@@ -1,0 +1,85 @@
+{% extends 'basecamp/easygo_base.html' %}
+{% block content %}
+      <!-- Page content-->
+      <!-- Page title-->
+
+      <section class="jarallax bg-gradient pt-5 pb-7 pt-md-7" data-jarallax data-speed="0.1"><span class="position-absolute top-0 start-0 w-100 h-100 bg-gradient opacity-80"></span>
+        <div class="jarallax-img" style="background-image: url('/static/basecamp/images/meeting_point.webp');"></div>
+        <div class="shape shape-bottom shape-slant bg-body">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 260">
+            <polygon fill="currentColor" points="0,257 0,260 3000,260 3000,0"></polygon>
+          </svg>
+        </div>
+        <div class="container position-relative zindex-5 pt-3 pb-7 pt-md-0">
+          <div class="row justify-content-center pb-7">
+            <div class="col-lg-10">
+              <br>
+              <h1 class="text-light">Airport Meeting Points</h1>
+              <p class="text-light">Makes it easier to experience the transport</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Contact form + details-->
+      <section class="container position-relative zindex-5 pb-5">
+        <div class="row">
+          <div class="col-lg-6 col-md-7 offset-lg-1 pb-2 mb-5" style="margin-top: -260px;">
+            <div class="card border-0 shadow-lg" >
+              <div class="form-control" style="padding:2rem">
+                <div class="mb-3 pb-1">
+                  <h3>Airport Meeting Points</h3>
+                </div>                
+                <div class="mb-3 pb-1">
+                  <p><strong>International Terminal &#8211; T1</strong><br><br/>
+                    <span style="color: #eb7828">Public Pick-up (Express pick-up)</span>, Just follow the Public pick-up (Express pick-up) signage
+                  after exiting the arrival halls</p>
+                 <p>
+                    <small><span style="color: #eb7828">Please note: </span> On landing simply turn on your mobile phone</small><br>
+                    <small>The meeting point may vary by the notification of your driver on the flight day</small><br><br>
+                    <small><a href="https://easygo-staticfiles-bucket.s3.ap-southeast-2.amazonaws.com/international-map.webp">Map of International airport</a>&nbsp;(Public pickup = Express pickup)</small></p>
+                </div>
+                <hr>
+                <br>
+                <div class="mb-3 pb-1">
+                  <p><strong>Domestic Terminal &#8211; T2</strong><br><br/>
+                    <span style="color: #eb7828"> Priority pickup area</span>.
+                  This is where you meet your driver, please refer to the map below.</p>
+                  <p>
+                    <small><span style="color: #eb7828">Please note: </span> On landing simply turn on your mobile phone</small><br>
+                    <small>The meeting point may vary by the notification of your driver on the flight day</small><br><br>
+                    <small><a href="https://easygo-staticfiles-bucket.s3.ap-southeast-2.amazonaws.com/T2-Priority-Pickup-map.webp">Map of Priority Pickup</a></small></p>
+                </div>
+                <hr>
+                <br>
+                <div class="mb-3 pb-1">
+                 <p><strong>Qantas Terminal &#8211; T3</strong><br><br/>
+                   Inside the Qantas Terminal at the <span style="color: #eb7828"> baggage carousel number one (1).</span>
+                  This is where you meet your driver, who will then lead you out to the bus.</p>
+                 <p>
+                    <small><span style="color: #eb7828">Please note: </span> On landing simply turn on your mobile phone</small><br><br>
+                    <small><a href="https://easygo-staticfiles-bucket.s3.ap-southeast-2.amazonaws.com/Domestic-T3-baggage-carousel-1.webp">Map of Qantas baggage carousel</a></small></p>                
+                </div>
+                <hr>
+                <br>                              
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-4 offset-md-1">
+            <h2 class="h4 pb-3">Contact details</h2>
+            <h3 class="h6 pb-2">Sydney, Australia</h3>
+            <ul class="list-unstyled fs-sm pb-3">
+              <li class="d-flex align-items-center mb-3"><i class="ai-mail fs-xl text-muted me-2 pe-1"></i>
+                <a href="mailto:info@easygoshuttle.com.au">info@easygoshuttle.com.au</a>
+              </li>
+              <li class="d-flex align-items-center mb-3"><i class="ai-map-pin fs-xl text-muted me-2 pe-1"></i>
+                <a href="sms:+61406883355">sms: message us</a>
+              </li>
+              <li class="d-flex align-items-center mb-3"><i class="ai-phone fs-xl text-muted me-2 pe-1"></i>
+                <a href="tel:+61406883355">0406 883 355</a></div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+{% endblock %}

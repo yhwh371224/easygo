@@ -1,0 +1,198 @@
+{% extends 'basecamp/easygo_base.html' %}
+{% block content %}
+      <!-- Page content-->
+      <!-- Page title-->
+      <section class="jarallax bg-gradient pt-5 pb-7 pt-md-7" data-jarallax data-speed="0.1"><span class="position-absolute top-0 start-0 w-100 h-100 bg-gradient opacity-70"></span>
+        <div class="jarallax-img" style="background-image: url('/static/basecamp/images/page-title-bg.webp');"></div>
+        <div class="shape shape-bottom shape-slant bg-body">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 260">
+            <polygon fill="currentColor" points="0,257 0,260 3000,260 3000,0"></polygon>
+          </svg>
+        </div>
+		  <br>
+		  <br>
+		  <br>
+		  <br>
+        <div class="container position-relative zindex-5 pt-3 pb-7 pt-md-0">
+          <div class="row justify-content-center pb-7">
+            <div class="col-lg-10">
+              <h1 class="text-light">Retrieve Post Form</h1>
+              <div class="active" style="color:white">Please fill out the booking form</div>
+			  <br>
+            </div>
+          </div>
+        </div>
+	</section>
+
+ 	<section class="container position-relative zindex-5 px-0 px-xl-3">
+        <div class="row">
+          <div class="col-lg-7 col-md-7 pb-2 mb-5" style="margin-top: -260px;">
+            <div class="card border-1 shadow-lg">
+      <!-- Page content-->
+      <!-- Page title-->	 
+      <!-- Contact form + details-->  	  
+            <form method="post" enctype="multipart/form-data" action="/retrieve_post_detail/" class="card-body needs-validation p-5" >
+                {% csrf_token %}
+				<div class="mb3 pb-1" >					
+					<label class="form-label">Personal Information</label>									      
+				</div>					
+				<div class="card text-white bg-secondary p-4">
+				<div class="mb-3 pb-1">
+					<label class="form-label" >Email address<sup class="text-danger ms-1">*</sup></label>
+					<input class="form-control" type="email"  placeholder="j.doe@example.com" required name="email">
+					<div class="invalid-feedback">Please enter a valid email address!</div>
+				</div></div>
+				<br><br>
+				<hr>
+				<br><br>
+				<div class="mb3 pb-1" >					
+					<label class="form-label">Flight Information</label>					      
+				</div>
+				<div class="card text-white bg-secondary p-4">
+				<div class="mb-3 pb-1">
+					<label class="form-label" >Flight date (Trip date)<sup class="text-danger ms-1"></sup>&nbsp;(Sydney)</label>
+					 <input class="form-control date-picker rounded" required name="flight_date" type="text" placeholder="Choose flight date" data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;Y-m-d&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;, &quot;defaultDate&quot;: &quot;today&quot;}" >
+					<div class="invalid-feedback">Please enter a valid email address!</div>
+				</div>
+				<div class="mb-3 pb-1">
+					<label class="form-label" >Flight number(sp)<sup class="text-danger ms-1">*</sup></label>
+					 <input class="form-control" type="text" placeholder="Your flight number" name="flight_number" required>
+					<div class="invalid-feedback">Please enter your flight number!</div>
+				 </div>
+				<div class="mb-3 pb-1">
+				  <label class="form-label">Flight time(n)<sup class="text-danger ms-1"></sup>&nbsp;(Sydney)</label>
+				   <input class="form-control" name="flight_time" type="time" required>
+				</div>
+				<div class="mb-3 pb-1">
+					<label class="form-label" >Pickup time preferred</label>
+					 <input class="form-control" type="time" name="pickup_time" >
+					 <sup class="text-danger ms-1">if not sure, just skip this column</sup>
+					
+				 </div></div>
+				<br><br>
+				<hr>
+				<br><br>				
+				<div class="mb-3 pb-1">
+					<label class="form-label">Direction<sup class="text-danger ms-1">*</sup></label>
+					<select class="form-select" name="direction" id="direction" required>
+						<option value="#" disabled style="color:red">To/From Airport</option>
+						<option value="Drop off to Domestic Airport">Drop off to Domestic Airport</option>
+                		<option value="Drop off to Intl Airport">Drop off to Intl Airport</option>						
+                		<option value="Pickup from Domestic Airport">Pickup from Domestic Airport</option>					
+                		<option value="Pickup from Intl Airport">Pickup from Intl Airport</option>
+						<option value="Point to Point">Point to Point</option>
+					</select>
+				</div><br>				
+                <div class="mb-3 pb-1">
+                   <label class="form-label" >Passengers<sup class="text-danger ms-1">*</sup></label>
+                  <select class="form-select" name="no_of_passenger" required>
+                  <option value="" >How many people?</option>
+				  <option value="1">1</option>
+				  <option value="2">2</option>
+				  <option value="3">3</option>
+				  <option value="4">4</option>
+				  <option value="5">5</option>
+				  <option value="6">6</option>
+				  <option value="7">7</option>
+				  <option value="8">8</option>
+				  <option value="9">9</option>
+				  <option value="10">10</option>
+				  <option value="11">11</option>
+				  <option value="12">12</option>
+				  <option value="13">13</option>
+				  <option value="14">14</option>
+				  <option value="15">15</option>
+				  <option value="16">16</option>
+				  <option value="17">17</option>
+				  <option value="18">18</option>
+				  <option value="-1" disabled="disabled">Over 18 (please email us)</option>
+              </select>
+                </div>
+                <div class="mb-3 pb-1">
+                  <label class="form-label" >Baggage<sup class="text-danger ms-1">*</sup></label>
+                  <input class="form-control" type="text" placeholder="How many baggage?" name="no_of_baggage" requried>
+                  <div class="invalid-feedback">Please enter the number of baggage!</div>
+                </div>
+                <div class="mb-3 pb-1">
+                  <label class="form-label" >Message</label>
+                  <textarea class="form-control" name="message" id="cont-message" rows="5" placeholder="Write your message here"></textarea>
+                  <div class="invalid-feedback">Please write a message!</div>
+                </div>
+                <div class="mb-3 pb-1">
+                    <label class="form-label" >Price $</label>
+                    <input class="form-control" type="text"  name="price">
+                    <div class="invalid-feedback">Please enter price</div>
+                </div>
+				<br>
+				<div class="text-center pt-2">
+					<button class="btn btn-primary" type="submit">Submit</button>
+				</div>
+				<br><br>
+                <div><small>This form is protected by reCAPTCHA Enterprise and the Google
+					<a href="https://policies.google.com/privacy">Privacy Policy</a> and
+					<a href="https://policies.google.com/terms">Terms of Service</a> apply.</small>
+				</div>
+				<br>                
+              </form>
+              </div>
+            </div>
+          
+          <div class="col-lg-4 col-md-4 offset-md-1">
+            <!-- Categories Widget -->
+			  <div class="card my-4" id="category-card" >
+				  <h5 class="card-header" style="color:red">Note!</h5>
+				  <div class="card-body" >
+					  <div class="row">
+						  <div class="col-lg-10 list-unstyled">
+
+							  <li>
+								  <p><strong>For arrivals</strong></p>
+								  <p><small>Flight number is important to us</small></p>
+								  <p><small>Your driver will keep track of arrival time in order to meet you on time</small></p>								  
+								  <p><small>Please check where the meeting point is &raquo; <a href="/meeting_point/" target="_blank">Airport Meeting Points</a></small></p>
+							  </li>
+
+						  </div>
+					  </div>
+				  </div>
+			  </div>
+			  <div class="card my-4" id="category-second_card" >
+				  <h5 class="card-header" style="color:blue">Note!</h5>
+				  <div class="card-body">
+					  <div class="row">
+						  <div class="col-lg-10 list-unstyled">
+
+							  <li>
+								<p><strong>For departure</strong></p>
+								<p>Please inform us your preferred pickup time</p>
+								<p><small>Our vehicles are entitled to use <strong>BUS LANE</strong></small></p>
+								<p><small>So even if there is traffic congestion, it won't take long</small></p>
+								<p><small>For domestic departure, you should be at airport two hours before the flight time and for international departure, at least 3 hours </small></p>
+								<p><small></small></p>
+							  </li>
+
+						  </div>
+					  </div>
+				  </div>
+			  </div>
+			  <div class="card my-4" id="category-second_card" >
+				<h5 class="card-header" style="color:green">Note!</h5>
+				<div class="card-body">
+					<div class="row">
+						<div class="col-lg-10 list-unstyled">
+
+							<li>
+							  <p><strong>For Direction</strong></p>
+							  <p>If you select 'Drop off to the airport' in the direction column, then 'the full address of suburb' will be your <strong>pick-up location</strong></p>	
+							  <p>If you select 'Pickup from the airport' in the direction column, then 'the full address of suburb' will be your <strong>drop-off location</strong></p>							  
+							  <p></p>
+							</li>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		  </div>
+		</div>
+	</section>	
+{% endblock %}
