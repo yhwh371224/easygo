@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+{% load static %}
+{% load compress %}
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Airport Transfers Sydney - EasyGo private transfers</title>
+    <meta name="google-site-verification" content="9oGVWVDfeSL5Nf17bdLC4iSNJ4TO_fQHgDfvVJSkOGQ" />
+    <!-- SEO Meta Tags-->
+    <meta name="description" content="EasyGo airport transfers provide Sydney airport transport service, private ride with the cheap price. ">
+    <meta name="keywords" content="sydney airport shuttle, sydney airport transfers, airport transfers near me, private transfers, cheap airport transfers, maxi taxi, mini bus, Uber, airport pickup service, airport private transfers, Sydney hotel transfers">
+    <meta name="author" content="easycoding.live">
+    <!-- Viewport-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Favicon and Touch Icons-->
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'basecamp/favi/favicon.ico' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'basecamp/favi/apple-touch-icon.png' %}">
+    <link rel="android-chrome" type="image/png" sizes="192x192" href="{% static 'basecamp/favi/android-chrome-192x192.png' %}">
+	<link rel="android-chrome" type="image/png" sizes="512x512" href="{% static 'basecamp/favi/android-chrome-512x512.png' %}">
+	<link rel="icon" type="image/png" sizes="32x32" href="{% static 'basecamp/favi/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'basecamp/favi/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'basecamp/favi/site.webmanifest' %}">
+    
+    <!-- Page loading styles-->
+    <style>
+      .page-loading {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        -webkit-transition: all .2s .1s ease-in-out;
+        transition: all .2s .1s ease-in-out;
+        background-color: #fff;
+        opacity: 0;
+        visibility: hidden;
+        z-index: 9999;
+      }
+      .page-loading.active {
+        opacity: 1;
+        visibility: visible;
+      }
+      .page-loading-inner {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        -webkit-transform: translateY(-50%);
+        transform: translateY(-50%);
+        -webkit-transition: opacity .1s ease-in-out;
+        transition: opacity .1s ease-in-out;
+        opacity: 0;
+      }
+      .page-loading.active > .page-loading-inner {
+        opacity: 1;
+      }
+      .page-loading-inner > span {
+        display: block;
+        font-family: 'Inter', sans-serif;
+        font-size: 1rem;
+        font-weight: normal;
+        color: #737491;
+      }
+      .page-spinner {
+        display: inline-block;
+        width: 2.75rem;
+        height: 2.75rem;
+        margin-bottom: .75rem;
+        vertical-align: text-bottom;
+        border: .15em solid #766df4;
+        border-right-color: transparent;
+        border-radius: 50%;
+        -webkit-animation: spinner .5s linear infinite;
+        animation: spinner .5s linear infinite;
+      }
+      @-webkit-keyframes spinner {
+        100% {
+          -webkit-transform: rotate(360deg);
+          transform: rotate(360deg);
+        }
+      }
+      @keyframes spinner {
+        100% {
+          -webkit-transform: rotate(360deg);
+          transform: rotate(360deg);
+        }
+      }
+
+    </style>
+    <!-- Page loading scripts-->
+    <script>
+      (function () {
+        window.onload = function () {
+          var preloader = document.querySelector('.page-loading');
+          preloader.classList.remove('active');
+          setTimeout(function () {
+            preloader.remove();
+          }, 2000);
+        };
+      })();
+    </script>
+          	 
+
+    <!-- Vendor Styles-->
+    {% compress css %}
+    <link rel="stylesheet" media="screen" href="/static/basecamp/css/simplebar.min.css"/>
+    <link rel="stylesheet" media="screen" href="/static/basecamp/css/tiny-slider.css"/>
+    <link rel="stylesheet" media="screen" href="/static/basecamp/css/flatpickr.min.css"/>
+    <!-- Main Theme Styles + Bootstrap-->
+    <link rel="stylesheet" media="screen" href="/static/basecamp/css/theme.min.css">
+    {% endcompress %}
+  </head>
+  <!-- Body-->
+  <body>
+    <!-- Page loading spinner-->
+    <div class="page-loading active">
+      <div class="page-loading-inner">
+        <div class="page-spinner"></div><span>Loading...</span>
+      </div>
+    </div>
+    <main class="page-wrapper">
+      <!-- Sign In Modal-->
+      <!-- Navbar (Floating light)-->
+      <!-- Remove "navbar-sticky" class to make navigation bar scrollable with the page.-->
+      <header class="header navbar navbar-expand-lg navbar-dark navbar-floating navbar-sticky" data-scroll-header data-fixed-element>
+        <div class="container px-0 px-xl-3">
+          <button class="navbar-toggler ms-n2 me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#primaryMenu"><span class="navbar-toggler-icon"></span></button><a class="navbar-brand flex-shrink-0 order-lg-1 mx-auto ms-lg-0 pe-lg-2 me-lg-4" href="/home/"><img class="navbar-floating-logo d-none d-lg-block" src="/static/basecamp/images/easygo_icon.webp" style="border-radius: 30%" alt="EasyGo_icon" width="40"></a>
+          <div class="d-flex align-items-center order-lg-3 ms-lg-auto">
+			  <a class="nav-link-style fs-sm text-nowrap" data-view="modal-signin-view" href="#">
+				  <img class="fs-xl me-2 align-middle" src="/static/basecamp/images/easygo-logo-final.webp" alt="EasyGo_logo"  width="120"></a>
+			</div>
+          <div class="offcanvas offcanvas-collapse order-lg-2" id="primaryMenu">
+            <div class="offcanvas-header navbar-shadow">
+              <h5 class="mt-1 mb-0">Menu</h5>
+              <button class="btn-close lead" type="button" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+              <!-- Menu-->
+              <ul class="navbar-nav">
+
+                <li class="nav-item active">
+                  <a class="nav-link" href="/home/" >Home</a>
+                </li>
+                <li class="nav-item dropdown dropdown-mega active"><a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">AboutUs</a>
+                  <div class="dropdown-menu"><p class="dropdown-column dropdown-column-img bg-secondary" style="background-image: url('/static/basecamp/images/aboutus.webp');"></p>
+                    <div class="dropdown-column"><a class="dropdown-item" href="/about_us/">About us</a><a class="dropdown-item" href="/service/">Service</a><a class="dropdown-item" href="/information/">Information</a><a class="dropdown-item" href="/booking_form/">Booking</a><a class="dropdown-item" href="/terms/">Terms</a><a class="dropdown-item" href="/privacy/">Privacy policy</a><a class="dropdown-item" href="mailto:info@easygoshuttle.com.au">Contact</a><a class="dropdown-item" href="/payonline/">Pay Online</a><a class="dropdown-item" href="/meeting_point/">Airport Meeting Point</a></div>
+                  </div>
+                </li>                
+                <li class="nav-item dropdown active"><a class="nav-link dropdown-toggle" href="#"data-bs-toggle="dropdown">Airport Transfers</a>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="/inquiry/">Just Price Inquiry</a></li>
+                    <li><a class="dropdown-item" href="/booking_form/">Actual Booking</a></li>                    
+                    <li><a class="dropdown-item" href="#reasons">Reasons to book</a></li>
+                  </ul>
+                      </li>
+                <li class="nav-item dropdown active"><a class="nav-link dropdown-toggle" href="#"data-bs-toggle="dropdown">Point to Point</a>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="/p2p_single/">Point to point</a></li>
+                    <li><a class="dropdown-item" href="/p2p/">Multiple way points</a></li>                   
+                  </ul>
+                      </li>                
+                <li class="nav-item dropdown active"><a class="nav-link dropdown-toggle" href="#"data-bs-toggle="dropdown">Day tours</a>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="/p2p/">Blue Mountains</a></li>
+                    <li><a class="dropdown-item" href="/p2p/">Sydney city & Harbour</a></li>                    
+                    <li><a class="dropdown-item" href="/p2p/">Jenolan Caves</a></li>
+                    <li><a class="dropdown-item" href="/p2p/">Hunter Valley Wineries</a></li>
+                    <li><a class="dropdown-item" href="/p2p/">Port Stephens</a></li>                    
+                    <li><a class="dropdown-item" href="/p2p/">Canberra (from Sydney)</a></li>
+                  </ul>
+                </li>        
+
+				 <li class="nav-item dropdown active" ><a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" >Price & Booking</a>
+                  <ul class="dropdown-menu">
+                    <li class="dropdown"><a class="dropdown-item dropdown-toggle" href="#" data-bs-toggle="dropdown">Price</a>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/inquiry/">Airport</a></li>
+                        <li><a class="dropdown-item" href="/p2p_single/">Cruise</a></li>
+                        <li><a class="dropdown-item" href="/p2p_single/">Event</a></li>
+                        <li><a class="dropdown-item" href="/p2p_single/">Wedding</a></li>
+                      </ul>
+                    </li>
+                    <li class="dropdown"><a class="dropdown-item dropdown-toggle" href="#" data-bs-toggle="dropdown">Booking</a>
+                      <ul class="dropdown-menu">
+						<li><a class="dropdown-item" href="/booking_form/">Airport</a></li>
+                        <li><a class="dropdown-item" href="/p2p_single/">Cruise</a></li>
+                        <li><a class="dropdown-item" href="/p2p_single/">Event</a></li>
+                        <li><a class="dropdown-item" href="/p2p_single/">Wedding</a></li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+				
+                <li class="nav-item dropdown active" ><a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" >contact</a>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="/inquiry3/"><i class="far fa-paper-plane"></i>&nbsp;contact by form</a></li>
+                    <li><a class="dropdown-item" href="mailto:info@easygoshuttle.com.au"><i class="fal fa-envelope"></i>&nbsp;contact by email</a></li>
+                    <li><a class="dropdown-item"  href="sms:+61406883355"><i class="fad fa-sms"></i>&nbsp;contact by sms</a></li>
+                    <li><a class="dropdown-item"  href="tell:+61406883355"><i class="fal fa-phone-alt"></i>&nbsp;0406 883 355 </a></li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+		  </div></div>
+      </header>
+      <!-- Page content-->
+      <!-- Hero-->
+      <section class="jarallax bg-dark py-7" data-jarallax data-speed="0.1" >
+        <div class="jarallax-img" style="background-image: url('/static/basecamp/photos/back10.PNG.webp');"></div>
+        <div class="container py-5 py-sm-7 text-center">
+          <div class="py-md-6">
+			  <div><a role="button" class="btn btn-primary" href="/booking_form/">BOOK NOW</a> | <a class="btn btn-warning" href="/inquiry/">PRICE NOW</a></div>
+			  <br>
+			  <div></div>
+			  <br>
+			  <p class="fs-lg text-light">Private airport transfers with a fixed price, We are reliable & puntual 			  
+          <a href="/admin/">
+				  <img src="https://easygo-staticfiles-bucket.s3.ap-southeast-2.amazonaws.com/thumbsup_120241.webp" alt="thumps_up" width="30"></a>
+          <a href="/confirm_booking/">
+          <img src="https://easygo-staticfiles-bucket.s3.ap-southeast-2.amazonaws.com/thumbsup_120241.webp" alt="thumps_up" width="30"></a>
+          <a href="/confirmation/">
+          <img src="https://easygo-staticfiles-bucket.s3.ap-southeast-2.amazonaws.com/thumbsup_120241.webp" alt="thumps_up" width="30"></a>
+        </p>
+          </div>
+		</div>
+      </section>
+      <!-- Price checking form-->
+      <form class="container position-relative zindex-5" action="/price_detail/" method="post" style="margin-top: -68px;">
+		  {% csrf_token %}
+        <div class="d-lg-flex align-items-center bg-secondary border rounded-3 px-4 pt-4 pb-3" >
+          <div class="d-sm-flex align-items-center flex-grow-1">
+            <div class="mb-3 pb-1 w-100 mb-sm-4 me-sm-3">
+              <label class="form-label">Flight date</label>
+              <div class="input-group" >
+                <input class="form-control date-picker rounded" style="color: brown" name="flight_date" required type="date" placeholder="Choose date" data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;Y-m-d&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;, &quot;defaultDate&quot;: &quot;today&quot;}" >
+				<a class="date-picker" href="https://material.io/components/date-pickers"><i class="ai-calendar position-absolute top-50 end-0 translate-middle-y me-3"></i></a>
+              </div>
+            </div>
+            <div class="mb-3 pb-1 w-100 mb-sm-4 me-sm-3">
+              <label class="form-label">Direction</label>
+              <select class="form-select" style="color: brown" name="direction" required>                
+                <option value="Drop off to Domestic Airport">Drop off to Domestic Airport</option>
+                <option value="Drop off to Intl Airport">Drop off to Intl Airport</option>						
+                <option value="Pickup from Domestic Airport">Pickup from Domestic Airport</option>					
+                <option value="Pickup from Intl Airport">Pickup from Intl Airport</option>                
+              </select>
+            </div>
+          </div>
+          <div class="d-sm-flex align-items-center">
+            <div class="mb-3 pb-1 w-100 mb-sm-4 me-sm-3">
+              <label class="form-label">Suburb...</label>
+              <select class="form-select" style="color: brown" name="suburb" required>          
+          <option value="Artarmon">Artarmon</option>        
+				  <option value="Hotels in CBD">Hotels in city</option>				  
+				  <option value="Asquith">Asquith</option>
+				  <option value="Auburn">Auburn</option>
+          <option value="Balgowlah">Balgowlah</option>
+          <option value="Balgowlah Heights">Balgowlah Heights</option>
+				  <option value="Balmain">Balmain</option>
+				  <option value="Bankstown">Bankstown</option>
+				  <option value="Bass Hill">Bass Hill</option>
+				  <option value="Baulkham Hills">Baulkham Hills</option>
+				  <option value="Beaumont Hills">Beaumont Hills</option>
+				  <option value="Beecroft">Beecroft</option>
+				  <option value="Belfield">Belfield</option>
+				  <option value="Bella vista">Bella vista</option>
+				  <option value="Belleveue Hill">Bellevue Hill</option>
+				  <option value="Belmore">Belmore</option>
+				  <option value="Berala">Berala</option>
+          <option value="Berowra">Berowra</option>
+				  <option value="Berowra Heights">Berowra Heights</option>
+				  <option value="Bevely Hills">Bevely Hills</option>
+				  <option value="Beverly Park">Beverly Park</option>
+				  <option value="Bexley">Bexley</option>
+				  <option value="Bexley North">Bexley North</option>
+				  <option value="Bidwill">Bidwill</option>
+				  <option value="Birchgrove">Birchgrove</option>
+				  <option value="Birrong">Birrong</option>
+				  <option value="Blackett">Blackett</option>
+				  <option value="Blacktown">Blacktown</option>
+				  <option value="Bligh Park">Bligh Park</option>
+				  <option value="Bondi">Bondi</option>
+				  <option value="Bondi Junction">Bondi Junction</option>
+				  <option value="Bossley Park">Bossley Park</option>
+				  <option value="Box Hill">Box Hill</option>
+				  <option value="Breakfast Point">Breakfast Point</option>
+				  <option value="Bronte">Bronte</option>
+          <option value="Brookvale">Brookvale</option>
+          <option value="Bungarribee">Bungarribee</option>
+				  <option value="Burwood">Burwood</option>
+				  <option value="Cabarita">Cabarita</option>
+				  <option value="Cambridge Garden">Cambridge Garden</option>
+				  <option value="Cambridge Park">Cambridge Park</option>
+				  <option value="Cammeray">Cammeray</option>
+				  <option value="Canada Bay">Canada Bay</option>
+				  <option value="Canterbury">Canterbury</option>
+				  <option value="Carlingford">Carlingford</option>
+				  <option value="Castle Hill">Castle Hill</option>
+				  <option value="Castlecove">Castlecove</option>
+				  <option value="Castlecrag">Castlecrag</option>
+				  <option value="Castlereagh">Castlereagh</option>
+				  <option value="Chatswood">Chatswood</option>
+				  <option value="Cheltenham">Cheltenham</option>
+				  <option value="Cherrybrook">Cherrybrook</option>
+				  <option value="Chester Hill">Chester Hill</option>
+				  <option value="Chullora">Chullora</option>
+				  <option value="Claremont Meadow">Claremont Meadow</option>
+				  <option value="Clyde">Clyde</option>
+          <option value="Colebee">Colebee</option>
+				  <option value="Colyton">Colyton</option>
+				  <option value="Concord">Concord</option>
+				  <option value="Concord West">Concord West</option>
+				  <option value="Condell Park">Condell Park</option>
+				  <option value="Constitution Hill">Constitution Hill</option>
+          <option value="Coogee">Coogee</option>
+				  <option value="Cranebrook">Cranebrook</option>
+				  <option value="Cremorne">Cremorne</option>
+				  <option value="Crows Nest">Crows Nest</option>
+				  <option value="Croydon">Croydon</option>
+				  <option value="Croydon Park">Croydon Park</option>
+				  <option value="Darling Point">Darling Point</option>
+				  <option value="Darlinghurst">Darlinghurst</option>
+				  <option value="Dean Park">Dean Park</option>
+          <option value="Dee Why">Dee Why</option>
+				  <option value="Denistone">Denistone</option>
+				  <option value="Dharruk">Dharruk</option>
+				  <option value="Doonside">Doonside</option>
+				  <option value="Drummoyne">Drummoyne</option>
+				  <option value="Dulwitch Hill">Dulwitch Hill</option>
+				  <option value="Dundas">Dundas</option>
+				  <option value="Dural">Dural</option>
+				  <option value="East Killara">East Killara</option>
+				  <option value="East Lindfield">East Lindfield</option>
+				  <option value="East Ryde">East Ryde</option>
+				  <option value="Eastern Creek">Eastern Creek</option>
+				  <option value="Eastwood">Eastwood</option>
+				  <option value="Edensor Park">Edensor Park</option>
+				  <option value="Elanora Heights">Elanora Heights</option>
+				  <option value="Emerton">Emerton</option>
+				  <option value="Emu Plains">Emu Plains</option>
+				  <option value="Enfield">Enfield</option>
+				  <option value="Enmore">Enmore</option>
+				  <option value="Epping">Epping</option>
+				  <option value="Ermington">Ermington</option>
+				  <option value="Erskin Park">Erskin Park</option>
+          <option value="Fairlight">Fairlight</option>
+				  <option value="Five Dock">Five Dock</option>
+				  <option value="Forest Lodge">Forest Lodge</option>
+				  <option value="Forestville">Forestville</option>
+          <option value="French Forest">French Forest</option>
+				  <option value="Galston">Galston</option>
+				  <option value="Georges Hall">Georges Hall</option>
+				  <option value="Girraween">Girraween</option>
+				  <option value="Gladesville">Gladesville</option>
+				  <option value="Glendenning">Glendenning</option>
+				  <option value="Glenhaven">Glenhaven</option>
+				  <option value="Glenmore Park">Glenmore Park</option>
+				  <option value="Glenwood">Glenwood</option>
+				  <option value="Gordon">Gordon</option>
+				  <option value="Granville">Granville</option>
+				  <option value="Greenacre">Greenacre</option>
+				  <option value="Greenwich">Greenwich</option>
+				  <option value="Greystanes">Greystanes</option>
+				  <option value="Guildford">Guildford</option>
+				  <option value="Harberfield">Harberfield</option>
+				  <option value="Harris park">Harris park</option>
+				  <option value="Hassal Grove">Hassal Grove</option>
+				  <option value="Henley">Henley</option>
+				  <option value="Herbersham">Herbersham</option>
+				  <option value="Holroyd">Holroyd</option>
+				  <option value="Homebush">Homebush</option>
+				  <option value="Hornsby">Hornsby</option>
+				  <option value="Hornsby Heights">Hornsby Heights</option>
+				  <option value="Hunters Hill">Hunters Hill</option>
+				  <option value="Huntingwood">Huntingwood</option>
+				  <option value="Huntley Point">Huntley Point</option>
+				  <option value="Hurstville">Hurstville</option>
+				  <option value="Jamisontown">Jamisontown</option>
+				  <option value="Jordan Springs">Jordan Springs</option>
+				  <option value="Kellyville">Kellyville</option>
+				  <option value="Keyllyville Ridge">Kellyville Ridge</option>
+				  <option value="Kenthurst">Kenthurst</option>
+				  <option value="Killara">Killara</option>
+          <option value="Killarney Heights">Killaryney Heights</option>
+				  <option value="Kings Langley">Kings Langley</option>
+				  <option value="Kings Park">Kings Park</option>
+				  <option value="Kirribilli">Kirribilli</option>
+				  <option value="Lalor Park">Lalor Park</option>
+				  <option value="Lane Cove">Lane Cove</option>
+				  <option value="Leichhardt">Leichhardt</option>
+				  <option value="Lethbridge Park">Lethbridge Park</option>
+				  <option value="Lewwisham">Lewisham</option>
+				  <option value="Liberty Grove">Liberty Grove</option>
+				  <option value="Lidcombe">Lidcombe</option>
+				  <option value="Lindfield">Lindfield</option>
+				  <option value="Linley Point">Linley Point</option>
+				  <option value="Liyfield">Liyfield</option>
+				  <option value="Longueville">Longueville</option>
+				  <option value="Macquarie Park">Macquarie Park</option>
+          <option value="Manly">Manly</option>
+          <option value="Manly Vale">Manly Vale</option>
+				  <option value="Marayong">Marayong</option>
+				  <option value="Marsden Park">Marsden Park</option>
+				  <option value="Marsfield">Marsfield</option>
+				  <option value="McGraths Hill">McGraths Hill</option>
+				  <option value="Mcmahons Point">Mcmahons Point</option>
+				  <option value="Meadowbank">Meadowbank</option>
+				  <option value="Melrose Park">Melrose Park</option>
+				  <option value="Merrylands">Merrylands</option>
+				  <option value="Michinbery">Michinbery</option>
+				  <option value="Middle Cove">Middle Cove </option>
+          <option value="Millers Point">Millers Point </option>
+				  <option value="Milpera">Milpera</option>
+				  <option value="Milsons Point">Milsons Point</option>
+				  <option value="Mortdale">Mortdale</option>
+				  <option value="Mortlake">Mortlake</option>
+				  <option value="Mosman">Mosman</option>
+				  <option value="Mt Colah">Mt Colah</option>
+				  <option value="Mt druitt">Mt druitt</option>
+				  <option value="Mt Kuring Gai">Mt Kuring Gai</option>
+				  <option value="Mulgrave">Mulgrave</option>
+				  <option value="Naremburn">Naremburn</option>
+          <option value="Narraweena">Narraweena</option>
+				  <option value="Neutral Bay">Neutral Bay</option>
+				  <option value="Newington">Newington</option>
+				  <option value="Normanhurst">Normanhurst</option>
+          <option value="North Balgowlah">North Balgowlah</option>
+				  <option value="North Bondi">North Bondi</option>
+				  <option value="North Epping">North Epping</option>
+				  <option value="North Parramatta">North Parramatta</option>
+				  <option value="North rocks">North rocks</option>
+				  <option value="North Ryde">North Ryde</option>
+				  <option value="North Strathfield">North Strathfield</option>
+				  <option value="North Sydney">North Sydney</option>
+          <option value="North Turramurra">North Turramurra</option>
+				  <option value="Northbridge">Northbridge</option>
+				  <option value="Northmead">Northmead</option>
+				  <option value="Northwood">Northwood</option>
+				  <option value="Oakhurst">Oakhurst</option>
+				  <option value="Oakville">Oakville</option>
+				  <option value="Oatland">Oatland</option>
+				  <option value="Old Toongabbie">Old Toongabbie</option>
+				  <option value="Olympic Park">Olympic Park</option>
+				  <option value="Orchard Hill">Orchard Hill</option>
+				  <option value="Oxley Park">Oxley Park</option>
+				  <option value="Paddington">Paddington</option>
+          <option value="Panania">Panania</option>
+				  <option value="Pairiewood">Pairiewood</option>
+				  <option value="Parklea">Parklea</option>
+				  <option value="Parramatta">Parramatta</option>
+				  <option value="Peakhurst">Peakhurst</option>
+				  <option value="Pemulway">Pemulway</option>
+				  <option value="Pendle Hill">Pendle Hill</option>
+				  <option value="Pennant Hills">Pennant Hills</option>
+				  <option value="Penrith">Penrith</option>
+				  <option value="Plumpton">Plumpton</option>
+				  <option value="Potts Point">Potts Point</option>
+				  <option value="Prospect">Prospect</option>
+				  <option value="Punchbowl">Punchbowl</option>
+				  <option value="Putney">Putney</option>
+				  <option value="Pymble">Pymble</option>
+				  <option value="Pyrmont">Pyrmont</option>
+				  <option value="Quakers hill">Quakers hill</option>
+				  <option value="Regents Park">Regents Park</option>
+				  <option value="Revesby">Revesby</option>
+				  <option value="Rhodes">Rhodes</option>
+				  <option value="Richmond">Richmond</option>
+				  <option value="Riverston">Riverston</option>
+				  <option value="Riverview">Riverview</option>
+          <option value="Riverwood">Riverwood</option>
+				  <option value="Rooty Hill">Rooty Hill</option>
+				  <option value="Ropes Crossing">Ropes Crossing</option>
+				  <option value="Rose Hill">Rose Hill</option>
+				  <option value="Roseville">Roseville</option>
+				  <option value="Roseville Chase">Roseville Chase</option>
+				  <option value="Rouse Hill">Rouse Hill</option>
+				  <option value="Russel Lea">Russel Lea</option>
+				  <option value="Rydalmere">Rydalmere</option>
+				  <option value="Ryde">Ryde</option>
+          <option value="Seaforth">Seaforth</option>
+				  <option value="Sefton">Sefton</option>
+				  <option value="Seven Hills">Seven Hills</option>
+				  <option value="Shalvey">Shalvey</option>
+				  <option value="Silverwater">Silverwater</option>				 
+				  <option value="Schofields">Schofields</option>
+				  <option value="South Turramurra">South Turramurra</option>
+				  <option value="South Wentworthville">South Wentworthville</option>
+				  <option value="St Clair">St Clair</option>
+				  <option value="St Ives">St Ives</option>
+				  <option value="St Leonards">St Leonards</option>
+				  <option value="St marys">St marys</option>
+				  <option value="St Marys north">St Marys North</option>
+				  <option value="Stanhope garden">Stanhope gardens</option>
+          <option value="Strathfield">Strathfield</option>
+				  <option value="Summer Hill">Summer Hill</option>
+				  <option value="Surry Hills">Surry Hills</option>
+          <option value="Sydney (city)">Sydney (city)</option>
+				  <option value="Telopea">Telopea</option>
+				  <option value="Tennyson Point">Tennyson Point</option>
+				  <option value="Terrey Hills">Terrey Hills</option>
+				  <option value="The ponds">The ponds </option>
+				  <option value="Thornleigh">Thornleigh</option>
+				  <option value="Toongabbie">Toongabbie</option>
+				  <option value="Top Ryde">Top Ryde</option>
+				  <option value="Tregear">Tregear</option>
+				  <option value="Turramurra">Turramurra</option>
+				  <option value="Vineyard">Vineyard</option>
+				  <option value="Wahroonga">Wahroonga</option>
+				  <option value="Waitara">Waitara</option>
+				  <option value="Wareemba">Wareemba</option>
+				  <option value="Warrawee">Warrawee</option>
+          <option value="Watsons Bay">Watsons Bay</option>
+				  <option value="Waverley">Waverley</option>
+				  <option value="Waverton">Waverton</option>
+				  <option value="Wentworth Point">Wentworth Point</option>
+				  <option value="Wentworthville">Wentworthville</option>
+				  <option value="Werrington">Werrington</option>
+				  <option value="West Pennant Hills">West Pennant Hills</option>
+				  <option value="West Pymble">West Pymble</option>
+				  <option value="West Ryde">West Ryde</option>
+				  <option value="Westleigh">Westleigh</option>
+				  <option value="Westmead">Westmead</option>
+				  <option value="Whalan">Whalan</option>
+				  <option value="Willmot">Willmot</option>
+				  <option value="Willoughby">Willoughby</option>
+				  <option value="Winsor">Winsor</option>
+				  <option value="Winston Hill">Winston Hill</option>          
+          <option value="Wollstoncraft">Wollstoncraft</option>
+          <option value="Woodcroft">Woodcroft</option>
+          <option value="Woollahra">Woollahra</option>
+          <option value="Woolwich">Woolwich</option>
+				  <option value="Yagoona">Yagoona</option>
+              </select>
+            </div>
+            <div class="mb-3 pb-1 w-100 mb-sm-4 me-sm-3">
+              <label class="form-label">Passengers</label>
+              <select class="form-select" style="color: brown" name="no_of_passenger" required>                 
+				  <option value="1">1</option>
+				  <option value="2">2</option>
+				  <option value="3">3</option>
+				  <option value="4">4</option>
+				  <option value="5">5</option>
+				  <option value="6">6</option>
+				  <option value="7">7</option>
+				  <option value="8">8</option>
+				  <option value="9">9</option>
+				  <option value="10">10</option>
+				  <option value="11">11</option>
+				  <option value="12">12</option>
+				  <option value="13">13</option>          
+				  <option value="" disabled>Over 13(please contact us)</option>
+              </select>
+            </div>
+            <div class="text-center text-sm-start mt-2 mt-sm-4 mb-4">
+				<button role="button" type="submit" class="btn btn-warning" href="/inquiry1/">Next</button>
+            </div>
+          </div>
+        </div>
+      </form>
+	<!-- Offers carousel-->
+      <section class="container rounded bg-dark py-5 my-4 my-sm-0 py-sm-6 py-md-7">
+		  <h2 class="text-center mb-4" style="color:white"><span style="color: #eb7828">HOT OFFER</span> - Best Price Guaranteed</h2>
+        <div class="tns-carousel-wrapper">
+          <div class="tns-carousel-progress ms-auto mb-3">
+            <div class="text-sm text-muted text-center mb-2"><span class="tns-current-slide me-1"></span>of<span class="tns-total-slides ms-1"></span></div>
+            <div class="progress">
+              <div class="progress-bar" role="progressbar"></div>
+            </div>
+          </div>
+          <div class="tns-carousel-inner" data-carousel-options="{&quot;items&quot;: 3, &quot;nav&quot;: false, &quot;gutter&quot;: 23, &quot;responsive&quot;: {&quot;0&quot;:{&quot;items&quot;:1},&quot;540&quot;:{&quot;items&quot;:2},&quot;900&quot;:{&quot;items&quot;:3}}}">
+            <div class="pb-2"><a class="card border-0 shadow card-hover mx-1" href="/airport-transfers-thornleigh/"><span class="badge badge-lg badge-floating badge-floating-end bg-danger" style="width: 5rem;">$100</span>
+                <div class="card-img-top card-img-gradient"><img src="/static/basecamp/photos/Thornleigh.webp" alt="Thornleigh"><span class="card-floating-text text-light fw-medium">Discover the trip<i class="ai-chevron-right align-middle fs-lg ms-1"></i></span></div>
+                <div class="card-body text-center">
+                  <h3 class="h5 pt-1 mb-3">Thornleigh</h3>
+					<p class="fs-sm text-muted mb-2">EasyGo airport transfers provide a <span style="color: #eb7828">private ride</span>: $100 for two persons, $110 for three persons</p>
+					<p class="fs-sm text-muted mb-2">* additional $10 per person *</p>
+                </div></a></div>
+            <div class="pb-2"><a class="card border-0 shadow card-hover mx-1" href="/airport-transfers-hornsby/"><span class="badge badge-lg badge-floating badge-floating-end bg-danger" style="width: 5rem;">$100</span>
+                <div class="card-img-top card-img-gradient"><img src="/static/basecamp/photos/hornsby.webp" alt="Hornsby"><span class="card-floating-text text-light fw-medium">Discover the trip<i class="ai-chevron-right align-middle fs-lg ms-1"></i></span></div>
+                <div class="card-body text-center">
+                  <h3 class="h5 pt-1 mb-3">Hornsby</h3>
+					<p class="fs-sm text-muted mb-2">EasyGo airport transfers a <span style="color: #eb7828">private ride</span> for two persons: $110, for three persons: $120</p>
+                  <p class="fs-sm text-muted mb-2">* additional $10 per person *</p>
+                </div></a></div>
+            <div class="pb-2"><a class="card border-0 shadow card-hover mx-1" href="/airport-transfers-blacktown/"><span class="badge badge-lg badge-floating badge-floating-end bg-danger" style="width: 5rem;">$110</span>
+                <div class="card-img-top card-img-gradient"><img src="/static/basecamp/photos/blacktown.webp" alt="Blacktown"><span class="card-floating-text text-light fw-medium">Discover the trip<i class="ai-chevron-right align-middle fs-lg ms-1"></i></span></div>
+                <div class="card-body text-center">
+                  <h3 class="h5 pt-1 mb-3">Blacktown</h3>
+					<p class="fs-sm text-muted mb-2">EasyGo airport transfers provide a <span style="color: #eb7828">private ride</span> for two persons: $120, for three persons: $130</p>
+                  <p class="fs-sm text-muted mb-2">* additional $10 per person *</p>
+                </div></a></div>
+            <div class="pb-2"><a class="card border-0 shadow card-hover mx-1" href="/airport-transfers-parramatta/"><span class="badge badge-lg badge-floating badge-floating-end bg-danger" style="width: 5rem;">$90</span>
+                <div class="card-img-top card-img-gradient"><img src="/static/basecamp/photos/parramatta.webp" alt="Parramatta"><span class="card-floating-text text-light fw-medium">Discover the trip<i class="ai-chevron-right align-middle fs-lg ms-1"></i></span></div>
+                <div class="card-body text-center">
+                  <h3 class="h5 pt-1 mb-3">Parramatta</h3>
+					<p class="fs-sm text-muted mb-2">EasyGo airport tranfers provide a <span style="color: #eb7828">private ride</span> for two persons: $90, for three persons: $100</p>
+                  <p class="fs-sm text-muted mb-2">* additional $10 per person *</p>
+                </div></a></div>
+            <div class="pb-2"><a class="card border-0 shadow card-hover mx-1" href="/airport-transfers-st-ives/"><span class="badge badge-lg badge-floating badge-floating-end bg-danger" style="width: 5rem;">$90</span>
+                <div class="card-img-top card-img-gradient"><img src="/static/basecamp/photos/st ives.webp" alt="St Ives"><span class="card-floating-text text-light fw-medium">Discover the trip<i class="ai-chevron-right align-middle fs-lg ms-1"></i></span></div>
+                <div class="card-body text-center">
+                  <h3 class="h5 pt-1 mb-3">St ives</h3>
+					<p class="fs-sm text-muted mb-2">EasyGo airport transfers provide a <span style="color: #eb7828">private ride</span> for two persons: $100, for three persons: $110</p>
+                  <p class="fs-sm text-muted mb-2">* additional $10 per person *</p>
+                </div></a></div>
+			<div class="pb-2"><a class="card border-0 shadow card-hover mx-1" href="/airport-transfers-chatswood/"><span class="badge badge-lg badge-floating badge-floating-end bg-danger" style="width: 5rem;">$70</span>
+                <div class="card-img-top card-img-gradient"><img src="/static/basecamp/photos/chatswood.webp" alt="Chatswood"><span class="card-floating-text text-light fw-medium">Discover the trip<i class="ai-chevron-right align-middle fs-lg ms-1"></i></span></div>
+                <div class="card-body text-center">
+                  <h3 class="h5 pt-1 mb-3">Chatswood</h3>
+					<p class="fs-sm text-muted mb-2">EasyGo airport transfers provide a <span style="color: #eb7828">private ride</span> for two persons: $80, for three persons: $90</p>
+                  <p class="fs-sm text-muted mb-2">* additional $10 per person *</p>
+                </div></a></div>
+			  <div class="pb-2"><a class="card border-0 shadow card-hover mx-1" href="/airport-transfers-epping/"><span class="badge badge-lg badge-floating badge-floating-end bg-danger" style="width: 5rem;">$90</span>
+                <div class="card-img-top card-img-gradient"><img src="/static/basecamp/photos/epping.webp" alt="Epping"><span class="card-floating-text text-light fw-medium">Discover the trip<i class="ai-chevron-right align-middle fs-lg ms-1"></i></span></div>
+                <div class="card-body text-center">
+                  <h3 class="h5 pt-1 mb-3">Epping</h3>
+					<p class="fs-sm text-muted mb-2">EasyGo airport transfers provide a <span style="color: #eb7828">private ride</span> for two persons: $100, for three persons: $110</p>
+                  <p class="fs-sm text-muted mb-2">* additional $10 per person *</p>
+                </div></a></div>
+			  <div class="pb-2"><a class="card border-0 shadow card-hover mx-1" href="/airport-transfers-toongabbie/"><span class="badge badge-lg badge-floating badge-floating-end bg-danger" style="width: 5rem;">$100</span>
+                <div class="card-img-top card-img-gradient"><img src="/static/basecamp/photos/toongabbie.webp" alt="Toogabbie"><span class="card-floating-text text-light fw-medium">Discover the trip<i class="ai-chevron-right align-middle fs-lg ms-1"></i></span></div>
+                <div class="card-body text-center">
+                  <h3 class="h5 pt-1 mb-3">Toongabbie</h3>
+					<p class="fs-sm text-muted mb-2">EasyGo airport transfers provide a <span style="color: #eb7828">private ride</span> for two persons: $110, for three persons: $120</p>
+                  <p class="fs-sm text-muted mb-2">* additional $10 per person *</p>
+                </div></a></div>
+			  <div class="pb-2"><a class="card border-0 shadow card-hover mx-1" href="/airport-transfers-ryde/"><span class="badge badge-lg badge-floating badge-floating-end bg-danger" style="width: 5rem;">$80</span>
+                <div class="card-img-top card-img-gradient"><img src="/static/basecamp/photos/Ryde.webp" alt="Ryde"><span class="card-floating-text text-light fw-medium">Discover the trip<i class="ai-chevron-right align-middle fs-lg ms-1"></i></span></div>
+                <div class="card-body text-center">
+                  <h3 class="h5 pt-1 mb-3">Ryde</h3>
+					<p class="fs-sm text-muted mb-2">EasyGo airport transfers provide a <span style="color: #eb7828">private ride</span> for two persons: $90, for three persons: $100</p>
+                  <p class="fs-sm text-muted mb-2">* additional $10 per person *</p>
+                </div></a></div>
+          </div>
+        </div>
+      </section>
+      <!-- Features CTA-->
+      <section class="bg-gradient position-relative pt-6 pb-5 py-sm-6">
+        <div class="position-absolute top-0 start-0 w-100 h-100 bg-size-cover" style="background-image: url('/static/basecamp/photos/bg-pattern01.webp');"></div>
+        <div class="position-relative zindex-5 container py-2">
+          <div class="row align-items-center">
+            <div class="col-lg-5 offset-lg-1 order-lg-2 pb-5 pb-lg-0 text-center text-lg-start">
+			  <h2 class="text-light">EasyGo Airport Transfers</h2>
+              <p class="text-light mb-0">
+				  We provide an express pickup and transport service to and from Sydney Airport, delivering to and from hotels, homes, business offices or any other venue. Catering to individual travellers, families or corporate groups we run the easiest and most cost-effective of shuttle services.
+			  </p>
+            </div>
+            <div class="col-lg-6 order-lg-1">
+              <div class="row">
+                <div class="col-sm-4 mb-2 pb-4 mb-sm-0 pb-sm-0">
+                  <div class="px-2 text-center"><img class="bg-light rounded-circle mb-2" src="/static/basecamp/images/01.svg" alt="Tickets" width="105">
+                    <p class="fs-sm fw-medium text-light mb-0 pt-1">Make it easier to experience the airport transfers</p>
+                  </div>
+                </div>
+                <div class="col-sm-4 mb-2 pb-4 mb-sm-0 pb-sm-0">
+                  <div class="px-2 text-center"><img class="bg-light rounded-circle mb-2" src="/static/basecamp/images/02.svg" alt="Search" width="105">
+                    <p class="fs-sm fw-medium text-light mb-0 pt-1">Chartered Bus Hire</p>
+                  </div>
+                </div>
+                <div class="col-sm-4 mb-2 pb-4 mb-sm-0 pb-sm-0">
+                  <div class="px-2 text-center"><img class="bg-light rounded-circle mb-2" src="/static/basecamp/images/03.svg" alt="Flight" width="105">
+                    <p class="fs-sm fw-medium text-light mb-0 pt-1">Find the cheapest airport transfer price</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- FAQ-->
+      <section class="container py-5 my-4 my-sm-0 py-sm-6 py-md-7">
+        <h2 class="text-center pb-2 mb-5">Popular questions</h2>
+        <div class="row pb-2">
+          <div class="col-lg-6">
+            <div class="accordion" id="faq">
+				<div class="accordion-item shadow">
+                <h2 class="accordion-header" id="faq-heading-1">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-1" aria-expanded="true" aria-controls="faq-content-1">What are included in the price we get? Is there any extra charge?</button>
+                </h2>
+                <div class="accordion-collapse collapse show" id="faq-content-1" aria-labelledby="faq-heading-1" data-bs-parent="#faq">
+                  <div class="accordion-body">
+                    <div class="fs-sm">The price you get from EasyGo is included airport parking fee. Even if your flight is delayed, we do not charge anything for the waiting time occurred. Our price is fixed. there is no extra charge.</div>
+                  </div>
+                </div>
+              </div>
+				<div class="accordion-item shadow">
+                <h2 class="accordion-header" id="faq-heading-2">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-2" aria-expanded="true" aria-controls="faq-content-2">What if my flight is delayed?</button>
+                </h2>
+                <div class="accordion-collapse collapse show" id="faq-content-2" aria-labelledby="faq-heading-2" data-bs-parent="#faq">
+                  <div class="accordion-body">
+                    <div class="fs-sm">EasyGo drivers will keep track of your flights landing time in order to meet you on time. He will call or message you by the time you collect your baggage. All you have to do is that you can go to the meeting point. He will be waiting for you there.</div>
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item shadow">
+                <h2 class="accordion-header" id="faq-heading-3">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-3" aria-expanded="true" aria-controls="faq-content-3">What are the payment options available?</button>
+                </h2>
+                <div class="accordion-collapse collapse show" id="faq-content-3" aria-labelledby="faq-heading-3" data-bs-parent="#faq">
+                  <div class="accordion-body">
+                    <div class="fs-sm">EasyGo accepts all major Credit Cards, we accept American Express, MasterCard, VisaCard. or you can simply pay cash to your driver on the booking day</div>
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item shadow">
+                <h2 class="accordion-header" id="faq-heading-4">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-4" aria-expanded="false" aria-controls="faq-content-4">Do you offer infant seats or baby capsules?</button>
+                </h2>
+                <div class="accordion-collapse collapse" id="faq-content-4" aria-labelledby="faq-heading-4" data-bs-parent="#faq">
+                  <div class="accordion-body">
+                    <div class="fs-sm">Yes we do provide a infant seat or baby capsule (one car seat is free of charge but we charge extra $10 more than two seats. it has to be mentioned on the booking process) </div>
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item shadow">
+                <h2 class="accordion-header" id="faq-heading-5">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-5" aria-expanded="false" aria-controls="faq-content-5">How many passengers can I fit into EasyGo's shuttle?</button>
+                </h2>
+                <div class="accordion-collapse collapse" id="faq-content-5" aria-labelledby="faq-heading-5" data-bs-parent="#faq">
+                  <div class="accordion-body">
+					  <div class="fs-sm">Thirteen (13) passengers fit in a standard shuttle mini bus. you can check the photo of the vehicle on the webpage <a href="/service/">'EASYGO SERVICES'</a></div>
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item shadow">
+                <h2 class="accordion-header" id="faq-heading-6">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-6" aria-expanded="false" aria-controls="faq-content-6">How many bags can I take with me?</button>
+                </h2>
+                <div class="accordion-collapse collapse" id="faq-content-6" aria-labelledby="faq-heading-6" data-bs-parent="#faq">
+                  <div class="accordion-body">
+                    <div class="fs-sm">EASYGO permits one (1) bag plus one (1) carry-on per person. If you have additional bags, please inform our office.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="d-none d-lg-block col-lg-5 offset-lg-1"><img src="/static/basecamp/images/illustration.svg"  alt="Illustration"></div>
+        </div>
+      </section>
+      <!-- Services (Split section)-->
+      <section class="row g-0 mt-3" id="reasons">
+        <div class="col-md-6 bg-size-cover py-7" style="background-image: url('/static/basecamp/photos/services-cover.webp');">
+          <div class="py-6"></div>
+        </div>
+        <div class="col-md-6 border-top border-bottom px-3 pe-xl-0 ps-lg-5 ps-xl-7">
+			<div class="ms-sm-4 my-2 py-5 my-sm-0 py-sm-6 py-md-7" style="max-width: 495px;">
+				<h2 class="mb-4"><span style="color:orange">7 Reasons to book with</span> <span style="color:navy">EasyGo </span></h2>
+				<p style="line-height: 2.0; list-style-type:circle"><i class="fad fa-caret-right"></i>&nbsp;Competitive &amp; fixed price</p>
+				<p style="line-height: 2.0;"><i class="fad fa-caret-right"></i>&nbsp;Mostly non-shared ride, private ride&nbsp;</p>
+				<p style="line-height: 2.0;"><i class="fad fa-caret-right"></i>&nbsp;Direct Express Service, No additional stops</p>
+				<p style="line-height: 2.0;"><i class="fad fa-caret-right"></i>&nbsp;Reliable &amp; punctual service</p>
+				<p style="line-height: 2.0;"><i class="fad fa-caret-right"></i>&nbsp;Clean &amp; modern vehicle</p>
+				<p style="line-height: 2.0;"><i class="fad fa-caret-right"></i>&nbsp;Qualified &amp; experienced driver</p>
+				<p style="line-height: 2.0;"><i class="fad fa-caret-right"></i>&nbsp;Very competitive price with all the service above</p><br>
+			
+			</div>
+        </div>
+      </section>
+      <!-- Mobile app CTA-->
+      <section class="container mt-3 pt-5 mt-md-0 pt-md-7">
+        <div class="row align-items-end align-items-lg-start">
+          <div class="col-md-6 pb-5 pb-md-6 pt-lg-6 text-center text-md-start">
+            <h2 class="pb-1">Access the best deals anywhere</h2>
+            <p class="mx-auto mb-5 mx-md-0" style="max-width: 496px;">Please download easygo airport transfer mobile phone app. You can access anytime, anywhere and track your booking and more</p><a class="btn-market btn-apple mx-2 me-md-3 mb-3" href="https://www.apple.com/au/app-store/" role="button" target="_blank"><span class="btn-market-subtitle">Download on the</span><span class="btn-market-title">App Store</span></a><a class="btn-market btn-google mx-2 mb-3" href="https://play.google.com/" role="button" target="_blank"><span class="btn-market-subtitle">Download on the</span><span class="btn-market-title">Google Play</span></a>
+          </div>
+          <div class="col-md-6 col-xl-5 offset-xl-1"><img class="d-block mx-auto" src="/static/basecamp/photos/easygo_app.webp" alt="Mobile App"></div>
+        </div>
+		   <p class="text-center">This site is protected by reCAPTCHA Enterprise and the Google
+                    <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a> and
+                    <a href="https://policies.google.com/terms" target="_blank">Terms of Service</a> apply.
+                  </p>
+      </section>
+      <!-- Subscribe CTA-->
+      <section class="bg-gradient position-relative pt-6 pb-5 py-sm-6">
+        <div class="position-absolute top-0 start-0 w-100 h-100 bg-size-cover" style="background-image: url('/static/basecamp/photos/bg-pattern02.webp');"></div>
+        <div class="position-relative zindex-5 container pb-3 pt-sm-2">
+          <div class="mx-auto" style="max-width: 460px;">
+            <h2 class="text-light text-center pt-sm-2">Subscribe to EasyGo Transport mailing list</h2>
+            <p class="text-light text-center mb-grid-gutter">Enter your email address to receive special offer</p>
+            <form class="input-group mb-4" action="/contact_us/" method="post">{% csrf_token %}
+              <input class="form-control" type="email" placeholder="Your email" required>
+              <button class="btn btn-success" type="submit"><i class="ai-send fs-xl me-1"></i></button>
+            </form>
+            <div class="text-center pt-3">
+              <div class="fs-sm fw-medium text-light pb-1 mb-2">We are social</div>
+				<a class="btn-social bs-outline bs-facebook bs-light bs-lg me-2 mb-2" href="https://facebook.com/easygoairport" target="_blank"><i class="ai-facebook"></i></a>
+				<a class="btn-social bs-outline bs-twitter bs-light bs-lg me-2 mb-2" href="https://twitter.com" target="_blank"><i class="ai-twitter"></i></a>
+				<a class="btn-social bs-outline bs-instagram bs-light bs-lg me-2 mb-2" href="https://instagram.com" target="_blank"><i class="ai-instagram"></i></a>
+				<a class="btn-social bs-outline bs-google bs-light bs-lg me-2 mb-2" href="https://www.blog.google" target="_blank"><i class="ai-google"></i></a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer bg-dark pt-5 pb-4">
+      <div class="container d-md-flex justify-content-between align-items-center text-center">
+        <ul class="list-inline fs-sm mb-3 order-md-2">
+          <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="mailto:info@easygoshuttle.com.au">Support</a></li>
+          <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="/inquiry3/">Contact</a></li>
+		  <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="/privacy/">Privacy Policy</a></li>
+          <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="/terms/">Terms &amp; Conditions</a></li>
+        </ul>
+        <p class="fs-sm mb-3 order-md-1"><span class="text-light opacity-50 me-1">© 2023 EasyGo. All rights reserved.</a></p>        
+      </div>
+      
+    </footer>
+    <!-- Vendor scrits: js libraries and plugins-->
+    {% compress js %}
+    <script src="/static/basecamp/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/basecamp/js/simplebar.min.js"></script>
+    <script src="/static/basecamp/js/smooth-scroll.polyfills.min.js"></script>
+    <script src="/static/basecamp/js/jarallax.min.js"></script>
+    <script src="/static/basecamp/js/min/tiny-slider.js"></script>
+    <script src="/static/basecamp/js/flatpickr.min.js"></script>
+    <script src="/static/basecamp/js/rangePlugin.js"></script>
+    <script src="/static/basecamp/js/date-picker.js"></script>
+    <!-- Main theme script-->
+    <script src="/static/basecamp/js/theme.min.js"></script>
+    {% endcompress %}
+    
+  </body>
+</html>
