@@ -1628,8 +1628,10 @@ def return_trip_detail(request):
         is_confirmed = True if is_confirmed_str == 'True' else False
         
         user = Post.objects.filter(email=email).first()    
+        
         if not user:
-            return render(request, 'basecamp/500.html')        
+            return render(request, 'basecamp/500.html')    
+            
         else:
             name = user.name
             contact = user.contact
@@ -1686,9 +1688,9 @@ def return_trip_detail(request):
                  no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, price=price, is_confirmed=is_confirmed)
         p.save()
         
-        send_email_delayed.apply_async(args=[name, contact, email, flight_date, flight_number, flight_time,
-                                          pickup_time, direction, suburb, street, no_of_passenger, no_of_baggage,
-                                          message, price, is_confirmed], countdown=300)
+        # send_email_delayed.apply_async(args=[name, contact, email, flight_date, flight_number, flight_time,
+        #                                   pickup_time, direction, suburb, street, no_of_passenger, no_of_baggage,
+        #                                   message, price, is_confirmed], countdown=300)
 
         rendering = render(request, 'basecamp/return_trip_detail.html',
                         {'name' : name, 'email': email, })    
