@@ -14,7 +14,7 @@ from django.core.mail import send_mail
 @receiver(post_save, sender=Post)
 def notify_user(sender, instance, created, **kwargs):
     
-    if instance.is_confirmed:        
+    if instance.reConfirmed:        
         
         html_content = render_to_string("basecamp/html_email-confirmation.html",
                                         {'name': instance.name, 'contact': instance.contact, 'email': instance.email,
@@ -45,10 +45,11 @@ def notify_user(sender, instance, created, **kwargs):
 def notify_user(sender, instance, created, **kwargs):
     
     if instance.cancelled:        
-        
+       
         html_content = render_to_string("basecamp/html_email-cancelled.html",
                                         {'name': instance.name, 'email': instance.email,
                                          })
+        
         text_content = strip_tags(html_content)
 
         email = EmailMultiAlternatives(
@@ -63,7 +64,7 @@ def notify_user(sender, instance, created, **kwargs):
         email.send()
 
     elif instance.is_confirmed:       
-         
+        
         html_content = render_to_string("basecamp/html_email-inquiry-response.html",
                                         {'name': instance.name, 'contact': instance.contact, 'email': instance.email,
                                          'flight_date': instance.flight_date, 'flight_number': instance.flight_number,
