@@ -1232,9 +1232,9 @@ def booking_detail(request):
                  no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, price=price, is_confirmed=is_confirmed)
         p.save()
         
-        send_email_delayed.apply_async(args=[name, contact, email, flight_date, flight_number, flight_time,
-                                              pickup_time, direction, suburb, street, no_of_passenger, no_of_baggage,
-                                              message, price, is_confirmed], countdown=300)
+        # send_email_delayed.apply_async(args=[name, contact, email, flight_date, flight_number, flight_time,
+        #                                       pickup_time, direction, suburb, street, no_of_passenger, no_of_baggage,
+        #                                       message, price, is_confirmed], countdown=30)
 
         return render(request, 'basecamp/booking_detail.html',
                         {'name' : name, 'email': email, }) 
@@ -1248,9 +1248,11 @@ def confirm_booking_detail(request):
         email = request.POST.get('email')
         is_confirmed_str = request.POST.get('is_confirmed')
         is_confirmed = True if is_confirmed_str == 'True' else False
-        user = Inquiry.objects.filter(email=email).first()                     
+        user = Inquiry.objects.filter(email=email).first() 
+                            
         if not user:
-            return render(request, 'basecamp/500.html')        
+            return render(request, 'basecamp/500.html')   
+             
         else:
             name = user.name            
             contact = user.contact            
@@ -1265,6 +1267,7 @@ def confirm_booking_detail(request):
             no_of_baggage = user.no_of_baggage
             message = user.message
             price = user.price
+            reConfirmed = user.reConfirmed
             
             data = {
             'name': name,
@@ -1310,12 +1313,12 @@ def confirm_booking_detail(request):
             
         p = Post(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
-                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, price=price, is_confirmed=is_confirmed)
+                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, price=price, is_confirmed=is_confirmed, reConfirmed=reConfirmed)
         p.save()        
                
-        send_email_delayed.apply_async(args=[name, contact, email, flight_date, flight_number, flight_time,
-                                              pickup_time, direction, suburb, street, no_of_passenger, no_of_baggage,
-                                              message, price, is_confirmed], countdown=300)
+        # send_email_delayed.apply_async(args=[name, contact, email, flight_date, flight_number, flight_time,
+        #                                       pickup_time, direction, suburb, street, no_of_passenger, no_of_baggage,
+        #                                       message, price, is_confirmed], countdown=30)
                 
         return render(request, 'basecamp/confirm_booking_detail.html',
                         {'name' : name, 'email': email, })
