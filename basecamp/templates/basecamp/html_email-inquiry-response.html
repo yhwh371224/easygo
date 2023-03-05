@@ -262,14 +262,17 @@
 													(you don't have to fill the form again)<br>
 												 </p>
 												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">	                                                  
-													<a class="btn btn-warning" href="https://easygoshuttle.com.au/confirm_booking/"><img src="https://easygo-staticfiles-bucket.s3.ap-southeast-2.amazonaws.com/bookonline+image.webp" alt="book online logo" width="120"></a>
+													<a class="btn btn-warning" href="https://127.0.0.1:8000/confirm_booking/"><img src="https://easygo-staticfiles-bucket.s3.ap-southeast-2.amazonaws.com/bookonline+image.webp" alt="book online logo" width="120"></a>
 													
 													<br><br>
-													<a href="https://easygoshuttle.com.au/confirm_booking/">easygoshuttle.com.au/confirm_booking</a>
+													<a href="https://127.0.0.1:8000/confirm_booking/">easygoshuttle.com.au/confirm_booking</a>
 												</p>																				                                                 
 												<p style="Margin:0;font-size:12px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
-													Please note: you can pay cash or card to your driver on the flight day or you can pay online via PayPal<br>
-													<a href="https://easygoshuttle.com.au/payonline/">easygoshuttle.com.au/payonline</a><br><br>													
+													You can pay online via PayPal&nbsp;<a href="https://easygoshuttle.com.au/payonline/">easygoshuttle.com.au/payonline</a><br>
+													If you don't pay online, you will need to pay cash to your driver on the flight day<br><br>
+													{% if notice %}
+														{{ notice }}
+													{% endif %}	<br><br>
 												</p>				
 												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">                                                    
                                                     If your flight is within 24 hours, please let us know as soon as possible</p><br><br><br>  
