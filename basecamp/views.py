@@ -59,6 +59,9 @@ def inquiry(request): return render(request, 'basecamp/inquiry.html')
 def inquiry1(request): return render(request, 'basecamp/inquiry1.html')
 
 
+def invoice(request): return render(request, 'basecamp/invoice.html')
+
+
 def about_us(request): return render(request, 'basecamp/about_us.html')
 
 
@@ -1117,7 +1120,7 @@ def booking_detail(request):
             content = '''
             Hello, {} \n  
             * Both exist in Inquiry & Post *\n       
-            [Booking by client]       
+            [Booking by client] >> Sending email only!      
             ===============================
             Contact: {}
             Email: {}  
@@ -1146,7 +1149,7 @@ def booking_detail(request):
             content = '''
             Hello, {} \n  
             * Post only exist *\n     
-            [Booking by client]       
+            [Booking by client] >> Sending email only!       
             ===============================
             Contact: {}
             Email: {}  
@@ -1175,7 +1178,7 @@ def booking_detail(request):
             content = '''
             Hello, {} \n  
             * Inquiry only exist *\n     
-            [Booking by client]       
+            [Booking by client] >> Sending email only!       
             ===============================
             Contact: {}
             Email: {}  
@@ -1203,7 +1206,7 @@ def booking_detail(request):
             content = '''
             Hello, {} \n  
             * Neither in Inquiry & Post *\n    
-            [Booking by client]       
+            [Booking by client] >> Sending email only!       
             ===============================
             Contact: {}
             Email: {}  
@@ -1289,6 +1292,7 @@ def confirm_booking_detail(request):
             content = '''
             {} 
             clicked the 'confirm booking' \n
+            >> Sending email only! \n
             ===============================
             Contact: {}
             Email: {}  
@@ -1700,3 +1704,38 @@ def return_trip_detail(request):
     else:
         return render(request, 'beasecamp/return_trip.html', {})        
 
+
+# send invoice to customer
+def invoice_detail(request):     
+    if request.method == "POST":
+        email = request.POST.get('email')        
+        
+        user = Post.objects.filter(email=email).first()    
+        
+        if not user:
+            return render(request, 'basecamp/500.html')    
+            
+        else: 
+            
+            html_content = render_to_string("basecamp/html_email-invoice.html",
+                                        {'name': user.name, 'contact': user.contact, 'email': user.email,
+                                         'direction': user.direction, 'flight_date': user.flight_date,                                     
+                                         'street': user.street, 'suburb': user.suburb,
+                                         'no_of_passenger': user.no_of_passenger, 'price': user.price })
+
+            text_content = strip_tags(html_content)
+
+            email = EmailMultiAlternatives(
+                "Tax Invoice - EasyGo",
+                text_content,
+                '',
+                [email, 'info@easygoshuttle.com.au']
+            )
+            email.attach_alternative(html_content, "text/html")
+            email.send()
+
+            return render(request, 'basecamp/return_trip.html',
+                            {'email': email, })  
+    
+    else:
+        return render(request, 'beasecamp/invoice.html', {})        
