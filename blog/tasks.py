@@ -155,7 +155,7 @@ def email_6(self, **kwargs):
             {'name': i.name, 'flight_date': i.flight_date, 'flight_number': i.flight_number, 
             'flight_time': i.flight_time, 'direction': i.direction, 'pickup_time': i.pickup_time, 'street': i.street, 'suburb': i.suburb})
             text_content = strip_tags(html_content)
-            email = EmailMultiAlternatives("Review - EasyGo", text_content, '', ['info@easygoshuttle.com.au'])
+            email = EmailMultiAlternatives("Review - EasyGo", text_content, '', [i.email])
             email.attach_alternative(html_content, "text/html")
             email.send()
             
