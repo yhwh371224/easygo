@@ -231,17 +231,14 @@
 											<td align="left" style="padding-top:28px;padding-left:0;">
                                                 <p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                    
                                                     Thank you for your inquiry with EasyGo<br><br>
-													Please double check your booking details correct<br>                                                    
+													Please double check your booking details are correct<br>                                                    
 												<p style="Margin:0;font-size:12px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                    
 													Contact:  {{ contact }}<br>
                                                     Email:  {{ email }}<br>
                                                     Flight date:  {{ flight_date }}<br>
                                                     Flight number:  {{ flight_number }}<br>
 													Direction:  {{ direction }}<br>
-												{% if direction == 'Pickup from Intl Airport' %}
-													Arrival time in Sydney:  {{ flight_time }}<br>
-													<a href="https://easygoshuttle.com.au/meeting_point/">The meeting point</a><br> 
-												{% elif direction == 'Pickup from Domestic Airport' %}
+												{% if direction == 'Pickup from Intl Airport' or direction == 'Pickup from Domestic Airport' %}
 													Arrival time in Sydney:  {{ flight_time }}<br>
 													<a href="https://easygoshuttle.com.au/meeting_point/">The meeting point</a><br>
 												{% else %}
@@ -256,7 +253,7 @@
 													{{ message }}<br><br>                                                   
 												</p>																			
 												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;">
-													The cost for you will be ${{ price }}<br><br>
+													The cost for your booking will be ${{ price }}<br><br>
                                                     If you wish to proceed, please let me know<br><br> 
 													or simply click the image below<br>
 													(you don't have to fill the form again)<br>
@@ -276,7 +273,7 @@
 													{% endif %}	<br><br>
 												</p>				
 												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">                                                    
-                                                    If your flight is within 24 hours, please let us know as soon as possible</p><br><br><br>  
+                                                    If your flight is scheduled within the next 24 hours, kindly inform us at the earliest convenience</p><br><br><br>  
 												<p style="Margin:0;font-size:13px; line-height:22px;Margin-bottom:12px;">
                                                     Best Regards,<br> 
 													Peter <br> 
