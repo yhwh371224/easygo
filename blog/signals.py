@@ -22,7 +22,7 @@ def notify_user(sender, instance, created, **kwargs):
                                          'flight_time': instance.flight_time, 'pickup_time': instance.pickup_time,
                                          'direction': instance.direction, 'street': instance.street, 'suburb': instance.suburb,
                                          'no_of_passenger': instance.no_of_passenger, 'no_of_baggage': instance.no_of_baggage,
-                                         'message': instance.message, 'price': instance.price, 'paid': instance.paid })
+                                         'message': instance.message, 'notice': instance.notice, 'price': instance.price, 'paid': instance.paid })
 
         text_content = strip_tags(html_content)
 
@@ -30,7 +30,7 @@ def notify_user(sender, instance, created, **kwargs):
             "Booking confirmation - EasyGo",
             text_content,
             '',
-            [instance.email, 'info@easygoshuttle.com.au']
+            ['info@easygoshuttle.com.au']
         )
         email.attach_alternative(html_content, "text/html")
         
@@ -71,7 +71,7 @@ def notify_user(sender, instance, created, **kwargs):
                                          'flight_time': instance.flight_time, 'pickup_time': instance.pickup_time,
                                          'direction': instance.direction, 'street': instance.street, 'suburb': instance.suburb,
                                          'no_of_passenger': instance.no_of_passenger, 'no_of_baggage': instance.no_of_baggage,
-                                         'message': instance.message, 'price': instance.price})
+                                         'message': instance.message, 'price': instance.price, 'notice': instance.notice,})
 
         text_content = strip_tags(html_content)
 
