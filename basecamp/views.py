@@ -908,7 +908,9 @@ def confirmation_detail(request):
         no_of_passenger = request.POST.get('no_of_passenger')
         no_of_baggage = request.POST.get('no_of_baggage')
         message = request.POST.get('message')
-        price = request.POST.get('price')        
+        notice = request.POST.get('notice')
+        price = request.POST.get('price')
+                
         
         data = {
             'name': name,
@@ -1047,7 +1049,7 @@ def confirmation_detail(request):
 
         p = Post(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
-                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, price=price,)
+                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, notice=notice, price=price)
         p.save()
 
         rendering = render(request, 'basecamp/confirmation_detail.html',
@@ -1059,7 +1061,7 @@ def confirmation_detail(request):
                                      'flight_time': flight_time, 'pickup_time': pickup_time,
                                      'direction': direction, 'street': street, 'suburb': suburb,
                                      'no_of_passenger': no_of_passenger, 'no_of_baggage': no_of_baggage,
-                                     'message': message, 'price': price })
+                                     'message': message, 'notice': notice , 'price': price })
         text_content = strip_tags(html_content)
         email = EmailMultiAlternatives(
             "Booking confirmation - EasyGo",
@@ -1091,6 +1093,7 @@ def booking_detail(request):
         no_of_passenger = request.POST.get('no_of_passenger')
         no_of_baggage = request.POST.get('no_of_baggage')
         message = request.POST.get('message')
+        notice = request.POST.get('notice')
         price = request.POST.get('price')
         is_confirmed_str = request.POST.get('is_confirmed')
         is_confirmed = True if is_confirmed_str == 'True' else False
@@ -1232,7 +1235,7 @@ def booking_detail(request):
 
         p = Post(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
-                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, price=price, is_confirmed=is_confirmed)
+                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, notice=notice, price=price, is_confirmed=is_confirmed)
         p.save()
         
         # send_email_delayed.apply_async(args=[name, contact, email, flight_date, flight_number, flight_time,
@@ -1269,6 +1272,7 @@ def confirm_booking_detail(request):
             no_of_passenger = user.no_of_passenger
             no_of_baggage = user.no_of_baggage
             message = user.message
+            notice = user.notice
             price = user.price
             reConfirmed = user.reConfirmed
             
@@ -1317,7 +1321,7 @@ def confirm_booking_detail(request):
             
         p = Post(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
-                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, price=price, is_confirmed=is_confirmed, reConfirmed=reConfirmed)
+                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, notice=notice, price=price, is_confirmed=is_confirmed, reConfirmed=reConfirmed)
         p.save()        
                
         # send_email_delayed.apply_async(args=[name, contact, email, flight_date, flight_number, flight_time,
@@ -1351,11 +1355,12 @@ def retrieve_inquiry_detail(request):
             suburb = user.suburb
             street = user.street
             no_of_passenger = user.no_of_passenger
-            no_of_baggage = user.no_of_baggage       
+            no_of_baggage = user.no_of_baggage
+            notice = user.notice       
             
         p = Post(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
-                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, price=price)
+                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, notice=notice, price=price)
         p.save()
 
         rendering = render(request, 'basecamp/retrieve_inquiry_detail.html',
@@ -1367,7 +1372,7 @@ def retrieve_inquiry_detail(request):
                                      'flight_time': flight_time, 'pickup_time': pickup_time,
                                      'direction': direction, 'street': street, 'suburb': suburb,
                                      'no_of_passenger': no_of_passenger, 'no_of_baggage': no_of_baggage,
-                                     'message': message, 'price': price })
+                                     'message': message, 'notice': notice, 'price': price })
     
         text_content = strip_tags(html_content)
 
@@ -1396,7 +1401,7 @@ def retrieve_post_detail(request):
         direction = request.POST.get('direction')        
         no_of_passenger = request.POST.get('no_of_passenger')
         no_of_baggage = request.POST.get('no_of_baggage')
-        message = request.POST.get('message')
+        message = request.POST.get('message')        
         price = request.POST.get('price')  
 
         user = Post.objects.filter(email=email).first()    
@@ -1407,10 +1412,11 @@ def retrieve_post_detail(request):
             contact = user.contact
             suburb = user.suburb
             street = user.street
+            notice = user.notice
             
         p = Post(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
-                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, price=price)
+                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, notice=notice, price=price)
         p.save()
 
         rendering = render(request, 'basecamp/retrieve_post_detail.html',
@@ -1422,7 +1428,7 @@ def retrieve_post_detail(request):
                                      'flight_time': flight_time, 'pickup_time': pickup_time,
                                      'direction': direction, 'street': street, 'suburb': suburb,
                                      'no_of_passenger': no_of_passenger, 'no_of_baggage': no_of_baggage,
-                                     'message': message, 'price': price })
+                                     'message': message, 'notice': notice, 'price': price })
     
         text_content = strip_tags(html_content)
 
@@ -1461,11 +1467,12 @@ def re_confirm_detail(request):
             no_of_passenger = user.no_of_passenger
             no_of_baggage = user.no_of_baggage
             message = user.message
+            notice = user.notice
             price = user.price
             
         p = Post(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
-                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, price=price)
+                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, notice=notice, price=price)
         p.save()
 
         rendering = render(request, 'basecamp/re_confirm_detail.html',
@@ -1477,7 +1484,7 @@ def re_confirm_detail(request):
                                      'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
                                      'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
                                      'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
-                                     'message': user.message, 'price': user.price })
+                                     'message': user.message, 'notice': user.notice, 'price': user.price })
     
         text_content = strip_tags(html_content)
 
@@ -1512,7 +1519,7 @@ def re_confirm_email_detail(request):
                                      'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
                                      'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
                                      'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
-                                     'message': user.message, 'price': user.price })
+                                     'message': user.message, 'notice': user.notice, 'price': user.price })
     
         text_content = strip_tags(html_content)
 
@@ -1547,11 +1554,12 @@ def save_data_only_detail(request):
         no_of_passenger = request.POST.get('no_of_passenger')
         no_of_baggage = request.POST.get('no_of_baggage')
         message = request.POST.get('message')
+        notice = request.POST.get('notice')
         price = request.POST.get('price')
  
         p = Post(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
-                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, price=price)
+                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, notice=notice, price=price)
         p.save()
                    
         
@@ -1571,7 +1579,7 @@ def retrieve_inquiry_To_inquiry_detail(request):
         pickup_time = request.POST.get('pickup_time')
         direction = request.POST.get('direction')        
         no_of_passenger = request.POST.get('no_of_passenger')        
-        message = request.POST.get('message')
+        message = request.POST.get('message')        
         price = request.POST.get('price')  
 
         user = Inquiry.objects.filter(email=email).first()    
@@ -1583,10 +1591,11 @@ def retrieve_inquiry_To_inquiry_detail(request):
             suburb = user.suburb
             street = user.street
             no_of_baggage = user.no_of_baggage
+            notice = user.notice
             
         p = Inquiry(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
-                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, price=price)
+                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, notice=notice, price=price)
         p.save()
 
         rendering = render(request, 'basecamp/retrieve_post_detail.html',
@@ -1598,7 +1607,7 @@ def retrieve_inquiry_To_inquiry_detail(request):
                                      'flight_time': flight_time, 'pickup_time': pickup_time,
                                      'direction': direction, 'street': street, 'suburb': suburb,
                                      'no_of_passenger': no_of_passenger, 'no_of_baggage': no_of_baggage,
-                                     'message': message, 'price': price })
+                                     'message': message, 'notice': notice, 'price': price })
     
         text_content = strip_tags(html_content)
 
@@ -1643,6 +1652,7 @@ def return_trip_detail(request):
             street = user.street
             no_of_passenger = user.no_of_passenger
             no_of_baggage = user.no_of_baggage
+            notice = user.notice
             
         data = {
             'name': name,
@@ -1689,7 +1699,7 @@ def return_trip_detail(request):
                     
         p = Post(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
-                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, price=price, is_confirmed=is_confirmed)
+                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, notice=notice, price=price, is_confirmed=is_confirmed)
         p.save()
         
         # send_email_delayed.apply_async(args=[name, contact, email, flight_date, flight_number, flight_time,
