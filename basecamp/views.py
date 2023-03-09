@@ -907,8 +907,8 @@ def confirmation_detail(request):
         street = request.POST.get('street')
         no_of_passenger = request.POST.get('no_of_passenger')
         no_of_baggage = request.POST.get('no_of_baggage')
-        message = request.POST.get('message')
-        notice = request.POST.get('notice')
+        message = request.POST.get('message') 
+        notice = request.POST.get('notice')       
         price = request.POST.get('price')
                 
         

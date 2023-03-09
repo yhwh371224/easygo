@@ -14,7 +14,7 @@ from django.core.mail import send_mail
 @receiver(post_save, sender=Post)
 def notify_user(sender, instance, created, **kwargs):
     
-    if instance.reConfirmed:        
+    if instance.is_confirmed:         
         
         html_content = render_to_string("basecamp/html_email-confirmation.html",
                                         {'name': instance.name, 'contact': instance.contact, 'email': instance.email,
@@ -30,7 +30,7 @@ def notify_user(sender, instance, created, **kwargs):
             "Booking confirmation - EasyGo",
             text_content,
             '',
-            ['info@easygoshuttle.com.au']
+            [instance.email, 'info@easygoshuttle.com.au']
         )
         email.attach_alternative(html_content, "text/html")
         
