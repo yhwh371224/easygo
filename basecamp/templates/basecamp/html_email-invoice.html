@@ -238,14 +238,11 @@
 													Flight time: {{ flight_time }}<br>
 													Pickup time: {{ pickup_time }}<br>		
 													Direction: {{ direction }}<br>
-													Street: {{ street }}<br>
-													Suburb: {{ suburb }}<br>                                                   
+													Address: {{ street }}, {{ suburb }}<br>													                                                   
                                                     Number of Passenger: {{ no_of_passenger }}<br><br>
                                                     <strong>Total price: ${{ price }} inc GST</strong><br>
 													{% if paid %}
-														<strong>Paid: ${{ paid }}</strong><br>
-														<hr>
-														<strong>Balance: $0.00</strong><br>
+														<strong>Paid: ${{ paid }}</strong><br><br>	
 													{% endif %}
                                                 </p>     										
 												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">                                                  

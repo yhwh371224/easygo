@@ -1729,9 +1729,9 @@ def invoice_detail(request):
             
             html_content = render_to_string("basecamp/html_email-invoice.html",
                                         {'notice': user.notice, 'name': user.name, 'contact': user.contact, 
-                                         'email': user.email, 'direction': user.direction, 'flight_date': user.flight_date,                                     
-                                         'pickup time': user.pickup_time, 'street': user.street, 'suburb': user.suburb,
-                                         'no_of_passenger': user.no_of_passenger, 'price': user.price, 'paid': user.paid })
+                                         'email': user.email, 'direction': user.direction, 'flight_date': user.flight_date, 
+                                         'flight_time': user.flight_time, 'pickup_time': user.pickup_time, 'street': user.street, 
+                                         'suburb': user.suburb, 'no_of_passenger': user.no_of_passenger, 'price': user.price, 'paid': user.paid })
 
             text_content = strip_tags(html_content)
 
