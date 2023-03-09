@@ -230,8 +230,8 @@
 										<tr>
 											<td align="left" style="padding-top:28px;padding-left:0;">
                                                 <p style="Margin:0;font-size:15px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                    
-                                                    TAX INVOICE #T98887<br><br>     
-                                                    Invoice to: <br><br>                                                                                                       
+                                                    TAX INVOICE {{ notice }}<br><br>     
+                                                    Invoice to: {{ name }}<br><br>                                                                                                       
                                                 </p>
 												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
                                                     Flight date: {{ flight_date }}<br>                                                    
@@ -241,7 +241,12 @@
 													Street: {{ street }}<br>
 													Suburb: {{ suburb }}<br>                                                   
                                                     Number of Passenger: {{ no_of_passenger }}<br><br>
-                                                    <strong>Total price: {{ price }} inc GST</strong><br>													                                                
+                                                    <strong>Total price: ${{ price }} inc GST</strong><br>
+													{% if paid %}
+														<strong>Paid: ${{ paid }}</strong><br>
+														<hr>
+														<strong>Balance: $0.00</strong><br>
+													{% endif %}
                                                 </p>     										
 												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">                                                  
                                                     Payment options are as below<br><br>
