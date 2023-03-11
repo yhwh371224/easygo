@@ -1062,6 +1062,7 @@ def confirmation_detail(request):
                                      'direction': direction, 'street': street, 'suburb': suburb,
                                      'no_of_passenger': no_of_passenger, 'no_of_baggage': no_of_baggage,
                                      'message': message, 'notice': notice , 'price': price })
+        
         text_content = strip_tags(html_content)
         email = EmailMultiAlternatives(
             "Booking confirmation - EasyGo",
@@ -1553,13 +1554,12 @@ def save_data_only_detail(request):
         street = request.POST.get('street')
         no_of_passenger = request.POST.get('no_of_passenger')
         no_of_baggage = request.POST.get('no_of_baggage')
-        message = request.POST.get('message')
-        notice = request.POST.get('notice')
+        message = request.POST.get('message')        
         price = request.POST.get('price')
  
         p = Post(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
-                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, notice=notice, price=price)
+                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, price=price)
         p.save()
                    
         
