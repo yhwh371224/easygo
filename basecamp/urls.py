@@ -44,6 +44,8 @@ urlpatterns = [
     path('retrieve_inquiry_to_inquiry_detail/', views.retrieve_inquiry_To_inquiry_detail),
     path('return_trip/', views.return_trip, name="return_trip"),
     path('return_trip_detail/', views.return_trip_detail),
+    path('return_flight_fields/', views.return_flight_fields, name='return_flight_fields'),
+    path('return_flight_fields_detail/', views.return_flight_fields_detail),
     path('re_confirm/', views.re_confirm, name="re_confirm"),
     path('re_confirm_detail/', views.re_confirm_detail),
     path('re_confirm_email/', views.re_confirm_email, name="re_confirm_email"),
