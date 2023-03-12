@@ -5,7 +5,9 @@ from rangefilter.filters import DateRangeFilter
 
 class PostAdmin(admin.ModelAdmin):
     list_display = ['flight_date', 'name', 'suburb', 'contact',
-                    'created', 'price', 'is_confirmed', 'cancelled', 'reConfirmed' ]
+                    'created', 'price', 'is_confirmed', 'cancelled', 
+                    'reConfirmed', 'return_flight_date', 'return_flight_number',
+                     'return_flight_time' ]
 
     list_filter = (('flight_date', DateRangeFilter), 'suburb')
 
@@ -15,7 +17,9 @@ class PostAdmin(admin.ModelAdmin):
 
 class InquiryAdmin(admin.ModelAdmin):
     list_display = ['flight_date', 'name', 'suburb', 'contact',
-                    'created', 'price', 'is_confirmed', 'cancelled', 'reConfirmed']
+                    'created', 'price', 'is_confirmed', 'cancelled', 
+                    'reConfirmed', 'return_flight_date', 'return_flight_number',
+                     'return_flight_time' ]
 
     list_filter = (('flight_date', DateRangeFilter), 'suburb')
 

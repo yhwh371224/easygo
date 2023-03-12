@@ -263,14 +263,12 @@
 													</p>
 												{% endif %}
 												<br><br>
-												<!-- If paid -->
+												<!-- If paid or not-->
 												{% if paid %}																								
 												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">                                                  
                                                     You have paid ${{ paid }}, which we have received and greatly appreciate. 													
 												<br><br></p>
-												{% endif %}
-												<!-- Payment option -->
-												{% if direction == 'Pickup from Intl Airport' or direction == 'Pickup from Domestic Airport' %}												
+												{% elif direction == 'Pickup from Intl Airport' or direction == 'Pickup from Domestic Airport' %}												
 												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">                                                  
                                                     Please pay online ${{ price }} via PayPal in advance <a href="https://easygoshuttle.com.au/payonline/">&raquo;&raquo; pay here</a><br>
 													For those arriving in Sydney, payment in advance is kindly requested																								
@@ -281,11 +279,9 @@
 													Alternatively, you can pay online vis PayPal <a href="https://easygoshuttle.com.au/payonline/">&raquo;&raquo; pay here</a>													
 												<br><br></p>
 												{% endif %}
-												<!-- For return trip -->
-												{% if paid %}							
+												<!-- For return trip -->						
 												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
 													If you wish to book a return trip, click&nbsp;<a href="https://easygoshuttle.com.au/return_trip/">&raquo;&raquo;Book for return trip</a><br><br></p>
-												{% endif %}
 												<!-- If notice -->
 												{% if notice %}
 												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;"></p>

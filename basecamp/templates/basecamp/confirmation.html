@@ -36,7 +36,7 @@
       <!-- Page content-->
       <!-- Page title-->	 
       <!-- Contact form + details-->  	  
-            <form method="post" enctype="multipart/form-data" action="/confirmation_detail/" class="card-body needs-validation p-5" >
+            <form id="flight-form" method="post" enctype="multipart/form-data" action="/confirmation_detail/" class="card-body needs-validation p-5" >
                 {% csrf_token %}
 				<div class="mb3 pb-1" >					
 					<label class="form-label">Personal Information</label>									      
@@ -424,6 +424,12 @@
                   <input class="form-control" type="text" placeholder="How many baggage?" name="no_of_baggage" requried>
                   <div class="invalid-feedback">Please enter the number of baggage!</div>
                 </div>
+				<div id="return-flight-fields" hx-get="{% url 'basecamp:return_flight_fields' %}">
+					<!-- Fields will be dynamically added here -->
+				</div>
+				
+				<label for="return-flight-date">Return Flight:</label>
+				<input type="checkbox" name="return_flight" id="return-flight">
                 <div class="mb-3 pb-1">
                   <label class="form-label" >Message</label>
                   <textarea class="form-control" name="message" id="cont-message" rows="5" placeholder="Write your message here"></textarea>
@@ -516,4 +522,17 @@
 		  </div>
 		</div>
 	</section>	
+
+	<script src="https://cdn.jsdelivr.net/npm/htmx.org/dist/htmx.js"></script>
+	<script>
+		var returnFlightCheckbox = document.getElementById("return-flight");
+		returnFlightCheckbox.addEventListener("change", function() {
+			if (returnFlightCheckbox.checked) {
+				htmx.trigger("#return-flight-fields", "hx-get");
+			} else {
+				var returnFlightFields = document.getElementById("return-flight-fields");
+				returnFlightFields.innerHTML = "";
+			}
+		});
+	</script>
 {% endblock %}

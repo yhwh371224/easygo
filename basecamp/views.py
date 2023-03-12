@@ -4,6 +4,7 @@ from basecamp.area import suburbs
 from blog.models import Post, Inquiry
 from django.http import HttpResponseBadRequest
 from blog.tasks import send_email_delayed
+from django.http import JsonResponse
 
 # html email required stuff
 from django.core.mail import EmailMultiAlternatives
@@ -42,6 +43,9 @@ def retrieve_inquiry_to_inquiry(request): return render(request, 'basecamp/retri
 
 
 def return_trip(request): return render(request, 'basecamp/return_trip.html')
+
+
+def return_flight_fields(request): return render(request, 'basecamp/return_flight_fields.html')
 
 
 def re_confirm(request): return render(request, 'basecamp/re_confirm.html')
@@ -1748,4 +1752,9 @@ def invoice_detail(request):
                             {'email': email, })  
     
     else:
-        return render(request, 'beasecamp/invoice.html', {})        
+        return render(request, 'beasecamp/invoice.html', {})  
+
+
+def return_flight_fields_detail(request):
+    html = render_to_string('basecamp/return_flight_fields.html')
+    return JsonResponse({'html': html})      
