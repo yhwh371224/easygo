@@ -42,6 +42,9 @@ def retrieve_post(request): return render(request, 'basecamp/retrieve_post.html'
 def retrieve_inquiry_to_inquiry(request): return render(request, 'basecamp/retrieve_inquiry_to_inquiry.html')
 
 
+def return_flight_fields(request): return render(request, 'basecamp/return_flight_fields.html')
+
+
 def return_trip(request): return render(request, 'basecamp/return_trip.html')
 
 
@@ -1867,5 +1870,3 @@ def invoice_detail(request):
         return render(request, 'beasecamp/invoice.html', {})  
 
 
-def return_flight_fields(request):
-    return render(request, 'basecamp/return_flight_fields.html')
