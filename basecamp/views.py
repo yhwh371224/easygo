@@ -45,7 +45,7 @@ def retrieve_inquiry_to_inquiry(request): return render(request, 'basecamp/retri
 def return_trip(request): return render(request, 'basecamp/return_trip.html')
 
 
-def return_flight_fields(request): return render(request, 'basecamp/return_flight_fields.html')
+def return_trip_inquiry(request): return render(request, 'basecamp/return_trip_inquiry.html')
 
 
 def re_confirm(request): return render(request, 'basecamp/re_confirm.html')
@@ -914,6 +914,7 @@ def confirmation_detail(request):
         message = request.POST.get('message') 
         notice = request.POST.get('notice')       
         price = request.POST.get('price')
+        paid = request.POST.get('paid')
                 
         
         data = {
@@ -1053,7 +1054,7 @@ def confirmation_detail(request):
 
         p = Post(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
-                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, notice=notice, price=price)
+                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, notice=notice, price=price, paid=paid)
         p.save()
 
         rendering = render(request, 'basecamp/confirmation_detail.html',
@@ -1065,7 +1066,7 @@ def confirmation_detail(request):
                                      'flight_time': flight_time, 'pickup_time': pickup_time,
                                      'direction': direction, 'street': street, 'suburb': suburb,
                                      'no_of_passenger': no_of_passenger, 'no_of_baggage': no_of_baggage,
-                                     'message': message, 'notice': notice , 'price': price })
+                                     'message': message, 'notice': notice , 'price': price, 'paid': paid })
         
         text_content = strip_tags(html_content)
         email = EmailMultiAlternatives(
@@ -1279,6 +1280,7 @@ def confirm_booking_detail(request):
             message = user.message
             notice = user.notice
             price = user.price
+            paid = user.paid
             reConfirmed = user.reConfirmed
             
             data = {
@@ -1326,7 +1328,8 @@ def confirm_booking_detail(request):
             
         p = Post(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
-                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, notice=notice, price=price, is_confirmed=is_confirmed, reConfirmed=reConfirmed)
+                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, notice=notice, price=price,
+                 paid=paid, is_confirmed=is_confirmed, reConfirmed=reConfirmed)
         p.save()        
                
         # send_email_delayed.apply_async(args=[name, contact, email, flight_date, flight_number, flight_time,
@@ -1361,11 +1364,12 @@ def retrieve_inquiry_detail(request):
             street = user.street
             no_of_passenger = user.no_of_passenger
             no_of_baggage = user.no_of_baggage
-            notice = user.notice       
+            notice = user.notice
+            paid = user.paid       
             
         p = Post(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
-                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, notice=notice, price=price)
+                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, notice=notice, price=price, paid=paid)
         p.save()
 
         rendering = render(request, 'basecamp/retrieve_inquiry_detail.html',
@@ -1377,7 +1381,7 @@ def retrieve_inquiry_detail(request):
                                      'flight_time': flight_time, 'pickup_time': pickup_time,
                                      'direction': direction, 'street': street, 'suburb': suburb,
                                      'no_of_passenger': no_of_passenger, 'no_of_baggage': no_of_baggage,
-                                     'message': message, 'notice': notice, 'price': price })
+                                     'message': message, 'notice': notice, 'price': price, 'paid': paid })
     
         text_content = strip_tags(html_content)
 
@@ -1418,10 +1422,11 @@ def retrieve_post_detail(request):
             suburb = user.suburb
             street = user.street
             notice = user.notice
+            paid = user.paid
             
         p = Post(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
-                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, notice=notice, price=price)
+                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, notice=notice, price=price, paid=paid)
         p.save()
 
         rendering = render(request, 'basecamp/retrieve_post_detail.html',
@@ -1433,7 +1438,7 @@ def retrieve_post_detail(request):
                                      'flight_time': flight_time, 'pickup_time': pickup_time,
                                      'direction': direction, 'street': street, 'suburb': suburb,
                                      'no_of_passenger': no_of_passenger, 'no_of_baggage': no_of_baggage,
-                                     'message': message, 'notice': notice, 'price': price })
+                                     'message': message, 'notice': notice, 'price': price, 'paid': paid })
     
         text_content = strip_tags(html_content)
 
@@ -1474,10 +1479,11 @@ def re_confirm_detail(request):
             message = user.message
             notice = user.notice
             price = user.price
+            paid = user.paid
             
         p = Post(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
-                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, notice=notice, price=price)
+                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, notice=notice, price=price, paid=paid)
         p.save()
 
         rendering = render(request, 'basecamp/re_confirm_detail.html',
@@ -1489,7 +1495,7 @@ def re_confirm_detail(request):
                                      'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
                                      'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
                                      'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
-                                     'message': user.message, 'notice': user.notice, 'price': user.price })
+                                     'message': user.message, 'notice': user.notice, 'price': user.price, 'paid': user.paid })
     
         text_content = strip_tags(html_content)
 
@@ -1524,7 +1530,7 @@ def re_confirm_email_detail(request):
                                      'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
                                      'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
                                      'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
-                                     'message': user.message, 'notice': user.notice, 'price': user.price })
+                                     'message': user.message, 'notice': user.notice, 'price': user.price, 'paid': user.paid })
     
         text_content = strip_tags(html_content)
 
@@ -1560,10 +1566,11 @@ def save_data_only_detail(request):
         no_of_baggage = request.POST.get('no_of_baggage')
         message = request.POST.get('message')        
         price = request.POST.get('price')
+        paid = request.POST.get('paid')
  
         p = Post(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
-                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, price=price)
+                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, price=price, paid=paid)
         p.save()
                    
         
@@ -1630,6 +1637,109 @@ def retrieve_inquiry_To_inquiry_detail(request):
         return render(request, 'beasecamp/retrieve_inquiry_to_inquiry.html', {})         
 
 
+# From Inquiry to Inquiry return trip
+def return_trip_inquiry_detail(request):     
+    if request.method == "POST":
+        email = request.POST.get('email')
+        flight_date = request.POST.get('flight_date')
+        flight_number = request.POST.get('flight_number')
+        flight_time = request.POST.get('flight_time')
+        pickup_time = request.POST.get('pickup_time')
+        direction = request.POST.get('direction')
+        message = request.POST.get('message')        
+        
+        user = Inquiry.objects.filter(email=email).first()    
+        if not user:
+            return render(request, 'basecamp/500.html')       
+        else:
+            name = user.name
+            contact = user.contact
+            suburb = user.suburb
+            street = user.street
+            no_of_passenger = user.no_of_passenger
+            no_of_baggage = user.no_of_baggage
+            notice = user.notice
+            price = user.price
+            
+        data = {
+            'name': name,
+            'contact': contact,
+            'email': email,
+            'flight_date': flight_date,
+            'flight_number': flight_number,
+            'flight_time': flight_time,
+            'pickup_time': pickup_time,
+            'direction': direction,
+            'suburb': suburb,
+            'street': street,
+            'no_of_passenger': no_of_passenger,
+            'no_of_baggage': no_of_baggage,
+            'message': message,
+            'notice': notice,
+            'price': price,
+            }       
+            
+        content = '''
+        {} 
+        clicked the 'inquiry return trip' \n
+        >> Sending inquiry email only! \n
+        ===============================
+        Contact: {}
+        Email: {}  
+        Flight no: {}      
+        Flight time: {}
+        Pickup time: {}
+        Direction: {}
+        Street: {}
+        Suburb: {}
+        Passenger: {}
+        Baggage: {}
+        Messag
+        {}  
+        Notice: {}
+        Price: {} \n          
+        ===============================\n        
+        Best Regards,
+        EasyGo Admin \n\n        
+        ''' .format(data['name'], data['contact'], data['email'], data['flight_number'],
+                    data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
+                    data['no_of_passenger'], data['no_of_baggage'], data['message'], data['notice'], data['price'])
+        send_mail(data['flight_date'], content,
+                  '', ['info@easygoshuttle.com.au'])       
+            
+        p = Inquiry(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
+                 flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
+                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, notice=notice, price=price)
+        p.save()
+
+        rendering = render(request, 'basecamp/retrieve_post_detail.html',
+                        {'name' : name, 'email': email, })        
+
+        html_content = render_to_string("basecamp/html_email-inquiry-response.html",
+                                    {'name': name, 'contact': contact, 'email': email,
+                                     'flight_date': flight_date, 'flight_number': flight_number,
+                                     'flight_time': flight_time, 'pickup_time': pickup_time,
+                                     'direction': direction, 'street': street, 'suburb': suburb,
+                                     'no_of_passenger': no_of_passenger, 'no_of_baggage': no_of_baggage,
+                                     'message': message, 'notice': notice, 'price': price })
+    
+        text_content = strip_tags(html_content)
+
+        email = EmailMultiAlternatives(
+            "Booking inquiry - EasyGo",
+            text_content,
+            '',
+            [email, 'info@easygoshuttle.com.au']
+        )
+        email.attach_alternative(html_content, "text/html")
+        email.send()
+        
+        return rendering
+    
+    else:
+        return render(request, 'beasecamp/return_trip_inquiry.html', {})         
+
+
 # For Return Trip 
 def return_trip_detail(request):     
     if request.method == "POST":
@@ -1656,6 +1766,7 @@ def return_trip_detail(request):
             street = user.street
             no_of_passenger = user.no_of_passenger
             no_of_baggage = user.no_of_baggage
+            paid = user.paid
             notice = user.notice
             
         data = {
@@ -1673,6 +1784,7 @@ def return_trip_detail(request):
             'no_of_baggage': no_of_baggage,
             'message': message,
             'price': price,
+            'paid': paid,
             }       
             
         content = '''
@@ -1703,7 +1815,7 @@ def return_trip_detail(request):
                     
         p = Post(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
-                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, notice=notice, price=price, is_confirmed=is_confirmed)
+                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, notice=notice, price=price, paid=paid, is_confirmed=is_confirmed)
         p.save()
         
         # send_email_delayed.apply_async(args=[name, contact, email, flight_date, flight_number, flight_time,
@@ -1755,6 +1867,5 @@ def invoice_detail(request):
         return render(request, 'beasecamp/invoice.html', {})  
 
 
-def return_flight_fields_detail(request):
-    html = render_to_string('basecamp/return_flight_fields.html')
-    return JsonResponse({'html': html})      
+def return_flight_fields(request):
+    return render(request, 'basecamp/return_flight_fields.html')
