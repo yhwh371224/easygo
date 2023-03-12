@@ -246,28 +246,27 @@
     <script src="/static/basecamp/js/rangePlugin.js"></script>
     <script src="/static/basecamp/js/date-picker.js"></script>
     <!-- Main theme script-->
-    <script src="/static/basecamp/js/theme.min.js"></script>
-    <script src="/static/basecamp/js/htmx.min.js"></script>    
+    <script src="/static/basecamp/js/theme.min.js"></script>   
     <script>
     	var returnFlightCheckbox = document.getElementById("return-flight");
-    var returnFlightFields = document.getElementById("return-flight-fields");
+      var returnFlightFields = document.getElementById("return-flight-fields");
 
-    returnFlightCheckbox.addEventListener("change", function() {
-        if (returnFlightCheckbox.checked) {
-            var xhr = new XMLHttpRequest();
-            xhr.open("GET", "{% url 'basecamp:return_flight_fields' %}");
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    returnFlightFields.innerHTML = xhr.responseText;
-                } else {
-                    console.log("Request failed. Returned status of " + xhr.status);
-                }
-            };
-            xhr.send();
-        } else {
-            returnFlightFields.innerHTML = "";
-        }
-    });
+      returnFlightCheckbox.addEventListener("change", function() {
+          if (returnFlightCheckbox.checked) {
+              var xhr = new XMLHttpRequest();
+              xhr.open("GET", "{% url 'basecamp:return_flight_fields' %}");
+              xhr.onload = function() {
+                  if (xhr.status === 200) {
+                      returnFlightFields.innerHTML = xhr.responseText;
+                  } else {
+                      console.log("Request failed. Returned status of " + xhr.status);
+                  }
+              };
+              xhr.send();
+          } else {
+              returnFlightFields.innerHTML = "";
+          }
+      });
     </script>
        
   </body>
