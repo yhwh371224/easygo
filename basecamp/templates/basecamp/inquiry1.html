@@ -35,28 +35,6 @@
               <form method="post" enctype="multipart/form-data" action="/inquiry_details1/" class="card-body needs-validation p-5" >
                 {% csrf_token %}
 				<div class="mb3 pb-1" >					
-					<label class="form-label">Personal Information</label>									      
-				</div>					
-				<div class="card text-white bg-secondary p-4">
-                <div class="mb-3 pb-1">
-                  <label class="form-label" >Full name<sup class="text-danger ms-1">*</sup></label>
-                  <input class="form-control" type="text"  placeholder="John Doe" name="name" required>
-                  <div class="invalid-feedback">Please enter your full name!</div>				  
-                </div>
-                 <div class="mb-3 pb-1">
-                  <label class="form-label" >Mobile phone number<sup class="text-danger ms-1">*</sup></label>
-                  <input class="form-control" type="text"  placeholder="Your mobile phone number" name="contact" required>
-                  <div class="invalid-feedback">Please enter a valid number!</div>
-                </div>
-                <div class="mb-3 pb-1">
-                  <label class="form-label" >Email address<sup class="text-danger ms-1">*</sup></label>
-                  <input class="form-control" type="email"  placeholder="j.doe@example.com" name="email" required>
-                  <div class="invalid-feedback">Please enter a valid email address!</div>
-                </div></div>
-				<br><br>
-				<hr>
-				<br><br>
-				<div class="mb3 pb-1" >					
 					<label class="form-label">Flight Information</label>					      
 				</div>
 				<div class="mb-3 pb-1">
@@ -100,7 +78,28 @@
 				<br><br>
 				<hr>
 				<br><br>
-				
+				<div class="mb3 pb-1" >					
+					<label class="form-label">Personal Information</label>									      
+				</div>					
+				<div class="card text-white bg-secondary p-4">
+                <div class="mb-3 pb-1">
+                  <label class="form-label" >Full name<sup class="text-danger ms-1">*</sup></label>
+                  <input class="form-control" type="text"  placeholder="John Doe" name="name" required>
+                  <div class="invalid-feedback">Please enter your full name!</div>				  
+                </div>
+                 <div class="mb-3 pb-1">
+                  <label class="form-label" >Mobile phone number<sup class="text-danger ms-1">*</sup></label>
+                  <input class="form-control" type="text"  placeholder="Your mobile phone number" name="contact" required>
+                  <div class="invalid-feedback">Please enter a valid number!</div>
+                </div>
+                <div class="mb-3 pb-1">
+                  <label class="form-label" >Email address<sup class="text-danger ms-1">*</sup></label>
+                  <input class="form-control" type="email"  placeholder="j.doe@example.com" name="email" required>
+                  <div class="invalid-feedback">Please enter a valid email address!</div>
+                </div></div>
+				<br><br>
+				<hr>
+				<br><br>				
 				<div class="mb3 pb-1" >					
 					<label class="form-label">Full Address of {{ suburb }}<sup class="text-danger ms-1">*</sup></label>					
 				</div>
