@@ -10,31 +10,17 @@ from django.conf import settings
 from time import sleep
 
 
-
 logger = get_task_logger(__name__)
-
-today = date.today()
-reminder_1day = today + timedelta(days=1)
-reminders_1day = Post.objects.filter(flight_date=reminder_1day)
-
-reminder_3days = today + timedelta(days=3)
-reminders_3days = Post.objects.filter(flight_date=reminder_3days)
-
-reminder_7days = today + timedelta(days=7)
-reminders_7days = Post.objects.filter(flight_date=reminder_7days)
-
-reminder_14days = today + timedelta(days=14)
-reminders_14days = Post.objects.filter(flight_date=reminder_14days)
-
-reminder_today = today
-reminders_today = Post.objects.filter(flight_date=reminder_today)
-
-reminder_yesterday = today + timedelta(days=-1)
-reminders_yesterday = Post.objects.filter(flight_date=reminder_yesterday)
 
 
 @shared_task(bind=True)
-def email_1(self, **kwargs):    
+def email_1(self, target_date=None, **kwargs):
+    if target_date is None:
+        target_date = date.today()    
+        
+    reminder_1day = target_date + timedelta(days=1)
+    reminders_1day = Post.objects.filter(flight_date=reminder_1day)
+    
     for i in reminders_1day:
         
         if i.cancelled:            
@@ -56,7 +42,13 @@ def email_1(self, **kwargs):
 
     
 @shared_task(bind=True)
-def email_2(self, **kwargs):    
+def email_2(self, **kwargs):
+    if target_date is None:
+        target_date = date.today()    
+        
+    reminder_3days = target_date + timedelta(days=3)
+    reminders_3days = Post.objects.filter(flight_date=reminder_3days)   
+    
     for i in reminders_3days:
         
         if i.cancelled:            
@@ -79,6 +71,12 @@ def email_2(self, **kwargs):
 
 @shared_task(bind=True)
 def email_3(self, **kwargs):
+    if target_date is None:
+        target_date = date.today()   
+        
+    reminder_7days = target_date + timedelta(days=7)
+    reminders_7days = Post.objects.filter(flight_date=reminder_7days)
+    
     for i in reminders_7days:
         
         if i.cancelled:            
@@ -100,7 +98,13 @@ def email_3(self, **kwargs):
 
 
 @shared_task(bind=True)
-def email_4(self, **kwargs):    
+def email_4(self, **kwargs): 
+    if target_date is None:
+        target_date = date.today()   
+        
+    reminder_14days = target_date + timedelta(days=14)
+    reminders_14days = Post.objects.filter(flight_date=reminder_14days)
+       
     for i in reminders_14days:
         
         if i.cancelled:            
@@ -122,7 +126,13 @@ def email_4(self, **kwargs):
 
 
 @shared_task(bind=True)
-def email_5(self, **kwargs):    
+def email_5(self, **kwargs): 
+    if target_date is None:
+        target_date = date.today()   
+        
+    reminder_today = target_date
+    reminders_today = Post.objects.filter(flight_date=reminder_today)
+       
     for i in reminders_today:
         
         if i.cancelled:            
@@ -144,7 +154,13 @@ def email_5(self, **kwargs):
 
 
 @shared_task(bind=True)
-def email_6(self, **kwargs):    
+def email_6(self, **kwargs):  
+    if target_date is None:
+        target_date = date.today()   
+        
+    reminder_yesterday = target_date + timedelta(days=-1)
+    reminders_yesterday = Post.objects.filter(flight_date=reminder_yesterday)
+      
     for i in reminders_yesterday:
         
         if i.cancelled:            
