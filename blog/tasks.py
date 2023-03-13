@@ -12,26 +12,42 @@ from time import sleep
 
 logger = get_task_logger(__name__)
 
+target_date = date.today()
+tomorrow_reminder = target_date + timedelta(days=1)
+tomorrow_reminders = Post.objects.filter(flight_date=tomorrow_reminder)
+
+upcoming3_reminder = target_date + timedelta(days=3)
+upcoming3_reminders = Post.objects.filter(flight_date=upcoming3_reminder)
+
+upcoming7_reminder = target_date + timedelta(days=7)
+upcoming7_reminders = Post.objects.filter(flight_date=upcoming7_reminder)
+
+upcoming14_reminder = target_date + timedelta(days=14)
+upcoming14_reminders = Post.objects.filter(flight_date=upcoming14_reminder)
+
+today_reminder = target_date
+today_reminders = Post.objects.filter(flight_date=today_reminder)
+
+yesterday_reminder = target_date + timedelta(days=-1)
+yesterday_reminders = Post.objects.filter(flight_date=yesterday_reminder)
+
 
 @shared_task(bind=True)
-def email_1(self, target_date=None, **kwargs):
-    if target_date is None:
-        target_date = date.today()    
-        
-    reminder_1day = target_date + timedelta(days=1)
-    reminders_1day = Post.objects.filter(flight_date=reminder_1day)
+def email_1(self, reminders=None, **kwargs):
     
-    for i in reminders_1day:
+    reminders = reminders or tomorrow_reminders
+    
+    for reminder in reminders:
         
-        if i.cancelled:            
-                continue
-            
-        elif i.flight_date:
+        if reminder.cancelled:           
+            continue
+        
+        elif reminder.flight_date:
             html_content = render_to_string("basecamp/html_email-tomorrow.html", 
-            {'name': i.name, 'flight_date': i.flight_date, 'flight_number': i.flight_number, 
-            'flight_time': i.flight_time, 'direction': i.direction, 'pickup_time': i.pickup_time, 'street': i.street, 'suburb': i.suburb})
+                {'name': reminder.name, 'flight_date': reminder.flight_date, 'flight_number': reminder.flight_number, 
+                'flight_time': reminder.flight_time, 'direction': reminder.direction, 'pickup_time': reminder.pickup_time, 'street': reminder.street, 'suburb': reminder.suburb})
             text_content = strip_tags(html_content)
-            email = EmailMultiAlternatives("Reminder - Booking", text_content, '', [i.email])
+            email = EmailMultiAlternatives("Reminder - Booking", text_content, '', [reminder.email])
             email.attach_alternative(html_content, "text/html")
             email.send()
             
@@ -42,24 +58,21 @@ def email_1(self, target_date=None, **kwargs):
 
     
 @shared_task(bind=True)
-def email_2(self, **kwargs):
-    if target_date is None:
-        target_date = date.today()    
-        
-    reminder_3days = target_date + timedelta(days=3)
-    reminders_3days = Post.objects.filter(flight_date=reminder_3days)   
+def email_2(self, reminders=None, **kwargs):
     
-    for i in reminders_3days:
+    reminders = reminders or upcoming3_reminders
+    
+    for reminder in reminders:
         
-        if i.cancelled:            
-                continue
-            
-        elif i.flight_date:
+        if reminder.cancelled:           
+            continue
+        
+        elif reminder.flight_date:
             html_content = render_to_string("basecamp/html_email-upcoming3.html", 
-            {'name': i.name, 'flight_date': i.flight_date, 'flight_number': i.flight_number, 
-            'flight_time': i.flight_time, 'direction': i.direction, 'pickup_time': i.pickup_time, 'street': i.street, 'suburb': i.suburb})
+                {'name': reminder.name, 'flight_date': reminder.flight_date, 'flight_number': reminder.flight_number, 
+                'flight_time': reminder.flight_time, 'direction': reminder.direction, 'pickup_time': reminder.pickup_time, 'street': reminder.street, 'suburb': reminder.suburb})
             text_content = strip_tags(html_content)
-            email = EmailMultiAlternatives("Reminder - Booking", text_content, '', [i.email])
+            email = EmailMultiAlternatives("Reminder - Booking", text_content, '', [reminder.email])
             email.attach_alternative(html_content, "text/html")
             email.send()
             
@@ -70,24 +83,21 @@ def email_2(self, **kwargs):
 
 
 @shared_task(bind=True)
-def email_3(self, **kwargs):
-    if target_date is None:
-        target_date = date.today()   
-        
-    reminder_7days = target_date + timedelta(days=7)
-    reminders_7days = Post.objects.filter(flight_date=reminder_7days)
+def email_3(self, reminders=None, **kwargs):
     
-    for i in reminders_7days:
+    reminders = reminders or upcoming7_reminders
+    
+    for reminder in reminders:
         
-        if i.cancelled:            
-                continue
+        if reminder.cancelled:            
+            continue
         
-        elif i.flight_date:
+        elif reminder.flight_date:
             html_content = render_to_string("basecamp/html_email-upcoming7.html", 
-            {'name': i.name, 'flight_date': i.flight_date, 'flight_number': i.flight_number, 
-            'flight_time': i.flight_time, 'direction': i.direction, 'pickup_time': i.pickup_time, 'street': i.street, 'suburb': i.suburb})
+                {'name': reminder.name, 'flight_date': reminder.flight_date, 'flight_number': reminder.flight_number, 
+                'flight_time': reminder.flight_time, 'direction': reminder.direction, 'pickup_time': reminder.pickup_time, 'street': reminder.street, 'suburb': reminder.suburb})
             text_content = strip_tags(html_content)
-            email = EmailMultiAlternatives("Reminder - Booking", text_content, '', [i.email])
+            email = EmailMultiAlternatives("Reminder - Booking", text_content, '', [reminder.email])
             email.attach_alternative(html_content, "text/html")
             email.send()
             
@@ -98,80 +108,71 @@ def email_3(self, **kwargs):
 
 
 @shared_task(bind=True)
-def email_4(self, **kwargs): 
-    if target_date is None:
-        target_date = date.today()   
+def email_4(self, reminders=None, **kwargs):
+    
+    reminders = reminders or upcoming14_reminders
+    
+    for reminder in reminders:
         
-    reminder_14days = target_date + timedelta(days=14)
-    reminders_14days = Post.objects.filter(flight_date=reminder_14days)
-       
-    for i in reminders_14days:
+        if reminder.cancelled:            
+            continue        
         
-        if i.cancelled:            
-                continue
-            
-        elif i.flight_date:
+        elif reminder.flight_date:
             html_content = render_to_string("basecamp/html_email-upcoming14.html", 
-            {'name': i.name, 'flight_date': i.flight_date, 'flight_number': i.flight_number, 
-            'flight_time': i.flight_time, 'direction': i.direction, 'pickup_time': i.pickup_time, 'street': i.street, 'suburb': i.suburb})
+                {'name': reminder.name, 'flight_date': reminder.flight_date, 'flight_number': reminder.flight_number, 
+                'flight_time': reminder.flight_time, 'direction': reminder.direction, 'pickup_time': reminder.pickup_time, 'street': reminder.street, 'suburb': reminder.suburb})
             text_content = strip_tags(html_content)
-            email = EmailMultiAlternatives("Reminder - Booking", text_content, '', [i.email])
+            email = EmailMultiAlternatives("Reminder - Booking", text_content, '', [reminder.email])
             email.attach_alternative(html_content, "text/html")
-            email.send()
-            
+            email.send()  
+        
         else:
-            continue
-
+            continue 
+                  
     return "14 days done"
 
 
 @shared_task(bind=True)
-def email_5(self, **kwargs): 
-    if target_date is None:
-        target_date = date.today()   
+def email_5(self, reminders=None, **kwargs):
+     
+    reminders = reminders or today_reminders
+    
+    for reminder in reminders:
         
-    reminder_today = target_date
-    reminders_today = Post.objects.filter(flight_date=reminder_today)
-       
-    for i in reminders_today:
+        if reminder.cancelled:            
+            continue        
         
-        if i.cancelled:            
-                continue
-            
-        elif i.flight_date:
+        elif reminder.flight_date:
             html_content = render_to_string("basecamp/html_email-today.html", 
-            {'name': i.name, 'flight_date': i.flight_date, 'flight_number': i.flight_number, 
-            'flight_time': i.flight_time, 'direction': i.direction, 'pickup_time': i.pickup_time, 'street': i.street, 'suburb': i.suburb})
+                {'name': reminder.name, 'flight_date': reminder.flight_date, 'flight_number': reminder.flight_number, 
+                'flight_time': reminder.flight_time, 'direction': reminder.direction, 'pickup_time': reminder.pickup_time, 'street': reminder.street, 'suburb': reminder.suburb})
             text_content = strip_tags(html_content)
-            email = EmailMultiAlternatives("Notice - EasyGo", text_content, '', [i.email])
+            email = EmailMultiAlternatives("Notice - EasyGo", text_content, '', [reminder.email])
             email.attach_alternative(html_content, "text/html")
-            email.send()
+            email.send() 
             
-        else:         
-            continue
-
+        else:
+            continue 
+                   
     return "Today done"
 
 
 @shared_task(bind=True)
-def email_6(self, **kwargs):  
-    if target_date is None:
-        target_date = date.today()   
+def email_6(self, reminders=None, **kwargs):
+    
+    reminders = reminders or yesterday_reminders
+    
+    for reminder in reminders:
         
-    reminder_yesterday = target_date + timedelta(days=-1)
-    reminders_yesterday = Post.objects.filter(flight_date=reminder_yesterday)
-      
-    for i in reminders_yesterday:
+        if reminder.cancelled:            
+            continue        
         
-        if i.cancelled:            
-                continue
-            
-        elif i.flight_date:
+        elif reminder.flight_date:
             html_content = render_to_string("basecamp/html_email-yesterday.html", 
-            {'name': i.name, 'flight_date': i.flight_date, 'flight_number': i.flight_number, 
-            'flight_time': i.flight_time, 'direction': i.direction, 'pickup_time': i.pickup_time, 'street': i.street, 'suburb': i.suburb})
+                {'name': reminder.name, 'flight_date': reminder.flight_date, 'flight_number': reminder.flight_number, 
+                'flight_time': reminder.flight_time, 'direction': reminder.direction, 'pickup_time': reminder.pickup_time, 'street': reminder.street, 'suburb': reminder.suburb})            
             text_content = strip_tags(html_content)
-            email = EmailMultiAlternatives("Review - EasyGo", text_content, '', [i.email])
+            email = EmailMultiAlternatives("Review - EasyGo", text_content, '', [reminder.email])
             email.attach_alternative(html_content, "text/html")
             email.send()
             
