@@ -271,7 +271,7 @@
 												{% elif direction == 'Pickup from Intl Airport' or direction == 'Pickup from Domestic Airport' %}												
 												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">                                                  
                                                     Please pay online ${{ price }} via PayPal in advance <a href="https://easygoshuttle.com.au/payonline/">&raquo;&raquo; pay here</a>
-													<br>
+													<br><br>
 													For those arriving in Sydney, payment in advance is kindly requested																								
 												<br><br></p>					
 												{% else %}
@@ -285,9 +285,9 @@
 													If you wish to book a return trip, click&nbsp;<a href="https://easygoshuttle.com.au/return_trip/">&raquo;&raquo;Book for return trip</a><br><br></p>
 												<!-- If notice -->
 												{% if notice %}
-												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;"></p>
-												Note: {{ notice }}<br><br>
-												{% endif %}	
+												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
+												Note: {{ notice }}<br><br></p>
+												{% endif %}
 													We will send you a reminder email closer to the date of your booking.<br><br></p>											
 												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">                                                  
                                                     Thank you again for booking with us. We look forward to seeing you on time													
