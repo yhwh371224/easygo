@@ -231,12 +231,44 @@
 											<td align="left" style="padding-top:28px;padding-left:0;">
                                                 <p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                    
                                                     Thank you for your inquiry with EasyGo<br><br>
-													The cost for your booking will be ${{ price }}<br><br>
-                                                    If you wish to proceed, please let me know<br><br> 
-													or simply click the image below<br>
-													(you don't have to fill the form again)<br>
+													Please find below the details of your booking<br><br>                                                   
 												 </p>
-												 <p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;">---Booking---</p>
+												 <p style="Margin:0;font-size:12px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                    
+													Contact:  {{ contact }}<br>
+                                                    Email:  {{ email }}<br>
+                                                    Flight date:  {{ flight_date }}<br>
+                                                    Flight number:  {{ flight_number }}<br>
+												{% if return_flight_number %}
+													<sup>Return flight date:  {{ return_flight_date }}</sup><br>
+                                                    <sup>Return flight number:  {{ return_flight_number }}</sup><br>
+												{% endif %}
+													Direction:  {{ direction }}<br>
+												{% if direction == 'Pickup from Intl Airport' or direction == 'Pickup from Domestic Airport' %}
+													Arrival time in Sydney:  {{ flight_time }}<br>
+												{% else %}
+													Departure time from Sydney: {{ flight_time }}<br>
+												{% endif %}
+													Pickup time:  {{ pickup_time }}<br>
+													Address:  {{ street }}, {{ suburb }}<br>      
+                                                    Number of Passenger:  {{ no_of_passenger }}<br>
+													Number of baggage:  {{ no_of_baggage }}<br>
+                                                    Your Message: <br>
+													{{ message }}<br><br>                                                   
+												</p>
+												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;">
+												{% if return_flight_number %}
+													The cost for your booking will be ${{ price }} for a round trip<br><br>
+												{% else %}
+													The cost for your booking will be ${{ price }} for a single trip<br><br>
+												{% endif %}
+												<!-- notice to the customer -->
+												{% if notice %}
+													Note: {{ notice }}<br><br>
+												{% endif %}	 
+													If you wish to proceed, please let me know<br><br>
+													Alternatively simply click the image below<br>
+													(you don't have to fill the form again)<br></p>								
+												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;">---Booking---</p>
 												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">	                                                  
 													<a class="btn btn-warning" href="https://easygoshuttle.com.au/confirm_booking"><img src="https://easygo-staticfiles-bucket.s3.ap-southeast-2.amazonaws.com/bookonline+image.webp" alt="book online logo" width="120"></a>
 													
@@ -248,10 +280,7 @@
 												<p style="Margin:0;font-size:12px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
 													You can pay online via PayPal&nbsp;<a href="https://easygoshuttle.com.au/payonline/">easygoshuttle.com.au/payonline</a><br>
 													If you don't pay online, you will need to pay cash to your driver on the flight day<br><br>
-													For those arriving in Sydney, payment in advance is kindly requested<br><br>
-												{% if notice %}
-												Note: {{ notice }}<br><br>
-												{% endif %}	
+													<sup>For those arriving in Sydney, payment in advance is kindly requested</sup><br><br>												
 												</p>				
 												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;">
 													Please let me know if you have any questions<br><br>													
