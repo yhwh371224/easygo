@@ -1517,7 +1517,7 @@ def re_confirm_detail(request):
         return render(request, 'beasecamp/re_confirm.html', {})    
      
      
-# sending email only to the clients   
+# sending email only   
 def re_confirm_email_detail(request):     
     if request.method == "POST":
         email = request.POST.get('email')             
