@@ -4,40 +4,19 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags 
 from celery import shared_task
 from celery.utils.log import get_task_logger
-from datetime import date, datetime, timedelta
-from django.core.mail import send_mail
-from django.conf import settings
-from time import sleep
+from datetime import date, timedelta
 
 
 logger = get_task_logger(__name__)
 
-target_date = date.today()
-tomorrow_reminder = target_date + timedelta(days=1)
-tomorrow_reminders = Post.objects.filter(flight_date=tomorrow_reminder)
-
-upcoming3_reminder = target_date + timedelta(days=3)
-upcoming3_reminders = Post.objects.filter(flight_date=upcoming3_reminder)
-
-upcoming7_reminder = target_date + timedelta(days=7)
-upcoming7_reminders = Post.objects.filter(flight_date=upcoming7_reminder)
-
-upcoming14_reminder = target_date + timedelta(days=14)
-upcoming14_reminders = Post.objects.filter(flight_date=upcoming14_reminder)
-
-today_reminder = target_date
-today_reminders = Post.objects.filter(flight_date=today_reminder)
-
-yesterday_reminder = target_date + timedelta(days=-1)
-yesterday_reminders = Post.objects.filter(flight_date=yesterday_reminder)
-
 
 @shared_task(bind=True)
-def email_1(self, reminders=None, **kwargs):
+def email_1():
     
-    reminders = reminders or tomorrow_reminders
+    tomorrow_reminder = date.today() + timedelta(days=1)
+    tomorrow_reminders = Post.objects.filter(flight_date=tomorrow_reminder)
     
-    for reminder in reminders:
+    for reminder in tomorrow_reminders:
         
         if reminder.cancelled:           
             continue
@@ -58,11 +37,12 @@ def email_1(self, reminders=None, **kwargs):
 
     
 @shared_task(bind=True)
-def email_2(self, reminders=None, **kwargs):
+def email_2():
     
-    reminders = reminders or upcoming3_reminders
+    upcoming3_reminder = date.today() + timedelta(days=3)
+    upcoming3_reminders = Post.objects.filter(flight_date=upcoming3_reminder)
     
-    for reminder in reminders:
+    for reminder in upcoming3_reminders:
         
         if reminder.cancelled:           
             continue
@@ -83,11 +63,12 @@ def email_2(self, reminders=None, **kwargs):
 
 
 @shared_task(bind=True)
-def email_3(self, reminders=None, **kwargs):
+def email_3():
     
-    reminders = reminders or upcoming7_reminders
-    
-    for reminder in reminders:
+    upcoming7_reminder = date.today() + timedelta(days=7)
+    upcoming7_reminders = Post.objects.filter(flight_date=upcoming7_reminder)
+
+    for reminder in upcoming7_reminders:
         
         if reminder.cancelled:            
             continue
@@ -108,11 +89,12 @@ def email_3(self, reminders=None, **kwargs):
 
 
 @shared_task(bind=True)
-def email_4(self, reminders=None, **kwargs):
+def email_4():
     
-    reminders = reminders or upcoming14_reminders
+    upcoming14_reminder = date.today() + timedelta(days=14)
+    upcoming14_reminders = Post.objects.filter(flight_date=upcoming14_reminder)
     
-    for reminder in reminders:
+    for reminder in upcoming14_reminders:
         
         if reminder.cancelled:            
             continue        
@@ -133,11 +115,12 @@ def email_4(self, reminders=None, **kwargs):
 
 
 @shared_task(bind=True)
-def email_5(self, reminders=None, **kwargs):
+def email_5():
      
-    reminders = reminders or today_reminders
+    today_reminder = date.today()
+    today_reminders = Post.objects.filter(flight_date=today_reminder)
     
-    for reminder in reminders:
+    for reminder in today_reminders:
         
         if reminder.cancelled:            
             continue        
@@ -158,11 +141,12 @@ def email_5(self, reminders=None, **kwargs):
 
 
 @shared_task(bind=True)
-def email_6(self, reminders=None, **kwargs):
+def email_6():
     
-    reminders = reminders or yesterday_reminders
+    yesterday_reminder = date.today() + timedelta(days=-1)
+    yesterday_reminders = Post.objects.filter(flight_date=yesterday_reminder)
     
-    for reminder in reminders:
+    for reminder in yesterday_reminders:
         
         if reminder.cancelled:            
             continue        
