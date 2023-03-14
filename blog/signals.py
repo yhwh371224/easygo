@@ -71,7 +71,9 @@ def notify_user(sender, instance, created, **kwargs):
                                          'flight_time': instance.flight_time, 'pickup_time': instance.pickup_time,
                                          'direction': instance.direction, 'street': instance.street, 'suburb': instance.suburb,
                                          'no_of_passenger': instance.no_of_passenger, 'no_of_baggage': instance.no_of_baggage,
-                                         'message': instance.message, 'price': instance.price, 'notice': instance.notice,})
+                                         'return_flight_date': instance.return_flight_date, 'return_flight_number': instance.return_flight_number,
+                                         'return_flight_time': instance.return_flight_time, 'message': instance.message, 'price': instance.price, 
+                                         'notice': instance.notice,})
 
         text_content = strip_tags(html_content)
 
