@@ -1094,8 +1094,9 @@ def confirmation_detail(request):
                                     {'name': name, 'contact': contact, 'email': email,
                                      'flight_date': flight_date, 'flight_number': flight_number,
                                      'flight_time': flight_time, 'pickup_time': pickup_time,
-                                     'direction': direction, 'street': street, 'suburb': suburb,
-                                     'no_of_passenger': no_of_passenger, 'no_of_baggage': no_of_baggage,
+                                     'return_flight_date': return_flight_date, 'return_flight_number': return_flight_number,
+                                     'return_flight_time': return_flight_time, 'direction': direction, 'street': street, 
+                                     'suburb': suburb, 'no_of_passenger': no_of_passenger, 'no_of_baggage': no_of_baggage,
                                      'message': message, 'notice': notice , 'price': price, 'paid': paid })
         
         text_content = strip_tags(html_content)
@@ -1492,6 +1493,8 @@ def retrieve_post_detail(request):
                                      'flight_time': flight_time, 'pickup_time': pickup_time,
                                      'direction': direction, 'street': street, 'suburb': suburb,
                                      'no_of_passenger': no_of_passenger, 'no_of_baggage': no_of_baggage,
+                                     'return_flight_date': return_flight_date, 'return_flight_number': return_flight_number,
+                                     'return_flight_time': return_flight_time, 
                                      'message': message, 'notice': notice, 'price': price, 'paid': paid })
     
         text_content = strip_tags(html_content)
@@ -1557,6 +1560,8 @@ def re_confirm_detail(request):
                                      'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
                                      'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
                                      'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
+                                     'return_flight_date': user.return_flight_date, 'return_flight_number': user.return_flight_number,
+                                     'return_flight_time': user.return_flight_time, 
                                      'message': user.message, 'notice': user.notice, 'price': user.price, 'paid': user.paid })
     
         text_content = strip_tags(html_content)
@@ -1583,7 +1588,8 @@ def re_confirm_email_detail(request):
         user = Post.objects.filter(email=email).first()  
          
         if not user:
-            return render(request, 'basecamp/500.html')       
+            return render(request, 'basecamp/500.html')    
+           
         else:
             name = user.name
         
@@ -1593,7 +1599,9 @@ def re_confirm_email_detail(request):
                                      'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
                                      'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
                                      'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
-                                     'message': user.message, 'notice': user.notice, 'price': user.price, 'paid': user.paid })
+                                     'return_flight_date': user.return_flight_date, 'return_flight_number': user.return_flight_number,
+                                     'return_flight_time': user.return_flight_time, 'message': user.message, 'notice': user.notice, 
+                                     'price': user.price, 'paid': user.paid })
     
         text_content = strip_tags(html_content)
 

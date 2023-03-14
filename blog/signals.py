@@ -8,36 +8,45 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.core.mail import send_mail
-
+from time import sleep
 
 
 @receiver(post_save, sender=Post)
 def notify_user(sender, instance, created, **kwargs):
-    pass
-    # if instance.is_confirmed:         
+    
+    if instance.return_flight_number:   
+
+        p = Post(name=instance.name, contact=instance.contact, email=instance.email, flight_date=instance.return_flight_date, 
+                 flight_number=instance.return_flight_number, flight_time=instance.return_flight_time, pickup_time=instance.returnn_pickup_time, 
+                 direction=instance.direction, suburb=instance.suburb, street=instance.street, no_of_passenger=instance.no_of_passenger, 
+                 no_of_baggage=instance.no_of_baggage, message=instance.message, price=instance.price, paid=instance.paid)
         
-    #     html_content = render_to_string("basecamp/html_email-confirmation.html",
-    #                                     {'name': instance.name, 'contact': instance.contact, 'email': instance.email,
-    #                                      'flight_date': instance.flight_date, 'flight_number': instance.flight_number,
-    #                                      'flight_time': instance.flight_time, 'pickup_time': instance.pickup_time,
-    #                                      'direction': instance.direction, 'street': instance.street, 'suburb': instance.suburb,
-    #                                      'no_of_passenger': instance.no_of_passenger, 'no_of_baggage': instance.no_of_baggage,
-    #                                      'message': instance.message, 'notice': instance.notice, 'price': instance.price, 'paid': instance.paid })
+        p.save()       
 
-    #     text_content = strip_tags(html_content)
-
-    #     email = EmailMultiAlternatives(
-    #         "Booking confirmation - EasyGo",
-    #         text_content,
-    #         '',
-    #         [instance.email, 'info@easygoshuttle.com.au']
-    #     )
-    #     email.attach_alternative(html_content, "text/html")
+        sleep(1)           
         
-    #     email.send()
+        html_content = render_to_string("basecamp/html_email-confirmation-return.html",
+                                        {'name': instance.name, 'contact': instance.contact, 'email': instance.email,
+                                         'flight_date': instance.flight_date, 'flight_number': instance.flight_number,
+                                         'flight_time': instance.flight_time, 'pickup_time': instance.pickup_time,
+                                         'direction': instance.direction, 'street': instance.street, 'suburb': instance.suburb,
+                                         'no_of_passenger': instance.no_of_passenger, 'no_of_baggage': instance.no_of_baggage,
+                                         'message': instance.message, 'notice': instance.notice, 'price': instance.price, 'paid': instance.paid })
 
-    # else:
-    #     return None
+        text_content = strip_tags(html_content)
+
+        email = EmailMultiAlternatives(
+            "Booking confirmation - EasyGo",
+            text_content,
+            '',
+            [instance.email, 'info@easygoshuttle.com.au']
+        )
+        email.attach_alternative(html_content, "text/html")
+        
+        email.send()
+
+    else:
+        return None
 
 
 
