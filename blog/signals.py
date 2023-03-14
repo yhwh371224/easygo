@@ -15,39 +15,35 @@ from time import sleep
 def notify_user(sender, instance, created, **kwargs):
     
     if instance.return_flight_number:   
-        pass
-    #     p = Post(name=instance.name, contact=instance.contact, email=instance.email, flight_date=instance.return_flight_date, 
-    #              flight_number=instance.return_flight_number, flight_time=instance.return_flight_time, pickup_time=instance.returnn_pickup_time, 
-    #              direction=instance.direction, suburb=instance.suburb, street=instance.street, no_of_passenger=instance.no_of_passenger, 
-    #              no_of_baggage=instance.no_of_baggage, message=instance.message, price=instance.price, paid=instance.paid)
         
-    #     p.save()       
+        p = Post(name=instance.name, contact=instance.contact, email=instance.email, flight_date=instance.return_flight_date, 
+                 flight_number=instance.return_flight_number, flight_time=instance.return_flight_time, pickup_time=instance.return_pickup_time, 
+                 direction=instance.direction, suburb=instance.suburb, street=instance.street, no_of_passenger=instance.no_of_passenger, 
+                 no_of_baggage=instance.no_of_baggage, message=instance.message, price=instance.price, paid=instance.paid)
+        
+        p.save()       
 
-    #     sleep(1)
+        sleep(1)
                         
-    #     html_content = render_to_string("basecamp/html_email-confirmation-return.html",
-    #                                     {'name': name, 'contact': instance.contact, 'email': instance.email,
-    #                                      'flight_date': instance.flight_date, 'flight_number': instance.flight_number,
-    #                                      'flight_time': instance.flight_time, 'pickup_time': instance.pickup_time,
-    #                                      'direction': instance.direction, 'street': instance.street, 'suburb': instance.suburb,
-    #                                      'no_of_passenger': instance.no_of_passenger, 'no_of_baggage': instance.no_of_baggage,
-    #                                      'message': instance.message, 'notice': instance.notice, 'price': instance.price, 'paid': instance.paid })
+        html_content = render_to_string("basecamp/html_email-confirmation-return.html",
+                                        {'name': instance.name, 'contact': instance.contact, 'email': instance.email,
+                                         'flight_date': instance.flight_date, 'flight_number': instance.flight_number,
+                                         'flight_time': instance.flight_time, 'pickup_time': instance.pickup_time,
+                                         'direction': instance.direction, 'street': instance.street, 'suburb': instance.suburb,
+                                         'no_of_passenger': instance.no_of_passenger, 'no_of_baggage': instance.no_of_baggage,
+                                         'message': instance.message, 'notice': instance.notice, 'price': instance.price, 'paid': instance.paid })
 
-    #     text_content = strip_tags(html_content)
+        text_content = strip_tags(html_content)
 
-    #     email = EmailMultiAlternatives(
-    #         "Booking confirmation - EasyGo",
-    #         text_content,
-    #         '',
-    #         [instance.email, 'info@easygoshuttle.com.au']
-    #     )
-    #     email.attach_alternative(html_content, "text/html")
+        email = EmailMultiAlternatives(
+            "Booking confirmation - EasyGo",
+            text_content,
+            '',
+            [instance.email, 'info@easygoshuttle.com.au']
+        )
+        email.attach_alternative(html_content, "text/html")
         
-    #     email.send()
-
-    # else:
-    #     return None
-
+        email.send()    
 
 
 @receiver(post_save, sender=Inquiry)
@@ -96,6 +92,4 @@ def notify_user(sender, instance, created, **kwargs):
         email.attach_alternative(html_content, "text/html")
         
         email.send()
-
-    else:
-        return None
+    
