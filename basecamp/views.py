@@ -1131,10 +1131,8 @@ def booking_detail(request):
         message = request.POST.get('message')
         return_flight_date = request.POST.get('return_flight_date')
         return_flight_number = request.POST.get('return_flight_number')
-        return_flight_time = request.POST.get('return_flight_time')
-        notice = request.POST.get('notice')
+        return_flight_time = request.POST.get('return_flight_time')        
         price = request.POST.get('price')
-        paid = request.POST.get('paid')
         is_confirmed_str = request.POST.get('is_confirmed')
         is_confirmed = True if is_confirmed_str == 'True' else False
         
@@ -1275,9 +1273,9 @@ def booking_detail(request):
 
         p = Post(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
-                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, return_flight_date=return_flight_date, 
-                 return_flight_number=return_flight_number, return_flight_time=return_flight_time, notice=notice, price=price, paid=paid,
-                 is_confirmed=is_confirmed)
+                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_flight_date=return_flight_date, 
+                 return_flight_number=return_flight_number, return_flight_time=return_flight_time, message=message, 
+                 price=price, is_confirmed=is_confirmed)
         
         p.save()
         
