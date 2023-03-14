@@ -242,19 +242,22 @@
 													Pickup time: {{ pickup_time }}<br>
 													Start point: {{ flight_number }}<br>
                                                     End point: {{ street }}<br>																									
-												{% else %}
+												{% elif direction == 'Pickup from Intl Airport' or direction == 'Pickup from Domestic Airport' %}
                                                     Flight date: {{ flight_date|slice:":10" }}<br>
                                                     Flight number: {{ flight_number }}<br>
 													Flight time: {{ flight_time }}<br>
-													Pickup time: {{ pickup_time }}<br>
-                                                    Direction: {{ direction }}<br>
+													Pickup time: {{ pickup_time }}<br>												
+                                                    Direction: Drop off to the Airport<br>
 													Street: {{ street }}<br>
 													Suburb: {{ suburb }}<br>
-												{% endif %}
-												{% if return_flight_number %}
-													<span style="font-weight:bold; color: #9a765c">Return flight date: {{ return_flight_date |slice:":10" }}</span><br>
-													<span style="font-weight:bold; color: #9a765c">Return flight number: {{ return_flight_number }}</span><br>
-													<span style="font-weight:bold; color: #9a765c">Return flight time: {{ return_flight_time }}</span><br>
+												{% else %}
+													Flight date: {{ flight_date|slice:":10" }}<br>
+													Flight number: {{ flight_number }}<br>
+													Flight time: {{ flight_time }}<br>
+													Pickup time: {{ pickup_time }}<br>												
+													Direction: Pickup from the Airport<br>
+													Street: {{ street }}<br>
+													Suburb: {{ suburb }}<br>
 												{% endif %}
                                                     Number of Passenger: {{ no_of_passenger }}<br>
 													Number of baggage: {{ no_of_baggage }}<br>

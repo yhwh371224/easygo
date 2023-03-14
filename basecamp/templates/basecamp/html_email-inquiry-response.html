@@ -237,11 +237,7 @@
 													Contact:  {{ contact }}<br>
                                                     Email:  {{ email }}<br>
                                                     Flight date:  {{ flight_date }}<br>
-                                                    Flight number:  {{ flight_number }}<br>
-												{% if return_flight_number %}
-													<span style="font-weight:bold; color: #9a765c">Return flight date:  {{ return_flight_date }}</span><br>
-                                                    <span style="font-weight:bold; color: #9a765c">Return flight number:  {{ return_flight_number }}</span><br>
-												{% endif %}
+                                                    Flight number:  {{ flight_number }}<br>												
 													Direction:  {{ direction }}<br>
 												{% if direction == 'Pickup from Intl Airport' or direction == 'Pickup from Domestic Airport' %}
 													Arrival time in Sydney:  {{ flight_time }}<br>
@@ -253,11 +249,15 @@
                                                     Number of Passenger:  {{ no_of_passenger }}<br>
 													Number of baggage:  {{ no_of_baggage }}<br>
                                                     Your Message: <br>
-													{{ message }}<br><br>                                                   
+													{{ message }}<br><br>
+												{% if return_flight_number %}
+													<span style="font-weight:bold; color: #3f3e3d">Return flight date:  {{ return_flight_date }}</span><br>
+                                                    <span style="font-weight:bold; color: #3f3e3d">Return flight number:  {{ return_flight_number }}</span><br>
+												{% endif %}                                                   
 												</p>
 												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;">
 												{% if return_flight_number %}
-													The cost for your booking will be ${{ price }} for a round trip<br><br>
+													The cost for your booking will be ${{ price }} for a return trip<br><br>
 												{% else %}
 													The cost for your booking will be ${{ price }} for a single trip<br><br>
 												{% endif %}
@@ -272,8 +272,8 @@
 												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">	                                                  
 													<a class="btn btn-warning" href="https://easygoshuttle.com.au/confirm_booking"><img src="https://easygo-staticfiles-bucket.s3.ap-southeast-2.amazonaws.com/bookonline+image.webp" alt="book online logo" width="120"></a>
 													
-													<br>
-													<a href="https://easygoshuttle.com.au/confirm_booking">easygoshuttle.com.au/confirm_booking</a>
+													<br><br>
+													<a href="https://easygoshuttle.com.au/confirm_booking">easygoshuttle.com.au/confirm_booking</a><br>
 												</p>
 												<!-- For return trip -->
 												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;">---Payment---</p>							                                                 
