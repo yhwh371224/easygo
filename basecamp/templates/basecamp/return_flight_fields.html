@@ -1,5 +1,14 @@
 <div class="card text-white bg-secondary p-4" id="return-flight-fields" >
     <div class="mb-3 pb-1">
+        <label class="form-label">Direction<sup class="text-danger ms-1">*</sup></label>
+        <select class="form-select" name="return_direction" id="return_direction" required>					
+            <option value="Drop off to Domestic Airport">Drop off to Domestic Airport</option>
+            <option value="Drop off to Intl Airport">Drop off to Intl Airport</option>						
+            <option value="Pickup from Domestic Airport">Pickup from Domestic Airport</option>					
+            <option value="Pickup from Intl Airport">Pickup from Intl Airport</option>                
+        </select>
+    </div><br>
+    <div class="mb-3 pb-1">
         <label class="form-label" for="return_flight_date">Return Flight date (Trip date)<sup class="text-danger ms-1"></sup>&nbsp;(Sydney)</label>
          <input class="form-control date-picker rounded" required name="return_flight_date" id="return-flight-date" type="date" placeholder="Your flight date">
     </div>
@@ -12,5 +21,11 @@
       <label class="form-label" for="return_flight_time">Flight time<sup class="text-danger ms-1"></sup>&nbsp;(Sydney)</label>
        <input class="form-control" required name="return_flight_time" id="return-flight-time" type="time">
        <div class="invalid-feedback">Please enter your flight time!</div>
-</div>     
+    </div>
+    <div class="mb-3 pb-1">
+        <label class="form-label">Your desired pickup time</label>
+        <input class="form-control" type="time" name="return_pickup_time" id="return-pickup-time">
+        <sup class="text-danger ms-1">if not sure, just skip</sup>
+    </div> 
+</div>    
  
