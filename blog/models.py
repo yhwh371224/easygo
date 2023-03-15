@@ -18,9 +18,11 @@ class Inquiry(models.Model):
     no_of_passenger = models.CharField(max_length=30, blank=False)
     no_of_baggage = models.CharField(max_length=200, blank=True)
 
+    return_direction = models.CharField(max_length=100, blank=True, null=True)
     return_flight_date = models.DateField(blank=True, null=True, default=datetime.date.today)
     return_flight_number = models.CharField(max_length=100, blank=True, null=True)
     return_flight_time = models.CharField(max_length=30, blank=True, null=True)
+    return_pickup_time = models.CharField(max_length=30, blank=True, null=True)
 
     message = models.TextField(blank=True)
     notice = models.TextField(blank=True)    
@@ -55,9 +57,11 @@ class Post(models.Model):
     no_of_passenger = models.CharField(max_length=30, blank=False)
     no_of_baggage = models.CharField(max_length=200, blank=True)
 
+    return_direction = models.CharField(max_length=100, blank=True, null=True)
     return_flight_date = models.DateField(blank=True, null=True, default=datetime.date.today)
     return_flight_number = models.CharField(max_length=100, blank=True, null=True)
     return_flight_time = models.CharField(max_length=30, blank=True, null=True)
+    return_pickup_time = models.CharField(max_length=30, blank=True, null=True)
 
     message = models.TextField(blank=True)
     notice = models.TextField(blank=True)
