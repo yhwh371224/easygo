@@ -9,8 +9,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = config('SECRET_KEY')
 
-DEBUG = True
-#DEBUG = config('DEBUG', cast=bool, default=True)
+#DEBUG = True
+DEBUG = config('DEBUG', cast=bool, default=True)
 
 
 ALLOWED_HOSTS = ['easygoshuttle.com.au', 'www.easygoshuttle.com.au', '52.64.177.56']
