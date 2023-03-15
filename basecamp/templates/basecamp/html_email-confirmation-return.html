@@ -241,21 +241,13 @@
                                                     Booking date: {{ flight_date|slice:":10" }}<br>
 													Pickup time: {{ pickup_time }}<br>
 													Start point: {{ flight_number }}<br>
-                                                    End point: {{ street }}<br>																									
-												{% elif direction == 'Pickup from Intl Airport' or direction == 'Pickup from Domestic Airport' %}
-                                                    Flight date: {{ flight_date|slice:":10" }}<br>
-                                                    Flight number: {{ flight_number }}<br>
-													Flight time: {{ flight_time }}<br>
-													Pickup time: {{ pickup_time }}<br>												
-                                                    Direction: Drop off to the Airport<br>
-													Street: {{ street }}<br>
-													Suburb: {{ suburb }}<br>
+                                                    End point: {{ street }}<br>		
 												{% else %}
 													Flight date: {{ flight_date|slice:":10" }}<br>
 													Flight number: {{ flight_number }}<br>
 													Flight time: {{ flight_time }}<br>
 													Pickup time: {{ pickup_time }}<br>												
-													Direction: Pickup from the Airport<br>
+													Direction: {{ direction }}<br>
 													Street: {{ street }}<br>
 													Suburb: {{ suburb }}<br>
 												{% endif %}
@@ -276,26 +268,21 @@
 												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">                                                  
                                                     You have paid ${{ paid }}, which we have received and greatly appreciate. 													
 												<br><br></p>
-												{% elif direction == 'Pickup from Intl Airport' or direction == 'Pickup from Domestic Airport' %}												
-												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">                                                  
-                                                    Please pay online ${{ price }} via PayPal in advance <a href="https://easygoshuttle.com.au/payonline/">easygoshuttle.com.au/payonline</a>
-													<br><br>
-													For those arriving in Sydney, payment in advance is kindly requested																								
-												<br><br></p>					
-												{% else %}
-												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">                                                  
-                                                    On the day of booking, you can pay cash ${{ price }} or card to your driver.
-													Alternatively, you can pay online via PayPal <a href="https://easygoshuttle.com.au/payonline/">easygoshuttle.com.au/payonline</a>													
-												<br><br></p>
-												{% endif %}
-												<!-- For return trip -->						
+												{% else %}												
 												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
-													If you wish to book a return trip, click&nbsp;<a href="https://easygoshuttle.com.au/return_trip/">&raquo;&raquo;Book for return trip</a><br><br></p>
+													--- Payment ---<br><br>                                                  
+                                                    Please pay online ${{ price }} via PayPal in advance <a href="https://easygoshuttle.com.au/payonline/">easygoshuttle.com.au/payonline</a>
+													(This price is for a single trip)<br>
+													If you don't pay online, you will need to pay cash to your driver on the flight day<br><br>
+													For those arriving in Sydney, payment in advance is kindly requested<br><br>				
+												</p>
+												{% endif %}
 												<!-- If notice -->
 												{% if notice %}
 												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
 												Note: {{ notice }}<br><br></p>
 												{% endif %}
+												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
 													We will send you a reminder email closer to the date of your booking.<br><br></p>											
 												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">                                                  
                                                     Thank you again for booking with us. We look forward to seeing you on time													
