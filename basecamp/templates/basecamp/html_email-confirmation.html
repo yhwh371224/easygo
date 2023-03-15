@@ -269,12 +269,13 @@
                                                     You have paid ${{ paid }}, which we have received and greatly appreciate. 													
 												<br><br></p>
 												{% else %}												
-												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">                                                  
+												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
+													--- Payment ---<br><br>                                                  
                                                     Please pay online ${{ price }} via PayPal in advance <a href="https://easygoshuttle.com.au/payonline/">easygoshuttle.com.au/payonline</a>
-													&nbsp;&nbsp; This price is for a single trip<br>
+													(This price is for a single trip)<br>
 													If you don't pay online, you will need to pay cash to your driver on the flight day<br><br>
 													For those arriving in Sydney, payment in advance is kindly requested<br><br>				
-												<br><br></p>
+												</p>
 												{% endif %}
 												{% if not return_flight_number %}
 												<!-- For return trip -->						

@@ -234,18 +234,25 @@
                                                     Invoice to: {{ name }}<br><br>                                                                                                       
                                                 </p>
 												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
+													Direction: {{ direction }}<br>
                                                     Flight date: {{ flight_date }}<br>                                                    
 													Flight time: {{ flight_time }}<br>
 												{% if return_flight_number %}
+													Return Direction: {{ return_direction }}<br>
 													Return flight date: {{ return_flight_date }}<br>
 													Return flight time: {{ return_flight_time }}<br>
 												{% endif %}
 													Address: {{ street }}, {{ suburb }}<br>													                                                   
                                                     Number of Passenger: {{ no_of_passenger }}<br><br>
-                                                    <strong>Total price: ${{ price }} inc GST</strong><br>
-													{% if paid %}
-														<strong>Paid: ${{ paid }}</strong><br><br>	
-													{% endif %}
+												{% if return_flight_number %}
+                                                    <strong>Total price: ${{ price }} inc GST for a round trip</strong><br>
+												{% else %}
+													<strong>Total price: ${{ price }} inc GST for a single trip</strong><br>
+												{% endif %}
+												<!-- Paid amount -->
+												{% if paid %}
+													<strong>Paid: ${{ paid }}</strong><br><br>	
+												{% endif %}
                                                 </p>     										
 												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">                                                  
                                                     Payment options are as below<br><br>
