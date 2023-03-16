@@ -49,6 +49,8 @@ urlpatterns = [
     path('re_confirm_detail/', views.re_confirm_detail),
     path('re_confirm_email/', views.re_confirm_email, name="re_confirm_email"),
     path('re_confirm_email_detail/', views.re_confirm_email_detail),
+    path('sending_email_second/', views.sending_email_second, name="sending_email_second"),
+    path('sending_email_second_detail/', views.sending_email_second_detail),
     path('save_data_only/', views.save_data_only, name="save_data_only"),
     path('save_data_only_detail/', views.save_data_only_detail),
     path('airport-transfer-sydney-city/', views.sydney_city),
