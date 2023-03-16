@@ -57,6 +57,9 @@ def re_confirm(request): return render(request, 'basecamp/re_confirm.html')
 def re_confirm_email(request): return render(request, 'basecamp/re_confirm_email.html')
 
 
+def sending_email_second(request): return render(request, 'basecamp/sending_email_second.html')
+
+
 def save_data_only(request): return render(request, 'basecamp/save_data_only.html')
 
 
@@ -1601,11 +1604,11 @@ def re_confirm_detail(request):
         return render(request, 'beasecamp/re_confirm.html', {})    
      
      
-# sending email only   
+# sending email first one   
 def re_confirm_email_detail(request):     
     if request.method == "POST":
         email = request.POST.get('email')             
-        user = Post.objects.filter(email=email).first()  
+        user = Post.objects.filter(email=email).first()        
          
         if not user:
             return render(request, 'basecamp/500.html')    
@@ -1640,6 +1643,46 @@ def re_confirm_email_detail(request):
     
     else:
         return render(request, 'beasecamp/re_confirm_email.html', {})   
+    
+    
+def sending_email_second_detail(request):     
+    if request.method == "POST":
+        email = request.POST.get('email')
+        user = Post.objects.filter(email=email)[1]  
+         
+        if not user:
+            return render(request, 'basecamp/500.html')    
+           
+        else:
+            name = user.name
+        
+        html_content = render_to_string("basecamp/html_email-confirmation.html",
+                                    {'name': user.name, 'contact': user.contact, 'email': user.email,
+                                     'flight_date': user.flight_date, 'flight_number': user.flight_number,
+                                     'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
+                                     'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
+                                     'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
+                                     'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date, 
+                                     'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
+                                     'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
+                                     'price': user.price, 'paid': user.paid })
+    
+        text_content = strip_tags(html_content)
+
+        email = EmailMultiAlternatives(
+            "Booking confirmation - EasyGo",
+            text_content,
+            '',
+            [email, 'info@easygoshuttle.com.au']
+        )
+        email.attach_alternative(html_content, "text/html")
+        email.send()
+        
+        return render(request, 'basecamp/sending_email_second_detail.html',
+                        {'name' : name, 'email': email, }) 
+    
+    else:
+        return render(request, 'beasecamp/sending_email_second.html', {})   
 
 
 def save_data_only_detail(request):     
