@@ -11,7 +11,7 @@ logger = get_task_logger(__name__)
 
 
 @shared_task(bind=True)
-def email_1():
+def email_1(self, **kwargs):
     
     tomorrow_reminder = date.today() + timedelta(days=1)
     tomorrow_reminders = Post.objects.filter(flight_date=tomorrow_reminder)
@@ -37,7 +37,7 @@ def email_1():
 
     
 @shared_task(bind=True)
-def email_2():
+def email_2(self, **kwargs):
     
     upcoming3_reminder = date.today() + timedelta(days=3)
     upcoming3_reminders = Post.objects.filter(flight_date=upcoming3_reminder)
@@ -63,7 +63,7 @@ def email_2():
 
 
 @shared_task(bind=True)
-def email_3():
+def email_3(self, **kwargs):
     
     upcoming7_reminder = date.today() + timedelta(days=7)
     upcoming7_reminders = Post.objects.filter(flight_date=upcoming7_reminder)
@@ -89,7 +89,7 @@ def email_3():
 
 
 @shared_task(bind=True)
-def email_4():
+def email_4(self, **kwargs):
     
     upcoming14_reminder = date.today() + timedelta(days=14)
     upcoming14_reminders = Post.objects.filter(flight_date=upcoming14_reminder)
@@ -115,7 +115,7 @@ def email_4():
 
 
 @shared_task(bind=True)
-def email_5():
+def email_5(self, **kwargs):
      
     today_reminder = date.today()
     today_reminders = Post.objects.filter(flight_date=today_reminder)
@@ -141,7 +141,7 @@ def email_5():
 
 
 @shared_task(bind=True)
-def email_6():
+def email_6(self, **kwargs):
     
     yesterday_reminder = date.today() + timedelta(days=-1)
     yesterday_reminders = Post.objects.filter(flight_date=yesterday_reminder)
