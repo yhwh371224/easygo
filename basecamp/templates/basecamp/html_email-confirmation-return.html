@@ -257,18 +257,30 @@
 													{{ message }}<br><br> 
                                                 </p>
 												<!-- Meeting point -->
-												{% if direction == 'Pickup from Intl Airport' or direction == 'Pickup from Domestic Airport' %}														
+												{% if direction == 'Pickup from Intl Airport' or direction == 'Pickup from Domestic Airport' %}	
+												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
+													--- Meeting point ---<br><br> 													
                                                 <p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">                                                  
                                                     Please refer to <a href="https://easygoshuttle.com.au/meeting_point/">the meeting point</a> at the airport													
 													</p>
 												{% endif %}
 												<br><br>
 												<!-- If paid or not-->
-												{% if paid %}																								
+												{% if paid %}
+												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
+													--- Payment ---<br><br> 																								
 												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">                                                  
                                                     You have paid ${{ paid }}, which we have received and greatly appreciate. 													
-												<br><br></p>
-												{% else %}												
+												<br><br></p>												
+												{% elif return_flight_number %}												
+												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
+													--- Payment ---<br><br>                                                  
+                                                    Please pay online ${{ price }} via PayPal in advance <a href="https://easygoshuttle.com.au/payonline/">easygoshuttle.com.au/payonline</a>
+													(This price is for a return trip)<br>
+													If you don't pay online, you will need to pay cash to your driver on the flight day<br><br>
+													For those arriving in Sydney, payment in advance is kindly requested<br><br>				
+												</p>
+												{% else %}
 												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
 													--- Payment ---<br><br>                                                  
                                                     Please pay online ${{ price }} via PayPal in advance <a href="https://easygoshuttle.com.au/payonline/">easygoshuttle.com.au/payonline</a>
