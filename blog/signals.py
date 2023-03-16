@@ -21,31 +21,29 @@ def notify_user_post(sender, instance, created, **kwargs):
                  direction=instance.return_direction, suburb=instance.suburb, street=instance.street, no_of_passenger=instance.no_of_passenger, 
                  no_of_baggage=instance.no_of_baggage, message=instance.message, price=instance.price, paid=instance.paid)
         
-        p.save()       
-
-        sleep(1)
+        p.save() 
         
-        user = Post.objects.filter().first()
+        # user = Post.objects.filter().first()
                         
-        html_content = render_to_string("basecamp/html_email-confirmation-return.html",
-                                        {'name': user.name, 'contact': user.contact, 'email': user.email,
-                                         'flight_date': user.flight_date, 'flight_number': user.flight_number,
-                                         'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
-                                         'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
-                                         'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
-                                         'message': user.message, 'notice': user.notice, 'price': user.price, 'paid': user.paid })
+        # html_content = render_to_string("basecamp/html_email-confirmation-return.html",
+        #                                 {'name': user.name, 'contact': user.contact, 'email': user.email,
+        #                                  'flight_date': user.flight_date, 'flight_number': user.flight_number,
+        #                                  'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
+        #                                  'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
+        #                                  'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
+        #                                  'message': user.message, 'notice': user.notice, 'price': user.price, 'paid': user.paid })
 
-        text_content = strip_tags(html_content)
+        # text_content = strip_tags(html_content)
 
-        email = EmailMultiAlternatives(
-            "Booking confirmation - EasyGo",
-            text_content,
-            '',
-            [instance.email, 'info@easygoshuttle.com.au']
-        )
-        email.attach_alternative(html_content, "text/html")
+        # email = EmailMultiAlternatives(
+        #     "Booking confirmation - EasyGo",
+        #     text_content,
+        #     '',
+        #     [instance.email, 'info@easygoshuttle.com.au']
+        # )
+        # email.attach_alternative(html_content, "text/html")
         
-        email.send()    
+        # email.send()    
 
 
 @receiver(post_save, sender=Inquiry)
