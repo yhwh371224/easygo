@@ -1118,6 +1118,7 @@ def confirmation_detail(request):
                                      'message': message, 'notice': notice , 'price': price, 'paid': paid })
         
         text_content = strip_tags(html_content)
+        
         email = EmailMultiAlternatives(
             "Booking confirmation - EasyGo",
             text_content,
