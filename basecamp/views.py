@@ -51,9 +51,6 @@ def return_trip(request): return render(request, 'basecamp/return_trip.html')
 def return_trip_inquiry(request): return render(request, 'basecamp/return_trip_inquiry.html')
 
 
-def re_confirm(request): return render(request, 'basecamp/re_confirm.html')
-
-
 def re_confirm_email(request): return render(request, 'basecamp/re_confirm_email.html')
 
 
@@ -1536,74 +1533,8 @@ def retrieve_post_detail(request):
         return rendering
     
     else:
-        return render(request, 'beasecamp/retrieve_post.html', {})        
-
-
-# From Post to Post
-def re_confirm_detail(request):     
-    if request.method == "POST":
-        email = request.POST.get('email')             
-        user = Post.objects.filter(email=email).first()    
-        
-        if not user:
-            return render(request, 'basecamp/500.html') 
-               
-        else:
-            name = user.name
-            contact = user.contact
-            flight_date = user.flight_date
-            flight_number = user.flight_number
-            flight_time = user.flight_time
-            pickup_time = user.pickup_time
-            direction = user.direction
-            street = user.street
-            suburb = user.suburb
-            no_of_passenger = user.no_of_passenger
-            no_of_baggage = user.no_of_baggage
-            return_direction = user.return_direction
-            return_flight_date = user.return_flight_date
-            return_flight_number = user.return_flight_number
-            return_flight_time = user.return_flight_time 
-            return_pickup_time = user.return_pickup_time  
-            message = user.message
-            notice = user.notice
-            price = user.price
-            paid = user.paid
-            
-        p = Post(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
-                 flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
-                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction,
-                 return_flight_date=return_flight_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
-                 return_pickup_time=return_pickup_time, message=message, notice=notice, price=price, paid=paid)
-        
-        p.save()
-
-        rendering = render(request, 'basecamp/re_confirm_detail.html',
-                        {'name' : name, 'email': email, })        
-
-        html_content = render_to_string("basecamp/html_email-confirmation.html",
-                                     {'name': name, 'contact': contact, 'email': email, 'flight_date': flight_date, 'flight_number': flight_number,
-                                     'flight_time': flight_time, 'pickup_time': pickup_time, 'return_direction': return_direction,'return_flight_date': return_flight_date, 
-                                     'return_flight_number': return_flight_number, 'return_flight_time': return_flight_time, 'return_pickup_time': return_pickup_time,
-                                     'direction': direction, 'street': street, 'suburb': suburb, 'no_of_passenger': no_of_passenger, 'no_of_baggage': no_of_baggage,
-                                     'message': message, 'notice': notice , 'price': price, 'paid': paid })
+        return render(request, 'beasecamp/retrieve_post.html', {}) 
     
-        text_content = strip_tags(html_content)
-
-        email = EmailMultiAlternatives(
-            "Booking confirmation - EasyGo",
-            text_content,
-            '',
-            [email, 'info@easygoshuttle.com.au']
-        )
-        email.attach_alternative(html_content, "text/html")
-        email.send()
-        
-        return rendering
-    
-    else:
-        return render(request, 'beasecamp/re_confirm.html', {})    
-     
      
 # sending email first one   
 def re_confirm_email_detail(request):     
@@ -1939,6 +1870,7 @@ def return_trip_detail(request):
         content = '''
             {} 
             submitted the 'Return trip' \n
+            sending first email only \n
             ===============================
             Contact: {}
             Email: {}  
