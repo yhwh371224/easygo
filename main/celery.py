@@ -34,22 +34,22 @@ app.conf.beat_schedule = {
 # app.conf.beat_schedule = {
 #    "email_1": {
 #        "task": "blog.tasks.email_1", 
-#        "schedule": timedelta(seconds=30)},
+#        "schedule": timedelta(seconds=60)},
 #    "email_2": {
 #        "task": "blog.tasks.email_2", 
-#        "schedule": timedelta(seconds=30)},
+#        "schedule": timedelta(seconds=60)},
 #    "email_3": {
 #        "task": "blog.tasks.email_3", 
-#        "schedule": timedelta(seconds=30)},
+#        "schedule": timedelta(seconds=60)},
 #    "email_4": {
 #        "task": "blog.tasks.email_4", 
-#        "schedule": timedelta(seconds=30)},
+#        "schedule": timedelta(seconds=60)},
 #    "email_5": {
 #        "task": "blog.tasks.email_5", 
-#        "schedule": timedelta(seconds=30)},
+#        "schedule": timedelta(seconds=60)},
 #    "email_6": {
 #        "task": "blog.tasks.email_6", 
-#        "schedule": timedelta(seconds=30)},#   
+#        "schedule": timedelta(seconds=60)},
 #    }
  
 app.autodiscover_tasks()
