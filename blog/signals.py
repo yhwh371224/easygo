@@ -19,7 +19,7 @@ def notify_user_post(sender, instance, created, **kwargs):
         p = Post(name=instance.name, contact=instance.contact, email=instance.email, flight_date=instance.return_flight_date, 
                  flight_number=instance.return_flight_number, flight_time=instance.return_flight_time, pickup_time=instance.return_pickup_time, 
                  direction=instance.return_direction, suburb=instance.suburb, street=instance.street, no_of_passenger=instance.no_of_passenger, 
-                 no_of_baggage=instance.no_of_baggage, message=instance.message, notice=instance.notice, price=instance.price, paid=instance.paid)
+                 no_of_baggage=instance.no_of_baggage, message=instance.message, return_flight_number=instance.flight_number, notice=instance.notice, price=instance.price, paid=instance.paid)
         
         p.save() 
         

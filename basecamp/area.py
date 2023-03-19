@@ -115,7 +115,7 @@ suburbs = {
     "Harris park": 80,
     "Hassal Grove": 130,
     "Henley": 60,
-    "Herbersham": 110,
+    "Hebersham": 110,
     "Holroyd": 80,
     "Homebush": 60,
     "Hornsby": 100,
