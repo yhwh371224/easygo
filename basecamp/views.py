@@ -300,9 +300,11 @@ def inquiry_details(request):
             Suburb: {}
             Passenger: {}
             Baggage: {}
+            Return direction: {}
             Return flight date: {}
             Return flight no: {}
             Return flight time: {}
+            Return pickup time: {}
             Messag
             {}
             ===============================\n        
@@ -310,8 +312,10 @@ def inquiry_details(request):
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['contact'], data['email'], data['flight_number'],
                         data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
-                        data['no_of_passenger'], data['no_of_baggage'], data['return_flight_date'], data['return_flight_number'],
-                        data ['return_flight_time'], data['message'])
+                        data['no_of_passenger'], data['no_of_baggage'], data['return_direction'],
+                        data['return_flight_date'], data['return_flight_number'],
+                        data['return_flight_time'], data['return_pickup_time'], data['message'])
+            
             send_mail(data['flight_date'], content,
                       '', ['info@easygoshuttle.com.au'])
             
@@ -331,6 +335,11 @@ def inquiry_details(request):
             Suburb: {}
             Passenger: {}
             Baggage: {}
+            Return direction: {}
+            Return flight date: {}
+            Return flight no: {}
+            Return flight time: {}
+            Return pickup time: {}
             Messag
             {}
             ===============================\n        
@@ -338,8 +347,10 @@ def inquiry_details(request):
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['contact'], data['email'], data['flight_number'],
                         data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
-                        data['no_of_passenger'], data['no_of_baggage'], data['return_flight_date'], data['return_flight_number'],
-                        data ['return_flight_time'], data['message'])
+                        data['no_of_passenger'], data['no_of_baggage'], data['return_direction'],
+                        data['return_flight_date'], data['return_flight_number'],
+                        data['return_flight_time'], data['return_pickup_time'], data['message'])
+            
             send_mail(data['flight_date'], content,
                       '', ['info@easygoshuttle.com.au'])
             
@@ -359,6 +370,11 @@ def inquiry_details(request):
             Suburb: {}
             Passenger: {}
             Baggage: {}
+            Return direction: {}
+            Return flight date: {}
+            Return flight no: {}
+            Return flight time: {}
+            Return pickup time: {}
             Messag
             {}
             ===============================\n        
@@ -366,8 +382,10 @@ def inquiry_details(request):
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['contact'], data['email'], data['flight_number'],
                         data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
-                        data['no_of_passenger'], data['no_of_baggage'], data['return_flight_date'], data['return_flight_number'],
-                        data ['return_flight_time'], data['message'])
+                        data['no_of_passenger'], data['no_of_baggage'], data['return_direction'],
+                        data['return_flight_date'], data['return_flight_number'],
+                        data['return_flight_time'], data['return_pickup_time'], data['message'])
+            
             send_mail(data['flight_date'], content,
                       '', ['info@easygoshuttle.com.au'])
             
@@ -387,6 +405,11 @@ def inquiry_details(request):
             Suburb: {}
             Passenger: {}
             Baggage: {}
+            Return direction: {}
+            Return flight date: {}
+            Return flight no: {}
+            Return flight time: {}
+            Return pickup time: {}
             Messag
             {}
             ===============================\n        
@@ -394,8 +417,10 @@ def inquiry_details(request):
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['contact'], data['email'], data['flight_number'],
                         data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
-                        data['no_of_passenger'], data['no_of_baggage'], data['return_flight_date'], data['return_flight_number'],
-                        data ['return_flight_time'], data['message'])
+                        data['no_of_passenger'], data['no_of_baggage'], data['return_direction'],
+                        data['return_flight_date'], data['return_flight_number'],
+                        data['return_flight_time'], data['return_pickup_time'], data['message'])
+            
             send_mail(data['flight_date'], content,
                       '', ['info@easygoshuttle.com.au'])
         
@@ -449,6 +474,11 @@ def inquiry_details1(request):
             'street': street,
             'no_of_passenger': no_of_passenger,
             'no_of_baggage': no_of_baggage,
+            'return_direction': return_direction,
+            'return_flight_date': return_flight_date,
+            'return_flight_number': return_flight_number,
+            'return_flight_time': return_flight_time,
+            'return_pickup_time': return_pickup_time,
             'message': message,}       
         
         inquiry_email = Inquiry.objects.values_list('email', flat=True)
@@ -471,6 +501,11 @@ def inquiry_details1(request):
             Suburb: {}
             Passenger: {}
             Baggage: {}
+            Return direction: {}
+            Return flight date: {}
+            Return flight no: {}
+            Return flight time: {}
+            Return pickup time: {}
             Messag
             {}
             ===============================\n        
@@ -478,7 +513,10 @@ def inquiry_details1(request):
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['contact'], data['email'], data['flight_number'],
                         data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
-                        data['no_of_passenger'], data['no_of_baggage'], data['message'])
+                        data['no_of_passenger'], data['no_of_baggage'], data['return_direction'],
+                        data['return_flight_date'], data['return_flight_number'],
+                        data['return_flight_time'], data['return_pickup_time'], data['message'])
+            
             send_mail(data['flight_date'], content,
                       '', ['info@easygoshuttle.com.au'])
             
@@ -499,6 +537,11 @@ def inquiry_details1(request):
             Suburb: {}
             Passenger: {}
             Baggage: {}
+            Return direction: {}
+            Return flight date: {}
+            Return flight no: {}
+            Return flight time: {}
+            Return pickup time: {}
             Messag
             {}
             ===============================\n        
@@ -506,7 +549,10 @@ def inquiry_details1(request):
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['contact'], data['email'], data['flight_number'],
                         data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
-                        data['no_of_passenger'], data['no_of_baggage'], data['message'])
+                        data['no_of_passenger'], data['no_of_baggage'], data['return_direction'],
+                        data['return_flight_date'], data['return_flight_number'],
+                        data['return_flight_time'], data['return_pickup_time'], data['message'])
+            
             send_mail(data['flight_date'], content,
                       '', ['info@easygoshuttle.com.au'])
             
@@ -527,6 +573,11 @@ def inquiry_details1(request):
             Suburb: {}
             Passenger: {}
             Baggage: {}
+            Return direction: {}
+            Return flight date: {}
+            Return flight no: {}
+            Return flight time: {}
+            Return pickup time: {}
             Messag
             {}
             ===============================\n        
@@ -534,7 +585,10 @@ def inquiry_details1(request):
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['contact'], data['email'], data['flight_number'],
                         data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
-                        data['no_of_passenger'], data['no_of_baggage'], data['message'])
+                        data['no_of_passenger'], data['no_of_baggage'], data['return_direction'],
+                        data['return_flight_date'], data['return_flight_number'],
+                        data['return_flight_time'], data['return_pickup_time'], data['message'])
+            
             send_mail(data['flight_date'], content,
                       '', ['info@easygoshuttle.com.au'])
         
@@ -554,6 +608,11 @@ def inquiry_details1(request):
             Suburb: {}
             Passenger: {}
             Baggage: {}
+            Return direction: {}
+            Return flight date: {}
+            Return flight no: {}
+            Return flight time: {}
+            Return pickup time: {}
             Messag
             {}
             ===============================\n        
@@ -561,7 +620,10 @@ def inquiry_details1(request):
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['contact'], data['email'], data['flight_number'],
                         data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
-                        data['no_of_passenger'], data['no_of_baggage'], data['message'])
+                        data['no_of_passenger'], data['no_of_baggage'], data['return_direction'],
+                        data['return_flight_date'], data['return_flight_number'],
+                        data['return_flight_time'], data['return_pickup_time'], data['message'])
+            
             send_mail(data['flight_date'], content,
                       '', ['info@easygoshuttle.com.au'])        
         
@@ -614,6 +676,11 @@ def booking_form_detail(request):
             'street': street,
             'no_of_passenger': no_of_passenger,
             'no_of_baggage': no_of_baggage,
+            'return_direction': return_direction,
+            'return_flight_date': return_flight_date,
+            'return_flight_number': return_flight_number,
+            'return_flight_time': return_flight_time,
+            'return_pickup_time': return_pickup_time,
             'message': message,           
         }
         
@@ -636,6 +703,11 @@ def booking_form_detail(request):
             Suburb: {}
             Passenger: {}
             Baggage: {}
+            Return direction: {}
+            Return flight date: {}
+            Return flight no: {}
+            Return flight time: {}
+            Return pickup time: {}
             Messag
             {}
             ===============================\n        
@@ -643,7 +715,9 @@ def booking_form_detail(request):
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['contact'], data['email'], data['flight_number'],
                         data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
-                        data['no_of_passenger'], data['no_of_baggage'], data['message'])
+                        data['no_of_passenger'], data['no_of_baggage'], data['return_direction'],
+                        data['return_flight_date'], data['return_flight_number'],
+                        data['return_flight_time'], data['return_pickup_time'], data['message'])
 
             send_mail(data['flight_date'], content,
                       '', ['info@easygoshuttle.com.au'])
@@ -664,6 +738,11 @@ def booking_form_detail(request):
             Suburb: {}
             Passenger: {}
             Baggage: {}
+            Return direction: {}
+            Return flight date: {}
+            Return flight no: {}
+            Return flight time: {}
+            Return pickup time: {}
             Messag
             {}
             ===============================\n        
@@ -671,8 +750,10 @@ def booking_form_detail(request):
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['contact'], data['email'], data['flight_number'],
                         data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
-                        data['no_of_passenger'], data['no_of_baggage'], data['message'])
-
+                        data['no_of_passenger'], data['no_of_baggage'], data['return_direction'],
+                        data['return_flight_date'], data['return_flight_number'],
+                        data['return_flight_time'], data['return_pickup_time'], data['message'])
+            
             send_mail(data['flight_date'], content,
                       '', ['info@easygoshuttle.com.au'])
             
@@ -692,6 +773,11 @@ def booking_form_detail(request):
             Suburb: {}
             Passenger: {}
             Baggage: {}
+            Return direction: {}
+            Return flight date: {}
+            Return flight no: {}
+            Return flight time: {}
+            Return pickup time: {}
             Messag
             {}
             ===============================\n        
@@ -699,7 +785,9 @@ def booking_form_detail(request):
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['contact'], data['email'], data['flight_number'],
                         data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
-                        data['no_of_passenger'], data['no_of_baggage'], data['message'])
+                        data['no_of_passenger'], data['no_of_baggage'], data['return_direction'],
+                        data['return_flight_date'], data['return_flight_number'],
+                        data['return_flight_time'], data['return_pickup_time'], data['message'])
 
             send_mail(data['flight_date'], content,
                       '', ['info@easygoshuttle.com.au'])
@@ -720,6 +808,11 @@ def booking_form_detail(request):
             Suburb: {}
             Passenger: {}
             Baggage: {}
+            Return direction: {}
+            Return flight date: {}
+            Return flight no: {}
+            Return flight time: {}
+            Return pickup time: {}
             Messag
             {}
             ===============================\n        
@@ -727,7 +820,9 @@ def booking_form_detail(request):
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['contact'], data['email'], data['flight_number'],
                         data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
-                        data['no_of_passenger'], data['no_of_baggage'], data['message'])
+                        data['no_of_passenger'], data['no_of_baggage'], data['return_direction'],
+                        data['return_flight_date'], data['return_flight_number'],
+                        data['return_flight_time'], data['return_pickup_time'], data['message'])
 
             send_mail(data['flight_date'], content,
                       '', ['info@easygoshuttle.com.au'])
