@@ -24,6 +24,8 @@ def notify_user_post(sender, instance, created, **kwargs):
         
         p.save() 
         
+        return 
+     
         # user = Post.objects.filter().first()
                         
         # html_content = render_to_string("basecamp/html_email-confirmation-return.html",
