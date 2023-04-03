@@ -1671,7 +1671,8 @@ def re_confirm_email_detail(request):
     else:
         return render(request, 'beasecamp/re_confirm_email.html', {})   
     
-    
+
+# sending email second one    
 def sending_email_second_detail(request):     
     if request.method == "POST":
         email = request.POST.get('email')
@@ -1683,7 +1684,7 @@ def sending_email_second_detail(request):
         else:
             name = user.name
         
-        html_content = render_to_string("basecamp/html_email-confirmation.html",
+        html_content = render_to_string("basecamp/html_email-confirmation-return.html",
                                     {'name': user.name, 'contact': user.contact, 'email': user.email,
                                      'flight_date': user.flight_date, 'flight_number': user.flight_number,
                                      'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
