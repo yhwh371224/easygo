@@ -24,7 +24,7 @@ def notify_user_post(sender, instance, created, **kwargs):
         
         p.save() 
         
-        return
+        return 
      
         # user = Post.objects.filter().first()
                         

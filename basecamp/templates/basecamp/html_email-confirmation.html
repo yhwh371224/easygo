@@ -254,7 +254,14 @@
                                                     Number of Passenger: {{ no_of_passenger }}<br>
 													Number of baggage: {{ no_of_baggage }}<br>
                                                     Message: <br>
-													{{ message }}<br><br>
+													{{ message }}<br><br> 
+												{% if return_flight_number %}
+													<span style="font-weight:bold; color: #bdb1a6">Return direction:  {{ return_direction }}</span><br>
+													<span style="font-weight:bold; color: #bdb1a6">Return flight date:  {{ return_flight_date }}</span><br>
+                                                    <span style="font-weight:bold; color: #bdb1a6">Return flight number:  {{ return_flight_number }}</span><br>
+													<span style="font-weight:bold; color: #bdb1a6">Return flight time:  {{ return_flight_time }}</span><br>
+													<span style="font-weight:bold; color: #bdb1a6">Return pickup time:  {{ return_pickup_time }}</span><br>
+												{% endif %}         
                                                 </p>
 												<!-- Meeting point -->
 												{% if direction == 'Pickup from Intl Airport' or direction == 'Pickup from Domestic Airport' %}
@@ -276,7 +283,7 @@
 													--- Payment ---</p>
 												<p style="Margin:0;font-size:12px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                  
                                                     Please pay online ${{ price }} via PayPal in advance <a href="https://easygoshuttle.com.au/payonline/">easygoshuttle.com.au/payonline</a>
-													(This price is for a return trip)<br>
+													<span style="font-weight:bold; color: #bdb1a6">This price is for a return trip</span><br>
 													If you don't pay online, you will need to pay cash to your driver on the flight day<br><br>
 													For those arriving in Sydney, payment in advance is kindly requested<br><br>				
 												</p>
