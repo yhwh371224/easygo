@@ -10,7 +10,7 @@ from django.http import JsonResponse
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
-
+from datetime import date
 
 def index(request): return redirect('/home/')
 
@@ -269,8 +269,9 @@ def inquiry_details(request):
         return_pickup_time = request.POST.get('return_pickup_time')
         message = request.POST.get('message')
                         
-        if not flight_date:
-            return render(request, 'basecamp/501.html') 
+        today = date.today()        
+        if flight_date <= str(today):
+            return render(request, 'basecamp/501.html')
                 
         data = {
             'name': name,
@@ -475,6 +476,10 @@ def inquiry_details1(request):
         return_flight_time = request.POST.get('return_flight_time')
         return_pickup_time = request.POST.get('return_pickup_time')
         message = request.POST.get('message')
+        
+        today = date.today()        
+        if flight_date <= str(today):
+            return render(request, 'basecamp/501.html')
 
         data = {
             'name': name,
@@ -682,8 +687,9 @@ def booking_form_detail(request):
         return_pickup_time = request.POST.get('return_pickup_time')
         message = request.POST.get('message')
                                 
-        if not flight_date:
-            return render(request, 'basecamp/502.html') 
+        today = date.today()        
+        if flight_date <= str(today):
+            return render(request, 'basecamp/502.html')
                 
         data = {
             'name': name,
