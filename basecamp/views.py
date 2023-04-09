@@ -243,6 +243,10 @@ def server_error(request): return render(
     request, 'basecamp/501.html')
 
 
+def server_error(request): return render(
+    request, 'basecamp/502.html')
+
+
 # Inquiry 
 def inquiry_details(request):
     if request.method == "POST":
@@ -679,7 +683,7 @@ def booking_form_detail(request):
         message = request.POST.get('message')
                                 
         if not flight_date:
-            return render(request, 'basecamp/501.html') 
+            return render(request, 'basecamp/502.html') 
                 
         data = {
             'name': name,
