@@ -239,6 +239,10 @@ def server_error(request): return render(
     request, 'basecamp/500.html')
 
 
+def server_error(request): return render(
+    request, 'basecamp/501.html')
+
+
 # Inquiry 
 def inquiry_details(request):
     if request.method == "POST":
@@ -260,7 +264,10 @@ def inquiry_details(request):
         return_flight_time = request.POST.get('return_flight_time')
         return_pickup_time = request.POST.get('return_pickup_time')
         message = request.POST.get('message')
-        
+                        
+        if not flight_date:
+            return render(request, 'basecamp/501.html') 
+                
         data = {
             'name': name,
             'contact': contact,
@@ -287,7 +294,8 @@ def inquiry_details(request):
         if (email in inquiry_email) and (email in post_email):            
             content = '''
             Hello, {} \n   
-            * Both exist in Inquiry & Post *\n     
+            * Both exist in Inquiry & Post *\n 
+            https://easygoshuttle.com.au    
             [Airport Inquiry]       
             ===============================
             Contact: {}
@@ -322,7 +330,8 @@ def inquiry_details(request):
         elif (email in inquiry_email) and not(email in post_email):            
             content = '''
             Hello, {} \n   
-            * Inquiry only exist *\n     
+            * Inquiry only exist *\n  
+            https://easygoshuttle.com.au    
             [Airport Inquiry]       
             ===============================
             Contact: {}
@@ -358,6 +367,7 @@ def inquiry_details(request):
             content = '''
             Hello, {} \n   
             * Post only exist *\n   
+            https://easygoshuttle.com.au 
             [Airport Inquiry]       
             ===============================
             Contact: {}
@@ -392,7 +402,8 @@ def inquiry_details(request):
         else:
             content = '''
             Hello, {} \n  
-            * Neither in Inquiry & Post *\n     
+            * Neither in Inquiry & Post *\n
+            https://easygoshuttle.com.au      
             [Airport Inquiry]       
             ===============================
             Contact: {}
@@ -460,7 +471,7 @@ def inquiry_details1(request):
         return_flight_time = request.POST.get('return_flight_time')
         return_pickup_time = request.POST.get('return_pickup_time')
         message = request.POST.get('message')
-        
+
         data = {
             'name': name,
             'contact': contact,
@@ -488,7 +499,8 @@ def inquiry_details1(request):
                         
             content = '''
             Hello, {} \n  
-            * Both exist in Inquiry & Post *\n   
+            * Both exist in Inquiry & Post *\n 
+            https://easygoshuttle.com.au   
             [Quick Price]       
             ===============================
             Contact: {}
@@ -524,7 +536,8 @@ def inquiry_details1(request):
                         
             content = '''
             Hello, {} \n  
-            * Post only exist *\n       
+            * Post only exist *\n 
+            https://easygoshuttle.com.au       
             [Quick Price]       
             ===============================
             Contact: {}
@@ -560,7 +573,8 @@ def inquiry_details1(request):
                         
             content = '''
             Hello, {} \n  
-            * Inquiry only exist *\n       
+            * Inquiry only exist *\n  
+            https://easygoshuttle.com.au      
             [Quick Price]       
             ===============================
             Contact: {}
@@ -595,7 +609,8 @@ def inquiry_details1(request):
         else:
             content = '''
             Hello, {} \n  
-            * Neither in Inquiry & Post *\n       
+            * Neither in Inquiry & Post *\n   
+            https://easygoshuttle.com.au     
             [Quick Price]       
             ===============================
             Contact: {}
@@ -662,7 +677,10 @@ def booking_form_detail(request):
         return_flight_time = request.POST.get('return_flight_time')
         return_pickup_time = request.POST.get('return_pickup_time')
         message = request.POST.get('message')
-        
+                                
+        if not flight_date:
+            return render(request, 'basecamp/501.html') 
+                
         data = {
             'name': name,
             'contact': contact,
@@ -691,6 +709,7 @@ def booking_form_detail(request):
             content = '''
             Hello, {} \n
             * Both exist in Inquiry & Post *\n
+            https://easygoshuttle.com.au 
             [Filled out booking form]       
             ===============================
             Contact: {}
@@ -726,6 +745,7 @@ def booking_form_detail(request):
             content = '''
             Hello, {} \n
             * Inquiry only exist *\n
+            https://easygoshuttle.com.au 
             [Filled out booking form]       
             ===============================
             Contact: {}
@@ -761,6 +781,7 @@ def booking_form_detail(request):
             content = '''
             Hello, {} \n
             * Post only exist *\n
+            https://easygoshuttle.com.au 
             [Filled out booking form]       
             ===============================
             Contact: {}
@@ -796,6 +817,7 @@ def booking_form_detail(request):
             content = '''
             Hello, {} \n
             * Neither in Inquiry & Post *\n
+            https://easygoshuttle.com.au 
             [Filled out booking form]       
             ===============================
             Contact: {}
@@ -1275,7 +1297,8 @@ def booking_detail(request):
             content = '''
             Hello, {} \n  
             * Both exist in Inquiry & Post *\n       
-            [Booking by client] >> Sending email only!      
+            [Booking by client] >> Sending email only! \n
+            https://easygoshuttle.com.au/re_confirm_email/ \n             
             ===============================
             Contact: {}
             Email: {}  
@@ -1304,7 +1327,8 @@ def booking_detail(request):
             content = '''
             Hello, {} \n  
             * Post only exist *\n     
-            [Booking by client] >> Sending email only!       
+            [Booking by client] >> Sending email only! \n
+            https://easygoshuttle.com.au/re_confirm_email/ \n      
             ===============================
             Contact: {}
             Email: {}  
@@ -1333,7 +1357,8 @@ def booking_detail(request):
             content = '''
             Hello, {} \n  
             * Inquiry only exist *\n     
-            [Booking by client] >> Sending email only!       
+            [Booking by client] >> Sending email only!\n
+            https://easygoshuttle.com.au/re_confirm_email/ \n   
             ===============================
             Contact: {}
             Email: {}  
@@ -1361,7 +1386,8 @@ def booking_detail(request):
             content = '''
             Hello, {} \n  
             * Neither in Inquiry & Post *\n    
-            [Booking by client] >> Sending email only!       
+            [Booking by client] >> Sending email only!\n
+            https://easygoshuttle.com.au/re_confirm_email/ \n         
             ===============================
             Contact: {}
             Email: {}  
@@ -1457,6 +1483,7 @@ def confirm_booking_detail(request):
             {} 
             clicked the 'confirm booking' \n
             >> Sending email only! \n
+            https://easygoshuttle.com.au/re_confirm_email/ \n  
             ===============================
             Contact: {}
             Email: {}  
@@ -1857,7 +1884,7 @@ def return_trip_inquiry_detail(request):
         content = '''
         {} 
         clicked the 'inquiry return trip' \n
-        >> Sending inquiry email only! \n
+        >> Sending inquiry email only! \n        
         ===============================
         Contact: {}
         Email: {}  
@@ -1967,6 +1994,7 @@ def return_trip_detail(request):
             {} 
             submitted the 'Return trip' \n
             sending first email only \n
+            https://easygoshuttle.com.au/re_confirm_email/ \n  
             ===============================
             Contact: {}
             Email: {}  
