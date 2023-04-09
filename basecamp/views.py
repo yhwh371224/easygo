@@ -268,11 +268,7 @@ def inquiry_details(request):
         return_flight_time = request.POST.get('return_flight_time')
         return_pickup_time = request.POST.get('return_pickup_time')
         message = request.POST.get('message')
-                        
-        today = date.today()        
-        if flight_date <= str(today):
-            return render(request, 'basecamp/501.html')
-                
+                                        
         data = {
             'name': name,
             'contact': contact,
@@ -448,6 +444,12 @@ def inquiry_details(request):
                  return_pickup_time=return_pickup_time ,message=message)
         
         p.save()
+        
+        
+        today = date.today()        
+        if flight_date <= str(today):
+            return render(request, 'basecamp/501.html')
+                        
                             
         return render(request, 'basecamp/inquiry_details.html',
                         {'name' : name, 'email': email, }) 
@@ -477,10 +479,6 @@ def inquiry_details1(request):
         return_pickup_time = request.POST.get('return_pickup_time')
         message = request.POST.get('message')
         
-        today = date.today()        
-        if flight_date <= str(today):
-            return render(request, 'basecamp/501.html')
-
         data = {
             'name': name,
             'contact': contact,
@@ -657,7 +655,13 @@ def inquiry_details1(request):
                  return_flight_date=return_flight_date, return_flight_number=return_flight_number, 
                  return_flight_time=return_flight_time, return_pickup_time=return_pickup_time ,message=message)
         
-        p.save()        
+        p.save() 
+        
+        
+        today = date.today()        
+        if flight_date <= str(today):
+            return render(request, 'basecamp/501.html')
+               
                 
         return render(request, 'basecamp/inquiry_details1.html',
                         {'name' : name, 'email': email, })
@@ -686,11 +690,7 @@ def booking_form_detail(request):
         return_flight_time = request.POST.get('return_flight_time')
         return_pickup_time = request.POST.get('return_pickup_time')
         message = request.POST.get('message')
-                                
-        today = date.today()        
-        if flight_date <= str(today):
-            return render(request, 'basecamp/502.html')
-                
+               
         data = {
             'name': name,
             'contact': contact,
@@ -865,7 +865,13 @@ def booking_form_detail(request):
                  return_flight_date=return_flight_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
                  return_pickup_time=return_pickup_time ,message=message)
         
-        p.save()           
+        p.save()
+        
+        
+        today = date.today()        
+        if flight_date <= str(today):
+            return render(request, 'basecamp/501.html')
+                   
 
         return render(request, 'basecamp/booking_form_detail.html',
                         {'name' : name, 'email': email, })
@@ -2110,5 +2116,93 @@ def invoice_detail(request):
     
     else:
         return render(request, 'beasecamp/invoice.html', {})  
+    
+    
 
+def flight_date_detail(request):       
+    if request.method == "POST":          
+        email = request.POST.get('email')
+        flight_date = request.POST.get('flight_date')
+        user = Inquiry.objects.filter(email=email).first() 
+                            
+        if not user:
+            return render(request, 'basecamp/502.html')   
+             
+        else:
+            name = user.name            
+            contact = user.contact
+            flight_number = user.flight_number
+            flight_time = user.flight_time
+            pickup_time = user.pickup_time
+            direction = user.direction
+            suburb = user.suburb
+            street = user.street
+            no_of_passenger = user.no_of_passenger
+            no_of_baggage = user.no_of_baggage
+            return_direction = user.return_direction
+            return_flight_date = user.return_flight_date
+            return_flight_number = user.return_flight_number
+            return_flight_time = user.return_flight_time 
+            return_pickup_time = user.return_pickup_time           
+            message = user.message                  
+            
+            data = {
+            'name': name,
+            'contact': contact,
+            'email': email,
+            'flight_date': flight_date,
+            'flight_number': flight_number,
+            'flight_time': flight_time,
+            'pickup_time': pickup_time,
+            'direction': direction,
+            'suburb': suburb,
+            'street': street,
+            'no_of_passenger': no_of_passenger,
+            'no_of_baggage': no_of_baggage,
+            'message': message,
+            
+            }       
+            
+            content = '''
+            {} 
+            sent 'flight date' from 501.html \n
+            >> Go to the Inquiry database \n
+            https://easygoshuttle.com.au \n  
+            ===============================
+            Contact: {}
+            Email: {}  
+            Flight no: {}      
+            Flight time: {}
+            Pickup time: {}
+            Direction: {}
+            Street: {}
+            Suburb: {}
+            Passenger: {}
+            Baggage: {}
+            Messag
+            {}            
+            ===============================\n        
+            Best Regards,
+            EasyGo Admin \n\n        
+            ''' .format(data['name'], data['contact'], data['email'], data['flight_number'],
+                        data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
+                        data['no_of_passenger'], data['no_of_baggage'], data['message'])
+            send_mail(data['flight_date'], content,
+                      '', ['info@easygoshuttle.com.au'])       
+            
+            
+        p = Inquiry (name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
+                 flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
+                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction,
+                 return_flight_date=return_flight_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
+                 return_pickup_time=return_pickup_time, message=message)
+        
+        p.save()        
+        
+                
+        return render(request, 'basecamp/inquiry_details1.html',
+                        {'name' : name, 'email': email, })
+
+    else:
+        return render(request, 'basecamp/inquiry1.html', {})
 

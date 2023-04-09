@@ -32,6 +32,7 @@ urlpatterns = [
     path('confirm_booking/', views.confirm_booking, name="confirm_booking"),
     path('confirm_booking_detail/', views.confirm_booking_detail, name='confirm_booking_detail'), 
     path('confirmation_detail/', views.confirmation_detail, name='confirmation_detail'), 
+    path( 'flight_date_detail/', views.flight_date_detail, name='flight_date_detail'),
     path('invoice/', views.invoice, name="invoice"),
     path('invoice_detail/', views.invoice_detail),  
     path('payonline/', views.payonline, name='payonline'),

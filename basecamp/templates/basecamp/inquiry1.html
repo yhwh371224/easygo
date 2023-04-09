@@ -38,34 +38,34 @@
 					<label class="form-label">Flight Information</label>					      
 				</div>
 				<div class="mb-3 pb-1">
-					<label class="form-label">Direction<sup class="text-danger ms-1">*</sup></label>
+					<label class="form-label">Direction</label>
 					<select class="form-select" name="direction" style="background-color:#E5EFFE; font-weight: 400; color:black" required>						
 						<option value="{{ direction }}">{{ direction }}</option>						                
 					</select>
 				</div><br>
 				<div id="flight-info" class="card text-white bg-secondary p-4">
                 <div class="mb-3 pb-1">					
-                  <label class="form-label" >Flight date<sup class="text-danger ms-1">*</sup>&nbsp;(Sydney)</label>
+                  <label class="form-label" >Flight date&nbsp;(Sydney)</label>
                   <input class="form-control" name="flight_date" style="background-color:#E5EFFE; font-weight: 400; color: black, " value="{{ flight_date }}" type="text" >				  
                 </div>
 				<div class="mb-3 pb-1">
-					<label class="form-label" >Flight number<sup class="text-danger ms-1">*</sup></label>
+					<label class="form-label" >Flight number</label>
 					 <input class="form-control" type="text" placeholder="ex) QF576, SQ221..." name="flight_number" required>
 					<div class="invalid-feedback">Please enter your flight number!</div>
 				 </div>
 				{% if direction == 'Pickup from Intl Airport' %}
 				  <div class="mb-3 pb-1">
-					<label class="form-label">Arrival time in Sydney<sup class="text-danger ms-1">*</sup></label>
+					<label class="form-label">Arrival time in Sydney</label>
 					<input class="form-control" name="flight_time" type="time" required>
 				  </div>
 				{% elif direction == 'Pickup from Domestic Airport' %}
 				  <div class="mb-3 pb-1">
-					  <label class="form-label">Arrival time in Sydney<sup class="text-danger ms-1">*</sup></label>
+					  <label class="form-label">Arrival time in Sydney</label>
 					  <input class="form-control" name="flight_time" type="time" required>
 				  </div>
 				{% else %}
 				<div class="mb-3 pb-1">
-					<label class="form-label">Departure time from Sydney<sup class="text-danger ms-1">*</sup></label>
+					<label class="form-label">Departure time from Sydney</label>
 					<input class="form-control" name="flight_time" type="time" required>
 				  </div>
 				{% endif %}
@@ -82,17 +82,17 @@
 				</div>					
 				<div class="card text-white bg-secondary p-4">
                 <div class="mb-3 pb-1">
-                  <label class="form-label" >Full name<sup class="text-danger ms-1">*</sup></label>
+                  <label class="form-label" >Full name</label>
                   <input class="form-control" type="text"  placeholder="John Doe" name="name" required>
                   <div class="invalid-feedback">Please enter your full name!</div>				  
                 </div>
                  <div class="mb-3 pb-1">
-                  <label class="form-label" >Mobile phone number<sup class="text-danger ms-1">*</sup></label>
+                  <label class="form-label" >Mobile phone number</label>
                   <input class="form-control" type="text"  placeholder="Your mobile phone number" name="contact" required>
                   <div class="invalid-feedback">Please enter a valid number!</div>
                 </div>
                 <div class="mb-3 pb-1">
-                  <label class="form-label" >Email address<sup class="text-danger ms-1">*</sup></label>
+                  <label class="form-label" >Email address</label>
                   <input class="form-control" type="email"  placeholder="j.doe@example.com" name="email" required>
                   <div class="invalid-feedback">Please enter a valid email address!</div>
                 </div></div>
@@ -100,7 +100,7 @@
 				<hr>
 				<br><br>				
 				<div class="mb3 pb-1" >					
-					<label class="form-label">Full Address of {{ suburb }}<sup class="text-danger ms-1">*</sup></label>					
+					<label class="form-label">Full Address of {{ suburb }}</label>					
 				</div>
 				<div class="card text-white bg-secondary p-4">				
 				<div class="mb-3 pb-1">
@@ -118,13 +118,13 @@
 				<hr>
 				<br><br>
                 <div class="mb-3 pb-1">
-                  <label class="form-label" >Passengers<sup class="text-danger ms-1">*</sup></label>
+                  <label class="form-label" >Passengers</label>
                   <select class="form-select" name="no_of_passenger" style="background-color:#E5EFFE; font-weight: 400; color:black" required>
                   <option value="{{ no_of_passenger }}">{{ no_of_passenger }}</option>				  
               </select>
                 </div>
 				<div class="mb-3 pb-1">
-					<label class="form-label" >Baggage<sup class="text-danger ms-1">*</sup></label>
+					<label class="form-label" >Baggage</label>
 					<input class="form-control" type="text" placeholder="How many baggage?" name="no_of_baggage">
 					<div class="invalid-feedback">Please enter the number of baggage!</div>
 				  </div>	
@@ -198,5 +198,5 @@
 		  </div>
 		</div>
 	</section>
-
+	
 {% endblock %}
