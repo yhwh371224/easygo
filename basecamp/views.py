@@ -235,16 +235,19 @@ def willoughby(request): return render(
     request, 'basecamp/airport-transfers-willoughby.html')
 
 
-def server_error(request): return render(
-    request, 'basecamp/500.html')
+def server_error(request): return render(request, 'basecamp/500.html')
 
 
-def server_error(request): return render(
-    request, 'basecamp/501.html')
+def server_error(request): return render(request, 'basecamp/501.html')
 
 
-def server_error(request): return render(
-    request, 'basecamp/502.html')
+def server_error(request): return render(request, 'basecamp/502.html')
+
+
+def server_error(request): return render(request, 'basecamp/503.html')
+
+
+def server_error(request): return render(request, 'basecamp/504.html')
 
 
 # Inquiry 
@@ -1546,31 +1549,28 @@ def retrieve_inquiry_detail(request):
     if request.method == "POST":  
         email = request.POST.get('email')
         message = request.POST.get('message')
-        price = request.POST.get('price')        
-        user = Inquiry.objects.filter(email=email).first()    
+        price = request.POST.get('price')  
+              
+        user = Inquiry.objects.filter(email=email).first() 
         
-        if not user:
-            return render(request, 'basecamp/500.html')    
-            
-        else:
-            name = user.name
-            contact = user.contact            
-            flight_date = user.flight_date
-            flight_number = user.flight_number
-            flight_time = user.flight_time
-            pickup_time = user.pickup_time
-            direction = user.direction
-            suburb = user.suburb
-            street = user.street
-            no_of_passenger = user.no_of_passenger
-            no_of_baggage = user.no_of_baggage
-            return_direction = user.return_direction
-            return_flight_date = user.return_flight_date
-            return_flight_number = user.return_flight_number
-            return_flight_time = user.return_flight_time 
-            return_pickup_time = user.return_pickup_time  
-            notice = user.notice
-            paid = user.paid       
+        name = user.name
+        contact = user.contact            
+        flight_date = user.flight_date
+        flight_number = user.flight_number
+        flight_time = user.flight_time
+        pickup_time = user.pickup_time
+        direction = user.direction
+        suburb = user.suburb
+        street = user.street
+        no_of_passenger = user.no_of_passenger
+        no_of_baggage = user.no_of_baggage
+        return_direction = user.return_direction
+        return_flight_date = user.return_flight_date
+        return_flight_number = user.return_flight_number
+        return_flight_time = user.return_flight_time 
+        return_pickup_time = user.return_pickup_time  
+        notice = user.notice
+        paid = user.paid       
             
         p = Post(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
@@ -1629,15 +1629,11 @@ def retrieve_post_detail(request):
         paid = request.POST.get('paid')  
 
         user = Post.objects.filter(email=email).first() 
-           
-        if not user:
-            return render(request, 'basecamp/500.html') 
-               
-        else:
-            name = user.name
-            contact = user.contact
-            suburb = user.suburb
-            street = user.street  
+              
+        name = user.name
+        contact = user.contact
+        suburb = user.suburb
+        street = user.street  
             
         p = Post(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
@@ -1678,13 +1674,9 @@ def retrieve_post_detail(request):
 def re_confirm_email_detail(request):     
     if request.method == "POST":
         email = request.POST.get('email')             
-        user = Post.objects.filter(email=email).first()        
-         
-        if not user:
-            return render(request, 'basecamp/500.html')    
-           
-        else:
-            name = user.name
+        user = Post.objects.filter(email=email).first()  
+                
+        name = user.name
         
         html_content = render_to_string("basecamp/html_email-confirmation.html",
                                     {'name': user.name, 'contact': user.contact, 'email': user.email,
@@ -1720,11 +1712,8 @@ def sending_email_second_detail(request):
     if request.method == "POST":
         email = request.POST.get('email')
         user = Post.objects.filter(email=email)[1]  
-         
-        if not user:
-            return render(request, 'basecamp/500.html')    
-           
-        else:
+        
+        if user:
             name = user.name
         
         html_content = render_to_string("basecamp/html_email-confirmation-return.html",
@@ -1806,12 +1795,9 @@ def retrieve_inquiry_To_inquiry_detail(request):
         message = request.POST.get('message')        
         price = request.POST.get('price')  
 
-        user = Inquiry.objects.filter(email=email).first()    
+        user = Inquiry.objects.filter(email=email).first()   
         
-        if not user:
-            return render(request, 'basecamp/500.html')       
-        
-        else:
+        if user:
             name = user.name
             contact = user.contact
             suburb = user.suburb
@@ -1867,7 +1853,7 @@ def return_trip_inquiry_detail(request):
         user = Inquiry.objects.filter(email=email).first()   
          
         if not user:
-            return render(request, 'basecamp/500.html')  
+            return render(request, 'basecamp/504.html')  
              
         else:
             name = user.name
@@ -1970,13 +1956,11 @@ def return_trip_detail(request):
         direction = request.POST.get('direction')       
         message = request.POST.get('message')
         price = request.POST.get('price')
-        is_confirmed_str = request.POST.get('is_confirmed')
-        is_confirmed = True if is_confirmed_str == 'True' else False
         
         user = Post.objects.filter(email=email).first()    
         
         if not user:
-            return render(request, 'basecamp/501.html')    
+            return render(request, 'basecamp/503.html')    
             
         else:
             name = user.name
@@ -2037,7 +2021,7 @@ def return_trip_detail(request):
         p = Post(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
                  no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, notice=notice, price=price, 
-                 paid=paid, is_confirmed=is_confirmed)
+                 paid=paid,)
         
         p.save()
         
@@ -2061,11 +2045,8 @@ def invoice_detail(request):
         notice = request.POST.get('notice')  
         
         user = Post.objects.filter(email=email).first()
-       
-        if not user:
-            return render(request, 'basecamp/500.html')    
-            
-        elif user.return_flight_number: 
+        
+        if user.return_flight_number: 
             user = Post.objects.filter(email=email)[1]
             
             html_content = render_to_string("basecamp/html_email-invoice.html",
