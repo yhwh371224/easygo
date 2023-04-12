@@ -894,26 +894,22 @@ def inquiry_details2(request):
         email = request.POST.get('email')        
         message = request.POST.get('message')     
         
-        html_content = render_to_string("basecamp/html_email-contact.html", 
-        {'name': name, 'contact': contact,
-        'email': email, 'message': message, })
+        # html_content = render_to_string("basecamp/html_email-contact.html", 
+        # {'name': name, 'contact': contact,
+        # 'email': email, 'message': message, })
         
-        text_content = strip_tags(html_content)
+        # text_content = strip_tags(html_content)
 
-        email = EmailMultiAlternatives(
-            "inquiry from contact_us",
-            text_content,
-            '',
-            [email, 'info@easygoshuttle.com.au']
-        )
+        # email = EmailMultiAlternatives(
+        #     "inquiry from contact_us",
+        #     text_content,
+        #     '',
+        #     [email]
+        # )
         
-        email.attach_alternative(html_content, "text/html")
-        email.send()
-
-        return render(request, 'basecamp/inquiry2.html',
-                      {'name': name},
-                      )
-
+        # email.attach_alternative(html_content, "text/html")
+        # email.send()
+        
     else:
         return render(request, 'basecamp/inquiry2.html', {})
 
@@ -948,11 +944,7 @@ def p2p_single(request):
         
         email.attach_alternative(html_content, "text/html")
         email.send()
-
-        return render(request, 'basecamp/p2p_single.html',
-                      {'name': name},
-                      )
-
+       
     else:
         return render(request, 'basecamp/p2p_single.html', {})
 
@@ -999,10 +991,6 @@ def p2p(request):
         
         email.attach_alternative(html_content, "text/html")
         email.send()
-
-        return render(request, 'basecamp/p2p.html',
-                      {'p2p_name': p2p_name},
-                      )
 
     else:
         return render(request, 'basecamp/p2p.html', {})
