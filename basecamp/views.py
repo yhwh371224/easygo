@@ -69,6 +69,9 @@ def inquiry1(request): return render(request, 'basecamp/inquiry1.html')
 def inquiry2(request): return render(request, 'basecamp/inquiry2.html')
 
 
+def inquiry2_detail(request): return render(request, 'basecamp/inquiry2_detail.html')
+
+
 def invoice(request): return render(request, 'basecamp/invoice.html')
 
 
@@ -910,6 +913,10 @@ def inquiry_details2(request):
         # email.attach_alternative(html_content, "text/html")
         # email.send()
         
+        return render(request, 'basecamp/inquiry2_detail.html',
+                        {'name' : name})    
+        
+        
     else:
         return render(request, 'basecamp/inquiry2.html', {})
 
@@ -944,6 +951,9 @@ def p2p_single(request):
         
         email.attach_alternative(html_content, "text/html")
         email.send()
+        
+        return render(request, 'basecamp/p2p_single.html',
+                        {'name' : name})    
        
     else:
         return render(request, 'basecamp/p2p_single.html', {})
@@ -991,6 +1001,9 @@ def p2p(request):
         
         email.attach_alternative(html_content, "text/html")
         email.send()
+        
+        return render(request, 'basecamp/p2p.html',
+                        {'name' : p2p_name})    
 
     else:
         return render(request, 'basecamp/p2p.html', {})
