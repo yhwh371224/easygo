@@ -20,6 +20,7 @@ urlpatterns = [
     path('inquiry/', views.inquiry, name="inquiry"),
     path('inquiry1/', views.inquiry1, name="inquiry1"),
     path('inquiry2/', views.inquiry2, name="inquiry2"),
+    path('inquiry2_detail/', views.inquiry2_detail, name="inquiry2_detail"),
     path('inquiry_details/', views.inquiry_details),
     path('inquiry_details1/', views.inquiry_details1),
     path('inquiry_details2/', views.inquiry_details2),    
