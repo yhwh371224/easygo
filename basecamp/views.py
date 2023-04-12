@@ -66,6 +66,9 @@ def inquiry(request): return render(request, 'basecamp/inquiry.html')
 def inquiry1(request): return render(request, 'basecamp/inquiry1.html')
 
 
+def inquiry2(request): return render(request, 'basecamp/inquiry2.html')
+
+
 def invoice(request): return render(request, 'basecamp/invoice.html')
 
 
@@ -884,14 +887,14 @@ def booking_form_detail(request):
 
 
 # Single point, Multiple points and contact  
-def inquiry3(request):
+def inquiry_details2(request):
     if request.method == "POST":
         name = request.POST.get('name')
         contact = request.POST.get('contact')
         email = request.POST.get('email')        
         message = request.POST.get('message')     
         
-        html_content = render_to_string("basecamp/html_email-inquiry3.html", 
+        html_content = render_to_string("basecamp/html_email-contact.html", 
         {'name': name, 'contact': contact,
         'email': email, 'message': message, })
         
@@ -907,12 +910,12 @@ def inquiry3(request):
         email.attach_alternative(html_content, "text/html")
         email.send()
 
-        return render(request, 'basecamp/inquiry3.html',
+        return render(request, 'basecamp/inquiry2.html',
                       {'name': name},
                       )
 
     else:
-        return render(request, 'basecamp/inquiry3.html', {})
+        return render(request, 'basecamp/inquiry2.html', {})
 
 
 def p2p_single(request):

@@ -3,7 +3,7 @@
       <!-- Page content-->
       <!-- Page title-->
       <section class="jarallax bg-gradient pt-5 pb-7 pt-md-7" data-jarallax data-speed="0.1"><span class="position-absolute top-0 start-0 w-100 h-100 bg-gradient opacity-50"></span>
-        <div class="jarallax-img" style="background-image: url('/static/basecamp/photos/cruise2.webp');"></div>
+        <div class="jarallax-img" style="background-image: url('/static/basecamp/photos/bg-pattern02.webp');"></div>
         <div class="shape shape-bottom shape-slant bg-body">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 260">
             <polygon fill="currentColor" points="0,257 0,260 3000,260 3000,0"></polygon>
@@ -15,8 +15,8 @@
         <div class="container position-relative zindex-5 pt-3 pb-7 pt-md-0">
           <div class="row justify-content-center pb-7">
             <div class="col-lg-10">
-              <h1 class="text-light">Point to Point</h1>
-              <h3 class="text-light">Complete the form to get the exact price</h3>
+              <h1 class="text-light">Contact</h1>
+              <h3 class="text-light">Complete the form for your inquiry</h3>
             </div>
           </div>
         </div>
@@ -34,7 +34,7 @@
         <div class="row">
           <div class="col-lg-6 col-md-7 offset-lg-1 pb-2 mb-5" style="margin-top: -260px;">
             <div class="card border-0 shadow-lg">
-              <form action="/p2p_single/" method="post" class="card-body needs-validation p-5" novalidate>
+              <form action="/inquiry_details2/" method="post" class="card-body needs-validation p-5" novalidate>
                 {% csrf_token %}
                 <div class="mb-3 pb-1">
                   <label class="form-label" >Full name<sup class="text-danger ms-1">*</sup></label>
@@ -51,68 +51,6 @@
                   <input class="form-control" type="email"  placeholder="j.doe@example.com" required name="email">
                   <div class="invalid-feedback">Please enter a valid email address!</div>
                 </div>
-                <br>
-                <hr>
-                <br>
-                <div class="mb-3 pb-1">
-                  <label class="form-label" >Trip date<sup class="text-danger ms-1">*</sup></label>
-                  <input class="form-control date-picker rounded" name="date" type="text" placeholder="Your booking date" data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;Y-m-d&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;, &quot;defaultDate&quot;: &quot;today&quot;}" required>
-                </div>
-                <div class="mb-3 pb-1">
-                  <label class="form-label" >Pickup time<sup class="text-danger ms-1">*</sup></label>
-                  <input class="form-control" type="time" name="pickuptime"  placeholder="Pickup time" required>
-                <div class="invalid-feedback">Please enter your pickup time!</div>
-                </div>
-                <div class="mb-3 pb-1">
-                  <label class="form-label" >Pickup location - Start point<sup class="text-danger ms-1">*</sup></label>
-                    <input class="form-control" type="text" name="startpoint"  placeholder="From where" required>
-                  <div class="invalid-feedback">Please enter your pickup location!</div>
-                </div>
-                <div class="mb-3 pb-1">
-                  <label class="form-label" >Drop off location - End point<sup class="text-danger ms-1">*</sup></label>
-                  <input class="form-control" type="text" name="endpoint"  placeholder="Your destination" required>
-                </div>
-                <br>
-                <hr>
-                <br>
-                <div class="mb-3 pb-1">
-                  <label class="form-label" >Passengers<sup class="text-danger ms-1">*</sup></label>
-                  <select class="form-select" name="passenger" required>
-                  <option value="0">How many people?</option>
-				  <option value="1">1</option>
-				  <option value="2">2</option>
-				  <option value="3">3</option>
-				  <option value="4">4</option>
-				  <option value="5">5</option>
-				  <option value="6">6</option>
-				  <option value="7">7</option>
-				  <option value="8">8</option>
-				  <option value="9">9</option>
-				  <option value="10">10</option>
-				  <option value="11">11</option>
-				  <option value="12">12</option>
-				  <option value="13">13</option>
-          <option value="14">14</option>
-          <option value="15">15</option>
-          <option value="16">16</option>
-          <option value="17">17</option>
-          <option value="18">18</option>
-          <option value="19">19</option>
-          <option value="20">20</option>
-          <option value="21">21</option>
-          <option value="22">22</option>
-          <option value="23">23</option>
-          <option value="24">24</option>
-          <option value="25">25</option>
-          <option value="26">26</option>				  
-				  <option value="-1" disabled="disabled">Over 26 (please leave message below)</option>
-              </select>
-                </div>
-            <div class="mb-3 pb-1">
-					    <label class="form-label" >Baggage<sup class="text-danger ms-1">*</sup></label>
-					    <input class="form-control" type="text" placeholder="How many baggage?" name="baggage">
-					  <div class="invalid-feedback">Please enter the number of baggage!</div>
-				  </div>	
                 <div class="mb-3 pb-1">
                   <label class="form-label" >Message</label>
                   <textarea class="form-control" name="message" id="cont-message" rows="5" placeholder="Write your message here"></textarea>
