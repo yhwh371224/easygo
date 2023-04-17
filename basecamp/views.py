@@ -1568,11 +1568,11 @@ def sending_email_first_detail(request):
         email.attach_alternative(html_content, "text/html")
         email.send()
         
-        return render(request, 'basecamp/sending_email_first_email_detail.html',
+        return render(request, 'basecamp/sending_email_first_detail.html',
                         {'name' : name, 'email': email, }) 
     
     else:
-        return render(request, 'beasecamp/sending_email_first_email.html', {})   
+        return render(request, 'beasecamp/sending_email_first.html', {})   
     
 
 # sending email second one    
