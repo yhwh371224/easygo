@@ -3,14 +3,13 @@ from django.core.mail import send_mail
 from basecamp.area import suburbs
 from blog.models import Post, Inquiry
 from django.http import HttpResponseBadRequest
-from blog.tasks import send_email_delayed
+# from blog.tasks import send_email_delayed
 from django.http import JsonResponse
-
-# html email required stuff
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from datetime import date
+
 
 def index(request): return redirect('/home/')
 
@@ -33,15 +32,6 @@ def confirmation(request): return render(request, 'basecamp/confirmation.html')
 def confirm_booking(request): return render(request, 'basecamp/confirm_booking.html')
 
 
-def retrieve_inquiry(request): return render(request, 'basecamp/retrieve_inquiry.html')
-
-
-def retrieve_post(request): return render(request, 'basecamp/retrieve_post.html')
-
-
-def retrieve_inquiry_to_inquiry(request): return render(request, 'basecamp/retrieve_inquiry_to_inquiry.html')
-
-
 def return_flight_fields(request): return render(request, 'basecamp/return_flight_fields.html')
 
 
@@ -51,7 +41,7 @@ def return_trip(request): return render(request, 'basecamp/return_trip.html')
 def return_trip_inquiry(request): return render(request, 'basecamp/return_trip_inquiry.html')
 
 
-def re_confirm_email(request): return render(request, 'basecamp/re_confirm_email.html')
+def sending_email_first(request): return render(request, 'basecamp/sending_email_first.html')
 
 
 def sending_email_second(request): return render(request, 'basecamp/sending_email_second.html')
@@ -1321,7 +1311,7 @@ def booking_detail(request):
             Hello, {} \n  
             * Both exist in Inquiry & Post *\n       
             [Booking by client] >> Sending email only! \n
-            https://easygoshuttle.com.au/re_confirm_email/ \n             
+            https://easygoshuttle.com.au/sending_email_first_email/ \n             
             ===============================
             Contact: {}
             Email: {}  
@@ -1351,7 +1341,7 @@ def booking_detail(request):
             Hello, {} \n  
             * Post only exist *\n     
             [Booking by client] >> Sending email only! \n
-            https://easygoshuttle.com.au/re_confirm_email/ \n      
+            https://easygoshuttle.com.au/sending_email_first_email/ \n      
             ===============================
             Contact: {}
             Email: {}  
@@ -1381,7 +1371,7 @@ def booking_detail(request):
             Hello, {} \n  
             * Inquiry only exist *\n     
             [Booking by client] >> Sending email only!\n
-            https://easygoshuttle.com.au/re_confirm_email/ \n   
+            https://easygoshuttle.com.au/sending_email_first_email/ \n   
             ===============================
             Contact: {}
             Email: {}  
@@ -1410,7 +1400,7 @@ def booking_detail(request):
             Hello, {} \n  
             * Neither in Inquiry & Post *\n    
             [Booking by client] >> Sending email only!\n
-            https://easygoshuttle.com.au/re_confirm_email/ \n         
+            https://easygoshuttle.com.au/sending_email_first_email/ \n         
             ===============================
             Contact: {}
             Email: {}  
@@ -1506,7 +1496,7 @@ def confirm_booking_detail(request):
             {} 
             clicked the 'confirm booking' \n
             >> Sending email only! \n
-            https://easygoshuttle.com.au/re_confirm_email/ \n  
+            https://easygoshuttle.com.au/sending_email_first_email/ \n  
             ===============================
             Contact: {}
             Email: {}  
@@ -1547,135 +1537,9 @@ def confirm_booking_detail(request):
     else:
         return render(request, 'beasecamp/confirm_booking.html', {})  
     
-
-# From Inquiry To Post 
-def retrieve_inquiry_detail(request):     
-    if request.method == "POST":  
-        email = request.POST.get('email')
-        message = request.POST.get('message')
-        price = request.POST.get('price')  
-              
-        user = Inquiry.objects.filter(email=email).first() 
-        
-        name = user.name
-        contact = user.contact            
-        flight_date = user.flight_date
-        flight_number = user.flight_number
-        flight_time = user.flight_time
-        pickup_time = user.pickup_time
-        direction = user.direction
-        suburb = user.suburb
-        street = user.street
-        no_of_passenger = user.no_of_passenger
-        no_of_baggage = user.no_of_baggage
-        return_direction = user.return_direction
-        return_flight_date = user.return_flight_date
-        return_flight_number = user.return_flight_number
-        return_flight_time = user.return_flight_time 
-        return_pickup_time = user.return_pickup_time  
-        notice = user.notice
-        paid = user.paid       
-            
-        p = Post(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
-                 flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
-                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction,
-                 return_flight_date=return_flight_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
-                 return_pickup_time=return_pickup_time, message=message, notice=notice, price=price, paid=paid)
-        
-        p.save()
-
-        rendering = render(request, 'basecamp/retrieve_inquiry_detail.html',
-                        {'name' : name, 'email': email, })        
-
-        html_content = render_to_string("basecamp/html_email-confirmation.html",
-                                    {'name': name, 'contact': contact, 'email': email,
-                                     'flight_date': flight_date, 'flight_number': flight_number,
-                                     'flight_time': flight_time, 'pickup_time': pickup_time,
-                                     'direction': direction, 'street': street, 'suburb': suburb,
-                                     'no_of_passenger': no_of_passenger, 'no_of_baggage': no_of_baggage,
-                                     'message': message, 'notice': notice, 'price': price, 'paid': paid })
-    
-        text_content = strip_tags(html_content)
-
-        email = EmailMultiAlternatives(
-            "Booking confirmation - EasyGo",
-            text_content,
-            '',
-            [email, 'info@easygoshuttle.com.au']
-        )
-        email.attach_alternative(html_content, "text/html")
-        email.send()
-        
-        return rendering
-    
-    else:
-        return render(request, 'beasecamp/retrieve_inquiry_error.html', {})
-
-# From Post to Post
-def retrieve_post_detail(request):     
-    if request.method == "POST":
-        email = request.POST.get('email')
-        flight_date = request.POST.get('flight_date')
-        flight_number = request.POST.get('flight_number')
-        flight_time = request.POST.get('flight_time')
-        pickup_time = request.POST.get('pickup_time')
-        direction = request.POST.get('direction')        
-        no_of_passenger = request.POST.get('no_of_passenger')
-        no_of_baggage = request.POST.get('no_of_baggage')
-        return_direction = request.POST.get('return_direction')
-        return_flight_date = request.POST.get('return_flight_date')
-        return_flight_number = request.POST.get('return_flight_number')
-        return_flight_time = request.POST.get('return_flight_time')
-        return_pickup_time = request.POST.get('return_pickup_time') 
-        message = request.POST.get('message')
-        notice = request.POST.get('notice')        
-        price = request.POST.get('price')
-        paid = request.POST.get('paid')  
-
-        user = Post.objects.filter(email=email).first() 
-              
-        name = user.name
-        contact = user.contact
-        suburb = user.suburb
-        street = user.street  
-            
-        p = Post(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
-                 flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
-                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction,
-                 return_flight_date=return_flight_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
-                 return_pickup_time=return_pickup_time, message=message, notice=notice, price=price, paid=paid)
-        
-        p.save()
-
-        rendering = render(request, 'basecamp/retrieve_post_detail.html',
-                        {'name' : name, 'email': email, })        
-
-        html_content = render_to_string("basecamp/html_email-confirmation.html",
-                                     {'name': name, 'contact': contact, 'email': email, 'flight_date': flight_date, 'flight_number': flight_number,
-                                     'flight_time': flight_time, 'pickup_time': pickup_time, 'return_direction': return_direction,'return_flight_date': return_flight_date, 
-                                     'return_flight_number': return_flight_number, 'return_flight_time': return_flight_time, 'return_pickup_time': return_pickup_time,
-                                     'direction': direction, 'street': street, 'suburb': suburb, 'no_of_passenger': no_of_passenger, 'no_of_baggage': no_of_baggage,
-                                     'message': message, 'notice': notice , 'price': price, 'paid': paid })
-    
-        text_content = strip_tags(html_content)
-
-        email = EmailMultiAlternatives(
-            "Booking confirmation - EasyGo",
-            text_content,
-            '',
-            [email, 'info@easygoshuttle.com.au']
-        )
-        email.attach_alternative(html_content, "text/html")
-        email.send()
-        
-        return rendering
-    
-    else:
-        return render(request, 'beasecamp/retrieve_post.html', {}) 
-    
      
 # sending email first one   
-def re_confirm_email_detail(request):     
+def sending_email_first_detail(request):     
     if request.method == "POST":
         email = request.POST.get('email')             
         user = Post.objects.filter(email=email).first()  
@@ -1704,11 +1568,11 @@ def re_confirm_email_detail(request):
         email.attach_alternative(html_content, "text/html")
         email.send()
         
-        return render(request, 'basecamp/re_confirm_email_detail.html',
+        return render(request, 'basecamp/sending_email_first_email_detail.html',
                         {'name' : name, 'email': email, }) 
     
     else:
-        return render(request, 'beasecamp/re_confirm_email.html', {})   
+        return render(request, 'beasecamp/sending_email_first_email.html', {})   
     
 
 # sending email second one    
@@ -1787,60 +1651,7 @@ def save_data_only_detail(request):
     
     
 # From Inquiry to Inquiry 
-def retrieve_inquiry_To_inquiry_detail(request):     
-    if request.method == "POST":
-        email = request.POST.get('email')
-        flight_date = request.POST.get('flight_date')
-        flight_number = request.POST.get('flight_number')
-        flight_time = request.POST.get('flight_time')
-        pickup_time = request.POST.get('pickup_time')
-        direction = request.POST.get('direction')        
-        no_of_passenger = request.POST.get('no_of_passenger')        
-        message = request.POST.get('message')        
-        price = request.POST.get('price')  
 
-        user = Inquiry.objects.filter(email=email).first()   
-        
-        if user:
-            name = user.name
-            contact = user.contact
-            suburb = user.suburb
-            street = user.street
-            no_of_baggage = user.no_of_baggage
-            notice = user.notice
-            
-        p = Inquiry(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
-                 flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
-                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, notice=notice, price=price)
-        
-        p.save()
-
-        rendering = render(request, 'basecamp/retrieve_post_detail.html',
-                        {'name' : name, 'email': email, })        
-
-        html_content = render_to_string("basecamp/html_email-inquiry-response.html",
-                                    {'name': name, 'contact': contact, 'email': email,
-                                     'flight_date': flight_date, 'flight_number': flight_number,
-                                     'flight_time': flight_time, 'pickup_time': pickup_time,
-                                     'direction': direction, 'street': street, 'suburb': suburb,
-                                     'no_of_passenger': no_of_passenger, 'no_of_baggage': no_of_baggage,
-                                     'message': message, 'notice': notice, 'price': price })
-    
-        text_content = strip_tags(html_content)
-
-        email = EmailMultiAlternatives(
-            "Booking inquiry - EasyGo",
-            text_content,
-            '',
-            [email, 'info@easygoshuttle.com.au']
-        )
-        email.attach_alternative(html_content, "text/html")
-        email.send()
-        
-        return rendering
-    
-    else:
-        return render(request, 'beasecamp/retrieve_inquiry_to_inquiry.html', {})         
 
 
 # From Inquiry to Inquiry return trip
@@ -1998,7 +1809,7 @@ def return_trip_detail(request):
             {} 
             submitted the 'Return trip' \n
             sending first email only \n
-            https://easygoshuttle.com.au/re_confirm_email/ \n  
+            https://easygoshuttle.com.au/sending_email_first_email/ \n  
             ===============================
             Contact: {}
             Email: {}  

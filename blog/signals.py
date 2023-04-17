@@ -1,14 +1,10 @@
 from .models import Post, Inquiry
-from django.shortcuts import render
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-
-# html email required stuff
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
-from django.core.mail import send_mail
-from time import sleep
+
 
 
 @receiver(post_save, sender=Post)
@@ -24,30 +20,9 @@ def notify_user_post(sender, instance, created, **kwargs):
         
         p.save() 
         
-        return 
-     
-        # user = Post.objects.filter().first()
-                        
-        # html_content = render_to_string("basecamp/html_email-confirmation-return.html",
-        #                                 {'name': user.name, 'contact': user.contact, 'email': user.email,
-        #                                  'flight_date': user.flight_date, 'flight_number': user.flight_number,
-        #                                  'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
-        #                                  'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
-        #                                  'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
-        #                                  'message': user.message, 'notice': user.notice, 'price': user.price, 'paid': user.paid })
-
-        # text_content = strip_tags(html_content)
-
-        # email = EmailMultiAlternatives(
-        #     "Booking confirmation - EasyGo",
-        #     text_content,
-        #     '',
-        #     [instance.email, 'info@easygoshuttle.com.au']
-        # )
-        # email.attach_alternative(html_content, "text/html")
-        
-        # email.send()    
-
+    return 
+    
+    
 
 @receiver(post_save, sender=Inquiry)
 def notify_user_inquiry(sender, instance, created, **kwargs):
