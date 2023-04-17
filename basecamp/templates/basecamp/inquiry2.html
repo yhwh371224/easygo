@@ -29,17 +29,17 @@
               <form action="/inquiry_details2/" method="post" class="card-body needs-validation p-5" novalidate>
                 {% csrf_token %}
                 <div class="mb-3 pb-1">
-                  <label class="form-label" >Full name<sup class="text-danger ms-1">*</sup></label>
+                  <label class="form-label" >Full name</label>
                   <input class="form-control" type="text"  placeholder="John Doe" required name="name">
                   <div class="invalid-feedback">Please enter your full name!</div>
                 </div>
                 <div class="mb-3 pb-1">
-                  <label class="form-label" >Mobile phone number<sup class="text-danger ms-1">*</sup></label>
+                  <label class="form-label" >Mobile phone number</label>
                   <input class="form-control" type="text"  placeholder="Your mobile phone number" required name="contact">
                   <div class="invalid-feedback">Please enter a valid number!</div>
                 </div>
                 <div class="mb-3 pb-1">
-                  <label class="form-label" >Email address<sup class="text-danger ms-1">*</sup></label>
+                  <label class="form-label" >Email address</label>
                   <input class="form-control" type="email"  placeholder="j.doe@example.com" required name="email">
                   <div class="invalid-feedback">Please enter a valid email address!</div>
                 </div>
