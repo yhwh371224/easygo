@@ -37,17 +37,17 @@
               <form action="/p2p/" method="post" class="card-body needs-validation p-5" novalidate>
                 {% csrf_token %}
                 <div class="mb-3 pb-1">
-                  <label class="form-label" >Full name<sup class="text-danger ms-1">*</sup></label>
+                  <label class="form-label" >Full name</label>
                   <input class="form-control" type="text"  placeholder="John Doe" required name="p2p_name">
                   <div class="invalid-feedback">Please enter your full name!</div>
                 </div>
                 <div class="mb-3 pb-1">
-                  <label class="form-label" >Mobile phone number<sup class="text-danger ms-1">*</sup></label>
+                  <label class="form-label" >Mobile phone number</label>
                   <input class="form-control" type="text"  placeholder="Your mobile phone number" required name="p2p_phone">
                   <div class="invalid-feedback">Please enter a valid number!</div>
                 </div>
                 <div class="mb-3 pb-1">
-                  <label class="form-label" >Email address<sup class="text-danger ms-1">*</sup></label>
+                  <label class="form-label" >Email address</label>
                   <input class="form-control" type="email"  placeholder="j.doe@example.com" required name="p2p_email">
                   <div class="invalid-feedback">Please enter a valid email address!</div>
                 </div>
@@ -55,16 +55,16 @@
                 <hr>
                 <br>
                 <div class="mb-3 pb-1">
-                  <label class="form-label" >Trip date<sup class="text-danger ms-1">*</sup></label>
+                  <label class="form-label" >Trip date</label>
                   <input class="form-control date-picker rounded" name="p2p_date" type="text" placeholder="Your booking date" data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;F j, Y&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;, &quot;defaultDate&quot;: &quot;today&quot;}" required>
                 </div>
                 <div class="mb-3 pb-1">
-                  <label class="form-label" >First Pickup location<sup class="text-danger ms-1">*</sup></label>
+                  <label class="form-label" >First Pickup location</label>
                     <input class="form-control" type="text" name="first_pickup_location"  placeholder="Full address" required>
                   <div class="invalid-feedback">Please enter your pickup location!</div>
                 </div>
                 <div class="mb-3 pb-1">
-                  <label class="form-label" >Pickup time<sup class="text-danger ms-1">*</sup></label>
+                  <label class="form-label" >Pickup time</label>
                     <input class="form-control" type="time" name="first_putime"  placeholder="Pickup time" required>
                   <div class="invalid-feedback">Please enter your pickup time!</div>
                 </div>
@@ -134,7 +134,7 @@
                 <hr>
                 <br>
                 <div class="mb-3 pb-1">
-                  <label class="form-label" >Passengers<sup class="text-danger ms-1">*</sup></label>
+                  <label class="form-label" >Passengers</label>
                   <select class="form-select" name="p2p_passengers" required>
                   <option value="0">How many people?</option>
 				  <option value="1">1</option>
