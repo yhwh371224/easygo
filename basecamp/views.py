@@ -1311,7 +1311,7 @@ def booking_detail(request):
             Hello, {} \n  
             * Both exist in Inquiry & Post *\n       
             [Booking by client] >> Sending email only! \n
-            https://easygoshuttle.com.au/sending_email_first_email/ \n             
+            https://easygoshuttle.com.au/sending_email_first/ \n             
             ===============================
             Contact: {}
             Email: {}  
@@ -1341,7 +1341,7 @@ def booking_detail(request):
             Hello, {} \n  
             * Post only exist *\n     
             [Booking by client] >> Sending email only! \n
-            https://easygoshuttle.com.au/sending_email_first_email/ \n      
+            https://easygoshuttle.com.au/sending_email_first/ \n      
             ===============================
             Contact: {}
             Email: {}  
@@ -1371,7 +1371,7 @@ def booking_detail(request):
             Hello, {} \n  
             * Inquiry only exist *\n     
             [Booking by client] >> Sending email only!\n
-            https://easygoshuttle.com.au/sending_email_first_email/ \n   
+            https://easygoshuttle.com.au/sending_email_first/ \n   
             ===============================
             Contact: {}
             Email: {}  
@@ -1400,7 +1400,7 @@ def booking_detail(request):
             Hello, {} \n  
             * Neither in Inquiry & Post *\n    
             [Booking by client] >> Sending email only!\n
-            https://easygoshuttle.com.au/sending_email_first_email/ \n         
+            https://easygoshuttle.com.au/sending_email_first/ \n         
             ===============================
             Contact: {}
             Email: {}  
@@ -1496,7 +1496,7 @@ def confirm_booking_detail(request):
             {} 
             clicked the 'confirm booking' \n
             >> Sending email only! \n
-            https://easygoshuttle.com.au/sending_email_first_email/ \n  
+            https://easygoshuttle.com.au/sending_email_first/ \n  
             ===============================
             Contact: {}
             Email: {}  
@@ -1701,7 +1701,7 @@ def return_trip_inquiry_detail(request):
         content = '''
         {} 
         clicked the 'inquiry return trip' \n
-        >> Sending inquiry email only! \n        
+        >> https://easygoshuttle.com.au\n        
         ===============================
         Contact: {}
         Email: {}  
@@ -1760,7 +1760,7 @@ def return_trip_inquiry_detail(request):
         return render(request, 'beasecamp/return_trip_inquiry.html', {})         
 
 
-# For Return Trip 
+# For Post Return Trip 
 def return_trip_detail(request):     
     if request.method == "POST":
         email = request.POST.get('email')
@@ -1809,7 +1809,7 @@ def return_trip_detail(request):
             {} 
             submitted the 'Return trip' \n
             sending first email only \n
-            https://easygoshuttle.com.au/sending_email_first_email/ \n  
+            https://easygoshuttle.com.au/sending_email_first/ \n  
             ===============================
             Contact: {}
             Email: {}  
