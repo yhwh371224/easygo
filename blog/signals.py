@@ -28,7 +28,7 @@ def notify_user_inquiry(sender, instance, created, **kwargs):
             "Booking Inquiry - EasyGo",
             text_content,
             '',
-            [instance.email, 'info@easygoshuttle.com.au']
+            [instance.email]
         )
         email.attach_alternative(html_content, "text/html")
         email.send()
@@ -49,7 +49,7 @@ def notify_user_inquiry(sender, instance, created, **kwargs):
             "Booking Inquiry - EasyGo",
             text_content,
             '',
-            [instance.email, 'info@easygoshuttle.com.au']
+            [instance.email]
         )
         email.attach_alternative(html_content, "text/html")
         email.send()
