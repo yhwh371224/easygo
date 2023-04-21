@@ -254,12 +254,17 @@
 													Number of baggage: {{ no_of_baggage }}<br>
                                                     Message: <br>
 													{{ message }}<br><br> 
-												{% if return_flight_number %}
+												{% if return_direction == 'Point to Point' %}													
+													<span style="font-weight:bold; color: #bdb1a6">Return trip date:  {{ return_flight_date }}</span><br>
+													<span style="font-weight:bold; color: #bdb1a6">Return start point:  {{ return_flight_number }}</span><br>
+													<span style="font-weight:bold; color: #bdb1a6">Return end point:  {{ street }}</span><br>
+													<span style="font-weight:bold; color: #bdb1a6">Return pickup time:  {{ return_pickup_time }}</span><br>
+												{% elif return_flight_time %}
 													<span style="font-weight:bold; color: #bdb1a6">Return direction:  {{ return_direction }}</span><br>
 													<span style="font-weight:bold; color: #bdb1a6">Return flight date:  {{ return_flight_date }}</span><br>
                                                     <span style="font-weight:bold; color: #bdb1a6">Return flight number:  {{ return_flight_number }}</span><br>
 													<span style="font-weight:bold; color: #bdb1a6">Return flight time:  {{ return_flight_time }}</span><br>
-													<span style="font-weight:bold; color: #bdb1a6">Return pickup time:  {{ return_pickup_time }}</span><br>
+													<span style="font-weight:bold; color: #bdb1a6">Return pickup time:  {{ return_pickup_time }}</span><br>												
 												{% endif %}         
                                                 </p>
 												<!-- Meeting point -->
