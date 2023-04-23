@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Airport Transfers Sydney - EasyGo Shuttle bus</title>
+    <meta name="google-site-verification" content="hae39L0Kv7JIxVc3YclvckH7Im5SdYa2hk_vZbGJIkA" />
+    <!-- SEO Meta Tags-->
+    <meta name="description" content="EasyGo airport shuttle bus provide Sydney airport transport service, private ride with the cheap price. ">
+    <meta name="keywords" content="Sydney airport shuttle, Sydney airport transfers,cheap airport transfers, maxi taxi, mini bus, uber, airport shuttle, airport pickup service, airport private transfers">
+    <meta name="author" content="easycoding.live">
+    <!-- Viewport-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Favicon and Touch Icons-->
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'basecamp/favi/favicon.ico' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'basecamp/favi/apple-touch-icon.png' %}">
+    <link rel="android-chrome" type="image/png" sizes="192x192" href="{% static 'basecamp/favi/android-chrome-192x192.png' %}">
+	  <link rel="android-chrome" type="image/png" sizes="512x512" href="{% static 'basecamp/favi/android-chrome-512x512.png' %}">
+	  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'basecamp/favi/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'basecamp/favi/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'basecamp/favi/site.webmanifest' %}">
+   
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+          
+    <!-- Vendor Styles-->
+    <link rel="stylesheet" media="screen" href="/static/basecamp/css/simplebar.min.css"/>
+    <link rel="stylesheet" media="screen" href="/static/basecamp/css/tiny-slider.css"/>
+    <link rel="stylesheet" media="screen" href="/static/basecamp/css/flatpickr.min.css"/>
+    <!-- Main Theme Styles + Bootstrap-->
+    <link rel="stylesheet" media="screen" href="/static/basecamp/css/theme.min.css">
+  </head>
+  <!-- Body-->
+  <body>
+    <!-- Page loading spinner-->
+    <main class="page-wrapper">
+      <!-- Sign In Modal-->
+      <!-- Navbar (Floating light)-->
+      <!-- Remove "navbar-sticky" class to make navigation bar scrollable with the page.-->
+      <header class="header navbar navbar-expand-lg navbar-dark navbar-floating navbar-sticky" data-scroll-header data-fixed-element>
+        
+      </header>
+      <!-- Page content-->
+           {% block content %}
+            {% endblock %}
+      <!-- Offers carousel-->
+
+      <!-- Features CTA-->
+
+      <!-- FAQ-->
+
+      <!-- Subscribe CTA-->
+
+      <!-- Offers carousel-->
+
+      <section class="container py-5 my-4 my-sm-0 py-sm-6 py-md-7">
+        <br/>
+        <br/>
+        <h2 class="text-center mb-4">Best Service Guaranteed</h2>
+         <p class="text-center"><small>This site is protected by reCAPTCHA Enterprise and the Google
+                    <a href="https://policies.google.com/privacy">Privacy Policy</a> and
+                    <a href="https://policies.google.com/terms">Terms of Service</a> apply.
+         </small></p>
+      </section>
+  </main>
+    <footer class="site-footer bg-dark pt-5 pb-4">
+      <div class="container d-md-flex justify-content-between align-items-center text-center">
+        <ul class="list-inline fs-sm mb-3 order-md-2">
+          <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="mailto:info@easygoshuttle.com.au">Support</a></li>
+          <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="/inquiry2/">Contact</a></li>
+          <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="/privacy/">Privacy policy</a></li>
+          <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="/terms/">Terms &amp; Conditions</a></li>
+        </ul>
+        <p class="fs-sm mb-3 order-md-1"><span class="text-light opacity-50 me-1">© 2023 EasyGo. All rights reserved. Made by</span><a class="nav-link-style nav-link-light" href="#" target="_blank" rel="noopener">EasyGo</a></p>
+      </div>
+    </footer>
+    <!-- Vendor scrits: js libraries and plugins-->
+    <script src="/static/basecamp/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/basecamp/js/simplebar.min.js"></script>
+    <script src="/static/basecamp/js/smooth-scroll.polyfills.min.js"></script>
+    <script src="/static/basecamp/js/jarallax.min.js"></script>
+    <script src="/static/basecamp/js/min/tiny-slider.js"></script>
+    <script src="/static/basecamp/js/flatpickr.min.js"></script>
+    <script src="/static/basecamp/js/rangePlugin.js"></script>
+    <script src="/static/basecamp/js/date-picker.js"></script>
+    <!-- Main theme script-->
+    <script src="/static/basecamp/js/theme.min.js"></script>   
+    <script>
+    	var returnFlightCheckbox = document.getElementById("return-flight");
+      var returnFlightFields = document.getElementById("return-flight-fields");
+
+      returnFlightCheckbox.addEventListener("change", function() {
+          if (returnFlightCheckbox.checked) {
+              var xhr = new XMLHttpRequest();
+              xhr.open("GET", "{% url 'basecamp:return_flight_fields' %}");
+              xhr.onload = function() {
+                  if (xhr.status === 200) {
+                      returnFlightFields.innerHTML = xhr.responseText;
+                  } else {
+                      console.log("Request failed. Returned status of " + xhr.status);
+                  }
+              };
+              xhr.send();
+          } else {
+              returnFlightFields.innerHTML = "";
+          }
+      });
+    </script>
+  </body>
+</html>

@@ -2,9 +2,7 @@ from django.shortcuts import render, redirect
 from django.core.mail import send_mail
 from basecamp.area import suburbs
 from blog.models import Post, Inquiry
-from django.http import HttpResponseBadRequest
 # from blog.tasks import send_email_delayed
-from django.http import JsonResponse
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
@@ -244,6 +242,9 @@ def server_error(request): return render(request, 'basecamp/503.html')
 
 
 def server_error(request): return render(request, 'basecamp/504.html')
+
+
+def server_error(request): return render(request, 'basecamp/505.html')
 
 
 # Inquiry 
@@ -1006,6 +1007,10 @@ def price_detail(request):
         suburb = request.POST.get('suburb')
         no_of_passenger = request.POST.get('no_of_passenger')
         
+        today = date.today()        
+        if not flight_date or flight_date <= str(today):
+            return render(request, 'basecamp/505.html')
+        
         
         #sub = int(suburbs.get(suburb))
         #no_p = int(no_of_passenger)
@@ -1282,8 +1287,6 @@ def booking_detail(request):
         return_flight_time = request.POST.get('return_flight_time')
         return_pickup_time = request.POST.get('return_pickup_time')     
         price = request.POST.get('price')
-        is_confirmed_str = request.POST.get('is_confirmed')
-        is_confirmed = True if is_confirmed_str == 'True' else False
         
         data = {
             'name': name,
@@ -1428,7 +1431,7 @@ def booking_detail(request):
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
                  no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction,
                  return_flight_date=return_flight_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
-                 return_pickup_time=return_pickup_time, message=message, price=price, is_confirmed=is_confirmed)
+                 return_pickup_time=return_pickup_time, message=message, price=price)
         
         p.save()
         
@@ -1451,7 +1454,7 @@ def confirm_booking_detail(request):
         user = Inquiry.objects.filter(email=email).first() 
                             
         if not user:
-            return render(request, 'basecamp/500.html')   
+            return render(request, 'basecamp/500.html') 
              
         else:
             name = user.name            
