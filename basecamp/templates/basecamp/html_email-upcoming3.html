@@ -238,7 +238,10 @@
 											{% if direction == 'Pickup from Intl Airport' or direction == 'Pickup from Domestic Airport' %}
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
 													• Sydney arrival date: {{ flight_date }}<br> 
-												    • Flight number: {{ flight_number }} <small>(ETA {{ flight_time }})</small><br><br>
+												    • Flight number: {{ flight_number }} <small>(ETA {{ flight_time }})</small><br>
+													• Price: AUD {{ price }}<br><br>													
+													You can pay online via PayPal&nbsp;<a href="https://easygoshuttle.com.au/payonline/">easygoshuttle.com.au/payonline</a><br>
+													For those arriving in Sydney, payment in advance is kindly requested<br><br>												
 											{% elif direction == 'Point to Point' %}
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">													
 													• See you on time,{{ pickup_time }}<br>											
