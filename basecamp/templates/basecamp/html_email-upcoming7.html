@@ -234,14 +234,11 @@
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">                                                    
                                                     Your flight day is 7 days away<br><br>
                                                     flight date: {{ flight_date }}<br><br>													
-												{% if direction == 'Pickup from Intl Airport' and if not paid %}	
+												{% if not paid %}	
 													Price: ${{ price }}<br><br>
 													You can pay online via PayPal&nbsp;<a href="https://easygoshuttle.com.au/payonline/">easygoshuttle.com.au/payonline</a><br>
+													If you don't pay online, you will need to pay cash to your driver on the flight day<br><br>
 													For those arriving in Sydney, payment in advance is kindly requested<br><br>
-												{% else %}
-													Price: ${{ price }}<br><br>
-													You can pay online via PayPal&nbsp;<a href="https://easygoshuttle.com.au/payonline/">easygoshuttle.com.au/payonline</a><br>
-													If you don't pay online, you will need to pay cash to your driver on the flight day<br><br>													
 												{% endif %}
 												</p>											
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
