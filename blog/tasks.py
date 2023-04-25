@@ -24,7 +24,8 @@ def email_1(self, **kwargs):
         elif reminder.flight_date:
             html_content = render_to_string("basecamp/html_email-tomorrow.html", 
                 {'name': reminder.name, 'flight_date': reminder.flight_date, 'flight_number': reminder.flight_number, 
-                'flight_time': reminder.flight_time, 'direction': reminder.direction, 'pickup_time': reminder.pickup_time, 'street': reminder.street, 'suburb': reminder.suburb})
+                'flight_time': reminder.flight_time, 'direction': reminder.direction, 'pickup_time': reminder.pickup_time, 
+                'street': reminder.street, 'suburb': reminder.suburb, 'price': reminder.price})
             text_content = strip_tags(html_content)
             email = EmailMultiAlternatives("Reminder - Booking", text_content, '', [reminder.email])
             email.attach_alternative(html_content, "text/html")
@@ -50,7 +51,8 @@ def email_2(self, **kwargs):
         elif reminder.flight_date:
             html_content = render_to_string("basecamp/html_email-upcoming3.html", 
                 {'name': reminder.name, 'flight_date': reminder.flight_date, 'flight_number': reminder.flight_number, 
-                'flight_time': reminder.flight_time, 'direction': reminder.direction, 'pickup_time': reminder.pickup_time, 'street': reminder.street, 'suburb': reminder.suburb})
+                'flight_time': reminder.flight_time, 'direction': reminder.direction, 'pickup_time': reminder.pickup_time, 
+                'street': reminder.street, 'suburb': reminder.suburb, 'price': reminder.price})
             text_content = strip_tags(html_content)
             email = EmailMultiAlternatives("Reminder - Booking", text_content, '', [reminder.email])
             email.attach_alternative(html_content, "text/html")
@@ -76,7 +78,8 @@ def email_3(self, **kwargs):
         elif reminder.flight_date:
             html_content = render_to_string("basecamp/html_email-upcoming7.html", 
                 {'name': reminder.name, 'flight_date': reminder.flight_date, 'flight_number': reminder.flight_number, 
-                'flight_time': reminder.flight_time, 'direction': reminder.direction, 'pickup_time': reminder.pickup_time, 'street': reminder.street, 'suburb': reminder.suburb})
+                'flight_time': reminder.flight_time, 'direction': reminder.direction, 'pickup_time': reminder.pickup_time, 
+                'street': reminder.street, 'suburb': reminder.suburb, 'price': reminder.price})
             text_content = strip_tags(html_content)
             email = EmailMultiAlternatives("Reminder - Booking", text_content, '', [reminder.email])
             email.attach_alternative(html_content, "text/html")
@@ -102,7 +105,8 @@ def email_4(self, **kwargs):
         elif reminder.flight_date:
             html_content = render_to_string("basecamp/html_email-upcoming14.html", 
                 {'name': reminder.name, 'flight_date': reminder.flight_date, 'flight_number': reminder.flight_number, 
-                'flight_time': reminder.flight_time, 'direction': reminder.direction, 'pickup_time': reminder.pickup_time, 'street': reminder.street, 'suburb': reminder.suburb})
+                'flight_time': reminder.flight_time, 'direction': reminder.direction, 'pickup_time': reminder.pickup_time, 
+                'street': reminder.street, 'suburb': reminder.suburb, 'price': reminder.price})
             text_content = strip_tags(html_content)
             email = EmailMultiAlternatives("Reminder - Booking", text_content, '', [reminder.email])
             email.attach_alternative(html_content, "text/html")
@@ -128,7 +132,8 @@ def email_5(self, **kwargs):
         elif reminder.flight_date:
             html_content = render_to_string("basecamp/html_email-today.html", 
                 {'name': reminder.name, 'flight_date': reminder.flight_date, 'flight_number': reminder.flight_number, 
-                'flight_time': reminder.flight_time, 'direction': reminder.direction, 'pickup_time': reminder.pickup_time, 'street': reminder.street, 'suburb': reminder.suburb})
+                'flight_time': reminder.flight_time, 'direction': reminder.direction, 'pickup_time': reminder.pickup_time, 
+                'street': reminder.street, 'suburb': reminder.suburb, 'price': reminder.price})
             text_content = strip_tags(html_content)
             email = EmailMultiAlternatives("Notice - EasyGo", text_content, '', [reminder.email])
             email.attach_alternative(html_content, "text/html")
@@ -154,7 +159,8 @@ def email_6(self, **kwargs):
         elif reminder.flight_date:
             html_content = render_to_string("basecamp/html_email-yesterday.html", 
                 {'name': reminder.name, 'flight_date': reminder.flight_date, 'flight_number': reminder.flight_number, 
-                'flight_time': reminder.flight_time, 'direction': reminder.direction, 'pickup_time': reminder.pickup_time, 'street': reminder.street, 'suburb': reminder.suburb})            
+                'flight_time': reminder.flight_time, 'direction': reminder.direction, 'pickup_time': reminder.pickup_time, 
+                'street': reminder.street, 'suburb': reminder.suburb})            
             text_content = strip_tags(html_content)
             email = EmailMultiAlternatives("Review - EasyGo", text_content, '', [reminder.email])
             email.attach_alternative(html_content, "text/html")
@@ -166,27 +172,27 @@ def email_6(self, **kwargs):
     return "Yesterday done"
 
 
-@shared_task
-def send_email_delayed(name, contact, email, flight_date, flight_number, flight_time, pickup_time, direction,
-                       suburb, street, no_of_passenger, no_of_baggage, message, price, is_confirmed):    
+# @shared_task
+# def send_email_delayed(name, contact, email, flight_date, flight_number, flight_time, pickup_time, direction,
+#                        suburb, street, no_of_passenger, no_of_baggage, message, price, is_confirmed):    
         
-    html_content = render_to_string("basecamp/html_email-confirmation.html",
-                                    {'name': name, 'contact': contact, 'email': email,
-                                     'flight_date': flight_date, 'flight_number': flight_number,
-                                     'flight_time': flight_time, 'pickup_time': pickup_time,
-                                     'direction': direction, 'street': street, 'suburb': suburb,
-                                     'no_of_passenger': no_of_passenger, 'no_of_baggage': no_of_baggage,
-                                     'message': message, 'price': price, 'is_confirmed': is_confirmed })   
+#     html_content = render_to_string("basecamp/html_email-confirmation.html",
+#                                     {'name': name, 'contact': contact, 'email': email,
+#                                      'flight_date': flight_date, 'flight_number': flight_number,
+#                                      'flight_time': flight_time, 'pickup_time': pickup_time,
+#                                      'direction': direction, 'street': street, 'suburb': suburb,
+#                                      'no_of_passenger': no_of_passenger, 'no_of_baggage': no_of_baggage,
+#                                      'message': message, 'price': price, 'is_confirmed': is_confirmed })   
      
-    text_content = strip_tags(html_content)    
+#     text_content = strip_tags(html_content)    
     
-    email = EmailMultiAlternatives(
-        "Booking confirmation - EasyGo",
-        text_content,
-        '',
-        [email, 'info@easygoshuttle.com.au']
-    )    
+#     email = EmailMultiAlternatives(
+#         "Booking confirmation - EasyGo",
+#         text_content,
+#         '',
+#         [email, 'info@easygoshuttle.com.au']
+#     )    
     
-    email.attach_alternative(html_content, "text/html")
+#     email.attach_alternative(html_content, "text/html")
     
-    email.send()      
+#     email.send()      
