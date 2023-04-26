@@ -1048,18 +1048,18 @@ def price_detail(request):
 
         }
 
-        message = '''
-                =====================
-                Someone checked price
-                =====================
-                Flight date: {}
-                Direction: {}        
-                Suburb: {}
-                No of passenger: {}              
-                '''.format(data['flight_date'], data['direction'],
-                           data['suburb'], data['no_of_passenger'])
+        # message = '''
+        #         =====================
+        #         Someone checked price
+        #         =====================
+        #         Flight date: {}
+        #         Direction: {}        
+        #         Suburb: {}
+        #         No of passenger: {}              
+        #         '''.format(data['flight_date'], data['direction'],
+        #                    data['suburb'], data['no_of_passenger'])
                 
-        send_mail(data['flight_date'], message, '', ['sungkam718@gmail.com'])
+        # send_mail(data['flight_date'], message, '', ['sungkam718@gmail.com'])
 
         return render(request, 'basecamp/inquiry1.html',
                       {'flight_date': flight_date, 'direction': direction, 'suburb': suburb,
