@@ -1493,6 +1493,7 @@ def confirm_booking_detail(request):
             'no_of_baggage': no_of_baggage,
             'message': message,
             'price': price,
+            'return_flight_number': return_flight_number,
             }       
             
             content = '''
@@ -1512,13 +1513,14 @@ def confirm_booking_detail(request):
             Passenger: {}
             Baggage: {}
             Messag
-            {}            
+            {}    
+            Return flight no: {}        
             ===============================\n        
             Best Regards,
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['contact'], data['email'], data['flight_number'],
                         data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
-                        data['no_of_passenger'], data['no_of_baggage'], data['message'])
+                        data['no_of_passenger'], data['no_of_baggage'], data['message'], data['return_flight_number'])
             send_mail(data['flight_date'], content,
                       '', ['info@easygoshuttle.com.au'])       
             
