@@ -24,7 +24,8 @@ def email_1(self, **kwargs):
         elif reminder.flight_date:
             html_content = render_to_string("basecamp/html_email-tomorrow.html", 
                 {'name': reminder.name, 'flight_date': reminder.flight_date, 'flight_number': reminder.flight_number, 
-                'flight_time': reminder.flight_time, 'direction': reminder.direction, 'pickup_time': reminder.pickup_time, 'street': reminder.street, 'suburb': reminder.suburb})
+                'flight_time': reminder.flight_time, 'direction': reminder.direction, 'pickup_time': reminder.pickup_time, 
+                'street': reminder.street, 'suburb': reminder.suburb, 'price': reminder.price})
             text_content = strip_tags(html_content)
             email = EmailMultiAlternatives("Reminder - tomorrow", text_content, '', [reminder.email])
             email.attach_alternative(html_content, "text/html")
@@ -50,7 +51,8 @@ def email_2(self, **kwargs):
         elif reminder.flight_date:
             html_content = render_to_string("basecamp/html_email-upcoming3.html", 
                 {'name': reminder.name, 'flight_date': reminder.flight_date, 'flight_number': reminder.flight_number, 
-                'flight_time': reminder.flight_time, 'direction': reminder.direction, 'pickup_time': reminder.pickup_time, 'street': reminder.street, 'suburb': reminder.suburb})
+                'flight_time': reminder.flight_time, 'direction': reminder.direction, 'pickup_time': reminder.pickup_time, 
+                'street': reminder.street, 'suburb': reminder.suburb, 'price': reminder.price})
             text_content = strip_tags(html_content)
             email = EmailMultiAlternatives("Reminder - 3days", text_content, '', [reminder.email])
             email.attach_alternative(html_content, "text/html")
@@ -102,7 +104,8 @@ def email_4(self, **kwargs):
         elif reminder.flight_date:
             html_content = render_to_string("basecamp/html_email-upcoming14.html", 
                 {'name': reminder.name, 'flight_date': reminder.flight_date, 'flight_number': reminder.flight_number, 
-                'flight_time': reminder.flight_time, 'direction': reminder.direction, 'pickup_time': reminder.pickup_time, 'street': reminder.street, 'suburb': reminder.suburb})
+                'flight_time': reminder.flight_time, 'direction': reminder.direction, 'pickup_time': reminder.pickup_time, 
+                'street': reminder.street, 'suburb': reminder.suburb, 'price': reminder.price})
             text_content = strip_tags(html_content)
             email = EmailMultiAlternatives("Reminder - 2wks", text_content, '', [reminder.email])
             email.attach_alternative(html_content, "text/html")
@@ -128,7 +131,8 @@ def email_5(self, **kwargs):
         elif reminder.flight_date:
             html_content = render_to_string("basecamp/html_email-today.html", 
                 {'name': reminder.name, 'flight_date': reminder.flight_date, 'flight_number': reminder.flight_number, 
-                'flight_time': reminder.flight_time, 'direction': reminder.direction, 'pickup_time': reminder.pickup_time, 'street': reminder.street, 'suburb': reminder.suburb})
+                'flight_time': reminder.flight_time, 'direction': reminder.direction, 'pickup_time': reminder.pickup_time, 
+                'street': reminder.street, 'suburb': reminder.suburb, 'price': reminder.price})
             text_content = strip_tags(html_content)
             email = EmailMultiAlternatives("Notice - EasyGo", text_content, '', [reminder.email])
             email.attach_alternative(html_content, "text/html")
