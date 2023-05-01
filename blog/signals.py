@@ -43,7 +43,7 @@ def notify_user_inquiry(sender, instance, created, **kwargs):
                                          'return_direction': instance.return_direction, 'return_flight_date': instance.return_flight_date, 
                                          'return_flight_number': instance.return_flight_number, 'return_flight_time': instance.return_flight_time,
                                          'return_pickup_time': instance.return_pickup_time, 'message': instance.message, 'price': instance.price, 
-                                         'notice': instance.notice,})
+                                         'notice': instance.notice, 'private_ride': instance.private_ride,})
         text_content = strip_tags(html_content)
         email = EmailMultiAlternatives(
             "Booking Inquiry - EasyGo",

@@ -30,7 +30,8 @@ class Inquiry(models.Model):
     paid = models.CharField(max_length=30, blank=True)
     is_confirmed = models.BooleanField(default=False, blank=True)    
     reConfirmed = models.BooleanField(default=False, blank=True)    
-    cancelled = models.BooleanField(default=False, blank=True)    
+    cancelled = models.BooleanField(default=False, blank=True) 
+    private_ride = models.BooleanField(default=False, blank=True)    
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -70,6 +71,7 @@ class Post(models.Model):
     is_confirmed = models.BooleanField(default=False, blank=True)    
     reConfirmed = models.BooleanField(default=False, blank=True)    
     cancelled = models.BooleanField(default=False, blank=True)    
+    private_ride = models.BooleanField(default=False, blank=True)
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
