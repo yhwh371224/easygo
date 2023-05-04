@@ -294,10 +294,10 @@ def inquiry_details(request):
                      
         if (email in inquiry_email) and (email in post_email):            
             content = '''
-            Hello, {} \n   
+            Hello, {} \n
+            [Airport Inquiry]    
             * Both exist in Inquiry & Post *\n 
-            https://easygoshuttle.com.au    
-            [Airport Inquiry]       
+            https://easygoshuttle.com.au
             ===============================
             Contact: {}
             Email: {}  
@@ -330,10 +330,10 @@ def inquiry_details(request):
             
         elif (email in inquiry_email) and not(email in post_email):            
             content = '''
-            Hello, {} \n   
+            Hello, {} \n 
+            [Airport Inquiry]   
             * Inquiry only exist *\n  
-            https://easygoshuttle.com.au    
-            [Airport Inquiry]       
+            https://easygoshuttle.com.au                    
             ===============================
             Contact: {}
             Email: {}  
@@ -366,10 +366,10 @@ def inquiry_details(request):
             
         elif not(email in inquiry_email) and (email in post_email):            
             content = '''
-            Hello, {} \n   
+            Hello, {} \n
+            [Airport Inquiry]    
             * Post only exist *\n   
             https://easygoshuttle.com.au 
-            [Airport Inquiry]       
             ===============================
             Contact: {}
             Email: {}  
@@ -402,10 +402,10 @@ def inquiry_details(request):
             
         else:
             content = '''
-            Hello, {} \n  
+            Hello, {} \n 
+            [Airport Inquiry]  
             * Neither in Inquiry & Post *\n
-            https://easygoshuttle.com.au      
-            [Airport Inquiry]       
+            https://easygoshuttle.com.au     
             ===============================
             Contact: {}
             Email: {}  
@@ -505,10 +505,10 @@ def inquiry_details1(request):
         if (email in post_email) and (email in inquiry_email):            
                         
             content = '''
-            Hello, {} \n  
+            Hello, {} \n 
+            [Quick Price] 
             * Both exist in Inquiry & Post *\n 
-            https://easygoshuttle.com.au   
-            [Quick Price]       
+            https://easygoshuttle.com.au 
             ===============================
             Contact: {}
             Email: {}  
@@ -542,10 +542,10 @@ def inquiry_details1(request):
         elif (email in post_email) and not(email in inquiry_email):            
                         
             content = '''
-            Hello, {} \n  
+            Hello, {} \n 
+            [Quick Price] 
             * Post only exist *\n 
-            https://easygoshuttle.com.au       
-            [Quick Price]       
+            https://easygoshuttle.com.au 
             ===============================
             Contact: {}
             Email: {}  
@@ -579,10 +579,10 @@ def inquiry_details1(request):
         elif not(email in post_email) and (email in inquiry_email):            
                         
             content = '''
-            Hello, {} \n  
+            Hello, {} \n
+            [Quick Price]  
             * Inquiry only exist *\n  
-            https://easygoshuttle.com.au      
-            [Quick Price]       
+            https://easygoshuttle.com.au
             ===============================
             Contact: {}
             Email: {}  
@@ -615,10 +615,10 @@ def inquiry_details1(request):
         
         else:
             content = '''
-            Hello, {} \n  
+            Hello, {} \n
+            [Quick Price]  
             * Neither in Inquiry & Post *\n   
-            https://easygoshuttle.com.au     
-            [Quick Price]       
+            https://easygoshuttle.com.au
             ===============================
             Contact: {}
             Email: {}  
@@ -718,9 +718,9 @@ def booking_form_detail(request):
         if (email in inquiry_email) and (email in post_email):   
             content = '''
             Hello, {} \n
+            [Inquiry from booking form] 
             * Both exist in Inquiry & Post *\n
-            https://easygoshuttle.com.au 
-            [Filled out booking form]       
+            https://easygoshuttle.com.au                   
             ===============================
             Contact: {}
             Email: {}  
@@ -754,9 +754,9 @@ def booking_form_detail(request):
         elif (email in inquiry_email) and not(email in post_email):   
             content = '''
             Hello, {} \n
+            [Inquiry from booking form] 
             * Inquiry only exist *\n
-            https://easygoshuttle.com.au 
-            [Filled out booking form]       
+            https://easygoshuttle.com.au
             ===============================
             Contact: {}
             Email: {}  
@@ -790,9 +790,9 @@ def booking_form_detail(request):
         elif not(email in inquiry_email) and (email in post_email):   
             content = '''
             Hello, {} \n
+            [Inquiry from booking form] 
             * Post only exist *\n
-            https://easygoshuttle.com.au 
-            [Filled out booking form]       
+            https://easygoshuttle.com.au
             ===============================
             Contact: {}
             Email: {}  
@@ -826,9 +826,9 @@ def booking_form_detail(request):
         else:
             content = '''
             Hello, {} \n
+            [Inquiry from booking form] 
             * Neither in Inquiry & Post *\n
-            https://easygoshuttle.com.au 
-            [Filled out booking form]       
+            https://easygoshuttle.com.au
             ===============================
             Contact: {}
             Email: {}  
@@ -1120,8 +1120,8 @@ def confirmation_detail(request):
                         
             content = '''
             Hello, {} \n  
-            * Both exist in Inquiry & Post *\n       
-            [Confirmation]       
+            [Confirmation] 
+            * Both exist in Inquiry & Post *\n 
             ===============================
             Contact: {}
             Email: {}  
@@ -1149,8 +1149,8 @@ def confirmation_detail(request):
                         
             content = '''
             Hello, {} \n  
-            * Post only exist *\n     
-            [Confirmation]       
+            [Confirmation] 
+            * Post only exist *\n 
             ===============================
             Contact: {}
             Email: {}  
@@ -1178,8 +1178,8 @@ def confirmation_detail(request):
                         
             content = '''
             Hello, {} \n  
-            * Inquiry only exist *\n     
-            [Confirmation]       
+            [Confirmation] 
+            * Inquiry only exist *\n 
             ===============================
             Contact: {}
             Email: {}  
@@ -1205,9 +1205,9 @@ def confirmation_detail(request):
         
         else:
             content = '''
-            Hello, {} \n  
-            * Neither in Inquiry & Post *\n    
-            [Confirmation]       
+            Hello, {} \n 
+            [Confirmation]  
+            * Neither in Inquiry & Post *\n 
             ===============================
             Contact: {}
             Email: {}  
@@ -1303,6 +1303,7 @@ def booking_detail(request):
             'no_of_baggage': no_of_baggage,
             'message': message,
             'price': price,
+            'return_flight_number': return_flight_number,
             }       
         
         post_email = Post.objects.values_list('email', flat=True)
@@ -1329,12 +1330,13 @@ def booking_detail(request):
             Messag
             {}
             price {}
+            return_flight_number {}
             ===============================\n        
             Best Regards,
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['contact'], data['email'], data['flight_number'],
                         data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
-                        data['no_of_passenger'], data['no_of_baggage'], data['message'], data['price'])
+                        data['no_of_passenger'], data['no_of_baggage'], data['message'], data['price'], data['return_flight_number'])
             send_mail(data['flight_date'], content,
                       '', ['info@easygoshuttle.com.au'])
             
@@ -1359,12 +1361,13 @@ def booking_detail(request):
             Messag
             {}
             price {}
+            return_flight_number {}
             ===============================\n        
             Best Regards,
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['contact'], data['email'], data['flight_number'],
                         data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
-                        data['no_of_passenger'], data['no_of_baggage'], data['message'], data['price'])
+                        data['no_of_passenger'], data['no_of_baggage'], data['message'], data['price'], data['return_flight_number'])
             send_mail(data['flight_date'], content,
                       '', ['info@easygoshuttle.com.au'])
             
@@ -1389,12 +1392,13 @@ def booking_detail(request):
             Messag
             {}
             price {}
+            return_flight_number {}
             ===============================\n        
             Best Regards,
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['contact'], data['email'], data['flight_number'],
                         data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
-                        data['no_of_passenger'], data['no_of_baggage'], data['message'], data['price'])
+                        data['no_of_passenger'], data['no_of_baggage'], data['message'], data['price'], data['return_flight_number'])
             send_mail(data['flight_date'], content,
                       '', ['info@easygoshuttle.com.au'])
         
@@ -1418,12 +1422,13 @@ def booking_detail(request):
             Messag
             {}
             price {}
+            return_flight_number {}
             ===============================\n        
             Best Regards,
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['contact'], data['email'], data['flight_number'],
                         data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
-                        data['no_of_passenger'], data['no_of_baggage'], data['message'], data['price'])
+                        data['no_of_passenger'], data['no_of_baggage'], data['message'], data['price'], data['return_flight_number'])
             send_mail(data['flight_date'], content,
                       '', ['info@easygoshuttle.com.au'])
 
@@ -1967,7 +1972,7 @@ def flight_date_detail(request):
             
             content = '''
             {} 
-            sent 'flight date' from 501.html \n
+            'flight date' amended from 501.html \n
             >> Go to the Inquiry database \n
             https://easygoshuttle.com.au \n  
             ===============================
