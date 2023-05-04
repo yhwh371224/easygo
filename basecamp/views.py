@@ -1312,8 +1312,8 @@ def booking_detail(request):
                         
             content = '''
             Hello, {} \n  
-            * Both exist in Inquiry & Post *\n       
-            [Booking by client] >> Sending email only! \n
+            [Booking by client] >> Sending email only!\n
+            * Both in Inquiry & Post *\n 
             https://easygoshuttle.com.au/sending_email_first/ \n             
             ===============================
             Contact: {}
@@ -1342,9 +1342,9 @@ def booking_detail(request):
                         
             content = '''
             Hello, {} \n  
-            * Post only exist *\n     
-            [Booking by client] >> Sending email only! \n
-            https://easygoshuttle.com.au/sending_email_first/ \n      
+            [Booking by client] >> Sending email only!\n
+            * Only in Post *\n 
+            https://easygoshuttle.com.au/sending_email_first/ \n       
             ===============================
             Contact: {}
             Email: {}  
@@ -1372,9 +1372,9 @@ def booking_detail(request):
                         
             content = '''
             Hello, {} \n  
-            * Inquiry only exist *\n     
-            [Booking by client] >> Sending email only!\n
-            https://easygoshuttle.com.au/sending_email_first/ \n   
+           [Booking by client] >> Sending email only!\n
+            * Only in Inquiry *\n 
+            https://easygoshuttle.com.au/sending_email_first/ \n  
             ===============================
             Contact: {}
             Email: {}  
@@ -1401,8 +1401,8 @@ def booking_detail(request):
         else:
             content = '''
             Hello, {} \n  
-            * Neither in Inquiry & Post *\n    
             [Booking by client] >> Sending email only!\n
+            * Neither in Inquiry & Post *\n 
             https://easygoshuttle.com.au/sending_email_first/ \n         
             ===============================
             Contact: {}
