@@ -187,6 +187,13 @@ KEEP_COMMENTS_ON_MINIFYING = True
 LOGIN_REDIRECT_URL = '/home/'
 LOGOUT_REDIRECT_URL = '/home/'
 
+
+#PayPal settings
+PAYPAL_MODE = 'live'  
+PAYPAL_CLIENT_ID = config('PAYPAL_CLIENT_ID')
+PAYPAL_CLIENT_SECRET = config('PAYPAL_CLIENT_SECRET')
+
+
 # Email settings
 EMAIL_HOST = config('EMAIL_HOST')
 EMAIL_PORT = config('EMAIL_PORT')

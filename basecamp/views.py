@@ -81,6 +81,9 @@ def terms(request): return render(request, 'basecamp/terms.html')
 def payonline(request): return render(request, 'basecamp/payonline.html')
 
 
+def paypal_notice(request): return render(request, 'basecamp/paypal_notice.html')
+
+
 def meeting_point(request): return render(
     request, 'basecamp/meeting_point.html')
 
