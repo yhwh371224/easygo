@@ -38,6 +38,7 @@ urlpatterns = [
     path('invoice/', views.invoice, name="invoice"),
     path('invoice_detail/', views.invoice_detail),  
     path('payonline/', views.payonline, name='payonline'),
+    path('paypal_notice/', views.paypal_notice, name='paypal_notice'),
     path('meeting_point/', views.meeting_point),
     path('return_trip/', views.return_trip, name="return_trip"),
     path('return_trip_detail/', views.return_trip_detail),

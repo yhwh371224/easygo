@@ -258,10 +258,10 @@ return false;
             <div class="card border-3 shadow-lg" style="padding:2rem">
                 <!-- Paypal form -->
                    <div id="smart-button-container">
-                     <div style="text-align: center"><small>BOOKING NAME or EMAIL ADDRESS</small></div>
+                     <div style="text-align: center"><small>BOOKING NAME</small></div>
                         <div style="text-align: center"><label for="description"></label><input type="text" name="descriptionInput" id="description" value=""></div>
                           <p id="descriptionError" style="visibility: hidden; color:red; text-align: center;">Please enter your booking name</p>
-                            <div style="text-align: center"><small>ENTER AMOUNT (3% surcharge apply)</small></div>
+                            <div style="text-align: center"><small>ENTER AMOUNT</small></div>
                             <div style="text-align: center"><label for="amount"> </label><input name="amountInput" type="number" id="amount" value="" ></div>
                           <p id="priceLabelError" style="visibility: hidden; color:red; text-align: center;">Please enter a price</p>
                           <div id="invoiceidDiv" style="text-align: center; display: none;"><label for="invoiceid"> </label><input name="invoiceid" maxlength="127" type="text" id="invoiceid" value="" ></div>
@@ -356,7 +356,8 @@ return false;
 
       onApprove: function (data, actions) {
         return actions.order.capture().then(function (details) {
-          alert('Transaction completed by ' + details.payer.name.given_name + '!');
+          // alert('Transaction completed by ' + details.payer.name.given_name + '!');
+          window.location.href = "/paypal_notice/";
         });
       },
 
