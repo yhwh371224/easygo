@@ -80,3 +80,283 @@ Not Found: /static/basecamp/js/bootstrap.bundle.min.js.map
 Not Found: /static/basecamp/js/bootstrap.bundle.min.js.map
 Not Found: /static/basecamp/js/jarallax.min.js.map
 Not Found: /static/basecamp/js/jarallax.min.js.map
+Not Found: /static/basecamp/css/theme.min.css.map
+Not Found: /static/basecamp/css/theme.min.css.map
+Not Found: /static/basecamp/css/sourcemaps/tiny-slider.css.map
+Not Found: /static/basecamp/css/sourcemaps/tiny-slider.css.map
+Not Found: /static/basecamp/js/bootstrap.bundle.min.js.map
+Not Found: /static/basecamp/js/bootstrap.bundle.min.js.map
+Not Found: /static/basecamp/js/jarallax.min.js.map
+Not Found: /static/basecamp/js/jarallax.min.js.map
+Not Found: /static/basecamp/css/sourcemaps/tiny-slider.css.map
+Not Found: /static/basecamp/css/sourcemaps/tiny-slider.css.map
+Not Found: /static/basecamp/css/theme.min.css.map
+Not Found: /static/basecamp/css/theme.min.css.map
+Not Found: /static/basecamp/js/bootstrap.bundle.min.js.map
+Not Found: /static/basecamp/js/bootstrap.bundle.min.js.map
+Not Found: /static/basecamp/js/jarallax.min.js.map
+Not Found: /static/basecamp/js/jarallax.min.js.map
+Not Found: /.well-known/acme-challenge/KLQMMWFT-Y48DORXBS2IC4HNJ8GFOT7P
+Not Found: /.well-known/acme-challenge/KLQMMWFT-Y48DORXBS2IC4HNJ8GFOT7P
+Not Found: /.well-known/acme-challenge/S6WRNM9XVKQT57OX3W08ERB4S0PZB__7
+Not Found: /.well-known/acme-challenge/S6WRNM9XVKQT57OX3W08ERB4S0PZB__7
+Invalid HTTP_HOST header: 'mail.easygoshuttle.com.au'. You may need to add 'mail.easygoshuttle.com.au' to ALLOWED_HOSTS.
+Invalid HTTP_HOST header: 'mail.easygoshuttle.com.au'. You may need to add 'mail.easygoshuttle.com.au' to ALLOWED_HOSTS.
+Bad Request: /.well-known/acme-challenge/5RLJTM9698XZ6WW_3H-NY4O-I6L5QTMN
+Bad Request: /.well-known/acme-challenge/5RLJTM9698XZ6WW_3H-NY4O-I6L5QTMN
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /th1s_1s_a_4o4.html
+Not Found: /th1s_1s_a_4o4.html
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /retrieve_post/
+Not Found: /retrieve_post/
+Not Found: /re_confirm/
+Not Found: /re_confirm/
+Not Found: /retrieve_inquiry/
+Not Found: /retrieve_inquiry/
+Not Found: /re_confirm_email/
+Not Found: /re_confirm_email/
+Not Found: /airport-transfers-toongabbie/sms:+61406883355
+Not Found: /airport-transfers-toongabbie/sms:+61406883355
+Not Found: /confirm_booking/sms:+61406883355
+Not Found: /confirm_booking/sms:+61406883355
+Not Found: /payonline/sms:+61406883355
+Not Found: /payonline/sms:+61406883355
+Not Found: /sending_email_second/sms:+61406883355
+Not Found: /sending_email_second/sms:+61406883355
+Not Found: /airport-transfers-epping/sms:+61406883355
+Not Found: /airport-transfers-epping/sms:+61406883355
+Not Found: /invoice/sms:+61406883355
+Not Found: /invoice/sms:+61406883355
+Not Found: /airport-transfers-st-ives/sms:+61406883355
+Not Found: /airport-transfers-st-ives/sms:+61406883355
+Internal Server Error: /return_trip_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1875, in return_trip_detail
+    return render(request, 'beasecamp/return_trip.html', {})
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/shortcuts.py", line 19, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: beasecamp/return_trip.html
+Internal Server Error: /return_trip_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1875, in return_trip_detail
+    return render(request, 'beasecamp/return_trip.html', {})
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/shortcuts.py", line 19, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: beasecamp/return_trip.html
+Not Found: /information/sms:+61406883355
+Not Found: /information/sms:+61406883355
+Not Found: /inquiry/sms:+61406883355
+Not Found: /inquiry/sms:+61406883355
+Not Found: /inquiry2/sms:+61406883355
+Not Found: /inquiry2/sms:+61406883355
+Not Found: /inquiry_details2/sms:+61406883355
+Not Found: /inquiry_details2/sms:+61406883355
+Not Found: /service/sms:+61406883355
+Not Found: /service/sms:+61406883355
+Not Found: /airport-transfers-ryde/sms:+61406883355
+Not Found: /airport-transfers-ryde/sms:+61406883355
+Not Found: /airport-transfers-blacktown/sms:+61406883355
+Not Found: /airport-transfers-blacktown/sms:+61406883355
+Not Found: /sending_email_first/sms:+61406883355
+Not Found: /sending_email_first/sms:+61406883355
+Not Found: /airport-transfers-parramatta/sms:+61406883355
+Not Found: /airport-transfers-parramatta/sms:+61406883355
+Not Found: /return_trip/sms:+61406883355
+Not Found: /return_trip/sms:+61406883355
+Not Found: /privacy/sms:+61406883355
+Not Found: /privacy/sms:+61406883355
+Not Found: /save_data_only/sms:+61406883355
+Not Found: /save_data_only/sms:+61406883355
+Not Found: /booking_form_detail/sms:+61406883355
+Not Found: /booking_form_detail/sms:+61406883355
+Not Found: /p2p/sms:+61406883355
+Not Found: /p2p/sms:+61406883355
+Not Found: /meeting_point/sms:+61406883355
+Not Found: /meeting_point/sms:+61406883355
+Not Found: /booking_form/sms:+61406883355
+Not Found: /booking_form/sms:+61406883355
+Internal Server Error: /invoice_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1936, in invoice_detail
+    return render(request, 'beasecamp/invoice.html', {})
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/shortcuts.py", line 19, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: beasecamp/invoice.html
+Internal Server Error: /invoice_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1936, in invoice_detail
+    return render(request, 'beasecamp/invoice.html', {})
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/shortcuts.py", line 19, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: beasecamp/invoice.html
+Internal Server Error: /save_data_only_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1671, in save_data_only_detail
+    return render(request, 'beasecamp/save_data_only.html', {})
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/shortcuts.py", line 19, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: beasecamp/save_data_only.html
+Internal Server Error: /save_data_only_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1671, in save_data_only_detail
+    return render(request, 'beasecamp/save_data_only.html', {})
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/shortcuts.py", line 19, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: beasecamp/save_data_only.html
+Not Found: /airport-transfers-hornsby/sms:+61406883355
+Not Found: /airport-transfers-hornsby/sms:+61406883355
+Internal Server Error: /sending_email_second_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1634, in sending_email_second_detail
+    return render(request, 'beasecamp/sending_email_second.html', {})
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/shortcuts.py", line 19, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: beasecamp/sending_email_second.html
+Internal Server Error: /sending_email_second_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1634, in sending_email_second_detail
+    return render(request, 'beasecamp/sending_email_second.html', {})
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/shortcuts.py", line 19, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: beasecamp/sending_email_second.html
+Not Found: /airport-transfers-chatswood/sms:+61406883355
+Not Found: /airport-transfers-chatswood/sms:+61406883355
+Not Found: /airport-transfers-thornleigh/sms:+61406883355
+Not Found: /airport-transfers-thornleigh/sms:+61406883355
+Not Found: /terms/sms:+61406883355
+Not Found: /terms/sms:+61406883355
+Internal Server Error: /sending_email_first_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1596, in sending_email_first_detail
+    return render(request, 'beasecamp/sending_email_first.html', {})
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/shortcuts.py", line 19, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: beasecamp/sending_email_first.html
+Internal Server Error: /sending_email_first_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1596, in sending_email_first_detail
+    return render(request, 'beasecamp/sending_email_first.html', {})
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/shortcuts.py", line 19, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: beasecamp/sending_email_first.html
+Internal Server Error: /confirm_booking_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1559, in confirm_booking_detail
+    return render(request, 'beasecamp/confirm_booking.html', {})
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/shortcuts.py", line 19, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: beasecamp/confirm_booking.html
+Internal Server Error: /confirm_booking_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1559, in confirm_booking_detail
+    return render(request, 'beasecamp/confirm_booking.html', {})
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/shortcuts.py", line 19, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: beasecamp/confirm_booking.html
+Not Found: /home/sms:+61406883355
+Not Found: /home/sms:+61406883355
+Not Found: /robots.txt
+Not Found: /robots.txt
+Invalid HTTP_HOST header: '/run/gunicorn.sock:'. The domain name provided is not valid according to RFC 1034/1035.
+Invalid HTTP_HOST header: '/run/gunicorn.sock:'. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /
+Bad Request: /
