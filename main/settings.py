@@ -1,10 +1,15 @@
 import os
-
+import logging
 
 from decouple import config
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+# Create the logs directory if it doesn't exist
+LOGS_DIR = os.path.join(BASE_DIR, 'logs')
+os.makedirs(LOGS_DIR, exist_ok=True)
 
 
 SECRET_KEY = config('SECRET_KEY')
@@ -37,8 +42,41 @@ INSTALLED_APPS = [
     'storages',
     'compressor',
     'django_celery_beat',
+    'paypal.standard.ipn',
 
 ]
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+        'file': {
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'django.log'),
+        },
+    },
+    'root': {
+        'handlers': ['console', 'file'],
+        'level': 'INFO',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'backend': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+    },
+}
+
 
 # CELERY_BROKER_URL = config('CELERY_BROKER_URL')
 CELERY_BROKER_URL = config('CELERY_BROKER', 'redis://redis:6379')
@@ -192,6 +230,8 @@ LOGOUT_REDIRECT_URL = '/home/'
 PAYPAL_MODE = 'live'  
 PAYPAL_CLIENT_ID = config('PAYPAL_CLIENT_ID')
 PAYPAL_CLIENT_SECRET = config('PAYPAL_CLIENT_SECRET')
+PAYPAL_RECEIVER_EMAIL = 'info@easygoshuttle.com.au'
+PAYPAL_IPN_URL = 'https://easygoshuttle.com.au/paypal_ipn/'
 
 
 # Email settings
