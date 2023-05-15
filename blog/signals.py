@@ -1,9 +1,10 @@
-from .models import Post, Inquiry
+from .models import Post, Inquiry, Payment
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+import re
 
 
 @receiver(post_save, sender=Post)
@@ -53,4 +54,42 @@ def notify_user_inquiry(sender, instance, created, **kwargs):
         )
         email.attach_alternative(html_content, "text/html")
         email.send()
+
+
+@receiver(post_save, sender=Payment)
+def notify_user_payment(sender, instance, created, **kwargs):
+    post_email = Post.objects.filter(email=instance.payer_email).first()
+    post_name = Post.objects.filter(name__iregex=r'^%s$' % re.escape(instance.item_name)).first()
     
+    if post_email or post_name:
+        post = post_email or post_name
+        if post:
+            post.paid = instance.gross_amount
+            post.save()
+
+        html_content = render_to_string("basecamp/html_email-payment-success.html",
+                                        {'name': instance.item_name, 'email': instance.payer_email,
+                                         'amount': instance.gross_amount })
+        text_content = strip_tags(html_content)
+        email = EmailMultiAlternatives(
+            "PayPal payment - EasyGo",
+            text_content,
+            '',
+            [instance.payer_email, 'info@easygoshuttle.com.au']
+        )        
+        email.attach_alternative(html_content, "text/html")        
+        email.send()
+
+    else:
+        html_content = render_to_string("basecamp/html_email-noIdentity.html",
+                                        {'name': instance.item_name, 'email': instance.payer_email,
+                                         'amount': instance.gross_amount })
+        text_content = strip_tags(html_content)
+        email = EmailMultiAlternatives(
+            "PayPal payment - EasyGo",
+            text_content,
+            '',
+            [instance.payer_email, 'info@easygoshuttle.com.au']
+        )        
+        email.attach_alternative(html_content, "text/html")        
+        email.send()

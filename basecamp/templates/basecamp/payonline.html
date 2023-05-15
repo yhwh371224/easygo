@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
+
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -109,42 +110,6 @@
       })();
     </script>
           <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	  <script>
-		  // To disable right click
-document.addEventListener('contextmenu', event => event.preventDefault());
-
-// To disable F12 options
-document.onkeypress = function (event) {
-event = (event || window.event);
-if (event.keyCode == 123) {
-return false;
-}
-}
-document.onmousedown = function (event) {
-event = (event || window.event);
-if (event.keyCode == 123) {
-return false;
-}
-}
-document.onkeydown = function (event) {
-event = (event || window.event);
-if (event.keyCode == 123) {
-return false;
-}
-}
-// To To Disable ctrl+c, ctrl+u
-
-jQuery(document).ready(function($){
-$(document).keydown(function(event) {
-var pressedKey = String.fromCharCode(event.keyCode).toLowerCase();
-
-if (event.ctrlKey && (pressedKey == "c" || pressedKey == "u")) {
-return false;
-}
-});
-});
-</script>
-
     <!-- Vendor Styles-->
     <link rel="stylesheet" media="screen" href="/static/basecamp/css/simplebar.min.css"/>
     <link rel="stylesheet" media="screen" href="/static/basecamp/css/tiny-slider.css"/>
@@ -354,10 +319,26 @@ return false;
         });
       },
 
-      onApprove: function (data, actions) {
-        return actions.order.capture().then(function (details) {
-          // alert('Transaction completed by ' + details.payer.name.given_name + '!');
-          window.location.href = "/paypal_notice/";
+      onApprove: function(data, actions) {
+        return actions.order.capture().then(function(details) {
+          var item_name = description.value;
+          var payer_email = details.payer.email_address;
+          var amount = amount.value;
+          var gross_amount = (amount * 1.03).toFixed(2);
+      
+          return fetch('/paypal_ipn/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              item_name: item_name,
+              payer_email: payer_email,
+              gross_amount: gross_amount,
+            })
+          }).then(function(response) {
+            window.location.href = "/paypal_notice/";
+          });
         });
       },
 

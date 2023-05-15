@@ -1,12 +1,20 @@
 from django.shortcuts import render, redirect
 from django.core.mail import send_mail
 from basecamp.area import suburbs
-from blog.models import Post, Inquiry
+from blog.models import Post, Inquiry, Payment
 # from blog.tasks import send_email_delayed
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from datetime import date
+#paypal ipn
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
+import logging
+import requests
+
+
+logger = logging.getLogger(__name__)
 
 
 def index(request): return redirect('/home/')
@@ -2015,4 +2023,44 @@ def flight_date_detail(request):
 
     else:
         return render(request, 'basecamp/inquiry1.html', {})
+    
+    
+
+@csrf_exempt
+def paypal_ipn(request):
+    if request.method == 'POST':
+        item_name = request.POST.get('item_name')
+        payer_email = request.POST.get('payer_email')
+        gross_amount = request.POST.get('mc_gross')
+        txn_id = request.POST.get('txn_id')
+
+        # Check if payment with the same transaction ID already exists
+        if Payment.objects.filter(txn_id=txn_id).exists():
+            return HttpResponse(status=200, content="Duplicate IPN Notification")
+
+        p = Payment(item_name=item_name, payer_email=payer_email, gross_amount=gross_amount, txn_id=txn_id)
+
+        try:
+            p.save()
+        except Exception as e:
+            return HttpResponse(status=500, content="Error processing PayPal IPN")
+
+        # Forward the complete IPN message back to PayPal for verification
+        ipn_data = request.POST.copy()
+        ipn_data['cmd'] = '_notify-validate'
+        headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+
+        try:
+            response = requests.post('https://ipnpb.paypal.com/cgi-bin/webscr', data=ipn_data, headers=headers, verify=True)
+            response_content = response.text.strip()
+            
+            if response.status_code == 200 and response_content == 'VERIFIED':
+                return HttpResponse(status=200)
+            else:
+                return HttpResponse(status=500, content="Error processing PayPal IPN")
+
+        except requests.exceptions.RequestException as e:
+            return HttpResponse(status=500, content="Error processing PayPal IPN")
+
+    return HttpResponse(status=400)
 
