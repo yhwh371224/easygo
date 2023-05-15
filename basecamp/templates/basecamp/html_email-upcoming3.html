@@ -239,16 +239,27 @@
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
 													• Sydney arrival date: {{ flight_date }}<br> 
 												    • Flight number: {{ flight_number }} <small>(ETA {{ flight_time }})</small><br>
-													{% if not paid %}
+													{% if not paid and not return_flight_number %}
 													• Price: ${{ price }}<br><br>													
-													You can pay online via PayPal&nbsp;<a href="https://easygoshuttle.com.au/payonline/">easygoshuttle.com.au/payonline</a><br>
-													For those arriving in Sydney, payment in advance is kindly requested<br><br>	
-													{% endif %}											
+													You can pay online via PayPal&nbsp;<a href="https://easygoshuttle.com.au/payonline/">easygoshuttle.com.au/payonline</a><br><br>	
+													{% elif not paid and return_flight_number %}
+													• Price: ${{ price }}. This price is for a return trip<br><br>													
+													You can pay online via PayPal&nbsp;<a href="https://easygoshuttle.com.au/payonline/">easygoshuttle.com.au/payonline</a><br><br>	
+													{% endif %}									
 											{% elif direction == 'Point to Point' %}
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">													
 													• See you on time,{{ pickup_time }}<br>											
 													• Start point: {{ flight_number }}<br>
                                                     • End point: {{ street }}<br><br></p>	
+													{% if not paid and not return_flight_number %}
+													• Price: ${{ price }}<br><br>													
+													You can pay online via PayPal&nbsp;<a href="https://easygoshuttle.com.au/payonline/">easygoshuttle.com.au/payonline</a><br><br>
+													If you don't pay online, you will need to pay cash to your driver on the flight day<br><br>	
+													{% elif not paid and return_flight_number %}
+													• Price: ${{ price }}. This price is for a return trip<br><br>													
+													You can pay online via PayPal&nbsp;<a href="https://easygoshuttle.com.au/payonline/">easygoshuttle.com.au/payonline</a><br><br>	
+													If you don't pay online, you will need to pay cash to your driver on the flight day<br><br>
+													{% endif %}			
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
 													Please be ready on time, {{ pickup_time }}<br><br></p>
 												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
@@ -259,6 +270,15 @@
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
 													• Direction: {{ direction }}<br>
 													• Pickup time: {{ pickup_time }}<br><br>
+													{% if not paid and not return_flight_number %}
+													• Price: ${{ price }}<br><br>													
+													You can pay online via PayPal&nbsp;<a href="https://easygoshuttle.com.au/payonline/">easygoshuttle.com.au/payonline</a><br><br>	
+													If you don't pay online, you will need to pay cash to your driver on the flight day<br><br>
+													{% elif not paid and return_flight_number %}
+													• Price: ${{ price }}. This price is for a return trip<br><br>													
+													You can pay online via PayPal&nbsp;<a href="https://easygoshuttle.com.au/payonline/">easygoshuttle.com.au/payonline</a><br><br>
+													If you don't pay online, you will need to pay cash to your driver on the flight day<br><br>	
+													{% endif %}			
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
 													Please be ready on your pickup time, {{ pickup_time }}<br><br></p>
 												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
