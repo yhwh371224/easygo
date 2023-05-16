@@ -57,22 +57,40 @@ def notify_user_inquiry(sender, instance, created, **kwargs):
 
 
 @receiver(post_save, sender=Payment)
-def notify_user_payment(sender, instance, created, **kwargs):
-    post_email = Post.objects.filter(email=instance.payer_email).first()
-    post_email1 = Post.objects.filter(email=instance.payer_email)[1]
-    post_name = Post.objects.filter(name__iregex=r'^%s$' % re.escape(instance.item_name)).first()
-    post_name1 = Post.objects.filter(name__iregex=r'^%s$' % re.escape(instance.item_name))[1]
-    
-    if post_email or post_name:
-        post = post_email or post_name
-        
-        if post:
-            post.paid = instance.gross_amount
-            post.save()
+def notify_user_payment(sender, instance, created, **kwargs):      
+    post_name = Post.objects.filter(name__iregex=r'^%s$' % re.escape(instance.item_name)).first()        
+    if post_name: 
+        post_name.paid = instance.gross_amount
+        post_name.save()        
+        html_content = render_to_string("basecamp/html_email-payment-success.html",
+                                    {'name': instance.item_name, 'email': instance.payer_email,
+                                     'amount': instance.gross_amount })
+        text_content = strip_tags(html_content)
+        email = EmailMultiAlternatives(
+            "PayPal payment - EasyGo",
+            text_content,
+            '',
+            [instance.payer_email, 'info@easygoshuttle.com.au']
+        )        
+        email.attach_alternative(html_content, "text/html")        
+        email.send()
 
+        if post_name.return_pickup_time == "x":        
+            post_name1 = Post.objects.filter(name__iregex=r'^%s$' % re.escape(instance.item_name))[1]
+            post_name1.paid = instance.gross_amount
+            post_name1.save()
+            
+    else:
+        pass
+    
+    if not post_name:        
+        post_email = Post.objects.filter(email=instance.payer_email).first()
+        if post_email:
+            post_email.paid = instance.gross_amount
+            post_email.save()
             html_content = render_to_string("basecamp/html_email-payment-success.html",
-                                            {'name': instance.item_name, 'email': instance.payer_email,
-                                             'amount': instance.gross_amount })
+                                    {'name': instance.item_name, 'email': instance.payer_email,
+                                     'amount': instance.gross_amount })
             text_content = strip_tags(html_content)
             email = EmailMultiAlternatives(
                 "PayPal payment - EasyGo",
@@ -83,12 +101,15 @@ def notify_user_payment(sender, instance, created, **kwargs):
             email.attach_alternative(html_content, "text/html")        
             email.send()
 
-        elif post.return_pickup_time == "x":
-            post1 = post_email1 or post_name1        
-            post1.paid = instance.gross_amount
-            post1.save()        
-
-    else:
+            if post_email.return_pickup_time == "x":        
+                post_email1 = Post.objects.filter(email=instance.payer_email)[1]
+                post_email1.paid = instance.gross_amount
+                post_email1.save()
+                
+        else:
+            pass
+                
+    if not post_name and not post_email:
         html_content = render_to_string("basecamp/html_email-noIdentity.html",
                                         {'name': instance.item_name, 'email': instance.payer_email,
                                          'amount': instance.gross_amount })

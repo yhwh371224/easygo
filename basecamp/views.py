@@ -2037,11 +2037,12 @@ def paypal_ipn(request):
         # Check if payment with the same transaction ID already exists
         if Payment.objects.filter(txn_id=txn_id).exists():
             return HttpResponse(status=200, content="Duplicate IPN Notification")
-
+        
         p = Payment(item_name=item_name, payer_email=payer_email, gross_amount=gross_amount, txn_id=txn_id)
 
         try:
-            p.save()
+            p.save()      
+            
         except Exception as e:
             return HttpResponse(status=500, content="Error processing PayPal IPN")
 
