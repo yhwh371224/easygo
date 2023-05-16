@@ -13,7 +13,7 @@ def notify_user_post(sender, instance, created, **kwargs):
         p = Post(name=instance.name, contact=instance.contact, email=instance.email, flight_date=instance.return_flight_date, 
                  flight_number=instance.return_flight_number, flight_time=instance.return_flight_time, pickup_time=instance.return_pickup_time, 
                  direction=instance.return_direction, suburb=instance.suburb, street=instance.street, no_of_passenger=instance.no_of_passenger, 
-                 no_of_baggage=instance.no_of_baggage, message=instance.message, 
+                 no_of_baggage=instance.no_of_baggage, message=instance.message, return_pickup_time="x",
                  notice=instance.notice, price=instance.price, paid=instance.paid)
         p.save() 
     
@@ -59,26 +59,34 @@ def notify_user_inquiry(sender, instance, created, **kwargs):
 @receiver(post_save, sender=Payment)
 def notify_user_payment(sender, instance, created, **kwargs):
     post_email = Post.objects.filter(email=instance.payer_email).first()
+    post_email1 = Post.objects.filter(email=instance.payer_email)[1]
     post_name = Post.objects.filter(name__iregex=r'^%s$' % re.escape(instance.item_name)).first()
+    post_name1 = Post.objects.filter(name__iregex=r'^%s$' % re.escape(instance.item_name))[1]
     
     if post_email or post_name:
         post = post_email or post_name
+        
         if post:
             post.paid = instance.gross_amount
             post.save()
 
-        html_content = render_to_string("basecamp/html_email-payment-success.html",
-                                        {'name': instance.item_name, 'email': instance.payer_email,
-                                         'amount': instance.gross_amount })
-        text_content = strip_tags(html_content)
-        email = EmailMultiAlternatives(
-            "PayPal payment - EasyGo",
-            text_content,
-            '',
-            [instance.payer_email, 'info@easygoshuttle.com.au']
-        )        
-        email.attach_alternative(html_content, "text/html")        
-        email.send()
+            html_content = render_to_string("basecamp/html_email-payment-success.html",
+                                            {'name': instance.item_name, 'email': instance.payer_email,
+                                             'amount': instance.gross_amount })
+            text_content = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                "PayPal payment - EasyGo",
+                text_content,
+                '',
+                [instance.payer_email, 'info@easygoshuttle.com.au']
+            )        
+            email.attach_alternative(html_content, "text/html")        
+            email.send()
+
+        elif post.return_pickup_time == "x":
+            post1 = post_email1 or post_name1        
+            post1.paid = instance.gross_amount
+            post1.save()        
 
     else:
         html_content = render_to_string("basecamp/html_email-noIdentity.html",
