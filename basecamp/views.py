@@ -1270,7 +1270,7 @@ def confirmation_detail(request):
             "Booking confirmation - EasyGo",
             text_content,
             '',
-            [email, email1, 'info@easygoshuttle.com.au']
+            [email, "info@easygoshuttle.com.au", email1]
         )
         email.attach_alternative(html_content, "text/html")
         email.send()
@@ -1588,7 +1588,7 @@ def sending_email_first_detail(request):
             "Booking confirmation - EasyGo",
             text_content,
             '',
-            [email, user.email1]
+            [email, "info@easygoshuttle.com.au", user.email1]
         )
         email.attach_alternative(html_content, "text/html")
         email.send()
@@ -1626,7 +1626,7 @@ def sending_email_second_detail(request):
             "Booking confirmation - EasyGo",
             text_content,
             '',
-            [email, user.email1]
+            [email, "info@easygoshuttle.com.au", user.email1]
         )
         email.attach_alternative(html_content, "text/html")
         email.send()
