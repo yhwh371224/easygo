@@ -1084,9 +1084,11 @@ def price_detail(request):
 # Post 
 def confirmation_detail(request):
     if request.method == "POST":
+        company_name = request.POST.get('company_name')
         name = request.POST.get('name')
         contact = request.POST.get('contact')
         email = request.POST.get('email')
+        email1 = request.POST.get('email1')
         flight_date = request.POST.get('flight_date')
         flight_number = request.POST.get('flight_number')
         flight_time = request.POST.get('flight_time')
@@ -1108,9 +1110,11 @@ def confirmation_detail(request):
                 
         
         data = {
+            'company_name': company_name,
             'name': name,
             'contact': contact,
             'email': email,
+            'email1': email1,
             'flight_date': flight_date,
             'flight_number': flight_number,
             'flight_time': flight_time,
@@ -1242,7 +1246,7 @@ def confirmation_detail(request):
             send_mail(data['flight_date'], content,
                       '', ['info@easygoshuttle.com.au'])
 
-        p = Post(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
+        p = Post(company_name=company_name, name=name, contact=contact, email=email, email1=email1, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
                  no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, return_direction=return_direction,
                  return_flight_date=return_flight_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
@@ -1254,7 +1258,7 @@ def confirmation_detail(request):
                         {'name' : name, 'email': email, })  
         
         html_content = render_to_string("basecamp/html_email-confirmation.html",
-                                    {'name': name, 'contact': contact, 'email': email, 'flight_date': flight_date, 'flight_number': flight_number,
+                                    {'company_name': company_name, 'name': name, 'contact': contact, 'email': email, 'email1': email1, 'flight_date': flight_date, 'flight_number': flight_number,
                                      'flight_time': flight_time, 'pickup_time': pickup_time, 'return_direction': return_direction,'return_flight_date': return_flight_date, 
                                      'return_flight_number': return_flight_number, 'return_flight_time': return_flight_time, 'return_pickup_time': return_pickup_time,
                                      'direction': direction, 'street': street, 'suburb': suburb, 'no_of_passenger': no_of_passenger, 'no_of_baggage': no_of_baggage,
@@ -1266,7 +1270,7 @@ def confirmation_detail(request):
             "Booking confirmation - EasyGo",
             text_content,
             '',
-            [email, 'info@easygoshuttle.com.au']
+            [email, email1, 'info@easygoshuttle.com.au']
         )
         email.attach_alternative(html_content, "text/html")
         email.send()
@@ -1568,7 +1572,7 @@ def sending_email_first_detail(request):
         name = user.name
         
         html_content = render_to_string("basecamp/html_email-confirmation.html",
-                                    {'name': user.name, 'contact': user.contact, 'email': user.email,
+                                    {'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 'email': user.email, 'email1': user.email1,
                                      'flight_date': user.flight_date, 'flight_number': user.flight_number,
                                      'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
                                      'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
@@ -1584,7 +1588,7 @@ def sending_email_first_detail(request):
             "Booking confirmation - EasyGo",
             text_content,
             '',
-            [email, 'info@easygoshuttle.com.au']
+            [email, user.email1]
         )
         email.attach_alternative(html_content, "text/html")
         email.send()
@@ -1606,7 +1610,7 @@ def sending_email_second_detail(request):
             name = user.name
         
         html_content = render_to_string("basecamp/html_email-confirmation.html",
-                                    {'name': user.name, 'contact': user.contact, 'email': user.email,
+                                    {'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 'email': user.email, 'email1': user.email1,
                                      'flight_date': user.flight_date, 'flight_number': user.flight_number,
                                      'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
                                      'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
@@ -1622,7 +1626,7 @@ def sending_email_second_detail(request):
             "Booking confirmation - EasyGo",
             text_content,
             '',
-            [email, 'info@easygoshuttle.com.au']
+            [email, user.email1]
         )
         email.attach_alternative(html_content, "text/html")
         email.send()
@@ -1636,9 +1640,11 @@ def sending_email_second_detail(request):
 
 def save_data_only_detail(request):     
     if request.method == "POST":
+        company_name = request.POST.get('company_name')
         name = request.POST.get('name')
         contact = request.POST.get('contact')
         email = request.POST.get('email')
+        email1 = request.POST.get('email1')
         flight_date = request.POST.get('flight_date')
         flight_number = request.POST.get('flight_number')
         flight_time = request.POST.get('flight_time')
@@ -1657,7 +1663,7 @@ def save_data_only_detail(request):
         price = request.POST.get('price')
         paid = request.POST.get('paid')
  
-        p = Post(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
+        p = Post(company_name=company_name, name=name, contact=contact, email=email, email1=email1, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
                  no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction,
                  return_flight_date=return_flight_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
@@ -1901,7 +1907,7 @@ def invoice_detail(request):
                 "Tax Invoice - EasyGo",
                 text_content,
                 '',
-                [email, 'info@easygoshuttle.com.au']
+                [email, user.email1]
             )
             email.attach_alternative(html_content, "text/html")
             email.send()
@@ -1924,7 +1930,7 @@ def invoice_detail(request):
                 "Tax Invoice - EasyGo",
                 text_content,
                 '',
-                [email, 'info@easygoshuttle.com.au']
+                [email, user.email1]
             )
             email.attach_alternative(html_content, "text/html")
             email.send()

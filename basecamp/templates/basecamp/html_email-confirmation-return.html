@@ -234,9 +234,13 @@
 													We are pleased to confirm that your booking has been successfully confirmed<br><br>                                        
                                                     Please find your booking details below:<br>                                                   
                                                 </p>
-												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                    
+												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
+												{% if company_name %}
+													Company name: {{ company_name }}<br>
+													Attention: {{ name }}<br>
+												{% endif %}
 												    Contact: {{ contact }}<br>
-                                                    Email: {{ email }}<br>
+                                                    Email: {{ email }}&nbsp;{{ email1 }}<br>
 												{% if direction == 'Point to Point' %}
                                                     Booking date: {{ flight_date|slice:":10" }}<br>
 													Pickup time: {{ pickup_time }}<br>
