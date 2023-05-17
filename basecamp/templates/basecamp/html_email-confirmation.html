@@ -224,7 +224,7 @@
                                     <table class="content" style="border-spacing:0;text-align: center;" role="presentation">
 										<tr>
 											<td align="left" style="padding-left:0px;">
-												<p style="Margin:0;font-size:16px;font-weight:bold;line-height:22px;">Hello, {{ name }}</p>
+												<p style="Margin:0;font-size:16px;font-weight:bold;line-height:22px;">Hello, {{ name }}&nbsp;&nbsp;{{ company_name }}</p>
 											</td>
 										</tr>
 										<tr>
@@ -234,9 +234,13 @@
 													We are pleased to confirm that your booking has been successfully confirmed<br><br>                                        
                                                     Please find your booking details below:<br>                                                   
                                                 </p>
-												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                    
+												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">  
+												{% if company_name %}
+													Company name: {{ company_name }}<br>
+													Attention: {{ name }}<br>
+												{% endif %}                                                  
 												    Contact: {{ contact }}<br>
-                                                    Email: {{ email }}<br>
+                                                    Email: {{ email }}&nbsp;&nbsp;{{ email1 }}<br>
 												{% if direction == 'Point to Point' %}
                                                     Booking date: {{ flight_date|slice:":10" }}<br>
 													Pickup time: {{ pickup_time }}<br>
@@ -301,7 +305,7 @@
 													For those arriving in Sydney, payment in advance is kindly requested<br><br>				
 												</p>
 												{% endif %}
-												{% if not return_flight_number %}
+												{% if not return_flight_date %}
 												<!-- For return trip -->						
 												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
 													If you wish to book a return trip, click&nbsp;<a href="https://easygoshuttle.com.au/return_trip/">&raquo;&raquo;Book for return trip</a><br><br></p>

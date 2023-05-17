@@ -27,7 +27,7 @@ def email_1(self, **kwargs):
                 'flight_time': reminder.flight_time, 'direction': reminder.direction, 'pickup_time': reminder.pickup_time, 
                 'street': reminder.street, 'suburb': reminder.suburb, 'price': reminder.price})
             text_content = strip_tags(html_content)
-            email = EmailMultiAlternatives("Reminder - tomorrow", text_content, '', [reminder.email])
+            email = EmailMultiAlternatives("Reminder - tomorrow", text_content, '', [reminder.email, reminder.email1])
             email.attach_alternative(html_content, "text/html")
             email.send()
             
@@ -54,7 +54,7 @@ def email_2(self, **kwargs):
                 'flight_time': reminder.flight_time, 'direction': reminder.direction, 'pickup_time': reminder.pickup_time, 
                 'street': reminder.street, 'suburb': reminder.suburb, 'price': reminder.price})
             text_content = strip_tags(html_content)
-            email = EmailMultiAlternatives("Reminder - 3days", text_content, '', [reminder.email])
+            email = EmailMultiAlternatives("Reminder - 3days", text_content, '', [reminder.email, reminder.email1])
             email.attach_alternative(html_content, "text/html")
             email.send()
             
@@ -80,7 +80,7 @@ def email_3(self, **kwargs):
                 {'name': reminder.name, 'flight_date': reminder.flight_date, 'flight_number': reminder.flight_number, 
                 'flight_time': reminder.flight_time, 'direction': reminder.direction, 'pickup_time': reminder.pickup_time, 'street': reminder.street, 'suburb': reminder.suburb})
             text_content = strip_tags(html_content)
-            email = EmailMultiAlternatives("Reminder - 7days", text_content, '', [reminder.email])
+            email = EmailMultiAlternatives("Reminder - 7days", text_content, '', [reminder.email, reminder.email1])
             email.attach_alternative(html_content, "text/html")
             email.send()
             
@@ -107,7 +107,7 @@ def email_4(self, **kwargs):
                 'flight_time': reminder.flight_time, 'direction': reminder.direction, 'pickup_time': reminder.pickup_time, 
                 'street': reminder.street, 'suburb': reminder.suburb, 'price': reminder.price})
             text_content = strip_tags(html_content)
-            email = EmailMultiAlternatives("Reminder - 2wks", text_content, '', [reminder.email])
+            email = EmailMultiAlternatives("Reminder - 2wks", text_content, '', [reminder.email, reminder.email1])
             email.attach_alternative(html_content, "text/html")
             email.send()  
         
@@ -134,7 +134,7 @@ def email_5(self, **kwargs):
                 'flight_time': reminder.flight_time, 'direction': reminder.direction, 'pickup_time': reminder.pickup_time, 
                 'street': reminder.street, 'suburb': reminder.suburb, 'price': reminder.price})
             text_content = strip_tags(html_content)
-            email = EmailMultiAlternatives("Notice - EasyGo", text_content, '', [reminder.email])
+            email = EmailMultiAlternatives("Notice - EasyGo", text_content, '', [reminder.email, reminder.email1])
             email.attach_alternative(html_content, "text/html")
             email.send() 
             
@@ -160,7 +160,7 @@ def email_6(self, **kwargs):
                 {'name': reminder.name, 'flight_date': reminder.flight_date, 'flight_number': reminder.flight_number, 
                 'flight_time': reminder.flight_time, 'direction': reminder.direction, 'pickup_time': reminder.pickup_time, 'street': reminder.street, 'suburb': reminder.suburb})            
             text_content = strip_tags(html_content)
-            email = EmailMultiAlternatives("Review - EasyGo", text_content, '', [reminder.email])
+            email = EmailMultiAlternatives("Review - EasyGo", text_content, '', [reminder.email, reminder.email1])
             email.attach_alternative(html_content, "text/html")
             email.send()
             

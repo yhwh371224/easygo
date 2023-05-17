@@ -6,8 +6,10 @@ import datetime
 
 class Inquiry(models.Model):
     name = models.CharField(max_length=100, blank=False)
+    company_name = models.CharField(max_length=100, blank=True)
     contact = models.CharField(max_length=50, blank=False)
     email = models.EmailField(blank=False)
+    email1 = models.EmailField(blank=True)
     flight_date = models.DateField(verbose_name='flight_date', blank=False)
     flight_number = models.CharField(max_length=100, blank=False)
     flight_time = models.CharField(max_length=30, blank=False)
@@ -44,8 +46,10 @@ class Inquiry(models.Model):
         
 class Post(models.Model):
     name = models.CharField(max_length=100, blank=False)
+    company_name = models.CharField(max_length=100, blank=True)
     contact = models.CharField(max_length=50, blank=False)
     email = models.EmailField(blank=False)
+    email1 = models.EmailField(blank=True)
     flight_date = models.DateField(verbose_name='flight_date', blank=False)
     flight_number = models.CharField(max_length=100, blank=False)
     flight_time = models.CharField(max_length=30, blank=False)
