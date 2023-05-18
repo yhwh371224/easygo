@@ -51,7 +51,7 @@ def notify_user_inquiry(sender, instance, created, **kwargs):
             "Booking Inquiry - EasyGo",
             text_content,
             '',
-            [instance.email, instance.email1]
+            [instance.email]
         )
         email.attach_alternative(html_content, "text/html")
         email.send()
