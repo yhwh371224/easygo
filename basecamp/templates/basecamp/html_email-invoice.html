@@ -230,8 +230,12 @@
 										<tr>
 											<td align="left" style="padding-top:28px;padding-left:0;">
                                                 <p style="Margin:0;font-size:15px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                    
-                                                    TAX INVOICE {{ notice }}<br><br>     
-                                                    Invoice to: {{ name }}<br><br>                                                                                                       
+                                                    TAX INVOICE {{ notice }}<br><br>
+												{% if company_name %}     
+													Invoice to: {{ company_name }}<br><br>
+												{% else %}
+                                                    Invoice to: {{ name }}<br><br> 
+												{% endif %}                                                                                                      
                                                 </p>
 												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
 													Direction: {{ direction }}<br>
