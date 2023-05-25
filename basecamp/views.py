@@ -1889,7 +1889,7 @@ def invoice_detail(request):
         
         user = Post.objects.filter(email=email).first()
         
-        if user.return_flight_number: 
+        if user.return_flight_time: 
             user = Post.objects.filter(email=email)[1]
             
             html_content = render_to_string("basecamp/html_email-invoice.html",
