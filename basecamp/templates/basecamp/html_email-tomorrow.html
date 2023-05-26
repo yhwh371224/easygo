@@ -233,9 +233,11 @@
 											<td align="left" style="padding-top:28px;padding-left:0;">	
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
 													Tomorrow is your trip day! {{ flight_date }}<br><br>
+											{% if not paid %}
 													<span style="color: #eb7828">Please reply "Yes" to this email for reconfirming your booking and details below</span><br><br>
 													If you have already replied to the email reminder 2 days ago, then you can disregard this email<br><br>
-													Please note that we can not guarantee your booking unless we receive a confirmation with a 'Yes' response, except for those who have paid in advance<br><br></p>											
+													Please note that we can not guarantee your booking unless we receive a confirmation with a 'Yes' response, except for those who have paid in advance<br><br></p>
+											{% endif %}																								
 											{% if direction == 'Pickup from Intl Airport' %}												
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
 													• Sydney Arrival Date: {{ flight_date }}<br> 
@@ -277,8 +279,8 @@
 													More details >><a href="https://easygoshuttle.com.au/information">&nbsp;click here</a><br><br><br></p>					
                                             {% endif %} 																					                                                 
 												<p style="Margin:0;font-size:12px;line-height:21px;Margin-top:16px;Margin-bottom:12px;">    
-                                                    <span style="color: #eb7828">Please reply "Yes" to this email for reconfirming your booking and details</span><br>
-                                                    <br></p>
+												<span style="color: #eb7828">Please note:</span><br>
+												If you have anything to change or cancel, Please let us know asap<br><br><br></p>
 												<p style="Margin:0;font-size:14px;font-weight:bold;line-height:22px;Margin-bottom:12px;">
 													<span style="color: #eb7828">Easy</span><span style="color: blue">Go&nbsp;</span>Airport Transfers<br>	                                                          
                                                 </p>															
