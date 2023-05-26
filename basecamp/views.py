@@ -71,6 +71,9 @@ def inquiry2_detail(request): return render(request, 'basecamp/inquiry2_detail.h
 def invoice(request): return render(request, 'basecamp/invoice.html')
 
 
+def invoice_details(request): return render(request, 'basecamp/invoice_details.html')
+
+
 def about_us(request): return render(request, 'basecamp/about_us.html')
 
 
@@ -1887,19 +1890,18 @@ def invoice_detail(request):
         email = request.POST.get('email')
         notice = request.POST.get('notice')  
         
-        user = Post.objects.filter(email=email).first()
+        user = Post.objects.filter(email=email).first()        
         
-        if user.return_pickup_time=='inv': 
-            user1 = Post.objects.filter(email=email)[1]
-            
+        if user.return_pickup_time=='inv':
+            user = Post.objects.filter(email=email)[1]
             html_content = render_to_string("basecamp/html_email-invoice.html",
-                                        {'notice': notice, 'name': user1.name, 'company_name': user1.company_name, 'contact': user1.contact, 
-                                         'email': user1.email, 'direction': user1.direction, 'flight_date': user1.flight_date, 
-                                         'flight_number': user1.flight_number, 'flight_time': user1.flight_time, 
-                                         'return_direction': user1.return_direction, 'return_flight_date': user1.return_flight_date,
-                                         'return_flight_number': user1.return_flight_number, 'return_flight_time': user1.return_flight_time, 
-                                         'street': user1.street, 'suburb': user1.suburb, 'no_of_passenger': user1.no_of_passenger, 
-                                         'price': user1.price, 'paid': user1.paid })
+                                        {'notice': notice, 'name': user.name, 'company_name': user.company_name, 'contact': user.contact, 
+                                         'email': user.email, 'direction': user.direction, 'flight_date': user.flight_date, 
+                                         'flight_number': user.flight_number, 'flight_time': user.flight_time, 
+                                         'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date,
+                                         'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
+                                         'street': user.street, 'suburb': user.suburb, 'no_of_passenger': user.no_of_passenger, 
+                                         'price': user.price, 'paid': user.paid })
 
             text_content = strip_tags(html_content)
 
@@ -1907,14 +1909,13 @@ def invoice_detail(request):
                 "Tax Invoice - EasyGo",
                 text_content,
                 '',
-                [email, user1.email1]
+                [email, user.email1]
             )
             email.attach_alternative(html_content, "text/html")
             email.send()
             
-        else:
-            user = Post.objects.filter(email=email).first()
-            
+        else:              
+            user = Post.objects.filter(email=email).first()        
             html_content = render_to_string("basecamp/html_email-invoice.html",
                                         {'notice': notice, 'name': user.name, 'contact': user.contact, 
                                          'email': user.email, 'direction': user.direction, 'flight_date': user.flight_date, 
@@ -1935,11 +1936,10 @@ def invoice_detail(request):
             email.attach_alternative(html_content, "text/html")
             email.send()
 
-            return render(request, 'basecamp/return_trip.html',
-                            {'email': email, })  
+        return render(request, 'basecamp/invoice_details.html', {})  
     
     else:
-        return render(request, 'beasecamp/invoice.html', {})  
+        return render(request, 'beasecamp/invoice.html', {})
     
     
 

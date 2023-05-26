@@ -27019,3 +27019,781 @@ Not Found: /inquiry3/
 Not Found: /inquiry3/
 Not Found: /inquiry3/
 Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Internal Server Error: /invoice_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 204, in _get_response
+    self.check_response(response, callback)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 332, in check_response
+    raise ValueError(
+ValueError: The view basecamp.views.invoice_detail didn't return an HttpResponse object. It returned None instead.
+Internal Server Error: /invoice_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 204, in _get_response
+    self.check_response(response, callback)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 332, in check_response
+    raise ValueError(
+ValueError: The view basecamp.views.invoice_detail didn't return an HttpResponse object. It returned None instead.
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /easygo-cruise-terminal/
+Not Found: /easygo-cruise-terminal/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Internal Server Error: /invoice_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 204, in _get_response
+    self.check_response(response, callback)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 332, in check_response
+    raise ValueError(
+ValueError: The view basecamp.views.invoice_detail didn't return an HttpResponse object. It returned None instead.
+Internal Server Error: /invoice_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 204, in _get_response
+    self.check_response(response, callback)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 332, in check_response
+    raise ValueError(
+ValueError: The view basecamp.views.invoice_detail didn't return an HttpResponse object. It returned None instead.
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Internal Server Error: /invoice_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 204, in _get_response
+    self.check_response(response, callback)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 332, in check_response
+    raise ValueError(
+ValueError: The view basecamp.views.invoice_detail didn't return an HttpResponse object. It returned None instead.
+Internal Server Error: /invoice_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 204, in _get_response
+    self.check_response(response, callback)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 332, in check_response
+    raise ValueError(
+ValueError: The view basecamp.views.invoice_detail didn't return an HttpResponse object. It returned None instead.
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Internal Server Error: /invoice_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 204, in _get_response
+    self.check_response(response, callback)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 332, in check_response
+    raise ValueError(
+ValueError: The view basecamp.views.invoice_detail didn't return an HttpResponse object. It returned None instead.
+Internal Server Error: /invoice_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 204, in _get_response
+    self.check_response(response, callback)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 332, in check_response
+    raise ValueError(
+ValueError: The view basecamp.views.invoice_detail didn't return an HttpResponse object. It returned None instead.
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /wordpress
+Not Found: /wordpress
+Not Found: /wp
+Not Found: /wp
+Not Found: /blog
+Not Found: /blog
+Not Found: /new
+Not Found: /new
+Not Found: /old
+Not Found: /old
+Not Found: /test
+Not Found: /test
+Not Found: /main
+Not Found: /main
+Not Found: /testing
+Not Found: /testing
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Internal Server Error: /invoice_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 204, in _get_response
+    self.check_response(response, callback)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 332, in check_response
+    raise ValueError(
+ValueError: The view basecamp.views.invoice_detail didn't return an HttpResponse object. It returned None instead.
+Internal Server Error: /invoice_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 204, in _get_response
+    self.check_response(response, callback)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 332, in check_response
+    raise ValueError(
+ValueError: The view basecamp.views.invoice_detail didn't return an HttpResponse object. It returned None instead.
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /.well-known/apple-app-site-association
+Not Found: /.well-known/apple-app-site-association
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Internal Server Error: /invoice_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 204, in _get_response
+    self.check_response(response, callback)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 332, in check_response
+    raise ValueError(
+ValueError: The view basecamp.views.invoice_detail didn't return an HttpResponse object. It returned None instead.
+Internal Server Error: /invoice_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 204, in _get_response
+    self.check_response(response, callback)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 332, in check_response
+    raise ValueError(
+ValueError: The view basecamp.views.invoice_detail didn't return an HttpResponse object. It returned None instead.
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /robots.txt
+Not Found: /robots.txt
+Internal Server Error: /invoice_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 204, in _get_response
+    self.check_response(response, callback)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 332, in check_response
+    raise ValueError(
+ValueError: The view basecamp.views.invoice_detail didn't return an HttpResponse object. It returned None instead.
+Internal Server Error: /invoice_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 204, in _get_response
+    self.check_response(response, callback)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 332, in check_response
+    raise ValueError(
+ValueError: The view basecamp.views.invoice_detail didn't return an HttpResponse object. It returned None instead.
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /robots.txt
+Not Found: /robots.txt
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /.well-known/apple-app-site-association
+Not Found: /.well-known/apple-app-site-association
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Internal Server Error: /invoice_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 204, in _get_response
+    self.check_response(response, callback)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 332, in check_response
+    raise ValueError(
+ValueError: The view basecamp.views.invoice_detail didn't return an HttpResponse object. It returned None instead.
+Internal Server Error: /invoice_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 204, in _get_response
+    self.check_response(response, callback)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 332, in check_response
+    raise ValueError(
+ValueError: The view basecamp.views.invoice_detail didn't return an HttpResponse object. It returned None instead.
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /index.php/jk
+Not Found: /index.php/jk
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /robots.txt
+Not Found: /robots.txt
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /.well-known/acme-challenge/OD-72-04ACE3W_BXR88LXRJKLYGY1HJJ
+Not Found: /.well-known/acme-challenge/OD-72-04ACE3W_BXR88LXRJKLYGY1HJJ
+Not Found: /.well-known/acme-challenge/BKKPWXR5S80U4U37N09EF7A6R3_SYH_-
+Not Found: /.well-known/acme-challenge/BKKPWXR5S80U4U37N09EF7A6R3_SYH_-
+Invalid HTTP_HOST header: 'mail.easygoshuttle.com.au'. You may need to add 'mail.easygoshuttle.com.au' to ALLOWED_HOSTS.
+Invalid HTTP_HOST header: 'mail.easygoshuttle.com.au'. You may need to add 'mail.easygoshuttle.com.au' to ALLOWED_HOSTS.
+Bad Request: /.well-known/acme-challenge/NIEC-DHUA5XZLRAC1ZKG5R_MAVAZY57V
+Bad Request: /.well-known/acme-challenge/NIEC-DHUA5XZLRAC1ZKG5R_MAVAZY57V
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /apple-app-site-association
+Not Found: /apple-app-site-association
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /robots.txt
+Not Found: /robots.txt
+Not Found: /apple-app-site-association
+Not Found: /apple-app-site-association
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /index.php/jk
+Not Found: /index.php/jk
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Internal Server Error: /invoice_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 204, in _get_response
+    self.check_response(response, callback)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 332, in check_response
+    raise ValueError(
+ValueError: The view basecamp.views.invoice_detail didn't return an HttpResponse object. It returned None instead.
+Internal Server Error: /invoice_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 204, in _get_response
+    self.check_response(response, callback)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 332, in check_response
+    raise ValueError(
+ValueError: The view basecamp.views.invoice_detail didn't return an HttpResponse object. It returned None instead.
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry_others/
+Not Found: /inquiry_others/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Internal Server Error: /invoice_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 204, in _get_response
+    self.check_response(response, callback)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 332, in check_response
+    raise ValueError(
+ValueError: The view basecamp.views.invoice_detail didn't return an HttpResponse object. It returned None instead.
+Internal Server Error: /invoice_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 204, in _get_response
+    self.check_response(response, callback)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 332, in check_response
+    raise ValueError(
+ValueError: The view basecamp.views.invoice_detail didn't return an HttpResponse object. It returned None instead.
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /apple-touch-icon-120x120-precomposed.png
+Not Found: /apple-touch-icon-120x120-precomposed.png
+Not Found: /apple-touch-icon-120x120.png
+Not Found: /apple-touch-icon-120x120.png
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /.env
+Not Found: /.env
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
+Not Found: /inquiry3/
