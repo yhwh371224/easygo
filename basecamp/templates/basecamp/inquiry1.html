@@ -32,7 +32,7 @@
         <div class="row">
           <div class="col-lg-7 col-md-7 pb-2 mb-5" style="margin-top: -260px;">
             <div class="card border-1 shadow-lg">				
-              <form method="post" enctype="multipart/form-data" action="/inquiry_details1/" class="card-body needs-validation p-5" >
+              <form method="post" enctype="multipart/form-data" id="booking-form" action="/inquiry_details1/" class="card-body needs-validation p-5" >
                 {% csrf_token %}
 				<div class="mb3 pb-1" >					
 					<label class="form-label">Flight Information</label>					      
@@ -93,7 +93,7 @@
                 </div>
                 <div class="mb-3 pb-1">
                   <label class="form-label" >Email address</label>
-                  <input class="form-control" type="email"  placeholder="j.doe@example.com" name="email" required>
+                  <input class="form-control" type="email" id="email" placeholder="j.doe@example.com" name="email" required>
                   <div class="invalid-feedback">Please enter a valid email address!</div>
                 </div></div>
 				<br><br>

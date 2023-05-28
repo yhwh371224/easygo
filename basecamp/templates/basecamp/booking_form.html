@@ -30,7 +30,7 @@
       <!-- Page content-->
       <!-- Page title-->	 
       <!-- Contact form + details-->  	  
-            <form method="post" enctype="multipart/form-data" action="/booking_form_detail/" class="card-body needs-validation p-5" >
+            <form method="post" enctype="multipart/form-data" id="booking-form" action="/booking_form_detail/" class="card-body needs-validation p-5" >
                 {% csrf_token %}
 				<div class="mb3 pb-1" >					
 					<label class="form-label">Personal Information</label>									      
@@ -48,7 +48,7 @@
 				  </div>
 				<div class="mb-3 pb-1">
 					<label class="form-label" >Email address</label>
-					<input class="form-control" type="email"  placeholder="j.doe@example.com" required name="email">
+					<input class="form-control" type="email" id="email" placeholder="j.doe@example.com" required name="email">
 					<div class="invalid-feedback">Please enter a valid email address!</div>
 				</div></div>
 				<br><br>

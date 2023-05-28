@@ -179,5 +179,19 @@
           }
       });
     </script>
+    <!-- bigpond email not available -->
+    <script>
+      document.getElementById("booking-form").addEventListener("submit", function(event) {
+        var emailInput = document.getElementById("email");
+        var email = emailInput.value.trim();
+        var domain = email.substring(email.lastIndexOf("@") + 1);
+      
+        if (domain === "bigpond.com" || domain === "bigpond.net.au") {
+          alert("Please enter a different email address. BigPond emails are not allowed.");
+          emailInput.focus();
+          event.preventDefault();
+        }
+      });
+    </script>
   </body>
 </html>
