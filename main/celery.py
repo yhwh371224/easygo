@@ -53,3 +53,5 @@ app.conf.beat_schedule = {
 #    }
  
 app.autodiscover_tasks()
+
+app.loader.override_backends['django-db'] = 'django_celery_results.backends.database:DatabaseBackend'
