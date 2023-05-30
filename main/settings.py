@@ -7,11 +7,6 @@ from decouple import config
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-# Create the logs directory if it doesn't exist
-LOGS_DIR = os.path.join(BASE_DIR, 'logs')
-os.makedirs(LOGS_DIR, exist_ok=True)
-
-
 SECRET_KEY = config('SECRET_KEY')
 
 #DEBUG = True
@@ -46,37 +41,6 @@ INSTALLED_APPS = [
     'corsheaders',
 
 ]
-
-
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-        },
-        'file': {
-            'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs', 'django.log'),
-        },
-    },
-    'root': {
-        'handlers': ['console', 'file'],
-        'level': 'INFO',
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['console', 'file'],
-            'level': 'INFO',
-            'propagate': True,
-        },
-        'backend': {
-            'handlers': ['console', 'file'],
-            'level': 'DEBUG',
-            'propagate': False,
-        },
-    },
-}
 
 
 # CELERY_BROKER_URL = config('CELERY_BROKER_URL')
@@ -138,6 +102,7 @@ WSGI_APPLICATION = 'main.wsgi.application'
 #   }
 # }
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -145,12 +110,14 @@ DATABASES = {
     }
 }
 
+
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
         'LOCATION': '127.0.0.1:11211',
     }
 }
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -167,6 +134,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Australia/Sydney'
@@ -177,28 +145,16 @@ USE_L10N = True
 
 USE_TZ = True
 
+
 AUTHENTICATION_BACKENDS = (    
     'django.contrib.auth.backends.ModelBackend',   
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 
+
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 
-#S3 BUCKETS CONFIG
-#AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
-#AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
-#AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
-#AWS_S3_FILE_OVERWRITE = False
-#AWS_S3_CUSTOM_DOMAIN = config(f'AWS_S3_CUSTOM_DOMAIN')
-#AWS_DEFAULT_ACL = 'public-read'
-#AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
-#AWS_LOCATION = 'static'
-#AWS_QUERYSTRING_AUTH = False
-#AWS_HEADERS = {'Access-Control-Allow-Origin': '*',}
-#DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-#STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'#
-#STATIC_URL = 'http://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
@@ -208,6 +164,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'compressor.finders.CompressorFinder',
 )
+
 
 COMPRESS_ENABLED = not DEBUG  
 COMPRESS_CSS_HASHING_METHOD = 'content'
@@ -221,8 +178,10 @@ COMPRESS_FILTERS = {
     ]
 }
 
+
 HTML_MINIFY = True
 KEEP_COMMENTS_ON_MINIFYING = True
+
 
 LOGIN_REDIRECT_URL = '/home/'
 LOGOUT_REDIRECT_URL = '/home/'
@@ -250,6 +209,7 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 EMAIL_BACKEND = config('EMAIL_BACKEND')
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
