@@ -1289,6 +1289,8 @@ def booking_detail(request):
         name = request.POST.get('name')
         contact = request.POST.get('contact')
         email = request.POST.get('email')
+        company_name = request.POST.get('company_name')
+        email1 = request.POST.get('email1')
         flight_date = request.POST.get('flight_date')
         flight_number = request.POST.get('flight_number')
         flight_time = request.POST.get('flight_time')
@@ -1310,6 +1312,8 @@ def booking_detail(request):
             'name': name,
             'contact': contact,
             'email': email,
+            'company_name': company_name,
+            'email1': email1,
             'flight_date': flight_date,
             'flight_number': flight_number,
             'flight_time': flight_time,
@@ -1450,7 +1454,7 @@ def booking_detail(request):
             send_mail(data['flight_date'], content,
                       '', ['info@easygoshuttle.com.au'])
 
-        p = Post(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
+        p = Post(name=name, contact=contact, email=email, company_name=company_name, email1=email1, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
                  no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction,
                  return_flight_date=return_flight_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
@@ -1481,7 +1485,9 @@ def confirm_booking_detail(request):
              
         else:
             name = user.name            
-            contact = user.contact            
+            contact = user.contact
+            company_name = user.company_name
+            email1 = user.email1            
             flight_date = user.flight_date
             flight_number = user.flight_number
             flight_time = user.flight_time
@@ -1505,6 +1511,8 @@ def confirm_booking_detail(request):
             'name': name,
             'contact': contact,
             'email': email,
+            'company_name': company_name,
+            'email1': email1,
             'flight_date': flight_date,
             'flight_number': flight_number,
             'flight_time': flight_time,
@@ -1547,7 +1555,7 @@ def confirm_booking_detail(request):
             send_mail(data['flight_date'], content,
                       '', ['info@easygoshuttle.com.au'])       
             
-        p = Post(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
+        p = Post(name=name, contact=contact, email=email, company_name=company_name, email1=email1, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
                  no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction,
                  return_flight_date=return_flight_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
