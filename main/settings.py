@@ -13,7 +13,7 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', cast=bool, default=True)
 
 
-ALLOWED_HOSTS = ['easygoshuttle.com.au', 'www.easygoshuttle.com.au', '3.27.44.205']
+ALLOWED_HOSTS = ['easygoshuttle.com.au', 'www.easygoshuttle.com.au', '3.27.44.205', 'Easygo1-env.eba-xqdc4rp9.ap-southeast-2.elasticbeanstalk.com']
 
 
 INSTALLED_APPS = [
