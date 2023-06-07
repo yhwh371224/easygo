@@ -97,6 +97,7 @@ suburbs = {
     "Forest Lodge": 50,
     "Forestville": 80,
     "French Forest": 90,
+    "Freshwater": 100,
     "Galston": 130,
     "Georges Hall": 60,
     "Girraween": 90,
