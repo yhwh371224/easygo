@@ -13,7 +13,7 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', cast=bool, default=True)
 
 
-ALLOWED_HOSTS = ['Easygo4-env.eba-tqmutp2p.ap-southeast-2.elasticbeanstalk.com']
+ALLOWED_HOSTS = ['easygoshuttle.com.au', 'www.easygoshuttle.com.au', '3.27.44.205']
 
 
 INSTALLED_APPS = [
