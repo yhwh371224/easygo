@@ -1,5 +1,6 @@
 from __future__ import print_function
 from .models import Post, Inquiry, Payment
+from basecamp.models import Inquiry_point
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.mail import EmailMultiAlternatives
@@ -21,7 +22,7 @@ from django.db.models import Q
 # from googleapiclient.errors import HttpError
 
 
-
+# Flight return booking
 @receiver(post_save, sender=Post)
 def notify_user_post(sender, instance, created, **kwargs):
     if not instance.paid and instance.return_flight_number:
@@ -32,7 +33,8 @@ def notify_user_post(sender, instance, created, **kwargs):
                  notice=instance.notice, price=instance.price, paid=instance.paid)
         p.save() 
     
-
+    
+# Flight inquiry
 @receiver(post_save, sender=Inquiry)
 def notify_user_inquiry(sender, instance, created, **kwargs):
     if instance.cancelled:
@@ -71,9 +73,46 @@ def notify_user_inquiry(sender, instance, created, **kwargs):
         email.send()
 
 
+# Point to point inquiry
+@receiver(post_save, sender=Inquiry_point)
+def notify_user_inquiry_point(sender, instance, created, **kwargs):
+    if instance.cancelled:
+        html_content = render_to_string("basecamp/html_email-cancelled.html",
+                                        {'name': instance.name, 'email': instance.email,
+                                         })
+        text_content = strip_tags(html_content)
+        email = EmailMultiAlternatives(
+            "Booking Inquiry - EasyGo",
+            text_content,
+            '',
+            [instance.email]
+        )
+        email.attach_alternative(html_content, "text/html")
+        email.send()
+
+    elif instance.is_confirmed:    
+        html_content = render_to_string("basecamp/html_email-inquiry-response-p2p.html",
+                                        {'name': instance.name, 'contact': instance.contact, 'email': instance.email,
+                                         'flight_date': instance.flight_date, 'pickup_time': instance.pickup_time, 'flight_number': instance.flight_number,
+                                         'street': instance.street, 'no_of_passenger': instance.no_of_passenger, 'no_of_baggage': instance.no_of_baggage,                                         
+                                         'return_flight_date': instance.return_flight_date, 'return_flight_number': instance.return_flight_number, 
+                                         'return_pickup_time': instance.return_pickup_time, 'message': instance.message, 'price': instance.price, 
+                                         'notice': instance.notice, 'private_ride': instance.private_ride,})
+        text_content = strip_tags(html_content)
+        email = EmailMultiAlternatives(
+            "Booking Inquiry - EasyGo",
+            text_content,
+            '',
+            [instance.email]
+        )
+        email.attach_alternative(html_content, "text/html")
+        email.send()      
+        
+
 @receiver(post_save, sender=Payment)
 def notify_user_payment(sender, instance, created, **kwargs):      
     post_name = Post.objects.filter(Q(name__iregex=r'^%s$' % re.escape(instance.item_name)) | Q(email=instance.payer_email)).first()
+    point_name = Point.objects.filter(Q(name__iregex=r'^%s$' % re.escape(instance.item_name)) | Q(email=instance.payer_email)).first()
     
     if post_name: 
         post_name.paid = instance.gross_amount
@@ -96,6 +135,28 @@ def notify_user_payment(sender, instance, created, **kwargs):
             post_name1 = Post.objects.filter(Q(name__iregex=r'^%s$' % re.escape(instance.item_name)) | Q(email=instance.payer_email))[1]
             post_name1.paid = instance.gross_amount
             post_name1.save()
+            
+    elif point_name: 
+        point_name.paid = instance.gross_amount
+        point_name.save() 
+        
+        html_content = render_to_string("basecamp/html_email-payment-success.html",
+                                    {'name': instance.item_name, 'email': instance.payer_email,
+                                     'amount': instance.gross_amount })
+        text_content = strip_tags(html_content)
+        email = EmailMultiAlternatives(
+            "PayPal payment - EasyGo",
+            text_content,
+            '',
+            [instance.payer_email, 'info@easygoshuttle.com.au']
+        )        
+        email.attach_alternative(html_content, "text/html")        
+        email.send()               
+
+        if point_name.return_pickuptime == "x":        
+            point_name1 = Point.objects.filter(Q(name__iregex=r'^%s$' % re.escape(instance.item_name)) | Q(email=instance.payer_email))[1]
+            point_name1.paid = instance.gross_amount
+            point_name1.save()
             
     else:
         html_content = render_to_string("basecamp/html_email-noIdentity.html",
