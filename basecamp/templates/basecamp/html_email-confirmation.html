@@ -258,7 +258,7 @@
 													Number of baggage: {{ no_of_baggage }}<br>
                                                     Message: <br>
 													{{ message }}<br><br> 
-												{% if return_direction == 'Point to Point' %}													
+												{% if return_direction == 'Point to Point' and return_flight_number %}													
 													<span style="font-weight:bold; color: #bdb1a6">Return trip date:  {{ return_flight_date }}</span><br>
 													<span style="font-weight:bold; color: #bdb1a6">Return start point:  {{ street }}</span><br>
 													<span style="font-weight:bold; color: #bdb1a6">Return end point:  {{ flight_number }}</span><br>
