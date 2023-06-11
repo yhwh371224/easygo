@@ -3,9 +3,9 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="color-scheme" content="light dark">
-    <meta name="supported-color-schemes" content="light dark">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta name="color-scheme" content="light dark">
+   <meta name="supported-color-schemes" content="light dark">
 	<title></title>
 	<style type="text/css">
 		@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
@@ -224,54 +224,65 @@
                                     <table class="content" style="border-spacing:0;text-align: center;" role="presentation">
 										<tr>
 											<td align="left" style="padding-left:0px;">
-												<p style="Margin:0;font-size:18px;font-weight:bold;line-height:22px;">Booking Tax Invoice</p>
+												<p style="Margin:0;font-size:16px;font-weight:bold;line-height:22px;">Hello, {{ name }}&nbsp;&nbsp;{{ company_name }}</p>
 											</td>
 										</tr>
 										<tr>
 											<td align="left" style="padding-top:28px;padding-left:0;">
-                                                <p style="Margin:0;font-size:15px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                    
-                                                    TAX INVOICE {{ notice }}<br><br>
-												{% if company_name %}     
-													Invoice to: {{ company_name }}<br><br>
-												{% else %}
-                                                    Invoice to: {{ name }}<br><br> 
-												{% endif %}                                                                                                      
-                                                </p>
-												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
-													Direction: {{ direction }}<br>
-                                                    Flight date: {{ flight_date }}<br>
-													Flight number: {{ flight_number }}<br>                                                    
-													Flight time: {{ flight_time }}<br>
-												{% if return_flight_number %}
-													Return Direction: {{ return_direction }}<br>
-													Return flight date: {{ return_flight_date }}<br>
-													Return flight number: {{ return_flight_number }}<br>
-													Return flight time: {{ return_flight_time }}<br>
+                                                <p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                    
+                                                    Thank you for your inquiry with EasyGo<br><br>
+													Please find below the details of your booking<br><br>                                                   
+												 </p>
+												 <p style="Margin:0;font-size:12px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;"> 												                                                 
+													Contact:  {{ contact }}<br>
+                                                    Email:  {{ email }}<br>													
+                                                    Trip date:  {{ flight_date }}<br>
+													Pickup time:  {{ pickup_time }}<br>
+													Start point:  {{ flight_number }}<br>      
+                                                    End point:  {{ street }}<br>
+                                                    Number of passenger: {{ no_of_passenger }}<br>
+													Number of baggage:  {{ no_of_baggage }}<br>
+                                                    Return trip date:  {{ return_flight_date }}<br>	
+													Return start point: {{ return_flight_number }}<br>												
+													Return pickup time:  {{ return_pickup_time }}<br>
+                                                    Your Message: <br>
+													{{ message }}<br><br>	         
+												</p>
+												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;">												
+													The cost for your booking will be ${{ price }} for your trip<br><br>
+												<!-- notice to the customer -->
+												{% if notice %}
+													Note: <span style="font-weight:bold; color: #d39383">{{ notice }}</span><br><br>
+												{% endif %}	 
+												{% if private_ride %} 
+													<span style="font-weight:bold; color: #d39383">This is a 'Private Ride'</span><br>
+													This transportation service being provided is exclusive to your group, and you will not be sharing the ride with any other passengers. 
+													The vehicle will be deicated to your group only, and there won't be any detour routes or additional stops during the Ride.
+													It will take you directly to your destination.<br><br>
 												{% endif %}
-													Address: {{ street }}, {{ suburb }}<br>													                                                   
-                                                    Number of Passenger: {{ no_of_passenger }}<br><br>
-												{% if return_flight_number %}
-                                                    <strong>Total price: ${{ price }} inc GST for a round trip</strong><br>
-												{% else %}
-													<strong>Total price: ${{ price }} inc GST for a single trip</strong><br>
-												{% endif %}
-												<!-- Paid amount -->
-												{% if paid %}
-													<strong>Paid: ${{ paid }}</strong><br><br>	
-												{% endif %}
-                                                </p>     										
-												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">                                                  
-                                                    Payment options are as below<br><br>
-                                                    1. Via Online Banking<br>
-                                                    &nbsp; • &nbsp;EasyGo Airport Transfers<br>
-                                                    &nbsp; • &nbsp;BSB: 082 - 356<br>
-                                                    &nbsp; • &nbsp;ACC: 980980701<br>
-                                                    &nbsp; • &nbsp;Please return receipt<br><br>
-                                                    2. Via our website through PayPal<br>
-                                                    &nbsp; • &nbsp;www.easygoshuttle.com.au/payonline<br>												
-													<br></p>   
-												<p style="Margin:0;font-size:13px;font-weight:bold;line-height:22px;Margin-bottom:12px;">                                                    
-													<span style="color: #eb7828">Easy</span><span style="color: blue">Go&nbsp;</span>Airport Transfers<br>	                                                          
+													If you wish to proceed, please let me know<br><br>
+													Alternatively simply click the image below<br>
+													(you don't have to fill the form again)<br></p>								
+												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;">---Booking---</p>
+												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">	                                                  
+													<a class="btn btn-warning" href="https://easygoshuttle.com.au/confirm_booking"><img src="https://easygo-staticfiles-bucket.s3.ap-southeast-2.amazonaws.com/bookonline+image.webp" alt="book online logo" width="120"></a>
+													
+													<br><br>
+													<a href="https://easygoshuttle.com.au/confirm_booking">https://easygoshuttle.com.au/confirm_booking</a><br>
+												</p>
+												<!-- For return trip -->
+												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;">---Payment---</p>							                                                 
+												<p style="Margin:0;font-size:12px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
+													You can pay online via PayPal&nbsp;<a href="https://easygoshuttle.com.au/payonline/">https://easygoshuttle.com.au/payonline</a><br>
+													If you don't pay online, you will need to pay cash to your driver on the flight day<br><br>
+													For those arriving in Sydney, payment in advance is kindly requested<br><br>												
+												</p>				
+												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;">
+													Please let me know if you have any questions<br><br>													
+												<p style="Margin:0;font-size:13px; line-height:22px;Margin-bottom:12px;">
+                                                    Best Regards,<br> 
+													Peter <br> 
+												<span style="font-weight:bold; color: #eb7828">Easy</span><span style="font-weight:bold; color: blue">Go&nbsp;</span style="font-weight:bold">Airport Transfers<br>	                                                          
                                                 </p>															
 											</td>
 										</tr>
