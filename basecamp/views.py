@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.core.mail import send_mail
 from basecamp.area import suburbs
 from blog.models import Post, Inquiry, Payment
+from basecamp.models import Inquiry_point
 # from blog.tasks import send_email_delayed
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
@@ -894,7 +895,7 @@ def booking_form_detail(request):
         return render(request, 'basecamp/booking_form.html', {})
 
 
-# Single point, Multiple points and contact  
+# Contact 
 def inquiry_details2(request):
     if request.method == "POST":
         name = request.POST.get('name')
@@ -924,46 +925,175 @@ def inquiry_details2(request):
         
     else:
         return render(request, 'basecamp/inquiry2.html', {})
-
-
+    
+# single point to point    
 def p2p_single(request):
     if request.method == "POST":
         name = request.POST.get('name')
         contact = request.POST.get('contact')
         email = request.POST.get('email')
-        date = request.POST.get('date')
-        pickuptime = request.POST.get('pickuptime')
-        startpoint = request.POST.get('startpoint')
-        endpoint = request.POST.get('endpoint')
-        passenger = request.POST.get('passenger')
-        baggage = request.POST.get('baggage')
-        message = request.POST.get('message')     
+        flight_date = request.POST.get('flight_date')
+        pickup_time = request.POST.get('pickup_time')
+        flight_number = request.POST.get('flight_number')
+        street = request.POST.get('street')
+        no_of_passenger = request.POST.get('no_of_passenger')
+        no_of_baggage = request.POST.get('no_of_baggage')        
+        return_flight_date = request.POST.get('return_flight_date')
+        return_flight_number = request.POST.get('return_flight_number')
+        return_pickup_time = request.POST.get('return_pickup_time')
+        message = request.POST.get('message')
         
-        html_content = render_to_string("basecamp/html_email-inquiry2.html", 
-        {'name': name, 'contact': contact,
-        'email': email, 'date': date, 'pickuptime': pickuptime,
-        'startpoint': startpoint, 'endpoint': endpoint, 'passenger': passenger,
-        'baggage': baggage, 'message': message, })
         
-        text_content = strip_tags(html_content)
+               
+        data = {
+            'name': name,
+            'contact': contact,
+            'email': email,            
+            'flight_date': flight_date,
+            'pickup_time': pickup_time,
+            'flight_number': flight_number,
+            'street': street,
+            'no_of_passenger': no_of_passenger,
+            'no_of_baggage': no_of_baggage,
+            'return_flight_date': return_flight_date,
+            'return_flight_number': return_flight_number,
+            'return_pickup_time': return_pickup_time,
+            'message': message,           
+        }
+        
+        inquiry_point_email = Inquiry_point.objects.values_list('email', flat=True) 
+        post_email = Post.objects.values_list('email', flat=True)
+                         
+        if (email in inquiry_point_email) and (email in post_email):   
+            content = '''
+            Hello, {} \n
+            [Inquiry from booking form] 
+            * Both exist in Inquiry & Post *\n
+            https://easygoshuttle.com.au                   
+            ===============================
+            Contact: {}
+            Email: {}  
+            Pick up time: {}      
+            Start point: {}
+            End point: {}
+            Number of passenger: {}
+            Number of baggage: {}
+            Return date: {}
+            Return pickup time: {}            
+            Messag
+            {}
+            ===============================\n        
+            Best Regards,
+            EasyGo Admin \n\n        
+            ''' .format(data['name'], data['contact'], data['email'], data['pickup_time'], data['flight_number'],
+                        data['street'], data['no_of_passenger'], data['no_of_baggage'], data['return_flight_date'], data['return_pickup_time'],
+                        data['message'])
 
-        email = EmailMultiAlternatives(
-            "Point to Point inquiry",
-            text_content,
-            '',
-            [email, 'info@easygoshuttle.com.au']
-        )
+            send_mail(data['flight_date'], content,
+                      '', ['info@easygoshuttle.com.au'])
+            
+        elif (email in inquiry_point_email) and not(email in post_email):   
+            content = '''
+            Hello, {} \n
+            [Inquiry from booking form] 
+            * Inquiry only exist *\n
+            https://easygoshuttle.com.au
+            ===============================
+            Contact: {}
+            Email: {}  
+            Pick up time: {}      
+            Start point: {}
+            End point: {}
+            Number of passenger: {}
+            Number of baggage: {}
+            Return date: {}
+            Return pickup time: {}            
+            Messag
+            {}
+            ===============================\n        
+            Best Regards,
+            EasyGo Admin \n\n        
+            ''' .format(data['name'], data['contact'], data['email'], data['pickup_time'], data['flight_number'],
+                        data['street'], data['no_of_passenger'], data['no_of_baggage'], data['return_flight_date'], data['return_pickup_time'],
+                        data['message'])
+
+            send_mail(data['flight_date'], content,
+                      '', ['info@easygoshuttle.com.au'])
+            
+        elif not(email in inquiry_point_email) and (email in post_email):   
+            content = '''
+            Hello, {} \n
+            [Inquiry from booking form] 
+            * Post only exist *\n
+            https://easygoshuttle.com.au
+            ===============================
+            Contact: {}
+            Email: {}  
+            Pick up time: {}      
+            Start point: {}
+            End point: {}
+            Number of passenger: {}
+            Number of baggage: {}
+            Return date: {}
+            Return pickup time: {}            
+            Messag
+            {}
+            ===============================\n        
+            Best Regards,
+            EasyGo Admin \n\n        
+            ''' .format(data['name'], data['contact'], data['email'], data['pickup_time'], data['flight_number'],
+                        data['street'], data['no_of_passenger'], data['no_of_baggage'], data['return_flight_date'], data['return_pickup_time'],
+                        data['message'])
+
+            send_mail(data['flight_date'], content,
+                      '', ['info@easygoshuttle.com.au'])
+            
+        else:
+            content = '''
+            Hello, {} \n
+            [Inquiry from booking form] 
+            * Neither in Inquiry & Post *\n
+            https://easygoshuttle.com.au
+            ===============================
+            Contact: {}
+            Email: {}  
+            Pick up time: {}      
+            Start point: {}
+            End point: {}
+            Number of passenger: {}
+            Number of baggage: {}
+            Return date: {}
+            Return pickup time: {}            
+            Messag
+            {}
+            ===============================\n        
+            Best Regards,
+            EasyGo Admin \n\n        
+            ''' .format(data['name'], data['contact'], data['email'], data['pickup_time'], data['flight_number'],
+                        data['street'], data['no_of_passenger'], data['no_of_baggage'], data['return_flight_date'], data['return_pickup_time'],
+                        data['message'])
+
+            send_mail(data['flight_date'], content,
+                      '', ['info@easygoshuttle.com.au'])        
         
-        email.attach_alternative(html_content, "text/html")
-        email.send()
+        p = Inquiry_point(name=name, contact=contact, email=email, direction="Point to Point", flight_date=flight_date, flight_time="01:00", 
+                          pickup_time=pickup_time, flight_number=flight_number, street=street, suburb="Cruise", no_of_passenger=no_of_passenger, 
+                          no_of_baggage=no_of_baggage, return_direction="Point to Point", return_flight_date=return_flight_date, 
+                          return_flight_time="01:00", return_flight_number=return_flight_number, return_pickup_time=return_pickup_time, message=message)
         
+        p.save()        
+        
+        # today = date.today()        
+        # if date <= str(today):
+        #     return render(request, 'basecamp/501.html')                   
+
         return render(request, 'basecamp/p2p_single.html',
-                        {'name' : name})    
-       
+                        {'name' : name})           
     else:
         return render(request, 'basecamp/p2p_single.html', {})
-
-
+    
+    
+# Multiple points
 def p2p(request):
     if request.method == "POST":
         p2p_name = request.POST.get('p2p_name')
@@ -1478,7 +1608,7 @@ def confirm_booking_detail(request):
         email = request.POST.get('email')
         is_confirmed_str = request.POST.get('is_confirmed')
         is_confirmed = True if is_confirmed_str == 'True' else False
-        user = Inquiry.objects.filter(email=email).first() 
+        user = (Inquiry.objects.filter(email=email).first()) or (Inquiry_point.objects.filter(email=email).first())
                             
         if not user:
             return render(request, 'basecamp/500.html') 
@@ -1571,8 +1701,8 @@ def confirm_booking_detail(request):
                         {'name' : name, 'email': email, })
         
     else:
-        return render(request, 'beasecamp/confirm_booking.html', {})  
-    
+        return render(request, 'beasecamp/confirm_booking.html', {})      
+
      
 # sending email first one   
 def sending_email_first_detail(request):     

@@ -56,28 +56,28 @@
                 <br>
                 <div class="mb-3 pb-1">
                   <label class="form-label" >Trip date</label>
-                  <input class="form-control date-picker rounded" name="date" type="text" placeholder="Your booking date" data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;Y-m-d&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;, &quot;defaultDate&quot;: &quot;today&quot;}" required>
+                  <input class="form-control date-picker rounded" name="flight_date" type="text" placeholder="Choose trip date" data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;Y-m-d&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;}" required>
                 </div>
                 <div class="mb-3 pb-1">
                   <label class="form-label" >Pickup time</label>
-                  <input class="form-control" type="time" name="pickuptime"  placeholder="Pickup time" required>
+                  <input class="form-control" type="time" name="pickup_time"  placeholder="Pickup time" required>
                 <div class="invalid-feedback">Please enter your pickup time!</div>
                 </div>
                 <div class="mb-3 pb-1">
                   <label class="form-label" >Pickup location - Start point</label>
-                    <input class="form-control" type="text" name="startpoint"  placeholder="From where" required>
+                    <input class="form-control" type="text" name="flight_number"  placeholder="From where" required>
                   <div class="invalid-feedback">Please enter your pickup location!</div>
                 </div>
                 <div class="mb-3 pb-1">
                   <label class="form-label" >Drop off location - End point</label>
-                  <input class="form-control" type="text" name="endpoint"  placeholder="Your destination" required>
+                  <input class="form-control" type="text" name="street"  placeholder="Your destination" required>
                 </div>
                 <br>
                 <hr>
                 <br>
                 <div class="mb-3 pb-1">
                   <label class="form-label" >Passengers</label>
-                  <select class="form-select" name="passenger" required>
+                  <select class="form-select" name="no_of_passenger" required>
                   <option value="0">How many people?</option>
 				  <option value="1">1</option>
 				  <option value="2">2</option>
@@ -92,27 +92,33 @@
 				  <option value="11">11</option>
 				  <option value="12">12</option>
 				  <option value="13">13</option>
-          <option value="14">14</option>
-          <option value="15">15</option>
-          <option value="16">16</option>
-          <option value="17">17</option>
-          <option value="18">18</option>
-          <option value="19">19</option>
-          <option value="20">20</option>
-          <option value="21">21</option>
-          <option value="22">22</option>
-          <option value="23">23</option>
-          <option value="24">24</option>
-          <option value="25">25</option>
-          <option value="26">26</option>				  
-				  <option value="-1" disabled="disabled">Over 26 (please leave message below)</option>
+				  <option value="-1" disabled="disabled">Over 13 (please leave message below)</option>
               </select>
                 </div>
             <div class="mb-3 pb-1">
 					    <label class="form-label" >Baggage</label>
-					    <input class="form-control" type="text" placeholder="How many baggage?" name="baggage">
+					    <input class="form-control" type="text" placeholder="How many baggage?" name="no_of_baggage">
 					  <div class="invalid-feedback">Please enter the number of baggage!</div>
 				  </div>	
+          <br>
+          <hr>
+          <br>
+          <!-- Retrun trip -->
+          <div class="mb-3 pb-1">
+            <label class="form-label" >Return trip date</label>
+            <input class="form-control date-picker rounded" name="return_flight_date" type="text" placeholder="Choose trip date" data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;Y-m-d&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;, &quot;defaultDate&quot;: &quot;today&quot;}" >
+          </div>
+          <div class="mb-3 pb-1">
+            <label class="form-label" >Return start point<sup class="text-danger ms-1">*</sup></label>
+             <input class="form-control" type="text" placeholder="Return start point" name="return_flight_number" >
+            <div class="invalid-feedback">Please enter your flight number!</div>
+         </div>
+          <div class="mb-3 pb-1">
+            <label class="form-label" >Return pickup time</label>
+            <input class="form-control" type="time" name="return_pickup_time"  placeholder="Pickup time">
+          <div class="invalid-feedback">Please enter your pickup time!</div>
+          </div>
+
                 <div class="mb-3 pb-1">
                   <label class="form-label" >Message</label>
                   <textarea class="form-control" name="message" id="cont-message" rows="5" placeholder="Write your message here"></textarea>

@@ -1,28 +1,46 @@
 from django.db import models
 from django.apps import AppConfig
+from django.urls import reverse
+import datetime
 
 
-class Point(models.Model):
+class Inquiry_point(models.Model):
     name = models.CharField(max_length=100, blank=False)
+    company_name = models.CharField(max_length=100, blank=True)
     contact = models.CharField(max_length=50, blank=False)
     email = models.EmailField(blank=False)
-
-    date = models.DateField(verbose_name='date', blank=False)    
-    pickuptime = models.CharField(max_length=30, blank=True)
-
-    startpoint = models.CharField(max_length=200, blank=False)
-    endpoint = models.CharField(max_length=200, blank=False)
-    
-    passenger = models.CharField(max_length=30, blank=False)
-    baggage = models.CharField(max_length=200, blank=True)
+    email1 = models.EmailField(blank=True)
+    flight_date = models.DateField(verbose_name='flight_date', blank=False)
+    flight_number = models.CharField(max_length=100, blank=False)
+    flight_time = models.CharField(max_length=60, blank=False, null=True)
+    pickup_time = models.CharField(max_length=30, blank=True)
+    direction = models.CharField(max_length=100, blank=False)
+    suburb = models.CharField(max_length=100, blank=False)
+    street = models.CharField(max_length=200, blank=False)
+    no_of_passenger = models.CharField(max_length=30, blank=False)
+    no_of_baggage = models.CharField(max_length=200, blank=True)
+    return_direction = models.CharField(max_length=100, blank=True, null=True)
+    return_flight_date = models.DateField(blank=True, null=True, default=datetime.date.today)
+    return_flight_number = models.CharField(max_length=100, blank=True, null=True)
+    return_flight_time = models.CharField(max_length=30, blank=True, null=True)
+    return_pickup_time = models.CharField(max_length=30, blank=True, null=True)
     message = models.TextField(blank=True)
-
+    notice = models.TextField(blank=True)    
+    price = models.CharField(max_length=30, blank=True)    
+    paid = models.CharField(max_length=30, blank=True)
+    is_confirmed = models.BooleanField(default=False, blank=True)    
+    reConfirmed = models.BooleanField(default=False, blank=True)    
+    cancelled = models.BooleanField(default=False, blank=True) 
+    private_ride = models.BooleanField(default=False, blank=True)    
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['-created']
-    
-    def get_absolute_url(self):
-        return '/basecamp/point{}/'.format(self.pk)
-    
-    
+        ordering = ['-created']    
+
+        
+
+class BasecampAppConfig(AppConfig):
+    name = 'basecamp'
+
+    def ready(self):
+        from blog import signals
