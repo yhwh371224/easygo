@@ -258,12 +258,11 @@
 													Number of baggage: {{ no_of_baggage }}<br>
                                                     Message: <br>
 													{{ message }}<br><br> 
-												{% if return_direction == 'Point to Point' and return_flight_number %}													
-													<span style="font-weight:bold; color: #bdb1a6">Return trip date:  {{ return_flight_date }}</span><br>
-													<span style="font-weight:bold; color: #bdb1a6">Return start point:  {{ street }}</span><br>
-													<span style="font-weight:bold; color: #bdb1a6">Return end point:  {{ flight_number }}</span><br>
+												{% if return_direction == 'Point to Point' and return_pickup_time %}													
+													<span style="font-weight:bold; color: #bdb1a6">Return trip date:  {{ return_flight_date }}</span><br>													
+													<span style="font-weight:bold; color: #bdb1a6">Return start point:  {{ return_flight_number }}</span><br>
 													<span style="font-weight:bold; color: #bdb1a6">Return pickup time:  {{ return_pickup_time }}</span><br>
-												{% elif return_flight_time %}
+												{% elif not return_direction == 'Point and Point' and return_flight_time %}
 													<span style="font-weight:bold; color: #bdb1a6">Return direction:  {{ return_direction }}</span><br>
 													<span style="font-weight:bold; color: #bdb1a6">Return flight date:  {{ return_flight_date }}</span><br>
                                                     <span style="font-weight:bold; color: #bdb1a6">Return flight number:  {{ return_flight_number }}</span><br>
@@ -286,7 +285,7 @@
 													<p style="Margin:0;font-size:12px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                  
                                                     You have paid ${{ price }}, which we have received and greatly appreciate. 													
 												<br><br></p>												
-												{% elif return_flight_time %}												
+												{% elif return_pickup_time %}												
 												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
 													--- Payment ---</p>
 												<p style="Margin:0;font-size:12px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                  
@@ -305,7 +304,7 @@
 													For those arriving in Sydney, payment in advance is kindly requested<br><br>				
 												</p>
 												{% endif %}
-												{% if not return_flight_date %}
+												{% if not return_pickup_time %}
 												<!-- For return trip -->						
 												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
 													If you wish to book a return trip, click&nbsp;<a href="https://easygoshuttle.com.au/return_trip/">&raquo;&raquo;Book for return trip</a><br><br></p>
