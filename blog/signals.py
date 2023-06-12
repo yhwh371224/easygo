@@ -112,7 +112,6 @@ def notify_user_inquiry_point(sender, instance, created, **kwargs):
 @receiver(post_save, sender=Payment)
 def notify_user_payment(sender, instance, created, **kwargs):      
     post_name = Post.objects.filter(Q(name__iregex=r'^%s$' % re.escape(instance.item_name)) | Q(email=instance.payer_email)).first()
-    point_name = Point.objects.filter(Q(name__iregex=r'^%s$' % re.escape(instance.item_name)) | Q(email=instance.payer_email)).first()
     
     if post_name: 
         post_name.paid = instance.gross_amount
@@ -135,28 +134,6 @@ def notify_user_payment(sender, instance, created, **kwargs):
             post_name1 = Post.objects.filter(Q(name__iregex=r'^%s$' % re.escape(instance.item_name)) | Q(email=instance.payer_email))[1]
             post_name1.paid = instance.gross_amount
             post_name1.save()
-            
-    elif point_name: 
-        point_name.paid = instance.gross_amount
-        point_name.save() 
-        
-        html_content = render_to_string("basecamp/html_email-payment-success.html",
-                                    {'name': instance.item_name, 'email': instance.payer_email,
-                                     'amount': instance.gross_amount })
-        text_content = strip_tags(html_content)
-        email = EmailMultiAlternatives(
-            "PayPal payment - EasyGo",
-            text_content,
-            '',
-            [instance.payer_email, 'info@easygoshuttle.com.au']
-        )        
-        email.attach_alternative(html_content, "text/html")        
-        email.send()               
-
-        if point_name.return_pickuptime == "x":        
-            point_name1 = Point.objects.filter(Q(name__iregex=r'^%s$' % re.escape(instance.item_name)) | Q(email=instance.payer_email))[1]
-            point_name1.paid = instance.gross_amount
-            point_name1.save()
             
     else:
         html_content = render_to_string("basecamp/html_email-noIdentity.html",
