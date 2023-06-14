@@ -29,7 +29,7 @@ class Inquiry_point(models.Model):
     price = models.CharField(max_length=30, blank=True)    
     paid = models.CharField(max_length=30, blank=True)
     is_confirmed = models.BooleanField(default=False, blank=True)    
-    reConfirmed = models.BooleanField(default=False, blank=True)    
+    driver = models.CharField(max_length=100, blank=True, null=True)    
     cancelled = models.BooleanField(default=False, blank=True) 
     private_ride = models.BooleanField(default=False, blank=True)    
     created = models.DateTimeField(auto_now_add=True)
