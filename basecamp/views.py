@@ -1383,7 +1383,7 @@ def confirmation_detail(request):
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
                  no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, return_direction=return_direction,
                  return_flight_date=return_flight_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
-                 return_pickup_time=return_pickup_time, notice=notice, price=price, paid=paid)
+                 return_pickup_time=return_pickup_time, notice=notice, price=price, paid=paid, driver="Sam, 0406783559")
         
         p.save()
 
@@ -1588,7 +1588,7 @@ def booking_detail(request):
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
                  no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction,
                  return_flight_date=return_flight_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
-                 return_pickup_time=return_pickup_time, message=message, price=price)
+                 return_pickup_time=return_pickup_time, message=message, price=price, driver="Sam, 0406783559")
         
         p.save()
         
@@ -1689,7 +1689,7 @@ def confirm_booking_detail(request):
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
                  no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction,
                  return_flight_date=return_flight_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
-                 return_pickup_time=return_pickup_time, message=message, notice=notice, price=price, paid=paid, is_confirmed=is_confirmed)
+                 return_pickup_time=return_pickup_time, message=message, notice=notice, price=price, paid=paid, is_confirmed=is_confirmed, driver="Sam, 0406783559")
         
         p.save()        
                
@@ -1808,7 +1808,7 @@ def save_data_only_detail(request):
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
                  no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction,
                  return_flight_date=return_flight_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
-                 return_pickup_time=return_pickup_time, message=message, price=price, paid=paid)
+                 return_pickup_time=return_pickup_time, message=message, price=price, paid=paid, driver="Sam, 0406783559")
         
         p.save()                   
         
@@ -2005,7 +2005,7 @@ def return_trip_detail(request):
         p = Post(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
                  no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, notice=notice, price=price, 
-                 paid=paid,)
+                 paid=paid, driver="Sam, 0406783559")
         
         p.save()
         
