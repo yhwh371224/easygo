@@ -6,7 +6,7 @@ from rangefilter.filters import DateRangeFilter
 class PostAdmin(admin.ModelAdmin):
     list_display = ['flight_date', 'name', 'suburb', 'contact',
                     'created', 'price', 'is_confirmed', 'cancelled', 
-                    'return_flight_number',
+                    'direction',
                      ]
 
     list_filter = (('flight_date', DateRangeFilter), 'suburb')
