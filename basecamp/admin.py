@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import Inquiry_point
 from rangefilter.filters import DateRangeFilter
+from blog.admin import admin_site
 
 
 class InquiryPointAdmin(admin.ModelAdmin):
@@ -11,6 +12,7 @@ class InquiryPointAdmin(admin.ModelAdmin):
                      'street', 'name', 'contact']
     
 
+admin_site.register(Inquiry_point, InquiryPointAdmin)
 admin.site.register(Inquiry_point, InquiryPointAdmin)
 
 
