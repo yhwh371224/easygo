@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'paypal.standard.ipn',
     'corsheaders',
     'admin_honeypot',
-    #'defender', 
+    'defender', 
     
 
 ]
@@ -71,7 +71,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    #'defender.middleware.FailedLoginMiddleware',
+    'defender.middleware.FailedLoginMiddleware',
 
 ]
 

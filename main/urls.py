@@ -21,7 +21,7 @@ from django.views.static import serve
 
 
 urlpatterns = [
-    # path('admin/defender/', include('defender.urls')),    
+    path('horeb_yhwh/defender/', include('defender.urls')),    
     path('admin/', include('admin_honeypot.urls', namespace='admin_honeypot')),
     path('horeb_yhwh/', admin.site.urls),
     path('blog/', include('blog.urls')),
