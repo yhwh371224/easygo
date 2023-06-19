@@ -121,7 +121,7 @@ def notify_user_payment(sender, instance, created, **kwargs):
         html_content = render_to_string("basecamp/html_email-payment-success.html",
                                     {'name': instance.item_name, 'email': instance.payer_email,
                                      'amount': instance.gross_amount, 'flight_date': post_name.flight_date, 
-                                     'return_flight_date': post_name.return_flight_date,})
+                                     'price': post_name.price,})
         text_content = strip_tags(html_content)
         email = EmailMultiAlternatives(
             "PayPal payment - EasyGo",
