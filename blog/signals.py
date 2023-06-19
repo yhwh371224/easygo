@@ -109,6 +109,7 @@ def notify_user_inquiry_point(sender, instance, created, **kwargs):
         email.send()      
         
 
+# PayPal Payment
 @receiver(post_save, sender=Payment)
 def notify_user_payment(sender, instance, created, **kwargs):      
     post_name = Post.objects.filter(Q(name__iregex=r'^%s$' % re.escape(instance.item_name)) | Q(email=instance.payer_email)).first()
@@ -119,7 +120,8 @@ def notify_user_payment(sender, instance, created, **kwargs):
         
         html_content = render_to_string("basecamp/html_email-payment-success.html",
                                     {'name': instance.item_name, 'email': instance.payer_email,
-                                     'amount': instance.gross_amount })
+                                     'amount': instance.gross_amount, 'flight_date': post_name.flight_date, 
+                                     'return_flight_date': post_name.return_flight_date,})
         text_content = strip_tags(html_content)
         email = EmailMultiAlternatives(
             "PayPal payment - EasyGo",
