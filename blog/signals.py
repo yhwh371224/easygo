@@ -30,7 +30,7 @@ def notify_user_post(sender, instance, created, **kwargs):
                  flight_date=instance.return_flight_date, flight_number=instance.return_flight_number, flight_time=instance.return_flight_time, 
                  pickup_time=instance.return_pickup_time, direction=instance.return_direction, suburb=instance.suburb, street=instance.street, 
                  no_of_passenger=instance.no_of_passenger, no_of_baggage=instance.no_of_baggage, message=instance.message, return_pickup_time="x",
-                 notice=instance.notice, price=instance.price, paid=instance.paid, driver=instance.driver)
+                 return_flight_date=instance.flight_date, notice=instance.notice, price=instance.price, paid=instance.paid, driver=instance.driver)
         p.save() 
     
     
@@ -121,7 +121,9 @@ def notify_user_payment(sender, instance, created, **kwargs):
         html_content = render_to_string("basecamp/html_email-payment-success.html",
                                     {'name': instance.item_name, 'email': instance.payer_email,
                                      'amount': instance.gross_amount, 'flight_date': post_name.flight_date, 
-                                     'price': post_name.price,})
+                                     'return_flight_date': post_name.return_flight_date, 
+                                     'return_pickup_time': post_name.return_pickup_time, })
+        
         text_content = strip_tags(html_content)
         email = EmailMultiAlternatives(
             "PayPal payment - EasyGo",
