@@ -1721,7 +1721,7 @@ def sending_email_first_detail(request):
                                      'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date, 
                                      'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
                                      'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
-                                     'price': user.price, 'paid': user.paid })
+                                     'price': user.price, 'paid': user.paid})
     
         text_content = strip_tags(html_content)
 
@@ -1759,7 +1759,7 @@ def sending_email_second_detail(request):
                                      'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date, 
                                      'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
                                      'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
-                                     'price': user.price, 'paid': user.paid })
+                                     'price': user.price, 'paid': user.paid})
     
         text_content = strip_tags(html_content)
 

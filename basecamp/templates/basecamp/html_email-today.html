@@ -234,15 +234,15 @@
 											{% if direction == 'Pickup from Intl Airport' %}												
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">													
 													Please inform your driver {{ driver }} know once you have retrieved your baggage to ensure a seamless process.<br><br>
-													{{ driver }} will provide you with any necessary details via message<br><br>
+													He will provide you with any necessary details via message<br><br>
 													Additionally, You can still reach us via email at info@easygoshuttle.com.au for any further assistance or inquiries<br><br>	
 													{% if meeting_point %}												
-													The meeting point >>&nbsp;{{ meeting_point }}</a><br><br>
+													The meeting point >>&nbsp;{{ meeting_point }}</a><br>
 													{% else %}
-													The meeting point >>&nbsp;Public pick-up (2 minutes area)</a><br><br>
+													The meeting point >>&nbsp;Public pick-up (2 minutes area)</a><br>
 													{% endif %}
-													<small><a href="https://easygo-staticfiles-bucket.s3.ap-southeast-2.amazonaws.com/international-map.webp">International Airport Map</a>&nbsp;(Public pickup = Express pickup)</small><br><br>
-													<small>If any changes, you will get notified by email or sms</small><br><br><br></p>	
+													<a href="https://easygo-staticfiles-bucket.s3.ap-southeast-2.amazonaws.com/international-map.webp">International Airport Map</a><br><br>
+													If any changes, you will get notified by email or sms<br><br><br></p>	
 											{% elif direction == 'Pickup from Domestic Airport' %}
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
 													Please inform your driver {{ driver }} know once you have retrieved your baggage to ensure a seamless process.<br><br>
