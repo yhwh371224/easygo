@@ -230,8 +230,12 @@
 										<tr>
 											<td align="left" style="padding-top:28px;padding-left:0;">
                                                 <p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;"> 
-                                                    Thank you for making your payment online through PayPal. <br><br>                                                 
+                                                    Thank you for making your payment online through PayPal. <br><br>  
+												{% if amount %}                                               
                                                     We have received <span style="color: blue">${{ amount }}</span>, including 3% surcharge. Much appreciated. <br><br> 
+												{% else %}
+													We have received <span style="color: blue">${{ paid }}</span>, including 3% surcharge. Much appreciated. <br><br>
+												{% endif %}
 												{% if return_pickup_time %}	
                                                     As your booking day ({{ return_flight_date }} & {{ flight_date }}) approaches, you will receive a reminder email.<br><br>
 												{% else %}
