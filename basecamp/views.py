@@ -1712,7 +1712,7 @@ def sending_email_first_detail(request):
                 
         name = user.name
         
-        html_content = render_to_string("basecamp/html_email-confirmation.html",
+        html_content = render_to_string("basecamp/html_email-confirmation.html", #"basecamp/html_email-payment-success.html", 
                                     {'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 'email': user.email, 'email1': user.email1,
                                      'flight_date': user.flight_date, 'flight_number': user.flight_number,
                                      'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
