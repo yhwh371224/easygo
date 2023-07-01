@@ -1467,7 +1467,8 @@ def booking_detail(request):
             Hello, {} \n  
             [Booking by client] >> Sending email only!\n
             * Both in Inquiry & Post *\n 
-            https://easygoshuttle.com.au/sending_email_first/ \n             
+            https://easygoshuttle.com.au/sending_email_first/ \n 
+            https://easygoshuttle.com.au/sending_email_second/ \n            
             ===============================
             Contact: {}
             Email: {}  
@@ -1498,7 +1499,8 @@ def booking_detail(request):
             Hello, {} \n  
             [Booking by client] >> Sending email only!\n
             * Only in Post *\n 
-            https://easygoshuttle.com.au/sending_email_first/ \n       
+            https://easygoshuttle.com.au/sending_email_first/ \n 
+            https://easygoshuttle.com.au/sending_email_second/ \n      
             ===============================
             Contact: {}
             Email: {}  
@@ -1529,7 +1531,8 @@ def booking_detail(request):
             Hello, {} \n  
            [Booking by client] >> Sending email only!\n
             * Only in Inquiry *\n 
-            https://easygoshuttle.com.au/sending_email_first/ \n  
+            https://easygoshuttle.com.au/sending_email_first/ \n 
+            https://easygoshuttle.com.au/sending_email_second/ \n 
             ===============================
             Contact: {}
             Email: {}  
@@ -1559,7 +1562,8 @@ def booking_detail(request):
             Hello, {} \n  
             [Booking by client] >> Sending email only!\n
             * Neither in Inquiry & Post *\n 
-            https://easygoshuttle.com.au/sending_email_first/ \n         
+            https://easygoshuttle.com.au/sending_email_first/ \n  
+            https://easygoshuttle.com.au/sending_email_second/ \n       
             ===============================
             Contact: {}
             Email: {}  
@@ -1662,6 +1666,7 @@ def confirm_booking_detail(request):
             clicked the 'confirm booking' \n
             >> Sending email only! \n
             https://easygoshuttle.com.au/sending_email_first/ \n  
+            https://easygoshuttle.com.au/sending_email_second/ \n
             ===============================
             Contact: {}
             Email: {}  
@@ -1979,6 +1984,7 @@ def return_trip_detail(request):
             submitted the 'Return trip' \n
             sending first email only \n
             https://easygoshuttle.com.au/sending_email_first/ \n  
+            https://easygoshuttle.com.au/sending_email_second/ \n
             ===============================
             Contact: {}
             Email: {}  
