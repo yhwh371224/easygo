@@ -29,7 +29,11 @@ class InquiryAdmin(admin.ModelAdmin):
     
 
 class PaymentAdmin(admin.ModelAdmin):
-    list_display = ['item_name', 'payer_email', 'gross_amount', 'txn_id', 'created']
+    list_display = ['item_name', 'payer_email', 'gross_amount', 'txn_id', 'created']    
+    
+
+    search_fields = ['item_name', 'payer_email', 'gross_amount']
+
 
 
 class MyAdminSite(AdminSite):
