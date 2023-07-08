@@ -112,7 +112,7 @@ def notify_user_inquiry_point(sender, instance, created, **kwargs):
 # PayPal Payment
 @receiver(post_save, sender=Payment)
 def notify_user_payment(sender, instance, created, **kwargs):      
-    post_name = Post.objects.filter(Q(email=instance.payer_email) | Q(name__iregex=r'^%s$' % re.escape(instance.item_name))).first()
+    post_name = Post.objects.filter(Q(email__iexact=instance.payer_email) | Q(name__iregex=r'^%s$' % re.escape(instance.item_name))).first()
     
     if post_name: 
         post_name.paid = instance.gross_amount
@@ -135,7 +135,7 @@ def notify_user_payment(sender, instance, created, **kwargs):
         email.send()               
 
         if post_name.return_pickup_time == "x":        
-            post_name1 = Post.objects.filter(Q(email=instance.payer_email) | Q(name__iregex=r'^%s$' % re.escape(instance.item_name)))[1]
+            post_name1 = Post.objects.filter(Q(email__iexact=instance.payer_email) | Q(name__iregex=r'^%s$' % re.escape(instance.item_name)))[1]
             post_name1.paid = instance.gross_amount
             post_name1.save()
             
