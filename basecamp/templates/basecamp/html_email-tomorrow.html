@@ -257,9 +257,14 @@
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
 													• Flight number: {{ flight_number }} <small>(ETA {{ flight_time }})</small><br>
 													• Pickup around {{ pickup_time }}, <small>20-30 mins after your flight's landing </small><br>
+													{% if meeting_point %}												
+													• The meeting point >>&nbsp;{{ meeting_point }}<br>
+													• <a href="https://easygo-staticfiles-bucket.s3.ap-southeast-2.amazonaws.com/Domestic-T2-meeting-point.webp">Map of Shuttle Bus Bay</a>
+													{% else %}
 													• The meeting point >><a href="https://easygoshuttle.com.au/meeting_point">&nbsp;click here</a><br>
 													• <a href="https://easygo-staticfiles-bucket.s3.ap-southeast-2.amazonaws.com/T2-Priority-Pickup-map.webp">Terminal 2 Map (Virgin, Jetstar)</a><br>
 													• <a href="https://easygo-staticfiles-bucket.s3.ap-southeast-2.amazonaws.com/Domestic-T3-baggage-carousel-1.webp">Terminal 3 Map (Qantas)</a><br>
+													{% endif %}
 													• On landing simply turn on your mobile phone<br><br></p>
 											{% elif direction == 'Point to Point' %}
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">													
