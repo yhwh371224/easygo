@@ -250,9 +250,14 @@
 													Please inform your driver {{ driver }} know once you have retrieved your baggage to ensure a seamless process.<br><br>
 													{{ driver }} will provide you with any necessary details via message<br><br>
 													Additionally, You can still reach us via email at info@easygoshuttle.com.au for any further assistance or inquiries<br><br>
-													The meeting point >><a href="https://easygoshuttle.com.au/meeting_point">&nbsp;click here</a><br><br>
-													<small><a href="https://easygo-staticfiles-bucket.s3.ap-southeast-2.amazonaws.com/T2-Priority-Pickup-map.webp">Terminal 2 Map (Virgin, Jetstar)</a></small>&nbsp;&nbsp;|&nbsp;&nbsp;
-													<small><a href="https://easygo-staticfiles-bucket.s3.ap-southeast-2.amazonaws.com/Domestic-T3-baggage-carousel-1.webp">Terminal 3 Map (Qantas)</a></small><br><br>
+													{% if meeting_point %}												
+													• The meeting point >>&nbsp;{{ meeting_point }}<br>
+													• <a href="https://easygo-staticfiles-bucket.s3.ap-southeast-2.amazonaws.com/Domestic-T2-meeting-point.webp">Map of Shuttle Bus Bay</a>
+													{% else %}
+													• The meeting point >><a href="https://easygoshuttle.com.au/meeting_point">&nbsp;click here</a><br>
+													• <a href="https://easygo-staticfiles-bucket.s3.ap-southeast-2.amazonaws.com/T2-Priority-Pickup-map.webp">Terminal 2 Map (Virgin, Jetstar)</a><br>
+													• <a href="https://easygo-staticfiles-bucket.s3.ap-southeast-2.amazonaws.com/Domestic-T3-baggage-carousel-1.webp">Terminal 3 Map (Qantas)</a><br>
+													{% endif %}
 													<small>If any changes, you will get notified by email or sms</small><br><br><br></p>												
 											{% else %} 
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
