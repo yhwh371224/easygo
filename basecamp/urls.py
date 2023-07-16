@@ -11,6 +11,7 @@ urlpatterns = [
     path('', views.index),
     path('home/', views.home, name='home'),
     path('about_us/', views.about_us),
+    path('yoosung/', views.yoosung),
     path('sitemap/', views.sitemap),
     path('information/', views.information),    
     path('service/', views.service),

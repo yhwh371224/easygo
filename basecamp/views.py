@@ -24,6 +24,9 @@ def index(request): return redirect('/home/')
 def home(request): return render(request, 'basecamp/home.html')
 
 
+def yoosung(request): return render(request, 'basecamp/yoosung.html')
+
+
 def sitemap(request): return render(request, 'basecamp/sitemap.xml')
 
 
