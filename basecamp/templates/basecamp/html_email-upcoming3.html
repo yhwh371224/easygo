@@ -233,13 +233,11 @@
 											<td align="left" style="padding-top:28px;padding-left:0;">
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
                                                     Upcoming your booking on {{ flight_date }}<br><br>
-                                                    Your flight day is only 3 days away<br><br></p>
-											{% if not paid %}
+                                                    Your flight day is only 3 days away<br><br></p>											
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
 													Please reply "Yes" to this email for reconfirming your booking and details below<br><br>
 													<span style="color: #eb7828">Please note:</span><br>
-                                                    We can not guarantee your booking unless we receive a confirmation with a 'Yes' response, except for those who have paid in advance<br><br></p>
-											{% endif %}
+                                                    We can not guarantee your booking unless we receive a confirmation with a 'Yes' response, except for those who have paid in advance<br><br></p>											
 											{% if direction == 'Pickup from Intl Airport' or direction == 'Pickup from Domestic Airport' %}
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
 													• Sydney arrival date: {{ flight_date }}<br> 
