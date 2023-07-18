@@ -27,6 +27,9 @@ def home(request): return render(request, 'basecamp/home.html')
 def yoosung(request): return render(request, 'basecamp/yoosung.html')
 
 
+def soyoung(request): return render(request, 'basecamp/soyoung.html')
+
+
 def sitemap(request): return render(request, 'basecamp/sitemap.xml')
 
 
