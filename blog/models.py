@@ -28,7 +28,8 @@ class Inquiry(models.Model):
     notice = models.TextField(blank=True)    
     price = models.CharField(max_length=30, blank=True)    
     paid = models.CharField(max_length=30, blank=True)
-    driver = models.CharField(max_length=100, blank=True, null=True)
+    # driver = models.CharField(max_length=100, blank=True, null=True)
+    driver = models.ForeignKey('Driver', on_delete=models.CASCADE, null=True, blank=True)
     meeting_point = models.CharField(max_length=100, blank=True, null=True)
     is_confirmed = models.BooleanField(default=False, blank=True)        
     cancelled = models.BooleanField(default=False, blank=True) 
@@ -69,7 +70,8 @@ class Post(models.Model):
     notice = models.TextField(blank=True)
     price = models.CharField(max_length=30, blank=True)
     paid = models.CharField(max_length=30, blank=True)
-    driver = models.CharField(max_length=100, blank=True, null=True)
+    # driver = models.CharField(max_length=100, blank=True, null=True)
+    driver = models.ForeignKey('Driver', on_delete=models.CASCADE, null=True, blank=True)
     meeting_point = models.CharField(max_length=100, blank=True, null=True)
     is_confirmed = models.BooleanField(default=False, blank=True)
     cancelled = models.BooleanField(default=False, blank=True)    
@@ -95,6 +97,19 @@ class Payment(models.Model):
 
     class Meta:
         ordering = ['-created']
+
+
+class Driver(models.Model):
+    driver_name = models.CharField(max_length=100, blank=True)
+    driver_contact = models.CharField(max_length=50, blank=True)
+    driver_email = models.EmailField(blank=True)
+    driver_address = models.CharField(max_length=200, blank=True)
+    driver_plate = models.CharField(max_length=30, blank=True)
+    driver_car = models.CharField(max_length=30, blank=True)
+    driver_bankdetails = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.driver_name 
 
 
 class BlogAppConfig(AppConfig):
