@@ -1,4 +1,4 @@
-from .models import Post
+from .models import Post, Driver
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags 
@@ -129,12 +129,19 @@ def email_5(self, **kwargs):
         if reminder.cancelled:            
             continue        
         
-        elif reminder.flight_date:
+        elif reminder.flight_date:            
+            driver_instance = reminder.driver            
+             
+            driver_name = driver_instance.driver_name
+            driver_contact = driver_instance.driver_contact
+            driver_plate = driver_instance.driver_plate
+            driver_car = driver_instance.driver_car
+
             html_content = render_to_string("basecamp/html_email-today.html", 
                 {'name': reminder.name, 'flight_date': reminder.flight_date, 'flight_number': reminder.flight_number, 
                 'flight_time': reminder.flight_time, 'direction': reminder.direction, 'pickup_time': reminder.pickup_time, 
                 'street': reminder.street, 'suburb': reminder.suburb, 'price': reminder.price, 'meeting_point': reminder.meeting_point,
-                'driver': reminder.driver})
+                'driver_name': driver_name, 'driver_contact': driver_contact, 'driver_plate': driver_plate, 'driver_car': driver_car})
             text_content = strip_tags(html_content)
             email = EmailMultiAlternatives("Notice - EasyGo", text_content, '', [reminder.email])
             email.attach_alternative(html_content, "text/html")
