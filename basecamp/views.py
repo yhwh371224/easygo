@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.core.mail import send_mail
 from basecamp.area import suburbs
-from blog.models import Post, Inquiry, Payment
+from blog.models import Post, Inquiry, Payment, Driver
 from basecamp.models import Inquiry_point
 # from blog.tasks import send_email_delayed
 from django.core.mail import EmailMultiAlternatives
@@ -1384,12 +1384,14 @@ def confirmation_detail(request):
                         data['no_of_passenger'], data['no_of_baggage'], data['message'], data['price'])
             send_mail(data['flight_date'], content,
                       '', ['info@easygoshuttle.com.au'])
+            
+        sam_driver = Driver.objects.get(driver_name="Sam") 
 
         p = Post(company_name=company_name, name=name, contact=contact, email=email, email1=email1, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
                  no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, return_direction=return_direction,
                  return_flight_date=return_flight_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
-                 return_pickup_time=return_pickup_time, notice=notice, price=price, paid=paid, driver="Sam (0406783559)")
+                 return_pickup_time=return_pickup_time, notice=notice, price=price, paid=paid, driver=sam_driver)
         
         p.save()
 
@@ -1593,12 +1595,14 @@ def booking_detail(request):
                         data['no_of_passenger'], data['no_of_baggage'], data['message'], data['price'], data['return_flight_number'])
             send_mail(data['flight_date'], content,
                       '', ['info@easygoshuttle.com.au'])
+            
+        sam_driver = Driver.objects.get(driver_name="Sam") 
 
         p = Post(name=name, contact=contact, email=email, company_name=company_name, email1=email1, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
                  no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction,
                  return_flight_date=return_flight_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
-                 return_pickup_time=return_pickup_time, message=message, price=price, driver="Sam (0406783559)")
+                 return_pickup_time=return_pickup_time, message=message, price=price, driver=sam_driver)
         
         p.save()
         
@@ -1695,13 +1699,15 @@ def confirm_booking_detail(request):
                         data['pickup_time'], data['direction'], data['street'], data['suburb'], data['no_of_passenger'], 
                         data['no_of_baggage'], data['message'], data['price'] , data['return_flight_number'])
             send_mail(data['flight_date'], content,
-                      '', ['info@easygoshuttle.com.au'])       
+                      '', ['info@easygoshuttle.com.au'])   
+            
+        sam_driver = Driver.objects.get(driver_name="Sam")    
             
         p = Post(name=name, contact=contact, email=email, company_name=company_name, email1=email1, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
                  no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction,
                  return_flight_date=return_flight_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
-                 return_pickup_time=return_pickup_time, message=message, notice=notice, price=price, paid=paid, is_confirmed=is_confirmed, driver="Sam (0406783559)")
+                 return_pickup_time=return_pickup_time, message=message, notice=notice, price=price, paid=paid, is_confirmed=is_confirmed, driver=sam_driver)
         
         p.save()        
                
@@ -1724,30 +1730,36 @@ def sending_email_first_detail(request):
                 
         name = user.name
         
-        html_content = render_to_string("basecamp/html_email-confirmation.html", #"basecamp/html_email-payment-success.html", 
-                                    {'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 'email': user.email, 'email1': user.email1,
-                                     'flight_date': user.flight_date, 'flight_number': user.flight_number,
-                                     'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
-                                     'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
-                                     'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
-                                     'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date, 
-                                     'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
-                                     'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
-                                     'price': user.price, 'paid': user.paid})
+        driver_instance = user.driver
+            
+        if driver_instance:    
+            driver_name = driver_instance.driver_name
+            driver_contact = driver_instance.driver_contact
+            driver_plate = driver_instance.driver_plate
+            driver_car = driver_instance.driver_car
     
-        text_content = strip_tags(html_content)
-
-        email = EmailMultiAlternatives(
-            "Booking confirmation - EasyGo",
-            text_content,
-            '',
-            [email, "info@easygoshuttle.com.au"]
-        )
-        email.attach_alternative(html_content, "text/html")
-        email.send()
-        
-        return render(request, 'basecamp/sending_email_first_detail.html',
-                        {'name' : name, 'email': email}) 
+            html_content = render_to_string("basecamp/html_email-confirmation.html", 
+                                        {'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 'email': user.email, 'email1': user.email1,
+                                         'flight_date': user.flight_date, 'flight_number': user.flight_number,
+                                         'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
+                                         'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
+                                         'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
+                                         'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date, 
+                                         'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
+                                         'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
+                                         'price': user.price, 'paid': user.paid, })
+            text_content = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                "Booking confirmation - EasyGo",
+                text_content,
+                '',
+                [email, "info@easygoshuttle.com.au"]
+            )
+            email.attach_alternative(html_content, "text/html")
+            email.send()
+    
+            return render(request, 'basecamp/sending_email_first_detail.html',
+                            {'name' : name, 'email': email}) 
     
     else:
         return render(request, 'beasecamp/sending_email_first.html', {})   
@@ -1815,12 +1827,14 @@ def save_data_only_detail(request):
         message = request.POST.get('message')        
         price = request.POST.get('price')
         paid = request.POST.get('paid')
+        
+        sam_driver = Driver.objects.get(driver_name="Sam") 
  
         p = Post(company_name=company_name, name=name, contact=contact, email=email, email1=email1, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
                  no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction,
                  return_flight_date=return_flight_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
-                 return_pickup_time=return_pickup_time, message=message, price=price, paid=paid, driver="Sam (0406783559)")
+                 return_pickup_time=return_pickup_time, message=message, price=price, paid=paid, driver=sam_driver)
         
         p.save()                   
         
@@ -2013,12 +2027,14 @@ def return_trip_detail(request):
                         data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
                         data['no_of_passenger'], data['no_of_baggage'], data['message'], data['price'])
         send_mail(data['flight_date'], content,
-                      '', ['info@easygoshuttle.com.au'])       
+                      '', ['info@easygoshuttle.com.au'])     
+        
+        sam_driver = Driver.objects.get(driver_name="Sam")  
                     
         p = Post(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
                  no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, notice=notice, price=price, 
-                 paid=paid, driver="Sam (0406783559)")
+                 paid=paid, driver=sam_driver)
         
         p.save()
         
