@@ -13,6 +13,8 @@ urlpatterns = [
     path('about_us/', views.about_us),
     path('yoosung/', views.yoosung),
     path('soyoung/', views.soyoung),
+    path('pickup_adjustment/', views.pickup_adjustment),
+    path('pickup_adjustment_detail/', views.pickup_adjustment_detail),
     path('sitemap/', views.sitemap),
     path('information/', views.information),    
     path('service/', views.service),
