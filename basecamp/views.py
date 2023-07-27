@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import LoginView
 from django.shortcuts import render, redirect
 from django.core.mail import send_mail
 from basecamp.area import suburbs
@@ -39,6 +41,7 @@ def booking_form(request): return render(request, 'basecamp/booking_form.html')
 def booking(request): return render(request, 'basecamp/booking.html')
 
 
+@login_required
 def confirmation(request): return render(request, 'basecamp/confirmation.html')
 
 
