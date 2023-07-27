@@ -1,5 +1,4 @@
 import os
-import logging
 
 from decouple import config
 
@@ -40,8 +39,7 @@ INSTALLED_APPS = [
     'paypal.standard.ipn',
     'corsheaders',
     'admin_honeypot',
-    'defender', 
-    
+    'defender',   
 
 ]
 

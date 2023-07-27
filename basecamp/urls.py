@@ -1,7 +1,6 @@
 from django.urls import path
 from . import views
 from .views import paypal_ipn, server_error
-from django.contrib.auth.views import LoginView
 from basecamp.area import suburbs
 
 app_name = "basecamp"
@@ -90,5 +89,4 @@ urlpatterns = [
     path('airport-transfers-macquarie-park/', views.macquarie_park),
     path('airport-transfers-mini-bus/', views.mini_bus),
     path('airport-transfers-willoughby/', views.willoughby),
-    path('admin/login/', LoginView.as_view(), name='admin_login'),
 ]
