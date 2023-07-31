@@ -5,8 +5,8 @@ from django.contrib.admin import AdminSite
 
 
 class PostAdmin(admin.ModelAdmin):
-    list_display = ['flight_date', 'name', 'suburb', 'contact',
-                    'pickup_time', 'price', 'is_confirmed', 'cancelled', 
+    list_display = ['flight_date', 'name', 'suburb', 'pickup_time', 
+                    'price', 'is_confirmed', 'cancelled', 
                     'direction',
                      ]
 
@@ -17,8 +17,8 @@ class PostAdmin(admin.ModelAdmin):
 
 
 class InquiryAdmin(admin.ModelAdmin):
-    list_display = ['flight_date', 'name', 'suburb', 'contact',
-                    'created', 'price', 'is_confirmed', 'cancelled', 
+    list_display = ['flight_date', 'name', 'suburb', 'pickup_time', 
+                    'price', 'is_confirmed', 'cancelled', 
                     'return_flight_number',
                      ]
 
