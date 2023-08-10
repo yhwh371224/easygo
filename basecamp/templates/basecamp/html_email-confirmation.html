@@ -224,7 +224,7 @@
                                     <table class="content" style="border-spacing:0;text-align: center;" role="presentation">
 										<tr>
 											<td align="left" style="padding-left:0px;">
-												<p style="Margin:0;font-size:16px;font-weight:bold;line-height:22px;">Hello, {{ name }}&nbsp;&nbsp;{{ company_name }}</p>
+												<p style="Margin:0;font-size:16px;font-weight:bold;line-height:22px;">Hello, {{ name }}&nbsp;&nbsp;</p>
 											</td>
 										</tr>
 										<tr>
@@ -235,10 +235,10 @@
                                                     Please find your booking details below:<br>                                                   
                                                 </p>
 												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">  
-												{% if company_name %}
+												<!-- {% if company_name %}
 													Company: {{ company_name }}<br>
-													Attention: {{ name }}<br>
-												{% endif %}                                                  
+													Name: {{ name }}<br>
+												{% endif %} -->
 												    Contact: {{ contact }}<br>
                                                     Email: {{ email }}&nbsp;&nbsp;{{ email1 }}<br>
 												{% if direction == 'Point to Point' %}
