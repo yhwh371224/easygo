@@ -6,7 +6,7 @@ from django.contrib.admin import AdminSite
 
 class PostAdmin(admin.ModelAdmin):
     list_display = ['flight_date', 'contact', 'name', 'suburb', 
-                    'pickup_time', 'price', 'is_confirmed', 
+                    'pickup_time', 'price', 'paid', 
                     'cancelled', 'direction', 'return_flight_number',
                      ]
 
