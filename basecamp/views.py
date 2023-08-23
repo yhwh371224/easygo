@@ -2197,11 +2197,13 @@ def flight_date_detail(request):
 def pickup_adjustment_detail(request):     
     if request.method == "POST":
         email = request.POST.get('email')
+        name = request.POST.get('name')
         adjustment_time = request.POST.get('adjustment_time')          
         pickup_time = request.POST.get('pickup_time')
         
         user = Post.objects.filter(email=email).first() 
-        
+
+        if not name:        
             html_content = render_to_string("basecamp/html_email-pickup-early.html",
                                         {'name': user.name, 'pickup_time': pickup_time, 
                                          'adjustment_time': adjustment_time, })
@@ -2215,6 +2217,22 @@ def pickup_adjustment_detail(request):
             )
             email.attach_alternative(html_content, "text/html")
             email.send()
+
+        else: 
+            html_content = render_to_string("basecamp/html_email-pickup-early.html",
+                                        {'name': name, 'pickup_time': pickup_time, 
+                                         'adjustment_time': adjustment_time, })
+            text_content = strip_tags(html_content)
+
+            email = EmailMultiAlternatives(
+                "Notice - EasyGo",
+                text_content,
+                '',
+                [email]
+            )
+            email.attach_alternative(html_content, "text/html")
+            email.send()
+
 
         return render(request, 'basecamp/pickup_adjustment_detail.html', {})  
     
