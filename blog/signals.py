@@ -111,7 +111,7 @@ def notify_user_inquiry_point(sender, instance, created, **kwargs):
 
 # PayPal Payment & Google Calendar payment update
 # If modifying these scopes, delete the file token.json.
-SCOPES = ['https://www.googleapis.com/auth/calendar']
+# SCOPES = ['https://www.googleapis.com/auth/calendar']
 
 @receiver(post_save, sender=Payment)
 def notify_user_payment(sender, instance, created, **kwargs):      
