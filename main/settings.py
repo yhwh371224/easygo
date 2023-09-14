@@ -1,6 +1,27 @@
 import os
+import logging
+import sentry_sdk
+
+from sentry_sdk.integrations.django import DjangoIntegration
 
 from decouple import config
+
+
+sentry_sdk.init(
+    dsn= config("dsn"),
+    integrations=[DjangoIntegration()],
+    # If you wish to associate users to errors (assuming you are using
+    # django.contrib.auth) you may enable sending PII data.
+    send_default_pii=True,
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    # We recommend adjusting this value in production.
+    traces_sample_rate=1.0,
+    # Set profiles_sample_rate to 1.0 to profile 100%
+    # of sampled transactions.
+    # We recommend adjusting this value in production.
+    profiles_sample_rate=1.0,
+)
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -12,7 +33,7 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', cast=bool, default=True)
 
 
-ALLOWED_HOSTS = ['easygoshuttle.com.au', 'www.easygoshuttle.com.au', '3.27.44.205']
+ALLOWED_HOSTS = ['easygoshuttle.com.au', 'www.easygoshuttle.com.au', '54.206.144.94']
 
 
 INSTALLED_APPS = [
@@ -44,7 +65,27 @@ INSTALLED_APPS = [
 ]
 
 
-CELERY_BROKER_URL = config('CELERY_BROKER_URL')
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'WARNING',  # Adjust the logging level as needed (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'django.log'),  # Adjust the path and filename
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',  # Adjust the logging level as needed
+            'propagate': True,
+        },
+    },
+}
+
+
+# CELERY_BROKER_URL = config('CELERY_BROKER_URL')
 CELERY_BROKER_URL = config('CELERY_BROKER', 'redis://redis:6379')
 CELERY_RESULT_BACKEND = config('CELERY_BACKEND', 'redis://redis:6379')
 if CELERY_RESULT_BACKEND == 'django-db':
@@ -195,6 +236,7 @@ PAYPAL_CLIENT_ID = config('PAYPAL_CLIENT_ID')
 PAYPAL_CLIENT_SECRET = config('PAYPAL_CLIENT_SECRET')
 PAYPAL_RECEIVER_EMAIL = 'info@easygoshuttle.com.au'
 PAYPAL_IPN_URL = 'https://easygoshuttle.com.au/paypal_ipn/'
+
 
 #CORS settings
 CORS_ALLOWED_ORIGINS = [
