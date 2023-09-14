@@ -1,6 +1,18 @@
 import os
+import logging
+import sentry_sdk
 
 from decouple import config
+from sentry_sdk.integrations.django import DjangoIntegration
+
+
+sentry_sdk.init(
+    dsn="https://d4392a01fca906cd18edbdbc17aac85c@o4505877452619776.ingest.sentry.io/4505877456486400",
+    integrations=[DjangoIntegration()],   
+    send_default_pii=True,    
+    traces_sample_rate=1.0,    
+    profiles_sample_rate=1.0,
+)
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -12,7 +24,7 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', cast=bool, default=True)
 
 
-ALLOWED_HOSTS = ['easygoshuttle.com.au', 'www.easygoshuttle.com.au', '54.206.144.94']
+ALLOWED_HOSTS = ['easygoshuttle.com.au', 'www.easygoshuttle.com.au', '3.27.44.205']
 
 
 INSTALLED_APPS = [
@@ -42,6 +54,26 @@ INSTALLED_APPS = [
     'defender',   
 
 ]
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'WARNING',  # Adjust the logging level as needed (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'django.log'),  # Adjust the path and filename
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',  # Adjust the logging level as needed
+            'propagate': True,
+        },
+    },
+}
 
 
 # CELERY_BROKER_URL = config('CELERY_BROKER_URL')
