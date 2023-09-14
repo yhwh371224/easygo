@@ -253,7 +253,7 @@ def notify_user_payment(sender, instance, created, **kwargs):
 #         }   
         
 #     try:
-#         event = service.events().insert(calendarId='primary', body=event).execute()        
+#         event = service.events().insert(calendarId='info@easygoshuttle.com.au', body=event).execute()        
 #         print('Event created: %s' % (event.get('htmlLink')))
        
 #     except HttpError as error:
