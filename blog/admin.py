@@ -5,26 +5,26 @@ from django.contrib.admin import AdminSite
 
 
 class PostAdmin(admin.ModelAdmin):
-    list_display = ['flight_date', 'contact', 'name', 'suburb', 
+    list_display = ['flight_date', 'contact', 'name', 'suburb', 'street',
                     'pickup_time', 'price', 'paid', 
                     'cancelled', 'direction', 'return_flight_number',
                      ]
 
     list_filter = (('flight_date', DateRangeFilter), 'suburb')
 
-    search_fields = ['flight_date', 'pickup_time', 'suburb', 'email', 
+    search_fields = ['flight_date', 'pickup_time', 'suburb', 'email', 'street', 
                      'name', 'contact']
 
 
 class InquiryAdmin(admin.ModelAdmin):
-    list_display = ['flight_date', 'contact', 'name', 'suburb', 
+    list_display = ['flight_date', 'contact', 'name', 'suburb', 'street', 
                     'pickup_time', 'price', 'is_confirmed', 
                     'cancelled', 'direction', 'return_flight_number',
                      ]
 
     list_filter = (('flight_date', DateRangeFilter), 'suburb')
 
-    search_fields = ['flight_date', 'pickup_time', 'suburb', 'email', 
+    search_fields = ['flight_date', 'pickup_time', 'suburb', 'email', 'street', 
                      'name', 'contact']
     
 
