@@ -260,5 +260,10 @@ def notify_user_payment(sender, instance, created, **kwargs):
 #         print(f'An error occurred: {error}')
 
 
+# if __name__ == '__main__':
+#     main()
+
+
+
 
 
