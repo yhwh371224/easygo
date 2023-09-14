@@ -86,8 +86,8 @@ LOGGING = {
 
 
 # CELERY_BROKER_URL = config('CELERY_BROKER_URL')
-CELERY_BROKER_URL = config('CELERY_BROKER', 'redis://redis:6379')
-CELERY_RESULT_BACKEND = config('CELERY_BACKEND', 'redis://redis:6379')
+CELERY_BROKER_URL = config('CELERY_BROKER', 'redis://redis:6370')
+CELERY_RESULT_BACKEND = config('CELERY_BACKEND', 'redis://redis:6370')
 if CELERY_RESULT_BACKEND == 'django-db':
     INSTALLED_APPS += ['django_celery_results',]
 CELERY_ACCEPT_CONTENT = ['application/json']
