@@ -7,3 +7,6 @@ venv/
 migrations/
 media/
 
+db.sqlite3
+
+
