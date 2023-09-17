@@ -110,7 +110,7 @@ class Driver(models.Model):
 
     def __str__(self):
         return self.driver_name 
-
+    
 
 class BlogAppConfig(AppConfig):
     name = 'blog'

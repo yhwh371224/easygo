@@ -3,29 +3,17 @@ import logging
 import sentry_sdk
 
 from sentry_sdk.integrations.django import DjangoIntegration
-
 from decouple import config
 
 
 sentry_sdk.init(
     dsn= config("dsn"),
     integrations=[DjangoIntegration()],
-    # If you wish to associate users to errors (assuming you are using
-    # django.contrib.auth) you may enable sending PII data.
-    send_default_pii=True,
-    # Set traces_sample_rate to 1.0 to capture 100%
-    # of transactions for performance monitoring.
-    # We recommend adjusting this value in production.
-    traces_sample_rate=1.0,
-    # Set profiles_sample_rate to 1.0 to profile 100%
-    # of sampled transactions.
-    # We recommend adjusting this value in production.
-    profiles_sample_rate=1.0,
+    
 )
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 
 SECRET_KEY = config('SECRET_KEY')
 
@@ -60,7 +48,7 @@ INSTALLED_APPS = [
     'paypal.standard.ipn',
     'corsheaders',
     'admin_honeypot',
-    'defender',   
+    'defender',
 
 ]
 
@@ -70,15 +58,15 @@ LOGGING = {
     'disable_existing_loggers': False,
     'handlers': {
         'file': {
-            'level': 'WARNING',  # Adjust the logging level as needed (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+            'level': 'INFO',  # Adjust the logging level as needed (DEBUG, INFO, WARNING, ERROR, CRITICAL)
             'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs', 'django.log'),  # Adjust the path and filename
+            'filename': os.path.join(BASE_DIR, 'logs/django.log'),  # Adjust the path and filename
         },
     },
     'loggers': {
         'django': {
             'handlers': ['file'],
-            'level': 'DEBUG',  # Adjust the logging level as needed
+            'level': 'INFO',  # Adjust the logging level as needed
             'propagate': True,
         },
     },
