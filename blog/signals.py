@@ -9,6 +9,7 @@ from django.utils.html import strip_tags
 import re
 from django.db.models import Q
 # google calendar 
+import logging
 import os.path
 import os 
 from datetime import date, timedelta
@@ -245,11 +246,10 @@ def create_event_on_calendar(sender, instance, created, **kwargs):
 
         try:
             event = service.events().insert(calendarId='primary', body=event).execute()        
-            print('Event created: %s' % (event.get('htmlLink')))
+            logging.info('Event created: %s' % (event.get('htmlLink')))
 
         except HttpError as error:
-            print(f'An error occurred: {error}')
-
+            logging.error(f'An error occurred: {error}')
 
 
 
