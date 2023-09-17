@@ -207,6 +207,8 @@ SERVICE_ACCOUNT_KEY_FILE = os.environ.get('SERVICE_ACCOUNT_KEY_FILE')
 
 SCOPES = ['https://www.googleapis.com/auth/calendar']
 
+logger = logging.getLogger('google_calendar')  # Get the custom logger
+
 @receiver(post_save, sender=Post)
 def create_event_on_calendar(sender, instance, created, **kwargs):
     if instance.is_confirmed:
@@ -249,7 +251,10 @@ def create_event_on_calendar(sender, instance, created, **kwargs):
             logging.info('Event created: %s' % (event.get('htmlLink')))
 
         except HttpError as error:
-            logging.error(f'An error occurred: {error}')
+            logging.error(f'An error occurred while creating the event: {error}')
+
+        except Exception as e:
+            logging.error(f'An error occurred: {e}')
 
 
 

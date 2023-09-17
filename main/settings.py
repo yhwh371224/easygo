@@ -1,7 +1,6 @@
 import os
 import logging
 import sentry_sdk
-
 from sentry_sdk.integrations.django import DjangoIntegration
 from decouple import config
 
@@ -56,6 +55,12 @@ INSTALLED_APPS = [
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',  # Use curly braces for formatting
+        },
+    },
     'handlers': {
         'file': {
             'level': 'INFO',  # Adjust the logging level as needed (DEBUG, INFO, WARNING, ERROR, CRITICAL)
@@ -65,6 +70,11 @@ LOGGING = {
     },
     'loggers': {
         'django': {
+            'handlers': ['file'],
+            'level': 'INFO',  # Adjust the logging level as needed
+            'propagate': True,
+        },
+        'google_calendar': {  # Create a custom logger for your Google Calendar integration
             'handlers': ['file'],
             'level': 'INFO',  # Adjust the logging level as needed
             'propagate': True,
