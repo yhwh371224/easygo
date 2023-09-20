@@ -237,3 +237,4 @@ WARNING 2023-09-20 22:08:15,698 log Not Found: /phpmyadmin/index.php
 WARNING 2023-09-20 22:25:55,453 log Not Found: //.env
 WARNING 2023-09-20 22:29:42,452 log Forbidden (Referer checking failed - no Referer.): /
 WARNING 2023-09-20 22:31:32,054 log Not Found: //vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php
+WARNING 2023-09-20 22:39:38,698 log Not Found: /.well-known/traffic-advice
