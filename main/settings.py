@@ -66,6 +66,7 @@ LOGGING = {
             'level': 'INFO',  # Adjust the logging level as needed (DEBUG, INFO, WARNING, ERROR, CRITICAL)
             'class': 'logging.FileHandler',
             'filename': os.path.join(BASE_DIR, 'logs/django.log'),  # Adjust the path and filename
+            'formatter': 'verbose',  # Use the 'verbose' formatter
         },
     },
     'loggers': {
