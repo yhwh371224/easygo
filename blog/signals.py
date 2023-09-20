@@ -10,17 +10,11 @@ import re
 from django.db.models import Q
 # google calendar 
 import logging
-from decouple import config
 import os.path
 import os 
-from datetime import date, timedelta
 import datetime
 from google.oauth2 import service_account
-from google.oauth2.credentials import Credentials
-from google_auth_oauthlib.flow import InstalledAppFlow
-from googleapiclient import errors
 from googleapiclient.discovery import build
-from google.auth.transport.requests import Request
 from googleapiclient.errors import HttpError
 
 
@@ -113,7 +107,7 @@ def notify_user_inquiry_point(sender, instance, created, **kwargs):
 
 # PayPal Payment & Google Calendar payment update
 # If modifying these scopes, delete the file token.json.
-# SCOPES = ['https://www.googleapis.com/auth/calendar']
+
 
 @receiver(post_save, sender=Payment)
 def notify_user_payment(sender, instance, created, **kwargs):      
@@ -143,50 +137,6 @@ def notify_user_payment(sender, instance, created, **kwargs):
             post_name1 = Post.objects.filter(Q(email__iexact=instance.payer_email) | Q(name__iregex=r'^%s$' % re.escape(instance.item_name)))[1]
             post_name1.paid = instance.gross_amount
             post_name1.save()
-
-    # ## Google Calendar API
-    #     creds = None    
-    #     if os.path.exists('token.json'):
-    #         creds = Credentials.from_authorized_user_file('token.json', SCOPES)    
-
-    #     if not creds or not creds.valid:
-    #         if creds and creds.expired and creds.refresh_token:
-    #             creds.refresh(Request())
-    #         else:
-    #             flow = InstalledAppFlow.from_client_secrets_file(
-    #                 'credentials.json', SCOPES)
-    #             creds = flow.run_local_server(port=0)
-    #         # Save the credentials for the next run
-    #         with open('token.json', 'w') as token:
-    #             token.write(creds.to_json())    
-        
-    #     if created:            
-    #         service = build('calendar', 'v3', credentials=creds)                    
-    #         title = " ".join(['Paid', post_name.pickup_time, post_name.flight_number, post_name.flight_time, 'p'+str(post_name.no_of_passenger), '$'+post_name.price, post_name.contact])
-    #         address = " ".join([post_name.street, post_name.suburb])
-    #         message = " ".join([post_name.name, post_name.email, post_name.no_of_baggage, post_name.message, str(instance.return_flight_date)])
-    #         flight_date = datetime.datetime.strptime(post_name.flight_date, '%Y-%m-%d') 
-    #         pickup_time = datetime.datetime.strptime(post_name.pickup_time, '%H:%M')
-    #         start = datetime.datetime.combine(flight_date.date(), pickup_time.time())        
-    #         end = start + datetime.timedelta(hours=1)
-    #         event = {
-    #             'summary': title,
-    #             'location': address,
-    #             'start': {
-    #                 'dateTime': start.strftime('%Y-%m-%dT%H:%M:%S'),
-    #                 'timeZone': 'Australia/Sydney',
-    #             },
-    #             'end': {
-    #                 'dateTime': end.strftime('%Y-%m-%dT%H:%M:%S'),
-    #                 'timeZone': 'Australia/Sydney',
-    #             },
-    #             'description': message,
-    #         }   
-    #     try:
-    #         event = service.events().insert(calendarId='primary', body=event).execute()        
-    #         print('Event created: %s' % (event.get('htmlLink')))
-    #     except HttpError as error:
-    #         print(f'An error occurred: {error}')
             
     else:
         html_content = render_to_string("basecamp/html_email-noIdentity.html",
@@ -204,60 +154,59 @@ def notify_user_payment(sender, instance, created, **kwargs):
 
 
 
-# os.environ['SERVICE_ACCOUNT_KEY_FILE'] = '/home/ubuntu/github/easygo/secure/service-account-key.json'
+os.environ['SERVICE_ACCOUNT_KEY_FILE'] = '/home/ubuntu/github/easygo/secure/service-account-key.json'
 
-# SERVICE_ACCOUNT_KEY_FILE = os.environ.get('SERVICE_ACCOUNT_KEY_FILE')
+SERVICE_ACCOUNT_KEY_FILE = os.environ.get('SERVICE_ACCOUNT_KEY_FILE')
 
-# SCOPES = ['https://www.googleapis.com/auth/calendar']
+SCOPES = ['https://www.googleapis.com/auth/calendar']
 
-# logger = logging.getLogger('google_calendar')  # Get the custom logger
+logger = logging.getLogger('google_calendar')  # Get the custom logger
 
-# @receiver(post_save, sender=Post)
-# def create_event_on_calendar(sender, instance, created, **kwargs):
-#     if instance.is_confirmed:
+@receiver(post_save, sender=Post)
+def create_event_on_calendar(sender, instance, created, **kwargs):
+       
+        google_credentials = service_account.Credentials.from_service_account_file(
+            SERVICE_ACCOUNT_KEY_FILE, scopes=SCOPES
+        )
     
-#         google_credentials = service_account.Credentials.from_service_account_file(
-#             SERVICE_ACCOUNT_KEY_FILE, scopes=SCOPES
-#         )
+        service = build('calendar', 'v3', credentials=google_credentials)
     
-#         service = build('calendar', 'v3', credentials=google_credentials)
-    
-#         if created:
-#             # Create a Google Calendar API service object
-#             service = build('calendar', 'v3', credentials=google_credentials)        
-#             # Call the funtion that creates the event in Google Calendar
-#             title = " ".join([instance.pickup_time, instance.flight_number, instance.flight_time, 'p'+str(instance.no_of_passenger), '$'+instance.price, instance.contact])
-#             address = " ".join([instance.street, instance.suburb])
-#             message = " ".join([instance.name, instance.email, instance.no_of_baggage, instance.message, str(instance.return_flight_date)])
-#             # flight_date = datetime.datetime.combine(instance.flight_date, datetime.time())
-#             flight_date = datetime.datetime.strptime(str(instance.flight_date), '%Y-%m-%d')
-#             pickup_time = datetime.datetime.strptime(instance.pickup_time, '%H:%M')
-#             start = datetime.datetime.combine(flight_date.date(), pickup_time.time())        
-#             end = start + datetime.timedelta(hours=1)    
+        if created:
+            # Create a Google Calendar API service object
+            service = build('calendar', 'v3', credentials=google_credentials)        
+            # Call the funtion that creates the event in Google Calendar
+            title = " ".join([instance.pickup_time, instance.flight_number, instance.flight_time, 'p'+str(instance.no_of_passenger), '$'+instance.price, instance.contact])
+            address = " ".join([instance.street, instance.suburb])
+            message = " ".join([instance.name, instance.email, instance.no_of_baggage, instance.message, str(instance.return_flight_date)])
+            # flight_date = datetime.datetime.combine(instance.flight_date, datetime.time())
+            flight_date = datetime.datetime.strptime(str(instance.flight_date), '%Y-%m-%d')
+            pickup_time = datetime.datetime.strptime(instance.pickup_time, '%H:%M')
+            start = datetime.datetime.combine(flight_date.date(), pickup_time.time())        
+            end = start + datetime.timedelta(hours=1)    
 
-#             event = {
-#                 'summary': title,
-#                 'location': address,
-#                 'start': {
-#                     'dateTime': start.strftime('%Y-%m-%dT%H:%M:%S'),
-#                     'timeZone': '(GMT+10:00) Eastern Australia Time - Sydney',
-#                 },
-#                 'end': {
-#                     'dateTime': end.strftime('%Y-%m-%dT%H:%M:%S'),
-#                     'timeZone': '(GMT+10:00) Eastern Australia Time - Sydney',
-#                 },
-#                 'description': message,
-#             }   
+            event = {
+                'summary': title,
+                'location': address,
+                'start': {
+                    'dateTime': start.strftime('%Y-%m-%dT%H:%M:%S'),
+                    'timeZone': '(GMT+10:00) Eastern Australia Time - Sydney',
+                },
+                'end': {
+                    'dateTime': end.strftime('%Y-%m-%dT%H:%M:%S'),
+                    'timeZone': '(GMT+10:00) Eastern Australia Time - Sydney',
+                },
+                'description': message,
+            }   
 
-#         try:
-#             event = service.events().insert(calendarId='primary', body=event).execute()        
-#             logging.info('Event created: %s' % (event.get('htmlLink')))
+        try:
+            event = service.events().insert(calendarId='primary', body=event).execute()        
+            logging.info('Event created: %s' % (event.get('htmlLink')))
 
-#         except HttpError as error:
-#             logging.error(f'An error occurred while creating the event: {error}')
+        except HttpError as error:
+            logging.error(f'An error occurred while creating the event: {error}')
 
-#         except Exception as e:
-#             logging.error(f'An error occurred: {e}')
+        except Exception as e:
+            logging.error(f'An error occurred: {e}')
 
 
 
