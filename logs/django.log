@@ -1,74 +1,18 @@
-WARNING 2023-09-20 03:34:30,436 log Not Found: /ReportServer
-WARNING 2023-09-20 03:57:45,393 log Not Found: /Core/Skin/Login.aspx
-ERROR 2023-09-20 04:21:17,437 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-09-20 04:21:17,442 log Bad Request: /
-WARNING 2023-09-20 04:35:54,701 log Not Found: /.env
-WARNING 2023-09-20 04:35:55,851 log Forbidden (Referer checking failed - no Referer.): /
-WARNING 2023-09-20 05:08:13,346 log Not Found: /.env
-WARNING 2023-09-20 05:31:15,992 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-09-20 05:49:23,734 log Not Found: /shop/pl/product/moncler-design-kobiety-dol-kurtki-stoja-kolnierz-morela/
-WARNING 2023-09-20 05:56:40,563 log Not Found: /.env
-WARNING 2023-09-20 05:56:41,754 log Forbidden (Referer checking failed - no Referer.): /
-WARNING 2023-09-20 07:04:35,019 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-09-20 07:09:02,917 log Not Found: /owa/
-WARNING 2023-09-20 07:09:18,990 log Not Found: /autodiscover/autodiscover.json
-WARNING 2023-09-20 07:12:57,912 log Not Found: /robots.txt
-WARNING 2023-09-20 07:26:50,488 log Not Found: /robots.txt
-WARNING 2023-09-20 07:40:06,545 log Not Found: /owa/auth/x.js
-WARNING 2023-09-20 08:01:50,592 log Not Found: //wp-admin/css/colors/blue/blue.php
-WARNING 2023-09-20 08:07:28,581 log Not Found: /.well-known/traffic-advice
-WARNING 2023-09-20 08:15:47,174 log Not Found: /apple-touch-icon-120x120-precomposed.png
-WARNING 2023-09-20 08:15:47,267 log Not Found: /apple-touch-icon-120x120.png
-WARNING 2023-09-20 08:18:34,363 log Not Found: /robots.txt
-ERROR 2023-09-20 08:21:01,216 log Internal Server Error: /paypal_ipn/
-WARNING 2023-09-20 08:22:45,196 log Not Found: /wp-config.php.bak
-WARNING 2023-09-20 08:22:46,599 log Not Found: /wp-config.php~
-WARNING 2023-09-20 08:38:02,785 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-09-20 09:05:02,939 log Forbidden (Referer checking failed - no Referer.): /admin/login/
-WARNING 2023-09-20 09:10:05,959 log Not Found: /home/robots.txt
-WARNING 2023-09-20 09:10:05,966 log Not Found: /home/sitemap.xml
-WARNING 2023-09-20 09:10:08,816 log Not Found: /home/robots.txt
-WARNING 2023-09-20 09:10:08,817 log Not Found: /home/sitemap.xml
-WARNING 2023-09-20 09:36:34,131 log Not Found: /robots.txt
-WARNING 2023-09-20 09:36:37,754 log Not Found: /悉尼机场巴士/
-WARNING 2023-09-20 09:36:39,404 log Not Found: /悉尼机场巴士/
-WARNING 2023-09-20 09:36:42,816 log Not Found: /悉尼机场接送/
-WARNING 2023-09-20 09:36:44,493 log Not Found: /悉尼机场接送/
-WARNING 2023-09-20 09:36:47,918 log Not Found: /悉尼机场接送服务/
-WARNING 2023-09-20 09:36:49,630 log Not Found: /悉尼机场接送服务/
-WARNING 2023-09-20 09:36:53,232 log Not Found: /悉尼机场接送服务的最佳拍档/
-WARNING 2023-09-20 09:36:55,026 log Not Found: /悉尼机场接送服务的最佳拍档/
-WARNING 2023-09-20 09:36:58,733 log Not Found: /机场接送-悉尼/
-WARNING 2023-09-20 09:37:00,450 log Not Found: /机场接送-悉尼/
-WARNING 2023-09-20 09:43:53,787 log Not Found: /wp-content/plugins/WordPressCore/include.php
-WARNING 2023-09-20 09:43:55,354 log Not Found: /wp-includes/images/include.php
-WARNING 2023-09-20 09:46:34,860 log Not Found: /.env
-WARNING 2023-09-20 09:46:36,007 log Forbidden (Referer checking failed - no Referer.): /
-WARNING 2023-09-20 10:11:32,796 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-09-20 10:19:26,791 log Not Found: /robots.txt
-WARNING 2023-09-20 10:25:55,405 log Not Found: /robots.txt
-WARNING 2023-09-20 10:39:53,138 log Not Found: /robots.txt
-WARNING 2023-09-20 10:40:02,196 log Not Found: /robots.txt
-WARNING 2023-09-20 11:25:05,932 log Not Found: /shop/da/product/moncler-lievre-klassiske-kvinder-dunjakker-rod-kort/
-WARNING 2023-09-20 11:32:02,765 log Not Found: /robots.txt
-WARNING 2023-09-20 11:33:45,133 log Not Found: /robots.txt
-WARNING 2023-09-20 11:37:38,393 log Not Found: /.env
-WARNING 2023-09-20 11:37:39,701 log Forbidden (Referer checking failed - no Referer.): /
-WARNING 2023-09-20 11:45:02,505 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-09-20 11:51:05,123 log Not Found: /shop/pl/product/moncler-pety-najwyzszej-jakosci-damskie-kamizelki-puchowe-mauve/
-WARNING 2023-09-20 11:55:10,135 log Not Found: /.env
-WARNING 2023-09-20 11:55:11,295 log Forbidden (Referer checking failed - no Referer.): /
-WARNING 2023-09-20 11:55:45,735 log Not Found: /robots.txt
-WARNING 2023-09-20 11:56:17,010 log Not Found: /.git/config
-WARNING 2023-09-20 11:56:17,838 log Not Found: /.git/config
-WARNING 2023-09-20 11:56:19,186 log Not Found: /.git/config
-WARNING 2023-09-20 12:22:20,277 log Not Found: /phpmyadmin/index.php
-WARNING 2023-09-20 12:25:37,975 log Not Found: /wordpress/
-WARNING 2023-09-20 12:25:38,077 log Not Found: /new/
-WARNING 2023-09-20 12:25:38,192 log Not Found: /old/
-WARNING 2023-09-20 12:25:38,322 log Not Found: /OLD/
-WARNING 2023-09-20 12:25:38,429 log Not Found: /backup/
-ERROR 2023-09-20 12:33:38,596 log Internal Server Error: /inquiry_details/
+WARNING 2023-09-21 03:55:34,516 log Not Found: /.env
+WARNING 2023-09-21 03:55:35,519 log Not Found: /wp-config.php
+WARNING 2023-09-21 04:03:42,676 log Not Found: /robots.txt
+WARNING 2023-09-21 04:19:41,655 log Not Found: /wp-content/plugins/WordPressCore/include.php
+WARNING 2023-09-21 04:19:48,791 log Not Found: /wp-includes/images/include.php
+WARNING 2023-09-21 04:19:50,370 log Not Found: /wp-includes/widgets/include.php
+WARNING 2023-09-21 04:20:13,100 log Not Found: /wp-login.php
+WARNING 2023-09-21 04:28:19,413 log Not Found: /.env
+WARNING 2023-09-21 04:28:20,544 log Not Found: /wp-config.php
+WARNING 2023-09-21 04:56:14,756 log Not Found: /robots.txt
+WARNING 2023-09-21 04:59:24,258 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-09-21 05:23:58,643 log Not Found: /ko/product/남성-스카프-모피-칼라-네이비-블루/
+WARNING 2023-09-21 05:44:54,510 log Not Found: /.env
+WARNING 2023-09-21 05:44:56,655 log Not Found: /wp-config.php
+ERROR 2023-09-21 05:49:51,696 log Internal Server Error: /inquiry_details/
 Traceback (most recent call last):
   File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
     response = get_response(request)
@@ -108,133 +52,27 @@ Traceback (most recent call last):
     return self.to_python(value)
   File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py", line 1369, in to_python
     raise exceptions.ValidationError(
-django.core.exceptions.ValidationError: ['“W Cwojg” value has an invalid date format. It must be in YYYY-MM-DD format.']
-WARNING 2023-09-20 12:50:31,675 log Not Found: /robots.txt
-WARNING 2023-09-20 12:53:11,307 log Not Found: /ecp/Current/exporttool/microsoft.exchange.ediscovery.exporttool.application
-WARNING 2023-09-20 12:58:30,346 log Not Found: /shop/da/product/moncler-breval-2/
-WARNING 2023-09-20 13:15:28,162 log Not Found: /.well-known/traffic-advice
-WARNING 2023-09-20 13:15:59,533 log Not Found: /.env
-WARNING 2023-09-20 13:16:00,414 log Forbidden (Referer checking failed - no Referer.): /
-WARNING 2023-09-20 13:18:36,888 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-09-20 13:25:45,358 log Not Found: /robots.txt
-WARNING 2023-09-20 13:30:09,514 log Not Found: /.env
-WARNING 2023-09-20 13:30:10,578 log Forbidden (Referer checking failed - no Referer.): /
-WARNING 2023-09-20 13:30:14,201 log Not Found: /.env
-WARNING 2023-09-20 13:30:15,331 log Forbidden (Referer checking failed - no Referer.): /
-WARNING 2023-09-20 13:32:04,949 log Not Found: /robots.txt
-WARNING 2023-09-20 13:37:18,816 log Not Found: /.well-known/acme-challenge/SRV6N4T-KJR6UURNAZ0OQDAHW1904O3D
-WARNING 2023-09-20 13:37:19,848 log Not Found: /.well-known/acme-challenge/G0GD7KFAIY3UC386X914CK7VD-18-0TA
-WARNING 2023-09-20 13:47:33,275 log Not Found: /ab2g
-WARNING 2023-09-20 13:47:34,097 log Not Found: /ab2h
-WARNING 2023-09-20 13:47:40,610 log Not Found: /t4
-WARNING 2023-09-20 14:04:41,155 log Not Found: /robots.txt
-WARNING 2023-09-20 14:04:42,783 log Not Found: /humans.txt
-WARNING 2023-09-20 14:04:44,402 log Not Found: /ads.txt
-WARNING 2023-09-20 14:20:34,760 log Not Found: /robots.txt
-WARNING 2023-09-20 14:32:29,379 log Forbidden (CSRF cookie not set.): /confirm_booking_detail/
-WARNING 2023-09-20 14:37:42,717 log Not Found: /robots.txt
-WARNING 2023-09-20 14:42:10,008 log Not Found: /autodiscover/autodiscover.json
-WARNING 2023-09-20 14:52:10,080 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-09-20 14:53:05,566 log Not Found: /.env
-WARNING 2023-09-20 15:17:21,904 log Not Found: /wp-content/plugins/videowhisper-video-conference-integration/vc/flash_detect_min.js
-WARNING 2023-09-20 15:43:07,965 log Not Found: /robots.txt
-WARNING 2023-09-20 15:49:10,494 log Not Found: /shop/ko/product-tag/저렴한-남성용-자켓/
-WARNING 2023-09-20 15:52:54,262 log Not Found: /robots.txt
-WARNING 2023-09-20 15:52:59,626 log Not Found: /robots.txt
-ERROR 2023-09-20 15:57:11,459 log Internal Server Error: /paypal_ipn/
-WARNING 2023-09-20 15:59:40,848 log Not Found: /robots.txt
-WARNING 2023-09-20 16:26:14,270 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-09-20 16:43:47,317 log Not Found: /ads.txt
-WARNING 2023-09-20 17:04:17,247 log Not Found: /th1s_1s_a_4o4.html
-WARNING 2023-09-20 17:04:48,748 log Not Found: /airport-transfers-toongabbie/sms:+61406883355
-WARNING 2023-09-20 17:04:49,480 log Not Found: /payonline/sms:+61406883355
-WARNING 2023-09-20 17:04:50,238 log Not Found: /airport-transfers-st-ives/sms:+61406883355
-WARNING 2023-09-20 17:04:50,905 log Not Found: /information/sms:+61406883355
-WARNING 2023-09-20 17:04:51,560 log Not Found: /service/sms:+61406883355
-WARNING 2023-09-20 17:04:52,265 log Not Found: /airport-transfers-epping/sms:+61406883355
-WARNING 2023-09-20 17:04:52,919 log Not Found: /inquiry/sms:+61406883355
-WARNING 2023-09-20 17:04:53,596 log Not Found: /inquiry2/sms:+61406883355
-WARNING 2023-09-20 17:04:54,244 log Not Found: /airport-transfers-ryde/sms:+61406883355
-WARNING 2023-09-20 17:04:54,912 log Not Found: /airport-transfers-blacktown/sms:+61406883355
-WARNING 2023-09-20 17:04:55,602 log Not Found: /airport-transfers-parramatta/sms:+61406883355
-WARNING 2023-09-20 17:04:56,272 log Not Found: /privacy/sms:+61406883355
-WARNING 2023-09-20 17:04:56,969 log Not Found: /p2p/sms:+61406883355
-WARNING 2023-09-20 17:04:58,530 log Not Found: /meeting_point/sms:+61406883355
-WARNING 2023-09-20 17:04:59,319 log Not Found: /inquiry_details2/sms:+61406883355
-WARNING 2023-09-20 17:05:00,101 log Not Found: /booking_form/sms:+61406883355
-WARNING 2023-09-20 17:05:00,748 log Not Found: /airport-transfers-hornsby/sms:+61406883355
-WARNING 2023-09-20 17:05:01,414 log Not Found: /airport-transfers-chatswood/sms:+61406883355
-WARNING 2023-09-20 17:05:02,093 log Not Found: /airport-transfers-thornleigh/sms:+61406883355
-WARNING 2023-09-20 17:05:04,137 log Not Found: /terms/sms:+61406883355
-WARNING 2023-09-20 17:05:06,075 log Not Found: /home/sms:+61406883355
-WARNING 2023-09-20 17:05:06,745 log Not Found: /payonline/tell:+61406883355
-WARNING 2023-09-20 17:05:08,571 log Not Found: /inquiry_details/sms:+61406883355
-WARNING 2023-09-20 17:05:09,222 log Not Found: /p2p_single/sms:+61406883355
-WARNING 2023-09-20 17:05:11,752 log Not Found: /price_detail/sms:+61406883355
-WARNING 2023-09-20 17:05:12,409 log Not Found: /about_us/sms:+61406883355
-WARNING 2023-09-20 17:05:18,281 log Not Found: /booking_form_detail/sms:+61406883355
-WARNING 2023-09-20 17:05:18,934 log Not Found: /inquiry_details1/sms:+61406883355
-WARNING 2023-09-20 17:06:29,065 log Forbidden (Referer checking failed - no Referer.): /accounts/login/
-WARNING 2023-09-20 17:16:27,971 log Forbidden (Referer checking failed - no Referer.): /inquiry_details1/
-WARNING 2023-09-20 17:19:30,992 log Forbidden (Referer checking failed - no Referer.): /inquiry_details2/
-WARNING 2023-09-20 17:23:24,083 log Forbidden (Referer checking failed - no Referer.): /price_detail/
-WARNING 2023-09-20 17:33:25,675 log Forbidden (Referer checking failed - no Referer.): /inquiry_details/
-WARNING 2023-09-20 17:33:27,263 log Forbidden (Referer checking failed - no Referer.): /booking_form_detail/
-ERROR 2023-09-20 17:35:02,167 log Internal Server Error: /confirm_booking_detail/
-Traceback (most recent call last):
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
-    response = get_response(request)
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/views.py", line 84, in sentry_wrapped_callback
-    return callback(request, *args, **kwargs)
-  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1723, in confirm_booking_detail
-    p.save()
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 806, in save
-    self.save_base(
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 872, in save_base
-    post_save.send(
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/dispatch/dispatcher.py", line 176, in send
-    return [
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/dispatch/dispatcher.py", line 177, in <listcomp>
-    (receiver, receiver(signal=self, sender=sender, **named))
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/signals_handlers.py", line 66, in wrapper
-    return receiver(*args, **kwargs)
-  File "/home/ubuntu/github/easygo/blog/signals.py", line 242, in create_event_on_calendar
-    'dateTime': start.striptime('%Y-%m-%dT%H:%M:%S'),
-AttributeError: 'datetime.datetime' object has no attribute 'striptime'
-WARNING 2023-09-20 17:42:14,444 log Not Found: /wordpress/
-WARNING 2023-09-20 17:43:45,849 log Not Found: /contact-us/
-WARNING 2023-09-20 18:00:13,078 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-09-20 18:07:40,730 log Not Found: /apple-touch-icon-120x120-precomposed.png
-WARNING 2023-09-20 18:07:40,794 log Not Found: /apple-touch-icon-120x120.png
-WARNING 2023-09-20 18:36:20,775 log Not Found: /.git/config
-WARNING 2023-09-20 18:36:21,600 log Not Found: /.git/config
-WARNING 2023-09-20 18:36:23,020 log Not Found: /.git/config
-WARNING 2023-09-20 18:38:27,070 log Not Found: /robots.txt
-WARNING 2023-09-20 18:38:58,168 log Not Found: /Public/home/js/check.js
-WARNING 2023-09-20 18:40:13,370 log Not Found: /robots.txt
-WARNING 2023-09-20 18:42:49,982 log Not Found: /robots.txt
-WARNING 2023-09-20 18:43:05,816 log Not Found: /robots.txt
-WARNING 2023-09-20 19:34:05,558 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-09-20 20:04:59,609 log Not Found: /.env
-WARNING 2023-09-20 20:05:01,135 log Forbidden (Referer checking failed - no Referer.): /
-ERROR 2023-09-20 20:07:48,915 exception Invalid HTTP_HOST header: '/run/gunicorn.sock:'. The domain name provided is not valid according to RFC 1034/1035.
-WARNING 2023-09-20 20:07:49,017 log Bad Request: /
-WARNING 2023-09-20 20:08:11,135 log Not Found: /robots.txt
-WARNING 2023-09-20 20:08:13,018 log Not Found: /.well-known/security.txt
-WARNING 2023-09-20 20:35:00,682 log Not Found: /contact/
-WARNING 2023-09-20 20:36:29,974 log Not Found: /.env
-WARNING 2023-09-20 20:36:31,300 log Forbidden (Referer checking failed - no Referer.): /
-WARNING 2023-09-20 21:03:48,081 log Not Found: /robots.txt
-WARNING 2023-09-20 21:08:15,314 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-09-20 21:28:42,560 log Not Found: /robots.txt
-WARNING 2023-09-20 21:31:06,155 log Not Found: /wp-content/plugins/WordPressCore/include.php
-WARNING 2023-09-20 21:31:07,585 log Not Found: /wp-includes/images/include.php
-WARNING 2023-09-20 21:31:09,017 log Not Found: /wp-includes/widgets/include.php
-WARNING 2023-09-20 21:58:05,022 log Not Found: /owa/auth/logon.aspx
-WARNING 2023-09-20 22:08:15,698 log Not Found: /phpmyadmin/index.php
-WARNING 2023-09-20 22:25:55,453 log Not Found: //.env
-WARNING 2023-09-20 22:29:42,452 log Forbidden (Referer checking failed - no Referer.): /
-WARNING 2023-09-20 22:31:32,054 log Not Found: //vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php
-WARNING 2023-09-20 22:39:38,698 log Not Found: /.well-known/traffic-advice
+django.core.exceptions.ValidationError: ['“D q U Jeypo” value has an invalid date format. It must be in YYYY-MM-DD format.']
+WARNING 2023-09-21 06:02:10,629 log Not Found: /vpn/index.html
+WARNING 2023-09-21 06:02:52,442 log Not Found: /geoserver/web/
+WARNING 2023-09-21 06:05:08,061 log Not Found: /.git/config
+WARNING 2023-09-21 06:33:14,321 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-09-21 07:16:36,145 log Not Found: /ab2g
+WARNING 2023-09-21 07:16:36,972 log Not Found: /ab2h
+WARNING 2023-09-21 07:16:43,555 log Not Found: /t4
+WARNING 2023-09-21 08:07:43,588 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-09-21 08:15:24,819 log Not Found: /.env
+WARNING 2023-09-21 08:33:31,078 log Not Found: /wp-content/plugins/WordPressCore/include.php
+WARNING 2023-09-21 08:33:43,232 log Not Found: /wp-includes/images/include.php
+WARNING 2023-09-21 08:33:54,142 log Not Found: /wp-includes/widgets/include.php
+WARNING 2023-09-21 08:41:53,952 log Not Found: /robots.txt
+WARNING 2023-09-21 08:42:22,436 log Not Found: /robots.txt
+WARNING 2023-09-21 08:44:50,429 log Not Found: /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php
+WARNING 2023-09-21 08:44:55,985 log Not Found: /.env
+WARNING 2023-09-21 08:48:28,850 log Not Found: /.env
+WARNING 2023-09-21 08:48:30,175 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-09-21 08:49:32,743 log Forbidden (Referer checking failed - no Referer.): /admin/login/
+WARNING 2023-09-21 09:01:34,971 log Not Found: /helpdesk/WebObjects/Helpdesk.woa
+ERROR 2023-09-21 09:11:17,812 log Internal Server Error: /paypal_ipn/
+WARNING 2023-09-21 09:13:19,791 log Not Found: /.well-known/traffic-advice
+WARNING 2023-09-21 09:41:20,266 log Not Found: /Core/Skin/Login.aspx
