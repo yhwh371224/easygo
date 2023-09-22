@@ -163,6 +163,7 @@ def notify_user_payment(sender, instance, created, **kwargs):
 SCOPES = ['https://www.googleapis.com/auth/calendar']
 
 
+@receiver(post_save, sender=Post)
 def create_event_on_calendar(sender, instance, created, **kwargs):
     creds = None
     # The file token.json stores the user's access and refresh tokens, and is
@@ -191,7 +192,7 @@ def create_event_on_calendar(sender, instance, created, **kwargs):
         title = " ".join([instance.pickup_time, instance.flight_number,     instance.flight_time, 'p'+str(instance.no_of_passenger), '$'+instance.price, instance.contact])
         address = " ".join([instance.street, instance.suburb])
         message = " ".join([instance.name, instance.email, instance.no_of_baggage, instance.message])
-        flight_date = datetime.datetime.strptime(instance.flight_date, '%Y-%m-%d')
+        flight_date = datetime.datetime.strptime(str(instance.flight_date), '%Y-%m-%d')
         pickup_time = datetime.datetime.strptime(instance.pickup_time, '%H:%M')
         start = datetime.datetime.combine(flight_date, pickup_time.time())        
         end = start + datetime.timedelta(hours=1)
