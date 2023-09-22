@@ -166,18 +166,21 @@ SCOPES = ['https://www.googleapis.com/auth/calendar']
 @receiver(post_save, sender=Post)
 def create_event_on_calendar(sender, instance, created, **kwargs):
     creds = None
-    # The file token.json stores the user's access and refresh tokens, and is
-    # created automatically when the authorization flow completes for the first
-    # time.
-    if os.path.exists('token.json'):
-        creds = Credentials.from_authorized_user_file('token.json', SCOPES)    
+
+    secure_directory = 'secure/'
+
+    token_file_path = os.path.join(secure_directory, 'token.json')
+
+    if os.path.exists(token_file_path):
+        creds = Credentials.from_authorized_user_file(token_file_path, SCOPES)    
     # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
         else:
+            credentials_file_path = os.path.join(secure_directory, 'credentials.json')
             flow = InstalledAppFlow.from_client_secrets_file(
-                'credentials.json', SCOPES)
+                credentials_file_path, SCOPES)
             creds = flow.run_local_server(port=0)
         # Save the credentials for the next run
         with open('token.json', 'w') as token:
