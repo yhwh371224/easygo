@@ -1129,7 +1129,7 @@ def p2p(request):
         p2p_baggage = request.POST.get('p2p_baggage')
         p2p_message = request.POST.get('p2p_message')
 
-        html_content = render_to_string("basecamp/html_email-p2p.html", 
+        html_content = render_to_string("basecamp/html_email-p2p-confirmation.html", 
             {'p2p_name': p2p_name, 'p2p_phone': p2p_phone, 'p2p_email': p2p_email, 'p2p_date': p2p_date, 
             'first_pickup_location': first_pickup_location, 'first_putime': first_putime, 'first_dropoff_location': first_dropoff_location, 
             'second_pickup_location': second_pickup_location, 'second_putime': second_putime, 'second_dropoff_location': second_dropoff_location, 
@@ -2067,7 +2067,7 @@ def invoice_detail(request):
                                          'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date,
                                          'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
                                          'street': user.street, 'suburb': user.suburb, 'no_of_passenger': user.no_of_passenger, 
-                                         'price': user.price, 'paid': user.paid })
+                                         'price': user.price, 'paid': user.paid, 'message': user.message })
 
             text_content = strip_tags(html_content)
 
@@ -2089,7 +2089,7 @@ def invoice_detail(request):
                                          'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date,
                                          'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
                                          'street': user.street, 'suburb': user.suburb, 'no_of_passenger': user.no_of_passenger, 
-                                         'price': user.price, 'paid': user.paid })
+                                         'price': user.price, 'paid': user.paid, 'message': user.message })
 
             text_content = strip_tags(html_content)
 
