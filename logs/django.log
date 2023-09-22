@@ -54,3 +54,6 @@ WARNING 2023-09-22 13:14:25,926 log Not Found: /robots.txt
 WARNING 2023-09-22 13:37:19,654 log Not Found: /.well-known/acme-challenge/P2ZZKU97JY-QVFLWNCJ54T1UA8U9_U3F
 WARNING 2023-09-22 13:37:20,690 log Not Found: /.well-known/acme-challenge/BC-3DWAEV2ZAMEKTGPHVE3X726LYZ871
 WARNING 2023-09-22 13:54:01,201 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-09-22 14:15:57,449 log Not Found: /.well-known/traffic-advice
+WARNING 2023-09-22 14:58:46,367 log Not Found: /robots.txt
+WARNING 2023-09-22 15:01:02,331 log Not Found: /robots.txt
