@@ -6,3 +6,66 @@ WARNING 2023-09-23 04:03:28,213 log Not Found: /Core/Skin/Login.aspx
 WARNING 2023-09-23 04:22:55,204 log Not Found: /wp-login.php
 WARNING 2023-09-23 04:42:30,244 log Not Found: /shop/fi/product/moncler-takit-lapset-herbert-sininen/
 WARNING 2023-09-23 05:29:39,349 log Not Found: /robots.txt
+WARNING 2023-09-23 05:37:13,980 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-09-23 06:01:16,511 log Not Found: /.env
+WARNING 2023-09-23 06:01:17,671 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-09-23 06:04:07,847 log Not Found: /robots.txt
+WARNING 2023-09-23 06:11:35,812 log Not Found: /robots.txt
+WARNING 2023-09-23 06:11:36,986 log Not Found: /accounts/login/index.html
+WARNING 2023-09-23 06:17:18,826 log Not Found: /product/kids-moncler-jackets-girl-dark-blue/
+WARNING 2023-09-23 06:33:28,847 log Not Found: //wp-includes/wlwmanifest.xml
+WARNING 2023-09-23 06:33:28,988 log Not Found: //xmlrpc.php
+WARNING 2023-09-23 06:33:29,184 log Not Found: //blog/wp-includes/wlwmanifest.xml
+WARNING 2023-09-23 06:33:29,284 log Not Found: //web/wp-includes/wlwmanifest.xml
+WARNING 2023-09-23 06:33:29,383 log Not Found: //wordpress/wp-includes/wlwmanifest.xml
+WARNING 2023-09-23 06:33:29,483 log Not Found: //website/wp-includes/wlwmanifest.xml
+WARNING 2023-09-23 06:33:29,582 log Not Found: //wp/wp-includes/wlwmanifest.xml
+WARNING 2023-09-23 06:33:29,681 log Not Found: //news/wp-includes/wlwmanifest.xml
+WARNING 2023-09-23 06:33:29,780 log Not Found: //2018/wp-includes/wlwmanifest.xml
+WARNING 2023-09-23 06:33:29,921 log Not Found: //2019/wp-includes/wlwmanifest.xml
+WARNING 2023-09-23 06:33:30,020 log Not Found: //shop/wp-includes/wlwmanifest.xml
+WARNING 2023-09-23 06:33:30,119 log Not Found: //wp1/wp-includes/wlwmanifest.xml
+WARNING 2023-09-23 06:33:30,219 log Not Found: //test/wp-includes/wlwmanifest.xml
+WARNING 2023-09-23 06:33:30,318 log Not Found: //media/wp-includes/wlwmanifest.xml
+WARNING 2023-09-23 06:33:30,417 log Not Found: //wp2/wp-includes/wlwmanifest.xml
+WARNING 2023-09-23 06:33:30,529 log Not Found: //site/wp-includes/wlwmanifest.xml
+WARNING 2023-09-23 06:33:30,629 log Not Found: //cms/wp-includes/wlwmanifest.xml
+WARNING 2023-09-23 06:33:30,728 log Not Found: //sito/wp-includes/wlwmanifest.xml
+WARNING 2023-09-23 06:42:45,497 log Not Found: /robots.txt
+WARNING 2023-09-23 06:45:17,002 log Not Found: /re_confirm/
+ERROR 2023-09-23 06:49:21,831 log Internal Server Error: /blog/create/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/views.py", line 38, in sentry_patched_render
+    return old_render(self)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/templates.py", line 75, in rendered_content
+    return real_rendered_content.fget(self)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/response.py", line 90, in rendered_content
+    template = self.resolve_template(self.template_name)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/response.py", line 72, in resolve_template
+    return select_template(template, using=self.using)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 47, in select_template
+    raise TemplateDoesNotExist(", ".join(template_name_list), chain=chain)
+django.template.exceptions.TemplateDoesNotExist: blog/post_form.html
+WARNING 2023-09-23 06:55:52,390 log Not Found: /robots.txt
+WARNING 2023-09-23 06:58:45,632 log Not Found: /ecp/Current/exporttool/microsoft.exchange.ediscovery.exporttool.application
+WARNING 2023-09-23 07:11:07,181 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-09-23 07:24:29,941 log Not Found: /robots.txt
+WARNING 2023-09-23 07:31:06,859 log Not Found: /autodiscover/autodiscover.json
+WARNING 2023-09-23 07:31:35,511 log Not Found: /robots.txt
+WARNING 2023-09-23 07:35:00,293 log Not Found: /.env
+WARNING 2023-09-23 07:35:01,472 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-09-23 07:42:08,941 log Not Found: /product/moncler-jackets-kids-fragon-red/
+WARNING 2023-09-23 07:49:10,662 log Forbidden (Referer checking failed - no Referer.): /admin/login/
+WARNING 2023-09-23 08:21:37,906 log Not Found: /cluster/cluster/
+WARNING 2023-09-23 08:44:44,049 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-09-23 08:50:53,711 log Not Found: /robots.txt
+WARNING 2023-09-23 09:05:51,767 log Not Found: /robots.txt
+WARNING 2023-09-23 09:05:52,726 log Not Found: /retrieve_inquiry/
+WARNING 2023-09-23 09:10:32,211 log Not Found: /robots.txt
+WARNING 2023-09-23 09:36:49,247 log Not Found: /robots.txt
