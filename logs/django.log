@@ -1,78 +1,56 @@
-WARNING 2023-09-21 03:55:34,516 log Not Found: /.env
-WARNING 2023-09-21 03:55:35,519 log Not Found: /wp-config.php
-WARNING 2023-09-21 04:03:42,676 log Not Found: /robots.txt
-WARNING 2023-09-21 04:19:41,655 log Not Found: /wp-content/plugins/WordPressCore/include.php
-WARNING 2023-09-21 04:19:48,791 log Not Found: /wp-includes/images/include.php
-WARNING 2023-09-21 04:19:50,370 log Not Found: /wp-includes/widgets/include.php
-WARNING 2023-09-21 04:20:13,100 log Not Found: /wp-login.php
-WARNING 2023-09-21 04:28:19,413 log Not Found: /.env
-WARNING 2023-09-21 04:28:20,544 log Not Found: /wp-config.php
-WARNING 2023-09-21 04:56:14,756 log Not Found: /robots.txt
-WARNING 2023-09-21 04:59:24,258 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-09-21 05:23:58,643 log Not Found: /ko/product/남성-스카프-모피-칼라-네이비-블루/
-WARNING 2023-09-21 05:44:54,510 log Not Found: /.env
-WARNING 2023-09-21 05:44:56,655 log Not Found: /wp-config.php
-ERROR 2023-09-21 05:49:51,696 log Internal Server Error: /inquiry_details/
-Traceback (most recent call last):
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
-    response = get_response(request)
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/views.py", line 84, in sentry_wrapped_callback
-    return callback(request, *args, **kwargs)
-  File "/home/ubuntu/github/easygo/basecamp/views.py", line 474, in inquiry_details
-    p.save()
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 806, in save
-    self.save_base(
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 857, in save_base
-    updated = self._save_table(
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 1000, in _save_table
-    results = self._do_insert(
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 1041, in _do_insert
-    return manager._insert(
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/manager.py", line 85, in manager_method
-    return getattr(self.get_queryset(), name)(*args, **kwargs)
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/query.py", line 1434, in _insert
-    return query.get_compiler(using=using).execute_sql(returning_fields)
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1620, in execute_sql
-    for sql, params in self.as_sql():
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1547, in as_sql
-    value_rows = [
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1548, in <listcomp>
-    [
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1549, in <listcomp>
-    self.prepare_value(field, self.pre_save_val(field, obj))
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1487, in prepare_value
-    value = field.get_db_prep_save(value, connection=self.connection)
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py", line 910, in get_db_prep_save
-    return self.get_db_prep_value(value, connection=connection, prepared=False)
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py", line 1408, in get_db_prep_value
-    value = self.get_prep_value(value)
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py", line 1403, in get_prep_value
-    return self.to_python(value)
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py", line 1369, in to_python
-    raise exceptions.ValidationError(
-django.core.exceptions.ValidationError: ['“D q U Jeypo” value has an invalid date format. It must be in YYYY-MM-DD format.']
-WARNING 2023-09-21 06:02:10,629 log Not Found: /vpn/index.html
-WARNING 2023-09-21 06:02:52,442 log Not Found: /geoserver/web/
-WARNING 2023-09-21 06:05:08,061 log Not Found: /.git/config
-WARNING 2023-09-21 06:33:14,321 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-09-21 07:16:36,145 log Not Found: /ab2g
-WARNING 2023-09-21 07:16:36,972 log Not Found: /ab2h
-WARNING 2023-09-21 07:16:43,555 log Not Found: /t4
-WARNING 2023-09-21 08:07:43,588 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-09-21 08:15:24,819 log Not Found: /.env
-WARNING 2023-09-21 08:33:31,078 log Not Found: /wp-content/plugins/WordPressCore/include.php
-WARNING 2023-09-21 08:33:43,232 log Not Found: /wp-includes/images/include.php
-WARNING 2023-09-21 08:33:54,142 log Not Found: /wp-includes/widgets/include.php
-WARNING 2023-09-21 08:41:53,952 log Not Found: /robots.txt
-WARNING 2023-09-21 08:42:22,436 log Not Found: /robots.txt
-WARNING 2023-09-21 08:44:50,429 log Not Found: /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php
-WARNING 2023-09-21 08:44:55,985 log Not Found: /.env
-WARNING 2023-09-21 08:48:28,850 log Not Found: /.env
-WARNING 2023-09-21 08:48:30,175 log Forbidden (Referer checking failed - no Referer.): /
-WARNING 2023-09-21 08:49:32,743 log Forbidden (Referer checking failed - no Referer.): /admin/login/
-WARNING 2023-09-21 09:01:34,971 log Not Found: /helpdesk/WebObjects/Helpdesk.woa
-ERROR 2023-09-21 09:11:17,812 log Internal Server Error: /paypal_ipn/
-WARNING 2023-09-21 09:13:19,791 log Not Found: /.well-known/traffic-advice
-WARNING 2023-09-21 09:41:20,266 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-09-22 03:46:01,541 log Not Found: /shop/da/min-konto/
+WARNING 2023-09-22 03:48:09,477 log Not Found: /owa/auth/x.js
+WARNING 2023-09-22 03:55:57,434 log Not Found: /shop/ko/product/moncler-womens-재킷-더블-브레스트-장식-벨트-블랙/
+WARNING 2023-09-22 04:13:47,148 log Not Found: /wp-login.php
+WARNING 2023-09-22 04:16:02,339 log Not Found: /about-us/
+WARNING 2023-09-22 04:30:09,446 log Not Found: /.well-known/acme-challenge/license.php
+WARNING 2023-09-22 04:31:32,384 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-09-22 04:33:56,765 log Not Found: /ews/autodiscovers/
+WARNING 2023-09-22 04:57:26,555 log Not Found: /shop/product/moncler-women-zip-shawl-style-black/
+WARNING 2023-09-22 05:22:53,667 log Not Found: /.env
+WARNING 2023-09-22 05:24:21,537 log Not Found: /autodiscover/autodiscovers/
+WARNING 2023-09-22 05:30:35,550 log Not Found: /.git/config
+WARNING 2023-09-22 05:30:37,595 log Not Found: /.git/config
+WARNING 2023-09-22 05:30:43,054 log Not Found: /.git/config
+WARNING 2023-09-22 05:30:46,339 log Not Found: /.git/config
+WARNING 2023-09-22 05:30:47,905 log Not Found: /.git/config
+WARNING 2023-09-22 05:30:50,399 log Not Found: /.git/config
+WARNING 2023-09-22 05:31:35,320 log Not Found: /config.json
+WARNING 2023-09-22 05:31:36,474 log Not Found: /.env
+WARNING 2023-09-22 05:31:37,554 log Not Found: /telescope/requests
+WARNING 2023-09-22 05:31:38,611 log Not Found: /info.php
+WARNING 2023-09-22 05:31:39,768 log Not Found: /.git/config
+WARNING 2023-09-22 05:31:40,962 log Not Found: /server-status
+WARNING 2023-09-22 05:35:39,637 log Not Found: /.env
+WARNING 2023-09-22 05:35:40,875 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-09-22 05:39:19,161 log Not Found: /robots.txt
+WARNING 2023-09-22 05:39:20,224 log Not Found: /xmlrpc.php
+WARNING 2023-09-22 06:05:40,083 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-09-22 07:28:08,992 log Not Found: /autodiscover/autodiscover /
+WARNING 2023-09-22 07:37:58,091 log Not Found: /autodiscover/autodiscoverrs/
+WARNING 2023-09-22 07:40:21,774 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-09-22 08:21:14,227 log Not Found: /product/moncler-branson-women-down-vest-belt-decorative-blue/
+WARNING 2023-09-22 08:28:29,380 log Forbidden (Referer checking failed - no Referer.): /admin/login/
+WARNING 2023-09-22 08:30:14,030 log Not Found: /phpmyadmin/index.php
+WARNING 2023-09-22 08:42:03,739 log Not Found: /wp-content/plugins/hello-dolly/hello.php
+WARNING 2023-09-22 08:53:32,390 log Not Found: /ecp/Current/exporttool/microsoft.exchange.ediscovery.exporttool.application
+WARNING 2023-09-22 08:53:37,889 log Not Found: /system.php
+WARNING 2023-09-22 08:53:37,921 log Not Found: /info.php
+WARNING 2023-09-22 09:13:39,855 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-09-22 09:21:21,335 log Not Found: /robots.txt
+WARNING 2023-09-22 09:39:39,862 log Not Found: /.env
+WARNING 2023-09-22 09:39:41,076 log Forbidden (Referer checking failed - no Referer.): /
+ERROR 2023-09-22 09:41:14,118 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-09-22 09:41:14,551 log Bad Request: /
+WARNING 2023-09-22 10:25:41,773 log Not Found: /ninja.php
+WARNING 2023-09-22 10:39:21,332 log Not Found: /.well-known/traffic-advice
+WARNING 2023-09-22 10:46:59,683 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-09-22 11:57:04,941 log Not Found: /robots.txt
+WARNING 2023-09-22 12:00:51,672 log Not Found: /.env
+WARNING 2023-09-22 12:00:52,860 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-09-22 12:16:22,002 log Not Found: /robots.txt
+WARNING 2023-09-22 12:20:33,621 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-09-22 13:14:25,926 log Not Found: /robots.txt
+WARNING 2023-09-22 13:37:19,654 log Not Found: /.well-known/acme-challenge/P2ZZKU97JY-QVFLWNCJ54T1UA8U9_U3F
+WARNING 2023-09-22 13:37:20,690 log Not Found: /.well-known/acme-challenge/BC-3DWAEV2ZAMEKTGPHVE3X726LYZ871
+WARNING 2023-09-22 13:54:01,201 log Not Found: /Core/Skin/Login.aspx
