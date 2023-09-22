@@ -271,6 +271,9 @@
 													{% endif %}													
 													
 												{% endif %}
+												{% if message %}
+													* {{ message }}
+												{% endif %}
 												<!-- Paid amount -->
 												{% if paid %}
 													<strong>Paid: ${{ paid }}</strong><br><br>	
