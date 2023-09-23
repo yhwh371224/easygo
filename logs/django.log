@@ -122,3 +122,8 @@ Traceback (most recent call last):
     raise exceptions.RefreshError(
 google.auth.exceptions.RefreshError: ('deleted_client: The OAuth client was deleted.', {'error': 'deleted_client', 'error_description': 'The OAuth client was deleted.'})
 WARNING 2023-09-24 06:44:56,124 log Not Found: /robots.txt
+WARNING 2023-09-24 06:53:49,475 log Not Found: /robots.txt
+WARNING 2023-09-24 06:57:26,075 log Not Found: /robots.txt
+ERROR 2023-09-24 06:59:41,039 log Internal Server Error: /paypal_ipn/
+WARNING 2023-09-24 07:15:19,757 log Not Found: /contact/
+ERROR 2023-09-24 07:16:14,583 log Internal Server Error: /paypal_ipn/
