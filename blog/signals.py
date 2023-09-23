@@ -9,19 +9,15 @@ from django.utils.html import strip_tags
 import re
 from django.db.models import Q
 # google calendar 
-import logging
 import os.path
 import os 
 import datetime
-from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
-from googleapiclient import errors
-
 
 
 # Flight return booking
@@ -156,6 +152,7 @@ def notify_user_payment(sender, instance, created, **kwargs):
         )        
         email.attach_alternative(html_content, "text/html")        
         email.send()
+        
 
     # # #google calendar update
     # SCOPES = ['https://www.googleapis.com/auth/calendar']
@@ -267,7 +264,7 @@ def create_event_on_calendar(sender, instance, created, **kwargs):
         title = " ".join([instance.pickup_time, instance.flight_number, instance.flight_time, 'p'+str(instance.no_of_passenger), '$'+instance.price, instance.contact])
         address = " ".join([instance.street, instance.suburb])
         if instance.return_flight_date:
-            message = " ".join([instance.name, instance.email, instance.no_of_baggage, instance.message, "Return date:" + str(instance.return_flight_date)])
+            message = " ".join([instance.name, instance.email, instance.no_of_baggage, instance.message, "Date:" + str(instance.return_flight_date)])
         else:
             message = " ".join([instance.name, instance.email, instance.no_of_baggage, instance.message])
         flight_date = datetime.datetime.strptime(str(instance.flight_date), '%Y-%m-%d')
@@ -296,34 +293,4 @@ def create_event_on_calendar(sender, instance, created, **kwargs):
     except HttpError as error:
         print(f'An error occurred: {error}')
         
-        if instance.return_flight_number:
-            service = build('calendar', 'v3', credentials=creds)        
-            # Call the funtion that creates the event in Google Calendar
-            title = " ".join([instance.return_pickup_time, instance.return_flight_number, instance.return_flight_time, 'p'+str(instance.no_of_passenger), '$'+instance.price, instance.contact])
-            address = " ".join([instance.street, instance.suburb])
-            message = " ".join([instance.name, instance.email, instance.no_of_baggage, instance.message, "First date:" + str(instance.flight_date)])            
-            flight_date = datetime.datetime.strptime(str(instance.return_flight_date), '%Y-%m-%d')
-            pickup_time = datetime.datetime.strptime(instance.return_pickup_time, '%H:%M')
-            start = datetime.datetime.combine(flight_date, pickup_time.time())        
-            end = start + datetime.timedelta(hours=1)
-
-            event = {
-                'summary': title,
-                'location': address,
-                'start': {
-                    'dateTime': start.strftime('%Y-%m-%dT%H:%M:%S'),
-                    'timeZone': 'Australia/Sydney',
-                },
-                'end': {
-                    'dateTime': end.strftime('%Y-%m-%dT%H:%M:%S'),
-                    'timeZone': 'Australia/Sydney',
-                },
-                'description': message,
-            }    
-
-        try:
-            event = service.events().insert(calendarId='primary', body=event).execute()        
-            print('Event created: %s' % (event.get('htmlLink')))
-
-        except HttpError as error:
-            print(f'An error occurred: {error}')
+      
