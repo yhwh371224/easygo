@@ -1,19 +1,42 @@
-WARNING 2023-09-24 03:36:12,559 log Not Found: /dns-query
-WARNING 2023-09-24 03:37:04,351 log Not Found: /dns-query
-WARNING 2023-09-24 03:37:04,982 log Not Found: /contact/
-WARNING 2023-09-24 03:38:52,251 log Not Found: /robots.txt
-WARNING 2023-09-24 03:38:53,766 log Not Found: /airport-transfers-leichhardt/
-WARNING 2023-09-24 03:58:48,534 log Not Found: /shop/product/2014-new-moncler-faucon-women-down-jacket-zip-with-grey/
-WARNING 2023-09-24 04:06:05,945 log Not Found: /robots.txt
-WARNING 2023-09-24 04:25:53,980 log Not Found: /robots.txt
-WARNING 2023-09-24 04:29:09,377 log Not Found: /robots.txt
-WARNING 2023-09-24 04:40:13,512 log Not Found: /ecp/Current/exporttool/microsoft.exchange.ediscovery.exporttool.application
-WARNING 2023-09-24 05:00:38,619 log Not Found: /.env
-WARNING 2023-09-24 05:00:39,792 log Forbidden (Referer checking failed - no Referer.): /
-WARNING 2023-09-24 05:02:50,757 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-09-24 05:36:00,233 log Not Found: /robots.txt
-WARNING 2023-09-24 05:43:32,495 log Not Found: /robots.txt
-ERROR 2023-09-24 05:43:33,383 log Internal Server Error: /return_trip_detail/
+ERROR 2023-09-25 03:35:14,109 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-09-25 03:35:14,114 log Bad Request: /.env
+ERROR 2023-09-25 03:35:17,618 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-09-25 03:35:17,621 log Bad Request: /
+WARNING 2023-09-25 04:23:06,155 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-09-25 04:50:30,558 log Forbidden (Referer checking failed - no Referer.): /inquiry_details/
+WARNING 2023-09-25 04:50:31,245 log Forbidden (Referer checking failed - no Referer.): /inquiry_details/
+WARNING 2023-09-25 04:50:31,932 log Forbidden (Referer checking failed - no Referer.): /inquiry_details/
+WARNING 2023-09-25 04:50:32,818 log Forbidden (Referer checking failed - no Referer.): /inquiry_details2/
+WARNING 2023-09-25 04:50:33,260 log Forbidden (Referer checking failed - no Referer.): /inquiry_details2/
+WARNING 2023-09-25 04:50:33,703 log Forbidden (Referer checking failed - no Referer.): /inquiry_details2/
+WARNING 2023-09-25 04:50:35,397 log Forbidden (Referer checking failed - no Referer.): /inquiry_details1/
+WARNING 2023-09-25 04:50:35,862 log Forbidden (Referer checking failed - no Referer.): /inquiry_details1/
+WARNING 2023-09-25 04:50:36,302 log Forbidden (Referer checking failed - no Referer.): /inquiry_details1/
+WARNING 2023-09-25 04:51:02,062 log Not Found: /products/news/
+WARNING 2023-09-25 04:51:02,481 log Not Found: /products/news/
+WARNING 2023-09-25 04:51:03,098 log Not Found: /products/news/
+WARNING 2023-09-25 04:51:03,479 log Not Found: /products/news/
+WARNING 2023-09-25 04:51:03,854 log Not Found: /products/news/
+WARNING 2023-09-25 04:51:04,229 log Not Found: /products/news/uni_subscribe_email=xivwajotoq@outlook.com
+WARNING 2023-09-25 04:51:04,608 log Not Found: /products/news/uni_subscribe_email=xivwajotoq@outlook.com
+WARNING 2023-09-25 04:51:04,991 log Not Found: /products/registry/
+WARNING 2023-09-25 04:51:05,649 log Not Found: /products/registry/
+WARNING 2023-09-25 04:51:06,027 log Not Found: /products/registry/
+WARNING 2023-09-25 04:51:06,646 log Not Found: /products/registry/
+WARNING 2023-09-25 04:51:07,019 log Not Found: /products/registry/
+WARNING 2023-09-25 04:51:07,392 log Not Found: /products/registry/uni_subscribe_email=xivwajotoq@outlook.com
+WARNING 2023-09-25 04:51:07,767 log Not Found: /products/registry/uni_subscribe_email=xivwajotoq@outlook.com
+WARNING 2023-09-25 04:51:08,140 log Not Found: /technology/ai/
+WARNING 2023-09-25 04:51:08,534 log Not Found: /technology/ai/
+WARNING 2023-09-25 04:51:08,907 log Not Found: /technology/ai/
+WARNING 2023-09-25 04:51:09,526 log Not Found: /technology/ai/
+WARNING 2023-09-25 04:51:09,968 log Not Found: /technology/ai/
+WARNING 2023-09-25 04:51:10,344 log Not Found: /technology/ai/uni_subscribe_email=xivwajotoq@outlook.com
+WARNING 2023-09-25 04:51:10,717 log Not Found: /technology/ai/uni_subscribe_email=xivwajotoq@outlook.com
+ERROR 2023-09-25 05:00:45,881 log Internal Server Error: /paypal_ipn/
+ERROR 2023-09-25 05:03:00,161 log Internal Server Error: /paypal_ipn/
+ERROR 2023-09-25 05:03:08,748 log Internal Server Error: /paypal_ipn/
+ERROR 2023-09-25 05:05:00,929 log Internal Server Error: /horeb_yhwh/blog/post/2176/change/
 Traceback (most recent call last):
   File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
     response = get_response(request)
@@ -21,24 +44,40 @@ Traceback (most recent call last):
     response = wrapped_callback(request, *callback_args, **callback_kwargs)
   File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/views.py", line 84, in sentry_wrapped_callback
     return callback(request, *args, **kwargs)
-  File "/home/ubuntu/github/easygo/basecamp/views.py", line 2050, in return_trip_detail
-    return render(request, 'beasecamp/return_trip.html', {})
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/templates.py", line 102, in render
-    return real_render(request, template_name, context, *args, **kwargs)
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/shortcuts.py", line 24, in render
-    content = loader.render_to_string(template_name, context, request, using=using)
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 61, in render_to_string
-    template = get_template(template_name, using=using)
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 19, in get_template
-    raise TemplateDoesNotExist(template_name, chain=chain)
-django.template.exceptions.TemplateDoesNotExist: beasecamp/return_trip.html
-WARNING 2023-09-24 05:51:20,387 log Not Found: /shop/ko/product/moncler-clamart-8/
-WARNING 2023-09-24 06:07:51,702 log Not Found: /nologin.php
-WARNING 2023-09-24 06:33:26,285 log Not Found: /_profiler/phpinfo
-WARNING 2023-09-24 06:33:29,277 log Not Found: /yuuki
-WARNING 2023-09-24 06:33:31,224 log Not Found: /.env
-WARNING 2023-09-24 06:33:33,630 log Forbidden (Referer checking failed - no Referer.): /
-ERROR 2023-09-24 06:36:05,599 log Internal Server Error: /confirm_booking_detail/
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 683, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 134, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/views/decorators/cache.py", line 62, in _wrapped_view_func
+    response = view_func(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/sites.py", line 242, in inner
+    return view(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 1889, in change_view
+    return self.changeform_view(request, object_id, form_url, extra_context)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 46, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 134, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 1746, in changeform_view
+    return self._changeform_view(request, object_id, form_url, extra_context)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 1798, in _changeform_view
+    self.save_model(request, new_object, form, not add)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 1221, in save_model
+    obj.save()
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 806, in save
+    self.save_base(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 872, in save_base
+    post_save.send(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/dispatch/dispatcher.py", line 176, in send
+    return [
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/dispatch/dispatcher.py", line 177, in <listcomp>
+    (receiver, receiver(signal=self, sender=sender, **named))
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/signals_handlers.py", line 66, in wrapper
+    return receiver(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/blog/signals.py", line 204, in create_event_on_calendar
+    event = service.events().insert(calendarId='primary', body=event).execute()
+UnboundLocalError: local variable 'service' referenced before assignment
+ERROR 2023-09-25 05:05:26,122 log Internal Server Error: /horeb_yhwh/blog/post/2176/change/
 Traceback (most recent call last):
   File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
     response = get_response(request)
@@ -46,8 +85,26 @@ Traceback (most recent call last):
     response = wrapped_callback(request, *callback_args, **callback_kwargs)
   File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/views.py", line 84, in sentry_wrapped_callback
     return callback(request, *args, **kwargs)
-  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1723, in confirm_booking_detail
-    p.save()
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 683, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 134, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/views/decorators/cache.py", line 62, in _wrapped_view_func
+    response = view_func(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/sites.py", line 242, in inner
+    return view(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 1889, in change_view
+    return self.changeform_view(request, object_id, form_url, extra_context)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 46, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 134, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 1746, in changeform_view
+    return self._changeform_view(request, object_id, form_url, extra_context)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 1798, in _changeform_view
+    self.save_model(request, new_object, form, not add)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 1221, in save_model
+    obj.save()
   File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 806, in save
     self.save_base(
   File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 872, in save_base
@@ -58,29 +115,10 @@ Traceback (most recent call last):
     (receiver, receiver(signal=self, sender=sender, **named))
   File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/signals_handlers.py", line 66, in wrapper
     return receiver(*args, **kwargs)
-  File "/home/ubuntu/github/easygo/blog/signals.py", line 32, in notify_user_post
-    p.save()
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 806, in save
-    self.save_base(
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 872, in save_base
-    post_save.send(
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/dispatch/dispatcher.py", line 176, in send
-    return [
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/dispatch/dispatcher.py", line 177, in <listcomp>
-    (receiver, receiver(signal=self, sender=sender, **named))
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/signals_handlers.py", line 66, in wrapper
-    return receiver(*args, **kwargs)
-  File "/home/ubuntu/github/easygo/blog/signals.py", line 250, in create_event_on_calendar
-    creds.refresh(Request())
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/google/oauth2/credentials.py", line 335, in refresh
-    ) = reauth.refresh_grant(
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/google/oauth2/reauth.py", line 351, in refresh_grant
-    _client._handle_error_response(response_data, retryable_error)
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/google/oauth2/_client.py", line 73, in _handle_error_response
-    raise exceptions.RefreshError(
-google.auth.exceptions.RefreshError: ('deleted_client: The OAuth client was deleted.', {'error': 'deleted_client', 'error_description': 'The OAuth client was deleted.'})
-WARNING 2023-09-24 06:36:18,878 log Not Found: /Core/Skin/Login.aspx
-ERROR 2023-09-24 06:38:29,357 log Internal Server Error: /confirm_booking_detail/
+  File "/home/ubuntu/github/easygo/blog/signals.py", line 204, in create_event_on_calendar
+    event = service.events().insert(calendarId='primary', body=event).execute()
+UnboundLocalError: local variable 'service' referenced before assignment
+ERROR 2023-09-25 05:08:04,745 log Internal Server Error: /horeb_yhwh/blog/post/2176/change/
 Traceback (most recent call last):
   File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
     response = get_response(request)
@@ -88,8 +126,26 @@ Traceback (most recent call last):
     response = wrapped_callback(request, *callback_args, **callback_kwargs)
   File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/views.py", line 84, in sentry_wrapped_callback
     return callback(request, *args, **kwargs)
-  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1723, in confirm_booking_detail
-    p.save()
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 683, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 134, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/views/decorators/cache.py", line 62, in _wrapped_view_func
+    response = view_func(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/sites.py", line 242, in inner
+    return view(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 1889, in change_view
+    return self.changeform_view(request, object_id, form_url, extra_context)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 46, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 134, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 1746, in changeform_view
+    return self._changeform_view(request, object_id, form_url, extra_context)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 1798, in _changeform_view
+    self.save_model(request, new_object, form, not add)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 1221, in save_model
+    obj.save()
   File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 806, in save
     self.save_base(
   File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 872, in save_base
@@ -100,8 +156,37 @@ Traceback (most recent call last):
     (receiver, receiver(signal=self, sender=sender, **named))
   File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/signals_handlers.py", line 66, in wrapper
     return receiver(*args, **kwargs)
-  File "/home/ubuntu/github/easygo/blog/signals.py", line 32, in notify_user_post
-    p.save()
+  File "/home/ubuntu/github/easygo/blog/signals.py", line 204, in create_event_on_calendar
+    event = service.events().insert(calendarId='primary', body=event).execute()
+UnboundLocalError: local variable 'service' referenced before assignment
+ERROR 2023-09-25 05:09:24,784 log Internal Server Error: /horeb_yhwh/blog/post/2176/change/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/views.py", line 84, in sentry_wrapped_callback
+    return callback(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 683, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 134, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/views/decorators/cache.py", line 62, in _wrapped_view_func
+    response = view_func(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/sites.py", line 242, in inner
+    return view(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 1889, in change_view
+    return self.changeform_view(request, object_id, form_url, extra_context)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 46, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 134, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 1746, in changeform_view
+    return self._changeform_view(request, object_id, form_url, extra_context)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 1798, in _changeform_view
+    self.save_model(request, new_object, form, not add)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 1221, in save_model
+    obj.save()
   File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 806, in save
     self.save_base(
   File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 872, in save_base
@@ -112,181 +197,23 @@ Traceback (most recent call last):
     (receiver, receiver(signal=self, sender=sender, **named))
   File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/signals_handlers.py", line 66, in wrapper
     return receiver(*args, **kwargs)
-  File "/home/ubuntu/github/easygo/blog/signals.py", line 250, in create_event_on_calendar
-    creds.refresh(Request())
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/google/oauth2/credentials.py", line 335, in refresh
-    ) = reauth.refresh_grant(
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/google/oauth2/reauth.py", line 351, in refresh_grant
-    _client._handle_error_response(response_data, retryable_error)
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/google/oauth2/_client.py", line 73, in _handle_error_response
-    raise exceptions.RefreshError(
-google.auth.exceptions.RefreshError: ('deleted_client: The OAuth client was deleted.', {'error': 'deleted_client', 'error_description': 'The OAuth client was deleted.'})
-WARNING 2023-09-24 06:44:56,124 log Not Found: /robots.txt
-WARNING 2023-09-24 06:53:49,475 log Not Found: /robots.txt
-WARNING 2023-09-24 06:57:26,075 log Not Found: /robots.txt
-ERROR 2023-09-24 06:59:41,039 log Internal Server Error: /paypal_ipn/
-WARNING 2023-09-24 07:15:19,757 log Not Found: /contact/
-ERROR 2023-09-24 07:16:14,583 log Internal Server Error: /paypal_ipn/
-WARNING 2023-09-24 07:28:05,204 log Forbidden (Referer checking failed - no Referer.): /admin/login/
-WARNING 2023-09-24 07:31:46,957 log Not Found: /c/
-WARNING 2023-09-24 07:44:13,008 log Not Found: /price-booking
-WARNING 2023-09-24 08:09:31,128 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-09-24 08:11:42,373 log Not Found: /resetpw.php
-WARNING 2023-09-24 08:11:42,876 log Not Found: /resetuser.php
-WARNING 2023-09-24 08:11:43,380 log Not Found: /passcode.php
-WARNING 2023-09-24 08:13:11,003 log Not Found: /shop/product/moncler-vest-men-fontaine-brown/
-WARNING 2023-09-24 08:28:07,540 log Not Found: /shop/es/product/moncler-chaquetas-mujer-lievre-azul/
-WARNING 2023-09-24 08:41:29,785 log Not Found: /.env
-WARNING 2023-09-24 09:06:02,047 log Not Found: /apple-touch-icon-120x120-precomposed.png
-WARNING 2023-09-24 09:06:02,160 log Not Found: /apple-touch-icon-120x120.png
-WARNING 2023-09-24 09:14:12,729 log Not Found: /robots.txt
-WARNING 2023-09-24 09:14:13,926 log Not Found: /price-booking
-WARNING 2023-09-24 09:24:47,318 log Not Found: /sms: 61406883355
-WARNING 2023-09-24 09:24:47,733 log Not Found: /sms: 61406883355
-WARNING 2023-09-24 09:25:01,327 log Not Found: /sms: 61406883355
-WARNING 2023-09-24 09:25:01,765 log Not Found: /sms: 61406883355
-WARNING 2023-09-24 09:37:05,323 log Not Found: /wp-content/plugins/WordPressCore/include.php
-WARNING 2023-09-24 09:42:38,932 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-09-24 10:02:01,962 log Not Found: /robots.txt
-ERROR 2023-09-24 10:07:26,984 log Internal Server Error: /paypal_ipn/
-ERROR 2023-09-24 10:07:34,558 log Internal Server Error: /paypal_ipn/
-WARNING 2023-09-24 10:10:26,126 log Not Found: /.env
-WARNING 2023-09-24 10:10:27,307 log Forbidden (Referer checking failed - no Referer.): /
-WARNING 2023-09-24 10:14:48,650 log Not Found: /airport-transfers-leichhardt/
-ERROR 2023-09-24 10:15:06,103 log Internal Server Error: /paypal_ipn/
-ERROR 2023-09-24 10:15:12,561 log Internal Server Error: /paypal_ipn/
-ERROR 2023-09-24 10:18:43,413 log Internal Server Error: /paypal_ipn/
-ERROR 2023-09-24 10:18:50,612 log Internal Server Error: /paypal_ipn/
-WARNING 2023-09-24 10:21:26,345 log Not Found: /.well-known/traffic-advice
-ERROR 2023-09-24 10:32:37,302 log Internal Server Error: /paypal_ipn/
-ERROR 2023-09-24 10:32:45,648 log Internal Server Error: /paypal_ipn/
-WARNING 2023-09-24 10:41:42,777 log Not Found: /android-chrome-192x192.png
-WARNING 2023-09-24 10:41:45,128 log Not Found: /android-chrome-512x512.png
-WARNING 2023-09-24 10:42:34,368 log Not Found: /android-chrome-192x192.png
-WARNING 2023-09-24 10:42:36,543 log Not Found: /android-chrome-512x512.png
-WARNING 2023-09-24 10:46:35,066 log Not Found: /services/
-WARNING 2023-09-24 10:57:52,388 log Not Found: /shop/it/product/moncler-seon-euramerican-style-coat-for-women-nero/
-WARNING 2023-09-24 11:02:18,508 log Not Found: /shop/de/product/moncler-nible-stiefel-frauen-glanzend-lila-gros-lassig/
-WARNING 2023-09-24 11:15:58,971 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-09-24 11:24:49,082 log Not Found: /shop/product/moncler-jackets-women-armoise-grey-tourterelle/
-WARNING 2023-09-24 11:29:43,861 log Not Found: /.well-known/traffic-advice
-WARNING 2023-09-24 11:42:44,801 log Not Found: /.env
-WARNING 2023-09-24 11:42:45,973 log Forbidden (Referer checking failed - no Referer.): /
-WARNING 2023-09-24 12:04:04,112 log Not Found: /robots.txt
-WARNING 2023-09-24 12:13:34,668 log Not Found: /robots.txt
-WARNING 2023-09-24 12:14:34,785 log Not Found: /shop/product-category/moncler-shawl/
-WARNING 2023-09-24 12:40:45,063 log Not Found: /.well-known/traffic-advice
-WARNING 2023-09-24 12:49:16,594 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-09-24 12:59:52,619 log Not Found: /robots.txt
-WARNING 2023-09-24 13:01:12,250 log Not Found: /robots.txt
-WARNING 2023-09-24 13:02:25,168 log Not Found: /autodiscover/autodiscover.json
-WARNING 2023-09-24 13:25:29,672 log Not Found: /robots.txt
-WARNING 2023-09-24 13:34:26,244 log Not Found: /wp-login.php
-WARNING 2023-09-24 13:35:39,524 log Not Found: /.well-known/acme-challenge/TXVREFA5Q7SIBCL-41RXD952YQ4N5XNB
-WARNING 2023-09-24 13:35:40,545 log Not Found: /.well-known/acme-challenge/TC9DP-DGONSIZATLNDJ-LZJXHJOS_38O
-WARNING 2023-09-24 13:44:15,673 log Not Found: /owa/auth/logon.aspx
-WARNING 2023-09-24 14:06:08,254 log Not Found: /.env
-WARNING 2023-09-24 14:06:09,431 log Forbidden (Referer checking failed - no Referer.): /
-WARNING 2023-09-24 14:22:33,645 log Not Found: /Core/Skin/Login.aspx
-ERROR 2023-09-24 14:22:53,735 log Internal Server Error: /paypal_ipn/
-ERROR 2023-09-24 14:23:02,092 log Internal Server Error: /paypal_ipn/
-WARNING 2023-09-24 14:24:48,791 log Not Found: /wp-content/plugins/core-plugin/include.php
-WARNING 2023-09-24 14:25:03,698 log Not Found: /wp-content/plugins/WordPressCore/include.php
-WARNING 2023-09-24 14:25:17,982 log Not Found: /wp-includes/images/include.php
-WARNING 2023-09-24 15:14:34,807 log Not Found: /.well-known/traffic-advice
-WARNING 2023-09-24 15:14:35,983 log Not Found: /ads.txt
-WARNING 2023-09-24 15:21:29,378 log Not Found: /contact/
-WARNING 2023-09-24 15:28:03,209 log Not Found: /.env
-WARNING 2023-09-24 15:28:04,390 log Forbidden (Referer checking failed - no Referer.): /
-WARNING 2023-09-24 15:48:43,448 log Not Found: /price-booking/
-WARNING 2023-09-24 15:55:52,993 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-09-24 15:59:58,251 log Not Found: /shop/es/product/chaqueta-de-plumas-de-moncler-para-el-chocolate-para-mujer/
-WARNING 2023-09-24 16:10:38,493 log Not Found: /robots.txt
-WARNING 2023-09-24 16:15:37,276 log Not Found: /robots.txt
-WARNING 2023-09-24 16:15:55,600 log Not Found: /contact-us/
-WARNING 2023-09-24 16:33:43,557 log Not Found: /robots.txt
-ERROR 2023-09-24 16:44:41,670 log Internal Server Error: /paypal_ipn/
-ERROR 2023-09-24 16:44:48,672 log Internal Server Error: /paypal_ipn/
-WARNING 2023-09-24 16:54:34,278 log Not Found: /wordpress
-WARNING 2023-09-24 16:54:35,719 log Not Found: /wp
-WARNING 2023-09-24 16:54:36,252 log Not Found: /bc
-WARNING 2023-09-24 16:54:36,776 log Not Found: /bk
-WARNING 2023-09-24 16:54:37,300 log Not Found: /backup
-WARNING 2023-09-24 16:54:37,818 log Not Found: /old
-WARNING 2023-09-24 16:54:38,332 log Not Found: /new
-WARNING 2023-09-24 16:54:39,427 log Not Found: /main
-WARNING 2023-09-24 17:18:21,872 log Not Found: /shop/product/2014-new-moncler-fashion-leisure-womens-down-jackets-green-card/
-WARNING 2023-09-24 17:23:26,116 log Not Found: /sign-up/
-WARNING 2023-09-24 17:23:27,248 log Not Found: /wp-admin/admin-ajax.php
-WARNING 2023-09-24 17:29:22,608 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-09-24 19:02:49,680 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-09-24 19:10:21,639 log Not Found: /apple-touch-icon-120x120-precomposed.png
-WARNING 2023-09-24 19:10:21,653 log Not Found: /apple-touch-icon-120x120.png
-WARNING 2023-09-24 19:32:45,987 log Not Found: /shop/de/product/moncler-frauen-reisverschluss-schal-stil-rot/
-WARNING 2023-09-24 19:40:13,537 log Not Found: /.well-known/traffic-advice
-WARNING 2023-09-24 20:36:07,306 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-09-24 20:43:42,280 log Not Found: /wp-content/plugins/wp-mailinglist/css/colorbox.css
-ERROR 2023-09-24 20:45:48,724 exception Invalid HTTP_HOST header: '/run/gunicorn.sock:'. The domain name provided is not valid according to RFC 1034/1035.
-WARNING 2023-09-24 20:45:48,935 log Bad Request: /
-WARNING 2023-09-24 20:56:36,805 log Forbidden (Referer checking failed - no Referer.): /inquiry_details/
-WARNING 2023-09-24 20:56:37,393 log Forbidden (Referer checking failed - no Referer.): /inquiry_details/
-WARNING 2023-09-24 20:56:38,012 log Forbidden (Referer checking failed - no Referer.): /inquiry_details/
-WARNING 2023-09-24 20:56:39,215 log Forbidden (Referer checking failed - no Referer.): /inquiry_details2/
-WARNING 2023-09-24 20:56:40,004 log Forbidden (Referer checking failed - no Referer.): /inquiry_details2/
-WARNING 2023-09-24 20:56:41,009 log Forbidden (Referer checking failed - no Referer.): /inquiry_details2/
-WARNING 2023-09-24 20:56:43,494 log Forbidden (Referer checking failed - no Referer.): /inquiry_details1/
-WARNING 2023-09-24 20:56:44,281 log Forbidden (Referer checking failed - no Referer.): /inquiry_details1/
-WARNING 2023-09-24 20:56:44,895 log Forbidden (Referer checking failed - no Referer.): /inquiry_details1/
-WARNING 2023-09-24 20:57:06,729 log Not Found: /products/news/
-WARNING 2023-09-24 20:57:07,439 log Not Found: /products/news/
-WARNING 2023-09-24 20:57:08,043 log Not Found: /products/news/
-WARNING 2023-09-24 20:57:08,681 log Not Found: /products/news/
-WARNING 2023-09-24 20:57:09,296 log Not Found: /products/news/
-WARNING 2023-09-24 20:57:09,882 log Not Found: /products/news/uni_subscribe_email=rodolfo.pettengell@yahoo.com
-WARNING 2023-09-24 20:57:10,461 log Not Found: /products/news/uni_subscribe_email=rodolfo.pettengell@yahoo.com
-WARNING 2023-09-24 20:57:11,041 log Not Found: /products/registry/
-WARNING 2023-09-24 20:57:11,635 log Not Found: /products/registry/
-WARNING 2023-09-24 20:57:12,313 log Not Found: /products/registry/
-WARNING 2023-09-24 20:57:12,931 log Not Found: /products/registry/
-WARNING 2023-09-24 20:57:13,566 log Not Found: /products/registry/
-WARNING 2023-09-24 20:57:14,185 log Not Found: /products/registry/uni_subscribe_email=rodolfo.pettengell@yahoo.com
-WARNING 2023-09-24 20:57:14,772 log Not Found: /products/registry/uni_subscribe_email=rodolfo.pettengell@yahoo.com
-WARNING 2023-09-24 20:57:15,526 log Not Found: /technology/ai/
-WARNING 2023-09-24 20:57:16,126 log Not Found: /technology/ai/
-WARNING 2023-09-24 20:57:16,847 log Not Found: /technology/ai/
-WARNING 2023-09-24 20:57:17,576 log Not Found: /technology/ai/
-WARNING 2023-09-24 20:57:18,302 log Not Found: /technology/ai/
-WARNING 2023-09-24 20:57:18,881 log Not Found: /technology/ai/uni_subscribe_email=rodolfo.pettengell@yahoo.com
-WARNING 2023-09-24 20:57:19,462 log Not Found: /technology/ai/uni_subscribe_email=rodolfo.pettengell@yahoo.com
-ERROR 2023-09-24 21:03:06,724 log Internal Server Error: /paypal_ipn/
-ERROR 2023-09-24 21:03:14,155 log Internal Server Error: /paypal_ipn/
-WARNING 2023-09-24 21:03:30,717 log Not Found: /th1s_1s_a_4o4.html
-WARNING 2023-09-24 21:04:49,775 log Not Found: /airport-transfers-toongabbie/sms:+61406883355
-WARNING 2023-09-24 21:04:50,619 log Not Found: /payonline/sms:+61406883355
-WARNING 2023-09-24 21:04:51,457 log Not Found: /airport-transfers-st-ives/sms:+61406883355
-WARNING 2023-09-24 21:04:55,014 log Not Found: /airport-transfers-epping/sms:+61406883355
-WARNING 2023-09-24 21:04:58,495 log Not Found: /information/sms:+61406883355
-WARNING 2023-09-24 21:04:59,336 log Not Found: /inquiry_details2/sms:+61406883355
-WARNING 2023-09-24 21:05:00,171 log Not Found: /inquiry/sms:+61406883355
-WARNING 2023-09-24 21:05:01,017 log Not Found: /inquiry2/sms:+61406883355
-WARNING 2023-09-24 21:05:04,253 log Not Found: /service/sms:+61406883355
-WARNING 2023-09-24 21:05:05,099 log Not Found: /airport-transfers-ryde/sms:+61406883355
-WARNING 2023-09-24 21:05:07,716 log Not Found: /booking_form_detail/sms:+61406883355
-WARNING 2023-09-24 21:05:08,557 log Not Found: /airport-transfers-blacktown/sms:+61406883355
-WARNING 2023-09-24 21:05:09,399 log Not Found: /airport-transfers-parramatta/sms:+61406883355
-WARNING 2023-09-24 21:05:10,243 log Not Found: /privacy/sms:+61406883355
-WARNING 2023-09-24 21:05:11,074 log Not Found: /p2p/sms:+61406883355
-WARNING 2023-09-24 21:05:11,913 log Not Found: /meeting_point/sms:+61406883355
-WARNING 2023-09-24 21:05:12,753 log Not Found: /booking_form/sms:+61406883355
-WARNING 2023-09-24 21:05:13,585 log Not Found: /airport-transfers-hornsby/sms:+61406883355
-WARNING 2023-09-24 21:05:14,432 log Not Found: /airport-transfers-chatswood/sms:+61406883355
-WARNING 2023-09-24 21:05:15,274 log Not Found: /airport-transfers-thornleigh/sms:+61406883355
-WARNING 2023-09-24 21:05:16,124 log Not Found: /terms/sms:+61406883355
-WARNING 2023-09-24 21:05:16,965 log Not Found: /home/sms:+61406883355
-ERROR 2023-09-24 21:05:17,689 log Internal Server Error: /paypal_ipn/
-WARNING 2023-09-24 21:05:17,798 log Not Found: /payonline/tell:+61406883355
-WARNING 2023-09-24 21:05:18,638 log Not Found: /inquiry_details/sms:+61406883355
-WARNING 2023-09-24 21:05:19,483 log Not Found: /inquiry_details1/sms:+61406883355
-WARNING 2023-09-24 21:05:20,324 log Not Found: /p2p_single/sms:+61406883355
-WARNING 2023-09-24 21:05:21,167 log Not Found: /price_detail/sms:+61406883355
-WARNING 2023-09-24 21:05:22,008 log Not Found: /about_us/sms:+61406883355
+  File "/home/ubuntu/github/easygo/blog/signals.py", line 204, in create_event_on_calendar
+    event = service.events().insert(calendarId='primary', body=event).execute()
+UnboundLocalError: local variable 'service' referenced before assignment
+WARNING 2023-09-25 05:23:35,365 log Not Found: /robots.txt
+WARNING 2023-09-25 05:23:38,024 log Not Found: /sitemap.xml
+WARNING 2023-09-25 05:29:00,813 log Not Found: /.git/config
+WARNING 2023-09-25 05:32:18,745 log Not Found: /shop/product-category/uncategorised/
+WARNING 2023-09-25 05:34:18,896 log Not Found: /robots.txt
+WARNING 2023-09-25 05:56:33,900 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-09-25 06:30:16,063 log Not Found: /dns-query
+WARNING 2023-09-25 06:43:54,435 log Not Found: /dns-query
+WARNING 2023-09-25 06:44:59,721 log Not Found: /robots.txt
+WARNING 2023-09-25 06:49:15,486 log Forbidden (Referer checking failed - no Referer.): /admin/login/
+WARNING 2023-09-25 07:21:51,566 log Not Found: /apple-touch-icon-120x120-precomposed.png
+WARNING 2023-09-25 07:21:51,616 log Not Found: /apple-touch-icon-120x120.png
+WARNING 2023-09-25 07:29:51,615 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-09-25 07:31:52,878 log Not Found: /wp-login.php
+WARNING 2023-09-25 07:38:01,262 log Not Found: /wp-login.php
+WARNING 2023-09-25 07:51:43,736 log Not Found: /apple-touch-icon-120x120-precomposed.png
+WARNING 2023-09-25 07:51:44,036 log Not Found: /apple-touch-icon-120x120.png
