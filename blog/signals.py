@@ -129,13 +129,8 @@ def notify_user_payment(sender, instance, created, **kwargs):
             [instance.payer_email, 'info@easygoshuttle.com.au']
         )        
         email.attach_alternative(html_content, "text/html")        
-        email.send()               
+        email.send()     
 
-        if post_name.return_pickup_time == "x":        
-            post_name1 = Post.objects.filter(Q(name__iregex=r'^%s$' % re.escape(instance.item_name)) | Q(email=instance.payer_email))[1]
-            post_name1.paid = instance.gross_amount
-            post_name1.save()
-            
     else:
         html_content = render_to_string("basecamp/html_email-noIdentity.html",
                                     {'name': instance.item_name, 'email': instance.payer_email,
@@ -148,86 +143,8 @@ def notify_user_payment(sender, instance, created, **kwargs):
             [instance.payer_email, 'info@easygoshuttle.com.au']
         )        
         email.attach_alternative(html_content, "text/html")        
-        email.send()
-        
-
-    # # #google calendar update
-    # SCOPES = ['https://www.googleapis.com/auth/calendar']
-
-    # creds = None
-    # secure_directory = 'secure/'
-    # token_file_path = os.path.join(secure_directory, 'token.json')
-
-    # if os.path.exists(token_file_path):
-    #     creds = Credentials.from_authorized_user_file(token_file_path, SCOPES)    
-    # # If there are no (valid) credentials available, let the user log in.
-    # if not creds or not creds.valid:
-    #     if creds and creds.expired and creds.refresh_token:
-    #         creds.refresh(Request())
-    #     else:
-    #         credentials_file_path = os.path.join(secure_directory, 'credentials.json')
-    #         flow = InstalledAppFlow.from_client_secrets_file(
-    #             credentials_file_path, SCOPES)
-    #         creds = flow.run_local_server(port=0)
-    #     # Save the credentials for the next run
-    #     with open('token.json', 'w') as token:
-    #         token.write(creds.to_json())
-   
-    # service = build('calendar', 'v3', credentials=creds)    
-
-    # if created:
-    #     title = " ".join(['PAID' + '$'+instance.price, instance.contact])    
-    #     flight_date = datetime.datetime.strptime(str(instance.flight_date), '%Y-%m-%d')
-    #     pickup_time = datetime.datetime.strptime(instance.pickup_time, '%H:%M')
-    #     start = datetime.datetime.combine(flight_date, pickup_time.time())        
-    #     end = start + datetime.timedelta(hours=1)
-    #     event = {
-    #         'summary': title,           
-    #         'start': {
-    #             'dateTime': start.strftime('%Y-%m-%dT%H:%M:%S'),
-    #             'timeZone': 'Australia/Sydney',
-    #         },
-    #         'end': {
-    #             'dateTime': end.strftime('%Y-%m-%dT%H:%M:%S'),
-    #             'timeZone': 'Australia/Sydney',
-    #         },            
-    #     }    
-
-    # try:
-    #     event = service.events().insert(calendarId='primary', body=event).execute()        
-    #     print('Event created: %s' % (event.get('htmlLink')))
-       
-    # except HttpError as error:
-    #     print(f'An error occurred: {error}')
-        
-    #     if instance.return_flight_number:
-    #         service = build('calendar', 'v3', credentials=creds)        
-    #         # Call the funtion that creates the event in Google Calendar
-    #         title = " ".join(['PAID' + '$'+instance.price, instance.contact])
-    #         flight_date = datetime.datetime.strptime(str(instance.return_flight_date), '%Y-%m-%d')
-    #         pickup_time = datetime.datetime.strptime(instance.return_pickup_time, '%H:%M')
-    #         start = datetime.datetime.combine(flight_date, pickup_time.time())        
-    #         end = start + datetime.timedelta(hours=1)
-
-    #         event = {
-    #             'summary': title,                
-    #             'start': {
-    #                 'dateTime': start.strftime('%Y-%m-%dT%H:%M:%S'),
-    #                 'timeZone': 'Australia/Sydney',
-    #             },
-    #             'end': {
-    #                 'dateTime': end.strftime('%Y-%m-%dT%H:%M:%S'),
-    #                 'timeZone': 'Australia/Sydney',
-    #             },                
-    #         }    
-
-    #     try:
-    #         event = service.events().insert(calendarId='primary', body=event).execute()        
-    #         print('Event created: %s' % (event.get('htmlLink')))
-
-    #     except HttpError as error:
-    #         print(f'An error occurred: {error}')
-
+        email.send()    
+    
 
 
 ## google calendar recording 
