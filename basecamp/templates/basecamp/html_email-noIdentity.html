@@ -224,13 +224,13 @@
                                     <table class="content" style="border-spacing:0;text-align: center;" role="presentation">
 										<tr>
 											<td align="left" style="padding-left:0px;">
-												<p style="Margin:0;font-size:16px;font-weight:bold;line-height:22px;">Hello, {{ name }}</p>
+												<p style="Margin:0;font-size:16px;font-weight:bold;line-height:22px;">Hello {{ name }},</p>
 											</td>
 										</tr>
 										<tr>
 											<td align="left" style="padding-top:28px;padding-left:0;">
                                                 <p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;"> 
-                                                    Thank you for your payment online through PayPal.<br><br>
+                                                    Thank you for your payment, {{ amount }} online through PayPal.<br><br>
 													Unfortunately, the email {{ email }} and name <span style="color: blue">{{ name }}</span> you used in PayPal do not match the information we have on file for you.<br><br>
 													This may make it difficult for us to identify your payment accurately.<br><br>
 													To ensure the proper processing of your payment, please email us with the name and email address we have on file for you.<br><br>

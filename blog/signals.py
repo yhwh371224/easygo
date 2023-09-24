@@ -1,4 +1,5 @@
 from __future__ import print_function
+from main.settings import RECIPIENT_EMAIL
 from .models import Post, Inquiry, Payment
 from basecamp.models import Inquiry_point
 from django.db.models.signals import post_save
@@ -111,7 +112,7 @@ def notify_user_inquiry_point(sender, instance, created, **kwargs):
 # If modifying these scopes, delete the file token.json.
 
 @receiver(post_save, sender=Payment)
-def notify_user_payment(sender, instance, created, **kwargs):      
+def notify_user_payment(instance):      
     post_name = Post.objects.filter(Q(name__iregex=r'^%s$' % re.escape(instance.item_name)) | Q(email=instance.payer_email)).first()
     
     if post_name: 
@@ -126,7 +127,7 @@ def notify_user_payment(sender, instance, created, **kwargs):
             "PayPal payment - EasyGo",
             text_content,
             '',
-            [instance.payer_email, 'info@easygoshuttle.com.au']
+            [instance.payer_email, RECIPIENT_EMAIL]
         )        
         email.attach_alternative(html_content, "text/html")        
         email.send()     
@@ -140,7 +141,7 @@ def notify_user_payment(sender, instance, created, **kwargs):
             "PayPal payment - EasyGo",
             text_content,
             '',
-            [instance.payer_email, 'info@easygoshuttle.com.au']
+            [instance.payer_email, RECIPIENT_EMAIL]
         )        
         email.attach_alternative(html_content, "text/html")        
         email.send()    
@@ -170,17 +171,15 @@ def create_event_on_calendar(sender, instance, created, **kwargs):
         with open('token.json', 'w') as token:
             token.write(creds.to_json())
    
-    service = build('calendar', 'v3', credentials=creds)
-   
     if created:
         service = build('calendar', 'v3', credentials=creds)        
         
         title = " ".join([instance.pickup_time, instance.flight_number, instance.flight_time, 'p'+str(instance.no_of_passenger), '$'+instance.price, instance.contact])
         address = " ".join([instance.street, instance.suburb])
         if instance.return_flight_date:
-            message = " ".join([instance.name, instance.email, instance.no_of_baggage, instance.message, "Date:" + str(instance.return_flight_date)])
+            message = " ".join([instance.name, instance.email, 'b'+instance.no_of_baggage, 'm:'+instance.message, "Date:"+str(instance.return_flight_date)])
         else:
-            message = " ".join([instance.name, instance.email, instance.no_of_baggage, instance.message])
+            message = " ".join([instance.name, instance.email, 'b'+instance.no_of_baggage, 'm:'+instance.message])
         flight_date = datetime.datetime.strptime(str(instance.flight_date), '%Y-%m-%d')
         pickup_time = datetime.datetime.strptime(instance.pickup_time, '%H:%M')
         start = datetime.datetime.combine(flight_date, pickup_time.time())        

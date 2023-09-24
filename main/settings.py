@@ -253,6 +253,9 @@ EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 EMAIL_BACKEND = config('EMAIL_BACKEND')
 
+# Recipient email address constant
+RECIPIENT_EMAIL = "info@easygoshuttle.com.au"
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

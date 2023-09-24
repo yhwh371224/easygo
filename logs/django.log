@@ -158,3 +158,73 @@ ERROR 2023-09-24 10:15:12,561 log Internal Server Error: /paypal_ipn/
 ERROR 2023-09-24 10:18:43,413 log Internal Server Error: /paypal_ipn/
 ERROR 2023-09-24 10:18:50,612 log Internal Server Error: /paypal_ipn/
 WARNING 2023-09-24 10:21:26,345 log Not Found: /.well-known/traffic-advice
+ERROR 2023-09-24 10:32:37,302 log Internal Server Error: /paypal_ipn/
+ERROR 2023-09-24 10:32:45,648 log Internal Server Error: /paypal_ipn/
+WARNING 2023-09-24 10:41:42,777 log Not Found: /android-chrome-192x192.png
+WARNING 2023-09-24 10:41:45,128 log Not Found: /android-chrome-512x512.png
+WARNING 2023-09-24 10:42:34,368 log Not Found: /android-chrome-192x192.png
+WARNING 2023-09-24 10:42:36,543 log Not Found: /android-chrome-512x512.png
+WARNING 2023-09-24 10:46:35,066 log Not Found: /services/
+WARNING 2023-09-24 10:57:52,388 log Not Found: /shop/it/product/moncler-seon-euramerican-style-coat-for-women-nero/
+WARNING 2023-09-24 11:02:18,508 log Not Found: /shop/de/product/moncler-nible-stiefel-frauen-glanzend-lila-gros-lassig/
+WARNING 2023-09-24 11:15:58,971 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-09-24 11:24:49,082 log Not Found: /shop/product/moncler-jackets-women-armoise-grey-tourterelle/
+WARNING 2023-09-24 11:29:43,861 log Not Found: /.well-known/traffic-advice
+WARNING 2023-09-24 11:42:44,801 log Not Found: /.env
+WARNING 2023-09-24 11:42:45,973 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-09-24 12:04:04,112 log Not Found: /robots.txt
+WARNING 2023-09-24 12:13:34,668 log Not Found: /robots.txt
+WARNING 2023-09-24 12:14:34,785 log Not Found: /shop/product-category/moncler-shawl/
+WARNING 2023-09-24 12:40:45,063 log Not Found: /.well-known/traffic-advice
+WARNING 2023-09-24 12:49:16,594 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-09-24 12:59:52,619 log Not Found: /robots.txt
+WARNING 2023-09-24 13:01:12,250 log Not Found: /robots.txt
+WARNING 2023-09-24 13:02:25,168 log Not Found: /autodiscover/autodiscover.json
+WARNING 2023-09-24 13:25:29,672 log Not Found: /robots.txt
+WARNING 2023-09-24 13:34:26,244 log Not Found: /wp-login.php
+WARNING 2023-09-24 13:35:39,524 log Not Found: /.well-known/acme-challenge/TXVREFA5Q7SIBCL-41RXD952YQ4N5XNB
+WARNING 2023-09-24 13:35:40,545 log Not Found: /.well-known/acme-challenge/TC9DP-DGONSIZATLNDJ-LZJXHJOS_38O
+WARNING 2023-09-24 13:44:15,673 log Not Found: /owa/auth/logon.aspx
+WARNING 2023-09-24 14:06:08,254 log Not Found: /.env
+WARNING 2023-09-24 14:06:09,431 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-09-24 14:22:33,645 log Not Found: /Core/Skin/Login.aspx
+ERROR 2023-09-24 14:22:53,735 log Internal Server Error: /paypal_ipn/
+ERROR 2023-09-24 14:23:02,092 log Internal Server Error: /paypal_ipn/
+WARNING 2023-09-24 14:24:48,791 log Not Found: /wp-content/plugins/core-plugin/include.php
+WARNING 2023-09-24 14:25:03,698 log Not Found: /wp-content/plugins/WordPressCore/include.php
+WARNING 2023-09-24 14:25:17,982 log Not Found: /wp-includes/images/include.php
+WARNING 2023-09-24 15:14:34,807 log Not Found: /.well-known/traffic-advice
+WARNING 2023-09-24 15:14:35,983 log Not Found: /ads.txt
+WARNING 2023-09-24 15:21:29,378 log Not Found: /contact/
+WARNING 2023-09-24 15:28:03,209 log Not Found: /.env
+WARNING 2023-09-24 15:28:04,390 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-09-24 15:48:43,448 log Not Found: /price-booking/
+WARNING 2023-09-24 15:55:52,993 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-09-24 15:59:58,251 log Not Found: /shop/es/product/chaqueta-de-plumas-de-moncler-para-el-chocolate-para-mujer/
+WARNING 2023-09-24 16:10:38,493 log Not Found: /robots.txt
+WARNING 2023-09-24 16:15:37,276 log Not Found: /robots.txt
+WARNING 2023-09-24 16:15:55,600 log Not Found: /contact-us/
+WARNING 2023-09-24 16:33:43,557 log Not Found: /robots.txt
+ERROR 2023-09-24 16:44:41,670 log Internal Server Error: /paypal_ipn/
+ERROR 2023-09-24 16:44:48,672 log Internal Server Error: /paypal_ipn/
+WARNING 2023-09-24 16:54:34,278 log Not Found: /wordpress
+WARNING 2023-09-24 16:54:35,719 log Not Found: /wp
+WARNING 2023-09-24 16:54:36,252 log Not Found: /bc
+WARNING 2023-09-24 16:54:36,776 log Not Found: /bk
+WARNING 2023-09-24 16:54:37,300 log Not Found: /backup
+WARNING 2023-09-24 16:54:37,818 log Not Found: /old
+WARNING 2023-09-24 16:54:38,332 log Not Found: /new
+WARNING 2023-09-24 16:54:39,427 log Not Found: /main
+WARNING 2023-09-24 17:18:21,872 log Not Found: /shop/product/2014-new-moncler-fashion-leisure-womens-down-jackets-green-card/
+WARNING 2023-09-24 17:23:26,116 log Not Found: /sign-up/
+WARNING 2023-09-24 17:23:27,248 log Not Found: /wp-admin/admin-ajax.php
+WARNING 2023-09-24 17:29:22,608 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-09-24 19:02:49,680 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-09-24 19:10:21,639 log Not Found: /apple-touch-icon-120x120-precomposed.png
+WARNING 2023-09-24 19:10:21,653 log Not Found: /apple-touch-icon-120x120.png
+WARNING 2023-09-24 19:32:45,987 log Not Found: /shop/de/product/moncler-frauen-reisverschluss-schal-stil-rot/
+WARNING 2023-09-24 19:40:13,537 log Not Found: /.well-known/traffic-advice
+WARNING 2023-09-24 20:36:07,306 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-09-24 20:43:42,280 log Not Found: /wp-content/plugins/wp-mailinglist/css/colorbox.css
+ERROR 2023-09-24 20:45:48,724 exception Invalid HTTP_HOST header: '/run/gunicorn.sock:'. The domain name provided is not valid according to RFC 1034/1035.
+WARNING 2023-09-24 20:45:48,935 log Bad Request: /
