@@ -112,7 +112,7 @@ def notify_user_inquiry_point(sender, instance, created, **kwargs):
 # If modifying these scopes, delete the file token.json.
 
 @receiver(post_save, sender=Payment)
-def notify_user_payment(instance):      
+def notify_user_payment(sender, instance, created, **kwargs):      
     post_name = Post.objects.filter(Q(name__iregex=r'^%s$' % re.escape(instance.item_name)) | Q(email=instance.payer_email)).first()
     
     if post_name: 
@@ -130,8 +130,13 @@ def notify_user_payment(instance):
             [instance.payer_email, RECIPIENT_EMAIL]
         )        
         email.attach_alternative(html_content, "text/html")        
-        email.send()     
+        email.send()               
 
+        if post_name.return_pickup_time == "x":        
+            post_name1 = Post.objects.filter(Q(name__iregex=r'^%s$' % re.escape(instance.item_name)) | Q(email=instance.payer_email))[1]
+            post_name1.paid = instance.gross_amount
+            post_name1.save()
+            
     else:
         html_content = render_to_string("basecamp/html_email-noIdentity.html",
                                     {'name': instance.item_name, 'email': instance.payer_email,
@@ -144,7 +149,7 @@ def notify_user_payment(instance):
             [instance.payer_email, RECIPIENT_EMAIL]
         )        
         email.attach_alternative(html_content, "text/html")        
-        email.send()    
+        email.send()
     
 
 
