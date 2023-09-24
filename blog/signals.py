@@ -119,23 +119,19 @@ def notify_user_payment(sender, instance, created, **kwargs):
         post_name.paid = instance.gross_amount
         post_name.save() 
         
-        html_content = render_to_string("basecamp/html_email-payment-success.html",
-                                    {'name': instance.item_name, 'email': instance.payer_email,
-                                     'amount': instance.gross_amount })
-        text_content = strip_tags(html_content)
-        email = EmailMultiAlternatives(
-            "PayPal payment - EasyGo",
-            text_content,
-            '',
-            [instance.payer_email, RECIPIENT_EMAIL]
-        )        
-        email.attach_alternative(html_content, "text/html")        
-        email.send()               
-
-        if post_name.return_pickup_time == "x":        
-            post_name1 = Post.objects.filter(Q(name__iregex=r'^%s$' % re.escape(instance.item_name)) | Q(email=instance.payer_email))[1]
-            post_name1.paid = instance.gross_amount
-            post_name1.save()
+        if created:
+            html_content = render_to_string("basecamp/html_email-payment-success.html",
+                                        {'name': instance.item_name, 'email': instance.payer_email,
+                                         'amount': instance.gross_amount })
+            text_content = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                "PayPal payment - EasyGo",
+                text_content,
+                '',
+                [instance.payer_email, RECIPIENT_EMAIL]
+            )        
+            email.attach_alternative(html_content, "text/html")        
+            email.send()               
             
     else:
         html_content = render_to_string("basecamp/html_email-noIdentity.html",
@@ -176,7 +172,7 @@ def create_event_on_calendar(sender, instance, created, **kwargs):
         with open('token.json', 'w') as token:
             token.write(creds.to_json())
    
-    if created:
+    if instance.is_confirmed:
         service = build('calendar', 'v3', credentials=creds)        
         
         title = " ".join([instance.pickup_time, instance.flight_number, instance.flight_time, 'p'+str(instance.no_of_passenger), '$'+instance.price, instance.contact])
