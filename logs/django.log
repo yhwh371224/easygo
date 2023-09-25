@@ -533,3 +533,215 @@ WARNING 2023-09-25 18:08:14,137 log Not Found: /product/2014-new-moncler-bresle-
 ERROR 2023-09-25 18:08:38,080 log Internal Server Error: /paypal_ipn/
 WARNING 2023-09-25 18:11:37,065 log Not Found: /.git/HEAD
 WARNING 2023-09-25 18:11:38,490 log Not Found: /.git/HEAD
+WARNING 2023-09-25 18:23:38,555 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-09-25 18:24:08,492 log Not Found: /cluster/cluster/
+WARNING 2023-09-25 18:26:01,794 log Not Found: /robots.txt
+WARNING 2023-09-25 18:30:09,394 log Not Found: /shop/pl/product/moncler-dol-kurtki-mezczyzna-sredniej-dlugosci-z-kapturem-niebieski/
+WARNING 2023-09-25 18:48:16,705 log Not Found: /autodiscover/autodiscover.json
+ERROR 2023-09-25 18:49:25,068 log Internal Server Error: /confirm_booking_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/views.py", line 84, in sentry_wrapped_callback
+    return callback(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1724, in confirm_booking_detail
+    p.save()
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 806, in save
+    self.save_base(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 872, in save_base
+    post_save.send(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/dispatch/dispatcher.py", line 176, in send
+    return [
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/dispatch/dispatcher.py", line 177, in <listcomp>
+    (receiver, receiver(signal=self, sender=sender, **named))
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/signals_handlers.py", line 66, in wrapper
+    return receiver(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/blog/signals.py", line 33, in notify_user_post
+    p.save()
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 806, in save
+    self.save_base(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 872, in save_base
+    post_save.send(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/dispatch/dispatcher.py", line 176, in send
+    return [
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/dispatch/dispatcher.py", line 177, in <listcomp>
+    (receiver, receiver(signal=self, sender=sender, **named))
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/signals_handlers.py", line 66, in wrapper
+    return receiver(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/blog/signals.py", line 219, in create_event_on_calendar
+    event = service.events().insert(calendarId='primary', body=event).execute()
+UnboundLocalError: local variable 'service' referenced before assignment
+ERROR 2023-09-25 18:52:06,018 log Internal Server Error: /confirm_booking_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/views.py", line 84, in sentry_wrapped_callback
+    return callback(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1724, in confirm_booking_detail
+    p.save()
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 806, in save
+    self.save_base(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 872, in save_base
+    post_save.send(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/dispatch/dispatcher.py", line 176, in send
+    return [
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/dispatch/dispatcher.py", line 177, in <listcomp>
+    (receiver, receiver(signal=self, sender=sender, **named))
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/signals_handlers.py", line 66, in wrapper
+    return receiver(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/blog/signals.py", line 33, in notify_user_post
+    p.save()
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 806, in save
+    self.save_base(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 872, in save_base
+    post_save.send(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/dispatch/dispatcher.py", line 176, in send
+    return [
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/dispatch/dispatcher.py", line 177, in <listcomp>
+    (receiver, receiver(signal=self, sender=sender, **named))
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/signals_handlers.py", line 66, in wrapper
+    return receiver(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/blog/signals.py", line 219, in create_event_on_calendar
+    event = service.events().insert(calendarId='primary', body=event).execute()
+UnboundLocalError: local variable 'service' referenced before assignment
+ERROR 2023-09-25 18:55:24,040 log Internal Server Error: /confirm_booking_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/views.py", line 84, in sentry_wrapped_callback
+    return callback(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1724, in confirm_booking_detail
+    p.save()
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 806, in save
+    self.save_base(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 872, in save_base
+    post_save.send(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/dispatch/dispatcher.py", line 176, in send
+    return [
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/dispatch/dispatcher.py", line 177, in <listcomp>
+    (receiver, receiver(signal=self, sender=sender, **named))
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/signals_handlers.py", line 66, in wrapper
+    return receiver(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/blog/signals.py", line 33, in notify_user_post
+    p.save()
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 806, in save
+    self.save_base(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 872, in save_base
+    post_save.send(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/dispatch/dispatcher.py", line 176, in send
+    return [
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/dispatch/dispatcher.py", line 177, in <listcomp>
+    (receiver, receiver(signal=self, sender=sender, **named))
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/signals_handlers.py", line 66, in wrapper
+    return receiver(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/blog/signals.py", line 219, in create_event_on_calendar
+    event = service.events().insert(calendarId='primary', body=event).execute()
+UnboundLocalError: local variable 'service' referenced before assignment
+ERROR 2023-09-25 18:55:41,913 exception Invalid HTTP_HOST header: 'row4.vfsglobal.com'. You may need to add 'row4.vfsglobal.com' to ALLOWED_HOSTS.
+WARNING 2023-09-25 18:55:42,017 log Bad Request: /NetherlandsAppointment/
+ERROR 2023-09-25 18:57:59,358 log Internal Server Error: /confirm_booking_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/views.py", line 84, in sentry_wrapped_callback
+    return callback(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1724, in confirm_booking_detail
+    p.save()
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 806, in save
+    self.save_base(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 872, in save_base
+    post_save.send(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/dispatch/dispatcher.py", line 176, in send
+    return [
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/dispatch/dispatcher.py", line 177, in <listcomp>
+    (receiver, receiver(signal=self, sender=sender, **named))
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/signals_handlers.py", line 66, in wrapper
+    return receiver(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/blog/signals.py", line 33, in notify_user_post
+    p.save()
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 806, in save
+    self.save_base(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 872, in save_base
+    post_save.send(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/dispatch/dispatcher.py", line 176, in send
+    return [
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/dispatch/dispatcher.py", line 177, in <listcomp>
+    (receiver, receiver(signal=self, sender=sender, **named))
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/signals_handlers.py", line 66, in wrapper
+    return receiver(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/blog/signals.py", line 219, in create_event_on_calendar
+    event = service.events().insert(calendarId='primary', body=event).execute()
+UnboundLocalError: local variable 'service' referenced before assignment
+WARNING 2023-09-25 19:03:23,208 log Not Found: /product/kids-moncler-jackets-girl-black-red/
+ERROR 2023-09-25 19:07:08,266 log Internal Server Error: /confirm_booking_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/views.py", line 84, in sentry_wrapped_callback
+    return callback(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1724, in confirm_booking_detail
+    p.save()
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 806, in save
+    self.save_base(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 872, in save_base
+    post_save.send(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/dispatch/dispatcher.py", line 176, in send
+    return [
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/dispatch/dispatcher.py", line 177, in <listcomp>
+    (receiver, receiver(signal=self, sender=sender, **named))
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/signals_handlers.py", line 66, in wrapper
+    return receiver(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/blog/signals.py", line 33, in notify_user_post
+    p.save()
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 806, in save
+    self.save_base(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 872, in save_base
+    post_save.send(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/dispatch/dispatcher.py", line 176, in send
+    return [
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/dispatch/dispatcher.py", line 177, in <listcomp>
+    (receiver, receiver(signal=self, sender=sender, **named))
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/signals_handlers.py", line 66, in wrapper
+    return receiver(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/blog/signals.py", line 219, in create_event_on_calendar
+    event = service.events().insert(calendarId='primary', body=event).execute()
+UnboundLocalError: local variable 'service' referenced before assignment
+WARNING 2023-09-25 19:09:09,143 log Not Found: /robots.txt
+WARNING 2023-09-25 19:25:41,749 log Not Found: /airport-transfers-toongabbie/sms:+61406883355
+WARNING 2023-09-25 19:25:42,438 log Not Found: /payonline/sms:+61406883355
+WARNING 2023-09-25 19:25:43,093 log Not Found: /airport-transfers-st-ives/sms:+61406883355
+WARNING 2023-09-25 19:25:43,740 log Not Found: /information/sms:+61406883355
+WARNING 2023-09-25 19:25:46,313 log Not Found: /airport-transfers-epping/sms:+61406883355
+WARNING 2023-09-25 19:25:46,965 log Not Found: /inquiry/sms:+61406883355
+WARNING 2023-09-25 19:25:47,605 log Not Found: /inquiry2/sms:+61406883355
+WARNING 2023-09-25 19:25:48,252 log Not Found: /service/sms:+61406883355
+WARNING 2023-09-25 19:25:48,898 log Not Found: /airport-transfers-ryde/sms:+61406883355
+WARNING 2023-09-25 19:25:49,559 log Not Found: /airport-transfers-blacktown/sms:+61406883355
+WARNING 2023-09-25 19:25:50,206 log Not Found: /airport-transfers-parramatta/sms:+61406883355
+WARNING 2023-09-25 19:25:50,852 log Not Found: /privacy/sms:+61406883355
+WARNING 2023-09-25 19:25:51,497 log Not Found: /inquiry_details2/sms:+61406883355
+WARNING 2023-09-25 19:25:52,134 log Not Found: /p2p/sms:+61406883355
+WARNING 2023-09-25 19:25:53,784 log Not Found: /meeting_point/sms:+61406883355
+WARNING 2023-09-25 19:25:54,431 log Not Found: /booking_form/sms:+61406883355
+WARNING 2023-09-25 19:25:55,075 log Not Found: /airport-transfers-hornsby/sms:+61406883355
+WARNING 2023-09-25 19:25:55,724 log Not Found: /airport-transfers-chatswood/sms:+61406883355
+WARNING 2023-09-25 19:25:56,375 log Not Found: /airport-transfers-thornleigh/sms:+61406883355
+WARNING 2023-09-25 19:25:57,023 log Not Found: /terms/sms:+61406883355
+WARNING 2023-09-25 19:25:58,743 log Not Found: /booking_form_detail/sms:+61406883355
+WARNING 2023-09-25 19:26:00,416 log Not Found: /home/sms:+61406883355
+WARNING 2023-09-25 19:26:01,060 log Not Found: /payonline/tell:+61406883355
+WARNING 2023-09-25 19:26:01,708 log Not Found: /inquiry_details/sms:+61406883355
+WARNING 2023-09-25 19:26:02,355 log Not Found: /p2p_single/sms:+61406883355
+WARNING 2023-09-25 19:26:02,998 log Not Found: /price_detail/sms:+61406883355
+WARNING 2023-09-25 19:26:03,646 log Not Found: /about_us/sms:+61406883355
+WARNING 2023-09-25 19:26:06,384 log Not Found: /inquiry_details1/sms:+61406883355

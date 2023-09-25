@@ -1,15 +1,6 @@
 import os
 import logging
-import sentry_sdk
-from sentry_sdk.integrations.django import DjangoIntegration
 from decouple import config
-
-
-sentry_sdk.init(
-    dsn= config("dsn"),
-    integrations=[DjangoIntegration()],
-    
-)
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
