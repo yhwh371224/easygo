@@ -76,6 +76,7 @@ class Post(models.Model):
     is_confirmed = models.BooleanField(default=False, blank=True)
     cancelled = models.BooleanField(default=False, blank=True)    
     private_ride = models.BooleanField(default=False, blank=True)
+    calendar_event_id = models.CharField(max_length=255, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
