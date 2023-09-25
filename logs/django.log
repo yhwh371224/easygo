@@ -509,3 +509,27 @@ WARNING 2023-09-25 15:15:58,275 log Not Found: /Core/Skin/Login.aspx
 WARNING 2023-09-25 16:49:23,387 log Not Found: /Core/Skin/Login.aspx
 ERROR 2023-09-25 17:08:48,106 log Internal Server Error: /paypal_ipn/
 WARNING 2023-09-25 17:12:14,419 log Not Found: /shop/pl/product/moncler-moka-4/
+WARNING 2023-09-25 17:21:03,606 log Not Found: /shop/sv/product/moncler-flera-logotyp-design-man-dunjackor-med-huva-svart/
+ERROR 2023-09-25 17:25:15,918 exception Invalid HTTP_HOST header: 'online.vfsglobal.dz'. You may need to add 'online.vfsglobal.dz' to ALLOWED_HOSTS.
+WARNING 2023-09-25 17:25:16,062 log Bad Request: /Global-Appointment
+ERROR 2023-09-25 17:25:41,085 log Internal Server Error: /paypal_ipn/
+ERROR 2023-09-25 17:27:17,089 exception Invalid HTTP_HOST header: 'row1.vfsglobal.com'. You may need to add 'row1.vfsglobal.com' to ALLOWED_HOSTS.
+WARNING 2023-09-25 17:27:17,191 log Bad Request: /GlobalAppointment
+WARNING 2023-09-25 17:28:16,355 log Not Found: /wp-content/plugins/incache/front/incache.jpeg
+WARNING 2023-09-25 17:28:17,723 log Not Found: /wp/wp-content/plugins/incache/front/incache.jpeg
+WARNING 2023-09-25 17:28:19,017 log Not Found: /wordpress/wp-content/plugins/incache/front/incache.jpeg
+ERROR 2023-09-25 17:31:46,273 log Internal Server Error: /paypal_ipn/
+WARNING 2023-09-25 17:40:38,050 log Not Found: /Public/home/js/check.js
+WARNING 2023-09-25 17:40:38,452 log Not Found: /Public/home/js/check.js
+ERROR 2023-09-25 17:43:43,780 log Internal Server Error: /paypal_ipn/
+ERROR 2023-09-25 17:43:56,213 log Internal Server Error: /paypal_ipn/
+ERROR 2023-09-25 17:53:01,743 log Internal Server Error: /paypal_ipn/
+ERROR 2023-09-25 17:53:14,123 log Internal Server Error: /paypal_ipn/
+WARNING 2023-09-25 17:55:50,498 log Not Found: /shop/fi/product/moncler-abrigo-hombres-cuello-de-piel-con-capucha-de-color-caqui/
+ERROR 2023-09-25 17:56:43,500 log Internal Server Error: /paypal_ipn/
+WARNING 2023-09-25 18:06:29,025 log Not Found: /robots.txt
+WARNING 2023-09-25 18:06:30,530 log Not Found: /about-us/
+WARNING 2023-09-25 18:08:14,137 log Not Found: /product/2014-new-moncler-bresle-euramerican-style-mens-jackets-blue/
+ERROR 2023-09-25 18:08:38,080 log Internal Server Error: /paypal_ipn/
+WARNING 2023-09-25 18:11:37,065 log Not Found: /.git/HEAD
+WARNING 2023-09-25 18:11:38,490 log Not Found: /.git/HEAD
