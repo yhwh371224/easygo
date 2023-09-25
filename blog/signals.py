@@ -117,21 +117,27 @@ def notify_user_payment(sender, instance, created, **kwargs):
     
     if post_name: 
         post_name.paid = instance.gross_amount
-        post_name.save() 
+        post_name.save()         
         
-        if created:
-            html_content = render_to_string("basecamp/html_email-payment-success.html",
-                                        {'name': instance.item_name, 'email': instance.payer_email,
-                                         'amount': instance.gross_amount })
-            text_content = strip_tags(html_content)
-            email = EmailMultiAlternatives(
-                "PayPal payment - EasyGo",
-                text_content,
-                '',
-                [instance.payer_email, RECIPIENT_EMAIL]
-            )        
-            email.attach_alternative(html_content, "text/html")        
-            email.send()               
+        html_content = render_to_string("basecamp/html_email-payment-success.html",
+                                    {'name': instance.item_name, 'email': instance.payer_email,
+                                     'amount': instance.gross_amount })
+        text_content = strip_tags(html_content)
+        email = EmailMultiAlternatives(
+            "PayPal payment - EasyGo",
+            text_content,
+            '',
+            [instance.payer_email, RECIPIENT_EMAIL]
+        )        
+        email.attach_alternative(html_content, "text/html")        
+        email.send()
+
+
+        if post_name.return_pickup_time == 'x':
+                post_name_second = Post.objects.filter(email=post_name.email)[1]
+                post_name_second.paid = instance.gross_amount
+                post_name_second.save()
+     
             
     else:
         html_content = render_to_string("basecamp/html_email-noIdentity.html",
@@ -178,7 +184,7 @@ def create_event_on_calendar(sender, instance, created, **kwargs):
             
             title = " ".join([instance.pickup_time, instance.flight_number, instance.flight_time, 'p'+str(instance.no_of_passenger), '$'+instance.price, instance.contact])
             address = " ".join([instance.street, instance.suburb])
-            if instance.return_flight_date:
+            if instance.return_flight_number:
                 message = " ".join([instance.name, instance.email, 'b'+instance.no_of_baggage, 'paid $'+instance.paid, 'm:'+instance.message, "Date:"+str(instance.return_flight_date)])
             else:
                 message = " ".join([instance.name, instance.email, 'b'+instance.no_of_baggage,'paid $'+instance.paid, 'm:'+instance.message])
@@ -208,7 +214,7 @@ def create_event_on_calendar(sender, instance, created, **kwargs):
                 print('Event updated: %s' % (event.get('htmlLink')))
             except HttpError as error:
                 print(f'An error occurred while updating the event: {error}')
-        elif created:
+        else:
             try:
                 event = service.events().insert(calendarId='primary', body=event).execute()
                 instance.calendar_event_id = event['id']  # Store the event ID in your model
