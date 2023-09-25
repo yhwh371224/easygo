@@ -217,3 +217,295 @@ WARNING 2023-09-25 07:31:52,878 log Not Found: /wp-login.php
 WARNING 2023-09-25 07:38:01,262 log Not Found: /wp-login.php
 WARNING 2023-09-25 07:51:43,736 log Not Found: /apple-touch-icon-120x120-precomposed.png
 WARNING 2023-09-25 07:51:44,036 log Not Found: /apple-touch-icon-120x120.png
+WARNING 2023-09-25 08:27:46,060 log Not Found: /robots.txt
+WARNING 2023-09-25 08:41:28,607 log Not Found: /shop/ko/product/여성용-카키에-대한-moncler-armoise-hot-sell-다운-재킷/
+WARNING 2023-09-25 09:03:22,222 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-09-25 09:03:26,557 log Not Found: /.env
+WARNING 2023-09-25 09:03:27,736 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-09-25 09:04:09,038 log Not Found: /shop/product/2014-new-moncler-fashion-womens-down-coats-windproof-light-coffee/
+WARNING 2023-09-25 10:00:39,598 log Not Found: /version
+WARNING 2023-09-25 10:03:43,136 log Not Found: /wp-json/acf/v3/options/a
+WARNING 2023-09-25 10:05:39,968 log Not Found: /robots.txt
+WARNING 2023-09-25 10:33:58,456 log Not Found: /robots.txt
+WARNING 2023-09-25 10:34:03,795 log Not Found: /sitemap.xml
+WARNING 2023-09-25 10:36:32,636 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-09-25 10:52:09,480 log Not Found: /shop/nl/product-tag/moncler-jassen-heren-te-koop/
+WARNING 2023-09-25 10:52:13,491 log Not Found: /robots.txt
+WARNING 2023-09-25 10:52:14,292 log Not Found: /robots.txt
+WARNING 2023-09-25 10:52:15,105 log Not Found: /feed
+WARNING 2023-09-25 10:57:56,474 log Not Found: /robots.txt
+WARNING 2023-09-25 11:15:59,515 log Not Found: /easygo-shuttle-chartered-bus/
+ERROR 2023-09-25 11:19:15,817 log Internal Server Error: /confirm_booking_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/views.py", line 84, in sentry_wrapped_callback
+    return callback(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1723, in confirm_booking_detail
+    p.save()
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 806, in save
+    self.save_base(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 872, in save_base
+    post_save.send(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/dispatch/dispatcher.py", line 176, in send
+    return [
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/dispatch/dispatcher.py", line 177, in <listcomp>
+    (receiver, receiver(signal=self, sender=sender, **named))
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/signals_handlers.py", line 66, in wrapper
+    return receiver(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/blog/signals.py", line 33, in notify_user_post
+    p.save()
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 806, in save
+    self.save_base(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 872, in save_base
+    post_save.send(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/dispatch/dispatcher.py", line 176, in send
+    return [
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/dispatch/dispatcher.py", line 177, in <listcomp>
+    (receiver, receiver(signal=self, sender=sender, **named))
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/signals_handlers.py", line 66, in wrapper
+    return receiver(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/blog/signals.py", line 204, in create_event_on_calendar
+    event = service.events().insert(calendarId='primary', body=event).execute()
+UnboundLocalError: local variable 'service' referenced before assignment
+ERROR 2023-09-25 11:21:17,020 log Internal Server Error: /confirm_booking_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/views.py", line 84, in sentry_wrapped_callback
+    return callback(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1723, in confirm_booking_detail
+    p.save()
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 806, in save
+    self.save_base(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 872, in save_base
+    post_save.send(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/dispatch/dispatcher.py", line 176, in send
+    return [
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/dispatch/dispatcher.py", line 177, in <listcomp>
+    (receiver, receiver(signal=self, sender=sender, **named))
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/signals_handlers.py", line 66, in wrapper
+    return receiver(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/blog/signals.py", line 33, in notify_user_post
+    p.save()
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 806, in save
+    self.save_base(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 872, in save_base
+    post_save.send(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/dispatch/dispatcher.py", line 176, in send
+    return [
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/dispatch/dispatcher.py", line 177, in <listcomp>
+    (receiver, receiver(signal=self, sender=sender, **named))
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/signals_handlers.py", line 66, in wrapper
+    return receiver(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/blog/signals.py", line 204, in create_event_on_calendar
+    event = service.events().insert(calendarId='primary', body=event).execute()
+UnboundLocalError: local variable 'service' referenced before assignment
+ERROR 2023-09-25 11:27:49,741 log Internal Server Error: /horeb_yhwh/blog/post/2181/change/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/views.py", line 84, in sentry_wrapped_callback
+    return callback(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 683, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 134, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/views/decorators/cache.py", line 62, in _wrapped_view_func
+    response = view_func(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/sites.py", line 242, in inner
+    return view(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 1889, in change_view
+    return self.changeform_view(request, object_id, form_url, extra_context)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 46, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 134, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 1746, in changeform_view
+    return self._changeform_view(request, object_id, form_url, extra_context)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 1798, in _changeform_view
+    self.save_model(request, new_object, form, not add)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 1221, in save_model
+    obj.save()
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 806, in save
+    self.save_base(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 872, in save_base
+    post_save.send(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/dispatch/dispatcher.py", line 176, in send
+    return [
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/dispatch/dispatcher.py", line 177, in <listcomp>
+    (receiver, receiver(signal=self, sender=sender, **named))
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/signals_handlers.py", line 66, in wrapper
+    return receiver(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/blog/signals.py", line 205, in create_event_on_calendar
+    event = service.events().insert(calendarId='primary', body=event).execute()
+UnboundLocalError: local variable 'service' referenced before assignment
+WARNING 2023-09-25 11:28:25,465 log Not Found: /robots.txt
+WARNING 2023-09-25 11:39:21,591 log Not Found: /vpn/index.html
+WARNING 2023-09-25 11:40:49,920 log Not Found: /.git/config
+WARNING 2023-09-25 11:45:00,445 log Not Found: /robots.txt
+WARNING 2023-09-25 11:45:01,152 log Not Found: /xmlrpc.php
+WARNING 2023-09-25 11:46:13,555 log Not Found: /.env
+WARNING 2023-09-25 11:46:14,737 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-09-25 11:51:15,412 log Not Found: /owa/auth/logon.aspx
+ERROR 2023-09-25 11:51:50,308 log Internal Server Error: /horeb_yhwh/blog/post/2190/change/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/views.py", line 84, in sentry_wrapped_callback
+    return callback(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 683, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 134, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/views/decorators/cache.py", line 62, in _wrapped_view_func
+    response = view_func(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/sites.py", line 242, in inner
+    return view(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 1889, in change_view
+    return self.changeform_view(request, object_id, form_url, extra_context)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 46, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 134, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 1746, in changeform_view
+    return self._changeform_view(request, object_id, form_url, extra_context)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 1798, in _changeform_view
+    self.save_model(request, new_object, form, not add)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 1221, in save_model
+    obj.save()
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 806, in save
+    self.save_base(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 872, in save_base
+    post_save.send(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/dispatch/dispatcher.py", line 176, in send
+    return [
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/dispatch/dispatcher.py", line 177, in <listcomp>
+    (receiver, receiver(signal=self, sender=sender, **named))
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/signals_handlers.py", line 66, in wrapper
+    return receiver(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/blog/signals.py", line 205, in create_event_on_calendar
+    event = service.events().insert(calendarId='primary', body=event).execute()
+UnboundLocalError: local variable 'service' referenced before assignment
+WARNING 2023-09-25 12:05:27,591 log Not Found: /robots.txt
+ERROR 2023-09-25 12:09:00,786 log Internal Server Error: /confirm_booking_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/views.py", line 84, in sentry_wrapped_callback
+    return callback(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1723, in confirm_booking_detail
+    p.save()
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 806, in save
+    self.save_base(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 872, in save_base
+    post_save.send(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/dispatch/dispatcher.py", line 176, in send
+    return [
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/dispatch/dispatcher.py", line 177, in <listcomp>
+    (receiver, receiver(signal=self, sender=sender, **named))
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/signals_handlers.py", line 66, in wrapper
+    return receiver(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/blog/signals.py", line 217, in create_event_on_calendar
+    message = " ".join([instance.name, instance.email, 'b'+instance.no_of_baggage, 'm:'+instance.message, 'Date'+instance.flight_date])
+TypeError: can only concatenate str (not "datetime.date") to str
+WARNING 2023-09-25 12:09:39,152 log Not Found: /Core/Skin/Login.aspx
+ERROR 2023-09-25 12:13:44,384 log Internal Server Error: /horeb_yhwh/blog/post/2197/change/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/views.py", line 84, in sentry_wrapped_callback
+    return callback(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 683, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 134, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/views/decorators/cache.py", line 62, in _wrapped_view_func
+    response = view_func(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/sites.py", line 242, in inner
+    return view(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 1889, in change_view
+    return self.changeform_view(request, object_id, form_url, extra_context)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 46, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 134, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 1746, in changeform_view
+    return self._changeform_view(request, object_id, form_url, extra_context)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 1798, in _changeform_view
+    self.save_model(request, new_object, form, not add)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 1221, in save_model
+    obj.save()
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 806, in save
+    self.save_base(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 872, in save_base
+    post_save.send(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/dispatch/dispatcher.py", line 176, in send
+    return [
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/dispatch/dispatcher.py", line 177, in <listcomp>
+    (receiver, receiver(signal=self, sender=sender, **named))
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/signals_handlers.py", line 66, in wrapper
+    return receiver(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/blog/signals.py", line 205, in create_event_on_calendar
+    event = service.events().insert(calendarId='primary', body=event).execute()
+UnboundLocalError: local variable 'service' referenced before assignment
+WARNING 2023-09-25 12:47:42,910 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-09-25 13:03:56,798 log Not Found: /.env
+WARNING 2023-09-25 13:03:57,972 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-09-25 13:04:24,934 log Not Found: /wordpress/
+WARNING 2023-09-25 13:10:24,048 log Not Found: /shop/product/moncler-jackets-kids-maya-blue-roi/
+WARNING 2023-09-25 13:28:28,747 log Not Found: /shop/sv/product/moncler-alskare-av-man-vast-armlos-single-breasted-vit/
+WARNING 2023-09-25 13:30:47,454 log Not Found: /robots.txt
+WARNING 2023-09-25 13:32:00,127 log Not Found: /robots.txt
+WARNING 2023-09-25 13:35:06,504 log Not Found: /shop/sv/product-category/moncler-vastar-kvinnor/
+WARNING 2023-09-25 13:36:52,203 log Not Found: /.well-known/acme-challenge/U_K5UZ0XU1O8OKQ5XH21W7QH0NF0ILZT
+WARNING 2023-09-25 13:36:53,240 log Not Found: /.well-known/acme-challenge/NQG0TQDTB85MSC9R8S5PT6IIGXHJ89XG
+WARNING 2023-09-25 13:42:40,395 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-09-25 13:44:12,919 log Not Found: /shop/ko/product/남성-다운-자-크라들-패션-다운-자켓/
+WARNING 2023-09-25 13:51:29,638 log Not Found: /.env
+WARNING 2023-09-25 13:51:30,830 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-09-25 13:58:06,422 log Not Found: /contact/
+WARNING 2023-09-25 14:02:43,307 log Not Found: /robots.txt
+WARNING 2023-09-25 14:12:33,277 log Not Found: /robots.txt
+WARNING 2023-09-25 14:13:54,651 log Not Found: /sydney-airport-shuttle-bus/
+WARNING 2023-09-25 14:18:36,622 log Not Found: /robots.txt
+WARNING 2023-09-25 14:32:24,548 log Not Found: //wp-includes/wlwmanifest.xml
+WARNING 2023-09-25 14:32:24,852 log Not Found: //xmlrpc.php
+WARNING 2023-09-25 14:32:25,458 log Not Found: //blog/wp-includes/wlwmanifest.xml
+WARNING 2023-09-25 14:32:25,798 log Not Found: //web/wp-includes/wlwmanifest.xml
+WARNING 2023-09-25 14:32:26,126 log Not Found: //wordpress/wp-includes/wlwmanifest.xml
+WARNING 2023-09-25 14:32:26,429 log Not Found: //website/wp-includes/wlwmanifest.xml
+WARNING 2023-09-25 14:32:26,751 log Not Found: //wp/wp-includes/wlwmanifest.xml
+WARNING 2023-09-25 14:32:27,054 log Not Found: //news/wp-includes/wlwmanifest.xml
+WARNING 2023-09-25 14:32:27,375 log Not Found: //2020/wp-includes/wlwmanifest.xml
+WARNING 2023-09-25 14:32:27,703 log Not Found: //2019/wp-includes/wlwmanifest.xml
+WARNING 2023-09-25 14:32:28,007 log Not Found: //shop/wp-includes/wlwmanifest.xml
+WARNING 2023-09-25 14:32:28,311 log Not Found: //wp1/wp-includes/wlwmanifest.xml
+WARNING 2023-09-25 14:32:28,615 log Not Found: //test/wp-includes/wlwmanifest.xml
+WARNING 2023-09-25 14:32:28,918 log Not Found: //wp2/wp-includes/wlwmanifest.xml
+WARNING 2023-09-25 14:32:29,251 log Not Found: //site/wp-includes/wlwmanifest.xml
+WARNING 2023-09-25 14:32:29,555 log Not Found: //cms/wp-includes/wlwmanifest.xml
+WARNING 2023-09-25 14:32:29,858 log Not Found: //sito/wp-includes/wlwmanifest.xml
+WARNING 2023-09-25 14:37:12,459 log Not Found: /wp-content/plugins/WordPressCore/include.php
+WARNING 2023-09-25 14:37:13,869 log Not Found: /wp-includes/images/include.php
+WARNING 2023-09-25 14:37:15,275 log Not Found: /wp-includes/widgets/include.php
+WARNING 2023-09-25 14:37:39,777 log Not Found: /robots.txt
+WARNING 2023-09-25 14:45:05,159 log Not Found: /ads.txt
+WARNING 2023-09-25 14:45:20,511 log Not Found: /airport-transfers-carlingford/
+WARNING 2023-09-25 15:02:48,057 log Not Found: /shop/ko/product-tag/저렴한-몽크-부츠/
+WARNING 2023-09-25 15:15:58,275 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-09-25 16:49:23,387 log Not Found: /Core/Skin/Login.aspx
+ERROR 2023-09-25 17:08:48,106 log Internal Server Error: /paypal_ipn/
+WARNING 2023-09-25 17:12:14,419 log Not Found: /shop/pl/product/moncler-moka-4/

@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from main.settings import RECIPIENT_EMAIL
 from django.shortcuts import render, redirect
 from django.core.mail import send_mail
 from basecamp.area import suburbs
@@ -354,7 +355,7 @@ def inquiry_details(request):
                         data['return_flight_time'], data['return_pickup_time'], data['message'])
             
             send_mail(data['flight_date'], content,
-                      '', ['info@easygoshuttle.com.au'])
+                      '', [RECIPIENT_EMAIL])
             
         elif (email in inquiry_email) and not(email in post_email):            
             content = '''
@@ -390,7 +391,7 @@ def inquiry_details(request):
                         data['return_flight_time'], data['return_pickup_time'], data['message'])
             
             send_mail(data['flight_date'], content,
-                      '', ['info@easygoshuttle.com.au'])
+                      '', [RECIPIENT_EMAIL])
             
         elif not(email in inquiry_email) and (email in post_email):            
             content = '''
@@ -426,7 +427,7 @@ def inquiry_details(request):
                         data['return_flight_time'], data['return_pickup_time'], data['message'])
             
             send_mail(data['flight_date'], content,
-                      '', ['info@easygoshuttle.com.au'])
+                      '', [RECIPIENT_EMAIL])
             
         else:
             content = '''
@@ -462,7 +463,7 @@ def inquiry_details(request):
                         data['return_flight_time'], data['return_pickup_time'], data['message'])
             
             send_mail(data['flight_date'], content,
-                      '', ['info@easygoshuttle.com.au'])
+                      '', [RECIPIENT_EMAIL])
         
         
         p = Inquiry(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
@@ -565,7 +566,7 @@ def inquiry_details1(request):
                         data['return_flight_time'], data['return_pickup_time'], data['message'])
             
             send_mail(data['flight_date'], content,
-                      '', ['info@easygoshuttle.com.au'])
+                      '', [RECIPIENT_EMAIL])
             
         elif (email in post_email) and not(email in inquiry_email):            
                         
@@ -602,7 +603,7 @@ def inquiry_details1(request):
                         data['return_flight_time'], data['return_pickup_time'], data['message'])
             
             send_mail(data['flight_date'], content,
-                      '', ['info@easygoshuttle.com.au'])
+                      '', [RECIPIENT_EMAIL])
             
         elif not(email in post_email) and (email in inquiry_email):            
                         
@@ -639,7 +640,7 @@ def inquiry_details1(request):
                         data['return_flight_time'], data['return_pickup_time'], data['message'])
             
             send_mail(data['flight_date'], content,
-                      '', ['info@easygoshuttle.com.au'])
+                      '', [RECIPIENT_EMAIL])
         
         else:
             content = '''
@@ -675,7 +676,7 @@ def inquiry_details1(request):
                         data['return_flight_time'], data['return_pickup_time'], data['message'])
             
             send_mail(data['flight_date'], content,
-                      '', ['info@easygoshuttle.com.au'])        
+                      '', [RECIPIENT_EMAIL])        
         
         p = Inquiry(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
@@ -777,7 +778,7 @@ def booking_form_detail(request):
                         data['return_flight_time'], data['return_pickup_time'], data['message'])
 
             send_mail(data['flight_date'], content,
-                      '', ['info@easygoshuttle.com.au'])
+                      '', [RECIPIENT_EMAIL])
             
         elif (email in inquiry_email) and not(email in post_email):   
             content = '''
@@ -813,7 +814,7 @@ def booking_form_detail(request):
                         data['return_flight_time'], data['return_pickup_time'], data['message'])
             
             send_mail(data['flight_date'], content,
-                      '', ['info@easygoshuttle.com.au'])
+                      '', [RECIPIENT_EMAIL])
             
         elif not(email in inquiry_email) and (email in post_email):   
             content = '''
@@ -849,7 +850,7 @@ def booking_form_detail(request):
                         data['return_flight_time'], data['return_pickup_time'], data['message'])
 
             send_mail(data['flight_date'], content,
-                      '', ['info@easygoshuttle.com.au'])
+                      '', [RECIPIENT_EMAIL])
             
         else:
             content = '''
@@ -885,7 +886,7 @@ def booking_form_detail(request):
                         data['return_flight_time'], data['return_pickup_time'], data['message'])
 
             send_mail(data['flight_date'], content,
-                      '', ['info@easygoshuttle.com.au'])
+                      '', [RECIPIENT_EMAIL])
         
         p = Inquiry(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
@@ -1003,7 +1004,7 @@ def p2p_single(request):
                         data['message'])
 
             send_mail(data['flight_date'], content,
-                      '', ['info@easygoshuttle.com.au'])
+                      '', [RECIPIENT_EMAIL])
             
         elif (email in inquiry_point_email) and not(email in post_email):   
             content = '''
@@ -1031,7 +1032,7 @@ def p2p_single(request):
                         data['message'])
 
             send_mail(data['flight_date'], content,
-                      '', ['info@easygoshuttle.com.au'])
+                      '', [RECIPIENT_EMAIL])
             
         elif not(email in inquiry_point_email) and (email in post_email):   
             content = '''
@@ -1059,7 +1060,7 @@ def p2p_single(request):
                         data['message'])
 
             send_mail(data['flight_date'], content,
-                      '', ['info@easygoshuttle.com.au'])
+                      '', [RECIPIENT_EMAIL])
             
         else:
             content = '''
@@ -1087,7 +1088,7 @@ def p2p_single(request):
                         data['message'])
 
             send_mail(data['flight_date'], content,
-                      '', ['info@easygoshuttle.com.au'])        
+                      '', [RECIPIENT_EMAIL])        
         
         p = Inquiry_point(name=name, contact=contact, email=email, direction="Point to Point", flight_date=flight_date, flight_time="01:00", 
                           pickup_time=pickup_time, flight_number=flight_number, street=street, suburb="Cruise", no_of_passenger=no_of_passenger, 
@@ -1144,7 +1145,7 @@ def p2p(request):
             "Multiple points inquiry",
             text_content,
             '',
-            [p2p_email, 'info@easygoshuttle.com.au']
+            [p2p_email, RECIPIENT_EMAIL]
         )
         
         email.attach_alternative(html_content, "text/html")
@@ -1306,7 +1307,7 @@ def confirmation_detail(request):
                         data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
                         data['no_of_passenger'], data['no_of_baggage'], data['message'], data['price'])
             send_mail(data['flight_date'], content,
-                      '', ['info@easygoshuttle.com.au'])
+                      '', [RECIPIENT_EMAIL])
             
         elif (email in post_email) and not(email in inquiry_email):            
                         
@@ -1335,7 +1336,7 @@ def confirmation_detail(request):
                         data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
                         data['no_of_passenger'], data['no_of_baggage'], data['message'], data['price'])
             send_mail(data['flight_date'], content,
-                      '', ['info@easygoshuttle.com.au'])
+                      '', [RECIPIENT_EMAIL])
             
         elif not(email in post_email) and (email in inquiry_email):            
                         
@@ -1364,7 +1365,7 @@ def confirmation_detail(request):
                         data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
                         data['no_of_passenger'], data['no_of_baggage'], data['message'], data['price'])
             send_mail(data['flight_date'], content,
-                      '', ['info@easygoshuttle.com.au'])
+                      '', [RECIPIENT_EMAIL])
         
         else:
             content = '''
@@ -1392,7 +1393,7 @@ def confirmation_detail(request):
                         data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
                         data['no_of_passenger'], data['no_of_baggage'], data['message'], data['price'])
             send_mail(data['flight_date'], content,
-                      '', ['info@easygoshuttle.com.au'])
+                      '', [RECIPIENT_EMAIL])
             
         sam_driver = Driver.objects.get(driver_name="Sam") 
 
@@ -1510,7 +1511,7 @@ def booking_detail(request):
                         data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
                         data['no_of_passenger'], data['no_of_baggage'], data['message'], data['price'], data['return_flight_number'])
             send_mail(data['flight_date'], content,
-                      '', ['info@easygoshuttle.com.au'])
+                      '', [RECIPIENT_EMAIL])
             
         elif (email in post_email) and not(email in inquiry_email):            
                         
@@ -1542,7 +1543,7 @@ def booking_detail(request):
                         data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
                         data['no_of_passenger'], data['no_of_baggage'], data['message'], data['price'], data['return_flight_number'])
             send_mail(data['flight_date'], content,
-                      '', ['info@easygoshuttle.com.au'])
+                      '', [RECIPIENT_EMAIL])
             
         elif not(email in post_email) and (email in inquiry_email):            
                         
@@ -1574,7 +1575,7 @@ def booking_detail(request):
                         data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
                         data['no_of_passenger'], data['no_of_baggage'], data['message'], data['price'], data['return_flight_number'])
             send_mail(data['flight_date'], content,
-                      '', ['info@easygoshuttle.com.au'])
+                      '', [RECIPIENT_EMAIL])
         
         else:
             content = '''
@@ -1605,7 +1606,7 @@ def booking_detail(request):
                         data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
                         data['no_of_passenger'], data['no_of_baggage'], data['message'], data['price'], data['return_flight_number'])
             send_mail(data['flight_date'], content,
-                      '', ['info@easygoshuttle.com.au'])
+                      '', [RECIPIENT_EMAIL])
             
         sam_driver = Driver.objects.get(driver_name="Sam") 
 
@@ -1710,7 +1711,7 @@ def confirm_booking_detail(request):
                         data['pickup_time'], data['direction'], data['street'], data['suburb'], data['no_of_passenger'], 
                         data['no_of_baggage'], data['message'], data['price'] , data['return_flight_number'])
             send_mail(data['flight_date'], content,
-                      '', ['info@easygoshuttle.com.au'])   
+                      '', [RECIPIENT_EMAIL])   
             
         sam_driver = Driver.objects.get(driver_name="Sam")    
             
@@ -1918,7 +1919,7 @@ def return_trip_inquiry_detail(request):
                     data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
                     data['no_of_passenger'], data['no_of_baggage'], data['message'], data['notice'], data['price'])
         send_mail(data['flight_date'], content,
-                  '', ['info@easygoshuttle.com.au'])       
+                  '', [RECIPIENT_EMAIL])       
             
         p = Inquiry(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
@@ -1943,7 +1944,7 @@ def return_trip_inquiry_detail(request):
             "Booking inquiry - EasyGo",
             text_content,
             '',
-            [email, 'info@easygoshuttle.com.au']
+            [email, RECIPIENT_EMAIL]
         )
         email.attach_alternative(html_content, "text/html")
         email.send()
@@ -2026,7 +2027,7 @@ def return_trip_detail(request):
                         data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
                         data['no_of_passenger'], data['no_of_baggage'], data['message'], data['price'])
         send_mail(data['flight_date'], content,
-                      '', ['info@easygoshuttle.com.au'])     
+                      '', [RECIPIENT_EMAIL])     
         
         sam_driver = Driver.objects.get(driver_name="Sam")  
                     
@@ -2178,7 +2179,7 @@ def flight_date_detail(request):
                         data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
                         data['no_of_passenger'], data['no_of_baggage'], data['message'])
             send_mail(data['flight_date'], content,
-                      '', ['info@easygoshuttle.com.au'])       
+                      '', [RECIPIENT_EMAIL])       
             
             
         p = Inquiry (name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
