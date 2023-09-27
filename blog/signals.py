@@ -182,12 +182,13 @@ def create_event_on_calendar(sender, instance, created, **kwargs):
         
             service = build('calendar', 'v3', credentials=creds)        
             
-            title = " ".join([instance.pickup_time, instance.flight_number, instance.flight_time, 'p'+str(instance.no_of_passenger), '$'+instance.price, instance.contact])
-            address = " ".join([instance.street, instance.suburb])
+            paid_str = f'paid' if instance.paid else ''
+            title = " ".join([instance.pickup_time, instance.flight_number, instance.flight_time, 'p'+str(instance.no_of_passenger), paid_str, '$'+instance.price, instance.contact])
+            address = " ".join([instance.street, instance.suburb])            
             if instance.return_flight_number:
-                message = " ".join([instance.name, instance.email, 'b'+instance.no_of_baggage, 'paid $'+instance.paid, 'm:'+instance.message, "Date:"+str(instance.return_flight_date)])
+                message = " ".join([instance.name, instance.email, 'b'+instance.no_of_baggage, 'm:'+instance.message, "d:"+str(instance.return_flight_date)])
             else:
-                message = " ".join([instance.name, instance.email, 'b'+instance.no_of_baggage,'paid $'+instance.paid, 'm:'+instance.message])
+                message = " ".join([instance.name, instance.email, 'b'+instance.no_of_baggage, 'm:'+instance.message])
             flight_date = datetime.datetime.strptime(str(instance.flight_date), '%Y-%m-%d')
             pickup_time = datetime.datetime.strptime(instance.pickup_time, '%H:%M')
             start = datetime.datetime.combine(flight_date, pickup_time.time())        
