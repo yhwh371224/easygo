@@ -35,8 +35,7 @@ class Inquiry(models.Model):
     private_ride = models.BooleanField(default=False, blank=True)    
     created = models.DateTimeField(auto_now_add=True)
 
-    class Meta:
-        unique_together = ('email', 'flight_date', 'flight_time')
+    class Meta:        
         ordering = ['-created']
     
     def get_absolute_url(self):
@@ -79,7 +78,6 @@ class Post(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('email', 'flight_date', 'flight_number')
         ordering = ['-created']
 
     def get_absolute_url(self):
