@@ -276,6 +276,9 @@ def server_error(request): return render(request, 'basecamp/504.html')
 def server_error(request): return render(request, 'basecamp/505.html')
 
 
+def server_error(request): return render(request, 'basecamp/basecamp/506.html')
+
+
 # Inquiry 
 def inquiry_details(request):
     if request.method == "POST":
@@ -296,7 +299,7 @@ def inquiry_details(request):
         return_flight_number = request.POST.get('return_flight_number')
         return_flight_time = request.POST.get('return_flight_time')
         return_pickup_time = request.POST.get('return_pickup_time')
-        message = request.POST.get('message')
+        message = request.POST.get('message')           
                                         
         data = {
             'name': name,
@@ -465,6 +468,10 @@ def inquiry_details(request):
             send_mail(data['flight_date'], content,
                       '', [RECIPIENT_EMAIL])
         
+
+        if Inquiry.objects.filter(email=email, flight_date=flight_date, flight_time=flight_time).exists():
+            return render(request, 'basecamp/506.html')   
+                           
         
         p = Inquiry(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
@@ -478,10 +485,11 @@ def inquiry_details(request):
         today = date.today()        
         if flight_date <= str(today):
             return render(request, 'basecamp/501.html')
-                        
+                                    
                             
         return render(request, 'basecamp/inquiry_details.html',
                         {'name' : name, 'email': email, }) 
+    
                             
     else:
         return render(request, 'basecamp/inquiry.html', {})
@@ -676,7 +684,12 @@ def inquiry_details1(request):
                         data['return_flight_time'], data['return_pickup_time'], data['message'])
             
             send_mail(data['flight_date'], content,
-                      '', [RECIPIENT_EMAIL])        
+                      '', [RECIPIENT_EMAIL])  
+            
+
+        if Inquiry.objects.filter(email=email, flight_date=flight_date, flight_time=flight_time).exists():
+            return render(request, 'basecamp/506.html')   
+              
         
         p = Inquiry(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
@@ -685,7 +698,7 @@ def inquiry_details1(request):
                  return_flight_time=return_flight_time, return_pickup_time=return_pickup_time ,message=message)
         
         p.save() 
-        
+
         
         today = date.today()        
         if flight_date <= str(today):
@@ -887,6 +900,11 @@ def booking_form_detail(request):
 
             send_mail(data['flight_date'], content,
                       '', [RECIPIENT_EMAIL])
+            
+            
+        if Inquiry.objects.filter(email=email, flight_date=flight_date, flight_time=flight_time).exists():
+            return render(request, 'basecamp/506.html')   
+        
         
         p = Inquiry(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
@@ -1617,7 +1635,12 @@ def booking_detail(request):
                  return_pickup_time=return_pickup_time, message=message, price=price, is_confirmed=is_confirmed,  driver=sam_driver)
         
         p.save()
+
+
+        if Post.objects.filter(email=email, created=p.created).exists():
+            return render(request, 'basecamp/506.html')   
         
+         
         # send_email_delayed.apply_async(args=[name, contact, email, flight_date, flight_number, flight_time,
         #                                       pickup_time, direction, suburb, street, no_of_passenger, no_of_baggage,
         #                                       message, price, is_confirmed], countdown=30)
@@ -1681,7 +1704,10 @@ def confirm_booking_detail(request):
             'message': message,
             'price': price,
             'return_flight_number': return_flight_number,
-            }       
+            }      
+
+            if Post.objects.filter(email=email, flight_date=flight_date, flight_number=flight_number).exists():
+                return render(request, 'basecamp/506.html')   
             
             content = '''
             {} 
@@ -1721,7 +1747,8 @@ def confirm_booking_detail(request):
                  return_flight_date=return_flight_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
                  return_pickup_time=return_pickup_time, message=message, notice=notice, price=price, paid=paid, is_confirmed=is_confirmed, driver=sam_driver)
         
-        p.save()        
+        p.save()    
+
                
         # send_email_delayed.apply_async(args=[name, contact, email, flight_date, flight_number, flight_time,
         #                                       pickup_time, direction, suburb, street, no_of_passenger, no_of_baggage,

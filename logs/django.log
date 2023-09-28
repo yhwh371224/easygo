@@ -10,3 +10,183 @@ WARNING 2023-09-28 05:11:59,258 log Not Found: /shop/ko/product/moncler-lazare-d
 WARNING 2023-09-28 05:20:03,599 log Not Found: /.env
 WARNING 2023-09-28 05:26:25,791 log Not Found: /price-booking/
 WARNING 2023-09-28 05:30:20,892 log Not Found: /wp-login.php
+WARNING 2023-09-28 05:35:25,651 log Forbidden (CSRF cookie not set.): /inquiry_details/
+WARNING 2023-09-28 05:37:27,715 log Not Found: /shop/nl/product/moncler-jackets-kids-sanglier-blue-2/
+WARNING 2023-09-28 05:40:57,638 log Not Found: /robots.txt
+WARNING 2023-09-28 05:43:53,070 log Not Found: /shop/ko/product/패션-여자-다운-버튼-모자-블랙-다운/
+WARNING 2023-09-28 05:44:25,939 log Not Found: /robots.txt
+WARNING 2023-09-28 05:48:36,256 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-09-28 06:03:15,977 log Not Found: /ecp/Current/exporttool/microsoft.exchange.ediscovery.exporttool.application
+WARNING 2023-09-28 06:06:29,508 log Not Found: /remote/login
+WARNING 2023-09-28 06:06:34,292 log Not Found: /favicon/favicon.ico
+WARNING 2023-09-28 06:18:45,553 log Not Found: /.git/config
+WARNING 2023-09-28 06:51:55,285 log Not Found: /shop/da/product/moncler-clamart-2/
+WARNING 2023-09-28 07:09:46,858 log Not Found: /.env
+WARNING 2023-09-28 07:09:48,246 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-09-28 07:22:08,833 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-09-28 07:36:53,957 log Not Found: /.git/HEAD
+WARNING 2023-09-28 07:41:53,669 log Not Found: /about_us/easycoding.live
+WARNING 2023-09-28 07:41:53,760 log Not Found: /about_us/easycoding.live
+WARNING 2023-09-28 07:42:03,183 log Not Found: /service/easycoding.live
+WARNING 2023-09-28 07:42:03,201 log Not Found: /service/easycoding.live
+WARNING 2023-09-28 07:56:57,535 log Not Found: /robots.txt
+WARNING 2023-09-28 07:57:08,389 log Not Found: /easygo-cruise-terminal/
+WARNING 2023-09-28 07:59:14,757 log Not Found: /robots.txt
+WARNING 2023-09-28 07:59:21,504 log Not Found: /contact/
+WARNING 2023-09-28 08:43:16,778 log Not Found: /.env
+WARNING 2023-09-28 08:43:17,413 log Not Found: /core/.env
+WARNING 2023-09-28 08:43:18,063 log Not Found: /web/.env
+WARNING 2023-09-28 08:43:18,717 log Not Found: /app/.env
+WARNING 2023-09-28 08:43:19,353 log Not Found: /laravel/.env
+WARNING 2023-09-28 08:43:20,225 log Not Found: /crm/.env
+WARNING 2023-09-28 08:43:20,862 log Not Found: /backend/.env
+WARNING 2023-09-28 08:43:21,497 log Not Found: /local/.env
+WARNING 2023-09-28 08:43:22,122 log Not Found: /application/.env
+WARNING 2023-09-28 08:43:23,383 log Not Found: /prod/.env
+WARNING 2023-09-28 08:43:24,012 log Not Found: /api/.env
+WARNING 2023-09-28 08:43:24,648 log Not Found: /blog/.env
+WARNING 2023-09-28 08:43:25,293 log Not Found: /.env.bak
+WARNING 2023-09-28 08:43:25,918 log Not Found: /vendor/laravel/.env
+WARNING 2023-09-28 08:43:26,554 log Not Found: /vendor/.env
+WARNING 2023-09-28 08:43:27,203 log Not Found: /public/.env
+WARNING 2023-09-28 08:43:27,837 log Not Found: /apps/.env
+WARNING 2023-09-28 08:43:28,473 log Not Found: /app/config/.env
+WARNING 2023-09-28 08:43:29,117 log Not Found: /portal/.env
+WARNING 2023-09-28 08:43:29,765 log Not Found: /.aws/credentials
+WARNING 2023-09-28 08:43:30,396 log Not Found: /phpinfo
+WARNING 2023-09-28 08:43:31,280 log Not Found: /_profiler/phpinfo
+WARNING 2023-09-28 08:43:31,907 log Not Found: /phpinfo.php
+WARNING 2023-09-28 08:43:32,546 log Not Found: /info.php
+WARNING 2023-09-28 08:43:33,173 log Not Found: /wp-config.php.orig
+WARNING 2023-09-28 08:43:33,815 log Not Found: /wp-config.php
+WARNING 2023-09-28 08:43:34,440 log Not Found: /index.php
+WARNING 2023-09-28 08:43:35,091 log Not Found: /temp.php
+WARNING 2023-09-28 08:43:35,723 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-09-28 08:51:33,025 log Not Found: /apple-touch-icon.png
+WARNING 2023-09-28 08:51:33,028 log Not Found: /apple-touch-icon-precomposed.png
+WARNING 2023-09-28 08:56:02,247 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-09-28 09:07:21,529 log Not Found: /shop/ko/product/moncler-lazare-down-jacket-패션-맨-숏-카키-2/
+ERROR 2023-09-28 09:07:58,014 log Internal Server Error: /paypal_ipn/
+WARNING 2023-09-28 09:14:52,823 log Not Found: /.env
+WARNING 2023-09-28 09:16:42,166 log Not Found: /.env
+WARNING 2023-09-28 09:16:43,555 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-09-28 09:17:54,162 log Not Found: /shop/es/product/chaquetas-moncler-hombres-cafe-corto-carreaux/
+WARNING 2023-09-28 09:21:18,427 log Not Found: /product/moncler-coat-men-hooded-fur-collar-black/
+ERROR 2023-09-28 10:11:45,702 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-09-28 10:11:45,704 log Bad Request: /
+WARNING 2023-09-28 10:15:26,011 log Not Found: /wp-content/plugins/WordPressCore/include.php
+WARNING 2023-09-28 10:29:35,702 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-09-28 10:35:47,006 log Not Found: /shop/da/product/moncler-aminata-7/
+WARNING 2023-09-28 10:54:36,268 log Not Found: /wp-content/plugins/WordPressCore/include.php
+WARNING 2023-09-28 11:11:01,982 log Not Found: /robots.txt
+WARNING 2023-09-28 11:15:42,852 log Not Found: /.env
+WARNING 2023-09-28 11:15:44,057 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-09-28 11:54:40,415 log Not Found: /robots.txt
+WARNING 2023-09-28 11:56:44,677 log Not Found: /shop/ko/product/블랙-자켓-여성-다운-자켓/
+WARNING 2023-09-28 12:00:31,340 log Not Found: /Res/login.html
+WARNING 2023-09-28 12:00:31,340 log Not Found: /aaaaaaaaaaaaaaaaaaaaaaaaaqr
+WARNING 2023-09-28 12:00:31,345 log Not Found: /99vt
+WARNING 2023-09-28 12:00:31,349 log Not Found: /robots.txt
+WARNING 2023-09-28 12:00:31,352 log Not Found: /robots.txt
+WARNING 2023-09-28 12:00:31,948 log Not Found: /99vu
+WARNING 2023-09-28 12:01:49,403 log Not Found: /shop/product/moncler-branson-women-down-vest-belt-decorative-purple/
+WARNING 2023-09-28 12:03:28,548 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-09-28 12:11:12,526 log Not Found: /.git/config
+ERROR 2023-09-28 12:16:12,947 log Internal Server Error: /booking_form_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 913, in booking_form_detail
+    return render(request, '506.html')
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: 506.html
+ERROR 2023-09-28 12:16:20,904 log Internal Server Error: /booking_form_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 913, in booking_form_detail
+    return render(request, '506.html')
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: 506.html
+ERROR 2023-09-28 12:17:46,606 log Internal Server Error: /inquiry_details/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 482, in inquiry_details
+    return render(request, '506.html')
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: 506.html
+ERROR 2023-09-28 12:19:01,303 log Internal Server Error: /inquiry_details/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 482, in inquiry_details
+    return render(request, '506.html')
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: 506.html
+WARNING 2023-09-28 12:19:55,346 log Not Found: /product/moncler-coat-men-hooded-fur-collar-black/
+ERROR 2023-09-28 12:20:44,610 log Internal Server Error: /inquiry_details/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 482, in inquiry_details
+    return render(request, '506.html')
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: 506.html
+ERROR 2023-09-28 12:25:07,408 log Internal Server Error: /inquiry_details/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 482, in inquiry_details
+    return render(request, '506.html')
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: 506.html
+WARNING 2023-09-28 12:25:42,555 log Not Found: /wp-login.php
+WARNING 2023-09-28 12:29:35,284 log Not Found: /shop/ko/product/여성용-반짝이는-스쿠버-블랙/
+WARNING 2023-09-28 12:44:20,640 log Not Found: /shop/pl/product/moncler-kurtki-meskie-zin-czarne/
+WARNING 2023-09-28 12:51:28,532 log Not Found: /shop/sv/product/moncler-mode-down-women-jacket-palskrage-kaffe/
+WARNING 2023-09-28 12:56:09,094 log Not Found: /robots.txt
+WARNING 2023-09-28 12:58:02,152 log Not Found: /ReportServer
+WARNING 2023-09-28 13:10:53,525 log Not Found: /confirm_booking

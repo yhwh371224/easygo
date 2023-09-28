@@ -28,7 +28,6 @@ class Inquiry(models.Model):
     notice = models.TextField(blank=True)    
     price = models.CharField(max_length=30, blank=True)    
     paid = models.CharField(max_length=30, blank=True)
-    # driver = models.CharField(max_length=100, blank=True, null=True)
     driver = models.ForeignKey('Driver', on_delete=models.CASCADE, null=True, blank=True)
     meeting_point = models.CharField(max_length=100, blank=True, null=True)
     is_confirmed = models.BooleanField(default=False, blank=True)        
@@ -37,6 +36,7 @@ class Inquiry(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
+        unique_together = ('email', 'flight_date', 'flight_time')
         ordering = ['-created']
     
     def get_absolute_url(self):
@@ -70,7 +70,6 @@ class Post(models.Model):
     notice = models.TextField(blank=True)
     price = models.CharField(max_length=30, blank=True)
     paid = models.CharField(max_length=30, blank=True)
-    # driver = models.CharField(max_length=100, blank=True, null=True)
     driver = models.ForeignKey('Driver', on_delete=models.CASCADE, null=True, blank=True)
     meeting_point = models.CharField(max_length=100, blank=True, null=True)
     is_confirmed = models.BooleanField(default=False, blank=True)
@@ -80,6 +79,7 @@ class Post(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
+        unique_together = ('email', 'flight_date', 'flight_number')
         ordering = ['-created']
 
     def get_absolute_url(self):
