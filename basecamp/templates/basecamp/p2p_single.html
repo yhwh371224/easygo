@@ -34,7 +34,7 @@
         <div class="row">
           <div class="col-lg-6 col-md-7 offset-lg-1 pb-2 mb-5" style="margin-top: -260px;">
             <div class="card border-0 shadow-lg">
-              <form action="/p2p_single/" method="post" class="card-body needs-validation p-5" novalidate>
+              <form action="/p2p_single/" method="post" id="booking-form" class="card-body needs-validation p-5" novalidate>
                 {% csrf_token %}
                 <div class="mb-3 pb-1">
                   <label class="form-label" >Full name</label>
@@ -131,7 +131,7 @@
 				</div>
 				<br>
                 <div class="text-center pt-2">
-                  <button class="btn btn-primary" type="submit" >Submit</button>
+                  <button class="btn btn-primary" type="submit" id="submitButton">Submit</button>
                 </div>
               </form>
             </div>

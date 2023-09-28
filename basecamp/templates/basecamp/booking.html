@@ -31,7 +31,7 @@
       <!-- Page content-->
       <!-- Page title-->	 
       <!-- Contact form + details-->  	  
-            <form method="post" enctype="multipart/form-data" action="/booking_detail/" class="card-body needs-validation p-5" >
+            <form method="post" enctype="multipart/form-data" action="/booking_detail/" id="booking-form" class="card-body needs-validation p-5" >
                 {% csrf_token %}
 				<div class="mb3 pb-1" >					
 					<label class="form-label">Personal Information</label>									      
@@ -454,7 +454,7 @@
 				</div>				
 				<br>				
 				<div class="text-center pt-2">
-					<button class="btn btn-primary" type="submit">Submit</button>
+					<button class="btn btn-primary" type="submit" id="submitButton">Submit</button>
 				</div>
 				<br><br>
                 <div><small>This form is protected by reCAPTCHA Enterprise and the Google

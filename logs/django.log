@@ -240,3 +240,14 @@ WARNING 2023-09-28 14:37:08,854 log Not Found: /shop/ko/product-category/moncler
 WARNING 2023-09-28 14:42:39,014 log Not Found: /confirm_booking
 WARNING 2023-09-28 14:42:50,416 log Not Found: /confirm_booking
 ERROR 2023-09-28 14:47:27,964 log Internal Server Error: /paypal_ipn/
+WARNING 2023-09-28 15:07:34,144 log Not Found: /wp-content/plugins/wp-daft/t62.php
+WARNING 2023-09-28 15:07:36,998 log Not Found: /wp-content/themes/hello-element/footer.php
+WARNING 2023-09-28 15:07:41,117 log Not Found: /wp-content/plugins/wordpress-three/miin.php
+WARNING 2023-09-28 15:07:42,088 log Not Found: /shop/product/moncler-jackets-kids-sanglier-blue/
+WARNING 2023-09-28 15:07:43,242 log Not Found: /wp-admin/css/colors/coffee/index.php
+WARNING 2023-09-28 15:07:45,523 log Not Found: /repeater.php
+WARNING 2023-09-28 15:07:49,643 log Not Found: /repeater.php
+WARNING 2023-09-28 15:07:52,438 log Not Found: /rindex.php
+WARNING 2023-09-28 15:07:54,701 log Not Found: /xl2023.php
+WARNING 2023-09-28 15:10:41,940 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-09-28 15:19:18,855 log Not Found: /robots.txt

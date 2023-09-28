@@ -35,7 +35,7 @@
         <div class="row">
           <div class="col-lg-7 col-md-7 pb-2 mb-5" style="margin-top: -260px;">
             <div class="card border-1 shadow-lg">    
-            <form method="post" enctype="multipart/form-data" action="/confirmation_detail/" class="card-body needs-validation p-5" >
+            <form method="post" enctype="multipart/form-data" action="/confirmation_detail/" id="booking-form" class="card-body needs-validation p-5" >
                 {% csrf_token %}
 				<div class="mb3 pb-1" >					
 					<label class="form-label">Personal Information</label>									      
@@ -468,7 +468,7 @@
 					<div class="invalid-feedback">Check this box for calendar</div>	
 				</div>
 				<div class="text-center pt-2">
-					<button class="btn btn-primary" type="submit">Submit</button>
+					<button class="btn btn-primary" type="submit" id="submitButton">Submit</button>
 				</div>
 				<br><br>
                 <div><small>This form is protected by reCAPTCHA Enterprise and the Google
