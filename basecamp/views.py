@@ -466,12 +466,8 @@ def inquiry_details(request):
                         data['return_flight_time'], data['return_pickup_time'], data['message'])
             
             send_mail(data['flight_date'], content,
-                      '', [RECIPIENT_EMAIL])
-        
-
-        if Inquiry.objects.filter(email=email, flight_date=flight_date, flight_time=flight_time).exists():
-            return render(request, 'basecamp/506.html')   
-                           
+                      '', [RECIPIENT_EMAIL])    
+                                   
         
         p = Inquiry(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
@@ -480,6 +476,9 @@ def inquiry_details(request):
                  return_pickup_time=return_pickup_time ,message=message)
         
         p.save()
+
+
+        
         
         
         today = date.today()        
@@ -684,12 +683,8 @@ def inquiry_details1(request):
                         data['return_flight_time'], data['return_pickup_time'], data['message'])
             
             send_mail(data['flight_date'], content,
-                      '', [RECIPIENT_EMAIL])  
+                      '', [RECIPIENT_EMAIL]) 
             
-
-        if Inquiry.objects.filter(email=email, flight_date=flight_date, flight_time=flight_time).exists():
-            return render(request, 'basecamp/506.html')   
-              
         
         p = Inquiry(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
@@ -899,12 +894,8 @@ def booking_form_detail(request):
                         data['return_flight_time'], data['return_pickup_time'], data['message'])
 
             send_mail(data['flight_date'], content,
-                      '', [RECIPIENT_EMAIL])
-            
-            
-        if Inquiry.objects.filter(email=email, flight_date=flight_date, flight_time=flight_time).exists():
-            return render(request, 'basecamp/506.html')   
-        
+                      '', [RECIPIENT_EMAIL])            
+    
         
         p = Inquiry(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
@@ -913,8 +904,8 @@ def booking_form_detail(request):
                  return_pickup_time=return_pickup_time ,message=message)
         
         p.save()
-        
-        
+
+
         today = date.today()        
         if flight_date <= str(today):
             return render(request, 'basecamp/501.html')
@@ -1637,8 +1628,8 @@ def booking_detail(request):
         p.save()
 
 
-        if Post.objects.filter(email=email, created=p.created).exists():
-            return render(request, 'basecamp/506.html')   
+        # if Post.objects.filter(email=email, created=p.created).exists():
+        #     return render(request, 'basecamp/506.html')   
         
          
         # send_email_delayed.apply_async(args=[name, contact, email, flight_date, flight_number, flight_time,
@@ -1704,10 +1695,7 @@ def confirm_booking_detail(request):
             'message': message,
             'price': price,
             'return_flight_number': return_flight_number,
-            }      
-
-            if Post.objects.filter(email=email, flight_date=flight_date, flight_number=flight_number).exists():
-                return render(request, 'basecamp/506.html')   
+            }                    
             
             content = '''
             {} 
@@ -1737,7 +1725,7 @@ def confirm_booking_detail(request):
                         data['pickup_time'], data['direction'], data['street'], data['suburb'], data['no_of_passenger'], 
                         data['no_of_baggage'], data['message'], data['price'] , data['return_flight_number'])
             send_mail(data['flight_date'], content,
-                      '', [RECIPIENT_EMAIL])   
+                      '', [RECIPIENT_EMAIL])  
             
         sam_driver = Driver.objects.get(driver_name="Sam")    
             
