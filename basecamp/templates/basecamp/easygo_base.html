@@ -179,6 +179,17 @@
           }
       });
     </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+          var form = document.getElementById("booking-form");
+          var submitButton = document.getElementById("submitButton");
+  
+          form.addEventListener("submit", function () {
+              submitButton.disabled = true;
+              submitButton.innerHTML = "Submitting..."; // You can change the text as needed
+          });
+      });
+  </script>
     <!-- bigpond email not available -->
     <!-- <script>
       document.getElementById("booking-form").addEventListener("submit", function(event) {

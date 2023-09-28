@@ -29,7 +29,7 @@
       <!-- Page content-->
       <!-- Page title-->	 
       <!-- Contact form + details-->  	  
-            <form method="post" enctype="multipart/form-data" action="/confirm_booking_detail/" class="card-body needs-validation p-5" >
+            <form method="post" enctype="multipart/form-data" id="booking-form" action="/confirm_booking_detail/" class="card-body needs-validation p-5" >
                 {% csrf_token %}							
 				<div class="card text-white bg-secondary p-4">
 				<div class="mb-3 pb-1">
@@ -43,7 +43,7 @@
           <div class="invalid-feedback">Please check this box if you want to proceed</div>				
 				<hr>				           	
 				<div class="text-center pt-2">					
-					<button class="btn btn-primary" type="submit">Submit</button>
+					<button class="btn btn-primary" type="submit" id="submitButton">Submit</button>
 				</div>
 				<br><br>                        
             </form>
