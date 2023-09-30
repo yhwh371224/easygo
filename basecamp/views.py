@@ -1769,10 +1769,10 @@ def reminder_detail(request):
             user1.save()
 
             html_content = render_to_string("basecamp/html_email-reminder.html",
-                                    {'company_name': user.company_name, 'name': user.name, 'email': user.email, 'email1': user.email1,})    
+                                    {'name': user.name, 'email': user.email})    
             text_content = strip_tags(html_content)
             email = EmailMultiAlternatives(
-                "Reminder - EasyGo",
+                "EasyGo: Yes-email",
                 text_content,
                 '',
                 [email, RECIPIENT_EMAIL]
@@ -1785,10 +1785,10 @@ def reminder_detail(request):
             user.save()            
 
             html_content = render_to_string("basecamp/html_email-reminder.html",
-                                    {'company_name': user.company_name, 'name': user.name, 'email': user.email, 'email1': user.email1,})            
+                                    {'name': user.name, 'email': user.email})            
             text_content = strip_tags(html_content)
             email = EmailMultiAlternatives(
-                "Reminder - EasyGo",
+                "EasyGo: Yes-email",
                 text_content,
                 '',
                 [email, RECIPIENT_EMAIL]
