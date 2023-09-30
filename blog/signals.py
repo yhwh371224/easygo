@@ -183,7 +183,9 @@ def create_event_on_calendar(sender, instance, created, **kwargs):
             service = build('calendar', 'v3', credentials=creds)        
             
             paid_str = f'paid' if instance.paid else ''
-            title = " ".join([instance.pickup_time, instance.flight_number, instance.flight_time, 'p'+str(instance.no_of_passenger), paid_str, '$'+instance.price, instance.contact])
+            reminder_str = f'!' if instance.reminder else ''
+
+            title = " ".join([reminder_str, instance.pickup_time, instance.flight_number, instance.flight_time, 'p'+str(instance.no_of_passenger), paid_str, '$'+instance.price, instance.contact])
             address = " ".join([instance.street, instance.suburb])            
             if instance.return_flight_number:
                 message = " ".join([instance.name, instance.email, 'b'+instance.no_of_baggage, 'm:'+instance.message, "d:"+str(instance.return_flight_date)])
