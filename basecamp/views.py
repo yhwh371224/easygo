@@ -9,7 +9,7 @@ from basecamp.models import Inquiry_point
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
-from datetime import date
+from datetime import date, datetime
 #paypal ipn
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
@@ -30,6 +30,9 @@ def yoosung(request): return render(request, 'basecamp/yoosung.html')
 
 
 def rose_kam(request): return render(request, 'basecamp/rose_kam.html')
+
+
+def reminder(request): return render(request, 'basecamp/reminder.html')
 
 
 def sitemap(request): return render(request, 'basecamp/sitemap.xml')
@@ -1430,7 +1433,7 @@ def confirmation_detail(request):
             "Booking confirmation - EasyGo",
             text_content,
             '',
-            [email, "info@easygoshuttle.com.au", email1]
+            [email, RECIPIENT_EMAIL, email1]
         )
         email.attach_alternative(html_content, "text/html")
         email.send()
@@ -1746,7 +1749,58 @@ def confirm_booking_detail(request):
                         {'name' : name, 'email': email, })
         
     else:
-        return render(request, 'beasecamp/confirm_booking.html', {})      
+        return render(request, 'beasecamp/confirm_booking.html', {}) 
+
+
+def reminder_detail(request):
+    if request.method == "POST":
+        email = request.POST.get('email')
+        reminder_str = request.POST.get('reminder')
+        reminder = True if reminder_str == 'True' else False
+        user = Post.objects.filter(email=email).first()
+        user1 = Post.objects.filter(email=email)[1]
+
+        today = date.today()  
+        today_date = datetime.strptime(str(today), '%Y-%m-%d').date() 
+
+        if user.return_pickup_time =='x' and user1.flight_date > today_date: 
+
+            user1.reminder = reminder
+            user1.save()
+
+            html_content = render_to_string("basecamp/html_email-reminder.html",
+                                    {'company_name': user.company_name, 'name': user.name, 'email': user.email, 'email1': user.email1,})    
+            text_content = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                "Reminder - EasyGo",
+                text_content,
+                '',
+                [email, RECIPIENT_EMAIL]
+            )
+            email.attach_alternative(html_content, "text/html")
+            email.send()
+
+        else:
+            user.reminder = reminder
+            user.save()            
+
+            html_content = render_to_string("basecamp/html_email-reminder.html",
+                                    {'company_name': user.company_name, 'name': user.name, 'email': user.email, 'email1': user.email1,})            
+            text_content = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                "Reminder - EasyGo",
+                text_content,
+                '',
+                [email, RECIPIENT_EMAIL]
+            )
+            email.attach_alternative(html_content, "text/html")
+            email.send()
+
+        return render(request, 'basecamp/reminder_detail.html',
+                      {'name': user.name, 'email': user.email})
+
+    else:
+        return render(request, 'basecamp/reminder.html', {}) 
 
      
 # sending email first one   
@@ -1772,7 +1826,7 @@ def sending_email_first_detail(request):
             "Booking confirmation - EasyGo",
             text_content,
             '',
-            [email, "info@easygoshuttle.com.au", user.email1]
+            [email, RECIPIENT_EMAIL]
         )
         email.attach_alternative(html_content, "text/html")
         email.send()
@@ -1810,7 +1864,7 @@ def sending_email_second_detail(request):
             "Booking confirmation - EasyGo",
             text_content,
             '',
-            [email, "info@easygoshuttle.com.au", user.email1]
+            [email, RECIPIENT_EMAIL, user.email1]
         )
         email.attach_alternative(html_content, "text/html")
         email.send()
