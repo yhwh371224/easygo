@@ -7,3 +7,841 @@ WARNING 2023-09-30 04:51:38,010 log Not Found: /shop/nl/product-category/moncler
 WARNING 2023-09-30 04:56:39,772 log Not Found: /robots.txt
 WARNING 2023-09-30 05:03:36,266 log Not Found: /about_us/booking_email.html
 WARNING 2023-09-30 05:25:08,108 log Not Found: /shop/nn/min-konto-2/lost-password/
+WARNING 2023-09-30 05:51:00,831 log Not Found: /shop/ko/product/긴-깊은-붉은-색의-몽크-자켓-아이들/
+WARNING 2023-09-30 06:01:50,138 log Not Found: /robots.txt
+WARNING 2023-09-30 06:13:09,640 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-09-30 06:48:22,560 log Not Found: /wp-log.php
+WARNING 2023-09-30 06:48:22,663 log Not Found: /wp-upload.php
+WARNING 2023-09-30 06:54:58,644 log Not Found: /_profiler/phpinfo
+WARNING 2023-09-30 06:54:59,712 log Not Found: /yuuki
+WARNING 2023-09-30 06:55:00,842 log Not Found: /.env
+WARNING 2023-09-30 06:55:01,912 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-09-30 07:12:15,543 log Not Found: /.env
+WARNING 2023-09-30 07:12:16,758 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-09-30 07:13:34,954 log Not Found: /adadaddadad
+ERROR 2023-09-30 07:18:00,480 log Internal Server Error: /paypal_ipn/
+WARNING 2023-09-30 07:20:31,428 log Not Found: /apple-touch-icon-120x120-precomposed.png
+WARNING 2023-09-30 07:20:31,460 log Not Found: /apple-touch-icon-120x120.png
+WARNING 2023-09-30 07:44:29,991 log Not Found: //wp-content/plugins/WordPressCore/include.php
+WARNING 2023-09-30 07:46:26,669 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-09-30 07:49:55,485 log Not Found: /css/album.css
+WARNING 2023-09-30 08:21:18,336 log Not Found: /data/admin/allowurl.txt
+WARNING 2023-09-30 08:24:33,771 log Not Found: /shop/nl/product/moncler-bresle-euramerican-style-heren-jassen-grijs/
+WARNING 2023-09-30 08:34:02,805 log Not Found: /robots.txt
+WARNING 2023-09-30 08:44:20,955 log Not Found: /e/data/js/ajax.js
+WARNING 2023-09-30 08:50:05,689 log Not Found: /adadaddadad
+ERROR 2023-09-30 09:13:39,863 log Internal Server Error: /horeb_yhwh/blog/post/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/sqlite3/base.py", line 477, in execute
+    return Database.Cursor.execute(self, query, params)
+sqlite3.OperationalError: no such column: blog_post.reminder_yes
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 683, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 134, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/views/decorators/cache.py", line 62, in _wrapped_view_func
+    response = view_func(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/sites.py", line 242, in inner
+    return view(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 46, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 134, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 2064, in changelist_view
+    "selection_note": _("0 of %(cnt)s selected") % {"cnt": len(cl.result_list)},
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/query.py", line 302, in __len__
+    self._fetch_all()
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/query.py", line 1507, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/query.py", line 57, in __iter__
+    results = compiler.execute_sql(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1361, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 67, in execute
+    return self._execute_with_wrappers(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 80, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 84, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/sqlite3/base.py", line 477, in execute
+    return Database.Cursor.execute(self, query, params)
+django.db.utils.OperationalError: no such column: blog_post.reminder_yes
+WARNING 2023-09-30 09:14:06,425 log Not Found: /shop/sv/product/moncler-mode-down-women-jacka-palskrage-ljus-solbranna/
+ERROR 2023-09-30 09:17:46,215 log Internal Server Error: /sending_email_second_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1796, in sending_email_second_detail
+    html_content = render_to_string("basecamp/html_email-upcoming3.html",
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 61, in render
+    return self.template.render(context)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/base.py", line 175, in render
+    return self._render(context)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/base.py", line 958, in render_annotated
+    return self.render(context)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 471, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/urls/base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/urls/resolvers.py", line 802, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'set-reminder' not found. 'set-reminder' is not a valid view function or pattern name.
+ERROR 2023-09-30 09:18:24,138 log Internal Server Error: /sending_email_second_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1796, in sending_email_second_detail
+    html_content = render_to_string("basecamp/html_email-upcoming3.html",
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 61, in render
+    return self.template.render(context)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/base.py", line 175, in render
+    return self._render(context)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/base.py", line 958, in render_annotated
+    return self.render(context)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 471, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/urls/base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/urls/resolvers.py", line 802, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'set-reminder' not found. 'set-reminder' is not a valid view function or pattern name.
+WARNING 2023-09-30 09:18:25,364 log Not Found: /inquiry_others/index.html
+WARNING 2023-09-30 09:19:34,496 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-09-30 09:23:19,437 log Not Found: /booking_form
+ERROR 2023-09-30 09:26:48,621 log Internal Server Error: /sending_email_second_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1796, in sending_email_second_detail
+    html_content = render_to_string("basecamp/html_email-upcoming3.html",
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 61, in render
+    return self.template.render(context)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/base.py", line 175, in render
+    return self._render(context)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/base.py", line 958, in render_annotated
+    return self.render(context)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 471, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/urls/base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/urls/resolvers.py", line 802, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'set-reminder' not found. 'set-reminder' is not a valid view function or pattern name.
+ERROR 2023-09-30 09:29:31,128 log Internal Server Error: /confirmation/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    callback, callback_args, callback_kwargs = self.resolve_request(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 313, in resolve_request
+    resolver_match = resolver.resolve(request.path_info)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/urls/resolvers.py", line 649, in resolve
+    for pattern in self.url_patterns:
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/utils/functional.py", line 49, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/urls/resolvers.py", line 696, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/utils/functional.py", line 49, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/urls/resolvers.py", line 689, in urlconf_module
+    return import_module(self.urlconf_name)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/home/ubuntu/github/easygo/main/urls.py", line 28, in <module>
+    path('', include('basecamp.urls')),
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/urls/conf.py", line 38, in include
+    urlconf_module = import_module(urlconf_module)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/home/ubuntu/github/easygo/basecamp/urls.py", line 2, in <module>
+    from . import views
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 2307, in <module>
+    url = reverse('set-reminder', kwargs={'pk': pk})
+NameError: name 'pk' is not defined
+ERROR 2023-09-30 09:29:38,937 log Internal Server Error: /home/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    callback, callback_args, callback_kwargs = self.resolve_request(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 313, in resolve_request
+    resolver_match = resolver.resolve(request.path_info)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/urls/resolvers.py", line 649, in resolve
+    for pattern in self.url_patterns:
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/utils/functional.py", line 49, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/urls/resolvers.py", line 696, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/utils/functional.py", line 49, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/urls/resolvers.py", line 689, in urlconf_module
+    return import_module(self.urlconf_name)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/home/ubuntu/github/easygo/main/urls.py", line 28, in <module>
+    path('', include('basecamp.urls')),
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/urls/conf.py", line 38, in include
+    urlconf_module = import_module(urlconf_module)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/home/ubuntu/github/easygo/basecamp/urls.py", line 2, in <module>
+    from . import views
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 2307, in <module>
+    url = reverse('set-reminder', kwargs={'pk': pk})
+NameError: name 'pk' is not defined
+ERROR 2023-09-30 09:30:44,352 log Internal Server Error: /sending_email_second_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1796, in sending_email_second_detail
+    html_content = render_to_string("basecamp/html_email-upcoming3.html",
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 61, in render
+    return self.template.render(context)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/base.py", line 175, in render
+    return self._render(context)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/base.py", line 958, in render_annotated
+    return self.render(context)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 471, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/urls/base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/urls/resolvers.py", line 802, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'set-reminder' not found. 'set-reminder' is not a valid view function or pattern name.
+ERROR 2023-09-30 09:34:57,177 log Internal Server Error: /sending_email_second_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1796, in sending_email_second_detail
+    html_content = render_to_string("basecamp/html_email-upcoming3.html",
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 61, in render
+    return self.template.render(context)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/base.py", line 175, in render
+    return self._render(context)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/base.py", line 958, in render_annotated
+    return self.render(context)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 471, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/urls/base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/urls/resolvers.py", line 802, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'set-reminder' not found. 'set-reminder' is not a valid view function or pattern name.
+WARNING 2023-09-30 09:50:15,501 log Not Found: /js/NewWindow_2_all.js
+WARNING 2023-09-30 10:11:15,022 log Not Found: /robots.txt
+WARNING 2023-09-30 10:11:29,286 log Not Found: /.env
+WARNING 2023-09-30 10:11:30,580 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-09-30 10:35:07,738 log Not Found: /shop/ko/product/몽크-스카프-뚜껑-순수한-코튼-화이트/
+WARNING 2023-09-30 10:41:32,491 log Not Found: /shop/nl/product/moncler-bresle-euramerican-style-heren-jassen-grijs/
+WARNING 2023-09-30 10:41:49,597 log Not Found: /shop/nl/product/moncler-bresle-euramerican-style-heren-jassen-grijs/
+WARNING 2023-09-30 10:46:03,075 log Not Found: /robots.txt
+WARNING 2023-09-30 10:46:06,066 log Not Found: /sitemap.xml
+WARNING 2023-09-30 10:46:15,965 log Not Found: /humans.txt
+WARNING 2023-09-30 10:46:16,917 log Not Found: /security.txt
+WARNING 2023-09-30 10:46:17,730 log Not Found: /.well-known/security.txt
+WARNING 2023-09-30 10:46:18,542 log Not Found: /ads.txt
+WARNING 2023-09-30 10:47:04,160 log Not Found: /shop/ko/product/moncler-자켓-여성-lievre-블루/
+WARNING 2023-09-30 10:49:41,240 log Not Found: /apple-touch-icon-120x120-precomposed.png
+WARNING 2023-09-30 10:49:41,357 log Not Found: /apple-touch-icon-120x120.png
+WARNING 2023-09-30 10:52:49,799 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-09-30 11:06:55,777 log Not Found: /shop/fr/product/vestes-moncler-hommes-zin-noir/
+ERROR 2023-09-30 11:20:49,554 log Internal Server Error: /paypal_ipn/
+WARNING 2023-09-30 11:21:40,830 log Not Found: /robots.txt
+WARNING 2023-09-30 11:26:00,172 log Not Found: /robots.txt
+WARNING 2023-09-30 11:26:19,605 log Not Found: /contact/booking_email.html
+WARNING 2023-09-30 11:26:25,539 log Not Found: /wp-includes/images/include.php
+WARNING 2023-09-30 11:27:26,063 log Not Found: /wp-content/plugins/WordPressCore/include.php
+WARNING 2023-09-30 11:29:54,025 log Not Found: /defaul1.php
+WARNING 2023-09-30 11:30:08,176 log Not Found: /Public/admin/webuploader/server/preview.php
+WARNING 2023-09-30 11:30:08,309 log Not Found: /lib/webuploader/0.1.5/server/preview.php
+WARNING 2023-09-30 11:30:08,442 log Not Found: /public/static/lib/webuploader/0.1.5/server/preview.php
+WARNING 2023-09-30 11:30:08,836 log Not Found: /public/static/admin/lib/webuploader/0.1.5/server/preview.php
+WARNING 2023-09-30 11:30:08,970 log Not Found: /Public/webuploader/0.1.5/server/preview.php
+WARNING 2023-09-30 11:30:09,235 log Forbidden (Referer checking failed - no Referer.): /admin/lib/webuploader/0.1.5/server/preview.php
+WARNING 2023-09-30 11:30:09,373 log Not Found: /Public/admin/Widget/webuploader/0.1.5/server/preview.php
+WARNING 2023-09-30 11:30:09,506 log Not Found: /Public/admin/lib/webuploader/0.1.5/server/preview.php
+WARNING 2023-09-30 11:42:34,575 log Not Found: /vpn/index.html
+WARNING 2023-09-30 11:43:33,173 log Not Found: /geoserver/web/
+WARNING 2023-09-30 11:44:05,162 log Not Found: /.git/config
+WARNING 2023-09-30 11:44:32,151 log Not Found: /robots.txt
+WARNING 2023-09-30 11:46:54,312 log Not Found: /shop/product-category/moncler-boots/
+WARNING 2023-09-30 11:55:16,258 log Not Found: /shop/pl/product/moncler-affton-coat-men-down-coffee-5/
+WARNING 2023-09-30 12:01:46,737 log Not Found: /home/sms:+61406883355
+ERROR 2023-09-30 12:01:52,375 log Internal Server Error: /inquiry_details/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 478, in inquiry_details
+    p.save()
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 806, in save
+    self.save_base(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 857, in save_base
+    updated = self._save_table(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 1000, in _save_table
+    results = self._do_insert(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 1041, in _do_insert
+    return manager._insert(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/query.py", line 1434, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1620, in execute_sql
+    for sql, params in self.as_sql():
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1547, in as_sql
+    value_rows = [
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1548, in <listcomp>
+    [
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1549, in <listcomp>
+    self.prepare_value(field, self.pre_save_val(field, obj))
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1487, in prepare_value
+    value = field.get_db_prep_save(value, connection=self.connection)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py", line 910, in get_db_prep_save
+    return self.get_db_prep_value(value, connection=connection, prepared=False)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py", line 1408, in get_db_prep_value
+    value = self.get_prep_value(value)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py", line 1403, in get_prep_value
+    return self.to_python(value)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py", line 1369, in to_python
+    raise exceptions.ValidationError(
+django.core.exceptions.ValidationError: ['“Bmnbaqxsn Jfbf” value has an invalid date format. It must be in YYYY-MM-DD format.']
+WARNING 2023-09-30 12:03:30,922 log Not Found: /shop/basket/
+WARNING 2023-09-30 12:03:31,295 log Not Found: /easygo-shuttle-chartered-bus/
+WARNING 2023-09-30 12:07:30,374 log Not Found: /aaa9
+WARNING 2023-09-30 12:07:31,808 log Not Found: /aab9
+WARNING 2023-09-30 12:07:53,952 log Not Found: /aaa9
+WARNING 2023-09-30 12:07:55,330 log Not Found: /aab9
+WARNING 2023-09-30 12:12:04,442 log Not Found: /robots.txt
+ERROR 2023-09-30 12:13:36,238 log Internal Server Error: /confirmation_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/sqlite3/base.py", line 477, in execute
+    return Database.Cursor.execute(self, query, params)
+sqlite3.IntegrityError: NOT NULL constraint failed: blog_post.reminder_yes
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1415, in confirmation_detail
+    p.save()
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 806, in save
+    self.save_base(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 857, in save_base
+    updated = self._save_table(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 1000, in _save_table
+    results = self._do_insert(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 1041, in _do_insert
+    return manager._insert(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/query.py", line 1434, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1621, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 67, in execute
+    return self._execute_with_wrappers(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 80, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 84, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/sqlite3/base.py", line 477, in execute
+    return Database.Cursor.execute(self, query, params)
+django.db.utils.IntegrityError: NOT NULL constraint failed: blog_post.reminder_yes
+WARNING 2023-09-30 12:16:18,661 log Not Found: /ads.txt
+WARNING 2023-09-30 12:26:06,499 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-09-30 12:26:40,801 log Not Found: /robots.txt
+ERROR 2023-09-30 12:27:30,535 log Internal Server Error: /confirmation_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/sqlite3/base.py", line 477, in execute
+    return Database.Cursor.execute(self, query, params)
+sqlite3.IntegrityError: NOT NULL constraint failed: blog_post.reminder_yes
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1415, in confirmation_detail
+    p.save()
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 806, in save
+    self.save_base(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 857, in save_base
+    updated = self._save_table(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 1000, in _save_table
+    results = self._do_insert(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 1041, in _do_insert
+    return manager._insert(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/query.py", line 1434, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1621, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 67, in execute
+    return self._execute_with_wrappers(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 80, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 84, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/sqlite3/base.py", line 477, in execute
+    return Database.Cursor.execute(self, query, params)
+django.db.utils.IntegrityError: NOT NULL constraint failed: blog_post.reminder_yes
+WARNING 2023-09-30 12:29:29,946 log Not Found: /e/data/js/ajax.js
+ERROR 2023-09-30 12:29:46,612 log Internal Server Error: /confirmation_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/sqlite3/base.py", line 477, in execute
+    return Database.Cursor.execute(self, query, params)
+sqlite3.IntegrityError: NOT NULL constraint failed: blog_post.reminder_yes
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1415, in confirmation_detail
+    p.save()
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 806, in save
+    self.save_base(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 857, in save_base
+    updated = self._save_table(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 1000, in _save_table
+    results = self._do_insert(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 1041, in _do_insert
+    return manager._insert(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/query.py", line 1434, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1621, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 102, in execute
+    return super().execute(sql, params)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 67, in execute
+    return self._execute_with_wrappers(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 80, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 84, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/sqlite3/base.py", line 477, in execute
+    return Database.Cursor.execute(self, query, params)
+django.db.utils.IntegrityError: NOT NULL constraint failed: blog_post.reminder_yes
+ERROR 2023-09-30 12:34:13,850 log Internal Server Error: /confirmation_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/sqlite3/base.py", line 477, in execute
+    return Database.Cursor.execute(self, query, params)
+sqlite3.IntegrityError: NOT NULL constraint failed: blog_post.reminder_yes
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1415, in confirmation_detail
+    p.save()
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 806, in save
+    self.save_base(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 857, in save_base
+    updated = self._save_table(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 1000, in _save_table
+    results = self._do_insert(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 1041, in _do_insert
+    return manager._insert(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/query.py", line 1434, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1621, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 102, in execute
+    return super().execute(sql, params)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 67, in execute
+    return self._execute_with_wrappers(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 80, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 84, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/sqlite3/base.py", line 477, in execute
+    return Database.Cursor.execute(self, query, params)
+django.db.utils.IntegrityError: NOT NULL constraint failed: blog_post.reminder_yes
+WARNING 2023-09-30 12:36:28,335 log Not Found: /home
+WARNING 2023-09-30 12:41:01,565 log Not Found: /robots.txt
+ERROR 2023-09-30 12:57:05,091 log Internal Server Error: /confirm_booking_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/sqlite3/base.py", line 477, in execute
+    return Database.Cursor.execute(self, query, params)
+sqlite3.IntegrityError: NOT NULL constraint failed: blog_post.reminder_yes
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1738, in confirm_booking_detail
+    p.save()
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 806, in save
+    self.save_base(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 857, in save_base
+    updated = self._save_table(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 1000, in _save_table
+    results = self._do_insert(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 1041, in _do_insert
+    return manager._insert(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/query.py", line 1434, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1621, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 102, in execute
+    return super().execute(sql, params)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 67, in execute
+    return self._execute_with_wrappers(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 80, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 84, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/sqlite3/base.py", line 477, in execute
+    return Database.Cursor.execute(self, query, params)
+django.db.utils.IntegrityError: NOT NULL constraint failed: blog_post.reminder_yes
+WARNING 2023-09-30 13:01:00,813 log Not Found: /shop/de/moncler-womens-sleeveless-vests-double-sided-violet/
+WARNING 2023-09-30 13:03:01,084 log Not Found: /shop/product-category/moncler-boots/
+WARNING 2023-09-30 13:03:19,334 log Not Found: //.env
+ERROR 2023-09-30 13:07:16,915 log Internal Server Error: /confirm_booking_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/sqlite3/base.py", line 477, in execute
+    return Database.Cursor.execute(self, query, params)
+sqlite3.IntegrityError: NOT NULL constraint failed: blog_post.reminder_yes
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1738, in confirm_booking_detail
+    p.save()
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 806, in save
+    self.save_base(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 857, in save_base
+    updated = self._save_table(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 1000, in _save_table
+    results = self._do_insert(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 1041, in _do_insert
+    return manager._insert(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/query.py", line 1434, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1621, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 67, in execute
+    return self._execute_with_wrappers(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 80, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 84, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/sqlite3/base.py", line 477, in execute
+    return Database.Cursor.execute(self, query, params)
+django.db.utils.IntegrityError: NOT NULL constraint failed: blog_post.reminder_yes
+ERROR 2023-09-30 13:12:17,896 log Internal Server Error: /confirm_booking_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/sqlite3/base.py", line 477, in execute
+    return Database.Cursor.execute(self, query, params)
+sqlite3.IntegrityError: NOT NULL constraint failed: blog_post.reminder_yes
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1738, in confirm_booking_detail
+    p.save()
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 806, in save
+    self.save_base(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 857, in save_base
+    updated = self._save_table(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 1000, in _save_table
+    results = self._do_insert(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 1041, in _do_insert
+    return manager._insert(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/query.py", line 1434, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1621, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 102, in execute
+    return super().execute(sql, params)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 67, in execute
+    return self._execute_with_wrappers(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 80, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 84, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/sqlite3/base.py", line 477, in execute
+    return Database.Cursor.execute(self, query, params)
+django.db.utils.IntegrityError: NOT NULL constraint failed: blog_post.reminder_yes
+WARNING 2023-09-30 13:13:45,001 log Not Found: /showLogin.cc
+WARNING 2023-09-30 13:18:31,736 log Not Found: /robots.txt
+WARNING 2023-09-30 13:35:29,138 log Not Found: /.well-known/acme-challenge/8LH05EWMWLY80QMCCPUN3NP6OQS99XYW
+WARNING 2023-09-30 13:35:30,178 log Not Found: /.well-known/acme-challenge/-7IMOQFYMTMBSTKV_04MWE3SNXTQO6ZD
+WARNING 2023-09-30 13:43:58,207 log Not Found: /shop/ko/product/블랙에-moncler-판매-핸드백/
+WARNING 2023-09-30 13:59:16,813 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-09-30 14:00:25,798 log Not Found: /robots.txt
+WARNING 2023-09-30 14:03:09,056 log Not Found: /robots.txt
+WARNING 2023-09-30 14:03:10,536 log Not Found: /airport-transfers-northern-suburbs/
+WARNING 2023-09-30 14:06:21,821 log Not Found: /wp-content/plugins/front-end-editor/lib/aloha-editor/plugins/extra/draganddropfiles/demo/index.css
+WARNING 2023-09-30 14:18:54,777 log Not Found: /apple-touch-icon-120x120-precomposed.png
+WARNING 2023-09-30 14:18:54,860 log Not Found: /apple-touch-icon-120x120.png
+WARNING 2023-09-30 15:02:54,056 log Not Found: /.env
+WARNING 2023-09-30 15:02:55,685 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-09-30 15:08:23,342 log Not Found: /.well-known/apple-app-site-association
+WARNING 2023-09-30 15:12:00,691 log Not Found: /showLogin.cc
+WARNING 2023-09-30 15:14:21,440 log Not Found: /apple-app-site-association
+WARNING 2023-09-30 15:16:31,004 log Not Found: /apple-app-site-association
+WARNING 2023-09-30 15:18:26,002 log Not Found: /shop/es/cesta/
+WARNING 2023-09-30 15:19:13,028 log Not Found: /shop/ko/product/moncler-down-coat-추천-여성-슬림-윈드-룩-레드/
+WARNING 2023-09-30 15:20:29,853 log Not Found: /.well-known/apple-app-site-association
+WARNING 2023-09-30 15:32:12,064 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-09-30 15:34:06,662 log Not Found: /contact/
+WARNING 2023-09-30 15:44:07,341 log Not Found: /wordpress/
+WARNING 2023-09-30 15:44:30,253 log Not Found: /owa/auth/logon.aspx
+WARNING 2023-09-30 16:03:28,574 log Not Found: /reminder_detail/
+WARNING 2023-09-30 16:10:07,437 log Not Found: /reminder_detail/
+WARNING 2023-09-30 16:16:35,057 log Not Found: /ab2g
+WARNING 2023-09-30 16:16:36,676 log Not Found: /ab2h
+WARNING 2023-09-30 16:16:48,396 log Not Found: /t4
+ERROR 2023-09-30 16:38:21,262 log Internal Server Error: /reminder_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1765, in reminder_detail
+    if user.return_pickup_time=='x' and user1.flight_date < str(today):
+TypeError: '<' not supported between instances of 'datetime.date' and 'str'
+ERROR 2023-09-30 16:41:01,748 log Internal Server Error: /reminder_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1765, in reminder_detail
+    if user.return_pickup_time=='x' and user1.flight_date < str(today):
+TypeError: '<' not supported between instances of 'datetime.date' and 'str'
+ERROR 2023-09-30 16:48:07,462 log Internal Server Error: /reminder_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1765, in reminder_detail
+    if user.return_pickup_time =='x' and user1.flight_date <= str(today):
+TypeError: '<=' not supported between instances of 'datetime.date' and 'str'
+WARNING 2023-09-30 16:59:17,511 log Not Found: /shop/sv/product/moncler-topp-kvalitet-ned-jacka-snygg-man-button-brown/
+WARNING 2023-09-30 17:05:14,927 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-09-30 17:09:14,568 log Not Found: /robots.txt
+WARNING 2023-09-30 17:14:16,984 log Not Found: /.svn/
+WARNING 2023-09-30 17:15:44,518 log Not Found: /home/sms:+61406883355
+ERROR 2023-09-30 17:15:50,854 log Internal Server Error: /inquiry_details/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 481, in inquiry_details
+    p.save()
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 806, in save
+    self.save_base(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 857, in save_base
+    updated = self._save_table(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 1000, in _save_table
+    results = self._do_insert(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 1041, in _do_insert
+    return manager._insert(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/query.py", line 1434, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1620, in execute_sql
+    for sql, params in self.as_sql():
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1547, in as_sql
+    value_rows = [
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1548, in <listcomp>
+    [
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1549, in <listcomp>
+    self.prepare_value(field, self.pre_save_val(field, obj))
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1487, in prepare_value
+    value = field.get_db_prep_save(value, connection=self.connection)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py", line 910, in get_db_prep_save
+    return self.get_db_prep_value(value, connection=connection, prepared=False)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py", line 1408, in get_db_prep_value
+    value = self.get_prep_value(value)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py", line 1403, in get_prep_value
+    return self.to_python(value)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py", line 1369, in to_python
+    raise exceptions.ValidationError(
+django.core.exceptions.ValidationError: ['“Bhnilijq” value has an invalid date format. It must be in YYYY-MM-DD format.']
+ERROR 2023-09-30 17:39:19,653 log Internal Server Error: /reminder_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1792, in reminder_detail
+    {'name': name, 'email': email})
+UnboundLocalError: local variable 'name' referenced before assignment
+ERROR 2023-09-30 17:41:12,351 log Internal Server Error: /reminder_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1792, in reminder_detail
+    {'name': name, 'email': email})
+UnboundLocalError: local variable 'name' referenced before assignment
