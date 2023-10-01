@@ -1752,49 +1752,47 @@ def confirm_booking_detail(request):
         return render(request, 'beasecamp/confirm_booking.html', {}) 
 
 
+def sending_reminder_email(user):
+    html_content = render_to_string("basecamp/html_email-reminder.html",
+                                        {'name': user.name, 'email': user.email})    
+    text_content = strip_tags(html_content)
+    email = EmailMultiAlternatives(
+        "EasyGo: Yes-email",
+        text_content,
+        '',
+        [user.email, RECIPIENT_EMAIL]
+    )
+    email.attach_alternative(html_content, "text/html")
+    email.send()
+
+
 def reminder_detail(request):
     if request.method == "POST":
         email = request.POST.get('email')
         reminder_str = request.POST.get('reminder')
         reminder = True if reminder_str == 'True' else False
         user = Post.objects.filter(email=email).first()
-        user1 = Post.objects.filter(email=email)[1]
 
-        today = date.today()  
-        today_date = datetime.strptime(str(today), '%Y-%m-%d').date() 
+        if user.return_pickup_time =='x': 
+            user1 = Post.objects.filter(email=email)[1]
+            today = date.today()  
+            today_date = datetime.strptime(str(today), '%Y-%m-%d').date() 
 
-        if user.return_pickup_time =='x' and user1.flight_date > today_date: 
+            if user1.flight_date > today_date:
+                user1.reminder = reminder
+                user1.save()
+                sending_reminder_email(user)
 
-            user1.reminder = reminder
-            user1.save()
-
-            html_content = render_to_string("basecamp/html_email-reminder.html",
-                                    {'name': user.name, 'email': user.email})    
-            text_content = strip_tags(html_content)
-            email = EmailMultiAlternatives(
-                "EasyGo: Yes-email",
-                text_content,
-                '',
-                [email, RECIPIENT_EMAIL]
-            )
-            email.attach_alternative(html_content, "text/html")
-            email.send()
+            else:
+                user.reminder = reminder
+                user.save()
+                sending_reminder_email(user)
 
         else:
             user.reminder = reminder
-            user.save()            
+            user.save()
+            sending_reminder_email(user)
 
-            html_content = render_to_string("basecamp/html_email-reminder.html",
-                                    {'name': user.name, 'email': user.email})            
-            text_content = strip_tags(html_content)
-            email = EmailMultiAlternatives(
-                "EasyGo: Yes-email",
-                text_content,
-                '',
-                [email, RECIPIENT_EMAIL]
-            )
-            email.attach_alternative(html_content, "text/html")
-            email.send()
 
         return render(request, 'basecamp/reminder_detail.html',
                       {'name': user.name, 'email': user.email})
