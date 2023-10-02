@@ -146,3 +146,11 @@ WARNING 2023-10-02 17:54:10,572 log Not Found: /version
 WARNING 2023-10-02 17:55:06,551 log Not Found: /vpn/index.html
 WARNING 2023-10-02 17:55:39,156 log Not Found: /geoserver/web/
 WARNING 2023-10-02 17:56:33,028 log Not Found: /.git/config
+WARNING 2023-10-02 18:11:12,674 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-10-02 18:14:26,388 log Not Found: //.env
+WARNING 2023-10-02 18:16:37,879 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-10-02 18:42:18,352 log Not Found: /.well-known/traffic-advice
+WARNING 2023-10-02 18:54:49,761 log Not Found: /robots.txt
+WARNING 2023-10-02 18:54:50,730 log Not Found: /accounts/google/login/index.html
+WARNING 2023-10-02 19:12:56,182 log Not Found: /shop/fi/product-category/moncler-coats-mens-fi/
+WARNING 2023-10-02 19:25:14,757 log Not Found: /robots.txt
