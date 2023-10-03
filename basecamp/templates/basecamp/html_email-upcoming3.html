@@ -226,7 +226,7 @@
                                     <table class="content" style="border-spacing:0;text-align: center;" role="presentation">
 										<tr>
 											<td align="left" style="padding-left:0px;">
-												<p style="Margin:0;font-size:18px;font-weight:bold;line-height:22px;">Hello! {{ name }}</p>
+												<p style="Margin:0;font-size:18px;font-weight:bold;line-height:22px;">Hello! {{ name }}, <small>{{ email }}</small></p>
 											</td>
 										</tr>
 										<tr>
@@ -237,7 +237,9 @@
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
 													Please reply "Yes" to this email for reconfirming your booking and details below<br><br>
 													<span style="color: #eb7828">Please note:</span><br>
-                                                    We can not guarantee your booking unless we receive a confirmation with a 'Yes' response, except for those who have paid in advance<br><br></p>	
+                                                    We can not guarantee your booking unless we receive a confirmation with a 
+													<a href="https://easygoshuttle.com.au/reminder">'Yes'</a> response, except for those who have paid in advance<br>
+													<br></p>	
 																	
 											{% if direction == 'Pickup from Intl Airport' or direction == 'Pickup from Domestic Airport' %}
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
