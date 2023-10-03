@@ -1757,7 +1757,7 @@ def sending_reminder_email(user):
         "EasyGo: Yes-email",
         text_content,
         '',
-        [user.email, RECIPIENT_EMAIL]
+        [user.email]
     )
     email.attach_alternative(html_content, "text/html")
     email.send()
