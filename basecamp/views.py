@@ -279,7 +279,7 @@ def server_error(request): return render(request, 'basecamp/504.html')
 def server_error(request): return render(request, 'basecamp/505.html')
 
 
-def server_error(request): return render(request, 'basecamp/basecamp/506.html')
+def server_error(request): return render(request, 'basecamp/506.html')
 
 
 # Inquiry 
@@ -1629,11 +1629,6 @@ def booking_detail(request):
                  return_pickup_time=return_pickup_time, message=message, price=price, is_confirmed=is_confirmed,  driver=sam_driver)
         
         p.save()
-
-
-        # if Post.objects.filter(email=email, created=p.created).exists():
-        #     return render(request, 'basecamp/506.html')   
-        
          
         # send_email_delayed.apply_async(args=[name, contact, email, flight_date, flight_number, flight_time,
         #                                       pickup_time, direction, suburb, street, no_of_passenger, no_of_baggage,
@@ -1772,29 +1767,33 @@ def reminder_detail(request):
         reminder_str = request.POST.get('reminder')
         reminder = True if reminder_str == 'True' else False
         user = Post.objects.filter(email=email).first()
-        
-        if user.return_pickup_time =='x':
-            user1 = Post.objects.filter(email=email)[1]
-            today = date.today()  
-            today_date = datetime.strptime(str(today), '%Y-%m-%d').date() 
 
-            if user1.flight_date > today_date: 
-                user1.reminder = reminder
-                user1.save()
-                sending_reminder_email(user)
+        if not user:
+            return render(request, 'basecamp/506.html') 
+        
+        else:             
+            if user.return_pickup_time =='x':
+                user1 = Post.objects.filter(email=email)[1]
+                today = date.today()  
+                today_date = datetime.strptime(str(today), '%Y-%m-%d').date() 
+
+                if user1.flight_date > today_date: 
+                    user1.reminder = reminder
+                    user1.save()
+                    sending_reminder_email(user)
+
+                else:
+                    user.reminder = reminder
+                    user.save()
+                    sending_reminder_email(user)
 
             else:
                 user.reminder = reminder
                 user.save()
                 sending_reminder_email(user)
 
-        else:
-            user.reminder = reminder
-            user.save()
-            sending_reminder_email(user)
 
-
-        return render(request, 'basecamp/reminder_detail.html',
+            return render(request, 'basecamp/reminder_detail.html',
                       {'name': user.name, 'email': user.email})
 
     else:

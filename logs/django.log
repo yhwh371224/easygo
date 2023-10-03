@@ -232,3 +232,9 @@ Traceback (most recent call last):
   File "/home/ubuntu/github/easygo/basecamp/views.py", line 1776, in reminder_detail
     if user.return_pickup_time =='x':
 AttributeError: 'QuerySet' object has no attribute 'return_pickup_time'
+WARNING 2023-10-03 13:45:40,437 log Not Found: /robots.txt
+WARNING 2023-10-03 13:47:13,583 log Not Found: /php.ini
+WARNING 2023-10-03 13:56:01,292 log Not Found: //.env
+WARNING 2023-10-03 14:03:09,615 log Not Found: /owa/auth/x.js
+WARNING 2023-10-03 14:04:28,720 log Not Found: /shop/product/moncler-jackets-men-leblond-khaki/
+WARNING 2023-10-03 14:11:53,059 log Forbidden (Referer checking failed - no Referer.): /
