@@ -15,6 +15,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 import logging
 import requests
+from django.db.models import Q
+
 
 
 logger = logging.getLogger(__name__)
@@ -1766,32 +1768,20 @@ def reminder_detail(request):
         email = request.POST.get('email')
         reminder_str = request.POST.get('reminder')
         reminder = True if reminder_str == 'True' else False
-        user = Post.objects.filter(email=email).first()
+        today = date.today()  
+        today_date = datetime.strptime(str(today), '%Y-%m-%d').date()  
+        user_queryset = Post.objects.filter(email=email)
+        filtered_queryset = user_queryset.filter(Q(flight_date__gt=today_date)).order_by('flight_date')
+        user = filtered_queryset.first()
 
         if not user:
-            return render(request, 'basecamp/506.html') 
-        
-        else:             
-            if user.return_pickup_time =='x':
-                user1 = Post.objects.filter(email=email)[1]
-                today = date.today()  
-                today_date = datetime.strptime(str(today), '%Y-%m-%d').date() 
+            return render(request, 'basecamp/506.html')
 
-                if user1.flight_date > today_date: 
-                    user1.reminder = reminder
-                    user1.save()
-                    sending_reminder_email(user)
-
-                else:
-                    user.reminder = reminder
-                    user.save()
-                    sending_reminder_email(user)
-
-            else:
-                user.reminder = reminder
-                user.save()
-                sending_reminder_email(user)
-
+        else:
+            user.reminder = reminder
+            user.save()
+            sending_reminder_email(user)
+            
 
             return render(request, 'basecamp/reminder_detail.html',
                       {'name': user.name, 'email': user.email})
