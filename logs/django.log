@@ -293,3 +293,10 @@ WARNING 2023-10-04 19:31:50,648 log Not Found: /wp-login.php
 WARNING 2023-10-04 19:33:42,012 log Not Found: /shop/product/moncler-lovers-of-men-vest-sleeveless-single-breasted-red/
 WARNING 2023-10-04 19:41:57,178 log Not Found: /shop/fi/product/moncler-chery-takki-naisille-zip-kaulus-fuusio/
 WARNING 2023-10-04 20:04:08,448 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-10-04 20:36:05,334 log Not Found: /robots.txt
+WARNING 2023-10-04 20:48:51,120 log Not Found: /.env
+WARNING 2023-10-04 20:48:52,300 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-10-04 20:59:42,369 log Not Found: /robots.txt
+WARNING 2023-10-04 21:11:00,731 log Not Found: /wp-comment.php
+WARNING 2023-10-04 21:37:50,974 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-10-04 21:44:22,120 log Not Found: /robots.txt
