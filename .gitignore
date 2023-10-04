@@ -9,6 +9,8 @@ media/
 
 secure/
 
+temp/
+
 logs/
 
 db.sqlite3
