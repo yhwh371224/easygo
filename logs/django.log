@@ -42,3 +42,33 @@ WARNING 2023-10-06 09:58:36,699 log Not Found: /backup
 WARNING 2023-10-06 09:58:37,152 log Not Found: /old
 WARNING 2023-10-06 09:58:37,634 log Not Found: /new
 WARNING 2023-10-06 09:58:38,123 log Not Found: /main
+WARNING 2023-10-06 10:43:28,968 log Not Found: /.env
+WARNING 2023-10-06 10:44:45,422 log Not Found: /.env
+WARNING 2023-10-06 10:44:45,531 log Not Found: /.env
+WARNING 2023-10-06 10:52:10,748 log Not Found: /robots.txt
+WARNING 2023-10-06 11:00:57,103 log Not Found: /ads.txt
+WARNING 2023-10-06 11:04:54,270 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-10-06 11:12:09,849 log Not Found: /robots.txt
+WARNING 2023-10-06 11:18:54,790 log Not Found: /wp-login.php
+WARNING 2023-10-06 11:18:55,037 log Not Found: /xmlrpc.php
+WARNING 2023-10-06 11:18:55,768 log Not Found: /wp-login.php
+WARNING 2023-10-06 11:18:56,256 log Not Found: /xmlrpc.php
+WARNING 2023-10-06 11:47:09,545 log Not Found: /robots.txt
+WARNING 2023-10-06 11:54:26,923 log Not Found: /robots.txt
+WARNING 2023-10-06 11:54:27,106 log Not Found: /robots.txt
+ERROR 2023-10-06 12:09:27,094 log Internal Server Error: /paypal_ipn/
+WARNING 2023-10-06 12:18:51,907 log Forbidden (CSRF cookie not set.): /inquiry_details/
+WARNING 2023-10-06 12:26:24,191 log Not Found: /robots.txt
+WARNING 2023-10-06 12:30:53,303 log Not Found: /robots.txt
+WARNING 2023-10-06 12:38:15,567 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-10-06 13:10:49,836 log Not Found: /.env
+WARNING 2023-10-06 13:16:33,133 log Not Found: /autodiscover/autodiscover.json
+WARNING 2023-10-06 13:17:12,130 log Not Found: /robots.txt
+WARNING 2023-10-06 13:31:37,736 log Not Found: /robots.txt
+WARNING 2023-10-06 13:48:00,537 log Not Found: /robots.txt
+ERROR 2023-10-06 14:07:29,143 log Internal Server Error: /paypal_ipn/
+WARNING 2023-10-06 14:11:37,860 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-10-06 14:24:55,515 log Not Found: /robots.txt
+WARNING 2023-10-06 14:35:13,769 log Not Found: /robots.txt
+WARNING 2023-10-06 14:36:06,190 log Not Found: /.well-known/acme-challenge/1DFEQ6AJC0DP80KEN1BBKC2423BEANME
+WARNING 2023-10-06 14:36:07,224 log Not Found: /.well-known/acme-challenge/TOARGNE1O4FMDGHN8KN_3SE85XR-9E7T
