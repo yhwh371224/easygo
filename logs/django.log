@@ -72,3 +72,34 @@ WARNING 2023-10-06 14:24:55,515 log Not Found: /robots.txt
 WARNING 2023-10-06 14:35:13,769 log Not Found: /robots.txt
 WARNING 2023-10-06 14:36:06,190 log Not Found: /.well-known/acme-challenge/1DFEQ6AJC0DP80KEN1BBKC2423BEANME
 WARNING 2023-10-06 14:36:07,224 log Not Found: /.well-known/acme-challenge/TOARGNE1O4FMDGHN8KN_3SE85XR-9E7T
+WARNING 2023-10-06 14:58:55,095 log Not Found: /.env
+WARNING 2023-10-06 14:58:56,303 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-10-06 15:01:15,082 log Not Found: /robots.txt
+WARNING 2023-10-06 15:01:29,764 log Not Found: /robots.txt
+ERROR 2023-10-06 15:18:15,003 log Internal Server Error: /paypal_ipn/
+WARNING 2023-10-06 15:26:13,147 log Not Found: /archive.zip
+WARNING 2023-10-06 15:31:56,185 log Not Found: /robots.txt
+WARNING 2023-10-06 15:35:16,036 log Not Found: /robots.txt
+WARNING 2023-10-06 15:35:17,050 log Not Found: /promotion/
+WARNING 2023-10-06 15:39:49,883 log Not Found: /shop/es/product/moncler-pety-para-mujer-de-calidad-superior-abajo-chalecos-rojos/
+WARNING 2023-10-06 15:45:22,405 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-10-06 15:59:57,481 log Not Found: /wp-content/plugins/core-plugin/include.php
+WARNING 2023-10-06 16:01:55,481 log Not Found: /wp-content/plugins/WordPressCore/include.php
+WARNING 2023-10-06 16:02:23,039 log Not Found: /wp-includes/images/include.php
+WARNING 2023-10-06 16:02:31,138 log Not Found: /wp-includes/widgets/include.php
+WARNING 2023-10-06 16:10:41,395 log Not Found: /contact-us/
+WARNING 2023-10-06 16:10:49,404 log Not Found: /home/sms:+61406883355
+WARNING 2023-10-06 16:38:55,737 log Not Found: /robots.txt
+WARNING 2023-10-06 16:44:47,226 log Not Found: /airport-transfers-parramatta/"/static/basecamp/photos/bg-pattern02.webp"
+WARNING 2023-10-06 16:44:49,696 log Not Found: /airport-transfers-parramatta/"/static/basecamp/photos/bg-pattern02.webp"
+WARNING 2023-10-06 16:47:52,386 log Not Found: /robots.txt
+WARNING 2023-10-06 17:19:13,029 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-10-06 17:24:42,590 log Not Found: /c/
+WARNING 2023-10-06 18:00:01,684 log Not Found: /apple-app-site-association
+WARNING 2023-10-06 18:04:45,069 log Not Found: /.env
+WARNING 2023-10-06 18:04:46,471 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-10-06 18:11:50,546 log Not Found: /robots.txt
+WARNING 2023-10-06 18:18:31,591 log Not Found: /.well-known/apple-app-site-association
+WARNING 2023-10-06 18:51:52,358 log Not Found: /robots.txt
+WARNING 2023-10-06 18:52:46,519 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-10-06 19:22:06,981 log Not Found: /robots.txt
