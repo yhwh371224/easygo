@@ -115,3 +115,12 @@ WARNING 2023-10-06 20:26:37,486 log Not Found: /Core/Skin/Login.aspx
 WARNING 2023-10-06 21:27:46,209 log Not Found: /robots.txt
 WARNING 2023-10-06 21:28:29,381 log Not Found: /robots.txt
 WARNING 2023-10-06 21:28:30,972 log Not Found: /sitemap.txt
+ERROR 2023-10-06 21:42:44,040 log Internal Server Error: /pickup_adjustment_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 2268, in pickup_adjustment_detail
+    {'name': user.name, 'adjustment_time': adjustment_time, })
+AttributeError: 'NoneType' object has no attribute 'name'
