@@ -2289,7 +2289,7 @@ def pickup_adjustment_detail(request):
             email.attach_alternative(html_content, "text/html")
             email.send()
 
-        elif selected_option == 'Arrival earlier than shedule':        
+        elif selected_option == 'Arrival earlier than schedule':        
             html_content = render_to_string("basecamp/html_email-arrival-early.html",
                                         {'name': user.name, 'adjustment_time': adjustment_time, })
             text_content = strip_tags(html_content)
