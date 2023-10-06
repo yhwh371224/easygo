@@ -103,3 +103,15 @@ WARNING 2023-10-06 18:18:31,591 log Not Found: /.well-known/apple-app-site-assoc
 WARNING 2023-10-06 18:51:52,358 log Not Found: /robots.txt
 WARNING 2023-10-06 18:52:46,519 log Not Found: /Core/Skin/Login.aspx
 WARNING 2023-10-06 19:22:06,981 log Not Found: /robots.txt
+WARNING 2023-10-06 19:31:49,876 log Not Found: /robots.txt
+WARNING 2023-10-06 19:32:07,494 log Not Found: /sms: 61406883355
+WARNING 2023-10-06 19:32:07,921 log Not Found: /sms: 61406883355
+WARNING 2023-10-06 20:12:51,718 log Not Found: /robots.txt
+WARNING 2023-10-06 20:13:06,812 log Forbidden (CSRF cookie not set.): /flight_date_detail/
+WARNING 2023-10-06 20:20:59,502 log Not Found: /mailto:info@easygoshuttle.com.au
+WARNING 2023-10-06 20:20:59,511 log Not Found: /sms:+61406883355
+WARNING 2023-10-06 20:23:09,556 log Not Found: /robots.txt
+WARNING 2023-10-06 20:26:37,486 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-10-06 21:27:46,209 log Not Found: /robots.txt
+WARNING 2023-10-06 21:28:29,381 log Not Found: /robots.txt
+WARNING 2023-10-06 21:28:30,972 log Not Found: /sitemap.txt

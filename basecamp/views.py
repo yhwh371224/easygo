@@ -1748,47 +1748,6 @@ def confirm_booking_detail(request):
     else:
         return render(request, 'beasecamp/confirm_booking.html', {}) 
 
-
-def sending_reminder_email(user):    
-    html_content = render_to_string("basecamp/html_email-reminder.html",
-                                    {'name': user.name, 'email': user.email})    
-    text_content = strip_tags(html_content)
-    email = EmailMultiAlternatives(
-        "EasyGo: Yes-email",
-        text_content,
-        '',
-        [user.email]
-    )
-    email.attach_alternative(html_content, "text/html")
-    email.send()
-
-
-def reminder_detail(request):
-    if request.method == "POST":
-        email = request.POST.get('email')
-        reminder_str = request.POST.get('reminder')
-        reminder = True if reminder_str == 'True' else False
-        today = date.today()  
-        today_date = datetime.strptime(str(today), '%Y-%m-%d').date()  
-        user_queryset = Post.objects.filter(email=email)
-        filtered_queryset = user_queryset.filter(Q(flight_date__gt=today_date)).order_by('flight_date')
-        user = filtered_queryset.first()
-
-        if not user:
-            return render(request, 'basecamp/506.html')
-
-        else:
-            user.reminder = reminder
-            user.save()
-            sending_reminder_email(user)
-            
-
-            return render(request, 'basecamp/reminder_detail.html',
-                      {'name': user.name, 'email': user.email})
-
-    else:
-        return render(request, 'basecamp/reminder.html', {}) 
-
      
 # sending email first one   
 def sending_email_first_detail(request):     
@@ -2253,27 +2212,108 @@ def flight_date_detail(request):
     else:
         return render(request, 'basecamp/inquiry1.html', {})
     
+
+def sending_reminder_email(user):    
+    html_content = render_to_string("basecamp/html_email-reminder.html",
+                                    {'name': user.name, 'email': user.email})    
+    text_content = strip_tags(html_content)
+    email = EmailMultiAlternatives(
+        "EasyGo: Yes-email",
+        text_content,
+        '',
+        [user.email]
+    )
+    email.attach_alternative(html_content, "text/html")
+    email.send()
+
+
+def reminder_detail(request):
+    if request.method == "POST":
+        email = request.POST.get('email')
+        reminder_str = request.POST.get('reminder')
+        reminder = True if reminder_str == 'True' else False
+        today = date.today()  
+        today_date = datetime.strptime(str(today), '%Y-%m-%d').date()  
+        user_queryset = Post.objects.filter(email=email)
+        filtered_queryset = user_queryset.filter(Q(flight_date__gt=today_date)).order_by('flight_date')
+        user = filtered_queryset.first()
+
+        if not user:
+            return render(request, 'basecamp/506.html')
+
+        else:
+            user.reminder = reminder
+            user.save()
+            sending_reminder_email(user)
+            
+
+            return render(request, 'basecamp/reminder_detail.html',
+                      {'name': user.name, 'email': user.email})
+
+    else:
+        return render(request, 'basecamp/reminder.html', {}) 
+
     
 # send pickup adjustment email to customer
 def pickup_adjustment_detail(request):     
     if request.method == "POST":
         email = request.POST.get('email')        
         adjustment_time = request.POST.get('adjustment_time')
+        selected_option = request.POST.get('selected_option')
         
-        user = Post.objects.filter(email=email).first() 
-        
-        html_content = render_to_string("basecamp/html_email-pickup-early.html",
-                                    {'name': user.name, 'pickup_time': user.pickup_time, 
-                                     'adjustment_time': adjustment_time, })
-        text_content = strip_tags(html_content)
-        email = EmailMultiAlternatives(
-            "Urgent notice - EasyGo",
-            text_content,
-            '',
-            [email]
-        )
-        email.attach_alternative(html_content, "text/html")
-        email.send()
+        user = Post.objects.filter(email=email).only('name').first() 
+
+        if selected_option == 'Departure earlier pickup':        
+            html_content = render_to_string("basecamp/html_email-departure-early.html",
+                                        {'name': user.name, 'adjustment_time': adjustment_time, })
+            text_content = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                "Urgent notice - EasyGo",
+                text_content,
+                '',
+                [email, RECIPIENT_EMAIL]
+            )
+            email.attach_alternative(html_content, "text/html")
+            email.send()
+
+        elif selected_option == 'Departure later pickup':        
+            html_content = render_to_string("basecamp/html_email-departure-late.html",
+                                        {'name': user.name, 'adjustment_time': adjustment_time, })
+            text_content = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                "Urgent notice - EasyGo",
+                text_content,
+                '',
+                [email, RECIPIENT_EMAIL]
+            )
+            email.attach_alternative(html_content, "text/html")
+            email.send()
+
+        elif selected_option == 'Arrival earlier than shedule':        
+            html_content = render_to_string("basecamp/html_email-arrival-early.html",
+                                        {'name': user.name, 'adjustment_time': adjustment_time, })
+            text_content = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                "Urgent notice - EasyGo",
+                text_content,
+                '',
+                [email, RECIPIENT_EMAIL]
+            )
+            email.attach_alternative(html_content, "text/html")
+            email.send()
+
+        elif selected_option == 'Arrival later than schedule':        
+            html_content = render_to_string("basecamp/html_email-arrival-late.html",
+                                        {'name': user.name, 'adjustment_time': adjustment_time, })
+            text_content = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                "Urgent notice - EasyGo",
+                text_content,
+                '',
+                [email, RECIPIENT_EMAIL]
+            )
+            email.attach_alternative(html_content, "text/html")
+            email.send()
 
 
         return render(request, 'basecamp/pickup_adjustment_detail.html', {})  
