@@ -124,3 +124,4 @@ Traceback (most recent call last):
   File "/home/ubuntu/github/easygo/basecamp/views.py", line 2268, in pickup_adjustment_detail
     {'name': user.name, 'adjustment_time': adjustment_time, })
 AttributeError: 'NoneType' object has no attribute 'name'
+WARNING 2023-10-06 22:00:56,490 log Not Found: /Core/Skin/Login.aspx
