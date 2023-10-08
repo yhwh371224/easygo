@@ -127,7 +127,7 @@ def notify_user_payment(sender, instance, created, **kwargs):
             "PayPal payment - EasyGo",
             text_content,
             '',
-            [instance.payer_email, 'sungkam718@gmail.com']
+            [instance.payer_email, RECIPIENT_EMAIL]
         )        
         email.attach_alternative(html_content, "text/html")        
         email.send()
@@ -148,7 +148,7 @@ def notify_user_payment(sender, instance, created, **kwargs):
             "PayPal payment - EasyGo",
             text_content,
             '',
-            [instance.payer_email, 'sungkam718@gmail.com']
+            [instance.payer_email, RECIPIENT_EMAIL]
         )        
         email.attach_alternative(html_content, "text/html")        
         email.send()
