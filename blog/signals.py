@@ -127,7 +127,7 @@ def notify_user_payment(sender, instance, created, **kwargs):
             "PayPal payment - EasyGo",
             text_content,
             '',
-            [instance.payer_email, RECIPIENT_EMAIL]
+            [instance.payer_email, 'sungkam718@gmail.com']
         )        
         email.attach_alternative(html_content, "text/html")        
         email.send()
@@ -148,7 +148,7 @@ def notify_user_payment(sender, instance, created, **kwargs):
             "PayPal payment - EasyGo",
             text_content,
             '',
-            [instance.payer_email, RECIPIENT_EMAIL]
+            [instance.payer_email, 'sungkam718@gmail.com']
         )        
         email.attach_alternative(html_content, "text/html")        
         email.send()
@@ -225,9 +225,3 @@ def create_event_on_calendar(sender, instance, created, **kwargs):
                 print('Event created: %s' % (event.get('htmlLink')))
             except HttpError as error:
                 print(f'An error occurred while creating the event: {error}')
-
-
-
-
-
-      
