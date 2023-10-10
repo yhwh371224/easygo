@@ -1028,3 +1028,329 @@ WARNING 2023-10-10 11:44:23,463 log Not Found: /02-info.php
 WARNING 2023-10-10 11:44:29,925 log Not Found: /1_1_PhpInfo.php
 WARNING 2023-10-10 11:44:36,769 log Not Found: /5info.php
 WARNING 2023-10-10 11:45:01,729 log Not Found: /api/index.php/v1/config/application
+WARNING 2023-10-10 12:01:29,088 log Not Found: /shop/product-category/new-arrivals/
+WARNING 2023-10-10 12:18:42,905 log Not Found: /shop/da/product/moncler-arcs-2/
+WARNING 2023-10-10 12:29:16,992 log Not Found: /robots.txt
+WARNING 2023-10-10 12:30:46,644 log Not Found: /.env
+WARNING 2023-10-10 12:30:46,935 log Not Found: /core/.env
+WARNING 2023-10-10 12:30:47,226 log Not Found: /web/.env
+WARNING 2023-10-10 12:30:47,525 log Not Found: /app/.env
+WARNING 2023-10-10 12:30:47,829 log Not Found: /laravel/.env
+WARNING 2023-10-10 12:30:48,480 log Not Found: /crm/.env
+WARNING 2023-10-10 12:30:48,799 log Not Found: /backend/.env
+WARNING 2023-10-10 12:30:49,101 log Not Found: /local/.env
+WARNING 2023-10-10 12:30:49,398 log Not Found: /application/.env
+WARNING 2023-10-10 12:30:49,979 log Not Found: /prod/.env
+WARNING 2023-10-10 12:30:50,276 log Not Found: /api/.env
+WARNING 2023-10-10 12:30:50,568 log Not Found: /blog/.env
+WARNING 2023-10-10 12:30:50,862 log Not Found: /.env.bak
+WARNING 2023-10-10 12:30:51,154 log Not Found: /vendor/laravel/.env
+WARNING 2023-10-10 12:30:51,463 log Not Found: /vendor/.env
+WARNING 2023-10-10 12:30:51,759 log Not Found: /public/.env
+WARNING 2023-10-10 12:30:52,055 log Not Found: /apps/.env
+WARNING 2023-10-10 12:30:52,358 log Not Found: /app/config/.env
+WARNING 2023-10-10 12:30:52,661 log Not Found: /portal/.env
+WARNING 2023-10-10 12:30:52,961 log Not Found: /.aws/credentials
+WARNING 2023-10-10 12:30:53,255 log Not Found: /phpinfo
+WARNING 2023-10-10 12:30:53,565 log Not Found: /_profiler/phpinfo
+WARNING 2023-10-10 12:30:53,859 log Not Found: /phpinfo.php
+WARNING 2023-10-10 12:30:54,158 log Not Found: /info.php
+WARNING 2023-10-10 12:30:54,478 log Not Found: /wp-config.php.orig
+WARNING 2023-10-10 12:30:54,795 log Not Found: /wp-config.php
+WARNING 2023-10-10 12:30:55,091 log Not Found: /index.php
+WARNING 2023-10-10 12:30:55,453 log Not Found: /temp.php
+WARNING 2023-10-10 12:30:55,749 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-10-10 12:35:20,436 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-10-10 12:49:17,140 log Not Found: /.env
+WARNING 2023-10-10 13:39:32,581 log Not Found: /shop/ko/product/도트-무늬-재킷-아래로-남성과-여성의-여러-로고가-새-2/
+WARNING 2023-10-10 13:49:38,802 log Not Found: /autodiscover/autodiscover.json
+WARNING 2023-10-10 13:57:47,008 log Not Found: /phpinfo.php
+WARNING 2023-10-10 13:57:47,607 log Not Found: /info.php
+WARNING 2023-10-10 13:57:48,206 log Not Found: /phpinfo
+WARNING 2023-10-10 13:57:48,806 log Not Found: /php.php
+WARNING 2023-10-10 13:57:49,405 log Not Found: /php_info.php
+WARNING 2023-10-10 13:57:50,004 log Not Found: /phptest.php
+WARNING 2023-10-10 13:57:50,603 log Not Found: /dashboard/phpinfo.php
+WARNING 2023-10-10 13:57:51,201 log Not Found: /infophp.php
+WARNING 2023-10-10 13:57:51,800 log Not Found: /p.php
+WARNING 2023-10-10 13:57:52,398 log Not Found: /_profiler/phpinfo
+WARNING 2023-10-10 13:57:52,996 log Not Found: /info.php
+WARNING 2023-10-10 13:57:53,595 log Not Found: /pinfo.php
+WARNING 2023-10-10 13:57:54,194 log Not Found: /scripts/phpinfo.php
+WARNING 2023-10-10 13:57:54,793 log Not Found: /phpinfo.php
+WARNING 2023-10-10 13:57:55,987 log Not Found: /phpinfo/phpinfo.php
+WARNING 2023-10-10 13:57:56,586 log Not Found: /information.php
+WARNING 2023-10-10 13:57:57,784 log Not Found: /phpinformation
+WARNING 2023-10-10 13:57:58,384 log Not Found: /php-info.php
+WARNING 2023-10-10 13:57:58,982 log Not Found: /phpversion.php
+WARNING 2023-10-10 13:57:59,582 log Not Found: /webdav/phpinfo.php
+WARNING 2023-10-10 13:58:00,183 log Not Found: /webdav/phpinfo
+WARNING 2023-10-10 13:58:00,781 log Not Found: /webdav/info.php
+WARNING 2023-10-10 13:58:01,379 log Not Found: /testphpinfo.php
+WARNING 2023-10-10 13:58:01,977 log Not Found: /testphpinfo
+WARNING 2023-10-10 13:58:02,581 log Not Found: /admin.php
+WARNING 2023-10-10 13:58:03,179 log Not Found: /_phpinfo.php
+WARNING 2023-10-10 13:58:03,778 log Not Found: /PHPConf.php
+WARNING 2023-10-10 13:58:04,377 log Not Found: /viewinfo.php
+WARNING 2023-10-10 13:58:04,977 log Not Found: /info/phpinfo.php
+WARNING 2023-10-10 13:58:05,577 log Not Found: /info/info.php
+WARNING 2023-10-10 13:58:06,219 log Not Found: /.env.save
+WARNING 2023-10-10 13:58:06,816 log Not Found: /.env.old
+WARNING 2023-10-10 13:58:07,414 log Not Found: /.env.prod
+WARNING 2023-10-10 13:58:08,012 log Not Found: /.env.production
+WARNING 2023-10-10 13:58:08,608 log Not Found: /.env.development
+WARNING 2023-10-10 13:58:09,209 log Not Found: /laravel/.env
+WARNING 2023-10-10 13:58:09,809 log Not Found: /admin-app/.env
+WARNING 2023-10-10 13:58:10,408 log Not Found: /api/.env
+WARNING 2023-10-10 13:58:11,006 log Not Found: /app/.env
+WARNING 2023-10-10 13:58:11,604 log Not Found: /development/.env
+WARNING 2023-10-10 13:58:11,738 log Not Found: /shop/es/product/moncler-bufanda-y-gorras-negro-generoso/
+WARNING 2023-10-10 13:58:12,203 log Not Found: /apps/.env
+WARNING 2023-10-10 13:58:12,801 log Not Found: /.aws/credentials
+WARNING 2023-10-10 13:58:13,399 log Not Found: /private/.env
+WARNING 2023-10-10 13:58:13,997 log Not Found: /system/.env
+WARNING 2023-10-10 13:58:14,597 log Not Found: /docker/.env
+WARNING 2023-10-10 13:58:15,196 log Not Found: /cms/.env
+WARNING 2023-10-10 13:58:15,797 log Not Found: /script/.env
+WARNING 2023-10-10 13:58:16,397 log Not Found: /live_env
+WARNING 2023-10-10 13:58:16,996 log Not Found: /application/.env
+WARNING 2023-10-10 13:58:17,595 log Not Found: /.env.project
+WARNING 2023-10-10 13:58:18,195 log Not Found: /.env.dist
+WARNING 2023-10-10 13:58:18,795 log Not Found: /back/.env
+WARNING 2023-10-10 13:58:19,392 log Not Found: /core/.env
+WARNING 2023-10-10 13:58:19,991 log Not Found: /docker/.env
+WARNING 2023-10-10 13:58:20,591 log Not Found: /fedex/.env
+WARNING 2023-10-10 13:58:21,189 log Not Found: /local/.env
+WARNING 2023-10-10 13:58:21,787 log Not Found: /rest/.env
+WARNING 2023-10-10 13:58:22,385 log Not Found: /shared/.env
+WARNING 2023-10-10 13:58:22,985 log Not Found: /sources/.env
+WARNING 2023-10-10 13:58:23,587 log Not Found: /enviroments/.env.production
+WARNING 2023-10-10 13:58:24,185 log Not Found: /enviroments/.env
+WARNING 2023-10-10 13:58:24,784 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-10-10 14:07:04,839 log Not Found: /robots.txt
+WARNING 2023-10-10 14:09:22,618 log Not Found: /actuator/gateway/routes
+WARNING 2023-10-10 14:09:38,653 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-10-10 14:27:33,700 log Not Found: /.env
+WARNING 2023-10-10 14:27:34,939 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-10-10 14:36:07,500 log Not Found: /.well-known/acme-challenge/KGYJCE0GVEQVU-13LZ_01LZV_XCVDTX4
+WARNING 2023-10-10 14:36:08,542 log Not Found: /.well-known/acme-challenge/C9JO4GYOTWYVUOMC016686UGK3IT5736
+WARNING 2023-10-10 14:36:57,737 log Not Found: /home/sms:+61406883355
+ERROR 2023-10-10 14:37:03,318 log Internal Server Error: /inquiry_details/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 483, in inquiry_details
+    p.save()
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 806, in save
+    self.save_base(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 857, in save_base
+    updated = self._save_table(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 1000, in _save_table
+    results = self._do_insert(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 1041, in _do_insert
+    return manager._insert(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/query.py", line 1434, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1620, in execute_sql
+    for sql, params in self.as_sql():
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1547, in as_sql
+    value_rows = [
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1548, in <listcomp>
+    [
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1549, in <listcomp>
+    self.prepare_value(field, self.pre_save_val(field, obj))
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1487, in prepare_value
+    value = field.get_db_prep_save(value, connection=self.connection)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py", line 910, in get_db_prep_save
+    return self.get_db_prep_value(value, connection=connection, prepared=False)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py", line 1408, in get_db_prep_value
+    value = self.get_prep_value(value)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py", line 1403, in get_prep_value
+    return self.to_python(value)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py", line 1369, in to_python
+    raise exceptions.ValidationError(
+django.core.exceptions.ValidationError: ['“Gwliiw” value has an invalid date format. It must be in YYYY-MM-DD format.']
+WARNING 2023-10-10 15:08:08,064 log Forbidden (CSRF cookie not set.): /confirm_booking_detail/
+ERROR 2023-10-10 15:13:41,882 log Internal Server Error: /horeb_yhwh/blog/inquiry/2792/change/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/sqlite3/base.py", line 477, in execute
+    return Database.Cursor.execute(self, query, params)
+sqlite3.OperationalError: database is locked
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 683, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 134, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/views/decorators/cache.py", line 62, in _wrapped_view_func
+    response = view_func(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/sites.py", line 242, in inner
+    return view(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 1889, in change_view
+    return self.changeform_view(request, object_id, form_url, extra_context)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 46, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 134, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 1746, in changeform_view
+    return self._changeform_view(request, object_id, form_url, extra_context)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 1798, in _changeform_view
+    self.save_model(request, new_object, form, not add)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 1221, in save_model
+    obj.save()
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 806, in save
+    self.save_base(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 857, in save_base
+    updated = self._save_table(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 970, in _save_table
+    updated = self._do_update(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 1034, in _do_update
+    return filtered._update(values) > 0
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/query.py", line 885, in _update
+    return query.get_compiler(self.db).execute_sql(CURSOR)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1783, in execute_sql
+    cursor = super().execute_sql(result_type)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1361, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 67, in execute
+    return self._execute_with_wrappers(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 80, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 84, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/backends/sqlite3/base.py", line 477, in execute
+    return Database.Cursor.execute(self, query, params)
+django.db.utils.OperationalError: database is locked
+WARNING 2023-10-10 15:24:58,890 log Not Found: //wp-includes/wlwmanifest.xml
+WARNING 2023-10-10 15:24:59,051 log Not Found: //xmlrpc.php
+WARNING 2023-10-10 15:24:59,371 log Not Found: //blog/wp-includes/wlwmanifest.xml
+WARNING 2023-10-10 15:24:59,532 log Not Found: //web/wp-includes/wlwmanifest.xml
+WARNING 2023-10-10 15:24:59,692 log Not Found: //wordpress/wp-includes/wlwmanifest.xml
+WARNING 2023-10-10 15:24:59,853 log Not Found: //website/wp-includes/wlwmanifest.xml
+WARNING 2023-10-10 15:25:00,014 log Not Found: //wp/wp-includes/wlwmanifest.xml
+WARNING 2023-10-10 15:25:00,175 log Not Found: //news/wp-includes/wlwmanifest.xml
+WARNING 2023-10-10 15:25:00,336 log Not Found: //2018/wp-includes/wlwmanifest.xml
+WARNING 2023-10-10 15:25:00,497 log Not Found: //2019/wp-includes/wlwmanifest.xml
+WARNING 2023-10-10 15:25:00,657 log Not Found: //shop/wp-includes/wlwmanifest.xml
+WARNING 2023-10-10 15:25:00,818 log Not Found: //wp1/wp-includes/wlwmanifest.xml
+WARNING 2023-10-10 15:25:00,979 log Not Found: //test/wp-includes/wlwmanifest.xml
+WARNING 2023-10-10 15:25:01,140 log Not Found: //media/wp-includes/wlwmanifest.xml
+WARNING 2023-10-10 15:25:01,301 log Not Found: //wp2/wp-includes/wlwmanifest.xml
+WARNING 2023-10-10 15:25:01,462 log Not Found: //site/wp-includes/wlwmanifest.xml
+WARNING 2023-10-10 15:25:01,622 log Not Found: //cms/wp-includes/wlwmanifest.xml
+WARNING 2023-10-10 15:25:01,785 log Not Found: //sito/wp-includes/wlwmanifest.xml
+WARNING 2023-10-10 15:38:11,040 log Not Found: /robots.txt
+WARNING 2023-10-10 15:44:11,195 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-10-10 15:44:16,665 log Not Found: /wso.php
+WARNING 2023-10-10 15:44:16,713 log Not Found: /ws.php
+WARNING 2023-10-10 15:56:02,235 log Not Found: /shop/product/moncler-moka/
+WARNING 2023-10-10 16:07:08,486 log Not Found: /.well-known/apple-app-site-association
+WARNING 2023-10-10 16:07:14,580 log Not Found: /apple-app-site-association
+WARNING 2023-10-10 16:42:30,946 log Not Found: /robots.txt
+WARNING 2023-10-10 16:42:50,318 log Not Found: /shop/pl/product/moncler-kurtki-dzieciece-sestriere-zolty/
+WARNING 2023-10-10 16:46:26,993 log Not Found: /robots.txt
+WARNING 2023-10-10 16:56:28,437 log Not Found: /sites/all/libraries/elfinder/src/connectors/php/connector.php
+ERROR 2023-10-10 17:12:54,632 log Internal Server Error: /inquiry_details/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 483, in inquiry_details
+    p.save()
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 806, in save
+    self.save_base(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 857, in save_base
+    updated = self._save_table(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 1000, in _save_table
+    results = self._do_insert(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/base.py", line 1041, in _do_insert
+    return manager._insert(
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/query.py", line 1434, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1620, in execute_sql
+    for sql, params in self.as_sql():
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1547, in as_sql
+    value_rows = [
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1548, in <listcomp>
+    [
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1549, in <listcomp>
+    self.prepare_value(field, self.pre_save_val(field, obj))
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1487, in prepare_value
+    value = field.get_db_prep_save(value, connection=self.connection)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py", line 910, in get_db_prep_save
+    return self.get_db_prep_value(value, connection=connection, prepared=False)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py", line 1408, in get_db_prep_value
+    value = self.get_prep_value(value)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py", line 1403, in get_prep_value
+    return self.to_python(value)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py", line 1369, in to_python
+    raise exceptions.ValidationError(
+django.core.exceptions.ValidationError: ['“Be iemhk nl O” value has an invalid date format. It must be in YYYY-MM-DD format.']
+WARNING 2023-10-10 17:19:27,392 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-10-10 17:40:55,184 log Not Found: /robots.txt
+WARNING 2023-10-10 17:48:50,079 log Not Found: /simple.php
+WARNING 2023-10-10 18:18:59,972 log Not Found: /.env
+WARNING 2023-10-10 18:21:30,959 log Not Found: //wp-includes/wlwmanifest.xml
+WARNING 2023-10-10 18:21:31,290 log Not Found: //xmlrpc.php
+WARNING 2023-10-10 18:21:31,952 log Not Found: //blog/wp-includes/wlwmanifest.xml
+WARNING 2023-10-10 18:21:32,283 log Not Found: //web/wp-includes/wlwmanifest.xml
+WARNING 2023-10-10 18:21:32,614 log Not Found: //wordpress/wp-includes/wlwmanifest.xml
+WARNING 2023-10-10 18:21:32,944 log Not Found: //website/wp-includes/wlwmanifest.xml
+WARNING 2023-10-10 18:21:33,275 log Not Found: //wp/wp-includes/wlwmanifest.xml
+WARNING 2023-10-10 18:21:33,610 log Not Found: //news/wp-includes/wlwmanifest.xml
+WARNING 2023-10-10 18:21:33,941 log Not Found: //2020/wp-includes/wlwmanifest.xml
+WARNING 2023-10-10 18:21:34,273 log Not Found: //2019/wp-includes/wlwmanifest.xml
+WARNING 2023-10-10 18:21:34,604 log Not Found: //shop/wp-includes/wlwmanifest.xml
+WARNING 2023-10-10 18:21:34,934 log Not Found: //wp1/wp-includes/wlwmanifest.xml
+WARNING 2023-10-10 18:21:35,265 log Not Found: //test/wp-includes/wlwmanifest.xml
+WARNING 2023-10-10 18:21:35,595 log Not Found: //wp2/wp-includes/wlwmanifest.xml
+WARNING 2023-10-10 18:21:35,925 log Not Found: //site/wp-includes/wlwmanifest.xml
+WARNING 2023-10-10 18:21:36,256 log Not Found: //cms/wp-includes/wlwmanifest.xml
+WARNING 2023-10-10 18:21:36,587 log Not Found: //sito/wp-includes/wlwmanifest.xml
+WARNING 2023-10-10 18:38:59,775 log Not Found: /robots.txt
+WARNING 2023-10-10 18:45:57,379 log Not Found: /wp-content/plugins/WordPressCore/include.php
+WARNING 2023-10-10 18:56:59,362 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-10-10 19:12:49,512 log Not Found: /robots.txt
+WARNING 2023-10-10 19:30:35,759 log Not Found: /.env
+WARNING 2023-10-10 19:30:36,995 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-10-10 20:02:47,135 log Not Found: /robots.txt
+ERROR 2023-10-10 20:02:48,030 log Internal Server Error: /sending_email_first_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1784, in sending_email_first_detail
+    return render(request, 'beasecamp/sending_email_first.html', {})
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: beasecamp/sending_email_first.html
+WARNING 2023-10-10 20:18:58,828 log Not Found: /shop/nl/product/moncler-auburn-9/
+WARNING 2023-10-10 20:36:52,580 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-10-10 20:43:54,905 log Not Found: /.well-known/traffic-advice
+WARNING 2023-10-10 20:52:03,468 log Not Found: /.env
+WARNING 2023-10-10 20:52:04,811 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-10-10 20:57:01,243 log Not Found: /shop/product/moncler-boots-nible-beige-stylish-and-generous/
