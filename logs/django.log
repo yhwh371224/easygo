@@ -1,121 +1,1030 @@
-WARNING 2023-10-09 03:31:48,556 log Not Found: //wp-includes/wlwmanifest.xml
-WARNING 2023-10-09 03:31:48,747 log Not Found: //xmlrpc.php
-WARNING 2023-10-09 03:31:49,480 log Not Found: //blog/wp-includes/wlwmanifest.xml
-WARNING 2023-10-09 03:31:49,622 log Not Found: //web/wp-includes/wlwmanifest.xml
-WARNING 2023-10-09 03:31:50,182 log Not Found: //wordpress/wp-includes/wlwmanifest.xml
-WARNING 2023-10-09 03:31:50,352 log Not Found: //website/wp-includes/wlwmanifest.xml
-WARNING 2023-10-09 03:31:50,533 log Not Found: //wp/wp-includes/wlwmanifest.xml
-WARNING 2023-10-09 03:31:50,695 log Not Found: //news/wp-includes/wlwmanifest.xml
-WARNING 2023-10-09 03:31:50,836 log Not Found: //2020/wp-includes/wlwmanifest.xml
-WARNING 2023-10-09 03:31:51,381 log Not Found: //2019/wp-includes/wlwmanifest.xml
-WARNING 2023-10-09 03:31:51,533 log Not Found: //shop/wp-includes/wlwmanifest.xml
-WARNING 2023-10-09 03:31:51,719 log Not Found: //wp1/wp-includes/wlwmanifest.xml
-WARNING 2023-10-09 03:31:51,885 log Not Found: //test/wp-includes/wlwmanifest.xml
-WARNING 2023-10-09 03:31:52,028 log Not Found: //wp2/wp-includes/wlwmanifest.xml
-WARNING 2023-10-09 03:31:52,566 log Not Found: //site/wp-includes/wlwmanifest.xml
-WARNING 2023-10-09 03:31:52,726 log Not Found: //cms/wp-includes/wlwmanifest.xml
-WARNING 2023-10-09 03:31:52,911 log Not Found: //sito/wp-includes/wlwmanifest.xml
-WARNING 2023-10-09 04:39:33,744 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-10-09 04:53:37,095 log Not Found: /wordpress
-WARNING 2023-10-09 04:53:38,020 log Not Found: /wp
-WARNING 2023-10-09 04:53:38,352 log Not Found: /bc
-WARNING 2023-10-09 04:53:38,682 log Not Found: /bk
-WARNING 2023-10-09 04:53:39,002 log Not Found: /backup
-WARNING 2023-10-09 04:53:39,334 log Not Found: /old
-WARNING 2023-10-09 04:53:39,675 log Not Found: /new
-WARNING 2023-10-09 04:53:40,012 log Not Found: /main
-WARNING 2023-10-09 05:32:48,485 log Not Found: /robots.txt
-WARNING 2023-10-09 05:40:43,449 log Not Found: /.well-known/traffic-advice
-WARNING 2023-10-09 05:45:44,147 log Not Found: /robots.txt
-WARNING 2023-10-09 05:53:19,083 log Not Found: /price-booking/
-WARNING 2023-10-09 06:02:17,086 log Not Found: /robots.txt
-WARNING 2023-10-09 06:12:51,626 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-10-09 06:40:02,280 log Not Found: /robots.txt
-WARNING 2023-10-09 06:42:21,232 log Not Found: /autodiscover/autodiscover.json
-ERROR 2023-10-09 06:44:51,894 log Internal Server Error: /paypal_ipn/
-WARNING 2023-10-09 06:58:18,520 log Not Found: /.well-known/traffic-advice
-WARNING 2023-10-09 07:15:44,516 log Not Found: /robots.txt
-WARNING 2023-10-09 07:20:39,235 log Not Found: /wp-login.php
-WARNING 2023-10-09 07:35:26,271 log Not Found: /wp-content/plugins/core/include.php
-WARNING 2023-10-09 07:46:04,914 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-10-09 07:59:27,820 log Not Found: /robots.txt
-WARNING 2023-10-09 09:18:58,701 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-10-09 09:25:36,526 log Not Found: /home//wp-admin/css/colors/blue/blue.php
-WARNING 2023-10-09 09:31:16,521 log Not Found: /ads.txt
-WARNING 2023-10-09 10:19:43,585 log Not Found: /ecp/Current/exporttool/microsoft.exchange.ediscovery.exporttool.application
-WARNING 2023-10-09 10:32:06,969 log Not Found: /.well-known/traffic-advice
-WARNING 2023-10-09 10:51:58,756 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-10-09 11:01:53,983 log Not Found: /robots.txt
-ERROR 2023-10-09 11:02:11,486 log Internal Server Error: /paypal_ipn/
-WARNING 2023-10-09 11:13:52,704 log Not Found: /robots.txt
-WARNING 2023-10-09 11:24:33,612 log Not Found: /wp-content/themes/seotheme/db.php
-WARNING 2023-10-09 11:24:41,439 log Not Found: /wp-content/themes/seotheme/db.php
-WARNING 2023-10-09 11:30:31,668 log Not Found: /contact-us/
-WARNING 2023-10-09 11:33:25,034 log Not Found: /.well-known/traffic-advice
-WARNING 2023-10-09 11:56:21,308 log Not Found: /robots.txt
-WARNING 2023-10-09 12:25:11,810 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-10-09 12:26:29,175 log Not Found: /robots.txt
-WARNING 2023-10-09 12:32:17,623 log Not Found: /.well-known/pki-validation/cloud.php
-WARNING 2023-10-09 12:32:27,115 log Not Found: /.well-known/acme-challenge/cloud.php
-WARNING 2023-10-09 12:32:36,023 log Not Found: /wp-admin/network/cloud.php
-WARNING 2023-10-09 12:32:45,765 log Not Found: /cloud.php
-WARNING 2023-10-09 12:32:53,605 log Not Found: /cgi-bin/cloud.php
-WARNING 2023-10-09 12:32:57,867 log Not Found: /wp-admin/admin-ajax.php
-WARNING 2023-10-09 12:33:01,949 log Not Found: /css/cloud.php
-WARNING 2023-10-09 12:33:10,189 log Not Found: /wp-admin/user/cloud.php
-WARNING 2023-10-09 12:33:18,227 log Not Found: /img/cloud.php
-WARNING 2023-10-09 12:33:23,983 log Not Found: /wp-admin/css/colors/coffee/cloud.php
-WARNING 2023-10-09 12:33:31,674 log Not Found: /wp-admin/images/cloud.php
-WARNING 2023-10-09 12:33:41,143 log Not Found: /images/cloud.php
-WARNING 2023-10-09 12:33:50,713 log Not Found: /wp-admin/js/widgets/cloud.php
-WARNING 2023-10-09 12:33:59,835 log Not Found: /wp-admin/css/colors/cloud.php
-WARNING 2023-10-09 12:34:08,775 log Not Found: /wp-admin/includes/cloud.php
-WARNING 2023-10-09 12:34:17,190 log Not Found: /wp-admin/css/colors/blue/cloud.php
-WARNING 2023-10-09 12:34:25,864 log Not Found: /wp-admin/cloud.php
-WARNING 2023-10-09 12:49:18,603 log Not Found: /.git/config
-WARNING 2023-10-09 12:49:19,438 log Not Found: /.git/config
-WARNING 2023-10-09 12:49:20,921 log Not Found: /.git/config
-WARNING 2023-10-09 13:23:40,611 log Not Found: /robots.txt
-WARNING 2023-10-09 13:33:38,973 log Not Found: /robots.txt
-WARNING 2023-10-09 13:33:41,270 log Not Found: /sitemap.xml
-WARNING 2023-10-09 13:49:32,000 log Not Found: /robots.txt
-WARNING 2023-10-09 13:56:17,475 log Not Found: /ads.txt
-WARNING 2023-10-09 13:59:02,734 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-10-09 14:19:37,150 log Not Found: /robots.txt
-WARNING 2023-10-09 14:35:58,849 log Not Found: /.well-known/acme-challenge/3ZGRBG-3RZ65W-L2E3C9GW371M8DS6II
-WARNING 2023-10-09 14:35:59,888 log Not Found: /.well-known/acme-challenge/-O_4W1NFV-Q92IS8D-XM4H88935149HT
-WARNING 2023-10-09 14:37:56,331 log Not Found: /robots.txt
-WARNING 2023-10-09 15:23:01,257 log Not Found: /.well-known/traffic-advice
-WARNING 2023-10-09 15:33:34,711 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-10-09 15:35:12,690 log Not Found: /robots.txt
-WARNING 2023-10-09 15:59:22,154 log Not Found: /wp-content/plugins/core/include.php
-WARNING 2023-10-09 15:59:24,112 log Not Found: /wp-head.php
-WARNING 2023-10-09 15:59:33,802 log Not Found: /owa/auth/errorFE.aspx
-WARNING 2023-10-09 15:59:34,188 log Not Found: /dana-cached/hc/HostCheckerInstaller.osx
-WARNING 2023-10-09 15:59:34,195 log Not Found: /dana-na/nc/nc_gina_ver.txt
-WARNING 2023-10-09 15:59:34,419 log Not Found: /ecp/Current/exporttool/microsoft.exchange.ediscovery.exporttool.application
-WARNING 2023-10-09 15:59:34,454 log Not Found: /wsman
-WARNING 2023-10-09 15:59:34,794 log Not Found: /api/v1
-WARNING 2023-10-09 15:59:35,036 log Not Found: /owa/auth/logon.aspx
-WARNING 2023-10-09 15:59:35,282 log Not Found: /RDWeb
-WARNING 2023-10-09 15:59:35,322 log Not Found: /Remote
-WARNING 2023-10-09 15:59:35,815 log Not Found: /auth.html
-WARNING 2023-10-09 15:59:35,817 log Not Found: /auth1.html
-WARNING 2023-10-09 15:59:35,830 log Not Found: /sslvpnLogin.html
-WARNING 2023-10-09 15:59:35,830 log Not Found: /api/sonicos/auth
-WARNING 2023-10-09 15:59:35,831 log Not Found: /api/sonicos/tfa
-WARNING 2023-10-09 16:02:26,385 log Not Found: /robots.txt
-WARNING 2023-10-09 16:04:43,543 log Not Found: /wp-admin/js/widgets/about.php
-WARNING 2023-10-09 16:06:20,686 log Not Found: //wp-admin/js/widgets/index.php
-WARNING 2023-10-09 16:06:26,282 log Not Found: //wp-admin/js/widgets/admin.php
-WARNING 2023-10-09 16:06:43,329 log Not Found: //wp-admin/js/widgets/contents.php
-WARNING 2023-10-09 16:06:50,694 log Not Found: //wp-admin/js/widgets/content.php
-WARNING 2023-10-09 16:15:37,791 log Not Found: /+CSCOE+/logon.html
-WARNING 2023-10-09 16:15:38,728 log Not Found: /remote/login
-WARNING 2023-10-09 16:15:39,664 log Not Found: /login
-WARNING 2023-10-09 16:15:40,596 log Not Found: /vpn/index.html
-WARNING 2023-10-09 16:15:41,562 log Not Found: /global-protect/login.esp
-WARNING 2023-10-09 16:15:42,499 log Not Found: /dana-na/auth/url_default/welcome.cgi
-WARNING 2023-10-09 16:15:43,440 log Not Found: /guacamole/
-WARNING 2023-10-09 16:18:01,832 log Not Found: /robots.txt
-WARNING 2023-10-09 16:28:50,654 log Not Found: /owa/auth/logon.aspx
+WARNING 2023-10-10 03:38:33,816 log Not Found: /robots.txt
+ERROR 2023-10-10 04:01:24,516 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:24,524 log Bad Request: /
+ERROR 2023-10-10 04:01:24,718 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:24,720 log Bad Request: /xampp/info.php
+ERROR 2023-10-10 04:01:24,918 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:24,920 log Bad Request: /xampp/phpinfo
+ERROR 2023-10-10 04:01:25,114 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:25,115 log Bad Request: /_profiler/phpinfo
+ERROR 2023-10-10 04:01:25,312 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:25,313 log Bad Request: /phpinfo.php
+ERROR 2023-10-10 04:01:25,510 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:25,512 log Bad Request: /phpinfo
+ERROR 2023-10-10 04:01:25,706 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:25,708 log Bad Request: /info.php
+ERROR 2023-10-10 04:01:25,903 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:25,905 log Bad Request: /php.ini
+ERROR 2023-10-10 04:01:26,103 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:26,104 log Bad Request: /php.php
+ERROR 2023-10-10 04:01:26,298 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:26,300 log Bad Request: /infophp.php
+ERROR 2023-10-10 04:01:26,494 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:26,495 log Bad Request: /test.php
+ERROR 2023-10-10 04:01:26,691 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:26,693 log Bad Request: /dashboard/phpinfo.php
+ERROR 2023-10-10 04:01:26,888 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:26,890 log Bad Request: //api/phpinfo.php
+ERROR 2023-10-10 04:01:27,085 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:27,086 log Bad Request: //backend/phpinfo.php
+ERROR 2023-10-10 04:01:27,282 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:27,283 log Bad Request: //backup/phpinfo.php
+ERROR 2023-10-10 04:01:27,478 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:27,480 log Bad Request: //crm/phpinfo.php
+ERROR 2023-10-10 04:01:27,676 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:27,677 log Bad Request: //current/phpinfo.php
+ERROR 2023-10-10 04:01:27,871 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:27,873 log Bad Request: //dev/phpinfo.php
+ERROR 2023-10-10 04:01:28,069 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:28,070 log Bad Request: //develop/phpinfo.php
+ERROR 2023-10-10 04:01:28,266 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:28,268 log Bad Request: //development/phpinfo.php
+ERROR 2023-10-10 04:01:28,464 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:28,466 log Bad Request: //help/phpinfo.php
+ERROR 2023-10-10 04:01:28,662 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:28,663 log Bad Request: //helper/phpinfo.php
+ERROR 2023-10-10 04:01:28,857 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:28,859 log Bad Request: //lara/phpinfo.php
+ERROR 2023-10-10 04:01:29,055 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:29,056 log Bad Request: //laravel/phpinfo.php
+ERROR 2023-10-10 04:01:29,252 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:29,254 log Bad Request: //server/phpinfo.php
+ERROR 2023-10-10 04:01:29,450 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:29,451 log Bad Request: //service/phpinfo.php
+ERROR 2023-10-10 04:01:29,646 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:29,648 log Bad Request: //services/phpinfo.php
+ERROR 2023-10-10 04:01:29,846 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:29,848 log Bad Request: //xampp/phpinfo.php
+ERROR 2023-10-10 04:01:30,043 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:30,045 log Bad Request: //phpinfo
+ERROR 2023-10-10 04:01:30,240 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:30,242 log Bad Request: //info.php
+ERROR 2023-10-10 04:01:30,436 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:30,438 log Bad Request: //api/info.php
+ERROR 2023-10-10 04:01:30,637 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:30,639 log Bad Request: //backend/info.php
+ERROR 2023-10-10 04:01:30,834 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:30,836 log Bad Request: //backup/info.php
+ERROR 2023-10-10 04:01:31,033 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:31,034 log Bad Request: //crm/info.php
+ERROR 2023-10-10 04:01:31,229 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:31,230 log Bad Request: //current/info.php
+ERROR 2023-10-10 04:01:31,425 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:31,427 log Bad Request: //dev/info.php
+ERROR 2023-10-10 04:01:31,622 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:31,623 log Bad Request: //develop/info.php
+ERROR 2023-10-10 04:01:31,819 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:31,821 log Bad Request: //development/iinfo.php
+ERROR 2023-10-10 04:01:32,022 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:32,024 log Bad Request: //help/info.php
+ERROR 2023-10-10 04:01:32,222 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:32,223 log Bad Request: //helper/info.php
+ERROR 2023-10-10 04:01:32,420 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:32,421 log Bad Request: //lara/info.php
+ERROR 2023-10-10 04:01:32,616 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:32,617 log Bad Request: //laravel/info.php
+ERROR 2023-10-10 04:01:32,813 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:32,814 log Bad Request: //server/info.php
+ERROR 2023-10-10 04:01:33,027 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:33,029 log Bad Request: //service/info.php
+ERROR 2023-10-10 04:01:33,223 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:33,224 log Bad Request: //services/info.php
+ERROR 2023-10-10 04:01:33,418 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:33,420 log Bad Request: //xampp/info.php
+ERROR 2023-10-10 04:01:33,613 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:33,614 log Bad Request: /php-info.php
+ERROR 2023-10-10 04:01:33,808 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:33,810 log Bad Request: /linusadmin-phpinfo.php
+ERROR 2023-10-10 04:01:34,003 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:34,005 log Bad Request: /infos.php
+ERROR 2023-10-10 04:01:34,202 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:34,204 log Bad Request: /old_phpinfo.php
+ERROR 2023-10-10 04:01:34,396 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:34,397 log Bad Request: /temp.php
+ERROR 2023-10-10 04:01:34,592 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:34,593 log Bad Request: /time.php
+ERROR 2023-10-10 04:01:34,788 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:34,789 log Bad Request: /phpversion.php
+ERROR 2023-10-10 04:01:34,983 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:34,985 log Bad Request: /pinfo.php
+ERROR 2023-10-10 04:01:35,180 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:35,181 log Bad Request: /i.php
+ERROR 2023-10-10 04:01:35,376 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:35,377 log Bad Request: /asdf.php
+ERROR 2023-10-10 04:01:35,572 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:35,574 log Bad Request: /index.json
+ERROR 2023-10-10 04:01:35,770 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:35,772 log Bad Request: /config.json
+ERROR 2023-10-10 04:01:35,966 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:35,968 log Bad Request: /config/config.json
+ERROR 2023-10-10 04:01:36,165 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:36,167 log Bad Request: /info.json
+ERROR 2023-10-10 04:01:36,362 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:36,363 log Bad Request: /.config/gatsby/config.json
+ERROR 2023-10-10 04:01:36,559 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:36,560 log Bad Request: /.cordova/config.json
+ERROR 2023-10-10 04:01:36,755 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:36,757 log Bad Request: /.deployment-config.json
+ERROR 2023-10-10 04:01:36,952 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:36,954 log Bad Request: /.docker/config.json
+ERROR 2023-10-10 04:01:37,148 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:37,149 log Bad Request: /.docker/daemon.json
+ERROR 2023-10-10 04:01:37,345 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:37,346 log Bad Request: /.jupyter/jupyter_notebook_config.json
+ERROR 2023-10-10 04:01:37,542 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:37,544 log Bad Request: /.lanproxy/config.json
+ERROR 2023-10-10 04:01:37,738 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:37,740 log Bad Request: /_wpeprivate/config.json
+ERROR 2023-10-10 04:01:37,933 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:37,935 log Bad Request: /console/base/config.json
+ERROR 2023-10-10 04:01:38,130 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:38,132 log Bad Request: /console/payments/config.json
+ERROR 2023-10-10 04:01:38,327 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:38,330 log Bad Request: /server/config.json
+ERROR 2023-10-10 04:01:38,526 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:38,527 log Bad Request: /.env.bak
+ERROR 2023-10-10 04:01:38,721 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:38,723 log Bad Request: /.env
+ERROR 2023-10-10 04:01:38,917 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:38,919 log Bad Request: /config.env
+ERROR 2023-10-10 04:01:39,116 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:39,118 log Bad Request: /.env.dist
+ERROR 2023-10-10 04:01:39,313 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:39,314 log Bad Request: /.env.dev
+ERROR 2023-10-10 04:01:39,508 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:39,509 log Bad Request: /.env.local
+ERROR 2023-10-10 04:01:39,704 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:39,706 log Bad Request: /public/.env
+ERROR 2023-10-10 04:01:39,899 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:39,901 log Bad Request: /laravel/.env
+ERROR 2023-10-10 04:01:40,096 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:40,097 log Bad Request: /laravel/core/.env
+ERROR 2023-10-10 04:01:40,290 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:40,292 log Bad Request: /beta/.env
+ERROR 2023-10-10 04:01:40,484 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:40,486 log Bad Request: /kyc/.env
+ERROR 2023-10-10 04:01:40,680 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:40,682 log Bad Request: /admin/.env
+ERROR 2023-10-10 04:01:40,876 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:40,878 log Bad Request: /prod/.env
+ERROR 2023-10-10 04:01:41,072 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:41,074 log Bad Request: /.env.backup
+ERROR 2023-10-10 04:01:41,271 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:41,272 log Bad Request: /.env.docker.dev
+ERROR 2023-10-10 04:01:41,466 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:41,468 log Bad Request: /.env.php
+ERROR 2023-10-10 04:01:41,662 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:41,664 log Bad Request: /.env.prod
+ERROR 2023-10-10 04:01:41,859 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:41,861 log Bad Request: /.env.production.local
+ERROR 2023-10-10 04:01:42,056 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:42,058 log Bad Request: /.env.sample.php
+ERROR 2023-10-10 04:01:42,253 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:42,255 log Bad Request: /.env.save
+ERROR 2023-10-10 04:01:42,450 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:42,452 log Bad Request: /.env.stage
+ERROR 2023-10-10 04:01:42,647 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:42,649 log Bad Request: /.env.test
+ERROR 2023-10-10 04:01:42,844 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:42,846 log Bad Request: /.env.test.local
+ERROR 2023-10-10 04:01:43,041 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:43,043 log Bad Request: /.env.local
+ERROR 2023-10-10 04:01:43,238 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:43,240 log Bad Request: /.env.production
+ERROR 2023-10-10 04:01:43,434 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:43,435 log Bad Request: /.env.staging
+ERROR 2023-10-10 04:01:43,629 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:43,630 log Bad Request: /backup/.env
+ERROR 2023-10-10 04:01:43,825 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:43,826 log Bad Request: /backup/.env.local
+ERROR 2023-10-10 04:01:44,020 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:44,022 log Bad Request: /backup/.env.production
+ERROR 2023-10-10 04:01:44,409 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:44,410 log Bad Request: /backup/.env.staging
+ERROR 2023-10-10 04:01:44,605 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:44,607 log Bad Request: /public/.env
+ERROR 2023-10-10 04:01:44,801 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:44,803 log Bad Request: /public/.env.local
+ERROR 2023-10-10 04:01:45,001 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:45,002 log Bad Request: /public/.env.production
+ERROR 2023-10-10 04:01:45,197 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:45,199 log Bad Request: /public/.env.staging
+ERROR 2023-10-10 04:01:45,395 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:45,397 log Bad Request: /laravel/.env
+ERROR 2023-10-10 04:01:45,592 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:45,594 log Bad Request: /laravel/.env.local
+ERROR 2023-10-10 04:01:45,787 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:45,789 log Bad Request: /laravel/.env.production
+ERROR 2023-10-10 04:01:45,982 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:45,984 log Bad Request: /laravel/.env.staging
+ERROR 2023-10-10 04:01:46,177 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:46,179 log Bad Request: /laravel/core/.env
+ERROR 2023-10-10 04:01:46,374 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:46,376 log Bad Request: /laravel/core/.env.local
+ERROR 2023-10-10 04:01:46,571 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:46,573 log Bad Request: /laravel/core/.env.production
+ERROR 2023-10-10 04:01:46,768 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:46,770 log Bad Request: /laravel/core/.env.staging
+ERROR 2023-10-10 04:01:46,965 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:46,966 log Bad Request: /beta/.env
+ERROR 2023-10-10 04:01:47,162 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:47,164 log Bad Request: /beta/.env.local
+ERROR 2023-10-10 04:01:47,357 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:47,359 log Bad Request: /beta/.env.production
+ERROR 2023-10-10 04:01:47,553 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:47,555 log Bad Request: /beta/.env.staging
+ERROR 2023-10-10 04:01:47,752 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:47,753 log Bad Request: /live/.env
+ERROR 2023-10-10 04:01:47,949 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:47,950 log Bad Request: /live/.env.local
+ERROR 2023-10-10 04:01:48,146 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:48,147 log Bad Request: /live/.env.production
+ERROR 2023-10-10 04:01:48,343 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:48,345 log Bad Request: /live/.env.staging
+ERROR 2023-10-10 04:01:48,542 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:48,543 log Bad Request: /demo/.env
+ERROR 2023-10-10 04:01:48,740 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:48,741 log Bad Request: /demo/.env.local
+ERROR 2023-10-10 04:01:48,939 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:48,941 log Bad Request: /demo/.env.production
+ERROR 2023-10-10 04:01:49,136 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:49,138 log Bad Request: /demo/.env.staging
+ERROR 2023-10-10 04:01:49,332 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:49,334 log Bad Request: /test/.env
+ERROR 2023-10-10 04:01:49,530 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:49,532 log Bad Request: /test/.env.local
+ERROR 2023-10-10 04:01:49,727 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:49,729 log Bad Request: /test/.env.production
+ERROR 2023-10-10 04:01:49,927 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:49,928 log Bad Request: /test/.env.staging
+ERROR 2023-10-10 04:01:50,126 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:50,127 log Bad Request: /kyc/.env
+ERROR 2023-10-10 04:01:50,322 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:50,324 log Bad Request: /kyc/.env.local
+ERROR 2023-10-10 04:01:50,519 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:50,521 log Bad Request: /kyc/.env.production
+ERROR 2023-10-10 04:01:50,716 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:50,718 log Bad Request: /kyc/.env.staging
+ERROR 2023-10-10 04:01:50,911 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:50,913 log Bad Request: /admin/.env
+ERROR 2023-10-10 04:01:51,108 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:51,110 log Bad Request: /admin/.env.local
+ERROR 2023-10-10 04:01:51,307 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:51,309 log Bad Request: /admin/.env.production
+ERROR 2023-10-10 04:01:51,506 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:51,508 log Bad Request: /admin/.env.staging
+ERROR 2023-10-10 04:01:51,702 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:51,704 log Bad Request: /client/.env
+ERROR 2023-10-10 04:01:51,900 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:51,902 log Bad Request: /client/.env.local
+ERROR 2023-10-10 04:01:52,098 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:52,099 log Bad Request: /client/.env.production
+ERROR 2023-10-10 04:01:52,294 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:52,296 log Bad Request: /client/.env.staging
+ERROR 2023-10-10 04:01:52,489 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:52,491 log Bad Request: /user/.env
+ERROR 2023-10-10 04:01:52,688 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:52,690 log Bad Request: /user/.env.local
+ERROR 2023-10-10 04:01:52,888 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:52,889 log Bad Request: /user/.env.staging
+ERROR 2023-10-10 04:01:53,086 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:53,087 log Bad Request: /api/.env
+ERROR 2023-10-10 04:01:53,282 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:53,285 log Bad Request: /api/.env.local
+ERROR 2023-10-10 04:01:53,483 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:53,485 log Bad Request: /api/.env.staging
+ERROR 2023-10-10 04:01:53,680 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:53,682 log Bad Request: /api/.env.production
+ERROR 2023-10-10 04:01:53,880 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:53,881 log Bad Request: /apis/.env
+ERROR 2023-10-10 04:01:54,077 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:54,078 log Bad Request: /apis/.env.local
+ERROR 2023-10-10 04:01:54,275 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:54,276 log Bad Request: /apis/.env.staging
+ERROR 2023-10-10 04:01:54,472 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:54,474 log Bad Request: /apis/.env.production
+ERROR 2023-10-10 04:01:54,669 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:54,671 log Bad Request: /backend/.env
+ERROR 2023-10-10 04:01:54,867 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:54,869 log Bad Request: /backend/.env.local
+ERROR 2023-10-10 04:01:55,068 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:55,069 log Bad Request: /backend/.env.staging
+ERROR 2023-10-10 04:01:55,266 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:55,267 log Bad Request: /backend/.env.production
+ERROR 2023-10-10 04:01:55,466 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:55,467 log Bad Request: /server/.env
+ERROR 2023-10-10 04:01:55,663 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:55,665 log Bad Request: /server/.env.local
+ERROR 2023-10-10 04:01:55,862 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:55,864 log Bad Request: /server/.env.staging
+ERROR 2023-10-10 04:01:56,059 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:56,061 log Bad Request: /server/.env.production
+ERROR 2023-10-10 04:01:56,257 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:56,258 log Bad Request: /app/.env
+ERROR 2023-10-10 04:01:56,453 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:56,454 log Bad Request: /app/.env.local
+ERROR 2023-10-10 04:01:56,650 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:56,652 log Bad Request: /app/.env.staging
+ERROR 2023-10-10 04:01:56,845 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:56,847 log Bad Request: /app/.env.production
+ERROR 2023-10-10 04:01:57,040 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:57,042 log Bad Request: /project/.env
+ERROR 2023-10-10 04:01:57,237 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:57,238 log Bad Request: /project/.env.local
+ERROR 2023-10-10 04:01:57,434 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:57,435 log Bad Request: /project/.env.staging
+ERROR 2023-10-10 04:01:57,630 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:57,631 log Bad Request: /project/.env.production
+ERROR 2023-10-10 04:01:57,826 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:57,828 log Bad Request: /cron/.env
+ERROR 2023-10-10 04:01:58,025 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:58,026 log Bad Request: /cron/.env.local
+ERROR 2023-10-10 04:01:58,221 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:58,223 log Bad Request: /cron/.env.staging
+ERROR 2023-10-10 04:01:58,418 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:58,420 log Bad Request: /cron/.env.production
+ERROR 2023-10-10 04:01:58,616 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:58,618 log Bad Request: /crm/.env
+ERROR 2023-10-10 04:01:58,812 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:58,814 log Bad Request: /crm/.env.local
+ERROR 2023-10-10 04:01:59,009 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:59,011 log Bad Request: /crm/.env.staging
+ERROR 2023-10-10 04:01:59,207 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:59,210 log Bad Request: /crm/.env.production
+ERROR 2023-10-10 04:01:59,420 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:59,422 log Bad Request: /current/.env
+ERROR 2023-10-10 04:01:59,618 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:59,620 log Bad Request: /current/.env.local
+ERROR 2023-10-10 04:01:59,813 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:01:59,815 log Bad Request: /current/.env.staging
+ERROR 2023-10-10 04:02:00,008 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:00,010 log Bad Request: /current/.env.production
+ERROR 2023-10-10 04:02:00,205 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:00,207 log Bad Request: /dev/.env
+ERROR 2023-10-10 04:02:00,403 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:00,404 log Bad Request: /dev/.env.local
+ERROR 2023-10-10 04:02:00,601 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:00,603 log Bad Request: /dev/.env.staging
+ERROR 2023-10-10 04:02:00,797 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:00,799 log Bad Request: /dev/.env.production
+ERROR 2023-10-10 04:02:00,994 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:00,995 log Bad Request: /develop/.env
+ERROR 2023-10-10 04:02:01,191 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:01,192 log Bad Request: /develop/.env.local
+ERROR 2023-10-10 04:02:01,385 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:01,387 log Bad Request: /develop/.env.staging
+ERROR 2023-10-10 04:02:01,581 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:01,584 log Bad Request: /develop/.env.production
+ERROR 2023-10-10 04:02:01,780 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:01,782 log Bad Request: /development/.env
+ERROR 2023-10-10 04:02:01,977 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:01,979 log Bad Request: /development/.env.local
+ERROR 2023-10-10 04:02:02,174 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:02,176 log Bad Request: /development/.env.staging
+ERROR 2023-10-10 04:02:02,372 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:02,374 log Bad Request: /development/.env.production
+ERROR 2023-10-10 04:02:02,569 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:02,570 log Bad Request: /prod/.env
+ERROR 2023-10-10 04:02:02,765 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:02,766 log Bad Request: /prod/.env.local
+ERROR 2023-10-10 04:02:02,961 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:02,963 log Bad Request: /prod/.env.staging
+ERROR 2023-10-10 04:02:03,156 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:03,157 log Bad Request: /prod/.env.production
+ERROR 2023-10-10 04:02:03,355 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:03,356 log Bad Request: /product/.env
+ERROR 2023-10-10 04:02:03,550 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:03,552 log Bad Request: /product/.env.local
+ERROR 2023-10-10 04:02:03,747 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:03,749 log Bad Request: /product/.env.staging
+ERROR 2023-10-10 04:02:03,943 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:03,944 log Bad Request: /product/.env.production
+ERROR 2023-10-10 04:02:04,331 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:04,333 log Bad Request: /production/.env
+ERROR 2023-10-10 04:02:04,526 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:04,528 log Bad Request: /production/.env.local
+ERROR 2023-10-10 04:02:04,723 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:04,725 log Bad Request: /production/.env.staging
+ERROR 2023-10-10 04:02:04,920 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:04,922 log Bad Request: /production/.env.production
+ERROR 2023-10-10 04:02:05,116 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:05,118 log Bad Request: /portal/.env
+ERROR 2023-10-10 04:02:05,316 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:05,318 log Bad Request: /portal/.env.local
+ERROR 2023-10-10 04:02:05,513 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:05,515 log Bad Request: /portal/.env.staging
+ERROR 2023-10-10 04:02:05,709 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:05,711 log Bad Request: /portal/.env.production
+ERROR 2023-10-10 04:02:05,906 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:05,908 log Bad Request: /qa/.env
+ERROR 2023-10-10 04:02:06,102 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:06,103 log Bad Request: /qa/.env.local
+ERROR 2023-10-10 04:02:06,298 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:06,299 log Bad Request: /qa/.env.staging
+ERROR 2023-10-10 04:02:06,496 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:06,498 log Bad Request: /qa/.env.production
+ERROR 2023-10-10 04:02:06,693 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:06,694 log Bad Request: /stg/.env
+ERROR 2023-10-10 04:02:06,891 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:06,893 log Bad Request: /stg/.env.local
+ERROR 2023-10-10 04:02:07,086 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:07,088 log Bad Request: /stg/.env.staging
+ERROR 2023-10-10 04:02:07,281 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:07,283 log Bad Request: /stg/.env.production
+ERROR 2023-10-10 04:02:07,480 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:07,481 log Bad Request: /staging/.env
+ERROR 2023-10-10 04:02:07,676 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:07,678 log Bad Request: /staging/.env.local
+ERROR 2023-10-10 04:02:07,875 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:07,876 log Bad Request: /staging/.env.staging
+ERROR 2023-10-10 04:02:08,072 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:08,073 log Bad Request: /staging/.env.production
+ERROR 2023-10-10 04:02:08,268 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:08,270 log Bad Request: /service/.env
+ERROR 2023-10-10 04:02:08,464 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:08,466 log Bad Request: /service/.env.local
+ERROR 2023-10-10 04:02:08,661 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:08,663 log Bad Request: /service/.env.staging
+ERROR 2023-10-10 04:02:08,857 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:08,859 log Bad Request: /service/.env.production
+ERROR 2023-10-10 04:02:09,054 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:09,056 log Bad Request: /services/.env
+ERROR 2023-10-10 04:02:09,252 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:09,254 log Bad Request: /services/.env.local
+ERROR 2023-10-10 04:02:09,447 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:09,448 log Bad Request: /services/.env.staging
+ERROR 2023-10-10 04:02:09,644 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:09,645 log Bad Request: /services/.env.production
+ERROR 2023-10-10 04:02:09,842 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:09,844 log Bad Request: /storage/.env
+ERROR 2023-10-10 04:02:10,040 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:10,042 log Bad Request: /storage/.env.local
+ERROR 2023-10-10 04:02:10,237 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:10,239 log Bad Request: /storage/.env.staging
+ERROR 2023-10-10 04:02:10,434 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:10,436 log Bad Request: /storage/.env.production
+ERROR 2023-10-10 04:02:10,631 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:10,633 log Bad Request: /old/.env
+ERROR 2023-10-10 04:02:10,832 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:10,834 log Bad Request: /old/.env.local
+ERROR 2023-10-10 04:02:11,028 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:11,030 log Bad Request: /old/.env.staging
+ERROR 2023-10-10 04:02:11,226 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:11,227 log Bad Request: /old/.env.production
+ERROR 2023-10-10 04:02:11,423 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:11,425 log Bad Request: /new/.env
+ERROR 2023-10-10 04:02:11,619 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:11,622 log Bad Request: /new/.env.local
+ERROR 2023-10-10 04:02:11,816 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:11,818 log Bad Request: /new/.env.staging
+ERROR 2023-10-10 04:02:12,014 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:12,016 log Bad Request: /new/.env.production
+ERROR 2023-10-10 04:02:12,210 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:12,212 log Bad Request: /web/.env
+ERROR 2023-10-10 04:02:12,406 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:12,408 log Bad Request: /web/.env.local
+ERROR 2023-10-10 04:02:12,604 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:12,605 log Bad Request: /web/.env.staging
+ERROR 2023-10-10 04:02:12,801 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:12,803 log Bad Request: /web/.env.production
+ERROR 2023-10-10 04:02:12,997 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:12,999 log Bad Request: /website/.env
+ERROR 2023-10-10 04:02:13,194 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:13,195 log Bad Request: /website/.env.local
+ERROR 2023-10-10 04:02:13,390 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:13,392 log Bad Request: /website/.env.staging
+ERROR 2023-10-10 04:02:13,590 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:13,592 log Bad Request: /website/.env.production
+ERROR 2023-10-10 04:02:13,790 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:13,791 log Bad Request: /market/.env
+ERROR 2023-10-10 04:02:13,987 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:13,989 log Bad Request: /market/.env.local
+ERROR 2023-10-10 04:02:14,184 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:14,186 log Bad Request: /market/.env.staging
+ERROR 2023-10-10 04:02:14,381 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:14,383 log Bad Request: /market/.env.production
+ERROR 2023-10-10 04:02:14,576 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:14,577 log Bad Request: /marketing/.env
+ERROR 2023-10-10 04:02:14,773 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:14,775 log Bad Request: /marketing/.env.local
+ERROR 2023-10-10 04:02:14,970 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:14,971 log Bad Request: /marketing/.env.staging
+ERROR 2023-10-10 04:02:15,167 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:15,169 log Bad Request: /marketing/.env.production
+ERROR 2023-10-10 04:02:15,364 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:15,365 log Bad Request: /shop/.env
+ERROR 2023-10-10 04:02:15,560 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:15,562 log Bad Request: /shop/.env.local
+ERROR 2023-10-10 04:02:15,760 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:15,762 log Bad Request: /shop/.env.staging
+ERROR 2023-10-10 04:02:15,957 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:15,958 log Bad Request: /shop/.env.production
+ERROR 2023-10-10 04:02:16,152 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:16,154 log Bad Request: /public_html/.env
+ERROR 2023-10-10 04:02:16,350 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:16,352 log Bad Request: /public_html/.env.local
+ERROR 2023-10-10 04:02:16,546 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:16,548 log Bad Request: /public_html/.env.staging
+ERROR 2023-10-10 04:02:16,744 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:16,746 log Bad Request: /public_html/.env.production
+ERROR 2023-10-10 04:02:16,939 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:16,941 log Bad Request: /xampp/.env
+ERROR 2023-10-10 04:02:17,135 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:17,137 log Bad Request: /xampp/.env.local
+ERROR 2023-10-10 04:02:17,333 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:17,335 log Bad Request: /xampp/.env.staging
+ERROR 2023-10-10 04:02:17,528 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:17,529 log Bad Request: /xampp/.env.production
+ERROR 2023-10-10 04:02:17,724 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:17,726 log Bad Request: /api/.env
+ERROR 2023-10-10 04:02:17,919 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:17,921 log Bad Request: /.docker/.env
+ERROR 2023-10-10 04:02:18,116 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:18,118 log Bad Request: /.docker/laravel/app/.env
+ERROR 2023-10-10 04:02:18,312 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:18,314 log Bad Request: /env.backup
+ERROR 2023-10-10 04:02:18,508 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:18,510 log Bad Request: /.environment
+ERROR 2023-10-10 04:02:18,704 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:18,706 log Bad Request: /.envrc
+ERROR 2023-10-10 04:02:18,902 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:18,904 log Bad Request: /.envs
+ERROR 2023-10-10 04:02:19,099 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:19,101 log Bad Request: /.env~
+ERROR 2023-10-10 04:02:19,297 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:19,299 log Bad Request: /.gitlab-ci/.env
+ERROR 2023-10-10 04:02:19,498 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:19,499 log Bad Request: /.vscode/.env
+ERROR 2023-10-10 04:02:19,696 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:19,698 log Bad Request: /mailer/.env
+ERROR 2023-10-10 04:02:19,895 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:19,896 log Bad Request: /twitter/.env
+ERROR 2023-10-10 04:02:20,092 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:20,093 log Bad Request: /.env.development.local
+ERROR 2023-10-10 04:02:20,289 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:20,290 log Bad Request: /wp-config.php.bak
+ERROR 2023-10-10 04:02:20,485 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:20,487 log Bad Request: /wp-config.php.old
+ERROR 2023-10-10 04:02:20,682 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:20,683 log Bad Request: /wp-config.php-backup
+ERROR 2023-10-10 04:02:20,882 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:20,884 log Bad Request: /.wp-config.php.swo
+ERROR 2023-10-10 04:02:21,079 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:21,081 log Bad Request: /wp-config.php.swp
+ERROR 2023-10-10 04:02:21,277 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:21,278 log Bad Request: /.wp-config.swp
+ERROR 2023-10-10 04:02:21,475 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:21,477 log Bad Request: /
+ERROR 2023-10-10 04:02:21,672 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:21,674 log Bad Request: /backup.wp-config.php
+ERROR 2023-10-10 04:02:21,870 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:21,871 log Bad Request: /wp-config
+ERROR 2023-10-10 04:02:22,067 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:22,068 log Bad Request: /wp-config - Copy.php
+ERROR 2023-10-10 04:02:22,264 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:22,265 log Bad Request: /wp-config copy.php
+ERROR 2023-10-10 04:02:22,463 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:22,465 log Bad Request: /wp-config_backup
+ERROR 2023-10-10 04:02:22,659 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:22,661 log Bad Request: /wp-config_good
+ERROR 2023-10-10 04:02:22,857 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:22,859 log Bad Request: /wp-config-backup
+ERROR 2023-10-10 04:02:23,054 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:23,055 log Bad Request: /wp-config-backup.php
+ERROR 2023-10-10 04:02:23,249 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:23,250 log Bad Request: /wp-config-backup.txt
+ERROR 2023-10-10 04:02:23,447 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:23,449 log Bad Request: /wp-config-backup1.txt
+ERROR 2023-10-10 04:02:23,643 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:23,645 log Bad Request: /wp-config-good
+ERROR 2023-10-10 04:02:23,837 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:23,839 log Bad Request: /wp-config-sample.php
+ERROR 2023-10-10 04:02:24,227 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:24,229 log Bad Request: /wp-config-sample.php.bak
+ERROR 2023-10-10 04:02:24,426 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:24,427 log Bad Request: /wp-config-sample.php~
+ERROR 2023-10-10 04:02:24,622 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:24,623 log Bad Request: /wp-config.backup
+ERROR 2023-10-10 04:02:24,820 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:24,822 log Bad Request: /wp-config.bak
+ERROR 2023-10-10 04:02:25,018 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:25,020 log Bad Request: /wp-config.bkp
+ERROR 2023-10-10 04:02:25,215 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:25,217 log Bad Request: /wp-config.cfg
+ERROR 2023-10-10 04:02:25,414 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:25,416 log Bad Request: /wp-config.conf
+ERROR 2023-10-10 04:02:25,610 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:25,612 log Bad Request: /wp-config.data
+ERROR 2023-10-10 04:02:25,810 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:25,812 log Bad Request: /wp-config.dump
+ERROR 2023-10-10 04:02:26,025 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:26,026 log Bad Request: /wp-config.good
+ERROR 2023-10-10 04:02:26,221 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:26,222 log Bad Request: /wp-config.htm
+ERROR 2023-10-10 04:02:26,418 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:26,419 log Bad Request: /wp-config.html
+ERROR 2023-10-10 04:02:26,612 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:26,614 log Bad Request: /wp-config.inc
+ERROR 2023-10-10 04:02:26,810 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:26,812 log Bad Request: /wp-config.local.php
+ERROR 2023-10-10 04:02:27,008 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:27,009 log Bad Request: /wp-config.old
+ERROR 2023-10-10 04:02:27,205 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:27,206 log Bad Request: /wp-config.old.old
+ERROR 2023-10-10 04:02:27,403 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:27,405 log Bad Request: /wp-config.ORG
+ERROR 2023-10-10 04:02:27,602 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:27,603 log Bad Request: /wp-config.orig
+ERROR 2023-10-10 04:02:27,797 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:27,799 log Bad Request: /wp-config.original
+ERROR 2023-10-10 04:02:27,995 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:27,996 log Bad Request: /wp-config.php
+ERROR 2023-10-10 04:02:28,192 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:28,194 log Bad Request: /wp-config.php_
+ERROR 2023-10-10 04:02:28,390 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:28,392 log Bad Request: /wp-config.php__
+ERROR 2023-10-10 04:02:28,587 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:28,589 log Bad Request: /wp-config.php______
+ERROR 2023-10-10 04:02:28,787 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:28,789 log Bad Request: /wp-config.php__olds
+ERROR 2023-10-10 04:02:28,985 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:28,987 log Bad Request: /wp-config.php_1
+ERROR 2023-10-10 04:02:29,184 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:29,186 log Bad Request: /wp-config.php_backup
+ERROR 2023-10-10 04:02:29,382 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:29,384 log Bad Request: /wp-config.php_bak
+ERROR 2023-10-10 04:02:29,581 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:29,583 log Bad Request: /wp-config.php_bk
+ERROR 2023-10-10 04:02:29,778 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:29,780 log Bad Request: /wp-config.php_new
+ERROR 2023-10-10 04:02:29,975 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:29,977 log Bad Request: /wp-config.php_old
+ERROR 2023-10-10 04:02:30,172 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:30,173 log Bad Request: /wp-config.php_old2017
+ERROR 2023-10-10 04:02:30,369 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:30,371 log Bad Request: /wp-config.php_old2018
+ERROR 2023-10-10 04:02:30,567 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:30,569 log Bad Request: /wp-config.php_old2019
+ERROR 2023-10-10 04:02:30,764 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:30,765 log Bad Request: /wp-config.php_old2020
+ERROR 2023-10-10 04:02:30,963 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:30,964 log Bad Request: /wp-config.php_orig
+ERROR 2023-10-10 04:02:31,164 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:31,165 log Bad Request: /wp-config.php_original
+ERROR 2023-10-10 04:02:31,361 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:31,362 log Bad Request: /wp-config.php-
+ERROR 2023-10-10 04:02:31,558 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:31,559 log Bad Request: /wp-config.php-backup
+ERROR 2023-10-10 04:02:31,756 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:31,758 log Bad Request: /wp-config.php-bak
+ERROR 2023-10-10 04:02:31,954 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:31,956 log Bad Request: /wp-config.php-n
+ERROR 2023-10-10 04:02:32,151 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:32,153 log Bad Request: /wp-config.php-o
+ERROR 2023-10-10 04:02:32,350 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:32,351 log Bad Request: /wp-config.php-old
+ERROR 2023-10-10 04:02:32,547 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:32,548 log Bad Request: /wp-config.php-original
+ERROR 2023-10-10 04:02:32,744 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:32,745 log Bad Request: /wp-config.php-save
+ERROR 2023-10-10 04:02:32,940 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:32,942 log Bad Request: /wp-config.php-work
+ERROR 2023-10-10 04:02:33,135 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:33,137 log Bad Request: /wp-config.php.0
+ERROR 2023-10-10 04:02:33,332 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:33,334 log Bad Request: /wp-config.php.1
+ERROR 2023-10-10 04:02:33,529 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:33,531 log Bad Request: /wp-config.php.2
+ERROR 2023-10-10 04:02:33,726 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:33,728 log Bad Request: /wp-config.php.3
+ERROR 2023-10-10 04:02:33,923 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:33,925 log Bad Request: /wp-config.php.4
+ERROR 2023-10-10 04:02:34,120 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:34,121 log Bad Request: /wp-config.php.5
+ERROR 2023-10-10 04:02:34,318 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:34,319 log Bad Request: /wp-config.php.6
+ERROR 2023-10-10 04:02:34,516 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:34,518 log Bad Request: /wp-config.php.7
+ERROR 2023-10-10 04:02:34,718 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:34,719 log Bad Request: /wp-config.php.8
+ERROR 2023-10-10 04:02:34,914 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:34,915 log Bad Request: /wp-config.php.9
+ERROR 2023-10-10 04:02:35,111 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:35,113 log Bad Request: /wp-config.php.a
+ERROR 2023-10-10 04:02:35,311 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:35,312 log Bad Request: /wp-config.php.aws
+ERROR 2023-10-10 04:02:35,508 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:35,510 log Bad Request: /wp-config.php.azure
+ERROR 2023-10-10 04:02:35,707 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:35,709 log Bad Request: /wp-config.php.b
+ERROR 2023-10-10 04:02:35,904 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:35,906 log Bad Request: /wp-config.php.backup
+ERROR 2023-10-10 04:02:36,101 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:36,103 log Bad Request: /wp-config.php.backup.txt
+ERROR 2023-10-10 04:02:36,299 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:36,300 log Bad Request: /wp-config.php.bak
+ERROR 2023-10-10 04:02:36,496 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:36,498 log Bad Request: /wp-config.php.bak1
+ERROR 2023-10-10 04:02:36,691 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:36,693 log Bad Request: /wp-config.php.bk
+ERROR 2023-10-10 04:02:36,886 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:36,888 log Bad Request: /wp-config.php.bkp
+ERROR 2023-10-10 04:02:37,085 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:37,087 log Bad Request: /wp-config.php.c
+ERROR 2023-10-10 04:02:37,283 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:37,285 log Bad Request: /wp-config.php.com
+ERROR 2023-10-10 04:02:37,479 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:37,481 log Bad Request: /wp-config.php.cust
+ERROR 2023-10-10 04:02:37,676 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:37,678 log Bad Request: /wp-config.php.dev
+ERROR 2023-10-10 04:02:37,874 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:37,875 log Bad Request: /wp-config.php.disabled
+ERROR 2023-10-10 04:02:38,072 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:38,074 log Bad Request: /wp-config.php.dist
+ERROR 2023-10-10 04:02:38,270 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:38,272 log Bad Request: /wp-config.php.dump
+ERROR 2023-10-10 04:02:38,469 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:38,470 log Bad Request: /wp-config.php.html
+ERROR 2023-10-10 04:02:38,666 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:38,668 log Bad Request: /wp-config.php.in
+ERROR 2023-10-10 04:02:38,864 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:38,865 log Bad Request: /wp-config.php.inc
+ERROR 2023-10-10 04:02:39,061 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:39,062 log Bad Request: /wp-config.php.local
+ERROR 2023-10-10 04:02:39,258 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:39,259 log Bad Request: /wp-config.php.maj
+ERROR 2023-10-10 04:02:39,455 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:39,457 log Bad Request: /wp-config.php.new
+ERROR 2023-10-10 04:02:39,653 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:39,654 log Bad Request: /wp-config.php.old
+ERROR 2023-10-10 04:02:39,851 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:39,853 log Bad Request: /wp-config.php.org
+ERROR 2023-10-10 04:02:40,051 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:40,053 log Bad Request: /wp-config.php.orig
+ERROR 2023-10-10 04:02:40,246 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:40,248 log Bad Request: /wp-config.php.original
+ERROR 2023-10-10 04:02:40,443 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:40,445 log Bad Request: /wp-config.php.php-bak
+ERROR 2023-10-10 04:02:40,640 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:40,642 log Bad Request: /wp-config.php.prod
+ERROR 2023-10-10 04:02:40,837 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:40,839 log Bad Request: /wp-config.php.production
+ERROR 2023-10-10 04:02:41,034 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:41,036 log Bad Request: /wp-config.php.sample
+ERROR 2023-10-10 04:02:41,234 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:41,235 log Bad Request: /wp-config.php.save
+ERROR 2023-10-10 04:02:41,435 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:41,437 log Bad Request: /wp-config.php.save.1
+ERROR 2023-10-10 04:02:41,633 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:41,635 log Bad Request: /wp-config.php.stage
+ERROR 2023-10-10 04:02:41,833 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:41,835 log Bad Request: /wp-config.php.staging
+ERROR 2023-10-10 04:02:42,030 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:42,032 log Bad Request: /wp-config.php.swn
+ERROR 2023-10-10 04:02:42,227 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:42,229 log Bad Request: /wp-config.php.swo
+ERROR 2023-10-10 04:02:42,426 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:42,427 log Bad Request: /wp-config.php.swp
+ERROR 2023-10-10 04:02:42,624 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:42,626 log Bad Request: /wp-config.php.tar
+ERROR 2023-10-10 04:02:42,822 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:42,824 log Bad Request: /wp-config.php.temp
+ERROR 2023-10-10 04:02:43,019 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:43,021 log Bad Request: /wp-config.php.tmp
+ERROR 2023-10-10 04:02:43,217 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:43,218 log Bad Request: /wp-config.php.txt
+ERROR 2023-10-10 04:02:43,414 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:43,415 log Bad Request: /wp-config.php.uk
+ERROR 2023-10-10 04:02:43,612 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:43,614 log Bad Request: /wp-config.php.us
+ERROR 2023-10-10 04:02:43,810 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:43,811 log Bad Request: /wp-config.php=
+ERROR 2023-10-10 04:02:44,201 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:44,203 log Bad Request: /wp-config.php~
+ERROR 2023-10-10 04:02:44,398 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:44,400 log Bad Request: /wp-config.php~~~
+ERROR 2023-10-10 04:02:44,596 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:44,598 log Bad Request: /wp-config.php1
+ERROR 2023-10-10 04:02:44,794 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:44,795 log Bad Request: /wp-config.phpa
+ERROR 2023-10-10 04:02:44,991 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:44,993 log Bad Request: /wp-config.phpb
+ERROR 2023-10-10 04:02:45,190 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:45,191 log Bad Request: /wp-config.phpbak
+ERROR 2023-10-10 04:02:45,385 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:45,386 log Bad Request: /wp-config.phpc
+ERROR 2023-10-10 04:02:45,582 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:45,584 log Bad Request: /wp-config.phpd
+ERROR 2023-10-10 04:02:45,779 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:45,781 log Bad Request: /wp-config.phpn
+ERROR 2023-10-10 04:02:45,977 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:45,979 log Bad Request: /wp-config.phpnew
+ERROR 2023-10-10 04:02:46,174 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:46,176 log Bad Request: /wp-config.phpold
+ERROR 2023-10-10 04:02:46,370 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:46,372 log Bad Request: /wp-config.phporiginal
+ERROR 2023-10-10 04:02:46,566 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:46,568 log Bad Request: /wp-config.phptmp
+ERROR 2023-10-10 04:02:46,763 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:46,765 log Bad Request: /wp-config.prod.php.txt
+ERROR 2023-10-10 04:02:46,962 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:46,963 log Bad Request: /wp-config.save
+ERROR 2023-10-10 04:02:47,160 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:47,161 log Bad Request: /wp-config.tar
+ERROR 2023-10-10 04:02:47,358 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:47,359 log Bad Request: /wp-config.temp
+ERROR 2023-10-10 04:02:47,554 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:47,556 log Bad Request: /wp-config.txt
+ERROR 2023-10-10 04:02:47,752 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:47,754 log Bad Request: /wp-config.zip
+ERROR 2023-10-10 04:02:47,949 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:47,951 log Bad Request: /wp-config~
+ERROR 2023-10-10 04:02:48,144 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:48,146 log Bad Request: /wp-configbak
+ERROR 2023-10-10 04:02:48,643 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:48,645 log Bad Request: /debug/default/view
+ERROR 2023-10-10 04:02:48,839 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:48,841 log Bad Request: /
+ERROR 2023-10-10 04:02:49,037 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:49,039 log Bad Request: /frontend_dev.php/$
+ERROR 2023-10-10 04:02:49,236 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:49,237 log Bad Request: /index js
+ERROR 2023-10-10 04:02:49,432 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:49,433 log Bad Request: /config.js
+ERROR 2023-10-10 04:02:49,630 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:49,632 log Bad Request: /config/config.js
+ERROR 2023-10-10 04:02:49,827 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:49,829 log Bad Request: /js/config.js
+ERROR 2023-10-10 04:02:50,024 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:50,026 log Bad Request: /js/envConfig.js
+ERROR 2023-10-10 04:02:50,223 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:50,224 log Bad Request: /env.config.js
+ERROR 2023-10-10 04:02:50,422 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:50,424 log Bad Request: /env.js
+ERROR 2023-10-10 04:02:50,620 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:50,622 log Bad Request: /app/config.yml
+ERROR 2023-10-10 04:02:50,818 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:50,819 log Bad Request: /app/config/parameters.yml
+ERROR 2023-10-10 04:02:51,012 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:51,014 log Bad Request: /config/secrets.yml
+ERROR 2023-10-10 04:02:51,209 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:51,210 log Bad Request: /secrets.yml
+ERROR 2023-10-10 04:02:51,406 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2023-10-10 04:02:51,408 log Bad Request: /database.yml
+WARNING 2023-10-10 04:07:17,603 log Not Found: /index.php
+WARNING 2023-10-10 04:35:31,615 log Not Found: /robots.txt
+WARNING 2023-10-10 04:35:35,601 log Not Found: /sitemap.xml
+WARNING 2023-10-10 04:40:16,583 log Not Found: /robots.txt
+WARNING 2023-10-10 04:40:17,454 log Not Found: /robots.txt
+WARNING 2023-10-10 04:40:18,955 log Not Found: /sitemap.xml
+WARNING 2023-10-10 04:41:11,618 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-10-10 04:42:17,286 log Not Found: /.env
+WARNING 2023-10-10 04:42:18,611 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-10-10 04:53:02,753 log Not Found: /admin.php
+WARNING 2023-10-10 04:59:27,860 log Not Found: /robots.txt
+WARNING 2023-10-10 05:01:55,996 log Not Found: /robots.txt
+WARNING 2023-10-10 05:27:19,876 log Not Found: /.env
+WARNING 2023-10-10 05:40:57,047 log Not Found: /robots.txt
+WARNING 2023-10-10 06:17:27,688 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-10-10 06:21:51,558 log Not Found: /price-booking/
+WARNING 2023-10-10 06:30:07,057 log Not Found: /robots.txt
+WARNING 2023-10-10 06:36:39,488 log Not Found: /robots.txt
+WARNING 2023-10-10 06:36:40,976 log Not Found: /contact/
+WARNING 2023-10-10 07:31:07,483 log Not Found: /login.php
+WARNING 2023-10-10 07:51:35,522 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-10-10 08:53:23,399 log Not Found: /product/moncler-vest-for-women-smooth-shiny-fabric-black-2/
+WARNING 2023-10-10 09:02:01,011 log Not Found: /ads.txt
+WARNING 2023-10-10 09:26:33,780 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-10-10 09:45:12,241 log Not Found: /shop/fi/product/moncler-classic-alushame-naisten-irrotettava-cap-sky-blue/
+WARNING 2023-10-10 09:54:04,676 log Not Found: /wp-content/plugins/WordPressCore/include.php
+WARNING 2023-10-10 09:54:43,736 log Not Found: /.env
+WARNING 2023-10-10 09:54:44,923 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-10-10 09:58:44,767 log Not Found: /0-8-litre-luxury-frog-eco-sustainable-hot-water-bottle-p-123968921140/
+WARNING 2023-10-10 10:07:49,296 log Not Found: /robots.txt
+WARNING 2023-10-10 11:01:00,677 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-10-10 11:13:51,565 log Not Found: /shop/nl/product-tag/goedkope-moncler-kinderen/
+WARNING 2023-10-10 11:34:57,711 log Not Found: /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php
+WARNING 2023-10-10 11:35:04,687 log Not Found: /.git/config
+WARNING 2023-10-10 11:35:10,803 log Not Found: /.DS_Store
+WARNING 2023-10-10 11:35:14,590 log Not Found: /.env
+WARNING 2023-10-10 11:35:16,309 log Not Found: /.env
+WARNING 2023-10-10 11:35:21,149 log Not Found: /.env.save
+WARNING 2023-10-10 11:35:23,926 log Not Found: /.env.save
+WARNING 2023-10-10 11:35:27,051 log Not Found: /.env.old
+WARNING 2023-10-10 11:35:28,879 log Not Found: /.env.old
+WARNING 2023-10-10 11:35:31,480 log Not Found: /.env.prod
+WARNING 2023-10-10 11:35:37,405 log Not Found: /.env.prod
+WARNING 2023-10-10 11:35:42,127 log Not Found: /.env.production
+WARNING 2023-10-10 11:35:44,165 log Not Found: /.env.production
+WARNING 2023-10-10 11:35:47,704 log Not Found: /.env.development
+WARNING 2023-10-10 11:35:48,913 log Not Found: /.env.development
+WARNING 2023-10-10 11:35:53,351 log Not Found: /laravel/.env
+WARNING 2023-10-10 11:35:57,734 log Not Found: /laravel/.env
+WARNING 2023-10-10 11:36:01,027 log Not Found: /admin-app/.env
+WARNING 2023-10-10 11:36:03,009 log Not Found: /admin-app/.env
+WARNING 2023-10-10 11:36:07,122 log Not Found: /api/.env
+WARNING 2023-10-10 11:36:13,971 log Not Found: /api/.env
+WARNING 2023-10-10 11:36:17,018 log Not Found: /app/.env
+WARNING 2023-10-10 11:36:18,646 log Not Found: /app/.env
+WARNING 2023-10-10 11:36:23,157 log Not Found: /development/.env
+WARNING 2023-10-10 11:36:25,348 log Not Found: /development/.env
+WARNING 2023-10-10 11:36:29,179 log Not Found: /apps/.env
+WARNING 2023-10-10 11:36:30,994 log Not Found: /apps/.env
+WARNING 2023-10-10 11:36:35,140 log Not Found: /cp/.env
+WARNING 2023-10-10 11:36:38,627 log Not Found: /cp/.env
+WARNING 2023-10-10 11:36:41,123 log Not Found: /private/.env
+WARNING 2023-10-10 11:36:43,130 log Not Found: /private/.env
+WARNING 2023-10-10 11:36:46,726 log Not Found: /system/.env
+WARNING 2023-10-10 11:36:50,020 log Not Found: /system/.env
+WARNING 2023-10-10 11:36:52,391 log Not Found: /docker/.env
+WARNING 2023-10-10 11:36:54,871 log Not Found: /docker/.env
+WARNING 2023-10-10 11:36:57,367 log Not Found: /cms/.env
+WARNING 2023-10-10 11:37:04,536 log Not Found: /cms/.env
+WARNING 2023-10-10 11:37:09,583 log Not Found: /script/.env
+WARNING 2023-10-10 11:37:12,663 log Not Found: /script/.env
+WARNING 2023-10-10 11:37:15,363 log Not Found: /live_env
+WARNING 2023-10-10 11:37:23,240 log Not Found: /application/.env
+WARNING 2023-10-10 11:37:26,843 log Not Found: /application/.env
+WARNING 2023-10-10 11:37:29,581 log Not Found: /.env.project
+WARNING 2023-10-10 11:37:31,912 log Not Found: /.env.project
+WARNING 2023-10-10 11:37:33,784 log Not Found: /.env.dist
+WARNING 2023-10-10 11:37:37,451 log Not Found: /.env.dist
+WARNING 2023-10-10 11:37:43,211 log Not Found: /back/.env
+WARNING 2023-10-10 11:37:45,601 log Not Found: /back/.env
+WARNING 2023-10-10 11:37:49,398 log Not Found: /core/.env
+WARNING 2023-10-10 11:37:52,050 log Not Found: /core/.env
+WARNING 2023-10-10 11:38:01,623 log Not Found: /fedex/.env
+WARNING 2023-10-10 11:38:03,407 log Not Found: /fedex/.env
+WARNING 2023-10-10 11:38:08,728 log Not Found: /local/.env
+WARNING 2023-10-10 11:38:11,553 log Not Found: /local/.env
+WARNING 2023-10-10 11:38:15,519 log Not Found: /rest/.env
+WARNING 2023-10-10 11:38:16,699 log Not Found: /rest/.env
+WARNING 2023-10-10 11:38:21,936 log Not Found: /shared/.env
+WARNING 2023-10-10 11:38:24,351 log Not Found: /shared/.env
+WARNING 2023-10-10 11:38:26,307 log Not Found: /sources/.env
+WARNING 2023-10-10 11:38:29,409 log Not Found: /sources/.env
+WARNING 2023-10-10 11:38:32,736 log Not Found: /enviroments/.env.production
+WARNING 2023-10-10 11:38:36,981 log Not Found: /enviroments/.env.production
+WARNING 2023-10-10 11:38:39,326 log Not Found: /enviroments/.env
+WARNING 2023-10-10 11:38:50,037 log Not Found: /enviroments/.env
+WARNING 2023-10-10 11:38:56,748 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-10-10 11:39:15,401 log Not Found: /frontend_dev.php/$
+WARNING 2023-10-10 11:39:25,835 log Not Found: /debug/default/view
+WARNING 2023-10-10 11:39:44,350 log Not Found: /debug/default/view
+WARNING 2023-10-10 11:39:49,983 log Not Found: /debug/default/view.html
+WARNING 2023-10-10 11:39:52,441 log Not Found: /debug/default/view
+WARNING 2023-10-10 11:39:57,658 log Not Found: /frontend/web/debug/default/view
+WARNING 2023-10-10 11:40:00,846 log Not Found: /web/debug/default/view
+WARNING 2023-10-10 11:40:04,503 log Not Found: /sapi/debug/default/view
+WARNING 2023-10-10 11:40:11,100 log Not Found: /config.json
+WARNING 2023-10-10 11:40:14,964 log Not Found: /AwsConfig.json
+WARNING 2023-10-10 11:40:21,170 log Not Found: /awsconfig.json
+WARNING 2023-10-10 11:40:23,597 log Not Found: /aws.json
+WARNING 2023-10-10 11:40:26,683 log Not Found: /conf.json
+WARNING 2023-10-10 11:40:29,922 log Not Found: /env.json
+WARNING 2023-10-10 11:40:36,004 log Not Found: /.vscode/sftp.json
+WARNING 2023-10-10 11:40:40,303 log Not Found: /.json
+WARNING 2023-10-10 11:40:44,698 log Not Found: /smtp.json
+WARNING 2023-10-10 11:40:49,617 log Not Found: /db.json
+WARNING 2023-10-10 11:40:51,786 log Not Found: /sendgrid.json
+WARNING 2023-10-10 11:40:55,796 log Not Found: /ws-config.json
+WARNING 2023-10-10 11:41:02,896 log Not Found: /_wpeprivate/config.json
+WARNING 2023-10-10 11:41:06,532 log Not Found: /deployment-config.json
+WARNING 2023-10-10 11:41:09,823 log Not Found: /sftp-config.json
+WARNING 2023-10-10 11:41:12,853 log Not Found: /db/robomongo.json
+WARNING 2023-10-10 11:41:14,808 log Not Found: /robomongo.json
+WARNING 2023-10-10 11:41:16,132 log Not Found: /client_secrets.json
+WARNING 2023-10-10 11:41:18,640 log Not Found: /user-config.json
+WARNING 2023-10-10 11:41:21,948 log Not Found: /ssh-config.json
+WARNING 2023-10-10 11:41:27,501 log Not Found: /database-config.json
+WARNING 2023-10-10 11:41:30,309 log Not Found: /config/default.json
+WARNING 2023-10-10 11:41:32,718 log Not Found: /config/config.json
+WARNING 2023-10-10 11:41:34,563 log Not Found: /credentials/config.json
+WARNING 2023-10-10 11:42:15,952 log Not Found: /.aws/credentials
+WARNING 2023-10-10 11:42:26,360 log Not Found: /app_dev.php/_profiler/open
+WARNING 2023-10-10 11:42:30,754 log Not Found: /_profiler/open
+WARNING 2023-10-10 11:42:32,208 log Not Found: /app/config/parameters.yml
+WARNING 2023-10-10 11:42:35,373 log Not Found: /config/parameters.yml
+WARNING 2023-10-10 11:42:37,297 log Not Found: /parameters.yml
+WARNING 2023-10-10 11:42:59,842 log Not Found: /_profiler/phpinfo
+WARNING 2023-10-10 11:43:01,873 log Not Found: /app_dev.php/_profiler/phpinfo
+WARNING 2023-10-10 11:43:03,879 log Not Found: /phpinfo.php
+WARNING 2023-10-10 11:43:05,470 log Not Found: /info.php
+WARNING 2023-10-10 11:43:15,262 log Not Found: /tool/view/phpinfo.view.php
+WARNING 2023-10-10 11:43:19,857 log Not Found: /phpinfo
+WARNING 2023-10-10 11:43:22,599 log Not Found: /symfony/public/_profiler/phpinfo
+WARNING 2023-10-10 11:43:24,989 log Not Found: /html/phpinfo.php
+WARNING 2023-10-10 11:43:31,611 log Not Found: /__info.php
+WARNING 2023-10-10 11:43:33,720 log Not Found: /_info-backoffice.php
+WARNING 2023-10-10 11:43:40,136 log Not Found: /_info.php
+WARNING 2023-10-10 11:43:43,046 log Not Found: /_phpinf.php
+WARNING 2023-10-10 11:43:47,680 log Not Found: /_phpinfo.php
+WARNING 2023-10-10 11:43:51,004 log Not Found: /_poopinfo.php
+WARNING 2023-10-10 11:43:59,580 log Not Found: /.__info.php
+WARNING 2023-10-10 11:44:05,625 log Not Found: /.info.php
+WARNING 2023-10-10 11:44:13,433 log Not Found: /0.0_phpinfo.php
+WARNING 2023-10-10 11:44:17,377 log Not Found: /00_server_info.php
+WARNING 2023-10-10 11:44:23,463 log Not Found: /02-info.php
+WARNING 2023-10-10 11:44:29,925 log Not Found: /1_1_PhpInfo.php
+WARNING 2023-10-10 11:44:36,769 log Not Found: /5info.php
+WARNING 2023-10-10 11:45:01,729 log Not Found: /api/index.php/v1/config/application
