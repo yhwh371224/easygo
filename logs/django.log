@@ -1354,3 +1354,21 @@ WARNING 2023-10-10 20:43:54,905 log Not Found: /.well-known/traffic-advice
 WARNING 2023-10-10 20:52:03,468 log Not Found: /.env
 WARNING 2023-10-10 20:52:04,811 log Forbidden (Referer checking failed - no Referer.): /
 WARNING 2023-10-10 20:57:01,243 log Not Found: /shop/product/moncler-boots-nible-beige-stylish-and-generous/
+WARNING 2023-10-10 21:09:36,259 log Not Found: /robots.txt
+WARNING 2023-10-10 21:38:43,212 log Not Found: /robots.txt
+ERROR 2023-10-10 21:38:44,233 log Internal Server Error: /sending_email_second_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 1822, in sending_email_second_detail
+    return render(request, 'beasecamp/sending_email_second.html', {})
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: beasecamp/sending_email_second.html
+WARNING 2023-10-10 21:42:35,854 log Not Found: /robots.txt
