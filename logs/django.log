@@ -361,3 +361,8 @@ WARNING 2023-10-13 00:35:22,551 log Not Found: /ads.txt
 WARNING 2023-10-13 00:35:56,809 log Not Found: /.env
 WARNING 2023-10-13 00:35:58,049 log Forbidden (Referer checking failed - no Referer.): /
 WARNING 2023-10-13 00:48:03,250 log Not Found: /robots.txt
+WARNING 2023-10-13 00:57:21,089 log Not Found: /ReportServer
+WARNING 2023-10-13 01:10:30,370 log Not Found: /showLogin.cc
+WARNING 2023-10-13 01:22:29,441 log Not Found: /.env
+WARNING 2023-10-13 01:22:30,629 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-10-13 01:22:51,098 log Not Found: /Core/Skin/Login.aspx
