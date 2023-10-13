@@ -19,7 +19,8 @@
 	  <link rel="android-chrome" type="image/png" sizes="512x512" href="{% static 'basecamp/favi/android-chrome-512x512.png' %}">
 	  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'basecamp/favi/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'basecamp/favi/favicon-16x16.png' %}">
-    <link rel="manifest" href="{% static 'basecamp/favi/site.webmanifest' %}">    
+    <link rel="manifest" href="{% static 'basecamp/favi/site.webmanifest' %}">
+       
     <!-- Google Tag (gtag.js) - Google Analytics -->
     <!-- <script async src="https://www.googletagmananger.com/gtag/js?id=G-LM2TMFMGH4"></script>
     <script>
@@ -35,7 +36,8 @@
     <link rel="stylesheet" media="screen" href="/static/basecamp/css/tiny-slider.css"/>
     <link rel="stylesheet" media="screen" href="/static/basecamp/css/flatpickr.min.css"/>
     <!-- Main Theme Styles + Bootstrap-->
-    <link rel="stylesheet" media="screen" href="/static/basecamp/css/theme.min.css">   
+    <link rel="stylesheet" media="screen" href="/static/basecamp/css/theme.min.css">  
+    <link rel="stylesheet" media="screen" href="/static/basecamp/css/styles.css"/>  
     {% endcompress %}
   </head>
   <!-- Body-->
@@ -122,7 +124,7 @@
       <!-- Page content-->
       <!-- Hero-->
       <section class="jarallax bg-dark py-7" data-jarallax data-speed="0.1" >
-        <div class="jarallax-img" style="background-image: url('/static/basecamp/photos/easygo-home-page3.webp');"></div>
+        <div id="changing-background" class="jarallax-img" style="background-image: url('/static/basecamp/photos/easygo-home-page3.webp');"></div>
         <div class="container py-5 py-sm-7 text-center">
           <div class="py-md-6">
 			  <div><a role="button" class="btn btn-primary" href="/booking_form/">BOOK NOW</a> | <a class="btn btn-success" href="/inquiry/">PRICE NOW</a></div>
@@ -720,6 +722,21 @@
         <p class="fs-sm mb-3 order-md-1"><span class="text-light opacity-50 me-1">© 2023 EasyGo. All rights reserved.</a></p>        
       </div>
     </footer>
+    <script>
+    let currentBackground = 0;
+    const backgrounds = [
+        'url(/static/basecamp/photos/back10.PNG.webp)',
+        'url(/static/basecamp/photos/easygo-home-page3.webp)'
+         
+    ];
+
+    document.getElementById('changing-background').style.backgroundImage = backgrounds[0];
+
+    setInterval(() => {
+        currentBackground = (currentBackground + 1) % backgrounds.length;
+        document.getElementById('changing-background').style.backgroundImage = backgrounds[currentBackground];
+    }, 7000);
+    </script>
     <!-- Vendor scrits: js libraries and plugins-->
     {% compress js %}
     <script src="/static/basecamp/js/bootstrap.bundle.min.js"></script>
