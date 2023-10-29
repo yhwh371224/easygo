@@ -726,7 +726,8 @@
     let currentBackground = 0;
     const backgrounds = [
         'url(/static/basecamp/photos/easygo-home-page3.webp)',
-        'url(/static/basecamp/photos/back10.PNG.webp)',        
+        'url(/static/basecamp/photos/easygo-home-page4.webp)',
+        'url(/static/basecamp/photos/home1.webp)',        
          
     ];
 
@@ -735,7 +736,7 @@
     setInterval(() => {
         currentBackground = (currentBackground + 1) % backgrounds.length;
         document.getElementById('changing-background').style.backgroundImage = backgrounds[currentBackground];
-    }, 7000);
+    }, 3000);
     </script>
     <!-- Vendor scrits: js libraries and plugins-->
     {% compress js %}
