@@ -248,6 +248,10 @@ EMAIL_BACKEND = config('EMAIL_BACKEND')
 RECIPIENT_EMAIL = "info@easygoshuttle.com.au"
 
 
+# RECAPTCHA_PUBLIC_KEY = config('RECAPTCHA_PUBLIC_KEY')
+# RECAPTCHA_PRIVATE_KEY = config('RECAPTCHA_PRIVATE_KEY')
+
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
