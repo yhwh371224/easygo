@@ -24408,3 +24408,4 @@ WARNING 2023-11-02 08:09:54,811 log Not Found: /home/url(/static/basecamp/photos
 WARNING 2023-11-02 08:12:06,335 log Not Found: /home/url(/static/basecamp/photos/easygo-home-page3.webp)
 WARNING 2023-11-02 08:12:54,336 log Not Found: /home/url(/static/basecamp/photos/easygo-home-page4.webp)
 WARNING 2023-11-02 08:15:50,976 log Not Found: /home/url(/static/basecamp/photos/home1.webp)
+ERROR 2023-11-02 08:20:06,715 log Internal Server Error: /paypal_ipn/
