@@ -188,9 +188,9 @@ def create_event_on_calendar(sender, instance, created, **kwargs):
             title = " ".join([reminder_str, instance.pickup_time, instance.flight_number, instance.flight_time, 'p'+str(instance.no_of_passenger), paid_str, '$'+instance.price, instance.contact])
             address = " ".join([instance.street, instance.suburb])            
             if instance.return_flight_number:
-                message = " ".join([instance.name, instance.email, 'b'+instance.no_of_baggage, 'm:'+instance.message, "d:"+str(instance.return_flight_date)])
+                message = " ".join([instance.name, instance.email, 'b'+instance.no_of_baggage, 'm:'+instance.message, 'n:'+instance.notice, "d:"+str(instance.return_flight_date)])
             else:
-                message = " ".join([instance.name, instance.email, 'b'+instance.no_of_baggage, 'm:'+instance.message])
+                message = " ".join([instance.name, instance.email, 'b'+instance.no_of_baggage, 'm:'+instance.message, 'n:'+instance.notice])
             flight_date = datetime.datetime.strptime(str(instance.flight_date), '%Y-%m-%d')
             pickup_time = datetime.datetime.strptime(instance.pickup_time, '%H:%M')
             start = datetime.datetime.combine(flight_date, pickup_time.time())        

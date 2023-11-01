@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from main.settings import RECIPIENT_EMAIL
+from django.conf import settings
 from django.shortcuts import render, redirect
 from django.core.mail import send_mail
 from basecamp.area import suburbs
@@ -284,9 +285,24 @@ def server_error(request): return render(request, 'basecamp/505.html')
 def server_error(request): return render(request, 'basecamp/506.html')
 
 
+def server_error(request): return render(request, 'basecamp/507.html')
+
+
+# def validate_recaptcha(response):
+#     data = {
+#         'secret': settings.RECAPTCHA_SECRET_KEY,
+#         'response': response
+#     }
+#     result = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
+#     return result.json().get('success', False)
+
+
 # Inquiry 
 def inquiry_details(request):
     if request.method == "POST":
+        # recaptcha_response = request.POST.get('g-recaptcha-response')
+        # if not validate_recaptcha(recaptcha_response):
+        #     return render(request, '507.html', {'error': 'reCAPTCHA verification failed'})
         name = request.POST.get('name')
         contact = request.POST.get('contact')
         email = request.POST.get('email')
@@ -480,10 +496,7 @@ def inquiry_details(request):
                  return_flight_date=return_flight_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
                  return_pickup_time=return_pickup_time ,message=message)
         
-        p.save()
-
-
-        
+        p.save()       
         
         
         today = date.today()        
@@ -501,6 +514,9 @@ def inquiry_details(request):
 
 def inquiry_details1(request):
     if request.method == "POST":
+        # recaptcha_response = request.POST.get('g-recaptcha-response')
+        # if not validate_recaptcha(recaptcha_response):
+        #     return render(request, '507.html', {'error': 'reCAPTCHA verification failed'})
         name = request.POST.get('name')
         contact = request.POST.get('contact')
         email = request.POST.get('email')
@@ -714,6 +730,9 @@ def inquiry_details1(request):
 
 def booking_form_detail(request):
     if request.method == "POST":
+        # recaptcha_response = request.POST.get('g-recaptcha-response')
+        # if not validate_recaptcha(recaptcha_response):
+        #     return render(request, '507.html', {'error': 'reCAPTCHA verification failed'})
         name = request.POST.get('name')
         contact = request.POST.get('contact')
         email = request.POST.get('email')
@@ -926,6 +945,9 @@ def booking_form_detail(request):
 # Contact 
 def inquiry_details2(request):
     if request.method == "POST":
+        # recaptcha_response = request.POST.get('g-recaptcha-response')
+        # if not validate_recaptcha(recaptcha_response):
+        #     return render(request, '507.html', {'error': 'reCAPTCHA verification failed'})
         name = request.POST.get('name')
         contact = request.POST.get('contact')
         email = request.POST.get('email')        
@@ -957,6 +979,9 @@ def inquiry_details2(request):
 # single point to point    
 def p2p_single(request):
     if request.method == "POST":
+        # recaptcha_response = request.POST.get('g-recaptcha-response')
+        # if not validate_recaptcha(recaptcha_response):
+        #     return render(request, '507.html', {'error': 'reCAPTCHA verification failed'})
         name = request.POST.get('name')
         contact = request.POST.get('contact')
         email = request.POST.get('email')
@@ -1124,6 +1149,9 @@ def p2p_single(request):
 # Multiple points
 def p2p(request):
     if request.method == "POST":
+        # recaptcha_response = request.POST.get('g-recaptcha-response')
+        # if not validate_recaptcha(recaptcha_response):
+        #     return render(request, '507.html', {'error': 'reCAPTCHA verification failed'})
         p2p_name = request.POST.get('p2p_name')
         p2p_phone = request.POST.get('p2p_phone')
         p2p_email = request.POST.get('p2p_email')
@@ -2314,20 +2342,6 @@ def pickup_adjustment_detail(request):
             )
             email.attach_alternative(html_content, "text/html")
             email.send()
-
-        elif selected_option == 'Just late notice':        
-            html_content = render_to_string("basecamp/html_email-just-late.html",
-                                        {'name': user.name, 'adjustment_time': adjustment_time, })
-            text_content = strip_tags(html_content)
-            email = EmailMultiAlternatives(
-                "Urgent notice - EasyGo",
-                text_content,
-                '',
-                [email, RECIPIENT_EMAIL]
-            )
-            email.attach_alternative(html_content, "text/html")
-            email.send()
-        
 
 
         return render(request, 'basecamp/pickup_adjustment_detail.html', {})  
