@@ -1,9 +1,8 @@
 from django.contrib.auth.decorators import login_required
-from main.settings import RECIPIENT_EMAIL
 from django.conf import settings
+from main.settings import RECIPIENT_EMAIL
 from django.shortcuts import render, redirect
 from django.core.mail import send_mail
-from basecamp.area import suburbs
 from blog.models import Post, Inquiry, Payment, Driver
 from basecamp.models import Inquiry_point
 # from blog.tasks import send_email_delayed
@@ -41,7 +40,11 @@ def reminder(request): return render(request, 'basecamp/reminder.html')
 def sitemap(request): return render(request, 'basecamp/sitemap.xml')
 
 
-def booking_form(request): return render(request, 'basecamp/booking_form.html')
+def booking_form(request): 
+    context = {
+        'recaptcha_site_key': settings.RECAPTCHA_PUBLIC_KEY,
+    }
+    return render(request, 'basecamp/booking_form.html', context)
 
 
 def booking(request): return render(request, 'basecamp/booking.html')
@@ -72,13 +75,39 @@ def sending_email_second(request): return render(request, 'basecamp/sending_emai
 def save_data_only(request): return render(request, 'basecamp/save_data_only.html')
 
 
-def inquiry(request): return render(request, 'basecamp/inquiry.html')
+def inquiry(request): 
+    context = {
+        'recaptcha_site_key': settings.RECAPTCHA_PUBLIC_KEY,
+    }
+    return render(request, 'basecamp/inquiry.html', context)
 
 
-def inquiry1(request): return render(request, 'basecamp/inquiry1.html')
+def inquiry1(request): 
+    context = {
+        'recaptcha_site_key': settings.RECAPTCHA_PUBLIC_KEY,
+    }
+    return render(request, 'basecamp/inquiry1.html', context)
 
 
-def inquiry2(request): return render(request, 'basecamp/inquiry2.html')
+def inquiry2(request): 
+    context = {
+        'recaptcha_site_key': settings.RECAPTCHA_PUBLIC_KEY,
+    }
+    return render(request, 'basecamp/inquiry2.html', context)
+
+
+def p2p(request): 
+    context = {
+        'recaptcha_site_key': settings.RECAPTCHA_PUBLIC_KEY,
+    }
+    return render(request, 'basecamp/p2p.html', context)
+
+
+def p2p_single(request): 
+    context = {
+        'recaptcha_site_key': settings.RECAPTCHA_PUBLIC_KEY,
+    }
+    return render(request, 'basecamp/p2p_single.html', context)
 
 
 def inquiry2_detail(request): return render(request, 'basecamp/inquiry2_detail.html')
@@ -288,21 +317,18 @@ def server_error(request): return render(request, 'basecamp/506.html')
 def server_error(request): return render(request, 'basecamp/507.html')
 
 
-# def validate_recaptcha(response):
-#     data = {
-#         'secret': settings.RECAPTCHA_SECRET_KEY,
-#         'response': response
-#     }
-#     result = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
-#     return result.json().get('success', False)
+def verify_recaptcha(response):
+    data = {
+        'secret': 'your_secret_key',
+        'response': response
+    }
+    r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
+    return r.json()
 
 
 # Inquiry 
 def inquiry_details(request):
     if request.method == "POST":
-        # recaptcha_response = request.POST.get('g-recaptcha-response')
-        # if not validate_recaptcha(recaptcha_response):
-        #     return render(request, '507.html', {'error': 'reCAPTCHA verification failed'})
         name = request.POST.get('name')
         contact = request.POST.get('contact')
         email = request.POST.get('email')
@@ -320,7 +346,19 @@ def inquiry_details(request):
         return_flight_number = request.POST.get('return_flight_number')
         return_flight_time = request.POST.get('return_flight_time')
         return_pickup_time = request.POST.get('return_pickup_time')
-        message = request.POST.get('message')           
+        message = request.POST.get('message')
+        
+        # # ReCAPTCHA validation
+        # recaptcha_response = request.POST.get('g-recaptcha-response')
+        # data = {
+        #     'secret': settings.RECAPTCHA_PRIVATE_KEY,
+        #     'response': recaptcha_response
+        # }
+        # r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
+        # result = r.json()
+
+        # if not result.get('success'):
+        #     return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'})           
                                         
         data = {
             'name': name,
@@ -514,9 +552,6 @@ def inquiry_details(request):
 
 def inquiry_details1(request):
     if request.method == "POST":
-        # recaptcha_response = request.POST.get('g-recaptcha-response')
-        # if not validate_recaptcha(recaptcha_response):
-        #     return render(request, '507.html', {'error': 'reCAPTCHA verification failed'})
         name = request.POST.get('name')
         contact = request.POST.get('contact')
         email = request.POST.get('email')
@@ -535,6 +570,18 @@ def inquiry_details1(request):
         return_flight_time = request.POST.get('return_flight_time')
         return_pickup_time = request.POST.get('return_pickup_time')
         message = request.POST.get('message')
+
+        # # ReCAPTCHA validation
+        # recaptcha_response = request.POST.get('g-recaptcha-response')
+        # data = {
+        #     'secret': settings.RECAPTCHA_PRIVATE_KEY,
+        #     'response': recaptcha_response
+        # }
+        # r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
+        # result = r.json()
+
+        # if not result.get('success'):
+        #     return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'})
         
         data = {
             'name': name,
@@ -730,9 +777,6 @@ def inquiry_details1(request):
 
 def booking_form_detail(request):
     if request.method == "POST":
-        # recaptcha_response = request.POST.get('g-recaptcha-response')
-        # if not validate_recaptcha(recaptcha_response):
-        #     return render(request, '507.html', {'error': 'reCAPTCHA verification failed'})
         name = request.POST.get('name')
         contact = request.POST.get('contact')
         email = request.POST.get('email')
@@ -751,7 +795,19 @@ def booking_form_detail(request):
         return_flight_time = request.POST.get('return_flight_time')
         return_pickup_time = request.POST.get('return_pickup_time')
         message = request.POST.get('message')
-               
+
+        # # ReCAPTCHA validation
+        # recaptcha_response = request.POST.get('g-recaptcha-response')
+        # data = {
+        #     'secret': settings.RECAPTCHA_PRIVATE_KEY,
+        #     'response': recaptcha_response
+        # }
+        # r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
+        # result = r.json()
+
+        # if not result.get('success'):
+        #     return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'})
+        
         data = {
             'name': name,
             'contact': contact,
@@ -771,7 +827,8 @@ def booking_form_detail(request):
             'return_flight_time': return_flight_time,
             'return_pickup_time': return_pickup_time,
             'message': message,           
-        }
+        }        
+             
         
         inquiry_email = Inquiry.objects.only('email').values_list('email', flat=True) 
         post_email = Post.objects.only('email').values_list('email', flat=True)
@@ -945,9 +1002,6 @@ def booking_form_detail(request):
 # Contact 
 def inquiry_details2(request):
     if request.method == "POST":
-        # recaptcha_response = request.POST.get('g-recaptcha-response')
-        # if not validate_recaptcha(recaptcha_response):
-        #     return render(request, '507.html', {'error': 'reCAPTCHA verification failed'})
         name = request.POST.get('name')
         contact = request.POST.get('contact')
         email = request.POST.get('email')        
@@ -970,18 +1024,15 @@ def inquiry_details2(request):
         # email.send()
         
         return render(request, 'basecamp/inquiry2_detail.html',
-                        {'name' : name})    
-        
+                        {'name' : name})            
         
     else:
         return render(request, 'basecamp/inquiry2.html', {})
     
+    
 # single point to point    
-def p2p_single(request):
+def p2p_single_detail(request):    
     if request.method == "POST":
-        # recaptcha_response = request.POST.get('g-recaptcha-response')
-        # if not validate_recaptcha(recaptcha_response):
-        #     return render(request, '507.html', {'error': 'reCAPTCHA verification failed'})
         name = request.POST.get('name')
         contact = request.POST.get('contact')
         email = request.POST.get('email')
@@ -994,9 +1045,7 @@ def p2p_single(request):
         return_flight_date = request.POST.get('return_flight_date')
         return_flight_number = request.POST.get('return_flight_number')
         return_pickup_time = request.POST.get('return_pickup_time')
-        message = request.POST.get('message')
-        
-        
+        message = request.POST.get('message')   
                
         data = {
             'name': name,
@@ -1138,20 +1187,18 @@ def p2p_single(request):
         
         # today = date.today()        
         # if date <= str(today):
-        #     return render(request, 'basecamp/501.html')                   
+        #     return render(request, 'basecamp/501.html')
+        #                   
 
-        return render(request, 'basecamp/p2p_single.html',
-                        {'name' : name})           
+        return render(request, 'basecamp/p2p_single_detail.html',
+                        {'name' : name, 'email' : email})           
     else:
         return render(request, 'basecamp/p2p_single.html', {})
     
     
 # Multiple points
-def p2p(request):
+def p2p_detail(request):    
     if request.method == "POST":
-        # recaptcha_response = request.POST.get('g-recaptcha-response')
-        # if not validate_recaptcha(recaptcha_response):
-        #     return render(request, '507.html', {'error': 'reCAPTCHA verification failed'})
         p2p_name = request.POST.get('p2p_name')
         p2p_phone = request.POST.get('p2p_phone')
         p2p_email = request.POST.get('p2p_email')
@@ -1193,8 +1240,8 @@ def p2p(request):
         email.attach_alternative(html_content, "text/html")
         email.send()
         
-        return render(request, 'basecamp/p2p.html',
-                        {'name' : p2p_name})    
+        return render(request, 'basecamp/p2p_detail.html',
+                        {'name' : p2p_name, 'email':p2p_email})    
 
     else:
         return render(request, 'basecamp/p2p.html', {})
@@ -1259,7 +1306,7 @@ def price_detail(request):
         #         '''.format(data['flight_date'], data['direction'],
         #                    data['suburb'], data['no_of_passenger'])
                 
-        # send_mail(data['flight_date'], message, '', [RECIPIENT_EMAIL])
+        # send_mail(data['flight_date'], message, '', [RECIPIENT_EMAIL])        
 
         return render(request, 'basecamp/inquiry1.html',
                       {'flight_date': flight_date, 'direction': direction, 'suburb': suburb,
