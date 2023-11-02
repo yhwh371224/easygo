@@ -21,20 +21,12 @@
           </div>
         </div>
       </section>
-      {% if p2p_name %}
-      <center>
-      <h2>Thank you!</h2>
-        <h3>{{ p2p_name }}&nbsp;<i class="fal fa-thumbs-up"></i></h3>
-        <p>We received your inquiry and will respond by email shortly</p>
-      </center>
-      <br/><br/>
-      {% else %}
       <!-- Contact form + details-->
       <section class="container position-relative zindex-5 pb-5">
         <div class="row">
           <div class="col-lg-6 col-md-7 offset-lg-1 pb-2 mb-5" style="margin-top: -260px;">
             <div class="card border-0 shadow-lg">
-              <form action="/p2p/" method="post" id="booking-form" class="card-body needs-validation p-5" novalidate>
+              <form action="/p2p_detail/" method="post" id="booking-form" class="card-body needs-validation p-5" novalidate>
                 {% csrf_token %}
                 <div class="mb-3 pb-1">
                   <label class="form-label" >Full name</label>
@@ -182,14 +174,13 @@
 					<a href="https://policies.google.com/terms">Terms of Service</a> apply.</small>
 				</div>
 				<br>
-        <div class="g-recaptcha" data-sitekey="6LciiukoAAAAAITKKMHWLtFyPmfb5owJzfzr9gB8"></div><br>	
+        <div class="g-recaptcha" data-sitekey="{{ recaptcha_site_key }}"></div><br>	
                 <div class="text-center pt-2">
                   <button class="btn btn-primary" type="submit" id="submitButton">Submit</button>
                 </div>
               </form>
             </div>
           </div>
-          {% endif %}
           <div class="col-lg-4 col-md-4 offset-md-1">
             <h2 class="h4 pb-3">Contact details</h2>
             <h3 class="h6 pb-2">Sydney, Australia</h3>

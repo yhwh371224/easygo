@@ -29,7 +29,7 @@
             <div class="card border-1 shadow-lg">
       <!-- Page content-->
       <!-- Page title-->	 
-      <!-- Contact form + details-->  	  
+      <!-- Contact form + details--> 
             <form method="post" enctype="multipart/form-data" id="booking-form" action="/booking_form_detail/" class="card-body needs-validation p-5" >
                 {% csrf_token %}
 				<div class="mb3 pb-1" >					
@@ -425,8 +425,8 @@
                   <div class="invalid-feedback">Please write a message!</div>
                 </div>
 				<br>
-				<div class="g-recaptcha" data-sitekey="6LciiukoAAAAAITKKMHWLtFyPmfb5owJzfzr9gB8"></div>
-				<br>			
+				<div class="g-recaptcha" data-sitekey="{{ recaptcha_site_key }}"></div>
+				<br>		
 				<div class="text-center pt-2">
 					<button class="btn btn-primary" type="submit" id="submitButton">Submit</button>
 				</div>
