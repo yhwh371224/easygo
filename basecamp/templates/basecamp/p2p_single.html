@@ -1,4 +1,4 @@
-{% extends 'basecamp/easygo_base.html' %}
+{% extends 'basecamp/easygo_base_form.html' %}
 {% block content %}
       <!-- Page content-->
       <!-- Page title-->
@@ -122,7 +122,8 @@
 					<a href="https://policies.google.com/terms">Terms of Service</a> apply.</small>
 				</div>
 				<br>
-        <div class="g-recaptcha" data-sitekey="{{ recaptcha_site_key }}"></div><br>
+        <div class="g-recaptcha" data-sitekey="{{ recaptcha_site_key }}"></div>
+        <div id="errorMessage" style="display:none; color: red; margin-top: 20px;" ></div><br>
                 <div class="text-center pt-2">
                   <button class="btn btn-primary" type="submit" id="submitButton">Submit</button>
                 </div>

@@ -16,7 +16,7 @@ from django.http import HttpResponse
 import logging
 import requests
 from django.db.models import Q
-
+from django.http import JsonResponse
 
 
 logger = logging.getLogger(__name__)
@@ -55,6 +55,9 @@ def confirmation(request): return render(request, 'basecamp/confirmation.html')
 
 
 def confirm_booking(request): return render(request, 'basecamp/confirm_booking.html')
+
+
+def date_error(request): return render(request, 'basecamp/date_error.html')
 
 
 def return_flight_fields(request): return render(request, 'basecamp/return_flight_fields.html')
@@ -111,6 +114,9 @@ def p2p_single(request):
 
 
 def inquiry2_detail(request): return render(request, 'basecamp/inquiry2_detail.html')
+
+
+def inquiry_done(request): return render(request, 'basecamp/inquiry_done.html')
 
 
 def invoice(request): return render(request, 'basecamp/invoice.html')
@@ -326,6 +332,10 @@ def verify_recaptcha(response):
     return r.json()
 
 
+def is_ajax(request):
+    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+
+
 # Inquiry 
 def inquiry_details(request):
     if request.method == "POST":
@@ -348,37 +358,24 @@ def inquiry_details(request):
         return_pickup_time = request.POST.get('return_pickup_time')
         message = request.POST.get('message')
         
-        # # ReCAPTCHA validation
-        # recaptcha_response = request.POST.get('g-recaptcha-response')
-        # data = {
-        #     'secret': settings.RECAPTCHA_PRIVATE_KEY,
-        #     'response': recaptcha_response
-        # }
-        # r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
-        # result = r.json()
+        # ReCAPTCHA validation
+        recaptcha_response = request.POST.get('g-recaptcha-response')
+        data = {
+            'secret': settings.RECAPTCHA_PRIVATE_KEY,
+            'response': recaptcha_response
+        }
+        r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
+        result = r.json()
 
-        # if not result.get('success'):
-        #     return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'})           
+        if not result.get('success'):
+            return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'})           
                                         
         data = {
             'name': name,
             'contact': contact,
             'email': email,
-            'flight_date': flight_date,
-            'flight_number': flight_number,
-            'flight_time': flight_time,
-            'pickup_time': pickup_time,
-            'direction': direction,
-            'suburb': suburb,
-            'street': street,
-            'no_of_passenger': no_of_passenger,
-            'no_of_baggage': no_of_baggage,
-            'return_direction': return_direction,
-            'return_flight_date': return_flight_date,
-            'return_flight_number': return_flight_number,
-            'return_flight_time': return_flight_time,
-            'return_pickup_time': return_pickup_time,
-            'message': message,}
+            'flight_date': flight_date
+            }
      
         inquiry_email = Inquiry.objects.only('email').values_list('email', flat=True)
         post_email = Post.objects.only('email').values_list('email', flat=True)  
@@ -386,35 +383,15 @@ def inquiry_details(request):
         if (email in inquiry_email) and (email in post_email):            
             content = '''
             Hello, {} \n
-            [Airport Inquiry]    
+            [Inquiry Form]    
             * Both exist in Inquiry & Post *\n 
-            https://easygoshuttle.com.au
             ===============================
             Contact: {}
-            Email: {}  
-            Flight no: {}      
-            Flight time: {}
-            Pickup time: {}
-            Direction: {}
-            Street: {}
-            Suburb: {}
-            Passenger: {}
-            Baggage: {}
-            Return direction: {}
-            Return flight date: {}
-            Return flight no: {}
-            Return flight time: {}
-            Return pickup time: {}
-            Messag
-            {}
+            Email: {}             
             ===============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['flight_number'],
-                        data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
-                        data['no_of_passenger'], data['no_of_baggage'], data['return_direction'],
-                        data['return_flight_date'], data['return_flight_number'],
-                        data['return_flight_time'], data['return_pickup_time'], data['message'])
+            ''' .format(data['name'], data['contact'], data['email'])
             
             send_mail(data['flight_date'], content,
                       '', [RECIPIENT_EMAIL])
@@ -422,35 +399,16 @@ def inquiry_details(request):
         elif (email in inquiry_email) and not(email in post_email):            
             content = '''
             Hello, {} \n 
-            [Airport Inquiry]   
+            [Inquiry Form]   
             * Inquiry only exist *\n  
             https://easygoshuttle.com.au                    
             ===============================
             Contact: {}
-            Email: {}  
-            Flight no: {}      
-            Flight time: {}
-            Pickup time: {}
-            Direction: {}
-            Street: {}
-            Suburb: {}
-            Passenger: {}
-            Baggage: {}
-            Return direction: {}
-            Return flight date: {}
-            Return flight no: {}
-            Return flight time: {}
-            Return pickup time: {}
-            Messag
-            {}
+            Email: {}              
             ===============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['flight_number'],
-                        data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
-                        data['no_of_passenger'], data['no_of_baggage'], data['return_direction'],
-                        data['return_flight_date'], data['return_flight_number'],
-                        data['return_flight_time'], data['return_pickup_time'], data['message'])
+            ''' .format(data['name'], data['contact'], data['email'])
             
             send_mail(data['flight_date'], content,
                       '', [RECIPIENT_EMAIL])
@@ -458,35 +416,16 @@ def inquiry_details(request):
         elif not(email in inquiry_email) and (email in post_email):            
             content = '''
             Hello, {} \n
-            [Airport Inquiry]    
+            [Inquiry Form]    
             * Post only exist *\n   
             https://easygoshuttle.com.au 
             ===============================
             Contact: {}
-            Email: {}  
-            Flight no: {}      
-            Flight time: {}
-            Pickup time: {}
-            Direction: {}
-            Street: {}
-            Suburb: {}
-            Passenger: {}
-            Baggage: {}
-            Return direction: {}
-            Return flight date: {}
-            Return flight no: {}
-            Return flight time: {}
-            Return pickup time: {}
-            Messag
-            {}
+            Email: {}              
             ===============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['flight_number'],
-                        data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
-                        data['no_of_passenger'], data['no_of_baggage'], data['return_direction'],
-                        data['return_flight_date'], data['return_flight_number'],
-                        data['return_flight_time'], data['return_pickup_time'], data['message'])
+            ''' .format(data['name'], data['contact'], data['email'])
             
             send_mail(data['flight_date'], content,
                       '', [RECIPIENT_EMAIL])
@@ -494,35 +433,16 @@ def inquiry_details(request):
         else:
             content = '''
             Hello, {} \n 
-            [Airport Inquiry]  
+            [Inquiry Form]  
             * Neither in Inquiry & Post *\n
             https://easygoshuttle.com.au     
             ===============================
             Contact: {}
-            Email: {}  
-            Flight no: {}      
-            Flight time: {}
-            Pickup time: {}
-            Direction: {}
-            Street: {}
-            Suburb: {}
-            Passenger: {}
-            Baggage: {}
-            Return direction: {}
-            Return flight date: {}
-            Return flight no: {}
-            Return flight time: {}
-            Return pickup time: {}
-            Messag
-            {}
+            Email: {} 
             ===============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['flight_number'],
-                        data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
-                        data['no_of_passenger'], data['no_of_baggage'], data['return_direction'],
-                        data['return_flight_date'], data['return_flight_number'],
-                        data['return_flight_time'], data['return_pickup_time'], data['message'])
+            ''' .format(data['name'], data['contact'], data['email'])
             
             send_mail(data['flight_date'], content,
                       '', [RECIPIENT_EMAIL])    
@@ -537,16 +457,23 @@ def inquiry_details(request):
         p.save()       
         
         
-        today = date.today()        
+        today = date.today()
         if flight_date <= str(today):
-            return render(request, 'basecamp/501.html')
-                                    
-                            
-        return render(request, 'basecamp/inquiry_details.html',
-                        {'name' : name, 'email': email, }) 
-    
-                            
+            if request.is_ajax():
+                return JsonResponse({'success': True, 'message': 'Past/Today flight dates are not allowed.'})
+            else:
+                return render(request, 'basecamp/date_error.html')  
+
+        # If everything is fine, respond accordingly
+        if is_ajax(request):
+            # Return a JSON response for AJAX requests
+            return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})
+        else:
+            # Return a standard HTTP response for non-AJAX requests
+            return render(request, 'basecamp/inquiry_done.html')
+
     else:
+        # If it's not a POST request, just render the inquiry form
         return render(request, 'basecamp/inquiry.html', {})
 
 
@@ -570,185 +497,79 @@ def inquiry_details1(request):
         return_flight_time = request.POST.get('return_flight_time')
         return_pickup_time = request.POST.get('return_pickup_time')
         message = request.POST.get('message')
-
-        # # ReCAPTCHA validation
-        # recaptcha_response = request.POST.get('g-recaptcha-response')
-        # data = {
-        #     'secret': settings.RECAPTCHA_PRIVATE_KEY,
-        #     'response': recaptcha_response
-        # }
-        # r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
-        # result = r.json()
-
-        # if not result.get('success'):
-        #     return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'})
         
         data = {
             'name': name,
             'contact': contact,
             'email': email,
-            'flight_date': flight_date,
-            'flight_number': flight_number,
-            'flight_time': flight_time,
-            'pickup_time': pickup_time,
-            'direction': direction,
-            'suburb': suburb,
-            'street': street,
-            'no_of_passenger': no_of_passenger,
-            'no_of_baggage': no_of_baggage,
-            'return_direction': return_direction,
-            'return_flight_date': return_flight_date,
-            'return_flight_number': return_flight_number,
-            'return_flight_time': return_flight_time,
-            'return_pickup_time': return_pickup_time,
-            'message': message,}       
-        
+            'flight_date': flight_date}
+     
         inquiry_email = Inquiry.objects.only('email').values_list('email', flat=True)
-        post_email = Post.objects.only('email').values_list('email', flat=True) 
-                         
-        if (email in post_email) and (email in inquiry_email):            
-                        
-            content = '''
-            Hello, {} \n 
-            [Quick Price] 
-            * Both exist in Inquiry & Post *\n 
-            https://easygoshuttle.com.au 
-            ===============================
-            Contact: {}
-            Email: {}  
-            Flight no: {}      
-            Flight time: {}
-            Pickup time: {}
-            Direction: {}
-            Street: {}
-            Suburb: {}
-            Passenger: {}
-            Baggage: {}
-            Return direction: {}
-            Return flight date: {}
-            Return flight no: {}
-            Return flight time: {}
-            Return pickup time: {}
-            Messag
-            {}
-            ===============================\n        
-            Best Regards,
-            EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['flight_number'],
-                        data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
-                        data['no_of_passenger'], data['no_of_baggage'], data['return_direction'],
-                        data['return_flight_date'], data['return_flight_number'],
-                        data['return_flight_time'], data['return_pickup_time'], data['message'])
-            
-            send_mail(data['flight_date'], content,
-                      '', [RECIPIENT_EMAIL])
-            
-        elif (email in post_email) and not(email in inquiry_email):            
-                        
-            content = '''
-            Hello, {} \n 
-            [Quick Price] 
-            * Post only exist *\n 
-            https://easygoshuttle.com.au 
-            ===============================
-            Contact: {}
-            Email: {}  
-            Flight no: {}      
-            Flight time: {}
-            Pickup time: {}
-            Direction: {}
-            Street: {}
-            Suburb: {}
-            Passenger: {}
-            Baggage: {}
-            Return direction: {}
-            Return flight date: {}
-            Return flight no: {}
-            Return flight time: {}
-            Return pickup time: {}
-            Messag
-            {}
-            ===============================\n        
-            Best Regards,
-            EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['flight_number'],
-                        data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
-                        data['no_of_passenger'], data['no_of_baggage'], data['return_direction'],
-                        data['return_flight_date'], data['return_flight_number'],
-                        data['return_flight_time'], data['return_pickup_time'], data['message'])
-            
-            send_mail(data['flight_date'], content,
-                      '', [RECIPIENT_EMAIL])
-            
-        elif not(email in post_email) and (email in inquiry_email):            
-                        
+        post_email = Post.objects.only('email').values_list('email', flat=True)  
+                     
+        if (email in inquiry_email) and (email in post_email):            
             content = '''
             Hello, {} \n
-            [Quick Price]  
-            * Inquiry only exist *\n  
-            https://easygoshuttle.com.au
+            [Quick Price]    
+            * Both exist in Inquiry & Post *\n 
             ===============================
             Contact: {}
-            Email: {}  
-            Flight no: {}      
-            Flight time: {}
-            Pickup time: {}
-            Direction: {}
-            Street: {}
-            Suburb: {}
-            Passenger: {}
-            Baggage: {}
-            Return direction: {}
-            Return flight date: {}
-            Return flight no: {}
-            Return flight time: {}
-            Return pickup time: {}
-            Messag
-            {}
+            Email: {}             
             ===============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['flight_number'],
-                        data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
-                        data['no_of_passenger'], data['no_of_baggage'], data['return_direction'],
-                        data['return_flight_date'], data['return_flight_number'],
-                        data['return_flight_time'], data['return_pickup_time'], data['message'])
+            ''' .format(data['name'], data['contact'], data['email'])
             
             send_mail(data['flight_date'], content,
                       '', [RECIPIENT_EMAIL])
-        
+            
+        elif (email in inquiry_email) and not(email in post_email):            
+            content = '''
+            Hello, {} \n 
+            [Quick Price]   
+            * Inquiry only exist *\n  
+            https://easygoshuttle.com.au                    
+            ===============================
+            Contact: {}
+            Email: {}              
+            ===============================\n        
+            Best Regards,
+            EasyGo Admin \n\n        
+            ''' .format(data['name'], data['contact'], data['email'])
+            
+            send_mail(data['flight_date'], content,
+                      '', [RECIPIENT_EMAIL])
+            
+        elif not(email in inquiry_email) and (email in post_email):            
+            content = '''
+            Hello, {} \n
+            [Quick Price]    
+            * Post only exist *\n   
+            https://easygoshuttle.com.au 
+            ===============================
+            Contact: {}
+            Email: {}              
+            ===============================\n        
+            Best Regards,
+            EasyGo Admin \n\n        
+            ''' .format(data['name'], data['contact'], data['email'])
+            
+            send_mail(data['flight_date'], content,
+                      '', [RECIPIENT_EMAIL])
+            
         else:
             content = '''
-            Hello, {} \n
+            Hello, {} \n 
             [Quick Price]  
-            * Neither in Inquiry & Post *\n   
-            https://easygoshuttle.com.au
+            * Neither in Inquiry & Post *\n
+            https://easygoshuttle.com.au     
             ===============================
             Contact: {}
-            Email: {}  
-            Flight no: {}      
-            Flight time: {}
-            Pickup time: {}
-            Direction: {}
-            Street: {}
-            Suburb: {}
-            Passenger: {}
-            Baggage: {}
-            Return direction: {}
-            Return flight date: {}
-            Return flight no: {}
-            Return flight time: {}
-            Return pickup time: {}
-            Messag
-            {}
+            Email: {} 
             ===============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['flight_number'],
-                        data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
-                        data['no_of_passenger'], data['no_of_baggage'], data['return_direction'],
-                        data['return_flight_date'], data['return_flight_number'],
-                        data['return_flight_time'], data['return_pickup_time'], data['message'])
+            ''' .format(data['name'], data['contact'], data['email'])
             
             send_mail(data['flight_date'], content,
                       '', [RECIPIENT_EMAIL]) 
@@ -762,11 +583,6 @@ def inquiry_details1(request):
         
         p.save() 
 
-        
-        today = date.today()        
-        if flight_date <= str(today):
-            return render(request, 'basecamp/501.html')
-               
                 
         return render(request, 'basecamp/inquiry_details1.html',
                         {'name' : name, 'email': email, })
@@ -796,186 +612,93 @@ def booking_form_detail(request):
         return_pickup_time = request.POST.get('return_pickup_time')
         message = request.POST.get('message')
 
-        # # ReCAPTCHA validation
-        # recaptcha_response = request.POST.get('g-recaptcha-response')
-        # data = {
-        #     'secret': settings.RECAPTCHA_PRIVATE_KEY,
-        #     'response': recaptcha_response
-        # }
-        # r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
-        # result = r.json()
+        # ReCAPTCHA validation
+        recaptcha_response = request.POST.get('g-recaptcha-response')
+        data = {
+            'secret': settings.RECAPTCHA_PRIVATE_KEY,
+            'response': recaptcha_response
+        }
+        r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
+        result = r.json()
 
-        # if not result.get('success'):
-        #     return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'})
+        if not result.get('success'):
+            return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'})
         
         data = {
             'name': name,
             'contact': contact,
             'email': email,
-            'flight_date': flight_date,
-            'flight_number': flight_number,
-            'flight_time': flight_time,
-            'pickup_time': pickup_time,
-            'direction': direction,
-            'suburb': suburb,
-            'street': street,
-            'no_of_passenger': no_of_passenger,
-            'no_of_baggage': no_of_baggage,
-            'return_direction': return_direction,
-            'return_flight_date': return_flight_date,
-            'return_flight_number': return_flight_number,
-            'return_flight_time': return_flight_time,
-            'return_pickup_time': return_pickup_time,
-            'message': message,           
-        }        
-             
-        
-        inquiry_email = Inquiry.objects.only('email').values_list('email', flat=True) 
-        post_email = Post.objects.only('email').values_list('email', flat=True)
-                         
-        if (email in inquiry_email) and (email in post_email):   
+            'flight_date': flight_date}
+     
+        inquiry_email = Inquiry.objects.only('email').values_list('email', flat=True)
+        post_email = Post.objects.only('email').values_list('email', flat=True)  
+                     
+        if (email in inquiry_email) and (email in post_email):            
             content = '''
             Hello, {} \n
-            [Inquiry from booking form] 
-            * Both exist in Inquiry & Post *\n
-            https://easygoshuttle.com.au                   
+            [Booking Form Inquiry]    
+            * Both exist in Inquiry & Post *\n 
             ===============================
             Contact: {}
-            Email: {}  
-            Flight no: {}      
-            Flight time: {}
-            Pickup time: {}
-            Direction: {}
-            Street: {}
-            Suburb: {}
-            Passenger: {}
-            Baggage: {}
-            Return direction: {}
-            Return flight date: {}
-            Return flight no: {}
-            Return flight time: {}
-            Return pickup time: {}
-            Messag
-            {}
+            Email: {}             
             ===============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['flight_number'],
-                        data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
-                        data['no_of_passenger'], data['no_of_baggage'], data['return_direction'],
-                        data['return_flight_date'], data['return_flight_number'],
-                        data['return_flight_time'], data['return_pickup_time'], data['message'])
-
-            send_mail(data['flight_date'], content,
-                      '', [RECIPIENT_EMAIL])
-            
-        elif (email in inquiry_email) and not(email in post_email):   
-            content = '''
-            Hello, {} \n
-            [Inquiry from booking form] 
-            * Inquiry only exist *\n
-            https://easygoshuttle.com.au
-            ===============================
-            Contact: {}
-            Email: {}  
-            Flight no: {}      
-            Flight time: {}
-            Pickup time: {}
-            Direction: {}
-            Street: {}
-            Suburb: {}
-            Passenger: {}
-            Baggage: {}
-            Return direction: {}
-            Return flight date: {}
-            Return flight no: {}
-            Return flight time: {}
-            Return pickup time: {}
-            Messag
-            {}
-            ===============================\n        
-            Best Regards,
-            EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['flight_number'],
-                        data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
-                        data['no_of_passenger'], data['no_of_baggage'], data['return_direction'],
-                        data['return_flight_date'], data['return_flight_number'],
-                        data['return_flight_time'], data['return_pickup_time'], data['message'])
+            ''' .format(data['name'], data['contact'], data['email'])
             
             send_mail(data['flight_date'], content,
                       '', [RECIPIENT_EMAIL])
             
-        elif not(email in inquiry_email) and (email in post_email):   
+        elif (email in inquiry_email) and not(email in post_email):            
             content = '''
-            Hello, {} \n
-            [Inquiry from booking form] 
-            * Post only exist *\n
-            https://easygoshuttle.com.au
+            Hello, {} \n 
+            [Booking Form Inquiry]   
+            * Inquiry only exist *\n  
+            https://easygoshuttle.com.au                    
             ===============================
             Contact: {}
-            Email: {}  
-            Flight no: {}      
-            Flight time: {}
-            Pickup time: {}
-            Direction: {}
-            Street: {}
-            Suburb: {}
-            Passenger: {}
-            Baggage: {}
-            Return direction: {}
-            Return flight date: {}
-            Return flight no: {}
-            Return flight time: {}
-            Return pickup time: {}
-            Messag
-            {}
+            Email: {}              
             ===============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['flight_number'],
-                        data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
-                        data['no_of_passenger'], data['no_of_baggage'], data['return_direction'],
-                        data['return_flight_date'], data['return_flight_number'],
-                        data['return_flight_time'], data['return_pickup_time'], data['message'])
-
+            ''' .format(data['name'], data['contact'], data['email'])
+            
+            send_mail(data['flight_date'], content,
+                      '', [RECIPIENT_EMAIL])
+            
+        elif not(email in inquiry_email) and (email in post_email):            
+            content = '''
+            Hello, {} \n
+            [Booking Form Inquiry]    
+            * Post only exist *\n   
+            https://easygoshuttle.com.au 
+            ===============================
+            Contact: {}
+            Email: {}              
+            ===============================\n        
+            Best Regards,
+            EasyGo Admin \n\n        
+            ''' .format(data['name'], data['contact'], data['email'])
+            
             send_mail(data['flight_date'], content,
                       '', [RECIPIENT_EMAIL])
             
         else:
             content = '''
-            Hello, {} \n
-            [Inquiry from booking form] 
+            Hello, {} \n 
+            [Booking Form Inquiry]  
             * Neither in Inquiry & Post *\n
-            https://easygoshuttle.com.au
+            https://easygoshuttle.com.au     
             ===============================
             Contact: {}
-            Email: {}  
-            Flight no: {}      
-            Flight time: {}
-            Pickup time: {}
-            Direction: {}
-            Street: {}
-            Suburb: {}
-            Passenger: {}
-            Baggage: {}
-            Return direction: {}
-            Return flight date: {}
-            Return flight no: {}
-            Return flight time: {}
-            Return pickup time: {}
-            Messag
-            {}
+            Email: {} 
             ===============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['flight_number'],
-                        data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
-                        data['no_of_passenger'], data['no_of_baggage'], data['return_direction'],
-                        data['return_flight_date'], data['return_flight_number'],
-                        data['return_flight_time'], data['return_pickup_time'], data['message'])
-
+            ''' .format(data['name'], data['contact'], data['email'])
+            
             send_mail(data['flight_date'], content,
-                      '', [RECIPIENT_EMAIL])            
+                      '', [RECIPIENT_EMAIL])             
     
         
         p = Inquiry(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
@@ -987,15 +710,23 @@ def booking_form_detail(request):
         p.save()
 
 
-        today = date.today()        
+        today = date.today()
         if flight_date <= str(today):
-            return render(request, 'basecamp/501.html')
-                   
+            if request.is_ajax():
+                return JsonResponse({'success': True, 'message': 'Past/Today flight dates are not allowed.'})
+            else:
+                return render(request, 'basecamp/date_error.html')  
 
-        return render(request, 'basecamp/booking_form_detail.html',
-                        {'name' : name, 'email': email, })
-    
+        # If everything is fine, respond accordingly
+        if is_ajax(request):
+            # Return a JSON response for AJAX requests
+            return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})
+        else:
+            # Return a standard HTTP response for non-AJAX requests
+            return render(request, 'basecamp/inquiry_done.html')
+
     else:
+        # If it's not a POST request, just render the inquiry form
         return render(request, 'basecamp/booking_form.html', {})
 
 
@@ -1007,26 +738,47 @@ def inquiry_details2(request):
         email = request.POST.get('email')        
         message = request.POST.get('message')     
         
-        # html_content = render_to_string("basecamp/html_email-contact.html", 
-        # {'name': name, 'contact': contact,
-        # 'email': email, 'message': message, })
-        
-        # text_content = strip_tags(html_content)
+        # ReCAPTCHA validation
+        recaptcha_response = request.POST.get('g-recaptcha-response')
+        data = {
+            'secret': settings.RECAPTCHA_PRIVATE_KEY,
+            'response': recaptcha_response
+        }
+        r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
+        result = r.json()
 
-        # email = EmailMultiAlternatives(
-        #     "inquiry from contact_us",
-        #     text_content,
-        #     '',
-        #     [email]
-        # )
+        data = {
+            'name': name,
+            'contact': contact,
+            'email': email,
+            'message': message}
+                     
+        message = '''
+                =====================
+                Contact Form
+                =====================
+                name: {}
+                contact: {}        
+                email: {}
+                message: {}              
+                '''.format(data['name'], data['contact'],
+                           data['email'], data['message'])
+                
+        send_mail(data['name'], message, '', [RECIPIENT_EMAIL])   
+
+        if not result.get('success'):
+            return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'})
         
-        # email.attach_alternative(html_content, "text/html")
-        # email.send()
-        
-        return render(request, 'basecamp/inquiry2_detail.html',
-                        {'name' : name})            
-        
+       # If everything is fine, respond accordingly
+        if is_ajax(request):
+            # Return a JSON response for AJAX requests
+            return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})
+        else:
+            # Return a standard HTTP response for non-AJAX requests
+            return render(request, 'basecamp/inquiry_done.html')
+
     else:
+        # If it's not a POST request, just render the inquiry form
         return render(request, 'basecamp/inquiry2.html', {})
     
     
@@ -1046,137 +798,94 @@ def p2p_single_detail(request):
         return_flight_number = request.POST.get('return_flight_number')
         return_pickup_time = request.POST.get('return_pickup_time')
         message = request.POST.get('message')   
+
+        # ReCAPTCHA validation
+        recaptcha_response = request.POST.get('g-recaptcha-response')
+        data = {
+            'secret': settings.RECAPTCHA_PRIVATE_KEY,
+            'response': recaptcha_response
+        }
+        r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
+        result = r.json()
+
+        if not result.get('success'):
+            return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'})    
                
         data = {
             'name': name,
             'contact': contact,
-            'email': email,            
-            'flight_date': flight_date,
-            'pickup_time': pickup_time,
-            'flight_number': flight_number,
-            'street': street,
-            'no_of_passenger': no_of_passenger,
-            'no_of_baggage': no_of_baggage,
-            'return_flight_date': return_flight_date,
-            'return_flight_number': return_flight_number,
-            'return_pickup_time': return_pickup_time,
-            'message': message,           
-        }
-        
-        inquiry_point_email = Inquiry_point.objects.only('email').values_list('email', flat=True) 
-        post_email = Post.objects.only('email').values_list('email', flat=True)
-                         
-        if (email in inquiry_point_email) and (email in post_email):   
+            'email': email,
+            'flight_date': flight_date}
+     
+        inquiry_email = Inquiry.objects.only('email').values_list('email', flat=True)
+        post_email = Post.objects.only('email').values_list('email', flat=True)  
+                     
+        if (email in inquiry_email) and (email in post_email):            
             content = '''
             Hello, {} \n
-            [Inquiry from booking form] 
-            * Both exist in Inquiry & Post *\n
-            https://easygoshuttle.com.au                   
+            [p2p single point]    
+            * Both exist in Inquiry & Post *\n 
             ===============================
             Contact: {}
-            Email: {}  
-            Pick up time: {}      
-            Start point: {}
-            End point: {}
-            Number of passenger: {}
-            Number of baggage: {}
-            Return date: {}
-            Return pickup time: {}            
-            Messag
-            {}
+            Email: {}             
             ===============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['pickup_time'], data['flight_number'],
-                        data['street'], data['no_of_passenger'], data['no_of_baggage'], data['return_flight_date'], data['return_pickup_time'],
-                        data['message'])
-
+            ''' .format(data['name'], data['contact'], data['email'])
+            
             send_mail(data['flight_date'], content,
                       '', [RECIPIENT_EMAIL])
             
-        elif (email in inquiry_point_email) and not(email in post_email):   
+        elif (email in inquiry_email) and not(email in post_email):            
             content = '''
-            Hello, {} \n
-            [Inquiry from booking form] 
-            * Inquiry only exist *\n
-            https://easygoshuttle.com.au
+            Hello, {} \n 
+            [p2p single point]   
+            * Inquiry only exist *\n  
+            https://easygoshuttle.com.au                    
             ===============================
             Contact: {}
-            Email: {}  
-            Pick up time: {}      
-            Start point: {}
-            End point: {}
-            Number of passenger: {}
-            Number of baggage: {}
-            Return date: {}
-            Return pickup time: {}            
-            Messag
-            {}
+            Email: {}              
             ===============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['pickup_time'], data['flight_number'],
-                        data['street'], data['no_of_passenger'], data['no_of_baggage'], data['return_flight_date'], data['return_pickup_time'],
-                        data['message'])
-
+            ''' .format(data['name'], data['contact'], data['email'])
+            
             send_mail(data['flight_date'], content,
                       '', [RECIPIENT_EMAIL])
             
-        elif not(email in inquiry_point_email) and (email in post_email):   
+        elif not(email in inquiry_email) and (email in post_email):            
             content = '''
             Hello, {} \n
-            [Inquiry from booking form] 
-            * Post only exist *\n
-            https://easygoshuttle.com.au
+            [p2p single point]    
+            * Post only exist *\n   
+            https://easygoshuttle.com.au 
             ===============================
             Contact: {}
-            Email: {}  
-            Pick up time: {}      
-            Start point: {}
-            End point: {}
-            Number of passenger: {}
-            Number of baggage: {}
-            Return date: {}
-            Return pickup time: {}            
-            Messag
-            {}
+            Email: {}              
             ===============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['pickup_time'], data['flight_number'],
-                        data['street'], data['no_of_passenger'], data['no_of_baggage'], data['return_flight_date'], data['return_pickup_time'],
-                        data['message'])
-
+            ''' .format(data['name'], data['contact'], data['email'])
+            
             send_mail(data['flight_date'], content,
                       '', [RECIPIENT_EMAIL])
             
         else:
             content = '''
-            Hello, {} \n
-            [Inquiry from booking form] 
+            Hello, {} \n 
+            [p2p single point]  
             * Neither in Inquiry & Post *\n
-            https://easygoshuttle.com.au
+            https://easygoshuttle.com.au     
             ===============================
             Contact: {}
-            Email: {}  
-            Pick up time: {}      
-            Start point: {}
-            End point: {}
-            Number of passenger: {}
-            Number of baggage: {}
-            Return date: {}
-            Return pickup time: {}            
-            Messag
-            {}
+            Email: {} 
             ===============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['pickup_time'], data['flight_number'],
-                        data['street'], data['no_of_passenger'], data['no_of_baggage'], data['return_flight_date'], data['return_pickup_time'],
-                        data['message'])
-
+            ''' .format(data['name'], data['contact'], data['email'])
+            
             send_mail(data['flight_date'], content,
-                      '', [RECIPIENT_EMAIL])        
+                      '', [RECIPIENT_EMAIL])             
         
         p = Inquiry_point(name=name, contact=contact, email=email, direction="Point to Point", flight_date=flight_date, flight_time="01:00", 
                           pickup_time=pickup_time, flight_number=flight_number, street=street, suburb="Cruise", no_of_passenger=no_of_passenger, 
@@ -1185,14 +894,19 @@ def p2p_single_detail(request):
         
         p.save()        
         
-        # today = date.today()        
-        # if date <= str(today):
-        #     return render(request, 'basecamp/501.html')
-        #                   
+        if not result.get('success'):
+            return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'})
+        
+       # If everything is fine, respond accordingly
+        if is_ajax(request):
+            # Return a JSON response for AJAX requests
+            return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})
+        else:
+            # Return a standard HTTP response for non-AJAX requests
+            return render(request, 'basecamp/inquiry_done.html')
 
-        return render(request, 'basecamp/p2p_single_detail.html',
-                        {'name' : name, 'email' : email})           
     else:
+        # If it's not a POST request, just render the inquiry form
         return render(request, 'basecamp/p2p_single.html', {})
     
     
@@ -1219,6 +933,18 @@ def p2p_detail(request):
         p2p_baggage = request.POST.get('p2p_baggage')
         p2p_message = request.POST.get('p2p_message')
 
+        # ReCAPTCHA validation
+        recaptcha_response = request.POST.get('g-recaptcha-response')
+        data = {
+            'secret': settings.RECAPTCHA_PRIVATE_KEY,
+            'response': recaptcha_response
+        }
+        r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
+        result = r.json()
+
+        if not result.get('success'):
+            return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'})
+
         html_content = render_to_string("basecamp/html_email-p2p-confirmation.html", 
             {'p2p_name': p2p_name, 'p2p_phone': p2p_phone, 'p2p_email': p2p_email, 'p2p_date': p2p_date, 
             'first_pickup_location': first_pickup_location, 'first_putime': first_putime, 'first_dropoff_location': first_dropoff_location, 
@@ -1240,10 +966,19 @@ def p2p_detail(request):
         email.attach_alternative(html_content, "text/html")
         email.send()
         
-        return render(request, 'basecamp/p2p_detail.html',
-                        {'name' : p2p_name, 'email':p2p_email})    
+        if not result.get('success'):
+            return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'})
+        
+       # If everything is fine, respond accordingly
+        if is_ajax(request):
+            # Return a JSON response for AJAX requests
+            return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})
+        else:
+            # Return a standard HTTP response for non-AJAX requests
+            return render(request, 'basecamp/inquiry_done.html')
 
     else:
+        # If it's not a POST request, just render the inquiry form
         return render(request, 'basecamp/p2p.html', {})
 
 
