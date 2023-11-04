@@ -584,8 +584,7 @@ def inquiry_details1(request):
         p.save() 
 
                 
-        return render(request, 'basecamp/inquiry_details1.html',
-                        {'name' : name, 'email': email, })
+        return render(request, 'basecamp/inquiry_done.html')
 
     else:
         return render(request, 'basecamp/inquiry1.html', {})
@@ -697,8 +696,7 @@ def booking_form_detail(request):
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['contact'], data['email'])
             
-            send_mail(data['flight_date'], content,
-                      '', [RECIPIENT_EMAIL])             
+            send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])             
     
         
         p = Inquiry(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
@@ -892,7 +890,7 @@ def p2p_single_detail(request):
                           no_of_baggage=no_of_baggage, return_direction="Point to Point", return_flight_date=return_flight_date, 
                           return_flight_time="01:00", return_flight_number=return_flight_number, return_pickup_time=return_pickup_time, message=message)
         
-        p.save()        
+        p.save() 
         
         if not result.get('success'):
             return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'})
@@ -1082,24 +1080,11 @@ def confirmation_detail(request):
         is_confirmed = True if is_confirmed_str == 'True' else False
                 
         
-        data = {
-            'company_name': company_name,
+        data = {            
             'name': name,
             'contact': contact,
-            'email': email,
-            'email1': email1,
-            'flight_date': flight_date,
-            'flight_number': flight_number,
-            'flight_time': flight_time,
-            'pickup_time': pickup_time,
-            'direction': direction,
-            'suburb': suburb,
-            'street': street,
-            'no_of_passenger': no_of_passenger,
-            'no_of_baggage': no_of_baggage,
-            'message': message,
-            'price': price,
-            }       
+            'email': email,            
+            'flight_date': flight_date}       
         
         post_email = Post.objects.only('email').values_list('email', flat=True)
         inquiry_email = Inquiry.objects.only('email').values_list('email', flat=True) 
@@ -1112,24 +1097,11 @@ def confirmation_detail(request):
             * Both exist in Inquiry & Post *\n 
             ===============================
             Contact: {}
-            Email: {}  
-            Flight no: {}      
-            Flight time: {}
-            Pickup time: {}
-            Direction: {}
-            Street: {}
-            Suburb: {}
-            Passenger: {}
-            Baggage: {}
-            Messag
-            {}
-            price: {}
+            Email: {}              
             ===============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['flight_number'],
-                        data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
-                        data['no_of_passenger'], data['no_of_baggage'], data['message'], data['price'])
+            ''' .format(data['name'], data['contact'], data['email'])
             send_mail(data['flight_date'], content,
                       '', [RECIPIENT_EMAIL])
             
@@ -1139,26 +1111,13 @@ def confirmation_detail(request):
             Hello, {} \n  
             [Confirmation] 
             * Post only exist *\n 
-            ===============================
+           ===============================
             Contact: {}
-            Email: {}  
-            Flight no: {}      
-            Flight time: {}
-            Pickup time: {}
-            Direction: {}
-            Street: {}
-            Suburb: {}
-            Passenger: {}
-            Baggage: {}
-            Messag
-            {}
-            price: {}
+            Email: {}              
             ===============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['flight_number'],
-                        data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
-                        data['no_of_passenger'], data['no_of_baggage'], data['message'], data['price'])
+            ''' .format(data['name'], data['contact'], data['email'])
             send_mail(data['flight_date'], content,
                       '', [RECIPIENT_EMAIL])
             
@@ -1168,26 +1127,13 @@ def confirmation_detail(request):
             Hello, {} \n  
             [Confirmation] 
             * Inquiry only exist *\n 
-            ===============================
+           ===============================
             Contact: {}
-            Email: {}  
-            Flight no: {}      
-            Flight time: {}
-            Pickup time: {}
-            Direction: {}
-            Street: {}
-            Suburb: {}
-            Passenger: {}
-            Baggage: {}
-            Messag
-            {}
-            price: {}
+            Email: {}              
             ===============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['flight_number'],
-                        data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
-                        data['no_of_passenger'], data['no_of_baggage'], data['message'], data['price'])
+            ''' .format(data['name'], data['contact'], data['email'])
             send_mail(data['flight_date'], content,
                       '', [RECIPIENT_EMAIL])
         
@@ -1198,24 +1144,11 @@ def confirmation_detail(request):
             * Neither in Inquiry & Post *\n 
             ===============================
             Contact: {}
-            Email: {}  
-            Flight no: {}      
-            Flight time: {}
-            Pickup time: {}
-            Direction: {}
-            Street: {}
-            Suburb: {}
-            Passenger: {}
-            Baggage: {}
-            Messag
-            {}
-            price: {}
+            Email: {}              
             ===============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['flight_number'],
-                        data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
-                        data['no_of_passenger'], data['no_of_baggage'], data['message'], data['price'])
+            ''' .format(data['name'], data['contact'], data['email'])
             send_mail(data['flight_date'], content,
                       '', [RECIPIENT_EMAIL])
             
@@ -1285,22 +1218,8 @@ def booking_detail(request):
         data = {
             'name': name,
             'contact': contact,
-            'email': email,
-            'company_name': company_name,
-            'email1': email1,
-            'flight_date': flight_date,
-            'flight_number': flight_number,
-            'flight_time': flight_time,
-            'pickup_time': pickup_time,
-            'direction': direction,
-            'suburb': suburb,
-            'street': street,
-            'no_of_passenger': no_of_passenger,
-            'no_of_baggage': no_of_baggage,
-            'message': message,
-            'price': price,
-            'return_flight_number': return_flight_number,
-            }       
+            'email': email,            
+            'flight_date': flight_date}       
         
         post_email = Post.objects.only('email').values_list('email', flat=True)
         inquiry_email = Inquiry.objects.only('email').values_list('email', flat=True) 
@@ -1315,25 +1234,11 @@ def booking_detail(request):
             https://easygoshuttle.com.au/sending_email_second/ \n            
             ===============================
             Contact: {}
-            Email: {}  
-            Flight no: {}      
-            Flight time: {}
-            Pickup time: {}
-            Direction: {}
-            Street: {}
-            Suburb: {}
-            Passenger: {}
-            Baggage: {}
-            Messag
-            {}
-            price {}
-            return_flight_number {}
+            Email: {}           
             ===============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['flight_number'],
-                        data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
-                        data['no_of_passenger'], data['no_of_baggage'], data['message'], data['price'], data['return_flight_number'])
+            ''' .format(data['name'], data['contact'], data['email'])
             send_mail(data['flight_date'], content,
                       '', [RECIPIENT_EMAIL])
             
@@ -1347,25 +1252,11 @@ def booking_detail(request):
             https://easygoshuttle.com.au/sending_email_second/ \n      
             ===============================
             Contact: {}
-            Email: {}  
-            Flight no: {}      
-            Flight time: {}
-            Pickup time: {}
-            Direction: {}
-            Street: {}
-            Suburb: {}
-            Passenger: {}
-            Baggage: {}
-            Messag
-            {}
-            price {}
-            return_flight_number {}
+            Email: {}           
             ===============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['flight_number'],
-                        data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
-                        data['no_of_passenger'], data['no_of_baggage'], data['message'], data['price'], data['return_flight_number'])
+            ''' .format(data['name'], data['contact'], data['email'])
             send_mail(data['flight_date'], content,
                       '', [RECIPIENT_EMAIL])
             
@@ -1380,24 +1271,10 @@ def booking_detail(request):
             ===============================
             Contact: {}
             Email: {}  
-            Flight no: {}      
-            Flight time: {}
-            Pickup time: {}
-            Direction: {}
-            Street: {}
-            Suburb: {}
-            Passenger: {}
-            Baggage: {}
-            Messag
-            {}
-            price {}
-            return_flight_number {}
             ===============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['flight_number'],
-                        data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
-                        data['no_of_passenger'], data['no_of_baggage'], data['message'], data['price'], data['return_flight_number'])
+            ''' .format(data['name'], data['contact'], data['email'])
             send_mail(data['flight_date'], content,
                       '', [RECIPIENT_EMAIL])
         
@@ -1408,27 +1285,13 @@ def booking_detail(request):
             * Neither in Inquiry & Post *\n 
             https://easygoshuttle.com.au/sending_email_first/ \n  
             https://easygoshuttle.com.au/sending_email_second/ \n       
-            ===============================
+           ===============================
             Contact: {}
             Email: {}  
-            Flight no: {}      
-            Flight time: {}
-            Pickup time: {}
-            Direction: {}
-            Street: {}
-            Suburb: {}
-            Passenger: {}
-            Baggage: {}
-            Messag
-            {}
-            price {}
-            return_flight_number {}
             ===============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['flight_number'],
-                        data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
-                        data['no_of_passenger'], data['no_of_baggage'], data['message'], data['price'], data['return_flight_number'])
+            ''' .format(data['name'], data['contact'], data['email'])
             send_mail(data['flight_date'], content,
                       '', [RECIPIENT_EMAIL])
             
@@ -1441,12 +1304,8 @@ def booking_detail(request):
                  return_pickup_time=return_pickup_time, message=message, price=price, is_confirmed=is_confirmed,  driver=sam_driver)
         
         p.save()
-         
-        # send_email_delayed.apply_async(args=[name, contact, email, flight_date, flight_number, flight_time,
-        #                                       pickup_time, direction, suburb, street, no_of_passenger, no_of_baggage,
-        #                                       message, price, is_confirmed], countdown=30)
 
-        return render(request, 'basecamp/booking_detail.html',
+        return render(request, 'basecamp/confirmation_detail.html',
                         {'name' : name, 'email': email, }) 
 
     else:
@@ -1490,22 +1349,8 @@ def confirm_booking_detail(request):
             data = {
             'name': name,
             'contact': contact,
-            'email': email,
-            'company_name': company_name,
-            'email1': email1,
-            'flight_date': flight_date,
-            'flight_number': flight_number,
-            'flight_time': flight_time,
-            'pickup_time': pickup_time,
-            'direction': direction,
-            'suburb': suburb,
-            'street': street,
-            'no_of_passenger': no_of_passenger,
-            'no_of_baggage': no_of_baggage,
-            'message': message,
-            'price': price,
-            'return_flight_number': return_flight_number,
-            }                    
+            'email': email,            
+            'flight_date': flight_date}                    
             
             content = '''
             {} 
@@ -1515,27 +1360,12 @@ def confirm_booking_detail(request):
             https://easygoshuttle.com.au/sending_email_second/ \n
             ===============================
             Contact: {}
-            Email: {}  
-            Flight no: {}      
-            Flight time: {}
-            Pickup time: {}
-            Direction: {}
-            Street: {}
-            Suburb: {}
-            Passenger: {}
-            Baggage: {}
-            Messag
-            {}    
-            Price: {}
-            Return flight no: {}        
+            Email: {}       
             ===============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['flight_number'], data['flight_time'], 
-                        data['pickup_time'], data['direction'], data['street'], data['suburb'], data['no_of_passenger'], 
-                        data['no_of_baggage'], data['message'], data['price'] , data['return_flight_number'])
-            send_mail(data['flight_date'], content,
-                      '', [RECIPIENT_EMAIL])  
+            ''' .format(data['name'], data['contact'], data['email'])
+            send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])  
             
         sam_driver = Driver.objects.get(driver_name="Sam")    
             
@@ -1546,13 +1376,8 @@ def confirm_booking_detail(request):
                  return_pickup_time=return_pickup_time, message=message, notice=notice, price=price, paid=paid, is_confirmed=is_confirmed, driver=sam_driver)
         
         p.save()    
-
-               
-        # send_email_delayed.apply_async(args=[name, contact, email, flight_date, flight_number, flight_time,
-        #                                       pickup_time, direction, suburb, street, no_of_passenger, no_of_baggage,
-        #                                       message, price, is_confirmed], countdown=30)
                 
-        return render(request, 'basecamp/confirm_booking_detail.html',
+        return render(request, 'basecamp/confirmation_detail.html',
                         {'name' : name, 'email': email, })
         
     else:
@@ -1587,7 +1412,7 @@ def sending_email_first_detail(request):
         email.attach_alternative(html_content, "text/html")
         email.send()
 
-        return render(request, 'basecamp/sending_email_first_detail.html',
+        return render(request, 'basecamp/confirmation_detail.html',
                         {'name' : name, 'email': email}) 
     
     else:
@@ -1625,7 +1450,7 @@ def sending_email_second_detail(request):
         email.attach_alternative(html_content, "text/html")
         email.send()
         
-        return render(request, 'basecamp/sending_email_second_detail.html',
+        return render(request, 'basecamp/confirmation_detail.html',
                         {'name' : name, 'email': email, }) 
     
     else:
@@ -1667,7 +1492,7 @@ def save_data_only_detail(request):
         
         p.save()                   
         
-        return render(request, 'basecamp/save_data_only_detail.html',{'name' : name, })
+        return render(request, 'basecamp/confirmation_detail.html',{'name' : name, })
     
     else:
         return render(request, 'beasecamp/save_data_only.html', {})  
@@ -1752,8 +1577,7 @@ def return_trip_inquiry_detail(request):
         
         p.save()
 
-        rendering = render(request, 'basecamp/retrieve_post_detail.html',
-                        {'name' : name, 'email': email, })        
+        rendering = render(request, 'basecamp/inquiry_done.html')        
 
         html_content = render_to_string("basecamp/html_email-inquiry-response.html",
                                     {'name': name, 'contact': contact, 'email': email,
@@ -1811,19 +1635,7 @@ def return_trip_detail(request):
             'name': name,
             'contact': contact,
             'email': email,
-            'flight_date': flight_date,
-            'flight_number': flight_number,
-            'flight_time': flight_time,
-            'pickup_time': pickup_time,
-            'direction': direction,
-            'suburb': suburb,
-            'street': street,
-            'no_of_passenger': no_of_passenger,
-            'no_of_baggage': no_of_baggage,
-            'message': message,
-            'price': price,
-            'paid': paid,
-            }       
+            'flight_date': flight_date}       
             
         content = '''
             {} 
@@ -1834,25 +1646,11 @@ def return_trip_detail(request):
             ===============================
             Contact: {}
             Email: {}  
-            Flight no: {}      
-            Flight time: {}
-            Pickup time: {}
-            Direction: {}
-            Street: {}
-            Suburb: {}
-            Passenger: {}
-            Baggage: {}
-            Messag
-            {} \n
-            Price: {}           
             ===============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['flight_number'],
-                        data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
-                        data['no_of_passenger'], data['no_of_baggage'], data['message'], data['price'])
-        send_mail(data['flight_date'], content,
-                      '', [RECIPIENT_EMAIL])     
+            ''' .format(data['name'], data['contact'], data['email'])
+        send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])     
         
         sam_driver = Driver.objects.get(driver_name="Sam")  
                     
@@ -1862,13 +1660,8 @@ def return_trip_detail(request):
                  paid=paid, driver=sam_driver)
         
         p.save()
-        
-        # send_email_delayed.apply_async(args=[name, contact, email, flight_date, flight_number, flight_time,
-        #                                   pickup_time, direction, suburb, street, no_of_passenger, no_of_baggage,
-        #                                   message, price, is_confirmed], countdown=300)
 
-        rendering = render(request, 'basecamp/return_trip_detail.html',
-                        {'name' : name, 'email': email, })    
+        rendering = render(request, 'basecamp/inquiry_done.html')    
         
         return rendering
     
@@ -1928,7 +1721,7 @@ def invoice_detail(request):
             email.attach_alternative(html_content, "text/html")
             email.send()
 
-        return render(request, 'basecamp/invoice_details.html', {})  
+        return render(request, 'basecamp/inquiry_done.html')  
     
     else:
         return render(request, 'beasecamp/invoice.html', {})
@@ -1966,18 +1759,7 @@ def flight_date_detail(request):
             'name': name,
             'contact': contact,
             'email': email,
-            'flight_date': flight_date,
-            'flight_number': flight_number,
-            'flight_time': flight_time,
-            'pickup_time': pickup_time,
-            'direction': direction,
-            'suburb': suburb,
-            'street': street,
-            'no_of_passenger': no_of_passenger,
-            'no_of_baggage': no_of_baggage,
-            'message': message,
-            
-            }       
+            'flight_date': flight_date}       
             
             content = '''
             {} 
@@ -1986,27 +1768,14 @@ def flight_date_detail(request):
             https://easygoshuttle.com.au \n  
             ===============================
             Contact: {}
-            Email: {}  
-            Flight no: {}      
-            Flight time: {}
-            Pickup time: {}
-            Direction: {}
-            Street: {}
-            Suburb: {}
-            Passenger: {}
-            Baggage: {}
-            Messag
-            {}            
+            Email: {}              
             ===============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['flight_number'],
-                        data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
-                        data['no_of_passenger'], data['no_of_baggage'], data['message'])
-            send_mail(data['flight_date'], content,
-                      '', [RECIPIENT_EMAIL])       
+            ''' .format(data['name'], data['contact'], data['email'])
+            send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])       
             
-            
+    
         p = Inquiry (name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
                  no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction,
@@ -2016,11 +1785,10 @@ def flight_date_detail(request):
         p.save()        
         
                 
-        return render(request, 'basecamp/inquiry_details1.html',
-                        {'name' : name, 'email': email, })
+        return render(request, 'basecamp/inquiry_done.html')
 
     else:
-        return render(request, 'basecamp/inquiry1.html', {})
+        return render(request, 'basecamp/date_error.html', {})
     
 
 def sending_reminder_email(user):    
@@ -2057,8 +1825,7 @@ def reminder_detail(request):
             sending_reminder_email(user)
             
 
-            return render(request, 'basecamp/reminder_detail.html',
-                      {'name': user.name, 'email': user.email})
+            return render(request, 'basecamp/inquiry_done.html')
 
     else:
         return render(request, 'basecamp/reminder.html', {}) 
@@ -2126,7 +1893,7 @@ def pickup_adjustment_detail(request):
             email.send()
 
 
-        return render(request, 'basecamp/pickup_adjustment_detail.html', {})  
+        return render(request, 'basecamp/inquiry_done.html')  
     
     else:
         return render(request, 'beasecamp/pickup_adjustment.html', {})
