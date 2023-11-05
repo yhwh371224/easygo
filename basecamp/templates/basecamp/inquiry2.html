@@ -44,6 +44,11 @@
                   <div class="invalid-feedback">Please enter a valid email address!</div>
                 </div>
                 <div class="mb-3 pb-1">
+                  <label class="form-label" >Choose today date</label>
+                   <input class="form-control date-picker rounded" required name="flight_date" type="text" placeholder="Choose today date" data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;m/d/Y&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;}" >
+                  <div class="invalid-feedback">Please enter today date!</div>
+                </div>
+                <div class="mb-3 pb-1">
                   <label class="form-label" >Message</label>
                   <textarea class="form-control" name="message" id="cont-message" rows="5" placeholder="Write your message here"></textarea>
                   <div class="invalid-feedback">Please write a message!</div>
@@ -51,12 +56,7 @@
                 <br>
                 <div class="g-recaptcha" data-sitekey="{{ recaptcha_site_key }}"></div>	
                 <div id="errorMessage" style="display:none; color: red; margin-top: 20px;" ></div>
-                <br>
-                <div><small>This form is protected by reCAPTCHA Enterprise and the Google
-					<a href="https://policies.google.com/privacy">Privacy Policy</a> and
-					<a href="https://policies.google.com/terms">Terms of Service</a> apply.</small>
-				</div>
-				<br>
+                <br>        
                 <div class="text-center pt-2">
                   <button class="btn btn-primary" type="submit" id="submitButton">Submit</button>
                 </div>
