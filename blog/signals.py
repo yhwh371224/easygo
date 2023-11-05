@@ -113,7 +113,10 @@ def notify_user_inquiry_point(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=Payment)
 def notify_user_payment(sender, instance, created, **kwargs):      
-    post_name = Post.objects.filter(Q(name__iregex=r'^%s$' % re.escape(instance.item_name)) | Q(email=instance.payer_email)).first()
+    post_name = Post.objects.filter(
+        Q(name__iregex=r'^%s$' % re.escape(instance.item_name)) | 
+        Q(email__iexact=instance.payer_email)
+    ).first()
     
     if post_name: 
         post_name.paid = instance.gross_amount
