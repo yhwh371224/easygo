@@ -376,6 +376,13 @@ def inquiry_details(request):
             'email': email,
             'flight_date': flight_date
             }
+        
+        today = date.today()
+        if flight_date <= str(today):
+            if request.is_ajax():
+                return JsonResponse({'success': True, 'message': 'Past/Today flight dates are not allowed.'})
+            else:
+                return render(request, 'basecamp/date_error.html')  
      
         inquiry_email = Inquiry.objects.only('email').values_list('email', flat=True)
         post_email = Post.objects.only('email').values_list('email', flat=True)  
@@ -454,15 +461,8 @@ def inquiry_details(request):
                  return_flight_date=return_flight_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
                  return_pickup_time=return_pickup_time ,message=message)
         
-        p.save()       
+        p.save() 
         
-        
-        today = date.today()
-        if flight_date <= str(today):
-            if request.is_ajax():
-                return JsonResponse({'success': True, 'message': 'Past/Today flight dates are not allowed.'})
-            else:
-                return render(request, 'basecamp/date_error.html')  
 
         # If everything is fine, respond accordingly
         if is_ajax(request):
@@ -628,6 +628,13 @@ def booking_form_detail(request):
             'contact': contact,
             'email': email,
             'flight_date': flight_date}
+        
+        today = date.today()
+        if flight_date <= str(today):
+            if request.is_ajax():
+                return JsonResponse({'success': True, 'message': 'Past/Today flight dates are not allowed.'})
+            else:
+                return render(request, 'basecamp/date_error.html')
      
         inquiry_email = Inquiry.objects.only('email').values_list('email', flat=True)
         post_email = Post.objects.only('email').values_list('email', flat=True)  
@@ -708,13 +715,6 @@ def booking_form_detail(request):
         p.save()
 
 
-        today = date.today()
-        if flight_date <= str(today):
-            if request.is_ajax():
-                return JsonResponse({'success': True, 'message': 'Past/Today flight dates are not allowed.'})
-            else:
-                return render(request, 'basecamp/date_error.html')  
-
         # If everything is fine, respond accordingly
         if is_ajax(request):
             # Return a JSON response for AJAX requests
@@ -733,7 +733,7 @@ def inquiry_details2(request):
     if request.method == "POST":
         name = request.POST.get('name')
         contact = request.POST.get('contact')
-        email = request.POST.get('email')        
+        email = request.POST.get('email')       
         message = request.POST.get('message')     
         
         # ReCAPTCHA validation
@@ -743,7 +743,10 @@ def inquiry_details2(request):
             'response': recaptcha_response
         }
         r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
-        result = r.json()
+        result = r.json()   
+
+        if not result.get('success'):
+            return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'})     
 
         data = {
             'name': name,
@@ -759,13 +762,10 @@ def inquiry_details2(request):
                 contact: {}        
                 email: {}
                 message: {}              
-                '''.format(data['name'], data['contact'],
+                '''.format(data['name'], data['contact'], 
                            data['email'], data['message'])
                 
-        send_mail(data['name'], message, '', [RECIPIENT_EMAIL])   
-
-        if not result.get('success'):
-            return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'})
+        send_mail(data['name'], message, '', [RECIPIENT_EMAIL])         
         
        # If everything is fine, respond accordingly
         if is_ajax(request):
@@ -1350,7 +1350,8 @@ def confirm_booking_detail(request):
             'name': name,
             'contact': contact,
             'email': email,            
-            'flight_date': flight_date}                    
+            'flight_date': flight_date,
+            'return_flight_number': return_flight_number}                    
             
             content = '''
             {} 
@@ -1361,10 +1362,11 @@ def confirm_booking_detail(request):
             ===============================
             Contact: {}
             Email: {}       
+            Return flight number: {}
             ===============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'])
+            ''' .format(data['name'], data['contact'], data['email'], data['return_flight_number'])
             send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])  
             
         sam_driver = Driver.objects.get(driver_name="Sam")    
@@ -1451,7 +1453,7 @@ def sending_email_second_detail(request):
         email.send()
         
         return render(request, 'basecamp/confirmation_detail.html',
-                        {'name' : name, 'email': email, }) 
+                        {'name' : name }) 
     
     else:
         return render(request, 'beasecamp/sending_email_second.html', {})   

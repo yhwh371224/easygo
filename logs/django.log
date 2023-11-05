@@ -1,181 +1,90 @@
-WARNING 2023-11-04 03:31:38,545 log Not Found: /.env.prod
-WARNING 2023-11-04 04:17:45,124 log Not Found: //wp-includes/wlwmanifest.xml
-WARNING 2023-11-04 04:17:45,220 log Not Found: //xmlrpc.php
-WARNING 2023-11-04 04:17:45,410 log Not Found: //blog/wp-includes/wlwmanifest.xml
-WARNING 2023-11-04 04:17:45,506 log Not Found: //web/wp-includes/wlwmanifest.xml
-WARNING 2023-11-04 04:17:45,602 log Not Found: //wordpress/wp-includes/wlwmanifest.xml
-WARNING 2023-11-04 04:17:45,700 log Not Found: //website/wp-includes/wlwmanifest.xml
-WARNING 2023-11-04 04:17:45,796 log Not Found: //wp/wp-includes/wlwmanifest.xml
-WARNING 2023-11-04 04:17:45,892 log Not Found: //news/wp-includes/wlwmanifest.xml
-WARNING 2023-11-04 04:17:45,988 log Not Found: //wp1/wp-includes/wlwmanifest.xml
-WARNING 2023-11-04 04:17:46,084 log Not Found: //test/wp-includes/wlwmanifest.xml
-WARNING 2023-11-04 04:17:46,179 log Not Found: //wp2/wp-includes/wlwmanifest.xml
-WARNING 2023-11-04 04:17:46,276 log Not Found: //site/wp-includes/wlwmanifest.xml
-WARNING 2023-11-04 04:17:46,371 log Not Found: //cms/wp-includes/wlwmanifest.xml
-WARNING 2023-11-04 04:17:46,467 log Not Found: //sito/wp-includes/wlwmanifest.xml
-WARNING 2023-11-04 04:22:52,325 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-11-04 04:24:22,635 log Not Found: /robots.txt
-WARNING 2023-11-04 04:50:00,671 log Not Found: /.env
-WARNING 2023-11-04 04:50:02,027 log Forbidden (Referer checking failed - no Referer.): /
-WARNING 2023-11-04 04:51:16,764 log Not Found: /robots.txt
-WARNING 2023-11-04 04:59:51,008 log Not Found: /dns-query
-WARNING 2023-11-04 05:10:32,963 log Not Found: /contact/
-ERROR 2023-11-04 05:10:41,284 log Internal Server Error: /inquiry_details2/
+WARNING 2023-11-05 04:00:56,849 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-11-05 04:24:48,080 log Not Found: /easygo-cruise-terminal/
+WARNING 2023-11-05 04:40:30,397 log Not Found: /.env
+WARNING 2023-11-05 04:40:31,763 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-11-05 05:14:36,582 log Not Found: /robots.txt
+WARNING 2023-11-05 05:30:01,698 log Not Found: /robots.txt
+WARNING 2023-11-05 05:30:02,815 log Not Found: /sitemap.xml
+WARNING 2023-11-05 05:30:03,928 log Not Found: /.well-known/security.txt
+WARNING 2023-11-05 05:35:43,869 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-11-05 05:46:47,517 log Not Found: /robots.txt
+WARNING 2023-11-05 05:46:56,730 log Not Found: /shop/da/kategori/
+WARNING 2023-11-05 06:09:43,836 log Not Found: /airport-transfers-berowra
+WARNING 2023-11-05 06:15:21,212 log Not Found: /wp-login.php
+WARNING 2023-11-05 06:17:43,297 log Not Found: /robots.txt
+WARNING 2023-11-05 06:20:25,187 log Not Found: /p2p.html/
+WARNING 2023-11-05 06:24:26,540 log Not Found: /post
+WARNING 2023-11-05 06:24:26,582 log Not Found: /text/html
+WARNING 2023-11-05 06:24:26,621 log Not Found: /post-json
+WARNING 2023-11-05 06:24:26,878 log Not Found: /text/css
+WARNING 2023-11-05 06:24:27,032 log Not Found: /post
+WARNING 2023-11-05 06:24:27,179 log Not Found: /post-json
+WARNING 2023-11-05 06:24:27,232 log Not Found: /application/json
+WARNING 2023-11-05 06:24:27,656 log Not Found: /date_error/assets/json/animation-404-dark.json
+WARNING 2023-11-05 06:24:27,662 log Not Found: /date_error/assets/json/animation-404-light.json
+WARNING 2023-11-05 06:44:22,203 log Not Found: /.env
+WARNING 2023-11-05 06:44:23,645 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-11-05 06:53:35,680 log Not Found: /.env
+WARNING 2023-11-05 06:53:36,732 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-11-05 06:58:40,102 log Not Found: /robots.txt
+WARNING 2023-11-05 07:10:11,657 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-11-05 07:12:33,766 log Not Found: /easygo-shuttle-chartered-bus/
+WARNING 2023-11-05 07:12:56,044 log Not Found: /robots.txt
+WARNING 2023-11-05 07:26:16,670 log Not Found: /shop/pl/product/szalik-moncler-i-czapki-z-czystej-bawelny-w-kolorze-czarnym/
+WARNING 2023-11-05 07:33:35,926 log Not Found: /shop/de/product-category/moncler-jacken-manner/
+WARNING 2023-11-05 07:34:26,092 log Not Found: /robots.txt
+WARNING 2023-11-05 07:43:55,834 log Not Found: /.env
+WARNING 2023-11-05 07:43:57,056 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-11-05 08:06:35,806 log Not Found: /robots.txt
+WARNING 2023-11-05 08:46:49,619 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-11-05 08:48:15,257 log Not Found: /owa/auth/logon.aspx
+ERROR 2023-11-05 09:39:56,685 log Internal Server Error: /inquiry_details2/
 Traceback (most recent call last):
   File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
     response = get_response(request)
   File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
     response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/home/ubuntu/github/easygo/basecamp/views.py", line 767, in inquiry_details2
-    send_mail(data['name'], message, '', [RECIPIENT_EMAIL])
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/mail/__init__.py", line 87, in send_mail
-    return mail.send()
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/mail/message.py", line 298, in send
-    return self.get_connection(fail_silently).send_messages([self])
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/mail/backends/smtp.py", line 131, in send_messages
-    sent = self._send(message)
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/mail/backends/smtp.py", line 147, in _send
-    message = email_message.message()
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/mail/message.py", line 262, in message
-    msg["Subject"] = self.subject
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/mail/message.py", line 163, in __setitem__
-    name, val = forbid_multi_line_headers(name, val, self.encoding)
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/mail/message.py", line 60, in forbid_multi_line_headers
-    raise BadHeaderError(
-django.core.mail.message.BadHeaderError: Header values can't contain newlines (got "https://twwcji.us21.list-manage.com/track/click?u=9b882a29c7ab3b3f6381abd18&id=3d715034bb&e=4fba4902f9?OKEYZALIV\r\n <<< HEY HEY BABY!; ) THE GAININGS IT'S 899EU A EVENING MAKE IT -\r\n" for header 'Subject')
-WARNING 2023-11-04 05:10:42,541 log Not Found: /inquiry2/contact/
-WARNING 2023-11-04 05:10:44,200 log Not Found: /contact/
-WARNING 2023-11-04 05:12:48,938 log Not Found: //wp-includes/wlwmanifest.xml
-WARNING 2023-11-04 05:12:49,128 log Not Found: //xmlrpc.php
-WARNING 2023-11-04 05:12:49,508 log Not Found: //blog/wp-includes/wlwmanifest.xml
-WARNING 2023-11-04 05:12:49,708 log Not Found: //web/wp-includes/wlwmanifest.xml
-WARNING 2023-11-04 05:12:49,898 log Not Found: //wordpress/wp-includes/wlwmanifest.xml
-WARNING 2023-11-04 05:12:50,089 log Not Found: //website/wp-includes/wlwmanifest.xml
-WARNING 2023-11-04 05:12:50,280 log Not Found: //wp/wp-includes/wlwmanifest.xml
-WARNING 2023-11-04 05:12:50,483 log Not Found: //news/wp-includes/wlwmanifest.xml
-WARNING 2023-11-04 05:12:50,674 log Not Found: //wp1/wp-includes/wlwmanifest.xml
-WARNING 2023-11-04 05:12:50,865 log Not Found: //test/wp-includes/wlwmanifest.xml
-WARNING 2023-11-04 05:12:51,066 log Not Found: //wp2/wp-includes/wlwmanifest.xml
-WARNING 2023-11-04 05:12:51,256 log Not Found: //site/wp-includes/wlwmanifest.xml
-WARNING 2023-11-04 05:12:51,447 log Not Found: //cms/wp-includes/wlwmanifest.xml
-WARNING 2023-11-04 05:12:51,638 log Not Found: //sito/wp-includes/wlwmanifest.xml
-WARNING 2023-11-04 05:26:23,833 log Not Found: /robots.txt
-WARNING 2023-11-04 05:41:39,325 log Not Found: /wp-includes/widgets/index.php
-WARNING 2023-11-04 05:49:36,716 log Not Found: /robots.txt
-WARNING 2023-11-04 05:49:48,132 log Not Found: /shop/product/moncler-jackets-men-marque-golden-orange/
-WARNING 2023-11-04 05:53:57,841 log Not Found: /dns-query
-WARNING 2023-11-04 05:58:04,700 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-11-04 06:19:09,006 log Not Found: /.env
-WARNING 2023-11-04 06:19:14,758 log Not Found: /api/.env
-WARNING 2023-11-04 06:19:20,658 log Not Found: /laravel/.env
-WARNING 2023-11-04 06:19:26,255 log Not Found: /test/.env
-WARNING 2023-11-04 06:19:36,060 log Not Found: /vendor/.env
-WARNING 2023-11-04 06:19:40,857 log Not Found: /sites/.env
-WARNING 2023-11-04 06:19:44,252 log Not Found: /blog/.env
-WARNING 2023-11-04 06:19:48,072 log Not Found: /system/.env
-WARNING 2023-11-04 06:19:52,481 log Not Found: /public/.env
-WARNING 2023-11-04 06:19:57,225 log Not Found: /shop/.env
-WARNING 2023-11-04 06:20:02,118 log Not Found: /dev/.env
-WARNING 2023-11-04 06:20:06,951 log Not Found: /application/.env
-WARNING 2023-11-04 06:20:12,252 log Not Found: /resources/.env
-WARNING 2023-11-04 06:20:15,279 log Not Found: /config/.env
-WARNING 2023-11-04 06:20:18,270 log Not Found: /app/.env
-WARNING 2023-11-04 06:20:21,879 log Not Found: /core/.env
-WARNING 2023-11-04 06:21:50,667 log Forbidden (CSRF cookie not set.): /inquiry_details/
-WARNING 2023-11-04 06:31:08,170 log Not Found: /wp-login.php
-WARNING 2023-11-04 06:31:08,478 log Not Found: /xmlrpc.php
-WARNING 2023-11-04 06:31:09,379 log Not Found: /wp-login.php
-WARNING 2023-11-04 06:31:09,981 log Not Found: /xmlrpc.php
-WARNING 2023-11-04 06:32:25,910 log Not Found: /robots.txt
-WARNING 2023-11-04 07:02:25,258 log Not Found: /sms: 61406883355
-WARNING 2023-11-04 07:02:25,682 log Not Found: /sms: 61406883355
-WARNING 2023-11-04 07:21:01,803 log Not Found: /.env
-WARNING 2023-11-04 07:21:03,187 log Forbidden (Referer checking failed - no Referer.): /
-WARNING 2023-11-04 07:23:18,546 log Not Found: /robots.txt
-WARNING 2023-11-04 07:33:23,505 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-11-04 07:41:40,383 log Not Found: /booking_form_detail/
-WARNING 2023-11-04 07:46:04,972 log Not Found: /booking_form_detail/
-WARNING 2023-11-04 07:47:26,598 log Not Found: /booking_form_detail/
-WARNING 2023-11-04 07:49:06,309 log Not Found: /booking_form_detail/
-WARNING 2023-11-04 07:49:40,906 log Not Found: /inquiry_details/
-WARNING 2023-11-04 07:50:39,781 log Not Found: /booking_form_detail/
-WARNING 2023-11-04 07:52:50,860 log Not Found: /flight_date_detail/
-WARNING 2023-11-04 07:54:58,108 log Not Found: /booking_form_detail/
-WARNING 2023-11-04 07:56:08,146 log Not Found: /booking_form_detail/
-WARNING 2023-11-04 08:05:33,461 log Not Found: /booking_form_detail/
-WARNING 2023-11-04 08:08:17,401 log Not Found: /booking_form_detail/
-WARNING 2023-11-04 08:09:43,657 log Not Found: /booking_form_detail/
-WARNING 2023-11-04 08:12:56,704 log Not Found: /shop/nl/product/moncler-jassen-kinderen-fragon-rood/
-WARNING 2023-11-04 08:44:35,382 log Not Found: /robots.txt
-WARNING 2023-11-04 08:44:36,270 log Not Found: /sitemap.xml
-WARNING 2023-11-04 08:44:42,006 log Not Found: /.well-known/security.txt
-WARNING 2023-11-04 08:46:53,144 log Not Found: /wp-login.php
-WARNING 2023-11-04 09:11:39,624 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-11-04 09:47:00,997 log Not Found: /.well-known/traffic-advice
-WARNING 2023-11-04 09:49:29,762 log Not Found: /aaa9
-WARNING 2023-11-04 09:49:31,327 log Not Found: /aab9
-WARNING 2023-11-04 09:52:00,223 log Not Found: /shop/product/moncler-jackets-kids-lizener-grey/
-WARNING 2023-11-04 10:03:14,956 log Not Found: /.git/HEAD
-WARNING 2023-11-04 10:26:09,690 log Not Found: /robots.txt
-WARNING 2023-11-04 10:30:13,076 log Not Found: /.env
-WARNING 2023-11-04 10:30:14,347 log Forbidden (Referer checking failed - no Referer.): /
-WARNING 2023-11-04 10:31:40,970 log Not Found: /text/css
-WARNING 2023-11-04 10:31:41,076 log Not Found: /text/html
-WARNING 2023-11-04 10:31:41,217 log Not Found: /post
-WARNING 2023-11-04 10:31:41,220 log Not Found: /post-json
-WARNING 2023-11-04 10:34:34,223 log Not Found: /shop/ko/product/스카프-모카신-클래식-클래식-여성용-다운-벨트-핑크/
-WARNING 2023-11-04 10:46:54,664 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-11-04 10:53:06,565 log Not Found: /reminder_detail/
-WARNING 2023-11-04 10:53:19,795 log Not Found: /reminder_detail/
-WARNING 2023-11-04 11:12:32,152 log Not Found: /robots.txt
-WARNING 2023-11-04 11:17:12,296 log Not Found: /robots.txt
-WARNING 2023-11-04 11:17:14,555 log Not Found: /sitemap.xml
-WARNING 2023-11-04 11:17:17,442 log Not Found: /.well-known/security.txt
-WARNING 2023-11-04 11:17:33,882 log Not Found: /robots.txt
-ERROR 2023-11-04 11:17:38,762 log Internal Server Error: /blog/create/
-Traceback (most recent call last):
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
-    response = get_response(request)
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 220, in _get_response
-    response = response.render()
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/response.py", line 114, in render
-    self.content = self.rendered_content
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/response.py", line 90, in rendered_content
-    template = self.resolve_template(self.template_name)
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/response.py", line 72, in resolve_template
-    return select_template(template, using=self.using)
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/template/loader.py", line 47, in select_template
-    raise TemplateDoesNotExist(", ".join(template_name_list), chain=chain)
-django.template.exceptions.TemplateDoesNotExist: blog/post_form.html
-WARNING 2023-11-04 11:29:13,442 log Not Found: /Telerik.Web.UI.WebResource.axd
-WARNING 2023-11-04 11:29:15,330 log Not Found: /Providers/HtmlEditorProviders/Telerik/Telerik.Web.UI.DialogHandler.aspx
-WARNING 2023-11-04 11:29:17,331 log Not Found: /common/admin/Jobs2/Telerik.Web.UI.DialogHandler.aspx
-WARNING 2023-11-04 11:29:19,355 log Not Found: /Telerik.Web.UI.DialogHandler.aspx
-WARNING 2023-11-04 11:29:21,239 log Not Found: /App_Master/Telerik.Web.UI.DialogHandler.aspx
-WARNING 2023-11-04 11:29:23,568 log Not Found: /DesktopModules/Admin/RadEditorProvider/DialogHandler.aspx
-WARNING 2023-11-04 11:29:25,619 log Not Found: /DesktopModules/TelerikWebUI/RadEditorProvider/Telerik.Web.UI.DialogHandler.aspx
-WARNING 2023-11-04 11:51:34,287 log Not Found: /.well-known/traffic-advice
-WARNING 2023-11-04 11:51:50,324 log Not Found: /pickup_adjustment_detail/
-WARNING 2023-11-04 11:56:27,550 log Not Found: /plesk-stat/
-WARNING 2023-11-04 12:00:01,871 log Not Found: /invoice_detail/
-WARNING 2023-11-04 12:05:38,460 log Not Found: /sending_email_first_detail/
-WARNING 2023-11-04 12:20:28,960 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-11-04 12:28:34,732 log Not Found: /robots.txt
-ERROR 2023-11-04 12:34:05,567 log Internal Server Error: /booking_form_detail/
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 737, in inquiry_details2
+    date = request.Post.get('date')
+AttributeError: 'WSGIRequest' object has no attribute 'Post'
+ERROR 2023-11-05 09:41:25,361 log Internal Server Error: /inquiry_details2/
 Traceback (most recent call last):
   File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
     response = get_response(request)
   File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
     response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/home/ubuntu/github/easygo/basecamp/views.py", line 715, in booking_form_detail
-    if request.is_ajax():
-AttributeError: 'WSGIRequest' object has no attribute 'is_ajax'
-WARNING 2023-11-04 12:37:45,250 log Not Found: /webui/
-WARNING 2023-11-04 12:42:11,329 log Not Found: /robots.txt
-WARNING 2023-11-04 12:46:20,320 log Not Found: /vpn/index.html
-WARNING 2023-11-04 12:47:34,938 log Not Found: /geoserver/web/
-WARNING 2023-11-04 12:48:34,452 log Not Found: /.git/config
-ERROR 2023-11-04 13:21:09,436 log Internal Server Error: /booking_form_detail/
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 737, in inquiry_details2
+    date = request.Post.get('date')
+AttributeError: 'WSGIRequest' object has no attribute 'Post'
+WARNING 2023-11-05 09:43:17,618 log Not Found: /robots.txt
+ERROR 2023-11-05 09:43:37,516 log Internal Server Error: /inquiry_details2/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 737, in inquiry_details2
+    date = request.Post.get('date')
+AttributeError: 'WSGIRequest' object has no attribute 'Post'
+ERROR 2023-11-05 09:50:03,988 log Internal Server Error: /inquiry_details2/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 737, in inquiry_details2
+    user_date = request.Post.get('user_date')
+AttributeError: 'WSGIRequest' object has no attribute 'Post'
+ERROR 2023-11-05 09:52:18,480 log Internal Server Error: /inquiry_details2/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 737, in inquiry_details2
+    user_date = request.Post.get('user_date')
+AttributeError: 'WSGIRequest' object has no attribute 'Post'
+ERROR 2023-11-05 09:52:46,509 log Internal Server Error: /booking_form_detail/
 Traceback (most recent call last):
   File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
     response = get_response(request)
@@ -184,12 +93,16 @@ Traceback (most recent call last):
   File "/home/ubuntu/github/easygo/basecamp/views.py", line 713, in booking_form_detail
     if request.is_ajax():
 AttributeError: 'WSGIRequest' object has no attribute 'is_ajax'
-ERROR 2023-11-04 13:21:43,265 log Internal Server Error: /p2p_single_detail/
+WARNING 2023-11-05 10:11:17,590 log Not Found: /wp-content/themes/include.php
+WARNING 2023-11-05 10:20:09,917 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-11-05 10:39:46,653 log Not Found: /robots.txt
+ERROR 2023-11-05 10:48:47,179 log Internal Server Error: /inquiry_details/
 Traceback (most recent call last):
   File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
     response = get_response(request)
   File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
     response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/home/ubuntu/github/easygo/basecamp/views.py", line 897, in p2p_single_detail
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 382, in inquiry_details
     if request.is_ajax():
 AttributeError: 'WSGIRequest' object has no attribute 'is_ajax'
+ERROR 2023-11-05 10:57:41,112 log Internal Server Error: /paypal_ipn/
