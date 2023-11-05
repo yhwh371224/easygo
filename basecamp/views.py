@@ -733,7 +733,8 @@ def inquiry_details2(request):
     if request.method == "POST":
         name = request.POST.get('name')
         contact = request.POST.get('contact')
-        email = request.POST.get('email')       
+        email = request.POST.get('email') 
+        flight_date = request.POST.get('flight_date')      
         message = request.POST.get('message')     
         
         # ReCAPTCHA validation
@@ -752,17 +753,25 @@ def inquiry_details2(request):
             'name': name,
             'contact': contact,
             'email': email,
+            'flight_date': flight_date,
             'message': message}
+        
+        today = date.today()
+        if flight_date != str(today):
+            if request.is_ajax():
+                return JsonResponse({'success': True, 'message': 'Past/Today flight dates are not allowed.'})
+            else:
+                return render(request, 'basecamp/date_error.html')
                      
         message = '''
-                =====================
                 Contact Form
                 =====================
                 name: {}
                 contact: {}        
                 email: {}
+                flight date: {}
                 message: {}              
-                '''.format(data['name'], data['contact'], 
+                '''.format(data['name'], data['contact'], data['flight_date'],
                            data['email'], data['message'])
                 
         send_mail(data['name'], message, '', [RECIPIENT_EMAIL])         
@@ -814,6 +823,13 @@ def p2p_single_detail(request):
             'contact': contact,
             'email': email,
             'flight_date': flight_date}
+        
+        today = date.today()
+        if flight_date <= str(today):
+            if request.is_ajax():
+                return JsonResponse({'success': True, 'message': 'Past/Today flight dates are not allowed.'})
+            else:
+                return render(request, 'basecamp/date_error.html')
      
         inquiry_email = Inquiry.objects.only('email').values_list('email', flat=True)
         post_email = Post.objects.only('email').values_list('email', flat=True)  
@@ -892,8 +908,6 @@ def p2p_single_detail(request):
         
         p.save() 
         
-        if not result.get('success'):
-            return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'})
         
        # If everything is fine, respond accordingly
         if is_ajax(request):

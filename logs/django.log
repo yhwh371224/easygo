@@ -106,3 +106,93 @@ Traceback (most recent call last):
     if request.is_ajax():
 AttributeError: 'WSGIRequest' object has no attribute 'is_ajax'
 ERROR 2023-11-05 10:57:41,112 log Internal Server Error: /paypal_ipn/
+WARNING 2023-11-05 11:46:22,145 log Not Found: /.env
+WARNING 2023-11-05 11:46:24,187 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-11-05 11:51:42,171 log Not Found: /.git/config
+WARNING 2023-11-05 11:53:29,132 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-11-05 12:08:43,081 log Not Found: /robots.txt
+WARNING 2023-11-05 12:12:04,398 log Not Found: /shop/es/product/moncler-hermine-abajo-abrigos-para-mujer-a-prueba-de-viento-rojo/
+WARNING 2023-11-05 12:39:27,031 log Not Found: /robots.txt
+WARNING 2023-11-05 12:43:31,417 log Not Found: /.env
+WARNING 2023-11-05 12:43:32,525 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-11-05 13:02:10,084 log Not Found: /apple-touch-icon-120x120-precomposed.png
+WARNING 2023-11-05 13:02:10,139 log Not Found: /apple-touch-icon-120x120.png
+WARNING 2023-11-05 13:13:36,030 log Not Found: /robots.txt
+WARNING 2023-11-05 13:22:28,064 log Not Found: //.env
+WARNING 2023-11-05 13:22:53,075 log Not Found: /apple-touch-icon-120x120-precomposed.png
+WARNING 2023-11-05 13:22:53,093 log Not Found: /apple-touch-icon-120x120.png
+WARNING 2023-11-05 13:24:04,073 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-11-05 13:25:40,672 log Not Found: //vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php
+WARNING 2023-11-05 13:26:47,708 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-11-05 13:52:05,518 log Not Found: /robots.txt
+WARNING 2023-11-05 13:52:10,339 log Not Found: /悉尼机场巴士/
+WARNING 2023-11-05 13:52:13,120 log Not Found: /悉尼机场巴士/
+WARNING 2023-11-05 13:52:18,106 log Not Found: /悉尼机场接送/
+WARNING 2023-11-05 13:52:20,887 log Not Found: /悉尼机场接送/
+WARNING 2023-11-05 13:52:25,676 log Not Found: /悉尼机场接送服务/
+WARNING 2023-11-05 13:52:28,424 log Not Found: /悉尼机场接送服务/
+WARNING 2023-11-05 13:52:33,194 log Not Found: /悉尼机场接送服务的最佳拍档/
+WARNING 2023-11-05 13:52:35,972 log Not Found: /悉尼机场接送服务的最佳拍档/
+WARNING 2023-11-05 13:52:40,896 log Not Found: /机场接送-悉尼/
+WARNING 2023-11-05 13:52:43,683 log Not Found: /机场接送-悉尼/
+WARNING 2023-11-05 13:53:34,607 log Forbidden (CSRF cookie not set.): /price_detail/
+WARNING 2023-11-05 14:08:29,060 log Not Found: /robots.txt
+WARNING 2023-11-05 14:17:19,286 log Not Found: /nginx_status
+WARNING 2023-11-05 14:17:20,698 log Not Found: /nginx_stub
+WARNING 2023-11-05 14:17:22,150 log Not Found: /basic_status
+WARNING 2023-11-05 14:17:23,624 log Not Found: /status
+WARNING 2023-11-05 14:17:25,066 log Not Found: /stub_status
+WARNING 2023-11-05 14:36:35,221 log Not Found: /version
+WARNING 2023-11-05 14:36:41,946 log Not Found: /.well-known/acme-challenge/-LA7QU1YU3YHDSN0AQWI-_CQYR8S1L3Y
+WARNING 2023-11-05 14:36:42,976 log Not Found: /.well-known/acme-challenge/_NW3K9_MLA8LEGRS8XDSA1F64YMLSSBC
+WARNING 2023-11-05 14:40:06,413 log Not Found: /robots.txt
+ERROR 2023-11-05 14:49:17,861 log Internal Server Error: /paypal_ipn/
+WARNING 2023-11-05 14:59:55,431 log Not Found: /Core/Skin/Login.aspx
+ERROR 2023-11-05 15:06:14,104 log Internal Server Error: /p2p_single_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 820, in p2p_single_detail
+    if request.is_ajax():
+AttributeError: 'WSGIRequest' object has no attribute 'is_ajax'
+ERROR 2023-11-05 15:07:59,169 log Internal Server Error: /p2p_single_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 820, in p2p_single_detail
+    if request.is_ajax():
+AttributeError: 'WSGIRequest' object has no attribute 'is_ajax'
+ERROR 2023-11-05 15:12:30,260 log Internal Server Error: /p2p_single_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 820, in p2p_single_detail
+    if request.is_ajax():
+AttributeError: 'WSGIRequest' object has no attribute 'is_ajax'
+ERROR 2023-11-05 15:15:59,951 log Internal Server Error: /p2p_single_detail/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 820, in p2p_single_detail
+    if request.is_ajax():
+AttributeError: 'WSGIRequest' object has no attribute 'is_ajax'
+WARNING 2023-11-05 15:23:02,150 log Not Found: /.env
+WARNING 2023-11-05 15:23:03,444 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-11-05 15:26:18,419 log Not Found: /inputs.php
+ERROR 2023-11-05 15:27:03,519 log Internal Server Error: /inquiry_details2/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 761, in inquiry_details2
+    if request.is_ajax():
+AttributeError: 'WSGIRequest' object has no attribute 'is_ajax'
