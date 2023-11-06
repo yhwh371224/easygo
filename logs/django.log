@@ -452,3 +452,63 @@ AttributeError: 'WSGIRequest' object has no attribute 'is_ajax'
 WARNING 2023-11-06 11:39:13,522 log Not Found: /shop/ko/product/moncler-branson-클래식-모자-남성-다운-자켓-모자-보라색/
 WARNING 2023-11-06 11:46:17,060 log Not Found: /.env
 WARNING 2023-11-06 11:46:18,566 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-11-06 12:19:30,686 log Not Found: /robots.txt
+ERROR 2023-11-06 12:27:19,765 log Internal Server Error: /inquiry_details2/
+Traceback (most recent call last):
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ubuntu/github/easygo/basecamp/views.py", line 761, in inquiry_details2
+    if request.is_ajax():
+AttributeError: 'WSGIRequest' object has no attribute 'is_ajax'
+WARNING 2023-11-06 12:38:26,714 log Not Found: /webui/
+WARNING 2023-11-06 12:45:52,480 log Not Found: /vpn/index.html
+WARNING 2023-11-06 12:47:28,048 log Not Found: /geoserver/web/
+WARNING 2023-11-06 12:48:07,814 log Not Found: /.git/config
+WARNING 2023-11-06 12:48:43,237 log Not Found: /contact-us/
+WARNING 2023-11-06 12:49:10,013 log Not Found: /robots.txt
+WARNING 2023-11-06 12:51:50,085 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-11-06 12:53:05,293 log Not Found: /services/
+WARNING 2023-11-06 12:53:23,098 log Not Found: /robots.txt
+WARNING 2023-11-06 12:53:47,232 log Not Found: /robots.txt
+WARNING 2023-11-06 13:06:43,963 log Not Found: /robots.txt
+WARNING 2023-11-06 13:23:47,322 log Not Found: /robots.txt
+WARNING 2023-11-06 13:45:29,156 log Not Found: /easygo-airport-pickup/
+WARNING 2023-11-06 13:54:50,133 log Not Found: /airport-pickup-point/
+WARNING 2023-11-06 14:24:59,398 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-11-06 14:30:34,487 log Not Found: /robots.txt
+WARNING 2023-11-06 14:44:18,781 log Not Found: /robots.txt
+WARNING 2023-11-06 15:00:08,180 log Not Found: /ecp/Current/exporttool/microsoft.exchange.ediscovery.exporttool.application
+WARNING 2023-11-06 15:11:20,156 log Forbidden (CSRF cookie not set.): /sending_email_first_detail/
+WARNING 2023-11-06 15:36:04,573 log Not Found: /robots.txt
+WARNING 2023-11-06 15:38:56,743 log Not Found: /robots.txt
+WARNING 2023-11-06 15:44:47,343 log Not Found: /.env
+WARNING 2023-11-06 15:44:48,631 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-11-06 15:45:17,165 log Not Found: /.well-known/acme-challenge/5WTCGMVAO6S8S2BBE6K_Y5LBLS3GC7PW
+WARNING 2023-11-06 15:45:18,191 log Not Found: /.well-known/acme-challenge/DBIXT82XX--J8BKJMC67TTPLTWLDCET_
+WARNING 2023-11-06 15:58:18,052 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-11-06 16:02:20,514 log Not Found: /easygo-cruise-terminal/
+WARNING 2023-11-06 16:49:09,488 log Not Found: /contact/
+WARNING 2023-11-06 16:49:09,492 log Not Found: /contact/
+WARNING 2023-11-06 17:03:40,798 log Not Found: /.env
+WARNING 2023-11-06 17:04:11,727 log Not Found: /shop/fi/product/moncler-poisto-alaspain-liivit-punaisella/
+WARNING 2023-11-06 17:30:34,967 log Not Found: /contact/
+WARNING 2023-11-06 17:30:39,513 log Not Found: /apple-touch-icon-120x120-precomposed.png
+WARNING 2023-11-06 17:30:39,593 log Not Found: /apple-touch-icon-120x120.png
+WARNING 2023-11-06 17:31:44,866 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-11-06 18:31:48,368 log Not Found: /.env
+WARNING 2023-11-06 18:31:49,867 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-11-06 19:04:17,580 log Not Found: /shop/fi/product/moncler-takit-lapset-bady-mauve/
+WARNING 2023-11-06 19:05:17,530 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-11-06 19:27:38,503 log Not Found: /robots.txt
+WARNING 2023-11-06 20:06:39,457 log Not Found: /shop/es/product/moncler-bresle-euramerican-style-chaquetas-hombre-gris/
+WARNING 2023-11-06 20:39:09,653 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-11-06 20:49:44,680 log Not Found: /shop/da/product/moncler-mode-ned-kvinder-jakke-pels-krave-lys-tan/
+WARNING 2023-11-06 21:07:56,022 log Not Found: /shop/es/product/moncler-vestes-angers-chocolat/
+WARNING 2023-11-06 21:16:28,270 log Not Found: /shop/nl/moncler-women-vest-tarn-black/
+WARNING 2023-11-06 21:55:57,101 log Not Found: /shop/it/product/moncler-bady-8/
+WARNING 2023-11-06 21:57:07,217 log Not Found: /shop/da/product-category/moncler-jakker-maend/
+WARNING 2023-11-06 22:04:56,320 log Not Found: /.env
+WARNING 2023-11-06 22:04:57,854 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-11-06 22:12:32,292 log Not Found: /Core/Skin/Login.aspx
