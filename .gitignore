@@ -13,8 +13,6 @@ temp/
 
 logs/
 
-db.sqlite3
-
 token.json
 
 
