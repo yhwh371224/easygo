@@ -450,3 +450,5 @@ Traceback (most recent call last):
     if request.is_ajax():
 AttributeError: 'WSGIRequest' object has no attribute 'is_ajax'
 WARNING 2023-11-06 11:39:13,522 log Not Found: /shop/ko/product/moncler-branson-클래식-모자-남성-다운-자켓-모자-보라색/
+WARNING 2023-11-06 11:46:17,060 log Not Found: /.env
+WARNING 2023-11-06 11:46:18,566 log Forbidden (Referer checking failed - no Referer.): /
