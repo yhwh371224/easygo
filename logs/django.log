@@ -1,454 +1,250 @@
-WARNING 2023-11-06 03:31:27,099 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-11-06 03:41:55,229 log Not Found: /robots.txt
-WARNING 2023-11-06 04:28:40,595 log Not Found: /thornleigh/
-WARNING 2023-11-06 04:28:42,844 log Not Found: //wp-includes/ID3/license.txt
-WARNING 2023-11-06 04:28:43,010 log Not Found: //feed/
-WARNING 2023-11-06 04:28:43,339 log Not Found: //xmlrpc.php
-WARNING 2023-11-06 04:28:43,505 log Not Found: //blog/wp-includes/wlwmanifest.xml
-WARNING 2023-11-06 04:28:43,746 log Not Found: //web/wp-includes/wlwmanifest.xml
-WARNING 2023-11-06 04:28:43,913 log Not Found: //wordpress/wp-includes/wlwmanifest.xml
-WARNING 2023-11-06 04:28:44,080 log Not Found: //wp/wp-includes/wlwmanifest.xml
-WARNING 2023-11-06 04:28:44,281 log Not Found: //2020/wp-includes/wlwmanifest.xml
-WARNING 2023-11-06 04:28:44,448 log Not Found: //2019/wp-includes/wlwmanifest.xml
-WARNING 2023-11-06 04:28:44,803 log Not Found: //2021/wp-includes/wlwmanifest.xml
-WARNING 2023-11-06 04:28:44,970 log Not Found: //shop/wp-includes/wlwmanifest.xml
-WARNING 2023-11-06 04:28:45,136 log Not Found: //wp1/wp-includes/wlwmanifest.xml
-WARNING 2023-11-06 04:28:45,327 log Not Found: //test/wp-includes/wlwmanifest.xml
-WARNING 2023-11-06 04:28:45,493 log Not Found: //site/wp-includes/wlwmanifest.xml
-WARNING 2023-11-06 04:28:45,676 log Not Found: //cms/wp-includes/wlwmanifest.xml
-WARNING 2023-11-06 04:55:54,324 log Not Found: /robots.txt
-ERROR 2023-11-06 04:56:31,478 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 04:56:31,479 log Bad Request: /
-WARNING 2023-11-06 04:57:46,674 log Not Found: /robots.txt
-WARNING 2023-11-06 05:04:48,934 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-11-06 05:27:23,506 log Not Found: /robots.txt
-WARNING 2023-11-06 05:27:28,432 log Not Found: /shop/nl/product/moncler-jas-heren-half-lengte-met-kap-koffie/
-WARNING 2023-11-06 05:38:32,429 log Not Found: /robots.txt
-WARNING 2023-11-06 05:42:16,769 log Not Found: /.env
-WARNING 2023-11-06 05:42:17,997 log Forbidden (Referer checking failed - no Referer.): /
-WARNING 2023-11-06 05:47:59,375 log Not Found: /robots.txt
-WARNING 2023-11-06 06:01:23,814 log Not Found: /easygo-shuttle-chartered-bus/
-WARNING 2023-11-06 06:17:23,273 log Not Found: /shop/da/product-category/moncler-handtasker-salg/
-WARNING 2023-11-06 06:37:53,699 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-11-06 07:15:43,147 log Not Found: /price-booking/
-WARNING 2023-11-06 07:21:43,576 log Not Found: /robots.txt
-ERROR 2023-11-06 07:41:25,707 exception Invalid HTTP_HOST header: '/run/gunicorn.sock:'. The domain name provided is not valid according to RFC 1034/1035.
-WARNING 2023-11-06 07:41:25,709 log Bad Request: /
-ERROR 2023-11-06 07:41:25,801 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:25,804 log Bad Request: /
-ERROR 2023-11-06 07:41:25,806 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:25,808 log Bad Request: /CSS/Miniweb.css
-ERROR 2023-11-06 07:41:25,810 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:25,811 log Bad Request: /3awQ
-ERROR 2023-11-06 07:41:25,813 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-ERROR 2023-11-06 07:41:25,814 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:25,816 log Bad Request: /
-WARNING 2023-11-06 07:41:25,817 log Bad Request: /.git/HEAD
-ERROR 2023-11-06 07:41:25,818 exception Invalid HTTP_HOST header: '/run/gunicorn.sock:'. The domain name provided is not valid according to RFC 1034/1035.
-WARNING 2023-11-06 07:41:25,820 log Bad Request: /
-ERROR 2023-11-06 07:41:25,822 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:25,823 log Bad Request: /localstart.html
-ERROR 2023-11-06 07:41:25,824 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-ERROR 2023-11-06 07:41:25,826 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:25,827 log Bad Request: /sdk
-WARNING 2023-11-06 07:41:25,827 log Bad Request: /Portal0000.htm
-ERROR 2023-11-06 07:41:25,988 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-ERROR 2023-11-06 07:41:25,990 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:25,992 log Bad Request: /__Additional
-WARNING 2023-11-06 07:41:25,994 log Bad Request: /
-ERROR 2023-11-06 07:41:25,995 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:25,996 log Bad Request: /robots.txt
-ERROR 2023-11-06 07:41:25,998 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:26,001 log Bad Request: /
-ERROR 2023-11-06 07:41:26,027 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:26,030 log Bad Request: /scripts/WPnBr.dll
-ERROR 2023-11-06 07:41:26,031 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-ERROR 2023-11-06 07:41:26,033 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:26,035 log Bad Request: /nmaplowercheck1699216885
-WARNING 2023-11-06 07:41:26,036 log Bad Request: /
-ERROR 2023-11-06 07:41:26,079 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:26,081 log Bad Request: /Portal/Portal.mwsl
-ERROR 2023-11-06 07:41:26,131 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:26,133 log Bad Request: /readme.txt
-ERROR 2023-11-06 07:41:26,181 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-ERROR 2023-11-06 07:41:26,185 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:26,187 log Bad Request: /
-WARNING 2023-11-06 07:41:26,187 log Bad Request: /pools/default/buckets
-ERROR 2023-11-06 07:41:26,232 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:26,234 log Bad Request: /HNAP1
-ERROR 2023-11-06 07:41:26,235 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:26,238 log Bad Request: /docs/cplugError.html/
-ERROR 2023-11-06 07:41:26,283 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:26,285 log Bad Request: /admin.shtml
-ERROR 2023-11-06 07:41:26,334 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:26,336 log Bad Request: /pools
-ERROR 2023-11-06 07:41:26,436 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-ERROR 2023-11-06 07:41:26,437 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:26,439 log Bad Request: /
-WARNING 2023-11-06 07:41:26,441 log Bad Request: /admin.pl
-ERROR 2023-11-06 07:41:26,590 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:26,592 log Bad Request: /admin.php
-ERROR 2023-11-06 07:41:26,639 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:26,641 log Bad Request: /
-ERROR 2023-11-06 07:41:26,743 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:26,744 log Bad Request: /default.php
-ERROR 2023-11-06 07:41:26,897 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-ERROR 2023-11-06 07:41:26,899 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:26,900 log Bad Request: /
-WARNING 2023-11-06 07:41:26,901 log Bad Request: /home.aspx
-ERROR 2023-11-06 07:41:27,049 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:27,050 log Bad Request: /index.html
-ERROR 2023-11-06 07:41:27,200 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:27,202 log Bad Request: /indice.shtml
-ERROR 2023-11-06 07:41:27,351 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:27,353 log Bad Request: /home.jhtml
-ERROR 2023-11-06 07:41:27,509 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:27,511 log Bad Request: /index.php
-ERROR 2023-11-06 07:41:27,655 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:27,656 log Bad Request: /home.cfm
-ERROR 2023-11-06 07:41:27,805 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:27,807 log Bad Request: /start.cgi
-ERROR 2023-11-06 07:41:27,955 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:27,956 log Bad Request: /menu.html
-ERROR 2023-11-06 07:41:28,109 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:28,111 log Bad Request: /menu.shtml
-ERROR 2023-11-06 07:41:28,409 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:28,411 log Bad Request: /start.jsa
-ERROR 2023-11-06 07:41:28,559 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:28,560 log Bad Request: /base.inc
-ERROR 2023-11-06 07:41:28,709 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:28,711 log Bad Request: /start.cfm
-ERROR 2023-11-06 07:41:28,859 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:28,861 log Bad Request: /default.html
-ERROR 2023-11-06 07:41:29,009 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:29,011 log Bad Request: /menu.asp
-ERROR 2023-11-06 07:41:29,160 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:29,163 log Bad Request: /index.jhtml
-ERROR 2023-11-06 07:41:29,310 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:29,312 log Bad Request: /index.pl
-ERROR 2023-11-06 07:41:29,465 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:29,466 log Bad Request: /default.jhtml
-ERROR 2023-11-06 07:41:29,610 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:29,612 log Bad Request: /home.jsa
-ERROR 2023-11-06 07:41:29,760 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:29,762 log Bad Request: /home.asp
-ERROR 2023-11-06 07:41:29,909 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:29,911 log Bad Request: /index.jsp
-ERROR 2023-11-06 07:41:30,060 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:30,063 log Bad Request: /admin.aspx
-ERROR 2023-11-06 07:41:30,211 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:30,213 log Bad Request: /menu.cgi
-ERROR 2023-11-06 07:41:30,360 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:30,362 log Bad Request: /menu.jsa
-ERROR 2023-11-06 07:41:30,509 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:30,511 log Bad Request: /localstart.jhtml
-ERROR 2023-11-06 07:41:30,658 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:30,660 log Bad Request: /inicio.jhtml
-ERROR 2023-11-06 07:41:30,808 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:30,810 log Bad Request: /base.shtml
-ERROR 2023-11-06 07:41:30,959 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:30,961 log Bad Request: /default.pl
-ERROR 2023-11-06 07:41:31,109 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:31,111 log Bad Request: /default.cfm
-ERROR 2023-11-06 07:41:31,259 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:31,261 log Bad Request: /default.cgi
-ERROR 2023-11-06 07:41:31,417 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:31,419 log Bad Request: /admin.html
-ERROR 2023-11-06 07:41:31,559 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:31,561 log Bad Request: /index.jsa
-ERROR 2023-11-06 07:41:31,709 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:31,711 log Bad Request: /localstart.shtml
-ERROR 2023-11-06 07:41:31,859 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:31,861 log Bad Request: /base.jsp
-ERROR 2023-11-06 07:41:32,010 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:32,012 log Bad Request: /inicio.php
-ERROR 2023-11-06 07:41:32,159 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:32,161 log Bad Request: /base.jsa
-ERROR 2023-11-06 07:41:32,308 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:32,310 log Bad Request: /localstart.jsa
-ERROR 2023-11-06 07:41:32,457 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:32,459 log Bad Request: /base.aspx
-ERROR 2023-11-06 07:41:32,606 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:32,607 log Bad Request: /inicio.jsp
-ERROR 2023-11-06 07:41:32,766 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:32,768 log Bad Request: /menu.jsp
-ERROR 2023-11-06 07:41:32,906 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:32,908 log Bad Request: /home.shtml
-ERROR 2023-11-06 07:41:33,053 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:33,055 log Bad Request: /home.php
-ERROR 2023-11-06 07:41:33,201 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:33,203 log Bad Request: /inicio.asp
-ERROR 2023-11-06 07:41:33,351 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:33,353 log Bad Request: /base.jhtml
-ERROR 2023-11-06 07:41:33,501 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:33,503 log Bad Request: /base.html
-ERROR 2023-11-06 07:41:33,650 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:33,652 log Bad Request: /main.php
-ERROR 2023-11-06 07:41:33,799 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:33,801 log Bad Request: /base.cgi
-ERROR 2023-11-06 07:41:33,949 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:33,950 log Bad Request: /menu.pl
-ERROR 2023-11-06 07:41:34,099 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:34,101 log Bad Request: /index.cfm
-ERROR 2023-11-06 07:41:34,248 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:34,250 log Bad Request: /base.cfm
-ERROR 2023-11-06 07:41:34,397 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:34,399 log Bad Request: /indice.jsa
-ERROR 2023-11-06 07:41:34,546 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:34,548 log Bad Request: /default.jsp
-ERROR 2023-11-06 07:41:34,696 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:34,698 log Bad Request: /inicio.pl
-ERROR 2023-11-06 07:41:34,846 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:34,848 log Bad Request: /base.asp
-ERROR 2023-11-06 07:41:34,997 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:34,999 log Bad Request: /admin.jsa
-ERROR 2023-11-06 07:41:35,147 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:35,149 log Bad Request: /admin.asp
-ERROR 2023-11-06 07:41:35,297 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:35,299 log Bad Request: /main.cgi
-ERROR 2023-11-06 07:41:35,447 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:35,449 log Bad Request: /admin.cgi
-ERROR 2023-11-06 07:41:35,597 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:35,599 log Bad Request: /inicio.cgi
-ERROR 2023-11-06 07:41:35,747 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:35,749 log Bad Request: /indice.jsp
-ERROR 2023-11-06 07:41:35,897 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:35,899 log Bad Request: /home.jsp
-ERROR 2023-11-06 07:41:36,046 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:36,048 log Bad Request: /start.html
-ERROR 2023-11-06 07:41:36,197 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:36,199 log Bad Request: /localstart.aspx
-ERROR 2023-11-06 07:41:36,346 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:36,348 log Bad Request: /localstart.jsp
-ERROR 2023-11-06 07:41:36,497 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:36,498 log Bad Request: /indice.jhtml
-ERROR 2023-11-06 07:41:36,646 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:36,648 log Bad Request: /main.asp
-ERROR 2023-11-06 07:41:36,796 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:36,797 log Bad Request: /default.jsa
-ERROR 2023-11-06 07:41:36,945 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:36,947 log Bad Request: /inicio.cfm
-ERROR 2023-11-06 07:41:37,096 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:37,098 log Bad Request: /main.html
-ERROR 2023-11-06 07:41:37,246 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:37,247 log Bad Request: /admin.cfm
-ERROR 2023-11-06 07:41:37,395 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:37,397 log Bad Request: /start.aspx
-ERROR 2023-11-06 07:41:37,544 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:37,545 log Bad Request: /main.pl
-ERROR 2023-11-06 07:41:37,694 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:37,695 log Bad Request: /admin.jsp
-ERROR 2023-11-06 07:41:37,842 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:37,844 log Bad Request: /index.aspx
-ERROR 2023-11-06 07:41:37,992 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:37,994 log Bad Request: /inicio.jsa
-ERROR 2023-11-06 07:41:38,143 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:38,145 log Bad Request: /indice.pl
-ERROR 2023-11-06 07:41:38,292 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:38,294 log Bad Request: /inicio.html
-ERROR 2023-11-06 07:41:38,441 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:38,443 log Bad Request: /indice.cgi
-ERROR 2023-11-06 07:41:38,590 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:38,592 log Bad Request: /inicio.aspx
-ERROR 2023-11-06 07:41:38,740 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:38,741 log Bad Request: /base.php
-ERROR 2023-11-06 07:41:38,889 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:38,891 log Bad Request: /menu.aspx
-ERROR 2023-11-06 07:41:39,040 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:39,042 log Bad Request: /menu.cfm
-ERROR 2023-11-06 07:41:39,190 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:39,191 log Bad Request: /start.asp
-ERROR 2023-11-06 07:41:39,340 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:39,342 log Bad Request: /main.jsp
-ERROR 2023-11-06 07:41:39,491 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:39,492 log Bad Request: /default.asp
-ERROR 2023-11-06 07:41:39,641 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:39,643 log Bad Request: /start.pl
-ERROR 2023-11-06 07:41:39,792 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:39,793 log Bad Request: /localstart.asp
-ERROR 2023-11-06 07:41:39,943 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:39,944 log Bad Request: /index.asp
-ERROR 2023-11-06 07:41:40,092 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:40,094 log Bad Request: /localstart.php
-ERROR 2023-11-06 07:41:40,241 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:40,243 log Bad Request: /localstart.cfm
-ERROR 2023-11-06 07:41:40,392 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:40,393 log Bad Request: /main.aspx
-ERROR 2023-11-06 07:41:40,540 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:40,542 log Bad Request: /start.php
-ERROR 2023-11-06 07:41:40,690 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:40,692 log Bad Request: /index.shtml
-ERROR 2023-11-06 07:41:40,840 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:40,841 log Bad Request: /start.jsp
-ERROR 2023-11-06 07:41:40,989 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:40,991 log Bad Request: /home.html
-ERROR 2023-11-06 07:41:41,139 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:41,141 log Bad Request: /base.pl
-ERROR 2023-11-06 07:41:41,288 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:41,290 log Bad Request: /start.jhtml
-ERROR 2023-11-06 07:41:41,439 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:41,440 log Bad Request: /indice.php
-ERROR 2023-11-06 07:41:41,588 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:41,589 log Bad Request: /indice.asp
-ERROR 2023-11-06 07:41:41,737 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:41,739 log Bad Request: /main.jhtml
-ERROR 2023-11-06 07:41:41,887 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:41,889 log Bad Request: /start.shtml
-ERROR 2023-11-06 07:41:42,037 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:42,039 log Bad Request: /home.cgi
-ERROR 2023-11-06 07:41:42,186 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:42,188 log Bad Request: /main.shtml
-ERROR 2023-11-06 07:41:42,336 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:42,338 log Bad Request: /default.shtml
-ERROR 2023-11-06 07:41:42,486 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:42,488 log Bad Request: /localstart.cgi
-ERROR 2023-11-06 07:41:42,593 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:42,595 log Bad Request: /main.jsa
-ERROR 2023-11-06 07:41:42,606 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:42,607 log Bad Request: /default.aspx
-ERROR 2023-11-06 07:41:42,617 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:42,619 log Bad Request: /inicio.shtml
-ERROR 2023-11-06 07:41:42,630 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:42,632 log Bad Request: /indice.cfm
-ERROR 2023-11-06 07:41:42,642 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:42,644 log Bad Request: /menu.php
-ERROR 2023-11-06 07:41:42,655 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:42,657 log Bad Request: /main.cfm
-ERROR 2023-11-06 07:41:42,668 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:42,670 log Bad Request: /menu.jhtml
-ERROR 2023-11-06 07:41:42,681 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:42,682 log Bad Request: /indice.html
-ERROR 2023-11-06 07:41:42,692 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:42,694 log Bad Request: /home.pl
-ERROR 2023-11-06 07:41:42,704 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:42,706 log Bad Request: /indice.aspx
-ERROR 2023-11-06 07:41:42,716 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:42,717 log Bad Request: /localstart.pl
-ERROR 2023-11-06 07:41:42,729 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:42,730 log Bad Request: /admin.jhtml
-ERROR 2023-11-06 07:41:42,740 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:42,742 log Bad Request: /index.cgi
-ERROR 2023-11-06 07:41:42,834 exception Invalid HTTP_HOST header: '/run/gunicorn.sock:'. The domain name provided is not valid according to RFC 1034/1035.
-WARNING 2023-11-06 07:41:42,836 log Bad Request: /
-ERROR 2023-11-06 07:41:42,984 exception Invalid HTTP_HOST header: 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com'. You may need to add 'ec2-54-206-144-94.ap-southeast-2.compute.amazonaws.com' to ALLOWED_HOSTS.
-WARNING 2023-11-06 07:41:42,986 log Bad Request: /
-WARNING 2023-11-06 07:47:35,489 log Not Found: /robots.txt
-WARNING 2023-11-06 07:55:10,661 log Not Found: /sitemap_index.xml
-WARNING 2023-11-06 08:06:49,801 log Not Found: /apple-touch-icon-120x120-precomposed.png
-WARNING 2023-11-06 08:06:49,819 log Not Found: /apple-touch-icon-120x120.png
-WARNING 2023-11-06 08:09:12,574 log Not Found: /wp-load.php
-WARNING 2023-11-06 08:09:15,326 log Not Found: /style.php
-WARNING 2023-11-06 08:09:16,847 log Not Found: /wp-admin/style.php
-WARNING 2023-11-06 08:09:19,767 log Not Found: /s_e.php
-WARNING 2023-11-06 08:09:22,464 log Not Found: /s_ne.php
-WARNING 2023-11-06 08:09:25,348 log Not Found: /1index.php
-WARNING 2023-11-06 08:09:28,149 log Not Found: /radio.php
-WARNING 2023-11-06 08:09:30,913 log Not Found: /doc.php
-WARNING 2023-11-06 08:09:34,088 log Not Found: /wp_wrong_datlib.php
-WARNING 2023-11-06 08:09:37,162 log Not Found: /beence.php
-WARNING 2023-11-06 08:09:39,908 log Not Found: /ups.php
-WARNING 2023-11-06 08:09:44,862 log Not Found: /wp-signin.php
-WARNING 2023-11-06 08:09:47,881 log Not Found: /media-admin.php
-WARNING 2023-11-06 08:09:51,145 log Not Found: /export.php
-WARNING 2023-11-06 08:09:52,495 log Not Found: /wp-content/export.php
-WARNING 2023-11-06 08:09:55,829 log Not Found: /wp-includes/wp-class.php
-WARNING 2023-11-06 08:09:59,035 log Not Found: /wp-includes/wp-atom.php
-WARNING 2023-11-06 08:10:01,891 log Not Found: /wp-includes/images/css.php
-WARNING 2023-11-06 08:10:02,958 log Not Found: /wp-includes/css/css.php
-WARNING 2023-11-06 08:10:05,979 log Not Found: /defau1t.php
-WARNING 2023-11-06 08:10:10,128 log Not Found: /moduless.php
-WARNING 2023-11-06 08:10:12,935 log Not Found: /wp-booking.php
-WARNING 2023-11-06 08:10:15,467 log Not Found: /wp-content/plugins/backup_index.php
-WARNING 2023-11-06 08:10:18,092 log Not Found: /wp-content/mu-plugins/db-safe-mode.php
-WARNING 2023-11-06 08:10:20,660 log Not Found: /wp-includes/css/wp-config.php
-WARNING 2023-11-06 08:10:23,079 log Not Found: /config.bak.php
-WARNING 2023-11-06 08:10:23,976 log Not Found: /wp-content/themes/config.bak.php
-WARNING 2023-11-06 08:10:26,897 log Not Found: /legion.php
-WARNING 2023-11-06 08:10:29,599 log Not Found: /wp-content/plugins/wpconfig.bak.php
-WARNING 2023-11-06 08:10:32,681 log Not Found: /wp-plugins.php
-WARNING 2023-11-06 08:10:35,272 log Not Found: /gank.php.PhP
-WARNING 2023-11-06 08:10:38,444 log Not Found: /wp-content/db-cache.php
-WARNING 2023-11-06 08:10:41,957 log Not Found: /archives.php
-WARNING 2023-11-06 08:10:44,857 log Not Found: /defau11.php
-WARNING 2023-11-06 08:10:47,865 log Not Found: /wp-content/outcms.php
-WARNING 2023-11-06 08:10:50,965 log Not Found: /system_log.php
-WARNING 2023-11-06 08:10:54,600 log Not Found: /wp-backup-sql-302.php
-WARNING 2023-11-06 08:10:56,991 log Not Found: /error.php
-WARNING 2023-11-06 08:11:36,939 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-11-06 08:12:45,299 log Not Found: /ALFA_DATA
-WARNING 2023-11-06 08:12:48,843 log Not Found: /alfacgiapi
-WARNING 2023-11-06 08:12:59,479 log Not Found: /cgialfa
-WARNING 2023-11-06 08:13:10,964 log Not Found: /.well-known/ALFA_DATA
-WARNING 2023-11-06 08:13:14,163 log Not Found: /.well-known/alfacgiapi
-WARNING 2023-11-06 08:13:17,748 log Not Found: /.well-known/cgialfa
-WARNING 2023-11-06 08:13:20,956 log Not Found: /wp-content/uploads/ALFA_DATA
-WARNING 2023-11-06 08:13:23,435 log Not Found: /wp-content/uploads/alfacgiapi
-WARNING 2023-11-06 08:13:26,429 log Not Found: /wp-content/uploads/cgialfa
-WARNING 2023-11-06 08:13:29,344 log Not Found: /wp-includes/ALFA_DATA
-WARNING 2023-11-06 08:13:32,303 log Not Found: /wp-includes/alfacgiapi
-WARNING 2023-11-06 08:13:34,521 log Not Found: /wp-includes/cgialfa
-WARNING 2023-11-06 08:13:37,260 log Not Found: /wp-admin/ALFA_DATA
-WARNING 2023-11-06 08:13:39,751 log Not Found: /wp-admin/alfacgiapi
-WARNING 2023-11-06 08:13:42,079 log Not Found: /wp-admin/cgialfa
-WARNING 2023-11-06 08:13:44,691 log Not Found: /wp-content/ALFA_DATA
-WARNING 2023-11-06 08:13:46,972 log Not Found: /wp-content/alfacgiapi
-WARNING 2023-11-06 08:13:49,080 log Not Found: /wp-content/cgialfa
-WARNING 2023-11-06 08:13:51,826 log Not Found: /templates/beez3/ALFA_DATA
-WARNING 2023-11-06 08:13:53,963 log Not Found: /templates/beez3/alfacgiapi
-WARNING 2023-11-06 08:13:56,652 log Not Found: /templates/beez3/cgialfa
-WARNING 2023-11-06 08:13:58,970 log Not Found: /sites/default/files/ALFA_DATA
-WARNING 2023-11-06 08:14:01,548 log Not Found: /sites/default/files/alfacgiapi
-WARNING 2023-11-06 08:14:03,600 log Not Found: /sites/default/files/cgialfa
-WARNING 2023-11-06 08:14:43,448 log Not Found: /wp-content/plugins/ubh/up.php
-WARNING 2023-11-06 08:16:45,372 log Not Found: /index.php
-WARNING 2023-11-06 08:16:46,724 log Not Found: /olux.php
-WARNING 2023-11-06 08:16:47,902 log Not Found: /xleet.php
-WARNING 2023-11-06 08:16:56,975 log Not Found: /wso.php
-WARNING 2023-11-06 08:16:57,859 log Not Found: /shell.php
-WARNING 2023-11-06 08:16:58,731 log Not Found: /up.php
-WARNING 2023-11-06 08:16:59,461 log Not Found: /upload.php
-WARNING 2023-11-06 08:17:00,310 log Not Found: /1.php
-WARNING 2023-11-06 08:17:01,330 log Not Found: /x.php
-WARNING 2023-11-06 08:17:02,225 log Not Found: /z.php
-WARNING 2023-11-06 08:17:03,129 log Not Found: /a.php
-WARNING 2023-11-06 08:17:03,877 log Not Found: /test.php
-WARNING 2023-11-06 08:17:04,687 log Not Found: /wp.php
-WARNING 2023-11-06 08:17:05,602 log Not Found: /alfa.php
-WARNING 2023-11-06 08:17:06,442 log Not Found: /config.php
-WARNING 2023-11-06 08:17:07,290 log Not Found: /templates/beez3/index.php
-WARNING 2023-11-06 08:17:08,269 log Not Found: /about.php
-WARNING 2023-11-06 08:17:09,314 log Not Found: /shells.php
-WARNING 2023-11-06 08:21:39,934 log Not Found: /robots.txt
-WARNING 2023-11-06 08:32:44,236 log Not Found: /.well-known/traffic-advice
-WARNING 2023-11-06 08:35:47,871 log Not Found: /apple-touch-icon-152x152-precomposed.png
-WARNING 2023-11-06 08:35:47,944 log Not Found: /apple-touch-icon-152x152.png
-WARNING 2023-11-06 09:15:15,948 log Not Found: /airport-transfers-drummoyne/
-WARNING 2023-11-06 09:28:04,946 log Not Found: /apple-touch-icon-120x120-precomposed.png
-WARNING 2023-11-06 09:28:05,005 log Not Found: /apple-touch-icon-120x120.png
-WARNING 2023-11-06 09:32:11,155 log Not Found: /.env
-WARNING 2023-11-06 09:32:12,622 log Forbidden (Referer checking failed - no Referer.): /
-WARNING 2023-11-06 09:44:52,954 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-11-06 10:00:54,066 log Not Found: /robots.txt
-WARNING 2023-11-06 10:03:00,328 log Not Found: /robots.txt
-WARNING 2023-11-06 10:05:59,896 log Not Found: /wp-login.php
-WARNING 2023-11-06 10:23:17,487 log Not Found: /shop/da/kategori/
-WARNING 2023-11-06 10:35:09,178 log Not Found: /robots.txt
-WARNING 2023-11-06 11:13:00,672 log Not Found: /robots.txt
-WARNING 2023-11-06 11:13:01,887 log Not Found: /p2p.html/
-WARNING 2023-11-06 11:16:41,150 log Not Found: /inputs.php
-WARNING 2023-11-06 11:18:16,654 log Not Found: /Core/Skin/Login.aspx
-WARNING 2023-11-06 11:20:37,632 log Not Found: /shop/de/product-category/neuankommlinge/
-WARNING 2023-11-06 11:21:57,858 log Not Found: /airport-transfers-west-pennant-hills
-WARNING 2023-11-06 11:33:10,627 log Not Found: /contact/
-ERROR 2023-11-06 11:34:05,977 log Internal Server Error: /inquiry_details2/
+WARNING 2023-11-07 14:38:49,502 log Not Found: /apple-touch-icon-120x120-precomposed.png
+WARNING 2023-11-07 14:38:49,530 log Not Found: /apple-touch-icon-120x120.png
+WARNING 2023-11-07 14:47:07,762 log Not Found: /shop/de/product/moncler-boots-nible-black-stilvoll-und-groszugig/
+WARNING 2023-11-07 14:51:44,719 log Not Found: /Autodiscover/Autodiscover.xml
+WARNING 2023-11-07 14:58:30,883 log Not Found: /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php
+WARNING 2023-11-07 15:12:40,885 log Not Found: /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php
+WARNING 2023-11-07 15:37:15,666 log Not Found: /shop/ko/product/moncler-anthime-저렴한-자켓-남성-싱글-브레스트-블랙/
+WARNING 2023-11-07 15:40:09,675 log Not Found: /home/sms:+61406883355
+WARNING 2023-11-07 15:43:55,362 log Not Found: /.well-known/acme-challenge/WSC6PE2HENN8YNP32YEBQJL-CO3V4BTO
+WARNING 2023-11-07 15:43:56,330 log Not Found: /.well-known/acme-challenge/_IW308D0IJXK2SOV9AZ32-UIKD4VXW1-
+WARNING 2023-11-07 15:44:09,255 log Not Found: /robots.txt
+WARNING 2023-11-07 15:54:53,586 log Not Found: /robots.txt
+WARNING 2023-11-07 15:56:46,600 log Not Found: /shop/it/product/moncler-clamart-7/
+WARNING 2023-11-07 16:08:55,492 log Not Found: /robots.txt
+WARNING 2023-11-07 16:10:00,276 log Not Found: /p2p.html/
+WARNING 2023-11-07 16:17:50,722 log Not Found: /Public/home/js/check.js
+WARNING 2023-11-07 16:21:50,616 log Not Found: /.well-known/traffic-advice
+WARNING 2023-11-07 16:30:23,125 log Not Found: /robots.txt
+WARNING 2023-11-07 16:30:24,240 log Not Found: /sitemap.xml
+WARNING 2023-11-07 16:30:25,353 log Not Found: /.well-known/security.txt
+WARNING 2023-11-07 16:46:33,070 log Not Found: /.git/config
+WARNING 2023-11-07 16:48:53,186 log Not Found: /robots.txt
+WARNING 2023-11-07 16:53:19,358 log Not Found: /console/
+WARNING 2023-11-07 16:59:25,977 log Not Found: /wp-content/themes/twentyseventeen/ALFA_DATA/alfacgiapi/
+WARNING 2023-11-07 17:06:47,900 log Not Found: /robots.txt
+WARNING 2023-11-07 17:09:27,701 log Not Found: /_ignition/execute-solution
+WARNING 2023-11-07 17:19:07,272 log Not Found: /shop/da/min-konto/lost-password/
+WARNING 2023-11-07 17:20:35,891 log Not Found: /robots.txt
+WARNING 2023-11-07 17:25:03,517 log Not Found: /contact-us/
+WARNING 2023-11-07 17:34:48,216 log Not Found: /wp-content/themes/twentyseventeen/ALFA_DATA/alfacgiapi/
+WARNING 2023-11-07 17:42:04,009 log Not Found: /shop/product/kids-moncler-jackets-boy-white/
+WARNING 2023-11-07 17:53:53,870 log Not Found: /shop/ko/product/여러-색상의-남성과-여성-다운-재킷-후드-커피/
+WARNING 2023-11-07 18:14:05,529 log Not Found: /shop/fi/product-category/uutuudet
+WARNING 2023-11-07 18:50:03,021 log Not Found: /contact-us/
+WARNING 2023-11-07 18:53:55,574 log Not Found: /geoserver
+WARNING 2023-11-07 18:55:04,182 log Not Found: /shop/product/moncler-down-jackets-in-black-with-hoody/
+WARNING 2023-11-07 18:57:38,895 log Not Found: /robots.txt
+WARNING 2023-11-07 18:57:46,956 log Not Found: /robots.txt
+WARNING 2023-11-07 18:59:51,291 log Not Found: /re_confirm/
+WARNING 2023-11-07 19:00:39,253 log Not Found: /inquiry_others/
+WARNING 2023-11-07 19:01:13,601 log Not Found: /accounts/login/index.html
+WARNING 2023-11-07 19:01:29,321 log Not Found: /retrieve_post/
+WARNING 2023-11-07 19:01:52,569 log Not Found: /inquiry_others/
+WARNING 2023-11-07 19:02:27,937 log Not Found: /re_confirm_email/
+WARNING 2023-11-07 19:02:44,252 log Not Found: /retrieve_post/
+WARNING 2023-11-07 19:02:52,978 log Not Found: /accounts/google/login/index.html
+WARNING 2023-11-07 19:03:52,327 log Not Found: /retrieve_inquiry/
+WARNING 2023-11-07 19:05:29,814 log Not Found: /accounts/password/reset/index.html
+WARNING 2023-11-07 19:14:48,474 log Not Found: /ab2g
+WARNING 2023-11-07 19:14:49,330 log Not Found: /ab2h
+WARNING 2023-11-07 19:14:56,043 log Not Found: /t4
+WARNING 2023-11-07 19:26:52,685 log Forbidden (CSRF cookie not set.): /price_detail/
+WARNING 2023-11-07 20:05:09,891 log Not Found: /shop/category/fake-moncler-jackets/
+WARNING 2023-11-07 20:07:25,940 log Forbidden (Referer checking failed - no Referer.): /admin/login/
+WARNING 2023-11-07 20:15:00,963 log Forbidden (Referer checking failed - no Referer.): /admin/login/
+WARNING 2023-11-07 20:22:29,283 log Forbidden (Referer checking failed - no Referer.): /admin/login/
+WARNING 2023-11-07 20:29:55,626 log Forbidden (Referer checking failed - no Referer.): /admin/login/
+WARNING 2023-11-07 20:33:03,657 log Not Found: /robots.txt
+WARNING 2023-11-07 20:37:25,064 log Forbidden (Referer checking failed - no Referer.): /admin/login/
+WARNING 2023-11-07 20:44:05,713 log Not Found: /robots.txt
+WARNING 2023-11-07 20:44:53,282 log Forbidden (Referer checking failed - no Referer.): /admin/login/
+WARNING 2023-11-07 20:52:21,110 log Forbidden (Referer checking failed - no Referer.): /admin/login/
+WARNING 2023-11-07 20:59:47,078 log Forbidden (Referer checking failed - no Referer.): /admin/login/
+WARNING 2023-11-07 21:05:01,395 log Not Found: /robots.txt
+WARNING 2023-11-07 21:06:42,879 log Not Found: /ads.txt
+WARNING 2023-11-07 21:07:15,254 log Forbidden (Referer checking failed - no Referer.): /admin/login/
+ERROR 2023-11-07 21:14:37,329 log Internal Server Error: /inquiry_details/
 Traceback (most recent call last):
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 56, in inner
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 56, in inner
     response = get_response(request)
-  File "/home/ubuntu/github/easygo/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
     response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/home/ubuntu/github/easygo/basecamp/views.py", line 761, in inquiry_details2
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/basecamp/views.py", line 382, in inquiry_details
     if request.is_ajax():
+       ^^^^^^^^^^^^^^^
 AttributeError: 'WSGIRequest' object has no attribute 'is_ajax'
-WARNING 2023-11-06 11:39:13,522 log Not Found: /shop/ko/product/moncler-branson-클래식-모자-남성-다운-자켓-모자-보라색/
-WARNING 2023-11-06 11:46:17,060 log Not Found: /.env
-WARNING 2023-11-06 11:46:18,566 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-11-07 21:14:44,864 log Forbidden (Referer checking failed - no Referer.): /admin/login/
+WARNING 2023-11-07 21:28:55,625 log Not Found: /robots.txt
+WARNING 2023-11-07 21:43:54,921 log Not Found: /shop/es/product/chalecos-moncler-mujer-acolchados-cuerpo-mas-calido-azul-marino/
+WARNING 2023-11-07 21:46:56,789 log Not Found: /robots.txt
+WARNING 2023-11-07 21:59:18,522 log Not Found: /shop/it/product/moncler-bady-8/
+WARNING 2023-11-07 22:22:22,789 log Not Found: /inquiry3/
+ERROR 2023-11-07 22:48:17,955 exception Invalid HTTP_HOST header: 'enterpriseplan.com.au'. You may need to add 'enterpriseplan.com.au' to ALLOWED_HOSTS.
+WARNING 2023-11-07 22:48:17,957 log Bad Request: /
+WARNING 2023-11-07 23:01:27,993 log Not Found: /apple-touch-icon-120x120-precomposed.png
+WARNING 2023-11-07 23:01:28,014 log Not Found: /apple-touch-icon-120x120.png
+WARNING 2023-11-07 23:03:05,957 log Not Found: /robots.txt
+WARNING 2023-11-07 23:21:45,958 log Not Found: /simple.php
+WARNING 2023-11-07 23:21:56,453 log Not Found: /chosen.php
+WARNING 2023-11-07 23:23:56,388 log Not Found: /robots.txt
+WARNING 2023-11-07 23:24:11,188 log Not Found: /inquiry_others/
+WARNING 2023-11-08 00:07:37,165 log Not Found: /shop/ko/product/남성용-운동복-재킷-2/
+WARNING 2023-11-08 00:08:07,043 log Not Found: /shop/fi/product/moncler-takit-miehet-matkat-sininen/
+WARNING 2023-11-08 00:12:33,184 log Not Found: /shop/de/product/moncler-top-quality-damen-daunenjacken-zip-green-card/
+WARNING 2023-11-08 00:42:13,051 log Not Found: /inputs.php
+WARNING 2023-11-08 00:43:34,641 log Not Found: /index.php
+WARNING 2023-11-08 00:47:14,114 log Not Found: /shop/ko/product/moncler-chery-자켓-여성용-지퍼-칼라-자홍색/
+WARNING 2023-11-08 00:49:22,088 log Not Found: /robots.txt
+WARNING 2023-11-08 00:52:26,057 log Not Found: /shop/ko/product/moncler-chery-자켓-여성용-지퍼-칼라-자홍색/
+WARNING 2023-11-08 00:55:06,841 log Not Found: /wordpress/
+WARNING 2023-11-08 01:36:24,666 log Not Found: /th1s_1s_a_4o4.html
+WARNING 2023-11-08 01:36:43,533 log Not Found: /inquiry3/
+WARNING 2023-11-08 01:37:04,822 log Not Found: /booking_form/sms:+61406883355
+WARNING 2023-11-08 01:37:05,723 log Not Found: /airport-transfers-toongabbie/sms:+61406883355
+WARNING 2023-11-08 01:37:06,568 log Not Found: /airport-transfers-hornsby/sms:+61406883355
+WARNING 2023-11-08 01:37:08,892 log Not Found: /booking_form_detail/sms:+61406883355
+WARNING 2023-11-08 01:37:09,734 log Not Found: /airport-transfers-epping/sms:+61406883355
+WARNING 2023-11-08 01:37:10,575 log Not Found: /payonline/sms:+61406883355
+WARNING 2023-11-08 01:37:11,474 log Not Found: /airport-transfers-st-ives/sms:+61406883355
+WARNING 2023-11-08 01:37:12,319 log Not Found: /information/sms:+61406883355
+WARNING 2023-11-08 01:37:13,170 log Not Found: /inquiry/sms:+61406883355
+WARNING 2023-11-08 01:37:14,009 log Not Found: /inquiry2/sms:+61406883355
+WARNING 2023-11-08 01:37:14,898 log Not Found: /service/sms:+61406883355
+WARNING 2023-11-08 01:37:17,240 log Not Found: /airport-transfers-ryde/sms:+61406883355
+WARNING 2023-11-08 01:37:19,224 log Not Found: /airport-transfers-blacktown/sms:+61406883355
+WARNING 2023-11-08 01:37:20,065 log Not Found: /airport-transfers-parramatta/sms:+61406883355
+WARNING 2023-11-08 01:37:20,914 log Not Found: /privacy/sms:+61406883355
+WARNING 2023-11-08 01:37:21,753 log Not Found: /p2p/sms:+61406883355
+WARNING 2023-11-08 01:37:22,591 log Not Found: /meeting_point/sms:+61406883355
+WARNING 2023-11-08 01:37:25,163 log Not Found: /airport-transfers-chatswood/sms:+61406883355
+WARNING 2023-11-08 01:37:26,007 log Not Found: /airport-transfers-thornleigh/sms:+61406883355
+WARNING 2023-11-08 01:37:26,853 log Not Found: /terms/sms:+61406883355
+WARNING 2023-11-08 01:37:27,701 log Not Found: /inquiry_details2/sms:+61406883355
+WARNING 2023-11-08 01:37:28,540 log Not Found: /p2p_detail/sms:+61406883355
+WARNING 2023-11-08 01:37:29,380 log Not Found: /home/sms:+61406883355
+WARNING 2023-11-08 01:37:30,224 log Not Found: /payonline/tell:+61406883355
+WARNING 2023-11-08 01:37:32,084 log Not Found: /inquiry_details/sms:+61406883355
+WARNING 2023-11-08 01:37:32,922 log Not Found: /p2p_single/sms:+61406883355
+WARNING 2023-11-08 01:37:34,799 log Not Found: /price_detail/sms:+61406883355
+WARNING 2023-11-08 01:37:35,647 log Not Found: /about_us/sms:+61406883355
+WARNING 2023-11-08 01:37:36,493 log Not Found: /inquiry_details1/sms:+61406883355
+WARNING 2023-11-08 01:37:37,765 log Not Found: /p2p_single_detail/sms:+61406883355
+WARNING 2023-11-08 01:48:55,028 log Not Found: /.well-known/traffic-advice
+WARNING 2023-11-08 02:16:03,760 log Not Found: /shop/de/product-category/neuankommlinge/
+WARNING 2023-11-08 02:23:32,645 log Not Found: /shop/product/moncler-chausenque/
+WARNING 2023-11-08 02:38:32,412 log Not Found: /.env
+WARNING 2023-11-08 02:38:32,416 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-11-08 02:38:33,399 log Not Found: /core/.env
+WARNING 2023-11-08 02:38:34,263 log Not Found: /app/.env
+WARNING 2023-11-08 02:38:36,420 log Not Found: /api/.env
+WARNING 2023-11-08 02:41:14,170 log Not Found: /robots.txt
+WARNING 2023-11-08 02:45:32,724 log Not Found: /price-booking/
+WARNING 2023-11-08 02:45:59,179 log Not Found: /robots.txt
+WARNING 2023-11-08 02:56:06,241 log Not Found: /robots.txt
+WARNING 2023-11-08 02:57:58,734 log Not Found: /robots.txt
+WARNING 2023-11-08 02:58:03,219 log Not Found: /sitemap.xml
+WARNING 2023-11-08 03:15:53,534 log Not Found: /robots.txt
+ERROR 2023-11-08 03:37:37,064 log Internal Server Error: /inquiry_details/
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/basecamp/views.py", line 464, in inquiry_details
+    p.save()
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/base.py", line 806, in save
+    self.save_base(
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/base.py", line 857, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/base.py", line 1000, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/base.py", line 1041, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/query.py", line 1434, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/sql/compiler.py", line 1620, in execute_sql
+    for sql, params in self.as_sql():
+                       ^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/sql/compiler.py", line 1547, in as_sql
+    value_rows = [
+                 ^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/sql/compiler.py", line 1548, in <listcomp>
+    [
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/sql/compiler.py", line 1549, in <listcomp>
+    self.prepare_value(field, self.pre_save_val(field, obj))
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/sql/compiler.py", line 1487, in prepare_value
+    value = field.get_db_prep_save(value, connection=self.connection)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/fields/__init__.py", line 910, in get_db_prep_save
+    return self.get_db_prep_value(value, connection=connection, prepared=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/fields/__init__.py", line 1408, in get_db_prep_value
+    value = self.get_prep_value(value)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/fields/__init__.py", line 1403, in get_prep_value
+    return self.to_python(value)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/fields/__init__.py", line 1369, in to_python
+    raise exceptions.ValidationError(
+django.core.exceptions.ValidationError: ['“D Bprueelb” value has an invalid date format. It must be in YYYY-MM-DD format.']
+WARNING 2023-11-08 03:41:49,405 log Not Found: /robots.txt
+WARNING 2023-11-08 03:52:52,875 log Not Found: /inquiry3/
+WARNING 2023-11-08 04:10:08,409 log Not Found: /shop/da/product-category/moncler-stovler/
+ERROR 2023-11-08 05:26:10,202 exception Invalid HTTP_HOST header: 'enterpriseplan.com.au'. You may need to add 'enterpriseplan.com.au' to ALLOWED_HOSTS.
+WARNING 2023-11-08 05:26:10,204 log Bad Request: /
+WARNING 2023-11-08 05:45:18,238 log Not Found: /robots.txt
+WARNING 2023-11-08 05:45:51,656 log Not Found: /shop/it/product-category/moncler-veste-donna/
+WARNING 2023-11-08 05:58:50,495 log Not Found: /shop/ko/product/moncler-branson-클래식-모자-남성-다운-자켓-모자-보라색/
+WARNING 2023-11-08 06:04:48,356 log Not Found: /robots.txt
+WARNING 2023-11-08 06:04:49,733 log Not Found: /robots.txt
+WARNING 2023-11-08 06:04:50,723 log Not Found: /robots.txt
+WARNING 2023-11-08 06:04:51,691 log Not Found: /robots.txt
+WARNING 2023-11-08 06:04:53,554 log Not Found: /robots.txt
+WARNING 2023-11-08 06:05:14,525 log Not Found: /robots.txt
+WARNING 2023-11-08 06:05:15,118 log Not Found: /robots.txt
+WARNING 2023-11-08 06:05:20,095 log Not Found: /robots.txt
+WARNING 2023-11-08 06:07:15,770 log Not Found: /robots.txt
+WARNING 2023-11-08 06:12:12,717 log Not Found: /robots.txt
+WARNING 2023-11-08 06:14:17,201 log Not Found: /inquiry3/
+WARNING 2023-11-08 06:14:48,118 log Not Found: /inquiry3/
+WARNING 2023-11-08 06:17:35,752 log Not Found: /autodiscover/autodiscover.json
+WARNING 2023-11-08 06:40:25,662 log Not Found: /style.php
+WARNING 2023-11-08 06:55:33,615 log Not Found: /Temporary_Listen_Addresses/
+WARNING 2023-11-08 06:59:01,430 log Not Found: /shop/nl/moncler-women-vest-tarn-black/
+WARNING 2023-11-08 07:26:33,375 log Not Found: /robots.txt
+WARNING 2023-11-08 07:26:34,881 log Not Found: /悉尼机场接送服务的最佳拍档/
+WARNING 2023-11-08 08:35:29,098 log Not Found: /IISStart
+WARNING 2023-11-08 08:36:27,712 log Not Found: /robots.txt
+WARNING 2023-11-08 08:37:18,596 log Not Found: /shop/nl/product/moncler-jas-heren-half-lengte-met-kap-koffie/
+ERROR 2023-11-08 09:09:36,706 exception Invalid HTTP_HOST header: '45.32.245.91.vultrusercontent.com'. You may need to add '45.32.245.91.vultrusercontent.com' to ALLOWED_HOSTS.
+WARNING 2023-11-08 09:09:36,708 log Bad Request: /rT5a
+ERROR 2023-11-08 09:09:37,434 exception Invalid HTTP_HOST header: '45.32.245.91.vultrusercontent.com'. You may need to add '45.32.245.91.vultrusercontent.com' to ALLOWED_HOSTS.
+WARNING 2023-11-08 09:09:37,435 log Bad Request: /eGgJ
+WARNING 2023-11-08 09:14:47,706 log Not Found: /robots.txt
+WARNING 2023-11-08 09:54:17,911 log Not Found: /robots.txt
+WARNING 2023-11-08 09:57:20,218 log Not Found: /actuator/health
+WARNING 2023-11-08 10:40:21,528 log Not Found: /wp-login.php
+WARNING 2023-11-08 11:03:30,862 log Not Found: /robots.txt
+WARNING 2023-11-08 11:03:31,050 log Not Found: /robots.txt
+WARNING 2023-11-08 12:13:47,971 log Not Found: /retrieve_inquiry/
+WARNING 2023-11-08 12:17:11,713 log Not Found: /.env
+WARNING 2023-11-08 12:17:28,361 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-11-08 12:17:40,530 log Not Found: /sendgrid/.env
+WARNING 2023-11-08 12:18:01,206 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-11-08 12:26:50,295 log Not Found: /inquiry3/
+WARNING 2023-11-08 12:46:10,406 log Not Found: /shop/de/moncler-women-vest-tarn-black/
+WARNING 2023-11-08 13:17:17,251 log Not Found: /robots.txt
+WARNING 2023-11-08 13:48:29,829 log Not Found: /home/_ignition/execute-solution
+WARNING 2023-11-08 13:55:25,119 log Not Found: /contact/
