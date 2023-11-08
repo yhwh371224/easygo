@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 WARNING 2023-11-07 14:38:49,502 log Not Found: /apple-touch-icon-120x120-precomposed.png
 WARNING 2023-11-07 14:38:49,530 log Not Found: /apple-touch-icon-120x120.png
 WARNING 2023-11-07 14:47:07,762 log Not Found: /shop/de/product/moncler-boots-nible-black-stilvoll-und-groszugig/
@@ -248,3 +249,12 @@ WARNING 2023-11-08 12:46:10,406 log Not Found: /shop/de/moncler-women-vest-tarn-
 WARNING 2023-11-08 13:17:17,251 log Not Found: /robots.txt
 WARNING 2023-11-08 13:48:29,829 log Not Found: /home/_ignition/execute-solution
 WARNING 2023-11-08 13:55:25,119 log Not Found: /contact/
+=======
+WARNING 2023-11-07 04:02:48,560 log Not Found: /cf_scripts/scripts/ajax/ckeditor/ckeditor.js
+WARNING 2023-11-07 04:26:37,980 log Not Found: /.env
+WARNING 2023-11-07 04:26:39,193 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-11-07 04:33:39,574 log Not Found: /Core/Skin/Login.aspx
+WARNING 2023-11-07 05:11:25,887 log Not Found: /.env
+WARNING 2023-11-07 05:11:27,076 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-11-07 06:09:02,109 log Not Found: /Core/Skin/Login.aspx
+>>>>>>> origin/main

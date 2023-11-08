@@ -7,15 +7,16 @@ venv/
 migrations/
 media/
 
-secure/
-
 temp/
 
 logs/
 
-db.sqlite3
+secure/
 
-token.json
+data.sqlite3
+
+
+
 
 
 
