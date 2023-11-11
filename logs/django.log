@@ -60,3 +60,46 @@ WARNING 2023-11-11 20:35:07,181 log Not Found: /autodiscove/
 WARNING 2023-11-11 20:50:59,829 log Not Found: /wp-apxupx.php
 ERROR 2023-11-11 21:23:58,217 exception Invalid HTTP_HOST header: 'enterpriseplan.com.au'. You may need to add 'enterpriseplan.com.au' to ALLOWED_HOSTS.
 WARNING 2023-11-11 21:23:58,219 log Bad Request: /employers/employer-responsibility/
+WARNING 2023-11-11 21:57:31,082 log Not Found: /shop/product/moncler-jackets-kids-erable-moka/
+WARNING 2023-11-11 21:58:38,442 log Not Found: /autodiscover/autodiscover.json
+WARNING 2023-11-11 22:04:58,998 log Not Found: /robots.txt
+WARNING 2023-11-11 22:08:46,512 log Not Found: /shop/ko/product/아기-테디-회색-다운-재킷/
+WARNING 2023-11-11 22:18:11,094 log Not Found: /robots.txt
+WARNING 2023-11-11 22:18:12,151 log Not Found: /robots.txt
+WARNING 2023-11-11 22:18:13,354 log Not Found: /robots.txt
+WARNING 2023-11-11 22:18:14,199 log Not Found: /robots.txt
+WARNING 2023-11-11 22:19:10,762 log Not Found: /ads.txt
+WARNING 2023-11-11 22:19:21,145 log Not Found: /sms:+61406883355
+WARNING 2023-11-11 22:19:21,154 log Not Found: /tell:+61406883355
+WARNING 2023-11-11 22:19:31,242 log Not Found: /inquiry3/
+WARNING 2023-11-11 22:29:03,732 log Not Found: /robots.txt
+WARNING 2023-11-11 22:29:08,284 log Not Found: /悉尼机场巴士/
+WARNING 2023-11-11 22:29:10,878 log Not Found: /悉尼机场巴士/
+WARNING 2023-11-11 22:29:15,488 log Not Found: /悉尼机场接送/
+WARNING 2023-11-11 22:29:18,067 log Not Found: /悉尼机场接送/
+WARNING 2023-11-11 22:29:22,628 log Not Found: /悉尼机场接送服务/
+WARNING 2023-11-11 22:29:25,088 log Not Found: /悉尼机场接送服务/
+WARNING 2023-11-11 22:29:29,663 log Not Found: /悉尼机场接送服务的最佳拍档/
+WARNING 2023-11-11 22:29:32,101 log Not Found: /悉尼机场接送服务的最佳拍档/
+WARNING 2023-11-11 22:29:36,696 log Not Found: /机场接送-悉尼/
+WARNING 2023-11-11 22:29:39,303 log Not Found: /机场接送-悉尼/
+ERROR 2023-11-11 22:59:49,724 log Internal Server Error: /inquiry_details/
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/basecamp/views.py", line 382, in inquiry_details
+    if request.is_ajax():
+       ^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'is_ajax'
+WARNING 2023-11-11 23:28:32,754 log Not Found: /webui/
+WARNING 2023-11-11 23:35:30,543 log Not Found: /vpn/index.html
+WARNING 2023-11-11 23:36:09,477 log Not Found: /geoserver/web/
+WARNING 2023-11-11 23:36:51,327 log Not Found: /.git/config
+WARNING 2023-11-11 23:45:46,236 log Not Found: /robots.txt
+WARNING 2023-11-11 23:51:44,484 log Not Found: /shop/nl/product/moncler-bodywarmer-gewatteerd-bodywarmer-diepblauw/
+WARNING 2023-11-12 00:22:22,530 log Not Found: /robots.txt
+WARNING 2023-11-12 00:38:35,958 log Not Found: /shop/nl/product/moncler-jassen-kinderen-herbert-blauw/
