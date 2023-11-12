@@ -1,36 +1,79 @@
-WARNING 2023-11-11 14:30:32,209 log Not Found: /robots.txt
-WARNING 2023-11-11 14:37:11,357 log Not Found: /robots.txt
-WARNING 2023-11-11 14:37:11,599 log Not Found: /price-booking/
-WARNING 2023-11-11 14:52:10,244 log Not Found: /shop/pl/product/moncler-dol-zakiet-mezczyzn-elegancja-armia-zielony/
-WARNING 2023-11-11 15:06:33,206 log Not Found: /.git/config
-WARNING 2023-11-11 15:36:48,561 log Not Found: /.well-known/acme-challenge/MXM8R9SGF47KSZXVPUC061HE09FWGHG_
-WARNING 2023-11-11 15:36:49,531 log Not Found: /.well-known/acme-challenge/TCNINV3BGQL_-TMSRT42C7H7F--N5EIL
-WARNING 2023-11-11 16:14:03,679 log Not Found: /owa/auth/logon.aspx
-WARNING 2023-11-11 16:14:13,126 log Not Found: /airport-transfers-hornsby/booking_email.html
-WARNING 2023-11-11 16:39:50,753 log Not Found: /shop/es/product/moncler-abajo-abrigo-mujeres-con-capucha-cafe-a-prueba-de-viento/
-WARNING 2023-11-11 17:20:51,550 log Not Found: /robots.txt
-WARNING 2023-11-11 17:45:00,670 log Not Found: /robots.txt
-WARNING 2023-11-11 17:54:28,130 log Not Found: /robots.txt
-WARNING 2023-11-11 17:54:29,234 log Not Found: /pay-online/
-ERROR 2023-11-11 17:56:46,277 exception Invalid HTTP_HOST header: 'www.enterpriseplan.com.au'. You may need to add 'www.enterpriseplan.com.au' to ALLOWED_HOSTS.
-WARNING 2023-11-11 17:56:46,278 log Bad Request: /
-ERROR 2023-11-11 17:56:46,337 exception Invalid HTTP_HOST header: 'enterpriseplan.com.au'. You may need to add 'enterpriseplan.com.au' to ALLOWED_HOSTS.
-WARNING 2023-11-11 17:56:46,339 log Bad Request: /
-WARNING 2023-11-11 17:59:41,785 log Not Found: /.git/config
-WARNING 2023-11-11 17:59:48,780 log Not Found: /wp-content/plugins/core-plugin/include.php
-WARNING 2023-11-11 18:00:02,909 log Not Found: /wp-content/plugins/WordPressCore/include.php
-WARNING 2023-11-11 18:00:28,471 log Not Found: /wp-includes/images/include.php
-WARNING 2023-11-11 18:00:38,859 log Not Found: /wp-includes/widgets/include.php
-WARNING 2023-11-11 18:38:01,270 log Not Found: /inquiry3/
-WARNING 2023-11-11 19:07:29,535 log Not Found: /ads.txt
-WARNING 2023-11-11 19:08:05,977 log Not Found: /robots.txt
-WARNING 2023-11-11 19:08:13,490 log Not Found: /.env
-WARNING 2023-11-11 19:14:19,633 log Not Found: /robots.txt
-WARNING 2023-11-11 19:18:31,255 log Not Found: /robots.txt
-WARNING 2023-11-11 19:26:15,456 log Not Found: /shop/product/moncler-branson-women-down-vest-belt-decorative-light-blue/
-WARNING 2023-11-11 19:37:29,957 log Not Found: /robots.txt
-WARNING 2023-11-11 19:52:59,553 log Not Found: /inquiry3/
-ERROR 2023-11-11 19:54:20,133 log Internal Server Error: /inquiry_details2/
+WARNING 2023-11-12 14:43:59,978 log Not Found: /robots.txt
+WARNING 2023-11-12 15:35:48,789 log Not Found: /owa/auth/logon.aspx
+WARNING 2023-11-12 15:36:01,305 log Not Found: /.well-known/acme-challenge/S45Q_0PMEPIMSA8P_YFC1_URY94W0D8G
+WARNING 2023-11-12 15:36:02,272 log Not Found: /.well-known/acme-challenge/AS7CLA9A_M1V8H07UI_4RPJ3LMI5HJI3
+WARNING 2023-11-12 15:36:57,732 log Not Found: /robots.txt
+WARNING 2023-11-12 15:38:28,278 log Not Found: /robots.txt
+WARNING 2023-11-12 15:40:48,475 log Not Found: /robots.txt
+WARNING 2023-11-12 15:42:14,450 log Not Found: /robots.txt
+WARNING 2023-11-12 15:48:10,341 log Forbidden (CSRF cookie not set.): /price_detail/
+WARNING 2023-11-12 15:57:25,743 log Not Found: /home/url(/static/basecamp/photos/easygo-home-page3.webp)
+WARNING 2023-11-12 16:04:15,115 log Not Found: /robots.txt
+WARNING 2023-11-12 16:12:20,892 log Not Found: /home/url(/static/basecamp/photos/easygo-home-page4.webp)
+WARNING 2023-11-12 16:27:22,545 log Not Found: /whyareugay
+WARNING 2023-11-12 16:33:07,342 log Not Found: /home/url(/static/basecamp/photos/easygo-home-page3.webp)
+WARNING 2023-11-12 16:41:10,712 log Not Found: /home/url(/static/basecamp/photos/easygo-home-page4.webp)
+WARNING 2023-11-12 16:43:12,010 log Not Found: /robots.txt
+WARNING 2023-11-12 16:44:24,051 log Not Found: /.env
+WARNING 2023-11-12 16:44:27,038 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-11-12 17:01:45,189 log Not Found: /robots.txt
+WARNING 2023-11-12 17:05:41,874 log Not Found: /home/url(/static/basecamp/photos/home1.webp)
+WARNING 2023-11-12 17:23:40,979 log Not Found: /shop/product/moncler-down-coat-men-mid-length-with-hood-coffee/
+WARNING 2023-11-12 18:03:29,278 log Not Found: /robots.txt
+WARNING 2023-11-12 18:03:56,090 log Not Found: /blacktown/
+WARNING 2023-11-12 18:04:02,937 log Not Found: /webui/
+WARNING 2023-11-12 18:04:03,417 log Not Found: /chatswood/
+WARNING 2023-11-12 18:04:06,747 log Not Found: /contact/
+WARNING 2023-11-12 18:04:10,452 log Not Found: /epping/
+WARNING 2023-11-12 18:04:13,764 log Not Found: /home/index.html
+WARNING 2023-11-12 18:04:17,116 log Not Found: /hornsby/
+WARNING 2023-11-12 18:04:24,234 log Not Found: /inquiry_others/
+WARNING 2023-11-12 18:04:31,167 log Not Found: /parramatta/
+WARNING 2023-11-12 18:04:37,990 log Not Found: /ryde/
+WARNING 2023-11-12 18:04:44,845 log Not Found: /st_ives/
+WARNING 2023-11-12 18:04:51,947 log Not Found: /thornleigh/
+WARNING 2023-11-12 18:04:55,277 log Not Found: /toongabbie/
+WARNING 2023-11-12 18:04:56,967 log Not Found: /robots.txt
+WARNING 2023-11-12 18:10:21,697 log Not Found: /vpn/index.html
+WARNING 2023-11-12 18:11:00,014 log Not Found: /geoserver/web/
+WARNING 2023-11-12 18:11:32,850 log Not Found: /.git/config
+WARNING 2023-11-12 18:16:02,765 log Forbidden (Referer checking failed - no Referer.): /inquiry_details2/
+WARNING 2023-11-12 18:16:04,265 log Forbidden (Referer checking failed - no Referer.): /inquiry_details2/
+WARNING 2023-11-12 18:16:05,232 log Forbidden (Referer checking failed - no Referer.): /inquiry_details2/
+WARNING 2023-11-12 18:16:11,917 log Forbidden (Referer checking failed - no Referer.): /inquiry_details/
+WARNING 2023-11-12 18:16:13,173 log Forbidden (Referer checking failed - no Referer.): /inquiry_details/
+WARNING 2023-11-12 18:16:14,593 log Forbidden (Referer checking failed - no Referer.): /inquiry_details/
+WARNING 2023-11-12 18:16:48,826 log Not Found: /technology/safety-security/
+WARNING 2023-11-12 18:16:53,774 log Not Found: /products/registry/
+WARNING 2023-11-12 18:17:02,546 log Not Found: /technology/developers/
+WARNING 2023-11-12 18:17:16,700 log Not Found: /newsletter-subscribe/
+WARNING 2023-11-12 18:17:36,920 log Not Found: /technology/families/
+WARNING 2023-11-12 18:17:37,784 log Not Found: /technology/ai/
+WARNING 2023-11-12 18:17:40,180 log Forbidden (Referer checking failed - no Referer.): /inquiry_details1/
+WARNING 2023-11-12 18:17:41,457 log Forbidden (Referer checking failed - no Referer.): /inquiry_details1/
+WARNING 2023-11-12 18:17:43,345 log Forbidden (Referer checking failed - no Referer.): /inquiry_details1/
+WARNING 2023-11-12 18:19:45,240 log Not Found: /home/url(/static/basecamp/photos/home1.webp)
+WARNING 2023-11-12 18:26:10,594 log Not Found: /.well-known/traffic-advice
+WARNING 2023-11-12 18:38:02,128 log Not Found: /ads.txt
+WARNING 2023-11-12 18:40:38,094 log Not Found: /shop/pl/product/moncler-sanglante-eider-down-jacket-women-black/
+WARNING 2023-11-12 18:55:39,501 log Not Found: /whyareugay
+WARNING 2023-11-12 18:55:46,186 log Not Found: /.env
+WARNING 2023-11-12 18:55:47,836 log Not Found: /api/.env
+WARNING 2023-11-12 19:25:31,277 log Not Found: /ab2g
+WARNING 2023-11-12 19:25:32,409 log Not Found: /ab2h
+WARNING 2023-11-12 19:25:41,413 log Not Found: /t4
+WARNING 2023-11-12 19:33:29,352 log Not Found: /robots.txt
+WARNING 2023-11-12 19:58:41,021 log Not Found: /robots.txt
+WARNING 2023-11-12 19:58:42,132 log Not Found: /robots.txt
+WARNING 2023-11-12 19:58:44,333 log Not Found: /sitemap.xml
+WARNING 2023-11-12 20:46:10,136 log Not Found: /robots.txt
+WARNING 2023-11-12 21:48:07,088 log Not Found: /robots.txt
+WARNING 2023-11-12 21:52:24,773 log Not Found: /robots.txt
+WARNING 2023-11-12 21:58:17,440 log Not Found: /Autodiscover/owa/
+WARNING 2023-11-12 22:06:31,709 log Not Found: /robots.txt
+WARNING 2023-11-12 22:13:08,367 log Not Found: /owa/auth/x.js
+WARNING 2023-11-12 22:45:03,980 log Not Found: /contact/
+ERROR 2023-11-12 22:47:21,560 log Internal Server Error: /inquiry_details2/
 Traceback (most recent call last):
   File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 56, in inner
     response = get_response(request)
@@ -42,64 +85,99 @@ Traceback (most recent call last):
     if request.is_ajax():
        ^^^^^^^^^^^^^^^
 AttributeError: 'WSGIRequest' object has no attribute 'is_ajax'
-ERROR 2023-11-11 19:56:57,561 exception Invalid HTTP_HOST header: 'www.enterpriseplan.com.au'. You may need to add 'www.enterpriseplan.com.au' to ALLOWED_HOSTS.
-WARNING 2023-11-11 19:56:57,563 log Bad Request: /robots.txt
-WARNING 2023-11-11 20:25:04,836 log Not Found: /robots.txt
-WARNING 2023-11-11 20:30:12,163 log Not Found: /robots.txt
-WARNING 2023-11-11 20:34:52,867 log Not Found: /Temporary_Listen_Addresses
-WARNING 2023-11-11 20:34:54,381 log Not Found: /ews/exchanges/
-WARNING 2023-11-11 20:34:55,832 log Not Found: /ews/exchange /
-WARNING 2023-11-11 20:34:57,216 log Not Found: /ews/exchange/
-WARNING 2023-11-11 20:34:58,630 log Not Found: /ews/ /
-WARNING 2023-11-11 20:35:00,152 log Not Found: /ews/ews/
-WARNING 2023-11-11 20:35:01,630 log Not Found: /ews/autodiscovers/
-WARNING 2023-11-11 20:35:03,212 log Not Found: /autodiscover/autodiscovers/
-WARNING 2023-11-11 20:35:04,766 log Not Found: /autodiscover/autodiscover /
-WARNING 2023-11-11 20:35:05,959 log Not Found: /autodiscover/autodiscoverrs/
-WARNING 2023-11-11 20:35:07,181 log Not Found: /autodiscove/
-WARNING 2023-11-11 20:50:59,829 log Not Found: /wp-apxupx.php
-ERROR 2023-11-11 21:23:58,217 exception Invalid HTTP_HOST header: 'enterpriseplan.com.au'. You may need to add 'enterpriseplan.com.au' to ALLOWED_HOSTS.
-WARNING 2023-11-11 21:23:58,219 log Bad Request: /employers/employer-responsibility/
-WARNING 2023-11-11 21:57:31,082 log Not Found: /shop/product/moncler-jackets-kids-erable-moka/
-WARNING 2023-11-11 21:58:38,442 log Not Found: /autodiscover/autodiscover.json
-WARNING 2023-11-11 22:04:58,998 log Not Found: /robots.txt
-WARNING 2023-11-11 22:08:46,512 log Not Found: /shop/ko/product/아기-테디-회색-다운-재킷/
-WARNING 2023-11-11 22:18:11,094 log Not Found: /robots.txt
-WARNING 2023-11-11 22:18:12,151 log Not Found: /robots.txt
-WARNING 2023-11-11 22:18:13,354 log Not Found: /robots.txt
-WARNING 2023-11-11 22:18:14,199 log Not Found: /robots.txt
-WARNING 2023-11-11 22:19:10,762 log Not Found: /ads.txt
-WARNING 2023-11-11 22:19:21,145 log Not Found: /sms:+61406883355
-WARNING 2023-11-11 22:19:21,154 log Not Found: /tell:+61406883355
-WARNING 2023-11-11 22:19:31,242 log Not Found: /inquiry3/
-WARNING 2023-11-11 22:29:03,732 log Not Found: /robots.txt
-WARNING 2023-11-11 22:29:08,284 log Not Found: /悉尼机场巴士/
-WARNING 2023-11-11 22:29:10,878 log Not Found: /悉尼机场巴士/
-WARNING 2023-11-11 22:29:15,488 log Not Found: /悉尼机场接送/
-WARNING 2023-11-11 22:29:18,067 log Not Found: /悉尼机场接送/
-WARNING 2023-11-11 22:29:22,628 log Not Found: /悉尼机场接送服务/
-WARNING 2023-11-11 22:29:25,088 log Not Found: /悉尼机场接送服务/
-WARNING 2023-11-11 22:29:29,663 log Not Found: /悉尼机场接送服务的最佳拍档/
-WARNING 2023-11-11 22:29:32,101 log Not Found: /悉尼机场接送服务的最佳拍档/
-WARNING 2023-11-11 22:29:36,696 log Not Found: /机场接送-悉尼/
-WARNING 2023-11-11 22:29:39,303 log Not Found: /机场接送-悉尼/
-ERROR 2023-11-11 22:59:49,724 log Internal Server Error: /inquiry_details/
-Traceback (most recent call last):
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 56, in inner
-    response = get_response(request)
-               ^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/basecamp/views.py", line 382, in inquiry_details
-    if request.is_ajax():
-       ^^^^^^^^^^^^^^^
-AttributeError: 'WSGIRequest' object has no attribute 'is_ajax'
-WARNING 2023-11-11 23:28:32,754 log Not Found: /webui/
-WARNING 2023-11-11 23:35:30,543 log Not Found: /vpn/index.html
-WARNING 2023-11-11 23:36:09,477 log Not Found: /geoserver/web/
-WARNING 2023-11-11 23:36:51,327 log Not Found: /.git/config
-WARNING 2023-11-11 23:45:46,236 log Not Found: /robots.txt
-WARNING 2023-11-11 23:51:44,484 log Not Found: /shop/nl/product/moncler-bodywarmer-gewatteerd-bodywarmer-diepblauw/
-WARNING 2023-11-12 00:22:22,530 log Not Found: /robots.txt
-WARNING 2023-11-12 00:38:35,958 log Not Found: /shop/nl/product/moncler-jassen-kinderen-herbert-blauw/
+WARNING 2023-11-12 23:18:59,389 log Not Found: /robots.txt
+WARNING 2023-11-12 23:21:19,709 log Not Found: /robots.txt
+ERROR 2023-11-12 23:38:43,943 exception Invalid HTTP_HOST header: 'www.enterpriseplan.com.au'. You may need to add 'www.enterpriseplan.com.au' to ALLOWED_HOSTS.
+WARNING 2023-11-12 23:38:43,944 log Bad Request: /
+ERROR 2023-11-12 23:40:18,640 exception Invalid HTTP_HOST header: 'enterpriseplan.com.au'. You may need to add 'enterpriseplan.com.au' to ALLOWED_HOSTS.
+WARNING 2023-11-12 23:40:18,642 log Bad Request: /
+WARNING 2023-11-13 00:02:10,356 log Not Found: /shop/de/product-category/moncler-zubehor/
+WARNING 2023-11-13 00:18:33,361 log Not Found: /inquiry3/
+WARNING 2023-11-13 00:18:34,548 log Not Found: /contact-us/
+WARNING 2023-11-13 00:36:47,876 log Not Found: /inquiry3/
+WARNING 2023-11-13 00:57:01,392 log Not Found: /ecp/Current/exporttool/microsoft.exchange.ediscovery.exporttool.application
+WARNING 2023-11-13 01:18:21,131 log Not Found: /th1s_1s_a_4o4.html
+WARNING 2023-11-13 01:18:39,765 log Not Found: /inquiry3/
+WARNING 2023-11-13 01:18:48,733 log Not Found: /airport-transfers-toongabbie/sms:+61406883355
+WARNING 2023-11-13 01:18:50,543 log Not Found: /payonline/sms:+61406883355
+WARNING 2023-11-13 01:18:51,382 log Not Found: /airport-transfers-st-ives/sms:+61406883355
+WARNING 2023-11-13 01:18:52,219 log Not Found: /information/sms:+61406883355
+WARNING 2023-11-13 01:18:53,093 log Not Found: /airport-transfers-epping/sms:+61406883355
+WARNING 2023-11-13 01:18:54,892 log Not Found: /inquiry/sms:+61406883355
+WARNING 2023-11-13 01:18:55,730 log Not Found: /inquiry2/sms:+61406883355
+WARNING 2023-11-13 01:18:56,566 log Not Found: /service/sms:+61406883355
+WARNING 2023-11-13 01:18:58,611 log Not Found: /airport-transfers-ryde/sms:+61406883355
+WARNING 2023-11-13 01:18:59,452 log Not Found: /airport-transfers-blacktown/sms:+61406883355
+WARNING 2023-11-13 01:19:00,295 log Not Found: /airport-transfers-parramatta/sms:+61406883355
+WARNING 2023-11-13 01:19:01,131 log Not Found: /privacy/sms:+61406883355
+WARNING 2023-11-13 01:19:02,006 log Not Found: /inquiry_details2/sms:+61406883355
+WARNING 2023-11-13 01:19:02,844 log Not Found: /p2p/sms:+61406883355
+WARNING 2023-11-13 01:19:03,679 log Not Found: /meeting_point/sms:+61406883355
+WARNING 2023-11-13 01:19:04,516 log Not Found: /booking_form/sms:+61406883355
+WARNING 2023-11-13 01:19:05,363 log Not Found: /airport-transfers-hornsby/sms:+61406883355
+WARNING 2023-11-13 01:19:06,200 log Not Found: /airport-transfers-chatswood/sms:+61406883355
+WARNING 2023-11-13 01:19:07,049 log Not Found: /airport-transfers-thornleigh/sms:+61406883355
+WARNING 2023-11-13 01:19:07,893 log Not Found: /terms/sms:+61406883355
+WARNING 2023-11-13 01:19:08,749 log Not Found: /home/sms:+61406883355
+WARNING 2023-11-13 01:19:09,594 log Not Found: /payonline/tell:+61406883355
+WARNING 2023-11-13 01:19:10,446 log Not Found: /inquiry_details/sms:+61406883355
+WARNING 2023-11-13 01:19:14,475 log Not Found: /p2p_single/sms:+61406883355
+WARNING 2023-11-13 01:19:15,323 log Not Found: /price_detail/sms:+61406883355
+WARNING 2023-11-13 01:19:16,160 log Not Found: /about_us/sms:+61406883355
+WARNING 2023-11-13 01:19:20,221 log Not Found: /booking_form_detail/sms:+61406883355
+WARNING 2023-11-13 01:19:21,058 log Not Found: /p2p_detail/sms:+61406883355
+WARNING 2023-11-13 01:19:21,907 log Not Found: /inquiry_details1/sms:+61406883355
+WARNING 2023-11-13 01:19:22,749 log Not Found: /p2p_single_detail/sms:+61406883355
+WARNING 2023-11-13 01:22:21,261 log Not Found: /robots.txt
+WARNING 2023-11-13 01:25:41,488 log Not Found: /style.php
+WARNING 2023-11-13 01:27:50,745 log Not Found: /shop/es/product/chaquetas-de-pluma-moncler-en-rojo-claro/
+WARNING 2023-11-13 01:28:32,065 log Not Found: /robots.txt
+WARNING 2023-11-13 01:32:33,065 log Not Found: /robots.txt
+WARNING 2023-11-13 01:57:20,683 log Not Found: /wp-login.php
+ERROR 2023-11-13 02:02:02,403 exception Invalid HTTP_HOST header: 'www.enterpriseplan.com.au'. You may need to add 'www.enterpriseplan.com.au' to ALLOWED_HOSTS.
+WARNING 2023-11-13 02:02:02,406 log Bad Request: /
+ERROR 2023-11-13 02:02:02,436 exception Invalid HTTP_HOST header: 'enterpriseplan.com.au'. You may need to add 'enterpriseplan.com.au' to ALLOWED_HOSTS.
+WARNING 2023-11-13 02:02:02,438 log Bad Request: /
+WARNING 2023-11-13 02:21:09,239 log Not Found: /悉尼机场接送服务的最佳拍档
+WARNING 2023-11-13 02:24:48,665 log Not Found: /robots.txt
+WARNING 2023-11-13 02:49:01,126 log Not Found: /robots.txt
+WARNING 2023-11-13 02:49:03,110 log Not Found: /sitemap.xml
+WARNING 2023-11-13 03:44:39,079 log Not Found: /shop/ko/product/아이-모크-재킷-소녀-보라색/
+WARNING 2023-11-13 04:27:04,778 log Not Found: /autodiscove/
+WARNING 2023-11-13 04:33:49,381 log Not Found: /robots.txt
+WARNING 2023-11-13 04:33:50,812 log Not Found: /airport-pickup-point/
+WARNING 2023-11-13 04:44:22,209 log Not Found: /inquiry3/
+WARNING 2023-11-13 05:00:31,308 log Not Found: /robots.txt
+WARNING 2023-11-13 05:10:53,449 log Not Found: /whyareugay
+WARNING 2023-11-13 05:10:55,502 log Not Found: /.env
+WARNING 2023-11-13 05:10:57,537 log Not Found: /api/.env
+WARNING 2023-11-13 05:11:15,289 log Not Found: /shop/nl/product/moncler-bodywarmer-gewatteerd-bodywarmer-diepblauw/
+WARNING 2023-11-13 05:17:07,947 log Not Found: /robots.txt
+WARNING 2023-11-13 05:21:37,646 log Not Found: /inquiry3/
+WARNING 2023-11-13 05:55:28,933 log Not Found: /shop/nn/product/moncler-jakker-kids-sanglier-bla-2/
+WARNING 2023-11-13 05:58:24,709 log Not Found: /.aws/credentials
+WARNING 2023-11-13 06:08:18,228 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-11-13 06:08:20,743 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-11-13 06:08:23,216 log Not Found: /WuEL
+WARNING 2023-11-13 06:08:28,285 log Not Found: /a
+WARNING 2023-11-13 06:08:30,835 log Not Found: /download/file.ext
+WARNING 2023-11-13 06:08:33,438 log Not Found: /SiteLoader
+WARNING 2023-11-13 06:08:35,731 log Not Found: /mPlayer
+WARNING 2023-11-13 06:20:03,314 log Not Found: /autodiscover/autodiscover.json
+ERROR 2023-11-13 06:26:28,544 exception Invalid HTTP_HOST header: 'enterpriseplan.com.au'. You may need to add 'enterpriseplan.com.au' to ALLOWED_HOSTS.
+WARNING 2023-11-13 06:26:28,545 log Bad Request: /
+WARNING 2023-11-13 06:41:07,959 log Not Found: /robots.txt
+WARNING 2023-11-13 06:42:02,108 log Not Found: /services/
+WARNING 2023-11-13 06:42:07,358 log Not Found: /robots.txt
+WARNING 2023-11-13 06:50:24,457 log Not Found: /wp/wp-includes/wlwmanifest.xml
+WARNING 2023-11-13 06:50:39,851 log Not Found: /wordpress/wp-includes/wlwmanifest.xml
+WARNING 2023-11-13 06:50:55,095 log Not Found: /blog/wp-includes/wlwmanifest.xml
+WARNING 2023-11-13 07:34:32,277 log Not Found: /actuator/gateway/routes
+WARNING 2023-11-13 07:43:35,766 log Not Found: /robots.txt
+WARNING 2023-11-13 08:41:37,217 log Not Found: /robots.txt
+WARNING 2023-11-13 08:53:21,104 log Not Found: /robots.txt
+WARNING 2023-11-13 09:06:31,916 log Not Found: /ews/exchange/
+WARNING 2023-11-13 09:51:24,839 log Not Found: /airport-pickup-point/
+WARNING 2023-11-13 09:55:15,061 log Not Found: /api/.env
+WARNING 2023-11-13 09:58:20,907 log Not Found: /whyareugay
+WARNING 2023-11-13 10:00:28,808 log Not Found: /robots.txt
