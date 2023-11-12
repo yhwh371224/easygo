@@ -338,7 +338,7 @@ var e = {
               var sliderDots = slider1.getAttribute('data-dots') !== 'false'; //option: true or false
 
               var sliderAutoPlay = slider1.getAttribute('data-autoplay') !== 'false'; //option: true or false
-              var sliderAutoPlayTime = slider1.getAttribute('data-autoplaytime') ? slider1.getAttribute('data-autoplaytime') : 4000;
+              var sliderAutoPlayTime = slider1.getAttribute('data-autoplaytime') ? slider1.getAttribute('data-autoplaytime') : 6000;
               var sliderHoverPause = slider1.getAttribute('data-hoverpause') === 'true'; //option: true or false
               if (e.isVariableDefined(e.select('.custom-thumb'))) {
                 var sliderNavContainer = e.select('.custom-thumb');
