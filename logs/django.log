@@ -32,3 +32,17 @@ Traceback (most recent call last):
     if request.is_ajax():
        ^^^^^^^^^^^^^^^
 AttributeError: 'WSGIRequest' object has no attribute 'is_ajax'
+WARNING 2023-11-15 16:38:21,193 log Not Found: /autodiscover/autodiscover.json
+WARNING 2023-11-15 17:10:06,672 log Not Found: /ads.txt
+ERROR 2023-11-15 17:14:15,178 log Internal Server Error: /paypal_ipn/
+WARNING 2023-11-15 17:16:23,458 log Not Found: /.env
+WARNING 2023-11-15 17:16:24,725 log Not Found: /xmlrpc.php
+WARNING 2023-11-15 17:36:48,249 log Forbidden (CSRF cookie not set.): /confirm_booking_detail/
+WARNING 2023-11-15 17:37:16,065 log Not Found: /robots.txt
+ERROR 2023-11-15 17:50:43,113 exception Invalid HTTP_HOST header: 'enterpriseplan.com.au'. You may need to add 'enterpriseplan.com.au' to ALLOWED_HOSTS.
+WARNING 2023-11-15 17:50:43,115 log Bad Request: /
+WARNING 2023-11-15 17:53:00,444 log Not Found: /Electron/download/windows/\Program Files\3CX Phone System\Data\DB\base\16384\16393
+WARNING 2023-11-15 18:28:44,874 log Not Found: /wp-login.php
+WARNING 2023-11-15 18:45:07,334 log Not Found: /inquiry3/
+WARNING 2023-11-15 18:48:48,195 log Not Found: /.env
+WARNING 2023-11-15 19:12:24,480 log Not Found: /robots.txt
