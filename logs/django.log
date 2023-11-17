@@ -1,230 +1,59 @@
-WARNING 2023-11-15 14:49:44,678 log Not Found: /robots.txt
-WARNING 2023-11-15 15:01:41,157 log Not Found: /airport-transfers-five-docks/
-WARNING 2023-11-15 15:03:50,049 log Not Found: /robots.txt
-WARNING 2023-11-15 15:06:23,968 log Not Found: /.env
-WARNING 2023-11-15 15:06:24,800 log Forbidden (Referer checking failed - no Referer.): /
-WARNING 2023-11-15 15:12:53,663 log Not Found: /inquiry3/
-ERROR 2023-11-15 15:16:02,495 log Internal Server Error: /inquiry_details2/
-Traceback (most recent call last):
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 56, in inner
-    response = get_response(request)
-               ^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/basecamp/views.py", line 761, in inquiry_details2
-    if request.is_ajax():
-       ^^^^^^^^^^^^^^^
-AttributeError: 'WSGIRequest' object has no attribute 'is_ajax'
-WARNING 2023-11-15 15:29:04,328 log Not Found: /.well-known/traffic-advice
-WARNING 2023-11-15 15:37:42,758 log Not Found: /.well-known/acme-challenge/THR44C7NUG52JR_7IT6AFWYS9056048A
-WARNING 2023-11-15 15:37:43,732 log Not Found: /.well-known/acme-challenge/IE7L-0J8O4_YEV_PCOUQ0ZX9VY9FIAK-
-WARNING 2023-11-15 15:46:17,931 log Not Found: /inquiry3/
-ERROR 2023-11-15 15:48:02,788 log Internal Server Error: /inquiry_details2/
-Traceback (most recent call last):
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 56, in inner
-    response = get_response(request)
-               ^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/basecamp/views.py", line 761, in inquiry_details2
-    if request.is_ajax():
-       ^^^^^^^^^^^^^^^
-AttributeError: 'WSGIRequest' object has no attribute 'is_ajax'
-WARNING 2023-11-15 16:38:21,193 log Not Found: /autodiscover/autodiscover.json
-WARNING 2023-11-15 17:10:06,672 log Not Found: /ads.txt
-ERROR 2023-11-15 17:14:15,178 log Internal Server Error: /paypal_ipn/
-WARNING 2023-11-15 17:16:23,458 log Not Found: /.env
-WARNING 2023-11-15 17:16:24,725 log Not Found: /xmlrpc.php
-WARNING 2023-11-15 17:36:48,249 log Forbidden (CSRF cookie not set.): /confirm_booking_detail/
-WARNING 2023-11-15 17:37:16,065 log Not Found: /robots.txt
-ERROR 2023-11-15 17:50:43,113 exception Invalid HTTP_HOST header: 'enterpriseplan.com.au'. You may need to add 'enterpriseplan.com.au' to ALLOWED_HOSTS.
-WARNING 2023-11-15 17:50:43,115 log Bad Request: /
-WARNING 2023-11-15 17:53:00,444 log Not Found: /Electron/download/windows/\Program Files\3CX Phone System\Data\DB\base\16384\16393
-WARNING 2023-11-15 18:28:44,874 log Not Found: /wp-login.php
-WARNING 2023-11-15 18:45:07,334 log Not Found: /inquiry3/
-WARNING 2023-11-15 18:48:48,195 log Not Found: /.env
-WARNING 2023-11-15 19:12:24,480 log Not Found: /robots.txt
-WARNING 2023-11-15 19:20:16,190 log Not Found: /robots.txt
-WARNING 2023-11-15 19:25:47,331 log Not Found: /robots.txt
-WARNING 2023-11-15 19:25:48,413 log Not Found: /price-booking/
-WARNING 2023-11-15 19:41:44,070 log Not Found: /shop/product/moncler-women-vest-cer-blue/
-WARNING 2023-11-15 19:47:51,079 log Not Found: /shop/product/moncler-down-coat-men-mid-length-with-hood-coffee/
-WARNING 2023-11-15 20:11:08,991 log Not Found: /robots.txt
-WARNING 2023-11-15 20:11:10,985 log Not Found: /pay-online/
-WARNING 2023-11-15 20:32:48,113 log Not Found: /product/moncler-jackets-kids-fragon-red/
-WARNING 2023-11-15 20:34:47,589 log Not Found: /robots.txt
-WARNING 2023-11-15 21:12:16,003 log Not Found: /inquiry3/
-WARNING 2023-11-15 22:10:04,074 log Not Found: /inquiry3/
-WARNING 2023-11-15 22:20:12,724 log Not Found: /shop/de/product/moncler-tinuviel-10/
-WARNING 2023-11-15 22:37:25,984 log Not Found: /wp-content/plugins/forminator/readme.txt
-WARNING 2023-11-15 22:47:35,513 log Not Found: /robots.txt
-ERROR 2023-11-15 22:47:36,495 log Internal Server Error: /save_data_only_detail/
-Traceback (most recent call last):
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 56, in inner
-    response = get_response(request)
-               ^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/basecamp/views.py", line 1514, in save_data_only_detail
-    return render(request, 'beasecamp/save_data_only.html', {})
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/shortcuts.py", line 24, in render
-    content = loader.render_to_string(template_name, context, request, using=using)
-              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/loader.py", line 61, in render_to_string
-    template = get_template(template_name, using=using)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/loader.py", line 19, in get_template
-    raise TemplateDoesNotExist(template_name, chain=chain)
-django.template.exceptions.TemplateDoesNotExist: beasecamp/save_data_only.html
-WARNING 2023-11-15 23:09:04,854 log Not Found: /robots.txt
-WARNING 2023-11-15 23:21:34,692 log Not Found: /.well-known/traffic-advice
-WARNING 2023-11-15 23:24:32,075 log Not Found: /robots.txt
-WARNING 2023-11-15 23:48:07,139 log Not Found: /.git/config
-WARNING 2023-11-15 23:49:18,065 log Not Found: /webui/
-WARNING 2023-11-15 23:55:14,510 log Not Found: /vpn/index.html
-WARNING 2023-11-15 23:55:54,563 log Not Found: /geoserver/web/
-WARNING 2023-11-15 23:56:13,053 log Not Found: /.git/config
-WARNING 2023-11-15 23:56:24,169 log Not Found: /robots.txt
-WARNING 2023-11-15 23:56:25,120 log Not Found: /airport-transfers-northern-suburbs/
-WARNING 2023-11-16 00:28:24,836 log Not Found: /robots.txt
-WARNING 2023-11-16 01:31:11,226 log Not Found: /robots.txt
-WARNING 2023-11-16 01:36:05,488 log Not Found: /shop/product/moncler-vests-women-quilted-warmer-body-navy-black/
-WARNING 2023-11-16 01:38:01,914 log Not Found: /th1s_1s_a_4o4.html
-WARNING 2023-11-16 01:38:35,898 log Not Found: /inquiry3/
-WARNING 2023-11-16 01:38:49,042 log Not Found: /airport-transfers-toongabbie/sms:+61406883355
-WARNING 2023-11-16 01:38:49,938 log Not Found: /payonline/sms:+61406883355
-WARNING 2023-11-16 01:38:50,836 log Not Found: /airport-transfers-st-ives/sms:+61406883355
-WARNING 2023-11-16 01:38:52,971 log Not Found: /information/sms:+61406883355
-WARNING 2023-11-16 01:38:53,895 log Not Found: /airport-transfers-epping/sms:+61406883355
-WARNING 2023-11-16 01:38:55,961 log Not Found: /inquiry/sms:+61406883355
-WARNING 2023-11-16 01:38:56,857 log Not Found: /inquiry2/sms:+61406883355
-WARNING 2023-11-16 01:38:57,758 log Not Found: /service/sms:+61406883355
-WARNING 2023-11-16 01:38:58,667 log Not Found: /airport-transfers-ryde/sms:+61406883355
-WARNING 2023-11-16 01:38:59,563 log Not Found: /airport-transfers-blacktown/sms:+61406883355
-WARNING 2023-11-16 01:39:01,512 log Not Found: /airport-transfers-parramatta/sms:+61406883355
-WARNING 2023-11-16 01:39:02,349 log Not Found: /privacy/sms:+61406883355
-WARNING 2023-11-16 01:39:03,185 log Not Found: /p2p/sms:+61406883355
-WARNING 2023-11-16 01:39:04,040 log Not Found: /inquiry_details2/sms:+61406883355
-WARNING 2023-11-16 01:39:06,249 log Not Found: /meeting_point/sms:+61406883355
-WARNING 2023-11-16 01:39:08,162 log Not Found: /booking_form/sms:+61406883355
-WARNING 2023-11-16 01:39:08,997 log Not Found: /airport-transfers-hornsby/sms:+61406883355
-WARNING 2023-11-16 01:39:09,844 log Not Found: /airport-transfers-chatswood/sms:+61406883355
-WARNING 2023-11-16 01:39:10,699 log Not Found: /airport-transfers-thornleigh/sms:+61406883355
-WARNING 2023-11-16 01:39:11,538 log Not Found: /terms/sms:+61406883355
-WARNING 2023-11-16 01:39:12,374 log Not Found: /home/sms:+61406883355
-WARNING 2023-11-16 01:39:13,219 log Not Found: /p2p_detail/sms:+61406883355
-WARNING 2023-11-16 01:39:15,076 log Not Found: /payonline/tell:+61406883355
-WARNING 2023-11-16 01:39:15,911 log Not Found: /p2p_single_detail/sms:+61406883355
-WARNING 2023-11-16 01:39:16,749 log Not Found: /p2p_single/sms:+61406883355
-WARNING 2023-11-16 01:39:18,900 log Not Found: /price_detail/sms:+61406883355
-WARNING 2023-11-16 01:39:21,049 log Not Found: /about_us/sms:+61406883355
-WARNING 2023-11-16 01:39:23,120 log Not Found: /booking_form_detail/sms:+61406883355
-WARNING 2023-11-16 01:39:23,957 log Not Found: /inquiry_details/sms:+61406883355
-WARNING 2023-11-16 01:39:24,797 log Not Found: /inquiry_details1/sms:+61406883355
-WARNING 2023-11-16 02:04:50,210 log Not Found: /mailto:info@easygoshuttle.com.au
-WARNING 2023-11-16 02:04:51,319 log Not Found: /sms:+61406883355
-WARNING 2023-11-16 02:10:43,563 log Not Found: /wordpress
-WARNING 2023-11-16 02:10:45,036 log Not Found: /wp
-WARNING 2023-11-16 02:10:45,587 log Not Found: /bc
-WARNING 2023-11-16 02:10:46,132 log Not Found: /bk
-WARNING 2023-11-16 02:10:46,684 log Not Found: /backup
-WARNING 2023-11-16 02:10:47,253 log Not Found: /old
-WARNING 2023-11-16 02:10:47,800 log Not Found: /new
-WARNING 2023-11-16 02:10:48,345 log Not Found: /main
-WARNING 2023-11-16 02:14:43,875 log Not Found: /shop/ko/product/패션-악세사리-다운-여자-패션-재킷-모피-칼라/
-WARNING 2023-11-16 02:20:41,055 log Not Found: /shop/product/moncler-rod-coat-down-men-navy-blue/
-WARNING 2023-11-16 02:27:02,340 log Not Found: /robots.txt
-WARNING 2023-11-16 02:43:11,685 log Not Found: /shop/product/moncler-vests-women-quilted-warmer-body-navy-black/
-WARNING 2023-11-16 02:46:53,420 log Not Found: /robots.txt
-WARNING 2023-11-16 02:46:54,894 log Not Found: /sitemap.xml
-ERROR 2023-11-16 03:10:45,262 exception Invalid HTTP_HOST header: 'enterpriseplan.com.au'. You may need to add 'enterpriseplan.com.au' to ALLOWED_HOSTS.
-WARNING 2023-11-16 03:10:45,264 log Bad Request: /
-WARNING 2023-11-16 03:44:27,725 log Not Found: /robots.txt
-WARNING 2023-11-16 04:14:26,563 log Not Found: /robots.txt
-WARNING 2023-11-16 04:26:58,388 log Not Found: /inquiry3/
-WARNING 2023-11-16 04:34:32,984 log Not Found: /robots.txt
-WARNING 2023-11-16 04:50:01,025 log Not Found: /wp-login.php
-WARNING 2023-11-16 05:17:29,674 log Not Found: /shop/ko/product/여성-다운-조끼-벨트-장식용-라이트-블루/
-WARNING 2023-11-16 05:31:50,485 log Not Found: /robots.txt
-WARNING 2023-11-16 06:17:06,866 log Not Found: /robots.txt
-WARNING 2023-11-16 06:29:34,465 log Not Found: /inputs.php
-ERROR 2023-11-16 06:31:50,813 exception Invalid HTTP_HOST header: '45.32.245.91.vultrusercontent.com'. You may need to add '45.32.245.91.vultrusercontent.com' to ALLOWED_HOSTS.
-WARNING 2023-11-16 06:31:50,815 log Bad Request: /qADf
-ERROR 2023-11-16 06:31:51,528 exception Invalid HTTP_HOST header: '45.32.245.91.vultrusercontent.com'. You may need to add '45.32.245.91.vultrusercontent.com' to ALLOWED_HOSTS.
-WARNING 2023-11-16 06:31:51,531 log Bad Request: /KBWy
-WARNING 2023-11-16 06:32:46,637 log Not Found: /inputs.php
-WARNING 2023-11-16 06:44:49,522 log Not Found: /shop/product/2014-new-moncler-seon-euramerican-style-coat-for-women-coffee/
-WARNING 2023-11-16 06:49:08,416 log Not Found: /robots.txt
-WARNING 2023-11-16 07:09:19,614 log Not Found: /robots.txt
-WARNING 2023-11-16 07:15:48,979 log Not Found: /robots.txt
-WARNING 2023-11-16 07:23:42,180 log Not Found: /shop/ko/product/여성-다운-조끼-벨트-장식용-라이트-블루/
-WARNING 2023-11-16 07:26:50,150 log Not Found: /shop/ko/product/아기-테디-회색-다운-재킷/
-WARNING 2023-11-16 07:42:00,016 log Not Found: /inquiry3/
-WARNING 2023-11-16 08:09:44,447 log Not Found: /robots.txt
-WARNING 2023-11-16 08:09:49,658 log Not Found: /robots.txt
-WARNING 2023-11-16 08:09:52,710 log Not Found: /sitemap.txt
-WARNING 2023-11-16 08:09:58,560 log Not Found: /sitemap.txt
-WARNING 2023-11-16 08:10:14,429 log Not Found: /sitemap_index.xml
-WARNING 2023-11-16 08:25:39,875 log Not Found: /robots.txt
-WARNING 2023-11-16 08:25:41,591 log Not Found: /sitemap.xml
-WARNING 2023-11-16 08:25:43,348 log Not Found: /.well-known/security.txt
-ERROR 2023-11-16 08:28:50,508 exception Invalid HTTP_HOST header: 'enterpriseplan.com.au'. You may need to add 'enterpriseplan.com.au' to ALLOWED_HOSTS.
-WARNING 2023-11-16 08:28:50,510 log Bad Request: /
-ERROR 2023-11-16 08:28:50,604 exception Invalid HTTP_HOST header: 'www.enterpriseplan.com.au'. You may need to add 'www.enterpriseplan.com.au' to ALLOWED_HOSTS.
-WARNING 2023-11-16 08:28:50,609 log Bad Request: /
-WARNING 2023-11-16 08:42:14,129 log Not Found: /apple-touch-icon-precomposed.png
-WARNING 2023-11-16 08:42:14,130 log Not Found: /apple-touch-icon.png
-WARNING 2023-11-16 08:43:54,164 log Not Found: /robots.txt
-WARNING 2023-11-16 08:44:40,889 log Not Found: /apple-touch-icon-precomposed.png
-WARNING 2023-11-16 08:44:41,138 log Not Found: /apple-touch-icon.png
-WARNING 2023-11-16 08:57:16,426 log Not Found: /robots.txt
-ERROR 2023-11-16 08:57:17,517 log Internal Server Error: /save_data_only_detail/
-Traceback (most recent call last):
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 56, in inner
-    response = get_response(request)
-               ^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/basecamp/views.py", line 1514, in save_data_only_detail
-    return render(request, 'beasecamp/save_data_only.html', {})
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/shortcuts.py", line 24, in render
-    content = loader.render_to_string(template_name, context, request, using=using)
-              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/loader.py", line 61, in render_to_string
-    template = get_template(template_name, using=using)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/loader.py", line 19, in get_template
-    raise TemplateDoesNotExist(template_name, chain=chain)
-django.template.exceptions.TemplateDoesNotExist: beasecamp/save_data_only.html
-ERROR 2023-11-16 09:12:34,038 log Internal Server Error: /sending_email_second_detail/
-Traceback (most recent call last):
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 56, in inner
-    response = get_response(request)
-               ^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/basecamp/views.py", line 1473, in sending_email_second_detail
-    return render(request, 'beasecamp/sending_email_second.html', {})
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/shortcuts.py", line 24, in render
-    content = loader.render_to_string(template_name, context, request, using=using)
-              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/loader.py", line 61, in render_to_string
-    template = get_template(template_name, using=using)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/loader.py", line 19, in get_template
-    raise TemplateDoesNotExist(template_name, chain=chain)
-django.template.exceptions.TemplateDoesNotExist: beasecamp/sending_email_second.html
-WARNING 2023-11-16 09:18:52,031 log Not Found: /.env
-WARNING 2023-11-16 10:11:03,339 log Not Found: /robots.txt
-WARNING 2023-11-16 10:11:04,342 log Not Found: /easygo-airport-pickup/
-WARNING 2023-11-16 10:25:00,037 log Not Found: /robots.txt
-WARNING 2023-11-16 10:41:49,460 log Not Found: /.env
-WARNING 2023-11-16 11:38:07,974 log Not Found: /robots.txt
+WARNING 2023-11-17 14:30:05,137 log Not Found: /robots.txt
+WARNING 2023-11-17 14:34:10,808 log Not Found: /robots.txt
+WARNING 2023-11-17 14:35:42,259 log Not Found: /机场接送-悉尼/
+WARNING 2023-11-17 14:35:50,773 log Not Found: /pay-online/
+WARNING 2023-11-17 14:36:12,335 log Not Found: /悉尼机场接送/
+WARNING 2023-11-17 14:52:30,177 log Not Found: /robots.txt
+WARNING 2023-11-17 15:17:29,485 log Not Found: /shop/ko/product/벨트-다운-캐주얼-조끼/
+WARNING 2023-11-17 15:37:29,673 log Not Found: /re_confirm/
+WARNING 2023-11-17 15:38:18,338 log Not Found: /.well-known/acme-challenge/ELZX26X-H2BDNPC38M8EXK463VB88DDM
+WARNING 2023-11-17 15:38:19,309 log Not Found: /.well-known/acme-challenge/NCW11T44GRHY74L4R7GEX_SFK9K0OT6K
+ERROR 2023-11-17 15:38:32,921 exception Invalid HTTP_HOST header: 'enterpriseplan.com.au'. You may need to add 'enterpriseplan.com.au' to ALLOWED_HOSTS.
+WARNING 2023-11-17 15:38:32,923 log Bad Request: /
+ERROR 2023-11-17 15:41:32,645 exception Invalid HTTP_HOST header: 'enterpriseplan.com.au'. You may need to add 'enterpriseplan.com.au' to ALLOWED_HOSTS.
+WARNING 2023-11-17 15:41:32,646 log Bad Request: /robots.txt
+ERROR 2023-11-17 15:41:32,875 exception Invalid HTTP_HOST header: 'enterpriseplan.com.au'. You may need to add 'enterpriseplan.com.au' to ALLOWED_HOSTS.
+WARNING 2023-11-17 15:41:32,877 log Bad Request: /members/why-join/
+WARNING 2023-11-17 15:46:37,320 log Not Found: /webui/
+WARNING 2023-11-17 15:49:08,202 log Not Found: /robots.txt
+WARNING 2023-11-17 15:57:13,438 log Not Found: /vpn/index.html
+WARNING 2023-11-17 15:57:59,731 log Not Found: /geoserver/web/
+WARNING 2023-11-17 16:00:00,071 log Not Found: /.git/config
+WARNING 2023-11-17 16:02:54,122 log Not Found: /robots.txt
+WARNING 2023-11-17 16:09:29,029 log Not Found: /robots.txt
+WARNING 2023-11-17 16:10:26,076 log Not Found: /ads.txt
+WARNING 2023-11-17 16:18:21,199 log Not Found: /wp-config.php
+WARNING 2023-11-17 16:50:13,257 log Not Found: /.well-known/traffic-advice
+WARNING 2023-11-17 17:03:16,753 log Not Found: /robots.txt
+WARNING 2023-11-17 17:18:38,198 log Not Found: //wp-includes/ID3/license.txt
+WARNING 2023-11-17 17:18:38,609 log Not Found: //feed/
+WARNING 2023-11-17 17:18:38,865 log Not Found: //xmlrpc.php
+WARNING 2023-11-17 17:18:39,284 log Not Found: //blog/wp-includes/wlwmanifest.xml
+WARNING 2023-11-17 17:18:39,394 log Not Found: //web/wp-includes/wlwmanifest.xml
+WARNING 2023-11-17 17:18:39,503 log Not Found: //wordpress/wp-includes/wlwmanifest.xml
+WARNING 2023-11-17 17:18:39,617 log Not Found: //wp/wp-includes/wlwmanifest.xml
+WARNING 2023-11-17 17:18:40,339 log Not Found: //2020/wp-includes/wlwmanifest.xml
+WARNING 2023-11-17 17:18:48,858 log Not Found: //2019/wp-includes/wlwmanifest.xml
+WARNING 2023-11-17 17:18:48,968 log Not Found: //2021/wp-includes/wlwmanifest.xml
+WARNING 2023-11-17 17:18:49,390 log Not Found: //shop/wp-includes/wlwmanifest.xml
+WARNING 2023-11-17 17:18:49,800 log Not Found: //wp1/wp-includes/wlwmanifest.xml
+WARNING 2023-11-17 17:18:50,209 log Not Found: //test/wp-includes/wlwmanifest.xml
+WARNING 2023-11-17 17:18:50,319 log Not Found: //site/wp-includes/wlwmanifest.xml
+WARNING 2023-11-17 17:18:50,428 log Not Found: //cms/wp-includes/wlwmanifest.xml
+WARNING 2023-11-17 18:20:19,490 log Not Found: /webcapture.jpg
+ERROR 2023-11-17 18:34:25,672 exception Invalid HTTP_HOST header: 'enterpriseplan.com.au'. You may need to add 'enterpriseplan.com.au' to ALLOWED_HOSTS.
+WARNING 2023-11-17 18:34:25,674 log Bad Request: /
+WARNING 2023-11-17 18:44:37,495 log Not Found: /shop/fi/product/moncler-pety-huippulaadukkaat-alushousut-mauve/
+WARNING 2023-11-17 18:54:50,884 log Not Found: /webcapture.jpg
+WARNING 2023-11-17 19:25:44,290 log Forbidden (Referer checking failed - no Referer.): /inquiry_details/
+WARNING 2023-11-17 19:25:45,623 log Forbidden (Referer checking failed - no Referer.): /inquiry_details/
+WARNING 2023-11-17 19:25:47,800 log Forbidden (Referer checking failed - no Referer.): /inquiry_details/
+WARNING 2023-11-17 19:25:51,468 log Forbidden (Referer checking failed - no Referer.): /inquiry_details1/
+WARNING 2023-11-17 19:25:53,330 log Forbidden (Referer checking failed - no Referer.): /inquiry_details1/
+WARNING 2023-11-17 19:25:55,249 log Forbidden (Referer checking failed - no Referer.): /inquiry_details1/
+WARNING 2023-11-17 19:26:02,179 log Forbidden (Referer checking failed - no Referer.): /inquiry_details2/
+WARNING 2023-11-17 19:26:04,717 log Forbidden (Referer checking failed - no Referer.): /inquiry_details2/
+WARNING 2023-11-17 19:26:07,168 log Forbidden (Referer checking failed - no Referer.): /inquiry_details2/
+WARNING 2023-11-17 19:27:36,542 log Not Found: /technology/ai/
+WARNING 2023-11-17 19:30:14,204 log Not Found: /robots.txt
+WARNING 2023-11-17 19:35:04,354 log Not Found: /robots.txt
