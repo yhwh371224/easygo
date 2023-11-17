@@ -1807,18 +1807,18 @@ def flight_date_detail(request):
         return render(request, 'basecamp/date_error.html', {})
     
 
-def sending_reminder_email(user):    
-    html_content = render_to_string("basecamp/html_email-reminder.html",
-                                    {'name': user.name, 'email': user.email})    
-    text_content = strip_tags(html_content)
-    email = EmailMultiAlternatives(
-        "EasyGo: Yes-email",
-        text_content,
-        '',
-        [user.email]
-    )
-    email.attach_alternative(html_content, "text/html")
-    email.send()
+# def sending_reminder_email(user):    
+#     html_content = render_to_string("basecamp/html_email-reminder.html",
+#                                     {'name': user.name, 'email': user.email})    
+#     text_content = strip_tags(html_content)
+#     email = EmailMultiAlternatives(
+#         "EasyGo: Yes-email",
+#         text_content,
+#         '',
+#         [user.email]
+#     )
+#     email.attach_alternative(html_content, "text/html")
+#     email.send()
 
 
 def reminder_detail(request):
@@ -1838,7 +1838,7 @@ def reminder_detail(request):
         else:
             user.reminder = reminder
             user.save()
-            sending_reminder_email(user)
+            # sending_reminder_email(user)
             
 
             return render(request, 'basecamp/inquiry_done.html')
