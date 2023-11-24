@@ -1,22 +1,28 @@
-WARNING 2023-11-23 15:09:22,161 log Not Found: /wp-content/plugins/byconsole-woo-order-delivery-time/js/byconsolewooodt.js
-WARNING 2023-11-23 15:09:23,612 log Not Found: /wp-content/plugins/royal-elementor-addons/assets/js/frontend.js
-WARNING 2023-11-23 15:23:37,462 log Not Found: /webui/
-WARNING 2023-11-23 15:30:41,625 log Not Found: /vpn/index.html
-WARNING 2023-11-23 15:31:36,423 log Not Found: /geoserver/web/
-WARNING 2023-11-23 15:32:10,913 log Not Found: /.git/config
-WARNING 2023-11-23 15:38:48,352 log Not Found: /.well-known/acme-challenge/-D41EZZTFSYDM756WJX9852H-6S8VHDX
-WARNING 2023-11-23 15:38:49,327 log Not Found: /.well-known/acme-challenge/5__8S68Z28K55U7CHA5A__3W-_BRSOUI
-WARNING 2023-11-23 15:42:20,621 log Not Found: /robots.txt
-WARNING 2023-11-23 15:44:02,189 log Not Found: /robots.txt
-WARNING 2023-11-23 16:07:15,130 log Not Found: /robots.txt
-WARNING 2023-11-23 16:07:27,436 log Not Found: /airport-transfers-west-ryde/
-WARNING 2023-11-23 16:16:49,022 log Not Found: /robots.txt
-WARNING 2023-11-23 16:17:55,246 log Not Found: /robots.txt
-WARNING 2023-11-23 16:19:27,069 log Not Found: /.well-known/traffic-advice
-WARNING 2023-11-23 16:47:10,305 log Not Found: /robots.txt
-WARNING 2023-11-23 16:47:20,478 log Not Found: /shop/nl/product/moncler-tinuviel-5/
-WARNING 2023-11-23 17:14:04,620 log Not Found: /inquiry3/
-ERROR 2023-11-23 17:14:12,077 log Internal Server Error: /inquiry_details2/
+WARNING 2023-11-24 14:35:22,874 log Not Found: /inquiry3/
+WARNING 2023-11-24 14:38:21,103 log Not Found: /inquiry3/
+WARNING 2023-11-24 14:46:23,579 log Not Found: /contact/
+WARNING 2023-11-24 14:47:40,685 log Not Found: /airport-transfers-drummoyne/
+WARNING 2023-11-24 14:50:37,453 log Not Found: /shop/it/product/moncler-boots-nible-red-elegante-e-generoso/
+WARNING 2023-11-24 15:02:59,052 log Not Found: /robots.txt
+WARNING 2023-11-24 15:28:15,055 log Not Found: /robots.txt
+ERROR 2023-11-24 15:30:10,038 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-24 15:30:10,041 log Bad Request: /
+ERROR 2023-11-24 15:33:39,890 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-24 15:33:39,892 log Bad Request: /webui/
+WARNING 2023-11-24 15:36:48,732 log Not Found: /.well-known/acme-challenge/LKEWGLBYML91WFL57F2IVB0U7E9SF8JM
+WARNING 2023-11-24 15:36:49,742 log Not Found: /.well-known/acme-challenge/3L6_4E4E6_FQA1RT-8KL_QWM3M3SD4RU
+ERROR 2023-11-24 15:38:31,845 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-24 15:38:31,880 log Bad Request: /dns-query
+ERROR 2023-11-24 15:38:55,536 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-24 15:38:55,538 log Bad Request: /
+ERROR 2023-11-24 15:39:47,790 exception Invalid HTTP_HOST header: '149.28.188.33:443'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-24 15:39:47,792 log Bad Request: /
+ERROR 2023-11-24 15:41:42,000 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-24 15:41:42,002 log Bad Request: /geoserver/web/
+WARNING 2023-11-24 15:41:51,761 log Not Found: /robots.txt
+ERROR 2023-11-24 15:42:14,877 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-24 15:42:14,880 log Bad Request: /.git/config
+ERROR 2023-11-24 15:52:02,357 log Internal Server Error: /inquiry_details/
 Traceback (most recent call last):
   File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 56, in inner
     response = get_response(request)
@@ -24,178 +30,14 @@ Traceback (most recent call last):
   File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
     response = wrapped_callback(request, *callback_args, **callback_kwargs)
                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/basecamp/views.py", line 761, in inquiry_details2
+  File "/home/horeb/github/easygo/basecamp/views.py", line 382, in inquiry_details
     if request.is_ajax():
        ^^^^^^^^^^^^^^^
 AttributeError: 'WSGIRequest' object has no attribute 'is_ajax'
-WARNING 2023-11-23 17:18:58,468 log Not Found: /wp-content/plugins/core-stab/index.php
-WARNING 2023-11-23 17:19:05,497 log Not Found: /wp-content/RxRxjjce.php
-WARNING 2023-11-23 17:21:10,839 log Not Found: /airport-transfers-dural/
-WARNING 2023-11-23 17:21:13,085 log Not Found: /robots.txt
-WARNING 2023-11-23 17:25:28,896 log Not Found: /.well-known/traffic-advice
-WARNING 2023-11-23 17:55:19,991 log Not Found: /robots.txt
-WARNING 2023-11-23 18:20:29,298 log Not Found: /robots.txt
-ERROR 2023-11-23 18:25:09,525 log Internal Server Error: /paypal_ipn/
-WARNING 2023-11-23 18:37:46,314 log Not Found: /robots.txt
-WARNING 2023-11-23 18:38:37,618 log Not Found: /shop/sv/product/moncler-kvinnor-zip-sjal-stil-rod/
-WARNING 2023-11-23 18:48:34,954 log Not Found: /robots.txt
-WARNING 2023-11-23 19:15:24,154 log Not Found: /android-chrome-192x192.png
-WARNING 2023-11-23 19:15:24,188 log Not Found: /android-chrome-512x512.png
-WARNING 2023-11-23 19:34:40,117 log Not Found: /app-ads.txt
-WARNING 2023-11-23 19:34:40,118 log Not Found: /ads.txt
-WARNING 2023-11-23 19:34:40,121 log Not Found: /sellers.json
-WARNING 2023-11-23 19:34:40,484 log Not Found: /.well-known/apple-app-site-association
-WARNING 2023-11-23 19:34:40,485 log Not Found: /.well-known/assetlinks.json
-WARNING 2023-11-23 19:34:42,416 log Not Found: /robots.txt
-WARNING 2023-11-23 19:34:43,069 log Not Found: /.well-known/apple-app-site-association
-WARNING 2023-11-23 19:34:43,071 log Not Found: /.well-known/assetlinks.json
-WARNING 2023-11-23 19:34:43,077 log Not Found: /.well-known/change-password
-WARNING 2023-11-23 19:34:43,080 log Not Found: /robots.txt
-WARNING 2023-11-23 19:34:43,074 log Not Found: /.well-known/gpc.json
-WARNING 2023-11-23 19:34:43,084 log Not Found: /.well-known/security.txt
-WARNING 2023-11-23 19:34:43,231 log Not Found: /.well-known/resource-that-should-not-exist-whose-status-code-should-not-be-200/
-WARNING 2023-11-23 19:35:17,581 log Not Found: /android-chrome-192x192.png
-WARNING 2023-11-23 19:35:17,966 log Not Found: /robots.txt
-WARNING 2023-11-23 19:41:54,990 log Not Found: /wp-content/plugins/woocommerce/assets/fonts/WooCommerce.woff
-WARNING 2023-11-23 19:41:55,229 log Not Found: /wp-includes/js/jquery/jquery.js
-WARNING 2023-11-23 19:41:55,245 log Not Found: /magento_version
-WARNING 2023-11-23 19:45:48,089 log Not Found: /shop/es/cesta/
-WARNING 2023-11-23 19:52:36,018 log Not Found: /nice.php
-WARNING 2023-11-23 20:01:39,136 log Not Found: /inquiry3/
-ERROR 2023-11-23 20:01:43,727 log Internal Server Error: /inquiry_details2/
-Traceback (most recent call last):
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 56, in inner
-    response = get_response(request)
-               ^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/basecamp/views.py", line 761, in inquiry_details2
-    if request.is_ajax():
-       ^^^^^^^^^^^^^^^
-AttributeError: 'WSGIRequest' object has no attribute 'is_ajax'
-WARNING 2023-11-23 20:04:45,351 log Not Found: /wp-content/themes/thrive-theme/style.css
-WARNING 2023-11-23 20:14:20,381 log Not Found: /robots.txt
-WARNING 2023-11-23 20:34:42,374 log Not Found: /apple-touch-icon-precomposed.png
-WARNING 2023-11-23 20:34:42,398 log Not Found: /apple-touch-icon.png
-WARNING 2023-11-23 20:50:10,743 log Not Found: /robots.txt
-WARNING 2023-11-23 21:10:35,448 log Forbidden (CSRF cookie not set.): /inquiry_details1/
-WARNING 2023-11-23 22:04:00,580 log Not Found: /price-booking/
-WARNING 2023-11-23 22:04:00,646 log Not Found: /apple-touch-icon-120x120-precomposed.png
-WARNING 2023-11-23 22:04:00,656 log Not Found: /apple-touch-icon-120x120.png
-WARNING 2023-11-23 22:04:00,667 log Not Found: /apple-touch-icon-precomposed.png
-WARNING 2023-11-23 22:04:00,678 log Not Found: /apple-touch-icon.png
-WARNING 2023-11-23 22:04:00,696 log Not Found: /apple-touch-icon-120x120-precomposed.png
-WARNING 2023-11-23 22:04:00,706 log Not Found: /apple-touch-icon-120x120.png
-WARNING 2023-11-23 22:04:00,717 log Not Found: /apple-touch-icon-precomposed.png
-WARNING 2023-11-23 22:04:00,727 log Not Found: /apple-touch-icon.png
-WARNING 2023-11-23 22:11:32,959 log Not Found: /e/data/js/ajax.js
-WARNING 2023-11-23 22:22:09,277 log Not Found: /robots.txt
-WARNING 2023-11-23 23:28:05,773 log Not Found: /.env
-WARNING 2023-11-23 23:28:06,369 log Forbidden (Referer checking failed - no Referer.): /
-WARNING 2023-11-23 23:52:45,390 log Not Found: /autodiscover/services/
-WARNING 2023-11-24 00:15:46,815 log Not Found: /owa/auth/x.js
-WARNING 2023-11-24 00:34:10,293 log Not Found: /aaaaaaaaaaaaaaaaaaaaaaaaaqr
-WARNING 2023-11-24 00:34:10,325 log Not Found: /%
-WARNING 2023-11-24 00:34:10,337 log Not Found: /robots.txt
-WARNING 2023-11-24 00:34:10,346 log Not Found: /Res/login.html
-WARNING 2023-11-24 00:34:10,352 log Not Found: /99vt
-WARNING 2023-11-24 00:34:10,353 log Not Found: /robots.txt
-WARNING 2023-11-24 00:34:11,017 log Not Found: /99vu
-WARNING 2023-11-24 00:34:42,769 log Not Found: /robots.txt
-WARNING 2023-11-24 01:09:47,099 log Not Found: /shop/sv/product/moncler-jackor-ungar-daim-rose/
-WARNING 2023-11-24 01:16:44,207 log Not Found: /wp-content/plugins/woocommerce-payments/readme.txt
-WARNING 2023-11-24 01:24:20,322 log Not Found: /robots.txt
-WARNING 2023-11-24 01:24:21,815 log Not Found: /sitemap.xml
-WARNING 2023-11-24 01:32:13,404 log Not Found: /th1s_1s_a_4o4.html
-WARNING 2023-11-24 01:32:45,458 log Not Found: /inquiry3/
-WARNING 2023-11-24 01:33:04,993 log Not Found: /airport-transfers-toongabbie/sms:+61406883355
-WARNING 2023-11-24 01:33:05,829 log Not Found: /payonline/sms:+61406883355
-WARNING 2023-11-24 01:33:06,666 log Not Found: /airport-transfers-st-ives/sms:+61406883355
-WARNING 2023-11-24 01:33:07,501 log Not Found: /information/sms:+61406883355
-WARNING 2023-11-24 01:33:08,339 log Not Found: /service/sms:+61406883355
-WARNING 2023-11-24 01:33:09,210 log Not Found: /airport-transfers-epping/sms:+61406883355
-WARNING 2023-11-24 01:33:10,049 log Not Found: /inquiry/sms:+61406883355
-WARNING 2023-11-24 01:33:12,079 log Not Found: /wp-content/plugins/core/include.php
-WARNING 2023-11-24 01:33:13,617 log Not Found: /inquiry2/sms:+61406883355
-WARNING 2023-11-24 01:33:16,477 log Not Found: /airport-transfers-ryde/sms:+61406883355
-WARNING 2023-11-24 01:33:17,313 log Not Found: /airport-transfers-blacktown/sms:+61406883355
-WARNING 2023-11-24 01:33:17,874 log Not Found: /wp-content/plugins/fix/up.php
-WARNING 2023-11-24 01:33:18,149 log Not Found: /airport-transfers-parramatta/sms:+61406883355
-WARNING 2023-11-24 01:33:18,984 log Not Found: /privacy/sms:+61406883355
-WARNING 2023-11-24 01:33:19,827 log Not Found: /p2p/sms:+61406883355
-WARNING 2023-11-24 01:33:20,683 log Not Found: /p2p_detail/sms:+61406883355
-WARNING 2023-11-24 01:33:21,519 log Not Found: /meeting_point/sms:+61406883355
-WARNING 2023-11-24 01:33:23,894 log Not Found: /booking_form/sms:+61406883355
-WARNING 2023-11-24 01:33:24,729 log Not Found: /airport-transfers-hornsby/sms:+61406883355
-WARNING 2023-11-24 01:33:29,057 log Not Found: /airport-transfers-chatswood/sms:+61406883355
-WARNING 2023-11-24 01:33:29,893 log Not Found: /airport-transfers-thornleigh/sms:+61406883355
-WARNING 2023-11-24 01:33:32,366 log Not Found: /booking_form_detail/sms:+61406883355
-WARNING 2023-11-24 01:33:34,903 log Not Found: /inquiry_details2/sms:+61406883355
-WARNING 2023-11-24 01:33:37,096 log Not Found: /terms/sms:+61406883355
-WARNING 2023-11-24 01:33:37,943 log Not Found: /home/sms:+61406883355
-WARNING 2023-11-24 01:33:38,784 log Not Found: /payonline/tell:+61406883355
-WARNING 2023-11-24 01:33:39,619 log Not Found: /inquiry_details/sms:+61406883355
-WARNING 2023-11-24 01:33:40,454 log Not Found: /p2p_single/sms:+61406883355
-WARNING 2023-11-24 01:33:41,291 log Not Found: /price_detail/sms:+61406883355
-WARNING 2023-11-24 01:33:42,144 log Not Found: /inquiry_details1/sms:+61406883355
-WARNING 2023-11-24 01:33:42,984 log Not Found: /p2p_single_detail/sms:+61406883355
-WARNING 2023-11-24 01:33:43,822 log Not Found: /about_us/sms:+61406883355
-WARNING 2023-11-24 01:59:55,899 log Not Found: /alfanew.php7
-WARNING 2023-11-24 01:59:56,517 log Not Found: /fm1.php
-WARNING 2023-11-24 02:00:00,573 log Not Found: /M1.php
-WARNING 2023-11-24 02:00:06,884 log Not Found: /ioxi-rex4.php7
-WARNING 2023-11-24 02:00:11,424 log Not Found: /about.php
-WARNING 2023-11-24 02:00:12,981 log Not Found: /404.php
-WARNING 2023-11-24 02:00:14,505 log Not Found: /wp-head.php
-WARNING 2023-11-24 02:00:15,419 log Not Found: /taf.php
-WARNING 2023-11-24 02:00:16,793 log Not Found: /adminfuns.php
-WARNING 2023-11-24 02:00:18,028 log Not Found: /wp-content/themes/twenty/twenty.php
-WARNING 2023-11-24 02:00:19,305 log Not Found: /xxl.php
-WARNING 2023-11-24 02:00:21,991 log Not Found: /class.api.php
-WARNING 2023-11-24 02:00:27,663 log Not Found: /wp-content/plugins/yyobang/mar.php
-WARNING 2023-11-24 02:00:29,031 log Not Found: /million.php
-WARNING 2023-11-24 02:00:34,275 log Not Found: /ioxi2.php
-WARNING 2023-11-24 02:00:35,438 log Not Found: /4pric.php
-WARNING 2023-11-24 02:00:37,773 log Not Found: /wp-content/style-css.php
-WARNING 2023-11-24 02:00:38,297 log Not Found: /oxi-rex.php
-WARNING 2023-11-24 02:00:39,875 log Not Found: /wp-content/themes/twenty/twenty.php
-WARNING 2023-11-24 02:00:40,412 log Not Found: /wp-admin/network/upfile.php
-WARNING 2023-11-24 02:00:41,906 log Not Found: /wp-admin/maint/upfile.php
-WARNING 2023-11-24 02:00:43,246 log Not Found: /wp-content/plugins/core-plugin/include.php
-WARNING 2023-11-24 02:00:48,374 log Not Found: /wp-admin/includes/license.php
-WARNING 2023-11-24 02:00:49,545 log Not Found: /wp-admin/css/colors/blue/license.php
-WARNING 2023-11-24 02:00:51,586 log Not Found: /css/license.php
-WARNING 2023-11-24 02:00:54,113 log Not Found: /cgi-bin/license.php
-WARNING 2023-11-24 02:00:55,765 log Not Found: /wp-admin/js/widgets/license.php
-WARNING 2023-11-24 02:00:57,145 log Not Found: /.well-known/acme-challenge/license.php
-WARNING 2023-11-24 02:09:10,680 log Not Found: /robots.txt
-WARNING 2023-11-24 02:20:24,496 log Not Found: /.env
-WARNING 2023-11-24 03:18:07,341 log Not Found: /css/album.css
-WARNING 2023-11-24 03:31:13,224 log Not Found: /remote/login
-WARNING 2023-11-24 03:51:31,421 log Not Found: /shop/product/moncler-jackets-kids-genevrier-white/
-WARNING 2023-11-24 04:04:21,397 log Not Found: /robots.txt
-WARNING 2023-11-24 04:09:43,244 log Not Found: /shop/product-category/moncler-kids/
-WARNING 2023-11-24 04:15:54,835 log Not Found: /robots.txt
-WARNING 2023-11-24 05:31:03,670 log Not Found: /wp-login.php
-WARNING 2023-11-24 05:34:10,797 log Not Found: /Res/login.html
-WARNING 2023-11-24 05:34:10,801 log Not Found: /robots.txt
-WARNING 2023-11-24 05:34:10,869 log Not Found: /aaaaaaaaaaaaaaaaaaaaaaaaaqr
-WARNING 2023-11-24 05:34:10,892 log Not Found: /%
-WARNING 2023-11-24 05:34:10,927 log Not Found: /robots.txt
-WARNING 2023-11-24 05:34:10,938 log Not Found: /99vt
-WARNING 2023-11-24 05:34:11,540 log Not Found: /99vu
-WARNING 2023-11-24 05:43:25,989 log Not Found: /wp-login.php
-WARNING 2023-11-24 06:07:35,970 log Not Found: /robots.txt
-WARNING 2023-11-24 06:07:39,933 log Not Found: /sitemap.xml
-WARNING 2023-11-24 06:11:16,082 log Not Found: /.env
-WARNING 2023-11-24 06:11:16,673 log Forbidden (Referer checking failed - no Referer.): /
-WARNING 2023-11-24 06:20:35,687 log Not Found: /easygo-shuttle-chartered-bus/
-WARNING 2023-11-24 06:21:40,582 log Forbidden (CSRF cookie not set.): /confirm_booking_detail/
-WARNING 2023-11-24 06:32:28,810 log Not Found: /rest/applinks/1.0/manifest
-WARNING 2023-11-24 06:34:41,478 log Not Found: /robots.txt
-WARNING 2023-11-24 06:38:00,135 log Not Found: /shop/ko/product/moncler-aliso-designer-womens-다운-재킷과-벨트-다크-레드/
-ERROR 2023-11-24 06:46:37,131 exception Invalid HTTP_HOST header: '33.188.28.149.in-addr.arpa'. You may need to add '33.188.28.149.in-addr.arpa' to ALLOWED_HOSTS.
-WARNING 2023-11-24 06:46:37,132 log Bad Request: /iWHT
-ERROR 2023-11-24 06:46:37,898 exception Invalid HTTP_HOST header: '33.188.28.149.in-addr.arpa'. You may need to add '33.188.28.149.in-addr.arpa' to ALLOWED_HOSTS.
-WARNING 2023-11-24 06:46:37,900 log Bad Request: /TYJf
+ERROR 2023-11-24 16:02:36,857 exception Invalid HTTP_HOST header: '149.28.188.33:443'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-24 16:02:36,860 log Bad Request: /
+ERROR 2023-11-24 16:02:40,531 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-24 16:02:40,533 log Bad Request: /
+WARNING 2023-11-24 16:15:15,602 log Not Found: /robots.txt
+ERROR 2023-11-24 16:21:06,226 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-24 16:21:06,228 log Bad Request: /

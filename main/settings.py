@@ -11,7 +11,7 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', cast=bool, default=True)
 
 
-ALLOWED_HOSTS = ['easygoshuttle.com.au', 'www.easygoshuttle.com.au', '149.28.188.33']
+ALLOWED_HOSTS = ['easygoshuttle.com.au', 'www.easygoshuttle.com.au', '45.32.245.91']
 
 
 INSTALLED_APPS = [
@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'admin_honeypot',
     'defender',
+    'simplegmail',
     
 ]
 
