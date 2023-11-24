@@ -6,7 +6,6 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from main.settings import RECIPIENT_EMAIL
 from retrieve import main 
-import re
 
 
 class Command(BaseCommand):
@@ -23,8 +22,6 @@ class Command(BaseCommand):
             posts = Post.objects.filter(email=list_email, flight_date__range=[today, three_days_later])
 
             for post in posts:
-                # print("Post Email:", post.email)
-
                 post.reminder = True
                 post.save()
                 

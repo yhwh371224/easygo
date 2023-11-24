@@ -13,7 +13,6 @@ SCOPES = ["https://www.googleapis.com/auth/gmail.readonly"]
 
 def get_rereminder_emails(service):
     try:
-        # Get messages with the "Re-reminder" label
         label_id = get_label_id(service, "Re-reminder")
         
         if label_id:
@@ -39,7 +38,6 @@ def get_rereminder_emails(service):
             return rereminder_emails
 
     except HttpError as error:
-        # Handle errors from Gmail API.
         print(f"An error occurred: {error}")
         return []
 
@@ -57,7 +55,6 @@ def get_label_id(service, label_name):
 
 
 def main():
-    """Shows basic usage of the Gmail API."""
     creds = None
     secure_directory = 'secure_gmail/'
     token_file_path = os.path.join(secure_directory, 'token.json')
@@ -74,20 +71,13 @@ def main():
             token.write(creds.to_json())
 
     try:
-        # Call the Gmail API
         service = build("gmail", "v1", credentials=creds)
 
         rereminder_emails = get_rereminder_emails(service)
 
-        # if rereminder_emails:
-        #     print("Email addresses")
-        #     for email in rereminder_emails:
-        #         print(email.strip())
-
         return rereminder_emails  # Return the list
 
     except HttpError as error:
-        # Handle errors from Gmail API.
         print(f"An error occurred: {error}")
         return []
 
