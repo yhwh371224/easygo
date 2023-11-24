@@ -41,3 +41,110 @@ WARNING 2023-11-24 16:02:40,533 log Bad Request: /
 WARNING 2023-11-24 16:15:15,602 log Not Found: /robots.txt
 ERROR 2023-11-24 16:21:06,226 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
 WARNING 2023-11-24 16:21:06,228 log Bad Request: /
+ERROR 2023-11-24 16:40:25,876 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-24 16:40:25,910 log Bad Request: /.env
+ERROR 2023-11-24 16:50:51,184 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-24 16:50:51,226 log Bad Request: /
+ERROR 2023-11-24 16:50:59,207 exception Invalid HTTP_HOST header: '149.28.188.33:443'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-24 16:50:59,243 log Bad Request: /
+WARNING 2023-11-24 16:59:38,170 log Bad Request: /paypal_ipn/
+WARNING 2023-11-24 16:59:39,174 log Not Found: /p2p.html/
+ERROR 2023-11-24 17:15:20,303 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-24 17:15:20,305 log Bad Request: /
+ERROR 2023-11-24 17:17:20,151 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-24 17:17:20,153 log Bad Request: /
+WARNING 2023-11-24 17:40:28,649 log Not Found: /contact us/
+ERROR 2023-11-24 18:11:25,348 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-24 18:11:25,349 log Bad Request: /
+WARNING 2023-11-24 18:28:04,627 log Not Found: /robots.txt
+WARNING 2023-11-24 18:31:54,606 log Not Found: /robots.txt
+WARNING 2023-11-24 18:32:05,826 log Not Found: /.FileZilla.xml
+WARNING 2023-11-24 19:08:04,981 log Not Found: /robots.txt
+WARNING 2023-11-24 19:09:48,740 log Not Found: /robots.txt
+WARNING 2023-11-24 19:18:36,362 log Not Found: /robots.txt
+ERROR 2023-11-24 19:21:45,182 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-24 19:21:45,183 log Bad Request: /
+ERROR 2023-11-24 19:22:39,154 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-24 19:22:39,155 log Bad Request: /
+ERROR 2023-11-24 19:26:32,485 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-24 19:26:32,488 log Bad Request: /
+ERROR 2023-11-24 19:38:45,880 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-24 19:38:45,881 log Bad Request: /
+ERROR 2023-11-24 19:39:03,605 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-24 19:39:03,606 log Bad Request: /robots.txt
+ERROR 2023-11-24 19:39:04,799 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-24 19:39:04,800 log Bad Request: /sitemap.xml
+ERROR 2023-11-24 19:39:06,260 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-24 19:39:06,261 log Bad Request: /.well-known/security.txt
+WARNING 2023-11-24 19:44:58,981 log Not Found: /robots.txt
+ERROR 2023-11-24 19:50:24,715 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-24 19:50:24,717 log Bad Request: /
+WARNING 2023-11-24 20:05:18,029 log Not Found: /robots.txt
+WARNING 2023-11-24 20:09:04,158 log Not Found: /robots.txt
+WARNING 2023-11-24 20:35:52,226 log Not Found: /robots.txt
+WARNING 2023-11-24 20:41:36,509 log Not Found: /wordpress
+WARNING 2023-11-24 20:41:36,894 log Not Found: /Wordpress
+WARNING 2023-11-24 20:41:37,234 log Not Found: /WORDPRESS
+WARNING 2023-11-24 20:41:37,578 log Not Found: /WordPress
+WARNING 2023-11-24 20:41:37,925 log Not Found: /wp
+WARNING 2023-11-24 20:41:38,264 log Not Found: /Wp
+WARNING 2023-11-24 20:41:38,614 log Not Found: /WP
+WARNING 2023-11-24 20:41:38,957 log Not Found: /old
+WARNING 2023-11-24 20:41:39,298 log Not Found: /Old
+WARNING 2023-11-24 20:41:39,639 log Not Found: /OLD
+WARNING 2023-11-24 20:41:39,979 log Not Found: /oldsite
+WARNING 2023-11-24 20:41:40,320 log Not Found: /new
+WARNING 2023-11-24 20:41:40,659 log Not Found: /New
+WARNING 2023-11-24 20:41:40,998 log Not Found: /NEW
+WARNING 2023-11-24 20:41:41,380 log Not Found: /wp-old
+WARNING 2023-11-24 20:41:41,733 log Not Found: /2022
+WARNING 2023-11-24 20:41:42,073 log Not Found: /2020
+WARNING 2023-11-24 20:41:42,413 log Not Found: /2019
+WARNING 2023-11-24 20:41:42,752 log Not Found: /2018
+WARNING 2023-11-24 20:41:43,091 log Not Found: /backup
+WARNING 2023-11-24 20:41:43,429 log Not Found: /test
+WARNING 2023-11-24 20:41:43,778 log Not Found: /Test
+WARNING 2023-11-24 20:41:44,121 log Not Found: /TEST
+WARNING 2023-11-24 20:41:44,460 log Not Found: /demo
+WARNING 2023-11-24 20:41:44,799 log Not Found: /bc
+WARNING 2023-11-24 20:41:45,144 log Not Found: /www
+WARNING 2023-11-24 20:41:45,485 log Not Found: /WWW
+WARNING 2023-11-24 20:41:45,833 log Not Found: /Www
+WARNING 2023-11-24 20:41:46,172 log Not Found: /2021
+WARNING 2023-11-24 20:41:46,514 log Not Found: /main
+WARNING 2023-11-24 20:41:46,852 log Not Found: /old-site
+WARNING 2023-11-24 20:41:47,189 log Not Found: /bk
+WARNING 2023-11-24 20:41:47,527 log Not Found: /Backup
+WARNING 2023-11-24 20:41:47,866 log Not Found: /BACKUP
+WARNING 2023-11-24 20:41:48,204 log Not Found: /SHOP
+WARNING 2023-11-24 20:41:48,546 log Not Found: /Shop
+WARNING 2023-11-24 20:41:48,883 log Not Found: /shop
+WARNING 2023-11-24 20:41:49,221 log Not Found: /bak
+WARNING 2023-11-24 20:41:49,559 log Not Found: /sitio
+WARNING 2023-11-24 20:41:49,898 log Not Found: /bac
+WARNING 2023-11-24 20:41:50,259 log Not Found: /sito
+WARNING 2023-11-24 20:41:50,597 log Not Found: /site
+WARNING 2023-11-24 20:41:50,935 log Not Found: /Site
+WARNING 2023-11-24 20:41:51,272 log Not Found: /SITE
+ERROR 2023-11-24 20:41:51,782 log Internal Server Error: /blog/
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+               ^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/response.py", line 90, in rendered_content
+    template = self.resolve_template(self.template_name)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/response.py", line 72, in resolve_template
+    return select_template(template, using=self.using)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/loader.py", line 47, in select_template
+    raise TemplateDoesNotExist(", ".join(template_name_list), chain=chain)
+django.template.exceptions.TemplateDoesNotExist: blog/post_list.html
+WARNING 2023-11-24 20:41:52,140 log Not Found: /BLOG
+WARNING 2023-11-24 20:41:52,501 log Not Found: /Blog
