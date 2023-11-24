@@ -5,6 +5,7 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
+import re
 
 # If modifying these scopes, delete the file token.json.
 SCOPES = ["https://www.googleapis.com/auth/gmail.readonly"]
@@ -14,6 +15,7 @@ def get_rereminder_emails(service):
     try:
         # Get messages with the "Re-reminder" label
         label_id = get_label_id(service, "Re-reminder")
+        
         if label_id:
             results = service.users().messages().list(userId="me", labelIds=[label_id]).execute()
             messages = results.get("messages", [])
@@ -29,7 +31,10 @@ def get_rereminder_emails(service):
                 headers = msg["payload"]["headers"]
                 for header in headers:
                     if header["name"] == "From":
-                        rereminder_emails.extend(header["value"].split(','))
+                        match = re.search(r'<([^>]+)>', header["value"])
+                        if match:
+                            email = match.group(1).strip()
+                            rereminder_emails.append(email)
 
             return rereminder_emails
 
@@ -75,7 +80,7 @@ def main():
         rereminder_emails = get_rereminder_emails(service)
 
         # if rereminder_emails:
-        #     print("Email addresses with 'Re-reminder' label:")
+        #     print("Email addresses")
         #     for email in rereminder_emails:
         #         print(email.strip())
 
