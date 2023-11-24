@@ -149,3 +149,229 @@ django.template.exceptions.TemplateDoesNotExist: blog/post_list.html
 WARNING 2023-11-24 20:41:52,140 log Not Found: /BLOG
 WARNING 2023-11-24 20:41:52,501 log Not Found: /Blog
 WARNING 2023-11-24 20:57:12,383 log Not Found: /robots.txt
+WARNING 2023-11-24 21:21:52,992 log Not Found: /robots.txt
+WARNING 2023-11-24 21:21:52,995 log Not Found: /robots.txt
+WARNING 2023-11-24 21:21:53,233 log Not Found: /robots.txt
+WARNING 2023-11-24 21:21:53,285 log Not Found: /robots.txt
+WARNING 2023-11-24 21:32:58,457 log Not Found: /robots.txt
+WARNING 2023-11-24 22:01:56,578 log Not Found: /apple-touch-icon-120x120-precomposed.png
+WARNING 2023-11-24 22:01:56,594 log Not Found: /apple-touch-icon-120x120.png
+WARNING 2023-11-24 22:12:13,330 log Not Found: /shop/fr/product/moncler-vente-sacs-a-main-en-noir/
+ERROR 2023-11-24 22:37:00,402 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-24 22:37:00,405 log Bad Request: /
+ERROR 2023-11-24 22:37:34,838 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-24 22:37:34,840 log Bad Request: /
+WARNING 2023-11-24 23:34:52,370 log Not Found: /robots.txt
+WARNING 2023-11-24 23:57:18,263 log Not Found: /robots.txt
+WARNING 2023-11-24 23:57:24,556 log Not Found: /shop/nl/product/moncler-epine-jassen-voor-dames-winddichte-kraag-donkerblauw/
+WARNING 2023-11-25 00:02:29,319 log Not Found: /robots.txt
+WARNING 2023-11-25 00:04:35,173 log Not Found: /悉尼机场接送服务的最佳拍档/
+ERROR 2023-11-25 00:11:43,301 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-25 00:11:43,303 log Bad Request: /
+WARNING 2023-11-25 00:25:26,158 log Not Found: /robots.txt
+WARNING 2023-11-25 00:25:26,167 log Not Found: /robots.txt
+WARNING 2023-11-25 00:25:26,488 log Not Found: /robots.txt
+WARNING 2023-11-25 00:25:26,503 log Not Found: /robots.txt
+ERROR 2023-11-25 00:33:13,431 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-25 00:33:13,433 log Bad Request: /
+WARNING 2023-11-25 00:56:23,193 log Not Found: /robots.txt
+WARNING 2023-11-25 01:05:48,050 log Not Found: /robots.txt
+WARNING 2023-11-25 01:08:05,818 log Not Found: /robots.txt
+WARNING 2023-11-25 01:10:10,754 log Not Found: /robots.txt
+WARNING 2023-11-25 01:11:40,626 log Not Found: /robots.txt
+ERROR 2023-11-25 01:27:55,838 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-25 01:27:55,839 log Bad Request: /actuator/health
+WARNING 2023-11-25 01:56:34,717 log Not Found: /robots.txt
+ERROR 2023-11-25 02:04:33,275 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-25 02:04:33,277 log Bad Request: /
+ERROR 2023-11-25 02:04:54,903 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-25 02:04:54,904 log Bad Request: /robots.txt
+ERROR 2023-11-25 02:04:56,537 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-25 02:04:56,538 log Bad Request: /sitemap.xml
+ERROR 2023-11-25 02:08:10,050 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-25 02:08:10,053 log Bad Request: /
+WARNING 2023-11-25 02:33:51,435 log Not Found: /shop/nl/product/moncler-tinuviel-5/
+ERROR 2023-11-25 02:37:08,374 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-25 02:37:08,376 log Bad Request: /version
+ERROR 2023-11-25 02:50:33,568 exception Invalid HTTP_HOST header: '33.188.28.149.in-addr.arpa'. You may need to add '33.188.28.149.in-addr.arpa' to ALLOWED_HOSTS.
+WARNING 2023-11-25 02:50:33,571 log Bad Request: /Y3nb
+ERROR 2023-11-25 02:50:34,280 exception Invalid HTTP_HOST header: '33.188.28.149.in-addr.arpa'. You may need to add '33.188.28.149.in-addr.arpa' to ALLOWED_HOSTS.
+WARNING 2023-11-25 02:50:34,282 log Bad Request: /F4yj
+WARNING 2023-11-25 03:03:22,959 log Not Found: /th1s_1s_a_4o4.html
+WARNING 2023-11-25 03:03:56,063 log Not Found: /inquiry3/
+WARNING 2023-11-25 03:04:16,305 log Not Found: /airport-transfers-toongabbie/sms:+61406883355
+WARNING 2023-11-25 03:04:18,879 log Not Found: /payonline/sms:+61406883355
+WARNING 2023-11-25 03:04:19,728 log Not Found: /airport-transfers-st-ives/sms:+61406883355
+WARNING 2023-11-25 03:04:20,573 log Not Found: /information/sms:+61406883355
+WARNING 2023-11-25 03:04:21,438 log Not Found: /airport-transfers-epping/sms:+61406883355
+WARNING 2023-11-25 03:04:24,123 log Not Found: /inquiry/sms:+61406883355
+WARNING 2023-11-25 03:04:26,038 log Not Found: /inquiry2/sms:+61406883355
+WARNING 2023-11-25 03:04:26,874 log Not Found: /service/sms:+61406883355
+WARNING 2023-11-25 03:04:27,711 log Not Found: /airport-transfers-ryde/sms:+61406883355
+WARNING 2023-11-25 03:04:28,555 log Not Found: /airport-transfers-blacktown/sms:+61406883355
+WARNING 2023-11-25 03:04:29,397 log Not Found: /airport-transfers-parramatta/sms:+61406883355
+WARNING 2023-11-25 03:04:30,240 log Not Found: /privacy/sms:+61406883355
+WARNING 2023-11-25 03:04:31,101 log Not Found: /p2p_detail/sms:+61406883355
+WARNING 2023-11-25 03:04:31,938 log Not Found: /p2p/sms:+61406883355
+WARNING 2023-11-25 03:04:34,034 log Not Found: /meeting_point/sms:+61406883355
+WARNING 2023-11-25 03:04:34,870 log Not Found: /booking_form/sms:+61406883355
+WARNING 2023-11-25 03:04:35,714 log Not Found: /airport-transfers-hornsby/sms:+61406883355
+WARNING 2023-11-25 03:04:39,069 log Not Found: /airport-transfers-chatswood/sms:+61406883355
+WARNING 2023-11-25 03:04:39,918 log Not Found: /airport-transfers-thornleigh/sms:+61406883355
+WARNING 2023-11-25 03:04:40,773 log Not Found: /inquiry_details2/sms:+61406883355
+WARNING 2023-11-25 03:04:42,787 log Not Found: /terms/sms:+61406883355
+WARNING 2023-11-25 03:04:43,623 log Not Found: /home/sms:+61406883355
+WARNING 2023-11-25 03:04:45,939 log Not Found: /payonline/tell:+61406883355
+WARNING 2023-11-25 03:04:46,781 log Not Found: /inquiry_details/sms:+61406883355
+WARNING 2023-11-25 03:04:47,619 log Not Found: /p2p_single_detail/sms:+61406883355
+WARNING 2023-11-25 03:04:48,457 log Not Found: /p2p_single/sms:+61406883355
+WARNING 2023-11-25 03:04:49,293 log Not Found: /price_detail/sms:+61406883355
+WARNING 2023-11-25 03:04:50,138 log Not Found: /booking_form_detail/sms:+61406883355
+WARNING 2023-11-25 03:04:50,973 log Not Found: /inquiry_details1/sms:+61406883355
+WARNING 2023-11-25 03:04:51,831 log Not Found: /about_us/sms:+61406883355
+WARNING 2023-11-25 03:09:58,252 log Not Found: /shop/ko/product/재킷-남성-두건-후드-다운-간단한-단락-검정/
+ERROR 2023-11-25 03:16:28,362 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-25 03:16:28,363 log Bad Request: /FD873AC4-CF86-4FED-84EC-4BD59C6F17A7
+WARNING 2023-11-25 04:01:52,333 log Not Found: /robots.txt
+WARNING 2023-11-25 04:07:49,843 log Not Found: /contact/booking_email.html
+ERROR 2023-11-25 04:16:43,068 log Internal Server Error: /inquiry_details/
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/basecamp/views.py", line 464, in inquiry_details
+    p.save()
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/base.py", line 806, in save
+    self.save_base(
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/base.py", line 857, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/base.py", line 1000, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/base.py", line 1041, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/query.py", line 1434, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/sql/compiler.py", line 1620, in execute_sql
+    for sql, params in self.as_sql():
+                       ^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/sql/compiler.py", line 1547, in as_sql
+    value_rows = [
+                 ^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/sql/compiler.py", line 1548, in <listcomp>
+    [
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/sql/compiler.py", line 1549, in <listcomp>
+    self.prepare_value(field, self.pre_save_val(field, obj))
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/sql/compiler.py", line 1487, in prepare_value
+    value = field.get_db_prep_save(value, connection=self.connection)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/fields/__init__.py", line 910, in get_db_prep_save
+    return self.get_db_prep_value(value, connection=connection, prepared=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/fields/__init__.py", line 1408, in get_db_prep_value
+    value = self.get_prep_value(value)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/fields/__init__.py", line 1403, in get_prep_value
+    return self.to_python(value)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/fields/__init__.py", line 1369, in to_python
+    raise exceptions.ValidationError(
+django.core.exceptions.ValidationError: ['“C Bksb c bo” value has an invalid date format. It must be in YYYY-MM-DD format.']
+WARNING 2023-11-25 04:47:40,776 log Not Found: /robots.txt
+WARNING 2023-11-25 05:00:57,623 log Not Found: /robots.txt
+ERROR 2023-11-25 05:03:16,144 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-25 05:03:16,146 log Bad Request: /.env
+ERROR 2023-11-25 05:03:18,885 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-25 05:03:18,887 log Bad Request: /
+WARNING 2023-11-25 05:17:09,338 log Not Found: /shop/da/2014-new-moncler-euramerican-style-down-coats-womens-light-tan/
+WARNING 2023-11-25 05:34:21,866 log Not Found: /.env
+ERROR 2023-11-25 05:40:10,573 exception Invalid HTTP_HOST header: '149.28.188.33:443'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-25 05:40:10,575 log Bad Request: /
+WARNING 2023-11-25 05:46:16,181 log Forbidden (Referer checking failed - no Referer.): /inquiry_details2/
+WARNING 2023-11-25 05:46:16,757 log Forbidden (Referer checking failed - no Referer.): /inquiry_details2/
+WARNING 2023-11-25 05:46:17,336 log Forbidden (Referer checking failed - no Referer.): /inquiry_details2/
+WARNING 2023-11-25 05:46:20,565 log Forbidden (Referer checking failed - no Referer.): /inquiry_details1/
+WARNING 2023-11-25 05:46:21,139 log Forbidden (Referer checking failed - no Referer.): /inquiry_details1/
+WARNING 2023-11-25 05:46:21,800 log Forbidden (Referer checking failed - no Referer.): /inquiry_details1/
+WARNING 2023-11-25 05:46:24,031 log Forbidden (Referer checking failed - no Referer.): /inquiry_details/
+WARNING 2023-11-25 05:46:24,651 log Forbidden (Referer checking failed - no Referer.): /inquiry_details/
+WARNING 2023-11-25 05:46:25,224 log Forbidden (Referer checking failed - no Referer.): /inquiry_details/
+WARNING 2023-11-25 05:50:20,145 log Not Found: /.well-known/
+WARNING 2023-11-25 05:50:24,849 log Not Found: /wp-content/uploads/
+WARNING 2023-11-25 05:50:27,793 log Not Found: /wp-includes/
+WARNING 2023-11-25 05:50:31,138 log Not Found: /wp-admin/
+WARNING 2023-11-25 05:50:35,170 log Not Found: /shop/ko/product/몽크-다운-코트-망-중반-후드-검정/
+WARNING 2023-11-25 05:50:36,085 log Not Found: /wp-content/
+WARNING 2023-11-25 05:50:40,900 log Not Found: /wp-content/upgrade/
+WARNING 2023-11-25 05:50:44,486 log Not Found: /.well-knownold/
+WARNING 2023-11-25 05:54:22,282 log Not Found: /.well-known/
+WARNING 2023-11-25 05:54:27,127 log Not Found: /wp-content/uploads/
+WARNING 2023-11-25 05:54:30,619 log Not Found: /wp-includes/
+WARNING 2023-11-25 05:54:36,092 log Not Found: /wp-admin/
+WARNING 2023-11-25 05:54:39,352 log Not Found: /wp-content/
+WARNING 2023-11-25 05:54:45,129 log Not Found: /wp-content/upgrade/
+WARNING 2023-11-25 05:54:48,295 log Not Found: /.well-knownold/
+WARNING 2023-11-25 06:08:27,350 log Not Found: /robots.txt
+WARNING 2023-11-25 06:08:28,036 log Not Found: /robots.txt
+WARNING 2023-11-25 06:08:47,580 log Not Found: /robots.txt
+WARNING 2023-11-25 06:08:48,177 log Not Found: /robots.txt
+ERROR 2023-11-25 06:18:37,372 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-25 06:18:37,376 log Bad Request: /
+WARNING 2023-11-25 06:27:20,333 log Not Found: /robots.txt
+WARNING 2023-11-25 06:28:04,497 log Not Found: /robots.txt
+WARNING 2023-11-25 06:28:04,498 log Not Found: /robots.txt
+WARNING 2023-11-25 06:29:55,866 log Not Found: /home/url(/static/basecamp/photos/easygo-home-page3.webp)
+ERROR 2023-11-25 06:30:55,522 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-25 06:30:55,524 log Bad Request: /
+WARNING 2023-11-25 06:32:01,145 log Not Found: /home/url(/static/basecamp/photos/easygo-home-page4.webp)
+WARNING 2023-11-25 06:34:39,754 log Not Found: /home/url(/static/basecamp/photos/easygo-home-page3.webp)
+ERROR 2023-11-25 06:35:17,731 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-25 06:35:17,732 log Bad Request: /
+WARNING 2023-11-25 06:35:37,709 log Not Found: /home/url(/static/basecamp/photos/easygo-home-page4.webp)
+WARNING 2023-11-25 06:38:05,582 log Not Found: /home/url(/static/basecamp/photos/home1.webp)
+WARNING 2023-11-25 06:45:47,354 log Not Found: /home/url(/static/basecamp/photos/home1.webp)
+WARNING 2023-11-25 06:55:45,651 log Not Found: /wp-login.php
+ERROR 2023-11-25 07:23:31,990 log Internal Server Error: /inquiry_details/
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 204, in _get_response
+    self.check_response(response, callback)
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 332, in check_response
+    raise ValueError(
+ValueError: The view basecamp.views.inquiry_details didn't return an HttpResponse object. It returned None instead.
+ERROR 2023-11-25 07:25:35,596 log Internal Server Error: /inquiry_details/
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/basecamp/views.py", line 468, in inquiry_details
+    if is_ajax(request):
+       ^^^^^^^
+NameError: name 'is_ajax' is not defined
+ERROR 2023-11-25 07:42:52,901 log Internal Server Error: /inquiry_details/
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/basecamp/views.py", line 382, in inquiry_details
+    if request.is_ajax():
+       ^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'is_ajax'
+WARNING 2023-11-25 07:44:24,886 log Not Found: /robots.txt
