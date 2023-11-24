@@ -6,6 +6,8 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from main.settings import RECIPIENT_EMAIL
 from retrieve import main 
+import re
+
 
 class Command(BaseCommand):
     help = 'Update reminders and send emails for posts'
@@ -16,10 +18,13 @@ class Command(BaseCommand):
         today = datetime.now()
         three_days_later = today + timedelta(days=3)
 
-        for list_email in my_list:
-            posts = Post.objects.filter(email=list_email)
+        for list_email in my_list:      
+
+            posts = Post.objects.filter(email=list_email, flight_date__range=[today, three_days_later])
 
             for post in posts:
+                # print("Post Email:", post.email)
+
                 post.reminder = True
                 post.save()
                 
@@ -36,5 +41,4 @@ class Command(BaseCommand):
                 email.send()
 
         self.stdout.write(self.style.SUCCESS('Successfully updated reminders and sent emails'))
-        print('Management command finished') 
 
