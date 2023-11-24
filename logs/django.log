@@ -148,3 +148,4 @@ Traceback (most recent call last):
 django.template.exceptions.TemplateDoesNotExist: blog/post_list.html
 WARNING 2023-11-24 20:41:52,140 log Not Found: /BLOG
 WARNING 2023-11-24 20:41:52,501 log Not Found: /Blog
+WARNING 2023-11-24 20:57:12,383 log Not Found: /robots.txt
