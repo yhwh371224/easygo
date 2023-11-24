@@ -325,7 +325,7 @@ def server_error(request): return render(request, 'basecamp/507.html')
 
 def verify_recaptcha(response):
     data = {
-        'secret': settings.RECAPTCHA_SECRET_KEY,
+        'secret': settings.RECAPTCHA_PRIVATE_KEY,
         'response': response
     }
     r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
@@ -358,7 +358,8 @@ def inquiry_details(request):
         return_pickup_time = request.POST.get('return_pickup_time')
         message = request.POST.get('message')
         
-        # ReCAPTCHA validation
+
+        # # ReCAPTCHA validation
         recaptcha_response = request.POST.get('g-recaptcha-response')
         data = {
             'secret': settings.RECAPTCHA_PRIVATE_KEY,
@@ -368,8 +369,8 @@ def inquiry_details(request):
         result = r.json()
 
         # if not result.get('success'):
-        #     return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'})           
-                                        
+        #     return JsonResponse({'success': True, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'})
+
         data = {
             'name': name,
             'contact': contact,
@@ -379,14 +380,14 @@ def inquiry_details(request):
         
         today = date.today()
         if flight_date <= str(today):
-            if request.is_ajax():
-                return JsonResponse({'success': True, 'message': 'Past/Today flight dates are not allowed.'})
-            else:
+            # if request.is_ajax():
+            #     return JsonResponse({'success': True, 'message': 'Past/Today flight dates are not allowed.'})
+            # else:
                 return render(request, 'basecamp/date_error.html')  
-     
+        
         inquiry_email = Inquiry.objects.only('email').values_list('email', flat=True)
         post_email = Post.objects.only('email').values_list('email', flat=True)  
-                     
+
         if (email in inquiry_email) and (email in post_email):            
             content = '''
             Hello, {} \n
@@ -399,7 +400,6 @@ def inquiry_details(request):
             Best Regards,
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['contact'], data['email'])
-            
             send_mail(data['flight_date'], content,
                       '', [RECIPIENT_EMAIL])
             
@@ -416,7 +416,6 @@ def inquiry_details(request):
             Best Regards,
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['contact'], data['email'])
-            
             send_mail(data['flight_date'], content,
                       '', [RECIPIENT_EMAIL])
             
@@ -433,7 +432,6 @@ def inquiry_details(request):
             Best Regards,
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['contact'], data['email'])
-            
             send_mail(data['flight_date'], content,
                       '', [RECIPIENT_EMAIL])
             
@@ -450,11 +448,9 @@ def inquiry_details(request):
             Best Regards,
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['contact'], data['email'])
-            
             send_mail(data['flight_date'], content,
                       '', [RECIPIENT_EMAIL])    
-                                   
-        
+            
         p = Inquiry(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
                  no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction,
@@ -462,16 +458,15 @@ def inquiry_details(request):
                  return_pickup_time=return_pickup_time ,message=message)
         
         p.save() 
-        
 
-        # If everything is fine, respond accordingly
         if is_ajax(request):
             # Return a JSON response for AJAX requests
             return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})
+        
         else:
             # Return a standard HTTP response for non-AJAX requests
             return render(request, 'basecamp/inquiry_done.html')
-
+        
     else:
         # If it's not a POST request, just render the inquiry form
         return render(request, 'basecamp/inquiry.html', {})
@@ -631,9 +626,9 @@ def booking_form_detail(request):
         
         today = date.today()
         if flight_date <= str(today):
-            if request.is_ajax():
-                return JsonResponse({'success': True, 'message': 'Past/Today flight dates are not allowed.'})
-            else:
+            # if request.is_ajax():
+            #     return JsonResponse({'success': True, 'message': 'Past/Today flight dates are not allowed.'})
+            # else:
                 return render(request, 'basecamp/date_error.html')
      
         inquiry_email = Inquiry.objects.only('email').values_list('email', flat=True)
@@ -758,9 +753,9 @@ def inquiry_details2(request):
         
         today = date.today()
         if flight_date != str(today):
-            if request.is_ajax():
-                return JsonResponse({'success': True, 'message': 'Past/Today flight dates are not allowed.'})
-            else:
+            # if request.is_ajax():
+            #     return JsonResponse({'success': True, 'message': 'Past/Today flight dates are not allowed.'})
+            # else:
                 return render(request, 'basecamp/date_error.html')
                      
         message = '''
@@ -826,9 +821,9 @@ def p2p_single_detail(request):
         
         today = date.today()
         if flight_date <= str(today):
-            if request.is_ajax():
-                return JsonResponse({'success': True, 'message': 'Past/Today flight dates are not allowed.'})
-            else:
+            # if request.is_ajax():
+            #     return JsonResponse({'success': True, 'message': 'Past/Today flight dates are not allowed.'})
+            # else:
                 return render(request, 'basecamp/date_error.html')
      
         inquiry_email = Inquiry.objects.only('email').values_list('email', flat=True)
@@ -976,10 +971,8 @@ def p2p_detail(request):
         )
         
         email.attach_alternative(html_content, "text/html")
-        email.send()
+        email.send()       
         
-        if not result.get('success'):
-            return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'})
         
        # If everything is fine, respond accordingly
         if is_ajax(request):

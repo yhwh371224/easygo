@@ -375,3 +375,47 @@ Traceback (most recent call last):
        ^^^^^^^^^^^^^^^
 AttributeError: 'WSGIRequest' object has no attribute 'is_ajax'
 WARNING 2023-11-25 07:44:24,886 log Not Found: /robots.txt
+WARNING 2023-11-25 08:12:18,738 log Not Found: /robots.txt
+WARNING 2023-11-25 08:13:13,081 log Not Found: /robots.txt
+WARNING 2023-11-25 08:13:13,083 log Not Found: /robots.txt
+WARNING 2023-11-25 08:21:13,827 log Not Found: /robots.txt
+WARNING 2023-11-25 08:23:52,454 log Not Found: /inquiry3/
+WARNING 2023-11-25 08:24:13,477 log Not Found: /robots.txt
+WARNING 2023-11-25 08:26:04,293 log Not Found: /inquiry3/
+ERROR 2023-11-25 08:27:19,417 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-25 08:27:19,419 log Bad Request: /ecp/Current/exporttool/microsoft.exchange.ediscovery.exporttool.application
+WARNING 2023-11-25 08:40:40,613 log Not Found: //wp-includes/wlwmanifest.xml
+WARNING 2023-11-25 08:40:40,815 log Not Found: //xmlrpc.php
+WARNING 2023-11-25 08:40:41,220 log Not Found: //blog/wp-includes/wlwmanifest.xml
+WARNING 2023-11-25 08:40:41,423 log Not Found: //web/wp-includes/wlwmanifest.xml
+WARNING 2023-11-25 08:40:41,626 log Not Found: //wordpress/wp-includes/wlwmanifest.xml
+WARNING 2023-11-25 08:40:41,829 log Not Found: //website/wp-includes/wlwmanifest.xml
+WARNING 2023-11-25 08:40:42,032 log Not Found: //wp/wp-includes/wlwmanifest.xml
+WARNING 2023-11-25 08:40:42,235 log Not Found: //news/wp-includes/wlwmanifest.xml
+WARNING 2023-11-25 08:40:42,437 log Not Found: //2020/wp-includes/wlwmanifest.xml
+WARNING 2023-11-25 08:40:42,640 log Not Found: //2019/wp-includes/wlwmanifest.xml
+WARNING 2023-11-25 08:40:42,843 log Not Found: //shop/wp-includes/wlwmanifest.xml
+WARNING 2023-11-25 08:40:43,046 log Not Found: //wp1/wp-includes/wlwmanifest.xml
+WARNING 2023-11-25 08:40:43,249 log Not Found: //test/wp-includes/wlwmanifest.xml
+WARNING 2023-11-25 08:40:43,452 log Not Found: //wp2/wp-includes/wlwmanifest.xml
+WARNING 2023-11-25 08:40:43,654 log Not Found: //site/wp-includes/wlwmanifest.xml
+WARNING 2023-11-25 08:40:43,857 log Not Found: //cms/wp-includes/wlwmanifest.xml
+WARNING 2023-11-25 08:40:44,060 log Not Found: //sito/wp-includes/wlwmanifest.xml
+WARNING 2023-11-25 08:51:39,247 log Not Found: /robots.txt
+WARNING 2023-11-25 08:51:39,279 log Not Found: /robots.txt
+WARNING 2023-11-25 08:51:39,597 log Not Found: /robots.txt
+WARNING 2023-11-25 08:51:39,639 log Not Found: /robots.txt
+ERROR 2023-11-25 08:57:47,480 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-25 08:57:47,482 log Bad Request: /
+ERROR 2023-11-25 08:57:49,451 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-25 08:57:49,452 log Bad Request: /robots.txt
+ERROR 2023-11-25 08:57:49,475 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-25 08:57:49,476 log Bad Request: /sitemap.xml
+WARNING 2023-11-25 09:06:18,211 log Not Found: /robots.txt
+WARNING 2023-11-25 09:06:22,536 log Not Found: /wp-content/themes/easygo/images/retina/gallery-next.png
+WARNING 2023-11-25 09:35:56,490 log Not Found: /shop/product-category/moncler-kids/
+ERROR 2023-11-25 09:51:12,820 exception Invalid HTTP_HOST header: '149.28.188.33:443'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-25 09:51:12,856 log Bad Request: /
+WARNING 2023-11-25 10:11:00,514 log Not Found: /simple.php
+WARNING 2023-11-25 10:11:01,276 log Not Found: /chosen.php
+WARNING 2023-11-25 10:35:31,266 log Not Found: /wp-login.php
