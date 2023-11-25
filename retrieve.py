@@ -58,16 +58,20 @@ def main():
     creds = None
     secure_directory = 'secure_gmail/'
     token_file_path = os.path.join(secure_directory, 'token.json')
+
     if os.path.exists(token_file_path):
         creds = Credentials.from_authorized_user_file(token_file_path, SCOPES)
+
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
+
         else:
             credentials_file_path = os.path.join(secure_directory, 'credentials.json')
             flow = InstalledAppFlow.from_client_secrets_file(credentials_file_path, SCOPES)
             creds = flow.run_local_server(port=0)
-        with open('token.json', 'w') as token:
+
+        with open(token_file_path, 'w') as token:
             token.write(creds.to_json())
 
     try:
@@ -85,7 +89,7 @@ def main():
 if __name__ == "__main__":
     rereminder_emails = main()
 
-    # Print the retrieved email addresses
-    print("Re-reminder Emails:")
-    for email in rereminder_emails:
-        print(email)
+    # # Print the retrieved email addresses
+    # print("Re-reminder Emails:")
+    # for email in rereminder_emails:
+    #     print(email)
