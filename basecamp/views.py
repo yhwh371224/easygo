@@ -42,7 +42,7 @@ def sitemap(request): return render(request, 'basecamp/sitemap.xml')
 
 def booking_form(request): 
     context = {
-        'recaptcha_site_key': settings.RECAPTCHA_PUBLIC_KEY,
+        'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
     }
     return render(request, 'basecamp/booking_form.html', context)
 
@@ -80,35 +80,35 @@ def save_data_only(request): return render(request, 'basecamp/save_data_only.htm
 
 def inquiry(request): 
     context = {
-        'recaptcha_site_key': settings.RECAPTCHA_PUBLIC_KEY,
+        'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
     }
     return render(request, 'basecamp/inquiry.html', context)
 
 
 def inquiry1(request): 
     context = {
-        'recaptcha_site_key': settings.RECAPTCHA_PUBLIC_KEY,
+        'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
     }
     return render(request, 'basecamp/inquiry1.html', context)
 
 
 def inquiry2(request): 
     context = {
-        'recaptcha_site_key': settings.RECAPTCHA_PUBLIC_KEY,
+        'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
     }
     return render(request, 'basecamp/inquiry2.html', context)
 
 
 def p2p(request): 
     context = {
-        'recaptcha_site_key': settings.RECAPTCHA_PUBLIC_KEY,
+        'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
     }
     return render(request, 'basecamp/p2p.html', context)
 
 
 def p2p_single(request): 
     context = {
-        'recaptcha_site_key': settings.RECAPTCHA_PUBLIC_KEY,
+        'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
     }
     return render(request, 'basecamp/p2p_single.html', context)
 
@@ -325,7 +325,7 @@ def server_error(request): return render(request, 'basecamp/507.html')
 
 def verify_recaptcha(response):
     data = {
-        'secret': settings.RECAPTCHA_PRIVATE_KEY,
+        'secret': settings.RECAPTCHA_SECRET_KEY,
         'response': response
     }
     r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
@@ -357,19 +357,13 @@ def inquiry_details(request):
         return_flight_time = request.POST.get('return_flight_time')
         return_pickup_time = request.POST.get('return_pickup_time')
         message = request.POST.get('message')
-        
 
-        # # ReCAPTCHA validation
+
         recaptcha_response = request.POST.get('g-recaptcha-response')
-        data = {
-            'secret': settings.RECAPTCHA_PRIVATE_KEY,
-            'response': recaptcha_response
-        }
-        r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
-        result = r.json()
-
-        # if not result.get('success'):
-        #     return JsonResponse({'success': True, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'})
+        result = verify_recaptcha(recaptcha_response)
+        if not result.get('success'):
+            return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'}) 
+        
 
         data = {
             'name': name,
@@ -380,9 +374,9 @@ def inquiry_details(request):
         
         today = date.today()
         if flight_date <= str(today):
-            # if request.is_ajax():
-            #     return JsonResponse({'success': True, 'message': 'Past/Today flight dates are not allowed.'})
-            # else:
+            if request.is_ajax():
+                return JsonResponse({'success': False, 'message': 'Past/Today flight dates are not allowed.'})
+            else:
                 return render(request, 'basecamp/date_error.html')  
         
         inquiry_email = Inquiry.objects.only('email').values_list('email', flat=True)
@@ -606,17 +600,10 @@ def booking_form_detail(request):
         return_pickup_time = request.POST.get('return_pickup_time')
         message = request.POST.get('message')
 
-        # # ReCAPTCHA validation
         recaptcha_response = request.POST.get('g-recaptcha-response')
-        data = {
-            'secret': settings.RECAPTCHA_PRIVATE_KEY,
-            'response': recaptcha_response
-        }
-        r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
-        result = r.json()
-
-        # if not result.get('success'):
-        #     return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'})
+        result = verify_recaptcha(recaptcha_response)
+        if not result.get('success'):
+            return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'}) 
         
         data = {
             'name': name,
@@ -732,17 +719,12 @@ def inquiry_details2(request):
         flight_date = request.POST.get('flight_date')      
         message = request.POST.get('message')     
         
-        # # ReCAPTCHA validation
-        recaptcha_response = request.POST.get('g-recaptcha-response')
-        data = {
-            'secret': settings.RECAPTCHA_PRIVATE_KEY,
-            'response': recaptcha_response
-        }
-        r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
-        result = r.json()   
 
-        # if not result.get('success'):
-        #     return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'})     
+        recaptcha_response = request.POST.get('g-recaptcha-response')
+        result = verify_recaptcha(recaptcha_response)
+        if not result.get('success'):
+            return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'}) 
+           
 
         data = {
             'name': name,
@@ -801,17 +783,12 @@ def p2p_single_detail(request):
         return_pickup_time = request.POST.get('return_pickup_time')
         message = request.POST.get('message')   
 
-        # # ReCAPTCHA validation
-        recaptcha_response = request.POST.get('g-recaptcha-response')
-        data = {
-            'secret': settings.RECAPTCHA_PRIVATE_KEY,
-            'response': recaptcha_response
-        }
-        r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
-        result = r.json()
 
-        # if not result.get('success'):
-        #     return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'})    
+        recaptcha_response = request.POST.get('g-recaptcha-response')
+        result = verify_recaptcha(recaptcha_response)
+        if not result.get('success'):
+            return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'}) 
+         
                
         data = {
             'name': name,
@@ -940,17 +917,12 @@ def p2p_detail(request):
         p2p_baggage = request.POST.get('p2p_baggage')
         p2p_message = request.POST.get('p2p_message')
 
-        # # ReCAPTCHA validation
+        
         recaptcha_response = request.POST.get('g-recaptcha-response')
-        data = {
-            'secret': settings.RECAPTCHA_PRIVATE_KEY,
-            'response': recaptcha_response
-        }
-        r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
-        result = r.json()
-
-        # if not result.get('success'):
-        #     return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'})
+        result = verify_recaptcha(recaptcha_response)
+        if not result.get('success'):
+            return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'}) 
+        
 
         html_content = render_to_string("basecamp/html_email-p2p-confirmation.html", 
             {'p2p_name': p2p_name, 'p2p_phone': p2p_phone, 'p2p_email': p2p_email, 'p2p_date': p2p_date, 

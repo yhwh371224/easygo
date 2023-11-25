@@ -147,7 +147,7 @@
         <p class="fs-sm mb-3 order-md-1"><span class="text-light opacity-50 me-1">© 2023 EasyGo. All rights reserved. Made by</span><a class="nav-link-style nav-link-light" href="#" target="_blank" rel="noopener">EasyGo</a></p>
       </div>
     </footer>
-    <!-- Vendor scrits: js libraries and plugins-->
+    <!-- Vendor scrits: js libraries and plugins-->    
     <script src="/static/basecamp/js/bootstrap.bundle.min.js"></script>
     <script src="/static/basecamp/js/simplebar.min.js"></script>
     <script src="/static/basecamp/js/smooth-scroll.polyfills.min.js"></script>
@@ -158,8 +158,7 @@
     <script src="/static/basecamp/js/date-picker.js"></script>
     <script src="/static/basecamp/js/form_handler.js" defer></script>
     <!-- Main theme script-->
-    <script src="/static/basecamp/js/theme.min.js"></script>     
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script> 
+    <script src="/static/basecamp/js/theme.min.js"></script>              
     <script>
     	var returnFlightCheckbox = document.getElementById("return-flight");
       var returnFlightFields = document.getElementById("return-flight-fields");
@@ -191,6 +190,26 @@
               submitButton.innerHTML = "Submitting..."; // You can change the text as needed
           });
       });
+  </script> 
+  <script async src="https://www.google.com/recaptcha/api.js"></script>
+  <script>    
+    if(typeof grecaptcha === 'undefined') {
+      grecaptcha = {};
+    }
+    grecaptcha.ready = function(cb){
+      if(typeof grecaptcha === 'undefined') {       
+        const c = '___grecaptcha_cfg';
+        window[c] = window[c] || {};
+        (window[c]['fns'] = window[c]['fns']||[]).push(cb);
+      } else {
+        cb();
+      }
+    }
+    grecaptcha.ready(function(){
+      grecaptcha.render("container", {
+        sitekey: "6LcF_xspAAAAAAjCmHaLpgYhyX_Ndi6taHUBrmUG"
+      });
+    });
   </script>
   </body>
 </html>
