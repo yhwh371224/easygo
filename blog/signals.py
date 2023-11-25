@@ -174,15 +174,16 @@ def create_event_on_calendar(sender, instance, created, **kwargs):
         if not creds or not creds.valid:
             if creds and creds.expired and creds.refresh_token:
                 creds.refresh(Request())
+                
             else:
                 credentials_file_path = os.path.join(secure_directory, 'credentials.json')
                 flow = InstalledAppFlow.from_client_secrets_file(credentials_file_path, SCOPES)
                 creds = flow.run_local_server(port=0)
     
-            with open('token.json', 'w') as token:
+            with open(token_file_path, 'w') as token:
                 token.write(creds.to_json())
-    
-        
+
+
             service = build('calendar', 'v3', credentials=creds)        
             
             paid_str = f'paid' if instance.paid else ''
