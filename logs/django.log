@@ -419,3 +419,121 @@ WARNING 2023-11-25 09:51:12,856 log Bad Request: /
 WARNING 2023-11-25 10:11:00,514 log Not Found: /simple.php
 WARNING 2023-11-25 10:11:01,276 log Not Found: /chosen.php
 WARNING 2023-11-25 10:35:31,266 log Not Found: /wp-login.php
+WARNING 2023-11-25 11:18:44,310 log Not Found: /.env
+WARNING 2023-11-25 11:18:53,066 log Not Found: /.env
+WARNING 2023-11-25 11:52:41,651 log Not Found: /shop/product/moncler-jackets-men-tours-black/
+WARNING 2023-11-25 12:06:51,223 log Forbidden (Referer checking failed - no Referer.): /inquiry_details2/
+WARNING 2023-11-25 12:06:52,002 log Forbidden (Referer checking failed - no Referer.): /inquiry_details2/
+WARNING 2023-11-25 12:06:52,806 log Forbidden (Referer checking failed - no Referer.): /inquiry_details2/
+WARNING 2023-11-25 12:06:54,218 log Forbidden (Referer checking failed - no Referer.): /inquiry_details1/
+WARNING 2023-11-25 12:06:55,046 log Forbidden (Referer checking failed - no Referer.): /inquiry_details1/
+WARNING 2023-11-25 12:06:55,823 log Forbidden (Referer checking failed - no Referer.): /inquiry_details1/
+WARNING 2023-11-25 12:06:57,178 log Forbidden (Referer checking failed - no Referer.): /inquiry_details/
+WARNING 2023-11-25 12:06:57,919 log Forbidden (Referer checking failed - no Referer.): /inquiry_details/
+WARNING 2023-11-25 12:06:58,706 log Forbidden (Referer checking failed - no Referer.): /inquiry_details/
+WARNING 2023-11-25 12:07:08,207 log Not Found: /technology/next-billion-users/
+WARNING 2023-11-25 12:07:09,001 log Not Found: /technology/
+WARNING 2023-11-25 12:07:09,383 log Not Found: /products/registry/
+WARNING 2023-11-25 12:07:10,192 log Not Found: /newsletter-subscribe/
+WARNING 2023-11-25 12:07:17,504 log Not Found: /technology/safety-security/
+WARNING 2023-11-25 12:07:17,917 log Not Found: /technology/developers/
+WARNING 2023-11-25 12:27:53,207 log Not Found: /ads.txt
+WARNING 2023-11-25 12:27:53,215 log Not Found: /app-ads.txt
+WARNING 2023-11-25 12:27:53,216 log Not Found: /sellers.json
+WARNING 2023-11-25 12:27:53,623 log Not Found: /.well-known/assetlinks.json
+WARNING 2023-11-25 12:27:53,624 log Not Found: /.well-known/apple-app-site-association
+WARNING 2023-11-25 12:27:55,722 log Not Found: /robots.txt
+WARNING 2023-11-25 12:27:56,451 log Not Found: /.well-known/assetlinks.json
+WARNING 2023-11-25 12:27:56,453 log Not Found: /.well-known/apple-app-site-association
+WARNING 2023-11-25 12:27:56,458 log Not Found: /robots.txt
+WARNING 2023-11-25 12:27:56,460 log Not Found: /.well-known/gpc.json
+WARNING 2023-11-25 12:27:56,463 log Not Found: /.well-known/change-password
+WARNING 2023-11-25 12:27:56,468 log Not Found: /.well-known/security.txt
+WARNING 2023-11-25 12:27:56,631 log Not Found: /.well-known/resource-that-should-not-exist-whose-status-code-should-not-be-200/
+WARNING 2023-11-25 12:28:33,877 log Not Found: /android-chrome-192x192.png
+WARNING 2023-11-25 12:28:34,333 log Not Found: /robots.txt
+ERROR 2023-11-25 12:33:06,526 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-25 12:33:06,528 log Bad Request: /
+WARNING 2023-11-25 12:41:50,429 log Not Found: /robots.txt
+WARNING 2023-11-25 12:41:54,728 log Not Found: /wp-content/uploads/2014/10/Easy_go_41-b.png
+WARNING 2023-11-25 12:47:56,415 log Not Found: /robots.txt
+WARNING 2023-11-25 13:01:10,681 log Not Found: /robots.txt
+WARNING 2023-11-25 13:03:27,402 log Not Found: /ads.txt
+WARNING 2023-11-25 13:08:23,431 log Not Found: /robots.txt
+WARNING 2023-11-25 13:08:39,231 log Not Found: /wp-content/themes/easygo/images/retina/slide-indicator-inactive.png
+WARNING 2023-11-25 13:29:48,427 log Not Found: /easygoshuttle.com.au/airport-transfers-north-shore/
+WARNING 2023-11-25 13:30:39,059 log Not Found: /.well-known/traffic-advice
+WARNING 2023-11-25 13:35:13,392 log Not Found: /robots.txt
+ERROR 2023-11-25 13:42:47,563 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-25 13:42:47,570 log Bad Request: /Electron/download/windows/..\..\..\Http\webroot\config.json
+ERROR 2023-11-25 13:42:48,229 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-25 13:42:48,275 log Bad Request: /Electron/download/windows/\windows\win.ini
+WARNING 2023-11-25 14:09:07,289 log Not Found: /robots.txt
+WARNING 2023-11-25 14:18:31,594 log Not Found: /inquiry3/
+WARNING 2023-11-25 14:33:31,666 log Not Found: /robots.txt
+ERROR 2023-11-25 15:05:11,946 exception Invalid HTTP_HOST header: '149.28.188.33:443'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-25 15:05:11,950 log Bad Request: /%
+ERROR 2023-11-25 15:05:11,971 exception Invalid HTTP_HOST header: '149.28.188.33:443'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-25 15:05:11,972 log Bad Request: /aaaaaaaaaaaaaaaaaaaaaaaaaqr
+ERROR 2023-11-25 15:05:11,977 exception Invalid HTTP_HOST header: '149.28.188.33:443'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-25 15:05:11,979 log Bad Request: /Res/login.html
+ERROR 2023-11-25 15:05:11,981 exception Invalid HTTP_HOST header: '149.28.188.33:443'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-25 15:05:11,982 log Bad Request: /99vt
+ERROR 2023-11-25 15:05:11,985 exception Invalid HTTP_HOST header: '149.28.188.33:443'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+ERROR 2023-11-25 15:05:11,986 exception Invalid HTTP_HOST header: '149.28.188.33:443'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-25 15:05:11,987 log Bad Request: /robots.txt
+WARNING 2023-11-25 15:05:11,988 log Bad Request: /
+ERROR 2023-11-25 15:05:11,991 exception Invalid HTTP_HOST header: '149.28.188.33:443'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-25 15:05:11,992 log Bad Request: /robots.txt
+ERROR 2023-11-25 15:05:12,923 exception Invalid HTTP_HOST header: '149.28.188.33:443'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-25 15:05:12,924 log Bad Request: /99vu
+WARNING 2023-11-25 15:05:41,340 log Not Found: /shop/product-category/moncler-kids/
+WARNING 2023-11-25 15:18:52,013 log Not Found: /robots.txt
+ERROR 2023-11-25 15:18:53,029 log Internal Server Error: /blog/create/
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+               ^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/response.py", line 90, in rendered_content
+    template = self.resolve_template(self.template_name)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/response.py", line 72, in resolve_template
+    return select_template(template, using=self.using)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/loader.py", line 47, in select_template
+    raise TemplateDoesNotExist(", ".join(template_name_list), chain=chain)
+django.template.exceptions.TemplateDoesNotExist: blog/post_form.html
+WARNING 2023-11-25 15:24:20,228 log Not Found: /.well-known/traffic-advice
+WARNING 2023-11-25 15:24:46,919 log Not Found: /contact-us/
+WARNING 2023-11-25 15:24:57,015 log Not Found: /home/sms:+61406883355
+WARNING 2023-11-25 15:39:35,146 log Not Found: /.well-known/acme-challenge/GAJ-CIJ47FOZ6TM73TL9A1FD1--DUHSU
+WARNING 2023-11-25 15:39:36,121 log Not Found: /.well-known/acme-challenge/TK80BEH3KQZ6WCRMCFDAO375KK2JB2WT
+WARNING 2023-11-25 15:43:46,589 log Not Found: /wp-admin/css/colors/blue/blue.php
+WARNING 2023-11-25 15:43:48,478 log Not Found: /simple.php
+WARNING 2023-11-25 15:43:49,117 log Not Found: /shell20211028.php
+WARNING 2023-11-25 15:43:49,748 log Not Found: /wp-content/plugins/yyobang/mar.php
+WARNING 2023-11-25 15:43:50,662 log Not Found: /wp-content/plugins/press/wp-class.php
+WARNING 2023-11-25 15:43:51,270 log Not Found: /xxl.php
+WARNING 2023-11-25 15:43:52,193 log Not Found: /fm1.php
+WARNING 2023-11-25 15:43:52,812 log Not Found: /wp-content/themes/finley/min.php
+WARNING 2023-11-25 15:43:53,425 log Not Found: /M1.php
+WARNING 2023-11-25 15:43:54,031 log Not Found: /wp-head.php
+WARNING 2023-11-25 15:43:54,648 log Not Found: /class.api.php
+WARNING 2023-11-25 15:59:02,134 log Not Found: /apple-touch-icon-precomposed.png
+WARNING 2023-11-25 15:59:02,188 log Not Found: /apple-touch-icon.png
+ERROR 2023-11-25 16:01:33,570 log Internal Server Error: /paypal_ipn/
+ERROR 2023-11-25 16:42:26,348 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-25 16:42:26,349 log Bad Request: /.env
+WARNING 2023-11-25 16:48:24,542 log Not Found: /robots.txt
+WARNING 2023-11-25 16:48:30,519 log Not Found: /product/moncler-jackets-kids-sestriere-yellow/
+ERROR 2023-11-25 17:13:31,352 log Internal Server Error: /paypal_ipn/
+WARNING 2023-11-25 17:13:53,781 log Not Found: /robots.txt
+WARNING 2023-11-25 17:34:11,412 log Not Found: /robots.txt
+ERROR 2023-11-25 17:56:43,645 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-25 17:56:43,650 log Bad Request: /
