@@ -562,3 +562,37 @@ Traceback (most recent call last):
        ^^^^^^^^^^^^^^^
 AttributeError: 'WSGIRequest' object has no attribute 'is_ajax'
 WARNING 2023-11-25 19:40:42,983 log Not Found: /robots.txt
+WARNING 2023-11-25 20:03:57,875 log Not Found: /autodiscover/autodiscover.json
+WARNING 2023-11-25 20:05:20,109 log Not Found: /%
+WARNING 2023-11-25 20:05:20,118 log Not Found: /robots.txt
+WARNING 2023-11-25 20:05:20,125 log Not Found: /robots.txt
+WARNING 2023-11-25 20:05:20,146 log Not Found: /aaaaaaaaaaaaaaaaaaaaaaaaaqr
+WARNING 2023-11-25 20:05:20,149 log Not Found: /99vt
+WARNING 2023-11-25 20:05:20,151 log Not Found: /Res/login.html
+WARNING 2023-11-25 20:05:20,952 log Not Found: /99vu
+WARNING 2023-11-25 20:19:24,805 log Not Found: /robots.txt
+WARNING 2023-11-25 20:22:22,494 log Not Found: /robots.txt
+ERROR 2023-11-25 20:32:42,068 log Internal Server Error: /inquiry_details/
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/basecamp/views.py", line 377, in inquiry_details
+    if request.is_ajax():
+       ^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'is_ajax'
+ERROR 2023-11-25 20:33:25,046 log Internal Server Error: /inquiry_details/
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/basecamp/views.py", line 377, in inquiry_details
+    if request.is_ajax():
+       ^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'is_ajax'
