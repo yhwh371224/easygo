@@ -541,3 +541,24 @@ ERROR 2023-11-25 18:21:31,014 exception Invalid HTTP_HOST header: '149.28.188.33
 WARNING 2023-11-25 18:21:31,016 log Bad Request: /
 ERROR 2023-11-25 18:24:29,905 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
 WARNING 2023-11-25 18:24:29,907 log Bad Request: /webui/
+WARNING 2023-11-25 18:28:30,778 log Not Found: /dns-query
+WARNING 2023-11-25 18:31:19,616 log Not Found: /geoserver/web/
+WARNING 2023-11-25 18:31:56,163 log Not Found: /.git/config
+WARNING 2023-11-25 18:37:29,600 log Not Found: /robots.txt
+WARNING 2023-11-25 19:20:14,610 log Not Found: /robots.txt
+WARNING 2023-11-25 19:24:44,851 log Not Found: /inquiry3/
+WARNING 2023-11-25 19:30:51,967 log Not Found: /robots.txt
+WARNING 2023-11-25 19:30:56,171 log Not Found: /wp-content/themes/easygo/slider/action.png
+ERROR 2023-11-25 19:36:07,949 log Internal Server Error: /inquiry_details/
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/basecamp/views.py", line 377, in inquiry_details
+    if request.is_ajax():
+       ^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'is_ajax'
+WARNING 2023-11-25 19:40:42,983 log Not Found: /robots.txt
