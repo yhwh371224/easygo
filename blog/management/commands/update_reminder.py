@@ -19,7 +19,7 @@ class Command(BaseCommand):
 
         for list_email in my_list:      
 
-            posts = Post.objects.filter(email=list_email, flight_date__range=[today, three_days_later])
+            posts = Post.objects.filter(email__iexact=list_email, flight_date__range=[today, three_days_later])
 
             for post in posts:
                 post.reminder = True
