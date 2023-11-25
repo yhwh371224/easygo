@@ -596,3 +596,192 @@ Traceback (most recent call last):
     if request.is_ajax():
        ^^^^^^^^^^^^^^^
 AttributeError: 'WSGIRequest' object has no attribute 'is_ajax'
+ERROR 2023-11-25 20:43:29,758 log Internal Server Error: /inquiry_details/
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/basecamp/views.py", line 451, in inquiry_details
+    if request.is_ajax():
+       ^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'is_ajax'
+WARNING 2023-11-25 20:47:00,348 log Not Found: /shop/es/product-category/moncler-coats-hombre/
+ERROR 2023-11-25 20:49:02,988 log Internal Server Error: /paypal_ipn/
+WARNING 2023-11-25 20:57:37,644 log Not Found: /actuator/gateway/routes
+WARNING 2023-11-25 21:06:13,880 log Not Found: /robots.txt
+WARNING 2023-11-25 21:17:42,856 log Not Found: /.env
+WARNING 2023-11-25 21:17:45,979 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-11-25 21:25:32,531 log Not Found: /inquiry3/
+WARNING 2023-11-25 21:34:31,923 log Not Found: /wp-admin/install.php
+WARNING 2023-11-25 21:34:37,475 log Not Found: /feed/
+WARNING 2023-11-25 21:54:42,521 log Not Found: /robots.txt
+WARNING 2023-11-25 21:58:32,300 log Not Found: /dns-query
+WARNING 2023-11-25 21:59:47,342 log Not Found: /jquery-3.3.1.min.js
+WARNING 2023-11-25 21:59:47,732 log Not Found: /categories/Yud
+WARNING 2023-11-25 21:59:48,140 log Not Found: /wp-content/themes/twentytwentyone/inc/block-css.php
+WARNING 2023-11-25 21:59:48,617 log Not Found: /nation.php
+WARNING 2023-11-25 21:59:49,067 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-11-25 21:59:49,453 log Not Found: /is-bin
+WARNING 2023-11-25 21:59:49,850 log Not Found: /is-bin
+WARNING 2023-11-25 21:59:50,242 log Not Found: /news.php
+WARNING 2023-11-25 21:59:50,634 log Not Found: /8.bin
+WARNING 2023-11-25 21:59:50,739 log Not Found: /hrsgdsb7386wknzms.jpg
+WARNING 2023-11-25 21:59:50,837 log Not Found: /UnityPlayer.dll
+WARNING 2023-11-25 21:59:50,934 log Not Found: /ttd.exe
+WARNING 2023-11-25 21:59:51,032 log Not Found: /qd.CHM
+WARNING 2023-11-25 21:59:51,611 log Not Found: /zMLUH93A
+WARNING 2023-11-25 21:59:52,081 log Not Found: /Display/chan/IB61I7MYA
+WARNING 2023-11-25 21:59:52,469 log Not Found: /jquery-3.3.1.min.js
+WARNING 2023-11-25 21:59:52,851 log Not Found: /Gmail/UnityPlayer.txt
+WARNING 2023-11-25 21:59:53,235 log Not Found: /new/login
+ERROR 2023-11-25 21:59:53,621 exception Invalid HTTP_HOST header: 'www.sogou.com'. You may need to add 'www.sogou.com' to ALLOWED_HOSTS.
+WARNING 2023-11-25 21:59:53,623 log Bad Request: /viwwwsogou
+WARNING 2023-11-25 21:59:54,045 log Not Found: /e3e7e71a0b28b5e96cc492e636722f73/4sVKAOvu3D/BDyot0NxyG.php
+WARNING 2023-11-25 21:59:54,556 log Not Found: /jquery.js
+WARNING 2023-11-25 21:59:54,981 log Not Found: /wh/glass.php
+WARNING 2023-11-25 21:59:55,368 log Not Found: /login
+ERROR 2023-11-25 21:59:55,750 exception Invalid HTTP_HOST header: 'docs.microsoft.com'. You may need to add 'docs.microsoft.com' to ALLOWED_HOSTS.
+WARNING 2023-11-25 21:59:55,752 log Bad Request: /c/msdownload/update/software/update/2021/11/6632de33-967441-x86.cab
+ERROR 2023-11-25 21:59:55,849 exception Invalid HTTP_HOST header: 'docs.microsoft.com'. You may need to add 'docs.microsoft.com' to ALLOWED_HOSTS.
+WARNING 2023-11-25 21:59:55,851 log Bad Request: /c/msdownload/update/software/update/2021/11/6632de33-967441-x86.cab
+WARNING 2023-11-25 21:59:56,244 log Not Found: /fw6I
+WARNING 2023-11-25 21:59:56,341 log Not Found: /fw6I
+WARNING 2023-11-25 21:59:56,735 log Not Found: /fw2M
+WARNING 2023-11-25 21:59:56,838 log Not Found: /Imo7
+ERROR 2023-11-25 21:59:57,217 exception Invalid HTTP_HOST header: 'www.wlanquna.club'. You may need to add 'www.wlanquna.club' to ALLOWED_HOSTS.
+WARNING 2023-11-25 21:59:57,218 log Bad Request: /Visu/ens/events
+ERROR 2023-11-25 21:59:57,349 exception Invalid HTTP_HOST header: 'www.wlanquna.club'. You may need to add 'www.wlanquna.club' to ALLOWED_HOSTS.
+WARNING 2023-11-25 21:59:57,350 log Bad Request: /Visu/ens/events
+WARNING 2023-11-25 22:01:55,055 log Not Found: /.well-known/traffic-advice
+WARNING 2023-11-25 22:34:20,433 log Not Found: /robots.txt
+WARNING 2023-11-25 22:38:53,213 log Not Found: /shop/fi/product-category/moncler-coats-mens-fi/
+WARNING 2023-11-25 22:47:12,065 log Not Found: /contact-us/
+WARNING 2023-11-25 23:24:06,812 log Not Found: /shop/da/product/moncler-calipso-2/
+WARNING 2023-11-25 23:24:38,956 log Not Found: /robots.txt
+WARNING 2023-11-25 23:24:44,294 log Not Found: /robots.txt
+WARNING 2023-11-25 23:24:47,877 log Not Found: /sitemap.txt
+WARNING 2023-11-25 23:24:51,415 log Not Found: /robots.txt
+WARNING 2023-11-25 23:24:56,024 log Not Found: /robots.txt
+WARNING 2023-11-25 23:24:59,148 log Not Found: /sitemap.txt
+WARNING 2023-11-25 23:25:02,386 log Not Found: /sitemap.txt
+WARNING 2023-11-25 23:25:05,352 log Not Found: /sitemap.txt
+WARNING 2023-11-25 23:25:12,586 log Not Found: /inquiry3/
+WARNING 2023-11-26 00:28:13,951 log Not Found: /owa/auth/x.js
+WARNING 2023-11-26 00:29:28,960 log Not Found: /robots.txt
+WARNING 2023-11-26 00:29:29,558 log Not Found: /robots.txt
+WARNING 2023-11-26 00:29:58,432 log Not Found: /robots.txt
+WARNING 2023-11-26 00:29:59,031 log Not Found: /robots.txt
+WARNING 2023-11-26 00:46:16,429 log Not Found: /robots.txt
+WARNING 2023-11-26 00:47:07,585 log Not Found: /robots.txt
+WARNING 2023-11-26 00:47:07,591 log Not Found: /robots.txt
+WARNING 2023-11-26 00:48:21,514 log Not Found: /wp-content/uploads/
+WARNING 2023-11-26 00:48:34,888 log Not Found: /.well-known/
+WARNING 2023-11-26 00:49:58,820 log Not Found: /home/url(/static/basecamp/photos/easygo-home-page3.webp)
+WARNING 2023-11-26 00:52:53,321 log Not Found: /home/url(/static/basecamp/photos/easygo-home-page4.webp)
+WARNING 2023-11-26 00:57:11,397 log Not Found: /home/url(/static/basecamp/photos/easygo-home-page3.webp)
+WARNING 2023-11-26 00:58:30,127 log Not Found: /home/url(/static/basecamp/photos/easygo-home-page4.webp)
+WARNING 2023-11-26 00:58:37,478 log Not Found: /robots.txt
+ERROR 2023-11-26 00:58:38,382 log Internal Server Error: /invoice_detail/
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/basecamp/views.py", line 1710, in invoice_detail
+    return render(request, 'beasecamp/invoice.html', {})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: beasecamp/invoice.html
+WARNING 2023-11-26 01:01:59,620 log Not Found: /home/url(/static/basecamp/photos/home1.webp)
+WARNING 2023-11-26 01:05:47,986 log Not Found: /Res/login.html
+WARNING 2023-11-26 01:05:47,990 log Not Found: /robots.txt
+WARNING 2023-11-26 01:05:47,994 log Not Found: /%
+WARNING 2023-11-26 01:05:48,043 log Not Found: /aaaaaaaaaaaaaaaaaaaaaaaaaqr
+WARNING 2023-11-26 01:05:48,081 log Not Found: /99vt
+WARNING 2023-11-26 01:05:48,087 log Not Found: /robots.txt
+WARNING 2023-11-26 01:05:49,173 log Not Found: /99vu
+WARNING 2023-11-26 01:12:43,900 log Not Found: /robots.txt
+WARNING 2023-11-26 01:14:15,573 log Not Found: /home/url(/static/basecamp/photos/home1.webp)
+WARNING 2023-11-26 01:20:30,141 log Not Found: /ReportServer
+WARNING 2023-11-26 01:35:51,066 log Not Found: /.vscode/sftp.json
+WARNING 2023-11-26 01:35:51,960 log Not Found: /about
+WARNING 2023-11-26 01:35:52,859 log Not Found: /debug/default/view
+WARNING 2023-11-26 01:35:53,760 log Not Found: /v2/_catalog
+WARNING 2023-11-26 01:35:54,660 log Not Found: /ecp/Current/exporttool/microsoft.exchange.ediscovery.exporttool.application
+WARNING 2023-11-26 01:35:55,576 log Not Found: /server-status
+WARNING 2023-11-26 01:35:56,464 log Not Found: /login.action
+WARNING 2023-11-26 01:35:57,347 log Not Found: /_all_dbs
+WARNING 2023-11-26 01:35:58,237 log Not Found: /.DS_Store
+WARNING 2023-11-26 01:35:59,119 log Not Found: /.env
+WARNING 2023-11-26 01:36:00,017 log Not Found: /.git/config
+WARNING 2023-11-26 01:36:00,921 log Not Found: /s/3333e2838313e28323e2934313/_/;/META-INF/maven/com.atlassian.jira/jira-webapp-dist/pom.properties
+WARNING 2023-11-26 01:36:01,821 log Not Found: /config.json
+WARNING 2023-11-26 01:36:02,755 log Not Found: /telescope/requests
+WARNING 2023-11-26 02:20:36,396 log Not Found: /robots.txt
+WARNING 2023-11-26 02:21:10,909 log Not Found: /robots.txt
+WARNING 2023-11-26 02:21:10,915 log Not Found: /robots.txt
+WARNING 2023-11-26 02:21:50,549 log Not Found: /robots.txt
+WARNING 2023-11-26 02:21:56,005 log Not Found: /sitemap.xml
+WARNING 2023-11-26 02:22:33,735 log Not Found: /th1s_1s_a_4o4.html
+WARNING 2023-11-26 02:23:04,768 log Not Found: /inquiry3/
+WARNING 2023-11-26 02:23:19,105 log Not Found: /airport-transfers-toongabbie/sms:+61406883355
+WARNING 2023-11-26 02:23:19,950 log Not Found: /payonline/sms:+61406883355
+WARNING 2023-11-26 02:23:22,653 log Not Found: /airport-transfers-st-ives/sms:+61406883355
+WARNING 2023-11-26 02:23:23,506 log Not Found: /information/sms:+61406883355
+WARNING 2023-11-26 02:23:24,372 log Not Found: /airport-transfers-epping/sms:+61406883355
+WARNING 2023-11-26 02:23:27,096 log Not Found: /inquiry/sms:+61406883355
+WARNING 2023-11-26 02:23:27,934 log Not Found: /inquiry2/sms:+61406883355
+WARNING 2023-11-26 02:23:28,781 log Not Found: /service/sms:+61406883355
+WARNING 2023-11-26 02:23:29,618 log Not Found: /airport-transfers-ryde/sms:+61406883355
+WARNING 2023-11-26 02:23:32,085 log Not Found: /airport-transfers-blacktown/sms:+61406883355
+WARNING 2023-11-26 02:23:32,923 log Not Found: /airport-transfers-parramatta/sms:+61406883355
+WARNING 2023-11-26 02:23:33,761 log Not Found: /privacy/sms:+61406883355
+WARNING 2023-11-26 02:23:34,616 log Not Found: /booking_form_detail/sms:+61406883355
+WARNING 2023-11-26 02:23:35,450 log Not Found: /p2p/sms:+61406883355
+WARNING 2023-11-26 02:23:36,287 log Not Found: /meeting_point/sms:+61406883355
+WARNING 2023-11-26 02:23:38,558 log Not Found: /booking_form/sms:+61406883355
+WARNING 2023-11-26 02:23:41,019 log Not Found: /airport-transfers-hornsby/sms:+61406883355
+WARNING 2023-11-26 02:23:41,891 log Not Found: /airport-transfers-chatswood/sms:+61406883355
+WARNING 2023-11-26 02:23:42,729 log Not Found: /airport-transfers-thornleigh/sms:+61406883355
+WARNING 2023-11-26 02:23:43,565 log Not Found: /terms/sms:+61406883355
+WARNING 2023-11-26 02:23:44,410 log Not Found: /inquiry_details2/sms:+61406883355
+WARNING 2023-11-26 02:23:45,254 log Not Found: /p2p_detail/sms:+61406883355
+WARNING 2023-11-26 02:23:46,090 log Not Found: /home/sms:+61406883355
+WARNING 2023-11-26 02:23:46,928 log Not Found: /payonline/tell:+61406883355
+WARNING 2023-11-26 02:23:47,763 log Not Found: /inquiry_details1/sms:+61406883355
+WARNING 2023-11-26 02:23:48,601 log Not Found: /p2p_single/sms:+61406883355
+WARNING 2023-11-26 02:23:49,438 log Not Found: /price_detail/sms:+61406883355
+WARNING 2023-11-26 02:23:51,723 log Not Found: /about_us/sms:+61406883355
+WARNING 2023-11-26 02:23:53,598 log Not Found: /inquiry_details/sms:+61406883355
+WARNING 2023-11-26 02:23:54,435 log Not Found: /p2p_single_detail/sms:+61406883355
+WARNING 2023-11-26 02:23:56,460 log Not Found: /robots.txt
+WARNING 2023-11-26 02:36:40,771 log Not Found: /inquiry3/
+WARNING 2023-11-26 02:39:41,163 log Not Found: /inquiry3/
+WARNING 2023-11-26 02:54:36,428 log Not Found: /.env
+WARNING 2023-11-26 02:54:38,713 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-11-26 02:58:40,404 log Not Found: /robots.txt
+WARNING 2023-11-26 02:58:45,990 log Not Found: /robots.txt
+WARNING 2023-11-26 02:59:16,520 log Not Found: /robots.txt
+WARNING 2023-11-26 02:59:16,522 log Not Found: /robots.txt
+WARNING 2023-11-26 03:12:43,021 log Not Found: /inquiry3/
+WARNING 2023-11-26 03:15:24,728 log Not Found: /inquiry3/
+WARNING 2023-11-26 03:29:10,589 log Not Found: /wp-login.php
+WARNING 2023-11-26 03:30:42,242 log Not Found: /robots.txt
+WARNING 2023-11-26 03:46:49,979 log Not Found: /shop/ko/product/도트-무늬-재킷-아래로-남성과-여성의-여러-로고가-새-2/
+WARNING 2023-11-26 04:15:42,548 log Not Found: /shop/de/product/moncler-champetre-beliebte-jacken-damen-schwarz/
+WARNING 2023-11-26 04:21:03,944 log Not Found: /robots.txt
+WARNING 2023-11-26 04:33:41,756 log Not Found: /robots.txt
+WARNING 2023-11-26 04:53:55,976 log Not Found: /robots.txt
+WARNING 2023-11-26 04:54:59,399 log Not Found: /shop/pl/product/kamizelka-z-daszkiem-moncler-chany-down-women-zip-short-black/
