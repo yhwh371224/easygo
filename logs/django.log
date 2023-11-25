@@ -537,3 +537,7 @@ WARNING 2023-11-25 17:13:53,781 log Not Found: /robots.txt
 WARNING 2023-11-25 17:34:11,412 log Not Found: /robots.txt
 ERROR 2023-11-25 17:56:43,645 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
 WARNING 2023-11-25 17:56:43,650 log Bad Request: /
+ERROR 2023-11-25 18:21:31,014 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-25 18:21:31,016 log Bad Request: /
+ERROR 2023-11-25 18:24:29,905 exception Invalid HTTP_HOST header: '149.28.188.33'. You may need to add '149.28.188.33' to ALLOWED_HOSTS.
+WARNING 2023-11-25 18:24:29,907 log Bad Request: /webui/
