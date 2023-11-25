@@ -371,14 +371,7 @@ def inquiry_details(request):
             'email': email,
             'flight_date': flight_date
             }
-        
-        today = date.today()
-        if flight_date <= str(today):
-            if request.is_ajax():
-                return JsonResponse({'success': False, 'message': 'Past/Today flight dates are not allowed.'})
-            else:
-                return render(request, 'basecamp/date_error.html')  
-        
+                
         inquiry_email = Inquiry.objects.only('email').values_list('email', flat=True)
         post_email = Post.objects.only('email').values_list('email', flat=True)  
 
@@ -451,7 +444,14 @@ def inquiry_details(request):
                  return_flight_date=return_flight_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
                  return_pickup_time=return_pickup_time ,message=message)
         
-        p.save() 
+        p.save()
+
+        today = date.today()
+        if flight_date <= str(today):
+            if request.is_ajax():
+                return JsonResponse({'success': False, 'message': 'Past/Today flight dates are not allowed.'})
+            else:
+                return render(request, 'basecamp/date_error.html')   
 
         if is_ajax(request):
             # Return a JSON response for AJAX requests
@@ -610,13 +610,6 @@ def booking_form_detail(request):
             'contact': contact,
             'email': email,
             'flight_date': flight_date}
-        
-        today = date.today()
-        if flight_date <= str(today):
-            # if request.is_ajax():
-            #     return JsonResponse({'success': True, 'message': 'Past/Today flight dates are not allowed.'})
-            # else:
-                return render(request, 'basecamp/date_error.html')
      
         inquiry_email = Inquiry.objects.only('email').values_list('email', flat=True)
         post_email = Post.objects.only('email').values_list('email', flat=True)  
@@ -696,6 +689,13 @@ def booking_form_detail(request):
         
         p.save()
 
+        today = date.today()
+        if flight_date <= str(today):
+            if request.is_ajax():
+                return JsonResponse({'success': False, 'message': 'Past/Today flight dates are not allowed.'})
+            else:
+                return render(request, 'basecamp/date_error.html')  
+
 
         # If everything is fine, respond accordingly
         if is_ajax(request):
@@ -735,9 +735,9 @@ def inquiry_details2(request):
         
         today = date.today()
         if flight_date != str(today):
-            # if request.is_ajax():
-            #     return JsonResponse({'success': True, 'message': 'Past/Today flight dates are not allowed.'})
-            # else:
+            if request.is_ajax():
+                return JsonResponse({'success': True, 'message': 'Past/Today flight dates are not allowed.'})
+            else:
                 return render(request, 'basecamp/date_error.html')
                      
         message = '''
@@ -796,12 +796,6 @@ def p2p_single_detail(request):
             'email': email,
             'flight_date': flight_date}
         
-        today = date.today()
-        if flight_date <= str(today):
-            # if request.is_ajax():
-            #     return JsonResponse({'success': True, 'message': 'Past/Today flight dates are not allowed.'})
-            # else:
-                return render(request, 'basecamp/date_error.html')
      
         inquiry_email = Inquiry.objects.only('email').values_list('email', flat=True)
         post_email = Post.objects.only('email').values_list('email', flat=True)  
@@ -879,6 +873,14 @@ def p2p_single_detail(request):
                           return_flight_time="01:00", return_flight_number=return_flight_number, return_pickup_time=return_pickup_time, message=message)
         
         p.save() 
+
+
+        today = date.today()
+        if flight_date <= str(today):
+            if request.is_ajax():
+                return JsonResponse({'success': False, 'message': 'Past/Today flight dates are not allowed.'})
+            else:
+                return render(request, 'basecamp/date_error.html')  
         
         
        # If everything is fine, respond accordingly
