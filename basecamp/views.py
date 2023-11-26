@@ -1058,80 +1058,79 @@ def confirmation_detail(request):
         price = request.POST.get('price')
         paid = request.POST.get('paid')
         is_confirmed_str = request.POST.get('is_confirmed')
-        is_confirmed = True if is_confirmed_str == 'True' else False
-                
+        is_confirmed = True if is_confirmed_str == 'True' else False                
         
-        data = {            
-            'name': name,
-            'contact': contact,
-            'email': email,            
-            'flight_date': flight_date}       
+        # data = {            
+        #     'name': name,
+        #     'contact': contact,
+        #     'email': email,            
+        #     'flight_date': flight_date}       
         
-        post_email = Post.objects.only('email').values_list('email', flat=True)
-        inquiry_email = Inquiry.objects.only('email').values_list('email', flat=True) 
+        # post_email = Post.objects.only('email').values_list('email', flat=True)
+        # inquiry_email = Inquiry.objects.only('email').values_list('email', flat=True) 
                          
-        if (email in post_email) and (email in inquiry_email):            
+        # if (email in post_email) and (email in inquiry_email):            
                         
-            content = '''
-            Hello, {} \n  
-            [Confirmation] 
-            * Both exist in Inquiry & Post *\n 
-            ===============================
-            Contact: {}
-            Email: {}              
-            ===============================\n        
-            Best Regards,
-            EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'])
-            send_mail(data['flight_date'], content,
-                      '', [RECIPIENT_EMAIL])
+        #     content = '''
+        #     Hello, {} \n  
+        #     [Confirmation] 
+        #     * Both exist in Inquiry & Post *\n 
+        #     ===============================
+        #     Contact: {}
+        #     Email: {}              
+        #     ===============================\n        
+        #     Best Regards,
+        #     EasyGo Admin \n\n        
+        #     ''' .format(data['name'], data['contact'], data['email'])
+        #     send_mail(data['flight_date'], content,
+        #               '', [RECIPIENT_EMAIL])
             
-        elif (email in post_email) and not(email in inquiry_email):            
+        # elif (email in post_email) and not(email in inquiry_email):            
                         
-            content = '''
-            Hello, {} \n  
-            [Confirmation] 
-            * Post only exist *\n 
-           ===============================
-            Contact: {}
-            Email: {}              
-            ===============================\n        
-            Best Regards,
-            EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'])
-            send_mail(data['flight_date'], content,
-                      '', [RECIPIENT_EMAIL])
+        #     content = '''
+        #     Hello, {} \n  
+        #     [Confirmation] 
+        #     * Post only exist *\n 
+        #    ===============================
+        #     Contact: {}
+        #     Email: {}              
+        #     ===============================\n        
+        #     Best Regards,
+        #     EasyGo Admin \n\n        
+        #     ''' .format(data['name'], data['contact'], data['email'])
+        #     send_mail(data['flight_date'], content,
+        #               '', [RECIPIENT_EMAIL])
             
-        elif not(email in post_email) and (email in inquiry_email):            
+        # elif not(email in post_email) and (email in inquiry_email):            
                         
-            content = '''
-            Hello, {} \n  
-            [Confirmation] 
-            * Inquiry only exist *\n 
-           ===============================
-            Contact: {}
-            Email: {}              
-            ===============================\n        
-            Best Regards,
-            EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'])
-            send_mail(data['flight_date'], content,
-                      '', [RECIPIENT_EMAIL])
+        #     content = '''
+        #     Hello, {} \n  
+        #     [Confirmation] 
+        #     * Inquiry only exist *\n 
+        #    ===============================
+        #     Contact: {}
+        #     Email: {}              
+        #     ===============================\n        
+        #     Best Regards,
+        #     EasyGo Admin \n\n        
+        #     ''' .format(data['name'], data['contact'], data['email'])
+        #     send_mail(data['flight_date'], content,
+        #               '', [RECIPIENT_EMAIL])
         
-        else:
-            content = '''
-            Hello, {} \n 
-            [Confirmation]  
-            * Neither in Inquiry & Post *\n 
-            ===============================
-            Contact: {}
-            Email: {}              
-            ===============================\n        
-            Best Regards,
-            EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'])
-            send_mail(data['flight_date'], content,
-                      '', [RECIPIENT_EMAIL])
+        # else:
+        #     content = '''
+        #     Hello, {} \n 
+        #     [Confirmation]  
+        #     * Neither in Inquiry & Post *\n 
+        #     ===============================
+        #     Contact: {}
+        #     Email: {}              
+        #     ===============================\n        
+        #     Best Regards,
+        #     EasyGo Admin \n\n        
+        #     ''' .format(data['name'], data['contact'], data['email'])
+        #     send_mail(data['flight_date'], content,
+        #               '', [RECIPIENT_EMAIL])
             
         sam_driver = Driver.objects.get(driver_name="Sam") 
 
