@@ -192,7 +192,10 @@ def create_event_on_calendar(sender, instance, created, **kwargs):
         address = " ".join([instance.street, instance.suburb])            
         message = " ".join([instance.name, instance.email, 'b'+instance.no_of_baggage, 'm:'+instance.message, 'n:'+instance.notice, "d:"+str(instance.return_flight_date)])            
         flight_date = datetime.datetime.strptime(str(instance.flight_date), '%Y-%m-%d')
-        pickup_time = datetime.datetime.strptime(instance.pickup_time, '%H:%M')
+        if instance.pickup_time:
+            pickup_time = datetime.datetime.strptime(instance.pickup_time, '%H:%M')
+        else:
+            pickup_time = datetime.datetime.strptime('00:00', '%H:%M') 
         start = datetime.datetime.combine(flight_date, pickup_time.time())        
         end = start + datetime.timedelta(hours=1)
 
