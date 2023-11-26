@@ -275,3 +275,15 @@ WARNING 2023-11-27 07:25:18,064 log Forbidden (CSRF cookie not set.): /price_det
 WARNING 2023-11-27 07:42:37,568 log Not Found: /shop/ko/product/몽-클레-베인/
 WARNING 2023-11-27 07:53:24,999 log Not Found: /shop/nl/moncler-women-down-coats-designer-metallic-fabric-black/
 WARNING 2023-11-27 07:55:15,185 log Not Found: /shop/ko/product/moncler-maya-겨울-다운-재킷-망-짧은-광택-지퍼-진한-파란색/
+ERROR 2023-11-27 08:15:57,028 log Internal Server Error: /inquiry_details/
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/basecamp/views.py", line 451, in inquiry_details
+    if request.is_ajax():
+       ^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'is_ajax'
