@@ -84,3 +84,43 @@ Traceback (most recent call last):
             ^^^^^^^
 UnboundLocalError: cannot access local variable 'service' where it is not associated with a value
 WARNING 2023-11-26 09:17:49,256 log Not Found: /inquiry_done
+WARNING 2023-11-26 09:24:12,089 log Not Found: /wp-login.php
+WARNING 2023-11-26 09:24:26,784 log Not Found: /inquiry_done
+ERROR 2023-11-26 09:53:59,459 log Internal Server Error: /confirm_booking_detail/
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/basecamp/views.py", line 1361, in confirm_booking_detail
+    p.save()
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/base.py", line 806, in save
+    self.save_base(
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/base.py", line 872, in save_base
+    post_save.send(
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/dispatch/dispatcher.py", line 176, in send
+    return [
+           ^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/dispatch/dispatcher.py", line 177, in <listcomp>
+    (receiver, receiver(signal=self, sender=sender, **named))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/blog/signals.py", line 223, in create_event_on_calendar
+    event = service.events().insert(calendarId='primary', body=event).execute()
+            ^^^^^^^
+UnboundLocalError: cannot access local variable 'service' where it is not associated with a value
+WARNING 2023-11-26 09:57:41,396 log Not Found: /robots.txt
+WARNING 2023-11-26 10:38:05,233 log Not Found: /shop/ko/product/몬스터-호레이스/
+WARNING 2023-11-26 10:42:48,711 log Not Found: /.well-known/traffic-advice
+WARNING 2023-11-26 10:49:57,827 log Not Found: /shop/product/moncler-classic-down-vest-sleeveless-women-zip-grey/
+WARNING 2023-11-26 11:05:47,422 log Not Found: /%
+WARNING 2023-11-26 11:05:48,139 log Not Found: /robots.txt
+WARNING 2023-11-26 11:05:48,155 log Not Found: /robots.txt
+WARNING 2023-11-26 11:05:48,156 log Not Found: /Res/login.html
+WARNING 2023-11-26 11:05:48,157 log Not Found: /99vt
+WARNING 2023-11-26 11:05:48,197 log Not Found: /aaaaaaaaaaaaaaaaaaaaaaaaaqr
+WARNING 2023-11-26 11:05:48,781 log Not Found: /99vu
+WARNING 2023-11-26 11:25:09,514 log Not Found: /robots.txt
+WARNING 2023-11-26 11:57:10,495 log Not Found: /emergency.php
+WARNING 2023-11-26 12:12:59,996 log Not Found: /.git/config
