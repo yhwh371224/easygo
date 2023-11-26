@@ -184,33 +184,32 @@ def create_event_on_calendar(sender, instance, created, **kwargs):
                 token.write(creds.to_json())
 
 
-            service = build('calendar', 'v3', credentials=creds)        
-            
-            paid_str = f'paid' if instance.paid else ''
-            reminder_str = f'!' if instance.reminder else ''
+        service = build('calendar', 'v3', credentials=creds)        
+        
+        paid_str = f'paid' if instance.paid else ''
+        reminder_str = f'!' if instance.reminder else ''
+        title = " ".join([reminder_str, instance.pickup_time, instance.flight_number, instance.flight_time, 'p'+str(instance.no_of_passenger), paid_str, '$'+instance.price, instance.contact])
+        address = " ".join([instance.street, instance.suburb])            
+        message = " ".join([instance.name, instance.email, 'b'+instance.no_of_baggage, 'm:'+instance.message, 'n:'+instance.notice, "d:"+str(instance.return_flight_date)])            
+        flight_date = datetime.datetime.strptime(str(instance.flight_date), '%Y-%m-%d')
+        pickup_time = datetime.datetime.strptime(instance.pickup_time, '%H:%M')
+        start = datetime.datetime.combine(flight_date, pickup_time.time())        
+        end = start + datetime.timedelta(hours=1)
 
-            title = " ".join([reminder_str, instance.pickup_time, instance.flight_number, instance.flight_time, 'p'+str(instance.no_of_passenger), paid_str, '$'+instance.price, instance.contact])
-            address = " ".join([instance.street, instance.suburb])            
-            message = " ".join([instance.name, instance.email, 'b'+instance.no_of_baggage, 'm:'+instance.message, 'n:'+instance.notice, "d:"+str(instance.return_flight_date)])            
-            flight_date = datetime.datetime.strptime(str(instance.flight_date), '%Y-%m-%d')
-            pickup_time = datetime.datetime.strptime(instance.pickup_time, '%H:%M')
-            start = datetime.datetime.combine(flight_date, pickup_time.time())        
-            end = start + datetime.timedelta(hours=1)
-    
-            event = {
-                'summary': title,
-                'location': address,
-                'start': {
-                    'dateTime': start.strftime('%Y-%m-%dT%H:%M:%S'),
-                    'timeZone': 'Australia/Sydney',
-                },
-                'end': {
-                    'dateTime': end.strftime('%Y-%m-%dT%H:%M:%S'),
-                    'timeZone': 'Australia/Sydney',
-                },
-                'description': message,
-            }    
-    
+        event = {
+            'summary': title,
+            'location': address,
+            'start': {
+                'dateTime': start.strftime('%Y-%m-%dT%H:%M:%S'),
+                'timeZone': 'Australia/Sydney',
+            },
+            'end': {
+                'dateTime': end.strftime('%Y-%m-%dT%H:%M:%S'),
+                'timeZone': 'Australia/Sydney',
+            },
+            'description': message,
+        }    
+
         # Check if an event already exists for this instance
         if instance.calendar_event_id:            
             try:
@@ -226,6 +225,4 @@ def create_event_on_calendar(sender, instance, created, **kwargs):
                 print('Event created: %s' % (event.get('htmlLink')))
             except HttpError as error:
                 print(f'An error occurred while creating the event: {error}')
-
-
-
+                
