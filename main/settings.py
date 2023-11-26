@@ -10,12 +10,9 @@ SECRET_KEY = config('SECRET_KEY')
 #DEBUG = True
 DEBUG = config('DEBUG', cast=bool, default=True)
 
-
 ALLOWED_HOSTS = ['easygoshuttle.com.au', 'www.easygoshuttle.com.au', '149.28.188.33']
 
-
 INSTALLED_APPS = [
-    'suit',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -24,25 +21,20 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'blog.apps.BlogConfig',
-    'basecamp.apps.BasecampConfig',
-    'crispy_forms',
+    'basecamp.apps.BasecampConfig', 
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',    
+    'allauth.socialaccount.providers.google',
     'rangefilter',
-    'twilio',
     'storages',
     'compressor',
     'django_celery_beat',
     'paypal.standard.ipn',
     'corsheaders',
     'admin_honeypot',
-    'defender',
-    'simplegmail',
     
 ]
-
 
 LOGGING = {
     'version': 1,
@@ -100,8 +92,8 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'defender.middleware.FailedLoginMiddleware',   
+    'django.middleware.clickjacking.XFrameOptionsMiddleware', 
+    'allauth.account.middleware.AccountMiddleware',
 
 ]
 
@@ -147,7 +139,7 @@ DATABASES = {
 
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
         'LOCATION': '127.0.0.1:11211',
     }
 }
