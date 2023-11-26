@@ -1,5 +1,109 @@
-WARNING 2023-11-26 08:20:58,686 log Not Found: /shop/de/product/moncler-jacken-manner-zin-schwarz/
-ERROR 2023-11-26 09:06:53,385 log Internal Server Error: /confirmation_detail/
+WARNING 2023-11-26 14:24:31,382 log Not Found: /airport-transfers-mt-colah/
+WARNING 2023-11-26 15:10:02,549 log Not Found: /robots.txt
+WARNING 2023-11-26 15:10:03,147 log Not Found: /robots.txt
+WARNING 2023-11-26 15:10:35,640 log Not Found: /robots.txt
+WARNING 2023-11-26 15:10:36,240 log Not Found: /robots.txt
+WARNING 2023-11-26 15:20:16,765 log Not Found: /robots.txt
+WARNING 2023-11-26 15:24:06,249 log Not Found: /robots.txt
+WARNING 2023-11-26 15:24:06,253 log Not Found: /robots.txt
+WARNING 2023-11-26 15:24:21,536 log Not Found: /robots.txt
+WARNING 2023-11-26 15:24:21,715 log Not Found: /promotion/
+WARNING 2023-11-26 15:24:24,878 log Not Found: /airport-transfers-epping/booking_email.html
+WARNING 2023-11-26 15:24:25,573 log Not Found: /airport-pickup-point/
+WARNING 2023-11-26 15:24:48,103 log Not Found: /robots.txt
+WARNING 2023-11-26 15:24:48,103 log Not Found: /robots.txt
+WARNING 2023-11-26 15:26:00,007 log Not Found: /home/url(/static/basecamp/photos/easygo-home-page3.webp)
+WARNING 2023-11-26 15:27:42,194 log Not Found: /home/url(/static/basecamp/photos/easygo-home-page4.webp)
+WARNING 2023-11-26 15:29:15,990 log Not Found: /robots.txt
+WARNING 2023-11-26 15:29:53,849 log Not Found: /home/url(/static/basecamp/photos/easygo-home-page3.webp)
+WARNING 2023-11-26 15:30:40,279 log Not Found: /home/url(/static/basecamp/photos/easygo-home-page4.webp)
+WARNING 2023-11-26 15:31:02,227 log Not Found: /webui/
+WARNING 2023-11-26 15:33:15,334 log Not Found: /home/url(/static/basecamp/photos/home1.webp)
+WARNING 2023-11-26 15:33:36,565 log Not Found: /robots.txt
+WARNING 2023-11-26 15:37:48,337 log Not Found: /.well-known/acme-challenge/J8F1-PT-NUFIGMDT5GF4XNCZTPF-7MYT
+WARNING 2023-11-26 15:37:49,307 log Not Found: /.well-known/acme-challenge/MJOVACLWWAYNBKT9XISLL619NWLC6G43
+WARNING 2023-11-26 15:38:55,237 log Not Found: /vpn/index.html
+WARNING 2023-11-26 15:39:56,784 log Not Found: /geoserver/web/
+WARNING 2023-11-26 15:40:03,018 log Not Found: /ads.txt
+WARNING 2023-11-26 15:40:03,023 log Not Found: /app-ads.txt
+WARNING 2023-11-26 15:40:03,027 log Not Found: /sellers.json
+WARNING 2023-11-26 15:40:04,733 log Not Found: /.well-known/assetlinks.json
+WARNING 2023-11-26 15:40:04,736 log Not Found: /.well-known/apple-app-site-association
+WARNING 2023-11-26 15:40:11,269 log Not Found: /home/url(/static/basecamp/photos/home1.webp)
+WARNING 2023-11-26 15:40:14,442 log Not Found: /robots.txt
+WARNING 2023-11-26 15:40:17,012 log Not Found: /.well-known/assetlinks.json
+WARNING 2023-11-26 15:40:17,018 log Not Found: /.well-known/gpc.json
+WARNING 2023-11-26 15:40:17,027 log Not Found: /.well-known/security.txt
+WARNING 2023-11-26 15:40:17,029 log Not Found: /robots.txt
+WARNING 2023-11-26 15:40:17,028 log Not Found: /.well-known/apple-app-site-association
+WARNING 2023-11-26 15:40:17,035 log Not Found: /.well-known/change-password
+WARNING 2023-11-26 15:40:17,163 log Not Found: /.well-known/resource-that-should-not-exist-whose-status-code-should-not-be-200/
+WARNING 2023-11-26 15:40:27,896 log Not Found: /.git/config
+WARNING 2023-11-26 15:41:02,583 log Not Found: /android-chrome-192x192.png
+WARNING 2023-11-26 15:41:02,989 log Not Found: /robots.txt
+WARNING 2023-11-26 16:05:48,270 log Not Found: /aaaaaaaaaaaaaaaaaaaaaaaaaqr
+WARNING 2023-11-26 16:05:48,274 log Not Found: /Res/login.html
+WARNING 2023-11-26 16:05:48,380 log Not Found: /robots.txt
+WARNING 2023-11-26 16:05:48,386 log Not Found: /99vt
+WARNING 2023-11-26 16:05:48,388 log Not Found: /%
+WARNING 2023-11-26 16:05:48,415 log Not Found: /robots.txt
+WARNING 2023-11-26 16:05:48,993 log Not Found: /99vu
+WARNING 2023-11-26 16:25:34,765 log Forbidden (Referer checking failed - no Referer.): /inquiry_details/
+WARNING 2023-11-26 16:25:35,359 log Forbidden (Referer checking failed - no Referer.): /inquiry_details/
+WARNING 2023-11-26 16:25:35,963 log Forbidden (Referer checking failed - no Referer.): /inquiry_details/
+WARNING 2023-11-26 16:25:39,203 log Forbidden (Referer checking failed - no Referer.): /inquiry_details1/
+WARNING 2023-11-26 16:25:39,797 log Forbidden (Referer checking failed - no Referer.): /inquiry_details1/
+WARNING 2023-11-26 16:25:40,719 log Forbidden (Referer checking failed - no Referer.): /inquiry_details1/
+WARNING 2023-11-26 16:25:57,992 log Forbidden (Referer checking failed - no Referer.): /inquiry_details2/
+WARNING 2023-11-26 16:25:58,587 log Forbidden (Referer checking failed - no Referer.): /inquiry_details2/
+WARNING 2023-11-26 16:25:59,185 log Forbidden (Referer checking failed - no Referer.): /inquiry_details2/
+WARNING 2023-11-26 16:29:31,992 log Not Found: /robots.txt
+WARNING 2023-11-26 16:30:38,598 log Not Found: /robots.txt
+WARNING 2023-11-26 16:30:38,604 log Not Found: /robots.txt
+WARNING 2023-11-26 16:40:04,513 log Not Found: /inquiry3/
+WARNING 2023-11-26 16:42:04,501 log Not Found: /inquiry3/
+WARNING 2023-11-26 16:55:18,839 log Not Found: /robots.txt
+WARNING 2023-11-26 17:08:02,552 log Not Found: /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php
+WARNING 2023-11-26 17:08:13,754 log Not Found: /.env
+WARNING 2023-11-26 17:10:13,808 log Not Found: /shop/it/product/moncler-giacche-bambini-daim-rose/
+WARNING 2023-11-26 17:25:17,502 log Not Found: /airport-transfers-five-docks/
+WARNING 2023-11-26 17:41:31,008 log Not Found: /robots.txt
+WARNING 2023-11-26 18:12:29,174 log Not Found: /.env
+WARNING 2023-11-26 18:14:24,364 log Not Found: /chatswood/
+WARNING 2023-11-26 18:15:27,704 log Not Found: /wordpress
+WARNING 2023-11-26 18:15:29,039 log Not Found: /wp
+WARNING 2023-11-26 18:15:29,536 log Not Found: /bc
+WARNING 2023-11-26 18:15:30,042 log Not Found: /bk
+WARNING 2023-11-26 18:15:30,538 log Not Found: /backup
+WARNING 2023-11-26 18:15:31,031 log Not Found: /old
+WARNING 2023-11-26 18:15:31,524 log Not Found: /new
+WARNING 2023-11-26 18:15:32,018 log Not Found: /main
+WARNING 2023-11-26 18:19:38,385 log Not Found: /inquiry3/
+WARNING 2023-11-26 18:20:28,752 log Not Found: /style.php
+WARNING 2023-11-26 18:25:55,384 log Not Found: /robots.txt
+WARNING 2023-11-26 18:48:13,923 log Not Found: /airport-transfers-mt-colah/
+WARNING 2023-11-26 18:55:49,209 log Not Found: /robots.txt
+WARNING 2023-11-26 18:59:06,169 log Not Found: /.well-known/traffic-advice
+WARNING 2023-11-26 18:59:34,627 log Not Found: /wp-content/plugins/wp-fastest-cache/readme.txt
+WARNING 2023-11-26 19:04:06,396 log Not Found: /robots.txt
+WARNING 2023-11-26 19:04:06,397 log Not Found: /sitemap.xml
+WARNING 2023-11-26 19:04:48,442 log Not Found: /sitemap.xml
+WARNING 2023-11-26 19:04:48,449 log Not Found: /robots.txt
+WARNING 2023-11-26 19:58:41,067 log Not Found: /inquiry3/
+WARNING 2023-11-26 20:25:16,636 log Not Found: /contact/
+WARNING 2023-11-26 20:44:30,531 log Not Found: /robots.txt
+WARNING 2023-11-26 21:05:47,676 log Not Found: /robots.txt
+WARNING 2023-11-26 21:05:47,690 log Not Found: /robots.txt
+WARNING 2023-11-26 21:05:47,715 log Not Found: /%
+WARNING 2023-11-26 21:05:47,718 log Not Found: /aaaaaaaaaaaaaaaaaaaaaaaaaqr
+WARNING 2023-11-26 21:05:47,722 log Not Found: /Res/login.html
+WARNING 2023-11-26 21:05:47,726 log Not Found: /99vt
+WARNING 2023-11-26 21:05:48,718 log Not Found: /99vu
+WARNING 2023-11-26 21:23:59,385 log Not Found: /simple.php
+WARNING 2023-11-26 21:24:15,108 log Not Found: /wp-content/plugins/core/include.php
+WARNING 2023-11-26 22:04:36,406 log Not Found: /product/moncler-affton-coat-men-down-black/
+WARNING 2023-11-26 22:23:13,247 log Not Found: /robots.txt
+ERROR 2023-11-26 22:33:08,978 log Internal Server Error: /confirmation_detail/
 Traceback (most recent call last):
   File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 56, in inner
     response = get_response(request)
@@ -19,229 +123,13 @@ Traceback (most recent call last):
   File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/dispatch/dispatcher.py", line 177, in <listcomp>
     (receiver, receiver(signal=self, sender=sender, **named))
                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/blog/signals.py", line 225, in create_event_on_calendar
-    instance.save()
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/base.py", line 806, in save
-    self.save_base(
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/base.py", line 872, in save_base
-    post_save.send(
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/dispatch/dispatcher.py", line 176, in send
-    return [
-           ^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/dispatch/dispatcher.py", line 177, in <listcomp>
-    (receiver, receiver(signal=self, sender=sender, **named))
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/blog/signals.py", line 217, in create_event_on_calendar
-    event = service.events().update(calendarId='primary', eventId=instance.calendar_event_id, body=event).execute()
-            ^^^^^^^
-UnboundLocalError: cannot access local variable 'service' where it is not associated with a value
-ERROR 2023-11-26 09:10:42,414 log Internal Server Error: /confirmation_detail/
-Traceback (most recent call last):
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 56, in inner
-    response = get_response(request)
-               ^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/basecamp/views.py", line 1144, in confirmation_detail
-    p.save()
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/base.py", line 806, in save
-    self.save_base(
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/base.py", line 872, in save_base
-    post_save.send(
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/dispatch/dispatcher.py", line 176, in send
-    return [
-           ^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/dispatch/dispatcher.py", line 177, in <listcomp>
-    (receiver, receiver(signal=self, sender=sender, **named))
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/blog/signals.py", line 223, in create_event_on_calendar
-    event = service.events().insert(calendarId='primary', body=event).execute()
-            ^^^^^^^
-UnboundLocalError: cannot access local variable 'service' where it is not associated with a value
-ERROR 2023-11-26 09:15:19,836 log Internal Server Error: /confirmation_detail/
-Traceback (most recent call last):
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 56, in inner
-    response = get_response(request)
-               ^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/basecamp/views.py", line 1144, in confirmation_detail
-    p.save()
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/base.py", line 806, in save
-    self.save_base(
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/base.py", line 872, in save_base
-    post_save.send(
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/dispatch/dispatcher.py", line 176, in send
-    return [
-           ^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/dispatch/dispatcher.py", line 177, in <listcomp>
-    (receiver, receiver(signal=self, sender=sender, **named))
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/blog/signals.py", line 223, in create_event_on_calendar
-    event = service.events().insert(calendarId='primary', body=event).execute()
-            ^^^^^^^
-UnboundLocalError: cannot access local variable 'service' where it is not associated with a value
-WARNING 2023-11-26 09:17:49,256 log Not Found: /inquiry_done
-WARNING 2023-11-26 09:24:12,089 log Not Found: /wp-login.php
-WARNING 2023-11-26 09:24:26,784 log Not Found: /inquiry_done
-ERROR 2023-11-26 09:53:59,459 log Internal Server Error: /confirm_booking_detail/
-Traceback (most recent call last):
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 56, in inner
-    response = get_response(request)
-               ^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/basecamp/views.py", line 1361, in confirm_booking_detail
-    p.save()
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/base.py", line 806, in save
-    self.save_base(
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/base.py", line 872, in save_base
-    post_save.send(
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/dispatch/dispatcher.py", line 176, in send
-    return [
-           ^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/dispatch/dispatcher.py", line 177, in <listcomp>
-    (receiver, receiver(signal=self, sender=sender, **named))
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/blog/signals.py", line 223, in create_event_on_calendar
-    event = service.events().insert(calendarId='primary', body=event).execute()
-            ^^^^^^^
-UnboundLocalError: cannot access local variable 'service' where it is not associated with a value
-WARNING 2023-11-26 09:57:41,396 log Not Found: /robots.txt
-WARNING 2023-11-26 10:38:05,233 log Not Found: /shop/ko/product/몬스터-호레이스/
-WARNING 2023-11-26 10:42:48,711 log Not Found: /.well-known/traffic-advice
-WARNING 2023-11-26 10:49:57,827 log Not Found: /shop/product/moncler-classic-down-vest-sleeveless-women-zip-grey/
-WARNING 2023-11-26 11:05:47,422 log Not Found: /%
-WARNING 2023-11-26 11:05:48,139 log Not Found: /robots.txt
-WARNING 2023-11-26 11:05:48,155 log Not Found: /robots.txt
-WARNING 2023-11-26 11:05:48,156 log Not Found: /Res/login.html
-WARNING 2023-11-26 11:05:48,157 log Not Found: /99vt
-WARNING 2023-11-26 11:05:48,197 log Not Found: /aaaaaaaaaaaaaaaaaaaaaaaaaqr
-WARNING 2023-11-26 11:05:48,781 log Not Found: /99vu
-WARNING 2023-11-26 11:25:09,514 log Not Found: /robots.txt
-WARNING 2023-11-26 11:57:10,495 log Not Found: /emergency.php
-WARNING 2023-11-26 12:12:59,996 log Not Found: /.git/config
-ERROR 2023-11-26 12:25:09,776 log Internal Server Error: /confirmation_detail/
-Traceback (most recent call last):
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 56, in inner
-    response = get_response(request)
-               ^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/basecamp/views.py", line 1144, in confirmation_detail
-    p.save()
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/base.py", line 806, in save
-    self.save_base(
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/base.py", line 872, in save_base
-    post_save.send(
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/dispatch/dispatcher.py", line 176, in send
-    return [
-           ^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/dispatch/dispatcher.py", line 177, in <listcomp>
-    (receiver, receiver(signal=self, sender=sender, **named))
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/blog/signals.py", line 225, in create_event_on_calendar
-    instance.save()
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/base.py", line 806, in save
-    self.save_base(
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/base.py", line 872, in save_base
-    post_save.send(
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/dispatch/dispatcher.py", line 176, in send
-    return [
-           ^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/dispatch/dispatcher.py", line 177, in <listcomp>
-    (receiver, receiver(signal=self, sender=sender, **named))
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/blog/signals.py", line 217, in create_event_on_calendar
-    event = service.events().update(calendarId='primary', eventId=instance.calendar_event_id, body=event).execute()
-            ^^^^^^^
-UnboundLocalError: cannot access local variable 'service' where it is not associated with a value
-ERROR 2023-11-26 12:29:43,500 log Internal Server Error: /inquiry_details/
-Traceback (most recent call last):
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 56, in inner
-    response = get_response(request)
-               ^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/basecamp/views.py", line 451, in inquiry_details
-    if request.is_ajax():
-       ^^^^^^^^^^^^^^^
-AttributeError: 'WSGIRequest' object has no attribute 'is_ajax'
-ERROR 2023-11-26 12:31:08,262 log Internal Server Error: /confirmation_detail/
-Traceback (most recent call last):
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 56, in inner
-    response = get_response(request)
-               ^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/basecamp/views.py", line 1144, in confirmation_detail
-    p.save()
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/base.py", line 806, in save
-    self.save_base(
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/base.py", line 872, in save_base
-    post_save.send(
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/dispatch/dispatcher.py", line 176, in send
-    return [
-           ^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/dispatch/dispatcher.py", line 177, in <listcomp>
-    (receiver, receiver(signal=self, sender=sender, **named))
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/blog/signals.py", line 223, in create_event_on_calendar
-    event = service.events().insert(calendarId='primary', body=event).execute()
-            ^^^^^^^
-UnboundLocalError: cannot access local variable 'service' where it is not associated with a value
-WARNING 2023-11-26 12:34:07,564 log Not Found: /ads.txt
-ERROR 2023-11-26 12:40:04,323 log Internal Server Error: /confirmation_detail/
-Traceback (most recent call last):
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 56, in inner
-    response = get_response(request)
-               ^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/basecamp/views.py", line 1144, in confirmation_detail
-    p.save()
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/base.py", line 806, in save
-    self.save_base(
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/base.py", line 872, in save_base
-    post_save.send(
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/dispatch/dispatcher.py", line 176, in send
-    return [
-           ^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/dispatch/dispatcher.py", line 177, in <listcomp>
-    (receiver, receiver(signal=self, sender=sender, **named))
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/blog/signals.py", line 223, in create_event_on_calendar
-    event = service.events().insert(calendarId='primary', body=event).execute()
-            ^^^^^^^
-UnboundLocalError: cannot access local variable 'service' where it is not associated with a value
-ERROR 2023-11-26 12:52:59,850 log Internal Server Error: /confirmation_detail/
-Traceback (most recent call last):
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 56, in inner
-    response = get_response(request)
-               ^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/basecamp/views.py", line 1144, in confirmation_detail
-    p.save()
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/base.py", line 806, in save
-    self.save_base(
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/base.py", line 872, in save_base
-    post_save.send(
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/dispatch/dispatcher.py", line 176, in send
-    return [
-           ^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/dispatch/dispatcher.py", line 177, in <listcomp>
-    (receiver, receiver(signal=self, sender=sender, **named))
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/blog/signals.py", line 223, in create_event_on_calendar
-    event = service.events().insert(calendarId='primary', body=event).execute()
-            ^^^^^^^
-UnboundLocalError: cannot access local variable 'service' where it is not associated with a value
+  File "/home/horeb/github/easygo/blog/signals.py", line 195, in create_event_on_calendar
+    pickup_time = datetime.datetime.strptime(instance.pickup_time, '%H:%M')
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/_strptime.py", line 568, in _strptime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/_strptime.py", line 349, in _strptime
+    raise ValueError("time data %r does not match format %r" %
+ValueError: time data '' does not match format '%H:%M'
+WARNING 2023-11-26 22:46:50,316 log Not Found: /robots.txt
