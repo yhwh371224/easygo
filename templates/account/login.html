@@ -10,15 +10,20 @@
     <div class="position-absolute top-0 start-0 w-100 h-100 bg-size-cover" ></div>
         <div class="position-relative zindex-5 container pb-3 pt-sm-2">
           <div class="mx-auto" style="max-width: 460px;">
-            <h2 class="text-light text-center pt-sm-2">{% trans "Sign In" %}</h2>
-
-    <form class="login text-light text-center mb-4" method="POST" action="{% url 'account_login' %}">
-        {% csrf_token %}
-        {{ form.as_p }}          
-        {% if redirect_field_value %}
-        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-        {% endif %}
-        <button class="primaryAction btn btn-warning" type="submit">{% trans "Sign In" %}</button>
-    </form>
+            <h2 class="text-light text-center pt-sm-2">{% trans "Sign In" %}</h2><br>
+            <form class="login text-light text-center mb-4" method="POST" action="{% url 'account_login' %}">
+                {% csrf_token %}
+                {{ form.login.label_tag }}
+                {{ form.login }}<br><br>
+                {{ form.password.label_tag }}
+                {{ form.password }}  <br><br>
+                {{ form.remember.label_tag }}
+                {{ form.remember }}  <br><br>
+                {% if redirect_field_value %}
+                    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                {% endif %}<br>
+                <button class="primaryAction btn btn-warning" type="submit">{% trans "Sign In" %}</button>
+            </form>
+            
 </section>
 {% endblock %}
