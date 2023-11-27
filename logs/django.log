@@ -287,3 +287,14 @@ Traceback (most recent call last):
     if request.is_ajax():
        ^^^^^^^^^^^^^^^
 AttributeError: 'WSGIRequest' object has no attribute 'is_ajax'
+WARNING 2023-11-27 09:12:55,814 log Not Found: /ads.txt
+WARNING 2023-11-27 09:13:01,049 log Not Found: /ads.txt
+WARNING 2023-11-27 09:13:05,085 log Not Found: /ads.txt
+WARNING 2023-11-27 09:13:07,410 log Not Found: /ads.txt
+WARNING 2023-11-27 09:13:11,876 log Not Found: /app-ads.txt
+WARNING 2023-11-27 09:13:15,355 log Not Found: /app-ads.txt
+WARNING 2023-11-27 09:13:16,721 log Not Found: /app-ads.txt
+WARNING 2023-11-27 09:13:18,311 log Not Found: /app-ads.txt
+WARNING 2023-11-27 09:37:19,357 log Not Found: /shop/product-category/moncler-kids/
+WARNING 2023-11-27 09:45:01,908 log Not Found: /robots.txt
+WARNING 2023-11-27 10:12:24,384 log Not Found: /robots.txt
