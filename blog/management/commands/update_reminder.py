@@ -37,5 +37,5 @@ class Command(BaseCommand):
                 # email.attach_alternative(html_content, "text/html")
                 # email.send()
 
-        self.stdout.write(self.style.SUCCESS('Successfully updated reminders and sent emails'))
+        self.stdout.write(self.style.SUCCESS('Successfully updated reminders'))
 
