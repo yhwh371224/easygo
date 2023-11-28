@@ -6,3 +6,10 @@ WARNING 2023-11-28 15:38:03,521 log Not Found: /.well-known/acme-challenge/PI6XM
 WARNING 2023-11-28 15:42:21,673 log Not Found: /sample.php
 WARNING 2023-11-28 15:42:41,926 log Not Found: /chosen.php
 WARNING 2023-11-28 15:44:47,733 log Not Found: /.git/config
+WARNING 2023-11-28 16:40:40,117 log Not Found: /sample.php
+WARNING 2023-11-28 16:41:01,234 log Not Found: /chosen.php
+WARNING 2023-11-28 16:41:38,769 log Not Found: /actuator/health
+WARNING 2023-11-28 16:45:41,296 log Not Found: /robots.txt
+WARNING 2023-11-28 16:47:55,499 log Not Found: /robots.txt
+WARNING 2023-11-28 18:07:22,007 log Not Found: /robots.txt
+WARNING 2023-11-28 18:15:42,406 log Not Found: /robots.txt

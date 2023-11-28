@@ -12,6 +12,11 @@ temp/
 logs/
 
 secure/
+secure_gmail/
+
+db.sqlite3 
+
+
 
  
 
