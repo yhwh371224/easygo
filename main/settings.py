@@ -59,13 +59,9 @@ LOGGING = {
             'level': 'INFO',  # Adjust the logging level as needed
             'propagate': True,
         },
-        'google_calendar': {  # Create a custom logger for your Google Calendar integration
-            'handlers': ['file'],
-            'level': 'INFO',  # Adjust the logging level as needed
-            'propagate': True,
-        },
     },
 }
+
 
 
 # CELERY_BROKER_URL = config('CELERY_BROKER_URL')
