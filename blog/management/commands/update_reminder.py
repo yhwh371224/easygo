@@ -1,3 +1,4 @@
+import logging
 from django.core.management.base import BaseCommand
 from blog.models import Post
 from datetime import datetime, timedelta
@@ -8,8 +9,11 @@ from main.settings import RECIPIENT_EMAIL
 from retrieve import main 
 
 
+logger = logging.getLogger(__name__)
+
+
 class Command(BaseCommand):
-    help = 'Update reminders and send emails for posts'
+    help = 'Update reminders for posts'
 
     def handle(self, *args, **options):
         my_list = main()  # Call the main function to get the list
@@ -25,7 +29,8 @@ class Command(BaseCommand):
                 post.reminder = True
                 post.save()
                 
-                self.stdout.write(self.style.SUCCESS(f'Successfully updated reminder for {post.name}, {post.flight_date}, {post.pickup_time}'))
+                logger.info(f"Updated reminder for {post.name}, {post.flight_date}, {post.pickup_time}")
+                self.stdout.write(self.style.SUCCESS(f'Updated reminder for {post.name}, {post.flight_date}, {post.pickup_time}'))
 
         # self.stdout.write(self.style.SUCCESS('Successfully updated reminders'))
 
