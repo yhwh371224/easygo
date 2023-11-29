@@ -1,0 +1,12 @@
+celery beat v5.3.6 (emerald-rush) is starting.
+__    -    ... __   -        _
+LocalTime -> 2023-11-29 12:30:03
+Configuration ->
+    . broker -> redis://127.0.0.1:6379//
+    . loader -> celery.loaders.app.AppLoader
+    . scheduler -> django_celery_beat.schedulers.DatabaseScheduler
+
+    . logfile -> [stderr]@%INFO
+    . maxinterval -> 5.00 seconds (5s)
+[2023-11-29 12:30:03,039: INFO/MainProcess] beat: Starting...
+[2023-11-29 12:30:03,126: INFO/MainProcess] DatabaseScheduler: Schedule changed.
