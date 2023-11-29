@@ -13,3 +13,104 @@ WARNING 2023-11-28 16:45:41,296 log Not Found: /robots.txt
 WARNING 2023-11-28 16:47:55,499 log Not Found: /robots.txt
 WARNING 2023-11-28 18:07:22,007 log Not Found: /robots.txt
 WARNING 2023-11-28 18:15:42,406 log Not Found: /robots.txt
+WARNING 2023-11-29 06:06:58,808 log Forbidden (Referer checking failed - no Referer.): /admin/login/
+WARNING 2023-11-29 06:07:53,200 log Not Found: /robots.txt
+WARNING 2023-11-29 06:07:53,799 log Not Found: /robots.txt
+WARNING 2023-11-29 06:08:15,491 log Not Found: /robots.txt
+WARNING 2023-11-29 06:08:16,110 log Not Found: /robots.txt
+WARNING 2023-11-29 06:24:01,858 log Not Found: /inquiry3/
+WARNING 2023-11-29 06:24:23,601 log Not Found: /robots.txt
+WARNING 2023-11-29 06:24:23,605 log Not Found: /robots.txt
+WARNING 2023-11-29 06:25:02,684 log Not Found: /robots.txt
+WARNING 2023-11-29 06:25:02,689 log Not Found: /robots.txt
+WARNING 2023-11-29 06:25:15,769 log Not Found: /home/url(/static/basecamp/photos/easygo-home-page3.webp)
+WARNING 2023-11-29 06:26:28,734 log Not Found: /home/url(/static/basecamp/photos/easygo-home-page4.webp)
+WARNING 2023-11-29 06:28:00,132 log Not Found: /home/url(/static/basecamp/photos/easygo-home-page3.webp)
+WARNING 2023-11-29 06:28:34,000 log Not Found: /home/url(/static/basecamp/photos/easygo-home-page4.webp)
+WARNING 2023-11-29 06:29:52,668 log Not Found: /home/url(/static/basecamp/photos/home1.webp)
+WARNING 2023-11-29 06:34:25,474 log Not Found: /home/url(/static/basecamp/photos/home1.webp)
+WARNING 2023-11-29 06:39:40,675 log Not Found: /ko/product/블랙에-moncler-판매-핸드백/
+ERROR 2023-11-29 07:08:08,495 exception Invalid HTTP_HOST header: '/run/gunicorn.sock:'. The domain name provided is not valid according to RFC 1034/1035.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/http/request.py", line 150, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '/run/gunicorn.sock:'. The domain name provided is not valid according to RFC 1034/1035.
+WARNING 2023-11-29 07:08:08,499 log Bad Request: /
+WARNING 2023-11-29 07:08:30,591 log Not Found: /robots.txt
+WARNING 2023-11-29 07:08:40,046 log Not Found: /.well-known/security.txt
+WARNING 2023-11-29 07:09:18,390 log Not Found: /shop/da/product/moncler-bresle-euramerican-stil-herrejakker-gra/
+WARNING 2023-11-29 07:11:00,989 log Not Found: /shop/ko/product/남녀-겸용-다운-스퀘어-싱글-2/
+WARNING 2023-11-29 07:13:48,750 log Not Found: /robots.txt
+WARNING 2023-11-29 07:14:50,908 log Not Found: /services/
+WARNING 2023-11-29 07:20:43,714 log Not Found: /robots.txt
+WARNING 2023-11-29 07:20:43,718 log Not Found: /robots.txt
+WARNING 2023-11-29 07:21:43,135 log Not Found: /robots.txt
+WARNING 2023-11-29 07:24:10,811 log Not Found: /.git/config
+WARNING 2023-11-29 07:26:23,317 log Not Found: /inquiry3/
+WARNING 2023-11-29 07:27:30,060 log Not Found: /inquiry3/
+WARNING 2023-11-29 07:30:50,804 log Not Found: /robots.txt
+WARNING 2023-11-29 07:33:45,549 log Not Found: /robots.txt
+WARNING 2023-11-29 07:45:28,511 log Not Found: /inquiry3/
+WARNING 2023-11-29 07:53:15,925 log Not Found: /robots.txt
+WARNING 2023-11-29 07:56:11,144 log Not Found: /robots.txt
+WARNING 2023-11-29 07:56:17,491 log Not Found: /robots.txt
+WARNING 2023-11-29 07:56:21,664 log Not Found: /sitemap.txt
+WARNING 2023-11-29 07:56:28,008 log Not Found: /robots.txt
+WARNING 2023-11-29 07:56:32,728 log Not Found: /robots.txt
+WARNING 2023-11-29 07:56:36,588 log Not Found: /sitemap.txt
+WARNING 2023-11-29 07:56:43,696 log Not Found: /sitemap.txt
+WARNING 2023-11-29 07:56:48,370 log Not Found: /sitemap.txt
+WARNING 2023-11-29 08:06:41,170 log Not Found: /aes.js
+WARNING 2023-11-29 08:14:07,902 log Not Found: /robots.txt
+WARNING 2023-11-29 08:14:35,138 log Not Found: /.well-known/traffic-advice
+WARNING 2023-11-29 08:26:21,491 log Not Found: /robots.txt
+WARNING 2023-11-29 08:36:52,533 log Not Found: /logon/LogonPoint/index.html
+WARNING 2023-11-29 08:36:53,387 log Not Found: /logon/LogonPoint/custom.html
+WARNING 2023-11-29 08:43:09,479 log Not Found: /Temporary_Listen_Addresses
+WARNING 2023-11-29 08:43:10,513 log Not Found: /ews/exchanges/
+WARNING 2023-11-29 08:43:11,519 log Not Found: /ews/exchange /
+WARNING 2023-11-29 08:43:12,456 log Not Found: /ews/exchange/
+WARNING 2023-11-29 08:43:13,500 log Not Found: /ews/ /
+WARNING 2023-11-29 08:43:14,453 log Not Found: /ews/ews/
+WARNING 2023-11-29 08:43:15,437 log Not Found: /ews/autodiscovers/
+WARNING 2023-11-29 08:43:16,508 log Not Found: /autodiscover/autodiscovers/
+WARNING 2023-11-29 08:43:17,484 log Not Found: /autodiscover/autodiscover /
+WARNING 2023-11-29 08:43:18,440 log Not Found: /autodiscover/autodiscoverrs/
+WARNING 2023-11-29 08:43:19,388 log Not Found: /autodiscove/
+WARNING 2023-11-29 08:46:11,266 log Not Found: /sample.php
+WARNING 2023-11-29 08:46:30,049 log Not Found: /sample.php
+WARNING 2023-11-29 09:14:34,166 log Not Found: /robots.txt
+WARNING 2023-11-29 09:21:32,916 log Not Found: /Res/login.html
+WARNING 2023-11-29 09:21:32,933 log Not Found: /%
+WARNING 2023-11-29 09:21:32,971 log Not Found: /robots.txt
+WARNING 2023-11-29 09:21:32,974 log Not Found: /robots.txt
+WARNING 2023-11-29 09:21:32,975 log Not Found: /aaaaaaaaaaaaaaaaaaaaaaaaaqr
+WARNING 2023-11-29 09:21:33,131 log Not Found: /99vt
+WARNING 2023-11-29 09:21:33,766 log Not Found: /99vu
+WARNING 2023-11-29 09:34:43,229 log Not Found: /wp-login.php
+WARNING 2023-11-29 09:48:25,241 log Not Found: /shop/product/moncler-lovers-of-men-vest-sleeveless-single-breasted-red/
+WARNING 2023-11-29 10:06:14,420 log Not Found: /actuator/gateway/routes
+WARNING 2023-11-29 10:08:04,614 log Not Found: /.env
+WARNING 2023-11-29 10:18:11,514 log Not Found: /inquiry3/
+WARNING 2023-11-29 10:18:23,235 log Not Found: /shop/pl/product/moncler-auburn-11/
+WARNING 2023-11-29 10:24:34,074 log Not Found: /webclient/api/login
+WARNING 2023-11-29 10:24:34,640 log Not Found: /webclient/api/login
+WARNING 2023-11-29 10:24:48,349 log Not Found: /webclient/api/login
+WARNING 2023-11-29 10:24:49,301 log Not Found: /webclient/api/login
+WARNING 2023-11-29 11:05:10,089 log Not Found: /ads.txt
+WARNING 2023-11-29 11:05:10,435 log Not Found: /ads.txt
+WARNING 2023-11-29 11:10:07,658 log Not Found: /robots.txt
+WARNING 2023-11-29 11:40:10,209 log Not Found: /robots.txt
+WARNING 2023-11-29 11:40:11,185 log Not Found: /robots.txt
+WARNING 2023-11-29 11:40:12,808 log Not Found: /robots.txt
+WARNING 2023-11-29 11:40:13,803 log Not Found: /robots.txt
+WARNING 2023-11-29 11:40:15,417 log Not Found: /sitemap.xml

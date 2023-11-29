@@ -32,7 +32,7 @@ def get_rereminder_emails(service):
                     if header["name"] == "From":
                         match = re.search(r'<([^>]+)>', header["value"])
                         if match:
-                            email = match.group(1).strip()
+                            email = match.group(1).strip()                            
                             rereminder_emails.append(email)
 
             return rereminder_emails

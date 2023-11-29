@@ -25,17 +25,7 @@ class Command(BaseCommand):
                 post.reminder = True
                 post.save()
                 
-                # html_content = render_to_string("basecamp/html_email-reminder.html",
-                #                                 {'name': post.name})
-                # text_content = strip_tags(html_content)
-                # email = EmailMultiAlternatives(
-                #     "Reminder - EasyGo",
-                #     text_content,
-                #     '',
-                #     [post.email, RECIPIENT_EMAIL]
-                # )
-                # email.attach_alternative(html_content, "text/html")
-                # email.send()
+                self.stdout.write(self.style.SUCCESS(f'Successfully updated reminder for {post.name}, {post.flight_date}, {post.pickup_time}'))
 
-        self.stdout.write(self.style.SUCCESS('Successfully updated reminders'))
+        # self.stdout.write(self.style.SUCCESS('Successfully updated reminders'))
 
