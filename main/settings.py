@@ -74,6 +74,7 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Australia/Sydney'
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 
 SITE_ID = 1
 
