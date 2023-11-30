@@ -1,10 +1,10 @@
  
  -------------- worker@easygo-airport-shuttle v5.3.6 (emerald-rush)
 --- ***** ----- 
--- ******* ---- Linux-6.5.0-13-generic-x86_64-with-glibc2.38 2023-11-29 12:31:02
+-- ******* ---- Linux-6.5.0-13-generic-x86_64-with-glibc2.38 2023-11-30 04:35:17
 - *** --- * --- 
 - ** ---------- [config]
-- ** ---------- .> app:         main:0x7f7291427190
+- ** ---------- .> app:         main:0x7fe2814b8b90
 - ** ---------- .> transport:   redis://127.0.0.1:6379//
 - ** ---------- .> results:     
 - *** --- * --- .> concurrency: 2 (prefork)
@@ -22,19 +22,19 @@
   . blog.tasks.email_5
   . blog.tasks.email_6
 
-[2023-11-29 12:31:03,228: WARNING/MainProcess] /home/horeb/github/easygo/venv/lib/python3.11/site-packages/celery/worker/consumer/consumer.py:507: CPendingDeprecationWarning: The broker_connection_retry configuration setting will no longer determine
+[2023-11-30 04:35:18,172: WARNING/MainProcess] /home/horeb/github/easygo/venv/lib/python3.11/site-packages/celery/worker/consumer/consumer.py:507: CPendingDeprecationWarning: The broker_connection_retry configuration setting will no longer determine
 whether broker connection retries are made during startup in Celery 6.0 and above.
 If you wish to retain the existing behavior for retrying connections on startup,
 you should set broker_connection_retry_on_startup to True.
   warnings.warn(
 
-[2023-11-29 12:31:03,239: INFO/MainProcess] Connected to redis://127.0.0.1:6379//
-[2023-11-29 12:31:03,241: WARNING/MainProcess] /home/horeb/github/easygo/venv/lib/python3.11/site-packages/celery/worker/consumer/consumer.py:507: CPendingDeprecationWarning: The broker_connection_retry configuration setting will no longer determine
+[2023-11-30 04:35:18,181: INFO/MainProcess] Connected to redis://127.0.0.1:6379//
+[2023-11-30 04:35:18,183: WARNING/MainProcess] /home/horeb/github/easygo/venv/lib/python3.11/site-packages/celery/worker/consumer/consumer.py:507: CPendingDeprecationWarning: The broker_connection_retry configuration setting will no longer determine
 whether broker connection retries are made during startup in Celery 6.0 and above.
 If you wish to retain the existing behavior for retrying connections on startup,
 you should set broker_connection_retry_on_startup to True.
   warnings.warn(
 
-[2023-11-29 12:31:03,248: INFO/MainProcess] mingle: searching for neighbors
-[2023-11-29 12:31:04,262: INFO/MainProcess] mingle: all alone
-[2023-11-29 12:31:04,270: INFO/MainProcess] worker@easygo-airport-shuttle ready.
+[2023-11-30 04:35:18,189: INFO/MainProcess] mingle: searching for neighbors
+[2023-11-30 04:35:19,220: INFO/MainProcess] mingle: all alone
+[2023-11-30 04:35:19,231: INFO/MainProcess] worker@easygo-airport-shuttle ready.
