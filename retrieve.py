@@ -1,19 +1,21 @@
 import os.path
-
+import re
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
-import re
+from main.settings import RECIPIENT_EMAIL
 
 # If modifying these scopes, delete the file token.json.
 SCOPES = ["https://www.googleapis.com/auth/gmail.readonly"]
 
+LABEL_NAME = "Re-reminder"
+EXCLUDED_EMAIL = "info+canned.response@easygoshuttle.com.au"
 
 def get_rereminder_emails(service):
     try:
-        label_id = get_label_id(service, "Re-reminder")
+        label_id = get_label_id(service, LABEL_NAME)
         
         if label_id:
             results = service.users().messages().list(userId="me", labelIds=[label_id]).execute()
@@ -32,8 +34,9 @@ def get_rereminder_emails(service):
                     if header["name"] == "From":
                         match = re.search(r'<([^>]+)>', header["value"])
                         if match:
-                            email = match.group(1).strip()                            
-                            rereminder_emails.append(email)
+                            email = match.group(1).strip()
+                            if email != RECIPIENT_EMAIL and email != EXCLUDED_EMAIL:                           
+                                rereminder_emails.append(email)
 
             return rereminder_emails
 

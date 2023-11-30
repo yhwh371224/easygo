@@ -1,150 +1,35 @@
-WARNING 2023-11-29 17:30:09,281 log Not Found: /.env
-WARNING 2023-11-29 17:33:08,506 log Not Found: /shop/product/moncler-chausenque/
-WARNING 2023-11-29 17:42:58,962 log Not Found: /robots.txt
-WARNING 2023-11-29 17:45:48,959 log Not Found: /shop/fi/ota-meihin-yhteytta/
-WARNING 2023-11-29 17:46:43,652 log Not Found: /apple-touch-icon-precomposed.png
-WARNING 2023-11-29 17:46:43,695 log Not Found: /apple-touch-icon.png
-WARNING 2023-11-29 18:39:28,745 log Not Found: /autodiscover/autodiscover.json
-WARNING 2023-11-29 18:49:31,939 log Not Found: /ms.php
-WARNING 2023-11-29 18:49:40,297 log Not Found: /wp-admin/about.php
-WARNING 2023-11-29 18:50:18,601 log Not Found: /wp-content/admin.php
-WARNING 2023-11-29 18:51:10,979 log Not Found: /simple.php
-WARNING 2023-11-29 19:22:35,219 log Not Found: /home/booking_email.html
-WARNING 2023-11-29 20:10:38,631 log Not Found: /webclient/api/login
-WARNING 2023-11-29 20:10:39,414 log Not Found: /webclient/api/login
-WARNING 2023-11-29 20:10:50,345 log Not Found: /webclient/api/login
-WARNING 2023-11-29 20:10:50,793 log Not Found: /webclient/api/login
-WARNING 2023-11-29 20:16:26,630 log Not Found: /robots.txt
-WARNING 2023-11-29 20:29:34,776 log Not Found: /robots.txt
-ERROR 2023-11-29 20:31:14,648 log Internal Server Error: /paypal_ipn/
-WARNING 2023-11-29 20:41:18,192 log Not Found: /shop/ko/점검/
-WARNING 2023-11-29 20:45:40,150 log Not Found: /sitemaps.xml
-WARNING 2023-11-29 20:55:16,786 log Not Found: /webclient/api/login
-WARNING 2023-11-29 20:55:17,694 log Not Found: /webclient/api/login
-WARNING 2023-11-29 20:55:18,167 log Not Found: /webclient/api/login
-WARNING 2023-11-29 20:55:19,430 log Not Found: /webclient/api/login
-WARNING 2023-11-29 21:01:54,752 log Not Found: /webclient/api/login
-WARNING 2023-11-29 21:02:02,255 log Not Found: /webclient/api/login
-WARNING 2023-11-29 21:02:06,495 log Not Found: /webclient/api/login
-WARNING 2023-11-29 21:02:06,596 log Not Found: /webclient/api/login
-WARNING 2023-11-29 21:02:39,746 log Not Found: /webclient/api/login
-WARNING 2023-11-29 21:02:40,316 log Not Found: /webclient/api/login
-WARNING 2023-11-29 21:02:43,167 log Not Found: /webclient/api/login
-WARNING 2023-11-29 21:02:43,608 log Not Found: /webclient/api/login
-WARNING 2023-11-29 21:08:08,808 log Forbidden (CSRF cookie not set.): /price_detail/
-WARNING 2023-11-29 21:13:04,979 log Not Found: /webclient/api/login
-WARNING 2023-11-29 21:13:06,056 log Not Found: /webclient/api/login
-WARNING 2023-11-29 21:13:10,185 log Not Found: /webclient/api/login
-WARNING 2023-11-29 21:13:10,363 log Not Found: /webclient/api/login
-WARNING 2023-11-29 21:16:13,487 log Not Found: /webclient/api/login
-WARNING 2023-11-29 21:18:30,212 log Not Found: /webclient/api/login
-WARNING 2023-11-29 21:18:53,253 log Not Found: /webclient/api/login
-WARNING 2023-11-29 21:18:53,702 log Not Found: /webclient/api/login
-WARNING 2023-11-29 21:21:00,962 log Not Found: /webclient/api/login
-WARNING 2023-11-29 21:21:01,538 log Not Found: /webclient/api/login
-WARNING 2023-11-29 21:21:01,968 log Not Found: /webclient/api/login
-WARNING 2023-11-29 21:21:02,709 log Not Found: /webclient/api/login
-WARNING 2023-11-29 21:31:57,534 log Not Found: /shop/es/product/moncler-pety-para-mujer-de-calidad-superior-abajo-chalecos-rojos/
-WARNING 2023-11-29 21:53:56,303 log Not Found: /sitemaps.xml
-WARNING 2023-11-29 22:16:34,399 log Not Found: /wp-includes/css/buttons.css
-WARNING 2023-11-29 22:47:15,956 log Not Found: /https://easygoshuttle.com.au/
-WARNING 2023-11-29 22:52:04,446 log Not Found: /robots.txt
-WARNING 2023-11-29 22:52:05,477 log Not Found: /robots.txt
-WARNING 2023-11-29 23:27:06,431 log Not Found: /robots.txt
-WARNING 2023-11-29 23:27:17,470 log Not Found: /shop/it/product/moncler-auburn-7/
-WARNING 2023-11-29 23:44:34,950 log Not Found: /webui/
-WARNING 2023-11-29 23:50:53,603 log Not Found: /robots.txt
-WARNING 2023-11-29 23:51:21,299 log Not Found: /vpn/index.html
-WARNING 2023-11-29 23:52:20,978 log Not Found: /geoserver/web/
-WARNING 2023-11-29 23:52:47,006 log Not Found: /.git/config
-WARNING 2023-11-29 23:54:45,965 log Not Found: /inquiry3/
-WARNING 2023-11-30 00:00:10,101 log Not Found: /robots.txt
-WARNING 2023-11-30 00:00:16,979 log Not Found: /easygoshuttle.com.au/airport-transfers-north-shore/
-WARNING 2023-11-30 00:34:44,084 log Not Found: /remote/fgt_lang
-WARNING 2023-11-30 00:53:23,499 log Not Found: /webclient/api/login
-WARNING 2023-11-30 00:53:23,811 log Not Found: /webclient/api/login
-WARNING 2023-11-30 00:53:23,940 log Not Found: /webclient/api/login
-WARNING 2023-11-30 00:53:25,849 log Not Found: /webclient/api/login
-WARNING 2023-11-30 00:57:29,787 log Not Found: /webclient/api/login
-WARNING 2023-11-30 00:57:30,612 log Not Found: /webclient/api/login
-WARNING 2023-11-30 00:57:33,980 log Not Found: /webclient/api/login
-WARNING 2023-11-30 00:57:34,338 log Not Found: /webclient/api/login
-WARNING 2023-11-30 00:59:57,879 log Not Found: /webclient/api/login
-WARNING 2023-11-30 01:00:18,578 log Not Found: /webclient/api/login
-WARNING 2023-11-30 01:00:19,836 log Not Found: /webclient/api/login
-WARNING 2023-11-30 01:00:40,398 log Not Found: /webclient/api/login
-WARNING 2023-11-30 01:00:41,063 log Not Found: /webclient/api/login
-WARNING 2023-11-30 01:00:42,536 log Not Found: /webclient/api/login
-WARNING 2023-11-30 01:00:43,109 log Not Found: /webclient/api/login
-WARNING 2023-11-30 01:00:43,850 log Not Found: /webclient/api/login
-WARNING 2023-11-30 01:01:52,101 log Not Found: /webclient/api/login
-WARNING 2023-11-30 01:01:53,796 log Not Found: /webclient/api/login
-WARNING 2023-11-30 01:01:54,121 log Not Found: /webclient/api/login
-WARNING 2023-11-30 01:02:01,943 log Not Found: /webclient/api/login
-WARNING 2023-11-30 01:02:47,652 log Not Found: /webclient/api/login
-WARNING 2023-11-30 01:02:48,308 log Not Found: /webclient/api/login
-WARNING 2023-11-30 01:02:48,819 log Not Found: /webclient/api/login
-WARNING 2023-11-30 01:02:49,350 log Not Found: /webclient/api/login
-WARNING 2023-11-30 01:08:26,747 log Not Found: /webclient/api/login
-WARNING 2023-11-30 01:08:27,734 log Not Found: /webclient/api/login
-WARNING 2023-11-30 01:08:43,308 log Not Found: /webclient/api/login
-WARNING 2023-11-30 01:08:43,986 log Not Found: /webclient/api/login
-WARNING 2023-11-30 01:21:56,764 log Not Found: /robots.txt
-WARNING 2023-11-30 02:17:11,811 log Not Found: /robots.txt
-WARNING 2023-11-30 02:32:39,583 log Not Found: /robots.txt
-WARNING 2023-11-30 02:48:06,737 log Forbidden (Referer checking failed - no Referer.): /inquiry_details2/
-WARNING 2023-11-30 02:48:09,286 log Forbidden (Referer checking failed - no Referer.): /inquiry_details2/
-WARNING 2023-11-30 02:48:10,412 log Forbidden (Referer checking failed - no Referer.): /inquiry_details2/
-WARNING 2023-11-30 02:48:18,484 log Forbidden (Referer checking failed - no Referer.): /inquiry_details1/
-WARNING 2023-11-30 02:48:19,917 log Forbidden (Referer checking failed - no Referer.): /inquiry_details1/
-WARNING 2023-11-30 02:48:21,040 log Forbidden (Referer checking failed - no Referer.): /inquiry_details1/
-WARNING 2023-11-30 02:48:23,192 log Not Found: /.well-known/
-WARNING 2023-11-30 02:48:23,947 log Forbidden (Referer checking failed - no Referer.): /inquiry_details/
-WARNING 2023-11-30 02:48:29,145 log Not Found: /wp-content/uploads/
-WARNING 2023-11-30 02:48:36,038 log Not Found: /wp-includes/
-WARNING 2023-11-30 02:48:41,197 log Not Found: /wp-admin/
-WARNING 2023-11-30 02:48:45,195 log Not Found: /wp-content/
-WARNING 2023-11-30 02:48:50,457 log Not Found: /wp-content/upgrade/
-WARNING 2023-11-30 02:48:55,184 log Not Found: /.well-knownold/
-WARNING 2023-11-30 02:48:58,064 log Forbidden (Referer checking failed - no Referer.): /inquiry_details/
-WARNING 2023-11-30 02:48:59,345 log Forbidden (Referer checking failed - no Referer.): /inquiry_details/
-WARNING 2023-11-30 02:51:44,483 log Not Found: /robots.txt
-WARNING 2023-11-30 02:51:48,723 log Not Found: /sitemap.xml
-WARNING 2023-11-30 02:55:09,186 log Not Found: /th1s_1s_a_4o4.html
-WARNING 2023-11-30 02:55:47,148 log Not Found: /inquiry3/
-WARNING 2023-11-30 02:56:05,422 log Not Found: /airport-transfers-toongabbie/sms:+61406883355
-WARNING 2023-11-30 02:56:06,259 log Not Found: /payonline/sms:+61406883355
-WARNING 2023-11-30 02:56:07,096 log Not Found: /airport-transfers-st-ives/sms:+61406883355
-WARNING 2023-11-30 02:56:07,936 log Not Found: /information/sms:+61406883355
-WARNING 2023-11-30 02:56:08,794 log Not Found: /airport-transfers-epping/sms:+61406883355
-WARNING 2023-11-30 02:56:09,632 log Not Found: /inquiry/sms:+61406883355
-WARNING 2023-11-30 02:56:10,474 log Not Found: /inquiry2/sms:+61406883355
-WARNING 2023-11-30 02:56:11,311 log Not Found: /service/sms:+61406883355
-WARNING 2023-11-30 02:56:12,147 log Not Found: /airport-transfers-ryde/sms:+61406883355
-WARNING 2023-11-30 02:56:17,613 log Not Found: /airport-transfers-blacktown/sms:+61406883355
-WARNING 2023-11-30 02:56:18,473 log Not Found: /airport-transfers-parramatta/sms:+61406883355
-WARNING 2023-11-30 02:56:19,332 log Not Found: /booking_form_detail/sms:+61406883355
-WARNING 2023-11-30 02:56:20,169 log Not Found: /p2p_detail/sms:+61406883355
-WARNING 2023-11-30 02:56:21,006 log Not Found: /privacy/sms:+61406883355
-WARNING 2023-11-30 02:56:21,845 log Not Found: /p2p/sms:+61406883355
-WARNING 2023-11-30 02:56:22,682 log Not Found: /meeting_point/sms:+61406883355
-WARNING 2023-11-30 02:56:23,520 log Not Found: /booking_form/sms:+61406883355
-WARNING 2023-11-30 02:56:24,359 log Not Found: /airport-transfers-hornsby/sms:+61406883355
-WARNING 2023-11-30 02:56:26,272 log Not Found: /airport-transfers-chatswood/sms:+61406883355
-WARNING 2023-11-30 02:56:27,109 log Not Found: /airport-transfers-thornleigh/sms:+61406883355
-WARNING 2023-11-30 02:56:27,962 log Not Found: /inquiry_details2/sms:+61406883355
-WARNING 2023-11-30 02:56:28,803 log Not Found: /terms/sms:+61406883355
-WARNING 2023-11-30 02:56:29,638 log Not Found: /home/sms:+61406883355
-WARNING 2023-11-30 02:56:30,476 log Not Found: /payonline/tell:+61406883355
-WARNING 2023-11-30 02:56:31,318 log Not Found: /inquiry_details/sms:+61406883355
-WARNING 2023-11-30 02:56:32,165 log Not Found: /p2p_single_detail/sms:+61406883355
-WARNING 2023-11-30 02:56:33,004 log Not Found: /p2p_single/sms:+61406883355
-WARNING 2023-11-30 02:56:35,190 log Not Found: /about_us/sms:+61406883355
-WARNING 2023-11-30 02:56:38,490 log Not Found: /price_detail/sms:+61406883355
-WARNING 2023-11-30 02:56:50,806 log Not Found: /inquiry_details1/sms:+61406883355
-WARNING 2023-11-30 03:14:41,017 log Not Found: /robots.txt
-WARNING 2023-11-30 03:33:30,150 log Not Found: /inquiry3/
-ERROR 2023-11-30 03:35:17,966 log Internal Server Error: /inquiry_details2/
+WARNING 2023-11-30 12:37:51,672 log Not Found: /feed/
+WARNING 2023-11-30 12:39:35,765 log Not Found: /robots.txt
+WARNING 2023-11-30 12:39:37,499 log Not Found: /humans.txt
+WARNING 2023-11-30 12:39:39,189 log Not Found: /ads.txt
+WARNING 2023-11-30 12:49:41,376 log Not Found: /.well-known/traffic-advice
+WARNING 2023-11-30 12:53:39,495 log Not Found: /product/moncler-jackets-kids-bouquettelle-white/
+ERROR 2023-11-30 13:04:18,677 log Internal Server Error: /paypal_ipn/
+WARNING 2023-11-30 13:12:16,674 log Not Found: /global-protect/login.esp
+WARNING 2023-11-30 13:12:17,534 log Not Found: /sslmgr
+WARNING 2023-11-30 13:20:28,151 log Not Found: /feed/
+WARNING 2023-11-30 13:22:09,813 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-11-30 13:22:11,035 log Not Found: /.env
+WARNING 2023-11-30 13:22:12,103 log Not Found: /local/.env
+WARNING 2023-11-30 13:22:14,206 log Not Found: /dev/.env
+WARNING 2023-11-30 13:22:15,246 log Not Found: /api/.env
+WARNING 2023-11-30 13:22:16,287 log Not Found: /stag/.env
+WARNING 2023-11-30 13:22:17,326 log Not Found: /platform/.env
+WARNING 2023-11-30 13:22:18,351 log Not Found: /staging/.env
+WARNING 2023-11-30 13:22:19,397 log Not Found: /development/.env
+WARNING 2023-11-30 13:24:58,966 log Not Found: /actuator/gateway/routes
+WARNING 2023-11-30 14:34:22,923 log Not Found: /.env
+WARNING 2023-11-30 14:34:23,714 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-11-30 14:53:15,105 log Not Found: /accounts/signup/index.html
+WARNING 2023-11-30 14:56:15,893 log Not Found: /comments/feed/
+WARNING 2023-11-30 14:56:38,759 log Not Found: /robots.txt
+WARNING 2023-11-30 15:05:13,289 log Not Found: /robots.txt
+WARNING 2023-11-30 15:11:59,871 log Not Found: /comments/feed/
+WARNING 2023-11-30 15:37:34,425 log Not Found: /.well-known/traffic-advice
+WARNING 2023-11-30 15:39:51,722 log Not Found: /.well-known/acme-challenge/HYU36LYQWF_QP3XUVZPX03TBJKLS6FXY
+WARNING 2023-11-30 15:39:52,697 log Not Found: /.well-known/acme-challenge/BW02Q6V29_P1MIWZ-RFNDEC_60S4DB0-
+WARNING 2023-11-30 15:39:57,756 log Not Found: /vpn/index.html
+ERROR 2023-11-30 15:41:11,206 log Internal Server Error: /sending_email_first_detail/
 Traceback (most recent call last):
   File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
@@ -152,148 +37,47 @@ Traceback (most recent call last):
   File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
     response = wrapped_callback(request, *callback_args, **callback_kwargs)
                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/basecamp/views.py", line 755, in inquiry_details2
-    if request.is_ajax():
-       ^^^^^^^^^^^^^^^
-AttributeError: 'WSGIRequest' object has no attribute 'is_ajax'
-WARNING 2023-11-30 03:38:47,694 log Not Found: /ews
-WARNING 2023-11-30 03:39:09,781 log Not Found: /owa
-WARNING 2023-11-30 03:51:47,833 log Not Found: /wp-content/plugins/fix/up.php
-WARNING 2023-11-30 03:54:58,846 log Not Found: /shop/ko/product/남성-조끼-moncler-연인-민소매-싱글-브레스트/
-WARNING 2023-11-30 04:11:04,245 log Not Found: /webclient/api/login
-WARNING 2023-11-30 04:11:04,678 log Not Found: /webclient/api/login
-WARNING 2023-11-30 04:11:04,966 log Not Found: /webclient/api/login
-WARNING 2023-11-30 04:11:07,668 log Not Found: /webclient/api/login
-WARNING 2023-11-30 04:13:11,400 log Not Found: /shop/es/product/moncler-abajo-hombres-escudo-medio-longitud-con-capucha-cafe/
-WARNING 2023-11-30 04:15:27,029 log Not Found: /webclient/api/login
-WARNING 2023-11-30 04:15:27,456 log Not Found: /webclient/api/login
-WARNING 2023-11-30 04:15:29,322 log Not Found: /webclient/api/login
-WARNING 2023-11-30 04:15:29,827 log Not Found: /webclient/api/login
-WARNING 2023-11-30 04:16:13,710 log Not Found: /webclient/api/login
-WARNING 2023-11-30 04:16:15,045 log Not Found: /webclient/api/login
-WARNING 2023-11-30 04:16:15,435 log Not Found: /webclient/api/login
-WARNING 2023-11-30 04:16:16,217 log Not Found: /webclient/api/login
-WARNING 2023-11-30 04:18:45,244 log Not Found: /webclient/api/login
-WARNING 2023-11-30 04:18:45,654 log Not Found: /webclient/api/login
-WARNING 2023-11-30 04:18:54,864 log Not Found: /webclient/api/login
-WARNING 2023-11-30 04:18:55,055 log Not Found: /webclient/api/login
-WARNING 2023-11-30 04:19:46,001 log Not Found: /webclient/api/login
-WARNING 2023-11-30 04:20:14,777 log Not Found: /webclient/api/login
-WARNING 2023-11-30 04:20:15,218 log Not Found: /webclient/api/login
-WARNING 2023-11-30 04:20:24,122 log Not Found: /webclient/api/login
-WARNING 2023-11-30 04:20:24,912 log Not Found: /webclient/api/login
-WARNING 2023-11-30 04:20:25,729 log Not Found: /webclient/api/login
-WARNING 2023-11-30 04:20:26,104 log Not Found: /webclient/api/login
-WARNING 2023-11-30 04:20:26,572 log Not Found: /webclient/api/login
-ERROR 2023-11-30 04:35:45,319 exception Invalid HTTP_HOST header: '33.188.28.149.in-addr.arpa'. You may need to add '33.188.28.149.in-addr.arpa' to ALLOWED_HOSTS.
-Traceback (most recent call last):
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
-    response = get_response(request)
-               ^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/utils/deprecation.py", line 133, in __call__
-    response = self.process_request(request)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/middleware/common.py", line 48, in process_request
-    host = request.get_host()
-           ^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/http/request.py", line 150, in get_host
-    raise DisallowedHost(msg)
-django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '33.188.28.149.in-addr.arpa'. You may need to add '33.188.28.149.in-addr.arpa' to ALLOWED_HOSTS.
-WARNING 2023-11-30 04:35:45,388 log Bad Request: /Fq7n
-ERROR 2023-11-30 04:35:46,193 exception Invalid HTTP_HOST header: '33.188.28.149.in-addr.arpa'. You may need to add '33.188.28.149.in-addr.arpa' to ALLOWED_HOSTS.
-Traceback (most recent call last):
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
-    response = get_response(request)
-               ^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/utils/deprecation.py", line 133, in __call__
-    response = self.process_request(request)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/middleware/common.py", line 48, in process_request
-    host = request.get_host()
-           ^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/http/request.py", line 150, in get_host
-    raise DisallowedHost(msg)
-django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '33.188.28.149.in-addr.arpa'. You may need to add '33.188.28.149.in-addr.arpa' to ALLOWED_HOSTS.
-WARNING 2023-11-30 04:35:46,197 log Bad Request: /3nrJ
-WARNING 2023-11-30 05:26:02,171 log Not Found: /sample.php
-WARNING 2023-11-30 05:26:06,758 log Not Found: /ms.php
-WARNING 2023-11-30 05:26:15,683 log Not Found: /wp-admin/about.php
-WARNING 2023-11-30 05:26:15,713 log Not Found: /sample.php
-WARNING 2023-11-30 05:26:28,480 log Not Found: /wp-content/admin.php
-WARNING 2023-11-30 05:26:40,882 log Not Found: /simple.php
-WARNING 2023-11-30 05:27:21,625 log Not Found: /robots.txt
-WARNING 2023-11-30 06:08:56,587 log Not Found: /shop/da/product/moncler-stovler-nible-red-stilfuld-og-generos/
-WARNING 2023-11-30 06:22:39,315 log Not Found: /inquiry3/
-WARNING 2023-11-30 06:51:26,876 log Not Found: /webclient/api/login
-WARNING 2023-11-30 06:51:30,112 log Not Found: /webclient/api/login
-WARNING 2023-11-30 06:51:36,254 log Not Found: /webclient/api/login
-WARNING 2023-11-30 06:51:40,502 log Not Found: /webclient/api/login
-WARNING 2023-11-30 06:52:06,881 log Not Found: /webclient/api/login
-WARNING 2023-11-30 06:52:08,122 log Not Found: /webclient/api/login
-WARNING 2023-11-30 06:52:08,530 log Not Found: /webclient/api/login
-WARNING 2023-11-30 06:53:07,769 log Not Found: /webclient/api/login
-WARNING 2023-11-30 06:56:17,746 log Not Found: /webclient/api/login
-WARNING 2023-11-30 06:56:18,145 log Not Found: /webclient/api/login
-WARNING 2023-11-30 06:56:20,244 log Not Found: /webclient/api/login
-WARNING 2023-11-30 06:56:20,923 log Not Found: /webclient/api/login
-WARNING 2023-11-30 06:56:55,251 log Not Found: /webclient/api/login
-WARNING 2023-11-30 06:56:55,730 log Not Found: /webclient/api/login
-WARNING 2023-11-30 06:57:03,880 log Not Found: /webclient/api/login
-WARNING 2023-11-30 06:57:03,919 log Not Found: /webclient/api/login
-WARNING 2023-11-30 07:07:26,274 log Not Found: /robots.txt
-WARNING 2023-11-30 07:07:27,746 log Not Found: /airport-transfers-dural/
-ERROR 2023-11-30 07:22:37,025 exception Invalid HTTP_HOST header: '/run/gunicorn.sock:'. The domain name provided is not valid according to RFC 1034/1035.
-Traceback (most recent call last):
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
-    response = get_response(request)
-               ^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/utils/deprecation.py", line 133, in __call__
-    response = self.process_request(request)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/middleware/common.py", line 48, in process_request
-    host = request.get_host()
-           ^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/http/request.py", line 150, in get_host
-    raise DisallowedHost(msg)
-django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '/run/gunicorn.sock:'. The domain name provided is not valid according to RFC 1034/1035.
-WARNING 2023-11-30 07:22:37,029 log Bad Request: /
-WARNING 2023-11-30 07:22:37,032 log Not Found: /nmaplowercheck1701289353
-WARNING 2023-11-30 07:28:14,345 log Not Found: /robots.txt
-WARNING 2023-11-30 07:34:50,427 log Not Found: /wp-content/themes/include.php
-WARNING 2023-11-30 07:34:59,310 log Not Found: /wp-content/plugins/WordPressCore/include.php
-WARNING 2023-11-30 07:35:15,764 log Not Found: /wp-content/themes/sketch/404.php
-WARNING 2023-11-30 07:35:36,533 log Not Found: /wp-content/plugins/core-plugin/include.php
-WARNING 2023-11-30 07:35:46,815 log Not Found: /wp-includes/widgets/include.php
-WARNING 2023-11-30 07:35:56,908 log Not Found: /wp-content/include.php
-WARNING 2023-11-30 07:36:07,009 log Not Found: /wp-content/themes/twentyfive/include.php
-WARNING 2023-11-30 07:36:21,886 log Not Found: /wp-includes/images/include.php
-WARNING 2023-11-30 07:36:32,521 log Not Found: /wp-content/plugins/include.php
-WARNING 2023-11-30 07:49:35,759 log Not Found: /wp-login.php
-WARNING 2023-11-30 07:52:00,477 log Not Found: /robots.txt
-WARNING 2023-11-30 07:58:35,355 log Not Found: /autodiscove/
-WARNING 2023-11-30 08:30:07,404 log Not Found: /robots.txt
-WARNING 2023-11-30 08:35:37,102 log Not Found: /robots.txt
-WARNING 2023-11-30 08:47:09,695 log Not Found: /sample.php
-WARNING 2023-11-30 08:47:21,103 log Not Found: /sample.php
-WARNING 2023-11-30 08:52:30,655 log Not Found: /wordpress/
-WARNING 2023-11-30 10:01:47,364 log Not Found: /shop/da/product/moncler-chausenque-11/
-WARNING 2023-11-30 10:28:08,780 log Forbidden (Referer checking failed - no Referer.): /admin/login/
-WARNING 2023-11-30 10:50:10,213 log Not Found: /apple-touch-icon-precomposed.png
-WARNING 2023-11-30 10:50:10,268 log Not Found: /apple-touch-icon.png
-WARNING 2023-11-30 10:50:11,635 log Not Found: /apple-touch-icon-precomposed.png
-WARNING 2023-11-30 10:50:11,691 log Not Found: /apple-touch-icon.png
-WARNING 2023-11-30 10:56:15,911 log Not Found: /ads.txt
-WARNING 2023-11-30 10:58:54,660 log Not Found: /wp-content/plugins/wp-file-manager/readme.txt
-WARNING 2023-11-30 11:04:55,892 log Not Found: /shop/product-category/moncler-vests-mens/
-WARNING 2023-11-30 11:38:53,173 log Not Found: /webclient/api/login
-WARNING 2023-11-30 11:38:53,887 log Not Found: /webclient/api/login
-WARNING 2023-11-30 11:39:06,306 log Not Found: /webclient/api/login
-WARNING 2023-11-30 11:39:06,695 log Not Found: /webclient/api/login
-WARNING 2023-11-30 11:39:11,925 log Not Found: /webclient/api/login
-WARNING 2023-11-30 11:39:12,443 log Not Found: /webclient/api/login
-WARNING 2023-11-30 11:42:10,701 log Not Found: /product/moncler-down-coats-mens-mid-length-hooded-black/
-WARNING 2023-11-30 11:44:26,437 log Not Found: /ab2g
-WARNING 2023-11-30 11:44:27,414 log Not Found: /ab2h
-WARNING 2023-11-30 11:44:34,587 log Not Found: /t4
-WARNING 2023-11-30 11:46:19,564 log Not Found: /shop/nl/product/moncler-down-jassen-heren-halverwege-lengte-hooded-blauw/
-WARNING 2023-11-30 11:59:50,549 log Not Found: /robots.txt
+  File "/home/horeb/github/easygo/basecamp/views.py", line 1398, in sending_email_first_detail
+    name = user.name
+         ^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'name'
+WARNING 2023-11-30 15:42:14,574 log Not Found: /.git/config
+WARNING 2023-11-30 15:46:10,942 log Forbidden (Referer checking failed - no Referer.): /inquiry_details/
+WARNING 2023-11-30 15:46:11,624 log Forbidden (Referer checking failed - no Referer.): /inquiry_details/
+WARNING 2023-11-30 15:46:12,293 log Forbidden (Referer checking failed - no Referer.): /inquiry_details/
+WARNING 2023-11-30 15:46:22,938 log Not Found: /technology/families/
+WARNING 2023-11-30 15:46:25,678 log Not Found: /newsletter-subscribe/
+WARNING 2023-11-30 15:46:32,311 log Not Found: /technology/ai/
+WARNING 2023-11-30 15:46:35,913 log Not Found: /technology/safety-security/
+WARNING 2023-11-30 15:46:38,223 log Not Found: /products/news/
+WARNING 2023-11-30 15:46:40,048 log Forbidden (Referer checking failed - no Referer.): /inquiry_details2/
+WARNING 2023-11-30 15:46:40,716 log Forbidden (Referer checking failed - no Referer.): /inquiry_details2/
+WARNING 2023-11-30 15:46:41,319 log Forbidden (Referer checking failed - no Referer.): /inquiry_details2/
+WARNING 2023-11-30 15:46:42,677 log Forbidden (Referer checking failed - no Referer.): /inquiry_details1/
+WARNING 2023-11-30 15:46:43,365 log Forbidden (Referer checking failed - no Referer.): /inquiry_details1/
+WARNING 2023-11-30 15:46:44,045 log Forbidden (Referer checking failed - no Referer.): /inquiry_details1/
+WARNING 2023-11-30 15:49:58,316 log Not Found: /shop/nn/min-konto-2/
+WARNING 2023-11-30 15:55:08,864 log Not Found: /robots.txt
+WARNING 2023-11-30 15:59:28,698 log Forbidden (Referer checking failed - no Referer.): /inquiry_details/
+WARNING 2023-11-30 15:59:29,166 log Forbidden (Referer checking failed - no Referer.): /inquiry_details/
+WARNING 2023-11-30 15:59:29,911 log Forbidden (Referer checking failed - no Referer.): /inquiry_details/
+WARNING 2023-11-30 15:59:31,109 log Forbidden (Referer checking failed - no Referer.): /inquiry_details1/
+WARNING 2023-11-30 15:59:31,958 log Forbidden (Referer checking failed - no Referer.): /inquiry_details1/
+WARNING 2023-11-30 15:59:32,414 log Forbidden (Referer checking failed - no Referer.): /inquiry_details1/
+WARNING 2023-11-30 15:59:33,518 log Forbidden (Referer checking failed - no Referer.): /inquiry_details2/
+WARNING 2023-11-30 15:59:33,981 log Forbidden (Referer checking failed - no Referer.): /inquiry_details2/
+WARNING 2023-11-30 15:59:34,471 log Forbidden (Referer checking failed - no Referer.): /inquiry_details2/
+WARNING 2023-11-30 15:59:43,052 log Not Found: /newsletter-subscribe/
+WARNING 2023-11-30 15:59:46,463 log Not Found: /technology/
+WARNING 2023-11-30 15:59:46,919 log Not Found: /technology/next-billion-users/
+WARNING 2023-11-30 15:59:48,404 log Not Found: /products/registry/
+WARNING 2023-11-30 15:59:48,850 log Not Found: /technology/families/
+WARNING 2023-11-30 15:59:49,821 log Not Found: /products/news/
+WARNING 2023-11-30 15:59:50,829 log Not Found: /technology/safety-security/
+WARNING 2023-11-30 16:06:19,911 log Not Found: /.env
+WARNING 2023-11-30 16:06:20,606 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-11-30 16:10:33,653 log Not Found: /.git/config
+WARNING 2023-11-30 16:16:08,043 log Not Found: /robots.txt
+WARNING 2023-11-30 16:17:38,015 log Not Found: /api/.env
+WARNING 2023-11-30 16:23:46,864 log Not Found: /.git/config
+WARNING 2023-11-30 16:23:47,765 log Not Found: /.git/config

@@ -72,7 +72,7 @@ class Command(BaseCommand):
                     'driver_name': driver_name, 'driver_contact': driver_contact, 'driver_plate': driver_plate, 'driver_car': driver_car
                 })
                 text_content = strip_tags(html_content)
-                email = EmailMultiAlternatives(subject, text_content, '', [reminder.email])
+                email = EmailMultiAlternatives(subject, text_content, '', [reminder.email, reminder.email1])
                 email.attach_alternative(html_content, "text/html")
                 email.send()
 
