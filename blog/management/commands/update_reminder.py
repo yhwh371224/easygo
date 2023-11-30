@@ -18,16 +18,22 @@ class Command(BaseCommand):
         today = datetime.now()
         three_days_later = today + timedelta(days=3)
 
-        for list_email in my_list:      
+        try:
+            for list_email in my_list:      
 
-            posts = Post.objects.filter(email__iexact=list_email, flight_date__range=[today, three_days_later])
+                posts = Post.objects.filter(email__iexact=list_email, flight_date__range=[today, three_days_later])
 
-            for post in posts:
-                post.reminder = True
-                post.save()
-                updated += 1
-                
-                self.stdout.write(self.style.SUCCESS(f'Updated reminder for {post.name}, {post.flight_date}, {post.pickup_time}'))
+                for post in posts:
+                    post.reminder = True
+                    post.save()
+                    updated += 1
 
-        self.stdout.write(self.style.SUCCESS(f'Successfully {updated} updated reminders'))
+                    logger.info(f'Updated reminder for {post.name}, {post.flight_date}, {post.pickup_time}')
+                    self.stdout.write(self.style.SUCCESS(f'Updated reminder for {post.name}, {post.flight_date}, {post.pickup_time}'))
+
+            logger.info(f'Successfully updated reminders for {updated} posts')
+            self.stdout.write(self.style.SUCCESS(f'Successfully {updated} updated reminders'))
+
+        except Exception as e:
+            logger.exception(f"Error during reminder update: {e}")
 
