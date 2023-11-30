@@ -26,7 +26,7 @@ class Command(BaseCommand):
                 html_content = render_to_string("basecamp/html_email-fnotice.html",
                                                 {'name': final_notice.name, 'email': final_notice.email})
                 text_content = strip_tags(html_content)
-                email = EmailMultiAlternatives("Final notice", text_content, '', [final_notice.email, RECIPIENT_EMAIL])
+                email = EmailMultiAlternatives("Final notice", text_content, '', [final_notice.email, RECIPIENT_EMAIL, final_notice.email1])
                 email.attach_alternative(html_content, "text/html")
                 email.send()
                 emails_sent += 1
