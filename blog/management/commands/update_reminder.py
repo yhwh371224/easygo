@@ -2,10 +2,6 @@ import logging
 from django.core.management.base import BaseCommand
 from blog.models import Post
 from datetime import datetime, timedelta
-from django.core.mail import EmailMultiAlternatives
-from django.template.loader import render_to_string
-from django.utils.html import strip_tags
-from main.settings import RECIPIENT_EMAIL
 from retrieve import main 
 
 
@@ -16,6 +12,7 @@ class Command(BaseCommand):
     help = 'Update reminders for posts'
 
     def handle(self, *args, **options):
+        updated = 0  # Initialize the counter
         my_list = main()  # Call the main function to get the list
 
         today = datetime.now()
@@ -28,9 +25,9 @@ class Command(BaseCommand):
             for post in posts:
                 post.reminder = True
                 post.save()
+                updated += 1
                 
-                logger.info(f"Updated reminder for {post.name}, {post.flight_date}, {post.pickup_time}")
                 self.stdout.write(self.style.SUCCESS(f'Updated reminder for {post.name}, {post.flight_date}, {post.pickup_time}'))
 
-        # self.stdout.write(self.style.SUCCESS('Successfully updated reminders'))
+        self.stdout.write(self.style.SUCCESS(f'Successfully {updated} updated reminders'))
 
