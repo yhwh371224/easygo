@@ -1,4 +1,3 @@
-import logging
 from django.core.management.base import BaseCommand
 from datetime import date, timedelta
 from django.core.mail import EmailMultiAlternatives
@@ -6,9 +5,6 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from blog.models import Post
 from main.settings import RECIPIENT_EMAIL
-
-
-logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
@@ -29,10 +25,6 @@ class Command(BaseCommand):
                 email = EmailMultiAlternatives("Final notice", text_content, '', [final_notice.email, RECIPIENT_EMAIL, final_notice.email1])
                 email.attach_alternative(html_content, "text/html")
                 email.send()
-                emails_sent += 1
-
-                # Log information about each email sent
-                logger.info(f"Email sent to {final_notice.email} for final notice.")
-
-        logger.info(f"Total {emails_sent} emails sent for final notices.")
+                emails_sent += 1                
+        
         self.stdout.write(self.style.SUCCESS(f"{emails_sent} emails sent."))

@@ -81,3 +81,32 @@ WARNING 2023-11-30 16:16:08,043 log Not Found: /robots.txt
 WARNING 2023-11-30 16:17:38,015 log Not Found: /api/.env
 WARNING 2023-11-30 16:23:46,864 log Not Found: /.git/config
 WARNING 2023-11-30 16:23:47,765 log Not Found: /.git/config
+WARNING 2023-11-30 16:54:08,402 log Not Found: /index.php
+WARNING 2023-11-30 16:57:07,555 log Not Found: /shop/ko/product/패션-악세사리-2/
+WARNING 2023-11-30 17:26:51,218 log Not Found: /robots.txt
+WARNING 2023-11-30 17:55:29,704 log Not Found: /robots.txt
+WARNING 2023-11-30 18:06:00,137 log Not Found: /robots.txt
+WARNING 2023-11-30 18:06:15,176 log Not Found: /robots.txt
+WARNING 2023-11-30 18:06:22,673 log Not Found: /悉尼机场巴士/
+WARNING 2023-11-30 18:06:26,679 log Not Found: /悉尼机场巴士/
+WARNING 2023-11-30 18:06:32,996 log Not Found: /悉尼机场接送/
+WARNING 2023-11-30 18:06:36,608 log Not Found: /悉尼机场接送/
+WARNING 2023-11-30 18:06:46,583 log Not Found: /悉尼机场接送服务/
+WARNING 2023-11-30 18:06:52,944 log Not Found: /悉尼机场接送服务/
+WARNING 2023-11-30 18:06:59,525 log Not Found: /悉尼机场接送服务的最佳拍档/
+WARNING 2023-11-30 18:07:02,593 log Not Found: /悉尼机场接送服务的最佳拍档/
+WARNING 2023-11-30 18:07:07,077 log Not Found: /机场接送-悉尼/
+WARNING 2023-11-30 18:07:09,750 log Not Found: /机场接送-悉尼/
+WARNING 2023-11-30 18:33:46,500 log Not Found: /shop/nn/product/moncler-affton-frakk-menn-down-black-2/
+ERROR 2023-11-30 19:02:12,542 log Internal Server Error: /booking_form_detail/
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/basecamp/views.py", line 711, in booking_form_detail
+    if request.is_ajax():
+       ^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'is_ajax'

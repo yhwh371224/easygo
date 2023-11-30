@@ -92,7 +92,3 @@ def main():
 if __name__ == "__main__":
     rereminder_emails = main()
 
-    # # Print the retrieved email addresses
-    # print("Re-reminder Emails:")
-    # for email in rereminder_emails:
-    #     print(email)
