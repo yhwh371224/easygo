@@ -16,6 +16,21 @@ secure_gmail/
 
 db.sqlite3 
 
+.env 
+
+__pycache__/
+
+*.pyo
+*.pyd
+.vscode/
+
+*.log
+
+.DS_Store
+
+
+
+
 
 
  
