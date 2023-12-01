@@ -421,3 +421,7 @@ django.template.base.VariableDoesNotExist: Failed lookup for key [subtitle] in [
 WARNING 2023-12-01 14:18:27,009 log Forbidden (Referer checking failed - no Referer.): /admin/login/
 WARNING 2023-12-01 14:31:00,682 log Not Found: /services/
 WARNING 2023-12-01 14:47:02,443 log Not Found: /robots.txt
+WARNING 2023-12-01 15:38:57,729 log Not Found: /.well-known/acme-challenge/D03EO811OX09VLUU9GPQ8LLFP3OTMHFX
+WARNING 2023-12-01 15:38:58,701 log Not Found: /.well-known/acme-challenge/BN2ENXHS2HB_PREZQK4OWODTGVGJMPHB
+WARNING 2023-12-01 15:43:23,760 log Not Found: /robots.txt
+WARNING 2023-12-01 15:43:25,977 log Not Found: /wp-content/uploads/2014/10/Easy_go_44-b.png

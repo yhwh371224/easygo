@@ -44,11 +44,9 @@ class Command(BaseCommand):
                     updated += 1
 
                     logger.info(f'Updated reminder for {post.name}, {post.flight_date}, {post.pickup_time}')
-                    self.stdout.write(self.style.SUCCESS(f'Updated reminder for {post.name}, {post.flight_date}, {post.pickup_time}'))
-
+                    
             logger.info(f'Successfully updated reminders for {updated}')
-            self.stdout.write(self.style.SUCCESS(f'Successfully {updated} updated reminders'))
-
+            
         except Exception as e:
             logger.exception(f"Error during reminder update: {e}")
 
