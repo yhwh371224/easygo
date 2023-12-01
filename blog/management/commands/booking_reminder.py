@@ -107,8 +107,6 @@ class Command(BaseCommand):
                         emails_sent += 1
 
                     logger.info(f'{subject}: email sent to {reminder.name}')
-                    
-            logger.info(f'booking reminder emails {emails_sent} sent')
             
         except Exception as e:            
             logger.exception(f"Error during booking reminders emailing: {e}")
