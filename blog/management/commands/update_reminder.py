@@ -1,11 +1,26 @@
+import os
 import logging
 from django.core.management.base import BaseCommand
 from blog.models import Post
 from datetime import datetime, timedelta
 from retrieve import main 
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('blog.update_reminder')
+logger.setLevel(logging.INFO)
+
+formatter = logging.Formatter('%(asctime)s:%(levelname)s:%(name)s:%(message)s')
+
+# Create the logs directory if it doesn't exist
+logs_dir = os.path.join(BASE_DIR, 'logs')
+if not os.path.exists(logs_dir):
+    os.makedirs(logs_dir)
+
+file_handler = logging.FileHandler(os.path.join(logs_dir, 'update_reminder.log'))
+file_handler.setFormatter(formatter)
+
+logger.addHandler(file_handler)
 
 
 class Command(BaseCommand):
@@ -31,7 +46,7 @@ class Command(BaseCommand):
                     logger.info(f'Updated reminder for {post.name}, {post.flight_date}, {post.pickup_time}')
                     self.stdout.write(self.style.SUCCESS(f'Updated reminder for {post.name}, {post.flight_date}, {post.pickup_time}'))
 
-            logger.info(f'Successfully updated reminders for {updated} posts')
+            logger.info(f'Successfully updated reminders for {updated}')
             self.stdout.write(self.style.SUCCESS(f'Successfully {updated} updated reminders'))
 
         except Exception as e:
