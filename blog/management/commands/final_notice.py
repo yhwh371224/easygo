@@ -46,10 +46,8 @@ class Command(BaseCommand):
                     email.send()
 
                     logger.info(f'final_notice sent to {final_notice.name}, {final_notice.pickup_time}')
-                    self.stdout.write(self.style.SUCCESS(f'final_notice sent to {final_notice.name}, {final_notice.pickup_time}'))
 
-                logger.info(f'final_notice emails sent')
-                self.stdout.write(self.style.SUCCESS(f"final_notice emails sent entirely"))
+            logger.info(f'final_notice emails sent')
 
         except Exception as e:
             logger.exception(f"Error during final_notice emailing: {e}")                
