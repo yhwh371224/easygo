@@ -1,3 +1,5 @@
+import os
+import logging 
 from django.core.management.base import BaseCommand
 from datetime import date, timedelta
 from django.core.mail import EmailMultiAlternatives
@@ -6,6 +8,23 @@ from django.utils.html import strip_tags
 from blog.models import Post
 from main.settings import RECIPIENT_EMAIL
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+logger = logging.getLogger('blog.final_notice')
+logger.setLevel(logging.INFO)
+
+formatter = logging.Formatter('%(asctime)s:%(levelname)s:%(name)s:%(message)s')
+
+# Create the logs directory if it doesn't exist
+logs_dir = os.path.join(BASE_DIR, 'logs')
+if not os.path.exists(logs_dir):
+    os.makedirs(logs_dir)
+
+file_handler = logging.FileHandler(os.path.join(logs_dir, 'final_notice.log'))
+file_handler.setFormatter(formatter)
+
+logger.addHandler(file_handler)
+
 
 class Command(BaseCommand):
     help = 'Send final notices'
@@ -13,18 +32,26 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         tomorrow = date.today() + timedelta(days=1)
         final_notices = Post.objects.filter(flight_date=tomorrow)
-        emails_sent = 0
 
-        for final_notice in final_notices:
-            if final_notice.cancelled or final_notice.paid:
-                continue
-            elif not final_notice.reminder:
-                html_content = render_to_string("basecamp/html_email-fnotice.html",
-                                                {'name': final_notice.name, 'email': final_notice.email})
-                text_content = strip_tags(html_content)
-                email = EmailMultiAlternatives("Final notice", text_content, '', [final_notice.email, RECIPIENT_EMAIL, final_notice.email1])
-                email.attach_alternative(html_content, "text/html")
-                email.send()
-                emails_sent += 1                
+        try:
+            for final_notice in final_notices:
+                if final_notice.cancelled or final_notice.paid:
+                    continue
+                elif not final_notice.reminder:
+                    html_content = render_to_string("basecamp/html_email-fnotice.html",
+                                                    {'name': final_notice.name, 'email': final_notice.email})
+                    text_content = strip_tags(html_content)
+                    email = EmailMultiAlternatives("Final notice", text_content, '', [final_notice.email, RECIPIENT_EMAIL, final_notice.email1])
+                    email.attach_alternative(html_content, "text/html")
+                    email.send()
+
+                    logger.info(f'final_notice sent to {final_notice.name}, {final_notice.pickup_time}')
+                    self.stdout.write(self.style.SUCCESS(f'final_notice sent to {final_notice.name}, {final_notice.pickup_time}'))
+
+                logger.info(f'final_notice emails sent')
+                self.stdout.write(self.style.SUCCESS(f"final_notice emails sent entirely"))
+
+        except Exception as e:
+            logger.exception(f"Error during final_notice emailing: {e}")                
         
-        self.stdout.write(self.style.SUCCESS(f"{emails_sent} emails sent."))
+        

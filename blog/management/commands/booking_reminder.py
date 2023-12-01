@@ -1,3 +1,5 @@
+import os
+import logging
 from django.core.management.base import BaseCommand
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
@@ -5,6 +7,24 @@ from django.utils.html import strip_tags
 from blog.models import Post
 from datetime import date, timedelta
 from main.settings import RECIPIENT_EMAIL
+
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+logger = logging.getLogger('blog.booking_reminder')
+logger.setLevel(logging.INFO)
+
+formatter = logging.Formatter('%(asctime)s:%(levelname)s:%(name)s:%(message)s')
+
+# Create the logs directory if it doesn't exist
+logs_dir = os.path.join(BASE_DIR, 'logs')
+if not os.path.exists(logs_dir):
+    os.makedirs(logs_dir)
+
+file_handler = logging.FileHandler(os.path.join(logs_dir, 'booking_reminder.log'))
+file_handler.setFormatter(formatter)
+
+logger.addHandler(file_handler)
 
 
 class Command(BaseCommand):
@@ -56,29 +76,37 @@ class Command(BaseCommand):
 
     def send_email_task(self, reminders, template_name, subject):
         emails_sent = 0  # Initialize the counter
-        for reminder in reminders:
-            if reminder.cancelled:
-                continue 
-            elif reminder.flight_date:                
-                driver_instance = reminder.driver            
-             
-                driver_name = driver_instance.driver_name
-                driver_contact = driver_instance.driver_contact
-                driver_plate = driver_instance.driver_plate
-                driver_car = driver_instance.driver_car
+        
+        try:
+            for reminder in reminders:
+                if reminder.cancelled:
+                    continue 
+                elif reminder.flight_date:                
+                    driver_instance = reminder.driver            
 
-                html_content = render_to_string(template_name, {
-                    'name': reminder.name, 'flight_date': reminder.flight_date, 'flight_number': reminder.flight_number,
-                    'flight_time': reminder.flight_time, 'direction': reminder.direction, 'pickup_time': reminder.pickup_time,
-                    'street': reminder.street, 'suburb': reminder.suburb, 'price': reminder.price, 'meeting_point': reminder.meeting_point,
-                    'driver_name': driver_name, 'driver_contact': driver_contact, 'driver_plate': driver_plate, 'driver_car': driver_car
-                })
-                text_content = strip_tags(html_content)
-                email = EmailMultiAlternatives(subject, text_content, '', [reminder.email, reminder.email1, RECIPIENT_EMAIL])
-                email.attach_alternative(html_content, "text/html")
-                email.send()               
-                emails_sent += 1
-                               
-                self.stdout.write(self.style.SUCCESS(f"{subject}: email sent to {reminder.name}"))
+                    driver_name = driver_instance.driver_name
+                    driver_contact = driver_instance.driver_contact
+                    driver_plate = driver_instance.driver_plate
+                    driver_car = driver_instance.driver_car
 
-        self.stdout.write(self.style.SUCCESS(f"{emails_sent} emails sent."))
+                    html_content = render_to_string(template_name, {
+                        'name': reminder.name, 'flight_date': reminder.flight_date, 'flight_number': reminder.flight_number,
+                        'flight_time': reminder.flight_time, 'direction': reminder.direction, 'pickup_time': reminder.pickup_time,
+                        'street': reminder.street, 'suburb': reminder.suburb, 'price': reminder.price, 'meeting_point': reminder.meeting_point,
+                        'driver_name': driver_name, 'driver_contact': driver_contact, 'driver_plate': driver_plate, 'driver_car': driver_car
+                    })
+                    text_content = strip_tags(html_content)
+                    email = EmailMultiAlternatives(subject, text_content, '', [reminder.email, reminder.email1, RECIPIENT_EMAIL])
+                    email.attach_alternative(html_content, "text/html")
+                    email.send()               
+                    emails_sent += 1
+
+                    logger.info(f'{subject}: email sent to {reminder.name}')
+                    self.stdout.write(self.style.SUCCESS(f"{subject}: email sent to {reminder.name}"))
+
+            logger.info(f'booking reminder emails {emails_sent} sent')
+            self.stdout.write(self.style.SUCCESS(f"booking reminder emails {emails_sent} sent."))
+
+        except Exception as e:            
+            logger.exception(f"Error during booking reminders emailing: {e}")
+            self.stdout.write(self.style.ERROR(f"An error occurred: {str(e)}"))
