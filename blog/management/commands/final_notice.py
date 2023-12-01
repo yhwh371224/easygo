@@ -38,11 +38,13 @@ class Command(BaseCommand):
         final_notices = Post.objects.filter(flight_date=tomorrow)
         
         for final_notice in final_notices:
+
             if not final_notice.reminder:
+
                 if final_notice.cancelled or final_notice.paid:
                     continue
             
-                else:
+                else:                    
                     with self.lock:
                         html_content = render_to_string("basecamp/html_email-fnotice.html",
                                                         {'name': final_notice.name, 'email': final_notice.email})
@@ -50,7 +52,8 @@ class Command(BaseCommand):
                         email = EmailMultiAlternatives("Final notice", text_content, '', [final_notice.email, RECIPIENT_EMAIL, final_notice.email1])
                         email.attach_alternative(html_content, "text/html")
                         email.send()
-                        logger.info(f'final_notice sent to {final_notice.name}, {final_notice.pickup_time}')
+
+                        logger.info(f'........{final_notice.name}, {final_notice.pickup_time}')
 
                 
         
