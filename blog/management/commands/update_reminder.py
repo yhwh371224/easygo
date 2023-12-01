@@ -46,7 +46,7 @@ class Command(BaseCommand):
                     post.save()
                     updated += 1
     
-                    logger.info(f'Updated reminder for {post.name}, {post.flight_date}, {post.pickup_time}')
+                    logger.info(f'........{post.name}, {post.flight_date}, {post.pickup_time}')
             
         
 
