@@ -104,7 +104,7 @@ class Command(BaseCommand):
                     email.attach_alternative(html_content, "text/html")
                     email.send() 
 
-                    logger.info(f'Booking reminder for {reminder.name}, {reminder.pickup_time}')
+                    logger.info(f'........{subject}: {reminder.name}, {reminder.pickup_time}')
 
                     if reminder.email not in sent_emails_set:
                         # Add the sent email to the set only if it's not already in the set
