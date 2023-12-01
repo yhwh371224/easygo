@@ -76,7 +76,8 @@ class Command(BaseCommand):
 
     def send_email_task(self, reminders, template_name, subject):
         emails_sent = 0  # Initialize the counter
-        
+        sent_emails_set = set()  # Set to track already sent emails
+
         try:
             for reminder in reminders:
                 if reminder.cancelled:
@@ -96,17 +97,19 @@ class Command(BaseCommand):
                         'driver_name': driver_name, 'driver_contact': driver_contact, 'driver_plate': driver_plate, 'driver_car': driver_car
                     })
                     text_content = strip_tags(html_content)
-                    email = EmailMultiAlternatives(subject, text_content, '', [reminder.email, reminder.email1, RECIPIENT_EMAIL])
+                    email = EmailMultiAlternatives(subject, text_content, '', [reminder.email])
                     email.attach_alternative(html_content, "text/html")
-                    email.send()               
-                    emails_sent += 1
+                    email.send() 
+
+                    if reminder.email not in sent_emails_set:
+                        # Add the sent email to the set only if it's not already in the set
+                        sent_emails_set.add(reminder.email)              
+                        emails_sent += 1
 
                     logger.info(f'{subject}: email sent to {reminder.name}')
-                    self.stdout.write(self.style.SUCCESS(f"{subject}: email sent to {reminder.name}"))
-
+                    
             logger.info(f'booking reminder emails {emails_sent} sent')
-            self.stdout.write(self.style.SUCCESS(f"booking reminder emails {emails_sent} sent."))
-
+            
         except Exception as e:            
             logger.exception(f"Error during booking reminders emailing: {e}")
             self.stdout.write(self.style.ERROR(f"An error occurred: {str(e)}"))
