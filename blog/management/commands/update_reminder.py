@@ -31,22 +31,24 @@ class Command(BaseCommand):
         self.lock = threading.Lock()
 
     def handle(self, *args, **options):
-        updated = 0  # Initialize the counter
         my_list = main()  # Call the main function to get the list
+        unique_emails = set()  # Use a set to store unique email addresses
 
         today = datetime.now()
         three_days_later = today + timedelta(days=3)
         
         with self.lock:
-            for list_email in my_list:      
-                posts = Post.objects.filter(email__iexact=list_email, flight_date__range=[today, three_days_later])
-    
-                for post in posts:
-                    post.reminder = True
-                    post.save()
-                    updated += 1
-    
-                    logger.info(f'........{post.name}, {post.flight_date}, {post.pickup_time}')
-            
-        
+            for list_email in my_list:
+                # Check if the email address has already been processed
+                if list_email in unique_emails:
+                    continue
+                else: 
+                    unique_emails.add(list_email)
 
+                    posts = Post.objects.filter(email__iexact=list_email, flight_date__range=[today, three_days_later])
+
+                    for post in posts:
+                        post.reminder = True
+                        post.save()
+
+                        logger.info(f'........{post.name}, {post.flight_date}, {post.pickup_time}')
