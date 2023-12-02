@@ -14,7 +14,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 logger = logging.getLogger('blog.booking_reminder')
 logger.setLevel(logging.INFO)
 
-formatter = logging.Formatter('%(asctime)s:%(levelname)s:%(name)s:%(message)s')
+formatter = logging.Formatter('%(asctime)s:%(message)s')
 
 # Create the logs directory if it doesn't exist
 logs_dir = os.path.join(BASE_DIR, 'logs')
@@ -100,7 +100,7 @@ class Command(BaseCommand):
                         'driver_name': driver_name, 'driver_contact': driver_contact, 'driver_plate': driver_plate, 'driver_car': driver_car
                     })
                     text_content = strip_tags(html_content)
-                    email = EmailMultiAlternatives(subject, text_content, '', [reminder.email, RECIPIENT_EMAIL])
+                    email = EmailMultiAlternatives(subject, text_content, '', [reminder.email])
                     email.attach_alternative(html_content, "text/html")
                     email.send() 
 

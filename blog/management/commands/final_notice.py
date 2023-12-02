@@ -14,7 +14,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 logger = logging.getLogger('blog.final_notice')
 logger.setLevel(logging.INFO)
 
-formatter = logging.Formatter('%(asctime)s:%(levelname)s:%(name)s:%(message)s')
+formatter = logging.Formatter('%(asctime)s:%(message)s')
 
 # Create the logs directory if it doesn't exist
 logs_dir = os.path.join(BASE_DIR, 'logs')
@@ -49,7 +49,7 @@ class Command(BaseCommand):
                         html_content = render_to_string("basecamp/html_email-fnotice.html",
                                                         {'name': final_notice.name, 'email': final_notice.email})
                         text_content = strip_tags(html_content)
-                        email = EmailMultiAlternatives("Final notice", text_content, '', [final_notice.email, RECIPIENT_EMAIL, final_notice.email1])
+                        email = EmailMultiAlternatives("Final notice", text_content, '', [final_notice.email, RECIPIENT_EMAIL])
                         email.attach_alternative(html_content, "text/html")
                         email.send()
 
