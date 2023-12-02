@@ -11,7 +11,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 logger = logging.getLogger('blog.update_reminder')
 logger.setLevel(logging.INFO)
 
-formatter = logging.Formatter('%(asctime)s:%(levelname)s:%(name)s:%(message)s')
+formatter = logging.Formatter('%(asctime)s:%(message)s')
 
 # Create the logs directory if it doesn't exist
 logs_dir = os.path.join(BASE_DIR, 'logs')
