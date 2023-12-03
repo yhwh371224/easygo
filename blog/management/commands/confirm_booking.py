@@ -6,7 +6,8 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from blog.models import Post
-from datetime import datetime, timedelta
+from datetime import date, timedelta
+from django.utils import timezone
 from main.settings import RECIPIENT_EMAIL
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -36,8 +37,9 @@ class Command(BaseCommand):
         self.send_email()
 
     def send_email(self):
-        one_hour_ago = datetime.now() - timedelta(hours=1)
-        posts = Post.objects.filter(created__gte=one_hour_ago)
+        current_datetime = timezone.now()
+
+        posts = Post.objects.filter(created__date=current_datetime.date())
 
         if posts.exists():
             self.send_email_task(posts, "basecamp/html_email-confirmation.html", "EasyGo Booking confirmation")
