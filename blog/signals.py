@@ -109,52 +109,65 @@ def notify_user_inquiry_point(sender, instance, created, **kwargs):
 
 
 # PayPal Payment & Google Calendar payment update
-# If modifying these scopes, delete the file token.json.
-
 @receiver(post_save, sender=Payment)
 def notify_user_payment(sender, instance, created, **kwargs):      
     post_name = Post.objects.filter(
         Q(name__iregex=r'^%s$' % re.escape(instance.item_name)) | 
         Q(email__iexact=instance.payer_email)
     ).first()
-    
-    if post_name: 
+
+    # instance.gross_amount = (instance.gross_amount / 1.03)
+   
+    if post_name:         
         post_name.paid = instance.gross_amount
-        post_name.save()         
+        post_name.save()
         
-        html_content = render_to_string("basecamp/html_email-payment-success.html",
-                                    {'name': instance.item_name, 'email': instance.payer_email,
-                                     'amount': instance.gross_amount })
-        text_content = strip_tags(html_content)
-        email = EmailMultiAlternatives(
-            "PayPal payment - EasyGo",
-            text_content,
-            '',
-            [instance.payer_email, RECIPIENT_EMAIL]
-        )        
-        email.attach_alternative(html_content, "text/html")        
-        email.send()
+        price_as_int = int(post_name.price)
+        gross_price = price_as_int * 1.03
+        gross_amount_as_numeric = float(instance.gross_amount)
+        net_amount = gross_amount_as_numeric / 1.03
+        diff_amount_numeric = price_as_int - net_amount
+        diff_amount_str = str(diff_amount_numeric)
 
+        if instance.gross_amount == str(gross_price):
+            html_template = "basecamp/html_email-payment-success.html"
+        else:
+            html_template = "basecamp/html_email-payment-success1.html"
 
-        if post_name.return_pickup_time == 'x':
-                post_name_second = Post.objects.filter(email=post_name.email)[1]
-                post_name_second.paid = instance.gross_amount
-                post_name_second.save()
-     
+        html_content = render_to_string(html_template, {
+            'name': instance.item_name,
+            'email': instance.payer_email,
+            'amount': instance.gross_amount,
+            'diff_amount': diff_amount_str
+        })
+
+        send_email([instance.payer_email, RECIPIENT_EMAIL], html_content)        
+
+    elif post_name.return_pickup_time == 'x':
+        post_name_second = Post.objects.filter(email=post_name.email)[1]
+        if post_name_second:
+            post_name_second.paid = instance.gross_amount
+            post_name_second.save()    
             
     else:
         html_content = render_to_string("basecamp/html_email-noIdentity.html",
                                     {'name': instance.item_name, 'email': instance.payer_email,
                                      'amount': instance.gross_amount })
-        text_content = strip_tags(html_content)
-        email = EmailMultiAlternatives(
-            "PayPal payment - EasyGo",
-            text_content,
-            '',
-            [instance.payer_email, RECIPIENT_EMAIL]
-        )        
-        email.attach_alternative(html_content, "text/html")        
-        email.send()
+        
+        send_email([instance.payer_email, RECIPIENT_EMAIL], html_content)
+
+EMAIL_SUBJECT = "Payment - EasyGo"
+
+def send_email(recipients, html_content):
+    text_content = strip_tags(html_content)
+    email = EmailMultiAlternatives(
+        EMAIL_SUBJECT,
+        text_content,
+        '',
+        recipients
+    )
+    email.attach_alternative(html_content, "text/html")
+    email.send()
     
 
 
