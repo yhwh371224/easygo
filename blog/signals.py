@@ -63,7 +63,7 @@ def notify_user_inquiry(sender, instance, created, **kwargs):
                                          'notice': instance.notice, 'private_ride': instance.private_ride,})
         text_content = strip_tags(html_content)
         email = EmailMultiAlternatives(
-            "Booking Inquiry - EasyGo",
+            "EasyGo Booking Inquiry",
             text_content,
             '',
             [instance.email]
@@ -81,7 +81,7 @@ def notify_user_inquiry_point(sender, instance, created, **kwargs):
                                          })
         text_content = strip_tags(html_content)
         email = EmailMultiAlternatives(
-            "Booking Inquiry - EasyGo",
+            "EasyGo Booking Inquiry",
             text_content,
             '',
             [instance.email]
