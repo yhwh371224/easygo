@@ -68,8 +68,8 @@ class Command(BaseCommand):
                     email.attach_alternative(html_content, "text/html")
                     email.send() 
 
-                    # post.sent_email = True
-                    # post.save()
+                    post.sent_email = True
+                    post.save()
 
                     logger.info(f'........{subject}: {post.name}, {post.flight_date}, {post.pickup_time}')
 
