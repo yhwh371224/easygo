@@ -1222,3 +1222,143 @@ WARNING 2023-12-03 19:41:58,745 log Not Found: /.env
 WARNING 2023-12-03 19:42:26,947 log Not Found: /inquiry3/
 WARNING 2023-12-03 19:43:27,992 log Not Found: /retrieve_post/
 WARNING 2023-12-03 19:44:30,388 log Not Found: /re_confirm/
+WARNING 2023-12-03 19:47:17,715 log Not Found: /.env
+WARNING 2023-12-03 19:49:03,183 log Not Found: /.env
+WARNING 2023-12-03 19:49:04,080 log Forbidden (Referer checking failed - no Referer.): /
+DEBUG 2023-12-03 19:49:34,746 base Exception while resolving variable 'email1' in template 'basecamp/html_email-inquiry-response.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'email1'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'Context' has no attribute 'email1'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'email1'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [email1] in [{'True': True, 'False': False, 'None': None}, {'company_name': '', 'name': 'Sandrine Ellis', 'contact': '+64272520707', 'email': 'sandrine.v.c.ellis@gmail.com', 'flight_date': datetime.date(2023, 12, 9), 'flight_number': 'NZ 103', 'flight_time': '10:25', 'pickup_time': '11:30', 'direction': 'Pickup from Intl Airport', 'street': '161 Sussex Street', 'suburb': 'Hotels in CBD', 'no_of_passenger': '2', 'no_of_baggage': '4', 'return_direction': 'Drop off to Intl Airport', 'return_flight_date': datetime.date(2023, 12, 14), 'return_flight_number': 'NZ 112', 'return_flight_time': '19:15', 'return_pickup_time': '15:15', 'message': '', 'price': '140', 'notice': '', 'private_ride': True}]
+DEBUG 2023-12-03 19:50:48,639 base Exception while resolving variable 'email1' in template 'basecamp/html_email-inquiry-response.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'email1'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'Context' has no attribute 'email1'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'email1'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [email1] in [{'True': True, 'False': False, 'None': None}, {'company_name': '', 'name': 'Leica Jamcotchian', 'contact': '0410282648', 'email': 'leicajam@hotmail.com', 'flight_date': datetime.date(2024, 1, 1), 'flight_number': 'Va477', 'flight_time': '08:10', 'pickup_time': '06:30', 'direction': 'Drop off to Domestic Airport', 'street': '37 Faulkner st', 'suburb': 'Old Toongabbie', 'no_of_passenger': '5', 'no_of_baggage': '2', 'return_direction': None, 'return_flight_date': None, 'return_flight_number': None, 'return_flight_time': None, 'return_pickup_time': None, 'message': '2 adult \r\n3kids (5/2/4 months', 'price': '185 (inc tolls)', 'notice': '3 car seats required', 'private_ride': False}]
+DEBUG 2023-12-03 19:51:35,663 base Exception while resolving variable 'email1' in template 'basecamp/html_email-inquiry-response.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'email1'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'Context' has no attribute 'email1'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'email1'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [email1] in [{'True': True, 'False': False, 'None': None}, {'company_name': '', 'name': 'Sev Lapuz', 'contact': '0400969777', 'email': 'srlapuz@gmail.com', 'flight_date': datetime.date(2023, 12, 18), 'flight_number': 'PR212', 'flight_time': '11:35', 'pickup_time': '07:00', 'direction': 'Drop off to Intl Airport', 'street': '3/149 Toongabbie Road', 'suburb': 'Toongabbie', 'no_of_passenger': '2', 'no_of_baggage': '4', 'return_direction': 'Pickup from Intl Airport', 'return_flight_date': datetime.date(2024, 1, 19), 'return_flight_number': 'PR211', 'return_flight_time': '10:15', 'return_pickup_time': '11:30', 'message': 'Pls. email quote first', 'price': '140', 'notice': '', 'private_ride': False}]
+DEBUG 2023-12-03 19:51:50,797 base Exception while resolving variable 'email1' in template 'basecamp/html_email-inquiry-response.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'email1'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'Context' has no attribute 'email1'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'email1'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [email1] in [{'True': True, 'False': False, 'None': None}, {'company_name': '', 'name': 'Sev Lapuz', 'contact': '0400969777', 'email': 'srlapuz@gmail.com', 'flight_date': datetime.date(2023, 12, 18), 'flight_number': 'PR212', 'flight_time': '11:35', 'pickup_time': '07:00', 'direction': 'Drop off to Intl Airport', 'street': '3/149 Toongabbie Road', 'suburb': 'Toongabbie', 'no_of_passenger': '2', 'no_of_baggage': '4', 'return_direction': 'Pickup from Intl Airport', 'return_flight_date': datetime.date(2024, 1, 19), 'return_flight_number': 'PR211', 'return_flight_time': '10:15', 'return_pickup_time': '11:30', 'message': 'Pls. email quote first', 'price': '280', 'notice': '', 'private_ride': False}]
+WARNING 2023-12-03 19:54:23,105 log Not Found: /.env
+WARNING 2023-12-03 19:54:24,096 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-12-03 20:01:21,613 log Not Found: /.env
+WARNING 2023-12-03 20:04:02,158 log Not Found: /.env
+WARNING 2023-12-03 20:04:35,925 log Not Found: /.well-known/traffic-advice
+WARNING 2023-12-03 20:06:47,231 log Not Found: /retrieve_post/
+WARNING 2023-12-03 20:08:03,037 log Not Found: /retrieve_inquiry/
+WARNING 2023-12-03 20:08:56,571 log Not Found: /re_confirm_email/
+WARNING 2023-12-03 20:09:53,760 log Not Found: /re_confirm/
+WARNING 2023-12-03 20:10:47,615 log Not Found: /inquiry3/
+WARNING 2023-12-03 20:13:03,990 log Not Found: /.env
+WARNING 2023-12-03 20:15:57,475 log Not Found: /robots.txt
+WARNING 2023-12-03 20:26:42,853 log Not Found: /.env
