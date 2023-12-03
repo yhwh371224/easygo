@@ -11,7 +11,7 @@ from main.settings import RECIPIENT_EMAIL
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-logger = logging.getLogger('blog.booking_confirmation')
+logger = logging.getLogger('blog.confirm_booking')
 logger.setLevel(logging.INFO)
 
 formatter = logging.Formatter('%(asctime)s:%(message)s')
@@ -21,7 +21,7 @@ logs_dir = os.path.join(BASE_DIR, 'logs')
 if not os.path.exists(logs_dir):
     os.makedirs(logs_dir)
 
-file_handler = logging.FileHandler(os.path.join(logs_dir, 'booking_confirmation.log'))
+file_handler = logging.FileHandler(os.path.join(logs_dir, 'confirm_booking.log'))
 file_handler.setFormatter(formatter)
 
 logger.addHandler(file_handler)
@@ -42,7 +42,6 @@ class Command(BaseCommand):
         if posts.exists():
             self.send_email_task(posts, "basecamp/html_email-confirmation.html", "EasyGo Booking confirmation")
         else:
-            # 적절한 로깅 또는 메시지를 남기고, 처리할 내용 추가
             logger.info("No upcoming flights within the last hour.")
 
     def send_email_task(self, posts, template_name, subject):
@@ -69,8 +68,8 @@ class Command(BaseCommand):
                     email.attach_alternative(html_content, "text/html")
                     email.send() 
 
-                    post.sent_email = True
-                    post.save()
+                    # post.sent_email = True
+                    # post.save()
 
                     logger.info(f'........{subject}: {post.name}, {post.flight_date}, {post.pickup_time}')
 

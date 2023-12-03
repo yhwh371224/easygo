@@ -75,6 +75,7 @@ class Post(models.Model):
     cancelled = models.BooleanField(default=False, blank=True)    
     private_ride = models.BooleanField(default=False, blank=True)
     reminder = models.BooleanField(default=False, blank=True)
+    sent_email = models.BooleanField(default=False, blank=True)
     calendar_event_id = models.CharField(max_length=255, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
 
