@@ -2652,3 +2652,76 @@ WARNING 2023-12-04 07:58:31,219 log Not Found: //wp-content/plugins/revslider/in
 WARNING 2023-12-04 07:58:32,305 log Not Found: //wp-content/plugins/revslider/includes/external/page/up.php
 ERROR 2023-12-04 07:59:03,675 log Internal Server Error: /paypal_ipn/
 WARNING 2023-12-04 08:02:15,928 log Not Found: /robots.txt
+WARNING 2023-12-04 08:12:06,780 log Not Found: /shop/ko/product/moncler-maya-겨울-다운-재킷-망-짧은-광택-지퍼-블랙/
+DEBUG 2023-12-04 08:12:15,139 base Exception while resolving variable 'email1' in template 'basecamp/html_email-inquiry-response.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'email1'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'Context' has no attribute 'email1'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'email1'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [email1] in [{'True': True, 'False': False, 'None': None}, {'company_name': '', 'name': 'James Alexander', 'contact': '0422233994', 'email': 'jwood.alexander@gmail.com', 'flight_date': datetime.date(2023, 12, 15), 'flight_number': 'Ua100', 'flight_time': '11:50', 'pickup_time': '08:00', 'direction': 'Drop off to Intl Airport', 'street': '5 Bolwarra Ave', 'suburb': 'West Pymble', 'no_of_passenger': '5', 'no_of_baggage': '3', 'return_direction': None, 'return_flight_date': None, 'return_flight_number': None, 'return_flight_time': None, 'return_pickup_time': None, 'message': '', 'price': '140', 'notice': '', 'private_ride': False}]
+WARNING 2023-12-04 08:44:58,533 log Not Found: /robots.txt
+WARNING 2023-12-04 08:47:00,541 log Not Found: /robots.txt
+WARNING 2023-12-04 08:56:50,135 log Not Found: /ads.txt
+WARNING 2023-12-04 09:46:11,272 log Not Found: /robots.txt
+WARNING 2023-12-04 09:46:28,866 log Not Found: /robots.txt
+ERROR 2023-12-04 09:57:09,676 log Internal Server Error: /paypal_ipn/
+WARNING 2023-12-04 10:08:43,428 log Not Found: /shop/ko/product/moncler-down-coat-추천-여성-슬림-windproof-army-green/
+ERROR 2023-12-04 10:13:26,961 log Internal Server Error: /paypal_ipn/
+WARNING 2023-12-04 10:26:25,873 log Not Found: /robots.txt
+DEBUG 2023-12-04 10:32:30,265 base Exception while resolving variable 'email1' in template 'basecamp/html_email-inquiry-response.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'email1'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'Context' has no attribute 'email1'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'email1'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [email1] in [{'True': True, 'False': False, 'None': None}, {'company_name': '', 'name': 'Siddharth Jangir', 'contact': '0478489598', 'email': 'siddharth.jangir@gmail.com', 'flight_date': datetime.date(2023, 12, 14), 'flight_number': 'AI-301', 'flight_time': '10:15', 'pickup_time': '06:15', 'direction': 'Drop off to Intl Airport', 'street': '5-15 Balmoral St', 'suburb': 'Waitara', 'no_of_passenger': '3', 'no_of_baggage': '6', 'return_direction': 'Pickup from Intl Airport', 'return_flight_date': datetime.date(2024, 1, 28), 'return_flight_number': 'AI-302', 'return_flight_time': '08:10', 'return_pickup_time': '09:10', 'message': '', 'price': '270', 'notice': '', 'private_ride': False}]
+ERROR 2023-12-04 10:33:48,665 log Internal Server Error: /paypal_ipn/

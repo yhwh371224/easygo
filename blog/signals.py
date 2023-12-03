@@ -115,21 +115,18 @@ def notify_user_payment(sender, instance, created, **kwargs):
         Q(name__iregex=r'^%s$' % re.escape(instance.item_name)) | 
         Q(email__iexact=instance.payer_email)
     ).first()
-
-    # instance.gross_amount = (instance.gross_amount / 1.03)
    
     if post_name:         
         post_name.paid = instance.gross_amount
         post_name.save()
         
         price_as_int = int(post_name.price)
-        gross_price = price_as_int * 1.03
         gross_amount_as_numeric = float(instance.gross_amount)
         net_amount = gross_amount_as_numeric / 1.03
         diff_amount_numeric = price_as_int - net_amount
         diff_amount_str = str(diff_amount_numeric)
 
-        if instance.gross_amount == str(gross_price):
+        if net_amount == price_as_int:
             html_template = "basecamp/html_email-payment-success.html"
         else:
             html_template = "basecamp/html_email-payment-success1.html"
@@ -137,17 +134,17 @@ def notify_user_payment(sender, instance, created, **kwargs):
         html_content = render_to_string(html_template, {
             'name': instance.item_name,
             'email': instance.payer_email,
-            'amount': instance.gross_amount,
+            'amount': post_name.price,
             'diff_amount': diff_amount_str
         })
 
         send_email([instance.payer_email, RECIPIENT_EMAIL], html_content)        
 
-    elif post_name.return_pickup_time == 'x':
-        post_name_second = Post.objects.filter(email=post_name.email)[1]
-        if post_name_second:
-            post_name_second.paid = instance.gross_amount
-            post_name_second.save()    
+        if post_name.return_pickup_time == 'x':
+            post_name_second = Post.objects.filter(email=post_name.email)[1]
+            if post_name_second:
+                post_name_second.paid = instance.gross_amount
+                post_name_second.save()    
             
     else:
         html_content = render_to_string("basecamp/html_email-noIdentity.html",
