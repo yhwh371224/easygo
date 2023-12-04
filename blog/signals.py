@@ -119,6 +119,12 @@ def notify_user_payment(sender, instance, created, **kwargs):
     if post_name:         
         post_name.paid = instance.gross_amount
         post_name.save()
+
+        if post_name.return_pickup_time == 'x':
+            post_name_second = Post.objects.filter(email=post_name.email)[1]
+            if post_name_second:
+                post_name_second.paid = instance.gross_amount
+                post_name_second.save()    
         
         price_as_int = int(post_name.price)
         gross_amount_as_numeric = float(instance.gross_amount)
@@ -138,13 +144,7 @@ def notify_user_payment(sender, instance, created, **kwargs):
             'diff_amount': diff_amount_str
         })
 
-        send_email([instance.payer_email, RECIPIENT_EMAIL], html_content)        
-
-        if post_name.return_pickup_time == 'x':
-            post_name_second = Post.objects.filter(email=post_name.email)[1]
-            if post_name_second:
-                post_name_second.paid = instance.gross_amount
-                post_name_second.save()    
+        send_email([instance.payer_email, RECIPIENT_EMAIL], html_content)  
             
     else:
         html_content = render_to_string("basecamp/html_email-noIdentity.html",
