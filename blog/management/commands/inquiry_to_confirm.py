@@ -38,6 +38,7 @@ class Command(BaseCommand):
             for list_email in my_list:
 
                 if list_email in unique_emails:
+                    logger.info(f'........ Already done')
                     continue
 
                 else: 
