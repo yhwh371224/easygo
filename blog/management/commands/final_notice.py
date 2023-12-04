@@ -42,7 +42,7 @@ class Command(BaseCommand):
             if not final_notice.reminder:
 
                 if final_notice.cancelled or final_notice.paid:
-                    logger.info(f'paid:{final_notice.paid} or cancelled:{final_notice.cancelled}')
+                    logger.info(f'........{final_notice.name}, {final_notice.pickup_time}, paid:{final_notice.paid} | cancelled:{final_notice.cancelled}')
                     continue
             
                 else:                    
