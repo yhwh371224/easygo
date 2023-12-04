@@ -37,8 +37,8 @@ class Command(BaseCommand):
         self.send_email()
 
     def send_email(self):
-        current_datetime = timezone.now()
-        # current_datetime = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
+        current_datetime = timezone.localtime(timezone.now())
+        posts = Post.objects.filter(created__date=current_datetime.date())
 
         posts = Post.objects.filter(created__date=current_datetime.date())
         
