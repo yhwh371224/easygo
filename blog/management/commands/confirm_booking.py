@@ -37,14 +37,15 @@ class Command(BaseCommand):
         self.send_email()
 
     def send_email(self):
-        current_datetime = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
+        current_datetime = timezone.now()
+        # current_datetime = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
 
         posts = Post.objects.filter(created__date=current_datetime.date())
-
+        
         if posts.exists():
             self.send_email_task(posts, "basecamp/html_email-confirmation.html", "EasyGo Booking confirmation")
         else:
-            logger.info("No upcoming flights within the last hour.")
+            logger.info("No upcoming flights today.")
 
     def send_email_task(self, posts, template_name, subject):
         # sent_emails_set = set()  
@@ -52,6 +53,7 @@ class Command(BaseCommand):
         for post in posts:
 
             if post.sent_email:
+                logger.info(f'....Already sent: {post.name}, {post.flight_date}, {post.pickup_time}')
                 continue 
 
             else:
