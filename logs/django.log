@@ -5335,3 +5335,8 @@ WARNING 2023-12-05 18:26:14,462 log Forbidden (Referer checking failed - no Refe
 WARNING 2023-12-05 18:58:42,829 log Not Found: /robots.txt
 WARNING 2023-12-05 19:23:31,757 log Not Found: /robots.txt
 WARNING 2023-12-05 19:44:56,549 log Not Found: /robots.txt
+WARNING 2023-12-05 19:52:26,024 log Not Found: /robots.txt
+WARNING 2023-12-05 19:52:51,063 log Not Found: /wp-content/admin.php
+WARNING 2023-12-05 19:52:52,512 log Not Found: /wp-content/plugins/wp-task-agent/scheduler.php
+WARNING 2023-12-05 19:52:53,831 log Not Found: /wp-content/admin.php
+WARNING 2023-12-05 19:54:07,186 log Not Found: /robots.txt
