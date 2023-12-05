@@ -3098,3 +3098,12 @@ WARNING 2023-12-05 09:26:48,346 log Not Found: /bicomposer/
 WARNING 2023-12-05 09:26:51,404 log Not Found: /robots.txt
 WARNING 2023-12-05 09:26:51,585 log Not Found: /robots.txt
 WARNING 2023-12-05 09:41:12,652 log Not Found: /robots.txt
+WARNING 2023-12-05 10:01:50,887 log Not Found: /inquiry3/
+WARNING 2023-12-05 10:07:27,810 log Not Found: /.well-known/traffic-advice
+WARNING 2023-12-05 10:14:56,685 log Forbidden (CSRF cookie not set.): /confirm_booking_detail/
+WARNING 2023-12-05 10:18:42,231 log Not Found: /airport-transfers-north-parramatta/
+WARNING 2023-12-05 10:28:56,917 log Not Found: /wp-content/plugins/blog-designer-pack/readme.txt
+WARNING 2023-12-05 10:55:19,015 log Not Found: /robots.txt
+WARNING 2023-12-05 11:09:19,289 log Not Found: /.env
+WARNING 2023-12-05 11:09:21,111 log Forbidden (Referer checking failed - no Referer.): /
+ERROR 2023-12-05 11:12:07,851 log Internal Server Error: /paypal_ipn/

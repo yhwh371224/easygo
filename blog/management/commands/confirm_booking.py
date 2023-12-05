@@ -43,10 +43,9 @@ class Command(BaseCommand):
         if posts.exists():
             self.send_email_task(posts, "basecamp/html_email-confirmation.html", "EasyGo Booking confirmation")
         else:
-            logger.info("No upcoming flights today.")
+            logger.info("No booking created until now.")
 
     def send_email_task(self, posts, template_name, subject):
-        # sent_emails_set = set()  
         
         for post in posts:
 
@@ -75,5 +74,4 @@ class Command(BaseCommand):
 
                     logger.info(f'........{subject}: {post.name}, {post.flight_date}, {post.pickup_time}')
 
-                    # if post.email not in sent_emails_set:
-                    #     sent_emails_set.add(post.email)              
+          
