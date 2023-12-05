@@ -3459,3 +3459,34 @@ WARNING 2023-12-05 12:01:30,636 log Not Found: /airport-transfers-cherrybrook/
 WARNING 2023-12-05 12:03:25,036 log Not Found: /shop/es/product-category/manton-de-moncler/
 WARNING 2023-12-05 12:11:35,055 log Not Found: /robots.txt
 WARNING 2023-12-05 12:13:27,015 log Not Found: /robots.txt
+DEBUG 2023-12-05 12:28:02,977 base Exception while resolving variable 'email1' in template 'basecamp/html_email-inquiry-response.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'email1'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'Context' has no attribute 'email1'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'email1'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [email1] in [{'True': True, 'False': False, 'None': None}, {'company_name': '', 'name': 'Adeline Yeung', 'contact': '0410659572', 'email': 'adeline.m.yeung@gmail.com', 'flight_date': datetime.date(2023, 12, 7), 'flight_number': 'VA965', 'flight_time': '17:00', 'pickup_time': '14:30', 'direction': 'Drop off to Domestic Airport', 'street': '26 Dudley Ave', 'suburb': 'Roseville', 'no_of_passenger': '3', 'no_of_baggage': '4', 'return_direction': 'Pickup from Domestic Airport', 'return_flight_date': datetime.date(2023, 12, 12), 'return_flight_number': 'VA970', 'return_flight_time': '19:40', 'return_pickup_time': '20:00', 'message': '', 'price': '200', 'notice': 'If there are no ski bags, $200', 'private_ride': False}]
