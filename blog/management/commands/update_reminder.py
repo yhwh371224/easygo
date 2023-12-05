@@ -48,7 +48,11 @@ class Command(BaseCommand):
                     posts = Post.objects.filter(email__iexact=list_email, flight_date__range=[today, three_days_later])
 
                     for post in posts:
-                        post.reminder = True
-                        post.save()
+                        if post.reminder:
+                            logger.info(f'....Already checked:{post.name}, {post.flight_date}, {post.pickup_time}')
+                            continue
+                        else: 
+                            post.reminder = True
+                            post.save()
 
-                        logger.info(f'........{post.name}, {post.flight_date}, {post.pickup_time}')
+                            logger.info(f'....Just now executed:{post.name}, {post.flight_date}, {post.pickup_time}')
