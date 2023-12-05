@@ -7,6 +7,7 @@ from django.dispatch import receiver
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+from decimal import Decimal
 import re
 from django.db.models import Q
 # google calendar 
@@ -124,15 +125,14 @@ def notify_user_payment(sender, instance, created, **kwargs):
             post_name_second = Post.objects.filter(email=post_name.email)[1]
             if post_name_second:
                 post_name_second.paid = instance.gross_amount
-                post_name_second.save()    
+                post_name_second.save()
         
         price_as_int = int(post_name.price)
-        gross_amount_as_numeric = float(instance.gross_amount)
-        net_amount = gross_amount_as_numeric / 1.03
-        diff_amount_numeric = price_as_int - net_amount
+        gross_amount_as_numeric = Decimal(instance.gross_amount) / 1.03
+        diff_amount_numeric = price_as_int - gross_amount_as_numeric
         diff_amount_str = str(diff_amount_numeric)
 
-        if net_amount == price_as_int:
+        if post_name.price == str(gross_amount_as_numeric):
             html_template = "basecamp/html_email-payment-success.html"
         else:
             html_template = "basecamp/html_email-payment-success1.html"
