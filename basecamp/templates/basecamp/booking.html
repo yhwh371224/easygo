@@ -448,10 +448,16 @@
 					<sup class="text-danger ms-1">if not sure, just skip</sup>
                 </div>
 				<div class="mb-3 pb-1">
-					<label class="form-label" >I confirm my booking&nbsp;&nbsp;&nbsp;</label>
+					<label class="form-label" >I would like to confirm my booking&nbsp;&nbsp;&nbsp;</label>
 					<input type="checkbox" required name="is_confirmed" value="True">
 					<div class="invalid-feedback">Please check this box if you want to proceed</div>
 				</div>				
+				<br>
+				<div class="mb-3 pb-1">
+					<label class="form-label" >To receive email confirmation, check the box&nbsp;&nbsp;&nbsp;</label>
+					<input type="checkbox" name="sent_email" value="True">
+					<div class="invalid-feedback">Please check this box if you want to proceed</div>
+				</div>			
 				<br>				
 				<div class="text-center pt-2">
 					<button class="btn btn-primary" type="submit" id="submitButton">Submit</button>
