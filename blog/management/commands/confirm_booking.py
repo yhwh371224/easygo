@@ -43,35 +43,41 @@ class Command(BaseCommand):
         if posts.exists():
             self.send_email_task(posts, "basecamp/html_email-confirmation.html", "EasyGo Booking confirmation")
         else:
-            logger.info("No booking created until now.")
+            logger.info("No booking created today until now.")
 
     def send_email_task(self, posts, template_name, subject):
-        
-        for post in posts:
+        with self.lock:
+            try:
+                for post in posts:
 
-            if post.sent_email:
-                logger.info(f'....Already sent: {post.name}, {post.flight_date}, {post.pickup_time}')
-                continue 
+                    if not post.sent_email:
+                        post.sent_email = True
+                        post.save()
 
-            else:
-                with self.lock:
+                        html_content = render_to_string(template_name, {
+                            'company_name': post.company_name, 'name': post.name, 'contact': post.contact, 'email': post.email, 'email1': post.email1, 
+                            'flight_date': post.flight_date, 'flight_number': post.flight_number, 'flight_time': post.flight_time, 'pickup_time': post.pickup_time, 
+                            'return_direction': post.return_direction,'return_flight_date': post.return_flight_date, 'return_flight_number': post.return_flight_number, 
+                            'return_flight_time': post.return_flight_time, 'return_pickup_time': post.return_pickup_time, 'direction': post.direction, 'street': post.street, 
+                            'suburb': post.suburb, 'no_of_passenger': post.no_of_passenger, 'no_of_baggage': post.no_of_baggage, 'message': post.message, 'notice': post.notice , 
+                            'price': post.price, 'paid': post.paid }
+                        )
+                        text_content = strip_tags(html_content)
+                        email = EmailMultiAlternatives(subject, text_content, '', [post.email, RECIPIENT_EMAIL])
+                        email.attach_alternative(html_content, "text/html")
+                        email.send()                     
+                        logger.info(f'........{subject}: {post.name}, {post.flight_date}, {post.pickup_time}')
 
-                    html_content = render_to_string(template_name, {
-                        'company_name': post.company_name, 'name': post.name, 'contact': post.contact, 'email': post.email, 'email1': post.email1, 
-                        'flight_date': post.flight_date, 'flight_number': post.flight_number, 'flight_time': post.flight_time, 'pickup_time': post.pickup_time, 
-                        'return_direction': post.return_direction,'return_flight_date': post.return_flight_date, 'return_flight_number': post.return_flight_number, 
-                        'return_flight_time': post.return_flight_time, 'return_pickup_time': post.return_pickup_time, 'direction': post.direction, 'street': post.street, 
-                        'suburb': post.suburb, 'no_of_passenger': post.no_of_passenger, 'no_of_baggage': post.no_of_baggage, 'message': post.message, 'notice': post.notice , 
-                        'price': post.price, 'paid': post.paid }
-                    )
-                    text_content = strip_tags(html_content)
-                    email = EmailMultiAlternatives(subject, text_content, '', [post.email, RECIPIENT_EMAIL])
-                    email.attach_alternative(html_content, "text/html")
-                    email.send() 
+                    else:
+                        continue
 
-                    post.sent_email = True
-                    post.save()
+            except Exception as e:
+                logger.error(f"Error sending email for {post.name}: {str(e)}")
 
-                    logger.info(f'........{subject}: {post.name}, {post.flight_date}, {post.pickup_time}')
+            finally:
+                self.lock.release()
+
+
+
 
           
