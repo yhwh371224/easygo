@@ -5861,3 +5861,172 @@ Traceback (most recent call last):
     raise VariableDoesNotExist(
 django.template.base.VariableDoesNotExist: Failed lookup for key [email1] in [{'True': True, 'False': False, 'None': None}, {'company_name': '', 'name': 'Cymbeline Marie Seguan', 'contact': '0224174272', 'email': 'cymbe10@yahoo.com', 'flight_date': datetime.date(2024, 1, 11), 'flight_number': 'NZ221', 'flight_time': '07:50', 'pickup_time': '08:50', 'direction': 'Pickup from Intl Airport', 'street': 'Unit 26, 35-39 Balmoral Street', 'suburb': 'Waitara', 'no_of_passenger': '1', 'no_of_baggage': '3', 'return_direction': None, 'return_flight_date': None, 'return_flight_number': None, 'return_flight_time': None, 'return_pickup_time': None, 'message': 'I have 1 small luggage, 1 medium luggage and 1 large luggage', 'price': '120', 'notice': '', 'private_ride': False}]
 WARNING 2023-12-06 11:47:38,059 log Not Found: /p2p.html/
+WARNING 2023-12-06 12:06:16,127 log Not Found: /robots.txt
+DEBUG 2023-12-06 12:09:41,013 base Exception while resolving variable 'recaptcha_site_key' in template 'basecamp/inquiry1.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [recaptcha_site_key] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: 'd82jSqpjf3BSipaKc1vVJEEIAevp8j4A2k3r9DWDkr9elvGORqRlmWBfqROiwfXQ'>, 'request': <WSGIRequest: POST '/price_detail/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f3527722980>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f3527722980>>), 'messages': <FallbackStorage: request=<WSGIRequest: POST '/price_detail/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'flight_date': '2023-12-07', 'direction': 'Drop off to Intl Airport', 'suburb': 'Kellyville', 'no_of_passenger': '1'}, {'block': <Block Node: content. Contents: [<TextNode: '\n      <!-- Page content-'>, <Variable Node: flight_date>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: direction>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: suburb>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: no_of_passenger>, <TextNode: '</a> -->\n\t\t\t  <br><br>\n  '>, <django.template.defaulttags.CsrfTokenNode object at 0x7f3526dae650>, <TextNode: '\n\t\t\t\t<div class="mb3 pb-1'>, <Variable Node: direction>, <TextNode: '">'>, <Variable Node: direction>, <TextNode: '</option>\t\t\t\t\t\t          '>, <Variable Node: flight_date>, <TextNode: '" type="text" >\t\t\t\t  \n   '>, <IfNode>, <TextNode: '\n\t\t\t\t  <div class="mb-3 p'>, <Variable Node: suburb>, <TextNode: '</label>\t\t\t\t\t\n\t\t\t\t</div>\n'>, <Variable Node: suburb>, <TextNode: '">'>, <Variable Node: suburb>, <TextNode: '</option>\t\t\t\t\t\n\t\t\t\t  </se'>, <Variable Node: no_of_passenger>, <TextNode: '">'>, <Variable Node: no_of_passenger>, <TextNode: '</option>\t\t\t\t  \n         '>, <Variable Node: recaptcha_site_key>, <TextNode: '"></div>\n\t\t\t\t<div id="err'>]>}]
+DEBUG 2023-12-06 12:21:58,945 base Exception while resolving variable 'email1' in template 'basecamp/html_email-inquiry-response.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'email1'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'Context' has no attribute 'email1'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'email1'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [email1] in [{'True': True, 'False': False, 'None': None}, {'company_name': '', 'name': 'Daniel Davis', 'contact': '0427850017', 'email': 'cxe94t@gmail.com', 'flight_date': datetime.date(2023, 12, 10), 'flight_number': 'PR0212', 'flight_time': '12:15', 'pickup_time': '09:15', 'direction': 'Drop off to Intl Airport', 'street': 'U807 / 37 Amalfi Drive', 'suburb': 'Wentworth Point', 'no_of_passenger': '2', 'no_of_baggage': '3', 'return_direction': None, 'return_flight_date': None, 'return_flight_number': None, 'return_flight_time': None, 'return_pickup_time': None, 'message': '', 'price': '90 (inc tolls)', 'notice': '', 'private_ride': False}]
+WARNING 2023-12-06 12:26:01,003 log Not Found: /ms.php
+WARNING 2023-12-06 12:26:24,006 log Not Found: /wp-admin/about.php
+WARNING 2023-12-06 12:26:33,652 log Not Found: /wp-content/admin.php
+WARNING 2023-12-06 12:26:53,743 log Not Found: /simple.php
+WARNING 2023-12-06 12:40:39,102 log Not Found: /shop/it/product/moncler-down-coat-men-mid-length-con-cappuccio-caffe/
+WARNING 2023-12-06 12:47:32,733 log Not Found: /robots.txt
+WARNING 2023-12-06 12:51:10,092 log Not Found: /robots.txt
+WARNING 2023-12-06 12:55:10,641 log Not Found: /config/AspCms_Config.asp
+WARNING 2023-12-06 12:55:11,153 log Not Found: /include/taglib/ty.lib.php
+WARNING 2023-12-06 12:55:13,018 log Not Found: /plus/read.php
+WARNING 2023-12-06 13:04:12,281 log Forbidden (CSRF cookie not set.): /inquiry_details1/
+WARNING 2023-12-06 13:04:32,396 log Not Found: /.well-known/traffic-advice
+WARNING 2023-12-06 13:17:44,201 log Forbidden (CSRF cookie not set.): /inquiry_details1/
+ERROR 2023-12-06 13:44:04,127 log Internal Server Error: /return_trip_detail/
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/basecamp/views.py", line 1677, in return_trip_detail
+    return render(request, 'beasecamp/return_trip.html', {})
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: beasecamp/return_trip.html
+WARNING 2023-12-06 14:07:39,303 log Forbidden (CSRF cookie not set.): /confirm_booking_detail/
+WARNING 2023-12-06 14:07:48,941 log Not Found: /robots.txt
+WARNING 2023-12-06 14:15:13,267 log Not Found: /robots.txt
+WARNING 2023-12-06 14:33:49,398 log Not Found: /wp-content/plugins/royal-elementor-addons/assets/js/frontend.js
+WARNING 2023-12-06 15:07:49,757 log Not Found: /robots.txt
+WARNING 2023-12-06 15:36:57,240 log Not Found: /.well-known/acme-challenge/NINS-6ODNDYMGUR1QAT78H3SV3MBH7D_
+WARNING 2023-12-06 15:36:58,213 log Not Found: /.well-known/acme-challenge/VDRZYU3IK3H6X5Z-GUZ1KNH_LL9FPPYJ
+WARNING 2023-12-06 15:44:05,785 log Not Found: /.well-known/traffic-advice
+ERROR 2023-12-06 15:44:19,482 log Internal Server Error: /paypal_ipn/
+ERROR 2023-12-06 15:44:30,615 log Internal Server Error: /paypal_ipn/
+WARNING 2023-12-06 15:53:26,125 log Not Found: /robots.txt
+DEBUG 2023-12-06 16:02:09,231 base Exception while resolving variable 'email1' in template 'basecamp/html_email-inquiry-response.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'email1'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'Context' has no attribute 'email1'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'email1'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [email1] in [{'True': True, 'False': False, 'None': None}, {'company_name': '', 'name': 'Harshal Shah', 'contact': '0422 615 424', 'email': 'harshal_7@yahoo.com', 'flight_date': datetime.date(2023, 12, 26), 'flight_number': 'JQ28', 'flight_time': '10:35', 'pickup_time': '11:30', 'direction': 'Pickup from Intl Airport', 'street': '2/21 Water street', 'suburb': 'Hornsby', 'no_of_passenger': '4', 'no_of_baggage': '2', 'return_direction': None, 'return_flight_date': None, 'return_flight_number': None, 'return_flight_time': None, 'return_pickup_time': None, 'message': '3 Adults + 1 child (4.5 yrs old - can sit in booster seat).\r\n2 Suitcases + 4 carry-on bags', 'price': '150', 'notice': '', 'private_ride': False}]
+DEBUG 2023-12-06 16:03:18,269 base Exception while resolving variable 'email1' in template 'basecamp/html_email-inquiry-response.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'email1'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'Context' has no attribute 'email1'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'email1'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [email1] in [{'True': True, 'False': False, 'None': None}, {'company_name': '', 'name': 'Harshal Shah', 'contact': '0422 615 424', 'email': 'harshal_7@yahoo.com', 'flight_date': datetime.date(2023, 12, 14), 'flight_number': 'D7289', 'flight_time': '21:20', 'pickup_time': '18:15', 'direction': 'Drop off to Intl Airport', 'street': '2/21 Water street', 'suburb': 'Hornsby', 'no_of_passenger': '4', 'no_of_baggage': '2 suitcase and 4 carry-on bags', 'return_direction': 'Pickup from Intl Airport', 'return_flight_date': datetime.date(2023, 12, 26), 'return_flight_number': 'JQ28', 'return_flight_time': '10:35', 'return_pickup_time': '11:30', 'message': 'on 14th December -- going to International airport (we are 2 adults and 1 child who can sit in booster seat) 1 suitcase and 3 carry-on\r\nAnd\r\non 26th December -- pick-up from International airport (we are 3 adults and 1 child who can sit in booster seat) 2 suitcases and 4 carry-on', 'price': '300', 'notice': '', 'private_ride': False}]
