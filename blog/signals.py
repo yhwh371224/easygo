@@ -127,21 +127,21 @@ def notify_user_payment(sender, instance, created, **kwargs):
                 post_name_second.paid = instance.gross_amount
                 post_name_second.save()
         
-        price_as_int = int(post_name.price)
-        gross_amount_as_numeric = Decimal(instance.gross_amount) / 1.03
-        diff_amount_numeric = price_as_int - gross_amount_as_numeric
-        diff_amount_str = str(diff_amount_numeric)
+        # price_as_int = int(post_name.price)
+        # gross_amount_as_numeric = Decimal(instance.gross_amount) / 1.03
+        # diff_amount_numeric = price_as_int - gross_amount_as_numeric
+        # diff_amount_str = str(diff_amount_numeric)
 
-        if post_name.price == str(gross_amount_as_numeric):
-            html_template = "basecamp/html_email-payment-success.html"
-        else:
-            html_template = "basecamp/html_email-payment-success1.html"
+        # if post_name.price == str(gross_amount_as_numeric):
+        html_template = "basecamp/html_email-payment-success.html"
+        # else:
+        #     html_template = "basecamp/html_email-payment-success1.html"
 
         html_content = render_to_string(html_template, {
             'name': instance.item_name,
             'email': instance.payer_email,
-            'amount': post_name.price,
-            'diff_amount': diff_amount_str
+            'amount': instance.gross_amout,
+            # 'diff_amount': diff_amount_str
         })
 
         send_email([instance.payer_email, RECIPIENT_EMAIL], html_content)  
@@ -200,7 +200,7 @@ def create_event_on_calendar(sender, instance, created, **kwargs):
         reminder_str = f'!' if instance.reminder else ''
         title = " ".join([reminder_str, instance.pickup_time, instance.flight_number, instance.flight_time, 'p'+str(instance.no_of_passenger), paid_str, '$'+instance.price, instance.contact])
         address = " ".join([instance.street, instance.suburb])            
-        message = " ".join([instance.name, instance.email, 'b'+instance.no_of_baggage, 'm:'+instance.message, 'n:'+instance.notice, "d:"+str(instance.return_flight_date)])            
+        message = " ".join([instance.name, instance.email, 'b'+instance.no_of_baggage, 'm:'+instance.message, 'n:'+instance.notice, "d:"+str(instance.return_flight_date), '$'+instance.paid])            
         flight_date = datetime.datetime.strptime(str(instance.flight_date), '%Y-%m-%d')
         if instance.pickup_time:
             pickup_time = datetime.datetime.strptime(instance.pickup_time, '%H:%M')
