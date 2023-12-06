@@ -7,13 +7,13 @@ from django.dispatch import receiver
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
-from decimal import Decimal
 import re
 from django.db.models import Q
 # google calendar 
 import os.path
 import os 
 import datetime
+from time import sleep
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from google.oauth2.credentials import Credentials
@@ -32,6 +32,8 @@ def notify_user_post(sender, instance, created, **kwargs):
                  no_of_passenger=instance.no_of_passenger, no_of_baggage=instance.no_of_baggage, message=instance.message, return_pickup_time="x",
                  return_flight_date=instance.flight_date, notice=instance.notice, price=instance.price, paid=instance.paid, driver=instance.driver)
         p.save() 
+
+        sleep(3)
     
     
 # Flight inquiry
@@ -114,58 +116,45 @@ def notify_user_inquiry_point(sender, instance, created, **kwargs):
 def notify_user_payment(sender, instance, created, **kwargs):      
     post_name = Post.objects.filter(
         Q(name__iregex=r'^%s$' % re.escape(instance.item_name)) | 
-        Q(email__iexact=instance.payer_email)
-    ).first()
+        Q(email__iexact=instance.payer_email)).first()
    
-    if post_name:         
+    if post_name:       
+        html_content = render_to_string("basecamp/html_email-payment-success.html",
+                                    {'name': instance.item_name, 'email': instance.payer_email,
+                                     'amount': instance.gross_amount })
+        text_content = strip_tags(html_content)
+        email = EmailMultiAlternatives(
+            "PayPal payment - EasyGo",
+            text_content,
+            '',
+            [instance.payer_email, RECIPIENT_EMAIL]
+        )        
+        email.attach_alternative(html_content, "text/html")        
+        email.send()
+
         post_name.paid = instance.gross_amount
         post_name.save()
 
+        sleep(1)
+
         if post_name.return_pickup_time == 'x':
-            post_name_second = Post.objects.filter(email=post_name.email)[1]
-            if post_name_second:
+                post_name_second = Post.objects.filter(email=post_name.email)[1]
                 post_name_second.paid = instance.gross_amount
-                post_name_second.save()
-        
-        # price_as_int = int(post_name.price)
-        # gross_amount_as_numeric = Decimal(instance.gross_amount) / 1.03
-        # diff_amount_numeric = price_as_int - gross_amount_as_numeric
-        # diff_amount_str = str(diff_amount_numeric)
-
-        # if post_name.price == str(gross_amount_as_numeric):
-        html_template = "basecamp/html_email-payment-success.html"
-        # else:
-        #     html_template = "basecamp/html_email-payment-success1.html"
-
-        html_content = render_to_string(html_template, {
-            'name': instance.item_name,
-            'email': instance.payer_email,
-            'amount': instance.gross_amout,
-            # 'diff_amount': diff_amount_str
-        })
-
-        send_email([instance.payer_email, RECIPIENT_EMAIL], html_content)  
-            
+                post_name_second.save()     
+           
     else:
         html_content = render_to_string("basecamp/html_email-noIdentity.html",
                                     {'name': instance.item_name, 'email': instance.payer_email,
                                      'amount': instance.gross_amount })
-        
-        send_email([instance.payer_email, RECIPIENT_EMAIL], html_content)
-
-EMAIL_SUBJECT = "Payment - EasyGo"
-
-def send_email(recipients, html_content):
-    text_content = strip_tags(html_content)
-    email = EmailMultiAlternatives(
-        EMAIL_SUBJECT,
-        text_content,
-        '',
-        recipients
-    )
-    email.attach_alternative(html_content, "text/html")
-    email.send()
-    
+        text_content = strip_tags(html_content)
+        email = EmailMultiAlternatives(
+            "PayPal payment - EasyGo",
+            text_content,
+            '',
+            [instance.payer_email, RECIPIENT_EMAIL]
+        )        
+        email.attach_alternative(html_content, "text/html")        
+        email.send()    
 
 
 ## google calendar recording 
@@ -192,7 +181,6 @@ def create_event_on_calendar(sender, instance, created, **kwargs):
     
             with open(token_file_path, 'w') as token:
                 token.write(creds.to_json())
-
 
         service = build('calendar', 'v3', credentials=creds)        
         
