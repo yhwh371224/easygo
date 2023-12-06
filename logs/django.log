@@ -6030,3 +6030,7 @@ Traceback (most recent call last):
   File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
     raise VariableDoesNotExist(
 django.template.base.VariableDoesNotExist: Failed lookup for key [email1] in [{'True': True, 'False': False, 'None': None}, {'company_name': '', 'name': 'Harshal Shah', 'contact': '0422 615 424', 'email': 'harshal_7@yahoo.com', 'flight_date': datetime.date(2023, 12, 14), 'flight_number': 'D7289', 'flight_time': '21:20', 'pickup_time': '18:15', 'direction': 'Drop off to Intl Airport', 'street': '2/21 Water street', 'suburb': 'Hornsby', 'no_of_passenger': '4', 'no_of_baggage': '2 suitcase and 4 carry-on bags', 'return_direction': 'Pickup from Intl Airport', 'return_flight_date': datetime.date(2023, 12, 26), 'return_flight_number': 'JQ28', 'return_flight_time': '10:35', 'return_pickup_time': '11:30', 'message': 'on 14th December -- going to International airport (we are 2 adults and 1 child who can sit in booster seat) 1 suitcase and 3 carry-on\r\nAnd\r\non 26th December -- pick-up from International airport (we are 3 adults and 1 child who can sit in booster seat) 2 suitcases and 4 carry-on', 'price': '300', 'notice': '', 'private_ride': False}]
+WARNING 2023-12-06 16:34:09,789 log Not Found: /robots.txt
+WARNING 2023-12-06 16:34:16,008 log Not Found: /robots.txt
+WARNING 2023-12-06 16:34:20,365 log Not Found: /sitemap.txt
+WARNING 2023-12-06 16:34:25,771 log Not Found: /sitemap.txt
