@@ -49,7 +49,6 @@ class Command(BaseCommand):
 
                     for post in posts:
                         if post.reminder:
-                            logger.info(f'....Already checked:{post.name}, {post.flight_date}, {post.pickup_time}')
                             continue
                         else: 
                             post.reminder = True

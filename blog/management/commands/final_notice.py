@@ -54,7 +54,7 @@ class Command(BaseCommand):
                         email.attach_alternative(html_content, "text/html")
                         email.send()
 
-                        logger.info(f'........{final_notice.name}, {final_notice.pickup_time}')
+                        logger.info(f'........final notice email sent: {final_notice.name}, {final_notice.pickup_time}')
 
                 
         

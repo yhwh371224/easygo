@@ -43,7 +43,7 @@ class Command(BaseCommand):
         if posts.exists():
             self.send_email_task(posts, "basecamp/html_email-confirmation.html", "EasyGo Booking confirmation")
         else:
-            logger.info("No booking created today until now.")
+            logger.info("........No booking created today until now.")
 
     def send_email_task(self, posts, template_name, subject):
         with self.lock:
@@ -66,7 +66,7 @@ class Command(BaseCommand):
                         email = EmailMultiAlternatives(subject, text_content, '', [post.email, RECIPIENT_EMAIL])
                         email.attach_alternative(html_content, "text/html")
                         email.send()                     
-                        logger.info(f'........{subject}: {post.name}, {post.flight_date}, {post.pickup_time}')
+                        logger.info(f'........{post.name}, {post.flight_date}, {post.pickup_time}')
 
                     else:
                         continue
