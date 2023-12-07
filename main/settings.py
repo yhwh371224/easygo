@@ -62,17 +62,16 @@ LOGGING = {
     },
 }
 
-# CELERY_BROKER_URL = config('CELERY_BROKER_URL')
 # CELERY_BROKER_URL = config('CELERY_BROKER', 'redis://redis:6379')
-# CELERY_RESULT_BACKEND = config('CELERY_BACKEND', 'redis://redis:6379')
-# if CELERY_RESULT_BACKEND == 'django-db':
-#     INSTALLED_APPS += ['django_celery_results',]
 # CELERY_ACCEPT_CONTENT = ['application/json']
-# CELERY_RESULT_SERIALIZER = 'json'
 # CELERY_TASK_SERIALIZER = 'json'
 # CELERY_TIMEZONE = 'Australia/Sydney'
 # CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 # CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+# CELERY_RESULT_BACKEND = config('CELERY_BACKEND', 'redis://redis:6379')
+# if CELERY_RESULT_BACKEND == 'django-db':
+#     INSTALLED_APPS += ['django_celery_results',]
+# CELERY_RESULT_SERIALIZER = 'json'
 
 SITE_ID = 1
 
@@ -131,10 +130,21 @@ DATABASES = {
 }
 
 
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
+#         'LOCATION': '127.0.0.1:11211',
+#     }
+# }
+
+
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
-        'LOCATION': '127.0.0.1:11211',
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/1',  
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
     }
 }
 
