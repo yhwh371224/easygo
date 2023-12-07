@@ -6,9 +6,9 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from blog.models import Post
-from datetime import date, timedelta
 from django.utils import timezone
 from main.settings import RECIPIENT_EMAIL
+
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 

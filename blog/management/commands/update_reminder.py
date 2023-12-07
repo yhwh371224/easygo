@@ -6,6 +6,7 @@ from blog.models import Post
 from datetime import datetime, timedelta
 from retrieve import main 
 
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 logger = logging.getLogger('blog.update_reminder')
