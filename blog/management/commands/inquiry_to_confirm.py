@@ -6,6 +6,7 @@ from blog.models import Post, Inquiry, Driver
 from basecamp.models import Inquiry_point
 from schedule import fetch_scheduled_emails 
 
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 logger = logging.getLogger('blog.inquiry_to_confirm')

@@ -9,6 +9,7 @@ from django.utils.html import strip_tags
 from blog.models import Post
 from main.settings import RECIPIENT_EMAIL
 
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 logger = logging.getLogger('blog.final_notice')
