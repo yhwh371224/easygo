@@ -62,16 +62,16 @@ LOGGING = {
     },
 }
 
-# CELERY_BROKER_URL = config('CELERY_BROKER', 'redis://redis:6379')
-# CELERY_ACCEPT_CONTENT = ['application/json']
-# CELERY_TASK_SERIALIZER = 'json'
-# CELERY_TIMEZONE = 'Australia/Sydney'
+CELERY_BROKER_URL = config('CELERY_BROKER', 'redis://redis:6379')
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Australia/Sydney'
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 # CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
-# CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 # CELERY_RESULT_BACKEND = config('CELERY_BACKEND', 'redis://redis:6379')
 # if CELERY_RESULT_BACKEND == 'django-db':
 #     INSTALLED_APPS += ['django_celery_results',]
-# CELERY_RESULT_SERIALIZER = 'json'
+#     CELERY_RESULT_SERIALIZER = 'json'
 
 SITE_ID = 1
 
