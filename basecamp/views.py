@@ -9,7 +9,7 @@ from basecamp.models import Inquiry_point
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
-from datetime import date, datetime, timedelta
+from datetime import date, datetime
 #paypal ipn
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
@@ -367,81 +367,51 @@ def inquiry_details(request):
 
         data = {
             'name': name,
-            'contact': contact,
             'email': email,
             'flight_date': flight_date,
             'pickup_time': pickup_time,
+            'suburb': suburb,
+            'direction': direction,
             }
                 
         inquiry_email = Inquiry.objects.only('email').values_list('email', flat=True)
         post_email = Post.objects.only('email').values_list('email', flat=True)  
 
-        if (email in inquiry_email) and (email in post_email):            
+        if (email in inquiry_email) or (email in post_email):            
             content = '''
-            Hello, {} \n
-            [Inquiry Form]    
-            * Both exist in Inquiry & Post *\n 
-            ==============================
-            Contact: {}
-            Email: {}
-            Pickup: {}             
-            ==============================\n        
-            Best Regards,
-            EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['pickup_time'])
-            send_mail(data['flight_date'], content,
-                      '', [RECIPIENT_EMAIL])
-            
-        elif (email in inquiry_email) and not(email in post_email):            
-            content = '''
-            Hello, {} \n 
-            [Inquiry Form]   
-            * Inquiry only exist *\n  
-            https://easygoshuttle.com.au                    
-            ==============================
-            Contact: {}
-            Email: {}
-            Pickup: {}               
-            ==============================\n        
-            Best Regards,
-            EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['pickup_time'])
-            send_mail(data['flight_date'], content,
-                      '', [RECIPIENT_EMAIL])
-            
-        elif not(email in inquiry_email) and (email in post_email):            
-            content = '''
-            Hello, {} \n
-            [Inquiry Form]    
-            * Post only exist *\n   
+            Hello, {} \n    
+            Exist in Inquiry or Post *\n
             https://easygoshuttle.com.au 
-            ==============================
-            Contact: {}
-            Email: {} 
-            Pickup: {}              
-            ==============================\n        
+            ============================
+            Email: {}
+            Pickup: {}
+            Suburb: {}
+            Direction: {}
+
+            ============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['pickup_time'])
+            ''' .format(data['name'], data['email'], data['pickup_time'], data['suburb'], data['direction'])
             send_mail(data['flight_date'], content,
-                      '', [RECIPIENT_EMAIL])
+                      '', [RECIPIENT_EMAIL])        
             
         else:
             content = '''
-            Hello, {} \n 
-            [Inquiry Form]  
-            * Neither in Inquiry & Post *\n
+            Hello, {} \n   
+            Neither in Inquiry & Post *\n
             https://easygoshuttle.com.au     
-            ==============================
-            Contact: {}
-            Email: {} 
-            Pickup: {} 
-            ==============================\n        
+            ============================
+            Email: {}
+            Pickup: {}
+            Suburb: {}
+            Direction: {}
+
+            ============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['pickup_time'])
+            ''' .format(data['name'], data['email'], data['pickup_time'], data['suburb'], data['direction'])
             send_mail(data['flight_date'], content,
-                      '', [RECIPIENT_EMAIL])    
+                      '', [RECIPIENT_EMAIL])      
             
         p = Inquiry(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
@@ -494,85 +464,51 @@ def inquiry_details1(request):
         
         data = {
             'name': name,
-            'contact': contact,
             'email': email,
             'flight_date': flight_date,
             'pickup_time': pickup_time,
+            'suburb': suburb,
+            'direction': direction,
             }
      
         inquiry_email = Inquiry.objects.only('email').values_list('email', flat=True)
         post_email = Post.objects.only('email').values_list('email', flat=True)  
-                     
-        if (email in inquiry_email) and (email in post_email):            
+
+        if (email in inquiry_email) or (email in post_email):            
             content = '''
-            Hello, {} \n
-            [Quick Price]    
-            * Both exist in Inquiry & Post *\n 
-            ==============================
-            Contact: {}
-            Email: {}  
-            Pickup: {}            
-            ==============================\n        
-            Best Regards,
-            EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['pickup_time'])
-            
-            send_mail(data['flight_date'], content,
-                      '', [RECIPIENT_EMAIL])
-            
-        elif (email in inquiry_email) and not(email in post_email):            
-            content = '''
-            Hello, {} \n 
-            [Quick Price]   
-            * Inquiry only exist *\n  
-            https://easygoshuttle.com.au                    
-            ==============================
-            Contact: {}
-            Email: {} 
-            Pickup: {}              
-            ==============================\n        
-            Best Regards,
-            EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['pickup_time'])
-            
-            send_mail(data['flight_date'], content,
-                      '', [RECIPIENT_EMAIL])
-            
-        elif not(email in inquiry_email) and (email in post_email):            
-            content = '''
-            Hello, {} \n
-            [Quick Price]    
-            * Post only exist *\n   
+            Hello, {} \n    
+            Exist in Inquiry or Post *\n
             https://easygoshuttle.com.au 
-            ==============================
-            Contact: {}
+            ============================
             Email: {}
-            Pickup: {}               
-            ==============================\n        
+            Pickup: {}
+            Suburb: {}
+            Direction: {}
+
+            ============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['pickup_time'])
-            
+            ''' .format(data['name'], data['email'], data['pickup_time'], data['suburb'], data['direction'])
             send_mail(data['flight_date'], content,
-                      '', [RECIPIENT_EMAIL])
+                      '', [RECIPIENT_EMAIL])        
             
         else:
             content = '''
-            Hello, {} \n 
-            [Quick Price]  
-            * Neither in Inquiry & Post *\n
+            Hello, {} \n   
+            Neither in Inquiry & Post *\n
             https://easygoshuttle.com.au     
-            ==============================
-            Contact: {}
-            Email: {} 
-            Pickup: {} 
-            ==============================\n        
+            ============================
+            Email: {}
+            Pickup: {}
+            Suburb: {}
+            Direction: {}
+
+            ============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['pickup_time'])
-            
+            ''' .format(data['name'], data['email'], data['pickup_time'], data['suburb'], data['direction'])
             send_mail(data['flight_date'], content,
-                      '', [RECIPIENT_EMAIL]) 
+                      '', [RECIPIENT_EMAIL])      
             
         
         p = Inquiry(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
@@ -618,84 +554,51 @@ def booking_form_detail(request):
         
         data = {
             'name': name,
-            'contact': contact,
             'email': email,
             'flight_date': flight_date,
             'pickup_time': pickup_time,
+            'suburb': suburb,
+            'direction': direction,
             }
      
         inquiry_email = Inquiry.objects.only('email').values_list('email', flat=True)
         post_email = Post.objects.only('email').values_list('email', flat=True)  
-                     
-        if (email in inquiry_email) and (email in post_email):            
+
+        if (email in inquiry_email) or (email in post_email):            
             content = '''
-            Hello, {} \n
-            [Booking Form Inquiry]    
-            * Both exist in Inquiry & Post *\n 
-            ==============================
-            Contact: {}
-            Email: {}   
-            Pickup: {}           
-            ==============================\n        
-            Best Regards,
-            EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['pickup_time'])
-            
-            send_mail(data['flight_date'], content,
-                      '', [RECIPIENT_EMAIL])
-            
-        elif (email in inquiry_email) and not(email in post_email):            
-            content = '''
-            Hello, {} \n 
-            [Booking Form Inquiry]   
-            * Inquiry only exist *\n  
-            https://easygoshuttle.com.au                    
-            ==============================
-            Contact: {}
-            Email: {}         
-            Pickup: {}      
-            ==============================\n        
-            Best Regards,
-            EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['pickup_time'])
-            
-            send_mail(data['flight_date'], content,
-                      '', [RECIPIENT_EMAIL])
-            
-        elif not(email in inquiry_email) and (email in post_email):            
-            content = '''
-            Hello, {} \n
-            [Booking Form Inquiry]    
-            * Post only exist *\n   
+            Hello, {} \n    
+            Exist in Inquiry or Post *\n
             https://easygoshuttle.com.au 
-            ==============================
-            Contact: {}
-            Email: {}              
-            Pickup: {} 
-            ==============================\n        
+            ============================
+            Email: {}
+            Pickup: {}
+            Suburb: {}
+            Direction: {}
+
+            ============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['pickup_time'])
-            
+            ''' .format(data['name'], data['email'], data['pickup_time'], data['suburb'], data['direction'])
             send_mail(data['flight_date'], content,
-                      '', [RECIPIENT_EMAIL])
+                      '', [RECIPIENT_EMAIL])        
             
         else:
             content = '''
-            Hello, {} \n 
-            [Booking Form Inquiry]  
-            * Neither in Inquiry & Post *\n
+            Hello, {} \n   
+            Neither in Inquiry & Post *\n
             https://easygoshuttle.com.au     
-            ==============================
-            Contact: {}
-            Email: {} 
-            Pickup: {} 
-            ==============================\n        
+            ============================
+            Email: {}
+            Pickup: {}
+            Suburb: {}
+            Direction: {}
+
+            ============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['pickup_time'])
-            
-            send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])             
+            ''' .format(data['name'], data['email'], data['pickup_time'], data['suburb'], data['direction'])
+            send_mail(data['flight_date'], content,
+                      '', [RECIPIENT_EMAIL])         
     
         
         p = Inquiry(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
@@ -809,85 +712,55 @@ def p2p_single_detail(request):
                
         data = {
             'name': name,
-            'contact': contact,
             'email': email,
             'flight_date': flight_date,
-            'pickup_time': pickup_time,}
+            'pickup_time': pickup_time,
+            'flight_number': flight_number,
+            'street': street,
+            }
         
      
         inquiry_email = Inquiry.objects.only('email').values_list('email', flat=True)
         post_email = Post.objects.only('email').values_list('email', flat=True)  
-                     
-        if (email in inquiry_email) and (email in post_email):            
+
+        if (email in inquiry_email) or (email in post_email):            
             content = '''
-            Hello, {} \n
-            [p2p single point]    
-            * Both exist in Inquiry & Post *\n 
-            ==============================
-            Contact: {}
-            Email: {}   
-            Pickup: {}           
-            ==============================\n        
-            Best Regards,
-            EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['pickup_time'])
-            
-            send_mail(data['flight_date'], content,
-                      '', [RECIPIENT_EMAIL])
-            
-        elif (email in inquiry_email) and not(email in post_email):            
-            content = '''
-            Hello, {} \n 
-            [p2p single point]   
-            * Inquiry only exist *\n  
-            https://easygoshuttle.com.au                    
-            ==============================
-            Contact: {}
-            Email: {}      
-            Pickup: {}         
-            ==============================\n        
-            Best Regards,
-            EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['pickup_time'])
-            
-            send_mail(data['flight_date'], content,
-                      '', [RECIPIENT_EMAIL])
-            
-        elif not(email in inquiry_email) and (email in post_email):            
-            content = '''
-            Hello, {} \n
-            [p2p single point]    
-            * Post only exist *\n   
+            Hello, {} \n    
+            Exist in Inquiry or Post *\n
+            P2P 
             https://easygoshuttle.com.au 
-            ==============================
-            Contact: {}
-            Email: {}    
-            Pickup: {}           
-            ==============================\n        
+            ============================
+            Email: {}
+            Trip date: {}
+            Pickup time: {}
+            Start point: {}
+            End point: {}
+            ============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['pickup_time'])
-            
+            ''' .format(data['name'], data['email'], data['pickup_time'], data['flight_number'], data['street'])
             send_mail(data['flight_date'], content,
-                      '', [RECIPIENT_EMAIL])
+                      '', [RECIPIENT_EMAIL])        
             
         else:
             content = '''
-            Hello, {} \n 
-            [p2p single point]  
-            * Neither in Inquiry & Post *\n
+            Hello, {} \n   
+            Neither in Inquiry & Post *\n
+            P2P 
             https://easygoshuttle.com.au     
-            ==============================
-            Contact: {}
+           ============================
             Email: {}
-            Pickup: {}  
-            ==============================\n        
+            Trip date: {}
+            Pickup time: {}
+            Start point: {}
+            End point: {}
+            ============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['pickup_time'])
-            
+            ''' .format(data['name'], data['email'], data['pickup_time'], data['flight_number'], data['street'])
             send_mail(data['flight_date'], content,
-                      '', [RECIPIENT_EMAIL])             
+                      '', [RECIPIENT_EMAIL])        
+                   
         
         p = Inquiry_point(name=name, contact=contact, email=email, direction="Point to Point", flight_date=flight_date, flight_time="01:00", 
                           pickup_time=pickup_time, flight_number=flight_number, street=street, suburb="Cruise", no_of_passenger=no_of_passenger, 
@@ -1089,48 +962,16 @@ def confirmation_detail(request):
         post_email = Post.objects.only('email').values_list('email', flat=True)
         inquiry_email = Inquiry.objects.only('email').values_list('email', flat=True) 
                          
-        if (email in post_email) and (email in inquiry_email):            
+        if (email in post_email) or (email in inquiry_email):            
                         
             content = '''
             Hello, {} \n  
             [Confirmation] 
-            * Both exist in Inquiry & Post *\n 
-            ===============================
+            Exist in Inquiry or Post *\n 
+            =============================
             Contact: {}
             Email: {}              
-            ===============================\n        
-            Best Regards,
-            EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'])
-            send_mail(data['flight_date'], content,
-                      '', [RECIPIENT_EMAIL])
-            
-        elif (email in post_email) and not(email in inquiry_email):            
-                        
-            content = '''
-            Hello, {} \n  
-            [Confirmation] 
-            * Post only exist *\n 
-           ===============================
-            Contact: {}
-            Email: {}              
-            ===============================\n        
-            Best Regards,
-            EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'])
-            send_mail(data['flight_date'], content,
-                      '', [RECIPIENT_EMAIL])
-            
-        elif not(email in post_email) and (email in inquiry_email):            
-                        
-            content = '''
-            Hello, {} \n  
-            [Confirmation] 
-            * Inquiry only exist *\n 
-           ===============================
-            Contact: {}
-            Email: {}              
-            ===============================\n        
+            =============================\n        
             Best Regards,
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['contact'], data['email'])
@@ -1141,11 +982,11 @@ def confirmation_detail(request):
             content = '''
             Hello, {} \n 
             [Confirmation]  
-            * Neither in Inquiry & Post *\n 
-            ===============================
+            Neither in Inquiry & Post *\n 
+            =============================
             Contact: {}
             Email: {}              
-            ===============================\n        
+            =============================\n        
             Best Regards,
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['contact'], data['email'])
@@ -1227,54 +1068,16 @@ def booking_detail(request):
         post_email = Post.objects.only('email').values_list('email', flat=True)
         inquiry_email = Inquiry.objects.only('email').values_list('email', flat=True) 
                          
-        if (email in post_email) and (email in inquiry_email):            
+        if (email in post_email) or (email in inquiry_email):            
                         
             content = '''
             Hello, {} \n  
-            [Booking by client] >> Sending email only!\n
-            * Both in Inquiry & Post *\n 
-            https://easygoshuttle.com.au/sending_email_first/ \n 
-            https://easygoshuttle.com.au/sending_email_second/ \n            
-            ===============================
+            [Confirmation] 
+            Exist in Inquiry or Post *\n 
+            =============================
             Contact: {}
-            Email: {}           
-            ===============================\n        
-            Best Regards,
-            EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'])
-            send_mail(data['flight_date'], content,
-                      '', [RECIPIENT_EMAIL])
-            
-        elif (email in post_email) and not(email in inquiry_email):            
-                        
-            content = '''
-            Hello, {} \n  
-            [Booking by client] >> Sending email only!\n
-            * Only in Post *\n 
-            https://easygoshuttle.com.au/sending_email_first/ \n 
-            https://easygoshuttle.com.au/sending_email_second/ \n      
-            ===============================
-            Contact: {}
-            Email: {}           
-            ===============================\n        
-            Best Regards,
-            EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'])
-            send_mail(data['flight_date'], content,
-                      '', [RECIPIENT_EMAIL])
-            
-        elif not(email in post_email) and (email in inquiry_email):            
-                        
-            content = '''
-            Hello, {} \n  
-           [Booking by client] >> Sending email only!\n
-            * Only in Inquiry *\n 
-            https://easygoshuttle.com.au/sending_email_first/ \n 
-            https://easygoshuttle.com.au/sending_email_second/ \n 
-            ===============================
-            Contact: {}
-            Email: {}  
-            ===============================\n        
+            Email: {}              
+            =============================\n        
             Best Regards,
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['contact'], data['email'])
@@ -1283,15 +1086,13 @@ def booking_detail(request):
         
         else:
             content = '''
-            Hello, {} \n  
-            [Booking by client] >> Sending email only!\n
-            * Neither in Inquiry & Post *\n 
-            https://easygoshuttle.com.au/sending_email_first/ \n  
-            https://easygoshuttle.com.au/sending_email_second/ \n       
-           ===============================
+            Hello, {} \n 
+            [Confirmation]  
+            Neither in Inquiry & Post *\n 
+            =============================
             Contact: {}
-            Email: {}  
-            ===============================\n        
+            Email: {}              
+            =============================\n        
             Best Regards,
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['contact'], data['email'])
@@ -1504,112 +1305,6 @@ def save_data_only_detail(request):
     
     else:
         return render(request, 'beasecamp/save_data_only.html', {})  
-    
-  
-# From Inquiry to Inquiry return trip
-def return_trip_inquiry_detail(request):     
-    if request.method == "POST":
-        email = request.POST.get('email')
-        flight_date = request.POST.get('flight_date')
-        flight_number = request.POST.get('flight_number')
-        flight_time = request.POST.get('flight_time')
-        pickup_time = request.POST.get('pickup_time')
-        direction = request.POST.get('direction')
-        message = request.POST.get('message')        
-        
-        user = Inquiry.objects.filter(email=email).first()   
-         
-        if not user:
-            return render(request, 'basecamp/504.html')  
-             
-        else:
-            name = user.name
-            contact = user.contact
-            suburb = user.suburb
-            street = user.street
-            no_of_passenger = user.no_of_passenger
-            no_of_baggage = user.no_of_baggage
-            notice = user.notice
-            price = user.price
-            
-        data = {
-            'name': name,
-            'contact': contact,
-            'email': email,
-            'flight_date': flight_date,
-            'flight_number': flight_number,
-            'flight_time': flight_time,
-            'pickup_time': pickup_time,
-            'direction': direction,
-            'suburb': suburb,
-            'street': street,
-            'no_of_passenger': no_of_passenger,
-            'no_of_baggage': no_of_baggage,
-            'message': message,
-            'notice': notice,
-            'price': price,
-            }       
-            
-        content = '''
-        {} 
-        clicked the 'inquiry return trip' \n
-        >> Sending inquiry email only! \n   
-        https://easygoshuttle.com.au \n    
-        ===============================
-        Contact: {}
-        Email: {}  
-        Flight no: {}      
-        Flight time: {}
-        Pickup time: {}
-        Direction: {}
-        Street: {}
-        Suburb: {}
-        Passenger: {}
-        Baggage: {}
-        Messag
-        {}  
-        Notice: {}
-        Price: {} \n          
-        ===============================\n        
-        Best Regards,
-        EasyGo Admin \n\n        
-        ''' .format(data['name'], data['contact'], data['email'], data['flight_number'],
-                    data['flight_time'], data['pickup_time'], data['direction'], data['street'], data['suburb'],
-                    data['no_of_passenger'], data['no_of_baggage'], data['message'], data['notice'], data['price'])
-        send_mail(data['flight_date'], content,
-                  '', [RECIPIENT_EMAIL])       
-            
-        p = Inquiry(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
-                 flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
-                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, notice=notice, price=price)
-        
-        p.save()
-
-        rendering = render(request, 'basecamp/inquiry_done.html')        
-
-        html_content = render_to_string("basecamp/html_email-inquiry-response.html",
-                                    {'name': name, 'contact': contact, 'email': email,
-                                     'flight_date': flight_date, 'flight_number': flight_number,
-                                     'flight_time': flight_time, 'pickup_time': pickup_time,
-                                     'direction': direction, 'street': street, 'suburb': suburb,
-                                     'no_of_passenger': no_of_passenger, 'no_of_baggage': no_of_baggage,
-                                     'message': message, 'notice': notice, 'price': price })
-    
-        text_content = strip_tags(html_content)
-
-        email = EmailMultiAlternatives(
-            "Booking inquiry - EasyGo",
-            text_content,
-            '',
-            [email, RECIPIENT_EMAIL]
-        )
-        email.attach_alternative(html_content, "text/html")
-        email.send()
-        
-        return rendering
-    
-    else:
-        return render(request, 'beasecamp/return_trip_inquiry.html', {})         
 
 
 # For Return Trip 
