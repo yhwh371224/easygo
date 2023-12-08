@@ -1,5 +1,7 @@
-from .models import Post
+from .models import Post, Inquiry
 from celery import shared_task
+from django.core.mail import send_mail
+from your_project.settings import RECIPIENT_EMAIL
 from celery.utils.log import get_task_logger
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
@@ -17,7 +19,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 logger = logging.getLogger('blog.calendar')
 logger.setLevel(logging.INFO)
 
-formatter = logging.Formatter('%(asctime)s:%(message)s')
+formatter = logging.Formatter('%(asctime)s:%(message)s - Name: %(name)s, Flight_Date: %(flight_date)s, Pickup_Time: %(pickup_time)s')
 
 logs_dir = os.path.join(BASE_DIR, 'logs')
 if not os.path.exists(logs_dir):
@@ -90,19 +92,22 @@ def create_event_on_calendar(instance_id):
     if instance.calendar_event_id:            
         try:
             event = service.events().update(calendarId='primary', eventId=instance.calendar_event_id, body=event).execute()
-            logger.info('Event updated: %s', event.get('htmlLink'))
+            logger.info('Event updated: %s - Name: %s, Flight Date: %s, Pickup Time: %s', event.get('htmlLink'), instance.name, instance.flight_date, instance.pickup_time)
 
         except HttpError as error:
-            logger.error('An error occurred while updating the event: %s', error)
+            logger.error('An error occurred while updating the event: %s - Name: %s, Flight Date: %s, Pickup Time: %s', error, instance.name, instance.flight_date, instance.pickup_time)
 
     else:
         try:
             event = service.events().insert(calendarId='primary', body=event).execute()
             instance.calendar_event_id = event['id']  # Store the event ID in your model
             instance.save()
-            logger.info('Event updated: %s', event.get('htmlLink'))
+            logger.info('Event inserted: %s - Name: %s, Flight Date: %s, Pickup Time: %s', event.get('htmlLink'), instance.name, instance.flight_date, instance.pickup_time)
 
         except HttpError as error:
-            logger.error('An error occurred while updating the event: %s', error)
+            logger.error('An error occurred while updating the event: %s - Name: %s, Flight Date: %s, Pickup Time: %s', error, instance.name, instance.flight_date, instance.pickup_time)
 
 
+@shared_task
+def send_async_email(subject, message, recipient_list):
+    send_mail(subject, message, '', recipient_list)
