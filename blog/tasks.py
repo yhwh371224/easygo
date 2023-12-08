@@ -1,7 +1,7 @@
 from .models import Post, Inquiry
 from celery import shared_task
 from django.core.mail import send_mail
-from your_project.settings import RECIPIENT_EMAIL
+from main.settings import RECIPIENT_EMAIL
 from celery.utils.log import get_task_logger
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
