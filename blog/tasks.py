@@ -1,5 +1,7 @@
-from .models import Post
+from .models import Post, Inquiry
 from celery import shared_task
+from django.core.mail import send_mail
+from your_project.settings import RECIPIENT_EMAIL
 from celery.utils.log import get_task_logger
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
@@ -106,3 +108,6 @@ def create_event_on_calendar(instance_id):
             logger.error('An error occurred while updating the event: %s', error)
 
 
+@shared_task
+def send_async_email(subject, message, recipient_list):
+    send_mail(subject, message, '', recipient_list)
