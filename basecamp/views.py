@@ -411,7 +411,8 @@ def inquiry_details(request):
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['email'], data['pickup_time'], data['suburb'], data['direction'])
             send_mail(data['flight_date'], content,
-                      '', [RECIPIENT_EMAIL])      
+                      '', [RECIPIENT_EMAIL])   
+            
             
         p = Inquiry(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
@@ -508,7 +509,8 @@ def inquiry_details1(request):
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['email'], data['pickup_time'], data['suburb'], data['direction'])
             send_mail(data['flight_date'], content,
-                      '', [RECIPIENT_EMAIL])      
+                      '', [RECIPIENT_EMAIL])    
+            
             
         
         p = Inquiry(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
@@ -598,7 +600,7 @@ def booking_form_detail(request):
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['email'], data['pickup_time'], data['suburb'], data['direction'])
             send_mail(data['flight_date'], content,
-                      '', [RECIPIENT_EMAIL])         
+                      '', [RECIPIENT_EMAIL])                           
     
         
         p = Inquiry(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
@@ -760,7 +762,7 @@ def p2p_single_detail(request):
             ''' .format(data['name'], data['email'], data['pickup_time'], data['flight_number'], data['street'])
             send_mail(data['flight_date'], content,
                       '', [RECIPIENT_EMAIL])        
-                   
+                       
         
         p = Inquiry_point(name=name, contact=contact, email=email, direction="Point to Point", flight_date=flight_date, flight_time="01:00", 
                           pickup_time=pickup_time, flight_number=flight_number, street=street, suburb="Cruise", no_of_passenger=no_of_passenger, 
@@ -968,25 +970,25 @@ def confirmation_detail(request):
             Hello, {} \n  
             [Confirmation] 
             Exist in Inquiry or Post *\n 
-            =============================
+            ===============================
             Contact: {}
             Email: {}              
-            =============================\n        
+            ===============================\n        
             Best Regards,
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['contact'], data['email'])
             send_mail(data['flight_date'], content,
-                      '', [RECIPIENT_EMAIL])
+                      '', [RECIPIENT_EMAIL])   
         
         else:
             content = '''
             Hello, {} \n 
             [Confirmation]  
             Neither in Inquiry & Post *\n 
-            =============================
+            ===============================
             Contact: {}
             Email: {}              
-            =============================\n        
+            ===============================\n        
             Best Regards,
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['contact'], data['email'])
@@ -1072,12 +1074,14 @@ def booking_detail(request):
                         
             content = '''
             Hello, {} \n  
-            [Confirmation] 
-            Exist in Inquiry or Post *\n 
-            =============================
+            [Booking by client] >> Sending email only!\n
+            Exit in Inquiry or Post *\n 
+            https://easygoshuttle.com.au/sending_email_first/ \n 
+            https://easygoshuttle.com.au/sending_email_second/ \n            
+            ===============================
             Contact: {}
-            Email: {}              
-            =============================\n        
+            Email: {}           
+            ===============================\n        
             Best Regards,
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['contact'], data['email'])
@@ -1086,13 +1090,15 @@ def booking_detail(request):
         
         else:
             content = '''
-            Hello, {} \n 
-            [Confirmation]  
+            Hello, {} \n  
+            [Booking by client] >> Sending email only!\n
             Neither in Inquiry & Post *\n 
-            =============================
+            https://easygoshuttle.com.au/sending_email_first/ \n  
+            https://easygoshuttle.com.au/sending_email_second/ \n       
+           ===============================
             Contact: {}
-            Email: {}              
-            =============================\n        
+            Email: {}  
+            ===============================\n        
             Best Regards,
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['contact'], data['email'])
