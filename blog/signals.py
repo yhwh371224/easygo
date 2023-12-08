@@ -10,28 +10,21 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 import re
 from django.db.models import Q
-# google calendar 
-import os.path
-import os 
-import datetime
-from time import sleep
-from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
-from google.oauth2.credentials import Credentials
-from googleapiclient.discovery import build
-from google_auth_oauthlib.flow import InstalledAppFlow
-from google.auth.transport.requests import Request
 
 
 # Flight return booking
 @receiver(post_save, sender=Post)
 def notify_user_post(sender, instance, created, **kwargs):
-    if instance.return_pickup_time != "x" and instance.return_flight_number:
+    if instance.return_pickup_time == 'x':
+        pass
+
+    elif not instance.calendar_event_id and instance.return_flight_number:
         p = Post(name=instance.name, contact=instance.contact, email=instance.email, company_name=instance.company_name, email1=instance.email1, 
                  flight_date=instance.return_flight_date, flight_number=instance.return_flight_number, flight_time=instance.return_flight_time, 
                  pickup_time=instance.return_pickup_time, direction=instance.return_direction, suburb=instance.suburb, street=instance.street, 
                  no_of_passenger=instance.no_of_passenger, no_of_baggage=instance.no_of_baggage, message=instance.message, return_pickup_time="x",
                  return_flight_date=instance.flight_date, notice=instance.notice, price=instance.price, paid=instance.paid, driver=instance.driver)
+
         p.save() 
     
     
