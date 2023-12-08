@@ -9,7 +9,8 @@ from basecamp.models import Inquiry_point
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
-from datetime import date, datetime
+from django.utils import timezone
+from datetime import date, datetime, timedelta
 #paypal ipn
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
@@ -511,7 +512,6 @@ def inquiry_details1(request):
             send_mail(data['flight_date'], content,
                       '', [RECIPIENT_EMAIL])    
             
-            
         
         p = Inquiry(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
@@ -601,7 +601,7 @@ def booking_form_detail(request):
             ''' .format(data['name'], data['email'], data['pickup_time'], data['suburb'], data['direction'])
             send_mail(data['flight_date'], content,
                       '', [RECIPIENT_EMAIL])                           
-    
+
         
         p = Inquiry(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
