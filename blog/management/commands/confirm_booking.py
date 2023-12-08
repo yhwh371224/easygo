@@ -66,9 +66,10 @@ class Command(BaseCommand):
                         email = EmailMultiAlternatives(subject, text_content, '', [post.email, RECIPIENT_EMAIL])
                         email.attach_alternative(html_content, "text/html")
                         email.send()                     
-                        logger.info(f'........{post.name}, {post.flight_date}, {post.pickup_time}')
+                        logger.info(f'........Just sent now: {post.name}, {post.flight_date}, {post.pickup_time}')
 
                     else:
+                        logger.info(f'........Sent already: {post.name}, {post.flight_date}, {post.pickup_time}')
                         continue
 
             except Exception as e:

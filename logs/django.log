@@ -5042,3 +5042,71 @@ Traceback (most recent call last):
     raise VariableDoesNotExist(
 django.template.base.VariableDoesNotExist: Failed lookup for key [email1] in [{'True': True, 'False': False, 'None': None}, {'company_name': '', 'name': 'Peter Tompkins', 'contact': '0408241878', 'email': 'ptompkins7@gmail.com', 'flight_date': datetime.date(2023, 12, 9), 'flight_number': 'QR1909', 'flight_time': '14:30', 'pickup_time': '09:00', 'direction': 'Drop off to Intl Airport', 'street': '3 Maranoa Pl', 'suburb': 'Wahroonga', 'no_of_passenger': '1', 'no_of_baggage': '1', 'return_direction': None, 'return_flight_date': None, 'return_flight_number': None, 'return_flight_time': None, 'return_pickup_time': None, 'message': 'Want the cost', 'price': '110', 'notice': '', 'private_ride': False}]
 WARNING 2023-12-08 12:54:48,423 log Forbidden (CSRF cookie not set.): /inquiry_details1/
+WARNING 2023-12-08 18:10:54,864 log Not Found: /robots.txt
+WARNING 2023-12-08 18:19:51,267 log Not Found: /robots.txt
+WARNING 2023-12-08 18:25:12,238 log Not Found: /robots.txt
+WARNING 2023-12-08 18:51:34,397 log Not Found: /robots.txt
+WARNING 2023-12-08 18:51:39,303 log Not Found: /shop/product/moncler-jackets-kids-sestriere-yellow/
+DEBUG 2023-12-08 19:03:58,503 base Exception while resolving variable 'recaptcha_site_key' in template 'basecamp/inquiry1.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [recaptcha_site_key] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: 'qWmptQf20qU6wUFGp4rKyauXOpJgdRqypp4CCkK9Vbsv4aAp1apbogco7mZB85DS'>, 'request': <WSGIRequest: POST '/price_detail/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fdf05131800>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fdf05131800>>), 'messages': <FallbackStorage: request=<WSGIRequest: POST '/price_detail/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'flight_date': '2023-12-22', 'direction': 'Drop off to Intl Airport', 'suburb': 'North Ryde', 'no_of_passenger': '2'}, {'block': <Block Node: content. Contents: [<TextNode: '\n      <!-- Page content-'>, <Variable Node: flight_date>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: direction>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: suburb>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: no_of_passenger>, <TextNode: '</a> -->\n\t\t\t  <br><br>\n  '>, <django.template.defaulttags.CsrfTokenNode object at 0x7fdf04f14590>, <TextNode: '\n\t\t\t\t<div class="mb3 pb-1'>, <Variable Node: direction>, <TextNode: '">'>, <Variable Node: direction>, <TextNode: '</option>\t\t\t\t\t\t          '>, <Variable Node: flight_date>, <TextNode: '" type="text" >\t\t\t\t  \n   '>, <IfNode>, <TextNode: '\n\t\t\t\t  <div class="mb-3 p'>, <Variable Node: suburb>, <TextNode: '</label>\t\t\t\t\t\n\t\t\t\t</div>\n'>, <Variable Node: suburb>, <TextNode: '">'>, <Variable Node: suburb>, <TextNode: '</option>\t\t\t\t\t\n\t\t\t\t  </se'>, <Variable Node: no_of_passenger>, <TextNode: '">'>, <Variable Node: no_of_passenger>, <TextNode: '</option>\t\t\t\t  \n         '>, <Variable Node: recaptcha_site_key>, <TextNode: '"></div>\n\t\t\t\t<div id="err'>]>}]
+WARNING 2023-12-08 19:10:12,899 log Not Found: /.well-known/traffic-advice
+WARNING 2023-12-08 19:26:01,204 log Not Found: /index.php
+WARNING 2023-12-08 19:51:38,479 log Not Found: /webclient/api/login
+WARNING 2023-12-08 19:51:40,199 log Not Found: /webclient/api/login
+WARNING 2023-12-08 19:51:40,487 log Not Found: /webclient/api/login
+WARNING 2023-12-08 19:51:41,014 log Not Found: /webclient/api/login
+WARNING 2023-12-08 19:57:52,597 log Not Found: /webclient/api/login
+WARNING 2023-12-08 19:57:52,990 log Not Found: /webclient/api/login
+WARNING 2023-12-08 19:57:56,124 log Not Found: /webclient/api/login
+WARNING 2023-12-08 19:57:56,522 log Not Found: /webclient/api/login
+WARNING 2023-12-08 19:58:41,113 log Not Found: /webclient/api/login
+WARNING 2023-12-08 19:58:41,854 log Not Found: /webclient/api/login
+WARNING 2023-12-08 19:58:44,882 log Not Found: /webclient/api/login
+WARNING 2023-12-08 19:58:45,579 log Not Found: /webclient/api/login
+WARNING 2023-12-08 20:01:07,194 log Not Found: /webclient/api/login
+WARNING 2023-12-08 20:01:08,980 log Not Found: /webclient/api/login
+WARNING 2023-12-08 20:01:09,323 log Not Found: /webclient/api/login
+WARNING 2023-12-08 20:01:10,044 log Not Found: /webclient/api/login
+WARNING 2023-12-08 20:01:52,382 log Not Found: /webclient/api/login
+WARNING 2023-12-08 20:01:52,881 log Not Found: /webclient/api/login
+WARNING 2023-12-08 20:01:53,472 log Not Found: /webclient/api/login
+WARNING 2023-12-08 20:01:54,572 log Not Found: /webclient/api/login
+WARNING 2023-12-08 20:23:34,404 log Not Found: /robots.txt
+WARNING 2023-12-08 20:37:37,303 log Not Found: /robots.txt
+WARNING 2023-12-08 20:37:37,539 log Not Found: /悉尼机场巴士/
+WARNING 2023-12-08 20:38:31,414 log Not Found: /shop/ko/product/여성-다운-캐디-백-까마귀-다운-코트-2/
+WARNING 2023-12-08 20:41:54,260 log Not Found: /apple-touch-icon.png
+WARNING 2023-12-08 20:41:55,498 log Not Found: /apple-touch-icon.png
+WARNING 2023-12-08 20:42:04,482 log Not Found: /apple-touch-icon.png
+WARNING 2023-12-08 20:42:04,980 log Not Found: /autodiscover/autodiscover.json
+WARNING 2023-12-08 20:42:13,568 log Not Found: /apple-touch-icon.png
+WARNING 2023-12-08 21:02:18,682 log Not Found: /.well-known/traffic-advice
