@@ -521,7 +521,7 @@ def inquiry_details1(request):
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['email'], data['flight_date'], data['pickup_time'], 
                         data['direction'], data['suburb'], data['no_of_passenger'], data['return_pickup_time'])
-            
+
             send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])     
         
         p = Inquiry(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
@@ -622,7 +622,6 @@ def booking_form_detail(request):
             
             send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])              
 
-        
         p = Inquiry(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
                  no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction,
@@ -776,8 +775,7 @@ def p2p_single_detail(request):
             ''' .format(data['name'], data['email'], data['pickup_time'], data['flight_number'], data['return_pickup_time'])
 
             send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])
-                                   
-        
+
         p = Inquiry_point(name=name, contact=contact, email=email, direction="Point to Point", flight_date=flight_date, flight_time="01:00", 
                           pickup_time=pickup_time, flight_number=flight_number, street=street, suburb="Cruise", no_of_passenger=no_of_passenger, 
                           no_of_baggage=no_of_baggage, return_direction="Point to Point", return_flight_date=return_flight_date, 
@@ -967,34 +965,56 @@ def confirmation_detail(request):
             'email': email,            
             'flight_date': flight_date}       
         
+<<<<<<< HEAD
         inquiry_email = Inquiry.objects.filter(email=email).exists()
         post_email = Post.objects.filter(email=email).exists()  
 
         if inquiry_email or post_email:             
+=======
+        post_email = Post.objects.only('email').values_list('email', flat=True)
+        inquiry_email = Inquiry.objects.only('email').values_list('email', flat=True) 
+                         
+        if (email in post_email) or (email in inquiry_email):            
+>>>>>>> aa4b3fb (resoved conflict views.py)
                         
             content = '''
             Hello, {} \n  
             [Confirmation] 
             Exist in Inquiry or Post *\n 
+<<<<<<< HEAD
             ===============================
             Contact: {}
             Email: {}              
             ===============================\n        
+=======
+            =============================
+            Contact: {}
+            Email: {}              
+            =============================\n        
+>>>>>>> aa4b3fb (resoved conflict views.py)
             Best Regards,
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['contact'], data['email'])
             send_mail(data['flight_date'], content,
+<<<<<<< HEAD
                       '', [RECIPIENT_EMAIL])   
+=======
+                      '', [RECIPIENT_EMAIL])
+>>>>>>> aa4b3fb (resoved conflict views.py)
         
         else:
             content = '''
             Hello, {} \n 
             [Confirmation]  
             Neither in Inquiry & Post *\n 
+<<<<<<< HEAD
             ===============================
+=======
+            =============================
+>>>>>>> aa4b3fb (resoved conflict views.py)
             Contact: {}
             Email: {}              
-            ===============================\n        
+            =============================\n        
             Best Regards,
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['contact'], data['email'])
@@ -1070,6 +1090,7 @@ def booking_detail(request):
             'email': email,            
             'flight_date': flight_date}       
         
+<<<<<<< HEAD
         inquiry_email = Inquiry.objects.filter(email=email).exists()
         post_email = Post.objects.filter(email=email).exists()  
 
@@ -1085,6 +1106,21 @@ def booking_detail(request):
             Contact: {}
             Email: {}           
             ===============================\n        
+=======
+        post_email = Post.objects.only('email').values_list('email', flat=True)
+        inquiry_email = Inquiry.objects.only('email').values_list('email', flat=True) 
+                         
+        if (email in post_email) or (email in inquiry_email):            
+                        
+            content = '''
+            Hello, {} \n  
+            [Confirmation] 
+            Exist in Inquiry or Post *\n 
+            =============================
+            Contact: {}
+            Email: {}              
+            =============================\n        
+>>>>>>> aa4b3fb (resoved conflict views.py)
             Best Regards,
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['contact'], data['email'])
@@ -1093,15 +1129,22 @@ def booking_detail(request):
         
         else:
             content = '''
+<<<<<<< HEAD
             Hello, {} \n  
             [Booking by client] >> Sending email only!\n
             Neither in Inquiry & Post *\n 
             https://easygoshuttle.com.au/sending_email_first/ \n  
             https://easygoshuttle.com.au/sending_email_second/ \n       
            ===============================
+=======
+            Hello, {} \n 
+            [Confirmation]  
+            Neither in Inquiry & Post *\n 
+            =============================
+>>>>>>> aa4b3fb (resoved conflict views.py)
             Contact: {}
-            Email: {}  
-            ===============================\n        
+            Email: {}              
+            =============================\n        
             Best Regards,
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['contact'], data['email'])
