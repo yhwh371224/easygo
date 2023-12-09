@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.core.mail import send_mail
 from blog.models import Post, Inquiry, Payment, Driver
 from basecamp.models import Inquiry_point
-from blog.tasks import send_inquiry_exist_email, send_inquiry_non_exist_email
+from blog.tasks import send_inquiry_exist_email, send_inquiry_non_exist_email, send_confirm_email
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
@@ -1039,21 +1039,7 @@ def confirm_booking_detail(request):
             'flight_date': flight_date,
             'return_flight_number': return_flight_number}                    
             
-            content = '''
-            {} 
-            clicked the 'confirm booking' \n
-            >> Sending email only! \n
-            https://easygoshuttle.com.au/sending_email_first/ \n  
-            https://easygoshuttle.com.au/sending_email_second/ \n
-            ===============================
-            Contact: {}
-            Email: {}       
-            Return flight number: {}
-            ===============================\n        
-            Best Regards,
-            EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['return_flight_number'])
-            send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])  
+            send_confirm_email.delay(data['name'], data['contact'], data['email'], data['flight_date'], data['return_flight_number'])
             
         sam_driver = Driver.objects.get(driver_name="Sam")    
             

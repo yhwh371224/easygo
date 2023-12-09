@@ -143,3 +143,23 @@ def send_inquiry_non_exist_email(name, email, pickup_time, suburb, direction):
     EasyGo Admin \n\n
     '''
     send_mail('', content, '', [RECIPIENT_EMAIL])
+
+
+@shared_task
+def send_confirm_email(name, contact, email, flight_date, return_flight_number):
+    content = f'''
+    {name}
+    clicked the 'confirm booking' \n
+    >> Sending email only! \n
+    https://easygoshuttle.com.au/sending_email_first/ \n  
+    https://easygoshuttle.com.au/sending_email_second/ \n
+    ===============================
+    Contact: {contact}
+    Email: {email}
+    Flight date: {flight_date}       
+    Return flight number: {return_flight_number}
+    ===============================\n        
+    Best Regards,
+    EasyGo Admin \n\n        
+    '''
+    send_mail('', content, '', [RECIPIENT_EMAIL])
