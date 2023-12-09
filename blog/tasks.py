@@ -32,21 +32,6 @@ file_handler.setFormatter(formatter)
 
 calendar_logger.addHandler(file_handler)
 
-# logger for update_reminder
-update_logger = logging.getLogger('blog.update_reminder')
-update_logger.setLevel(logging.INFO)
-
-formatter = logging.Formatter('%(asctime)s:%(message)s')
-
-logs_dir = os.path.join(BASE_DIR, 'logs')
-if not os.path.exists(logs_dir):
-    os.makedirs(logs_dir)
-
-file_handler = logging.FileHandler(os.path.join(logs_dir, 'update_reminder.log'))
-file_handler.setFormatter(formatter)
-
-update_logger.addHandler(file_handler)
-
 
 @shared_task
 def create_event_on_calendar(instance_id):
@@ -125,29 +110,36 @@ def create_event_on_calendar(instance_id):
             calendar_logger.error('An error occurred while updating the event: %s', error)
 
 
+@shared_task
+def send_inquiry_exist_email(name, email, pickup_time, suburb, direction):
+    content = f'''
+    Hello, {name} \n
+    Exist in Inquiry or Post *\n
+    https://easygoshuttle.com.au 
+    ============================
+    Email: {email}
+    Pickup: {pickup_time}
+    Suburb: {suburb}
+    Direction: {direction}
+    ============================
+    Best Regards,
+    EasyGo Admin \n\n
+    '''
+    send_mail('', content, '', [RECIPIENT_EMAIL])
 
 @shared_task
-def update_reminder():
-    my_list = main()
-    unique_emails = set()
-
-    today = datetime.now()
-    three_days_later = today + timedelta(days=3)
-
-    for list_email in my_list:
-        if list_email in unique_emails:
-            continue
-        else: 
-            unique_emails.add(list_email)
-
-            posts = Post.objects.filter(email__iexact=list_email, flight_date__range=[today, three_days_later])
-
-            for post in posts:
-                if post.reminder:
-                    update_logger.info(f'....Already in calceldar:{post.name}, {post.flight_date}, {post.pickup_time}')
-                    continue
-                else: 
-                    post.reminder = True
-                    post.save()
-
-                    update_logger.info(f'....Just now executed:{post.name}, {post.flight_date}, {post.pickup_time}')
+def send_inquiry_non_exist_email(name, email, pickup_time, suburb, direction):
+    content = f'''
+    Hello, {name} \n
+    Neither in Inquiry & Post *\n
+    https://easygoshuttle.com.au     
+    ============================
+    Email: {email}
+    Pickup: {pickup_time}
+    Suburb: {suburb}
+    Direction: {direction}
+    ============================
+    Best Regards,
+    EasyGo Admin \n\n
+    '''
+    send_mail('', content, '', [RECIPIENT_EMAIL])
