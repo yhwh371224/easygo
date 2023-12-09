@@ -9,13 +9,6 @@ media/
 
 temp/
 
-logs/
-
-secure/
-secure_gmail/
-
-db.sqlite3 
-
 .env 
 
 __pycache__/
