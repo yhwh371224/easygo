@@ -2,6 +2,8 @@ from .models import Post, Inquiry
 from celery import shared_task
 from django.core.mail import send_mail
 from main.settings import RECIPIENT_EMAIL
+from datetime import datetime, timedelta
+from retrieve import main 
 from celery.utils.log import get_task_logger
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
@@ -10,16 +12,16 @@ from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 import os
-import datetime
 import logging
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-logger = logging.getLogger('blog.calendar')
-logger.setLevel(logging.INFO)
+# logger for create_event_on_calendar
+calendar_logger = logging.getLogger('blog.calendar')
+calendar_logger.setLevel(logging.INFO)
 
-formatter = logging.Formatter('%(asctime)s:%(message)s - Name: %(name)s, Flight_Date: %(flight_date)s, Pickup_Time: %(pickup_time)s')
+formatter = logging.Formatter('%(asctime)s:%(message)s')
 
 logs_dir = os.path.join(BASE_DIR, 'logs')
 if not os.path.exists(logs_dir):
@@ -28,7 +30,22 @@ if not os.path.exists(logs_dir):
 file_handler = logging.FileHandler(os.path.join(logs_dir, 'calendar.log'))
 file_handler.setFormatter(formatter)
 
-logger.addHandler(file_handler) 
+calendar_logger.addHandler(file_handler)
+
+# logger for update_reminder
+update_logger = logging.getLogger('blog.update_reminder')
+update_logger.setLevel(logging.INFO)
+
+formatter = logging.Formatter('%(asctime)s:%(message)s')
+
+logs_dir = os.path.join(BASE_DIR, 'logs')
+if not os.path.exists(logs_dir):
+    os.makedirs(logs_dir)
+
+file_handler = logging.FileHandler(os.path.join(logs_dir, 'update_reminder.log'))
+file_handler.setFormatter(formatter)
+
+update_logger.addHandler(file_handler)
 
 
 @shared_task
@@ -92,22 +109,44 @@ def create_event_on_calendar(instance_id):
     if instance.calendar_event_id:            
         try:
             event = service.events().update(calendarId='primary', eventId=instance.calendar_event_id, body=event).execute()
-            logger.info('Event updated: %s - Name: %s, Flight Date: %s, Pickup Time: %s', event.get('htmlLink'), instance.name, instance.flight_date, instance.pickup_time)
+            calendar_logger.info('Event updated: %s', event.get('htmlLink'))
 
         except HttpError as error:
-            logger.error('An error occurred while updating the event: %s - Name: %s, Flight Date: %s, Pickup Time: %s', error, instance.name, instance.flight_date, instance.pickup_time)
+            calendar_logger.error('An error occurred while updating the event: %s', error)
 
     else:
         try:
             event = service.events().insert(calendarId='primary', body=event).execute()
             instance.calendar_event_id = event['id']  # Store the event ID in your model
             instance.save()
-            logger.info('Event inserted: %s - Name: %s, Flight Date: %s, Pickup Time: %s', event.get('htmlLink'), instance.name, instance.flight_date, instance.pickup_time)
+            calendar_logger.info('Event updated: %s', event.get('htmlLink'))
 
         except HttpError as error:
-            logger.error('An error occurred while updating the event: %s - Name: %s, Flight Date: %s, Pickup Time: %s', error, instance.name, instance.flight_date, instance.pickup_time)
+            calendar_logger.error('An error occurred while updating the event: %s', error)
+
 
 
 @shared_task
-def send_async_email(subject, message, recipient_list):
-    send_mail(subject, message, '', recipient_list)
+def update_reminder():
+    my_list = main()
+    unique_emails = set()
+
+    today = datetime.now()
+    three_days_later = today + timedelta(days=3)
+
+    for list_email in my_list:
+        if list_email in unique_emails:
+            continue
+        else: 
+            unique_emails.add(list_email)
+
+            posts = Post.objects.filter(email__iexact=list_email, flight_date__range=[today, three_days_later])
+
+            for post in posts:
+                if post.reminder:
+                    continue
+                else: 
+                    post.reminder = True
+                    post.save()
+
+                    update_logger.info(f'....Just now executed:{post.name}, {post.flight_date}, {post.pickup_time}')
