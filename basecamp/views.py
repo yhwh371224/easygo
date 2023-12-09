@@ -633,12 +633,45 @@ def p2p_single_detail(request):
         inquiry_email = Inquiry.objects.only('email').values_list('email', flat=True)
         post_email = Post.objects.only('email').values_list('email', flat=True)  
 
-        if (email in inquiry_email) or (email in post_email):            
-            send_inquiry_exist_email.delay(data['name'], data['email'], data['pickup_time'], data['suburb'], data['direction'])
+        if (email in inquiry_email) or (email in post_email):   
+            content = '''
+            Hello, {} \n
+            Point single 
+            Exist in Inquiry or Post *\n
+            https://easygoshuttle.com.au                   
+            =============================            
+            Email: {}  
+            Pick up time: {}      
+            Start point: {}            
+            Return pickup time: {}            
+           
+            =============================\n        
+            Best Regards,
+            EasyGo Admin \n\n        
+            ''' .format(data['name'], data['email'], data['pickup_time'], data['flight_number'], data['return_pickup_time'])
+
+            send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])
             
         else:
-            send_inquiry_non_exist_email.delay(data['name'], data['email'], data['pickup_time'], data['suburb'], data['direction'])     
-                       
+            content = '''
+            Hello, {} \n
+            Point single 
+            Neither in Inquiryand Post *\n
+            https://easygoshuttle.com.au  
+            ===============================
+            
+            Email: {}  
+            Pick up time: {}      
+            Start point: {}            
+            Return pickup time: {}            
+           
+            =============================\n        
+            Best Regards,
+            EasyGo Admin \n\n        
+            ''' .format(data['name'], data['email'], data['pickup_time'], data['flight_number'], data['return_pickup_time'])
+
+            send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])
+                                   
         
         p = Inquiry_point(name=name, contact=contact, email=email, direction="Point to Point", flight_date=flight_date, flight_time="01:00", 
                           pickup_time=pickup_time, flight_number=flight_number, street=street, suburb="Cruise", no_of_passenger=no_of_passenger, 
