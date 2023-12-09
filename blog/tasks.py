@@ -144,6 +144,7 @@ def update_reminder():
 
             for post in posts:
                 if post.reminder:
+                    update_logger.info(f'....Already in calceldar:{post.name}, {post.flight_date}, {post.pickup_time}')
                     continue
                 else: 
                     post.reminder = True
