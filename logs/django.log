@@ -19015,3 +19015,35 @@ Traceback (most recent call last):
   File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
     raise VariableDoesNotExist(
 django.template.base.VariableDoesNotExist: Failed lookup for key [email1] in [{'True': True, 'False': False, 'None': None}, {'company_name': '', 'name': 'Daya Devasundrarajah', 'contact': '0477327538', 'email': 'daya@tic.toshiba.com.au', 'flight_date': datetime.date(2023, 12, 14), 'flight_number': 'TR3', 'flight_time': '14:00', 'pickup_time': '10:30', 'direction': 'Drop off to Intl Airport', 'street': '34 Stirling avenue', 'suburb': 'North rocks', 'no_of_passenger': '3', 'no_of_baggage': '6', 'return_direction': None, 'return_flight_date': None, 'return_flight_number': None, 'return_flight_time': None, 'return_pickup_time': None, 'message': '', 'price': '120', 'notice': '', 'private_ride': False}]
+DEBUG 2023-12-11 00:14:03,015 base Exception while resolving variable 'email1' in template 'basecamp/html_email-inquiry-response.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'email1'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'Context' has no attribute 'email1'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'email1'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [email1] in [{'True': True, 'False': False, 'None': None}, {'company_name': '', 'name': 'Christina Neria', 'contact': '0434951816', 'email': 'christinaneria@gmail.com', 'flight_date': datetime.date(2023, 12, 18), 'flight_number': 'VA965', 'flight_time': '17:00', 'pickup_time': '12:00', 'direction': 'Drop off to Intl Airport', 'street': '43 De Castella Drive', 'suburb': 'Blacktown', 'no_of_passenger': '6', 'no_of_baggage': '6', 'return_direction': None, 'return_flight_date': None, 'return_flight_number': None, 'return_flight_time': None, 'return_pickup_time': None, 'message': '', 'price': '180 (inc tolls)', 'notice': '', 'private_ride': False}]
+WARNING 2023-12-11 00:17:38,692 log Not Found: /inquiry3/
