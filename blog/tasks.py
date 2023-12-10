@@ -18,23 +18,25 @@ import datetime
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-# logger for create_event_on_calendar
-calendar_logger = logging.getLogger('blog.calendar')
-calendar_logger.setLevel(logging.INFO)
-
-formatter = logging.Formatter('%(asctime)s:%(message)s')
-
 logs_dir = os.path.join(BASE_DIR, 'logs')
 if not os.path.exists(logs_dir):
     os.makedirs(logs_dir)
 
-file_handler = logging.FileHandler(os.path.join(logs_dir, 'calendar.log'))
-file_handler.setFormatter(formatter)
+formatter = logging.Formatter('%(asctime)s:%(message)s')
 
-calendar_logger.addHandler(file_handler)
+def configure_logger(name, filename):
+    logger = logging.getLogger(name)
+    logger.setLevel(logging.INFO)
+
+    file_handler = logging.FileHandler(os.path.join(logs_dir, filename))
+    file_handler.setFormatter(formatter)
+
+    logger.addHandler(file_handler)
+
+    return logger
 
 
+calendar_logger = configure_logger('blog.calendar', 'calendar.log')
 @shared_task
 def create_event_on_calendar(instance_id):
     # Fetch the Post instance
@@ -115,6 +117,7 @@ def create_event_on_calendar(instance_id):
             calendar_logger.error('An error occurred while updating the event: %s', error)
 
 
+logger_inquiry_local_email = configure_logger('blog.inquiry_local_email', 'inquiry_local_email.log')
 @shared_task
 def send_inquiry_exist_email(name, email, pickup_time, suburb, direction):
     content = f'''
@@ -131,6 +134,7 @@ def send_inquiry_exist_email(name, email, pickup_time, suburb, direction):
     EasyGo Admin \n\n
     '''
     send_mail('', content, '', [RECIPIENT_EMAIL])
+    logger_inquiry_local_email.info(f'Exist in Inquiry or Post email sent for {name} : {email}.')
 
 @shared_task
 def send_inquiry_non_exist_email(name, email, pickup_time, suburb, direction):
@@ -148,8 +152,10 @@ def send_inquiry_non_exist_email(name, email, pickup_time, suburb, direction):
     EasyGo Admin \n\n
     '''
     send_mail('', content, '', [RECIPIENT_EMAIL])
+    logger_inquiry_local_email.info(f'Neither in Inquiry & Post email sent for {name} : {email}.')
 
 
+logger_confirm_email = configure_logger('blog.confirm_email', 'confirm_email.log')
 @shared_task
 def send_confirm_email(name, contact, email, flight_date, return_flight_number):
     content = f'''
@@ -170,6 +176,7 @@ def send_confirm_email(name, contact, email, flight_date, return_flight_number):
     send_mail('', content, '', [RECIPIENT_EMAIL])
 
 
+logger_inquiry_response = configure_logger('blog.inquiry_response', 'inquiry_response.log')
 @shared_task
 def send_inquiry_confirmed_email(instance_data):
     company_name = instance_data.get('company_name', '')
@@ -215,6 +222,8 @@ def send_inquiry_confirmed_email(instance_data):
     )
     email.attach_alternative(html_content, "text/html")
     email.send()
+
+    logger_inquiry_response.info(f'Inquiry response email sent for {name} on {flight_date}.')
 
 
 @shared_task
@@ -262,3 +271,5 @@ def send_inquiry_cancelled_email(instance_data):
     )
     email.attach_alternative(html_content, "text/html")
     email.send()
+
+    logger_inquiry_response.info(f'Inquiry cancelled email sent for {name} on {flight_date}.')
