@@ -1,10 +1,8 @@
-from .models import Post, Inquiry
+from .models import Post
 from celery import shared_task
 from django.core.mail import send_mail
 from main.settings import RECIPIENT_EMAIL
-from datetime import datetime, timedelta
-from retrieve import main 
-from celery.utils.log import get_task_logger
+from datetime import datetime
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from google.oauth2.credentials import Credentials
@@ -13,6 +11,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 import os
 import logging
+import datetime 
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
