@@ -1,7 +1,7 @@
 from __future__ import print_function
 from main.settings import RECIPIENT_EMAIL
 from .models import Post, Inquiry, Payment
-from .tasks import create_event_on_calendar
+from .tasks import create_event_on_calendar, send_inquiry_confirmed_email, send_inquiry_cancelled_email
 from basecamp.models import Inquiry_point
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -31,40 +31,57 @@ def notify_user_post(sender, instance, created, **kwargs):
 # Flight inquiry
 @receiver(post_save, sender=Inquiry)
 def notify_user_inquiry(sender, instance, created, **kwargs):
-    if instance.is_confirmed:    
-        html_content = render_to_string("basecamp/html_email-inquiry-response.html",
-                                        {'company_name': instance.company_name, 'name': instance.name, 'contact': instance.contact, 'email': instance.email,
-                                         'flight_date': instance.flight_date, 'flight_number': instance.flight_number,
-                                         'flight_time': instance.flight_time, 'pickup_time': instance.pickup_time,
-                                         'direction': instance.direction, 'street': instance.street, 'suburb': instance.suburb,
-                                         'no_of_passenger': instance.no_of_passenger, 'no_of_baggage': instance.no_of_baggage,
-                                         'return_direction': instance.return_direction, 'return_flight_date': instance.return_flight_date, 
-                                         'return_flight_number': instance.return_flight_number, 'return_flight_time': instance.return_flight_time,
-                                         'return_pickup_time': instance.return_pickup_time, 'message': instance.message, 'price': instance.price, 
-                                         'notice': instance.notice, 'private_ride': instance.private_ride,})
-        text_content = strip_tags(html_content)
-        email = EmailMultiAlternatives(
-            "EasyGo Booking Inquiry",
-            text_content,
-            '',
-            [instance.email]
-        )
-        email.attach_alternative(html_content, "text/html")
-        email.send()
+    if instance.is_confirmed: 
+        send_inquiry_confirmed_email.delay(instance_data={
+            'company_name': instance.company_name,
+            'name': instance.name,
+            'contact': instance.contact,
+            'email': instance.email,
+            'flight_date': instance.flight_date,
+            'flight_number': instance.flight_number,
+            'flight_time': instance.flight_time,
+            'pickup_time': instance.pickup_time,
+            'direction': instance.direction,
+            'street': instance.street,
+            'suburb': instance.suburb,
+            'no_of_passenger': instance.no_of_passenger,
+            'no_of_baggage': instance.no_of_baggage,
+            'return_direction': instance.return_direction,
+            'return_flight_date': instance.return_flight_date,
+            'return_flight_number': instance.return_flight_number,
+            'return_flight_time': instance.return_flight_time,
+            'return_pickup_time': instance.return_pickup_time,
+            'message': instance.message,
+            'price': instance.price,
+            'notice': instance.notice,
+            'private_ride': instance.private_ride,
+        })
 
     elif instance.cancelled:
-        html_content = render_to_string("basecamp/html_email-cancelled.html",
-                                        {'name': instance.name, 'email': instance.email,
-                                         })
-        text_content = strip_tags(html_content)
-        email = EmailMultiAlternatives(
-            "Booking Inquiry - EasyGo",
-            text_content,
-            '',
-            [instance.email]
-        )
-        email.attach_alternative(html_content, "text/html")
-        email.send()
+        send_inquiry_cancelled_email.delay(instance_data={
+            'company_name': instance.company_name,
+            'name': instance.name,
+            'contact': instance.contact,
+            'email': instance.email,
+            'flight_date': instance.flight_date,
+            'flight_number': instance.flight_number,
+            'flight_time': instance.flight_time,
+            'pickup_time': instance.pickup_time,
+            'direction': instance.direction,
+            'street': instance.street,
+            'suburb': instance.suburb,
+            'no_of_passenger': instance.no_of_passenger,
+            'no_of_baggage': instance.no_of_baggage,
+            'return_direction': instance.return_direction,
+            'return_flight_date': instance.return_flight_date,
+            'return_flight_number': instance.return_flight_number,
+            'return_flight_time': instance.return_flight_time,
+            'return_pickup_time': instance.return_pickup_time,
+            'message': instance.message,
+            'price': instance.price,
+            'notice': instance.notice,
+            'private_ride': instance.private_ride,
+        })
 
 
 # Point to point inquiry
