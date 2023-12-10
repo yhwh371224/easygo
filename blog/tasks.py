@@ -119,7 +119,7 @@ def create_event_on_calendar(instance_id):
 
 logger_inquiry_local_email = configure_logger('blog.inquiry_local_email', 'inquiry_local_email.log')
 @shared_task
-def send_inquiry_exist_email(name, email, pickup_time, suburb, direction):
+def send_inquiry_exist_email(name, email, pickup_time, suburb, direction, flight_date):
     content = f'''
     Hello, {name} \n
     Exist in Inquiry or Post *\n
@@ -133,11 +133,11 @@ def send_inquiry_exist_email(name, email, pickup_time, suburb, direction):
     Best Regards,
     EasyGo Admin \n\n
     '''
-    send_mail('', content, '', [RECIPIENT_EMAIL])
+    send_mail(flight_date, content, '', [RECIPIENT_EMAIL])
     logger_inquiry_local_email.info(f'Exist in Inquiry or Post email sent for {name} : {email}.')
 
 @shared_task
-def send_inquiry_non_exist_email(name, email, pickup_time, suburb, direction):
+def send_inquiry_non_exist_email(name, email, pickup_time, suburb, direction, flight_date):
     content = f'''
     Hello, {name} \n
     Neither in Inquiry & Post *\n
@@ -151,7 +151,7 @@ def send_inquiry_non_exist_email(name, email, pickup_time, suburb, direction):
     Best Regards,
     EasyGo Admin \n\n
     '''
-    send_mail('', content, '', [RECIPIENT_EMAIL])
+    send_mail(flight_date, content, '', [RECIPIENT_EMAIL])
     logger_inquiry_local_email.info(f'Neither in Inquiry & Post email sent for {name} : {email}.')
 
 
