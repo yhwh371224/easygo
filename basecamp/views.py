@@ -368,21 +368,21 @@ def inquiry_details(request):
 
         data = {
             'name': name,
-            'email': email,
-            'flight_date': flight_date,
-            'pickup_time': pickup_time,
-            'suburb': suburb,
             'direction': direction,
+            'suburb': suburb,
+            'pickup_time': pickup_time,
+            'no_of_passenger': no_of_passenger,
+            'flight_date': flight_date,
             }
-                
+     
         inquiry_email = Inquiry.objects.only('email').values_list('email', flat=True)
         post_email = Post.objects.only('email').values_list('email', flat=True)  
 
         if (email in inquiry_email) or (email in post_email):            
-            send_inquiry_exist_email.delay(data['name'], data['flight_date'], data['email'], data['pickup_time'], data['suburb'], data['direction'])
+            send_inquiry_exist_email.delay(data['name'], data['direction'], data['suburb'], data['pickup_time'], data['no_of_passenger'], data['flight_date'])
             
         else:
-            send_inquiry_non_exist_email.delay(data['name'], data['flight_date'], data['email'], data['pickup_time'], data['suburb'], data['direction'])
+            send_inquiry_non_exist_email.delay(data['name'], data['direction'], data['suburb'], data['pickup_time'], data['no_of_passenger'], data['flight_date']) 
             
         p = Inquiry(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
@@ -435,21 +435,21 @@ def inquiry_details1(request):
         
         data = {
             'name': name,
-            'email': email,
-            'flight_date': flight_date,
-            'pickup_time': pickup_time,
-            'suburb': suburb,
             'direction': direction,
+            'suburb': suburb,
+            'pickup_time': pickup_time,
+            'no_of_passenger': no_of_passenger,
+            'flight_date': flight_date,
             }
      
         inquiry_email = Inquiry.objects.only('email').values_list('email', flat=True)
         post_email = Post.objects.only('email').values_list('email', flat=True)  
 
         if (email in inquiry_email) or (email in post_email):            
-            send_inquiry_exist_email.delay(data['name'], data['flight_date'], data['email'], data['pickup_time'], data['suburb'], data['direction'])
+            send_inquiry_exist_email.delay(data['name'], data['direction'], data['suburb'], data['pickup_time'], data['no_of_passenger'], data['flight_date'])
             
         else:
-            send_inquiry_non_exist_email.delay(data['name'], data['flight_date'], data['email'], data['pickup_time'], data['suburb'], data['direction'])
+            send_inquiry_non_exist_email.delay(data['name'], data['direction'], data['suburb'], data['pickup_time'], data['no_of_passenger'], data['flight_date']) 
         
         p = Inquiry(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
@@ -494,21 +494,21 @@ def booking_form_detail(request):
         
         data = {
             'name': name,
-            'email': email,
-            'flight_date': flight_date,
-            'pickup_time': pickup_time,
-            'suburb': suburb,
             'direction': direction,
+            'suburb': suburb,
+            'pickup_time': pickup_time,
+            'no_of_passenger': no_of_passenger,
+            'flight_date': flight_date,
             }
      
         inquiry_email = Inquiry.objects.only('email').values_list('email', flat=True)
         post_email = Post.objects.only('email').values_list('email', flat=True)  
 
         if (email in inquiry_email) or (email in post_email):            
-            send_inquiry_exist_email.delay(data['name'], data['flight_date'], data['email'], data['pickup_time'], data['suburb'], data['direction'])
+            send_inquiry_exist_email.delay(data['name'], data['direction'], data['suburb'], data['pickup_time'], data['no_of_passenger'], data['flight_date'])
             
         else:
-            send_inquiry_non_exist_email.delay(data['name'], data['flight_date'], data['email'], data['pickup_time'], data['suburb'], data['direction'])               
+            send_inquiry_non_exist_email.delay(data['name'], data['direction'], data['suburb'], data['pickup_time'], data['no_of_passenger'], data['flight_date'])               
 
         
         p = Inquiry(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
@@ -1067,12 +1067,11 @@ def confirm_booking_detail(request):
             
             data = {
             'name': name,
-            'contact': contact,
             'email': email,            
             'flight_date': flight_date,
             'return_flight_number': return_flight_number}                    
             
-            send_confirm_email.delay(data['name'], data['contact'], data['email'], data['flight_date'], data['return_flight_number'])
+            send_confirm_email.delay(data['name'], data['email'], data['flight_date'], data['return_flight_number'])
             
         sam_driver = Driver.objects.get(driver_name="Sam")    
             

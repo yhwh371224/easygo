@@ -5,7 +5,6 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from main.settings import RECIPIENT_EMAIL
-from datetime import datetime
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from google.oauth2.credentials import Credentials
@@ -119,40 +118,36 @@ def create_event_on_calendar(instance_id):
 
 logger_inquiry_local_email = configure_logger('blog.inquiry_local_email', 'inquiry_local_email.log')
 @shared_task
-def send_inquiry_exist_email(name, email, pickup_time, suburb, direction, flight_date):
+def send_inquiry_exist_email(name, direction, suburb, pickup_time, no_of_passenger, flight_date):
     content = f'''
     Hello, {name} \n
     Exist in Inquiry or Post *\n
     https://easygoshuttle.com.au 
     ============================
-    Email: {email}
-    Pickup: {pickup_time}
-    Suburb: {suburb}
     Direction: {direction}
-    ============================
-    Best Regards,
-    EasyGo Admin \n\n
+    Suburb: {suburb}
+    Pickup: {pickup_time}
+    No of Pax: {no_of_passenger}    
+    ============================\n
     '''
     send_mail(flight_date, content, '', [RECIPIENT_EMAIL])
-    logger_inquiry_local_email.info(f'Exist in Inquiry or Post email sent for {name} : {email}.')
+    logger_inquiry_local_email.info(f'Exist in Inquiry or Post email sent for {name}')
 
 @shared_task
-def send_inquiry_non_exist_email(name, email, pickup_time, suburb, direction, flight_date):
+def send_inquiry_non_exist_email(name, direction, suburb, pickup_time, no_of_passenger, flight_date):
     content = f'''
     Hello, {name} \n
     Neither in Inquiry & Post *\n
     https://easygoshuttle.com.au     
     ============================
-    Email: {email}
-    Pickup: {pickup_time}
-    Suburb: {suburb}
     Direction: {direction}
-    ============================
-    Best Regards,
-    EasyGo Admin \n\n
+    Suburb: {suburb}
+    Pickup: {pickup_time}
+    No of Pax: {no_of_passenger}
+    ============================\n
     '''
     send_mail(flight_date, content, '', [RECIPIENT_EMAIL])
-    logger_inquiry_local_email.info(f'Neither in Inquiry & Post email sent for {name} : {email}.')
+    logger_inquiry_local_email.info(f'Neither in Inquiry & Post email sent for {name}')
 
 
 logger_confirm_email = configure_logger('blog.confirm_email', 'confirm_email.log')
@@ -164,16 +159,15 @@ def send_confirm_email(name, contact, email, flight_date, return_flight_number):
     >> Sending email only! \n
     https://easygoshuttle.com.au/sending_email_first/ \n  
     https://easygoshuttle.com.au/sending_email_second/ \n
-    ===============================
-    Contact: {contact}
-    Email: {email}
-    Flight date: {flight_date}       
+    ============================= \n    
+    Email:  {email}  \n
+    Flight date: {flight_date} \n 
     Return flight number: {return_flight_number}
     ===============================\n        
     Best Regards,
     EasyGo Admin \n\n        
     '''
-    send_mail('', content, '', [RECIPIENT_EMAIL])
+    send_mail(flight_date, content, '', [RECIPIENT_EMAIL])
 
 
 logger_inquiry_response = configure_logger('blog.inquiry_response', 'inquiry_response.log')
