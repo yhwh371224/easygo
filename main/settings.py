@@ -7,7 +7,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = config('SECRET_KEY')
 
-#DEBUG = True
+# DEBUG = True
 DEBUG = config('DEBUG', cast=bool, default=True)
 
 ALLOWED_HOSTS = ['easygoshuttle.com.au', 'www.easygoshuttle.com.au', '149.28.188.33']
@@ -148,6 +148,9 @@ CACHES = {
         }
     }
 }
+
+
+WHITENOISE_MAX_AGE = 60 * 60 * 24 * 365  # 1 year in seconds
 
 
 AUTH_PASSWORD_VALIDATORS = [
