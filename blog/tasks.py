@@ -14,6 +14,8 @@ from google.auth.transport.requests import Request
 import os
 import logging
 import datetime 
+import re
+from django.db.models import Q
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -150,6 +152,7 @@ def send_inquiry_non_exist_email(name, direction, suburb, pickup_time, no_of_pas
     logger_inquiry_local_email.info(f'Neither in Inquiry & Post email sent for {name}')
 
 
+# Clicked confirm_booking form 
 logger_confirm_email = configure_logger('blog.confirm_email', 'confirm_email.log')
 @shared_task
 def send_confirm_email(name, contact, email, flight_date, return_flight_number):
@@ -170,6 +173,7 @@ def send_confirm_email(name, contact, email, flight_date, return_flight_number):
     send_mail(flight_date, content, '', [RECIPIENT_EMAIL])
 
 
+# Inquiry response email 
 logger_inquiry_response = configure_logger('blog.inquiry_response', 'inquiry_response.log')
 @shared_task
 def send_inquiry_confirmed_email(instance_data):
@@ -267,3 +271,56 @@ def send_inquiry_cancelled_email(instance_data):
     email.send()
 
     logger_inquiry_response.info(f'Inquiry cancelled email sent for {name} on {flight_date}.')
+
+
+# PayPal Payment
+logger_paypal_payment = configure_logger('blog.paypal_payment', 'paypal_payment.log')
+@shared_task
+def notify_user_payment(instance):
+    try: 
+        post_name = Post.objects.filter(
+            Q(name__iregex=r'^%s$' % re.escape(instance.item_name)) | 
+            Q(email__iexact=instance.payer_email)).first()
+    
+        if post_name:       
+            html_content = render_to_string("basecamp/html_email-payment-success.html",
+                                        {'name': instance.item_name, 'email': instance.payer_email,
+                                         'amount': instance.gross_amount })
+            text_content = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                "PayPal payment - EasyGo",
+                text_content,
+                '',
+                [instance.payer_email, RECIPIENT_EMAIL]
+            )        
+            email.attach_alternative(html_content, "text/html")        
+            email.send()
+
+            post_name.paid = instance.gross_amount
+            post_name.save()
+
+            if post_name.return_pickup_time == 'x':
+                    post_name_second = Post.objects.filter(email=post_name.email)[1]
+                    post_name_second.paid = instance.gross_amount
+                    post_name_second.save()  
+
+            logger_paypal_payment.info(f'Successfully notified user for PayPal payment: {instance.item_name}')   
+
+        else:
+            html_content = render_to_string("basecamp/html_email-noIdentity.html",
+                                        {'name': instance.item_name, 'email': instance.payer_email,
+                                         'amount': instance.gross_amount })
+            text_content = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                "PayPal payment - EasyGo",
+                text_content,
+                '',
+                [instance.payer_email, RECIPIENT_EMAIL]
+            )        
+            email.attach_alternative(html_content, "text/html")        
+            email.send()  
+
+            logger_paypal_payment.warning(f'No matching post found for PayPal payment: {instance.item_name}') 
+            
+    except Exception as e:
+        logger_paypal_payment.error(f'Error processing PayPal payment: {e}', exc_info=True)
