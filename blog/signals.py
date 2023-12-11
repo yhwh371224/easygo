@@ -1,15 +1,13 @@
 from __future__ import print_function
 from main.settings import RECIPIENT_EMAIL
 from .models import Post, Inquiry, Payment
-from .tasks import create_event_on_calendar, send_inquiry_confirmed_email, send_inquiry_cancelled_email
+from .tasks import create_event_on_calendar, send_inquiry_confirmed_email, send_inquiry_cancelled_email, notify_user_payment
 from basecamp.models import Inquiry_point
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
-import re
-from django.db.models import Q
 
 
 # Flight return booking
@@ -120,48 +118,11 @@ def notify_user_inquiry_point(sender, instance, created, **kwargs):
         email.send()
 
     
-# PayPal Payment 
+# PayPal Payment > sending email and saving 
 @receiver(post_save, sender=Payment)
-def notify_user_payment(sender, instance, created, **kwargs):      
-    post_name = Post.objects.filter(
-        Q(name__iregex=r'^%s$' % re.escape(instance.item_name)) | 
-        Q(email__iexact=instance.payer_email)).first()
-   
-    if post_name:       
-        html_content = render_to_string("basecamp/html_email-payment-success.html",
-                                    {'name': instance.item_name, 'email': instance.payer_email,
-                                     'amount': instance.gross_amount })
-        text_content = strip_tags(html_content)
-        email = EmailMultiAlternatives(
-            "PayPal payment - EasyGo",
-            text_content,
-            '',
-            [instance.payer_email, RECIPIENT_EMAIL]
-        )        
-        email.attach_alternative(html_content, "text/html")        
-        email.send()
-
-        post_name.paid = instance.gross_amount
-        post_name.save()
-
-        if post_name.return_pickup_time == 'x':
-                post_name_second = Post.objects.filter(email=post_name.email)[1]
-                post_name_second.paid = instance.gross_amount
-                post_name_second.save()     
-           
-    else:
-        html_content = render_to_string("basecamp/html_email-noIdentity.html",
-                                    {'name': instance.item_name, 'email': instance.payer_email,
-                                     'amount': instance.gross_amount })
-        text_content = strip_tags(html_content)
-        email = EmailMultiAlternatives(
-            "PayPal payment - EasyGo",
-            text_content,
-            '',
-            [instance.payer_email, RECIPIENT_EMAIL]
-        )        
-        email.attach_alternative(html_content, "text/html")        
-        email.send()    
+def async_notify_user_payment(sender, instance, created, **kwargs):
+    # Call the Celery task
+    notify_user_payment.delay(instance)  
 
 
 ## google calendar recording 
