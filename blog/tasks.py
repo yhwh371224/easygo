@@ -212,7 +212,7 @@ def send_inquiry_confirmed_email(instance_data):
         "EasyGo Booking Inquiry",
         text_content,
         '',
-        [email]
+        [email, RECIPIENT_EMAIL]
     )
     email.attach_alternative(html_content, "text/html")
     email.send()
@@ -261,7 +261,7 @@ def send_inquiry_cancelled_email(instance_data):
         "EasyGo Booking Inquiry",
         text_content,
         '',
-        [email]
+        [email, RECIPIENT_EMAIL]
     )
     email.attach_alternative(html_content, "text/html")
     email.send()
