@@ -5,3 +5,4 @@ WARNING 2023-12-13 00:18:21,256 log Not Found: /bicomposer/
 WARNING 2023-12-13 00:37:17,792 log Not Found: /.env
 WARNING 2023-12-13 00:37:20,799 log Forbidden (Referer checking failed - no Referer.): /
 WARNING 2023-12-13 00:53:23,453 log Not Found: /about_us//
+WARNING 2023-12-13 01:03:27,606 log Not Found: /inquiry2//
