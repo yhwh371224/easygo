@@ -15,7 +15,7 @@ import re
 # Flight return booking
 @receiver(post_save, sender=Post)
 def notify_user_post(sender, instance, created, **kwargs):
-    if instance.return_pickup_time == 'x':
+    if instance.return_pickup_time == 'x' or instance.sent_email:
         pass
 
     elif not instance.calendar_event_id and instance.return_flight_number:
