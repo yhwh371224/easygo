@@ -1130,7 +1130,10 @@ def sending_email_first_detail(request):
 def sending_email_second_detail(request):     
     if request.method == "POST":
         email = request.POST.get('email')
-        user = Post.objects.filter(email=email)[1]  
+
+        user = Post.objects.filter(email=email)[1]
+
+        user1 = Post.objects.filter(email=email).first()          
         
         if user:
             user.sent_email = True
@@ -1157,6 +1160,10 @@ def sending_email_second_detail(request):
             )
             email.attach_alternative(html_content, "text/html")
             email.send()
+
+            if not user1.sent_email: 
+                user1.sent_email = True
+                user1.save()
 
             return render(request, 'basecamp/confirmation_detail.html',
                             {'name' : user.name }) 

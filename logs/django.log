@@ -1,70 +1,7 @@
-WARNING 2023-12-12 06:29:16,673 log Not Found: /robots.txt
-WARNING 2023-12-12 06:29:16,854 log Not Found: /robots.txt
-WARNING 2023-12-12 06:31:27,202 log Not Found: /shop/fi/product/moncler-seon-euramerican-style-takki-naisille-musta/
-WARNING 2023-12-12 06:43:42,456 log Not Found: /inquiry3/
-WARNING 2023-12-12 06:46:05,839 log Not Found: /apple-touch-icon.png
-WARNING 2023-12-12 06:46:05,842 log Not Found: /apple-touch-icon-precomposed.png
-DEBUG 2023-12-12 06:46:57,745 base Exception while resolving variable 'recaptcha_site_key' in template 'basecamp/inquiry1.html'.
-Traceback (most recent call last):
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
-    current = current[bit]
-              ~~~~~~~^^^^^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
-    raise KeyError(key)
-KeyError: 'recaptcha_site_key'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
-    if isinstance(current, BaseContext) and getattr(
-                                            ^^^^^^^^
-AttributeError: type object 'RequestContext' has no attribute 'recaptcha_site_key'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
-    current = current[int(bit)]
-                      ^^^^^^^^
-ValueError: invalid literal for int() with base 10: 'recaptcha_site_key'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
-    raise VariableDoesNotExist(
-django.template.base.VariableDoesNotExist: Failed lookup for key [recaptcha_site_key] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: 'Q07EAMnScJ5PVhWzOdXHRNAyTNGlF8DYJd9yca9ZJxc64VyaDnqzQap0VlWEwzAS'>, 'request': <WSGIRequest: POST '/price_detail/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fb94b534cc0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fb94b534cc0>>), 'messages': <FallbackStorage: request=<WSGIRequest: POST '/price_detail/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'flight_date': '2024-02-08', 'direction': 'Drop off to Intl Airport', 'suburb': 'Riverstone', 'no_of_passenger': '3'}, {'block': <Block Node: content. Contents: [<TextNode: '\n      <!-- Page content-'>, <Variable Node: flight_date>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: direction>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: suburb>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: no_of_passenger>, <TextNode: '</a> -->\n\t\t\t  <br><br>\n  '>, <django.template.defaulttags.CsrfTokenNode object at 0x7fb94b6907d0>, <TextNode: '\n\t\t\t\t<div class="mb3 pb-1'>, <Variable Node: direction>, <TextNode: '">'>, <Variable Node: direction>, <TextNode: '</option>\t\t\t\t\t\t          '>, <Variable Node: flight_date>, <TextNode: '" type="text" >\t\t\t\t  \n   '>, <IfNode>, <TextNode: '\n\t\t\t\t  <div class="mb-3 p'>, <Variable Node: suburb>, <TextNode: '</label>\t\t\t\t\t\n\t\t\t\t</div>\n'>, <Variable Node: suburb>, <TextNode: '">'>, <Variable Node: suburb>, <TextNode: '</option>\t\t\t\t\t\n\t\t\t\t  </se'>, <Variable Node: no_of_passenger>, <TextNode: '">'>, <Variable Node: no_of_passenger>, <TextNode: '</option>\t\t\t\t  \n         '>, <Variable Node: recaptcha_site_key>, <TextNode: '"></div>\n\t\t\t\t<div id="err'>]>}]
-WARNING 2023-12-12 06:54:48,651 log Not Found: /vpn/index.html
-WARNING 2023-12-12 07:01:24,150 log Not Found: /.env
-DEBUG 2023-12-12 07:18:08,614 base Exception while resolving variable 'recaptcha_site_key' in template 'basecamp/inquiry1.html'.
-Traceback (most recent call last):
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
-    current = current[bit]
-              ~~~~~~~^^^^^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
-    raise KeyError(key)
-KeyError: 'recaptcha_site_key'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
-    if isinstance(current, BaseContext) and getattr(
-                                            ^^^^^^^^
-AttributeError: type object 'RequestContext' has no attribute 'recaptcha_site_key'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
-    current = current[int(bit)]
-                      ^^^^^^^^
-ValueError: invalid literal for int() with base 10: 'recaptcha_site_key'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
-    raise VariableDoesNotExist(
-django.template.base.VariableDoesNotExist: Failed lookup for key [recaptcha_site_key] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: '8ZwZgJdsiUAY8uLVz53o4UevBfU98nUsbToHPfwHzXEMY7rZkCh9ycG8TXqbwprR'>, 'request': <WSGIRequest: POST '/price_detail/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f659233d300>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f659233d300>>), 'messages': <FallbackStorage: request=<WSGIRequest: POST '/price_detail/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'flight_date': '2023-12-23', 'direction': 'Drop off to Intl Airport', 'suburb': 'North Sydney', 'no_of_passenger': '2'}, {'block': <Block Node: content. Contents: [<TextNode: '\n      <!-- Page content-'>, <Variable Node: flight_date>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: direction>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: suburb>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: no_of_passenger>, <TextNode: '</a> -->\n\t\t\t  <br><br>\n  '>, <django.template.defaulttags.CsrfTokenNode object at 0x7f65923f78d0>, <TextNode: '\n\t\t\t\t<div class="mb3 pb-1'>, <Variable Node: direction>, <TextNode: '">'>, <Variable Node: direction>, <TextNode: '</option>\t\t\t\t\t\t          '>, <Variable Node: flight_date>, <TextNode: '" type="text" >\t\t\t\t  \n   '>, <IfNode>, <TextNode: '\n\t\t\t\t  <div class="mb-3 p'>, <Variable Node: suburb>, <TextNode: '</label>\t\t\t\t\t\n\t\t\t\t</div>\n'>, <Variable Node: suburb>, <TextNode: '">'>, <Variable Node: suburb>, <TextNode: '</option>\t\t\t\t\t\n\t\t\t\t  </se'>, <Variable Node: no_of_passenger>, <TextNode: '">'>, <Variable Node: no_of_passenger>, <TextNode: '</option>\t\t\t\t  \n         '>, <Variable Node: recaptcha_site_key>, <TextNode: '"></div>\n\t\t\t\t<div id="err'>]>}]
+WARNING 2023-12-13 00:14:27,011 log Not Found: /robots.txt
+WARNING 2023-12-13 00:17:12,331 log Not Found: /.env
+WARNING 2023-12-13 00:17:14,197 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-12-13 00:18:21,256 log Not Found: /bicomposer/
+WARNING 2023-12-13 00:37:17,792 log Not Found: /.env
+WARNING 2023-12-13 00:37:20,799 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-12-13 00:53:23,453 log Not Found: /about_us//
