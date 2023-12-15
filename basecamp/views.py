@@ -1449,10 +1449,16 @@ def pickup_adjustment_detail(request):
         selected_option = request.POST.get('selected_option')
         
         user = Post.objects.filter(email=email).first() 
+        user1 = Post.objects.filter(email=email)[1]
 
         if selected_option == 'Departure earlier pickup':
-            user.pickup_time = adjustment_time
-            user.save()
+            if user.return_pickup_time == 'x':
+                user1.pickup_time = adjustment_time
+                user1.save()
+
+            else: 
+                user.pickup_time = adjustment_time
+                user.save()
 
             html_content = render_to_string("basecamp/html_email-departure-early.html",
                                         {'name': user.name, 'adjustment_time': adjustment_time, })
@@ -1467,8 +1473,13 @@ def pickup_adjustment_detail(request):
             email.send()
 
         elif selected_option == 'Departure later pickup':    
-            user.pickup_time = adjustment_time
-            user.save()
+            if user.return_pickup_time == 'x':
+                user1.pickup_time = adjustment_time
+                user1.save()
+
+            else: 
+                user.pickup_time = adjustment_time
+                user.save()
     
             html_content = render_to_string("basecamp/html_email-departure-late.html",
                                         {'name': user.name, 'adjustment_time': adjustment_time, })
@@ -1483,8 +1494,13 @@ def pickup_adjustment_detail(request):
             email.send()
 
         elif selected_option == 'Arrival earlier than schedule':   
-            user.pickup_time = adjustment_time
-            user.save()
+            if user.return_pickup_time == 'x':
+                user1.pickup_time = adjustment_time
+                user1.save()
+
+            else: 
+                user.pickup_time = adjustment_time
+                user.save()
      
             html_content = render_to_string("basecamp/html_email-arrival-early.html",
                                         {'name': user.name, 'adjustment_time': adjustment_time, })
@@ -1499,8 +1515,13 @@ def pickup_adjustment_detail(request):
             email.send()
 
         elif selected_option == 'Arrival later than schedule':        
-            user.pickup_time = adjustment_time
-            user.save()
+            if user.return_pickup_time == 'x':
+                user1.pickup_time = adjustment_time
+                user1.save()
+
+            else: 
+                user.pickup_time = adjustment_time
+                user.save()
 
             html_content = render_to_string("basecamp/html_email-arrival-late.html",
                                         {'name': user.name, 'adjustment_time': adjustment_time, })
