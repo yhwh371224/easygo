@@ -97,24 +97,26 @@ def create_event_on_calendar(instance_id):
     # Check if an event already exists for this instance
     if instance.calendar_event_id:            
         try:
-            event = service.events().update(calendarId='primary', eventId=instance.calendar_event_id, body=event).execute()
-            calendar_logger.info('Event updated: %s', event.get('htmlLink'))
+            if instance.cancelled:
+                service.events().delete(calendarId='primary', eventId=instance.calendar_event_id).execute()                
+                calendar_logger.info('Event cancelled and deleted from calendar')
+
+            else:
+                event = service.events().update(calendarId='primary', eventId=instance.calendar_event_id, body=event).execute()
+                calendar_logger.info('Event updated: %s', event.get('htmlLink'))
 
         except HttpError as error:
-            calendar_logger.error('An error occurred while updating the event: %s', error)
-
-    elif instance.cancelled:
-        pass
+            calendar_logger.error('An error occurred while updating/deleting the event: %s', error)
 
     else:
         try:
             event = service.events().insert(calendarId='primary', body=event).execute()
             instance.calendar_event_id = event['id']  # Store the event ID in your model
             instance.save()
-            calendar_logger.info('Event updated: %s', event.get('htmlLink'))
+            calendar_logger.info('Event created: %s', event.get('htmlLink'))
 
         except HttpError as error:
-            calendar_logger.error('An error occurred while updating the event: %s', error)
+            calendar_logger.error('An error occurred while creating the event: %s', error)
 
 
 logger_inquiry_local_email = configure_logger('blog.inquiry_local_email', 'inquiry_local_email.log')
