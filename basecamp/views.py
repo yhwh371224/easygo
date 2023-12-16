@@ -368,6 +368,7 @@ def inquiry_details(request):
 
         data = {
             'name': name,
+            'email': email,
             'direction': direction,
             'suburb': suburb,
             'pickup_time': pickup_time,
@@ -379,10 +380,10 @@ def inquiry_details(request):
         post_email = Post.objects.only('email').values_list('email', flat=True)  
 
         if (email in inquiry_email) or (email in post_email):            
-            send_inquiry_exist_email.delay(data['name'], data['direction'], data['suburb'], data['pickup_time'], data['no_of_passenger'], data['flight_date'])
+            send_inquiry_exist_email.delay(data['name'], data['email'], data['direction'], data['suburb'], data['pickup_time'], data['no_of_passenger'], data['flight_date'])
             
         else:
-            send_inquiry_non_exist_email.delay(data['name'], data['direction'], data['suburb'], data['pickup_time'], data['no_of_passenger'], data['flight_date']) 
+            send_inquiry_non_exist_email.delay(data['name'], data['email'], data['direction'], data['suburb'], data['pickup_time'], data['no_of_passenger'], data['flight_date']) 
             
         p = Inquiry(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
@@ -435,6 +436,7 @@ def inquiry_details1(request):
         
         data = {
             'name': name,
+            'email': email,
             'direction': direction,
             'suburb': suburb,
             'pickup_time': pickup_time,
@@ -446,10 +448,10 @@ def inquiry_details1(request):
         post_email = Post.objects.only('email').values_list('email', flat=True)  
 
         if (email in inquiry_email) or (email in post_email):            
-            send_inquiry_exist_email.delay(data['name'], data['direction'], data['suburb'], data['pickup_time'], data['no_of_passenger'], data['flight_date'])
+            send_inquiry_exist_email.delay(data['name'], data['email'], data['direction'], data['suburb'], data['pickup_time'], data['no_of_passenger'], data['flight_date'])
             
         else:
-            send_inquiry_non_exist_email.delay(data['name'], data['direction'], data['suburb'], data['pickup_time'], data['no_of_passenger'], data['flight_date']) 
+            send_inquiry_non_exist_email.delay(data['name'], data['email'], data['direction'], data['suburb'], data['pickup_time'], data['no_of_passenger'], data['flight_date']) 
         
         p = Inquiry(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
@@ -494,6 +496,7 @@ def booking_form_detail(request):
         
         data = {
             'name': name,
+            'email': email,
             'direction': direction,
             'suburb': suburb,
             'pickup_time': pickup_time,
@@ -505,10 +508,10 @@ def booking_form_detail(request):
         post_email = Post.objects.only('email').values_list('email', flat=True)  
 
         if (email in inquiry_email) or (email in post_email):            
-            send_inquiry_exist_email.delay(data['name'], data['direction'], data['suburb'], data['pickup_time'], data['no_of_passenger'], data['flight_date'])
+            send_inquiry_exist_email.delay(data['name'], data['email'], data['direction'], data['suburb'], data['pickup_time'], data['no_of_passenger'], data['flight_date'])
             
         else:
-            send_inquiry_non_exist_email.delay(data['name'], data['direction'], data['suburb'], data['pickup_time'], data['no_of_passenger'], data['flight_date'])               
+            send_inquiry_non_exist_email.delay(data['name'], data['email'], data['direction'], data['suburb'], data['pickup_time'], data['no_of_passenger'], data['flight_date'])               
 
         
         p = Inquiry(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
@@ -1069,9 +1072,10 @@ def confirm_booking_detail(request):
             'name': name,
             'email': email,            
             'flight_date': flight_date,
+            'pickup_time': pickup_time,
             'return_flight_number': return_flight_number}                    
             
-            send_confirm_email.delay(data['name'], data['email'], data['flight_date'], data['return_flight_number'])
+            send_confirm_email.delay(data['name'], data['email'], data['flight_date'], data['pickup_time'], data['return_flight_number'])
             
         sam_driver = Driver.objects.get(driver_name="Sam")    
             
@@ -1449,16 +1453,10 @@ def pickup_adjustment_detail(request):
         selected_option = request.POST.get('selected_option')
         
         user = Post.objects.filter(email=email).first() 
-        user1 = Post.objects.filter(email=email)[1]
 
         if selected_option == 'Departure earlier pickup':
-            if user.return_pickup_time == 'x':
-                user1.pickup_time = adjustment_time
-                user1.save()
-
-            else: 
-                user.pickup_time = adjustment_time
-                user.save()
+            user.pickup_time = adjustment_time
+            user.save()
 
             html_content = render_to_string("basecamp/html_email-departure-early.html",
                                         {'name': user.name, 'adjustment_time': adjustment_time, })
@@ -1473,13 +1471,8 @@ def pickup_adjustment_detail(request):
             email.send()
 
         elif selected_option == 'Departure later pickup':    
-            if user.return_pickup_time == 'x':
-                user1.pickup_time = adjustment_time
-                user1.save()
-
-            else: 
-                user.pickup_time = adjustment_time
-                user.save()
+            user.pickup_time = adjustment_time
+            user.save()
     
             html_content = render_to_string("basecamp/html_email-departure-late.html",
                                         {'name': user.name, 'adjustment_time': adjustment_time, })
@@ -1494,13 +1487,8 @@ def pickup_adjustment_detail(request):
             email.send()
 
         elif selected_option == 'Arrival earlier than schedule':   
-            if user.return_pickup_time == 'x':
-                user1.pickup_time = adjustment_time
-                user1.save()
-
-            else: 
-                user.pickup_time = adjustment_time
-                user.save()
+            user.pickup_time = adjustment_time
+            user.save()
      
             html_content = render_to_string("basecamp/html_email-arrival-early.html",
                                         {'name': user.name, 'adjustment_time': adjustment_time, })
@@ -1515,13 +1503,8 @@ def pickup_adjustment_detail(request):
             email.send()
 
         elif selected_option == 'Arrival later than schedule':        
-            if user.return_pickup_time == 'x':
-                user1.pickup_time = adjustment_time
-                user1.save()
-
-            else: 
-                user.pickup_time = adjustment_time
-                user.save()
+            user.pickup_time = adjustment_time
+            user.save()
 
             html_content = render_to_string("basecamp/html_email-arrival-late.html",
                                         {'name': user.name, 'adjustment_time': adjustment_time, })

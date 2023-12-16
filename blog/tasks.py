@@ -98,8 +98,13 @@ def create_event_on_calendar(instance_id):
     if instance.calendar_event_id:            
         try:
             if instance.cancelled:
-                service.events().delete(calendarId='primary', eventId=instance.calendar_event_id).execute()                
-                calendar_logger.info('Event cancelled and deleted from calendar')
+                response = service.events().delete(calendarId='primary', eventId=instance.calendar_event_id).execute()
+
+                # Check if deletion was successful
+                if 'error' in response:
+                    calendar_logger.error('Error deleting event: %s', response['error'])
+                else:
+                    calendar_logger.info('Event cancelled and deleted from calendar')
 
             else:
                 event = service.events().update(calendarId='primary', eventId=instance.calendar_event_id, body=event).execute()
@@ -121,12 +126,13 @@ def create_event_on_calendar(instance_id):
 
 logger_inquiry_local_email = configure_logger('blog.inquiry_local_email', 'inquiry_local_email.log')
 @shared_task
-def send_inquiry_exist_email(name, direction, suburb, pickup_time, no_of_passenger, flight_date):
+def send_inquiry_exist_email(name, email, direction, suburb, pickup_time, no_of_passenger, flight_date):
     content = f'''
     Hello, {name} \n
     Exist in Inquiry or Post *\n
     https://easygoshuttle.com.au 
     ============================
+    Email: {email}
     Direction: {direction}
     Suburb: {suburb}
     Pickup: {pickup_time}
@@ -137,12 +143,13 @@ def send_inquiry_exist_email(name, direction, suburb, pickup_time, no_of_passeng
     logger_inquiry_local_email.info(f'Exist in Inquiry or Post email sent for {name}')
 
 @shared_task
-def send_inquiry_non_exist_email(name, direction, suburb, pickup_time, no_of_passenger, flight_date):
+def send_inquiry_non_exist_email(name, email, direction, suburb, pickup_time, no_of_passenger, flight_date):
     content = f'''
     Hello, {name} \n
     Neither in Inquiry & Post *\n
     https://easygoshuttle.com.au     
     ============================
+    Email: {email}
     Direction: {direction}
     Suburb: {suburb}
     Pickup: {pickup_time}
