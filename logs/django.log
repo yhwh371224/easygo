@@ -4,3 +4,143 @@ WARNING 2023-12-16 09:06:19,904 log Not Found: /悉尼机场接送服务的最�
 WARNING 2023-12-16 09:06:34,054 log Not Found: /悉尼机场接送服务的最佳拍档/
 WARNING 2023-12-16 09:07:15,422 log Not Found: /机场接送-悉尼/
 WARNING 2023-12-16 09:07:35,548 log Not Found: /机场接送-悉尼/
+ERROR 2023-12-16 09:52:32,573 log Internal Server Error: /paypal_ipn/
+WARNING 2023-12-16 10:00:46,380 log Forbidden (CSRF cookie not set.): /price_detail/
+WARNING 2023-12-16 10:14:29,040 log Not Found: /%77eb%75i_%77sma_Http
+WARNING 2023-12-16 10:15:54,636 log Forbidden (CSRF cookie not set.): /price_detail/
+DEBUG 2023-12-16 10:23:54,270 base Exception while resolving variable 'recaptcha_site_key' in template 'basecamp/inquiry1.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [recaptcha_site_key] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: 'NMcJRtylQax2nsiQKKUMxBEjt6Tj4EBch8RlPIFnZsDPfXFeRRMeHf6EDpUSh3AR'>, 'request': <WSGIRequest: POST '/price_detail/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f29f9685620>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f29f9685620>>), 'messages': <FallbackStorage: request=<WSGIRequest: POST '/price_detail/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'flight_date': '2023-12-29', 'direction': 'Drop off to Intl Airport', 'suburb': 'Blacktown', 'no_of_passenger': '5'}, {'block': <Block Node: content. Contents: [<TextNode: '\n      <!-- Page content-'>, <Variable Node: flight_date>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: direction>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: suburb>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: no_of_passenger>, <TextNode: '</a> -->\n\t\t\t  <br><br>\n  '>, <django.template.defaulttags.CsrfTokenNode object at 0x7f29f98fc750>, <TextNode: '\n\t\t\t\t<div class="mb3 pb-1'>, <Variable Node: direction>, <TextNode: '">'>, <Variable Node: direction>, <TextNode: '</option>\t\t\t\t\t\t          '>, <Variable Node: flight_date>, <TextNode: '" type="text" >\t\t\t\t  \n   '>, <IfNode>, <TextNode: '\n\t\t\t\t  <div class="mb-3 p'>, <Variable Node: suburb>, <TextNode: '</label>\t\t\t\t\t\n\t\t\t\t</div>\n'>, <Variable Node: suburb>, <TextNode: '">'>, <Variable Node: suburb>, <TextNode: '</option>\t\t\t\t\t\n\t\t\t\t  </se'>, <Variable Node: no_of_passenger>, <TextNode: '">'>, <Variable Node: no_of_passenger>, <TextNode: '</option>\t\t\t\t  \n         '>, <Variable Node: recaptcha_site_key>, <TextNode: '"></div>\n\t\t\t\t<div id="err'>]>}]
+WARNING 2023-12-16 11:05:19,181 log Not Found: /wp-content/plugins/backup-backup/readme.txt
+WARNING 2023-12-16 11:06:25,014 log Not Found: /robots.txt
+WARNING 2023-12-16 11:07:43,196 log Not Found: //wp-includes/wlwmanifest.xml
+WARNING 2023-12-16 11:07:43,533 log Not Found: //xmlrpc.php
+WARNING 2023-12-16 11:07:44,202 log Not Found: //blog/wp-includes/wlwmanifest.xml
+WARNING 2023-12-16 11:07:44,537 log Not Found: //web/wp-includes/wlwmanifest.xml
+WARNING 2023-12-16 11:07:44,876 log Not Found: //wordpress/wp-includes/wlwmanifest.xml
+WARNING 2023-12-16 11:07:45,210 log Not Found: //website/wp-includes/wlwmanifest.xml
+WARNING 2023-12-16 11:07:45,548 log Not Found: //wp/wp-includes/wlwmanifest.xml
+WARNING 2023-12-16 11:07:45,886 log Not Found: //news/wp-includes/wlwmanifest.xml
+WARNING 2023-12-16 11:07:46,223 log Not Found: //2020/wp-includes/wlwmanifest.xml
+WARNING 2023-12-16 11:07:46,559 log Not Found: //2019/wp-includes/wlwmanifest.xml
+WARNING 2023-12-16 11:07:46,894 log Not Found: //shop/wp-includes/wlwmanifest.xml
+WARNING 2023-12-16 11:07:47,228 log Not Found: //wp1/wp-includes/wlwmanifest.xml
+WARNING 2023-12-16 11:07:47,564 log Not Found: //test/wp-includes/wlwmanifest.xml
+WARNING 2023-12-16 11:07:47,899 log Not Found: //wp2/wp-includes/wlwmanifest.xml
+WARNING 2023-12-16 11:07:48,234 log Not Found: //site/wp-includes/wlwmanifest.xml
+WARNING 2023-12-16 11:07:48,569 log Not Found: //cms/wp-includes/wlwmanifest.xml
+WARNING 2023-12-16 11:07:48,904 log Not Found: //sito/wp-includes/wlwmanifest.xml
+WARNING 2023-12-16 11:50:34,307 log Not Found: /robots.txt
+WARNING 2023-12-16 11:51:31,698 log Not Found: /ads.txt
+WARNING 2023-12-16 11:51:31,711 log Not Found: /app-ads.txt
+WARNING 2023-12-16 11:51:31,718 log Not Found: /sellers.json
+WARNING 2023-12-16 11:51:34,670 log Not Found: /.well-known/assetlinks.json
+WARNING 2023-12-16 11:51:34,674 log Not Found: /.well-known/apple-app-site-association
+WARNING 2023-12-16 11:51:35,237 log Not Found: /robots.txt
+WARNING 2023-12-16 11:51:43,757 log Not Found: /robots.txt
+WARNING 2023-12-16 11:51:45,879 log Not Found: /.well-known/assetlinks.json
+WARNING 2023-12-16 11:51:45,899 log Not Found: /.well-known/apple-app-site-association
+WARNING 2023-12-16 11:51:45,912 log Not Found: /robots.txt
+WARNING 2023-12-16 11:51:45,915 log Not Found: /.well-known/security.txt
+WARNING 2023-12-16 11:51:45,916 log Not Found: /.well-known/gpc.json
+WARNING 2023-12-16 11:51:45,924 log Not Found: /.well-known/resource-that-should-not-exist-whose-status-code-should-not-be-200/
+WARNING 2023-12-16 11:51:45,927 log Not Found: /.well-known/change-password
+WARNING 2023-12-16 11:52:59,307 log Not Found: /android-chrome-192x192.png
+WARNING 2023-12-16 11:52:59,697 log Not Found: /robots.txt
+WARNING 2023-12-16 12:22:39,502 log Not Found: /services/
+WARNING 2023-12-16 12:33:09,404 log Not Found: /inquiry3/
+WARNING 2023-12-16 12:46:38,091 log Not Found: /shop/pl/product/kurtki-dla-dzieci-moncler-boy-black-red/
+DEBUG 2023-12-16 13:05:23,947 base Exception while resolving variable 'recaptcha_site_key' in template 'basecamp/inquiry1.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [recaptcha_site_key] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: '69REIhBmivRGqLbRhQjJidkUKniPl1KUPELm2vqGm8KAK2pjl8Lhp3wvIRM9cODH'>, 'request': <WSGIRequest: POST '/price_detail/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f29f9bd4cc0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f29f9bd4cc0>>), 'messages': <FallbackStorage: request=<WSGIRequest: POST '/price_detail/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'flight_date': '2023-12-25', 'direction': 'Drop off to Intl Airport', 'suburb': 'Hotels in CBD', 'no_of_passenger': '2'}, {'block': <Block Node: content. Contents: [<TextNode: '\n      <!-- Page content-'>, <Variable Node: flight_date>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: direction>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: suburb>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: no_of_passenger>, <TextNode: '</a> -->\n\t\t\t  <br><br>\n  '>, <django.template.defaulttags.CsrfTokenNode object at 0x7f29f9659fd0>, <TextNode: '\n\t\t\t\t<div class="mb3 pb-1'>, <Variable Node: direction>, <TextNode: '">'>, <Variable Node: direction>, <TextNode: '</option>\t\t\t\t\t\t          '>, <Variable Node: flight_date>, <TextNode: '" type="text" >\t\t\t\t  \n   '>, <IfNode>, <TextNode: '\n\t\t\t\t  <div class="mb-3 p'>, <Variable Node: suburb>, <TextNode: '</label>\t\t\t\t\t\n\t\t\t\t</div>\n'>, <Variable Node: suburb>, <TextNode: '">'>, <Variable Node: suburb>, <TextNode: '</option>\t\t\t\t\t\n\t\t\t\t  </se'>, <Variable Node: no_of_passenger>, <TextNode: '">'>, <Variable Node: no_of_passenger>, <TextNode: '</option>\t\t\t\t  \n         '>, <Variable Node: recaptcha_site_key>, <TextNode: '"></div>\n\t\t\t\t<div id="err'>]>}]
+WARNING 2023-12-16 13:05:32,723 log Not Found: /robots.txt
+ERROR 2023-12-16 13:11:19,438 exception Invalid HTTP_HOST header: '/run/gunicorn.sock:'. The domain name provided is not valid according to RFC 1034/1035.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/http/request.py", line 150, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '/run/gunicorn.sock:'. The domain name provided is not valid according to RFC 1034/1035.
+WARNING 2023-12-16 13:11:19,486 log Bad Request: /
+ERROR 2023-12-16 13:13:09,041 exception Invalid HTTP_HOST header: '/run/gunicorn.sock:'. The domain name provided is not valid according to RFC 1034/1035.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/http/request.py", line 150, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '/run/gunicorn.sock:'. The domain name provided is not valid according to RFC 1034/1035.
+WARNING 2023-12-16 13:13:09,045 log Bad Request: /
+WARNING 2023-12-16 13:13:10,720 log Not Found: /nmaplowercheck1702692788
+WARNING 2023-12-16 13:13:11,589 log Not Found: /evox/about
+WARNING 2023-12-16 13:13:12,198 log Not Found: /sdk
+WARNING 2023-12-16 13:13:13,162 log Not Found: /HNAP1
