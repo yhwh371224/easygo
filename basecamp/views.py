@@ -5,12 +5,11 @@ from django.shortcuts import render, redirect
 from django.core.mail import send_mail
 from blog.models import Post, Inquiry, Payment, Driver
 from basecamp.models import Inquiry_point
-from blog.tasks import send_inquiry_exist_email, send_inquiry_non_exist_email, send_confirm_email
+from blog.tasks import send_confirm_email
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
-from django.utils import timezone
-from datetime import date, datetime, timedelta
+from datetime import date, datetime
 #paypal ipn
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
@@ -359,31 +358,67 @@ def inquiry_details(request):
         return_pickup_time = request.POST.get('return_pickup_time')
         message = request.POST.get('message')
 
-
         recaptcha_response = request.POST.get('g-recaptcha-response')
         result = verify_recaptcha(recaptcha_response)
         if not result.get('success'):
-            return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'}) 
-        
+            return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'})         
 
         data = {
             'name': name,
             'email': email,
+            'flight_date': flight_date,
+            'pickup_time': pickup_time,
             'direction': direction,
             'suburb': suburb,
-            'pickup_time': pickup_time,
             'no_of_passenger': no_of_passenger,
-            'flight_date': flight_date,
+            'return_pickup_time': return_pickup_time
             }
      
-        inquiry_email = Inquiry.objects.only('email').values_list('email', flat=True)
-        post_email = Post.objects.only('email').values_list('email', flat=True)  
+        inquiry_email_exists = Inquiry.objects.filter(email=email).exists()
+        post_email_exists = Post.objects.filter(email=email).exists()
 
-        if (email in inquiry_email) or (email in post_email):            
-            send_inquiry_exist_email.delay(data['name'], data['email'], data['direction'], data['suburb'], data['pickup_time'], data['no_of_passenger'], data['flight_date'])
+        # Send different emails based on email existence
+        if inquiry_email_exists or post_email_exists:
+            content = '''
+            Hello, {} \n
+            Exist in Inquiry or Post *\n 
+            https://easygoshuttle.com.au
+            =============================
+            Email: {}  
+            Flight date: {}
+            Pickup time: {}
+            Direction: {}
+            Suburb: {}
+            Passenger: {}
+            Return pickup time: {}
+            =============================\n        
+            Best Regards,
+            EasyGo Admin \n\n        
+            ''' .format(data['name'], data['email'], data['flight_date'], data['pickup_time'], 
+                        data['direction'], data['suburb'], data['no_of_passenger'], data['return_pickup_time'])
             
+            send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])
+
         else:
-            send_inquiry_non_exist_email.delay(data['name'], data['email'], data['direction'], data['suburb'], data['pickup_time'], data['no_of_passenger'], data['flight_date']) 
+            content = '''
+            Hello, {} \n
+            Neither in Inquiry & Post *\n 
+            https://easygoshuttle.com.au
+            =============================
+            Email: {}  
+            Flight date: {}
+            Pickup time: {}
+            Direction: {}
+            Suburb: {}
+            Passenger: {}
+            Return pickup time: {}
+            =============================\n        
+            Best Regards,
+            EasyGo Admin \n\n        
+            ''' .format(data['name'], data['email'], data['pickup_time'], 
+                        data['direction'], data['suburb'], data['return_pickup_time'])
+            
+            send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])    
             
         p = Inquiry(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
@@ -437,21 +472,59 @@ def inquiry_details1(request):
         data = {
             'name': name,
             'email': email,
+            'flight_date': flight_date,
+            'pickup_time': pickup_time,
             'direction': direction,
             'suburb': suburb,
-            'pickup_time': pickup_time,
             'no_of_passenger': no_of_passenger,
-            'flight_date': flight_date,
+            'return_pickup_time': return_pickup_time
             }
      
-        inquiry_email = Inquiry.objects.only('email').values_list('email', flat=True)
-        post_email = Post.objects.only('email').values_list('email', flat=True)  
+        inquiry_email_exists = Inquiry.objects.filter(email=email).exists()
+        post_email_exists = Post.objects.filter(email=email).exists()
 
-        if (email in inquiry_email) or (email in post_email):            
-            send_inquiry_exist_email.delay(data['name'], data['email'], data['direction'], data['suburb'], data['pickup_time'], data['no_of_passenger'], data['flight_date'])
+        # Send different emails based on email existence
+        if inquiry_email_exists or post_email_exists:
+            content = '''
+            Hello, {} \n
+            Exist in Inquiry or Post *\n 
+            https://easygoshuttle.com.au
+            =============================
+            Email: {}  
+            Flight date: {}
+            Pickup time: {}
+            Direction: {}
+            Suburb: {}
+            Passenger: {}
+            Return pickup time: {}
+            =============================\n        
+            Best Regards,
+            EasyGo Admin \n\n        
+            ''' .format(data['name'], data['email'], data['flight_date'], data['pickup_time'], 
+                        data['direction'], data['suburb'], data['no_of_passenger'], data['return_pickup_time'])
             
+            send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])
+
         else:
-            send_inquiry_non_exist_email.delay(data['name'], data['email'], data['direction'], data['suburb'], data['pickup_time'], data['no_of_passenger'], data['flight_date']) 
+            content = '''
+            Hello, {} \n
+            Neither in Inquiry & Post *\n 
+            https://easygoshuttle.com.au
+            =============================
+            Email: {}  
+            Flight date: {}
+            Pickup time: {}
+            Direction: {}
+            Suburb: {}
+            Passenger: {}
+            Return pickup time: {}
+            =============================\n        
+            Best Regards,
+            EasyGo Admin \n\n        
+            ''' .format(data['name'], data['email'], data['pickup_time'], 
+                        data['direction'], data['suburb'], data['return_pickup_time'])
+            
+            send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])     
         
         p = Inquiry(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
@@ -497,21 +570,59 @@ def booking_form_detail(request):
         data = {
             'name': name,
             'email': email,
+            'flight_date': flight_date,
+            'pickup_time': pickup_time,
             'direction': direction,
             'suburb': suburb,
-            'pickup_time': pickup_time,
             'no_of_passenger': no_of_passenger,
-            'flight_date': flight_date,
+            'return_pickup_time': return_pickup_time
             }
      
-        inquiry_email = Inquiry.objects.only('email').values_list('email', flat=True)
-        post_email = Post.objects.only('email').values_list('email', flat=True)  
+        inquiry_email_exists = Inquiry.objects.filter(email=email).exists()
+        post_email_exists = Post.objects.filter(email=email).exists()
 
-        if (email in inquiry_email) or (email in post_email):            
-            send_inquiry_exist_email.delay(data['name'], data['email'], data['direction'], data['suburb'], data['pickup_time'], data['no_of_passenger'], data['flight_date'])
+        # Send different emails based on email existence
+        if inquiry_email_exists or post_email_exists:
+            content = '''
+            Hello, {} \n
+            Exist in Inquiry or Post *\n 
+            https://easygoshuttle.com.au
+            =============================
+            Email: {}  
+            Flight date: {}
+            Pickup time: {}
+            Direction: {}
+            Suburb: {}
+            Passenger: {}
+            Return pickup time: {}
+            =============================\n        
+            Best Regards,
+            EasyGo Admin \n\n        
+            ''' .format(data['name'], data['email'], data['flight_date'], data['pickup_time'], 
+                        data['direction'], data['suburb'], data['no_of_passenger'], data['return_pickup_time'])
             
+            send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])
+
         else:
-            send_inquiry_non_exist_email.delay(data['name'], data['email'], data['direction'], data['suburb'], data['pickup_time'], data['no_of_passenger'], data['flight_date'])               
+            content = '''
+            Hello, {} \n
+            Neither in Inquiry & Post *\n 
+            https://easygoshuttle.com.au
+            =============================
+            Email: {}  
+            Flight date: {}
+            Pickup time: {}
+            Direction: {}
+            Suburb: {}
+            Passenger: {}
+            Return pickup time: {}
+            =============================\n        
+            Best Regards,
+            EasyGo Admin \n\n        
+            ''' .format(data['name'], data['email'], data['pickup_time'], 
+                        data['direction'], data['suburb'], data['return_pickup_time'])
+            
+            send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])              
 
         
         p = Inquiry(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
@@ -1072,10 +1183,9 @@ def confirm_booking_detail(request):
             'name': name,
             'email': email,            
             'flight_date': flight_date,
-            'pickup_time': pickup_time,
             'return_flight_number': return_flight_number}                    
             
-            send_confirm_email.delay(data['name'], data['email'], data['flight_date'], data['pickup_time'], data['return_flight_number'])
+            send_confirm_email.delay(data['name'], data['email'], data['flight_date'], data['return_flight_number'])
             
         sam_driver = Driver.objects.get(driver_name="Sam")    
             

@@ -124,46 +124,44 @@ def create_event_on_calendar(instance_id):
             calendar_logger.error('An error occurred while creating the event: %s', error)
 
 
-logger_inquiry_local_email = configure_logger('blog.inquiry_local_email', 'inquiry_local_email.log')
-@shared_task
-def send_inquiry_exist_email(name, email, direction, suburb, pickup_time, no_of_passenger, flight_date):
-    content = f'''
-    Hello, {name} \n
-    Exist in Inquiry or Post *\n
-    https://easygoshuttle.com.au 
-    ============================
-    Email: {email}
-    Direction: {direction}
-    Suburb: {suburb}
-    Pickup: {pickup_time}
-    No of Pax: {no_of_passenger}    
-    ============================\n
-    '''
-    send_mail(flight_date, content, '', [RECIPIENT_EMAIL])
-    logger_inquiry_local_email.info(f'Exist in Inquiry or Post email sent for {name}')
+# logger_inquiry_local_email = configure_logger('blog.inquiry_local_email', 'inquiry_local_email.log')
 
-@shared_task
-def send_inquiry_non_exist_email(name, email, direction, suburb, pickup_time, no_of_passenger, flight_date):
-    content = f'''
-    Hello, {name} \n
-    Neither in Inquiry & Post *\n
-    https://easygoshuttle.com.au     
-    ============================
-    Email: {email}
-    Direction: {direction}
-    Suburb: {suburb}
-    Pickup: {pickup_time}
-    No of Pax: {no_of_passenger}
-    ============================\n
-    '''
-    send_mail(flight_date, content, '', [RECIPIENT_EMAIL])
-    logger_inquiry_local_email.info(f'Neither in Inquiry & Post email sent for {name}')
+# @shared_task
+# def send_inquiry_exist_email(name, email, pickup_time, flight_date):
+#     content = f'''
+#     Hello, {name} \n
+#     Exist in Inquiry or Post \n
+#     https://easygoshuttle.com.au \n     
+#     ============================ \n
+#     Email: {email} \n
+#     Pickup: {pickup_time} \n
+#     Flight date: {flight_date} \n
+#     ============================\n
+#     '''
+#     send_mail('Inquiry', content, '', [RECIPIENT_EMAIL])
+#     logger_inquiry_local_email.info(f'Exist in Inquiry or Post email sent for {name}')
+
+
+# @shared_task
+# def send_inquiry_non_exist_email(name, email, pickup_time, flight_date):
+#     content = f'''
+#     Hello, {name} \n
+#     Neither in Inquiry & Post \n
+#     https://easygoshuttle.com.au \n     
+#     ============================ \n
+#     Email: {email} \n
+#     Pickup: {pickup_time} \n
+#     Flight date: {flight_date} \n
+#     ============================\n
+#     '''
+#     send_mail('Inquiry', content, '', [RECIPIENT_EMAIL])
+#     logger_inquiry_local_email.info(f'Neither in Inquiry & Post email sent for {name}')
 
 
 # Clicked confirm_booking form 
 logger_confirm_email = configure_logger('blog.confirm_email', 'confirm_email.log')
 @shared_task
-def send_confirm_email(name, email, flight_date, pickup_time, return_flight_number):
+def send_confirm_email(name, email, flight_date, return_flight_number):
     content = f'''
     {name}
     clicked the 'confirm booking' \n
@@ -173,14 +171,14 @@ def send_confirm_email(name, email, flight_date, pickup_time, return_flight_numb
     ============================= \n    
     Email:  {email}  \n
     Flight date: {flight_date} \n 
-    Pickup time: {pickup_time} \n
     Return flight number: {return_flight_number}
     ===============================\n        
-    Best Regards,
+    Best Regards, \n
     EasyGo Admin \n\n        
     '''
     send_mail(flight_date, content, '', [RECIPIENT_EMAIL])
-
+    logger_confirm_email.info(f'Successfully confirmation email sent to {name}')
+    
 
 # Inquiry response email 
 logger_inquiry_response = configure_logger('blog.inquiry_response', 'inquiry_response.log')
