@@ -163,7 +163,7 @@ def send_inquiry_non_exist_email(name, email, direction, suburb, pickup_time, no
 # Clicked confirm_booking form 
 logger_confirm_email = configure_logger('blog.confirm_email', 'confirm_email.log')
 @shared_task
-def send_confirm_email(name, email, flight_date, return_flight_number):
+def send_confirm_email(name, email, flight_date, pickup_time, return_flight_number):
     content = f'''
     {name}
     clicked the 'confirm booking' \n
@@ -173,6 +173,7 @@ def send_confirm_email(name, email, flight_date, return_flight_number):
     ============================= \n    
     Email:  {email}  \n
     Flight date: {flight_date} \n 
+    Pickup time: {pickup_time} \n
     Return flight number: {return_flight_number}
     ===============================\n        
     Best Regards,
