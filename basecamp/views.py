@@ -9,7 +9,7 @@ from blog.tasks import send_confirm_email
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 #paypal ipn
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
@@ -1561,8 +1561,11 @@ def pickup_adjustment_detail(request):
         email = request.POST.get('email')        
         adjustment_time = request.POST.get('adjustment_time')
         selected_option = request.POST.get('selected_option')
+
+        today = datetime.now().date()
+        two_days_later = today + timedelta(days=2)
         
-        user = Post.objects.filter(email=email).first() 
+        user = Post.objects.filter(email=email, flight_date__range=[today, two_days_later])
 
         if selected_option == 'Departure earlier pickup':
             user.pickup_time = adjustment_time

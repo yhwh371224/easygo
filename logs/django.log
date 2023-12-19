@@ -1,4 +1,23 @@
-ERROR 2023-12-18 18:11:21,927 log Internal Server Error: /inquiry_details/
+ERROR 2023-12-19 09:20:51,721 exception Invalid HTTP_HOST header: 'holidaycoast.3cx.com.au'. You may need to add 'holidaycoast.3cx.com.au' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/http/request.py", line 150, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: 'holidaycoast.3cx.com.au'. You may need to add 'holidaycoast.3cx.com.au' to ALLOWED_HOSTS.
+WARNING 2023-12-19 09:20:51,724 log Bad Request: /
+WARNING 2023-12-19 09:31:11,254 log Not Found: /.well-known/traffic-advice
+WARNING 2023-12-19 09:48:59,537 log Forbidden (CSRF cookie not set.): /reminder_detail/
+WARNING 2023-12-19 09:54:52,250 log Not Found: /inquiry3/
+WARNING 2023-12-19 10:43:56,746 log Not Found: /inquiry3/
+ERROR 2023-12-19 10:52:37,343 log Internal Server Error: /inquiry_details/
 Traceback (most recent call last):
   File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
@@ -6,15 +25,11 @@ Traceback (most recent call last):
   File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
     response = wrapped_callback(request, *callback_args, **callback_kwargs)
                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/basecamp/views.py", line 385, in inquiry_details
-    send_inquiry_non_exist_email.delay(data['name'], data['email'], data['suburb'], data['pickup_time'], data['flight_date'])
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/celery/app/task.py", line 444, in delay
-    return self.apply_async(args, kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/celery/app/task.py", line 559, in apply_async
-    check_arguments(*(args or ()), **(kwargs or {}))
-TypeError: send_inquiry_non_exist_email() missing 2 required positional arguments: 'no_of_passenger' and 'flight_date'
-ERROR 2023-12-18 18:12:53,684 log Internal Server Error: /booking_form_detail/
+  File "/home/horeb/github/easygo/basecamp/views.py", line 418, in inquiry_details
+    ''' .format(data['name'], data['email'], data['pickup_time'],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+IndexError: Replacement index 6 out of range for positional args tuple
+ERROR 2023-12-19 11:00:04,019 log Internal Server Error: /inquiry_details/
 Traceback (most recent call last):
   File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
@@ -22,126 +37,10 @@ Traceback (most recent call last):
   File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
     response = wrapped_callback(request, *callback_args, **callback_kwargs)
                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/basecamp/views.py", line 508, in booking_form_detail
-    send_inquiry_non_exist_email.delay(data['name'], data['email'], data['suburb'], data['pickup_time'], data['flight_date'])
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/celery/app/task.py", line 444, in delay
-    return self.apply_async(args, kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/celery/app/task.py", line 559, in apply_async
-    check_arguments(*(args or ()), **(kwargs or {}))
-TypeError: send_inquiry_non_exist_email() missing 2 required positional arguments: 'no_of_passenger' and 'flight_date'
-ERROR 2023-12-18 18:13:42,672 log Internal Server Error: /booking_form_detail/
-Traceback (most recent call last):
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
-    response = get_response(request)
-               ^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/basecamp/views.py", line 508, in booking_form_detail
-    send_inquiry_non_exist_email.delay(data['name'], data['email'], data['suburb'], data['pickup_time'], data['flight_date'])
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/celery/app/task.py", line 444, in delay
-    return self.apply_async(args, kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/celery/app/task.py", line 559, in apply_async
-    check_arguments(*(args or ()), **(kwargs or {}))
-TypeError: send_inquiry_non_exist_email() missing 2 required positional arguments: 'no_of_passenger' and 'flight_date'
-WARNING 2023-12-18 18:23:26,663 log Not Found: /webui/
-ERROR 2023-12-18 18:24:21,961 log Internal Server Error: /confirm_booking_detail/
-Traceback (most recent call last):
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
-    response = get_response(request)
-               ^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/basecamp/views.py", line 1078, in confirm_booking_detail
-    send_confirm_email.delay(data['name'], data['email'], data['flight_date'], data['pickup_time'], data['return_flight_number'])
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/celery/app/task.py", line 444, in delay
-    return self.apply_async(args, kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/celery/app/task.py", line 559, in apply_async
-    check_arguments(*(args or ()), **(kwargs or {}))
-TypeError: send_confirm_email() takes 4 positional arguments but 5 were given
-WARNING 2023-12-18 18:31:15,696 log Not Found: /vpn/index.html
-WARNING 2023-12-18 18:33:11,831 log Not Found: /.git/config
-DEBUG 2023-12-18 18:36:27,528 base Exception while resolving variable 'recaptcha_site_key' in template 'basecamp/inquiry1.html'.
-Traceback (most recent call last):
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
-    current = current[bit]
-              ~~~~~~~^^^^^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
-    raise KeyError(key)
-KeyError: 'recaptcha_site_key'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
-    if isinstance(current, BaseContext) and getattr(
-                                            ^^^^^^^^
-AttributeError: type object 'RequestContext' has no attribute 'recaptcha_site_key'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
-    current = current[int(bit)]
-                      ^^^^^^^^
-ValueError: invalid literal for int() with base 10: 'recaptcha_site_key'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
-    raise VariableDoesNotExist(
-django.template.base.VariableDoesNotExist: Failed lookup for key [recaptcha_site_key] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: 'xnJn7SagBGUnfCdRz5LrcEkeRKdVgvSeSPOUmhte9yoEYysZLYHHD5JMHPaKzcQI'>, 'request': <WSGIRequest: POST '/price_detail/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fea51dca980>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fea51dca980>>), 'messages': <FallbackStorage: request=<WSGIRequest: POST '/price_detail/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'flight_date': '2024-03-20', 'direction': 'Drop off to Domestic Airport', 'suburb': 'Seven Hills', 'no_of_passenger': '2'}, {'block': <Block Node: content. Contents: [<TextNode: '\n      <!-- Page content-'>, <Variable Node: flight_date>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: direction>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: suburb>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: no_of_passenger>, <TextNode: '</a> -->\n\t\t\t  <br><br>\n  '>, <django.template.defaulttags.CsrfTokenNode object at 0x7fea51c78e90>, <TextNode: '\n\t\t\t\t<div class="mb3 pb-1'>, <Variable Node: direction>, <TextNode: '">'>, <Variable Node: direction>, <TextNode: '</option>\t\t\t\t\t\t          '>, <Variable Node: flight_date>, <TextNode: '" type="text" >\t\t\t\t  \n   '>, <IfNode>, <TextNode: '\n\t\t\t\t  <div class="mb-3 p'>, <Variable Node: suburb>, <TextNode: '</label>\t\t\t\t\t\n\t\t\t\t</div>\n'>, <Variable Node: suburb>, <TextNode: '">'>, <Variable Node: suburb>, <TextNode: '</option>\t\t\t\t\t\n\t\t\t\t  </se'>, <Variable Node: no_of_passenger>, <TextNode: '">'>, <Variable Node: no_of_passenger>, <TextNode: '</option>\t\t\t\t  \n         '>, <Variable Node: recaptcha_site_key>, <TextNode: '"></div>\n\t\t\t\t<div id="err'>]>}]
-WARNING 2023-12-18 18:38:19,222 log Not Found: /FD873AC4-CF86-4FED-84EC-4BD59C6F17A7
-WARNING 2023-12-18 19:09:49,776 log Not Found: /shop/es/product/moncler-moda-abajo-chaquetas-encaje-verde-tarjeta-para-mujer/
-DEBUG 2023-12-18 19:11:11,263 base Exception while resolving variable 'recaptcha_site_key' in template 'basecamp/inquiry1.html'.
-Traceback (most recent call last):
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
-    current = current[bit]
-              ~~~~~~~^^^^^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
-    raise KeyError(key)
-KeyError: 'recaptcha_site_key'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
-    if isinstance(current, BaseContext) and getattr(
-                                            ^^^^^^^^
-AttributeError: type object 'RequestContext' has no attribute 'recaptcha_site_key'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
-    current = current[int(bit)]
-                      ^^^^^^^^
-ValueError: invalid literal for int() with base 10: 'recaptcha_site_key'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
-    raise VariableDoesNotExist(
-django.template.base.VariableDoesNotExist: Failed lookup for key [recaptcha_site_key] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: 'lH4Qxnb5Ye1VMyHnAPRSnje9JIcKbcx3oRjXNTHzyBj6blDNe00JiZJuhOy2zD9x'>, 'request': <WSGIRequest: POST '/price_detail/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7ff7f9003a60>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7ff7f9003a60>>), 'messages': <FallbackStorage: request=<WSGIRequest: POST '/price_detail/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'flight_date': '2023-12-26', 'direction': 'Drop off to Intl Airport', 'suburb': 'Woollahra', 'no_of_passenger': '4'}, {'block': <Block Node: content. Contents: [<TextNode: '\n      <!-- Page content-'>, <Variable Node: flight_date>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: direction>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: suburb>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: no_of_passenger>, <TextNode: '</a> -->\n\t\t\t  <br><br>\n  '>, <django.template.defaulttags.CsrfTokenNode object at 0x7ff7f91e6650>, <TextNode: '\n\t\t\t\t<div class="mb3 pb-1'>, <Variable Node: direction>, <TextNode: '">'>, <Variable Node: direction>, <TextNode: '</option>\t\t\t\t\t\t          '>, <Variable Node: flight_date>, <TextNode: '" type="text" >\t\t\t\t  \n   '>, <IfNode>, <TextNode: '\n\t\t\t\t  <div class="mb-3 p'>, <Variable Node: suburb>, <TextNode: '</label>\t\t\t\t\t\n\t\t\t\t</div>\n'>, <Variable Node: suburb>, <TextNode: '">'>, <Variable Node: suburb>, <TextNode: '</option>\t\t\t\t\t\n\t\t\t\t  </se'>, <Variable Node: no_of_passenger>, <TextNode: '">'>, <Variable Node: no_of_passenger>, <TextNode: '</option>\t\t\t\t  \n         '>, <Variable Node: recaptcha_site_key>, <TextNode: '"></div>\n\t\t\t\t<div id="err'>]>}]
-WARNING 2023-12-18 19:11:47,042 log Not Found: /robots.txt
-WARNING 2023-12-18 19:18:49,722 log Not Found: /robots.txt
-WARNING 2023-12-18 19:20:12,075 log Not Found: /robots.txt
-WARNING 2023-12-18 19:22:09,994 log Not Found: /shop/nl/product/moncler-acorus-euramerican-stijl-jas-voor-mannen-zwart/
-ERROR 2023-12-18 19:25:33,658 log Internal Server Error: /booking_form_detail/
-Traceback (most recent call last):
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
-    response = get_response(request)
-               ^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/basecamp/views.py", line 518, in booking_form_detail
-    data['direction'], data['suburb'], data['return_pickup_time'])
-    ~~~~^^^^^^^^^^^^^
-KeyError: 'direction'
+  File "/home/horeb/github/easygo/basecamp/views.py", line 418, in inquiry_details
+    ''' .format(data['name'], data['email'], data['pickup_time'],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+IndexError: Replacement index 6 out of range for positional args tuple
+ERROR 2023-12-19 11:00:22,969 log Internal Server Error: /paypal_ipn/
+WARNING 2023-12-19 11:23:33,494 log Not Found: /shop/ko/product/moncler-down-coat-추천-여성-슬림-윈드-룩-레드/
+ERROR 2023-12-19 11:31:38,283 log Internal Server Error: /paypal_ipn/
