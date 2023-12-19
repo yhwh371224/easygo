@@ -1562,10 +1562,10 @@ def pickup_adjustment_detail(request):
         adjustment_time = request.POST.get('adjustment_time')
         selected_option = request.POST.get('selected_option')
 
-        today = datetime.now().date()
+        today = datetime.now()
         two_days_later = today + timedelta(days=2)
         
-        user = Post.objects.filter(email=email, flight_date__range=[today, two_days_later])
+        user = Post.objects.filter(email=email, flight_date__range=[today, two_days_later]).first()
 
         if selected_option == 'Departure earlier pickup':
             user.pickup_time = adjustment_time
