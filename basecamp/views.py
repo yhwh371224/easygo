@@ -377,7 +377,6 @@ def inquiry_details(request):
         inquiry_email_exists = Inquiry.objects.filter(email=email).exists()
         post_email_exists = Post.objects.filter(email=email).exists()
 
-        # Send different emails based on email existence
         if inquiry_email_exists or post_email_exists:
             content = '''
             Hello, {} \n
@@ -415,8 +414,8 @@ def inquiry_details(request):
             =============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['email'], data['pickup_time'], 
-                        data['direction'], data['suburb'], data['return_pickup_time'])
+            ''' .format(data['name'], data['email'], data['flight_date'], data['pickup_time'], 
+                        data['direction'], data['suburb'], data['no_of_passenger'], data['return_pickup_time'])
             
             send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])    
             
@@ -429,6 +428,9 @@ def inquiry_details(request):
         p.save()
 
         today = date.today()
+        print("today:", today)
+        print("flight_date:", flight_date)
+
         if flight_date <= str(today):
             if request.is_ajax():
                 return JsonResponse({'success': False, 'message': 'Past/Today flight dates are not allowed.'})
@@ -436,15 +438,12 @@ def inquiry_details(request):
                 return render(request, 'basecamp/date_error.html')   
 
         if is_ajax(request):
-            # Return a JSON response for AJAX requests
             return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})
         
         else:
-            # Return a standard HTTP response for non-AJAX requests
             return render(request, 'basecamp/inquiry_done.html')
         
     else:
-        # If it's not a POST request, just render the inquiry form
         return render(request, 'basecamp/inquiry.html', {})
 
 
@@ -483,7 +482,6 @@ def inquiry_details1(request):
         inquiry_email_exists = Inquiry.objects.filter(email=email).exists()
         post_email_exists = Post.objects.filter(email=email).exists()
 
-        # Send different emails based on email existence
         if inquiry_email_exists or post_email_exists:
             content = '''
             Hello, {} \n
@@ -581,7 +579,7 @@ def booking_form_detail(request):
         inquiry_email_exists = Inquiry.objects.filter(email=email).exists()
         post_email_exists = Post.objects.filter(email=email).exists()
 
-        # Send different emails based on email existence
+
         if inquiry_email_exists or post_email_exists:
             content = '''
             Hello, {} \n
@@ -619,8 +617,8 @@ def booking_form_detail(request):
             =============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['email'], data['pickup_time'], 
-                        data['direction'], data['suburb'], data['return_pickup_time'])
+            ''' .format(data['name'], data['email'], data['flight_date'], data['pickup_time'], 
+                        data['direction'], data['suburb'], data['no_of_passenger'], data['return_pickup_time'])
             
             send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])              
 
@@ -633,6 +631,7 @@ def booking_form_detail(request):
         
         p.save()
 
+
         today = date.today()
         if flight_date <= str(today):
             if request.is_ajax():
@@ -640,17 +639,12 @@ def booking_form_detail(request):
             else:
                 return render(request, 'basecamp/date_error.html')  
 
-
-        # If everything is fine, respond accordingly
         if is_ajax(request):
-            # Return a JSON response for AJAX requests
             return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})
         else:
-            # Return a standard HTTP response for non-AJAX requests
             return render(request, 'basecamp/inquiry_done.html')
 
     else:
-        # If it's not a POST request, just render the inquiry form
         return render(request, 'basecamp/booking_form.html', {})
 
 
@@ -697,16 +691,13 @@ def inquiry_details2(request):
                 
         send_mail(data['name'], message, '', [RECIPIENT_EMAIL])         
         
-       # If everything is fine, respond accordingly
+
         if is_ajax(request):
-            # Return a JSON response for AJAX requests
             return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})
         else:
-            # Return a standard HTTP response for non-AJAX requests
             return render(request, 'basecamp/inquiry_done.html')
 
     else:
-        # If it's not a POST request, just render the inquiry form
         return render(request, 'basecamp/inquiry2.html', {})
     
     
@@ -803,16 +794,12 @@ def p2p_single_detail(request):
                 return render(request, 'basecamp/date_error.html')  
         
         
-       # If everything is fine, respond accordingly
         if is_ajax(request):
-            # Return a JSON response for AJAX requests
             return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})
         else:
-            # Return a standard HTTP response for non-AJAX requests
             return render(request, 'basecamp/inquiry_done.html')
 
     else:
-        # If it's not a POST request, just render the inquiry form
         return render(request, 'basecamp/p2p_single.html', {})
     
     
@@ -868,16 +855,12 @@ def p2p_detail(request):
         email.send()       
         
         
-       # If everything is fine, respond accordingly
         if is_ajax(request):
-            # Return a JSON response for AJAX requests
             return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})
         else:
-            # Return a standard HTTP response for non-AJAX requests
             return render(request, 'basecamp/inquiry_done.html')
 
     else:
-        # If it's not a POST request, just render the inquiry form
         return render(request, 'basecamp/p2p.html', {})
 
 
