@@ -10,7 +10,7 @@ SECRET_KEY = config('SECRET_KEY')
 #DEBUG = True
 DEBUG = config('DEBUG', cast=bool, default=True)
 
-ALLOWED_HOSTS = ['easygoshuttle.com.au', 'www.easygoshuttle.com.au', '149.28.188.33']
+ALLOWED_HOSTS = ['easygoshuttle.com.au', 'www.easygoshuttle.com.au', '149.28.188.33', '33.188.28.149.in-addr.arpa']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
