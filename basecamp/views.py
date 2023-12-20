@@ -735,10 +735,10 @@ def p2p_single_detail(request):
             }
         
      
-        inquiry_email = Inquiry.objects.only('email').values_list('email', flat=True)
-        post_email = Post.objects.only('email').values_list('email', flat=True)  
+        inquiry_email = Inquiry.objects.filter(email=email).exists()
+        post_email = Post.objects.filter(email=email).exists()  
 
-        if (email in inquiry_email) or (email in post_email):   
+        if inquiry_email or post_email:   
             content = '''
             Hello, {} \n
             Point single 
@@ -967,10 +967,10 @@ def confirmation_detail(request):
             'email': email,            
             'flight_date': flight_date}       
         
-        post_email = Post.objects.only('email').values_list('email', flat=True)
-        inquiry_email = Inquiry.objects.only('email').values_list('email', flat=True) 
-                         
-        if (email in post_email) or (email in inquiry_email):            
+        inquiry_email = Inquiry.objects.filter(email=email).exists()
+        post_email = Post.objects.filter(email=email).exists()  
+
+        if inquiry_email or post_email:             
                         
             content = '''
             Hello, {} \n  
@@ -1044,8 +1044,6 @@ def booking_detail(request):
         name = request.POST.get('name')
         contact = request.POST.get('contact')
         email = request.POST.get('email')
-        company_name = request.POST.get('company_name')
-        email1 = request.POST.get('email1')
         flight_date = request.POST.get('flight_date')
         flight_number = request.POST.get('flight_number')
         flight_time = request.POST.get('flight_time')
@@ -1064,8 +1062,7 @@ def booking_detail(request):
         price = request.POST.get('price')
         is_confirmed_str = request.POST.get('is_confirmed')
         is_confirmed = True if is_confirmed_str == 'True' else False
-        sent_email_str = request.POST.get('sent_email')
-        sent_email = False if sent_email_str == 'True' else True
+
         
         data = {
             'name': name,
@@ -1073,10 +1070,10 @@ def booking_detail(request):
             'email': email,            
             'flight_date': flight_date}       
         
-        post_email = Post.objects.only('email').values_list('email', flat=True)
-        inquiry_email = Inquiry.objects.only('email').values_list('email', flat=True) 
-                         
-        if (email in post_email) or (email in inquiry_email):            
+        inquiry_email = Inquiry.objects.filter(email=email).exists()
+        post_email = Post.objects.filter(email=email).exists()  
+
+        if inquiry_email or post_email:             
                         
             content = '''
             Hello, {} \n  
@@ -1113,11 +1110,11 @@ def booking_detail(request):
             
         sam_driver = Driver.objects.get(driver_name="Sam") 
 
-        p = Post(name=name, contact=contact, email=email, company_name=company_name, email1=email1, flight_date=flight_date, flight_number=flight_number,
+        p = Post(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
                  no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction,
                  return_flight_date=return_flight_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
-                 return_pickup_time=return_pickup_time, message=message, price=price, is_confirmed=is_confirmed, sent_email=sent_email,  driver=sam_driver)
+                 return_pickup_time=return_pickup_time, message=message, price=price, is_confirmed=is_confirmed, driver=sam_driver)
         
         p.save()
 
