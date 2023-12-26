@@ -122,8 +122,8 @@
       </header>
       <!-- Page content-->
       <!-- Hero-->
-      <section class="jarallax bg-dark py-7" data-jarallax data-speed="0.9" >
-        <div id="changing-background" class="jarallax-img" style="background-image: url('/static/basecamp/images/sydney-airport.webp');"></div>
+      <section class="jarallax bg-dark py-7" data-jarallax data-speed="0.1" >
+        <div id="changing-background" class="jarallax-img" style="background-image: url('/static/basecamp/photos/easygo-home-page4.webp');"></div>
         <!-- <div class="jarallax-img" style="background-image: url('/static/basecamp/images/sydney1.webp');"></div> -->
         <div class="container py-5 py-sm-7 text-center">
           <div class="py-md-6">
@@ -131,7 +131,7 @@
 			  <br>
 			  <div></div>
 			  <br><br>
-			  <p class="fs-lg text-light">Private, Rideshare and Group airport transfers with a fixed price, We are reliable & puntual, something 3% different from others<br> 			  
+			  <p class="fs-lg text-light" id="changing-text">Private, Rideshare and Group airport transfers with a fixed price, We are reliable & puntual, something 3% different from others<br> 			  
           <a href="/admin/">
 				  <img src="https://s3.ap-southeast-2.amazonaws.com/easygoshuttle.com.au/thumbsup_120241.webp" title="source: imgur.com" alt="thumps_up" width="30" height="auto"></a>
           <a href="/admin/">
@@ -797,22 +797,7 @@
         <p class="fs-sm mb-3 order-md-1"><span class="text-light opacity-50 me-1">© 2023 EasyGo. All rights reserved.</a></p>        
       </div>
     </footer>
-    <script>
-    let currentBackground = 0;
-    const backgrounds = [
-        // 'url(/static/basecamp/images/sydney1.webp)',
-        'url(/static/basecamp/photos/easygo-home-page4.webp)',
-        'url(/static/basecamp/images/sydney-airport.webp)',        
-         
-    ];
-
-    document.getElementById('changing-background').style.backgroundImage = backgrounds[0];
-
-    setInterval(() => {
-        currentBackground = (currentBackground + 1) % backgrounds.length;
-        document.getElementById('changing-background').style.backgroundImage = backgrounds[currentBackground];
-    }, 5000);
-    </script>
+   
     <!-- Vendor scrits: js libraries and plugins-->    
     {% compress js %}
     <script src="/static/basecamp/js/bootstrap.bundle.min.js"></script>
@@ -826,6 +811,7 @@
     <script src="/static/basecamp/js/functions.js"></script>
     <!-- Main theme script-->
     <script src="/static/basecamp/js/theme.min.js"></script>
+    <script src="/static/basecamp/js/script.js"></script>
     {% endcompress %}    
   </body>
 </html>
