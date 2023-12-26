@@ -1,18 +1,96 @@
-WARNING 2023-12-22 09:08:06,285 log Not Found: /robots.txt
-WARNING 2023-12-22 09:08:08,075 log Not Found: /robots.txt
-WARNING 2023-12-22 09:19:07,971 log Not Found: /robots.txt
-WARNING 2023-12-22 09:19:08,818 log Not Found: /robots.txt
-WARNING 2023-12-22 09:22:13,497 log Not Found: /robots.txt
-WARNING 2023-12-22 09:22:13,971 log Not Found: /robots.txt
-WARNING 2023-12-22 09:28:07,347 log Not Found: /.env
-WARNING 2023-12-22 09:51:15,438 log Not Found: /shop/it/product/giacche-moncler-uomo-nero-zin/
-WARNING 2023-12-22 10:01:28,613 log Not Found: /robots.txt
-WARNING 2023-12-22 10:05:37,699 log Not Found: /.git/config
-WARNING 2023-12-22 10:11:49,176 log Not Found: /robots.txt
-WARNING 2023-12-22 10:27:29,247 log Not Found: /robots.txt
-WARNING 2023-12-22 10:27:30,060 log Not Found: /robots.txt
-WARNING 2023-12-22 10:29:36,241 log Not Found: /robots.txt
-WARNING 2023-12-22 10:29:37,449 log Not Found: /robots.txt
-WARNING 2023-12-22 10:32:00,096 log Not Found: /robots.txt
-WARNING 2023-12-22 10:32:24,327 log Not Found: /.well-known/traffic-advice
-WARNING 2023-12-22 10:35:04,878 log Forbidden (CSRF cookie not set.): /reminder_detail/
+WARNING 2023-12-26 09:12:18,571 log Not Found: /easygo-airport-pickup/
+WARNING 2023-12-26 09:20:18,806 log Not Found: /shop/da/product/moncler-down-coat-maend-elegance-sort/
+WARNING 2023-12-26 10:27:53,695 log Not Found: /robots.txt
+WARNING 2023-12-26 10:43:34,867 log Not Found: /robots.txt
+DEBUG 2023-12-26 10:43:45,325 base Exception while resolving variable 'recaptcha_site_key' in template 'basecamp/inquiry1.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [recaptcha_site_key] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: 'sf8HGhWHpbIbO9rOUWG7j0MgvtMdpI6UOguyAr83gwQfvIWlnduIjEnvfHYp4TD6'>, 'request': <WSGIRequest: POST '/price_detail/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f9dbd219d00>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f9dbd219d00>>), 'messages': <FallbackStorage: request=<WSGIRequest: POST '/price_detail/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'flight_date': '2024-01-22', 'direction': 'Drop off to Domestic Airport', 'suburb': 'Marsfield', 'no_of_passenger': '3'}, {'block': <Block Node: content. Contents: [<TextNode: '\n      <!-- Page content-'>, <Variable Node: flight_date>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: direction>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: suburb>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: no_of_passenger>, <TextNode: '</a> -->\n\t\t\t  <br><br>\n  '>, <django.template.defaulttags.CsrfTokenNode object at 0x7f9dbd2c6090>, <TextNode: '\n\t\t\t\t<div class="mb3 pb-1'>, <Variable Node: direction>, <TextNode: '">'>, <Variable Node: direction>, <TextNode: '</option>\t\t\t\t\t\t          '>, <Variable Node: flight_date>, <TextNode: '" type="text" >\t\t\t\t  \n   '>, <IfNode>, <TextNode: '\n\t\t\t\t  <div class="mb-3 p'>, <Variable Node: suburb>, <TextNode: '</label>\t\t\t\t\t\n\t\t\t\t</div>\n'>, <Variable Node: suburb>, <TextNode: '">'>, <Variable Node: suburb>, <TextNode: '</option>\t\t\t\t\t\n\t\t\t\t  </se'>, <Variable Node: no_of_passenger>, <TextNode: '">'>, <Variable Node: no_of_passenger>, <TextNode: '</option>\t\t\t\t  \n         '>, <Variable Node: recaptcha_site_key>, <TextNode: '"></div>\n\t\t\t\t<div id="err'>]>}]
+DEBUG 2023-12-26 11:06:56,333 base Exception while resolving variable 'recaptcha_site_key' in template 'basecamp/inquiry1.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [recaptcha_site_key] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: 'u9ZwGlkijEdSuwAvBPLrEGJk9S4NVnjSUHe1H53QWTTzIlQzVwXbtg1tXDvhdj4k'>, 'request': <WSGIRequest: POST '/price_detail/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f9dbe02eac0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f9dbe02eac0>>), 'messages': <FallbackStorage: request=<WSGIRequest: POST '/price_detail/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'flight_date': '2023-12-27', 'direction': 'Drop off to Intl Airport', 'suburb': 'Panania', 'no_of_passenger': '8'}, {'block': <Block Node: content. Contents: [<TextNode: '\n      <!-- Page content-'>, <Variable Node: flight_date>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: direction>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: suburb>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: no_of_passenger>, <TextNode: '</a> -->\n\t\t\t  <br><br>\n  '>, <django.template.defaulttags.CsrfTokenNode object at 0x7f9dbdae01d0>, <TextNode: '\n\t\t\t\t<div class="mb3 pb-1'>, <Variable Node: direction>, <TextNode: '">'>, <Variable Node: direction>, <TextNode: '</option>\t\t\t\t\t\t          '>, <Variable Node: flight_date>, <TextNode: '" type="text" >\t\t\t\t  \n   '>, <IfNode>, <TextNode: '\n\t\t\t\t  <div class="mb-3 p'>, <Variable Node: suburb>, <TextNode: '</label>\t\t\t\t\t\n\t\t\t\t</div>\n'>, <Variable Node: suburb>, <TextNode: '">'>, <Variable Node: suburb>, <TextNode: '</option>\t\t\t\t\t\n\t\t\t\t  </se'>, <Variable Node: no_of_passenger>, <TextNode: '">'>, <Variable Node: no_of_passenger>, <TextNode: '</option>\t\t\t\t  \n         '>, <Variable Node: recaptcha_site_key>, <TextNode: '"></div>\n\t\t\t\t<div id="err'>]>}]
+WARNING 2023-12-26 11:44:01,347 log Forbidden (CSRF cookie not set.): /booking_detail/
+WARNING 2023-12-26 12:21:06,662 log Not Found: /robots.txt
+WARNING 2023-12-26 12:35:41,147 log Not Found: //wp-includes/wlwmanifest.xml
+WARNING 2023-12-26 12:35:41,261 log Not Found: //xmlrpc.php
+WARNING 2023-12-26 12:35:41,486 log Not Found: //blog/wp-includes/wlwmanifest.xml
+WARNING 2023-12-26 12:35:41,606 log Not Found: //web/wp-includes/wlwmanifest.xml
+WARNING 2023-12-26 12:35:41,722 log Not Found: //wordpress/wp-includes/wlwmanifest.xml
+WARNING 2023-12-26 12:35:41,834 log Not Found: //website/wp-includes/wlwmanifest.xml
+WARNING 2023-12-26 12:35:41,946 log Not Found: //wp/wp-includes/wlwmanifest.xml
+WARNING 2023-12-26 12:35:42,059 log Not Found: //news/wp-includes/wlwmanifest.xml
+WARNING 2023-12-26 12:35:42,172 log Not Found: //2018/wp-includes/wlwmanifest.xml
+WARNING 2023-12-26 12:35:42,284 log Not Found: //2019/wp-includes/wlwmanifest.xml
+WARNING 2023-12-26 12:35:42,398 log Not Found: //shop/wp-includes/wlwmanifest.xml
+WARNING 2023-12-26 12:35:42,510 log Not Found: //wp1/wp-includes/wlwmanifest.xml
+WARNING 2023-12-26 12:35:42,622 log Not Found: //test/wp-includes/wlwmanifest.xml
+WARNING 2023-12-26 12:35:42,735 log Not Found: //media/wp-includes/wlwmanifest.xml
+WARNING 2023-12-26 12:35:42,847 log Not Found: //wp2/wp-includes/wlwmanifest.xml
+WARNING 2023-12-26 12:35:42,961 log Not Found: //site/wp-includes/wlwmanifest.xml
+WARNING 2023-12-26 12:35:43,223 log Not Found: //cms/wp-includes/wlwmanifest.xml
+WARNING 2023-12-26 12:35:43,336 log Not Found: //sito/wp-includes/wlwmanifest.xml
+WARNING 2023-12-26 12:36:05,622 log Not Found: /robots.txt
+WARNING 2023-12-26 12:46:13,650 log Not Found: /static/basecamp/photos/sydney1.webp
+WARNING 2023-12-26 12:50:17,634 log Not Found: /_profiler/phpinfo
+WARNING 2023-12-26 12:54:13,543 log Not Found: /apple-app-site-association
+WARNING 2023-12-26 12:58:13,334 log Not Found: /apple-touch-icon-120x120-precomposed.png
+WARNING 2023-12-26 12:58:13,416 log Not Found: /apple-touch-icon-120x120.png
+WARNING 2023-12-26 12:58:17,831 log Not Found: /.well-known/apple-app-site-association
+WARNING 2023-12-26 13:04:45,084 log Not Found: /static/basecamp/images/sydney-airport.webp
+WARNING 2023-12-26 13:04:59,891 log Not Found: /static/basecamp/images/sydney-airport.webp
+WARNING 2023-12-26 13:05:17,791 log Not Found: /static/basecamp/images/sydney-airport.webp
