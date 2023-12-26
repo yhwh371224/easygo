@@ -101,3 +101,46 @@ WARNING 2023-12-26 13:33:06,598 log Not Found: /wp-login.php
 WARNING 2023-12-26 13:42:24,943 log Not Found: /.well-known/traffic-advice
 WARNING 2023-12-26 14:07:54,953 log Not Found: /home//.env
 WARNING 2023-12-26 14:14:53,174 log Not Found: /robots.txt
+WARNING 2023-12-26 15:03:19,671 log Not Found: /.well-known/traffic-advice
+WARNING 2023-12-26 15:36:29,248 log Not Found: /.well-known/acme-challenge/0CZBUP8K1W-G5Y71QE1_GB-UQ23UKKV2
+WARNING 2023-12-26 15:36:30,232 log Not Found: /.well-known/acme-challenge/-68FS_C-6UPNYZBUAXO2JJW2F8RWO9V9
+WARNING 2023-12-26 15:45:35,705 log Not Found: /robots.txt
+WARNING 2023-12-26 15:49:27,601 log Not Found: /shop/product/moncler-boots-nible-black-metallic-fabric/
+WARNING 2023-12-26 15:49:46,737 log Not Found: /shop/it/product/moncler-hermine-down-cappotti-donna-antivento-rosso/
+WARNING 2023-12-26 16:37:58,386 log Not Found: /robots.txt
+WARNING 2023-12-26 16:38:34,734 log Not Found: /autodiscover/autodiscover.json
+WARNING 2023-12-26 16:54:39,828 log Not Found: /robots.txt
+WARNING 2023-12-26 17:01:13,587 log Not Found: /robots.txt
+WARNING 2023-12-26 17:01:15,242 log Not Found: /price-booking
+WARNING 2023-12-26 17:05:14,917 log Not Found: /airport-transfers-st-ives/booking_email.html
+DEBUG 2023-12-26 17:05:16,959 base Exception while resolving variable 'recaptcha_site_key' in template 'basecamp/inquiry1.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [recaptcha_site_key] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: '4YIB2w1YuDr0xSRiNU9SdJ9YkFiyAhJfNPQhEA44ZQWy1U6C3n6bzEbE5VRRBQF6'>, 'request': <WSGIRequest: POST '/price_detail/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7ff2778763e0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7ff2778763e0>>), 'messages': <FallbackStorage: request=<WSGIRequest: POST '/price_detail/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'flight_date': '2023-12-27', 'direction': 'Drop off to Domestic Airport', 'suburb': 'Hornsby Heights', 'no_of_passenger': '3'}, {'block': <Block Node: content. Contents: [<TextNode: '\n      <!-- Page content-'>, <Variable Node: flight_date>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: direction>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: suburb>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: no_of_passenger>, <TextNode: '</a> -->\n\t\t\t  <br><br>\n  '>, <django.template.defaulttags.CsrfTokenNode object at 0x7ff2739c3e50>, <TextNode: '\n\t\t\t\t<div class="mb3 pb-1'>, <Variable Node: direction>, <TextNode: '">'>, <Variable Node: direction>, <TextNode: '</option>\t\t\t\t\t\t          '>, <Variable Node: flight_date>, <TextNode: '" type="text" >\t\t\t\t  \n   '>, <IfNode>, <TextNode: '\n\t\t\t\t  <div class="mb-3 p'>, <Variable Node: suburb>, <TextNode: '</label>\t\t\t\t\t\n\t\t\t\t</div>\n'>, <Variable Node: suburb>, <TextNode: '">'>, <Variable Node: suburb>, <TextNode: '</option>\t\t\t\t\t\n\t\t\t\t  </se'>, <Variable Node: no_of_passenger>, <TextNode: '">'>, <Variable Node: no_of_passenger>, <TextNode: '</option>\t\t\t\t  \n         '>, <Variable Node: recaptcha_site_key>, <TextNode: '"></div>\n\t\t\t\t<div id="err'>]>}]
