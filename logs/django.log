@@ -94,3 +94,10 @@ WARNING 2023-12-26 12:58:17,831 log Not Found: /.well-known/apple-app-site-assoc
 WARNING 2023-12-26 13:04:45,084 log Not Found: /static/basecamp/images/sydney-airport.webp
 WARNING 2023-12-26 13:04:59,891 log Not Found: /static/basecamp/images/sydney-airport.webp
 WARNING 2023-12-26 13:05:17,791 log Not Found: /static/basecamp/images/sydney-airport.webp
+WARNING 2023-12-26 13:18:02,278 log Not Found: /.env
+ERROR 2023-12-26 13:20:36,961 log Internal Server Error: /paypal_ipn/
+ERROR 2023-12-26 13:32:43,337 log Internal Server Error: /paypal_ipn/
+WARNING 2023-12-26 13:33:06,598 log Not Found: /wp-login.php
+WARNING 2023-12-26 13:42:24,943 log Not Found: /.well-known/traffic-advice
+WARNING 2023-12-26 14:07:54,953 log Not Found: /home//.env
+WARNING 2023-12-26 14:14:53,174 log Not Found: /robots.txt
