@@ -57,6 +57,9 @@ class Command(BaseCommand):
 
                         logger.info(f'........final notice email sent: {final_notice.name}, {final_notice.pickup_time}')
 
+            else:
+                logger.info(f'........already done for reminder: {final_notice.name}')
+
                 
         
         
