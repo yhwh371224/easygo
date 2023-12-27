@@ -75,8 +75,8 @@ class Command(BaseCommand):
             except Exception as e:
                 logger.error(f"Error sending email for {post.name}: {str(e)}")
 
-            finally:
-                self.lock.release()
+            # finally:
+            #     self.lock.release()
 
 
 
