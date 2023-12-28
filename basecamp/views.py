@@ -1001,14 +1001,13 @@ def confirmation_detail(request):
             send_mail(data['flight_date'], content,
                       '', [RECIPIENT_EMAIL])
 
-        sent_email = True    
         sam_driver = Driver.objects.get(driver_name="Sam") 
 
         p = Post(company_name=company_name, name=name, contact=contact, email=email, email1=email1, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
                  no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, return_direction=return_direction,
                  return_flight_date=return_flight_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
-                 return_pickup_time=return_pickup_time, notice=notice, price=price, paid=paid, sent_email=sent_email, driver=sam_driver)
+                 return_pickup_time=return_pickup_time, notice=notice, price=price, paid=paid, driver=sam_driver)
         
         p.save()
 
@@ -1033,6 +1032,7 @@ def confirmation_detail(request):
         email.attach_alternative(html_content, "text/html")
         email.send()
 
+        
         return rendering
 
     else:

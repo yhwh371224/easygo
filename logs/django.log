@@ -1,4 +1,14 @@
-DEBUG 2023-12-27 18:07:26,128 base Exception while resolving variable 'recaptcha_site_key' in template 'basecamp/inquiry1.html'.
+WARNING 2023-12-28 09:05:43,161 log Not Found: /robots.txt
+WARNING 2023-12-28 09:22:24,111 log Not Found: /robots.txt
+WARNING 2023-12-28 09:22:31,636 log Not Found: /shop/nl/product/moncler-jassen-kinderen-fragon-rood/
+WARNING 2023-12-28 09:29:26,476 log Not Found: /robots.txt
+WARNING 2023-12-28 09:35:41,436 log Not Found: /wp-content/plugins/backup-backup/readme.txt
+WARNING 2023-12-28 09:39:10,724 log Forbidden (CSRF cookie not set.): /inquiry_details1/
+WARNING 2023-12-28 09:47:36,083 log Not Found: /robots.txt
+WARNING 2023-12-28 09:47:37,112 log Not Found: /airport-transfers-five-docks/
+WARNING 2023-12-28 11:12:42,949 log Not Found: /+CSCOE+/logon.html
+WARNING 2023-12-28 11:21:55,324 log Not Found: /robots.txt
+DEBUG 2023-12-28 11:35:45,560 base Exception while resolving variable 'recaptcha_site_key' in template 'basecamp/inquiry1.html'.
 Traceback (most recent call last):
   File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
     current = current[bit]
@@ -28,30 +38,1433 @@ During handling of the above exception, another exception occurred:
 Traceback (most recent call last):
   File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
     raise VariableDoesNotExist(
-django.template.base.VariableDoesNotExist: Failed lookup for key [recaptcha_site_key] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: 'qRMN1PFG6PBDJzj3b9bvLznP5L8mvYjc2EE6FkCFmMFqxJ61EcwN8sk0rh7LQh18'>, 'request': <WSGIRequest: POST '/price_detail/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fdb62121d00>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fdb62121d00>>), 'messages': <FallbackStorage: request=<WSGIRequest: POST '/price_detail/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'flight_date': '2024-01-01', 'direction': 'Drop off to Intl Airport', 'suburb': 'Sydney (city)', 'no_of_passenger': '2'}, {'block': <Block Node: content. Contents: [<TextNode: '\n      <!-- Page content-'>, <Variable Node: flight_date>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: direction>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: suburb>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: no_of_passenger>, <TextNode: '</a> -->\n\t\t\t  <br><br>\n  '>, <django.template.defaulttags.CsrfTokenNode object at 0x7fdb62072b50>, <TextNode: '\n\t\t\t\t<div class="mb3 pb-1'>, <Variable Node: direction>, <TextNode: '">'>, <Variable Node: direction>, <TextNode: '</option>\t\t\t\t\t\t          '>, <Variable Node: flight_date>, <TextNode: '" type="text" >\t\t\t\t  \n   '>, <IfNode>, <TextNode: '\n\t\t\t\t  <div class="mb-3 p'>, <Variable Node: suburb>, <TextNode: '</label>\t\t\t\t\t\n\t\t\t\t</div>\n'>, <Variable Node: suburb>, <TextNode: '">'>, <Variable Node: suburb>, <TextNode: '</option>\t\t\t\t\t\n\t\t\t\t  </se'>, <Variable Node: no_of_passenger>, <TextNode: '">'>, <Variable Node: no_of_passenger>, <TextNode: '</option>\t\t\t\t  \n         '>, <Variable Node: recaptcha_site_key>, <TextNode: '"></div>\n\t\t\t\t<div id="err'>]>}]
-WARNING 2023-12-27 18:26:58,657 log Not Found: /.well-known/traffic-advice
-WARNING 2023-12-27 18:42:35,644 log Not Found: /teorema505
-WARNING 2023-12-27 18:45:01,708 log Not Found: /.env
-WARNING 2023-12-27 18:49:19,664 log Not Found: /.env
-WARNING 2023-12-27 19:07:39,592 log Not Found: /airport-transfers-north-epping/
-WARNING 2023-12-27 19:25:12,701 log Not Found: //wp-includes/wlwmanifest.xml
-WARNING 2023-12-27 19:25:12,978 log Not Found: //xmlrpc.php
-WARNING 2023-12-27 19:25:13,541 log Not Found: //blog/wp-includes/wlwmanifest.xml
-WARNING 2023-12-27 19:25:13,815 log Not Found: //web/wp-includes/wlwmanifest.xml
-WARNING 2023-12-27 19:25:14,092 log Not Found: //wordpress/wp-includes/wlwmanifest.xml
-WARNING 2023-12-27 19:25:14,366 log Not Found: //website/wp-includes/wlwmanifest.xml
-WARNING 2023-12-27 19:25:14,640 log Not Found: //wp/wp-includes/wlwmanifest.xml
-WARNING 2023-12-27 19:25:14,917 log Not Found: //news/wp-includes/wlwmanifest.xml
-WARNING 2023-12-27 19:25:15,190 log Not Found: //2020/wp-includes/wlwmanifest.xml
-WARNING 2023-12-27 19:25:15,463 log Not Found: //2019/wp-includes/wlwmanifest.xml
-WARNING 2023-12-27 19:25:15,739 log Not Found: //shop/wp-includes/wlwmanifest.xml
-WARNING 2023-12-27 19:25:16,014 log Not Found: //wp1/wp-includes/wlwmanifest.xml
-WARNING 2023-12-27 19:25:16,288 log Not Found: //test/wp-includes/wlwmanifest.xml
-WARNING 2023-12-27 19:25:16,563 log Not Found: //wp2/wp-includes/wlwmanifest.xml
-WARNING 2023-12-27 19:25:16,837 log Not Found: //site/wp-includes/wlwmanifest.xml
-WARNING 2023-12-27 19:25:17,121 log Not Found: //cms/wp-includes/wlwmanifest.xml
-WARNING 2023-12-27 19:25:17,398 log Not Found: //sito/wp-includes/wlwmanifest.xml
-ERROR 2023-12-27 19:36:44,064 log Internal Server Error: /inquiry_details2/
+django.template.base.VariableDoesNotExist: Failed lookup for key [recaptcha_site_key] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: '4FuxuHGzy6GzJs24iI1Q3AV6aoUURbB9vAUqHieYNDRDTignFbmQsMqsC6BUZLQD'>, 'request': <WSGIRequest: POST '/price_detail/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90549da0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90549da0>>), 'messages': <FallbackStorage: request=<WSGIRequest: POST '/price_detail/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'flight_date': '2023-12-29', 'direction': 'Drop off to Intl Airport', 'suburb': 'Manly', 'no_of_passenger': '2'}, {'block': <Block Node: content. Contents: [<TextNode: '\n      <!-- Page content-'>, <Variable Node: flight_date>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: direction>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: suburb>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: no_of_passenger>, <TextNode: '</a> -->\n\t\t\t  <br><br>\n  '>, <django.template.defaulttags.CsrfTokenNode object at 0x7f6f90576e90>, <TextNode: '\n\t\t\t\t<div class="mb3 pb-1'>, <Variable Node: direction>, <TextNode: '">'>, <Variable Node: direction>, <TextNode: '</option>\t\t\t\t\t\t          '>, <Variable Node: flight_date>, <TextNode: '" type="text" >\t\t\t\t  \n   '>, <IfNode>, <TextNode: '\n\t\t\t\t  <div class="mb-3 p'>, <Variable Node: suburb>, <TextNode: '</label>\t\t\t\t\t\n\t\t\t\t</div>\n'>, <Variable Node: suburb>, <TextNode: '">'>, <Variable Node: suburb>, <TextNode: '</option>\t\t\t\t\t\n\t\t\t\t  </se'>, <Variable Node: no_of_passenger>, <TextNode: '">'>, <Variable Node: no_of_passenger>, <TextNode: '</option>\t\t\t\t  \n         '>, <Variable Node: recaptcha_site_key>, <TextNode: '"></div>\n\t\t\t\t<div id="err'>]>}]
+WARNING 2023-12-28 11:45:27,428 log Not Found: /_profiler/phpinfo
+WARNING 2023-12-28 11:56:07,960 log Not Found: /wp-content/plugins/wp-apxupx.php
+WARNING 2023-12-28 11:57:41,057 log Not Found: /wp-content/plugins/backup-backup/includes/.wp-apxupx.php
+WARNING 2023-12-28 11:58:03,903 log Not Found: /wp-includes/.wp-apxupx.php
+WARNING 2023-12-28 11:58:21,781 log Not Found: /wp-content/wp-apxupx.php
+WARNING 2023-12-28 11:58:33,485 log Not Found: /wp-content/.wp-apxupx.php
+WARNING 2023-12-28 11:58:36,138 log Not Found: /wp-content/mu-plugins/wp-apxupx.php
+WARNING 2023-12-28 11:58:56,618 log Not Found: /wp-apxupx.php
+WARNING 2023-12-28 12:02:02,287 log Not Found: /robots.txt
+WARNING 2023-12-28 12:13:27,761 log Not Found: /en/favicon.ico
+DEBUG 2023-12-28 12:17:10,036 base Exception while resolving variable 'recaptcha_site_key' in template 'basecamp/inquiry1.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [recaptcha_site_key] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: '8r2XpcTPuxES8dlM8dDhFvK0xhLyGWief7ETcOMm8uQ33V7684HfO8lwYGVzDiak'>, 'request': <WSGIRequest: POST '/price_detail/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f9054ad40>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f9054ad40>>), 'messages': <FallbackStorage: request=<WSGIRequest: POST '/price_detail/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'flight_date': '2023-12-31', 'direction': 'Drop off to Intl Airport', 'suburb': 'South Turramurra', 'no_of_passenger': '4'}, {'block': <Block Node: content. Contents: [<TextNode: '\n      <!-- Page content-'>, <Variable Node: flight_date>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: direction>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: suburb>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: no_of_passenger>, <TextNode: '</a> -->\n\t\t\t  <br><br>\n  '>, <django.template.defaulttags.CsrfTokenNode object at 0x7f6f90576e90>, <TextNode: '\n\t\t\t\t<div class="mb3 pb-1'>, <Variable Node: direction>, <TextNode: '">'>, <Variable Node: direction>, <TextNode: '</option>\t\t\t\t\t\t          '>, <Variable Node: flight_date>, <TextNode: '" type="text" >\t\t\t\t  \n   '>, <IfNode>, <TextNode: '\n\t\t\t\t  <div class="mb-3 p'>, <Variable Node: suburb>, <TextNode: '</label>\t\t\t\t\t\n\t\t\t\t</div>\n'>, <Variable Node: suburb>, <TextNode: '">'>, <Variable Node: suburb>, <TextNode: '</option>\t\t\t\t\t\n\t\t\t\t  </se'>, <Variable Node: no_of_passenger>, <TextNode: '">'>, <Variable Node: no_of_passenger>, <TextNode: '</option>\t\t\t\t  \n         '>, <Variable Node: recaptcha_site_key>, <TextNode: '"></div>\n\t\t\t\t<div id="err'>]>}]
+WARNING 2023-12-28 12:18:51,026 log Not Found: //wp-includes/wlwmanifest.xml
+WARNING 2023-12-28 12:18:51,187 log Not Found: //xmlrpc.php
+WARNING 2023-12-28 12:18:51,508 log Not Found: //blog/wp-includes/wlwmanifest.xml
+WARNING 2023-12-28 12:18:51,669 log Not Found: //web/wp-includes/wlwmanifest.xml
+WARNING 2023-12-28 12:18:51,829 log Not Found: //wordpress/wp-includes/wlwmanifest.xml
+WARNING 2023-12-28 12:18:51,990 log Not Found: //website/wp-includes/wlwmanifest.xml
+WARNING 2023-12-28 12:18:52,150 log Not Found: //wp/wp-includes/wlwmanifest.xml
+WARNING 2023-12-28 12:18:52,311 log Not Found: //news/wp-includes/wlwmanifest.xml
+WARNING 2023-12-28 12:18:52,472 log Not Found: //2018/wp-includes/wlwmanifest.xml
+WARNING 2023-12-28 12:18:52,633 log Not Found: //2019/wp-includes/wlwmanifest.xml
+WARNING 2023-12-28 12:18:52,793 log Not Found: //shop/wp-includes/wlwmanifest.xml
+WARNING 2023-12-28 12:18:52,954 log Not Found: //wp1/wp-includes/wlwmanifest.xml
+WARNING 2023-12-28 12:18:53,114 log Not Found: //test/wp-includes/wlwmanifest.xml
+WARNING 2023-12-28 12:18:53,276 log Not Found: //media/wp-includes/wlwmanifest.xml
+WARNING 2023-12-28 12:18:53,437 log Not Found: //wp2/wp-includes/wlwmanifest.xml
+WARNING 2023-12-28 12:18:53,598 log Not Found: //site/wp-includes/wlwmanifest.xml
+WARNING 2023-12-28 12:18:53,758 log Not Found: //cms/wp-includes/wlwmanifest.xml
+WARNING 2023-12-28 12:18:53,919 log Not Found: //sito/wp-includes/wlwmanifest.xml
+ERROR 2023-12-28 12:20:49,038 log Internal Server Error: /paypal_ipn/
+WARNING 2023-12-28 12:23:45,509 log Not Found: /robots.txt
+WARNING 2023-12-28 12:24:00,951 log Not Found: /shop/nl/product/moncler-tinuviel-5/
+WARNING 2023-12-28 12:33:48,089 log Not Found: /robots.txt
+WARNING 2023-12-28 12:33:51,573 log Not Found: /悉尼机场巴士/
+WARNING 2023-12-28 12:33:53,437 log Not Found: /悉尼机场巴士/
+WARNING 2023-12-28 12:33:56,965 log Not Found: /悉尼机场接送/
+WARNING 2023-12-28 12:33:58,962 log Not Found: /悉尼机场接送/
+WARNING 2023-12-28 12:34:02,539 log Not Found: /悉尼机场接送服务/
+WARNING 2023-12-28 12:34:04,331 log Not Found: /悉尼机场接送服务/
+WARNING 2023-12-28 12:34:07,849 log Not Found: /悉尼机场接送服务的最佳拍档/
+WARNING 2023-12-28 12:34:09,605 log Not Found: /悉尼机场接送服务的最佳拍档/
+WARNING 2023-12-28 12:34:13,072 log Not Found: /机场接送-悉尼/
+WARNING 2023-12-28 12:34:14,879 log Not Found: /机场接送-悉尼/
+WARNING 2023-12-28 12:39:49,954 log Not Found: /services/
+DEBUG 2023-12-28 12:55:41,275 base Exception while resolving variable 'recaptcha_site_key' in template 'basecamp/inquiry1.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [recaptcha_site_key] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: 'ui5LDfp0cNBXUj7vTWHC6npK6jANEI1fLxuo4uO8435e6XFSQcjNMdiNZZW4hgiN'>, 'request': <WSGIRequest: POST '/price_detail/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f904f8040>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f904f8040>>), 'messages': <FallbackStorage: request=<WSGIRequest: POST '/price_detail/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'flight_date': '2024-01-21', 'direction': 'Drop off to Domestic Airport', 'suburb': 'Lalor Park', 'no_of_passenger': '10'}, {'block': <Block Node: content. Contents: [<TextNode: '\n      <!-- Page content-'>, <Variable Node: flight_date>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: direction>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: suburb>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: no_of_passenger>, <TextNode: '</a> -->\n\t\t\t  <br><br>\n  '>, <django.template.defaulttags.CsrfTokenNode object at 0x7f6f8fa32ed0>, <TextNode: '\n\t\t\t\t<div class="mb3 pb-1'>, <Variable Node: direction>, <TextNode: '">'>, <Variable Node: direction>, <TextNode: '</option>\t\t\t\t\t\t          '>, <Variable Node: flight_date>, <TextNode: '" type="text" >\t\t\t\t  \n   '>, <IfNode>, <TextNode: '\n\t\t\t\t  <div class="mb-3 p'>, <Variable Node: suburb>, <TextNode: '</label>\t\t\t\t\t\n\t\t\t\t</div>\n'>, <Variable Node: suburb>, <TextNode: '">'>, <Variable Node: suburb>, <TextNode: '</option>\t\t\t\t\t\n\t\t\t\t  </se'>, <Variable Node: no_of_passenger>, <TextNode: '">'>, <Variable Node: no_of_passenger>, <TextNode: '</option>\t\t\t\t  \n         '>, <Variable Node: recaptcha_site_key>, <TextNode: '"></div>\n\t\t\t\t<div id="err'>]>}]
+DEBUG 2023-12-28 12:56:00,007 base Exception while resolving variable 'recaptcha_site_key' in template 'basecamp/inquiry1.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [recaptcha_site_key] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: 'bnCiifZpAw7e5NKxTxkhyuPUFzdrY6yRsC1VJuoxsMBvhriUQNWsekIXyfzIBEPp'>, 'request': <WSGIRequest: POST '/price_detail/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f904fa020>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f904fa020>>), 'messages': <FallbackStorage: request=<WSGIRequest: POST '/price_detail/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'flight_date': '2024-01-21', 'direction': 'Drop off to Domestic Airport', 'suburb': 'Lalor Park', 'no_of_passenger': '10'}, {'block': <Block Node: content. Contents: [<TextNode: '\n      <!-- Page content-'>, <Variable Node: flight_date>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: direction>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: suburb>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: no_of_passenger>, <TextNode: '</a> -->\n\t\t\t  <br><br>\n  '>, <django.template.defaulttags.CsrfTokenNode object at 0x7f6f8fa32ed0>, <TextNode: '\n\t\t\t\t<div class="mb3 pb-1'>, <Variable Node: direction>, <TextNode: '">'>, <Variable Node: direction>, <TextNode: '</option>\t\t\t\t\t\t          '>, <Variable Node: flight_date>, <TextNode: '" type="text" >\t\t\t\t  \n   '>, <IfNode>, <TextNode: '\n\t\t\t\t  <div class="mb-3 p'>, <Variable Node: suburb>, <TextNode: '</label>\t\t\t\t\t\n\t\t\t\t</div>\n'>, <Variable Node: suburb>, <TextNode: '">'>, <Variable Node: suburb>, <TextNode: '</option>\t\t\t\t\t\n\t\t\t\t  </se'>, <Variable Node: no_of_passenger>, <TextNode: '">'>, <Variable Node: no_of_passenger>, <TextNode: '</option>\t\t\t\t  \n         '>, <Variable Node: recaptcha_site_key>, <TextNode: '"></div>\n\t\t\t\t<div id="err'>]>}]
+WARNING 2023-12-28 13:05:48,275 log Not Found: /term
+WARNING 2023-12-28 13:05:59,904 log Not Found: /term
+WARNING 2023-12-28 13:09:21,316 log Not Found: /.well-known/traffic-advice
+DEBUG 2023-12-28 13:35:53,660 base Exception while resolving variable 'flight_date' in template 'basecamp/inquiry1.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'flight_date'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'flight_date'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'flight_date'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [flight_date] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7f6f90a5db20>>, 'request': <WSGIRequest: GET '/price_detail/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90b32ca0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90b32ca0>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/price_detail/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'block': <Block Node: content. Contents: [<TextNode: '\n      <!-- Page content-'>, <Variable Node: flight_date>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: direction>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: suburb>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: no_of_passenger>, <TextNode: '</a> -->\n\t\t\t  <br><br>\n  '>, <django.template.defaulttags.CsrfTokenNode object at 0x7f6f8fa32ed0>, <TextNode: '\n\t\t\t\t<div class="mb3 pb-1'>, <Variable Node: direction>, <TextNode: '">'>, <Variable Node: direction>, <TextNode: '</option>\t\t\t\t\t\t          '>, <Variable Node: flight_date>, <TextNode: '" type="text" >\t\t\t\t  \n   '>, <IfNode>, <TextNode: '\n\t\t\t\t  <div class="mb-3 p'>, <Variable Node: suburb>, <TextNode: '</label>\t\t\t\t\t\n\t\t\t\t</div>\n'>, <Variable Node: suburb>, <TextNode: '">'>, <Variable Node: suburb>, <TextNode: '</option>\t\t\t\t\t\n\t\t\t\t  </se'>, <Variable Node: no_of_passenger>, <TextNode: '">'>, <Variable Node: no_of_passenger>, <TextNode: '</option>\t\t\t\t  \n         '>, <Variable Node: recaptcha_site_key>, <TextNode: '"></div>\n\t\t\t\t<div id="err'>]>}]
+DEBUG 2023-12-28 13:35:53,661 base Exception while resolving variable 'direction' in template 'basecamp/inquiry1.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'direction'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'direction'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'direction'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [direction] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7f6f90a5db20>>, 'request': <WSGIRequest: GET '/price_detail/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90b32ca0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90b32ca0>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/price_detail/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'block': <Block Node: content. Contents: [<TextNode: '\n      <!-- Page content-'>, <Variable Node: flight_date>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: direction>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: suburb>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: no_of_passenger>, <TextNode: '</a> -->\n\t\t\t  <br><br>\n  '>, <django.template.defaulttags.CsrfTokenNode object at 0x7f6f8fa32ed0>, <TextNode: '\n\t\t\t\t<div class="mb3 pb-1'>, <Variable Node: direction>, <TextNode: '">'>, <Variable Node: direction>, <TextNode: '</option>\t\t\t\t\t\t          '>, <Variable Node: flight_date>, <TextNode: '" type="text" >\t\t\t\t  \n   '>, <IfNode>, <TextNode: '\n\t\t\t\t  <div class="mb-3 p'>, <Variable Node: suburb>, <TextNode: '</label>\t\t\t\t\t\n\t\t\t\t</div>\n'>, <Variable Node: suburb>, <TextNode: '">'>, <Variable Node: suburb>, <TextNode: '</option>\t\t\t\t\t\n\t\t\t\t  </se'>, <Variable Node: no_of_passenger>, <TextNode: '">'>, <Variable Node: no_of_passenger>, <TextNode: '</option>\t\t\t\t  \n         '>, <Variable Node: recaptcha_site_key>, <TextNode: '"></div>\n\t\t\t\t<div id="err'>]>}]
+DEBUG 2023-12-28 13:35:53,662 base Exception while resolving variable 'suburb' in template 'basecamp/inquiry1.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'suburb'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'suburb'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'suburb'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [suburb] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7f6f90a5db20>>, 'request': <WSGIRequest: GET '/price_detail/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90b32ca0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90b32ca0>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/price_detail/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'block': <Block Node: content. Contents: [<TextNode: '\n      <!-- Page content-'>, <Variable Node: flight_date>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: direction>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: suburb>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: no_of_passenger>, <TextNode: '</a> -->\n\t\t\t  <br><br>\n  '>, <django.template.defaulttags.CsrfTokenNode object at 0x7f6f8fa32ed0>, <TextNode: '\n\t\t\t\t<div class="mb3 pb-1'>, <Variable Node: direction>, <TextNode: '">'>, <Variable Node: direction>, <TextNode: '</option>\t\t\t\t\t\t          '>, <Variable Node: flight_date>, <TextNode: '" type="text" >\t\t\t\t  \n   '>, <IfNode>, <TextNode: '\n\t\t\t\t  <div class="mb-3 p'>, <Variable Node: suburb>, <TextNode: '</label>\t\t\t\t\t\n\t\t\t\t</div>\n'>, <Variable Node: suburb>, <TextNode: '">'>, <Variable Node: suburb>, <TextNode: '</option>\t\t\t\t\t\n\t\t\t\t  </se'>, <Variable Node: no_of_passenger>, <TextNode: '">'>, <Variable Node: no_of_passenger>, <TextNode: '</option>\t\t\t\t  \n         '>, <Variable Node: recaptcha_site_key>, <TextNode: '"></div>\n\t\t\t\t<div id="err'>]>}]
+DEBUG 2023-12-28 13:35:53,662 base Exception while resolving variable 'no_of_passenger' in template 'basecamp/inquiry1.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'no_of_passenger'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'no_of_passenger'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'no_of_passenger'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [no_of_passenger] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7f6f90a5db20>>, 'request': <WSGIRequest: GET '/price_detail/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90b32ca0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90b32ca0>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/price_detail/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'block': <Block Node: content. Contents: [<TextNode: '\n      <!-- Page content-'>, <Variable Node: flight_date>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: direction>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: suburb>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: no_of_passenger>, <TextNode: '</a> -->\n\t\t\t  <br><br>\n  '>, <django.template.defaulttags.CsrfTokenNode object at 0x7f6f8fa32ed0>, <TextNode: '\n\t\t\t\t<div class="mb3 pb-1'>, <Variable Node: direction>, <TextNode: '">'>, <Variable Node: direction>, <TextNode: '</option>\t\t\t\t\t\t          '>, <Variable Node: flight_date>, <TextNode: '" type="text" >\t\t\t\t  \n   '>, <IfNode>, <TextNode: '\n\t\t\t\t  <div class="mb-3 p'>, <Variable Node: suburb>, <TextNode: '</label>\t\t\t\t\t\n\t\t\t\t</div>\n'>, <Variable Node: suburb>, <TextNode: '">'>, <Variable Node: suburb>, <TextNode: '</option>\t\t\t\t\t\n\t\t\t\t  </se'>, <Variable Node: no_of_passenger>, <TextNode: '">'>, <Variable Node: no_of_passenger>, <TextNode: '</option>\t\t\t\t  \n         '>, <Variable Node: recaptcha_site_key>, <TextNode: '"></div>\n\t\t\t\t<div id="err'>]>}]
+DEBUG 2023-12-28 13:35:53,663 base Exception while resolving variable 'direction' in template 'basecamp/inquiry1.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'direction'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'direction'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'direction'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [direction] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: 'jz01umFl7gt3bd6bHyLu33n8UIdiuW3uvUvO2KeHWVhZ5Ti57pEe7f41PEZ12icY'>, 'request': <WSGIRequest: GET '/price_detail/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90b32ca0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90b32ca0>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/price_detail/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'block': <Block Node: content. Contents: [<TextNode: '\n      <!-- Page content-'>, <Variable Node: flight_date>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: direction>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: suburb>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: no_of_passenger>, <TextNode: '</a> -->\n\t\t\t  <br><br>\n  '>, <django.template.defaulttags.CsrfTokenNode object at 0x7f6f8fa32ed0>, <TextNode: '\n\t\t\t\t<div class="mb3 pb-1'>, <Variable Node: direction>, <TextNode: '">'>, <Variable Node: direction>, <TextNode: '</option>\t\t\t\t\t\t          '>, <Variable Node: flight_date>, <TextNode: '" type="text" >\t\t\t\t  \n   '>, <IfNode>, <TextNode: '\n\t\t\t\t  <div class="mb-3 p'>, <Variable Node: suburb>, <TextNode: '</label>\t\t\t\t\t\n\t\t\t\t</div>\n'>, <Variable Node: suburb>, <TextNode: '">'>, <Variable Node: suburb>, <TextNode: '</option>\t\t\t\t\t\n\t\t\t\t  </se'>, <Variable Node: no_of_passenger>, <TextNode: '">'>, <Variable Node: no_of_passenger>, <TextNode: '</option>\t\t\t\t  \n         '>, <Variable Node: recaptcha_site_key>, <TextNode: '"></div>\n\t\t\t\t<div id="err'>]>}]
+DEBUG 2023-12-28 13:35:53,664 base Exception while resolving variable 'direction' in template 'basecamp/inquiry1.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'direction'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'direction'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'direction'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [direction] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: 'jz01umFl7gt3bd6bHyLu33n8UIdiuW3uvUvO2KeHWVhZ5Ti57pEe7f41PEZ12icY'>, 'request': <WSGIRequest: GET '/price_detail/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90b32ca0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90b32ca0>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/price_detail/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'block': <Block Node: content. Contents: [<TextNode: '\n      <!-- Page content-'>, <Variable Node: flight_date>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: direction>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: suburb>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: no_of_passenger>, <TextNode: '</a> -->\n\t\t\t  <br><br>\n  '>, <django.template.defaulttags.CsrfTokenNode object at 0x7f6f8fa32ed0>, <TextNode: '\n\t\t\t\t<div class="mb3 pb-1'>, <Variable Node: direction>, <TextNode: '">'>, <Variable Node: direction>, <TextNode: '</option>\t\t\t\t\t\t          '>, <Variable Node: flight_date>, <TextNode: '" type="text" >\t\t\t\t  \n   '>, <IfNode>, <TextNode: '\n\t\t\t\t  <div class="mb-3 p'>, <Variable Node: suburb>, <TextNode: '</label>\t\t\t\t\t\n\t\t\t\t</div>\n'>, <Variable Node: suburb>, <TextNode: '">'>, <Variable Node: suburb>, <TextNode: '</option>\t\t\t\t\t\n\t\t\t\t  </se'>, <Variable Node: no_of_passenger>, <TextNode: '">'>, <Variable Node: no_of_passenger>, <TextNode: '</option>\t\t\t\t  \n         '>, <Variable Node: recaptcha_site_key>, <TextNode: '"></div>\n\t\t\t\t<div id="err'>]>}]
+DEBUG 2023-12-28 13:35:53,664 base Exception while resolving variable 'flight_date' in template 'basecamp/inquiry1.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'flight_date'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'flight_date'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'flight_date'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [flight_date] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: 'jz01umFl7gt3bd6bHyLu33n8UIdiuW3uvUvO2KeHWVhZ5Ti57pEe7f41PEZ12icY'>, 'request': <WSGIRequest: GET '/price_detail/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90b32ca0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90b32ca0>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/price_detail/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'block': <Block Node: content. Contents: [<TextNode: '\n      <!-- Page content-'>, <Variable Node: flight_date>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: direction>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: suburb>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: no_of_passenger>, <TextNode: '</a> -->\n\t\t\t  <br><br>\n  '>, <django.template.defaulttags.CsrfTokenNode object at 0x7f6f8fa32ed0>, <TextNode: '\n\t\t\t\t<div class="mb3 pb-1'>, <Variable Node: direction>, <TextNode: '">'>, <Variable Node: direction>, <TextNode: '</option>\t\t\t\t\t\t          '>, <Variable Node: flight_date>, <TextNode: '" type="text" >\t\t\t\t  \n   '>, <IfNode>, <TextNode: '\n\t\t\t\t  <div class="mb-3 p'>, <Variable Node: suburb>, <TextNode: '</label>\t\t\t\t\t\n\t\t\t\t</div>\n'>, <Variable Node: suburb>, <TextNode: '">'>, <Variable Node: suburb>, <TextNode: '</option>\t\t\t\t\t\n\t\t\t\t  </se'>, <Variable Node: no_of_passenger>, <TextNode: '">'>, <Variable Node: no_of_passenger>, <TextNode: '</option>\t\t\t\t  \n         '>, <Variable Node: recaptcha_site_key>, <TextNode: '"></div>\n\t\t\t\t<div id="err'>]>}]
+DEBUG 2023-12-28 13:35:53,665 base Exception while resolving variable 'direction' in template 'basecamp/inquiry1.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'direction'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'direction'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'direction'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [direction] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: 'jz01umFl7gt3bd6bHyLu33n8UIdiuW3uvUvO2KeHWVhZ5Ti57pEe7f41PEZ12icY'>, 'request': <WSGIRequest: GET '/price_detail/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90b32ca0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90b32ca0>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/price_detail/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'block': <Block Node: content. Contents: [<TextNode: '\n      <!-- Page content-'>, <Variable Node: flight_date>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: direction>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: suburb>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: no_of_passenger>, <TextNode: '</a> -->\n\t\t\t  <br><br>\n  '>, <django.template.defaulttags.CsrfTokenNode object at 0x7f6f8fa32ed0>, <TextNode: '\n\t\t\t\t<div class="mb3 pb-1'>, <Variable Node: direction>, <TextNode: '">'>, <Variable Node: direction>, <TextNode: '</option>\t\t\t\t\t\t          '>, <Variable Node: flight_date>, <TextNode: '" type="text" >\t\t\t\t  \n   '>, <IfNode>, <TextNode: '\n\t\t\t\t  <div class="mb-3 p'>, <Variable Node: suburb>, <TextNode: '</label>\t\t\t\t\t\n\t\t\t\t</div>\n'>, <Variable Node: suburb>, <TextNode: '">'>, <Variable Node: suburb>, <TextNode: '</option>\t\t\t\t\t\n\t\t\t\t  </se'>, <Variable Node: no_of_passenger>, <TextNode: '">'>, <Variable Node: no_of_passenger>, <TextNode: '</option>\t\t\t\t  \n         '>, <Variable Node: recaptcha_site_key>, <TextNode: '"></div>\n\t\t\t\t<div id="err'>]>}]
+DEBUG 2023-12-28 13:35:53,665 base Exception while resolving variable 'direction' in template 'basecamp/inquiry1.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'direction'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'direction'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'direction'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [direction] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: 'jz01umFl7gt3bd6bHyLu33n8UIdiuW3uvUvO2KeHWVhZ5Ti57pEe7f41PEZ12icY'>, 'request': <WSGIRequest: GET '/price_detail/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90b32ca0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90b32ca0>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/price_detail/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'block': <Block Node: content. Contents: [<TextNode: '\n      <!-- Page content-'>, <Variable Node: flight_date>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: direction>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: suburb>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: no_of_passenger>, <TextNode: '</a> -->\n\t\t\t  <br><br>\n  '>, <django.template.defaulttags.CsrfTokenNode object at 0x7f6f8fa32ed0>, <TextNode: '\n\t\t\t\t<div class="mb3 pb-1'>, <Variable Node: direction>, <TextNode: '">'>, <Variable Node: direction>, <TextNode: '</option>\t\t\t\t\t\t          '>, <Variable Node: flight_date>, <TextNode: '" type="text" >\t\t\t\t  \n   '>, <IfNode>, <TextNode: '\n\t\t\t\t  <div class="mb-3 p'>, <Variable Node: suburb>, <TextNode: '</label>\t\t\t\t\t\n\t\t\t\t</div>\n'>, <Variable Node: suburb>, <TextNode: '">'>, <Variable Node: suburb>, <TextNode: '</option>\t\t\t\t\t\n\t\t\t\t  </se'>, <Variable Node: no_of_passenger>, <TextNode: '">'>, <Variable Node: no_of_passenger>, <TextNode: '</option>\t\t\t\t  \n         '>, <Variable Node: recaptcha_site_key>, <TextNode: '"></div>\n\t\t\t\t<div id="err'>]>}]
+DEBUG 2023-12-28 13:35:53,666 base Exception while resolving variable 'suburb' in template 'basecamp/inquiry1.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'suburb'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'suburb'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'suburb'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [suburb] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: 'jz01umFl7gt3bd6bHyLu33n8UIdiuW3uvUvO2KeHWVhZ5Ti57pEe7f41PEZ12icY'>, 'request': <WSGIRequest: GET '/price_detail/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90b32ca0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90b32ca0>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/price_detail/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'block': <Block Node: content. Contents: [<TextNode: '\n      <!-- Page content-'>, <Variable Node: flight_date>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: direction>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: suburb>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: no_of_passenger>, <TextNode: '</a> -->\n\t\t\t  <br><br>\n  '>, <django.template.defaulttags.CsrfTokenNode object at 0x7f6f8fa32ed0>, <TextNode: '\n\t\t\t\t<div class="mb3 pb-1'>, <Variable Node: direction>, <TextNode: '">'>, <Variable Node: direction>, <TextNode: '</option>\t\t\t\t\t\t          '>, <Variable Node: flight_date>, <TextNode: '" type="text" >\t\t\t\t  \n   '>, <IfNode>, <TextNode: '\n\t\t\t\t  <div class="mb-3 p'>, <Variable Node: suburb>, <TextNode: '</label>\t\t\t\t\t\n\t\t\t\t</div>\n'>, <Variable Node: suburb>, <TextNode: '">'>, <Variable Node: suburb>, <TextNode: '</option>\t\t\t\t\t\n\t\t\t\t  </se'>, <Variable Node: no_of_passenger>, <TextNode: '">'>, <Variable Node: no_of_passenger>, <TextNode: '</option>\t\t\t\t  \n         '>, <Variable Node: recaptcha_site_key>, <TextNode: '"></div>\n\t\t\t\t<div id="err'>]>}]
+DEBUG 2023-12-28 13:35:53,667 base Exception while resolving variable 'suburb' in template 'basecamp/inquiry1.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'suburb'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'suburb'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'suburb'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [suburb] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: 'jz01umFl7gt3bd6bHyLu33n8UIdiuW3uvUvO2KeHWVhZ5Ti57pEe7f41PEZ12icY'>, 'request': <WSGIRequest: GET '/price_detail/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90b32ca0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90b32ca0>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/price_detail/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'block': <Block Node: content. Contents: [<TextNode: '\n      <!-- Page content-'>, <Variable Node: flight_date>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: direction>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: suburb>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: no_of_passenger>, <TextNode: '</a> -->\n\t\t\t  <br><br>\n  '>, <django.template.defaulttags.CsrfTokenNode object at 0x7f6f8fa32ed0>, <TextNode: '\n\t\t\t\t<div class="mb3 pb-1'>, <Variable Node: direction>, <TextNode: '">'>, <Variable Node: direction>, <TextNode: '</option>\t\t\t\t\t\t          '>, <Variable Node: flight_date>, <TextNode: '" type="text" >\t\t\t\t  \n   '>, <IfNode>, <TextNode: '\n\t\t\t\t  <div class="mb-3 p'>, <Variable Node: suburb>, <TextNode: '</label>\t\t\t\t\t\n\t\t\t\t</div>\n'>, <Variable Node: suburb>, <TextNode: '">'>, <Variable Node: suburb>, <TextNode: '</option>\t\t\t\t\t\n\t\t\t\t  </se'>, <Variable Node: no_of_passenger>, <TextNode: '">'>, <Variable Node: no_of_passenger>, <TextNode: '</option>\t\t\t\t  \n         '>, <Variable Node: recaptcha_site_key>, <TextNode: '"></div>\n\t\t\t\t<div id="err'>]>}]
+DEBUG 2023-12-28 13:35:53,667 base Exception while resolving variable 'suburb' in template 'basecamp/inquiry1.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'suburb'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'suburb'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'suburb'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [suburb] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: 'jz01umFl7gt3bd6bHyLu33n8UIdiuW3uvUvO2KeHWVhZ5Ti57pEe7f41PEZ12icY'>, 'request': <WSGIRequest: GET '/price_detail/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90b32ca0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90b32ca0>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/price_detail/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'block': <Block Node: content. Contents: [<TextNode: '\n      <!-- Page content-'>, <Variable Node: flight_date>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: direction>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: suburb>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: no_of_passenger>, <TextNode: '</a> -->\n\t\t\t  <br><br>\n  '>, <django.template.defaulttags.CsrfTokenNode object at 0x7f6f8fa32ed0>, <TextNode: '\n\t\t\t\t<div class="mb3 pb-1'>, <Variable Node: direction>, <TextNode: '">'>, <Variable Node: direction>, <TextNode: '</option>\t\t\t\t\t\t          '>, <Variable Node: flight_date>, <TextNode: '" type="text" >\t\t\t\t  \n   '>, <IfNode>, <TextNode: '\n\t\t\t\t  <div class="mb-3 p'>, <Variable Node: suburb>, <TextNode: '</label>\t\t\t\t\t\n\t\t\t\t</div>\n'>, <Variable Node: suburb>, <TextNode: '">'>, <Variable Node: suburb>, <TextNode: '</option>\t\t\t\t\t\n\t\t\t\t  </se'>, <Variable Node: no_of_passenger>, <TextNode: '">'>, <Variable Node: no_of_passenger>, <TextNode: '</option>\t\t\t\t  \n         '>, <Variable Node: recaptcha_site_key>, <TextNode: '"></div>\n\t\t\t\t<div id="err'>]>}]
+DEBUG 2023-12-28 13:35:53,668 base Exception while resolving variable 'no_of_passenger' in template 'basecamp/inquiry1.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'no_of_passenger'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'no_of_passenger'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'no_of_passenger'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [no_of_passenger] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: 'jz01umFl7gt3bd6bHyLu33n8UIdiuW3uvUvO2KeHWVhZ5Ti57pEe7f41PEZ12icY'>, 'request': <WSGIRequest: GET '/price_detail/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90b32ca0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90b32ca0>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/price_detail/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'block': <Block Node: content. Contents: [<TextNode: '\n      <!-- Page content-'>, <Variable Node: flight_date>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: direction>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: suburb>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: no_of_passenger>, <TextNode: '</a> -->\n\t\t\t  <br><br>\n  '>, <django.template.defaulttags.CsrfTokenNode object at 0x7f6f8fa32ed0>, <TextNode: '\n\t\t\t\t<div class="mb3 pb-1'>, <Variable Node: direction>, <TextNode: '">'>, <Variable Node: direction>, <TextNode: '</option>\t\t\t\t\t\t          '>, <Variable Node: flight_date>, <TextNode: '" type="text" >\t\t\t\t  \n   '>, <IfNode>, <TextNode: '\n\t\t\t\t  <div class="mb-3 p'>, <Variable Node: suburb>, <TextNode: '</label>\t\t\t\t\t\n\t\t\t\t</div>\n'>, <Variable Node: suburb>, <TextNode: '">'>, <Variable Node: suburb>, <TextNode: '</option>\t\t\t\t\t\n\t\t\t\t  </se'>, <Variable Node: no_of_passenger>, <TextNode: '">'>, <Variable Node: no_of_passenger>, <TextNode: '</option>\t\t\t\t  \n         '>, <Variable Node: recaptcha_site_key>, <TextNode: '"></div>\n\t\t\t\t<div id="err'>]>}]
+DEBUG 2023-12-28 13:35:53,668 base Exception while resolving variable 'no_of_passenger' in template 'basecamp/inquiry1.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'no_of_passenger'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'no_of_passenger'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'no_of_passenger'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [no_of_passenger] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: 'jz01umFl7gt3bd6bHyLu33n8UIdiuW3uvUvO2KeHWVhZ5Ti57pEe7f41PEZ12icY'>, 'request': <WSGIRequest: GET '/price_detail/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90b32ca0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90b32ca0>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/price_detail/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'block': <Block Node: content. Contents: [<TextNode: '\n      <!-- Page content-'>, <Variable Node: flight_date>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: direction>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: suburb>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: no_of_passenger>, <TextNode: '</a> -->\n\t\t\t  <br><br>\n  '>, <django.template.defaulttags.CsrfTokenNode object at 0x7f6f8fa32ed0>, <TextNode: '\n\t\t\t\t<div class="mb3 pb-1'>, <Variable Node: direction>, <TextNode: '">'>, <Variable Node: direction>, <TextNode: '</option>\t\t\t\t\t\t          '>, <Variable Node: flight_date>, <TextNode: '" type="text" >\t\t\t\t  \n   '>, <IfNode>, <TextNode: '\n\t\t\t\t  <div class="mb-3 p'>, <Variable Node: suburb>, <TextNode: '</label>\t\t\t\t\t\n\t\t\t\t</div>\n'>, <Variable Node: suburb>, <TextNode: '">'>, <Variable Node: suburb>, <TextNode: '</option>\t\t\t\t\t\n\t\t\t\t  </se'>, <Variable Node: no_of_passenger>, <TextNode: '">'>, <Variable Node: no_of_passenger>, <TextNode: '</option>\t\t\t\t  \n         '>, <Variable Node: recaptcha_site_key>, <TextNode: '"></div>\n\t\t\t\t<div id="err'>]>}]
+DEBUG 2023-12-28 13:35:53,669 base Exception while resolving variable 'recaptcha_site_key' in template 'basecamp/inquiry1.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [recaptcha_site_key] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: 'jz01umFl7gt3bd6bHyLu33n8UIdiuW3uvUvO2KeHWVhZ5Ti57pEe7f41PEZ12icY'>, 'request': <WSGIRequest: GET '/price_detail/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90b32ca0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90b32ca0>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/price_detail/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'block': <Block Node: content. Contents: [<TextNode: '\n      <!-- Page content-'>, <Variable Node: flight_date>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: direction>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: suburb>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: no_of_passenger>, <TextNode: '</a> -->\n\t\t\t  <br><br>\n  '>, <django.template.defaulttags.CsrfTokenNode object at 0x7f6f8fa32ed0>, <TextNode: '\n\t\t\t\t<div class="mb3 pb-1'>, <Variable Node: direction>, <TextNode: '">'>, <Variable Node: direction>, <TextNode: '</option>\t\t\t\t\t\t          '>, <Variable Node: flight_date>, <TextNode: '" type="text" >\t\t\t\t  \n   '>, <IfNode>, <TextNode: '\n\t\t\t\t  <div class="mb-3 p'>, <Variable Node: suburb>, <TextNode: '</label>\t\t\t\t\t\n\t\t\t\t</div>\n'>, <Variable Node: suburb>, <TextNode: '">'>, <Variable Node: suburb>, <TextNode: '</option>\t\t\t\t\t\n\t\t\t\t  </se'>, <Variable Node: no_of_passenger>, <TextNode: '">'>, <Variable Node: no_of_passenger>, <TextNode: '</option>\t\t\t\t  \n         '>, <Variable Node: recaptcha_site_key>, <TextNode: '"></div>\n\t\t\t\t<div id="err'>]>}]
+WARNING 2023-12-28 14:41:57,750 log Not Found: /robots.txt
+WARNING 2023-12-28 14:41:57,930 log Not Found: /robots.txt
+WARNING 2023-12-28 14:55:10,956 log Not Found: /.env
+WARNING 2023-12-28 14:55:11,182 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2023-12-28 14:55:11,431 log Not Found: /_profiler/phpinfo
+WARNING 2023-12-28 14:55:11,696 log Not Found: /phpinfo.php
+WARNING 2023-12-28 14:55:11,921 log Not Found: /info.php
+WARNING 2023-12-28 14:55:12,163 log Not Found: /aws.yml
+WARNING 2023-12-28 14:55:12,394 log Not Found: /.env.bak
+WARNING 2023-12-28 14:55:12,631 log Not Found: /config/aws.yml
+WARNING 2023-12-28 14:55:12,877 log Not Found: /symfony/_profiler/phpinfo
+WARNING 2023-12-28 14:55:13,128 log Not Found: /phpinfo
+WARNING 2023-12-28 14:55:13,394 log Not Found: /login
+WARNING 2023-12-28 14:55:14,877 log Not Found: /.aws/credentials
+WARNING 2023-12-28 14:55:15,109 log Not Found: /config.js
+WARNING 2023-12-28 14:55:15,359 log Not Found: /helpers/utility.js
+WARNING 2023-12-28 14:55:15,570 log Not Found: /config/config.json
+WARNING 2023-12-28 14:55:15,784 log Not Found: /sms.py
+WARNING 2023-12-28 14:55:16,026 log Not Found: /php.php
+WARNING 2023-12-28 14:55:16,244 log Not Found: /infophp.php
+WARNING 2023-12-28 14:55:16,457 log Not Found: /php_info.php
+WARNING 2023-12-28 14:55:16,678 log Not Found: /test.php
+WARNING 2023-12-28 14:55:16,900 log Not Found: /i.php
+WARNING 2023-12-28 14:55:17,116 log Not Found: /asdf.php
+WARNING 2023-12-28 14:55:17,325 log Not Found: /pinfo.php
+WARNING 2023-12-28 14:55:17,536 log Not Found: /phpversion.php
+WARNING 2023-12-28 14:55:17,770 log Not Found: /time.php
+WARNING 2023-12-28 14:55:18,021 log Not Found: /index.php
+WARNING 2023-12-28 14:55:18,234 log Not Found: /temp.php
+WARNING 2023-12-28 14:55:18,447 log Not Found: /old_phpinfo.php
+WARNING 2023-12-28 14:55:18,711 log Not Found: /infos.php
+WARNING 2023-12-28 14:55:18,948 log Not Found: /linusadmin-phpinfo.php
+WARNING 2023-12-28 14:55:19,175 log Not Found: /php-info.php
+WARNING 2023-12-28 14:55:19,414 log Not Found: /dashboard/phpinfo.php
+WARNING 2023-12-28 14:55:19,685 log Not Found: /a.php
+WARNING 2023-12-28 14:55:19,953 log Not Found: /php1.php
+WARNING 2023-12-28 14:55:20,174 log Not Found: /adminphp.php/configuration.php
+WARNING 2023-12-28 14:55:20,388 log Not Found: /123.php
+WARNING 2023-12-28 14:55:20,601 log Not Found: /infophp.php
+WARNING 2023-12-28 14:55:20,810 log Not Found: /isadmin.php
+WARNING 2023-12-28 14:55:21,027 log Not Found: /jo.php
+WARNING 2023-12-28 14:55:21,248 log Not Found: /lindex.php
+WARNING 2023-12-28 14:55:21,471 log Not Found: /new.php
+WARNING 2023-12-28 14:55:21,726 log Not Found: /phpinfo.php3
+WARNING 2023-12-28 14:55:21,970 log Not Found: /phpinfo.php4
+WARNING 2023-12-28 14:55:22,202 log Not Found: /phpinfo.php5
+WARNING 2023-12-28 14:55:22,582 log Not Found: /phpinfos.php
+WARNING 2023-12-28 14:55:22,827 log Not Found: /phptest.php
+WARNING 2023-12-28 14:55:23,041 log Not Found: /pi.php
+WARNING 2023-12-28 14:55:23,270 log Not Found: /pi.php5
+WARNING 2023-12-28 14:55:23,517 log Not Found: /qq.php
+WARNING 2023-12-28 14:55:23,757 log Not Found: /test0.php
+WARNING 2023-12-28 14:55:24,010 log Not Found: /test1
+WARNING 2023-12-28 14:55:24,252 log Not Found: /test1.php
+WARNING 2023-12-28 14:55:24,523 log Not Found: /test123.php
+WARNING 2023-12-28 14:55:24,745 log Not Found: /wp-config.old
+WARNING 2023-12-28 14:55:25,036 log Not Found: /test2.php
+WARNING 2023-12-28 14:55:25,279 log Not Found: /test3.php
+WARNING 2023-12-28 14:55:25,506 log Not Found: /test4.php
+WARNING 2023-12-28 14:55:25,764 log Not Found: /test5.php
+WARNING 2023-12-28 14:55:26,007 log Not Found: /test6.php
+WARNING 2023-12-28 14:55:26,222 log Not Found: /test7.php
+WARNING 2023-12-28 14:55:26,443 log Not Found: /test8.php
+WARNING 2023-12-28 14:55:26,680 log Not Found: /test9.php
+WARNING 2023-12-28 14:55:26,893 log Not Found: /up.php
+WARNING 2023-12-28 14:55:27,104 log Not Found: /w.php
+WARNING 2023-12-28 14:55:27,322 log Not Found: /wp.php
+WARNING 2023-12-28 14:55:27,558 log Not Found: /apache.php
+WARNING 2023-12-28 14:55:27,819 log Not Found: /php.ini
+WARNING 2023-12-28 14:55:28,063 log Not Found: /web.php
+WARNING 2023-12-28 14:55:28,313 log Not Found: /token.php
+WARNING 2023-12-28 14:55:28,534 log Not Found: /main.yml
+WARNING 2023-12-28 14:55:28,774 log Not Found: /.travis.yml
+WARNING 2023-12-28 14:55:29,000 log Not Found: /s3.js
+WARNING 2023-12-28 14:55:29,249 log Not Found: /server/s3.js
+WARNING 2023-12-28 14:55:29,459 log Not Found: /aws-secret.yaml
+WARNING 2023-12-28 14:55:29,742 log Not Found: /config/cache.php
+WARNING 2023-12-28 14:55:29,997 log Not Found: /cache.php
+WARNING 2023-12-28 14:55:30,221 log Not Found: /env.template
+WARNING 2023-12-28 14:55:30,470 log Not Found: /wp-config.php.bak
+WARNING 2023-12-28 14:55:30,717 log Not Found: /wp-config.txt
+WARNING 2023-12-28 14:55:30,939 log Not Found: /wpp-config.php~
+WARNING 2023-12-28 14:55:31,171 log Not Found: /wp-config.php.backup
+WARNING 2023-12-28 14:55:31,382 log Not Found: /settings.py
+WARNING 2023-12-28 14:55:31,664 log Not Found: /in.php
+WARNING 2023-12-28 14:55:31,905 log Not Found: /dev.php
+WARNING 2023-12-28 14:55:32,138 log Not Found: /devs.php
+WARNING 2023-12-28 14:55:32,434 log Not Found: /ini.php
+WARNING 2023-12-28 14:55:32,662 log Not Found: /apache2.php
+WARNING 2023-12-28 14:55:32,920 log Not Found: /developer.php
+WARNING 2023-12-28 14:55:33,134 log Not Found: /phpinfodev.php
+WARNING 2023-12-28 14:55:33,341 log Not Found: /x.php
+WARNING 2023-12-28 14:55:33,574 log Not Found: /of.php
+WARNING 2023-12-28 14:55:33,791 log Not Found: /l.php
+WARNING 2023-12-28 14:55:34,031 log Not Found: /phpinfo/phpinfo.php
+WARNING 2023-12-28 14:55:34,272 log Not Found: /phpinfo/info.php
+WARNING 2023-12-28 14:55:34,498 log Not Found: /phpinfo.html
+WARNING 2023-12-28 14:55:34,730 log Not Found: /phpinfo.txt
+WARNING 2023-12-28 14:55:35,020 log Not Found: /_profiler/phpinfo/phpinfo.php
+WARNING 2023-12-28 14:55:35,268 log Not Found: /_profiler/phpinfo/info.php
+WARNING 2023-12-28 14:55:35,518 log Not Found: /index1.php
+WARNING 2023-12-28 14:55:35,763 log Not Found: /phpcustom_info/phpinfo.php
+WARNING 2023-12-28 14:55:36,018 log Not Found: /php52/phpinfo.php
+WARNING 2023-12-28 14:55:36,346 log Not Found: /apache/phpinfo.php
+WARNING 2023-12-28 14:55:36,581 log Not Found: /apache/info.php
+WARNING 2023-12-28 14:55:36,809 log Not Found: /apache/i.php
+WARNING 2023-12-28 14:55:37,042 log Not Found: /rest.php
+WARNING 2023-12-28 14:55:37,285 log Not Found: /inf.php
+WARNING 2023-12-28 14:55:37,545 log Not Found: /info1.php
+WARNING 2023-12-28 14:55:37,771 log Not Found: /info2.php
+WARNING 2023-12-28 14:55:38,139 log Not Found: /info3.php
+WARNING 2023-12-28 14:55:38,372 log Not Found: /info4.php
+WARNING 2023-12-28 14:55:38,600 log Not Found: /phpinfo1.php
+WARNING 2023-12-28 14:55:38,828 log Not Found: /phpinfo2.php
+WARNING 2023-12-28 14:55:39,091 log Not Found: /phpinfo3.php
+WARNING 2023-12-28 14:55:39,336 log Not Found: /phpinfo4.php
+WARNING 2023-12-28 14:55:39,580 log Not Found: /o.php
+WARNING 2023-12-28 14:55:39,803 log Not Found: /test_info.php
+WARNING 2023-12-28 14:55:40,078 log Not Found: /test_info2.php
+WARNING 2023-12-28 14:55:40,336 log Not Found: /test_info1.php
+WARNING 2023-12-28 14:55:40,570 log Not Found: /test_info3.php
+WARNING 2023-12-28 14:55:40,814 log Not Found: /test_info4.php
+WARNING 2023-12-28 14:55:41,062 log Not Found: /test_info5.php
+WARNING 2023-12-28 14:55:41,289 log Not Found: /test_phpinfo.php
+WARNING 2023-12-28 14:55:41,527 log Not Found: /test_phpinfo1.php
+WARNING 2023-12-28 14:55:41,748 log Not Found: /test_phpinfo2.php
+WARNING 2023-12-28 14:55:41,968 log Not Found: /test_phpinfo3.php
+WARNING 2023-12-28 14:55:42,206 log Not Found: /test_phpinfo4.php
+WARNING 2023-12-28 14:55:42,438 log Not Found: /test_phpinfo5.php
+WARNING 2023-12-28 14:55:42,660 log Not Found: /dashboard/info.php
+WARNING 2023-12-28 14:55:42,962 log Not Found: /dashboard/test.php
+WARNING 2023-12-28 14:55:43,276 log Not Found: /dashboard/i.php
+WARNING 2023-12-28 14:55:43,519 log Not Found: /p.php
+WARNING 2023-12-28 14:55:43,799 log Not Found: /ocp.php
+WARNING 2023-12-28 14:55:45,962 log Not Found: /phpsysinfo
+WARNING 2023-12-28 14:55:46,220 log Not Found: /phpsysinfo.php
+WARNING 2023-12-28 14:55:46,453 log Not Found: /phpsysinfo/info.php
+WARNING 2023-12-28 14:55:46,694 log Not Found: /phpsysinfo/phpinfo.php
+WARNING 2023-12-28 14:55:46,996 log Not Found: /phpsysinfo/phpsysinfo.php
+WARNING 2023-12-28 14:55:48,619 log Not Found: /.phpinfo
+WARNING 2023-12-28 14:55:49,566 log Not Found: /deploy.php
+WARNING 2023-12-28 14:55:49,854 log Not Found: /dep.php
+WARNING 2023-12-28 14:55:50,111 log Not Found: /main.php
+WARNING 2023-12-28 14:55:50,371 log Not Found: /tz.php
+DEBUG 2023-12-28 14:55:51,115 base Exception while resolving variable 'subtitle' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [subtitle] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7f6f90ba3560>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/phpinfo.php/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90bd31a0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90bd31a0>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/phpinfo.php/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7f6f9034a6d0>, 'app_path': '/admin/login/?next=/admin/phpinfo.php/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}, {'block': <Block Node: title. Contents: [<IfNode>, <Variable Node: title>, <TextNode: ' | '>, <Variable Node: site_title|default:_('Django site admin')>]>}]
+DEBUG 2023-12-28 14:55:51,116 base Exception while resolving variable 'site_title' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'site_title'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'site_title'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'site_title'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [site_title] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7f6f90ba3560>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/phpinfo.php/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90bd31a0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90bd31a0>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/phpinfo.php/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7f6f9034a6d0>, 'app_path': '/admin/login/?next=/admin/phpinfo.php/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}, {'block': <Block Node: title. Contents: [<IfNode>, <Variable Node: title>, <TextNode: ' | '>, <Variable Node: site_title|default:_('Django site admin')>]>}]
+DEBUG 2023-12-28 14:55:51,116 base Exception while resolving variable 'is_popup' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_popup] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7f6f90ba3560>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/phpinfo.php/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90bd31a0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90bd31a0>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/phpinfo.php/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7f6f9034a6d0>, 'app_path': '/admin/login/?next=/admin/phpinfo.php/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2023-12-28 14:55:51,117 base Exception while resolving variable 'is_nav_sidebar_enabled' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_nav_sidebar_enabled] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7f6f90ba3560>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/phpinfo.php/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90bd31a0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90bd31a0>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/phpinfo.php/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7f6f9034a6d0>, 'app_path': '/admin/login/?next=/admin/phpinfo.php/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2023-12-28 14:55:51,118 base Exception while resolving variable 'is_popup' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_popup] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7f6f90ba3560>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/phpinfo.php/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90bd31a0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90bd31a0>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/phpinfo.php/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7f6f9034a6d0>, 'app_path': '/admin/login/?next=/admin/phpinfo.php/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2023-12-28 14:55:51,118 base Exception while resolving variable 'is_popup' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_popup] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7f6f90ba3560>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/phpinfo.php/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90bd31a0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90bd31a0>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/phpinfo.php/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7f6f9034a6d0>, 'app_path': '/admin/login/?next=/admin/phpinfo.php/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2023-12-28 14:55:51,119 base Exception while resolving variable 'site_header' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'site_header'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'site_header'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'site_header'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [site_header] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7f6f90ba3560>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/phpinfo.php/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90bd31a0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90bd31a0>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/phpinfo.php/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7f6f9034a6d0>, 'app_path': '/admin/login/?next=/admin/phpinfo.php/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}, {'block': <Block Node: header. Contents: [<TextNode: '\n    <div id="header">\n  '>, <Block Node: branding. Contents: []>, <TextNode: '\n        </div>\n        '>, <Block Node: usertools. Contents: [<TextNode: '\n        '>, <IfNode>, <TextNode: '\n        '>]>, <TextNode: '\n        '>, <Block Node: nav-global. Contents: []>, <TextNode: '\n    </div>\n    '>]>}, {'block': <Block Node: branding. Contents: [<TextNode: '\n<h1 id="site-name"><a hr'>, <URLNode view_name=''admin_honeypot:index'' args=[] kwargs={} as=None>, <TextNode: '">'>, <Variable Node: site_header|default:_('Django administration')>, <TextNode: '</a></h1>\n'>]>}]
+DEBUG 2023-12-28 14:55:51,119 base Exception while resolving variable 'is_popup' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_popup] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7f6f90ba3560>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/phpinfo.php/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90bd31a0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90bd31a0>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/phpinfo.php/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7f6f9034a6d0>, 'app_path': '/admin/login/?next=/admin/phpinfo.php/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2023-12-28 14:55:51,119 base Exception while resolving variable 'is_nav_sidebar_enabled' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_nav_sidebar_enabled] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7f6f90ba3560>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/phpinfo.php/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90bd31a0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90bd31a0>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/phpinfo.php/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7f6f9034a6d0>, 'app_path': '/admin/login/?next=/admin/phpinfo.php/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2023-12-28 14:55:51,120 base Exception while resolving variable 'subtitle' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [subtitle] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7f6f90ba3560>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/phpinfo.php/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90bd31a0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90bd31a0>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/phpinfo.php/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7f6f9034a6d0>, 'app_path': '/admin/login/?next=/admin/phpinfo.php/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}, {'block': <Block Node: content_subtitle. Contents: [<IfNode>]>}]
+DEBUG 2023-12-28 14:55:51,915 base Exception while resolving variable 'subtitle' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [subtitle] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7f6f90c1d620>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/info.php/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90c1d940>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90c1d940>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/info.php/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7f6f90169510>, 'app_path': '/admin/login/?next=/admin/info.php/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}, {'block': <Block Node: title. Contents: [<IfNode>, <Variable Node: title>, <TextNode: ' | '>, <Variable Node: site_title|default:_('Django site admin')>]>}]
+DEBUG 2023-12-28 14:55:51,916 base Exception while resolving variable 'site_title' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'site_title'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'site_title'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'site_title'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [site_title] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7f6f90c1d620>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/info.php/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90c1d940>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90c1d940>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/info.php/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7f6f90169510>, 'app_path': '/admin/login/?next=/admin/info.php/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}, {'block': <Block Node: title. Contents: [<IfNode>, <Variable Node: title>, <TextNode: ' | '>, <Variable Node: site_title|default:_('Django site admin')>]>}]
+DEBUG 2023-12-28 14:55:51,917 base Exception while resolving variable 'is_popup' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_popup] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7f6f90c1d620>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/info.php/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90c1d940>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90c1d940>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/info.php/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7f6f90169510>, 'app_path': '/admin/login/?next=/admin/info.php/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2023-12-28 14:55:51,917 base Exception while resolving variable 'is_nav_sidebar_enabled' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_nav_sidebar_enabled] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7f6f90c1d620>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/info.php/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90c1d940>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90c1d940>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/info.php/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7f6f90169510>, 'app_path': '/admin/login/?next=/admin/info.php/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2023-12-28 14:55:51,918 base Exception while resolving variable 'is_popup' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_popup] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7f6f90c1d620>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/info.php/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90c1d940>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90c1d940>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/info.php/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7f6f90169510>, 'app_path': '/admin/login/?next=/admin/info.php/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2023-12-28 14:55:51,918 base Exception while resolving variable 'is_popup' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_popup] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7f6f90c1d620>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/info.php/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90c1d940>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90c1d940>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/info.php/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7f6f90169510>, 'app_path': '/admin/login/?next=/admin/info.php/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2023-12-28 14:55:51,919 base Exception while resolving variable 'site_header' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'site_header'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'site_header'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'site_header'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [site_header] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7f6f90c1d620>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/info.php/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90c1d940>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90c1d940>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/info.php/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7f6f90169510>, 'app_path': '/admin/login/?next=/admin/info.php/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}, {'block': <Block Node: header. Contents: [<TextNode: '\n    <div id="header">\n  '>, <Block Node: branding. Contents: []>, <TextNode: '\n        </div>\n        '>, <Block Node: usertools. Contents: [<TextNode: '\n        '>, <IfNode>, <TextNode: '\n        '>]>, <TextNode: '\n        '>, <Block Node: nav-global. Contents: []>, <TextNode: '\n    </div>\n    '>]>}, {'block': <Block Node: branding. Contents: [<TextNode: '\n<h1 id="site-name"><a hr'>, <URLNode view_name=''admin_honeypot:index'' args=[] kwargs={} as=None>, <TextNode: '">'>, <Variable Node: site_header|default:_('Django administration')>, <TextNode: '</a></h1>\n'>]>}]
+DEBUG 2023-12-28 14:55:51,919 base Exception while resolving variable 'is_popup' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_popup] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7f6f90c1d620>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/info.php/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90c1d940>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90c1d940>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/info.php/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7f6f90169510>, 'app_path': '/admin/login/?next=/admin/info.php/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2023-12-28 14:55:51,920 base Exception while resolving variable 'is_nav_sidebar_enabled' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_nav_sidebar_enabled] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7f6f90c1d620>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/info.php/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90c1d940>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90c1d940>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/info.php/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7f6f90169510>, 'app_path': '/admin/login/?next=/admin/info.php/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2023-12-28 14:55:51,920 base Exception while resolving variable 'subtitle' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [subtitle] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7f6f90c1d620>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/info.php/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90c1d940>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f90c1d940>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/info.php/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7f6f90169510>, 'app_path': '/admin/login/?next=/admin/info.php/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}, {'block': <Block Node: content_subtitle. Contents: [<IfNode>]>}]
+WARNING 2023-12-28 14:55:52,232 log Not Found: /u.php
+WARNING 2023-12-28 14:55:52,512 log Not Found: /q.php
+WARNING 2023-12-28 14:55:52,747 log Not Found: /testing.php
+WARNING 2023-12-28 14:55:52,960 log Not Found: /tester.php
+WARNING 2023-12-28 14:55:53,185 log Not Found: /build.php
+WARNING 2023-12-28 15:02:36,849 log Not Found: /robots.txt
+WARNING 2023-12-28 15:17:36,200 log Not Found: /wp-content/themes/deep-blue/megaframe/megapanel/inc/functions.php
+ERROR 2023-12-28 15:23:47,146 log Internal Server Error: /paypal_ipn/
+WARNING 2023-12-28 15:28:49,334 log Not Found: /.well-known/traffic-advice
+WARNING 2023-12-28 15:37:01,794 log Not Found: /.well-known/acme-challenge/3JZI71IHFWVV75XNK99BKQE_WHYR1F73
+WARNING 2023-12-28 15:37:02,764 log Not Found: /.well-known/acme-challenge/-F5OCVAZ41-MJP17E48S7WD1PH6YP53B
+WARNING 2023-12-28 15:38:00,344 log Not Found: /robots.txt
+WARNING 2023-12-28 15:39:16,587 log Not Found: //wp-content/plugins/fix/up.php
+WARNING 2023-12-28 16:30:29,161 log Not Found: /robots.txt
+DEBUG 2023-12-28 16:32:06,486 base Exception while resolving variable 'recaptcha_site_key' in template 'basecamp/inquiry1.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [recaptcha_site_key] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: 'B1kVxuYXp6K7uCnMOpIQkJ9pK2u4D9N80GXypOQkZ8wWMNly6bdt5uHhf673MkuI'>, 'request': <WSGIRequest: POST '/price_detail/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f909ebc40>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f6f909ebc40>>), 'messages': <FallbackStorage: request=<WSGIRequest: POST '/price_detail/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'flight_date': '2024-01-29', 'direction': 'Pickup from Domestic Airport', 'suburb': 'Hotels in CBD', 'no_of_passenger': '2'}, {'block': <Block Node: content. Contents: [<TextNode: '\n      <!-- Page content-'>, <Variable Node: flight_date>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: direction>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: suburb>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: no_of_passenger>, <TextNode: '</a> -->\n\t\t\t  <br><br>\n  '>, <django.template.defaulttags.CsrfTokenNode object at 0x7f6f9066d3d0>, <TextNode: '\n\t\t\t\t<div class="mb3 pb-1'>, <Variable Node: direction>, <TextNode: '">'>, <Variable Node: direction>, <TextNode: '</option>\t\t\t\t\t\t          '>, <Variable Node: flight_date>, <TextNode: '" type="text" >\t\t\t\t  \n   '>, <IfNode>, <TextNode: '\n\t\t\t\t  <div class="mb-3 p'>, <Variable Node: suburb>, <TextNode: '</label>\t\t\t\t\t\n\t\t\t\t</div>\n'>, <Variable Node: suburb>, <TextNode: '">'>, <Variable Node: suburb>, <TextNode: '</option>\t\t\t\t\t\n\t\t\t\t  </se'>, <Variable Node: no_of_passenger>, <TextNode: '">'>, <Variable Node: no_of_passenger>, <TextNode: '</option>\t\t\t\t  \n         '>, <Variable Node: recaptcha_site_key>, <TextNode: '"></div>\n\t\t\t\t<div id="err'>]>}]
+WARNING 2023-12-28 16:52:50,234 log Not Found: /wp-content/plugins/mw-wp-form/css/admin-common.css
+ERROR 2023-12-28 17:11:25,035 log Internal Server Error: /confirmation_detail/
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: NOT NULL constraint failed: blog_post.flight_date
+
+The above exception was the direct cause of the following exception:
+
 Traceback (most recent call last):
   File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
@@ -59,41 +1472,41 @@ Traceback (most recent call last):
   File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
     response = wrapped_callback(request, *callback_args, **callback_kwargs)
                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/horeb/github/easygo/basecamp/views.py", line 676, in inquiry_details2
-    if request.is_ajax():
-       ^^^^^^^^^^^^^^^
-AttributeError: 'WSGIRequest' object has no attribute 'is_ajax'
-WARNING 2023-12-27 19:48:46,104 log Not Found: /robots.txt
-WARNING 2023-12-27 19:54:23,971 log Not Found: /.well-known/traffic-advice
-DEBUG 2023-12-27 19:57:02,092 base Exception while resolving variable 'recaptcha_site_key' in template 'basecamp/inquiry1.html'.
-Traceback (most recent call last):
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
-    current = current[bit]
-              ~~~~~~~^^^^^
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
-    raise KeyError(key)
-KeyError: 'recaptcha_site_key'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
-    if isinstance(current, BaseContext) and getattr(
-                                            ^^^^^^^^
-AttributeError: type object 'RequestContext' has no attribute 'recaptcha_site_key'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
-    current = current[int(bit)]
-                      ^^^^^^^^
-ValueError: invalid literal for int() with base 10: 'recaptcha_site_key'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
-    raise VariableDoesNotExist(
-django.template.base.VariableDoesNotExist: Failed lookup for key [recaptcha_site_key] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: 'XdFwDQ9tbLJHzVjeYLUrhv5EuUTl8lAJfnMDnzgo1XqemDmE9MFlq2LSqVDlzr7B'>, 'request': <WSGIRequest: POST '/price_detail/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f0b823da7a0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f0b823da7a0>>), 'messages': <FallbackStorage: request=<WSGIRequest: POST '/price_detail/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'flight_date': '2023-12-28', 'direction': 'Drop off to Intl Airport', 'suburb': 'Castlecove', 'no_of_passenger': '5'}, {'block': <Block Node: content. Contents: [<TextNode: '\n      <!-- Page content-'>, <Variable Node: flight_date>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: direction>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: suburb>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: no_of_passenger>, <TextNode: '</a> -->\n\t\t\t  <br><br>\n  '>, <django.template.defaulttags.CsrfTokenNode object at 0x7f0b82417890>, <TextNode: '\n\t\t\t\t<div class="mb3 pb-1'>, <Variable Node: direction>, <TextNode: '">'>, <Variable Node: direction>, <TextNode: '</option>\t\t\t\t\t\t          '>, <Variable Node: flight_date>, <TextNode: '" type="text" >\t\t\t\t  \n   '>, <IfNode>, <TextNode: '\n\t\t\t\t  <div class="mb-3 p'>, <Variable Node: suburb>, <TextNode: '</label>\t\t\t\t\t\n\t\t\t\t</div>\n'>, <Variable Node: suburb>, <TextNode: '">'>, <Variable Node: suburb>, <TextNode: '</option>\t\t\t\t\t\n\t\t\t\t  </se'>, <Variable Node: no_of_passenger>, <TextNode: '">'>, <Variable Node: no_of_passenger>, <TextNode: '</option>\t\t\t\t  \n         '>, <Variable Node: recaptcha_site_key>, <TextNode: '"></div>\n\t\t\t\t<div id="err'>]>}]
-WARNING 2023-12-27 20:09:06,412 log Not Found: /shop/product/moncler-jackets-men-zin-black/
+  File "/home/horeb/github/easygo/basecamp/views.py", line 1037, in confirmation_detail
+    p.save()
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/base.py", line 814, in save
+    self.save_base(
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/base.py", line 877, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/base.py", line 1020, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/base.py", line 1061, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/query.py", line 1805, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/models/sql/compiler.py", line 1822, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 67, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 80, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 84, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: NOT NULL constraint failed: blog_post.flight_date
