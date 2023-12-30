@@ -81,7 +81,7 @@ class Command(BaseCommand):
         
         for reminder in reminders:
 
-            if reminder.cancelled:
+            if reminder.cancelled or reminder.reminder:
                 continue 
 
             else:
