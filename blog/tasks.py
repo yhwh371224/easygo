@@ -40,7 +40,6 @@ calendar_logger = configure_logger('blog.calendar', 'calendar.log')
 @shared_task
 def create_event_on_calendar(instance_id):
     # Fetch the Post instance
-    instance = Post.objects.get(pk=instance_id)
 
     SCOPES = ['https://www.googleapis.com/auth/calendar']
 
@@ -77,6 +76,7 @@ def create_event_on_calendar(instance_id):
 
     else:
         pickup_time = datetime.datetime.strptime('00:00', '%H:%M') 
+
     start = datetime.datetime.combine(flight_date, pickup_time.time())        
     end = start + datetime.timedelta(hours=1)
 
@@ -96,66 +96,24 @@ def create_event_on_calendar(instance_id):
 
     # Check if an event already exists for this instance
     if instance.calendar_event_id:            
-        try:
-            if instance.cancelled:
-                response = service.events().delete(calendarId='primary', eventId=instance.calendar_event_id).execute()
-
-                # Check if deletion was successful
-                if 'error' in response:
-                    calendar_logger.error('Error deleting event: %s', response['error'])
-                else:
-                    calendar_logger.info('Event cancelled and deleted from calendar')
-
-            else:
-                event = service.events().update(calendarId='primary', eventId=instance.calendar_event_id, body=event).execute()
-                calendar_logger.info('Event updated: %s', event.get('htmlLink'))
+        try:            
+            instance = Post.objects.get(pk=instance_id)
+            event = service.events().update(calendarId='primary', eventId=instance.calendar_event_id, body=event).execute()
+            calendar_logger.info('Event updated: %s', event.get('htmlLink'))
 
         except HttpError as error:
             calendar_logger.error('An error occurred while updating/deleting the event: %s', error)
 
     else:
         try:
+            instance = Post.objects.get(pk=instance_id)
             event = service.events().insert(calendarId='primary', body=event).execute()
-            instance.calendar_event_id = event['id']  # Store the event ID in your model
+            instance.calendar_event_id = event['id'] 
             instance.save()
             calendar_logger.info('Event created: %s', event.get('htmlLink'))
 
         except HttpError as error:
             calendar_logger.error('An error occurred while creating the event: %s', error)
-
-
-# logger_inquiry_local_email = configure_logger('blog.inquiry_local_email', 'inquiry_local_email.log')
-
-# @shared_task
-# def send_inquiry_exist_email(name, email, pickup_time, flight_date):
-#     content = f'''
-#     Hello, {name} \n
-#     Exist in Inquiry or Post \n
-#     https://easygoshuttle.com.au \n     
-#     ============================ \n
-#     Email: {email} \n
-#     Pickup: {pickup_time} \n
-#     Flight date: {flight_date} \n
-#     ============================\n
-#     '''
-#     send_mail('Inquiry', content, '', [RECIPIENT_EMAIL])
-#     logger_inquiry_local_email.info(f'Exist in Inquiry or Post email sent for {name}')
-
-
-# @shared_task
-# def send_inquiry_non_exist_email(name, email, pickup_time, flight_date):
-#     content = f'''
-#     Hello, {name} \n
-#     Neither in Inquiry & Post \n
-#     https://easygoshuttle.com.au \n     
-#     ============================ \n
-#     Email: {email} \n
-#     Pickup: {pickup_time} \n
-#     Flight date: {flight_date} \n
-#     ============================\n
-#     '''
-#     send_mail('Inquiry', content, '', [RECIPIENT_EMAIL])
-#     logger_inquiry_local_email.info(f'Neither in Inquiry & Post email sent for {name}')
 
 
 # Clicked confirm_booking form 
