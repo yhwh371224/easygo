@@ -40,6 +40,7 @@ calendar_logger = configure_logger('blog.calendar', 'calendar.log')
 @shared_task
 def create_event_on_calendar(instance_id):
     # Fetch the Post instance
+    instance = Post.objects.get(pk=instance_id)
 
     SCOPES = ['https://www.googleapis.com/auth/calendar']
 
@@ -97,7 +98,6 @@ def create_event_on_calendar(instance_id):
     # Check if an event already exists for this instance
     if instance.calendar_event_id:            
         try:            
-            instance = Post.objects.get(pk=instance_id)
             event = service.events().update(calendarId='primary', eventId=instance.calendar_event_id, body=event).execute()
             calendar_logger.info('Event updated: %s', event.get('htmlLink'))
 
@@ -106,7 +106,6 @@ def create_event_on_calendar(instance_id):
 
     else:
         try:
-            instance = Post.objects.get(pk=instance_id)
             event = service.events().insert(calendarId='primary', body=event).execute()
             instance.calendar_event_id = event['id'] 
             instance.save()
