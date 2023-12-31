@@ -450,3 +450,5 @@ ERROR 2023-12-31 12:01:51,346 log Internal Server Error: /paypal_ipn/
 ERROR 2023-12-31 12:10:06,801 log Internal Server Error: /paypal_ipn/
 WARNING 2023-12-31 12:17:10,569 log Not Found: /robots.txt
 WARNING 2023-12-31 12:18:21,775 log Not Found: /robots.txt
+WARNING 2023-12-31 12:41:28,476 log Not Found: /.env
+WARNING 2023-12-31 12:47:31,112 log Not Found: /inquiry3/
