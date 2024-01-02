@@ -643,3 +643,4 @@ Traceback (most recent call last):
 AttributeError: 'WSGIRequest' object has no attribute 'is_ajax'
 WARNING 2024-01-02 12:12:50,823 log Not Found: /shop/author/admin/
 WARNING 2024-01-02 12:36:21,382 log Not Found: /contact/
+WARNING 2024-01-02 12:58:30,414 log Not Found: /robots.txt
