@@ -3,3 +3,5 @@ WARNING 2024-01-06 09:40:59,903 log Not Found: /robots.txt
 WARNING 2024-01-06 10:17:58,234 log Not Found: /robots.txt
 WARNING 2024-01-06 11:24:17,291 log Not Found: /robots.txt
 WARNING 2024-01-06 12:08:52,260 log Not Found: /robots.txt
+WARNING 2024-01-06 12:18:12,204 log Not Found: /.well-known/apple-app-site-association
+WARNING 2024-01-06 12:18:13,205 log Not Found: /apple-app-site-association
