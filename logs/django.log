@@ -1176,3 +1176,4 @@ DEBUG 2024-01-08 20:44:43,903 schema DROP TABLE "blog_post"; (params ())
 DEBUG 2024-01-08 20:44:43,903 schema ALTER TABLE "new__blog_post" RENAME TO "blog_post"; (params ())
 DEBUG 2024-01-08 20:44:43,905 schema CREATE INDEX "blog_post_email_6ca5b4e5" ON "blog_post" ("email"); (params ())
 DEBUG 2024-01-08 20:44:43,906 schema CREATE INDEX "blog_post_driver_id_5941734f" ON "blog_post" ("driver_id"); (params ())
+WARNING 2024-01-08 20:46:58,859 log Not Found: /wp-22.php
