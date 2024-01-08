@@ -1263,7 +1263,7 @@ def sending_email_second_detail(request):
                             {'name' : user.name }) 
     
     else:
-        return render(request, 'beasecamp/sending_email_second.html', {})   
+        return render(request, 'basecamp/sending_email_second.html', {})
 
 
 def save_data_only_detail(request):     

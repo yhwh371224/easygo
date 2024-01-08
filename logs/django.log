@@ -1,7 +1,209 @@
-WARNING 2024-01-06 09:13:25,682 log Not Found: /_profiler/phpinfo
-WARNING 2024-01-06 09:40:59,903 log Not Found: /robots.txt
-WARNING 2024-01-06 10:17:58,234 log Not Found: /robots.txt
-WARNING 2024-01-06 11:24:17,291 log Not Found: /robots.txt
-WARNING 2024-01-06 12:08:52,260 log Not Found: /robots.txt
-WARNING 2024-01-06 12:18:12,204 log Not Found: /.well-known/apple-app-site-association
-WARNING 2024-01-06 12:18:13,205 log Not Found: /apple-app-site-association
+DEBUG 2024-01-08 18:09:04,179 schema CREATE TABLE `django_migrations` (`id` bigint AUTO_INCREMENT NOT NULL PRIMARY KEY, `app` varchar(255) NOT NULL, `name` varchar(255) NOT NULL, `applied` datetime(6) NOT NULL); (params None)
+DEBUG 2024-01-08 18:09:04,207 schema CREATE TABLE `django_content_type` (`id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY, `name` varchar(100) NOT NULL, `app_label` varchar(100) NOT NULL, `model` varchar(100) NOT NULL); (params None)
+DEBUG 2024-01-08 18:09:04,225 schema ALTER TABLE `django_content_type` ADD CONSTRAINT `django_content_type_app_label_model_76bd3d3b_uniq` UNIQUE (`app_label`, `model`); (params ())
+DEBUG 2024-01-08 18:09:04,267 schema CREATE TABLE `auth_permission` (`id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY, `name` varchar(50) NOT NULL, `content_type_id` integer NOT NULL, `codename` varchar(100) NOT NULL); (params None)
+DEBUG 2024-01-08 18:09:04,290 schema CREATE TABLE `auth_group` (`id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY, `name` varchar(80) NOT NULL UNIQUE); (params None)
+DEBUG 2024-01-08 18:09:04,315 schema CREATE TABLE `auth_group_permissions` (`id` bigint AUTO_INCREMENT NOT NULL PRIMARY KEY, `group_id` integer NOT NULL, `permission_id` integer NOT NULL); (params None)
+DEBUG 2024-01-08 18:09:04,339 schema CREATE TABLE `auth_user` (`id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY, `password` varchar(128) NOT NULL, `last_login` datetime(6) NOT NULL, `is_superuser` bool NOT NULL, `username` varchar(30) NOT NULL UNIQUE, `first_name` varchar(30) NOT NULL, `last_name` varchar(30) NOT NULL, `email` varchar(75) NOT NULL, `is_staff` bool NOT NULL, `is_active` bool NOT NULL, `date_joined` datetime(6) NOT NULL); (params None)
+DEBUG 2024-01-08 18:09:04,353 schema CREATE TABLE `auth_user_groups` (`id` bigint AUTO_INCREMENT NOT NULL PRIMARY KEY, `user_id` integer NOT NULL, `group_id` integer NOT NULL); (params None)
+DEBUG 2024-01-08 18:09:04,368 schema CREATE TABLE `auth_user_user_permissions` (`id` bigint AUTO_INCREMENT NOT NULL PRIMARY KEY, `user_id` integer NOT NULL, `permission_id` integer NOT NULL); (params None)
+DEBUG 2024-01-08 18:09:04,392 schema ALTER TABLE `auth_permission` ADD CONSTRAINT `auth_permission_content_type_id_codename_01ab375a_uniq` UNIQUE (`content_type_id`, `codename`); (params ())
+DEBUG 2024-01-08 18:09:04,406 schema ALTER TABLE `auth_permission` ADD CONSTRAINT `auth_permission_content_type_id_2f476e4b_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`); (params ())
+DEBUG 2024-01-08 18:09:04,441 schema ALTER TABLE `auth_group_permissions` ADD CONSTRAINT `auth_group_permissions_group_id_permission_id_0cd325b0_uniq` UNIQUE (`group_id`, `permission_id`); (params ())
+DEBUG 2024-01-08 18:09:04,457 schema ALTER TABLE `auth_group_permissions` ADD CONSTRAINT `auth_group_permissions_group_id_b120cbf9_fk_auth_group_id` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`); (params ())
+DEBUG 2024-01-08 18:09:04,496 schema ALTER TABLE `auth_group_permissions` ADD CONSTRAINT `auth_group_permissio_permission_id_84c5c92e_fk_auth_perm` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`); (params ())
+DEBUG 2024-01-08 18:09:04,530 schema ALTER TABLE `auth_user_groups` ADD CONSTRAINT `auth_user_groups_user_id_group_id_94350c0c_uniq` UNIQUE (`user_id`, `group_id`); (params ())
+DEBUG 2024-01-08 18:09:04,542 schema ALTER TABLE `auth_user_groups` ADD CONSTRAINT `auth_user_groups_user_id_6a12ed8b_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`); (params ())
+DEBUG 2024-01-08 18:09:04,594 schema ALTER TABLE `auth_user_groups` ADD CONSTRAINT `auth_user_groups_group_id_97559544_fk_auth_group_id` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`); (params ())
+DEBUG 2024-01-08 18:09:04,638 schema ALTER TABLE `auth_user_user_permissions` ADD CONSTRAINT `auth_user_user_permissions_user_id_permission_id_14a6b632_uniq` UNIQUE (`user_id`, `permission_id`); (params ())
+DEBUG 2024-01-08 18:09:04,649 schema ALTER TABLE `auth_user_user_permissions` ADD CONSTRAINT `auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`); (params ())
+DEBUG 2024-01-08 18:09:04,699 schema ALTER TABLE `auth_user_user_permissions` ADD CONSTRAINT `auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`); (params ())
+DEBUG 2024-01-08 18:09:04,753 schema CREATE TABLE `account_emailaddress` (`id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY, `email` varchar(75) NOT NULL UNIQUE, `verified` bool NOT NULL, `primary` bool NOT NULL, `user_id` integer NOT NULL); (params None)
+DEBUG 2024-01-08 18:09:04,785 schema CREATE TABLE `account_emailconfirmation` (`id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY, `created` datetime(6) NOT NULL, `sent` datetime(6) NULL, `key` varchar(64) NOT NULL UNIQUE, `email_address_id` integer NOT NULL); (params None)
+DEBUG 2024-01-08 18:09:04,804 schema ALTER TABLE `account_emailaddress` ADD CONSTRAINT `account_emailaddress_user_id_2c513194_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`); (params ())
+DEBUG 2024-01-08 18:09:04,834 schema ALTER TABLE `account_emailconfirmation` ADD CONSTRAINT `account_emailconfirm_email_address_id_5b7f8c58_fk_account_e` FOREIGN KEY (`email_address_id`) REFERENCES `account_emailaddress` (`id`); (params ())
+DEBUG 2024-01-08 18:09:04,887 schema ALTER TABLE `account_emailaddress` MODIFY `email` varchar(254) NOT NULL; (params [])
+DEBUG 2024-01-08 18:09:04,909 schema ALTER TABLE `account_emailaddress` ADD CONSTRAINT `account_emailaddress_user_id_email_987c8728_uniq` UNIQUE (`user_id`, `email`); (params ())
+DEBUG 2024-01-08 18:09:04,973 schema ALTER TABLE `account_emailaddress` DROP INDEX `email`; (params ())
+DEBUG 2024-01-08 18:09:05,008 schema CREATE INDEX `account_emailaddress_upper` ON `account_emailaddress` ((UPPER(`email`))); (params None)
+DEBUG 2024-01-08 18:09:05,128 schema CREATE TABLE `django_admin_log` (`id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY, `action_time` datetime(6) NOT NULL, `object_id` longtext NULL, `object_repr` varchar(200) NOT NULL, `action_flag` smallint UNSIGNED NOT NULL CHECK (`action_flag` >= 0), `change_message` longtext NOT NULL, `content_type_id` integer NULL, `user_id` integer NOT NULL); (params None)
+DEBUG 2024-01-08 18:09:05,144 schema ALTER TABLE `django_admin_log` ADD CONSTRAINT `django_admin_log_content_type_id_c4bce8eb_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`); (params ())
+DEBUG 2024-01-08 18:09:05,176 schema ALTER TABLE `django_admin_log` ADD CONSTRAINT `django_admin_log_user_id_c564eba6_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`); (params ())
+DEBUG 2024-01-08 18:09:05,261 schema CREATE TABLE `admin_honeypot_loginattempt` (`id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY, `username` varchar(255) NULL, `ip_address` char(15) NULL, `session_key` varchar(50) NULL, `user_agent` longtext NULL, `timestamp` datetime(6) NOT NULL, `path` longtext NULL); (params None)
+DEBUG 2024-01-08 18:09:05,306 schema ALTER TABLE `admin_honeypot_loginattempt` MODIFY `ip_address` char(39) NULL; (params [])
+DEBUG 2024-01-08 18:09:05,680 schema ALTER TABLE `admin_honeypot_loginattempt` MODIFY `id` bigint AUTO_INCREMENT NOT NULL; (params [])
+DEBUG 2024-01-08 18:09:05,736 schema ALTER TABLE `django_content_type` MODIFY `name` varchar(100) NULL; (params [])
+DEBUG 2024-01-08 18:09:05,792 schema ALTER TABLE `django_content_type` DROP COLUMN `name`; (params ())
+DEBUG 2024-01-08 18:09:05,830 schema ALTER TABLE `auth_permission` MODIFY `name` varchar(255) NOT NULL; (params [])
+DEBUG 2024-01-08 18:09:05,907 schema ALTER TABLE `auth_user` MODIFY `email` varchar(254) NOT NULL; (params [])
+DEBUG 2024-01-08 18:09:05,978 schema ALTER TABLE `auth_user` MODIFY `last_login` datetime(6) NULL; (params [])
+DEBUG 2024-01-08 18:09:06,077 schema ALTER TABLE `auth_user` MODIFY `username` varchar(150) NOT NULL; (params [])
+DEBUG 2024-01-08 18:09:06,139 schema ALTER TABLE `auth_user` MODIFY `last_name` varchar(150) NOT NULL; (params [])
+DEBUG 2024-01-08 18:09:06,210 schema ALTER TABLE `auth_group` MODIFY `name` varchar(150) NOT NULL; (params [])
+DEBUG 2024-01-08 18:09:06,308 schema ALTER TABLE `auth_user` MODIFY `first_name` varchar(150) NOT NULL; (params [])
+DEBUG 2024-01-08 18:09:06,401 schema CREATE TABLE `basecamp_inquiry_point` (`id` bigint AUTO_INCREMENT NOT NULL PRIMARY KEY, `name` varchar(100) NOT NULL, `company_name` varchar(100) NOT NULL, `contact` varchar(50) NOT NULL, `email` varchar(254) NOT NULL, `email1` varchar(254) NOT NULL, `flight_date` date NOT NULL, `flight_number` varchar(100) NOT NULL, `flight_time` varchar(60) NULL, `pickup_time` varchar(30) NOT NULL, `direction` varchar(100) NOT NULL, `suburb` varchar(100) NOT NULL, `street` varchar(200) NOT NULL, `no_of_passenger` varchar(30) NOT NULL, `no_of_baggage` varchar(200) NOT NULL, `return_direction` varchar(100) NULL, `return_flight_date` date NULL, `return_flight_number` varchar(100) NULL, `return_flight_time` varchar(30) NULL, `return_pickup_time` varchar(30) NULL, `message` longtext NOT NULL, `notice` longtext NOT NULL, `price` varchar(30) NOT NULL, `paid` varchar(30) NOT NULL, `driver` varchar(100) NULL, `is_confirmed` bool NOT NULL, `cancelled` bool NOT NULL, `private_ride` bool NOT NULL, `created` datetime(6) NOT NULL); (params None)
+DEBUG 2024-01-08 18:09:06,429 schema CREATE TABLE `blog_driver` (`id` bigint AUTO_INCREMENT NOT NULL PRIMARY KEY, `driver_name` varchar(100) NOT NULL, `driver_contact` varchar(50) NOT NULL, `driver_email` varchar(254) NOT NULL, `driver_address` varchar(200) NOT NULL, `driver_plate` varchar(30) NOT NULL, `driver_car` varchar(30) NOT NULL, `driver_bankdetails` longtext NOT NULL); (params None)
+DEBUG 2024-01-08 18:09:06,443 schema CREATE TABLE `blog_payment` (`id` bigint AUTO_INCREMENT NOT NULL PRIMARY KEY, `item_name` varchar(100) NOT NULL, `payer_email` varchar(254) NOT NULL, `gross_amount` varchar(30) NOT NULL, `txn_id` varchar(30) NOT NULL, `created` datetime(6) NOT NULL); (params None)
+DEBUG 2024-01-08 18:09:06,470 schema CREATE TABLE `blog_post` (`id` bigint AUTO_INCREMENT NOT NULL PRIMARY KEY, `name` varchar(100) NOT NULL, `company_name` varchar(100) NOT NULL, `contact` varchar(50) NOT NULL, `email` varchar(254) NOT NULL, `email1` varchar(254) NOT NULL, `flight_date` date NOT NULL, `flight_number` varchar(100) NOT NULL, `flight_time` varchar(30) NOT NULL, `pickup_time` varchar(30) NOT NULL, `direction` varchar(100) NOT NULL, `suburb` varchar(100) NOT NULL, `street` varchar(200) NOT NULL, `no_of_passenger` varchar(30) NOT NULL, `no_of_baggage` varchar(200) NOT NULL, `return_direction` varchar(100) NULL, `return_flight_date` date NULL, `return_flight_number` varchar(100) NULL, `return_flight_time` varchar(30) NULL, `return_pickup_time` varchar(30) NULL, `message` longtext NOT NULL, `notice` longtext NOT NULL, `price` varchar(30) NOT NULL, `paid` varchar(30) NOT NULL, `meeting_point` varchar(100) NULL, `is_confirmed` bool NOT NULL, `cancelled` bool NOT NULL, `private_ride` bool NOT NULL, `reminder` bool NOT NULL, `calendar_event_id` varchar(255) NULL, `created` datetime(6) NOT NULL, `driver_id` bigint NULL); (params None)
+DEBUG 2024-01-08 18:09:06,508 schema CREATE TABLE `blog_inquiry` (`id` bigint AUTO_INCREMENT NOT NULL PRIMARY KEY, `name` varchar(100) NOT NULL, `company_name` varchar(100) NOT NULL, `contact` varchar(50) NOT NULL, `email` varchar(254) NOT NULL, `email1` varchar(254) NOT NULL, `flight_date` date NOT NULL, `flight_number` varchar(100) NOT NULL, `flight_time` varchar(30) NOT NULL, `pickup_time` varchar(30) NOT NULL, `direction` varchar(100) NOT NULL, `suburb` varchar(100) NOT NULL, `street` varchar(200) NOT NULL, `no_of_passenger` varchar(30) NOT NULL, `no_of_baggage` varchar(200) NOT NULL, `return_direction` varchar(100) NULL, `return_flight_date` date NULL, `return_flight_number` varchar(100) NULL, `return_flight_time` varchar(30) NULL, `return_pickup_time` varchar(30) NULL, `message` longtext NOT NULL, `notice` longtext NOT NULL, `price` varchar(30) NOT NULL, `paid` varchar(30) NOT NULL, `meeting_point` varchar(100) NULL, `is_confirmed` bool NOT NULL, `cancelled` bool NOT NULL, `private_ride` bool NOT NULL, `created` datetime(6) NOT NULL, `driver_id` bigint NULL); (params None)
+DEBUG 2024-01-08 18:09:06,535 schema ALTER TABLE `blog_post` ADD CONSTRAINT `blog_post_driver_id_5941734f_fk_blog_driver_id` FOREIGN KEY (`driver_id`) REFERENCES `blog_driver` (`id`); (params ())
+DEBUG 2024-01-08 18:09:06,590 schema CREATE INDEX `blog_post_email_6ca5b4e5` ON `blog_post` (`email`); (params ())
+DEBUG 2024-01-08 18:09:06,614 schema ALTER TABLE `blog_inquiry` ADD CONSTRAINT `blog_inquiry_driver_id_2afe2222_fk_blog_driver_id` FOREIGN KEY (`driver_id`) REFERENCES `blog_driver` (`id`); (params ())
+DEBUG 2024-01-08 18:09:06,673 schema CREATE INDEX `blog_inquiry_email_66d7f507` ON `blog_inquiry` (`email`); (params ())
+DEBUG 2024-01-08 18:09:06,724 schema ALTER TABLE `blog_post` ADD COLUMN `sent_email` bool DEFAULT %s NOT NULL; (params [False])
+DEBUG 2024-01-08 18:09:06,747 schema ALTER TABLE `blog_post` ALTER COLUMN `sent_email` DROP DEFAULT; (params [])
+DEBUG 2024-01-08 18:09:06,777 schema ALTER TABLE `blog_inquiry` ADD COLUMN `sent_email` bool DEFAULT %s NOT NULL; (params [False])
+DEBUG 2024-01-08 18:09:06,810 schema ALTER TABLE `blog_inquiry` ALTER COLUMN `sent_email` DROP DEFAULT; (params [])
+DEBUG 2024-01-08 18:09:06,851 schema ALTER TABLE `blog_inquiry` DROP COLUMN `sent_email`; (params ())
+DEBUG 2024-01-08 18:09:07,006 schema CREATE TABLE `django_celery_beat_crontabschedule` (`id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY, `minute` varchar(64) NOT NULL, `hour` varchar(64) NOT NULL, `day_of_week` varchar(64) NOT NULL, `day_of_month` varchar(64) NOT NULL, `month_of_year` varchar(64) NOT NULL); (params None)
+DEBUG 2024-01-08 18:09:07,027 schema CREATE TABLE `django_celery_beat_intervalschedule` (`id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY, `every` integer NOT NULL, `period` varchar(24) NOT NULL); (params None)
+DEBUG 2024-01-08 18:09:07,049 schema CREATE TABLE `django_celery_beat_periodictask` (`id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY, `name` varchar(200) NOT NULL UNIQUE, `task` varchar(200) NOT NULL, `args` longtext NOT NULL, `kwargs` longtext NOT NULL, `queue` varchar(200) NULL, `exchange` varchar(200) NULL, `routing_key` varchar(200) NULL, `expires` datetime(6) NULL, `enabled` bool NOT NULL, `last_run_at` datetime(6) NULL, `total_run_count` integer UNSIGNED NOT NULL CHECK (`total_run_count` >= 0), `date_changed` datetime(6) NOT NULL, `description` longtext NOT NULL, `crontab_id` integer NULL, `interval_id` integer NULL); (params None)
+DEBUG 2024-01-08 18:09:07,089 schema CREATE TABLE `django_celery_beat_periodictasks` (`ident` smallint NOT NULL PRIMARY KEY, `last_update` datetime(6) NOT NULL); (params None)
+DEBUG 2024-01-08 18:09:07,107 schema ALTER TABLE `django_celery_beat_periodictask` ADD CONSTRAINT `django_celery_beat_p_crontab_id_d3cba168_fk_django_ce` FOREIGN KEY (`crontab_id`) REFERENCES `django_celery_beat_crontabschedule` (`id`); (params ())
+DEBUG 2024-01-08 18:09:07,151 schema ALTER TABLE `django_celery_beat_periodictask` ADD CONSTRAINT `django_celery_beat_p_interval_id_a8ca27da_fk_django_ce` FOREIGN KEY (`interval_id`) REFERENCES `django_celery_beat_intervalschedule` (`id`); (params ())
+DEBUG 2024-01-08 18:09:07,208 schema CREATE TABLE `django_celery_beat_solarschedule` (`id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY, `event` varchar(24) NOT NULL, `latitude` numeric(9, 6) NOT NULL, `longitude` numeric(9, 6) NOT NULL); (params None)
+DEBUG 2024-01-08 18:09:07,226 schema ALTER TABLE `django_celery_beat_periodictask` ADD COLUMN `solar_id` integer NULL , ADD CONSTRAINT `django_celery_beat_p_solar_id_a87ce72c_fk_django_ce` FOREIGN KEY (`solar_id`) REFERENCES `django_celery_beat_solarschedule`(`id`); (params [])
+DEBUG 2024-01-08 18:09:07,305 schema ALTER TABLE `django_celery_beat_solarschedule` ADD CONSTRAINT `django_celery_beat_solar_event_latitude_longitude_ba64999a_uniq` UNIQUE (`event`, `latitude`, `longitude`); (params ())
+DEBUG 2024-01-08 18:09:07,433 schema ALTER TABLE `django_celery_beat_crontabschedule` ADD COLUMN `timezone` varchar(63) DEFAULT %s NOT NULL; (params ['UTC'])
+DEBUG 2024-01-08 18:09:07,452 schema ALTER TABLE `django_celery_beat_crontabschedule` ALTER COLUMN `timezone` DROP DEFAULT; (params [])
+DEBUG 2024-01-08 18:09:07,472 schema ALTER TABLE `django_celery_beat_crontabschedule` MODIFY `day_of_month` varchar(124) NOT NULL; (params [])
+DEBUG 2024-01-08 18:09:07,492 schema ALTER TABLE `django_celery_beat_crontabschedule` MODIFY `hour` varchar(96) NOT NULL; (params [])
+DEBUG 2024-01-08 18:09:07,522 schema ALTER TABLE `django_celery_beat_crontabschedule` MODIFY `minute` varchar(240) NOT NULL; (params [])
+DEBUG 2024-01-08 18:09:07,548 schema ALTER TABLE `django_celery_beat_periodictask` ADD COLUMN `one_off` bool DEFAULT %s NOT NULL; (params [False])
+DEBUG 2024-01-08 18:09:07,576 schema ALTER TABLE `django_celery_beat_periodictask` ALTER COLUMN `one_off` DROP DEFAULT; (params [])
+DEBUG 2024-01-08 18:09:07,599 schema ALTER TABLE `django_celery_beat_periodictask` ADD COLUMN `start_time` datetime(6) NULL; (params [])
+DEBUG 2024-01-08 18:09:07,688 schema ALTER TABLE `django_celery_beat_periodictask` ADD COLUMN `priority` integer UNSIGNED NULL CHECK (`priority` >= 0); (params [])
+DEBUG 2024-01-08 18:09:07,953 schema ALTER TABLE `django_celery_beat_periodictask` ADD COLUMN `headers` longtext DEFAULT (%s) NOT NULL; (params ['{}'])
+DEBUG 2024-01-08 18:09:08,282 schema CREATE TABLE `django_celery_beat_clockedschedule` (`id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY, `clocked_time` datetime(6) NOT NULL, `enabled` bool NOT NULL); (params None)
+DEBUG 2024-01-08 18:09:08,312 schema ALTER TABLE `django_celery_beat_periodictask` ADD COLUMN `clocked_id` integer NULL , ADD CONSTRAINT `django_celery_beat_p_clocked_id_47a69f82_fk_django_ce` FOREIGN KEY (`clocked_id`) REFERENCES `django_celery_beat_clockedschedule`(`id`); (params [])
+DEBUG 2024-01-08 18:09:08,392 schema ALTER TABLE `django_celery_beat_periodictask` ADD COLUMN `expire_seconds` integer UNSIGNED NULL CHECK (`expire_seconds` >= 0); (params [])
+DEBUG 2024-01-08 18:09:08,484 schema ALTER TABLE `django_celery_beat_clockedschedule` DROP COLUMN `enabled`; (params ())
+DEBUG 2024-01-08 18:09:08,582 schema CREATE TABLE `paypal_ipn` (`id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY, `business` varchar(127) NOT NULL, `charset` varchar(32) NOT NULL, `custom` varchar(255) NOT NULL, `notify_version` numeric(64, 2) NULL, `parent_txn_id` varchar(19) NOT NULL, `receiver_email` varchar(127) NOT NULL, `receiver_id` varchar(127) NOT NULL, `residence_country` varchar(2) NOT NULL, `test_ipn` bool NOT NULL, `txn_id` varchar(19) NOT NULL, `txn_type` varchar(128) NOT NULL, `verify_sign` varchar(255) NOT NULL, `address_country` varchar(64) NOT NULL, `address_city` varchar(40) NOT NULL, `address_country_code` varchar(64) NOT NULL, `address_name` varchar(128) NOT NULL, `address_state` varchar(40) NOT NULL, `address_status` varchar(11) NOT NULL, `address_street` varchar(200) NOT NULL, `address_zip` varchar(20) NOT NULL, `contact_phone` varchar(20) NOT NULL, `first_name` varchar(64) NOT NULL, `last_name` varchar(64) NOT NULL, `payer_business_name` varchar(127) NOT NULL, `payer_email` varchar(127) NOT NULL, `payer_id` varchar(13) NOT NULL, `auth_amount` numeric(64, 2) NULL, `auth_exp` varchar(28) NOT NULL, `auth_id` varchar(19) NOT NULL, `auth_status` varchar(9) NOT NULL, `exchange_rate` numeric(64, 16) NULL, `invoice` varchar(127) NOT NULL, `item_name` varchar(127) NOT NULL, `item_number` varchar(127) NOT NULL, `mc_currency` varchar(32) NOT NULL, `mc_fee` numeric(64, 2) NULL, `mc_gross` numeric(64, 2) NULL, `mc_handling` numeric(64, 2) NULL, `mc_shipping` numeric(64, 2) NULL, `memo` varchar(255) NOT NULL, `num_cart_items` integer NULL, `option_name1` varchar(64) NOT NULL, `option_name2` varchar(64) NOT NULL, `payer_status` varchar(10) NOT NULL, `payment_date` datetime(6) NULL, `payment_gross` numeric(64, 2) NULL, `payment_status` varchar(17) NOT NULL, `payment_type` varchar(7) NOT NULL, `pending_reason` varchar(14) NOT NULL, `protection_eligibility` varchar(32) NOT NULL, `quantity` integer NULL, `reason_code` varchar(15) NOT NULL, `remaining_settle` numeric(64, 2) NULL, `settle_amount` numeric(64, 2) NULL, `settle_currency` varchar(32) NOT NULL, `shipping` numeric(64, 2) NULL, `shipping_method` varchar(255) NOT NULL, `tax` numeric(64, 2) NULL, `transaction_entity` varchar(7) NOT NULL, `auction_buyer_id` varchar(64) NOT NULL, `auction_closing_date` datetime(6) NULL, `auction_multi_item` integer NULL, `for_auction` numeric(64, 2) NULL, `amount` numeric(64, 2) NULL, `amount_per_cycle` numeric(64, 2) NULL, `initial_payment_amount` numeric(64, 2) NULL, `next_payment_date` datetime(6) NULL, `outstanding_balance` numeric(64, 2) NULL, `payment_cycle` varchar(32) NOT NULL, `period_type` varchar(32) NOT NULL, `product_name` varchar(128) NOT NULL, `product_type` varchar(128) NOT NULL, `profile_status` varchar(32) NOT NULL, `recurring_payment_id` varchar(128) NOT NULL, `rp_invoice_id` varchar(127) NOT NULL, `time_created` datetime(6) NULL, `amount1` numeric(64, 2) NULL, `amount2` numeric(64, 2) NULL, `amount3` numeric(64, 2) NULL, `mc_amount1` numeric(64, 2) NULL, `mc_amount2` numeric(64, 2) NULL, `mc_amount3` numeric(64, 2) NULL, `password` varchar(24) NOT NULL, `period1` varchar(32) NOT NULL, `period2` varchar(32) NOT NULL, `period3` varchar(32) NOT NULL, `reattempt` varchar(1) NOT NULL, `recur_times` integer NULL, `recurring` varchar(1) NOT NULL, `retry_at` datetime(6) NULL, `subscr_date` datetime(6) NULL, `subscr_effective` datetime(6) NULL, `subscr_id` varchar(19) NOT NULL, `username` varchar(64) NOT NULL, `case_creation_date` datetime(6) NULL, `case_id` varchar(14) NOT NULL, `case_type` varchar(24) NOT NULL, `receipt_id` varchar(64) NOT NULL, `currency_code` varchar(32) NOT NULL, `handling_amount` numeric(64, 2) NULL, `transaction_subject` varchar(255) NOT NULL, `ipaddress` char(15) NOT NULL, `flag` bool NOT NULL, `flag_code` varchar(16) NOT NULL, `flag_info` longtext NOT NULL, `query` longtext NOT NULL, `response` longtext NOT NULL, `created_at` datetime(6) NOT NULL, `updated_at` datetime(6) NOT NULL, `from_view` varchar(6) NULL); (params None)
+DEBUG 2024-01-08 18:09:08,627 schema CREATE INDEX `paypal_ipn_txn_id_8fa22c44` ON `paypal_ipn` (`txn_id`); (params ())
+DEBUG 2024-01-08 18:09:08,713 schema ALTER TABLE `paypal_ipn` ADD COLUMN `mp_id` varchar(128) NULL; (params [])
+DEBUG 2024-01-08 18:09:08,777 schema ALTER TABLE `paypal_ipn` MODIFY `ipaddress` char(39) NOT NULL; (params [])
+DEBUG 2024-01-08 18:09:08,842 schema ALTER TABLE `paypal_ipn` MODIFY `ipaddress` char(39) NULL; (params [])
+DEBUG 2024-01-08 18:09:08,976 schema ALTER TABLE `paypal_ipn` MODIFY `address_status` varchar(255) NOT NULL; (params [])
+DEBUG 2024-01-08 18:09:09,050 schema ALTER TABLE `paypal_ipn` MODIFY `auth_status` varchar(255) NOT NULL; (params [])
+DEBUG 2024-01-08 18:09:09,114 schema ALTER TABLE `paypal_ipn` MODIFY `case_id` varchar(255) NOT NULL; (params [])
+DEBUG 2024-01-08 18:09:09,184 schema ALTER TABLE `paypal_ipn` MODIFY `case_type` varchar(255) NOT NULL; (params [])
+DEBUG 2024-01-08 18:09:09,267 schema ALTER TABLE `paypal_ipn` MODIFY `charset` varchar(255) NOT NULL; (params [])
+DEBUG 2024-01-08 18:09:09,350 schema ALTER TABLE `paypal_ipn` MODIFY `payer_status` varchar(255) NOT NULL; (params [])
+DEBUG 2024-01-08 18:09:09,440 schema ALTER TABLE `paypal_ipn` MODIFY `payment_cycle` varchar(255) NOT NULL; (params [])
+DEBUG 2024-01-08 18:09:09,522 schema ALTER TABLE `paypal_ipn` MODIFY `payment_status` varchar(255) NOT NULL; (params [])
+DEBUG 2024-01-08 18:09:09,639 schema ALTER TABLE `paypal_ipn` MODIFY `payment_type` varchar(255) NOT NULL; (params [])
+DEBUG 2024-01-08 18:09:09,765 schema ALTER TABLE `paypal_ipn` MODIFY `pending_reason` varchar(255) NOT NULL; (params [])
+DEBUG 2024-01-08 18:09:09,951 schema ALTER TABLE `paypal_ipn` MODIFY `period1` varchar(255) NOT NULL; (params [])
+DEBUG 2024-01-08 18:09:10,104 schema ALTER TABLE `paypal_ipn` MODIFY `period2` varchar(255) NOT NULL; (params [])
+DEBUG 2024-01-08 18:09:10,209 schema ALTER TABLE `paypal_ipn` MODIFY `period3` varchar(255) NOT NULL; (params [])
+DEBUG 2024-01-08 18:09:10,276 schema ALTER TABLE `paypal_ipn` MODIFY `period_type` varchar(255) NOT NULL; (params [])
+DEBUG 2024-01-08 18:09:10,364 schema ALTER TABLE `paypal_ipn` MODIFY `product_name` varchar(255) NOT NULL; (params [])
+DEBUG 2024-01-08 18:09:10,432 schema ALTER TABLE `paypal_ipn` MODIFY `product_type` varchar(255) NOT NULL; (params [])
+DEBUG 2024-01-08 18:09:10,497 schema ALTER TABLE `paypal_ipn` MODIFY `profile_status` varchar(255) NOT NULL; (params [])
+DEBUG 2024-01-08 18:09:10,594 schema ALTER TABLE `paypal_ipn` MODIFY `protection_eligibility` varchar(255) NOT NULL; (params [])
+DEBUG 2024-01-08 18:09:10,693 schema ALTER TABLE `paypal_ipn` MODIFY `reason_code` varchar(255) NOT NULL; (params [])
+DEBUG 2024-01-08 18:09:10,913 schema ALTER TABLE `paypal_ipn` MODIFY `receipt_id` varchar(255) NOT NULL; (params [])
+DEBUG 2024-01-08 18:09:11,044 schema ALTER TABLE `paypal_ipn` MODIFY `receiver_email` varchar(254) NOT NULL; (params [])
+DEBUG 2024-01-08 18:09:11,133 schema ALTER TABLE `paypal_ipn` MODIFY `receiver_id` varchar(255) NOT NULL; (params [])
+DEBUG 2024-01-08 18:09:11,167 schema ALTER TABLE `paypal_ipn` MODIFY `recurring_payment_id` varchar(255) NOT NULL; (params [])
+DEBUG 2024-01-08 18:09:11,227 schema ALTER TABLE `paypal_ipn` MODIFY `transaction_entity` varchar(255) NOT NULL; (params [])
+DEBUG 2024-01-08 18:09:11,315 schema ALTER TABLE `paypal_ipn` MODIFY `txn_id` varchar(255) NOT NULL; (params [])
+DEBUG 2024-01-08 18:09:11,576 schema ALTER TABLE `paypal_ipn` MODIFY `txn_type` varchar(255) NOT NULL; (params [])
+DEBUG 2024-01-08 18:09:11,624 schema ALTER TABLE `paypal_ipn` MODIFY `custom` varchar(256) NOT NULL; (params [])
+DEBUG 2024-01-08 18:09:11,659 schema ALTER TABLE `paypal_ipn` MODIFY `transaction_subject` varchar(256) NOT NULL; (params [])
+DEBUG 2024-01-08 18:09:11,709 schema ALTER TABLE `paypal_ipn` ADD COLUMN `option_selection1` varchar(200) DEFAULT %s NOT NULL; (params [''])
+DEBUG 2024-01-08 18:09:11,768 schema ALTER TABLE `paypal_ipn` ALTER COLUMN `option_selection1` DROP DEFAULT; (params [])
+DEBUG 2024-01-08 18:09:11,848 schema ALTER TABLE `paypal_ipn` ADD COLUMN `option_selection2` varchar(200) DEFAULT %s NOT NULL; (params [''])
+DEBUG 2024-01-08 18:09:11,906 schema ALTER TABLE `paypal_ipn` ALTER COLUMN `option_selection2` DROP DEFAULT; (params [])
+DEBUG 2024-01-08 18:09:11,989 schema ALTER TABLE `paypal_ipn` MODIFY `id` bigint AUTO_INCREMENT NOT NULL; (params [])
+DEBUG 2024-01-08 18:09:12,075 schema CREATE TABLE `django_session` (`session_key` varchar(40) NOT NULL PRIMARY KEY, `session_data` longtext NOT NULL, `expire_date` datetime(6) NOT NULL); (params None)
+DEBUG 2024-01-08 18:09:12,087 schema CREATE INDEX `django_session_expire_date_a5c62663` ON `django_session` (`expire_date`); (params ())
+DEBUG 2024-01-08 18:09:12,106 schema CREATE TABLE `django_site` (`id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY, `domain` varchar(100) NOT NULL, `name` varchar(50) NOT NULL); (params None)
+DEBUG 2024-01-08 18:09:12,132 schema ALTER TABLE `django_site` ADD CONSTRAINT `django_site_domain_a2e37b91_uniq` UNIQUE (`domain`); (params ())
+DEBUG 2024-01-08 18:09:12,159 schema CREATE TABLE `socialaccount_socialaccount` (`id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY, `provider` varchar(30) NOT NULL, `uid` varchar(191) NOT NULL, `last_login` datetime(6) NOT NULL, `date_joined` datetime(6) NOT NULL, `extra_data` longtext NOT NULL, `user_id` integer NOT NULL); (params None)
+DEBUG 2024-01-08 18:09:12,176 schema CREATE TABLE `socialaccount_socialapp` (`id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY, `provider` varchar(30) NOT NULL, `name` varchar(40) NOT NULL, `client_id` varchar(100) NOT NULL, `secret` varchar(100) NOT NULL, `key` varchar(100) NOT NULL); (params None)
+DEBUG 2024-01-08 18:09:12,186 schema CREATE TABLE `socialaccount_socialapp_sites` (`id` bigint AUTO_INCREMENT NOT NULL PRIMARY KEY, `socialapp_id` integer NOT NULL, `site_id` integer NOT NULL); (params None)
+DEBUG 2024-01-08 18:09:12,264 schema CREATE TABLE `socialaccount_socialtoken` (`id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY, `token` longtext NOT NULL, `token_secret` longtext NOT NULL, `expires_at` datetime(6) NULL, `account_id` integer NOT NULL, `app_id` integer NOT NULL); (params None)
+DEBUG 2024-01-08 18:09:12,296 schema ALTER TABLE `socialaccount_socialtoken` ADD CONSTRAINT `socialaccount_socialtoken_app_id_account_id_fca4e0ac_uniq` UNIQUE (`app_id`, `account_id`); (params ())
+DEBUG 2024-01-08 18:09:12,325 schema ALTER TABLE `socialaccount_socialaccount` ADD CONSTRAINT `socialaccount_socialaccount_provider_uid_fc810c6e_uniq` UNIQUE (`provider`, `uid`); (params ())
+DEBUG 2024-01-08 18:09:12,337 schema ALTER TABLE `socialaccount_socialaccount` ADD CONSTRAINT `socialaccount_socialaccount_user_id_8146e70c_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`); (params ())
+DEBUG 2024-01-08 18:09:12,369 schema ALTER TABLE `socialaccount_socialapp_sites` ADD CONSTRAINT `socialaccount_socialapp_sites_socialapp_id_site_id_71a9a768_uniq` UNIQUE (`socialapp_id`, `site_id`); (params ())
+DEBUG 2024-01-08 18:09:12,387 schema ALTER TABLE `socialaccount_socialapp_sites` ADD CONSTRAINT `socialaccount_social_socialapp_id_97fb6e7d_fk_socialacc` FOREIGN KEY (`socialapp_id`) REFERENCES `socialaccount_socialapp` (`id`); (params ())
+DEBUG 2024-01-08 18:09:12,412 schema ALTER TABLE `socialaccount_socialapp_sites` ADD CONSTRAINT `socialaccount_socialapp_sites_site_id_2579dee5_fk_django_site_id` FOREIGN KEY (`site_id`) REFERENCES `django_site` (`id`); (params ())
+DEBUG 2024-01-08 18:09:12,436 schema ALTER TABLE `socialaccount_socialtoken` ADD CONSTRAINT `socialaccount_social_account_id_951f210e_fk_socialacc` FOREIGN KEY (`account_id`) REFERENCES `socialaccount_socialaccount` (`id`); (params ())
+DEBUG 2024-01-08 18:09:12,460 schema ALTER TABLE `socialaccount_socialtoken` ADD CONSTRAINT `socialaccount_social_app_id_636a42d7_fk_socialacc` FOREIGN KEY (`app_id`) REFERENCES `socialaccount_socialapp` (`id`); (params ())
+DEBUG 2024-01-08 18:09:12,576 schema ALTER TABLE `socialaccount_socialapp` MODIFY `client_id` varchar(191) NOT NULL; (params [])
+DEBUG 2024-01-08 18:09:12,633 schema ALTER TABLE `socialaccount_socialapp` MODIFY `key` varchar(191) NOT NULL; (params [])
+DEBUG 2024-01-08 18:09:12,691 schema ALTER TABLE `socialaccount_socialapp` MODIFY `secret` varchar(191) NOT NULL; (params [])
+DEBUG 2024-01-08 18:09:12,738 schema ALTER TABLE `socialaccount_socialapp` ADD COLUMN `provider_id` varchar(200) DEFAULT %s NOT NULL; (params [''])
+DEBUG 2024-01-08 18:09:12,756 schema ALTER TABLE `socialaccount_socialapp` ALTER COLUMN `provider_id` DROP DEFAULT; (params [])
+DEBUG 2024-01-08 18:09:12,775 schema ALTER TABLE `socialaccount_socialapp` ADD COLUMN `settings` json DEFAULT (%s) NOT NULL; (params ['{}'])
+DEBUG 2024-01-08 18:09:12,819 schema ALTER TABLE `socialaccount_socialaccount` MODIFY `provider` varchar(200) NOT NULL; (params [])
+DEBUG 2024-01-08 18:09:12,952 schema ALTER TABLE `socialaccount_socialtoken` DROP FOREIGN KEY `socialaccount_social_app_id_636a42d7_fk_socialacc`; (params ())
+DEBUG 2024-01-08 18:09:12,962 schema ALTER TABLE `socialaccount_socialtoken` MODIFY `app_id` integer NULL; (params [])
+DEBUG 2024-01-08 18:09:12,994 schema ALTER TABLE `socialaccount_socialtoken` ADD CONSTRAINT `socialaccount_social_app_id_636a42d7_fk_socialacc` FOREIGN KEY (`app_id`) REFERENCES `socialaccount_socialapp` (`id`); (params ())
+DEBUG 2024-01-08 18:09:13,132 schema ALTER TABLE `socialaccount_socialaccount` MODIFY `extra_data` json NOT NULL; (params [])
+DEBUG 2024-01-08 18:42:26,592 base Exception while resolving variable 'recaptcha_site_key' in template 'basecamp/inquiry1.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [recaptcha_site_key] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: 'DIdbaGgdhuxkgOMAD0xPzOIVPIKhacJWhMgBMBxPVN55MVrc9RVCrr6O71Zxl4D2'>, 'request': <WSGIRequest: POST '/price_detail/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f966dc3aca0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f966dc3aca0>>), 'messages': <FallbackStorage: request=<WSGIRequest: POST '/price_detail/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'flight_date': '2024-01-23', 'direction': 'Pickup from Domestic Airport', 'suburb': 'Surry Hills', 'no_of_passenger': '2'}, {'block': <Block Node: content. Contents: [<TextNode: '\n      <!-- Page content-'>, <Variable Node: flight_date>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: direction>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: suburb>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: no_of_passenger>, <TextNode: '</a> -->\n\t\t\t  <br><br>\n  '>, <django.template.defaulttags.CsrfTokenNode object at 0x7f966d719950>, <TextNode: '\n\t\t\t\t<div class="mb3 pb-1'>, <Variable Node: direction>, <TextNode: '">'>, <Variable Node: direction>, <TextNode: '</option>\t\t\t\t\t\t          '>, <Variable Node: flight_date>, <TextNode: '" type="text" >\t\t\t\t  \n   '>, <IfNode>, <TextNode: '\n\t\t\t\t  <div class="mb-3 p'>, <Variable Node: suburb>, <TextNode: '</label>\t\t\t\t\t\n\t\t\t\t</div>\n'>, <Variable Node: suburb>, <TextNode: '">'>, <Variable Node: suburb>, <TextNode: '</option>\t\t\t\t\t\n\t\t\t\t  </se'>, <Variable Node: no_of_passenger>, <TextNode: '">'>, <Variable Node: no_of_passenger>, <TextNode: '</option>\t\t\t\t  \n         '>, <Variable Node: recaptcha_site_key>, <TextNode: '"></div>\n\t\t\t\t<div id="err'>]>}]
+WARNING 2024-01-08 19:00:52,832 log Not Found: /.git/config
+DEBUG 2024-01-08 19:17:59,049 base Exception while resolving variable 'recaptcha_site_key' in template 'basecamp/inquiry1.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [recaptcha_site_key] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: 'qqooo2H5gwyKlOlJ5ZP4V8rBDuOFQJfL4AcitF39oDwpuBrtOETurFY7EmNyjTKO'>, 'request': <WSGIRequest: POST '/price_detail/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f966dd247c0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f966dd247c0>>), 'messages': <FallbackStorage: request=<WSGIRequest: POST '/price_detail/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'flight_date': '2024-01-11', 'direction': 'Drop off to Domestic Airport', 'suburb': 'Bronte', 'no_of_passenger': '4'}, {'block': <Block Node: content. Contents: [<TextNode: '\n      <!-- Page content-'>, <Variable Node: flight_date>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: direction>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: suburb>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: no_of_passenger>, <TextNode: '</a> -->\n\t\t\t  <br><br>\n  '>, <django.template.defaulttags.CsrfTokenNode object at 0x7f966dbe4b50>, <TextNode: '\n\t\t\t\t<div class="mb3 pb-1'>, <Variable Node: direction>, <TextNode: '">'>, <Variable Node: direction>, <TextNode: '</option>\t\t\t\t\t\t          '>, <Variable Node: flight_date>, <TextNode: '" type="text" >\t\t\t\t  \n   '>, <IfNode>, <TextNode: '\n\t\t\t\t  <div class="mb-3 p'>, <Variable Node: suburb>, <TextNode: '</label>\t\t\t\t\t\n\t\t\t\t</div>\n'>, <Variable Node: suburb>, <TextNode: '">'>, <Variable Node: suburb>, <TextNode: '</option>\t\t\t\t\t\n\t\t\t\t  </se'>, <Variable Node: no_of_passenger>, <TextNode: '">'>, <Variable Node: no_of_passenger>, <TextNode: '</option>\t\t\t\t  \n         '>, <Variable Node: recaptcha_site_key>, <TextNode: '"></div>\n\t\t\t\t<div id="err'>]>}]
+WARNING 2024-01-08 19:21:35,315 log Not Found: /robots.txt

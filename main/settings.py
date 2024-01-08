@@ -7,7 +7,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = config('SECRET_KEY')
 
-#DEBUG = True
+# DEBUG = True
 DEBUG = config('DEBUG', cast=bool, default=True)
 
 ALLOWED_HOSTS = ['easygoshuttle.com.au', 'www.easygoshuttle.com.au', '149.28.188.33', '33.188.28.149.in-addr.arpa']
@@ -114,12 +114,15 @@ WSGI_APPLICATION = 'main.wsgi.application'
 
 # DATABASES = {
 #   'default': {
-#       'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#       'ENGINE': 'django.db.backends.mysql',
 #       'NAME': config('DB_NAME'),
 #       'USER': config('DB_USER'),
 #       'PASSWORD': config('DB_USER_PASSWORD'),
 #       'HOST': config('DB_HOST'),
-#       'PORT': '5432',
+#       'PORT': '3306',
+#       'OPTIONS': {
+#           'charset': 'utf8',
+#       },
 #   }
 # }
 
