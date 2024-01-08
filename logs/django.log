@@ -207,3 +207,972 @@ Traceback (most recent call last):
     raise VariableDoesNotExist(
 django.template.base.VariableDoesNotExist: Failed lookup for key [recaptcha_site_key] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: 'qqooo2H5gwyKlOlJ5ZP4V8rBDuOFQJfL4AcitF39oDwpuBrtOETurFY7EmNyjTKO'>, 'request': <WSGIRequest: POST '/price_detail/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f966dd247c0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f966dd247c0>>), 'messages': <FallbackStorage: request=<WSGIRequest: POST '/price_detail/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'flight_date': '2024-01-11', 'direction': 'Drop off to Domestic Airport', 'suburb': 'Bronte', 'no_of_passenger': '4'}, {'block': <Block Node: content. Contents: [<TextNode: '\n      <!-- Page content-'>, <Variable Node: flight_date>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: direction>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: suburb>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: no_of_passenger>, <TextNode: '</a> -->\n\t\t\t  <br><br>\n  '>, <django.template.defaulttags.CsrfTokenNode object at 0x7f966dbe4b50>, <TextNode: '\n\t\t\t\t<div class="mb3 pb-1'>, <Variable Node: direction>, <TextNode: '">'>, <Variable Node: direction>, <TextNode: '</option>\t\t\t\t\t\t          '>, <Variable Node: flight_date>, <TextNode: '" type="text" >\t\t\t\t  \n   '>, <IfNode>, <TextNode: '\n\t\t\t\t  <div class="mb-3 p'>, <Variable Node: suburb>, <TextNode: '</label>\t\t\t\t\t\n\t\t\t\t</div>\n'>, <Variable Node: suburb>, <TextNode: '">'>, <Variable Node: suburb>, <TextNode: '</option>\t\t\t\t\t\n\t\t\t\t  </se'>, <Variable Node: no_of_passenger>, <TextNode: '">'>, <Variable Node: no_of_passenger>, <TextNode: '</option>\t\t\t\t  \n         '>, <Variable Node: recaptcha_site_key>, <TextNode: '"></div>\n\t\t\t\t<div id="err'>]>}]
 WARNING 2024-01-08 19:21:35,315 log Not Found: /robots.txt
+DEBUG 2024-01-08 19:43:33,708 base Exception while resolving variable 'subtitle' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [subtitle] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7f3b167505e0>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f3b1687db20>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f3b1687db20>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7f3b168eec90>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}, {'block': <Block Node: title. Contents: [<IfNode>, <Variable Node: title>, <TextNode: ' | '>, <Variable Node: site_title|default:_('Django site admin')>]>}]
+DEBUG 2024-01-08 19:43:33,710 base Exception while resolving variable 'site_title' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'site_title'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'site_title'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'site_title'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [site_title] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7f3b167505e0>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f3b1687db20>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f3b1687db20>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7f3b168eec90>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}, {'block': <Block Node: title. Contents: [<IfNode>, <Variable Node: title>, <TextNode: ' | '>, <Variable Node: site_title|default:_('Django site admin')>]>}]
+DEBUG 2024-01-08 19:43:33,711 base Exception while resolving variable 'is_popup' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_popup] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7f3b167505e0>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f3b1687db20>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f3b1687db20>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7f3b168eec90>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2024-01-08 19:43:33,712 base Exception while resolving variable 'is_nav_sidebar_enabled' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_nav_sidebar_enabled] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7f3b167505e0>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f3b1687db20>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f3b1687db20>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7f3b168eec90>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2024-01-08 19:43:33,712 base Exception while resolving variable 'is_popup' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_popup] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7f3b167505e0>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f3b1687db20>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f3b1687db20>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7f3b168eec90>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2024-01-08 19:43:33,715 base Exception while resolving variable 'is_popup' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_popup] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7f3b167505e0>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f3b1687db20>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f3b1687db20>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7f3b168eec90>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2024-01-08 19:43:33,716 base Exception while resolving variable 'site_header' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'site_header'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'site_header'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'site_header'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [site_header] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7f3b167505e0>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f3b1687db20>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f3b1687db20>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7f3b168eec90>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}, {'block': <Block Node: header. Contents: [<TextNode: '\n    <div id="header">\n  '>, <Block Node: branding. Contents: []>, <TextNode: '\n        </div>\n        '>, <Block Node: usertools. Contents: [<TextNode: '\n        '>, <IfNode>, <TextNode: '\n        '>]>, <TextNode: '\n        '>, <Block Node: nav-global. Contents: []>, <TextNode: '\n    </div>\n    '>]>}, {'block': <Block Node: branding. Contents: [<TextNode: '\n<h1 id="site-name"><a hr'>, <URLNode view_name=''admin_honeypot:index'' args=[] kwargs={} as=None>, <TextNode: '">'>, <Variable Node: site_header|default:_('Django administration')>, <TextNode: '</a></h1>\n'>]>}]
+DEBUG 2024-01-08 19:43:33,717 base Exception while resolving variable 'is_popup' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_popup] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7f3b167505e0>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f3b1687db20>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f3b1687db20>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7f3b168eec90>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2024-01-08 19:43:33,717 base Exception while resolving variable 'is_nav_sidebar_enabled' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_nav_sidebar_enabled] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7f3b167505e0>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f3b1687db20>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f3b1687db20>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7f3b168eec90>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2024-01-08 19:43:33,718 base Exception while resolving variable 'subtitle' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [subtitle] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7f3b167505e0>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f3b1687db20>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f3b1687db20>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7f3b168eec90>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}, {'block': <Block Node: content_subtitle. Contents: [<IfNode>]>}]
+DEBUG 2024-01-08 19:43:40,960 base Exception while resolving variable 'subtitle' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [subtitle] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7f3b166b8540>>, 'request': <WSGIRequest: POST '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f3b168d36a0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f3b168d36a0>>), 'messages': <FallbackStorage: request=<WSGIRequest: POST '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=True, valid=False, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7f3b166efd90>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}, {'block': <Block Node: title. Contents: [<IfNode>, <Variable Node: title>, <TextNode: ' | '>, <Variable Node: site_title|default:_('Django site admin')>]>}]
+DEBUG 2024-01-08 19:43:40,962 base Exception while resolving variable 'site_title' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'site_title'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'site_title'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'site_title'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [site_title] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7f3b166b8540>>, 'request': <WSGIRequest: POST '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f3b168d36a0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f3b168d36a0>>), 'messages': <FallbackStorage: request=<WSGIRequest: POST '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=True, valid=False, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7f3b166efd90>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}, {'block': <Block Node: title. Contents: [<IfNode>, <Variable Node: title>, <TextNode: ' | '>, <Variable Node: site_title|default:_('Django site admin')>]>}]
+DEBUG 2024-01-08 19:43:40,963 base Exception while resolving variable 'is_popup' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_popup] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7f3b166b8540>>, 'request': <WSGIRequest: POST '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f3b168d36a0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f3b168d36a0>>), 'messages': <FallbackStorage: request=<WSGIRequest: POST '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=True, valid=False, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7f3b166efd90>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2024-01-08 19:43:40,964 base Exception while resolving variable 'is_nav_sidebar_enabled' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_nav_sidebar_enabled] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7f3b166b8540>>, 'request': <WSGIRequest: POST '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f3b168d36a0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f3b168d36a0>>), 'messages': <FallbackStorage: request=<WSGIRequest: POST '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=True, valid=False, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7f3b166efd90>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2024-01-08 19:43:40,965 base Exception while resolving variable 'is_popup' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_popup] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7f3b166b8540>>, 'request': <WSGIRequest: POST '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f3b168d36a0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f3b168d36a0>>), 'messages': <FallbackStorage: request=<WSGIRequest: POST '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=True, valid=False, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7f3b166efd90>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2024-01-08 19:43:40,966 base Exception while resolving variable 'is_popup' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_popup] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7f3b166b8540>>, 'request': <WSGIRequest: POST '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f3b168d36a0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f3b168d36a0>>), 'messages': <FallbackStorage: request=<WSGIRequest: POST '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=True, valid=False, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7f3b166efd90>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2024-01-08 19:43:40,966 base Exception while resolving variable 'site_header' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'site_header'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'site_header'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'site_header'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [site_header] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7f3b166b8540>>, 'request': <WSGIRequest: POST '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f3b168d36a0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f3b168d36a0>>), 'messages': <FallbackStorage: request=<WSGIRequest: POST '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=True, valid=False, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7f3b166efd90>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}, {'block': <Block Node: header. Contents: [<TextNode: '\n    <div id="header">\n  '>, <Block Node: branding. Contents: []>, <TextNode: '\n        </div>\n        '>, <Block Node: usertools. Contents: [<TextNode: '\n        '>, <IfNode>, <TextNode: '\n        '>]>, <TextNode: '\n        '>, <Block Node: nav-global. Contents: []>, <TextNode: '\n    </div>\n    '>]>}, {'block': <Block Node: branding. Contents: [<TextNode: '\n<h1 id="site-name"><a hr'>, <URLNode view_name=''admin_honeypot:index'' args=[] kwargs={} as=None>, <TextNode: '">'>, <Variable Node: site_header|default:_('Django administration')>, <TextNode: '</a></h1>\n'>]>}]
+DEBUG 2024-01-08 19:43:40,967 base Exception while resolving variable 'is_popup' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_popup] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7f3b166b8540>>, 'request': <WSGIRequest: POST '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f3b168d36a0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f3b168d36a0>>), 'messages': <FallbackStorage: request=<WSGIRequest: POST '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=True, valid=False, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7f3b166efd90>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2024-01-08 19:43:40,967 base Exception while resolving variable 'is_nav_sidebar_enabled' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_nav_sidebar_enabled] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7f3b166b8540>>, 'request': <WSGIRequest: POST '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f3b168d36a0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f3b168d36a0>>), 'messages': <FallbackStorage: request=<WSGIRequest: POST '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=True, valid=False, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7f3b166efd90>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2024-01-08 19:43:40,968 base Exception while resolving variable 'subtitle' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [subtitle] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7f3b166b8540>>, 'request': <WSGIRequest: POST '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f3b168d36a0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f3b168d36a0>>), 'messages': <FallbackStorage: request=<WSGIRequest: POST '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=True, valid=False, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7f3b166efd90>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}, {'block': <Block Node: content_subtitle. Contents: [<IfNode>]>}]
+WARNING 2024-01-08 19:44:01,918 log Not Found: /robots.txt
+WARNING 2024-01-08 19:56:32,604 log Not Found: /robots.txt
+WARNING 2024-01-08 19:56:38,938 log Not Found: /style.php
+WARNING 2024-01-08 19:57:11,129 log Not Found: /style.php
+DEBUG 2024-01-08 19:58:50,866 base Exception while resolving variable 'recaptcha_site_key' in template 'basecamp/inquiry1.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [recaptcha_site_key] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: 'O0ye2CMR3KGSNDk1eca1k9J3D4Cwg37hRxWQAH3BI3rbySf886NsZkbouoaLqSzy'>, 'request': <WSGIRequest: POST '/price_detail/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f26acce4d60>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f26acce4d60>>), 'messages': <FallbackStorage: request=<WSGIRequest: POST '/price_detail/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'flight_date': '2024-01-12', 'direction': 'Drop off to Intl Airport', 'suburb': 'Punchbowl', 'no_of_passenger': '5'}, {'block': <Block Node: content. Contents: [<TextNode: '\n      <!-- Page content-'>, <Variable Node: flight_date>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: direction>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: suburb>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: no_of_passenger>, <TextNode: '</a> -->\n\t\t\t  <br><br>\n  '>, <django.template.defaulttags.CsrfTokenNode object at 0x7f26ac9c4050>, <TextNode: '\n\t\t\t\t<div class="mb3 pb-1'>, <Variable Node: direction>, <TextNode: '">'>, <Variable Node: direction>, <TextNode: '</option>\t\t\t\t\t\t          '>, <Variable Node: flight_date>, <TextNode: '" type="text" >\t\t\t\t  \n   '>, <IfNode>, <TextNode: '\n\t\t\t\t  <div class="mb-3 p'>, <Variable Node: suburb>, <TextNode: '</label>\t\t\t\t\t\n\t\t\t\t</div>\n'>, <Variable Node: suburb>, <TextNode: '">'>, <Variable Node: suburb>, <TextNode: '</option>\t\t\t\t\t\n\t\t\t\t  </se'>, <Variable Node: no_of_passenger>, <TextNode: '">'>, <Variable Node: no_of_passenger>, <TextNode: '</option>\t\t\t\t  \n         '>, <Variable Node: recaptcha_site_key>, <TextNode: '"></div>\n\t\t\t\t<div id="err'>]>}]
+DEBUG 2024-01-08 19:59:41,433 base Exception while resolving variable 'recaptcha_site_key' in template 'basecamp/inquiry1.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [recaptcha_site_key] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: '07hWdWA5xkGdwhItGlX7mQ8xsjp0VxkQikKRCpFPSGRJ01APV42NIpgK4CiLygKz'>, 'request': <WSGIRequest: POST '/price_detail/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f26aca3b380>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f26aca3b380>>), 'messages': <FallbackStorage: request=<WSGIRequest: POST '/price_detail/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'flight_date': '2024-01-10', 'direction': 'Drop off to Intl Airport', 'suburb': 'Hornsby', 'no_of_passenger': '11'}, {'block': <Block Node: content. Contents: [<TextNode: '\n      <!-- Page content-'>, <Variable Node: flight_date>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: direction>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: suburb>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: no_of_passenger>, <TextNode: '</a> -->\n\t\t\t  <br><br>\n  '>, <django.template.defaulttags.CsrfTokenNode object at 0x7f26ac54bcd0>, <TextNode: '\n\t\t\t\t<div class="mb3 pb-1'>, <Variable Node: direction>, <TextNode: '">'>, <Variable Node: direction>, <TextNode: '</option>\t\t\t\t\t\t          '>, <Variable Node: flight_date>, <TextNode: '" type="text" >\t\t\t\t  \n   '>, <IfNode>, <TextNode: '\n\t\t\t\t  <div class="mb-3 p'>, <Variable Node: suburb>, <TextNode: '</label>\t\t\t\t\t\n\t\t\t\t</div>\n'>, <Variable Node: suburb>, <TextNode: '">'>, <Variable Node: suburb>, <TextNode: '</option>\t\t\t\t\t\n\t\t\t\t  </se'>, <Variable Node: no_of_passenger>, <TextNode: '">'>, <Variable Node: no_of_passenger>, <TextNode: '</option>\t\t\t\t  \n         '>, <Variable Node: recaptcha_site_key>, <TextNode: '"></div>\n\t\t\t\t<div id="err'>]>}]
+WARNING 2024-01-08 20:05:33,574 log Not Found: /airport-transfers-toongabbie/easycoding.live
+WARNING 2024-01-08 20:05:33,901 log Not Found: /airport-transfers-toongabbie/easycoding.live
+WARNING 2024-01-08 20:05:42,535 log Not Found: /airport-transfers-ryde/easycoding.live
+WARNING 2024-01-08 20:05:42,635 log Not Found: /airport-transfers-ryde/easycoding.live
+WARNING 2024-01-08 20:05:58,167 log Not Found: /inquiry3/
+WARNING 2024-01-08 20:05:58,206 log Not Found: /inquiry3/
+WARNING 2024-01-08 20:09:01,622 log Not Found: /.env
+WARNING 2024-01-08 20:09:02,447 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2024-01-08 20:09:08,190 log Not Found: /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php
+DEBUG 2024-01-08 20:14:44,916 base Exception while resolving variable 'recaptcha_site_key' in template 'basecamp/inquiry1.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [recaptcha_site_key] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: 'rN1WeXo1XRlYHryhgw74pnVpDlLmjIpGUzpFctliyq8wVYGZV7POsy0ybH6LsVjm'>, 'request': <WSGIRequest: POST '/price_detail/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f26aca3ac00>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f26aca3ac00>>), 'messages': <FallbackStorage: request=<WSGIRequest: POST '/price_detail/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'flight_date': '2024-01-23', 'direction': 'Pickup from Intl Airport', 'suburb': 'Seaforth', 'no_of_passenger': '4'}, {'block': <Block Node: content. Contents: [<TextNode: '\n      <!-- Page content-'>, <Variable Node: flight_date>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: direction>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: suburb>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: no_of_passenger>, <TextNode: '</a> -->\n\t\t\t  <br><br>\n  '>, <django.template.defaulttags.CsrfTokenNode object at 0x7f26ac9c4050>, <TextNode: '\n\t\t\t\t<div class="mb3 pb-1'>, <Variable Node: direction>, <TextNode: '">'>, <Variable Node: direction>, <TextNode: '</option>\t\t\t\t\t\t          '>, <Variable Node: flight_date>, <TextNode: '" type="text" >\t\t\t\t  \n   '>, <IfNode>, <TextNode: '\n\t\t\t\t  <div class="mb-3 p'>, <Variable Node: suburb>, <TextNode: '</label>\t\t\t\t\t\n\t\t\t\t</div>\n'>, <Variable Node: suburb>, <TextNode: '">'>, <Variable Node: suburb>, <TextNode: '</option>\t\t\t\t\t\n\t\t\t\t  </se'>, <Variable Node: no_of_passenger>, <TextNode: '">'>, <Variable Node: no_of_passenger>, <TextNode: '</option>\t\t\t\t  \n         '>, <Variable Node: recaptcha_site_key>, <TextNode: '"></div>\n\t\t\t\t<div id="err'>]>}]
+DEBUG 2024-01-08 20:15:44,379 base Exception while resolving variable 'recaptcha_site_key' in template 'basecamp/inquiry1.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [recaptcha_site_key] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: 'P3A8r7I01AOd7dEojYzwWK2Ydrmta0zviPYRpDFhC9BLlKM6YzhgZV77LNHSjdtb'>, 'request': <WSGIRequest: POST '/price_detail/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f26acbca160>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f26acbca160>>), 'messages': <FallbackStorage: request=<WSGIRequest: POST '/price_detail/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'flight_date': '2024-01-23', 'direction': 'Pickup from Domestic Airport', 'suburb': 'Seaforth', 'no_of_passenger': '4'}, {'block': <Block Node: content. Contents: [<TextNode: '\n      <!-- Page content-'>, <Variable Node: flight_date>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: direction>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: suburb>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: no_of_passenger>, <TextNode: '</a> -->\n\t\t\t  <br><br>\n  '>, <django.template.defaulttags.CsrfTokenNode object at 0x7f26ac9b8cd0>, <TextNode: '\n\t\t\t\t<div class="mb3 pb-1'>, <Variable Node: direction>, <TextNode: '">'>, <Variable Node: direction>, <TextNode: '</option>\t\t\t\t\t\t          '>, <Variable Node: flight_date>, <TextNode: '" type="text" >\t\t\t\t  \n   '>, <IfNode>, <TextNode: '\n\t\t\t\t  <div class="mb-3 p'>, <Variable Node: suburb>, <TextNode: '</label>\t\t\t\t\t\n\t\t\t\t</div>\n'>, <Variable Node: suburb>, <TextNode: '">'>, <Variable Node: suburb>, <TextNode: '</option>\t\t\t\t\t\n\t\t\t\t  </se'>, <Variable Node: no_of_passenger>, <TextNode: '">'>, <Variable Node: no_of_passenger>, <TextNode: '</option>\t\t\t\t  \n         '>, <Variable Node: recaptcha_site_key>, <TextNode: '"></div>\n\t\t\t\t<div id="err'>]>}]
+DEBUG 2024-01-08 20:23:37,303 schema ALTER TABLE `blog_inquiry` MODIFY `pickup_time` varchar(30) NULL; (params [])
+DEBUG 2024-01-08 20:23:37,580 schema ALTER TABLE `blog_post` MODIFY `pickup_time` varchar(30) NULL; (params [])
+WARNING 2024-01-08 20:26:51,287 log Not Found: /robots.txt
+WARNING 2024-01-08 20:36:16,097 log Not Found: /webui/
+DEBUG 2024-01-08 20:38:03,620 base Exception while resolving variable 'recaptcha_site_key' in template 'basecamp/inquiry1.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [recaptcha_site_key] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: 'HvfusqYscioCAb75QqIlQnGJ5DPSzsgLEugagUaFmsClrEepAC0x9ApqlNFyibU1'>, 'request': <WSGIRequest: POST '/price_detail/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f2db21a72e0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f2db21a72e0>>), 'messages': <FallbackStorage: request=<WSGIRequest: POST '/price_detail/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'flight_date': '2024-01-22', 'direction': 'Drop off to Intl Airport', 'suburb': 'Concord', 'no_of_passenger': '6'}, {'block': <Block Node: content. Contents: [<TextNode: '\n      <!-- Page content-'>, <Variable Node: flight_date>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: direction>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: suburb>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: no_of_passenger>, <TextNode: '</a> -->\n\t\t\t  <br><br>\n  '>, <django.template.defaulttags.CsrfTokenNode object at 0x7f2db2046990>, <TextNode: '\n\t\t\t\t<div class="mb3 pb-1'>, <Variable Node: direction>, <TextNode: '">'>, <Variable Node: direction>, <TextNode: '</option>\t\t\t\t\t\t          '>, <Variable Node: flight_date>, <TextNode: '" type="text" >\t\t\t\t  \n   '>, <IfNode>, <TextNode: '\n\t\t\t\t  <div class="mb-3 p'>, <Variable Node: suburb>, <TextNode: '</label>\t\t\t\t\t\n\t\t\t\t</div>\n'>, <Variable Node: suburb>, <TextNode: '">'>, <Variable Node: suburb>, <TextNode: '</option>\t\t\t\t\t\n\t\t\t\t  </se'>, <Variable Node: no_of_passenger>, <TextNode: '">'>, <Variable Node: no_of_passenger>, <TextNode: '</option>\t\t\t\t  \n         '>, <Variable Node: recaptcha_site_key>, <TextNode: '"></div>\n\t\t\t\t<div id="err'>]>}]
+ERROR 2024-01-08 20:40:45,994 log Internal Server Error: /inquiry_details1/
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/basecamp/views.py", line 525, in inquiry_details1
+    send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])
+    ^^^^^^^^^
+NameError: name 'send_mail' is not defined
+DEBUG 2024-01-08 20:42:37,207 base Exception while resolving variable 'recaptcha_site_key' in template 'basecamp/inquiry1.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [recaptcha_site_key] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: 'ZqBDqGyRtJlcw6c1OgjPecm5ZfEaetd4WpCjeaK4DTzVnzjlysB1xp5MfpuQXcRk'>, 'request': <WSGIRequest: POST '/price_detail/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f8c4551e200>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f8c4551e200>>), 'messages': <FallbackStorage: request=<WSGIRequest: POST '/price_detail/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'flight_date': '2024-01-22', 'direction': 'Drop off to Intl Airport', 'suburb': 'Concord', 'no_of_passenger': '6'}, {'block': <Block Node: content. Contents: [<TextNode: '\n      <!-- Page content-'>, <Variable Node: flight_date>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: direction>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: suburb>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: no_of_passenger>, <TextNode: '</a> -->\n\t\t\t  <br><br>\n  '>, <django.template.defaulttags.CsrfTokenNode object at 0x7f8c4195c650>, <TextNode: '\n\t\t\t\t<div class="mb3 pb-1'>, <Variable Node: direction>, <TextNode: '">'>, <Variable Node: direction>, <TextNode: '</option>\t\t\t\t\t\t          '>, <Variable Node: flight_date>, <TextNode: '" type="text" >\t\t\t\t  \n   '>, <IfNode>, <TextNode: '\n\t\t\t\t  <div class="mb-3 p'>, <Variable Node: suburb>, <TextNode: '</label>\t\t\t\t\t\n\t\t\t\t</div>\n'>, <Variable Node: suburb>, <TextNode: '">'>, <Variable Node: suburb>, <TextNode: '</option>\t\t\t\t\t\n\t\t\t\t  </se'>, <Variable Node: no_of_passenger>, <TextNode: '">'>, <Variable Node: no_of_passenger>, <TextNode: '</option>\t\t\t\t  \n         '>, <Variable Node: recaptcha_site_key>, <TextNode: '"></div>\n\t\t\t\t<div id="err'>]>}]
+DEBUG 2024-01-08 20:44:43,235 schema CREATE TABLE "new__blog_inquiry" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name" varchar(100) NOT NULL, "company_name" varchar(100) NOT NULL, "contact" varchar(50) NOT NULL, "email" varchar(254) NOT NULL, "email1" varchar(254) NOT NULL, "flight_date" date NOT NULL, "flight_number" varchar(100) NOT NULL, "flight_time" varchar(30) NOT NULL, "direction" varchar(100) NOT NULL, "suburb" varchar(100) NOT NULL, "street" varchar(200) NOT NULL, "no_of_passenger" varchar(30) NOT NULL, "no_of_baggage" varchar(200) NOT NULL, "return_direction" varchar(100) NULL, "return_flight_date" date NULL, "return_flight_number" varchar(100) NULL, "return_flight_time" varchar(30) NULL, "return_pickup_time" varchar(30) NULL, "message" text NOT NULL, "notice" text NOT NULL, "price" varchar(30) NOT NULL, "paid" varchar(30) NOT NULL, "meeting_point" varchar(100) NULL, "is_confirmed" bool NOT NULL, "cancelled" bool NOT NULL, "private_ride" bool NOT NULL, "created" datetime NOT NULL, "driver_id" bigint NULL REFERENCES "blog_driver" ("id") DEFERRABLE INITIALLY DEFERRED, "pickup_time" varchar(30) NULL); (params None)
+DEBUG 2024-01-08 20:44:43,237 schema INSERT INTO "new__blog_inquiry" ("id", "name", "company_name", "contact", "email", "email1", "flight_date", "flight_number", "flight_time", "direction", "suburb", "street", "no_of_passenger", "no_of_baggage", "return_direction", "return_flight_date", "return_flight_number", "return_flight_time", "return_pickup_time", "message", "notice", "price", "paid", "meeting_point", "is_confirmed", "cancelled", "private_ride", "created", "driver_id", "pickup_time") SELECT "id", "name", "company_name", "contact", "email", "email1", "flight_date", "flight_number", "flight_time", "direction", "suburb", "street", "no_of_passenger", "no_of_baggage", "return_direction", "return_flight_date", "return_flight_number", "return_flight_time", "return_pickup_time", "message", "notice", "price", "paid", "meeting_point", "is_confirmed", "cancelled", "private_ride", "created", "driver_id", "pickup_time" FROM "blog_inquiry"; (params ())
+DEBUG 2024-01-08 20:44:43,266 schema DROP TABLE "blog_inquiry"; (params ())
+DEBUG 2024-01-08 20:44:43,277 schema ALTER TABLE "new__blog_inquiry" RENAME TO "blog_inquiry"; (params ())
+DEBUG 2024-01-08 20:44:43,281 schema CREATE INDEX "blog_inquiry_email_66d7f507" ON "blog_inquiry" ("email"); (params ())
+DEBUG 2024-01-08 20:44:43,284 schema CREATE INDEX "blog_inquiry_driver_id_2afe2222" ON "blog_inquiry" ("driver_id"); (params ())
+DEBUG 2024-01-08 20:44:43,296 schema CREATE TABLE "new__blog_post" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name" varchar(100) NOT NULL, "company_name" varchar(100) NOT NULL, "contact" varchar(50) NOT NULL, "email" varchar(254) NOT NULL, "email1" varchar(254) NOT NULL, "flight_date" date NOT NULL, "flight_number" varchar(100) NOT NULL, "flight_time" varchar(30) NOT NULL, "direction" varchar(100) NOT NULL, "suburb" varchar(100) NOT NULL, "street" varchar(200) NOT NULL, "no_of_passenger" varchar(30) NOT NULL, "no_of_baggage" varchar(200) NOT NULL, "return_direction" varchar(100) NULL, "return_flight_date" date NULL, "return_flight_number" varchar(100) NULL, "return_flight_time" varchar(30) NULL, "return_pickup_time" varchar(30) NULL, "message" text NOT NULL, "notice" text NOT NULL, "price" varchar(30) NOT NULL, "paid" varchar(30) NOT NULL, "meeting_point" varchar(100) NULL, "is_confirmed" bool NOT NULL, "cancelled" bool NOT NULL, "private_ride" bool NOT NULL, "reminder" bool NOT NULL, "calendar_event_id" varchar(255) NULL, "created" datetime NOT NULL, "driver_id" bigint NULL REFERENCES "blog_driver" ("id") DEFERRABLE INITIALLY DEFERRED, "sent_email" bool NOT NULL, "pickup_time" varchar(30) NULL); (params None)
+DEBUG 2024-01-08 20:44:43,297 schema INSERT INTO "new__blog_post" ("id", "name", "company_name", "contact", "email", "email1", "flight_date", "flight_number", "flight_time", "direction", "suburb", "street", "no_of_passenger", "no_of_baggage", "return_direction", "return_flight_date", "return_flight_number", "return_flight_time", "return_pickup_time", "message", "notice", "price", "paid", "meeting_point", "is_confirmed", "cancelled", "private_ride", "reminder", "calendar_event_id", "created", "driver_id", "sent_email", "pickup_time") SELECT "id", "name", "company_name", "contact", "email", "email1", "flight_date", "flight_number", "flight_time", "direction", "suburb", "street", "no_of_passenger", "no_of_baggage", "return_direction", "return_flight_date", "return_flight_number", "return_flight_time", "return_pickup_time", "message", "notice", "price", "paid", "meeting_point", "is_confirmed", "cancelled", "private_ride", "reminder", "calendar_event_id", "created", "driver_id", "sent_email", "pickup_time" FROM "blog_post"; (params ())
+DEBUG 2024-01-08 20:44:43,310 schema DROP TABLE "blog_post"; (params ())
+DEBUG 2024-01-08 20:44:43,318 schema ALTER TABLE "new__blog_post" RENAME TO "blog_post"; (params ())
+DEBUG 2024-01-08 20:44:43,322 schema CREATE INDEX "blog_post_email_6ca5b4e5" ON "blog_post" ("email"); (params ())
+DEBUG 2024-01-08 20:44:43,323 schema CREATE INDEX "blog_post_driver_id_5941734f" ON "blog_post" ("driver_id"); (params ())
+DEBUG 2024-01-08 20:44:43,351 schema CREATE TABLE "new__blog_driver" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "driver_name" varchar(100) NOT NULL, "driver_contact" varchar(50) NOT NULL, "driver_email" varchar(254) NOT NULL, "driver_plate" varchar(30) NOT NULL, "driver_car" varchar(30) NOT NULL, "driver_bankdetails" text NOT NULL, "driver_address" varchar(200) NULL); (params None)
+DEBUG 2024-01-08 20:44:43,352 schema INSERT INTO "new__blog_driver" ("id", "driver_name", "driver_contact", "driver_email", "driver_plate", "driver_car", "driver_bankdetails", "driver_address") SELECT "id", "driver_name", "driver_contact", "driver_email", "driver_plate", "driver_car", "driver_bankdetails", "driver_address" FROM "blog_driver"; (params ())
+DEBUG 2024-01-08 20:44:43,352 schema DROP TABLE "blog_driver"; (params ())
+DEBUG 2024-01-08 20:44:43,352 schema ALTER TABLE "new__blog_driver" RENAME TO "blog_driver"; (params ())
+DEBUG 2024-01-08 20:44:43,364 schema CREATE TABLE "new__blog_driver" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "driver_name" varchar(100) NOT NULL, "driver_contact" varchar(50) NOT NULL, "driver_email" varchar(254) NOT NULL, "driver_address" varchar(200) NULL, "driver_plate" varchar(30) NOT NULL, "driver_car" varchar(30) NOT NULL, "driver_bankdetails" text NULL); (params None)
+DEBUG 2024-01-08 20:44:43,364 schema INSERT INTO "new__blog_driver" ("id", "driver_name", "driver_contact", "driver_email", "driver_address", "driver_plate", "driver_car", "driver_bankdetails") SELECT "id", "driver_name", "driver_contact", "driver_email", "driver_address", "driver_plate", "driver_car", "driver_bankdetails" FROM "blog_driver"; (params ())
+DEBUG 2024-01-08 20:44:43,364 schema DROP TABLE "blog_driver"; (params ())
+DEBUG 2024-01-08 20:44:43,365 schema ALTER TABLE "new__blog_driver" RENAME TO "blog_driver"; (params ())
+DEBUG 2024-01-08 20:44:43,374 schema CREATE TABLE "new__blog_driver" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "driver_name" varchar(100) NOT NULL, "driver_contact" varchar(50) NOT NULL, "driver_email" varchar(254) NOT NULL, "driver_address" varchar(200) NULL, "driver_plate" varchar(30) NOT NULL, "driver_bankdetails" text NULL, "driver_car" varchar(30) NULL); (params None)
+DEBUG 2024-01-08 20:44:43,375 schema INSERT INTO "new__blog_driver" ("id", "driver_name", "driver_contact", "driver_email", "driver_address", "driver_plate", "driver_bankdetails", "driver_car") SELECT "id", "driver_name", "driver_contact", "driver_email", "driver_address", "driver_plate", "driver_bankdetails", "driver_car" FROM "blog_driver"; (params ())
+DEBUG 2024-01-08 20:44:43,375 schema DROP TABLE "blog_driver"; (params ())
+DEBUG 2024-01-08 20:44:43,375 schema ALTER TABLE "new__blog_driver" RENAME TO "blog_driver"; (params ())
+DEBUG 2024-01-08 20:44:43,385 schema CREATE TABLE "new__blog_driver" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "driver_name" varchar(100) NOT NULL, "driver_email" varchar(254) NOT NULL, "driver_address" varchar(200) NULL, "driver_plate" varchar(30) NOT NULL, "driver_car" varchar(30) NULL, "driver_bankdetails" text NULL, "driver_contact" varchar(50) NULL); (params None)
+DEBUG 2024-01-08 20:44:43,385 schema INSERT INTO "new__blog_driver" ("id", "driver_name", "driver_email", "driver_address", "driver_plate", "driver_car", "driver_bankdetails", "driver_contact") SELECT "id", "driver_name", "driver_email", "driver_address", "driver_plate", "driver_car", "driver_bankdetails", "driver_contact" FROM "blog_driver"; (params ())
+DEBUG 2024-01-08 20:44:43,386 schema DROP TABLE "blog_driver"; (params ())
+DEBUG 2024-01-08 20:44:43,386 schema ALTER TABLE "new__blog_driver" RENAME TO "blog_driver"; (params ())
+DEBUG 2024-01-08 20:44:43,396 schema CREATE TABLE "new__blog_driver" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "driver_name" varchar(100) NOT NULL, "driver_contact" varchar(50) NULL, "driver_address" varchar(200) NULL, "driver_plate" varchar(30) NOT NULL, "driver_car" varchar(30) NULL, "driver_bankdetails" text NULL, "driver_email" varchar(254) NULL); (params None)
+DEBUG 2024-01-08 20:44:43,397 schema INSERT INTO "new__blog_driver" ("id", "driver_name", "driver_contact", "driver_address", "driver_plate", "driver_car", "driver_bankdetails", "driver_email") SELECT "id", "driver_name", "driver_contact", "driver_address", "driver_plate", "driver_car", "driver_bankdetails", "driver_email" FROM "blog_driver"; (params ())
+DEBUG 2024-01-08 20:44:43,397 schema DROP TABLE "blog_driver"; (params ())
+DEBUG 2024-01-08 20:44:43,397 schema ALTER TABLE "new__blog_driver" RENAME TO "blog_driver"; (params ())
+DEBUG 2024-01-08 20:44:43,408 schema CREATE TABLE "new__blog_driver" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "driver_contact" varchar(50) NULL, "driver_email" varchar(254) NULL, "driver_address" varchar(200) NULL, "driver_plate" varchar(30) NOT NULL, "driver_car" varchar(30) NULL, "driver_bankdetails" text NULL, "driver_name" varchar(100) NULL); (params None)
+DEBUG 2024-01-08 20:44:43,408 schema INSERT INTO "new__blog_driver" ("id", "driver_contact", "driver_email", "driver_address", "driver_plate", "driver_car", "driver_bankdetails", "driver_name") SELECT "id", "driver_contact", "driver_email", "driver_address", "driver_plate", "driver_car", "driver_bankdetails", "driver_name" FROM "blog_driver"; (params ())
+DEBUG 2024-01-08 20:44:43,408 schema DROP TABLE "blog_driver"; (params ())
+DEBUG 2024-01-08 20:44:43,408 schema ALTER TABLE "new__blog_driver" RENAME TO "blog_driver"; (params ())
+DEBUG 2024-01-08 20:44:43,419 schema CREATE TABLE "new__blog_driver" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "driver_name" varchar(100) NULL, "driver_contact" varchar(50) NULL, "driver_email" varchar(254) NULL, "driver_address" varchar(200) NULL, "driver_car" varchar(30) NULL, "driver_bankdetails" text NULL, "driver_plate" varchar(30) NULL); (params None)
+DEBUG 2024-01-08 20:44:43,419 schema INSERT INTO "new__blog_driver" ("id", "driver_name", "driver_contact", "driver_email", "driver_address", "driver_car", "driver_bankdetails", "driver_plate") SELECT "id", "driver_name", "driver_contact", "driver_email", "driver_address", "driver_car", "driver_bankdetails", "driver_plate" FROM "blog_driver"; (params ())
+DEBUG 2024-01-08 20:44:43,420 schema DROP TABLE "blog_driver"; (params ())
+DEBUG 2024-01-08 20:44:43,420 schema ALTER TABLE "new__blog_driver" RENAME TO "blog_driver"; (params ())
+DEBUG 2024-01-08 20:44:43,431 schema CREATE TABLE "new__blog_inquiry" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name" varchar(100) NOT NULL, "contact" varchar(50) NOT NULL, "email" varchar(254) NOT NULL, "email1" varchar(254) NOT NULL, "flight_date" date NOT NULL, "flight_number" varchar(100) NOT NULL, "flight_time" varchar(30) NOT NULL, "pickup_time" varchar(30) NULL, "direction" varchar(100) NOT NULL, "suburb" varchar(100) NOT NULL, "street" varchar(200) NOT NULL, "no_of_passenger" varchar(30) NOT NULL, "no_of_baggage" varchar(200) NOT NULL, "return_direction" varchar(100) NULL, "return_flight_date" date NULL, "return_flight_number" varchar(100) NULL, "return_flight_time" varchar(30) NULL, "return_pickup_time" varchar(30) NULL, "message" text NOT NULL, "notice" text NOT NULL, "price" varchar(30) NOT NULL, "paid" varchar(30) NOT NULL, "meeting_point" varchar(100) NULL, "is_confirmed" bool NOT NULL, "cancelled" bool NOT NULL, "private_ride" bool NOT NULL, "created" datetime NOT NULL, "driver_id" bigint NULL REFERENCES "blog_driver" ("id") DEFERRABLE INITIALLY DEFERRED, "company_name" varchar(100) NULL); (params None)
+DEBUG 2024-01-08 20:44:43,432 schema INSERT INTO "new__blog_inquiry" ("id", "name", "contact", "email", "email1", "flight_date", "flight_number", "flight_time", "pickup_time", "direction", "suburb", "street", "no_of_passenger", "no_of_baggage", "return_direction", "return_flight_date", "return_flight_number", "return_flight_time", "return_pickup_time", "message", "notice", "price", "paid", "meeting_point", "is_confirmed", "cancelled", "private_ride", "created", "driver_id", "company_name") SELECT "id", "name", "contact", "email", "email1", "flight_date", "flight_number", "flight_time", "pickup_time", "direction", "suburb", "street", "no_of_passenger", "no_of_baggage", "return_direction", "return_flight_date", "return_flight_number", "return_flight_time", "return_pickup_time", "message", "notice", "price", "paid", "meeting_point", "is_confirmed", "cancelled", "private_ride", "created", "driver_id", "company_name" FROM "blog_inquiry"; (params ())
+DEBUG 2024-01-08 20:44:43,438 schema DROP TABLE "blog_inquiry"; (params ())
+DEBUG 2024-01-08 20:44:43,441 schema ALTER TABLE "new__blog_inquiry" RENAME TO "blog_inquiry"; (params ())
+DEBUG 2024-01-08 20:44:43,445 schema CREATE INDEX "blog_inquiry_email_66d7f507" ON "blog_inquiry" ("email"); (params ())
+DEBUG 2024-01-08 20:44:43,447 schema CREATE INDEX "blog_inquiry_driver_id_2afe2222" ON "blog_inquiry" ("driver_id"); (params ())
+DEBUG 2024-01-08 20:44:43,457 schema CREATE TABLE "new__blog_inquiry" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name" varchar(100) NOT NULL, "company_name" varchar(100) NULL, "contact" varchar(50) NOT NULL, "email" varchar(254) NOT NULL, "flight_date" date NOT NULL, "flight_number" varchar(100) NOT NULL, "flight_time" varchar(30) NOT NULL, "pickup_time" varchar(30) NULL, "direction" varchar(100) NOT NULL, "suburb" varchar(100) NOT NULL, "street" varchar(200) NOT NULL, "no_of_passenger" varchar(30) NOT NULL, "no_of_baggage" varchar(200) NOT NULL, "return_direction" varchar(100) NULL, "return_flight_date" date NULL, "return_flight_number" varchar(100) NULL, "return_flight_time" varchar(30) NULL, "return_pickup_time" varchar(30) NULL, "message" text NOT NULL, "notice" text NOT NULL, "price" varchar(30) NOT NULL, "paid" varchar(30) NOT NULL, "meeting_point" varchar(100) NULL, "is_confirmed" bool NOT NULL, "cancelled" bool NOT NULL, "private_ride" bool NOT NULL, "created" datetime NOT NULL, "driver_id" bigint NULL REFERENCES "blog_driver" ("id") DEFERRABLE INITIALLY DEFERRED, "email1" varchar(254) NULL); (params None)
+DEBUG 2024-01-08 20:44:43,458 schema INSERT INTO "new__blog_inquiry" ("id", "name", "company_name", "contact", "email", "flight_date", "flight_number", "flight_time", "pickup_time", "direction", "suburb", "street", "no_of_passenger", "no_of_baggage", "return_direction", "return_flight_date", "return_flight_number", "return_flight_time", "return_pickup_time", "message", "notice", "price", "paid", "meeting_point", "is_confirmed", "cancelled", "private_ride", "created", "driver_id", "email1") SELECT "id", "name", "company_name", "contact", "email", "flight_date", "flight_number", "flight_time", "pickup_time", "direction", "suburb", "street", "no_of_passenger", "no_of_baggage", "return_direction", "return_flight_date", "return_flight_number", "return_flight_time", "return_pickup_time", "message", "notice", "price", "paid", "meeting_point", "is_confirmed", "cancelled", "private_ride", "created", "driver_id", "email1" FROM "blog_inquiry"; (params ())
+DEBUG 2024-01-08 20:44:43,466 schema DROP TABLE "blog_inquiry"; (params ())
+DEBUG 2024-01-08 20:44:43,468 schema ALTER TABLE "new__blog_inquiry" RENAME TO "blog_inquiry"; (params ())
+DEBUG 2024-01-08 20:44:43,471 schema CREATE INDEX "blog_inquiry_email_66d7f507" ON "blog_inquiry" ("email"); (params ())
+DEBUG 2024-01-08 20:44:43,473 schema CREATE INDEX "blog_inquiry_driver_id_2afe2222" ON "blog_inquiry" ("driver_id"); (params ())
+DEBUG 2024-01-08 20:44:43,483 schema CREATE TABLE "new__blog_inquiry" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name" varchar(100) NOT NULL, "company_name" varchar(100) NULL, "contact" varchar(50) NOT NULL, "email" varchar(254) NOT NULL, "email1" varchar(254) NULL, "flight_date" date NOT NULL, "flight_number" varchar(100) NOT NULL, "flight_time" varchar(30) NOT NULL, "pickup_time" varchar(30) NULL, "direction" varchar(100) NOT NULL, "suburb" varchar(100) NOT NULL, "street" varchar(200) NOT NULL, "no_of_passenger" varchar(30) NOT NULL, "no_of_baggage" varchar(200) NOT NULL, "return_direction" varchar(100) NULL, "return_flight_date" date NULL, "return_flight_number" varchar(100) NULL, "return_flight_time" varchar(30) NULL, "return_pickup_time" varchar(30) NULL, "notice" text NOT NULL, "price" varchar(30) NOT NULL, "paid" varchar(30) NOT NULL, "meeting_point" varchar(100) NULL, "is_confirmed" bool NOT NULL, "cancelled" bool NOT NULL, "private_ride" bool NOT NULL, "created" datetime NOT NULL, "driver_id" bigint NULL REFERENCES "blog_driver" ("id") DEFERRABLE INITIALLY DEFERRED, "message" text NULL); (params None)
+DEBUG 2024-01-08 20:44:43,484 schema INSERT INTO "new__blog_inquiry" ("id", "name", "company_name", "contact", "email", "email1", "flight_date", "flight_number", "flight_time", "pickup_time", "direction", "suburb", "street", "no_of_passenger", "no_of_baggage", "return_direction", "return_flight_date", "return_flight_number", "return_flight_time", "return_pickup_time", "notice", "price", "paid", "meeting_point", "is_confirmed", "cancelled", "private_ride", "created", "driver_id", "message") SELECT "id", "name", "company_name", "contact", "email", "email1", "flight_date", "flight_number", "flight_time", "pickup_time", "direction", "suburb", "street", "no_of_passenger", "no_of_baggage", "return_direction", "return_flight_date", "return_flight_number", "return_flight_time", "return_pickup_time", "notice", "price", "paid", "meeting_point", "is_confirmed", "cancelled", "private_ride", "created", "driver_id", "message" FROM "blog_inquiry"; (params ())
+DEBUG 2024-01-08 20:44:43,494 schema DROP TABLE "blog_inquiry"; (params ())
+DEBUG 2024-01-08 20:44:43,496 schema ALTER TABLE "new__blog_inquiry" RENAME TO "blog_inquiry"; (params ())
+DEBUG 2024-01-08 20:44:43,499 schema CREATE INDEX "blog_inquiry_email_66d7f507" ON "blog_inquiry" ("email"); (params ())
+DEBUG 2024-01-08 20:44:43,502 schema CREATE INDEX "blog_inquiry_driver_id_2afe2222" ON "blog_inquiry" ("driver_id"); (params ())
+DEBUG 2024-01-08 20:44:43,512 schema CREATE TABLE "new__blog_inquiry" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name" varchar(100) NOT NULL, "company_name" varchar(100) NULL, "contact" varchar(50) NOT NULL, "email" varchar(254) NOT NULL, "email1" varchar(254) NULL, "flight_date" date NOT NULL, "flight_number" varchar(100) NOT NULL, "flight_time" varchar(30) NOT NULL, "pickup_time" varchar(30) NULL, "direction" varchar(100) NOT NULL, "suburb" varchar(100) NOT NULL, "street" varchar(200) NOT NULL, "no_of_passenger" varchar(30) NOT NULL, "return_direction" varchar(100) NULL, "return_flight_date" date NULL, "return_flight_number" varchar(100) NULL, "return_flight_time" varchar(30) NULL, "return_pickup_time" varchar(30) NULL, "message" text NULL, "notice" text NOT NULL, "price" varchar(30) NOT NULL, "paid" varchar(30) NOT NULL, "meeting_point" varchar(100) NULL, "is_confirmed" bool NOT NULL, "cancelled" bool NOT NULL, "private_ride" bool NOT NULL, "created" datetime NOT NULL, "driver_id" bigint NULL REFERENCES "blog_driver" ("id") DEFERRABLE INITIALLY DEFERRED, "no_of_baggage" varchar(200) NULL); (params None)
+DEBUG 2024-01-08 20:44:43,513 schema INSERT INTO "new__blog_inquiry" ("id", "name", "company_name", "contact", "email", "email1", "flight_date", "flight_number", "flight_time", "pickup_time", "direction", "suburb", "street", "no_of_passenger", "return_direction", "return_flight_date", "return_flight_number", "return_flight_time", "return_pickup_time", "message", "notice", "price", "paid", "meeting_point", "is_confirmed", "cancelled", "private_ride", "created", "driver_id", "no_of_baggage") SELECT "id", "name", "company_name", "contact", "email", "email1", "flight_date", "flight_number", "flight_time", "pickup_time", "direction", "suburb", "street", "no_of_passenger", "return_direction", "return_flight_date", "return_flight_number", "return_flight_time", "return_pickup_time", "message", "notice", "price", "paid", "meeting_point", "is_confirmed", "cancelled", "private_ride", "created", "driver_id", "no_of_baggage" FROM "blog_inquiry"; (params ())
+DEBUG 2024-01-08 20:44:43,524 schema DROP TABLE "blog_inquiry"; (params ())
+DEBUG 2024-01-08 20:44:43,525 schema ALTER TABLE "new__blog_inquiry" RENAME TO "blog_inquiry"; (params ())
+DEBUG 2024-01-08 20:44:43,529 schema CREATE INDEX "blog_inquiry_email_66d7f507" ON "blog_inquiry" ("email"); (params ())
+DEBUG 2024-01-08 20:44:43,531 schema CREATE INDEX "blog_inquiry_driver_id_2afe2222" ON "blog_inquiry" ("driver_id"); (params ())
+DEBUG 2024-01-08 20:44:43,541 schema CREATE TABLE "new__blog_inquiry" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name" varchar(100) NOT NULL, "company_name" varchar(100) NULL, "contact" varchar(50) NOT NULL, "email" varchar(254) NOT NULL, "email1" varchar(254) NULL, "flight_date" date NOT NULL, "flight_number" varchar(100) NOT NULL, "flight_time" varchar(30) NOT NULL, "pickup_time" varchar(30) NULL, "direction" varchar(100) NOT NULL, "suburb" varchar(100) NOT NULL, "street" varchar(200) NOT NULL, "no_of_passenger" varchar(30) NOT NULL, "no_of_baggage" varchar(200) NULL, "return_direction" varchar(100) NULL, "return_flight_date" date NULL, "return_flight_number" varchar(100) NULL, "return_flight_time" varchar(30) NULL, "return_pickup_time" varchar(30) NULL, "message" text NULL, "price" varchar(30) NOT NULL, "paid" varchar(30) NOT NULL, "meeting_point" varchar(100) NULL, "is_confirmed" bool NOT NULL, "cancelled" bool NOT NULL, "private_ride" bool NOT NULL, "created" datetime NOT NULL, "driver_id" bigint NULL REFERENCES "blog_driver" ("id") DEFERRABLE INITIALLY DEFERRED, "notice" varchar(255) NULL); (params None)
+DEBUG 2024-01-08 20:44:43,542 schema INSERT INTO "new__blog_inquiry" ("id", "name", "company_name", "contact", "email", "email1", "flight_date", "flight_number", "flight_time", "pickup_time", "direction", "suburb", "street", "no_of_passenger", "no_of_baggage", "return_direction", "return_flight_date", "return_flight_number", "return_flight_time", "return_pickup_time", "message", "price", "paid", "meeting_point", "is_confirmed", "cancelled", "private_ride", "created", "driver_id", "notice") SELECT "id", "name", "company_name", "contact", "email", "email1", "flight_date", "flight_number", "flight_time", "pickup_time", "direction", "suburb", "street", "no_of_passenger", "no_of_baggage", "return_direction", "return_flight_date", "return_flight_number", "return_flight_time", "return_pickup_time", "message", "price", "paid", "meeting_point", "is_confirmed", "cancelled", "private_ride", "created", "driver_id", "notice" FROM "blog_inquiry"; (params ())
+DEBUG 2024-01-08 20:44:43,549 schema DROP TABLE "blog_inquiry"; (params ())
+DEBUG 2024-01-08 20:44:43,551 schema ALTER TABLE "new__blog_inquiry" RENAME TO "blog_inquiry"; (params ())
+DEBUG 2024-01-08 20:44:43,554 schema CREATE INDEX "blog_inquiry_email_66d7f507" ON "blog_inquiry" ("email"); (params ())
+DEBUG 2024-01-08 20:44:43,556 schema CREATE INDEX "blog_inquiry_driver_id_2afe2222" ON "blog_inquiry" ("driver_id"); (params ())
+DEBUG 2024-01-08 20:44:43,566 schema CREATE TABLE "new__blog_inquiry" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name" varchar(100) NOT NULL, "company_name" varchar(100) NULL, "contact" varchar(50) NOT NULL, "email" varchar(254) NOT NULL, "email1" varchar(254) NULL, "flight_date" date NOT NULL, "flight_number" varchar(100) NOT NULL, "flight_time" varchar(30) NOT NULL, "pickup_time" varchar(30) NULL, "direction" varchar(100) NOT NULL, "suburb" varchar(100) NOT NULL, "street" varchar(200) NOT NULL, "no_of_passenger" varchar(30) NOT NULL, "no_of_baggage" varchar(200) NULL, "return_direction" varchar(100) NULL, "return_flight_date" date NULL, "return_flight_number" varchar(100) NULL, "return_flight_time" varchar(30) NULL, "return_pickup_time" varchar(30) NULL, "message" text NULL, "notice" varchar(255) NULL, "price" varchar(30) NOT NULL, "meeting_point" varchar(100) NULL, "is_confirmed" bool NOT NULL, "cancelled" bool NOT NULL, "private_ride" bool NOT NULL, "created" datetime NOT NULL, "driver_id" bigint NULL REFERENCES "blog_driver" ("id") DEFERRABLE INITIALLY DEFERRED, "paid" varchar(30) NULL); (params None)
+DEBUG 2024-01-08 20:44:43,566 schema INSERT INTO "new__blog_inquiry" ("id", "name", "company_name", "contact", "email", "email1", "flight_date", "flight_number", "flight_time", "pickup_time", "direction", "suburb", "street", "no_of_passenger", "no_of_baggage", "return_direction", "return_flight_date", "return_flight_number", "return_flight_time", "return_pickup_time", "message", "notice", "price", "meeting_point", "is_confirmed", "cancelled", "private_ride", "created", "driver_id", "paid") SELECT "id", "name", "company_name", "contact", "email", "email1", "flight_date", "flight_number", "flight_time", "pickup_time", "direction", "suburb", "street", "no_of_passenger", "no_of_baggage", "return_direction", "return_flight_date", "return_flight_number", "return_flight_time", "return_pickup_time", "message", "notice", "price", "meeting_point", "is_confirmed", "cancelled", "private_ride", "created", "driver_id", "paid" FROM "blog_inquiry"; (params ())
+DEBUG 2024-01-08 20:44:43,574 schema DROP TABLE "blog_inquiry"; (params ())
+DEBUG 2024-01-08 20:44:43,576 schema ALTER TABLE "new__blog_inquiry" RENAME TO "blog_inquiry"; (params ())
+DEBUG 2024-01-08 20:44:43,579 schema CREATE INDEX "blog_inquiry_email_66d7f507" ON "blog_inquiry" ("email"); (params ())
+DEBUG 2024-01-08 20:44:43,581 schema CREATE INDEX "blog_inquiry_driver_id_2afe2222" ON "blog_inquiry" ("driver_id"); (params ())
+DEBUG 2024-01-08 20:44:43,591 schema CREATE TABLE "new__blog_inquiry" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name" varchar(100) NOT NULL, "company_name" varchar(100) NULL, "contact" varchar(50) NOT NULL, "email" varchar(254) NOT NULL, "email1" varchar(254) NULL, "flight_date" date NOT NULL, "flight_number" varchar(100) NOT NULL, "flight_time" varchar(30) NOT NULL, "pickup_time" varchar(30) NULL, "direction" varchar(100) NOT NULL, "suburb" varchar(100) NOT NULL, "street" varchar(200) NOT NULL, "no_of_passenger" varchar(30) NOT NULL, "no_of_baggage" varchar(200) NULL, "return_direction" varchar(100) NULL, "return_flight_date" date NULL, "return_flight_number" varchar(100) NULL, "return_flight_time" varchar(30) NULL, "return_pickup_time" varchar(30) NULL, "message" text NULL, "notice" varchar(255) NULL, "paid" varchar(30) NULL, "meeting_point" varchar(100) NULL, "is_confirmed" bool NOT NULL, "cancelled" bool NOT NULL, "private_ride" bool NOT NULL, "created" datetime NOT NULL, "driver_id" bigint NULL REFERENCES "blog_driver" ("id") DEFERRABLE INITIALLY DEFERRED, "price" varchar(30) NULL); (params None)
+DEBUG 2024-01-08 20:44:43,592 schema INSERT INTO "new__blog_inquiry" ("id", "name", "company_name", "contact", "email", "email1", "flight_date", "flight_number", "flight_time", "pickup_time", "direction", "suburb", "street", "no_of_passenger", "no_of_baggage", "return_direction", "return_flight_date", "return_flight_number", "return_flight_time", "return_pickup_time", "message", "notice", "paid", "meeting_point", "is_confirmed", "cancelled", "private_ride", "created", "driver_id", "price") SELECT "id", "name", "company_name", "contact", "email", "email1", "flight_date", "flight_number", "flight_time", "pickup_time", "direction", "suburb", "street", "no_of_passenger", "no_of_baggage", "return_direction", "return_flight_date", "return_flight_number", "return_flight_time", "return_pickup_time", "message", "notice", "paid", "meeting_point", "is_confirmed", "cancelled", "private_ride", "created", "driver_id", "price" FROM "blog_inquiry"; (params ())
+DEBUG 2024-01-08 20:44:43,599 schema DROP TABLE "blog_inquiry"; (params ())
+DEBUG 2024-01-08 20:44:43,601 schema ALTER TABLE "new__blog_inquiry" RENAME TO "blog_inquiry"; (params ())
+DEBUG 2024-01-08 20:44:43,604 schema CREATE INDEX "blog_inquiry_email_66d7f507" ON "blog_inquiry" ("email"); (params ())
+DEBUG 2024-01-08 20:44:43,607 schema CREATE INDEX "blog_inquiry_driver_id_2afe2222" ON "blog_inquiry" ("driver_id"); (params ())
+DEBUG 2024-01-08 20:44:43,613 schema CREATE TABLE "new__blog_payment" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "item_name" varchar(100) NOT NULL, "payer_email" varchar(254) NOT NULL, "txn_id" varchar(30) NOT NULL, "created" datetime NOT NULL, "gross_amount" varchar(30) NULL); (params None)
+DEBUG 2024-01-08 20:44:43,613 schema INSERT INTO "new__blog_payment" ("id", "item_name", "payer_email", "txn_id", "created", "gross_amount") SELECT "id", "item_name", "payer_email", "txn_id", "created", "gross_amount" FROM "blog_payment"; (params ())
+DEBUG 2024-01-08 20:44:43,614 schema DROP TABLE "blog_payment"; (params ())
+DEBUG 2024-01-08 20:44:43,615 schema ALTER TABLE "new__blog_payment" RENAME TO "blog_payment"; (params ())
+DEBUG 2024-01-08 20:44:43,621 schema CREATE TABLE "new__blog_payment" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "payer_email" varchar(254) NOT NULL, "gross_amount" varchar(30) NULL, "txn_id" varchar(30) NOT NULL, "created" datetime NOT NULL, "item_name" varchar(100) NULL); (params None)
+DEBUG 2024-01-08 20:44:43,621 schema INSERT INTO "new__blog_payment" ("id", "payer_email", "gross_amount", "txn_id", "created", "item_name") SELECT "id", "payer_email", "gross_amount", "txn_id", "created", "item_name" FROM "blog_payment"; (params ())
+DEBUG 2024-01-08 20:44:43,622 schema DROP TABLE "blog_payment"; (params ())
+DEBUG 2024-01-08 20:44:43,622 schema ALTER TABLE "new__blog_payment" RENAME TO "blog_payment"; (params ())
+DEBUG 2024-01-08 20:44:43,629 schema CREATE TABLE "new__blog_payment" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "item_name" varchar(100) NULL, "gross_amount" varchar(30) NULL, "txn_id" varchar(30) NOT NULL, "created" datetime NOT NULL, "payer_email" varchar(254) NULL); (params None)
+DEBUG 2024-01-08 20:44:43,630 schema INSERT INTO "new__blog_payment" ("id", "item_name", "gross_amount", "txn_id", "created", "payer_email") SELECT "id", "item_name", "gross_amount", "txn_id", "created", "payer_email" FROM "blog_payment"; (params ())
+DEBUG 2024-01-08 20:44:43,630 schema DROP TABLE "blog_payment"; (params ())
+DEBUG 2024-01-08 20:44:43,631 schema ALTER TABLE "new__blog_payment" RENAME TO "blog_payment"; (params ())
+DEBUG 2024-01-08 20:44:43,637 schema CREATE TABLE "new__blog_payment" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "item_name" varchar(100) NULL, "payer_email" varchar(254) NULL, "gross_amount" varchar(30) NULL, "created" datetime NOT NULL, "txn_id" varchar(30) NULL); (params None)
+DEBUG 2024-01-08 20:44:43,637 schema INSERT INTO "new__blog_payment" ("id", "item_name", "payer_email", "gross_amount", "created", "txn_id") SELECT "id", "item_name", "payer_email", "gross_amount", "created", "txn_id" FROM "blog_payment"; (params ())
+DEBUG 2024-01-08 20:44:43,638 schema DROP TABLE "blog_payment"; (params ())
+DEBUG 2024-01-08 20:44:43,638 schema ALTER TABLE "new__blog_payment" RENAME TO "blog_payment"; (params ())
+DEBUG 2024-01-08 20:44:43,649 schema CREATE TABLE "new__blog_post" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name" varchar(100) NOT NULL, "contact" varchar(50) NOT NULL, "email" varchar(254) NOT NULL, "email1" varchar(254) NOT NULL, "flight_date" date NOT NULL, "flight_number" varchar(100) NOT NULL, "flight_time" varchar(30) NOT NULL, "pickup_time" varchar(30) NULL, "direction" varchar(100) NOT NULL, "suburb" varchar(100) NOT NULL, "street" varchar(200) NOT NULL, "no_of_passenger" varchar(30) NOT NULL, "no_of_baggage" varchar(200) NOT NULL, "return_direction" varchar(100) NULL, "return_flight_date" date NULL, "return_flight_number" varchar(100) NULL, "return_flight_time" varchar(30) NULL, "return_pickup_time" varchar(30) NULL, "message" text NOT NULL, "notice" text NOT NULL, "price" varchar(30) NOT NULL, "paid" varchar(30) NOT NULL, "meeting_point" varchar(100) NULL, "is_confirmed" bool NOT NULL, "cancelled" bool NOT NULL, "private_ride" bool NOT NULL, "reminder" bool NOT NULL, "calendar_event_id" varchar(255) NULL, "created" datetime NOT NULL, "driver_id" bigint NULL REFERENCES "blog_driver" ("id") DEFERRABLE INITIALLY DEFERRED, "sent_email" bool NOT NULL, "company_name" varchar(100) NULL); (params None)
+DEBUG 2024-01-08 20:44:43,650 schema INSERT INTO "new__blog_post" ("id", "name", "contact", "email", "email1", "flight_date", "flight_number", "flight_time", "pickup_time", "direction", "suburb", "street", "no_of_passenger", "no_of_baggage", "return_direction", "return_flight_date", "return_flight_number", "return_flight_time", "return_pickup_time", "message", "notice", "price", "paid", "meeting_point", "is_confirmed", "cancelled", "private_ride", "reminder", "calendar_event_id", "created", "driver_id", "sent_email", "company_name") SELECT "id", "name", "contact", "email", "email1", "flight_date", "flight_number", "flight_time", "pickup_time", "direction", "suburb", "street", "no_of_passenger", "no_of_baggage", "return_direction", "return_flight_date", "return_flight_number", "return_flight_time", "return_pickup_time", "message", "notice", "price", "paid", "meeting_point", "is_confirmed", "cancelled", "private_ride", "reminder", "calendar_event_id", "created", "driver_id", "sent_email", "company_name" FROM "blog_post"; (params ())
+DEBUG 2024-01-08 20:44:43,654 schema DROP TABLE "blog_post"; (params ())
+DEBUG 2024-01-08 20:44:43,819 schema ALTER TABLE "new__blog_post" RENAME TO "blog_post"; (params ())
+DEBUG 2024-01-08 20:44:43,822 schema CREATE INDEX "blog_post_email_6ca5b4e5" ON "blog_post" ("email"); (params ())
+DEBUG 2024-01-08 20:44:43,823 schema CREATE INDEX "blog_post_driver_id_5941734f" ON "blog_post" ("driver_id"); (params ())
+DEBUG 2024-01-08 20:44:43,832 schema CREATE TABLE "new__blog_post" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name" varchar(100) NOT NULL, "company_name" varchar(100) NULL, "contact" varchar(50) NOT NULL, "email" varchar(254) NOT NULL, "email1" varchar(254) NOT NULL, "flight_date" date NOT NULL, "flight_number" varchar(100) NOT NULL, "flight_time" varchar(30) NOT NULL, "pickup_time" varchar(30) NULL, "direction" varchar(100) NOT NULL, "suburb" varchar(100) NOT NULL, "street" varchar(200) NOT NULL, "no_of_passenger" varchar(30) NOT NULL, "no_of_baggage" varchar(200) NOT NULL, "return_direction" varchar(100) NULL, "return_flight_date" date NULL, "return_flight_number" varchar(100) NULL, "return_flight_time" varchar(30) NULL, "return_pickup_time" varchar(30) NULL, "notice" text NOT NULL, "price" varchar(30) NOT NULL, "paid" varchar(30) NOT NULL, "meeting_point" varchar(100) NULL, "is_confirmed" bool NOT NULL, "cancelled" bool NOT NULL, "private_ride" bool NOT NULL, "reminder" bool NOT NULL, "calendar_event_id" varchar(255) NULL, "created" datetime NOT NULL, "driver_id" bigint NULL REFERENCES "blog_driver" ("id") DEFERRABLE INITIALLY DEFERRED, "sent_email" bool NOT NULL, "message" text NULL); (params None)
+DEBUG 2024-01-08 20:44:43,832 schema INSERT INTO "new__blog_post" ("id", "name", "company_name", "contact", "email", "email1", "flight_date", "flight_number", "flight_time", "pickup_time", "direction", "suburb", "street", "no_of_passenger", "no_of_baggage", "return_direction", "return_flight_date", "return_flight_number", "return_flight_time", "return_pickup_time", "notice", "price", "paid", "meeting_point", "is_confirmed", "cancelled", "private_ride", "reminder", "calendar_event_id", "created", "driver_id", "sent_email", "message") SELECT "id", "name", "company_name", "contact", "email", "email1", "flight_date", "flight_number", "flight_time", "pickup_time", "direction", "suburb", "street", "no_of_passenger", "no_of_baggage", "return_direction", "return_flight_date", "return_flight_number", "return_flight_time", "return_pickup_time", "notice", "price", "paid", "meeting_point", "is_confirmed", "cancelled", "private_ride", "reminder", "calendar_event_id", "created", "driver_id", "sent_email", "message" FROM "blog_post"; (params ())
+DEBUG 2024-01-08 20:44:43,835 schema DROP TABLE "blog_post"; (params ())
+DEBUG 2024-01-08 20:44:43,836 schema ALTER TABLE "new__blog_post" RENAME TO "blog_post"; (params ())
+DEBUG 2024-01-08 20:44:43,839 schema CREATE INDEX "blog_post_email_6ca5b4e5" ON "blog_post" ("email"); (params ())
+DEBUG 2024-01-08 20:44:43,840 schema CREATE INDEX "blog_post_driver_id_5941734f" ON "blog_post" ("driver_id"); (params ())
+DEBUG 2024-01-08 20:44:43,849 schema CREATE TABLE "new__blog_post" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name" varchar(100) NOT NULL, "company_name" varchar(100) NULL, "contact" varchar(50) NOT NULL, "email" varchar(254) NOT NULL, "email1" varchar(254) NOT NULL, "flight_date" date NOT NULL, "flight_number" varchar(100) NOT NULL, "flight_time" varchar(30) NOT NULL, "pickup_time" varchar(30) NULL, "direction" varchar(100) NOT NULL, "suburb" varchar(100) NOT NULL, "street" varchar(200) NOT NULL, "no_of_passenger" varchar(30) NOT NULL, "return_direction" varchar(100) NULL, "return_flight_date" date NULL, "return_flight_number" varchar(100) NULL, "return_flight_time" varchar(30) NULL, "return_pickup_time" varchar(30) NULL, "message" text NULL, "notice" text NOT NULL, "price" varchar(30) NOT NULL, "paid" varchar(30) NOT NULL, "meeting_point" varchar(100) NULL, "is_confirmed" bool NOT NULL, "cancelled" bool NOT NULL, "private_ride" bool NOT NULL, "reminder" bool NOT NULL, "calendar_event_id" varchar(255) NULL, "created" datetime NOT NULL, "driver_id" bigint NULL REFERENCES "blog_driver" ("id") DEFERRABLE INITIALLY DEFERRED, "sent_email" bool NOT NULL, "no_of_baggage" varchar(200) NULL); (params None)
+DEBUG 2024-01-08 20:44:43,849 schema INSERT INTO "new__blog_post" ("id", "name", "company_name", "contact", "email", "email1", "flight_date", "flight_number", "flight_time", "pickup_time", "direction", "suburb", "street", "no_of_passenger", "return_direction", "return_flight_date", "return_flight_number", "return_flight_time", "return_pickup_time", "message", "notice", "price", "paid", "meeting_point", "is_confirmed", "cancelled", "private_ride", "reminder", "calendar_event_id", "created", "driver_id", "sent_email", "no_of_baggage") SELECT "id", "name", "company_name", "contact", "email", "email1", "flight_date", "flight_number", "flight_time", "pickup_time", "direction", "suburb", "street", "no_of_passenger", "return_direction", "return_flight_date", "return_flight_number", "return_flight_time", "return_pickup_time", "message", "notice", "price", "paid", "meeting_point", "is_confirmed", "cancelled", "private_ride", "reminder", "calendar_event_id", "created", "driver_id", "sent_email", "no_of_baggage" FROM "blog_post"; (params ())
+DEBUG 2024-01-08 20:44:43,852 schema DROP TABLE "blog_post"; (params ())
+DEBUG 2024-01-08 20:44:43,853 schema ALTER TABLE "new__blog_post" RENAME TO "blog_post"; (params ())
+DEBUG 2024-01-08 20:44:43,856 schema CREATE INDEX "blog_post_email_6ca5b4e5" ON "blog_post" ("email"); (params ())
+DEBUG 2024-01-08 20:44:43,857 schema CREATE INDEX "blog_post_driver_id_5941734f" ON "blog_post" ("driver_id"); (params ())
+DEBUG 2024-01-08 20:44:43,866 schema CREATE TABLE "new__blog_post" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name" varchar(100) NOT NULL, "company_name" varchar(100) NULL, "contact" varchar(50) NOT NULL, "email" varchar(254) NOT NULL, "email1" varchar(254) NOT NULL, "flight_date" date NOT NULL, "flight_number" varchar(100) NOT NULL, "flight_time" varchar(30) NOT NULL, "pickup_time" varchar(30) NULL, "direction" varchar(100) NOT NULL, "suburb" varchar(100) NOT NULL, "street" varchar(200) NOT NULL, "no_of_passenger" varchar(30) NOT NULL, "no_of_baggage" varchar(200) NULL, "return_direction" varchar(100) NULL, "return_flight_date" date NULL, "return_flight_number" varchar(100) NULL, "return_flight_time" varchar(30) NULL, "return_pickup_time" varchar(30) NULL, "message" text NULL, "price" varchar(30) NOT NULL, "paid" varchar(30) NOT NULL, "meeting_point" varchar(100) NULL, "is_confirmed" bool NOT NULL, "cancelled" bool NOT NULL, "private_ride" bool NOT NULL, "reminder" bool NOT NULL, "calendar_event_id" varchar(255) NULL, "created" datetime NOT NULL, "driver_id" bigint NULL REFERENCES "blog_driver" ("id") DEFERRABLE INITIALLY DEFERRED, "sent_email" bool NOT NULL, "notice" varchar(255) NULL); (params None)
+DEBUG 2024-01-08 20:44:43,867 schema INSERT INTO "new__blog_post" ("id", "name", "company_name", "contact", "email", "email1", "flight_date", "flight_number", "flight_time", "pickup_time", "direction", "suburb", "street", "no_of_passenger", "no_of_baggage", "return_direction", "return_flight_date", "return_flight_number", "return_flight_time", "return_pickup_time", "message", "price", "paid", "meeting_point", "is_confirmed", "cancelled", "private_ride", "reminder", "calendar_event_id", "created", "driver_id", "sent_email", "notice") SELECT "id", "name", "company_name", "contact", "email", "email1", "flight_date", "flight_number", "flight_time", "pickup_time", "direction", "suburb", "street", "no_of_passenger", "no_of_baggage", "return_direction", "return_flight_date", "return_flight_number", "return_flight_time", "return_pickup_time", "message", "price", "paid", "meeting_point", "is_confirmed", "cancelled", "private_ride", "reminder", "calendar_event_id", "created", "driver_id", "sent_email", "notice" FROM "blog_post"; (params ())
+DEBUG 2024-01-08 20:44:43,871 schema DROP TABLE "blog_post"; (params ())
+DEBUG 2024-01-08 20:44:43,872 schema ALTER TABLE "new__blog_post" RENAME TO "blog_post"; (params ())
+DEBUG 2024-01-08 20:44:43,875 schema CREATE INDEX "blog_post_email_6ca5b4e5" ON "blog_post" ("email"); (params ())
+DEBUG 2024-01-08 20:44:43,876 schema CREATE INDEX "blog_post_driver_id_5941734f" ON "blog_post" ("driver_id"); (params ())
+DEBUG 2024-01-08 20:44:43,886 schema CREATE TABLE "new__blog_post" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name" varchar(100) NOT NULL, "company_name" varchar(100) NULL, "contact" varchar(50) NOT NULL, "email" varchar(254) NOT NULL, "email1" varchar(254) NOT NULL, "flight_date" date NOT NULL, "flight_number" varchar(100) NOT NULL, "flight_time" varchar(30) NOT NULL, "pickup_time" varchar(30) NULL, "direction" varchar(100) NOT NULL, "suburb" varchar(100) NOT NULL, "street" varchar(200) NOT NULL, "no_of_passenger" varchar(30) NOT NULL, "no_of_baggage" varchar(200) NULL, "return_direction" varchar(100) NULL, "return_flight_date" date NULL, "return_flight_number" varchar(100) NULL, "return_flight_time" varchar(30) NULL, "return_pickup_time" varchar(30) NULL, "message" text NULL, "notice" varchar(255) NULL, "price" varchar(30) NOT NULL, "meeting_point" varchar(100) NULL, "is_confirmed" bool NOT NULL, "cancelled" bool NOT NULL, "private_ride" bool NOT NULL, "reminder" bool NOT NULL, "calendar_event_id" varchar(255) NULL, "created" datetime NOT NULL, "driver_id" bigint NULL REFERENCES "blog_driver" ("id") DEFERRABLE INITIALLY DEFERRED, "sent_email" bool NOT NULL, "paid" varchar(30) NULL); (params None)
+DEBUG 2024-01-08 20:44:43,887 schema INSERT INTO "new__blog_post" ("id", "name", "company_name", "contact", "email", "email1", "flight_date", "flight_number", "flight_time", "pickup_time", "direction", "suburb", "street", "no_of_passenger", "no_of_baggage", "return_direction", "return_flight_date", "return_flight_number", "return_flight_time", "return_pickup_time", "message", "notice", "price", "meeting_point", "is_confirmed", "cancelled", "private_ride", "reminder", "calendar_event_id", "created", "driver_id", "sent_email", "paid") SELECT "id", "name", "company_name", "contact", "email", "email1", "flight_date", "flight_number", "flight_time", "pickup_time", "direction", "suburb", "street", "no_of_passenger", "no_of_baggage", "return_direction", "return_flight_date", "return_flight_number", "return_flight_time", "return_pickup_time", "message", "notice", "price", "meeting_point", "is_confirmed", "cancelled", "private_ride", "reminder", "calendar_event_id", "created", "driver_id", "sent_email", "paid" FROM "blog_post"; (params ())
+DEBUG 2024-01-08 20:44:43,890 schema DROP TABLE "blog_post"; (params ())
+DEBUG 2024-01-08 20:44:43,890 schema ALTER TABLE "new__blog_post" RENAME TO "blog_post"; (params ())
+DEBUG 2024-01-08 20:44:43,892 schema CREATE INDEX "blog_post_email_6ca5b4e5" ON "blog_post" ("email"); (params ())
+DEBUG 2024-01-08 20:44:43,893 schema CREATE INDEX "blog_post_driver_id_5941734f" ON "blog_post" ("driver_id"); (params ())
+DEBUG 2024-01-08 20:44:43,900 schema CREATE TABLE "new__blog_post" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name" varchar(100) NOT NULL, "company_name" varchar(100) NULL, "contact" varchar(50) NOT NULL, "email" varchar(254) NOT NULL, "email1" varchar(254) NOT NULL, "flight_date" date NOT NULL, "flight_number" varchar(100) NOT NULL, "flight_time" varchar(30) NOT NULL, "pickup_time" varchar(30) NULL, "direction" varchar(100) NOT NULL, "suburb" varchar(100) NOT NULL, "street" varchar(200) NOT NULL, "no_of_passenger" varchar(30) NOT NULL, "no_of_baggage" varchar(200) NULL, "return_direction" varchar(100) NULL, "return_flight_date" date NULL, "return_flight_number" varchar(100) NULL, "return_flight_time" varchar(30) NULL, "return_pickup_time" varchar(30) NULL, "message" text NULL, "notice" varchar(255) NULL, "paid" varchar(30) NULL, "meeting_point" varchar(100) NULL, "is_confirmed" bool NOT NULL, "cancelled" bool NOT NULL, "private_ride" bool NOT NULL, "reminder" bool NOT NULL, "calendar_event_id" varchar(255) NULL, "created" datetime NOT NULL, "driver_id" bigint NULL REFERENCES "blog_driver" ("id") DEFERRABLE INITIALLY DEFERRED, "sent_email" bool NOT NULL, "price" varchar(30) NULL); (params None)
+DEBUG 2024-01-08 20:44:43,900 schema INSERT INTO "new__blog_post" ("id", "name", "company_name", "contact", "email", "email1", "flight_date", "flight_number", "flight_time", "pickup_time", "direction", "suburb", "street", "no_of_passenger", "no_of_baggage", "return_direction", "return_flight_date", "return_flight_number", "return_flight_time", "return_pickup_time", "message", "notice", "paid", "meeting_point", "is_confirmed", "cancelled", "private_ride", "reminder", "calendar_event_id", "created", "driver_id", "sent_email", "price") SELECT "id", "name", "company_name", "contact", "email", "email1", "flight_date", "flight_number", "flight_time", "pickup_time", "direction", "suburb", "street", "no_of_passenger", "no_of_baggage", "return_direction", "return_flight_date", "return_flight_number", "return_flight_time", "return_pickup_time", "message", "notice", "paid", "meeting_point", "is_confirmed", "cancelled", "private_ride", "reminder", "calendar_event_id", "created", "driver_id", "sent_email", "price" FROM "blog_post"; (params ())
+DEBUG 2024-01-08 20:44:43,903 schema DROP TABLE "blog_post"; (params ())
+DEBUG 2024-01-08 20:44:43,903 schema ALTER TABLE "new__blog_post" RENAME TO "blog_post"; (params ())
+DEBUG 2024-01-08 20:44:43,905 schema CREATE INDEX "blog_post_email_6ca5b4e5" ON "blog_post" ("email"); (params ())
+DEBUG 2024-01-08 20:44:43,906 schema CREATE INDEX "blog_post_driver_id_5941734f" ON "blog_post" ("driver_id"); (params ())
