@@ -3,10 +3,10 @@ from django.conf import settings
 from main.settings import RECIPIENT_EMAIL
 from django.shortcuts import render, redirect
 from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
 from blog.models import Post, Inquiry, Payment, Driver
 from basecamp.models import Inquiry_point
 from blog.tasks import send_confirm_email
-from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from datetime import date, datetime, timedelta
