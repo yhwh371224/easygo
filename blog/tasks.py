@@ -69,7 +69,13 @@ def create_event_on_calendar(instance_id):
     reminder_str = f'!' if instance.reminder else ''
     title = " ".join([reminder_str, instance.pickup_time, instance.flight_number, instance.flight_time, 'p'+str(instance.no_of_passenger), paid_str, '$'+instance.price, instance.contact])
     address = " ".join([instance.street, instance.suburb])            
-    message = " ".join([instance.name, instance.email, 'b'+instance.no_of_baggage, 'm:'+instance.message, 'n:'+instance.notice, "d:"+str(instance.return_flight_date), '$'+instance.paid])            
+    message_parts = [instance.name, instance.email, 
+                     'b'+str(instance.no_of_baggage) if instance.no_of_baggage is not None else '', 
+                     'm:'+instance.message if instance.message is not None else '', 
+                     'n:'+instance.notice if instance.notice is not None else '', 
+                     "d:"+str(instance.return_flight_date), 
+                     '$'+str(instance.paid) if instance.paid is not None else '']
+    message = " ".join(filter(None, message_parts))            
     flight_date = datetime.datetime.strptime(str(instance.flight_date), '%Y-%m-%d')
 
     if instance.pickup_time:
