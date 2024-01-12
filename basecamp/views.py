@@ -428,13 +428,10 @@ def inquiry_details(request):
         p.save()
 
         today = date.today()
-        print("today:", today)
-        print("flight_date:", flight_date)
-
-        if flight_date <= str(today):
-            if request.is_ajax():
-                return JsonResponse({'success': False, 'message': 'Past/Today flight dates are not allowed.'})
-            else:
+        if flight_date <= str(today):            
+            if is_ajax(request):                
+                return render(request, 'basecamp/date_error.html')
+            else:                
                 return render(request, 'basecamp/date_error.html')   
 
         if is_ajax(request):
@@ -633,10 +630,10 @@ def booking_form_detail(request):
 
 
         today = date.today()
-        if flight_date <= str(today):
-            if request.is_ajax():
-                return JsonResponse({'success': False, 'message': 'Past/Today flight dates are not allowed.'})
-            else:
+        if flight_date <= str(today):            
+            if is_ajax(request):                
+                return render(request, 'basecamp/date_error.html')
+            else:                
                 return render(request, 'basecamp/date_error.html')  
 
         if is_ajax(request):
@@ -673,8 +670,8 @@ def inquiry_details2(request):
         
         today = date.today()
         if flight_date != str(today):
-            if request.is_ajax():
-                return JsonResponse({'success': True, 'message': 'Past/Today flight dates are not allowed.'})
+            if is_ajax(request):
+                return render(request, 'basecamp/date_error.html')
             else:
                 return render(request, 'basecamp/date_error.html')
                      
@@ -788,8 +785,8 @@ def p2p_single_detail(request):
 
         today = date.today()
         if flight_date <= str(today):
-            if request.is_ajax():
-                return JsonResponse({'success': False, 'message': 'Past/Today flight dates are not allowed.'})
+            if is_ajax(request):
+                return render(request, 'basecamp/date_error.html')
             else:
                 return render(request, 'basecamp/date_error.html')  
         
