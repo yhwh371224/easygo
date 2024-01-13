@@ -1,0 +1,45 @@
+WARNING 2024-01-13 18:34:45,071 log Not Found: /inquiry3/
+WARNING 2024-01-13 18:42:16,742 log Not Found: /robots.txt
+WARNING 2024-01-13 18:45:46,800 log Not Found: /shop/nl/product-category/moncler-jassen-heren-nl/
+WARNING 2024-01-13 19:15:00,684 log Not Found: /.env
+WARNING 2024-01-13 19:15:01,519 log Forbidden (Referer checking failed - no Referer.): /
+WARNING 2024-01-13 19:24:38,259 log Not Found: /shop/da/product/moncler-bady-3/
+WARNING 2024-01-13 19:47:24,232 log Not Found: /.well-known/traffic-advice
+WARNING 2024-01-13 19:49:44,960 log Not Found: /static/basecamp/images/vehicle.jpg
+WARNING 2024-01-13 20:44:39,080 log Not Found: /vpn/index.html
+WARNING 2024-01-13 20:44:43,234 log Not Found: /logon/LogonPoint/index.html
+WARNING 2024-01-13 20:44:44,065 log Not Found: /logon/LogonPoint/custom.html
+WARNING 2024-01-13 20:46:12,618 log Not Found: /vpn/index.html
+WARNING 2024-01-13 20:46:17,318 log Not Found: /logon/LogonPoint/index.html
+WARNING 2024-01-13 20:46:18,151 log Not Found: /logon/LogonPoint/custom.html
+DEBUG 2024-01-13 20:51:44,873 base Exception while resolving variable 'recaptcha_site_key' in template 'basecamp/inquiry1.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'recaptcha_site_key'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [recaptcha_site_key] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: 'pZGcnYFzD3FBt6MtrUO2hFFOW2ANgP2NI4AndbexTMCopylzwgLyDez4MAxrxH0P'>, 'request': <WSGIRequest: POST '/price_detail/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f93e2e09c60>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7f93e2e09c60>>), 'messages': <FallbackStorage: request=<WSGIRequest: POST '/price_detail/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'flight_date': '2024-01-16', 'direction': 'Pickup from Intl Airport', 'suburb': 'Turramurra', 'no_of_passenger': '5'}, {'block': <Block Node: content. Contents: [<TextNode: '\n      <!-- Page content-'>, <Variable Node: flight_date>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: direction>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: suburb>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: no_of_passenger>, <TextNode: '</a> -->\n\t\t\t  <br><br>\n  '>, <django.template.defaulttags.CsrfTokenNode object at 0x7f93e2beb6d0>, <TextNode: '\n\t\t\t\t<div class="mb3 pb-1'>, <Variable Node: direction>, <TextNode: '">'>, <Variable Node: direction>, <TextNode: '</option>\t\t\t\t\t\t          '>, <Variable Node: flight_date>, <TextNode: '" type="text" >\t\t\t\t  \n   '>, <IfNode>, <TextNode: '\n\t\t\t\t  <div class="mb-3 p'>, <Variable Node: suburb>, <TextNode: '</label>\t\t\t\t\t\n\t\t\t\t</div>\n'>, <Variable Node: suburb>, <TextNode: '">'>, <Variable Node: suburb>, <TextNode: '</option>\t\t\t\t\t\n\t\t\t\t  </se'>, <Variable Node: no_of_passenger>, <TextNode: '">'>, <Variable Node: no_of_passenger>, <TextNode: '</option>\t\t\t\t  \n         '>, <Variable Node: recaptcha_site_key>, <TextNode: '"></div>\n\t\t\t\t<div id="err'>]>}]
