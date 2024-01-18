@@ -40,38 +40,32 @@ class Command(BaseCommand):
         self.send_email_5()
         self.send_email_6()
 
-    def send_email_1(self):
-        # pass 
+    def send_email_1(self): 
         tomorrow_reminder = date.today() + timedelta(days=1)
         tomorrow_reminders = Post.objects.filter(flight_date=tomorrow_reminder)
         self.send_email_task(tomorrow_reminders, "basecamp/html_email-tomorrow.html", "Reminder-tomorrow")
 
     def send_email_2(self):
-        # pass
         upcoming3_reminder = date.today() + timedelta(days=3)
         upcoming3_reminders = Post.objects.filter(flight_date=upcoming3_reminder)
         self.send_email_task(upcoming3_reminders, "basecamp/html_email-upcoming3.html", "Reminder-3days")
 
     def send_email_3(self):
-        # pass
         upcoming7_reminder = date.today() + timedelta(days=7)
         upcoming7_reminders = Post.objects.filter(flight_date=upcoming7_reminder)
         self.send_email_task(upcoming7_reminders, "basecamp/html_email-upcoming7.html", "Reminder-7days")
 
     def send_email_4(self):
-        # pass
         upcoming14_reminder = date.today() + timedelta(days=14)
         upcoming14_reminders = Post.objects.filter(flight_date=upcoming14_reminder)
         self.send_email_task(upcoming14_reminders, "basecamp/html_email-upcoming14.html", "Reminder-2wks")
 
     def send_email_5(self):
-        # pass
         today_reminder = date.today()
         today_reminders = Post.objects.filter(flight_date=today_reminder)
         self.send_email_task(today_reminders, "basecamp/html_email-today.html", "Reminder-Today")
 
     def send_email_6(self):
-        # pass
         yesterday_reminder = date.today() + timedelta(days=-1)
         yesterday_reminders = Post.objects.filter(flight_date=yesterday_reminder)
         self.send_email_task(yesterday_reminders, "basecamp/html_email-yesterday.html", "Review-EasyGo")
