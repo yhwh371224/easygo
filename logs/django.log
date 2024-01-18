@@ -704,3 +704,4 @@ WARNING 2024-01-18 16:33:11,684 log Forbidden (Referer checking failed - no Refe
 WARNING 2024-01-18 16:33:21,592 log Not Found: /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php
 WARNING 2024-01-18 16:46:11,194 log Not Found: /robots.txt
 WARNING 2024-01-18 16:55:45,529 log Not Found: /inquiry3/
+WARNING 2024-01-18 17:11:28,080 log Not Found: /api/v1/configuration/users/user-roles/user-role/rest-userrole1/web/web-bookmarks/bookmark
