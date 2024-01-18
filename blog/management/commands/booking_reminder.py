@@ -37,7 +37,7 @@ class Command(BaseCommand):
         self.send_email_2()
         self.send_email_3()
         self.send_email_4()
-        self.send_email_5()
+        # self.send_email_5()
         self.send_email_6()
 
     def send_email_1(self):
@@ -64,11 +64,11 @@ class Command(BaseCommand):
         upcoming14_reminders = Post.objects.filter(flight_date=upcoming14_reminder)
         self.send_email_task(upcoming14_reminders, "basecamp/html_email-upcoming14.html", "Reminder-2wks")
 
-    def send_email_5(self):
-        # pass
-        today_reminder = date.today()
-        today_reminders = Post.objects.filter(flight_date=today_reminder)
-        self.send_email_task(today_reminders, "basecamp/html_email-today.html", "Reminder-Today")
+    # def send_email_5(self):
+    #     # pass
+    #     today_reminder = date.today()
+    #     today_reminders = Post.objects.filter(flight_date=today_reminder)
+    #     self.send_email_task(today_reminders, "basecamp/html_email-today.html", "Reminder-Today")
 
     def send_email_6(self):
         # pass
@@ -81,7 +81,7 @@ class Command(BaseCommand):
         
         for reminder in reminders:
 
-            if reminder.cancelled or reminder.reminder:
+            if reminder.cancelled:
                 continue 
 
             else:
