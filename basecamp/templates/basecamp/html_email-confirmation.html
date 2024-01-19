@@ -256,7 +256,7 @@
                                                     Number of Passenger: {{ no_of_passenger }}<br>
 													Number of baggage: {{ no_of_baggage }}<br>
                                                     Message: <br>
-													{{ message }}<br><br> 
+													{{ message }}<br>
 												{% if return_direction == 'Point to Point' and return_pickup_time %}													
 													<span style="font-weight:bold; color: #bdb1a6">Return trip date:  {{ return_flight_date }}</span><br>													
 													<span style="font-weight:bold; color: #bdb1a6">Return start point:  {{ return_flight_number }}</span><br>
@@ -284,24 +284,24 @@
 													--- Payment ---</p> 																								
 													<p style="Margin:0;font-size:12px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                  
                                                     You have paid ${{ price }}, which we have received and greatly appreciate.
-												<br><br></p>												
+												<br><br></p><br>												
 												{% elif return_pickup_time %}												
 												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
 													--- Payment ---</p>
 												<p style="Margin:0;font-size:12px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;"> 
 													Please pay online ${{ price }} via PayPal in advance <a href="https://easygoshuttle.com.au/payonline/">easygoshuttle.com.au/payonline</a><br>
-													if you don't pay online, you will need to pay cash to your driver on the booking day<br><br>													
+													if you don't pay online, you will need to pay cash to your driver on the booking day<br>													
 													For those arriving in Sydney, payment in advance is kindly requested<br> 
-													<span style="font-weight:bold; color: #d39383">This price is for a return trip</span><br>													
-												</p>
+													<span style="font-weight:bold; color: #d39383">This price is for both trips</span><br>												
+												</p><br>
 												{% else %}
 												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
 													--- Payment ---</p>
 												<p style="Margin:0;font-size:12px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                  
                                                     Please pay online ${{ price }} via PayPal in advance <a href="https://easygoshuttle.com.au/payonline/">easygoshuttle.com.au/payonline</a><br>
-													if you don't pay online, you will need to pay cash to your driver on the booking day<br><br>													
-													For those arriving in Sydney, payment in advance is kindly requested<br> 														
-												</p>
+													if you don't pay online, you will need to pay cash to your driver on the booking day<br>													
+													For those arriving in Sydney, payment in advance is kindly requested<br>														
+												</p><br>
 												{% endif %}
 												{% if not return_pickup_time %}
 												<!-- For return trip -->						
@@ -313,13 +313,11 @@
 												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
 												Note: <span style="font-weight:bold; color: #d39383">{{ notice }}</span><br><br></p>
 												{% endif %}
-													We will send you a reminder email closer to the date of your booking.<br><br></p>											
-												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">                                                  
-                                                    Thank you again for booking with us. We look forward to seeing you on time													
-													<br><br></p>   
+												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
+													We will send you a reminder email closer to the date of your booking.<br>                                                  
+                                                    Thank you again for booking with us. We look forward to seeing you on time<br><br></p>   
 												<p style="Margin:0;font-size:13px;font-weight:bold;line-height:22px;Margin-bottom:12px;">
                                                     Best regards<br>
-													Peter<br>
 													<span style="color: #eb7828">Easy</span><span style="color: blue">Go&nbsp;</span>Airport Shuttle<br>	                                                          
                                                 </p>															
 											</td>
