@@ -1,42 +1,20 @@
-from .models import Post
-from celery import shared_task
-from django.core.mail import send_mail
-from django.core.mail import EmailMultiAlternatives
-from django.template.loader import render_to_string
-from django.utils.html import strip_tags
-from main.settings import RECIPIENT_EMAIL
-from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
+import datetime
+import os
+
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
-import os
-import logging
-import datetime 
-
+from django.core.mail import send_mail, EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from celery import shared_task
+from main.settings import RECIPIENT_EMAIL
+from .models import Post
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-logs_dir = os.path.join(BASE_DIR, 'logs')
-if not os.path.exists(logs_dir):
-    os.makedirs(logs_dir)
 
-formatter = logging.Formatter('%(asctime)s:%(message)s')
-
-def configure_logger(name, filename):
-    logger = logging.getLogger(name)
-    logger.setLevel(logging.INFO)
-
-    file_handler = logging.FileHandler(os.path.join(logs_dir, filename))
-    file_handler.setFormatter(formatter)
-
-    logger.addHandler(file_handler)
-
-    return logger
-
-
-calendar_logger = configure_logger('blog.calendar', 'calendar.log')
 @shared_task
 def create_event_on_calendar(instance_id):
     # Fetch the Post instance
@@ -105,27 +83,16 @@ def create_event_on_calendar(instance_id):
     }    
 
     # Check if an event already exists for this instance
-    if instance.calendar_event_id:            
-        try:            
+    if instance.calendar_event_id:                       
             event = service.events().update(calendarId='primary', eventId=instance.calendar_event_id, body=event).execute()
-            calendar_logger.info('Event updated: %s', event.get('htmlLink'))
-
-        except HttpError as error:
-            calendar_logger.error('An error occurred while updating/deleting the event: %s', error)
 
     else:
-        try:
-            event = service.events().insert(calendarId='primary', body=event).execute()
-            instance.calendar_event_id = event['id'] 
-            instance.save()
-            calendar_logger.info('Event created: %s', event.get('htmlLink'))
-
-        except HttpError as error:
-            calendar_logger.error('An error occurred while creating the event: %s', error)
+        event = service.events().insert(calendarId='primary', body=event).execute()
+        instance.calendar_event_id = event['id'] 
+        instance.save()
 
 
 # Clicked confirm_booking form 
-logger_confirm_email = configure_logger('blog.confirm_email', 'confirm_email.log')
 @shared_task
 def send_confirm_email(name, email, flight_date, return_flight_number):
     content = f'''
@@ -143,12 +110,9 @@ def send_confirm_email(name, email, flight_date, return_flight_number):
     EasyGo Admin \n\n        
     '''
     send_mail(flight_date, content, '', [RECIPIENT_EMAIL])
-    logger_confirm_email.info(f'Successfully confirmation email sent to {name}')
     
 
 # Inquiry response email 
-logger_inquiry_response = configure_logger('blog.inquiry_response', 'inquiry_response.log')
-@shared_task
 def send_inquiry_confirmed_email(instance_data):
     company_name = instance_data.get('company_name', '')
     name = instance_data.get('name', '')
@@ -193,8 +157,6 @@ def send_inquiry_confirmed_email(instance_data):
     )
     email.attach_alternative(html_content, "text/html")
     email.send()
-
-    logger_inquiry_response.info(f'Inquiry response email sent for {name} on {flight_date}.')
 
 
 @shared_task
@@ -242,7 +204,5 @@ def send_inquiry_cancelled_email(instance_data):
     )
     email.attach_alternative(html_content, "text/html")
     email.send()
-
-    logger_inquiry_response.info(f'Inquiry cancelled email sent for {name} on {flight_date}.')
 
 

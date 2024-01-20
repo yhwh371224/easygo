@@ -1,15 +1,18 @@
 from __future__ import print_function
+
+import re
+
+from django.core.mail import EmailMultiAlternatives
+from django.db.models import Q
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 from main.settings import RECIPIENT_EMAIL
 from .models import Post, Inquiry, Payment
 from .tasks import create_event_on_calendar, send_inquiry_confirmed_email, send_inquiry_cancelled_email
 from basecamp.models import Inquiry_point
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
-from django.db.models import Q
-import re
 
 
 # Flight return booking
