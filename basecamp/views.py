@@ -1,22 +1,22 @@
-from django.contrib.auth.decorators import login_required
-from django.conf import settings
-from main.settings import RECIPIENT_EMAIL
-from django.shortcuts import render, redirect
-from django.core.mail import send_mail
-from django.core.mail import EmailMultiAlternatives
-from blog.models import Post, Inquiry, Payment, Driver
-from basecamp.models import Inquiry_point
-from blog.tasks import send_confirm_email
-from django.template.loader import render_to_string
-from django.utils.html import strip_tags
 from datetime import date, datetime, timedelta
-#paypal ipn
-from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponse
+
 import logging
 import requests
+
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail, EmailMultiAlternatives
 from django.db.models import Q
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import render, redirect
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from django.views.decorators.csrf import csrf_exempt
+
+from main.settings import RECIPIENT_EMAIL
+from basecamp.models import Inquiry_point
+from blog.models import Post, Inquiry, Payment, Driver
+from blog.tasks import send_confirm_email
 
 
 logger = logging.getLogger(__name__)

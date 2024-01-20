@@ -1,7 +1,7 @@
 from django.contrib import admin
-from .models import Post, Inquiry, Payment, Driver
-from rangefilter.filters import DateRangeFilter
 from django.contrib.admin import AdminSite
+from rangefilter.filters import DateRangeFilter
+from .models import Post, Inquiry, Payment, Driver
 
 
 class PostAdmin(admin.ModelAdmin):
