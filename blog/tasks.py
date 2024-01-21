@@ -113,6 +113,7 @@ def send_confirm_email(name, email, flight_date, return_flight_number):
     
 
 # Inquiry response email 
+@shared_task
 def send_inquiry_confirmed_email(instance_data):
     company_name = instance_data.get('company_name', '')
     name = instance_data.get('name', '')
