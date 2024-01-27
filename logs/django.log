@@ -18,3 +18,5 @@ WARNING 2024-01-27 16:08:01,914 log Not Found: /robots.txt
 WARNING 2024-01-27 16:18:07,558 log Not Found: /webvpn.html
 WARNING 2024-01-27 16:47:52,193 log Not Found: /contact/
 WARNING 2024-01-27 17:43:47,696 log Not Found: /.env
+WARNING 2024-01-27 17:51:18,005 log Not Found: /actuator/gateway/routes
+WARNING 2024-01-27 17:57:50,366 log Not Found: /api/v1/cav/client/status/../../admin/options
