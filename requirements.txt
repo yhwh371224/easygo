@@ -57,6 +57,7 @@ jmespath==1.0.1
 kombu==5.3.4
 lxml==4.9.3
 multidict==6.0.4
+mysqlclient==2.2.1
 oauthlib==3.2.2
 packaging==23.2
 paypalrestsdk==1.13.3
