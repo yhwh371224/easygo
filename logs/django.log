@@ -1,10 +1,319 @@
-WARNING 2024-02-03 18:06:58,992 log Not Found: /robots.txt
-WARNING 2024-02-03 18:12:57,636 log Not Found: /wp-content/plugins/wp-gdpr-compliance/Assets/js/front.min.js.LICENSE.txt
-WARNING 2024-02-03 18:17:21,561 log Not Found: /robots.txt
-WARNING 2024-02-03 18:28:04,853 log Not Found: /robots.txt
-WARNING 2024-02-03 18:35:38,397 log Not Found: /.git/config
-WARNING 2024-02-03 18:53:22,968 log Not Found: /.well-known/apple-app-site-association
-DEBUG 2024-02-03 18:54:45,149 base Exception while resolving variable 'recaptcha_site_key' in template 'basecamp/p2p.html'.
+WARNING 2024-02-04 12:51:38,500 log Not Found: /pay-online/
+WARNING 2024-02-04 13:26:55,624 log Not Found: /robots.txt
+WARNING 2024-02-04 13:34:09,589 log Not Found: /robots.txt
+DEBUG 2024-02-04 13:34:10,796 base Exception while resolving variable 'subtitle' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [subtitle] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7fd87836ce00>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87819be20>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87819be20>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7fd877842e10>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}, {'block': <Block Node: title. Contents: [<IfNode>, <Variable Node: title>, <TextNode: ' | '>, <Variable Node: site_title|default:_('Django site admin')>]>}]
+DEBUG 2024-02-04 13:34:10,798 base Exception while resolving variable 'site_title' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'site_title'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'site_title'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'site_title'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [site_title] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7fd87836ce00>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87819be20>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87819be20>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7fd877842e10>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}, {'block': <Block Node: title. Contents: [<IfNode>, <Variable Node: title>, <TextNode: ' | '>, <Variable Node: site_title|default:_('Django site admin')>]>}]
+DEBUG 2024-02-04 13:34:10,798 base Exception while resolving variable 'is_popup' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_popup] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7fd87836ce00>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87819be20>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87819be20>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7fd877842e10>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2024-02-04 13:34:10,799 base Exception while resolving variable 'is_nav_sidebar_enabled' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_nav_sidebar_enabled] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7fd87836ce00>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87819be20>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87819be20>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7fd877842e10>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2024-02-04 13:34:10,799 base Exception while resolving variable 'is_popup' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_popup] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7fd87836ce00>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87819be20>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87819be20>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7fd877842e10>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2024-02-04 13:34:10,800 base Exception while resolving variable 'is_popup' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_popup] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7fd87836ce00>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87819be20>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87819be20>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7fd877842e10>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2024-02-04 13:34:10,800 base Exception while resolving variable 'site_header' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'site_header'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'site_header'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'site_header'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [site_header] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7fd87836ce00>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87819be20>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87819be20>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7fd877842e10>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}, {'block': <Block Node: header. Contents: [<TextNode: '\n    <div id="header">\n  '>, <Block Node: branding. Contents: []>, <TextNode: '\n        </div>\n        '>, <Block Node: usertools. Contents: [<TextNode: '\n        '>, <IfNode>, <TextNode: '\n        '>]>, <TextNode: '\n        '>, <Block Node: nav-global. Contents: []>, <TextNode: '\n    </div>\n    '>]>}, {'block': <Block Node: branding. Contents: [<TextNode: '\n<h1 id="site-name"><a hr'>, <URLNode view_name=''admin_honeypot:index'' args=[] kwargs={} as=None>, <TextNode: '">'>, <Variable Node: site_header|default:_('Django administration')>, <TextNode: '</a></h1>\n'>]>}]
+DEBUG 2024-02-04 13:34:10,801 base Exception while resolving variable 'is_popup' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_popup] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7fd87836ce00>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87819be20>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87819be20>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7fd877842e10>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2024-02-04 13:34:10,801 base Exception while resolving variable 'is_nav_sidebar_enabled' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_nav_sidebar_enabled] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7fd87836ce00>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87819be20>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87819be20>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7fd877842e10>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2024-02-04 13:34:10,802 base Exception while resolving variable 'subtitle' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [subtitle] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7fd87836ce00>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87819be20>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87819be20>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7fd877842e10>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}, {'block': <Block Node: content_subtitle. Contents: [<IfNode>]>}]
+WARNING 2024-02-04 13:36:20,074 log Not Found: /robots.txt
+WARNING 2024-02-04 14:13:03,460 log Not Found: /robots.txt
+DEBUG 2024-02-04 14:24:31,842 base Exception while resolving variable 'recaptcha_site_key' in template 'basecamp/inquiry1.html'.
 Traceback (most recent call last):
   File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
     current = current[bit]
@@ -34,13 +343,984 @@ During handling of the above exception, another exception occurred:
 Traceback (most recent call last):
   File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
     raise VariableDoesNotExist(
-django.template.base.VariableDoesNotExist: Failed lookup for key [recaptcha_site_key] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: 'OOdckDlcirbsVWxPXi6vTXT7dVLOqiZDFd4ZSOO5EbWpfMjgnZd1alm4TO9FyMkG'>, 'request': <WSGIRequest: GET '/p2p_detail/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fabb1fab380>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fabb1fab380>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/p2p_detail/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'block': <Block Node: content. Contents: [<TextNode: '\n      <!-- Page content-'>, <django.template.defaulttags.CsrfTokenNode object at 0x7fabb1ea5f10>, <TextNode: '\n                <div cla'>, <Variable Node: recaptcha_site_key>, <TextNode: '"></div>\n        <div id='>]>}]
-WARNING 2024-02-03 18:57:23,544 log Not Found: /apple-app-site-association
-WARNING 2024-02-03 19:11:22,695 log Not Found: /wp-content/plugins/WordPressCore/include.php
-WARNING 2024-02-03 19:11:37,871 log Not Found: /wp-content/plugins/include.php
-WARNING 2024-02-03 19:11:51,500 log Not Found: /wp-content/themes/include.php
-WARNING 2024-02-03 19:12:06,743 log Not Found: /wp-includes/widgets/include.php
-WARNING 2024-02-03 19:12:21,681 log Not Found: /wp-includes/images/include.php
-WARNING 2024-02-03 19:12:36,641 log Not Found: /wp-content/admin.php
-WARNING 2024-02-03 19:12:50,601 log Not Found: /wp-content/plugins/about.php
-WARNING 2024-02-03 19:13:05,383 log Not Found: /about.php
+django.template.base.VariableDoesNotExist: Failed lookup for key [recaptcha_site_key] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: 'zuju6ntI4xDVrU0DAs00nhXFrG95aVzciqwNjHoSDnF7wkCUTmvfGmM5lZavuZmv'>, 'request': <WSGIRequest: POST '/price_detail/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd878605e40>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd878605e40>>), 'messages': <FallbackStorage: request=<WSGIRequest: POST '/price_detail/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'flight_date': '2024-02-10', 'direction': 'Drop off to Intl Airport', 'suburb': 'Northmead', 'no_of_passenger': '3'}, {'block': <Block Node: content. Contents: [<TextNode: '\n      <!-- Page content-'>, <Variable Node: flight_date>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: direction>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: suburb>, <TextNode: '</a><br>\n\t\t\t  <a style="f'>, <Variable Node: no_of_passenger>, <TextNode: '</a> -->\n\t\t\t  <br><br>\n  '>, <django.template.defaulttags.CsrfTokenNode object at 0x7fd877d61050>, <TextNode: '\n\t\t\t\t<div class="mb3 pb-1'>, <Variable Node: direction>, <TextNode: '">'>, <Variable Node: direction>, <TextNode: '</option>\t\t\t\t\t\t          '>, <Variable Node: flight_date>, <TextNode: '" type="text" >\t\t\t\t  \n   '>, <IfNode>, <TextNode: '\n\t\t\t\t  <div class="mb-3 p'>, <Variable Node: suburb>, <TextNode: '</label>\t\t\t\t\t\n\t\t\t\t</div>\n'>, <Variable Node: suburb>, <TextNode: '">'>, <Variable Node: suburb>, <TextNode: '</option>\t\t\t\t\t\n\t\t\t\t  </se'>, <Variable Node: no_of_passenger>, <TextNode: '">'>, <Variable Node: no_of_passenger>, <TextNode: '</option>\t\t\t\t  \n         '>, <Variable Node: recaptcha_site_key>, <TextNode: '"></div>\n\t\t\t\t<div id="err'>]>}]
+ERROR 2024-02-04 14:33:47,718 exception Invalid HTTP_HOST header: 's3.ap-southeast-2.amazonaws.com'. You may need to add 's3.ap-southeast-2.amazonaws.com' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/http/request.py", line 150, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: 's3.ap-southeast-2.amazonaws.com'. You may need to add 's3.ap-southeast-2.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2024-02-04 14:33:47,728 log Bad Request: /easygoshuttle.com.au/thumbsup_120241.webp
+DEBUG 2024-02-04 14:34:21,210 base Exception while resolving variable 'subtitle' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [subtitle] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7fd878048540>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87b95dda0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87b95dda0>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7fd878288bd0>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}, {'block': <Block Node: title. Contents: [<IfNode>, <Variable Node: title>, <TextNode: ' | '>, <Variable Node: site_title|default:_('Django site admin')>]>}]
+DEBUG 2024-02-04 14:34:21,211 base Exception while resolving variable 'site_title' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'site_title'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'site_title'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'site_title'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [site_title] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7fd878048540>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87b95dda0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87b95dda0>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7fd878288bd0>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}, {'block': <Block Node: title. Contents: [<IfNode>, <Variable Node: title>, <TextNode: ' | '>, <Variable Node: site_title|default:_('Django site admin')>]>}]
+DEBUG 2024-02-04 14:34:21,212 base Exception while resolving variable 'is_popup' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_popup] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7fd878048540>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87b95dda0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87b95dda0>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7fd878288bd0>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2024-02-04 14:34:21,212 base Exception while resolving variable 'is_nav_sidebar_enabled' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_nav_sidebar_enabled] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7fd878048540>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87b95dda0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87b95dda0>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7fd878288bd0>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2024-02-04 14:34:21,213 base Exception while resolving variable 'is_popup' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_popup] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7fd878048540>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87b95dda0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87b95dda0>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7fd878288bd0>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2024-02-04 14:34:21,213 base Exception while resolving variable 'is_popup' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_popup] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7fd878048540>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87b95dda0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87b95dda0>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7fd878288bd0>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2024-02-04 14:34:21,214 base Exception while resolving variable 'site_header' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'site_header'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'site_header'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'site_header'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [site_header] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7fd878048540>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87b95dda0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87b95dda0>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7fd878288bd0>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}, {'block': <Block Node: header. Contents: [<TextNode: '\n    <div id="header">\n  '>, <Block Node: branding. Contents: []>, <TextNode: '\n        </div>\n        '>, <Block Node: usertools. Contents: [<TextNode: '\n        '>, <IfNode>, <TextNode: '\n        '>]>, <TextNode: '\n        '>, <Block Node: nav-global. Contents: []>, <TextNode: '\n    </div>\n    '>]>}, {'block': <Block Node: branding. Contents: [<TextNode: '\n<h1 id="site-name"><a hr'>, <URLNode view_name=''admin_honeypot:index'' args=[] kwargs={} as=None>, <TextNode: '">'>, <Variable Node: site_header|default:_('Django administration')>, <TextNode: '</a></h1>\n'>]>}]
+DEBUG 2024-02-04 14:34:21,214 base Exception while resolving variable 'is_popup' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_popup] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7fd878048540>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87b95dda0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87b95dda0>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7fd878288bd0>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2024-02-04 14:34:21,215 base Exception while resolving variable 'is_nav_sidebar_enabled' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_nav_sidebar_enabled] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7fd878048540>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87b95dda0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87b95dda0>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7fd878288bd0>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2024-02-04 14:34:21,215 base Exception while resolving variable 'subtitle' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [subtitle] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7fd878048540>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87b95dda0>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87b95dda0>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7fd878288bd0>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}, {'block': <Block Node: content_subtitle. Contents: [<IfNode>]>}]
+ERROR 2024-02-04 14:34:21,409 exception Invalid HTTP_HOST header: 's3.ap-southeast-2.amazonaws.com'. You may need to add 's3.ap-southeast-2.amazonaws.com' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/http/request.py", line 150, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: 's3.ap-southeast-2.amazonaws.com'. You may need to add 's3.ap-southeast-2.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2024-02-04 14:34:21,411 log Bad Request: /easygoshuttle.com.au/thumbsup_120241.webp
+DEBUG 2024-02-04 14:34:31,266 base Exception while resolving variable 'subtitle' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [subtitle] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7fd877b0de40>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd877b0f240>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd877b0f240>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7fd87862e510>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}, {'block': <Block Node: title. Contents: [<IfNode>, <Variable Node: title>, <TextNode: ' | '>, <Variable Node: site_title|default:_('Django site admin')>]>}]
+DEBUG 2024-02-04 14:34:31,267 base Exception while resolving variable 'site_title' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'site_title'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'site_title'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'site_title'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [site_title] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7fd877b0de40>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd877b0f240>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd877b0f240>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7fd87862e510>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}, {'block': <Block Node: title. Contents: [<IfNode>, <Variable Node: title>, <TextNode: ' | '>, <Variable Node: site_title|default:_('Django site admin')>]>}]
+DEBUG 2024-02-04 14:34:31,268 base Exception while resolving variable 'is_popup' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_popup] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7fd877b0de40>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd877b0f240>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd877b0f240>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7fd87862e510>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2024-02-04 14:34:31,268 base Exception while resolving variable 'is_nav_sidebar_enabled' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_nav_sidebar_enabled] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7fd877b0de40>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd877b0f240>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd877b0f240>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7fd87862e510>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2024-02-04 14:34:31,269 base Exception while resolving variable 'is_popup' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_popup] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7fd877b0de40>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd877b0f240>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd877b0f240>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7fd87862e510>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2024-02-04 14:34:31,270 base Exception while resolving variable 'is_popup' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_popup] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7fd877b0de40>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd877b0f240>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd877b0f240>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7fd87862e510>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2024-02-04 14:34:31,270 base Exception while resolving variable 'site_header' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'site_header'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'site_header'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'site_header'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [site_header] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7fd877b0de40>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd877b0f240>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd877b0f240>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7fd87862e510>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}, {'block': <Block Node: header. Contents: [<TextNode: '\n    <div id="header">\n  '>, <Block Node: branding. Contents: []>, <TextNode: '\n        </div>\n        '>, <Block Node: usertools. Contents: [<TextNode: '\n        '>, <IfNode>, <TextNode: '\n        '>]>, <TextNode: '\n        '>, <Block Node: nav-global. Contents: []>, <TextNode: '\n    </div>\n    '>]>}, {'block': <Block Node: branding. Contents: [<TextNode: '\n<h1 id="site-name"><a hr'>, <URLNode view_name=''admin_honeypot:index'' args=[] kwargs={} as=None>, <TextNode: '">'>, <Variable Node: site_header|default:_('Django administration')>, <TextNode: '</a></h1>\n'>]>}]
+DEBUG 2024-02-04 14:34:31,271 base Exception while resolving variable 'is_popup' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_popup] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7fd877b0de40>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd877b0f240>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd877b0f240>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7fd87862e510>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2024-02-04 14:34:31,271 base Exception while resolving variable 'is_nav_sidebar_enabled' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_nav_sidebar_enabled] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7fd877b0de40>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd877b0f240>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd877b0f240>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7fd87862e510>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2024-02-04 14:34:31,272 base Exception while resolving variable 'subtitle' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [subtitle] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7fd877b0de40>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd877b0f240>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd877b0f240>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7fd87862e510>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}, {'block': <Block Node: content_subtitle. Contents: [<IfNode>]>}]
+DEBUG 2024-02-04 14:34:34,605 base Exception while resolving variable 'subtitle' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [subtitle] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7fd878636ac0>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87868aa20>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87868aa20>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7fd877b20390>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}, {'block': <Block Node: title. Contents: [<IfNode>, <Variable Node: title>, <TextNode: ' | '>, <Variable Node: site_title|default:_('Django site admin')>]>}]
+DEBUG 2024-02-04 14:34:34,606 base Exception while resolving variable 'site_title' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'site_title'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'site_title'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'site_title'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [site_title] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7fd878636ac0>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87868aa20>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87868aa20>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7fd877b20390>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}, {'block': <Block Node: title. Contents: [<IfNode>, <Variable Node: title>, <TextNode: ' | '>, <Variable Node: site_title|default:_('Django site admin')>]>}]
+DEBUG 2024-02-04 14:34:34,607 base Exception while resolving variable 'is_popup' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_popup] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7fd878636ac0>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87868aa20>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87868aa20>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7fd877b20390>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2024-02-04 14:34:34,607 base Exception while resolving variable 'is_nav_sidebar_enabled' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_nav_sidebar_enabled] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7fd878636ac0>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87868aa20>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87868aa20>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7fd877b20390>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2024-02-04 14:34:34,608 base Exception while resolving variable 'is_popup' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_popup] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7fd878636ac0>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87868aa20>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87868aa20>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7fd877b20390>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2024-02-04 14:34:34,608 base Exception while resolving variable 'is_popup' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_popup] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7fd878636ac0>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87868aa20>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87868aa20>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7fd877b20390>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2024-02-04 14:34:34,609 base Exception while resolving variable 'site_header' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'site_header'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'site_header'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'site_header'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [site_header] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7fd878636ac0>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87868aa20>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87868aa20>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7fd877b20390>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}, {'block': <Block Node: header. Contents: [<TextNode: '\n    <div id="header">\n  '>, <Block Node: branding. Contents: []>, <TextNode: '\n        </div>\n        '>, <Block Node: usertools. Contents: [<TextNode: '\n        '>, <IfNode>, <TextNode: '\n        '>]>, <TextNode: '\n        '>, <Block Node: nav-global. Contents: []>, <TextNode: '\n    </div>\n    '>]>}, {'block': <Block Node: branding. Contents: [<TextNode: '\n<h1 id="site-name"><a hr'>, <URLNode view_name=''admin_honeypot:index'' args=[] kwargs={} as=None>, <TextNode: '">'>, <Variable Node: site_header|default:_('Django administration')>, <TextNode: '</a></h1>\n'>]>}]
+DEBUG 2024-02-04 14:34:34,609 base Exception while resolving variable 'is_popup' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_popup'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_popup] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7fd878636ac0>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87868aa20>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87868aa20>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7fd877b20390>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2024-02-04 14:34:34,610 base Exception while resolving variable 'is_nav_sidebar_enabled' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'is_nav_sidebar_enabled'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [is_nav_sidebar_enabled] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7fd878636ac0>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87868aa20>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87868aa20>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7fd877b20390>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}]
+DEBUG 2024-02-04 14:34:34,610 base Exception while resolving variable 'subtitle' in template 'admin_honeypot/login.html'.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/context.py", line 83, in __getitem__
+    raise KeyError(key)
+KeyError: 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 886, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ^^^^^^^^
+AttributeError: type object 'RequestContext' has no attribute 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'subtitle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [subtitle] in [{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x7fd878636ac0>>, 'request': <WSGIRequest: GET '/admin/login/?next=/admin/'>, 'user': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87868aa20>>, 'perms': PermWrapper(<SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x7fd87868aa20>>), 'messages': <FallbackStorage: request=<WSGIRequest: GET '/admin/login/?next=/admin/'>>, 'DEFAULT_MESSAGE_LEVELS': {'DEBUG': 10, 'INFO': 20, 'SUCCESS': 25, 'WARNING': 30, 'ERROR': 40}}, {}, {'form': <HoneypotLoginForm bound=False, valid=Unknown, fields=(username;password)>, 'view': <admin_honeypot.views.AdminHoneypot object at 0x7fd877b20390>, 'app_path': '/admin/login/?next=/admin/', 'next': '/admin/', 'title': 'Log in', 'LANGUAGE_CODE': 'en-us', 'LANGUAGE_BIDI': False}, {'block': <Block Node: content_subtitle. Contents: [<IfNode>]>}]
+ERROR 2024-02-04 14:34:39,385 exception Invalid HTTP_HOST header: 's3.ap-southeast-2.amazonaws.com'. You may need to add 's3.ap-southeast-2.amazonaws.com' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/horeb/github/easygo/venv/lib/python3.11/site-packages/django/http/request.py", line 150, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: 's3.ap-southeast-2.amazonaws.com'. You may need to add 's3.ap-southeast-2.amazonaws.com' to ALLOWED_HOSTS.
+WARNING 2024-02-04 14:34:39,387 log Bad Request: /easygoshuttle.com.au/thumbsup_120241.webp
+WARNING 2024-02-04 14:40:30,467 log Not Found: /premium-airport-shuttle-service/
+WARNING 2024-02-04 15:37:05,681 log Not Found: /.well-known/acme-challenge/_01SQG6UIGLH1D9XQU0AFBNAMHGFPBRD
+WARNING 2024-02-04 15:37:06,654 log Not Found: /.well-known/acme-challenge/PE011RCAFRPCE0YG_V4M8JEZ9V1XOP99
+WARNING 2024-02-04 15:42:57,576 log Not Found: /apple-touch-icon-120x120-precomposed.png
+WARNING 2024-02-04 15:42:57,641 log Not Found: /apple-touch-icon-120x120.png
