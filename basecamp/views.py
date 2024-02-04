@@ -1329,8 +1329,6 @@ def return_trip_detail(request):
             street = user.street
             no_of_passenger = user.no_of_passenger
             no_of_baggage = user.no_of_baggage
-            paid = user.paid
-            notice = user.notice
             
         data = {
             'name': name,
@@ -1357,8 +1355,8 @@ def return_trip_detail(request):
                     
         p = Post(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
-                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, notice=notice, price=price, 
-                 paid=paid, driver=sam_driver)
+                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, price=price, 
+                 driver=sam_driver)
         
         p.save()
 
