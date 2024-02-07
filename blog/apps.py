@@ -6,6 +6,9 @@ class BlogConfig(AppConfig):
     name = 'blog'
 
     def ready(self):
-        import blog.signals
+        # from django.db.backends.signals import connection_created        
+        # from blog import tasks        
+        import blog.signals        
+        # connection_created.connect(tasks.handle_database_change)
 
 
