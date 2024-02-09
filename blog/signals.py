@@ -126,47 +126,50 @@ def notify_user_inquiry_point(sender, instance, created, **kwargs):
 # PayPal Payment > sending email and saving 
 @receiver(post_save, sender=Payment)
 def notify_user_payment(sender, instance, created, **kwargs):
-    post_name = Post.objects.filter(
-            Q(name__iregex=r'^%s$' % re.escape(instance.item_name)) | 
-            Q(email__iexact=instance.payer_email)).first()
-    
-    if post_name:       
-        html_content = render_to_string("basecamp/html_email-payment-success.html",
-                                    {'name': instance.item_name, 'email': instance.payer_email,
-                                     'amount': instance.gross_amount })
-        text_content = strip_tags(html_content)
-        email = EmailMultiAlternatives(
-            "PayPal payment - EasyGo",
-            text_content,
-            '',
-            [instance.payer_email, RECIPIENT_EMAIL]
-        )        
+    if instance.item_name is not None:
+        post_name = Post.objects.filter(
+                Q(name__iregex=r'^%s$' % re.escape(instance.item_name)) | 
+                Q(email__iexact=instance.payer_email)).first()
 
-        email.attach_alternative(html_content, "text/html")        
-        email.send()
+        if post_name:       
+            html_content = render_to_string("basecamp/html_email-payment-success.html",
+                                        {'name': instance.item_name, 'email': instance.payer_email,
+                                         'amount': instance.gross_amount })
+            text_content = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                "PayPal payment - EasyGo",
+                text_content,
+                '',
+                [instance.payer_email, RECIPIENT_EMAIL]
+            )        
 
-        post_name.paid = instance.gross_amount
-        post_name.save()
+            email.attach_alternative(html_content, "text/html")        
+            email.send()
 
-        if post_name.return_pickup_time == 'x':
-                post_name_second = Post.objects.filter(email=post_name.email)[1]
-                post_name_second.paid = instance.gross_amount
-                post_name_second.save() 
+            post_name.paid = instance.gross_amount
+            post_name.save()
 
-    else:
-        html_content = render_to_string("basecamp/html_email-noIdentity.html",
-                                    {'name': instance.item_name, 'email': instance.payer_email,
-                                     'amount': instance.gross_amount })
-        text_content = strip_tags(html_content)
-        email = EmailMultiAlternatives(
-            "PayPal payment - EasyGo",
-            text_content,
-            '',
-            [instance.payer_email, RECIPIENT_EMAIL]
-        )  
+            if post_name.return_pickup_time == 'x':
+                    post_name_second = Post.objects.filter(email=post_name.email)[1]
+                    post_name_second.paid = instance.gross_amount
+                    post_name_second.save() 
 
-        email.attach_alternative(html_content, "text/html")        
-        email.send()  
+        else:
+            html_content = render_to_string("basecamp/html_email-noIdentity.html",
+                                        {'name': instance.item_name, 'email': instance.payer_email,
+                                         'amount': instance.gross_amount })
+            text_content = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                "PayPal payment - EasyGo",
+                text_content,
+                '',
+                [instance.payer_email, RECIPIENT_EMAIL]
+            )  
+
+            email.attach_alternative(html_content, "text/html")        
+            email.send()  
+
+    else: pass 
 
 
 ## google calendar recording 
