@@ -115,14 +115,18 @@ WSGI_APPLICATION = 'main.wsgi.application'
 
 # DATABASES = {
 #   'default': {
-#       'ENGINE': 'django.db.backends.postgresql',
+#       'ENGINE': 'django.db.backends.mysql',
 #       'NAME': config('DB_NAME'),
 #       'USER': config('DB_USER'),
 #       'PASSWORD': config('DB_USER_PASSWORD'),
 #       'HOST': config('DB_HOST'),
-#       'PORT': '5432',      
+#       'PORT': '3306',
+#       'OPTIONS': {
+#           'charset': 'utf8mb4',
+#       },      
 #   }
 # }
+
 
 DATABASES = {
     'default': {
