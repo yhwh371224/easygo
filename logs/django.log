@@ -653,3 +653,4 @@ WARNING 2024-02-12 09:22:46,020 log Not Found: /sites/all/libraries/mailchimp/.e
 WARNING 2024-02-12 09:22:46,633 log Not Found: /database/.env
 WARNING 2024-02-12 09:22:47,355 log Not Found: /public/.env
 WARNING 2024-02-12 09:22:48,396 log Not Found: /33.188.28.149.in-addr.arpa/.env
+WARNING 2024-02-12 09:22:49,290 log Forbidden (Referer checking failed - no Referer.): /
