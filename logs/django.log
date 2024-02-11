@@ -579,3 +579,4 @@ DEBUG 2024-02-07 22:23:44,165 schema SET CONSTRAINTS "socialaccount_social_app_i
 DEBUG 2024-02-07 22:23:44,165 schema ALTER TABLE "socialaccount_socialtoken" ALTER COLUMN "app_id" DROP NOT NULL; (params None)
 DEBUG 2024-02-07 22:23:44,166 schema ALTER TABLE "socialaccount_socialtoken" ADD CONSTRAINT "socialaccount_social_app_id_636a42d7_fk_socialacc" FOREIGN KEY ("app_id") REFERENCES "socialaccount_socialapp" ("id") DEFERRABLE INITIALLY DEFERRED; (params None)
 DEBUG 2024-02-07 22:23:44,174 schema ALTER TABLE "socialaccount_socialaccount" ALTER COLUMN "extra_data" TYPE jsonb USING "extra_data"::jsonb; (params None)
+WARNING 2024-02-12 08:13:08,704 log Not Found: /robots.txt
