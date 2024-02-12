@@ -365,12 +365,17 @@ def inquiry_details(request):
 
         data = {
             'name': name,
+            'contact': contact,
             'email': email,
             'flight_date': flight_date,
+            'flight_number': flight_number,
             'pickup_time': pickup_time,
             'direction': direction,
+            'street': street,
             'suburb': suburb,
             'no_of_passenger': no_of_passenger,
+            'return_flight_date': return_flight_date,
+            'return_flight_number': return_flight_number,
             'return_pickup_time': return_pickup_time
             }
      
@@ -383,18 +388,24 @@ def inquiry_details(request):
             Exist in Inquiry or Post *\n 
             https://easygoshuttle.com.au
             =============================
+            Contact: {}
             Email: {}  
             Flight date: {}
+            Flight number: {}
             Pickup time: {}
             Direction: {}
+            Street: {}
             Suburb: {}
             Passenger: {}
+            Return flight date {}
+            Return flight number {}
             Return pickup time: {}
             =============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['email'], data['flight_date'], data['pickup_time'], 
-                        data['direction'], data['suburb'], data['no_of_passenger'], data['return_pickup_time'])
+            ''' .format(data['name'], data['contact'], data['email'],  data['flight_date'], data['flight_number'],
+                        data['pickup_time'], data['direction'], data['street'],  data['suburb'], data['no_of_passenger'], 
+                        data['return_flight_date'], data['return_flight_number'],data['return_pickup_time'])
             
             send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])
 
@@ -404,20 +415,26 @@ def inquiry_details(request):
             Neither in Inquiry & Post *\n 
             https://easygoshuttle.com.au
             =============================
+            Contact: {}
             Email: {}  
             Flight date: {}
+            Flight number: {}
             Pickup time: {}
             Direction: {}
+            Street: {}
             Suburb: {}
             Passenger: {}
+            Return flight date {}
+            Return flight number {}
             Return pickup time: {}
             =============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['email'], data['flight_date'], data['pickup_time'], 
-                        data['direction'], data['suburb'], data['no_of_passenger'], data['return_pickup_time'])
+            ''' .format(data['name'], data['contact'], data['email'],  data['flight_date'], data['flight_number'],
+                        data['pickup_time'], data['direction'], data['street'],  data['suburb'], data['no_of_passenger'], 
+                        data['return_flight_date'], data['return_flight_number'],data['return_pickup_time'])
             
-            send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])    
+            send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL]) 
             
         p = Inquiry(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
@@ -467,12 +484,17 @@ def inquiry_details1(request):
         
         data = {
             'name': name,
+            'contact': contact,
             'email': email,
             'flight_date': flight_date,
+            'flight_number': flight_number,
             'pickup_time': pickup_time,
             'direction': direction,
+            'street': street,
             'suburb': suburb,
             'no_of_passenger': no_of_passenger,
+            'return_flight_date': return_flight_date,
+            'return_flight_number': return_flight_number,
             'return_pickup_time': return_pickup_time
             }
      
@@ -485,18 +507,24 @@ def inquiry_details1(request):
             Exist in Inquiry or Post *\n 
             https://easygoshuttle.com.au
             =============================
+            Contact: {}
             Email: {}  
             Flight date: {}
+            Flight number: {}
             Pickup time: {}
             Direction: {}
+            Street: {}
             Suburb: {}
             Passenger: {}
+            Return flight date {}
+            Return flight number {}
             Return pickup time: {}
             =============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['email'], data['flight_date'], data['pickup_time'], 
-                        data['direction'], data['suburb'], data['no_of_passenger'], data['return_pickup_time'])
+            ''' .format(data['name'], data['contact'], data['email'],  data['flight_date'], data['flight_number'],
+                        data['pickup_time'], data['direction'], data['street'],  data['suburb'], data['no_of_passenger'], 
+                        data['return_flight_date'], data['return_flight_number'],data['return_pickup_time'])
             
             send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])
 
@@ -506,18 +534,24 @@ def inquiry_details1(request):
             Neither in Inquiry & Post *\n 
             https://easygoshuttle.com.au
             =============================
+            Contact: {}
             Email: {}  
             Flight date: {}
+            Flight number: {}
             Pickup time: {}
             Direction: {}
+            Street: {}
             Suburb: {}
             Passenger: {}
+            Return flight date {}
+            Return flight number {}
             Return pickup time: {}
             =============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['email'], data['flight_date'], data['pickup_time'], 
-                        data['direction'], data['suburb'], data['no_of_passenger'], data['return_pickup_time'])
+            ''' .format(data['name'], data['contact'], data['email'],  data['flight_date'], data['flight_number'],
+                        data['pickup_time'], data['direction'], data['street'],  data['suburb'], data['no_of_passenger'], 
+                        data['return_flight_date'], data['return_flight_number'],data['return_pickup_time'])
             
             send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])     
         
@@ -564,18 +598,22 @@ def booking_form_detail(request):
         
         data = {
             'name': name,
+            'contact': contact,
             'email': email,
             'flight_date': flight_date,
+            'flight_number': flight_number,
             'pickup_time': pickup_time,
             'direction': direction,
+            'street': street,
             'suburb': suburb,
             'no_of_passenger': no_of_passenger,
+            'return_flight_date': return_flight_date,
+            'return_flight_number': return_flight_number,
             'return_pickup_time': return_pickup_time
             }
      
         inquiry_email_exists = Inquiry.objects.filter(email=email).exists()
         post_email_exists = Post.objects.filter(email=email).exists()
-
 
         if inquiry_email_exists or post_email_exists:
             content = '''
@@ -583,18 +621,24 @@ def booking_form_detail(request):
             Exist in Inquiry or Post *\n 
             https://easygoshuttle.com.au
             =============================
+            Contact: {}
             Email: {}  
             Flight date: {}
+            Flight number: {}
             Pickup time: {}
             Direction: {}
+            Street: {}
             Suburb: {}
             Passenger: {}
+            Return flight date {}
+            Return flight number {}
             Return pickup time: {}
             =============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['email'], data['flight_date'], data['pickup_time'], 
-                        data['direction'], data['suburb'], data['no_of_passenger'], data['return_pickup_time'])
+            ''' .format(data['name'], data['contact'], data['email'],  data['flight_date'], data['flight_number'],
+                        data['pickup_time'], data['direction'], data['street'],  data['suburb'], data['no_of_passenger'], 
+                        data['return_flight_date'], data['return_flight_number'],data['return_pickup_time'])
             
             send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])
 
@@ -604,18 +648,24 @@ def booking_form_detail(request):
             Neither in Inquiry & Post *\n 
             https://easygoshuttle.com.au
             =============================
+            Contact: {}
             Email: {}  
             Flight date: {}
+            Flight number: {}
             Pickup time: {}
             Direction: {}
+            Street: {}
             Suburb: {}
             Passenger: {}
+            Return flight date {}
+            Return flight number {}
             Return pickup time: {}
             =============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['email'], data['flight_date'], data['pickup_time'], 
-                        data['direction'], data['suburb'], data['no_of_passenger'], data['return_pickup_time'])
+            ''' .format(data['name'], data['contact'], data['email'],  data['flight_date'], data['flight_number'],
+                        data['pickup_time'], data['direction'], data['street'],  data['suburb'], data['no_of_passenger'], 
+                        data['return_flight_date'], data['return_flight_number'],data['return_pickup_time'])
             
             send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])              
 
