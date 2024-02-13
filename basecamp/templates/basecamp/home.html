@@ -20,16 +20,6 @@
 	  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'basecamp/favi/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'basecamp/favi/favicon-16x16.png' %}">
     <link rel="manifest" href="{% static 'basecamp/favi/site.webmanifest' %}">       
-    <!-- Google Tag (gtag.js) - Google Analytics -->
-    <!-- <script async src="https://www.googletagmananger.com/gtag/js?id=G-LM2TMFMGH4"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      
-      gtag('config', 'G-LM2TMFMGH4');
-    </script> -->
-    <!-- Vendor Styles-->
     {% compress css %}
     <link rel="stylesheet" media="screen" href="/static/basecamp/css/simplebar.min.css"/>
     <link rel="stylesheet" media="screen" href="/static/basecamp/css/tiny-slider.css"/>
@@ -797,22 +787,6 @@
         <p class="fs-sm mb-3 order-md-1"><span class="text-light opacity-50 me-1">© 2023 EasyGo. All rights reserved.</a></p>        
       </div>
     </footer>
-    <!-- <script>
-    let currentBackground = 0;
-    const backgrounds = [
-        'url(/static/basecamp/photos/easygo-home-page3.webp)',
-        'url(/static/basecamp/photos/easygo-home-page4.webp)',
-        'url(/static/basecamp/photos/home1.webp)',        
-         
-    ];
-
-    document.getElementById('changing-background').style.backgroundImage = backgrounds[0];
-
-    setInterval(() => {
-        currentBackground = (currentBackground + 1) % backgrounds.length;
-        document.getElementById('changing-background').style.backgroundImage = backgrounds[currentBackground];
-    }, 5000);
-    </script> -->
     <!-- Vendor scrits: js libraries and plugins-->    
     {% compress js %}
     <script src="/static/basecamp/js/bootstrap.bundle.min.js"></script>
