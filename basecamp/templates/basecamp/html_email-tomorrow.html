@@ -243,29 +243,29 @@
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
 													• Sydney Arrival Date: {{ flight_date }}<br> 
 													• Flight number: {{ flight_number }} <small>(ETA {{ flight_time }})</small><br>
-													• Pickup around {{ pickup_time }}, <small>60 - 90 mins after your flight's landing </small><br>
-													{% if meeting_point %}												
+													• Pickup around {{ pickup_time }}, <small>60 mins after your flight's landing </small><br>
+													<!-- {% if meeting_point %}												
 													• The meeting point >>&nbsp;{{ meeting_point }}<br>
 													• Please proceed to the P7 parking building first after exiting the arrival halls, and then follow the signs for '{{ meeting_point }}'<br>
 													{% else %}
 													• The meeting point >>&nbsp;Public pick-up (2 minutes area)<br>
 													• Please proceed to the P7 parking building first after exiting the arrival halls, and then follow the signs for 'Public Pick-up'<br>
-													{% endif %}													
-													• <a href="https://s3.ap-southeast-2.amazonaws.com/easygoshuttle.com.au/International-Airport-Meeting-Point.webp">International Airport Map</a><br>
-													• After landing, please turn on your mobile phone or check your email. You will be notified of any changes via email or SMS<br><br>
+													{% endif %}													 -->
+													<!-- • <a href="https://s3.ap-southeast-2.amazonaws.com/easygoshuttle.com.au/International-Airport-Meeting-Point.webp">International Airport Map</a><br> -->
+													• After landing, please turn on your mobile phone or check your email. You will be notified of the meeting details via email or SMS<br><br>
 												</p>	
 											{% elif direction == 'Pickup from Domestic Airport' %}
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
 													• Flight number: {{ flight_number }} <small>(ETA {{ flight_time }})</small><br>
 													• Pickup around {{ pickup_time }}, <small>20-30 mins after your flight's landing </small><br>
-													{% if meeting_point %}												
+													<!-- {% if meeting_point %}												
 													• The meeting point >>&nbsp;{{ meeting_point }}<br>
 													• <a href="https://s3.ap-southeast-2.amazonaws.com/easygoshuttle.com.au/Domestic-T2-meeting-point.webp">Map of Shuttle bus bay</a><br>													
 													{% else %}
 													• The meeting point >><a href="https://easygoshuttle.com.au/meeting_point">&nbsp;click here</a><br>
 													• <a href="https://s3.ap-southeast-2.amazonaws.com/easygoshuttle.com.au/T2-Priority-Pickup-map.webp">Terminal 2 Map (Virgin, Jetstar)</a><br>
 													• <a href="https://s3.ap-southeast-2.amazonaws.com/easygoshuttle.com.au/Domestic-T3-baggage-carousel-1.webp">Terminal 3 Map (Qantas)</a><br>
-													{% endif %}
+													{% endif %} -->
 													• After landing, please turn on your mobile phone or check your email. You will be notified of any changes via email or SMS<br><br></p>
 											{% elif direction == 'Point to Point' %}
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">													
