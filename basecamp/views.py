@@ -1367,7 +1367,8 @@ def return_trip_detail(request):
         message = request.POST.get('message')
         price = request.POST.get('price')
         
-        user = Post.objects.filter(email=email).first()    
+        # user = Post.objects.filter(email=email).first()
+        user = Post.objects.filter(Q(email__iexact=email)).first()    
         
         if not user:
             return render(request, 'basecamp/503.html')    
