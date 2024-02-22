@@ -14,11 +14,11 @@ class Command(BaseCommand):
     help = 'Send booking reminders for upcoming flights'
 
     def handle(self, *args, **options):
+        self.send_email(0, "basecamp/html_email-today.html", "Reminder-Today")
         self.send_email(1, "basecamp/html_email-tomorrow.html", "Reminder-tomorrow")
         self.send_email(3, "basecamp/html_email-upcoming3.html", "Reminder-3days")
         self.send_email(7, "basecamp/html_email-upcoming7.html", "Reminder-7days")
-        self.send_email(14, "basecamp/html_email-upcoming14.html", "Reminder-2wks")
-        self.send_email(0, "basecamp/html_email-today.html", "Reminder-Today")
+        self.send_email(14, "basecamp/html_email-upcoming14.html", "Reminder-2wks")        
         self.send_email(-1, "basecamp/html_email-yesterday.html", "Review-EasyGo")
 
     def send_email(self, date_offset, template_name, subject):
@@ -36,21 +36,31 @@ class Command(BaseCommand):
 
             driver_instance = booking_reminder.driver       
 
-            if driver_instance is not None:
+            if driver_instance:
                 driver_name = driver_instance.driver_name
                 driver_contact = driver_instance.driver_contact
                 driver_plate = driver_instance.driver_plate
                 driver_car = driver_instance.driver_car
 
-            html_content = render_to_string(template_name, {
-                'name': booking_reminder.name, 'flight_date': booking_reminder.flight_date, 'flight_number': booking_reminder.flight_number,
-                'flight_time': booking_reminder.flight_time, 'direction': booking_reminder.direction, 'pickup_time': booking_reminder.pickup_time,
-                'street': booking_reminder.street, 'suburb': booking_reminder.suburb, 'price': booking_reminder.price, 'meeting_point': booking_reminder.meeting_point,
-                'driver_name': driver_name, 'driver_contact': driver_contact, 'driver_plate': driver_plate, 'driver_car': driver_car
-            })
+                html_content = render_to_string(template_name, {
+                    'name': booking_reminder.name, 'flight_date': booking_reminder.flight_date, 'flight_number': booking_reminder.flight_number,
+                    'flight_time': booking_reminder.flight_time, 'direction': booking_reminder.direction, 'pickup_time': booking_reminder.pickup_time,
+                    'street': booking_reminder.street, 'suburb': booking_reminder.suburb, 'price': booking_reminder.price, 'meeting_point': booking_reminder.meeting_point,
+                    'driver_name': driver_name, 'driver_contact': driver_contact, 'driver_plate': driver_plate, 'driver_car': driver_car
+                })
+                
+            else: 
+                html_content = render_to_string(template_name, {
+                    'name': booking_reminder.name, 'flight_date': booking_reminder.flight_date, 'flight_number': booking_reminder.flight_number,
+                    'flight_time': booking_reminder.flight_time, 'direction': booking_reminder.direction, 'pickup_time': booking_reminder.pickup_time,
+                    'street': booking_reminder.street, 'suburb': booking_reminder.suburb, 'price': booking_reminder.price, 'meeting_point': booking_reminder.meeting_point,
+                })
+
             text_content = strip_tags(html_content)
             email = EmailMultiAlternatives(subject, text_content, '', [booking_reminder.email])
             email.attach_alternative(html_content, "text/html")
             email.send() 
-            sent_emails_set.add(booking_reminder.email)              
+            sent_emails_set.add(booking_reminder.email)
+
+                   
                     
