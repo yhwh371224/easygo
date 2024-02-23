@@ -224,63 +224,51 @@
                                     <table class="content" style="border-spacing:0;text-align: center;" role="presentation">
 										<tr>
 											<td align="left" style="padding-left:0px;">
-												<p style="Margin:0;font-size:18px;font-weight:bold;line-height:22px;">Booking Tax Invoice</p>
+												<p style="Margin:0;font-size:18px;font-weight:bold;line-height:22px;">TAX INVOICE</p>
 											</td>
 										</tr>
 										<tr>
 											<td align="left" style="padding-top:28px;padding-left:0;">
-                                                <p style="Margin:0;font-size:15px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                    
-                                                    TAX INVOICE {{ notice }}<br><br>
+                                                <p style="Margin:0;font-size:15px;line-height:22px;Margin-bottom:6px;border-bottom: 1px solid #E1E1E1;"> 												                                                   
+                                                    Tax Invoice number: {{ notice }}<br><br>
 												{% if company_name %}     
-													Invoice to: {{ company_name }} (attn: {{ name }} )<br><br>
+													Invoice to: {{ name }} (attn: {{ company_name }} )<br><br>
 												{% else %}
                                                     Invoice to: {{ name }}<br><br> 
 												{% endif %}                                                                                                      
                                                 </p>
-												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
+												<p style="Margin:0;font-size:15px;line-height:22px;Margin-bottom:6px;border-top: 1px solid #E1E1E1;"></p>
+												<p style="Margin:0;font-size:12px;line-height:20px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
 												{% if direction == 'Point to Point' %}
-													Direction: {{ direction }}<br>
+													{% if return_flight_number %}
+													Trip type: Round Trip<br>
+													Point to point: [{{ flight_number }}] To/From [{{ street }}]<br>
+													Trip date: {{ flight_date }} & {{ return_flight_date}}<br>													
+													{% else %}
+													Trip type: Single Trip<br>
+													Point to point: From [{{ flight_number }}] To [{{ street }}]<br>
 													Trip date: {{ flight_date }}<br>
-													Start point: {{ flight_number }}<br>                                                    
-													End point: {{ street }}<br>
-													Number of Passenger: {{ no_of_passenger }}<br><br>
-
-													{% if return_flight_number %}
-													Return to: {{ return_flight_number }}<br><br>													
-													<strong>Total price: ${{ price }} inc GST for a round trip</strong><br>
-													{% else %}
-													<strong>Total price: ${{ price }} inc GST for a single trip</strong><br>
-													{% endif %}
-																										
+													{% endif %}																																																			
 												{% else %}
-													Direction: {{ direction }}<br>
-                                                    Flight date: {{ flight_date }}<br>
-													Flight number: {{ flight_number }}<br>                                                    
-													Flight time: {{ flight_time }}<br>
-													Address: {{ street }}, {{ suburb }}<br>													                                                   
-                                                    Number of Passenger: {{ no_of_passenger }}<br><br>
-
 													{% if return_flight_number %}
-													Return Direction: {{ return_direction }}<br>
-													Return flight date: {{ return_flight_date }}<br>
-													Return flight number: {{ return_flight_number }}<br>
-													Return flight time: {{ return_flight_time }}<br><br>
-													<strong>Total price: ${{ price }} inc GST for a round trip</strong><br>
+													Trip type: Round Trip<br>
+													Flight date: {{ flight_date }} & {{ return_flight_date}}<br>													
 													{% else %}
-													<strong>Total price: ${{ price }} inc GST for a single trip</strong><br>
-													{% endif %}													
-													
+													Trip type: Single Trip<br>
+													Flight date: {{ flight_date }}<br>													
+													{% endif %}															
+													Address: {{ street }}, {{ suburb }}<br>												
 												{% endif %}
+												Number of Passenger: {{ no_of_passenger }}<br><br>
 												<!-- message -->
-												{% if message %}
-													<strong>* {{ message }}</strong><br><br>
-												{% endif %}
-												<!-- Paid amount -->
-												{% if paid %}
-													<strong>Paid: ${{ paid }}</strong><br><br>	
-												{% endif %}
+												{% if message %}*{{ message }}<br><br>{% endif %}
+												<strong>Price: ${{ price }} without GST </strong><br>
+												<strong>GST (10%): ${{ price * 0.1 }}</strong><br>
+												<strong>Surcharge (3%): ${{ price * 0.03 }}</strong><br>
+												<strong>Total: ${{ price + (price * 0.1) + (price * 0.03) }}</strong> with GST and additional tax<br>
+												<strong>Paid: ${{ paid }}</strong><br>											
                                                 </p>     										
-												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">                                                  
+												<p style="Margin:0;font-size:12px;line-height:20px;margin-top:12px;Margin-bottom:12px; border-bottom: 2px solid #E1E1E1;">                                                  
                                                     Payment options are as below<br><br>
                                                     1. Via Online Banking<br>
                                                     &nbsp; • &nbsp;EasyGo Airport Shuttle<br>
