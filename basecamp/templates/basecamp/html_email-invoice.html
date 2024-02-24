@@ -261,11 +261,11 @@
 												{% endif %}
 												Number of Passenger: {{ no_of_passenger }}<br><br>
 												<!-- message -->
-												{% if message %}*{{ message }}<br><br>{% endif %}
+												{% if message %}*{{ message }}{% endif %}<br><br>
 												<strong>Price: ${{ price }} without GST </strong><br>
-												<strong>GST (10%): ${{ price * 0.1 }}</strong><br>
-												<strong>Surcharge (3%): ${{ price * 0.03 }}</strong><br>
-												<strong>Total: ${{ price + (price * 0.1) + (price * 0.03) }}</strong> with GST and additional tax<br>
+												<strong>GST (10%): ${{ with_gst }}</strong><br>
+												<strong>Surcharge (3%): ${{ surcharge }}</strong><br>
+												<strong>Total: ${{ total_price }}</strong> with GST and additional tax<br>
 												<strong>Paid: ${{ paid }}</strong><br>											
                                                 </p>     										
 												<p style="Margin:0;font-size:12px;line-height:20px;margin-top:12px;Margin-bottom:12px; border-bottom: 2px solid #E1E1E1;">                                                  
