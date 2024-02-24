@@ -1425,7 +1425,12 @@ def invoice_detail(request):
         email = request.POST.get('email')
         notice = request.POST.get('notice')  
         
-        user = Post.objects.filter(email=email).first()        
+        user = Post.objects.filter(email=email).first()
+
+        price_as_float = float(user.price)
+        with_gst = round(price_as_float * 0.10, 2)
+        surcharge = round(price_as_float * 0.03, 2) 
+        total_price = round(price_as_float + with_gst + surcharge, 2)     
         
         if user.return_pickup_time:
             user = Post.objects.filter(email=email)[1]
@@ -1436,7 +1441,8 @@ def invoice_detail(request):
                                          'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date,
                                          'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
                                          'street': user.street, 'suburb': user.suburb, 'no_of_passenger': user.no_of_passenger, 
-                                         'price': user.price, 'paid': user.paid, 'message': user.message })
+                                         'price': user.price, 'with_gst': with_gst, 'surcharge': surcharge, 'total_price': total_price, 
+                                         'paid': user.paid, 'message': user.message })
 
             text_content = strip_tags(html_content)
 
@@ -1458,7 +1464,8 @@ def invoice_detail(request):
                                          'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date,
                                          'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
                                          'street': user.street, 'suburb': user.suburb, 'no_of_passenger': user.no_of_passenger, 
-                                         'price': user.price, 'paid': user.paid, 'message': user.message })
+                                         'price': user.price, 'with_gst': with_gst, 'surcharge': surcharge, 'total_price': total_price, 
+                                         'paid': user.paid, 'message': user.message })
 
             text_content = strip_tags(html_content)
 
