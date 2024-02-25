@@ -229,45 +229,64 @@
 										</tr>
 										<tr>
 											<td align="left" style="padding-top:28px;padding-left:0;">
-                                                <p style="Margin:0;font-size:15px;line-height:22px;Margin-bottom:6px;border-bottom: 1px solid #E1E1E1;"> 												                                                   
-                                                    Tax Invoice number: {{ notice }}<br><br>
+                                                <p style="Margin:0;font-size:12px;line-height:20px;Margin-bottom:6px;border-bottom: 1px solid #2e2b2b;"> 												                                                   
+                                                	Tax Invoice number: {{ notice }}<br>
 												{% if company_name %}     
-													Invoice to: {{ name }} (attn: {{ company_name }} )<br><br>
+													Invoice to: {{ name }} (attn: {{ company_name }} )<br>
 												{% else %}
-                                                    Invoice to: {{ name }}<br><br> 
-												{% endif %}                                                                                                      
+                                                    Invoice to: {{ name }}<br><br>
+												{% endif %}
                                                 </p>
-												<p style="Margin:0;font-size:15px;line-height:22px;Margin-bottom:6px;border-top: 1px solid #E1E1E1;"></p>
-												<p style="Margin:0;font-size:12px;line-height:20px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
+												<p style="Margin:0;font-size:12px;line-height:20px;Margin-bottom:6px;border-top: 1px solid #2e2b2b;">
+												<p style="Margin:0;font-size:12px;line-height:20px;Margin-bottom:6px;">
 												{% if direction == 'Point to Point' %}
 													{% if return_flight_number %}
 													Trip type: Round Trip<br>
-													Point to point: [{{ flight_number }}] To/From [{{ street }}]<br>
-													Trip date: {{ flight_date }} & {{ return_flight_date}}<br>													
+													Service: Point to point<br>
+													{{ flight_number }} To/From {{ street }}<br>
+													Trip date: {{ flight_date }} & {{ return_flight_date}}<br>																										
 													{% else %}
 													Trip type: Single Trip<br>
-													Point to point: From [{{ flight_number }}] To [{{ street }}]<br>
+													Service: Point to point<br>
+													{{ flight_number }} To/From {{ street }}<br>
 													Trip date: {{ flight_date }}<br>
 													{% endif %}																																																			
 												{% else %}
 													{% if return_flight_number %}
 													Trip type: Round Trip<br>
+													Service: Airport transfers<br>
 													Flight date: {{ flight_date }} & {{ return_flight_date}}<br>													
 													{% else %}
 													Trip type: Single Trip<br>
+													Service: Airport transfers<br>
 													Flight date: {{ flight_date }}<br>													
 													{% endif %}															
 													Address: {{ street }}, {{ suburb }}<br>												
 												{% endif %}
+												Pick-up time: {{ pickup_time }}<br>												
 												Number of Passenger: {{ no_of_passenger }}<br>
+												Number of Baggage: {{ no_of_baggage }}<br>
 												<!-- message -->
-												{% if message %}*{{ message }}{% endif %}<br><br>
-												<strong>Price: ${{ price }} without GST </strong><br>
-												<strong>GST (10%): ${{ with_gst }}</strong><br>
-												<strong>Surcharge (3%): ${{ surcharge }}</strong><br>
-												<strong>Total: ${{ total_price }}</strong> with GST and surcharge<br><br>										<strong>Paid: ${{ paid }}</strong><br>											
-                                                </p>     										
-												<p style="Margin:0;font-size:12px;line-height:20px;margin-top:12px;Margin-bottom:12px; border-bottom: 2px solid #E1E1E1;">                                                  
+												{% if message %}*{{ message }}{% endif %}<br><br></p>
+											</td>
+										</tr>
+										<tr>
+											<td align="left" style="padding-top:28px;padding-left:0;">												
+												<p style="border: 1px solid #af865f; padding: 10px; Margin:0;font-size:12px;line-height:20px;Margin-bottom:6px; ">
+													<strong>Price: ${{ price }}</strong> without gst <br>
+													<strong>GST (10%): ${{ with_gst }}</strong><br>
+													<strong>Surcharge (3%): ${{ surcharge }}</strong><br>
+													<strong>Total: ${{ total_price }}</strong> with gst and surcharge<br>
+													<strong>Paid: ${{ paid }}</strong><br>
+													<strong>Balance due: ${{ balance }}</strong><br>
+												</p>
+											</td>			
+										</tr>
+										<tr>
+											<td align="left" style="padding-top:28px;padding-left:0;">
+												<p style="Margin:0;font-size:12px;line-height:20px;Margin-bottom:12px;border-top: 1px solid #2e2b2b;">
+												</p>
+												<p style="Margin:0;font-size:12px;line-height:20px;margin-top:6px;Margin-bottom:12px; border-bottom: 1px solid #2e2b2b;">                                                  
                                                     Payment options are as below<br><br>
                                                     1. Via Online Banking<br>
                                                     &nbsp; • &nbsp;EasyGo Airport Shuttle<br>
@@ -279,10 +298,9 @@
 													<br></p>   
 												<p style="Margin:0;font-size:13px;font-weight:bold;line-height:22px;Margin-bottom:12px;">                                                    
 													<span style="color: #eb7828">Easy</span><span style="color: blue">Go&nbsp;</span>Airport Shuttle<br>	                                                          
-                                                </p>															
-											</td>
+                                                </p>			
+											</td>	
 										</tr>
-										
                                     </table>
 									<!--[if (gte mso 9)|(IE)]>
 							            </td>
