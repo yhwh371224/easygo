@@ -86,10 +86,10 @@ def inquiry(request):
 
 
 def inquiry1(request): 
-    context = {
-        'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
-    }
-    return render(request, 'basecamp/inquiry1.html', context)
+    # context = {
+    #     'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
+    # }
+    return render(request, 'basecamp/inquiry1.html')
 
 
 def inquiry2(request): 
