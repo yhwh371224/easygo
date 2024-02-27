@@ -229,15 +229,16 @@
 										</tr>
 										<tr>
 											<td align="left" style="padding-top:28px;padding-left:0;">
-                                                <p style="Margin:0;font-size:12px;line-height:20px;Margin-bottom:6px;border-bottom: 1px solid #2e2b2b;"> 												                                                   
-                                                	Tax Invoice number: {{ notice }}<br>
+                                                <p style="Margin:0;font-size:12px;line-height:20px;Margin-bottom:6px;border-bottom: 1px solid #a09a9a;"> 												                                                   
+                                                	<strong>Invoice number: {{ notice }}</strong><br>
 												{% if company_name %}     
-													Invoice to: {{ name }} (attn: {{ company_name }} )<br>
+													<strong>Invoice to: {{ name }} (attn: {{ company_name }} )</strong><br>
 												{% else %}
-                                                    Invoice to: {{ name }}<br><br>
+                                                    <strong>Invoice to: {{ name }}</strong><br>
 												{% endif %}
+													<strong>Invoice date: {{ invoice_date }}</strong><br><br>
                                                 </p>
-												<p style="Margin:0;font-size:12px;line-height:20px;Margin-bottom:6px;border-top: 1px solid #2e2b2b;">
+												<p style="Margin:0;font-size:12px;line-height:20px;Margin-bottom:6px;border-top: 1px solid #a09a9a;">
 												<p style="Margin:0;font-size:12px;line-height:20px;Margin-bottom:6px;">
 												{% if direction == 'Point to Point' %}
 													{% if return_flight_number %}
@@ -248,7 +249,7 @@
 													{% else %}
 													Trip type: Single Trip<br>
 													Service: Point to point<br>
-													{{ flight_number }} To/From {{ street }}<br>
+													{{ flight_number }} To {{ street }}<br>
 													Trip date: {{ flight_date }}<br>
 													{% endif %}																																																			
 												{% else %}
@@ -267,7 +268,7 @@
 												Number of Passenger: {{ no_of_passenger }}<br>
 												Number of Baggage: {{ no_of_baggage }}<br>
 												<!-- message -->
-												{% if message %}*{{ message }}{% endif %}<br><br></p>
+												{% if message %}*{{ message }}{% endif %}</p>
 											</td>
 										</tr>
 										<tr>
@@ -285,9 +286,9 @@
 										</tr>
 										<tr>
 											<td align="left" style="padding-top:28px;padding-left:0;">
-												<p style="Margin:0;font-size:12px;line-height:20px;Margin-bottom:12px;border-top: 1px solid #2e2b2b;">
+												<p style="Margin:0;font-size:12px;line-height:20px;Margin-bottom:12px;border-top: 1px solid #a09a9a;">
 												</p>
-												<p style="Margin:0;font-size:12px;line-height:20px;margin-top:6px;Margin-bottom:12px; border-bottom: 1px solid #2e2b2b;">                                                  
+												<p style="Margin:0;font-size:12px;line-height:20px;margin-top:6px;Margin-bottom:12px; border-bottom: 1px solid #a09a9a;">                                                  
                                                     Payment options are as below<br><br>
                                                     1. Via Online Banking<br>
                                                     &nbsp; • &nbsp;EasyGo Airport Shuttle<br>

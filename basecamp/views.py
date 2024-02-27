@@ -1444,20 +1444,21 @@ def invoice_detail(request):
             float_discount = 0.0 
 
         total_price = (round(price_as_float + with_gst + surcharge, 2)) - float_discount
-        balance = round(total_price - float_paid, 2)  
-          
+        balance = round(total_price - float_paid, 2) 
+
+        today = date.today()           
         
         if user.return_pickup_time:
             user = Post.objects.filter(email=email)[1]
             html_content = render_to_string("basecamp/html_email-invoice.html",
                                         {'notice': notice, 'name': user.name, 'company_name': user.company_name, 'contact': user.contact, 'discount': discount,
-                                         'email': user.email, 'direction': user.direction, 'flight_date': user.flight_date, 
+                                         'email': user.email, 'direction': user.direction, 'flight_date': user.flight_date, 'invoice_date': today, 
                                          'flight_number': user.flight_number, 'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
                                          'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date,
                                          'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
                                          'street': user.street, 'suburb': user.suburb, 'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
                                          'price': user.price, 'with_gst': with_gst, 'surcharge': surcharge, 'total_price': total_price, 
-                                         'balance': balance, 'paid': user.paid, 'message': user.message })
+                                         'balance': balance, 'paid': float_paid, 'message': user.message })
 
             text_content = strip_tags(html_content)
 
@@ -1474,13 +1475,13 @@ def invoice_detail(request):
             user = Post.objects.filter(email=email).first()        
             html_content = render_to_string("basecamp/html_email-invoice.html",
                                         {'notice': notice, 'name': user.name, 'company_name': user.company_name,'contact': user.contact, 'discount': discount,
-                                         'email': user.email, 'direction': user.direction, 'flight_date': user.flight_date, 
+                                         'email': user.email, 'direction': user.direction, 'flight_date': user.flight_date, 'invoice_date': today,
                                          'flight_number': user.flight_number, 'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
                                          'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date,
                                          'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
                                          'street': user.street, 'suburb': user.suburb, 'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
                                          'price': user.price, 'with_gst': with_gst, 'surcharge': surcharge, 'total_price': total_price, 
-                                         'balance': balance, 'paid': user.paid, 'message': user.message })
+                                         'balance': balance, 'paid': float_paid, 'message': user.message })
 
             text_content = strip_tags(html_content)
 
