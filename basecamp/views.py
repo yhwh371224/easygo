@@ -1423,21 +1423,34 @@ def return_trip_detail(request):
 def invoice_detail(request):     
     if request.method == "POST":
         email = request.POST.get('email')
+        discount = request.POST.get('discount')
         notice = request.POST.get('notice')  
         
         user = Post.objects.filter(email=email).first()
 
         price_as_float = float(user.price)
-        float_paid = float(user.paid)
+
+        if user.paid: 
+            float_paid = float(user.paid)
+        else:
+            float_paid = 0.0    
+                
         with_gst = round(price_as_float * 0.10, 2)
         surcharge = round(price_as_float * 0.03, 2) 
-        total_price = round(price_as_float + with_gst + surcharge, 2) 
-        balance = round(total_price - float_paid, 2)    
+        
+        if discount: 
+            float_discount = float(discount)
+        else:
+            float_discount = 0.0 
+
+        total_price = (round(price_as_float + with_gst + surcharge, 2)) - float_discount
+        balance = round(total_price - float_paid, 2)  
+          
         
         if user.return_pickup_time:
             user = Post.objects.filter(email=email)[1]
             html_content = render_to_string("basecamp/html_email-invoice.html",
-                                        {'notice': notice, 'name': user.name, 'company_name': user.company_name, 'contact': user.contact, 
+                                        {'notice': notice, 'name': user.name, 'company_name': user.company_name, 'contact': user.contact, 'discount': discount,
                                          'email': user.email, 'direction': user.direction, 'flight_date': user.flight_date, 
                                          'flight_number': user.flight_number, 'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
                                          'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date,
@@ -1460,7 +1473,7 @@ def invoice_detail(request):
         else:              
             user = Post.objects.filter(email=email).first()        
             html_content = render_to_string("basecamp/html_email-invoice.html",
-                                        {'notice': notice, 'name': user.name, 'company_name': user.company_name,'contact': user.contact, 
+                                        {'notice': notice, 'name': user.name, 'company_name': user.company_name,'contact': user.contact, 'discount': discount,
                                          'email': user.email, 'direction': user.direction, 'flight_date': user.flight_date, 
                                          'flight_number': user.flight_number, 'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
                                          'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date,

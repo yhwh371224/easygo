@@ -70,6 +70,7 @@ class Post(models.Model):
     notice = models.TextField(blank=True, null=True)
     price = models.CharField(max_length=100, blank=True, null=True)
     paid = models.CharField(max_length=30, blank=True, null=True)
+    discount = models.CharField(max_length=30, blank=True, null=True)
     driver = models.ForeignKey('Driver', on_delete=models.CASCADE, null=True, blank=True)
     meeting_point = models.CharField(max_length=100, blank=True, null=True)
     is_confirmed = models.BooleanField(default=False, blank=True)

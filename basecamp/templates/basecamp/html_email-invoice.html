@@ -276,9 +276,10 @@
 													<strong>Price: ${{ price }}</strong> without gst <br>
 													<strong>GST (10%): ${{ with_gst }}</strong><br>
 													<strong>Surcharge (3%): ${{ surcharge }}</strong><br>
-													<strong>Total: ${{ total_price }}</strong> with gst and surcharge<br>
-													<strong>Paid: ${{ paid }}</strong><br>
-													<strong>Balance due: ${{ balance }}</strong><br>
+													{% if discount %}<strong>Discount: ${{ discount }}</strong><br>{% endif %}
+													<strong><u>Total: ${{ total_price }}</u></strong><br>
+													<strong><u>Paid: ${{ paid }}</u></strong><br>													
+													<strong style="text-decoration: underline double;">Balance due: ${{ balance }}</strong><br>
 												</p>
 											</td>			
 										</tr>
