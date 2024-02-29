@@ -27,7 +27,7 @@ class Command(BaseCommand):
         self.send_email_task(booking_reminders, template_name, subject)
 
     def send_email_task(self, booking_reminders, template_name, subject):
-        sent_emails_set = set()  # Set to track already sent emails
+        # sent_emails_set = set()  # Set to track already sent emails
         
         for booking_reminder in booking_reminders:
 
@@ -61,7 +61,7 @@ class Command(BaseCommand):
             email = EmailMultiAlternatives(subject, text_content, '', [booking_reminder.email])
             email.attach_alternative(html_content, "text/html")
             email.send() 
-            sent_emails_set.add(booking_reminder.email)
+            # sent_emails_set.add(booking_reminder.email)
 
                    
                     
