@@ -31,7 +31,8 @@ class Command(BaseCommand):
         
         for booking_reminder in booking_reminders:
 
-            if booking_reminder.cancelled or booking_reminder.email in sent_emails_set:
+            if booking_reminder.cancelled: 
+                # or booking_reminder.email in sent_emails_set:
                 continue 
 
             driver_instance = booking_reminder.driver       
