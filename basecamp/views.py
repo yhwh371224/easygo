@@ -765,7 +765,6 @@ def p2p_single_detail(request):
         return_pickup_time = request.POST.get('return_pickup_time')
         message = request.POST.get('message')   
 
-
         recaptcha_response = request.POST.get('g-recaptcha-response')
         result = verify_recaptcha(recaptcha_response)
         if not result.get('success'):
@@ -779,6 +778,7 @@ def p2p_single_detail(request):
             'pickup_time': pickup_time,
             'flight_number': flight_number,
             'street': street,
+            'return_pickup_time': return_pickup_time
             }
         
      
@@ -795,12 +795,13 @@ def p2p_single_detail(request):
             Email: {}  
             Pick up time: {}      
             Start point: {}            
-            Return pickup time: {}            
+            End point: {}  
+            Return pickup time: {}          
            
             =============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['email'], data['pickup_time'], data['flight_number'], data['return_pickup_time'])
+            ''' .format(data['name'], data['email'], data['pickup_time'], data['flight_number'], data['street'], data['return_pickup_time'])
 
             send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])
             
@@ -808,19 +809,19 @@ def p2p_single_detail(request):
             content = '''
             Hello, {} \n
             Point single 
-            Neither in Inquiryand Post *\n
+            Neither in Inquiry and Post *\n
             https://easygoshuttle.com.au  
-            ===============================
-            
+            ===============================            
             Email: {}  
             Pick up time: {}      
-            Start point: {}            
+            Start point: {}   
+            End point: {}          
             Return pickup time: {}            
            
             =============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['email'], data['pickup_time'], data['flight_number'], data['return_pickup_time'])
+            ''' .format(data['name'], data['email'], data['pickup_time'], data['flight_number'], data['street'], data['return_pickup_time'])
 
             send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])
                                    
@@ -880,7 +881,7 @@ def p2p_detail(request):
             return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'}) 
         
 
-        html_content = render_to_string("basecamp/html_email-p2p-confirmation.html", 
+        html_content = render_to_string("basecamp/html_email-p2p.html", 
             {'p2p_name': p2p_name, 'p2p_phone': p2p_phone, 'p2p_email': p2p_email, 'p2p_date': p2p_date, 
             'first_pickup_location': first_pickup_location, 'first_putime': first_putime, 'first_dropoff_location': first_dropoff_location, 
             'second_pickup_location': second_pickup_location, 'second_putime': second_putime, 'second_dropoff_location': second_dropoff_location, 
