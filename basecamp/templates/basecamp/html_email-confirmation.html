@@ -266,18 +266,45 @@
 													<span style="font-weight:bold; color: #bdb1a6">Return flight date:  {{ return_flight_date }}</span><br>
                                                     <span style="font-weight:bold; color: #bdb1a6">Return flight number:  {{ return_flight_number }}</span><br>
 													<span style="font-weight:bold; color: #bdb1a6">Return flight time:  {{ return_flight_time }}</span><br>
-													<span style="font-weight:bold; color: #bdb1a6">Return pickup time:  {{ return_pickup_time }}</span><br>												
-												{% endif %}         
-                                                </p>
-												<!-- Meeting point -->
+													<span style="font-weight:bold; color: #bdb1a6">Return pickup time:  {{ return_pickup_time }}</span><br>
+												{% endif %}
+												</p>
+
+												<!-- Meeting point  -->
 												{% if direction == 'Pickup from Intl Airport' or direction == 'Pickup from Domestic Airport' %}
 												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
 													--- Meeting point ---</p> 														
                                                 <p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">                                                  
                                                     Please refer to our website for the meeting point at the airport.<br>
 													Click here >>&nbsp;<a href="https://easygoshuttle.com.au/meeting_point/">easygoshuttle.com.au/meeting_point</a>&nbsp;to view the location of the meeting_point. 
-													(Please note that it can be changed on the day, so check your email just in case.)<br><br></p>
+													(Please note that changes may occur on the day of your pickup, so remember to check your email for updates)<br><br></p>													
+												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">													
+													--- Payment ---</p>
+												<p style="Margin:0;font-size:12px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                  
+													Please pay ${{ price }} online in advance <a href="https://easygoshuttle.com.au/payonline/">easygoshuttle.com.au/payonline</a><br>
+													For those arriving in Sydney, payment in advance is kindly requested<br>
+													<!-- A booking may not be guaranteed without payment<br> -->
+												</p><br>
 												{% endif %}
+
+												<!-- Payment  -->
+												{% if direction != 'Pickup from Intl Airport' and direction != 'Pickup from Domestic Airport' and no_of_passenger >= 4 %}
+												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
+													--- Payment ---</p>
+												<p style="Margin:0;font-size:12px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                  
+													You can pay ${{ price }} online in advance <a href="https://easygoshuttle.com.au/payonline/">easygoshuttle.com.au/payonline</a><br>
+													Alternatively, you can pay cash to your driver on the day of your pickup<br>														
+												</p><br>
+												{% elif direction != 'Pickup from Intl Airport' and direction != 'Pickup from Domestic Airport' and no_of_passenger < 4 %}
+												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
+													--- Payment ---</p>
+												<p style="Margin:0;font-size:12px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                  
+													Please pay ${{ price }} online in advance <a href="https://easygoshuttle.com.au/payonline/">easygoshuttle.com.au/payonline</a><br>
+													Payment is kindly required prior to the day of your pickup<br>
+													<!-- A booking may not be guaranteed without payment<br> -->
+												</p><br>
+												{% endif %}
+
 												<!-- If paid or not-->
 												{% if paid %}
 												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
@@ -285,34 +312,20 @@
 													<p style="Margin:0;font-size:12px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                  
                                                     You have paid ${{ price }}, which we have received and greatly appreciate.
 												<br><br></p><br>												
-												{% elif return_pickup_time %}												
-												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
-													--- Payment ---</p>
-												<p style="Margin:0;font-size:12px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;"> 
-													Please pay online ${{ price }} via PayPal in advance <a href="https://easygoshuttle.com.au/payonline/">easygoshuttle.com.au/payonline</a><br>
-													<!-- if you don't pay online, you will need to pay cash to your driver on the booking day<br>													 -->
-													<!-- For those arriving in Sydney, payment in advance is kindly requested<br>  -->
-													<span style="font-weight:bold; color: #d39383">This price is for both trips</span><br>												
-												</p><br>
-												{% else %}
-												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
-													--- Payment ---</p>
-												<p style="Margin:0;font-size:12px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                  
-                                                    Please pay online ${{ price }} via PayPal in advance <a href="https://easygoshuttle.com.au/payonline/">easygoshuttle.com.au/payonline</a><br>
-													<!-- if you don't pay online, you will need to pay cash to your driver on the booking day<br>													 -->
-													<!-- For those arriving in Sydney, payment in advance is kindly requested<br>														 -->
-												</p><br>
 												{% endif %}
-												{% if not return_pickup_time %}
-												<!-- For return trip -->						
+
+												<!-- For return trip -->	
+												{% if not return_pickup_time %}																	
 												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
 													If you wish to book a return trip, click&nbsp;<a href="https://easygoshuttle.com.au/return_trip/">&raquo;&raquo;Book for return trip</a><br><br></p>
 												{% endif %}
+
 												<!-- If notice -->
 												{% if notice %}
 												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
 												Note: <span style="font-weight:bold; color: #d39383">{{ notice }}</span><br><br></p>
 												{% endif %}
+
 												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
 													We will send you a reminder email closer to the date of your booking.<br><br>                                                 
                                                     Thank you again for booking with us. We look forward to seeing you on time<br><br></p>   
