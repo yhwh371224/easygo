@@ -1240,13 +1240,15 @@ def sending_email_first_detail(request):
 
         user.sent_email = True
         user.save() 
+
+        no_of_passenger_int = int(user.no_of_passenger)
         
         html_content = render_to_string("basecamp/html_email-confirmation.html", 
                                     {'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 'email': user.email, 'email1': user.email1,
                                      'flight_date': user.flight_date, 'flight_number': user.flight_number,
                                      'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
                                      'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
-                                     'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
+                                     'no_of_passenger': no_of_passenger_int, 'no_of_baggage': user.no_of_baggage,
                                      'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date, 
                                      'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
                                      'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
@@ -1275,7 +1277,9 @@ def sending_email_second_detail(request):
 
         user = Post.objects.filter(email=email)[1]
 
-        user1 = Post.objects.filter(email=email).first()          
+        user1 = Post.objects.filter(email=email).first()    
+
+        no_of_passenger_int = int(user.no_of_passenger)     
         
         if user:
             user.sent_email = True
@@ -1286,7 +1290,7 @@ def sending_email_second_detail(request):
                                          'flight_date': user.flight_date, 'flight_number': user.flight_number,
                                          'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
                                          'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
-                                         'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
+                                         'no_of_passenger': no_of_passenger_int, 'no_of_baggage': user.no_of_baggage,
                                          'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date, 
                                          'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
                                          'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
