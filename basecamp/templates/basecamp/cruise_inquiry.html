@@ -1,0 +1,150 @@
+{% extends 'basecamp/easygo_base_form.html' %}
+{% block content %}
+      <!-- Page content-->
+      <!-- Page title-->
+      <section class="jarallax bg-gradient pt-5 pb-7 pt-md-7" data-jarallax data-speed="0.1"><span class="position-absolute top-0 start-0 w-100 h-100 bg-gradient opacity-50"></span>
+        <div class="jarallax-img" style="background-image: url('/static/basecamp/photos/cruise2.webp');"></div>
+        <div class="shape shape-bottom shape-slant bg-body">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 260">
+            <polygon fill="currentColor" points="0,257 0,260 3000,260 3000,0"></polygon>
+          </svg>
+        </div>
+        <br>
+		  <br>
+		  <br/>
+        <div class="container position-relative zindex-5 pt-3 pb-7 pt-md-0">
+          <div class="row justify-content-center pb-7">
+            <div class="col-lg-10">
+              <h1 class="text-light">Cruise Inquiry Form</h1>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Contact form + details-->
+      <section class="container position-relative zindex-5 pb-5">
+        <div class="row">
+          <div class="col-lg-6 col-md-7 offset-lg-1 pb-2 mb-5" style="margin-top: -260px;">
+            <div class="card border-0 shadow-lg">
+              <form action="/p2p_single_detail/" method="post" id="booking-form" class="card-body needs-validation p-5" novalidate>
+                {% csrf_token %}
+                <div class="mb-3 pb-1">
+                  <label class="form-label" >Full name</label>
+                  <input class="form-control" type="text"  placeholder="John Doe" required name="name">
+                  <div class="invalid-feedback">Please enter your full name!</div>
+                </div>
+                <div class="mb-3 pb-1">
+                  <label class="form-label" >Mobile phone number</label>
+                  <input class="form-control" type="text"  placeholder="Your mobile phone number" required name="contact">
+                  <div class="invalid-feedback">Please enter a valid number!</div>
+                </div>
+                <div class="mb-3 pb-1">
+                  <label class="form-label" >Email address</label>
+                  <input class="form-control" type="email"  placeholder="j.doe@example.com" required name="email">
+                  <div class="invalid-feedback">Please enter a valid email address!</div>
+                </div>
+                <br>
+                <hr>
+                <br>
+                <div class="mb-3 pb-1">
+                  <label class="form-label" >Cruise Trip date</label>
+                  <input class="form-control date-picker rounded" name="flight_date" type="text" placeholder="Choose trip date" data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;Y-m-d&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;}" required>
+                </div>
+                <div class="mb-3 pb-1">
+                  <label class="form-label" >Pickup time</label>
+                  <input class="form-control" type="time" name="pickup_time"  placeholder="Pickup time" required>
+                <div class="invalid-feedback">Please enter your pickup time!</div>
+                </div>
+                <div class="mb-3 pb-1">
+                  <label class="form-label" >Pickup location - Start point</label>
+                    <input class="form-control" type="text" name="flight_number"  placeholder="From where" required>
+                  <div class="invalid-feedback">Please enter your pickup location!</div>
+                </div>
+                <div class="mb-3 pb-1">
+                  <label class="form-label" >Drop off location - End point</label>
+                  <input class="form-control" type="text" name="street"  placeholder="Your destination" required>
+                </div>
+                <br>
+                <hr>
+                <br>
+                <div class="mb-3 pb-1">
+                  <label class="form-label" >Passengers</label>
+                  <select class="form-select" name="no_of_passenger" required>
+                  <option value="0">How many people?</option>
+				  <option value="1">1</option>
+				  <option value="2">2</option>
+				  <option value="3">3</option>
+				  <option value="4">4</option>
+				  <option value="5">5</option>
+				  <option value="6">6</option>
+				  <option value="7">7</option>
+				  <option value="8">8</option>
+				  <option value="9">9</option>
+				  <option value="10">10</option>
+				  <option value="11">11</option>
+				  <option value="12">12</option>
+				  <option value="13">13</option>
+				  <option value="-1" disabled="disabled">Over 13 (please leave message below)</option>
+              </select>
+                </div>
+            <div class="mb-3 pb-1">
+					    <label class="form-label" >Baggage</label>
+					    <input class="form-control" type="text" placeholder="How many baggage?" name="no_of_baggage">
+					  <div class="invalid-feedback">Please enter the number of baggage!</div>
+				  </div>	
+          <br>
+          <hr>
+          <br>
+          <!-- Retrun trip -->
+          <div class="mb-3 pb-1">
+            <label class="form-label" >Return trip date</label>
+            <input class="form-control date-picker rounded" name="return_flight_date" type="text" placeholder="Choose trip date" data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;Y-m-d&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;, &quot;defaultDate&quot;: &quot;today&quot;}" >
+          </div>
+          <div class="mb-3 pb-1">
+            <label class="form-label" >Return start point<sup class="text-danger ms-1">*</sup></label>
+             <input class="form-control" type="text" placeholder="Return start point" name="return_flight_number" >
+            <div class="invalid-feedback">Please enter your flight number!</div>
+         </div>
+          <div class="mb-3 pb-1">
+            <label class="form-label" >Return pickup time</label>
+            <input class="form-control" type="time" name="return_pickup_time"  placeholder="Pickup time">
+          <div class="invalid-feedback">Please enter your pickup time!</div>
+          </div>
+
+                <div class="mb-3 pb-1">
+                  <label class="form-label" >Message</label>
+                  <textarea class="form-control" name="message" id="cont-message" rows="5" placeholder="Write your message here"></textarea>
+                  <div class="invalid-feedback">Please write a message!</div>
+                </div>
+				<br>
+        <div class="g-recaptcha" data-sitekey="{{ recaptcha_site_key }}"></div>
+        <div id="errorMessage" style="display:none; color: red; margin-top: 20px;" ></div><br>
+                <div class="text-center pt-2">
+                  <button class="btn btn-primary" type="submit" id="submitButton">Submit</button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-4 offset-md-1">
+            <h2 class="h4 pb-3">Contact details</h2>
+            <h3 class="h6 pb-2">Sydney, Australia</h3>
+            <ul class="list-unstyled fs-sm pb-3">
+              <li class="d-flex align-items-center mb-3"><i class="ai-mail fs-xl text-muted me-2 pe-1"></i>
+                <a href="mailto:info@easygoshuttle.com.au">info@easygoshuttle.com.au</a>
+              </li>
+              <li class="d-flex align-items-center mb-3"><i class="ai-map-pin fs-xl text-muted me-2 pe-1"></i>
+                <a href="sms:+61406883355"> sms: message us</a>
+              </li>
+              <li class="d-flex align-items-center mb-3"><i class="ai-phone fs-xl text-muted me-2 pe-1"></i>
+                <a href="tel:+61406883355"> 0406 883 355</a>
+              </li>
+            </ul>
+          </div>
+
+
+          </div>
+
+
+      </section>
+
+
+{% endblock %}

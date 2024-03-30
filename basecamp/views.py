@@ -40,6 +40,13 @@ def reminder(request): return render(request, 'basecamp/reminder.html')
 def sitemap(request): return render(request, 'basecamp/sitemap.xml')
 
 
+def cruise_booking(request): 
+    context = {
+        'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
+    }
+    return render(request, 'basecamp/cruise_booking.html', context)
+
+
 def booking_form(request): 
     context = {
         'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
@@ -80,6 +87,13 @@ def sending_email_second(request): return render(request, 'basecamp/sending_emai
 
 
 def save_data_only(request): return render(request, 'basecamp/save_data_only.html')
+
+
+def cruise_inquiry(request): 
+    context = {
+        'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
+    }
+    return render(request, 'basecamp/cruise_inquiry.html', context)
 
 
 def inquiry(request): 
@@ -785,49 +799,23 @@ def p2p_single_detail(request):
             'return_pickup_time': return_pickup_time
             }
         
-     
-        inquiry_email = Inquiry.objects.filter(email=email).exists()
-        post_email = Post.objects.filter(email=email).exists()  
-
-        if inquiry_email or post_email:   
-            content = '''
-            Hello, {} \n
-            Point single 
-            Exist in Inquiry or Post *\n
-            https://easygoshuttle.com.au                   
-            =============================            
-            Email: {}  
-            Pick up time: {}      
-            Start point: {}            
-            End point: {}  
-            Return pickup time: {}          
-           
-            =============================\n        
-            Best Regards,
-            EasyGo Admin \n\n        
-            ''' .format(data['name'], data['email'], data['pickup_time'], data['flight_number'], data['street'], data['return_pickup_time'])
-
-            send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])
-            
-        else:
-            content = '''
-            Hello, {} \n
-            Point single 
-            Neither in Inquiry and Post *\n
-            https://easygoshuttle.com.au  
-            ===============================            
-            Email: {}  
-            Pick up time: {}      
-            Start point: {}   
-            End point: {}          
-            Return pickup time: {}            
-           
-            =============================\n        
-            Best Regards,
-            EasyGo Admin \n\n        
-            ''' .format(data['name'], data['email'], data['pickup_time'], data['flight_number'], data['street'], data['return_pickup_time'])
-
-            send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])
+        content = '''
+        Hello, {} \n
+        Cruise or Point single 
+        ***Inquiry_point***\n
+        https://easygoshuttle.com.au                   
+        =============================            
+        Email: {}  
+        Pick up time: {}      
+        Start point: {}            
+        End point: {}  
+        Return pickup time: {}          
+        
+        =============================\n        
+        Best Regards,
+        EasyGo Admin \n\n        
+        ''' .format(data['name'], data['email'], data['pickup_time'], data['flight_number'], data['street'], data['return_pickup_time'])
+        send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])
                                    
         
         p = Inquiry_point(name=name, contact=contact, email=email, direction="Point to Point", flight_date=flight_date, flight_time="01:00", 
@@ -1190,6 +1178,108 @@ def booking_detail(request):
     else:
         return render(request, 'basecamp/booking.html', {})
     
+
+
+def cruise_booking_detail(request):
+    if request.method == "POST":        
+        name = request.POST.get('name')
+        contact = request.POST.get('contact')
+        email = request.POST.get('email')
+        flight_date = request.POST.get('flight_date')
+        flight_number = request.POST.get('flight_number')
+        # flight_time = request.POST.get('flight_time')
+        pickup_time = request.POST.get('pickup_time')
+        # direction = request.POST.get('direction')
+        # suburb = request.POST.get('suburb')
+        street = request.POST.get('street')
+        no_of_passenger = request.POST.get('no_of_passenger')
+        no_of_baggage = request.POST.get('no_of_baggage')
+        message = request.POST.get('message')
+        # return_direction = request.POST.get('return_direction')
+        return_flight_date = request.POST.get('return_flight_date')
+        # return_flight_number = request.POST.get('return_flight_number')
+        # return_flight_time = request.POST.get('return_flight_time')
+        return_pickup_time = request.POST.get('return_pickup_time')     
+
+        recaptcha_response = request.POST.get('g-recaptcha-response')
+        result = verify_recaptcha(recaptcha_response)
+        if not result.get('success'):
+            return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'}) 
+        
+        data = {
+            'name': name,
+            'contact': contact,
+            'email': email,            
+            'flight_date': flight_date,
+            'return_pickup_time': return_pickup_time}       
+        
+        inquiry_email = Inquiry.objects.filter(email=email).exists()
+        post_email = Post.objects.filter(email=email).exists()  
+
+        if inquiry_email or post_email:             
+                        
+            content = '''
+            Hello, {} \n  
+            [Cruise Booking by client] >> Put price & Send email\n
+            Exit in Inquiry or Post *\n 
+            https://easygoshuttle.com.au/sending_email_first/ \n 
+            https://easygoshuttle.com.au/sending_email_second/ \n            
+            ===============================
+            Contact: {}
+            Email: {}  
+            Return_pickup_time: {}         
+            ===============================\n        
+            Best Regards,
+            EasyGo Admin \n\n        
+            ''' .format(data['name'], data['contact'], data['email'], data['return_pickup_time'])
+            send_mail(data['flight_date'], content,
+                      '', [RECIPIENT_EMAIL])
+        
+        else:
+            content = '''
+            Hello, {} \n  
+            [Cruise Booking by client] >> Put price & Send email \n
+            Neither in Inquiry & Post *\n 
+            https://easygoshuttle.com.au/sending_email_first/ \n  
+            https://easygoshuttle.com.au/sending_email_second/ \n       
+           ===============================
+            Contact: {}
+            Email: {}  
+            Return_pickup_time: {}
+            ===============================\n        
+            Best Regards,
+            EasyGo Admin \n\n        
+            ''' .format(data['name'], data['contact'], data['email'], data['return_pickup_time'])
+            send_mail(data['flight_date'], content,
+                      '', [RECIPIENT_EMAIL])
+            
+        sam_driver = Driver.objects.get(driver_name="Sam") 
+
+        p = Post(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
+                 flight_time="01:00", pickup_time=pickup_time, direction="Point to Point", suburb="cruise", street=street,
+                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction="Point to Point",
+                 return_flight_date=return_flight_date, return_flight_number=street, return_flight_time="01:00", 
+                 return_pickup_time=return_pickup_time, message=message, driver=sam_driver)
+        
+        p.save()
+
+        today = date.today()
+        if flight_date <= str(today):
+            if is_ajax(request):
+                return render(request, 'basecamp/date_error.html')
+            else:
+                return render(request, 'basecamp/date_error.html') 
+
+        if is_ajax(request):
+            return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})
+        
+        else:
+            return render(request, 'basecamp/inquiry_done.html')
+
+    else:
+        return render(request, 'basecamp/cruise_booking.html', {})
+
+
     
 def confirm_booking_detail(request):       
     if request.method == "POST":          
