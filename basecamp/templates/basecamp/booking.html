@@ -1,4 +1,4 @@
-{% extends 'basecamp/easygo_base_confirmation.html' %}
+{% extends 'basecamp/easygo_base_form.html' %}
 {% block content %}
       <!-- Page content-->
       <!-- Page title-->
@@ -441,22 +441,25 @@
                   <textarea class="form-control" name="message" id="cont-message" rows="5" placeholder="Write your message here"></textarea>
                   <div class="invalid-feedback">Please write a message!</div>
                 </div>
-                <div class="mb-3 pb-1">
+                <!-- <div class="mb-3 pb-1">
                     <label class="form-label" >Price $</label>
                     <input class="form-control" type="text"  name="price">                    
                     <div class="invalid-feedback">Please enter price</div>
 					<sup class="text-danger ms-1">if not sure, just skip</sup>
-                </div>
-				<div class="mb-3 pb-1">
+                </div> -->
+				<!-- <div class="mb-3 pb-1">
 					<label class="form-label" >I would like to confirm my booking&nbsp;&nbsp;&nbsp;</label>
 					<input type="checkbox" required name="is_confirmed" value="True">
 					<div class="invalid-feedback">Please check this box if you want to proceed</div>
-				</div>					
-				<br>				
+				</div>					 -->
+				<br>
+				<div class="g-recaptcha" data-sitekey="{{ recaptcha_site_key }}"></div>
+				<div id="errorMessage" style="display:none; color: red; margin-top: 20px;" ></div>
+				<br>		
 				<div class="text-center pt-2">
 					<button class="btn btn-primary" type="submit" id="submitButton">Submit</button>
 				</div>
-				<br><br>
+				<br>				
                 <div><small>This form is protected by reCAPTCHA Enterprise and the Google
 					<a href="https://policies.google.com/privacy">Privacy Policy</a> and
 					<a href="https://policies.google.com/terms">Terms of Service</a> apply.</small>
