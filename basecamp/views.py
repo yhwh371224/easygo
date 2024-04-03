@@ -61,6 +61,9 @@ def booking(request):
     return render(request, 'basecamp/booking.html', context)
 
 
+def cruise_inquiry_1(request): return render(request, 'basecamp/cruise_inquiry_1.html')
+
+
 @login_required
 def confirmation(request): return render(request, 'basecamp/confirmation.html')
 
@@ -171,6 +174,10 @@ def pickup_adjustment(request): return render(request, 'basecamp/pickup_adjustme
 
 
 def pickup_adjustment_detail(request): return render(request, 'basecamp/pickup_adjustment_detail.html')
+
+
+def artarmon(request): return render(
+    request, 'basecamp/airport-transfers-artarmon.html')
 
 
 def sydney_city(request): return render(
@@ -315,6 +322,10 @@ def mini_bus(request): return render(
 
 def willoughby(request): return render(
     request, 'basecamp/airport-transfers-willoughby.html')
+
+
+def roseville(request): return render(
+    request, 'basecamp/airport-transfers-roseville.html')
 
 
 def server_error(request): return render(request, 'basecamp/500.html')
@@ -766,7 +777,7 @@ def inquiry_details2(request):
         return render(request, 'basecamp/inquiry2.html', {})
     
     
-# single point to point    
+# single point to point & cruise transfers    
 def p2p_single_detail(request):    
     if request.method == "POST":
         name = request.POST.get('name')
@@ -841,6 +852,74 @@ def p2p_single_detail(request):
 
     else:
         return render(request, 'basecamp/p2p_single.html', {})
+    
+
+def p2p_single_detail_1(request):    
+    if request.method == "POST":
+        name = request.POST.get('name')
+        contact = request.POST.get('contact')
+        email = request.POST.get('email')
+        direction = request.POST.get('direction')
+        flight_date = request.POST.get('flight_date')
+        pickup_time = request.POST.get('pickup_time')
+        flight_number = request.POST.get('flight_number')
+        flight_time = request.POST.get('flight_time')
+        street = request.POST.get('street')
+        no_of_passenger = request.POST.get('no_of_passenger')
+        no_of_baggage = request.POST.get('no_of_baggage')
+        return_direction = request.POST.get('return_direction')        
+        return_flight_date = request.POST.get('return_flight_date')
+        return_flight_number = request.POST.get('return_flight_number')
+        return_flight_time = request.POST.get('return_flight_time')
+        return_pickup_time = request.POST.get('return_pickup_time')
+        message = request.POST.get('message')            
+               
+        data = {
+            'name': name,
+            'email': email,
+            'direction': direction,
+            'flight_date': flight_date,
+            'pickup_time': pickup_time,
+            'flight_number': flight_number,
+            'street': street,
+            'return_pickup_time': return_pickup_time
+            }
+        
+        content = '''
+        Hello, {} \n
+        Cruise or Point single \n
+        From Home page \n
+        ***Inquiry_point***\n
+        https://easygoshuttle.com.au                   
+        =============================            
+        Email: {}  
+        Direction: {}
+        Pick up time: {}      
+        Start point: {}            
+        End point: {}  
+        Return pickup time: {}          
+        
+        =============================\n        
+        Best Regards,
+        EasyGo Admin \n\n        
+        ''' .format(data['name'], data['email'], data['direction'], data['pickup_time'], data['flight_number'], data['street'], data['return_pickup_time'])
+        send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])
+                                   
+        
+        p = Inquiry_point(name=name, contact=contact, email=email, direction=direction, flight_date=flight_date, flight_time=flight_time,
+                          pickup_time=pickup_time, flight_number=flight_number, street=street, no_of_passenger=no_of_passenger, 
+                          no_of_baggage=no_of_baggage, return_direction=return_direction, return_flight_date=return_flight_date, 
+                          return_flight_time=return_flight_time, return_flight_number=return_flight_number, return_pickup_time=return_pickup_time, message=message)
+        
+        p.save() 
+
+        if is_ajax(request):
+            return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})
+        else:
+            return render(request, 'basecamp/inquiry_done.html')
+
+    else:
+        return render(request, 'basecamp/cruise_inquiry.html', {})
     
     
 # Multiple points
@@ -963,12 +1042,19 @@ def price_detail(request):
         #         '''.format(data['flight_date'], data['direction'],
         #                    data['suburb'], data['no_of_passenger'])
                 
-        # send_mail(data['flight_date'], message, '', [RECIPIENT_EMAIL])        
+        # send_mail(data['flight_date'], message, '', [RECIPIENT_EMAIL])
 
-        return render(request, 'basecamp/inquiry1.html',
-                      {'flight_date': flight_date, 'direction': direction, 'suburb': suburb,
-                       'no_of_passenger': no_of_passenger},
-                      )
+        if direction == 'To/From Cruise Transfers':
+            return render(request, 'basecamp/cruise_inquiry_1.html',
+                          {'flight_date': flight_date, 'direction': direction, 
+                           'no_of_passenger': no_of_passenger, 'suburb': suburb},
+                          )
+
+        else: 
+            return render(request, 'basecamp/inquiry1.html',
+                          {'flight_date': flight_date, 'direction': direction, 'suburb': suburb,
+                           'no_of_passenger': no_of_passenger},
+                          )
 
     else:
         return render(request, 'basecamp/inquiry1.html', {})
