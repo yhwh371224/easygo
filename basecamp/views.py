@@ -883,8 +883,6 @@ def p2p_single_detail_1(request):
             return_flight_time = '11:00'
         return_pickup_time = request.POST.get('return_pickup_time')
         message = request.POST.get('message')
-                
-        cruise = True        
                
         data = {
             'name': name,
@@ -919,7 +917,7 @@ def p2p_single_detail_1(request):
         
         p = Inquiry_point(name=name, contact=contact, email=email, direction=direction, flight_date=flight_date, flight_time=flight_time,
                           pickup_time=pickup_time, flight_number=flight_number, street=street, suburb=suburb, no_of_passenger=no_of_passenger, 
-                          no_of_baggage=no_of_baggage, return_direction=return_direction, return_flight_date=return_flight_date, cruise=cruise,
+                          no_of_baggage=no_of_baggage, return_direction=return_direction, return_flight_date=return_flight_date, 
                           return_flight_time=return_flight_time, return_flight_number=return_flight_number, return_pickup_time=return_pickup_time, message=message)
         
         p.save() 
@@ -1298,7 +1296,7 @@ def cruise_booking_detail(request):
         return_pickup_time = request.POST.get('return_pickup_time') 
 
         return_flight_time = '11:00'
-        suburb = 'Sydney, NSW'    
+        suburb = 'The Rocks'    
 
         recaptcha_response = request.POST.get('g-recaptcha-response')
         result = verify_recaptcha(recaptcha_response)
@@ -1413,7 +1411,6 @@ def confirm_booking_detail(request):
             return_flight_time = user.return_flight_time 
             return_pickup_time = user.return_pickup_time           
             message = user.message
-            cruise = user.cruise
             notice = user.notice
             price = user.price
             paid = user.paid            
@@ -1430,7 +1427,7 @@ def confirm_booking_detail(request):
             
         p = Post(name=name, contact=contact, email=email, company_name=company_name, email1=email1, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
-                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction, cruise=cruise,
+                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction, 
                  return_flight_date=return_flight_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
                  return_pickup_time=return_pickup_time, message=message, notice=notice, price=price, paid=paid, is_confirmed=is_confirmed, driver=sam_driver)
         
