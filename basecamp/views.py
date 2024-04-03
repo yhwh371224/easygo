@@ -792,7 +792,10 @@ def p2p_single_detail(request):
         return_flight_date = request.POST.get('return_flight_date')
         return_flight_number = request.POST.get('return_flight_number')
         return_pickup_time = request.POST.get('return_pickup_time')
-        message = request.POST.get('message')   
+        message = request.POST.get('message') 
+
+        flight_time = '11:00'
+        return_flight_time = '11:00'  
 
         recaptcha_response = request.POST.get('g-recaptcha-response')
         result = verify_recaptcha(recaptcha_response)
@@ -829,10 +832,10 @@ def p2p_single_detail(request):
         send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])
                                    
         
-        p = Inquiry_point(name=name, contact=contact, email=email, direction="Point to Point", flight_date=flight_date, flight_time="01:00", 
-                          pickup_time=pickup_time, flight_number=flight_number, street=street, suburb="Cruise", no_of_passenger=no_of_passenger, 
-                          no_of_baggage=no_of_baggage, return_direction="Point to Point", return_flight_date=return_flight_date, 
-                          return_flight_time="01:00", return_flight_number=return_flight_number, return_pickup_time=return_pickup_time, message=message)
+        p = Inquiry_point(name=name, contact=contact, email=email, flight_date=flight_date, flight_time=flight_time, 
+                          pickup_time=pickup_time, flight_number=flight_number, street=street, no_of_passenger=no_of_passenger, 
+                          no_of_baggage=no_of_baggage, return_flight_date=return_flight_date, return_flight_time=return_flight_time,
+                          return_flight_number=return_flight_number, return_pickup_time=return_pickup_time, message=message)
         
         p.save() 
 
@@ -864,15 +867,24 @@ def p2p_single_detail_1(request):
         pickup_time = request.POST.get('pickup_time')
         flight_number = request.POST.get('flight_number')
         flight_time = request.POST.get('flight_time')
+        if not flight_time:
+            flight_time = '11:00'
         street = request.POST.get('street')
+        if not street:
+            street = '130 Argly St'
+            suburb = 'The Rocks'
         no_of_passenger = request.POST.get('no_of_passenger')
         no_of_baggage = request.POST.get('no_of_baggage')
         return_direction = request.POST.get('return_direction')        
         return_flight_date = request.POST.get('return_flight_date')
         return_flight_number = request.POST.get('return_flight_number')
         return_flight_time = request.POST.get('return_flight_time')
+        if not return_flight_time:
+            return_flight_time = '11:00'
         return_pickup_time = request.POST.get('return_pickup_time')
-        message = request.POST.get('message')            
+        message = request.POST.get('message')
+                
+        cruise = True        
                
         data = {
             'name': name,
@@ -903,12 +915,11 @@ def p2p_single_detail_1(request):
         Best Regards,
         EasyGo Admin \n\n        
         ''' .format(data['name'], data['email'], data['direction'], data['pickup_time'], data['flight_number'], data['street'], data['return_pickup_time'])
-        send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])
-                                   
+        send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])                           
         
         p = Inquiry_point(name=name, contact=contact, email=email, direction=direction, flight_date=flight_date, flight_time=flight_time,
-                          pickup_time=pickup_time, flight_number=flight_number, street=street, no_of_passenger=no_of_passenger, 
-                          no_of_baggage=no_of_baggage, return_direction=return_direction, return_flight_date=return_flight_date, 
+                          pickup_time=pickup_time, flight_number=flight_number, street=street, suburb=suburb, no_of_passenger=no_of_passenger, 
+                          no_of_baggage=no_of_baggage, return_direction=return_direction, return_flight_date=return_flight_date, cruise=cruise,
                           return_flight_time=return_flight_time, return_flight_number=return_flight_number, return_pickup_time=return_pickup_time, message=message)
         
         p.save() 
@@ -1273,19 +1284,21 @@ def cruise_booking_detail(request):
         email = request.POST.get('email')
         flight_date = request.POST.get('flight_date')
         flight_number = request.POST.get('flight_number')
-        # flight_time = request.POST.get('flight_time')
+        flight_time = request.POST.get('flight_time')
+        if not flight_time:
+            flight_time = "11:00"
         pickup_time = request.POST.get('pickup_time')
-        # direction = request.POST.get('direction')
-        # suburb = request.POST.get('suburb')
+        direction = request.POST.get('direction')
         street = request.POST.get('street')
         no_of_passenger = request.POST.get('no_of_passenger')
         no_of_baggage = request.POST.get('no_of_baggage')
         message = request.POST.get('message')
-        # return_direction = request.POST.get('return_direction')
         return_flight_date = request.POST.get('return_flight_date')
-        # return_flight_number = request.POST.get('return_flight_number')
-        # return_flight_time = request.POST.get('return_flight_time')
-        return_pickup_time = request.POST.get('return_pickup_time')     
+        return_flight_number = request.POST.get('return_flight_number')
+        return_pickup_time = request.POST.get('return_pickup_time') 
+
+        return_flight_time = '11:00'
+        suburb = 'Sydney, NSW'    
 
         recaptcha_response = request.POST.get('g-recaptcha-response')
         result = verify_recaptcha(recaptcha_response)
@@ -1313,7 +1326,7 @@ def cruise_booking_detail(request):
             ===============================
             Contact: {}
             Email: {}  
-            Return_pickup_time: {}         
+            Return pickup time: {}         
             ===============================\n        
             Best Regards,
             EasyGo Admin \n\n        
@@ -1342,10 +1355,11 @@ def cruise_booking_detail(request):
         sam_driver = Driver.objects.get(driver_name="Sam") 
 
         p = Post(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
-                 flight_time="01:00", pickup_time=pickup_time, direction="Point to Point", suburb="cruise", street=street,
-                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction="Point to Point",
-                 return_flight_date=return_flight_date, return_flight_number=street, return_flight_time="01:00", 
-                 return_pickup_time=return_pickup_time, message=message, driver=sam_driver)
+                 flight_time=flight_time, pickup_time=pickup_time, direction=direction, street=street,
+                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, suburb=suburb,  
+                 return_flight_date=return_flight_date, return_flight_number=return_flight_number,  
+                 return_pickup_time=return_pickup_time, return_flight_time=return_flight_time,
+                 message=message, driver=sam_driver)
         
         p.save()
 
@@ -1388,6 +1402,8 @@ def confirm_booking_detail(request):
             pickup_time = user.pickup_time
             direction = user.direction
             suburb = user.suburb
+            if not suburb: 
+                suburb = 'The Rocks'
             street = user.street
             no_of_passenger = user.no_of_passenger
             no_of_baggage = user.no_of_baggage
@@ -1397,6 +1413,7 @@ def confirm_booking_detail(request):
             return_flight_time = user.return_flight_time 
             return_pickup_time = user.return_pickup_time           
             message = user.message
+            cruise = user.cruise
             notice = user.notice
             price = user.price
             paid = user.paid            
@@ -1413,7 +1430,7 @@ def confirm_booking_detail(request):
             
         p = Post(name=name, contact=contact, email=email, company_name=company_name, email1=email1, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
-                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction,
+                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction, cruise=cruise,
                  return_flight_date=return_flight_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
                  return_pickup_time=return_pickup_time, message=message, notice=notice, price=price, paid=paid, is_confirmed=is_confirmed, driver=sam_driver)
         
@@ -1437,25 +1454,47 @@ def sending_email_first_detail(request):
 
         no_of_passenger_int = int(user.no_of_passenger)
         
-        html_content = render_to_string("basecamp/html_email-confirmation.html", 
-                                    {'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 'email': user.email, 'email1': user.email1,
-                                     'flight_date': user.flight_date, 'flight_number': user.flight_number,
-                                     'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
-                                     'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
-                                     'no_of_passenger': no_of_passenger_int, 'no_of_baggage': user.no_of_baggage,
-                                     'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date, 
-                                     'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
-                                     'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
-                                     'price': user.price, 'paid': user.paid, })
-        text_content = strip_tags(html_content)
-        email = EmailMultiAlternatives(
-            "Booking confirmation - EasyGo",
-            text_content,
-            '',
-            [email, RECIPIENT_EMAIL]
-        )
-        email.attach_alternative(html_content, "text/html")
-        email.send()
+        if user.cruise: 
+            html_content = render_to_string("basecamp/html_email-confirmation-cruise.html", 
+                                        {'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 'email': user.email, 'email1': user.email1,
+                                         'flight_date': user.flight_date, 'flight_number': user.flight_number,
+                                         'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
+                                         'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
+                                         'no_of_passenger': no_of_passenger_int, 'no_of_baggage': user.no_of_baggage,
+                                         'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date, 
+                                         'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
+                                         'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
+                                         'price': user.price, 'paid': user.paid, })
+            text_content = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                "Booking confirmation - EasyGo",
+                text_content,
+                '',
+                [email, RECIPIENT_EMAIL]
+            )
+            email.attach_alternative(html_content, "text/html")
+            email.send()
+
+        else: 
+            html_content = render_to_string("basecamp/html_email-confirmation.html", 
+                                        {'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 'email': user.email, 'email1': user.email1,
+                                         'flight_date': user.flight_date, 'flight_number': user.flight_number,
+                                         'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
+                                         'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
+                                         'no_of_passenger': no_of_passenger_int, 'no_of_baggage': user.no_of_baggage,
+                                         'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date, 
+                                         'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
+                                         'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
+                                         'price': user.price, 'paid': user.paid, })
+            text_content = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                "Booking confirmation - EasyGo",
+                text_content,
+                '',
+                [email, RECIPIENT_EMAIL]
+            )
+            email.attach_alternative(html_content, "text/html")
+            email.send()
 
         return render(request, 'basecamp/confirmation_detail.html',
                         {'name' : user.name, 'email': email}) 
@@ -1470,15 +1509,37 @@ def sending_email_second_detail(request):
         email = request.POST.get('email')
 
         user = Post.objects.filter(email=email)[1]
-
         user1 = Post.objects.filter(email=email).first()    
 
-        no_of_passenger_int = int(user.no_of_passenger)     
+        no_of_passenger_int = int(user.no_of_passenger)  
+
+        user.sent_email = True
+        user.save()   
         
-        if user:
-            user.sent_email = True
-            user.save() 
+        if user.cruise:     
+            html_content = render_to_string("basecamp/html_email-confirmation-cruise.html",
+                                        {'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 'email': user.email, 'email1': user.email1,
+                                         'flight_date': user.flight_date, 'flight_number': user.flight_number,
+                                         'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
+                                         'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
+                                         'no_of_passenger': no_of_passenger_int, 'no_of_baggage': user.no_of_baggage,
+                                         'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date, 
+                                         'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
+                                         'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
+                                         'price': user.price, 'paid': user.paid})
+
+            text_content = strip_tags(html_content)
+
+            email = EmailMultiAlternatives(
+                "Booking confirmation - EasyGo",
+                text_content,
+                '',
+                [email, RECIPIENT_EMAIL, user.email1]
+            )
+            email.attach_alternative(html_content, "text/html")
+            email.send()
         
+        else:        
             html_content = render_to_string("basecamp/html_email-confirmation.html",
                                         {'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 'email': user.email, 'email1': user.email1,
                                          'flight_date': user.flight_date, 'flight_number': user.flight_number,
@@ -1501,12 +1562,12 @@ def sending_email_second_detail(request):
             email.attach_alternative(html_content, "text/html")
             email.send()
 
-            if not user1.sent_email: 
-                user1.sent_email = True
-                user1.save()
-
-            return render(request, 'basecamp/confirmation_detail.html',
-                            {'name' : user.name }) 
+        if not user1.sent_email: 
+            user1.sent_email = True
+            user1.save()
+            
+        return render(request, 'basecamp/confirmation_detail.html',
+                        {'name' : user.name }) 
     
     else:
         return render(request, 'basecamp/sending_email_second.html', {})
