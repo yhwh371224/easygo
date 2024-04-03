@@ -45,11 +45,11 @@ def create_event_on_calendar(instance_id):
     
     paid_str = f'paid' if instance.paid else ''
     reminder_str = f'!' if instance.reminder else ''
-    cancelled_str = f'c' if instance.cancelled else ''
+    cancelled_str = f'c' if instance.cancelled else ''    
     title = " ".join([cancelled_str, reminder_str, instance.pickup_time, instance.flight_number, 
                       instance.flight_time, 'p'+str(instance.no_of_passenger), 
                       paid_str, '$'+instance.price, instance.contact])
-    address = " ".join([instance.street, instance.suburb])            
+    address = " ".join([instance.street, instance.suburb])        
     message_parts = [instance.name, instance.email, 
                      'b'+str(instance.no_of_baggage) if instance.no_of_baggage is not None else '', 
                      'm:'+instance.message if instance.message is not None else '', 
