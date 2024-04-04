@@ -794,8 +794,8 @@ def p2p_single_detail(request):
         return_pickup_time = request.POST.get('return_pickup_time')
         message = request.POST.get('message') 
 
-        flight_time = '11:00'
-        return_flight_time = '11:00'
+        flight_time = 'cruise'
+        return_flight_time = 'cruise'
         suburb = 'The Rocks'  
 
         recaptcha_response = request.POST.get('g-recaptcha-response')
@@ -869,7 +869,7 @@ def p2p_single_detail_1(request):
         flight_number = request.POST.get('flight_number')
         flight_time = request.POST.get('flight_time')
         if not flight_time:
-            flight_time = '11:00'
+            flight_time = 'cruise'
         street = request.POST.get('street')
         if not street:
             street = '130 Argly St'
@@ -880,7 +880,7 @@ def p2p_single_detail_1(request):
         return_flight_number = request.POST.get('return_flight_number')
         return_flight_time = request.POST.get('return_flight_time')
         if not return_flight_time:
-            return_flight_time = '11:00'
+            return_flight_time = 'cruise'
         return_pickup_time = request.POST.get('return_pickup_time')
         message = request.POST.get('message')
 
@@ -1286,10 +1286,12 @@ def cruise_booking_detail(request):
         flight_number = request.POST.get('flight_number')
         flight_time = request.POST.get('flight_time')
         if not flight_time:
-            flight_time = "11:00"
+            flight_time = "cruise"
         pickup_time = request.POST.get('pickup_time')
         direction = request.POST.get('direction')
         street = request.POST.get('street')
+        if not street:
+            street = '130 Argly St'
         no_of_passenger = request.POST.get('no_of_passenger')
         no_of_baggage = request.POST.get('no_of_baggage')
         message = request.POST.get('message')
@@ -1297,7 +1299,7 @@ def cruise_booking_detail(request):
         return_flight_number = request.POST.get('return_flight_number')
         return_pickup_time = request.POST.get('return_pickup_time') 
 
-        return_flight_time = '11:00'
+        return_flight_time = 'cruise'
         suburb = 'The Rocks'    
 
         recaptcha_response = request.POST.get('g-recaptcha-response')
@@ -1400,7 +1402,7 @@ def confirm_booking_detail(request):
             flight_number = user.flight_number
             flight_time = user.flight_time
             if not flight_time:
-                flight_time = '11:00'
+                flight_time = 'cruise'
             pickup_time = user.pickup_time
             direction = user.direction
             suburb = user.suburb
@@ -1414,7 +1416,7 @@ def confirm_booking_detail(request):
             return_flight_number = user.return_flight_number
             return_flight_time = user.return_flight_time
             if not return_flight_time:
-                return_flight_time = '11:00' 
+                return_flight_time = 'cruise' 
             return_pickup_time = user.return_pickup_time           
             message = user.message
             notice = user.notice
@@ -1457,25 +1459,47 @@ def sending_email_first_detail(request):
 
         no_of_passenger_int = int(user.no_of_passenger)
 
-        html_content = render_to_string("basecamp/html_email-confirmation.html", 
-                                    {'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 'email': user.email, 'email1': user.email1,
-                                     'flight_date': user.flight_date, 'flight_number': user.flight_number,
-                                     'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
-                                     'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
-                                     'no_of_passenger': no_of_passenger_int, 'no_of_baggage': user.no_of_baggage,
-                                     'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date, 
-                                     'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
-                                     'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
-                                     'price': user.price, 'paid': user.paid, })
-        text_content = strip_tags(html_content)
-        email = EmailMultiAlternatives(
-            "Booking confirmation - EasyGo",
-            text_content,
-            '',
-            [email, RECIPIENT_EMAIL]
-        )
-        email.attach_alternative(html_content, "text/html")
-        email.send()
+        if user.flight_time == 'cruise':
+            html_content = render_to_string("basecamp/html_email-confirmation-cruise.html", 
+                                        {'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 'email': user.email, 'email1': user.email1,
+                                         'flight_date': user.flight_date, 'flight_number': user.flight_number,
+                                         'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
+                                         'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
+                                         'no_of_passenger': no_of_passenger_int, 'no_of_baggage': user.no_of_baggage,
+                                         'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date, 
+                                         'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
+                                         'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
+                                         'price': user.price, 'paid': user.paid, })
+            text_content = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                "Booking confirmation - EasyGo",
+                text_content,
+                '',
+                [email, RECIPIENT_EMAIL]
+            )
+            email.attach_alternative(html_content, "text/html")
+            email.send()
+
+        else: 
+            html_content = render_to_string("basecamp/html_email-confirmation.html", 
+                                        {'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 'email': user.email, 'email1': user.email1,
+                                         'flight_date': user.flight_date, 'flight_number': user.flight_number,
+                                         'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
+                                         'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
+                                         'no_of_passenger': no_of_passenger_int, 'no_of_baggage': user.no_of_baggage,
+                                         'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date, 
+                                         'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
+                                         'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
+                                         'price': user.price, 'paid': user.paid, })
+            text_content = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                "Booking confirmation - EasyGo",
+                text_content,
+                '',
+                [email, RECIPIENT_EMAIL]
+            )
+            email.attach_alternative(html_content, "text/html")
+            email.send()
 
         return render(request, 'basecamp/confirmation_detail.html',
                         {'name' : user.name, 'email': email}) 
@@ -1496,26 +1520,48 @@ def sending_email_second_detail(request):
 
         user.sent_email = True
         user.save()  
-      
-        html_content = render_to_string("basecamp/html_email-confirmation.html",
-                                    {'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 'email': user.email, 'email1': user.email1,
-                                     'flight_date': user.flight_date, 'flight_number': user.flight_number,
-                                     'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
-                                     'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
-                                     'no_of_passenger': no_of_passenger_int, 'no_of_baggage': user.no_of_baggage,
-                                     'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date, 
-                                     'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
-                                     'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
-                                     'price': user.price, 'paid': user.paid})
-        text_content = strip_tags(html_content)
-        email = EmailMultiAlternatives(
-            "Booking confirmation - EasyGo",
-            text_content,
-            '',
-            [email, RECIPIENT_EMAIL, user.email1]
-        )
-        email.attach_alternative(html_content, "text/html")
-        email.send()
+
+        if user.flight_time == 'cruise':
+            html_content = render_to_string("basecamp/html_email-confirmation-cruise.html",
+                                        {'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 'email': user.email, 'email1': user.email1,
+                                         'flight_date': user.flight_date, 'flight_number': user.flight_number,
+                                         'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
+                                         'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
+                                         'no_of_passenger': no_of_passenger_int, 'no_of_baggage': user.no_of_baggage,
+                                         'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date, 
+                                         'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
+                                         'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
+                                         'price': user.price, 'paid': user.paid})
+            text_content = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                "Booking confirmation - EasyGo",
+                text_content,
+                '',
+                [email, RECIPIENT_EMAIL, user.email1]
+            )
+            email.attach_alternative(html_content, "text/html")
+            email.send()
+
+        else:
+            html_content = render_to_string("basecamp/html_email-confirmation.html",
+                                        {'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 'email': user.email, 'email1': user.email1,
+                                         'flight_date': user.flight_date, 'flight_number': user.flight_number,
+                                         'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
+                                         'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
+                                         'no_of_passenger': no_of_passenger_int, 'no_of_baggage': user.no_of_baggage,
+                                         'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date, 
+                                         'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
+                                         'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
+                                         'price': user.price, 'paid': user.paid})
+            text_content = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                "Booking confirmation - EasyGo",
+                text_content,
+                '',
+                [email, RECIPIENT_EMAIL, user.email1]
+            )
+            email.attach_alternative(html_content, "text/html")
+            email.send()
 
         if not user1.sent_email: 
             user1.sent_email = True
