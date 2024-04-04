@@ -78,21 +78,22 @@
                 </li>                
                 <li class="nav-item dropdown active"><a class="nav-link dropdown-toggle" href="#"data-bs-toggle="dropdown">Airport Transfers</a>
                   <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="/inquiry/">Price Inquiry Only</a></li>
-                    <li><a class="dropdown-item" href="/booking/">Book Now</a></li>                    
+                    <li><a class="dropdown-item" href="/inquiry/">Price Inquiry for airport</a></li>
+                    <li><a class="dropdown-item" href="/booking/">Book Now for airport</a></li>                    
                     <li><a class="dropdown-item" href="#reasons">Why Book With Us?</a></li>
                   </ul>
                       </li>
                 <li class="nav-item dropdown active"><a class="nav-link dropdown-toggle" href="#"data-bs-toggle="dropdown">Point to Point</a>
                   <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="/p2p_single/">Point to point</a></li>
-                    <li><a class="dropdown-item" href="/p2p/">Multiple way points</a></li>                   
+                    <li><a class="dropdown-item" href="/p2p_single/">Price Inquiry for P2P</a></li>
+                    <li><a class="dropdown-item" href="/p2p/">Multiple way points</a></li> 
+                    <li><a class="dropdown-item" href="#reasons">Why Book With Us?</a></li>                  
                   </ul>
                       </li>                
                 <li class="nav-item dropdown active"><a class="nav-link dropdown-toggle" href="#"data-bs-toggle="dropdown">Cruise Transfers</a>
                   <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="/cruise_inquiry/">Price Inquiry Only</a></li>
-                    <li><a class="dropdown-item" href="/cruise_booking/">Book Now</a></li>                    
+                    <li><a class="dropdown-item" href="/cruise_inquiry/">Price Inquiry for cruise</a></li>
+                    <li><a class="dropdown-item" href="/cruise_booking/">Book Now for cruise</a></li>                    
                     <li><a class="dropdown-item" href="#reasons">Why Book With Us?</a></li>
                   </ul>
                       </li>
@@ -167,7 +168,8 @@
             </div>
             <div class="mb-3 pb-1 w-100 mb-sm-4 me-sm-3">
               <label class="form-label">Direction</label>
-              <select class="form-select" name="direction" required>                
+              <select class="form-select" name="direction" required>
+                <option disabled selected value="">Select your direction...</option>                
                 <option value="Drop off to Domestic Airport">Drop off to Domestic Airport</option>
                 <option value="Drop off to Intl Airport">Drop off to Intl Airport</option>						
                 <option value="Pickup from Domestic Airport">Pickup from Domestic Airport</option>					
@@ -178,10 +180,11 @@
           </div>
           <div class="d-sm-flex align-items-center">
             <div class="mb-3 pb-1 w-100 mb-sm-4 me-sm-3">
-              <label class="form-label">Suburb...</label>
-              <select class="form-select" name="suburb" required>          
+              <label class="form-label">Suburb or Hotel...</label>
+              <select class="form-select" name="suburb" required>
+          <option disabled selected value="">Suburb or Hotel...</option>          
           <option value="Artarmon">Artarmon</option>        
-				  <option value="Hotels in CBD">Hotels in city</option>	
+				  <option value="Hotels in CBD">Hotel in Sydney</option>	
           <option value="Airport <--> Cruise">Airport <--> Cruise</option>
 				  <option value="Asquith">Asquith</option>
 				  <option value="Auburn">Auburn</option>
