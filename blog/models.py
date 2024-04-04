@@ -33,7 +33,8 @@ class Inquiry(models.Model):
     meeting_point = models.CharField(max_length=100, blank=True, null=True)
     is_confirmed = models.BooleanField(default=False, blank=True)        
     cancelled = models.BooleanField(default=False, blank=True) 
-    private_ride = models.BooleanField(default=False, blank=True)    
+    private_ride = models.BooleanField(default=False, blank=True)  
+    cruise = models.BooleanField(default=False, blank=True)    
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:        
@@ -74,6 +75,7 @@ class Post(models.Model):
     driver = models.ForeignKey('Driver', on_delete=models.CASCADE, null=True, blank=True)
     meeting_point = models.CharField(max_length=100, blank=True, null=True)
     is_confirmed = models.BooleanField(default=False, blank=True)
+    cruise = models.BooleanField(default=False, blank=True)  
     cancelled = models.BooleanField(default=False, blank=True)    
     private_ride = models.BooleanField(default=False, blank=True)
     reminder = models.BooleanField(default=False, blank=True)
