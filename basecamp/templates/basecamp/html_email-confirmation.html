@@ -284,11 +284,8 @@
 													Please pay ${{ price }} online in advance <a href="https://easygoshuttle.com.au/payonline/">easygoshuttle.com.au/payonline</a><br>
 													For those arriving in Sydney, payment in advance is kindly requested<br>
 													<!-- A booking may not be guaranteed without payment<br> -->
-												</p><br>
-												{% endif %}
-
-												<!-- Payment  -->
-												{% if direction != 'Pickup from Intl Airport' and direction != 'Pickup from Domestic Airport' and no_of_passenger >= 4 %}
+												</p><br>												
+												{% elif direction != 'Pickup from Intl Airport' and direction != 'Pickup from Domestic Airport' and no_of_passenger >= 4 %}
 												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
 													--- Payment ---</p>
 												<p style="Margin:0;font-size:12px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                  
