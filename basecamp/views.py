@@ -794,15 +794,10 @@ def p2p_single_detail(request):
         return_pickup_time = request.POST.get('return_pickup_time')
         message = request.POST.get('message') 
 
-        flight_time = 'cruise'
-        return_flight_time = 'cruise'
-        suburb = 'The Rocks'  
-
         recaptcha_response = request.POST.get('g-recaptcha-response')
         result = verify_recaptcha(recaptcha_response)
         if not result.get('success'):
             return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'}) 
-         
                
         data = {
             'name': name,
@@ -885,6 +880,7 @@ def p2p_single_detail_1(request):
         message = request.POST.get('message')
 
         suburb = 'The Rocks'
+        cruise = True
                
         data = {
             'name': name,
@@ -919,7 +915,7 @@ def p2p_single_detail_1(request):
         
         p = Inquiry_point(name=name, contact=contact, email=email, direction=direction, flight_date=flight_date, flight_time=flight_time,
                           pickup_time=pickup_time, flight_number=flight_number, street=street, suburb=suburb, no_of_passenger=no_of_passenger, 
-                          no_of_baggage=no_of_baggage, return_direction=return_direction, return_flight_date=return_flight_date, 
+                          no_of_baggage=no_of_baggage, return_direction=return_direction, return_flight_date=return_flight_date, cruise=cruise,
                           return_flight_time=return_flight_time, return_flight_number=return_flight_number, return_pickup_time=return_pickup_time, message=message)
         
         p.save() 
@@ -1071,7 +1067,7 @@ def price_detail(request):
         return render(request, 'basecamp/inquiry1.html', {})
 
 
-# Post 
+# Post & myself recording
 def confirmation_detail(request):
     if request.method == "POST":
         company_name = request.POST.get('company_name')
@@ -1175,7 +1171,7 @@ def confirmation_detail(request):
     else:
         return render(request, 'basecamp/confirmation.html', {})
 
-
+# client recording for airport transfers
 def booking_detail(request):
     if request.method == "POST":        
         name = request.POST.get('name')
@@ -1195,7 +1191,9 @@ def booking_detail(request):
         return_flight_date = request.POST.get('return_flight_date')
         return_flight_number = request.POST.get('return_flight_number')
         return_flight_time = request.POST.get('return_flight_time')
-        return_pickup_time = request.POST.get('return_pickup_time')     
+        return_pickup_time = request.POST.get('return_pickup_time') 
+
+        price = 'TBA'    
 
         recaptcha_response = request.POST.get('g-recaptcha-response')
         result = verify_recaptcha(recaptcha_response)
@@ -1253,7 +1251,7 @@ def booking_detail(request):
 
         p = Post(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
-                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction,
+                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction, price=price,
                  return_flight_date=return_flight_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
                  return_pickup_time=return_pickup_time, message=message, driver=sam_driver)
         
@@ -1276,7 +1274,7 @@ def booking_detail(request):
         return render(request, 'basecamp/booking.html', {})
     
 
-
+# client recording for cruise transfers
 def cruise_booking_detail(request):
     if request.method == "POST":        
         name = request.POST.get('name')
@@ -1300,7 +1298,9 @@ def cruise_booking_detail(request):
         return_pickup_time = request.POST.get('return_pickup_time') 
 
         return_flight_time = 'cruise'
-        suburb = 'The Rocks'    
+        suburb = 'The Rocks'
+        cruise = True
+        price = 'TBA'    
 
         recaptcha_response = request.POST.get('g-recaptcha-response')
         result = verify_recaptcha(recaptcha_response)
@@ -1357,8 +1357,8 @@ def cruise_booking_detail(request):
         sam_driver = Driver.objects.get(driver_name="Sam") 
 
         p = Post(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
-                 flight_time=flight_time, pickup_time=pickup_time, direction=direction, street=street,
-                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, suburb=suburb,  
+                 flight_time=flight_time, pickup_time=pickup_time, direction=direction, street=street, price=price,
+                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, suburb=suburb, cruise=cruise,  
                  return_flight_date=return_flight_date, return_flight_number=return_flight_number,  
                  return_pickup_time=return_pickup_time, return_flight_time=return_flight_time,
                  message=message, driver=sam_driver)
@@ -1421,7 +1421,7 @@ def confirm_booking_detail(request):
             message = user.message
             notice = user.notice
             price = user.price
-            paid = user.paid            
+            paid = user.paid          
             
             data = {
             'name': name,
@@ -1434,7 +1434,7 @@ def confirm_booking_detail(request):
         sam_driver = Driver.objects.get(driver_name="Sam")    
             
         p = Post(name=name, contact=contact, email=email, company_name=company_name, email1=email1, flight_date=flight_date, flight_number=flight_number,
-                 flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
+                 flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street, 
                  no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction, 
                  return_flight_date=return_flight_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
                  return_pickup_time=return_pickup_time, message=message, notice=notice, price=price, paid=paid, is_confirmed=is_confirmed, driver=sam_driver)
@@ -1459,7 +1459,7 @@ def sending_email_first_detail(request):
 
         no_of_passenger_int = int(user.no_of_passenger)
 
-        if user.flight_time == 'cruise':
+        if user.cruise:
             html_content = render_to_string("basecamp/html_email-confirmation-cruise.html", 
                                         {'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 'email': user.email, 'email1': user.email1,
                                          'flight_date': user.flight_date, 'flight_number': user.flight_number,
@@ -1521,7 +1521,7 @@ def sending_email_second_detail(request):
         user.sent_email = True
         user.save()  
 
-        if user.flight_time == 'cruise':
+        if user.cruise:
             html_content = render_to_string("basecamp/html_email-confirmation-cruise.html",
                                         {'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 'email': user.email, 'email1': user.email1,
                                          'flight_date': user.flight_date, 'flight_number': user.flight_number,
