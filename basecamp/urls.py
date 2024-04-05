@@ -24,6 +24,7 @@ urlpatterns = [
     path('privacy/', views.privacy),
     path('price_detail/', views.price_detail),
     path('cruise_inquiry/', views.cruise_inquiry, name="cruise_inquiry"),
+    path('cruise_inquiry_detail/', views.cruise_inquiry_detail),
     path('cruise_inquiry_1/', views.cruise_inquiry_1, name="cruise_inquiry_1"),
     path('inquiry/', views.inquiry, name="inquiry"),
     path('inquiry1/', views.inquiry1, name="inquiry1"),
