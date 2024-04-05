@@ -777,7 +777,7 @@ def inquiry_details2(request):
         return render(request, 'basecamp/inquiry2.html', {})
     
     
-# single point to point & cruise transfers    
+# single point to point  
 def p2p_single_detail(request):    
     if request.method == "POST":
         name = request.POST.get('name')
@@ -811,8 +811,8 @@ def p2p_single_detail(request):
         
         content = '''
         Hello, {} \n
-        Cruise or Point single 
-        ***Inquiry_point***\n
+        Point to Point single 
+        *** Inquiry_points ***\n
         https://easygoshuttle.com.au                   
         =============================            
         Email: {}  
@@ -828,9 +828,9 @@ def p2p_single_detail(request):
         send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])
                                    
         
-        p = Inquiry_point(name=name, contact=contact, email=email, flight_date=flight_date, flight_time=flight_time, suburb=suburb,
+        p = Inquiry_point(name=name, contact=contact, email=email, flight_date=flight_date, 
                           pickup_time=pickup_time, flight_number=flight_number, street=street, no_of_passenger=no_of_passenger, 
-                          no_of_baggage=no_of_baggage, return_flight_date=return_flight_date, return_flight_time=return_flight_time,
+                          no_of_baggage=no_of_baggage, return_flight_date=return_flight_date, 
                           return_flight_number=return_flight_number, return_pickup_time=return_pickup_time, message=message)
         
         p.save() 
@@ -851,6 +851,83 @@ def p2p_single_detail(request):
 
     else:
         return render(request, 'basecamp/p2p_single.html', {})
+    
+
+# cruise inquiry 
+def cruise_inquiry_detail(request):    
+    if request.method == "POST":
+        name = request.POST.get('name')
+        contact = request.POST.get('contact')
+        email = request.POST.get('email')
+        flight_date = request.POST.get('flight_date')
+        pickup_time = request.POST.get('pickup_time')
+        flight_number = request.POST.get('flight_number')
+        street = request.POST.get('street')
+        no_of_passenger = request.POST.get('no_of_passenger')
+        no_of_baggage = request.POST.get('no_of_baggage')        
+        return_flight_date = request.POST.get('return_flight_date')
+        return_flight_number = request.POST.get('return_flight_number')
+        return_pickup_time = request.POST.get('return_pickup_time')
+        message = request.POST.get('message') 
+
+        recaptcha_response = request.POST.get('g-recaptcha-response')
+        result = verify_recaptcha(recaptcha_response)
+        if not result.get('success'):
+            return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'}) 
+               
+        data = {
+            'name': name,
+            'email': email,
+            'flight_date': flight_date,
+            'pickup_time': pickup_time,
+            'flight_number': flight_number,
+            'street': street,
+            'return_pickup_time': return_pickup_time
+            }
+        
+        content = '''
+        Hello, {} \n
+        Cruise Inquiry
+        *** Inquiry_points ***\n
+        https://easygoshuttle.com.au                   
+        =============================            
+        Email: {}  
+        Pick up time: {}      
+        Start point: {}            
+        End point: {}  
+        Return pickup time: {}          
+        
+        =============================\n        
+        Best Regards,
+        EasyGo Admin \n\n        
+        ''' .format(data['name'], data['email'], data['pickup_time'], data['flight_number'], data['street'], data['return_pickup_time'])
+        send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])
+
+        cruise = True                                   
+        
+        p = Inquiry_point(name=name, contact=contact, email=email, flight_date=flight_date, cruise=cruise,
+                          pickup_time=pickup_time, flight_number=flight_number, street=street, no_of_passenger=no_of_passenger, 
+                          no_of_baggage=no_of_baggage, return_flight_date=return_flight_date, 
+                          return_flight_number=return_flight_number, return_pickup_time=return_pickup_time, message=message)
+        
+        p.save() 
+
+
+        today = date.today()
+        if flight_date <= str(today):
+            if is_ajax(request):
+                return render(request, 'basecamp/date_error.html')
+            else:
+                return render(request, 'basecamp/date_error.html')  
+        
+        
+        if is_ajax(request):
+            return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})
+        else:
+            return render(request, 'basecamp/inquiry_done.html')
+
+    else:
+        return render(request, 'basecamp/cruise_inquiry.html', {})
     
 
 def p2p_single_detail_1(request):    
@@ -1417,7 +1494,8 @@ def confirm_booking_detail(request):
             return_flight_time = user.return_flight_time
             if not return_flight_time:
                 return_flight_time = 'cruise' 
-            return_pickup_time = user.return_pickup_time           
+            return_pickup_time = user.return_pickup_time 
+            cruise = user.cruise          
             message = user.message
             notice = user.notice
             price = user.price
@@ -1434,7 +1512,7 @@ def confirm_booking_detail(request):
         sam_driver = Driver.objects.get(driver_name="Sam")    
             
         p = Post(name=name, contact=contact, email=email, company_name=company_name, email1=email1, flight_date=flight_date, flight_number=flight_number,
-                 flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street, 
+                 flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street, cruise=cruise,
                  no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction, 
                  return_flight_date=return_flight_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
                  return_pickup_time=return_pickup_time, message=message, notice=notice, price=price, paid=paid, is_confirmed=is_confirmed, driver=sam_driver)
