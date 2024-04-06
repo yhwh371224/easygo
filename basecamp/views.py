@@ -31,7 +31,7 @@ def home(request): return render(request, 'basecamp/home.html')
 def yoosung(request): return render(request, 'basecamp/yoosung.html')
 
 
-def rose_kam(request): return render(request, 'basecamp/rose_kam.html')
+def soyoung(request): return render(request, 'basecamp/soyoung.html')
 
 
 def reminder(request): return render(request, 'basecamp/reminder.html')
@@ -106,11 +106,7 @@ def inquiry(request):
     return render(request, 'basecamp/inquiry.html', context)
 
 
-def inquiry1(request): 
-    # context = {
-    #     'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
-    # }
-    return render(request, 'basecamp/inquiry1.html')
+def inquiry1(request): return render(request, 'basecamp/inquiry1.html')
 
 
 def inquiry2(request): 
