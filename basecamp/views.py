@@ -506,11 +506,6 @@ def inquiry_details1(request):
         return_flight_time = request.POST.get('return_flight_time')
         return_pickup_time = request.POST.get('return_pickup_time')
         message = request.POST.get('message')
-
-        # recaptcha_response = request.POST.get('g-recaptcha-response')
-        # result = verify_recaptcha(recaptcha_response)
-        # if not result.get('success'):
-        #     return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'}) 
         
         data = {
             'name': name,
@@ -594,9 +589,6 @@ def inquiry_details1(request):
                  return_flight_time=return_flight_time, return_pickup_time=return_pickup_time ,message=message)
         
         p.save() 
-
-        # if is_ajax(request):
-        #     return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})
 
         return render(request, 'basecamp/inquiry_done.html')
 
