@@ -472,9 +472,9 @@ def inquiry_details(request):
         today = date.today()
         if flight_date <= str(today):            
             if is_ajax(request):                
-                return render(request, 'basecamp/date_error.html')
+                return render(request, 'basecamp/flight_date_error.html')
             else:                
-                return render(request, 'basecamp/date_error.html')   
+                return render(request, 'basecamp/flight_date_error.html')   
 
         if is_ajax(request):
             return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})
@@ -708,9 +708,9 @@ def booking_form_detail(request):
         today = date.today()
         if flight_date <= str(today):            
             if is_ajax(request):                
-                return render(request, 'basecamp/date_error.html')
+                return render(request, 'basecamp/flight_date_error.html')
             else:                
-                return render(request, 'basecamp/date_error.html')  
+                return render(request, 'basecamp/flight_date_error.html')  
 
         if is_ajax(request):
             return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})
@@ -747,9 +747,9 @@ def inquiry_details2(request):
         today = date.today()
         if flight_date != str(today):
             if is_ajax(request):
-                return render(request, 'basecamp/date_error.html')
+                return render(request, 'basecamp/501.html')
             else:
-                return render(request, 'basecamp/date_error.html')
+                return render(request, 'basecamp/501.html')
                      
         message = '''
                 Contact Form
@@ -948,8 +948,6 @@ def p2p_single_detail_1(request):
         return_flight_date = request.POST.get('return_flight_date')
         return_flight_number = request.POST.get('return_flight_number')
         return_flight_time = request.POST.get('return_flight_time')
-        if not return_flight_time:
-            return_flight_time = 'cruise'
         return_pickup_time = request.POST.get('return_pickup_time')
         message = request.POST.get('message')
 
@@ -1335,9 +1333,9 @@ def booking_detail(request):
         today = date.today()
         if flight_date <= str(today):
             if is_ajax(request):
-                return render(request, 'basecamp/date_error.html')
+                return render(request, 'basecamp/flight_date_error.html')
             else:
-                return render(request, 'basecamp/date_error.html') 
+                return render(request, 'basecamp/flight_date_error.html') 
 
         if is_ajax(request):
             return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})
@@ -1463,7 +1461,10 @@ def confirm_booking_detail(request):
         email = request.POST.get('email')
         is_confirmed_str = request.POST.get('is_confirmed')
         is_confirmed = True if is_confirmed_str == 'True' else False
-        user = (Inquiry.objects.filter(email=email).first()) or (Inquiry_point.objects.filter(email=email).first())
+
+        inquiry = Inquiry.objects.filter(email=email).order_by('-created').first()
+        inquiry_point = Inquiry_point.objects.filter(email=email).order_by('-created').first()
+        user = inquiry if inquiry and inquiry.created > inquiry_point.created else inquiry_point
                             
         if not user:
             return render(request, 'basecamp/500.html') 
@@ -1490,8 +1491,6 @@ def confirm_booking_detail(request):
             return_flight_date = user.return_flight_date
             return_flight_number = user.return_flight_number
             return_flight_time = user.return_flight_time
-            if not return_flight_time:
-                return_flight_time = 'cruise' 
             return_pickup_time = user.return_pickup_time 
             cruise = user.cruise          
             message = user.message
@@ -1704,7 +1703,6 @@ def return_trip_detail(request):
         message = request.POST.get('message')
         price = request.POST.get('price')
         
-        # user = Post.objects.filter(email=email).first()
         user = Post.objects.filter(Q(email__iexact=email)).first()    
         
         if not user:
@@ -1844,13 +1842,19 @@ def flight_date_detail(request):
         flight_date = request.POST.get('flight_date')
 
         user_I = Inquiry.objects.filter(email=email).first()
+        user_Ip = Inquiry_point.objects.filter(email=email).first()
         user_P = Post.objects.filter(email=email).first()
                             
-        if not (user_I or user_P):
+        if not (user_I or user_Ip or user_P):
             return render(request, 'basecamp/502.html')   
              
         else:
-            user = user_I if user_I else user_P
+            if user_I:
+                user = user_I
+            elif user_Ip:
+                user = user_Ip
+            elif user_P:
+                user = user_P
 
             name = user.name
             contact = user.contact
@@ -1877,8 +1881,8 @@ def flight_date_detail(request):
             
             content = '''
             {} 
-            'flight date' amended from data_error.html \n
-            >> Go to the Inquiry or Post database \n
+            'The date' amended from data_error.html \n
+            >> Go to the Inquiry or Inquiry_point or Post \n
             https://easygoshuttle.com.au \n  
             ===============================
             Contact: {}
@@ -1897,6 +1901,15 @@ def flight_date_detail(request):
                      return_pickup_time=return_pickup_time, message=message)
 
             p.save() 
+
+        elif user_Ip: 
+            p = Inquiry_point (name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
+                     flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
+                     no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction,
+                     return_flight_date=return_flight_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
+                     return_pickup_time=return_pickup_time, message=message)
+
+            p.save()
              
 
         elif user_P:
