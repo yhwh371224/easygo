@@ -32,6 +32,8 @@ urlpatterns = [
     path('inquiry_details/', views.inquiry_details),
     path('inquiry_done/', views.inquiry_done, name='inquiry_done'),
     path('date_error/', views.date_error, name='date_error'),
+    path('flight_date_error/', views.flight_date_error, name='flight_date_error'),
+    path('cruise_date_error/', views.cruise_date_error, name='cruise_date_error'),
     path('inquiry_details1/', views.inquiry_details1),
     path('inquiry_details2/', views.inquiry_details2),    
     path('p2p_single/', views.p2p_single, name="p2p_single"),
