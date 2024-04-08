@@ -1464,53 +1464,55 @@ def confirm_booking_detail(request):
 
         inquiry = Inquiry.objects.filter(email=email).order_by('-created').first()
         inquiry_point = Inquiry_point.objects.filter(email=email).order_by('-created').first()
-        user = inquiry or inquiry_point 
+
+        if not (inquiry or inquiry_point): 
+            return render(request, 'basecamp/500.html')
         
-        if inquiry and inquiry_point:
-            if inquiry > inquiry_point: 
+        elif inquiry and inquiry_point:
+            # user = inquiry if inquiry and inquiry.created > inquiry_point.created else inquiry_point
+            if inquiry.created > inquiry_point.created: 
                 user = inquiry 
             else: 
-                user = inquiry_point  
- 
-        if not user: 
-            return render(request, 'basecamp/500.html')
+                user = inquiry_point          
 
         else: 
-            name = user.name            
-            contact = user.contact
-            company_name = user.company_name
-            email1 = user.email1            
-            flight_date = user.flight_date
-            flight_number = user.flight_number
-            flight_time = user.flight_time
-            if not flight_time:
-                flight_time = 'cruise'
-            pickup_time = user.pickup_time
-            direction = user.direction
-            suburb = user.suburb
-            if not suburb: 
-                suburb = 'The Rocks'
-            street = user.street
-            no_of_passenger = user.no_of_passenger
-            no_of_baggage = user.no_of_baggage
-            return_direction = user.return_direction
-            return_flight_date = user.return_flight_date
-            return_flight_number = user.return_flight_number
-            return_flight_time = user.return_flight_time
-            return_pickup_time = user.return_pickup_time 
-            cruise = user.cruise          
-            message = user.message
-            notice = user.notice
-            price = user.price
-            paid = user.paid          
-            
-            data = {
-            'name': name,
-            'email': email,            
-            'flight_date': flight_date,
-            'return_flight_number': return_flight_number}                    
-            
-            send_confirm_email.delay(data['name'], data['email'], data['flight_date'], data['return_flight_number'])
+            user = inquiry or inquiry_point
+
+        name = user.name            
+        contact = user.contact
+        company_name = user.company_name
+        email1 = user.email1            
+        flight_date = user.flight_date
+        flight_number = user.flight_number
+        flight_time = user.flight_time
+        if not flight_time:
+            flight_time = 'cruise'
+        pickup_time = user.pickup_time
+        direction = user.direction
+        suburb = user.suburb
+        if not suburb: 
+            suburb = 'The Rocks'
+        street = user.street
+        no_of_passenger = user.no_of_passenger
+        no_of_baggage = user.no_of_baggage
+        return_direction = user.return_direction
+        return_flight_date = user.return_flight_date
+        return_flight_number = user.return_flight_number
+        return_flight_time = user.return_flight_time
+        return_pickup_time = user.return_pickup_time 
+        cruise = user.cruise          
+        message = user.message
+        notice = user.notice
+        price = user.price
+        paid = user.paid          
+        
+        data = {
+        'name': name,
+        'email': email,            
+        'flight_date': flight_date,
+        'return_flight_number': return_flight_number}                    
+        
+        send_confirm_email.delay(data['name'], data['email'], data['flight_date'], data['return_flight_number'])
             
         sam_driver = Driver.objects.get(driver_name="Sam")    
             
