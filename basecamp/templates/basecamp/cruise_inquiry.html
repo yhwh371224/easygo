@@ -46,8 +46,9 @@
                 <hr>
                 <br>
                 <div class="mb-3 pb-1">
-                  <label class="form-label" >Cruise Trip date</label>
-                  <input class="form-control date-picker rounded" name="flight_date" type="text" placeholder="Choose trip date" data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;Y-m-d&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;}" required>
+                  <label class="form-label" >Cruise date&nbsp;(Sydney)</label>
+                   <input class="form-control date-picker rounded" required name="flight_date" type="text" placeholder="Choose cruise date" data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;F j, Y&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;}" >
+                  <div class="invalid-feedback">Please enter cruise date!</div>
                 </div>
                 <div class="mb-3 pb-1">
                   <label class="form-label" >Pickup time</label>
@@ -109,7 +110,7 @@
          </div>
           <div class="mb-3 pb-1">
             <label class="form-label" >Return pickup time</label>
-            <input class="form-control" type="time" name="return_pickup_time"  placeholder="Return Pickup time">
+            <input class="form-control" type="time" name="return_pickup_time"  placeholder="Return pickup time">
           <div class="invalid-feedback">Please enter your pickup time!</div>
           </div>
 
