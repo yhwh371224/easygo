@@ -1464,12 +1464,18 @@ def confirm_booking_detail(request):
 
         inquiry = Inquiry.objects.filter(email=email).order_by('-created').first()
         inquiry_point = Inquiry_point.objects.filter(email=email).order_by('-created').first()
-        user = inquiry if inquiry and inquiry.created > inquiry_point.created else inquiry_point
-                            
-        if not user:
-            return render(request, 'basecamp/500.html') 
-             
-        else:
+        user = inquiry or inquiry_point 
+        
+        if inquiry and inquiry_point:
+            if inquiry > inquiry_point: 
+                user = inquiry 
+            else: 
+                user = inquiry_point  
+ 
+        if not user: 
+            return render(request, 'basecamp/500.html')
+
+        else: 
             name = user.name            
             contact = user.contact
             company_name = user.company_name
@@ -1963,9 +1969,9 @@ def pickup_adjustment_detail(request):
         selected_option = request.POST.get('selected_option')
 
         today = datetime.now()
-        three_days_later = today + timedelta(days=3)
+        seven_days_later = today + timedelta(days=7)
         
-        user = Post.objects.filter(email=email, flight_date__range=[today, three_days_later]).first()
+        user = Post.objects.filter(email=email, flight_date__range=[today, seven_days_later]).first()
 
         if selected_option == 'Departure earlier pickup':
             user.pickup_time = adjustment_time
