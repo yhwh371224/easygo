@@ -1,14 +1,14 @@
 from django import forms
-from blog.models import Inquiry
+from blog.models import Inquiry, Post
+from .models import Inquiry_cruise, Inquiry_point
 
 
-class InquiryForm(forms.ModelForm):
+class BaseInquiryForm(forms.ModelForm):
     class Meta:
-        model = Inquiry
-        fields = {'name', 'contact', 'email', 'flight_date', 'flight_number', 'flight_time', 'pickup_time',
+        fields = ['name', 'contact', 'email', 'flight_date', 'flight_number', 'flight_time', 'pickup_time',
                   'direction', 'suburb', 'street', 'no_of_passenger', 'no_of_baggage', 'return_direction',
                   'return_flight_date', 'return_flight_number', 'return_flight_time', 'return_pickup_time',
-                  'message'} 
+                  'message']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'John Doe'}),
             'contact': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your mobile phone number'}),
@@ -31,4 +31,21 @@ class InquiryForm(forms.ModelForm):
         }
 
 
+class InquiryForm(BaseInquiryForm):
+    class Meta(BaseInquiryForm.Meta):
+        model = Inquiry
 
+
+class PostForm(BaseInquiryForm):
+    class Meta(BaseInquiryForm.Meta):
+        model = Post
+
+
+class InquiryPointForm(BaseInquiryForm):
+    class Meta(BaseInquiryForm.Meta):
+        model = Inquiry_point
+
+
+class InquiryCruiseForm(BaseInquiryForm):
+    class Meta(BaseInquiryForm.Meta):
+        model = Inquiry_cruise
