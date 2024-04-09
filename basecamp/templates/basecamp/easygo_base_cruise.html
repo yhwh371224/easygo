@@ -158,26 +158,27 @@
     <!-- Main theme script-->
     <script src="/static/basecamp/js/theme.min.js"></script>              
     <script>
-    	var returnFlightCheckbox = document.getElementById("return-flight");
-      var returnFlightFields = document.getElementById("return-flight-fields");
-      
-      returnFlightCheckbox.addEventListener("change", function() {
-          if (returnFlightCheckbox.checked) {
-              var xhr = new XMLHttpRequest();
-              xhr.open("GET", "{% url 'basecamp:return_flight_fields' %}");
-              xhr.onload = function() {
-                  if (xhr.status === 200) {
-                      returnFlightFields.innerHTML = xhr.responseText;
-                  } else {
-                      console.log("Request failed. Returned status of " + xhr.status);
-                  }
-              };
-              xhr.send();
-          } else {
-              returnFlightFields.innerHTML = "";
-          }
-      });
-    </script>
+      var returnCruiseCheckbox = document.getElementById("return-cruise");
+      var returnCruiseFields = document.getElementById("return-cruise-fields");
+
+      returnCruiseCheckbox.addEventListener("change", function() {
+        if (returnCruiseCheckbox.checked) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "{% url 'basecamp:return_cruise_fields' %}");
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    returnCruiseFields.innerHTML = xhr.responseText;
+                } else {
+                    console.log("Request failed. Returned status of " + xhr.status);
+                }
+            };
+            xhr.send();
+        } else {
+            returnCruiseFields.innerHTML = "";
+        }
+    });
+
+    </script>  
     <script>
       document.addEventListener("DOMContentLoaded", function () {
           var form = document.getElementById("booking-form");
