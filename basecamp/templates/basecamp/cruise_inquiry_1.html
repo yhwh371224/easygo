@@ -1,4 +1,4 @@
-{% extends 'basecamp/easygo_base_confirmation.html' %}
+{% extends 'basecamp/easygo_base_submit.html' %}
 {% block content %}
       <!-- Page content-->
       <!-- Page title-->
@@ -27,7 +27,7 @@
         <div class="row">
           <div class="col-lg-6 col-md-7 offset-lg-1 pb-2 mb-5" style="margin-top: -260px;">
             <div class="card border-0 shadow-lg">
-              <form action="/p2p_single_detail_1/" method="post" id="booking-form" class="card-body needs-validation p-5" novalidate>
+              <form action="/cruise_inquiry_detail_1/" method="post" id="booking-form" class="card-body needs-validation p-5" novalidate>
                 {% csrf_token %}
                 <div class="mb-3 pb-1">
                   <label class="form-label" >Full name</label>
@@ -111,7 +111,7 @@
           <br>
           <div class="mb-3 pb-1">
             <label class="form-label" >Return trip date</label>
-            <input class="form-control date-picker rounded" name="return_flight_date" type="text" placeholder="Choose trip date" data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;Y-m-d&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;, &quot;defaultDate&quot;: &quot;today&quot;}" >
+            <input class="form-control date-picker rounded" name="return_flight_date" type="text" placeholder="Choose trip date" data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;Y-m-d&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;}" >
           </div>
           <div class="mb-3 pb-1">
             <label class="form-label" >Return pickup time</label>

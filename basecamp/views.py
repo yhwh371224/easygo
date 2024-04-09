@@ -80,6 +80,9 @@ def flight_date_error(request): return render(request, 'basecamp/flight_date_err
 def cruise_date_error(request): return render(request, 'basecamp/cruise_date_error.html')
 
 
+def return_cruise_fields(request): return render(request, 'basecamp/return_cruise_fields.html')
+
+
 def return_flight_fields(request): return render(request, 'basecamp/return_flight_fields.html')
 
 
@@ -793,12 +796,8 @@ def p2p_single_detail(request):
         no_of_passenger = request.POST.get('no_of_passenger')
         no_of_baggage = request.POST.get('no_of_baggage')        
         return_flight_date = request.POST.get('return_flight_date')
-        if not return_flight_date:
-            return_flight_date = datetime.now().strftime('%Y-%m-%d')
         return_flight_number = request.POST.get('return_flight_number')
         return_pickup_time = request.POST.get('return_pickup_time')
-        if not return_pickup_time: 
-            return_pickup_time = datetime.now().strftime('%H:%M')
         message = request.POST.get('message') 
 
         recaptcha_response = request.POST.get('g-recaptcha-response')
@@ -865,12 +864,8 @@ def cruise_inquiry_detail(request):
         no_of_passenger = request.POST.get('no_of_passenger')
         no_of_baggage = request.POST.get('no_of_baggage')        
         return_flight_date = request.POST.get('return_flight_date')
-        if not return_flight_date:
-            return_flight_date = datetime.now().strftime('%Y-%m-%d')
         return_flight_number = request.POST.get('return_flight_number')
         return_pickup_time = request.POST.get('return_pickup_time')
-        if not return_pickup_time: 
-            return_pickup_time = datetime.now().strftime('%H:%M')
         message = request.POST.get('message') 
 
         recaptcha_response = request.POST.get('g-recaptcha-response')
@@ -946,8 +941,8 @@ def cruise_inquiry_detail(request):
         return render(request, 'basecamp/cruise_inquiry.html', {})
     
 
-# cruise home page detail 
-def p2p_single_detail_1(request):    
+# cruise from home page 
+def cruise_inquiry_detail_1(request):    
     if request.method == "POST":
         name = request.POST.get('name')
         contact = request.POST.get('contact')
@@ -966,13 +961,84 @@ def p2p_single_detail_1(request):
         no_of_baggage = request.POST.get('no_of_baggage')
         return_direction = request.POST.get('return_direction')        
         return_flight_date = request.POST.get('return_flight_date')
+        if not return_flight_date:
+            return_flight_date = date.today().strftime('%Y-%m-%d')
+        return_flight_number = request.POST.get('return_flight_number')
+        return_flight_time = request.POST.get('return_flight_time')
+        if not return_flight_time:
+            return_flight_time = datetime.now().strftime('%H:%M')
+        return_pickup_time = request.POST.get('return_pickup_time')
+        message = request.POST.get('message')
+
+        # suburb = 'The Rocks'
+        cruise = True
+               
+        data = {
+            'name': name,
+            'email': email,
+            'direction': direction,
+            'flight_date': flight_date,
+            'pickup_time': pickup_time,
+            'flight_number': flight_number,
+            'return_pickup_time': return_pickup_time
+            }
+        
+        content = '''
+        Hello, {} \n
+        Cruise inquiry \n
+        From Home page \n
+        ***Inquiry_cruise***\n
+        https://easygoshuttle.com.au                   
+        =============================            
+        Email: {}  
+        Direction: {}
+        Pick up time: {}      
+        Start point: {}            
+        Return pickup time: {}          
+        
+        =============================\n        
+        Best Regards,
+        EasyGo Admin \n\n        
+        ''' .format(data['name'], data['email'], data['direction'], data['pickup_time'], data['flight_number'], data['return_pickup_time'])
+        send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])                           
+        
+        p = Inquiry_cruise(name=name, contact=contact, email=email, direction=direction, flight_date=flight_date, flight_time=flight_time,
+                          pickup_time=pickup_time, flight_number=flight_number, no_of_passenger=no_of_passenger, 
+                          no_of_baggage=no_of_baggage, return_direction=return_direction, return_flight_date=return_flight_date, cruise=cruise,
+                          return_flight_time=return_flight_time, return_flight_number=return_flight_number, return_pickup_time=return_pickup_time, message=message)
+        
+        p.save() 
+
+        
+        return render(request, 'basecamp/inquiry_done.html')
+
+    else:
+        return render(request, 'basecamp/cruise_inquiry.html', {})
+    
+
+# p2p home page detail 
+def p2p_single_detail_1(request):    
+    if request.method == "POST":
+        name = request.POST.get('name')
+        contact = request.POST.get('contact')
+        email = request.POST.get('email')
+        direction = request.POST.get('direction')
+        flight_date = request.POST.get('flight_date')
+        pickup_time = request.POST.get('pickup_time')
+        flight_number = request.POST.get('flight_number')
+        flight_time = request.POST.get('flight_time')
+        if not flight_time:
+            flight_time = 'p2p'
+        street = request.POST.get('street')
+        suburb = request.POST.get('suburb')
+        no_of_passenger = request.POST.get('no_of_passenger')
+        no_of_baggage = request.POST.get('no_of_baggage')
+        return_direction = request.POST.get('return_direction')        
+        return_flight_date = request.POST.get('return_flight_date')
         return_flight_number = request.POST.get('return_flight_number')
         return_flight_time = request.POST.get('return_flight_time')
         return_pickup_time = request.POST.get('return_pickup_time')
         message = request.POST.get('message')
-
-        suburb = 'The Rocks'
-        cruise = True
                
         data = {
             'name': name,
@@ -987,7 +1053,7 @@ def p2p_single_detail_1(request):
         
         content = '''
         Hello, {} \n
-        Cruise or Point single \n
+        Point to point single \n
         From Home page \n
         ***Inquiry_point***\n
         https://easygoshuttle.com.au                   
@@ -1005,9 +1071,9 @@ def p2p_single_detail_1(request):
         ''' .format(data['name'], data['email'], data['direction'], data['pickup_time'], data['flight_number'], data['street'], data['return_pickup_time'])
         send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])                           
         
-        p = Inquiry_cruise(name=name, contact=contact, email=email, direction=direction, flight_date=flight_date, flight_time=flight_time,
+        p = Inquiry_point(name=name, contact=contact, email=email, direction=direction, flight_date=flight_date, flight_time=flight_time,
                           pickup_time=pickup_time, flight_number=flight_number, street=street, suburb=suburb, no_of_passenger=no_of_passenger, 
-                          no_of_baggage=no_of_baggage, return_direction=return_direction, return_flight_date=return_flight_date, cruise=cruise,
+                          no_of_baggage=no_of_baggage, return_direction=return_direction, return_flight_date=return_flight_date, 
                           return_flight_time=return_flight_time, return_flight_number=return_flight_number, return_pickup_time=return_pickup_time, message=message)
         
         p.save() 
@@ -1388,12 +1454,8 @@ def cruise_booking_detail(request):
         no_of_baggage = request.POST.get('no_of_baggage')
         message = request.POST.get('message')
         return_flight_date = request.POST.get('return_flight_date')
-        if not return_flight_date:
-            return_flight_date = datetime.now().strftime('%Y-%m-%d')
         return_flight_number = request.POST.get('return_flight_number')
         return_pickup_time = request.POST.get('return_pickup_time')
-        if not return_pickup_time: 
-            return_pickup_time = datetime.now().strftime('%H:%M') 
         return_flight_time = 'cruise'
         suburb = 'The Rocks'
         cruise = True
