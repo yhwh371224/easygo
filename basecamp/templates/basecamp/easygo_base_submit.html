@@ -67,8 +67,8 @@
                 <li class="nav-item dropdown active"><a class="nav-link dropdown-toggle" href="#"data-bs-toggle="dropdown">Point to Point</a>
                   <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="/p2p_single/">Price Inquiry for P2P</a></li>
-                    <li><a class="dropdown-item" href="/p2p/">Multiple way points</a></li>   
-                    <li><a class="dropdown-item" href="/home/#reasons">Why Book With Us?</a></li>                
+                    <li><a class="dropdown-item" href="/p2p/">Multiple way points</a></li>
+                    <li><a class="dropdown-item" href="/home/#reasons">Why Book With Us?</a></li>                   
                   </ul>
                       </li>       
                 <li class="nav-item dropdown active"><a class="nav-link dropdown-toggle" href="#"data-bs-toggle="dropdown">Cruise Transfers</a>
@@ -145,7 +145,7 @@
         <p class="fs-sm mb-3 order-md-1"><span class="text-light opacity-50 me-1">© 2023 EasyGo. All rights reserved. Made by</span><a class="nav-link-style nav-link-light" href="#" target="_blank" rel="noopener">EasyGo</a></p>
       </div>
     </footer>
-    <!-- Vendor scrits: js libraries and plugins-->    
+    <!-- Vendor scrits: js libraries and plugins-->
     <script src="/static/basecamp/js/bootstrap.bundle.min.js"></script>
     <script src="/static/basecamp/js/simplebar.min.js"></script>
     <script src="/static/basecamp/js/smooth-scroll.polyfills.min.js"></script>
@@ -154,60 +154,19 @@
     <script src="/static/basecamp/js/flatpickr.min.js"></script>
     <script src="/static/basecamp/js/rangePlugin.js"></script>
     <script src="/static/basecamp/js/date-picker.js"></script>
-    <script src="/static/basecamp/js/form_handler.js" defer></script>
     <!-- Main theme script-->
-    <script src="/static/basecamp/js/theme.min.js"></script>              
+    <script src="/static/basecamp/js/theme.min.js"></script>     
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script> 
     <script>
-    	var returnFlightCheckbox = document.getElementById("return-flight");
-      var returnFlightFields = document.getElementById("return-flight-fields");
-      
-      returnFlightCheckbox.addEventListener("change", function() {
-          if (returnFlightCheckbox.checked) {
-              var xhr = new XMLHttpRequest();
-              xhr.open("GET", "{% url 'basecamp:return_flight_fields' %}");
-              xhr.onload = function() {
-                  if (xhr.status === 200) {
-                      returnFlightFields.innerHTML = xhr.responseText;
-                  } else {
-                      console.log("Request failed. Returned status of " + xhr.status);
-                  }
-              };
-              xhr.send();
-          } else {
-              returnFlightFields.innerHTML = "";
-          }
-      });
-    </script>
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-          var form = document.getElementById("booking-form");
-          var submitButton = document.getElementById("submitButton");
-  
-          form.addEventListener("submit", function () {
-              submitButton.disabled = true;
-              submitButton.innerHTML = "Submitting..."; // You can change the text as needed
-          });
-      });
-  </script> 
-  <script async src="https://www.google.com/recaptcha/api.js"></script>
-  <script>    
-    if(typeof grecaptcha === 'undefined') {
-      grecaptcha = {};
-    }
-    grecaptcha.ready = function(cb){
-      if(typeof grecaptcha === 'undefined') {       
-        const c = '___grecaptcha_cfg';
-        window[c] = window[c] || {};
-        (window[c]['fns'] = window[c]['fns']||[]).push(cb);
-      } else {
-        cb();
-      }
-    }
-    grecaptcha.ready(function(){
-      grecaptcha.render("container", {
-        sitekey: "6LcF_xspAAAAAAjCmHaLpgYhyX_Ndi6taHUBrmUG"
-      });
-    });
-  </script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var form = document.getElementById("booking-form");
+            var submitButton = document.getElementById("submitButton");
+    
+            form.addEventListener("submit", function () {
+                submitButton.disabled = true;
+                submitButton.innerHTML = "Submitting..."; // You can change the text as needed
+            });
+        });
+    </script>    
   </body>
 </html>

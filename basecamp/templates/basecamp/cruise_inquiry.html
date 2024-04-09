@@ -1,4 +1,4 @@
-{% extends 'basecamp/easygo_base_form.html' %}
+{% extends 'basecamp/easygo_base_cruise.html' %}
 {% block content %}
       <!-- Page content-->
       <!-- Page title-->
@@ -96,7 +96,7 @@
           <hr>
           <br>
           <!-- Retrun trip -->
-          <div class="mb-3 pb-1">
+          <!-- <div class="mb-3 pb-1">
             <label class="form-label" >[ If Return trip ]</label>
           </div>
           <div class="mb-3 pb-1">
@@ -112,7 +112,16 @@
             <label class="form-label" >Return pickup time</label>
             <input class="form-control" type="time" name="return_pickup_time"  placeholder="Return pickup time">
           <div class="invalid-feedback">Please enter your pickup time!</div>
-          </div>
+          </div> -->
+
+          <!-- Return Cruise Option -->
+				  <br>
+				  <div id="return-cruise-fields">
+				  	<!-- Fields will be dynamically added here -->
+				  </div>				
+				  <label for="return-cruise">Return Trip:&nbsp;&nbsp;</label>
+				  <input type="checkbox" name="return_cruise" id="return-cruise">
+				  <br><br>
 
                 <div class="mb-3 pb-1">
                   <label class="form-label" >Message</label>
