@@ -32,6 +32,7 @@ class Inquiry_point(models.Model):
     is_confirmed = models.BooleanField(default=False, blank=True) 
     cancelled = models.BooleanField(default=False, blank=True) 
     private_ride = models.BooleanField(default=False, blank=True) 
+    cruise = models.BooleanField(default=False, blank=True)  
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:

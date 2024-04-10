@@ -40,7 +40,6 @@ urlpatterns = [
     path('inquiry_details2/', views.inquiry_details2),    
     path('p2p_single/', views.p2p_single, name="p2p_single"),
     path('p2p_single_detail/', views.p2p_single_detail),
-    path('p2p_single_detail_1/', views.p2p_single_detail_1),
     path('p2p/', views.p2p, name="p2p"),
     path('p2p_detail/', views.p2p_detail),
     path('cruise_booking/', views.cruise_booking, name="cruise_booking"),
