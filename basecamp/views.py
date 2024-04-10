@@ -477,7 +477,7 @@ def inquiry_details(request):
                  return_pickup_time=return_pickup_time ,message=message)
         
         p.save()
-
+        
         today = date.today()
         if flight_date <= str(today):            
             if is_ajax(request):                
@@ -927,14 +927,12 @@ def cruise_inquiry_detail(request):
         
         p.save() 
 
-        today = date.today()
-
-        if flight_date <= str(today): 
-            if is_ajax(request):                
-                return render(request, 'basecamp/cruise_date_error.html')            
-            else:                
-                return render(request, 'basecamp/cruise_date_error.html')
-            
+        # today = date.today()
+        # if flight_date <= str(today): 
+        #     if is_ajax(request):                
+        #         return render(request, 'basecamp/cruise_date_error.html')            
+        #     else:                
+        #         return render(request, 'basecamp/cruise_date_error.html')            
         if is_ajax(request):
             return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})        
         else:
@@ -1483,12 +1481,12 @@ def cruise_booking_detail(request):
         
         p.save()
 
-        today = date.today()
-        if flight_date <= str(today):
-            if is_ajax(request):
-                return render(request, 'basecamp/cruise_date_error.html')
-            else:
-                return render(request, 'basecamp/cruise_date_error.html') 
+        # today = date.today()
+        # if flight_date <= str(today):
+        #     if is_ajax(request):
+        #         return render(request, 'basecamp/cruise_date_error.html')
+        #     else:
+        #         return render(request, 'basecamp/cruise_date_error.html') 
 
         if is_ajax(request):
             return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})
@@ -1964,6 +1962,7 @@ def flight_date_detail(request):
     else:
         return render(request, 'basecamp/flight_date_error.html', {})
     
+
 # def for cruise date detail 
 def latest_cruise_date_by_email(email):
     latest_ic = Inquiry_cruise.objects.filter(email=email).order_by('-created').first()
