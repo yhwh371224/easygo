@@ -281,22 +281,19 @@
 												</p><br>
 												{% endif %}
 												
+												<!-- If paid or not-->
 												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
 													--- Payment ---</p>
+												{% if paid %}																								
+													<p style="Margin:0;font-size:12px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                  
+                                                    You have paid ${{ price }}, which we have received and greatly appreciate.
+												<br></p><br>
+												{% else %}	
 												<p style="Margin:0;font-size:12px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                  
 													Please pay ${{ price }} online in advance <a href="https://easygoshuttle.com.au/payonline/">easygoshuttle.com.au/payonline</a><br>
 													Payment is kindly required prior to the day of your pickup<br>
 													<!-- A booking may not be guaranteed without payment<br> -->
-												</p><br>
-												
-
-												<!-- If paid or not-->
-												{% if paid %}
-												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
-													--- Payment ---</p> 																								
-													<p style="Margin:0;font-size:12px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                  
-                                                    You have paid ${{ price }}, which we have received and greatly appreciate.
-												<br><br></p><br>												
+												</p><br>											
 												{% endif %}
 
 												<!-- For return trip -->	
