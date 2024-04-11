@@ -932,7 +932,8 @@ def cruise_inquiry_detail(request):
         #     if is_ajax(request):                
         #         return render(request, 'basecamp/cruise_date_error.html')            
         #     else:                
-        #         return render(request, 'basecamp/cruise_date_error.html')            
+        #         return render(request, 'basecamp/cruise_date_error.html')     
+                   
         if is_ajax(request):
             return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})        
         else:
@@ -1837,7 +1838,7 @@ def invoice_detail(request):
                                          'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
                                          'street': user.street, 'suburb': user.suburb, 'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
                                          'price': user.price, 'with_gst': with_gst, 'surcharge': surcharge, 'total_price': total_price, 
-                                         'balance': balance, 'paid': float_paid, 'message': user.message })
+                                         'balance': balance, 'paid': float_paid, 'message': user.message, 'notice': user.notice })
 
             text_content = strip_tags(html_content)
 
