@@ -8,10 +8,24 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = config('SECRET_KEY')
 
-# DEBUG = True
-DEBUG = config('DEBUG', cast=bool, default=True)
+ENVIRONMENT = config('ENVIRONMENT', default='production')
 
-ALLOWED_HOSTS = ['easygoshuttle.com.au', 'www.easygoshuttle.com.au', '149.28.188.33', '33.188.28.149.in-addr.arpa']
+if ENVIRONMENT == 'production':
+    DEBUG = config('DEBUG', cast=bool, default=True)
+    ALLOWED_HOSTS = ['easygoshuttle.com.au', 'www.easygoshuttle.com.au', '149.28.188.33', '33.188.28.149.in-addr.arpa']
+
+    SECURE_SSL_REDIRECT = True
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 31536000 
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_BROWSER_XSS_FILTER = True
+
+else:
+    DEBUG = True
+    ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -266,11 +280,5 @@ RECAPTCHA_SECRET_KEY = config('RECAPTCHA_SECRET_KEY')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-SECURE_SSL_REDIRECT = True
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
-SECURE_HSTS_SECONDS = 31536000 
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
-SECURE_BROWSER_XSS_FILTER = True
+
 
