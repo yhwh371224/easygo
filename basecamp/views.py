@@ -479,15 +479,11 @@ def inquiry_details(request):
         p.save()
         
         today = date.today()
-        if flight_date <= str(today):            
-            if is_ajax(request):                
-                return render(request, 'basecamp/flight_date_error.html')
-            else:                
-                return render(request, 'basecamp/flight_date_error.html')   
+        if flight_date <= str(today):                      
+            return render(request, 'basecamp/flight_date_error.html')   
 
         if is_ajax(request):
-            return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})
-        
+            return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})        
         else:
             return render(request, 'basecamp/inquiry_done.html')
         
@@ -932,8 +928,7 @@ def cruise_inquiry_detail(request):
         #     if is_ajax(request):                
         #         return render(request, 'basecamp/cruise_date_error.html')            
         #     else:                
-        #         return render(request, 'basecamp/cruise_date_error.html')     
-                   
+        #         return render(request, 'basecamp/cruise_date_error.html')            
         if is_ajax(request):
             return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})        
         else:
@@ -1498,16 +1493,6 @@ def cruise_booking_detail(request):
     else:
         return render(request, 'basecamp/cruise_booking.html', {})
 
-# def for confirm booking detail 
-def get_latest_inquiry_by_email(email):
-    inquiries = [
-        Inquiry.objects.filter(email=email),
-        Inquiry_cruise.objects.filter(email=email),
-        Inquiry_point.objects.filter(email=email)
-    ]
-    latest_inquiries = [inq.first() for inq in inquiries if inq.exists()]
-    return max(latest_inquiries, key=lambda x: x.created) if latest_inquiries else None
-
 
 def confirm_booking_detail(request):
     if request.method == "POST":
@@ -1515,7 +1500,13 @@ def confirm_booking_detail(request):
         is_confirmed_str = request.POST.get('is_confirmed')
         is_confirmed = is_confirmed_str == 'True'
 
-        user = get_latest_inquiry_by_email(email)
+        user_query = (
+            Inquiry.objects.filter(email=email) |
+            Inquiry_cruise.objects.filter(email=email) |
+            Inquiry_point.objects.filter(email=email)
+        )
+        user = user_query.order_by('-created').first()
+
         if not user:
             return render(request, 'basecamp/500.html')
 
@@ -1828,7 +1819,7 @@ def invoice_detail(request):
 
         today = date.today()           
         
-        if user.return_pickup_time:
+        if user.return_flight_number:
             user = Post.objects.filter(email=email)[1]
             html_content = render_to_string("basecamp/html_email-invoice.html",
                                         {'notice': notice, 'name': user.name, 'company_name': user.company_name, 'contact': user.contact, 'discount': discount,
@@ -1838,7 +1829,7 @@ def invoice_detail(request):
                                          'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
                                          'street': user.street, 'suburb': user.suburb, 'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
                                          'price': user.price, 'with_gst': with_gst, 'surcharge': surcharge, 'total_price': total_price, 
-                                         'balance': balance, 'paid': float_paid, 'message': user.message, 'notice': user.notice })
+                                         'balance': balance, 'paid': float_paid, 'message': user.message })
 
             text_content = strip_tags(html_content)
 
@@ -1880,24 +1871,16 @@ def invoice_detail(request):
         return render(request, 'beasecamp/invoice.html', {})
     
 
-# def for flight_date_detail 
-def get_latest_record_by_email(email):
-    latest_inquiry = Inquiry.objects.filter(email=email).order_by('-created').first()
-    latest_post = Post.objects.filter(email=email).order_by('-created').first()
-
-    if latest_inquiry and latest_post:
-        return latest_inquiry if latest_inquiry.created > latest_post.created else latest_post
-    else:
-        return latest_inquiry or latest_post
-
-
-
 def flight_date_detail(request):       
     if request.method == "POST":          
         email = request.POST.get('email')
         flight_date = request.POST.get('flight_date')
 
-        user = get_latest_record_by_email(email)
+        user_query = (
+            Inquiry.objects.filter(email=email) |
+            Post.objects.filter(email=email) 
+        )
+        user = user_query.order_by('-created').first()
         
         if not user:
             return render(request, 'basecamp/502.html')
@@ -1962,20 +1945,6 @@ def flight_date_detail(request):
 
     else:
         return render(request, 'basecamp/flight_date_error.html', {})
-    
-
-# def for cruise date detail 
-def latest_cruise_date_by_email(email):
-    latest_ic = Inquiry_cruise.objects.filter(email=email).order_by('-created').first()
-    latest_ip = Inquiry_point.objects.filter(email=email).order_by('-created').first()
-    latest_p = Post.objects.filter(email=email).order_by('-created').first()
-
-    latest_records = [record for record in [latest_ic, latest_ip, latest_p] if record is not None]
-
-    if not latest_records:
-        return None
-
-    return sorted(latest_records, key=lambda x: x.created, reverse=True)[0]
 
 
 def cruise_date_detail(request):       
@@ -1983,7 +1952,12 @@ def cruise_date_detail(request):
         email = request.POST.get('email')
         flight_date = request.POST.get('flight_date')
 
-        user = latest_cruise_date_by_email(email)
+        user_query = (
+            Inquiry_cruise.objects.filter(email=email) |
+            Inquiry_point.objects.filter(email=email) |
+            Post.objects.filter(email=email) 
+        )
+        user = user_query.order_by('-created').first()
                             
         if not user:
             return render(request, 'basecamp/502.html')   
