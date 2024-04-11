@@ -187,11 +187,13 @@ def notify_user_payment(sender, instance, created, **kwargs):
             email.send()
 
             post_name.paid = instance.gross_amount
+            post_name.reminder = True
             post_name.save()
 
             if post_name.return_pickup_time == 'x':
                     post_name_second = Post.objects.filter(email=post_name.email)[1]
                     post_name_second.paid = instance.gross_amount
+                    post_name.reminder = True
                     post_name_second.save() 
 
         else:
