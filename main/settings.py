@@ -14,6 +14,9 @@ if ENVIRONMENT == 'production':
     DEBUG = config('DEBUG', cast=bool, default=True)
     ALLOWED_HOSTS = ['easygoshuttle.com.au', 'www.easygoshuttle.com.au', '149.28.188.33', '33.188.28.149.in-addr.arpa']
 
+    RECAPTCHA_SITE_KEY = config('RECAPTCHA_SITE_KEY')
+    RECAPTCHA_SECRET_KEY = config('RECAPTCHA_SECRET_KEY')
+
     SECURE_SSL_REDIRECT = True
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_SECURE = True
@@ -25,6 +28,9 @@ if ENVIRONMENT == 'production':
 else:
     DEBUG = True
     ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+
+    RECAPTCHA_SITE_KEY = config('DEV_RECAPTCHA_SITE_KEY')
+    RECAPTCHA_SECRET_KEY = config('DEV_RECAPTCHA_SECRET_KEY')
 
 
 INSTALLED_APPS = [
@@ -263,10 +269,6 @@ EMAIL_BACKEND = config('EMAIL_BACKEND')
 
 # Recipient email address constant
 RECIPIENT_EMAIL = "info@easygoshuttle.com.au"
-
-
-RECAPTCHA_SITE_KEY = config('RECAPTCHA_SITE_KEY')
-RECAPTCHA_SECRET_KEY = config('RECAPTCHA_SECRET_KEY')
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
