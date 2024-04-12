@@ -319,6 +319,10 @@ def sending_email_second(request):
     return render(request, 'basecamp/sending_email_second.html')
 
 
+def sending_email_input_data(request): 
+    return render(request, 'basecamp/sending_email_input_data.html')
+
+
 def server_error_500(request): 
     return render(request, 'basecamp/500.html')
 
@@ -1690,6 +1694,56 @@ def sending_email_second_detail(request):
     
     else:
         return render(request, 'basecamp/sending_email_second.html', {})
+    
+
+def sending_email_input_data_detail(request):     
+    if request.method == "POST":
+        email = request.POST.get('email')   
+        field = request.POST.get('field')
+        data = request.POST.get('data')          
+
+        inquiry = Inquiry.objects.filter(email=email).first()
+        inquiry_cruise = Inquiry_cruise.objects.filter(email=email).first()
+        inquiry_point = Inquiry.objects.filter(email=email).first()
+        post = Post.objects.filter(email=email).first()
+
+        user = None
+        for obj in [inquiry, inquiry_cruise, inquiry_point, post]:
+            if obj:
+                if user is None or obj.created > user.created:
+                    user = obj
+
+        if not user:
+            return render(request, 'basecamp/500.html')
+
+        else:
+            html_content = render_to_string("basecamp/html_email-input-date.html", 
+                                        {'name': user.name, 'contact': user.contact, 'email': user.email, 
+                                         'flight_date': user.flight_date, 'flight_number': user.flight_number,
+                                         'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
+                                         'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
+                                         'no_of_baggage': user.no_of_baggage, 'field': field, 'data': data, 
+                                         'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date, 
+                                         'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
+                                         'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
+                                         })
+            text_content = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                "Checking date - EasyGo",
+                text_content,
+                '',
+                [email, RECIPIENT_EMAIL]
+            )
+            email.attach_alternative(html_content, "text/html")
+            email.send()
+
+
+        return render(request, 'basecamp/confirmation_detail.html',
+                        {'name' : user.name, 'email': email}) 
+    
+    else:
+        return render(request, 'beasecamp/sending_email_first.html', {})   
+
 
 
 def save_data_only_detail(request):     
