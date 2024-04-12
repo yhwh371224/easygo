@@ -14,8 +14,7 @@ from django.utils.html import strip_tags
 from django.views.decorators.csrf import csrf_exempt
 
 from main.settings import RECIPIENT_EMAIL
-from basecamp.models import Inquiry_point, Inquiry_cruise
-from blog.models import Post, Inquiry, Payment, Driver
+from blog.models import Post, Inquiry, Payment, Driver, Inquiry_point, Inquiry_cruise
 from blog.tasks import send_confirm_email
 
 
@@ -1500,12 +1499,17 @@ def confirm_booking_detail(request):
         is_confirmed_str = request.POST.get('is_confirmed')
         is_confirmed = is_confirmed_str == 'True'
 
-        user_query = (
-            Inquiry.objects.filter(email=email) |
-            Inquiry_cruise.objects.filter(email=email) |
-            Inquiry_point.objects.filter(email=email)
-        )
-        user = user_query.order_by('-created').first()
+        inquiry = Inquiry.objects.filter(email=email).order_by('-created').first()
+        inquiry_cruise = Inquiry_cruise.objects.filter(email=email).order_by('-created').first()
+        inquiry_point = Inquiry.objects.filter(email=email).order_by('-created').first()
+
+        # user = max([inquiry, inquiry_cruise, inquiry_point], key=lambda x: getattr(x, 'created', None))
+
+        user = None
+        for obj in [inquiry, inquiry_cruise, inquiry_point]:
+            if obj:
+                if user is None or obj.created > user.created:
+                    user = obj
 
         if not user:
             return render(request, 'basecamp/500.html')
