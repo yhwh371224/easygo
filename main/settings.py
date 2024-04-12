@@ -29,9 +29,6 @@ else:
     DEBUG = True
     ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
-    RECAPTCHA_SITE_KEY = config('DEV_RECAPTCHA_SITE_KEY')
-    RECAPTCHA_SECRET_KEY = config('DEV_RECAPTCHA_SECRET_KEY')
-
 
 INSTALLED_APPS = [
     'django.contrib.admin',

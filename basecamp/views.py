@@ -1715,15 +1715,17 @@ def sending_email_second_detail(request):
 
 def sending_email_input_data_detail(request):     
     if request.method == "POST":
-        email = request.POST.get('email')            
+        email = request.POST.get('email')
+        field = request.POST.get('field')
+        data = request.POST.get('data')            
 
         inquiry = Inquiry.objects.filter(email=email).first()
-        # inquiry_cruise = Inquiry_cruise.objects.filter(email=email).first()
-        # inquiry_point = Inquiry.objects.filter(email=email).first()
+        inquiry_cruise = Inquiry_cruise.objects.filter(email=email).first()
+        inquiry_point = Inquiry.objects.filter(email=email).first()
         post = Post.objects.filter(email=email).first()
 
         user = None
-        for obj in [inquiry, post]:
+        for obj in [inquiry, inquiry_cruise, inquiry_point, post]:
             if obj:
                 if user is None or obj.created > user.created:
                     user = obj
@@ -1737,7 +1739,7 @@ def sending_email_input_data_detail(request):
                                          'flight_date': user.flight_date, 'flight_number': user.flight_number,
                                          'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
                                          'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
-                                         'no_of_baggage': user.no_of_baggage, 
+                                         'no_of_baggage': user.no_of_baggage, 'field': field, 'data': data, 
                                          'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date, 
                                          'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
                                          'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
