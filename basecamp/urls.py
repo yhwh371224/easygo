@@ -95,6 +95,8 @@ urlpatterns = [
     path('sending_email_first_detail/', views.sending_email_first_detail),
     path('sending_email_second/', views.sending_email_second, name="sending_email_second"),
     path('sending_email_second_detail/', views.sending_email_second_detail),
+    path('sending_email_input_data/', views.sending_email_input_data),
+    path('sending_email_input_data_detail/', views.sending_email_input_data_detail),
     path('sitemap/', views.sitemap),
     path('soyoung/', views.soyoung),
     path('terms/', views.terms),
