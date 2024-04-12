@@ -31,144 +31,156 @@ def about_us(request):
     return render(request, 'basecamp/about_us.html')
 
 
-def airport_transfers_asquith(request): 
-    return render(request, 'basecamp/airport-transfers-asquith.html')
+def artarmon(request): return render(
+    request, 'basecamp/airport-transfers-artarmon.html')
 
 
-def airport_transfers_berowra(request): 
-    return render(request, 'basecamp/airport-transfers-berowra.html')
+def roseville(request): return render(
+    request, 'basecamp/airport-transfers-roseville.html')
 
 
-def airport_transfers_blacktown(request): 
-    return render(request, 'basecamp/airport-transfers-blacktown.html')
+def sydney_city(request): return render(
+    request, 'basecamp/airport-transfers-sydney-city.html')
 
 
-def airport_transfers_chatswood(request): 
-    return render(request, 'basecamp/airport-transfers-chatswood.html')
+def blacktown(request): return render(
+    request, 'basecamp/airport-transfers-blacktown.html')
 
 
-def airport_transfers_doonside(request): 
-    return render(request, 'basecamp/airport-transfers-doonside.html')
+def chatswood(request): return render(
+    request, 'basecamp/airport-transfers-chatswood.html')
 
 
-def airport_transfers_eastwood(request): 
-    return render(request, 'basecamp/airport-transfers-eastwood.html')
+def epping(request): return render(
+    request, 'basecamp/airport-transfers-epping.html')
 
 
-def airport_transfers_epping(request): 
-    return render(request, 'basecamp/airport-transfers-epping.html')
+def hornsby(request): return render(
+    request, 'basecamp/airport-transfers-hornsby.html')
 
 
-def airport_transfers_gordon(request): 
-    return render(request, 'basecamp/airport-transfers-gordon.html')
+def north_shore(request): return render(
+    request, 'basecamp/airport-transfers-north-shore.html')
 
 
-def airport_transfers_hornsby(request): 
-    return render(request, 'basecamp/airport-transfers-hornsby.html')
+def north_west(request): return render(
+    request, 'basecamp/airport-transfers-north-west.html')
 
 
-def airport_transfers_lane_cove(request): 
-    return render(request, 'basecamp/airport-transfers-lane-cove.html')
+def parramatta(request): return render(
+    request, 'basecamp/airport-transfers-parramatta.html')
 
 
-def airport_transfers_linfield(request): 
-    return render(request, 'basecamp/airport-transfers-linfield.html')
+def ryde(request): return render(
+    request, 'basecamp/airport-transfers-ryde.html')
 
 
-def airport_transfers_macquarie_park(request): 
-    return render(request, 'basecamp/airport-transfers-macquarie-park.html')
+def st_ives(request): return render(
+    request, 'basecamp/airport-transfers-st-ives.html')
 
 
-def airport_transfers_marsfield(request): 
-    return render(request, 'basecamp/airport-transfers-marsfield.html')
+def thornleigh(request): return render(
+    request, 'basecamp/airport-transfers-thornleigh.html')
 
 
-def airport_transfers_middle_cove(request): 
-    return render(request, 'basecamp/airport-transfers-middle-cove.html')
+def toongabbie(request): return render(
+    request, 'basecamp/airport-transfers-toongabbie.html')
 
 
-def airport_transfers_mini_bus(request): 
-    return render(request, 'basecamp/airport-transfers-mini-bus.html')
+def westleigh(request): return render(
+    request, 'basecamp/airport-transfers-westleigh.html')
 
 
-def airport_transfers_mount_kuring_gai(request): 
-    return render(request, 'basecamp/airport-transfers-mount-kuring-gai.html')
+def pennant_hills(request): return render(
+    request, 'basecamp/airport-transfers-pennant-hills.html')
 
 
-def airport_transfers_north_shore(request): 
-    return render(request, 'basecamp/airport-transfers-north-shore.html')
+def normanhurst(request): return render(
+    request, 'basecamp/airport-transfers-normanhurst.html')
 
 
-def airport_transfers_north_west(request): 
-    return render(request, 'basecamp/airport-transfers-north-west.html')
+def wahroonga(request): return render(
+    request, 'basecamp/airport-transfers-wahroonga.html')
 
 
-def airport_transfers_normanhurst(request): 
-    return render(request, 'basecamp/airport-transfers-normanhurst.html')
+def asquith(request): return render(
+    request, 'basecamp/airport-transfers-asquith.html')
 
 
-def airport_transfers_parramatta(request): 
-    return render(request, 'basecamp/airport-transfers-parramatta.html')
+def turramurra(request): return render(
+    request, 'basecamp/airport-transfers-turramurra.html')
 
 
-def airport_transfers_pennant_hills(request): 
-    return render(request, 'basecamp/airport-transfers-pennant-hills.html')
+def waitara(request): return render(
+    request, 'basecamp/airport-transfers-waitara.html')
 
 
-def airport_transfers_pymble(request): 
-    return render(request, 'basecamp/airport-transfers-pymble.html')
+def pymble(request): return render(
+    request, 'basecamp/airport-transfers-pymble.html')
 
 
-def airport_transfers_roseville(request): 
-    return render(request, 'basecamp/airport-transfers-roseville.html')
+def gordon(request): return render(
+    request, 'basecamp/airport-transfers-gordon.html')
 
 
-def airport_transfers_ryde(request): 
-    return render(request, 'basecamp/airport-transfers-ryde.html')
+def killara(request): return render(
+    request, 'basecamp/airport-transfers-killara.html')
 
 
-def airport_transfers_st_ives(request): 
-    return render(request, 'basecamp/airport-transfers-st-ives.html')
+def berowra(request): return render(
+    request, 'basecamp/airport-transfers-berowra.html')
 
 
-def airport_transfers_sydney_city(request): 
-    return render(request, 'basecamp/airport-transfers-sydney-city.html')
+def mt_colah(request): return render(
+    request, 'basecamp/airport-transfers-mt-colah.html')
 
 
-def airport_transfers_thornleigh(request): 
-    return render(request, 'basecamp/airport-transfers-thornleigh.html')
+def mount_kuring_gai(request): return render(
+    request, 'basecamp/airport-transfers-mount-kuring-gai.html')
 
 
-def airport_transfers_toongabbie(request): 
-    return render(request, 'basecamp/airport-transfers-toongabbie.html')
+def warrawee(request): return render(
+    request, 'basecamp/airport-transfers-warrawee.html')
 
 
-def airport_transfers_turramurra(request): 
-    return render(request, 'basecamp/airport-transfers-turramurra.html')
+def lane_cove(request): return render(
+    request, 'basecamp/airport-transfers-lane-cove.html')
 
 
-def airport_transfers_waitara(request): 
-    return render(request, 'basecamp/airport-transfers-waitara.html')
+def middle_cove(request): return render(
+    request, 'basecamp/airport-transfers-middle-cove.html')
 
 
-def airport_transfers_wahroonga(request): 
-    return render(request, 'basecamp/airport-transfers-wahroonga.html')
+def west_pymble(request): return render(
+    request, 'basecamp/airport-transfers-west-pymble.html')
 
 
-def airport_transfers_warrawee(request): 
-    return render(request, 'basecamp/airport-transfers-warrawee.html')
+def linfield(request): return render(
+    request, 'basecamp/airport-transfers-linfield.html')
 
 
-def airport_transfers_west_pymble(request): 
-    return render(request, 'basecamp/airport-transfers-west-pymble.html')
+def marsfield(request): return render(
+    request, 'basecamp/airport-transfers-marsfield.html')
 
 
-def airport_transfers_westleigh(request): 
-    return render(request, 'basecamp/airport-transfers-westleigh.html')
+def doonside(request): return render(
+    request, 'basecamp/airport-transfers-doonside.html')
 
 
-def airport_transfers_willoughby(request): 
-    return render(request, 'basecamp/airport-transfers-willoughby.html')
+def eastwood(request): return render(
+    request, 'basecamp/airport-transfers-eastwood.html')
+
+
+def macquarie_park(request): return render(
+    request, 'basecamp/airport-transfers-macquarie-park.html')
+
+
+def mini_bus(request): return render(
+    request, 'basecamp/airport-transfers-mini-bus.html')
+
+
+def willoughby(request): return render(
+    request, 'basecamp/airport-transfers-willoughby.html')
 
 
 def booking(request): 
@@ -185,6 +197,7 @@ def booking_form(request):
     return render(request, 'basecamp/booking_form.html', context)
 
 
+@login_required
 def confirmation(request): 
     return render(request, 'basecamp/confirmation.html')
 
@@ -217,6 +230,10 @@ def date_error(request):
 
 def flight_date_error(request): 
     return render(request, 'basecamp/flight_date_error.html')
+
+
+def information(request): 
+    return render(request, 'basecamp/information.html')
 
 
 def inquiry(request): 
@@ -323,35 +340,35 @@ def sending_email_input_data(request):
     return render(request, 'basecamp/sending_email_input_data.html')
 
 
-def server_error_500(request): 
+def server_error(request):
     return render(request, 'basecamp/500.html')
 
 
-def server_error_501(request): 
+def server_error(request): 
     return render(request, 'basecamp/501.html')
 
 
-def server_error_502(request): 
+def server_error(request): 
     return render(request, 'basecamp/502.html')
 
 
-def server_error_503(request): 
+def server_error(request): 
     return render(request, 'basecamp/503.html')
 
 
-def server_error_504(request): 
+def server_error(request): 
     return render(request, 'basecamp/504.html')
 
 
-def server_error_505(request): 
+def server_error(request): 
     return render(request, 'basecamp/505.html')
 
 
-def server_error_506(request): 
+def server_error(request): 
     return render(request, 'basecamp/506.html')
 
 
-def server_error_507(request): 
+def server_error(request): 
     return render(request, 'basecamp/507.html')
 
 
@@ -1698,17 +1715,15 @@ def sending_email_second_detail(request):
 
 def sending_email_input_data_detail(request):     
     if request.method == "POST":
-        email = request.POST.get('email')   
-        field = request.POST.get('field')
-        data = request.POST.get('data')          
+        email = request.POST.get('email')            
 
         inquiry = Inquiry.objects.filter(email=email).first()
-        inquiry_cruise = Inquiry_cruise.objects.filter(email=email).first()
-        inquiry_point = Inquiry.objects.filter(email=email).first()
+        # inquiry_cruise = Inquiry_cruise.objects.filter(email=email).first()
+        # inquiry_point = Inquiry.objects.filter(email=email).first()
         post = Post.objects.filter(email=email).first()
 
         user = None
-        for obj in [inquiry, inquiry_cruise, inquiry_point, post]:
+        for obj in [inquiry, post]:
             if obj:
                 if user is None or obj.created > user.created:
                     user = obj
@@ -1722,7 +1737,7 @@ def sending_email_input_data_detail(request):
                                          'flight_date': user.flight_date, 'flight_number': user.flight_number,
                                          'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
                                          'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
-                                         'no_of_baggage': user.no_of_baggage, 'field': field, 'data': data, 
+                                         'no_of_baggage': user.no_of_baggage, 
                                          'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date, 
                                          'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
                                          'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
