@@ -24,8 +24,7 @@
 			  <br>
 				<a class="btn btn-primary" href="/sending_email_first/">Sending Email only (first)</a>&nbsp;|&nbsp;<a class="btn btn-success" href="/sending_email_second/">Sending Email only (second)</a><br>
 				<a class="btn btn-dark" href="/save_data_only/">Save Data only</a>&nbsp;|<a class="btn btn-warning" href="/return_trip/">return_trip</a>&nbsp;|&nbsp;<a class="btn btn-info" href="/invoice/">Send_invoice</a><br>
-				<a class="btn btn-primary" href="/pickup_adjustment/">Pickup_adjustment</a>&nbsp;|&nbsp;<a class="btn btn-info" href="/confirm_booking/">confirm_booking</a>&nbsp;|&nbsp;<a class="btn btn-success" href="/reminder/">reminder</a><br>
-				<a class="btn btn-primary" href="/sending_email_input_data/">Sending email for wrong data</a><br>				
+				<a class="btn btn-primary" href="/pickup_adjustment/">Pickup_adjustment</a>&nbsp;|&nbsp;<a class="btn btn-info" href="/confirm_booking/">confirm_booking</a>&nbsp;|&nbsp;<a class="btn btn-success" href="/reminder/">reminder</a><br>				
 			</div>
             </div>
           </div>
@@ -79,12 +78,15 @@
 				<div class="card text-white bg-secondary p-4">
 					<div class="mb-3 pb-1">
 						<label class="form-label">Direction</label>
-						<select class="form-select" name="direction" id="direction" required>						
+						<select class="form-select" name="direction" id="direction" >						
 							<option value="Drop off to Domestic Airport">Drop off to Domestic Airport</option>
 							<option value="Drop off to Intl Airport">Drop off to Intl Airport</option>						
 							<option value="Pickup from Domestic Airport">Pickup from Domestic Airport</option>					
 							<option value="Pickup from Intl Airport">Pickup from Intl Airport</option> 
-							<option value="Point to Point">Point to Point</option>
+							<option value="From Airport To White Bay">From Airport To White Bay</option>
+                      		<option value="From Airport To OPT">From Airport To OPT</option>						
+                      		<option value="From White Bay To Airport">From White Bay To Airport</option>					
+                      		<option value="From OPT To Airport">From OPT To Airport</option> 
 						</select>
 					</div>
 				<div class="mb-3 pb-1">
