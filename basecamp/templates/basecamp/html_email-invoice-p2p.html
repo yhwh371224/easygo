@@ -239,34 +239,21 @@
 													<strong>Invoice date: {{ invoice_date }}</strong><br><br>
                                                 </p>
 												<p style="Margin:0;font-size:12px;line-height:20px;Margin-bottom:6px;border-top: 1px solid #a09a9a;">
-												<p style="Margin:0;font-size:12px;line-height:20px;Margin-bottom:6px;">
-												{% if not direction %}
-													{% if return_flight_number %}
-													Trip type: Round Trip<br>
-													Service: Point to point/Cruise<br>
-													{{ flight_number }} To/From {{ street }}<br>
-													Trip date: {{ flight_date }} & {{ return_flight_date}}<br>																										
-													{% else %}
-													Trip type: Single Trip<br>
-													Service: Point to point/Cruise<br>
-													{{ flight_number }} To {{ street }}<br>
-													Trip date: {{ flight_date }}<br>
-													{% endif %}																																																			
-												{% else %}
-													{% if return_flight_number %}
-													Trip type: Round Trip<br>
-													Service: Airport transfers/Cruise<br>
-													Flight date: {{ flight_date }} & {{ return_flight_date}}<br>													
-													{% else %}
-													Trip type: Single Trip<br>
-													Service: Airport transfers/Cruise<br>
-													Flight date: {{ flight_date }}<br>													
-													{% endif %}															
-													Address: {{ street }}, {{ suburb }}<br>												
-												{% endif %}
-												Pick-up time: {{ pickup_time }}<br>												
-												Number of Passenger: {{ no_of_passenger }}<br>
-												Number of Baggage: {{ no_of_baggage }}<br>
+												<p style="Margin:0;font-size:12px;line-height:20px;Margin-bottom:6px;">                                                                                                    
+                                                    Trip type: Multiple Point to Point Trips<br>
+                                                    Booking date: {{ p2p_date }}<br>
+                                                    Pickup time: {{ first_putime }}<br>
+                                                    First point: {{ first_pickup_location }}<br>													
+													Second point: {{ second_pickup_location }}<br>
+													{% if third_pickup_location %}
+													Third point: {{ third_pickup_location }}<br>
+													{% endif %}
+													{% if fourth_pickup_location %}
+													Fourth point: {{ fourth_pickup_location }}<br>                                                    
+													{% endif %}
+                                                    End point: {{ fourth_dropoff_location }}<br>     												    
+												    Number of Passenger: {{ no_of_passenger }}<br>
+												    Number of Baggage: {{ no_of_baggage }}<br>
 												<!-- message -->
 												{% if message %}*{{ message }}{% endif %}</p>
 											</td>
