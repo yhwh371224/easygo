@@ -226,7 +226,7 @@
                                     <table class="content" style="border-spacing:0;text-align: center;" role="presentation">
 										<tr>
 											<td align="left" style="padding-left:0px;">
-												<p style="Margin:0;font-size:18px;font-weight:bold;line-height:22px;">Dear {{ name }},</p>
+												<p style="Margin:0;font-size:18px;font-weight:bold;line-height:22px;">Hello {{ name }},</p>
 											</td>
 										</tr>
 										<tr>
@@ -235,16 +235,30 @@
                                                     I hope this email finds you well. 
                                                     I am writing to request a confirmation of the details provided for your booking inquiry.<br><br>
 
-                                                    It appears that there may be a discrepancy in the information submitted, 
-                                                    and we kindly ask for your assistance in verifying the accuracy of the {{ field }}<br>
+                                                    <span style="color: #eb7828">It appears that there may be a discrepancy in the information submitted, 
+														and we kindly ask for your assistance in verifying the accuracy of the</span><span style="color: blue">{{ field }}</span><br><br>
 
-                                                    The detail you entered in the form was {{ data }} <br><br>
+                                                    The details you entered in the form are as follows:<br><br>
 
-                                                    <!-- {% if flight_date %}
-                                                    Flight date: {{ flight_date }}<br><br>
-                                                    {% elif flight_number %}
-                                                    Flight number: {{ flight_number }}<br><br>
-                                                    {% endif %} -->
+                                                <p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                    
+													Contact:  {{ contact }}<br>
+													Email:  {{ email }}<br>
+													Flight date:  {{ flight_date }}<br>
+													Flight number:  {{ flight_number }}<br>
+													Direction:  {{ direction }}<br>
+												{% if direction == 'Pickup from Intl Airport' or direction == 'Pickup from Domestic Airport' %}
+													Arrival time in Sydney:  {{ flight_time }}<br>
+												{% else %}
+													Departure time from Sydney: {{ flight_time }}<br>
+												{% endif %}
+													Pickup time:  {{ pickup_time }}<br>
+													Street:  {{ street }}<br>
+													Suburb:  {{ suburb }}<br>                                                   
+													Number of Passenger:  {{ no_of_passenger }}<br>
+													Number of baggage:  {{ no_of_baggage }}<br>
+													Message: <br>
+													{{ message }}<br><br>     
+												</p>       					
 
                                                     Your prompt attention to this matter would be greatly appreciated as we strive to ensure a seamless experience for you.<br><br>
 
