@@ -31,16 +31,17 @@ def about_us(request):
     return render(request, 'basecamp/about_us.html')
 
 
+# Suburb names 
 def artarmon(request): return render(
     request, 'basecamp/airport-transfers-artarmon.html')
 
 
-def roseville(request): return render(
-    request, 'basecamp/airport-transfers-roseville.html')
+def asquith(request): return render(
+    request, 'basecamp/airport-transfers-asquith.html')
 
 
-def sydney_city(request): return render(
-    request, 'basecamp/airport-transfers-sydney-city.html')
+def berowra(request): return render(            
+    request, 'basecamp/airport-transfers-berowra.html')
 
 
 def blacktown(request): return render(
@@ -51,12 +52,60 @@ def chatswood(request): return render(
     request, 'basecamp/airport-transfers-chatswood.html')
 
 
+def doonside(request): return render(
+    request, 'basecamp/airport-transfers-doonside.html')
+
+
+def eastwood(request): return render(
+    request, 'basecamp/airport-transfers-eastwood.html')
+
+
 def epping(request): return render(
     request, 'basecamp/airport-transfers-epping.html')
 
 
+def gordon(request): return render(
+    request, 'basecamp/airport-transfers-gordon.html')
+
+
 def hornsby(request): return render(
     request, 'basecamp/airport-transfers-hornsby.html')
+
+
+def killara(request): return render(
+    request, 'basecamp/airport-transfers-killara.html')
+
+
+def lane_cove(request): return render(
+    request, 'basecamp/airport-transfers-lane-cove.html')
+
+
+def linfield(request): return render(
+    request, 'basecamp/airport-transfers-linfield.html')
+
+
+def macquarie_park(request): return render(
+    request, 'basecamp/airport-transfers-macquarie-park.html')
+
+
+def marsfield(request): return render(
+    request, 'basecamp/airport-transfers-marsfield.html')
+
+
+def middle_cove(request): return render(
+    request, 'basecamp/airport-transfers-middle-cove.html')
+
+
+def mini_bus(request): return render(
+    request, 'basecamp/airport-transfers-mini-bus.html')
+
+
+def mount_kuring_gai(request): return render(
+    request, 'basecamp/airport-transfers-mount-kuring-gai.html')
+
+
+def mt_colah(request): return render(
+    request, 'basecamp/airport-transfers-mt-colah.html')
 
 
 def north_shore(request): return render(
@@ -67,8 +116,24 @@ def north_west(request): return render(
     request, 'basecamp/airport-transfers-north-west.html')
 
 
+def normanhurst(request): return render(
+    request, 'basecamp/airport-transfers-normanhurst.html')
+
+
 def parramatta(request): return render(
     request, 'basecamp/airport-transfers-parramatta.html')
+
+
+def pennant_hills(request): return render(
+    request, 'basecamp/airport-transfers-pennant-hills.html')
+
+
+def pymble(request): return render(
+    request, 'basecamp/airport-transfers-pymble.html')
+
+
+def roseville(request): return render(
+    request, 'basecamp/airport-transfers-roseville.html')
 
 
 def ryde(request): return render(
@@ -79,32 +144,16 @@ def st_ives(request): return render(
     request, 'basecamp/airport-transfers-st-ives.html')
 
 
+def sydney_city(request): return render(
+    request, 'basecamp/airport-transfers-sydney-city.html')
+
+
 def thornleigh(request): return render(
     request, 'basecamp/airport-transfers-thornleigh.html')
 
 
 def toongabbie(request): return render(
     request, 'basecamp/airport-transfers-toongabbie.html')
-
-
-def westleigh(request): return render(
-    request, 'basecamp/airport-transfers-westleigh.html')
-
-
-def pennant_hills(request): return render(
-    request, 'basecamp/airport-transfers-pennant-hills.html')
-
-
-def normanhurst(request): return render(
-    request, 'basecamp/airport-transfers-normanhurst.html')
-
-
-def wahroonga(request): return render(
-    request, 'basecamp/airport-transfers-wahroonga.html')
-
-
-def asquith(request): return render(
-    request, 'basecamp/airport-transfers-asquith.html')
 
 
 def turramurra(request): return render(
@@ -115,73 +164,25 @@ def waitara(request): return render(
     request, 'basecamp/airport-transfers-waitara.html')
 
 
-def pymble(request): return render(
-    request, 'basecamp/airport-transfers-pymble.html')
-
-
-def gordon(request): return render(
-    request, 'basecamp/airport-transfers-gordon.html')
-
-
-def killara(request): return render(
-    request, 'basecamp/airport-transfers-killara.html')
-
-
-def berowra(request): return render(
-    request, 'basecamp/airport-transfers-berowra.html')
-
-
-def mt_colah(request): return render(
-    request, 'basecamp/airport-transfers-mt-colah.html')
-
-
-def mount_kuring_gai(request): return render(
-    request, 'basecamp/airport-transfers-mount-kuring-gai.html')
+def wahroonga(request): return render(
+    request, 'basecamp/airport-transfers-wahroonga.html')
 
 
 def warrawee(request): return render(
     request, 'basecamp/airport-transfers-warrawee.html')
 
 
-def lane_cove(request): return render(
-    request, 'basecamp/airport-transfers-lane-cove.html')
-
-
-def middle_cove(request): return render(
-    request, 'basecamp/airport-transfers-middle-cove.html')
-
-
 def west_pymble(request): return render(
     request, 'basecamp/airport-transfers-west-pymble.html')
 
 
-def linfield(request): return render(
-    request, 'basecamp/airport-transfers-linfield.html')
-
-
-def marsfield(request): return render(
-    request, 'basecamp/airport-transfers-marsfield.html')
-
-
-def doonside(request): return render(
-    request, 'basecamp/airport-transfers-doonside.html')
-
-
-def eastwood(request): return render(
-    request, 'basecamp/airport-transfers-eastwood.html')
-
-
-def macquarie_park(request): return render(
-    request, 'basecamp/airport-transfers-macquarie-park.html')
-
-
-def mini_bus(request): return render(
-    request, 'basecamp/airport-transfers-mini-bus.html')
+def westleigh(request): return render(
+    request, 'basecamp/airport-transfers-westleigh.html')
 
 
 def willoughby(request): return render(
     request, 'basecamp/airport-transfers-willoughby.html')
-
+    
 
 def booking(request): 
     context = {
@@ -232,10 +233,6 @@ def flight_date_error(request):
     return render(request, 'basecamp/flight_date_error.html')
 
 
-def information(request): 
-    return render(request, 'basecamp/information.html')
-
-
 def inquiry(request): 
     context = {
         'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
@@ -256,6 +253,10 @@ def inquiry2(request):
 
 def inquiry_done(request): 
     return render(request, 'basecamp/inquiry_done.html')
+
+
+def information(request): 
+    return render(request, 'basecamp/information.html')
 
 
 def invoice(request): 
@@ -340,7 +341,7 @@ def sending_email_input_data(request):
     return render(request, 'basecamp/sending_email_input_data.html')
 
 
-def server_error(request):
+def server_error(request): 
     return render(request, 'basecamp/500.html')
 
 
@@ -1596,19 +1597,40 @@ def sending_email_first_detail(request):
         user.sent_email = True
         user.save() 
 
-        no_of_passenger_int = int(user.no_of_passenger)
-
         if user.cruise:
             html_content = render_to_string("basecamp/html_email-confirmation-cruise.html", 
                                         {'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 'email': user.email, 'email1': user.email1,
                                          'flight_date': user.flight_date, 'flight_number': user.flight_number,
                                          'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
                                          'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
-                                         'no_of_passenger': no_of_passenger_int, 'no_of_baggage': user.no_of_baggage,
+                                         'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
                                          'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date, 
                                          'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
                                          'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
                                          'price': user.price, 'paid': user.paid, })
+            
+            text_content = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                "Booking confirmation - EasyGo",
+                text_content,
+                '',
+                [email, RECIPIENT_EMAIL]
+            )
+            email.attach_alternative(html_content, "text/html")
+            email.send()
+
+        if user.discount == 'TBA':
+            html_content = render_to_string("basecamp/html_email-confirmation-pending.html", 
+                                        {'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 'email': user.email, 'email1': user.email1,
+                                         'flight_date': user.flight_date, 'flight_number': user.flight_number,
+                                         'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
+                                         'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
+                                         'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
+                                         'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date, 
+                                         'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
+                                         'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
+                                         'price': user.price, 'paid': user.paid, })
+            
             text_content = strip_tags(html_content)
             email = EmailMultiAlternatives(
                 "Booking confirmation - EasyGo",
@@ -1625,11 +1647,12 @@ def sending_email_first_detail(request):
                                          'flight_date': user.flight_date, 'flight_number': user.flight_number,
                                          'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
                                          'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
-                                         'no_of_passenger': no_of_passenger_int, 'no_of_baggage': user.no_of_baggage,
+                                         'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
                                          'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date, 
                                          'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
                                          'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
                                          'price': user.price, 'paid': user.paid, })
+            
             text_content = strip_tags(html_content)
             email = EmailMultiAlternatives(
                 "Booking confirmation - EasyGo",
@@ -1655,8 +1678,6 @@ def sending_email_second_detail(request):
         user = Post.objects.filter(email=email)[1]
         user1 = Post.objects.filter(email=email).first()    
 
-        no_of_passenger_int = int(user.no_of_passenger)  
-
         user.sent_email = True
         user.save()  
 
@@ -1666,7 +1687,7 @@ def sending_email_second_detail(request):
                                          'flight_date': user.flight_date, 'flight_number': user.flight_number,
                                          'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
                                          'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
-                                         'no_of_passenger': no_of_passenger_int, 'no_of_baggage': user.no_of_baggage,
+                                         'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
                                          'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date, 
                                          'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
                                          'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
@@ -1681,13 +1702,35 @@ def sending_email_second_detail(request):
             email.attach_alternative(html_content, "text/html")
             email.send()
 
+        if user.discount == 'TBA':
+            html_content = render_to_string("basecamp/html_email-confirmation-pending.html", 
+                                        {'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 'email': user.email, 'email1': user.email1,
+                                         'flight_date': user.flight_date, 'flight_number': user.flight_number,
+                                         'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
+                                         'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
+                                         'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
+                                         'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date, 
+                                         'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
+                                         'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
+                                         'price': user.price, 'paid': user.paid, })
+            
+            text_content = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                "Booking confirmation - EasyGo",
+                text_content,
+                '',
+                [email, RECIPIENT_EMAIL]
+            )
+            email.attach_alternative(html_content, "text/html")
+            email.send()
+
         else:
             html_content = render_to_string("basecamp/html_email-confirmation.html",
                                         {'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 'email': user.email, 'email1': user.email1,
                                          'flight_date': user.flight_date, 'flight_number': user.flight_number,
                                          'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
                                          'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
-                                         'no_of_passenger': no_of_passenger_int, 'no_of_baggage': user.no_of_baggage,
+                                         'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
                                          'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date, 
                                          'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
                                          'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
@@ -1715,17 +1758,16 @@ def sending_email_second_detail(request):
 
 def sending_email_input_data_detail(request):     
     if request.method == "POST":
-        email = request.POST.get('email')
-        field = request.POST.get('field')
-        data = request.POST.get('data')            
+        email = request.POST.get('email')   
+        field = request.POST.get('field')        
 
         inquiry = Inquiry.objects.filter(email=email).first()
-        inquiry_cruise = Inquiry_cruise.objects.filter(email=email).first()
-        inquiry_point = Inquiry.objects.filter(email=email).first()
+        # inquiry_cruise = Inquiry_cruise.objects.filter(email=email).first()
+        # inquiry_point = Inquiry.objects.filter(email=email).first()
         post = Post.objects.filter(email=email).first()
 
         user = None
-        for obj in [inquiry, inquiry_cruise, inquiry_point, post]:
+        for obj in [inquiry, post]:
             if obj:
                 if user is None or obj.created > user.created:
                     user = obj
@@ -1739,7 +1781,7 @@ def sending_email_input_data_detail(request):
                                          'flight_date': user.flight_date, 'flight_number': user.flight_number,
                                          'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
                                          'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
-                                         'no_of_baggage': user.no_of_baggage, 'field': field, 'data': data, 
+                                         'no_of_baggage': user.no_of_baggage, 'field': field, 
                                          'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date, 
                                          'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
                                          'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
