@@ -224,7 +224,7 @@
                                     <table class="content" style="border-spacing:0;text-align: center;" role="presentation">
 										<tr>
 											<td align="left" style="padding-left:0px;">
-												<p style="Margin:0;font-size:16px;font-weight:bold;line-height:22px;">Thanks! {{ p2p_name }}</p>
+												<p style="Margin:0;font-size:16px;font-weight:bold;line-height:22px;">Hello {{ p2p_name }},</p>
 											</td>
 										</tr>
 										<tr>
@@ -237,25 +237,30 @@
 												<p style="Margin:0;font-size:12px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                    
 													Contact: {{ p2p_phone }}<br>
                                                     Email: {{ p2p_email }}<br>
-                                                    Booking date: {{ p2p_date }}<br>
+                                                    Booking date: {{ p2p_date }}<br><br>
+
                                                     First point: {{ first_pickup_location }}<br>
 													Pickup time: {{ first_putime }}<br>
-                                                    End point: {{ first_dropoff_location }}<br>											
+                                                    End point: {{ first_dropoff_location }}<br><br>	
+
 													{% if second_pickup_location %}
 													Second point: {{ second_pickup_location }}<br>
 													Pickup time: {{ second_putime }}<br>
-                                                    End point: {{ second_dropoff_location }}<br>
+                                                    End point: {{ second_dropoff_location }}<br><br>		
 													{% endif %} 
+
 													{% if third_pickup_location %}
 													Third point: {{ third_pickup_location }}<br>
 													Pickup time: {{ third_putime }}<br>
-                                                    End point: {{ third_dropoff_location }}<br>
+                                                    End point: {{ third_dropoff_location }}<br><br>
 													{% endif %}
+
 													{% if fourth_pickup_location %}
 													Fourth point: {{ fourth_pickup_location }}<br>
 													Pickup time: {{ fourth_putime }}<br>
-                                                    End point: {{ fourth_dropoff_location }}<br>
-													{% endif %}                                                  
+                                                    End point: {{ fourth_dropoff_location }}<br><br>
+													{% endif %}     
+													                                             
                                                     Number of Passenger: {{ p2p_passengers }}<br>
 													Number of Baggage: {{ p2p_baggage }}<br>                                                    
                                                     Message: <br>
@@ -264,11 +269,10 @@
                                                 <p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
 													--- Payment ---</p>
 												<p style="Margin:0;font-size:12px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                  
-                                                    Please pay online $ via PayPal in advance <a href="https://easygoshuttle.com.au/payonline/">easygoshuttle.com.au/payonline</a>
-													<br>
-													If you don't pay online, you will need to pay cash to your driver on the flight day<br><br>
-													For those arriving in Sydney, payment in advance is kindly requested<br><br>				
-												</p>	
+													Please pay ${{ price }} online in advance <a href="https://easygoshuttle.com.au/payonline/">easygoshuttle.com.au/payonline</a><br>
+													Payment is kindly required prior to the day of your pickup<br>
+													<!-- A booking may not be guaranteed without payment<br> -->
+												</p><br>		
                                                 <p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">                                                  
                                                     Thank you again for booking with us. We look forward to seeing you on time													
 												</p>   									                                                 

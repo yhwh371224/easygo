@@ -294,6 +294,10 @@ def p2p(request):
     return render(request, 'basecamp/p2p.html', context)
 
 
+def p2p_booking(request):     
+    return render(request, 'basecamp/p2p_booking.html')
+
+
 def p2p_single(request): 
     context = {
         'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
@@ -1045,7 +1049,7 @@ def cruise_inquiry_detail_1(request):
         return render(request, 'basecamp/cruise_inquiry.html', {})
     
     
-# Multiple points
+# Multiple points Inquiry 
 def p2p_detail(request):    
     if request.method == "POST":
         p2p_name = request.POST.get('p2p_name')
@@ -1105,6 +1109,69 @@ def p2p_detail(request):
 
     else:
         return render(request, 'basecamp/p2p.html', {})
+    
+
+# p2p multiple points booking by myself 
+def p2p_booking_detail(request):    
+    if request.method == "POST":
+        p2p_name = request.POST.get('p2p_name')
+        p2p_phone = request.POST.get('p2p_phone')
+        p2p_email = request.POST.get('p2p_email')
+        p2p_date = request.POST.get('p2p_date')
+        first_pickup_location = request.POST.get('first_pickup_location')
+        first_putime = request.POST.get('first_putime')
+        first_dropoff_location = request.POST.get('first_dropoff_location')
+        second_pickup_location = request.POST.get('second_pickup_location')
+        second_putime = request.POST.get('second_putime')
+        second_dropoff_location = request.POST.get('second_dropoff_location')
+        third_pickup_location = request.POST.get('third_pickup_location')
+        third_putime = request.POST.get('third_putime')
+        third_dropoff_location = request.POST.get('third_dropoff_location')
+        fourth_pickup_location = request.POST.get('fourth_pickup_location')
+        fourth_putime = request.POST.get('fourth_putime')
+        fourth_dropoff_location = request.POST.get('fourth_dropoff_location')
+        p2p_passengers = request.POST.get('p2p_passengers')
+        p2p_baggage = request.POST.get('p2p_baggage')
+        p2p_message = request.POST.get('p2p_message')
+        price = request.POST.get('price')
+
+
+        html_content = render_to_string("basecamp/html_email-p2p-confirmation.html", 
+            {'p2p_name': p2p_name, 'p2p_phone': p2p_phone, 'p2p_email': p2p_email, 'p2p_date': p2p_date, 
+            'first_pickup_location': first_pickup_location, 'first_putime': first_putime,  
+            'second_pickup_location': second_pickup_location, 'second_putime': second_putime, 
+            'third_pickup_location': third_pickup_location, 'third_putime': third_putime, 
+            'fourth_pickup_location': fourth_pickup_location, 'fourth_putime': fourth_putime,
+            'first_dropoff_location': first_dropoff_location, 
+            'second_dropoff_location': second_dropoff_location, 
+            'third_dropoff_location': third_dropoff_location,  
+            'fourth_dropoff_location': fourth_dropoff_location, 
+            'p2p_passengers': p2p_passengers, 'p2p_baggage': p2p_baggage, 'p2p_message': p2p_message,
+            'price': price
+            })
+
+        text_content = strip_tags(html_content)
+
+        email = EmailMultiAlternatives(
+            "Multiple points inquiry",
+            text_content,
+            '',
+            [p2p_email, RECIPIENT_EMAIL]
+        )
+        
+        email.attach_alternative(html_content, "text/html")
+        email.send()       
+        
+        
+        if is_ajax(request):
+            return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})
+        
+        else:
+            return render(request, 'basecamp/inquiry_done.html')
+
+    else:
+        return render(request, 'basecamp/p2p.html', {})
+
 
 
 def price_detail(request):
