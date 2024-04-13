@@ -14,6 +14,7 @@ from django.utils.html import strip_tags
 from django.views.decorators.csrf import csrf_exempt
 
 from main.settings import RECIPIENT_EMAIL
+from basecamp.models import Booking_p2p
 from blog.models import Post, Inquiry, Payment, Driver, Inquiry_point, Inquiry_cruise
 from blog.tasks import send_confirm_email
 
@@ -1134,6 +1135,16 @@ def p2p_booking_detail(request):
         p2p_baggage = request.POST.get('p2p_baggage')
         p2p_message = request.POST.get('p2p_message')
         price = request.POST.get('price')
+
+        # p = Booking_p2p(p2p_name=p2p_name, p2p_phone=p2p_phone, p2p_email=p2p_email, p2p_date=p2p_date,
+        #                 first_pickup_location=first_pickup_location, first_putime=first_putime,
+        #                 first_dropoff_location=first_dropoff_location, second_pickup_location=second_pickup_location,
+        #                 second_putime=second_putime, second_dropoff_location=second_dropoff_location, third_pickup_location=third_pickup_location,
+        #                 third_putime=third_putime, third_dropoff_location=third_dropoff_location, fourth_pickup_location=fourth_pickup_location,
+        #                 fourth_putime=fourth_putime, fourth_dropoff_location=fourth_dropoff_location, p2p_passengers=p2p_passengers,p2p_baggage=p2p_baggage,
+        #                 p2p_message=p2p_message, price=price)
+
+        # p.save()
 
 
         html_content = render_to_string("basecamp/html_email-p2p-confirmation.html", 
