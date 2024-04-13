@@ -83,13 +83,15 @@ def create_event_on_calendar(instance_id):
     }    
 
     # Check if an event already exists for this instance
-    if instance.calendar_event_id:                       
-            event = service.events().update(calendarId='primary', eventId=instance.calendar_event_id, body=event).execute()
-
+    if instance.price == 'TBA' or instance.cancelled:
+        pass
     else:
-        event = service.events().insert(calendarId='primary', body=event).execute()
-        instance.calendar_event_id = event['id'] 
-        instance.save()
+        if instance.calendar_event_id:
+            event = service.events().update(calendarId='primary', eventId=instance.calendar_event_id, body=event).execute()
+        else:
+            event = service.events().insert(calendarId='primary', body=event).execute()
+            instance.calendar_event_id = event['id']
+            instance.save()
 
 
 # Clicked confirm_booking form 
