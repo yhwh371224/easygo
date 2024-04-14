@@ -240,26 +240,26 @@
 
                                                     The details you entered in the form are as follows:<br><br>
 
-                                                <p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                    
+                                                <p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
 													Contact:  {{ contact }}<br>
 													Email:  {{ email }}<br>
 													Flight date:  {{ flight_date }}<br>
-													Flight number:  {{ flight_number }}<br>
-													Direction:  {{ direction }}<br>
-												{% if direction == 'Pickup from Intl Airport' or direction == 'Pickup from Domestic Airport' %}
-													Arrival time in Sydney:  {{ flight_time }}<br>
-												{% else %}
-													Departure time from Sydney: {{ flight_time }}<br>
-												{% endif %}
 													Pickup time:  {{ pickup_time }}<br>
-													Street:  {{ street }}<br>
-													Suburb:  {{ suburb }}<br>                                                   
+												{% if direction %}                                                   
+													Direction:  {{ direction }}<br>				
+													Flight number:  {{ flight_number }}<br>
+													Flight time: {{ flight_time}}<br>
+													Address: {{ street }}, {{ suburub }}<br>													
+												{% else %}
+													Start point: {{ flight_number }}
+													End point: {{ street }}
+												{% endif %}                              
 													Number of Passenger:  {{ no_of_passenger }}<br>
 													Number of baggage:  {{ no_of_baggage }}<br>
 													Message: <br>
 													{{ message }}<br><br>     
 												</p>       					
-
+												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
                                                     Your prompt attention to this matter would be greatly appreciated as we strive to ensure a seamless experience for you.<br><br>
 
                                                     If you require any further clarification or assistance, please do not hesitate to reach out to us.<br><br>
