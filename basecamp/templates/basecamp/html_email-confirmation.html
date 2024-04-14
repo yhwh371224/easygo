@@ -240,7 +240,7 @@
 												{% endif %}
 												    Contact: {{ contact }}<br>
                                                     Email: {{ email }}<br>
-												{% if direction == 'Point to Point' %}
+												{% if direction %}
                                                     Booking date: {{ flight_date|slice:":10" }}<br>
 													Pickup time: {{ pickup_time }}<br>
 													Start point: {{ flight_number }}<br>
@@ -257,11 +257,11 @@
 													Number of baggage: {{ no_of_baggage }}<br>
                                                     Message: <br>
 													{{ message }}<br>
-												{% if return_direction == 'Point to Point' and return_pickup_time %}													
+												{% if not return_direction and return_flight_number %}													
 													<span style="font-weight:bold; color: #bdb1a6">Return trip date:  {{ return_flight_date }}</span><br>													
 													<span style="font-weight:bold; color: #bdb1a6">Return start point:  {{ return_flight_number }}</span><br>
 													<span style="font-weight:bold; color: #bdb1a6">Return pickup time:  {{ return_pickup_time }}</span><br>
-												{% elif not return_direction == 'Point and Point' and return_pickup_time %}
+												{% elif return_direction and return_flight_number %}
 													<span style="font-weight:bold; color: #bdb1a6">Return direction:  {{ return_direction }}</span><br>
 													<span style="font-weight:bold; color: #bdb1a6">Return flight date:  {{ return_flight_date }}</span><br>
                                                     <span style="font-weight:bold; color: #bdb1a6">Return flight number:  {{ return_flight_number }}</span><br>
