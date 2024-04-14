@@ -14,7 +14,7 @@ from django.utils.html import strip_tags
 from django.views.decorators.csrf import csrf_exempt
 
 from main.settings import RECIPIENT_EMAIL
-from basecamp.models import Booking_p2p
+# from basecamp.models import Booking_p2p
 from blog.models import Post, Inquiry, Payment, Driver, Inquiry_point, Inquiry_cruise
 from blog.tasks import send_confirm_email
 
@@ -1840,12 +1840,12 @@ def sending_email_input_data_detail(request):
         field = request.POST.get('field')        
 
         inquiry = Inquiry.objects.filter(email=email).first()
-        inquiry_cruise = Inquiry_cruise.objects.filter(email=email).first()
-        inquiry_point = Inquiry.objects.filter(email=email).first()
+        # inquiry_cruise = Inquiry_cruise.objects.filter(email=email).first()
+        # inquiry_point = Inquiry.objects.filter(email=email).first()
         post = Post.objects.filter(email=email).first()
 
         user = None
-        for obj in [inquiry, inquiry_cruise, inquiry_point, post]:
+        for obj in [inquiry, post]:
             if obj:
                 if user is None or obj.created > user.created:
                     user = obj

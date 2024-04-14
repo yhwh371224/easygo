@@ -1,13 +1,13 @@
-from django.contrib import admin
-from .models import Booking_p2p
-from rangefilter.filters import DateRangeFilter
-from blog.admin import admin_site
+# from django.contrib import admin
+# from .models import Booking_p2p
+# from rangefilter.filters import DateRangeFilter
+# from blog.admin import admin_site
 
 
-class BookingP2pAdmin(admin.ModelAdmin):
-    list_display = ['p2p_date', 'p2p_phone', 'p2p_name', 'first_pickup_location', 'pickup_time', 'created']
+# class BookingP2pAdmin(admin.ModelAdmin):
+#     list_display = ['p2p_date', 'p2p_phone', 'p2p_name', 'first_pickup_location', 'pickup_time', 'created']
 
-    search_fields = ['p2p_date', 'first_putime', 'p2p_email', 'p2p_name', 'p2p_phone']
+#     search_fields = ['p2p_date', 'first_putime', 'p2p_email', 'p2p_name', 'p2p_phone']
 
 
 # class InquiryCruiseAdmin(admin.ModelAdmin):
@@ -18,8 +18,8 @@ class BookingP2pAdmin(admin.ModelAdmin):
 #                      'street', 'name', 'contact']
     
 
-admin_site.register(Booking_p2p, BookingP2pAdmin)
+# admin_site.register(Booking_p2p, BookingP2pAdmin)
 
-admin.site.register(Booking_p2p, BookingP2pAdmin)
+# admin.site.register(Booking_p2p, BookingP2pAdmin)
 
 
