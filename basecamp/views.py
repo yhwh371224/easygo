@@ -1388,7 +1388,8 @@ def booking_detail(request):
         return_flight_time = request.POST.get('return_flight_time')
         return_pickup_time = request.POST.get('return_pickup_time') 
 
-        price = 'TBA'    
+        price = 'TBA' 
+        discount = 'TBA'   
 
         recaptcha_response = request.POST.get('g-recaptcha-response')
         result = verify_recaptcha(recaptcha_response)
@@ -1448,7 +1449,7 @@ def booking_detail(request):
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
                  no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction, price=price,
                  return_flight_date=return_flight_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
-                 return_pickup_time=return_pickup_time, message=message, driver=sam_driver)
+                 return_pickup_time=return_pickup_time, message=message, driver=sam_driver, discount=discount)
         
         p.save()
 
@@ -1494,6 +1495,7 @@ def cruise_booking_detail(request):
         return_flight_time = 'cruise'
         suburb = 'The Rocks'
         cruise = True
+        discount = 'TBA'
         price = 'TBA'    
 
         recaptcha_response = request.POST.get('g-recaptcha-response')
@@ -1583,7 +1585,7 @@ def cruise_booking_detail(request):
                  no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, suburb=suburb, cruise=cruise,  
                  return_flight_date=return_flight_date, return_flight_number=return_flight_number,  
                  return_pickup_time=return_pickup_time, return_flight_time=return_flight_time,
-                 message=message, driver=sam_driver)
+                 message=message, driver=sam_driver, discount=discount)
         
         p.save()
 
