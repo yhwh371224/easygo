@@ -1842,12 +1842,12 @@ def sending_email_input_data_detail(request):
         field = request.POST.get('field')        
 
         inquiry = Inquiry.objects.filter(email=email).first()
-        # inquiry_cruise = Inquiry_cruise.objects.filter(email=email).first()
-        # inquiry_point = Inquiry.objects.filter(email=email).first()
+        inquiry_cruise = Inquiry_cruise.objects.filter(email=email).first()
+        inquiry_point = Inquiry.objects.filter(email=email).first()
         post = Post.objects.filter(email=email).first()
 
         user = None
-        for obj in [inquiry, post]:
+        for obj in [inquiry, inquiry_cruise, inquiry_point, post]:
             if obj:
                 if user is None or obj.created > user.created:
                     user = obj
