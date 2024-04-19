@@ -1783,26 +1783,41 @@ def sending_email_second_detail(request):
             email.send()
 
         if user.discount == 'TBA':
-            html_content = render_to_string("basecamp/html_email-confirmation-pending.html", 
-                                        {'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 'email': user.email, 'email1': user.email1,
-                                         'flight_date': user.flight_date, 'flight_number': user.flight_number,
-                                         'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
-                                         'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
-                                         'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
-                                         'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date, 
-                                         'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
-                                         'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
-                                         'price': user.price, 'paid': user.paid, })
-            
-            text_content = strip_tags(html_content)
-            email = EmailMultiAlternatives(
-                "Booking confirmation - EasyGo",
-                text_content,
-                '',
-                [email, RECIPIENT_EMAIL]
-            )
-            email.attach_alternative(html_content, "text/html")
-            email.send()
+            if user.cancelled: 
+                html_content = render_to_string("basecamp/html_email-cancelled.html", 
+                                            {'name': user.name, 'email': user.email })
+                
+                text_content = strip_tags(html_content)
+                email = EmailMultiAlternatives(
+                    "Booking confirmation - EasyGo",
+                    text_content,
+                    '',
+                    [email, RECIPIENT_EMAIL]
+                )
+                email.attach_alternative(html_content, "text/html")
+                email.send()
+
+            else: 
+                html_content = render_to_string("basecamp/html_email-confirmation-pending.html", 
+                                            {'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 'email': user.email, 'email1': user.email1,
+                                             'flight_date': user.flight_date, 'flight_number': user.flight_number,
+                                             'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
+                                             'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
+                                             'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
+                                             'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date, 
+                                             'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
+                                             'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
+                                             'price': user.price, 'paid': user.paid, })
+                
+                text_content = strip_tags(html_content)
+                email = EmailMultiAlternatives(
+                    "Booking confirmation - EasyGo",
+                    text_content,
+                    '',
+                    [email, RECIPIENT_EMAIL]
+                )
+                email.attach_alternative(html_content, "text/html")
+                email.send()
 
         else:
             html_content = render_to_string("basecamp/html_email-confirmation.html",
