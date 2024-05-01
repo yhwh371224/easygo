@@ -1,0 +1,21 @@
+{% extends 'basecamp/easygo_base_error.html' %}
+{% block content %}
+<!-- Hero -->
+<section class="jarallax bg-dark py-0" data-jarallax data-speed="0.25">
+    <div class="jarallax-img" style="background-image: url('/static/basecamp/photos/bg-pattern02.webp');"></div>
+    <div class="container py-4 py-sm-7 text-center">
+        <div class="py-md-6">
+            <h3 class="text-light pb-1">Thank you!</h3>
+            <h2 class="fs-lg text-light">Please find your random numbers below</h2>
+            {% if games %}
+            <h2>Please find your random numbers. Good luck!</h2>
+            {% for game in games %}
+                <p>Saturday Lotto numbers: {{ game }}</p>
+                <hr>
+            {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}
+
