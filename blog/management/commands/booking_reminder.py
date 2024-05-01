@@ -47,7 +47,8 @@ class Command(BaseCommand):
                     'name': booking_reminder.name, 'flight_date': booking_reminder.flight_date, 'flight_number': booking_reminder.flight_number,
                     'flight_time': booking_reminder.flight_time, 'direction': booking_reminder.direction, 'pickup_time': booking_reminder.pickup_time,
                     'street': booking_reminder.street, 'suburb': booking_reminder.suburb, 'price': booking_reminder.price, 'meeting_point': booking_reminder.meeting_point,
-                    'driver_name': driver_name, 'driver_contact': driver_contact, 'driver_plate': driver_plate, 'driver_car': driver_car
+                    'driver_name': driver_name, 'driver_contact': driver_contact, 'driver_plate': driver_plate, 'driver_car': driver_car, 
+                    'paid': booking_reminder.paid
                 })
                 
             else: 
@@ -55,6 +56,7 @@ class Command(BaseCommand):
                     'name': booking_reminder.name, 'flight_date': booking_reminder.flight_date, 'flight_number': booking_reminder.flight_number,
                     'flight_time': booking_reminder.flight_time, 'direction': booking_reminder.direction, 'pickup_time': booking_reminder.pickup_time,
                     'street': booking_reminder.street, 'suburb': booking_reminder.suburb, 'price': booking_reminder.price, 'meeting_point': booking_reminder.meeting_point,
+                    'paid': booking_reminder.paid
                 })
 
             text_content = strip_tags(html_content)
