@@ -12,9 +12,9 @@ from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.views.decorators.csrf import csrf_exempt
+from random import sample, shuffle
 
 from main.settings import RECIPIENT_EMAIL
-# from basecamp.models import Booking_p2p
 from blog.models import Post, Inquiry, Payment, Driver, Inquiry_point, Inquiry_cruise
 from blog.tasks import send_confirm_email
 
@@ -232,6 +232,14 @@ def date_error(request):
 
 def flight_date_error(request): 
     return render(request, 'basecamp/flight_date_error.html')
+
+
+def gen_lotto(request): 
+    return render(request, 'basecamp/gen_lotto.html')
+
+
+def gen_lotto_details(request): 
+    return render(request, 'basecamp/gen_lotto_details.html')
 
 
 def inquiry(request): 
@@ -2328,3 +2336,20 @@ def paypal_ipn(request):
     return HttpResponse(status=400)
 
 
+
+# lotto
+def gen_lotto_detail(request):
+    if request.method == 'POST':
+        n = int(request.POST.get('num_games'))        
+        lotto_numbers = list(range(1, 46))
+        games = []
+        
+        for _ in range(n):
+            lotto = shuffle(lotto_numbers)
+            winner_numbers = sample(lotto, 6)
+            winner_numbers.sort()
+            games.append(winner_numbers)
+        
+        return render(request, 'gen_lotto_details.html', {'games': games})
+    else:
+        return render(request, 'gen_lotto.html')
