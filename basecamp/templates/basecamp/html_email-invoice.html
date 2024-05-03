@@ -232,7 +232,7 @@
                                                 <p style="Margin:0;font-size:12px;line-height:20px;Margin-bottom:6px;border-bottom: 1px solid #a09a9a;"> 												                                                   
                                                 	<strong>Invoice number: {{ notice }}</strong><br>
 												{% if company_name %}     
-													<strong>Invoice to: {{ name }} (attn: {{ company_name }} )</strong><br>
+													<strong>Invoice to: {{ company_name }} (attn: {{ name }} )</strong><br>
 												{% else %}
                                                     <strong>Invoice to: {{ name }}</strong><br>
 												{% endif %}
@@ -253,13 +253,13 @@
 													Trip date: {{ flight_date }}<br>
 													{% endif %}																																																			
 												{% else %}
-													{% if return_flight_number %}
+													{% if return_pickup_time %}
 													Trip type: Round Trip<br>
-													Service: Airport transfers/Cruise<br>
+													Service: Airport transfers<br>
 													Flight date: {{ flight_date }} & {{ return_flight_date}}<br>													
 													{% else %}
 													Trip type: Single Trip<br>
-													Service: Airport transfers/Cruise<br>
+													Service: Airport transfers<br>
 													Flight date: {{ flight_date }}<br>													
 													{% endif %}															
 													Address: {{ street }}, {{ suburb }}<br>												
