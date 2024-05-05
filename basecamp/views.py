@@ -2043,8 +2043,6 @@ def invoice_detail(request):
             total_price = (round(price_as_float + with_gst, 2)) - float_discount
             balance = round(total_price - float_paid, 2)
 
-
-
         today = date.today()           
         
         if user.return_pickup_time:
