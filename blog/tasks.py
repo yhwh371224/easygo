@@ -83,7 +83,7 @@ def create_event_on_calendar(instance_id):
     }    
 
     # Check if an event already exists for this instance
-    if instance.price == 'TBA' or instance.cancelled:
+    if instance.cancelled:
         pass
     else:
         if instance.calendar_event_id:
