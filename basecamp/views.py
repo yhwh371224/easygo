@@ -2310,7 +2310,7 @@ def sending_responses_detail(request):
         user = Post.objects.filter(email=email).first()
 
         if user.discount == 'TBA':            
-            html_content = render_to_string("basecamp/html_email-sending-resposes.html",
+            html_content = render_to_string("basecamp/html_email-sending-response.html",
                                         {'name': user.name})
             text_content = strip_tags(html_content)
             email = EmailMultiAlternatives(
