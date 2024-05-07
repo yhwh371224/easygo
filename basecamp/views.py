@@ -354,6 +354,10 @@ def sending_email_input_data(request):
     return render(request, 'basecamp/sending_email_input_data.html')
 
 
+def sending_responses(request): 
+    return render(request, 'basecamp/sending_responses.html')
+
+
 def server_error(request): 
     return render(request, 'basecamp/500.html')
 
@@ -2297,6 +2301,31 @@ def pickup_adjustment_detail(request):
     else:
         return render(request, 'beasecamp/pickup_adjustment.html', {})
     
+
+# sending the response via email 
+def sending_responses_detail(request):     
+    if request.method == "POST":
+        email = request.POST.get('email')        
+        
+        user = Post.objects.filter(email=email).first()
+
+        if user.discount == 'TBA':            
+            html_content = render_to_string("basecamp/html_email-sending-resposes.html",
+                                        {'name': user.name})
+            text_content = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                "Response - EasyGo",
+                text_content,
+                '',
+                [email, RECIPIENT_EMAIL]
+            )
+            email.attach_alternative(html_content, "text/html")
+            email.send()
+
+        return render(request, 'basecamp/inquiry_done.html')  
+    
+    else:
+        return render(request, 'beasecamp/sending_responses.html', {})    
     
 
 @csrf_exempt
