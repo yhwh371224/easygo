@@ -232,16 +232,21 @@
 										<tr>
 											<td align="left" style="padding-top:28px;padding-left:0;">																								
 											{% if direction == 'Pickup from Intl Airport' %}												
-												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">	
-													Please inform your driver know once you have retrieved your baggage to ensure a seamless process.<br><br>
+												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">													
+													Please keep your mobile phone switched on. Your driver will call or message you with his details.<br>
+													Additionally, You can still reach us via email at info@easygoshuttle.com.au for any further assistance or inquiries<br>
+													<!-- Please inform your driver know once you have retrieved your baggage to ensure a seamless process.<br><br>
 													He will provide you with any necessary details via message<br><br>
-													Additionally, You can still reach us via email at info@easygoshuttle.com.au for any further assistance or inquiries<br><br></p>													
+													Additionally, You can still reach us via email at info@easygoshuttle.com.au for any further assistance or inquiries<br><br></p>													 -->
 												<p style="border: 1px solid #af865f; padding: 10px; margin-bottom: 20px; color: #af865f;">
+													{% if driver != 'Sam' %}
 													<strong>=== Driver's details ===</strong><br>
 													• Name: {{ driver_name }}<br>
 													• Phone: {{ driver_contact }}<br>
 													• Vehicle: {{ driver_car }}<br>
-													• Vehicle plate: {{ driver_plate }}<br><br>													
+													• Vehicle plate: {{ driver_plate }}<br><br>	
+													{% endif %}
+
 													{% if meeting_point %}
 														<strong>=== The meeting point ===</strong><br>
 														• {{ meeting_point }}<br>
@@ -256,18 +261,23 @@
 													<!-- • Due to unforeseen circumstances, the above information may change. Please make sure to turn on your phone or check your email -->
 												</p>
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
-													If any changes, you will get notified by email or sms<br><br><br></p>	
+													If there are any changes, you will be notified by email or SMS<br><br><br></p>	
 											{% elif direction == 'Pickup from Domestic Airport' %}
-												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">	
-													Please inform your driver know once you have retrieved your baggage to ensure a seamless process.<br><br>
+												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
+													Please keep your mobile phone switched on. Your driver will call or message you with his details.<br>
+													Additionally, You can still reach us via email at info@easygoshuttle.com.au for any further assistance or inquiries<br>	
+													<!-- Please inform your driver know once you have retrieved your baggage to ensure a seamless process.<br><br>
 													He will provide you with any necessary details via message<br><br>
-													Additionally, You can still reach us via email at info@easygoshuttle.com.au for any further assistance or inquiries<br><br></p>													
+													Additionally, You can still reach us via email at info@easygoshuttle.com.au for any further assistance or inquiries<br><br></p>													 -->
 												<p style="border: 1px solid #af865f; padding: 10px; margin-bottom: 20px; color: #af865f;">
+													{% if driver != 'Sam' %}
 													<strong>=== Driver's details ===</strong><br>
 													• Name: {{ driver_name }}<br>
 													• Phone: {{ driver_contact }}<br>
 													• Vehicle: {{ driver_car }}<br>
-													• Vehicle plate: {{ driver_plate }}<br><br>													
+													• Vehicle plate: {{ driver_plate }}<br><br>	
+													{% endif %}
+
 													{% if meeting_point %}
 														<strong>=== The meeting point ===</strong><br>
 														• {{ meeting_point }}<br>
@@ -280,7 +290,7 @@
 													<!-- • Due to unforeseen circumstances, the above information may change. Please make sure to turn on your phone or check your email -->
 												</p>
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
-													If any changes, you will get notified by email or sms<br><br><br></p>
+													If there are any changes, you will be notified by email or SMS<br><br><br></p>
 											{% elif direction == 'From Airport To OPT' or direction == 'From Airport To White Bay' %}
 											<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">	
 												Please inform your driver know once you have retrieved your baggage to ensure a seamless process.<br><br>

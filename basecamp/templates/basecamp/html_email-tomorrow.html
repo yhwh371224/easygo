@@ -235,10 +235,9 @@
 													Tomorrow is your trip day! {{ flight_date }}<br><br></p>
 											{% if not paid %}											
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
-													<span style="color: #eb7828">Please reply "Yes" to this email for reconfirming your booking and details below</span><br><br>
-													If you have already replied to the email reminder 2 days ago, then you can disregard this email<br><br>
-													Please note that we can not guarantee your booking unless we receive a confirmation with a <a href="https://easygoshuttle.com.au/reminder">'Yes'</a> response,
-													 except for those who have paid in advance<br><br></p>
+													<span style="color: #eb7828">Please reply "Yes" to this email for reconfirming your booking and details below</span><br><br>													
+													Please note that we can not guarantee your booking unless we receive a confirmation with a 
+													<a href="https://easygoshuttle.com.au/reminder">'Yes'</a> response.<br><br></p>
 											{% endif %}
 
 											{% if direction == 'Pickup from Intl Airport' or direction == 'Pickup from Domestic Airport' %}												
@@ -255,13 +254,13 @@
 													• Please proceed to the P7 parking building first after exiting the arrival halls, and then follow the signs for 'Public Pick-up'<br>
 													{% endif %}													 -->
 													<!-- • <a href="https://s3.ap-southeast-2.amazonaws.com/easygoshuttle.com.au/International-Airport-Meeting-Point.webp">International Airport Map</a><br> -->
-													• After landing, please turn on your mobile phone or check your email. You will be notified of the meeting details via email or SMS<br><br>
+													• After landing, please turn on your mobile phone and check your email. You will be notified of the meeting details via email or SMS<br><br>
 												</p>	
 											{% elif direction == 'From Airport To OPT' or direction == 'From Airport to White Bay' %}
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
 													• Flight number: {{ flight_number }} <small>(ETA {{ flight_time }})</small><br>
 													• Pickup around {{ pickup_time }}<br>													
-													• After landing, please turn on your mobile phone or check your email. You will be notified of any changes via email or SMS<br><br></p>
+													• After landing, please turn on your mobile phone and check your email. You will be notified of any changes via email or SMS<br><br></p>
 											{% elif not direction %}
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">													
 													• See you on time, {{ pickup_time }}<br>											
