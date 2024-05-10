@@ -2312,7 +2312,7 @@ def sending_responses_detail(request):
                                     {'name': user.name})
         text_content = strip_tags(html_content)
         email = EmailMultiAlternatives(
-            "Response - EasyGo",
+            "Payment method - EasyGo",
             text_content,
             '',
             [email, RECIPIENT_EMAIL]
