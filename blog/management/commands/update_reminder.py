@@ -51,9 +51,9 @@ class Command(BaseCommand):
                     for post in posts:
                         if post.reminder:
                             logger.info(f'....Already in calendar:{post.name}, {post.flight_date}, {post.pickup_time}')
-                            continue
-                        else: 
-                            post.reminder = True
-                            post.save()
-
+                        
+                        else:                             
                             logger.info(f'....Just now executed:{post.name}, {post.flight_date}, {post.pickup_time}')
+
+                        post.reminder = True
+                        post.save()
