@@ -2,10 +2,12 @@ import os
 from datetime import date, timedelta
 
 from django.core.management.base import BaseCommand
-from django.core.mail import EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives, send_mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from blog.models import Post
+from main.settings import RECIPIENT_EMAIL
+
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -30,6 +32,12 @@ class Command(BaseCommand):
         # sent_emails_set = set()  # Set to track already sent emails
         
         for booking_reminder in booking_reminders:
+
+            if not booking_reminder.calendar_event_id:
+                subject = "empty calendar id"
+                message = f"{booking_reminder.name} & {booking_reminder.email}"
+                recipient_list = [RECIPIENT_EMAIL]
+                send_mail(subject, message, '', recipient_list)
 
             if booking_reminder.cancelled: 
                 # or booking_reminder.email in sent_emails_set:
@@ -63,6 +71,7 @@ class Command(BaseCommand):
             email = EmailMultiAlternatives(subject, text_content, '', [booking_reminder.email])
             email.attach_alternative(html_content, "text/html")
             email.send() 
+            booking_reminder.save()
             # sent_emails_set.add(booking_reminder.email)
 
                    
