@@ -1236,7 +1236,6 @@ def price_detail(request):
         #price_cal3()
         #price = str(price_cal3())
         
-
         data = {
             'flight_date': flight_date,
             'direction': direction,
