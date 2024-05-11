@@ -2304,21 +2304,36 @@ def pickup_adjustment_detail(request):
 # sending the response via email 
 def sending_responses_detail(request):     
     if request.method == "POST":
-        email = request.POST.get('email')        
+        email = request.POST.get('email')   
+        selected_option = request.POST.get('selected_option')     
         
         user = Post.objects.filter(email=email).first()
-                 
-        html_content = render_to_string("basecamp/html_email-sending-response.html",
-                                    {'name': user.name})
-        text_content = strip_tags(html_content)
-        email = EmailMultiAlternatives(
-            "Payment method - EasyGo",
-            text_content,
-            '',
-            [email, RECIPIENT_EMAIL]
-        )
-        email.attach_alternative(html_content, "text/html")
-        email.send()
+
+        if selected_option == "Payment Method":                 
+            html_content = render_to_string("basecamp/html_email-response-payment.html",
+                                        {'name': user.name})
+            text_content = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                "Payment Method - EasyGo",
+                text_content,
+                '',
+                [email, RECIPIENT_EMAIL]
+            )
+            email.attach_alternative(html_content, "text/html")
+            email.send()
+
+        if selected_option == "Meeting Point":                 
+            html_content = render_to_string("basecamp/html_email-response-meeting.html",
+                                        {'name': user.name})
+            text_content = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                "Meeting Point - EasyGo",
+                text_content,
+                '',
+                [email, RECIPIENT_EMAIL]
+            )
+            email.attach_alternative(html_content, "text/html")
+            email.send()
 
         return render(request, 'basecamp/inquiry_done.html')  
     
