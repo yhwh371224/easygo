@@ -2305,9 +2305,12 @@ def pickup_adjustment_detail(request):
 def sending_responses_detail(request):     
     if request.method == "POST":
         email = request.POST.get('email')   
-        selected_option = request.POST.get('selected_option')     
+        selected_option = request.POST.get('selected_option')
+
+        today = date.today()     
         
         user = Post.objects.filter(email=email).first()
+        user_today = Post.objects.filter(email=email, flight_date=today)
 
         if selected_option == "Payment Method":                 
             html_content = render_to_string("basecamp/html_email-response-payment.html",
@@ -2336,14 +2339,14 @@ def sending_responses_detail(request):
             email.send()
 
         if selected_option == "html_email-today": 
-            driver_instance = user.driver  
+            driver_instance = user_today.driver  
             driver_name = driver_instance.driver_name
             driver_contact = driver_instance.driver_contact
             driver_plate = driver_instance.driver_plate
             driver_car = driver_instance.driver_car     
 
             html_content = render_to_string("basecamp/html_email-today.html", 
-                                            {'name': user.name, 'pickup_time': user.pickup_time, 'meeting_point': user.meeting_point, 
+                                            {'name': user_today.name, 'pickup_time': user_today.pickup_time, 'meeting_point': user_today.meeting_point, 
                                              'driver_name': driver_name, 'driver_contact': driver_contact, 'driver_plate': driver_plate, 
                                              'driver_car': driver_car, })
             text_content = strip_tags(html_content)
