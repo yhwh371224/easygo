@@ -33,16 +33,6 @@ class Command(BaseCommand):
         
         for booking_reminder in booking_reminders:
 
-            if not booking_reminder.calendar_event_id:
-                subject = "empty calendar id"
-                message = f"{booking_reminder.name} & {booking_reminder.email}"
-                recipient_list = [RECIPIENT_EMAIL]
-                send_mail(subject, message, '', recipient_list)
-
-            if booking_reminder.cancelled: 
-                # or booking_reminder.email in sent_emails_set:
-                continue 
-
             driver_instance = booking_reminder.driver       
 
             if driver_instance:
@@ -67,12 +57,24 @@ class Command(BaseCommand):
                     'paid': booking_reminder.paid
                 })
 
-            text_content = strip_tags(html_content)
-            email = EmailMultiAlternatives(subject, text_content, '', [booking_reminder.email])
-            email.attach_alternative(html_content, "text/html")
-            email.send() 
-            booking_reminder.save()
-            # sent_emails_set.add(booking_reminder.email)
+                text_content = strip_tags(html_content)
+                email = EmailMultiAlternatives(subject, text_content, '', [booking_reminder.email])
+                email.attach_alternative(html_content, "text/html")
+                email.send() 
+                booking_reminder.save()
+                # sent_emails_set.add(booking_reminder.email)
+
+            if booking_reminder.cancelled: 
+                # or booking_reminder.email in sent_emails_set:
+                continue 
+
+            if not booking_reminder.calendar_event_id:
+                subject = "No confirmation yet - empty id"
+                message = f"{booking_reminder.name} & {booking_reminder.email}"
+                recipient_list = [RECIPIENT_EMAIL]
+                send_mail(subject, message, '', recipient_list)
+
+            
 
                    
                     

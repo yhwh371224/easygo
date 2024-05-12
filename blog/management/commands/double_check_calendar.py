@@ -20,7 +20,7 @@ class Command(BaseCommand):
         for tomorrow_booking in tomorrow_bookings:
 
             if not tomorrow_booking.calendar_event_id:
-                subject = "empty calendar id"
+                subject = "empty calendar id from double_check_calendar.py"
                 message = f"{tomorrow_booking.name} & {tomorrow_booking.email}"
                 recipient_list = [RECIPIENT_EMAIL]
 
