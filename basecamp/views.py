@@ -2322,12 +2322,33 @@ def sending_responses_detail(request):
             email.attach_alternative(html_content, "text/html")
             email.send()
 
-        if selected_option == "Meeting Point":                 
+        if selected_option == "Inquiry Meeting Point":                 
             html_content = render_to_string("basecamp/html_email-response-meeting.html",
                                         {'name': user.name})
             text_content = strip_tags(html_content)
             email = EmailMultiAlternatives(
                 "Meeting Point - EasyGo",
+                text_content,
+                '',
+                [email, RECIPIENT_EMAIL]
+            )
+            email.attach_alternative(html_content, "text/html")
+            email.send()
+
+        if selected_option == "html_email-today": 
+            driver_instance = user.driver  
+            driver_name = driver_instance.driver_name
+            driver_contact = driver_instance.driver_contact
+            driver_plate = driver_instance.driver_plate
+            driver_car = driver_instance.driver_car     
+
+            html_content = render_to_string("basecamp/html_email-today.html", 
+                                            {'name': user.name, 'pickup_time': user.pickup_time, 'meeting_point': user.meeting_point, 
+                                             'driver_name': driver_name, 'driver_contact': driver_contact, 'driver_plate': driver_plate, 
+                                             'driver_car': driver_car, })
+            text_content = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                "Today notice - EasyGo",
                 text_content,
                 '',
                 [email, RECIPIENT_EMAIL]
