@@ -244,12 +244,14 @@
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
 													• Sydney Arrival Date: {{ flight_date }}<br> 
 													• Flight number: {{ flight_number }} <small>(ETA {{ flight_time }})</small><br>
-													• Pickup around {{ pickup_time }}<br>
+													• Pickup around {{ pickup_time }}<br><br>
+
 													{% if cash %}
-													• <span style="color: #eb7828">We kindly ask that you email us prior to your flight's departure and immediately upon your arrival in Sydney</span><br><br>
+														We kindly request that you email us before boarding your flight<br><br>													
 													{% else %}
-													• After landing, please turn on your mobile phone and check your email. You will be notified of the meeting details via email or SMS<br><br>
+														After landing, please turn on your mobile phone and check your email. You will be notified of the meeting details via email or SMS<br><br>
 													{% endif %}
+
 												</p>	
 											{% elif direction == 'From Airport To OPT' or direction == 'From Airport to White Bay' %}
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
