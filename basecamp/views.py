@@ -2324,8 +2324,7 @@ def sending_responses_detail(request):
 
         today = date.today()     
         
-        user = Post.objects.filter(email=email).first()
-        user_today = Post.objects.filter(email=email, flight_date=today)
+        user = Post.objects.filter(email=email).first()        
 
         if selected_option == "Payment Method":                 
             html_content = render_to_string("basecamp/html_email-response-payment.html",
@@ -2354,25 +2353,28 @@ def sending_responses_detail(request):
             email.send()
 
         if selected_option == "html_email-today": 
+            user_today = Post.objects.filter(email=email, flight_date=today)
             driver_instance = user_today.driver  
-            driver_name = driver_instance.driver_name
-            driver_contact = driver_instance.driver_contact
-            driver_plate = driver_instance.driver_plate
-            driver_car = driver_instance.driver_car     
+            if driver_instance: 
+                driver_name = driver_instance.driver_name
+                driver_contact = driver_instance.driver_contact
+                driver_plate = driver_instance.driver_plate
+                driver_car = driver_instance.driver_car     
 
-            html_content = render_to_string("basecamp/html_email-today.html", 
-                                            {'name': user_today.name, 'pickup_time': user_today.pickup_time, 'meeting_point': user_today.meeting_point, 
-                                             'driver_name': driver_name, 'driver_contact': driver_contact, 'driver_plate': driver_plate, 
-                                             'driver_car': driver_car, })
-            text_content = strip_tags(html_content)
-            email = EmailMultiAlternatives(
-                "Today notice - EasyGo",
-                text_content,
-                '',
-                [email, RECIPIENT_EMAIL]
-            )
-            email.attach_alternative(html_content, "text/html")
-            email.send()
+                html_content = render_to_string("basecamp/html_email-today.html", 
+                                                {'name': user_today.name, 'pickup_time': user_today.pickup_time, 'meeting_point': user_today.meeting_point, 
+                                                 'direction': user_today.direction, 
+                                                 'driver_name': driver_name, 'driver_contact': driver_contact, 'driver_plate': driver_plate, 
+                                                 'driver_car': driver_car, })
+                text_content = strip_tags(html_content)
+                email = EmailMultiAlternatives(
+                    "Today notice - EasyGo",
+                    text_content,
+                    '',
+                    [email, RECIPIENT_EMAIL]
+                )
+                email.attach_alternative(html_content, "text/html")
+                email.send()
 
         return render(request, 'basecamp/inquiry_done.html')  
     
