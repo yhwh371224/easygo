@@ -1,4 +1,5 @@
 import os 
+import logging
 from datetime import date, timedelta
 
 from django.core.management.base import BaseCommand
@@ -9,6 +10,21 @@ from blog.models import Post
 from main.settings import RECIPIENT_EMAIL
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+logger = logging.getLogger('blog.booking_reminders')
+logger.setLevel(logging.INFO)
+
+formatter = logging.Formatter('%(asctime)s:%(message)s')
+
+# Create the logs directory if it doesn't exist
+logs_dir = os.path.join(BASE_DIR, 'logs')
+if not os.path.exists(logs_dir):
+    os.makedirs(logs_dir)
+
+file_handler = logging.FileHandler(os.path.join(logs_dir, 'booking_reminders.log'))
+file_handler.setFormatter(formatter)
+
+logger.addHandler(file_handler)
 
 class Command(BaseCommand):
     help = 'Send booking reminders for upcoming flights'
@@ -49,17 +65,21 @@ class Command(BaseCommand):
             text_content = strip_tags(html_content)            
             email = EmailMultiAlternatives(subject, text_content, '', [booking_reminder.email])
             email.attach_alternative(html_content, "text/html")
+
             try:
                 email.send()
                 booking_reminder.save()
+                logger.info(f"Email sent to {booking_reminder.email} for {booking_reminder.name}")
             except Exception as e:
-                print(f"Failed to send email to {booking_reminder.email}: {e}")
+                logger.error(f"Failed to send email to {booking_reminder.email} | {booking_reminder.flight_date} & {booking_reminder.pickup_time}: {e}")
 
             if not booking_reminder.calendar_event_id:
-                subject = "No confirmation yet - empty id"
-                message = f"{booking_reminder.name} & {booking_reminder.email}"
+                confirmation_subject = "No confirmation yet - empty id"
+                confirmation_message = f"{booking_reminder.name} & {booking_reminder.email}"
                 recipient = [RECIPIENT_EMAIL]
+
                 try:
-                    send_mail(subject, message, '', recipient)
+                    send_mail(confirmation_subject, confirmation_message, '', recipient)
+                    logger.info(f"Confirmation email sent to {booking_reminder.email} for {booking_reminder.name}")
                 except Exception as e:
-                    print(f"Failed to send confirmation email to {booking_reminder.email}: {e}")
+                    logger.error(f"Failed to send email to {booking_reminder.email} | {booking_reminder.flight_date} & {booking_reminder.pickup_time}: {e}")
