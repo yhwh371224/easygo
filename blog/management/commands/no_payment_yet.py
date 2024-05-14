@@ -19,7 +19,7 @@ class Command(BaseCommand):
         
         for tomorrow_booking in tomorrow_bookings:
 
-            if not tomorrow_booking.cancelled and not tomorrow_booking.paid and not tomorrow_booking.cash:
+            if not tomorrow_booking.cancelled and not tomorrow_booking.paid and tomorrow_booking.cash:
                 html_content = render_to_string("basecamp/html_email-nopayment.html",
                                                 {'name': tomorrow_booking.name, 'email': tomorrow_booking.email})
                 text_content = strip_tags(html_content)

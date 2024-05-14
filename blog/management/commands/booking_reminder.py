@@ -57,12 +57,12 @@ class Command(BaseCommand):
                     'paid': booking_reminder.paid
                 })
 
-                text_content = strip_tags(html_content)
-                email = EmailMultiAlternatives(subject, text_content, '', [booking_reminder.email])
-                email.attach_alternative(html_content, "text/html")
-                email.send() 
-                booking_reminder.save()
-                # sent_emails_set.add(booking_reminder.email)
+            text_content = strip_tags(html_content)
+            email = EmailMultiAlternatives(subject, text_content, '', [booking_reminder.email])
+            email.attach_alternative(html_content, "text/html")
+            email.send() 
+            booking_reminder.save()
+            # sent_emails_set.add(booking_reminder.email)
 
             if booking_reminder.cancelled: 
                 # or booking_reminder.email in sent_emails_set:
