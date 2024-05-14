@@ -2362,7 +2362,7 @@ def sending_responses_detail(request):
 
                 html_content = render_to_string("basecamp/html_email-today.html", 
                                                 {'name': user_today.name, 'pickup_time': user_today.pickup_time, 'meeting_point': user_today.meeting_point, 
-                                                 'direction': user_today.direction, 
+                                                 'direction': user_today.direction, 'cash': user_today.cash, 
                                                  'driver_name': driver_name, 'driver_contact': driver_contact, 'driver_plate': driver_plate, 
                                                  'driver_car': driver_car, })
                 text_content = strip_tags(html_content)
