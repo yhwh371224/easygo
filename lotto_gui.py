@@ -68,7 +68,7 @@ def lotto_num():
 
     # Generating winners
     for i in range(6):
-        lotto_number = list(range(1, 46))
+        lotto_number = total_numbers
         winner_numbers = sample(lotto_number, 6)
         winner_numbers = sorted(winner_numbers)
         winner_numbers = map(str, winner_numbers)
