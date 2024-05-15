@@ -63,7 +63,6 @@ urlpatterns = [
     path('flight_date_detail/', views.flight_date_detail, name='flight_date_detail'),
     path('flight_date_error/', views.flight_date_error, name='flight_date_error'),
     path('gen_lotto/', views.gen_lotto, name="gen_lotto"),
-    path('gen_lotto_detail/', views.gen_lotto_detail, name="gen_lotto_detail"),
     path('gen_lotto_details/', views.gen_lotto_details, name="gen_lotto_details"),
     path('home/', views.home, name='home'),
     path('information/', views.information, name='information'),
