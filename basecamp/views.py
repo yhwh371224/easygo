@@ -2375,6 +2375,19 @@ def sending_responses_detail(request):
                 email.attach_alternative(html_content, "text/html")
                 email.send()
 
+        if selected_option == "Gratitude For Payment":                 
+            html_content = render_to_string("basecamp/html_email-response-meeting.html",
+                                        {'name': user.name})
+            text_content = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                "Payment Recevied - EasyGo",
+                text_content,
+                '',
+                [email, RECIPIENT_EMAIL]
+            )
+            email.attach_alternative(html_content, "text/html")
+            email.send()
+
         return render(request, 'basecamp/inquiry_done.html')  
     
     else:
