@@ -2,6 +2,7 @@ from datetime import date, datetime, timedelta
 
 import logging
 import requests
+import random
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
@@ -12,7 +13,6 @@ from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.views.decorators.csrf import csrf_exempt
-from random import sample, shuffle
 
 from main.settings import RECIPIENT_EMAIL
 from blog.models import Post, Inquiry, Payment, Driver, Inquiry_point, Inquiry_cruise
@@ -2423,16 +2423,16 @@ def paypal_ipn(request):
 
 
 # lotto
-def gen_lotto_detail(request):
+def gen_lotto_details(request):
     if request.method == 'POST':
-        n = int(request.POST.get('num_games'))        
+        n = int(request.POST.get('num_games'))    
         lotto_numbers = list(range(1, 46))
+
         games = []
         
         for _ in range(n):
-            lotto = shuffle(lotto_numbers)
-            winner_numbers = sample(lotto, 6)
-            winner_numbers.sort()
+            winner_numbers = random.sample(lotto_numbers, 6)
+            winner_numbers.sort()            
             games.append(winner_numbers)
         
         return render(request, 'gen_lotto_details.html', {'games': games})

@@ -43,15 +43,11 @@
         <div class="py-md-6">
             <h3 class="text-light pb-1">Thank you!</h3>
             <h2 class="fs-lg text-light">Please find your random numbers below</h2>
-            {% for game in games %}
-                <h3>Game {{ forloop.counter }}</h3>
-                <ul>
-                    {% for number in game %}
-                        <li>{{ number }}</li>
-                    {% endfor %}
-                </ul>
-                <hr>
-            {% endfor %}
+              <ul>
+              {% for game in games %}
+                <li>{{ game }}</li>
+              {% endfor %}
+              </ul>
         </div>
     </div>
 </section>
