@@ -59,7 +59,7 @@ def get_label_id(service, label_name):
 
 def main():
     creds = None
-    secure_directory = 'secure_gmail/'
+    secure_directory = 'secure/reminder/'
     token_file_path = os.path.join(secure_directory, 'token.json')
 
     if os.path.exists(token_file_path):

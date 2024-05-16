@@ -23,7 +23,7 @@ def create_event_on_calendar(instance_id):
     SCOPES = ['https://www.googleapis.com/auth/calendar']
 
     creds = None
-    secure_directory = 'secure/'
+    secure_directory = 'secure/calendar/'
     token_file_path = os.path.join(secure_directory, 'token.json')
 
     if os.path.exists(token_file_path):
