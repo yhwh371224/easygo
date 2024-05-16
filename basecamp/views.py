@@ -2388,7 +2388,13 @@ def sending_responses_detail(request):
                 email.attach_alternative(html_content, "text/html")
                 email.send()        
 
-        return render(request, 'basecamp/inquiry_done.html')  
+                return render(request, 'basecamp/inquiry_done.html')  
+        
+            else:
+                message = "No booking today found for this client!"                
+                return render(request, 'basecamp/inquiry_done.html', {'message': message})  
+            
+        return render(request, 'basecamp/inquiry_done.html') 
     
     else:
         return render(request, 'beasecamp/sending_responses.html', {})    
