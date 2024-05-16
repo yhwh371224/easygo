@@ -15,9 +15,8 @@ __pycache__/
 
 db.sqlite3
 
-secure/
-secure_gmail/
-secure_gmail_1/  
+# secure/
+
 
 *.pyo
 *.pyd
