@@ -2366,8 +2366,9 @@ def sending_responses_detail(request):
         if selected_option == "html_email-today": 
             today = date.today()     
             user_today = Post.objects.filter(email=email, flight_date=today).first()
-            driver_instance = user_today.driver  
-            if driver_instance: 
+            
+            if user_today: 
+                driver_instance = user_today.driver 
                 driver_name = driver_instance.driver_name
                 driver_contact = driver_instance.driver_contact
                 driver_plate = driver_instance.driver_plate
