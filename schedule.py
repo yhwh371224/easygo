@@ -57,7 +57,7 @@ def get_label_id(service, label_name):
 
 def fetch_scheduled_emails():
     creds = None
-    secure_directory = 'secure_gmail_1/'
+    secure_directory = 'secure/inquiry_to_confirm/'
     token_file_path = os.path.join(secure_directory, 'token.json')
 
     if os.path.exists(token_file_path):
