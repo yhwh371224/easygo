@@ -8,7 +8,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.db.models import Q
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
@@ -2392,8 +2392,7 @@ def sending_responses_detail(request):
                 return render(request, 'basecamp/inquiry_done.html')  
         
             else:
-                message = "No booking today found for this client!"                
-                return render(request, 'basecamp/inquiry_done.html', {'message': message})  
+                pass 
             
         return render(request, 'basecamp/inquiry_done.html') 
     
