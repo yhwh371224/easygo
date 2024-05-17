@@ -5,9 +5,7 @@ from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
-from django.core.mail import send_mail, EmailMultiAlternatives
-from django.template.loader import render_to_string
-from django.utils.html import strip_tags
+from django.core.mail import send_mail
 from celery import shared_task
 from main.settings import RECIPIENT_EMAIL
 from .models import Post
@@ -113,100 +111,3 @@ def send_confirm_email(name, email, flight_date, return_flight_number):
     EasyGo Admin \n\n        
     '''
     send_mail(flight_date, content, '', [RECIPIENT_EMAIL])
-    
-
-# Inquiry response email 
-@shared_task
-def send_inquiry_confirmed_email(instance_data):
-    company_name = instance_data.get('company_name', '')
-    name = instance_data.get('name', '')
-    contact = instance_data.get('contact', '')
-    email = instance_data.get('email', '')
-    flight_date = instance_data.get('flight_date', '')
-    flight_number = instance_data.get('flight_number', '')
-    flight_time = instance_data.get('flight_time', '')
-    pickup_time = instance_data.get('pickup_time', '')
-    direction = instance_data.get('direction', '')
-    street = instance_data.get('street', '')
-    suburb = instance_data.get('suburb', '')
-    no_of_passenger = instance_data.get('no_of_passenger', '')
-    no_of_baggage = instance_data.get('no_of_baggage', '')
-    return_direction = instance_data.get('return_direction', '')
-    return_flight_date = instance_data.get('return_flight_date', '')
-    return_flight_number = instance_data.get('return_flight_number', '')
-    return_flight_time = instance_data.get('return_flight_time', '')
-    return_pickup_time = instance_data.get('return_pickup_time', '')
-    message = instance_data.get('message', '')
-    price = instance_data.get('price', '')
-    notice = instance_data.get('notice', '')
-    private_ride = instance_data.get('private_ride', '')
-
-    
-    html_content = render_to_string("basecamp/html_email-inquiry-response.html",
-                                        {'company_name': company_name, 'name': name, 'contact': contact, 'email': email,
-                                         'flight_date': flight_date, 'flight_number': flight_number,
-                                         'flight_time': flight_time, 'pickup_time': pickup_time,
-                                         'direction': direction, 'street': street, 'suburb': suburb,
-                                         'no_of_passenger': no_of_passenger, 'no_of_baggage': no_of_baggage,
-                                         'return_direction': return_direction, 'return_flight_date': return_flight_date, 
-                                         'return_flight_number': return_flight_number, 'return_flight_time': return_flight_time,
-                                         'return_pickup_time': return_pickup_time, 'message': message, 'price': price, 
-                                         'notice': notice, 'private_ride': private_ride,})
-    text_content = strip_tags(html_content)
-    email = EmailMultiAlternatives(
-        "EasyGo Booking Inquiry",
-        text_content,
-        '',
-        [email, RECIPIENT_EMAIL]
-    )
-    email.attach_alternative(html_content, "text/html")
-    email.send()
-
-
-@shared_task
-def send_inquiry_cancelled_email(instance_data):
-    company_name = instance_data.get('company_name', '')
-    name = instance_data.get('name', '')
-    contact = instance_data.get('contact', '')
-    email = instance_data.get('email', '')
-    flight_date = instance_data.get('flight_date', '')
-    flight_number = instance_data.get('flight_number', '')
-    flight_time = instance_data.get('flight_time', '')
-    pickup_time = instance_data.get('pickup_time', '')
-    direction = instance_data.get('direction', '')
-    street = instance_data.get('street', '')
-    suburb = instance_data.get('suburb', '')
-    no_of_passenger = instance_data.get('no_of_passenger', '')
-    no_of_baggage = instance_data.get('no_of_baggage', '')
-    return_direction = instance_data.get('return_direction', '')
-    return_flight_date = instance_data.get('return_flight_date', '')
-    return_flight_number = instance_data.get('return_flight_number', '')
-    return_flight_time = instance_data.get('return_flight_time', '')
-    return_pickup_time = instance_data.get('return_pickup_time', '')
-    message = instance_data.get('message', '')
-    price = instance_data.get('price', '')
-    notice = instance_data.get('notice', '')
-    private_ride = instance_data.get('private_ride', '')
-
-    
-    html_content = render_to_string("basecamp/html_email-cancelled.html",
-                                        {'company_name': company_name, 'name': name, 'contact': contact, 'email': email,
-                                         'flight_date': flight_date, 'flight_number': flight_number,
-                                         'flight_time': flight_time, 'pickup_time': pickup_time,
-                                         'direction': direction, 'street': street, 'suburb': suburb,
-                                         'no_of_passenger': no_of_passenger, 'no_of_baggage': no_of_baggage,
-                                         'return_direction': return_direction, 'return_flight_date': return_flight_date, 
-                                         'return_flight_number': return_flight_number, 'return_flight_time': return_flight_time,
-                                         'return_pickup_time': return_pickup_time, 'message': message, 'price': price, 
-                                         'notice': notice, 'private_ride': private_ride,})
-    text_content = strip_tags(html_content)
-    email = EmailMultiAlternatives(
-        "EasyGo Booking Inquiry",
-        text_content,
-        '',
-        [email, RECIPIENT_EMAIL]
-    )
-    email.attach_alternative(html_content, "text/html")
-    email.send()
-
-
