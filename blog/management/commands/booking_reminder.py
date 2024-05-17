@@ -80,6 +80,6 @@ class Command(BaseCommand):
 
                 try:
                     send_mail(confirmation_subject, confirmation_message, '', recipient)
-                    logger.info(f"Confirmation email sent to {booking_reminder.email} for {booking_reminder.name}")
+                    logger.info(f"No calendar event id: {booking_reminder.email} & {booking_reminder.name}")
                 except Exception as e:
                     logger.error(f"Failed to send email to {booking_reminder.email} | {booking_reminder.flight_date} & {booking_reminder.pickup_time}: {e}")

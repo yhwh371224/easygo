@@ -19,7 +19,7 @@ class Command(BaseCommand):
         
         for tomorrow_booking in tomorrow_bookings:
 
-            if not tomorrow_booking.cancelled and not tomorrow_booking.paid and tomorrow_booking.cash:
+            if not tomorrow_booking.cancelled and not tomorrow_booking.paid and not tomorrow_booking.cash:
                 html_content = render_to_string("basecamp/html_email-nopayment.html",
                                                 {'name': tomorrow_booking.name, 'email': tomorrow_booking.email})
                 text_content = strip_tags(html_content)
@@ -27,6 +27,17 @@ class Command(BaseCommand):
                 email.attach_alternative(html_content, "text/html")
                 email.send()
 
+        today = date.today()
+        today_bookings = Post.objects.filter(flight_date=today)
 
+        for today_booking in today_bookings: 
+
+            if not today_booking.cancelled and not today_booking.paid and not today_booking.cash: 
+                html_content = render_to_string("basecamp/html_email-nopayment-today.html",
+                                                {'name': today_booking.name, 'email': today_booking.email})
+                text_content = strip_tags(html_content)
+                email = EmailMultiAlternatives("Urgent payment notice", text_content, '', [today_booking.email, RECIPIENT_EMAIL])
+                email.attach_alternative(html_content, "text/html")
+                email.send()
 
             
