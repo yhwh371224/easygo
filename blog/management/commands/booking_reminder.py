@@ -35,7 +35,7 @@ class Command(BaseCommand):
         self.send_email(3, "basecamp/html_email-upcoming3.html", "Reminder-3days")
         self.send_email(7, "basecamp/html_email-upcoming7.html", "Reminder-7days")
         self.send_email(14, "basecamp/html_email-upcoming14.html", "Reminder-2wks")        
-        self.send_email(-1, "basecamp/html_email-yesterday.html", "Review-EasyGo")
+        # self.send_email(-1, "basecamp/html_email-yesterday.html", "Review-EasyGo")
 
     def send_email(self, date_offset, template_name, subject):
         target_date = date.today() + timedelta(days=date_offset)
@@ -74,12 +74,12 @@ class Command(BaseCommand):
                 logger.error(f"Failed to send email to {booking_reminder.email} | {booking_reminder.flight_date} & {booking_reminder.pickup_time}: {e}")
 
             if not booking_reminder.calendar_event_id:
-                confirmation_subject = "No confirmation yet - empty id"
-                confirmation_message = f"{booking_reminder.name} & {booking_reminder.email}"
+                subject = "calendar - empty id"
+                message = f"{booking_reminder.name} & {booking_reminder.email}"
                 recipient = [RECIPIENT_EMAIL]
 
                 try:
-                    send_mail(confirmation_subject, confirmation_message, '', recipient)
+                    send_mail(subject, message, '', recipient)
                     logger.info(f"No calendar event id: {booking_reminder.email} & {booking_reminder.name}")
                 except Exception as e:
                     logger.error(f"Failed to send email to {booking_reminder.email} | {booking_reminder.flight_date} & {booking_reminder.pickup_time}: {e}")
