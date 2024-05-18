@@ -67,7 +67,7 @@ class Command(BaseCommand):
             email.attach_alternative(html_content, "text/html")
 
             try:
-                email.send()
+                email.send(fail_silently=False)
                 booking_reminder.save()
                 logger.info(f"Email sent to {booking_reminder.email} for {booking_reminder.name}")
             except Exception as e:
@@ -79,7 +79,7 @@ class Command(BaseCommand):
                 recipient = [RECIPIENT_EMAIL]
 
                 try:
-                    send_mail(subject, message, '', recipient)
+                    send_mail(subject, message, '', recipient, fail_silently=False)
                     logger.info(f"No calendar event id: {booking_reminder.email} & {booking_reminder.name}")
                 except Exception as e:
                     logger.error(f"Failed to send email to {booking_reminder.email} | {booking_reminder.flight_date} & {booking_reminder.pickup_time}: {e}")
