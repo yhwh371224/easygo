@@ -2355,7 +2355,7 @@ def sending_responses_detail(request):
             email.attach_alternative(html_content, "text/html")
             email.send()
 
-        if selected_option == "html_email-today": 
+        if selected_option == "Arrival Notice Today": 
             today = date.today()     
             user_today = Post.objects.filter(email=email, flight_date=today).first()
             
@@ -2373,7 +2373,7 @@ def sending_responses_detail(request):
                                                  'driver_car': driver_car, })
                 text_content = strip_tags(html_content)
                 email = EmailMultiAlternatives(
-                    "Today notice - EasyGo",
+                    "Arrival Notice Today - EasyGo",
                     text_content,
                     '',
                     [email, RECIPIENT_EMAIL]
