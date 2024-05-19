@@ -230,8 +230,7 @@
 										<tr>
 											<td align="left" style="padding-top:28px;padding-left:0;">
                                                 <p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                    
-                                                    Thank you for your booking with us!<br><br>
-													                                        
+                                                    Thank you for your booking request with us!<br><br>													                                        
                                                     Please find your booking details below:<br>                                                   
                                                 </p>
 												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">  
@@ -273,6 +272,17 @@
 													<span style="font-weight:bold; color: #bdb1a6">Return pickup time:  {{ return_pickup_time }}</span><br>
 												{% endif %}
 												</p>
+												<!-- Meeting point  -->
+												{% if direction == 'Pickup from Intl Airport' or direction == 'Pickup from Domestic Airport' %}
+												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
+													--- Meeting point ---</p> 														
+                                                <p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">                                                  
+                                                    Please refer to our website for the meeting point at the airport.<br>
+													Click here >>&nbsp;<a href="https://easygoshuttle.com.au/meeting_point/">easygoshuttle.com.au/meeting_point</a>&nbsp;to view the location of the meeting_point. 
+													(Please note that changes may occur on the day of your pickup, so remember to check your email for updates)<br><br></p>
+												</p><br>
+												{% endif %}	
+
 												<!-- Price -->
 												{% if return_flight_number %}
 												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
@@ -282,9 +292,26 @@
 													The cost for your booking for a single trip will be ${{ price }}<br><br></p>
 												{% endif %}
 
+												<!-- If paid or not-->
 												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
-												Note:&nbsp;<span style="font-weight:bold; color: #d39383">
-													Your booking will be confirmed upon receipt of your email response</span><br><br></p>
+													--- Payment ---</p>
+												{% if paid %}																								
+													<p style="Margin:0;font-size:12px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                  
+                                                    You have paid ${{ price }}, which we have received and greatly appreciate.
+												<br></p><br>
+												{% else %}	
+												<p style="Margin:0;font-size:12px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                  
+													Please pay ${{ price }} online in advance <a href="https://easygoshuttle.com.au/payonline/">easygoshuttle.com.au/payonline</a><br>
+													Payment is kindly required prior to the day of your pickup<br>
+													<!-- A booking may not be guaranteed without payment<br> -->
+												</p><br>											
+												{% endif %}
+												
+												<!-- Confirm your booking by responding this email  -->
+												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
+													If you are happy with the price, please confirm your booking by responding to this email.<br><br> 
+												<span style="font-weight:bold; color: #d39383">													
+													Your booking will be confirmed once we receive your response</span><br><br></p>
 													 
 												<p style="Margin:0;font-size:13px;font-weight:bold;line-height:22px;Margin-bottom:12px;">
                                                     Best regards<br>
