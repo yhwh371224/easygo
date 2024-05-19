@@ -6,38 +6,71 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from blog.models import Post
 from main.settings import RECIPIENT_EMAIL
-
+import logging
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+logger = logging.getLogger('blog.no_payment_yet')
+logger.setLevel(logging.INFO)
+
+formatter = logging.Formatter('%(asctime)s:%(message)s')
+
+# Create the logs directory if it doesn't exist
+logs_dir = os.path.join(BASE_DIR, 'logs')
+if not os.path.exists(logs_dir):
+    os.makedirs(logs_dir)
+
+file_handler = logging.FileHandler(os.path.join(logs_dir, 'no_payment_yet.log'))
+file_handler.setFormatter(formatter)
+
+logger.addHandler(file_handler)
+
 class Command(BaseCommand):
-    help = 'Not payment received yet'
+    help = 'Send reminders for payment'
+
+    def send_email(self, subject, template, context, recipient_list):
+        html_content = render_to_string(template, context)
+        text_content = strip_tags(html_content)
+        email = EmailMultiAlternatives(subject, text_content, '', recipient_list)
+        email.attach_alternative(html_content, "text/html")
+        try:
+            email.send(fail_silently=False)
+            logger.info(f"Email sent to {recipient_list}")
+        except Exception as e:
+            logger.error(f"Failed to send email to {recipient_list}: {e}")
 
     def handle(self, *args, **options):
-        tomorrow = date.today() + timedelta(days=1)
-        tomorrow_bookings = Post.objects.filter(flight_date=tomorrow)
-        
-        for tomorrow_booking in tomorrow_bookings:
+        dates_to_check = {
+            "three_days": date.today() + timedelta(days=3),
+            "tomorrow": date.today() + timedelta(days=1),
+            "today": date.today(),
+        }
 
-            if not tomorrow_booking.cancelled and not tomorrow_booking.paid and not tomorrow_booking.cash:
-                html_content = render_to_string("basecamp/html_email-nopayment.html",
-                                                {'name': tomorrow_booking.name, 'email': tomorrow_booking.email})
-                text_content = strip_tags(html_content)
-                email = EmailMultiAlternatives("Payment notice", text_content, '', [tomorrow_booking.email, RECIPIENT_EMAIL])
-                email.attach_alternative(html_content, "text/html")
-                email.send()
-
-        today = date.today()
-        today_bookings = Post.objects.filter(flight_date=today)
-
-        for today_booking in today_bookings: 
-
-            if not today_booking.cancelled and not today_booking.paid and not today_booking.cash: 
-                html_content = render_to_string("basecamp/html_email-nopayment-today.html",
-                                                {'name': today_booking.name, 'email': today_booking.email})
-                text_content = strip_tags(html_content)
-                email = EmailMultiAlternatives("Urgent payment notice", text_content, '', [today_booking.email, RECIPIENT_EMAIL])
-                email.attach_alternative(html_content, "text/html")
-                email.send()
-
+        for key, check_date in dates_to_check.items():
+            bookings = Post.objects.filter(flight_date=check_date)
             
+            for booking in bookings:
+                if key == "three_days":
+                    if booking.discount == "TBA":
+                        self.send_email(
+                            "Payment notice",
+                            "basecamp/html_email-nopayment.html",
+                            {'name': booking.name, 'email': booking.email},
+                            [booking.email, RECIPIENT_EMAIL]
+                        )
+                else:
+                    if not booking.cancelled and not booking.paid and not booking.cash:
+                        if key == "today":
+                            self.send_email(
+                                "Urgent notice for payment",
+                                "basecamp/html_email-nopayment-today.html",
+                                {'name': booking.name, 'email': booking.email},
+                                [booking.email, RECIPIENT_EMAIL]
+                            )
+                        else: # "tomorrow"
+                            self.send_email(
+                                "Payment notice",
+                                "basecamp/html_email-nopayment.html",
+                                {'name': booking.name, 'email': booking.email},
+                                [booking.email, RECIPIENT_EMAIL]
+                            )
