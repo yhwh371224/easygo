@@ -234,14 +234,6 @@ def flight_date_error(request):
     return render(request, 'basecamp/flight_date_error.html')
 
 
-def gen_lotto(request): 
-    return render(request, 'basecamp/gen_lotto.html')
-
-
-def gen_lotto_details(request): 
-    return render(request, 'basecamp/gen_lotto_details.html')
-
-
 def inquiry(request): 
     context = {
         'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
@@ -2438,22 +2430,3 @@ def paypal_ipn(request):
             return HttpResponse(status=500, content="Error processing PayPal IPN")
 
     return HttpResponse(status=400)
-
-
-
-# lotto
-def gen_lotto_details(request):
-    if request.method == 'POST':
-        n = int(request.POST.get('num_games'))    
-        lotto_numbers = list(range(1, 46))
-
-        games = []
-        
-        for _ in range(n):
-            winner_numbers = random.sample(lotto_numbers, 6)
-            winner_numbers.sort()            
-            games.append(winner_numbers)
-        
-        return render(request, 'gen_lotto_details.html', {'games': games})
-    else:
-        return render(request, 'gen_lotto.html')
