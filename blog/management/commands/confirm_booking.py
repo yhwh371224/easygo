@@ -52,7 +52,7 @@ class Command(BaseCommand):
 
                     if not post.sent_email:
                         post.sent_email = True
-                        post.save()
+                        post.save(update_fields=['sent_email'])
 
                         html_content = render_to_string(template_name, {
                             'company_name': post.company_name, 'name': post.name, 'contact': post.contact, 'email': post.email, 'email1': post.email1, 

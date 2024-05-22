@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en-us">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}EasyCoding{% endblock %}</title>
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'easygo_review/images/favicon.ico' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="keywords" content="website, web design, web development, web builder, web pages, web developer, web dev, web freelancer" />
+    <meta name="description" content="website, web design, web development, seo, online marketing to be done by our professional knowledge, skill and experience" />
+    <link rel="stylesheet" href="{% static 'easygo_review/css/bootstrap.css' %}" media="screen">
+    <link rel="stylesheet" href="{% static 'easygo_review/css/custom.min.css' %}">
+    <script src="https://kit.fontawesome.com/e57bc5ae97.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+{% include 'easygo_review/navbar.html' %}
+
+<div class="container">
+    <div class="row">
+        <!-- easygo_review Entries Column -->
+        <div class="col-md-8" id="main-div">
+            {% block content %}
+            {% endblock %}
+        </div>
+
+        <div class="col-md-4" id="side-div">
+            <!-- Search Widget -->
+            <div class="card my-4">
+                <h5 class="card-header">Search</h5>
+                <div class="card-body">
+                    <div class="input-group">
+                        <input type="text" id="search-input" onkeyup="wait_for_enterkey()" class="form-control" placeholder="Search for..."/>
+                        <span class="input-group-btn">
+                                <button class="btn btn-secondary" type="button" onclick="search_post();">Go!</button>
+                            </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Categories Widget -->
+            <div class="card my-4" id="category-card">
+                <h5 class="card-header">Categories</h5>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <ul class="list-unstyled mb-0">
+                                {% for category in category_list %}
+                                    <li>
+                                        <a href="{{ category.get_absolute_url }}">{{ category.name }} ({{ category.post_set.count }})</a>
+                                    </li>
+                                {% endfor %}
+                                <li>
+                                    <a href="/easygo_review/category/_none/">no category ({{ posts_without_category }})</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- footer -->
+    <br>
+    <div class="footer container-xl width-full p-responsive" role="contentinfo">
+        <ul class="list-style-none border-top d-flex flex-wrap flex-justify-center flex-lg-justify-between ">
+            <li class="mr-3 mr-lg-2 list-unstyled">&copy; 2020 EasyCoding</li>
+            <li class="mr-3 mr-lg-2 list-unstyled"><a href="mailto:sungkam3@gmail.com">contact</a></li>
+            <li class="mr-3 mr-lg-2 list-unstyled"><a href="/terms/" data-ga-click="Footer, go to terms, text:terms">terms</a></li>
+            <li class="mr-3 mr-lg-2 list-unstyled"><a href="/privacy/" data-ga-click="Footer, go to privacy, text:privacy">privacy</a></li>
+        </ul>
+    </div>
+
+<br>
+
+</div>
+
+<script>
+    function search_post(){
+        var search_value = document.getElementById('search-input').value;
+        location.href="/easygo_review/search/" + search_value + "/";
+    }
+
+    function wait_for_enterkey(){
+        if (window.event.keyCode == 13){
+            search_post();
+        }
+    }
+</script>
+
+<script src="{% static 'easygo_review/js/jquery.min.js' %}"></script>
+<script src="{% static 'easygo_review/js/popper.min.js' %}"></script>
+<script src="{% static 'easygo_review/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'easygo_review/js/custom.js' %}"></script>
+
+</body>
+</html>
