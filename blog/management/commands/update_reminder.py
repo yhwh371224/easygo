@@ -56,4 +56,4 @@ class Command(BaseCommand):
                             logger.info(f'....Just now executed:{post.name}, {post.flight_date}, {post.pickup_time}')
 
                         post.reminder = True
-                        post.save()
+                        post.save(update_fields=['reminder'])
