@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'blog.apps.BlogConfig',
     'basecamp.apps.BasecampConfig', 
+    'easygo_review.apps.EasygoReviewConfig', 
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -47,6 +48,8 @@ INSTALLED_APPS = [
     'paypal.standard.ipn',
     'corsheaders',
     'admin_honeypot',
+    'crispy_forms',
+    'markdownx',
     
 ]
 
