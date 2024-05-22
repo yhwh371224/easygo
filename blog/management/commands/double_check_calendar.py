@@ -4,11 +4,12 @@ from django.core.management.base import BaseCommand
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
-from blog.models import Post
+from blog.models import Post, Driver
 from main.settings import RECIPIENT_EMAIL
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 
 class Command(BaseCommand):
     help = 'Double check calendar'
@@ -17,17 +18,27 @@ class Command(BaseCommand):
         tomorrow = date.today() + timedelta(days=1)
         tomorrow_bookings = Post.objects.filter(flight_date=tomorrow)
         
-        for tomorrow_booking in tomorrow_bookings:
+        for booking in tomorrow_bookings:
+            self.check_and_notify_missing_calendar_id(booking)
+            self.confirm_booking(booking)
+            self.assign_default_driver(booking)
+            
+    def check_and_notify_missing_calendar_id(self, booking):
+        if not booking.calendar_event_id:
+            subject = "Empty calendar ID in double_check_calendar.py"
+            message = f"{booking.name} & {booking.email}"
+            recipient_list = [RECIPIENT_EMAIL]
+            send_mail(subject, message, '', recipient_list, fail_silently=False)
 
-            if not tomorrow_booking.calendar_event_id:
-                subject = "empty calendar id from double_check_calendar.py"
-                message = f"{tomorrow_booking.name} & {tomorrow_booking.email}"
-                recipient_list = [RECIPIENT_EMAIL]
+    def confirm_booking(self, booking):
+        if not booking.cancelled:
+            booking.is_confirmed = True
+            booking.save(update_fields=['is_confirmed'])
 
-                send_mail(subject, message, '', recipient_list)
-
-            if not tomorrow_booking.cancelled:
-                tomorrow_booking.is_confirmed = True
-                tomorrow_booking.save()
+    def assign_default_driver(self, booking):
+        if booking.driver is None:
+            sam_driver = Driver.objects.get(driver_name="Sam")
+            booking.driver = sam_driver
+            booking.save(update_fields=['driver'])
 
             
