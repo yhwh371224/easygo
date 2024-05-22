@@ -14,9 +14,6 @@ if ENVIRONMENT == 'production':
     DEBUG = config('DEBUG', cast=bool, default=True)
     ALLOWED_HOSTS = ['easygoshuttle.com.au', 'www.easygoshuttle.com.au', '149.28.188.33', '33.188.28.149.in-addr.arpa']
 
-    RECAPTCHA_SITE_KEY = config('RECAPTCHA_SITE_KEY')
-    RECAPTCHA_SECRET_KEY = config('RECAPTCHA_SECRET_KEY')
-
     SECURE_SSL_REDIRECT = True
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_SECURE = True
@@ -28,7 +25,6 @@ if ENVIRONMENT == 'production':
 else:
     DEBUG = True
     ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
-
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -144,14 +140,12 @@ WSGI_APPLICATION = 'main.wsgi.application'
 #   }
 # }
 
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
 
 CACHES = {
     'default': {
@@ -163,9 +157,7 @@ CACHES = {
     }
 }
 
-
 WHITENOISE_MAX_AGE = 60 * 60 * 24 * 365  # 1 year in seconds
-
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -182,7 +174,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Australia/Sydney'
@@ -193,12 +184,10 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 AUTHENTICATION_BACKENDS = (    
     'django.contrib.auth.backends.ModelBackend',   
     'allauth.account.auth_backends.AuthenticationBackend',
 )
-
 
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = 'none'
@@ -231,14 +220,11 @@ COMPRESS_FILTERS = {
     ]
 }
 
-
 HTML_MINIFY = True
 KEEP_COMMENTS_ON_MINIFYING = True
 
-
 LOGIN_REDIRECT_URL = '/home/'
 LOGOUT_REDIRECT_URL = '/home/'
-
 
 #PayPal settings
 PAYPAL_MODE = 'live'  
@@ -247,13 +233,11 @@ PAYPAL_CLIENT_SECRET = config('PAYPAL_CLIENT_SECRET')
 PAYPAL_RECEIVER_EMAIL = 'info@easygoshuttle.com.au'
 PAYPAL_IPN_URL = 'https://easygoshuttle.com.au/paypal_ipn/'
 
-
 #CORS settings
 CORS_ALLOWED_ORIGINS = [
     'http://easygoshuttle.com.au',
     'https://easygoshuttle.com.au',
 ]
-
 
 # Email settings
 EMAIL_HOST = config('EMAIL_HOST')
@@ -264,9 +248,11 @@ EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 EMAIL_BACKEND = config('EMAIL_BACKEND')
 
+RECAPTCHA_SITE_KEY = config('RECAPTCHA_SITE_KEY')
+RECAPTCHA_SECRET_KEY = config('RECAPTCHA_SECRET_KEY')
+
 # Recipient email address constant
 RECIPIENT_EMAIL = "info@easygoshuttle.com.au"
-
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
