@@ -196,7 +196,7 @@
               submitButton.innerHTML = "Submitting..."; // You can change the text as needed
           });
       });
-  </script> 
+  </script>   
   <script async src="https://www.google.com/recaptcha/api.js"></script>
   <script>    
     if(typeof grecaptcha === 'undefined') {
@@ -213,7 +213,7 @@
     }
     grecaptcha.ready(function(){
       grecaptcha.render("container", {
-        sitekey: "6LcF_xspAAAAAAjCmHaLpgYhyX_Ndi6taHUBrmUG"
+        sitekey: "{{ recaptcha_site_key }}"
       });
     });
   </script>
