@@ -8,6 +8,7 @@ from django.db.models import Q
 
 class PostList(ListView):
     model = Post
+    template_name = 'easygo_review/post_list.html'
     paginate_by = 6
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -32,6 +33,7 @@ class PostSearch(PostList):
 
 class PostDetail(DetailView):
     model = Post
+    template_name = 'easygo_review/post_detail.html'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(PostDetail, self).get_context_data(**kwargs)
@@ -44,6 +46,7 @@ class PostDetail(DetailView):
 
 class PostCreate(LoginRequiredMixin, CreateView):
     model = Post
+    template_name = 'easygo_review/post_form.html'
     fields = [
         'title', 'content', 'head_image', 'category', 'tags'
     ]
@@ -59,6 +62,7 @@ class PostCreate(LoginRequiredMixin, CreateView):
 
 class PostUpdate(UpdateView):
     model = Post
+    template_name = 'easygo_review/post_form.html'
     fields = [
         'title', 'content', 'head_image', 'category', 'tags'
     ]
