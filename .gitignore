@@ -9,13 +9,13 @@ media/
 
 temp/
 
-# .env 
+.env 
 
 __pycache__/
 
 db.sqlite3
 
-# secure/
+secure/
 
 *.pyo
 *.pyd
