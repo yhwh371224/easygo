@@ -59,26 +59,7 @@ def get_label_id(service, label_name):
     return None
 
 
-def main():
-    # creds = None
-    # secure_directory = 'secure/reminder/'
-    # token_file_path = os.path.join(secure_directory, 'token.json')
-
-    # if os.path.exists(token_file_path):
-    #     creds = Credentials.from_authorized_user_file(token_file_path, SCOPES)
-
-    # if not creds or not creds.valid:
-    #     if creds and creds.expired and creds.refresh_token:
-    #         creds.refresh(Request())
-
-    #     else:
-    #         credentials_file_path = os.path.join(secure_directory, 'credentials.json')
-    #         flow = InstalledAppFlow.from_client_secrets_file(credentials_file_path, SCOPES)
-    #         creds = flow.run_console()             # run_local_server(port=0)
-
-    #     with open(token_file_path, 'w') as token:
-    #         token.write(creds.to_json())
-    
+def main():    
     credentials = service_account.Credentials.from_service_account_file(
         SERVICE_ACCOUNT_FILE, scopes=SCOPES, subject=DELEGATED_USER_EMAIL)
 
@@ -90,7 +71,6 @@ def main():
     except HttpError as error:
         print(f"An error occurred: {error}")
         return []
-
 
 if __name__ == "__main__":
     rereminder_emails = main()
