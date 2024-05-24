@@ -1,17 +1,19 @@
 import os.path
 import re
+from google.oauth2 import service_account
 from google.auth.transport.requests import Request
-from google.oauth2.credentials import Credentials
-from google_auth_oauthlib.flow import InstalledAppFlow
+# from google.oauth2.credentials import Credentials
+# from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from main.settings import RECIPIENT_EMAIL
 
 # If modifying these scopes, delete the file token.json.
 SCOPES = ["https://www.googleapis.com/auth/gmail.readonly"]
-
 LABEL_NAME = "Re-reminder"
 EXCLUDED_EMAIL = "info+canned.response@easygoshuttle.com.au"
+SERVICE_ACCOUNT_FILE = 'secure/reminder/service-account-file.json'
+DELEGATED_USER_EMAIL = RECIPIENT_EMAIL  # 위임받은 사용자의 이메일 주소
 
 def get_rereminder_emails(service):
     try:
@@ -58,31 +60,32 @@ def get_label_id(service, label_name):
 
 
 def main():
-    creds = None
-    secure_directory = 'secure/reminder/'
-    token_file_path = os.path.join(secure_directory, 'token.json')
+    # creds = None
+    # secure_directory = 'secure/reminder/'
+    # token_file_path = os.path.join(secure_directory, 'token.json')
 
-    if os.path.exists(token_file_path):
-        creds = Credentials.from_authorized_user_file(token_file_path, SCOPES)
+    # if os.path.exists(token_file_path):
+    #     creds = Credentials.from_authorized_user_file(token_file_path, SCOPES)
 
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
+    # if not creds or not creds.valid:
+    #     if creds and creds.expired and creds.refresh_token:
+    #         creds.refresh(Request())
 
-        else:
-            credentials_file_path = os.path.join(secure_directory, 'credentials.json')
-            flow = InstalledAppFlow.from_client_secrets_file(credentials_file_path, SCOPES)
-            creds = flow.run_local_server(port=0)
+    #     else:
+    #         credentials_file_path = os.path.join(secure_directory, 'credentials.json')
+    #         flow = InstalledAppFlow.from_client_secrets_file(credentials_file_path, SCOPES)
+    #         creds = flow.run_console()             # run_local_server(port=0)
 
-        with open(token_file_path, 'w') as token:
-            token.write(creds.to_json())
+    #     with open(token_file_path, 'w') as token:
+    #         token.write(creds.to_json())
+    
+    credentials = service_account.Credentials.from_service_account_file(
+        SERVICE_ACCOUNT_FILE, scopes=SCOPES, subject=DELEGATED_USER_EMAIL)
 
     try:
-        service = build("gmail", "v1", credentials=creds)
-
+        service = build("gmail", "v1", credentials=credentials)
         rereminder_emails = get_rereminder_emails(service)
-
-        return rereminder_emails  # Return the list
+        return rereminder_emails  
 
     except HttpError as error:
         print(f"An error occurred: {error}")
