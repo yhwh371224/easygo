@@ -23,9 +23,10 @@ urlpatterns = [
     path('category/<str:slug>/', views.PostListByCategory.as_view()),
     path('edit_comment/<int:pk>/', views.CommentUpdate.as_view()),
     path('delete_comment/<int:pk>/', views.delete_comment),
-    path('<int:pk>/new_comment/', views.new_comment),
-    path('<int:pk>/update/', views.PostUpdate.as_view()),
-    path('<int:pk>/', views.PostDetail.as_view()),
-    path('create/', views.PostCreate.as_view()),
-    path('', views.PostList.as_view()),
+    path('<int:pk>/new_comment/', views.new_comment, name="easygo_review/<pk>/new_comment/"),
+    path('<int:pk>/update/', views.PostUpdate.as_view(), name="easygo_review/<pk>/update/"),
+    path('<int:pk>/', views.PostDetail.as_view(), name="easygo_review/<pk>"),
+    path('create/', views.PostCreate.as_view(), name="easygo_review/create"),
+    path('', views.PostList.as_view(), name="easygo_review"),
+
 ]
