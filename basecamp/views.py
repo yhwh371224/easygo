@@ -306,6 +306,10 @@ def p2p_single(request):
     return render(request, 'basecamp/p2p_single.html', context)
 
 
+def p2p_single_1(request):     
+    return render(request, 'basecamp/p2p_single_1.html')
+
+
 def privacy(request): 
     return render(request, 'basecamp/privacy.html')
 
@@ -896,6 +900,76 @@ def p2p_single_detail(request):
         return render(request, 'basecamp/p2p_single.html', {})
     
 
+# p2p_single_detail_1 
+def p2p_single_detail_1(request):    
+    if request.method == "POST":
+        name = request.POST.get('name')
+        contact = request.POST.get('contact')
+        email = request.POST.get('email')        
+        flight_date = request.POST.get('flight_date')
+        pickup_time = request.POST.get('pickup_time')
+        flight_number = request.POST.get('flight_number')
+        flight_time = request.POST.get('flight_time')
+        if not flight_time:
+            flight_time = 'p2p'
+        street = request.POST.get('street')        
+        no_of_passenger = request.POST.get('no_of_passenger')
+        no_of_baggage = request.POST.get('no_of_baggage')        
+        return_flight_date = request.POST.get('return_flight_date')
+        if not return_flight_date:
+            return_flight_date = date.today().strftime('%Y-%m-%d')
+        return_flight_number = request.POST.get('return_flight_number')
+        return_flight_time = request.POST.get('return_flight_time')
+        if not return_flight_time:
+            return_flight_time = datetime.now().strftime('%H:%M')
+        return_pickup_time = request.POST.get('return_pickup_time')
+        message = request.POST.get('message')
+
+        cruise = True
+               
+        data = {
+            'name': name,
+            'email': email,
+            'flight_date': flight_date,
+            'pickup_time': pickup_time,
+            'flight_number': flight_number,
+            'street': street, 
+            'return_pickup_time': return_pickup_time
+            }
+        
+        content = '''
+        Hello, {} \n
+        Point to Point inquiry \n
+        From Home page \n
+        ***Inquiry_point to point***\n
+        https://easygoshuttle.com.au                   
+        =============================            
+        Email: {}          
+        Pick up time: {}      
+        Start point: {}  
+        End point: {}          
+        Return pickup time: {}          
+        
+        =============================\n        
+        Best Regards,
+        EasyGo Admin \n\n        
+        ''' .format(data['name'], data['email'], data['street'], data['pickup_time'], data['flight_number'], data['return_pickup_time'])
+        send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])                           
+        
+        p = Inquiry_point(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number, flight_time=flight_time, 
+                          street=street, pickup_time=pickup_time, no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, cruise=cruise,
+                          return_flight_date=return_flight_date, return_flight_time=return_flight_time, return_flight_number=return_flight_number,                           
+                          return_pickup_time=return_pickup_time, message=message)
+        
+        p.save() 
+
+        
+        return render(request, 'basecamp/inquiry_done.html')
+
+    else:
+        return render(request, 'basecamp/p2p_single.html', {})
+    
+
 # cruise inquiry 
 def cruise_inquiry_detail(request):    
     if request.method == "POST":
@@ -1140,17 +1214,6 @@ def p2p_booking_detail(request):
         p2p_message = request.POST.get('p2p_message')
         price = request.POST.get('price')
 
-        # p = Booking_p2p(p2p_name=p2p_name, p2p_phone=p2p_phone, p2p_email=p2p_email, p2p_date=p2p_date,
-        #                 first_pickup_location=first_pickup_location, first_putime=first_putime,
-        #                 first_dropoff_location=first_dropoff_location, second_pickup_location=second_pickup_location,
-        #                 second_putime=second_putime, second_dropoff_location=second_dropoff_location, third_pickup_location=third_pickup_location,
-        #                 third_putime=third_putime, third_dropoff_location=third_dropoff_location, fourth_pickup_location=fourth_pickup_location,
-        #                 fourth_putime=fourth_putime, fourth_dropoff_location=fourth_dropoff_location, p2p_passengers=p2p_passengers,p2p_baggage=p2p_baggage,
-        #                 p2p_message=p2p_message, price=price)
-
-        # p.save()
-
-
         html_content = render_to_string("basecamp/html_email-p2p-confirmation.html", 
             {'p2p_name': p2p_name, 'p2p_phone': p2p_phone, 'p2p_email': p2p_email, 'p2p_date': p2p_date, 
             'first_pickup_location': first_pickup_location, 'first_putime': first_putime,  
@@ -1236,21 +1299,26 @@ def price_detail(request):
 
         }
 
-        # message = '''
-        #         =====================
-        #         Someone checked price
-        #         =====================
-        #         Flight date: {}
-        #         Direction: {}        
-        #         Suburb: {}
-        #         No of passenger: {}              
-        #         '''.format(data['flight_date'], data['direction'],
-        #                    data['suburb'], data['no_of_passenger'])
+        message = '''
+                =====================
+                Someone checked price
+                =====================
+                Flight date: {}
+                Direction: {}        
+                Suburb: {}
+                No of passenger: {}              
+                '''.format(data['flight_date'], data['direction'],
+                           data['suburb'], data['no_of_passenger'])
                 
-        # send_mail(data['flight_date'], message, '', [RECIPIENT_EMAIL])
+        send_mail(data['flight_date'], message, '', [RECIPIENT_EMAIL])
 
         if direction == 'To/From Cruise Transfers':
             return render(request, 'basecamp/cruise_inquiry_1.html',
+                          {'flight_date': flight_date, 'direction': direction, 
+                           'no_of_passenger': no_of_passenger, 'suburb': suburb},
+                          )
+        elif direction == 'Point to Point':
+            return render(request, 'basecamp/p2p_single_1.html',
                           {'flight_date': flight_date, 'direction': direction, 
                            'no_of_passenger': no_of_passenger, 'suburb': suburb},
                           )
@@ -1368,6 +1436,7 @@ def confirmation_detail(request):
 
     else:
         return render(request, 'basecamp/confirmation.html', {})
+
 
 # airport booking by client
 def booking_detail(request):
