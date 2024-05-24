@@ -10,6 +10,7 @@ urlpatterns = [
     path('horeb_yhwh/', admin.site.urls),
     # path('admin/', admin.site.urls),
     path('blog/', include('blog.urls')),
+    path('easygo_review/', include('easygo_review.urls')),
     path('', include('basecamp.urls')),
     path('accounts/', include('allauth.urls')),
     path('static/<path:path>', serve, {'document_root': settings.STATIC_ROOT}),
