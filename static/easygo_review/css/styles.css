@@ -20,7 +20,6 @@
 .grey-star {
     color: #c5c5c5; 
 }
-
 .low {
     display: flex; 
     align-items: center; 
@@ -29,36 +28,9 @@
 .low > * {
     margin-right: 30px; 
 }
-
 .footer small {
     font-size: 12px; 
 }
-
-@media (min-width: 500px) {
-    .container,.container-sm {
-        max-width:100%
-    }
-}
-
-@media (min-width: 768px) {
-    .container,.container-sm,.container-md {
-        max-width:100%
-    }
-}
-
-@media (min-width: 992px) {
-    .container,.container-sm,.container-md,.container-lg {
-        max-width:100%
-    }
-}
-
-@media (min-width: 1280px) {
-    .container,.container-sm,.container-md,.container-lg,.container-xl {
-        max-width:1260px
-    }
-}
-
-
 
 
 
