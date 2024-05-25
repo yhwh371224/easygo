@@ -194,9 +194,9 @@ USE_TZ = True
 
 AUTHENTICATION_BACKENDS = (    
     'axes.backends.AxesStandaloneBackend',
-    'django.contrib.auth.backends.ModelBackend',   
+    'easygo_review.auth.PostEmailAuthBackend', 
     'allauth.account.auth_backends.AuthenticationBackend',
-    
+    'django.contrib.auth.backends.ModelBackend',
 )
 
 SOCIALACCOUNT_PROVIDERS = {

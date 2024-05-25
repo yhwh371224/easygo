@@ -5,6 +5,31 @@ from django.views.generic import ListView, DetailView, UpdateView, CreateView, D
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 
+from django.contrib.auth import login
+from django.urls import reverse_lazy
+from django.views.generic.edit import FormView
+from .forms import EmailLoginForm
+from django.contrib.auth import authenticate, get_user_model
+
+
+User = get_user_model()
+
+
+class EmailLoginView(FormView):
+    form_class = EmailLoginForm
+    success_url = reverse_lazy('easygo_review')  # 로그인 성공 후 리디렉션할 URL
+    template_name = 'easygo_review/login.html'
+
+    def form_valid(self, form):
+        email = form.cleaned_data['email']
+        user = authenticate(self.request, username=email)
+        if user is not None:
+            login(self.request, user)
+            return super().form_valid(form)
+        else:
+            form.add_error(None, 'No this email in our system')
+            return self.form_invalid(form)
+
 
 class PostList(ListView):
     model = Post
@@ -52,14 +77,19 @@ class PostCreate(LoginRequiredMixin, CreateView):
         return context
 
     def form_valid(self, form):
-        current_user = self.request.user
-        if current_user.is_authenticated:
-            form.instance.author = current_user
-            rating = form.cleaned_data.get('rating')
-            if not (1 <= rating <= 5):
-                form.add_error('rating', 'Rating must be between 1 and 5')
-                return self.form_invalid(form)
-            return super(type(self), self).form_valid(form)
+        if self.request.user.is_authenticated:
+            current_user = self.request.user
+            # current_user가 실제 User 인스턴스인지 확인
+            if isinstance(current_user, get_user_model()):
+                form.instance.author = current_user
+                rating = form.cleaned_data.get('rating')
+                if not (1 <= rating <= 5):
+                    form.add_error('rating', 'Rating must be between 1 and 5')
+                    return self.form_invalid(form)
+                return super().form_valid(form)
+            else:
+                # current_user가 User 인스턴스가 아니면 리디렉션
+                return redirect('/easygo_review/')
         else:
             return redirect('/easygo_review/')
 
