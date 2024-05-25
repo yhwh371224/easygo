@@ -17,6 +17,10 @@ db.sqlite3
 
 secure/
 
+credentials.json
+token.json
+service-account-file.json
+
 *.pyo
 *.pyd
 .vscode/
