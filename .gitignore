@@ -20,6 +20,7 @@ secure/
 credentials.json
 token.json
 service-account-file.json
+dumpdata.json
 
 *.pyo
 *.pyd
