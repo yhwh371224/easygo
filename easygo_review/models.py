@@ -1,8 +1,16 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AbstractBaseUser
 from markdownx.models import MarkdownxField
 from markdownx.utils import markdown
 import datetime
+
+
+class User(AbstractBaseUser):
+    email = models.EmailField(unique=True, verbose_name='email')
+    USERNAME_FIELD = 'email'
+
+    def __str__(self):
+        return self.email
 
 
 class Post(models.Model):
@@ -13,7 +21,7 @@ class Post(models.Model):
     rating = models.IntegerField(default=5, choices=[(i, i) for i in range(1, 6)])
     is_published = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='review_posts')
 
     class Meta:
         ordering = ['-created']
