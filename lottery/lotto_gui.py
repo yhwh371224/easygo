@@ -69,7 +69,8 @@ def lotto_num():
     # Generating winners
     for i in range(6):
         lotto_number = total_numbers
-        winner_numbers = sample(lotto_number, 6)
+        lucky_numbers =random.shuffle(lotto_number)
+        winner_numbers = sample(lucky_numbers, 6)
         winner_numbers = sorted(winner_numbers)
         winner_numbers = map(str, winner_numbers)
         winner_numbers = ", ".join(winner_numbers)

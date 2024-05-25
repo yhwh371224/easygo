@@ -32,8 +32,8 @@ random.shuffle(powerball_number)
 powerball_numbers = random.sample(powerball_number, 11)
 
 for i in range(int(n)):
-    random.shuffle(powerball_number)
-    winner_number = random.sample(powerball_number, 1)    
+    random.shuffle(powerball_numbers)
+    winner_number = random.sample(powerball_numbers, 1)    
     print(f"{i+1}회: {winner_number}")
     print('')
 
