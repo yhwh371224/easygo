@@ -17,6 +17,7 @@ from django.views.decorators.csrf import csrf_exempt
 from main.settings import RECIPIENT_EMAIL
 from blog.models import Post, Inquiry, Payment, Driver, Inquiry_point, Inquiry_cruise
 from blog.tasks import send_confirm_email
+from basecamp.area import get_suburbs
 
 
 logger = logging.getLogger(__name__)
@@ -25,7 +26,9 @@ logger = logging.getLogger(__name__)
 def index(request): return redirect('/home/')
 
 
-def home(request): return render(request, 'basecamp/home.html')
+def home(request):
+    suburbs = get_suburbs()  
+    return render(request, 'basecamp/home.html', {'suburbs': suburbs})
 
 
 def about_us(request): 
@@ -33,177 +36,21 @@ def about_us(request):
 
 
 # Suburb names
-def airport_hotel(request): return render(
-    request, 'basecamp/airport-transfers-airport-hotel.html')
+def airport_transfers(request, suburb):
+    suburbs = get_suburbs()
+    suburb = suburb.replace('-', ' ').title()  # "lane-cove" -> "Lane Cove"
+    if suburb in suburbs:
+        context = {
+            'suburb': suburb,
+            'details': suburbs[suburb]
+        }
+    else:
+        # context가 정의되지 않은 경우를 처리
+        context = {'message': 'Suburb not found'}
+        return render(request, 'error.html', context)
+
+    return render(request, 'basecamp/airport-transfers.html', context)
 
-
-def artarmon(request): return render(
-    request, 'basecamp/airport-transfers-artarmon.html')
-
-
-def asquith(request): return render(
-    request, 'basecamp/airport-transfers-asquith.html')
-
-
-def berowra(request): return render(            
-    request, 'basecamp/airport-transfers-berowra.html')
-
-
-def blacktown(request): return render(
-    request, 'basecamp/airport-transfers-blacktown.html')
-
-
-def chatswood(request): return render(
-    request, 'basecamp/airport-transfers-chatswood.html')
-
-
-def doonside(request): return render(
-    request, 'basecamp/airport-transfers-doonside.html')
-
-
-def eastwood(request): return render(
-    request, 'basecamp/airport-transfers-eastwood.html')
-
-
-def epping(request): return render(
-    request, 'basecamp/airport-transfers-epping.html')
-
-
-def gordon(request): return render(
-    request, 'basecamp/airport-transfers-gordon.html')
-
-
-def hotel(request): return render(
-    request, 'basecamp/airport-transfers-hotel.html')
-
-
-def hornsby(request): return render(
-    request, 'basecamp/airport-transfers-hornsby.html')
-
-
-def killara(request): return render(
-    request, 'basecamp/airport-transfers-killara.html')
-
-
-def lane_cove(request): return render(
-    request, 'basecamp/airport-transfers-lane-cove.html')
-
-
-def linfield(request): return render(
-    request, 'basecamp/airport-transfers-linfield.html')
-
-
-def macquarie_park(request): return render(
-    request, 'basecamp/airport-transfers-macquarie-park.html')
-
-
-def manly(request): return render(
-    request, 'basecamp/airport-transfers-manly.html')
-
-
-def marsfield(request): return render(
-    request, 'basecamp/airport-transfers-marsfield.html')
-
-
-def middle_cove(request): return render(
-    request, 'basecamp/airport-transfers-middle-cove.html')
-
-
-def mini_bus(request): return render(
-    request, 'basecamp/airport-transfers-mini-bus.html')
-
-
-def mount_kuring_gai(request): return render(
-    request, 'basecamp/airport-transfers-mount-kuring-gai.html')
-
-
-def mt_colah(request): return render(
-    request, 'basecamp/airport-transfers-mt-colah.html')
-
-
-def north_shore(request): return render(
-    request, 'basecamp/airport-transfers-north-shore.html')
-
-
-def north_west(request): return render(
-    request, 'basecamp/airport-transfers-north-west.html')
-
-
-def normanhurst(request): return render(
-    request, 'basecamp/airport-transfers-normanhurst.html')
-
-
-def parramatta(request): return render(
-    request, 'basecamp/airport-transfers-parramatta.html')
-
-
-def pennant_hills(request): return render(
-    request, 'basecamp/airport-transfers-pennant-hills.html')
-
-
-def pymble(request): return render(
-    request, 'basecamp/airport-transfers-pymble.html')
-
-
-def roseville(request): return render(
-    request, 'basecamp/airport-transfers-roseville.html')
-
-
-def ryde(request): return render(
-    request, 'basecamp/airport-transfers-ryde.html')
-
-
-def st_ives(request): return render(
-    request, 'basecamp/airport-transfers-st-ives.html')
-
-
-def sydney_city(request): return render(
-    request, 'basecamp/airport-transfers-sydney-city.html')
-
-
-def sydney_hotel(request): return render(
-    request, 'basecamp/airport-transfers-sydney-hotel.html')
-
-
-def sydney_hotels(request): return render(
-    request, 'basecamp/airport-transfers-sydney-hotels.html')
-
-
-def thornleigh(request): return render(
-    request, 'basecamp/airport-transfers-thornleigh.html')
-
-
-def toongabbie(request): return render(
-    request, 'basecamp/airport-transfers-toongabbie.html')
-
-
-def turramurra(request): return render(
-    request, 'basecamp/airport-transfers-turramurra.html')
-
-
-def waitara(request): return render(
-    request, 'basecamp/airport-transfers-waitara.html')
-
-
-def wahroonga(request): return render(
-    request, 'basecamp/airport-transfers-wahroonga.html')
-
-
-def warrawee(request): return render(
-    request, 'basecamp/airport-transfers-warrawee.html')
-
-
-def west_pymble(request): return render(
-    request, 'basecamp/airport-transfers-west-pymble.html')
-
-
-def westleigh(request): return render(
-    request, 'basecamp/airport-transfers-westleigh.html')
-
-
-def willoughby(request): return render(
-    request, 'basecamp/airport-transfers-willoughby.html')
-    
 
 def booking(request): 
     context = {
