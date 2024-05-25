@@ -18,6 +18,7 @@ db.sqlite3
 credentials.json
 token.json
 service-account-file.json
+calendar-service-account-file.json
 dumpdata.json
 
 *.pyo

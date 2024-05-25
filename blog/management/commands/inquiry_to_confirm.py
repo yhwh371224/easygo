@@ -2,7 +2,7 @@ import os
 import logging
 import threading
 from django.core.management.base import BaseCommand
-from blog.models import Post, Inquiry, Driver
+from blog.models import Post, Inquiry, Driver, Inquiry_cruise, Inquiry_point
 from basecamp.models import Inquiry_point
 from schedule import fetch_scheduled_emails 
 
@@ -44,7 +44,7 @@ class Command(BaseCommand):
                 else: 
                     unique_emails.add(list_email)
 
-                    user = (Inquiry.objects.filter(email=list_email).first()) or (Inquiry_point.objects.filter(email=list_email).first())
+                    user = (Inquiry.objects.filter(email=list_email).first()) or (Inquiry_cruise.objects.filter(email=list_email).first()) or (Inquiry_point.objects.filter(email=list_email).first())
     
                     sam_driver = Driver.objects.get(driver_name="Sam")    
             
