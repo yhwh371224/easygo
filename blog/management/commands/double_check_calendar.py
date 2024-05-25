@@ -2,8 +2,6 @@ import os
 from datetime import date, timedelta
 from django.core.management.base import BaseCommand
 from django.core.mail import send_mail
-from django.template.loader import render_to_string
-from django.utils.html import strip_tags
 from blog.models import Post, Driver
 from main.settings import RECIPIENT_EMAIL
 
