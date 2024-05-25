@@ -1,16 +1,15 @@
 import os.path
 import re
-from google.auth.transport.requests import Request
-from google.oauth2.credentials import Credentials
-from google_auth_oauthlib.flow import InstalledAppFlow
+from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from main.settings import RECIPIENT_EMAIL
 
 # If modifying these scopes, delete the file token.json.
 SCOPES = ["https://www.googleapis.com/auth/gmail.readonly"]
-
 LABEL_NAME = "Inquiry to confirm"
+SERVICE_ACCOUNT_FILE = 'secure/reminder/service-account-file.json'
+DELEGATED_USER_EMAIL = RECIPIENT_EMAIL  # 위임받은 사용자의 이메일 주소
 
 def get_scheduled_emails(service):
     try:
@@ -56,26 +55,11 @@ def get_label_id(service, label_name):
     return None
 
 def fetch_scheduled_emails():
-    creds = None
-    secure_directory = 'secure/inquiry_to_confirm/'
-    token_file_path = os.path.join(secure_directory, 'token.json')
-
-    if os.path.exists(token_file_path):
-        creds = Credentials.from_authorized_user_file(token_file_path, SCOPES)
-
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            credentials_file_path = os.path.join(secure_directory, 'credentials.json')
-            flow = InstalledAppFlow.from_client_secrets_file(credentials_file_path, SCOPES)
-            creds = flow.run_local_server(port=0)
-
-        with open(token_file_path, 'w') as token:
-            token.write(creds.to_json())
+    credentials = service_account.Credentials.from_service_account_file(
+        SERVICE_ACCOUNT_FILE, scopes=SCOPES, subject=DELEGATED_USER_EMAIL)
 
     try:
-        service = build("gmail", "v1", credentials=creds)
+        service = build("gmail", "v1", credentials=credentials)
 
         scheduled_emails = get_scheduled_emails(service)
 

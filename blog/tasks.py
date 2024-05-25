@@ -1,10 +1,8 @@
 import datetime
 import os
 
-from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
-from google_auth_oauthlib.flow import InstalledAppFlow
-from google.auth.transport.requests import Request
+from google.oauth2 import service_account
 from django.core.mail import send_mail
 from celery import shared_task
 from main.settings import RECIPIENT_EMAIL
@@ -19,27 +17,13 @@ def create_event_on_calendar(instance_id):
     instance = Post.objects.get(pk=instance_id)
 
     SCOPES = ['https://www.googleapis.com/auth/calendar']
+    SERVICE_ACCOUNT_FILE = 'secure/calendar/calendar-service-account-file.json'
+    DELEGATED_USER_EMAIL = RECIPIENT_EMAIL  # 위임받은 사용자의 이메일 주소
 
-    creds = None
-    secure_directory = 'secure/calendar/'
-    token_file_path = os.path.join(secure_directory, 'token.json')
+    credentials = service_account.Credentials.from_service_account_file(
+        SERVICE_ACCOUNT_FILE, scopes=SCOPES, subject=DELEGATED_USER_EMAIL)
 
-    if os.path.exists(token_file_path):
-        creds = Credentials.from_authorized_user_file(token_file_path, SCOPES)   
-
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-            
-        else:
-            credentials_file_path = os.path.join(secure_directory, 'credentials.json')
-            flow = InstalledAppFlow.from_client_secrets_file(credentials_file_path, SCOPES)
-            creds = flow.run_local_server(port=0)
-
-        with open(token_file_path, 'w') as token:
-            token.write(creds.to_json())
-
-    service = build('calendar', 'v3', credentials=creds)        
+    service = build('calendar', 'v3', credentials=credentials)        
     
     paid_str = f'paid' if instance.paid else ''
     reminder_str = f'!' if instance.reminder else ''
