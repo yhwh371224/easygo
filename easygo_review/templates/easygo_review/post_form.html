@@ -3,6 +3,11 @@
 {% block title %}{{ object.title }} - EasyGo Reviews {% endblock %}
 
 {% block content %}
+<style>
+    form {
+        margin-top: 40px; /* 상단 마진을 20px로 설정 */
+    }
+</style>
     <form method="post" enctype="multipart/form-data">{% csrf_token %}
         <table>
             {{ form.as_table }}
