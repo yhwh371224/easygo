@@ -45,7 +45,7 @@ class PostDetail(DetailView):
 class PostCreate(LoginRequiredMixin, CreateView):
     model = Post
     template_name = 'easygo_review/post_form.html'
-    fields = ['content', 'head_image']
+    fields = ['content']
 
     def form_valid(self, form):
         current_user = self.request.user
@@ -59,7 +59,7 @@ class PostCreate(LoginRequiredMixin, CreateView):
 class PostUpdate(UpdateView):
     model = Post
     template_name = 'easygo_review/post_form.html'
-    fields = ['content', 'head_image']
+    fields = ['content']
 
 
 def new_comment(request, pk):

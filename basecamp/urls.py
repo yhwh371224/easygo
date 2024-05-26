@@ -60,6 +60,7 @@ urlpatterns = [
     path('cruise_inquiry_detail_1/', views.cruise_inquiry_detail_1, name='cruise_inquiry_detail_1'),
     path('cruise_inquiry_1/', views.cruise_inquiry_1, name="cruise_inquiry_1"),
     path('date_error/', views.date_error, name='date_error'),
+    path('error/', views.error, name='error'),
     path('flight_date_detail/', views.flight_date_detail, name='flight_date_detail'),
     path('flight_date_error/', views.flight_date_error, name='flight_date_error'),
     path('home/', views.home, name='home'),
