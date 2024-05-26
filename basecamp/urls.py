@@ -88,6 +88,7 @@ urlpatterns = [
     path('pickup_adjustment/', views.pickup_adjustment, name='pickup_adjustment'),
     path('pickup_adjustment_detail/', views.pickup_adjustment_detail, name='pickup_adjustment_detail'),
     path('price_detail/', views.price_detail, name='price_detail'),
+    path('privacy/', views.privacy, name='privacy'),
     path('return_cruise_fields/', views.return_cruise_fields, name='return_cruise_fields'),
     path('return_flight_fields/', views.return_flight_fields, name='return_flight_fields'),
     path('return_trip/', views.return_trip, name="return_trip"),

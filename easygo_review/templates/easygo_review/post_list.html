@@ -1,47 +1,36 @@
 {% extends 'easygo_review/base.html' %}
 
 {% block content %}
+    <br/>
     {% if user.is_authenticated %}
         <button class="btn btn-primary btn-sm float-right" onclick="location.href='/easygo_review/create/'">New Post</button>
     {% endif %}
 
-    <h1 id="easygo_review-list-title">
-        EasyGo Review
-        {% if category %}<small class="text-muted">: {{ category }}</small>{% endif %}
-        {% if tag %}<small class="text-muted">: #{{ tag }}</small>{% endif %}
-        {% if search_info %}<small class="text-muted">: {{ search_info }} ({{ object_list.count }})</small>{% endif %}
-    </h1>
+    <h3 id="easygo_review-list-title">
+        <br/>
+        Reivews 
+        <!-- {% if search_info %}<small class="text-muted">: {{ search_info }} ({{ object_list.count }})</small>{% endif %} -->
+    </h3>
+    <br/>
     {% if object_list.exists %}
         {% for p in object_list %}
             <!-- easygo_review Post -->
             <div class="card mb-4" id="post-card-{{ p.pk }}">
-
-                {% if p.head_image %}
-                    <img class="card-img-top" src="{{ p.head_image.url }}" alt="Card image cap">
-                {% else %}
-                    <img class="card-img-top" src="https://picsum.photos/700/300/?random" alt="Card image cap">
-                {% endif %}
+                <div class="card-header text-muted">
+                    Posted by {{ p.name }} on {{ p.date }}</a>
+                </div>
 
                 <div class="card-body">
-                    {% if p.category %}
-                        <span class="badge badge-primary float-right">{{ p.category }}</span>
-                    {% else %}
-                        <span class="badge badge-primary float-right">no category</span>
-                    {% endif %}
-                    <h2 class="card-title">{{ p.title | striptags | truncatewords_html:8 }}</h2>
-                    <p class="card-text">{{ p.get_markdown_content | striptags | truncatewords_html:50}}</p>
+                    <h2></h2>
+                    <p class="card-text">{{ p.get_markdown_content | striptags | truncatewords_html:300}}</p>
 
-                    {% for tag in p.tags.all %}
-                        <a href="{{ tag.get_absolute_url }}">#{{ tag }} </a>
-                    {% endfor %}
                     <br/>
                     <br/>
 
-                    <a href="{{ p.get_absolute_url }}" class="btn btn-primary" id="read-more-post-{{ p.pk }}">Read More &rarr;</a>
+                    <!-- <a href="{{ p.get_absolute_url }}" class="btn btn-primary" id="read-more-post-{{ p.pk }}">Read More &rarr;</a> -->
                 </div>
                 <div class="card-footer text-muted">
-                    Posted on {{ p.created }} by
-                    <a href="#">{{ p.author }}</a>
+                    You can find the original review on Google: <a href="{{ p.link }}"> here</a>.
                 </div>
             </div>
         {% endfor %}
