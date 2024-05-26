@@ -230,6 +230,10 @@ def date_error(request):
     return render(request, 'basecamp/date_error.html')
 
 
+def error(request): 
+    return render(request, 'basecamp/error.html')
+
+
 def flight_date_error(request): 
     return render(request, 'basecamp/flight_date_error.html')
 
@@ -1675,21 +1679,19 @@ def cruise_booking_detail(request):
 def confirm_booking_detail(request):
     if request.method == "POST":
         email = request.POST.get('email')
-        is_confirmed_str = request.POST.get('is_confirmed')
-        is_confirmed = is_confirmed_str == 'True'
+        is_confirmed = request.POST.get('is_confirmed') == 'True'
 
-        inquiry = Inquiry.objects.filter(email=email).first()
-        inquiry_cruise = Inquiry_cruise.objects.filter(email=email).first()
-        inquiry_point = Inquiry.objects.filter(email=email).first()
+        inquiries = [
+            Inquiry.objects.filter(email=email).first(),
+            Inquiry_cruise.objects.filter(email=email).first(),
+            Inquiry_point.objects.filter(email=email).first()
+        ]
 
-        user = None
-        for obj in [inquiry, inquiry_cruise, inquiry_point]:
-            if obj:
-                if user is None or obj.created > user.created:
-                    user = obj
+        # None이 아닌 객체들만 필터링하고, 가장 최근에 생성된 객체를 찾는다.
+        user = max((obj for obj in inquiries if obj is not None), default=None, key=lambda x: x.created)
 
         if not user:
-            return render(request, 'basecamp/500.html')
+            return render(request, 'basecamp/error.html', {'message': 'There is no information registered with this email in our system'})
 
         name = user.name            
         contact = user.contact
@@ -1737,7 +1739,7 @@ def confirm_booking_detail(request):
                         {'name' : name, 'email': email, })
         
     else:
-        return render(request, 'beasecamp/confirm_booking.html', {}) 
+        return render(request, 'basecamp/confirm_booking.html', {}) 
 
      
 # sending confirmation email first one   

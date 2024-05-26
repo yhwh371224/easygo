@@ -1,16 +1,25 @@
 {% extends 'easygo_review/base.html' %}
 
 {% block content %}
+<div class="col-md-8" id="main-div">
     <br/>
-    {% if user.is_authenticated %}
-        <button class="btn btn-primary btn-sm float-right" onclick="location.href='/easygo_review/create/'">New Post</button>
-    {% endif %}
-
-    <h3 id="easygo_review-list-title">
-        <br/>
-        Reivews 
-        <!-- {% if search_info %}<small class="text-muted">: {{ search_info }} ({{ object_list.count }})</small>{% endif %} -->
-    </h3>
+    <div class="row">
+        <div class="col-md-8" id="main-div">
+            <h5 id="easygo_review-list-title">
+                <br/>
+                Reivews 
+                {% if search_info %}<small class="text-muted">: {{ search_info }} ({{ object_list.count }})</small>{% endif %}
+            </h5>
+        </div>
+        <div class="col-md-4" id="side-div">
+            <h5 id="easygo_review-list-title">
+                <br/>
+                {% if user.is_authenticated %}
+                    <button class="btn btn-primary btn-sm float-right" onclick="location.href='/easygo_review/create/'">New Post</button>
+                {% endif %}   
+            </h5>
+        </div>
+    </div>
     <br/>
     {% if object_list.exists %}
         {% for p in object_list %}
@@ -30,7 +39,7 @@
                     <!-- <a href="{{ p.get_absolute_url }}" class="btn btn-primary" id="read-more-post-{{ p.pk }}">Read More &rarr;</a> -->
                 </div>
                 <div class="card-footer text-muted">
-                    You can find the original review on Google: <a href="{{ p.link }}"> here</a>.
+                    You can find the original review on Google >>>&nbsp;<a href="{{ p.link }}"> here</a>.
                 </div>
             </div>
         {% endfor %}
@@ -62,4 +71,34 @@
     {% else %}
         <h3>No Post Yet </h3>
     {% endif %}
+</div>
+<div class="col-md-4" id="side-div">
+    <br/>
+    <h5><br/></h5>
+    <h5><br/></h5>
+    <!-- Note Widget -->
+    <div class="card my-4">
+        <h5 class="card-header" style="color:red">Note!</h5>
+        <div class="card-body">
+            <p class="card-text">
+                If you want to see the original review on Google, click >>>&nbsp;<a href="{{ p.link }}"> here</a>
+                <br><br> 
+                The content of the reviews on this page is exactly the same as the Google reviews our clients left
+            </p>
+        </div> 
+    </div>
+    <br/>
+    <!-- Search Widget -->  
+    <div class="card my-4">     
+        <h5 class="card-header">Search review</h5>
+        <div class="card-body">
+            <div class="input-group">
+                <input type="text" id="search-input" onkeyup="wait_for_enterkey()" class="form-control" placeholder="Search for..."/>
+                    <span class="input-group-btn">
+                        <button class="btn btn-secondary" type="button" onclick="search_post();">Go!</button>
+                    </span>
+            </div>
+        </div>
+    </div> 
+</div>       
 {% endblock %}
