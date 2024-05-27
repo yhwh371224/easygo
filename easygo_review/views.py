@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Post, Comment
-from .forms import CommentForm
+from .forms import CommentForm, PostForm
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
@@ -45,7 +45,7 @@ class PostDetail(DetailView):
 class PostCreate(LoginRequiredMixin, CreateView):
     model = Post
     template_name = 'easygo_review/post_form.html'
-    fields = ['name', 'date', 'link', 'content']
+    fields = ['name', 'date', 'link', 'content', 'rating']
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -56,6 +56,10 @@ class PostCreate(LoginRequiredMixin, CreateView):
         current_user = self.request.user
         if current_user.is_authenticated:
             form.instance.author = current_user
+            rating = form.cleaned_data.get('rating')
+            if not (1 <= rating <= 5):
+                form.add_error('rating', 'Rating must be between 1 and 5')
+                return self.form_invalid(form)
             return super(type(self), self).form_valid(form)
         else:
             return redirect('/easygo_review/')

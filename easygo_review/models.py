@@ -10,6 +10,7 @@ class Post(models.Model):
     name = models.CharField(max_length=100, blank=False, null=True)
     date = models.DateField(blank=True, null=True, default=datetime.date.today)
     link = models.URLField(max_length=100, default="https://bit.ly/4bQ6JF6")
+    rating = models.IntegerField(default=1, choices=[(i, i) for i in range(1, 6)])
     is_published = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)

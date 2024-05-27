@@ -1,4 +1,5 @@
 {% extends 'easygo_review/base.html' %}
+{% load rating_filters %}
 
 {% block content %}
 <div class="col-md-8" id="main-div">
@@ -21,6 +22,7 @@
         </div>
     </div>
     <br/>
+
     {% if object_list.exists %}
         {% for p in object_list %}
             <!-- easygo_review Post -->
@@ -35,6 +37,11 @@
 
                     <br/>
                     <br/>
+                    <div class="star-rating">
+                        {% for star in 1|to:5 %}
+                            <span class="{% if p.rating >= star %}filled{% else %}empty{% endif %}">&#9733;</span>
+                        {% endfor %}
+                    </div>
 
                     <!-- <a href="{{ p.get_absolute_url }}" class="btn btn-primary" id="read-more-post-{{ p.pk }}">Read More &rarr;</a> -->
                 </div>
