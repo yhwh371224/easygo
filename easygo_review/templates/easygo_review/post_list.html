@@ -1,7 +1,7 @@
 {% extends 'easygo_review/base.html' %}
-{% load custom_filter %}
 
 {% block content %}
+{% load custom_filter %}
 <div class="col-md-8" id="main-div">
     <br/>
     <div class="row">
@@ -36,8 +36,7 @@
                     
                     <br/>
                     
-                    <div class="star-rating d-flex justify-content-center align-items-center">
-                        <span>Rating:</span>&nbsp;
+                    <div class="star-rating d-flex justify-content-center align-items-center">                        
                         {% for star in 1|to:5 %}
                             <span class="{% if p.rating >= star %}gold-star{% else %}grey-star{% endif %}">&#9733;</span>
                         {% endfor %}                        
