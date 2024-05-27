@@ -1,4 +1,5 @@
 {% extends 'easygo_review/base.html' %}
+{% load custom_filter %}
 
 {% block title %}{{ object.title }} - EasyGo Reviews {% endblock %}
 
@@ -7,13 +8,46 @@
     form {
         margin-top: 40px; /* 상단 마진을 20px로 설정 */
     }
+    .star-rating .star {
+        font-size: 25px;
+        cursor: pointer;
+        color: #ccc;
+    }
 </style>
-    <form method="post" enctype="multipart/form-data">{% csrf_token %}
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
         <table>
             {{ form.as_table }}
         </table>
+        <label for="rating">Rating (1-5):</label>
+        <div class="star-rating">
+            {% for star in 1|to:5 %}
+                <span class="star" data-rating="{{ star }}">&#9733;</span>
+            {% endfor %}
+        </div>
+        <input type="hidden" id="rating" name="rating" required>
         <button type="submit" class="btn btn-primary float-right">Submit</button>
     </form>
-
+    
     {{ form.media }}
+    
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const stars = document.querySelectorAll('.star-rating .star');
+    stars.forEach(star => {
+        star.addEventListener('click', function() {
+            const rating = this.getAttribute('data-rating');
+            setRating(rating);
+        });
+    });
+});
+
+function setRating(rating) {
+    const stars = document.querySelectorAll('.star-rating .star');
+    stars.forEach((star, index) => {
+        star.style.color = index < rating ? 'gold' : '#ccc';
+    });
+    document.getElementById('rating').value = rating;
+}
+</script>
 {% endblock %}
