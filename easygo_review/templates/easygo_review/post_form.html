@@ -1,5 +1,4 @@
 {% extends 'easygo_review/base.html' %}
-{% load custom_filter %}
 
 {% block title %}{{ object.title }} - EasyGo Reviews {% endblock %}
 
@@ -8,11 +7,6 @@
     form {
         margin-top: 40px; /* 상단 마진을 20px로 설정 */
     }
-    .star-rating .star {
-        font-size: 25px;
-        cursor: pointer;
-        color: #ccc;
-    }
 </style>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
@@ -20,11 +14,6 @@
             {{ form.as_table }}
         </table>
         <label for="rating">Please choose your star rating</label>
-        <div class="star-rating">
-            {% for star in 1|to:5 %}
-                <span class="star" data-rating="{{ star }}">&#9733;</span>
-            {% endfor %}
-        </div>
         <input type="hidden" id="rating" name="rating" required>
         <button type="submit" class="btn btn-primary float-right">Submit</button>
     </form>
