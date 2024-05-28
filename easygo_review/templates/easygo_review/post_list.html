@@ -25,32 +25,27 @@
 
     {% if object_list.exists %}
         {% for p in object_list %}
-            <!-- easygo_review Post -->
-            <div class="card mb-4" id="post-card-{{ p.pk }}">
+            <div class="card mb-4" id="post-card-{{ post_with_rating.p.pk }}">
                 <div class="card-header text-muted">
-                    Posted by {{ p.name }} on {{ p.date }}</a>
+                    Posted by {{ post_with_rating.p.name }} on {{ post_with_rating.p.date }}
                 </div>
-
+            
                 <div class="card-body">
-                    <p class="card-text">{{ p.get_markdown_content | striptags | truncatewords_html:100 }}</p>
-                    
+                    <p class="card-text">{{ post_with_rating.p.get_markdown_content | striptags | truncatewords_html:300 }}</p>
+                
                     <br/>
-                    
-                    <p class="star-rating d-flex justify-content-center align-items-center">                        
-                        {% for _ in p.rating_range %}
-                            <span class="star-rating gold-star">&#9733;</span>
+                
+                    <p class="star-rating d-flex justify-content-center align-items-center">
+                        {% for _ in p.rating|filter_range %}
+                            <span class="gold-star">&#9733;</span>
                         {% endfor %}
-                        {% for _ in p.remaining_range %}
-                            <span class="star-rating grey-star">&#9733;</span>
-                        {% endfor %}                        
+                        {% for _ in (5-p.rating)|filter_range %}
+                            <span class="grey-star">&#9733;</span>
+                        {% endfor %}
                     </p>
-
-                    <br/>
-
-                    <a href="{{ p.get_absolute_url }}" class="btn btn-primary" id="read-more-post-{{ p.pk }}">Read More &rarr;</a>
                 </div>
                 <div class="card-footer text-muted">
-                    You can find the original review on Google >>>&nbsp;<a href="{{ p.link }}"> here</a>.
+                    You can find the original review on Google >>>&nbsp;<a href="{{ post_with_rating.p.link }}"> here</a>.
                 </div>
             </div>
         {% endfor %}

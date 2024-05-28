@@ -12,18 +12,10 @@ class PostList(ListView):
     paginate_by = 6
 
     def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(PostList, self).get_context_data(**kwargs)       
+        context = super(PostList, self).get_context_data(**kwargs)
         context['post_count'] = Post.objects.all().count()
-        posts_with_ratings = [{
-            'p': p,
-            'rating': p.rating,
-            'rating_range': range(p.rating),
-            'remaining_range': range(5 - p.rating)
-        } for p in context['object_list']]
-        context['posts_with_ratings'] = posts_with_ratings
-
         return context
-
+    
 
 class PostSearch(PostList):
     def get_queryset(self):
