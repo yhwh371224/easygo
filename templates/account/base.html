@@ -1,80 +1,67 @@
 <!DOCTYPE html>
 {% load static %}
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Airport Transfers Sydney - EasyGo Shuttle bus</title>
-    <!-- SEO Meta Tags-->
-    <meta name="description" content="EasyGo airport shuttle bus provide Sydney airport transport service, private ride with the cheap price. ">
-    <meta name="keywords" content="Sydney airport shuttle, Sydney airport transfers,cheap airport transfers, maxi taxi, mini bus, uber, airport shuttle, airport pickup service, airport private transfers">
-    <meta name="author" content="easycoding.live">
-    <!-- Viewport-->
+<html lang="en-us">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}accounts/ - EasyGo Review{% endblock %}</title>
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'easygo_review/images/favicon.ico' %}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Favicon and Touch Icons-->
-    <link rel="shortcut icon" type="image/x-icon" href="{% static 'basecamp/favi/favicon.ico' %}">
-    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'basecamp/favi/apple-touch-icon.png' %}">
-    <link rel="android-chrome" type="image/png" sizes="192x192" href="{% static 'basecamp/favi/android-chrome-192x192.png' %}">
-	  <link rel="android-chrome" type="image/png" sizes="512x512" href="{% static 'basecamp/favi/android-chrome-512x512.png' %}">
-	  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'basecamp/favi/favicon-32x32.png' %}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'basecamp/favi/favicon-16x16.png' %}">
-    <link rel="manifest" href="{% static 'basecamp/favi/site.webmanifest' %}">      
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>    
-    <!-- Vendor Styles-->
-    <link rel="stylesheet" media="screen" href="/static/basecamp/css/simplebar.min.css"/>
-    <link rel="stylesheet" media="screen" href="/static/basecamp/css/tiny-slider.css"/>
-    <link rel="stylesheet" media="screen" href="/static/basecamp/css/flatpickr.min.css"/>
-    <!-- Main Theme Styles + Bootstrap-->
-    <link rel="stylesheet" media="screen" href="/static/basecamp/css/theme.min.css">
-  </head>
-  <!-- Body-->
-  <body>    
-    <main class="page-wrapper">
-      <header class="header navbar navbar-expand-lg navbar-dark navbar-floating navbar-sticky" data-scroll-header data-fixed-element>
-        <div class="container px-0 px-xl-3">
-          <button class="navbar-toggler ms-n2 me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#primaryMenu"><span class="navbar-toggler-icon"></span></button><a class="navbar-brand flex-shrink-0 order-lg-1 mx-auto ms-lg-0 pe-lg-2 me-lg-4" href="/home/"><img class="navbar-floating-logo d-none d-lg-block" src="/static/basecamp/images/easygo_icon.webp" style="border-radius: 30%" alt="EasyGo_image" width="40"></a>
-          <div class="d-flex align-items-center order-lg-3 ms-lg-auto">
-			  <a class="nav-link-style fs-sm text-nowrap" data-view="modal-signin-view" href="/confirmation/">
-				  <img class="fs-xl me-2 align-middle" src="/static/basecamp/images/easygo-logo-final.webp" alt="EasyGo_logo" width="120"></a>
-			</div>
-          <div class="offcanvas offcanvas-collapse order-lg-2" id="primaryMenu">
-            <div class="offcanvas-header navbar-shadow">
-              <h5 class="mt-1 mb-0">Menu</h5>
-              <button class="btn-close lead" type="button" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-		  </div></div>
-      </header>
-      <!-- Page content-->      
-           {% block content %}
-           {% endblock %}
-           <section class="container py-5 my-4 my-sm-0 py-sm-6 py-md-7">           
-            <h2 class="text-center mb-4">Best Service Guaranteed</h2>
-             <p class="text-center"><small>This site is protected by reCAPTCHA Enterprise and the Google
-                        <a href="https://policies.google.com/privacy">Privacy Policy</a> and
-                        <a href="https://policies.google.com/terms">Terms of Service</a> apply.
-             </small></p>
-          </section>
-  </main>
-    <footer class="site-footer bg-dark pt-5 pb-4">
-      <div class="container d-md-flex justify-content-between align-items-center text-center">
-        <ul class="list-inline fs-sm mb-3 order-md-2">
-          <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="mailto:info@easygoshuttle.com.au">Support</a></li>
-          <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="/inquiry2/">Contact</a></li>
-          <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="/privacy/">Privacy policy</a></li>
-          <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="/terms/">Terms &amp; Conditions</a></li>
-        </ul>
-        <p class="fs-sm mb-3 order-md-1"><span class="text-light opacity-50 me-1">© 2023 EasyGo. All rights reserved. Made by</span><a class="nav-link-style nav-link-light" href="#" target="_blank" rel="noopener">EasyGo</a></p>
-      </div>
-    </footer>
-    <!-- Vendor scrits: js libraries and plugins-->
-    <!-- <script src="/static/basecamp/js/bootstrap.bundle.min.js"></script>
-    <script src="/static/basecamp/js/simplebar.min.js"></script> -->
-    <script src="/static/basecamp/js/smooth-scroll.polyfills.min.js"></script>
-    <!-- <script src="/static/basecamp/js/jarallax.min.js"></script>
-    <script src="/static/basecamp/js/min/tiny-slider.js"></script>
-    <script src="/static/basecamp/js/flatpickr.min.js"></script>
-    <script src="/static/basecamp/js/rangePlugin.js"></script>
-    <script src="/static/basecamp/js/date-picker.js"></script> -->
-    <!-- Main theme script-->
-    <script src="/static/basecamp/js/theme.min.js"></script>    
-  </body>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="keywords" content="website, web design, web development, web builder, web pages, web developer, web dev, web freelancer" />
+    <meta name="description" content="website, web design, web development, seo, online marketing to be done by our professional knowledge, skill and experience" />
+    <link rel="stylesheet" href="{% static 'easygo_review/css/bootstrap.css' %}" media="screen">
+    <link rel="stylesheet" href="{% static 'easygo_review/css/custom.min.css' %}">
+    <script src="https://kit.fontawesome.com/e57bc5ae97.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+{% include 'account/navbar.html' %}
+
+<div class="container">
+
+    <div class="container width-full p-responsive ">
+    <div class="row">
+        <div class="col-md-4" id="left-side-div"></div>
+
+        <div class="col-md-4" id="main-div">
+            <div class="card>"
+                <div class="logged-out env-production page-responsive session-authentication" style="word-wrap: break-word;"></div>
+                <div class="position-relative js-header-wrapper "></div>
+                    <span class="progress-pjax-loader width-full js-pjax-loader-bar Progress position-fixed"></span>
+                    <span style="background-color: #79b8ff;width: 0%;" class="Progress-item progress-pjax-loader-bar "></span>
+
+                <div class="header header-logged-out width-full pt-5 pb-4 row justify-content-center" role="banner">                    
+                    <a href="/easygo_review/" class="title">EasyGo Airport Shuttle</a>
+                </div>
+
+{% block content %}
+{% endblock %}
+
+<br>
+<br>
+<br>
+<br>
+</div>
+
+
+<!-- footer -->
+
+    <div class="container"
+        <div class="footer container-xl width-full p-responsive" role="contentinfo">
+            <ul class="list-style-none border-top d-flex flex-wrap flex-start">
+                <li class="mr-3 mr-lg-2 list-unstyled"><small>&copy; 2021 EasyCoding</small></li>
+                <li class="mr-3 mr-lg-2 list-unstyled"><a href="mailto:sungkam3@gmail.com"><small>contact</small></a></li>
+                <li class="mr-3 mr-lg-2 list-unstyled"><a href="/terms/" data-ga-click="Footer, go to terms, text:terms"><small>terms</small></a></li>
+                <li class="mr-3 mr-lg-2 list-unstyled"><a href="/privacy/" data-ga-click="Footer, go to privacy, text:privacy"><small>privacy</small></a></li>
+            </ul>
+        </div>
+    </div>
+
+<script src="{% static 'easygo_review/js/jquery.min.js' %}"></script>
+<script src="{% static 'easygo_review/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'easygo_review/js/custom.js' %}"></script>
+<script src="{% static 'easygo_review/js/popper.min.js' %}"></script>
+<script src="https://kit.fontawesome.com/e57bc5ae97.js" crossorigin="anonymous"></script>
+
+</body>
 </html>
