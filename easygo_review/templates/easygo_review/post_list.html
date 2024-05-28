@@ -27,11 +27,11 @@
         {% for p in object_list %}
             <div class="card mb-4" id="post-card-{{ post_with_rating.p.pk }}">
                 <div class="card-header text-muted">
-                    Posted by {{ post_with_rating.p.name }} on {{ post_with_rating.p.date }}
+                    Posted by {{ p.name }} on {{ p.date }}
                 </div>
 
                 <div class="card-body">
-                    <p class="card-text">{{ post_with_rating.p.get_markdown_content | striptags | truncatewords_html:300 }}</p>
+                    <p class="card-text">{{ p.get_markdown_content | striptags | truncatewords_html:300 }}</p>
 
                     <br/>
 
@@ -45,7 +45,7 @@
                     </p>
                 </div>
                 <div class="card-footer text-muted">
-                    You can find the original review on Google >>>&nbsp;<a href="{{ post_with_rating.p.link }}"> here</a>.
+                    You can find the original review on Google >>>&nbsp;<a href="{{ p.link }}"> here</a>.
                 </div>
             </div>
         {% endfor %}
