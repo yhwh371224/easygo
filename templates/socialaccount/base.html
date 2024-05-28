@@ -1,1 +1,68 @@
-{% extends "account/base.html" %}
+<!DOCTYPE html>
+{% load static %}
+<html lang="en-us">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}accounts/ - EasyGo Review{% endblock %}</title>
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'easygo_review/images/favicon.ico' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="keywords" content="website, web design, web development, web builder, web pages, web developer, web dev, web freelancer" />
+    <meta name="description" content="website, web design, web development, seo, online marketing to be done by our professional knowledge, skill and experience" />
+    <link rel="stylesheet" href="{% static 'easygo_review/css/bootstrap.css' %}" media="screen">
+    <link rel="stylesheet" href="{% static 'easygo_review/css/custom.min.css' %}">
+    <script src="https://kit.fontawesome.com/e57bc5ae97.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+{% include 'account/navbar.html' %}
+
+<div class="container">
+
+    <div class="container width-full p-responsive ">
+    <div class="row">
+        <div class="col-md-4" id="left-side-div"></div>
+
+        <div class="col-md-4" id="main-div">
+            <div class="card>"
+                <div class="logged-out env-production page-responsive session-authentication" style="word-wrap: break-word;"></div>
+                <div class="position-relative js-header-wrapper "></div>
+                    <span class="progress-pjax-loader width-full js-pjax-loader-bar Progress position-fixed"></span>
+                    <span style="background-color: #79b8ff;width: 0%;" class="Progress-item progress-pjax-loader-bar "></span>
+
+                <div class="header header-logged-out width-full pt-5 pb-4 row justify-content-center" role="banner">                    
+                    <a href="/easygo_review/" class="title">EasyGo Airport Shuttle</a>
+                </div>
+
+{% block content %}
+{% endblock %}
+
+<br>
+<br>
+<br>
+<br>
+</div>
+
+
+<!-- footer -->
+
+    <div class="container"
+        <div class="footer container-xl width-full p-responsive" role="contentinfo">
+            <ul class="list-style-none border-top d-flex flex-wrap flex-start">
+                <li class="mr-3 mr-lg-2 list-unstyled"><small>&copy; 2021 EasyCoding</small></li>
+                <li class="mr-3 mr-lg-2 list-unstyled"><a href="mailto:sungkam3@gmail.com"><small>contact</small></a></li>
+                <li class="mr-3 mr-lg-2 list-unstyled"><a href="/terms/" data-ga-click="Footer, go to terms, text:terms"><small>terms</small></a></li>
+                <li class="mr-3 mr-lg-2 list-unstyled"><a href="/privacy/" data-ga-click="Footer, go to privacy, text:privacy"><small>privacy</small></a></li>
+            </ul>
+        </div>
+    </div>
+
+<script src="{% static 'easygo_review/js/jquery.min.js' %}"></script>
+<script src="{% static 'easygo_review/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'easygo_review/js/custom.js' %}"></script>
+<script src="{% static 'easygo_review/js/popper.min.js' %}"></script>
+<script src="https://kit.fontawesome.com/e57bc5ae97.js" crossorigin="anonymous"></script>
+
+</body>
+</html>
+
