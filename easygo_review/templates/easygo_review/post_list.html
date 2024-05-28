@@ -36,14 +36,14 @@
                     
                     <br/>
                     
-                    <div class="star-rating d-flex justify-content-center align-items-center">                        
+                    <p class="star-rating d-flex justify-content-center align-items-center">                        
                         {% for _ in p.rating_range %}
-                            <span class="gold-star">&#9733;</span>
+                            <span class="star-rating gold-star">&#9733;</span>
                         {% endfor %}
                         {% for _ in p.remaining_range %}
-                            <span class="grey-star">&#9733;</span>
+                            <span class="star-rating grey-star">&#9733;</span>
                         {% endfor %}                        
-                    </div>
+                    </p>
                     <!-- <a href="{{ p.get_absolute_url }}" class="btn btn-primary" id="read-more-post-{{ p.pk }}">Read More &rarr;</a> -->
                 </div>
                 <div class="card-footer text-muted">
