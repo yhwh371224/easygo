@@ -2,15 +2,12 @@
 
 {% load crispy_forms_tags %}
 
-{% block title %}{{ object.title }} - EasyGo Reivew{% endblock %}
+{% block title %}EasyGo Reivew{% endblock %}
 
-{% block content %}
-    <!-- Title -->
-    <h1>{{ object.title }}</h1>
-    
+{% block content %}   
     <!-- Author -->
     <p class="lead">
-        by
+        Review by
         <a href="#">{{ object.author.username }}</a>
     </p>
     {% if request.user == object.author %}
