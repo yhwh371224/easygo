@@ -32,7 +32,11 @@ def about_us(request):
     return render(request, 'basecamp/about_us.html')
 
 
-# Suburb names 
+# Suburb names
+def airport_hotel(request): return render(
+    request, 'basecamp/airport-transfers-airport-hotel.html')
+
+
 def artarmon(request): return render(
     request, 'basecamp/airport-transfers-artarmon.html')
 
@@ -67,6 +71,10 @@ def epping(request): return render(
 
 def gordon(request): return render(
     request, 'basecamp/airport-transfers-gordon.html')
+
+
+def hotel(request): return render(
+    request, 'basecamp/airport-transfers-hotel.html')
 
 
 def hornsby(request): return render(
@@ -147,6 +155,10 @@ def st_ives(request): return render(
 
 def sydney_city(request): return render(
     request, 'basecamp/airport-transfers-sydney-city.html')
+
+
+def sydney_hotel(request): return render(
+    request, 'basecamp/airport-transfers-sydney-hotel.html')
 
 
 def thornleigh(request): return render(
