@@ -86,11 +86,6 @@ CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Australia/Sydney'
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
-# CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
-# CELERY_RESULT_BACKEND = config('CELERY_BACKEND', 'redis://redis:6379')
-# if CELERY_RESULT_BACKEND == 'django-db':
-#     INSTALLED_APPS += ['django_celery_results',]
-#     CELERY_RESULT_SERIALIZER = 'json'
 
 SITE_ID = 1
 
@@ -211,6 +206,8 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
+SOCIALACCOUNT_LOGIN_ON_GET=True
+
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 
@@ -251,7 +248,7 @@ COMPRESS_FILTERS = {
 HTML_MINIFY = True
 KEEP_COMMENTS_ON_MINIFYING = True
 
-LOGIN_REDIRECT_URL = '/home/'
+LOGIN_REDIRECT_URL = '/easygo_review/'
 LOGOUT_REDIRECT_URL = '/home/'
 
 #PayPal settings
