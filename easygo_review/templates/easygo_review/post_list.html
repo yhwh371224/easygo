@@ -8,8 +8,7 @@
         <div class="col-md-8" id="main-div">
             <h5 id="easygo_review-list-title">
                 <br/>
-                <div>Total reviews:&nbsp;&nbsp;{{ post_count }}</div>
-                {% if search_info %}<small class="text-muted">: {{ search_info }} ({{ object_list.count }})</small>{% endif %}
+                <div>Total reviews:&nbsp;&nbsp;{{ post_count }}</div>                
             </h5>
         </div>
         <div class="col-md-4" id="side-div">
@@ -25,7 +24,7 @@
 
     {% if object_list.exists %}
         {% for p in object_list %}
-            <div class="card mb-4" id="post-card-{{ post_with_rating.p.pk }}">
+            <div class="card mb-4" id="post-card-{{ p.pk }}">
                 <div class="card-header text-muted">
                     Posted by {{ p.name }} on {{ p.date }}
                 </div>
@@ -43,6 +42,8 @@
                         <span class="grey-star">&#9733;</span>
                         {% endfor %}
                     </p>
+                    <br>
+                    <a href="{{ p.get_absolute_url }}" class="btn btn-primary" id="read-more-post-{{ p.pk }}">Read More &rarr;</a>
                 </div>
                 <div class="card-footer text-muted">
                     You can find the original review on Google >>>&nbsp;<a href="{{ p.link }}"> here</a>.
