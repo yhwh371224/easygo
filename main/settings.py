@@ -2,7 +2,7 @@ import logging
 import os
 
 from decouple import config
-from datetime import datetime 
+from datetime import datetime, timedelta 
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'markdownx',
     'bootstrap4',
+    'axes',
     
 ]
 
@@ -93,7 +94,7 @@ MIDDLEWARE = [
     'django.middleware.gzip.GZipMiddleware', 
     'htmlmin.middleware.HtmlMinifyMiddleware', 
     'htmlmin.middleware.MarkRequestMiddleware', 
-    'django.middleware.security.SecurityMiddleware',
+    'django.middleware.security.SecurityMiddleware',    
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
@@ -103,8 +104,13 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware', 
     'allauth.account.middleware.AccountMiddleware',
+    'axes.middleware.AxesMiddleware',
 
 ]
+
+AXES_FAILURE_LIMIT = 3  
+AXES_COOLOFF_TIME = timedelta(minutes=3)  
+AXES_LOCKOUT_MESSAGE = "Access locked. Please contact the office"
 
 ROOT_URLCONF = 'main.urls'
 
@@ -187,6 +193,7 @@ USE_TZ = True
 AUTHENTICATION_BACKENDS = (    
     'django.contrib.auth.backends.ModelBackend',   
     'allauth.account.auth_backends.AuthenticationBackend',
+    'axes.backends.AxesBackend',
 )
 
 SOCIALACCOUNT_PROVIDERS = {
