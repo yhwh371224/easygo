@@ -1,24 +1,26 @@
 {% extends "account/base.html" %}
 
 {% load i18n %}
+{% load socialaccount %}
 {% load account socialaccount %}
 
-{% block head_title %}{% trans "Log In" %}{% endblock %}
+{% block head_title %}{% trans "Sign In" %}{% endblock %}
 
 {% block content %}
 <section class="bg-dark position-relative pt-6 pb-5 py-sm-6">
     <div class="position-absolute top-0 start-0 w-100 h-100 bg-size-cover" ></div>
         <div class="position-relative zindex-5 container pb-3 pt-sm-2">
           <div class="mx-auto" style="max-width: 460px;">
-            <h2 class="text-light text-center pt-sm-2">{% trans "Sign In" %}</h2><br>
+            <h2 class="text-light text-center pt-sm-2">{% trans "Log In" %}</h2><br>
             <form class="login text-light text-center mb-4" method="POST" action="{% url 'account_login' %}">
                 {% csrf_token %}
                 {{ form.login.label_tag }}
                 {{ form.login }}<br><br>
-                {{ form.password.label_tag }}
-                {{ form.password }}  <br><br>
-                {{ form.remember.label_tag }}
-                {{ form.remember }}  <br><br>
+                {% for provider in socialaccount_providers %}
+                    <li>
+                      <a href="{% provider_login_url 'google' %}">Log in with Google</a>
+                    </li>
+                {% endfor %}
                 {% if redirect_field_value %}
                     <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
                 {% endif %}<br>
