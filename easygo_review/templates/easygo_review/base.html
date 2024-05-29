@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
-{% load bootstrap4 %}
+{% load crispy_forms_tags %}
 <html lang="en-us">
 <head>
     <meta charset="UTF-8">
@@ -15,29 +15,8 @@
     <meta name="author" content="easycoding.live">
     <link rel="stylesheet" href="{% static 'easygo_review/css/bootstrap.css' %}" media="screen">
     <link rel="stylesheet" href="{% static 'easygo_review/css/custom.min.css' %}">
+    <link rel="stylesheet" href="{% static 'easygo_review/css/styles.css' %}">
     <script src="https://kit.fontawesome.com/e57bc5ae97.js" crossorigin="anonymous"></script>
-    <style>
-        .star-rating {
-            unicode-bidi: bidi-override;
-            color: #c5c5c5;
-            font-size: 20px;
-            height: 20px;
-            width: 100px;
-            margin: 0 auto;
-            position: relative;
-            padding: 0;
-            text-shadow: 0px 1px 0 #a2a2a2;
-        }
-        .star-rating span {
-            display: inline-block;                
-        }
-        .gold-star {
-            color: gold; /* 별점이 있는 부분은 금색으로 표시 */
-        }
-        .grey-star {
-            color: #c5c5c5; /* 별점이 없는 부분은 회색으로 표시 */
-        }
-        </style>
 </head>
 <body>
 

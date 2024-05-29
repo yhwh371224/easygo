@@ -1,0 +1,47 @@
+.star-rating {
+    unicode-bidi: bidi-override;
+    color: #c5c5c5;
+    font-size: 20px;
+    height: 20px;
+    width: 100px;
+    margin: 0 auto;
+    position: relative;
+    padding: 0;
+    text-shadow: 0px 1px 0 #a2a2a2;
+}
+.star-rating span {
+    display: inline-block;                
+}
+.gold-star {
+    color: gold !important;
+}
+.grey-star {
+    color: #c5c5c5; 
+}
+
+/* .card.my-4 {
+    margin-top: 10px; 
+} */
+
+/* .review-section {
+    margin-top: 20px; 
+} */
+
+.low {
+    display: flex; /* 자식 요소를 수평으로 배열합니다 */
+    align-items: center; /* 수직 가운데 정렬 */
+}
+.low > * {
+    margin-right: 30px; /* 요소 사이의 간격을 설정합니다 */
+}
+
+@media (max-width: 768px) {
+    .low {
+        flex-direction: column; /* 작은 화면에서는 요소들을 세로로 배열합니다 */
+        align-items: flex-start; /* 수직으로는 시작 부분에 정렬합니다 */
+    }
+    .low > * {
+        margin-right: 0; /* 작은 화면에서는 요소 사이의 간격을 없앱니다 */
+        margin-bottom: 10px; /* 작은 화면에서는 요소들 사이에 간격을 추가합니다 */
+    }
+}

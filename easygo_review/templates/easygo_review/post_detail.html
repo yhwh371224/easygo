@@ -4,26 +4,26 @@
 
 {% block title %}EasyGo Reivew{% endblock %}
 
-{% block content %}   
+{% block content %}
+<div class="review-section">  
+    <br/> 
     <!-- Author -->
-    <p class="lead">
-        Review by
-        <a href="#">{{ object.author.username }}</a>
-    </p>
-    {% if request.user == object.author %}
-        <button type="button" class="btn btn-sm btn-outline-secondary float-right" onclick="location.href='{{ object.get_update_url }}'">EDIT</button>
-    {% endif %}
-    <hr>
+    <div class="low">
+        <p class="lead">
+            Review by
+            <a href="#">{{ object.author.username }}</a>
+        </p>&nbsp;&nbsp;
+        <!-- Date/Time -->
+        <p>posted on {{ object.created }}</p>
 
-    <!-- Date/Time -->
-    <p>Posted on {{ object.created }}</p>
-
-    <hr>
-
+        {% if request.user == object.author %}
+            <button type="button" class="btn btn-sm btn-outline-secondary float-right" onclick="location.href='{{ object.get_update_url }}'">EDIT</button>
+        {% endif %}    
+    </div>
+    <br/>    
     <!-- Post Content -->
     {{ object.get_markdown_content | safe }}
 
-    <br/>    
     <hr>
 
     <!-- Comments Form -->
@@ -35,7 +35,7 @@
                 <div class="form-group">
                     {{ comment_form | crispy }}
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
             </form>
             {% else %}
             <button type="button" class="btn btn-outline-dark btn-block" data-toggle="modal" data-target="#loginModal">
@@ -89,5 +89,5 @@
             </div>
         {% endif %}
     {% endfor %}
-
+</div>
 {% endblock %}
