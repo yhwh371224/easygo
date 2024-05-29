@@ -50,8 +50,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'admin_honeypot',
     'crispy_forms',
+    'crispy_bootstrap4',
     'markdownx',
-    'bootstrap4',
     'axes',
     
 ]
@@ -191,9 +191,10 @@ USE_L10N = True
 USE_TZ = True
 
 AUTHENTICATION_BACKENDS = (    
+    'axes.backends.AxesStandaloneBackend',
     'django.contrib.auth.backends.ModelBackend',   
     'allauth.account.auth_backends.AuthenticationBackend',
-    'axes.backends.AxesBackend',
+    
 )
 
 SOCIALACCOUNT_PROVIDERS = {
@@ -285,6 +286,7 @@ RECAPTCHA_SECRET_KEY = config('RECAPTCHA_SECRET_KEY')
 
 MARKDOWNX_MEDIA_PATH = datetime.now().strftime('markdownx/%Y/%m/%d/')
 
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 RECIPIENT_EMAIL = "info@easygoshuttle.com.au"
