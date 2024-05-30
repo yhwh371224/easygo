@@ -29,7 +29,7 @@ class Driver(models.Model):
 class Inquiry(models.Model):
     name = models.CharField(max_length=100, blank=False)
     company_name = models.CharField(max_length=100, blank=True, null=True)
-    contact = models.CharField(max_length=150, blank=False)
+    contact = models.CharField(max_length=150, blank=True, null=True)
     email = models.EmailField(blank=False, db_index=True)
     email1 = models.EmailField(blank=True, null=True)
     flight_date = models.DateField(verbose_name='flight_date', blank=False)
