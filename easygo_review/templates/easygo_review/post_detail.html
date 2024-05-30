@@ -8,17 +8,18 @@
 <div class="review-section">  
     <br/> 
     <!-- Author -->
-    <div class="low">
-        <p class="lead">
-            Review by
-            <a href="#">{{ object.author.username }}</a>
-        </p>&nbsp;&nbsp;
-        <!-- Date/Time -->
-        <p>posted on {{ object.created }}</p>
-
+    <div class="low" style="display: flex; align-items: center;">
+        <div>
+            <p class="lead">
+                Review by
+                <a href="#">{{ object.author.username }}</a>
+            </p>
+            <p>posted on {{ object.date }}</p>
+        </div>
+        
         {% if request.user == object.author %}
-            <button type="button" class="btn btn-sm btn-outline-secondary float-right" onclick="location.href='{{ object.get_update_url }}'">REVIEW EDIT</button>
-        {% endif %}    
+            <button type="button" class="btn btn-primary" style="margin-left: auto;" onclick="location.href='{{ object.get_update_url }}'">EDIT REVIEW</button>
+        {% endif %}
     </div>
     <br/>    
     <!-- Post Content -->
