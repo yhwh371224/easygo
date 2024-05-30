@@ -109,7 +109,7 @@ MIDDLEWARE = [
 ]
 
 AXES_FAILURE_LIMIT = 3  
-AXES_COOLOFF_TIME = timedelta(minutes=3)  
+AXES_COOLOFF_TIME = timedelta(minutes=60)  
 AXES_LOCKOUT_MESSAGE = "Access locked. Please contact the office"
 
 ROOT_URLCONF = 'main.urls'
