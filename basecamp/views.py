@@ -2520,6 +2520,19 @@ def sending_responses_detail(request):
             email.attach_alternative(html_content, "text/html")
             email.send()
 
+        if selected_option == "More details Inquiry":                 
+            html_content = render_to_string("basecamp/html_email-response-more-details.html",
+                                        {'name': user.name})
+            text_content = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                "Payment Recevied - EasyGo",
+                text_content,
+                '',
+                [email, RECIPIENT_EMAIL]
+            )
+            email.attach_alternative(html_content, "text/html")
+            email.send()
+
         if selected_option == "Arrival Notice Today": 
             today = date.today()     
             user_today = Post.objects.filter(email=email, flight_date=today).first()
