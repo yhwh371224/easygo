@@ -261,6 +261,10 @@ def inquiry1(request):
     return render(request, 'basecamp/inquiry1.html')
 
 
+def inquiry1_full(request): 
+    return render(request, 'basecamp/inquiry1_full.html')
+
+
 def inquiry2(request): 
     context = {
         'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
@@ -557,8 +561,86 @@ def inquiry_details(request):
         return render(request, 'basecamp/inquiry.html', {})
 
 
-# inquiry for airport from home page
+# inquiry (simple one) for airport from home page
 def inquiry_details1(request):
+    if request.method == "POST":
+        name = request.POST.get('name')        
+        email = request.POST.get('email')
+        flight_date = request.POST.get('flight_date')        
+        pickup_time = request.POST.get('pickup_time')
+        direction = request.POST.get('direction')
+        suburb = request.POST.get('suburb')        
+        no_of_passenger = request.POST.get('no_of_passenger')
+        
+        data = {
+            'name': name,            
+            'email': email,
+            'flight_date': flight_date,            
+            'pickup_time': pickup_time,
+            'direction': direction,            
+            'suburb': suburb,
+            'no_of_passenger': no_of_passenger,           
+            }
+     
+        inquiry_email_exists = Inquiry.objects.filter(email=email).exists()
+        post_email_exists = Post.objects.filter(email=email).exists()
+
+        if inquiry_email_exists or post_email_exists:
+            content = '''
+            Hello, {} \n
+            Exist in Inquiry or Post \n 
+            *** From Home Page ***
+            https://easygoshuttle.com.au
+            =============================            
+            Email: {}  
+            Flight date: {}            
+            Pickup time: {}
+            Direction: {}            
+            Suburb: {}
+            Passenger: {}            
+            =============================\n        
+            Best Regards,
+            EasyGo Admin \n\n        
+            ''' .format(data['name'], data['email'],  data['flight_date'], data['pickup_time'], 
+                        data['direction'], data['suburb'], data['no_of_passenger'])
+            
+            send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])
+
+        else:
+            content = '''
+            Hello, {} \n
+            Neither in Inquiry & Post \n 
+            *** From Home Page ***
+            https://easygoshuttle.com.au
+            =============================
+            Email: {}  
+            Flight date: {}            
+            Pickup time: {}
+            Direction: {}            
+            Suburb: {}
+            Passenger: {}         
+            =============================\n        
+            Best Regards,
+            EasyGo Admin \n\n        
+            ''' .format(data['name'], data['email'],  data['flight_date'], data['pickup_time'], 
+                        data['direction'], data['suburb'], data['no_of_passenger'])
+            
+            send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])     
+        
+        p = Inquiry(name=name, email=email, flight_date=flight_date, 
+                 pickup_time=pickup_time, direction=direction, suburb=suburb, 
+                 no_of_passenger=no_of_passenger)
+        
+        p.save() 
+
+        return render(request, 'basecamp/inquiry_done.html')
+
+    else:
+        return render(request, 'basecamp/inquiry1.html', {})
+    
+
+# inquiry1 full page one 
+def inquiry_details1_full(request):
     if request.method == "POST":
         name = request.POST.get('name')
         contact = request.POST.get('contact')
@@ -666,7 +748,7 @@ def inquiry_details1(request):
 
     else:
         return render(request, 'basecamp/inquiry1.html', {})
-    
+        
 
 # client to fill out the inquiry form
 def booking_form_detail(request):
