@@ -15,53 +15,52 @@
 </head>
 <body>
 
-{% include 'account/navbar.html' %}
-
-<div class="container">
-
-    <div class="container width-full p-responsive ">
-    <div class="row">
-        <div class="col-md-4" id="left-side-div"></div>
-
-        <div class="col-md-4" id="main-div">
-            <div class="card>"
-                <div class="logged-out env-production page-responsive session-authentication" style="word-wrap: break-word;"></div>
-                <div class="position-relative js-header-wrapper "></div>
-                    <span class="progress-pjax-loader width-full js-pjax-loader-bar Progress position-fixed"></span>
-                    <span style="background-color: #79b8ff;width: 0%;" class="Progress-item progress-pjax-loader-bar "></span>
-
-                <div class="header header-logged-out width-full pt-5 pb-4 row justify-content-center" role="banner">                    
-                    <a href="/easygo_review/" class="title">EasyGo Airport Shuttle</a>
+    {% include 'account/navbar.html' %}
+    
+    <div class="container">
+    
+        <div class="container width-full p-responsive">
+            <div class="row">
+                <div class="col-md-4" id="left-side-div"></div>
+    
+                <div class="col-md-4" id="main-div" style="padding-bottom: 2rem;">
+                    <div class="card" style="border: none;"> <!-- 여기에 닫는 태그가 필요합니다 -->
+                        <div class="logged-out env-production page-responsive session-authentication" style="word-wrap: break-word;"></div>
+                        <div class="position-relative js-header-wrapper"></div>
+                            <span class="progress-pjax-loader width-full js-pjax-loader-bar Progress position-fixed"></span>
+                            <span style="background-color: #79b8ff;width: 0%;" class="Progress-item progress-pjax-loader-bar"></span>
+    
+                        <div class="header header-logged-out width-full pt-5 pb-4 row justify-content-center" role="banner">                    
+                            <a href="/easygo_review/" class="title">EasyGo Airport Shuttle</a>
+                        </div>
+                    </div> <!-- card 닫는 태그 추가 -->
+    
+                    {% block content %}
+                    {% endblock %}
+    
+                    <br>
+                    <br>
+                    <br>
+                    <br>
                 </div>
-
-{% block content %}
-{% endblock %}
-
-<br>
-<br>
-<br>
-<br>
-</div>
-
-
-<!-- footer -->
-
-    <div class="container"
-        <div class="footer container-xl width-full p-responsive" role="contentinfo">
-            <ul class="list-style-none border-top d-flex flex-wrap flex-start">
-                <li class="mr-3 mr-lg-2 list-unstyled"><small>&copy; 2021 EasyCoding</small></li>
-                <li class="mr-3 mr-lg-2 list-unstyled"><a href="mailto:sungkam3@gmail.com"><small>contact</small></a></li>
-                <li class="mr-3 mr-lg-2 list-unstyled"><a href="/terms/" data-ga-click="Footer, go to terms, text:terms"><small>terms</small></a></li>
-                <li class="mr-3 mr-lg-2 list-unstyled"><a href="/privacy/" data-ga-click="Footer, go to privacy, text:privacy"><small>privacy</small></a></li>
-            </ul>
-        </div>
-    </div>
-
-<script src="{% static 'easygo_review/js/jquery.min.js' %}"></script>
-<script src="{% static 'easygo_review/js/bootstrap.min.js' %}"></script>
-<script src="{% static 'easygo_review/js/custom.js' %}"></script>
-<script src="{% static 'easygo_review/js/popper.min.js' %}"></script>
-<script src="https://kit.fontawesome.com/e57bc5ae97.js" crossorigin="anonymous"></script>
-
-</body>
+            </div>
+        </div> <!-- container 닫는 태그 추가 -->
+    
+        <!-- footer -->
+    
+        <div class="container">
+            <div class="footer container-xl width-full p-responsive" role="contentinfo">
+                <ul class="list-style-none border-top d-flex flex-wrap flex-start">
+                    <li class="mr-3 mr-lg-2 list-unstyled"><small><a href="#">&copy; 2024 EasyCoding - EasyGo</a></small></li>                    
+                </ul>
+            </div>
+        </div> <!-- container 닫는 태그 추가 -->
+    
+    <script src="{% static 'easygo_review/js/jquery.min.js' %}"></script>
+    <script src="{% static 'easygo_review/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'easygo_review/js/custom.js' %}"></script>
+    <script src="{% static 'easygo_review/js/popper.min.js' %}"></script>
+    <script src="https://kit.fontawesome.com/e57bc5ae97.js" crossorigin="anonymous"></script>
+    
+    </body>
 </html>
