@@ -67,7 +67,7 @@ class PostCreate(LoginRequiredMixin, CreateView):
 class PostUpdate(UpdateView):
     model = Post
     template_name = 'easygo_review/post_form.html'
-    fields = ['content']
+    fields = ['content', 'rating']
 
 
 def new_comment(request, pk):
