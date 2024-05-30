@@ -66,7 +66,22 @@ def notify_user_inquiry(sender, instance, created, **kwargs):
         )
         email.attach_alternative(html_content, "text/html")
         email.send()
-        
+
+    elif instance.sent_email:
+        html_content = render_to_string("basecamp/html_email-inquiry-response-1.html",
+                                        {'name': instance.name, 'email': instance.email, 'flight_date': instance.flight_date, 
+                                         'pickup_time': instance.pickup_time, 'direction': instance.direction, 
+                                         'street': instance.street, 'suburb': instance.suburb, 'no_of_passenger': instance.no_of_passenger,                                         
+                                         'message': instance.message, 'price': instance.price,})
+        text_content = strip_tags(html_content)
+        email = EmailMultiAlternatives(
+            "EasyGo Booking Inquiry",
+            text_content,
+            '',
+            [instance.email, RECIPIENT_EMAIL]
+        )
+        email.attach_alternative(html_content, "text/html")
+        email.send()                 
 
 
 # Point to point inquiry

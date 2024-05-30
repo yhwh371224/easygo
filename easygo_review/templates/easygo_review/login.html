@@ -1,0 +1,26 @@
+{% extends "easygo_review/base.html" %}
+
+{% load i18n %}
+{% load account socialaccount %}
+
+{% block head_title %}{% trans "Log In" %}{% endblock %}
+
+{% block content %}
+<section class="bg-dark position-relative pt-6 pb-5 py-sm-6">
+    <div class="position-absolute top-0 start-0 w-100 h-100 bg-size-cover" ></div>
+        <div class="position-relative zindex-5 container pb-3 pt-sm-2">
+          <div class="mx-auto" style="max-width: 460px;">
+            <h3 class="text-light text-center pt-sm-2">{% trans "Sign In" %}</h3><br>
+            <form class="login text-light text-center mb-4" method="POST" action="{% url 'login' %}">
+                {% csrf_token %}
+                {{ form.login.label_tag }}
+                {{ form.login }}<br><br>
+                
+                {% if redirect_field_value %}
+                    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                {% endif %}<br>
+                <button class="primaryAction btn btn-warning" type="submit">{% trans "Sign In" %}</button>
+            </form>
+            
+</section>
+{% endblock %}
