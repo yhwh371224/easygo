@@ -17,6 +17,11 @@
     <link rel="stylesheet" href="{% static 'easygo_review/css/custom.min.css' %}">
     <link rel="stylesheet" href="{% static 'easygo_review/css/styles.css' %}">
     <script src="https://kit.fontawesome.com/e57bc5ae97.js" crossorigin="anonymous"></script>
+    <style>        
+        .footer small {
+        font-size: 12px; /* 글자 크기를 12px로 설정 */
+    }
+    </style>
 </head>
 <body>
 
@@ -30,19 +35,17 @@
             {% endblock %}    
         
     </div>
+</div>
 
-    <!-- footer -->
-    <br>
-    <br/>
+<!-- footer -->    
+<div class="container">
     <div class="footer container-xl width-full p-responsive" role="contentinfo">
-        <ul class="list-style-none border-top d-flex flex-wrap flex-justify-center flex-lg-justify-between ">
-            <li class="mr-3 mr-lg-2 list-unstyled">&copy; 2024 EasyGo Airport Shuttle</li>
-            <li class="mr-3 mr-lg-2 list-unstyled"><a href="mailto:info@easygoshuttle.com.au">contact</a></li>
-            <li class="mr-3 mr-lg-2 list-unstyled"><a href="/terms/" data-ga-click="Footer, go to terms, text:terms">terms</a></li>
-            <li class="mr-3 mr-lg-2 list-unstyled"><a href="/privacy/" data-ga-click="Footer, go to privacy, text:privacy">privacy</a></li>
+        <ul class="list-style-none border-top d-flex flex-wrap flex-start">
+            <li class="mr-3 mr-lg-2 list-unstyled"><small><a href="#">&copy; 2024 EasyCoding - EasyGo</a></small></li>                    
         </ul>
     </div>
 </div>
+
 
 <script>
     function search_post(){
