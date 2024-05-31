@@ -15,7 +15,7 @@
     <div class="position-absolute top-0 start-0 w-100 h-100 bg-size-cover" ></div>
         <div class="position-relative zindex-5 container pb-3 pt-sm-2">
           <div class="mx-auto" style="max-width: 460px;">
-            <h3 class="text-light text-center pt-sm-2">{% trans "Sign Out" %}</h3><br>
+            <h3 class="text-light text-center pt-sm-2" style="padding-top: 30px;">{% trans "Sign Out" %}</h3><br>
             <form class="login text-light text-center mb-4" method="POST" action="{% url 'account_logout' %}">
                 {% csrf_token %}
                 {{ form.logout.label_tag }}
