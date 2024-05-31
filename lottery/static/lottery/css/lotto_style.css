@@ -1,0 +1,40 @@
+body, html {
+    height: 100%; /* 전체 높이를 100%로 설정 */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.centered-form-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%; /* 컨테이너의 너비를 100%로 설정 */
+    max-width: 600px; /* 최대 너비 설정 */
+    padding: 40px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+h5 + .form-group {
+    margin-top: 20px;
+}
+
+/* 미디어 쿼리를 사용하여 화면 크기에 따라 스타일 조정 */
+@media (max-width: 768px) {
+    .centered-form-container {
+        max-width: 95%; /* 모바일 화면에서는 폼의 최대 너비를 95%로 설정 */
+        padding: 10px; /* 패딩을 줄여 더 많은 공간 활용 */
+    }
+
+    .form-group {
+        margin-bottom: 15px; /* 모바일에서는 간격을 조금 줄임 */
+    }
+}
