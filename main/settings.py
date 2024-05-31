@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'blog.apps.BlogConfig',
     'basecamp.apps.BasecampConfig', 
     'easygo_review.apps.EasygoReviewConfig', 
+    'lottery.apps.LotteryConfig',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -53,6 +54,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap4',
     'markdownx',
     'axes',
+    'django_extensions',
     
 ]
 
