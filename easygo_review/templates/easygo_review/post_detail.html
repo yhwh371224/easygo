@@ -36,7 +36,7 @@
                 <div class="form-group">
                     {{ comment_form | crispy }}
                 </div>
-                <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
+                <button class="btn btn-secondary btn-sm float-right" onclick="location.href='/easygo_review/create/'">New Post</button>
             </form>
             {% else %}
             <button type="button" class="btn btn-outline-dark btn-block" data-toggle="modal" data-target="#loginModal">
