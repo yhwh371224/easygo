@@ -1,3 +1,19 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+header, footer {
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+}
+
+.container {
+    padding: 20px;
+}
+
 .star-rating {
     unicode-bidi: bidi-override;
     color: #c5c5c5;
@@ -19,29 +35,45 @@
     color: #c5c5c5; 
 }
 
-/* .card.my-4 {
-    margin-top: 10px; 
-} */
-
-/* .review-section {
-    margin-top: 20px; 
-} */
-
 .low {
-    display: flex; /* 자식 요소를 수평으로 배열합니다 */
-    align-items: center; /* 수직 가운데 정렬 */
+    display: flex; 
+    align-items: center; 
 }
 .low > * {
-    margin-right: 30px; /* 요소 사이의 간격을 설정합니다 */
+    margin-right: 30px; 
+}
+
+.footer small {
+    font-size: 12px; 
 }
 
 @media (max-width: 768px) {
     .low {
-        flex-direction: column; /* 작은 화면에서는 요소들을 세로로 배열합니다 */
-        align-items: flex-start; /* 수직으로는 시작 부분에 정렬합니다 */
+        flex-direction: column; 
+        align-items: flex-start; 
     }
     .low > * {
-        margin-right: 0; /* 작은 화면에서는 요소 사이의 간격을 없앱니다 */
-        margin-bottom: 10px; /* 작은 화면에서는 요소들 사이에 간격을 추가합니다 */
+        margin-right: 0; 
+        margin-bottom: 10px; 
+    }
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 10px;
+    }
+}
+
+@media (min-width: 601px) and (max-width: 1024px) {
+    .container {
+        padding: 15px;
+    }
+}
+
+@media (min-width: 1025px) {
+    .container {
+        padding: 20px;
+        max-width: 800px;
+        margin: auto;
     }
 }
