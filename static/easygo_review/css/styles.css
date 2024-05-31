@@ -15,11 +15,12 @@ header, footer {
 }
 
 .star-rating {
+    white-space: nowrap;
     unicode-bidi: bidi-override;
     color: #c5c5c5;
     font-size: 20px;
     height: 20px;
-    width: 100px;
+    width: 100%;
     margin: 0 auto;
     position: relative;
     padding: 0;
@@ -55,6 +56,13 @@ header, footer {
     .low > * {
         margin-right: 0; 
         margin-bottom: 10px; 
+    }
+    .star-rating {
+        font-size: 10px; /* 모바일에서 별의 크기를 줄임 */
+        min-width: 120px; /* 최소 너비 설정 */
+    }
+    .star-rating span {
+        margin-right: 1px; /* 별 사이의 간격을 줄임 */
     }
 }
 

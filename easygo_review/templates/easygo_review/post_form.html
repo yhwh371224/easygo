@@ -21,14 +21,15 @@
         <table>
             {{ form.as_table }}
         </table>
-        <label for="rating">Please choose your star rating:</label>
-        <div class="star-rating">
+        <label for="rating">Click star rating:</label>
+        <div class="star-rating" style="white-space: nowrap;">
             <span class="star" onclick="setRating(1)">&#9733;</span>
             <span class="star" onclick="setRating(2)">&#9733;</span>
             <span class="star" onclick="setRating(3)">&#9733;</span>
             <span class="star" onclick="setRating(4)">&#9733;</span>
             <span class="star" onclick="setRating(5)">&#9733;</span>
         </div>
+        <br>
         <input type="hidden" id="rating" name="rating" required>
         <button type="submit" class="btn btn-primary float-right">Submit</button>
     </form>
