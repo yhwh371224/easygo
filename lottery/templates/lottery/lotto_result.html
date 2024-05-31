@@ -6,9 +6,10 @@
         height: 100%; /* 전체 높이를 100%로 설정 */
         margin: 0;
         padding: 0;
+        padding-top: 50px;
         display: flex;
         justify-content: center;
-        align-items: center;
+        align-items: flex-start; /* 상단에서 시작 */
     }
 
     .centered-form-container {
@@ -17,14 +18,23 @@
         justify-content: center;
         align-items: center;
         width: 100%; /* 컨테이너의 너비를 100%로 설정 */
-        max-width: 500px; /* 최대 너비 설정 */
-        padding: 50px;
+        max-width: 850px; /* 최대 너비 설정 */
+        padding: 20px;
         background: rgba(0, 0, 0, 0.5);
         border-radius: 8px;
+        margin-top: 50px;
+        margin-bottom: 50px;
     }
 
+    .result-item {
+        white-space: nowrap; /* 줄바꿈 없이 한 줄로 표시 */
+        padding: 5px; /* 결과 항목에 패딩 추가 */
+    }
+    
     .form-group {
         margin-bottom: 20px;
+        max-height: auto; /* 최대 높이 설정 */
+        
     }
 
     h5 + .form-group {
@@ -45,7 +55,7 @@
 </style>
 <body>
     <div class="centered-form-container">
-        <h3 class="text-light text-center">Result Numbers</h3>
+        <h5 class="text-light text-center">Result Numbers</h5>
         <br>
         <div class="text-light text-center mb-4">
             <div class="form-group">
