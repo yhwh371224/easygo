@@ -70,7 +70,7 @@ class Inquiry(models.Model):
 class Inquiry_cruise(models.Model):
     name = models.CharField(max_length=100, blank=False)
     company_name = models.CharField(max_length=100, blank=True, null=True)
-    contact = models.CharField(max_length=150, blank=False)
+    contact = models.CharField(max_length=150, blank=True, null=True)
     email = models.EmailField(blank=False, db_index=True)
     email1 = models.EmailField(blank=True, null=True)
     flight_date = models.DateField(verbose_name='flight_date', blank=False)
@@ -111,7 +111,7 @@ class Inquiry_cruise(models.Model):
 class Inquiry_point(models.Model):
     name = models.CharField(max_length=100, blank=False)
     company_name = models.CharField(max_length=100, blank=True, null=True)
-    contact = models.CharField(max_length=150, blank=False)
+    contact = models.CharField(max_length=150, blank=True, null=True)
     email = models.EmailField(blank=False, db_index=True)
     email1 = models.EmailField(blank=True, null=True)
     flight_date = models.DateField(verbose_name='flight_date', blank=False)
@@ -163,7 +163,7 @@ class Payment(models.Model):
 class Post(models.Model):
     name = models.CharField(max_length=100, blank=False)
     company_name = models.CharField(max_length=100, blank=True, null=True)
-    contact = models.CharField(max_length=150, blank=False)
+    contact = models.CharField(max_length=150, blank=True, null=True)
     email = models.EmailField(blank=False, db_index=True)
     email1 = models.EmailField(blank=True, null=True)
     flight_date = models.DateField(verbose_name='flight_date', blank=False)
