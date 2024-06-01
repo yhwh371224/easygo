@@ -39,6 +39,7 @@ urlpatterns = [
     path('airport-transfers-st-ives/', views.st_ives, name='st_ives'),
     path('airport-transfers-sydney-city/', views.sydney_city, name='sydney_city'),
     path('airport-transfers-sydney-hotel/', views.sydney_hotel, name='sydney_hotel'),
+    path('airport-transfers-sydney-hotels/', views.sydney_hotels, name='sydney_hotels'),
     path('airport-transfers-thornleigh/', views.thornleigh, name='thornleigh'),
     path('airport-transfers-toongabbie/', views.toongabbie, name='toongabbie'),
     path('airport-transfers-turramurra/', views.turramurra, name='turramurra'),
