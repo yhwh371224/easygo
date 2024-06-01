@@ -252,16 +252,16 @@
 													Pickup time:  {{ pickup_time }}<br>
 													Address:  {{ street }}, {{ suburb }}<br>      
                                                     Number of Passenger:  {{ no_of_passenger }}<br>
-													Number of baggage:  {{ no_of_baggage }}<br>
-                                                    Your Message: <br>
-													{{ message }}<br>
+													Number of baggage:  {{ no_of_baggage }}<br><br>
+                                                    
 												{% if return_flight_number %}
 													<span style="font-weight:bold; color: #bdb1a6">Return direction:  {{ return_direction }}</span><br>
 													<span style="font-weight:bold; color: #bdb1a6">Return flight date:  {{ return_flight_date }}</span><br>
                                                     <span style="font-weight:bold; color: #bdb1a6">Return flight number:  {{ return_flight_number }}</span><br>
 													<span style="font-weight:bold; color: #bdb1a6">Return flight time:  {{ return_flight_time }}</span><br>
-													<span style="font-weight:bold; color: #bdb1a6">Return pickup time:  {{ return_pickup_time }}</span><br>
-												{% endif %}                                                   
+													<span style="font-weight:bold; color: #bdb1a6">Return pickup time:  {{ return_pickup_time }}</span><br><br>
+												{% endif %}
+													Message: {{ message }}<br>                                                   
 												</p>
 												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;">
 												{% if return_flight_number %}
