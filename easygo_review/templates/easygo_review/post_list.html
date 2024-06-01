@@ -47,7 +47,7 @@
                     <a href="{{ p.get_absolute_url }}" class="btn btn-primary" id="read-more-post-{{ p.pk }}">Read More &rarr;</a>
                 </div>
                 <div class="card-footer text-muted">
-                    You can find the original review on Google >>>&nbsp;<a href="{{ p.link }}"> here</a>.
+                    {{ p.name }}'s original review on Google >>>&nbsp;<a href="{{ p.link }}"> here</a>
                 </div>
             </div>
         {% endfor %}
