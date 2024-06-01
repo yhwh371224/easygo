@@ -161,6 +161,10 @@ def sydney_hotel(request): return render(
     request, 'basecamp/airport-transfers-sydney-hotel.html')
 
 
+def sydney_hotels(request): return render(
+    request, 'basecamp/airport-transfers-sydney-hotels.html')
+
+
 def thornleigh(request): return render(
     request, 'basecamp/airport-transfers-thornleigh.html')
 
