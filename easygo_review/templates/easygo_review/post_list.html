@@ -2,6 +2,7 @@
 
 {% block content %}
 {% load custom_filters %}
+
 <div class="col-md-8" id="main-div">
     <br/>
     <div class="row">
@@ -46,7 +47,7 @@
                     <a href="{{ p.get_absolute_url }}" class="btn btn-primary" id="read-more-post-{{ p.pk }}">Read More &rarr;</a>
                 </div>
                 <div class="card-footer text-muted">
-                    <a href="{{ p.link }}">The original review on Google</a>&nbsp;by {{ p.name }}
+                    You can find the original review on Google >>>&nbsp;<a href="{{ p.link }}"> here</a>.
                 </div>
             </div>
         {% endfor %}
@@ -54,19 +55,9 @@
         {% if is_paginated %}
             <!-- Pagination -->
             <ul class="pagination justify-content-center mb-4">
-                {% if page_obj.has_previous %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">&larr; Newer</a>
-                </li>
-                {% else %}
-                <li class="page-item disabled">
-                    <a class="page-link" href="#">Newer &rarr;</a>
-                </li>
-                {% endif %}
-
                 {% if page_obj.has_next %}
                 <li class="page-item">
-                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Older &rarr;</a>
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">&larr; Older</a>
                 </li>
                 {% else %}
                 <li class="page-item disabled">
@@ -74,7 +65,15 @@
                 </li>
                 {% endif %}
 
-                
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Newer &rarr;</a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#">Newer &rarr;</a>
+                </li>
+                {% endif %}
             </ul>
         {% endif %}
     {% else %}
