@@ -18,9 +18,7 @@
             <h3 class="text-light text-center pt-sm-2" style="padding-top: 30px;">{% trans "Sign In" %}</h3><br>
             <form class="login text-light text-center mb-4" method="POST" action="{% url 'account_login' %}">
                 {% csrf_token %}
-                {{ form.login.label_tag }}
                 {{ form.login }}<br><br>
-                {{ form.password.label_tag }}
                 {{ form.password }}  <br><br>
                 {{ form.remember.label_tag }}
                 {{ form.remember }}  <br><br>
