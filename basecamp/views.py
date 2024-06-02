@@ -8,7 +8,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.db.models import Q
-from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
+from django.http import HttpResponse, JsonResponse, HttpResponseNotAllowed
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
@@ -2571,18 +2571,36 @@ def sending_responses_detail(request):
         return render(request, 'basecamp/inquiry_done.html') 
     
     else:
-        return render(request, 'beasecamp/sending_responses.html', {})    
+        return render(request, 'beasecamp/sending_responses.html', {})  
+
+
+def paypal_ipn_error_email(subject, exception, item_name, payer_email, gross_amount):
+    error_message = (
+        f"{exception}\n"
+        f"Item Name: {item_name}\n"
+        f"Payer Email: {payer_email}\n"
+        f"Gross Amount: {gross_amount}"
+    )
+    send_mail(
+        subject,
+        error_message,
+        settings.DEFAULT_FROM_EMAIL,
+        [RECIPIENT_EMAIL],  
+        fail_silently=False,
+    )  
     
 
 @csrf_exempt
-def paypal_ipn(request):
+def paypal_ipn(request):   
+    if request.method != 'POST':
+        return HttpResponseNotAllowed(['POST'])
+    
     if request.method == 'POST':
         item_name = request.POST.get('item_name')
         payer_email = request.POST.get('payer_email')
         gross_amount = request.POST.get('mc_gross')
         txn_id = request.POST.get('txn_id')
 
-        # Check if payment with the same transaction ID already exists
         if Payment.objects.filter(txn_id=txn_id).exists():
             return HttpResponse(status=200, content="Duplicate IPN Notification")
         
@@ -2592,9 +2610,9 @@ def paypal_ipn(request):
             p.save()      
             
         except Exception as e:
+            paypal_ipn_error_email('PayPal IPN Error', str(e), item_name, payer_email, gross_amount)
             return HttpResponse(status=500, content="Error processing PayPal IPN")
 
-        # Forward the complete IPN message back to PayPal for verification
         ipn_data = request.POST.copy()
         ipn_data['cmd'] = '_notify-validate'
         headers = {'Content-Type': 'application/x-www-form-urlencoded'}
@@ -2606,9 +2624,12 @@ def paypal_ipn(request):
             if response.status_code == 200 and response_content == 'VERIFIED':
                 return HttpResponse(status=200)
             else:
+                paypal_ipn_error_email('PayPal IPN Verification Failed', 'Failed to verify PayPal IPN.', item_name, payer_email, gross_amount)
                 return HttpResponse(status=500, content="Error processing PayPal IPN")
 
         except requests.exceptions.RequestException as e:
+            paypal_ipn_error_email('PayPal IPN Request Exception', str(e), item_name, payer_email, gross_amount)
             return HttpResponse(status=500, content="Error processing PayPal IPN")
 
     return HttpResponse(status=400)
+
