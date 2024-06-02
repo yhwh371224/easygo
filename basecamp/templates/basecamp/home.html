@@ -159,7 +159,7 @@
 		</div>
       </section>
       <!-- Price checking form-->
-      <form class="container position-relative zindex-5" action="/price_detail/" method="post" style="margin-top: -125px;">
+      <form class="container position-relative zindex-5" action="/price_detail/" id="booking-form" method="post" style="margin-top: -125px;">
 		  {% csrf_token %}
         <div class="d-lg-flex align-items-center bg-secondary border rounded-3 px-4 pt-4 pb-3" >
           <div class="d-sm-flex align-items-center flex-grow-1">
@@ -211,7 +211,7 @@
               </select>
             </div>
             <div class="text-center text-sm-start mt-2 mt-sm-4 mb-4">
-				<button role="button" type="submit" class="btn btn-warning" href="/inquiry1/">Next >></button>
+				<button role="button" type="submit" class="btn btn-warning" href="/inquiry1/" id="submitButton">Next >></button>
             </div>
           </div>
         </div>
@@ -558,6 +558,17 @@
     </footer>
    
     <!-- Vendor scrits: js libraries and plugins-->    
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+          var form = document.getElementById("booking-form");
+          var submitButton = document.getElementById("submitButton");
+  
+          form.addEventListener("submit", function () {
+              submitButton.disabled = true;
+              submitButton.innerHTML = "Submitting..."; // You can change the text as needed
+          });
+      });
+    </script>   
     {% compress js %}
     <script src="/static/basecamp/js/bootstrap.bundle.min.js"></script>
     <script src="/static/basecamp/js/simplebar.min.js"></script>
