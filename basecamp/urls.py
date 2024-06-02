@@ -24,6 +24,7 @@ urlpatterns = [
     path('airport-transfers-lane-cove/', views.lane_cove, name='lane_cove'),
     path('airport-transfers-linfield/', views.linfield, name='linfield'),
     path('airport-transfers-macquarie-park/', views.macquarie_park, name='macquarie_park'),
+    path('airport-transfers-manly/', views.manly, name='manly'),
     path('airport-transfers-marsfield/', views.marsfield, name='marsfield'),
     path('airport-transfers-middle-cove/', views.middle_cove, name='middle_cove'),
     path('airport-transfers-mini-bus/', views.mini_bus, name='mini_bus'),
