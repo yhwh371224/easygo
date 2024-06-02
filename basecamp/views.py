@@ -97,6 +97,10 @@ def macquarie_park(request): return render(
     request, 'basecamp/airport-transfers-macquarie-park.html')
 
 
+def manly(request): return render(
+    request, 'basecamp/airport-transfers-manly.html')
+
+
 def marsfield(request): return render(
     request, 'basecamp/airport-transfers-marsfield.html')
 
@@ -593,8 +597,8 @@ def inquiry_details1(request):
             content = '''
             Hello, {} \n
             Exist in Inquiry or Post \n 
-            *** From Home Page ***
-            https://easygoshuttle.com.au
+            *** From Home Page *** \n
+            ====Simple One====
             =============================            
             Email: {}  
             Flight date: {}            
@@ -615,7 +619,7 @@ def inquiry_details1(request):
             Hello, {} \n
             Neither in Inquiry & Post \n 
             *** From Home Page ***
-            https://easygoshuttle.com.au
+            ====Simple One====
             =============================
             Email: {}  
             Flight date: {}            
