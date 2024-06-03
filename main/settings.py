@@ -194,7 +194,6 @@ USE_TZ = True
 
 AUTHENTICATION_BACKENDS = (    
     'axes.backends.AxesStandaloneBackend',
-    'easygo_review.auth.PostEmailAuthBackend', 
     'allauth.account.auth_backends.AuthenticationBackend',
     'django.contrib.auth.backends.ModelBackend',
 )

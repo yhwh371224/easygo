@@ -3,8 +3,6 @@ import datetime
 from django.db import models
 from django.apps import AppConfig
 from django.urls import reverse
-from easygo_review.models import User
-
 
 
 class BlogAppConfig(AppConfig):
@@ -162,8 +160,7 @@ class Payment(models.Model):
 
         
 class Post(models.Model):
-    name = models.CharField(max_length=100, blank=False)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blog_posts')
+    name = models.CharField(max_length=100, blank=False)    
     company_name = models.CharField(max_length=100, blank=True, null=True)
     contact = models.CharField(max_length=150, blank=True, null=True)
     email = models.EmailField(blank=False, db_index=True, verbose_name='email')
