@@ -1,16 +1,8 @@
 from django.db import models
-from django.contrib.auth.models import User, AbstractBaseUser
+from django.contrib.auth.models import User
 from markdownx.models import MarkdownxField
 from markdownx.utils import markdown
 import datetime
-
-
-class User(AbstractBaseUser):
-    email = models.EmailField(unique=True, verbose_name='email')
-    USERNAME_FIELD = 'email'
-
-    def __str__(self):
-        return self.email
 
 
 class Post(models.Model):
