@@ -1,4 +1,5 @@
 venv/
+myenv/
 
 *.pyc
 
@@ -29,7 +30,7 @@ dumpdata.json
 
 .DS_Store
 
-
+dump.rdb 
 
 
 
