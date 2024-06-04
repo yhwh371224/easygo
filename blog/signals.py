@@ -190,7 +190,7 @@ def notify_user_payment(sender, instance, created, **kwargs):
             post_name.reminder = True
             post_name.discount = ""
             if float(post_name.price) >= float(instance.gross_amount):
-                post_name.notice = checking_message             
+                post_name.toll = checking_message             
             post_name.save()
 
             if post_name.return_pickup_time == 'x':                   
@@ -199,7 +199,7 @@ def notify_user_payment(sender, instance, created, **kwargs):
                     second_post.reminder = True
                     second_post.discount = ""
                     if float(post_name.price) >= float(instance.gross_amount):
-                        second_post.notice = checking_message 
+                        second_post.toll = checking_message 
                     second_post.save() 
 
         else:
