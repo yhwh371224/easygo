@@ -254,6 +254,10 @@ def error(request):
     return render(request, 'basecamp/error.html')
 
 
+def email_dispatch(request): 
+    return render(request, 'basecamp/email_dispatch.html')
+
+
 def flight_date_error(request): 
     return render(request, 'basecamp/flight_date_error.html')
 
@@ -306,14 +310,6 @@ def payonline(request):
 
 def paypal_notice(request): 
     return render(request, 'basecamp/paypal_notice.html')
-
-
-def pickup_adjustment(request): 
-    return render(request, 'basecamp/pickup_adjustment.html')
-
-
-def pickup_adjustment_detail(request): 
-    return render(request, 'basecamp/pickup_adjustment_detail.html')
 
 
 def p2p(request): 
@@ -376,10 +372,6 @@ def sending_email_second(request):
 
 def sending_email_input_data(request): 
     return render(request, 'basecamp/sending_email_input_data.html')
-
-
-def sending_responses(request): 
-    return render(request, 'basecamp/sending_responses.html')
 
 
 def server_error(request): 
@@ -2363,39 +2355,24 @@ def flight_date_detail(request):
 
     else:
         return render(request, 'basecamp/flight_date_error.html', {})
-    
+   
+# email_dispatch_detail 
+def handle_email_sending(request, email, subject, template_name, context):
+    html_content = render_to_string(template_name, context)
+    text_content = strip_tags(html_content)
+    email_message = EmailMultiAlternatives(
+        subject,
+        text_content,
+        '',
+        [email, RECIPIENT_EMAIL]
+    )
+    email_message.attach_alternative(html_content, "text/html")
+    email_message.send()
 
-def reminder_detail(request):
-    if request.method == "POST":
-        email = request.POST.get('email')
-        reminder_str = request.POST.get('reminder')
-        reminder = True if reminder_str == 'True' else False
-        today = date.today()  
-        today_date = datetime.strptime(str(today), '%Y-%m-%d').date()  
-        user_queryset = Post.objects.filter(email=email)
-        filtered_queryset = user_queryset.filter(Q(flight_date__gt=today_date)).order_by('flight_date')
-        user = filtered_queryset.first()
-
-        if not user:
-            return render(request, 'basecamp/506.html')
-
-        else:
-            user.reminder = reminder
-            user.save()
-            # sending_reminder_email(user)
-            
-
-            return render(request, 'basecamp/inquiry_done.html')
-
-    else:
-        return render(request, 'basecamp/reminder.html', {}) 
-
-    
-# send pickup adjustment email to customer
-def pickup_adjustment_detail(request):     
+def email_dispatch_detail(request):     
     if request.method == "POST":
         email = request.POST.get('email')        
-        adjustment_time = request.POST.get('adjustment_time')
+        adjustment_time = request.POST.get('adjustment_time', None)
         selected_option = request.POST.get('selected_option')
 
         today = datetime.now()
@@ -2403,185 +2380,43 @@ def pickup_adjustment_detail(request):
         
         user = Post.objects.filter(email=email, flight_date__range=[today, seven_days_later]).first()
 
-        if selected_option == 'Departure earlier pickup':
-            user.pickup_time = adjustment_time
-            user.save()
+        template_options = {
+            'Departure earlier pickup': ("basecamp/html_email-departure-early.html", "Urgent notice - EasyGo"),
+            'Departure later pickup': ("basecamp/html_email-departure-late.html", "Urgent notice - EasyGo"),
+            'Arrival earlier than schedule': ("basecamp/html_email-arrival-early.html", "Urgent notice - EasyGo"),
+            'Arrival later than schedule': ("basecamp/html_email-arrival-late.html", "Urgent notice - EasyGo"),
+            'Just late notice': ("basecamp/html_email-just-late-notice.html", "Urgent notice - EasyGo"),
+            'Just Just adjustment pickup time': ("basecamp/html_email-just-adjustment.html", "Urgent notice - EasyGo"),
+            "Payment Method": ("basecamp/html_email-response-payment.html", "Payment Method - EasyGo"),
+            "Inquiry Meeting Point": ("basecamp/html_email-response-meeting.html", "Meeting Point - EasyGo"),
+            "Gratitude For Payment": ("basecamp/html_email-response-payment-received.html", "Payment Received - EasyGo"),
+            "More details Inquiry": ("basecamp/html_email-response-more-details.html", "More Details Inquiry - EasyGo"),
+            "Arrival Notice Today": ("basecamp/html_email-today.html", "Arrival Notice Today - EasyGo"),
+            "Requested driver contact": ("basecamp/html_email-response-driver-contact.html", "For driver contact - EasyGo"),
 
-            html_content = render_to_string("basecamp/html_email-departure-early.html",
-                                        {'name': user.name, 'adjustment_time': adjustment_time, })
-            text_content = strip_tags(html_content)
-            email = EmailMultiAlternatives(
-                "Urgent notice - EasyGo",
-                text_content,
-                '',
-                [email, RECIPIENT_EMAIL]
-            )
-            email.attach_alternative(html_content, "text/html")
-            email.send()
+        }
 
-        elif selected_option == 'Departure later pickup':    
-            user.pickup_time = adjustment_time
-            user.save()
-    
-            html_content = render_to_string("basecamp/html_email-departure-late.html",
-                                        {'name': user.name, 'adjustment_time': adjustment_time, })
-            text_content = strip_tags(html_content)
-            email = EmailMultiAlternatives(
-                "Urgent notice - EasyGo",
-                text_content,
-                '',
-                [email, RECIPIENT_EMAIL]
-            )
-            email.attach_alternative(html_content, "text/html")
-            email.send()
-
-        elif selected_option == 'Arrival earlier than schedule':   
-            user.pickup_time = adjustment_time
-            user.save()
-     
-            html_content = render_to_string("basecamp/html_email-arrival-early.html",
-                                        {'name': user.name, 'adjustment_time': adjustment_time, })
-            text_content = strip_tags(html_content)
-            email = EmailMultiAlternatives(
-                "Urgent notice - EasyGo",
-                text_content,
-                '',
-                [email, RECIPIENT_EMAIL]
-            )
-            email.attach_alternative(html_content, "text/html")
-            email.send()
-
-        elif selected_option == 'Arrival later than schedule':        
-            user.pickup_time = adjustment_time
-            user.save()
-
-            html_content = render_to_string("basecamp/html_email-arrival-late.html",
-                                        {'name': user.name, 'adjustment_time': adjustment_time, })
-            text_content = strip_tags(html_content)
-            email = EmailMultiAlternatives(
-                "Urgent notice - EasyGo",
-                text_content,
-                '',
-                [email, RECIPIENT_EMAIL]
-            )
-            email.attach_alternative(html_content, "text/html")
-            email.send()
-
-        elif selected_option == 'Just late notice':        
-            html_content = render_to_string("basecamp/html_email-just-late-notice.html",
-                                        {'name': user.name, 'adjustment_time': adjustment_time, })
-            text_content = strip_tags(html_content)
-            email = EmailMultiAlternatives(
-                "Urgent notice - EasyGo",
-                text_content,
-                '',
-                [email, RECIPIENT_EMAIL]
-            )
-            email.attach_alternative(html_content, "text/html")
-            email.send()
-
+        if selected_option in template_options:
+            template_name, subject = template_options[selected_option]
+            context = {'name': user.name, 'adjustment_time': adjustment_time}
+            if selected_option == "Arrival Notice Today":
+                today = date.today()     
+                user_today = Post.objects.filter(email=email, flight_date=today).first()
+                if user_today:
+                    driver_instance = user_today.driver 
+                    context.update({
+                        'pickup_time': user_today.pickup_time, 'meeting_point': user_today.meeting_point, 
+                        'direction': user_today.direction, 'cash': user_today.cash, 
+                        'driver_name': driver_instance.driver_name, 'driver_contact': driver_instance.driver_contact, 
+                        'driver_plate': driver_instance.driver_plate, 'driver_car': driver_instance.driver_car
+                    })
+            handle_email_sending(request, email, subject, template_name, context)
 
         return render(request, 'basecamp/inquiry_done.html')  
     
     else:
-        return render(request, 'beasecamp/pickup_adjustment.html', {})
-    
+        return render(request, 'basecamp/email_dispatch.html', {})
 
-# sending the response via email 
-def sending_responses_detail(request):     
-    if request.method == "POST":
-        email = request.POST.get('email')   
-        selected_option = request.POST.get('selected_option')        
-        
-        user = Post.objects.filter(email=email).first()        
-
-        if selected_option == "Payment Method":                 
-            html_content = render_to_string("basecamp/html_email-response-payment.html",
-                                        {'name': user.name})
-            text_content = strip_tags(html_content)
-            email = EmailMultiAlternatives(
-                "Payment Method - EasyGo",
-                text_content,
-                '',
-                [email, RECIPIENT_EMAIL]
-            )
-            email.attach_alternative(html_content, "text/html")
-            email.send()
-
-        if selected_option == "Inquiry Meeting Point":                 
-            html_content = render_to_string("basecamp/html_email-response-meeting.html",
-                                        {'name': user.name})
-            text_content = strip_tags(html_content)
-            email = EmailMultiAlternatives(
-                "Meeting Point - EasyGo",
-                text_content,
-                '',
-                [email, RECIPIENT_EMAIL]
-            )
-            email.attach_alternative(html_content, "text/html")
-            email.send()
-
-        if selected_option == "Gratitude For Payment":                 
-            html_content = render_to_string("basecamp/html_email-response-payment-received.html",
-                                        {'name': user.name})
-            text_content = strip_tags(html_content)
-            email = EmailMultiAlternatives(
-                "Payment Recevied - EasyGo",
-                text_content,
-                '',
-                [email, RECIPIENT_EMAIL]
-            )
-            email.attach_alternative(html_content, "text/html")
-            email.send()
-
-        if selected_option == "More details Inquiry":                 
-            html_content = render_to_string("basecamp/html_email-response-more-details.html",
-                                        {'name': user.name})
-            text_content = strip_tags(html_content)
-            email = EmailMultiAlternatives(
-                "Payment Recevied - EasyGo",
-                text_content,
-                '',
-                [email, RECIPIENT_EMAIL]
-            )
-            email.attach_alternative(html_content, "text/html")
-            email.send()
-
-        if selected_option == "Arrival Notice Today": 
-            today = date.today()     
-            user_today = Post.objects.filter(email=email, flight_date=today).first()
-            
-            if user_today: 
-                driver_instance = user_today.driver 
-                driver_name = driver_instance.driver_name
-                driver_contact = driver_instance.driver_contact
-                driver_plate = driver_instance.driver_plate
-                driver_car = driver_instance.driver_car     
-
-                html_content = render_to_string("basecamp/html_email-today.html", 
-                                                {'name': user_today.name, 'pickup_time': user_today.pickup_time, 'meeting_point': user_today.meeting_point, 
-                                                 'direction': user_today.direction, 'cash': user_today.cash, 
-                                                 'driver_name': driver_name, 'driver_contact': driver_contact, 'driver_plate': driver_plate, 
-                                                 'driver_car': driver_car, })
-                text_content = strip_tags(html_content)
-                email = EmailMultiAlternatives(
-                    "Arrival Notice Today - EasyGo",
-                    text_content,
-                    '',
-                    [email, RECIPIENT_EMAIL]
-                )
-                email.attach_alternative(html_content, "text/html")
-                email.send()        
-
-                return render(request, 'basecamp/inquiry_done.html')  
-        
-            else:
-                pass 
-            
-        return render(request, 'basecamp/inquiry_done.html') 
-    
-    else:
-        return render(request, 'beasecamp/sending_responses.html', {})  
 
 
 def paypal_ipn_error_email(subject, exception, item_name, payer_email, gross_amount):

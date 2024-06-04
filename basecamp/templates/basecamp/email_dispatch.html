@@ -16,7 +16,8 @@
         <div class="container position-relative zindex-5 pt-3 pb-7 pt-md-0">
           <div class="row justify-content-center pb-7">
             <div class="col-lg-10">
-              <h1 class="text-light">Send responses via email</h1>
+              <h1 class="text-light">Send email notice to customer</h1>
+              <div class="active" style="color:white">Please choose your option</div>
 			  <br>
             </div>
           </div>
@@ -30,23 +31,36 @@
       <!-- Page content-->
       <!-- Page title-->	 
       <!-- Contact form + details-->  	  
-            <form method="post" enctype="multipart/form-data" action="/sending_responses_detail/" id="booking-form" class="card-body needs-validation p-5" >
+            <form method="post" enctype="multipart/form-data" action="/email_dispatch_detail/" id="booking-form" class="card-body needs-validation p-5" >
                 {% csrf_token %}							
 				<div class="card text-white bg-secondary p-4">
 				<div class="mb-3 pb-1">
 					<label class="form-label" >Email address<sup class="text-danger ms-1">*</sup></label>
 					<input class="form-control" type="email"  placeholder="j.doe@example.com" required name="email">
 					<div class="invalid-feedback">Please enter a valid email address!</div>
-				</div> 
+				</div>                
+				<div class="mb-3 pb-1">
+                    <label class="form-label" >Adjustment pickup time</label>
+                    <input class="form-control" type="text"  placeholder="John Doe" name="adjustment_time">
+                    <div class="invalid-feedback">Please enter your full name!</div>
+                </div>
 				<div class="mb-3 pb-1">
                     <label class="form-label">Select an Option:</label>
-              		<select class="form-select" name="selected_option">                
-              		  <option value="Payment Method">Payment Method</option>
+              		<select class="form-select" name="selected_option">
+					  <option disabled selected value="" style="color: blue">Select your option...</option>                  
+              		  <option value="Departure earlier pickup">Departure earlier pickup</option>
+              		  <option value="Departure later pickup">Departure later pickup</option>						
+              		  <option value="Arrival earlier than schedule">Arrival earlier than schedule</option>					
+              		  <option value="Arrival later than schedule">Arrival later than schedule</option>   
+					  <option value="Just late notice">Just late notice</option>
+					  <option value="Just adjustment pickup time">Just adjustment pickup time</option>
+					  <option disabled selected value="" style="color: red">Select your option...</option>
+					  <option value="Payment Method">Payment Method</option>
               		  <option value="Inquiry Meeting Point">Inquiry Meeting Point</option>	
 					  <option value="Arrival Notice Today">Arrival Notice Today</option>
 					  <option value="Gratitude For Payment">Gratitude For Payment</option>
-					  <option value="More details Inquiry">More details Inquiry</option>					
-              		              
+					  <option value="More details Inquiry">More details Inquiry</option>
+					  <option value="Requested driver contact">Requested driver contact</option>             
               		</select>
                 </div>    
 			</div>
