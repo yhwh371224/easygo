@@ -167,8 +167,9 @@ def notify_user_inquiry_cruise(sender, instance, created, **kwargs):
 def notify_user_payment(sender, instance, created, **kwargs):
     if instance.item_name is not None:
         post_name = Post.objects.filter(
-                Q(name__iregex=r'^%s$' % re.escape(instance.item_name)) | 
-                Q(email__iexact=instance.payer_email)).first()
+            Q(name__iregex=r'^%s$' % re.escape(instance.item_name)) | 
+            Q(email__iexact=instance.payer_email)
+            ).first()
 
         if post_name:       
             html_content = render_to_string("basecamp/html_email-payment-success.html",
@@ -180,22 +181,26 @@ def notify_user_payment(sender, instance, created, **kwargs):
                 text_content,
                 '',
                 [instance.payer_email, RECIPIENT_EMAIL]
-            )        
-
+            )
             email.attach_alternative(html_content, "text/html")        
             email.send()
 
-            post_name.paid = instance.gross_amount
+            checking_message = "short payment"
+            post_name.paid = instance.gross_amount            
             post_name.reminder = True
             post_name.discount = ""
+            if int(post_name.price) >= instance.gross_amount:
+                post_name.notice = checking_message             
             post_name.save()
 
-            if post_name.return_pickup_time == 'x':
-                    post_name_second = Post.objects.filter(email=post_name.email)[1]
-                    post_name_second.paid = instance.gross_amount
-                    post_name.reminder = True
-                    post_name.discount = ""
-                    post_name_second.save() 
+            if post_name.return_pickup_time == 'x':                   
+                    second_post = Post.objects.filter(email=post_name.email)[1]                    
+                    second_post.paid = instance.gross_amount                    
+                    second_post.reminder = True
+                    second_post.discount = ""
+                    if instance.gross_amount <= int(second_post.price):
+                        second_post.notice = checking_message 
+                    second_post.save() 
 
         else:
             html_content = render_to_string("basecamp/html_email-noIdentity.html",
@@ -208,7 +213,6 @@ def notify_user_payment(sender, instance, created, **kwargs):
                 '',
                 [instance.payer_email, RECIPIENT_EMAIL]
             )  
-
             email.attach_alternative(html_content, "text/html")        
             email.send()  
 
