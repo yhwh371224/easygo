@@ -12,7 +12,7 @@ urlpatterns = [
     path('markdownx/', include('markdownx.urls')),
     path('blog/', include('blog.urls')),
     path('easygo_review/', include('easygo_review.urls')),
-    path('lottery/', include('lottery.urls')),
+    path('.sequence/', include('.sequence.urls')),
     path('', include('basecamp.urls')),
     path('accounts/', include('allauth.urls')),
     path('static/<path:path>', serve, {'document_root': settings.STATIC_ROOT}),
