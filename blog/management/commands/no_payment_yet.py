@@ -51,7 +51,7 @@ class Command(BaseCommand):
             
             for booking in bookings:
                 if key == "three_days":
-                    if booking.discount == "TBA":
+                    if booking.discount == "TBA" and not booking.paid:
                         self.send_email(
                             "Payment notice",
                             "basecamp/html_email-nopayment.html",
