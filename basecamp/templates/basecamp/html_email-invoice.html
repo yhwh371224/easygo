@@ -256,15 +256,16 @@
 													{% if return_pickup_time %}
 													Trip type: Round Trip<br>
 													Service: Airport transfers<br>
-													Flight date: {{ flight_date }} & {{ return_flight_date}}<br>													
+													Flight date: {{ flight_date }} & {{ return_flight_date}}<br>	
+													Pick-up time: {{ pickup_time}} & {{ return_pickup_time}}<br>											
 													{% else %}
 													Trip type: Single Trip<br>
 													Service: Airport transfers<br>
-													Flight date: {{ flight_date }}<br>													
+													Flight date: {{ flight_date }}<br>
+													Pick-up time: {{ pickup_time }}<br>														
 													{% endif %}															
 													Address: {{ street }}, {{ suburb }}<br>												
-												{% endif %}
-												Pick-up time: {{ pickup_time }}<br>												
+												{% endif %}																							
 												Number of Passenger: {{ no_of_passenger }}<br>
 												Number of Baggage: {{ no_of_baggage }}<br>
 												<!-- message -->
