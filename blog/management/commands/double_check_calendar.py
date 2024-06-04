@@ -23,7 +23,7 @@ class Command(BaseCommand):
             
     def check_and_notify_missing_calendar_id(self, booking):
         if not booking.calendar_event_id:
-            subject = "Empty calendar ID in double_check_calendar.py"
+            subject = "Empty calendar ID for tomorrow"
             message = f"{booking.name} & {booking.email}"
             recipient_list = [RECIPIENT_EMAIL]
             send_mail(subject, message, '', recipient_list, fail_silently=False)

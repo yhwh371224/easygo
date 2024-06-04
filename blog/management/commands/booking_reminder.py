@@ -98,7 +98,7 @@ class Command(BaseCommand):
                 self.logger.error(f"Failed to send email to {booking_reminder.email} | {booking_reminder.flight_date} & {booking_reminder.pickup_time}: {e}")
 
             if not booking_reminder.calendar_event_id:
-                subject = "calendar - empty id"
+                subject = "calendar empty id - from booking_reminder"
                 message = f"{booking_reminder.name} & {booking_reminder.email}"
                 recipient = [settings.RECIPIENT_EMAIL]
 
