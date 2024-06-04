@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'blog.apps.BlogConfig',
     'basecamp.apps.BasecampConfig', 
     'easygo_review.apps.EasygoReviewConfig',
-    'lottery.apps.LotteryConfig', 
+    '.sequence', 
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
