@@ -2355,7 +2355,8 @@ def flight_date_detail(request):
 
     else:
         return render(request, 'basecamp/flight_date_error.html', {})
-   
+
+
 # email_dispatch_detail 
 def handle_email_sending(request, email, subject, template_name, context):
     html_content = render_to_string(template_name, context)
@@ -2374,11 +2375,8 @@ def email_dispatch_detail(request):
         email = request.POST.get('email')        
         adjustment_time = request.POST.get('adjustment_time', None)
         selected_option = request.POST.get('selected_option')
-
-        today = datetime.now()
-        seven_days_later = today + timedelta(days=7)
         
-        user = Post.objects.filter(email=email, flight_date__range=[today, seven_days_later]).first()
+        user = Post.objects.filter(email=email).first()
 
         template_options = {
             'Departure earlier pickup': ("basecamp/html_email-departure-early.html", "Urgent notice - EasyGo"),
@@ -2386,7 +2384,7 @@ def email_dispatch_detail(request):
             'Arrival earlier than schedule': ("basecamp/html_email-arrival-early.html", "Urgent notice - EasyGo"),
             'Arrival later than schedule': ("basecamp/html_email-arrival-late.html", "Urgent notice - EasyGo"),
             'Just late notice': ("basecamp/html_email-just-late-notice.html", "Urgent notice - EasyGo"),
-            'Just Just adjustment pickup time': ("basecamp/html_email-just-adjustment.html", "Urgent notice - EasyGo"),
+            'Just adjustment pickup time': ("basecamp/html_email-just-adjustment.html", "Urgent notice - EasyGo"),
             "Payment Method": ("basecamp/html_email-response-payment.html", "Payment Method - EasyGo"),
             "Inquiry Meeting Point": ("basecamp/html_email-response-meeting.html", "Meeting Point - EasyGo"),
             "Gratitude For Payment": ("basecamp/html_email-response-payment-received.html", "Payment Received - EasyGo"),
