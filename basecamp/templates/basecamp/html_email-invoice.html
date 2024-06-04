@@ -268,7 +268,7 @@
 												Number of Passenger: {{ no_of_passenger }}<br>
 												Number of Baggage: {{ no_of_baggage }}<br>
 												<!-- message -->
-												{% if message %}Message:&nbsp;{{ message }}{% endif %}</p>
+												{% if message %}{{ message }}{% endif %}</p>
 											</td>
 										</tr>
 										<tr>
@@ -278,6 +278,7 @@
 													<strong>GST (10%): ${{ with_gst }}</strong><br>
 													{% if paid %}<strong>Surcharge (3%): ${{ surcharge }}</strong><br>{% endif %}
 													{% if discount %}<strong>Discount: ${{ discount }}</strong><br>{% endif %}
+													{% if toll %}<strong>Toll Road Fee: ${{ toll }}</strong><br>{% endif %}
 													<strong><u>Total: ${{ total_price }}</u></strong><br>
 													<strong><u>Paid: ${{ paid }}</u></strong><br>													
 													<strong style="text-decoration: underline double;">Balance due: ${{ balance }}</strong><br>

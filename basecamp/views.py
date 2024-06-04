@@ -2201,6 +2201,7 @@ def invoice_detail(request):
         email = request.POST.get('email')
         discount = request.POST.get('discount')
         notice = request.POST.get('notice')  
+        toll = request.POST.get('toll')
         
         user = Post.objects.filter(email=email).first()
 
@@ -2217,13 +2218,18 @@ def invoice_detail(request):
         if discount: 
             float_discount = float(discount)
         else:
-            float_discount = 0.0 
+            float_discount = 0.0
+
+        if toll: 
+            float_toll = float(toll)
+        else:
+            float_toll = 0.0  
         
         if user.paid:
-            total_price = (round(price_as_float + with_gst + surcharge, 2)) - float_discount
+            total_price = (round(price_as_float + with_gst + surcharge + float_toll, 2)) - float_discount
             balance = round(total_price - float_paid, 2) 
         else:
-            total_price = (round(price_as_float + with_gst, 2)) - float_discount
+            total_price = (round(price_as_float + with_gst + float_toll, 2)) - float_discount
             balance = round(total_price - float_paid, 2)
 
         today = date.today()           
@@ -2237,7 +2243,7 @@ def invoice_detail(request):
                                          'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date,
                                          'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 'return_pickup_time': user.return_pickup_time,
                                          'street': user.street, 'suburb': user.suburb, 'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
-                                         'price': user.price, 'with_gst': with_gst, 'surcharge': surcharge, 'total_price': total_price, 
+                                         'price': user.price, 'with_gst': with_gst, 'surcharge': surcharge, 'total_price': total_price, 'toll': toll, 
                                          'balance': balance, 'paid': float_paid, 'message': user.message })
 
             text_content = strip_tags(html_content)
