@@ -255,10 +255,14 @@
 												</p>
 												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;">
 												{% if return_pickup_time %}
-													The cost for this booking will be ${{ price }} for both trips<br><br>
+													The cost for this booking will be ${{ price }} for both trips&nbsp;
 												{% else %}
-													The cost for this booking will be ${{ price }} for a single trip<br><br>
+													The cost for this booking will be ${{ price }} for a single trip&nbsp;
 												{% endif %}
+												{% if toll %}
+													({{ toll }})
+												{% endif %}
+												<br><br>
 												<!-- notice to the customer -->
 												{% if notice %}
 													Note: <span style="font-weight:bold; color: #d39383">{{ notice }}</span><br><br>
