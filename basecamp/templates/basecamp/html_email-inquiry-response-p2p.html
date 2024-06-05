@@ -268,7 +268,11 @@
 													{{ message }}<br><br>	         
 												</p>
 												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;">												
-													The cost for your booking will be ${{ price }} for your trip<br><br>
+													The cost for your booking will be ${{ price }} for your trip
+												{% if toll %}
+													({{ toll }})
+												{% endif %}														
+												<br><br>
 												<!-- notice to the customer -->
 												{% if notice %}
 													Note: <span style="font-weight:bold; color: #d39383">{{ notice }}</span><br><br>
