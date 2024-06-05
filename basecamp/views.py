@@ -2377,6 +2377,15 @@ def email_dispatch_detail(request):
         selected_option = request.POST.get('selected_option')
         
         user = Post.objects.filter(email=email).first()
+
+        if adjustment_time is not None:
+            if user.return_pickup_time == 'x':
+                user_1 = Post.objects.filter(email=email)[1]
+                user_1.pickup_time = adjustment_time
+                user_1.save()  
+            else: 
+                user.pickup_time = adjustment_time
+                user.save()        
         
         template_options = {
             'Departure earlier pickup': ("basecamp/html_email-departure-early.html", "Urgent notice - EasyGo"),
@@ -2409,11 +2418,7 @@ def email_dispatch_detail(request):
                         'driver_plate': driver_instance.driver_plate, 'driver_car': driver_instance.driver_car
                     })
             handle_email_sending(request, email, subject, template_name, context)
-
-        if adjustment_time is not None and user.return_pickup_time == 'x':
-            user_adjustment = Post.objects.filter(email=email)[1]
-            user_adjustment.pickup_time = adjustment_time
-            user.save()            
+              
 
         return render(request, 'basecamp/inquiry_done.html')  
     
