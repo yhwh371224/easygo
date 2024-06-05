@@ -189,7 +189,7 @@ def notify_user_payment(sender, instance, created, **kwargs):
             post_name.paid = instance.gross_amount            
             post_name.reminder = True
             post_name.discount = ""
-            if float(post_name.price) >= float(instance.gross_amount):
+            if float(post_name.price) > float(instance.gross_amount):
                 post_name.toll = checking_message             
             post_name.save()
 
@@ -198,7 +198,7 @@ def notify_user_payment(sender, instance, created, **kwargs):
                     second_post.paid = instance.gross_amount                    
                     second_post.reminder = True
                     second_post.discount = ""
-                    if float(post_name.price) >= float(instance.gross_amount):
+                    if float(post_name.price) > float(instance.gross_amount):
                         second_post.toll = checking_message 
                     second_post.save() 
 
