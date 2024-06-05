@@ -2410,8 +2410,9 @@ def email_dispatch_detail(request):
                     })
             handle_email_sending(request, email, subject, template_name, context)
 
-        if adjustment_time is not None:
-            user.adjustment_time = adjustment_time
+        if adjustment_time is not None and user.return_pickup_time == 'x':
+            user_adjustment = Post.objects.filter(email=email)[1]
+            user_adjustment.pickup_time = adjustment_time
             user.save()            
 
         return render(request, 'basecamp/inquiry_done.html')  
