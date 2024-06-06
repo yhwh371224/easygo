@@ -48,7 +48,7 @@ def airport_transfers(request, suburb):
         context = {'message': 'Suburb not found'}
         return render(request, 'error.html', context)
 
-    return render(request, 'basecamp/airport-transfers.html', context)
+    return render(request, 'basecamp/airport-transfers-template.html', context)
 
 
 def booking(request): 
