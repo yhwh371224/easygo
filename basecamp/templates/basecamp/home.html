@@ -129,7 +129,6 @@
                     <li><a class="dropdown-item" href="/inquiry2/"><i class="far fa-paper-plane"></i>&nbsp;contact by form</a></li>
                     <li><a class="dropdown-item" href="mailto:info@easygoshuttle.com.au"><i class="fal fa-envelope"></i>&nbsp;contact by email</a></li>
                     <li><a class="dropdown-item"  href="sms:+61406883355"><i class="fad fa-sms"></i>&nbsp;contact by sms</a></li>
-                    <!-- <li><a class="dropdown-item"  href="tell:+61406883355"><i class="fal fa-phone-alt"></i>&nbsp;0406 883 355 (message only) </a></li> -->
                   </ul>
                 </li>
               </ul>
@@ -140,7 +139,6 @@
       <!-- Hero-->
       <section class="jarallax bg-dark py-7" data-jarallax data-speed="0.1" >
         <div id="changing-background" class="jarallax-img" style="background-image: url('/static/basecamp/photos/easygo-home-page3.webp');"></div>
-        <!-- <div class="jarallax-img" style="background-image: url('/static/basecamp/images/sydney1.webp');"></div> -->
         <div class="container py-4 py-sm-5 text-center">
           <div class="py-md-6">
 			  <div><a role="button" class="btn btn-primary" href="/booking/">BOOK NOW</a> | <a class="btn btn-success" href="/inquiry/">PRICE NOW</a></div>
@@ -239,7 +237,7 @@
                       <div class="card-body text-center">
                           <h3 class="h5 pt-1 mb-3">{{ suburb|title }}</h3>
                           <p class="fs-sm text-muted mb-2">{{ details.description }}</p>
-                          <p class="fs-sm text-muted mb-2">* additional $10 per person *</p>
+                          <p class="fs-sm text-muted mb-2">{{ details.extra }}</p>
                           <p class="fs-sm mb-2" style="color: blue;">more details >>></p>
                       </div>
                   </a>

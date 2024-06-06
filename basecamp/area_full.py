@@ -1,4 +1,4 @@
-def get_suburbs(): 
+def get_suburbs_full(): 
     suburbs = {
         "Artarmon": 60,
         "Hotels in CBD": 60,     

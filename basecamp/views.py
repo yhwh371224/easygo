@@ -38,14 +38,13 @@ def about_us(request):
 # Suburb names
 def airport_transfers(request, suburb):
     suburbs = get_suburbs()
-    suburb = suburb.replace('-', ' ').title()  # "lane-cove" -> "Lane Cove"
+    suburb = suburb.replace('-', ' ').title()  
     if suburb in suburbs:
         context = {
             'suburb': suburb,
             'details': suburbs[suburb]
         }
-    else:
-        # context가 정의되지 않은 경우를 처리
+    else:        
         context = {'message': 'Suburb not found'}
         return render(request, 'error.html', context)
 
