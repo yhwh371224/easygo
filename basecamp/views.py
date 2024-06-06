@@ -2219,12 +2219,12 @@ def handle_email_sending(request, email, subject, template_name, context):
 def email_dispatch_detail(request):     
     if request.method == "POST":
         email = request.POST.get('email')        
-        adjustment_time = request.POST.get('adjustment_time', None)
+        adjustment_time = request.POST.get('adjustment_time')
         selected_option = request.POST.get('selected_option')
         
         user = Post.objects.filter(email=email).first()
 
-        if adjustment_time is not None:
+        if adjustment_time:
             if user.return_pickup_time == 'x':
                 user_1 = Post.objects.filter(email=email)[1]
                 user_1.pickup_time = adjustment_time
