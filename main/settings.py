@@ -91,8 +91,8 @@ MIDDLEWARE = [
     'django.middleware.gzip.GZipMiddleware', 
     'htmlmin.middleware.HtmlMinifyMiddleware', 
     'htmlmin.middleware.MarkRequestMiddleware', 
-    'django.middleware.security.SecurityMiddleware',    
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -226,7 +226,7 @@ STORAGES = {
         "LOCATION": os.path.join(BASE_DIR, 'media'),
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
 
