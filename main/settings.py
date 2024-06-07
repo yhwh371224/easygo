@@ -42,18 +42,14 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
-    'rangefilter',
     'storages',
     'compressor',
-    'django_celery_beat',
     'paypal.standard.ipn',
-    'corsheaders',
     'admin_honeypot',
     'crispy_forms',
     'crispy_bootstrap4',
     'markdownx',
     'axes',
-    'django_extensions',
     
 ]
 
@@ -98,7 +94,6 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',    
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -265,12 +260,6 @@ PAYPAL_CLIENT_ID = config('PAYPAL_CLIENT_ID')
 PAYPAL_CLIENT_SECRET = config('PAYPAL_CLIENT_SECRET')
 PAYPAL_RECEIVER_EMAIL = 'info@easygoshuttle.com.au'
 PAYPAL_IPN_URL = 'https://easygoshuttle.com.au/paypal_ipn/'
-
-#CORS settings
-CORS_ALLOWED_ORIGINS = [
-    'http://easygoshuttle.com.au',
-    'https://easygoshuttle.com.au',
-]
 
 # Email settings
 EMAIL_HOST = config('EMAIL_HOST')
