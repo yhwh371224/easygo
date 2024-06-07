@@ -80,7 +80,7 @@ def get_suburbs():
 
         'Parramatta': {
             'price': 90,
-            'image_url': '/static/basecamp/photos/lane-cove.webp',
+            'image_url': '/static/basecamp/photos/parramatta.webp',
             'description': 'EasyGo Airport Shuttle provide a private/shared ride for two persons: $100, for three persons: $110',
             'extra': '*additional $10 per person*'
         },        
