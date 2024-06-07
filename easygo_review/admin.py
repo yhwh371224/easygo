@@ -1,12 +1,10 @@
 from django.contrib import admin
 from django.contrib.admin import AdminSite
-from rangefilter.filters import DateRangeFilter
 from .models import Post, Comment
 
 
 class PostAdmin(admin.ModelAdmin):
     list_display = ['date', 'name', 'is_published', 'created']
-    list_filter = (('date', DateRangeFilter), 'name')
     search_fields = ['date', 'name']
 
 

@@ -1,6 +1,5 @@
 from django.contrib import admin
 from django.contrib.admin import AdminSite
-from rangefilter.filters import DateRangeFilter
 from .models import Driver, Inquiry, Inquiry_cruise, Inquiry_point, Payment, Post
 
 
@@ -13,7 +12,6 @@ class InquiryAdmin(admin.ModelAdmin):
     list_display = ['flight_date', 'contact', 'name', 'suburb', 'street', 
                     'pickup_time', 'price', 'is_confirmed', 
                     'cancelled', 'direction', 'return_flight_number', 'created']
-    list_filter = (('flight_date', DateRangeFilter), 'suburb')
     search_fields = ['flight_date', 'pickup_time', 'suburb', 'email', 'street', 
                      'name', 'contact']
 
@@ -41,7 +39,6 @@ class PostAdmin(admin.ModelAdmin):
     list_display = ['flight_date', 'contact', 'name', 'suburb', 'street',
                     'pickup_time', 'price', 'paid', 
                     'cancelled', 'direction', 'return_flight_number', 'created']
-    list_filter = (('flight_date', DateRangeFilter), 'suburb')
     search_fields = ['flight_date', 'pickup_time', 'suburb', 'email', 'street', 
                      'name', 'contact']
 
