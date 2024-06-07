@@ -35,14 +35,14 @@ class Command(BaseCommand):
         return logger
 
     def handle(self, *args, **options):
-        reminder_intervals = [0, 1, 3, 7, 14, -1]
+        reminder_intervals = [0, 1, 3, 7, 14]
         templates = [
             "basecamp/html_email-today.html",
             "basecamp/html_email-tomorrow.html",
             "basecamp/html_email-upcoming3.html",
             "basecamp/html_email-upcoming7.html",
             "basecamp/html_email-upcoming14.html",
-            "basecamp/html_email-yesterday.html",
+            # "basecamp/html_email-yesterday.html",
         ]
         subjects = [
             "Reminder-Today",
