@@ -5,14 +5,11 @@
   <head>
     <meta charset="utf-8">
     <title>Airport Transfers Sydney & Airport Shuttle services start from A$25</title>
-    <!-- SEO Meta Tags-->
     <meta name="google-site-verification" content="hae39L0Kv7JIxVc3YclvckH7Im5SdYa2hk_vZbGJIkA" />
     <meta name="description" content="Easygo Airport Shuttle provides a comfortable and reliable transfer service to/from Sydney Airport, Hotels, Cruise terminal. ✓ door to door service ✓ Fixed rates ✓ Flight tracking & free waiting time . Book Now To Secure Your Low Price!">
-    <meta name="keywords" content="airport shuttle sydney, airport transfers sydney, airport transfers near me, cruise transfers, shuttle bus, private transfers, maxi taxi, mini bus, hotel transfers">
+    <meta name="keywords" content="airport shuttle sydney, airport transfers sydney, airport shuttle sydney prices, airport transfers near me, cruise transfers, shuttle bus, private transfers, maxi taxi, mini bus, hotel transfers">
     <meta name="author" content="easycoding.live">
-    <!-- Viewport-->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Favicon and Touch Icons-->
     <link rel="shortcut icon" type="image/x-icon" href="{% static 'basecamp/favi/favicon.ico' %}">
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'basecamp/favi/apple-touch-icon.png' %}">
     <link rel="android-chrome" type="image/png" sizes="192x192" href="{% static 'basecamp/favi/android-chrome-192x192.png' %}">
@@ -20,7 +17,6 @@
 	  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'basecamp/favi/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'basecamp/favi/favicon-16x16.png' %}">
     <link rel="manifest" href="{% static 'basecamp/favi/site.webmanifest' %}">       
-    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=AW-346352014"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -29,26 +25,18 @@
     
       gtag('config', 'G-LM2TMFMGH4');
     </script>
-    <!-- Event snippet for Submit lead form conversion page -->
     <script>
       gtag('event', 'conversion', {'send_to': 'AW-346352014/A8nNCP-DsbQZEI7Tk6UB'});
     </script>
-    <!-- Vendor Styles-->
     {% compress css %}
-    <link rel="stylesheet" media="screen" href="/static/basecamp/css/simplebar.min.css"/>
     <link rel="stylesheet" media="screen" href="/static/basecamp/css/tiny-slider.css"/>
     <link rel="stylesheet" media="screen" href="/static/basecamp/css/flatpickr.min.css"/>
-    <!-- Main Theme Styles + Bootstrap-->
     <link rel="stylesheet" media="screen" href="/static/basecamp/css/theme.min.css">  
     <link rel="stylesheet" media="screen" href="/static/basecamp/css/styles.css"/>
     {% endcompress %}  
   </head>
-  <!-- Body-->
   <body>   
     <main class="page-wrapper">
-      <!-- Sign In Modal-->
-      <!-- Navbar (Floating light)-->
-      <!-- Remove "navbar-sticky" class to make navigation bar scrollable with the page.-->
       <header class="header navbar navbar-expand-lg navbar-dark navbar-floating navbar-sticky" data-scroll-header data-fixed-element>
         <div class="container px-0 px-xl-3">
           <button class="navbar-toggler ms-n2 me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#primaryMenu"><span class="navbar-toggler-icon"></span></button><a class="navbar-brand flex-shrink-0 order-lg-1 mx-auto ms-lg-0 pe-lg-2 me-lg-4" href="/home/"><img class="navbar-floating-logo d-none d-lg-block" src="/static/basecamp/images/easygo_icon.webp" style="border-radius: 30%" alt="EasyGo_icon" width="40"></a>
@@ -231,7 +219,7 @@
                   <a class="card border-0 shadow card-hover mx-1" href="/airport-transfers-{{ suburb|slugify }}/">
                       <span class="badge badge-lg badge-floating badge-floating-end bg-danger" style="width: 5rem;">${{ details.price }}</span>
                       <div class="card-img-top card-img-gradient" style="position: relative; overflow: hidden; width: 100%; max-height: 360px;">
-                          <img src="{{ details.image_url }}" alt="airport shuttle {{ suburb }}" style="width: 100%; height: auto; display: block;" >
+                          <img loading="lazy" src="{{ details.image_url }}" alt="airport shuttle {{ suburb }}" style="width: 100%; height: auto; display: block;" >
                           <span class="card-floating-text text-light fw-medium">Discover the trip<i class="ai-chevron-right align-middle fs-lg ms-1"></i></span>
                       </div>
                       <div class="card-body text-center">
@@ -373,30 +361,22 @@
         <div class="container">
           <div class="text-center position-relative py-5" style="background-image:url(/static/basecamp/images/map.svg); background-position: center left; background-size: cover;">
             <div class="bg-overlay bg-dark opacity-1"></div>
-            <!-- Title -->
             <div class="row mb-5">
               <div class="col-12">
                 <h3>Hear From Our Happy Clients</h3>
               </div>
             </div>
-            <!-- Testimonials -->
             <div class="row">
               <div class="col-md-9 col-xl-7 mx-auto">
-                <!-- Slider START -->
                 <div class="tiny-slider dots-primary">
                   <div class="tiny-slider-inner" data-autoplay="6000" data-arrow="false" data-dots="true" data-edge="2" data-items="1">
-                    <!-- Slider item -->
                     <div>
-                      <!-- Content -->
                       <p class="h5 fw-light mb-3">"Thank you for your help in making the final part of our long journey easy. 
                         Communication is so important and you were great from the start. I will circulate Easygo details to others and let my travel agent know. 
                         Much appreciated."</p>                      
-                      <h5 class="mb-0">Rhona and Colin</h5>
-                      <span></span>
-                    </div>	
-                    <!-- Slider item -->
+                      <h5 class="mb-0">Rhona and Colin</h5>                      
+                    </div><br>
                     <div>
-                      <!-- Content -->
                       <p class="h5 fw-light mb-3">"Easy to work with, reliable, on time.
                         We have used GoEasy Shuttle now on five occasions for our small group student tours. 
                         They have always been on time, friendly, helpful and taken us to and from the airport in good time and are good value. 
@@ -404,67 +384,26 @@
                         They were good on two occasions my flights were cancelled too. Peter is a nice guy and happy to recommend his services based on my current experiences with them. 
                         Thanks for your help"</p>                      
                       <h5 class="mb-0">Peter Russell</h5>
-                      <span></span>
-                    </div>	
-                    <!-- Slider item -->
+                    </div><br>	
                     <div>
-                      <!-- Content -->
                       <p class="h5 fw-light mb-3">"Just used Easygo to/from international airport. 
                         Booked the shuttle few days ahead of time and no problem at all. 
                         International airport was a mess and waited for almost 2 hours for the luggage collection and they are willing to wait/arrange for another shuttle for the pick up. 
                         Very happy with the service. Highly recommended!"</p>                      
                       <h5 class="mb-0">CD Khoo</h5>
-                      <span></span>
-                    </div>
-                    <!-- Slider item -->
-                    <div>
-                      <!-- Content -->
-                      <p class="h5 fw-light mb-3">"I have used this service before and this time was also an excellent experience. 
-                        I was travelling with a toddler and more than 60kg of luggage and a pram, so Peter met me at the baggage carousel to assist me. 
-                        He had a toddler seat ready to go and got my grandson and me into the shuttle first, then packed all our luggage in himself. 
-                        Upon arrival he carried our bags into our home. This is really the type of personal, professional service that I love and I am extremely grateful. 
-                        As for cost, you won’t do better! Very reasonable! I couldn’t recommend this service more highly"</p>                      
-                      <h5 class="mb-0">Judy Lynne</h5>
-                      <span></span>
-                    </div>
-                    <!-- Slider item -->
-                    <div>
-                      <!-- Content -->
-                      <p class="h5 fw-light mb-3">"Great service, nice driver and completely trouble free process. 
-                        They have a new regular customer, these guys are the go to company if you just want it to work"</p>								
-                      <h5 class="mb-0">Rory Pullen</h5>
-                      <span></span>
-                    </div>
-                    <!-- Slider item -->
-                    <div>
-                      <!-- Content -->
-                      <p class="h5 fw-light mb-3">"I used EasyGo for a group (9 pax) return airport transfer in Sydney to CBD. 
-                        Aside from the obvious ease of door-to-door service and fast, friendly service, the surprising fact was that EasyGo ended up an overall 25% ($50) cheaper than the independent train alternative.
-                        It’s a no brainer here for anyone part of a group or even with a large family, come and use these guys"</p>								
-                      <h5 class="mb-0">Royce Percival</h5>
-                      <span></span>
-                    </div>
+                    </div><br>                   
                   </div>
-                </div>	
-                <!-- Slider END -->	 
-                <div class="row mb-5">
-                  <div class="col-12">
-                    <p></p>
+                </div>                
+                   <div class="col-12">
+                    <h5>{% include 'basecamp/review_link.html' %}</h5>                                    
                   </div>
-                </div>
-                <div class="row mb-5">
-                  <div class="col-12">
-                    <h5>{% include 'basecamp/review_link.html' %}</h5>
-                </div>                                      
-              </div>
              </div>                
             </div>
             </div>              
             </div>            
           </div>
         </div>
-      </section>
-      
+      </section>      
     </main>
     <footer class="site-footer bg-dark pt-5 pb-4">
       <div class="container d-md-flex justify-content-between align-items-center text-center">
@@ -476,9 +415,7 @@
         </ul>
         <p class="fs-sm mb-3 order-md-1"><span class="text-light opacity-50 me-1">© 2024 EasyGo. All rights reserved.</a></p>        
       </div>
-    </footer>
-   
-    <!-- Vendor scrits: js libraries and plugins-->    
+    </footer>   
     <script>
       document.addEventListener("DOMContentLoaded", function () {
           var form = document.getElementById("booking-form");
@@ -486,21 +423,16 @@
   
           form.addEventListener("submit", function () {
               submitButton.disabled = true;
-              submitButton.innerHTML = "In progress..."; 
+              submitButton.innerHTML = "Processing..."; 
           });
       });
     </script>   
 {% compress js %}
 <script src="/static/basecamp/js/bootstrap.bundle.min.js" defer></script>
-<script src="/static/basecamp/js/simplebar.min.js" defer></script>
 <script src="/static/basecamp/js/smooth-scroll.polyfills.min.js" defer></script>
 <script src="/static/basecamp/js/jarallax.min.js" defer></script>
 <script src="/static/basecamp/js/min/tiny-slider.js" defer></script>
 <script src="/static/basecamp/js/flatpickr.min.js" defer></script>
-<script src="/static/basecamp/js/rangePlugin.js" defer></script>
-<script src="/static/basecamp/js/date-picker.js" defer></script>
-<script src="/static/basecamp/js/functions.js" defer></script>
-<!-- Main theme script -->
 <script src="/static/basecamp/js/theme.min.js" defer></script>
 <script src="/static/basecamp/js/script.js" defer></script>
 {% endcompress js %}
