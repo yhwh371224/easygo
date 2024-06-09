@@ -18,6 +18,7 @@ from main.settings import RECIPIENT_EMAIL
 from blog.models import Post, Inquiry, Payment, Driver, Inquiry_point, Inquiry_cruise
 from blog.tasks import send_confirm_email
 from basecamp.area import get_suburbs
+from basecamp.area_full import get_more_suburbs
 
 
 logger = logging.getLogger(__name__)
@@ -38,11 +39,17 @@ def about_us(request):
 # Suburb names
 def airport_transfers(request, suburb):
     suburbs = get_suburbs()
+    more_suburbs = get_more_suburbs()
     suburb = suburb.replace('-', ' ').title()  
     if suburb in suburbs:
         context = {
             'suburb': suburb,
             'details': suburbs[suburb]
+        }
+    elif suburb in more_suburbs:
+        context = {
+            'suburb': suburb, 
+            'details': more_suburbs[suburb]
         }
     else:        
         context = {'message': 'Suburb not found'}
@@ -148,6 +155,11 @@ def invoice_details(request):
 
 def meeting_point(request): 
     return render(request, 'basecamp/meeting_point.html')
+
+
+def more_suburbs(request): 
+    more_suburbs = get_more_suburbs()
+    return render(request, 'basecamp/more_suburbs.html', {'more_suburbs': more_suburbs})
 
 
 def payonline(request): 
