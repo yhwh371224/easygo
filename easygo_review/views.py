@@ -4,16 +4,53 @@ from .forms import CommentForm, PostForm
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
+# email login 
+# from django.contrib.auth import login
+# from django.contrib.auth.backends import BaseBackend
+# from django.contrib.auth.models import User
+# from django.contrib.auth import authenticate
+# from django.contrib import messages
+# from .forms import EmailLoginForm
+# from blog.models import Post as BlogPost
+from easygo_review.models import Post as EasygoPost
+
+
+# def email_login_view(request):
+#     if request.method == 'POST':
+#         form = EmailLoginForm(request.POST)
+#         if form.is_valid():
+#             email = form.cleaned_data['email']
+#             try:
+#                 blog_posts = BlogPost.objects.filter(email=email).first()
+#                 if blog_posts:                      
+#                     user = authenticate(request, email=email)
+#                     if user:
+#                         login(request, user)
+#                         return redirect('easygo_review:post_list') 
+#                     else:
+#                         messages.error(request, 'Authentication failed.')
+#                 else:
+#                     messages.error(request, 'Your email does not exist in our system')
+#             except BlogPost.DoesNotExist:
+#                 messages.error(request, 'Your email does not exist in our system')
+#     else:
+#         form = EmailLoginForm()
+#     return render(request, 'easygo_review/custom_login.html', {'form': form})
 
 
 class PostList(ListView):
-    model = Post
+    model = EasygoPost
     template_name = 'easygo_review/post_list.html'
     paginate_by = 6
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(PostList, self).get_context_data(**kwargs)
-        context['post_count'] = Post.objects.all().count()
+        context['post_count'] = EasygoPost.objects.all().count()
+
+        for post in context['object_list']:
+            if post.rating is None:
+                post.rating = 5
+
         return context
     
 
