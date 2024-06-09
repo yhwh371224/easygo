@@ -3,12 +3,14 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.static import serve
+from django.contrib.auth.decorators import user_passes_test
 
+
+admin_site = user_passes_test(lambda u: u.is_superuser)(admin.site.urls)
 
 urlpatterns = [  
     path('admin/', include('admin_honeypot.urls', namespace='admin_honeypot')),    
     path('horeb_yhwh/', admin.site.urls),
-    # path('admin/', admin.site.urls),
     path('markdownx/', include('markdownx.urls')),
     path('blog/', include('blog.urls')),
     path('easygo_review/', include('easygo_review.urls')),
@@ -16,6 +18,7 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('static/<path:path>', serve, {'document_root': settings.STATIC_ROOT}),
     path('paypal/', include('paypal.standard.ipn.urls')),
+    
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

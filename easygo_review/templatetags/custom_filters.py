@@ -4,7 +4,11 @@ register = template.Library()
 
 @register.filter
 def filter_range(value):
-    return range(int(value))
+    try:
+        value = int(value)
+    except (TypeError, ValueError):
+        value = 0
+    return range(value)
 
 @register.filter
 def subtract_from_five(value):
