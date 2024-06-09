@@ -22,47 +22,12 @@ def get_suburbs():
             'extra': '*additional $10 per person*'
         },
 
-        'Lane Cove': {
-            'price': 75,
-            'image_url': '/static/basecamp/photos/lane-cove.webp',
-            'description': 'EasyGo Airport Shuttle provide a private/shared ride for two persons: $85, for three persons: $95',
-            'extra': '*additional $10 per person*'
-        },
-
         'Ryde': {
             'price': 75,
             'image_url': '/static/basecamp/photos/ryde.webp',
             'description': 'EasyGo Airport Shuttle provide a private/shared ride for two persons: $85, for three persons: $95',
             'extra': '*additional $10 per person*'
-        },
-
-        'Manly': {
-            'price': 90,
-            'image_url': '/static/basecamp/photos/manly.webp',
-            'description': 'EasyGo Airport Shuttle provide a private/shared ride for two persons: $100, for three persons: $110',
-            'extra': '*additional $10 per person*'
-        },
-
-        'Epping': {
-            'price': 90,
-            'image_url': '/static/basecamp/photos/epping.webp',
-            'description': 'EasyGo Airport Shuttle provide a private/shared ride for two persons: $100, for three persons: $110',
-            'extra': '*additional $10 per person*'
-        },
-
-        'Pymble': {
-            'price': 90,
-            'image_url': '/static/basecamp/photos/pymble.webp',
-            'description': 'EasyGo Airport Shuttle provide a private/shared ride for two persons: $100, for three persons: $110',
-            'extra': '*additional $10 per person*'
-        },
-
-        'Thornleigh': {
-            'price': 110,
-            'image_url': '/static/basecamp/photos/thornleigh.webp',
-            'description': 'EasyGo Airport Shuttle provide a private/shared ride for two persons: $120, for three persons: $130',
-            'extra': '*additional $10 per person*'
-        },
+        }, 
 
         'Hornsby': {
             'price': 110,
@@ -76,15 +41,7 @@ def get_suburbs():
             'image_url': '/static/basecamp/photos/blacktown.webp',
             'description': 'EasyGo Airport Shuttle provide a private/shared ride for two persons: $130, for three persons: $140',
             'extra': '*additional $10 per person*'
-        },
-
-        'Parramatta': {
-            'price': 90,
-            'image_url': '/static/basecamp/photos/parramatta.webp',
-            'description': 'EasyGo Airport Shuttle provide a private/shared ride for two persons: $100, for three persons: $110',
-            'extra': '*additional $10 per person*'
-        },        
-        
+        },    
     }
     return suburbs
 
