@@ -95,3 +95,26 @@ def send_confirm_email(name, email, flight_date, return_flight_number):
     EasyGo Admin \n\n        
     '''
     send_mail(flight_date, content, '', [RECIPIENT_EMAIL])
+
+
+# Clicked confirm_booking form 
+@shared_task
+def send_email_task(flight_date, direction, suburb, no_of_passenger):
+    content = f'''
+    someone tried to get the price from homepage \n    
+    ============================= \n    
+    flight date:  {flight_date}  \n
+    Direction: {direction} \n 
+    Suburbs: {suburb} \n
+    No of Pax: {no_of_passenger}\n
+    ===============================\n          
+    '''
+    send_mail(flight_date, content, '', [RECIPIENT_EMAIL])
+
+
+# sending email for suburbs 
+@shared_task
+def send_subemail_task(subject, content, DEFAULT_FROM_EMAIL, RECIPIENT_EMAIL):
+    send_mail(subject, content, DEFAULT_FROM_EMAIL, [RECIPIENT_EMAIL])
+
+
