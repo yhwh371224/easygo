@@ -52,13 +52,29 @@
     document.addEventListener("DOMContentLoaded", function() {
         const searchButton = document.getElementById('searchButton');
         const searchInput = document.getElementById('searchInput');
-
+        const suburbCards = document.getElementById('suburbCards');
+        const cards = suburbCards.getElementsByClassName('card');
         searchButton.addEventListener('click', function() {
             const searchText = searchInput.value.trim().toLowerCase();
             if (searchText) {
-                const slugifiedSearchText = searchText.replace(/\s+/g, '-'); 
-                const url = `/airport-transfers-${slugifiedSearchText}/`;
-                window.location.href = url;
+                const slugifiedSearchText = searchText.replace(/\s+/g, '-');
+                let suburbExists = false;
+                Array.from(cards).forEach(function(card) {
+                    const text = card.textContent.toLowerCase();
+                    if (text.includes(searchText)) {
+                        suburbExists = true;
+                    }
+                });
+                if (suburbExists) {
+                    const url = `/airport-transfers-${slugifiedSearchText}/`;
+                    window.location.href = url;
+                } else {
+                    alert(
+                        'The entered suburb does not exist. You may have entered the name incorrectly, ' +
+                        'or the suburb might not be in our list. Please re-enter the correct name or select it from the list. ' +
+                        'If the suburb is not listed, kindly notify us via email. Thank you.'
+                    );
+                }
             } else {
                 alert('Please enter a search term.');
             }
