@@ -57,12 +57,17 @@ class PostList(ListView):
 class PostSearch(PostList):
     def get_queryset(self):
         q = self.kwargs['q']
-        object_list = Post.objects.filter(Q(title__contains=q) | Q(content__contains=q))
-        return object_list
+        try:
+            object_list = Post.objects.filter(Q(title__contains=q) | Q(content__contains=q))
+            return object_list
+        except Exception as e:
+            self.request.session['search_error'] = "An error occurred while searching. Please try right term again"
+            return Post.objects.none()
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(PostSearch, self).get_context_data()
         context['search_info'] = 'Search: "{}"'.format(self.kwargs['q'])
+        context['search_error'] = self.request.session.pop('search_error', None)
         return context
 
 
