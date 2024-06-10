@@ -279,6 +279,7 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 RECIPIENT_EMAIL = "info@easygoshuttle.com.au"
+DEFAULT_FROM_EMAIL = "info@easygoshuttle.com.au"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

@@ -14,9 +14,9 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.views.decorators.csrf import csrf_exempt
 
-from main.settings import RECIPIENT_EMAIL
+from main.settings import RECIPIENT_EMAIL, DEFAULT_FROM_EMAIL
 from blog.models import Post, Inquiry, Payment, Driver, Inquiry_point, Inquiry_cruise
-from blog.tasks import send_confirm_email
+from blog.tasks import send_confirm_email, send_email_task, send_subemail_task
 from basecamp.area import get_suburbs
 from basecamp.area_full import get_more_suburbs
 
@@ -159,6 +159,9 @@ def meeting_point(request):
 
 def more_suburbs(request): 
     more_suburbs = get_more_suburbs()
+    content = "someone visited the Suburbs page"
+    send_subemail_task.delay('suburbs', content, DEFAULT_FROM_EMAIL, [RECIPIENT_EMAIL])
+    
     return render(request, 'basecamp/more_suburbs.html', {'more_suburbs': more_suburbs})
 
 
@@ -1253,20 +1256,9 @@ def price_detail(request):
             'suburb': suburb,
             'no_of_passenger': no_of_passenger,
 
-        }
-
-        message = '''
-                =====================
-                Someone checked price
-                =====================
-                Flight date: {}
-                Direction: {}        
-                Suburb: {}
-                No of passenger: {}              
-                '''.format(data['flight_date'], data['direction'],
-                           data['suburb'], data['no_of_passenger'])
+        }        
                 
-        send_mail(data['flight_date'], message, '', [RECIPIENT_EMAIL])
+        send_email_task.delay(data['flight_date'], data['direction'], data['suburb'], data['no_of_passenger'])
 
         if direction == 'To/From Cruise Transfers':
             return render(request, 'basecamp/cruise_inquiry_1.html',
