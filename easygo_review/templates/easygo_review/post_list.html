@@ -103,10 +103,16 @@
             <div class="input-group">
                 <input type="text" id="search-input" onkeyup="wait_for_enterkey()" class="form-control" placeholder="Search for..."/>
                     <span class="input-group-btn">
-                        <button class="btn btn-primary" type="button" onclick="search_post();">Go!</button>
+                        <button class="btn btn-primary" type="button" onclick="search_post();">Go !</button>
                     </span>
             </div>
+            <div id="error-message" class="text-danger mt-2" style="display: none;"></div>
         </div>
     </div> 
+    {% if search_error %}
+        <script>
+            alert("{{ search_error|escapejs }}");
+        </script>
+    {% endif %}
 </div>       
 {% endblock %}
