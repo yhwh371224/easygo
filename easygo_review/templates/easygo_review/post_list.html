@@ -23,31 +23,31 @@
     </div>
     <br/>
 
-    {% if object_list.exists %}
-        {% for p in object_list %}
-            <div class="card mb-4" id="post-card-{{ p.pk }}">
+    {% if object_list %}
+        {% for post in object_list %}
+            <div class="card mb-4" id="post-card-{{ post.pk }}">
                 <div class="card-header text-muted">
-                    Posted by {{ p.name }} on {{ p.date }}
+                    Posted by {{ post.name }} on {{ post.date }}
                 </div>
 
                 <div class="card-body">
-                    <p class="card-text">{{ p.get_markdown_content | striptags | truncatewords_html:150 }}</p>
+                    <p class="card-text">{{ post.get_markdown_content | striptags | truncatewords_html:100 }}</p>
 
                     <br/>
 
                     <p class="star-rating d-flex justify-content-center align-items-center">
-                        {% for _ in p.rating|filter_range %}
+                        {% for _ in post.rating|filter_range %}
                             <span class="gold-star">&#9733;</span>
                         {% endfor %}
-                        {% for _ in p.rating|subtract_from_five %}
+                        {% for _ in post.rating|subtract_from_five %}
                         <span class="grey-star">&#9733;</span>
                         {% endfor %}
                     </p>
                     <br>
-                    <a href="{{ p.get_absolute_url }}" class="btn btn-primary" id="read-more-post-{{ p.pk }}">Read More &rarr;</a>
+                    <a href="{{ post.get_absolute_url }}" class="btn btn-primary" id="read-more-post-{{ post.pk }}">Read More &rarr;</a>
                 </div>
                 <div class="card-footer text-muted">
-                    {{ p.name }}'s original review on Google >>>&nbsp;<a href="{{ p.link }}"> here</a>
+                    {{ post.name }}'s original review on Google >>>&nbsp;<a href="{{ post.link }}"> here</a>
                 </div>
             </div>
         {% endfor %}
@@ -91,7 +91,11 @@
             <p class="card-text">
                 The content of the reviews on this page is exactly the same as the Google reviews our clients left
                 <br><br> 
-                <a href="{{ p.link }}">Google Reviews</a>
+                {% if object_list %}
+                    {% for post in object_list %}
+                        <a href="{{ post.link }}">Google Reviews</a>
+                    {% endfor %}
+                {% endif %}
             </p>
         </div> 
     </div>
