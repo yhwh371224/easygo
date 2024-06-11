@@ -50,7 +50,7 @@ class Command(BaseCommand):
             "Reminder-3days",
             "Reminder-7days",
             "Reminder-2wks",
-            "Review-EasyGo",
+            # "Review-EasyGo",
         ]
         for interval, template, subject in zip(reminder_intervals, templates, subjects):
             self.send_email(interval, template, subject)
