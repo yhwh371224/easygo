@@ -110,4 +110,15 @@ def send_email_task(flight_date, direction, suburb, no_of_passenger):
     send_mail(flight_date, content, DEFAULT_FROM_EMAIL, [RECIPIENT_EMAIL])
 
 
+@shared_task
+def send_notification_email(RECIPIENT_EMAIL):
+    send_mail(
+        'New Post List Accessed',
+        'A user has accessed the post list page.',
+        DEFAULT_FROM_EMAIL,
+        [RECIPIENT_EMAIL],
+        fail_silently=False,
+    )
+
+
 
