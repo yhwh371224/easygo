@@ -1,7 +1,7 @@
 def get_suburbs(): 
     suburbs = {        
         'Sydney City Hotels': {
-            'price': 30,
+            'price': 25,
             'image_url': '/static/basecamp/photos/sydney-city-hotels.webp',
             'description': 'Easygo Airport Shuttle provide a shared ride for $25 per person and a private ride for $70 tow persons',
             'extra': ''
