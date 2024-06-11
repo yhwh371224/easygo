@@ -197,7 +197,7 @@
               </select>
             </div>
             <div class="text-center text-sm-start mt-2 mt-sm-4 mb-4">
-				<button role="button" type="submit" class="btn btn-warning" href="/inquiry1/" id="submitButton">Go! >>></button>
+				<button role="button" type="submit" class="btn btn-warning" href="/inquiry1/" id="submitButton">Go >>></button>
             </div>
           </div>
         </div>
@@ -401,7 +401,7 @@
                   </div>
                 </div>                
                    <div class="col-12">
-                    <h5><a href="/easygo_review/">
+                    <h5><a href="/easygo_review/" id="viewAllLink3">
                       &raquo;&raquo;&raquo;&nbsp;&nbsp;More Reviews&nbsp;&nbsp;&laquo;&laquo;&laquo;</a></h5>                                    
                   </div>
              </div>                
@@ -427,6 +427,7 @@
       document.addEventListener("DOMContentLoaded", function () {
         var viewAllLink1 = document.getElementById("viewAllLink1");
         var viewAllLink2 = document.getElementById("viewAllLink2");
+        var viewAllLink3 = document.getElementById("viewAllLink3");
     
         function handleLinkClick(event) {
           event.preventDefault();
@@ -437,6 +438,7 @@
     
         viewAllLink1.addEventListener("click", handleLinkClick);
         viewAllLink2.addEventListener("click", handleLinkClick);
+        viewAllLink3.addEventListener("click", handleLinkClick);
       });
     </script>
 {% compress js %}
