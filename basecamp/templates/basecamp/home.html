@@ -422,25 +422,7 @@
         </ul>
         <p class="fs-sm mb-3 order-md-1"><span class="text-light opacity-50 me-1">© 2024 EasyGo. All rights reserved.</a></p>        
       </div>
-    </footer>   
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        var viewAllLink1 = document.getElementById("viewAllLink1");
-        var viewAllLink2 = document.getElementById("viewAllLink2");
-        var viewAllLink3 = document.getElementById("viewAllLink3");
-    
-        function handleLinkClick(event) {
-          event.preventDefault();
-          var link = event.currentTarget;
-          link.innerHTML = '<div class="spinner-border text-warning" role="status"><span class="visually-hidden">Loading...</span></div>';
-          window.location.href = link.href;
-        }
-    
-        viewAllLink1.addEventListener("click", handleLinkClick);
-        viewAllLink2.addEventListener("click", handleLinkClick);
-        viewAllLink3.addEventListener("click", handleLinkClick);
-      });
-    </script>
+    </footer> 
 {% compress js %}
 <script src="/static/basecamp/js/bootstrap.bundle.min.js" defer></script>
 <script src="/static/basecamp/js/smooth-scroll.polyfills.min.js" defer></script>
