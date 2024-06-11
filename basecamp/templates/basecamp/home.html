@@ -31,7 +31,7 @@
     {% compress css %}
     <link rel="stylesheet" media="screen" href="/static/basecamp/css/tiny-slider.css"/>
     <link rel="stylesheet" media="screen" href="/static/basecamp/css/flatpickr.min.css"/>
-    <link rel="stylesheet" media="screen" href="/static/basecamp/css/theme.min.css">  
+    <link rel="stylesheet" media="screen" href="/static/basecamp/css/theme.min.css"> 
     <link rel="stylesheet" media="screen" href="/static/basecamp/css/styles.css"/>
     {% endcompress %}  
   </head>
@@ -208,7 +208,7 @@
         <div class="tns-carousel-wrapper">
           <div class="tns-carousel-progress ms-auto mb-3">
             <div class="text-sm text-muted text-center mb-2">
-              <a href="/more_suburbs/" style="color:#eb7828">View all &raquo;&raquo;&raquo;</a>
+              <a href="/more_suburbs/" id="viewAllLink1" style="color: #eb7828">View all &raquo;&raquo;&raquo;</a>
             </div>
             <div class="progress">
               <div class="progress-bar" role="progressbar"></div>
@@ -236,8 +236,10 @@
 
           </div>
         </div>
-        <h5 class="text-center mb-4" style="color:white">&raquo;&raquo;&raquo;&nbsp;&nbsp;<a href="/more_suburbs/">
-          <span style="color: #eb7828">Search your area</span><span style="color: white">&nbsp;&nbsp;&laquo;&laquo;&laquo;</span></a></h5>
+        <br>
+        <div class="text-center mb-4">          
+          <a href="/more_suburbs/" id="viewAllLink2" style="color: #eb7828">Search your area &raquo;&raquo;&raquo;</a>
+        </div>
       </section>
       <!-- Features CTA-->
       <section class="bg-gradient position-relative pt-6 pb-5 py-sm-6">
@@ -423,15 +425,20 @@
     </footer>   
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-          var form = document.getElementById("booking-form");
-          var submitButton = document.getElementById("submitButton");
-  
-          form.addEventListener("submit", function () {
-              submitButton.disabled = true;
-              submitButton.innerHTML = "Processing..."; 
-          });
+        var viewAllLink1 = document.getElementById("viewAllLink1");
+        var viewAllLink2 = document.getElementById("viewAllLink2");
+    
+        function handleLinkClick(event) {
+          event.preventDefault();
+          var link = event.currentTarget;
+          link.innerHTML = '<div class="spinner-border text-warning" role="status"><span class="visually-hidden">Loading...</span></div>';
+          window.location.href = link.href;
+        }
+    
+        viewAllLink1.addEventListener("click", handleLinkClick);
+        viewAllLink2.addEventListener("click", handleLinkClick);
       });
-    </script>   
+    </script>
 {% compress js %}
 <script src="/static/basecamp/js/bootstrap.bundle.min.js" defer></script>
 <script src="/static/basecamp/js/smooth-scroll.polyfills.min.js" defer></script>

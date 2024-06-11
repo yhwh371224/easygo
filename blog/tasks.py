@@ -110,11 +110,4 @@ def send_email_task(flight_date, direction, suburb, no_of_passenger):
     send_mail(flight_date, content, DEFAULT_FROM_EMAIL, [RECIPIENT_EMAIL])
 
 
-# sending email for suburbs 
-@shared_task
-def send_subemail_task(message, sender, recipient):
-    # sender = DEFAULT_FROM_EMAIL
-    # recipient = RECIPIENT_EMAIL
-    send_mail(message, DEFAULT_FROM_EMAIL, [RECIPIENT_EMAIL])
-
 

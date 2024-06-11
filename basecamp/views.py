@@ -16,7 +16,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from main.settings import RECIPIENT_EMAIL, DEFAULT_FROM_EMAIL
 from blog.models import Post, Inquiry, Payment, Driver, Inquiry_point, Inquiry_cruise
-from blog.tasks import send_confirm_email, send_email_task, send_subemail_task
+from blog.tasks import send_confirm_email, send_email_task
 from basecamp.area import get_suburbs
 from basecamp.area_full import get_more_suburbs
 
@@ -157,13 +157,11 @@ def meeting_point(request):
     return render(request, 'basecamp/meeting_point.html')
 
 
-def more_suburbs(request):     
+def more_suburbs(request): 
     message = "someone visited the Suburbs page"
-    sender = DEFAULT_FROM_EMAIL
-    recipient = RECIPIENT_EMAIL
-    send_subemail_task.delay(message, sender, recipient)
-    more_suburbs = get_more_suburbs()
+    send_mail("Suburbs Page Visit", message, DEFAULT_FROM_EMAIL, [RECIPIENT_EMAIL])
 
+    more_suburbs = get_more_suburbs()
     return render(request, 'basecamp/more_suburbs.html', {'more_suburbs': more_suburbs})
 
 
