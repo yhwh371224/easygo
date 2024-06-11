@@ -39,8 +39,7 @@ class PostSearch(PostList):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(PostSearch, self).get_context_data()
-        context['search_info'] = 'Search: "{}"'.format(self.kwargs['q'])
-        context['search_error'] = self.request.session.pop('search_error', None)
+        context['search_info'] = 'Search: "{}"'.format(self.kwargs['q'])        
         return context
 
 
