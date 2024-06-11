@@ -157,11 +157,13 @@ def meeting_point(request):
     return render(request, 'basecamp/meeting_point.html')
 
 
-def more_suburbs(request): 
+def more_suburbs(request):     
+    message = "someone visited the Suburbs page"
+    sender = DEFAULT_FROM_EMAIL
+    recipient = RECIPIENT_EMAIL
+    send_subemail_task.delay(message, sender, recipient)
     more_suburbs = get_more_suburbs()
-    content = "someone visited the Suburbs page"
-    send_subemail_task.delay('suburbs', content, DEFAULT_FROM_EMAIL, [RECIPIENT_EMAIL])
-    
+
     return render(request, 'basecamp/more_suburbs.html', {'more_suburbs': more_suburbs})
 
 

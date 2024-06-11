@@ -5,7 +5,7 @@ from googleapiclient.discovery import build
 from google.oauth2 import service_account
 from django.core.mail import send_mail
 from celery import shared_task
-from main.settings import RECIPIENT_EMAIL
+from main.settings import RECIPIENT_EMAIL, DEFAULT_FROM_EMAIL
 from .models import Post
 
 
@@ -90,18 +90,16 @@ def send_confirm_email(name, email, flight_date, return_flight_number):
     Email:  {email}  \n
     Flight date: {flight_date} \n 
     Return flight number: {return_flight_number}
-    ===============================\n        
-    Best Regards, \n
-    EasyGo Admin \n\n        
+    ===============================\n             
     '''
-    send_mail(flight_date, content, '', [RECIPIENT_EMAIL])
+    send_mail(flight_date, content, DEFAULT_FROM_EMAIL, [RECIPIENT_EMAIL])
 
 
 # Clicked confirm_booking form 
 @shared_task
 def send_email_task(flight_date, direction, suburb, no_of_passenger):
     content = f'''
-    someone tried to get the price from homepage \n    
+    someone checked the price from homepage \n    
     ============================= \n    
     flight date:  {flight_date}  \n
     Direction: {direction} \n 
@@ -109,12 +107,14 @@ def send_email_task(flight_date, direction, suburb, no_of_passenger):
     No of Pax: {no_of_passenger}\n
     ===============================\n          
     '''
-    send_mail(flight_date, content, '', [RECIPIENT_EMAIL])
+    send_mail(flight_date, content, DEFAULT_FROM_EMAIL, [RECIPIENT_EMAIL])
 
 
 # sending email for suburbs 
 @shared_task
-def send_subemail_task(subject, content, DEFAULT_FROM_EMAIL, RECIPIENT_EMAIL):
-    send_mail(subject, content, DEFAULT_FROM_EMAIL, [RECIPIENT_EMAIL])
+def send_subemail_task(message, sender, recipient):
+    # sender = DEFAULT_FROM_EMAIL
+    # recipient = RECIPIENT_EMAIL
+    send_mail(message, DEFAULT_FROM_EMAIL, [RECIPIENT_EMAIL])
 
 
