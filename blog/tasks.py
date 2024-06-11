@@ -85,27 +85,27 @@ def send_confirm_email(name, email, flight_date, return_flight_number):
     clicked the 'confirm booking' \n
     >> Sending email only! \n
     https://easygoshuttle.com.au/sending_email_first/ \n  
-    https://easygoshuttle.com.au/sending_email_second/ \n
-    ============================= \n    
-    Email:  {email}  \n
-    Flight date: {flight_date} \n 
+    https://easygoshuttle.com.au/sending_email_second/
+    =============================   
+    Email:  {email}
+    Flight date: {flight_date}
     Return flight number: {return_flight_number}
-    ===============================\n             
+    ===============================          
     '''
     send_mail(flight_date, content, DEFAULT_FROM_EMAIL, [RECIPIENT_EMAIL])
 
 
-# Clicked confirm_booking form 
+# Home page for price 
 @shared_task
 def send_email_task(flight_date, direction, suburb, no_of_passenger):
     content = f'''
-    someone checked the price from homepage \n    
-    ============================= \n    
-    flight date:  {flight_date}  \n
-    Direction: {direction} \n 
-    Suburbs: {suburb} \n
-    No of Pax: {no_of_passenger}\n
-    ===============================\n          
+    someone checked the price from homepage    
+    =============================  
+    flight date:  {flight_date}
+    Direction: {direction}
+    Suburbs: {suburb}
+    No of Pax: {no_of_passenger}
+    ===============================        
     '''
     send_mail(flight_date, content, DEFAULT_FROM_EMAIL, [RECIPIENT_EMAIL])
 
