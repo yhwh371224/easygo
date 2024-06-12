@@ -57,11 +57,14 @@ class PostList(ListView):
 
         post_id = self.request.session.get('post_id')
         if post_id:
-            blog_post = Post.objects.get(id=post_id)
-            user_name = blog_post.name
-            context['user_name'] = user_name
+            try:
+                blog_post = Post.objects.get(id=post_id)
+                user_name = blog_post.name
+                context['user_name'] = user_name
+            except Post.DoesNotExist:
+                context['user_name'] = None
         else:
-            context['user_name'] = 'AnonymousUser'
+            context['user_name'] = None
 
         return context
     
