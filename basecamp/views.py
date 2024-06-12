@@ -33,6 +33,7 @@ def home(request):
 
 
 def about_us(request): 
+    send_notice_email.delay('about_us accessed', 'about_us accessed', RECIPIENT_EMAIL)
     return render(request, 'basecamp/about_us.html')
 
 
@@ -142,6 +143,7 @@ def inquiry_done(request):
 
 
 def information(request): 
+    send_notice_email.delay('information accessed', 'information accessed', RECIPIENT_EMAIL)
     return render(request, 'basecamp/information.html')
 
 
@@ -158,8 +160,7 @@ def meeting_point(request):
 
 
 def more_suburbs(request): 
-    send_notice_email.delay(RECIPIENT_EMAIL)
-
+    send_notice_email.delay('suburbs accessed', 'A user accessed suburbs', RECIPIENT_EMAIL)
     more_suburbs = get_more_suburbs()
     return render(request, 'basecamp/more_suburbs.html', {'more_suburbs': more_suburbs})
 
@@ -195,6 +196,7 @@ def p2p_single_1(request):
 
 
 def privacy(request): 
+    send_notice_email.delay('service accessed', 'service accessed', RECIPIENT_EMAIL)
     return render(request, 'basecamp/privacy.html')
 
 
@@ -267,6 +269,7 @@ def server_error(request):
 
 
 def service(request): 
+    send_notice_email.delay('service accessed', 'service accessed', RECIPIENT_EMAIL)
     return render(request, 'basecamp/service.html')
 
 
