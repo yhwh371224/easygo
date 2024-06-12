@@ -7,6 +7,29 @@ from django.db.models import Q
 from blog.tasks import send_notification_email
 from easygo_review.models import Post as EasygoPost
 from main.settings import RECIPIENT_EMAIL
+from blog.models import Post
+
+
+def custom_login_view(request):
+    if request.method == 'POST':
+        email = request.POST['email']
+        post = Post.objects.filter(email=email).first()
+        if post:
+            request.session['post_id'] = post.id
+            return redirect('easygo_review:easygo_review')
+        else:
+            return render(request, 'easygo_review/custom_login.html', {'error': 'Invalid email address'})
+    return render(request, 'easygo_review/custom_login.html')
+
+
+def get_authenticated_post(request):
+    post_id = request.session.get('post_id')
+    if post_id:
+        try:
+            return Post.objects.get(id=post_id)
+        except Post.DoesNotExist:
+            return None
+    return None
 
 
 class PostList(ListView):
