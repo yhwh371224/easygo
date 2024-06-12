@@ -2226,6 +2226,8 @@ def email_dispatch_detail(request):
         selected_option = request.POST.get('selected_option')
         
         user = Post.objects.filter(email=email).first()
+        if not user:
+            user = Inquiry.objects.filter(email=email).first()
 
         if adjustment_time:
             if user.return_pickup_time == 'x':
@@ -2249,7 +2251,7 @@ def email_dispatch_detail(request):
             "More details Inquiry": ("basecamp/html_email-response-more-details.html", "More Details Inquiry - EasyGo"),
             "Arrival Notice Today": ("basecamp/html_email-today.html", "Arrival Notice Today - EasyGo"),
             "Requested driver contact": ("basecamp/html_email-response-driver-contact.html", "For driver contact - EasyGo"),
-
+            "Shared ride discount": ("basecamp/html_email-shared-discount.html", "Discount notice - EasyGo")
         }
 
         if selected_option in template_options:
