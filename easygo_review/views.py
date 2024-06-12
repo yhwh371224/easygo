@@ -62,9 +62,9 @@ class PostList(ListView):
                 user_name = blog_post.name
                 context['user_name'] = user_name
             except Post.DoesNotExist:
-                context['user_name'] = None
+                pass  # Post 객체가 없으면 아무것도 하지 않음
         else:
-            context['user_name'] = None
+            pass  # post_id가 없으면 아무것도 하지 않음
 
         return context
     
@@ -96,7 +96,7 @@ class PostCreate(View):
     def get(self, request, *args, **kwargs):
         post_id = request.session.get('post_id')  
         if post_id:
-            blog_post = Post.objects.get(id=post_id)
+            blog_post = BlogPost.objects.get(id=post_id)
             form = PostForm(initial={'name': blog_post.name})  
         else:
             form = PostForm()
@@ -107,7 +107,7 @@ class PostCreate(View):
         if form.is_valid():
             post_id = request.session.get('post_id')  
             if post_id:
-                blog_post = Post.objects.get(id=post_id)
+                blog_post = BlogPost.objects.get(id=post_id)
                 form.instance.author = blog_post.name  
                 form.instance.name = blog_post.name  
                 rating = form.cleaned_data.get('rating')
