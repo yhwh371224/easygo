@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function toggleBackgroundImage() {
       var currentBackgroundImage = backgroundElement.style.backgroundImage;
       if (currentBackgroundImage.includes('sydney-airport.webp')) {
-        backgroundElement.style.backgroundImage = 'url("/static/basecamp/images/vehicle.webp")';
+        backgroundElement.style.backgroundImage = 'url("/static/basecamp/photos/easygo-home-page3.webp")';
       } else {
         backgroundElement.style.backgroundImage = 'url("/static/basecamp/images/sydney-airport.webp")';
       }
