@@ -7,6 +7,7 @@ from django.db.models import Q
 from blog.tasks import send_notification_email
 from main.settings import RECIPIENT_EMAIL
 from blog.models import Post as BlogPost
+from django.core.exceptions import PermissionDenied
 
 
 def custom_login_view(request):
@@ -60,16 +61,12 @@ class PostList(ListView):
 class PostSearch(PostList):
     def get_queryset(self):
         q = self.kwargs['q']
-        try:
-            object_list = Post.objects.filter(Q(title__contains=q) | Q(content__contains=q))
-            return object_list
-        except Exception as e:
-            self.request.session['search_error'] = "An error occurred while searching. Please try right term again"
-            return Post.objects.none()
+        object_list = Post.objects.filter(Q(title__icontains=q) | Q(content__icontains=q))  # 수정된 부분
+        return object_list
 
     def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(PostSearch, self).get_context_data()
-        context['search_info'] = 'Search: "{}"'.format(self.kwargs['q'])        
+        context = super(PostSearch, self).get_context_data(object_list=object_list, **kwargs)  
+        context['search_info'] = 'Search: "{}"'.format(self.kwargs['q'])
         return context
 
 
@@ -77,11 +74,10 @@ class PostDetail(DetailView):
     model = Post
     template_name = 'easygo_review/post_detail.html'
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(PostDetail, self).get_context_data(**kwargs)        
+    def get_context_data(self, **kwargs):
+        context = super(PostDetail, self).get_context_data(**kwargs)
         context['post_count'] = Post.objects.all().count()
         context['comment_form'] = CommentForm()
-
         return context
 
 
@@ -97,13 +93,14 @@ class PostCreate(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         current_user = self.request.user
-        if current_user.is_authenticated:
+        post_id = self.request.session.get('post_id')  
+        if post_id:
             form.instance.author = current_user
             rating = form.cleaned_data.get('rating')
             if not (1 <= rating <= 5):
                 form.add_error('rating', 'Rating must be between 1 and 5')
                 return self.form_invalid(form)
-            return super(type(self), self).form_valid(form)
+            return super().form_valid(form)  
         else:
             return redirect('/easygo_review/')
 
@@ -125,8 +122,7 @@ def new_comment(request, pk):
             comment.author = request.user
             comment.save()
             return redirect(comment.get_absolute_url())
-    else:
-        return redirect('/easygo_review/')
+    return redirect('/easygo_review/')  # 
 
 
 class CommentUpdate(UpdateView):
@@ -136,7 +132,7 @@ class CommentUpdate(UpdateView):
     def get_object(self, queryset=None):
         comment = super(CommentUpdate, self).get_object()
         if comment.author != self.request.user:
-            raise PermissionError('No right to edit')
+            raise PermissionDenied('No right to edit')  
         return comment
 
 
@@ -147,7 +143,7 @@ def delete_comment(request, pk):
         comment.delete()
         return redirect(post.get_absolute_url() + '#comment-list')
     else:
-        raise PermissionError('No right to delete')
+        raise PermissionDenied('No right to delete') 
 
 
 class CommentDelete(DeleteView):
@@ -156,7 +152,7 @@ class CommentDelete(DeleteView):
     def get_object(self, queryset=None):
         comment = super(CommentDelete, self).get_object()
         if comment.author != self.request.user:
-            raise PermissionError('No right to delete Comment')
+            raise PermissionDenied('No right to delete Comment')
         return comment
 
     def get_success_url(self):
