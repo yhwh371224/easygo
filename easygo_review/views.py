@@ -61,11 +61,11 @@ class PostSearch(PostList):
     def get_queryset(self):
         q = self.kwargs['q']
         try:
-            object_list = EasygoPost.objects.filter(Q(title__contains=q) | Q(content__contains=q))
+            object_list = Post.objects.filter(Q(title__contains=q) | Q(content__contains=q))
             return object_list
         except Exception as e:
             self.request.session['search_error'] = "An error occurred while searching. Please try right term again"
-            return EasygoPost.objects.none()
+            return Post.objects.none()
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(PostSearch, self).get_context_data()
@@ -79,7 +79,7 @@ class PostDetail(DetailView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(PostDetail, self).get_context_data(**kwargs)        
-        context['post_count'] = EasygoPost.objects.all().count()
+        context['post_count'] = Post.objects.all().count()
         context['comment_form'] = CommentForm()
 
         return context
