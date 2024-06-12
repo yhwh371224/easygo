@@ -13,7 +13,7 @@ class Post(models.Model):
     rating = models.IntegerField(default=5, choices=[(i, i) for i in range(1, 6)])
     is_published = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='review_posts')
+    author = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
         ordering = ['-created']

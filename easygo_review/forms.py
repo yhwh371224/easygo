@@ -18,3 +18,7 @@ class PostForm(forms.ModelForm):
         widgets = {
             'rating': forms.HiddenInput(),
             }
+    
+    def __init__(self, *args, **kwargs):
+        super(PostForm, self).__init__(*args, **kwargs)
+        self.fields['name'].widget.attrs['readonly'] = True
