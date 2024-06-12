@@ -3,7 +3,7 @@ from .models import Post, Comment
 from .forms import CommentForm, PostForm
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
 from django.db.models import Q
-from blog.tasks import send_notification_email
+from blog.tasks import send_notice_email
 from main.settings import RECIPIENT_EMAIL
 from blog.models import Post as BlogPost
 from django.core.exceptions import PermissionDenied
@@ -50,7 +50,7 @@ class PostList(ListView):
             if post.rating is None:
                 post.rating = 5
 
-        send_notification_email.delay(RECIPIENT_EMAIL)
+        send_notice_email.delay('reviews accessed', 'reviews accessed', RECIPIENT_EMAIL)
 
         authenticated_post = get_authenticated_post(self.request)
         context['authenticated_post'] = authenticated_post 
