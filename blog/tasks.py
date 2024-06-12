@@ -110,28 +110,18 @@ def send_email_task(flight_date, direction, suburb, no_of_passenger):
     send_mail(flight_date, content, DEFAULT_FROM_EMAIL, [RECIPIENT_EMAIL])
 
 
-# Review page
+# Review page, suburbs page, service, information, about_us, terms, policy 
 @shared_task
-def send_notification_email(RECIPIENT_EMAIL):
+def send_notice_email(subject, message, RECIPIENT_EMAIL):
     send_mail(
-        'Reviews Accessed',
-        'A user has accessed the reviews page.',
+        subject,
+        message,
         DEFAULT_FROM_EMAIL,
         [RECIPIENT_EMAIL],
         fail_silently=False,
     )
 
 
-# Suburbs page 
-@shared_task
-def send_notice_email(RECIPIENT_EMAIL):
-    send_mail(
-        'Suburbs Accessed',
-        'A user has accessed the suburbs page.',
-        DEFAULT_FROM_EMAIL,
-        [RECIPIENT_EMAIL],
-        fail_silently=False,
-    )
 
 
 
