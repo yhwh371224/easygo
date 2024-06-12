@@ -56,15 +56,10 @@ class PostList(ListView):
         context['authenticated_post'] = authenticated_post 
 
         post_id = self.request.session.get('post_id')
-        if post_id:
-            try:
-                blog_post = Post.objects.get(id=post_id)
-                user_name = blog_post.name
-                context['user_name'] = user_name
-            except Post.DoesNotExist:
-                pass  # Post 객체가 없으면 아무것도 하지 않음
-        else:
-            pass  # post_id가 없으면 아무것도 하지 않음
+        if post_id:            
+            blog_post = BlogPost.objects.get(id=post_id)
+            user_name = blog_post.name
+            context['user_name'] = user_name            
 
         return context
     
