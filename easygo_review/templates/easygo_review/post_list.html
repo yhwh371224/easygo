@@ -15,7 +15,7 @@
         <div class="col-md-4" id="side-div">
             <h5 id="easygo_review-list-title">
                 <br/>
-                {% if user.is_authenticated %}
+                {% if request.session.post_id %}
                     <button class="btn btn-primary btn-sm float-right" onclick="location.href='/easygo_review/create/'">New Post</button>
                 {% endif %}   
             </h5>
