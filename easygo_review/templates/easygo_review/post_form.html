@@ -19,18 +19,30 @@
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <table>
-            {{ form.as_table }}
+            {{ form.non_field_errors }}
+            <tr>
+                <th>{{ form.name.label_tag }}</th>
+                <td>{{ form.name }}</td>
+            </tr>            
+            <tr>
+                <th>{{ form.content.label_tag }}</th>
+                <td>{{ form.content }}</td>
+            </tr>
+            <tr>
+                <th>{{ form.rating.label_tag }}</th>
+                <td>
+                    <label for="rating">Click star rating:</label>
+                    <div class="star-rating" style="white-space: nowrap;">
+                        <span class="star" onclick="setRating(1)">&#9733;</span>
+                        <span class="star" onclick="setRating(2)">&#9733;</span>
+                        <span class="star" onclick="setRating(3)">&#9733;</span>
+                        <span class="star" onclick="setRating(4)">&#9733;</span>
+                        <span class="star" onclick="setRating(5)">&#9733;</span>
+                    </div>
+                    <input type="hidden" id="rating" name="rating" required>
+                </td>
+            </tr>
         </table>
-        <label for="rating">Click star rating:</label>
-        <div class="star-rating" style="white-space: nowrap;">
-            <span class="star" onclick="setRating(1)">&#9733;</span>
-            <span class="star" onclick="setRating(2)">&#9733;</span>
-            <span class="star" onclick="setRating(3)">&#9733;</span>
-            <span class="star" onclick="setRating(4)">&#9733;</span>
-            <span class="star" onclick="setRating(5)">&#9733;</span>
-        </div>
-        <br>
-        <input type="hidden" id="rating" name="rating" required>
         <button type="submit" class="btn btn-primary float-right">Submit</button>
     </form>
     

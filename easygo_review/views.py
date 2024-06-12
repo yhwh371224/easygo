@@ -2,12 +2,12 @@ from django.shortcuts import render, redirect
 from .models import Post, Comment
 from .forms import CommentForm, PostForm
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from blog.tasks import send_notification_email
 from main.settings import RECIPIENT_EMAIL
 from blog.models import Post as BlogPost
 from django.core.exceptions import PermissionDenied
+from django.views import View 
 
 
 def custom_login_view(request):
@@ -55,13 +55,21 @@ class PostList(ListView):
         authenticated_post = get_authenticated_post(self.request)
         context['authenticated_post'] = authenticated_post 
 
+        post_id = self.request.session.get('post_id')
+        if post_id:
+            blog_post = Post.objects.get(id=post_id)
+            user_name = blog_post.name
+            context['user_name'] = user_name
+        else:
+            context['user_name'] = 'AnonymousUser'
+
         return context
     
 
 class PostSearch(PostList):
     def get_queryset(self):
         q = self.kwargs['q']
-        object_list = Post.objects.filter(Q(title__icontains=q) | Q(content__icontains=q))  # 수정된 부분
+        object_list = Post.objects.filter(Q(name__contains=q) | Q(content__contains=q)) 
         return object_list
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -81,28 +89,31 @@ class PostDetail(DetailView):
         return context
 
 
-class PostCreate(LoginRequiredMixin, CreateView):
-    model = Post
-    template_name = 'easygo_review/post_form.html'
-    fields = ['name', 'date', 'link', 'content', 'rating']
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form_guide'] = 'Please post your review'
-        return context
-
-    def form_valid(self, form):
-        current_user = self.request.user
-        post_id = self.request.session.get('post_id')  
+class PostCreate(View):
+    def get(self, request, *args, **kwargs):
+        post_id = request.session.get('post_id')  
         if post_id:
-            form.instance.author = current_user
-            rating = form.cleaned_data.get('rating')
-            if not (1 <= rating <= 5):
-                form.add_error('rating', 'Rating must be between 1 and 5')
-                return self.form_invalid(form)
-            return super().form_valid(form)  
+            blog_post = Post.objects.get(id=post_id)
+            form = PostForm(initial={'name': blog_post.name})  
         else:
-            return redirect('/easygo_review/')
+            form = PostForm()
+        return render(request, 'easygo_review/post_form.html', {'form': form, 'form_guide': 'Please post your review'})
+
+    def post(self, request, *args, **kwargs):
+        form = PostForm(request.POST)
+        if form.is_valid():
+            post_id = request.session.get('post_id')  
+            if post_id:
+                blog_post = Post.objects.get(id=post_id)
+                form.instance.author = blog_post.name  
+                form.instance.name = blog_post.name  
+                rating = form.cleaned_data.get('rating')
+                if not (1 <= rating <= 5):
+                    form.add_error('rating', 'Rating must be between 1 and 5')
+                    return render(request, 'easygo_review/post_form.html', {'form': form, 'form_guide': 'Please post your review'})
+                form.save()
+                return redirect('/easygo_review/')
+        return render(request, 'easygo_review/post_form.html', {'form': form, 'form_guide': 'Please post your review'})
 
 
 class PostUpdate(UpdateView):
