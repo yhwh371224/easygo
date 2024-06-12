@@ -5,15 +5,14 @@ from django.views.generic import ListView, DetailView, UpdateView, CreateView, D
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from blog.tasks import send_notification_email
-from easygo_review.models import Post as EasygoPost
 from main.settings import RECIPIENT_EMAIL
-from blog.models import Post
+from blog.models import Post as BlogPost
 
 
 def custom_login_view(request):
     if request.method == 'POST':
         email = request.POST['email']
-        post = Post.objects.filter(email=email).first()
+        post = BlogPost.objects.filter(email=email).first()
         if post:
             request.session['post_id'] = post.id
             return redirect('easygo_review:easygo_review')
@@ -22,30 +21,38 @@ def custom_login_view(request):
     return render(request, 'easygo_review/custom_login.html')
 
 
+def custom_logout_view(request):
+    request.session.flush()    
+    return redirect('/')
+
+
 def get_authenticated_post(request):
     post_id = request.session.get('post_id')
     if post_id:
         try:
-            return Post.objects.get(id=post_id)
-        except Post.DoesNotExist:
+            return BlogPost.objects.get(id=post_id)
+        except BlogPost.DoesNotExist:
             return None
     return None
 
 
 class PostList(ListView):
-    model = EasygoPost
+    model = Post
     template_name = 'easygo_review/post_list.html'
     paginate_by = 6
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(PostList, self).get_context_data(**kwargs)
-        context['post_count'] = EasygoPost.objects.all().count()
+        context['post_count'] = Post.objects.all().count()
 
         for post in context['object_list']:
             if post.rating is None:
                 post.rating = 5
 
         send_notification_email.delay(RECIPIENT_EMAIL)
+
+        authenticated_post = get_authenticated_post(self.request)
+        context['authenticated_post'] = authenticated_post 
 
         return context
     
@@ -54,11 +61,11 @@ class PostSearch(PostList):
     def get_queryset(self):
         q = self.kwargs['q']
         try:
-            object_list = Post.objects.filter(Q(title__contains=q) | Q(content__contains=q))
+            object_list = EasygoPost.objects.filter(Q(title__contains=q) | Q(content__contains=q))
             return object_list
         except Exception as e:
             self.request.session['search_error'] = "An error occurred while searching. Please try right term again"
-            return Post.objects.none()
+            return EasygoPost.objects.none()
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(PostSearch, self).get_context_data()
@@ -72,7 +79,7 @@ class PostDetail(DetailView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(PostDetail, self).get_context_data(**kwargs)        
-        context['post_count'] = Post.objects.all().count()
+        context['post_count'] = EasygoPost.objects.all().count()
         context['comment_form'] = CommentForm()
 
         return context

@@ -14,7 +14,7 @@ urlpatterns = [
     path('create/', views.PostCreate.as_view(), name="easygo_review/create"),
     path('', views.PostList.as_view(), name="easygo_review"),
     path('custom_login/', views.custom_login_view, name='custom_login'),
-    path('logout/', auth_views.LogoutView.as_view(next_page='easygo_review'), name='logout'),
+    path('custom_logout/', views.custom_logout_view, name='custom_logout'),
 
 ]
 
