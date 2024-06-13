@@ -11,6 +11,7 @@ from .models import Post
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+
 @shared_task
 def create_event_on_calendar(instance_id):    
     # Fetch the Post instance
@@ -25,13 +26,28 @@ def create_event_on_calendar(instance_id):
 
     service = build('calendar', 'v3', credentials=credentials)        
     
-    paid_str = f'paid' if instance.paid else ''
-    reminder_str = f'!' if instance.reminder else ''
-    pending_str = f'?' if instance.discount else ''
-    cancelled_str = f'c' if instance.cancelled else ''    
-    title = " ".join([cancelled_str, reminder_str, pending_str, instance.pickup_time, instance.flight_number, 
-                      instance.flight_time, 'p'+str(instance.no_of_passenger), 
-                      paid_str, '$'+instance.price, instance.contact])
+    paid_str = 'paid' if instance.paid else ''
+    reminder_str = '!' if instance.reminder else ''
+    pending_str = '?' if instance.discount else ''
+    cancelled_str = 'c' if instance.cancelled else ''
+    pickup_time_str = instance.pickup_time or ''
+    flight_number_str = instance.flight_number or ''
+    flight_time_str = instance.flight_time or ''
+    no_of_passenger_str = f'p{instance.no_of_passenger}' if instance.no_of_passenger is not None else ''
+    price_str = f'${instance.price}' if instance.price is not None else ''
+    contact_str = instance.contact or ''
+    title = " ".join([
+        cancelled_str, 
+        reminder_str, 
+        pending_str, 
+        pickup_time_str, 
+        flight_number_str, 
+        flight_time_str, 
+        no_of_passenger_str,
+        paid_str, 
+        price_str,
+        contact_str
+    ]).strip()    
     address = " ".join([instance.street, instance.suburb])        
     message_parts = [instance.name, instance.email, 
                      'b'+str(instance.no_of_baggage) if instance.no_of_baggage is not None else '', 
