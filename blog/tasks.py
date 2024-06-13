@@ -24,18 +24,19 @@ def create_event_on_calendar(instance_id):
     credentials = service_account.Credentials.from_service_account_file(
         SERVICE_ACCOUNT_FILE, scopes=SCOPES, subject=DELEGATED_USER_EMAIL)
 
-    service = build('calendar', 'v3', credentials=credentials)        
-    
-    paid_str = 'paid' if instance.paid else ''
+    service = build('calendar', 'v3', credentials=credentials)  
+
+    cancelled_str = 'c' if instance.cancelled else ''
     reminder_str = '!' if instance.reminder else ''
     pending_str = '?' if instance.discount else ''
-    cancelled_str = 'c' if instance.cancelled else ''
     pickup_time_str = instance.pickup_time or ''
     flight_number_str = instance.flight_number or ''
     flight_time_str = instance.flight_time or ''
     no_of_passenger_str = f'p{instance.no_of_passenger}' if instance.no_of_passenger is not None else ''
+    paid_str = 'paid' if instance.paid else ''    
     price_str = f'${instance.price}' if instance.price is not None else ''
     contact_str = instance.contact or ''
+
     title = " ".join([
         cancelled_str, 
         reminder_str, 
@@ -48,14 +49,16 @@ def create_event_on_calendar(instance_id):
         price_str,
         contact_str
     ]).strip()    
+
     address = " ".join([instance.street, instance.suburb])        
     message_parts = [instance.name, instance.email, 
-                     'b'+str(instance.no_of_baggage) if instance.no_of_baggage is not None else '', 
+                     'b:'+str(instance.no_of_baggage) if instance.no_of_baggage is not None else '', 
                      'm:'+instance.message if instance.message is not None else '', 
                      'n:'+instance.notice if instance.notice is not None else '', 
                      "d:"+str(instance.return_flight_date), 
                      '$'+str(instance.paid) if instance.paid is not None else '']
-    message = " ".join(filter(None, message_parts))            
+    message = " ".join(filter(None, message_parts))      
+          
     flight_date = datetime.datetime.strptime(str(instance.flight_date), '%Y-%m-%d')
 
     if instance.pickup_time:
