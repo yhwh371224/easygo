@@ -9,6 +9,7 @@ handler500 = server_error
 urlpatterns = [
     path('', views.index, name='index'),
     path('about_us/', views.about_us, name='about_us'),
+    path('airport-shuttle-<str:suburb>/', views.airport_shuttle, name='airport_shuttle'),
     path('airport-transfers-<str:suburb>/', views.airport_transfers, name='airport_transfers'),
     path('booking/', views.booking, name="booking"),
     path('booking_detail/', views.booking_detail, name="booking_detail"),
