@@ -36,7 +36,7 @@ def create_event_on_calendar(instance_id):
     paid_str = 'paid' if instance.paid else ''    
     price_str = f'${instance.price}' if instance.price is not None else ''
     contact_str = instance.contact or ''
-    suburb_str = instance.suburb or ''
+    suburb_str = instance.suburb if instance.suburb else 'NSW'
 
     title = " ".join([
         cancelled_str, 
