@@ -38,7 +38,7 @@ def about_us(request):
 
 
 # Suburb names
-def airport_transfers(request, suburb):
+def airport_shuttle(request, suburb):
     suburbs = get_suburbs()
     more_suburbs = get_more_suburbs()
     suburb = suburb.replace('-', ' ').title()  
@@ -56,6 +56,27 @@ def airport_transfers(request, suburb):
         context = {'message': 'Suburb not found'}
         return render(request, 'error.html', context)
 
+    return render(request, 'basecamp/airport-shuttle-template.html', context)    
+
+
+def airport_transfers(request, suburb):
+    suburbs = get_suburbs()
+    more_suburbs = get_more_suburbs()
+    suburb = suburb.replace('-', ' ').title()  
+    if suburb in suburbs:
+        context = {
+            'suburb': suburb,
+            'details': suburbs[suburb]
+        }
+    elif suburb in more_suburbs:
+        context = {
+            'suburb': suburb, 
+            'details': more_suburbs[suburb]
+        }
+    else:        
+        context = {'message': 'Suburb not found'}
+        return render(request, 'error.html', context)
+    
     return render(request, 'basecamp/airport-transfers-template.html', context)
 
 
