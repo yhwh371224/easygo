@@ -2292,6 +2292,13 @@ def email_dispatch_detail(request):
                         'driver_name': driver_instance.driver_name, 'driver_contact': driver_instance.driver_contact, 
                         'driver_plate': driver_instance.driver_plate, 'driver_car': driver_instance.driver_car
                     })
+
+            if selected_option == "Gratitude For Payment":                     
+                user = Post.objects.filter(email=email).first()
+                if user:
+                    user.paid = "bank deposit"
+                    user.save()
+
             handle_email_sending(request, email, subject, template_name, context)
               
 
