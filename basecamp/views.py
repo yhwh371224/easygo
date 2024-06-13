@@ -2,7 +2,6 @@ from datetime import date, datetime, timedelta
 
 import logging
 import requests
-import random
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
@@ -14,7 +13,7 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.views.decorators.csrf import csrf_exempt
 
-from main.settings import RECIPIENT_EMAIL, DEFAULT_FROM_EMAIL
+from main.settings import RECIPIENT_EMAIL
 from blog.models import Post, Inquiry, Payment, Driver, Inquiry_point, Inquiry_cruise
 from blog.tasks import send_confirm_email, send_email_task, send_notice_email
 from basecamp.area import get_suburbs
