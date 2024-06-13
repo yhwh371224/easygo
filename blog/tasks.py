@@ -36,6 +36,7 @@ def create_event_on_calendar(instance_id):
     paid_str = 'paid' if instance.paid else ''    
     price_str = f'${instance.price}' if instance.price is not None else ''
     contact_str = instance.contact or ''
+    suburb_str = instance.suburb or ''
 
     title = " ".join([
         cancelled_str, 
@@ -58,7 +59,7 @@ def create_event_on_calendar(instance_id):
                      "d:"+str(instance.return_flight_date), 
                      '$'+str(instance.paid) if instance.paid is not None else '']
     message = " ".join(filter(None, message_parts))      
-          
+
     flight_date = datetime.datetime.strptime(str(instance.flight_date), '%Y-%m-%d')
 
     if instance.pickup_time:
