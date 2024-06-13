@@ -217,8 +217,8 @@
 
             {% for suburb, details in suburbs.items %}
               <div class="pb-1">
-                  <a class="card border-0 shadow card-hover mx-1" href="/airport-shuttle-{{ suburb|slugify }}/"></a>
-                  <!-- <a class="card border-0 shadow card-hover mx-1" href="/airport-transfers-{{ suburb|slugify }}/"></a> -->
+                  <a class="card border-0 shadow card-hover mx-1" href="/airport-shuttle-{{ suburb|slugify }}/">
+                  <!-- <a class="card border-0 shadow card-hover mx-1" href="/airport-transfers-{{ suburb|slugify }}/"> -->
                       <span class="badge badge-lg badge-floating badge-floating-end bg-danger" style="width: 5rem;">${{ details.price }}</span>
                       <div class="card-img-top card-img-gradient" style="position: relative; overflow: hidden; width: 100%; max-height: 360px;">
                           <img loading="lazy" src="{{ details.image_url }}" alt="airport shuttle {{ suburb }}" style="width: 100%; height: auto; display: block;" >
