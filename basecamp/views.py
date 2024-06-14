@@ -297,17 +297,8 @@ def sitemap(request):
     return render(request, 'basecamp/sitemap.xml')
 
 
-def soyoung(request): 
-    return render(request, 'basecamp/soyoung.html')
-
-
 def terms(request): 
     return render(request, 'basecamp/terms.html')
-
-
-def yoosung(request): 
-    return render(request, 'basecamp/yoosung.html')
-
 
 
 def verify_recaptcha(response):
@@ -1380,8 +1371,7 @@ def confirmation_detail(request):
         
         p.save()
 
-        rendering = render(request, 'basecamp/confirmation_detail.html',
-                        {'name' : name, 'email': email, })  
+        rendering = render(request, 'basecamp/inquiry_done.html')   
         
         html_content = render_to_string("basecamp/html_email-confirmation.html",
                                     {'company_name': company_name, 'name': name, 'contact': contact, 'email': email, 'email1': email1, 'flight_date': flight_date, 'flight_number': flight_number,
@@ -1653,7 +1643,6 @@ def confirm_booking_detail(request):
             Inquiry_point.objects.filter(email=email).first()
         ]
 
-        # None이 아닌 객체들만 필터링하고, 가장 최근에 생성된 객체를 찾는다.
         user = max((obj for obj in inquiries if obj is not None), default=None, key=lambda x: x.created)
 
         if not user:
@@ -1701,8 +1690,7 @@ def confirm_booking_detail(request):
         
         p.save()    
                 
-        return render(request, 'basecamp/confirmation_detail.html',
-                        {'name' : name, 'email': email, })
+        return render(request, 'basecamp/inquiry_done.html') 
         
     else:
         return render(request, 'basecamp/confirm_booking.html', {}) 
@@ -1798,8 +1786,7 @@ def sending_email_first_detail(request):
             email.attach_alternative(html_content, "text/html")
             email.send()
 
-        return render(request, 'basecamp/confirmation_detail.html',
-                        {'name' : user.name, 'email': email}) 
+        return render(request, 'basecamp/inquiry_done.html')  
     
     else:
         return render(request, 'beasecamp/sending_email_first.html', {})   
@@ -1899,8 +1886,7 @@ def sending_email_second_detail(request):
             user1.sent_email = True
             user1.save()
             
-        return render(request, 'basecamp/confirmation_detail.html',
-                        {'name' : user.name }) 
+        return render(request, 'basecamp/inquiry_done.html') 
     
     else:
         return render(request, 'basecamp/sending_email_second.html', {})
@@ -1947,8 +1933,7 @@ def sending_email_input_data_detail(request):
             email.send()
 
 
-        return render(request, 'basecamp/confirmation_detail.html',
-                        {'name' : user.name, 'email': email}) 
+        return render(request, 'basecamp/inquiry_done.html') 
     
     else:
         return render(request, 'beasecamp/sending_email_first.html', {})   
@@ -1990,7 +1975,7 @@ def save_data_only_detail(request):
         
         p.save()                   
         
-        return render(request, 'basecamp/confirmation_detail.html',{'name' : name, })
+        return render(request, 'basecamp/inquiry_done.html')
     
     else:
         return render(request, 'beasecamp/save_data_only.html', {})  
