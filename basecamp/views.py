@@ -2,6 +2,8 @@ from datetime import date, datetime, timedelta
 
 import logging
 import requests
+import stripe
+import json
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
@@ -12,9 +14,10 @@ from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 
 from main.settings import RECIPIENT_EMAIL
-from blog.models import Post, Inquiry, Payment, Driver, Inquiry_point, Inquiry_cruise
+from blog.models import Post, Inquiry, PayPalPayment, StripePayment, Driver, Inquiry_point, Inquiry_cruise
 from blog.tasks import send_confirm_email, send_email_task, send_notice_email
 from basecamp.area import get_suburbs
 from basecamp.area_full import get_more_suburbs
@@ -179,6 +182,10 @@ def more_suburbs(request):
 
 def payonline(request): 
     return render(request, 'basecamp/payonline.html')
+
+
+def payonline_combine(request): 
+    return render(request, 'basecamp/payonline_combine.html')
 
 
 def paypal_notice(request): 
@@ -2034,20 +2041,18 @@ def paypal_ipn_error_email(subject, exception, item_name, payer_email, gross_amo
     
 
 @csrf_exempt
-def paypal_ipn(request):   
-    if request.method != 'POST':
-        return HttpResponseNotAllowed(['POST'])
-    
+@require_POST
+def paypal_ipn(request):       
     if request.method == 'POST':
         item_name = request.POST.get('item_name')
         payer_email = request.POST.get('payer_email')
         gross_amount = request.POST.get('mc_gross')
         txn_id = request.POST.get('txn_id')
 
-        if Payment.objects.filter(txn_id=txn_id).exists():
+        if PayPalPayment.objects.filter(txn_id=txn_id).exists():
             return HttpResponse(status=200, content="Duplicate IPN Notification")
         
-        p = Payment(item_name=item_name, payer_email=payer_email, gross_amount=gross_amount, txn_id=txn_id)
+        p = PayPalPayment(item_name=item_name, payer_email=payer_email, gross_amount=gross_amount, txn_id=txn_id)
 
         try:
             p.save()      
@@ -2076,3 +2081,40 @@ def paypal_ipn(request):
 
     return HttpResponse(status=400)
 
+
+stripe.api_key = settings.STRIPE_LIVE_SECRET_KEY
+
+@csrf_exempt
+@require_POST
+def stripe_webhook(request):
+    payload = request.body
+    sig_header = request.META['HTTP_STRIPE_SIGNATURE']
+    endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
+
+    event = None
+
+    try:
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, endpoint_secret
+        )
+    except ValueError as e:
+        # Invalid payload
+        return JsonResponse({'error': 'Invalid payload'}, status=400)
+    except stripe.error.SignatureVerificationError as e:
+        # Invalid signature
+        return JsonResponse({'error': 'Invalid signature'}, status=400)
+
+    # Handle the event
+    if event['type'] == 'checkout.session.completed':
+        session = event['data']['object']
+        handle_checkout_session(session)
+
+    return JsonResponse({'status': 'success'}, status=200)
+
+def handle_checkout_session(session):
+    item_name = session.get('metadata', {}).get('item_name')
+    customer_email = session.get('customer_email')
+    amount_total = session.get('amount_total') / 100  # convert to original currency unit    
+
+    p = StripePayment(item_name=item_name, customer_email=customer_email, amount_total=amount_total)
+    p.save()      
