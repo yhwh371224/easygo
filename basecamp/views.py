@@ -2086,6 +2086,39 @@ stripe.api_key = settings.STRIPE_LIVE_SECRET_KEY
 
 @csrf_exempt
 @require_POST
+def create_stripe_checkout_session(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            item_name = data['item_name']
+            amount = int(float(data['amount']) * 100)  
+            customer_email = data['customer_email']
+
+            session = stripe.checkout.Session.create(
+                payment_method_types=['card'],
+                line_items=[{
+                    'price_data': {
+                        'currency': 'aud',
+                        'product_data': {'name': item_name},
+                        'unit_amount': amount,
+                    },
+                    'quantity': 1,
+                }],
+                mode='payment',
+                success_url='https://easygoshuttle.com.au/success/',
+                cancel_url='https://easygoshuttle.com.au/cancel/',
+                metadata={
+                    'item_name': item_name,
+                    'customer_email': customer_email,
+                    'amount_total': amount  # 센트 단위로 저장
+                }
+            )
+            return JsonResponse({'id': session.id})
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=403)
+
+@csrf_exempt
+@require_POST
 def stripe_webhook(request):
     payload = request.body
     sig_header = request.META['HTTP_STRIPE_SIGNATURE']
