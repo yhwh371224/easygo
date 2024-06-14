@@ -180,6 +180,10 @@ def more_suburbs(request):
     return render(request, 'basecamp/more_suburbs.html', {'more_suburbs': more_suburbs})
 
 
+def payment_cancel(request): 
+    return render(request, 'basecamp/payment_cancel.html')
+
+
 def payonline(request): 
     return render(request, 'basecamp/payonline.html')
 
@@ -2105,7 +2109,7 @@ def create_stripe_checkout_session(request):
                     'quantity': 1,
                 }],
                 mode='payment',
-                success_url='https://easygoshuttle.com.au/success/',
+                success_url='https://easygoshuttle.com.au/paypal_notice/',
                 cancel_url='https://easygoshuttle.com.au/cancel/',
                 metadata={
                     'item_name': item_name,
