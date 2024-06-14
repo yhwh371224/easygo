@@ -19,10 +19,11 @@
             <form class="login text-light text-center mb-4" method="POST" action="{% url 'easygo_review:custom_login' %}">
                 {% csrf_token %}
                 <label for="email">{% trans "Email" %}</label><br>
-                <input type="email" id="email" name="email" required><br><br>
+                <input type="email" id="email" name="email" required><br><br><br>
                 <button class="primaryAction btn btn-warning" type="submit">{% trans "Sign In" %}</button>
+                <br><br>
                 {% if error %}
-                    <p style="color: red;">{{ error }}</p>
+                    <p style="color: red;"><large>{{ error }}</large></p>
                 {% endif %}
             </form>
             
