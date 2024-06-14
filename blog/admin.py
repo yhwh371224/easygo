@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.admin import AdminSite
-from .models import Driver, Inquiry, Inquiry_cruise, Inquiry_point, Payment, Post
+from .models import Driver, Inquiry, Inquiry_cruise, Inquiry_point, PayPalPayment, StripePayment, Post
 
 
 class DriverAdmin(admin.ModelAdmin):
@@ -30,9 +30,14 @@ class InquiryPointAdmin(admin.ModelAdmin):
                      'street', 'name', 'contact']
 
 
-class PaymentAdmin(admin.ModelAdmin):
+class PayPalPaymentAdmin(admin.ModelAdmin):
     list_display = ['item_name', 'payer_email', 'gross_amount', 'txn_id', 'created']    
     search_fields = ['item_name', 'payer_email', 'gross_amount']
+
+
+class StripePaymentAdmin(admin.ModelAdmin):
+    list_display = ['item_name', 'customer_email', 'amount_total', 'created']    
+    search_fields = ['item_name', 'customer_email', 'amount_total']
 
 
 class PostAdmin(admin.ModelAdmin):
@@ -51,12 +56,14 @@ admin_site.register(Driver, DriverAdmin)
 admin_site.register(Inquiry, InquiryAdmin)
 admin_site.register(Inquiry_cruise, InquiryCruiseAdmin)
 admin_site.register(Inquiry_point, InquiryPointAdmin)
-admin_site.register(Payment, PaymentAdmin)
+admin_site.register(PayPalPayment, PayPalPaymentAdmin)
+admin_site.register(StripePayment, StripePaymentAdmin)
 admin_site.register(Post, PostAdmin)
 
 admin.site.register(Driver, DriverAdmin)
 admin.site.register(Inquiry, InquiryAdmin)
 admin.site.register(Inquiry_cruise, InquiryCruiseAdmin)
 admin.site.register(Inquiry_point, InquiryPointAdmin)
-admin.site.register(Payment, PaymentAdmin)
+admin.site.register(PayPalPayment, PayPalPaymentAdmin)
+admin.site.register(StripePayment, StripePaymentAdmin)
 admin.site.register(Post, PostAdmin)
