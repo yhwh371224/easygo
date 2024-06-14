@@ -94,6 +94,7 @@ s3transfer==0.7.0
 six==1.16.0
 soupsieve==2.5
 sqlparse==0.4.4
+stripe==9.11.0
 suit==2.0.2
 toml==0.10.2
 typing_extensions==4.8.0
