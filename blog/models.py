@@ -152,11 +152,21 @@ class Inquiry_point(models.Model):
         ordering = ['-created'] 
         
 
-class Payment(models.Model):
+class PayPalPayment(models.Model):
     item_name = models.CharField(max_length=100, blank=True, null=True)
     payer_email = models.EmailField(blank=True, null=True)
     gross_amount = models.CharField(max_length=30, blank=True, null=True)
     txn_id = models.CharField(max_length=30, blank=True, null=True)
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created']
+
+
+class StripePayment(models.Model):
+    item_name = models.CharField(max_length=100, blank=True, null=True)
+    customer_email = models.EmailField(blank=True, null=True)
+    amount_total = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
