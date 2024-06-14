@@ -188,6 +188,7 @@ USE_TZ = True
 
 AUTHENTICATION_BACKENDS = (    
     'axes.backends.AxesStandaloneBackend',
+    'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
     'blog.auth_backends.PostEmailBackend',
 )

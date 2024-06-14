@@ -7,8 +7,8 @@
     <title>Airport Transfers Sydney & Airport Shuttle services start from A$25</title>
     <meta name="google-site-verification" content="hae39L0Kv7JIxVc3YclvckH7Im5SdYa2hk_vZbGJIkA" />
     <meta name="description" content="Easygo Airport Shuttle provides a comfortable and reliable transfer service to/from Sydney Airport, Hotels, Cruise terminal. ✓ door to door service ✓ Fixed rates ✓ Flight tracking & free waiting time . Book Now To Secure Your Low Price!">
-    <meta name="keywords" content="airport shuttle sydney, airport transfers sydney, airport shuttle sydney prices, airport transfers near me, cruise transfers, shuttle bus, private transfers, maxi taxi, mini bus, hotel transfers">
-    <meta name="author" content="easycoding.live">
+    <meta name="keywords" content="airport shuttle, airport shuttle sydney, airport transfers sydney, airport shuttle sydney prices, airport transfers near me, private transfers sydney, airport pickup service, airport dropoff service, maxi taxi, mini buss">
+    <meta name="author" content="easygoshuttle.com.au">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" type="image/x-icon" href="{% static 'basecamp/favi/favicon.ico' %}">
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'basecamp/favi/apple-touch-icon.png' %}">
@@ -152,14 +152,14 @@
         <div class="d-lg-flex align-items-center bg-secondary border rounded-3 px-4 pt-4 pb-3" >
           <div class="d-sm-flex align-items-center flex-grow-1">
             <div class="mb-3 pb-1 w-100 mb-sm-4 me-sm-3">
-              <label class="form-label">Flight date</label>
+              <label class="form-label">Pickup date</label>
               <div class="input-group" >
                 <input class="form-control date-picker rounded" name="flight_date" required type="date" placeholder="Choose date" data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;F j, Y&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;}" >
 				<a class="date-picker" href="#"><i class="ai-calendar position-absolute top-50 end-0 translate-middle-y me-3"></i></a>
               </div>
             </div>
             <div class="mb-3 pb-1 w-100 mb-sm-4 me-sm-3">
-              <label class="form-label">From start point</label>
+              <label class="form-label">From: start point</label>
               <select class="form-select" name="direction" required>
                 {% include 'basecamp/suburbs_home.html' %}
               </select>
@@ -167,7 +167,7 @@
           </div>
           <div class="d-sm-flex align-items-center">
             <div class="mb-3 pb-1 w-100 mb-sm-4 me-sm-3">
-              <label class="form-label">To end point</label>
+              <label class="form-label">To: end point</label>
               <select class="form-select" name="suburb" required>
                 {% include 'basecamp/suburbs_home1.html' %}
               </select>
@@ -175,7 +175,7 @@
             <div class="mb-3 pb-1 w-100 mb-sm-4 me-sm-3">
               <label class="form-label">Passengers</label>
               <select class="form-select" name="no_of_passenger" required>
-          <option disabled selected value="">Number of people</option>                 
+          <option disabled selected value="" style="background-color: beige;">Number of people</option>                 
 				  <option value="1">1</option>
 				  <option value="2">2</option>
 				  <option value="3">3</option>
