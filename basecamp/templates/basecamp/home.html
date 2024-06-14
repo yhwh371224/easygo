@@ -159,15 +159,9 @@
               </div>
             </div>
             <div class="mb-3 pb-1 w-100 mb-sm-4 me-sm-3">
-              <label class="form-label">Direction</label>
+              <label class="form-label">Suburb or Hotel...</label>
               <select class="form-select" name="direction" required>
-                <option disabled selected value="">Select your direction...</option>                
-                <option value="Drop off to Domestic Airport">Drop off to Domestic Airport</option>
-                <option value="Drop off to Intl Airport">Drop off to Intl Airport</option>						
-                <option value="Pickup from Domestic Airport">Pickup from Domestic Airport</option>					
-                <option value="Pickup from Intl Airport">Pickup from Intl Airport</option>
-                <option value="To/From Cruise Transfers">To/From Cruise Transfers</option>
-                <option value="Point to Point">Point to Point transfers</option>                
+                {% include 'basecamp/suburbs_home.html' %}
               </select>
             </div>
           </div>
