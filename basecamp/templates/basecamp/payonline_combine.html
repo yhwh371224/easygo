@@ -51,7 +51,7 @@
             <div class="col-lg-5 col-md-4 offset-lg-1 pb-2 mb-5" style="margin-top: -260px;">
                 <div class="card border-3 shadow-lg" style="padding:2rem">
                     <!-- Payment forms -->
-                    <form method="post" id="paypal-form">
+                    <form method="post" id="payment-form">
                         {% csrf_token %}
                         <h3 class="fs-4 mb-0 text-center">PayPal / Stripe Checkout</h3>
                         <br><br>
@@ -112,8 +112,6 @@
                       gross_amount: gross_amount,	
             })
               }).then(function(response) {
-                  // Handle the payment success
-                  // alert('Payment completed successfully!');
                   window.location.href = "/paypal_notice/";
               });
           });
