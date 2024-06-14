@@ -73,7 +73,5 @@ urlpatterns = [
     path('sending_email_input_data_detail/', views.sending_email_input_data_detail, name="sending_email_input_data_detail"),
     path('service/', views.service, name='service'),
     path('sitemap/', views.sitemap, name='sitemap'),
-    path('soyoung/', views.soyoung),
     path('terms/', views.terms, name='terms'),
-    path('yoosung/', views.yoosung),
 ]
