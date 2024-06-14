@@ -125,8 +125,7 @@
         var item_name = document.getElementById("description").value;
         var amount = document.getElementById("amount").value;
         var gross_amount = (amount * 1.03).toFixed(2);
-
-        var customer_email = prompt("Please enter your email address:");
+        var customer_email = document.getElementById("email").value;
 
         fetch('/create-stripe-checkout-session', {
             method: 'POST',
