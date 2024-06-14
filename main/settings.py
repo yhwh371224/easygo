@@ -262,6 +262,11 @@ PAYPAL_CLIENT_SECRET = config('PAYPAL_CLIENT_SECRET')
 PAYPAL_RECEIVER_EMAIL = 'info@easygoshuttle.com.au'
 PAYPAL_IPN_URL = 'https://easygoshuttle.com.au/paypal_ipn/'
 
+# Stripe settings
+STRIPE_MODE = 'live' 
+STRIPE_LIVE_SECRET_KEY = config('STRIPE_LIVE_SECRET_KEY')
+STRIPE_WEBHOOK_SECRET = config('STRIPE_WEBHOOK_SECRET')
+
 # Email settings
 EMAIL_HOST = config('EMAIL_HOST')
 EMAIL_PORT = config('EMAIL_PORT')

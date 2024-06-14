@@ -49,6 +49,7 @@ urlpatterns = [
     path('p2p_single/', views.p2p_single, name="p2p_single"),    
     path('p2p_single_detail/', views.p2p_single_detail, name='p2p_single_detail'),    
     path('payonline/', views.payonline, name='payonline'),
+    path('payonline_combine/', views.payonline_combine, name='payonline_combine'),
     path('paypal_ipn/', paypal_ipn, name='paypal_ipn'),
     path('paypal_notice/', views.paypal_notice, name='paypal_notice'),
     path('price_detail/', views.price_detail, name='price_detail'),
