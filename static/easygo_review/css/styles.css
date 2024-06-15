@@ -41,5 +41,9 @@
     }
 }
 
-
+@media (max-width: 768px) {
+    .search-widget {
+        display: none;
+    }
+}
 
