@@ -2,43 +2,8 @@
 
 {% block content %}
 {% load custom_filters %}
-<div class="col-md-4 order-2 order-md-2" id="side-div">
-    <br/>
-    <h5><br/></h5>
-    <h5><br/></h5>
-    <!-- Note Widget -->
-    <div class="card my-4">
-        <h5 class="card-header" style="color:red">Note!</h5>
-        <div class="card-body">
-            <p class="card-text">
-                The content of the reviews on this page is exactly the same as the Google reviews our clients left
-                <br><br>      
-                    <a href="https://bit.ly/3xkLEUD" target="_blank">Google Reviews</a> 
-            </p>
-        </div> 
-    </div>
-    <br/>
-    <!-- Search Widget -->  
-    <div class="card my-4">     
-        <h5 class="card-header">Search review</h5>
-        <div class="card-body">
-            <div class="input-group">
-                <input type="text" id="search-input" onkeyup="wait_for_enterkey()" class="form-control" placeholder="Search for..."/>
-                    <span class="input-group-btn">
-                        <button class="btn btn-primary" type="button" onclick="search_post();">Go !</button>
-                    </span>
-            </div>
-            <div id="error-message" class="text-danger mt-2" style="display: none;"></div>
-        </div>
-    </div> 
-    {% if search_error %}
-        <script>
-            alert("{{ search_error|escapejs }}");
-        </script>
-    {% endif %}
-</div>       
 
-<div class="col-md-8 order-1 order-md-1" id="main-div">
+<div class="col-md-8 order-2 order-md-1" id="main-div">
     <br/>
     <div class="row">
         <div class="col-md-8" id="main-div">
@@ -115,5 +80,41 @@
         <h3>No Post</h3>
     {% endif %}
 </div>
+
+<div class="col-md-4 order-1 order-md-2" id="side-div">
+    <br/>
+    <h5><br/></h5>
+    <h5><br/></h5>
+    <!-- Note Widget -->
+    <div class="card my-4">
+        <h5 class="card-header" style="color:red">Note!</h5>
+        <div class="card-body">
+            <p class="card-text">
+                The content of the reviews on this page is exactly the same as the Google reviews our clients left
+                <br><br>      
+                    <a href="https://bit.ly/3xkLEUD" target="_blank">Google Reviews</a> 
+            </p>
+        </div> 
+    </div>
+    <br/>
+    <!-- Search Widget -->  
+    <div class="card my-4">     
+        <h5 class="card-header">Search review</h5>
+        <div class="card-body">
+            <div class="input-group">
+                <input type="text" id="search-input" onkeyup="wait_for_enterkey()" class="form-control" placeholder="Search for..."/>
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary" type="button" onclick="search_post();">Go !</button>
+                    </span>
+            </div>
+            <div id="error-message" class="text-danger mt-2" style="display: none;"></div>
+        </div>
+    </div> 
+    {% if search_error %}
+        <script>
+            alert("{{ search_error|escapejs }}");
+        </script>
+    {% endif %}
+</div>       
 
 {% endblock %}
