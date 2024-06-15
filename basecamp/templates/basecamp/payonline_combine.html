@@ -27,6 +27,7 @@
     <link rel="stylesheet" media="screen" href="/static/basecamp/css/flatpickr.min.css"/>
     <!-- Main Theme Styles + Bootstrap-->
     <link rel="stylesheet" media="screen" href="/static/basecamp/css/theme.min.css">
+    <script src="https://js.stripe.com/v3/"></script>
   </head>
   <body>
     <section class="jarallax bg-gradient pt-5 pb-7 pt-md-7" data-jarallax data-speed="0.25">
@@ -57,13 +58,13 @@
                         <br><br>
                         <div id="smart-button-container">
                             <div style="text-align: center"><small>BOOKING NAME</small></div>
-                            <div style="text-align: center"><label for="description"></label><input type="text" name="descriptionInput" id="description" value="" autocomplete="off"></div>
+                            <div style="text-align: center"><label for="description"></label><input type="text" name="descriptionInput" id="description" value="" ></div>
                             <p id="descriptionError" style="visibility: hidden; color:red; text-align: center;">Please enter your booking name</p>
                             <div style="text-align: center"><small>ENTER AMOUNT</small></div>
-                            <div style="text-align: center"><label for="amount"> </label><input name="amountInput" type="number" id="amount" value="" autocomplete="off"></div>
+                            <div style="text-align: center"><label for="amount"> </label><input name="amountInput" type="number" id="amount" value="" ></div>
                             <p id="priceLabelError" style="visibility: hidden; color:red; text-align: center;">Price only without $ sign</p>
                             <div style="text-align: center"><small>EMAIL</small></div>
-                            <div style="text-align: center"><label for="email"> </label><input type="email" name="emailInput" id="email" value="" autocomplete="email"></div>
+                            <div style="text-align: center"><label for="email"> </label><input type="email" name="emailInput" id="email" value=""></div>
                             <p id="emailError" style="visibility: hidden; color:red; text-align: center;">Please enter your email</p>
                             <div style="text-align: center; margin-top: 0.625rem;" id="paypal-button-container"></div>
                         </div>
@@ -118,8 +119,7 @@
       }
     }).render('#paypal-button-container');
     </script>
-
-    <script src="https://js.stripe.com/v3/"></script>
+    
     <script>
     var stripe = Stripe('pk_live_51J29VnI9LkpP3oK9Mg0KTeQPVnEfLlt6Z1ffuAaBoxvwGHVT7o37bLZBwBo2ylAhGzum0zSmrKkGOqvoDloi1Vyf004qgRrdaF');
         document.getElementById('stripe-button').addEventListener('click', function() {
