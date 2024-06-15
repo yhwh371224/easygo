@@ -57,13 +57,13 @@
                         <br><br>
                         <div id="smart-button-container">
                             <div style="text-align: center"><small>BOOKING NAME</small></div>
-                            <div style="text-align: center"><label for="description"></label><input type="text" name="descriptionInput" id="description" value=""></div>
+                            <div style="text-align: center"><label for="description"></label><input type="text" name="descriptionInput" id="description" value="" autocomplete="off"></div>
                             <p id="descriptionError" style="visibility: hidden; color:red; text-align: center;">Please enter your booking name</p>
                             <div style="text-align: center"><small>ENTER AMOUNT</small></div>
-                            <div style="text-align: center"><label for="amount"> </label><input name="amountInput" type="number" id="amount" value="" ></div>
+                            <div style="text-align: center"><label for="amount"> </label><input name="amountInput" type="number" id="amount" value="" autocomplete="off"></div>
                             <p id="priceLabelError" style="visibility: hidden; color:red; text-align: center;">Price only without $ sign</p>
                             <div style="text-align: center"><small>EMAIL</small></div>
-                            <div style="text-align: center"><label for="email"> </label><input type="email" name="emailInput" id="email" value="" ></div>
+                            <div style="text-align: center"><label for="email"> </label><input type="email" name="emailInput" id="email" value="" autocomplete="email"></div>
                             <p id="emailError" style="visibility: hidden; color:red; text-align: center;">Please enter your email</p>
                             <div style="text-align: center; margin-top: 0.625rem;" id="paypal-button-container"></div>
                         </div>
@@ -74,7 +74,7 @@
             </div>
         </div>
     </section>
-  <!-- <script src="https://www.paypal.com/sdk/js?client-id=AZ2xYI2bgydBrPHtPNum5eMNhxKhjgoBGlGYhbDGOVA5PwA99rfia8KitgAW0LErRFnjYnGVdkrbeLKn&components=buttons&enable-funding=card&disable-funding=paylater,venmo&currency=AUD" data-sdk-integration-source="integrationbuilder_sc"></script>
+  <script src="https://www.paypal.com/sdk/js?client-id=AZ2xYI2bgydBrPHtPNum5eMNhxKhjgoBGlGYhbDGOVA5PwA99rfia8KitgAW0LErRFnjYnGVdkrbeLKn&components=buttons&enable-funding=card&disable-funding=paylater,venmo&currency=AUD" data-sdk-integration-source="integrationbuilder_sc"></script>
   <script>
     paypal.Buttons({
       createOrder: function(data, actions) {
@@ -116,42 +116,42 @@
               });
           });
       }
-    }).render('#paypal-button-container'); -->
+    }).render('#paypal-button-container');
+    </script>
 
-    <script>    
-
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
     var stripe = Stripe('pk_live_51J29VnI9LkpP3oK9Mg0KTeQPVnEfLlt6Z1ffuAaBoxvwGHVT7o37bLZBwBo2ylAhGzum0zSmrKkGOqvoDloi1Vyf004qgRrdaF');
+        document.getElementById('stripe-button').addEventListener('click', function() {
+            var item_name = document.getElementById("description").value;
+            var amount = document.getElementById("amount").value;
+            var gross_amount = (amount * 1.03).toFixed(2);
+            var customer_email = document.getElementById("email").value;
 
-    document.getElementById('stripe-button').addEventListener('click', function() {
-        var item_name = document.getElementById("description").value;
-        var amount = document.getElementById("amount").value;
-        var gross_amount = (amount * 1.03).toFixed(2);
-        var customer_email = document.getElementById("email").value;
-
-        fetch('/create-stripe-checkout-session', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                item_name: item_name,
-                amount: gross_amount,
-                customer_email: customer_email
+            fetch('/create-stripe-checkout-session', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    item_name: item_name,
+                    amount: gross_amount,
+                    customer_email: customer_email
+                })
             })
-        })
-        .then(function(response) {
-            return response.json();
-        })
-        .then(function(session) {
-            return stripe.redirectToCheckout({ sessionId: session.id });
-        })
-        .then(function(result) {
-            if (result.error) {
-                alert(result.error.message);
-            }
-        })
-        .catch(function(error) {
-            console.error('Error:', error);
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(session) {
+                return stripe.redirectToCheckout({ sessionId: session.id });
+            })
+            .then(function(result) {
+                if (result.error) {
+                    alert(result.error.message);
+                }
+            })
+            .catch(function(error) {
+                console.error('Error:', error);
+            });
         });
-    });
     </script>
 
     <section class="container py-5 my-4 my-sm-0 py-sm-6 py-md-7">
