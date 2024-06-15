@@ -101,6 +101,10 @@ def confirmation(request):
     return render(request, 'basecamp/confirmation.html')
 
 
+def confirmation_multiplebookings(request): 
+    return render(request, 'basecamp/confirmation_multiplebookings.html')
+
+
 def confirm_booking(request): 
     return render(request, 'basecamp/confirm_booking.html')
 
@@ -1131,6 +1135,42 @@ def confirmation_detail(request):
 
     else:
         return render(request, 'basecamp/confirmation.html', {})
+    
+
+def confirmation_multiplebookings_detail(request): 
+    if request.method == "POST": 
+        name = request.POST.get('name')
+        contact = request.POST.get('contact')
+        email = request.POST.get('email')
+        field1 = request.POST.get('field1')
+        field2 = request.POST.get('field2')
+        field3 = request.POST.get('field3')
+        field4 = request.POST.get('field4')
+        field5 = request.POST.get('field5')
+        field6 = request.POST.get('field6')
+        field7 = request.POST.get('field7')
+        field8 = request.POST.get('field8')
+        field9 = request.POST.get('field9')
+        field10 = request.POST.get('field10')
+
+        html_content = render_to_string("basecamp/html_email-confirmation-multiplebookings.html",
+                                    {'name': name, 'contact': contact, 'email': email, 
+                                     'field1': field1, 'field2': field2,'field3': field3,'field4': field4,
+                                     'field5': field5,'field6': field6,'field7': field7,'field8': field8,
+                                      'field9': field9, 'field10': field10})
+        
+        text_content = strip_tags(html_content)
+        
+        email = EmailMultiAlternatives(
+            "Booking confirmation - EasyGo",
+            text_content,
+            '',
+            [email, RECIPIENT_EMAIL]
+        )
+        email.attach_alternative(html_content, "text/html")
+        email.send()
+
+    return render(request, 'basecamp/confirmation_multiplebookings.html')
 
 
 # airport booking by client
