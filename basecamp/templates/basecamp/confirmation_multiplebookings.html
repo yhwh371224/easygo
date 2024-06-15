@@ -11,21 +11,13 @@
         </div>
 		  <br>
 		  <br>
-		  <br>
-		  <br>
         <div class="container position-relative zindex-5 pt-3 pb-7 pt-md-0">
           <div class="row justify-content-center pb-7">
             <div class="col-lg-10">
               <h1 class="text-light">Booking Confirmation Form</h1>
               <div class="active" style="color:white">Please fill out the booking form&nbsp;		  
-				<a href="/horeb_yhwh/"><img src="https://s3.ap-southeast-2.amazonaws.com/easygoshuttle.com.au/thumbsup_120241.webp" title="source: imgur.com" alt="thumps_up" width="30"></a>
+				
 			  </div>
-			  <br>
-			  <br>
-				<a class="btn btn-primary" href="/sending_email_first/">Sending Email only (first)</a>&nbsp;|&nbsp;<a class="btn btn-success" href="/sending_email_second/">Sending Email only (second)</a><br>
-				<a class="btn btn-dark" href="/save_data_only/">Save Data only</a>&nbsp;|<a class="btn btn-warning" href="/return_trip/">return_trip</a>&nbsp;|&nbsp;<a class="btn btn-info" href="/invoice/">Send_invoice</a><br>
-				<a class="btn btn-primary" href="/email_dispatch/">email_dispatch</a>&nbsp;|&nbsp;<a class="btn btn-info" href="/confirm_booking/">confirm_booking</a><br>				
-				<a class="btn btn-primary" href="/sending_email_input_data/">Sending email for wrong data</a>&nbsp;<br>				
 			</div>
             </div>
           </div>
@@ -44,26 +36,25 @@
 				<div class="card text-white bg-secondary p-4">				
                 <div class="mb-3 pb-1">
                   <label class="form-label" >Full name</label>
-                  <input class="form-control" type="text"  placeholder="John Doe" required name="name">
+                  <input class="form-control" type="text"  placeholder="John Doe" name="name">
                   <div class="invalid-feedback">Please enter your full name!</div>
                 </div>
 				<div class="mb-3 pb-1">
 					<label class="form-label" >Contact number</label>
-					<input class="form-control" type="text"  placeholder="Your mobile phone number" required name="contact">
+					<input class="form-control" type="text"  placeholder="Your mobile phone number" name="contact">
 					<div class="invalid-feedback">Please enter your mobile phone number!</div>
 				  </div>
 				<div class="mb-3 pb-1">
 					<label class="form-label" >Email address</label>
-					<input class="form-control" type="email"  placeholder="j.doe@example.com" required name="email">
+					<input class="form-control" type="email"  placeholder="j.doe@example.com" name="email">
 					<div class="invalid-feedback">Please enter a valid email address!</div>
-				</div></div>
-				<div class="mb3 pb-1" >					
-					<label class="form-label"></label>									      
 				</div>
 				<div class="mb-3 pb-1">
-					<label class="form-label" >Field 1</label>
-					<input class="form-control" type="text"  placeholder="John Doe" name="field1">					
-				</div>	
+					<label class="form-label" >no of Passenger</label>
+					<input class="form-control" type="text"  placeholder="Your mobile phone number" name="no_of_passenger">
+					<div class="invalid-feedback">Please enter your mobile phone number!</div>
+				  </div>
+			</div>		
 				<div class="mb-3 pb-1">
 					<label class="form-label" >Field 1</label>
 					<input class="form-control" type="text"  placeholder="John Doe" name="field1">					
@@ -98,11 +89,16 @@
 				</div>
 				<div class="mb-3 pb-1">
 					<label class="form-label" >Field 9</label>
-					<input class="form-control" type="text"  placeholder="John Doe" name="field1">					
+					<input class="form-control" type="text"  placeholder="John Doe" name="field9">					
 				</div>
 				<div class="mb-3 pb-1">
 					<label class="form-label" >Field 10</label>
-					<input class="form-control" type="text"  placeholder="John Doe" name="field1">					
+					<input class="form-control" type="text"  placeholder="John Doe" name="field10">					
+				</div>
+				<div class="mb-3 pb-1">
+					<label class="form-label" >Message</label>
+					<textarea class="form-control" name="message" id="cont-message" rows="5" placeholder="Write your message here"></textarea>
+					<div class="invalid-feedback">Please write a message!</div>
 				</div>
 				
 				<div class="text-center pt-2">

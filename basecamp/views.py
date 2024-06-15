@@ -1142,6 +1142,7 @@ def confirmation_multiplebookings_detail(request):
         name = request.POST.get('name')
         contact = request.POST.get('contact')
         email = request.POST.get('email')
+        no_of_passenger = request.POST.get('no_of_passenger')
         field1 = request.POST.get('field1')
         field2 = request.POST.get('field2')
         field3 = request.POST.get('field3')
@@ -1152,12 +1153,13 @@ def confirmation_multiplebookings_detail(request):
         field8 = request.POST.get('field8')
         field9 = request.POST.get('field9')
         field10 = request.POST.get('field10')
+        message = request.POST.get('message')
 
         html_content = render_to_string("basecamp/html_email-confirmation-multiplebookings.html",
-                                    {'name': name, 'contact': contact, 'email': email, 
+                                    {'name': name, 'contact': contact, 'email': email, 'no_of_passenger': no_of_passenger,
                                      'field1': field1, 'field2': field2,'field3': field3,'field4': field4,
                                      'field5': field5,'field6': field6,'field7': field7,'field8': field8,
-                                      'field9': field9, 'field10': field10})
+                                      'field9': field9, 'field10': field10, 'message': message})
         
         text_content = strip_tags(html_content)
         
@@ -1165,7 +1167,7 @@ def confirmation_multiplebookings_detail(request):
             "Booking confirmation - EasyGo",
             text_content,
             '',
-            [email, RECIPIENT_EMAIL]
+            [RECIPIENT_EMAIL]
         )
         email.attach_alternative(html_content, "text/html")
         email.send()
