@@ -232,32 +232,18 @@
                                                 <p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                    
                                                     Thank you for reaching out with your inquiry.<br><br>													                                            
 												 </p>
-												 <p style="Margin:0;font-size:12px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;"> 
-                                                    Pickup date:  {{ flight_date }}<br>
-													Pickup time:  {{ pickup_time }}<br>													
-													Start Point:  {{ direction }}<br>
-													End Point:{{ street }},&nbsp;{% if suburb %}&nbsp;{{ suburb }},{% endif %}<br>
-                                                    Number of Passenger:  {{ no_of_passenger }}<br>
-													{% if flight_number %}Flight number: {{ flight_number }}<br>{% endif %}	
-													{% if no_of_baggage %}Number of baggage: {{ no_of_baggage }}<br>{% endif %}
-													{% if return_pickup_time %}
-													<br>
-													<span style="font-weight:bold; color: #bdb1a6">Return direction:  {{ return_direction }}</span><br>													
-													<span style="font-weight:bold; color: #bdb1a6">Return flight date:  {{ return_flight_date }}</span><br>   
-													{% if return_flight_number %}<span style="font-weight:bold; color: #bdb1a6">Return flight number: {{ return_flight_number }}</span><br>{% endif %}
-													{% if return_flight_time %}<span style="font-weight:bold; color: #bdb1a6">Return flight time: {{ return_flight_time }}</span><br>{% endif %}                                                 
-													<span style="font-weight:bold; color: #bdb1a6">Return pickup time:  {{ return_pickup_time }}</span><br><br>
-												{% endif %}     	
+												<p style="Margin:0;font-size:12px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;"> 
+                                                    Pickup date: {{ flight_date }}<br>
+													Pickup time: {{ pickup_time }}<br>													
+													Start Point: {{ direction }}<br>
+													End Point: {{ suburb }}<br>
+                                                    Number of Passenger:  {{ no_of_passenger }}<br>													
                                                 {% if message %}												
                                                     Message: {{ message }}<br>
                                                 {% endif %}													    											                                    
 												</p>
 												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;">
-												{% if return_pickup_time %}
-													The cost for this booking will be ${{ price }} for both trips&nbsp;
-												{% else %}
-													The cost for this booking will be ${{ price }} for a single trip&nbsp;
-												{% endif %}
+													The cost for this booking will be ${{ price }} for a single trip&nbsp;												
 												{% if toll %}
 													({{ toll }})
 												{% endif %}
@@ -272,7 +258,7 @@
 													There will be no detours or additional stops during the ride<br><br>													
 												{% endif %}							
 												
-												Kindly inform us if you are happy to proceed with the booking <br><br></p>								
+													Kindly inform us if you are happy to proceed with the booking <br><br></p>								
 																								
 												<p style="Margin:0;font-size:13px; line-height:22px;Margin-bottom:12px;">
                                                     Best Regards,<br> 
