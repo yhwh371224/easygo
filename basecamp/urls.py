@@ -18,7 +18,6 @@ urlpatterns = [
     path('confirmation/', views.confirmation, name="confirmation"),
     path('confirmation_detail/', views.confirmation_detail, name='confirmation_detail'),
     path('confirmation_multiplebookings/', views.confirmation_multiplebookings, name='confirmation_multiplebookings'),
-    path('confirmation_multiplebookings_detail/', views.confirmation_multiplebookings_detail, name='confirmation_multiplebookings_detail'),
     path('confirm_booking/', views.confirm_booking, name="confirm_booking"),
     path('confirm_booking_detail/', views.confirm_booking_detail, name='confirm_booking_detail'),
     path('cruise_booking/', views.cruise_booking, name="cruise_booking"),
