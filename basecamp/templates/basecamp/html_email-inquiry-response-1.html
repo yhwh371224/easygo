@@ -233,15 +233,14 @@
                                                     Thank you for reaching out with your inquiry.<br><br>													                                            
 												 </p>
 												 <p style="Margin:0;font-size:12px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;"> 
-                                                    Email:  {{ email }}<br>
-													Direction:  {{ direction }}<br>
-                                                    Flight date:  {{ flight_date }}<br>
-													{% if flight_number %}Flight number: {{ flight_number }}<br>{% endif %}
-													Pickup time:  {{ pickup_time }}<br>
-													Address:{% if street %}&nbsp;{{ street }},{% endif %}&nbsp;{{ suburb }}<br>      
+                                                    Pickup date:  {{ flight_date }}<br>
+													Pickup time:  {{ pickup_time }}<br>													
+													Start Point:  {{ direction }}<br>
+													End Point:{{ street }},&nbsp;{% if suburb %}&nbsp;{{ suburb }},{% endif %}<br>
                                                     Number of Passenger:  {{ no_of_passenger }}<br>
-												{% if no_of_baggage %}Number of baggage: {{ no_of_baggage }}<br>{% endif %}
-												{% if return_pickup_time %}
+													{% if flight_number %}Flight number: {{ flight_number }}<br>{% endif %}	
+													{% if no_of_baggage %}Number of baggage: {{ no_of_baggage }}<br>{% endif %}
+													{% if return_pickup_time %}
 													<br>
 													<span style="font-weight:bold; color: #bdb1a6">Return direction:  {{ return_direction }}</span><br>													
 													<span style="font-weight:bold; color: #bdb1a6">Return flight date:  {{ return_flight_date }}</span><br>   
