@@ -235,21 +235,20 @@
                                                     Please find your booking details below:<br>                                                   
                                                 </p>
 												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">  
-												{% if company_name %}
-													{{ company_name }}: {{ email1 }}<br>													
-												{% endif %}		
                                                     Contact number: {{ contact }}<br>
                                                     Email: {{ email }}<br>
-                                                {{ field 1 }}<br>
-                                                {{ field 2 }}<br>
-                                                {{ field 3 }}<br>
-                                                {{ field 4 }}<br>
-                                                {{ field 5 }}<br>
-                                                {{ field 6 }}<br>
-                                                {{ field 7 }}<br>
-                                                {{ field 8 }}<br>
-                                                {{ field 9 }}<br>
-                                                {{ field 10 }}<br>											
+                                                    Number of Passengers: {{ no_of_passenger }}<br><br>
+                                                    {{ field1 }}<br>
+                                                    {{ field2 }}<br>
+                                                    {{ field3 }}<br>
+                                                    {{ field4 }}<br>
+                                                    {{ field5 }}<br>
+                                                    {{ field6 }}<br>
+                                                    {{ field7 }}<br>
+                                                    {{ field8 }}<br>
+                                                    {{ field9 }}<br>
+                                                    {{ field10 }}<br><br>	
+                                                    {{ message }}										
 												</p>
 												<!-- Meeting point  -->												
 												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
@@ -269,13 +268,6 @@
                                                     You will receive an invoice for your booking and you can choose the method that is most convenient for you to proceed with the payment.<br> 
                                                     If you have any further questions, feel free to contact us anytime.<br>                                              
                                                 </p>
-												
-												<!-- If notice -->
-												{% if notice %}
-												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
-												Note: <span style="font-weight:bold; color: #d39383">{{ notice }}</span><br><br></p>
-												{% endif %}
-
 												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
 													We will send you a reminder email closer to the date of your booking.<br><br>                                                 
                                                     Thank you again for booking with us. We look forward to seeing you on time<br><br></p>   
