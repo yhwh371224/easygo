@@ -26,8 +26,7 @@
     <link rel="stylesheet" media="screen" href="/static/basecamp/css/tiny-slider.css"/>
     <link rel="stylesheet" media="screen" href="/static/basecamp/css/flatpickr.min.css"/>
     <!-- Main Theme Styles + Bootstrap-->
-    <link rel="stylesheet" media="screen" href="/static/basecamp/css/theme.min.css">
-    <script async src="https://js.stripe.com/v3/"></script>
+    <link rel="stylesheet" media="screen" href="/static/basecamp/css/theme.min.css">    
   </head>
   <body>
     <section class="jarallax bg-gradient pt-5 pb-7 pt-md-7" data-jarallax data-speed="0.25">
@@ -75,85 +74,59 @@
             </div>
         </div>
     </section>
-  <script src="https://www.paypal.com/sdk/js?client-id=AZ2xYI2bgydBrPHtPNum5eMNhxKhjgoBGlGYhbDGOVA5PwA99rfia8KitgAW0LErRFnjYnGVdkrbeLKn&components=buttons&enable-funding=card&disable-funding=paylater,venmo&currency=AUD" data-sdk-integration-source="integrationbuilder_sc"></script>
-  <script>
-    paypal.Buttons({
-      createOrder: function(data, actions) {
-        var item_name = document.getElementById("description").value;
-        var amount = document.getElementById("amount").value;
-        var gross_amount = (amount * 1.03).toFixed(2);
-        
-        // Set up the transaction
-        return actions.order.create({
-          purchase_units: [{
-            amount: {
-              value: gross_amount
-            },
-            description: item_name,
-          }]
-        });
-      },
-      onApprove: function(data, actions) {
-          // Capture the funds from the transaction
-          return actions.order.capture().then(function(details) {
-              // Create a new Payment object and save it to the database
-              var item_name = document.getElementById("description").value;
-              var payer_email = details.payer.email_address;
-              var amount = document.getElementById("amount").value;
-              var gross_amount = (amount * 1.03).toFixed(2);
-          
-              return fetch('/paypal_ipn/', {
-                  method: 'POST',
-                  headers: {
-                      'Content-Type': 'application/json',						
-                  },
-                  body: JSON.stringify({
-                      item_name: item_name,
-                      payer_email: payer_email,
-                      gross_amount: gross_amount,	
-            })
-              }).then(function(response) {
-                  window.location.href = "/paypal_notice/";
-              });
-          });
-      }
-    }).render('#paypal-button-container');
-    </script>
-    
+
+    <script async src="https://js.stripe.com/v3/buy-button.js"></script>
+    <stripe-buy-button
+      buy-button-id="buy_btn_1PRwL0I9LkpP3oK9idlVAzlE"
+      publishable-key="pk_live_51J29VnI9LkpP3oK9Mg0KTeQPVnEfLlt6Z1ffuAaBoxvwGHVT7o37bLZBwBo2ylAhGzum0zSmrKkGOqvoDloi1Vyf004qgRrdaF"
+    >
+    </stripe-buy-button>
+
+    <script src="https://www.paypal.com/sdk/js?client-id=AZ2xYI2bgydBrPHtPNum5eMNhxKhjgoBGlGYhbDGOVA5PwA99rfia8KitgAW0LErRFnjYnGVdkrbeLKn&components=buttons&enable-funding=card&disable-funding=paylater,venmo&currency=AUD" data-sdk-integration-source="integrationbuilder_sc"></script>
     <script>
-    var stripe = Stripe('pk_live_51J29VnI9LkpP3oK9Mg0KTeQPVnEfLlt6Z1ffuAaBoxvwGHVT7o37bLZBwBo2ylAhGzum0zSmrKkGOqvoDloi1Vyf004qgRrdaF');
-        document.getElementById('stripe-button').addEventListener('click', function() {
+        paypal.Buttons({
+          createOrder: function(data, actions) {
             var item_name = document.getElementById("description").value;
             var amount = document.getElementById("amount").value;
             var gross_amount = (amount * 1.03).toFixed(2);
-            var customer_email = document.getElementById("email").value;
 
-            fetch('/create-stripe-checkout-session', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    item_name: item_name,
-                    amount: gross_amount,
-                    customer_email: customer_email
-                })
-            })
-            .then(function(response) {
-                return response.json();
-            })
-            .then(function(session) {
-                return stripe.redirectToCheckout({ sessionId: session.id });
-            })
-            .then(function(result) {
-                if (result.error) {
-                    alert(result.error.message);
-                }
-            })
-            .catch(function(error) {
-                console.error('Error:', error);
+            // Set up the transaction
+            return actions.order.create({
+              purchase_units: [{
+                amount: {
+                  value: gross_amount
+                },
+                description: item_name,
+              }]
             });
-        });
-    </script>
-
+          },
+          onApprove: function(data, actions) {
+              // Capture the funds from the transaction
+              return actions.order.capture().then(function(details) {
+                  // Create a new Payment object and save it to the database
+                  var item_name = document.getElementById("description").value;
+                  var payer_email = details.payer.email_address;
+                  var amount = document.getElementById("amount").value;
+                  var gross_amount = (amount * 1.03).toFixed(2);
+            
+                  return fetch('/paypal_ipn/', {
+                      method: 'POST',
+                      headers: {
+                          'Content-Type': 'application/json',						
+                      },
+                      body: JSON.stringify({
+                          item_name: item_name,
+                          payer_email: payer_email,
+                          gross_amount: gross_amount,	
+                })
+                  }).then(function(response) {
+                      window.location.href = "/paypal_notice/";
+                  });
+              });
+          }
+        }).render('#paypal-button-container');
+    </script>   
+    
     <section class="container py-5 my-4 my-sm-0 py-sm-6 py-md-7">
     <br/>
     <h3 class="text-center mb-4">Safe Security Guaranteed</h3>
@@ -174,6 +147,12 @@
     <p class="fs-sm mb-3 order-md-1"><span class="text-light opacity-50 me-1">© 2022 EasyGo. All rights reserved. Made by</span><a class="nav-link-style nav-link-light" href="https://easycoding.live" target="_blank" rel="noopener">EasyCoding.live</a></p>
   </div>
 </footer>
+<script>
+  document.getElementById('stripe-button').addEventListener('click', function() {
+      window.location.href = 'https://buy.stripe.com/7sIcP940RbKH7LO6ow'; 
+  });
+</script>
+
 <!-- Vendor scrits: js libraries and plugins-->
 <script src="/static/basecamp/js/bootstrap.bundle.min.js"></script>
 <script src="/static/basecamp/js/simplebar.min.js"></script>
@@ -185,6 +164,7 @@
 <script src="/static/basecamp/js/date-picker.js"></script>
 <!-- Main theme script-->
 <script src="/static/basecamp/js/theme.min.js"></script>
+
   
 </body>
 </html>
