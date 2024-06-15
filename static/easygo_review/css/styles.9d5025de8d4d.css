@@ -53,23 +53,3 @@ body {
     }
 }
 
-@media (max-width: 768px) {
-    #side-div, #main-div {
-        margin-bottom: 10px; /* 모바일 환경에서 마진 줄이기 */
-    }
-
-    .container {
-        padding-left: 10px;
-        padding-right: 10px;
-    }
-
-    .navbar + #side-div {
-        margin-top: 10px; /* navbar와 side-div 간의 간격 줄이기 */
-    }
-}
-
-@media (max-width: 768px) {
-    .side-h {
-        display: none !important;
-    }
-}
