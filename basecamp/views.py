@@ -1135,44 +1135,6 @@ def confirmation_detail(request):
 
     else:
         return render(request, 'basecamp/confirmation.html', {})
-    
-
-def confirmation_multiplebookings_detail(request): 
-    if request.method == "POST": 
-        name = request.POST.get('name')
-        contact = request.POST.get('contact')
-        email = request.POST.get('email')
-        no_of_passenger = request.POST.get('no_of_passenger')
-        field1 = request.POST.get('field1')
-        field2 = request.POST.get('field2')
-        field3 = request.POST.get('field3')
-        field4 = request.POST.get('field4')
-        field5 = request.POST.get('field5')
-        field6 = request.POST.get('field6')
-        field7 = request.POST.get('field7')
-        field8 = request.POST.get('field8')
-        field9 = request.POST.get('field9')
-        field10 = request.POST.get('field10')
-        message = request.POST.get('message')
-
-        html_content = render_to_string("basecamp/html_email-confirmation-multiplebookings.html",
-                                    {'name': name, 'contact': contact, 'email': email, 'no_of_passenger': no_of_passenger,
-                                     'field1': field1, 'field2': field2,'field3': field3,'field4': field4,
-                                     'field5': field5,'field6': field6,'field7': field7,'field8': field8,
-                                      'field9': field9, 'field10': field10, 'message': message})
-        
-        text_content = strip_tags(html_content)
-        
-        email = EmailMultiAlternatives(
-            "Booking confirmation - EasyGo",
-            text_content,
-            '',
-            [RECIPIENT_EMAIL]
-        )
-        email.attach_alternative(html_content, "text/html")
-        email.send()
-
-    return render(request, 'basecamp/confirmation_multiplebookings.html')
 
 
 # airport booking by client
@@ -2036,7 +1998,8 @@ def email_dispatch_detail(request):
             "More details Inquiry": ("basecamp/html_email-response-more-details.html", "More Details Inquiry - EasyGo"),
             "Arrival Notice Today": ("basecamp/html_email-today.html", "Arrival Notice Today - EasyGo"),
             "Requested driver contact": ("basecamp/html_email-response-driver-contact.html", "For driver contact - EasyGo"),
-            "Shared ride discount": ("basecamp/html_email-shared-discount.html", "Discount notice - EasyGo")
+            "Shared ride discount": ("basecamp/html_email-shared-discount.html", "Discount notice - EasyGo"),
+            "Confirmation multiplebookings": ("basecamp/html_email-confirmation-multiplebookings.html", "Booking Confirmation - EasyGo")
         }
 
         if selected_option in template_options:
