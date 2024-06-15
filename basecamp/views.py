@@ -2014,7 +2014,7 @@ def email_dispatch_detail(request):
         if not user:
             user = Inquiry.objects.filter(email=email).first()
 
-        if adjustment_time:
+        if adjustment_time and user:
             if user.return_pickup_time == 'x':
                 user_1 = Post.objects.filter(email=email)[1]
                 user_1.pickup_time = adjustment_time
@@ -2041,8 +2041,9 @@ def email_dispatch_detail(request):
 
         if selected_option in template_options:
             template_name, subject = template_options[selected_option]
-            context = {'name': user.name, 'adjustment_time': adjustment_time}
-            if selected_option == "Arrival Notice Today":
+            context = {'email': email, 'name': user.name, 'adjustment_time': adjustment_time}
+
+            if selected_option == "Arrival Notice Today" and user:
                 today = date.today()     
                 user_today = Post.objects.filter(email=email, flight_date=today).first()
                 if user_today:
@@ -2054,15 +2055,12 @@ def email_dispatch_detail(request):
                         'driver_plate': driver_instance.driver_plate, 'driver_car': driver_instance.driver_car
                     })
 
-            if selected_option == "Gratitude For Payment":                     
-                user = Post.objects.filter(email=email).first()
-                if user:
-                    user.paid = "bank deposit"
-                    user.save()
+            if selected_option == "Gratitude For Payment" and user:                     
+                user.paid = "bank deposit"
+                user.save()
 
             handle_email_sending(request, email, subject, template_name, context)
               
-
         return render(request, 'basecamp/inquiry_done.html')  
     
     else:
