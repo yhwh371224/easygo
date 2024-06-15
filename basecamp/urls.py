@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import paypal_ipn, server_error
+from .views import paypal_ipn, create_stripe_checkout_session, server_error
 
 app_name = "basecamp"
 
@@ -20,6 +20,7 @@ urlpatterns = [
     path('confirmation_multiplebookings/', views.confirmation_multiplebookings, name='confirmation_multiplebookings'),
     path('confirm_booking/', views.confirm_booking, name="confirm_booking"),
     path('confirm_booking_detail/', views.confirm_booking_detail, name='confirm_booking_detail'),
+    path('create-stripe-checkout-session/', create_stripe_checkout_session, name='create-stripe-checkout-session'),
     path('cruise_booking/', views.cruise_booking, name="cruise_booking"),
     path('cruise_booking_detail/', views.cruise_booking_detail, name='cruise_booking_detail'),
     path('cruise_inquiry/', views.cruise_inquiry, name="cruise_inquiry"),
