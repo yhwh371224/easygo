@@ -67,9 +67,3 @@ body {
         margin-top: 10px; /* navbar와 side-div 간의 간격 줄이기 */
     }
 }
-
-@media (max-width: 768px) {
-    .side-h {
-        display: none !important;
-    }
-}
