@@ -2124,6 +2124,7 @@ def create_stripe_checkout_session(request):
             return JsonResponse({'id': session.id})
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=403)
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 @csrf_exempt
 @require_POST
