@@ -2045,8 +2045,7 @@ def paypal_ipn_error_email(subject, exception, item_name, payer_email, gross_amo
         settings.DEFAULT_FROM_EMAIL,
         [RECIPIENT_EMAIL],  
         fail_silently=False,
-    )  
-    
+    )      
 
 @csrf_exempt
 @require_POST
@@ -2093,44 +2092,26 @@ def paypal_ipn(request):
 stripe.api_key = settings.STRIPE_LIVE_SECRET_KEY
 
 @csrf_exempt
-@require_POST
 def create_stripe_checkout_session(request):
     if request.method == 'POST':
-        try:
-            data = json.loads(request.body)
-            item_name = data['item_name']
-            amount = int(float(data['amount']) * 100)  
-            customer_email = data['customer_email']
-
-            session = stripe.checkout.Session.create(
-                payment_method_types=['card'],
-                line_items=[{
-                    'price_data': {
-                        'currency': 'aud',
-                        'product_data': {'name': item_name},
-                        'unit_amount': amount,
-                    },
-                    'quantity': 1,
-                }],
-                mode='payment',
-                success_url='https://easygoshuttle.com.au/paypal_notice/',
-                cancel_url='https://easygoshuttle.com.au/cancel/',
-                metadata={
-                    'item_name': item_name,
-                    'customer_email': customer_email,
-                    'amount_total': amount  # 센트 단위로 저장
-                }
-            )
-            return JsonResponse({'id': session.id})
-        except Exception as e:
-            return JsonResponse({'error': str(e)}, status=403)
-    return JsonResponse({'error': 'Invalid request method'}, status=400)
+        session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=[{
+            'price': 'price_1PRwKAI9LkpP3oK9hQF7BHj7', 
+            'quantity': 1,
+            }],
+            mode='payment',
+            success_url='https://easygoshuttle.com.au/paypal_notice/',
+            cancel_url='https://easygoshuttle.com.au/cancel/',                
+        )
+        
+        return JsonResponse({'id': session.id})
+       
 
 @csrf_exempt
-@require_POST
 def stripe_webhook(request):
     payload = request.body
-    sig_header = request.META['HTTP_STRIPE_SIGNATURE']
+    sig_header = request.headers.get('Stripe-Signature')
     endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
 
     event = None
@@ -2154,9 +2135,9 @@ def stripe_webhook(request):
     return JsonResponse({'status': 'success'}, status=200)
 
 def handle_checkout_session(session):
-    item_name = session.get('metadata', {}).get('item_name')
-    customer_email = session.get('customer_email')
-    amount_total = session.get('amount_total') / 100  # convert to original currency unit    
+    user_name = session.get('client_reference_id', '')
+    customer_email = session.get('customer_details', {}).get('email', '')
+    amount_total = session.get('amount_total', 0)
 
-    p = StripePayment(item_name=item_name, customer_email=customer_email, amount_total=amount_total)
+    p = StripePayment(user_name=user_name, customer_email=customer_email, amount_total=amount_total)
     p.save()      

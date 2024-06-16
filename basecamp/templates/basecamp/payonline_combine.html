@@ -26,7 +26,8 @@
     <link rel="stylesheet" media="screen" href="/static/basecamp/css/tiny-slider.css"/>
     <link rel="stylesheet" media="screen" href="/static/basecamp/css/flatpickr.min.css"/>
     <!-- Main Theme Styles + Bootstrap-->
-    <link rel="stylesheet" media="screen" href="/static/basecamp/css/theme.min.css">    
+    <link rel="stylesheet" media="screen" href="/static/basecamp/css/theme.min.css">   
+    <script src="https://js.stripe.com/v3/"></script> 
   </head>
   <body>
     <section class="jarallax bg-gradient pt-5 pb-7 pt-md-7" data-jarallax data-speed="0.25">
@@ -52,35 +53,43 @@
                 <div class="card border-3 shadow-lg" style="padding:2rem">
                     <!-- Payment forms -->
                     <form method="post" id="payment-form">
-                        {% csrf_token %}
-                        <h3 class="fs-4 mb-0 text-center">PayPal / Stripe Checkout</h3>
-                        <br><br>
+                        {% csrf_token %}                        
+                        <h3 class="fs-4 mb-0 text-center">PayPal Checkout</h3>
+                        <br>
                         <div id="smart-button-container">
                             <div style="text-align: center"><small>BOOKING NAME</small></div>
                             <div style="text-align: center"><label for="description"></label><input type="text" name="descriptionInput" id="description" value="" ></div>
                             <p id="descriptionError" style="visibility: hidden; color:red; text-align: center;">Please enter your booking name</p>
                             <div style="text-align: center"><small>ENTER AMOUNT</small></div>
                             <div style="text-align: center"><label for="amount"> </label><input name="amountInput" type="number" id="amount" value="" ></div>
-                            <p id="priceLabelError" style="visibility: hidden; color:red; text-align: center;">Price only without $ sign</p>
-                            <div style="text-align: center"><small>EMAIL</small></div>
-                            <div style="text-align: center"><label for="email"> </label><input type="email" name="emailInput" id="email" value=""></div>
-                            <p id="emailError" style="visibility: hidden; color:red; text-align: center;">Please enter your email</p>
+                            <p id="priceLabelError" style="visibility: hidden; color:red; text-align: center;">Price only without $ sign</p>                            
                             <div style="text-align: center; margin-top: 0.625rem;" id="paypal-button-container"></div>
                         </div>
-                    </form>
-                    <hr>
-                    <button id="stripe-button" class="btn btn-primary btn-block">Pay with Stripe</button>
-                </div>
+                    </form>    
+                    <hr>                    
+                    <h5 class="fs-4 mb-0 text-center">Stripe Checkout</h5>
+                    <br>
+                    <button id="stripe-button" class="btn btn-primary btn-block">Pay with Stripe</button>                
+                </div>                
             </div>
         </div>
     </section>
 
-    <script async src="https://js.stripe.com/v3/buy-button.js"></script>
-    <stripe-buy-button
-      buy-button-id="buy_btn_1PRwL0I9LkpP3oK9idlVAzlE"
-      publishable-key="pk_live_51J29VnI9LkpP3oK9Mg0KTeQPVnEfLlt6Z1ffuAaBoxvwGHVT7o37bLZBwBo2ylAhGzum0zSmrKkGOqvoDloi1Vyf004qgRrdaF"
-    >
-    </stripe-buy-button>
+    <script>
+      var stripe = Stripe('pk_live_51J29VnI9LkpP3oK9Mg0KTeQPVnEfLlt6Z1ffuAaBoxvwGHVT7o37bLZBwBo2ylAhGzum0zSmrKkGOqvoDloi1Vyf004qgRrdaF');  
+      document.getElementById('stripe-button').addEventListener('click', function() {
+          fetch('/create_stripe_checkout_session/', {
+              method: 'POST',
+          })
+          .then(function(response) {
+              return response.json();
+          })
+          .then(function(data) {
+              console.log('Session ID:', data.id);
+              return stripe.redirectToCheckout({ sessionId: data.id });
+          })  
+      });
+    </script>  
 
     <script src="https://www.paypal.com/sdk/js?client-id=AZ2xYI2bgydBrPHtPNum5eMNhxKhjgoBGlGYhbDGOVA5PwA99rfia8KitgAW0LErRFnjYnGVdkrbeLKn&components=buttons&enable-funding=card&disable-funding=paylater,venmo&currency=AUD" data-sdk-integration-source="integrationbuilder_sc"></script>
     <script>
@@ -147,11 +156,6 @@
     <p class="fs-sm mb-3 order-md-1"><span class="text-light opacity-50 me-1">© 2022 EasyGo. All rights reserved. Made by</span><a class="nav-link-style nav-link-light" href="https://easycoding.live" target="_blank" rel="noopener">EasyCoding.live</a></p>
   </div>
 </footer>
-<script>
-  document.getElementById('stripe-button').addEventListener('click', function() {
-      window.location.href = 'https://buy.stripe.com/7sIcP940RbKH7LO6ow'; 
-  });
-</script>
 
 <!-- Vendor scrits: js libraries and plugins-->
 <script src="/static/basecamp/js/bootstrap.bundle.min.js"></script>
@@ -164,7 +168,6 @@
 <script src="/static/basecamp/js/date-picker.js"></script>
 <!-- Main theme script-->
 <script src="/static/basecamp/js/theme.min.js"></script>
-
   
 </body>
 </html>
