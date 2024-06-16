@@ -36,8 +36,8 @@ class PayPalPaymentAdmin(admin.ModelAdmin):
 
 
 class StripePaymentAdmin(admin.ModelAdmin):
-    list_display = ['item_name', 'customer_email', 'amount_total', 'created']    
-    search_fields = ['item_name', 'customer_email', 'amount_total']
+    list_display = ['user_name', 'customer_email', 'amount_total', 'created']    
+    search_fields = ['user_name', 'customer_email', 'amount_total']
 
 
 class PostAdmin(admin.ModelAdmin):

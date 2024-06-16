@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'storages',
     'compressor',
+    'corsheaders',
     'paypal.standard.ipn',
     'admin_honeypot',
     'crispy_forms',
@@ -93,6 +94,7 @@ MIDDLEWARE = [
     'htmlmin.middleware.MarkRequestMiddleware', 
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',  
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -255,6 +257,15 @@ KEEP_COMMENTS_ON_MINIFYING = True
 LOGIN_REDIRECT_URL = '/easygo_review/'
 LOGOUT_REDIRECT_URL = '/home/'
 
+CORS_ALLOWED_ORIGINS = [
+    "https://easygoshuttle.com.au",
+    
+]
+
+CORS_ALLOW_METHODS = [ 'GET', 'POST', ]
+
+CORS_ALLOW_HEADERS = [ 'Content-Type', 'X-CSRFToken', ]
+
 #PayPal settings
 PAYPAL_MODE = 'live'  
 PAYPAL_CLIENT_ID = config('PAYPAL_CLIENT_ID')
@@ -266,6 +277,7 @@ PAYPAL_IPN_URL = 'https://easygoshuttle.com.au/paypal_ipn/'
 STRIPE_MODE = 'live' 
 STRIPE_LIVE_SECRET_KEY = config('STRIPE_LIVE_SECRET_KEY')
 STRIPE_WEBHOOK_SECRET = config('STRIPE_WEBHOOK_SECRET')
+STRIPE_PUBLIC_KEY = config('STRIPE_PUBLIC_KEY')
 
 # Email settings
 EMAIL_HOST = config('EMAIL_HOST')
