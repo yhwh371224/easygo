@@ -32,6 +32,7 @@ django-appconf==1.0.6
 django-axes==6.4.0
 django-bootstrap4==24.3
 django-compressor==4.4
+django-cors-headers==4.3.1
 django-crispy-forms==2.1
 django-htmlmin==0.11.0
 django-markdownx==4.0.7
