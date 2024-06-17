@@ -2102,6 +2102,7 @@ def paypal_ipn(request):
 stripe.api_key = settings.STRIPE_LIVE_SECRET_KEY
 
 @csrf_exempt
+@require_POST
 def create_stripe_checkout_session(request):
     if request.method == 'POST':
         session = stripe.checkout.Session.create(
