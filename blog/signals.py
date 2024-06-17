@@ -223,53 +223,55 @@ def notify_user_payment(sender, instance, created, **kwargs):
 @receiver(post_save, sender=StripePayment)
 def notify_user_payment(sender, instance, created, **kwargs):
     if created:          
-        if instance.item_name is not None:            
+        if instance.name:            
             post_name = Post.objects.filter(
-                Q(name__iregex=r'^%s$' % re.escape(instance.item_name)) |
-                Q(email__iexact=instance.customer_email)
+                Q(name__iregex=r'^%s$' % re.escape(instance.name)) |
+                Q(email__iexact=instance.email)
             ).first()
 
             if post_name:
+                amount = str(instance.amount)
                 html_content = render_to_string("basecamp/html_email-payment-success.html",
-                                                {'name': instance.item_name, 'email': instance.customer_email,
-                                                 'amount': instance.amount_total })
+                                                {'name': instance.name, 'email': instance.email,
+                                                 'amount': amount })
                 text_content = strip_tags(html_content)
                 email = EmailMultiAlternatives(
                     "Stripe payment - EasyGo",
                     text_content,
                     '',
-                    [instance.customer_email, RECIPIENT_EMAIL]
+                    [instance.email, RECIPIENT_EMAIL]
                 )
                 email.attach_alternative(html_content, "text/html")
                 email.send()
                 
                 checking_message = "short payment"
-                post_name.paid = instance.amount_total          
+                post_name.paid = amount          
                 post_name.reminder = True
                 post_name.discount = ""
-                if float(post_name.price) > float(instance.amount_total):
+                if float(post_name.price) > instance.amount:
                     post_name.toll = checking_message             
                 post_name.save()
     
                 if post_name.return_pickup_time == 'x':                   
                         second_post = Post.objects.filter(email=post_name.email)[1]                    
-                        second_post.paid = instance.amount_total                    
+                        second_post.paid = amount                    
                         second_post.reminder = True
                         second_post.discount = ""
-                        if float(post_name.price) > float(instance.amount_total):
+                        if float(post_name.price) > instance.amount:
                             second_post.toll = checking_message 
                         second_post.save() 
 
             else:
+                amount = str(instance.amount)
                 html_content = render_to_string("basecamp/html_email-noIdentity.html",
-                                                {'name': instance.item_name, 'email': instance.customer_email,
-                                                 'amount': instance.amount_total })
+                                                {'name': instance.name, 'email': instance.email,
+                                                 'amount': amount })
                 text_content = strip_tags(html_content)
                 email = EmailMultiAlternatives(
                     "Stripe payment - EasyGo",
                     text_content,
                     '',
-                    [instance.customer_email, RECIPIENT_EMAIL]
+                    [instance.email, RECIPIENT_EMAIL]
                 )
                 email.attach_alternative(html_content, "text/html")
                 email.send()
