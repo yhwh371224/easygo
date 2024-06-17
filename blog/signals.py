@@ -231,7 +231,7 @@ def notify_user_payment(sender, instance, created, **kwargs):
 
             if post_name:
                 amount = str(instance.amount)
-                html_content = render_to_string("basecamp/html_email-payment-success.html",
+                html_content = render_to_string("basecamp/html_email-payment-success-stripe.html",
                                                 {'name': instance.name, 'email': instance.email,
                                                  'amount': amount })
                 text_content = strip_tags(html_content)
@@ -263,7 +263,7 @@ def notify_user_payment(sender, instance, created, **kwargs):
 
             else:
                 amount = str(instance.amount)
-                html_content = render_to_string("basecamp/html_email-noIdentity.html",
+                html_content = render_to_string("basecamp/html_email-noIdentity-stripe.html",
                                                 {'name': instance.name, 'email': instance.email,
                                                  'amount': amount })
                 text_content = strip_tags(html_content)
