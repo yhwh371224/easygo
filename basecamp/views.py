@@ -2140,23 +2140,21 @@ def stripe_webhook(request):
         return HttpResponse(status=400)
 
     # Handle the event
-    if event.type == 'payment_intent.succeeded':
-        payment_intent = event.data.object
+    if event.type == 'checkout.session.completed':
+        session = event.data.object
         print('PaymentIntent was successful!')
-        handle_payment_intent_succeeded(payment_intent)
+        handle_checkout_session_completed(session)
 
     else:
         print('Unhandled event type {}'.format(event.type))
 
     return HttpResponse(status=200)
 
-def handle_payment_intent_succeeded(payment_intent):
-    # Retrieve charge information
-    charges = payment_intent.get('charges', {}).get('data', [])
-    for charge in charges:
-        email = charge['billing_details']['email']
-        name = charge['billing_details']['name']
-        amount = charge['amount'] / 100
-        
+def handle_checkout_session_completed(session):
+    email = session.customer_details.email
+    name = session.customer_details.name
+    amount = session.amount_total / 100  # Amount is in cents
+
+    # Save payment information
     p = StripePayment(name=name, email=email, amount=amount)
-    p.save()      
+    p.save()
