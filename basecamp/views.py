@@ -1,16 +1,15 @@
-from datetime import date, datetime, timedelta
+from datetime import date
 
 import logging
 import requests
 import stripe
-import json
 
 from django.conf import settings
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.db.models import Q
-from django.http import HttpResponse, JsonResponse, HttpResponseNotAllowed
-from django.shortcuts import render, redirect
+from django.http import HttpResponse, JsonResponse
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.views.decorators.csrf import csrf_exempt
@@ -94,6 +93,10 @@ def booking_form(request):
         'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
     }
     return render(request, 'basecamp/booking_form.html', context)
+
+
+def cancel(request):
+    return render(request, 'basecamp/cancel.html')
 
 
 @login_required
@@ -184,6 +187,12 @@ def more_suburbs(request):
     return render(request, 'basecamp/more_suburbs.html', {'more_suburbs': more_suburbs})
 
 
+def more_suburbs1(request): 
+    send_notice_email.delay('suburbs_1 accessed', 'A user accessed suburbs_1', RECIPIENT_EMAIL)
+    more_suburbs = get_more_suburbs()
+    return render(request, 'basecamp/more_suburbs1.html', {'more_suburbs': more_suburbs})
+
+
 def payment_cancel(request): 
     return render(request, 'basecamp/payment_cancel.html')
 
@@ -194,10 +203,6 @@ def payonline(request):
 
 def payonline_combine(request): 
     return render(request, 'basecamp/payonline_combine.html')
-
-
-def paypal_notice(request): 
-    return render(request, 'basecamp/paypal_notice.html')
 
 
 def p2p(request): 
@@ -302,6 +307,10 @@ def service(request):
 
 def sitemap(request): 
     return render(request, 'basecamp/sitemap.xml')
+
+
+def success(request): 
+    return render(request, 'basecamp/success.html')
 
 
 def terms(request): 
@@ -2047,6 +2056,7 @@ def paypal_ipn_error_email(subject, exception, item_name, payer_email, gross_amo
         fail_silently=False,
     )      
 
+
 @csrf_exempt
 @require_POST
 def paypal_ipn(request):       
@@ -2101,7 +2111,7 @@ def create_stripe_checkout_session(request):
             'quantity': 1,
             }],
             mode='payment',
-            success_url='https://easygoshuttle.com.au/paypal_notice/',
+            success_url='https://easygoshuttle.com.au/success/',
             cancel_url='https://easygoshuttle.com.au/cancel/',                
         )
         
@@ -2111,7 +2121,7 @@ def create_stripe_checkout_session(request):
 @csrf_exempt
 def stripe_webhook(request):
     payload = request.body
-    sig_header = request.headers.get('Stripe-Signature')
+    sig_header = request.META['HTTP_STRIPE_SIGNATURE']
     endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
 
     event = None
@@ -2122,22 +2132,31 @@ def stripe_webhook(request):
         )
     except ValueError as e:
         # Invalid payload
-        return JsonResponse({'error': 'Invalid payload'}, status=400)
+        print('Error parsing payload: {}'.format(str(e)))
+        return HttpResponse(status=400)
     except stripe.error.SignatureVerificationError as e:
         # Invalid signature
-        return JsonResponse({'error': 'Invalid signature'}, status=400)
+        print('Error verifying webhook signature: {}'.format(str(e)))
+        return HttpResponse(status=400)
 
     # Handle the event
-    if event['type'] == 'checkout.session.completed':
-        session = event['data']['object']
-        handle_checkout_session(session)
+    if event.type == 'payment_intent.succeeded':
+        payment_intent = event.data.object
+        print('PaymentIntent was successful!')
+        handle_payment_intent_succeeded(payment_intent)
 
-    return JsonResponse({'status': 'success'}, status=200)
+    else:
+        print('Unhandled event type {}'.format(event.type))
 
-def handle_checkout_session(session):
-    user_name = session.get('client_reference_id', '')
-    customer_email = session.get('customer_details', {}).get('email', '')
-    amount_total = session.get('amount_total', 0)
+    return HttpResponse(status=200)
 
-    p = StripePayment(user_name=user_name, customer_email=customer_email, amount_total=amount_total)
+def handle_payment_intent_succeeded(payment_intent):
+    # Retrieve charge information
+    charges = payment_intent.get('charges', {}).get('data', [])
+    for charge in charges:
+        email = charge['billing_details']['email']
+        name = charge['billing_details']['name']
+        amount = charge['amount'] / 100
+        
+    p = StripePayment(name=name, email=email, amount=amount)
     p.save()      

@@ -130,7 +130,7 @@ def send_email_task(flight_date, direction, suburb, no_of_passenger):
     send_mail(flight_date, content, DEFAULT_FROM_EMAIL, [RECIPIENT_EMAIL])
 
 
-# Review page, suburbs page, service, information, about_us, terms, policy 
+# Review page, suburbs page, service, information, about_us, terms, policy, suburbs1
 @shared_task
 def send_notice_email(subject, message, RECIPIENT_EMAIL):
     send_mail(
