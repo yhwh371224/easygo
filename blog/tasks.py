@@ -222,7 +222,7 @@ def notify_user_payment_stripe(instance_id):
             post_name.discount = ""
             if float(post_name.price) > instance.amount:
                 post_name.toll = checking_message             
-            post_name.save()
+                post_name.save()
 
             if post_name.return_pickup_time == 'x':                   
                     second_post = Post.objects.filter(email=post_name.email)[1]                    
@@ -231,7 +231,7 @@ def notify_user_payment_stripe(instance_id):
                     second_post.discount = ""
                     if float(post_name.price) > instance.amount:
                         second_post.toll = checking_message 
-                    second_post.save() 
+                        second_post.save() 
 
         else:
             amount = str(instance.amount)
