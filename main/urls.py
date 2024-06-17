@@ -19,7 +19,7 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('static/<path:path>', serve, {'document_root': settings.STATIC_ROOT}),
     path('paypal/', include('paypal.standard.ipn.urls')),
-    path('stripe-webhook/', stripe_webhook, name='stripe-webhook'),    
+    path('stripe_webhook/', stripe_webhook, name='stripe_webhook'),    
     
 ]
 
