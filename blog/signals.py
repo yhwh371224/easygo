@@ -3,13 +3,12 @@ from __future__ import print_function
 import re
 
 from django.core.mail import EmailMultiAlternatives
-from django.db.models import Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from main.settings import RECIPIENT_EMAIL
 from .models import Post, Inquiry, PayPalPayment, StripePayment, Inquiry_point, Inquiry_cruise
-from .tasks import create_event_on_calendar
+from .tasks import create_event_on_calendar, notify_user_payment_paypal, notify_user_payment_stripe
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 
@@ -162,120 +161,16 @@ def notify_user_inquiry_cruise(sender, instance, created, **kwargs):
         email.send()
 
     
-# PayPal Payment > sending email and saving 
 @receiver(post_save, sender=PayPalPayment)
-def notify_user_payment(sender, instance, created, **kwargs):
-    if instance.item_name is not None:
-        post_name = Post.objects.filter(
-            Q(name__iregex=r'^%s$' % re.escape(instance.item_name)) | 
-            Q(email__iexact=instance.payer_email)
-            ).first()
-
-        if post_name:       
-            html_content = render_to_string("basecamp/html_email-payment-success.html",
-                                        {'name': instance.item_name, 'email': instance.payer_email,
-                                         'amount': instance.gross_amount })
-            text_content = strip_tags(html_content)
-            email = EmailMultiAlternatives(
-                "PayPal payment - EasyGo",
-                text_content,
-                '',
-                [instance.payer_email, RECIPIENT_EMAIL]
-            )
-            email.attach_alternative(html_content, "text/html")        
-            email.send()
-
-            checking_message = "short payment"
-            post_name.paid = instance.gross_amount            
-            post_name.reminder = True
-            post_name.discount = ""
-            if float(post_name.price) > float(instance.gross_amount):
-                post_name.toll = checking_message             
-            post_name.save()
-
-            if post_name.return_pickup_time == 'x':                   
-                    second_post = Post.objects.filter(email=post_name.email)[1]                    
-                    second_post.paid = instance.gross_amount                    
-                    second_post.reminder = True
-                    second_post.discount = ""
-                    if float(post_name.price) > float(instance.gross_amount):
-                        second_post.toll = checking_message 
-                    second_post.save() 
-
-        else:
-            html_content = render_to_string("basecamp/html_email-noIdentity.html",
-                                        {'name': instance.item_name, 'email': instance.payer_email,
-                                         'amount': instance.gross_amount })
-            text_content = strip_tags(html_content)
-            email = EmailMultiAlternatives(
-                "PayPal payment - EasyGo",
-                text_content,
-                '',
-                [instance.payer_email, RECIPIENT_EMAIL]
-            )  
-            email.attach_alternative(html_content, "text/html")        
-            email.send()  
-
-    else: pass 
-
-
-# Stripe > sending email & save
+def async_notify_user_payment_paypal(sender, instance, created, **kwargs):
+    if created:
+        notify_user_payment_paypal.delay(instance.id)
+        
+        
 @receiver(post_save, sender=StripePayment)
-def notify_user_payment(sender, instance, created, **kwargs):
-    if created:          
-        if instance.name:            
-            post_name = Post.objects.filter(
-                Q(name__iregex=r'^%s$' % re.escape(instance.name)) |
-                Q(email__iexact=instance.email)
-            ).first()
-
-            if post_name:
-                amount = str(instance.amount)
-                html_content = render_to_string("basecamp/html_email-payment-success-stripe.html",
-                                                {'name': instance.name, 'email': instance.email,
-                                                 'amount': amount })
-                text_content = strip_tags(html_content)
-                email = EmailMultiAlternatives(
-                    "Stripe payment - EasyGo",
-                    text_content,
-                    '',
-                    [instance.email, RECIPIENT_EMAIL]
-                )
-                email.attach_alternative(html_content, "text/html")
-                email.send()
-                
-                checking_message = "short payment"
-                post_name.paid = amount          
-                post_name.reminder = True
-                post_name.discount = ""
-                if float(post_name.price) > instance.amount:
-                    post_name.toll = checking_message             
-                post_name.save()
-    
-                if post_name.return_pickup_time == 'x':                   
-                        second_post = Post.objects.filter(email=post_name.email)[1]                    
-                        second_post.paid = amount                    
-                        second_post.reminder = True
-                        second_post.discount = ""
-                        if float(post_name.price) > instance.amount:
-                            second_post.toll = checking_message 
-                        second_post.save() 
-
-            else:
-                amount = str(instance.amount)
-                html_content = render_to_string("basecamp/html_email-noIdentity-stripe.html",
-                                                {'name': instance.name, 'email': instance.email,
-                                                 'amount': amount })
-                text_content = strip_tags(html_content)
-                email = EmailMultiAlternatives(
-                    "Stripe payment - EasyGo",
-                    text_content,
-                    '',
-                    [instance.email, RECIPIENT_EMAIL]
-                )
-                email.attach_alternative(html_content, "text/html")
-                email.send()
-
+def async_notify_user_payment_stripe(sender, instance, created, **kwargs):
+    if created:
+        notify_user_payment_stripe.delay(instance.id)
 
 
 ## google calendar recording 
