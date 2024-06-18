@@ -1,8 +1,5 @@
 from __future__ import print_function
 
-import re
-import logging
-
 from django.core.mail import EmailMultiAlternatives
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -167,13 +164,10 @@ def async_notify_user_payment_paypal(sender, instance, created, **kwargs):
     if created:
         notify_user_payment_paypal.delay(instance.id)
 
-
-logger = logging.getLogger(__name__)
    
 @receiver(post_save, sender=StripePayment)
 def async_notify_user_payment_stripe(sender, instance, created, **kwargs):
     if created:
-        logger.info(f"StripePayment created with ID: {instance.id}")
         notify_user_payment_stripe.delay(instance.id)
 
 
