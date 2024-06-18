@@ -1,6 +1,7 @@
 import datetime
 import os
 import re
+import logging
 
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
@@ -159,7 +160,7 @@ def payment_send_email(subject, html_content, recipient_list):
 
 
 @shared_task
-def notify_user_payment_paypal(instance_id):
+def notify_user_payment_paypal(instance_id):    
     instance = PayPalPayment.objects.get(id=instance_id)
     if instance.item_name:
         post_name = Post.objects.filter(
@@ -199,44 +200,51 @@ def notify_user_payment_paypal(instance_id):
             payment_send_email("Payment - EasyGo", html_content, [instance.payer_email, RECIPIENT_EMAIL])
 
 
-# Stripe > sending email & save
+logger = logging.getLogger(__name__)
+
+@shared_task
 def notify_user_payment_stripe(instance_id):
-    instance = StripePayment.objects.get(id=instance_id)   
-    if instance.name:            
-        post_name = Post.objects.filter(
-            Q(name__iregex=r'^%s$' % re.escape(instance.name)) |
-            Q(email__iexact=instance.email)
-        ).first()
+    logger.info(f"Starting notify_user_payment_stripe task for instance ID: {instance_id}")
+    try:
+        instance = StripePayment.objects.get(id=instance_id)
+        if instance.name:
+            post_name = Post.objects.filter(
+                Q(name__iregex=r'^%s$' % re.escape(instance.name)) |
+                Q(email__iexact=instance.email)
+            ).first()
 
-        if post_name:
-            amount = str(instance.amount)
-            html_content = render_to_string(
-                "basecamp/html_email-payment-success-stripe.html",
-                {'name': post_name.name, 'email': post_name.email, 'amount': amount}
-            )
-            payment_send_email("Payment - EasyGo", html_content, [post_name.email, RECIPIENT_EMAIL])
-            
-            checking_message = "short payment"
-            post_name.paid = amount          
-            post_name.reminder = True
-            post_name.discount = ""
-            if float(post_name.price) > instance.amount:
-                post_name.toll = checking_message             
-                post_name.save()
+            if post_name:
+                amount = str(instance.amount)
+                html_content = render_to_string(
+                    "basecamp/html_email-payment-success-stripe.html",
+                    {'name': post_name.name, 'email': post_name.email, 'amount': amount}
+                )
+                payment_send_email("Payment - EasyGo", html_content, [post_name.email, RECIPIENT_EMAIL])
+                
+                checking_message = "short payment"
+                post_name.paid = amount          
+                post_name.reminder = True
+                post_name.discount = ""
+                if float(post_name.price) > instance.amount:
+                    post_name.toll = checking_message             
+                    post_name.save()
 
-            if post_name.return_pickup_time == 'x':                   
-                    second_post = Post.objects.filter(email=post_name.email)[1]                    
-                    second_post.paid = amount                    
-                    second_post.reminder = True
-                    second_post.discount = ""
-                    if float(post_name.price) > instance.amount:
-                        second_post.toll = checking_message 
-                        second_post.save() 
+                if post_name.return_pickup_time == 'x':                   
+                        second_post = Post.objects.filter(email=post_name.email)[1]                    
+                        second_post.paid = amount                    
+                        second_post.reminder = True
+                        second_post.discount = ""
+                        if float(post_name.price) > instance.amount:
+                            second_post.toll = checking_message 
+                            second_post.save() 
 
-        else:
-            amount = str(instance.amount)
-            html_content = render_to_string(
-                "basecamp/html_email-noIdentity-stripe.html",
-                {'name': instance.name, 'email': instance.email, 'amount': amount}
-            )
-            payment_send_email("Payment - EasyGo", html_content, [instance.email, RECIPIENT_EMAIL])
+            else:
+                amount = str(instance.amount)
+                html_content = render_to_string(
+                    "basecamp/html_email-noIdentity-stripe.html",
+                    {'name': instance.name, 'email': instance.email, 'amount': amount}
+                )
+                payment_send_email("Payment - EasyGo", html_content, [instance.email, RECIPIENT_EMAIL])
+        logger.info(f"Completed notify_user_payment_stripe task for instance ID: {instance_id}")
+    except Exception as e:
+        logger.error(f"Error in notify_user_payment_stripe task for instance ID: {instance_id}: {e}")
