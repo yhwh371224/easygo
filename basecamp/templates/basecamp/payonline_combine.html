@@ -58,7 +58,13 @@
                     <hr>                    
                     <h5 class="fs-4 mb-0 text-center">Stripe Checkout</h5>
                     <br>
-                    <button id="stripe-button" class="btn btn-primary btn-block">Pay with Stripe</button>                
+                    <button id="stripe-button" class="btn btn-primary btn-block">Pay with Stripe</button>
+                    <br>
+                    <!-- Google recaptcha  -->
+                    <br>
+                    <div class="g-recaptcha" data-sitekey="{{ recaptcha_site_key }}" style="text-align: center" ></div>	
+                    <div id="errorMessage" style="display:none; color: red;" ></div>
+                    <br><br>                
                 </div>                
             </div>
         </div>
@@ -73,6 +79,26 @@
           </div>          
         </div>              
     </section>
+    <script async src="https://www.google.com/recaptcha/api.js"></script>
+    <script>    
+      if(typeof grecaptcha === 'undefined') {
+        grecaptcha = {};
+      }
+      grecaptcha.ready = function(cb){
+        if(typeof grecaptcha === 'undefined') {       
+          const c = '___grecaptcha_cfg';
+          window[c] = window[c] || {};
+          (window[c]['fns'] = window[c]['fns']||[]).push(cb);
+        } else {
+          cb();
+        }
+      }
+      grecaptcha.ready(function(){
+        grecaptcha.render("container", {
+          sitekey: "{{ recaptcha_site_key }}"
+        });
+      });
+    </script>
 
     <script>
       var stripe = Stripe('pk_live_51J29VnI9LkpP3oK9Mg0KTeQPVnEfLlt6Z1ffuAaBoxvwGHVT7o37bLZBwBo2ylAhGzum0zSmrKkGOqvoDloi1Vyf004qgRrdaF');  
