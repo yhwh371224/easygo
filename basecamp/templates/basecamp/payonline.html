@@ -122,24 +122,56 @@
       <!-- Contact form + details-->
       <section class="container position-relative zindex-5 pb-5"  >
         <div class="row">
-          <div class="col-lg-1 col-md-2 offset-lg-1 pb-2 mb-5" style="margin-top: -260px;"></div>
-          <div class="col-lg-5 col-md-4 offset-lg-1 pb-2 mb-5" style="margin-top: -260px;">
+          <div class="col-lg-1 col-md-2 offset-lg-1 pb-2 mb-5" style="margin-top: -280px;"></div>
+          <div class="col-lg-5 col-md-4 offset-lg-1 pb-2 mb-5" style="margin-top: -280px;">
             <div class="card border-3 shadow-lg" style="padding:2rem">
                 <!-- Paypal form -->
 			          <form method="post" id="paypal-form">
 			          	{% csrf_token %}
-			          	<h3 class="fs-4 mb-0 text-center">PayPal Checkout</h3>
+			          	<h3 class="text-center">PayPal Checkout</h3>
 			          	<br><br>
 			          	<div id="smart-button-container">
-			          		<div style="text-align: center"><small>BOOKING NAME</small></div>
-			          		   <div style="text-align: center"><label for="description"></label><input type="text" name="descriptionInput" id="description" value=""></div>
-			          			 <p id="descriptionError" style="visibility: hidden; color:red; text-align: center;">Please enter your booking name</p>
-			          			   <div style="text-align: center"><small>ENTER AMOUNT</small></div>
-			          			   <div style="text-align: center"><label for="amount"> </label><input name="amountInput" type="number" id="amount" value="" ></div>
-			          			 <p id="priceLabelError" style="visibility: hidden; color:red; text-align: center;">Price only without $ sign</p>
-			          			 <div style="text-align: center; margin-top: 0.625rem;" id="paypal-button-container"></div>
+                  <div style="text-align: center"><small>BOOKING NAME</small></div>
+                  <div style="text-align: center"><label for="description"></label><input type="text" name="descriptionInput" id="description" value=""></div>
+                  <p id="descriptionError" style="visibility: hidden; color:red; text-align: center;">Please enter your booking name</p>
+                    <div style="text-align: center"><small>ENTER AMOUNT</small></div>
+                    <div style="text-align: center"><label for="amount"> </label><input name="amountInput" type="number" id="amount" value="" ></div>
+                  <p id="priceLabelError" style="visibility: hidden; color:red; text-align: center;">Price only without $ sign</p>
+                  <!-- Google recaptcha  -->
+                  <br>
+                  <div class="g-recaptcha" data-sitekey="{{ recaptcha_site_key }}" style="text-align: center" ></div>	
+                  <div id="errorMessage" style="display:none; color: red;" ></div>
+                  <br><br>
+                  <div style="text-align: center; margin-top: 0.625rem;" id="paypal-button-container"></div>
 			          	</div>				
 			          </form>
+                <section class="container" style="margin-top: 60px;">
+                  <h5 class="text-center mb-4">Safe Security Guaranteed</h5>
+                   <p class="text-center"><small><small>This site is protected by reCAPTCHA Enterprise and the Google
+                              <a href="https://policies.google.com/privacy">Privacy Policy</a> and
+                              <a href="https://policies.google.com/terms">Terms of Service</a> apply.
+                   </small></small></p>
+                </section>
+  <script async src="https://www.google.com/recaptcha/api.js"></script>
+  <script>    
+    if(typeof grecaptcha === 'undefined') {
+      grecaptcha = {};
+    }
+    grecaptcha.ready = function(cb){
+      if(typeof grecaptcha === 'undefined') {       
+        const c = '___grecaptcha_cfg';
+        window[c] = window[c] || {};
+        (window[c]['fns'] = window[c]['fns']||[]).push(cb);
+      } else {
+        cb();
+      }
+    }
+    grecaptcha.ready(function(){
+      grecaptcha.render("container", {
+        sitekey: "{{ recaptcha_site_key }}"
+      });
+    });
+  </script>
   <script src="https://www.paypal.com/sdk/js?client-id=AZ2xYI2bgydBrPHtPNum5eMNhxKhjgoBGlGYhbDGOVA5PwA99rfia8KitgAW0LErRFnjYnGVdkrbeLKn&components=buttons&enable-funding=card&disable-funding=paylater,venmo&currency=AUD" data-sdk-integration-source="integrationbuilder_sc"></script>
   <script>
     paypal.Buttons({
@@ -186,15 +218,6 @@
       }
     }).render('#paypal-button-container');
   </script>
-
-      <section class="container py-5 my-4 my-sm-0 py-sm-6 py-md-7">
-        <br/>
-        <h3 class="text-center mb-4">Safe Security Guaranteed</h3>
-         <p class="text-center"><small><small>This site is protected by reCAPTCHA Enterprise and the Google
-                    <a href="https://policies.google.com/privacy">Privacy Policy</a> and
-                    <a href="https://policies.google.com/terms">Terms of Service</a> apply.
-         </small></small></p>
-      </section>
   </main>
     <footer class="site-footer bg-dark pt-5 pb-4">
       <div class="container d-md-flex justify-content-between align-items-center text-center">
