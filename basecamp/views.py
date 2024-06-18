@@ -205,10 +205,6 @@ def payonline_combine(request):
     return render(request, 'basecamp/payonline_combine.html')
 
 
-def payonline_stripe(request): 
-    return render(request, 'basecamp/payonline_stripe.html')
-
-
 def p2p(request): 
     context = {
         'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
