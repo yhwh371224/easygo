@@ -52,20 +52,7 @@
             <div class="col-lg-5 col-md-4 offset-lg-1 pb-2 mb-5" style="margin-top: -260px;">
                 <div class="card border-3 shadow-lg" style="padding:2rem">
                     <!-- Payment forms -->
-                    <form method="post" id="payment-form">
-                        {% csrf_token %}                        
-                        <h3 class="fs-4 mb-0 text-center">PayPal Checkout</h3>
-                        <br>
-                        <div id="smart-button-container">
-                            <div style="text-align: center"><small>BOOKING NAME</small></div>
-                            <div style="text-align: center"><label for="description"></label><input type="text" name="descriptionInput" id="description" value="" ></div>
-                            <p id="descriptionError" style="visibility: hidden; color:red; text-align: center;">Please enter your booking name</p>
-                            <div style="text-align: center"><small>ENTER AMOUNT</small></div>
-                            <div style="text-align: center"><label for="amount"> </label><input name="amountInput" type="number" id="amount" value="" ></div>
-                            <p id="priceLabelError" style="visibility: hidden; color:red; text-align: center;">Price only without $ sign</p>                            
-                            <div style="text-align: center; margin-top: 0.625rem;" id="paypal-button-container"></div>
-                        </div>
-                    </form>    
+                    <div id="paypal-container-3XG3XKKBMWU6S"></div>
                     <hr>                    
                     <h5 class="fs-4 mb-0 text-center">Stripe Checkout</h5>
                     <br>
@@ -91,50 +78,12 @@
       });
     </script>  
 
-    <script src="https://www.paypal.com/sdk/js?client-id=AZ2xYI2bgydBrPHtPNum5eMNhxKhjgoBGlGYhbDGOVA5PwA99rfia8KitgAW0LErRFnjYnGVdkrbeLKn&components=buttons&enable-funding=card&disable-funding=paylater,venmo&currency=AUD" data-sdk-integration-source="integrationbuilder_sc"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=BAALE04UK8MZh6es1re686lx5-9LVea7kO4DuNt4RLdrMbYPTBIfjvUdatKRe13iPrM414kwMxkQbMJrmQ&components=hosted-buttons&disable-funding=venmo&currency=AUD"></script>    
     <script>
-        paypal.Buttons({
-          createOrder: function(data, actions) {
-            var item_name = document.getElementById("description").value;
-            var amount = document.getElementById("amount").value;
-            var gross_amount = (amount * 1.03).toFixed(2);
-
-            // Set up the transaction
-            return actions.order.create({
-              purchase_units: [{
-                amount: {
-                  value: gross_amount
-                },
-                description: item_name,
-              }]
-            });
-          },
-          onApprove: function(data, actions) {
-              // Capture the funds from the transaction
-              return actions.order.capture().then(function(details) {
-                  // Create a new Payment object and save it to the database
-                  var item_name = document.getElementById("description").value;
-                  var payer_email = details.payer.email_address;
-                  var amount = document.getElementById("amount").value;
-                  var gross_amount = (amount * 1.03).toFixed(2);
-            
-                  return fetch('/paypal_ipn/', {
-                      method: 'POST',
-                      headers: {
-                          'Content-Type': 'application/json',						
-                      },
-                      body: JSON.stringify({
-                          item_name: item_name,
-                          payer_email: payer_email,
-                          gross_amount: gross_amount,	
-                })
-                  }).then(function(response) {
-                      window.location.href = "/success/";
-                  });
-              });
-          }
-        }).render('#paypal-button-container');
-    </script>   
+      paypal.HostedButtons({
+        hostedButtonId: "3XG3XKKBMWU6S",
+      }).render("#paypal-container-3XG3XKKBMWU6S")
+    </script>
     
     <section class="container py-5 my-4 my-sm-0 py-sm-6 py-md-7">
     <br/>
