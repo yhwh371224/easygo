@@ -1402,10 +1402,10 @@ def confirm_booking_detail(request):
         email1 = user.email1            
         flight_date = user.flight_date
         flight_number = user.flight_number
-        flight_time = user.flight_time or 'cruise'
+        flight_time = user.flight_time 
         pickup_time = user.pickup_time
         direction = user.direction
-        suburb = user.suburb or 'The Rocks'
+        suburb = user.suburb 
         street = user.street
         no_of_passenger = user.no_of_passenger
         no_of_baggage = user.no_of_baggage
