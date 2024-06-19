@@ -32,13 +32,14 @@
     <link rel="stylesheet" media="screen" href="/static/basecamp/css/tiny-slider.css"/>
     <link rel="stylesheet" media="screen" href="/static/basecamp/css/flatpickr.min.css"/>
     <link rel="stylesheet" media="screen" href="/static/basecamp/css/theme.min.css"> 
+    <link rel="stylesheet" media="screen" href="/static/basecamp/css/styles.css"> 
     {% endcompress %}  
   </head>
   <body>   
     <main class="page-wrapper">
       <header class="header navbar navbar-expand-lg navbar-dark navbar-floating navbar-sticky" data-scroll-header data-fixed-element>
         <div class="container px-0 px-xl-3">
-          <button class="navbar-toggler ms-n2 me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#primaryMenu"><span class="navbar-toggler-icon"></span></button><a class="navbar-brand flex-shrink-0 order-lg-1 mx-auto ms-lg-0 pe-lg-2 me-lg-4" href="/home/"><img class="navbar-floating-logo d-none d-lg-block" src="/static/basecamp/images/easygo_icon.webp" style="border-radius: 30%" alt="EasyGo_icon" width="40"></a>
+          <button class="navbar-toggler ms-n2 me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#primaryMenu"><span class="navbar-toggler-icon"></span></button><a class="navbar-brand flex-shrink-0 order-lg-1 mx-auto ms-lg-0 pe-lg-2 me-lg-4" href="/home/"><img class="navbar-floating-logo d-none d-lg-block" src="/static/basecamp/images/easygo_icon.webp" style="border-radius: 30%" alt="EasyGo Home" width="40"></a>
           <div class="d-flex align-items-center order-lg-3 ms-lg-auto">
 			  <a class="nav-link-style fs-sm text-nowrap" data-view="modal-signin-view" href="#">
 				  <img class="fs-xl me-2 align-middle" src="/static/basecamp/images/easygo-logo-final.webp" alt="EasyGo_logo"  width="120" height="auto"></a>
@@ -58,15 +59,15 @@
                 <li class="nav-item dropdown dropdown-mega active"><a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">AboutUs</a>
                   <div class="dropdown-menu"><p class="dropdown-column dropdown-column-img bg-secondary" style="background-image: url('/static/basecamp/images/aboutus.webp');"></p>
                     <div class="dropdown-column">
-                      <a class="dropdown-item" href="/about_us/">About us</a>
-                      <a class="dropdown-item" href="/service/">Service</a>
-                      <a class="dropdown-item" href="/information/">Information</a>
-                      <a class="dropdown-item" href="/easygo_review/">Reviews</a>
-                      <a class="dropdown-item" href="/more_suburbs/">Service Areas</a>
-                      <a class="dropdown-item" href="/terms/">Terms</a>
-                      <a class="dropdown-item" href="/privacy/">Privacy policy</a>
-                      <a class="dropdown-item" href="/payonline/">Pay Online</a>
-                      <a class="dropdown-item" href="/meeting_point/">Airport Meeting Point</a></div>
+                      <a class="dropdown-item" href="/about_us/">Learn about us</a>
+                      <a class="dropdown-item" href="/service/">View Our Services</a>
+                      <a class="dropdown-item" href="/information/">More Information</a>
+                      <a class="dropdown-item" href="/easygo_review/">Read Customer Reviews</a>
+                      <a class="dropdown-item" href="/more_suburbs/">Explore Service Areas</a>
+                      <a class="dropdown-item" href="/terms/">Read Terms and Conditions</a>
+                      <a class="dropdown-item" href="/privacy/">View Privacy Policy</a>
+                      <a class="dropdown-item" href="/payonline/">Pay Online Now</a>
+                      <a class="dropdown-item" href="/meeting_point/">Find Airport Meeting Point</a></div>
                   </div>
                 </li>                
                 <li class="nav-item dropdown active"><a class="nav-link dropdown-toggle" href="#"data-bs-toggle="dropdown">Airport Transfers</a>
@@ -131,14 +132,14 @@
         <div class="d-lg-flex align-items-center bg-secondary border rounded-3 px-4 pt-4 pb-3" >
           <div class="d-sm-flex align-items-center flex-grow-1">
             <div class="mb-3 pb-1 w-100 mb-sm-4 me-sm-3">
-              <label class="form-label">Pickup date</label>
+              <label class="form-label" for="pickup-date">Pickup date</label>
               <div class="input-group" >
                 <input class="form-control date-picker rounded" name="flight_date" required type="date" placeholder="Choose date" data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;F j, Y&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;}" >
-				<a class="date-picker" href="#"><i class="ai-calendar position-absolute top-50 end-0 translate-middle-y me-3"></i></a>
+				        <a class="date-picker flatpickr-input" href="#" aria-label="Choose date"><i class="ai-calendar position-absolute top-50 end-0 translate-middle-y me-3"></i></a>
               </div>
             </div>
             <div class="mb-3 pb-1 w-100 mb-sm-4 me-sm-3">
-              <label class="form-label">From: start point</label>
+              <label class="form-label" for="start-point">From: start point</label>
               <select class="form-select" name="direction" required>
                 {% include 'basecamp/suburbs_home.html' %}
               </select>
@@ -146,13 +147,13 @@
           </div>
           <div class="d-sm-flex align-items-center">
             <div class="mb-3 pb-1 w-100 mb-sm-4 me-sm-3">
-              <label class="form-label">To: end point</label>
+              <label class="form-label" for="end-point">To: end point</label>
               <select class="form-select" name="suburb" required>
                 {% include 'basecamp/suburbs_home1.html' %}
               </select>
             </div>
             <div class="mb-3 pb-1 w-100 mb-sm-4 me-sm-3">
-              <label class="form-label">Passengers</label>
+              <label class="form-label" for="passengers">Passengers</label>
               <select class="form-select" name="no_of_passenger" required>
           <option disabled selected value="" style="background-color: beige;">Number of people</option>                 
 				  <option value="1">1</option>
