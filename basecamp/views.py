@@ -3,6 +3,7 @@ from datetime import date
 import logging
 import requests
 import stripe
+import json
 
 from django.conf import settings
 from django.shortcuts import render, redirect
@@ -2071,7 +2072,7 @@ def generate_access_token():
 @csrf_exempt
 def create_order(request):
     try:
-        data = request.json()
+        data = json.loads(request.body)
         amount = data['amount']
         access_token = generate_access_token()
         headers = {
@@ -2107,7 +2108,7 @@ def capture_order(request, order_id):
         return JsonResponse({"error": str(e)}, status=500)
 
 def serve_index(request):
-    return render(request, 'payonline.html')
+    return render(request, 'payonline_new.html')
 
 
 def paypal_ipn_error_email(subject, exception, item_name, payer_email, gross_amount):
