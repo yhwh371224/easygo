@@ -108,3 +108,15 @@ class Command(BaseCommand):
                 except Exception as e:
                     self.logger.error(f"Failed to send calendar event id email to {booking_reminder.email} | {booking_reminder.flight_date} & {booking_reminder.pickup_time}: {e}")
 
+            if booking_reminder.toll =='short payment':
+                subject = "short payment - from booking_reminder"
+                message = f"{booking_reminder.name} & {booking_reminder.email}"
+                recipient = [settings.RECIPIENT_EMAIL]
+
+                try:
+                    send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, recipient, fail_silently=False)
+                    self.logger.info(f"short payment: {booking_reminder.email} & {booking_reminder.name}")
+                except Exception as e:
+                    self.logger.error(f"Failed to send calendar event id email to {booking_reminder.email} | {booking_reminder.flight_date} & {booking_reminder.pickup_time}: {e}")
+
+

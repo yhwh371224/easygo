@@ -158,6 +158,7 @@ def payment_send_email(subject, html_content, recipient_list):
     email.send()
 
 
+# PayPal payment record and email 
 @shared_task
 def notify_user_payment_paypal(instance_id):
     instance = PayPalPayment.objects.get(id=instance_id)
@@ -180,16 +181,16 @@ def notify_user_payment_paypal(instance_id):
             post_name.discount = ""
             if float(post_name.price) > float(instance.gross_amount):
                 post_name.toll = checking_message             
-                post_name.save()
+            post_name.save()
 
             if post_name.return_pickup_time == 'x':                   
                     second_post = Post.objects.filter(email=post_name.email)[1]                    
                     second_post.paid = instance.gross_amount                    
                     second_post.reminder = True
-                    second_post.discount = ""
-                    if float(post_name.price) > float(instance.gross_amount):
-                        second_post.toll = checking_message 
-                        second_post.save() 
+                    second_post.discount = ""   
+                    if float(second_post.price) > float(instance.gross_amount):
+                        post_name.toll = checking_message                    
+                    second_post.save() 
 
         else:
             html_content = render_to_string(
@@ -220,7 +221,7 @@ def notify_user_payment_stripe(instance_id):
             post_name.discount = ""
             if float(post_name.price) > instance.amount:
                 post_name.toll = "short payment"             
-                post_name.save()
+            post_name.save()
 
             if post_name.return_pickup_time == 'x':                   
                     second_post = Post.objects.filter(email=post_name.email)[1]                    
@@ -229,7 +230,7 @@ def notify_user_payment_stripe(instance_id):
                     second_post.discount = ""
                     if float(post_name.price) > instance.amount:
                         second_post.toll = "short payment"  
-                        second_post.save() 
+                    second_post.save() 
 
         else:            
             html_content = render_to_string(
