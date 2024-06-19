@@ -6,13 +6,13 @@ window.paypal
     },
     async createOrder() {
       try {
-        const price = parseFloat(document.getElementById('product-price').value);
-        if (!price) {
-          throw new Error('Price is required');
-        }
+        // const price = parseFloat(document.getElementById('product-price').value);
+        // if (!price) {
+        //   throw new Error('Price is required');
+        // }
 
-        const surcharge = price * 0.03;
-        const totalPrice = (price + surcharge).toFixed(2);
+        // const surcharge = price * 0.03;
+        // const totalPrice = (price + surcharge).toFixed(2);
 
         const response = await fetch("/api/orders", {
           method: "POST",
@@ -20,10 +20,10 @@ window.paypal
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            amount: {
-              currency_code: "AUD", 
-              value: totalPrice,
-            },
+            // amount: {
+            //   currency_code: "AUD", 
+            //   value: totalPrice,
+            // },
           }),
         });
         

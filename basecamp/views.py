@@ -2083,7 +2083,7 @@ def create_order(request):
             "intent": "CAPTURE",
             "purchase_units": [
                 {
-                    "amount": amount
+                    # "amount": amount
                 }
             ]
         }
