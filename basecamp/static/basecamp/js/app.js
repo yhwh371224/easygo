@@ -1,29 +1,32 @@
 window.paypal
   .Buttons({
     style: {
-      shape: 'rect',
-      //color:'blue', change the default color of the buttons
-      layout: 'vertical', //default value. Can be changed to horizontal
+      shape: 'rect',      
+      layout: 'vertical', 
     },
     async createOrder() {
       try {
+        const price = parseFloat(document.getElementById('product-price').value);
+        if (!price) {
+          throw new Error('Price is required');
+        }
+
+        const surcharge = price * 0.03;
+        const totalPrice = (price + surcharge).toFixed(2);
+
         const response = await fetch("/api/orders", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          // use the "body" param to optionally pass additional order information
-          // like product ids and quantities
           body: JSON.stringify({
-            cart: [
-              {
-                id: "YOUR_PRODUCT_ID",
-                quantity: "YOUR_PRODUCT_QUANTITY",
-              },
-            ],
+            amount: {
+              currency_code: "AUD", 
+              value: totalPrice,
+            },
           }),
         });
-
+        
         const orderData = await response.json();
 
         if (orderData.id) {
@@ -51,25 +54,16 @@ window.paypal
         });
 
         const orderData = await response.json();
-        // Three cases to handle:
-        //   (1) Recoverable INSTRUMENT_DECLINED -> call actions.restart()
-        //   (2) Other non-recoverable errors -> Show a failure message
-        //   (3) Successful transaction -> Show confirmation or thank you message
 
         const errorDetail = orderData?.details?.[0];
 
-        if (errorDetail?.issue === "INSTRUMENT_DECLINED") {
-          // (1) Recoverable INSTRUMENT_DECLINED -> call actions.restart()
-          // recoverable state, per https://developer.paypal.com/docs/checkout/standard/customize/handle-funding-failures/
+        if (errorDetail?.issue === "INSTRUMENT_DECLINED") {          
           return actions.restart();
         } else if (errorDetail) {
-          // (2) Other non-recoverable errors -> Show a failure message
           throw new Error(`${errorDetail.description} (${orderData.debug_id})`);
         } else if (!orderData.purchase_units) {
           throw new Error(JSON.stringify(orderData));
         } else {
-          // (3) Successful transaction -> Show confirmation or thank you message
-          // Or go to another URL:  actions.redirect('thank_you.html');
           const transaction =
             orderData?.purchase_units?.[0]?.payments?.captures?.[0] ||
             orderData?.purchase_units?.[0]?.payments?.authorizations?.[0];

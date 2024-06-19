@@ -15,7 +15,7 @@ from django.utils.html import strip_tags
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
-from main.settings import RECIPIENT_EMAIL
+from main.settings import RECIPIENT_EMAIL, PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET
 from blog.models import Post, Inquiry, PayPalPayment, StripePayment, Driver, Inquiry_point, Inquiry_cruise
 from blog.tasks import send_confirm_email, send_email_task, send_notice_email
 from basecamp.area import get_suburbs
@@ -2051,7 +2051,63 @@ def email_dispatch_detail(request):
     
     else:
         return render(request, 'basecamp/email_dispatch.html', {})
+    
 
+BASE_URL = "https://api-m.paypal.com"
+
+def generate_access_token():
+    auth = (PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET)
+    headers = {
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+    data = {
+        "grant_type": "client_credentials"
+    }
+    response = requests.post(f"{BASE_URL}/v1/oauth2/token", headers=headers, data=data, auth=auth)
+    response.raise_for_status()
+    return response.json()['access_token']
+
+
+@csrf_exempt
+def create_order(request):
+    try:
+        data = request.json()
+        amount = data['amount']
+        access_token = generate_access_token()
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {access_token}"
+        }
+        payload = {
+            "intent": "CAPTURE",
+            "purchase_units": [
+                {
+                    "amount": amount
+                }
+            ]
+        }
+        response = requests.post(f"{BASE_URL}/v2/checkout/orders", headers=headers, json=payload)
+        response.raise_for_status()
+        return JsonResponse(response.json(), status=response.status_code)
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
+
+@csrf_exempt
+def capture_order(request, order_id):
+    try:
+        access_token = generate_access_token()
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {access_token}"
+        }
+        response = requests.post(f"{BASE_URL}/v2/checkout/orders/{order_id}/capture", headers=headers)
+        response.raise_for_status()
+        return JsonResponse(response.json(), status=response.status_code)
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
+
+def serve_index(request):
+    return render(request, 'payonline.html')
 
 
 def paypal_ipn_error_email(subject, exception, item_name, payer_email, gross_amount):
