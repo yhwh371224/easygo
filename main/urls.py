@@ -23,7 +23,7 @@ urlpatterns = [
     path('stripe_webhook/', stripe_webhook, name='stripe_webhook'),
     path('api/orders', views.create_order, name='create_order'),
     path('api/orders/<str:order_id>/capture', views.capture_order, name='capture_order'),
-    path('', views.serve_index, name='serve_index'),   
+
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
