@@ -120,7 +120,7 @@
       <!-- Page content-->
       <!-- Hero-->
       <section class="jarallax bg-dark py-7" data-jarallax data-speed="0.1" >
-        <div class="jarallax-img lazyload" style="background-image: url('/static/basecamp/photos/easygo-home-page3.webp');"></div>
+        <div class="jarallax-img" style="background-image: url('/static/basecamp/photos/easygo-home-page3.webp');"></div>
         <div class="container py-4 py-sm-5 text-center">
           <div class="py-md-6">
 			  <div><a role="button" class="btn btn-primary" href="/booking/">BOOK NOW</a> | <a class="btn btn-success" href="/inquiry/">PRICE NOW</a></div>
@@ -410,24 +410,6 @@
       </div>
     </footer> 
 {% compress js %}
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    var lazyBackgrounds = [].slice.call(document.querySelectorAll(".lazyload"));
-    if ("IntersectionObserver" in window) {
-      let lazyBackgroundObserver = new IntersectionObserver(function(entries, observer) {
-        entries.forEach(function(entry) {
-          if (entry.isIntersecting) {
-            entry.target.style.backgroundImage = entry.target.getAttribute("data-bg");
-            lazyBackgroundObserver.unobserve(entry.target);
-          }
-        });
-      });
-      lazyBackgrounds.forEach(function(lazyBackground) {
-        lazyBackgroundObserver.observe(lazyBackground);
-      });
-    }
-  });
-</script>
 <script src="/static/basecamp/js/bootstrap.bundle.min.js" defer></script>
 <script src="/static/basecamp/js/smooth-scroll.polyfills.min.js" defer></script>
 <script src="/static/basecamp/js/jarallax.min.js" defer></script>
