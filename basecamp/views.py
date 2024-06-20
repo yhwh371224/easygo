@@ -2082,7 +2082,7 @@ def create_order(request):
                     {
                         "amount": {
                             "currency_code": "AUD",
-                            "value": "100.00"
+                            "value": "1.50"
                         }
                     }
                 ]
