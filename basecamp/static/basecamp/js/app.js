@@ -9,6 +9,7 @@ window.paypal
     async createOrder() {
       try {
         const amount = document.getElementById('amount').value;
+        console.log("Amount entered:", amount);
         if (!amount) {
           throw new Error("Amount is required");
         }
