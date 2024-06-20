@@ -2071,6 +2071,10 @@ def create_order(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
+            amount = data.get('amount')
+            if not amount:
+                return JsonResponse({'error': 'Amount is required'}, status=400)
+            
             access_token = generate_access_token()
             headers = {
                 "Content-Type": "application/json",
@@ -2082,7 +2086,7 @@ def create_order(request):
                     {
                         "amount": {
                             "currency_code": "AUD",
-                            "value": "1.50"
+                            "value": amount
                         }
                     }
                 ]
