@@ -2076,6 +2076,11 @@ def create_order(request):
             if not amount:
                 return JsonResponse({'error': 'Amount is required'}, status=400)
             
+            try:
+                amount = float(amount)
+            except ValueError:
+                return JsonResponse({'error': 'Invalid amount format'}, status=400)
+            
             access_token = generate_access_token()
             headers = {
                 "Content-Type": "application/json",
@@ -2087,7 +2092,7 @@ def create_order(request):
                     {
                         "amount": {
                             "currency_code": "AUD",
-                            "value": amount
+                            "value": f"{amount:.2f}" 
                         }
                     }
                 ]
