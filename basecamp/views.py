@@ -2054,61 +2054,65 @@ def email_dispatch_detail(request):
         return render(request, 'basecamp/email_dispatch.html', {})
     
 
-BASE_URL = "https://api-m.paypal.com"
+PAYPAL_BASE_URL = "https://api-m.paypal.com"
 
 def generate_access_token():
     auth = (PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET)
-    headers = {
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
-    data = {
-        "grant_type": "client_credentials"
-    }
-    response = requests.post(f"{BASE_URL}/v1/oauth2/token", headers=headers, data=data, auth=auth)
+    response = requests.post(f"{PAYPAL_BASE_URL}/v1/oauth2/token", 
+                             headers={"Accept": "application/json", "Accept-Language": "en_US"},
+                             data={"grant_type": "client_credentials"},
+                             auth=auth)
     response.raise_for_status()
-    return response.json()['access_token']
+    return response.json()["access_token"]
 
 
 @csrf_exempt
 def create_order(request):
-    try:
-        data = json.loads(request.body)
-        amount = data['amount']
-        access_token = generate_access_token()
-        headers = {
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {access_token}"
-        }
-        payload = {
-            "intent": "CAPTURE",
-            "purchase_units": [
-                {
-                    "amount": amount
-                }
-            ]
-        }
-        response = requests.post(f"{BASE_URL}/v2/checkout/orders", headers=headers, json=payload)
-        response.raise_for_status()
-        return JsonResponse(response.json(), status=response.status_code)
-    except Exception as e:
-        return JsonResponse({"error": str(e)}, status=500)
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            access_token = generate_access_token()
+            headers = {
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {access_token}"
+            }
+            payload = {
+                "intent": "CAPTURE",
+                "purchase_units": [
+                    {
+                        "amount": {
+                            "currency_code": "AUD",
+                            "value": "100.00"
+                        }
+                    }
+                ]
+            }
+            response = requests.post(f"{PAYPAL_BASE_URL}/v2/checkout/orders", 
+                                     headers=headers, 
+                                     json=payload)
+            response.raise_for_status()
+            return JsonResponse(response.json())
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
+
 
 @csrf_exempt
 def capture_order(request, order_id):
-    try:
-        access_token = generate_access_token()
-        headers = {
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {access_token}"
-        }
-        response = requests.post(f"{BASE_URL}/v2/checkout/orders/{order_id}/capture", headers=headers)
-        response.raise_for_status()
-        return JsonResponse(response.json(), status=response.status_code)
-    except Exception as e:
-        return JsonResponse({"error": str(e)}, status=500)
-
-def serve_index(request):
-    return render(request, 'payonline_new.html')
+    if request.method == 'POST':
+        try:
+            access_token = generate_access_token()
+            headers = {
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {access_token}"
+            }
+            response = requests.post(f"{PAYPAL_BASE_URL}/v2/checkout/orders/{order_id}/capture", 
+                                     headers=headers)
+            response.raise_for_status()
+            return JsonResponse(response.json())
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 
 def paypal_ipn_error_email(subject, exception, item_name, payer_email, gross_amount):
