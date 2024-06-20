@@ -2072,6 +2072,7 @@ def create_order(request):
         try:
             data = json.loads(request.body)
             amount = data.get('amount')
+            print("Amount received:", amount) 
             if not amount:
                 return JsonResponse({'error': 'Amount is required'}, status=400)
             
