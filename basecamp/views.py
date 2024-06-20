@@ -2135,7 +2135,7 @@ def paypal_ipn_error_email(subject, exception, item_name, payer_email, gross_amo
 @require_POST
 def paypal_ipn(request):       
     if request.method == 'POST':
-        item_name = request.POST.get('item_name')
+        name = request.POST.get('name')
         payer_email = request.POST.get('payer_email')
         gross_amount = request.POST.get('mc_gross')
         txn_id = request.POST.get('txn_id')
@@ -2143,13 +2143,13 @@ def paypal_ipn(request):
         if PayPalPayment.objects.filter(txn_id=txn_id).exists():
             return HttpResponse(status=200, content="Duplicate IPN Notification")
         
-        p = PayPalPayment(item_name=item_name, payer_email=payer_email, gross_amount=gross_amount, txn_id=txn_id)
+        p = PayPalPayment(item_name=name, payer_email=payer_email, gross_amount=gross_amount, txn_id=txn_id)
 
         try:
             p.save()      
             
         except Exception as e:
-            paypal_ipn_error_email('PayPal IPN Error', str(e), item_name, payer_email, gross_amount)
+            paypal_ipn_error_email('PayPal IPN Error', str(e), name, payer_email, gross_amount)
             return HttpResponse(status=500, content="Error processing PayPal IPN")
 
         ipn_data = request.POST.copy()
@@ -2163,11 +2163,11 @@ def paypal_ipn(request):
             if response.status_code == 200 and response_content == 'VERIFIED':
                 return HttpResponse(status=200)
             else:
-                paypal_ipn_error_email('PayPal IPN Verification Failed', 'Failed to verify PayPal IPN.', item_name, payer_email, gross_amount)
+                paypal_ipn_error_email('PayPal IPN Verification Failed', 'Failed to verify PayPal IPN.', name, payer_email, gross_amount)
                 return HttpResponse(status=500, content="Error processing PayPal IPN")
 
         except requests.exceptions.RequestException as e:
-            paypal_ipn_error_email('PayPal IPN Request Exception', str(e), item_name, payer_email, gross_amount)
+            paypal_ipn_error_email('PayPal IPN Request Exception', str(e), name, payer_email, gross_amount)
             return HttpResponse(status=500, content="Error processing PayPal IPN")
 
     return HttpResponse(status=400)
