@@ -29,11 +29,23 @@
       gtag('event', 'conversion', {'send_to': 'AW-346352014/A8nNCP-DsbQZEI7Tk6UB'});
     </script> -->
     {% compress css %}
+    <style>
+      /* Critical CSS */
+      body { margin: 0; font-family: Arial, sans-serif; }
+      .jarallax-img {
+        background-size: cover;
+        background-position: center;
+        transition: background-image 1s ease-in-out;
+      }
+    </style>
+    <link rel="stylesheet" href="/static/basecamp/css/theme.min.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="/static/basecamp/css/theme.min.css"></noscript>
     <link rel="stylesheet" media="screen" href="/static/basecamp/css/tiny-slider.css"/>
     <link rel="stylesheet" media="screen" href="/static/basecamp/css/flatpickr.min.css"/>
-    <link rel="stylesheet" media="screen" href="/static/basecamp/css/theme.min.css"> 
     <link rel="stylesheet" media="screen" href="/static/basecamp/css/styles.css"> 
     {% endcompress %}  
+    <link rel="stylesheet" href="/static/basecamp/css/theme.min.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="/static/basecamp/css/theme.min.css"></noscript>
   </head>
   <body>   
     <main class="page-wrapper">
