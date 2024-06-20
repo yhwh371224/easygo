@@ -2139,7 +2139,8 @@ def paypal_ipn(request):
     if request.method == 'POST':
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
-        payer_name = f"{first_name} {last_name}" if first_name and last_name else None
+        item_name = request.POST.get('item_name')
+        payer_name = f"{first_name} {last_name}" if first_name and last_name else item_name
         payer_email = request.POST.get('payer_email')
         gross_amount = request.POST.get('mc_gross')
         txn_id = request.POST.get('txn_id')
