@@ -2115,10 +2115,10 @@ def capture_order(request, order_id):
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 
-def paypal_ipn_error_email(subject, exception, item_name, payer_email, gross_amount):
+def paypal_ipn_error_email(subject, exception, payer_name, payer_email, gross_amount):
     error_message = (
-        f"{exception}\n"
-        f"Item Name: {item_name}\n"
+        f"Exception: {exception}\n"
+        f"Payer Name: {payer_name}\n"
         f"Payer Email: {payer_email}\n"
         f"Gross Amount: {gross_amount}"
     )
@@ -2126,16 +2126,20 @@ def paypal_ipn_error_email(subject, exception, item_name, payer_email, gross_amo
         subject,
         error_message,
         settings.DEFAULT_FROM_EMAIL,
-        [RECIPIENT_EMAIL],  
+        [settings.RECIPIENT_EMAIL],  
         fail_silently=False,
-    )      
+    )
 
+
+PAYPAL_VERIFY_URL = "https://ipnpb.paypal.com/cgi-bin/webscr"
 
 @csrf_exempt
 @require_POST
-def paypal_ipn(request):       
+def paypal_ipn(request):
     if request.method == 'POST':
-        name = request.POST.get('name')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        payer_name = f"{first_name} {last_name}" if first_name and last_name else None
         payer_email = request.POST.get('payer_email')
         gross_amount = request.POST.get('mc_gross')
         txn_id = request.POST.get('txn_id')
@@ -2143,13 +2147,12 @@ def paypal_ipn(request):
         if PayPalPayment.objects.filter(txn_id=txn_id).exists():
             return HttpResponse(status=200, content="Duplicate IPN Notification")
         
-        p = PayPalPayment(item_name=name, payer_email=payer_email, gross_amount=gross_amount, txn_id=txn_id)
+        p = PayPalPayment(item_name=payer_name, payer_email=payer_email, gross_amount=gross_amount, txn_id=txn_id)
 
         try:
-            p.save()      
-            
+            p.save()
         except Exception as e:
-            paypal_ipn_error_email('PayPal IPN Error', str(e), name, payer_email, gross_amount)
+            paypal_ipn_error_email('PayPal IPN Error', str(e), payer_name, payer_email, gross_amount)
             return HttpResponse(status=500, content="Error processing PayPal IPN")
 
         ipn_data = request.POST.copy()
@@ -2157,17 +2160,17 @@ def paypal_ipn(request):
         headers = {'Content-Type': 'application/x-www-form-urlencoded'}
 
         try:
-            response = requests.post('https://ipnpb.paypal.com/cgi-bin/webscr', data=ipn_data, headers=headers, verify=True)
+            response = requests.post(PAYPAL_VERIFY_URL, data=ipn_data, headers=headers, verify=True)
             response_content = response.text.strip()
             
             if response.status_code == 200 and response_content == 'VERIFIED':
                 return HttpResponse(status=200)
             else:
-                paypal_ipn_error_email('PayPal IPN Verification Failed', 'Failed to verify PayPal IPN.', name, payer_email, gross_amount)
+                paypal_ipn_error_email('PayPal IPN Verification Failed', 'Failed to verify PayPal IPN.', payer_name, payer_email, gross_amount)
                 return HttpResponse(status=500, content="Error processing PayPal IPN")
 
         except requests.exceptions.RequestException as e:
-            paypal_ipn_error_email('PayPal IPN Request Exception', str(e), name, payer_email, gross_amount)
+            paypal_ipn_error_email('PayPal IPN Request Exception', str(e), payer_name, payer_email, gross_amount)
             return HttpResponse(status=500, content="Error processing PayPal IPN")
 
     return HttpResponse(status=400)
