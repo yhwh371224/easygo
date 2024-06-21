@@ -198,6 +198,10 @@ def payment_cancel(request):
     return render(request, 'basecamp/payment_cancel.html')
 
 
+def payment_options(request): 
+    return render(request, 'basecamp/payment_options.html')
+
+
 def payonline(request): 
     context = {
         'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
