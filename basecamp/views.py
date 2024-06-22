@@ -21,6 +21,7 @@ from blog.models import Post, Inquiry, PayPalPayment, StripePayment, Driver
 from blog.tasks import send_confirm_email, send_email_task, send_notice_email
 from basecamp.area import get_suburbs
 from basecamp.area_full import get_more_suburbs
+from basecamp.area_home import get_home_suburbs
 
 
 logger = logging.getLogger(__name__)
@@ -30,8 +31,13 @@ def index(request): return redirect('/home/')
 
 
 def home(request):
-    suburbs = get_suburbs()  
-    return render(request, 'basecamp/home.html', {'suburbs': suburbs})
+    suburbs = get_suburbs()
+    home_suburbs = get_home_suburbs()    
+    
+    return render(request, 'basecamp/home.html', {
+        'suburbs': suburbs,
+        'home_suburbs': home_suburbs,
+    })
 
 
 def about_us(request): 

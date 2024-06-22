@@ -7,7 +7,7 @@
     <title>Airport Transfers Sydney & Airport Shuttle services start from A$25</title>
     <meta name="google-site-verification" content="hae39L0Kv7JIxVc3YclvckH7Im5SdYa2hk_vZbGJIkA" />
     <meta name="description" content="Easygo Airport Shuttle provides a comfortable and reliable transfer service to/from Sydney Airport, Hotels, Cruise terminal. ✓ door to door service ✓ Fixed rates ✓ Flight tracking & free waiting time . Book Now To Secure Your Low Price!">
-    <meta name="keywords" content="airport shuttle, airport shuttle sydney, airport transfers sydney, airport shuttle sydney prices, airport transfers near me, private transfers sydney, airport pickup service, airport dropoff service, maxi taxi, mini buss">
+    <meta name="keywords" content="sydney airport shuttle, sydney airport transfers, airport shuttle, airport shuttle sydney, airport transfers sydney, airport pickup service sydney, airport drop off service sydney, airport transfers near me, private transfers sydney, maxi taxi, mini buss">
     <meta name="author" content="easygoshuttle.com.au">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" type="image/x-icon" href="{% static 'basecamp/favi/favicon.ico' %}">
@@ -153,7 +153,9 @@
             <div class="mb-3 pb-1 w-100 mb-sm-4 me-sm-3">
               <label class="form-label" for="start-point">From: start point</label>
               <select class="form-select" name="direction" required>
-                {% include 'basecamp/suburbs_home.html' %}
+                {% for area in home_suburbs %}
+                  <option value="{{ area }}">{{ area }}</option>
+                {% endfor %}
               </select>
             </div>
           </div>
@@ -161,7 +163,9 @@
             <div class="mb-3 pb-1 w-100 mb-sm-4 me-sm-3">
               <label class="form-label" for="end-point">To: end point</label>
               <select class="form-select" name="suburb" required>
-                {% include 'basecamp/suburbs_home1.html' %}
+                {% for area in home_suburbs %}
+                  <option value="{{ area }}">{{ area }}</option>
+                {% endfor %}
               </select>
             </div>
             <div class="mb-3 pb-1 w-100 mb-sm-4 me-sm-3">
