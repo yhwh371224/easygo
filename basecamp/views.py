@@ -32,11 +32,23 @@ def index(request): return redirect('/home/')
 
 def home(request):
     suburbs = get_suburbs()
-    home_suburbs = get_home_suburbs()    
+    home_suburbs = get_home_suburbs()
+    
+    fixed_items = [
+        "Hotels In City",  
+        "International Airport",
+        "Domestic Airport",
+        "WhiteBay cruise terminal",
+        "Overseas cruise terminal"
+    ]
+    
+    remaining_items = sorted([item for item in home_suburbs if item not in fixed_items])
+    
+    sorted_home_suburbs = fixed_items + remaining_items
     
     return render(request, 'basecamp/home.html', {
         'suburbs': suburbs,
-        'home_suburbs': home_suburbs,
+        'home_suburbs': sorted_home_suburbs,
     })
 
 
