@@ -1,10 +1,10 @@
 def get_home_suburbs(): 
     home_suburbs = {
         "Hotels In City",  
-        "International Airport"
-        "Domestic Airport"
-        "WhiteBay cruise terminal"
-        "Overseas cruise terminal"
+        "International Airport",
+        "Domestic Airport",
+        "WhiteBay cruise terminal",
+        "Overseas cruise terminal",
         "Artarmon",            
         "Asquith",
         "Auburn",
