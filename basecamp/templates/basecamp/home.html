@@ -154,7 +154,9 @@
               <label class="form-label" for="start-point">From: start point</label>
               <select class="form-select" name="direction" required>
                 {% for area in home_suburbs %}
-                  <option value="{{ area }}">{{ area }}</option>
+                  <option value="{{ area }}" {% if area == "Select your option" %}disabled selected{% endif %}>
+                    {{ area }}
+                  </option>
                 {% endfor %}
               </select>
             </div>
@@ -164,7 +166,9 @@
               <label class="form-label" for="end-point">To: end point</label>
               <select class="form-select" name="suburb" required>
                 {% for area in home_suburbs %}
-                  <option value="{{ area }}">{{ area }}</option>
+                  <option value="{{ area }}" {% if area == "Select your option" %}disabled selected{% endif %}>
+                    {{ area }}
+                  </option>
                 {% endfor %}
               </select>
             </div>
