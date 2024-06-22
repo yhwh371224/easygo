@@ -1,5 +1,6 @@
 def get_home_suburbs(): 
     home_suburbs = {
+        "Select your option"
         "Hotels In City",  
         "International Airport",
         "Domestic Airport",
