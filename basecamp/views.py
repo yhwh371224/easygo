@@ -35,6 +35,7 @@ def home(request):
     home_suburbs = get_home_suburbs()
     
     fixed_items = [
+        "Select your option",
         "Hotels In City",  
         "International Airport",
         "Domestic Airport",
