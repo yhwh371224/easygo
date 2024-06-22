@@ -5,7 +5,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from main.settings import RECIPIENT_EMAIL
-from .models import Post, Inquiry, PayPalPayment, StripePayment, Inquiry_point, Inquiry_cruise
+from .models import Post, Inquiry, PayPalPayment, StripePayment
 from .tasks import create_event_on_calendar, notify_user_payment_paypal, notify_user_payment_stripe
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
@@ -80,83 +80,7 @@ def notify_user_inquiry(sender, instance, created, **kwargs):
             [instance.email, RECIPIENT_EMAIL]
         )
         email.attach_alternative(html_content, "text/html")
-        email.send()                 
-
-
-# Point to point inquiry
-@receiver(post_save, sender=Inquiry_point)
-def notify_user_inquiry_point(sender, instance, created, **kwargs):
-    if instance.is_confirmed:    
-        html_content = render_to_string("basecamp/html_email-inquiry-response-p2p.html",
-                                        {'name': instance.name, 'contact': instance.contact, 'email': instance.email, 'direction': instance.direction, 
-                                         'flight_date': instance.flight_date, 'flight_time': instance.flight_time, 'pickup_time': instance.pickup_time, 
-                                         'flight_number': instance.flight_number, 'street': instance.street, 'no_of_passenger': instance.no_of_passenger, 
-                                         'suburb': instance.suburb, 'no_of_baggage': instance.no_of_baggage, 'return_direction': instance.return_direction, 
-                                         'return_flight_date': instance.return_flight_date, 'return_flight_time': instance.return_flight_time, 'toll': instance.toll, 
-                                         'return_flight_number': instance.return_flight_number, 'return_pickup_time': instance.return_pickup_time, 
-                                         'message': instance.message, 'price': instance.price, 'notice': instance.notice, 'private_ride': instance.private_ride,})
-        
-        text_content = strip_tags(html_content)
-        email = EmailMultiAlternatives(
-            "Booking Inquiry - EasyGo",
-            text_content,
-            '',
-            [RECIPIENT_EMAIL, instance.email]
-        )
-        email.attach_alternative(html_content, "text/html")
-        email.send()      
-
-    elif instance.cancelled:
-        html_content = render_to_string("basecamp/html_email-cancelled.html",
-                                        {'name': instance.name, 'email': instance.email,
-                                         })
-        text_content = strip_tags(html_content)
-        email = EmailMultiAlternatives(
-            "EasyGo Booking Inquiry",
-            text_content,
-            '',
-            [RECIPIENT_EMAIL, instance.email]
-        )
-        email.attach_alternative(html_content, "text/html")
-        email.send()
-
-
-# Cruise inquiry
-@receiver(post_save, sender=Inquiry_cruise)
-def notify_user_inquiry_cruise(sender, instance, created, **kwargs):
-    if instance.is_confirmed:    
-        html_content = render_to_string("basecamp/html_email-inquiry-response-p2p.html",
-                                        {'name': instance.name, 'contact': instance.contact, 'email': instance.email, 'direction': instance.direction, 
-                                         'flight_date': instance.flight_date, 'flight_time': instance.flight_time, 'pickup_time': instance.pickup_time, 
-                                         'flight_number': instance.flight_number, 'street': instance.street, 'no_of_passenger': instance.no_of_passenger, 
-                                         'suburb': instance.suburb, 'no_of_baggage': instance.no_of_baggage, 'return_direction': instance.return_direction, 
-                                         'return_flight_date': instance.return_flight_date, 'return_flight_time': instance.return_flight_time, 'toll': instance.toll, 
-                                         'return_flight_number': instance.return_flight_number, 'return_pickup_time': instance.return_pickup_time, 
-                                         'message': instance.message, 'price': instance.price, 'notice': instance.notice, 'private_ride': instance.private_ride,})
-        
-        text_content = strip_tags(html_content)
-        email = EmailMultiAlternatives(
-            "Booking Inquiry - EasyGo",
-            text_content,
-            '',
-            [RECIPIENT_EMAIL, instance.email]
-        )
-        email.attach_alternative(html_content, "text/html")
-        email.send()      
-
-    elif instance.cancelled:
-        html_content = render_to_string("basecamp/html_email-cancelled.html",
-                                        {'name': instance.name, 'email': instance.email,
-                                         })
-        text_content = strip_tags(html_content)
-        email = EmailMultiAlternatives(
-            "EasyGo Booking Inquiry",
-            text_content,
-            '',
-            [RECIPIENT_EMAIL, instance.email]
-        )
-        email.attach_alternative(html_content, "text/html")
-        email.send()
+        email.send() 
 
     
 @receiver(post_save, sender=PayPalPayment)
