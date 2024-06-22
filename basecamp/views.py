@@ -17,7 +17,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 from main.settings import RECIPIENT_EMAIL, PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET
-from blog.models import Post, Inquiry, PayPalPayment, StripePayment, Driver, Inquiry_point, Inquiry_cruise
+from blog.models import Post, Inquiry, PayPalPayment, StripePayment, Driver
 from blog.tasks import send_confirm_email, send_email_task, send_notice_email
 from basecamp.area import get_suburbs
 from basecamp.area_full import get_more_suburbs
@@ -87,13 +87,6 @@ def booking(request):
         'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
     }
     return render(request, 'basecamp/booking.html', context)
-
-
-def booking_form(request): 
-    context = {
-        'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
-    }
-    return render(request, 'basecamp/booking_form.html', context)
 
 
 def cancel(request):
@@ -312,10 +305,6 @@ def server_error(request):
 
 def server_error(request): 
     return render(request, 'basecamp/506.html')
-
-
-def server_error(request): 
-    return render(request, 'basecamp/507.html')
 
 
 def service(request): 
@@ -545,132 +534,6 @@ def inquiry_details1(request):
 
     else:
         return render(request, 'basecamp/inquiry1.html', {})
-        
-
-# client to fill out the inquiry form
-def booking_form_detail(request):
-    if request.method == "POST":
-        name = request.POST.get('name')
-        contact = request.POST.get('contact')
-        email = request.POST.get('email')
-        flight_date = request.POST.get('flight_date')
-        flight_number = request.POST.get('flight_number')
-        flight_time = request.POST.get('flight_time')
-        pickup_time = request.POST.get('pickup_time')
-        direction = request.POST.get('direction')
-        suburb = request.POST.get('suburb')
-        street = request.POST.get('street')
-        no_of_passenger = request.POST.get('no_of_passenger')
-        no_of_baggage = request.POST.get('no_of_baggage')
-        return_direction = request.POST.get('return_direction')
-        return_flight_date = request.POST.get('return_flight_date')
-        return_flight_number = request.POST.get('return_flight_number')
-        return_flight_time = request.POST.get('return_flight_time')
-        return_pickup_time = request.POST.get('return_pickup_time')
-        message = request.POST.get('message')
-
-        recaptcha_response = request.POST.get('g-recaptcha-response')
-        result = verify_recaptcha(recaptcha_response)
-        if not result.get('success'):
-            return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'}) 
-        
-        data = {
-            'name': name,
-            'contact': contact,
-            'email': email,
-            'flight_date': flight_date,
-            'flight_number': flight_number,
-            'pickup_time': pickup_time,
-            'direction': direction,
-            'street': street,
-            'suburb': suburb,
-            'no_of_passenger': no_of_passenger,
-            'return_flight_date': return_flight_date,
-            'return_flight_number': return_flight_number,
-            'return_pickup_time': return_pickup_time
-            }
-     
-        inquiry_email_exists = Inquiry.objects.filter(email=email).exists()
-        post_email_exists = Post.objects.filter(email=email).exists()
-
-        if inquiry_email_exists or post_email_exists:
-            content = '''
-            Hello, {} \n
-            Exist in Inquiry or Post *\n 
-            https://easygoshuttle.com.au
-            =============================
-            Contact: {}
-            Email: {}  
-            Flight date: {}
-            Flight number: {}
-            Pickup time: {}
-            Direction: {}
-            Street: {}
-            Suburb: {}
-            Passenger: {}
-            Return flight date {}
-            Return flight number {}
-            Return pickup time: {}
-            =============================\n        
-            Best Regards,
-            EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'],  data['flight_date'], data['flight_number'],
-                        data['pickup_time'], data['direction'], data['street'],  data['suburb'], data['no_of_passenger'], 
-                        data['return_flight_date'], data['return_flight_number'],data['return_pickup_time'])
-            
-            send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])
-
-        else:
-            content = '''
-            Hello, {} \n
-            Neither in Inquiry & Post *\n 
-            https://easygoshuttle.com.au
-            =============================
-            Contact: {}
-            Email: {}  
-            Flight date: {}
-            Flight number: {}
-            Pickup time: {}
-            Direction: {}
-            Street: {}
-            Suburb: {}
-            Passenger: {}
-            Return flight date {}
-            Return flight number {}
-            Return pickup time: {}
-            =============================\n        
-            Best Regards,
-            EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'],  data['flight_date'], data['flight_number'],
-                        data['pickup_time'], data['direction'], data['street'],  data['suburb'], data['no_of_passenger'], 
-                        data['return_flight_date'], data['return_flight_number'],data['return_pickup_time'])
-            
-            send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])              
-
-        
-        p = Inquiry(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
-                 flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
-                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction,
-                 return_flight_date=return_flight_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
-                 return_pickup_time=return_pickup_time ,message=message)
-        
-        p.save()
-
-
-        today = date.today()
-        if flight_date <= str(today):            
-            if is_ajax(request):                
-                return render(request, 'basecamp/flight_date_error.html')
-            else:                
-                return render(request, 'basecamp/flight_date_error.html')  
-
-        if is_ajax(request):
-            return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})
-        else:
-            return render(request, 'basecamp/inquiry_done.html')
-
-    else:
-        return render(request, 'basecamp/booking_form.html', {})
 
 
 # Contact form
@@ -778,7 +641,7 @@ def p2p_single_detail(request):
 
         cruise = True                           
         
-        p = Inquiry_point(name=name, contact=contact, email=email, flight_date=flight_date, cruise=cruise,
+        p = Inquiry(name=name, contact=contact, email=email, flight_date=flight_date, cruise=cruise,
                           pickup_time=pickup_time, flight_number=flight_number, street=street, no_of_passenger=no_of_passenger, 
                           no_of_baggage=no_of_baggage, return_flight_date=return_flight_date, 
                           return_flight_number=return_flight_number, return_pickup_time=return_pickup_time, message=message)
@@ -861,7 +724,7 @@ def cruise_inquiry_detail(request):
 
         cruise = True                                   
         
-        p = Inquiry_cruise(name=name, contact=contact, email=email, flight_date=flight_date, cruise=cruise,
+        p = Inquiry(name=name, contact=contact, email=email, flight_date=flight_date, cruise=cruise,
                           pickup_time=pickup_time, flight_number=flight_number, street=street, no_of_passenger=no_of_passenger, 
                           no_of_baggage=no_of_baggage, return_flight_date=return_flight_date, 
                           return_flight_number=return_flight_number, return_pickup_time=return_pickup_time, message=message)

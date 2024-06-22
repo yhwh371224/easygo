@@ -239,28 +239,33 @@
 													Company name: {{ company_name }}<br>
 													Attention: {{ name }}<br>
 												{% endif %}                                                   
-													Contact:  {{ contact }}<br>
-                                                    Email:  {{ email }}<br>
-													Direction:  {{ direction }}<br>
-                                                    Flight date:  {{ flight_date }}<br>
-                                                    Flight number:  {{ flight_number }}<br>	
-												{% if direction == 'Pickup from Intl Airport' or direction == 'Pickup from Domestic Airport' %}
-													Arrival time in Sydney:  {{ flight_time }}<br>
+												{% if direction %}
+													Direction: {{ direction }}<br>
+													Flight date: {{ flight_date }}<br>
+													Flight number: {{ flight_number }}<br>
+													Flight time: {{ flight_time }}<br>
+													Pickup time: {{ pickup_time }}<br>
 												{% else %}
-													Departure time from Sydney: {{ flight_time }}<br>
-												{% endif %}
+													Booking date:  {{ flight_date }}<br>
 													Pickup time:  {{ pickup_time }}<br>
-													Address:  {{ street }}, {{ suburb }}<br>      
-                                                    Number of Passenger:  {{ no_of_passenger }}<br>
-													Number of baggage:  {{ no_of_baggage }}<br><br>
-                                                    
-												{% if return_flight_number %}
-													<span style="font-weight:bold; color: #bdb1a6">Return direction:  {{ return_direction }}</span><br>
-													<span style="font-weight:bold; color: #bdb1a6">Return flight date:  {{ return_flight_date }}</span><br>
-                                                    <span style="font-weight:bold; color: #bdb1a6">Return flight number:  {{ return_flight_number }}</span><br>
-													<span style="font-weight:bold; color: #bdb1a6">Return flight time:  {{ return_flight_time }}</span><br>
-													<span style="font-weight:bold; color: #bdb1a6">Return pickup time:  {{ return_pickup_time }}</span><br><br>
+													Start point:  {{ flight_number }}<br>      
+													End point:  {{ street }}<br>
 												{% endif %}
+													Number of passenger: {{ no_of_passenger }}<br>
+													Number of baggage:  {{ no_of_baggage }}<br>
+
+												{% if not return_direction and return_flight_number %}
+													Return booking date:  {{ return_flight_date }}<br>	
+													Return start/end point: {{ return_flight_number }}<br>												
+													Return pickup time:  {{ return_pickup_time }}<br>
+												{% elif return_direction %}
+													Return Direction: {{ return_direction }}<br>
+													Return Flight date: {{ return_flight_date }}<br>
+													Return Flight number: {{ return_flight_number }}<br>
+													Return Flight time: {{ return_flight_time }}<br>
+													Return Pickup time: {{ return_pickup_time }}<br>
+												{% endif %}
+
 													Message: {{ message }}<br>                                                   
 												</p>
 												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;">
