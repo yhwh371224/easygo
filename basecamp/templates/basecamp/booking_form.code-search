@@ -1,0 +1,73 @@
+# Query: booking_form
+# ContextLines: 1
+
+15 results - 9 files
+
+basecamp\templates\basecamp\507.html:
+  13          <p class="fs-lg pb-2 pb-md-0 mb-4 mb-md-5"><span style="color: #eb7828">Google-site-verification is failed</span></p>
+  14:         <a class="btn btn-lg btn-primary" href="/inquiry/">Go to the previous page!</a>
+  15   
+
+basecamp\templates\basecamp\airport-shuttle-template.html:
+  46                            <li>However, we can sometimes accommodate for shorter frames if there has been a change of plans. </li>
+  47:                           <li>Bookings are only online via our website. Go to our <a href="/inquiry/">Price & Booking page</a></li>
+  48                            <li>For more details, get a quote, and remember to specify whether it is the domestic or International airport.</li>
+
+basecamp\templates\basecamp\airport-transfers-template.html:
+  46                            <li>However, we can sometimes accommodate for shorter frames if there has been a change of plans. </li>
+  47:                           <li>Bookings are only online via our website. Go to our <a href="/inquiry/">Price & Booking page</a></li>
+  48                            <li>For more details, get a quote, and remember to specify whether it is the domestic or International airport.</li>
+
+basecamp\templates\basecamp\cancel.html:
+  58                    <div class="dropdown-menu"><a class="dropdown-column dropdown-column-img bg-secondary" style="background-image: url('/static/basecamp/images/aboutus.webp');"></a>
+  59:                     <div class="dropdown-column"><a class="dropdown-item" href="/about_us/">About us</a><a class="dropdown-item" href="/service/">Service</a><a class="dropdown-item" href="/information/">Information</a><a class="dropdown-item" href="/inquiry/">Booking</a><a class="dropdown-item" href="/terms/">Terms</a><a class="dropdown-item" href="/privacy/">Privacy policy</a><a class="dropdown-item" href="mailto:info@easygoshuttle.com.au">Contact</a><a class="dropdown-item" href="/payonline/">Pay Online</a><a class="dropdown-item" href="/meeting_point/">Airport Meeting Point</a></div>
+  60                    </div>
+
+  83                        <ul class="dropdown-menu">
+  84: 						<li><a class="dropdown-item" href="/inquiry/">Airport</a></li>
+  85                          <li><a class="dropdown-item" href="/p2p_single/">Cruise</a></li>
+
+basecamp\templates\basecamp\payment_cancel.html:
+  58                    <div class="dropdown-menu"><a class="dropdown-column dropdown-column-img bg-secondary" style="background-image: url('/static/basecamp/images/aboutus.webp');"></a>
+  59:                     <div class="dropdown-column"><a class="dropdown-item" href="/about_us/">About us</a><a class="dropdown-item" href="/service/">Service</a><a class="dropdown-item" href="/information/">Information</a><a class="dropdown-item" href="/inquiry/">Booking</a><a class="dropdown-item" href="/terms/">Terms</a><a class="dropdown-item" href="/privacy/">Privacy policy</a><a class="dropdown-item" href="mailto:info@easygoshuttle.com.au">Contact</a><a class="dropdown-item" href="/payonline/">Pay Online</a><a class="dropdown-item" href="/meeting_point/">Airport Meeting Point</a></div>
+  60                    </div>
+
+  83                        <ul class="dropdown-menu">
+  84: 						<li><a class="dropdown-item" href="/inquiry/">Airport</a></li>
+  85                          <li><a class="dropdown-item" href="/p2p_single/">Cruise</a></li>
+
+basecamp\templates\basecamp\payment_options.html:
+  58                    <div class="dropdown-menu"><a class="dropdown-column dropdown-column-img bg-secondary" style="background-image: url('/static/basecamp/images/aboutus.webp');"></a>
+  59:                     <div class="dropdown-column"><a class="dropdown-item" href="/about_us/">About us</a><a class="dropdown-item" href="/service/">Service</a><a class="dropdown-item" href="/information/">Information</a><a class="dropdown-item" href="/inquiry/">Booking</a><a class="dropdown-item" href="/terms/">Terms</a><a class="dropdown-item" href="/privacy/">Privacy policy</a><a class="dropdown-item" href="mailto:info@easygoshuttle.com.au">Contact</a><a class="dropdown-item" href="/payonline/">Pay Online</a><a class="dropdown-item" href="/meeting_point/">Airport Meeting Point</a></div>
+  60                    </div>
+
+  83                        <ul class="dropdown-menu">
+  84: 						<li><a class="dropdown-item" href="/inquiry/">Airport</a></li>
+  85                          <li><a class="dropdown-item" href="/p2p_single/">Cruise</a></li>
+
+basecamp\templates\basecamp\payonline_new.html:
+  58                    <div class="dropdown-menu"><a class="dropdown-column dropdown-column-img bg-secondary" style="background-image: url('/static/basecamp/images/aboutus.webp');"></a>
+  59:                     <div class="dropdown-column"><a class="dropdown-item" href="/about_us/">About us</a><a class="dropdown-item" href="/service/">Service</a><a class="dropdown-item" href="/information/">Information</a><a class="dropdown-item" href="/inquiry/">Booking</a><a class="dropdown-item" href="/terms/">Terms</a><a class="dropdown-item" href="/privacy/">Privacy policy</a><a class="dropdown-item" href="mailto:info@easygoshuttle.com.au">Contact</a><a class="dropdown-item" href="/payonline/">Pay Online</a><a class="dropdown-item" href="/meeting_point/">Airport Meeting Point</a></div>
+  60                    </div>
+
+  83                        <ul class="dropdown-menu">
+  84: 						<li><a class="dropdown-item" href="/inquiry/">Airport</a></li>
+  85                          <li><a class="dropdown-item" href="/p2p_single/">Cruise</a></li>
+
+basecamp\templates\basecamp\payonline.html:
+  58                    <div class="dropdown-menu"><a class="dropdown-column dropdown-column-img bg-secondary" style="background-image: url('/static/basecamp/images/aboutus.webp');"></a>
+  59:                     <div class="dropdown-column"><a class="dropdown-item" href="/about_us/">About us</a><a class="dropdown-item" href="/service/">Service</a><a class="dropdown-item" href="/information/">Information</a><a class="dropdown-item" href="/inquiry/">Booking</a><a class="dropdown-item" href="/terms/">Terms</a><a class="dropdown-item" href="/privacy/">Privacy policy</a><a class="dropdown-item" href="mailto:info@easygoshuttle.com.au">Contact</a><a class="dropdown-item" href="/payonline/">Pay Online</a><a class="dropdown-item" href="/meeting_point/">Airport Meeting Point</a></div>
+  60                    </div>
+
+  83                        <ul class="dropdown-menu">
+  84: 						<li><a class="dropdown-item" href="/inquiry/">Airport</a></li>
+  85                          <li><a class="dropdown-item" href="/p2p_single/">Cruise</a></li>
+
+basecamp\templates\basecamp\success.html:
+  58                    <div class="dropdown-menu"><a class="dropdown-column dropdown-column-img bg-secondary" style="background-image: url('/static/basecamp/images/aboutus.webp');"></a>
+  59:                     <div class="dropdown-column"><a class="dropdown-item" href="/about_us/">About us</a><a class="dropdown-item" href="/service/">Service</a><a class="dropdown-item" href="/information/">Information</a><a class="dropdown-item" href="/inquiry/">Booking</a><a class="dropdown-item" href="/terms/">Terms</a><a class="dropdown-item" href="/privacy/">Privacy policy</a><a class="dropdown-item" href="mailto:info@easygoshuttle.com.au">Contact</a><a class="dropdown-item" href="/payonline/">Pay Online</a><a class="dropdown-item" href="/meeting_point/">Airport Meeting Point</a></div>
+  60                    </div>
+
+  83                        <ul class="dropdown-menu">
+  84: 						<li><a class="dropdown-item" href="/inquiry/">Airport</a></li>
+  85                          <li><a class="dropdown-item" href="/p2p_single/">Cruise</a></li>
