@@ -52,7 +52,6 @@ urlpatterns = [
     path('payment_options/', views.payment_options, name='payment_options'),
     path('payonline/', views.payonline, name='payonline'),
     path('payonline_combine/', views.payonline_combine, name='payonline_combine'),
-    path('payonline_new/', views.payonline_new, name='payonline_new'),
     path('paypal_ipn/', paypal_ipn, name='paypal_ipn'),    
     path('price_detail/', views.price_detail, name='price_detail'),
     path('privacy/', views.privacy, name='privacy'),
