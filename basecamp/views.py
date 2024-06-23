@@ -643,7 +643,7 @@ def p2p_single_detail(request):
         content = '''
         Hello, {} \n
         Point to Point single 
-        *** Inquiry_points ***\n
+        *** Inquirys ***\n
         https://easygoshuttle.com.au                   
         =============================            
         Email: {}  
@@ -718,7 +718,7 @@ def cruise_inquiry_detail(request):
         content = '''
         Hello, {} \n
         Cruise Inquiry
-        *** Inquiry_cruise ***\n
+        *** Inquiry ***\n
         https://easygoshuttle.com.au                   
         =============================            
         Email: {}  
@@ -1198,7 +1198,7 @@ def cruise_booking_detail(request):
             'return_pickup_time': return_pickup_time, 
             'message': message}       
         
-        cruise_email = Inquiry_cruise.objects.filter(email=email).exists()
+        cruise_email = Inquiry.objects.filter(email=email).exists()
         post_email = Post.objects.filter(email=email).exists()  
 
         if cruise_email or post_email:             
@@ -1206,7 +1206,7 @@ def cruise_booking_detail(request):
             content = '''
             Hello, {} \n  
             [Cruise Booking by client] >> Put price & Send email\n
-            Exit in Inquiry_cruise or Post *\n 
+            Exit in Inquiry or Post *\n 
             https://easygoshuttle.com.au/sending_email_first/ \n 
             https://easygoshuttle.com.au/sending_email_second/ \n            
             ===============================
@@ -1285,13 +1285,7 @@ def confirm_booking_detail(request):
         email = request.POST.get('email')
         is_confirmed = request.POST.get('is_confirmed') == 'True'
 
-        inquiries = [
-            Inquiry.objects.filter(email=email).first(),
-            Inquiry_cruise.objects.filter(email=email).first(),
-            Inquiry_point.objects.filter(email=email).first()
-        ]
-
-        user = max((obj for obj in inquiries if obj is not None), default=None, key=lambda x: x.created)
+        user = Inquiry.objects.filter(email=email).first()
 
         if not user:
             return render(request, 'basecamp/error.html', {'message': 'There is no information registered with this email in our system'})
@@ -1546,12 +1540,10 @@ def sending_email_input_data_detail(request):
         field = request.POST.get('field')        
 
         inquiry = Inquiry.objects.filter(email=email).first()
-        inquiry_cruise = Inquiry_cruise.objects.filter(email=email).first()
-        inquiry_point = Inquiry.objects.filter(email=email).first()
         post = Post.objects.filter(email=email).first()
 
         user = None
-        for obj in [inquiry, inquiry_cruise, inquiry_point, post]:
+        for obj in [inquiry, post]:
             if obj:
                 if user is None or obj.created > user.created:
                     user = obj
@@ -1826,7 +1818,7 @@ def flight_date_detail(request):
         content = '''
         {} 
         'The date' amended from data_error.html \n
-        >> Go to the Inquiry or Inquiry_point or Post \n
+        >> Go to the Inquiry or Inquiry or Post \n
         https://easygoshuttle.com.au \n  
         ===============================
         Contact: {}
