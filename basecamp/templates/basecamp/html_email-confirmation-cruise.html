@@ -245,7 +245,7 @@
 													Flight time: {{ flight_time }}<br>
 													Pickup time: {{ pickup_time }}<br>
 												{% else %}
-													Booking date:  {{ flight_date }}<br>
+													Pickup date:  {{ flight_date }}<br>
 													Pickup time:  {{ pickup_time }}<br>
 													Start point:  {{ flight_number }}<br>      
                                                     End point:  {{ street }}<br>
@@ -255,7 +255,7 @@
 													Number of baggage:  {{ no_of_baggage }}<br><br>
 
 												{% if not return_direction and return_flight_number %}
-                                                    Return booking date:  {{ return_flight_date }}<br>	
+                                                    Return pickup date:  {{ return_flight_date }}<br>	
 													Return start & end point: {{ return_flight_number }}<br>												
 													Return pickup time:  {{ return_pickup_time }}<br>
 												{% elif return_direction %}

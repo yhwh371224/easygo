@@ -608,158 +608,6 @@ def inquiry_details2(request):
         return render(request, 'basecamp/inquiry2.html', {})
     
     
-# single point to point inquiry
-def p2p_single_detail(request):    
-    if request.method == "POST":
-        name = request.POST.get('name')
-        contact = request.POST.get('contact')
-        email = request.POST.get('email')
-        flight_date = request.POST.get('flight_date')
-        pickup_time = request.POST.get('pickup_time')
-        flight_number = request.POST.get('flight_number')
-        street = request.POST.get('street')
-        no_of_passenger = request.POST.get('no_of_passenger')
-        no_of_baggage = request.POST.get('no_of_baggage')        
-        return_flight_date = request.POST.get('return_flight_date')
-        return_flight_number = request.POST.get('return_flight_number')
-        return_pickup_time = request.POST.get('return_pickup_time')
-        message = request.POST.get('message') 
-
-        recaptcha_response = request.POST.get('g-recaptcha-response')
-        result = verify_recaptcha(recaptcha_response)
-        if not result.get('success'):
-            return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'}) 
-               
-        data = {
-            'name': name,
-            'email': email,
-            'flight_date': flight_date,
-            'pickup_time': pickup_time,
-            'flight_number': flight_number,
-            'street': street,
-            'return_pickup_time': return_pickup_time
-            }
-        
-        content = '''
-        Hello, {} \n
-        Point to Point single 
-        *** Inquirys ***\n
-        https://easygoshuttle.com.au                   
-        =============================            
-        Email: {}  
-        Pick up time: {}      
-        Start point: {}            
-        End point: {}  
-        Return pickup time: {}          
-        
-        =============================\n        
-        Best Regards,
-        EasyGo Admin \n\n        
-        ''' .format(data['name'], data['email'], data['pickup_time'], data['flight_number'], data['street'], data['return_pickup_time'])
-        send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])
-
-        cruise = True                           
-        
-        p = Inquiry(name=name, contact=contact, email=email, flight_date=flight_date, cruise=cruise,
-                          pickup_time=pickup_time, flight_number=flight_number, street=street, no_of_passenger=no_of_passenger, 
-                          no_of_baggage=no_of_baggage, return_flight_date=return_flight_date, 
-                          return_flight_number=return_flight_number, return_pickup_time=return_pickup_time, message=message)
-        
-        p.save()         
-        
-        if is_ajax(request):
-            return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})
-        
-        else:
-            return render(request, 'basecamp/inquiry_done.html')
-
-    else:
-        return render(request, 'basecamp/p2p_single.html', {})
-
-
-# cruise inquiry 
-def cruise_inquiry_detail(request):    
-    if request.method == "POST":
-        name = request.POST.get('name')
-        contact = request.POST.get('contact')
-        email = request.POST.get('email')
-        flight_date = request.POST.get('flight_date')
-        pickup_time = request.POST.get('pickup_time')
-        flight_number = request.POST.get('flight_number')
-        street = request.POST.get('street')
-        no_of_passenger = request.POST.get('no_of_passenger')
-        no_of_baggage = request.POST.get('no_of_baggage')        
-        return_flight_date = request.POST.get('return_flight_date')
-        return_flight_number = request.POST.get('return_flight_number')
-        return_pickup_time = request.POST.get('return_pickup_time')
-        message = request.POST.get('message') 
-
-        recaptcha_response = request.POST.get('g-recaptcha-response')
-        result = verify_recaptcha(recaptcha_response)
-        if not result.get('success'):
-            return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'}) 
-               
-        data = {
-            'name': name,
-            'contact': contact, 
-            'email': email,
-            'flight_date': flight_date,
-            'pickup_time': pickup_time,
-            'flight_number': flight_number,
-            'street': street,
-            'no_of_passenger': no_of_passenger,
-            'no_of_baggage': no_of_baggage,
-            'return_flight_date': return_flight_date,
-            'return_flight_number': return_flight_number,
-            'return_pickup_time': return_pickup_time, 
-            'message': message
-            }
-        
-        content = '''
-        Hello, {} \n
-        Cruise Inquiry
-        *** Inquiry ***\n
-        https://easygoshuttle.com.au                   
-        =============================            
-        Email: {}  
-        Contact: {}
-        Pick up time: {}      
-        Start point: {}            
-        End point: {}  
-        No of passenger: {}
-        no_of_baggage: {}
-        return_flight_date: {}
-        return_flight_number: {}
-        Return pickup time: {}     
-        Message: {}     
-        
-        =============================\n        
-        Best Regards,
-        EasyGo Admin \n\n        
-        ''' .format(data['name'], data['email'], data['contact'], data['pickup_time'], data['flight_number'], data['street'], 
-                    data['no_of_passenger'], data['no_of_baggage'], data['return_flight_date'], data['return_flight_number'],
-                    data['return_pickup_time'], data['message'])
-        send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])
-
-        cruise = True                                   
-        
-        p = Inquiry(name=name, contact=contact, email=email, flight_date=flight_date, cruise=cruise,
-                          pickup_time=pickup_time, flight_number=flight_number, street=street, no_of_passenger=no_of_passenger, 
-                          no_of_baggage=no_of_baggage, return_flight_date=return_flight_date, 
-                          return_flight_number=return_flight_number, return_pickup_time=return_pickup_time, message=message)
-        
-        p.save() 
-
-
-        if is_ajax(request):
-            return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})        
-        else:
-            return render(request, 'basecamp/inquiry_done.html')
-
-    else:
-        return render(request, 'basecamp/cruise_inquiry.html', {})
-    
-    
 # Multiple points Inquiry 
 def p2p_detail(request):    
     if request.method == "POST":
@@ -1563,20 +1411,20 @@ def sending_email_input_data_detail(request):
                                          'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
                                          })
             text_content = strip_tags(html_content)
-            email = EmailMultiAlternatives(
+            email_message = EmailMultiAlternatives(
                 "Checking details - EasyGo",
                 text_content,
                 '',
                 [email, RECIPIENT_EMAIL]
             )
-            email.attach_alternative(html_content, "text/html")
-            email.send()
+            email_message.attach_alternative(html_content, "text/html")
+            email_message.send()
 
 
         return render(request, 'basecamp/inquiry_done.html') 
     
     else:
-        return render(request, 'beasecamp/sending_email_first.html', {})   
+        return render(request, 'basecamp/sending_email_first.html', {})   
 
 
 
@@ -1818,7 +1666,7 @@ def flight_date_detail(request):
         content = '''
         {} 
         'The date' amended from data_error.html \n
-        >> Go to the Inquiry or Inquiry or Post \n
+        >> Go to the Inquiry or Post \n
         https://easygoshuttle.com.au \n  
         ===============================
         Contact: {}
@@ -1949,6 +1797,10 @@ def create_order(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
+            amount_value = data.get('amount_value', '1.50')  # 기본값을 '1.50'으로 설정
+
+            amount_value = str(amount_value)
+            
             access_token = generate_access_token()
             headers = {
                 "Content-Type": "application/json",
@@ -1960,7 +1812,7 @@ def create_order(request):
                     {
                         "amount": {
                             "currency_code": "AUD",
-                            "value": "1.50"
+                            "value": amount_value
                         }
                     }
                 ]
