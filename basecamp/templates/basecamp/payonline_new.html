@@ -126,13 +126,13 @@
           <div class="col-lg-5 col-md-4 offset-lg-1 pb-2 mb-5" style="margin-top: -280px;">
             <!-- Paypal form -->
             <div class="card border-3 shadow-lg" style="padding:2rem">          
-              <form method="post" id="paypal-form">
+              <form method="post" id="payment-form">
                 {% csrf_token %}
                 <h3 class="text-center">PayPal Checkout</h3>
                 <br><br>
                 <div id="smart-button-container">                
                   <div style="text-align: center"><small>ENTER AMOUNT</small></div>
-                  <div style="text-align: center"><label for="amount"> </label><input name="amountInput" type="number" id="amount-value" value="" ></div>
+                  <div style="text-align: center"><label for="amount-value"> </label><input name="amountInput" type="number" id="amount-value" value="" ></div>
                 <p id="priceLabelError" style="visibility: hidden; color:red; text-align: center;">Price only without $ sign</p>                
                 <br><br>
                 <div style="text-align: center; margin-top: 0.625rem;" id="paypal-button-container"></div>

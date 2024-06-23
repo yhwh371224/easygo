@@ -87,6 +87,7 @@ document.getElementById('payment-form').addEventListener('submit', function(even
               orderData,
               JSON.stringify(orderData, null, 2)
             );
+            window.location.href = "/success/";
           }
         } catch (error) {
           console.error(error);
