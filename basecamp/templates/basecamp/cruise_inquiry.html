@@ -25,7 +25,7 @@
         <div class="row">
           <div class="col-lg-6 col-md-7 offset-lg-1 pb-2 mb-5" style="margin-top: -260px;">
             <div class="card border-0 shadow-lg">
-              <form action="/cruise_inquiry_detail/" method="post" id="booking-form" class="card-body needs-validation p-5" novalidate>
+              <form action="/inquiry_details/" method="post" id="booking-form" class="card-body needs-validation p-5" novalidate>
                 {% csrf_token %}
                 <div class="mb-3 pb-1">
                   <label class="form-label" >Full name</label>
@@ -46,7 +46,7 @@
                 <hr>
                 <br>
                 <div class="mb-3 pb-1">
-                  <label class="form-label" >Cruise date&nbsp;(Sydney)</label>
+                  <label class="form-label" >Pickup date (Sydney)</label>
                    <input class="form-control date-picker rounded" required name="flight_date" type="text" placeholder="Choose cruise date" data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;F j, Y&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;}" >
                   <div class="invalid-feedback">Please enter cruise date!</div>
                 </div>
