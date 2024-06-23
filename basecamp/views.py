@@ -1797,7 +1797,8 @@ def create_order(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
-            amount_value = data.get('amount_value')  # 기본값을 '1.50'으로 설정
+            amount_value = data.get('amount_value', '1.50')  
+            # 기본값을 '1.50'으로 설정, 이것이 없으면 오류가 발생함
 
             amount_value = str(amount_value)
             
