@@ -1999,6 +1999,6 @@ def handle_checkout_session_completed(session):
     amount = session.amount_total / 100  # Amount is in cents
 
     # Save payment information
-    # p = SquarePayment(name=name, email=email, amount=amount)
-    # p.save()
+    p = SquarePayment(name=name, email=email, amount=amount)
+    p.save()
 

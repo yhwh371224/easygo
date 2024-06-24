@@ -79,6 +79,16 @@ class PayPalPayment(models.Model):
         ordering = ['-created']
 
 
+class SquarePayment(models.Model):
+    name = models.CharField(max_length=100, blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
+    amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created']
+
+
 class StripePayment(models.Model):
     name = models.CharField(max_length=100, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
@@ -89,7 +99,7 @@ class StripePayment(models.Model):
         ordering = ['-created']
 
     def __str__(self):
-        return f"{self.name} - {self.amount}"
+        return f"{self.name} - {self.amount}"   
 
         
 class Post(models.Model):
