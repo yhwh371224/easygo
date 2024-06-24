@@ -218,8 +218,12 @@ def payonline(request):
     return render(request, 'basecamp/payonline.html')
 
 
-def payonline_combine(request):     
-    return render(request, 'basecamp/payonline_combine.html')
+def payonline_square(request):     
+    return render(request, 'basecamp/payonline_square.html')
+
+
+def payonline_stripe(request):     
+    return render(request, 'basecamp/payonline_stripe.html')
 
 
 def p2p(request): 
