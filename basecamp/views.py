@@ -17,7 +17,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 from main.settings import RECIPIENT_EMAIL, PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET
-from blog.models import Post, Inquiry, PayPalPayment, StripePayment, Driver
+from blog.models import Post, Inquiry, PayPalPayment, StripePayment, SquarePayment, Driver
 from blog.tasks import send_confirm_email, send_email_task, send_notice_email
 from basecamp.area import get_suburbs
 from basecamp.area_full import get_more_suburbs
@@ -218,8 +218,12 @@ def payonline(request):
     return render(request, 'basecamp/payonline.html')
 
 
-def payonline_combine(request):     
-    return render(request, 'basecamp/payonline_combine.html')
+def payonline_square(request):     
+    return render(request, 'basecamp/payonline_square.html')
+
+
+def payonline_stripe(request):     
+    return render(request, 'basecamp/payonline_stripe.html')
 
 
 def p2p(request): 
@@ -1955,3 +1959,46 @@ def handle_checkout_session_completed(session):
     # Save payment information
     p = StripePayment(name=name, email=email, amount=amount)
     p.save()
+
+
+@csrf_exempt
+def square_webhook(request):
+    payload = request.body
+    sig_header = request.META['HTTP_SQUARE_SIGNATURE']
+    endpoint_secret = settings.SQUARE_SIGNATURE_KEY
+
+    event = None
+
+    try:
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, endpoint_secret
+        )
+    except ValueError as e:
+        # Invalid payload
+        print('Error parsing payload: {}'.format(str(e)))
+        return HttpResponse(status=400)
+    except stripe.error.SignatureVerificationError as e:
+        # Invalid signature
+        print('Error verifying webhook signature: {}'.format(str(e)))
+        return HttpResponse(status=400)
+
+    # Handle the event
+    if event.type == 'checkout.session.completed':
+        session = event.data.object
+        print('PaymentIntent was successful!')
+        handle_checkout_session_completed(session)
+
+    else:
+        print('Unhandled event type {}'.format(event.type))
+
+    return HttpResponse(status=200)
+
+def handle_checkout_session_completed(session):
+    email = session.customer_details.email
+    name = session.customer_details.name
+    amount = session.amount_total / 100  # Amount is in cents
+
+    # Save payment information
+    p = SquarePayment(name=name, email=email, amount=amount)
+    p.save()
+
