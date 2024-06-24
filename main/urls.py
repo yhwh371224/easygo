@@ -20,6 +20,7 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('static/<path:path>', serve, {'document_root': settings.STATIC_ROOT}),
     path('paypal/', include('paypal.standard.ipn.urls')),
+    path('square_webhook/', views.square_webhook, name='square_webhook'),
     path('stripe_webhook/', stripe_webhook, name='stripe_webhook'),
     path('api/orders', views.create_order, name='create_order'),
     path('api/orders/<str:order_id>/capture', views.capture_order, name='capture_order'),
