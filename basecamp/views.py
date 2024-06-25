@@ -920,6 +920,12 @@ def booking_detail(request):
             'contact': contact,
             'email': email,            
             'flight_date': flight_date,
+            'flight_number': flight_number,            
+            'street': street, 
+            'suburb': suburb,
+            'no_of_passenger': no_of_passenger,
+            'return_flight_date': return_flight_date,
+            'return_flight_number': return_flight_number,
             'return_flight_time': return_flight_time}       
         
         inquiry_email = Inquiry.objects.filter(email=email).exists()
@@ -936,11 +942,18 @@ def booking_detail(request):
             ===============================
             Contact: {}
             Email: {}  
-            Return_flight_time: {}         
+            Flight number: {}
+            Address: {}, {}
+            No of Pax: {}
+            Return flight date: {}
+            Return flight no: {}
+            Return flight time: {}         
             ===============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['return_flight_time'])
+            ''' .format(data['name'], data['contact'], data['email'], data['flight_number'], data['street'], 
+                        data['suburb'], data['no_of_passenger'], data['return_flight_date'], data['return_flight_number'],
+                        data['return_flight_time'])
             send_mail(data['flight_date'], content,
                       '', [RECIPIENT_EMAIL])
         
@@ -954,11 +967,18 @@ def booking_detail(request):
            ===============================
             Contact: {}
             Email: {}  
-            Return_flight_time: {}
+            Flight number: {}
+            Address: {}, {}
+            No of Pax: {}
+            Return flight date: {}
+            Return flight no: {}
+            Return flight time: {}         
             ===============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['return_flight_time'])
+           ''' .format(data['name'], data['contact'], data['email'], data['flight_number'], data['street'], 
+                        data['suburb'], data['no_of_passenger'], data['return_flight_date'], data['return_flight_number'],
+                        data['return_flight_time'])
             send_mail(data['flight_date'], content,
                       '', [RECIPIENT_EMAIL])
             
@@ -1961,44 +1981,44 @@ def handle_checkout_session_completed(session):
     p.save()
 
 
-@csrf_exempt
-def square_webhook(request):
-    payload = request.body
-    sig_header = request.META['HTTP_SQUARE_SIGNATURE']
-    endpoint_secret = settings.SQUARE_SIGNATURE_KEY
+# @csrf_exempt
+# def square_webhook(request):
+#     payload = request.body
+#     sig_header = request.META['HTTP_SQUARE_SIGNATURE']
+#     endpoint_secret = settings.SQUARE_SIGNATURE_KEY
 
-    event = None
+#     event = None
 
-    try:
-        event = stripe.Webhook.construct_event(
-            payload, sig_header, endpoint_secret
-        )
-    except ValueError as e:
-        # Invalid payload
-        print('Error parsing payload: {}'.format(str(e)))
-        return HttpResponse(status=400)
-    except stripe.error.SignatureVerificationError as e:
-        # Invalid signature
-        print('Error verifying webhook signature: {}'.format(str(e)))
-        return HttpResponse(status=400)
+#     try:
+#         event = stripe.Webhook.construct_event(
+#             payload, sig_header, endpoint_secret
+#         )
+#     except ValueError as e:
+#         # Invalid payload
+#         print('Error parsing payload: {}'.format(str(e)))
+#         return HttpResponse(status=400)
+#     except stripe.error.SignatureVerificationError as e:
+#         # Invalid signature
+#         print('Error verifying webhook signature: {}'.format(str(e)))
+#         return HttpResponse(status=400)
 
-    # Handle the event
-    if event.type == 'checkout.session.completed':
-        session = event.data.object
-        print('PaymentIntent was successful!')
-        handle_checkout_session_completed(session)
+#     # Handle the event
+#     if event.type == 'checkout.session.completed':
+#         session = event.data.object
+#         print('PaymentIntent was successful!')
+#         handle_checkout_session_completed(session)
 
-    else:
-        print('Unhandled event type {}'.format(event.type))
+#     else:
+#         print('Unhandled event type {}'.format(event.type))
 
-    return HttpResponse(status=200)
+#     return HttpResponse(status=200)
 
-def handle_checkout_session_completed(session):
-    email = session.customer_details.email
-    name = session.customer_details.name
-    amount = session.amount_total / 100  # Amount is in cents
+# def handle_checkout_session_completed(session):
+#     email = session.customer_details.email
+#     name = session.customer_details.name
+#     amount = session.amount_total / 100  # Amount is in cents
 
-    # Save payment information
-    p = SquarePayment(name=name, email=email, amount=amount)
-    p.save()
+#     # Save payment information
+#     p = SquarePayment(name=name, email=email, amount=amount)
+#     p.save()
 
