@@ -238,15 +238,18 @@
 												{% if company_name %}
 													Company name: {{ company_name }}<br>
 													Attention: {{ name }}<br>
-												{% endif %}                                                   
+												{% endif %}   
+													Contact: {{ contact }}<br>
+													Email: {{ email }}<br>
 												{% if direction %}
 													Direction: {{ direction }}<br>
 													Flight date: {{ flight_date }}<br>
 													Flight number: {{ flight_number }}<br>
 													Flight time: {{ flight_time }}<br>
 													Pickup time: {{ pickup_time }}<br>
+													Address: {{ street }}, {{ suburb }}<br>
 												{% else %}
-													Booking date:  {{ flight_date }}<br>
+													Pickup date:  {{ flight_date }}<br>
 													Pickup time:  {{ pickup_time }}<br>
 													Start point:  {{ flight_number }}<br>      
 													End point:  {{ street }}<br>
@@ -265,7 +268,6 @@
 													Return Flight time: {{ return_flight_time }}<br>
 													Return Pickup time: {{ return_pickup_time }}<br>
 												{% endif %}
-
 													Message: {{ message }}<br>                                                   
 												</p>
 												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;">
