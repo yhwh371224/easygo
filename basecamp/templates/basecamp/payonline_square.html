@@ -137,15 +137,21 @@
                     <br><br>
                     <div id="smart-button-container">
                       <div style="text-align: center"><small>BOOKING NAME</small></div>
-                      <div style="text-align: center"><label for="description"></label><input type="text" name="descriptionInput" id="description" value=""></div>
+                      <div style="text-align: center"><label for="description"></label><input type="text" name="descriptionInput" id="description" value="" required></div>
                       <p id="descriptionError" style="visibility: hidden; color:red; text-align: center;">Please enter your booking name</p>
                       <div style="text-align: center"><small>ENTER AMOUNT</small></div>
-                      <div style="text-align: center"><label for="amount"> </label><input name="amountInput" type="number" id="amount" value="" ></div>
+                      <div style="text-align: center"><label for="amount"> </label><input name="amountInput" type="number" id="amount" value="" required></div>
                       <p id="priceLabelError" style="visibility: hidden; color:red; text-align: center;">Price only without $ sign</p>
                       <br><br>
                       <div style="text-align: center; margin-top: 0.625rem;" id="paypal-button-container"></div>
                       <br><br>
-                      <div style="text-align: center; margin-top: 0.625rem;" id="square-button-container"></div>
+                      <div id="square-button-container">
+                        <div id="sq-card-number"></div>
+                        <div id="sq-expiration-date"></div>
+                        <div id="sq-cvv"></div>
+                        <div id="sq-postal-code"></div>
+                        <button id="sq-creditcard" class="button-credit-card" onclick="onGetCardNonce(event)">Pay with Card</button>
+                      </div>
                     </div>				
                 </form>
     <section class="container" style="margin-top: 60px;">
@@ -263,6 +269,11 @@
         }
     });
     paymentForm.build();
+
+    function onGetCardNonce(event) {
+    event.preventDefault();
+    paymentForm.requestCardNonce();
+  }
 </script>
   </main>
     <footer class="site-footer bg-dark pt-5 pb-4">
