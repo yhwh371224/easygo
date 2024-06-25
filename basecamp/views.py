@@ -103,7 +103,7 @@ def airport_transfers(request, suburb):
 
 def booking(request): 
     context = {
-        'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
+        'recaptcha_v2_site_key': settings.RECAPTCHA_V2_SITE_KEY,
     }
     return render(request, 'basecamp/booking.html', context)
 
@@ -127,14 +127,14 @@ def confirm_booking(request):
 
 def cruise_booking(request): 
     context = {
-        'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
+        'recaptcha_v2_site_key': settings.RECAPTCHA_V2_SITE_KEY,
     }
     return render(request, 'basecamp/cruise_booking.html', context)
 
 
 def cruise_inquiry(request): 
     context = {
-        'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
+        'recaptcha_v2_site_key': settings.RECAPTCHA_V2_SITE_KEY,
     }
     return render(request, 'basecamp/cruise_inquiry.html', context)
 
@@ -157,7 +157,7 @@ def flight_date_error(request):
 
 def inquiry(request): 
     context = {
-        'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
+        'recaptcha_v2_site_key': settings.RECAPTCHA_V2_SITE_KEY,
     }
     return render(request, 'basecamp/inquiry.html', context)
 
@@ -168,7 +168,7 @@ def inquiry1(request):
 
 def inquiry2(request): 
     context = {
-        'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
+        'recaptcha_v2_site_key': settings.RECAPTCHA_V2_SITE_KEY,
     }
     return render(request, 'basecamp/inquiry2.html', context)
 
@@ -224,7 +224,7 @@ def payonline_stripe(request):
 
 def p2p(request): 
     context = {
-        'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
+        'recaptcha_v2_site_key': settings.RECAPTCHA_V2_SITE_KEY,
     }
     return render(request, 'basecamp/p2p.html', context)
 
@@ -235,7 +235,7 @@ def p2p_booking(request):
 
 def p2p_single(request): 
     context = {
-        'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
+        'recaptcha_v2_site_key': settings.RECAPTCHA_V2_SITE_KEY,
     }
     return render(request, 'basecamp/p2p_single.html', context)
 
@@ -330,9 +330,16 @@ def terms(request):
     return render(request, 'basecamp/terms.html')
 
 
-def verify_recaptcha(response):
+def verify_recaptcha(response, version='v2'):
+    if version == 'v2':
+        secret_key = settings.RECAPTCHA_V2_SECRET_KEY
+    elif version == 'v3':
+        secret_key = settings.RECAPTCHA_V3_SECRET_KEY
+    else:
+        return {'success': False, 'error-codes': ['invalid-version']}
+
     data = {
-        'secret': settings.RECAPTCHA_SECRET_KEY,
+        'secret': secret_key,
         'response': response
     }
     r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
@@ -1977,7 +1984,26 @@ def handle_checkout_session_completed(session):
     p.save()
 
 
+@csrf_exempt
+def recaptcha_verify(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        recaptcha_token = data.get('recaptchaToken')
+        
+        if not recaptcha_token:
+            return JsonResponse({'success': False, 'message': 'No reCAPTCHA token provided'})
 
+        # Verify the reCAPTCHA v3 token
+        result = verify_recaptcha(recaptcha_token, version='v3')
+        
+        if result.get('success'):
+            # The token is valid, handle your logic here
+            return JsonResponse({'success': True})
+        else:
+            # The token is invalid
+            return JsonResponse({'success': False, 'message': result.get('error-codes', 'Invalid reCAPTCHA token')})
+    
+    return JsonResponse({'success': False, 'message': 'Invalid request method'})
 
 
 
