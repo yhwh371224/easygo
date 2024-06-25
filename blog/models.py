@@ -68,7 +68,7 @@ class Inquiry(models.Model):
         ordering = ['-created']
 
 
-class PayPalPayment(models.Model):
+class PaypalPayment(models.Model):
     item_name = models.CharField(max_length=100, blank=True, null=True)
     payer_email = models.EmailField(blank=True, null=True)
     gross_amount = models.CharField(max_length=30, blank=True, null=True)
@@ -99,7 +99,7 @@ class StripePayment(models.Model):
         ordering = ['-created']
 
     def __str__(self):
-        return f"{self.name} - {self.amount}"   
+        return f"{self.name} - {self.amount}"  
 
         
 class Post(models.Model):
