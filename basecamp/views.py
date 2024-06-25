@@ -17,11 +17,12 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 from main.settings import RECIPIENT_EMAIL, PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET
-from blog.models import Post, Inquiry, PayPalPayment, StripePayment, SquarePayment, Driver
+from blog.models import Post, Inquiry, PaypalPayment, StripePayment, SquarePayment, Driver
 from blog.tasks import send_confirm_email, send_email_task, send_notice_email
 from basecamp.area import get_suburbs
 from basecamp.area_full import get_more_suburbs
 from basecamp.area_home import get_home_suburbs
+from square.client import Client
 
 
 logger = logging.getLogger(__name__)
@@ -1887,10 +1888,10 @@ def paypal_ipn(request):
         gross_amount = request.POST.get('mc_gross')
         txn_id = request.POST.get('txn_id')
 
-        if PayPalPayment.objects.filter(txn_id=txn_id).exists():
+        if PaypalPayment.objects.filter(txn_id=txn_id).exists():
             return HttpResponse(status=200, content="Duplicate IPN Notification")
         
-        p = PayPalPayment(item_name=payer_name, payer_email=payer_email, gross_amount=gross_amount, txn_id=txn_id)
+        p = PaypalPayment(item_name=payer_name, payer_email=payer_email, gross_amount=gross_amount, txn_id=txn_id)
 
         try:
             p.save()
@@ -1981,44 +1982,44 @@ def handle_checkout_session_completed(session):
     p.save()
 
 
-# @csrf_exempt
-# def square_webhook(request):
-#     payload = request.body
-#     sig_header = request.META['HTTP_SQUARE_SIGNATURE']
-#     endpoint_secret = settings.SQUARE_SIGNATURE_KEY
+@csrf_exempt
+def square_webhook(request):
+    payload = request.body.decode('utf-8')
+    sig_header = request.META.get('HTTP_X_SQUARE_SIGNATURE')
+    endpoint_secret = settings.SQUARE_SIGNATURE_KEY
 
-#     event = None
+    # Verify the signature
+    if not verify_square_signature(payload, sig_header, endpoint_secret):
+        return HttpResponse(status=400)
 
-#     try:
-#         event = stripe.Webhook.construct_event(
-#             payload, sig_header, endpoint_secret
-#         )
-#     except ValueError as e:
-#         # Invalid payload
-#         print('Error parsing payload: {}'.format(str(e)))
-#         return HttpResponse(status=400)
-#     except stripe.error.SignatureVerificationError as e:
-#         # Invalid signature
-#         print('Error verifying webhook signature: {}'.format(str(e)))
-#         return HttpResponse(status=400)
+    event = json.loads(payload)
 
-#     # Handle the event
-#     if event.type == 'checkout.session.completed':
-#         session = event.data.object
-#         print('PaymentIntent was successful!')
-#         handle_checkout_session_completed(session)
+    # Handle the event
+    if event['type'] == 'payment.created':
+        session = event['data']['object']
+        print('Payment was successful!')
+        handle_square_payment_created(session)
 
-#     else:
-#         print('Unhandled event type {}'.format(event.type))
+    else:
+        print('Unhandled event type {}'.format(event['type']))
 
-#     return HttpResponse(status=200)
+    return HttpResponse(status=200)
 
-# def handle_checkout_session_completed(session):
-#     email = session.customer_details.email
-#     name = session.customer_details.name
-#     amount = session.amount_total / 100  # Amount is in cents
+def verify_square_signature(payload, sig_header, endpoint_secret):
+    import hmac
+    import hashlib
+    import base64
 
-#     # Save payment information
-#     p = SquarePayment(name=name, email=email, amount=amount)
-#     p.save()
+    hash = hmac.new(endpoint_secret.encode('utf-8'), payload.encode('utf-8'), hashlib.sha1)
+    expected_signature = base64.b64encode(hash.digest()).decode('utf-8')
+    return hmac.compare_digest(expected_signature, sig_header)
+
+def handle_square_payment_created(session):
+    email = session['customer']['email']
+    name = session['customer']['name']
+    amount = session['amount_money']['amount'] / 100  # Amount is in cents
+
+    # Save payment information
+    p = SquarePayment(name=name, email=email, amount=amount)
+    p.save()
 
