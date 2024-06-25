@@ -16,18 +16,7 @@
 	  <link rel="android-chrome" type="image/png" sizes="512x512" href="{% static 'basecamp/favi/android-chrome-512x512.png' %}">
 	  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'basecamp/favi/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'basecamp/favi/favicon-16x16.png' %}">
-    <link rel="manifest" href="{% static 'basecamp/favi/site.webmanifest' %}">       
-    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=AW-346352014"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-    
-      gtag('config', 'G-LM2TMFMGH4');
-    </script>
-    <script>
-      gtag('event', 'conversion', {'send_to': 'AW-346352014/A8nNCP-DsbQZEI7Tk6UB'});
-    </script> -->
+    <link rel="manifest" href="{% static 'basecamp/favi/site.webmanifest' %}"> 
     {% compress css %}
     <style>
       /* Critical CSS */
@@ -45,7 +34,7 @@
     <link rel="stylesheet" media="screen" href="/static/basecamp/css/styles.css"> 
     {% endcompress %}  
     <link rel="stylesheet" href="/static/basecamp/css/theme.min.css" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="/static/basecamp/css/theme.min.css"></noscript>
+    <noscript><link rel="stylesheet" href="/static/basecamp/css/theme.min.css"></noscript>    
   </head>
   <body>   
     <main class="page-wrapper">
@@ -140,7 +129,7 @@
       </section>
       <!-- Price checking form-->
       <form class="container position-relative zindex-5" action="/price_detail/" id="booking-form" method="post" style="margin-top: -125px;">
-		  {% csrf_token %}
+		  {% csrf_token %}      
         <div class="d-lg-flex align-items-center bg-secondary border rounded-3 px-4 pt-4 pb-3" >
           <div class="d-sm-flex align-items-center flex-grow-1">
             <div class="mb-3 pb-1 w-100 mb-sm-4 me-sm-3">
@@ -192,7 +181,7 @@
 				  <option value="" disabled>Over 13(please contact us)</option>
               </select>
             </div>
-            <div class="text-center text-sm-start mt-2 mt-sm-4 mb-4">
+            <div class="text-center text-sm-start mt-2 mt-sm-4 mb-4">        
 				<button role="button" type="submit" class="btn btn-warning" href="/inquiry1/" id="submitButton">Go >>></button>
             </div>
           </div>
@@ -425,6 +414,30 @@
 <script src="/static/basecamp/js/flatpickr.min.js" defer></script>
 <script src="/static/basecamp/js/date-picker.js" defer></script>
 <script src="/static/basecamp/js/theme.min.js" defer></script>
+<script src="https://www.google.com/recaptcha/api.js?render={{ RECAPTCHA_V3_SITE_KEY }}" defer></script>
+<script>
+    grecaptcha.ready(function() {
+        grecaptcha.execute("{{ RECAPTCHA_V3_SITE_KEY }}", {action: 'homepage'}).then(function(token) {
+            const csrftoken = '{{ csrf_token }}';
+            fetch('/recaptcha-verify/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken
+                },
+                body: JSON.stringify({recaptchaToken: token})
+            }).then(response => {
+                return response.json();
+            }).then(data => {
+                if (data.success) {
+                    console.log('reCAPTCHA validation succeeded');
+                } else {
+                    console.log('reCAPTCHA validation failed:', data.message);
+                }
+            });
+        });
+    });
+</script>
 {% endcompress js %}
   </body>
 </html>
