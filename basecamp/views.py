@@ -1756,7 +1756,7 @@ def email_dispatch_detail(request):
             "Requested driver contact": ("basecamp/html_email-response-driver-contact.html", "For driver contact - EasyGo"),
             "Shared ride discount": ("basecamp/html_email-shared-discount.html", "Discount notice - EasyGo"),
             "Confirmation multiplebookings": ("basecamp/html_email-confirmation-multiplebookings.html", "Booking Confirmation - EasyGo"),
-            "Sending invoice": ("basecamp/html_email-invoice-victor.html", "Invoice - EasyGo")
+            "Cancel-booking": ("basecamp/html_email-response-cancel.html", "Cancel-booking: EasyGo")
         }
 
         if selected_option in template_options:
