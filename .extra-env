@@ -9,7 +9,7 @@
 
 ##### Development 
 # ENVIRONMENT=development
-# RECAPTCHA_SITE_KEY=6Ldb4rcpAAAAADIZpi7CYoTVIcooode7L8lV6uh0
-# RECAPTCHA_SECRET_KEY=6Ldb4rcpAAAAAN98rPsfLGajh5lh3e-IkFrTa93P
+# recaptcha_v2_site_key=6Ldb4rcpAAAAADIZpi7CYoTVIcooode7L8lV6uh0
+# RECAPTCHA_V2_SECRET_KEY=6Ldb4rcpAAAAAN98rPsfLGajh5lh3e-IkFrTa93P
 
 
