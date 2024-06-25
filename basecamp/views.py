@@ -4,8 +4,8 @@ import logging
 import requests
 import stripe
 import json
+import uuid
 import hmac
-import hashlib
 import base64
 
 from django.conf import settings
@@ -26,6 +26,7 @@ from basecamp.area import get_suburbs
 from basecamp.area_full import get_more_suburbs
 from basecamp.area_home import get_home_suburbs
 from square.client import Client
+from hashlib import sha1
 
 
 logger = logging.getLogger(__name__)
@@ -1989,6 +1990,42 @@ def handle_checkout_session_completed(session):
     p.save()
 
 
+square_client = Client(
+    access_token=settings.SQUARE_ACCESS_TOKEN,
+    environment='production'  # or 'sandbox' for testing
+)
+
+@csrf_exempt
+def process_payment(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            location_id = data.get('locationId')
+            source_id = data.get('sourceId')
+            amount = data.get('amount')
+
+            # Here you would integrate with Square's API to process the payment
+            response = square_client.payments.create_payment({
+                "source_id": source_id,
+                "idempotency_key": str(uuid.uuid4()),
+                "amount_money": {
+                    "amount": int(float(amount) * 100),  # amount in cents
+                    "currency": "AUD"
+                },
+                "location_id": location_id
+            })
+
+            return JsonResponse(response, status=200)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
+
+
+def verify_square_signature(payload, sig_header, endpoint_secret):
+    computed_signature = base64.b64encode(hmac.new(endpoint_secret.encode(), payload.encode(), sha1).digest()).decode()
+    return hmac.compare_digest(computed_signature, sig_header)
+
+
 @csrf_exempt
 def square_webhook(request):
     payload = request.body.decode('utf-8')
@@ -2012,10 +2049,6 @@ def square_webhook(request):
 
     return HttpResponse(status=200)
 
-def verify_square_signature(payload, sig_header, endpoint_secret):
-    hash = hmac.new(endpoint_secret.encode('utf-8'), payload.encode('utf-8'), hashlib.sha1)
-    expected_signature = base64.b64encode(hash.digest()).decode('utf-8')
-    return hmac.compare_digest(expected_signature, sig_header)
 
 def handle_square_payment_created(payment):
     email = payment['customer_email']
