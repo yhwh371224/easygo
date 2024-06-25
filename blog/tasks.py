@@ -10,7 +10,7 @@ from django.utils.html import strip_tags
 from django.db.models import Q
 from celery import shared_task
 from main.settings import RECIPIENT_EMAIL, DEFAULT_FROM_EMAIL
-from .models import Post, PaypalPayment, SquarePayment, StripePayment
+from .models import Post, PaypalPayment, StripePayment
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -196,46 +196,6 @@ def notify_user_payment_paypal(instance_id):
                 {'name': instance.item_name, 'email': instance.payer_email, 'amount': instance.gross_amount}
             )
             payment_send_email("Payment - EasyGo", html_content, [instance.payer_email, RECIPIENT_EMAIL])
-
-
-# Square > sending email & save
-def notify_user_payment_square(instance_id):
-    instance = SquarePayment.objects.get(id=instance_id)   
-    if instance.name:            
-        post_name = Post.objects.filter(
-            Q(name__iregex=r'^%s$' % re.escape(instance.name)) |
-            Q(email__iexact=instance.email)
-        ).first()
-
-        if post_name:            
-            html_content = render_to_string(
-                "basecamp/html_email-payment-success-stripe.html",
-                {'name': post_name.name, 'email': post_name.email, 'amount': instance.amount}
-            )
-            payment_send_email("Payment - EasyGo", html_content, [post_name.email, RECIPIENT_EMAIL])            
-            
-            post_name.paid = instance.amount          
-            post_name.reminder = True
-            post_name.discount = ""
-            if float(post_name.price) > instance.amount:
-                post_name.toll = "short payment"             
-            post_name.save()
-
-            if post_name.return_pickup_time == 'x':                   
-                    second_post = Post.objects.filter(email=post_name.email)[1]                    
-                    second_post.paid = instance.amount                    
-                    second_post.reminder = True
-                    second_post.discount = ""
-                    if float(post_name.price) > instance.amount:
-                        second_post.toll = "short payment"  
-                    second_post.save() 
-
-        else:            
-            html_content = render_to_string(
-                "basecamp/html_email-noIdentity-stripe.html",
-                {'name': instance.name, 'email': instance.email, 'amount': instance.amount}
-            )
-            payment_send_email("Payment - EasyGo", html_content, [instance.email, RECIPIENT_EMAIL])
 
 
 # Stripe > sending email & save
