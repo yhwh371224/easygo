@@ -17,7 +17,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 from main.settings import RECIPIENT_EMAIL, PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET
-from blog.models import Post, Inquiry, PayPalPayment, StripePayment, SquarePayment, Driver
+from blog.models import Post, Inquiry, PaypalPayment, StripePayment, Driver
 from blog.tasks import send_confirm_email, send_email_task, send_notice_email
 from basecamp.area import get_suburbs
 from basecamp.area_full import get_more_suburbs
@@ -103,7 +103,7 @@ def airport_transfers(request, suburb):
 
 def booking(request): 
     context = {
-        'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
+        'recaptcha_v2_site_key': settings.RECAPTCHA_V2_SITE_KEY,
     }
     return render(request, 'basecamp/booking.html', context)
 
@@ -127,14 +127,14 @@ def confirm_booking(request):
 
 def cruise_booking(request): 
     context = {
-        'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
+        'recaptcha_v2_site_key': settings.RECAPTCHA_V2_SITE_KEY,
     }
     return render(request, 'basecamp/cruise_booking.html', context)
 
 
 def cruise_inquiry(request): 
     context = {
-        'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
+        'recaptcha_v2_site_key': settings.RECAPTCHA_V2_SITE_KEY,
     }
     return render(request, 'basecamp/cruise_inquiry.html', context)
 
@@ -157,7 +157,7 @@ def flight_date_error(request):
 
 def inquiry(request): 
     context = {
-        'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
+        'recaptcha_v2_site_key': settings.RECAPTCHA_V2_SITE_KEY,
     }
     return render(request, 'basecamp/inquiry.html', context)
 
@@ -168,7 +168,7 @@ def inquiry1(request):
 
 def inquiry2(request): 
     context = {
-        'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
+        'recaptcha_v2_site_key': settings.RECAPTCHA_V2_SITE_KEY,
     }
     return render(request, 'basecamp/inquiry2.html', context)
 
@@ -218,17 +218,13 @@ def payonline(request):
     return render(request, 'basecamp/payonline.html')
 
 
-def payonline_square(request):     
-    return render(request, 'basecamp/payonline_square.html')
-
-
 def payonline_stripe(request):     
     return render(request, 'basecamp/payonline_stripe.html')
 
 
 def p2p(request): 
     context = {
-        'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
+        'recaptcha_v2_site_key': settings.RECAPTCHA_V2_SITE_KEY,
     }
     return render(request, 'basecamp/p2p.html', context)
 
@@ -239,7 +235,7 @@ def p2p_booking(request):
 
 def p2p_single(request): 
     context = {
-        'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
+        'recaptcha_v2_site_key': settings.RECAPTCHA_V2_SITE_KEY,
     }
     return render(request, 'basecamp/p2p_single.html', context)
 
@@ -334,9 +330,16 @@ def terms(request):
     return render(request, 'basecamp/terms.html')
 
 
-def verify_recaptcha(response):
+def verify_recaptcha(response, version='v2'):
+    if version == 'v2':
+        secret_key = settings.RECAPTCHA_V2_SECRET_KEY
+    elif version == 'v3':
+        secret_key = settings.RECAPTCHA_V3_SECRET_KEY
+    else:
+        return {'success': False, 'error-codes': ['invalid-version']}
+
     data = {
-        'secret': settings.RECAPTCHA_SECRET_KEY,
+        'secret': secret_key,
         'response': response
     }
     r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
@@ -920,6 +923,12 @@ def booking_detail(request):
             'contact': contact,
             'email': email,            
             'flight_date': flight_date,
+            'flight_number': flight_number,            
+            'street': street, 
+            'suburb': suburb,
+            'no_of_passenger': no_of_passenger,
+            'return_flight_date': return_flight_date,
+            'return_flight_number': return_flight_number,
             'return_flight_time': return_flight_time}       
         
         inquiry_email = Inquiry.objects.filter(email=email).exists()
@@ -936,11 +945,18 @@ def booking_detail(request):
             ===============================
             Contact: {}
             Email: {}  
-            Return_flight_time: {}         
+            Flight number: {}
+            Address: {}, {}
+            No of Pax: {}
+            Return flight date: {}
+            Return flight no: {}
+            Return flight time: {}         
             ===============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['return_flight_time'])
+            ''' .format(data['name'], data['contact'], data['email'], data['flight_number'], data['street'], 
+                        data['suburb'], data['no_of_passenger'], data['return_flight_date'], data['return_flight_number'],
+                        data['return_flight_time'])
             send_mail(data['flight_date'], content,
                       '', [RECIPIENT_EMAIL])
         
@@ -954,11 +970,18 @@ def booking_detail(request):
            ===============================
             Contact: {}
             Email: {}  
-            Return_flight_time: {}
+            Flight number: {}
+            Address: {}, {}
+            No of Pax: {}
+            Return flight date: {}
+            Return flight no: {}
+            Return flight time: {}         
             ===============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['return_flight_time'])
+           ''' .format(data['name'], data['contact'], data['email'], data['flight_number'], data['street'], 
+                        data['suburb'], data['no_of_passenger'], data['return_flight_date'], data['return_flight_number'],
+                        data['return_flight_time'])
             send_mail(data['flight_date'], content,
                       '', [RECIPIENT_EMAIL])
             
@@ -1740,7 +1763,7 @@ def email_dispatch_detail(request):
             "Requested driver contact": ("basecamp/html_email-response-driver-contact.html", "For driver contact - EasyGo"),
             "Shared ride discount": ("basecamp/html_email-shared-discount.html", "Discount notice - EasyGo"),
             "Confirmation multiplebookings": ("basecamp/html_email-confirmation-multiplebookings.html", "Booking Confirmation - EasyGo"),
-            "Sending invoice": ("basecamp/html_email-invoice-victor.html", "Invoice - EasyGo")
+            "Cancel-booking": ("basecamp/html_email-response-cancel.html", "Cancel-booking: EasyGo")
         }
 
         if selected_option in template_options:
@@ -1867,10 +1890,10 @@ def paypal_ipn(request):
         gross_amount = request.POST.get('mc_gross')
         txn_id = request.POST.get('txn_id')
 
-        if PayPalPayment.objects.filter(txn_id=txn_id).exists():
+        if PaypalPayment.objects.filter(txn_id=txn_id).exists():
             return HttpResponse(status=200, content="Duplicate IPN Notification")
         
-        p = PayPalPayment(item_name=payer_name, payer_email=payer_email, gross_amount=gross_amount, txn_id=txn_id)
+        p = PaypalPayment(item_name=payer_name, payer_email=payer_email, gross_amount=gross_amount, txn_id=txn_id)
 
         try:
             p.save()
@@ -1962,43 +1985,28 @@ def handle_checkout_session_completed(session):
 
 
 @csrf_exempt
-def square_webhook(request):
-    payload = request.body
-    sig_header = request.META['HTTP_SQUARE_SIGNATURE']
-    endpoint_secret = settings.SQUARE_SIGNATURE_KEY
+def recaptcha_verify(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        recaptcha_token = data.get('recaptchaToken')
+        
+        if not recaptcha_token:
+            return JsonResponse({'success': False, 'message': 'No reCAPTCHA token provided'})
 
-    event = None
+        # Verify the reCAPTCHA v3 token
+        result = verify_recaptcha(recaptcha_token, version='v3')
+        
+        if result.get('success'):
+            # The token is valid, handle your logic here
+            return JsonResponse({'success': True})
+        else:
+            # The token is invalid
+            return JsonResponse({'success': False, 'message': result.get('error-codes', 'Invalid reCAPTCHA token')})
+    
+    return JsonResponse({'success': False, 'message': 'Invalid request method'})
 
-    try:
-        event = stripe.Webhook.construct_event(
-            payload, sig_header, endpoint_secret
-        )
-    except ValueError as e:
-        # Invalid payload
-        print('Error parsing payload: {}'.format(str(e)))
-        return HttpResponse(status=400)
-    except stripe.error.SignatureVerificationError as e:
-        # Invalid signature
-        print('Error verifying webhook signature: {}'.format(str(e)))
-        return HttpResponse(status=400)
 
-    # Handle the event
-    if event.type == 'checkout.session.completed':
-        session = event.data.object
-        print('PaymentIntent was successful!')
-        handle_checkout_session_completed(session)
 
-    else:
-        print('Unhandled event type {}'.format(event.type))
 
-    return HttpResponse(status=200)
 
-def handle_checkout_session_completed(session):
-    email = session.customer_details.email
-    name = session.customer_details.name
-    amount = session.amount_total / 100  # Amount is in cents
-
-    # Save payment information
-    p = SquarePayment(name=name, email=email, amount=amount)
-    p.save()
 
