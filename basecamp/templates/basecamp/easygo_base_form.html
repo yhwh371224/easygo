@@ -196,7 +196,7 @@
           });
       });
   </script>   
-  <script async src="https://www.google.com/recaptcha/api.js"></script>
+  <script async src="https://www.google.com/recaptcha/api.js" defer></script>
   <script>    
     if(typeof grecaptcha === 'undefined') {
       grecaptcha = {};
@@ -212,7 +212,7 @@
     }
     grecaptcha.ready(function(){
       grecaptcha.render("container", {
-        sitekey: "{{ recaptcha_site_key }}"
+        sitekey: "{{ recaptcha_v2_site_key }}"
       });
     });
   </script>

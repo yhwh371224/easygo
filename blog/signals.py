@@ -5,7 +5,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from main.settings import RECIPIENT_EMAIL
-from .models import Post, Inquiry, PayPalPayment, StripePayment
+from .models import Post, Inquiry, PaypalPayment, StripePayment
 from .tasks import create_event_on_calendar, notify_user_payment_paypal, notify_user_payment_stripe
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
@@ -83,7 +83,7 @@ def notify_user_inquiry(sender, instance, created, **kwargs):
         email.send() 
 
     
-@receiver(post_save, sender=PayPalPayment)
+@receiver(post_save, sender=PaypalPayment)
 def async_notify_user_payment_paypal(sender, instance, created, **kwargs):
     if created:
         notify_user_payment_paypal.delay(instance.id)

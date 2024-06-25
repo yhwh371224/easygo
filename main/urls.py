@@ -4,7 +4,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.views.static import serve
 from django.contrib.auth.decorators import user_passes_test
-from basecamp.views import stripe_webhook, square_webhook
+from basecamp.views import stripe_webhook
 from basecamp import views
 
 
@@ -20,7 +20,6 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('static/<path:path>', serve, {'document_root': settings.STATIC_ROOT}),
     path('paypal/', include('paypal.standard.ipn.urls')),
-    path('square_webhook/', square_webhook, name='square_webhook'),
     path('stripe_webhook/', stripe_webhook, name='stripe_webhook'),
     path('api/orders', views.create_order, name='create_order'),
     path('api/orders/<str:order_id>/capture', views.capture_order, name='capture_order'),

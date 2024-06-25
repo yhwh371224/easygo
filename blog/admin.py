@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.admin import AdminSite
-from .models import Driver, Inquiry, PayPalPayment, StripePayment, Post
+from .models import Driver, Inquiry, PaypalPayment, StripePayment, Post
 
 
 class DriverAdmin(admin.ModelAdmin):
@@ -16,7 +16,7 @@ class InquiryAdmin(admin.ModelAdmin):
                      'name', 'contact']
 
 
-class PayPalPaymentAdmin(admin.ModelAdmin):
+class PaypalPaymentAdmin(admin.ModelAdmin):
     list_display = ['item_name', 'payer_email', 'gross_amount', 'txn_id', 'created']    
     search_fields = ['item_name', 'payer_email', 'gross_amount']
 
@@ -40,12 +40,12 @@ class MyAdminSite(AdminSite):
 admin_site = MyAdminSite(name='horeb_yhwh')
 admin_site.register(Driver, DriverAdmin)
 admin_site.register(Inquiry, InquiryAdmin)
-admin_site.register(PayPalPayment, PayPalPaymentAdmin)
+admin_site.register(PaypalPayment, PaypalPaymentAdmin)
 admin_site.register(StripePayment, StripePaymentAdmin)
 admin_site.register(Post, PostAdmin)
 
 admin.site.register(Driver, DriverAdmin)
 admin.site.register(Inquiry, InquiryAdmin)
-admin.site.register(PayPalPayment, PayPalPaymentAdmin)
+admin.site.register(PaypalPayment, PaypalPaymentAdmin)
 admin.site.register(StripePayment, StripePaymentAdmin)
 admin.site.register(Post, PostAdmin)

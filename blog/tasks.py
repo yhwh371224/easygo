@@ -10,7 +10,7 @@ from django.utils.html import strip_tags
 from django.db.models import Q
 from celery import shared_task
 from main.settings import RECIPIENT_EMAIL, DEFAULT_FROM_EMAIL
-from .models import Post, PayPalPayment, StripePayment
+from .models import Post, PaypalPayment, StripePayment
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -61,7 +61,8 @@ def create_event_on_calendar(instance_id):
                      'm:'+instance.message if instance.message is not None else '', 
                      'n:'+instance.notice if instance.notice is not None else '', 
                      "d:"+str(instance.return_flight_date), 
-                     '$'+str(instance.paid) if instance.paid is not None else '']
+                     '$'+str(instance.paid) if instance.paid is not None else '',
+                     '!!'+instance.toll if instance.toll is not None else '']
     message = " ".join(filter(None, message_parts))      
 
     flight_date = datetime.datetime.strptime(str(instance.flight_date), '%Y-%m-%d')
@@ -161,7 +162,7 @@ def payment_send_email(subject, html_content, recipient_list):
 # PayPal payment record and email 
 @shared_task
 def notify_user_payment_paypal(instance_id):
-    instance = PayPalPayment.objects.get(id=instance_id)
+    instance = PaypalPayment.objects.get(id=instance_id)
     if instance.payer_email:
         post_name = Post.objects.filter(email=instance.payer_email).first()
 
@@ -235,3 +236,5 @@ def notify_user_payment_stripe(instance_id):
                 {'name': instance.name, 'email': instance.email, 'amount': instance.amount}
             )
             payment_send_email("Payment - EasyGo", html_content, [instance.email, RECIPIENT_EMAIL])
+
+
