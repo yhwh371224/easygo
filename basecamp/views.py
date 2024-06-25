@@ -222,8 +222,12 @@ def payonline(request):
     return render(request, 'basecamp/payonline.html')
 
 
-def payonline_square(request):     
-    return render(request, 'basecamp/payonline_square.html')
+def payonline_square(request):  
+    context = {
+        'square_application_id': settings.SQUARE_APPLICATION_ID,
+        'square_location_id': settings.SQUARE_LOCATION_ID,
+    }   
+    return render(request, 'basecamp/payonline_square.html', context)
 
 
 def payonline_stripe(request):     
@@ -1999,9 +2003,9 @@ def square_webhook(request):
 
     # Handle the event
     if event['type'] == 'payment.created':
-        session = event['data']['object']
+        payment = event['data']['object']['payment']
         print('Payment was successful!')
-        handle_square_payment_created(session)
+        handle_square_payment_created(payment)
 
     else:
         print('Unhandled event type {}'.format(event['type']))
@@ -2013,10 +2017,10 @@ def verify_square_signature(payload, sig_header, endpoint_secret):
     expected_signature = base64.b64encode(hash.digest()).decode('utf-8')
     return hmac.compare_digest(expected_signature, sig_header)
 
-def handle_square_payment_created(session):
-    email = session['customer']['email']
-    name = session['customer']['name']
-    amount = session['amount_money']['amount'] / 100  # Amount is in cents
+def handle_square_payment_created(payment):
+    email = payment['customer_email']
+    name = payment['customer_name']
+    amount = payment['amount_money']['amount'] / 100  # Amount is in cents
 
     # Save payment information
     p = SquarePayment(name=name, email=email, amount=amount)
