@@ -2006,10 +2006,6 @@ def square_webhook(request):
     return HttpResponse(status=200)
 
 def verify_square_signature(payload, sig_header, endpoint_secret):
-    import hmac
-    import hashlib
-    import base64
-
     hash = hmac.new(endpoint_secret.encode('utf-8'), payload.encode('utf-8'), hashlib.sha1)
     expected_signature = base64.b64encode(hash.digest()).decode('utf-8')
     return hmac.compare_digest(expected_signature, sig_header)
