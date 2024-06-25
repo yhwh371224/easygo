@@ -414,6 +414,7 @@
 <script src="/static/basecamp/js/flatpickr.min.js" defer></script>
 <script src="/static/basecamp/js/date-picker.js" defer></script>
 <script src="/static/basecamp/js/theme.min.js" defer></script>
+{% endcompress js %}
 <script src="https://www.google.com/recaptcha/api.js?render={{ RECAPTCHA_V3_SITE_KEY }}" defer></script>
 <script>
     grecaptcha.ready(function() {
@@ -438,6 +439,5 @@
         });
     });
 </script>
-{% endcompress js %}
   </body>
 </html>
