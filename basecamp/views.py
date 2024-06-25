@@ -200,10 +200,10 @@ def more_suburbs(request):
     return render(request, 'basecamp/more_suburbs.html', {'more_suburbs': more_suburbs})
 
 
-def more_suburbs1(request): 
-    send_notice_email.delay('suburbs_1 accessed', 'A user accessed suburbs_1', RECIPIENT_EMAIL)
-    more_suburbs = get_more_suburbs()
-    return render(request, 'basecamp/more_suburbs1.html', {'more_suburbs': more_suburbs})
+# def more_suburbs1(request): 
+#     send_notice_email.delay('suburbs_1 accessed', 'A user accessed suburbs_1', RECIPIENT_EMAIL)
+#     more_suburbs = get_more_suburbs()
+#     return render(request, 'basecamp/more_suburbs1.html', {'more_suburbs': more_suburbs})
 
 
 def payment_cancel(request): 
