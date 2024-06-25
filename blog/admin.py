@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.admin import AdminSite
-from .models import Driver, Inquiry, PaypalPayment, StripePayment, Post
+from .models import Driver, Inquiry, PaypalPayment, SquarePayment, StripePayment, Post
 
 
 class DriverAdmin(admin.ModelAdmin):
@@ -46,11 +46,13 @@ admin_site = MyAdminSite(name='horeb_yhwh')
 admin_site.register(Driver, DriverAdmin)
 admin_site.register(Inquiry, InquiryAdmin)
 admin_site.register(PaypalPayment, PaypalPaymentAdmin)
+admin_site.register(SquarePayment, SquarePaymentAdmin)
 admin_site.register(StripePayment, StripePaymentAdmin)
 admin_site.register(Post, PostAdmin)
 
 admin.site.register(Driver, DriverAdmin)
 admin.site.register(Inquiry, InquiryAdmin)
 admin.site.register(PaypalPayment, PaypalPaymentAdmin)
+admin.site.register(SquarePayment, SquarePaymentAdmin)
 admin.site.register(StripePayment, StripePaymentAdmin)
 admin.site.register(Post, PostAdmin)
