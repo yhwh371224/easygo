@@ -1783,8 +1783,12 @@ def email_dispatch_detail(request):
                     })
 
             if selected_option == "Gratitude For Payment" and user:                     
-                user.paid = "bank deposit"
+                user.paid = float(user.price) + 0.10
                 user.save()
+                if user.return_pickup_time == 'x':
+                    user_1 = Post.objects.filter(email=email)[1]
+                    user_1.paid = float(user.price) + 0.10
+                    user_1.save() 
 
             handle_email_sending(request, email, subject, template_name, context)
               
