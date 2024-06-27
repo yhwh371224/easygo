@@ -14,7 +14,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         tomorrow = date.today() + timedelta(days=1)
-        tomorrow_bookings = Post.objects.filter(flight_date=tomorrow)
+        tomorrow_bookings = Post.objects.filter(pickup_date=tomorrow)
         
         for booking in tomorrow_bookings:
             self.check_and_notify_missing_calendar_id(booking)

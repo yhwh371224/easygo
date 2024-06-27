@@ -233,7 +233,7 @@
 										<tr>
 											<td align="left" style="padding-top:28px;padding-left:0;">
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
-                                                    Upcoming your booking on {{ flight_date }}<br><br>
+                                                    Upcoming your booking on {{ pickup_date }}<br><br>
                                                     Your booking day is only 3 days away<br><br></p>
 											{% if not reminder %}																				
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
@@ -246,7 +246,7 @@
 																	
 											{% if direction == 'Pickup from Intl Airport' or direction == 'Pickup from Domestic Airport' %}
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
-													• Sydney arrival date: {{ flight_date }}<br> 
+													• Sydney arrival date: {{ pickup_date }}<br> 
 												    • Flight number: {{ flight_number }} <small>(ETA {{ flight_time }})</small><br>	
 													<!-- • The meeting point >><a href="https://easygoshuttle.com.au/meeting_point">&nbsp;click here</a><br> -->
 													• After landing, please turn on your mobile phone or check your email. You will be notified of the meeting details via email or SMS<br><br></p>											

@@ -47,12 +47,12 @@ class Command(BaseCommand):
     
                     sam_driver = Driver.objects.get(driver_name="Sam")    
             
-                    p = Post(name=user.name, contact=user.contact, email=user.email, company_name=user.company_name, email1=user.email1, flight_date=user.flight_date, 
+                    p = Post(name=user.name, contact=user.contact, email=user.email, company_name=user.company_name, email1=user.email1, pickup_date=user.pickup_date, 
                     flight_number=user.flight_number, flight_time=user.flight_time, pickup_time=user.pickup_time, direction=user.direction, suburb=user.suburb, street=user.street, 
-                    no_of_passenger=user.no_of_passenger, no_of_baggage=user.no_of_baggage, return_direction=user.return_direction, return_flight_date=user.return_flight_date, 
+                    no_of_passenger=user.no_of_passenger, no_of_baggage=user.no_of_baggage, return_direction=user.return_direction, return_pickup_date=user.return_pickup_date, 
                     return_flight_number=user.return_flight_number, return_flight_time=user.return_flight_time, return_pickup_time=user.return_pickup_time, message=user.message, 
                     notice=user.notice, price=user.price, paid=user.paid, is_confirmed=user.is_confirmed, driver=sam_driver)
     
                     p.save()
     
-                    logger.info(f'....{user.name}, {user.flight_date}, {user.pickup_time} | {user.return_flight_date}, {user.return_flight_number}')
+                    logger.info(f'....{user.name}, {user.pickup_date}, {user.pickup_time} | {user.return_pickup_date}, {user.return_flight_number}')

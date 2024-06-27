@@ -47,7 +47,7 @@ class Command(BaseCommand):
         }
 
         for key, check_date in dates_to_check.items():
-            bookings = Post.objects.filter(flight_date=check_date)
+            bookings = Post.objects.filter(pickup_date=check_date)
             
             for booking in bookings:
                 if key == "three_days":
