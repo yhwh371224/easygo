@@ -60,12 +60,12 @@ def create_event_on_calendar(instance_id):
                      'b:'+str(instance.no_of_baggage) if instance.no_of_baggage is not None else '', 
                      'm:'+instance.message if instance.message is not None else '', 
                      'n:'+instance.notice if instance.notice is not None else '', 
-                     "d:"+str(instance.return_flight_date), 
+                     "d:"+str(instance.return_pickup_date), 
                      '$'+str(instance.paid) if instance.paid is not None else '',
                      '!!'+instance.toll if instance.toll is not None else '']
     message = " ".join(filter(None, message_parts))      
 
-    flight_date = datetime.datetime.strptime(str(instance.flight_date), '%Y-%m-%d')
+    pickup_date = datetime.datetime.strptime(str(instance.pickup_date), '%Y-%m-%d')
 
     if instance.pickup_time:
         pickup_time = datetime.datetime.strptime(instance.pickup_time, '%H:%M')
@@ -73,7 +73,7 @@ def create_event_on_calendar(instance_id):
     else:
         pickup_time = datetime.datetime.strptime('00:00', '%H:%M') 
 
-    start = datetime.datetime.combine(flight_date, pickup_time.time())        
+    start = datetime.datetime.combine(pickup_date, pickup_time.time())        
     end = start + datetime.timedelta(hours=1)
 
     event = {
@@ -104,7 +104,7 @@ def create_event_on_calendar(instance_id):
 
 # Clicked confirm_booking form 
 @shared_task
-def send_confirm_email(name, email, flight_date, return_flight_number):
+def send_confirm_email(name, email, pickup_date, return_flight_number):
     content = f'''
     {name}
     clicked the 'confirm booking' \n
@@ -113,26 +113,26 @@ def send_confirm_email(name, email, flight_date, return_flight_number):
     https://easygoshuttle.com.au/sending_email_second/
     =============================   
     Email:  {email}
-    Flight date: {flight_date}
+    Flight date: {pickup_date}
     Return flight number: {return_flight_number}
     ===============================          
     '''
-    send_mail(flight_date, content, DEFAULT_FROM_EMAIL, [RECIPIENT_EMAIL])
+    send_mail(pickup_date, content, DEFAULT_FROM_EMAIL, [RECIPIENT_EMAIL])
 
 
 # Home page for price 
 @shared_task
-def send_email_task(flight_date, direction, suburb, no_of_passenger):
+def send_email_task(pickup_date, direction, suburb, no_of_passenger):
     content = f'''
     someone checked the price from homepage    
     =============================  
-    flight date:  {flight_date}
+    flight date:  {pickup_date}
     Direction: {direction}
     Suburbs: {suburb}
     No of Pax: {no_of_passenger}
     ===============================        
     '''
-    send_mail(flight_date, content, DEFAULT_FROM_EMAIL, [RECIPIENT_EMAIL])
+    send_mail(pickup_date, content, DEFAULT_FROM_EMAIL, [RECIPIENT_EMAIL])
 
 
 # Review page, suburbs page, service, information, about_us, terms, policy, suburbs1

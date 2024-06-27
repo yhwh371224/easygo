@@ -57,7 +57,7 @@ class Command(BaseCommand):
 
     def send_email(self, date_offset, template_name, subject):
         target_date = date.today() + timedelta(days=date_offset)
-        booking_reminders = Post.objects.filter(flight_date=target_date, cancelled=False).select_related('driver')
+        booking_reminders = Post.objects.filter(pickup_date=target_date, cancelled=False).select_related('driver')
         self.send_email_task(booking_reminders, template_name, subject, target_date)
 
     def send_email_task(self, booking_reminders, template_name, subject, target_date):
@@ -69,7 +69,7 @@ class Command(BaseCommand):
             driver = booking_reminder.driver
             html_content = render_to_string(template_name, {
                 'name': booking_reminder.name,
-                'flight_date': booking_reminder.flight_date,
+                'pickup_date': booking_reminder.pickup_date,
                 'flight_number': booking_reminder.flight_number,
                 'flight_time': booking_reminder.flight_time,
                 'direction': booking_reminder.direction,
@@ -95,7 +95,7 @@ class Command(BaseCommand):
                 booking_reminder.save()
                 self.logger.info(f"Email sent to {booking_reminder.email} for {booking_reminder.name}")
             except Exception as e:
-                self.logger.error(f"Failed to send email to {booking_reminder.email} | {booking_reminder.flight_date} & {booking_reminder.pickup_time}: {e}")
+                self.logger.error(f"Failed to send email to {booking_reminder.email} | {booking_reminder.pickup_date} & {booking_reminder.pickup_time}: {e}")
 
             if not booking_reminder.calendar_event_id:
                 subject = "calendar empty id - from booking_reminder"
@@ -106,7 +106,7 @@ class Command(BaseCommand):
                     send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, recipient, fail_silently=False)
                     self.logger.info(f"No calendar event id: {booking_reminder.email} & {booking_reminder.name}")
                 except Exception as e:
-                    self.logger.error(f"Failed to send calendar event id email to {booking_reminder.email} | {booking_reminder.flight_date} & {booking_reminder.pickup_time}: {e}")
+                    self.logger.error(f"Failed to send calendar event id email to {booking_reminder.email} | {booking_reminder.pickup_date} & {booking_reminder.pickup_time}: {e}")
 
             if booking_reminder.toll =='short payment':
                 subject = "short payment - from booking_reminder"
@@ -117,6 +117,6 @@ class Command(BaseCommand):
                     send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, recipient, fail_silently=False)
                     self.logger.info(f"short payment: {booking_reminder.email} & {booking_reminder.name}")
                 except Exception as e:
-                    self.logger.error(f"Failed to send calendar event id email to {booking_reminder.email} | {booking_reminder.flight_date} & {booking_reminder.pickup_time}: {e}")
+                    self.logger.error(f"Failed to send calendar event id email to {booking_reminder.email} | {booking_reminder.pickup_date} & {booking_reminder.pickup_time}: {e}")
 
 
