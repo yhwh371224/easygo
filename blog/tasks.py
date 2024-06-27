@@ -32,7 +32,7 @@ def create_event_on_calendar(instance_id):
 
     cancelled_str = 'c' if instance.cancelled else ''
     reminder_str = '!' if instance.reminder else ''
-    pending_str = '?' if instance.discount else ''
+    pending_str = '?' if instance.discount == 'TBA' else ''
     pickup_time_str = instance.pickup_time or ''
     flight_number_str = instance.flight_number or ''
     flight_time_str = instance.flight_time or ''
