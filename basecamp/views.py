@@ -1807,6 +1807,10 @@ def email_dispatch_detail(request):
                     user_1 = Post.objects.filter(email=email)[1]
                     user_1.paid = float(user.price) + 0.10
                     user_1.save() 
+            
+            if selected_option == "Cancel-booking" and user:                     
+                user.cancelled = True
+                user.save()
 
             handle_email_sending(request, email, subject, template_name, context)
               
