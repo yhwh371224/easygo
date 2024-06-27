@@ -15,7 +15,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         tomorrow = date.today() + timedelta(days=1)
-        final_notices = Post.objects.filter(flight_date=tomorrow)
+        final_notices = Post.objects.filter(pickup_date=tomorrow)
         
         for final_notice in final_notices:
 

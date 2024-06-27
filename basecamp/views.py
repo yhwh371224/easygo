@@ -151,8 +151,8 @@ def email_dispatch(request):
     return render(request, 'basecamp/email_dispatch.html')
 
 
-def flight_date_error(request): 
-    return render(request, 'basecamp/flight_date_error.html')
+def pickup_date_error(request): 
+    return render(request, 'basecamp/pickup_date_error.html')
 
 
 def inquiry(request): 
@@ -356,7 +356,7 @@ def inquiry_details(request):
         name = request.POST.get('name')
         contact = request.POST.get('contact')
         email = request.POST.get('email')
-        flight_date = request.POST.get('flight_date')
+        pickup_date = request.POST.get('pickup_date')
         flight_number = request.POST.get('flight_number')
         flight_time = request.POST.get('flight_time')
         pickup_time = request.POST.get('pickup_time')
@@ -366,7 +366,7 @@ def inquiry_details(request):
         no_of_passenger = request.POST.get('no_of_passenger')
         no_of_baggage = request.POST.get('no_of_baggage')
         return_direction = request.POST.get('return_direction')
-        return_flight_date = request.POST.get('return_flight_date')
+        return_pickup_date = request.POST.get('return_pickup_date')
         return_flight_number = request.POST.get('return_flight_number')
         return_flight_time = request.POST.get('return_flight_time')
         return_pickup_time = request.POST.get('return_pickup_time')
@@ -381,14 +381,14 @@ def inquiry_details(request):
             'name': name,
             'contact': contact,
             'email': email,
-            'flight_date': flight_date,
+            'pickup_date': pickup_date,
             'flight_number': flight_number,
             'pickup_time': pickup_time,
             'direction': direction,
             'street': street,
             'suburb': suburb,
             'no_of_passenger': no_of_passenger,
-            'return_flight_date': return_flight_date,
+            'return_pickup_date': return_pickup_date,
             'return_flight_number': return_flight_number,
             'return_pickup_time': return_pickup_time
             }
@@ -417,11 +417,11 @@ def inquiry_details(request):
             =============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'],  data['flight_date'], data['flight_number'],
+            ''' .format(data['name'], data['contact'], data['email'],  data['pickup_date'], data['flight_number'],
                         data['pickup_time'], data['direction'], data['street'],  data['suburb'], data['no_of_passenger'], 
-                        data['return_flight_date'], data['return_flight_number'],data['return_pickup_time'])
+                        data['return_pickup_date'], data['return_flight_number'],data['return_pickup_time'])
             
-            send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])
+            send_mail(data['pickup_date'], content, '', [RECIPIENT_EMAIL])
 
         else:
             content = '''
@@ -444,23 +444,23 @@ def inquiry_details(request):
             =============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'],  data['flight_date'], data['flight_number'],
+            ''' .format(data['name'], data['contact'], data['email'],  data['pickup_date'], data['flight_number'],
                         data['pickup_time'], data['direction'], data['street'],  data['suburb'], data['no_of_passenger'], 
-                        data['return_flight_date'], data['return_flight_number'],data['return_pickup_time'])
+                        data['return_pickup_date'], data['return_flight_number'],data['return_pickup_time'])
             
-            send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL]) 
+            send_mail(data['pickup_date'], content, '', [RECIPIENT_EMAIL]) 
             
-        p = Inquiry(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
+        p = Inquiry(name=name, contact=contact, email=email, pickup_date=pickup_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
                  no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction,
-                 return_flight_date=return_flight_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
+                 return_pickup_date=return_pickup_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
                  return_pickup_time=return_pickup_time ,message=message)
         
         p.save()
         
         today = date.today()
-        if flight_date <= str(today):                      
-            return render(request, 'basecamp/flight_date_error.html')   
+        if pickup_date <= str(today):                      
+            return render(request, 'basecamp/pickup_date_error.html')   
 
         if is_ajax(request):
             return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})        
@@ -476,7 +476,7 @@ def inquiry_details1(request):
     if request.method == "POST":
         name = request.POST.get('name')        
         email = request.POST.get('email')
-        flight_date = request.POST.get('flight_date')        
+        pickup_date = request.POST.get('pickup_date')        
         pickup_time = request.POST.get('pickup_time')
         direction = request.POST.get('direction')
         suburb = request.POST.get('suburb')        
@@ -485,7 +485,7 @@ def inquiry_details1(request):
         data = {
             'name': name,            
             'email': email,
-            'flight_date': flight_date,            
+            'pickup_date': pickup_date,            
             'pickup_time': pickup_time,
             'direction': direction,            
             'suburb': suburb,
@@ -511,10 +511,10 @@ def inquiry_details1(request):
             =============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['email'],  data['flight_date'], data['pickup_time'], 
+            ''' .format(data['name'], data['email'],  data['pickup_date'], data['pickup_time'], 
                         data['direction'], data['suburb'], data['no_of_passenger'])
             
-            send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])
+            send_mail(data['pickup_date'], content, '', [RECIPIENT_EMAIL])
 
         else:
             content = '''
@@ -532,12 +532,12 @@ def inquiry_details1(request):
             =============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['email'],  data['flight_date'], data['pickup_time'], 
+            ''' .format(data['name'], data['email'],  data['pickup_date'], data['pickup_time'], 
                         data['direction'], data['suburb'], data['no_of_passenger'])
             
-            send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])     
+            send_mail(data['pickup_date'], content, '', [RECIPIENT_EMAIL])     
         
-        p = Inquiry(name=name, email=email, flight_date=flight_date, 
+        p = Inquiry(name=name, email=email, pickup_date=pickup_date, 
                  pickup_time=pickup_time, direction=direction, suburb=suburb, 
                  no_of_passenger=no_of_passenger)
         
@@ -555,7 +555,7 @@ def inquiry_details2(request):
         name = request.POST.get('name')
         contact = request.POST.get('contact')
         email = request.POST.get('email') 
-        flight_date = request.POST.get('flight_date')      
+        pickup_date = request.POST.get('pickup_date')      
         message = request.POST.get('message')     
         
 
@@ -569,11 +569,11 @@ def inquiry_details2(request):
             'name': name,
             'contact': contact,
             'email': email,
-            'flight_date': flight_date,
+            'pickup_date': pickup_date,
             'message': message}
         
         today = date.today()
-        if flight_date != str(today):
+        if pickup_date != str(today):
             if is_ajax(request):
                 return render(request, 'basecamp/501.html')
             else:
@@ -587,7 +587,7 @@ def inquiry_details2(request):
                 email: {}
                 flight date: {}
                 message: {}              
-                '''.format(data['name'], data['contact'], data['flight_date'],
+                '''.format(data['name'], data['contact'], data['pickup_date'],
                            data['email'], data['message'])
                 
         send_mail(data['name'], message, '', [RECIPIENT_EMAIL])         
@@ -728,13 +728,13 @@ def p2p_booking_detail(request):
 
 def price_detail(request):
     if request.method == "POST":
-        flight_date = request.POST.get('flight_date')
+        pickup_date = request.POST.get('pickup_date')
         direction = request.POST.get('direction')
         suburb = request.POST.get('suburb')
         no_of_passenger = request.POST.get('no_of_passenger')
         
         today = date.today()        
-        if not flight_date or flight_date <= str(today):
+        if not pickup_date or pickup_date <= str(today):
             return render(request, 'basecamp/505.html')
         
         
@@ -766,17 +766,17 @@ def price_detail(request):
         #price = str(price_cal3())
         
         data = {
-            'flight_date': flight_date,
+            'pickup_date': pickup_date,
             'direction': direction,
             'suburb': suburb,
             'no_of_passenger': no_of_passenger,
 
         }        
                 
-        send_email_task.delay(data['flight_date'], data['direction'], data['suburb'], data['no_of_passenger'])
+        send_email_task.delay(data['pickup_date'], data['direction'], data['suburb'], data['no_of_passenger'])
 
         return render(request, 'basecamp/inquiry1.html',
-                      {'flight_date': flight_date, 'direction': direction, 
+                      {'pickup_date': pickup_date, 'direction': direction, 
                        'no_of_passenger': no_of_passenger, 'suburb': suburb},
                       )
 
@@ -792,7 +792,7 @@ def confirmation_detail(request):
         contact = request.POST.get('contact')
         email = request.POST.get('email')
         email1 = request.POST.get('email1')
-        flight_date = request.POST.get('flight_date')
+        pickup_date = request.POST.get('pickup_date')
         flight_number = request.POST.get('flight_number')
         flight_time = request.POST.get('flight_time')
         pickup_time = request.POST.get('pickup_time')
@@ -802,7 +802,7 @@ def confirmation_detail(request):
         no_of_passenger = request.POST.get('no_of_passenger')
         no_of_baggage = request.POST.get('no_of_baggage')
         return_direction = request.POST.get('return_direction')
-        return_flight_date = request.POST.get('return_flight_date')
+        return_pickup_date = request.POST.get('return_pickup_date')
         return_flight_number = request.POST.get('return_flight_number')
         return_flight_time = request.POST.get('return_flight_time')
         return_pickup_time = request.POST.get('return_pickup_time')
@@ -815,7 +815,7 @@ def confirmation_detail(request):
             'name': name,
             'contact': contact,
             'email': email,            
-            'flight_date': flight_date}       
+            'pickup_date': pickup_date}       
         
         inquiry_email = Inquiry.objects.filter(email=email).exists()
         post_email = Post.objects.filter(email=email).exists()  
@@ -833,7 +833,7 @@ def confirmation_detail(request):
             Best Regards,
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['contact'], data['email'])
-            send_mail(data['flight_date'], content,
+            send_mail(data['pickup_date'], content,
                       '', [RECIPIENT_EMAIL])   
         
         else:
@@ -848,15 +848,15 @@ def confirmation_detail(request):
             Best Regards,
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['contact'], data['email'])
-            send_mail(data['flight_date'], content,
+            send_mail(data['pickup_date'], content,
                       '', [RECIPIENT_EMAIL])
 
         sam_driver = Driver.objects.get(driver_name="Sam") 
 
-        p = Post(company_name=company_name, name=name, contact=contact, email=email, email1=email1, flight_date=flight_date, flight_number=flight_number,
+        p = Post(company_name=company_name, name=name, contact=contact, email=email, email1=email1, pickup_date=pickup_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
                  no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, return_direction=return_direction,
-                 return_flight_date=return_flight_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
+                 return_pickup_date=return_pickup_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
                  return_pickup_time=return_pickup_time, notice=notice, price=price, paid=paid, driver=sam_driver)
         
         p.save()
@@ -864,8 +864,8 @@ def confirmation_detail(request):
         rendering = render(request, 'basecamp/inquiry_done.html')   
         
         html_content = render_to_string("basecamp/html_email-confirmation.html",
-                                    {'company_name': company_name, 'name': name, 'contact': contact, 'email': email, 'email1': email1, 'flight_date': flight_date, 'flight_number': flight_number,
-                                     'flight_time': flight_time, 'pickup_time': pickup_time, 'return_direction': return_direction,'return_flight_date': return_flight_date, 
+                                    {'company_name': company_name, 'name': name, 'contact': contact, 'email': email, 'email1': email1, 'pickup_date': pickup_date, 'flight_number': flight_number,
+                                     'flight_time': flight_time, 'pickup_time': pickup_time, 'return_direction': return_direction,'return_pickup_date': return_pickup_date, 
                                      'return_flight_number': return_flight_number, 'return_flight_time': return_flight_time, 'return_pickup_time': return_pickup_time,
                                      'direction': direction, 'street': street, 'suburb': suburb, 'no_of_passenger': no_of_passenger, 'no_of_baggage': no_of_baggage,
                                      'message': message, 'notice': notice , 'price': price, 'paid': paid })
@@ -894,7 +894,7 @@ def booking_detail(request):
         name = request.POST.get('name')
         contact = request.POST.get('contact')
         email = request.POST.get('email')
-        flight_date = request.POST.get('flight_date')
+        pickup_date = request.POST.get('pickup_date')
         flight_number = request.POST.get('flight_number')
         flight_time = request.POST.get('flight_time')
         pickup_time = request.POST.get('pickup_time')
@@ -905,7 +905,7 @@ def booking_detail(request):
         no_of_baggage = request.POST.get('no_of_baggage')
         message = request.POST.get('message')
         return_direction = request.POST.get('return_direction')
-        return_flight_date = request.POST.get('return_flight_date')
+        return_pickup_date = request.POST.get('return_pickup_date')
         return_flight_number = request.POST.get('return_flight_number')
         return_flight_time = request.POST.get('return_flight_time')
         return_pickup_time = request.POST.get('return_pickup_time') 
@@ -922,12 +922,12 @@ def booking_detail(request):
             'name': name,
             'contact': contact,
             'email': email,            
-            'flight_date': flight_date,
+            'pickup_date': pickup_date,
             'flight_number': flight_number,            
             'street': street, 
             'suburb': suburb,
             'no_of_passenger': no_of_passenger,
-            'return_flight_date': return_flight_date,
+            'return_pickup_date': return_pickup_date,
             'return_flight_number': return_flight_number,
             'return_flight_time': return_flight_time}       
         
@@ -955,9 +955,9 @@ def booking_detail(request):
             Best Regards,
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['contact'], data['email'], data['flight_number'], data['street'], 
-                        data['suburb'], data['no_of_passenger'], data['return_flight_date'], data['return_flight_number'],
+                        data['suburb'], data['no_of_passenger'], data['return_pickup_date'], data['return_flight_number'],
                         data['return_flight_time'])
-            send_mail(data['flight_date'], content,
+            send_mail(data['pickup_date'], content,
                       '', [RECIPIENT_EMAIL])
         
         else:
@@ -980,27 +980,27 @@ def booking_detail(request):
             Best Regards,
             EasyGo Admin \n\n        
            ''' .format(data['name'], data['contact'], data['email'], data['flight_number'], data['street'], 
-                        data['suburb'], data['no_of_passenger'], data['return_flight_date'], data['return_flight_number'],
+                        data['suburb'], data['no_of_passenger'], data['return_pickup_date'], data['return_flight_number'],
                         data['return_flight_time'])
-            send_mail(data['flight_date'], content,
+            send_mail(data['pickup_date'], content,
                       '', [RECIPIENT_EMAIL])
             
         sam_driver = Driver.objects.get(driver_name="Sam") 
 
-        p = Post(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
+        p = Post(name=name, contact=contact, email=email, pickup_date=pickup_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
                  no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction, price=price,
-                 return_flight_date=return_flight_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
+                 return_pickup_date=return_pickup_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
                  return_pickup_time=return_pickup_time, message=message, driver=sam_driver, discount=discount)
         
         p.save()
 
         today = date.today()
-        if flight_date <= str(today):
+        if pickup_date <= str(today):
             if is_ajax(request):
-                return render(request, 'basecamp/flight_date_error.html')
+                return render(request, 'basecamp/pickup_date_error.html')
             else:
-                return render(request, 'basecamp/flight_date_error.html') 
+                return render(request, 'basecamp/pickup_date_error.html') 
 
         if is_ajax(request):
             return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})
@@ -1018,7 +1018,7 @@ def cruise_booking_detail(request):
         name = request.POST.get('name')
         contact = request.POST.get('contact')
         email = request.POST.get('email')
-        flight_date = request.POST.get('flight_date')
+        pickup_date = request.POST.get('pickup_date')
         flight_number = request.POST.get('flight_number')
         flight_time = request.POST.get('flight_time')
         if not flight_time:
@@ -1031,7 +1031,7 @@ def cruise_booking_detail(request):
         no_of_passenger = request.POST.get('no_of_passenger')
         no_of_baggage = request.POST.get('no_of_baggage')
         message = request.POST.get('message')
-        return_flight_date = request.POST.get('return_flight_date')
+        return_pickup_date = request.POST.get('return_pickup_date')
         return_flight_number = request.POST.get('return_flight_number')
         return_pickup_time = request.POST.get('return_pickup_time')
         return_flight_time = 'cruise'
@@ -1049,13 +1049,13 @@ def cruise_booking_detail(request):
             'name': name,
             'contact': contact, 
             'email': email,
-            'flight_date': flight_date,
+            'pickup_date': pickup_date,
             'pickup_time': pickup_time,
             'flight_number': flight_number,
             'street': street,
             'no_of_passenger': no_of_passenger,
             'no_of_baggage': no_of_baggage,
-            'return_flight_date': return_flight_date,
+            'return_pickup_date': return_pickup_date,
             'return_flight_number': return_flight_number,
             'return_pickup_time': return_pickup_time, 
             'message': message}       
@@ -1079,7 +1079,7 @@ def cruise_booking_detail(request):
             End point: {}  
             No of passenger: {}
             no_of_baggage: {}
-            return_flight_date: {}
+            return_pickup_date: {}
             return_flight_number: {}
             Return pickup time: {}     
             Message: {}     
@@ -1088,9 +1088,9 @@ def cruise_booking_detail(request):
             Best Regards,
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['email'], data['contact'], data['pickup_time'], data['flight_number'], data['street'], 
-                        data['no_of_passenger'], data['no_of_baggage'], data['return_flight_date'], data['return_flight_number'],
+                        data['no_of_passenger'], data['no_of_baggage'], data['return_pickup_date'], data['return_flight_number'],
                         data['return_pickup_time'], data['message'])
-            send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])
+            send_mail(data['pickup_date'], content, '', [RECIPIENT_EMAIL])
         
         else:
             content = '''
@@ -1107,7 +1107,7 @@ def cruise_booking_detail(request):
             End point: {}  
             No of passenger: {}
             no_of_baggage: {}
-            return_flight_date: {}
+            return_pickup_date: {}
             return_flight_number: {}
             Return pickup time: {}     
             Message: {}     
@@ -1116,16 +1116,16 @@ def cruise_booking_detail(request):
             Best Regards,
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['email'], data['contact'], data['pickup_time'], data['flight_number'], data['street'], 
-                        data['no_of_passenger'], data['no_of_baggage'], data['return_flight_date'], data['return_flight_number'],
+                        data['no_of_passenger'], data['no_of_baggage'], data['return_pickup_date'], data['return_flight_number'],
                         data['return_pickup_time'], data['message'])
-            send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])
+            send_mail(data['pickup_date'], content, '', [RECIPIENT_EMAIL])
             
         sam_driver = Driver.objects.get(driver_name="Sam") 
 
-        p = Post(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
+        p = Post(name=name, contact=contact, email=email, pickup_date=pickup_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, street=street, price=price,
                  no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, suburb=suburb, cruise=cruise,  
-                 return_flight_date=return_flight_date, return_flight_number=return_flight_number,  
+                 return_pickup_date=return_pickup_date, return_flight_number=return_flight_number,  
                  return_pickup_time=return_pickup_time, return_flight_time=return_flight_time,
                  message=message, driver=sam_driver, discount=discount)
         
@@ -1156,7 +1156,7 @@ def confirm_booking_detail(request):
         contact = user.contact
         company_name = user.company_name
         email1 = user.email1            
-        flight_date = user.flight_date
+        pickup_date = user.pickup_date
         flight_number = user.flight_number
         flight_time = user.flight_time 
         pickup_time = user.pickup_time
@@ -1166,7 +1166,7 @@ def confirm_booking_detail(request):
         no_of_passenger = user.no_of_passenger
         no_of_baggage = user.no_of_baggage
         return_direction = user.return_direction
-        return_flight_date = user.return_flight_date
+        return_pickup_date = user.return_pickup_date
         return_flight_number = user.return_flight_number
         return_flight_time = user.return_flight_time
         return_pickup_time = user.return_pickup_time 
@@ -1179,17 +1179,17 @@ def confirm_booking_detail(request):
         data = {
         'name': name,
         'email': email,            
-        'flight_date': flight_date,
+        'pickup_date': pickup_date,
         'return_flight_number': return_flight_number}                    
         
-        send_confirm_email.delay(data['name'], data['email'], data['flight_date'], data['return_flight_number'])
+        send_confirm_email.delay(data['name'], data['email'], data['pickup_date'], data['return_flight_number'])
             
         sam_driver = Driver.objects.get(driver_name="Sam")    
             
-        p = Post(name=name, contact=contact, email=email, company_name=company_name, email1=email1, flight_date=flight_date, flight_number=flight_number,
+        p = Post(name=name, contact=contact, email=email, company_name=company_name, email1=email1, pickup_date=pickup_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street, cruise=cruise,
                  no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction, 
-                 return_flight_date=return_flight_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
+                 return_pickup_date=return_pickup_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
                  return_pickup_time=return_pickup_time, message=message, notice=notice, price=price, paid=paid, is_confirmed=is_confirmed, driver=sam_driver)
         
         p.save()    
@@ -1213,11 +1213,11 @@ def sending_email_first_detail(request):
         if user.cruise:
             html_content = render_to_string("basecamp/html_email-confirmation-cruise.html", 
                                         {'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 'email': user.email, 'email1': user.email1,
-                                         'flight_date': user.flight_date, 'flight_number': user.flight_number,
+                                         'pickup_date': user.pickup_date, 'flight_number': user.flight_number,
                                          'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
                                          'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
                                          'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
-                                         'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date, 
+                                         'return_direction': user.return_direction, 'return_pickup_date': user.return_pickup_date, 
                                          'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
                                          'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
                                          'price': user.price, 'paid': user.paid, 'cash': user.cash})
@@ -1250,11 +1250,11 @@ def sending_email_first_detail(request):
             else: 
                 html_content = render_to_string("basecamp/html_email-confirmation-pending.html", 
                                             {'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 'email': user.email, 'email1': user.email1,
-                                             'flight_date': user.flight_date, 'flight_number': user.flight_number,
+                                             'pickup_date': user.pickup_date, 'flight_number': user.flight_number,
                                              'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
                                              'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
                                              'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
-                                             'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date, 
+                                             'return_direction': user.return_direction, 'return_pickup_date': user.return_pickup_date, 
                                              'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
                                              'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
                                              'price': user.price, 'paid': user.paid, })
@@ -1277,11 +1277,11 @@ def sending_email_first_detail(request):
 
             html_content = render_to_string("basecamp/html_email-confirmation.html", 
                                         {'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 'email': user.email, 'email1': user.email1,
-                                            'flight_date': user.flight_date, 'flight_number': user.flight_number,
+                                            'pickup_date': user.pickup_date, 'flight_number': user.flight_number,
                                             'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
                                             'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
                                             'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
-                                            'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date, 
+                                            'return_direction': user.return_direction, 'return_pickup_date': user.return_pickup_date, 
                                             'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
                                             'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
                                             'price': user.price, 'paid': user.paid, 'cash': user.cash})
@@ -1316,11 +1316,11 @@ def sending_email_second_detail(request):
         if user.cruise:
             html_content = render_to_string("basecamp/html_email-confirmation-cruise.html",
                                         {'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 'email': user.email, 'email1': user.email1,
-                                         'flight_date': user.flight_date, 'flight_number': user.flight_number,
+                                         'pickup_date': user.pickup_date, 'flight_number': user.flight_number,
                                          'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
                                          'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
                                          'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
-                                         'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date, 
+                                         'return_direction': user.return_direction, 'return_pickup_date': user.return_pickup_date, 
                                          'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
                                          'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
                                          'price': user.price, 'paid': user.paid, 'cash': user.cash})
@@ -1352,11 +1352,11 @@ def sending_email_second_detail(request):
             else: 
                 html_content = render_to_string("basecamp/html_email-confirmation-pending.html", 
                                             {'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 'email': user.email, 'email1': user.email1,
-                                             'flight_date': user.flight_date, 'flight_number': user.flight_number,
+                                             'pickup_date': user.pickup_date, 'flight_number': user.flight_number,
                                              'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
                                              'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
                                              'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
-                                             'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date, 
+                                             'return_direction': user.return_direction, 'return_pickup_date': user.return_pickup_date, 
                                              'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
                                              'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
                                              'price': user.price, 'paid': user.paid})
@@ -1374,11 +1374,11 @@ def sending_email_second_detail(request):
         else:
             html_content = render_to_string("basecamp/html_email-confirmation.html",
                                         {'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 'email': user.email, 'email1': user.email1,
-                                         'flight_date': user.flight_date, 'flight_number': user.flight_number,
+                                         'pickup_date': user.pickup_date, 'flight_number': user.flight_number,
                                          'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
                                          'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
                                          'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
-                                         'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date, 
+                                         'return_direction': user.return_direction, 'return_pickup_date': user.return_pickup_date, 
                                          'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
                                          'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
                                          'price': user.price, 'paid': user.paid, 'cash': user.cash})
@@ -1422,11 +1422,11 @@ def sending_email_input_data_detail(request):
         else:
             html_content = render_to_string("basecamp/html_email-input-date.html", 
                                         {'name': user.name, 'contact': user.contact, 'email': user.email, 
-                                         'flight_date': user.flight_date, 'flight_number': user.flight_number,
+                                         'pickup_date': user.pickup_date, 'flight_number': user.flight_number,
                                          'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
                                          'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
                                          'no_of_baggage': user.no_of_baggage, 'field': field, 
-                                         'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date, 
+                                         'return_direction': user.return_direction, 'return_pickup_date': user.return_pickup_date, 
                                          'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
                                          'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
                                          })
@@ -1455,7 +1455,7 @@ def save_data_only_detail(request):
         contact = request.POST.get('contact')
         email = request.POST.get('email')
         email1 = request.POST.get('email1')
-        flight_date = request.POST.get('flight_date')
+        pickup_date = request.POST.get('pickup_date')
         flight_number = request.POST.get('flight_number')
         flight_time = request.POST.get('flight_time')
         pickup_time = request.POST.get('pickup_time')
@@ -1465,7 +1465,7 @@ def save_data_only_detail(request):
         no_of_passenger = request.POST.get('no_of_passenger')
         no_of_baggage = request.POST.get('no_of_baggage')
         return_direction = request.POST.get('return_direction')
-        return_flight_date = request.POST.get('return_flight_date')
+        return_pickup_date = request.POST.get('return_pickup_date')
         return_flight_number = request.POST.get('return_flight_number')
         return_flight_time = request.POST.get('return_flight_time')
         return_pickup_time = request.POST.get('return_pickup_time')
@@ -1475,10 +1475,10 @@ def save_data_only_detail(request):
      
         sam_driver = Driver.objects.get(driver_name="Sam") 
  
-        p = Post(company_name=company_name, name=name, contact=contact, email=email, email1=email1, flight_date=flight_date, flight_number=flight_number,
+        p = Post(company_name=company_name, name=name, contact=contact, email=email, email1=email1, pickup_date=pickup_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
                  no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction,
-                 return_flight_date=return_flight_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
+                 return_pickup_date=return_pickup_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
                  return_pickup_time=return_pickup_time, message=message, price=price, paid=paid, driver=sam_driver)
         
         p.save()                   
@@ -1493,7 +1493,7 @@ def save_data_only_detail(request):
 def return_trip_detail(request):     
     if request.method == "POST":
         email = request.POST.get('email')
-        flight_date = request.POST.get('flight_date')
+        pickup_date = request.POST.get('pickup_date')
         flight_number = request.POST.get('flight_number')
         flight_time = request.POST.get('flight_time')
         pickup_time = request.POST.get('pickup_time')
@@ -1518,7 +1518,7 @@ def return_trip_detail(request):
             'name': name,
             'contact': contact,
             'email': email,
-            'flight_date': flight_date}       
+            'pickup_date': pickup_date}       
             
         content = '''
             {} 
@@ -1533,11 +1533,11 @@ def return_trip_detail(request):
             Best Regards,
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['contact'], data['email'])
-        send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])     
+        send_mail(data['pickup_date'], content, '', [RECIPIENT_EMAIL])     
         
         sam_driver = Driver.objects.get(driver_name="Sam")  
                     
-        p = Post(name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
+        p = Post(name=name, contact=contact, email=email, pickup_date=pickup_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
                  no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, price=price, 
                  driver=sam_driver)
@@ -1602,9 +1602,9 @@ def invoice_detail(request):
             user1 = Post.objects.filter(email=email)[1]
             html_content = render_to_string("basecamp/html_email-invoice.html",
                                         {'inv_no': inv_no, 'name': user.name, 'company_name': user1.company_name, 'contact': user1.contact, 'discount': discount,
-                                        'email': user1.email, 'direction': user1.direction, 'flight_date': user1.flight_date, 'invoice_date': today, 
+                                        'email': user1.email, 'direction': user1.direction, 'pickup_date': user1.pickup_date, 'invoice_date': today, 
                                         'flight_number': user1.flight_number, 'flight_time': user1.flight_time, 'pickup_time': user1.pickup_time,
-                                        'return_direction': user1.return_direction, 'return_flight_date': user1.return_flight_date,
+                                        'return_direction': user1.return_direction, 'return_pickup_date': user1.return_pickup_date,
                                         'return_flight_number': user1.return_flight_number, 'return_flight_time': user1.return_flight_time, 'return_pickup_time': user1.return_pickup_time,
                                         'street': user1.street, 'suburb': user1.suburb, 'no_of_passenger': user1.no_of_passenger, 'no_of_baggage': user1.no_of_baggage,
                                         'price': user1.price, 'with_gst': with_gst, 'surcharge': surcharge, 'total_price': total_price, 'toll': toll, 
@@ -1626,9 +1626,9 @@ def invoice_detail(request):
         else:                    
             html_content = render_to_string("basecamp/html_email-invoice.html",
                                         {'inv_no': inv_no, 'name': user.name, 'company_name': user.company_name,'contact': user.contact, 'discount': discount,
-                                        'email': email, 'direction': user.direction, 'flight_date': user.flight_date, 'invoice_date': today,
+                                        'email': email, 'direction': user.direction, 'pickup_date': user.pickup_date, 'invoice_date': today,
                                         'flight_number': user.flight_number, 'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
-                                        'return_direction': user.return_direction, 'return_flight_date': user.return_flight_date,
+                                        'return_direction': user.return_direction, 'return_pickup_date': user.return_pickup_date,
                                         'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 'return_pickup_time': user.return_pickup_time,
                                         'street': user.street, 'suburb': user.suburb, 'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
                                         'price': user.price, 'with_gst': with_gst, 'surcharge': surcharge, 'total_price': total_price, 'toll': toll, 
@@ -1655,10 +1655,10 @@ def invoice_detail(request):
         return render(request, 'beasecamp/invoice.html', {})
     
 
-def flight_date_detail(request):       
+def pickup_date_detail(request):       
     if request.method == "POST":          
         email = request.POST.get('email')
-        flight_date = request.POST.get('flight_date')
+        pickup_date = request.POST.get('pickup_date')
 
         inquiry = Inquiry.objects.filter(email=email).first()
         post = Post.objects.filter(email=email).first()
@@ -1683,7 +1683,7 @@ def flight_date_detail(request):
         no_of_passenger = user.no_of_passenger
         no_of_baggage = user.no_of_baggage
         return_direction = user.return_direction
-        return_flight_date = user.return_flight_date
+        return_pickup_date = user.return_pickup_date
         return_flight_number = user.return_flight_number
         return_flight_time = user.return_flight_time
         return_pickup_time = user.return_pickup_time
@@ -1693,7 +1693,7 @@ def flight_date_detail(request):
         'name': name,
         'contact': contact,
         'email': email,
-        'flight_date': flight_date}       
+        'pickup_date': pickup_date}       
         
         content = '''
         {} 
@@ -1707,23 +1707,23 @@ def flight_date_detail(request):
         Best Regards,
         EasyGo Admin \n\n        
         ''' .format(data['name'], data['contact'], data['email'])
-        send_mail(data['flight_date'], content, '', [RECIPIENT_EMAIL])       
+        send_mail(data['pickup_date'], content, '', [RECIPIENT_EMAIL])       
             
         if isinstance(user, Inquiry):
-            p = Inquiry (name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
+            p = Inquiry (name=name, contact=contact, email=email, pickup_date=pickup_date, flight_number=flight_number,
                      flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
                      no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction,
-                     return_flight_date=return_flight_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
+                     return_pickup_date=return_pickup_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
                      return_pickup_time=return_pickup_time, message=message)
 
             p.save()              
 
         elif isinstance(user, Post):
             sam_driver = Driver.objects.get(driver_name="Sam") 
-            p = Post (name=name, contact=contact, email=email, flight_date=flight_date, flight_number=flight_number,
+            p = Post (name=name, contact=contact, email=email, pickup_date=pickup_date, flight_number=flight_number,
                      flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
                      no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction,
-                     return_flight_date=return_flight_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
+                     return_pickup_date=return_pickup_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
                      return_pickup_time=return_pickup_time, message=message, driver=sam_driver)
 
             p.save()                
@@ -1731,7 +1731,7 @@ def flight_date_detail(request):
         return render(request, 'basecamp/inquiry_done.html')
 
     else:
-        return render(request, 'basecamp/flight_date_error.html', {})
+        return render(request, 'basecamp/pickup_date_error.html', {})
 
 
 # email_dispatch_detail 
@@ -1790,7 +1790,7 @@ def email_dispatch_detail(request):
 
             if selected_option == "Arrival Notice Today" and user:
                 today = date.today()     
-                user_today = Post.objects.filter(email=email, flight_date=today).first()
+                user_today = Post.objects.filter(email=email, pickup_date=today).first()
                 if user_today:
                     driver_instance = user_today.driver 
                     context.update({

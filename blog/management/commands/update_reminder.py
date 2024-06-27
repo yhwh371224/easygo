@@ -46,14 +46,14 @@ class Command(BaseCommand):
                 else: 
                     unique_emails.add(list_email)
 
-                    posts = Post.objects.filter(email__iexact=list_email, flight_date__range=[today, three_days_later])
+                    posts = Post.objects.filter(email__iexact=list_email, pickup_date__range=[today, three_days_later])
 
                     for post in posts:
                         if post.reminder:
-                            logger.info(f'....Already in calendar:{post.name}, {post.flight_date}, {post.pickup_time}')
+                            logger.info(f'....Already in calendar:{post.name}, {post.pickup_date}, {post.pickup_time}')
                         
                         else:                             
-                            logger.info(f'....Just now executed:{post.name}, {post.flight_date}, {post.pickup_time}')
+                            logger.info(f'....Just now executed:{post.name}, {post.pickup_date}, {post.pickup_time}')
 
                         post.reminder = True
                         post.save(update_fields=['reminder'])

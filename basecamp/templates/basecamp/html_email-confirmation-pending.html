@@ -240,12 +240,12 @@
 												    Contact: {{ contact }}<br>
                                                     Email: {{ email }}<br>
 												{% if not direction %}
-                                                    Booking date: {{ flight_date|slice:":10" }}<br>
+                                                    Booking date: {{ pickup_date|slice:":10" }}<br>
 													Pickup time: {{ pickup_time }}<br>
 													Start point: {{ flight_number }}<br>
                                                     End point: {{ street }}<br>																									
 												{% else %}
-                                                    Flight date: {{ flight_date|slice:":10" }}<br>
+                                                    Flight date: {{ pickup_date|slice:":10" }}<br>
                                                     Flight number: {{ flight_number }}<br>
 													Flight time: {{ flight_time }}<br>
 													Pickup time: {{ pickup_time }}<br>
@@ -261,12 +261,12 @@
 													<span style="font-weight:bold; color: #d39383">{{ notice }}</span><br><br>
 												{% endif %}
 												{% if not return_direction and return_pickup_time %}													
-													<span style="font-weight:bold; color: #bdb1a6">Return trip date:  {{ return_flight_date }}</span><br>													
+													<span style="font-weight:bold; color: #bdb1a6">Return trip date:  {{ return_pickup_date }}</span><br>													
 													<span style="font-weight:bold; color: #bdb1a6">Return start point:  {{ return_flight_number }}</span><br>
 													<span style="font-weight:bold; color: #bdb1a6">Return pickup time:  {{ return_pickup_time }}</span><br>
 												{% elif return_direction %}
 													<span style="font-weight:bold; color: #bdb1a6">Return direction:  {{ return_direction }}</span><br>
-													<span style="font-weight:bold; color: #bdb1a6">Return flight date:  {{ return_flight_date }}</span><br>
+													<span style="font-weight:bold; color: #bdb1a6">Return flight date:  {{ return_pickup_date }}</span><br>
                                                     <span style="font-weight:bold; color: #bdb1a6">Return flight number:  {{ return_flight_number }}</span><br>
 													<span style="font-weight:bold; color: #bdb1a6">Return flight time:  {{ return_flight_time }}</span><br>
 													<span style="font-weight:bold; color: #bdb1a6">Return pickup time:  {{ return_pickup_time }}</span><br>

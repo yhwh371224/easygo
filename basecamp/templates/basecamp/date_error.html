@@ -12,7 +12,7 @@
         <!-- <h3 class="fs-lg pb-2 pb-md-0 mb-4 mb-md-5"><span style="font-weight:bold; color: #d69355">The date you entered for your booking may be today or in the past</span></h3> -->
         <h3 class="fs-lg pb-2 pb-md-0 mb-4 mb-md-5"><span style="font-weight:bold; color: #d69355">Please enter the future date on the form below if the transportation service you desire is not for today</span></h3>
         <p>If you require transportation services today, please contact us via email at&nbsp;<a href="mailto:info@easygoshuttle.com.au">&nbsp;info@easygoshuttle.com.au</a></p>
-        <form method="post" enctype="multipart/form-data" action="/flight_date_detail/" class="card-body needs-validation p-5" >
+        <form method="post" enctype="multipart/form-data" action="/pickup_date_detail/" class="card-body needs-validation p-5" >
           {% csrf_token %}							
           <div class="card text-white bg-secondary p-4">
           <div class="mb-3 pb-1">
@@ -22,7 +22,7 @@
           </div><br><br>
           <div class="mb-3 pb-1">
             <label class="form-label" >Trip date&nbsp;(Sydney)</label>
-             <input class="form-control date-picker rounded" name="flight_date" type="text" placeholder="Choose your future date" data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;F j, Y&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;}" required>
+             <input class="form-control date-picker rounded" name="pickup_date" type="text" placeholder="Choose your future date" data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;F j, Y&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;}" required>
             <div class="invalid-feedback">Please enter your future date!</div>
           </div>			
           <hr>				           	
