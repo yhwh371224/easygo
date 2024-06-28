@@ -5,7 +5,6 @@ from django.conf.urls.static import static
 from django.views.static import serve
 from django.contrib.auth.decorators import user_passes_test
 from basecamp.views import stripe_webhook
-from basecamp import views
 
 
 admin_site = user_passes_test(lambda u: u.is_superuser)(admin.site.urls)
@@ -21,9 +20,6 @@ urlpatterns = [
     path('static/<path:path>', serve, {'document_root': settings.STATIC_ROOT}),
     path('paypal/', include('paypal.standard.ipn.urls')),
     path('stripe_webhook/', stripe_webhook, name='stripe_webhook'),
-    path('api/orders', views.create_order, name='create_order'),
-    path('api/orders/<str:order_id>/capture', views.capture_order, name='capture_order'),
-
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
