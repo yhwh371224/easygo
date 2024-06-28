@@ -10,8 +10,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         today = timezone.now().date()
-        start_date = today - timedelta(days=(today.day - 12))  # Calculate June 12th
-        end_date = start_date - timedelta(days=30)  # Calculate May 11th
+        start_date = today.replace(month=5, day=11)
+        end_date = today.replace(month=4, day=11)
 
         customers = Post.objects.filter(created__range=[end_date, start_date])
 
