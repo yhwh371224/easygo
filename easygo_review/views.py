@@ -65,7 +65,7 @@ class PostList(ListView):
         if post_id:            
             blog_post = BlogPost.objects.get(id=post_id)
             user_name = blog_post.name
-            context['user_name'] = user_name            
+            context['user_name'] = user_name     
 
         return context
     

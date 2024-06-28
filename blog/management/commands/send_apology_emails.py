@@ -27,8 +27,7 @@ class Command(BaseCommand):
             "Thank you for your understanding and patience.\n\n"
             "Best regards,\n\n"
             "Peter\n"
-            "EasyGo Airport Shuttle\n"
-            
+            "EasyGo Airport Shuttle\n"            
         )
 
         for customer in customers:
