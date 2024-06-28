@@ -1800,76 +1800,76 @@ def email_dispatch_detail(request):
         return render(request, 'basecamp/email_dispatch.html', {})
     
 
-PAYPAL_BASE_URL = "https://api-m.paypal.com"
+# PAYPAL_BASE_URL = "https://api-m.paypal.com"
 
-def generate_access_token():
-    auth = (PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET)
-    response = requests.post(f"{PAYPAL_BASE_URL}/v1/oauth2/token", 
-                             headers={"Accept": "application/json", "Accept-Language": "en_US"},
-                             data={"grant_type": "client_credentials"},
-                             auth=auth)
-    response.raise_for_status()
-    return response.json()["access_token"]
+# def generate_access_token():
+#     auth = (PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET)
+#     response = requests.post(f"{PAYPAL_BASE_URL}/v1/oauth2/token", 
+#                              headers={"Accept": "application/json", "Accept-Language": "en_US"},
+#                              data={"grant_type": "client_credentials"},
+#                              auth=auth)
+#     response.raise_for_status()
+#     return response.json()["access_token"]
 
 
-@csrf_exempt
-def create_order(request):
-    if request.method == 'POST':
-        try:
-            data = json.loads(request.body)
-            amount_value = data.get('amount_value', '1.50')  
-            # 기본값을 '1.50'으로 설정, 이것이 없으면 오류가 발생함
+# @csrf_exempt
+# def create_order(request):
+#     if request.method == 'POST':
+#         try:
+#             data = json.loads(request.body)
+#             amount_value = data.get('amount_value', '1.50')  
+#             # 기본값을 '1.50'으로 설정, 이것이 없으면 오류가 발생함
 
-            amount_value = str(amount_value)
+#             amount_value = str(amount_value)
             
-            access_token = generate_access_token()
-            headers = {
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {access_token}"
-            }
-            payload = {
-                "intent": "CAPTURE",
-                "purchase_units": [
-                    {
-                        "amount": {
-                            "currency_code": "AUD",
-                            "value": amount_value
-                        }
-                    }
-                ]
-            }
-            response = requests.post(f"{PAYPAL_BASE_URL}/v2/checkout/orders", 
-                                     headers=headers, 
-                                     json=payload)
-            response.raise_for_status()
-            return JsonResponse(response.json())
-        except Exception as e:
-            return JsonResponse({'error': str(e)}, status=500)
-    return JsonResponse({'error': 'Invalid request method'}, status=400)
+#             access_token = generate_access_token()
+#             headers = {
+#                 "Content-Type": "application/json",
+#                 "Authorization": f"Bearer {access_token}"
+#             }
+#             payload = {
+#                 "intent": "CAPTURE",
+#                 "purchase_units": [
+#                     {
+#                         "amount": {
+#                             "currency_code": "AUD",
+#                             "value": amount_value
+#                         }
+#                     }
+#                 ]
+#             }
+#             response = requests.post(f"{PAYPAL_BASE_URL}/v2/checkout/orders", 
+#                                      headers=headers, 
+#                                      json=payload)
+#             response.raise_for_status()
+#             return JsonResponse(response.json())
+#         except Exception as e:
+#             return JsonResponse({'error': str(e)}, status=500)
+#     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 
-@csrf_exempt
-def capture_order(request, order_id):
-    if request.method == 'POST':
-        try:
-            access_token = generate_access_token()
-            headers = {
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {access_token}"
-            }
-            response = requests.post(f"{PAYPAL_BASE_URL}/v2/checkout/orders/{order_id}/capture", 
-                                     headers=headers)
-            response.raise_for_status()
-            return JsonResponse(response.json())
-        except Exception as e:
-            return JsonResponse({'error': str(e)}, status=500)
-    return JsonResponse({'error': 'Invalid request method'}, status=400)
+# @csrf_exempt
+# def capture_order(request, order_id):
+#     if request.method == 'POST':
+#         try:
+#             access_token = generate_access_token()
+#             headers = {
+#                 "Content-Type": "application/json",
+#                 "Authorization": f"Bearer {access_token}"
+#             }
+#             response = requests.post(f"{PAYPAL_BASE_URL}/v2/checkout/orders/{order_id}/capture", 
+#                                      headers=headers)
+#             response.raise_for_status()
+#             return JsonResponse(response.json())
+#         except Exception as e:
+#             return JsonResponse({'error': str(e)}, status=500)
+#     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 
-def paypal_ipn_error_email(subject, exception, payer_name, payer_email, gross_amount):
+def paypal_ipn_error_email(subject, exception, item_name, payer_email, gross_amount):
     error_message = (
         f"Exception: {exception}\n"
-        f"Payer Name: {payer_name}\n"
+        f"Payer Name: {item_name}\n"
         f"Payer Email: {payer_email}\n"
         f"Gross Amount: {gross_amount}"
     )
@@ -1887,11 +1887,8 @@ PAYPAL_VERIFY_URL = "https://ipnpb.paypal.com/cgi-bin/webscr"
 @csrf_exempt
 @require_POST
 def paypal_ipn(request):
-    if request.method == 'POST':
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
+    if request.method == 'POST':        
         item_name = request.POST.get('item_name')
-        payer_name = f"{first_name} {last_name}" if first_name and last_name else item_name
         payer_email = request.POST.get('payer_email')
         gross_amount = request.POST.get('mc_gross')
         txn_id = request.POST.get('txn_id')
@@ -1899,12 +1896,12 @@ def paypal_ipn(request):
         if PaypalPayment.objects.filter(txn_id=txn_id).exists():
             return HttpResponse(status=200, content="Duplicate IPN Notification")
         
-        p = PaypalPayment(item_name=payer_name, payer_email=payer_email, gross_amount=gross_amount, txn_id=txn_id)
+        p = PaypalPayment(item_name=item_name, payer_email=payer_email, gross_amount=gross_amount, txn_id=txn_id)
 
         try:
             p.save()
         except Exception as e:
-            paypal_ipn_error_email('PayPal IPN Error', str(e), payer_name, payer_email, gross_amount)
+            paypal_ipn_error_email('PayPal IPN Error', str(e), item_name, payer_email, gross_amount)
             return HttpResponse(status=500, content="Error processing PayPal IPN")
 
         ipn_data = request.POST.copy()
@@ -1918,17 +1915,18 @@ def paypal_ipn(request):
             if response.status_code == 200 and response_content == 'VERIFIED':
                 return HttpResponse(status=200)
             else:
-                paypal_ipn_error_email('PayPal IPN Verification Failed', 'Failed to verify PayPal IPN.', payer_name, payer_email, gross_amount)
+                paypal_ipn_error_email('PayPal IPN Verification Failed', 'Failed to verify PayPal IPN.', item_name, payer_email, gross_amount)
                 return HttpResponse(status=500, content="Error processing PayPal IPN")
 
         except requests.exceptions.RequestException as e:
-            paypal_ipn_error_email('PayPal IPN Request Exception', str(e), payer_name, payer_email, gross_amount)
+            paypal_ipn_error_email('PayPal IPN Request Exception', str(e), item_name, payer_email, gross_amount)
             return HttpResponse(status=500, content="Error processing PayPal IPN")
 
     return HttpResponse(status=400)
 
 
 stripe.api_key = settings.STRIPE_LIVE_SECRET_KEY
+
 
 @csrf_exempt
 @require_POST

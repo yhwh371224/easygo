@@ -1,7 +1,6 @@
 import datetime
 import os
 import re
-# import logging
 
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
@@ -13,14 +12,9 @@ from celery import shared_task
 from main.settings import RECIPIENT_EMAIL, DEFAULT_FROM_EMAIL
 from .models import Post, PaypalPayment, StripePayment
 from django.core.exceptions import ImproperlyConfigured
-# from django.core.cache import cache
 
-
-# logger = logging.getLogger(__name__)
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-RATE_LIMIT_KEY_TEMPLATE = 'send_notice_email_rate_limit_{email}'
 
 
 @shared_task
@@ -158,50 +152,6 @@ def send_notice_email(subject, message, RECIPIENT_EMAIL):
         [RECIPIENT_EMAIL],
         fail_silently=False,
     )
-
-
-# Review page, suburbs page, service, information, about_us, terms, policy, suburbs1
-# RATE_LIMIT_KEY_TEMPLATE = 'rate_limit_{email}'
-# RATE_LIMIT_COUNT_KEY_TEMPLATE = 'rate_limit_count_{email}'
-# RATE_LIMIT_MAX_ATTEMPTS = 7  # 1분 안에 허용되는 최대 이메일 전송 횟수
-
-# @shared_task(bind=True, max_retries=3)
-# def send_notice_email(self, subject, message, RECIPIENT_EMAIL):
-#     try:
-#         if not all([subject, message, RECIPIENT_EMAIL]):
-#             raise ValueError("Subject, message, and recipient email must be provided")
-        
-#         if not DEFAULT_FROM_EMAIL:
-#             raise ImproperlyConfigured("DEFAULT_FROM_EMAIL is not set in environment variables")
-
-#         # Check rate limit
-#         rate_limit_key = RATE_LIMIT_KEY_TEMPLATE.format(email=RECIPIENT_EMAIL)
-#         rate_limit_count_key = RATE_LIMIT_COUNT_KEY_TEMPLATE.format(email=RECIPIENT_EMAIL)
-        
-#         rate_limit_count = cache.get(rate_limit_count_key, 0)
-
-#         if rate_limit_count >= RATE_LIMIT_MAX_ATTEMPTS:
-#             logger.warning(f"Rate limit exceeded for {RECIPIENT_EMAIL}")
-#             return
-
-#         send_mail(
-#             subject,
-#             message,
-#             DEFAULT_FROM_EMAIL,
-#             [RECIPIENT_EMAIL],
-#             fail_silently=False,
-#         )
-#         logger.info(f"Email sent to {RECIPIENT_EMAIL} with subject {subject}")
-
-#         # Increment rate limit count and set rate limit key with a timeout (e.g., 60 seconds)
-#         cache.set(rate_limit_key, 'sent', timeout=60)
-#         cache.set(rate_limit_count_key, rate_limit_count + 1, timeout=60)
-
-#     except (ValueError, ImproperlyConfigured) as e:
-#         logger.error(f"Failed to send email: {str(e)}")
-#     except Exception as e:
-#         logger.error(f"An unexpected error occurred: {str(e)}")
-#         self.retry(countdown=60)
     
 
 def payment_send_email(subject, html_content, recipient_list):
