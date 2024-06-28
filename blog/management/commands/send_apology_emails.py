@@ -1,4 +1,3 @@
-# your_app/management/commands/send_apology_emails.py
 from django.core.management.base import BaseCommand
 from django.core.mail import send_mail
 from django.utils import timezone
@@ -10,8 +9,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         today = timezone.now().date()
-        start_date = today.replace(month=3, day=11)
-        end_date = today.replace(month=2, day=11)
+        start_date = today.replace(month=1, day=11)
+        end_date = today.replace(month=12, day=11).replace(year=today.year - 1)
 
         customers = Post.objects.filter(created__range=[end_date, start_date])
 
@@ -41,4 +40,5 @@ class Command(BaseCommand):
                 fail_silently=False,
             )
             self.stdout.write(self.style.SUCCESS(f'Email sent to {customer.email}'))
+
 
