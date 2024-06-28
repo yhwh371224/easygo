@@ -12,7 +12,7 @@ from django.db.models import Q
 from celery import shared_task
 from main.settings import RECIPIENT_EMAIL, DEFAULT_FROM_EMAIL
 from .models import Post, PaypalPayment, StripePayment
-# from django.core.exceptions import ImproperlyConfigured
+from django.core.exceptions import ImproperlyConfigured
 # from django.core.cache import cache
 
 
@@ -145,6 +145,12 @@ def send_email_task(pickup_date, direction, suburb, no_of_passenger):
 # Review page, endpoints page, service, information, about_us, terms, policy, endpoints1
 @shared_task
 def send_notice_email(subject, message, RECIPIENT_EMAIL):
+    if not all([subject, message, RECIPIENT_EMAIL]):
+        raise ValueError("Subject, message, and recipient email must be provided")
+            
+    if not DEFAULT_FROM_EMAIL:
+        raise ImproperlyConfigured("DEFAULT_FROM_EMAIL is not set in environment variables")
+    
     send_mail(
         subject,
         message,
