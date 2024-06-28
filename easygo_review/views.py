@@ -56,19 +56,21 @@ class PostList(ListView):
             if post.rating is None:
                 post.rating = 5
 
-        send_notice_email.delay('reviews accessed', 'reviews accessed', RECIPIENT_EMAIL)
+        send_notice_email.delay('reviews accessed', 'reviews accessed', 'recipient@example.com')
 
         authenticated_post = get_authenticated_post(self.request)
         context['authenticated_post'] = authenticated_post 
 
-        post_id = self.request.session.get('post_id', None)
-        if post_id:            
-            blog_post = BlogPost.objects.get(id=post_id)
+        id = self.request.session.get('id', None)
+        if id:
+            blog_post = BlogPost.objects.get(id=id)
             user_name = blog_post.name
             context['user_name'] = user_name
+        else:
+            context['user_name'] = None
 
-        context['post_id'] = post_id
-        context['search_error'] = self.request.session.get('search_error', None)   
+        context['id'] = id  # 세션 변수 id를 컨텍스트에 추가
+        context['search_error'] = self.request.session.get('search_error', None)  # search_error를 컨텍스트에 추가
 
         return context
     
@@ -98,9 +100,9 @@ class PostDetail(DetailView):
 
 class PostCreate(View):
     def get(self, request, *args, **kwargs):
-        post_id = request.session.get('post_id')  
-        if post_id:
-            blog_post = BlogPost.objects.get(id=post_id)
+        id = request.session.get('id')  
+        if id:
+            blog_post = BlogPost.objects.get(id=id)
             form = PostForm(initial={'name': blog_post.name})  
         else:
             form = PostForm()
@@ -109,9 +111,9 @@ class PostCreate(View):
     def post(self, request, *args, **kwargs):
         form = PostForm(request.POST)
         if form.is_valid():
-            post_id = request.session.get('post_id')  
-            if post_id:
-                blog_post = BlogPost.objects.get(id=post_id)
+            id = request.session.get('id')  
+            if id:
+                blog_post = BlogPost.objects.get(id=id)
                 form.instance.author = blog_post.name  
                 form.instance.name = blog_post.name  
                 rating = form.cleaned_data.get('rating')
@@ -121,7 +123,7 @@ class PostCreate(View):
                 form.save()
                 return redirect('/easygo_review/')
         return render(request, 'easygo_review/post_form.html', {'form': form, 'form_guide': 'Please post your review'})
-
+    
 
 class PostUpdate(UpdateView):
     model = Post
