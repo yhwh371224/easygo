@@ -17,6 +17,10 @@
                 <br/>
                 {% if request.session.post_id %}
                     <button class="btn btn-primary btn-sm float-right" onclick="location.href='/easygo_review/create/'">New Post</button>
+                {% else %}
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#loginModal">
+                        Log in
+                    </button>
                 {% endif %}   
             </h5>
         </div>
