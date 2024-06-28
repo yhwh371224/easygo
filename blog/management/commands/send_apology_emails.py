@@ -9,22 +9,22 @@ class Command(BaseCommand):
     help = 'Send apology emails to customers created in the last three months'
 
     def handle(self, *args, **kwargs):
-        three_months_ago = timezone.now() - timedelta(days=90)
-        customers = Post.objects.filter(created__gte=three_months_ago)
+        today = timezone.now().date()
+        start_date = today - timedelta(days=(today.day - 12))  # Calculate June 12th
+        end_date = start_date - timedelta(days=30)  # Calculate May 11th
+
+        customers = Post.objects.filter(created__range=[end_date, start_date])
 
         subject = 'Apology for Recent Email Error'
         message = (
             "Dear Valued Customer,\n\n"
             "I hope this message finds you well.\n\n"
-            "I am writing to sincerely apologize for a recent error in our email system. "
-            "It has come to our attention that an email may have been sent to you by mistake, "
-            "which was not relevant to your current status or interests.\n\n"
-            "We understand that your time is valuable and that receiving such an email can be both "
-            "confusing and inconvenient. Please rest assured that we are taking all necessary steps to "
-            "ensure that this does not happen again in the future. Our team is currently reviewing our "
-            "systems and processes to prevent any further issues.\n\n"
-            "Your satisfaction is our top priority, and we deeply regret any inconvenience this may have caused. "
-            "If you have any questions or concerns, please do not hesitate to contact us \n\n"            
+            "We recently identified and fixed a system error that caused the loss of booking dates (flight_dates). "
+            "We are in the process of recovering the lost information manually, but it is time-consuming, and some booking dates (pickup dates) may not be recoverable.\n\n"
+            "We are reaching out individually to request this information. If you have not received such an email, it means we have successfully retrieved your information. "
+            "However, if your booking date is approaching and you have not received a reminder notice, please contact us to confirm your details.\n\n"
+            "We apologize for any inconvenience this may cause and appreciate your understanding. "
+            "We are taking these steps to ensure no mistakes are made and to provide you with the best service possible.\n\n"         
             "Thank you for your understanding and patience.\n\n"
             "Best regards,\n\n"
             "Peter\n"
