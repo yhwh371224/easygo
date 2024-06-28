@@ -17,6 +17,7 @@ from django.http import JsonResponse
 
 
 def custom_login_view(request):
+    error = None
     if request.method == 'POST':
         email = request.POST['email']
         post = BlogPost.objects.filter(email=email).first()
@@ -25,7 +26,7 @@ def custom_login_view(request):
             return redirect('easygo_review:easygo_review')
         else:
             return render(request, 'easygo_review/custom_login.html', {'error': 'Invalid email address'})
-    return render(request, 'easygo_review/custom_login.html')
+    return render(request, 'easygo_review/custom_login.html', {'error': error})
 
 
 def custom_logout_view(request):
