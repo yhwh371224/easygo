@@ -299,8 +299,8 @@ MARKDOWNX_MEDIA_PATH = datetime.now().strftime('markdownx/%Y/%m/%d/')
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-RECIPIENT_EMAIL = "info@easygoshuttle.com.au"
-DEFAULT_FROM_EMAIL = "info@easygoshuttle.com.au"
+RECIPIENT_EMAIL = config('RECIPIENT_EMAIL')
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

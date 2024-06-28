@@ -1,3 +1,6 @@
+import requests
+import json
+
 from django.shortcuts import render, redirect
 from .models import Post, Comment
 from .forms import CommentForm, PostForm
@@ -8,6 +11,9 @@ from main.settings import RECIPIENT_EMAIL
 from blog.models import Post as BlogPost
 from django.core.exceptions import PermissionDenied
 from django.views import View 
+from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
 
 
 def custom_login_view(request):
@@ -191,3 +197,41 @@ def index(request):
             'posts': posts,
         }
     )
+
+
+def verify_recaptcha(response, version='v2'):
+    if version == 'v2':
+        secret_key = settings.RECAPTCHA_V2_SECRET_KEY
+    elif version == 'v3':
+        secret_key = settings.RECAPTCHA_V3_SECRET_KEY
+    else:
+        return {'success': False, 'error-codes': ['invalid-version']}
+
+    data = {
+        'secret': secret_key,
+        'response': response
+    }
+    r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
+    return r.json()
+
+
+@csrf_exempt
+def recaptcha_verify(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        recaptcha_token = data.get('recaptchaToken')
+        
+        if not recaptcha_token:
+            return JsonResponse({'success': False, 'message': 'No reCAPTCHA token provided'})
+
+        # Verify the reCAPTCHA v3 token
+        result = verify_recaptcha(recaptcha_token, version='v3')
+        
+        if result.get('success'):
+            # The token is valid, handle your logic here
+            return JsonResponse({'success': True})
+        else:
+            # The token is invalid
+            return JsonResponse({'success': False, 'message': result.get('error-codes', 'Invalid reCAPTCHA token')})
+    
+    return JsonResponse({'success': False, 'message': 'Invalid request method'})
