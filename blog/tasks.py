@@ -1,6 +1,7 @@
 import datetime
 import os
 import re
+import logging
 
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
@@ -11,9 +12,15 @@ from django.db.models import Q
 from celery import shared_task
 from main.settings import RECIPIENT_EMAIL, DEFAULT_FROM_EMAIL
 from .models import Post, PaypalPayment, StripePayment
+from django.core.exceptions import ImproperlyConfigured
+from django.core.cache import cache
 
+
+logger = logging.getLogger(__name__)
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+RATE_LIMIT_KEY_TEMPLATE = 'send_notice_email_rate_limit_{email}'
 
 
 @shared_task
@@ -136,15 +143,40 @@ def send_email_task(pickup_date, direction, suburb, no_of_passenger):
 
 
 # Review page, suburbs page, service, information, about_us, terms, policy, suburbs1
-@shared_task
-def send_notice_email(subject, message, RECIPIENT_EMAIL):
-    send_mail(
-        subject,
-        message,
-        DEFAULT_FROM_EMAIL,
-        [RECIPIENT_EMAIL],
-        fail_silently=False,
-    )
+@shared_task(bind=True, max_retries=3)
+def send_notice_email(self, subject, message, RECIPIENT_EMAIL):
+    try:
+        if not all([subject, message, RECIPIENT_EMAIL]):
+            raise ValueError("Subject, message, and recipient email must be provided")
+
+        # Ensure DEFAULT_FROM_EMAIL is set in environment variables
+        DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
+        if not DEFAULT_FROM_EMAIL:
+            raise ImproperlyConfigured("DEFAULT_FROM_EMAIL is not set in environment variables")
+
+        # Check rate limit
+        rate_limit_key = RATE_LIMIT_KEY_TEMPLATE.format(email=RECIPIENT_EMAIL)
+        if cache.get(rate_limit_key):
+            logger.warning(f"Rate limit exceeded for {RECIPIENT_EMAIL}")
+            return
+
+        send_mail(
+            subject,
+            message,
+            DEFAULT_FROM_EMAIL,
+            [RECIPIENT_EMAIL],
+            fail_silently=False,
+        )
+        logger.info(f"Email sent to {RECIPIENT_EMAIL} with subject {subject}")
+
+        # Set rate limit key with a timeout (e.g., 60 seconds)
+        cache.set(rate_limit_key, 'sent', timeout=60)
+
+    except (ValueError, ImproperlyConfigured) as e:
+        logger.error(f"Failed to send email: {str(e)}")
+    except Exception as e:
+        logger.error(f"An unexpected error occurred: {str(e)}")
+        self.retry(countdown=60)  # Retry after 60 seconds if there is an unexpected error
     
 
 def payment_send_email(subject, html_content, recipient_list):

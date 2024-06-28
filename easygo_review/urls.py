@@ -15,6 +15,7 @@ urlpatterns = [
     path('', views.PostList.as_view(), name="easygo_review"),
     path('custom_login/', views.custom_login_view, name='custom_login'),
     path('custom_logout/', views.custom_logout_view, name='custom_logout'),
+    path('recaptcha-verify/', views.recaptcha_verify, name='recaptcha_verify'),
 
 ]
 
