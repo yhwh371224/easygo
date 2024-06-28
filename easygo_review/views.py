@@ -21,7 +21,7 @@ def custom_login_view(request):
         email = request.POST['email']
         post = BlogPost.objects.filter(email=email).first()
         if post:
-            request.session['post_id'] = post.id
+            request.session['id'] = post.id
             return redirect('easygo_review:easygo_review')
         else:
             return render(request, 'easygo_review/custom_login.html', {'error': 'Invalid email address'})
@@ -34,10 +34,10 @@ def custom_logout_view(request):
 
 
 def get_authenticated_post(request):
-    post_id = request.session.get('post_id')
-    if post_id:
+    id = request.session.get('id')
+    if id:
         try:
-            return BlogPost.objects.get(id=post_id)
+            return BlogPost.objects.get(id=id)
         except BlogPost.DoesNotExist:
             return None
     return None
