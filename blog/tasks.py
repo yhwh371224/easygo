@@ -206,6 +206,7 @@ def notify_user_payment_paypal(instance_id):
 
 
 # Stripe > sending email & save
+@shared_task
 def notify_user_payment_stripe(instance_id):
     instance = StripePayment.objects.get(id=instance_id)   
     if instance.name:            
