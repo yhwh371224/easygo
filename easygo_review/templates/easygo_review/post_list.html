@@ -15,10 +15,10 @@
         <div class="col-md-4" id="side-div">
             <h5 id="easygo_review-list-title">
                 <br/>
-                {% if request.session.post_id %}
+                {% if id %}
                     <button class="btn btn-primary btn-sm float-right" onclick="location.href='/easygo_review/create/'">New Post</button>
                 {% else %}
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#loginModal">
+                    <button type="button" class="btn btn-primary btn-sm float-right" data-toggle="modal" data-target="#loginModal" >
                         Log in
                     </button>
                 {% endif %}   
