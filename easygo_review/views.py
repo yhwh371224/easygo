@@ -61,11 +61,14 @@ class PostList(ListView):
         authenticated_post = get_authenticated_post(self.request)
         context['authenticated_post'] = authenticated_post 
 
-        post_id = self.request.session.get('post_id')
+        post_id = self.request.session.get('post_id', None)
         if post_id:            
             blog_post = BlogPost.objects.get(id=post_id)
             user_name = blog_post.name
-            context['user_name'] = user_name     
+            context['user_name'] = user_name
+
+        context['post_id'] = post_id
+        context['search_error'] = self.request.session.get('search_error', None)   
 
         return context
     
