@@ -4,15 +4,16 @@ from django.utils import timezone
 from datetime import timedelta
 from blog.models import Post
 
+
 class Command(BaseCommand):
     help = 'Send apology emails to customers created in the last three months'
 
     def handle(self, *args, **kwargs):
         today = timezone.now().date()
-        start_date = today.replace(month=1, day=11)
-        end_date = today.replace(month=12, day=11).replace(year=today.year - 1)
+        start_date = today.replace(year=today.year - 1, month=10, day=23)
+        end_date = today.replace(year=today.year - 1, month=11, day=23)
 
-        customers = Post.objects.filter(created__range=[end_date, start_date])
+        customers = Post.objects.filter(created__range=[start_date, end_date])
 
         subject = 'Apology for Recent Email Error'
         message = (
