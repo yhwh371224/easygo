@@ -4,7 +4,7 @@ from django.core.management.base import BaseCommand
 from django.template.loader import render_to_string
 from blog.models import Post
 from utils.email_helper import EmailSender
-from main.settings import RECIPIENT_EMAIL, GMAIL_API_SERVICE_ACCOUNT_FILE
+from main.settings import RECIPIENT_EMAIL
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -13,7 +13,7 @@ class Command(BaseCommand):
     help = 'Send payment notices'
 
     def handle(self, *args, **options):
-        email_sender = EmailSender(service_account_file=GMAIL_API_SERVICE_ACCOUNT_FILE)
+        email_sender = EmailSender()
 
         dates_to_check = {
             "three_days": date.today() + timedelta(days=3),
