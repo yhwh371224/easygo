@@ -6,7 +6,7 @@ from django.core.management.base import BaseCommand
 from utils.email_helper import EmailSender
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
-from django.conf import settings
+from main.settings import RECIPIENT_EMAIL, GMAIL_API_SERVICE_ACCOUNT_FILE
 from blog.models import Post
 
 
@@ -14,7 +14,7 @@ class Command(BaseCommand):
     help = 'Send booking reminders for upcoming flights'
 
     def handle(self, *args, **options):
-        email_sender = EmailSender()
+        email_sender = EmailSender(service_account_file=GMAIL_API_SERVICE_ACCOUNT_FILE)
 
         reminder_intervals = [0, 1, 3, 7, 14, -1]
         templates = [
@@ -78,13 +78,13 @@ class Command(BaseCommand):
     def send_calendar_event_id_email(self, email_sender, booking_reminder):
         subject = "calendar empty id - from booking_reminder"
         message = f"{booking_reminder.name} & {booking_reminder.email}"
-        recipient = [settings.RECIPIENT_EMAIL]
+        recipient = RECIPIENT_EMAIL
         if not email_sender.send_email(subject, recipient, message):
             email_sender.logger.error(f"Failed to send calendar event id email to {booking_reminder.email}")
 
     def send_short_payment_email(self, email_sender, booking_reminder):
         subject = "short payment - from booking_reminder"
         message = f"{booking_reminder.name} & {booking_reminder.email}"
-        recipient = [settings.RECIPIENT_EMAIL]
+        recipient = RECIPIENT_EMAIL
         if not email_sender.send_email(subject, recipient, message):
             email_sender.logger.error(f"Failed to send short payment email to {booking_reminder.email}")

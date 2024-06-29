@@ -2,7 +2,7 @@ import os
 from datetime import date, timedelta
 from django.core.management.base import BaseCommand
 from blog.models import Post, Driver
-from main.settings import RECIPIENT_EMAIL
+from main.settings import RECIPIENT_EMAIL, GMAIL_API_SERVICE_ACCOUNT_FILE
 from utils.email_helper import EmailSender
 
 
@@ -13,7 +13,7 @@ class Command(BaseCommand):
     help = 'Double check calendar'
 
     def handle(self, *args, **options):
-        email_sender = EmailSender()
+        email_sender = EmailSender(service_account_file=GMAIL_API_SERVICE_ACCOUNT_FILE)
 
         tomorrow = date.today() + timedelta(days=1)
         tomorrow_bookings = Post.objects.filter(pickup_date=tomorrow)
@@ -28,7 +28,7 @@ class Command(BaseCommand):
             subject = "Empty calendar ID for tomorrow"
             message = f"{booking.name} & {booking.email}"
             try:
-                email_sender.send_email(subject, RECIPIENT_EMAIL, message)
+                email_sender.send_email(subject, [RECIPIENT_EMAIL], message)
             except Exception as e:
                 self.stdout.write(self.style.ERROR(f"Failed to send email: {e}"))
 
