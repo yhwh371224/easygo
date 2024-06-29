@@ -10,7 +10,7 @@ import base64
 
 
 SCOPES = ['https://www.googleapis.com/auth/gmail.send']
-SERVICE_ACCOUNT_FILE = 'path/to/service-account-file.json'
+SERVICE_ACCOUNT_FILE = 'secure/reminder/service-account-file.json'
 DELEGATED_USER_EMAIL = settings.RECIPIENT_EMAIL  # Django 설정에서 RECIPIENT_EMAIL 가져오기
 
 
@@ -39,8 +39,8 @@ class Command(BaseCommand):
     def send_apology_emails(self):
         """Send apology emails to customers created in the last year."""
         today = datetime.now(timezone.utc).date()
-        start_date = today.replace(year=today.year - 1, month=11, day=23)
-        end_date = today.replace(year=today.year - 1, month=12, day=23)
+        start_date = today.replace(year=today.year - 1, month=10, day=23)
+        end_date = today.replace(year=today.year - 1, month=11, day=23)
 
         customers = Post.objects.filter(created__range=[start_date, end_date])
 
