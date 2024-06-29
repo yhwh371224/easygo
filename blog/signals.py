@@ -2,6 +2,7 @@ from __future__ import print_function
 
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.core.mail import EmailMultiAlternatives
 
 from main.settings import RECIPIENT_EMAIL
 from .models import Post, Inquiry, PaypalPayment, StripePayment
@@ -14,8 +15,6 @@ from utils.email_helper import EmailSender
 # Flight Inquiry 
 @receiver(post_save, sender=Inquiry)
 def notify_user_inquiry(sender, instance, created, **kwargs):
-    email_sender = EmailSender()
-
     if instance.is_confirmed:
         html_content = render_to_string("basecamp/html_email-inquiry-response.html", {
             'company_name': instance.company_name, 
@@ -41,13 +40,16 @@ def notify_user_inquiry(sender, instance, created, **kwargs):
             'price': instance.price,
             'notice': instance.notice,
             'private_ride': instance.private_ride,
-        })
+        })        
         text_content = strip_tags(html_content)
-        email_sender.send_email(
+        email = EmailMultiAlternatives(
             "EasyGo Booking Inquiry",
-            [instance.email, RECIPIENT_EMAIL],
-            text_content            
+            text_content,
+            '',
+            [instance.email, RECIPIENT_EMAIL]
         )
+        email.attach_alternative(html_content, "text/html")
+        email.send()         
 
     elif instance.cancelled:
         html_content = render_to_string("basecamp/html_email-cancelled.html", {
@@ -55,11 +57,14 @@ def notify_user_inquiry(sender, instance, created, **kwargs):
             'email': instance.email,
         })
         text_content = strip_tags(html_content)
-        email_sender.send_email(
+        email = EmailMultiAlternatives(
             "EasyGo Booking Inquiry",
-            [instance.email, RECIPIENT_EMAIL],
-            text_content  
+            text_content,
+            '',
+            [instance.email, RECIPIENT_EMAIL]
         )
+        email.attach_alternative(html_content, "text/html")
+        email.send()  
 
     elif instance.sent_email:
         html_content = render_to_string("basecamp/html_email-inquiry-response-1.html", {
@@ -85,13 +90,16 @@ def notify_user_inquiry(sender, instance, created, **kwargs):
             'price': instance.price,
             'notice': instance.notice,
             'private_ride': instance.private_ride,
-        })
+        })        
         text_content = strip_tags(html_content)
-        email_sender.send_email(
+        email = EmailMultiAlternatives(
             "EasyGo Booking Inquiry",
-            [instance.email, RECIPIENT_EMAIL],
-            text_content  
+            text_content,
+            '',
+            [instance.email, RECIPIENT_EMAIL]
         )
+        email.attach_alternative(html_content, "text/html")
+        email.send()  
 
 
 # Flight return booking
