@@ -6,10 +6,10 @@ class PostAuthenticationMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        post_id = request.session.get('post_id')
-        if post_id:
+        id = request.session.get('id')
+        if id:
             try:
-                request.user = Post.objects.get(id=post_id)
+                request.user = Post.objects.get(id=id)
             except Post.DoesNotExist:
                 request.user = AnonymousUser()
         else:
