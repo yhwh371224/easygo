@@ -57,7 +57,7 @@ class PostList(ListView):
             if post.rating is None:
                 post.rating = 5
 
-        send_notice_email.delay('reviews accessed', 'reviews accessed', 'recipient@example.com')
+        send_notice_email.delay('reviews accessed', 'reviews accessed', RECIPIENT_EMAIL)
 
         authenticated_post = get_authenticated_post(self.request)
         context['authenticated_post'] = authenticated_post 
