@@ -10,7 +10,8 @@ SCOPES = ["https://www.googleapis.com/auth/gmail.readonly"]
 LABEL_NAME = "Re-reminder"
 EXCLUDED_EMAIL = "info+canned.response@easygoshuttle.com.au"
 SERVICE_ACCOUNT_FILE = 'secure/reminder/service-account-file.json'
-DELEGATED_USER_EMAIL = RECIPIENT_EMAIL  # 위임받은 사용자의 이메일 주소
+DELEGATED_USER_EMAIL = RECIPIENT_EMAIL  
+
 
 def get_rereminder_emails(service):
     try:
