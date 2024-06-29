@@ -3,7 +3,7 @@ from __future__ import print_function
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from main.settings import RECIPIENT_EMAIL, GMAIL_API_SERVICE_ACCOUNT_FILE
+from main.settings import RECIPIENT_EMAIL
 from .models import Post, Inquiry, PaypalPayment, StripePayment
 from .tasks import create_event_on_calendar, notify_user_payment_paypal, notify_user_payment_stripe
 from django.template.loader import render_to_string
@@ -14,7 +14,7 @@ from utils.email_helper import EmailSender
 # Flight Inquiry 
 @receiver(post_save, sender=Inquiry)
 def notify_user_inquiry(sender, instance, created, **kwargs):
-    email_sender = EmailSender(service_account_file=GMAIL_API_SERVICE_ACCOUNT_FILE)
+    email_sender = EmailSender()
 
     if instance.is_confirmed:
         html_content = render_to_string("basecamp/html_email-inquiry-response.html", {
@@ -45,8 +45,8 @@ def notify_user_inquiry(sender, instance, created, **kwargs):
         text_content = strip_tags(html_content)
         email_sender.send_email(
             "EasyGo Booking Inquiry",
-            text_content,
-            [instance.email, RECIPIENT_EMAIL]
+            [instance.email, RECIPIENT_EMAIL],
+            text_content            
         )
 
     elif instance.cancelled:
@@ -57,8 +57,8 @@ def notify_user_inquiry(sender, instance, created, **kwargs):
         text_content = strip_tags(html_content)
         email_sender.send_email(
             "EasyGo Booking Inquiry",
-            text_content,
-            [instance.email, RECIPIENT_EMAIL]
+            [instance.email, RECIPIENT_EMAIL],
+            text_content  
         )
 
     elif instance.sent_email:
@@ -89,8 +89,8 @@ def notify_user_inquiry(sender, instance, created, **kwargs):
         text_content = strip_tags(html_content)
         email_sender.send_email(
             "EasyGo Booking Inquiry",
-            text_content,
-            [instance.email, RECIPIENT_EMAIL]
+            [instance.email, RECIPIENT_EMAIL],
+            text_content  
         )
 
 
