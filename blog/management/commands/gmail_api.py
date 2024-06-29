@@ -14,8 +14,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         today = timezone.now().date()
-        start_date = today.replace(year=today.year - 1, month=8, day=23)
-        end_date = today.replace(year=today.year - 1, month=9, day=23)
+        start_date = today.replace(year=today.year - 1, month=2, day=9)
+        end_date = today.replace(year=today.year - 1, month=3, day=23)
 
         customers = Post.objects.filter(created__range=[start_date, end_date])
 
