@@ -2,7 +2,7 @@ import os
 from datetime import date, timedelta
 from django.core.management.base import BaseCommand
 from blog.models import Post, Driver
-from main.settings import RECIPIENT_EMAIL, GMAIL_API_SERVICE_ACCOUNT_FILE
+from main.settings import RECIPIENT_EMAIL
 from utils.email_helper import EmailSender
 
 
@@ -13,7 +13,7 @@ class Command(BaseCommand):
     help = 'Double check calendar'
 
     def handle(self, *args, **options):
-        email_sender = EmailSender(service_account_file=GMAIL_API_SERVICE_ACCOUNT_FILE)
+        email_sender = EmailSender()
 
         tomorrow = date.today() + timedelta(days=1)
         tomorrow_bookings = Post.objects.filter(pickup_date=tomorrow)
