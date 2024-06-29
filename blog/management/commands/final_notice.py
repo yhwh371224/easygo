@@ -5,7 +5,7 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from blog.models import Post
 from utils.email_helper import EmailSender  
-from main.settings import RECIPIENT_EMAIL
+from main.settings import RECIPIENT_EMAIL, GMAIL_API_SERVICE_ACCOUNT_FILE
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -15,10 +15,12 @@ class Command(BaseCommand):
     help = 'Send final notices using Gmail API'
 
     def handle(self, *args, **options):
-        email_sender = EmailSender()
+        email_sender = EmailSender(
+            service_account_file=GMAIL_API_SERVICE_ACCOUNT_FILE
+        )
 
         tomorrow = date.today() + timedelta(days=1)
-        final_notices = Post.objects.filter(pickup_date=tomorrow, reminder=False, cancelled=False, paid=False)
+        final_notices = Post.objects.filter(pickup_date=tomorrow, reminder=False, cash=False, paid=False)
         
         for final_notice in final_notices:
             html_content = render_to_string("basecamp/html_email-fnotice.html", {'name': final_notice.name, 'email': final_notice.email})            
