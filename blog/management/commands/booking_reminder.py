@@ -5,8 +5,7 @@ from datetime import date, timedelta
 from django.core.management.base import BaseCommand
 from utils.email_helper import EmailSender
 from django.template.loader import render_to_string
-from django.utils.html import strip_tags
-from main.settings import RECIPIENT_EMAIL, GMAIL_API_SERVICE_ACCOUNT_FILE
+from main.settings import RECIPIENT_EMAIL
 from blog.models import Post
 
 
@@ -14,7 +13,7 @@ class Command(BaseCommand):
     help = 'Send booking reminders for upcoming flights'
 
     def handle(self, *args, **options):
-        email_sender = EmailSender(service_account_file=GMAIL_API_SERVICE_ACCOUNT_FILE)
+        email_sender = EmailSender()
 
         reminder_intervals = [0, 1, 3, 7, 14, -1]
         templates = [
