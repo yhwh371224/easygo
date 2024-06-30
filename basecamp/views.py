@@ -54,7 +54,7 @@ def home(request):
 
 
 def about_us(request): 
-    send_notice_email.delay('about_us accessed', 'about_us accessed', RECIPIENT_EMAIL)
+    # send_notice_email.delay('about_us accessed', 'about_us accessed', RECIPIENT_EMAIL)
     return render(request, 'basecamp/about_us.html')
 
 
