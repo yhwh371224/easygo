@@ -1759,7 +1759,6 @@ def email_dispatch_detail(request):
             "Arrival Notice Today": ("basecamp/html_email-today.html", "Arrival Notice Today - EasyGo"),
             "Requested driver contact": ("basecamp/html_email-response-driver-contact.html", "For driver contact - EasyGo"),
             "Shared ride discount": ("basecamp/html_email-shared-discount.html", "Discount notice - EasyGo"),
-            "Confirmation multiplebookings": ("basecamp/html_email-confirmation-multiplebookings.html", "Booking Confirmation - EasyGo"),
             "Cancel-booking": ("basecamp/html_email-response-cancel.html", "Cancel-booking: EasyGo"),
             "Apology emails": ("basecamp/html_email-response-apology-emails.html", "Apology emails: EasyGo")
         }
@@ -1799,72 +1798,6 @@ def email_dispatch_detail(request):
     else:
         return render(request, 'basecamp/email_dispatch.html', {})
     
-
-# PAYPAL_BASE_URL = "https://api-m.paypal.com"
-
-# def generate_access_token():
-#     auth = (PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET)
-#     response = requests.post(f"{PAYPAL_BASE_URL}/v1/oauth2/token", 
-#                              headers={"Accept": "application/json", "Accept-Language": "en_US"},
-#                              data={"grant_type": "client_credentials"},
-#                              auth=auth)
-#     response.raise_for_status()
-#     return response.json()["access_token"]
-
-
-# @csrf_exempt
-# def create_order(request):
-#     if request.method == 'POST':
-#         try:
-#             data = json.loads(request.body)
-#             amount_value = data.get('amount_value', '1.50')  
-#             # 기본값을 '1.50'으로 설정, 이것이 없으면 오류가 발생함
-
-#             amount_value = str(amount_value)
-            
-#             access_token = generate_access_token()
-#             headers = {
-#                 "Content-Type": "application/json",
-#                 "Authorization": f"Bearer {access_token}"
-#             }
-#             payload = {
-#                 "intent": "CAPTURE",
-#                 "purchase_units": [
-#                     {
-#                         "amount": {
-#                             "currency_code": "AUD",
-#                             "value": amount_value
-#                         }
-#                     }
-#                 ]
-#             }
-#             response = requests.post(f"{PAYPAL_BASE_URL}/v2/checkout/orders", 
-#                                      headers=headers, 
-#                                      json=payload)
-#             response.raise_for_status()
-#             return JsonResponse(response.json())
-#         except Exception as e:
-#             return JsonResponse({'error': str(e)}, status=500)
-#     return JsonResponse({'error': 'Invalid request method'}, status=400)
-
-
-# @csrf_exempt
-# def capture_order(request, order_id):
-#     if request.method == 'POST':
-#         try:
-#             access_token = generate_access_token()
-#             headers = {
-#                 "Content-Type": "application/json",
-#                 "Authorization": f"Bearer {access_token}"
-#             }
-#             response = requests.post(f"{PAYPAL_BASE_URL}/v2/checkout/orders/{order_id}/capture", 
-#                                      headers=headers)
-#             response.raise_for_status()
-#             return JsonResponse(response.json())
-#         except Exception as e:
-#             return JsonResponse({'error': str(e)}, status=500)
-#     return JsonResponse({'error': 'Invalid request method'}, status=400)
-
 
 def paypal_ipn_error_email(subject, exception, item_name, payer_email, gross_amount):
     error_message = (
