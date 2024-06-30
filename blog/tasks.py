@@ -136,7 +136,7 @@ def send_email_task(pickup_date, direction, suburb, no_of_passenger):
     send_mail(pickup_date, content, DEFAULT_FROM_EMAIL, [RECIPIENT_EMAIL])
 
 
-# Review page, endpoints page, service, information, about_us, terms, policy, endpoints1
+# Review page, service, information, about_us, terms, policy
 @shared_task
 def send_notice_email(subject, message, RECIPIENT_EMAIL):
     if not all([subject, message, RECIPIENT_EMAIL]):
