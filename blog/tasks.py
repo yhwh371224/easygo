@@ -136,22 +136,22 @@ def send_email_task(pickup_date, direction, suburb, no_of_passenger):
     send_mail(pickup_date, content, DEFAULT_FROM_EMAIL, [RECIPIENT_EMAIL])
 
 
-# Review page, service, information, about_us, terms, policy
-# @shared_task
-# def send_notice_email(subject, message, RECIPIENT_EMAIL):
-#     if not all([subject, message, RECIPIENT_EMAIL]):
-#         raise ValueError("Subject, message, and recipient email must be provided")
+# Review page, service, information, terms, policy
+@shared_task
+def send_notice_email(subject, message, RECIPIENT_EMAIL):
+    if not all([subject, message, RECIPIENT_EMAIL]):
+        raise ValueError("Subject, message, and recipient email must be provided")
             
-#     if not DEFAULT_FROM_EMAIL:
-#         raise ImproperlyConfigured("DEFAULT_FROM_EMAIL is not set in environment variables")
+    if not DEFAULT_FROM_EMAIL:
+        raise ImproperlyConfigured("DEFAULT_FROM_EMAIL is not set in environment variables")
     
-#     send_mail(
-#         subject,
-#         message,
-#         DEFAULT_FROM_EMAIL,
-#         [RECIPIENT_EMAIL],
-#         fail_silently=False,
-#     )
+    send_mail(
+        subject,
+        message,
+        DEFAULT_FROM_EMAIL,
+        [RECIPIENT_EMAIL],
+        fail_silently=False,
+    )
     
 
 def payment_send_email(subject, html_content, recipient_list):
