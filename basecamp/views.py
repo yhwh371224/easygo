@@ -16,7 +16,7 @@ from django.utils.html import strip_tags
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
-from main.settings import RECIPIENT_EMAIL, PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET
+from main.settings import RECIPIENT_EMAIL
 from blog.models import Post, Inquiry, PaypalPayment, StripePayment, Driver
 from blog.tasks import send_confirm_email, send_email_task, send_notice_email
 from basecamp.area import get_suburbs
