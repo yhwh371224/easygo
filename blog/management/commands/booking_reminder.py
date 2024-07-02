@@ -15,14 +15,14 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         email_sender = EmailSender()
 
-        reminder_intervals = [0, 1, 3, 7, 14, -1]
+        reminder_intervals = [0, 1, 3, 7, 14, ]
         templates = [
             "basecamp/html_email-today.html",
             "basecamp/html_email-tomorrow.html",
             "basecamp/html_email-upcoming3.html",
             "basecamp/html_email-upcoming7.html",
             "basecamp/html_email-upcoming14.html",
-            "basecamp/html_email-yesterday.html",
+            # "basecamp/html_email-yesterday.html",
         ]
         subjects = [
             "Reminder-Today",
@@ -30,7 +30,7 @@ class Command(BaseCommand):
             "Reminder-3days",
             "Reminder-7days",
             "Reminder-2wks",
-            "Review-EasyGo",
+            # "Review-EasyGo",
         ]
         for interval, template, subject in zip(reminder_intervals, templates, subjects):
             self.send_email(email_sender, interval, template, subject)
