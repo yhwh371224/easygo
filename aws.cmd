@@ -1,1 +1,0 @@
-ssh -i "awskeypair.pem" ubuntu@ec2-54-153-219-223.ap-southeast-2.compute.amazonaws.com
