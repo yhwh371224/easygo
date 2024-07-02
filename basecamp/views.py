@@ -1760,7 +1760,8 @@ def email_dispatch_detail(request):
             "Requested driver contact": ("basecamp/html_email-response-driver-contact.html", "For driver contact - EasyGo"),
             "Shared ride discount": ("basecamp/html_email-shared-discount.html", "Discount notice - EasyGo"),
             "Cancel-booking": ("basecamp/html_email-response-cancel.html", "Cancel-booking: EasyGo"),
-            "Apology emails": ("basecamp/html_email-response-apology-emails.html", "Apology emails: EasyGo")
+            "Apology emails": ("basecamp/html_email-response-apology-emails.html", "Apology emails: EasyGo"),
+            "Payment discrepancy": ("basecamp/html_email-response-discrepancy.html", "Payment discrepancy: EasyGo")
         }
 
         if selected_option in template_options:
@@ -1790,6 +1791,10 @@ def email_dispatch_detail(request):
             if selected_option == "Cancel-booking" and user:                     
                 user.cancelled = True
                 user.save()
+
+            if selected_option == "Payment discrepancy" and user: 
+                diff = float(user.price) - float(user.paid)
+                context.update({'price': user.price, 'paid': user.paid, 'diff': diff})
 
             handle_email_sending(request, email, subject, template_name, context)
               
