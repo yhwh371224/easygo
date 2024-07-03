@@ -1746,20 +1746,20 @@ def email_dispatch_detail(request):
                 user.save()        
         
         template_options = {
-            'Departure earlier pickup': ("basecamp/html_email-departure-early.html", "Urgent notice - EasyGo"),
-            'Departure later pickup': ("basecamp/html_email-departure-late.html", "Urgent notice - EasyGo"),
-            'Arrival earlier than schedule': ("basecamp/html_email-arrival-early.html", "Urgent notice - EasyGo"),
-            'Arrival later than schedule': ("basecamp/html_email-arrival-late.html", "Urgent notice - EasyGo"),
-            'Just late notice': ("basecamp/html_email-just-late-notice.html", "Urgent notice - EasyGo"),
-            'Just adjustment pickup time': ("basecamp/html_email-just-adjustment.html", "Urgent notice - EasyGo"),
+            'Earlier Pickup Requested for Departure': ("basecamp/html_email-departure-early.html", "Urgent notice - EasyGo"),
+            'Later Pickup Requested for Departure': ("basecamp/html_email-departure-late.html", "Urgent notice - EasyGo"),
+            'Early Arrival Notification': ("basecamp/html_email-arrival-early.html", "Urgent notice - EasyGo"),
+            'Arrival Later Than Scheduled': ("basecamp/html_email-arrival-late.html", "Urgent notice - EasyGo"),
+            'Notice of Delay': ("basecamp/html_email-just-late-notice.html", "Urgent notice - EasyGo"),
+            'Adjusted Pickup Time': ("basecamp/html_email-just-adjustment.html", "Urgent notice - EasyGo"),
             "Payment Method": ("basecamp/html_email-response-payment.html", "Payment Method - EasyGo"),
-            "Inquiry Meeting Point": ("basecamp/html_email-response-meeting.html", "Meeting Point - EasyGo"),
+            "Meeting Point Inquiry": ("basecamp/html_email-response-meeting.html", "Meeting Point - EasyGo"),
             "Gratitude For Payment": ("basecamp/html_email-response-payment-received.html", "Payment Received - EasyGo"),
-            "More details Inquiry": ("basecamp/html_email-response-more-details.html", "More Details Inquiry - EasyGo"),
-            "Arrival Notice Today": ("basecamp/html_email-today.html", "Arrival Notice Today - EasyGo"),
-            "Requested driver contact": ("basecamp/html_email-response-driver-contact.html", "For driver contact - EasyGo"),
-            "Shared ride discount": ("basecamp/html_email-shared-discount.html", "Discount notice - EasyGo"),
-            "Cancel-booking": ("basecamp/html_email-response-cancel.html", "Cancel-booking: EasyGo"),
+            "Inquiry for further details": ("basecamp/html_email-response-more-details.html", "Inquiry for further details - EasyGo"),
+            "Arrival Notice for Today": ("basecamp/html_email-today.html", "Arrival Notice for Today - EasyGo"),
+            "Request for Driver Contact Information": ("basecamp/html_email-response-driver-contact.html", "For driver contact - EasyGo"),
+            "Shared Ride Discount Offer": ("basecamp/html_email-shared-discount.html", "Discount notice - EasyGo"),
+            "Cancellation of Booking": ("basecamp/html_email-response-cancel.html", "Cancellation of Booking: EasyGo"),
             "Apology emails": ("basecamp/html_email-response-apology-emails.html", "Apology emails: EasyGo"),
             "Payment discrepancy": ("basecamp/html_email-response-discrepancy.html", "Payment discrepancy: EasyGo")
         }
@@ -1768,7 +1768,7 @@ def email_dispatch_detail(request):
             template_name, subject = template_options[selected_option]
             context = {'email': email, 'name': user.name, 'adjustment_time': adjustment_time}
 
-            if selected_option == "Arrival Notice Today" and user:
+            if selected_option == "Arrival Notice for Today" and user:
                 today = date.today()     
                 user_today = Post.objects.filter(email=email, pickup_date=today).first()
                 if user_today:
@@ -1788,7 +1788,7 @@ def email_dispatch_detail(request):
                     user_1.paid = float(user.price) + 0.10
                     user_1.save() 
             
-            if selected_option == "Cancel-booking" and user:                     
+            if selected_option == "Cancellation of Booking" and user:                     
                 user.cancelled = True
                 user.save()
 
