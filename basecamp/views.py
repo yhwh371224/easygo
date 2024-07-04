@@ -1578,6 +1578,7 @@ def invoice_detail(request):
             balance = round(total_price - float_paid, 2)
 
         if user.cash and user.paid:
+            cash_balance = balance - (with_gst + surcharge)
             html_content = render_to_string("basecamp/html_email-invoice-cash.html",
                                         {'inv_no': inv_no, 'name': user.name, 'company_name': user.company_name,'contact': user.contact, 'discount': discount,
                                         'email': email, 'direction': user.direction, 'pickup_date': user.pickup_date, 'invoice_date': today,
@@ -1586,7 +1587,7 @@ def invoice_detail(request):
                                         'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 'return_pickup_time': user.return_pickup_time,
                                         'street': user.street, 'suburb': user.suburb, 'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
                                         'price': user.price, 'with_gst': with_gst, 'surcharge': surcharge, 'total_price': total_price, 'toll': toll, 
-                                        'balance': balance, 'paid': float_paid, 'message': user.message })
+                                        'balance': cash_balance, 'paid': float_paid, 'message': user.message })
             text_content = strip_tags(html_content)
 
             recipient_list = [email, RECIPIENT_EMAIL]
