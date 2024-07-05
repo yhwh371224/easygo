@@ -1575,9 +1575,33 @@ def invoice_detail(request):
             balance = round(total_price - float_paid, 2) 
         else:
             total_price = (round(price_as_float + with_gst + float_toll, 2)) - float_discount
-            balance = round(total_price - float_paid, 2)       
+            balance = round(total_price - float_paid, 2)
+
+        if user.cash and user.paid:
+            cash_balance = balance - (with_gst + surcharge)
+            html_content = render_to_string("basecamp/html_email-invoice-cash.html",
+                                        {'inv_no': inv_no, 'name': user.name, 'company_name': user.company_name,'contact': user.contact, 'discount': discount,
+                                        'email': email, 'direction': user.direction, 'pickup_date': user.pickup_date, 'invoice_date': today,
+                                        'flight_number': user.flight_number, 'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
+                                        'return_direction': user.return_direction, 'return_pickup_date': user.return_pickup_date,
+                                        'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 'return_pickup_time': user.return_pickup_time,
+                                        'street': user.street, 'suburb': user.suburb, 'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
+                                        'price': user.price, 'with_gst': with_gst, 'surcharge': surcharge, 'total_price': total_price, 'toll': toll, 
+                                        'balance': cash_balance, 'paid': float_paid, 'message': user.message })
+            text_content = strip_tags(html_content)
+
+            recipient_list = [email, RECIPIENT_EMAIL]
+
+            email = EmailMultiAlternatives(
+                f"Tax Invoice #T{inv_no} - EasyGo",
+                text_content,
+                '',
+                recipient_list
+            )
+            email.attach_alternative(html_content, "text/html")
+            email.send()       
             
-        if user.return_pickup_time:
+        elif user.return_pickup_time:
             user1 = Post.objects.filter(email=email)[1]
             html_content = render_to_string("basecamp/html_email-invoice.html",
                                         {'inv_no': inv_no, 'name': user.name, 'company_name': user1.company_name, 'contact': user1.contact, 'discount': discount,
