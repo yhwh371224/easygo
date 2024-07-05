@@ -1,12 +1,10 @@
 venv/
-myenv/
-
-*.pyc
 
 .idea/
 
 migrations/
 media/
+/staticfiles
 
 temp/
 
@@ -21,12 +19,11 @@ token.json
 service-account-file.json
 calendar-service-account-file.json
 
+*.log
 *.pyo
 *.pyd
+*.pyc
 .vscode/
-
-*.log
-
 .DS_Store
 
 dump.rdb 
