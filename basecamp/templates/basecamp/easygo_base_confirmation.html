@@ -134,5 +134,29 @@
           });
       });
   </script>
+  <script src="https://www.google.com/recaptcha/api.js?render={{ RECAPTCHA_V3_SITE_KEY }}" defer></script>
+  <script>
+      grecaptcha.ready(function() {
+          grecaptcha.execute("{{ RECAPTCHA_V3_SITE_KEY }}", {action: 'homepage'}).then(function(token) {
+              const csrftoken = '{{ csrf_token }}';
+              fetch('/recaptcha-verify/', {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json',
+                      'X-CSRFToken': csrftoken
+                  },
+                  body: JSON.stringify({recaptchaToken: token})
+              }).then(response => {
+                  return response.json();
+              }).then(data => {
+                  if (data.success) {
+                      console.log('reCAPTCHA validation succeeded');
+                  } else {
+                      console.log('reCAPTCHA validation failed:', data.message);
+                  }
+              });
+          });
+      });
+  </script>
   </body>
 </html>
