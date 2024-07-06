@@ -1,7 +1,7 @@
 import os
 from datetime import date, timedelta
 from django.core.management.base import BaseCommand
-from django.core.mail import EmailMultiAlternatives, send_mail
+from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from blog.models import Post
@@ -41,27 +41,22 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         dates_to_check = {
-            "three_days": date.today() + timedelta(days=3),
+            "four_days": date.today() + timedelta(days=4),
             "tomorrow": date.today() + timedelta(days=1),
-            "today": date.today(),
+            "today": date.today(),            
         }
 
         for key, check_date in dates_to_check.items():
-            bookings = Post.objects.filter(pickup_date=check_date, cancelled=False, paid=False, cash=False)
+            bookings = Post.objects.filter(pickup_date=check_date)
             
             for booking in bookings:
-                if key == "today":
-                    subject = "Urgent notice for payment"
-                    template = "basecamp/html_email-nopayment-today.html"
+                if not booking.cancelled and not booking.paid and not booking.cash:
+                    email_subject = "Urgent notice for payment" if key == "today" else "Payment notice"
+                    email_template = "basecamp/html_email-nopayment-today.html" if key == "today" else "basecamp/html_email-nopayment.html"
                     
-                else:  # "three_days" or "tomorrow"
-                    subject = "Payment notice"
-                    template = "basecamp/html_email-nopayment.html"
-
-                self.send_email(
-                                subject,
-                                template,
-                                {'name': booking.name, 'email': booking.email},
-                                [booking.email, RECIPIENT_EMAIL]
-                            )
-
+                    self.send_email(
+                        email_subject,
+                        email_template,
+                        {'name': booking.name, 'email': booking.email},
+                        [booking.email, RECIPIENT_EMAIL]
+                    )
