@@ -14,10 +14,14 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         today = timezone.now().date()
-        start_date = today.replace(year=today.year - 1, month=2, day=9)
-        end_date = today.replace(year=today.year - 1, month=3, day=23)
+        start_date = today - timezone.timedelta(days=30)  # One month ago
+        end_date = today
 
-        customers = Post.objects.filter(created__range=[start_date, end_date])
+        # Filter customers where Pickup_date is missing
+        customers = Post.objects.filter(
+            created__range=[start_date, end_date],
+            # Pickup_date__isnull=True
+        )
 
         SCOPES = ['https://mail.google.com/']
         creds = service_account.Credentials.from_service_account_file(
@@ -32,12 +36,12 @@ class Command(BaseCommand):
             subject = 'Apology for Recent Email Error'
             message_body = (
                 "Dear Valued Customer,\n\n"
-                "I hope this message finds you well.\n\n"
-                "We recently identified and fixed a system error that caused the loss of booking dates (flight_dates). "
-                "We are in the process of recovering the lost information manually, but it is time-consuming, and some booking dates (pickup dates) may not be recoverable.\n\n"
-                "We are reaching out individually to request this information. If you have not received such an email, it means we have successfully retrieved your information. "
-                "However, if your booking date is approaching and you have not received a reminder notice, please contact us to confirm your details.\n\n"
-                "We apologize for any inconvenience this may cause and appreciate your understanding. "
+                "I hope this email finds you well.\n\n"
+                "We sincerely apologize for any inconvenience caused by a recent system issue that resulted in data loss, specifically booking dates (pickup dates). "
+                "We have diligently worked to manually recover all the lost information and I am pleased to confirm that we have restored all booking details\n\n"
+                "However, to ensure no errors occur, we kindly request your assistance."
+                "If you do not receive a reminder email three days prior to your booking date, please contact us immediately to confirm your booking details. \n\n"                
+                "We deeply regret any inconvenience this may cause and appreciate your understanding"
                 "We are taking these steps to ensure no mistakes are made and to provide you with the best service possible.\n\n"
                 "Thank you for your understanding and patience.\n\n"
                 "Best regards,\n\n"
@@ -45,7 +49,12 @@ class Command(BaseCommand):
                 "EasyGo Airport Shuttle\n"
             )
 
+            sent_emails = set()  # To store sent email addresses
+
             for customer in customers:
+                if customer.email in sent_emails:
+                    continue  # Skip sending email if already sent
+
                 message = EmailMessage()
                 message.set_content(message_body)
                 message['To'] = customer.email
@@ -60,6 +69,8 @@ class Command(BaseCommand):
 
                 email = service.users().messages().send(userId="me", body=create_message).execute()
                 self.stdout.write(self.style.SUCCESS(f'Email sent to {customer.email}'))
+
+                sent_emails.add(customer.email)  # Add the email to sent_emails set
 
         except Exception as e:
             self.stderr.write(f'An error occurred: {e}')
