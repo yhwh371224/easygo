@@ -1,7 +1,7 @@
 import os
 from datetime import date, timedelta
 from django.core.management.base import BaseCommand
-from django.core.mail import EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives, send_mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from blog.models import Post
@@ -47,30 +47,20 @@ class Command(BaseCommand):
         }
 
         for key, check_date in dates_to_check.items():
-            bookings = Post.objects.filter(pickup_date=check_date)
+            bookings = Post.objects.filter(pickup_date=check_date, cancelled=False, paid=False, cash=False)
             
             for booking in bookings:
-                if key == "three_days":
-                    if booking.discount == "TBA" and not booking.paid:
-                        self.send_email(
-                            "Payment notice",
-                            "basecamp/html_email-nopayment.html",
-                            {'name': booking.name, 'email': booking.email},
-                            [booking.email, RECIPIENT_EMAIL]
-                        )
-                else:
-                    if not booking.cancelled and not booking.paid and not booking.cash:
-                        if key == "today":
-                            self.send_email(
-                                "Urgent notice for payment",
-                                "basecamp/html_email-nopayment-today.html",
-                                {'name': booking.name, 'email': booking.email},
-                                [booking.email, RECIPIENT_EMAIL]
-                            )
-                        else: # "tomorrow"
-                            self.send_email(
-                                "Payment notice",
-                                "basecamp/html_email-nopayment.html",
+                if key == "today":
+                    subject = "Urgent notice for payment"
+                    template = "basecamp/html_email-nopayment-today.html"
+                    
+                else:  # "three_days" or "tomorrow"
+                    subject = "Payment notice"
+                    template = "basecamp/html_email-nopayment.html"
+
+                self.send_email(
+                                subject,
+                                template,
                                 {'name': booking.name, 'email': booking.email},
                                 [booking.email, RECIPIENT_EMAIL]
                             )
