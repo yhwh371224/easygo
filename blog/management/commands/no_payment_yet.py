@@ -42,8 +42,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         dates_to_check = {
             "four_days": date.today() + timedelta(days=4),
-            "tomorrow": date.today() + timedelta(days=1),
-            "today": date.today(),            
+            "tow_days": date.today() + timedelta(days=2),
+            "tomorrow": date.today() + timedelta(days=1),                    
         }
 
         for key, check_date in dates_to_check.items():
@@ -51,8 +51,8 @@ class Command(BaseCommand):
             
             for booking in bookings:
                 if not booking.cancelled and not booking.paid and not booking.cash:
-                    email_subject = "Urgent notice for payment" if key == "today" else "Payment notice"
-                    email_template = "basecamp/html_email-nopayment-today.html" if key == "today" else "basecamp/html_email-nopayment.html"
+                    email_subject = "Urgent notice for payment" if key == "tomorrow" else "Payment notice"
+                    email_template = "basecamp/html_email-nopayment-today.html" if key == "tomorrow" else "basecamp/html_email-nopayment.html"
                     
                     self.send_email(
                         email_subject,
