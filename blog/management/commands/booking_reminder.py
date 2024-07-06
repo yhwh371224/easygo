@@ -3,18 +3,38 @@ import logging
 from datetime import date, timedelta
 
 from django.core.management.base import BaseCommand
-from utils.email_helper import EmailSender
+from django.core.mail import EmailMultiAlternatives, send_mail
 from django.template.loader import render_to_string
-from main.settings import RECIPIENT_EMAIL
+from django.utils.html import strip_tags
 from blog.models import Post
+from django.conf import settings
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 class Command(BaseCommand):
     help = 'Send booking reminders for upcoming flights'
 
-    def handle(self, *args, **options):
-        email_sender = EmailSender()
+    def __init__(self):
+        super().__init__()
+        self.logger = self.setup_logger()
 
+    def setup_logger(self):
+        logger = logging.getLogger('blog.booking_reminders')
+        logger.setLevel(logging.INFO)
+
+        formatter = logging.Formatter('%(asctime)s:%(message)s')
+
+        logs_dir = os.path.join(BASE_DIR, 'logs')
+        if not os.path.exists(logs_dir):
+            os.makedirs(logs_dir)
+
+        file_handler = logging.FileHandler(os.path.join(logs_dir, 'booking_reminders.log'))
+        file_handler.setFormatter(formatter)
+
+        logger.addHandler(file_handler)
+        return logger
+
+    def handle(self, *args, **options):
         reminder_intervals = [0, 1, 3, 7, 14, ]
         templates = [
             "basecamp/html_email-today.html",
@@ -33,15 +53,17 @@ class Command(BaseCommand):
             # "Review-EasyGo",
         ]
         for interval, template, subject in zip(reminder_intervals, templates, subjects):
-            self.send_email(email_sender, interval, template, subject)
+            self.send_email(interval, template, subject)
 
-    def send_email(self, email_sender, date_offset, template_name, subject):
+    def send_email(self, date_offset, template_name, subject):
         target_date = date.today() + timedelta(days=date_offset)
         booking_reminders = Post.objects.filter(pickup_date=target_date, cancelled=False).select_related('driver')
+        self.send_email_task(booking_reminders, template_name, subject, target_date)
 
+    def send_email_task(self, booking_reminders, template_name, subject, target_date):
         for booking_reminder in booking_reminders:
             if target_date == date.today() and booking_reminder.discount == "TBA":
-                email_sender.logger.info(f"Skipping email for {booking_reminder.email} due to no payment of TBA")
+                self.logger.info(f"Skipping email for {booking_reminder.email} due to no payment of TBA")
                 continue
 
             driver = booking_reminder.driver
@@ -64,26 +86,37 @@ class Command(BaseCommand):
                 'cash': booking_reminder.cash,
             })
 
-            if not email_sender.send_email(subject, booking_reminder.email, html_content):
-                # Handle failure if needed
-                pass
+            text_content = strip_tags(html_content)
+            email = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [booking_reminder.email])
+            email.attach_alternative(html_content, "text/html")
+
+            try:
+                email.send(fail_silently=False)
+                booking_reminder.save()
+                self.logger.info(f"Email sent to {booking_reminder.email} for {booking_reminder.name}")
+            except Exception as e:
+                self.logger.error(f"Failed to send email to {booking_reminder.email} | {booking_reminder.pickup_date} & {booking_reminder.pickup_time}: {e}")
 
             if not booking_reminder.calendar_event_id:
-                self.send_calendar_event_id_email(email_sender, booking_reminder)
+                subject = "calendar empty id - from booking_reminder"
+                message = f"{booking_reminder.name} & {booking_reminder.email}"
+                recipient = [settings.RECIPIENT_EMAIL]
 
-            if booking_reminder.toll == 'short payment':
-                self.send_short_payment_email(email_sender, booking_reminder)
+                try:
+                    send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, recipient, fail_silently=False)
+                    self.logger.info(f"No calendar event id: {booking_reminder.email} & {booking_reminder.name}")
+                except Exception as e:
+                    self.logger.error(f"Failed to send calendar event id email to {booking_reminder.email} | {booking_reminder.pickup_date} & {booking_reminder.pickup_time}: {e}")
 
-    def send_calendar_event_id_email(self, email_sender, booking_reminder):
-        subject = "calendar empty id - from booking_reminder"
-        message = f"{booking_reminder.name} & {booking_reminder.email}"
-        recipient = RECIPIENT_EMAIL
-        if not email_sender.send_email(subject, recipient, message):
-            email_sender.logger.error(f"Failed to send calendar event id email to {booking_reminder.email}")
+            if booking_reminder.toll =='short payment':
+                subject = "short payment - from booking_reminder"
+                message = f"{booking_reminder.name} & {booking_reminder.email}"
+                recipient = [settings.RECIPIENT_EMAIL]
 
-    def send_short_payment_email(self, email_sender, booking_reminder):
-        subject = "short payment - from booking_reminder"
-        message = f"{booking_reminder.name} & {booking_reminder.email}"
-        recipient = RECIPIENT_EMAIL
-        if not email_sender.send_email(subject, recipient, message):
-            email_sender.logger.error(f"Failed to send short payment email to {booking_reminder.email}")
+                try:
+                    send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, recipient, fail_silently=False)
+                    self.logger.info(f"short payment: {booking_reminder.email} & {booking_reminder.name}")
+                except Exception as e:
+                    self.logger.error(f"Failed to send calendar event id email to {booking_reminder.email} | {booking_reminder.pickup_date} & {booking_reminder.pickup_time}: {e}")
+
+
