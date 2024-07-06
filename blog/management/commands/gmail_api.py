@@ -14,8 +14,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         today = timezone.now().date()
-        start_date = today - timezone.timedelta(days=30)  # One month ago
-        end_date = today
+        start_date = timezone.datetime(2023, 2, 9).date()
+        end_date = timezone.datetime(2023, 4, 5).date()
 
         # Filter customers where Pickup_date is missing
         customers = Post.objects.filter(
