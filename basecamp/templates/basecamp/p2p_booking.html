@@ -175,6 +175,9 @@
                     <div class="invalid-feedback">Please enter price!</div>
                 </div>
                 <br>
+                <div class="g-recaptcha" data-sitekey="{{ RECAPTCHA_V2_SITE_KEY }}"></div>
+                <div id="errorMessage" style="display:none; color: red; margin-top: 20px;" ></div>
+                <br>	
                 <div class="text-center pt-2">
                   <button class="btn btn-primary" type="submit" id="submitButton">Submit</button>
                 </div>
