@@ -49,7 +49,7 @@ class Command(BaseCommand):
                 "EasyGo Airport Shuttle\n"
             )
 
-            sent_emails = set()  # To store sent email addresses
+            sent_emails = set()  
 
             for customer in customers:
                 if customer.email in sent_emails:
