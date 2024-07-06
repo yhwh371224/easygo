@@ -101,8 +101,11 @@ def airport_transfers(request, suburb):
     return render(request, 'basecamp/airport-transfers-template.html', context)
 
 
-def booking(request):     
-    return render(request, 'basecamp/booking.html')
+def booking(request):
+    context = {
+        'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
+    }
+    return render(request, 'basecamp/booking.html', context)
 
 
 def cancel(request):
@@ -122,12 +125,18 @@ def confirm_booking(request):
     return render(request, 'basecamp/confirm_booking.html')
 
 
-def cruise_booking(request):     
-    return render(request, 'basecamp/cruise_booking.html')
+def cruise_booking(request):
+    context = {
+        'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
+    }
+    return render(request, 'basecamp/cruise_booking.html', context)
 
 
-def cruise_inquiry(request):     
-    return render(request, 'basecamp/cruise_inquiry.html')
+def cruise_inquiry(request):  
+    context = {
+        'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
+    }   
+    return render(request, 'basecamp/cruise_inquiry.html', context)
 
 
 def date_error(request): 
@@ -146,16 +155,22 @@ def pickup_date_error(request):
     return render(request, 'basecamp/pickup_date_error.html')
 
 
-def inquiry(request):     
-    return render(request, 'basecamp/inquiry.html')
+def inquiry(request): 
+    context = {
+        'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
+    }    
+    return render(request, 'basecamp/inquiry.html', context)
 
 
 def inquiry1(request): 
     return render(request, 'basecamp/inquiry1.html')
 
 
-def inquiry2(request):     
-    return render(request, 'basecamp/inquiry2.html')
+def inquiry2(request): 
+    context = {
+        'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
+    }    
+    return render(request, 'basecamp/inquiry2.html', context)
 
 
 def inquiry_done(request): 
@@ -211,12 +226,18 @@ def p2p(request):
     return render(request, 'basecamp/p2p.html')
 
 
-def p2p_booking(request):     
-    return render(request, 'basecamp/p2p_booking.html')
+def p2p_booking(request): 
+    context = {
+        'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
+    }       
+    return render(request, 'basecamp/p2p_booking.html', context)
 
 
-def p2p_single(request):     
-    return render(request, 'basecamp/p2p_single.html')
+def p2p_single(request):
+    context = {
+        'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
+    }   
+    return render(request, 'basecamp/p2p_single.html', context)
 
 
 def p2p_single_1(request):     
