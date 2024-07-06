@@ -103,7 +103,7 @@ def airport_transfers(request, suburb):
 
 def booking(request):
     context = {
-        'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
+        'RECAPTCHA_V2_SITE_KEY': settings.RECAPTCHA_V2_SITE_KEY,
     }
     return render(request, 'basecamp/booking.html', context)
 
@@ -127,14 +127,14 @@ def confirm_booking(request):
 
 def cruise_booking(request):
     context = {
-        'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
+        'RECAPTCHA_V2_SITE_KEY': settings.RECAPTCHA_V2_SITE_KEY,
     }
     return render(request, 'basecamp/cruise_booking.html', context)
 
 
 def cruise_inquiry(request):  
     context = {
-        'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
+        'RECAPTCHA_V2_SITE_KEY': settings.RECAPTCHA_V2_SITE_KEY,
     }   
     return render(request, 'basecamp/cruise_inquiry.html', context)
 
@@ -157,7 +157,7 @@ def pickup_date_error(request):
 
 def inquiry(request): 
     context = {
-        'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
+        'RECAPTCHA_V2_SITE_KEY': settings.RECAPTCHA_V2_SITE_KEY,
     }    
     return render(request, 'basecamp/inquiry.html', context)
 
@@ -168,7 +168,7 @@ def inquiry1(request):
 
 def inquiry2(request): 
     context = {
-        'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
+        'RECAPTCHA_V2_SITE_KEY': settings.RECAPTCHA_V2_SITE_KEY,
     }    
     return render(request, 'basecamp/inquiry2.html', context)
 
@@ -228,14 +228,14 @@ def p2p(request):
 
 def p2p_booking(request): 
     context = {
-        'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
+        'RECAPTCHA_V2_SITE_KEY': settings.RECAPTCHA_V2_SITE_KEY,
     }       
     return render(request, 'basecamp/p2p_booking.html', context)
 
 
 def p2p_single(request):
     context = {
-        'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY,
+        'RECAPTCHA_V2_SITE_KEY': settings.RECAPTCHA_V2_SITE_KEY,
     }   
     return render(request, 'basecamp/p2p_single.html', context)
 
