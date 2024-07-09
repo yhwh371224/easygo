@@ -18,6 +18,9 @@ token.json
 service-account-file.json
 calendar-service-account-file.json
 
+aws.cmd
+awskeypair.pem
+
 *.log
 *.pyo
 *.pyd
