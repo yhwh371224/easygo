@@ -20,7 +20,7 @@ class Command(BaseCommand):
         # Filter customers where Pickup_date is missing
         customers = Post.objects.filter(
             created__range=[start_date, end_date],
-            cancelled=True, 
+            cancelled=False, 
             # Pickup_date__isnull=True
         )
 
