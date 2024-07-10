@@ -171,7 +171,10 @@ def payment_send_email(subject, html_content, recipient_list):
 def notify_user_payment_paypal(instance_id):
     instance = PaypalPayment.objects.get(id=instance_id)
     if instance.payer_email:
-        post_name = Post.objects.filter(email=instance.payer_email).first()
+        post_name = Post.objects.filter(
+            Q(name__iregex=r'^%s$' % re.escape(instance.name)) |
+            Q(email__iexact=instance.email)
+        ).first()
 
         if post_name:       
             html_content = render_to_string(
