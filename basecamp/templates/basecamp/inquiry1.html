@@ -1,85 +1,75 @@
 {% extends 'basecamp/easygo_base.html' %}
 {% block content %}
-      <section class="jarallax bg-gradient pt-5 pb-7 pt-md-7" data-jarallax data-speed="0.1"><span class="position-absolute top-0 start-0 w-100 h-100 bg-gradient opacity-80"></span>
-        <div class="jarallax-img" style="background-image: url('/static/basecamp/images/page-title-bg.webp');"></div>
-        <div class="shape shape-bottom shape-slant bg-body">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 260">
-            <polygon fill="currentColor" points="0,257 0,260 3000,260 3000,0"></polygon>
-          </svg>
-        </div>		  
-		  <br>
-		  <br/>
-      <div class="container position-relative zindex-5 pt-3 pb-7 pt-md-0">
-        <div class="row justify-content-center pb-7">
-          <div class="col-lg-10">
-            <h5 class="text-light">The price varies based on pickup time and other conditions</h5>
-            <!-- <div class="active" style="color:white">Please complete the form to get the price</div> -->
-          </div>
-        </div>
+<section class="jarallax bg-gradient pt-5 pb-7 pt-md-7" data-jarallax data-speed="0.1">
+  <span class="position-absolute top-0 start-0 w-100 h-100 bg-gradient opacity-80"></span>
+  <div class="jarallax-img" style="background-image: url('/static/basecamp/images/page-title-bg.webp');"></div>
+  <div class="shape shape-bottom shape-slant bg-body">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 260">
+      <polygon fill="currentColor" points="0,257 0,260 3000,260 3000,0"></polygon>
+    </svg>
+  </div>
+  <br>
+  <br>
+  <br/>
+  <div class="container position-relative zindex-5 pt-3 pb-7 pt-md-0">
+    <div class="row justify-content-center pb-7">
+      <div class="col-lg-12">
+        <h4 class="text-light">The price varies based on pickup time and other conditions</h4>
+        <!-- <div class="active" style="color:white">Please complete the form to get the price</div> -->
       </div>
-      </section>      
-      <!-- Contact form + details-->
-     <section class="container position-relative zindex-5 px-0 px-xl-3">
-        <div class="row">
-          <div class="col-lg-7 col-md-7 pb-2 mb-5" style="margin-top: -260px;">
-            <div class="card border-1 shadow-lg">				
-              <form method="post" enctype="multipart/form-data" id="booking-form" action="/inquiry_details1/" class="card-body needs-validation p-5" >
-                {% csrf_token %}				
-				        <div class="mb3 pb-1" >					
-				        	<label class="form-label"></label>									      
-				        </div>
-                <div class="card text-white bg-secondary p-4">              
-				        	<div class="mb-3 pb-1">
-				        		<label class="form-label">Your pickup time</label>
-				        		<input class="form-control" type="time" name="pickup_time" required>
-				        	</div>
-                  <div class="mb-3 pb-1">
-                    <label class="form-label">Baggage details</label>
-                    <input class="form-control" type="time" name="no_of_baggage" required>
-                    <div class="invalid-feedback">Oversized, Large, Medium and small</div>
-                  </div>
-                  <div class="mb-3 pb-1">
-                    <label class="form-label" >Your name</label>
-                    <input class="form-control" type="text"  placeholder="John Doe" name="name" required>
-                    <div class="invalid-feedback">Please enter your full name!</div>				  
-                  </div>                 
-                  <div class="mb-3 pb-1">
-                    <label class="form-label" >Email address</label>
-                    <input class="form-control" type="email" id="email" placeholder="j.doe@example.com" name="email" required>
-                    <div class="invalid-feedback">Please enter a valid email address!</div>
-                  </div>
-				        </div></div>
-				        <br/>
-                <input type="hidden" name="pickup_date" value="{{ pickup_date }}">
-                <input type="hidden" name="direction" value="{{ direction }}">
-                <input type="hidden" name="suburb" value="{{ suburb }}">
-                <input type="hidden" name="no_of_passenger" value="{{ no_of_passenger }}">        
-				        <div class="text-center pt-2">
-				        	<button class="btn btn-primary" type="submit" id="submitButton">Get a quote</button>
-				        </div>
-				        <br>		              
-              </form>
-            </div>
-          </div>
-        <div class="col-lg-4 col-md-4 ">
-		    <!-- Categories Widget -->
-		    <div class="card my-4" id="category-card" >
-		    	<h5 class="card-header">Reviews from our clients</h5>
-		    	<div class="card-body" >
-		    		<div class="row">
-		    			<div class="col-lg-10 list-unstyled">
-		    				<li>
-		    				  <p><strong>You can check the 245 reviews from the clients who have used our company's services</strong></p>								  
-		    				  <p><a href="/easygo_review/">
-									&raquo;&raquo;&raquo;&nbsp;&nbsp;More Reviews&nbsp;&nbsp;&laquo;&laquo;&laquo;</a></p>
-		    				</li>
-		    			</div>
-		    		</div>
-		    	</div>
-		    </div>
-	    </div>
     </div>
   </div>
 </section>
-	
+<!-- Contact form + details-->
+<section class="container position-relative zindex-5 px-0 px-xl-3">
+  <div class="row">
+    <div class="col-lg-6 col-md-7 pb-2 mb-5" style="margin-top: -220px;">
+      <div class="card border-1 shadow-lg">
+        <form method="post" enctype="multipart/form-data" id="booking-form" action="/inquiry_details1/" class="card-body needs-validation p-5">
+          {% csrf_token %}
+          <div class="mb3 pb-1">
+            <label class="form-label"></label>
+          </div>
+          <div class="card text-white bg-secondary p-4">
+            <div class="mb-3 pb-1">
+              <label class="form-label">Your pickup time</label>
+              <input class="form-control" type="time" name="pickup_time" required>
+            </div>
+            <div class="mb-3 pb-1">
+              <label class="form-label">Baggage details</label>
+              <textarea class="form-control" name="message" id="cont-message" rows="5" placeholder="Oversized, Large, Medium and small"></textarea>
+              <div class="invalid-feedback">Please write a message!</div>
+            </div>
+            <div class="mb-3 pb-1">
+              <label class="form-label">Your name</label>
+              <input class="form-control" type="text" placeholder="John Doe" name="name" required>
+              <div class="invalid-feedback">Please enter your full name!</div>
+            </div>
+            <div class="mb-3 pb-1">
+              <label class="form-label">Email address</label>
+              <input class="form-control" type="email" id="email" placeholder="j.doe@example.com" name="email" required>
+              <div class="invalid-feedback">Please enter a valid email address!</div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="col-lg-5 col-md-5 offset-lg-1 offset-md-0">
+      <!-- Categories Widget -->
+      <div class="card my-4" id="category-card">
+        <h5 class="card-header">Reviews from our clients</h5>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-lg-10 list-unstyled">
+              <li>
+                <p><strong>You can check the 245 reviews from the clients who have used our company's services</strong></p>
+                <p><a href="/easygo_review/">&raquo;&raquo;&raquo;&nbsp;&nbsp;More Reviews&nbsp;&nbsp;&laquo;&laquo;&laquo;</a></p>
+              </li>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 {% endblock %}
