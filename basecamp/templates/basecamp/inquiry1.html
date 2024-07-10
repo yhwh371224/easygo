@@ -12,8 +12,8 @@
       <div class="container position-relative zindex-5 pt-3 pb-7 pt-md-0">
         <div class="row justify-content-center pb-7">
           <div class="col-lg-10">
-            <h1 class="text-light">Price Inquiry</h1>
-            <div class="active" style="color:white">Please complete the form to get the price</div>
+            <h1 class="text-light">The price varies based on pickup time and other conditions</h1>
+            <!-- <div class="active" style="color:white">Please complete the form to get the price</div> -->
           </div>
         </div>
       </div>
@@ -27,8 +27,17 @@
                 {% csrf_token %}				
 				        <div class="mb3 pb-1" >					
 				        	<label class="form-label"></label>									      
-				        </div>					
-				        <div class="card text-white bg-secondary p-4">
+				        </div>
+                <div class="card text-white bg-secondary p-4">              
+				        	<div class="mb-3 pb-1">
+				        		<label class="form-label">Your pickup time</label>
+				        		<input class="form-control" type="time" name="pickup_time" required>
+				        	</div>
+                  <div class="mb-3 pb-1">
+                    <label class="form-label">Baggage details</label>
+                    <input class="form-control" type="time" name="no_of_baggage" required>
+                    <div class="invalid-feedback">Oversized, Large, Medium and small</div>
+                  </div>
                   <div class="mb-3 pb-1">
                     <label class="form-label" >Your name</label>
                     <input class="form-control" type="text"  placeholder="John Doe" name="name" required>
@@ -38,12 +47,7 @@
                     <label class="form-label" >Email address</label>
                     <input class="form-control" type="email" id="email" placeholder="j.doe@example.com" name="email" required>
                     <div class="invalid-feedback">Please enter a valid email address!</div>
-                  </div>				
-				        <div class="mb3 pb-1" >
-				        	<div class="mb-3 pb-1">
-				        		<label class="form-label">Your pickup time</label>
-				        		<input class="form-control" type="time" name="pickup_time" required>
-				        	</div>
+                  </div>
 				        </div></div>
 				        <br/>
                 <input type="hidden" name="pickup_date" value="{{ pickup_date }}">
