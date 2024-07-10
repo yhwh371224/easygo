@@ -42,7 +42,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         dates_to_check = {
             "four_days": date.today() + timedelta(days=4),
-            "tow_days": date.today() + timedelta(days=2),
+            "two_days": date.today() + timedelta(days=2),
             "tomorrow": date.today() + timedelta(days=1),                    
         }
 
