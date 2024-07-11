@@ -3,6 +3,35 @@
 {% block content %}
 {% load custom_filters %}
 
+<style>
+    .award-badge {
+      position: fixed;
+      top: 50px;
+      left: 40px;
+      width: 350px; 
+      height: auto;
+      z-index: 1000; 
+    }
+
+    @media (max-width: 768px) {
+      .award-badge {
+        top: 30px;
+        left: 20px;
+        width: 200px; 
+      }
+    }
+
+    @media (max-width: 480px) {
+      .award-badge {
+        top: 15px;
+        left: 10px;
+        width: 100px; 
+      }
+    }
+  </style>    
+
+<img src="/static/basecamp/images/award-badge.png" alt="Award Badge" class="award-badge">
+
 <div class="col-md-8 order-2 order-md-1" id="main-div">
     <br/>
     <div class="row">
