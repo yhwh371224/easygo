@@ -30,11 +30,36 @@
     <link rel="stylesheet" href="/static/basecamp/css/theme.min.css" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="/static/basecamp/css/theme.min.css"></noscript>
     <link rel="stylesheet" media="screen" href="/static/basecamp/css/tiny-slider.css"/>
-    <link rel="stylesheet" media="screen" href="/static/basecamp/css/flatpickr.min.css"/>
-    <link rel="stylesheet" media="screen" href="/static/basecamp/css/styles.css"> 
+    <link rel="stylesheet" media="screen" href="/static/basecamp/css/flatpickr.min.css"/> 
     {% endcompress %}  
     <link rel="stylesheet" href="/static/basecamp/css/theme.min.css" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="/static/basecamp/css/theme.min.css"></noscript>    
+    <noscript><link rel="stylesheet" href="/static/basecamp/css/theme.min.css"></noscript>
+    <style>
+      .award-badge {
+        position: fixed;
+        top: 50px;
+        left: 40px;
+        width: 350px; 
+        height: auto;
+        z-index: 1000; 
+      }
+  
+      @media (max-width: 768px) {
+        .award-badge {
+          top: 30px;
+          left: 20px;
+          width: 200px; 
+        }
+      }
+  
+      @media (max-width: 480px) {
+        .award-badge {
+          top: 15px;
+          left: 10px;
+          width: 100px; 
+        }
+      }
+    </style>    
   </head>
   <body>   
     <main class="page-wrapper">
@@ -110,6 +135,7 @@
       <!-- Hero-->
       <section class="jarallax bg-dark py-7" data-jarallax data-speed="0.1" >
         <div class="jarallax-img" style="background-image: url('/static/basecamp/photos/easygo-home-page3.webp');"></div>
+          <img src="/static/basecamp/images/award-badge.webp" alt="Award Badge" class="award-badge">
         <div class="container py-4 py-sm-5 text-center">
           <div class="py-md-6">
 			  <div><a role="button" class="btn btn-primary" href="/booking/">BOOK NOW</a> | <a class="btn btn-success" href="/inquiry/">PRICE NOW</a></div>
