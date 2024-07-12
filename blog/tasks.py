@@ -170,7 +170,7 @@ def payment_send_email(subject, html_content, recipient_list):
 @shared_task
 def notify_user_payment_paypal(instance_id):
     instance = PaypalPayment.objects.get(id=instance_id)
-    if instance.item_name:
+    if instance.name:
         post_name = Post.objects.filter(
             Q(name__iregex=r'^%s$' % re.escape(instance.name)) |
             Q(email__iexact=instance.email)
