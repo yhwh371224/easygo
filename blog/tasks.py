@@ -172,8 +172,8 @@ def notify_user_payment_paypal(instance_id):
     instance = PaypalPayment.objects.get(id=instance_id)
     if instance.payer_email:
         post_name = Post.objects.filter(
-            Q(name__iregex=r'^%s$' % re.escape(instance.name)) |
-            Q(email__iexact=instance.email)
+            Q(name__iregex=r'^%s$' % re.escape(instance.item_name)) |
+            Q(email__iexact=instance.payer_email)
         ).first()
 
         if post_name:       
