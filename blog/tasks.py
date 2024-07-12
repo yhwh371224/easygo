@@ -178,7 +178,7 @@ def notify_user_payment_paypal(instance_id):
 
         if post_name:            
             html_content = render_to_string(
-                "basecamp/html_email-payment-success.html",
+                "basecamp/html_email-payment-success-stripe.html",
                 {'name': post_name.name, 'email': post_name.email, 'amount': instance.amount}
             )
             payment_send_email("Payment - EasyGo", html_content, [post_name.email, RECIPIENT_EMAIL])
