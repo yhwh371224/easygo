@@ -17,8 +17,8 @@ class InquiryAdmin(admin.ModelAdmin):
 
 
 class PaypalPaymentAdmin(admin.ModelAdmin):
-    list_display = ['item_name', 'payer_email', 'gross_amount', 'txn_id', 'created']    
-    search_fields = ['item_name', 'payer_email', 'gross_amount']
+    list_display = ['name', 'email', 'amount', 'txn_id', 'created']    
+    search_fields = ['name', 'email', 'amount']
 
 
 class StripePaymentAdmin(admin.ModelAdmin):
