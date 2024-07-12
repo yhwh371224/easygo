@@ -1879,7 +1879,7 @@ def paypal_ipn(request):
         if PaypalPayment.objects.filter(txn_id=txn_id).exists():
             return HttpResponse(status=200, content="Duplicate IPN Notification")
         
-        p = PaypalPayment(item_name=item_name, payer_email=payer_email, gross_amount=gross_amount, txn_id=txn_id)
+        p = PaypalPayment(name=item_name, email=payer_email, amount=gross_amount, txn_id=txn_id)
 
         try:
             p.save()
