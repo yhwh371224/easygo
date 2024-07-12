@@ -19,6 +19,7 @@ service-account-file.json
 calendar-service-account-file.json
 
 aws.cmd
+aws1.cmd
 awskeypair.pem
 
 *.log
