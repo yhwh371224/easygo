@@ -13,7 +13,7 @@ ENVIRONMENT = config('ENVIRONMENT', default='production')
 
 if ENVIRONMENT == 'production':
     DEBUG = config('DEBUG', cast=bool, default=True)
-    ALLOWED_HOSTS = ['easygoshuttle.com.au', 'www.easygoshuttle.com.au', '149.28.188.33', '33.188.28.149.in-addr.arpa']
+    ALLOWED_HOSTS = ['easygoshuttle.com.au', 'www.easygoshuttle.com.au', '3.106.165.52', '52.165.106.3.in-addr.arpa']
 
     SECURE_SSL_REDIRECT = True
     CSRF_COOKIE_SECURE = True
