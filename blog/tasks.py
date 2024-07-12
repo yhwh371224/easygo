@@ -170,25 +170,24 @@ def payment_send_email(subject, html_content, recipient_list):
 @shared_task
 def notify_user_payment_paypal(instance_id):
     instance = PaypalPayment.objects.get(id=instance_id)
-    if instance.name:
+    if instance.name:            
         post_name = Post.objects.filter(
             Q(name__iregex=r'^%s$' % re.escape(instance.name)) |
             Q(email__iexact=instance.email)
         ).first()
 
-        if post_name:       
+        if post_name:            
             html_content = render_to_string(
                 "basecamp/html_email-payment-success.html",
                 {'name': post_name.name, 'email': post_name.email, 'amount': instance.amount}
             )
             payment_send_email("Payment - EasyGo", html_content, [post_name.email, RECIPIENT_EMAIL])
-
-            checking_message = "short payment"
+            
             post_name.paid = instance.amount            
             post_name.reminder = True
             post_name.discount = ""
             if float(post_name.price) > float(instance.amount):
-                post_name.toll = checking_message             
+                post_name.toll = "short payment"             
             post_name.save()
 
             if post_name.return_pickup_time == 'x':                   
@@ -197,7 +196,7 @@ def notify_user_payment_paypal(instance_id):
                     second_post.reminder = True
                     second_post.discount = ""   
                     if float(second_post.price) > float(instance.amount):
-                        post_name.toll = checking_message                    
+                        post_name.toll = "short payment"                    
                     second_post.save() 
 
         else:
