@@ -31,10 +31,6 @@
   <!-- Body-->
   <body>    
     <main class="page-wrapper">
-      <!-- Sign In Modal-->
-		
-      <!-- Navbar (Floating light)-->
-      <!-- Remove "navbar-sticky" class to make navigation bar scrollable with the page.-->
       <header class="header navbar navbar-expand-lg navbar-dark navbar-floating navbar-sticky" data-scroll-header data-fixed-element>
         <div class="container px-0 px-xl-3">
           <button class="navbar-toggler ms-n2 me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#primaryMenu" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button><a class="navbar-brand flex-shrink-0 order-lg-1 mx-auto ms-lg-0 pe-lg-2 me-lg-4" href="/home/"><img class="navbar-floating-logo d-none d-lg-block" src="/static/basecamp/images/easygo_icon.webp" style="border-radius: 30%" alt="EasyGo_image" width="40"></a>
@@ -57,18 +53,10 @@
             </div>
 		  </div></div>
       </header>
-      <!-- Page content-->
+
            {% block content %}
             {% endblock %}
-      <!-- Offers carousel-->
 
-      <!-- Features CTA-->
-
-      <!-- FAQ-->
-
-      <!-- Subscribe CTA-->
-
-      <!-- Offers carousel-->
 
       <section class="container py-5 my-4 my-sm-0 py-sm-6 py-md-7">
         <br/>
@@ -130,29 +118,9 @@
   
           form.addEventListener("submit", function () {
               submitButton.disabled = true;
-              submitButton.innerHTML = "Submitting..."; // You can change the text as needed
+              submitButton.innerHTML = "Submitting..."; 
           });
       });
-  </script>
-  <script src="https://www.google.com/recaptcha/api.js" defer></script>
-  <script>    
-    if(typeof grecaptcha === 'undefined') {
-      grecaptcha = {};
-    }
-    grecaptcha.ready = function(cb){
-      if(typeof grecaptcha === 'undefined') {       
-        const c = '___grecaptcha_cfg';
-        window[c] = window[c] || {};
-        (window[c]['fns'] = window[c]['fns']||[]).push(cb);
-      } else {
-        cb();
-      }
-    }
-    grecaptcha.ready(function(){
-      grecaptcha.render("container", {
-        sitekey: "{{ RECAPTCHA_V2_SITE_KEY }}"
-      });
-    });
   </script>
   </body>
 </html>
