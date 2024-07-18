@@ -38,7 +38,7 @@ class Command(BaseCommand):
             message_body = (
                 "Dear Valued Customer,\n\n"
                 "We apologize for any inconvenience caused by the frequent receipt of this general notification email. If you do not have a booking, please disregard this email. \n\n"
-                "I am writing this email to ensure that there are no mistakes. As the booking date approaches, if you do not receive any reminder email, please let me know by email. " 
+                "I am writing this email to ensure that there are no mistakes. As the booking date approaches, if you do not receive any reminder email, please let us know by email. " 
                 "Usually, a reminder email is sent 3 days before the booking date.\n\n"
                 "Thank you for your understanding. \n\n"
                 "Best regards,\n\n"
