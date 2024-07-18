@@ -14,7 +14,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         today = timezone.now().date()
-        start_date = timezone.datetime(2024, 1, 1).date()
+        start_date = timezone.datetime(2023, 7, 1).date()
         end_date = timezone.datetime(2024, 6, 30).date()
 
         # Filter customers where Pickup_date is missing
