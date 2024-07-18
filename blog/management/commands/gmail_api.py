@@ -10,12 +10,12 @@ import base64
 
 
 class Command(BaseCommand):
-    help = 'Send good news to customers'
+    help = 'Send notification to customers'
 
     def handle(self, *args, **kwargs):
         today = timezone.now().date()
-        start_date = timezone.datetime(2023, 2, 9).date()
-        end_date = timezone.datetime(2023, 7, 7).date()
+        start_date = timezone.datetime(2024, 1, 1).date()
+        end_date = timezone.datetime(2024, 6, 30).date()
 
         # Filter customers where Pickup_date is missing
         customers = Post.objects.filter(
@@ -34,15 +34,13 @@ class Command(BaseCommand):
             # Call the Gmail API
             service = build('gmail', 'v1', credentials=delegated_creds)
 
-            subject = 'Exciting News from EasyGo Airport Shuttle!'
+            subject = 'Booking Reminder Notification'
             message_body = (
                 "Dear Valued Customer,\n\n"
-                "We are excited to share some wonderful news with you! EasyGo Airport Shuttle has been awarded the 2024 Quality Business Award by the Inner West Council. "
-                "This recognition is a testament to our commitment to providing excellent service to all our customers.\n\n"
-                "We want to express our sincere gratitude for your continued support, which has been instrumental in achieving this honor.\n\n"
-                "For more details about this award and what it means for EasyGo Airport Shuttle, please click the link below:\n"
-                "https://qualitybusinessawards.com.au/2024/the-best-airport-shuttle-service-in-inner-west-council/easygo-airport-shuttle\n\n"
-                "Thank you for choosing EasyGo Airport Shuttle. We look forward to serving you again soon.\n\n"
+                "We apologize for any inconvenience caused by the frequent receipt of this general notification email. If you do not have a booking, please disregard this email. \n\n"
+                "I am writing this email to ensure that there are no mistakes. As the booking date approaches, if you do not receive any reminder email, please let me know by email. " 
+                "Usually, a reminder email is sent 3 days before the booking date.\n\n"
+                "Thank you for your understanding. \n\n"
                 "Best regards,\n\n"
                 "The EasyGo Airport Shuttle Team\n"
             )
