@@ -4,12 +4,6 @@
 
 {% block content %}
 <style>
-    .form-container {
-        display: flex;
-        align-items: center; 
-        justify-content: center; 
-        height: 100vh; 
-    }
     form {
         margin-top: 40px; 
     }
@@ -23,7 +17,7 @@
     }
 </style>
 <img src="/static/basecamp/images/award-badge.webp" alt="Award Badge" class="award-badge">
-<div class="form-container">
+
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <table>
@@ -53,7 +47,7 @@
         </table>
         <button type="submit" class="btn btn-primary float-right">Submit</button>
     </form>
-</div>
+
         
     {{ form.media }}
     
