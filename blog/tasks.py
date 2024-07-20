@@ -62,8 +62,7 @@ def create_event_on_calendar(instance_id):
                      'm:'+instance.message if instance.message is not None else '', 
                      'n:'+instance.notice if instance.notice is not None else '', 
                      "d:"+str(instance.return_pickup_date), 
-                     '$'+str(instance.paid) if instance.paid is not None else '',
-                     '!!'+instance.toll if instance.toll is not None else '']
+                     '$'+str(instance.paid) if instance.paid is not None else '',]
     message = " ".join(filter(None, message_parts))      
 
     pickup_date = datetime.datetime.strptime(str(instance.pickup_date), '%Y-%m-%d')
