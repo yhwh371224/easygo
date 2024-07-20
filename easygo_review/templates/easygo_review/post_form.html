@@ -6,22 +6,23 @@
 <style>
     .form-container {
         display: flex;
-        align-items: center; /* 세로 중앙 정렬 */
-        justify-content: center; /* 가로 중앙 정렬 */
-        height: 100vh; /* 뷰포트 높이 전체 사용 */
+        align-items: center; 
+        justify-content: center; 
+        height: 100vh; 
     }
     form {
-        margin-top: 40px; /* 상단 마진을 40px로 설정 */
+        margin-top: 40px; 
     }
     .star {
-        color: #ccc; /* 기본 별 색상을 회색으로 설정 */
+        color: #ccc; 
         cursor: pointer;
         font-size: 20px;
     }
     .star.rated {
-        color: gold; /* 선택된 별 색상을 골드로 설정 */
+        color: gold; 
     }
 </style>
+<div class="form-container">
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <table>
@@ -51,7 +52,8 @@
         </table>
         <button type="submit" class="btn btn-primary float-right">Submit</button>
     </form>
-    
+</div>
+        
     {{ form.media }}
     
 <script>
