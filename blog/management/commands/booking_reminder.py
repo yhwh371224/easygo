@@ -43,7 +43,7 @@ class Command(BaseCommand):
             "basecamp/html_email-upcoming5.html",
             "basecamp/html_email-upcoming7.html",
             "basecamp/html_email-upcoming14.html",
-            # "basecamp/html_email-yesterday.html",
+            "basecamp/html_email-yesterday.html",
         ]
         subjects = [
             "Reminder-Today",
@@ -52,7 +52,7 @@ class Command(BaseCommand):
             "Reminder-5days",
             "Reminder-7days",
             "Reminder-2wks",
-            # "Review-EasyGo",
+            "Review-EasyGo",
         ]
         for interval, template, subject in zip(reminder_intervals, templates, subjects):
             self.send_email(interval, template, subject)
