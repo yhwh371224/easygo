@@ -5,52 +5,57 @@
 {% block content %}
 <style>
     form {
-        margin-top: 40px; 
+        display: block;
     }
     .star {
-        color: #ccc; 
+        color: #ccc; /* 기본 별 색상을 회색으로 설정 */
         cursor: pointer;
         font-size: 20px;
     }
     .star.rated {
-        color: gold; 
+        color: gold; /* 선택된 별 색상을 골드로 설정 */
     }
 </style>
-<img src="/static/basecamp/images/award-badge.webp" alt="Award Badge" class="award-badge">
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <table>
+                    {{ form.non_field_errors }}
+                    <tr>
+                        <th>{{ form.name.label_tag }}</th>
+                        <td>{{ form.name }}</td>
+                    </tr>            
+                    <tr>
+                        <th>{{ form.content.label_tag }}</th>
+                        <td>{{ form.content }}</td>
+                    </tr>
+                    <tr>
+                        <th>{{ form.rating.label_tag }}</th>
+                        <td>
+                            <label for="rating">Click star rating:</label>
+                            <div class="star-rating" style="white-space: nowrap;">
+                                <span class="star" onclick="setRating(1)">&#9733;</span>
+                                <span class="star" onclick="setRating(2)">&#9733;</span>
+                                <span class="star" onclick="setRating(3)">&#9733;</span>
+                                <span class="star" onclick="setRating(4)">&#9733;</span>
+                                <span class="star" onclick="setRating(5)">&#9733;</span>
+                            </div>
+                            <input type="hidden" id="rating" name="rating" required>
+                        </td>
+                    </tr>
+                </table>
+                <button type="submit" class="btn btn-primary float-right">Submit</button>
+            </form>
+        </div>
+        <div class="col-md-4">
+            <img src="/static/basecamp/images/award-badge.webp" alt="Award Badge" class="award-badge">
+        </div>
+    </div>
+</div>
+{{ form.media }}
 
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <table>
-            {{ form.non_field_errors }}
-            <tr>
-                <th>{{ form.name.label_tag }}</th>
-                <td>{{ form.name }}</td>
-            </tr>            
-            <tr>
-                <th>{{ form.content.label_tag }}</th>
-                <td>{{ form.content }}</td>
-            </tr>
-            <tr>
-                <th>{{ form.rating.label_tag }}</th>
-                <td>
-                    <label for="rating">Click star rating:</label>
-                    <div class="star-rating" style="white-space: nowrap;">
-                        <span class="star" onclick="setRating(1)">&#9733;</span>
-                        <span class="star" onclick="setRating(2)">&#9733;</span>
-                        <span class="star" onclick="setRating(3)">&#9733;</span>
-                        <span class="star" onclick="setRating(4)">&#9733;</span>
-                        <span class="star" onclick="setRating(5)">&#9733;</span>
-                    </div>
-                    <input type="hidden" id="rating" name="rating" required>
-                </td>
-            </tr>
-        </table>
-        <button type="submit" class="btn btn-primary float-right">Submit</button>
-    </form>
-
-        
-    {{ form.media }}
-    
 <script>
 function setRating(rating) {
     const stars = document.querySelectorAll('.star-rating .star');
