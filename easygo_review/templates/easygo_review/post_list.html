@@ -50,9 +50,9 @@
                     <br>
                     <a href="{{ post.get_absolute_url }}" class="btn btn-primary" id="read-more-post-{{ post.pk }}">Read More &rarr;</a>
                 </div>
-                <div class="card-footer text-muted">
+                <!-- <div class="card-footer text-muted">
                     {{ post.name }}'s original review on Google >>>&nbsp;<a href="{{ post.link }}" target="_blank"> here</a>
-                </div>
+                </div> -->
             </div>
         {% endfor %}
 
@@ -118,6 +118,8 @@
             alert("{{ search_error|escapejs }}");
         </script>
     {% endif %}
+    <br>
+    <img src="/static/basecamp/images/award-badge.webp" alt="Award Badge" class="award-badge">
 </div>       
 
 {% endblock %}
