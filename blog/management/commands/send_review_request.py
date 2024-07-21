@@ -1,7 +1,5 @@
 import os
 from datetime import date, timedelta
-from itsdangerous import URLSafeTimedSerializer
-
 from django.core.management.base import BaseCommand
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
@@ -11,9 +9,7 @@ from django.utils.encoding import force_bytes
 from django.conf import settings
 from blog.models import Post
 
-
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 
 class Command(BaseCommand):
     help = 'Send review requests for yesterday\'s bookings'
@@ -25,13 +21,10 @@ class Command(BaseCommand):
         target_date = date.today() - timedelta(days=1)
         booking_reminders = Post.objects.filter(pickup_date=target_date, cancelled=False)
 
-        serializer = URLSafeTimedSerializer(settings.SECRET_KEY)
-
         for booking_reminder in booking_reminders:
             email = booking_reminder.email
-            token = serializer.dumps(email, salt='email-confirmation-salt')
             uid = urlsafe_base64_encode(force_bytes(email))
-            review_link = f"{settings.SITE_URL}/verify-email/{uid}/{token}/"
+            review_link = f"{settings.SITE_URL}/verify-email/{uid}/"
 
             html_content = render_to_string("basecamp/html_email-yesterday.html", {
                 'name': booking_reminder.name,

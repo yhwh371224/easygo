@@ -20,19 +20,17 @@ from blog.tasks import send_notice_email
 from main.settings import RECIPIENT_EMAIL
 
 
-def verify_email(request, uidb64, token):
+def verify_email(request, uidb64):
     try:
         email = force_str(urlsafe_base64_decode(uidb64))
-        serializer = URLSafeTimedSerializer(settings.SECRET_KEY)
-        email_from_token = serializer.loads(token, salt='email-confirmation-salt', max_age=3600)
-
-        if email == email_from_token:
-            request.session['email'] = email
-            return redirect('easygo_review/create')
+        post = Post.objects.filter(email=email).first()
+        if post:
+            request.session['id'] = post.id
+            return redirect('easygo_review:create')  
         else:
             return HttpResponse('Invalid link', status=400)
-    except (SignatureExpired, BadSignature):
-        return HttpResponse('The confirmation link has expired or is invalid.', status=400)
+    except (TypeError, ValueError, OverflowError):
+        return HttpResponse('Invalid link', status=400)
 
 
 def custom_login_view(request):
