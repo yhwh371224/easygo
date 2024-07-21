@@ -74,10 +74,10 @@ class Command(BaseCommand):
                 continue
 
             driver = booking_reminder.driver
-            user = booking_reminder.user
+            user = booking_reminder.email
             token = default_token_generator.make_token(user)
             uid = urlsafe_base64_encode(force_bytes(user.pk))
-            review_link = f"{self.request.build_absolute_uri('/verify-email/{uid}/{token}/')}"
+            review_link = f"{self.request.build_absolute_uri(f'/verify-email/{uid}/{token}/')}"
 
             html_content = render_to_string(template_name, {
                 'name': booking_reminder.name,

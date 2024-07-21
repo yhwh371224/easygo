@@ -24,7 +24,7 @@ class Command(BaseCommand):
         booking_reminders = Post.objects.filter(pickup_date=target_date, cancelled=False)
 
         for booking_reminder in booking_reminders:
-            user = booking_reminder.user
+            user = booking_reminder.email
             token = default_token_generator.make_token(user)
             uid = urlsafe_base64_encode(force_bytes(user.pk))
             review_link = f"{self.request.build_absolute_uri(f'/verify-email/{uid}/{token}/')}"
