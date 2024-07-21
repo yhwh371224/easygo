@@ -13,7 +13,33 @@
     <meta name="keywords" content="reviews easygo shuttle, reviews easygo, reviews for easygo airport shuttle, customer reviews for easygo service">
     <meta name="author" content="EasyGo Airport Shuttle">
     <link rel="stylesheet" href="{% static 'easygo_review/css/bootstrap.css' %}" media="screen">
-    <link rel="stylesheet" href="{% static 'easygo_review/css/custom.min.css' %}">    
+    <link rel="stylesheet" href="{% static 'easygo_review/css/custom.min.css' %}"> 
+    <style>
+        .award-badge {
+          position: fixed;
+          /* top: 120px;
+          left: 60px; */
+          width: 200px; 
+          height: auto;
+          z-index: 1000; 
+        }
+    
+        @media (max-width: 768px) {
+          .award-badge {
+            /* top: 60px;
+            left: 30px; */
+            width: 100px; 
+          }
+        }
+    
+        @media (max-width: 480px) {
+          .award-badge {
+            /* top: 85px;
+            left: 15px; */
+            width: 70px; 
+          }
+        }
+      </style>          
 </head>
 <body>
 
