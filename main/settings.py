@@ -87,6 +87,7 @@ CELERY_TIMEZONE = 'Australia/Sydney'
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 
 SITE_ID = 1
+SITE_URL = 'https://easygoshuttle.com.au'
 
 MIDDLEWARE = [
     'django.middleware.gzip.GZipMiddleware', 

@@ -3,14 +3,14 @@ import requests
 
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadSignature
 from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse, HttpResponse
-from django.contrib.auth import login, get_user_model
 from django.utils.http import urlsafe_base64_decode
-from django.contrib.auth.tokens import default_token_generator
+from django.utils.encoding import force_str
 from django.db.models import Q
 
 from .models import Post, Comment
@@ -20,20 +20,19 @@ from blog.tasks import send_notice_email
 from main.settings import RECIPIENT_EMAIL
 
 
-User = get_user_model()
-
 def verify_email(request, uidb64, token):
     try:
-        uid = urlsafe_base64_decode(uidb64).decode()
-        user = User.objects.get(pk=uid)
-    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-        user = None
+        email = force_str(urlsafe_base64_decode(uidb64))
+        serializer = URLSafeTimedSerializer(settings.SECRET_KEY)
+        email_from_token = serializer.loads(token, salt='email-confirmation-salt', max_age=3600)
 
-    if user and default_token_generator.check_token(user, token):
-        login(request, user)
-        return redirect('easygo_review/create')  
-    else:
-        return HttpResponse('Invalid link', status=400)
+        if email == email_from_token:
+            request.session['user_email'] = email
+            return redirect('easygo_review/create')
+        else:
+            return HttpResponse('Invalid link', status=400)
+    except (SignatureExpired, BadSignature):
+        return HttpResponse('The confirmation link has expired or is invalid.', status=400)
 
 
 def custom_login_view(request):
