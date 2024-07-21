@@ -27,7 +27,7 @@ def verify_email(request, uidb64, token):
         email_from_token = serializer.loads(token, salt='email-confirmation-salt', max_age=3600)
 
         if email == email_from_token:
-            request.session['user_email'] = email
+            request.session['email'] = email
             return redirect('easygo_review/create')
         else:
             return HttpResponse('Invalid link', status=400)
