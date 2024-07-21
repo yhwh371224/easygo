@@ -25,7 +25,7 @@ def custom_login_view(request):
             request.session['id'] = post.id
             return redirect('easygo_review:easygo_review')
         else:
-            return render(request, 'easygo_review/custom_login.html', {'error': 'Invalid email address'})
+            return render(request, 'easygo_review/custom_login.html', {'error': 'This is not the email address used for booking'})
     return render(request, 'easygo_review/custom_login.html', {'error': error})
 
 
