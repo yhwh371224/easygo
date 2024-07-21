@@ -6,9 +6,6 @@ from django.core.management.base import BaseCommand
 from django.core.mail import EmailMultiAlternatives, send_mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
-from django.utils.http import urlsafe_base64_encode
-from django.utils.encoding import force_bytes
-from django.contrib.auth.tokens import default_token_generator
 from django.conf import settings
 from blog.models import Post
 
@@ -40,23 +37,23 @@ class Command(BaseCommand):
         return logger
 
     def handle(self, *args, **options):
-        reminder_intervals = [-1]
+        reminder_intervals = [0, 1, 3, 5, 7, 14, -1]
         templates = [
-            # "basecamp/html_email-today.html",
-            # "basecamp/html_email-tomorrow.html",
-            # "basecamp/html_email-upcoming3.html",
-            # "basecamp/html_email-upcoming5.html",
-            # "basecamp/html_email-upcoming7.html",
-            # "basecamp/html_email-upcoming14.html",
+            "basecamp/html_email-today.html",
+            "basecamp/html_email-tomorrow.html",
+            "basecamp/html_email-upcoming3.html",
+            "basecamp/html_email-upcoming5.html",
+            "basecamp/html_email-upcoming7.html",
+            "basecamp/html_email-upcoming14.html",
             "basecamp/html_email-yesterday.html",
         ]
         subjects = [
-            # "Reminder-Today",
-            # "Reminder-Tomorrow",
-            # "Reminder-3days",
-            # "Reminder-5days",
-            # "Reminder-7days",
-            # "Reminder-2wks",
+            "Reminder-Today",
+            "Reminder-Tomorrow",
+            "Reminder-3days",
+            "Reminder-5days",
+            "Reminder-7days",
+            "Reminder-2wks",
             "Review-EasyGo",
         ]
         for interval, template, subject in zip(reminder_intervals, templates, subjects):
@@ -74,10 +71,6 @@ class Command(BaseCommand):
                 continue
 
             driver = booking_reminder.driver
-            user = booking_reminder.email
-            token = default_token_generator.make_token(user)
-            uid = urlsafe_base64_encode(force_bytes(user.pk))
-            review_link = f"{self.request.build_absolute_uri(f'/verify-email/{uid}/{token}/')}"
 
             html_content = render_to_string(template_name, {
                 'name': booking_reminder.name,
@@ -96,7 +89,6 @@ class Command(BaseCommand):
                 'driver_car': driver.driver_car if driver else "",
                 'paid': booking_reminder.paid,
                 'cash': booking_reminder.cash,
-                'review_link': review_link,
             })
 
             text_content = strip_tags(html_content)
