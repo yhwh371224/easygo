@@ -1,19 +1,39 @@
-import requests
 import json
+import requests
 
+from django.conf import settings
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, redirect
+from django.views import View
+from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse, HttpResponse
+from django.contrib.auth import login, get_user_model
+from django.utils.http import urlsafe_base64_decode
+from django.contrib.auth.tokens import default_token_generator
+from django.db.models import Q
+
 from .models import Post, Comment
 from .forms import CommentForm, PostForm
-from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
-from django.db.models import Q
+from blog.models import Post as BlogPost
 from blog.tasks import send_notice_email
 from main.settings import RECIPIENT_EMAIL
-from blog.models import Post as BlogPost
-from django.core.exceptions import PermissionDenied
-from django.views import View 
-from django.conf import settings
-from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
+
+
+User = get_user_model()
+
+def verify_email(request, uidb64, token):
+    try:
+        uid = urlsafe_base64_decode(uidb64).decode()
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+
+    if user and default_token_generator.check_token(user, token):
+        login(request, user)
+        return redirect('easygo_review/create')  
+    else:
+        return HttpResponse('Invalid link', status=400)
 
 
 def custom_login_view(request):

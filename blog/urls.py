@@ -3,6 +3,6 @@ from . import views
 
 
 urlpatterns = [
-
+    
 ]
 
