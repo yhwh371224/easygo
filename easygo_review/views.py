@@ -3,14 +3,10 @@ import requests
 
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
-from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadSignature
 from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
 from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse, HttpResponse
-from django.utils.http import urlsafe_base64_decode
-from django.utils.encoding import force_str
 from django.db.models import Q
 
 from .models import Post, Comment
@@ -18,19 +14,6 @@ from .forms import CommentForm, PostForm
 from blog.models import Post as BlogPost
 from blog.tasks import send_notice_email
 from main.settings import RECIPIENT_EMAIL
-
-
-def verify_email(request, uidb64):
-    try:
-        email = force_str(urlsafe_base64_decode(uidb64))
-        post = Post.objects.filter(email=email).first()
-        if post:
-            request.session['id'] = post.id
-            return redirect('easygo_review/create')  
-        else:
-            return HttpResponse('Invalid link', status=400)
-    except (TypeError, ValueError, OverflowError):
-        return HttpResponse('Invalid link', status=400)
 
 
 def custom_login_view(request):
