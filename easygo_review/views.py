@@ -26,7 +26,7 @@ def verify_email(request, uidb64):
         post = Post.objects.filter(email=email).first()
         if post:
             request.session['id'] = post.id
-            return redirect('easygo_review:create')  
+            return redirect('easygo_review/create')  
         else:
             return HttpResponse('Invalid link', status=400)
     except (TypeError, ValueError, OverflowError):
