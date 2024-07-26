@@ -15,7 +15,7 @@
         <div class="col-md-4" id="side-div">
             <h5 id="easygo_review-list-title">
                 <br/>
-                {% if id %}
+                {% if email %}
                     <button class="btn btn-primary btn-sm float-right" onclick="location.href='/easygo_review/create/'">New Post</button>
                 {% else %}
                     <button type="button" class="btn btn-primary btn-sm float-right" data-toggle="modal" data-target="#loginModal" >
@@ -99,7 +99,7 @@
     <div class="card my-4">
         <h5 class="card-header" style="color:red">Note!</h5>
         <div class="card-body">
-            {% if id %}
+            {% if email %}
             <p class="card-text">
                 Click the 'New Post' button to leave a review. Only customers who have used our service can leave a review
             </p>

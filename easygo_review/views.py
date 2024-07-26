@@ -8,6 +8,7 @@ from django.views import View
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
+from django.http import JsonResponse
 
 from .models import Post, Comment
 from .forms import CommentForm, PostForm
@@ -22,7 +23,7 @@ def custom_login_view(request):
         email = request.POST['email']
         post = BlogPost.objects.filter(email=email).first()
         if post:
-            request.session['id'] = post.id
+            request.session['email'] = post.email
             return redirect('easygo_review:easygo_review')
         else:
             return render(request, 'easygo_review/custom_login.html', {'error': 'This is not the email address used for booking'})
@@ -35,10 +36,10 @@ def custom_logout_view(request):
 
 
 def get_authenticated_post(request):
-    id = request.session.get('id')
-    if id:
+    email = request.session.get('email')
+    if email:
         try:
-            return BlogPost.objects.get(id=id)
+            return BlogPost.objects.get(email=email)
         except BlogPost.DoesNotExist:
             return None
     return None
@@ -62,18 +63,46 @@ class PostList(ListView):
         authenticated_post = get_authenticated_post(self.request)
         context['authenticated_post'] = authenticated_post 
 
-        id = self.request.session.get('id', None)
-        if id:
-            blog_post = BlogPost.objects.get(id=id)
+        email = self.request.session.get('email', None)
+        if email:
+            blog_post = BlogPost.objects.get(email=email)
             user_name = blog_post.name
             context['user_name'] = user_name
         else:
             context['user_name'] = None
 
-        context['id'] = id  # 세션 변수 id를 컨텍스트에 추가
-        context['search_error'] = self.request.session.get('search_error', None)  # search_error를 컨텍스트에 추가
+        context['email'] = email 
+        context['search_error'] = self.request.session.get('search_error', None)  
 
         return context
+    
+
+class PostCreate(View):
+    def get(self, request, *args, **kwargs):
+        email = request.session.get('email')  
+        if email:
+            blog_post = BlogPost.objects.get(email=email)
+            form = PostForm(initial={'name': blog_post.name})  
+        else:
+            form = PostForm()
+        return render(request, 'easygo_review/post_form.html', {'form': form, 'form_guide': 'Please post your review'})
+
+    def post(self, request, *args, **kwargs):
+        form = PostForm(request.POST)
+        if form.is_valid():
+            email = request.session.get('email')  
+            if email:
+                blog_post = BlogPost.objects.get(email=email)
+                form.instance.author = blog_post.name  
+                form.instance.name = blog_post.name  
+                rating = form.cleaned_data.get('rating')
+                if not (1 <= rating <= 5):
+                    form.add_error('rating', 'Rating must be between 1 and 5')
+                    return render(request, 'easygo_review/post_form.html', {'form': form, 'form_guide': 'Please post your review'})
+                form.save()
+                return redirect('/easygo_review/')
+        return render(request, 'easygo_review/post_form.html', {'form': form, 'form_guide': 'Please post your review'})
+
     
 
 class PostSearch(PostList):
@@ -97,34 +126,7 @@ class PostDetail(DetailView):
         context['post_count'] = Post.objects.all().count()
         context['comment_form'] = CommentForm()
         return context
-
-
-class PostCreate(View):
-    def get(self, request, *args, **kwargs):
-        id = request.session.get('id')  
-        if id:
-            blog_post = BlogPost.objects.get(id=id)
-            form = PostForm(initial={'name': blog_post.name})  
-        else:
-            form = PostForm()
-        return render(request, 'easygo_review/post_form.html', {'form': form, 'form_guide': 'Please post your review'})
-
-    def post(self, request, *args, **kwargs):
-        form = PostForm(request.POST)
-        if form.is_valid():
-            id = request.session.get('id')  
-            if id:
-                blog_post = BlogPost.objects.get(id=id)
-                form.instance.author = blog_post.name  
-                form.instance.name = blog_post.name  
-                rating = form.cleaned_data.get('rating')
-                if not (1 <= rating <= 5):
-                    form.add_error('rating', 'Rating must be between 1 and 5')
-                    return render(request, 'easygo_review/post_form.html', {'form': form, 'form_guide': 'Please post your review'})
-                form.save()
-                return redirect('/easygo_review/')
-        return render(request, 'easygo_review/post_form.html', {'form': form, 'form_guide': 'Please post your review'})
-    
+        
 
 class PostUpdate(UpdateView):
     model = Post
@@ -143,7 +145,7 @@ def new_comment(request, pk):
             comment.author = request.user
             comment.save()
             return redirect(comment.get_absolute_url())
-    return redirect('/easygo_review/')  # 
+    return redirect('/easygo_review/')  
 
 
 class CommentUpdate(UpdateView):
@@ -230,14 +232,11 @@ def recaptcha_verify(request):
         if not recaptcha_token:
             return JsonResponse({'success': False, 'message': 'No reCAPTCHA token provided'})
 
-        # Verify the reCAPTCHA v3 token
         result = verify_recaptcha(recaptcha_token, version='v3')
         
         if result.get('success'):
-            # The token is valid, handle your logic here
             return JsonResponse({'success': True})
         else:
-            # The token is invalid
             return JsonResponse({'success': False, 'message': result.get('error-codes', 'Invalid reCAPTCHA token')})
     
     return JsonResponse({'success': False, 'message': 'Invalid request method'})
