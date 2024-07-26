@@ -74,6 +74,7 @@ class Command(BaseCommand):
 
             html_content = render_to_string(template_name, {
                 'name': booking_reminder.name,
+                'email': booking_reminder.email,
                 'pickup_date': booking_reminder.pickup_date,
                 'flight_number': booking_reminder.flight_number,
                 'flight_time': booking_reminder.flight_time,
