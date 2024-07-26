@@ -51,13 +51,13 @@
                     <a href="{{ post.get_absolute_url }}" class="btn btn-primary" id="read-more-post-{{ post.pk }}">Read More &rarr;</a>
                 </div>
                 {% if post.author %}
-                <div class="card-footer text-muted">
-                    {{ post.name }}'s original review on Google >>>&nbsp;<a href="{{ post.link }}" target="_blank"> here</a>
-                </div>
+                    <div class="card-footer text-muted">                    
+                            {{ post.name }} left this review directly on our website
+                    </div>
                 {% else %}
-                <div class="card-footer text-muted">
-                    {{ post.name }} left this review directly on our website. 
-                </div>
+                    <div class="card-footer text-muted">
+                        {{ post.name }}'s original review on Google >>>&nbsp;<a href="{{ post.link }}" target="_blank"> here</a>
+                    </div>
                 {% endif %}
             </div>
         {% endfor %}
