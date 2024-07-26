@@ -50,9 +50,15 @@
                     <br>
                     <a href="{{ post.get_absolute_url }}" class="btn btn-primary" id="read-more-post-{{ post.pk }}">Read More &rarr;</a>
                 </div>
-                <!-- <div class="card-footer text-muted">
+                {% if post.author %}
+                <div class="card-footer text-muted">
                     {{ post.name }}'s original review on Google >>>&nbsp;<a href="{{ post.link }}" target="_blank"> here</a>
-                </div> -->
+                </div>
+                {% else %}
+                <div class="card-footer text-muted">
+                    {{ post.name }} left this review directly on our website. 
+                </div>
+                {% endif %}
             </div>
         {% endfor %}
 
@@ -93,11 +99,16 @@
     <div class="card my-4">
         <h5 class="card-header" style="color:red">Note!</h5>
         <div class="card-body">
+            {% if id %}
             <p class="card-text">
                 Click the 'New Post' button to leave a review. Only customers who have used our service can leave a review
-                <br><br>      
-                    <!-- <a href="https://bit.ly/3xkLEUD" target="_blank">Google Reviews</a>  -->
             </p>
+            {% else %}
+            <p class="card-text">
+                Most of the reviews here (except those left directly here) are identical to the reviews left on Google
+            </p>
+            <br><br><a href="https://bit.ly/3xkLEUD" target="_blank">Google Reviews</a> 
+            {% endif %}             
         </div> 
     </div>
     <!-- Search Widget -->  
