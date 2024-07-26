@@ -21,12 +21,13 @@ def custom_login_view(request):
     error = None
     if request.method == 'POST':
         email = request.POST['email']
-        post = BlogPost.objects.filter(email=email).first()
-        if post:
+        posts = BlogPost.objects.filter(email=email)
+        if posts.exists():
+            post = posts.first()  
             request.session['email'] = post.email
             return redirect('easygo_review:easygo_review')
         else:
-            return render(request, 'easygo_review/custom_login.html', {'error': 'This is not the email address used for booking'})
+            error = 'This is not the email address used for booking'
     return render(request, 'easygo_review/custom_login.html', {'error': error})
 
 
@@ -38,10 +39,9 @@ def custom_logout_view(request):
 def get_authenticated_post(request):
     email = request.session.get('email')
     if email:
-        try:
-            return BlogPost.objects.get(email=email)
-        except BlogPost.DoesNotExist:
-            return None
+        posts = BlogPost.objects.filter(email=email)
+        if posts.exists():
+            return posts.first()  
     return None
 
 
@@ -65,9 +65,12 @@ class PostList(ListView):
 
         email = self.request.session.get('email', None)
         if email:
-            blog_post = BlogPost.objects.get(email=email)
-            user_name = blog_post.name
-            context['user_name'] = user_name
+            blog_post = BlogPost.objects.filter(email=email).first()  
+            if blog_post:
+                user_name = blog_post.name
+                context['user_name'] = user_name
+            else:
+                context['user_name'] = None
         else:
             context['user_name'] = None
 
@@ -81,7 +84,7 @@ class PostCreate(View):
     def get(self, request, *args, **kwargs):
         email = request.session.get('email')  
         if email:
-            blog_post = BlogPost.objects.get(email=email)
+            blog_post = BlogPost.objects.filter(email=email).first()
             form = PostForm(initial={'name': blog_post.name})  
         else:
             form = PostForm()
