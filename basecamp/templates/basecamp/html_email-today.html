@@ -233,8 +233,9 @@
 											<td align="left" style="padding-top:28px;padding-left:0;">																								
 											{% if direction == 'Pickup from Intl Airport' %}												
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">													
-													Please ensure that your mobile phone remains switched on. Your driver will contact you via call or message with his details.<br><br>
-													For any further assistance or inquiries, you can also reach us via email at info@easygoshuttle.com.au<br><br>
+													Please ensure that your mobile phone remains switched on. Your driver will contact you via call or message with his details. 
+													Once you have collected all your luggage, please contact the driver to inform them. 
+													This will help us estimate your arrival time at the meeting point, ensuring a smooth transition.<br><br>
 
 													{% if cash %}
 														We kindly ask that you <span style="color: #eb7828">email us immediately</span> upon your arrival in Sydney</span><br><br>													
@@ -252,18 +253,18 @@
 													{% endif %}
 
 													{% if meeting_point == "At McDonald's" %}
-														<strong>=== The meeting point ===</strong><br>
-														• {{ meeting_point }}<br>
+														<strong>=== The meeting point ===</strong><br><br>
+														• {{ meeting_point }}<br><br>
 														• Please refer to the map below for the meeting point<br><br>
 														• <a href="https://s3.ap-southeast-2.amazonaws.com/easygoshuttle.com.au/easygoshuttle_airport-pickup-point-2.webp">The meeting point</a><br>
 													{% elif meeting_point == "Rideshare" %}
-														<strong>=== The meeting point ===</strong><br>
-														• {{ meeting_point }}<br>
+														<strong>=== The meeting point ===</strong><br><br>
+														• {{ meeting_point }}<br><br>
 														• Please proceed to the P7 parking building first after exiting the arrival halls, and then follow the signs for 'Rideshare pick-up'<br><br>
 														• <a href="https://s3.ap-southeast-2.amazonaws.com/easygoshuttle.com.au/International-Airport-Meeting-Point.webp">The meeting point</a><br>
 													{% else %}
-														<strong>=== The meeting point ===</strong><br>
-														• Public pick-up (2 minutes area)<br>
+														<strong>=== The meeting point ===</strong><br><br>
+														• Public pick-up (2 minutes area)<br><br>
 														• Please proceed to the P7 parking building first after exiting the arrival halls, and then follow the signs for 'Public Pick-up'<br><br>
 														• <a href="https://s3.ap-southeast-2.amazonaws.com/easygoshuttle.com.au/International-Airport-Meeting-Point.webp">International Airport Map</a><br>
 													{% endif %}
