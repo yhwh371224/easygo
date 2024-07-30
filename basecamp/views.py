@@ -75,7 +75,7 @@ def airport_shuttle(request, suburb):
         }
     else:        
         context = {'message': 'Suburb not found'}
-        return render(request, 'error.html', context)
+        return render(request, 'basecamp/error.html', context)
 
     return render(request, 'basecamp/airport-shuttle-template.html', context)    
 
@@ -96,7 +96,7 @@ def airport_transfers(request, suburb):
         }
     else:        
         context = {'message': 'Suburb not found'}
-        return render(request, 'error.html', context)
+        return render(request, 'basecamp/error.html', context)
     
     return render(request, 'basecamp/airport-transfers-template.html', context)
 
