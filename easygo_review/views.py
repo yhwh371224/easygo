@@ -125,15 +125,13 @@ class PostDetail(DetailView):
     template_name = 'easygo_review/post_detail.html'
 
     def get_context_data(self, **kwargs):
-        context = super(PostDetail, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context['post_count'] = Post.objects.all().count()
         context['comment_form'] = CommentForm()
 
-        if self.request.user.is_authenticated:
-            context['email'] = self.request.user.email
-        else:
-            context['email'] = None
-        
+        email = self.request.session.get('email', None)
+        context['email'] = email
+
         return context
         
 
