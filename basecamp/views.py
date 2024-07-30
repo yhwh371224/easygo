@@ -1556,14 +1556,14 @@ def return_trip_detail(request):
 def invoice_detail(request):     
     if request.method == "POST":
         email = request.POST.get('email')
+        surcharge = request.POST.get('surcharge')
         discount = request.POST.get('discount')
         inv_no = request.POST.get('inv_no')  
         toll = request.POST.get('toll')
         
         # users = Post.objects.filter(email=email)[:5]  
         if not inv_no:
-            inv_no = 988390
-        inv_no = int(inv_no)     
+            inv_no = 988390     
         today = date.today()
 
         # for user in users:
@@ -1576,7 +1576,12 @@ def invoice_detail(request):
             float_paid = 0.0    
                 
         with_gst = round(price_as_float * 0.10, 2)
-        surcharge = round(price_as_float * 0.03, 2) 
+        cal_surcharge = round(price_as_float * 0.03, 2)
+
+        if surcharge: 
+            float_surcharge = float(cal_surcharge)
+        else:
+            float_surcharge = 0.0 
         
         if discount: 
             float_discount = float(discount)
@@ -1592,14 +1597,14 @@ def invoice_detail(request):
             float_toll = 0.0  
         
         if user.paid:
-            total_price = (round(price_as_float + with_gst + surcharge + float_toll, 2)) - float_discount
+            total_price = (round(price_as_float + with_gst + float_surcharge + float_toll, 2)) - float_discount
             balance = round(total_price - float_paid, 2) 
         else:
             total_price = (round(price_as_float + with_gst + float_toll, 2)) - float_discount
             balance = round(total_price - float_paid, 2)
 
         if user.cash and user.paid:
-            cash_balance = balance - (with_gst + surcharge)
+            cash_balance = balance - (with_gst + float_surcharge)
             html_content = render_to_string("basecamp/html_email-invoice-cash.html",
                                         {'inv_no': inv_no, 'name': user.name, 'company_name': user.company_name,'contact': user.contact, 'discount': discount,
                                         'email': email, 'direction': user.direction, 'pickup_date': user.pickup_date, 'invoice_date': today,
@@ -1607,7 +1612,7 @@ def invoice_detail(request):
                                         'return_direction': user.return_direction, 'return_pickup_date': user.return_pickup_date,
                                         'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 'return_pickup_time': user.return_pickup_time,
                                         'street': user.street, 'suburb': user.suburb, 'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
-                                        'price': user.price, 'with_gst': with_gst, 'surcharge': surcharge, 'total_price': total_price, 'toll': toll, 
+                                        'price': user.price, 'with_gst': with_gst, 'surcharge': float_surcharge, 'total_price': total_price, 'toll': toll, 
                                         'balance': cash_balance, 'paid': float_paid, 'message': user.message })
             text_content = strip_tags(html_content)
 
@@ -1631,7 +1636,7 @@ def invoice_detail(request):
                                         'return_direction': user1.return_direction, 'return_pickup_date': user1.return_pickup_date,
                                         'return_flight_number': user1.return_flight_number, 'return_flight_time': user1.return_flight_time, 'return_pickup_time': user1.return_pickup_time,
                                         'street': user1.street, 'suburb': user1.suburb, 'no_of_passenger': user1.no_of_passenger, 'no_of_baggage': user1.no_of_baggage,
-                                        'price': user1.price, 'with_gst': with_gst, 'surcharge': surcharge, 'total_price': total_price, 'toll': toll, 
+                                        'price': user1.price, 'with_gst': with_gst, 'surcharge': float_surcharge, 'total_price': total_price, 'toll': toll, 
                                         'balance': balance, 'paid': float_paid, 'message': user1.message })
 
             text_content = strip_tags(html_content)
@@ -1655,7 +1660,7 @@ def invoice_detail(request):
                                         'return_direction': user.return_direction, 'return_pickup_date': user.return_pickup_date,
                                         'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 'return_pickup_time': user.return_pickup_time,
                                         'street': user.street, 'suburb': user.suburb, 'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
-                                        'price': user.price, 'with_gst': with_gst, 'surcharge': surcharge, 'total_price': total_price, 'toll': toll, 
+                                        'price': user.price, 'with_gst': with_gst, 'surcharge': float_surcharge, 'total_price': total_price, 'toll': toll, 
                                         'balance': balance, 'paid': float_paid, 'message': user.message })
 
             text_content = strip_tags(html_content)
