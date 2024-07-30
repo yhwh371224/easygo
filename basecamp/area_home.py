@@ -249,7 +249,7 @@ def get_home_suburbs():
         "Stanhope Garden",
         "Strathfield",
         "Summer Hill",
-        "Sydney (city)", 
+        "Sydney City", 
         "Telopea",
         "Tennyson Point",
         "Terrey Hills",

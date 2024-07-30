@@ -244,7 +244,7 @@ def get_more_suburbs():
         "Stanhope Garden": {'price': 130},
         "Strathfield": {'price': 70},
         "Summer Hill": {'price': 60},
-        "Sydney (city)": {'price': 60}, 
+        "Sydney City": {'price': 60}, 
         "Telopea": {'price': 90},
         "Tennyson Point": {'price': 80},
         "Terrey Hills": {'price': 110},
