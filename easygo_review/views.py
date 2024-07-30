@@ -128,6 +128,12 @@ class PostDetail(DetailView):
         context = super(PostDetail, self).get_context_data(**kwargs)
         context['post_count'] = Post.objects.all().count()
         context['comment_form'] = CommentForm()
+
+        if self.request.user.is_authenticated:
+            context['email'] = self.request.user.email
+        else:
+            context['email'] = None
+        
         return context
         
 
@@ -186,28 +192,27 @@ class CommentDelete(DeleteView):
         return post.get_absolute_url() + '#comment-list'
     
 
-def post_detail(request, pk):
-    easygo_review_post = Post.objects.get(pk=pk)
+# def post_detail(request, pk):
+#     easygo_review_post = Post.objects.get(pk=pk)
 
-    return render(
-        request,
-        'easygo_review/post_detail.html',
-        {
-            'easygo_review_post': easygo_review_post,
-        }
-    )
+#     if request.user.is_authenticated:
+#         email = request.user.email
+#     else:
+#         email = None
+
+#     return render(
+#         request,
+#         'easygo_review/post_detail.html',
+#         {
+#             'easygo_review_post': easygo_review_post,
+#             'email': email,
+#         }
+#     )
 
 
 def index(request):
     posts = Post.objects.all()
-
-    return render(
-        request,
-        'easygo_review/index.html',
-        {
-            'posts': posts,
-        }
-    )
+    return render(request, 'easygo_review/index.html', {'posts': posts})
 
 
 def verify_recaptcha(response, version='v2'):
