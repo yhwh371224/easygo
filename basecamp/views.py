@@ -1563,7 +1563,8 @@ def invoice_detail(request):
         
         # users = Post.objects.filter(email=email)[:5]  
         if not inv_no:
-            inv_no = 988390     
+            inv_no = 988390
+        inv_no = int(inv_no)             
         today = date.today()
 
         # for user in users:
