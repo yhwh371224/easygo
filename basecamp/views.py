@@ -1844,7 +1844,7 @@ def email_dispatch_detail(request):
                 user.save()
 
             if selected_option == "Payment discrepancy" and user: 
-                diff = float(user.price) - float(user.paid)
+                diff = round(float(user.price) - float(user.paid), 2)
                 context.update({'price': user.price, 'paid': user.paid, 'diff': diff})
 
             handle_email_sending(request, email, subject, template_name, context)
