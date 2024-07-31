@@ -57,6 +57,6 @@ class Command(BaseCommand):
                     self.send_email(
                         email_subject,
                         email_template,
-                        {'name': booking.name, 'email': booking.email},
+                        {'name': booking.name, 'email': booking.email, 'price': booking.price},
                         [booking.email, RECIPIENT_EMAIL]
                     )
