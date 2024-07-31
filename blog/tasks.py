@@ -175,8 +175,14 @@ def notify_user_payment_paypal(instance_id):
             Q(email__iexact=instance.email)
         ).first()
 
-        amount = round(float(instance.amount) / 1.03, 2)
-
+        try:
+            amount_value = instance.amount
+            print(f"instance.amount: {amount_value}")
+            amount = round(float(amount_value) / 1.03, 2)
+        except Exception as e:
+            print(f"Error converting amount: {e}")
+            raise  
+        
         if post_name:            
             html_content = render_to_string(
                 "basecamp/html_email-payment-success.html",
