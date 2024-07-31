@@ -175,7 +175,7 @@ def notify_user_payment_paypal(instance_id):
             Q(email__iexact=instance.email)
         ).first()
 
-        amount = round(instance.amount / 1.03, 2)
+        amount = round(float(instance.amount) / 1.03, 2)
 
         if post_name:            
             html_content = render_to_string(
