@@ -1,6 +1,7 @@
 import datetime
 import os
 import re
+import logging
 
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
@@ -16,6 +17,7 @@ from django.core.exceptions import ImproperlyConfigured
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+logger = logging.getLogger('celery')
 
 @shared_task
 def create_event_on_calendar(instance_id):    
@@ -177,12 +179,15 @@ def notify_user_payment_paypal(instance_id):
 
         try:
             amount_value = instance.amount
-            print(f"instance.amount: {amount_value}")
+            logger.debug(f"instance.amount (type: {type(amount_value)}): {amount_value}")
+            if amount_value is None:
+                raise ValueError("amount_value is None")
             amount = round(float(amount_value) / 1.03, 2)
+            logger.debug(f"Calculated amount: {amount}")
         except Exception as e:
-            print(f"Error converting amount: {e}")
-            raise  
-        
+            logger.error(f"Error converting amount: {e}")
+            raise
+
         if post_name:            
             html_content = render_to_string(
                 "basecamp/html_email-payment-success.html",
