@@ -188,6 +188,7 @@ def notify_user_payment_paypal(instance_id):
             post_name.reminder = True
             post_name.discount = ""
             if float(post_name.price) > float(amount):
+                post_name.toll = "short payment"
                 diff = round(float(post_name.price) - float(amount), 2)
                 html_content = render_to_string(
                 "basecamp/html_email-response-discrepancy.html",
@@ -203,6 +204,7 @@ def notify_user_payment_paypal(instance_id):
                     second_post.reminder = True
                     second_post.discount = ""   
                     if float(post_name.price) > float(amount):
+                        post_name.toll = "short payment"
                         diff = round(float(post_name.price) - float(amount), 2)
                         html_content = render_to_string(
                         "basecamp/html_email-response-discrepancy.html",
@@ -240,6 +242,7 @@ def notify_user_payment_stripe(instance_id):
             post_name.reminder = True
             post_name.discount = ""
             if float(post_name.price) > float(instance.amount):
+                post_name.toll = "short payment"
                 diff = round(float(post_name.price) - float(instance.amount), 2)
                 html_content = render_to_string(
                 "basecamp/html_email-response-discrepancy.html",
@@ -254,6 +257,7 @@ def notify_user_payment_stripe(instance_id):
                     second_post.reminder = True
                     second_post.discount = ""
                     if float(post_name.price) > float(instance.amount):
+                        post_name.toll = "short payment"
                         diff = round(float(post_name.price) - float(instance.amount), 2)
                         html_content = render_to_string(
                         "basecamp/html_email-response-discrepancy.html",
