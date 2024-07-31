@@ -60,25 +60,31 @@ LOGGING = {
     'formatters': {
         'verbose': {
             'format': '{levelname} {asctime} {module} {message}',
-            'style': '{',  # Use curly braces for formatting
+            'style': '{',
         },
     },
     'handlers': {
         'file': {
-            'level': 'DEBUG',  # Adjust the logging level as needed (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+            'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs/django.log'),  # Adjust the path and filename
-            'formatter': 'verbose',  # Use the 'verbose' formatter
+            'filename': os.path.join(BASE_DIR, 'logs/django.log'),
+            'formatter': 'verbose',
         },
     },
     'loggers': {
         'django': {
             'handlers': ['file'],
-            'level': 'DEBUG',  # Adjust the logging level as needed
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'celery': {  # Add Celery logger
+            'handlers': ['file'],
+            'level': 'DEBUG',
             'propagate': False,
         },
     },
 }
+
 
 CELERY_BROKER_URL = config('CELERY_BROKER', 'redis://redis:6379')
 CELERY_ACCEPT_CONTENT = ['application/json']
