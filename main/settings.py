@@ -77,7 +77,7 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': False,
         },
-        'celery': {  # Add Celery logger
+        'celery': {  
             'handlers': ['file'],
             'level': 'DEBUG',
             'propagate': False,
