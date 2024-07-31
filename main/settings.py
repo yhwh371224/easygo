@@ -125,6 +125,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'context_processors.recaptcha_site_key',
+                'context_processors.add_custom_context',
             ],
         },
     },
