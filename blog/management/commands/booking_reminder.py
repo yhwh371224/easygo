@@ -83,6 +83,7 @@ class Command(BaseCommand):
                 'street': booking_reminder.street,
                 'suburb': booking_reminder.suburb,
                 'price': booking_reminder.price,
+                'reminder': booking_reminder.reminder,
                 'meeting_point': booking_reminder.meeting_point,
                 'driver_name': driver.driver_name if driver else "",
                 'driver_contact': driver.driver_contact if driver else "",
