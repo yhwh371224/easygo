@@ -1,0 +1,11 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /secure/
+Disallow: /generate_uuid.py
+Disallow: /retrieve.py
+Disallow: /schedule.py
+Disallow: /db.sqlite3
+Disallow: /awskeypair.pem
+Disallow: /manage.py
+Disallow: /private/
+Disallow: /test/
