@@ -6,24 +6,9 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from blog.models import Post
 from main.settings import RECIPIENT_EMAIL
-import logging
+
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-logger = logging.getLogger('blog.no_payment_yet')
-logger.setLevel(logging.INFO)
-
-formatter = logging.Formatter('%(asctime)s:%(message)s')
-
-# Create the logs directory if it doesn't exist
-logs_dir = os.path.join(BASE_DIR, 'logs')
-if not os.path.exists(logs_dir):
-    os.makedirs(logs_dir)
-
-file_handler = logging.FileHandler(os.path.join(logs_dir, 'no_payment_yet.log'))
-file_handler.setFormatter(formatter)
-
-logger.addHandler(file_handler)
 
 class Command(BaseCommand):
     help = 'Send reminders for payment'
@@ -33,12 +18,8 @@ class Command(BaseCommand):
         text_content = strip_tags(html_content)
         email = EmailMultiAlternatives(subject, text_content, '', recipient_list)
         email.attach_alternative(html_content, "text/html")
-        try:
-            email.send(fail_silently=False)
-            logger.info(f"Email sent to {recipient_list}")
-        except Exception as e:
-            logger.error(f"Failed to send email to {recipient_list}: {e}")
-
+        email.send(fail_silently=False)            
+        
     def handle(self, *args, **options):
         dates_to_check = {
             "four_days": date.today() + timedelta(days=4),

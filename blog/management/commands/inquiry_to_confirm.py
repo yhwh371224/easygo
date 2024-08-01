@@ -1,5 +1,4 @@
 import os
-import logging
 import threading
 from django.core.management.base import BaseCommand
 from blog.models import Post, Inquiry, Driver
@@ -7,22 +6,6 @@ from schedule import fetch_scheduled_emails
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-logger = logging.getLogger('blog.inquiry_to_confirm')
-logger.setLevel(logging.INFO)
-
-formatter = logging.Formatter('%(asctime)s:%(message)s')
-
-# Create the logs directory if it doesn't exist
-logs_dir = os.path.join(BASE_DIR, 'logs')
-if not os.path.exists(logs_dir):
-    os.makedirs(logs_dir)
-
-file_handler = logging.FileHandler(os.path.join(logs_dir, 'inquiry_to_confirm.log'))
-file_handler.setFormatter(formatter)
-
-logger.addHandler(file_handler)
-
 
 class Command(BaseCommand):
     help = 'To confirm the inquiries for booking'
@@ -55,4 +38,3 @@ class Command(BaseCommand):
     
                     p.save()
     
-                    logger.info(f'....{user.name}, {user.pickup_date}, {user.pickup_time} | {user.return_pickup_date}, {user.return_flight_number}')
