@@ -46,6 +46,7 @@ django-ratelimit==4.1.0
 django-redis==5.4.0
 django-storages==1.14.2
 django-timezone-field==6.1.0
+django_csp==3.8
 docutils==0.20.1
 frozenlist==1.4.0
 git-filter-repo==2.38.0
@@ -60,6 +61,7 @@ gunicorn==21.2.0
 html5lib==1.1
 httplib2==0.22.0
 idna==3.6
+itsdangerous==2.2.0
 jmespath==1.0.1
 jsonpickle==3.0.4
 jsonpointer==2.4
