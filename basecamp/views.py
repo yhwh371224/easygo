@@ -481,6 +481,7 @@ def inquiry_details1(request):
         direction = request.POST.get('direction')
         suburb = request.POST.get('suburb')        
         no_of_passenger = request.POST.get('no_of_passenger')
+        no_of_baggage = request.POST.get('no_of_baggage')
         
         data = {
             'name': name,            
@@ -489,7 +490,8 @@ def inquiry_details1(request):
             'pickup_time': pickup_time,
             'direction': direction,            
             'suburb': suburb,
-            'no_of_passenger': no_of_passenger,           
+            'no_of_passenger': no_of_passenger,
+            'no_of_baggage': no_of_baggage,           
             }
      
         inquiry_email_exists = Inquiry.objects.filter(email=email).exists()
@@ -507,12 +509,13 @@ def inquiry_details1(request):
             Pickup time: {}
             Direction: {}            
             Suburb: {}
-            Passenger: {}            
+            Passenger: {}   
+            Baggage: {}         
             =============================\n        
             Best Regards,
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['email'],  data['pickup_date'], data['pickup_time'], 
-                        data['direction'], data['suburb'], data['no_of_passenger'])
+                        data['direction'], data['suburb'], data['no_of_passenger'], data['no_of_baggage'])
             
             send_mail(data['pickup_date'], content, '', [RECIPIENT_EMAIL])
 
@@ -528,18 +531,19 @@ def inquiry_details1(request):
             Pickup time: {}
             Direction: {}            
             Suburb: {}
-            Passenger: {}         
+            Passenger: {}        
+            Baggage: {} 
             =============================\n        
             Best Regards,
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['email'],  data['pickup_date'], data['pickup_time'], 
-                        data['direction'], data['suburb'], data['no_of_passenger'])
+                        data['direction'], data['suburb'], data['no_of_passenger'], data['no_of_baggage'])
             
             send_mail(data['pickup_date'], content, '', [RECIPIENT_EMAIL])     
         
         p = Inquiry(name=name, email=email, pickup_date=pickup_date, 
                  pickup_time=pickup_time, direction=direction, suburb=suburb, 
-                 no_of_passenger=no_of_passenger)
+                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage)
         
         p.save() 
 
