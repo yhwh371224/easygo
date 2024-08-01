@@ -10,6 +10,6 @@ Disallow: /manage.py
 Disallow: /private/
 Disallow: /test/
 
-Sitemap: https://www.easygoshuttle.com.au/sitemap.xml
+Sitemap: https://www.easygoshuttle.com.au/sitemap/sitemap.xml
 Sitemap: https://www.easygoshuttle.com.au/sitemap/sitemap_schemalocation.xml
 
