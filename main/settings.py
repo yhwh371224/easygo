@@ -22,6 +22,12 @@ if ENVIRONMENT == 'production':
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
     SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    X_FRAME_OPTIONS = 'DENY'
+    CSP_DEFAULT_SRC = ("'self'",)
+    CSP_STYLE_SRC = ("'self'", 'https://fonts.googleapis.com')
+    CSP_SCRIPT_SRC = ("'self'", 'https://cdnjs.cloudflare.com')
+    SECURE_REFERRER_POLICY = 'no-referrer-when-downgrade'
 
 else:
     DEBUG = True
@@ -50,6 +56,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap4',
     'markdownx',
+    'csp',
     'axes',
     
 ]
