@@ -16,26 +16,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 class Command(BaseCommand):
     help = 'Send booking reminders for upcoming flights'
 
-    def __init__(self):
-        super().__init__()
-        self.logger = self.setup_logger()
-
-    def setup_logger(self):
-        logger = logging.getLogger('blog.booking_reminders')
-        logger.setLevel(logging.INFO)
-
-        formatter = logging.Formatter('%(asctime)s:%(message)s')
-
-        logs_dir = os.path.join(BASE_DIR, 'logs')
-        if not os.path.exists(logs_dir):
-            os.makedirs(logs_dir)
-
-        file_handler = logging.FileHandler(os.path.join(logs_dir, 'booking_reminders.log'))
-        file_handler.setFormatter(formatter)
-
-        logger.addHandler(file_handler)
-        return logger
-
     def handle(self, *args, **options):
         reminder_intervals = [0, 1, 3, 5, 7, 14, -1]
         templates = [
@@ -67,7 +47,6 @@ class Command(BaseCommand):
     def send_email_task(self, booking_reminders, template_name, subject, target_date):
         for booking_reminder in booking_reminders:
             if target_date == date.today() and booking_reminder.discount == "TBA":
-                self.logger.info(f"Skipping email for {booking_reminder.email} due to no payment of TBA")
                 continue
 
             driver = booking_reminder.driver
@@ -97,33 +76,22 @@ class Command(BaseCommand):
             email = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [booking_reminder.email])
             email.attach_alternative(html_content, "text/html")
 
-            try:
-                email.send(fail_silently=False)
-                booking_reminder.save()
-                self.logger.info(f"Email sent to {booking_reminder.email} for {booking_reminder.name}")
-            except Exception as e:
-                self.logger.error(f"Failed to send email to {booking_reminder.email} | {booking_reminder.pickup_date} & {booking_reminder.pickup_time}: {e}")
+            email.send(fail_silently=False)
+            booking_reminder.save()
 
             if not booking_reminder.calendar_event_id:
                 subject = "calendar empty id - from booking_reminder"
                 message = f"{booking_reminder.name} & {booking_reminder.email}"
                 recipient = [settings.RECIPIENT_EMAIL]
 
-                try:
-                    send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, recipient, fail_silently=False)
-                    self.logger.info(f"No calendar event id: {booking_reminder.email} & {booking_reminder.name}")
-                except Exception as e:
-                    self.logger.error(f"Failed to send calendar event id email to {booking_reminder.email} | {booking_reminder.pickup_date} & {booking_reminder.pickup_time}: {e}")
+                send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, recipient, fail_silently=False)
 
-            if booking_reminder.toll =='short payment':
+            if booking_reminder.toll == 'short payment':
                 subject = "short payment - from booking_reminder"
                 message = f"{booking_reminder.name} & {booking_reminder.email}"
                 recipient = [settings.RECIPIENT_EMAIL]
 
-                try:
-                    send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, recipient, fail_silently=False)
-                    self.logger.info(f"short payment: {booking_reminder.email} & {booking_reminder.name}")
-                except Exception as e:
-                    self.logger.error(f"Failed to send calendar event id email to {booking_reminder.email} | {booking_reminder.pickup_date} & {booking_reminder.pickup_time}: {e}")
+                send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, recipient, fail_silently=False)
+
 
 
