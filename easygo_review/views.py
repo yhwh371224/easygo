@@ -103,9 +103,11 @@ class PostCreate(View):
                     form.add_error('rating', 'Rating must be between 1 and 5')
                     return render(request, 'easygo_review/post_form.html', {'form': form, 'form_guide': 'Please post your review'})
                 form.save()
+
+                send_notice_email.delay('review created', 'review created', RECIPIENT_EMAIL)
+
                 return redirect('/easygo_review/')
         return render(request, 'easygo_review/post_form.html', {'form': form, 'form_guide': 'Please post your review'})
-
     
 
 class PostSearch(PostList):
