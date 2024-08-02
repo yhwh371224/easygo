@@ -185,7 +185,8 @@ def new_comment(request, pk):
         if comment_form.is_valid():
             comment = comment_form.save(commit=False)
             comment.post = post
-            comment.author = post.name
+            comment.author = request.user
+            comment.name = post.name
             comment.save()
             return redirect(comment.get_absolute_url())
         
@@ -206,7 +207,7 @@ class CommentUpdate(UpdateView):
 
     def get_object(self, queryset=None):
         comment = super(CommentUpdate, self).get_object()
-        if comment.author != self.request.user:
+        if comment.name != self.request.user:
             raise PermissionDenied('No right to edit')  
         return comment
     
@@ -235,7 +236,7 @@ class CommentUpdate(UpdateView):
 def delete_comment(request, pk):
     comment = Comment.objects.get(pk=pk)
     post = comment.post
-    if request.user == comment.author:
+    if request.user == comment.name:
         comment.delete()
         return redirect(post.get_absolute_url() + '#comment-list')
     else:
@@ -247,7 +248,7 @@ class CommentDelete(DeleteView):
 
     def get_object(self, queryset=None):
         comment = super(CommentDelete, self).get_object()
-        if comment.author != self.request.user:
+        if comment.name != self.request.user:
             raise PermissionDenied('No right to delete Comment')
         return comment
 
