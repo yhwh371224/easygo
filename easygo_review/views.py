@@ -177,105 +177,105 @@ class PostUpdate(UpdateView):
         return context
 
 
-def new_comment(request, pk):
-    post = Post.objects.get(pk=pk)
+# def new_comment(request, pk):
+#     post = Post.objects.get(pk=pk)
 
-    if request.method == 'POST':
-        comment_form = CommentForm(request.POST)
-        if comment_form.is_valid():
-            comment = comment_form.save(commit=False)
-            comment.post = post
-            comment.author = request.user
-            comment.name = post.name
-            comment.save()
-            return redirect(comment.get_absolute_url())
+#     if request.method == 'POST':
+#         comment_form = CommentForm(request.POST)
+#         if comment_form.is_valid():
+#             comment = comment_form.save(commit=False)
+#             comment.post = post
+#             comment.author = request.user
+#             comment.name = post.name
+#             comment.save()
+#             return redirect(comment.get_absolute_url())
         
-    email = request.session.get('email', None)
-    authenticated_post = get_authenticated_post(request)
+#     email = request.session.get('email', None)
+#     authenticated_post = get_authenticated_post(request)
     
-    return render(request, 'easygo_review/post_form.html', {
-        'comment_form': comment_form,
-        'email': email,
-        'authenticated_post': authenticated_post,
-        'user_name': BlogPost.objects.filter(email=email).first().name if email else None
-    })
+#     return render(request, 'easygo_review/post_form.html', {
+#         'comment_form': comment_form,
+#         'email': email,
+#         'authenticated_post': authenticated_post,
+#         'user_name': BlogPost.objects.filter(email=email).first().name if email else None
+#     })
 
 
-class CommentUpdate(UpdateView):
-    model = Comment
-    form_class = CommentForm
+# class CommentUpdate(UpdateView):
+#     model = Comment
+#     form_class = CommentForm
 
-    def get_object(self, queryset=None):
-        comment = super(CommentUpdate, self).get_object()
-        if comment.name != self.request.user:
-            raise PermissionDenied('No right to edit')  
-        return comment
+#     def get_object(self, queryset=None):
+#         comment = super(CommentUpdate, self).get_object()
+#         if comment.name != self.request.user:
+#             raise PermissionDenied('No right to edit')  
+#         return comment
     
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
 
-        email = self.request.session.get('email', None)
-        context['email'] = email
+#         email = self.request.session.get('email', None)
+#         context['email'] = email
 
-        authenticated_post = get_authenticated_post(self.request)
-        context['authenticated_post'] = authenticated_post 
+#         authenticated_post = get_authenticated_post(self.request)
+#         context['authenticated_post'] = authenticated_post 
 
-        if email:
-            blog_post = BlogPost.objects.filter(email=email).first()  
-            if blog_post:
-                user_name = blog_post.name
-                context['user_name'] = user_name
-            else:
-                context['user_name'] = None
-        else:
-            context['user_name'] = None
+#         if email:
+#             blog_post = BlogPost.objects.filter(email=email).first()  
+#             if blog_post:
+#                 user_name = blog_post.name
+#                 context['user_name'] = user_name
+#             else:
+#                 context['user_name'] = None
+#         else:
+#             context['user_name'] = None
 
-        return context
-
-
-def delete_comment(request, pk):
-    comment = Comment.objects.get(pk=pk)
-    post = comment.post
-    if request.user == comment.name:
-        comment.delete()
-        return redirect(post.get_absolute_url() + '#comment-list')
-    else:
-        raise PermissionDenied('No right to delete') 
+#         return context
 
 
-class CommentDelete(DeleteView):
-    model = Comment
+# def delete_comment(request, pk):
+#     comment = Comment.objects.get(pk=pk)
+#     post = comment.post
+#     if request.user == comment.name:
+#         comment.delete()
+#         return redirect(post.get_absolute_url() + '#comment-list')
+#     else:
+#         raise PermissionDenied('No right to delete') 
 
-    def get_object(self, queryset=None):
-        comment = super(CommentDelete, self).get_object()
-        if comment.name != self.request.user:
-            raise PermissionDenied('No right to delete Comment')
-        return comment
 
-    def get_success_url(self):
-        post = self.get_object().post
-        return post.get_absolute_url() + '#comment-list'
+# class CommentDelete(DeleteView):
+#     model = Comment
+
+#     def get_object(self, queryset=None):
+#         comment = super(CommentDelete, self).get_object()
+#         if comment.name != self.request.user:
+#             raise PermissionDenied('No right to delete Comment')
+#         return comment
+
+#     def get_success_url(self):
+#         post = self.get_object().post
+#         return post.get_absolute_url() + '#comment-list'
     
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
 
-        email = self.request.session.get('email', None)
-        context['email'] = email
+#         email = self.request.session.get('email', None)
+#         context['email'] = email
 
-        authenticated_post = get_authenticated_post(self.request)
-        context['authenticated_post'] = authenticated_post 
+#         authenticated_post = get_authenticated_post(self.request)
+#         context['authenticated_post'] = authenticated_post 
 
-        if email:
-            blog_post = BlogPost.objects.filter(email=email).first()  
-            if blog_post:
-                user_name = blog_post.name
-                context['user_name'] = user_name
-            else:
-                context['user_name'] = None
-        else:
-            context['user_name'] = None
+#         if email:
+#             blog_post = BlogPost.objects.filter(email=email).first()  
+#             if blog_post:
+#                 user_name = blog_post.name
+#                 context['user_name'] = user_name
+#             else:
+#                 context['user_name'] = None
+#         else:
+#             context['user_name'] = None
 
-        return context  
+#         return context  
     
 
 def index(request):
