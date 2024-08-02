@@ -185,7 +185,7 @@ def new_comment(request, pk):
         if comment_form.is_valid():
             comment = comment_form.save(commit=False)
             comment.post = post
-            comment.author = request.user
+            comment.author = post.name
             comment.save()
             return redirect(comment.get_absolute_url())
         
