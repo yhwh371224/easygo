@@ -35,7 +35,7 @@
                 </div>
 
                 <div class="card-body">
-                    <p class="card-text">{{ post.get_markdown_content | striptags | truncatewords_html:50 }}</p>
+                    <p class="card-text">{{ post.get_markdown_content | striptags | truncatewords_html:300 }}</p>
 
                     <br/>
 
@@ -46,8 +46,7 @@
                         {% for _ in post.rating|subtract_from_five %}
                         <span class="grey-star">&#9733;</span>
                         {% endfor %}
-                    </p>
-                    <br>
+                    </p>                    
                     <a href="{{ post.get_absolute_url }}" class="btn btn-primary" id="read-more-post-{{ post.pk }}">Read More &rarr;</a>
                 </div>
                 {% if post.author %}

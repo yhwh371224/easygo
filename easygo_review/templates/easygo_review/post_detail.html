@@ -25,10 +25,10 @@
     <!-- Post Content -->
     {{ object.get_markdown_content | safe }}
 
-    <hr>
+    <!-- <hr> -->
 
     <!-- Comments Form -->
-    <div class="card my-4">
+    <!-- <div class="card my-4">
         <h5 class="card-header">Leave a Comment:</h5>
         <div class="card-body">
             {% if email %}
@@ -43,16 +43,16 @@
             </button>
             {% endif %}
         </div>
-    </div>
+    </div> -->
 
-    <div id="comment-list">
+    <!-- <div id="comment-list">
         {% for comment in object.comment_set.all %}
             <div class="media mb-4" id="comment-id-{{ comment.pk }}">
-                <!-- {% if comment.author.socialaccount_set.all.0.get_avatar_url %}
+                {% if comment.author.socialaccount_set.all.0.get_avatar_url %}
                     <img width="50px" class="d-flex mr-3 rounded-circle" src="{{ comment.author.socialaccount_set.all.0.get_avatar_url }}" alt="">
                 {% else %}
                     <img width="50px" class="d-flex mr-3 rounded-circle" src="https://api.adorable.io/avatars/285/{{ comment.author }}.png" alt="">
-                {% endif %} -->
+                {% endif %}
                 <div class="media-body">
                     {% if comment.name == object.name %}
                         <button class="btn btn-sm btn-info float-right" onclick="location.href='/easygo_review/edit_comment/{{ comment.pk }}/'">edit</button>
@@ -63,11 +63,10 @@
                 </div>
             </div>
         {% endfor %}
-    </div>
+    </div> -->
 
-    {% for comment in object.comment_set.all %}
-        {% if user == object.name %}
-            <!-- Modal -->
+    <!-- {% for comment in object.comment_set.all %}
+        {% if user == object.name %}            
             <div class="modal fade" id="deleteCommentModal-{{ comment.pk }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -88,6 +87,6 @@
                 </div>
             </div>
         {% endif %}
-    {% endfor %}
+    {% endfor %} -->
 </div>
 {% endblock %}
