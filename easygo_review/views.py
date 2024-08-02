@@ -95,7 +95,7 @@ class PostCreate(View):
         if form.is_valid():
             email = request.session.get('email')  
             if email:
-                blog_post = BlogPost.objects.get(email=email)
+                blog_post = BlogPost.objects.filter(email=email).first()
                 form.instance.author = blog_post.name  
                 form.instance.name = blog_post.name  
                 rating = form.cleaned_data.get('rating')
