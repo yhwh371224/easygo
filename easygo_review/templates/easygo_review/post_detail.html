@@ -21,72 +21,10 @@
             <button type="button" class="btn btn-primary" style="margin-left: auto;" onclick="location.href='{{ object.get_update_url }}'">EDIT REVIEW</button>
         {% endif %}
     </div>
+    <br>
     <br/>    
     <!-- Post Content -->
     {{ object.get_markdown_content | safe }}
 
-    <!-- <hr> -->
-
-    <!-- Comments Form -->
-    <!-- <div class="card my-4">
-        <h5 class="card-header">Leave a Comment:</h5>
-        <div class="card-body">
-            {% if email %}
-            <form method="post" action="{{ object.get_absolute_url }}new_comment/">{% csrf_token %}
-                <div class="form-group">
-                    {{ comment_form | crispy }}
-                </div>                
-            </form>
-            {% else %}
-            <button type="button" class="btn btn-outline-dark btn-block" data-toggle="modal" data-target="#loginModal">
-                Log in
-            </button>
-            {% endif %}
-        </div>
-    </div> -->
-
-    <!-- <div id="comment-list">
-        {% for comment in object.comment_set.all %}
-            <div class="media mb-4" id="comment-id-{{ comment.pk }}">
-                {% if comment.author.socialaccount_set.all.0.get_avatar_url %}
-                    <img width="50px" class="d-flex mr-3 rounded-circle" src="{{ comment.author.socialaccount_set.all.0.get_avatar_url }}" alt="">
-                {% else %}
-                    <img width="50px" class="d-flex mr-3 rounded-circle" src="https://api.adorable.io/avatars/285/{{ comment.author }}.png" alt="">
-                {% endif %}
-                <div class="media-body">
-                    {% if comment.name == object.name %}
-                        <button class="btn btn-sm btn-info float-right" onclick="location.href='/easygo_review/edit_comment/{{ comment.pk }}/'">edit</button>
-                        <button class="btn btn-sm btn-warning float-right" data-toggle="modal" data-target="#deleteCommentModal-{{ comment.pk }}">delete</button>
-                    {% endif %}
-                    <h5 class="mt-0">{{ object.name }} <small class="text-muted">{{ comment.created_at }}</small></h5>
-                    {{ comment.get_markdown_content | safe }}
-                </div>
-            </div>
-        {% endfor %}
-    </div> -->
-
-    <!-- {% for comment in object.comment_set.all %}
-        {% if user == object.name %}            
-            <div class="modal fade" id="deleteCommentModal-{{ comment.pk }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to delete the comments?</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <p>{{ comment.get_markdown_content | safe  }}</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary" onclick="location.href='/easygo_review/delete_comment/{{ comment.pk }}/'">Delete</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        {% endif %}
-    {% endfor %} -->
 </div>
 {% endblock %}
