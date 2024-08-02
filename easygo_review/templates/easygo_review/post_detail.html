@@ -35,8 +35,7 @@
             <form method="post" action="{{ object.get_absolute_url }}new_comment/">{% csrf_token %}
                 <div class="form-group">
                     {{ comment_form | crispy }}
-                </div>
-                <button class="btn btn-secondary btn-sm float-right" onclick="location.href='/easygo_review/create/'">New Post</button>
+                </div>                
             </form>
             {% else %}
             <button type="button" class="btn btn-outline-dark btn-block" data-toggle="modal" data-target="#loginModal">
