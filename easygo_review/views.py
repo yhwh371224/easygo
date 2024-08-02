@@ -134,6 +134,19 @@ class PostDetail(DetailView):
         email = self.request.session.get('email', None)
         context['email'] = email
 
+        authenticated_post = get_authenticated_post(self.request)
+        context['authenticated_post'] = authenticated_post 
+
+        if email:
+            blog_post = BlogPost.objects.filter(email=email).first()  
+            if blog_post:
+                user_name = blog_post.name
+                context['user_name'] = user_name
+            else:
+                context['user_name'] = None
+        else:
+            context['user_name'] = None
+
         return context
         
 
@@ -141,6 +154,27 @@ class PostUpdate(UpdateView):
     model = Post
     template_name = 'easygo_review/post_form.html'
     fields = ['content', 'rating']
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        email = self.request.session.get('email', None)
+        context['email'] = email
+
+        authenticated_post = get_authenticated_post(self.request)
+        context['authenticated_post'] = authenticated_post 
+
+        if email:
+            blog_post = BlogPost.objects.filter(email=email).first()  
+            if blog_post:
+                user_name = blog_post.name
+                context['user_name'] = user_name
+            else:
+                context['user_name'] = None
+        else:
+            context['user_name'] = None
+
+        return context
 
 
 def new_comment(request, pk):
@@ -154,7 +188,16 @@ def new_comment(request, pk):
             comment.author = request.user
             comment.save()
             return redirect(comment.get_absolute_url())
-    return redirect('/easygo_review/')  
+        
+    email = request.session.get('email', None)
+    authenticated_post = get_authenticated_post(request)
+    
+    return render(request, 'easygo_review/post_form.html', {
+        'comment_form': comment_form,
+        'email': email,
+        'authenticated_post': authenticated_post,
+        'user_name': BlogPost.objects.filter(email=email).first().name if email else None
+    })
 
 
 class CommentUpdate(UpdateView):
@@ -166,6 +209,27 @@ class CommentUpdate(UpdateView):
         if comment.author != self.request.user:
             raise PermissionDenied('No right to edit')  
         return comment
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        email = self.request.session.get('email', None)
+        context['email'] = email
+
+        authenticated_post = get_authenticated_post(self.request)
+        context['authenticated_post'] = authenticated_post 
+
+        if email:
+            blog_post = BlogPost.objects.filter(email=email).first()  
+            if blog_post:
+                user_name = blog_post.name
+                context['user_name'] = user_name
+            else:
+                context['user_name'] = None
+        else:
+            context['user_name'] = None
+
+        return context
 
 
 def delete_comment(request, pk):
@@ -191,24 +255,27 @@ class CommentDelete(DeleteView):
         post = self.get_object().post
         return post.get_absolute_url() + '#comment-list'
     
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
-# def post_detail(request, pk):
-#     easygo_review_post = Post.objects.get(pk=pk)
+        email = self.request.session.get('email', None)
+        context['email'] = email
 
-#     if request.user.is_authenticated:
-#         email = request.user.email
-#     else:
-#         email = None
+        authenticated_post = get_authenticated_post(self.request)
+        context['authenticated_post'] = authenticated_post 
 
-#     return render(
-#         request,
-#         'easygo_review/post_detail.html',
-#         {
-#             'easygo_review_post': easygo_review_post,
-#             'email': email,
-#         }
-#     )
+        if email:
+            blog_post = BlogPost.objects.filter(email=email).first()  
+            if blog_post:
+                user_name = blog_post.name
+                context['user_name'] = user_name
+            else:
+                context['user_name'] = None
+        else:
+            context['user_name'] = None
 
+        return context  
+    
 
 def index(request):
     posts = Post.objects.all()
