@@ -41,7 +41,7 @@ class Command(BaseCommand):
             no_of_passenger,
             no_of_baggage,
             return_direction,
-            return_pickup_date,
+            return_flight_date,
             return_flight_number,
             return_flight_time,
             return_pickup_time,
@@ -50,24 +50,27 @@ class Command(BaseCommand):
             price,
             paid,
             discount,
-            toll,
-            driver,
             meeting_point,
             is_confirmed,
-            cash,
-            cruise,
             cancelled,
             private_ride,
             reminder,
+            calendar_event_id,
+            created,
+            driver_id,
             sent_email,
-            calendar_event_id
+            cruise
         ) VALUES (
             %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
         )'''
 
         for row in rows:
-            if len(row) == 37:  
-                mysql_cursor.execute(insert_query, row[1:])
+            if len(row) == 37:
+                try:
+                    mysql_cursor.execute(insert_query, row[1:])  # Adjusted to exclude 'id'
+                except mysql.connector.Error as err:
+                    self.stdout.write(self.style.ERROR(f'Error inserting row: {err}'))
+                    self.stdout.write(self.style.ERROR(f'Row data: {row}'))
             else:
                 self.stdout.write(self.style.ERROR(f'Row length mismatch: {len(row)}'))
 
@@ -77,3 +80,4 @@ class Command(BaseCommand):
         mysql_conn.close()
 
         self.stdout.write(self.style.SUCCESS('Data migration from SQLite to MySQL completed successfully.'))
+
