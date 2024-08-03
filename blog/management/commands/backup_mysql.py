@@ -1,14 +1,16 @@
-from django.core.management.base import BaseCommand
 import sqlite3
 import mysql.connector
+from django.core.management.base import BaseCommand
 
 class Command(BaseCommand):
     help = 'Backup data from SQLite to MySQL'
 
     def handle(self, *args, **options):
+        # SQLite 데이터베이스 연결
         sqlite_conn = sqlite3.connect('/home/ubuntu/github/easygo/db.sqlite3')
         sqlite_cursor = sqlite_conn.cursor()
 
+        # MySQL 데이터베이스 연결
         mysql_conn = mysql.connector.connect(
             host='localhost',
             user='mysql-easygo',
@@ -17,9 +19,11 @@ class Command(BaseCommand):
         )
         mysql_cursor = mysql_conn.cursor()
 
+        # SQLite에서 blog_post 테이블 데이터 읽기
         sqlite_cursor.execute('SELECT * FROM blog_post')
         rows = sqlite_cursor.fetchall()
 
+        # MySQL에 데이터 삽입 쿼리
         insert_query = '''
         INSERT INTO blog_post (
             name,
@@ -61,11 +65,17 @@ class Command(BaseCommand):
             %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
         )'''
 
+        # 데이터 삽입
         for row in rows:
-            mysql_cursor.execute(insert_query, row[1:])  
+            # SQLite에서 id 컬럼을 제외한 나머지 데이터를 삽입
+            if len(row) == 33:  # 총 컬럼 수 확인
+                mysql_cursor.execute(insert_query, row[1:])
+            else:
+                self.stdout.write(self.style.ERROR(f'Row length mismatch: {len(row)}'))
 
         mysql_conn.commit()
 
+        # 연결 종료
         sqlite_conn.close()
         mysql_conn.close()
 
