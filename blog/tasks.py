@@ -95,11 +95,11 @@ def create_event_on_calendar(instance_id):
     else:
         if instance.calendar_event_id:
             pass
-            # event = service.events().update(calendarId='primary', eventId=instance.calendar_event_id, body=event).execute()
+            event = service.events().update(calendarId='primary', eventId=instance.calendar_event_id, body=event).execute()
         else:
             event = service.events().insert(calendarId='primary', body=event).execute()
             instance.calendar_event_id = event['id']
-            # instance.save()
+            instance.save()
 
 
 # Clicked confirm_booking form 
@@ -117,7 +117,7 @@ def send_confirm_email(name, email, pickup_date, return_flight_number):
     Return flight number: {return_flight_number}
     ===============================          
     '''
-    # send_mail(pickup_date, content, DEFAULT_FROM_EMAIL, [RECIPIENT_EMAIL])
+    send_mail(pickup_date, content, DEFAULT_FROM_EMAIL, [RECIPIENT_EMAIL])
 
 
 # Home page for price 
@@ -132,7 +132,7 @@ def send_email_task(pickup_date, direction, suburb, no_of_passenger):
     No of Pax: {no_of_passenger}
     ===============================        
     '''
-    # send_mail(pickup_date, content, DEFAULT_FROM_EMAIL, [RECIPIENT_EMAIL])
+    send_mail(pickup_date, content, DEFAULT_FROM_EMAIL, [RECIPIENT_EMAIL])
 
 
 # Review page, service, information, terms, policy
@@ -144,13 +144,13 @@ def send_notice_email(subject, message, RECIPIENT_EMAIL):
     if not DEFAULT_FROM_EMAIL:
         raise ImproperlyConfigured("DEFAULT_FROM_EMAIL is not set in environment variables")
     
-    # send_mail(
-    #     subject,
-    #     message,
-    #     DEFAULT_FROM_EMAIL,
-    #     [RECIPIENT_EMAIL],
-    #     fail_silently=False,
-    # )
+    send_mail(
+        subject,
+        message,
+        DEFAULT_FROM_EMAIL,
+        [RECIPIENT_EMAIL],
+        fail_silently=False,
+    )
     
 
 def payment_send_email(subject, html_content, recipient_list):
@@ -162,7 +162,7 @@ def payment_send_email(subject, html_content, recipient_list):
         recipient_list
     )
     email.attach_alternative(html_content, "text/html")
-    # email.send()
+    email.send()
 
 
 # PayPal payment record and email 
@@ -183,7 +183,7 @@ def notify_user_payment_paypal(instance_id):
                 "basecamp/html_email-payment-success.html",
                 {'name': post_name.name, 'email': post_name.email, 'amount': amount}
             )
-            # payment_send_email("Payment - EasyGo", html_content, [post_name.email, RECIPIENT_EMAIL])
+            payment_send_email("Payment - EasyGo", html_content, [post_name.email, RECIPIENT_EMAIL])
             
             post_name.paid = amount           
             post_name.reminder = True
@@ -195,7 +195,7 @@ def notify_user_payment_paypal(instance_id):
                 "basecamp/html_email-response-discrepancy.html",
                 {'name': post_name.name, 'price': post_name.price, 'paid': amount, 'diff': diff}
                 )
-                # payment_send_email("Payment - EasyGo", html_content, [post_name.email, RECIPIENT_EMAIL])
+                payment_send_email("Payment - EasyGo", html_content, [post_name.email, RECIPIENT_EMAIL])
                              
             post_name.save()
 
@@ -211,7 +211,7 @@ def notify_user_payment_paypal(instance_id):
                         "basecamp/html_email-response-discrepancy.html",
                         {'name': post_name.name, 'price': post_name.price, 'paid': amount, 'diff': diff}
                         )
-                        # payment_send_email("Payment - EasyGo", html_content, [post_name.email, RECIPIENT_EMAIL])                   
+                        payment_send_email("Payment - EasyGo", html_content, [post_name.email, RECIPIENT_EMAIL])                   
                     second_post.save() 
 
         else:
@@ -219,7 +219,7 @@ def notify_user_payment_paypal(instance_id):
                 "basecamp/html_email-noIdentity.html",
                 {'name': instance.name, 'email': instance.email, 'amount': amount}
             )
-            # payment_send_email("Payment - EasyGo", html_content, [instance.email, RECIPIENT_EMAIL])
+            payment_send_email("Payment - EasyGo", html_content, [instance.email, RECIPIENT_EMAIL])
 
 
 # Stripe > sending email & save
@@ -237,7 +237,7 @@ def notify_user_payment_stripe(instance_id):
                 "basecamp/html_email-payment-success-stripe.html",
                 {'name': post_name.name, 'email': post_name.email, 'amount': instance.amount}
             )
-            # payment_send_email("Payment - EasyGo", html_content, [post_name.email, RECIPIENT_EMAIL])            
+            payment_send_email("Payment - EasyGo", html_content, [post_name.email, RECIPIENT_EMAIL])            
             
             post_name.paid = instance.amount          
             post_name.reminder = True
@@ -249,7 +249,7 @@ def notify_user_payment_stripe(instance_id):
                 "basecamp/html_email-response-discrepancy.html",
                 {'name': post_name.name, 'price': post_name.price, 'paid': instance.amount, 'diff': diff}
                 )
-                # payment_send_email("Payment - EasyGo", html_content, [post_name.email, RECIPIENT_EMAIL])             
+                payment_send_email("Payment - EasyGo", html_content, [post_name.email, RECIPIENT_EMAIL])             
             post_name.save()
 
             if post_name.return_pickup_time == 'x':                   
@@ -272,6 +272,6 @@ def notify_user_payment_stripe(instance_id):
                 "basecamp/html_email-noIdentity-stripe.html",
                 {'name': instance.name, 'email': instance.email, 'amount': instance.amount}
             )
-            # payment_send_email("Payment - EasyGo", html_content, [instance.email, RECIPIENT_EMAIL])
+            payment_send_email("Payment - EasyGo", html_content, [instance.email, RECIPIENT_EMAIL])
 
 
