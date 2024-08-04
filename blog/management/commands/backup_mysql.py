@@ -27,6 +27,9 @@ class Command(BaseCommand):
         except mysql.connector.Error as err:
             self.stdout.write(self.style.ERROR(f'MySQL connection error: {err}'))
             return
+        
+        # Disable foreign key checks
+        mysql_cursor.execute("SET foreign_key_checks = 0")
 
         sqlite_cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
         tables = sqlite_cursor.fetchall()
@@ -35,7 +38,9 @@ class Command(BaseCommand):
         table_order = [
             'django_content_type',
             'auth_user',             
-            'auth_group',            
+            'auth_group',   
+            'auth_permission',  
+            'django_admin_log',        
             'django_session',        
             'django_site',           
             'socialaccount_socialapp',
@@ -85,6 +90,10 @@ class Command(BaseCommand):
                 continue
 
         mysql_conn.commit()
+
+        # Enable foreign key checks
+        mysql_cursor.execute("SET foreign_key_checks = 1")
+
         sqlite_conn.close()
         mysql_cursor.close()
         mysql_conn.close()
