@@ -8,7 +8,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         # SQLite3 연결 설정
-        sqlite_conn = sqlite3.connect('/path/to/your/sqlite3/db.sqlite3')
+        sqlite_conn = sqlite3.connect('/home/ubuntu/github/easygo/db.sqlite3')
         sqlite_cursor = sqlite_conn.cursor()
 
         # MySQL 연결 설정
