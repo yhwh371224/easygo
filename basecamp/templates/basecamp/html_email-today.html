@@ -233,7 +233,7 @@
 											<td align="left" style="padding-top:28px;padding-left:0;">																								
 											{% if direction == 'Pickup from Intl Airport' %}												
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">													
-													Please ensure that your mobile phone remains switched on. Your driver will contact you via call or message with his details. 
+													Please ensure that your mobile phone remains switched on.  
 													Once you have collected all your luggage, please contact the driver to inform them. 
 													This will help us estimate your arrival time at the meeting point, ensuring a smooth transition.<br><br>
 
@@ -244,13 +244,13 @@
 													</p>
 													
 												<p style="border: 1px solid #af865f; padding: 10px; margin-bottom: 20px; color: #af865f;">
-													{% if driver_name != "Sam" %}
+													
 													<strong>=== Driver's details ===</strong><br>
 													• Name: {{ driver_name }}<br>
 													• Phone: {{ driver_contact }}<br>
 													• Vehicle: {{ driver_car }}<br>
 													• Vehicle plate: {{ driver_plate }}<br><br>	
-													{% endif %}
+													
 
 													{% if meeting_point == "At McDonald's" %}
 														<strong>=== The meeting point ===</strong><br><br>
@@ -275,8 +275,9 @@
 
 											{% elif direction == 'Pickup from Domestic Airport' %}
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
-													Please ensure that your mobile phone remains switched on. Your driver will contact you via call or message with his details.<br><br>
-													For any further assistance or inquiries, you can also reach us via email at info@easygoshuttle.com.au<br><br>
+													Please ensure that your mobile phone remains switched on.  
+													Once you have collected all your luggage, please contact the driver to inform them. 
+													This will help us estimate your arrival time at the meeting point, ensuring a smooth transition.<br><br>
 
 													{% if cash %}
 														We kindly ask that you <span style="color: #eb7828">email us immediately</span> upon your arrival in Sydney</span><br><br>													
@@ -285,13 +286,13 @@
 													</p>
 
 												<p style="border: 1px solid #af865f; padding: 10px; margin-bottom: 20px; color: #af865f;">
-													{% if driver_name != "Sam" %}
+													
 													<strong>=== Driver's details ===</strong><br>
 													• Name: {{ driver_name }}<br>
 													• Phone: {{ driver_contact }}<br>
 													• Vehicle: {{ driver_car }}<br>
 													• Vehicle plate: {{ driver_plate }}<br><br>	
-													{% endif %}
+													
 
 													{% if meeting_point %}
 														<strong>=== The meeting point ===</strong><br>
