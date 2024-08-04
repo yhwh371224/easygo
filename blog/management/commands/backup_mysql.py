@@ -32,15 +32,12 @@ class Command(BaseCommand):
         tables = sqlite_cursor.fetchall()
         table_names = [t[0] for t in tables]
 
-        # 테이블 순서 설정 (부모 테이블 먼저 삽입)
         table_order = [
-            'django_content_type',   # 부모 테이블
-            'auth_user',             # 부모 테이블
-            'auth_group',            # 부모 테이블
-            'auth_permission',       # 자식 테이블
-            'django_admin_log',      # 자식 테이블
-            'django_session',        # 세션 테이블
-            'django_site',           # 사이트 테이블
+            'django_content_type',
+            'auth_user',             
+            'auth_group',            
+            'django_session',        
+            'django_site',           
             'socialaccount_socialapp',
             'socialaccount_socialtoken',
             'socialaccount_socialaccount',
@@ -48,8 +45,7 @@ class Command(BaseCommand):
             'admin_honeypot_loginattempt',
             'otp_hotp_hotpdevice',
             'otp_static_statictoken',
-            'otp_static_staticdevice',
-            'otp_totp_totpdevice',
+            'otp_static_staticdevice',            
             'account_emailaddress',
             'axes_accessattempt',
             'axes_accesslog',
