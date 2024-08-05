@@ -3,6 +3,7 @@ from twilio.rest import Client
 from datetime import date, timedelta
 from django.core.management.base import BaseCommand
 from blog.models import Post
+from decouple import config
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -14,8 +15,8 @@ class Command(BaseCommand):
         final_notices = Post.objects.filter(pickup_date=tomorrow)
         
         # Initialize Twilio client once
-        account_sid = 'AC9ad86a3cd3fc22fa11c35d8d17bde7a0'
-        auth_token = '632142d0e5afac3e05359e87abe61d2a'
+        account_sid = config('TWILIO_ACCOUNT_SID')
+        auth_token = config('TWILIO_AUTH_TOKEN')
         client = Client(account_sid, auth_token)
 
         def sms_one(sendto):
@@ -24,7 +25,7 @@ class Command(BaseCommand):
                       \n\nWe haven't received your payment and a response to our emails. \
                       \nPlease contact us ASAP or your booking may be canceled. \
                       \nReply only via email >> info@easygoshuttle.com.au",
-                from_='+61488885330',
+                from_='+18148920523',
                 to=sendto
             )
 
