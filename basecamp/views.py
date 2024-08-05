@@ -355,7 +355,7 @@ def is_ajax(request):
 def inquiry1(request):
     token = request.GET.get('token')
     if token != request.session.get('inquiry_token'):
-        return render(request, 'basecamp/home.html')
+        return render(request, 'basecamp/inquiry.html')
     
     request.session.pop('inquiry_token', None)
 
