@@ -15,6 +15,7 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from uuid import uuid4
 
 from main.settings import RECIPIENT_EMAIL
 from blog.models import Post, Inquiry, PaypalPayment, StripePayment, Driver
@@ -352,13 +353,16 @@ def is_ajax(request):
 
 # Inquiry1 
 def inquiry1(request):
-    pickup_date = request.GET.get('pickup_date', None)
-    direction = request.GET.get('direction', None)
-    suburb = request.GET.get('suburb', None)
-    no_of_passenger = request.GET.get('no_of_passenger', None)
+    token = request.GET.get('token')
+    if token != request.session.get('inquiry_token'):
+        return redirect('home')  
 
-    if not all([pickup_date, direction, suburb, no_of_passenger]):
-        return redirect('inquiry')  
+    request.session.pop('inquiry_token', None)
+
+    pickup_date = request.GET.get('pickup_date', '')
+    direction = request.GET.get('direction', '')
+    suburb = request.GET.get('suburb', '')
+    no_of_passenger = request.GET.get('no_of_passenger', '')
 
     context = {
         'pickup_date': pickup_date,
@@ -761,6 +765,10 @@ def price_detail(request):
         if not pickup_date or pickup_date <= str(today):
             return render(request, 'basecamp/505.html')
         
+        token = str(uuid4())
+        request.session['inquiry_token'] = token       
+
+        send_email_task.delay(pickup_date, direction, suburb, no_of_passenger)
         
         #sub = int(suburbs.get(suburb))
         #no_p = int(no_of_passenger)
@@ -789,23 +797,18 @@ def price_detail(request):
         #price_cal3()
         #price = str(price_cal3())
         
-        data = {
+        context = {
             'pickup_date': pickup_date,
             'direction': direction,
             'suburb': suburb,
             'no_of_passenger': no_of_passenger,
+            'token': token,  
+        }
 
-        }        
-                
-        send_email_task.delay(data['pickup_date'], data['direction'], data['suburb'], data['no_of_passenger'])
-
-        return render(request, 'basecamp/inquiry1.html',
-                      {'pickup_date': pickup_date, 'direction': direction, 
-                       'no_of_passenger': no_of_passenger, 'suburb': suburb},
-                      )
+        return render(request, 'basecamp/inquiry1.html', context)
 
     else:
-        return render(request, 'basecamp/inquiry1.html', {})
+        return redirect('home')
 
 
 # Booking by myself 
