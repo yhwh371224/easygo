@@ -355,8 +355,8 @@ def is_ajax(request):
 def inquiry1(request):
     token = request.GET.get('token')
     if token != request.session.get('inquiry_token'):
-        return redirect('home')  
-
+        return render(request, 'basecamp/home.html')
+    
     request.session.pop('inquiry_token', None)
 
     pickup_date = request.GET.get('pickup_date', '')
