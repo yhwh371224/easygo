@@ -163,8 +163,8 @@ def inquiry(request):
     return render(request, 'basecamp/inquiry.html', context)
 
 
-# def inquiry1(request): 
-#     return render(request, 'basecamp/inquiry1.html')
+def inquiry1(request): 
+    return render(request, 'basecamp/inquiry.html')
 
 
 def inquiry2(request): 
@@ -349,29 +349,6 @@ def verify_recaptcha(response, version='v2'):
 
 def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
-
-
-# Inquiry1 
-def inquiry1(request):
-    token = request.GET.get('token')
-    if token != request.session.get('inquiry_token'):
-        return render(request, 'basecamp/inquiry.html')
-    
-    request.session.pop('inquiry_token', None)
-
-    pickup_date = request.GET.get('pickup_date', '')
-    direction = request.GET.get('direction', '')
-    suburb = request.GET.get('suburb', '')
-    no_of_passenger = request.GET.get('no_of_passenger', '')
-
-    context = {
-        'pickup_date': pickup_date,
-        'direction': direction,
-        'suburb': suburb,
-        'no_of_passenger': no_of_passenger
-    }
-
-    return render(request, 'basecamp/inquiry1.html', context)
 
 
 # Inquiry for airport 
