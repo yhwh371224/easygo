@@ -885,7 +885,6 @@ def confirmation_detail(request):
         )
         email.attach_alternative(html_content, "text/html")
         email.send()
-
         
         return rendering
 
