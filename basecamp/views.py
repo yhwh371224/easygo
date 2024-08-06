@@ -15,7 +15,6 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
-from uuid import uuid4
 
 from main.settings import RECIPIENT_EMAIL
 from blog.models import Post, Inquiry, PaypalPayment, StripePayment, Driver
@@ -740,10 +739,7 @@ def price_detail(request):
         
         today = date.today()        
         if not pickup_date or pickup_date <= str(today):
-            return render(request, 'basecamp/505.html')
-        
-        token = str(uuid4())
-        request.session['inquiry_token'] = token       
+            return render(request, 'basecamp/505.html')    
 
         send_email_task.delay(pickup_date, direction, suburb, no_of_passenger)
         
@@ -778,8 +774,7 @@ def price_detail(request):
             'pickup_date': pickup_date,
             'direction': direction,
             'suburb': suburb,
-            'no_of_passenger': no_of_passenger,
-            'token': token,  
+            'no_of_passenger': no_of_passenger,  
         }
 
         return render(request, 'basecamp/inquiry1.html', context)
