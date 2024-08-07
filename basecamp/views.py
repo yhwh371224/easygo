@@ -780,7 +780,7 @@ def price_detail(request):
         return render(request, 'basecamp/inquiry1.html', context)
 
     else:
-        return redirect('home')
+        return render(request, 'basecamp/home.html')
 
 
 # Booking by myself 
@@ -1484,7 +1484,7 @@ def save_data_only_detail(request):
         return render(request, 'basecamp/inquiry_done.html')
     
     else:
-        return render(request, 'beasecamp/save_data_only.html', {})  
+        return render(request, 'basecamp/save_data_only.html', {})  
 
 
 # For Return Trip 
