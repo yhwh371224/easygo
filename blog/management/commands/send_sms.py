@@ -51,7 +51,7 @@ class Command(BaseCommand):
             except Exception as e:
                 sms_logger.error(f'Failed to send WhatsApp message to {formatted_number}: {e}')            
 
-        def send_sms_message(sendto, message_body):
+        def send_sms_message(sendto):
             formatted_number = format_phone_number(sendto)
             try:
                 message = client.messages.create(
