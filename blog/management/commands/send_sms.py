@@ -36,7 +36,7 @@ class Command(BaseCommand):
                       \n\nWe haven't received your payment and a response to our emails. \
                       \nPlease contact us ASAP or your booking may be canceled. \
                       \nReply only via email >> info@easygoshuttle.com.au",
-                from_='whatsapp:+18148920523',  # Your Twilio WhatsApp-enabled number
+                from_='whatsapp:+14155238886',  # Your Twilio WhatsApp-enabled number
                 to=f'whatsapp:{formatted_number}'
             )
             return message.sid
