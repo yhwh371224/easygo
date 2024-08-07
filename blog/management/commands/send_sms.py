@@ -19,14 +19,20 @@ class Command(BaseCommand):
         auth_token = config('TWILIO_AUTH_TOKEN')
         client = Client(account_sid, auth_token)
 
+        def format_phone_number(phone_number):
+            if not phone_number.startswith('+'):
+                phone_number = '+61' + phone_number.lstrip('0')
+            return phone_number
+
         def sms_one(sendto):
+            formatted_number = format_phone_number(sendto)
             client.messages.create(
                 body="EasyGo - Urgent notice \
                       \n\nWe haven't received your payment and a response to our emails. \
                       \nPlease contact us ASAP or your booking may be canceled. \
                       \nReply only via email >> info@easygoshuttle.com.au",
                 from_='+18148920523',
-                to=sendto
+                to=formatted_number
             )
 
         for final_notice in final_notices:
