@@ -64,13 +64,9 @@ class Command(BaseCommand):
                 if final_notice.contact:
                     sent_numbers.append((final_notice.contact, message_sid))
 
-        # Send to office numbers
+        # Prepare log message to be sent to office numbers
+        log_message = "\n".join([f'Message sent to {number}' for number in sent_numbers])
         for office_number in office_numbers:
-            message_sid = send_sms_message(office_number)
-            sent_numbers.append((office_number, message_sid))
-
-        # Log the sent numbers
-        for number, sid in sent_numbers:
-            self.stdout.write(self.style.SUCCESS(f'Message sent to {number}, Message SID: {sid}'))
+            send_sms_message(office_number, log_message)
 
         self.stdout.write(self.style.SUCCESS('Successfully sent final notices'))
