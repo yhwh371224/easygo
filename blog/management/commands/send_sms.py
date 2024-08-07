@@ -5,7 +5,6 @@ from django.core.management.base import BaseCommand
 from blog.models import Post
 from decouple import config
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 class Command(BaseCommand):
     help = 'Send final notices via WhatsApp or SMS'
@@ -39,30 +38,31 @@ class Command(BaseCommand):
                 from_='whatsapp:+14155238886',  # Your Twilio WhatsApp-enabled number
                 to=f'whatsapp:{formatted_number}'
             )
-            return message.sid
+            
 
-        def send_sms_message(sendto):
+        def send_sms_message(sendto, message_body):
             formatted_number = format_phone_number(sendto)
             message = client.messages.create(
-                body="EasyGo - Urgent notice \
-                      \n\nWe haven't received your payment and a response to our emails. \
-                      \nPlease contact us ASAP to ensure your booking remains confirmed \
-                      \nReply only via email >> info@easygoshuttle.com.au",
+                body=message_body,
                 from_='+18148920523',  # Your Twilio SMS number
                 to=formatted_number
             )
-            return message.sid
+            
 
         sent_numbers = []  
         for final_notice in final_notices:
             if not final_notice.reminder and not final_notice.cancelled and not final_notice.paid:
                 if final_notice.direction == 'Pickup from Intl Airport':
-                    message_sid = send_whatsapp_message(final_notice.contact)
+                    send_whatsapp_message(final_notice.contact)
                 else:
-                    message_sid = send_sms_message(final_notice.contact)
+                    message_body = "EasyGo - Urgent notice \
+                                    \n\nWe haven't received your payment and a response to our emails. \
+                                    \nPlease contact us ASAP to ensure your booking remains confirmed \
+                                    \nReply only via email >> info@easygoshuttle.com.au"
+                    send_sms_message(final_notice.contact, message_body)
                 
                 if final_notice.contact:
-                    sent_numbers.append((final_notice.contact, message_sid))
+                    sent_numbers.append(final_notice.contact)  # Just store the phone numbers
 
         # Prepare log message to be sent to office numbers
         log_message = "\n".join([f'Message sent to {number}' for number in sent_numbers])
