@@ -30,17 +30,17 @@ class Command(BaseCommand):
                 phone_number = '+61' + phone_number.lstrip('0')
             return phone_number
 
-        def send_whatsapp_message(sendto):
-            formatted_number = format_phone_number(sendto)
-            message = client.messages.create(
-                body="EasyGo - Urgent notice \
-                      \n\nWe haven't received your payment and a response to our emails. \
-                      \nPlease contact us ASAP or your booking may be canceled. \
-                      \nReply only via email >> info@easygoshuttle.com.au",
-                from_='whatsapp:+14155238886',  # Your Twilio WhatsApp-enabled number
-                to=f'whatsapp:{formatted_number}'
-            )
-            return message.sid
+        # def send_whatsapp_message(sendto):
+        #     formatted_number = format_phone_number(sendto)
+        #     message = client.messages.create(
+        #         body="EasyGo - Urgent notice \
+        #               \n\nWe haven't received your payment and a response to our emails. \
+        #               \nPlease contact us ASAP or your booking may be canceled. \
+        #               \nReply only via email >> info@easygoshuttle.com.au",
+        #         from_='whatsapp:+14155238886',  # Your Twilio WhatsApp-enabled number
+        #         to=f'whatsapp:{formatted_number}'
+        #     )
+        #     return message.sid
 
         def send_sms_message(sendto):
             formatted_number = format_phone_number(sendto)
@@ -57,10 +57,10 @@ class Command(BaseCommand):
         sent_numbers = []  # List to keep track of sent numbers
         for final_notice in final_notices:
             if not final_notice.reminder and not final_notice.cancelled and not final_notice.paid:
-                if final_notice.direction == 'Pickup from Intl Airport':
-                    message_sid = send_whatsapp_message(final_notice.contact)
-                else:
-                    message_sid = send_sms_message(final_notice.contact)
+                # if final_notice.direction == 'Pickup from Intl Airport':
+                #     message_sid = send_whatsapp_message(final_notice.contact)
+                # else:
+                message_sid = send_sms_message(final_notice.contact)
                 
                 if final_notice.contact:
                     sent_numbers.append((final_notice.contact, message_sid))
