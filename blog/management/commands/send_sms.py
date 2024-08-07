@@ -33,7 +33,7 @@ class Command(BaseCommand):
             message = client.messages.create(
                 body="EasyGo - Urgent notice \
                       \n\nWe haven't received your payment and a response to our emails. \
-                      \nPlease contact us ASAP or your booking may be canceled. \
+                      \nPlease email us ASAP to ensure your booking remains confirmed \
                       \nReply only via email >> info@easygoshuttle.com.au",
                 from_='whatsapp:+14155238886',  # Your Twilio WhatsApp-enabled number
                 to=f'whatsapp:{formatted_number}'
@@ -57,7 +57,7 @@ class Command(BaseCommand):
                 else:
                     message_body = "EasyGo - Urgent notice \
                                     \n\nWe haven't received your payment and a response to our emails. \
-                                    \nPlease contact us ASAP to ensure your booking remains confirmed \
+                                    \nPlease email us ASAP to ensure your booking remains confirmed \
                                     \nReply only via email >> info@easygoshuttle.com.au"
                     send_sms_message(final_notice.contact, message_body)
                 
@@ -65,8 +65,8 @@ class Command(BaseCommand):
                     sent_numbers.append(final_notice.contact)  # Just store the phone numbers
 
         # Prepare log message to be sent to office numbers
-        log_message = "\n".join([f'Message sent to {number}' for number in sent_numbers])
+        log_message = "\n".join([f'Twilio message sent to {number}' for number in sent_numbers])
         for office_number in office_numbers:
             send_sms_message(office_number, log_message)
 
-        self.stdout.write(self.style.SUCCESS('Successfully sent final notices'))
+        self.stdout.write(self.style.SUCCESS('Successfully sent final notices via twilio'))
