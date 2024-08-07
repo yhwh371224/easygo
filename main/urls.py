@@ -17,7 +17,6 @@ urlpatterns = [
     path('easygo_review/', include('easygo_review.urls')),
     path('', include('basecamp.urls')),
     path('accounts/', include('allauth.urls')),
-    # path('static/<path:path>', serve, {'document_root': settings.STATIC_ROOT}),
     path('paypal/', include('paypal.standard.ipn.urls')),
     path('stripe_webhook/', stripe_webhook, name='stripe_webhook'),
 ]
