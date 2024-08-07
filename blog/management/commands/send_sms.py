@@ -7,11 +7,12 @@ from django.core.management.base import BaseCommand
 from blog.models import Post
 from decouple import config
 
+
 # Configure logging for this script
 LOGGING_DIR = os.path.join(os.path.dirname(__file__), 'logs')
 
 logging.basicConfig(
-    level=logging.DEBUG,
+    level=logging.INFO,
     format='%(levelname)s %(asctime)s %(module)s %(message)s',
     handlers=[logging.FileHandler(os.path.join(LOGGING_DIR, 'sms.log'))]
 )
@@ -67,20 +68,14 @@ class Command(BaseCommand):
                 )
                 sms_logger.info(f'SMS message sent to {formatted_number}')
             except Exception as e:
-                sms_logger.error(f'Failed to send SMS message to {formatted_number}: {e}')
-            
+                sms_logger.error(f'Failed to send SMS message to {formatted_number}: {e}')            
 
-        sent_numbers = []  
         for final_notice in final_notices:
-            if not final_notice.reminder and not final_notice.cancelled and not final_notice.paid:                
-                send_sms_message(final_notice.contact) 
-                send_whatsapp_message(final_notice.contact)
+            if not final_notice.reminder and not final_notice.cancelled and not final_notice.paid:
+                if final_notice.direction == 'Pickup from Intl Airport':                
+                    send_sms_message(final_notice.contact) 
+                    send_whatsapp_message(final_notice.contact)
+                else:
+                    send_sms_message(final_notice.contact)                
                 
-                if final_notice.contact:
-                    sent_numbers.append(final_notice.contact)  
-
-        # Prepare log message to be sent to office numbers
-        log_message = "\n".join([f'Twilio sent message to {number}' for number in sent_numbers])
-        sms_logger.info(log_message)
-
         self.stdout.write(self.style.SUCCESS('Twilio sent final notice successfully'))
