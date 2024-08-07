@@ -18,6 +18,9 @@ logging.basicConfig(
 
 sms_logger = logging.getLogger()
 
+twilio_logger = logging.getLogger('twilio')
+twilio_logger.setLevel(logging.WARNING)
+
 
 class Command(BaseCommand):
     help = 'Send final notices via WhatsApp or SMS'
