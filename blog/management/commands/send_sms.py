@@ -27,8 +27,9 @@ class Command(BaseCommand):
     help = 'Send final notices via WhatsApp or SMS'
 
     def handle(self, *args, **options):
-        tomorrow = date.today() + timedelta(days=1)
-        final_notices = Post.objects.filter(pickup_date=tomorrow)
+        today = date.today()
+        tomorrow = today + timedelta(days=1)
+        final_notices = Post.objects.filter(pickup_date__range=[today, tomorrow])
         
         # Initialize Twilio client once
         account_sid = config('TWILIO_ACCOUNT_SID')
