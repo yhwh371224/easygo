@@ -808,7 +808,8 @@ def confirmation_detail(request):
         message = request.POST.get('message') 
         notice = request.POST.get('notice')       
         price = request.POST.get('price')
-        paid = request.POST.get('paid')        
+        paid = request.POST.get('paid')
+        cash = request.POST.get('cash') == 'True'         
         
         data = {            
             'name': name,
@@ -856,7 +857,7 @@ def confirmation_detail(request):
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
                  no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, return_direction=return_direction,
                  return_pickup_date=return_pickup_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
-                 return_pickup_time=return_pickup_time, notice=notice, price=price, paid=paid, driver=sam_driver)
+                 return_pickup_time=return_pickup_time, notice=notice, price=price, paid=paid, cash=cash, driver=sam_driver)
         
         p.save()
 
@@ -867,7 +868,7 @@ def confirmation_detail(request):
                                      'flight_time': flight_time, 'pickup_time': pickup_time, 'return_direction': return_direction,'return_pickup_date': return_pickup_date, 
                                      'return_flight_number': return_flight_number, 'return_flight_time': return_flight_time, 'return_pickup_time': return_pickup_time,
                                      'direction': direction, 'street': street, 'suburb': suburb, 'no_of_passenger': no_of_passenger, 'no_of_baggage': no_of_baggage,
-                                     'message': message, 'notice': notice , 'price': price, 'paid': paid })
+                                     'message': message, 'notice': notice , 'price': price, 'cash': cash, 'paid': paid })
         
         text_content = strip_tags(html_content)
         
