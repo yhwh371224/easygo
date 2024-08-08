@@ -14,8 +14,9 @@ class Command(BaseCommand):
     help = 'Send final notices'
 
     def handle(self, *args, **options):
-        tomorrow = date.today() + timedelta(days=1)
-        final_notices = Post.objects.filter(pickup_date=tomorrow)
+        today = date.today()
+        tomorrow = today + timedelta(days=1)
+        final_notices = Post.objects.filter(pickup_date__range=[today, tomorrow])
         
         for final_notice in final_notices:
 
