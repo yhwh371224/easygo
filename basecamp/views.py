@@ -1290,7 +1290,7 @@ def sending_email_first_detail(request):
                 "Booking confirmation - EasyGo",
                 text_content,
                 '',
-                [email, RECIPIENT_EMAIL]
+                [email, RECIPIENT_EMAIL, user.email1]
             )
             email.attach_alternative(html_content, "text/html")
             email.send()
