@@ -33,7 +33,7 @@
                     </tr>            
                     <tr>
                         <th>{{ form.content.label_tag }}</th>
-                        <td>{{ form.content }}</td>
+                        <td>{{ form.content|safe }}</td>
                     </tr>
                     <tr>
                         <th>{{ form.rating.label_tag }}</th>
