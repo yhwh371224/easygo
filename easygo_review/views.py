@@ -124,7 +124,7 @@ class PostSearch(PostList):
 
 class PostDetail(DetailView):
     model = Post
-    template_name = 'easygo_review/post_detail.html'
+    template_name = 'easygo_review/post_detail1.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
