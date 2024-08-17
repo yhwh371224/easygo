@@ -193,7 +193,7 @@ def new_comment(request, pk):
 
 class CommentUpdate(UpdateView):
     model = Comment
-    # form_class = CommentForm
+    form_class = CommentForm
 
     def get_object(self, queryset=None):
         comment = super(CommentUpdate, self).get_object()
