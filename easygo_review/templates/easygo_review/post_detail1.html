@@ -15,7 +15,7 @@
             <p>posted on {{ object.date }}</p>
         </div>
         
-        {% if request.user == object.author %}
+        {% if request.session.email == object.email %}
             <button type="button" class="btn btn-primary" style="margin-left: auto;" onclick="location.href='{{ object.get_update_url }}'">EDIT REVIEW</button>
         {% endif %}
     </div>
