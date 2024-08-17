@@ -7,6 +7,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
 from django.views.decorators.csrf import csrf_exempt
+from django.urls import reverse_lazy
 from django.db.models import Q
 from django.http import JsonResponse
 
@@ -250,6 +251,7 @@ class CommentUpdate(UpdateView):
 
 class CommentDelete(DeleteView):
     model = Comment
+    success_url = reverse_lazy('comment_list')
 
     def get_object(self, queryset=None):
         comment = super().get_object(queryset)
@@ -266,6 +268,11 @@ class CommentDelete(DeleteView):
             raise PermissionDenied('No right to delete Comment')
 
         return comment
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['email'] = self.request.session.get('email', None)
+        return context
 
     def get_success_url(self):
         post = self.get_object().post

@@ -1,12 +1,27 @@
 {% extends 'easygo_review/base.html' %}
 
-{% block title %} EasyGo Reivews {% endblock %}
+{% block title %}Confirm Deletion{% endblock %}
 
 {% block content %}
-    <form method="post">{% csrf_token %}
-        {{ object.get_markdown_content | safe }}
-        <button type="submit" class="btn btn-primary float-right">Submit</button>
+<div class="container mt-4">
+    <h3 class="mb-4">Confirm Deletion</h3>
+    
+    <!-- Comment Content -->
+    <div class="mb-4">
+        <p>Are you sure you want to delete the following comment?</p>
+        <div class="border p-3 rounded">
+            {{ object.get_markdown_content | safe }}
+        </div>
+    </div>
+
+    <!-- Deletion Form -->
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Confirm Deletion</button>
+        <a href="{% url 'comment_list' %}" class="btn btn-secondary">Cancel</a>
     </form>
 
+    <!-- Media -->
     {{ form.media }}
+</div>
 {% endblock %}
