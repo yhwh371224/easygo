@@ -250,10 +250,10 @@ class CommentUpdate(UpdateView):
 
 class CommentDelete(DeleteView):
     model = Comment
+    template_name = 'easygo_review/comment_confirm_delete.html'
 
     def get_object(self, queryset=None):
-        comment = super().get_object(queryset)
-        
+        comment = super().get_object(queryset)        
         email = self.request.session.get('email', None)
         user_name = None
 
@@ -269,7 +269,15 @@ class CommentDelete(DeleteView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['email'] = self.request.session.get('email', None)
+        email = self.request.session.get('email', None)
+        user_name = None
+
+        if email:
+            blog_post = BlogPost.objects.filter(email=email).first()
+            if blog_post:
+                user_name = blog_post.name
+
+        context['user_name'] = user_name
         return context
 
     def get_success_url(self):
