@@ -1,7 +1,5 @@
 {% extends 'easygo_review/base.html' %}
 
-<!-- {% load crispy_forms_tags %} -->
-
 {% block title %}EasyGo Reivew{% endblock %}
 
 {% block content %}
@@ -17,22 +15,13 @@
             <p>posted on {{ object.date }}</p>
         </div>
         
-    {% if request.session.email %}
-        {% if request.session.email == object.email %}
+        {% if request.user == object.author %}
             <button type="button" class="btn btn-primary" style="margin-left: auto;" onclick="location.href='{{ object.get_update_url }}'">EDIT REVIEW</button>
         {% endif %}
-    {% endif %}
     </div>
     <br/>    
     <!-- Post Content -->
-    {% if request.session.email %}
-        {{ object.get_markdown_content | safe }}
-    {% else %}
-        <div class="alert alert-warning">You need to log in to view the content.</div>
-        <button type="button" class="btn btn-outline-dark btn-block" data-toggle="modal" data-target="#loginModal">
-            Log in
-        </button>
-    {% endif %}
+    {{ object.get_markdown_content | safe }}
 
     <hr>
 
@@ -48,15 +37,9 @@
                 <button class="btn btn-secondary btn-sm float-right" onclick="location.href='/easygo_review/create/'">New Post</button>
             </form>
             {% else %}
-            <div class="card my-4">
-                <h5 class="card-header">Leave a Comment:</h5>
-                <div class="card-body">
-                    <div class="alert alert-warning">You need to log in to leave a comment.</div>
-                    <button type="button" class="btn btn-outline-dark btn-block" data-toggle="modal" data-target="#loginModal">
-                        Log in
-                    </button>
-                </div>
-            </div>
+            <button type="button" class="btn btn-outline-dark btn-block" data-toggle="modal" data-target="#loginModal">
+                Log in
+            </button>
             {% endif %}
         </div>
     </div>
