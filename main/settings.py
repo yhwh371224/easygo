@@ -57,8 +57,6 @@ INSTALLED_APPS = [
     'corsheaders',
     'paypal.standard.ipn',
     'admin_honeypot',
-    # 'crispy_forms',
-    # 'crispy_bootstrap4',
     'markdownx',
     'csp',
     'axes',
@@ -321,9 +319,6 @@ SESSION_COOKIE_PATH = '/'
 SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SIGNED = True
-
-# CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
-# CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 RECIPIENT_EMAIL = config('RECIPIENT_EMAIL')
 DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')

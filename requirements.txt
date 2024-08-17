@@ -24,7 +24,6 @@ click-didyoumean                 0.3.0
 click-plugins                    1.1.1
 click-repl                       0.3.0
 colorama                         0.4.6
-crispy-bootstrap4                2024.1
 cron_descriptor                  1.4.0
 cryptography                     41.0.5
 defusedxml                       0.7.1
@@ -38,7 +37,6 @@ django-axes                      6.4.0
 django-bootstrap4                24.3
 django-compressor                4.4
 django-cors-headers              4.3.1
-django-crispy-forms              2.3
 django_csp                       3.8
 django-htmlmin                   0.11.0
 django-markdownx                 4.0.7
