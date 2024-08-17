@@ -179,16 +179,34 @@ class PostUpdate(UpdateView):
 
 def new_comment(request, pk):
     post = Post.objects.get(pk=pk)
+    email = request.session.get('email', None)
+
+    if email:
+        blog_post = BlogPost.objects.filter(email=email).first()  
+        if blog_post:
+            user_name = blog_post.name            
+        else:
+            user_name = None
+    else:
+        user_name = None
 
     if request.method == 'POST':
         comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
             comment = comment_form.save(commit=False)
             comment.post = post
-            comment.author = request.user
+            comment.author = user_name
             comment.save()
-            return redirect(comment.get_absolute_url())
-    return redirect('/easygo_review/')    
+            return redirect(comment.get_absolute_url())        
+    
+    context = {
+        'post': post,
+        'email': email,
+        'user_name': user_name,
+        'comment_form': comment_form if request.method == 'POST' else CommentForm(),
+    }
+
+    return render(request, '/easygo_review/post_details1.html', context)
 
 
 class CommentUpdate(UpdateView):
@@ -196,9 +214,19 @@ class CommentUpdate(UpdateView):
     form_class = CommentForm
 
     def get_object(self, queryset=None):
-        comment = super(CommentUpdate, self).get_object()
-        if comment.author != self.request.user:
+        comment = super().get_object(queryset)
+        
+        email = self.request.session.get('email', None)
+        user_name = None
+
+        if email:
+            blog_post = BlogPost.objects.filter(email=email).first()
+            if blog_post:
+                user_name = blog_post.name
+
+        if comment.author != user_name:
             raise PermissionDenied('No right to edit')
+
         return comment
 
 
@@ -206,9 +234,19 @@ class CommentDelete(DeleteView):
     model = Comment
 
     def get_object(self, queryset=None):
-        comment = super(CommentDelete, self).get_object()
-        if comment.author != self.request.user:
+        comment = super().get_object(queryset)
+        
+        email = self.request.session.get('email', None)
+        user_name = None
+
+        if email:
+            blog_post = BlogPost.objects.filter(email=email).first()
+            if blog_post:
+                user_name = blog_post.name
+
+        if comment.author != user_name:
             raise PermissionDenied('No right to delete Comment')
+
         return comment
 
     def get_success_url(self):

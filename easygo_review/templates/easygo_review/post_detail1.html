@@ -30,7 +30,7 @@
         <h5 class="card-header">Leave a Comment:</h5>
         <div class="card-body">
             {% if request.session.email %}
-            <form method="post" action="{{ object.get_absolute_url }}new_comment/">{% csrf_token %}
+            <form method="post" action="{% url 'new_comment' post.pk %}">{% csrf_token %}
                 <div class="form-group">
                     {{ comment_form.as_p }}
                 </div>
