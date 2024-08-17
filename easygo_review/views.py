@@ -33,7 +33,7 @@ def custom_login_view(request):
 
 def custom_logout_view(request):
     request.session.flush()    
-    return redirect('/')
+    return redirect('easygo_review:easygo_review')
 
 
 def get_authenticated_post(request):
