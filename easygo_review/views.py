@@ -178,22 +178,33 @@ class PostUpdate(UpdateView):
     
 
 def new_comment(request, pk):
-    post = BlogPost.objects.get(pk=pk)
+    blog_post = BlogPost.objects.get(pk=pk)
 
     if request.method == 'POST':
+        email = request.session.get('email')
+        if not email:
+            return redirect('login')  
+
         comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
             comment = comment_form.save(commit=False)
-            comment.post = post
-            comment.author = request.user
-            comment.save()
-            return redirect(comment.get_absolute_url())
-    return redirect('/easygo_review/')  
+            comment.post = blog_post
+            comment.email = email  
+
+            post = Post.objects.filter(email=email).first()
+            if post:
+                comment.author = post.name  
+            else:
+                raise PermissionDenied('error!')
+            comment.save()  
+            return redirect(comment.get_absolute_url())  
+        
+    return redirect('/easygo_review/')   
 
 
 class CommentUpdate(UpdateView):
     model = Comment
-    form_class = CommentForm
+    # form_class = CommentForm
 
     def get_object(self, queryset=None):
         comment = super(CommentUpdate, self).get_object()
