@@ -57,8 +57,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'paypal.standard.ipn',
     'admin_honeypot',
-    'crispy_forms',
-    'crispy_bootstrap4',
+    # 'crispy_forms',
+    # 'crispy_bootstrap4',
     'markdownx',
     'csp',
     'axes',
@@ -312,8 +312,18 @@ RECAPTCHA_V3_SECRET_KEY = config('RECAPTCHA_V3_SECRET_KEY')
 
 MARKDOWNX_MEDIA_PATH = datetime.now().strftime('markdownx/%Y/%m/%d/')
 
-CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
+SESSION_COOKIE_AGE = 3600
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+SESSION_COOKIE_NAME = 'my_session_cookie'
+SESSION_COOKIE_DOMAIN = None
+SESSION_COOKIE_PATH = '/'
+SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SIGNED = True
+
+# CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
+# CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 RECIPIENT_EMAIL = config('RECIPIENT_EMAIL')
 DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
