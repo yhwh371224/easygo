@@ -206,7 +206,7 @@ def new_comment(request, pk):
         'comment_form': comment_form if request.method == 'POST' else CommentForm(),
     }
 
-    return render(request, '/easygo_review/post_detail1.html', context)
+    return render(request, 'easygo_review/post_detail1.html', context)
 
 
 class CommentUpdate(UpdateView):
