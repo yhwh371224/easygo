@@ -181,14 +181,11 @@ def new_comment(request, pk):
     post = Post.objects.get(pk=pk)
     email = request.session.get('email', None)
 
+    user_name = None
     if email:
-        blog_post = BlogPost.objects.filter(email=email).first()  
+        blog_post = BlogPost.objects.filter(email=email).first()
         if blog_post:
-            user_name = blog_post.name            
-        else:
-            user_name = None
-    else:
-        user_name = None
+            user_name = blog_post.name
 
     if request.method == 'POST':
         comment_form = CommentForm(request.POST)
@@ -197,13 +194,16 @@ def new_comment(request, pk):
             comment.post = post
             comment.author = user_name
             comment.save()
-            return redirect(comment.get_absolute_url())        
-    
+            return redirect(post.get_absolute_url())  
+        
+    else:
+        comment_form = CommentForm()  
+
     context = {
         'post': post,
         'email': email,
         'user_name': user_name,
-        'comment_form': comment_form if request.method == 'POST' else CommentForm(),
+        'comment_form': comment_form,
     }
 
     return render(request, 'easygo_review/post_detail1.html', context)
