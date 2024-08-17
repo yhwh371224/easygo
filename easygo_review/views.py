@@ -177,37 +177,55 @@ class PostUpdate(UpdateView):
         return context
     
 
-def new_comment(request, pk):
-    post = Post.objects.get(pk=pk)
-    email = request.session.get('email', None)
+class CommentCreate(View):
+    def get(self, request, pk, *args, **kwargs):
+        post = Post.objects.get(pk=pk)
+        email = request.session.get('email', None)
 
-    user_name = None
-    if email:
-        blog_post = BlogPost.objects.filter(email=email).first()
-        if blog_post:
-            user_name = blog_post.name
+        user_name = None
+        if email:
+            blog_post = BlogPost.objects.filter(email=email).first()
+            if blog_post:
+                user_name = blog_post.name
 
-    if request.method == 'POST':
+        comment_form = CommentForm()
+        
+        context = {
+            'post': post,
+            'email': email,
+            'user_name': user_name,
+            'comment_form': comment_form,
+        }
+
+        return render(request, 'easygo_review/post_detail1.html', context)
+
+    def post(self, request, pk, *args, **kwargs):
+        post = Post.objects.get(pk=pk)
+        email = request.session.get('email', None)
+
+        user_name = None
+        if email:
+            blog_post = BlogPost.objects.filter(email=email).first()
+            if blog_post:
+                user_name = blog_post.name
+
         comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
             comment = comment_form.save(commit=False)
             comment.post = post
             comment.author = user_name
             comment.save()
-            return redirect(post.get_absolute_url())  
-        
-    else:
-        comment_form = CommentForm()  
+            return redirect(post.get_absolute_url())  # Redirect to post detail page
 
-    context = {
-        'post': post,
-        'email': email,
-        'user_name': user_name,
-        'comment_form': comment_form,
-    }
-
-    return render(request, 'easygo_review/post_detail1.html', context)
-
+        # Render the form with errors if form is not valid
+        context = {
+            'post': post,
+            'email': email,
+            'user_name': user_name,
+            'comment_form': comment_form,
+        }
+        return render(request, 'easygo_review/post_detail1.html', context)
+    
 
 class CommentUpdate(UpdateView):
     model = Comment
