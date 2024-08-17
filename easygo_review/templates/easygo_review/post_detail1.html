@@ -29,7 +29,7 @@
     <div class="card my-4">
         <h5 class="card-header">Leave a Comment:</h5>
         <div class="card-body">
-            {% if not request.session.email %}
+            {% if not email %}
             <button type="button" class="btn btn-outline-dark btn-block" data-toggle="modal" data-target="#loginModal">
                 Log in
             </button>            
