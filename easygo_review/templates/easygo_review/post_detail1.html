@@ -32,7 +32,7 @@
             {% if request.session.email %}
             <form method="post" action="{{ object.get_absolute_url }}new_comment/">{% csrf_token %}
                 <div class="form-group">
-                    {{ comment_form | crispy }}
+                    {{ comment_form.as_p }}
                 </div>
                 <button class="btn btn-secondary btn-sm float-right" onclick="location.href='/easygo_review/create/'">New Post</button>
             </form>
