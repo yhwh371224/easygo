@@ -13,5 +13,8 @@ urlpatterns = [
     path('search/<str:q>/', views.PostSearch.as_view(), name="post_search"),
     path('<int:pk>/', views.PostDetail.as_view(), name="easygo_review/<pk>"),
     path('<int:pk>/update/', views.PostUpdate.as_view(), name="easygo_review/<pk>/update/"),
+    path('<int:pk>/new_comment/', views.new_comment, name='new_comment'),
+    path('comment/<int:pk>/update/', views.CommentUpdate.as_view(), name='comment_update'),
+    path('comment/<int:pk>/delete/', views.CommentDelete.as_view(), name='comment_delete'),
 
 ]
