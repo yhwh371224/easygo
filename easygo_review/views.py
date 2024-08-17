@@ -138,10 +138,16 @@ class PostDetail(DetailView):
         context['authenticated_post'] = authenticated_post 
 
         if email:
-            blog_post = BlogPost.objects.filter(email=email).first()
-            context['user_name'] = blog_post.name if blog_post else None
+            blog_post = BlogPost.objects.filter(email=email).first()  
+            if blog_post:
+                user_name = blog_post.name
+                context['user_name'] = user_name
+            else:
+                context['user_name'] = None
         else:
             context['user_name'] = None
+
+        return context
         
 
 class PostUpdate(UpdateView):
