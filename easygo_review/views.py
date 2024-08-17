@@ -230,10 +230,10 @@ class CommentCreate(View):
 class CommentUpdate(UpdateView):
     model = Comment
     form_class = CommentForm
+    template_name = 'easygo_review/comment_form.html'
 
     def get_object(self, queryset=None):
-        comment = super().get_object(queryset)
-        
+        comment = super().get_object(queryset)        
         email = self.request.session.get('email', None)
         user_name = None
 
@@ -246,6 +246,24 @@ class CommentUpdate(UpdateView):
             raise PermissionDenied('No right to edit')
 
         return comment
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        email = self.request.session.get('email', None)
+        user_name = None
+
+        if email:
+            blog_post = BlogPost.objects.filter(email=email).first()
+            if blog_post:
+                user_name = blog_post.name
+
+        context['email'] = email
+        context['user_name'] = user_name
+        return context
+
+    def get_success_url(self):
+        post = self.get_object().post
+        return post.get_absolute_url() + '#comment-list'
 
 
 class CommentDelete(DeleteView):
