@@ -30,9 +30,11 @@
         <h5 class="card-header">Leave a Comment:</h5>
         <div class="card-body">
             {% if request.session.email %}
-            <form method="post" action="{{ object.get_absolute_url }}new_comment/">{% csrf_token %}
+            <form method="post" action="{{ object.get_absolute_url }}new_comment/">
+                {% csrf_token %}
                 <div class="form-group">
-                    {{ comment_form.as_p }}
+                    <label for="{{ comment_form.text.id_for_label }}">Comment:</label>
+                    {{ comment_form.text }}
                 </div>
                 <button class="btn btn-secondary btn-sm float-right" onclick="location.href='/easygo_review/create/'">New Post</button>
             </form>
