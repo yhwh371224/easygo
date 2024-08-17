@@ -15,7 +15,7 @@
             <p>posted on {{ object.date }}</p>
         </div>
         
-        {% if request.session.email == object.email %}
+        {% if request.user == object.author %}
             <button type="button" class="btn btn-primary" style="margin-left: auto;" onclick="location.href='{{ object.get_update_url }}'">EDIT REVIEW</button>
         {% endif %}
     </div>
@@ -30,11 +30,9 @@
         <h5 class="card-header">Leave a Comment:</h5>
         <div class="card-body">
             {% if request.session.email %}
-            <form method="post" action="{{ object.get_absolute_url }}new_comment/">
-                {% csrf_token %}
+            <form method="post" action="{{ object.get_absolute_url }}new_comment/">{% csrf_token %}
                 <div class="form-group">
-                    <label for="{{ comment_form.text.id_for_label }}">Comment:</label>
-                    {{ comment_form.text }}
+                    {{ comment_form.as_p }}
                 </div>
                 <button class="btn btn-secondary btn-sm float-right" onclick="location.href='/easygo_review/create/'">New Post</button>
             </form>
