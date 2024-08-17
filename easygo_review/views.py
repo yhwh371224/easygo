@@ -177,6 +177,45 @@ class PostUpdate(UpdateView):
         return context
     
 
+def new_comment(request, pk):
+    post = BlogPost.objects.get(pk=pk)
+
+    if request.method == 'POST':
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.post = post
+            comment.author = request.user
+            comment.save()
+            return redirect(comment.get_absolute_url())
+    return redirect('/easygo_review/')  
+
+
+class CommentUpdate(UpdateView):
+    model = Comment
+    form_class = CommentForm
+
+    def get_object(self, queryset=None):
+        comment = super(CommentUpdate, self).get_object()
+        if comment.author != self.request.user:
+            raise PermissionDenied('No right to edit')
+        return comment
+
+
+class CommentDelete(DeleteView):
+    model = Comment
+
+    def get_object(self, queryset=None):
+        comment = super(CommentDelete, self).get_object()
+        if comment.author != self.request.user:
+            raise PermissionDenied('No right to delete Comment')
+        return comment
+
+    def get_success_url(self):
+        post = self.get_object().post
+        return post.get_absolute_url() + '#comment-list'
+    
+
 def index(request):
     posts = Post.objects.all()
     return render(request, 'easygo_review/index.html', {'posts': posts})
