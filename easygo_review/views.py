@@ -277,6 +277,7 @@ class CommentDelete(DeleteView):
             if blog_post:
                 user_name = blog_post.name
 
+        context['email'] = email
         context['user_name'] = user_name
         return context
 
