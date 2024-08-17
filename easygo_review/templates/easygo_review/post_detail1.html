@@ -54,7 +54,7 @@
                 {% endif %} -->
                 <div class="media-body">
                     {% if comment.author == user_name %}
-                        <button class="btn btn-sm btn-info float-right" onclick="location.href='/easygo_review/edit_comment/{{ comment.pk }}/'">edit</button>
+                        <button class="btn btn-sm btn-info float-right" onclick="location.href='/easygo_review/comment/{{ comment.pk }}/update/'">edit</button>
                         <button class="btn btn-sm btn-warning float-right" data-toggle="modal" data-target="#deleteCommentModal-{{ comment.pk }}">delete</button>
                     {% endif %}
                     <h5 class="mt-0">{{ comment.author }} <small class="text-muted">{{ comment.created_at }}</small></h5>
@@ -81,7 +81,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary" onclick="location.href='/easygo_review/delete_comment/{{ comment.pk }}/'">Delete</button>
+                            <button type="button" class="btn btn-primary" onclick="location.href='/easygo_review/comment/{{ comment.pk }}/delete/'">Delete</button>
                         </div>
                     </div>
                 </div>
