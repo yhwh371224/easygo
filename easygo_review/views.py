@@ -104,7 +104,7 @@ class PostCreate(View):
                     return render(request, 'easygo_review/post_form.html', {'form': form, 'form_guide': 'Please post your review'})
                 form.save()
 
-                send_notice_email.delay('review created', 'review created', RECIPIENT_EMAIL)
+                send_notice_email.delay('sb created review', 'sb created review', RECIPIENT_EMAIL)
 
                 return redirect('/easygo_review/')
         return render(request, 'easygo_review/post_form.html', {'form': form, 'form_guide': 'Please post your review'})
@@ -136,6 +136,8 @@ class PostDetail(DetailView):
 
         authenticated_post = get_authenticated_post(self.request)
         context['authenticated_post'] = authenticated_post 
+
+        send_notice_email.delay('post_detail accessed', 'post_detail accessed', RECIPIENT_EMAIL)
 
         if email:
             blog_post = BlogPost.objects.filter(email=email).first()  
