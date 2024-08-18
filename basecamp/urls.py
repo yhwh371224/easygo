@@ -50,6 +50,7 @@ urlpatterns = [
     path('p2p_single/', views.p2p_single, name="p2p_single"),    
     path('payment_cancel/', views.payment_cancel, name='payment_cancel'),   
     path('payment_options/', views.payment_options, name='payment_options'),
+    path('payment_options1/', views.payment_options1, name='payment_options1'),
     path('payonline/', views.payonline, name='payonline'),
     path('payonline_stripe/', views.payonline_stripe, name='payonline_stripe'),
     path('paypal_ipn/', paypal_ipn, name='paypal_ipn'),    
