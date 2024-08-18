@@ -1298,7 +1298,7 @@ def sending_email_first_detail(request):
         return render(request, 'basecamp/inquiry_done.html')  
 
     else:
-        return render(request, 'beasecamp/sending_email_first.html', {})   
+        return render(request, 'basecamp/sending_email_first.html', {})   
     
 
 # sending confirmation email second one    
@@ -1548,7 +1548,7 @@ def return_trip_detail(request):
         return rendering
     
     else:
-        return render(request, 'beasecamp/return_trip.html', {})        
+        return render(request, 'basecamp/return_trip.html', {})        
 
 
 # send invoice to customer
@@ -1681,7 +1681,7 @@ def invoice_detail(request):
         return render(request, 'basecamp/inquiry_done.html')  
     
     else:
-        return render(request, 'beasecamp/invoice.html', {})
+        return render(request, 'basecamp/invoice.html', {})
     
 
 def pickup_date_detail(request):       
