@@ -18,7 +18,6 @@ token.json
 service-account-file.json
 calendar-service-account-file.json
 
-*.cmd
 *.pem
 *.log
 *.pyo
