@@ -214,6 +214,10 @@ def payment_options(request):
     return render(request, 'basecamp/payment_options.html')
 
 
+def payment_options1(request): 
+    return render(request, 'basecamp/payment_options1.html')
+
+
 def payonline(request):     
     return render(request, 'basecamp/payonline.html')
 
