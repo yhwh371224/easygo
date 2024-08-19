@@ -14,10 +14,10 @@ ENVIRONMENT = config('ENVIRONMENT', default='production')
 if ENVIRONMENT == 'production':
     DEBUG = config('DEBUG', cast=bool, default=True)
     ALLOWED_HOSTS = [
-        'ec2-3-106-165-52.ap-southeast-2.compute.amazonaws.com', 
+        'ec2-13-54-242-110.ap-southeast-2.compute.amazonaws.com', 
         'easygoshuttle.com.au', 
         'www.easygoshuttle.com.au', 
-        '3.106.165.52']
+        '13.54.242.110']
 
     SECURE_SSL_REDIRECT = True
     CSRF_COOKIE_SECURE = True
