@@ -163,10 +163,7 @@ def inquiry(request):
 
 
 def inquiry1(request):
-    if not request.POST.get('pickup_date') or not request.POST.get('direction') or not request.POST.get('suburb') or not request.POST.get('no_of_passenger'):
-        return render(request, 'basecamp/inquiry.html')
-    
-    return render(request, 'basecamp/inquiry1.html', request.POST)
+    return render(request, 'basecamp/inquiry.html')
 
 
 def inquiry2(request): 
