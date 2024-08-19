@@ -259,10 +259,6 @@ def privacy(request):
     return render(request, 'basecamp/privacy.html')
 
 
-def reminder(request): 
-    return render(request, 'basecamp/reminder.html')
-
-
 def return_cruise_fields(request): 
     return render(request, 'basecamp/return_cruise_fields.html')
 
@@ -293,10 +289,6 @@ def sending_email_second(request):
 
 def sending_email_input_data(request): 
     return render(request, 'basecamp/sending_email_input_data.html')
-
-
-def server_error(request): 
-    return render(request, 'basecamp/502.html')
 
 
 def service(request): 
@@ -336,8 +328,12 @@ def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 
 
+# 400 error handler 
 def wrong_email(request, exception): 
     return render(request, 'basecamp/400.html', status=400)
+
+def wrong_email_home(request, exception): 
+    return render(request, 'basecamp/405.html', status=405)
 
 def wrong_date(request, exception): 
     return render(request, 'basecamp/401.html', status=401)
@@ -1704,7 +1700,7 @@ def pickup_date_detail(request):
                     user = obj
         
         if not user:
-            return render(request, 'basecamp/502.html')
+            return render(request, 'basecamp/405.html')
 
         name = user.name
         contact = user.contact
