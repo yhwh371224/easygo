@@ -205,5 +205,24 @@
       });
     });
   </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var flightDateInput = document.getElementById('flight-date');
+        var dateError = document.getElementById('date-error');
+        
+        flightDateInput.addEventListener('change', function () {
+            var selectedDate = new Date(flightDateInput.value);
+            var currentDate = new Date();
+    
+            if (selectedDate < currentDate.setHours(0, 0, 0, 0)) {
+                dateError.style.display = 'block';
+                flightDateInput.classList.add('is-invalid');
+            } else {
+                dateError.style.display = 'none';
+                flightDateInput.classList.remove('is-invalid');
+            }
+        });
+    });
+    </script>
   </body>
 </html>
