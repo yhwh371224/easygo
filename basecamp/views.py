@@ -163,7 +163,7 @@ def inquiry(request):
 
 
 def inquiry1(request): 
-    return render(request, 'basecamp/inquiry.html')
+    return render(request, 'basecamp/inquiry1.html')
 
 
 def inquiry2(request): 
