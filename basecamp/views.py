@@ -336,24 +336,20 @@ def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 
 
-def wrong_date(request): 
+def wrong_email(request, exception): 
+    return render(request, 'basecamp/400.html', status=400)
+
+def wrong_date(request, exception): 
     return render(request, 'basecamp/401.html', status=401)
 
-
-def wrong_date_return(request): 
+def wrong_date_return(request, exception): 
     return render(request, 'basecamp/403.html', status=403)
 
-
-def wrong_date_return_inquiry(request): 
+def wrong_date_return_inquiry(request, exception): 
     return render(request, 'basecamp/404.html', status=404)
 
-
-def wrong_date_today(request): 
+def wrong_date_today(request, exception): 
     return render(request, 'basecamp/402.html', status=402)
-
-
-def wrong_email(request): 
-    return render(request, 'basecamp/400.html', status=400)
 
 
 # Inquiry for airport 
