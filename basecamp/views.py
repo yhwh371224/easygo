@@ -162,8 +162,14 @@ def inquiry(request):
     return render(request, 'basecamp/inquiry.html', context)
 
 
-def inquiry1(request): 
-    return render(request, 'basecamp/inquiry.html')
+def inquiry1(request):
+    context = {
+        'pickup_date': None,
+        'direction': None,
+        'suburb': None,
+        'no_of_passenger': None,
+    }    
+    return render(request, 'basecamp/inquiry.html', context)
 
 
 def inquiry2(request): 
@@ -740,6 +746,9 @@ def price_detail(request):
         direction = request.POST.get('direction')
         suburb = request.POST.get('suburb')
         no_of_passenger = request.POST.get('no_of_passenger')
+
+        if direction or suburb == 'Select your option':
+            return render(request, 'basecamp/505.html')
         
         today = date.today()        
         if not pickup_date or pickup_date <= str(today):
