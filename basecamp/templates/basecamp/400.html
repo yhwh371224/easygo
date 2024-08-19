@@ -1,0 +1,19 @@
+{% extends 'basecamp/easygo_base_error.html' %}
+{% block content %}
+
+<!-- Page wrapper-->
+<main class="page-wrapper">
+    <!-- Page content-->
+    <div class="container d-flex flex-column justify-content-center min-vh-100 py-5">
+      <lottie-player class="d-dark-mode-none mt-n5" src="assets/json/animation-404-light.json" background="transparent" speed="1" loop autoplay></lottie-player>
+      <lottie-player class="d-none d-dark-mode-block mt-n5" src="assets/json/animation-404-dark.json" background="transparent" speed="1" loop autoplay></lottie-player>
+      <div class="text-center pt-4 mt-lg-2">
+        <h1 class="display-5">Opps! something wrong</h1>
+
+        <p class="fs-lg pb-2 pb-md-0 mb-4 mb-md-5"><span style="color: #eb7828">Perhaps the email you entered is not the same one you used before</span></p><a class="btn btn-lg btn-primary" href="/confirm_booking/">Go to the previous page!</a>
+ 
+      </div>
+    </div>
+  </main>
+
+{% endblock %}

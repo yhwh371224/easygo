@@ -296,31 +296,7 @@ def sending_email_input_data(request):
 
 
 def server_error(request): 
-    return render(request, 'basecamp/500.html')
-
-
-def server_error(request): 
-    return render(request, 'basecamp/501.html')
-
-
-def server_error(request): 
     return render(request, 'basecamp/502.html')
-
-
-def server_error(request): 
-    return render(request, 'basecamp/503.html')
-
-
-def server_error(request): 
-    return render(request, 'basecamp/504.html')
-
-
-def server_error(request): 
-    return render(request, 'basecamp/505.html')
-
-
-def server_error(request): 
-    return render(request, 'basecamp/506.html')
 
 
 def service(request): 
@@ -358,6 +334,26 @@ def verify_recaptcha(response, version='v2'):
 
 def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+
+
+def wrong_date(request): 
+    return render(request, 'basecamp/401.html', status=401)
+
+
+def wrong_date_return(request): 
+    return render(request, 'basecamp/403.html', status=403)
+
+
+def wrong_date_return_inquiry(request): 
+    return render(request, 'basecamp/404.html', status=404)
+
+
+def wrong_date_today(request): 
+    return render(request, 'basecamp/402.html', status=402)
+
+
+def wrong_email(request): 
+    return render(request, 'basecamp/400.html', status=400)
 
 
 # Inquiry for airport 
@@ -589,9 +585,9 @@ def inquiry_details2(request):
         today = date.today()
         if pickup_date != str(today):
             if is_ajax(request):
-                return render(request, 'basecamp/501.html')
+                return render(request, 'basecamp/402.html')
             else:
-                return render(request, 'basecamp/501.html')
+                return render(request, 'basecamp/402.html')
                      
         message = '''
                 Contact Form
@@ -748,11 +744,11 @@ def price_detail(request):
         no_of_passenger = request.POST.get('no_of_passenger')
 
         if direction == 'Select your option' or suburb == 'Select your option':
-            return render(request, 'basecamp/505.html')
+            return render(request, 'basecamp/401.html')
         
         today = date.today()        
         if not pickup_date or pickup_date <= str(today):
-            return render(request, 'basecamp/505.html')    
+            return render(request, 'basecamp/401.html')    
 
         send_email_task.delay(pickup_date, direction, suburb, no_of_passenger)
         
@@ -1429,7 +1425,7 @@ def sending_email_input_data_detail(request):
                     user = obj
 
         if not user:
-            return render(request, 'basecamp/500.html')
+            return render(request, 'basecamp/400.html')
 
         else:
             html_content = render_to_string("basecamp/html_email-input-date.html", 
@@ -1516,7 +1512,7 @@ def return_trip_detail(request):
         user = Post.objects.filter(Q(email__iexact=email)).first()    
         
         if not user:
-            return render(request, 'basecamp/503.html')    
+            return render(request, 'basecamp/403.html')    
             
         else:
             name = user.name

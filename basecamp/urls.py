@@ -1,8 +1,21 @@
 from django.urls import path
 from . import views
 from .views import paypal_ipn, create_stripe_checkout_session, server_error
+from .views import (
+    wrong_email,
+    wrong_date,
+    wrong_date_today,
+    wrong_date_return,
+    wrong_date_return_inquiry,
 
+)
 app_name = "basecamp"
+
+handler400 = wrong_email
+handler401 = wrong_date
+handler402 = wrong_date_today
+handler403 = wrong_date_return
+handler404 = wrong_date_return_inquiry
 
 handler500 = server_error
 
@@ -57,7 +70,6 @@ urlpatterns = [
     path('price_detail/', views.price_detail, name='price_detail'),
     path('privacy/', views.privacy, name='privacy'),
     path('recaptcha-verify/', views.recaptcha_verify, name='recaptcha_verify'),
-    path('reminder/', views.reminder, name='reminder'),
     path('return_cruise_fields/', views.return_cruise_fields, name='return_cruise_fields'),
     path('return_flight_fields/', views.return_flight_fields, name='return_flight_fields'),
     path('return_trip/', views.return_trip, name="return_trip"),
