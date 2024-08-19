@@ -1807,7 +1807,7 @@ def email_dispatch_detail(request):
             "Meeting Point Inquiry": ("basecamp/html_email-response-meeting.html", "Meeting Point - EasyGo"),
             "Gratitude For Payment": ("basecamp/html_email-response-payment-received.html", "Payment Received - EasyGo"),
             "Inquiry for further details": ("basecamp/html_email-response-more-details.html", "Inquiry for further details - EasyGo"),
-            "Arrival Notice for Today": ("basecamp/html_email-today.html", "Arrival Notice for Today - EasyGo"),
+            "Pickup Notice for Today": ("basecamp/html_email-today.html", "Pickup Notice for Today - EasyGo"),
             "Request for Driver Contact Information": ("basecamp/html_email-response-driver-contact.html", "For driver contact - EasyGo"),
             "Shared Ride Discount Offer": ("basecamp/html_email-shared-discount.html", "Discount notice - EasyGo"),
             "Cancellation of Booking": ("basecamp/html_email-response-cancel.html", "Cancellation of Booking: EasyGo"),
@@ -1819,7 +1819,7 @@ def email_dispatch_detail(request):
             template_name, subject = template_options[selected_option]
             context = {'email': email, 'name': user.name, 'adjustment_time': adjustment_time}
 
-            if selected_option == "Arrival Notice for Today" and user:
+            if selected_option == "Pickup Notice for Today" and user:
                 today = date.today()     
                 user_today = Post.objects.filter(email=email, pickup_date=today).first()
                 if user_today:
