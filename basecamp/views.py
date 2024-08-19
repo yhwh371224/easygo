@@ -163,12 +163,7 @@ def inquiry(request):
 
 
 def inquiry1(request):
-    context = {
-        'pickup_date': None,
-        'direction': None,
-        'suburb': None,
-        'no_of_passenger': None,
-    }    
+    context = {}    
     return render(request, 'basecamp/inquiry.html', context)
 
 
