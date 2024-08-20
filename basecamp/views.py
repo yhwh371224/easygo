@@ -139,6 +139,7 @@ def cruise_inquiry(request):
     return render(request, 'basecamp/cruise_inquiry.html', context)
 
 
+# error handler 400 403 404 500 502 503 
 def custom_bad_request(request, exception):
     return render(request, 'basecamp/400.html', status=400)
 
@@ -149,6 +150,18 @@ def custom_forbidden(request, exception):
 
 def custom_page_not_found(request, exception):
     return render(request, 'basecamp/404.html', status=404)
+
+
+def custom_server_error(request, exception):
+    return render(request, 'basecamp/500.html', status=500)
+
+
+def custom_bad_gateway(request, exception):
+    return render(request, 'basecamp/502.html', status=502)
+
+
+def custom_under_maintenance(request, exception):
+    return render(request, 'basecamp/503.html', status=503)
 
 
 def date_error(request): 
