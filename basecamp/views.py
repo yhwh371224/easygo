@@ -149,7 +149,7 @@ def custom_forbidden(request, exception):
 
 
 def custom_page_not_found(request, exception):
-    return render(request, 'basecamp/404.html', status=404)
+    return render(request, '404.html', status=404)
 
 
 def custom_server_error(request, exception):
