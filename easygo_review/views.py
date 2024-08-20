@@ -137,8 +137,6 @@ class PostDetail(DetailView):
         authenticated_post = get_authenticated_post(self.request)
         context['authenticated_post'] = authenticated_post 
 
-        send_notice_email.delay('post_detail accessed', 'post_detail accessed', RECIPIENT_EMAIL)
-
         if email:
             blog_post = BlogPost.objects.filter(email=email).first()  
             if blog_post:
