@@ -35,7 +35,7 @@ if ENVIRONMENT == 'production':
 
 else:
     DEBUG = True
-    ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+    ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'easygoshuttle.com.au', '13.54.242.110']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
