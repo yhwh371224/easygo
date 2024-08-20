@@ -4,9 +4,9 @@ from .views import paypal_ipn, create_stripe_checkout_session
 
 app_name = "basecamp"
 
-handler400 = views.custom_bad_request
-handler403 = views.custom_forbidden
-handler404 = views.custom_page_not_found
+handler400 = 'basecamp.views.custom_bad_request'
+handler403 = 'basecamp.views.custom_forbidden'
+handler404 = 'basecamp.views.custom_page_not_found'
 
 urlpatterns = [
     path('', views.index, name='index'),
