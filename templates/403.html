@@ -1,19 +1,43 @@
-{% extends 'basecamp/easygo_base_error.html' %}
-{% block content %}
-
-<!-- Page wrapper-->
-<main class="page-wrapper">
-    <!-- Page content-->
-    <div class="container d-flex flex-column justify-content-center min-vh-100 py-5">
-      <lottie-player class="d-dark-mode-none mt-n5" src="assets/json/animation-404-light.json" background="transparent" speed="1" loop autoplay></lottie-player>
-      <lottie-player class="d-none d-dark-mode-block mt-n5" src="assets/json/animation-404-dark.json" background="transparent" speed="1" loop autoplay></lottie-player>
-      <div class="text-center pt-4 mt-lg-2">
-        <h1 class="display-5">Opps! something wrong - Forbidden (403)</h1>
-
-        <p class="fs-lg pb-2 pb-md-0 mb-4 mb-md-5"><span style="color: #eb7828">Sorry, you do not have permission to access this page</span></p>
-        <a class="btn btn-lg btn-primary" href="/">Go to the home page!</a>
- 
-      </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forbidden (403)</title>
+    <style>
+        /* Your custom CSS styles go here */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f3f3;
+        }
+        .container {
+            text-align: center;
+            padding: 100px;
+        }
+        h1 {
+            font-size: 48px;
+            color: #eb7828;
+        }
+        p {
+            font-size: 18px;
+            color: #555;
+        }
+        a {
+            font-size: 18px;
+            color: #1b25ac;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Opps! something wrong - Forbidden (403)</h1>
+        <p>Sorry, you do not have permission to access this page</p>
+        <a href="/">Go to Homepage</a>
     </div>
-  </main>
-{% endblock %}
+</body>
+</html>
+
