@@ -455,10 +455,6 @@ def inquiry_details(request):
                  return_pickup_time=return_pickup_time ,message=message)
         
         p.save()
-        
-        today = date.today()
-        if pickup_date <= str(today):                      
-            return render(request, 'basecamp/pickup_date_error.html')   
 
         if is_ajax(request):
             return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})        
@@ -994,14 +990,7 @@ def booking_detail(request):
                  return_pickup_time=return_pickup_time, message=message, driver=sam_driver, discount=discount)
         
         p.save()
-
-        today = date.today()
-        if pickup_date <= str(today):
-            if is_ajax(request):
-                return render(request, 'basecamp/pickup_date_error.html')
-            else:
-                return render(request, 'basecamp/pickup_date_error.html') 
-
+        
         if is_ajax(request):
             return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})
         

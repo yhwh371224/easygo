@@ -72,9 +72,9 @@
 						</select>
 					</div>
 				<div class="mb-3 pb-1">
-					<label class="form-label" >Flight date<sup class="text-danger ms-1"></sup>&nbsp;(Sydney)</label>
-					 <input class="form-control date-picker rounded" required name="pickup_date" type="text" placeholder="Choose flight date" data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;F j, Y&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;}" >
-					<div class="invalid-feedback">Please enter a valid email address!</div>
+					<label class="form-label">Pickup date&nbsp;(Sydney)</label>
+					<input id="flight-date" class="form-control date-picker rounded" required name="pickup_date" type="text" placeholder="Choose flight date" data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;F j, Y&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;}" >
+					<div id="date-error" class="invalid-feedback" style="display: none;">Please enter a future date!</div>
 				</div>
 				<div class="mb-3 pb-1">
 					<label class="form-label" >Flight number</label>
