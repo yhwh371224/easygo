@@ -26,7 +26,7 @@ class Command(BaseCommand):
                 "today": date.today(),
                 "tomorrow": date.today() + timedelta(days=1),
                 "two_days": date.today() + timedelta(days=2),
-                "four_days": date.today() + timedelta(days=4),                    
+                "three_days": date.today() + timedelta(days=3),                   
             }
 
             for key, check_date in dates_to_check.items():
