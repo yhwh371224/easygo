@@ -21,24 +21,31 @@ class Command(BaseCommand):
         email.send(fail_silently=False)            
         
     def handle(self, *args, **options):
-        dates_to_check = {
-            "today": date.today(),
-            "tomorrow": date.today() + timedelta(days=1),
-            "two_days": date.today() + timedelta(days=2),
-            "four_days": date.today() + timedelta(days=4),                    
-        }
+        try: 
+            dates_to_check = {
+                "today": date.today(),
+                "tomorrow": date.today() + timedelta(days=1),
+                "two_days": date.today() + timedelta(days=2),
+                "four_days": date.today() + timedelta(days=4),                    
+            }
 
-        for key, check_date in dates_to_check.items():
-            bookings = Post.objects.filter(pickup_date=check_date)
-            
-            for booking in bookings:
-                if not booking.cancelled and not booking.paid and not booking.cash:
-                    email_subject = "Urgent notice for payment" if key == "today" or key == "tomorrow" else "Payment notice"
-                    email_template = "basecamp/html_email-nopayment-today.html" if key == "today" or key == "tomorrow" else "basecamp/html_email-nopayment.html"
-                    
-                    self.send_email(
-                        email_subject,
-                        email_template,
-                        {'name': booking.name, 'email': booking.email, 'price': booking.price},
-                        [booking.email, RECIPIENT_EMAIL]
-                    )
+            for key, check_date in dates_to_check.items():
+                bookings = Post.objects.filter(pickup_date=check_date)
+                
+                for booking in bookings:
+                    if not booking.cancelled and not booking.paid and not booking.cash:
+                        email_subject = "Urgent notice for payment" if key == "today" or key == "tomorrow" else "Payment notice"
+                        email_template = "basecamp/html_email-nopayment-today.html" if key == "today" or key == "tomorrow" else "basecamp/html_email-nopayment.html"
+                        
+                        self.send_email(
+                            email_subject,
+                            email_template,
+                            {'name': booking.name, 'email': booking.email, 'price': booking.price},
+                            [booking.email, RECIPIENT_EMAIL]
+                        )
+
+            self.stdout.write(self.style.SUCCESS('No_payment_yet emailed successfully'))
+
+        except Exception as e:            
+            self.stdout.write(self.style.ERROR('Failed to send no_payment_yet'))
+        
