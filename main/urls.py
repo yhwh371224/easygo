@@ -31,4 +31,6 @@ admin.site.block_title = "EasyGo Admin"
 handler400 = 'basecamp.views.custom_bad_request'
 handler403 = 'basecamp.views.custom_forbidden'
 handler404 = 'basecamp.views.custom_page_not_found'
-
+handler500 = 'basecamp.views.custom_server_error'
+handler502 = 'basecamp.views.custom_bad_gateway'
+handler503 = 'basecamp.views.custom_under_maintenance'
