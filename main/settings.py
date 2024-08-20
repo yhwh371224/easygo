@@ -142,10 +142,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'main.wsgi.application'
 
-handler400 = 'basecamp.views.custom_bad_request'
-handler403 = 'basecamp.views.custom_forbidden'
-handler404 = 'basecamp.views.custom_page_not_found'
-
 # DATABASES = {
 #   'default': {
 #       'ENGINE': 'django.db.backends.mysql',
