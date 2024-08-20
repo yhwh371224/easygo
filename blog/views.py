@@ -3,15 +3,15 @@ from django.http import HttpResponseServerError
 
 
 # error handler 400 403 404 500 502 503 
-def custom_bad_request(request):
+def custom_bad_request(request, exception):
     return render(request, '400.html', status=400)
 
 
-def custom_forbidden(request):
+def custom_forbidden(request, exception):
     return render(request, '403.html', status=403)
 
 
-def custom_page_not_found(request):
+def custom_page_not_found(request, exception):
     return render(request, '404.html', status=404)
 
 
