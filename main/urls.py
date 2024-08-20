@@ -27,3 +27,8 @@ admin.site.site_header = "EasyGo Administration"
 admin.site.site_title = "EasyGo Administration"
 admin.site.index_title = "EasyGo admin"
 admin.site.block_title = "EasyGo Admin"
+
+handler400 = 'basecamp.views.custom_bad_request'
+handler403 = 'basecamp.views.custom_forbidden'
+handler404 = 'basecamp.views.custom_page_not_found'
+
