@@ -167,8 +167,8 @@ def email_error_confirmbooking(request):
     return render(request, 'basecamp/email_error_confirmbooking.html')
 
 
-# def pickup_date_error(request): 
-#     return render(request, 'basecamp/pickup_date_error.html')
+def home_error(request): 
+    return render(request, 'basecamp/home_error.html')
 
 
 def inquiry(request): 
