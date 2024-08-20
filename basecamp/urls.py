@@ -2,7 +2,6 @@ from django.urls import path
 from . import views
 from .views import paypal_ipn, create_stripe_checkout_session
 
-
 app_name = "basecamp"
 
 urlpatterns = [
@@ -74,3 +73,8 @@ urlpatterns = [
     path('terms/', views.terms, name='terms'),
     path('wrong_date_today/', views.wrong_date_today, name='wrong_date_today')
 ]
+
+handler400 = 'basecamp.views.custom_bad_request'
+handler403 = 'basecamp.views.custom_forbidden'
+handler404 = 'basecamp.views.custom_page_not_found'
+
