@@ -7,7 +7,6 @@ app_name = "basecamp"
 handler400 = views.custom_bad_request
 handler403 = views.custom_forbidden
 handler404 = views.custom_page_not_found
-# handler405 = views.wrong_email_home
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -31,8 +30,7 @@ urlpatterns = [
     path('email_dispatch/', views.email_dispatch, name='email_dispatch'),
     path('email_dispatch_detail/', views.email_dispatch_detail, name='email_dispatch_detail'),
     path('email_error_confirmbooking/', views.email_error_confirmbooking, name='email_error_confirmbooking'),
-    path('pickup_date_detail/', views.pickup_date_detail, name='pickup_date_detail'),
-    path('pickup_date_error/', views.pickup_date_error, name='pickup_date_error'),
+    # path('pickup_date_error/', views.pickup_date_error, name='pickup_date_error'),
     path('home/', views.home, name='home'),
     path('information/', views.information, name='information'),
     path('invoice/', views.invoice, name="invoice"),
