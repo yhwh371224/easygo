@@ -139,6 +139,18 @@ def cruise_inquiry(request):
     return render(request, 'basecamp/cruise_inquiry.html', context)
 
 
+def custom_bad_request(request, exception):
+    return render(request, 'basecamp/400.html', status=400)
+
+
+def custom_forbidden(request, exception):
+    return render(request, 'basecamp/403.html', status=403)
+
+
+def custom_page_not_found(request, exception):
+    return render(request, 'basecamp/404.html', status=404)
+
+
 def date_error(request): 
     return render(request, 'basecamp/date_error.html')
 
@@ -149,6 +161,10 @@ def error(request):
 
 def email_dispatch(request): 
     return render(request, 'basecamp/email_dispatch.html')
+
+
+def email_error_confirmbooking(request): 
+    return render(request, 'basecamp/email_error_confirmbooking.html')
 
 
 def pickup_date_error(request): 
@@ -328,24 +344,8 @@ def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 
 
-# 400 error handler 
-def wrong_email(request, exception): 
-    return render(request, 'basecamp/400.html', status=400)
-
-def wrong_email_home(request, exception): 
-    return render(request, 'basecamp/405.html', status=405)
-
-def wrong_date(request, exception): 
-    return render(request, 'basecamp/401.html', status=401)
-
-def wrong_date_return(request, exception): 
-    return render(request, 'basecamp/403.html', status=403)
-
-def wrong_date_return_inquiry(request, exception): 
-    return render(request, 'basecamp/404.html', status=404)
-
-def wrong_date_today(request, exception): 
-    return render(request, 'basecamp/402.html', status=402)
+def wrong_date_today(request): 
+    return render(request, 'basecamp/wrong_date_today.html')
 
 
 # Inquiry for airport 
@@ -573,9 +573,9 @@ def inquiry_details2(request):
         today = date.today()
         if pickup_date != str(today):
             if is_ajax(request):
-                return render(request, 'basecamp/402.html')
+                return render(request, 'basecamp/wrong_date_today.html')
             else:
-                return render(request, 'basecamp/402.html')
+                return render(request, 'basecamp/wrong_date_today.html')
                      
         message = '''
                 Contact Form
@@ -1139,7 +1139,7 @@ def confirm_booking_detail(request):
         user = Inquiry.objects.filter(email=email).first()
 
         if not user:
-            return render(request, 'basecamp/error.html', {'message': 'There is no information registered with this email in our system'})
+            return render(request, 'basecamp/email_error_confirmbooking.html')
 
         name = user.name            
         contact = user.contact
@@ -1674,83 +1674,83 @@ def invoice_detail(request):
         return render(request, 'basecamp/invoice.html', {})
     
 
-def pickup_date_detail(request):       
-    if request.method == "POST":          
-        email = request.POST.get('email')
-        pickup_date = request.POST.get('pickup_date')
+# def pickup_date_detail(request):       
+#     if request.method == "POST":          
+#         email = request.POST.get('email')
+#         pickup_date = request.POST.get('pickup_date')
 
-        inquiry = Inquiry.objects.filter(email=email).first()
-        post = Post.objects.filter(email=email).first()
+#         inquiry = Inquiry.objects.filter(email=email).first()
+#         post = Post.objects.filter(email=email).first()
 
-        user = None
-        for obj in [inquiry, post]:
-            if obj:
-                if user is None or obj.created > user.created:
-                    user = obj
+#         user = None
+#         for obj in [inquiry, post]:
+#             if obj:
+#                 if user is None or obj.created > user.created:
+#                     user = obj
         
-        if not user:
-            return render(request, 'basecamp/405.html')
+#         if not user:
+#             return render(request, 'basecamp/405.html')
 
-        name = user.name
-        contact = user.contact
-        flight_number = user.flight_number
-        flight_time = user.flight_time
-        pickup_time = user.pickup_time
-        direction = user.direction
-        suburb = user.suburb
-        street = user.street
-        no_of_passenger = user.no_of_passenger
-        no_of_baggage = user.no_of_baggage
-        return_direction = user.return_direction
-        return_pickup_date = user.return_pickup_date
-        return_flight_number = user.return_flight_number
-        return_flight_time = user.return_flight_time
-        return_pickup_time = user.return_pickup_time
-        message = user.message                        
+#         name = user.name
+#         contact = user.contact
+#         flight_number = user.flight_number
+#         flight_time = user.flight_time
+#         pickup_time = user.pickup_time
+#         direction = user.direction
+#         suburb = user.suburb
+#         street = user.street
+#         no_of_passenger = user.no_of_passenger
+#         no_of_baggage = user.no_of_baggage
+#         return_direction = user.return_direction
+#         return_pickup_date = user.return_pickup_date
+#         return_flight_number = user.return_flight_number
+#         return_flight_time = user.return_flight_time
+#         return_pickup_time = user.return_pickup_time
+#         message = user.message                        
         
-        data = {
-        'name': name,
-        'contact': contact,
-        'email': email,
-        'pickup_date': pickup_date}       
+#         data = {
+#         'name': name,
+#         'contact': contact,
+#         'email': email,
+#         'pickup_date': pickup_date}       
         
-        content = '''
-        {} 
-        'The date' amended from data_error.html \n
-        >> Go to the Inquiry or Post \n
-        https://easygoshuttle.com.au \n  
-        ===============================
-        Contact: {}
-        Email: {}              
-        ===============================\n        
-        Best Regards,
-        EasyGo Admin \n\n        
-        ''' .format(data['name'], data['contact'], data['email'])
-        send_mail(data['pickup_date'], content, '', [RECIPIENT_EMAIL])       
+#         content = '''
+#         {} 
+#         'The date' amended from data_error.html \n
+#         >> Go to the Inquiry or Post \n
+#         https://easygoshuttle.com.au \n  
+#         ===============================
+#         Contact: {}
+#         Email: {}              
+#         ===============================\n        
+#         Best Regards,
+#         EasyGo Admin \n\n        
+#         ''' .format(data['name'], data['contact'], data['email'])
+#         send_mail(data['pickup_date'], content, '', [RECIPIENT_EMAIL])       
             
-        if isinstance(user, Inquiry):
-            p = Inquiry (name=name, contact=contact, email=email, pickup_date=pickup_date, flight_number=flight_number,
-                     flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
-                     no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction,
-                     return_pickup_date=return_pickup_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
-                     return_pickup_time=return_pickup_time, message=message)
+#         if isinstance(user, Inquiry):
+#             p = Inquiry (name=name, contact=contact, email=email, pickup_date=pickup_date, flight_number=flight_number,
+#                      flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
+#                      no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction,
+#                      return_pickup_date=return_pickup_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
+#                      return_pickup_time=return_pickup_time, message=message)
 
-            p.save()              
+#             p.save()              
 
-        elif isinstance(user, Post):
-            sam_driver = Driver.objects.get(driver_name="Sam") 
-            p = Post (name=name, contact=contact, email=email, pickup_date=pickup_date, flight_number=flight_number,
-                     flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
-                     no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction,
-                     return_pickup_date=return_pickup_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
-                     return_pickup_time=return_pickup_time, message=message, driver=sam_driver)
+#         elif isinstance(user, Post):
+#             sam_driver = Driver.objects.get(driver_name="Sam") 
+#             p = Post (name=name, contact=contact, email=email, pickup_date=pickup_date, flight_number=flight_number,
+#                      flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
+#                      no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction,
+#                      return_pickup_date=return_pickup_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
+#                      return_pickup_time=return_pickup_time, message=message, driver=sam_driver)
 
-            p.save()                
+#             p.save()                
                 
-        return render(request, 'basecamp/inquiry_done.html')
+#         return render(request, 'basecamp/inquiry_done.html')
 
-    else:
-        return render(request, 'basecamp/pickup_date_error.html', {})
+#     else:
+#         return render(request, 'basecamp/pickup_date_error.html', {})
 
 
 # email_dispatch_detail 
