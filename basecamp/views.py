@@ -732,11 +732,11 @@ def price_detail(request):
         no_of_passenger = request.POST.get('no_of_passenger')
 
         if direction == 'Select your option' or suburb == 'Select your option':
-            return render(request, 'basecamp/401.html')
+            return render(request, 'basecamp/home_error.html')
         
         today = date.today()        
         if not pickup_date or pickup_date <= str(today):
-            return render(request, 'basecamp/401.html')    
+            return render(request, 'basecamp/home_error.html')    
 
         send_email_task.delay(pickup_date, direction, suburb, no_of_passenger)
         
