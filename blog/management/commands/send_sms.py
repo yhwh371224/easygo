@@ -92,4 +92,4 @@ class Command(BaseCommand):
             
         except Exception as e:
             sms_logger.error(f'Error in handle method: {e}')
-            self.stdout.write(self.style.ERROR('Failed to send final notices'))
+            self.stdout.write(self.style.ERROR('Failed to send  twilio final notices'))
