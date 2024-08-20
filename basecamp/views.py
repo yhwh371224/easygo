@@ -167,8 +167,8 @@ def email_error_confirmbooking(request):
     return render(request, 'basecamp/email_error_confirmbooking.html')
 
 
-def pickup_date_error(request): 
-    return render(request, 'basecamp/pickup_date_error.html')
+# def pickup_date_error(request): 
+#     return render(request, 'basecamp/pickup_date_error.html')
 
 
 def inquiry(request): 
@@ -1672,85 +1672,6 @@ def invoice_detail(request):
     
     else:
         return render(request, 'basecamp/invoice.html', {})
-    
-
-# def pickup_date_detail(request):       
-#     if request.method == "POST":          
-#         email = request.POST.get('email')
-#         pickup_date = request.POST.get('pickup_date')
-
-#         inquiry = Inquiry.objects.filter(email=email).first()
-#         post = Post.objects.filter(email=email).first()
-
-#         user = None
-#         for obj in [inquiry, post]:
-#             if obj:
-#                 if user is None or obj.created > user.created:
-#                     user = obj
-        
-#         if not user:
-#             return render(request, 'basecamp/405.html')
-
-#         name = user.name
-#         contact = user.contact
-#         flight_number = user.flight_number
-#         flight_time = user.flight_time
-#         pickup_time = user.pickup_time
-#         direction = user.direction
-#         suburb = user.suburb
-#         street = user.street
-#         no_of_passenger = user.no_of_passenger
-#         no_of_baggage = user.no_of_baggage
-#         return_direction = user.return_direction
-#         return_pickup_date = user.return_pickup_date
-#         return_flight_number = user.return_flight_number
-#         return_flight_time = user.return_flight_time
-#         return_pickup_time = user.return_pickup_time
-#         message = user.message                        
-        
-#         data = {
-#         'name': name,
-#         'contact': contact,
-#         'email': email,
-#         'pickup_date': pickup_date}       
-        
-#         content = '''
-#         {} 
-#         'The date' amended from data_error.html \n
-#         >> Go to the Inquiry or Post \n
-#         https://easygoshuttle.com.au \n  
-#         ===============================
-#         Contact: {}
-#         Email: {}              
-#         ===============================\n        
-#         Best Regards,
-#         EasyGo Admin \n\n        
-#         ''' .format(data['name'], data['contact'], data['email'])
-#         send_mail(data['pickup_date'], content, '', [RECIPIENT_EMAIL])       
-            
-#         if isinstance(user, Inquiry):
-#             p = Inquiry (name=name, contact=contact, email=email, pickup_date=pickup_date, flight_number=flight_number,
-#                      flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
-#                      no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction,
-#                      return_pickup_date=return_pickup_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
-#                      return_pickup_time=return_pickup_time, message=message)
-
-#             p.save()              
-
-#         elif isinstance(user, Post):
-#             sam_driver = Driver.objects.get(driver_name="Sam") 
-#             p = Post (name=name, contact=contact, email=email, pickup_date=pickup_date, flight_number=flight_number,
-#                      flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
-#                      no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction,
-#                      return_pickup_date=return_pickup_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
-#                      return_pickup_time=return_pickup_time, message=message, driver=sam_driver)
-
-#             p.save()                
-                
-#         return render(request, 'basecamp/inquiry_done.html')
-
-#     else:
-#         return render(request, 'basecamp/pickup_date_error.html', {})
 
 
 # email_dispatch_detail 
