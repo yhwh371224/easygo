@@ -1,23 +1,13 @@
 from django.urls import path
 from . import views
 from .views import paypal_ipn, create_stripe_checkout_session
-from .views import (
-    wrong_email,    
-    wrong_date,
-    wrong_date_today,
-    wrong_date_return,
-    wrong_date_return_inquiry,
-    wrong_email_home,
-)
 
 app_name = "basecamp"
 
-handler400 = wrong_email
-handler401 = wrong_date
-handler402 = wrong_date_today
-handler403 = wrong_date_return
-handler404 = wrong_date_return_inquiry
-handler405 = wrong_email_home
+handler400 = views.custom_bad_request
+handler403 = views.custom_forbidden
+handler404 = views.custom_page_not_found
+# handler405 = views.wrong_email_home
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -40,6 +30,7 @@ urlpatterns = [
     path('error/', views.error, name='error'),
     path('email_dispatch/', views.email_dispatch, name='email_dispatch'),
     path('email_dispatch_detail/', views.email_dispatch_detail, name='email_dispatch_detail'),
+    path('email_error_confirmbooking/', views.email_error_confirmbooking, name='email_error_confirmbooking'),
     path('pickup_date_detail/', views.pickup_date_detail, name='pickup_date_detail'),
     path('pickup_date_error/', views.pickup_date_error, name='pickup_date_error'),
     path('home/', views.home, name='home'),
@@ -86,4 +77,5 @@ urlpatterns = [
     path('sitemap/', views.sitemap, name='sitemap'),
     path('success/', views.success, name='success'),
     path('terms/', views.terms, name='terms'),
+    path('wrong_date_today/', views.wrong_date_today, name='wrong_date_today')
 ]
