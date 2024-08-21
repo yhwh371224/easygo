@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponseServerError
+from django.core.exceptions import PermissionDenied
 
 
 # error handler 400 403 404 500 502 503 
@@ -29,3 +30,8 @@ def custom_under_maintenance(request):
 
 def test_server_error(request):
     return HttpResponseServerError("This is a test 500 error.")
+
+
+def test_forbidden_view(request):
+    # This will raise a PermissionDenied exception
+    raise PermissionDenied
