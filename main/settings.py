@@ -267,7 +267,7 @@ HTML_MINIFY = True
 KEEP_COMMENTS_ON_MINIFYING = True
 
 LOGIN_REDIRECT_URL = '/easygo_review/'
-LOGOUT_REDIRECT_URL = '/home/'
+LOGOUT_REDIRECT_URL = '/easygo_review/'
 
 CORS_ALLOWED_ORIGINS = [
     "https://easygoshuttle.com.au",
