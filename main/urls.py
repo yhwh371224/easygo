@@ -5,7 +5,6 @@ from django.conf.urls.static import static
 from django.views.static import serve
 from django.contrib.auth.decorators import user_passes_test
 from basecamp.views import stripe_webhook
-from blog.views import test_server_error, test_forbidden_view
 
 
 admin_site = user_passes_test(lambda u: u.is_superuser)(admin.site.urls)
@@ -20,8 +19,6 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('paypal/', include('paypal.standard.ipn.urls')),
     path('stripe_webhook/', stripe_webhook, name='stripe_webhook'),
-    path('test-500/', test_server_error, name='test_server_error'),
-    path('test-forbidden/', test_forbidden_view, name='test_forbidden'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
