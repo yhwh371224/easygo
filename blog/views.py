@@ -1,6 +1,4 @@
 from django.shortcuts import render
-from django.http import HttpResponseServerError
-from django.core.exceptions import PermissionDenied
 
 
 # error handler 400 403 404 500 502 503 
