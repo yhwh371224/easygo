@@ -112,6 +112,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware', 
     'allauth.account.middleware.AccountMiddleware',
+    'main.middlewares.block_ip_middleware.BlockIPMiddleware',
     'axes.middleware.AxesMiddleware',
 
 ]
