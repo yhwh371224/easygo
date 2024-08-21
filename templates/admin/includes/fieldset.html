@@ -1,4 +1,4 @@
-{% with prefix=fieldset.prefix|default:"fieldset" id_prefix=id_prefix|default:"0" id_suffix=id_suffix|default:"0" name=fieldset.name|default:""|slugify %}
+{% with id_suffix=id_suffix|default:"0" name=fieldset.name|default:""|slugify %}
 {% if name %}
     {% if fieldset.is_collapsible %}
         <details>
