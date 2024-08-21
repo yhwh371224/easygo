@@ -108,10 +108,6 @@ def booking(request):
     return render(request, 'basecamp/booking.html', context)
 
 
-def cancel(request):
-    return render(request, 'basecamp/cancel.html')
-
-
 @login_required
 def confirmation(request): 
     return render(request, 'basecamp/confirmation.html')
@@ -137,10 +133,6 @@ def cruise_inquiry(request):
         'RECAPTCHA_V2_SITE_KEY': settings.RECAPTCHA_V2_SITE_KEY,
     }   
     return render(request, 'basecamp/cruise_inquiry.html', context)
-
-
-def date_error(request): 
-    return render(request, 'basecamp/date_error.html')
 
 
 def error(request): 
@@ -1247,11 +1239,6 @@ def sending_email_first_detail(request):
                 email.send()
                 
         else: 
-
-        # for user in users:
-        #     user.sent_email = True
-        #     user.save() 
-
             html_content = render_to_string("basecamp/html_email-confirmation.html", 
                                         {'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 'email': user.email, 'email1': user.email1,
                                             'pickup_date': user.pickup_date, 'flight_number': user.flight_number,
