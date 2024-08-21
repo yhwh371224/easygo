@@ -47,6 +47,7 @@
 
 {% block field_sets %}
 {% for fieldset in adminform %}
+  <pre>{{ fieldset }}</pre>
   {% include "admin/includes/fieldset.html" with heading_level=2 id_suffix=forloop.counter0 %}
 {% endfor %}
 {% endblock %}
