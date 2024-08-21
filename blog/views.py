@@ -26,12 +26,3 @@ def custom_bad_gateway(request):
 
 def custom_under_maintenance(request):
     return render(request, '503.html', status=503)
-
-
-def test_server_error(request):
-    return HttpResponseServerError("This is a test 500 error.")
-
-
-def test_forbidden_view(request):
-    # This will raise a PermissionDenied exception
-    raise PermissionDenied
