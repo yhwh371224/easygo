@@ -1718,10 +1718,12 @@ def email_dispatch_detail(request):
 
             if selected_option == "Gratitude For Payment" and user:                     
                 user.paid = float(user.price) + 0.10
+                user.reminder = True
                 user.save()
                 if user.return_pickup_time == 'x':
                     user_1 = Post.objects.filter(email=email)[1]
                     user_1.paid = float(user.price) + 0.10
+                    user_1.reminder = True
                     user_1.save() 
             
             if selected_option == "Cancellation of Booking" and user:                     
