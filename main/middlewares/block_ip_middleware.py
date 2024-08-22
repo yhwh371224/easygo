@@ -1,7 +1,7 @@
 from django.http import HttpResponseForbidden
 
 class BlockIPMiddleware:
-    BLOCKED_IPS = ['207.154.205.99']
+    BLOCKED_IPS = ['207.154.205.99', '147.78.47.81']
 
     def __init__(self, get_response):
         self.get_response = get_response
