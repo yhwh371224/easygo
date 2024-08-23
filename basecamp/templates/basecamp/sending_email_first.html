@@ -31,29 +31,37 @@
       <!-- Page content-->
       <!-- Page title-->	 
       <!-- Contact form + details-->  	  
-            <form method="post" enctype="multipart/form-data" action="/sending_email_first_detail/" id="booking-form" class="card-body needs-validation p-5" >
-                {% csrf_token %}
-							
-				<div class="card text-white bg-secondary p-4">
-				<div class="mb-3 pb-1">
-					<label class="form-label" >Email address<sup class="text-danger ms-1">*</sup></label>
-					<input class="form-control" type="email"  placeholder="j.doe@example.com" required name="email">
-					<div class="invalid-feedback">Please enter a valid email address!</div>
-				</div></div>
-				<br><br>
-				<hr>
-				<br><br>
-				
-				<div class="text-center pt-2">
-					<button class="btn btn-primary" type="submit" id="submitButton">Submit</button>
-				</div>
-				<br><br>
-                <div><small>This form is protected by reCAPTCHA Enterprise and the Google
+	  <form method="post" enctype="multipart/form-data" action="/sending_email_first_detail/" id="booking-form" class="card-body needs-validation p-5">
+		{% csrf_token %}
+								
+		<div class="card text-white bg-secondary p-4">
+			<div class="mb-3 pb-1">
+				<label class="form-label">Email address<sup class="text-danger ms-1">*</sup></label>
+				<input class="form-control" type="email" placeholder="j.doe@example.com" required name="email">
+				<div class="invalid-feedback">Please enter a valid email address!</div>
+			</div>
+			</div>	
+			<br><br>
+			<hr>
+			<br><br>	
+			<!-- Index 입력 필드 추가 -->
+			<div class="mb-3 pb-1">
+				<label class="form-label">Index<sup class="text-danger ms-1">*</sup></label>
+				<input class="form-control" type="number" placeholder="1" name="index" value="1">
+				<div class="invalid-feedback">Please enter a valid index!</div>
+			</div>	
+			<div class="text-center pt-2">
+				<button class="btn btn-primary" type="submit" id="submitButton">Submit</button>
+			</div>	
+			<br><br>
+			<div>
+				<small>This form is protected by reCAPTCHA Enterprise and the Google
 					<a href="https://policies.google.com/privacy">Privacy Policy</a> and
-					<a href="https://policies.google.com/terms">Terms of Service</a> apply.</small>
-				</div>
-				<br>                
-              </form>
+					<a href="https://policies.google.com/terms">Terms of Service</a> apply.
+				</small>
+			</div>
+			<br>                
+		</form>
               </div>
             </div>
           
