@@ -47,6 +47,8 @@ def home(request):
     
     sorted_home_suburbs = fixed_items + remaining_items
     
+    send_notice_email.delay('homepage accessed', 'homepage accessed', RECIPIENT_EMAIL)    
+    
     return render(request, 'basecamp/home.html', {
         'suburbs': suburbs,
         'home_suburbs': sorted_home_suburbs,
@@ -250,9 +252,13 @@ def p2p_single_1(request):
     return render(request, 'basecamp/p2p_single_1.html')
 
 
-def privacy(request): 
-    send_notice_email.delay('service accessed', 'service accessed', RECIPIENT_EMAIL)
+def privacy(request):     
     return render(request, 'basecamp/privacy.html')
+
+
+def profile(request): 
+    send_notice_email.delay('profile accessed', 'profile accessed', RECIPIENT_EMAIL)
+    return render(request, 'basecamp/profile.html')
 
 
 def return_cruise_fields(request): 
@@ -287,8 +293,7 @@ def sending_email_input_data(request):
     return render(request, 'basecamp/sending_email_input_data.html')
 
 
-def service(request): 
-    send_notice_email.delay('service accessed', 'service accessed', RECIPIENT_EMAIL)
+def service(request):     
     return render(request, 'basecamp/service.html')
 
 

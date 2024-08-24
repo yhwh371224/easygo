@@ -51,6 +51,7 @@ urlpatterns = [
     path('paypal_ipn/', paypal_ipn, name='paypal_ipn'),    
     path('price_detail/', views.price_detail, name='price_detail'),
     path('privacy/', views.privacy, name='privacy'),
+    path('profile/', views.profile, name='profile'),
     path('recaptcha-verify/', views.recaptcha_verify, name='recaptcha_verify'),
     path('return_cruise_fields/', views.return_cruise_fields, name='return_cruise_fields'),
     path('return_flight_fields/', views.return_flight_fields, name='return_flight_fields'),
