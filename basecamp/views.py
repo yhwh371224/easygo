@@ -32,7 +32,9 @@ def index(request): return redirect('/home/')
 
 def home(request):
     suburbs = get_suburbs()
-    home_suburbs = get_home_suburbs()
+    home_suburbs = list(get_home_suburbs())
+
+    logger.debug(f"home_suburbs: {home_suburbs}") 
     
     fixed_items = [
         "Select your option",
