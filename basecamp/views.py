@@ -258,11 +258,6 @@ def privacy(request):
     return render(request, 'basecamp/privacy.html')
 
 
-def profile(request): 
-    # send_notice_email.delay('profile accessed', 'profile accessed', RECIPIENT_EMAIL)
-    return render(request, 'basecamp/profile.html')
-
-
 def return_cruise_fields(request): 
     return render(request, 'basecamp/return_cruise_fields.html')
 
