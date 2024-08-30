@@ -8,6 +8,7 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.conf import settings
 from blog.models import Post
+from main.settings import RECIPIENT_EMAIL
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -73,7 +74,7 @@ class Command(BaseCommand):
             })
 
             text_content = strip_tags(html_content)
-            email = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [booking_reminder.email])
+            email = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [booking_reminder.email, RECIPIENT_EMAIL])
             email.attach_alternative(html_content, "text/html")
 
             email.send(fail_silently=False)
