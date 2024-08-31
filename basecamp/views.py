@@ -1124,11 +1124,11 @@ def confirm_booking_detail(request):
         except ValueError:
             return HttpResponse("Invalid index value", status=400)  
         
-        users = Inquiry.objects.filter(email=email)        
-        if users.exists() and 0 <= index < len(users):
-            user = users[index]  
+        users = Inquiry.objects.filter(email=email)
 
-        if not user:
+        if users.exists() and 0 <= index < len(users):
+            user = users[index]
+        else:
             return render(request, 'basecamp/email_error_confirmbooking.html')
 
         name = user.name            
