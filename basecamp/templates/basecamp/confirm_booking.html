@@ -36,7 +36,12 @@
 					<label class="form-label" >Email address<sup class="text-danger ms-1">*</sup></label>
 					<input class="form-control" type="email"  placeholder="j.doe@example.com" required name="email">
 					<div class="invalid-feedback">Please enter the exact email address you used</div>
-				</div><br><br>
+				</div>
+        <div class="mb-3 pb-1">
+          <label class="form-label">Index<sup class="text-danger ms-1">*</sup></label>
+          <input class="form-control" type="number" placeholder="1" name="index" value="1">
+          <div class="invalid-feedback">Please enter a valid index!</div>
+        </div><br><br>
         <div class="mb-3 pb-1">
           <label class="form-label" >I confirm my booking&nbsp;&nbsp;&nbsp;</label>
           <input type="checkbox" required name="is_confirmed" value="True"></div></div>

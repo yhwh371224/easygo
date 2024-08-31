@@ -1117,8 +1117,16 @@ def confirm_booking_detail(request):
     if request.method == "POST":
         email = request.POST.get('email')
         is_confirmed = request.POST.get('is_confirmed') == 'True'
+        index = request.POST.get('index', '1')
 
-        user = Inquiry.objects.filter(email=email).first()
+        try:
+            index = int(index) - 1  
+        except ValueError:
+            return HttpResponse("Invalid index value", status=400)  
+        
+        users = Inquiry.objects.filter(email=email)        
+        if users.exists() and 0 <= index < len(users):
+            user = users[index]  
 
         if not user:
             return render(request, 'basecamp/email_error_confirmbooking.html')
@@ -1158,10 +1166,10 @@ def confirm_booking_detail(request):
         sam_driver = Driver.objects.get(driver_name="Sam")    
             
         p = Post(name=name, contact=contact, email=email, company_name=company_name, email1=email1, pickup_date=pickup_date, flight_number=flight_number,
-                 flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street, cruise=cruise,
-                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction, 
-                 return_pickup_date=return_pickup_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
-                 return_pickup_time=return_pickup_time, message=message, notice=notice, price=price, paid=paid, is_confirmed=is_confirmed, driver=sam_driver)
+                flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street, cruise=cruise,
+                no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction, 
+                return_pickup_date=return_pickup_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
+                return_pickup_time=return_pickup_time, message=message, notice=notice, price=price, paid=paid, is_confirmed=is_confirmed, driver=sam_driver)
         
         p.save()    
                 
