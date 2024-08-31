@@ -26,36 +26,64 @@
         <div class="row">
           <div class="col-lg-7 col-md-7 pb-2 mb-5" style="margin-top: -260px;">
             <div class="card border-1 shadow-lg">
-      <!-- Page content-->
-      <!-- Page title-->	 
-      <!-- Contact form + details-->  	  
-            <form method="post" enctype="multipart/form-data" id="booking-form" action="/confirm_booking_detail/" class="card-body needs-validation p-5" >
-                {% csrf_token %}							
-				<div class="card text-white bg-secondary p-4">
-				<div class="mb-3 pb-1">
-					<label class="form-label" >Email address<sup class="text-danger ms-1">*</sup></label>
-					<input class="form-control" type="email"  placeholder="j.doe@example.com" required name="email">
-					<div class="invalid-feedback">Please enter the exact email address you used</div>
-				</div>
-        <div class="mb-3 pb-1">
-          <label class="form-label">Index<sup class="text-danger ms-1">*</sup></label>
-          <input class="form-control" type="number" placeholder="1" name="index" value="1">
-          <div class="invalid-feedback">Please enter a valid index!</div>
-        </div><br><br>
-        <div class="mb-3 pb-1">
-          <label class="form-label" >I confirm my booking&nbsp;&nbsp;&nbsp;</label>
-          <input type="checkbox" required name="is_confirmed" value="True"></div></div>
-          <div class="invalid-feedback">Please check this box if you want to proceed</div>				
-				<hr>				           	
-				<div class="text-center pt-2">					
-					<button class="btn btn-primary" type="submit" id="submitButton">Submit</button>
-				</div>
-				<br><br>                        
-            </form>
+            <!-- Page content-->
+            <!-- Page title-->	 
+            <!-- Contact form + details-->  	  
+              <form method="post" enctype="multipart/form-data" id="booking-form" action="/confirm_booking_detail/" class="card-body needs-validation p-5">
+                {% csrf_token %}
+                <div class="card text-white bg-secondary p-4">
+                    <!-- Email Address Field -->
+                    <div class="mb-3 pb-1">
+                        <label class="form-label">Email address<sup class="text-danger ms-1">*</sup></label>
+                        <input class="form-control" type="email" placeholder="j.doe@example.com" required name="email">
+                        <div class="invalid-feedback">Please enter the exact email address you used</div>
+                    </div>            
+                    <!-- Hidden Index Field -->
+                    <input type="hidden" id="index" name="index" value="1">            
+                    <!-- Optionally Visible Index Field -->
+                    <div class="mb-3 pb-1 d-none" id="index-field">
+                        <label class="form-label">Index<sup class="text-danger ms-1">*</sup></label>
+                        <input class="form-control" type="number" name="index_visible" placeholder="1">
+                        <div class="invalid-feedback">Please enter a valid index!</div>
+                    </div>            
+                    <!-- Booking Confirmation Field -->
+                    <div class="mb-3 pb-1">
+                        <label class="form-label">I confirm my booking&nbsp;&nbsp;&nbsp;</label>
+                        <input type="checkbox" required name="is_confirmed" value="True">
+                        <div class="invalid-feedback">Please check this box if you want to proceed</div>
+                    </div>
+                </div>            
+                <!-- Submit Button -->
+                <div class="text-center pt-2">
+                    <button class="btn btn-primary" type="submit" id="submitButton">Submit</button>
+                </div>            
+                <!-- Admin Access Button -->
+                <div class="text-center pt-2">
+                    <button type="button" class="btn btn-secondary" style="opacity: 0.5;" onclick="toggleIndexField()">Admin Access</button>
+                </div>
+              </form>
             </div>
           </div>
         </div>  
             
 		</div>
 	</section>	
+
+  <script>
+    function toggleIndexField() {
+        var hiddenField = document.getElementById('index');
+        var visibleField = document.getElementById('index-field');
+        var indexInput = document.querySelector('input[name="index_visible"]');
+
+        if (visibleField.classList.contains('d-none')) {
+            visibleField.classList.remove('d-none');
+            indexInput.value = hiddenField.value;
+            hiddenField.setAttribute('type', 'number'); // Show the field
+        } else {
+            hiddenField.value = indexInput.value;
+            hiddenField.setAttribute('type', 'hidden'); // Hide the field again
+            visibleField.classList.add('d-none');
+        }
+    }
+</script>
 {% endblock %}
