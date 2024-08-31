@@ -42,7 +42,7 @@
                     <input type="hidden" id="index" name="index" value="1">            
                     <!-- Optionally Visible Index Field -->
                     <div class="mb-3 pb-1 d-none" id="index-field">
-                        <label class="form-label">Index<sup class="text-danger ms-1">*</sup></label>
+                        <label class="form-label">Admin Use Only<sup class="text-danger ms-1">*</sup></label>
                         <input class="form-control" type="number" name="index_visible" placeholder="1">
                         <div class="invalid-feedback">Please enter a valid index!</div>
                     </div>            
@@ -59,7 +59,7 @@
                 </div>            
                 <!-- Admin Access Button -->
                 <div class="text-center pt-2">
-                    <button type="button" class="btn btn-secondary" style="opacity: 0.5;" onclick="toggleIndexField()">Admin Access</button>
+                    <button type="button" class="btn btn-secondary" style="opacity: 0.3;" onclick="toggleIndexField()">Admin Access</button>
                 </div>
               </form>
             </div>
@@ -77,13 +77,11 @@
 
         if (visibleField.classList.contains('d-none')) {
             visibleField.classList.remove('d-none');
-            indexInput.value = hiddenField.value;
-            hiddenField.setAttribute('type', 'number'); // Show the field
+            indexInput.value = hiddenField.value; // Initialize visible field with hidden field value
         } else {
-            hiddenField.value = indexInput.value;
-            hiddenField.setAttribute('type', 'hidden'); // Hide the field again
+            hiddenField.value = indexInput.value; // Update hidden field with visible field value
             visibleField.classList.add('d-none');
         }
     }
-</script>
+  </script>
 {% endblock %}
