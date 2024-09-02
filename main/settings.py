@@ -91,7 +91,7 @@ LOGGING = {
             'level': 'DEBUG',  
             'propagate': False,
         },
-        'blog.management.commands.send_booking_reminders': {  
+        'blog.management.commands.booking_reminder': {  
             'handlers': ['email_file'],  
             'level': 'INFO',
             'propagate': False,
