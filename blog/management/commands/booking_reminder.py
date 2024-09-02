@@ -8,8 +8,8 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.conf import settings
 from blog.models import Post
-from main.settings import RECIPIENT_EMAIL
 
+logger = logging.getLogger(__name__)
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -48,6 +48,7 @@ class Command(BaseCommand):
     def send_email_task(self, booking_reminders, template_name, subject, target_date):
         for booking_reminder in booking_reminders:
             if target_date == date.today() and booking_reminder.discount == "TBA":
+                logger.info(f"Skipping email for {booking_reminder.email} due to discount 'TBA' on {target_date}")
                 continue
 
             driver = booking_reminder.driver
@@ -74,25 +75,28 @@ class Command(BaseCommand):
             })
 
             text_content = strip_tags(html_content)
-            email = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [booking_reminder.email, RECIPIENT_EMAIL])
+            email = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [booking_reminder.email])
             email.attach_alternative(html_content, "text/html")
 
-            email.send(fail_silently=False)
+            try:
+                email.send(fail_silently=False)
+                logger.info(f"Successfully sent '{subject}' email to {booking_reminder.email} for pickup on {target_date}")
+            except Exception as e:
+                logging.error(f"Failed to send email to {booking_reminder.email}: {str(e)}")
+
             booking_reminder.save()
 
-            if not booking_reminder.calendar_event_id:
-                subject = "calendar empty id - from booking_reminder"
-                message = f"{booking_reminder.name} & {booking_reminder.email}"
-                recipient = [settings.RECIPIENT_EMAIL]
+            conditions = [
+                (not booking_reminder.calendar_event_id, "calendar empty id - from booking_reminder"),
+                (booking_reminder.toll == 'short payment', "short payment - from booking_reminder"),
+            ]
 
-                send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, recipient, fail_silently=False)
-
-            if booking_reminder.toll == 'short payment':
-                subject = "short payment - from booking_reminder"
-                message = f"{booking_reminder.name} & {booking_reminder.email}"
-                recipient = [settings.RECIPIENT_EMAIL]
-
-                send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, recipient, fail_silently=False)
-
-
-
+            for condition, email_subject in conditions:
+                if condition:
+                    message = f"{booking_reminder.name} & {booking_reminder.email}"
+                    recipient = settings.DEFAULT_FROM_EMAIL
+                    try:
+                        send_mail(email_subject, message, settings.DEFAULT_FROM_EMAIL, [recipient], fail_silently=False)
+                        logger.info(f"Successfully sent alert '{email_subject}' for {booking_reminder.email}")
+                    except Exception as e:
+                        logging.error(f"Failed to send alert email: {str(e)}")
