@@ -59,8 +59,7 @@ INSTALLED_APPS = [
     'admin_honeypot',
     'markdownx',
     'csp',
-    'axes',
-    
+    'axes',    
 ]
 
 LOGGING = {
@@ -79,11 +78,22 @@ LOGGING = {
             'filename': os.path.join(BASE_DIR, 'logs/django.log'),  
             'formatter': 'verbose',  
         },
+        'email_file': {  
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs/email_reminders.log'),  
+            'formatter': 'verbose',
+        },
     },
     'loggers': {
         'django': {
             'handlers': ['file'],
             'level': 'DEBUG',  
+            'propagate': False,
+        },
+        'blog.management.commands.send_booking_reminders': {  
+            'handlers': ['email_file'],  
+            'level': 'INFO',
             'propagate': False,
         },
     },
@@ -114,7 +124,6 @@ MIDDLEWARE = [
     'allauth.account.middleware.AccountMiddleware',
     'main.middlewares.block_ip_middleware.BlockIPMiddleware',
     'axes.middleware.AxesMiddleware',
-
 ]
 
 AXES_FAILURE_LIMIT = 7  
@@ -142,20 +151,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'main.wsgi.application'
-
-# DATABASES = {
-#   'default': {
-#       'ENGINE': 'django.db.backends.mysql',
-#       'NAME': config('DB_NAME'),
-#       'USER': config('DB_USER'),
-#       'PASSWORD': config('DB_USER_PASSWORD'),
-#       'HOST': config('DB_HOST'),
-#       'PORT': '3306',
-#       'OPTIONS': {
-#           'charset': 'utf8mb4',
-#       },      
-#   }
-# }
 
 DATABASES = {
     'default': {
@@ -325,7 +320,3 @@ RECIPIENT_EMAIL = config('RECIPIENT_EMAIL')
 DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-
-
-
