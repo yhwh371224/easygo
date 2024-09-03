@@ -4,7 +4,9 @@ from twilio.rest import Client
 from decouple import config
 
 # Configure logging
-LOGGING_DIR = os.path.join(os.path.dirname(__file__), 'logs')
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+LOGGING_DIR = os.path.join(BASE_DIR, 'logs')
 os.makedirs(LOGGING_DIR, exist_ok=True)
 
 logging.basicConfig(
