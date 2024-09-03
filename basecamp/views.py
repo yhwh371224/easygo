@@ -19,6 +19,7 @@ from django.views.decorators.http import require_POST
 from main.settings import RECIPIENT_EMAIL
 from blog.models import Post, Inquiry, PaypalPayment, StripePayment, Driver
 from blog.tasks import send_confirm_email, send_email_task, send_notice_email
+from blog.sms_utils import send_sms_message
 from basecamp.area import get_suburbs
 from basecamp.area_full import get_more_suburbs
 from basecamp.area_home import get_home_suburbs
@@ -1698,10 +1699,12 @@ def email_dispatch_detail(request):
             if user.return_pickup_time == 'x':
                 user_1 = Post.objects.filter(email=email)[1]
                 user_1.pickup_time = adjustment_time
-                user_1.save()  
+                user_1.save() 
+                send_sms_message(user_1.contact, "Your pickup time has been adjusted. Please check your email")
             else: 
                 user.pickup_time = adjustment_time
-                user.save()        
+                user.save()    
+                send_sms_message(user_1.contact, "Your pickup time has been adjusted. Please check your email")    
         
         template_options = {
             'Earlier Pickup Requested for Departure': ("basecamp/html_email-departure-early.html", "Urgent notice - EasyGo"),
