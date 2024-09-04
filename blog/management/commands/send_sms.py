@@ -11,16 +11,7 @@ from decouple import config
 # Configure logging for this script
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-LOGGING_DIR = os.path.join(BASE_DIR, 'logs')
-os.makedirs(LOGGING_DIR, exist_ok=True)
-
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(levelname)s %(asctime)s %(module)s %(message)s',
-    handlers=[logging.FileHandler(os.path.join(LOGGING_DIR, 'sms.log'))]
-)
-
-sms_logger = logging.getLogger()
+sms_logger = logging.getLogger('sms')
 
 twilio_logger = logging.getLogger('twilio')
 twilio_logger.setLevel(logging.WARNING)

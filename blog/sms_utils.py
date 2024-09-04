@@ -6,16 +6,7 @@ from decouple import config
 # Configure logging
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-LOGGING_DIR = os.path.join(BASE_DIR, 'logs')
-os.makedirs(LOGGING_DIR, exist_ok=True)
-
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(levelname)s %(asctime)s %(module)s %(message)s',
-    handlers=[logging.FileHandler(os.path.join(LOGGING_DIR, 'sms.log'))]
-)
-
-sms_logger = logging.getLogger()
+sms_logger = logging.getLogger('sms')
 
 # Initialize Twilio client
 account_sid = config('TWILIO_ACCOUNT_SID')
@@ -32,7 +23,7 @@ def send_sms_message(phone_number, message_body):
     try:
         message = client.messages.create(
             body=message_body,
-            from_='+18148920523',  # Your Twilio SMS number
+            from_='+18148920523',  
             to=formatted_number
         )
         sms_logger.info(f'SMS sent to {formatted_number}')
