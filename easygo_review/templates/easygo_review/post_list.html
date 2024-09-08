@@ -46,7 +46,7 @@
                         <span class="grey-star">&#9733;</span>
                         {% endfor %}
                     </p>                   
-                    {% if post.comment_set.exists %}
+                    {% if post.author %}
                     <p class="card-text">
                         <a href="{{ post.get_absolute_url }}" class="btn btn-primary" id="read-more-post-{{ post.pk }}">Read More &rarr;</a>
                     </p>  
