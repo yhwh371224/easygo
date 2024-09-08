@@ -33,7 +33,6 @@
                 <div class="card-header text-muted">
                     Posted by {{ post.name }} on {{ post.date }}
                 </div>
-
                 <div class="card-body">
                     <p class="card-text">{{ post.get_markdown_content | striptags | truncatewords_html:300 }}</p>
 
@@ -48,9 +47,10 @@
                         {% endfor %}
                     </p>                    
                     <!-- {% if post.comment_set.exists %} -->
+                    <p class="card-text">
                         <a href="{{ post.get_absolute_url }}" class="btn btn-primary" id="read-more-post-{{ post.pk }}">Read More &rarr;</a>
+                    </p>                        
                     <!-- {% endif %} -->
-
                 </div>
                 {% if post.author %}
                     <div class="card-footer text-muted">                    
