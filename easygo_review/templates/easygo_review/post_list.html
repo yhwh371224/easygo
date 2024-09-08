@@ -34,7 +34,7 @@
                     Posted by {{ post.name }} on {{ post.date }}
                 </div>
                 <div class="card-body">
-                    <p class="card-text">{{ post.get_markdown_content | striptags | truncatewords_html:300 }}</p>
+                    <p class="card-text">{{ post.get_markdown_content | striptags | safe }}</p>
 
                     <br/>
 
