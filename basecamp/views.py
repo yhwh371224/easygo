@@ -1103,7 +1103,6 @@ def cruise_booking_detail(request):
         
         p.save()
 
-
         if is_ajax(request):
             return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})
         
@@ -1174,6 +1173,8 @@ def confirm_booking_detail(request):
                 return_pickup_time=return_pickup_time, message=message, notice=notice, price=price, paid=paid, cash=cash, is_confirmed=is_confirmed, driver=sam_driver)
         
         p.save()    
+
+        user.delete()
                 
         return render(request, 'basecamp/inquiry_done.html') 
         
