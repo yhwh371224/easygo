@@ -18,7 +18,7 @@ def format_phone_number(phone_number):
         phone_number = '+61' + phone_number.lstrip('0')
     return phone_number
 
-def send_sms_message(phone_number, message_body):
+def send_sms_notice(phone_number, message_body):
     formatted_number = format_phone_number(phone_number)
     try:
         message = client.messages.create(
