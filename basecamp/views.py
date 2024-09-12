@@ -1698,15 +1698,16 @@ def email_dispatch_detail(request):
             user = Inquiry.objects.filter(email=email).first()
 
         if adjustment_time and user:
+            message = f"Pickup time updated to {adjustment_time}. Check your email and reply via email only. - EasyGo Airport Shuttle"
             if user.return_pickup_time == 'x':
                 user_1 = Post.objects.filter(email=email)[1]
                 user_1.pickup_time = adjustment_time
                 user_1.save() 
-                send_sms_notice(user_1.contact, "Your pickup time has been adjusted. Please check your email. EasyGo Airport Shuttle")
+                send_sms_notice(user_1.contact, message)
             else: 
                 user.pickup_time = adjustment_time
                 user.save()    
-                send_sms_notice(user.contact, "Your pickup time has been adjusted. Please check your email. EasyGo Airport Shuttle")    
+                send_sms_notice(user.contact, message)    
         
         template_options = {
             'Earlier Pickup Requested for Departure': ("basecamp/html_email-departure-early.html", "Urgent notice - EasyGo"),
