@@ -68,36 +68,48 @@ LOGGING = {
     'formatters': {
         'verbose': {
             'format': '{levelname} {asctime} {module} {message}',
-            'style': '{',  
+            'style': '{',
         },
     },
     'handlers': {
         'file': {
-            'level': 'DEBUG',  
+            'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs/django.log'),  
-            'formatter': 'verbose',  
+            'filename': os.path.join(BASE_DIR, 'logs/django.log'),
+            'formatter': 'verbose',
         },
-        'email_file': {  
+        'email_file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs/email_reminders.log'),  
+            'filename': os.path.join(BASE_DIR, 'logs/email_reminders.log'),
+            'formatter': 'verbose',
+        },
+        'sms_file': {  
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs/sms.log'),  
             'formatter': 'verbose',
         },
     },
     'loggers': {
         'django': {
             'handlers': ['file'],
-            'level': 'DEBUG',  
+            'level': 'DEBUG',
             'propagate': False,
         },
-        'blog.management.commands.booking_reminder': {  
-            'handlers': ['email_file'],  
+        'blog.management.commands.booking_reminder': {
+            'handlers': ['email_file'],
             'level': 'INFO',
+            'propagate': False,
+        },
+        'sms': {  
+            'handlers': ['sms_file'],  
+            'level': 'INFO',  
             'propagate': False,
         },
     },
 }
+
 
 CELERY_BROKER_URL = config('CELERY_BROKER', 'redis://redis:6379')
 CELERY_ACCEPT_CONTENT = ['application/json']
