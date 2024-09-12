@@ -1690,6 +1690,7 @@ def email_dispatch_detail(request):
     if request.method == "POST":
         email = request.POST.get('email')        
         adjustment_time = request.POST.get('adjustment_time')
+        discount_price = request.POST.get('discount_price')
         selected_option = request.POST.get('selected_option')
         
         user = Post.objects.filter(email=email).first()
@@ -1723,12 +1724,13 @@ def email_dispatch_detail(request):
             "Shared Ride Discount Offer": ("basecamp/html_email-shared-discount.html", "Discount notice - EasyGo"),
             "Cancellation of Booking": ("basecamp/html_email-response-cancel.html", "Cancellation of Booking: EasyGo"),
             "Apology emails": ("basecamp/html_email-response-apology-emails.html", "Apology emails: EasyGo"),
-            "Payment discrepancy": ("basecamp/html_email-response-discrepancy.html", "Payment discrepancy: EasyGo")
+            "Payment discrepancy": ("basecamp/html_email-response-discrepancy.html", "Payment discrepancy: EasyGo"),
+            "Special promotion": ("basecamp/html_email-special-promotion.html", "Special promotion: EasyGo")
         }
 
         if selected_option in template_options:
             template_name, subject = template_options[selected_option]
-            context = {'email': email, 'name': user.name, 'adjustment_time': adjustment_time}
+            context = {'email': email, 'name': user.name, 'discount_price': discount_price, 'adjustment_time': adjustment_time}
 
             if selected_option == "Pickup Notice for Today" and user:
                 today = date.today()     
