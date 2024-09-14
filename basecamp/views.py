@@ -1726,7 +1726,9 @@ def email_dispatch_detail(request):
             "Cancellation of Booking": ("basecamp/html_email-response-cancel.html", "Cancellation of Booking: EasyGo"),
             "Apology emails": ("basecamp/html_email-response-apology-emails.html", "Apology emails: EasyGo"),
             "Payment discrepancy": ("basecamp/html_email-response-discrepancy.html", "Payment discrepancy: EasyGo"),
-            "Special promotion": ("basecamp/html_email-special-promotion.html", "Special promotion: EasyGo")
+            "Special promotion": ("basecamp/html_email-special-promotion.html", "Special promotion: EasyGo"),
+            "Booking delay": ("basecamp/html_email-booking-delay.html", "Booking delay: EasyGo"),
+            "Booking delay 1": ("basecamp/html_email-booking-delay1.html", "Booking delay 1: EasyGo")
         }
 
         if selected_option in template_options:
