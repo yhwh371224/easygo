@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, timedelta
 
 import logging
 import requests
@@ -1690,6 +1690,7 @@ def email_dispatch_detail(request):
     if request.method == "POST":
         email = request.POST.get('email')        
         adjustment_time = request.POST.get('adjustment_time')
+        wait_duration = request.POST.get('wait_duration')
         discount_price = request.POST.get('discount_price')
         selected_option = request.POST.get('selected_option')
         
@@ -1698,16 +1699,22 @@ def email_dispatch_detail(request):
             user = Inquiry.objects.filter(email=email).first()
 
         if adjustment_time and user:
-            message = f"Pickup time updated to {adjustment_time}. Check your email and reply via email only. - EasyGo Airport Shuttle"
-            if user.return_pickup_time == 'x':
-                user_1 = Post.objects.filter(email=email)[1]
-                user_1.pickup_time = adjustment_time
-                user_1.save() 
-                send_sms_notice(user_1.contact, message)
-            else: 
-                user.pickup_time = adjustment_time
-                user.save()    
-                send_sms_notice(user.contact, message)    
+            today = date.today()
+            day_after_tomorrow = today + timedelta(days=2)
+
+            users = Post.objects.filter(
+                email=email,
+                pickup_date__gte=today,
+                pickup_date__lte=day_after_tomorrow
+            ).order_by('pickup_date')
+
+            if users.exists():
+                closest_user = users.first()  # The closest post by pickup_date                
+                closest_user.pickup_time = adjustment_time
+                closest_user.save()
+
+                message = f"Important Notice! Please check your email and respond only via email - EasyGo Airport Shuttle"
+                send_sms_notice(closest_user.contact, message)   
         
         template_options = {
             'Earlier Pickup Requested for Departure': ("basecamp/html_email-departure-early.html", "Urgent notice - EasyGo"),
@@ -1734,7 +1741,7 @@ def email_dispatch_detail(request):
 
         if selected_option in template_options:
             template_name, subject = template_options[selected_option]
-            context = {'email': email, 'name': user.name, 'discount_price': discount_price, 'adjustment_time': adjustment_time}
+            context = {'email': email, 'name': user.name, 'adjustment_time': adjustment_time, 'wait_duration': wait_duration, 'discount_price': discount_price}
 
             if selected_option == "Pickup Notice for Today" and user:
                 today = date.today()     
