@@ -40,9 +40,14 @@
 					<div class="invalid-feedback">Please enter a valid email address!</div>
 				</div>                
 				<div class="mb-3 pb-1">
-                    <label class="form-label" >Adjustment pickup time (how long driver waited)</label>
-                    <input class="form-control" type="text"  placeholder="John Doe" name="adjustment_time">
+                    <label class="form-label" >Adjustment pickup time</label>
+                    <input class="form-control" type="text"  placeholder="adjustment_time" name="adjustment_time">
                     <div class="invalid-feedback">Please enter adjustment pickup time!</div>
+                </div>
+				<div class="mb-3 pb-1"></div>
+                    <label class="form-label" >How long driver waited</label>
+                    <input class="form-control" type="text"  placeholder="wait_duration" name="wait_duration">
+                    <div class="invalid-feedback">Please enter waiting time!</div>
                 </div>
 				<div class="mb-3 pb-1">
                     <label class="form-label" >Discount price (or % discount) | additional price for waiting</label>
@@ -76,10 +81,7 @@
 					  <option value="Booking delay 1">Booking delay 1</option>            
               		</select>
                 </div>    
-			</div>
-				<br>
-				<hr>
-				<br>				
+			</div>							
 				<div class="text-center pt-2">
 					<button class="btn btn-primary" type="submit" id="submitButton">Submit</button>
 				</div>
