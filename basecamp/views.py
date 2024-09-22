@@ -1616,7 +1616,7 @@ def invoice_detail(request):
             email.attach_alternative(html_content, "text/html")
             email.send()       
             
-        elif user.return_pickup_time:
+        elif user.return_pickup_time == 'x':
             user1 = Post.objects.filter(email=email)[1]
             html_content = render_to_string("basecamp/html_email-invoice.html",
                                         {'inv_no': inv_no, 'name': user.name, 'company_name': user1.company_name, 'contact': user1.contact, 'discount': discount,
