@@ -233,8 +233,17 @@
 											<td align="left" style="padding-top:28px;padding-left:0;">
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">                                                    
                                                     Your booking day is 2 weeks away<br><br>
-                                                    Booking date: {{ pickup_date }}<br><br>													
-													Pickup time: {{ pickup_time }}<br><br></p>								
+                                                </p>
+												{% if direction == 'Pickup from Intl Airport' or direction == 'Pickup from Domestic Airport' %}
+												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
+													• Sydney arrival date: {{ pickup_date }}<br><br>
+												    • Flight number: {{ flight_number }} <small>(ETA {{ flight_time }})</small><br><br>													
+													• After landing, please check your email. You will be notified of the meeting details via email or SMS<br><br></p>
+												{% else %}			
+												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
+													• Pickup date: {{ pickup_date }}<br><br>
+												    • Pikcup time: {{ pickup_time }}<br><br></p>
+												{$ endif %}									
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
 												    We will remind you again of your booking close to the Booking date<br><br><br></p>																	    										                                                 
 												<p style="Margin:0;font-size:12px;line-height:21px;Margin-top:16px;Margin-bottom:12px;">    
