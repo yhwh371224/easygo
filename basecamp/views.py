@@ -1728,7 +1728,7 @@ def email_dispatch_detail(request):
             "Gratitude For Payment": ("basecamp/html_email-response-payment-received.html", "Payment Received - EasyGo"),
             "Inquiry for further details": ("basecamp/html_email-response-more-details.html", "Inquiry for further details - EasyGo"),
             "Pickup Notice for Today": ("basecamp/html_email-today.html", "Pickup Notice for Today - EasyGo"),
-            "Request for Driver Contact Information": ("basecamp/html_email-response-driver-contact.html", "For driver contact - EasyGo"),
+            "Request for more Information": ("basecamp/html_email-response-driver-contact.html", "For more infomation - EasyGo"),
             "Shared Ride (inquiry) Discount Offer": ("basecamp/html_email-shared-inquiry-discount.html", "Discount notice - EasyGo"),
             "Shared Ride (booking) Discount Offer": ("basecamp/html_email-shared-booking-discount.html", "Discount notice - EasyGo"),
             "Cancellation of Booking": ("basecamp/html_email-response-cancel.html", "Cancellation of Booking: EasyGo"),
