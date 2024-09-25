@@ -1154,6 +1154,7 @@ def confirm_booking_detail(request):
         notice = user.notice
         price = user.price
         paid = user.paid 
+        private = user.private
         cash = user.cash         
         
         data = {
@@ -1168,7 +1169,7 @@ def confirm_booking_detail(request):
             
         p = Post(name=name, contact=contact, email=email, company_name=company_name, email1=email1, pickup_date=pickup_date, flight_number=flight_number,
                 flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street, cruise=cruise, 
-                no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction, 
+                no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction, private=private, 
                 return_pickup_date=return_pickup_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
                 return_pickup_time=return_pickup_time, message=message, notice=notice, price=price, paid=paid, cash=cash, is_confirmed=is_confirmed, driver=sam_driver)
         
