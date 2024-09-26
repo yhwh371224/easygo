@@ -22,30 +22,30 @@ class Command(BaseCommand):
         
     def handle(self, *args, **options):
         try: 
-            dates_to_check = {
-                "today": date.today(),
-                "tomorrow": date.today() + timedelta(days=1),
-                "two_days": date.today() + timedelta(days=2),
-                "three_days": date.today() + timedelta(days=3),                   
-            }
+            start_date = date.today()
+            end_date = start_date + timedelta(days=3)
 
-            for key, check_date in dates_to_check.items():
-                bookings = Post.objects.filter(pickup_date=check_date)
+            bookings = Post.objects.filter(pickup_date__range=(start_date, end_date))
                 
-                for booking in bookings:
-                    if not booking.cancelled and not booking.paid and not booking.cash:
-                        email_subject = "Urgent notice for payment" if key == "today" or key == "tomorrow" else "Payment notice"
-                        email_template = "basecamp/html_email-nopayment-today.html" if key == "today" or key == "tomorrow" else "basecamp/html_email-nopayment.html"
-                        
-                        self.send_email(
-                            email_subject,
-                            email_template,
-                            {'name': booking.name, 'email': booking.email, 'price': booking.price},
-                            [booking.email, RECIPIENT_EMAIL]
-                        )
+            for booking in bookings:
+                if not booking.cancelled and not booking.paid and not booking.cash:
+                    days_difference = (booking.pickup_date - start_date).days
+                    if days_difference in [0, 1]:  
+                        email_subject = "Urgent notice for payment"
+                        email_template = "basecamp/html_email-nopayment-today.html"
+                    else:
+                        email_subject = "Payment notice"
+                        email_template = "basecamp/html_email-nopayment.html"
+
+                    self.send_email(
+                        email_subject,
+                        email_template,
+                        {'name': booking.name, 'email': booking.email, 'price': booking.price},
+                        [booking.email, RECIPIENT_EMAIL]
+                    )
 
             self.stdout.write(self.style.SUCCESS('No_payment_yet emailed successfully'))
 
-        except Exception as e:            
-            self.stdout.write(self.style.ERROR('Failed to send no_payment_yet'))
+        except Exception as e:
+            self.stdout.write(self.style.ERROR(f'Failed to send no_payment_yet: {str(e)}'))
         
