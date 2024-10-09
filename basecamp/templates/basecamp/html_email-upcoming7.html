@@ -234,16 +234,23 @@
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">                                                    
                                                     Your trip day is 7 days away<br><br>                                                    
 												</p>
-												{% if direction == 'Pickup from Intl Airport' or direction == 'Pickup from Domestic Airport' %}
+											{% if direction == 'Pickup from Intl Airport' or direction == 'Pickup from Domestic Airport' %}
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
 													• Sydney arrival date: {{ pickup_date }}<br><br>
 												    • Flight number: {{ flight_number }} <small>(ETA {{ flight_time }})</small><br><br>													
 													• After landing, please check your email. You will be notified of the meeting details via email or SMS<br><br></p>
-												{% else %}			
+											{% elif not direction %}
+												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">													
+													• See you on time,{{ pickup_time }}<br>											
+													• Start point: {{ flight_number }}<br>
+													• End point: {{ street }}<br><br></p>												
+												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
+													Please be ready on time, {{ pickup_time }}<br><br></p>
+											{% else %}			
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
 													• Pickup date: {{ pickup_date }}<br><br>
 												    • Pikcup time: {{ pickup_time }}<br><br></p>
-												{$ endif %}												
+											{$ endif %}														
 												<br>																	    										                                                 
 												<p style="Margin:0;font-size:12px;line-height:21px;Margin-top:16px;Margin-bottom:12px;">    
                                                     <span style="color: #eb7828">Please note:</span><br>
