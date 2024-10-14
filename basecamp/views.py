@@ -1751,7 +1751,7 @@ def email_dispatch_detail(request):
                     driver_instance = user_today.driver 
                     context.update({
                         'pickup_time': user_today.pickup_time, 'meeting_point': user_today.meeting_point, 
-                        'direction': user_today.direction, 'cash': user_today.cash, 
+                        'direction': user_today.direction, 'cash': user_today.cash, 'cruise': user_today.cruise,
                         'driver_name': driver_instance.driver_name, 'driver_contact': driver_instance.driver_contact, 
                         'driver_plate': driver_instance.driver_plate, 'driver_car': driver_instance.driver_car
                     })
