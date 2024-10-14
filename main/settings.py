@@ -121,12 +121,12 @@ SITE_ID = 1
 SITE_URL = 'https://easygoshuttle.com.au'
 
 MIDDLEWARE = [
-    'django.middleware.gzip.GZipMiddleware', 
-    'main.middlewares.block_ip_middleware.BlockIPMiddleware',
+    'django.middleware.gzip.GZipMiddleware',     
     'htmlmin.middleware.HtmlMinifyMiddleware', 
     'htmlmin.middleware.MarkRequestMiddleware', 
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'main.middlewares.block_ip_middleware.BlockIPMiddleware',  
     'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
