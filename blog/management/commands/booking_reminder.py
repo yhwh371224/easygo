@@ -73,6 +73,7 @@ class Command(BaseCommand):
                 'driver_car': driver.driver_car if driver else "",
                 'paid': booking_reminder.paid,
                 'cash': booking_reminder.cash,
+                'cruise': booking_reminder.cruise,
             })
 
             text_content = strip_tags(html_content)
