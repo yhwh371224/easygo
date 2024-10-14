@@ -138,6 +138,10 @@ MIDDLEWARE = [
     'axes.middleware.AxesMiddleware',
 ]
 
+AXES_WHITELIST = [
+    '185.194.217.213'
+]
+
 AXES_FAILURE_LIMIT = 7  
 AXES_COOLOFF_TIME = timedelta(minutes=60)  
 AXES_LOCKOUT_MESSAGE = "Access locked. Please contact the office"
