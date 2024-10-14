@@ -32,7 +32,7 @@ def index(request): return redirect('/home/')
 
 
 def home(request):
-    # suburbs = get_suburbs()
+    suburbs = get_suburbs()
     home_suburbs = get_home_suburbs()
 
     logger.debug(f"home_suburbs: {home_suburbs}") 
@@ -53,7 +53,7 @@ def home(request):
     # send_notice_email.delay('homepage accessed', 'homepage accessed', RECIPIENT_EMAIL)    
     
     return render(request, 'basecamp/home.html', {
-        # 'suburbs': suburbs,
+        'suburbs': suburbs,
         'home_suburbs': sorted_home_suburbs,
     })
 
