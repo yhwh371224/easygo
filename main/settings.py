@@ -27,6 +27,8 @@ if ENVIRONMENT == 'production':
     SECURE_HSTS_PRELOAD = True
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    USE_X_FORWARDED_HOST = True
     X_FRAME_OPTIONS = 'DENY'
     CSP_DEFAULT_SRC = ("'self'",)
     CSP_STYLE_SRC = ("'self'", 'https://fonts.googleapis.com')
@@ -136,10 +138,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware', 
     'allauth.account.middleware.AccountMiddleware',    
     'axes.middleware.AxesMiddleware',
-]
-
-AXES_WHITELIST = [
-    '185.194.217.213'
 ]
 
 AXES_FAILURE_LIMIT = 7  
