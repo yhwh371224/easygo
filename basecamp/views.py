@@ -1436,48 +1436,6 @@ def sending_email_input_data_detail(request):
         return render(request, 'basecamp/sending_email_first.html', {})   
 
 
-
-def save_data_only_detail(request):     
-    if request.method == "POST":
-        company_name = request.POST.get('company_name')
-        name = request.POST.get('name')
-        contact = request.POST.get('contact')
-        email = request.POST.get('email')
-        email1 = request.POST.get('email1')
-        pickup_date = request.POST.get('pickup_date')
-        flight_number = request.POST.get('flight_number')
-        flight_time = request.POST.get('flight_time')
-        pickup_time = request.POST.get('pickup_time')
-        direction = request.POST.get('direction')
-        suburb = request.POST.get('suburb')
-        street = request.POST.get('street')
-        no_of_passenger = request.POST.get('no_of_passenger')
-        no_of_baggage = request.POST.get('no_of_baggage')
-        return_direction = request.POST.get('return_direction')
-        return_pickup_date = request.POST.get('return_pickup_date')
-        return_flight_number = request.POST.get('return_flight_number')
-        return_flight_time = request.POST.get('return_flight_time')
-        return_pickup_time = request.POST.get('return_pickup_time')
-        message = request.POST.get('message')        
-        price = request.POST.get('price')
-        paid = request.POST.get('paid')
-     
-        sam_driver = Driver.objects.get(driver_name="Sam") 
- 
-        p = Post(company_name=company_name, name=name, contact=contact, email=email, email1=email1, pickup_date=pickup_date, flight_number=flight_number,
-                 flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
-                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction,
-                 return_pickup_date=return_pickup_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
-                 return_pickup_time=return_pickup_time, message=message, price=price, paid=paid, driver=sam_driver)
-        
-        p.save()                   
-        
-        return render(request, 'basecamp/inquiry_done.html')
-    
-    else:
-        return render(request, 'basecamp/save_data_only.html', {})  
-
-
 # For Return Trip 
 def return_trip_detail(request):     
     if request.method == "POST":
