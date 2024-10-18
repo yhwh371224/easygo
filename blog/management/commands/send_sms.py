@@ -23,8 +23,9 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         try: 
             today = date.today()
-            tomorrow = today + timedelta(days=1)
-            final_notices = Post.objects.filter(pickup_date__range=[today, tomorrow])
+            # tomorrow = today + timedelta(days=1)
+            day_after_tomorrow = today + timedelta(days=2)
+            final_notices = Post.objects.filter(pickup_date__range=[today, day_after_tomorrow])
             
             # Initialize Twilio client once
             account_sid = config('TWILIO_ACCOUNT_SID')
@@ -67,8 +68,7 @@ class Command(BaseCommand):
                     sms_logger.error(f'Failed to send SMS message to {formatted_number}: {e}')            
 
             def should_send_notice(final_notice):
-                return (
-                    not final_notice.reminder and 
+                return (                     
                     not final_notice.cancelled and 
                     not final_notice.paid and 
                     not final_notice.cash
