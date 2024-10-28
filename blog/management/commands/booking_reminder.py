@@ -8,6 +8,7 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.conf import settings
 from blog.models import Post
+from itertools import zip_longest
 
 logger = logging.getLogger(__name__)
 
@@ -38,7 +39,7 @@ class Command(BaseCommand):
             "Reminder-2wks",
             "Review-EasyGo",
         ]
-        for interval, template, subject in zip(reminder_intervals, templates, subjects):
+        for interval, template, subject in zip_longest(reminder_intervals, templates, subjects, fillvalue=""):
             self.send_email(interval, template, subject)
 
     def send_email(self, date_offset, template_name, subject):
@@ -56,7 +57,9 @@ class Command(BaseCommand):
 
             html_content = render_to_string(template_name, {
                 'name': booking_reminder.name,
+                'company_name': booking_reminder.company_name,
                 'email': booking_reminder.email,
+                'email1': booking_reminder.email1,
                 'pickup_date': booking_reminder.pickup_date,
                 'flight_number': booking_reminder.flight_number,
                 'flight_time': booking_reminder.flight_time,
@@ -77,7 +80,7 @@ class Command(BaseCommand):
             })
 
             text_content = strip_tags(html_content)
-            email = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [booking_reminder.email])
+            email = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [booking_reminder.email, booking_reminder.email1])
             email.attach_alternative(html_content, "text/html")
 
             try:
