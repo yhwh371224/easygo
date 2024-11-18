@@ -702,7 +702,6 @@ def p2p_booking_detail(request):
         return render(request, 'basecamp/p2p.html', {})
 
 
-
 def price_detail(request):
     if request.method == "POST":
         pickup_date = request.POST.get('pickup_date')
@@ -717,35 +716,15 @@ def price_detail(request):
         if not pickup_date or pickup_date <= str(today):
             return render(request, 'basecamp/home_error.html')    
 
+        # direction과 suburb가 'International Airport' 또는 'Domestic Airport'일 경우 'Airport'로 설정
+        if direction in ['International Airport', 'Domestic Airport']:
+            direction = 'Airport'
+
+        if suburb in ['International Airport', 'Domestic Airport']:
+            suburb = 'Airport'
+
         send_email_task.delay(pickup_date, direction, suburb, no_of_passenger)
-        
-        #sub = int(suburbs.get(suburb))
-        #no_p = int(no_of_passenger)
-#
-        #def price_cal3():
-        #    if 1 <= no_p < 10 and direction == 'Drop off to Domestic Airport':
-        #        return sub + (no_p * 10) - 10
-        #    elif 10 <= no_p <= 13 and direction == 'Drop off to Domestic Airport':
-        #        return sub + (no_p * 10) + 10
-#
-        #    elif 1 <= no_p < 10 and direction == 'Drop off to Intl Airport':
-        #        return sub + (no_p * 10) - 10
-        #    elif 10 <= no_p <= 13 and direction == 'Drop off to Intl Airport':
-        #        return sub + (no_p * 10) + 10
-#
-        #    elif 1 <= no_p < 10 and direction == 'Pickup from Domestic Airport':
-        #        return sub + (no_p * 10) 
-        #    elif 10 <= no_p <= 13 and direction == 'Pickup from Domestic Airport':
-        #        return sub + (no_p * 10) + 10
-#
-        #    elif 1 <= no_p < 10 and direction == 'Pickup from Intl Airport':
-        #        return sub + (no_p * 10) 
-        #    else:
-        #        return sub + (no_p * 10) + 10
-#
-        #price_cal3()
-        #price = str(price_cal3())
-        
+
         context = {
             'pickup_date': pickup_date,
             'direction': direction,
@@ -757,6 +736,7 @@ def price_detail(request):
 
     else:
         return render(request, 'basecamp/home.html')
+
 
 
 # Booking by myself 
