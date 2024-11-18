@@ -723,6 +723,9 @@ def price_detail(request):
         if suburb in ['International Airport', 'Domestic Airport']:
             suburb = 'Airport'
 
+        condition_met = not ( (direction in ['Overseas cruise terminal', 'WhiteBay cruise terminal'] and suburb == 'Airport') or
+                          (direction == 'Airport' and suburb in ['Overseas cruise terminal', 'WhiteBay cruise terminal']) )
+
         send_email_task.delay(pickup_date, direction, suburb, no_of_passenger)
 
         context = {
@@ -730,6 +733,7 @@ def price_detail(request):
             'direction': direction,
             'suburb': suburb,
             'no_of_passenger': no_of_passenger,  
+            'condition_met': condition_met
         }
 
         return render(request, 'basecamp/inquiry1.html', context)
