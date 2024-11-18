@@ -498,7 +498,7 @@ def inquiry_details1(request):
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['contact'], data['email'],  data['pickup_date'], data['flight_number'],
                         data['pickup_time'], data['direction'], data['street'],  data['suburb'], data['no_of_passenger'], 
-                        data['return_pickup_date'], data['return_flight_number'],data['return_pickup_time'])
+                        )
             
             send_mail(data['pickup_date'], content, '', [RECIPIENT_EMAIL])
 
