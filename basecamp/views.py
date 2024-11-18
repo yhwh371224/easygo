@@ -447,24 +447,32 @@ def inquiry_details(request):
 # inquiry (simple one) for airport from home page
 def inquiry_details1(request):
     if request.method == "POST":
-        name = request.POST.get('name')        
+        name = request.POST.get('name')
+        contact = request.POST.get('contact')
         email = request.POST.get('email')
-        pickup_date = request.POST.get('pickup_date')        
+        pickup_date = request.POST.get('pickup_date')
+        flight_number = request.POST.get('flight_number')
+        flight_time = request.POST.get('flight_time')
         pickup_time = request.POST.get('pickup_time')
         direction = request.POST.get('direction')
-        suburb = request.POST.get('suburb')        
+        suburb = request.POST.get('suburb')
+        street = request.POST.get('street')
         no_of_passenger = request.POST.get('no_of_passenger')
-        no_of_baggage = request.POST.get('no_of_baggage')
+        no_of_baggage = request.POST.get('no_of_baggage')        
+        message = request.POST.get('message')
+
         
         data = {
-            'name': name,            
+            'name': name,
+            'contact': contact,
             'email': email,
-            'pickup_date': pickup_date,            
+            'pickup_date': pickup_date,
+            'flight_number': flight_number,
             'pickup_time': pickup_time,
-            'direction': direction,            
+            'direction': direction,
+            'street': street,
             'suburb': suburb,
-            'no_of_passenger': no_of_passenger,
-            'no_of_baggage': no_of_baggage,           
+            'no_of_passenger': no_of_passenger,           
             }
      
         inquiry_email_exists = Inquiry.objects.filter(email=email).exists()
@@ -473,52 +481,56 @@ def inquiry_details1(request):
         if inquiry_email_exists or post_email_exists:
             content = '''
             Hello, {} \n
-            Exist in Inquiry or Post \n 
-            *** From Home Page *** \n
-            ====Simple One====
-            =============================            
+            Exist in Inquiry or Post *\n 
+            *** It starts from Home Page
+            =============================
+            Contact: {}
             Email: {}  
-            Flight date: {}            
+            Flight date: {}
+            Flight number: {}
             Pickup time: {}
-            Direction: {}            
+            Direction: {}
+            Street: {}
             Suburb: {}
-            Passenger: {}   
-            Baggage: {}         
+            Passenger: {}            
             =============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['email'],  data['pickup_date'], data['pickup_time'], 
-                        data['direction'], data['suburb'], data['no_of_passenger'], data['no_of_baggage'])
+            ''' .format(data['name'], data['contact'], data['email'],  data['pickup_date'], data['flight_number'],
+                        data['pickup_time'], data['direction'], data['street'],  data['suburb'], data['no_of_passenger'], 
+                        data['return_pickup_date'], data['return_flight_number'],data['return_pickup_time'])
             
             send_mail(data['pickup_date'], content, '', [RECIPIENT_EMAIL])
 
         else:
             content = '''
             Hello, {} \n
-            Neither in Inquiry & Post \n 
-            *** From Home Page ***
-            ====Simple One====
+            Neither in Inquiry & Post *\n 
+            *** It starts from Home Page
             =============================
+            Contact: {}
             Email: {}  
-            Flight date: {}            
+            Flight date: {}
+            Flight number: {}
             Pickup time: {}
-            Direction: {}            
+            Direction: {}
+            Street: {}
             Suburb: {}
-            Passenger: {}        
-            Baggage: {} 
+            Passenger: {}            
             =============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['email'],  data['pickup_date'], data['pickup_time'], 
-                        data['direction'], data['suburb'], data['no_of_passenger'], data['no_of_baggage'])
+            ''' .format(data['name'], data['contact'], data['email'],  data['pickup_date'], data['flight_number'],
+                        data['pickup_time'], data['direction'], data['street'],  data['suburb'], data['no_of_passenger'], 
+                        )
             
             send_mail(data['pickup_date'], content, '', [RECIPIENT_EMAIL])     
         
-        p = Inquiry(name=name, email=email, pickup_date=pickup_date, 
-                 pickup_time=pickup_time, direction=direction, suburb=suburb, 
-                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage)
+        p = Inquiry(name=name, contact=contact, email=email, pickup_date=pickup_date, flight_number=flight_number,
+                 flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
+                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message)
         
-        p.save() 
+        p.save()
 
         return render(request, 'basecamp/inquiry_done.html')
 
