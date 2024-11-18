@@ -71,7 +71,8 @@
             <br><br>
             <hr>
             <br><br>
-          {% if not ( (direction in ['Overseas cruise terminal', 'WhiteBay cruise terminal'] and suburb == 'Airport') or (direction == 'Airport' and suburb in ['Overseas cruise terminal', 'WhiteBay cruise terminal']) ) %}           
+            {% if not (direction in ['Overseas cruise terminal', 'WhiteBay cruise terminal'] and suburb == 'Airport') and not (direction == 'Airport' and suburb in ['Overseas cruise terminal', 'WhiteBay cruise terminal']) %}
+           
             <div class="mb3 pb-1" >					
               <label class="form-label" >Full Address of Suburb/Hotel</label>					
             </div>
