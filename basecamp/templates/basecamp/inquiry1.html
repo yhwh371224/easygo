@@ -82,14 +82,18 @@
                 <input class="form-control" type="text"  placeholder="Street No and Street Name" required name="street">
                 <div class="invalid-feedback">Please enter street no & name!</div>
                 </div>    
-              </div>
+              </div><br>
           {% endif %}
               <div class="mb-3 pb-1">
                 <label class="form-label" >Baggage</label>
                 <input class="form-control" type="text" placeholder="How many baggage?" name="no_of_baggage" required>
                 <div class="invalid-feedback">Please enter the number of baggage!</div>
               </div>
-            <br>            
+            <br>   
+            <input type="hidden" name="pickup_date" value="{{ pickup_date }}">
+            <input type="hidden" name="direction" value="{{ direction }}">
+            <input type="hidden" name="suburb" value="{{ suburb }}">
+            <input type="hidden" name="no_of_passenger" value="{{ no_of_passenger }}">        
             <div class="text-center pt-2">
               <button class="btn btn-primary" type="submit" id="submitButton">Submit</button>
             </div>        
