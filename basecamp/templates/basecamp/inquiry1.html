@@ -68,7 +68,10 @@
               <div class="mb-3 pb-1">
                 <label class="form-label" >Pickup time preferred</label>
                 <input class="form-control" type="time" name="pickup_time" >
-              </div>            
+              </div>
+            <br><br>
+            <hr>
+            <br><br>            
           {% if condition_met %}           
             <div class="mb3 pb-1" >					
               <label class="form-label" >Full Address of Suburb/Hotel</label>					
@@ -79,11 +82,8 @@
                 <input class="form-control" type="text"  placeholder="Street No and Street Name" required name="street">
                 <div class="invalid-feedback">Please enter street no & name!</div>
                 </div>    
-              </div></div>
-          {% endif %}		               
-            <br><br>
-            <hr>
-            <br><br>  
+              </div>
+          {% endif %}
               <div class="mb-3 pb-1">
                 <label class="form-label" >Baggage</label>
                 <input class="form-control" type="text" placeholder="How many baggage?" name="no_of_baggage" required>
