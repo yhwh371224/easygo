@@ -247,7 +247,7 @@
 													Flight number: {{ flight_number }}<br>
 													Flight time: {{ flight_time }}<br>
 													Pickup time: {{ pickup_time }}<br>
-													Address: {{ street }}, {{ suburb }}<br>
+													Address: {{ street|default:'' }}, {{ suburb }}<br>
 												{% else %}
 													Pickup date:  {{ pickup_date }}<br>
 													Pickup time:  {{ pickup_time }}<br>
