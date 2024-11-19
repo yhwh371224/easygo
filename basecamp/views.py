@@ -1625,14 +1625,19 @@ def invoice_detail(request):
 
 
 # email_dispatch_detail 
-def handle_email_sending(request, email, subject, template_name, context):
+def handle_email_sending(request, email, subject, template_name, context, email1=None):
     html_content = render_to_string(template_name, context)
     text_content = strip_tags(html_content)
+    
+    recipient_list = [email, RECIPIENT_EMAIL]
+    if email1:  # email1이 제공되었을 경우 추가
+        recipient_list.append(email1)
+    
     email_message = EmailMultiAlternatives(
         subject,
         text_content,
         '',
-        [email, RECIPIENT_EMAIL]
+        recipient_list
     )
     email_message.attach_alternative(html_content, "text/html")
     email_message.send()
