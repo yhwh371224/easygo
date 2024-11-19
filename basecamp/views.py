@@ -738,7 +738,7 @@ def price_detail(request):
         condition_met = not ( (direction in ['Overseas cruise terminal', 'WhiteBay cruise terminal'] and suburb == 'Airport') or
                           (direction == 'Airport' and suburb in ['Overseas cruise terminal', 'WhiteBay cruise terminal']) )
 
-        # send_email_task.delay(pickup_date, direction, suburb, no_of_passenger)
+        send_email_task.delay(pickup_date, direction, suburb, no_of_passenger)
 
         context = {
             'pickup_date': pickup_date,
