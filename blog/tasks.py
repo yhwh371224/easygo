@@ -35,7 +35,7 @@ def create_event_on_calendar(instance_id):
     pending_str = '?' if instance.discount == 'TBA' else ''
     pickup_time_str = instance.pickup_time or ''
     flight_number_str = instance.flight_number or ''
-    flight_time_str = instance.flight_time or '01:00'
+    flight_time_str = instance.flight_time if instance.flight_time else '01:00'
     no_of_passenger_str = f'p{instance.no_of_passenger}' if instance.no_of_passenger is not None else ''
     paid_str = 'paid' if instance.paid else ''    
     price_str = f'${instance.price}' if instance.price is not None else ''
@@ -55,7 +55,7 @@ def create_event_on_calendar(instance_id):
         contact_str
     ]).strip()    
 
-    address = " ".join([instance.street or '15 Barton Rd', suburb_str])        
+    address = " ".join([instance.street if instance.street else '15 Barton Rd', suburb_str])        
     message_parts = [instance.name, instance.email, 
                      'b:'+str(instance.no_of_baggage) if instance.no_of_baggage is not None else '', 
                      'm:'+instance.message if instance.message is not None else '', 
