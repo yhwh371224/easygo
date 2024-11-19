@@ -1513,7 +1513,10 @@ def invoice_detail(request):
         today = date.today()
 
         # for user in users:
-        user = Post.objects.filter(email=email).first()
+        users = Post.objects.filter(email=email)        
+        if users.exists() and 0 <= index < len(users):
+            user = users[index]  
+        
         price_as_float = float(user.price)
 
         if user.paid: 
