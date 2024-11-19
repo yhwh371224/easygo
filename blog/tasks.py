@@ -55,7 +55,7 @@ def create_event_on_calendar(instance_id):
         contact_str
     ]).strip()    
 
-    address = " ".join([instance.street or 'TBA', suburb_str])        
+    address = " ".join([instance.street or '', suburb_str])        
     message_parts = [instance.name, instance.email, 
                      'b:'+str(instance.no_of_baggage) if instance.no_of_baggage is not None else '', 
                      'm:'+instance.message if instance.message is not None else '', 
