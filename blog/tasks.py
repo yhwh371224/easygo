@@ -121,18 +121,18 @@ def send_confirm_email(name, email, pickup_date, return_flight_number):
 
 
 # Home page for price 
-@shared_task
-def send_email_task(pickup_date, direction, suburb, no_of_passenger):
-    content = f'''
-    someone checked the price from homepage    
-    =============================  
-    flight date:  {pickup_date}
-    Direction: {direction}
-    Suburbs: {suburb}
-    No of Pax: {no_of_passenger}
-    ===============================        
-    '''
-    send_mail(pickup_date, content, DEFAULT_FROM_EMAIL, [RECIPIENT_EMAIL])
+# @shared_task
+# def send_email_task(pickup_date, direction, suburb, no_of_passenger):
+#     content = f'''
+#     someone checked the price from homepage    
+#     =============================  
+#     flight date:  {pickup_date}
+#     Direction: {direction}
+#     Suburbs: {suburb}
+#     No of Pax: {no_of_passenger}
+#     ===============================        
+#     '''
+#     send_mail(pickup_date, content, DEFAULT_FROM_EMAIL, [RECIPIENT_EMAIL])
 
 
 # Review page, service, information, terms, policy
