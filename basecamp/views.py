@@ -1499,6 +1499,12 @@ def invoice_detail(request):
         discount = request.POST.get('discount')
         inv_no = request.POST.get('inv_no')  
         toll = request.POST.get('toll')
+        index = request.POST.get('index', '1')
+
+        try:
+            index = int(index) - 1  
+        except ValueError:
+            return HttpResponse("Invalid index value", status=400)  
         
         # users = Post.objects.filter(email=email)[:5]  
         if not inv_no:
