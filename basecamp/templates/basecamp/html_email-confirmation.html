@@ -244,17 +244,17 @@
                                                     Pickup date: {{ pickup_date|slice:":10" }}<br>
 													Pickup time: {{ pickup_time }}<br>
 													Start point: {{ flight_number }}<br>
-                                                    End point: {{ street }}<br>																									
+                                                    End point: {{ street|default:'' }} {{ suburb|default:'' }}<br>																									
 												{% else %}
                                                     Flight date: {{ pickup_date|slice:":10" }}<br>
                                                     Flight number: {{ flight_number }}<br>
-													Flight time: {{ flight_time }}<br>
+													Flight time: {{ flight_time|default:'' }}<br>
 													Pickup time: {{ pickup_time }}<br>
                                                     Direction: {{ direction }}<br>
-													Address: {{ street }}, {{ suburb }}<br>
+													Address: {{ street|default:'' }} {{ suburb|default:'' }}<br>
 												{% endif %}												
                                                     Number of Passenger: {{ no_of_passenger }}<br>
-													Number of baggage: {{ no_of_baggage }}<br>
+													Number of baggage: {{ no_of_baggage|default:'' }}<br>
                                                     Message: <br>
 													{{ message }}<br>
 												{% if not return_direction and return_flight_number %}													
