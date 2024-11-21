@@ -544,12 +544,7 @@ def inquiry_details1(request):
             direction = 'Drop off to Domestic Airport'
             suburb = start_point
             end_point = ''  
-        else:
-            if start_point != 'Airport' and end_point != 'Airport':
-                street = start_point
-                suburb = end_point 
-                direction = ''
-
+        
         p = Inquiry(name=name, contact=contact, email=email, pickup_date=pickup_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
                  start_point=start_point, end_point=end_point, no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, 
