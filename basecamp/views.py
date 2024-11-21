@@ -1161,6 +1161,8 @@ def confirm_booking_detail(request):
         direction = user.direction
         suburb = user.suburb 
         street = user.street
+        start_point = start_point
+        end_point = end_point
         no_of_passenger = user.no_of_passenger
         no_of_baggage = user.no_of_baggage
         return_direction = user.return_direction
@@ -1187,8 +1189,8 @@ def confirm_booking_detail(request):
         sam_driver = Driver.objects.get(driver_name="Sam")    
             
         p = Post(name=name, contact=contact, email=email, company_name=company_name, email1=email1, pickup_date=pickup_date, flight_number=flight_number,
-                flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street, cruise=cruise, 
-                no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction, private_ride=private_ride, 
+                flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street, start_point=start_point, end_point=end_point,
+                cruise=cruise, no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction, private_ride=private_ride, 
                 return_pickup_date=return_pickup_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
                 return_pickup_time=return_pickup_time, message=message, notice=notice, price=price, paid=paid, cash=cash, is_confirmed=is_confirmed, driver=sam_driver)
         
