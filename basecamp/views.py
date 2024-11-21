@@ -447,6 +447,8 @@ def inquiry_details(request):
 # inquiry (simple one) for airport from home page
 def inquiry_details1(request):
     if request.method == "POST":
+        direction = ""
+        suburb = ""
         name = request.POST.get('name')
         contact = request.POST.get('contact')
         email = request.POST.get('email')
