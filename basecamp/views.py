@@ -475,7 +475,7 @@ def inquiry_details1(request):
             'pickup_time': pickup_time,
             'start_point': start_point,
             'end_point': end_point,
-            'suburb': suburb,
+            'street': street,
             'no_of_passenger': no_of_passenger,           
             }
      
