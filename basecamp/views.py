@@ -530,21 +530,24 @@ def inquiry_details1(request):
         
         if original_start_point == 'International Airport':
             direction = 'Pickup from Intl Airport'
-            start_point = ''  
+            start_point = ''
         elif original_start_point == 'Domestic Airport':
             direction = 'Pickup from Domestic Airport'
-            start_point = ''    
-        if original_end_point == 'International Airport':
+            start_point = ''
+        elif original_end_point == 'International Airport':
             direction = 'Drop off to Intl Airport'
             suburb = start_point
-            end_point = '' 
+            end_point = ''
         elif original_end_point == 'Domestic Airport':
             direction = 'Drop off to Domestic Airport'
             suburb = start_point
             end_point = ''  
-        if start_point != 'Airport' and end_point != 'Airport':
-            street = direction 
-            direction = ''
+
+        else:
+            if start_point != 'Airport' and end_point != 'Airport':
+                street = start_point
+                suburb = end_point 
+                direction = ''
 
         p = Inquiry(name=name, contact=contact, email=email, pickup_date=pickup_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
