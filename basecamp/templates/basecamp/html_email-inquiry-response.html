@@ -251,8 +251,8 @@
 												{% else %}
 													Pickup date:  {{ pickup_date }}<br>
 													Pickup time:  {{ pickup_time|default:'' }}<br>
-													Start point:  {{ flight_number }}<br>      
-													End point:  {{ street|default:'' }} {{ suburb|default:'' }}<br>
+													Start point:  {{ start_point|default:'' }} {{ flight_number|default:'' }}<br>      
+													End point:  {{ end_point|default:'' }} {{ suburb|default:'' }}<br>
 												{% endif %}
 													Number of passenger: {{ no_of_passenger }}<br>
 													Number of baggage:  {{ no_of_baggage|default:'' }}<br>
