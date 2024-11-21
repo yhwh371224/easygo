@@ -458,7 +458,7 @@ def inquiry_details1(request):
         pickup_time = request.POST.get('pickup_time')        
         start_point = request.POST.get('start_point')
         end_point = request.POST.get('end_point')        
-        street = request.POST.get('street')
+        street = request.POST.get('street', '')  # 키가 없으면 빈 문자열 반환
         no_of_passenger = request.POST.get('no_of_passenger')
         no_of_baggage = request.POST.get('no_of_baggage')        
         message = request.POST.get('message')
@@ -544,7 +544,6 @@ def inquiry_details1(request):
             direction = 'Drop off to Domestic Airport'
             suburb = start_point
             end_point = ''  
-
         else:
             if start_point != 'Airport' and end_point != 'Airport':
                 street = start_point
