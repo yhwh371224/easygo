@@ -248,11 +248,17 @@
 													Flight time: {{ flight_time|default:'' }}<br>
 													Pickup time: {{ pickup_time }}<br>
 													Address: {{ street|default:'' }} {{ suburb }}<br>
-												{% else %}
+												{% endif %}
+												{% if start_point %}
 													Pickup date:  {{ pickup_date }}<br>
 													Pickup time:  {{ pickup_time|default:'' }}<br>
-													Start point:  {{ start_point|default:'' }} {{ flight_number|default:'' }}<br>      
-													End point:  {{ end_point|default:'' }} {{ suburb|default:'' }}<br>
+													{% if start_point == 'Overseas cruise terminal' or start_point == 'WhieBay cruise terminal'}
+														Start point:  {{ start_point }}<br>      
+														End point:  {{ street|default:'' }}{{ end_point|default:'' }}<br>
+													{% elif end_point == 'Overseas cruise terminal' or start_point == 'WhieBay cruise terminal'}
+														Start point:  {{ flight_number|default:'' }} {{ start_point|default:'' }}<br>      
+														End point:  {{ end_point }}<br>
+													{% endif %}
 												{% endif %}
 													Number of passenger: {{ no_of_passenger }}<br>
 													Number of baggage:  {{ no_of_baggage|default:'' }}<br>
