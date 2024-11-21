@@ -453,15 +453,17 @@ def inquiry_details1(request):
         pickup_date = request.POST.get('pickup_date')
         flight_number = request.POST.get('flight_number')
         flight_time = request.POST.get('flight_time')
-        pickup_time = request.POST.get('pickup_time')
-        direction = request.POST.get('direction')
-        suburb = request.POST.get('suburb')
+        pickup_time = request.POST.get('pickup_time')        
+        start_point = request.POST.get('start_point')
+        end_point = request.POST.get('end_point')        
         street = request.POST.get('street')
         no_of_passenger = request.POST.get('no_of_passenger')
         no_of_baggage = request.POST.get('no_of_baggage')        
         message = request.POST.get('message')
 
-        
+        original_start_point = request.session.get('original_start_point', start_point)
+        original_end_point = request.session.get('original_end_point', end_point)
+
         data = {
             'name': name,
             'contact': contact,
@@ -469,8 +471,8 @@ def inquiry_details1(request):
             'pickup_date': pickup_date,
             'flight_number': flight_number,
             'pickup_time': pickup_time,
-            'direction': direction,
-            'street': street,
+            'start_point': start_point,
+            'end_point': end_point,
             'suburb': suburb,
             'no_of_passenger': no_of_passenger,           
             }
@@ -489,15 +491,15 @@ def inquiry_details1(request):
             Flight date: {}
             Flight number: {}
             Pickup time: {}
-            Direction: {}
+            start_point: {}
             Street: {}
-            Suburb: {}
+            end_point: {}
             Passenger: {}            
             =============================\n        
             Best Regards,
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['contact'], data['email'],  data['pickup_date'], data['flight_number'],
-                        data['pickup_time'], data['direction'], data['street'],  data['suburb'], data['no_of_passenger'], 
+                        data['pickup_time'], data['start_point'], data['street'],  data['end_point'], data['no_of_passenger'], 
                         )
             
             send_mail(data['pickup_date'], content, '', [RECIPIENT_EMAIL])
@@ -513,22 +515,41 @@ def inquiry_details1(request):
             Flight date: {}
             Flight number: {}
             Pickup time: {}
-            Direction: {}
+            start_point: {}
             Street: {}
-            Suburb: {}
+            end_point: {}
             Passenger: {}            
             =============================\n        
             Best Regards,
             EasyGo Admin \n\n        
             ''' .format(data['name'], data['contact'], data['email'],  data['pickup_date'], data['flight_number'],
-                        data['pickup_time'], data['direction'], data['street'],  data['suburb'], data['no_of_passenger'], 
+                        data['pickup_time'], data['start_point'], data['street'],  data['end_point'], data['no_of_passenger'], 
                         )
             
             send_mail(data['pickup_date'], content, '', [RECIPIENT_EMAIL])     
         
+        if original_start_point == 'International Airport':
+            direction = 'Pickup from Intl Airport'
+            start_point = ''  
+        elif original_start_point == 'Domestic Airport':
+            direction = 'Pickup from Domestic Airport'
+            start_point = ''    
+        if original_end_point == 'International Airport':
+            direction = 'Drop off to Intl Airport'
+            suburb = start_point
+            end_point = '' 
+        elif original_end_point == 'Domestic Airport':
+            direction = 'Drop off to Domestic Airport'
+            suburb = start_point
+            end_point = ''  
+        if start_point != 'Airport' and end_point != 'Airport':
+            street = direction 
+            direction = ''
+
         p = Inquiry(name=name, contact=contact, email=email, pickup_date=pickup_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
-                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message)
+                 start_point=start_point, end_point=end_point, no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, 
+                 message=message)
         
         p.save()
 
@@ -717,34 +738,36 @@ def p2p_booking_detail(request):
 def price_detail(request):
     if request.method == "POST":
         pickup_date = request.POST.get('pickup_date')
-        direction = request.POST.get('direction')
-        suburb = request.POST.get('suburb')
+        start_point = request.POST.get('start_point')
+        end_point = request.POST.get('end_point')
         no_of_passenger = request.POST.get('no_of_passenger')
 
-        if direction == 'Select your option' or suburb == 'Select your option':
+        if start_point == 'Select your option' or end_point == 'Select your option':
             return render(request, 'basecamp/home_error.html')
         
         today = date.today()        
         if not pickup_date or pickup_date <= str(today):
-            return render(request, 'basecamp/home_error.html')    
+            return render(request, 'basecamp/home_error.html')
 
-        # direction과 suburb가 'International Airport' 또는 'Domestic Airport'일 경우 'Airport'로 설정
-        if direction in ['International Airport', 'Domestic Airport']:
-            direction = 'Airport'
+        request.session['original_start_point'] = start_point
+        request.session['original_end_point'] = end_point
 
-        if suburb in ['International Airport', 'Domestic Airport']:
-            suburb = 'Airport'
+        if start_point in ['International Airport', 'Domestic Airport']:
+            start_point = 'Airport'
 
-        condition_met = not ( (direction in ['Overseas cruise terminal', 'WhiteBay cruise terminal'] and suburb == 'Airport') or
-                          (direction == 'Airport' and suburb in ['Overseas cruise terminal', 'WhiteBay cruise terminal']) )
+        if end_point in ['International Airport', 'Domestic Airport']:
+            end_point = 'Airport'
 
-        # send_email_task.delay(pickup_date, direction, suburb, no_of_passenger)
+        condition_met = not (
+            (start_point in ['Overseas cruise terminal', 'WhiteBay cruise terminal'] and end_point == 'Airport') or
+            (start_point == 'Airport' and end_point in ['Overseas cruise terminal', 'WhiteBay cruise terminal'])
+        )
 
         context = {
             'pickup_date': pickup_date,
-            'direction': direction,
-            'suburb': suburb,
-            'no_of_passenger': no_of_passenger,  
+            'start_point': start_point,
+            'end_point': end_point,
+            'no_of_passenger': no_of_passenger,
             'condition_met': condition_met
         }
 
@@ -752,7 +775,6 @@ def price_detail(request):
 
     else:
         return render(request, 'basecamp/home.html')
-
 
 
 # Booking by myself 
