@@ -255,9 +255,9 @@
 
 													{% if start_point == 'Overseas cruise terminal' or start_point == 'WhieBay cruise terminal' %}
 														Start point:  {{ start_point }}<br>      
-														End point:  {{ street|default:'' }}{{ end_point|default:'' }}<br>
+														End point:  {{ street|default:'' }} {{ end_point|default:'' }}<br>
 													{% elif end_point == 'Overseas cruise terminal' or start_point == 'WhieBay cruise terminal' %}
-														Start point:  {{ flight_number|default:'' }} {{ start_point|default:'' }}<br>      
+														Start point:  {{ street|default:'' }} {{ start_point|default:'' }}<br>      
 														End point:  {{ end_point }}<br>
 													{% endif %}
 												{% endif %}
