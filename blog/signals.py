@@ -38,6 +38,8 @@ def notify_user_inquiry(sender, instance, created, **kwargs):
             'return_flight_number': instance.return_flight_number,
             'return_flight_time': instance.return_flight_time,
             'return_pickup_time': instance.return_pickup_time,
+            'return_start_point': instance.return_start_point,
+            'return_end_point': instance.return_end_point,
             'message': instance.message,
             'price': instance.price,
             'notice': instance.notice,
