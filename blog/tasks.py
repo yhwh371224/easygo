@@ -30,9 +30,8 @@ def create_event_on_calendar(instance_id):
 
     service = build('calendar', 'v3', credentials=credentials)  
 
-    cancelled_str = 'c' if instance.cancelled else ''
     reminder_str = '!' if instance.reminder else ''
-    pending_str = '?' if instance.discount == 'TBA' else ''
+    pending_str = '?' if instance.price == 'TBA' else ''
     pickup_time_str = instance.pickup_time or ''
     flight_number_str = instance.flight_number or ''
     flight_time_str = instance.flight_time or ''
@@ -40,22 +39,29 @@ def create_event_on_calendar(instance_id):
     paid_str = 'paid' if instance.paid else ''    
     price_str = f'${instance.price}' if instance.price is not None else ''
     contact_str = instance.contact or ''
-    suburb_str = instance.suburb if instance.suburb else 'NSW'
+    suburb_str = instance.suburb or ''
+    street_str = instance.street or ''
+    start_point_str = instance.start_point or ''
+    end_point_str = instance.end_point or ''
 
-    title = " ".join([
-        cancelled_str, 
+    title = " ".join([ 
         reminder_str, 
         pending_str, 
         pickup_time_str, 
-        flight_number_str, 
+        flight_number_str,
+        start_point_str, 
         flight_time_str, 
         no_of_passenger_str,
         paid_str, 
         price_str,
-        contact_str
+        contact_str        
     ]).strip()    
 
-    address = " ".join([instance.street, suburb_str])        
+    if street_str or suburb_str:
+        address = " ".join(filter(None, [street_str, suburb_str])).strip()
+    else:
+        address = end_point_str
+
     message_parts = [instance.name, instance.email, 
                      'b:'+str(instance.no_of_baggage) if instance.no_of_baggage is not None else '', 
                      'm:'+instance.message if instance.message is not None else '', 
