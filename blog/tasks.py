@@ -34,14 +34,14 @@ def create_event_on_calendar(instance_id):
     pending_str = '?' if instance.price == 'TBA' else ''
     pickup_time_str = instance.pickup_time or ''
     flight_number_str = instance.flight_number or ''
+    start_point_str = instance.start_point or ''
     flight_time_str = instance.flight_time or ''
     no_of_passenger_str = f'p{instance.no_of_passenger}' if instance.no_of_passenger is not None else ''
     paid_str = 'paid' if instance.paid else ''    
     price_str = f'${instance.price}' if instance.price is not None else ''
     contact_str = instance.contact or ''
     suburb_str = instance.suburb or ''
-    street_str = instance.street or ''
-    start_point_str = instance.start_point or ''
+    street_str = instance.street or ''    
     end_point_str = instance.end_point or ''
 
     title = " ".join([ 
@@ -57,8 +57,10 @@ def create_event_on_calendar(instance_id):
         contact_str        
     ]).strip()    
 
-    if street_str or suburb_str:
-        address = " ".join(filter(None, [street_str, suburb_str])).strip()
+    if suburb_str and street_str:
+        address = " ".join([street_str, suburb_str]).strip()
+    elif street_str:
+        address = " ".join([street_str, end_point_str]).strip()
     else:
         address = end_point_str
 
