@@ -33,9 +33,12 @@ class Command(BaseCommand):
             client = Client(account_sid, auth_token)
 
             def format_phone_number(phone_number):
-                if not phone_number.startswith('+'):
-                    phone_number = '+61' + phone_number.lstrip('0')
-                return phone_number
+                if phone_number.startswith('+'):
+                    return phone_number
+                elif phone_number.startswith('0'):
+                    return '+61' + phone_number[1:]
+                else:
+                    return '+' + phone_number
 
             def send_whatsapp_message(sendto):
                 formatted_number = format_phone_number(sendto)
