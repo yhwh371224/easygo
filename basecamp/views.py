@@ -1161,8 +1161,8 @@ def confirm_booking_detail(request):
         direction = user.direction
         suburb = user.suburb 
         street = user.street
-        start_point = start_point
-        end_point = end_point
+        start_point = getattr(user, 'start_point', "")
+        end_point = getattr(user, 'end_point', "")
         no_of_passenger = user.no_of_passenger
         no_of_baggage = user.no_of_baggage
         return_direction = user.return_direction
