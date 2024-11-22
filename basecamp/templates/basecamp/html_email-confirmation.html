@@ -244,6 +244,7 @@
                                                     Pickup date: {{ pickup_date|slice:":10" }}<br>
 													Pickup time: {{ pickup_time }}<br>
 													Start point: {{ start_point }}<br>
+													{{ street|default:'' }}
                                                     End point: {{ end_point }}<br>																									
 												{% else %}
                                                     Flight date: {{ pickup_date|slice:":10" }}<br>
