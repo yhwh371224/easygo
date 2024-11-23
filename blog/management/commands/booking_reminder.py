@@ -64,6 +64,8 @@ class Command(BaseCommand):
                 'flight_time': booking_reminder.flight_time,
                 'direction': booking_reminder.direction,
                 'pickup_time': booking_reminder.pickup_time,
+                'start_point': booking_reminder.start_point or "",  
+                'end_point': booking_reminder.end_point or "",    
                 'street': booking_reminder.street,
                 'suburb': booking_reminder.suburb,
                 'price': booking_reminder.price,
