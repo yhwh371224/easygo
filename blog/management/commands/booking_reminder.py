@@ -19,7 +19,7 @@ class Command(BaseCommand):
     help = 'Send booking reminders for upcoming flights'
 
     def handle(self, *args, **options):
-        reminder_intervals = [0, 1, 3, 5, 7, 14, -1]
+        reminder_intervals = [0, 1, 3, 5, 7, 14, 28, -1]
         # reminder_intervals = [-1]
         templates = [
             "basecamp/html_email-today.html",
@@ -28,6 +28,7 @@ class Command(BaseCommand):
             "basecamp/html_email-upcoming5.html",
             "basecamp/html_email-upcoming7.html",
             "basecamp/html_email-upcoming14.html",
+            "basecamp/html_email-upcoming28.html",
             "basecamp/html_email-yesterday.html",
         ]
         subjects = [
@@ -37,6 +38,7 @@ class Command(BaseCommand):
             "Reminder-5days",
             "Reminder-7days",
             "Reminder-2wks",
+            "Reminder-4wks",
             "Review-EasyGo",
         ]
         for interval, template, subject in zip_longest(reminder_intervals, templates, subjects, fillvalue=""):
@@ -49,9 +51,6 @@ class Command(BaseCommand):
 
     def send_email_task(self, booking_reminders, template_name, subject, target_date):
         for booking_reminder in booking_reminders:
-            if target_date == date.today() and booking_reminder.discount == "TBA":
-                logger.info(f"Skipping email for {booking_reminder.email} due to discount 'TBA' on {target_date}")
-                continue
 
             driver = booking_reminder.driver
 
