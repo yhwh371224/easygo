@@ -35,6 +35,9 @@ def home(request):
     suburbs = get_suburbs()
     home_suburbs = get_home_suburbs()
 
+    if not isinstance(home_suburbs, list):
+        home_suburbs = []  # 기본값 설정
+
     logger.debug(f"home_suburbs: {home_suburbs}") 
     
     fixed_items = [
@@ -46,7 +49,9 @@ def home(request):
         "Overseas cruise terminal"
     ]
     
-    remaining_items = sorted([item for item in home_suburbs if item not in fixed_items])
+    remaining_items = sorted(
+        [item for item in home_suburbs if isinstance(item, str) and item not in fixed_items]
+        )
     
     sorted_home_suburbs = fixed_items + remaining_items
     
@@ -567,7 +572,7 @@ def inquiry_details1(request):
         return render(request, 'basecamp/inquiry_done.html')
 
     else:
-        return redirect('home')
+        return redirect('basecamp:home')
 
 
 # Contact form
@@ -785,7 +790,13 @@ def price_detail(request):
         return render(request, 'basecamp/inquiry1.html', context)
 
     else:
-        return render(request, 'basecamp/home.html')
+        suburbs = get_suburbs()
+        home_suburbs = get_home_suburbs()
+
+        return render(request, 'basecamp/home.html', {
+            'suburbs': suburbs,
+            'home_suburbs': home_suburbs,
+        })
 
 
 # Booking by myself 
