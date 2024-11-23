@@ -240,27 +240,33 @@
 													<span style="color: #eb7828">Please reply "Yes" to this email for reconfirming your booking and details below</span><br><br>
 													Please note:<br>
                                                     We can not guarantee your booking unless we receive a confirmation with a "Yes" response via email
-													<!-- <a href="https://easygoshuttle.com.au/reminder">'Yes'</a> response<br> -->
-													<br></p>
+													<br>
+												</p>
 											{% endif %}	
 																	
 											{% if direction == 'Pickup from Intl Airport' or direction == 'Pickup from Domestic Airport' %}
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
 													• Sydney arrival date: {{ pickup_date }}<br> 
 												    • Flight number: {{ flight_number }} <small>(ETA {{ flight_time }})</small><br>	
-													<!-- • The meeting point >><a href="https://easygoshuttle.com.au/meeting_point">&nbsp;click here</a><br> -->
-													• After landing, please check your email. You will be notified of the meeting details via email or SMS<br><br></p>											
-											{% elif not direction %}
+													• After landing, please check your email. You will be notified of the meeting details via email or SMS<br><br>
+												</p>											
+											{% elif not direction or start_point %}
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">													
 													• See you on time,{{ pickup_time }}<br>											
-													• Start point: {{ flight_number }}<br>
-                                                    • End point: {{ street }}<br><br></p>												
+													• Start point: {{ start_point }}<br>
+													{% if street %}
+													• {{ street }}<br>
+													{% endif %}
+                                                    • End point: {{ end_point }}<br><br>
+												</p>												
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
-													Please be ready on time, {{ pickup_time }}<br><br></p>
+													Please be ready on time, {{ pickup_time }}<br><br>
+												</p>
 												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
 													Delays greater than 5 mins from pickup time creates last min reschedule expenses 
 													and additional liabilities to other scheduled passengers, additional charge will apply<br>
-													More details >><a href="https://easygoshuttle.com.au/information">&nbsp;click here</a><br><br><br></p>					
+													More details >><a href="https://easygoshuttle.com.au/information">&nbsp;click here</a><br><br><br>
+												</p>					
 											{% else %} 
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
 													• Direction: {{ direction }}<br>
@@ -270,8 +276,10 @@
 												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
 													Delays greater than 5 mins from pickup time creates last min reschedule expenses 
 													and additional liabilities to other scheduled passengers, additional charge will apply<br>
-													More details >><a href="https://easygoshuttle.com.au/information">&nbsp;click here</a><br><br><br></p>																
-                                            {% endif %}											    										                                                 
+													More details >><a href="https://easygoshuttle.com.au/information">&nbsp;click here</a><br><br><br>
+												</p>																
+                                            {% endif %}				
+																		    										                                                 
 												<p style="Margin:0;font-size:12px;line-height:21px;Margin-top:16px;Margin-bottom:12px;">    
 												<span style="color: #eb7828">Please note:</span><br>
 												If you have anything to change or cancel, Please let us know asap<br><br><br></p>
