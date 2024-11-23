@@ -563,10 +563,11 @@ def inquiry_details1(request):
         
         p.save()
 
+
         return render(request, 'basecamp/inquiry_done.html')
 
     else:
-        return render(request, 'basecamp/inquiry1.html', {})
+        return redirect('home')
 
 
 # Contact form
