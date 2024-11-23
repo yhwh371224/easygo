@@ -61,6 +61,8 @@ def create_event_on_calendar(instance_id):
         address = " ".join([street_str, suburb_str]).strip()
     elif street_str:
         address = " ".join([street_str, end_point_str]).strip()
+    elif suburb_str:
+        address = suburb_str
     else:
         address = end_point_str
 
