@@ -282,7 +282,7 @@
 													{% if discount %}
 														<strong>Discount: ${{ discount }}</strong><br>
 													{% else %}
-														<strong>GST 10%: ${{ discount }}</strong><br>
+														<strong>GST 10%: ${{ with_gst }}</strong><br>
 													{% endif %}													
 													<strong><u>Total: ${{ total_price }}</u></strong><br>
 													<strong><u>Paid: ${{ paid }}</u></strong><br>													
