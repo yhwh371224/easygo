@@ -1,7 +1,6 @@
 from django.contrib import admin
 from django.contrib.admin import AdminSite
 from .models import Driver, Inquiry, PaypalPayment, StripePayment, Post
-from django.contrib.admin import NumericRangeListFilter
 
 
 class DriverAdmin(admin.ModelAdmin):
@@ -33,7 +32,7 @@ class PostAdmin(admin.ModelAdmin):
                     'cancelled', 'direction', 'return_flight_number', 'created']
     search_fields = ['pickup_date', 'pickup_time', 'suburb', 'email', 'street', 
                      'name', 'contact', 'price', 'paid']
-    list_filter = [('price', NumericRangeListFilter)]
+    list_filter = ['price']
 
 
 class MyAdminSite(AdminSite):
