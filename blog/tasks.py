@@ -30,38 +30,49 @@ def create_event_on_calendar(instance_id):
 
     service = build('calendar', 'v3', credentials=credentials)  
 
-    cancelled_str = 'c' if instance.cancelled else ''
     reminder_str = '!' if instance.reminder else ''
-    pending_str = '?' if instance.discount == 'TBA' else ''
+    pending_str = '?' if instance.price == 'TBA' else ''
     pickup_time_str = instance.pickup_time or ''
     flight_number_str = instance.flight_number or ''
+    start_point_str = instance.start_point or ''
     flight_time_str = instance.flight_time or ''
     no_of_passenger_str = f'p{instance.no_of_passenger}' if instance.no_of_passenger is not None else ''
     paid_str = 'paid' if instance.paid else ''    
     price_str = f'${instance.price}' if instance.price is not None else ''
     contact_str = instance.contact or ''
-    suburb_str = instance.suburb if instance.suburb else 'NSW'
+    suburb_str = instance.suburb or ''
+    street_str = instance.street or ''    
+    end_point_str = instance.end_point or ''
 
-    title = " ".join([
-        cancelled_str, 
+    title = " ".join([ 
         reminder_str, 
         pending_str, 
         pickup_time_str, 
-        flight_number_str, 
+        flight_number_str,
+        start_point_str, 
         flight_time_str, 
         no_of_passenger_str,
         paid_str, 
         price_str,
-        contact_str
+        contact_str        
     ]).strip()    
 
-    address = " ".join([instance.street, suburb_str])        
+    if suburb_str and street_str:
+        address = " ".join([street_str, suburb_str]).strip()
+    elif street_str:
+        address = " ".join([street_str, end_point_str]).strip()
+    elif suburb_str:
+        address = suburb_str
+    else:
+        address = end_point_str
+
     message_parts = [instance.name, instance.email, 
                      'b:'+str(instance.no_of_baggage) if instance.no_of_baggage is not None else '', 
                      'm:'+instance.message if instance.message is not None else '', 
                      'n:'+instance.notice if instance.notice is not None else '', 
                      "d:"+str(instance.return_pickup_date), 
-                     '$'+str(instance.paid) if instance.paid is not None else '',]
+                     '$'+str(instance.paid) if instance.paid is not None else '',
+                     'opt:'+instance.end_point if instance.end_point is not None else '']
     message = " ".join(filter(None, message_parts))      
 
     pickup_date = datetime.datetime.strptime(str(instance.pickup_date), '%Y-%m-%d')
