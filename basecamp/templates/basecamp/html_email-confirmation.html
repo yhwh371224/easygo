@@ -240,11 +240,14 @@
 												{% endif %}
 												    Contact: {{ contact }}<br>
                                                     Email: {{ email }}<br>
-												{% if not direction %}
+												{% if start_point %}
                                                     Pickup date: {{ pickup_date|slice:":10" }}<br>
 													Pickup time: {{ pickup_time }}<br>
-													Start point: {{ flight_number }}<br>
-                                                    End point: {{ street|default:'' }} {{ suburb|default:'' }}<br>																									
+													Start point: {{ start_point }}<br>
+													{% if street %}
+														Street: {{ street|default:'' }}<br>
+													{% endif %}
+                                                    End point: {{ end_point }}<br>																									
 												{% else %}
                                                     Flight date: {{ pickup_date|slice:":10" }}<br>
                                                     Flight number: {{ flight_number }}<br>
@@ -257,9 +260,10 @@
 													Number of baggage: {{ no_of_baggage|default:'' }}<br>
                                                     Message: <br>
 													{{ message }}<br>
-												{% if not return_direction and return_flight_number %}													
+												{% if return_start_point %}													
 													<span style="font-weight:bold; color: #bdb1a6">Return trip date:  {{ return_pickup_date }}</span><br>													
-													<span style="font-weight:bold; color: #bdb1a6">Return start & end point:  {{ return_flight_number }}</span><br>
+													<span style="font-weight:bold; color: #bdb1a6">Return start point:  {{ return_start_point }}</span><br>
+													<span style="font-weight:bold; color: #bdb1a6">Return end point:  {{ return_end_point }}</span><br>
 													<span style="font-weight:bold; color: #bdb1a6">Return pickup time:  {{ return_pickup_time }}</span><br>
 												{% elif return_direction and return_flight_number %}
 													<span style="font-weight:bold; color: #bdb1a6">Return direction:  {{ return_direction }}</span><br>
@@ -303,10 +307,10 @@
 												{% endif %}
 
 												<!-- For return trip -->	
-												{% if not return_pickup_time %}																	
+												<!-- {% if not return_pickup_time %}																	
 												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
 													If you wish to book a return trip, click&nbsp;<a href="https://easygoshuttle.com.au/return_trip/">&raquo;&raquo;Book for return trip</a><br><br></p>
-												{% endif %}
+												{% endif %} -->
 
 												<!-- If notice -->
 												{% if notice %}

@@ -247,7 +247,7 @@
 													Flight number: {{ flight_number }}<br>
 													Flight time: {{ flight_time|default:'' }}<br>
 													Pickup time: {{ pickup_time }}<br>
-													Address: {{ street|default:'' }} {{ suburb }}<br>
+													Address: {{ street|default:'' }} {{ suburb|default:'' }}<br>
 												{% endif %}
 												{% if start_point %}
 													Pickup date:  {{ pickup_date }}<br>
@@ -259,14 +259,18 @@
 													{% elif end_point == 'Overseas cruise terminal' or start_point == 'WhieBay cruise terminal' %}
 														Start point:  {{ street|default:'' }} {{ start_point|default:'' }}<br>      
 														End point:  {{ end_point }}<br>
+													{% else %}
+														Start point: {{ start_point }}<br>
+														End point:  {{ end_point }}<br>
 													{% endif %}
 												{% endif %}
 													Number of passenger: {{ no_of_passenger }}<br>
 													Number of baggage:  {{ no_of_baggage|default:'' }}<br>
 
-												{% if not return_direction and return_flight_number %}
+												{% if return_start_point %}
 													Return booking date:  {{ return_pickup_date }}<br>	
-													Return start/end point: {{ return_flight_number }}<br>												
+													Return start point: {{ return_start_point }}<br>
+													Return end point: {{ return_end_point }}<br>													
 													Return pickup time:  {{ return_pickup_time }}<br>
 												{% elif return_direction %}
 													Return Direction: {{ return_direction }}<br>
@@ -278,10 +282,10 @@
 													Message: {{ message }}<br>                                                   
 												</p>
 												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;">
-												{% if return_flight_number %}
-													The cost for this booking will be ${{ price }} for both trips.&nbsp;
+												{% if return_pickup_time %}
+													The total cost for this booking, including both the outbound and return trips, is ${{ price }}&nbsp;
 												{% else %}
-													The cost for this booking will be ${{ price }} for a single trip.&nbsp;
+													The cost for this booking is ${{ price }} for a one-way trip.&nbsp;
 												{% endif %}
 												{% if toll %}
 													({{ toll }})
