@@ -31,7 +31,7 @@ class PostAdmin(admin.ModelAdmin):
                     'pickup_time', 'price', 'paid', 
                     'cancelled', 'direction', 'return_flight_number', 'created']
     search_fields = ['pickup_date', 'pickup_time', 'suburb', 'email', 'street', 
-                     'name', 'contact']
+                     'name', 'contact', 'price', 'paid']
 
 
 class MyAdminSite(AdminSite):
