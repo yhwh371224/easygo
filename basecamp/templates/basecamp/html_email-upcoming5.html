@@ -238,18 +238,26 @@
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
 													• Sydney arrival date: {{ pickup_date }}<br><br>
 												    • Flight number: {{ flight_number }} <small>(ETA {{ flight_time }})</small><br><br>													
-													• After landing, please check your email. You will be notified of the meeting details via email or SMS<br><br></p>
-											{% elif not direction %}
+													• After landing, please check your email. You will be notified of the meeting details via email or SMS<br><br>
+												</p>
+											{% elif not direction or start_point %}
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">													
 													• See you on time,{{ pickup_time }}<br>											
-													• Start point: {{ flight_number }}<br>
-													• End point: {{ street }}<br><br></p>												
+													• Start point: {{ start_point|default:"" }}<br>
+													{% if street %}
+													• {{ street }}<br>
+													{% endif %}
+                                                    • End point: {{ end_point|default:"" }}<br><br>
+												</p>												
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
-													Please be ready on time, {{ pickup_time }}<br><br></p>
+													Please be ready on time, {{ pickup_time }}<br><br>
+												
+												</p>
 											{% else %}			
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
 													• Pickup date: {{ pickup_date }}<br><br>
-												    • Pikcup time: {{ pickup_time }}<br><br></p>
+												    • Pickup time: {{ pickup_time }}<br><br>
+												</p>
 											{% endif %}		
 												<br>																	    										                                                 
 												<p style="Margin:0;font-size:12px;line-height:21px;Margin-top:16px;Margin-bottom:12px;">    
