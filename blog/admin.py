@@ -32,7 +32,7 @@ class PostAdmin(admin.ModelAdmin):
                     'cancelled', 'direction', 'return_flight_number', 'created']
     search_fields = ['pickup_date', 'pickup_time', 'suburb', 'email', 'street', 
                      'name', 'contact', 'price', 'paid']
-    list_filter = ['paid']
+    # list_filter = ['paid']
 
 
 class MyAdminSite(AdminSite):
