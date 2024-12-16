@@ -118,6 +118,10 @@ def booking(request):
     return render(request, 'basecamp/booking.html', context)
 
 
+def church_info(request):
+    return render(request, 'basecamp/church_info.html')
+
+
 @login_required
 def confirmation(request): 
     return render(request, 'basecamp/confirmation.html')
