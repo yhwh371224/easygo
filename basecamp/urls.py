@@ -11,7 +11,6 @@ urlpatterns = [
     path('airport-transfers-<str:suburb>/', views.airport_transfers, name='airport_transfers'),
     path('booking/', views.booking, name="booking"),
     path('booking_detail/', views.booking_detail, name="booking_detail"),
-    path('church_info/', views.church_info, name="church_info"),
     path('confirmation/', views.confirmation, name="confirmation"),
     path('confirmation_detail/', views.confirmation_detail, name='confirmation_detail'),
     path('confirm_booking/', views.confirm_booking, name="confirm_booking"),
