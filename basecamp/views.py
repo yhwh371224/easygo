@@ -1693,9 +1693,10 @@ def email_dispatch_detail(request):
                     user_1.reminder = True
                     user_1.save() 
             
-            if selected_option == "Cancellation of Booking" and user:                     
+            if selected_option in ["Cancellation of Booking", "Cancellation by Client"] and user:                     
                 user.cancelled = True
                 user.save()
+
 
             if selected_option == "Payment discrepancy" and user: 
                 diff = round(float(user.price) - float(user.paid), 2)
