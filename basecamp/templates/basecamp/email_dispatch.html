@@ -11,8 +11,6 @@
         </div>
 		  <br>
 		  <br>
-		  <br>
-		  <br>
         <div class="container position-relative zindex-5 pt-3 pb-7 pt-md-0">
           <div class="row justify-content-center pb-7">
             <div class="col-lg-10">
@@ -38,7 +36,38 @@
 					<label class="form-label" >Email address<sup class="text-danger ms-1">*</sup></label>
 					<input class="form-control" type="email"  placeholder="j.doe@example.com" required name="email">
 					<div class="invalid-feedback">Please enter a valid email address!</div>
-				</div>                
+				</div>   
+				<div class="mb-3 pb-1">
+                    <label class="form-label">Select an Option:</label>
+              		<select class="form-select" name="selected_option">
+					  <option disabled selected value="" style="color: blue">Select your option...</option>
+					  <option value="Gratitude For Payment">Gratitude For Payment</option>
+					  <option value="Payment Method">Payment Method</option>
+              		  <option value="Meeting Point Inquiry">Meeting Point Inquiry</option>	
+					  <option value="Pickup Notice for Today">Pickup Notice for Today</option>                  
+              		  <option value="Earlier Pickup Requested for Departure">Earlier Pickup Requested for Departure</option>
+              		  <option value="Later Pickup Requested for Departure">Later Pickup Requested for Departure</option>						
+              		  <option value="Early Arrival Notification">Early Arrival Notification</option>					
+              		  <option value="Arrival Later Than Scheduled">Arrival Later Than Scheduled</option>   
+					  <option value="Notice of Delay">Notice of Delay</option>
+					  <option value="Adjusted Pickup Time">Adjusted Pickup Time</option>
+					  <option disabled selected value="" style="color: red">Select your option...</option>
+					  <option value="Payment Method">Payment Method</option>
+              		  <option value="Meeting Point Inquiry">Meeting Point Inquiry</option>	
+					  <option value="Pickup Notice for Today">Pickup Notice for Today</option>					  
+					  <option value="Further details for booking">Further details for booking</option>
+					  <option value="Inquiry for driver contact">Inquiry for driver contact</option>
+					  <option value="Shared Ride (inquiry) Discount Offer">Shared Ride (inquiry) Discount Offer</option>
+					  <option value="Shared Ride (booking) Discount Offer">Shared Ride (booking) Discount Offer</option>					   
+					  <option value="Cancellation of Booking">Cancellation of Booking</option>
+					  <option value="Cancellation by Client">Cancellation by Client</option>
+					  <option value="Apology emails">Apology emails</option>
+					  <option value="Payment discrepancy">Payment discrepancy</option>
+					  <option value="Special promotion">Special promotion</option>
+					  <option value="Booking delay">Booking delay</option>
+					  <option value="Booking delay 1">Booking delay 1</option>            
+              		</select>
+                </div>                 
 				<div class="mb-3 pb-1">
                     <label class="form-label" >Adjustment pickup time</label>
                     <input class="form-control" type="text"  placeholder="adjustment_time" name="adjustment_time">
@@ -54,34 +83,6 @@
                     <input class="form-control" type="text"  placeholder="Put only number" name="discount_price">
                     <div class="invalid-feedback">Please enter only number!</div>
                 </div>
-				<div class="mb-3 pb-1">
-                    <label class="form-label">Select an Option:</label>
-              		<select class="form-select" name="selected_option">
-					  <option disabled selected value="" style="color: blue">Select your option...</option>                  
-              		  <option value="Earlier Pickup Requested for Departure">Earlier Pickup Requested for Departure</option>
-              		  <option value="Later Pickup Requested for Departure">Later Pickup Requested for Departure</option>						
-              		  <option value="Early Arrival Notification">Early Arrival Notification</option>					
-              		  <option value="Arrival Later Than Scheduled">Arrival Later Than Scheduled</option>   
-					  <option value="Notice of Delay">Notice of Delay</option>
-					  <option value="Adjusted Pickup Time">Adjusted Pickup Time</option>
-					  <option disabled selected value="" style="color: red">Select your option...</option>
-					  <option value="Payment Method">Payment Method</option>
-              		  <option value="Meeting Point Inquiry">Meeting Point Inquiry</option>	
-					  <option value="Pickup Notice for Today">Pickup Notice for Today</option>
-					  <option value="Gratitude For Payment">Gratitude For Payment</option>
-					  <option value="Further details for booking">Further details for booking</option>
-					  <option value="Inquiry for driver contact">Inquiry for driver contact</option>
-					  <option value="Shared Ride (inquiry) Discount Offer">Shared Ride (inquiry) Discount Offer</option>
-					  <option value="Shared Ride (booking) Discount Offer">Shared Ride (booking) Discount Offer</option>					   
-					  <option value="Cancellation of Booking">Cancellation of Booking</option>
-					  <option value="Cancellation by Client">Cancellation by Client</option>
-					  <option value="Apology emails">Apology emails</option>
-					  <option value="Payment discrepancy">Payment discrepancy</option>
-					  <option value="Special promotion">Special promotion</option>
-					  <option value="Booking delay">Booking delay</option>
-					  <option value="Booking delay 1">Booking delay 1</option>            
-              		</select>
-                </div>    
 			</div>							
 				<div class="text-center pt-2">
 					<button class="btn btn-primary" type="submit" id="submitButton">Submit</button>
