@@ -1615,11 +1615,11 @@ def handle_email_sending(request, email, subject, template_name, context, email1
 
 def email_dispatch_detail(request):     
     if request.method == "POST":
-        email = request.POST.get('email')        
+        email = request.POST.get('email')  
+        selected_option = request.POST.get('selected_option')      
         adjustment_time = request.POST.get('adjustment_time')
         wait_duration = request.POST.get('wait_duration')
-        discount_price = request.POST.get('discount_price')
-        selected_option = request.POST.get('selected_option')
+        discount_price = request.POST.get('discount_price')        
         
         user = Post.objects.filter(email=email).first()
         if not user:
@@ -1644,18 +1644,18 @@ def email_dispatch_detail(request):
                 send_sms_notice(closest_user.contact, message)   
         
         template_options = {
+            "Gratitude For Payment": ("basecamp/html_email-response-payment-received.html", "Payment Received - EasyGo"),
+            "Pickup Notice for Today": ("basecamp/html_email-today.html", "Pickup Notice for Today - EasyGo"),
+            "Payment Method": ("basecamp/html_email-response-payment.html", "Payment Method - EasyGo"),
+            "Inquiry for driver contact": ("basecamp/html_email-response-driver-contact.html", "Inquiry for driver contact - EasyGo"),
             'Earlier Pickup Requested for Departure': ("basecamp/html_email-departure-early.html", "Urgent notice - EasyGo"),
             'Later Pickup Requested for Departure': ("basecamp/html_email-departure-late.html", "Urgent notice - EasyGo"),
             'Early Arrival Notification': ("basecamp/html_email-arrival-early.html", "Urgent notice - EasyGo"),
             'Arrival Later Than Scheduled': ("basecamp/html_email-arrival-late.html", "Urgent notice - EasyGo"),
             'Notice of Delay': ("basecamp/html_email-just-late-notice.html", "Urgent notice - EasyGo"),
-            'Adjusted Pickup Time': ("basecamp/html_email-just-adjustment.html", "Urgent notice - EasyGo"),
-            "Payment Method": ("basecamp/html_email-response-payment.html", "Payment Method - EasyGo"),
-            "Meeting Point Inquiry": ("basecamp/html_email-response-meeting.html", "Meeting Point - EasyGo"),
-            "Gratitude For Payment": ("basecamp/html_email-response-payment-received.html", "Payment Received - EasyGo"),
+            'Adjusted Pickup Time': ("basecamp/html_email-just-adjustment.html", "Urgent notice - EasyGo"),            
+            "Meeting Point Inquiry": ("basecamp/html_email-response-meeting.html", "Meeting Point - EasyGo"),            
             "Further details for booking": ("basecamp/html_email-response-more-details.html", "Further details for booking - EasyGo"),
-            "Pickup Notice for Today": ("basecamp/html_email-today.html", "Pickup Notice for Today - EasyGo"),
-            "Inquiry for driver contact": ("basecamp/html_email-response-driver-contact.html", "Inquiry for driver contact - EasyGo"),
             "Shared Ride (inquiry) Discount Offer": ("basecamp/html_email-shared-inquiry-discount.html", "Discount notice - EasyGo"),
             "Shared Ride (booking) Discount Offer": ("basecamp/html_email-shared-booking-discount.html", "Discount notice - EasyGo"),
             "Cancellation of Booking": ("basecamp/html_email-response-cancel.html", "Cancellation of Booking: EasyGo"),
