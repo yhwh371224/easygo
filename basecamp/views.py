@@ -1656,6 +1656,7 @@ def email_dispatch_detail(request):
             'Adjusted Pickup Time': ("basecamp/html_email-just-adjustment.html", "Urgent notice - EasyGo"),            
             "Meeting Point Inquiry": ("basecamp/html_email-response-meeting.html", "Meeting Point - EasyGo"),            
             "Further details for booking": ("basecamp/html_email-response-more-details.html", "Further details for booking - EasyGo"),
+            "Arrival Pickup Arrangement": ("basedamp/html_email-urgent-arrival-pickup.html", "Arrival Pickup Arrangement - EasyGo"),
             "Shared Ride (inquiry) Discount Offer": ("basecamp/html_email-shared-inquiry-discount.html", "Discount notice - EasyGo"),
             "Shared Ride (booking) Discount Offer": ("basecamp/html_email-shared-booking-discount.html", "Discount notice - EasyGo"),
             "Cancellation of Booking": ("basecamp/html_email-response-cancel.html", "Cancellation of Booking: EasyGo"),
