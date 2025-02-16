@@ -1698,6 +1698,11 @@ def email_dispatch_detail(request):
                 user.cancelled = True
                 user.save()
 
+                if user.return_pickup_time == "x":
+                    second_user = Post.objects.filter(email=email)[1]
+                    second_user.cancelled = True
+                    second_user.save()
+
 
             if selected_option == "Payment discrepancy" and user: 
                 diff = round(float(user.price) - float(user.paid), 2)
