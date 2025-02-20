@@ -31,7 +31,7 @@ def create_event_on_calendar(instance_id):
     service = build('calendar', 'v3', credentials=credentials)  
 
     reminder_str = '!' if instance.reminder else ''
-    cancelled_str = 'c' if instance.reminder else ''
+    cancelled_str = 'C' if instance.cancelled else ''
     pending_str = '?' if instance.price == 'TBA' else ''
     pickup_time_str = instance.pickup_time or ''
     flight_number_str = instance.flight_number or ''
