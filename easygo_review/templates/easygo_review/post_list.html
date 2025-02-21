@@ -45,7 +45,8 @@
                         {% for _ in post.rating|subtract_from_five %}
                         <span class="grey-star">&#9733;</span>
                         {% endfor %}
-                    </p>                   
+                    </p>
+                    <br>                 
                     {% if post.author %}
                     <p class="card-text">
                         <a href="{{ post.get_absolute_url }}" class="btn btn-primary" id="read-more-post-{{ post.pk }}">Read More &rarr;</a>
