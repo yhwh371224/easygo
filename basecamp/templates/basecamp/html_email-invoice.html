@@ -240,18 +240,18 @@
                                                 </p>
 												<p style="Margin:0;font-size:12px;line-height:20px;Margin-bottom:6px;border-top: 1px solid #a09a9a;">
 												<p style="Margin:0;font-size:12px;line-height:20px;Margin-bottom:6px;">
-												{% if not direction %}
-													{% if return_flight_number %}
+												{% if start_point %}
+													{% if return_pickup_time %}
 													Trip type: Round Trip<br>
-													Service: Point to point/Cruise<br>
-													{{ flight_number }} To/From {{ street }}<br>
+													Service: Point to Point<br>
+													{{ start_point }} To/From {{ end_point }}<br>
 													Trip date: {{ pickup_date }} & {{ return_pickup_date}}<br>																										
 													{% else %}
 													Trip type: Single Trip<br>
-													Service: Point to point/Cruise<br>
-													{{ flight_number }} To {{ street }}<br>
+													Service: Point to Point<br>
+													{{ start_point }} To {{ end_point }}<br>
 													Trip date: {{ pickup_date }}<br>
-													{% endif %}																																																			
+													{% endif %}																																																		
 												{% else %}
 													{% if return_pickup_time %}
 													Trip type: Round Trip<br>
