@@ -280,7 +280,7 @@
 													{% if company_name %}<strong>GST (10%): ${{ with_gst }}</strong><br>{% endif %}
 													{% if paid %}<strong>Surcharge: ${{ surcharge }}</strong><br>{% endif %}
 													{% if toll %}<strong>Toll Road Fee: ${{ toll }}</strong><br>{% endif %}
-													{% if discount|trim == 'yes' %}
+													{% if discount == 'Yes' %}
 														<strong>Discount: ${{ with_gst }}</strong><br>
 													{% else %}
 														<strong>GST 10%: ${{ with_gst }}</strong><br>
