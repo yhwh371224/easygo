@@ -1495,11 +1495,13 @@ def invoice_detail(request):
             float_surcharge = 0.0 
         
         ###
-        if discount == 'yes':
+        discount = discount.strip() if discount else None
+
+        if discount == 'Yes' or user.discount == 'Yes':
             float_discount = round(price_as_float * 0.10, 2)
-        elif discount:
+        elif discount and discount.replace('.', '', 1).isdigit():
             float_discount = float(discount)
-        elif user.discount:
+        elif user.discount and user.discount.replace('.', '', 1).isdigit():
             float_discount = float(user.discount)
         else:
             float_discount = 0.0
