@@ -1494,7 +1494,7 @@ def invoice_detail(request):
         else:
             float_surcharge = 0.0 
         
-        ###
+        #######
         discount = discount.strip() if discount else None
 
         if discount == 'Yes' or user.discount == 'Yes':
@@ -1505,7 +1505,7 @@ def invoice_detail(request):
             float_discount = float(user.discount)
         else:
             float_discount = 0.0
-        ###
+        #######
 
         if toll: 
             float_toll = float(toll)
