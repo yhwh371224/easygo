@@ -41,7 +41,7 @@ class Command(BaseCommand):
                         [booking.email, RECIPIENT_EMAIL]
                     )
 
-                if float(booking.price or 0) > float(booking.paid or 0):
+                if booking.paid is not None and float(booking.price or 0) > float(booking.paid or 0):
                     diff = round(float(booking.price or 0) - float(booking.paid or 0), 2)
                     email_subject = "Urgent notice for payment discrepancy"
                     email_template = "basecamp/html_email-response-discrepancy.html"
