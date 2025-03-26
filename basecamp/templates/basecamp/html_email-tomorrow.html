@@ -233,11 +233,19 @@
 											<td align="left" style="padding-top:28px;padding-left:0;">	
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
 													Tomorrow is your trip day! {{ pickup_date }}<br><br></p>
-											{% if not reminder %}											
+											{% if not reminder or cash %}	
+												<p style="margin:0; font-size:16px; line-height:24px; font-weight:bold;">
+													✨ Important Notice:  
+												</p>										
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
 													<span style="color: #eb7828">Please reply "Yes" to this email for reconfirming your booking and details below</span><br><br>													
 													Please note that we can not guarantee your booking unless we receive a confirmation with a "Yes" response<br><br>
-													</p> 
+												</p>
+											{% endif %}
+
+											{% if cash %}	
+												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">													
+													Please note that the driver may not have a card machine available. We kindly ask you to prepare the cash in advance<br><br></p>											
 											{% endif %}
 
 											{% if direction == 'Pickup from Intl Airport' or direction == 'Pickup from Domestic Airport' %}												
