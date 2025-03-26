@@ -238,7 +238,8 @@
 													This will help us estimate your arrival time at the meeting point, ensuring a smooth transition.<br><br>
 
 													{% if cash %}
-														We kindly ask that you <span style="color: #eb7828">email us immediately</span> upon your arrival in Sydney</span><br><br>													
+														We kindly ask that you <span style="color: #eb7828">email us immediately</span> upon your arrival in Sydney</span><br><br>
+														Please note that the driver may not have a card machine available. We kindly ask you to prepare the cash in advance<br>											
 													{% endif %}
 
 													</p>
@@ -280,7 +281,8 @@
 													This will help us estimate your arrival time at the meeting point, ensuring a smooth transition.<br><br>
 
 													{% if cash %}
-														We kindly ask that you <span style="color: #eb7828">email us immediately</span> upon your arrival in Sydney</span><br><br>													
+														We kindly ask that you <span style="color: #eb7828">email us immediately</span> upon your arrival in Sydney</span><br><br>
+														Please note that the driver may not have a card machine available. We kindly ask you to prepare the cash in advance<br>												
 													{% endif %}
 
 													</p>
@@ -321,6 +323,11 @@
 													• Vehicle: {{ driver_car }}<br>
 													• Vehicle plate: {{ driver_plate }}<br><br></p>
 
+													{% if cash %}
+														We kindly ask that you <span style="color: #eb7828">email us immediately</span> upon your arrival in Sydney</span><br><br>
+														Please note that the driver may not have a card machine available. We kindly ask you to prepare the cash in advance<br>												
+													{% endif %}
+
 											{% else %} 
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
 													Please be ready on your pickup time, {{ pickup_time }}<br><br></p>
@@ -328,6 +335,10 @@
 													Delays greater than 5 mins from pickup time creates last min reschedule expenses 
 													and additional liabilities to other scheduled passengers, additional charge will apply<br>
 													More details >><a href="https://easygoshuttle.com.au/information">&nbsp;click here</a><br><br></p>
+
+													{% if cash %}
+														Please note that the driver may not have a card machine available. We kindly ask you to <span style="color: #eb7828; font-weight: bold">prepare the cash in advance</span><br><br>													
+													{% endif %}
 
                                             {% endif %} 											
 												<p style="Margin:0;font-size:14px;font-weight:bold;line-height:22px;Margin-bottom:12px;">
