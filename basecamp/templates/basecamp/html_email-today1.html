@@ -242,11 +242,10 @@
                                                     Once you’ve collected your luggage, kindly contact your driver to help us coordinate your arrival at the meeting point smoothly.  
                                                 </p>
                                                 
-                                                {% if cash %}
-                                                <p style="margin:0; font-size:14px; line-height:22px; margin-bottom:12px;">
-                                                    We kindly ask that you <span style="color: #eb7828; font-weight:bold;">email us immediately</span> upon your arrival in Sydney.  
-                                                </p>
-                                                {% endif %}
+                                                	{% if cash %}
+														We kindly ask that you <span style="color: #eb7828">email us immediately</span> upon your arrival in Sydney</span><br>
+														Please note that the driver may not have a card machine available. We kindly ask you to prepare the cash in advance<br><br>												
+													{% endif %}
 													
 												<p style="border: 1px solid #af865f; padding: 10px; margin-bottom: 20px; color: #af865f;">
 													
@@ -289,11 +288,10 @@
                                                     Once you’ve collected your luggage, kindly contact your driver to help us coordinate your arrival at the meeting point smoothly.  
                                                 </p>
                                                 
-                                                {% if cash %}
-                                                <p style="margin:0; font-size:14px; line-height:22px; margin-bottom:12px;">
-                                                    We kindly ask that you <span style="color: #eb7828; font-weight:bold;">email us immediately</span> upon your arrival in Sydney.  
-                                                </p>
-                                                {% endif %}
+                                                	{% if cash %}
+														We kindly ask that you <span style="color: #eb7828">email us immediately</span> upon your arrival in Sydney</span><br>
+														Please note that the driver may not have a card machine available. We kindly ask you to prepare the cash in advance<br><br>												
+													{% endif %}
 
 												<p style="border: 1px solid #af865f; padding: 10px; margin-bottom: 20px; color: #af865f;">
 													
@@ -328,6 +326,11 @@
                                                     Please be ready at your scheduled pickup time of {{ pickup_time }}. <br>
 													We kindly request that you contact your driver 60 minutes before pickup to ensure a smooth and seamless experience<br><br> 
                                                 </p>
+
+													{% if cash %}
+														We kindly ask that you <span style="color: #eb7828">email us immediately</span> upon your arrival in Sydney</span><br>
+														Please note that the driver may not have a card machine available. We kindly ask you to prepare the cash in advance<br><br>												
+													{% endif %}
 												
 												<p style="border: 1px solid #af865f; padding: 10px; margin-bottom: 20px; color: #af865f;">													
 													<strong>=== Driver's details ===</strong><br>
@@ -343,6 +346,10 @@
 													Delays greater than 5 mins from pickup time creates last min reschedule expenses 
 													and additional liabilities to other scheduled passengers, additional charge will apply<br>
 													More details >><a href="https://easygoshuttle.com.au/information">&nbsp;click here</a><br><br></p>
+
+													{% if cash %}
+														Please note that the driver may not have a card machine available. We kindly ask you to <span style="color: #eb7828; font-weight: bold">prepare the cash in advance</span><br><br>													
+													{% endif %}
 
                                             {% endif %} 											
 												<p style="Margin:0;font-size:14px;font-weight:bold;line-height:22px;Margin-bottom:12px;">
