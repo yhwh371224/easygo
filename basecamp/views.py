@@ -1398,9 +1398,18 @@ def return_trip_detail(request):
         flight_number = request.POST.get('flight_number')
         flight_time = request.POST.get('flight_time')
         pickup_time = request.POST.get('pickup_time')
-        direction = request.POST.get('direction')       
+        start_point = request.POST.get('start_point', '')
+        end_point = request.POST.get('end_point', '') 
+        direction = request.POST.get('direction')               
         message = request.POST.get('message')
         price = request.POST.get('price')
+        return_direction = request.POST.get('return_direction')
+        return_pickup_date = request.POST.get('return_pickup_date')
+        return_flight_number = request.POST.get('return_flight_number')
+        return_flight_time = request.POST.get('return_flight_time')
+        return_pickup_time = request.POST.get('return_pickup_time')
+        return_start_point = request.POST.get('return_start_point', '')
+        return_end_point = request.POST.get('return_end_point', '') 
         
         user = Post.objects.filter(Q(email__iexact=email)).first()    
         
@@ -1412,14 +1421,18 @@ def return_trip_detail(request):
             contact = user.contact
             suburb = user.suburb
             street = user.street
+            start_point = user.start_point
+            end_point = user.end_point
             no_of_passenger = user.no_of_passenger
             no_of_baggage = user.no_of_baggage
+            
             
         data = {
             'name': name,
             'contact': contact,
             'email': email,
-            'pickup_date': pickup_date}       
+            'pickup_date': pickup_date,
+            }       
             
         content = '''
             {} 
@@ -1438,10 +1451,12 @@ def return_trip_detail(request):
         
         sam_driver = Driver.objects.get(driver_name="Sam")  
                     
-        p = Post(name=name, contact=contact, email=email, pickup_date=pickup_date, flight_number=flight_number,
-                 flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
-                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, price=price, 
-                 driver=sam_driver)
+        p = Post(name=name, contact=contact, email=email, pickup_date=pickup_date, flight_number=flight_number, flight_time=flight_time, 
+                 pickup_time=pickup_time, start_point=start_point, end_point=end_point, direction=direction, suburb=suburb, street=street,
+                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, return_direction=return_direction, 
+                 return_pickup_date=return_pickup_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
+                 return_pickup_time=return_pickup_time, return_start_point=return_start_point, return_end_point=return_end_point, driver=sam_driver,
+                 price=price, )
         
         p.save()
 
