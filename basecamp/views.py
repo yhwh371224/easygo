@@ -1683,6 +1683,7 @@ def email_dispatch_detail(request):
             "Shared Ride (inquiry) Discount Offer": ("basecamp/html_email-shared-inquiry-discount.html", "Discount notice - EasyGo"),
             "Shared Ride (booking) Discount Offer": ("basecamp/html_email-shared-booking-discount.html", "Discount notice - EasyGo"),
             "Cancellation of Booking": ("basecamp/html_email-response-cancel.html", "Cancellation of Booking: EasyGo"),
+            "Apologies Cancellation of Booking": ("basecamp/html_email-response-cancel1.html", "Apologies Cancellation of Booking: EasyGo"),
             "Cancellation by Client": ("basecamp/html_email-response-cancelby.html", "Confirmed Booking Cancellation: EasyGo"),
             "Apology emails": ("basecamp/html_email-response-apology-emails.html", "Apology emails: EasyGo"),
             "Payment discrepancy": ("basecamp/html_email-response-discrepancy.html", "Payment discrepancy: EasyGo"),
