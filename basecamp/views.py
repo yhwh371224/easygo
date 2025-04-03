@@ -1718,7 +1718,7 @@ def email_dispatch_detail(request):
                     user_1.reminder = True
                     user_1.save() 
             
-            if selected_option in ["Cancellation of Booking", "Cancellation by Client"] and user:                     
+            if selected_option in ["Cancellation of Booking", "Cancellation by Client", "Apologies Cancellation of Booking"] and user:                     
                 user.cancelled = True
                 user.save()
 
