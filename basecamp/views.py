@@ -1670,6 +1670,7 @@ def email_dispatch_detail(request):
             "Pickup Notice for Today": ("basecamp/html_email-today1.html", "Important Update for Today's Pickup - EasyGo "),
             "Payment Method": ("basecamp/html_email-response-payment.html", "Payment Method - EasyGo"),
             "Inquiry for driver contact": ("basecamp/html_email-response-driver-contact.html", "Inquiry for driver contact - EasyGo"),
+            "Airport Pickup Guide": ("basecamp/html_email-response-arrival-guide.html", "Airport Pickup Guide - EasyGo"),
             'Earlier Pickup Requested for Departure': ("basecamp/html_email-departure-early.html", "Urgent notice - EasyGo"),
             'Later Pickup Requested for Departure': ("basecamp/html_email-departure-late.html", "Urgent notice - EasyGo"),
             'Early Arrival Notification': ("basecamp/html_email-arrival-early.html", "Urgent notice - EasyGo"),
