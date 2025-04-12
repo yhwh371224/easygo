@@ -1,7 +1,7 @@
 <div class="card text-white bg-secondary p-4" id="return-cruise-fields" >    
     <div class="mb-3 pb-1">
         <label class="form-label" for="return_cruise_date">Return Pickup date (ex; 07/31/2023)</label>
-         <input class="form-control date-picker rounded" required name="return_pickup_date" id="return-cruise-date" type="date" placeholder="Your trip date">
+         <input class="form-control date-picker rounded" required name="return_pickup_date" id="return-cruise-date" type="date" placeholder="Your trip date" required>
     </div>
     <div class="mb-3 pb-1">
         <label class="form-label" for="return_pickup_time">Return Pickup time</label>
@@ -9,12 +9,12 @@
     </div> 
     <div class="mb-3 pb-1">
         <label class="form-label" for="return_start_point">Return start point<sup class="text-danger ms-1">*</sup></label>
-         <input class="form-control" type="text" placeholder="Return start point" required name="return_start_point" id="return-cruise-number">
+         <input class="form-control" type="text" placeholder="Return start point" required name="return_start_point" id="return-cruise-number" required>
         <div class="invalid-feedback">Please enter start point!</div>
     </div>    
     <div class="mb-3 pb-1">
         <label class="form-label" for="return_end_point">Return end point<sup class="text-danger ms-1">*</sup></label>
-         <input class="form-control" type="text" placeholder="Return end point" required name="return_end_point" id="return-cruise-number">
+         <input class="form-control" type="text" placeholder="Return end point" required name="return_end_point" id="return-cruise-number" required>
         <div class="invalid-feedback">Please enter end point!</div>
     </div>
 </div>    
