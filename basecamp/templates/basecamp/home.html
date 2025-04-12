@@ -488,5 +488,56 @@
         });
     });
 </script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      const returnFlightCheckbox = document.getElementById('return-flight');
+      const returnFlightFields = document.getElementById('return-flight-fields');
+
+      returnFlightCheckbox.addEventListener('change', function() {
+          if (this.checked) {
+              returnFlightFields.style.display = 'block';
+              const inputs = returnFlightFields.querySelectorAll('input');
+              inputs.forEach(input => {
+                  input.setAttribute('required', 'required');
+              });
+          } else {
+              returnFlightFields.style.display = 'none';
+              const inputs = returnFlightFields.querySelectorAll('input');
+              inputs.forEach(input => {
+                  input.removeAttribute('required');
+              });
+          }
+      });
+
+      document.getElementById('booking-form').addEventListener('submit', function(event) {
+          let isValid = true;
+          
+          // Return flight fields validation
+          if (returnFlightCheckbox.checked) {
+              const returnFlightNumber = returnFlightFields.querySelector('input[name="return_flight_number"]');
+              const returnFlightDate = returnFlightFields.querySelector('input[name="return_flight_date"]');
+
+              if (!returnFlightNumber.value) {
+                  returnFlightNumber.classList.add('is-invalid');
+                  isValid = false;
+              } else {
+                  returnFlightNumber.classList.remove('is-invalid');
+              }
+
+              if (!returnFlightDate.value) {
+                  returnFlightDate.classList.add('is-invalid');
+                  isValid = false;
+              } else {
+                  returnFlightDate.classList.remove('is-invalid');
+              }
+          }
+
+          if (!isValid) {
+              event.preventDefault(); // Prevent form submission
+              alert('Please fill in all required fields.');
+          }
+      });
+  });
+</script>
   </body>
 </html>
