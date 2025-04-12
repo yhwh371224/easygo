@@ -1,5 +1,5 @@
 def get_home_suburbs(): 
-    home_suburbs = {
+    home_suburbs = [
         "Select your option",
         "Hotels In City",  
         "International Airport",
@@ -284,7 +284,7 @@ def get_home_suburbs():
         "Woollahra",
         "Woolwich", 
         "Yagoona",
-        }
+    ]
     return home_suburbs
 
 home_suburbs = get_home_suburbs() 
