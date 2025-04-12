@@ -98,11 +98,31 @@ class Command(BaseCommand):
             ]
 
             for condition, email_subject in conditions:
-                if condition:
-                    message = f"{booking_reminder.name} & {booking_reminder.email}"
-                    recipient = settings.DEFAULT_FROM_EMAIL
+                if condition and booking_reminder.email:
                     try:
-                        send_mail(email_subject, message, settings.DEFAULT_FROM_EMAIL, [recipient], fail_silently=False)
-                        logger.info(f"Successfully sent alert '{email_subject}' for {booking_reminder.email}")
+                        diff = round(float(booking_reminder.price) - float(booking_reminder.paid), 2)
+                        html_content = render_to_string(
+                            "basecamp/html_email-shortpayment-alert.html",  
+                            {
+                                'name': booking_reminder.name,
+                                'email': booking_reminder.email,
+                                'note': email_subject,
+                                'pickup_date': booking_reminder.pickup_date,
+                                'price': booking_reminder.price,
+                                'paid': booking_reminder.paid,
+                                'diff': diff,
+                            }
+                        )
+                        text_content = strip_tags(html_content)
+
+                        email = EmailMultiAlternatives(
+                            email_subject,
+                            text_content,
+                            settings.DEFAULT_FROM_EMAIL,
+                            [booking_reminder.email, settings.DEFAULT_FROM_EMAIL]
+                        )
+                        email.attach_alternative(html_content, "text/html")
+                        email.send()
+                        logger.info(f"Sent HTML alert '{email_subject}' to customer: {booking_reminder.email}")
                     except Exception as e:
-                        logging.error(f"Failed to send alert email: {str(e)}")
+                        logger.error(f"Failed to send HTML alert to customer {booking_reminder.email}: {str(e)}")
