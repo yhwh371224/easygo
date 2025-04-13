@@ -1712,11 +1712,13 @@ def email_dispatch_detail(request):
             if selected_option == "Gratitude For Payment" and user:                     
                 user.paid = float(user.price) + 0.00
                 user.reminder = True
+                user.toll = "" 
                 user.save()
                 if user.return_pickup_time == 'x':
                     user_1 = Post.objects.filter(email=email)[1]
                     user_1.paid = float(user.price) + 0.00
                     user_1.reminder = True
+                    user_1.toll = ""
                     user_1.save() 
             
             if selected_option in ["Cancellation of Booking", "Cancellation by Client", "Apologies Cancellation of Booking"] and user:                     
@@ -1731,7 +1733,10 @@ def email_dispatch_detail(request):
 
             if selected_option == "Payment discrepancy" and user: 
                 diff = round(float(user.price) - float(user.paid), 2)
-                context.update({'price': user.price, 'paid': user.paid, 'diff': diff})
+                if diff > 0:
+                    user.toll = "short payment"
+                    context.update({'price': user.price, 'paid': user.paid, 'diff': diff})
+                    user.save()
 
             handle_email_sending(request, email, subject, template_name, context)
               
