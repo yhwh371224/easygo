@@ -3,13 +3,48 @@
 {% block content %}
 <style>
     form {
-        margin-top: 40px; /* 상단 마진을 40px로 설정 */
+        margin-top: 40px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0 16px;
+    }
+
+    textarea {
+        width: 100%;
+        max-width: 600px;
+        height: 150px;
+        font-size: 16px;
+        padding: 10px;
+        box-sizing: border-box;
+        resize: vertical;
+    }
+
+    button {
+        margin-top: 10px;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    @media (max-width: 480px) {
+        textarea {
+            font-size: 14px;
+            height: 120px;
+        }
+
+        button {
+            font-size: 14px;
+            padding: 8px 16px;
+        }
     }
 </style>
-    <form method="post">
-        {% csrf_token %}
-        <textarea name="verse" rows="5" cols="60" placeholder="예: 여호와는 나의 목자시니..."></textarea><br>
-        <button type="submit">Create Image Now</button>
-    </form>
 
+<a href="https://easygoshuttle.com.au/easygo_review/verse_of_today/" class="link-button">Go to Verse of Today</a>
+<br>
+<form method="post">
+    {% csrf_token %}
+    <textarea name="verse" placeholder="예: 여호와는 나의 목자시니..."></textarea><br>
+    <button type="submit">Create Image Now</button>
+</form>
 {% endblock %}

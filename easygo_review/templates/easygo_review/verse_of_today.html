@@ -2,13 +2,33 @@
 
 {% block content %}
 <style>
-    form {
-        margin-top: 40px; 
+    /* 이미지 반응형 */
+    img {
+        max-width: 100%; /* 최대 너비를 100%로 설정 */
+        height: auto;    /* 비율에 맞게 높이 자동 조정 */
+        display: block;  /* 기본적으로 블록 요소로 변경 */
+        margin: 0 auto;  /* 화면 중앙 정렬 */
     }
-</style>    
-    {% if image_path %}
-        <img src="{{ image_path }}" style="max-width:90%;">
-    {% else %}
-        <p>No image available.</p>
-    {% endif %}
+
+    /* "No image available" 메시지 스타일 */
+    p {
+        text-align: center; /* 가운데 정렬 */
+        font-size: 16px;    /* 글자 크기 조정 */
+        color: #555;       /* 색상 */
+    }
+
+    @media (max-width: 480px) {
+        p {
+            font-size: 14px;  /* 작은 화면에서 글자 크기 줄이기 */
+        }
+    }
+</style>
+
+{% if image_path %}
+    <img src="{{ image_path }}" alt="Verse Image">
+{% else %}
+    <p>No image available.</p>
+{% endif %}
+
 {% endblock %}
+
