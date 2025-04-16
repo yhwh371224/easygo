@@ -2,41 +2,44 @@
 
 {% block content %}
 <style>
-    /* 링크 스타일링 */
-    .link {
-        display: flex;
-        justify-content: center;
-        margin-top: 20px;
-        color: #66BB6A;  /* 링크 색상 - 진한 연초록 */
-        text-decoration: none;
-        font-size: 16px;
-        font-weight: bold;
-        width: 100%;
-    }
-
-    /* 링크에 호버 효과 */
-    .link:hover {
-        color: #388E3C;  /* 호버 시 더 진한 초록 */
-        text-decoration: underline;
-    }
-
-    /* 화면 중앙 정렬을 위한 스타일 */
     body {
+        margin: 0;
+        padding: 0;
+        height: 100vh;
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100vh;
-        margin: 0;
         text-align: center;
+        background-color: #f9f9f9;
     }
 
-    form {
+    .container {
         display: flex;
         flex-direction: column;
         align-items: center;
-        padding: 0 16px;
-        width: 100%;
         max-width: 600px;
+        width: 100%;
+        padding: 20px;
+    }
+
+    .link {
+        color: #2e7d32;
+        text-decoration: none;
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .link:hover {
+        color: #1b5e20;
+        text-decoration: underline;
+    }
+
+    form {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
     textarea {
@@ -46,7 +49,7 @@
         padding: 20px;
         box-sizing: border-box;
         resize: vertical;
-        border: 1px solid #81C784; /* 테두리 색상 - 연초록 */
+        border: 1px solid #2e7d32;
         border-radius: 5px;
     }
 
@@ -57,12 +60,12 @@
         cursor: pointer;
         border: none;
         border-radius: 5px;
-        background-color: #81C784;  /* 버튼 배경색 - 연초록 */
+        background-color: #2e7d32;
         color: white;
     }
 
     button:hover {
-        background-color: #66BB6A;  /* 버튼 호버 - 진한 초록 */
+        background-color: #1b5e20;
     }
 
     @media (max-width: 480px) {
@@ -82,14 +85,13 @@
     }
 </style>
 
-<!-- 이동 버튼 -->
-<a href="https://easygoshuttle.com.au/easygo_review/verse_of_today/" class="link">Go to Verse of Today</a>
-<br>
+<div class="container">
+    <a href="https://easygoshuttle.com.au/easygo_review/verse_of_today/" class="link">Go to Verse of Today</a>
 
-<!-- 기존 폼 -->
-<form method="post">
-    {% csrf_token %}
-    <textarea name="verse" placeholder="예: 여호와는 나의 목자시니..."></textarea><br>
-    <button type="submit">Create Image Now</button>
-</form>
+    <form method="post">
+        {% csrf_token %}
+        <textarea name="verse" placeholder="예: 여호와는 나의 목자시니..."></textarea><br>
+        <button type="submit">Create Image Now</button>
+    </form>
+</div>
 {% endblock %}
