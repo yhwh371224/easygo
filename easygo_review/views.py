@@ -355,15 +355,12 @@ def create_verse_image(verse_text, image_format='JPEG'):
     if not bg_files:
         raise FileNotFoundError("No background images found in the 'verse_backgrounds' directory.")
 
-    # 첫 번째 배경 이미지 선택
-    bg_path = os.path.join(bg_dir, bg_files[0])  # 랜덤이 아니라 첫 번째 이미지를 사용
+    bg_path = os.path.join(bg_dir, bg_files[0])  
     img = Image.open(bg_path)
     draw = ImageDraw.Draw(img)
 
-    # 이미지 크기
     W, H = img.size
 
-    # 폰트 설정 (경로는 실제 존재하는 폰트로 수정 필요)
     font_path = os.path.join('static', 'fonts', 'NotoSansKR-Regular.ttf')
     font_size = 40
     try:
@@ -371,7 +368,6 @@ def create_verse_image(verse_text, image_format='JPEG'):
     except IOError:
         raise FileNotFoundError(f"Font file not found at {font_path}")
 
-    # 텍스트 줄바꿈 처리
     words = verse_text.split()
     lines = []
     line = ""
@@ -387,7 +383,6 @@ def create_verse_image(verse_text, image_format='JPEG'):
     if line:
         lines.append(line)
 
-    # 텍스트 그리기
     total_text_height = len(lines) * (font_size + 18)
     y_text = (H - total_text_height) // 2
     for line in lines:
@@ -397,19 +392,24 @@ def create_verse_image(verse_text, image_format='JPEG'):
         draw.text((x_text, y_text), line, font=font, fill="white")
         y_text += font_size + 10
 
-    # 결과 저장
+
     output_dir = os.path.join(settings.MEDIA_ROOT, 'verse')
     os.makedirs(output_dir, exist_ok=True)  
 
-    # 파일명과 확장자를 .jpg로 저장
     output_path = os.path.join(output_dir, f'verse.{image_format.lower()}')
     img.save(output_path, format=image_format)
 
+    if os.path.exists(output_path):
+        print(f"Image successfully created at: {output_path}")
+    else:
+        print("Image creation failed.")
 
 def verse_input_view(request):
     if request.method == 'POST':
         verse_text = request.POST.get('verse')
-        image_format = request.POST.get('format', 'JPEG')  # 기본값은 JPEG
+        image_format = request.POST.get('format', 'JPEG').upper()  
+        if image_format not in ['JPEG', 'PNG']:
+            image_format = 'JPEG'  
         if verse_text:
             try:
                 create_verse_image(verse_text, image_format)
@@ -418,13 +418,12 @@ def verse_input_view(request):
                 print(f"Error creating image: {e}")
     return render(request, 'easygo_review/verse.html')
 
-
 def verse_display_view(request):
-    # 이미지 파일 경로 설정
-    image_filename = 'verse.jpg'  # 실제 이미지 파일 이름
-    image_path = os.path.join(settings.MEDIA_URL, 'verse', image_filename)  # MEDIA_URL을 포함한 경로
+    image_filename = 'verse.jpg'  
+    image_path = os.path.join(settings.MEDIA_URL, 'verse', image_filename)  
     context = {
         'image_path': image_path
     }
     return render(request, 'easygo_review/verse_of_today.html', context)
+
 
