@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en-us">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Verse of Today{% endblock %}</title>
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'basecamp/favi/favicon.ico' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="google-site-verification" content="hae39L0Kv7JIxVc3YclvckH7Im5SdYa2hk_vZbGJIkA" />
+    <!-- SEO Meta Tags-->
+    <meta name="description" content="EasyGo airport shuttle bus provide Sydney airport transport service, private ride with the cheap price. ">
+    <meta name="keywords" content="EasyGo reviews, EasyGo Airport Shuttle Reviews, reviews for easygo shuttle, reviews for easygo airport transfers">
+    <meta name="author" content="easygoshuttle.com.au">
+    <link rel="stylesheet" href="{% static 'easygo_review/css/bootstrap.css' %}" media="screen">
+    <link rel="stylesheet" href="{% static 'easygo_review/css/custom.min.css' %}">
+    <link rel="stylesheet" href="{% static 'easygo_review/css/styles.css' %}">
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <!-- easygo_review Entries Column -->        
+            {% block content %}
+            {% endblock %}            
+    </div>
+</div>
+
+<script src="{% static 'easygo_review/js/jquery.min.js' %}"></script>
+<script src="{% static 'easygo_review/js/bootstrap.min.js' %}"></script>
+</body>
+</html>

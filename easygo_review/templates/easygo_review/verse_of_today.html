@@ -1,0 +1,13 @@
+{% extends "account/base_verse.html" %}
+
+{% block content %}
+<style>
+    form {
+        margin-top: 40px; /* 상단 마진을 40px로 설정 */
+    }
+</style>
+    <h3>Verse of Today</h3>
+    <img src="/media/verse/verse.png?{{ now }}" alt="verse_of_today" style="max-width:90%;">
+    <p><a href="{% url 'verse_input' %}">다시 입력</a></p>
+
+{% endblock %}
