@@ -2,21 +2,38 @@
 
 {% block content %}
 <style>
+    html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        background-color: #f9f9f9;
+        font-family: 'Arial', sans-serif;
+    }
+
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
     .form-wrapper {
+        width: 95%;
+        max-width: 1000px;
+        padding: 40px;
+        background: #fff;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        border-radius: 12px;
         display: flex;
         flex-direction: column;
         align-items: center;
-        width: 95%;
-        max-width: 1000px;  /* 더 넓게 */
-        padding: 30px;
     }
 
     .link {
         color: #2e7d32;
         text-decoration: none;
-        font-size: 22px;  /* 더 크게 */
+        font-size: 20px;
         font-weight: bold;
-        margin-bottom: 25px;
+        margin-bottom: 30px;
         text-align: center;
     }
 
@@ -35,41 +52,47 @@
     textarea {
         width: 100%;
         min-height: 400px;
-        font-size: 20px;  /* 더 크게 */
-        padding: 25px;
+        font-size: 20px;
+        padding: 20px;
+        box-sizing: border-box;
+        resize: vertical;
         border: 2px solid #2e7d32;
         border-radius: 8px;
-        resize: vertical;
     }
 
     button {
         margin-top: 20px;
-        padding: 18px 35px;
+        padding: 18px 40px;
         font-size: 20px;
         cursor: pointer;
         border: none;
         border-radius: 8px;
         background-color: #2e7d32;
         color: white;
+        transition: background-color 0.3s ease;
     }
 
     button:hover {
         background-color: #1b5e20;
     }
 
-    @media (max-width: 480px) {
+    @media (max-width: 600px) {
+        .form-wrapper {
+            padding: 20px;
+        }
+
         .link {
-            font-size: 18px;
+            font-size: 16px;
         }
 
         textarea {
             font-size: 18px;
-            min-height: 300px;
+            min-height: 250px;
         }
 
         button {
             font-size: 18px;
-            padding: 15px 30px;
+            padding: 14px 30px;
         }
     }
 </style>
@@ -79,7 +102,7 @@
 
     <form method="post">
         {% csrf_token %}
-        <textarea name="verse" placeholder="예: 여호와는 나의 목자시니..."></textarea>
+        <textarea name="verse" placeholder="예: 여호와는 나의 목자시니..."></textarea><br>
         <button type="submit">Create Image Now</button>
     </form>
 </div>
