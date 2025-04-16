@@ -6,7 +6,9 @@
         margin-top: 40px; 
     }
 </style>    
-    <img src="/media/verse/verse.jpg" style="max-width:90%;">
-
-
+    {% if image_path %}
+        <img src="{{ image_path }}" style="max-width:90%;">
+    {% else %}
+        <p>No image available.</p>
+    {% endif %}
 {% endblock %}
