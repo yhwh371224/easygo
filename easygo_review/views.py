@@ -1,6 +1,5 @@
 import json
 import requests
-import random
 import os
 
 from django.conf import settings
