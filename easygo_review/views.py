@@ -371,20 +371,22 @@ def create_verse_image(verse_text, image_format='JPEG'):
         raise FileNotFoundError(f"Font file not found at {font_path}")
 
     # 텍스트 줄 나누기
-    words = verse_text.split()
+    raw_lines = verse_text.split('\n')
     lines = []
-    line = ""
-    for word in words:
-        test_line = line + " " + word if line else word
-        bbox = draw.textbbox((0, 0), test_line, font=font)
-        line_width = bbox[2] - bbox[0]
-        if line_width < W * 0.7:  # 더 짧게 해서 줄바꿈 유도
-            line = test_line
-        else:
+    for raw_line in raw_lines:
+        words = raw_line.split()
+        line = ""
+        for word in words:
+            test_line = line + " " + word if line else word
+            bbox = draw.textbbox((0, 0), test_line, font=font)
+            line_width = bbox[2] - bbox[0]
+            if line_width < W * 0.8:
+                line = test_line
+            else:
+                lines.append(line)
+                line = word
+        if line:
             lines.append(line)
-            line = word
-    if line:
-        lines.append(line)
 
     total_text_height = len(lines) * (font_size + line_spacing)
     y_text = (H - total_text_height) // 2
