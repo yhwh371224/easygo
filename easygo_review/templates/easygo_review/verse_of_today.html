@@ -2,24 +2,34 @@
 
 {% block content %}
 <style>
-    /* 이미지 반응형 */
-    img {
-        max-width: 100%; /* 최대 너비를 100%로 설정 */
-        height: auto;    /* 비율에 맞게 높이 자동 조정 */
-        display: block;  /* 기본적으로 블록 요소로 변경 */
-        margin: 0 auto;  /* 화면 중앙 정렬 */
+    /* 전체 마진/패딩 제거 */
+    html, body {
+        margin: 0;
+        padding: 0;
     }
 
-    /* "No image available" 메시지 스타일 */
+    /* 이미지 반응형 + 바짝 붙이기 */
+    img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 0 auto;
+        padding: 0;
+    }
+
+    /* 메시지 스타일 */
     p {
-        text-align: center; /* 가운데 정렬 */
-        font-size: 16px;    /* 글자 크기 조정 */
-        color: #555;       /* 색상 */
+        text-align: center;
+        font-size: 16px;
+        color: #555;
+        margin: 0;
+        padding-top: 20px;
     }
 
     @media (max-width: 480px) {
         p {
-            font-size: 14px;  /* 작은 화면에서 글자 크기 줄이기 */
+            font-size: 14px;
+            padding-top: 10px;
         }
     }
 </style>
@@ -29,6 +39,4 @@
 {% else %}
     <p>No image available.</p>
 {% endif %}
-
 {% endblock %}
-
