@@ -1,5 +1,7 @@
 import json
 import requests
+import random
+import os
 
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
@@ -9,6 +11,7 @@ from django.views.generic import ListView, DetailView, UpdateView, CreateView, D
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
 from django.http import JsonResponse
+from PIL import Image, ImageDraw, ImageFont
 
 from .models import Post, Comment
 from .forms import CommentForm, PostForm
@@ -342,3 +345,60 @@ def recaptcha_verify(request):
             return JsonResponse({'success': False, 'message': result.get('error-codes', 'Invalid reCAPTCHA token')})
     
     return JsonResponse({'success': False, 'message': 'Invalid request method'})
+
+
+def create_verse_image(text):
+    # 배경 이미지 디렉토리
+    bg_dir = os.path.join(settings.BASE_DIR, 'static', 'verse_backgrounds')
+    bg_files = [f for f in os.listdir(bg_dir) if f.endswith(('.jpg', '.png'))]
+    bg_path = os.path.join(bg_dir, random.choice(bg_files))
+
+    # 이미지 열기
+    img = Image.open(bg_path).convert("RGBA")
+    W, H = img.size
+    draw = ImageDraw.Draw(img)
+
+    # 폰트 설정
+    try:
+        font_path = os.path.join(settings.BASE_DIR, 'fonts', 'NotoSansKR-Regular.ttf')
+        font = ImageFont.truetype(font_path, 50)
+    except:
+        font = ImageFont.load_default()
+
+    # 텍스트 줄바꿈
+    lines = []
+    words = text.split()
+    line = ""
+    for word in words:
+        if draw.textsize(line + " " + word, font=font)[0] < W * 0.8:
+            line += " " + word
+        else:
+            lines.append(line.strip())
+            line = word
+    lines.append(line.strip())
+
+    total_height = len(lines) * 60
+    y = (H - total_height) // 2
+
+    # 텍스트 그리기
+    for line in lines:
+        w, h = draw.textsize(line, font=font)
+        draw.text(((W - w) / 2, y), line, fill="white", font=font)
+        y += 60
+
+    # 저장 경로
+    out_dir = os.path.join(settings.MEDIA_ROOT, 'verse')
+    os.makedirs(out_dir, exist_ok=True)
+    img_path = os.path.join(out_dir, 'verse.png')
+    img.save(img_path)
+
+def verse_input_view(request):
+    if request.method == 'POST':
+        verse_text = request.POST.get('verse')
+        if verse_text:
+            create_verse_image(verse_text)
+            return redirect('verse_display')
+    return render(request, 'verse.html')
+
+def verse_display_view(request):
+    return render(request, 'verse_of_today.html')

@@ -1,0 +1,16 @@
+{% extends "account/base_verse.html" %}
+
+{% block content %}
+<style>
+    form {
+        margin-top: 40px; /* 상단 마진을 40px로 설정 */
+    }
+</style>
+    <h3>Verse input</h3>
+    <form method="post">
+        {% csrf_token %}
+        <textarea name="verse" rows="5" cols="60" placeholder="예: 여호와는 나의 목자시니..."></textarea><br>
+        <button type="submit">Create Image Now</button>
+    </form>
+
+{% endblock %}
