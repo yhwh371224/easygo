@@ -16,6 +16,6 @@ urlpatterns = [
     path('<int:pk>/new_comment/', views.CommentCreate.as_view(), name='new_comment'),
     path('comment/<int:pk>/update/', views.CommentUpdate.as_view(), name='comment_update'),
     path('comment/<int:pk>/delete/', views.CommentDelete.as_view(), name='comment_delete'),
-    path('verse/', views.verse_input_view, name='verse_input'),
-    path('verse_of_today/', views.verse_display_view, name='verse_display'),
+    path('verse/', views.verse_input_view, name='verse'),
+    path('verse_of_today/', views.verse_display_view, name='verse_of_today'),
 ]
