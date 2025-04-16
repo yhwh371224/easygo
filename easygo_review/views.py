@@ -407,10 +407,10 @@ def verse_input_view(request):
         verse_text = request.POST.get('verse')
         if verse_text:
             create_verse_image(verse_text)
-            return redirect('easygo_review:verse_of_today')  # 'verse_of_today' 경로로 리다이렉션
+            return redirect('easygo_review:verse_of_today') 
     return render(request, 'easygo_review/verse.html')
 
 def verse_display_view(request):
-    return render(request, 'easygo_review/verse_of_today.html', {'now': now()})  # 현재 시간을 템플릿에 전달
+    return render(request, 'easygo_review/verse_of_today.html', {'now': now()}) 
 
 
