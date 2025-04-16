@@ -2,14 +2,19 @@
 
 {% block content %}
 <style>
+    /* 폼 스타일링 */
     form {
         margin-top: 40px;
         display: flex;
         flex-direction: column;
         align-items: center;
         padding: 0 16px;
+        max-width: 800px; /* 최대 너비 설정 */
+        margin-left: auto;
+        margin-right: auto; /* 화면 가운데 정렬 */
     }
 
+    /* 텍스트 영역 스타일링 */
     textarea {
         width: 100%;
         max-width: 600px;
@@ -20,28 +25,45 @@
         resize: vertical;
     }
 
+    /* 버튼 스타일링 */
     button {
         margin-top: 10px;
         padding: 10px 20px;
         font-size: 16px;
         cursor: pointer;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
     }
 
-    @media (max-width: 480px) {
-        textarea {
-            font-size: 14px;
-            height: 120px;
-        }
+    /* 버튼에 호버 효과 */
+    button:hover {
+        background-color: #45a049;
+    }
 
-        button {
-            font-size: 14px;
-            padding: 8px 16px;
-        }
+    /* 링크 버튼 스타일링 */
+    .link-button {
+        margin-top: 20px;
+        padding: 10px 20px;
+        background-color: #4CAF50;
+        color: white;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    /* 링크 버튼에 호버 효과 */
+    .link-button:hover {
+        background-color: #45a049;
     }
 </style>
 
+<!-- 이동 버튼 추가 -->
 <a href="https://easygoshuttle.com.au/easygo_review/verse_of_today/" class="link-button">Go to Verse of Today</a>
-<br>
+
+<!-- 기존 폼 -->
 <form method="post">
     {% csrf_token %}
     <textarea name="verse" placeholder="예: 여호와는 나의 목자시니..."></textarea><br>
