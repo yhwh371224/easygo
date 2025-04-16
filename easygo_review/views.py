@@ -349,50 +349,58 @@ def recaptcha_verify(request):
     return JsonResponse({'success': False, 'message': 'Invalid request method'})
 
 
-def create_verse_image(text):
+def create_verse_image(verse_text):
     # 배경 이미지 디렉토리
-    bg_dir = os.path.join(settings.BASE_DIR, 'static', 'verse_backgrounds')
+    bg_dir = os.path.join('static', 'verse_backgrounds')
     bg_files = [f for f in os.listdir(bg_dir) if f.endswith(('.jpg', '.png'))]
-    bg_path = os.path.join(bg_dir, random.choice(bg_files))
 
-    # 이미지 열기
-    img = Image.open(bg_path).convert("RGBA")
-    W, H = img.size
+    if not bg_files:
+        raise FileNotFoundError("No background images found in the 'verse_backgrounds' directory.")
+
+    # 랜덤 배경 이미지 선택
+    bg_path = os.path.join(bg_dir, random.choice(bg_files))
+    img = Image.open(bg_path)
     draw = ImageDraw.Draw(img)
 
-    # 폰트 설정
-    try:
-        font_path = os.path.join(settings.BASE_DIR, 'fonts', 'NotoSansKR-Regular.ttf')
-        font = ImageFont.truetype(font_path, 50)
-    except:
-        font = ImageFont.load_default()
+    # 이미지 크기
+    W, H = img.size
 
-    # 텍스트 줄바꿈
+    # 폰트 설정 (경로는 실제 존재하는 폰트로 수정 필요)
+    font_path = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
+    font_size = 40
+    font = ImageFont.truetype(font_path, font_size)
+
+    # 텍스트 줄바꿈 처리
+    words = verse_text.split()
     lines = []
-    words = text.split()
     line = ""
     for word in words:
-        if draw.textsize(line + " " + word, font=font)[0] < W * 0.8:
-            line += " " + word
+        test_line = line + " " + word if line else word
+        bbox = draw.textbbox((0, 0), test_line, font=font)
+        line_width = bbox[2] - bbox[0]
+        if line_width < W * 0.8:
+            line = test_line
         else:
-            lines.append(line.strip())
+            lines.append(line)
             line = word
-    lines.append(line.strip())
-
-    total_height = len(lines) * 60
-    y = (H - total_height) // 2
+    if line:
+        lines.append(line)
 
     # 텍스트 그리기
+    total_text_height = len(lines) * (font_size + 10)
+    y_text = (H - total_text_height) // 2
     for line in lines:
-        w, h = draw.textsize(line, font=font)
-        draw.text(((W - w) / 2, y), line, fill="white", font=font)
-        y += 60
+        bbox = draw.textbbox((0, 0), line, font=font)
+        line_width = bbox[2] - bbox[0]
+        x_text = (W - line_width) // 2
+        draw.text((x_text, y_text), line, font=font, fill="white")
+        y_text += font_size + 10
 
-    # 저장 경로
-    out_dir = os.path.join(settings.MEDIA_ROOT, 'verse')
-    os.makedirs(out_dir, exist_ok=True)
-    img_path = os.path.join(out_dir, 'verse.png')
-    img.save(img_path)
+    # 결과 저장
+    output_dir = os.path.join('media', 'verse')
+    os.makedirs(output_dir, exist_ok=True)
+    output_path = os.path.join(output_dir, 'verse.png')
+    img.save(output_path)
 
 def verse_input_view(request):
     if request.method == 'POST':
