@@ -42,26 +42,27 @@
         background-color: #45a049;
     }
 
-    /* 링크 버튼 스타일링 */
-    .link-button {
+    /* 링크 스타일링 */
+    .link {
+        display: inline-block;
         margin-top: 20px;
-        padding: 10px 20px;
-        background-color: #4CAF50;
-        color: white;
+        color: #3565a3;  /* 링크 색상 */
         text-align: center;
         text-decoration: none;
-        border-radius: 5px;
         font-size: 16px;
+        font-weight: bold;
     }
 
-    /* 링크 버튼에 호버 효과 */
-    .link-button:hover {
-        background-color: #45a049;
+    /* 링크에 호버 효과 */
+    .link:hover {
+        color: #45a049;  /* 호버 시 색상 */
+        text-decoration: underline;  /* 호버 시 밑줄 */
     }
 </style>
 
 <!-- 이동 버튼 추가 -->
-<a href="https://easygoshuttle.com.au/easygo_review/verse_of_today/" class="link-button">Go to Verse of Today</a>
+<a href="https://easygoshuttle.com.au/easygo_review/verse_of_today/" class="link">Go to Verse of Today</a>
+<br>
 
 <!-- 기존 폼 -->
 <form method="post">
