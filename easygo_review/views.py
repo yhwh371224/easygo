@@ -351,7 +351,7 @@ def recaptcha_verify(request):
 
 def create_verse_image(verse_text):
     # 배경 이미지 경로 (하나의 배경 이미지만 사용)
-    bg_path = os.path.join('static', 'verse_backgrounds', 'your_background_image.png')
+    bg_path = os.path.join('static', 'verse_backgrounds', 'verse.png')
 
     if not os.path.exists(bg_path):
         raise FileNotFoundError(f"Background image not found at {bg_path}")
