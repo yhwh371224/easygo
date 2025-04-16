@@ -347,7 +347,7 @@ def recaptcha_verify(request):
     return JsonResponse({'success': False, 'message': 'Invalid request method'})
 
 
-def create_verse_image(verse_text):
+def create_verse_image(verse_text, image_format='JPEG'):
     # 배경 이미지 디렉토리
     bg_dir = os.path.join('static', 'verse_backgrounds')
     bg_files = [f for f in os.listdir(bg_dir) if f.endswith(('.jpg', '.png'))]
@@ -402,19 +402,29 @@ def create_verse_image(verse_text):
     os.makedirs(output_dir, exist_ok=True)  
 
     # 파일명과 확장자를 .jpg로 저장
-    output_path = os.path.join(output_dir, 'verse.jpg')
-    img.save(output_path, format='JPEG')
+    output_path = os.path.join(output_dir, f'verse.{image_format.lower()}')
+    img.save(output_path, format=image_format)
 
 
 def verse_input_view(request):
     if request.method == 'POST':
         verse_text = request.POST.get('verse')
+        image_format = request.POST.get('format', 'JPEG')  # 기본값은 JPEG
         if verse_text:
-            create_verse_image(verse_text)
-            return redirect('easygo_review:verse_of_today') 
+            try:
+                create_verse_image(verse_text, image_format)
+                return redirect('easygo_review:verse_of_today') 
+            except Exception as e:
+                print(f"Error creating image: {e}")
     return render(request, 'easygo_review/verse.html')
 
+
 def verse_display_view(request):
-    return render(request, 'easygo_review/verse_of_today.html') 
+    # 이미지 파일 경로 설정 (예: 사용자가 생성한 이미지 파일 이름을 동적으로 처리)
+    image_path = 'verse/verse.jpg'  # 실제 이미지 파일 경로
+    context = {
+        'image_path': image_path
+    }
+    return render(request, 'easygo_review/verse_of_today.html', context)
 
 
