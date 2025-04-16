@@ -412,6 +412,6 @@ def verse_input_view(request):
     return render(request, 'easygo_review/verse.html')
 
 def verse_display_view(request):
-    return render(request, 'easygo_review/verse_of_today.html', {'now': now()}) 
+    return render(request, 'easygo_review/verse_of_today.html') 
 
 
