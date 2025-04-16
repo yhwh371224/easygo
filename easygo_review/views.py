@@ -367,7 +367,10 @@ def create_verse_image(verse_text):
     # 폰트 설정 (경로는 실제 존재하는 폰트로 수정 필요)
     font_path = os.path.join('static', 'fonts', 'NotoSansKR-Regular.ttf')
     font_size = 40
-    font = ImageFont.truetype(font_path, font_size)
+    try:
+        font = ImageFont.truetype(font_path, font_size)
+    except IOError:
+        raise FileNotFoundError(f"Font file not found at {font_path}")
 
     # 텍스트 줄바꿈 처리
     words = verse_text.split()
@@ -397,6 +400,7 @@ def create_verse_image(verse_text):
 
     # 결과 저장
     output_dir = os.path.join(settings.MEDIA_ROOT, 'verse')
+    os.makedirs(output_dir, exist_ok=True)  
 
     # 파일명과 확장자를 .jpg로 저장
     output_path = os.path.join(output_dir, 'verse.jpg')
