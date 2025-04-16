@@ -12,7 +12,6 @@ from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
 from django.http import JsonResponse
 from PIL import Image, ImageDraw, ImageFont
-from django.utils.timezone import now
 
 from .models import Post, Comment
 from .forms import CommentForm, PostForm
@@ -350,23 +349,25 @@ def recaptcha_verify(request):
 
 
 def create_verse_image(verse_text):
-    # 배경 이미지 경로 (하나의 배경 이미지만 사용)
-    bg_path = os.path.join('static', 'verse_backgrounds', 'verse.jpg')
+    # 배경 이미지 디렉토리
+    bg_dir = os.path.join('static', 'verse_backgrounds')
+    bg_files = [f for f in os.listdir(bg_dir) if f.endswith(('.jpg', '.png'))]
 
-    if not os.path.exists(bg_path):
-        raise FileNotFoundError(f"Background image not found at {bg_path}")
+    if not bg_files:
+        raise FileNotFoundError("No background images found in the 'verse_backgrounds' directory.")
 
+    # 첫 번째 배경 이미지 선택
+    bg_path = os.path.join(bg_dir, bg_files[0])  # 랜덤이 아니라 첫 번째 이미지를 사용
     img = Image.open(bg_path)
     draw = ImageDraw.Draw(img)
 
     # 이미지 크기
     W, H = img.size
 
-    # 기본 시스템 폰트를 사용 (웹 환경에서는 보통 시스템에 설치된 기본 폰트 사용)
-    try:
-        font = ImageFont.load_default()  # 시스템 기본 폰트를 사용
-    except IOError:
-        raise FileNotFoundError("Default font is not available.")
+    # 폰트 설정 (경로는 실제 존재하는 폰트로 수정 필요)
+    font_path = os.path.join('static', 'fonts', 'NotoSansKR-Regular.ttf')
+    font_size = 40
+    font = ImageFont.truetype(font_path, font_size)
 
     # 텍스트 줄바꿈 처리
     words = verse_text.split()
@@ -374,7 +375,7 @@ def create_verse_image(verse_text):
     line = ""
     for word in words:
         test_line = line + " " + word if line else word
-        bbox = draw.textbbox((0, 0), test_line, font=font)  # Pillow 8.0 이상 버전에서 사용 가능
+        bbox = draw.textbbox((0, 0), test_line, font=font)
         line_width = bbox[2] - bbox[0]
         if line_width < W * 0.8:
             line = test_line
@@ -385,26 +386,21 @@ def create_verse_image(verse_text):
         lines.append(line)
 
     # 텍스트 그리기
-    total_text_height = sum(draw.textbbox((0, 0), line, font=font)[3] - draw.textbbox((0, 0), line, font=font)[1] + 10 for line in lines)
+    total_text_height = len(lines) * (font_size + 10)
     y_text = (H - total_text_height) // 2
     for line in lines:
-        bbox = draw.textbbox((0, 0), line, font=font)  # Pillow 8.0 이상 버전에서 사용 가능
+        bbox = draw.textbbox((0, 0), line, font=font)
         line_width = bbox[2] - bbox[0]
         x_text = (W - line_width) // 2
         draw.text((x_text, y_text), line, font=font, fill="white")
-        y_text += bbox[3] - bbox[1] + 10  # Update y_text using the height from the bbox
+        y_text += font_size + 10
 
     # 결과 저장
-    output_dir = os.path.join('media', 'verse')
-    os.makedirs(output_dir, exist_ok=True)
+    output_dir = os.path.join(settings.MEDIA_ROOT, 'verse')
+
+    # 파일명과 확장자를 .jpg로 저장
     output_path = os.path.join(output_dir, 'verse.jpg')
-
-    try:
-        img.save(output_path)
-    except Exception as e:
-        raise Exception(f"Failed to save the image: {e}")
-
-    return output_path  # 저장된 이미지 경로 반환
+    img.save(output_path, format='JPEG')
 
 
 def verse_input_view(request):
