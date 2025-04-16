@@ -12,12 +12,14 @@ from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
 from django.http import JsonResponse
 from PIL import Image, ImageDraw, ImageFont
+from django.utils.timezone import now
 
 from .models import Post, Comment
 from .forms import CommentForm, PostForm
 from blog.models import Post as BlogPost
 from blog.tasks import send_notice_email
 from main.settings import RECIPIENT_EMAIL
+
 
 
 def custom_login_view(request):
@@ -401,4 +403,6 @@ def verse_input_view(request):
     return render(request, 'verse.html')
 
 def verse_display_view(request):
-    return render(request, 'verse_of_today.html')
+    return render(request, 'verse_of_today.html', {'now': now()})
+
+
