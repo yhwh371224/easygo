@@ -362,7 +362,9 @@ def create_verse_image(verse_text, image_format='JPEG'):
     W, H = img.size
 
     font_path = os.path.join('static', 'fonts', 'NotoSansKR-Regular.ttf')
-    font_size = 48  # 글자 크기 더 크게
+    font_size = 120  # 글자 크기 더 크게
+    line_spacing = font_size // 2  # 줄 간격도 비례해서
+
     try:
         font = ImageFont.truetype(font_path, font_size)
     except IOError:
@@ -384,7 +386,7 @@ def create_verse_image(verse_text, image_format='JPEG'):
     if line:
         lines.append(line)
 
-    total_text_height = len(lines) * (font_size + 20)
+    total_text_height = len(lines) * (font_size + line_spacing)
     y_text = (H - total_text_height) // 2
 
     for line in lines:
@@ -392,7 +394,7 @@ def create_verse_image(verse_text, image_format='JPEG'):
         line_width = bbox[2] - bbox[0]
         x_text = (W - line_width) // 2
         draw.text((x_text, y_text), line, font=font, fill="white")
-        y_text += font_size + 20
+        y_text += font_size + line_spacing
 
     # 이미지 저장 (JPG 고정)
     output_dir = os.path.join(settings.MEDIA_ROOT, 'verse')
