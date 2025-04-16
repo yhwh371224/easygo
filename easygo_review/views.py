@@ -348,12 +348,12 @@ def recaptcha_verify(request):
 
 
 def create_verse_image(verse_text, image_format='JPEG'):
-    # 배경 이미지 디렉토리
+    # 배경 이미지 디렉토리 (JPG만)
     bg_dir = os.path.join('static', 'verse_backgrounds')
-    bg_files = [f for f in os.listdir(bg_dir) if f.endswith(('.jpg', '.png'))]
+    bg_files = [f for f in os.listdir(bg_dir) if f.endswith('.jpg')]
 
     if not bg_files:
-        raise FileNotFoundError("No background images found in the 'verse_backgrounds' directory.")
+        raise FileNotFoundError("No JPG background images found in the 'verse_backgrounds' directory.")
 
     bg_path = os.path.join(bg_dir, bg_files[0])  
     img = Image.open(bg_path)
@@ -362,12 +362,13 @@ def create_verse_image(verse_text, image_format='JPEG'):
     W, H = img.size
 
     font_path = os.path.join('static', 'fonts', 'NotoSansKR-Regular.ttf')
-    font_size = 40
+    font_size = 48  # 글자 크기 더 크게
     try:
         font = ImageFont.truetype(font_path, font_size)
     except IOError:
         raise FileNotFoundError(f"Font file not found at {font_path}")
 
+    # 텍스트 줄 나누기
     words = verse_text.split()
     lines = []
     line = ""
@@ -375,7 +376,7 @@ def create_verse_image(verse_text, image_format='JPEG'):
         test_line = line + " " + word if line else word
         bbox = draw.textbbox((0, 0), test_line, font=font)
         line_width = bbox[2] - bbox[0]
-        if line_width < W * 0.8:
+        if line_width < W * 0.7:  # 더 짧게 해서 줄바꿈 유도
             line = test_line
         else:
             lines.append(line)
@@ -383,47 +384,57 @@ def create_verse_image(verse_text, image_format='JPEG'):
     if line:
         lines.append(line)
 
-    total_text_height = len(lines) * (font_size + 18)
+    total_text_height = len(lines) * (font_size + 20)
     y_text = (H - total_text_height) // 2
+
     for line in lines:
         bbox = draw.textbbox((0, 0), line, font=font)
         line_width = bbox[2] - bbox[0]
         x_text = (W - line_width) // 2
         draw.text((x_text, y_text), line, font=font, fill="white")
-        y_text += font_size + 10
+        y_text += font_size + 20
 
-
+    # 이미지 저장 (JPG 고정)
     output_dir = os.path.join(settings.MEDIA_ROOT, 'verse')
-    os.makedirs(output_dir, exist_ok=True)  
+    os.makedirs(output_dir, exist_ok=True)
 
-    output_path = os.path.join(output_dir, f'verse.{image_format.lower()}')
-    img.save(output_path, format=image_format)
+    output_path = os.path.join(output_dir, 'verse.jpg')
+    img.save(output_path, format='JPEG')
 
     if os.path.exists(output_path):
         print(f"Image successfully created at: {output_path}")
     else:
         print("Image creation failed.")
 
+
 def verse_input_view(request):
     if request.method == 'POST':
         verse_text = request.POST.get('verse')
-        image_format = request.POST.get('format', 'JPEG').upper()  
-        if image_format not in ['JPEG', 'PNG']:
-            image_format = 'JPEG'  
         if verse_text:
             try:
-                create_verse_image(verse_text, image_format)
+                create_verse_image(verse_text, 'JPEG')
                 return redirect('easygo_review:verse_of_today') 
             except Exception as e:
                 print(f"Error creating image: {e}")
     return render(request, 'easygo_review/verse.html')
 
+
 def verse_display_view(request):
-    image_filename = 'verse.jpg'  
-    image_path = os.path.join(settings.MEDIA_URL, 'verse', image_filename)  
+    base_dir = os.path.join(settings.MEDIA_ROOT, 'verse')
+    base_url = os.path.join(settings.MEDIA_URL, 'verse')
+
+    jpg_filename = 'verse.jpg'
+    jpeg_filename = 'verse.jpeg'
+
+    if os.path.exists(os.path.join(base_dir, jpg_filename)):
+        image_filename = jpg_filename
+    elif os.path.exists(os.path.join(base_dir, jpeg_filename)):
+        image_filename = jpeg_filename
+    else:
+        image_filename = None 
+
     context = {
-        'image_path': image_path
+        'image_path': os.path.join(base_url, image_filename) if image_filename else None
     }
+
     return render(request, 'easygo_review/verse_of_today.html', context)
-
-
