@@ -397,7 +397,7 @@ def create_verse_image(verse_text):
     # 결과 저장
     output_dir = os.path.join('media', 'verse')
     os.makedirs(output_dir, exist_ok=True)
-    output_path = os.path.join(output_dir, 'verse.png')
+    output_path = os.path.join(output_dir, 'verse.jpg')
 
     try:
         img.save(output_path)
