@@ -388,7 +388,7 @@ def create_verse_image(verse_text, image_format='JPEG'):
         lines.append(line)
 
     # 텍스트 그리기
-    total_text_height = len(lines) * (font_size + 10)
+    total_text_height = len(lines) * (font_size + 18)
     y_text = (H - total_text_height) // 2
     for line in lines:
         bbox = draw.textbbox((0, 0), line, font=font)
