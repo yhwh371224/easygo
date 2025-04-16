@@ -385,14 +385,14 @@ def create_verse_image(verse_text):
         lines.append(line)
 
     # 텍스트 그리기
-    total_text_height = len(lines) * (font.getsize(lines[0])[1] + 10)
+    total_text_height = sum(draw.textbbox((0, 0), line, font=font)[3] - draw.textbbox((0, 0), line, font=font)[1] + 10 for line in lines)
     y_text = (H - total_text_height) // 2
     for line in lines:
         bbox = draw.textbbox((0, 0), line, font=font)  # Pillow 8.0 이상 버전에서 사용 가능
         line_width = bbox[2] - bbox[0]
         x_text = (W - line_width) // 2
         draw.text((x_text, y_text), line, font=font, fill="white")
-        y_text += font.getsize(line)[1] + 10
+        y_text += bbox[3] - bbox[1] + 10  # Update y_text using the height from the bbox
 
     # 결과 저장
     output_dir = os.path.join('media', 'verse')
@@ -405,6 +405,7 @@ def create_verse_image(verse_text):
         raise Exception(f"Failed to save the image: {e}")
 
     return output_path  # 저장된 이미지 경로 반환
+
 
 def verse_input_view(request):
     if request.method == 'POST':
