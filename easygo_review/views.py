@@ -420,11 +420,11 @@ def verse_input_view(request):
 
 
 def verse_display_view(request):
-    # 이미지 파일 경로 설정 (예: 사용자가 생성한 이미지 파일 이름을 동적으로 처리)
-    image_path = 'verse/verse.jpg'  # 실제 이미지 파일 경로
+    # 이미지 파일 경로 설정
+    image_filename = 'verse.jpg'  # 실제 이미지 파일 이름
+    image_path = os.path.join(settings.MEDIA_URL, 'verse', image_filename)  # MEDIA_URL을 포함한 경로
     context = {
         'image_path': image_path
     }
     return render(request, 'easygo_review/verse_of_today.html', context)
-
 
