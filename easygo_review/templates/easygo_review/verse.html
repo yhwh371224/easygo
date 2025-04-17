@@ -100,9 +100,10 @@
 <div class="form-wrapper">
     <a href="https://easygoshuttle.com.au/easygo_review/verse_of_today/" class="link">Go to Verse of Today</a>
 
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <textarea name="verse" placeholder="예: 여호와는 나의 목자시니..."></textarea><br>
+        <input type="file" name="background_image" accept="image/*"><br><br>
         <button type="submit">Create Image Now</button>
     </form>
 </div>
