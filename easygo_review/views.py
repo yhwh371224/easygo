@@ -365,7 +365,7 @@ def create_verse_image(verse_text, uploaded_image=None):
     W, H = img.size
 
     font_path = os.path.join('static', 'fonts', 'NotoSansKR-Regular.ttf')
-    font_size = 120
+    font_size = 60
     line_spacing = font_size // 2
 
     try:
