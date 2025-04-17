@@ -348,15 +348,13 @@ def recaptcha_verify(request):
 
 
 def create_verse_image(verse_text, uploaded_image=None):
-    # 배경 이미지 디렉토리 (JPG, PNG 모두 허용)
     bg_dir = os.path.join('static', 'verse_backgrounds')
     bg_files = [f for f in os.listdir(bg_dir) if f.lower().endswith(('.jpg', '.png'))]
 
-    # 배경 이미지가 업로드되지 않았다면 기본 이미지를 사용
     if uploaded_image:
         img = Image.open(uploaded_image).convert("RGB")
     elif bg_files:
-        bg_path = os.path.join(bg_dir, bg_files[0])  # 첫 번째 배경 이미지 사용
+        bg_path = os.path.join(bg_dir, bg_files[0])  
         img = Image.open(bg_path).convert("RGB")
     else:
         raise FileNotFoundError("No background images available.")
@@ -373,7 +371,6 @@ def create_verse_image(verse_text, uploaded_image=None):
     except IOError:
         raise FileNotFoundError(f"Font file not found at {font_path}")
 
-    # 텍스트 줄 나누기
     raw_lines = verse_text.split('\n')
     lines = []
     for raw_line in raw_lines:
@@ -401,23 +398,14 @@ def create_verse_image(verse_text, uploaded_image=None):
         draw.text((x_text, y_text), line, font=font, fill="white")
         y_text += font_size + line_spacing
 
-    # 덮어쓰기 위한 경로 (같은 파일명 사용)
     output_dir = os.path.join(settings.MEDIA_ROOT, 'verse')
     os.makedirs(output_dir, exist_ok=True)
 
-    # 덮어쓸 파일 이름
     jpg_path = os.path.join(output_dir, 'verse.jpg')
     png_path = os.path.join(output_dir, 'verse.png')
 
     img.save(jpg_path, format='JPEG')
     img.save(png_path, format='PNG')
-
-    # 성공 메시지
-    for path in (jpg_path, png_path):
-        if os.path.exists(path):
-            print(f"Image successfully created at: {path}")
-        else:
-            print(f"Image creation failed: {path}")
 
 
 def verse_input_view(request):
