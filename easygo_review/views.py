@@ -1,7 +1,6 @@
 import json
 import requests
 import os
-import uuid
 
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
@@ -348,28 +347,25 @@ def recaptcha_verify(request):
     return JsonResponse({'success': False, 'message': 'Invalid request method'})
 
 
-def create_verse_image(verse_text, uploaded_image=None, image_format='JPEG'):
+def create_verse_image(verse_text, uploaded_image=None):
+    # 배경 이미지 디렉토리 (JPG, PNG 모두 허용)
+    bg_dir = os.path.join('static', 'verse_backgrounds')
+    bg_files = [f for f in os.listdir(bg_dir) if f.lower().endswith(('.jpg', '.png'))]
+
+    # 배경 이미지가 업로드되지 않았다면 기본 이미지를 사용
     if uploaded_image:
-        bg_path = os.path.join(settings.MEDIA_ROOT, 'verse', uploaded_image.name)
-        with open(bg_path, 'wb') as f:
-            for chunk in uploaded_image.chunks():
-                f.write(chunk)
+        img = Image.open(uploaded_image).convert("RGB")
+    elif bg_files:
+        bg_path = os.path.join(bg_dir, bg_files[0])  # 첫 번째 배경 이미지 사용
         img = Image.open(bg_path).convert("RGB")
     else:
-        bg_dir = os.path.join('static', 'verse_backgrounds')
-        bg_files = [f for f in os.listdir(bg_dir) if f.lower().endswith(('.jpg', '.png'))]
-
-        if not bg_files:
-            raise FileNotFoundError("No background images (.jpg or .png) found in the 'verse_backgrounds' directory.")
-
-        bg_path = os.path.join(bg_dir, bg_files[0])  
-        img = Image.open(bg_path).convert("RGB")
+        raise FileNotFoundError("No background images available.")
 
     draw = ImageDraw.Draw(img)
     W, H = img.size
 
     font_path = os.path.join('static', 'fonts', 'NotoSansKR-Regular.ttf')
-    font_size = 100
+    font_size = 120
     line_spacing = font_size // 2
 
     try:
@@ -377,6 +373,7 @@ def create_verse_image(verse_text, uploaded_image=None, image_format='JPEG'):
     except IOError:
         raise FileNotFoundError(f"Font file not found at {font_path}")
 
+    # 텍스트 줄 나누기
     raw_lines = verse_text.split('\n')
     lines = []
     for raw_line in raw_lines:
@@ -404,16 +401,18 @@ def create_verse_image(verse_text, uploaded_image=None, image_format='JPEG'):
         draw.text((x_text, y_text), line, font=font, fill="white")
         y_text += font_size + line_spacing
 
+    # 덮어쓰기 위한 경로 (같은 파일명 사용)
     output_dir = os.path.join(settings.MEDIA_ROOT, 'verse')
     os.makedirs(output_dir, exist_ok=True)
 
-    unique_id = uuid.uuid4().hex
-    jpg_path = os.path.join(output_dir, f'verse_{unique_id}.jpg')
-    png_path = os.path.join(output_dir, f'verse_{unique_id}.png')
+    # 덮어쓸 파일 이름
+    jpg_path = os.path.join(output_dir, 'verse.jpg')
+    png_path = os.path.join(output_dir, 'verse.png')
 
     img.save(jpg_path, format='JPEG')
     img.save(png_path, format='PNG')
 
+    # 성공 메시지
     for path in (jpg_path, png_path):
         if os.path.exists(path):
             print(f"Image successfully created at: {path}")
@@ -440,18 +439,17 @@ def verse_display_view(request):
     base_dir = os.path.join(settings.MEDIA_ROOT, 'verse')
     base_url = os.path.join(settings.MEDIA_URL, 'verse')
 
-    for filename in ['verse.jpg', 'verse.jpeg', 'verse.png']:
+    # 최신 파일을 가져오기 위해서는 단순히 'verse.jpg' 또는 'verse.png' 파일을 가져옵니다.
+    image_filename = None
+    for filename in ['verse.jpg', 'verse.png']:
         file_path = os.path.join(base_dir, filename)
         if os.path.exists(file_path):
             image_filename = filename
             break
-    else:
-        image_filename = None
 
     context = {
         'image_path': os.path.join(base_url, image_filename) if image_filename else None
     }
 
     return render(request, 'easygo_review/verse_of_today.html', context)
-
 
