@@ -437,9 +437,8 @@ def verse_input_view(request):
 
 def verse_display_view(request):
     base_dir = os.path.join(settings.MEDIA_ROOT, 'verse')
-    base_url = os.path.join(settings.MEDIA_URL, 'verse')
+    base_url = settings.MEDIA_URL.rstrip('/') + '/verse'
 
-    # 최신 파일을 가져오기 위해서는 단순히 'verse.jpg' 또는 'verse.png' 파일을 가져옵니다.
     image_filename = None
     for filename in ['verse.jpg', 'verse.png']:
         file_path = os.path.join(base_dir, filename)
@@ -448,8 +447,9 @@ def verse_display_view(request):
             break
 
     context = {
-        'image_path': os.path.join(base_url, image_filename) if image_filename else None
+        'image_path': f"{base_url}/{image_filename}" if image_filename else None
     }
 
     return render(request, 'easygo_review/verse_of_today.html', context)
+
 
