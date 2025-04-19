@@ -196,7 +196,7 @@ def notify_user_payment_paypal(instance_id):
             total_paid = already_paid + amount
             price = float(post_name.price)
 
-            if total_paid == price:
+            if round(total_paid, 2) == round(price, 2):
                 html_content = render_to_string(
                     "basecamp/html_email-payment-success.html",
                     {'name': post_name.name, 'email': post_name.email, 'amount': amount}
@@ -230,7 +230,7 @@ def notify_user_payment_paypal(instance_id):
                 total_paid_second = already_paid_second + amount
                 price_second = float(second_post.price)
 
-                if total_paid_second == price_second:
+                if round(total_paid_second, 2) == round(price, 2):
                     html_content = render_to_string(
                         "basecamp/html_email-payment-success.html",
                         {'name': second_post.name, 'email': second_post.email, 'amount': amount}
@@ -282,7 +282,7 @@ def notify_user_payment_stripe(instance_id):
             total_paid = already_paid + instance.amount
             price = float(post_name.price)
 
-            if total_paid == price:
+            if round(total_paid, 2) == round(price, 2):
                 html_content = render_to_string(
                     "basecamp/html_email-payment-success-stripe.html",
                     {'name': post_name.name, 'email': post_name.email, 'amount': instance.amount}
@@ -316,7 +316,7 @@ def notify_user_payment_stripe(instance_id):
                 total_paid_second = already_paid_second + instance.amount
                 price_second = float(second_post.price)
 
-                if total_paid_second == price_second:
+                if round(total_paid_second, 2) == round(price, 2):
                     html_content = render_to_string(
                         "basecamp/html_email-payment-success-stripe.html",
                         {'name': second_post.name, 'email': second_post.email, 'amount': instance.amount}
