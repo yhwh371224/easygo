@@ -15,7 +15,7 @@ from .models import Post, PaypalPayment, StripePayment
 from django.core.exceptions import ImproperlyConfigured
 
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('easygo')
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
