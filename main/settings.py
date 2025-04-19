@@ -67,12 +67,14 @@ INSTALLED_APPS = [
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+
     'formatters': {
         'verbose': {
             'format': '{levelname} {asctime} {module} {message}',
             'style': '{',
         },
     },
+
     'handlers': {
         'file': {
             'level': 'DEBUG',
@@ -86,13 +88,19 @@ LOGGING = {
             'filename': os.path.join(BASE_DIR, 'logs/email_reminders.log'),
             'formatter': 'verbose',
         },
-        'sms_file': {  
+        'sms_file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs/sms.log'),  
+            'filename': os.path.join(BASE_DIR, 'logs/sms.log'),
+            'formatter': 'verbose',
+        },
+        'console': {  
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
             'formatter': 'verbose',
         },
     },
+
     'loggers': {
         'django': {
             'handlers': ['file'],
@@ -104,18 +112,19 @@ LOGGING = {
             'level': 'INFO',
             'propagate': False,
         },
-        'sms': {  
-            'handlers': ['sms_file'],  
-            'level': 'INFO',  
+        'sms': {
+            'handlers': ['sms_file'],
+            'level': 'INFO',
             'propagate': False,
         },
         'easygo': {
-            'handlers': ['file', 'console'],
+            'handlers': ['file', 'console'],  
             'level': 'DEBUG',
             'propagate': False,
         },
     },
 }
+
 
 
 CELERY_BROKER_URL = config('CELERY_BROKER', 'redis://redis:6379')
