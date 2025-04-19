@@ -236,7 +236,8 @@ def notify_user_payment_paypal(instance_id):
                         {'name': second_post.name, 'email': second_post.email, 'amount': amount}
                     )
                     payment_send_email("Payment - EasyGo", html_content, [second_post.email, RECIPIENT_EMAIL])
-                    post_name.toll = ""
+                    second_post.toll = ""
+
                 elif total_paid_second < price_second:
                     second_post.toll = "short payment"
                     diff = round(price_second - total_paid_second, 2)
@@ -245,13 +246,14 @@ def notify_user_payment_paypal(instance_id):
                         {'name': second_post.name, 'price': price_second, 'paid': total_paid_second, 'diff': diff}
                     )
                     payment_send_email("Payment - EasyGo", html_content, [second_post.email, RECIPIENT_EMAIL])
+
                 else:
                     html_content = render_to_string(
                         "basecamp/html_email-payment-success.html",
                         {'name': second_post.name, 'email': second_post.email, 'amount': amount}
                     )
                     payment_send_email("Payment - EasyGo", html_content, [second_post.email, RECIPIENT_EMAIL])
-                    post_name.toll = ""
+                    second_post.toll = ""
 
                 second_post.paid = total_paid_second
                 second_post.reminder = True
@@ -289,6 +291,7 @@ def notify_user_payment_stripe(instance_id):
                 )
                 payment_send_email("Payment - EasyGo", html_content, [post_name.email, RECIPIENT_EMAIL])
                 post_name.toll = ""
+                
             elif total_paid < price:
                 post_name.toll = "short payment"
                 diff = round(price - total_paid, 2)
@@ -322,7 +325,7 @@ def notify_user_payment_stripe(instance_id):
                         {'name': second_post.name, 'email': second_post.email, 'amount': instance.amount}
                     )
                     payment_send_email("Payment - EasyGo", html_content, [second_post.email, RECIPIENT_EMAIL])
-                    post_name.toll = ""
+                    second_post.toll = ""
                 elif total_paid_second < price_second:
                     second_post.toll = "short payment"
                     diff = round(price_second - total_paid_second, 2)
@@ -337,7 +340,7 @@ def notify_user_payment_stripe(instance_id):
                         {'name': second_post.name, 'email': second_post.email, 'amount': instance.amount}
                     )
                     payment_send_email("Payment - EasyGo", html_content, [second_post.email, RECIPIENT_EMAIL])
-                    post_name.toll = ""
+                    second_post.toll = ""
 
                 second_post.paid = total_paid_second
                 second_post.reminder = True
