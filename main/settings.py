@@ -109,6 +109,11 @@ LOGGING = {
             'level': 'INFO',  
             'propagate': False,
         },
+        'easygo': {
+            'handlers': ['file', 'console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
     },
 }
 
