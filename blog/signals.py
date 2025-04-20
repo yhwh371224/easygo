@@ -96,16 +96,9 @@ def async_notify_user_payment_paypal(sender, instance, created, **kwargs):
    
 @receiver(post_save, sender=StripePayment)
 def async_notify_user_payment_stripe(sender, instance, created, **kwargs):
-    import logging
-    logger = logging.getLogger(__name__)
-    logger.info(f"🔥 Stripe 시그널 호출됨 - created={created}, instance ID={instance.id}, email={instance.email}")
-    
     if created:
-        logger.info("✅ Celery task 실행 시작")
         notify_user_payment_stripe.delay(instance.id)
-    else:
-        logger.warning("⚠️ created=False → Celery task 실행하지 않음")
-        
+
 
 ## google calendar recording 
 @receiver(post_save, sender=Post)

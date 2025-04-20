@@ -23,7 +23,6 @@ from blog.sms_utils import send_sms_notice
 from basecamp.area import get_suburbs
 from basecamp.area_full import get_more_suburbs
 from basecamp.area_home import get_home_suburbs
-from blog.tasks import notify_user_payment_stripe
 
 
 logger = logging.getLogger(__name__)
@@ -1867,8 +1866,6 @@ def handle_checkout_session_completed(session):
     # Save payment information
     p = StripePayment(name=name, email=email, amount=amount)
     p.save()
-
-    notify_user_payment_stripe.delay(p.id)
 
 
 @csrf_exempt
