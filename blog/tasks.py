@@ -262,93 +262,39 @@ def notify_user_payment_paypal(instance_id):
 # Stripe > sending email & save
 @shared_task
 def notify_user_payment_stripe(instance_id):
-    try:
-        instance = StripePayment.objects.get(id=instance_id)
-        logger.info(f"[Stripe] StripePayment instance fetched: ID={instance.id}, name={instance.name}, email={instance.email}, amount={instance.amount}")
-
-        if not instance.name:
-            logger.warning(f"[Stripe] instance.name is missing, skipping payment check.")
-            return
-
+    instance = StripePayment.objects.get(id=instance_id)   
+    if instance.name:            
         post_name = Post.objects.filter(
             Q(name__iregex=r'^%s$' % re.escape(instance.name)) |
             Q(email__iexact=instance.email)
         ).first()
 
-        if not post_name:
-            logger.warning(f"[Stripe] No matching Post found for name={instance.name}, email={instance.email}. Sending 'no identity' email.")
+        if post_name:            
+            html_content = render_to_string(
+                "basecamp/html_email-payment-success-stripe.html",
+                {'name': post_name.name, 'email': post_name.email, 'amount': instance.amount}
+            )
+            payment_send_email("Payment - EasyGo", html_content, [post_name.email, RECIPIENT_EMAIL])            
+            
+            post_name.paid = instance.amount          
+            post_name.reminder = True
+            post_name.discount = ""
+            if float(post_name.price) > instance.amount:
+                post_name.toll = "short payment"             
+            post_name.save()
+
+            if post_name.return_pickup_time == 'x':                   
+                    second_post = Post.objects.filter(email=post_name.email)[1]                    
+                    second_post.paid = instance.amount                    
+                    second_post.reminder = True
+                    second_post.discount = ""
+                    if float(post_name.price) > instance.amount:
+                        second_post.toll = "short payment"  
+                    second_post.save() 
+
+        else:            
             html_content = render_to_string(
                 "basecamp/html_email-noIdentity-stripe.html",
                 {'name': instance.name, 'email': instance.email, 'amount': instance.amount}
             )
             payment_send_email("Payment - EasyGo", html_content, [instance.email, RECIPIENT_EMAIL])
-            return
-
-        # 첫 번째 Post 결제 처리
-        already_paid = float(post_name.paid or 0)
-        total_paid = already_paid + instance.amount
-        price = float(post_name.price)
-
-        if round(total_paid, 2) >= round(price, 2):
-            logger.info(f"[Stripe] Full or over payment received for {post_name.name} (paid: {total_paid}, price: {price})")
-            html_content = render_to_string(
-                "basecamp/html_email-payment-success-stripe.html",
-                {'name': post_name.name, 'email': post_name.email, 'amount': instance.amount}
-            )
-            payment_send_email("Payment - EasyGo", html_content, [post_name.email, RECIPIENT_EMAIL])
-            post_name.toll = ""
-        else:
-            diff = round(price - total_paid, 2)
-            logger.info(f"[Stripe] Short payment detected for {post_name.name} (paid: {total_paid}, price: {price}, diff: {diff})")
-            post_name.toll = "short payment"
-            html_content = render_to_string(
-                "basecamp/html_email-response-discrepancy.html",
-                {'name': post_name.name, 'price': price, 'paid': total_paid, 'diff': diff}
-            )
-            payment_send_email("Payment - EasyGo", html_content, [post_name.email, RECIPIENT_EMAIL])
-
-        post_name.paid = total_paid
-        post_name.reminder = True
-        post_name.discount = ""
-        post_name.save()
-        logger.info(f"[Stripe] Post updated: ID={post_name.id}, paid={post_name.paid}")
-
-        # Return ride 결제 처리
-        if post_name.return_pickup_time == 'x':
-            posts = Post.objects.filter(email=post_name.email)
-            if len(posts) > 1:
-                second_post = posts[1]
-                already_paid_second = float(second_post.paid or 0)
-                total_paid_second = already_paid_second + instance.amount
-                price_second = float(second_post.price)
-
-                if round(total_paid_second, 2) >= round(price_second, 2):
-                    logger.info(f"[Stripe] Full/over payment for RETURN post: ID={second_post.id}")
-                    html_content = render_to_string(
-                        "basecamp/html_email-payment-success-stripe.html",
-                        {'name': second_post.name, 'email': second_post.email, 'amount': instance.amount}
-                    )
-                    payment_send_email("Payment - EasyGo", html_content, [second_post.email, RECIPIENT_EMAIL])
-                    second_post.toll = ""
-                else:
-                    diff = round(price_second - total_paid_second, 2)
-                    logger.info(f"[Stripe] Short payment for RETURN post: ID={second_post.id}, diff={diff}")
-                    second_post.toll = "short payment"
-                    html_content = render_to_string(
-                        "basecamp/html_email-response-discrepancy.html",
-                        {'name': second_post.name, 'price': price_second, 'paid': total_paid_second, 'diff': diff}
-                    )
-                    payment_send_email("Payment - EasyGo", html_content, [second_post.email, RECIPIENT_EMAIL])
-
-                second_post.paid = total_paid_second
-                second_post.reminder = True
-                second_post.discount = ""
-                second_post.save()
-                logger.info(f"[Stripe] RETURN Post updated: ID={second_post.id}, paid={second_post.paid}")
-            else:
-                logger.warning(f"[Stripe] Return ride requested but no second Post entry found for email={post_name.email}")
-
-    except Exception as e:
-        logger.exception(f"[Stripe] notify_user_payment_stripe failed: {str(e)}")
-
-
