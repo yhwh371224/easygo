@@ -1867,6 +1867,9 @@ def handle_checkout_session_completed(session):
     p = StripePayment(name=name, email=email, amount=amount)
     p.save()
 
+    from blog.tasks import notify_user_payment_stripe
+    notify_user_payment_stripe.delay(p.id)
+
 
 @csrf_exempt
 def recaptcha_verify(request):
