@@ -1,6 +1,7 @@
 import json
 import requests
 import os
+import time
 
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
@@ -435,7 +436,7 @@ def verse_display_view(request):
             break
 
     context = {
-        'image_path': f"{base_url}/{image_filename}" if image_filename else None
+        'image_path': f"{base_url}/{image_filename}?v={int(time.time())}" if image_filename else None
     }
 
     return render(request, 'easygo_review/verse_of_today.html', context)
