@@ -26,7 +26,7 @@ class Command(BaseCommand):
             bookings = Post.objects.filter(pickup_date__range=(start_date, end_date))
 
             for booking in bookings:
-                if booking.direction and booking.direction.lower() in ['Pckup from Intl Airport', 'Pickup from Domestic Airport']:
+                if booking.direction and booking.direction.strip().lower() in ['pickup from intl airport', 'pickup from domestic airport']:
                     if not booking.flight_number or not booking.contact:
                         email_subject = "Missing Flight or Contact Number Reminder"
                         email_template = "basecamp/html_email-missing-flight-contact.html"
