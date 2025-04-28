@@ -1680,6 +1680,7 @@ def email_dispatch_detail(request):
             "Meeting Point Inquiry": ("basecamp/html_email-response-meeting.html", "Meeting Point - EasyGo"),  
             "Payment in Advance Required": ("basecamp/html_email-response-prepayment.html", "Payment in Advance Required - EasyGo"),           
             "Further details for booking": ("basecamp/html_email-response-more-details.html", "Further details for booking - EasyGo"),
+            "Further details for booked": ("basecamp/html_email-response-details-booked.html", "Further details for booked - EasyGo"),
             "Arrival Pickup Arrangement Without Payment": ("basecamp/html_email-urgent-arrival-pickup.html", "Arrival Pickup Arrangement Without Payment - EasyGo"),
             "Shared Ride (inquiry) Discount Offer": ("basecamp/html_email-shared-inquiry-discount.html", "Discount notice - EasyGo"),
             "Shared Ride (booking) Discount Offer": ("basecamp/html_email-shared-booking-discount.html", "Discount notice - EasyGo"),
