@@ -4,7 +4,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from blog.models import Post
-from main.settings import RECIPIENT_EMAIL
+from main.settings import RECIPIENT_EMAIL, DEFAULT_FROM_EMAIL
 
 
 class Command(BaseCommand):
@@ -26,7 +26,7 @@ class Command(BaseCommand):
             bookings = Post.objects.filter(pickup_date__range=(start_date, end_date))
 
             for booking in bookings:
-                if booking.direction and booking.direction.lower() in ['pickup from intl airport', 'pickup from domestic airport']:
+                if booking.direction and booking.direction.lower() in ['Pckup from Intl Airport', 'Pickup from Domestic Airport']:
                     if not booking.flight_number or not booking.contact:
                         email_subject = "Missing Flight or Contact Number Reminder"
                         email_template = "basecamp/html_email-missing-flight-contact.html"
