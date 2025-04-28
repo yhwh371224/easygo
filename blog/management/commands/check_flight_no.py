@@ -27,8 +27,19 @@ class Command(BaseCommand):
 
             for booking in bookings:
                 if booking.direction and booking.direction.strip().lower() in ['pickup from intl airport', 'pickup from domestic airport']:
-                    if not booking.flight_number or not booking.contact:
-                        email_subject = "Missing Flight or Contact Number Reminder"
+                    flight_number = booking.flight_number.strip() if booking.flight_number else ''
+                    contact = booking.contact.strip() if booking.contact else ''
+                    cleaned_contact = ''.join(filter(str.isdigit, contact))
+
+                    if (
+                        not flight_number
+                        or len(flight_number) <= 2
+                        or len(flight_number) >= 7
+                        or not cleaned_contact
+                        or len(cleaned_contact) < 10
+                        or len(cleaned_contact) > 16
+                    ):
+                        email_subject = "Missing or Invalid Flight/Contact Information Reminder"
                         email_template = "basecamp/html_email-missing-flight-contact.html"
 
                         self.send_email(
