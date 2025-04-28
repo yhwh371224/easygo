@@ -31,16 +31,18 @@ class Command(BaseCommand):
                     contact = booking.contact.strip() if booking.contact else ''
                     cleaned_contact = ''.join(filter(str.isdigit, contact))
 
-                    if (
-                        not flight_number
-                        or len(flight_number) <= 2
-                        or len(flight_number) >= 7
-                        or not cleaned_contact
-                        or len(cleaned_contact) < 10
-                        or len(cleaned_contact) > 16
-                    ):
+                    flight_issue = not flight_number or len(flight_number) <= 2 or len(flight_number) >= 7
+                    contact_issue = not cleaned_contact or len(cleaned_contact) < 10 or len(cleaned_contact) > 16
+
+                    if flight_issue or contact_issue:
                         email_subject = "Missing or Invalid Flight/Contact Information Reminder"
                         email_template = "basecamp/html_email-missing-flight-contact.html"
+
+                        issues = []
+                        if flight_issue:
+                            issues.append('Flight number is missing or invalid')
+                        if contact_issue:
+                            issues.append('Contact number is missing or invalid')
 
                         self.send_email(
                             email_subject,
@@ -52,9 +54,11 @@ class Command(BaseCommand):
                                 'direction': booking.direction,
                                 'flight_number': booking.flight_number,
                                 'contact': booking.contact,
+                                'issues': issues,  # <== 추가
                             },
                             [booking.email, RECIPIENT_EMAIL]
                         )
+
 
             self.stdout.write(self.style.SUCCESS('Missing flight/contact number reminders sent successfully'))
 
