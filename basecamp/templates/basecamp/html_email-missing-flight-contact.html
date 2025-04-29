@@ -244,7 +244,12 @@
 														&nbsp; • &nbsp;{{ issue }}<br><br>
 													{% endfor %}
 													
-													In order to ensure a smooth pickup, it is essential that we have all required and correct details in advance.<br>
+													In order to ensure a smooth pickup, it is essential that we have all required and correct details in advance.<br><br>
+
+													{% if 'Flight number is missing or invalid' in issues %}
+														Please provide your flight code and number (e.g., <strong>QF587</strong>, <strong>SQ241</strong>).<br><br>
+													{% endif %}
+
 													<span style="color: #eb7828">
 														If the flight number or contact number is missing or incorrect, please note that delays or failure to locate you at the airport may occur, 
 														and in such cases, we cannot be held responsible for missed pickups, delays, or additional waiting times.
