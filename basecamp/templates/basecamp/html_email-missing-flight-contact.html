@@ -243,47 +243,50 @@
 													{% for issue in issues %}
 														&nbsp; • &nbsp;{{ issue }}<br><br>
 													{% endfor %}
+												</p>
 												
-													<table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top:1px solid #cccccc; border-bottom:1px solid #cccccc; margin:20px 0;">
-														<tr>
-														  <td style="padding:20px 0; font-size:14px; line-height:22px;">
-													  
-															To ensure a smooth pickup experience, it is essential that we receive complete and correct booking details before your travel date.<br><br>
-													  
-															{% if 'Flight number is missing or invalid' in issues %}
-															  Please provide your flight code and number<br>
-															  (e.g., <strong>QF587</strong>, <strong>SQ241</strong>).<br><br>
-													  
-															  A correct flight number is essential for us to track your arrival and meet you on time<br><br>
+												<table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top:1px solid #cccccc; border-bottom:1px solid #cccccc; margin:20px 0;">
+													<tr>
+														<td style="padding:20px 0; font-size:14px; line-height:22px;">
+													
+														To ensure a smooth pickup experience, it is essential that we receive complete and correct booking details before your travel date.<br><br>
+													
+														{% if 'Flight number is missing or invalid' in issues %}
+															Please provide your flight code and number<br>
+															(e.g., <strong>QF587</strong>, <strong>SQ241</strong>).<br><br>
+													
+															A correct flight number is essential for us to track your arrival and meet you on time<br><br>
 
-															  If your phone is not working after your arrival at the airport, you must contact us immediately by email.
-															  After you have landed and collected your baggage, please send us an email to confirm your arrival. 
-															  This will help ensure a smooth and timely pickup.<br><br>
-															{% endif %}
-													  
-															{% if 'Contact number is missing or invalid' in issues %}
-															  Please ensure your contact number is entered correctly, depending on your location:<br><br>
-													  
-															  <em style="color: #3c9c4c;">Examples:</em><br>
-															  <strong>Australia:</strong> 0412 345 678<br>
-															  <strong>New Zealand:</strong> +64 27 123 4567<br><br>
-													  
-															  Having a correct contact number is essential for a smooth pickup experience.<br><br>
-															{% endif %}
-													  
-														  </td>
-														</tr>
-													  </table>													  
+															If your phone is not working after your arrival at the airport, you must contact us immediately by email.
+															After you have landed and collected your baggage, please send us an email to confirm your arrival. 
+															This will help ensure a smooth and timely pickup.<br><br>
+														{% endif %}
+													
+														{% if 'Contact number is missing or invalid' in issues %}
+															Please ensure your contact number is entered correctly, depending on your location:<br><br>
+													
+															<em style="color: #3c9c4c;">Examples:</em><br>
+															<strong>Australia:</strong> 0412 345 678<br>
+															<strong>New Zealand:</strong> +64 27 123 4567<br><br>
+													
+															Having a correct contact number is essential for a smooth pickup experience.<br><br>
+														{% endif %}
+													
+														</td>
+													</tr>
+												</table>													  
 												
-													<span style="color: #eb7828">
-														Missing or incorrect contact or flight information may result in difficulties locating you or coordinating your pickup. 
-														In such cases, we may not be able to guarantee timely service or be held responsible for delays, waiting times, or missed pickups.<br><br>
-													</span>
+												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
+												<span style="color: #eb7828">
+													Missing or incorrect contact or flight information may result in difficulties locating you or coordinating your pickup.
+													In such cases, we may not be able to guarantee timely service or be held responsible for delays, waiting times, or missed pickups.
+												</span><br><br>
 												
-													Kindly reply to this email with the correct information as soon as possible to avoid any issues on the day of your pickup.<br><br>
+												Kindly reply to this email with the correct information as soon as possible to avoid any issues on the day of your pickup.<br><br>
 												
-													We appreciate your prompt attention and look forward to assisting you.<br><br>
-													Best regards,
+												We appreciate your prompt attention and look forward to assisting you.<br><br>
+												
+												Best regards,<br>
 												</p>
 																				
 												<p style="Margin:0;font-size:14px;font-weight:bold;line-height:22px;Margin-bottom:12px;">
