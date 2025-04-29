@@ -1,3 +1,5 @@
+import re
+
 from datetime import date, timedelta
 from django.core.management.base import BaseCommand
 from django.core.mail import EmailMultiAlternatives
@@ -31,7 +33,13 @@ class Command(BaseCommand):
                     contact = booking.contact.strip() if booking.contact else ''
                     cleaned_contact = ''.join(filter(str.isdigit, contact))
 
-                    flight_issue = not flight_number or len(flight_number) <= 2 or len(flight_number) >= 7
+                    flight_number = flight_number.upper()
+
+                    flight_valid = False
+                    if flight_number:
+                        flight_valid = bool(re.match(r'^[A-Z]{2,3}\d{1,4}$', flight_number))  
+
+                    flight_issue = not flight_valid
                     contact_issue = not cleaned_contact or len(cleaned_contact) < 10 or len(cleaned_contact) > 16
 
                     if flight_issue or contact_issue:
@@ -54,11 +62,10 @@ class Command(BaseCommand):
                                 'direction': booking.direction,
                                 'flight_number': booking.flight_number,
                                 'contact': booking.contact,
-                                'issues': issues,  # <== 추가
+                                'issues': issues,
                             },
                             [booking.email, RECIPIENT_EMAIL]
                         )
-
 
             self.stdout.write(self.style.SUCCESS('Missing flight/contact number reminders sent successfully'))
 
