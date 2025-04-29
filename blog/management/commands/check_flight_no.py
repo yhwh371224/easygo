@@ -28,8 +28,8 @@ class Command(BaseCommand):
             bookings = Post.objects.filter(pickup_date__range=(start_date, end_date))
 
             for booking in bookings:
-                flight_issue = False
                 contact_issue = False
+                flight_issue = False
                 issues = []
 
                 contact = booking.contact.strip() if booking.contact else ''
@@ -46,30 +46,24 @@ class Command(BaseCommand):
                     if flight_issue:
                         issues.append('Flight number is missing or invalid')
 
-                    if flight_issue or contact_issue:
-                        email_subject = "Missing or Invalid Flight/Contact Information Reminder"
-                        email_template = "basecamp/html_email-missing-flight-contact.html"
+                if contact_issue or flight_issue:
+                    email_subject = "Missing or Invalid Flight/Contact Information Reminder"
+                    email_template = "basecamp/html_email-missing-flight-contact.html"
 
-                        issues = []
-                        if flight_issue:
-                            issues.append('Flight number is missing or invalid')
-                        if contact_issue:
-                            issues.append('Contact number is missing or invalid')
-
-                        self.send_email(
-                            email_subject,
-                            email_template,
-                            {
-                                'name': booking.name,
-                                'email': booking.email,
-                                'pickup_date': booking.pickup_date,
-                                'direction': booking.direction,
-                                'flight_number': booking.flight_number,
-                                'contact': booking.contact,
-                                'issues': issues,
-                            },
-                            [booking.email, RECIPIENT_EMAIL]
-                        )
+                    self.send_email(
+                        email_subject,
+                        email_template,
+                        {
+                            'name': booking.name,
+                            'email': booking.email,
+                            'pickup_date': booking.pickup_date,
+                            'direction': booking.direction,
+                            'flight_number': booking.flight_number,
+                            'contact': booking.contact,
+                            'issues': issues,
+                        },
+                        [booking.email, RECIPIENT_EMAIL]
+                    )
 
             self.stdout.write(self.style.SUCCESS('Missing flight/contact number reminders sent successfully'))
 
