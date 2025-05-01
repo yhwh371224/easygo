@@ -247,6 +247,12 @@
                                                     If you have already made any payments, we will process a full refund promptly. 
                                                     <br><br>
 
+													• Your booking on {{ booking_date }} has been cancelled.<br><br>
+
+													{% if return_booking_date %}
+													• Your return booking on {{ return_booking_date }} has also been cancelled.<br><br>
+													{% endif %}
+
                                                     Once again, we apologize for this unexpected change and appreciate your understanding.
                                                     <br><br> 
                                                     
