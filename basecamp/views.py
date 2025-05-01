@@ -1726,12 +1726,14 @@ def email_dispatch_detail(request):
             
             if selected_option in ["Cancellation of Booking", "Cancellation by Client", "Apologies Cancellation of Booking"] and user:                     
                 user.cancelled = True
+                context.update({'booking_date': user.pickup_date})
                 user.save()
 
                 if user.return_pickup_time == "x":
                     second_user = Post.objects.filter(email=email)[1]
                     second_user.cancelled = True
                     second_user.cash = ""
+                    context.update({'return_booking_date': second_user.pickup_date})
                     second_user.save()
 
 
