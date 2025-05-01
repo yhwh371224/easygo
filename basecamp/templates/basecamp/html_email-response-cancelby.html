@@ -242,6 +242,12 @@
                                                     We confirm that your booking has been successfully canceled.
                                                     <br><br>
 
+													• Your booking on {{ booking_date }} has been cancelled.<br><br>
+
+													{% if return_booking_date %}
+													• Your return booking on {{ return_booking_date }} has also been cancelled.<br><br>
+													{% endif %}
+
                                                     We’re sorry to hear you won’t be joining us this time.
                                                     <br><br>
 
