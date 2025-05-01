@@ -207,6 +207,7 @@ def notify_user_payment_paypal(instance_id):
                 )
                 payment_send_email("Payment - EasyGo", html_content, [post_name.email, RECIPIENT_EMAIL])
                 post_name.toll = ""
+                post_name.cash = ""
 
             else:
                 post_name.toll = "short payment"
@@ -235,6 +236,7 @@ def notify_user_payment_paypal(instance_id):
                     )
                     payment_send_email("Payment - EasyGo", html_content, [second_post.email, RECIPIENT_EMAIL])
                     second_post.toll = ""
+                    second_post.cash = ""
 
                 else:
                     second_post.toll = "short payment"
@@ -282,6 +284,8 @@ def notify_user_payment_stripe(instance_id):
                 )
                 payment_send_email("Payment - EasyGo", html_content, [post_name.email, RECIPIENT_EMAIL])
                 post_name.toll = ""
+                post_name.cash = ""
+
             else:
                 post_name.toll = "short payment"
                 diff = round(float(price) - float(total_paid), 2)
@@ -309,6 +313,8 @@ def notify_user_payment_stripe(instance_id):
                     )
                     payment_send_email("Payment - EasyGo", html_content, [second_post.email, RECIPIENT_EMAIL])
                     second_post.toll = ""
+                    second_post.cash = ""
+                    
                 else:
                     second_post.toll = "short payment"
                     diff = round(price_second - total_paid_second, 2)
