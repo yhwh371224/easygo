@@ -1,6 +1,8 @@
 from django.urls import path
 from . import views
 from .views import paypal_ipn, create_stripe_checkout_session
+from django.shortcuts import redirect
+
 
 app_name = "basecamp"
 
@@ -66,7 +68,9 @@ urlpatterns = [
     path('sitemap/', views.sitemap, name='sitemap'),
     path('success/', views.success, name='success'),
     path('terms/', views.terms, name='terms'),
-    path('wrong_date_today/', views.wrong_date_today, name='wrong_date_today')
+    path('wrong_date_today/', views.wrong_date_today, name='wrong_date_today'),
+    path('pay/stripe/', lambda request: redirect('https://buy.stripe.com/7sIcP940RbKH7LO6ow'), name='pay_stripe'),
+
 ]
 
 
