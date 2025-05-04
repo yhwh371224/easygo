@@ -35,13 +35,23 @@ class Command(BaseCommand):
                 contact = booking.contact.strip() if booking.contact else ''
                 cleaned_contact = ''.join(filter(str.isdigit, contact))
                 contact_issue = not cleaned_contact or len(cleaned_contact) < 10 or len(cleaned_contact) > 16
+
                 if contact_issue:
                     issues.append('Contact number is missing or invalid')
 
                 if booking.direction and booking.direction.strip().lower() in ['pickup from intl airport', 'pickup from domestic airport']:
-                    flight_number = booking.flight_number.strip() if booking.flight_number else ''
-                    flight_number = flight_number.upper()
-                    flight_valid = bool(re.match(r'^[A-Z]{2,3}\d{1,4}$', flight_number)) if flight_number else False
+                    flight_number = booking.flight_number.strip() if booking.flight_number else ''                    
+                    flight_number_cleaned = re.sub(r'[^A-Za-z0-9]', '', flight_number).upper()
+                    
+                    match = re.match(r'^([A-Z]{2,3})(\d+)$', flight_number_cleaned)
+
+                    flight_valid = False
+                    if match:
+                        airline_code = match.group(1)
+                        number_part = str(int(match.group(2)))
+                        flight_number_final = airline_code + number_part
+                        flight_valid = bool(re.match(r'^[A-Z]{2,3}\d{1,4}$', flight_number_final))
+
                     flight_issue = not flight_valid
                     if flight_issue:
                         issues.append('Flight number is missing or invalid')
