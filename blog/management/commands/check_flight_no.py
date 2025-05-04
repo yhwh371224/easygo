@@ -48,9 +48,14 @@ class Command(BaseCommand):
                     flight_valid = False
                     if match:
                         airline_code = match.group(1)
-                        number_part = str(int(match.group(2)))
-                        flight_number_final = airline_code + number_part
-                        flight_valid = bool(re.match(r'^[A-Z]{2,3}\d{1,4}$', flight_number_final))
+                        number_part_raw = match.group(2)
+                       
+                        if len(number_part_raw) > 4:
+                            flight_valid = False
+                        else:
+                            number_part = str(int(number_part_raw))  
+                            flight_number_final = airline_code + number_part
+                            flight_valid = bool(re.match(r'^[A-Z]{2,3}\d{1,4}$', flight_number_final))
 
                     flight_issue = not flight_valid
                     if flight_issue:
