@@ -49,8 +49,9 @@ class Command(BaseCommand):
                     if match:
                         airline_code = match.group(1)
                         number_part_raw = match.group(2)
+                        number_part_no_zero = number_part_raw.lstrip('0')
                        
-                        if len(number_part_raw) > 4:
+                        if len(number_part_no_zero) > 4:
                             flight_valid = False
                         else:
                             number_part = str(int(number_part_raw))  
