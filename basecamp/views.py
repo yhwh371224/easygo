@@ -1714,7 +1714,7 @@ def email_dispatch_detail(request):
                 user.paid = float(user.price) + 0.00
                 user.reminder = True
                 user.toll = ""
-                user.cash = "" 
+                user.cash = False 
                 user.save()
                 if user.return_pickup_time == 'x':
                     user_1 = Post.objects.filter(email=email)[1]
@@ -1732,7 +1732,7 @@ def email_dispatch_detail(request):
                 if user.return_pickup_time == "x":
                     second_user = Post.objects.filter(email=email)[1]
                     second_user.cancelled = True
-                    second_user.cash = ""
+                    second_user.cash = False
                     context.update({'return_booking_date': second_user.pickup_date})
                     second_user.save()
 
