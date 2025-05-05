@@ -1725,27 +1725,21 @@ def email_dispatch_detail(request):
                     user_1.save() 
             
             if selected_option in ["Cancellation of Booking", "Cancellation by Client", "Apologies Cancellation of Booking"] and user:
-                user.cancelled = True
-                context.update({'booking_date': user.pickup_date})
-                user.save()
 
                 if user.return_pickup_time == "x":
-                    bookings = Post.objects.filter(email=email).order_by('pickup_date')
-
-                    if bookings.count() >= 2:
-                        second_user = bookings[1]
-                        second_user.cancelled = True
-                        second_user.cash = False
-                        second_user.save()
-
-                        context.update({
-                            'booking_date': second_user.pickup_date,
-                            'return_booking_date': second_user.return_pickup_date
-                        })
-                    else:
-                        context.update({'return_booking_date': None})
-
-
+                    second_user = Post.objects.filter(email=email)[1]
+                    second_user.cancelled = True
+                    second_user.cash = False
+                    second_user.save()
+                    context.update({
+                        'booking_date': second_user.pickup_date,
+                        'return_booking_date': second_user.return_pickup_date
+                    })
+                else:
+                    user.cancelled = True
+                    user.save()
+                    context.update({'booking_date': user.pickup_date, 'return_booking_date': None})                    
+                    
             if selected_option == "Payment discrepancy" and user: 
                 diff = round(float(user.price) - float(user.paid), 2)
                 if diff > 0:
