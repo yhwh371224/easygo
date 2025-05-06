@@ -1618,6 +1618,7 @@ def invoice_detail(request):
             with_gst = round(price * 0.10, 2) if user.company_name else 0.0
             float_surcharge = round(price * 0.03, 2) if surcharge_flag else 0.0
             toll = safe_float(toll_input) if toll_input else safe_float(user.toll) or 0.0
+            
             discount = None
             if discount_input == 'Yes' or user.discount == 'Yes':
                 discount = round(price * 0.10, 2)
@@ -1641,7 +1642,7 @@ def invoice_detail(request):
                     "price": user.price, "with_gst": with_gst, "surcharge": float_surcharge,
                     "total_price": total_price, "toll": toll, "balance": cash_balance,
                     "paid": float_paid, "message": user.message, "no_of_passenger": user.no_of_passenger,
-                    "no_of_baggage": user.no_of_baggage, "notice": user.notice
+                    "no_of_baggage": user.no_of_baggage, "notice": user.notice, "street": user.street, "suburb": user.suburb
                 })
 
             elif user.return_pickup_time == "x":
@@ -1654,7 +1655,7 @@ def invoice_detail(request):
                     "price": user1.price, "with_gst": with_gst, "surcharge": float_surcharge,
                     "total_price": total_price, "toll": toll, "balance": balance,
                     "paid": float_paid, "message": user1.message, "no_of_passenger": user1.no_of_passenger,
-                    "no_of_baggage": user1.no_of_baggage, "notice": user1.notice
+                    "no_of_baggage": user1.no_of_baggage, "notice": user1.notice, "street": user1.street, "suburb": user1.suburb
                 })
 
             else:
@@ -1665,7 +1666,7 @@ def invoice_detail(request):
                     "price": user.price, "with_gst": with_gst, "surcharge": float_surcharge,
                     "total_price": total_price, "toll": toll, "balance": balance,
                     "paid": float_paid, "message": user.message, "no_of_passenger": user.no_of_passenger,
-                    "no_of_baggage": user.no_of_baggage, "notice": user.notice
+                    "no_of_baggage": user.no_of_baggage, "notice": user.notice, "street": user.street, "suburb": user.suburb
                 })
 
         text_content = strip_tags(html_content)
