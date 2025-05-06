@@ -1600,9 +1600,6 @@ def invoice_detail(request):
                 "bookings": booking_data,
                 "total_price_without_gst": total_price_without_gst,
                 "with_gst": total_with_gst - total_price_without_gst,
-                "surcharge": None,
-                "toll": None,
-                "discount": None,
                 "total_price": total_with_gst,
                 "paid": total_paid,
                 "balance": total_balance
@@ -1643,7 +1640,7 @@ def invoice_detail(request):
                     "pickup_date": user.pickup_date, "pickup_time": user.pickup_time,    
                     "start_point": start_point, "end_point": end_point, "invoice_date": today,
                     "price": user.price, "with_gst": with_gst, "surcharge": float_surcharge,
-                    "total_price": total_price, "toll": toll, "balance": cash_balance,
+                    "total_price": total_price, "toll": toll, "balance": cash_balance, 
                     "paid": float_paid, "message": user.message, "no_of_passenger": user.no_of_passenger,
                     "no_of_baggage": user.no_of_baggage, "notice": user.notice, "street": user.street, "suburb": user.suburb
                 })
@@ -1656,7 +1653,7 @@ def invoice_detail(request):
                     "contact": user1.contact, "pickup_date": user1.pickup_date, "pickup_time": user1.pickup_time,   
                     "start_point": user1.start_point, "end_point": user1.end_point, "invoice_date": today,
                     "price": user1.price, "with_gst": with_gst, "surcharge": float_surcharge,
-                    "total_price": total_price, "toll": toll, "balance": balance,
+                    "total_price": total_price, "toll": toll, "balance": balance, "discount": discount,
                     "paid": float_paid, "message": user1.message, "no_of_passenger": user1.no_of_passenger,
                     "no_of_baggage": user1.no_of_baggage, "notice": user1.notice, "street": user1.street, "suburb": user1.suburb
                 })
@@ -1667,7 +1664,7 @@ def invoice_detail(request):
                     "contact": user.contact, "pickup_date": user.pickup_date, "pickup_time": user.pickup_time,  
                     "start_point": start_point, "end_point": end_point, "invoice_date": today,
                     "price": user.price, "with_gst": with_gst, "surcharge": float_surcharge,
-                    "total_price": total_price, "toll": toll, "balance": balance,
+                    "total_price": total_price, "toll": toll, "balance": balance, "discount": discount,
                     "paid": float_paid, "message": user.message, "no_of_passenger": user.no_of_passenger,
                     "no_of_baggage": user.no_of_baggage, "notice": user.notice, "street": user.street, "suburb": user.suburb
                 })
