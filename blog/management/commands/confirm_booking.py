@@ -62,7 +62,7 @@ class Command(BaseCommand):
                         'paid': post.paid
                     })
                     text_content = strip_tags(html_content)
-                    email = EmailMultiAlternatives(subject, text_content, '', [post.email, RECIPIENT_EMAIL])
+                    email = EmailMultiAlternatives(subject, text_content, '', [post.email, post.email1, RECIPIENT_EMAIL])
                     email.attach_alternative(html_content, "text/html")
                     email.send()
 

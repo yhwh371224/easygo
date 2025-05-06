@@ -28,7 +28,7 @@ class Command(BaseCommand):
                     
                     html_content = render_to_string(template_name, {'name': final_notice.name, 'email': final_notice.email})
                     text_content = strip_tags(html_content)
-                    email = EmailMultiAlternatives("Final notice", text_content, '', [final_notice.email, RECIPIENT_EMAIL])
+                    email = EmailMultiAlternatives("Final notice", text_content, '', [final_notice.email, final_notice.email1, RECIPIENT_EMAIL])
                     email.attach_alternative(html_content, "text/html")
                     email.send()
 
