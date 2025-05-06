@@ -1468,151 +1468,155 @@ def return_trip_detail(request):
         return render(request, 'basecamp/return_trip.html', {})        
 
 
-# send invoice to customer
-def invoice_detail(request):     
+def invoice_detail(request):
     if request.method == "POST":
         email = request.POST.get('email')
-        surcharge = request.POST.get('surcharge')
-        discount = request.POST.get('discount')
-        inv_no = request.POST.get('inv_no')  
-        toll = request.POST.get('toll')
+        surcharge_flag = request.POST.get('surcharge')
+        discount_input = request.POST.get('discount')
+        inv_no = request.POST.get('inv_no')
+        toll_input = request.POST.get('toll')
         index = request.POST.get('index', '1')
+        from_date = request.POST.get('from_date')
+        to_date = request.POST.get('to_date')
 
         try:
-            index = int(index) - 1  
+            index = int(index) - 1
         except ValueError:
-            return HttpResponse("Invalid index value", status=400)  
-        
-        # users = Post.objects.filter(email=email)[:5]  
+            return HttpResponse("Invalid index value", status=400)
+
+        today = date.today()
         if not inv_no:
             inv_no = 988390
-        inv_no = int(inv_no)             
-        today = date.today()
+        inv_no = int(inv_no)
 
-        # for user in users:
-        users = Post.objects.filter(email=email)        
-        if users.exists() and 0 <= index < len(users):
-            user = users[index]  
-        
-        price_as_float = float(user.price)
+        users = Post.objects.filter(email=email).order_by('pickup_date', 'pickup_time')
+        if not users.exists():
+            return HttpResponse("No bookings found", status=404)
 
-        if user.paid: 
-            float_paid = float(user.paid)
+        # Determine if multi booking or single
+        multiple = False
+        if from_date and to_date:
+            from_date_obj = datetime.strptime(from_date, "%Y-%m-%d").date()
+            to_date_obj = datetime.strptime(to_date, "%Y-%m-%d").date()
+            bookings = users.filter(pickup_date__range=(from_date_obj, to_date_obj))
+            multiple = True
         else:
-            float_paid = 0.0    
-                
-        with_gst = round(price_as_float * 0.10, 2)
-        cal_surcharge = round(price_as_float * 0.03, 2)
+            if index < 0 or index >= len(users):
+                bookings = [users.first()]
+            else:
+                bookings = [users[index]]
 
-        if surcharge: 
-            float_surcharge = float(cal_surcharge)
-        else:
-            float_surcharge = 0.0 
-        
-        #######
-        discount = discount.strip() if discount else None
+        booking_data = []
+        total_price_without_gst = 0
+        total_with_gst = 0
+        total_paid = 0
 
-        if discount == 'Yes' or user.discount == 'Yes':
-            float_discount = round(price_as_float * 0.10, 2)
-        elif discount and discount.replace('.', '', 1).isdigit():
-            float_discount = float(discount)
-        elif user.discount and user.discount.replace('.', '', 1).isdigit():
-            float_discount = float(user.discount)
-        else:
-            float_discount = 0.0
-        #######
+        for booking in bookings:
+            # From / To 계산
+            if booking.start_point:
+                from_point = booking.start_point
+                to_point = booking.end_point
+            else:
+                if "Drop off to Domestic" in booking.direction:
+                    from_point = f"{booking.street}, {booking.suburb}"
+                    to_point = "Domestic Airport"
+                elif "Drop off to Intl" in booking.direction:
+                    from_point = f"{booking.street}, {booking.suburb}"
+                    to_point = "International Airport"
+                elif "Pickup from Domestic" in booking.direction:
+                    from_point = "Domestic Airport"
+                    to_point = f"{booking.street}, {booking.suburb}"
+                elif "Pickup from Intl" in booking.direction:
+                    from_point = "International Airport"
+                    to_point = f"{booking.street}, {booking.suburb}"
+                else:
+                    from_point = f"{booking.street}, {booking.suburb}"
+                    to_point = "Unknown"
 
-        if toll: 
-            float_toll = float(toll)
-        else:
-            float_toll = 0.0  
-        
-        if user.paid:
-            total_price = (round(price_as_float + with_gst + float_surcharge + float_toll, 2)) - float_discount
-            balance = round(total_price - float_paid, 2) 
-        else:
-            total_price = (round(price_as_float + with_gst + float_toll, 2)) - float_discount
-            balance = round(total_price - float_paid, 2)
+            # 요금 계산
+            price = float(booking.price) if booking.price else 0.0
+            with_gst = round(price * 0.10, 2) if booking.company_name else None
+            surcharge = round(price * 0.03, 2) if booking.paid else None
+            toll = float(toll_input) if toll_input else (float(booking.toll) if booking.toll else None)
 
-        if user.cash and user.paid:
-            cash_balance = balance - (with_gst + float_surcharge)
-            html_content = render_to_string("basecamp/html_email-invoice-cash.html",
-                                        {'inv_no': inv_no, 'name': user.name, 'company_name': user.company_name,'contact': user.contact, 'discount': discount,
-                                        'email': email, 'direction': user.direction, 'pickup_date': user.pickup_date, 'invoice_date': today,
-                                        'flight_number': user.flight_number, 'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
-                                        'return_direction': user.return_direction, 'return_pickup_date': user.return_pickup_date,
-                                        'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 'return_pickup_time': user.return_pickup_time,
-                                        'street': user.street, 'suburb': user.suburb, 'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
-                                        'price': user.price, 'with_gst': with_gst, 'surcharge': float_surcharge, 'total_price': total_price, 'toll': toll, 
-                                        'balance': cash_balance, 'paid': float_paid, 'message': user.message })
-            text_content = strip_tags(html_content)
+            # Discount 처리
+            discount = None
+            if discount_input == 'Yes' or booking.discount == 'Yes':
+                discount = round(price * 0.10, 2)
+            elif discount_input and discount_input.replace('.', '', 1).isdigit():
+                discount = float(discount_input)
+            elif booking.discount and booking.discount.replace('.', '', 1).isdigit():
+                discount = float(booking.discount)
 
-            recipient_list = [email, RECIPIENT_EMAIL]
+            total = price
+            if with_gst:
+                total += with_gst
+            if surcharge_flag:
+                total += surcharge if surcharge else 0
+            if toll:
+                total += toll
+            if discount:
+                total -= discount
 
-            email = EmailMultiAlternatives(
-                f"Tax Invoice #T{inv_no} - EasyGo",
-                text_content,
-                '',
-                recipient_list
-            )
-            email.attach_alternative(html_content, "text/html")
-            email.send()       
-            
-        elif user.return_pickup_time == 'x':
-            user1 = Post.objects.filter(email=email)[1]
-            html_content = render_to_string("basecamp/html_email-invoice.html",
-                                        {'inv_no': inv_no, 'name': user.name, 'company_name': user1.company_name, 'contact': user1.contact, 'discount': discount,
-                                        'email': user1.email, 'direction': user1.direction, 'pickup_date': user1.pickup_date, 'invoice_date': today, 
-                                        'flight_number': user1.flight_number, 'flight_time': user1.flight_time, 'pickup_time': user1.pickup_time, 'start_point': user1.start_point,
-                                        'end_point': user1.end_point, 'return_direction': user1.return_direction, 'return_pickup_date': user1.return_pickup_date,
-                                        'return_start_point': user1.return_start_point, 'return_end_point': user1.return_end_point,
-                                        'return_flight_number': user1.return_flight_number, 'return_flight_time': user1.return_flight_time, 'return_pickup_time': user1.return_pickup_time,
-                                        'street': user1.street, 'suburb': user1.suburb, 'no_of_passenger': user1.no_of_passenger, 'no_of_baggage': user1.no_of_baggage,
-                                        'price': user1.price, 'with_gst': with_gst, 'surcharge': float_surcharge, 'total_price': total_price, 'toll': toll, 
-                                        'balance': balance, 'paid': float_paid, 'message': user1.message })
+            paid = float(booking.paid) if booking.paid else 0.0
+            balance = round(total - paid, 2)
 
-            text_content = strip_tags(html_content)
+            booking_data.append({
+                "pickup_date": booking.pickup_date,
+                "pickup_time": booking.pickup_time,
+                "from_point": from_point,
+                "to_point": to_point,
+                "no_of_passenger": booking.no_of_passenger,
+                "no_of_baggage": booking.no_of_baggage,
+                "message": booking.message,
+                "price": price,
+                "with_gst": with_gst,
+                "surcharge": surcharge if surcharge_flag else None,
+                "toll": toll,
+                "discount": discount,
+                "total_price": total,
+            })
 
-            recipient_list = [email, RECIPIENT_EMAIL]
+            total_price_without_gst += price
+            total_with_gst += total
+            total_paid += paid
 
-            email = EmailMultiAlternatives(
-                f"Tax Invoice #T{inv_no} - EasyGo",
-                text_content,
-                '',
-                recipient_list
-            )
-            email.attach_alternative(html_content, "text/html")
-            email.send()
-            
-        else:                    
-            html_content = render_to_string("basecamp/html_email-invoice.html",
-                                        {'inv_no': inv_no, 'name': user.name, 'company_name': user.company_name,'contact': user.contact, 'discount': discount,
-                                        'email': email, 'direction': user.direction, 'pickup_date': user.pickup_date, 'invoice_date': today,
-                                        'flight_number': user.flight_number, 'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
-                                        'start_point': user.start_point, 'end_point': user.end_point, 'return_start_point': user.return_start_point, 'return_end_point': user.return_end_point,
-                                        'return_direction': user.return_direction, 'return_pickup_date': user.return_pickup_date,
-                                        'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 'return_pickup_time': user.return_pickup_time,
-                                        'street': user.street, 'suburb': user.suburb, 'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
-                                        'price': user.price, 'with_gst': with_gst, 'surcharge': float_surcharge, 'total_price': total_price, 'toll': toll, 
-                                        'balance': balance, 'paid': float_paid, 'message': user.message })
+        total_balance = round(total_with_gst - total_paid, 2)
 
-            text_content = strip_tags(html_content)
+        context = {
+            "inv_no": inv_no,
+            "company_name": bookings[0].company_name,
+            "name": bookings[0].name,
+            "invoice_date": today,
+            "bookings": booking_data,
+            "total_price_without_gst": total_price_without_gst,
+            "with_gst": total_with_gst - total_price_without_gst,
+            "surcharge": None,
+            "toll": None,
+            "discount": None,
+            "total_price": total_with_gst,
+            "paid": total_paid,
+            "balance": total_balance
+        }
 
-            recipient_list = [email, RECIPIENT_EMAIL]
+        template_name = "basecamp/html_email-multi-invoice.html" if multiple else "basecamp/html_email-invoice.html"
 
-            email = EmailMultiAlternatives(
-                f"Tax Invoice #T{inv_no} - EasyGo",
-                text_content,
-                '',
-                recipient_list
-            )
-            email.attach_alternative(html_content, "text/html")
-            email.send()
+        html_content = render_to_string(template_name, context)
+        text_content = strip_tags(html_content)
 
-            inv_no += 1  
+        recipient_list = [email, RECIPIENT_EMAIL]
 
-        return render(request, 'basecamp/inquiry_done.html')  
-    
+        mail = EmailMultiAlternatives(
+            f"Tax Invoice #T{inv_no} - EasyGo",
+            text_content,
+            '',
+            recipient_list
+        )
+        mail.attach_alternative(html_content, "text/html")
+        mail.send()
+
+        return render(request, 'basecamp/inquiry_done.html')
+
     else:
         return render(request, 'basecamp/invoice.html', {})
 

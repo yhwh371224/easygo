@@ -53,6 +53,16 @@
 					<input class="form-control" type="text"  placeholder="toll amount" name="toll">
 				  </div>
 				<div class="mb-3 pb-1">
+					<label class="form-label">From Date (Start Date)<sup class="text-danger ms-1">*</sup></label>
+					<input class="form-control" type="date" name="from_date" required>
+					<div class="invalid-feedback">Please select the start date!</div>
+				</div>				
+				<div class="mb-3 pb-1">
+					<label class="form-label">To Date (End Date)<sup class="text-danger ms-1">*</sup></label>
+					<input class="form-control" type="date" name="to_date" required>
+					<div class="invalid-feedback">Please select the end date!</div>
+				</div>				
+				<div class="mb-3 pb-1">
 					<label class="form-label">Index<sup class="text-danger ms-1">*</sup></label>
 					<input class="form-control" type="number" placeholder="1" name="index" value="1">
 				<div class="invalid-feedback">Please enter a valid index!</div>
