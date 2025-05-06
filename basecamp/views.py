@@ -1565,9 +1565,8 @@ def invoice_detail(request):
                     "notice": booking.notice,
                     "price": price,
                     "with_gst": with_gst,
-                    "surcharge": surcharge,
-                    "toll": toll,
-                    "discount": discount,
+                    "surcharge": sum(item.get("surcharge", 0.0) or 0.0 for item in booking_data),
+                    "toll": sum(item.get("toll", 0.0) or 0.0 for item in booking_data),
                     "total_price": total,
                 })
 
