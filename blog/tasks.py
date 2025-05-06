@@ -205,7 +205,8 @@ def notify_user_payment_paypal(instance_id):
                     "basecamp/html_email-payment-success.html",
                     {'name': post_name.name, 'email': post_name.email, 'amount': amount}
                 )
-                payment_send_email("Payment - EasyGo", html_content, [post_name.email, RECIPIENT_EMAIL])
+                recipient_list = [email for email in [post_name.email, post_name.email1, RECIPIENT_EMAIL] if email]
+                payment_send_email("Payment - EasyGo", html_content, recipient_list)
                 post_name.toll = ""
                 post_name.cash = ""
 
@@ -216,8 +217,9 @@ def notify_user_payment_paypal(instance_id):
                     "basecamp/html_email-response-discrepancy.html",
                     {'name': post_name.name, 'price': price, 'paid': total_paid, 'diff': diff}
                 )
-                payment_send_email("Payment - EasyGo", html_content, [post_name.email, RECIPIENT_EMAIL])
-            
+                recipient_list = [email for email in [post_name.email, post_name.email1, RECIPIENT_EMAIL] if email]
+                payment_send_email("Payment - EasyGo", html_content, recipient_list)
+
             post_name.paid = total_paid
             post_name.reminder = True
             post_name.discount = ""
@@ -234,7 +236,8 @@ def notify_user_payment_paypal(instance_id):
                         "basecamp/html_email-payment-success.html",
                         {'name': second_post.name, 'email': second_post.email, 'amount': amount}
                     )
-                    payment_send_email("Payment - EasyGo", html_content, [second_post.email, RECIPIENT_EMAIL])
+                    recipient_list = [email for email in [post_name.email, post_name.email1, RECIPIENT_EMAIL] if email]
+                    payment_send_email("Payment - EasyGo", html_content, recipient_list)
                     second_post.toll = ""
                     second_post.cash = ""
 
@@ -245,7 +248,8 @@ def notify_user_payment_paypal(instance_id):
                         "basecamp/html_email-response-discrepancy.html",
                         {'name': second_post.name, 'price': price_second, 'paid': total_paid_second, 'diff': diff}
                     )
-                    payment_send_email("Payment - EasyGo", html_content, [second_post.email, RECIPIENT_EMAIL])
+                    recipient_list = [email for email in [post_name.email, post_name.email1, RECIPIENT_EMAIL] if email]
+                    payment_send_email("Payment - EasyGo", html_content, recipient_list)
 
                 second_post.paid = total_paid_second
                 second_post.reminder = True
@@ -257,7 +261,8 @@ def notify_user_payment_paypal(instance_id):
                 "basecamp/html_email-noIdentity.html",
                 {'name': instance.name, 'email': instance.email, 'amount': amount}
             )
-            payment_send_email("Payment - EasyGo", html_content, [instance.email, RECIPIENT_EMAIL])
+            recipient_list = [email for email in [instance.email, RECIPIENT_EMAIL] if email]
+            payment_send_email("Payment - EasyGo", html_content, recipient_list)
 
 
 # Stripe > sending email & save
@@ -282,7 +287,8 @@ def notify_user_payment_stripe(instance_id):
                     "basecamp/html_email-payment-success-stripe.html",
                     {'name': post_name.name, 'email': post_name.email, 'amount': amount}
                 )
-                payment_send_email("Payment - EasyGo", html_content, [post_name.email, RECIPIENT_EMAIL])
+                recipient_list = [email for email in [post_name.email, post_name.email1, RECIPIENT_EMAIL] if email]
+                payment_send_email("Payment - EasyGo", html_content, recipient_list)
                 post_name.toll = ""
                 post_name.cash = ""
 
@@ -293,7 +299,8 @@ def notify_user_payment_stripe(instance_id):
                     "basecamp/html_email-response-discrepancy.html",
                     {'name': post_name.name, 'price': price, 'paid': total_paid, 'diff': diff}
                 )
-                payment_send_email("Payment - EasyGo", html_content, [post_name.email, RECIPIENT_EMAIL])
+                recipient_list = [email for email in [post_name.email, post_name.email1, RECIPIENT_EMAIL] if email]
+                payment_send_email("Payment - EasyGo", html_content, recipient_list)
 
             post_name.paid = total_paid
             post_name.reminder = True
@@ -311,7 +318,8 @@ def notify_user_payment_stripe(instance_id):
                         "basecamp/html_email-payment-success-stripe.html",
                         {'name': second_post.name, 'email': second_post.email, 'amount': amount}
                     )
-                    payment_send_email("Payment - EasyGo", html_content, [second_post.email, RECIPIENT_EMAIL])
+                    recipient_list = [email for email in [post_name.email, post_name.email1, RECIPIENT_EMAIL] if email]
+                    payment_send_email("Payment - EasyGo", html_content, recipient_list)
                     second_post.toll = ""
                     second_post.cash = ""
                     
@@ -322,7 +330,8 @@ def notify_user_payment_stripe(instance_id):
                         "basecamp/html_email-response-discrepancy.html",
                         {'name': second_post.name, 'price': price_second, 'paid': total_paid_second, 'diff': diff}
                     )
-                    payment_send_email("Payment - EasyGo", html_content, [second_post.email, RECIPIENT_EMAIL])
+                    recipient_list = [email for email in [post_name.email, post_name.email1, RECIPIENT_EMAIL] if email]
+                    payment_send_email("Payment - EasyGo", html_content, recipient_list)
 
                 second_post.paid = total_paid_second
                 second_post.reminder = True
@@ -334,4 +343,6 @@ def notify_user_payment_stripe(instance_id):
                 "basecamp/html_email-noIdentity-stripe.html",
                 {'name': instance.name, 'email': instance.email, 'amount': amount}
             )
-            payment_send_email("Payment - EasyGo", html_content, [instance.email, RECIPIENT_EMAIL])
+            recipient_list = [email for email in [instance.email, RECIPIENT_EMAIL] if email]
+            payment_send_email("Payment - EasyGo", html_content, recipient_list)
+            
