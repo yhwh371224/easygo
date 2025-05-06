@@ -1520,7 +1520,8 @@ def invoice_detail(request):
             booking_data = []
             total_price_without_gst = 0
             total_with_gst = 0
-            total_paid = 0
+            total_paid = 0            
+            grand_total = 0
 
             for booking in bookings:
                 if booking.start_point:
@@ -1546,26 +1547,10 @@ def invoice_detail(request):
                 price = safe_float(booking.price) or 0.0
                 with_gst = round(price * 0.10, 2) if booking.company_name else 0.0
                 surcharge = round(price * 0.03, 2) if surcharge_flag else 0.0
-                toll = safe_float(toll_input) if toll_input else safe_float(booking.toll) or 0.0
+                toll = safe_float(toll_input) if toll_input else safe_float(booking.toll) or 0.0                
 
-                if (discount_input or '') == 'Yes' or (bookings[0].discount or '') == 'Yes':
-                    discount = round(price * 0.10, 2)
-                elif (discount_input or '').replace('.', '', 1).isdigit():
-                    discount = float(discount_input)
-                elif (bookings[0].discount or '').replace('.', '', 1).isdigit():
-                    discount = float(bookings[0].discount)
-                else:
-                    discount = None
-
-                total = price
-                if with_gst:
-                    total += with_gst
-                if surcharge:
-                    total += surcharge
-                if toll:
-                    total += toll
-                # if discount:
-                #     total -= discount
+                total = price + with_gst + surcharge + toll 
+                grand_total += total 
 
                 paid = safe_float(booking.paid) or 0.0
 
@@ -1589,10 +1574,19 @@ def invoice_detail(request):
                 total_price_without_gst += price
                 total_with_gst += total
                 total_paid += paid
+            
+            if (discount_input or '') == 'Yes' or (bookings[0].discount or '') == 'Yes':
+                    discount = round(price * 0.10, 2)
+            elif (discount_input or '').replace('.', '', 1).isdigit():
+                discount = float(discount_input)
+            elif (bookings[0].discount or '').replace('.', '', 1).isdigit():
+                discount = float(bookings[0].discount)
+            else:
+                discount = None
 
-            total_balance = round(total_with_gst - total_paid, 2)
+            final_total = grand_total - discount
+            total_balance = round(final_total - total_paid, 2)
 
-            # 총 GST 계산 (회사 booking 만 계산)
             total_price_for_gst = sum(b["price"] for b in booking_data if b["with_gst"] > 0)
             total_gst = round(total_price_for_gst * 0.10, 2)
 
@@ -1604,6 +1598,8 @@ def invoice_detail(request):
                 "bookings": booking_data,
                 "total_price_without_gst": total_price_without_gst,
                 "with_gst": total_gst,
+                "discount": discount,
+                "total_price": final_total,
                 "total_price": total_with_gst,
                 "paid": total_paid,
                 "balance": total_balance
