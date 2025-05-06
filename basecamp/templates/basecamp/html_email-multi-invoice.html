@@ -254,6 +254,10 @@
                                                 Message: {{ booking.message }}<br>
                                             {% endif %}
 
+                                            {% if booking.notice %}
+                                                Message: {{ booking.notice }}<br>
+                                            {% endif %}
+
                                             <br>
                                             {% endfor %}
                                             </p>
