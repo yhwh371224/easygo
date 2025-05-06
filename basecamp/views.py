@@ -1540,8 +1540,8 @@ def invoice_detail(request):
                         start_point = "International Airport"
                         end_point = f"{booking.street}, {booking.suburb}"
                     else:
-                        start_point = f"{booking.street}, {booking.suburb}"
-                        end_point = "Unknown"
+                        start_point = "Unknown"
+                        end_point = "Unknown" 
 
                 price = safe_float(booking.price) or 0.0
                 with_gst = round(price * 0.10, 2) if booking.company_name else None
@@ -1610,11 +1610,38 @@ def invoice_detail(request):
 
         else:
             user = bookings[0]
+            # Start / End Point 계산 (이걸 꼭 먼저 해줘야 한다)
+            if user.start_point:
+                start_point = user.start_point
+                end_point = user.end_point
+            else:
+                if "Drop off to Domestic" in user.direction:
+                    start_point = f"{user.street}, {user.suburb}"
+                    end_point = "Domestic Airport"
+                elif "Drop off to Intl" in user.direction:
+                    start_point = f"{user.street}, {user.suburb}"
+                    end_point = "International Airport"
+                elif "Pickup from Domestic" in user.direction:
+                    start_point = "Domestic Airport"
+                    end_point = f"{user.street}, {user.suburb}"
+                elif "Pickup from Intl" in user.direction:
+                    start_point = "International Airport"
+                    end_point = f"{user.street}, {user.suburb}"
+                else:
+                    start_point = "Unknown"
+                    end_point = "Unknown" 
+
             price = safe_float(user.price) or 0.0
             with_gst = round(price * 0.10, 2) if user.company_name else 0.0
             float_surcharge = round(price * 0.03, 2) if surcharge_flag else 0.0
             toll = safe_float(toll_input) if toll_input else safe_float(user.toll) or 0.0
-            discount = safe_float(discount_input) if discount_input and discount_input != "Yes" else 0.0
+            discount = None
+            if discount_input == 'Yes' or user.discount == 'Yes':
+                discount = round(price * 0.10, 2)
+            elif discount_input and discount_input.replace('.', '', 1).isdigit():
+                discount = float(discount_input)
+            elif user.discount and user.discount.replace('.', '', 1).isdigit():
+                discount = float(user.discount)
 
             total_price = price + with_gst + float_surcharge + toll - discount
             float_paid = safe_float(user.paid) or 0.0
