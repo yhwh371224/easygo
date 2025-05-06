@@ -49,7 +49,7 @@ class Command(BaseCommand):
                         email_subject,
                         email_template,
                         {'name': booking.name, 'price': booking.price, 'paid': booking.paid, 'diff': diff},                    
-                        [booking.email, RECIPIENT_EMAIL]
+                        [booking.email, booking.email1, RECIPIENT_EMAIL]
                     )
 
             self.stdout.write(self.style.SUCCESS('No_payment_yet emailed successfully'))
