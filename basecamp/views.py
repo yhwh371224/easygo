@@ -1547,13 +1547,15 @@ def invoice_detail(request):
                 with_gst = round(price * 0.10, 2) if booking.company_name else None
                 surcharge = round(price * 0.03, 2) if surcharge_flag else None
                 toll = safe_float(toll_input) if toll_input else safe_float(booking.toll)
-                discount = None
-                if discount_input == 'Yes' or booking.discount == 'Yes':
+
+                if (discount_input or '') == 'Yes' or (user.discount or '') == 'Yes':
                     discount = round(price * 0.10, 2)
-                elif discount_input and discount_input.replace('.', '', 1).isdigit():
+                elif (discount_input or '').replace('.', '', 1).isdigit():
                     discount = float(discount_input)
-                elif booking.discount and booking.discount.replace('.', '', 1).isdigit():
-                    discount = float(booking.discount)
+                elif (user.discount or '').replace('.', '', 1).isdigit():
+                    discount = float(user.discount)
+                else:
+                    discount = None
 
                 total = price
                 if with_gst:
@@ -1617,15 +1619,16 @@ def invoice_detail(request):
             price = safe_float(user.price) or 0.0
             with_gst = round(price * 0.10, 2) if user.company_name else 0.0
             float_surcharge = round(price * 0.03, 2) if surcharge_flag else 0.0
-            toll = safe_float(toll_input) if toll_input else safe_float(user.toll) or 0.0
+            toll = safe_float(toll_input) if toll_input else safe_float(user.toll) or 0.0            
             
-            discount = None
-            if discount_input == 'Yes' or user.discount == 'Yes':
+            if (discount_input or '') == 'Yes' or (user.discount or '') == 'Yes':
                 discount = round(price * 0.10, 2)
-            elif discount_input and discount_input.replace('.', '', 1).isdigit():
+            elif (discount_input or '').replace('.', '', 1).isdigit():
                 discount = float(discount_input)
-            elif user.discount and user.discount.replace('.', '', 1).isdigit():
+            elif (user.discount or '').replace('.', '', 1).isdigit():
                 discount = float(user.discount)
+            else:
+                discount = None
 
             total_price = price + with_gst + float_surcharge + toll - discount
             float_paid = safe_float(user.paid) or 0.0
