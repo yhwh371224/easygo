@@ -245,8 +245,8 @@
 
                                             Pickup Date: {{ booking.pickup_date }}<br>
                                             Pickup Time: {{ booking.pickup_time }}<br>
-                                            From: {{ booking.from_point }}<br>
-                                            To: {{ booking.to_point }}<br>
+                                            From: {{ booking.start_point }}<br>
+                                            To: {{ booking.end_point }}<br>
                                             Number of Passenger: {{ booking.no_of_passenger }}<br>
                                             Number of Baggage: {{ booking.no_of_baggage }}<br>
 
@@ -255,7 +255,7 @@
                                             {% endif %}
 
                                             {% if booking.notice %}
-                                                Message: {{ booking.notice }}<br>
+                                                Notice: {{ booking.notice }}<br>
                                             {% endif %}
 
                                             <br>

@@ -1575,7 +1575,7 @@ def invoice_detail(request):
                     "no_of_passenger": booking.no_of_passenger,
                     "no_of_baggage": booking.no_of_baggage,
                     "message": booking.message,
-                    "note": booking.notice,
+                    "notice": booking.notice,
                     "price": price,
                     "with_gst": with_gst,
                     "surcharge": surcharge,
@@ -1610,26 +1610,10 @@ def invoice_detail(request):
 
         else:
             user = bookings[0]
-            # Start / End Point 계산 (이걸 꼭 먼저 해줘야 한다)
+
             if user.start_point:
                 start_point = user.start_point
                 end_point = user.end_point
-            else:
-                if "Drop off to Domestic" in user.direction:
-                    start_point = f"{user.street}, {user.suburb}"
-                    end_point = "Domestic Airport"
-                elif "Drop off to Intl" in user.direction:
-                    start_point = f"{user.street}, {user.suburb}"
-                    end_point = "International Airport"
-                elif "Pickup from Domestic" in user.direction:
-                    start_point = "Domestic Airport"
-                    end_point = f"{user.street}, {user.suburb}"
-                elif "Pickup from Intl" in user.direction:
-                    start_point = "International Airport"
-                    end_point = f"{user.street}, {user.suburb}"
-                else:
-                    start_point = "Unknown"
-                    end_point = "Unknown" 
 
             price = safe_float(user.price) or 0.0
             with_gst = round(price * 0.10, 2) if user.company_name else 0.0
@@ -1653,12 +1637,12 @@ def invoice_detail(request):
                 html_content = render_to_string("basecamp/html_email-invoice-cash.html", {
                     "inv_no": inv_no, "name": user.name, "company_name": user.company_name,
                     "contact": user.contact, "discount": discount, "email": email,
-                    "pickup_date": user.pickup_date, "pickup_time": user.pickup_time,    # 추가
-                    "start_point": start_point, "end_point": end_point,                  # 추가
-                    "invoice_date": today,
+                    "pickup_date": user.pickup_date, "pickup_time": user.pickup_time,    
+                    "start_point": start_point, "end_point": end_point, "invoice_date": today,
                     "price": user.price, "with_gst": with_gst, "surcharge": float_surcharge,
                     "total_price": total_price, "toll": toll, "balance": cash_balance,
-                    "paid": float_paid, "message": user.message
+                    "paid": float_paid, "message": user.message, "no_of_passenger": user.no_of_passenger,
+                    "no_of_baggage": user.no_of_baggage, "notice": user.notice
                 })
 
             elif user.return_pickup_time == "x":
@@ -1666,23 +1650,23 @@ def invoice_detail(request):
 
                 html_content = render_to_string("basecamp/html_email-invoice.html", {
                     "inv_no": inv_no, "name": user.name, "company_name": user1.company_name,
-                    "contact": user1.contact, "pickup_date": user1.pickup_date, "pickup_time": user1.pickup_time,   # 추가
-                    "start_point": user1.start_point, "end_point": user1.end_point,                                # 추가
-                    "invoice_date": today,
+                    "contact": user1.contact, "pickup_date": user1.pickup_date, "pickup_time": user1.pickup_time,   
+                    "start_point": user1.start_point, "end_point": user1.end_point, "invoice_date": today,
                     "price": user1.price, "with_gst": with_gst, "surcharge": float_surcharge,
                     "total_price": total_price, "toll": toll, "balance": balance,
-                    "paid": float_paid, "message": user1.message
+                    "paid": float_paid, "message": user1.message, "no_of_passenger": user1.no_of_passenger,
+                    "no_of_baggage": user1.no_of_baggage, "notice": user1.notice
                 })
 
             else:
                 html_content = render_to_string("basecamp/html_email-invoice.html", {
                     "inv_no": inv_no, "name": user.name, "company_name": user.company_name,
-                    "contact": user.contact, "pickup_date": user.pickup_date, "pickup_time": user.pickup_time,  # 추가
-                    "start_point": start_point, "end_point": end_point,                                        # 추가
-                    "invoice_date": today,
+                    "contact": user.contact, "pickup_date": user.pickup_date, "pickup_time": user.pickup_time,  
+                    "start_point": start_point, "end_point": end_point, "invoice_date": today,
                     "price": user.price, "with_gst": with_gst, "surcharge": float_surcharge,
                     "total_price": total_price, "toll": toll, "balance": balance,
-                    "paid": float_paid, "message": user.message
+                    "paid": float_paid, "message": user.message, "no_of_passenger": user.no_of_passenger,
+                    "no_of_baggage": user.no_of_baggage, "notice": user.notice
                 })
 
         text_content = strip_tags(html_content)
