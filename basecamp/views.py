@@ -1544,9 +1544,9 @@ def invoice_detail(request):
                         end_point = "Unknown" 
 
                 price = safe_float(booking.price) or 0.0
-                with_gst = round(price * 0.10, 2) if booking.company_name else None
-                surcharge = round(price * 0.03, 2) if surcharge_flag else None
-                toll = safe_float(toll_input) if toll_input else safe_float(booking.toll)
+                with_gst = round(price * 0.10, 2) if booking.company_name else 0.0
+                surcharge = round(price * 0.03, 2) if surcharge_flag else 0.0
+                toll = safe_float(toll_input) if toll_input else safe_float(booking.toll) or 0.0
 
                 if (discount_input or '') == 'Yes' or (bookings[0].discount or '') == 'Yes':
                     discount = round(price * 0.10, 2)
@@ -1592,6 +1592,10 @@ def invoice_detail(request):
 
             total_balance = round(total_with_gst - total_paid, 2)
 
+            # 총 GST 계산 (회사 booking 만 계산)
+            total_price_for_gst = sum(b["price"] for b in booking_data if b["with_gst"] > 0)
+            total_gst = round(total_price_for_gst * 0.10, 2)
+
             context = {
                 "inv_no": inv_no,
                 "company_name": bookings[0].company_name,
@@ -1599,7 +1603,7 @@ def invoice_detail(request):
                 "invoice_date": today,
                 "bookings": booking_data,
                 "total_price_without_gst": total_price_without_gst,
-                "with_gst": total_with_gst - total_price_without_gst,
+                "with_gst": total_gst,
                 "total_price": total_with_gst,
                 "paid": total_paid,
                 "balance": total_balance
