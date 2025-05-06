@@ -1548,7 +1548,7 @@ def invoice_detail(request):
                 surcharge = round(price * 0.03, 2) if surcharge_flag else None
                 toll = safe_float(toll_input) if toll_input else safe_float(booking.toll)
 
-                if (discount_input or '') == 'Yes' or (user.discount or '') == 'Yes':
+                if (discount_input or '') == 'Yes' or (bookings[0].discount or '') == 'Yes':
                     discount = round(price * 0.10, 2)
                 elif (discount_input or '').replace('.', '', 1).isdigit():
                     discount = float(discount_input)
@@ -1642,7 +1642,8 @@ def invoice_detail(request):
                     "price": user.price, "with_gst": with_gst, "surcharge": float_surcharge,
                     "total_price": total_price, "toll": toll, "balance": cash_balance, 
                     "paid": float_paid, "message": user.message, "no_of_passenger": user.no_of_passenger,
-                    "no_of_baggage": user.no_of_baggage, "notice": user.notice, "street": user.street, "suburb": user.suburb
+                    "no_of_baggage": user.no_of_baggage, "notice": user.notice, "street": user.street, "suburb": user.suburb,
+                    "return_pickup_time": user.return_pickup_time, "return_pickup_date": user.return_pickup_date,
                 })
 
             elif user.return_pickup_time == "x":
@@ -1655,7 +1656,8 @@ def invoice_detail(request):
                     "price": user1.price, "with_gst": with_gst, "surcharge": float_surcharge,
                     "total_price": total_price, "toll": toll, "balance": balance, "discount": discount,
                     "paid": float_paid, "message": user1.message, "no_of_passenger": user1.no_of_passenger,
-                    "no_of_baggage": user1.no_of_baggage, "notice": user1.notice, "street": user1.street, "suburb": user1.suburb
+                    "no_of_baggage": user1.no_of_baggage, "notice": user1.notice, "street": user1.street, "suburb": user1.suburb,
+                    "return_pickup_time": user.return_pickup_time, "return_pickup_date": user.return_pickup_date,
                 })
 
             else:
@@ -1666,7 +1668,8 @@ def invoice_detail(request):
                     "price": user.price, "with_gst": with_gst, "surcharge": float_surcharge,
                     "total_price": total_price, "toll": toll, "balance": balance, "discount": discount,
                     "paid": float_paid, "message": user.message, "no_of_passenger": user.no_of_passenger,
-                    "no_of_baggage": user.no_of_baggage, "notice": user.notice, "street": user.street, "suburb": user.suburb
+                    "no_of_baggage": user.no_of_baggage, "notice": user.notice, "street": user.street, "suburb": user.suburb,
+                    "return_pickup_time": user.return_pickup_time, "return_pickup_date": user.return_pickup_date,
                 })
 
         text_content = strip_tags(html_content)
