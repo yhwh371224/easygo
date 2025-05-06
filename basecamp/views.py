@@ -1610,10 +1610,9 @@ def invoice_detail(request):
 
         else:
             user = bookings[0]
-
-            if user.start_point:
-                start_point = user.start_point
-                end_point = user.end_point
+            
+            start_point = user.start_point
+            end_point = user.end_point
 
             price = safe_float(user.price) or 0.0
             with_gst = round(price * 0.10, 2) if user.company_name else 0.0
