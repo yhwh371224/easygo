@@ -1599,7 +1599,6 @@ def invoice_detail(request):
                 "with_gst": total_gst,
                 "discount": discount,
                 "total_price": final_total,
-                "total_price": total_with_gst,
                 "paid": total_paid,
                 "balance": total_balance
             }
