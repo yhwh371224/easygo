@@ -1587,6 +1587,7 @@ def invoice_detail(request):
                 "no_of_passenger": booking.no_of_passenger,
                 "no_of_baggage": booking.no_of_baggage,
                 "message": booking.message,
+                "note": booking.notice,
                 "price": price,
                 "with_gst": with_gst,
                 "surcharge": surcharge,
