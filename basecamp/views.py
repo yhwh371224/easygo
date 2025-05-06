@@ -1564,8 +1564,8 @@ def invoice_detail(request):
                     total += surcharge
                 if toll:
                     total += toll
-                if discount:
-                    total -= discount
+                # if discount:
+                #     total -= discount
 
                 paid = safe_float(booking.paid) or 0.0
 
