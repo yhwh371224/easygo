@@ -1552,8 +1552,8 @@ def invoice_detail(request):
                     discount = round(price * 0.10, 2)
                 elif (discount_input or '').replace('.', '', 1).isdigit():
                     discount = float(discount_input)
-                elif (user.discount or '').replace('.', '', 1).isdigit():
-                    discount = float(user.discount)
+                elif (bookings[0].discount or '').replace('.', '', 1).isdigit():
+                    discount = float(bookings[0].discount)
                 else:
                     discount = None
 
