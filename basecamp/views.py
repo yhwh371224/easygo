@@ -1465,7 +1465,26 @@ def return_trip_detail(request):
         return rendering
     
     else:
-        return render(request, 'basecamp/return_trip.html', {})        
+        return render(request, 'basecamp/return_trip.html', {})  
+
+
+from datetime import datetime, date, timedelta
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from django.http import HttpResponse
+from blog.models import Post
+from main.settings import RECIPIENT_EMAIL
+
+
+# 안전한 float 변환 함수 (inc toll 같은 것도 처리)
+def safe_float(value):
+    try:
+        return float(value)
+    except (ValueError, TypeError):
+        if value and 'inc' in value.lower():
+            return 0.0
+        return None
 
 
 def invoice_detail(request):
@@ -1493,7 +1512,7 @@ def invoice_detail(request):
         if not users.exists():
             return HttpResponse("No bookings found", status=404)
 
-        # Determine if multi booking or single
+        # Multi booking 여부
         multiple = False
         if from_date and to_date:
             from_date_obj = datetime.strptime(from_date, "%Y-%m-%d").date()
@@ -1534,12 +1553,11 @@ def invoice_detail(request):
                     to_point = "Unknown"
 
             # 요금 계산
-            price = float(booking.price) if booking.price else 0.0
+            price = safe_float(booking.price) or 0.0
             with_gst = round(price * 0.10, 2) if booking.company_name else None
-            surcharge = round(price * 0.03, 2) if booking.paid else None
-            toll = float(toll_input) if toll_input else (float(booking.toll) if booking.toll else None)
+            surcharge = round(price * 0.03, 2) if surcharge_flag else None
+            toll = safe_float(toll_input) if toll_input else safe_float(booking.toll)
 
-            # Discount 처리
             discount = None
             if discount_input == 'Yes' or booking.discount == 'Yes':
                 discount = round(price * 0.10, 2)
@@ -1551,14 +1569,14 @@ def invoice_detail(request):
             total = price
             if with_gst:
                 total += with_gst
-            if surcharge_flag:
-                total += surcharge if surcharge else 0
+            if surcharge_flag and surcharge:
+                total += surcharge
             if toll:
                 total += toll
             if discount:
                 total -= discount
 
-            paid = float(booking.paid) if booking.paid else 0.0
+            paid = safe_float(booking.paid) or 0.0
             balance = round(total - paid, 2)
 
             booking_data.append({
@@ -1571,7 +1589,7 @@ def invoice_detail(request):
                 "message": booking.message,
                 "price": price,
                 "with_gst": with_gst,
-                "surcharge": surcharge if surcharge_flag else None,
+                "surcharge": surcharge,
                 "toll": toll,
                 "discount": discount,
                 "total_price": total,
