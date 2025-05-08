@@ -22,7 +22,7 @@ class Command(BaseCommand):
             for final_notice in final_notices:
                 if not final_notice.reminder and not final_notice.cancelled and not final_notice.paid:
                     if final_notice.pickup_date == today:
-                        template_name = "basecamp/ftoday.html"
+                        template_name = "basecamp/html_email-ftoday.html"
                     else:
                         template_name = "basecamp/html_email-fnotice.html"
                     
