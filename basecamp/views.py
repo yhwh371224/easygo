@@ -1480,7 +1480,7 @@ def safe_float(value):
 
 def invoice_detail(request):
     if request.method == "POST":
-        email = request.POST.get('email')
+        email = request.POST.get('email', '').strip()
         surcharge_flag = request.POST.get('surcharge')
         discount_input = request.POST.get('discount')
         inv_no = request.POST.get('inv_no')
@@ -1575,13 +1575,13 @@ def invoice_detail(request):
                 total_paid += paid
             
             if (discount_input or '') == 'Yes':
-                    discount = None
+                    discount = 0.0
             elif (discount_input or '').replace('.', '', 1).isdigit():
                 discount = float(discount_input)
             elif (bookings[0].discount or '').replace('.', '', 1).isdigit():
                 discount = float(bookings[0].discount)
             else:
-                discount = None
+                discount = 0.0
 
             final_total = grand_total - discount
             total_balance = round(final_total - total_paid, 2)
@@ -1617,13 +1617,13 @@ def invoice_detail(request):
             toll = safe_float(toll_input) if toll_input else safe_float(user.toll) or 0.0            
             
             if (discount_input or '') == 'Yes':
-                discount = None
+                discount = 0.0
             elif (discount_input or '').replace('.', '', 1).isdigit():
                 discount = float(discount_input)
             elif (user.discount or '').replace('.', '', 1).isdigit():
                 discount = float(user.discount)
             else:
-                discount = None
+                discount = 0.0
 
             total_price = price + with_gst + float_surcharge + toll - discount
             float_paid = safe_float(user.paid) or 0.0
@@ -1656,7 +1656,7 @@ def invoice_detail(request):
                     "paid": float_paid, "message": user1.message, "no_of_passenger": user1.no_of_passenger,
                     "no_of_baggage": user1.no_of_baggage, "notice": user1.notice, "street": user1.street, "suburb": user1.suburb,
                     "return_pickup_time": user1.return_pickup_time, "return_pickup_date": user1.return_pickup_date,
-                    
+
                 })
 
             else:
