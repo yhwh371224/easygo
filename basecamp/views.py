@@ -1508,7 +1508,7 @@ def invoice_detail(request):
         if from_date and to_date:
             from_date_obj = datetime.strptime(from_date, "%Y-%m-%d").date()
             to_date_obj = datetime.strptime(to_date, "%Y-%m-%d").date()
-            bookings = users.filter(pickup_date__range=(from_date_obj, to_date_obj)).order_by('pickup_date')
+            bookings = users.filter(pickup_date__range=(from_date_obj, to_date_obj)).order_by('pickup_date', 'pickup_time')
             multiple = True
         else:
             if 0 <= index < len(users):
