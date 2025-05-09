@@ -1655,7 +1655,7 @@ def invoice_detail(request):
                     "total_price": total_price, "toll": toll, "balance": balance, "discount": discount,
                     "paid": float_paid, "message": user1.message, "no_of_passenger": user1.no_of_passenger,
                     "no_of_baggage": user1.no_of_baggage, "notice": user1.notice, "street": user1.street, "suburb": user1.suburb,
-                    "return_pickup_time": user.return_pickup_time, "return_pickup_date": user.return_pickup_date,
+                    "return_pickup_time": user1.return_pickup_time, "return_pickup_date": user1.return_pickup_date,
                 })
 
             else:
