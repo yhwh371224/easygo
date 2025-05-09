@@ -1574,8 +1574,8 @@ def invoice_detail(request):
                 total_with_gst += total
                 total_paid += paid
             
-            if (discount_input or '') == 'Yes' or (bookings[0].discount or '') == 'Yes':
-                    discount = round(price * 0.10, 2)
+            if (discount_input or '') == 'Yes':
+                    discount = None
             elif (discount_input or '').replace('.', '', 1).isdigit():
                 discount = float(discount_input)
             elif (bookings[0].discount or '').replace('.', '', 1).isdigit():
@@ -1616,8 +1616,8 @@ def invoice_detail(request):
             float_surcharge = round(price * 0.03, 2) if surcharge_flag else 0.0
             toll = safe_float(toll_input) if toll_input else safe_float(user.toll) or 0.0            
             
-            if (discount_input or '') == 'Yes' or (user.discount or '') == 'Yes':
-                discount = round(price * 0.10, 2)
+            if (discount_input or '') == 'Yes':
+                discount = None
             elif (discount_input or '').replace('.', '', 1).isdigit():
                 discount = float(discount_input)
             elif (user.discount or '').replace('.', '', 1).isdigit():
@@ -1648,7 +1648,7 @@ def invoice_detail(request):
                 user1 = Post.objects.filter(email=email)[1]
 
                 html_content = render_to_string("basecamp/html_email-invoice.html", {
-                    "inv_no": inv_no, "name": user.name, "company_name": user1.company_name,
+                    "inv_no": inv_no, "name": user1.name, "company_name": user1.company_name,
                     "contact": user1.contact, "pickup_date": user1.pickup_date, "pickup_time": user1.pickup_time,   
                     "start_point": user1.start_point, "end_point": user1.end_point, "invoice_date": today,
                     "price": user1.price, "with_gst": with_gst, "surcharge": float_surcharge,
@@ -1656,6 +1656,7 @@ def invoice_detail(request):
                     "paid": float_paid, "message": user1.message, "no_of_passenger": user1.no_of_passenger,
                     "no_of_baggage": user1.no_of_baggage, "notice": user1.notice, "street": user1.street, "suburb": user1.suburb,
                     "return_pickup_time": user1.return_pickup_time, "return_pickup_date": user1.return_pickup_date,
+                    
                 })
 
             else:
