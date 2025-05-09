@@ -245,25 +245,26 @@
 													Trip type: Round Trip<br>
 													Service: Point to Point<br>
 													{{ start_point }} To/From {{ end_point }}<br>
-													Trip date: {{ pickup_date }} ~ {{ return_pickup_date}}<br>	
-													Pick-up time: {{ pickup_time}} & {{ return_pickup_time}}<br>																									
+													Frist Pickup time & Pickup date: {{ pickup_time }} on {{ pickup_date }}<br>	
+													Secound Pickup time & Pickup date: {{ return_pickup_time}} on {{ return_pickup_date }}<br>																									
 													{% else %}
 													Trip type: Single Trip<br>
 													Service: Point to Point<br>
 													{{ start_point }} To {{ end_point }}<br>
-													Trip date: {{ pickup_date }}<br>
+													Pickup date: {{ pickup_date }}<br>
+													Pickup time: {{ pickup_time }}<br>
 													{% endif %}																																																		
 												{% else %}
 													{% if return_pickup_time %}
 													Trip type: Round Trip<br>
 													Service: Airport transfers<br>
-													Flight date: {{ pickup_date }} & {{ return_pickup_date}}<br>	
-													Pick-up time: {{ pickup_time}} & {{ return_pickup_time}}<br>											
+													Frist Pickup time & Pickup date: {{ pickup_time }} on {{ pickup_date }}<br>	
+													Secound Pickup time & Pickup date: {{ return_pickup_time}} on {{ return_pickup_date }}<br>												
 													{% else %}
 													Trip type: Single Trip<br>
 													Service: Airport transfers<br>
 													Flight date: {{ pickup_date }}<br>
-													Pick-up time: {{ pickup_time }}<br>														
+													Pickup time: {{ pickup_time }}<br>														
 													{% endif %}															
 													Address: {{ street }}, {{ suburb }}<br>												
 												{% endif %}																							
