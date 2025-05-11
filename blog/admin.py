@@ -13,7 +13,7 @@ class InquiryAdmin(admin.ModelAdmin):
                     'pickup_time', 'price', 'is_confirmed', 
                     'cancelled', 'direction', 'return_flight_number', 'created']
     search_fields = ['pickup_date', 'pickup_time', 'suburb', 'email', 'street', 
-                     'name', 'contact']
+                     'name', 'contact', 'email1']
 
 
 class PaypalPaymentAdmin(admin.ModelAdmin):
@@ -31,7 +31,7 @@ class PostAdmin(admin.ModelAdmin):
                     'pickup_time', 'price', 'paid', 
                     'cancelled', 'direction', 'return_flight_number', 'created']
     search_fields = ['pickup_date', 'pickup_time', 'suburb', 'email', 'street', 
-                     'name', 'contact', 'price', 'paid']
+                     'name', 'contact', 'price', 'paid', 'email1']
     # list_filter = ['paid']
 
 
