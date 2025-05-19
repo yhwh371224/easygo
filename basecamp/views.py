@@ -1794,7 +1794,7 @@ def email_dispatch_detail(request):
                     user_1.paid = float(user.price) + 0.00
                     user_1.reminder = True
                     user_1.toll = ""
-                    user_1.cash = ""
+                    user_1.cash = False
                     user_1.save() 
             
             if selected_option in ["Cancellation of Booking", "Cancellation by Client", "Apologies Cancellation of Booking"] and user:
