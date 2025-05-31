@@ -34,21 +34,45 @@ class Command(BaseCommand):
                         email_subject = "Payment notice"
                         email_template = "basecamp/html_email-nopayment.html"
 
+                    # 날짜 표시 조건 처리
+                    if booking.return_pickup_time == 'x':
+                        if booking.return_pickup_date and booking.return_pickup_date < date.today():
+                            display_date = f"{booking.pickup_date}"
+                        else:
+                            display_date = f"{booking.pickup_date} & {booking.return_pickup_date}"
+                    else:
+                        display_date = f"{booking.pickup_date}"
+
                     self.send_email(
                         email_subject,
                         email_template,
-                        {'name': booking.name, 'email': booking.email, 'price': booking.price},
+                        {'name': booking.name, 'email': booking.email, 'price': booking.price, 
+                         'pickup_date': booking.pickup_date, 
+                         'return_pickup_date': booking.return_pickup_date,
+                         'display_date': display_date},
                         [booking.email, RECIPIENT_EMAIL]
                     )
 
                 if booking.paid is not None and float(booking.price or 0) > float(booking.paid or 0):
                     diff = round(float(booking.price or 0) - float(booking.paid or 0), 2)
+
+                    # 날짜 표시 조건 처리
+                    if booking.return_pickup_time == 'x':
+                        if booking.return_pickup_date and booking.return_pickup_date < date.today():
+                            display_date = f"{booking.pickup_date}"
+                        else:
+                            display_date = f"{booking.pickup_date} & {booking.return_pickup_date}"
+                    else:
+                        display_date = f"{booking.pickup_date}"
+
                     email_subject = "Urgent notice for payment discrepancy"
                     email_template = "basecamp/html_email-response-discrepancy.html"
                     self.send_email(
                         email_subject,
                         email_template,
-                        {'name': booking.name, 'price': booking.price, 'paid': booking.paid, 'diff': diff},                    
+                        {'name': booking.name, 'price': booking.price, 'paid': booking.paid, 
+                         'diff': diff, 'pickup_date': booking.pickup_date, 
+                         'display_date': display_date, 'return_pickup_date': booking.return_pickup_date},                    
                         [booking.email, booking.email1, RECIPIENT_EMAIL]
                     )
 
