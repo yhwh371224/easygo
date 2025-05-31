@@ -1789,6 +1789,13 @@ def email_dispatch_detail(request):
                 user.toll = ""
                 user.cash = False 
                 user.save()
+
+                context.update({
+                    'pickup_date': user.pickup_date,
+                    'return_pickup_date': user.return_pickup_date,
+                    'price': user.price
+                })
+
                 if user.return_pickup_time == 'x':
                     user_1 = Post.objects.filter(email=email)[1]
                     user_1.paid = float(user.price) + 0.00
