@@ -1708,6 +1708,15 @@ def handle_email_sending(request, email, subject, template_name, context, email1
     email_message.attach_alternative(html_content, "text/html")
     email_message.send()
 
+
+def format_pickup_time_12h(pickup_time_str):
+    try:
+        time_obj = datetime.strptime(pickup_time_str.strip(), "%H:%M")
+        return time_obj.strftime("%I:%M %p")  # 예: "06:30 PM"
+    except ValueError:
+        return pickup_time_str  # 실패 시 원래 값 반환
+    
+
 def email_dispatch_detail(request):     
     if request.method == "POST":
         email = request.POST.get('email')  
@@ -1735,8 +1744,13 @@ def email_dispatch_detail(request):
                 closest_user.pickup_time = adjustment_time
                 closest_user.save()
 
-                message = f"Important Notice! Please check your email and respond only via email - EasyGo Airport Shuttle"
-                send_sms_notice(closest_user.contact, message)   
+                # 12시간제 변환
+                pickup_time_12h = format_pickup_time_12h(adjustment_time)
+                context.update({'pickup_time_12h': pickup_time_12h})
+
+                message = "Important Notice! Please check your email and respond only via email - EasyGo Airport Shuttle"
+                send_sms_notice(closest_user.contact, message)
+                        
         
         template_options = {
             "Gratitude For Payment": ("basecamp/html_email-response-payment-received.html", "Payment Received - EasyGo"),
@@ -1791,12 +1805,14 @@ def email_dispatch_detail(request):
                 user.save()
 
                 context.update({
-                    'pickup_date': user.pickup_date,
-                    'return_pickup_date': user.return_pickup_date,
+                    'pickup_date': user.pickup_date,                    
                     'price': user.price
                 })
 
                 if user.return_pickup_time == 'x':
+                    context.update({
+                        'return_pickup_date': user.return_pickup_date
+                    })
                     user_1 = Post.objects.filter(email=email)[1]
                     user_1.paid = float(user.price) + 0.00
                     user_1.reminder = True

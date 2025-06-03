@@ -1,6 +1,6 @@
 import os
 import logging
-from datetime import date, timedelta
+from datetime import datetime, date, timedelta
 
 from django.core.management.base import BaseCommand
 from django.core.mail import EmailMultiAlternatives, send_mail
@@ -44,6 +44,13 @@ class Command(BaseCommand):
         for interval, template, subject in zip_longest(reminder_intervals, templates, subjects, fillvalue=""):
             self.send_email(interval, template, subject)
 
+    def format_pickup_time_12h(self, pickup_time_str):
+        try:
+            time_obj = datetime.strptime(pickup_time_str.strip(), "%H:%M")
+            return time_obj.strftime("%I:%M %p")  # e.g., 06:30 PM
+        except (ValueError, AttributeError):
+            return pickup_time_str  # Return original if invalid format
+
     def send_email(self, date_offset, template_name, subject):
         target_date = date.today() + timedelta(days=date_offset)
         booking_reminders = Post.objects.filter(pickup_date=target_date, cancelled=False).select_related('driver')
@@ -54,6 +61,8 @@ class Command(BaseCommand):
 
             driver = booking_reminder.driver
 
+            pickup_time_12h = self.format_pickup_time_12h(booking_reminder.pickup_time)
+
             html_content = render_to_string(template_name, {
                 'name': booking_reminder.name,
                 'company_name': booking_reminder.company_name,
@@ -63,7 +72,7 @@ class Command(BaseCommand):
                 'flight_number': booking_reminder.flight_number,
                 'flight_time': booking_reminder.flight_time,
                 'direction': booking_reminder.direction,
-                'pickup_time': booking_reminder.pickup_time,
+                'pickup_time': pickup_time_12h,
                 'start_point': booking_reminder.start_point or "",  
                 'end_point': booking_reminder.end_point or "",    
                 'street': booking_reminder.street,
