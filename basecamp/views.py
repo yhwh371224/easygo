@@ -1689,7 +1689,6 @@ def invoice_detail(request):
         return render(request, 'basecamp/invoice.html', {})
 
 
-
 # email_dispatch_detail 
 def handle_email_sending(request, email, subject, template_name, context, email1=None):
     html_content = render_to_string(template_name, context)
@@ -1735,8 +1734,7 @@ def email_dispatch_detail(request):
 
             users = Post.objects.filter(
                 email=email,
-                pickup_date__gte=today,
-                pickup_date__lte=day_after_tomorrow
+                pickup_date__gte=date.today()
             ).order_by('pickup_date')
 
             if users.exists():
@@ -1745,8 +1743,7 @@ def email_dispatch_detail(request):
                 closest_user.save()
 
                 message = "Important Notice! Please check your email and respond only via email - EasyGo Airport Shuttle"
-                send_sms_notice(closest_user.contact, message)
-                        
+                send_sms_notice(closest_user.contact, message)                        
         
         template_options = {
             "Gratitude For Payment": ("basecamp/html_email-response-payment-received.html", "Payment Received - EasyGo"),
