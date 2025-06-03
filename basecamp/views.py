@@ -1744,10 +1744,6 @@ def email_dispatch_detail(request):
                 closest_user.pickup_time = adjustment_time
                 closest_user.save()
 
-                # 12시간제 변환
-                pickup_time_12h = format_pickup_time_12h(adjustment_time)
-                context.update({'pickup_time_12h': pickup_time_12h})
-
                 message = "Important Notice! Please check your email and respond only via email - EasyGo Airport Shuttle"
                 send_sms_notice(closest_user.contact, message)
                         
@@ -1784,6 +1780,10 @@ def email_dispatch_detail(request):
         if selected_option in template_options:
             template_name, subject = template_options[selected_option]
             context = {'email': email, 'name': user.name, 'adjustment_time': adjustment_time, 'wait_duration': wait_duration, 'discount_price': discount_price}
+
+            if adjustment_time:
+                pickup_time_12h = format_pickup_time_12h(adjustment_time)
+                context.update({'pickup_time_12h': pickup_time_12h})
 
             if selected_option == "Pickup Notice for Today" and user:
                 today = date.today()     
