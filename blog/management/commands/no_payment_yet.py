@@ -27,7 +27,7 @@ class Command(BaseCommand):
             for booking in bookings:
                 if not booking.cash and not booking.paid and not booking.cancelled:
                     days_difference = (booking.pickup_date - start_date).days
-                    if days_difference in [0, 1]:  
+                    if days_difference in [0, 1, 2]:  
                         email_subject = "Urgent notice for payment"
                         email_template = "basecamp/html_email-nopayment-today.html"
                     else:
