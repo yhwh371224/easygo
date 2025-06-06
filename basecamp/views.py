@@ -1690,7 +1690,7 @@ def invoice_detail(request):
 
 
 # email_dispatch_detail 
-def handle_email_sending(request, email, subject, template_name, context, email1=None):
+def handle_email_sending(email, subject, template_name, context, email1=None):
     html_content = render_to_string(template_name, context)
     text_content = strip_tags(html_content)
     
@@ -1730,7 +1730,6 @@ def email_dispatch_detail(request):
 
         if adjustment_time and user:
             today = date.today()
-            day_after_tomorrow = today + timedelta(days=2)
 
             users = Post.objects.filter(
                 email=email,
@@ -1840,7 +1839,7 @@ def email_dispatch_detail(request):
                     context.update({'price': user.price, 'paid': user.paid, 'diff': diff})
                     user.save()
 
-            handle_email_sending(request, email, subject, template_name, context)
+            handle_email_sending(email, subject, template_name, context, user.email1)
               
         return render(request, 'basecamp/inquiry_done.html')  
     
