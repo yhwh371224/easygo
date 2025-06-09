@@ -1421,10 +1421,12 @@ def return_trip_detail(request):
             contact = user.contact
             suburb = user.suburb
             street = user.street
-            start_point = user.start_point
-            end_point = user.end_point
             no_of_passenger = user.no_of_passenger
             no_of_baggage = user.no_of_baggage
+            if not start_point:
+                start_point = user.start_point
+            if not end_point:
+                end_point = user.end_point
             
             
         data = {
