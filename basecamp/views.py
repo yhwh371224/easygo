@@ -1628,8 +1628,7 @@ def invoice_detail(request):
             if user.cash and user.paid:
                 cash_balance = balance - (with_gst + float_surcharge)
                 template_name = "basecamp/html_email-invoice-cash.html"
-
-                html_content = render_to_string(template_name, {
+                context = {
                     "inv_no": inv_no, "name": user.name, "company_name": user.company_name,
                     "contact": user.contact, "discount": discount, "email": email,
                     "pickup_date": user.pickup_date, "pickup_time": user.pickup_time,    
@@ -1639,13 +1638,12 @@ def invoice_detail(request):
                     "paid": float_paid, "message": user.message, "no_of_passenger": user.no_of_passenger,
                     "no_of_baggage": user.no_of_baggage, "notice": user.notice, "street": user.street, "suburb": user.suburb,
                     "return_pickup_time": user.return_pickup_time, "return_pickup_date": user.return_pickup_date,
-                })
+                }
 
             elif user.return_pickup_time == "x":
                 user1 = Post.objects.filter(email=email)[1]
                 template_name = "basecamp/html_email-invoice.html"
-
-                html_content = render_to_string(template_name, {
+                context = {
                     "inv_no": inv_no, "name": user1.name, "company_name": user1.company_name,
                     "contact": user1.contact, "pickup_date": user1.pickup_date, "pickup_time": user1.pickup_time,   
                     "start_point": user1.start_point, "end_point": user1.end_point, "invoice_date": today,
@@ -1654,12 +1652,11 @@ def invoice_detail(request):
                     "paid": float_paid, "message": user1.message, "no_of_passenger": user1.no_of_passenger,
                     "no_of_baggage": user1.no_of_baggage, "notice": user1.notice, "street": user1.street, "suburb": user1.suburb,
                     "return_pickup_time": user1.return_pickup_time, "return_pickup_date": user1.return_pickup_date,
-
-                })
+                }
 
             else:
                 template_name = "basecamp/html_email-invoice.html"
-                html_content = render_to_string(template_name, {
+                context = {
                     "inv_no": inv_no, "name": user.name, "company_name": user.company_name,
                     "contact": user.contact, "pickup_date": user.pickup_date, "pickup_time": user.pickup_time,  
                     "start_point": start_point, "end_point": end_point, "invoice_date": today,
@@ -1668,7 +1665,9 @@ def invoice_detail(request):
                     "paid": float_paid, "message": user.message, "no_of_passenger": user.no_of_passenger,
                     "no_of_baggage": user.no_of_baggage, "notice": user.notice, "street": user.street, "suburb": user.suburb,
                     "return_pickup_time": user.return_pickup_time, "return_pickup_date": user.return_pickup_date,
-                })
+                }
+
+            html_content = render_to_string(template_name, context)
 
         text_content = strip_tags(html_content)
         recipient_list = [email, RECIPIENT_EMAIL]
