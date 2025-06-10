@@ -86,6 +86,24 @@
 			}
 		}
 
+		@media print {
+			body {
+				margin: 0;
+				padding: 0;
+				background: #F6F9FC;
+			}
+			body > center {
+				width: 100%;
+			}
+			body > center > div {
+				margin-left: auto !important;
+				margin-right: auto !important;
+			}
+			.no-print {
+				display: none !important;
+			}
+		}
+
 		/* Custom Dark Mode Colors */
       :root {
          color-scheme: light dark;
@@ -318,7 +336,7 @@
 
 <!-- START FOOTER -->
 <tr>
-	<td style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;">
+	<td style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;" class="no-print">
 		<table width="100%" style="border-spacing:0;background-color:#FAFAFA;" role="presentation">
 			<tr>
 				<td class="padded content" style="padding-top:40px;padding-right:0;padding-bottom:8px;padding-left:0;width:100%;text-align:center;">
@@ -373,7 +391,7 @@
 
 <!-- START DISCLAIMER -->
 <tr>
-	<td style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;">
+	<td style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;" class="no-print">
 		<table width="100%" style="border-spacing:0;background-color:#FAFAFA;" role="presentation">
 			<tr>
 				<td class="padded content" style="padding-top:6px;padding-right:20px;padding-bottom:24px;padding-left:20px;width:100%;text-align:center;font-size: 13px;color: #C4C7C9;width:600px;">
