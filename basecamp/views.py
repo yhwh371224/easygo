@@ -24,6 +24,8 @@ from basecamp.area import get_suburbs
 from basecamp.area_full import get_more_suburbs
 from basecamp.area_home import get_home_suburbs
 
+from utils.pdf import render_to_pdf
+
 
 logger = logging.getLogger(__name__)
 
@@ -1479,7 +1481,6 @@ def safe_float(value):
             return 0.0
         return None
 
-
 def invoice_detail(request):
     if request.method == "POST":
         email = request.POST.get('email', '').strip()
@@ -1497,9 +1498,7 @@ def invoice_detail(request):
             return HttpResponse("Invalid index value", status=400)
 
         today = date.today()
-        if not inv_no:
-            inv_no = 988390
-        inv_no = int(inv_no)
+        inv_no = int(inv_no or 988390)
 
         users = Post.objects.filter(email=email)
         if not users.exists():
@@ -1513,17 +1512,11 @@ def invoice_detail(request):
             bookings = users.filter(pickup_date__range=(from_date_obj, to_date_obj)).order_by('pickup_date', 'pickup_time')
             multiple = True
         else:
-            if 0 <= index < len(users):
-                bookings = [users[index]]
-            else:
-                bookings = [users.first()]
+            bookings = [users[index]] if 0 <= index < len(users) else [users.first()]
 
         if multiple:
             booking_data = []
-            total_price_without_gst = 0
-            total_with_gst = 0
-            total_paid = 0            
-            grand_total = 0
+            total_price_without_gst = total_with_gst = total_paid = grand_total = 0
 
             for booking in bookings:
                 if booking.start_point:
@@ -1605,7 +1598,8 @@ def invoice_detail(request):
                 "balance": total_balance
             }
 
-            html_content = render_to_string("basecamp/html_email-multi-invoice.html", context)
+            template_name = "basecamp/html_email-multi-invoice.html"
+            html_content = render_to_string(template_name, context)
 
         else:
             user = bookings[0]
@@ -1633,8 +1627,9 @@ def invoice_detail(request):
 
             if user.cash and user.paid:
                 cash_balance = balance - (with_gst + float_surcharge)
+                template_name = "basecamp/html_email-invoice-cash.html"
 
-                html_content = render_to_string("basecamp/html_email-invoice-cash.html", {
+                html_content = render_to_string(template_name, {
                     "inv_no": inv_no, "name": user.name, "company_name": user.company_name,
                     "contact": user.contact, "discount": discount, "email": email,
                     "pickup_date": user.pickup_date, "pickup_time": user.pickup_time,    
@@ -1648,8 +1643,9 @@ def invoice_detail(request):
 
             elif user.return_pickup_time == "x":
                 user1 = Post.objects.filter(email=email)[1]
+                template_name = "basecamp/html_email-invoice.html"
 
-                html_content = render_to_string("basecamp/html_email-invoice.html", {
+                html_content = render_to_string(template_name, {
                     "inv_no": inv_no, "name": user1.name, "company_name": user1.company_name,
                     "contact": user1.contact, "pickup_date": user1.pickup_date, "pickup_time": user1.pickup_time,   
                     "start_point": user1.start_point, "end_point": user1.end_point, "invoice_date": today,
@@ -1662,7 +1658,8 @@ def invoice_detail(request):
                 })
 
             else:
-                html_content = render_to_string("basecamp/html_email-invoice.html", {
+                template_name = "basecamp/html_email-invoice.html"
+                html_content = render_to_string(template_name, {
                     "inv_no": inv_no, "name": user.name, "company_name": user.company_name,
                     "contact": user.contact, "pickup_date": user.pickup_date, "pickup_time": user.pickup_time,  
                     "start_point": start_point, "end_point": end_point, "invoice_date": today,
@@ -1683,6 +1680,12 @@ def invoice_detail(request):
             recipient_list
         )
         mail.attach_alternative(html_content, "text/html")
+
+        # PDF 생성 및 첨부
+        pdf = render_to_pdf(template_name, context)
+        if pdf:
+            mail.attach(f"Tax-Invoice-T{inv_no}.pdf", pdf, 'application/pdf')
+
         mail.send()
 
         return render(request, 'basecamp/inquiry_done.html')
