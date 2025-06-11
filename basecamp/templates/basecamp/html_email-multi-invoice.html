@@ -163,7 +163,7 @@
         <tr>
 			<td style="text-align: center;">
 				<p style="font-size:18px; font-weight:bold; margin:0;">TAX INVOICE</p>
-				<div style="font-size:12px; line-height:20px; border-bottom:1px solid #a09a9a; margin: 20px auto 0; padding-bottom:20px; text-align: center;">
+				<div style="font-size:12px; line-height:20px; border-bottom:1px solid #a09a9a; margin: 30px auto 0; padding-bottom:10px; text-align: center;">
 					<strong>Invoice number: #T{{ inv_no }}</strong><br>
 					{% if company_name %}
 						<strong>Invoice to: {{ company_name }} (attn: {{ name }})</strong><br>
@@ -177,7 +177,7 @@
 
         <!-- BOOKINGS -->
         <tr>
-          <td style="padding-top: 30px;">
+          <td style="padding-top: 20px;">
             {% for booking in bookings %}
             <div style="margin-bottom: 15px; font-size:12px; line-height:20px;">
               <strong>Booking {{ forloop.counter }}:</strong><br>
