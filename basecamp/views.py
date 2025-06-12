@@ -1803,7 +1803,7 @@ def email_dispatch_detail(request):
                 full_price = round(float(user.price or 0) * 2, 2)
 
                 if user.return_pickup_time == 'x':
-                    user.paid = full_price
+                    user.paid = user.price
                     user.reminder = True
                     user.toll = ""
                     user.cash = False
@@ -1817,7 +1817,7 @@ def email_dispatch_detail(request):
 
                     try:
                         user_1 = Post.objects.filter(email=user.email)[1]
-                        user_1.paid = full_price
+                        user_1.paid = user.price
                         user_1.reminder = True
                         user_1.toll = ""
                         user_1.cash = False
