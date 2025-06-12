@@ -83,7 +83,7 @@ def notify_user_post(sender, instance, created, **kwargs):
 
         # notice 메시지 생성
         original_notice = instance.notice or ""
-        combined_notice = f"{original_notice}\nOriginal total price: ${full_price:.2f}".strip()
+        combined_notice = f"{original_notice}\nReturn trips: ${full_price:.2f}".strip()
 
         # 기존 instance.price 도 절반으로 조정
         Post.objects.filter(pk=instance.pk).update(price=half_price, notice=combined_notice)
