@@ -190,7 +190,8 @@ def notify_user_payment_paypal(instance_id):
     if instance.name:            
         post_name = Post.objects.filter(
             Q(name__iregex=r'^%s$' % re.escape(instance.name)) |
-            Q(email__iexact=instance.email)
+            Q(email__iexact=instance.email) |
+            Q(email1__iexact=instance.email)
         ).first()
         
         amount = round(float(instance.amount or 0) / 1.03, 2)
@@ -272,7 +273,8 @@ def notify_user_payment_stripe(instance_id):
     if instance.name:  
         post_name = Post.objects.filter(
             Q(name__iregex=r'^%s$' % re.escape(instance.name)) |
-            Q(email__iexact=instance.email)
+            Q(email__iexact=instance.email) |
+            Q(email1__iexact=instance.email)
         ).first()
 
         amount = round(float(instance.amount or 0), 2)

@@ -1722,13 +1722,15 @@ def format_pickup_time_12h(pickup_time_str):
 
 def email_dispatch_detail(request):     
     if request.method == "POST":
-        email = request.POST.get('email')  
+        email = request.POST.get('email', '').strip() 
         selected_option = request.POST.get('selected_option')      
         adjustment_time = request.POST.get('adjustment_time')
         wait_duration = request.POST.get('wait_duration')
         discount_price = request.POST.get('discount_price')        
         
         user = Post.objects.filter(email=email).first()
+        if not user:
+            user = Post.objects.filter(email1=email).first()
         if not user:
             user = Inquiry.objects.filter(email=email).first()
 
@@ -1770,7 +1772,7 @@ def email_dispatch_detail(request):
             "Cancellation of Booking": ("basecamp/html_email-response-cancel.html", "Cancellation of Booking: EasyGo"),
             "Apologies Cancellation of Booking": ("basecamp/html_email-response-cancel1.html", "Apologies Cancellation of Booking: EasyGo"),
             "Cancellation by Client": ("basecamp/html_email-response-cancelby.html", "Confirmed Booking Cancellation: EasyGo"),
-            "Apology emails": ("basecamp/html_email-response-apology-emails.html", "Apology emails: EasyGo"),
+            "Apology for oversight": ("basecamp/html_email-apology-for-oversight.html", "Apology for oversight: EasyGo"),
             "Payment discrepancy": ("basecamp/html_email-response-discrepancy.html", "Payment discrepancy: EasyGo"),
             "Special promotion": ("basecamp/html_email-special-promotion.html", "Special promotion: EasyGo"),
             "Booking delay": ("basecamp/html_email-booking-delay.html", "Booking delay: EasyGo"),
@@ -1813,7 +1815,7 @@ def email_dispatch_detail(request):
                     context.update({
                         'return_pickup_date': user.return_pickup_date
                     })
-                    user_1 = Post.objects.filter(email=email)[1]
+                    user_1 = Post.objects.filter(email=user.email)[1]
                     user_1.paid = float(user.price) + 0.00
                     user_1.reminder = True
                     user_1.toll = ""
