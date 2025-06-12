@@ -78,7 +78,7 @@ def notify_user_post(sender, instance, created, **kwargs):
         pass
 
     elif not instance.calendar_event_id and instance.return_pickup_time:
-        half_price = round((instance.price or 0) / 2, 2)
+        half_price = round(float(instance.price or 0) / 2, 2)
 
         # 기존 instance.price 도 절반으로 조정
         Post.objects.filter(pk=instance.pk).update(price=half_price)
