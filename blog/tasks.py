@@ -187,75 +187,74 @@ def payment_send_email(subject, html_content, recipient_list):
 @shared_task
 def notify_user_payment_paypal(instance_id):
     instance = PaypalPayment.objects.get(id=instance_id)
-    if instance.name:            
-        post_name = Post.objects.filter(
+
+    if instance.name:
+        posts = Post.objects.filter(
             Q(name__iregex=r'^%s$' % re.escape(instance.name)) |
             Q(email__iexact=instance.email) |
             Q(email1__iexact=instance.email)
-        ).first()
-        
-        amount = round(float(instance.amount or 0) / 1.03, 2)
-            
-        if post_name:
-            already_paid = float(post_name.paid or 0)
-            total_paid = already_paid + amount
-            price = float(post_name.price or 0)
+        ).order_by('-pickup_date')
 
-            if round(total_paid, 2) >= round(price, 2):
+        amount = round(float(instance.amount or 0) / 1.03, 2)
+        recipient_emails = set()
+
+        if posts.exists():
+            remaining_amount = amount
+            total_price = 0.0
+            total_paid_before = 0.0
+            total_paid_after = 0.0
+
+            for post in posts:
+                price = float(post.price or 0)
+                paid = float(post.paid or 0)
+                balance = round(price - paid, 2)
+
+                total_price += price
+                total_paid_before += paid
+
+                if balance <= 0:
+                    continue
+
+                if remaining_amount >= balance:
+                    post.paid = price
+                    remaining_amount -= balance
+                else:
+                    post.paid = paid + remaining_amount
+                    remaining_amount = 0
+
+                total_paid_after += float(post.paid or 0)
+
+                post.toll = "" if post.paid >= price else "short payment"
+                post.cash = ""
+                post.reminder = True
+                post.discount = ""
+                post.save()
+
+                recipient_emails.update([post.email, post.email1])
+
+                if remaining_amount <= 0:
+                    break
+
+            # 이메일 한 번만 발송
+            recipient_list = [email for email in recipient_emails if email] + [RECIPIENT_EMAIL]
+
+            if total_paid_after >= total_price:
                 html_content = render_to_string(
                     "basecamp/html_email-payment-success.html",
-                    {'name': post_name.name, 'email': post_name.email, 'amount': amount}
+                    {'name': instance.name, 'email': instance.email, 'amount': amount}
                 )
-                recipient_list = [email for email in [post_name.email, post_name.email1, RECIPIENT_EMAIL] if email]
-                payment_send_email("Payment - EasyGo", html_content, recipient_list)
-                post_name.toll = ""
-                post_name.cash = ""
-
             else:
-                post_name.toll = "short payment"
-                diff = round(float(price) - float(total_paid), 2)
                 html_content = render_to_string(
                     "basecamp/html_email-response-discrepancy.html",
-                    {'name': post_name.name, 'price': price, 'paid': total_paid, 'diff': diff}
+                    {
+                        'name': instance.name,
+                        'price': round(total_price, 2),
+                        'paid': round(total_paid_before + amount, 2),
+                        'diff': round(total_price - (total_paid_before + amount), 2)
+                    }
                 )
-                recipient_list = [email for email in [post_name.email, post_name.email1, RECIPIENT_EMAIL] if email]
-                payment_send_email("Payment - EasyGo", html_content, recipient_list)
 
-            post_name.paid = total_paid
-            post_name.reminder = True
-            post_name.discount = ""
-            post_name.save()
-
-            if post_name.return_pickup_time == 'x':
-                second_post = Post.objects.filter(email=post_name.email)[1]                    
-                already_paid_second = float(second_post.paid or 0)
-                total_paid_second = already_paid_second + amount
-                price_second = float(second_post.price)
-
-                if round(total_paid_second, 2) >= round(price, 2):
-                    html_content = render_to_string(
-                        "basecamp/html_email-payment-success.html",
-                        {'name': second_post.name, 'email': second_post.email, 'amount': amount}
-                    )
-                    recipient_list = [email for email in [post_name.email, post_name.email1, RECIPIENT_EMAIL] if email]
-                    payment_send_email("Payment - EasyGo", html_content, recipient_list)
-                    second_post.toll = ""
-                    second_post.cash = ""
-
-                else:
-                    second_post.toll = "short payment"
-                    diff = round(price_second - total_paid_second, 2)
-                    html_content = render_to_string(
-                        "basecamp/html_email-response-discrepancy.html",
-                        {'name': second_post.name, 'price': price_second, 'paid': total_paid_second, 'diff': diff}
-                    )
-                    recipient_list = [email for email in [post_name.email, post_name.email1, RECIPIENT_EMAIL] if email]
-                    payment_send_email("Payment - EasyGo", html_content, recipient_list)
-
-                second_post.paid = total_paid_second
-                second_post.reminder = True
-                second_post.discount = ""
-                second_post.save()
+            payment_send_email("Payment - EasyGo", html_content, recipient_list)
 
         else:
             html_content = render_to_string(
@@ -270,81 +269,82 @@ def notify_user_payment_paypal(instance_id):
 @shared_task
 def notify_user_payment_stripe(instance_id):
     instance = StripePayment.objects.get(id=instance_id)
-    if instance.name:  
-        post_name = Post.objects.filter(
+
+    if instance.name:
+        posts = Post.objects.filter(
             Q(name__iregex=r'^%s$' % re.escape(instance.name)) |
             Q(email__iexact=instance.email) |
             Q(email1__iexact=instance.email)
-        ).first()
+        ).order_by('-pickup_date')   
 
         amount = round(float(instance.amount or 0), 2)
+        recipient_emails = set()
 
-        if post_name:
-            already_paid = float(post_name.paid or 0)
-            total_paid = already_paid + amount
-            price = float(post_name.price or 0)
+        if posts.exists():
+            remaining_amount = amount
+            total_price = 0.0
+            total_paid_before = 0.0
+            total_paid_after = 0.0
 
-            if round(total_paid, 2) >= round(price, 2):
+            for post in posts:
+                price = float(post.price or 0)
+                paid = float(post.paid or 0)
+                balance = round(price - paid, 2)
+
+                total_price += price
+                total_paid_before += paid
+
+                if balance <= 0:
+                    continue  # 이미 결제된 예약은 건너뜀
+
+                if remaining_amount >= balance:
+                    post.paid = price
+                    remaining_amount -= balance
+                else:
+                    post.paid = paid + remaining_amount
+                    remaining_amount = 0.0
+
+                total_paid_after += float(post.paid or 0)
+
+                post.toll = "" if post.paid >= price else "short payment"
+                post.cash = ""
+                post.reminder = True
+                post.discount = ""
+                post.save()
+
+                recipient_emails.update([post.email, post.email1])
+
+                if remaining_amount <= 0:
+                    break
+
+            # 이메일 한 번만 발송
+            recipient_list = [email for email in recipient_emails if email] + [RECIPIENT_EMAIL]
+
+            if total_paid_after >= total_price:
                 html_content = render_to_string(
                     "basecamp/html_email-payment-success-stripe.html",
-                    {'name': post_name.name, 'email': post_name.email, 'amount': amount}
+                    {'name': instance.name, 'email': instance.email, 'amount': amount}
                 )
-                recipient_list = [email for email in [post_name.email, post_name.email1, RECIPIENT_EMAIL] if email]
-                payment_send_email("Payment - EasyGo", html_content, recipient_list)
-                post_name.toll = ""
-                post_name.cash = ""
-
             else:
-                post_name.toll = "short payment"
-                diff = round(float(price) - float(total_paid), 2)
                 html_content = render_to_string(
                     "basecamp/html_email-response-discrepancy.html",
-                    {'name': post_name.name, 'price': price, 'paid': total_paid, 'diff': diff}
+                    {
+                        'name': instance.name,
+                        'price': round(total_price, 2),
+                        'paid': round(total_paid_before + amount, 2),
+                        'diff': round(total_price - (total_paid_before + amount), 2)
+                    }
                 )
-                recipient_list = [email for email in [post_name.email, post_name.email1, RECIPIENT_EMAIL] if email]
-                payment_send_email("Payment - EasyGo", html_content, recipient_list)
 
-            post_name.paid = total_paid
-            post_name.reminder = True
-            post_name.discount = ""
-            post_name.save()
-
-            if post_name.return_pickup_time == 'x':
-                second_post = Post.objects.filter(email=post_name.email)[1]
-                already_paid_second = float(second_post.paid or 0)
-                total_paid_second = already_paid_second + amount
-                price_second = float(second_post.price or 0)
-
-                if round(total_paid_second, 2) >= round(price_second, 2):
-                    html_content = render_to_string(
-                        "basecamp/html_email-payment-success-stripe.html",
-                        {'name': second_post.name, 'email': second_post.email, 'amount': amount}
-                    )
-                    recipient_list = [email for email in [post_name.email, post_name.email1, RECIPIENT_EMAIL] if email]
-                    payment_send_email("Payment - EasyGo", html_content, recipient_list)
-                    second_post.toll = ""
-                    second_post.cash = ""
-                    
-                else:
-                    second_post.toll = "short payment"
-                    diff = round(price_second - total_paid_second, 2)
-                    html_content = render_to_string(
-                        "basecamp/html_email-response-discrepancy.html",
-                        {'name': second_post.name, 'price': price_second, 'paid': total_paid_second, 'diff': diff}
-                    )
-                    recipient_list = [email for email in [post_name.email, post_name.email1, RECIPIENT_EMAIL] if email]
-                    payment_send_email("Payment - EasyGo", html_content, recipient_list)
-
-                second_post.paid = total_paid_second
-                second_post.reminder = True
-                second_post.discount = ""
-                second_post.save()
+            payment_send_email("Payment - EasyGo", html_content, recipient_list)
 
         else:
+            # 예약 찾지 못한 경우
             html_content = render_to_string(
                 "basecamp/html_email-noIdentity-stripe.html",
                 {'name': instance.name, 'email': instance.email, 'amount': amount}
             )
             recipient_list = [email for email in [instance.email, RECIPIENT_EMAIL] if email]
             payment_send_email("Payment - EasyGo", html_content, recipient_list)
+
             
