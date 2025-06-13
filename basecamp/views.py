@@ -1803,7 +1803,8 @@ def email_dispatch_detail(request):
                     })
 
             if selected_option == "Gratitude For Payment" and user:
-                full_price = round(float(user.price or 0) * 2, 2)
+                original_price = float(user.price or 0)
+                full_price = round(original_price * 2)
 
                 if user.return_pickup_time == 'x':
                     user.paid = user.price
@@ -1814,7 +1815,7 @@ def email_dispatch_detail(request):
 
                     context.update({
                         'pickup_date': user.pickup_date,
-                        'price': full_price,
+                        'price': str(int(full_price)),
                         'return_pickup_date': user.return_pickup_date,
                     })
 
@@ -1829,7 +1830,7 @@ def email_dispatch_detail(request):
                         pass  
 
                 else:
-                    user.paid = float(user.price or 0)
+                    user.paid = user.price
                     user.reminder = True
                     user.toll = ""
                     user.cash = False
@@ -1865,7 +1866,7 @@ def email_dispatch_detail(request):
                 diff = round(float(user.price) - float(user.paid), 2)
                 if diff > 0:
                     user.toll = "short payment"
-                    context.update({'price': user.price, 'paid': user.paid, 'diff': diff})
+                    context.update({'price': user.price, 'paid': user.paid, 'diff': f"{diff:.2f}"})
                     user.save()
 
             handle_email_sending(email, subject, template_name, context, user.email1)
