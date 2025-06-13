@@ -26,9 +26,8 @@ class Command(BaseCommand):
             end_date = today + timedelta(days=7)
 
             bookings = Post.objects.filter(
-                pickup_date__range=(start_date, end_date),
-                cancelled=False
-            )
+                pickup_date__range=(start_date, end_date)
+            ).exclude(cancelled=True)
 
             for booking in bookings:
                 contact_issue = False

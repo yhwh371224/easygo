@@ -6,7 +6,7 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from blog.models import Post
 from main.settings import RECIPIENT_EMAIL
-
+from django.db.models import Q
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -18,10 +18,13 @@ class Command(BaseCommand):
             tomorrow = date.today() + timedelta(days=1)
 
             final_notices = Post.objects.filter(
-                pickup_date=tomorrow,
-                reminder=False,
-                cancelled=False,
-                paid=False
+                pickup_date=tomorrow
+            ).exclude(
+                cancelled=True
+            ).exclude(
+                reminder=True
+            ).exclude(
+                Q(paid__isnull=False) & ~Q(paid="") & ~Q(paid="0")
             )
 
             for final_notice in final_notices:

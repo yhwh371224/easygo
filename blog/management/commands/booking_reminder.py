@@ -53,7 +53,7 @@ class Command(BaseCommand):
 
     def send_email(self, date_offset, template_name, subject):
         target_date = date.today() + timedelta(days=date_offset)
-        booking_reminders = Post.objects.filter(pickup_date=target_date, cancelled=False).select_related('driver')
+        booking_reminders = Post.objects.filter(pickup_date=target_date).exclude(cancelled=True).select_related('driver')
         self.send_email_task(booking_reminders, template_name, subject, target_date)
 
     def send_email_task(self, booking_reminders, template_name, subject, target_date):
