@@ -1300,6 +1300,9 @@ def sending_email_second_detail(request):
 
         user.sent_email = True
         user.save()  
+
+        double_price = float(user.price or 0) * 2
+        double_paid = float(user.paid or 0) * 2
         
         if user.cancelled: 
             html_content = render_to_string("basecamp/html_email-cancelled.html", 
@@ -1326,7 +1329,7 @@ def sending_email_second_detail(request):
                                          'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
                                          'return_pickup_time': user.return_pickup_time, 'return_start_point': user.return_start_point,
                                          'return_end_point': user.return_end_point, 'message': user.message, 'notice': user.notice, 
-                                         'price': user.price, 'paid': user.paid, 'cash': user.cash})
+                                         'price': double_price, 'paid': double_paid, 'cash': user.cash})
             text_content = strip_tags(html_content)
             email = EmailMultiAlternatives(
                 "Booking confirmation - EasyGo",
