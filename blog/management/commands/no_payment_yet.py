@@ -25,7 +25,7 @@ class Command(BaseCommand):
             bookings = Post.objects.filter(pickup_date__range=(start_date, end_date))
                 
             for booking in bookings:
-                if not booking.cash and not booking.paid and not booking.cancelled:
+                if not booking.cash and (booking.paid is None or booking.paid.strip() in ["", "0"]) and not booking.cancelled:
                     days_difference = (booking.pickup_date - start_date).days
                     if days_difference in [0, 1, 2]:  
                         email_subject = "Urgent notice for payment"
