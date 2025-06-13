@@ -74,26 +74,40 @@ def notify_user_inquiry(sender, instance, created, **kwargs):
 # Flight return booking
 @receiver(post_save, sender=Post)
 def notify_user_post(sender, instance, created, **kwargs):
-    if instance.return_pickup_time == 'x' or instance.sent_email:
-        pass
+    if (
+        instance.return_pickup_time == 'x' or  
+        instance.sent_email or                
+        instance.calendar_event_id      
+    ):
+        return
 
     elif not instance.calendar_event_id and instance.return_pickup_time:
         full_price = float(instance.price or 0)
         half_price = round(full_price / 2, 2)
+        full_paid = float(instance.paid or 0)
+        half_paid = round(full_paid / 2, 2)
 
         # notice 메시지 생성
         original_notice = instance.notice or ""
-        combined_notice = f"{original_notice}\nReturn trips: ${full_price:.2f}".strip()
+        notice_parts = [original_notice.strip(), f"Return trips: ${full_price:.2f}"]
+        if full_paid > 0:
+            notice_parts.append(f"Total Paid: ${full_paid:.2f}")
 
-        # 기존 instance.price 도 절반으로 조정
-        Post.objects.filter(pk=instance.pk).update(price=half_price, notice=combined_notice)
+        updated_notice = " | ".join(filter(None, notice_parts)).strip()
+
+        # instance 업데이트 (ORM 방식)
+        instance.price = half_price
+        instance.paid = half_paid
+        instance.notice = updated_notice
+        instance.save(update_fields=['price', 'paid', 'notice'])
+
 
         p = Post(name=instance.name, contact=instance.contact, email=instance.email, company_name=instance.company_name, email1=instance.email1, 
                  pickup_date=instance.return_pickup_date, flight_number=instance.return_flight_number, flight_time=instance.return_flight_time, 
                  pickup_time=instance.return_pickup_time, direction=instance.return_direction, start_point=instance.return_start_point, 
                  end_point=instance.return_end_point, suburb=instance.suburb, street=instance.street, no_of_passenger=instance.no_of_passenger, 
                  no_of_baggage=instance.no_of_baggage, message=instance.message, return_pickup_time="x", return_pickup_date=instance.pickup_date, 
-                 notice=combined_notice, price=half_price, paid=instance.paid, private_ride=instance.private_ride, driver=instance.driver,)
+                 notice=updated_notice, price=half_price, paid=half_paid, private_ride=instance.private_ride, driver=instance.driver,)
 
         p.save() 
 
