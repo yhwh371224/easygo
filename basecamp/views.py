@@ -1329,7 +1329,7 @@ def sending_email_second_detail(request):
                                          'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
                                          'return_pickup_time': user.return_pickup_time, 'return_start_point': user.return_start_point,
                                          'return_end_point': user.return_end_point, 'message': user.message, 'notice': user.notice, 
-                                         'price': double_price, 'paid': double_paid, 'cash': user.cash})
+                                         'price': str(int(double_price)), 'paid': str(int(double_paid)), 'cash': user.cash})
             text_content = strip_tags(html_content)
             email = EmailMultiAlternatives(
                 "Booking confirmation - EasyGo",
