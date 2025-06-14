@@ -1,28 +1,28 @@
 from blog.models import Post
-from django.db.models import Q
 import re
 
-qs = Post.objects.filter(
-    Q(return_pickup_time__isnull=True) | Q(return_pickup_time__exact=""),
-    notice__icontains="Both trips:"
-)
+qs = Post.objects.filter(notice__regex=r'Both trips: \$\d+(?:\.\d{2})? \| Both trips: \$\d+(?:\.\d{2})?')
 
 for index, post in enumerate(qs.iterator(), start=1):
     try:
-        # price 복원
+        # 현재 price 두 배로 복구
         current_price = float(post.price or 0)
         restored_price = round(current_price * 2, 2)
 
-        # notice에서 "Both trips: $..." 부분 제거
+        # notice: "Both trips: $280.00 | Both trips: $140.00" → "Both trips: $280.00"
         notice = post.notice or ""
-        updated_notice = re.sub(r'\|?\s*Both trips: \$\d+(?:\.\d{1,2})?', '', notice).strip(' |')
+        both_matches = re.findall(r'Both trips: \$\d+(?:\.\d{2})?', notice)
 
-        # 필드 업데이트
-        post.price = restored_price
-        post.notice = updated_notice
-        post.save(update_fields=["price", "notice"])
+        if both_matches:
+            # 첫 번째만 유지
+            updated_notice = re.sub(r'\s*\|\s*Both trips: \$\d+(?:\.\d{2})?', '', notice, count=1)
 
-        print(f"🔁 Restored {post.email} - price set back to {restored_price}")
+            post.price = restored_price
+            post.notice = updated_notice.strip(" |")
+            post.save(update_fields=["price", "notice"])
+
+            print(f"🔁 Fixed {post.email} - price restored to {restored_price}")
 
     except Exception as e:
         print(f"❌ Error on {getattr(post, 'email', 'unknown email')}: {e}")
+
