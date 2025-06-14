@@ -1,13 +1,12 @@
-# one_time_update.py
 from django.db.models import Q
 from blog.models import Post
 
 
-posts = Post.objects.filter(
+qs = Post.objects.filter(
     Q(paid=False) | Q(paid__isnull=True) | Q(paid=""),
 ).exclude(return_pickup_time="")
 
-for post in posts:
+for index, post in enumerate(qs.iterator(), start=1):
     try:
         original_price = float(post.price or 0)
         half_price = round(original_price / 2, 2)
@@ -27,7 +26,9 @@ for post in posts:
         post.notice = updated_notice
         post.save(update_fields=["price", "notice"])
 
-        print(f"✔ Updated {post.email} - price set to {half_price}")
+        if index % 100 == 0:
+            print(f"✅ {index} posts updated...")
+
     except Exception as e:
         print(f"❌ Error on {getattr(post, 'email', 'unknown email')}: {e}")
 
