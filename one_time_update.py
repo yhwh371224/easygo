@@ -3,8 +3,11 @@ from blog.models import Post
 
 
 qs = Post.objects.filter(
-    Q(paid=False) | Q(paid__isnull=True) | Q(paid=""),
-).exclude(return_pickup_time="")
+    Q(paid__isnull=True) |
+    Q(paid__exact="") |
+    Q(paid__in=["0", "0.0", "0.00", "False"]),
+    return_pickup_time__isnull=False
+).exclude(return_pickup_time__exact="")
 
 for index, post in enumerate(qs.iterator(), start=1):
     try:
