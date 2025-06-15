@@ -9,18 +9,22 @@ def handle_return_trip(instance):
         instance.return_pickup_time == 'x' or  
         instance.sent_email or                
         instance.calendar_event_id or
-        "Return trips:" in original_notice
+        "===RETURN===" in original_notice
     ):
         return
 
-    elif not instance.calendar_event_id and instance.return_pickup_time:
+    elif (
+            not instance.calendar_event_id and 
+            instance.return_pickup_time and
+            "===RETURN===" not in original_notice  
+        ):
         full_price = float(instance.price or 0)
         half_price = round(full_price / 2, 2)
         full_paid = float(instance.paid or 0)
         half_paid = round(full_paid / 2, 2)
 
         # notice 메시지 생성        
-        notice_parts = [original_notice.strip(), f"Return trips: ${full_price:.2f}"]
+        notice_parts = [original_notice.strip(), f"===RETURN=== Return trips: ${full_price:.2f}"]
         if full_paid > 0:
             notice_parts.append(f"Total Paid: ${full_paid:.2f}")
 
