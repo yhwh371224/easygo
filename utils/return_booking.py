@@ -19,7 +19,7 @@ def handle_return_trip(instance):
             "===RETURN===" not in original_notice  
         ):
 
-        driver = instance.driver or Driver.objects.get(name__iexact="Sam")
+        driver = instance.driver or Driver.objects.get(driver_name__iexact="Sam")
 
         full_price = float(instance.price or 0)
         half_price = round(full_price / 2, 2)
