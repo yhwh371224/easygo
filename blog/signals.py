@@ -74,10 +74,12 @@ def notify_user_inquiry(sender, instance, created, **kwargs):
 # Flight return booking
 @receiver(post_save, sender=Post)
 def notify_user_post(sender, instance, created, **kwargs):
+    original_notice = instance.notice or ""
     if (
         instance.return_pickup_time == 'x' or  
         instance.sent_email or                
-        instance.calendar_event_id      
+        instance.calendar_event_id or
+        "Return trips:" in original_notice
     ):
         return
 
@@ -87,20 +89,18 @@ def notify_user_post(sender, instance, created, **kwargs):
         full_paid = float(instance.paid or 0)
         half_paid = round(full_paid / 2, 2)
 
-        # notice 메시지 생성
-        original_notice = instance.notice or ""
+        # notice 메시지 생성        
         notice_parts = [original_notice.strip(), f"Return trips: ${full_price:.2f}"]
         if full_paid > 0:
             notice_parts.append(f"Total Paid: ${full_paid:.2f}")
 
         updated_notice = " | ".join(filter(None, notice_parts)).strip()
 
-        # instance 업데이트 (ORM 방식)
-        instance.price = half_price
-        instance.paid = half_paid
-        instance.notice = updated_notice
-        instance.save(update_fields=['price', 'paid', 'notice'])
-
+        if "Return trips:" not in original_notice:
+            instance.price = half_price
+            instance.paid = half_paid
+            instance.notice = updated_notice
+            instance.save(update_fields=['price', 'paid', 'notice'])
 
         p = Post(name=instance.name, contact=instance.contact, email=instance.email, company_name=instance.company_name, email1=instance.email1, 
                  pickup_date=instance.return_pickup_date, flight_number=instance.return_flight_number, flight_time=instance.return_flight_time, 
