@@ -13,6 +13,7 @@ from celery import shared_task
 from main.settings import RECIPIENT_EMAIL, DEFAULT_FROM_EMAIL
 from .models import Post, PaypalPayment, StripePayment
 from django.core.exceptions import ImproperlyConfigured
+from django.utils import timezone
 
 
 logger = logging.getLogger('easygo')
@@ -190,10 +191,13 @@ def notify_user_payment_paypal(instance_id):
 
     if instance.name:
         posts = Post.objects.filter(
-            Q(name__iregex=r'^%s$' % re.escape(instance.name)) |
-            Q(email__iexact=instance.email) |
-            Q(email1__iexact=instance.email)
-        ).order_by('-pickup_date')
+            (
+                Q(name__iregex=r'^%s$' % re.escape(instance.name)) |
+                Q(email__iexact=instance.email) |
+                Q(email1__iexact=instance.email)
+            ),
+            pickup_date__gte=timezone.now().date()  # 오늘 이후
+        ).order_by('pickup_date')  # 가장 가까운 순
 
         amount = round(float(instance.amount or 0) / 1.03, 2)
         recipient_emails = set()
@@ -272,10 +276,13 @@ def notify_user_payment_stripe(instance_id):
 
     if instance.name:
         posts = Post.objects.filter(
-            Q(name__iregex=r'^%s$' % re.escape(instance.name)) |
-            Q(email__iexact=instance.email) |
-            Q(email1__iexact=instance.email)
-        ).order_by('-pickup_date')   
+            (
+                Q(name__iregex=r'^%s$' % re.escape(instance.name)) |
+                Q(email__iexact=instance.email) |
+                Q(email1__iexact=instance.email)
+            ),
+            pickup_date__gte=timezone.now().date()  # 오늘 이후
+        ).order_by('pickup_date')  # 가장 가까운 순   
 
         amount = round(float(instance.amount or 0), 2)
         recipient_emails = set()
