@@ -1809,11 +1809,16 @@ def email_dispatch_detail(request):
                 original_price = float(user.price or 0)
                 full_price = round(original_price * 2)
 
+                total_paid_text = f"Total Paid: ${float(user.price):.2f}"
+                original_notice = user.notice or ""
+                updated_notice = " | ".join(filter(None, [original_notice.strip(), total_paid_text]))
+
                 if user.return_pickup_time == 'x':
                     user.paid = user.price
                     user.reminder = True
                     user.toll = ""
                     user.cash = False
+                    user.notice = updated_notice
                     user.save()
 
                     context.update({
@@ -1828,6 +1833,7 @@ def email_dispatch_detail(request):
                         user_1.reminder = True
                         user_1.toll = ""
                         user_1.cash = False
+                        user_1.notice = updated_notice
                         user_1.save()
                     except IndexError:
                         pass  
@@ -1837,6 +1843,7 @@ def email_dispatch_detail(request):
                     user.reminder = True
                     user.toll = ""
                     user.cash = False
+                    user.notice = updated_notice
                     user.save()
 
                     context.update({
