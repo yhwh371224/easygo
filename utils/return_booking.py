@@ -18,24 +18,27 @@ def handle_return_trip(instance):
             instance.return_pickup_time and
             "===RETURN===" not in original_notice  
         ):
+
         full_price = float(instance.price or 0)
         half_price = round(full_price / 2, 2)
+
         if instance.paid and float(instance.paid) > 0:
             full_paid = float(instance.paid)
             half_paid = round(full_paid / 2, 2)
+
         else:
             full_paid = None
             half_paid = None
 
         # notice 메시지 생성        
-        notice_parts = [original_notice.strip(), f"===RETURN=== : ${full_price:.2f}"]
+        notice_parts = [original_notice.strip(), f"===RETURN=== ${full_price:.2f}"]
         if full_paid is not None:
             notice_parts.append(f"Total Paid: ${full_paid:.2f}")
 
         updated_notice = " | ".join(filter(None, notice_parts)).strip()
 
-        instance.price = half_price
-        instance.paid = half_paid
+        instance.price = str(half_price)
+        instance.paid = str(half_paid) if half_paid is not None else None
         instance.notice = updated_notice
         instance.save(update_fields=['price', 'paid', 'notice'])
 
@@ -44,6 +47,6 @@ def handle_return_trip(instance):
                  pickup_time=instance.return_pickup_time, direction=instance.return_direction, start_point=instance.return_start_point, 
                  end_point=instance.return_end_point, suburb=instance.suburb, street=instance.street, no_of_passenger=instance.no_of_passenger, 
                  no_of_baggage=instance.no_of_baggage, message=instance.message, return_pickup_time="x", return_pickup_date=instance.pickup_date, 
-                 notice=updated_notice, price=half_price, paid=half_paid, private_ride=instance.private_ride, driver=instance.driver,)
+                 notice=updated_notice, price=str(half_price), paid=str(half_paid) if half_paid is not None else None, private_ride=instance.private_ride, driver=instance.driver,)
 
         p.save() 
