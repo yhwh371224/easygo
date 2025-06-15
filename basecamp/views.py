@@ -1809,7 +1809,7 @@ def email_dispatch_detail(request):
                 original_price = float(user.price or 0)
                 full_price = round(original_price * 2)
 
-                total_paid_text = f"Total Paid: ${float(user.price):.2f}"
+                total_paid_text = f"Total Paid: ${full_price:.2f}" 
                 original_notice = user.notice or ""
                 updated_notice = " | ".join(filter(None, [original_notice.strip(), total_paid_text]))
 
