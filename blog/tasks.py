@@ -220,13 +220,16 @@ def notify_user_payment_paypal(instance_id):
                     continue
 
                 if remaining_amount >= balance:
-                    post.paid = price
+                    post.paid = str(price)
                     remaining_amount -= balance
                 else:
-                    post.paid = paid + remaining_amount
+                    post.paid = str(paid + remaining_amount)
                     remaining_amount = 0
 
-                total_paid_after += float(post.paid or 0)
+                try:
+                    total_paid_after += float(post.paid or 0)
+                except (ValueError, TypeError):
+                    total_paid_after += 0.0
 
                 post.toll = "" if post.paid >= price else "short payment"
                 post.cash = ""
