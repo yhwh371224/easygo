@@ -308,16 +308,19 @@ def notify_user_payment_stripe(instance_id):
                     continue  # 이미 결제된 예약은 건너뜀
 
                 if remaining_amount >= balance:
-                    post.paid = price
+                    post.paid = str(price)
                     remaining_amount -= balance
                 else:
-                    post.paid = paid + remaining_amount
+                    post.paid = str(paid + remaining_amount)
                     remaining_amount = 0.0
 
-                total_paid_after += float(post.paid or 0)
+                try:
+                    total_paid_after += float(post.paid or 0)
+                except (ValueError, TypeError):
+                    total_paid_after += 0.0
 
-                post.toll = "" if post.paid >= price else "short payment"
-                post.cash = ""
+                post.toll = "" if float(post.paid) >= price else "short payment"
+                post.cash = False
                 post.reminder = True
                 post.discount = ""
                 post.save()
