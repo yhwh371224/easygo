@@ -20,12 +20,16 @@ def handle_return_trip(instance):
         ):
         full_price = float(instance.price or 0)
         half_price = round(full_price / 2, 2)
-        full_paid = float(instance.paid or 0)
-        half_paid = round(full_paid / 2, 2)
+        if instance.paid and float(instance.paid) > 0:
+            full_paid = float(instance.paid)
+            half_paid = round(full_paid / 2, 2)
+        else:
+            full_paid = None
+            half_paid = None
 
         # notice 메시지 생성        
         notice_parts = [original_notice.strip(), f"===RETURN=== Return trips: ${full_price:.2f}"]
-        if full_paid > 0:
+        if full_paid is not None:
             notice_parts.append(f"Total Paid: ${full_paid:.2f}")
 
         updated_notice = " | ".join(filter(None, notice_parts)).strip()
