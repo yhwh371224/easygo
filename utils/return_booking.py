@@ -28,7 +28,7 @@ def handle_return_trip(instance):
             half_paid = None
 
         # notice 메시지 생성        
-        notice_parts = [original_notice.strip(), f"===RETURN=== Return trips: ${full_price:.2f}"]
+        notice_parts = [original_notice.strip(), f"===RETURN=== : ${full_price:.2f}"]
         if full_paid is not None:
             notice_parts.append(f"Total Paid: ${full_paid:.2f}")
 
