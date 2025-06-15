@@ -27,10 +27,8 @@ def handle_return_trip(instance):
         # notice 메시지 생성        
         notice_parts = [original_notice.strip(), f"===RETURN=== ${full_price:.2f}"]
 
-        updated_notice = " | ".join(filter(None, notice_parts)).strip()
-
         instance.price = half_price
-        instance.notice = updated_notice
+        instance.notice = notice_parts
         instance.save(update_fields=['price', 'paid', 'notice'])
 
         p = Post(name=instance.name, contact=instance.contact, email=instance.email, company_name=instance.company_name, email1=instance.email1, 
@@ -38,6 +36,6 @@ def handle_return_trip(instance):
                  pickup_time=instance.return_pickup_time, direction=instance.return_direction, start_point=instance.return_start_point, 
                  end_point=instance.return_end_point, suburb=instance.suburb, street=instance.street, no_of_passenger=instance.no_of_passenger, 
                  no_of_baggage=instance.no_of_baggage, message=instance.message, return_pickup_time="x", return_pickup_date=instance.pickup_date, 
-                 notice=updated_notice, price=half_price, paid=instance.paid, private_ride=instance.private_ride, driver=driver,)
+                 notice=notice_parts, price=half_price, paid=instance.paid, private_ride=instance.private_ride, driver=driver,)
 
         p.save() 
