@@ -1,5 +1,5 @@
 from blog.models import Post
-
+from blog.models import Driver
 
 # Flight return booking
 def handle_return_trip(instance):
@@ -19,6 +19,8 @@ def handle_return_trip(instance):
             "===RETURN===" not in original_notice  
         ):
 
+        driver = instance.driver or Driver.objects.get(name__iexact="Sam")
+
         full_price = float(instance.price or 0)
         half_price = round(full_price / 2, 2)
 
@@ -36,6 +38,6 @@ def handle_return_trip(instance):
                  pickup_time=instance.return_pickup_time, direction=instance.return_direction, start_point=instance.return_start_point, 
                  end_point=instance.return_end_point, suburb=instance.suburb, street=instance.street, no_of_passenger=instance.no_of_passenger, 
                  no_of_baggage=instance.no_of_baggage, message=instance.message, return_pickup_time="x", return_pickup_date=instance.pickup_date, 
-                 notice=updated_notice, price=instance.price, paid=instance.paid, private_ride=instance.private_ride, driver=instance.driver,)
+                 notice=updated_notice, price=half_price, paid=instance.paid, private_ride=instance.private_ride, driver=driver,)
 
         p.save() 
