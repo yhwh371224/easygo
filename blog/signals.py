@@ -1,11 +1,8 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.core.mail import EmailMultiAlternatives
 
-from main.settings import RECIPIENT_EMAIL
 from .models import Post, Inquiry, PaypalPayment, StripePayment
 from .tasks import create_event_on_calendar, notify_user_payment_paypal, notify_user_payment_stripe
-from utils.email_helper import EmailSender
 from utils.return_booking import handle_return_trip
 from utils.inquiry_helper import send_inquiry_email  
 
