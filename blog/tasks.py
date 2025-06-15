@@ -231,8 +231,8 @@ def notify_user_payment_paypal(instance_id):
                 except (ValueError, TypeError):
                     total_paid_after += 0.0
 
-                post.toll = "" if post.paid >= price else "short payment"
-                post.cash = ""
+                post.toll = "" if float(post.paid) >= price else "short payment"
+                post.cash = False
                 post.reminder = True
                 post.discount = ""
                 post.save()
