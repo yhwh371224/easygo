@@ -24,19 +24,37 @@ def handle_return_trip(instance):
         full_price = float(instance.price or 0)
         half_price = round(full_price / 2, 2)
 
-        # notice 메시지 생성        
+        # paid 처리
+        full_paid = instance.paid
+        half_paid = None
+        if full_paid:
+            try:
+                full_paid_float = round(float(full_paid), 2)
+                half_paid = round(full_paid_float / 2, 2)
+            except ValueError:
+                full_paid_float = None
+                half_paid = None
+        else:
+            full_paid_float = None
+
+        # notice 생성
         notice_parts = [original_notice.strip(), f"===RETURN=== ${full_price:.2f}"]
-        updated_notice = " | ".join(filter(None, notice_parts))
+
+        if full_paid_float is not None:
+            notice_parts.append(f"Total Paid: ${full_paid_float:.2f}")
+            
+        updated_notice = " | ".join(filter(None, notice_parts)).strip()
 
         instance.price = half_price
+        instance.paid = half_paid
         instance.notice = updated_notice
-        instance.save(update_fields=['price', 'notice'])
+        instance.save(update_fields=['price', 'paid', 'notice'])
 
         p = Post(name=instance.name, contact=instance.contact, email=instance.email, company_name=instance.company_name, email1=instance.email1, 
                  pickup_date=instance.return_pickup_date, flight_number=instance.return_flight_number, flight_time=instance.return_flight_time, 
                  pickup_time=instance.return_pickup_time, direction=instance.return_direction, start_point=instance.return_start_point, 
                  end_point=instance.return_end_point, suburb=instance.suburb, street=instance.street, no_of_passenger=instance.no_of_passenger, 
                  no_of_baggage=instance.no_of_baggage, message=instance.message, return_pickup_time="x", return_pickup_date=instance.pickup_date, 
-                 notice=updated_notice, price=half_price, paid=instance.paid, private_ride=instance.private_ride, driver=driver,)
+                 notice=updated_notice, price=half_price, paid=half_paid, private_ride=instance.private_ride, driver=driver,)
 
         p.save() 
