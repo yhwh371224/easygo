@@ -226,15 +226,23 @@ def notify_user_payment_paypal(instance_id):
                     post.paid = str(paid + remaining_amount)
                     remaining_amount = 0
 
-                try:
-                    total_paid_after += float(post.paid or 0)
-                except (ValueError, TypeError):
-                    total_paid_after += 0.0
+                total_paid_after += float(post.paid or '0')
 
                 post.toll = "" if float(post.paid) >= price else "short payment"
                 post.cash = False
                 post.reminder = True
                 post.discount = ""
+
+                original_notice = post.notice or ""
+                notice_parts = [original_notice.strip()]
+
+                new_notice_entry = f"===PAYPAL=== Total paid: ${amount:.2f}"
+
+                # 중복 방지 조건 추가
+                if new_notice_entry not in original_notice:
+                    notice_parts.append(new_notice_entry)
+                    post.notice = " | ".join(filter(None, notice_parts)).strip()
+
                 post.save()
 
                 recipient_emails.update([post.email, post.email1])
@@ -314,15 +322,23 @@ def notify_user_payment_stripe(instance_id):
                     post.paid = str(paid + remaining_amount)
                     remaining_amount = 0.0
 
-                try:
-                    total_paid_after += float(post.paid or 0)
-                except (ValueError, TypeError):
-                    total_paid_after += 0.0
+                total_paid_after += float(post.paid or '0')
 
                 post.toll = "" if float(post.paid) >= price else "short payment"
                 post.cash = False
                 post.reminder = True
                 post.discount = ""
+
+                original_notice = post.notice or ""
+                notice_parts = [original_notice.strip()]
+
+                new_notice_entry = f"===STRIPE=== Total paid: ${amount:.2f}"
+
+                # 중복 방지 조건 추가
+                if new_notice_entry not in original_notice:
+                    notice_parts.append(new_notice_entry)
+                    post.notice = " | ".join(filter(None, notice_parts)).strip()
+
                 post.save()
 
                 recipient_emails.update([post.email, post.email1])
