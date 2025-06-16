@@ -1806,24 +1806,38 @@ def email_dispatch_detail(request):
                     })
 
             if selected_option == "Gratitude For Payment" and user:
-                original_price = float(user.price or 0)
-                full_price = round(original_price * 2)
+                original_price = float(user.price or 0)   
+                total_paid_text = f"Total Paid: ${int(original_price)}" 
+                original_notice = (user.notice or "").strip()
+                updated_notice = original_notice
 
-                total_paid_text = f"Total Paid: ${full_price:.2f}" 
-                original_notice = user.notice or ""
-                updated_notice = " | ".join(filter(None, [original_notice.strip(), total_paid_text]))
+                if total_paid_text not in original_notice:
+                    updated_notice = (
+                        f"{original_notice} | {total_paid_text}"
+                        if original_notice else total_paid_text
+                    )
 
                 if user.return_pickup_time == 'x':
+                    full_price = int(original_price * 2)
+                    total_paid_text_1 = f"Total Paid: ${full_price}" 
+                    updated_notice_1 = original_notice
+
+                    if total_paid_text_1 not in original_notice:
+                        updated_notice_1 = (
+                            f"{original_notice} | {total_paid_text_1}"
+                            if original_notice else total_paid_text_1
+                        )
+
                     user.paid = user.price
                     user.reminder = True
                     user.toll = ""
                     user.cash = False
-                    user.notice = updated_notice
+                    user.notice = updated_notice_1
                     user.save()
 
                     context.update({
                         'pickup_date': user.pickup_date,
-                        'price': str(int(full_price)),
+                        'price': full_price,
                         'return_pickup_date': user.return_pickup_date,
                     })
 
@@ -1833,7 +1847,7 @@ def email_dispatch_detail(request):
                         user_1.reminder = True
                         user_1.toll = ""
                         user_1.cash = False
-                        user_1.notice = updated_notice
+                        user_1.notice = updated_notice_1
                         user_1.save()
                     except IndexError:
                         pass  
