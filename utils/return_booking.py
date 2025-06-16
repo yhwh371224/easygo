@@ -38,10 +38,10 @@ def handle_return_trip(instance):
             full_paid_float = None
 
         # notice 생성
-        notice_parts = [original_notice.strip(), f"===RETURN=== ${full_price:.2f}"]
+        notice_parts = [original_notice.strip(), f"===RETURN=== (Total Price: ${int(full_price)})"]
 
         if full_paid_float is not None:
-            notice_parts.append(f"Total Paid: ${full_paid_float:.2f}")
+            notice_parts.append(f"Total Paid: ${int(full_paid_float)}")
             
         updated_notice = " | ".join(filter(None, notice_parts)).strip()
 

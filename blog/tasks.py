@@ -236,7 +236,7 @@ def notify_user_payment_paypal(instance_id):
                 original_notice = post.notice or ""
                 notice_parts = [original_notice.strip()]
 
-                new_notice_entry = f"===PAYPAL=== Total paid: ${amount:.2f}"
+                new_notice_entry = f"===PAYPAL=== Total paid: ${int(amount)}"
 
                 # 중복 방지 조건 추가
                 if new_notice_entry not in original_notice:
@@ -332,7 +332,7 @@ def notify_user_payment_stripe(instance_id):
                 original_notice = post.notice or ""
                 notice_parts = [original_notice.strip()]
 
-                new_notice_entry = f"===STRIPE=== Total paid: ${amount:.2f}"
+                new_notice_entry = f"===STRIPE=== Total paid: ${int(amount)}"
 
                 # 중복 방지 조건 추가
                 if new_notice_entry not in original_notice:
