@@ -194,7 +194,7 @@ def notify_user_payment_paypal(instance_id):
             (
                 Q(name__iregex=r'^%s$' % re.escape(instance.name)) |
                 Q(email__iexact=instance.email) |
-                Q(email1__iexact=(instance.email or ''))
+                Q(email1__iexact=instance.email)
             ),
             pickup_date__gte=timezone.now().date()  # 오늘 이후
         ).order_by('pickup_date')  # 가장 가까운 순
@@ -290,7 +290,7 @@ def notify_user_payment_stripe(instance_id):
             (
                 Q(name__iregex=r'^%s$' % re.escape(instance.name)) |
                 Q(email__iexact=instance.email) |
-                Q(email1__iexact=(instance.email or ''))
+                Q(email1__iexact=instance.email)
             ),
             pickup_date__gte=timezone.now().date()  # 오늘 이후
         ).order_by('pickup_date')  # 가장 가까운 순   
