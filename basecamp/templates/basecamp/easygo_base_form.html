@@ -153,68 +153,54 @@
     <script src="/static/basecamp/js/form_handler.js" defer></script>
     <!-- Main theme script-->
     <script src="/static/basecamp/js/theme.min.js"></script>              
+    <script src="https://www.google.com/recaptcha/api.js" defer></script>
     <script>
-    	var returnFlightCheckbox = document.getElementById("return-flight");
-      var returnFlightFields = document.getElementById("return-flight-fields");
-      
-      returnFlightCheckbox.addEventListener("change", function() {
-          if (returnFlightCheckbox.checked) {
-              var xhr = new XMLHttpRequest();
-              xhr.open("GET", "{% url 'basecamp:return_flight_fields' %}");
-              xhr.onload = function() {
-                  if (xhr.status === 200) {
-                      returnFlightFields.innerHTML = xhr.responseText;
-                  } else {
-                      console.log("Request failed. Returned status of " + xhr.status);
-                  }
-              };
-              xhr.send();
-          } else {
-              returnFlightFields.innerHTML = "";
-          }
-      });
-    </script>
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-          var form = document.getElementById("booking-form");
-          var submitButton = document.getElementById("submitButton");
-  
-          form.addEventListener("submit", function () {
-              submitButton.disabled = true;
-              submitButton.innerHTML = "Submitting..."; 
-          });
-      });
-  </script>   
-  <script src="https://www.google.com/recaptcha/api.js" defer></script>
-  <script>    
-    if(typeof grecaptcha === 'undefined') {
-      grecaptcha = {};
-    }
-    grecaptcha.ready = function(cb){
-      if(typeof grecaptcha === 'undefined') {       
-        const c = '___grecaptcha_cfg';
-        window[c] = window[c] || {};
-        (window[c]['fns'] = window[c]['fns']||[]).push(cb);
-      } else {
-        cb();
-      }
-    }
-    grecaptcha.ready(function(){
-      grecaptcha.render("container", {
-        sitekey: "{{ RECAPTCHA_V2_SITE_KEY }}"
-      });
-    });
-  </script>
-  <script>
     document.addEventListener('DOMContentLoaded', function () {
-        var flightDateInput = document.getElementById('flight-date');
-        var dateError = document.getElementById('date-error');
-        
+        const form = document.getElementById('booking-form');
+        const submitButton = document.getElementById('submitButton');
+        const returnFlightCheckbox = document.getElementById('return-flight');
+        const returnFlightFields = document.getElementById('return-flight-fields');
+        const flightDateInput = document.getElementById('flight-date');
+        const dateError = document.getElementById('date-error');
+
+        // ✅ 동적으로 return-flight 필드 로딩 (Ajax)
+        returnFlightCheckbox.addEventListener("change", function () {
+            if (returnFlightCheckbox.checked) {
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", "{% url 'basecamp:return_flight_fields' %}");
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        returnFlightFields.innerHTML = xhr.responseText;
+                    } else {
+                        console.log("Request failed. Returned status of " + xhr.status);
+                    }
+                };
+                xhr.send();
+            } else {
+                returnFlightFields.innerHTML = "";
+            }
+        });
+
+        // ✅ return-flight 입력 필드 required 적용/제거
+        returnFlightCheckbox.addEventListener('change', function () {
+            if (this.checked) {
+                returnFlightFields.style.display = 'block';
+                const inputs = returnFlightFields.querySelectorAll('input');
+                inputs.forEach(input => input.setAttribute('required', 'required'));
+            } else {
+                returnFlightFields.style.display = 'none';
+                const inputs = returnFlightFields.querySelectorAll('input');
+                inputs.forEach(input => input.removeAttribute('required'));
+            }
+        });
+
+        // ✅ flight-date 과거 날짜 방지
         flightDateInput.addEventListener('change', function () {
-            var selectedDate = new Date(flightDateInput.value);
-            var currentDate = new Date();
-    
-            if (selectedDate < currentDate.setHours(0, 0, 0, 0)) {
+            const selectedDate = new Date(flightDateInput.value);
+            const currentDate = new Date();
+            currentDate.setHours(0, 0, 0, 0);
+
+            if (selectedDate < currentDate) {
                 dateError.style.display = 'block';
                 flightDateInput.classList.add('is-invalid');
             } else {
@@ -222,58 +208,64 @@
                 flightDateInput.classList.remove('is-invalid');
             }
         });
+
+        // ✅ 전체 submit 처리 (유효성 검사 + 중복 방지 통합)
+        form.addEventListener('submit', function (event) {
+            let isValid = true;
+
+            // Return flight 유효성 검사
+            if (returnFlightCheckbox.checked) {
+                const returnFlightNumber = returnFlightFields.querySelector('input[name="return_flight_number"]');
+                const returnFlightDate = returnFlightFields.querySelector('input[name="return_flight_date"]');
+
+                if (!returnFlightNumber?.value.trim()) {
+                    returnFlightNumber.classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    returnFlightNumber.classList.remove('is-invalid');
+                }
+
+                if (!returnFlightDate?.value.trim()) {
+                    returnFlightDate.classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    returnFlightDate.classList.remove('is-invalid');
+                }
+            }
+
+            // 유효성 검사 통과하지 못하면 제출 방지
+            if (!isValid) {
+                event.preventDefault();
+                alert('Please fill in all required fields.');
+                return;
+            }
+
+            // 중복 제출 방지 및 메시지 표시
+            submitButton.disabled = true;
+            submitButton.innerHTML = "Submitting...";
+        });
+
+        // ✅ reCAPTCHA Fallback
+        if (typeof grecaptcha === 'undefined') {
+            grecaptcha = {};
+        }
+
+        grecaptcha.ready = function (cb) {
+            if (typeof grecaptcha === 'undefined') {
+                const c = '___grecaptcha_cfg';
+                window[c] = window[c] || {};
+                (window[c]['fns'] = window[c]['fns'] || []).push(cb);
+            } else {
+                cb();
+            }
+        };
+
+        grecaptcha.ready(function () {
+            grecaptcha.render("container", {
+                sitekey: "{{ RECAPTCHA_V2_SITE_KEY }}"
+            });
+        });
     });
     </script>
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-          const returnFlightCheckbox = document.getElementById('return-flight');
-          const returnFlightFields = document.getElementById('return-flight-fields');
-    
-          returnFlightCheckbox.addEventListener('change', function() {
-              if (this.checked) {
-                  returnFlightFields.style.display = 'block';
-                  const inputs = returnFlightFields.querySelectorAll('input');
-                  inputs.forEach(input => {
-                      input.setAttribute('required', 'required');
-                  });
-              } else {
-                  returnFlightFields.style.display = 'none';
-                  const inputs = returnFlightFields.querySelectorAll('input');
-                  inputs.forEach(input => {
-                      input.removeAttribute('required');
-                  });
-              }
-          });
-    
-          document.getElementById('booking-form').addEventListener('submit', function(event) {
-              let isValid = true;
-              
-              // Return flight fields validation
-              if (returnFlightCheckbox.checked) {
-                  const returnFlightNumber = returnFlightFields.querySelector('input[name="return_flight_number"]');
-                  const returnFlightDate = returnFlightFields.querySelector('input[name="return_flight_date"]');
-    
-                  if (!returnFlightNumber.value) {
-                      returnFlightNumber.classList.add('is-invalid');
-                      isValid = false;
-                  } else {
-                      returnFlightNumber.classList.remove('is-invalid');
-                  }
-    
-                  if (!returnFlightDate.value) {
-                      returnFlightDate.classList.add('is-invalid');
-                      isValid = false;
-                  } else {
-                      returnFlightDate.classList.remove('is-invalid');
-                  }
-              }
-    
-              if (!isValid) {
-                  event.preventDefault(); // Prevent form submission
-                  alert('Please fill in all required fields.');
-              }
-          });
-      });
-    </script>
-  </body>
+  </body> 
 </html>
