@@ -1818,8 +1818,8 @@ def email_dispatch_detail(request):
                     )
 
                 if user.return_pickup_time == 'x':
-                    full_price = int(original_price * 2)
-                    total_paid_text_1 = f"Total Paid: ${full_price}" 
+                    full_price = float(original_price * 2)
+                    total_paid_text_1 = f"Total Paid: ${int(full_price)}" 
                     updated_notice_1 = original_notice
 
                     if total_paid_text_1 not in original_notice:
