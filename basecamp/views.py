@@ -364,7 +364,16 @@ def inquiry_details(request):
         recaptcha_response = request.POST.get('g-recaptcha-response')
         result = verify_recaptcha(recaptcha_response)
         if not result.get('success'):
-            return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'})         
+            return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'})  
+
+        # ✅ 중복 제출 방지 
+        recent_duplicate = Inquiry.objects.filter(
+            email=email,
+            created__gte=timezone.now() - timedelta(seconds=2)
+        ).exists()
+
+        if recent_duplicate:
+            return JsonResponse({'success': False, 'message': 'Duplicate inquiry recently submitted. Please wait before trying again.'})       
 
         data = {
             'name': name,
@@ -587,12 +596,10 @@ def inquiry_details2(request):
         pickup_date = request.POST.get('pickup_date')      
         message = request.POST.get('message')     
         
-
         recaptcha_response = request.POST.get('g-recaptcha-response')
         result = verify_recaptcha(recaptcha_response)
         if not result.get('success'):
             return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'}) 
-           
 
         data = {
             'name': name,
@@ -660,6 +667,14 @@ def p2p_detail(request):
         if not result.get('success'):
             return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'}) 
         
+        # ✅ 중복 제출 방지 
+        recent_duplicate = Inquiry.objects.filter(
+            email=email,
+            created__gte=timezone.now() - timedelta(seconds=2)
+        ).exists()
+
+        if recent_duplicate:
+            return JsonResponse({'success': False, 'message': 'Duplicate inquiry recently submitted. Please wait before trying again.'})  
 
         html_content = render_to_string("basecamp/html_email-p2p.html", 
             {'p2p_name': p2p_name, 'p2p_phone': p2p_phone, 'p2p_email': p2p_email, 'p2p_date': p2p_date, 
@@ -944,6 +959,15 @@ def booking_detail(request):
         if not result.get('success'):
             return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'}) 
         
+        # ✅ 중복 제출 방지 
+        recent_duplicate = Post.objects.filter(
+            email=email,
+            created__gte=timezone.now() - timedelta(seconds=2)
+        ).exists()
+
+        if recent_duplicate:
+            return JsonResponse({'success': False, 'message': 'Duplicate form recently submitted. Please wait before trying again.'})  
+        
         data = {
             'name': name,
             'contact': contact,
@@ -1055,6 +1079,15 @@ def cruise_booking_detail(request):
         result = verify_recaptcha(recaptcha_response)
         if not result.get('success'):
             return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'}) 
+        
+        # ✅ 중복 제출 방지 
+        recent_duplicate = Post.objects.filter(
+            email=email,
+            created__gte=timezone.now() - timedelta(seconds=2)
+        ).exists()
+
+        if recent_duplicate:
+            return JsonResponse({'success': False, 'message': 'Duplicate inquiry recently submitted. Please wait before trying again.'})  
         
         data = {
             'name': name,
@@ -1436,7 +1469,15 @@ def return_trip_detail(request):
                 start_point = user.start_point
             if not end_point:
                 end_point = user.end_point
-            
+
+        # ✅ 중복 제출 방지 
+        recent_duplicate = Post.objects.filter(
+            email=email,
+            created__gte=timezone.now() - timedelta(seconds=2)
+        ).exists()
+
+        if recent_duplicate:
+            return JsonResponse({'success': False, 'message': 'Duplicate inquiry recently submitted. Please wait before trying again.'})             
             
         data = {
             'name': name,
@@ -2080,9 +2121,5 @@ def recaptcha_verify(request):
             return JsonResponse({'success': False, 'message': result.get('error-codes', 'Invalid reCAPTCHA token')})
     
     return JsonResponse({'success': False, 'message': 'Invalid request method'})
-
-
-
-
 
 
