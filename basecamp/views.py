@@ -1759,7 +1759,7 @@ def email_dispatch_detail(request):
         
         template_options = {
             "Gratitude For Payment": ("basecamp/html_email-response-payment-received.html", "Payment Received - EasyGo"),
-            "Gratitude For Multi Payment": ("basecamp/html_email-response-payment-received.html", "Payment Received - EasyGo"),
+            "Gratitude For Multi Payment": ("basecamp/html_email-response-multi-payment-received.html", "(M) Payment Received - EasyGo"),
             "Pickup Notice for Today": ("basecamp/html_email-today1.html", "Important Update for Today's Pickup - EasyGo "),
             "Payment Method": ("basecamp/html_email-response-payment.html", "Payment Method - EasyGo"),
             "Inquiry for driver contact": ("basecamp/html_email-response-driver-contact.html", "Inquiry for driver contact - EasyGo"),
@@ -1867,65 +1867,40 @@ def email_dispatch_detail(request):
                         'price': user.price,
                     })
 
-                # multi payment 적용방식 
-                if selected_option == "Gratitude For Multi Payment" and user:
-                    raw_amount = float(user.price or 0)
+            # multi payment 적용방식 
+            if selected_option == "Gratitude For Multi Payment" and user:
+                posts = Post.objects.filter(
+                    Q(email__iexact=user.email) | Q(email1__iexact=(user.email1 or '')),
+                    pickup_date__gte=timezone.now().date()
+                ).order_by('pickup_date')
 
-                    posts = Post.objects.filter(
-                        Q(name__iregex=r'^%s$' % re.escape(user.name)) |
-                        Q(email__iexact=user.email) |
-                        Q(email1__iexact=user.email),
-                        pickup_date__gte=timezone.now().date()
-                    ).order_by('pickup_date')
+                if posts.exists():
+                    total_paid_applied = 0.0
+                    updated_posts = []
 
-                    if posts.exists():
-                        remaining_amount = raw_amount
-                        total_paid_applied = 0.0
-                        updated_posts = []
+                    for post in posts:
+                        price = float(post.price or 0)
+                        post.paid = str(price)
+                        post.reminder = True
+                        post.toll = ""
+                        post.cash = False
+                        post.discount = ""
 
-                        for post in posts:
-                            price = float(post.price or 0)
-                            paid = float(post.paid or 0)
-                            balance = round(price - paid, 2)
+                        total_paid_applied += price
+                        updated_posts.append(post)
 
-                            if balance <= 0:
-                                continue
+                    actual_paid_text = f"===(M) GRATITUDE=== Total Paid: ${int(total_paid_applied)} ({len(updated_posts)} bookings)"
 
-                            if remaining_amount >= balance:
-                                new_paid = price
-                                applied = balance
-                                remaining_amount -= balance
-                            else:
-                                new_paid = paid + remaining_amount
-                                applied = remaining_amount
-                                remaining_amount = 0
+                    for post in updated_posts:
+                        original_notice = post.notice or ""
+                        if "===(M) GRATITUDE===" not in original_notice:
+                            notice_parts = [original_notice.strip(), actual_paid_text] if original_notice else [actual_paid_text]
+                            post.notice = " | ".join(filter(None, notice_parts)).strip()
+                        post.save()
 
-                            post.paid = str(new_paid)
-                            post.reminder = True
-                            post.toll = "" if new_paid >= price else "short payment"
-                            post.cash = False
-                            post.discount = ""
-
-                            total_paid_applied += applied
-                            updated_posts.append(post)
-
-                            if remaining_amount <= 0:
-                                break
-
-                        # 이제 실제 총 결제 금액이 확정됨
-                        actual_paid_text = f"===GRATITUDE=== Total Paid: ${int(total_paid_applied)}"
-
-                        for post in updated_posts:
-                            original_notice = post.notice or ""
-                            if actual_paid_text not in original_notice:
-                                notice_parts = [original_notice.strip(), actual_paid_text]
-                                post.notice = " | ".join(filter(None, notice_parts)).strip()
-                            post.save()
-
-                        # 이메일 발송
-                        context.update({
-                            'price': int(total_paid_applied)
-                        })   
+                    context.update({
+                        'price': int(total_paid_applied),
+                    })
             
             if selected_option in ["Cancellation of Booking", "Cancellation by Client", "Apologies Cancellation of Booking"] and user:
 
