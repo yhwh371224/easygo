@@ -15,6 +15,7 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from django.utils import timezone
 
 from main.settings import RECIPIENT_EMAIL
 from blog.models import Post, Inquiry, PaypalPayment, StripePayment, Driver
@@ -1758,6 +1759,7 @@ def email_dispatch_detail(request):
         
         template_options = {
             "Gratitude For Payment": ("basecamp/html_email-response-payment-received.html", "Payment Received - EasyGo"),
+            "Gratitude For Multi Payment": ("basecamp/html_email-response-payment-received.html", "Payment Received - EasyGo"),
             "Pickup Notice for Today": ("basecamp/html_email-today1.html", "Important Update for Today's Pickup - EasyGo "),
             "Payment Method": ("basecamp/html_email-response-payment.html", "Payment Method - EasyGo"),
             "Inquiry for driver contact": ("basecamp/html_email-response-driver-contact.html", "Inquiry for driver contact - EasyGo"),
@@ -1864,6 +1866,66 @@ def email_dispatch_detail(request):
                         'pickup_date': user.pickup_date,
                         'price': user.price,
                     })
+
+                # multi payment 적용방식 
+                if selected_option == "Gratitude For Multi Payment" and user:
+                    raw_amount = float(user.price or 0)
+
+                    posts = Post.objects.filter(
+                        Q(name__iregex=r'^%s$' % re.escape(user.name)) |
+                        Q(email__iexact=user.email) |
+                        Q(email1__iexact=user.email),
+                        pickup_date__gte=timezone.now().date()
+                    ).order_by('pickup_date')
+
+                    if posts.exists():
+                        remaining_amount = raw_amount
+                        total_paid_applied = 0.0
+                        updated_posts = []
+
+                        for post in posts:
+                            price = float(post.price or 0)
+                            paid = float(post.paid or 0)
+                            balance = round(price - paid, 2)
+
+                            if balance <= 0:
+                                continue
+
+                            if remaining_amount >= balance:
+                                new_paid = price
+                                applied = balance
+                                remaining_amount -= balance
+                            else:
+                                new_paid = paid + remaining_amount
+                                applied = remaining_amount
+                                remaining_amount = 0
+
+                            post.paid = str(new_paid)
+                            post.reminder = True
+                            post.toll = "" if new_paid >= price else "short payment"
+                            post.cash = False
+                            post.discount = ""
+
+                            total_paid_applied += applied
+                            updated_posts.append(post)
+
+                            if remaining_amount <= 0:
+                                break
+
+                        # 이제 실제 총 결제 금액이 확정됨
+                        actual_paid_text = f"===GRATITUDE=== Total Paid: ${int(total_paid_applied)}"
+
+                        for post in updated_posts:
+                            original_notice = post.notice or ""
+                            if actual_paid_text not in original_notice:
+                                notice_parts = [original_notice.strip(), actual_paid_text]
+                                post.notice = " | ".join(filter(None, notice_parts)).strip()
+                            post.save()
+
+                        # 이메일 발송
+                        context.update({
+                            'price': int(total_paid_applied)
+                        })   
             
             if selected_option in ["Cancellation of Booking", "Cancellation by Client", "Apologies Cancellation of Booking"] and user:
 
