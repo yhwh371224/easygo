@@ -7,7 +7,7 @@ from django.core.mail import EmailMultiAlternatives, send_mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.conf import settings
-from blog.models import Post
+from blog.models import Post, Driver
 from itertools import zip_longest
 
 logger = logging.getLogger(__name__)
@@ -59,6 +59,11 @@ class Command(BaseCommand):
     def send_email_task(self, booking_reminders, template_name, subject, target_date):
         for booking_reminder in booking_reminders:
 
+            if not booking_reminder.driver:            
+                sam_driver = Driver.objects.get(driver_name="Sam")
+                booking_reminder.driver = sam_driver
+                booking_reminder.save()            
+
             driver = booking_reminder.driver
 
             pickup_time_12h = self.format_pickup_time_12h(booking_reminder.pickup_time)
@@ -80,10 +85,10 @@ class Command(BaseCommand):
                 'price': booking_reminder.price,
                 'reminder': booking_reminder.reminder,
                 'meeting_point': booking_reminder.meeting_point,
-                'driver_name': driver.driver_name if driver else "",
-                'driver_contact': driver.driver_contact if driver else "",
-                'driver_plate': driver.driver_plate if driver else "",
-                'driver_car': driver.driver_car if driver else "",
+                'driver_name': driver.driver_name,
+                'driver_contact': driver.driver_contact,
+                'driver_plate': driver.driver_plate,
+                'driver_car': driver.driver_car,
                 'paid': booking_reminder.paid,
                 'cash': booking_reminder.cash,
                 'cruise': booking_reminder.cruise,
@@ -98,8 +103,6 @@ class Command(BaseCommand):
                 logger.info(f"Successfully sent '{subject}' email to {booking_reminder.email} for pickup on {target_date}")
             except Exception as e:
                 logging.error(f"Failed to send email to {booking_reminder.email}: {str(e)}")
-
-            booking_reminder.save()
 
             conditions = [
                 (not booking_reminder.calendar_event_id, "calendar empty id - from booking_reminder"),
