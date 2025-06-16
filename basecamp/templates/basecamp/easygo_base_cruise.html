@@ -153,126 +153,126 @@
           <script src="/static/basecamp/js/form_handler.js" defer></script>
           <!-- Main theme script-->
           <script src="/static/basecamp/js/theme.min.js"></script>              
-    <script>
-      var returnCruiseCheckbox = document.getElementById("return-cruise");
-      var returnCruiseFields = document.getElementById("return-cruise-fields");
+          <script src="https://www.google.com/recaptcha/api.js" defer></script>
+          <script>
+          document.addEventListener('DOMContentLoaded', function () {
+              const form = document.getElementById('booking-form');
+              const submitButton = document.getElementById('submitButton');
 
-      returnCruiseCheckbox.addEventListener("change", function() {
-        if (returnCruiseCheckbox.checked) {
-            var xhr = new XMLHttpRequest();
-            xhr.open("GET", "{% url 'basecamp:return_cruise_fields' %}");
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    returnCruiseFields.innerHTML = xhr.responseText;
-                } else {
-                    console.log("Request failed. Returned status of " + xhr.status);
-                }
-            };
-            xhr.send();
-        } else {
-            returnCruiseFields.innerHTML = "";
-        }
-    });
-    </script>  
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-          var form = document.getElementById("booking-form");
-          var submitButton = document.getElementById("submitButton");
-  
-          form.addEventListener("submit", function () {
-              submitButton.disabled = true;
-              submitButton.innerHTML = "Submitting..."; // You can change the text as needed
+              const flightDateInput = document.getElementById('flight-date');
+              const dateError = document.getElementById('date-error');
+
+              const returnCruiseCheckbox = document.getElementById('return-cruise');
+              const returnCruiseFields = document.getElementById('return-cruise-fields');
+
+              // ✅ 과거 날짜 입력 방지
+              flightDateInput.addEventListener('change', function () {
+                  const selectedDate = new Date(flightDateInput.value);
+                  const currentDate = new Date();
+                  currentDate.setHours(0, 0, 0, 0);
+
+                  if (selectedDate < currentDate) {
+                      dateError.style.display = 'block';
+                      flightDateInput.classList.add('is-invalid');
+                  } else {
+                      dateError.style.display = 'none';
+                      flightDateInput.classList.remove('is-invalid');
+                  }
+              });
+
+              // ✅ return-cruise 필드 Ajax로 로딩
+              returnCruiseCheckbox.addEventListener("change", function () {
+                  if (this.checked) {
+                      const xhr = new XMLHttpRequest();
+                      xhr.open("GET", "{% url 'basecamp:return_cruise_fields' %}");
+                      xhr.onload = function () {
+                          if (xhr.status === 200) {
+                              returnCruiseFields.innerHTML = xhr.responseText;
+                              returnCruiseFields.style.display = 'block';
+
+                              // 새로 삽입된 필드에 required 속성 추가
+                              const inputs = returnCruiseFields.querySelectorAll('input');
+                              inputs.forEach(input => input.setAttribute('required', 'required'));
+                          } else {
+                              console.log("Request failed. Returned status of " + xhr.status);
+                          }
+                      };
+                      xhr.send();
+                  } else {
+                      returnCruiseFields.innerHTML = '';
+                      returnCruiseFields.style.display = 'none';
+                  }
+              });
+
+              // ✅ return-cruise 필드 직접 제어(required 추가/제거)
+              returnCruiseCheckbox.addEventListener('change', function () {
+                  if (this.checked) {
+                      returnCruiseFields.style.display = 'block';
+                      const inputs = returnCruiseFields.querySelectorAll('input');
+                      inputs.forEach(input => input.setAttribute('required', 'required'));
+                  } else {
+                      returnCruiseFields.style.display = 'none';
+                      const inputs = returnCruiseFields.querySelectorAll('input');
+                      inputs.forEach(input => input.removeAttribute('required'));
+                  }
+              });
+
+              // ✅ 전체 submit 처리 (유효성 검사 + 중복 방지 통합)
+              form.addEventListener('submit', function (event) {
+                  let isValid = true;
+
+                  // Return Cruise 유효성 검사
+                  if (returnCruiseCheckbox.checked) {
+                      const returnPickupTime = returnCruiseFields.querySelector('input[name="return_pickup_time"]');
+                      const returnPickupDate = returnCruiseFields.querySelector('input[name="return_pickup_date"]');
+
+                      if (!returnPickupTime?.value.trim()) {
+                          returnPickupTime.classList.add('is-invalid');
+                          isValid = false;
+                      } else {
+                          returnPickupTime.classList.remove('is-invalid');
+                      }
+
+                      if (!returnPickupDate?.value.trim()) {
+                          returnPickupDate.classList.add('is-invalid');
+                          isValid = false;
+                      } else {
+                          returnPickupDate.classList.remove('is-invalid');
+                      }
+                  }
+
+                  if (!isValid) {
+                      event.preventDefault();
+                      alert('Please fill in all required fields.');
+                      return;
+                  }
+
+                  // 중복 제출 방지
+                  submitButton.disabled = true;
+                  submitButton.innerHTML = "Submitting...";
+              });
+
+              // ✅ reCAPTCHA Fallback
+              if (typeof grecaptcha === 'undefined') {
+                  grecaptcha = {};
+              }
+
+              grecaptcha.ready = function (cb) {
+                  if (typeof grecaptcha === 'undefined') {
+                      const c = '___grecaptcha_cfg';
+                      window[c] = window[c] || {};
+                      (window[c]['fns'] = window[c]['fns'] || []).push(cb);
+                  } else {
+                      cb();
+                  }
+              };
+
+              grecaptcha.ready(function () {
+                  grecaptcha.render("container", {
+                      sitekey: "{{ RECAPTCHA_V2_SITE_KEY }}"
+                  });
+              });
           });
-      });
-  </script> 
-  <script src="https://www.google.com/recaptcha/api.js" defer></script>
-  <script>    
-    if(typeof grecaptcha === 'undefined') {
-      grecaptcha = {};
-    }
-    grecaptcha.ready = function(cb){
-      if(typeof grecaptcha === 'undefined') {       
-        const c = '___grecaptcha_cfg';
-        window[c] = window[c] || {};
-        (window[c]['fns'] = window[c]['fns']||[]).push(cb);
-      } else {
-        cb();
-      }
-    }
-    grecaptcha.ready(function(){
-      grecaptcha.render("container", {
-        sitekey: "{{ RECAPTCHA_V2_SITE_KEY }}"
-      });
-    });
-  </script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Flight date validation
-        var flightDateInput = document.getElementById('flight-date');
-        var dateError = document.getElementById('date-error');
-        
-        flightDateInput.addEventListener('change', function () {
-            var selectedDate = new Date(flightDateInput.value);
-            var currentDate = new Date();
-
-            if (selectedDate < currentDate.setHours(0, 0, 0, 0)) {
-                dateError.style.display = 'block';
-                flightDateInput.classList.add('is-invalid');
-            } else {
-                dateError.style.display = 'none';
-                flightDateInput.classList.remove('is-invalid');
-            }
-        });
-
-        // Return cruise fields toggle and validation
-        const returnCruiseCheckbox = document.getElementById('return-cruise');
-        const returnCruiseFields = document.getElementById('return-cruise-fields');
-
-        returnCruiseCheckbox.addEventListener('change', function() {
-            if (this.checked) {
-                returnCruiseFields.style.display = 'block';
-                const inputs = returnCruiseFields.querySelectorAll('input');
-                inputs.forEach(input => {
-                    input.setAttribute('required', 'required');
-                });
-            } else {
-                returnCruiseFields.style.display = 'none';
-                const inputs = returnCruiseFields.querySelectorAll('input');
-                inputs.forEach(input => {
-                    input.removeAttribute('required');
-                });
-            }
-        });
-
-        document.getElementById('booking-form').addEventListener('submit', function(event) {
-            let isValid = true;
-            
-            // Return Cruise fields validation
-            if (returnCruiseCheckbox.checked) {
-                const returnPickupTime = returnCruiseFields.querySelector('input[name="return_pickup_time"]');
-                const returnPickupDate = returnCruiseFields.querySelector('input[name="return_pickup_date"]');
-
-                if (!returnPickupTime.value) {
-                    returnPickupTime.classList.add('is-invalid');
-                    isValid = false;
-                } else {
-                    returnPickupTime.classList.remove('is-invalid');
-                }
-
-                if (!returnPickupDate.value) {
-                    returnPickupDate.classList.add('is-invalid');
-                    isValid = false;
-                } else {
-                    returnPickupDate.classList.remove('is-invalid');
-                }
-            }
-
-            if (!isValid) {
-                event.preventDefault(); // Prevent form submission
-                alert('Please fill in all required fields.');
-            }
-        });
-    });
-</script>
+          </script>
   </body>
 </html>
