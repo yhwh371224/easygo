@@ -488,6 +488,15 @@ def inquiry_details1(request):
         original_start_point = request.session.get('original_start_point', start_point)
         original_end_point = request.session.get('original_end_point', end_point)
 
+        # ✅ 중복 제출 방지 
+        recent_duplicate = Inquiry.objects.filter(
+            email=email,
+            created__gte=timezone.now() - timedelta(seconds=2)
+        ).exists()
+
+        if recent_duplicate:
+            return JsonResponse({'success': False, 'message': 'Duplicate inquiry recently submitted. Please wait before trying again.'})
+
         data = {
             'name': name,
             'contact': contact,
