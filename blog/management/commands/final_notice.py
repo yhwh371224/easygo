@@ -18,14 +18,12 @@ class Command(BaseCommand):
             tomorrow = date.today() + timedelta(days=1)
 
             final_notices = Post.objects.filter(
-                pickup_date=tomorrow
-            ).exclude(
-                cancelled=True
-            ).exclude(
-                reminder=True
-            ).exclude(
-                Q(paid__isnull=False) & ~Q(paid="") & ~Q(paid="0")
-            )
+                    pickup_date=tomorrow,
+                    cancelled=False,
+                    reminder=False
+                ).filter(
+                    Q(paid__isnull=True) | Q(paid__exact="")
+                )
 
             for final_notice in final_notices:
                 template_name = "basecamp/html_email-fnotice.html"
