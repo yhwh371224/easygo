@@ -253,16 +253,22 @@
 													• Vehicle plate: {{ driver_plate }}<br><br>	
 													
 
-													{% if meeting_point == "At McDonald's" %}
+													{% if meeting_point  %}
 														<strong>=== The meeting point ===</strong><br><br>
-														• At McDonald's<br><br>
-														• Please refer to the map below for the meeting point<br><br>
-														• <a href="https://s3.ap-southeast-2.amazonaws.com/easygoshuttle.com.au/easygoshuttle_airport-pickup-point-2.webp">Map of the McDonald’s Meeting Point</a><br>
-													{% elif meeting_point == "Rideshare" %}
-														<strong>=== The meeting point ===</strong><br><br>
-														• Rideshare<br><br>
-														• Please proceed to the P7 parking building first after exiting the arrival halls, and then follow the signs for 'Rideshare Pick-up'<br><br>
-														• <a href="https://s3.ap-southeast-2.amazonaws.com/easygoshuttle.com.au/International-Airport-Meeting-Point.webp">Map of the Rideshare Pick-up Point</a><br>
+
+														{% if meeting_point == "At McDonald's"%}															
+															• At McDonald's<br><br>
+															• Please refer to the map below for the meeting point<br><br>
+															• <a href="https://s3.ap-southeast-2.amazonaws.com/easygoshuttle.com.au/easygoshuttle_airport-pickup-point-2.webp">Map of the McDonald’s Meeting Point</a><br>
+														{% elif meeting_point == "Rideshare" %}
+															• Rideshare<br><br>
+															• Please proceed to the P7 parking building first after exiting the arrival halls, and then follow the signs for 'Rideshare Pick-up'<br><br>
+															• <a href="https://s3.ap-southeast-2.amazonaws.com/easygoshuttle.com.au/International-Airport-Meeting-Point.webp">Map of the Rideshare Pick-up Point</a><br>
+														{% else %}														
+														• {{ meeting_point }}<br><br>
+														• <a href="https://s3.ap-southeast-2.amazonaws.com/easygoshuttle.com.au/International-Airport-Meeting-Point.webp">Map of the International Airport</a><br>
+														{% endif %}
+
 													{% else %}
 														<strong>=== The meeting point ===</strong><br><br>
 														• Public pick-up (2 minutes area)<br><br>
@@ -298,14 +304,17 @@
 
 													{% if meeting_point %}
 														<strong>=== The meeting point ===</strong><br>
-														• {{ meeting_point }}<br>
+														• {{ meeting_point }}<br><br>
 														• <a href="https://s3.ap-southeast-2.amazonaws.com/easygoshuttle.com.au/Domestic-T2-meeting-point.webp">Map of Shuttle bus bay</a><br><br>
+														• <a href="https://s3.ap-southeast-2.amazonaws.com/easygoshuttle.com.au/T2-Priority-Pickup-map.webp">T2 Domestic Terminal Map</a>&nbsp;> Please proceed to the Priority Pick-up (Area C)<br><br>
+														• <a href="https://assets.ctfassets.net/v228i5y5k0x4/66JD5wV9qeCei3lDAdMwAk/d598e1f92b27779617229cf07e1f87eb/T3_Domestic_Arrivals_Jan_25.pdf">Qantas Domestic Terminal Map</a>&nbsp;> Please proceed to the Priority Pick-up (Area C)<br><br>
 													{% else %}
 														<strong>=== The meeting point ===</strong><br>
 														• <a href="https://s3.ap-southeast-2.amazonaws.com/easygoshuttle.com.au/T2-Priority-Pickup-map.webp">T2 Domestic Terminal Map</a>&nbsp;> Please proceed to the Priority Pick-up (Area C)<br><br>
 														• <a href="https://assets.ctfassets.net/v228i5y5k0x4/66JD5wV9qeCei3lDAdMwAk/d598e1f92b27779617229cf07e1f87eb/T3_Domestic_Arrivals_Jan_25.pdf">Qantas Domestic Terminal Map</a>&nbsp;> Please proceed to the Priority Pick-up (Area C)<br><br>
                                                     	<!-- • <a href="https://s3.ap-southeast-2.amazonaws.com/easygoshuttle.com.au/Domestic-T3-baggage-carousel-1.webp">Terminal 3 Map (Qantas)</a>&nbsp;> Inside the Qantas Terminal at the baggage carousel no 1<br><br> -->
 													{% endif %}
+
 													<!-- • Due to unforeseen circumstances, the above information may change. Please make sure to turn on your phone or check your email -->
 												</p>
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
