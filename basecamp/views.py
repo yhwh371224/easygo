@@ -1813,7 +1813,7 @@ def email_dispatch_detail(request):
         
         template_options = {
             "Gratitude For Payment": ("basecamp/html_email-response-payment-received.html", "Payment Received - EasyGo"),
-            "Gratitude For Multi Payment": ("basecamp/html_email-response-multi-payment-received.html", "(M) Payment Received - EasyGo"),
+            "Gratitude For (M) Payment": ("basecamp/html_email-response-multi-payment-received.html", "(M) Payment Received - EasyGo"),
             "Pickup Notice for Today": ("basecamp/html_email-today1.html", "Important Update for Today's Pickup - EasyGo "),
             "Payment Method": ("basecamp/html_email-response-payment.html", "Payment Method - EasyGo"),
             "Inquiry for driver contact": ("basecamp/html_email-response-driver-contact.html", "Inquiry for driver contact - EasyGo"),
@@ -1863,7 +1863,7 @@ def email_dispatch_detail(request):
 
             if selected_option == "Gratitude For Payment" and user:
                 original_price = float(user.price or 0)   
-                total_paid_text = f"Total Paid: ${int(original_price)}" 
+                total_paid_text = f"===Gratitude=== Total Paid: ${int(original_price)}" 
                 original_notice = (user.notice or "").strip()
                 updated_notice = original_notice
 
@@ -1875,7 +1875,7 @@ def email_dispatch_detail(request):
 
                 if user.return_pickup_time == 'x':
                     full_price = float(original_price * 2)
-                    total_paid_text_1 = f"Total Paid: ${int(full_price)}" 
+                    total_paid_text_1 = f"===Gratitude=== Total Paid: ${int(full_price)}" 
                     updated_notice_1 = original_notice
 
                     if total_paid_text_1 not in original_notice:
@@ -1922,7 +1922,7 @@ def email_dispatch_detail(request):
                     })
 
             # multi payment 적용방식 
-            if selected_option == "Gratitude For Multi Payment" and user:
+            if selected_option == "Gratitude For (M) Payment" and user:
                 posts = Post.objects.filter(
                     Q(email__iexact=user.email) | Q(email1__iexact=(user.email1 or '')),
                     pickup_date__gte=timezone.now().date()
