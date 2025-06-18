@@ -1795,21 +1795,19 @@ def email_dispatch_detail(request):
         if not user:
             user = Inquiry.objects.filter(email=email).first()
 
+        # Handle adjustment_time logic (DB update + SMS + context prep)
+        pickup_time_12h = None
         if adjustment_time and user:
-            today = date.today()
-
-            users = Post.objects.filter(
-                email=email,
-                pickup_date__gte=date.today()
-            ).order_by('pickup_date')
-
+            users = Post.objects.filter(email=email, pickup_date__gte=date.today()).order_by('pickup_date')
             if users.exists():
-                closest_user = users.first()  # The closest post by pickup_date                
+                closest_user = users.first()
                 closest_user.pickup_time = adjustment_time
                 closest_user.save()
 
                 message = "Important Notice! Please check your email and respond only via email - EasyGo Airport Shuttle"
-                send_sms_notice(closest_user.contact, message)                        
+                send_sms_notice(closest_user.contact, message)
+
+                pickup_time_12h = format_pickup_time_12h(adjustment_time)                       
         
         template_options = {
             "Gratitude For Payment": ("basecamp/html_email-response-payment-received.html", "Payment Received - EasyGo"),
@@ -1845,20 +1843,29 @@ def email_dispatch_detail(request):
             template_name, subject = template_options[selected_option]
             context = {'email': email, 'name': user.name, 'adjustment_time': adjustment_time, 'wait_duration': wait_duration, 'discount_price': discount_price}
 
-            if adjustment_time:
-                pickup_time_12h = format_pickup_time_12h(adjustment_time)
-                context.update({'pickup_time_12h': pickup_time_12h})
+            if pickup_time_12h:
+                context['pickup_time_12h'] = pickup_time_12h
+
+            # driver 정보 추가
+            if user and hasattr(user, 'driver') and user.driver:
+                context.update({
+                    'driver': user.driver,
+                    'driver_name': user.driver.driver_name,
+                    'driver_contact': user.driver.driver_contact,
+                    'driver_plate': user.driver.driver_plate,
+                    'driver_car': user.driver.driver_car,
+                })
 
             if selected_option == "Pickup Notice for Today" and user:
-                today = date.today()     
+                today = date.today()
                 user_today = Post.objects.filter(email=email, pickup_date=today).first()
                 if user_today:
-                    driver_instance = user_today.driver 
                     context.update({
-                        'pickup_time': user_today.pickup_time, 'meeting_point': user_today.meeting_point, 
-                        'direction': user_today.direction, 'cash': user_today.cash, 'cruise': user_today.cruise,
-                        'driver_name': driver_instance.driver_name, 'driver_contact': driver_instance.driver_contact, 
-                        'driver_plate': driver_instance.driver_plate, 'driver_car': driver_instance.driver_car
+                        'pickup_time': user_today.pickup_time,
+                        'meeting_point': user_today.meeting_point,
+                        'direction': user_today.direction,
+                        'cash': user_today.cash,
+                        'cruise': user_today.cruise,
                     })
 
             if selected_option == "Gratitude For Payment" and user:
