@@ -2,8 +2,7 @@ from django.core.management.base import BaseCommand
 from blog.models import Post
 
 
-class Command(BaseCommand):
-    help = "Update kate@diveplanit.com to heather@blueplanetdc.com and move old email to email1"
+class Command(BaseCommand):    
 
     def handle(self, *args, **options):
         target_email = "kate@diveplanit.com"
@@ -22,3 +21,19 @@ class Command(BaseCommand):
             count += 1
 
         self.stdout.write(self.style.SUCCESS(f"{count} posts updated."))
+
+
+# class Command(BaseCommand):
+
+#     def handle(self, *args, **kwargs):
+#         old_email = "heather@blueplanetdc.com"
+#         new_email = "sungkam718@gmail.com"
+#         updated = Post.objects.filter(email__iexact=old_email).update(email=new_email)
+
+
+# class Command(BaseCommand):
+
+#     def handle(self, *args, **kwargs):
+#         target_email = "kate@diveplanit.com"
+#         cleared = Post.objects.filter(email__iexact=target_email).update(email1="")
+        
