@@ -1573,7 +1573,8 @@ def invoice_detail(request):
 
         if multiple:
             booking_data = []
-            total_price_without_gst = total_with_gst = total_paid = grand_total = 0
+            total_price_without_gst = total_paid = grand_total = 0
+            total_gst = total_surcharge = total_toll = 0
 
             for booking in bookings:
                 if booking.start_point:
@@ -1599,10 +1600,17 @@ def invoice_detail(request):
                 price = safe_float(booking.price) or 0.0
                 with_gst = round(price * 0.10, 2) if booking.company_name else 0.0
                 surcharge = round(price * 0.03, 2) if surcharge_flag else 0.0
-                toll = safe_float(toll_input) if toll_input else safe_float(booking.toll) or 0.0                
+                toll = safe_float(toll_input) if toll_input else safe_float(booking.toll) or 0.0  
+                paid = safe_float(booking.paid) or 0.0              
 
                 total = price + with_gst + surcharge + toll 
-                grand_total += total 
+                
+                total_price_without_gst += price
+                total_gst += with_gst
+                total_surcharge += surcharge
+                total_toll += toll
+                total_paid += paid
+                grand_total += total
 
                 paid = safe_float(booking.paid) or 0.0
 
@@ -1617,14 +1625,11 @@ def invoice_detail(request):
                     "notice": booking.notice,
                     "price": price,
                     "with_gst": with_gst,
-                    "surcharge": sum(item.get("surcharge", 0.0) or 0.0 for item in booking_data),
-                    "toll": sum(item.get("toll", 0.0) or 0.0 for item in booking_data),
+                    "surcharge": surcharge,
+                    "toll": toll,
                     "total_price": total,
                 })
-
-                total_price_without_gst += price
-                total_with_gst += total
-                total_paid += paid
+                
             
             if (discount_input or '') == 'Yes':
                     discount = 0.0
@@ -1638,21 +1643,20 @@ def invoice_detail(request):
             final_total = grand_total - discount
             total_balance = round(final_total - total_paid, 2)
 
-            total_price_for_gst = sum(b["price"] for b in booking_data if b["with_gst"] > 0)
-            total_gst = round(total_price_for_gst * 0.10, 2)
-
             context = {
                 "inv_no": inv_no,
                 "company_name": bookings[0].company_name,
                 "name": bookings[0].name,
                 "invoice_date": today,
                 "bookings": booking_data,
-                "total_price_without_gst": total_price_without_gst,
-                "with_gst": total_gst,
+                "total_price_without_gst": round(total_price_without_gst, 2),
+                "with_gst": round(total_gst, 2),
+                "surcharge": round(total_surcharge, 2),
+                "toll": round(total_toll, 2),
                 "discount": discount,
-                "total_price": final_total,
-                "paid": total_paid,
-                "balance": total_balance
+                "total_price": round(final_total, 2),
+                "paid": round(total_paid, 2),
+                "balance": round(total_balance, 2),
             }
 
             template_name = "basecamp/html_email-multi-invoice.html"
