@@ -6,6 +6,7 @@ from datetime import date, timedelta
 from django.core.management.base import BaseCommand
 from blog.models import Post
 from decouple import config
+from django.db.models import Q
 
 
 # Configure logging for this script
@@ -24,8 +25,14 @@ class Command(BaseCommand):
         try: 
             today = date.today()
             # tomorrow = today + timedelta(days=1)
-            day_after_tomorrow = today + timedelta(days=2)
-            final_notices = Post.objects.filter(pickup_date__range=[today, day_after_tomorrow])
+            day_after_tomorrow = today + timedelta(days=1)
+            final_notices = Post.objects.filter(
+                    pickup_date__range=[today, day_after_tomorrow],
+                    cancelled=False,
+                    reminder=False
+                ).filter(
+                    Q(paid__isnull=True) | Q(paid__exact="")
+                )
             
             # Initialize Twilio client once
             account_sid = config('TWILIO_ACCOUNT_SID')
@@ -71,16 +78,12 @@ class Command(BaseCommand):
                     sms_logger.error(f'Failed to send SMS message to {formatted_number}: {e}')            
 
             def should_send_notice(final_notice):
-                return (                     
-                    not final_notice.cancelled and 
-                    not final_notice.paid and 
-                    not final_notice.cash
-                )
+                return not final_notice.cash
 
             for final_notice in final_notices:
-                if should_send_notice(final_notice):
+                if should_send_notice(final_notice) and final_notice.contact:
                     send_sms_message(final_notice.contact)
-                    if final_notice.direction == 'Pickup from Intl Airport':                
+                    if final_notice.direction == 'Pickup from Intl Airport':
                         send_whatsapp_message(final_notice.contact)                
                     
             self.stdout.write(self.style.SUCCESS('Twilio sent final notice successfully'))
