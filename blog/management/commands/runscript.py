@@ -23,6 +23,10 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS(f"{count} posts updated."))
 
 
+# updated = Post.objects.filter(email="heather@blueplanetdc.com").update(email="sungkam718@gmail.com")
+# updated = Post.objects.filter(email="sungkam718@gmail.com").update(email="heather@blueplanetdc.com")
+
+
 # class Command(BaseCommand):
 
 #     def handle(self, *args, **kwargs):
