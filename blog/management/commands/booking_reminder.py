@@ -191,7 +191,7 @@ class Command(BaseCommand):
             for condition, email_subject in conditions:
                 if condition and booking_reminder.email:
                     try:
-                        diff = round(float(booking_reminder.price) - float(booking_reminder.paid), 2)
+                        diff = round(float(booking_reminder.price or 0) - float(booking_reminder.paid or 0), 2)
                         html_content = render_to_string(
                             "basecamp/html_email-shortpayment-alert.html",  
                             {
