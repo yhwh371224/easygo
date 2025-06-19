@@ -22,9 +22,16 @@ class Command(BaseCommand):
 
         self.stdout.write(self.style.SUCCESS(f"{count} posts updated."))
 
+# from blog.models import Post
 
-# updated = Post.objects.filter(email="heather@blueplanetdc.com").update(email="sungkam718@gmail.com")
-# updated = Post.objects.filter(email="sungkam718@gmail.com").update(email="heather@blueplanetdc.com")
+# Post.objects.filter(email="heather@blueplanetdc.com").update(email="sungkam718@gmail.com")
+# Post.objects.filter(email="sungkam718@gmail.com").update(email="heather@blueplanetdc.com")
+# Post.objects.filter(email="heather@blueplanetdc.com").update(email="kate@diveplanit.com")
+# Post.objects.filter(email="kate@diveplanit.com").update(email="heather@blueplanetdc.com")
+# Post.objects.filter(email="kate@diveplanit.com").update(name="")
+# Post.objects.filter(email="heather@blueplanetdc.com").update(name="")
+
+
 
 
 # class Command(BaseCommand):
