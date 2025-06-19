@@ -1703,18 +1703,29 @@ def invoice_detail(request):
 
             elif user.return_pickup_time == "x":
                 user1 = Post.objects.filter(email=email)[1]
+
+                # 두 배 가격 계산
+                base_price = safe_float(user1.price) or 0.0
+                base_paid = safe_float(user1.paid) or 0.0
+
+                doubled_price = base_price * 2
+                doubled_paid = base_paid * 2  
+                doubled_with_gst = round(doubled_price * 0.10, 2) if user1.company_name else 0.0
+                doubled_surcharge = round(doubled_price * 0.03, 2) if surcharge_flag else 0.0
+                doubled_total = doubled_price + doubled_with_gst + doubled_surcharge + toll - discount
+                balance = round(doubled_total - doubled_paid, 2)
+
                 template_name = "basecamp/html_email-invoice.html"
                 context = {
                     "inv_no": inv_no, "name": user1.name, "company_name": user1.company_name,
                     "contact": user1.contact, "pickup_date": user1.pickup_date, "pickup_time": user1.pickup_time,   
                     "start_point": user1.start_point, "end_point": user1.end_point, "invoice_date": today,
-                    "price": user1.price, "with_gst": with_gst, "surcharge": float_surcharge,
-                    "total_price": total_price, "toll": toll, "balance": balance, "discount": discount,
-                    "paid": float_paid, "message": user1.message, "no_of_passenger": user1.no_of_passenger,
+                    "price": doubled_price, "with_gst": doubled_with_gst, "surcharge": doubled_surcharge,
+                    "total_price": doubled_total, "toll": toll, "balance": balance, "discount": discount,
+                    "paid": doubled_paid, "message": user1.message, "no_of_passenger": user1.no_of_passenger,
                     "no_of_baggage": user1.no_of_baggage, "notice": user1.notice, "street": user1.street, "suburb": user1.suburb,
                     "return_pickup_time": user1.return_pickup_time, "return_pickup_date": user1.return_pickup_date,
                 }
-
             else:
                 template_name = "basecamp/html_email-invoice.html"
                 context = {
