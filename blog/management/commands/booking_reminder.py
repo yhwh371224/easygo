@@ -8,6 +8,9 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.conf import settings
 from blog.models import Post, Driver
+
+from twilio.rest import Client
+from decouple import config
 from itertools import zip_longest
 
 logger = logging.getLogger(__name__)
@@ -19,6 +22,13 @@ class Command(BaseCommand):
     help = 'Send booking reminders for upcoming flights'
 
     def handle(self, *args, **options):
+        # Initialize Twilio client once
+        account_sid = config('TWILIO_ACCOUNT_SID')
+        auth_token = config('TWILIO_AUTH_TOKEN')
+        self.twilio_from = config('TWILIO_SMS_FROM')
+        self.twilio_whatsapp_from = config('TWILIO_WHATSAPP_FROM')
+        self.twilio_client = Client(account_sid, auth_token)
+
         reminder_intervals = [0, 1, 3, 5, 7, 14, 28, -1]
         # reminder_intervals = [-1]
         templates = [
@@ -42,21 +52,74 @@ class Command(BaseCommand):
             "Review-EasyGo",
         ]
         for interval, template, subject in zip_longest(reminder_intervals, templates, subjects, fillvalue=""):
-            self.send_email(interval, template, subject)
+            sms_allowed = interval in [1, 3]
+            self.send_email(interval, template, subject, sms_allowed)
 
     def format_pickup_time_12h(self, pickup_time_str):
         try:
             time_obj = datetime.strptime(pickup_time_str.strip(), "%H:%M")
-            return time_obj.strftime("%I:%M %p")  # e.g., 06:30 PM
+            return time_obj.strftime("%I:%M %p")  
         except (ValueError, AttributeError):
-            return pickup_time_str  # Return original if invalid format
+            return pickup_time_str
+        
+    def format_phone_number(self, phone_number):
+        if not phone_number:
+            return None
+        phone_number = phone_number.strip()
+        if phone_number.startswith('+'):
+            return phone_number
+        elif phone_number.startswith('0'):
+            return '+61' + phone_number[1:]
+        else:
+            return '+' + phone_number
 
-    def send_email(self, date_offset, template_name, subject):
+    def send_sms_reminder(self, sendto, name, pickup_date, email, price):
+        formatted_number = self.format_phone_number(sendto)
+        if not formatted_number:
+            logger.warning(f"Invalid phone number for {name}, skipping SMS.")
+            return
+
+        message_body = f"""
+        Hi {name}, this is a reminder for your EasyGo booking on {pickup_date}.
+        Please check your email for details. Reply by email.
+        """.strip()
+        try:
+            self.twilio_client.messages.create(
+                body=message_body,
+                from_=self.twilio_from,
+                to=formatted_number
+            )
+            logger.info(f"SMS sent to {name} ({formatted_number}) | Email: {email} | Price: ${price}")
+        except Exception as e:
+            logger.error(f"Failed to send SMS to {name} ({formatted_number}) | Email: {email} | Price: ${price} | Error: {str(e)}") 
+
+    def send_whatsapp_reminder(self, sendto, name, pickup_date, email, price):
+        formatted_number = self.format_phone_number(sendto)
+        if not formatted_number:
+            logger.warning(f"Invalid phone number for WhatsApp ({name}, {email}), skipping.")
+            return
+
+        message_body = f"""
+        Hi {name}, this is a reminder for your EasyGo booking on {pickup_date}.
+        Please check your email for details. Reply by email.
+        """.strip()
+
+        try:
+            self.twilio_client.messages.create(
+                body=message_body,
+                from_=self.twilio_whatsapp_from,
+                to=f'whatsapp:{formatted_number}'
+            )
+            logger.info(f"WhatsApp sent to {name} ({formatted_number}) | Email: {email} | Price: ${price}")
+        except Exception as e:
+            logger.error(f"Failed to send WhatsApp to {name} ({formatted_number}) | Email: {email} | Price: ${price} | Error: {str(e)}")
+
+    def send_email(self, date_offset, template_name, subject, sms_allowed):
         target_date = date.today() + timedelta(days=date_offset)
         booking_reminders = Post.objects.filter(pickup_date=target_date).exclude(cancelled=True).select_related('driver')
-        self.send_email_task(booking_reminders, template_name, subject, target_date)
+        self.send_email_task(booking_reminders, template_name, subject, target_date, sms_allowed)
 
-    def send_email_task(self, booking_reminders, template_name, subject, target_date):
+    def send_email_task(self, booking_reminders, template_name, subject, target_date, sms_allowed):
         for booking_reminder in booking_reminders:
 
             if not booking_reminder.driver:            
@@ -65,7 +128,6 @@ class Command(BaseCommand):
                 booking_reminder.save()            
 
             driver = booking_reminder.driver
-
             pickup_time_12h = self.format_pickup_time_12h(booking_reminder.pickup_time)
 
             html_content = render_to_string(template_name, {
@@ -102,7 +164,24 @@ class Command(BaseCommand):
                 email.send(fail_silently=False)
                 logger.info(f"Successfully sent '{subject}' email to {booking_reminder.email} for pickup on {target_date}")
             except Exception as e:
-                logging.error(f"Failed to send email to {booking_reminder.email}: {str(e)}")
+                logger.error(f"Failed to send email to {booking_reminder.email}: {str(e)}")
+
+            # 📱 Send SMS if applicable
+            if booking_reminder.sms_reminder and booking_reminder.contact and sms_allowed:
+                self.send_sms_reminder(
+                    booking_reminder.contact,
+                    booking_reminder.name,
+                    booking_reminder.pickup_date,
+                    booking_reminder.email,
+                    booking_reminder.price
+                )
+                self.send_whatsapp_reminder(
+                    booking_reminder.contact,
+                    booking_reminder.name,
+                    booking_reminder.pickup_date,
+                    booking_reminder.email,
+                    booking_reminder.price
+                )
 
             conditions = [
                 (not booking_reminder.calendar_event_id, "calendar empty id - from booking_reminder"),
