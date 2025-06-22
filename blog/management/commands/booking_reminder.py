@@ -167,7 +167,7 @@ class Command(BaseCommand):
                 logger.error(f"Failed to send email to {booking_reminder.email}: {str(e)}")
 
             # 📱 Send SMS if applicable
-            if booking_reminder.sms_reminder and booking_reminder.contact and sms_allowed:
+            if booking_reminder.sms_reminder is True and booking_reminder.contact and sms_allowed:
                 self.send_sms_reminder(
                     booking_reminder.contact,
                     booking_reminder.name,
