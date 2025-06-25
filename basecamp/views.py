@@ -1883,30 +1883,26 @@ def email_dispatch_detail(request):
                 original_price = float(user.price or 0)   
                 total_paid_text = f"===Gratitude=== Total Paid: ${int(original_price)}" 
                 original_notice = (user.notice or "").strip()
-                updated_notice = original_notice
 
-                if total_paid_text not in original_notice:
-                    updated_notice = (
-                        f"{original_notice} | {total_paid_text}"
-                        if original_notice else total_paid_text
-                    )
+                # 기존 결제 기록이 있는지 체크
+                has_payment_record = any(keyword in original_notice for keyword in ["===STRIPE===", "===PAYPAL===", "===Gratitude==="])                
 
                 if user.return_pickup_time == 'x':
                     full_price = float(original_price * 2)
-                    total_paid_text_1 = f"===Gratitude=== Total Paid: ${int(full_price)}" 
-                    updated_notice_1 = original_notice
+                    total_paid_text_1 = f"===Gratitude=== Total Paid: ${int(full_price)}"                     
 
-                    if total_paid_text_1 not in original_notice:
-                        updated_notice_1 = (
-                            f"{original_notice} | {total_paid_text_1}"
-                            if original_notice else total_paid_text_1
-                        )
+                    if not has_payment_record:                        
+                            user.notice = (
+                                f"{original_notice} | {total_paid_text_1}"
+                                if original_notice else total_paid_text_1
+                            )
+                    else:
+                        user.notice = original_notice
 
                     user.paid = user.price
                     user.reminder = True
                     user.toll = ""
                     user.cash = False
-                    user.notice = updated_notice_1
                     user.save()
 
                     context.update({
@@ -1921,17 +1917,24 @@ def email_dispatch_detail(request):
                         user_1.reminder = True
                         user_1.toll = ""
                         user_1.cash = False
-                        user_1.notice = updated_notice_1
+                        user_1.notice = user.notice
                         user_1.save()
                     except IndexError:
                         pass  
 
                 else:
+                    if not has_payment_record:
+                        user.notice = (
+                            f"{original_notice} | {total_paid_text}"
+                            if original_notice else total_paid_text
+                        )
+                    else:
+                        user.notice = original_notice
+
                     user.paid = user.price
                     user.reminder = True
                     user.toll = ""
                     user.cash = False
-                    user.notice = updated_notice
                     user.save()
 
                     context.update({
@@ -1952,7 +1955,7 @@ def email_dispatch_detail(request):
 
                     for post in posts:
                         price = float(post.price or 0)
-                        post.paid = str(price)
+                        post.paid = price
                         post.reminder = True
                         post.toll = ""
                         post.cash = False
@@ -1964,10 +1967,17 @@ def email_dispatch_detail(request):
                     actual_paid_text = f"===(M) GRATITUDE=== Total Paid: ${int(total_paid_applied)} ({len(updated_posts)} bookings)"
 
                     for post in updated_posts:
-                        original_notice = post.notice or ""
-                        if "===(M) GRATITUDE===" not in original_notice:
-                            notice_parts = [original_notice.strip(), actual_paid_text] if original_notice else [actual_paid_text]
-                            post.notice = " | ".join(filter(None, notice_parts)).strip()
+                        original_notice = (post.notice or "").strip()
+
+                        # 기존 결제 기록 있는지 체크
+                        has_payment_record = any(keyword in original_notice for keyword in ["===STRIPE===", "===PAYPAL===", "===Gratitude===", "===(M) GRATITUDE==="])
+
+                        if not has_payment_record:
+                            post.notice = (
+                                f"{original_notice} | {actual_paid_text}"
+                                if original_notice else actual_paid_text
+                            )
+                        
                         post.save()
 
                     context.update({
