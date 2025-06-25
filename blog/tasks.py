@@ -220,15 +220,16 @@ def notify_user_payment_paypal(instance_id):
                     continue
 
                 if remaining_amount >= balance:
-                    post.paid = str(price)
+                    paid_new = price
                     remaining_amount -= balance
                 else:
-                    post.paid = str(paid + remaining_amount)
+                    paid_new = paid + remaining_amount
                     remaining_amount = 0
 
-                total_paid_after += float(post.paid or '0')
+                post.paid = str(round(paid_new, 2))
+                total_paid_after += paid_new
 
-                post.toll = "" if float(post.paid) >= price else "short payment"
+                post.toll = "" if paid_new >= price else "short payment"
                 post.cash = False
                 post.reminder = True
                 post.discount = ""
@@ -316,15 +317,16 @@ def notify_user_payment_stripe(instance_id):
                     continue  # 이미 결제된 예약은 건너뜀
 
                 if remaining_amount >= balance:
-                    post.paid = str(price)
+                    post.paid = price
                     remaining_amount -= balance
                 else:
-                    post.paid = str(paid + remaining_amount)
+                    paid_new = paid + remaining_amount
                     remaining_amount = 0.0
 
-                total_paid_after += float(post.paid or '0')
+                post.paid = str(round(paid_new, 2))
+                total_paid_after += paid_new
 
-                post.toll = "" if float(post.paid) >= price else "short payment"
+                post.toll = "" if paid_new >= price else "short payment"
                 post.cash = False
                 post.reminder = True
                 post.discount = ""
