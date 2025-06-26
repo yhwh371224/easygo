@@ -19,7 +19,7 @@ def notify_user_post(sender, instance, created, **kwargs):
 
 
 @receiver(post_save, sender=Post, dispatch_uid="notify_user_post_cancelled_once")
-def notify_user_post_cancelled(sender, instance, created, **kwargs):
+def notify_user_post_cancelled(sender, instance, created, **kwargs): 
     if not created and instance.cancelled and not instance.sent_email:
         send_post_cancelled_email(instance)
         instance.sent_email = True
