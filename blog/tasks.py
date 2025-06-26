@@ -27,6 +27,12 @@ def create_event_on_calendar(instance_id):
     # Fetch the Post instance
     instance = Post.objects.get(pk=instance_id)
 
+    event_id = (instance.calendar_event_id or '').strip()
+
+    # 취소 상태면서 기존 이벤트 없으면 새로 생성 안 함
+    if instance.cancelled and not event_id:
+        return
+
     SCOPES = ['https://www.googleapis.com/auth/calendar']
     SERVICE_ACCOUNT_FILE = 'secure/calendar/calendar-service-account-file.json'
     DELEGATED_USER_EMAIL = RECIPIENT_EMAIL  
@@ -108,21 +114,13 @@ def create_event_on_calendar(instance_id):
         'description': message,
     }    
 
-    # 취소 상태일 때는 새로 생성 안 하고, 기존 이벤트만 업데이트
-    event_id = (instance.calendar_event_id or '').strip()
-
-    if instance.cancelled:
-        if event_id:
-            service.events().update(calendarId='primary', eventId=event_id, body=event).execute()
-        else:
-            return
+    # 구글 캘린더 이벤트 처리
+    if event_id:
+        service.events().update(calendarId='primary', eventId=event_id, body=event).execute()
     else:
-        if event_id:
-            service.events().update(calendarId='primary', eventId=event_id, body=event).execute()
-        else:
-            new_event = service.events().insert(calendarId='primary', body=event).execute()
-            instance.calendar_event_id = new_event['id']
-            instance.save(update_fields=['calendar_event_id'])
+        new_event = service.events().insert(calendarId='primary', body=event).execute()
+        instance.calendar_event_id = new_event['id']
+        instance.save(update_fields=['calendar_event_id'])
 
 
 # Clicked confirm_booking form 
