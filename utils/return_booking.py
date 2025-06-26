@@ -58,3 +58,5 @@ def handle_return_trip(instance):
                  notice=updated_notice, price=half_price, paid=half_paid, private_ride=instance.private_ride, driver=driver,)
 
         p.save() 
+
+        
