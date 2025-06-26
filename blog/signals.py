@@ -5,6 +5,7 @@ from .models import Post, Inquiry, PaypalPayment, StripePayment
 from .tasks import create_event_on_calendar, notify_user_payment_paypal, notify_user_payment_stripe
 from utils.return_booking import handle_return_trip
 from utils.inquiry_helper import send_inquiry_email  
+from utils.post_helper import send_post_cancelled_email
 
 
 @receiver(post_save, sender=Inquiry, dispatch_uid="notify_user_inquiry_once")
@@ -15,6 +16,14 @@ def notify_user_inquiry(sender, instance, created, **kwargs):
 @receiver(post_save, sender=Post, dispatch_uid="notify_user_post_once")
 def notify_user_post(sender, instance, created, **kwargs):
     handle_return_trip(instance)
+
+
+@receiver(post_save, sender=Post, dispatch_uid="notify_user_post_cancelled_once")
+def notify_user_post_cancelled(sender, instance, created, **kwargs):
+    if not created and instance.cancelled and not instance.sent_email:
+        send_post_cancelled_email(instance)
+        instance.sent_email = True
+        instance.save(update_fields=['sent_email'])
 
     
 @receiver(post_save, sender=PaypalPayment, dispatch_uid="async_notify_user_payment_paypal_once")

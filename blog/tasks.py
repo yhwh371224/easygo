@@ -108,17 +108,19 @@ def create_event_on_calendar(instance_id):
         'description': message,
     }    
 
-    # Check if an event already exists for this instance
-    # if instance.cancelled:
-    #     pass
-    # else:
-    if instance.calendar_event_id:
-        pass
-        event = service.events().update(calendarId='primary', eventId=instance.calendar_event_id, body=event).execute()
+    # 핵심 로직: 취소 상태일 때는 새로 생성 안 하고, 기존 이벤트만 업데이트
+    if instance.cancelled:
+        if instance.calendar_event_id:
+            service.events().update(calendarId='primary', eventId=instance.calendar_event_id, body=event).execute()
+        else:
+            return  # 새로 생성은 하지 않음
     else:
-        event = service.events().insert(calendarId='primary', body=event).execute()
-        instance.calendar_event_id = event['id']
-        instance.save()
+        if instance.calendar_event_id:
+            service.events().update(calendarId='primary', eventId=instance.calendar_event_id, body=event).execute()
+        else:
+            event = service.events().insert(calendarId='primary', body=event).execute()
+            instance.calendar_event_id = event['id']
+            instance.save(update_fields=['calendar_event_id'])
 
 
 # Clicked confirm_booking form 
