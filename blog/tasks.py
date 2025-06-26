@@ -108,18 +108,20 @@ def create_event_on_calendar(instance_id):
         'description': message,
     }    
 
-    # 핵심 로직: 취소 상태일 때는 새로 생성 안 하고, 기존 이벤트만 업데이트
+    # 취소 상태일 때는 새로 생성 안 하고, 기존 이벤트만 업데이트
+    event_id = (instance.calendar_event_id or '').strip()
+
     if instance.cancelled:
-        if instance.calendar_event_id:
-            service.events().update(calendarId='primary', eventId=instance.calendar_event_id, body=event).execute()
+        if event_id:
+            service.events().update(calendarId='primary', eventId=event_id, body=event).execute()
         else:
-            return  # 새로 생성은 하지 않음
+            return
     else:
-        if instance.calendar_event_id:
-            service.events().update(calendarId='primary', eventId=instance.calendar_event_id, body=event).execute()
+        if event_id:
+            service.events().update(calendarId='primary', eventId=event_id, body=event).execute()
         else:
-            event = service.events().insert(calendarId='primary', body=event).execute()
-            instance.calendar_event_id = event['id']
+            new_event = service.events().insert(calendarId='primary', body=event).execute()
+            instance.calendar_event_id = new_event['id']
             instance.save(update_fields=['calendar_event_id'])
 
 
