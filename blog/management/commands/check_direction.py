@@ -41,7 +41,7 @@ class Command(BaseCommand):
                 # if flight_number and not direction:
                 #     issues.append('Direction missing (flight number present)')
 
-                # 일반 필드 체크
+
                 for field in fields_to_check:
                     value = getattr(booking, field, None)
                     value = value.strip() if value else ''
