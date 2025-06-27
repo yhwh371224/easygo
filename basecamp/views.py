@@ -1572,6 +1572,12 @@ def invoice_detail(request):
             bookings = [users[index]] if 0 <= index < len(users) else [users.first()]
 
         if multiple:
+            for booking in bookings:
+                if booking.company_name and not booking.price_adjusted:
+                    booking.price = round(float(booking.price) * 1.10, 2)
+                    booking.price_adjusted = True
+                    booking.save()
+
             booking_data = []
             total_price_without_gst = total_paid = grand_total = 0
             total_gst = total_surcharge = total_toll = 0
@@ -1758,6 +1764,11 @@ def invoice_detail(request):
             mail.attach(f"Tax-Invoice-T{inv_no}.pdf", pdf, 'application/pdf')
 
         mail.send()
+
+        if not multiple and user.company_name and not user.price_adjusted:
+            user.price = round(float(user.price) * 1.10, 2)
+            user.price_adjusted = True
+            user.save()
 
         return render(request, 'basecamp/inquiry_done.html')
 
