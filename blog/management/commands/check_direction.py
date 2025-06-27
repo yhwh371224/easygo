@@ -30,19 +30,20 @@ class Command(BaseCommand):
             missing_direction_list = []
 
             for booking in bookings:
-                flight_number = booking.flight_number.strip() if booking.flight_number else ''
-                direction = booking.direction.strip() if booking.direction else ''
+                # flight_number = booking.flight_number.strip() if booking.flight_number else ''
+                # direction = booking.direction.strip() if booking.direction else ''
+                pickup_time = booking.pickup_time.strip() if booking.pickup_time else ''
 
-                if flight_number and not direction:
+                # if flight_number and not direction:
+                if not pickup_time:
                     missing_direction_list.append({
                         'name': booking.name,
                         'email': booking.email,
                         'pickup_date': booking.pickup_date,
-                        'flight_number': booking.flight_number,
                     })
 
             if missing_direction_list:
-                email_subject = "Summary: Bookings with Flight Number but Missing Direction"
+                email_subject = "Summary: Bookings details missing"
                 email_template = "basecamp/html_email-missing-direction.html"
 
                 self.send_email(
