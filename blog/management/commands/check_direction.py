@@ -21,7 +21,7 @@ class Command(BaseCommand):
         try:
             today = date.today()
             start_date = today + timedelta(days=1)
-            end_date = today + timedelta(days=180)
+            end_date = today + timedelta(days=70)
 
             bookings = Post.objects.filter(
                 pickup_date__range=(start_date, end_date)
@@ -32,6 +32,7 @@ class Command(BaseCommand):
             consolidated_list = []
 
             for booking in bookings:
+                print(f'Checking booking: {booking.name}, pickup_time: {booking.pickup_time!r}')
                 issues = []
 
                 flight_number = (booking.flight_number or '').strip()
@@ -43,12 +44,15 @@ class Command(BaseCommand):
                 # 일반 필드 체크
                 for field in fields_to_check:
                     value = getattr(booking, field, None)
-                    value = value.strip() if value else ''  # None 이든 공백이든 다 '' 처리
+                    value = value.strip() if value else ''
+
+                    print(f'Field: {field}, Value after strip: {value!r}')
 
                     if not value:
                         issues.append(f'{field.replace("_", " ").capitalize()} missing')
 
                 if issues:
+                    print(f'Adding to consolidated_list: {booking.name}, Issues: {issues}')
                     consolidated_list.append({
                         'name': booking.name,
                         'email': booking.email or 'N/A',
