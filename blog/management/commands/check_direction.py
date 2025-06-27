@@ -27,27 +27,33 @@ class Command(BaseCommand):
                 pickup_date__range=(start_date, end_date)
             ).exclude(cancelled=True)
 
+            missing_direction_list = []
+
             for booking in bookings:
                 flight_number = booking.flight_number.strip() if booking.flight_number else ''
                 direction = booking.direction.strip() if booking.direction else ''
 
                 if flight_number and not direction:
-                    email_subject = "Booking with Flight Number but Missing Direction"
-                    email_template = "basecamp/html_email-missing-direction.html"
+                    missing_direction_list.append({
+                        'name': booking.name,
+                        'email': booking.email,
+                        'pickup_date': booking.pickup_date,
+                        'flight_number': booking.flight_number,
+                    })
 
-                    self.send_email(
-                        email_subject,
-                        email_template,
-                        {
-                            'name': booking.name,
-                            'email': booking.email,
-                            'pickup_date': booking.pickup_date,
-                            'flight_number': booking.flight_number,
-                        },
-                        [RECIPIENT_EMAIL]
-                    )
+            if missing_direction_list:
+                email_subject = "Summary: Bookings with Flight Number but Missing Direction"
+                email_template = "basecamp/html_email-missing-direction.html"
 
-            self.stdout.write(self.style.SUCCESS('Missing direction reminders sent successfully'))
+                self.send_email(
+                    email_subject,
+                    email_template,
+                    {'bookings': missing_direction_list},
+                    [RECIPIENT_EMAIL]
+                )
+                self.stdout.write(self.style.SUCCESS(f'Missing direction summary sent. Total: {len(missing_direction_list)}'))
+            else:
+                self.stdout.write(self.style.SUCCESS('No bookings with missing direction found.'))
 
         except Exception as e:
-            self.stdout.write(self.style.ERROR(f'Failed to send missing direction reminders: {str(e)}'))
+            self.stdout.write(self.style.ERROR(f'Failed to send missing direction summary: {str(e)}'))
