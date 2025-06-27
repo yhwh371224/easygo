@@ -35,21 +35,20 @@
                <td style="padding: 20px;">
                   <h2 style="font-size:20px;color:#eb7828;">Missing Direction Alert</h2>
                   <p>Dear Admin,</p>
-                  <p>The following booking has a flight number but is missing the <strong>Direction</strong> information:</p>
-
+                  <p>The following bookings have missing or incomplete details:</p>
                   <table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; width:100%; margin-top:15px;">
                      <tr>
-                        <th align="left">Name</th>
-                        <th align="left">Email</th>
-                        <th align="left">Pickup Date</th>
-                        <th align="left">Flight Number</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Pickup Date</th>
+                        <th>Issues</th>
                      </tr>
                      {% for booking in bookings %}
                      <tr>
                         <td>{{ booking.name }}</td>
                         <td>{{ booking.email }}</td>
                         <td>{{ booking.pickup_date }}</td>
-                        <td>{{ booking.flight_number }}</td>
+                        <td>{{ booking.issues }}</td>
                      </tr>
                      {% endfor %}
                   </table>
