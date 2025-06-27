@@ -35,11 +35,11 @@ class Command(BaseCommand):
                 print(f'Checking booking: {booking.name}, pickup_time: {booking.pickup_time!r}')
                 issues = []
 
-                flight_number = (booking.flight_number or '').strip()
-                direction = (booking.direction or '').strip()
+                # flight_number = (booking.flight_number or '').strip()
+                # direction = (booking.direction or '').strip()
 
-                if flight_number and not direction:
-                    issues.append('Direction missing (flight number present)')
+                # if flight_number and not direction:
+                #     issues.append('Direction missing (flight number present)')
 
                 # 일반 필드 체크
                 for field in fields_to_check:
