@@ -1881,25 +1881,28 @@ def email_dispatch_detail(request):
 
             if selected_option == "Gratitude For Payment" and user:
                 original_price = float(user.price or 0)   
-                total_paid_text = f"===Gratitude=== Total Paid: ${int(original_price)}" 
                 original_notice = (user.notice or "").strip()
 
-                # 기존 결제 기록이 있는지 체크
                 has_payment_record = any(keyword in original_notice for keyword in ["===STRIPE===", "===PAYPAL===", "===Gratitude==="])                
 
+                # 왕복 픽업 있는 경우
                 if user.return_pickup_time == 'x':
-                    full_price = float(original_price * 2)
-                    total_paid_text_1 = f"===Gratitude=== Total Paid: ${int(full_price)}"                     
+                    full_price = original_price * 2
+                    if user.email1:
+                        full_price += full_price * 0.1  # 전체 왕복 요금에 10% 추가
 
-                    if not has_payment_record:                        
-                            user.notice = (
-                                f"{original_notice} | {total_paid_text_1}"
-                                if original_notice else total_paid_text_1
-                            )
+                    total_paid_text_full = f"===Gratitude=== Total Paid: ${int(full_price)}"
+
+                    if not has_payment_record:
+                        user.notice = (
+                            f"{original_notice} | {total_paid_text_full}"
+                            if original_notice else total_paid_text_full
+                        )
                     else:
                         user.notice = original_notice
 
-                    user.paid = user.price
+                    user.paid = full_price
+                    user.price = full_price
                     user.reminder = True
                     user.toll = ""
                     user.cash = False
@@ -1913,7 +1916,11 @@ def email_dispatch_detail(request):
 
                     try:
                         user_1 = Post.objects.filter(email=user.email)[1]
-                        user_1.paid = user.price
+                        user_1_price = original_price * 2
+                        if user.email1:
+                            user_1_price += user_1_price * 0.1  # 10% 추가
+
+                        user_1.paid = user_1_price
                         user_1.reminder = True
                         user_1.toll = ""
                         user_1.cash = False
@@ -1922,16 +1929,24 @@ def email_dispatch_detail(request):
                     except IndexError:
                         pass  
 
+                # 왕복 픽업 없는 경우
                 else:
+                    full_price = original_price
+                    if user.email1:
+                        full_price += full_price * 0.1  # 편도 요금에 10% 추가
+
+                    total_paid_text_full = f"===Gratitude=== Total Paid: ${int(full_price)}"
+
                     if not has_payment_record:
                         user.notice = (
-                            f"{original_notice} | {total_paid_text}"
-                            if original_notice else total_paid_text
+                            f"{original_notice} | {total_paid_text_full}"
+                            if original_notice else total_paid_text_full
                         )
                     else:
                         user.notice = original_notice
 
-                    user.paid = user.price
+                    user.paid = full_price
+                    user.price = full_price
                     user.reminder = True
                     user.toll = ""
                     user.cash = False
@@ -1939,7 +1954,7 @@ def email_dispatch_detail(request):
 
                     context.update({
                         'pickup_date': user.pickup_date,
-                        'price': user.price,
+                        'price': full_price,
                     })
 
             # multi payment 적용방식 
