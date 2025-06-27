@@ -20,8 +20,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         try:
             today = date.today()
-            start_date = today + timedelta(days=14)
-            end_date = today + timedelta(days=90)
+            start_date = today + timedelta(days=90)
+            end_date = today + timedelta(days=180)
 
             bookings = Post.objects.filter(
                 pickup_date__range=(start_date, end_date)
