@@ -34,9 +34,8 @@ class Command(BaseCommand):
             for booking in bookings:
                 issues = []
 
-                # 특수 조건: flight_number는 있고 direction 없음
-                flight_number = booking.flight_number.strip() if booking.flight_number else ''
-                direction = booking.direction.strip() if booking.direction else ''
+                flight_number = (booking.flight_number or '').strip()
+                direction = (booking.direction or '').strip()
 
                 if flight_number and not direction:
                     issues.append('Direction missing (flight number present)')
@@ -44,12 +43,11 @@ class Command(BaseCommand):
                 # 일반 필드 체크
                 for field in fields_to_check:
                     value = getattr(booking, field, None)
-                    if isinstance(value, str):
-                        value = value.strip()
+                    value = value.strip() if value else ''  # None 이든 공백이든 다 '' 처리
+
                     if not value:
                         issues.append(f'{field.replace("_", " ").capitalize()} missing')
 
-                # 문제가 하나라도 있으면 추가
                 if issues:
                     consolidated_list.append({
                         'name': booking.name,
