@@ -66,6 +66,7 @@ class Inquiry(models.Model):
     reminder = models.BooleanField(default=False, blank=True)
     sent_email = models.BooleanField(default=False, blank=True)
     sms_reminder = models.BooleanField(default=False, blank=True)
+    price_adjusted = models.BooleanField(default=False)
     calendar_event_id = models.CharField(max_length=255, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
 
@@ -140,6 +141,7 @@ class Post(models.Model):
     reminder = models.BooleanField(default=False, blank=True)
     sent_email = models.BooleanField(default=False, blank=True)
     sms_reminder = models.BooleanField(default=False, blank=True)
+    price_adjusted = models.BooleanField(default=False)
     calendar_event_id = models.CharField(max_length=255, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
 
