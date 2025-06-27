@@ -8,7 +8,7 @@ from main.settings import RECIPIENT_EMAIL
 
 
 class Command(BaseCommand):
-    help = 'Check bookings with flight number but missing direction'
+    help = 'Check bookings with missing details (consolidated report)'
 
     def send_email(self, subject, template, context, recipient_list):
         html_content = render_to_string(template, context)
@@ -21,40 +21,59 @@ class Command(BaseCommand):
         try:
             today = date.today()
             start_date = today + timedelta(days=1)
-            end_date = today + timedelta(days=180) # 2025/12월까지 다 조사함 
+            end_date = today + timedelta(days=180)
 
             bookings = Post.objects.filter(
                 pickup_date__range=(start_date, end_date)
             ).exclude(cancelled=True)
 
-            missing_direction_list = []
+            fields_to_check = ['pickup_time']  # 원하는 일반 필드 추가
+
+            consolidated_list = []
 
             for booking in bookings:
-                # flight_number = booking.flight_number.strip() if booking.flight_number else ''
-                # direction = booking.direction.strip() if booking.direction else ''
-                pickup_time = booking.pickup_time.strip() if booking.pickup_time else ''
+                issues = []
 
-                # if flight_number and not direction:
-                if not pickup_time:
-                    missing_direction_list.append({
+                # 특수 조건: flight_number는 있고 direction 없음
+                flight_number = booking.flight_number.strip() if booking.flight_number else ''
+                direction = booking.direction.strip() if booking.direction else ''
+
+                if flight_number and not direction:
+                    issues.append('Direction missing (flight number present)')
+
+                # 일반 필드 체크
+                for field in fields_to_check:
+                    value = getattr(booking, field, None)
+                    if isinstance(value, str):
+                        value = value.strip()
+                    if not value:
+                        issues.append(f'{field.replace("_", " ").capitalize()} missing')
+
+                # 문제가 하나라도 있으면 추가
+                if issues:
+                    consolidated_list.append({
                         'name': booking.name,
-                        'email': booking.email,
+                        'email': booking.email or 'N/A',
                         'pickup_date': booking.pickup_date,
+                        'issues': '; '.join(issues)
                     })
 
-            if missing_direction_list:
-                email_subject = "Summary: Bookings details missing"
-                email_template = "basecamp/html_email-missing-direction.html"
+            if consolidated_list:
+                email_subject = "Summary: Bookings with Missing Details"
+                email_template = "basecamp/html_email-missing-details.html"
 
                 self.send_email(
                     email_subject,
                     email_template,
-                    {'bookings': missing_direction_list},
+                    {'bookings': consolidated_list},
                     [RECIPIENT_EMAIL]
                 )
-                self.stdout.write(self.style.SUCCESS(f'Missing direction summary sent. Total: {len(missing_direction_list)}'))
+
+                self.stdout.write(self.style.SUCCESS(
+                    f'Missing details summary sent. Total problematic bookings: {len(consolidated_list)}'
+                ))
             else:
-                self.stdout.write(self.style.SUCCESS('No bookings with missing direction found.'))
+                self.stdout.write(self.style.SUCCESS('No bookings with missing details found.'))
 
         except Exception as e:
-            self.stdout.write(self.style.ERROR(f'Failed to send missing direction summary: {str(e)}'))
+            self.stdout.write(self.style.ERROR(f'Failed to send summary: {str(e)}'))
