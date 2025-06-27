@@ -32,7 +32,6 @@ class Command(BaseCommand):
             consolidated_list = []
 
             for booking in bookings:
-                print(f'Checking booking: {booking.name}, pickup_time: {booking.pickup_time!r}')
                 issues = []
 
                 # flight_number = (booking.flight_number or '').strip()
@@ -45,8 +44,6 @@ class Command(BaseCommand):
                 for field in fields_to_check:
                     value = getattr(booking, field, None)
                     value = value.strip() if value else ''
-
-                    print(f'Field: {field}, Value after strip: {value!r}')
 
                     if not value:
                         issues.append(f'{field.replace("_", " ").capitalize()} missing')
