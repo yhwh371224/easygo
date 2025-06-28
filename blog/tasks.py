@@ -209,7 +209,6 @@ def notify_user_payment_paypal(instance_id):
             remaining_amount = amount
             total_price = 0.0
             total_paid_before = 0.0
-            total_paid_after = 0.0
 
             for post in posts:
                 price = float(post.price or 0)
@@ -223,16 +222,14 @@ def notify_user_payment_paypal(instance_id):
                     continue  # 이미 결제된 예약 건너뜀
 
                 if remaining_amount >= balance:
-                    post.paid = price
+                    paid_new = price
                     remaining_amount -= balance
                 else:
                     paid_new = paid + remaining_amount
                     remaining_amount = 0.0
-                    post.paid = str(round(paid_new, 2))
 
-                total_paid_after += float(post.paid)
-
-                post.toll = "" if float(post.paid) >= price else "short payment"
+                post.paid = str(round(paid_new, 2))
+                post.toll = "" if paid_new >= price else "short payment"
                 post.cash = False
                 post.reminder = True
                 post.discount = ""
@@ -251,6 +248,8 @@ def notify_user_payment_paypal(instance_id):
 
                 if remaining_amount <= 0:
                     break
+
+            total_paid_after = total_paid_before + amount
 
             # 이메일 발송
             recipient_list = [email for email in recipient_emails if email] + [RECIPIENT_EMAIL]
