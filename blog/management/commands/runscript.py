@@ -46,4 +46,4 @@ payment = PaypalPayment.objects.create(
     amount=amount
 )
 
-
+notify_user_payment_paypal(payment.id)
