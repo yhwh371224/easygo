@@ -201,7 +201,8 @@ def notify_user_payment_paypal(instance_id):
             pickup_date__gte=timezone.now().date()  # 오늘 이후
         ).order_by('pickup_date')  # 가장 가까운 순
 
-        amount = round(float(instance.amount or 0) / 1.03, 2)
+        raw_amount = float(instance.amount or 0)  # 실제 결제금액
+        amount = round(raw_amount / 1.03, 2)      # 수수료 제외 시스템 반영금액
         recipient_emails = set()
 
         if posts.exists():
@@ -229,7 +230,7 @@ def notify_user_payment_paypal(instance_id):
                     remaining_amount = 0
 
                 post.paid = str(round(paid_new, 2))
-                total_paid_after += paid_new
+                total_paid_after += paid_new - paid
 
                 post.toll = "" if paid_new >= price else "short payment"
                 post.cash = False
@@ -259,16 +260,24 @@ def notify_user_payment_paypal(instance_id):
             if total_paid_after >= total_price:
                 html_content = render_to_string(
                     "basecamp/html_email-payment-success.html",
-                    {'name': instance.name, 'email': instance.email, 'amount': amount}
+                    {
+                        'name': instance.name, 
+                        'email': instance.email, 
+                        'amount': amount,             # 시스템 반영금액
+                        'raw_amount': raw_amount      # 실제 결제금액                        
+                    }
                 )
             else:
+                remaining_before_payment = round(total_price - total_paid_before, 2)
+                diff = round(remaining_before_payment - amount, 2)
+
                 html_content = render_to_string(
                     "basecamp/html_email-response-discrepancy.html",
                     {
                         'name': instance.name,
                         'price': round(total_price, 2),
-                        'paid': round(total_paid_before + amount, 2),
-                        'diff': round(total_price - (total_paid_before + amount), 2)
+                        'paid': amount,
+                        'diff': diff
                     }
                 )
 

@@ -22,29 +22,28 @@ class Command(BaseCommand):
 
         self.stdout.write(self.style.SUCCESS(f"{count} posts updated."))
 
-# from blog.models import Post
 
-# Post.objects.filter(email="heather@blueplanetdc.com").update(email="sungkam718@gmail.com")
-# Post.objects.filter(email="sungkam718@gmail.com").update(email="heather@blueplanetdc.com")
-# Post.objects.filter(email="heather@blueplanetdc.com").update(email="kate@diveplanit.com")
-# Post.objects.filter(email="kate@diveplanit.com").update(email="heather@blueplanetdc.com")
-# Post.objects.filter(email="kate@diveplanit.com").update(name="")
-# Post.objects.filter(email="heather@blueplanetdc.com").update(name="")
+from blog.models import Post
 
-
-
-
-# class Command(BaseCommand):
-
-#     def handle(self, *args, **kwargs):
-#         old_email = "heather@blueplanetdc.com"
-#         new_email = "sungkam718@gmail.com"
-#         updated = Post.objects.filter(email__iexact=old_email).update(email=new_email)
+Post.objects.filter(email="silvio.vichroski@fiero.org.br").update(email="sungkam718@gmail.com")
+Post.objects.filter(email="sungkam718@gmail.com").update(email="heather@blueplanetdc.com")
+Post.objects.filter(email="heather@blueplanetdc.com").update(email="kate@diveplanit.com")
+Post.objects.filter(email="kate@diveplanit.com").update(email="heather@blueplanetdc.com")
+Post.objects.filter(email="kate@diveplanit.com").update(name="Kate Smillie")
+Post.objects.filter(email="heather@blueplanetdc.com").update(name="")
 
 
-# class Command(BaseCommand):
+class Command(BaseCommand):
 
-#     def handle(self, *args, **kwargs):
-#         target_email = "kate@diveplanit.com"
-#         cleared = Post.objects.filter(email__iexact=target_email).update(email1="")
+    def handle(self, *args, **kwargs):
+        old_email = "heather@blueplanetdc.com"
+        new_email = "sungkam718@gmail.com"
+        updated = Post.objects.filter(email__iexact=old_email).update(email=new_email)
+
+
+class Command(BaseCommand):
+
+    def handle(self, *args, **kwargs):
+        target_email = "kate@diveplanit.com"
+        cleared = Post.objects.filter(email__iexact=target_email).update(email1="")
         
