@@ -206,9 +206,7 @@ def notify_user_payment_paypal(instance_id):
         recipient_emails = set()
 
         if posts.exists():
-            # 1. 미납 예약 기준으로 총 미납금 계산
             unpaid_posts = []
-            total_outstanding_before_payment = 0.0
 
             for post in posts:
                 price = float(post.price or 0)
@@ -217,45 +215,51 @@ def notify_user_payment_paypal(instance_id):
 
                 if balance > 0:
                     unpaid_posts.append((post, balance))
-                    total_outstanding_before_payment += balance
 
-            # 결제금 분배 로직   
-            remaining_amount = amount
-            total_paid_after = 0.0
+            # 미납 예약이 있는 경우만 처리
+            if unpaid_posts:
+                total_outstanding_before_payment = sum(balance for _, balance in unpaid_posts)
 
-            for post, balance in unpaid_posts:
-                price = float(post.price or 0)
-                paid = float(post.paid or 0)
+                # 결제금 분배 로직   
+                remaining_amount = amount
+                total_applied_amount = 0.0
 
-                if remaining_amount >= balance:
-                    paid_new = price
-                    remaining_amount -= balance
-                else:
-                    paid_new = paid + remaining_amount
-                    remaining_amount = 0
+                for post, balance in unpaid_posts:
+                    price = float(post.price or 0)
+                    paid = float(post.paid or 0)
 
-                post.paid = str(round(paid_new, 2))
-                total_applied_amount += paid_new - paid
+                    if remaining_amount >= balance:
+                        paid_new = price
+                        remaining_amount -= balance
+                    else:
+                        paid_new = paid + remaining_amount
+                        remaining_amount = 0
 
-                post.toll = "" if paid_new >= price else "short payment"
-                post.cash = False
-                post.reminder = True
-                post.discount = ""
+                    post.paid = str(round(paid_new, 2))
+                    total_applied_amount += paid_new - paid
 
-                original_notice = post.notice or ""
-                notice_parts = [original_notice.strip()]
-                new_notice_entry = f"===PAYPAL=== Total paid: ${int(amount)}"
+                    post.toll = "" if paid_new >= price else "short payment"
+                    post.cash = False
+                    post.reminder = True
+                    post.discount = ""
 
-                if new_notice_entry not in original_notice:
-                    notice_parts.append(new_notice_entry)
-                    post.notice = " | ".join(filter(None, notice_parts)).strip()
+                    original_notice = post.notice or ""
+                    notice_parts = [original_notice.strip()]
+                    new_notice_entry = f"===PAYPAL=== Total paid: ${int(amount)}"
 
-                post.save()
+                    if new_notice_entry not in original_notice:
+                        notice_parts.append(new_notice_entry)
+                        post.notice = " | ".join(filter(None, notice_parts)).strip()
 
-                recipient_emails.update([post.email, post.email1])
+                    post.save()
 
-                if remaining_amount <= 0:
-                    break
+                    recipient_emails.update([post.email, post.email1])
+
+                    if remaining_amount <= 0:
+                        break
+            else:
+                total_outstanding_before_payment = 0.0
+                total_applied_amount = 0.0
 
             # 3. 남은 미납액 기준으로 메일 작성
             remaining_after_payment = round(total_outstanding_before_payment - amount, 2)
@@ -270,7 +274,7 @@ def notify_user_payment_paypal(instance_id):
                     {
                         'name': instance.name,
                         'outstanding_before': round(total_outstanding_before_payment, 2),
-                        'paid': amount,
+                        'paid': round(raw_amount, 2),
                         'diff': remaining_after_payment
                     }
                 )
