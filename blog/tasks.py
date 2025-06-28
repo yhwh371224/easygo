@@ -206,28 +206,26 @@ def notify_user_payment_paypal(instance_id):
         recipient_emails = set()
 
         if posts.exists():
-            # 전체 예약 기준 총액과 기존 납부금 먼저 계산
-            total_price = 0.0
-            total_paid_before = 0.0
-
-            for post in posts:
-                price = float(post.price or 0)
-                paid = float(post.paid or 0)
-
-                total_price += price
-                total_paid_before += paid
-
-            # 결제금 분배 로직   
-            remaining_amount = amount
-            total_paid_after = 0.0
+            # 1. 미납 예약 기준으로 총 미납금 계산
+            unpaid_posts = []
+            total_outstanding_before_payment = 0.0
 
             for post in posts:
                 price = float(post.price or 0)
                 paid = float(post.paid or 0)
                 balance = round(price - paid, 2)
 
-                if balance <= 0:
-                    continue
+                if balance > 0:
+                    unpaid_posts.append((post, balance))
+                    total_outstanding_before_payment += balance
+
+            # 결제금 분배 로직   
+            remaining_amount = amount
+            total_paid_after = 0.0
+
+            for post, balance in unpaid_posts:
+                price = float(post.price or 0)
+                paid = float(post.paid or 0)
 
                 if remaining_amount >= balance:
                     paid_new = price
@@ -237,7 +235,7 @@ def notify_user_payment_paypal(instance_id):
                     remaining_amount = 0
 
                 post.paid = str(round(paid_new, 2))
-                total_paid_after += paid_new - paid
+                total_applied_amount += paid_new - paid
 
                 post.toll = "" if paid_new >= price else "short payment"
                 post.cash = False
@@ -246,10 +244,8 @@ def notify_user_payment_paypal(instance_id):
 
                 original_notice = post.notice or ""
                 notice_parts = [original_notice.strip()]
-
                 new_notice_entry = f"===PAYPAL=== Total paid: ${int(amount)}"
 
-                # 중복 방지 조건 추가
                 if new_notice_entry not in original_notice:
                     notice_parts.append(new_notice_entry)
                     post.notice = " | ".join(filter(None, notice_parts)).strip()
@@ -261,30 +257,32 @@ def notify_user_payment_paypal(instance_id):
                 if remaining_amount <= 0:
                     break
 
+            # 3. 남은 미납액 기준으로 메일 작성
+            remaining_after_payment = round(total_outstanding_before_payment - amount, 2)
+
             # 이메일 한 번만 발송
             recipient_list = [email for email in recipient_emails if email] + [RECIPIENT_EMAIL]
 
-            if total_paid_after >= total_price:
-                html_content = render_to_string(
-                    "basecamp/html_email-payment-success.html",
-                    {
-                        'name': instance.name, 
-                        'email': instance.email, 
-                        'amount': amount,             # 시스템 반영금액
-                        'raw_amount': raw_amount      # 실제 결제금액                        
-                    }
-                )
-            else:
-                remaining_before_payment = round(total_price - total_paid_before, 2)
-                diff = round(remaining_before_payment - amount, 2)
-
+            if remaining_after_payment > 0:
+                # 미납금 남음 - 차이 메일
                 html_content = render_to_string(
                     "basecamp/html_email-response-discrepancy.html",
                     {
                         'name': instance.name,
-                        'price': round(total_price, 2),
+                        'outstanding_before': round(total_outstanding_before_payment, 2),
                         'paid': amount,
-                        'diff': diff
+                        'diff': remaining_after_payment
+                    }
+                )
+            else:
+                # 전액 또는 초과 결제 - 성공 메일
+                html_content = render_to_string(
+                    "basecamp/html_email-payment-success.html",
+                    {
+                        'name': instance.name,
+                        'email': instance.email,
+                        'amount': amount,
+                        'raw_amount': raw_amount
                     }
                 )
 
