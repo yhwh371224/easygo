@@ -194,92 +194,68 @@ def notify_user_payment_paypal(instance_id):
     if instance.name:
         posts = Post.objects.filter(
             (
-                Q(name__iregex=r'^%s$' % re.escape(instance.name)) |
+                Q(name__iexact=instance.name) |
                 Q(email__iexact=instance.email) |
                 Q(email1__iexact=instance.email)
             ),
-            pickup_date__gte=timezone.now().date()  # 오늘 이후
-        ).order_by('pickup_date')  # 가장 가까운 순
+            pickup_date__gte=timezone.now().date()
+        ).order_by('pickup_date')
 
-        raw_amount = float(instance.amount or 0)  # 실제 결제금액
-        amount = round(raw_amount / 1.03, 2)      # 수수료 제외 시스템 반영금액
+        raw_amount = float(instance.amount or 0)
+        amount = round(raw_amount / 1.03, 2)  # 수수료 제외 반영금액
         recipient_emails = set()
 
         if posts.exists():
-            unpaid_posts = []
+            remaining_amount = amount
+            total_price = 0.0
+            total_paid_before = 0.0
+            total_paid_after = 0.0
 
             for post in posts:
                 price = float(post.price or 0)
                 paid = float(post.paid or 0)
                 balance = round(price - paid, 2)
 
-                if balance > 0:
-                    unpaid_posts.append((post, balance))
+                total_price += price
+                total_paid_before += paid
 
-            # 미납 예약이 있는 경우만 처리
-            if unpaid_posts:
-                total_outstanding_before_payment = sum(balance for _, balance in unpaid_posts)
+                if balance <= 0:
+                    continue  # 이미 결제된 예약 건너뜀
 
-                # 결제금 분배 로직   
-                remaining_amount = amount
-                total_applied_amount = 0.0
-
-                for post, balance in unpaid_posts:
-                    price = float(post.price or 0)
-                    paid = float(post.paid or 0)
-
-                    if remaining_amount >= balance:
-                        paid_new = price
-                        remaining_amount -= balance
-                    else:
-                        paid_new = paid + remaining_amount
-                        remaining_amount = 0
-
+                if remaining_amount >= balance:
+                    post.paid = price
+                    remaining_amount -= balance
+                else:
+                    paid_new = paid + remaining_amount
+                    remaining_amount = 0.0
                     post.paid = str(round(paid_new, 2))
-                    total_applied_amount += paid_new - paid
 
-                    post.toll = "" if paid_new >= price else "short payment"
-                    post.cash = False
-                    post.reminder = True
-                    post.discount = ""
+                total_paid_after += float(post.paid)
 
-                    original_notice = post.notice or ""
-                    notice_parts = [original_notice.strip()]
-                    new_notice_entry = f"===PAYPAL=== Total paid: ${int(amount)}"
+                post.toll = "" if float(post.paid) >= price else "short payment"
+                post.cash = False
+                post.reminder = True
+                post.discount = ""
 
-                    if new_notice_entry not in original_notice:
-                        notice_parts.append(new_notice_entry)
-                        post.notice = " | ".join(filter(None, notice_parts)).strip()
+                original_notice = post.notice or ""
+                notice_parts = [original_notice.strip()]
+                new_notice_entry = f"===PAYPAL=== Total paid: ${int(amount)}"
 
-                    post.save()
+                if new_notice_entry not in original_notice:
+                    notice_parts.append(new_notice_entry)
+                    post.notice = " | ".join(filter(None, notice_parts)).strip()
 
-                    recipient_emails.update([post.email, post.email1])
+                post.save()
 
-                    if remaining_amount <= 0:
-                        break
-            else:
-                total_outstanding_before_payment = 0.0
-                total_applied_amount = 0.0
+                recipient_emails.update([post.email, post.email1])
 
-            # 3. 남은 미납액 기준으로 메일 작성
-            remaining_after_payment = round(total_outstanding_before_payment - amount, 2)
+                if remaining_amount <= 0:
+                    break
 
-            # 이메일 한 번만 발송
+            # 이메일 발송
             recipient_list = [email for email in recipient_emails if email] + [RECIPIENT_EMAIL]
 
-            if remaining_after_payment > 0:
-                # 미납금 남음 - 차이 메일
-                html_content = render_to_string(
-                    "basecamp/html_email-response-discrepancy.html",
-                    {
-                        'name': instance.name,
-                        'outstanding_before': round(total_outstanding_before_payment, 2),
-                        'paid': round(raw_amount, 2),
-                        'diff': remaining_after_payment
-                    }
-                )
-            else:
-                # 전액 또는 초과 결제 - 성공 메일
+            if total_paid_after >= total_price:
                 html_content = render_to_string(
                     "basecamp/html_email-payment-success.html",
                     {
@@ -287,6 +263,16 @@ def notify_user_payment_paypal(instance_id):
                         'email': instance.email,
                         'amount': amount,
                         'raw_amount': raw_amount
+                    }
+                )
+            else:
+                html_content = render_to_string(
+                    "basecamp/html_email-response-discrepancy.html",
+                    {
+                        'name': instance.name,
+                        'price': round(total_price, 2),
+                        'paid': round(total_paid_before + amount, 2),
+                        'diff': round(total_price - (total_paid_before + amount), 2)
                     }
                 )
 
