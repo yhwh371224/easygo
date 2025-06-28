@@ -52,7 +52,7 @@ class Command(BaseCommand):
             "Review-EasyGo",
         ]
         for interval, template, subject in zip_longest(reminder_intervals, templates, subjects, fillvalue=""):
-            sms_allowed = interval in [1, 3]
+            sms_allowed = interval in [0, 1]
             self.send_email(interval, template, subject, sms_allowed)
 
     def format_pickup_time_12h(self, pickup_time_str):
@@ -80,8 +80,8 @@ class Command(BaseCommand):
             return
 
         message_body = f"""
-        Hi {name}, this is a reminder for your EasyGo booking on {pickup_date}.
-        Please check your email for details. Reply by email.
+        Hi {name}, your EasyGo booking is on {pickup_date}.
+        Please check your email for details and reply by email.
         """.strip()
         try:
             self.twilio_client.messages.create(
@@ -100,8 +100,8 @@ class Command(BaseCommand):
             return
 
         message_body = f"""
-        Hi {name}, this is a reminder for your EasyGo booking on {pickup_date}.
-        Please check your email for details. Reply by email.
+        Hi {name}, your EasyGo booking is on {pickup_date}.
+        Please check your email for details and reply by email.
         """.strip()
 
         try:
@@ -157,7 +157,13 @@ class Command(BaseCommand):
             })
 
             text_content = strip_tags(html_content)
-            email = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [booking_reminder.email, booking_reminder.email1])
+
+            email_recipients = [booking_reminder.email]
+
+            if booking_reminder.email1 and booking_reminder.email1.strip():
+                email_recipients.append(booking_reminder.email1.strip())
+
+            email = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, email_recipients)
             email.attach_alternative(html_content, "text/html")
 
             try:
@@ -167,7 +173,12 @@ class Command(BaseCommand):
                 logger.error(f"Failed to send email to {booking_reminder.email}: {str(e)}")
 
             # 📱 Send SMS if applicable
-            if booking_reminder.sms_reminder is True and booking_reminder.contact and sms_allowed:
+            if (
+                    booking_reminder.sms_reminder is True and
+                    not booking_reminder.cancelled and
+                    (booking_reminder.paid or booking_reminder.cash) and
+                    sms_allowed
+                ):
                 self.send_sms_reminder(
                     booking_reminder.contact,
                     booking_reminder.name,
@@ -175,6 +186,13 @@ class Command(BaseCommand):
                     booking_reminder.email,
                     booking_reminder.price
                 )
+            if (
+                    booking_reminder.sms_reminder is True and                    
+                    not booking_reminder.cancelled and
+                    (booking_reminder.paid or booking_reminder.cash) and
+                    booking_reminder.direction == "Pickup from Intl Airport" and
+                    sms_allowed 
+                ):
                 self.send_whatsapp_reminder(
                     booking_reminder.contact,
                     booking_reminder.name,
