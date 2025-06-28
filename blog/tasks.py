@@ -206,18 +206,25 @@ def notify_user_payment_paypal(instance_id):
         recipient_emails = set()
 
         if posts.exists():
-            remaining_amount = amount
+            # 전체 예약 기준 총액과 기존 납부금 먼저 계산
             total_price = 0.0
             total_paid_before = 0.0
+
+            for post in posts:
+                price = float(post.price or 0)
+                paid = float(post.paid or 0)
+
+                total_price += price
+                total_paid_before += paid
+
+            # 결제금 분배 로직   
+            remaining_amount = amount
             total_paid_after = 0.0
 
             for post in posts:
                 price = float(post.price or 0)
                 paid = float(post.paid or 0)
                 balance = round(price - paid, 2)
-
-                total_price += price
-                total_paid_before += paid
 
                 if balance <= 0:
                     continue
