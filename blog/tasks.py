@@ -194,21 +194,21 @@ def notify_user_payment_paypal(instance_id):
     if instance.name:
         posts = Post.objects.filter(
             (
-                Q(name__iregex=r'^%s$' % re.escape(instance.name)) |
+                Q(name__iexact=instance.name) |
                 Q(email__iexact=instance.email) |
                 Q(email1__iexact=instance.email)
             ),
-            pickup_date__gte=timezone.now().date()  # 오늘 이후
-        ).order_by('pickup_date')  # 가장 가까운 순
+            pickup_date__gte=timezone.now().date()
+        ).order_by('pickup_date')
 
-        amount = round(float(instance.amount or 0) / 1.03, 2)
+        raw_amount = float(instance.amount or 0)
+        amount = round(raw_amount / 1.03, 2)  # 수수료 제외 반영금액
         recipient_emails = set()
 
         if posts.exists():
             remaining_amount = amount
             total_price = 0.0
             total_paid_before = 0.0
-            total_paid_after = 0.0
 
             for post in posts:
                 price = float(post.price or 0)
@@ -219,18 +219,16 @@ def notify_user_payment_paypal(instance_id):
                 total_paid_before += paid
 
                 if balance <= 0:
-                    continue
+                    continue  # 이미 결제된 예약 건너뜀
 
                 if remaining_amount >= balance:
                     paid_new = price
                     remaining_amount -= balance
                 else:
                     paid_new = paid + remaining_amount
-                    remaining_amount = 0
+                    remaining_amount = 0.0
 
                 post.paid = str(round(paid_new, 2))
-                total_paid_after += paid_new
-
                 post.toll = "" if paid_new >= price else "short payment"
                 post.cash = False
                 post.reminder = True
@@ -238,10 +236,8 @@ def notify_user_payment_paypal(instance_id):
 
                 original_notice = post.notice or ""
                 notice_parts = [original_notice.strip()]
-
                 new_notice_entry = f"===PAYPAL=== Total paid: ${int(amount)}"
 
-                # 중복 방지 조건 추가
                 if new_notice_entry not in original_notice:
                     notice_parts.append(new_notice_entry)
                     post.notice = " | ".join(filter(None, notice_parts)).strip()
@@ -253,13 +249,20 @@ def notify_user_payment_paypal(instance_id):
                 if remaining_amount <= 0:
                     break
 
-            # 이메일 한 번만 발송
+            total_paid_after = total_paid_before + amount
+
+            # 이메일 발송
             recipient_list = [email for email in recipient_emails if email] + [RECIPIENT_EMAIL]
 
             if total_paid_after >= total_price:
                 html_content = render_to_string(
                     "basecamp/html_email-payment-success.html",
-                    {'name': instance.name, 'email': instance.email, 'amount': amount}
+                    {
+                        'name': instance.name,
+                        'email': instance.email,
+                        'amount': amount,
+                        'raw_amount': raw_amount
+                    }
                 )
             else:
                 html_content = render_to_string(
@@ -291,7 +294,7 @@ def notify_user_payment_stripe(instance_id):
     if instance.name:
         posts = Post.objects.filter(
             (
-                Q(name__iregex=r'^%s$' % re.escape(instance.name)) |
+                Q(name__iexact=instance.name) |
                 Q(email__iexact=instance.email) |
                 Q(email1__iexact=instance.email)
             ),
