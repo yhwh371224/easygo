@@ -295,7 +295,7 @@ def notify_user_payment_stripe(instance_id):
     if instance.name:
         posts = Post.objects.filter(
             (
-                Q(name__iregex=r'^%s$' % re.escape(instance.name)) |
+                Q(name__iexact=instance.name) |
                 Q(email__iexact=instance.email) |
                 Q(email1__iexact=instance.email)
             ),
