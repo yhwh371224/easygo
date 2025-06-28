@@ -33,17 +33,17 @@ Post.objects.filter(email="kate@diveplanit.com").update(name="Kate Smillie")
 Post.objects.filter(email="heather@blueplanetdc.com").update(name="")
 
 
-class Command(BaseCommand):
+from blog.models import Post, PaypalPayment
+from blog.tasks import notify_user_payment_paypal
 
-    def handle(self, *args, **kwargs):
-        old_email = "heather@blueplanetdc.com"
-        new_email = "sungkam718@gmail.com"
-        updated = Post.objects.filter(email__iexact=old_email).update(email=new_email)
+name = "Silvio Luiz"
+email = "sungkam718@gmail.com"
+amount = "2.06"  
+
+payment = PaypalPayment.objects.create(
+    name=name,
+    email=email,
+    amount=amount
+)
 
 
-class Command(BaseCommand):
-
-    def handle(self, *args, **kwargs):
-        target_email = "kate@diveplanit.com"
-        cleared = Post.objects.filter(email__iexact=target_email).update(email1="")
-        
