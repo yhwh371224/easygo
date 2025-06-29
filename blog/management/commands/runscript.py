@@ -26,15 +26,15 @@ class Command(BaseCommand):
 from blog.models import Post
 
 Post.objects.filter(email="silvio.vichroski@fiero.org.br").update(email="sungkam718@gmail.com")
-Post.objects.filter(email="sungkam718@gmail.com").update(email="heather@blueplanetdc.com")
+Post.objects.filter(email="sungkam718@gmail.com").update(email="silvio.vichroski@fiero.org.br")
 Post.objects.filter(email="heather@blueplanetdc.com").update(email="kate@diveplanit.com")
 Post.objects.filter(email="kate@diveplanit.com").update(email="heather@blueplanetdc.com")
 Post.objects.filter(email="kate@diveplanit.com").update(name="Kate Smillie")
 Post.objects.filter(email="heather@blueplanetdc.com").update(name="")
 
 
-from blog.models import Post, PaypalPayment
-from blog.tasks import notify_user_payment_paypal
+from blog.models import Post, PaypalPayment, StripePayment
+from blog.tasks import notify_user_payment_paypal, notify_user_payment_stripe
 
 name = "Silvio Luiz"
 email = "sungkam718@gmail.com"
@@ -46,4 +46,19 @@ payment = PaypalPayment.objects.create(
     amount=amount
 )
 
+from blog.models import Post, StripePayment
+from blog.tasks import notify_user_payment_stripe
+
+name = "Silvio Luiz"
+email = "sungkam718@gmail.com"
+amount = "2.06"  
+
 notify_user_payment_paypal(payment.id)
+
+payment = StripePayment.objects.create(
+    name=name,
+    email=email,
+    amount=amount
+)
+
+notify_user_payment_stripe(payment.id)
