@@ -1811,7 +1811,7 @@ def email_dispatch_detail(request):
         wait_duration = request.POST.get('wait_duration')
         discount_price = request.POST.get('discount_price')        
         
-        user = Post.objects.filter(email=email).first()
+        user = Post.objects.filter(email=email).order_by('-id').first()
         if not user:
             user = Post.objects.filter(email1=email).first()
         if not user:
