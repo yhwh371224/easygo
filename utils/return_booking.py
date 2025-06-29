@@ -21,7 +21,13 @@ def handle_return_trip(instance):
 
         driver = instance.driver or Driver.objects.get(driver_name__iexact="Sam")
 
-        full_price = float(instance.price or 0)
+        price_raw = (instance.price or '').strip()
+
+        try:
+            full_price = float(price_raw) if price_raw else 0.0
+        except ValueError:
+            full_price = 0.0  
+
         half_price = round(full_price / 2, 2)
 
         # paid 처리

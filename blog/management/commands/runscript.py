@@ -38,25 +38,19 @@ from blog.tasks import notify_user_payment_paypal, notify_user_payment_stripe
 
 name = "Silvio Luiz"
 email = "sungkam718@gmail.com"
-amount = "2.06"  
+amount = "330"  
 
-payment = PaypalPayment.objects.create(
-    name=name,
-    email=email,
-    amount=amount
-)
+payment = PaypalPayment.objects.create(name=name, email=email, amount=amount)
+
+notify_user_payment_paypal(payment.id)
 
 from blog.models import Post, StripePayment
 from blog.tasks import notify_user_payment_stripe
 
 name = "Silvio Luiz"
 email = "sungkam718@gmail.com"
-amount = "2.06"  
+amount = "300"  
 
-payment = StripePayment.objects.create(
-    name=name,
-    email=email,
-    amount=amount
-)
+payment = StripePayment.objects.create(name=name, email=email, amount=amount)
 
 notify_user_payment_stripe(payment.id)
