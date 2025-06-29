@@ -322,7 +322,7 @@ def notify_user_payment_stripe(instance_id):
                     continue  # 이미 결제된 예약은 건너뜀
 
                 if remaining_amount >= balance:
-                    post.paid = price
+                    paid_new = price
                     remaining_amount -= balance
                 else:
                     paid_new = paid + remaining_amount
