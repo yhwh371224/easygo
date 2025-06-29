@@ -53,8 +53,6 @@ name = "Silvio Luiz"
 email = "sungkam718@gmail.com"
 amount = "2.06"  
 
-notify_user_payment_paypal(payment.id)
-
 payment = StripePayment.objects.create(
     name=name,
     email=email,
