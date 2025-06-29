@@ -1205,7 +1205,7 @@ def confirm_booking_detail(request):
         except ValueError:
             return HttpResponse("Invalid index value", status=400)  
         
-        users = Inquiry.objects.filter(email=email)
+        users = Inquiry.objects.filter(email__iexact=email)
 
         if users.exists() and 0 <= index < len(users):
             user = users[index]
@@ -1280,7 +1280,7 @@ def sending_email_first_detail(request):
         except ValueError:
             return HttpResponse("Invalid index value", status=400)  
         
-        users = Post.objects.filter(email=email)        
+        users = Post.objects.filter(email__iexact=email)        
         if users.exists() and 0 <= index < len(users):
             user = users[index]  
 
@@ -1338,8 +1338,8 @@ def sending_email_second_detail(request):
     if request.method == "POST":
         email = request.POST.get('email')
 
-        user = Post.objects.filter(email=email)[1]
-        user1 = Post.objects.filter(email=email).first()    
+        user = Post.objects.filter(email__iexact=email)[1]
+        user1 = Post.objects.filter(email__iexact=email).first()    
 
         user.sent_email = True
         user.save()  
@@ -1401,8 +1401,8 @@ def sending_email_input_data_detail(request):
         email = request.POST.get('email')   
         field = request.POST.get('field')        
 
-        inquiry = Inquiry.objects.filter(email=email).first()
-        post = Post.objects.filter(email=email).first()
+        inquiry = Inquiry.objects.filter(email__iexact=email).first()
+        post = Post.objects.filter(email__iexact=email).first()
 
         user = None
         for obj in [inquiry, post]:
@@ -1557,7 +1557,7 @@ def invoice_detail(request):
         today = date.today()
         inv_no = int(inv_no or 988390)
 
-        users = Post.objects.filter(email=email)
+        users = Post.objects.filter(email__iexact=email)
         if not users.exists():
             return HttpResponse("No bookings found", status=404)
 
@@ -1708,7 +1708,7 @@ def invoice_detail(request):
                 }
 
             elif user.return_pickup_time == "x":
-                user1 = Post.objects.filter(email=email)[1]
+                user1 = Post.objects.filter(email__iexact=email)[1]
 
                 # 두 배 가격 계산
                 base_price = safe_float(user1.price) or 0.0
@@ -1811,11 +1811,11 @@ def email_dispatch_detail(request):
         wait_duration = request.POST.get('wait_duration')
         discount_price = request.POST.get('discount_price')        
         
-        user = Post.objects.filter(email=email).first()
+        user = Post.objects.filter(email__iexact=email).first()
         if not user:
             user = Post.objects.filter(email1=email).first()
         if not user:
-            user = Inquiry.objects.filter(email=email).first()
+            user = Inquiry.objects.filter(email__iexact=email).first()
 
         # Handle adjustment_time logic (DB update + SMS + context prep)
         pickup_time_12h = None
@@ -1922,7 +1922,7 @@ def email_dispatch_detail(request):
                     context.update({
                         'pickup_date': user.pickup_date,
                         'price': full_price,
-                        'return_pickup_date': user.return_pickup_date,
+                        'return_pickup_date': user.return_pickup_date if user else '',
                     })
 
                     try:
@@ -2016,7 +2016,7 @@ def email_dispatch_detail(request):
                     user.cancelled = True
                     user.save()
 
-                    second_user = Post.objects.filter(email=email)[1]
+                    second_user = Post.objects.filter(email__iexact=email)[1]
                     second_user.cancelled = True
                     second_user.cash = False
                     second_user.save()
