@@ -38,7 +38,7 @@ from blog.tasks import notify_user_payment_paypal
 
 name = "Sung Kam"
 email = "sungkam718@gmail.com"
-amount = "103"  
+amount = "412" 
 
 payment = PaypalPayment.objects.create(name=name, email=email, amount=amount)
 
