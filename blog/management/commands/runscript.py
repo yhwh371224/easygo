@@ -49,7 +49,7 @@ from blog.tasks import notify_user_payment_stripe
 
 name = "Silvio Luiz"
 email = "sungkam718@gmail.com"
-amount = "100"  
+amount = "400"  
 
 payment = StripePayment.objects.create(name=name, email=email, amount=amount)
 
