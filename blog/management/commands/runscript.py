@@ -33,12 +33,12 @@ Post.objects.filter(email="kate@diveplanit.com").update(name="Kate Smillie")
 Post.objects.filter(email="heather@blueplanetdc.com").update(name="")
 
 
-from blog.models import Post, PaypalPayment, StripePayment
-from blog.tasks import notify_user_payment_paypal, notify_user_payment_stripe
+from blog.models import Post, PaypalPayment
+from blog.tasks import notify_user_payment_paypal
 
-name = "Silvio Luiz"
+name = "Sung Kam"
 email = "sungkam718@gmail.com"
-amount = "330"  
+amount = "103"  
 
 payment = PaypalPayment.objects.create(name=name, email=email, amount=amount)
 
@@ -49,7 +49,7 @@ from blog.tasks import notify_user_payment_stripe
 
 name = "Silvio Luiz"
 email = "sungkam718@gmail.com"
-amount = "300"  
+amount = "100"  
 
 payment = StripePayment.objects.create(name=name, email=email, amount=amount)
 
