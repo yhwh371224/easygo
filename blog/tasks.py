@@ -206,20 +206,25 @@ def notify_user_payment_paypal(instance_id):
         recipient_emails = set()
 
         if posts.exists():
+            # 전체 미납액 계산 
+            total_balance = 0.0
+            for post in posts:
+                price = float(post.price or 0)
+                paid = float(post.paid or 0)
+                balance = round(price - paid, 2)
+
+                if balance > 0:
+                    total_balance += balance
+
             remaining_amount = amount
-            total_price = 0.0
-            total_paid_before = 0.0
 
             for post in posts:
                 price = float(post.price or 0)
                 paid = float(post.paid or 0)
                 balance = round(price - paid, 2)
 
-                total_price += price
-                total_paid_before += paid
-
                 if balance <= 0:
-                    continue  # 이미 결제된 예약 건너뜀
+                    continue  # 이미 전액 결제된 예약 건너뜀
 
                 if remaining_amount >= balance:
                     paid_new = price
@@ -228,7 +233,7 @@ def notify_user_payment_paypal(instance_id):
                     paid_new = paid + remaining_amount
                     remaining_amount = 0.0
 
-                post.paid = str(round(paid_new, 2))
+                post.paid = "{:.2f}".format(paid_new)
                 post.toll = "" if paid_new >= price else "short payment"
                 post.cash = False
                 post.reminder = True
@@ -236,7 +241,7 @@ def notify_user_payment_paypal(instance_id):
 
                 original_notice = post.notice or ""
                 notice_parts = [original_notice.strip()]
-                new_notice_entry = f"===PAYPAL=== Total paid: ${int(amount)}"
+                new_notice_entry = f"===PAYPAL=== Paid this time: ${amount:.2f}"
 
                 if new_notice_entry not in original_notice:
                     notice_parts.append(new_notice_entry)
@@ -249,12 +254,10 @@ def notify_user_payment_paypal(instance_id):
                 if remaining_amount <= 0:
                     break
 
-            total_paid_after = total_paid_before + amount
-
-            # 이메일 발송
+            remaining_balance_after_payment = total_balance - amount
             recipient_list = [email for email in recipient_emails if email] + [RECIPIENT_EMAIL]
 
-            if total_paid_after >= total_price:
+            if remaining_balance_after_payment <= 0:
                 html_content = render_to_string(
                     "basecamp/html_email-payment-success.html",
                     {
@@ -269,9 +272,9 @@ def notify_user_payment_paypal(instance_id):
                     "basecamp/html_email-response-discrepancy.html",
                     {
                         'name': instance.name,
-                        'price': round(total_price, 2),
-                        'paid': round(total_paid_before + amount, 2),
-                        'diff': round(total_price - (total_paid_before + amount), 2)
+                        'price': round(total_balance, 2),
+                        'paid': round(amount, 2),
+                        'diff': round(remaining_balance_after_payment, 2)
                     }
                 )
 
@@ -298,25 +301,29 @@ def notify_user_payment_stripe(instance_id):
                 Q(email__iexact=instance.email) |
                 Q(email1__iexact=instance.email)
             ),
-            pickup_date__gte=timezone.now().date()  # 오늘 이후
-        ).order_by('pickup_date')  # 가장 가까운 순   
+            pickup_date__gte=timezone.now().date()  
+        ).order_by('pickup_date')   
 
         amount = round(float(instance.amount or 0), 2)
         recipient_emails = set()
 
         if posts.exists():
-            remaining_amount = amount
-            total_price = 0.0
-            total_paid_before = 0.0
-            total_paid_after = 0.0
-
+            # 전체 미납액 계산
+            total_balance = 0.0
             for post in posts:
                 price = float(post.price or 0)
                 paid = float(post.paid or 0)
                 balance = round(price - paid, 2)
 
-                total_price += price
-                total_paid_before += paid
+                if balance > 0:
+                    total_balance += balance
+
+            remaining_amount = amount
+
+            for post in posts:
+                price = float(post.price or 0)
+                paid = float(post.paid or 0)
+                balance = round(price - paid, 2)
 
                 if balance <= 0:
                     continue  # 이미 결제된 예약은 건너뜀
@@ -328,7 +335,7 @@ def notify_user_payment_stripe(instance_id):
                     paid_new = paid + remaining_amount
                     remaining_amount = 0.0
 
-                post.paid = str(round(paid_new, 2))
+                post.paid = "{:.2f}".format(paid_new)
                 total_paid_after += paid_new
 
                 post.toll = "" if paid_new >= price else "short payment"
@@ -338,8 +345,7 @@ def notify_user_payment_stripe(instance_id):
 
                 original_notice = post.notice or ""
                 notice_parts = [original_notice.strip()]
-
-                new_notice_entry = f"===STRIPE=== Total paid: ${int(amount)}"
+                new_notice_entry = f"===STRIPE=== Total paid: ${amount:.2f}"
 
                 # 중복 방지 조건 추가
                 if new_notice_entry not in original_notice:
@@ -353,10 +359,12 @@ def notify_user_payment_stripe(instance_id):
                 if remaining_amount <= 0:
                     break
 
+            remaining_balance_after_payment = total_balance - amount
+
             # 이메일 한 번만 발송
             recipient_list = [email for email in recipient_emails if email] + [RECIPIENT_EMAIL]
 
-            if total_paid_after >= total_price:
+            if remaining_balance_after_payment <= 0:
                 html_content = render_to_string(
                     "basecamp/html_email-payment-success-stripe.html",
                     {'name': instance.name, 'email': instance.email, 'amount': amount}
@@ -366,9 +374,9 @@ def notify_user_payment_stripe(instance_id):
                     "basecamp/html_email-response-discrepancy.html",
                     {
                         'name': instance.name,
-                        'price': round(total_price, 2),
-                        'paid': round(total_paid_before + amount, 2),
-                        'diff': round(total_price - (total_paid_before + amount), 2)
+                        'price': round(total_balance, 2),
+                        'paid': round(amount, 2),
+                        'diff': round(remaining_balance_after_payment, 2)
                     }
                 )
 
