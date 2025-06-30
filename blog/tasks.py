@@ -336,8 +336,6 @@ def notify_user_payment_stripe(instance_id):
                     remaining_amount = 0.0
 
                 post.paid = "{:.2f}".format(paid_new)
-                total_paid_after += paid_new
-
                 post.toll = "" if paid_new >= price else "short payment"
                 post.cash = False
                 post.reminder = True
