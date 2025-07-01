@@ -1,9 +1,11 @@
 import os
 import string
 import random
+from decouple import config
 from django.core.management.base import BaseCommand
 from django.conf import settings
 
+SECURE_DRIVE = config('SECURE_DRIVE', default='J:')
 
 class Command(BaseCommand):
     help = 'Generate random passwords for predefined email prefixes and save to secure/password.txt'
@@ -38,9 +40,9 @@ class Command(BaseCommand):
             chars = string.ascii_letters + string.digits + string.punctuation
             return ''.join(random.choice(chars) for _ in range(length))
 
-        # secure 폴더 설정
-        project_root = settings.BASE_DIR if hasattr(settings, 'BASE_DIR') else os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        secure_folder = os.path.join(project_root, 'secure')
+        drive_letter = settings.SECURE_DRIVE
+        secure_folder = os.path.join(f'{drive_letter}/secure')
+
         os.makedirs(secure_folder, exist_ok=True)
         file_path = os.path.join(secure_folder, 'password.txt')
 
