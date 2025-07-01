@@ -339,7 +339,7 @@ MYSQL_CONFIG = {
     'database': config('DB_NAME')
 }
 
-SECURE_DRIVER = config('SECURE_DRIVER')
+SECURE_DRIVE = config('SECURE_DRIVE')
 
 MARKDOWNX_MEDIA_PATH = datetime.now().strftime('markdownx/%Y/%m/%d/')
 
