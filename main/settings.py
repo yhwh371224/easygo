@@ -332,6 +332,13 @@ RECAPTCHA_V2_SECRET_KEY = config('RECAPTCHA_V2_SECRET_KEY')
 RECAPTCHA_V3_SITE_KEY = config('RECAPTCHA_V3_SITE_KEY')
 RECAPTCHA_V3_SECRET_KEY = config('RECAPTCHA_V3_SECRET_KEY')
 
+MYSQL_CONFIG = {
+    'user': config('DB_USER'),
+    'password': config('DB_USER_PASSWORD'),
+    'host': config('DB_HOST'),
+    'database': config('DB_NAME')
+}
+
 MARKDOWNX_MEDIA_PATH = datetime.now().strftime('markdownx/%Y/%m/%d/')
 
 SESSION_COOKIE_AGE = 3600
