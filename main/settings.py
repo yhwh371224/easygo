@@ -339,6 +339,8 @@ MYSQL_CONFIG = {
     'database': config('DB_NAME')
 }
 
+SECURE_DRIVER = config('SECURE_DRIVER')
+
 MARKDOWNX_MEDIA_PATH = datetime.now().strftime('markdownx/%Y/%m/%d/')
 
 SESSION_COOKIE_AGE = 3600
