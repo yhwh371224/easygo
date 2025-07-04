@@ -22,7 +22,7 @@ class PaypalPaymentAdmin(admin.ModelAdmin):
 
 
 class StripePaymentAdmin(admin.ModelAdmin):
-    list_display = ['name', 'email', 'amount', 'created']    
+    list_display = ['name', 'email', 'amount', 'payment_intent_id', 'created']    
     search_fields = ['name', 'email', 'amount']
 
 
