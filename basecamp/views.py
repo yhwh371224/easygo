@@ -1898,11 +1898,11 @@ def email_dispatch_detail(request):
 
                 # 왕복 픽업 있는 경우
                 if user.return_pickup_time == 'x':
-                    half_price = original_price / 2
+                    full_price = original_price * 2
                     if user.email1:
-                        half_price += half_price * 0.1  # 전체 왕복 요금에 10% 추가
+                        full_price += full_price * 0.1  # 전체 왕복 요금에 10% 추가
 
-                    total_paid_text_full = f"===Gratitude=== Total Paid: ${int(original_price)}"
+                    total_paid_text_full = f"===Gratitude=== Total Paid: ${int(full_price)}"
 
                     if not has_payment_record:
                         user.notice = (
@@ -1912,7 +1912,7 @@ def email_dispatch_detail(request):
                     else:
                         user.notice = original_notice
 
-                    user.paid = half_price
+                    user.paid = user.price
                     user.reminder = True
                     user.toll = ""
                     user.cash = False
@@ -1926,11 +1926,11 @@ def email_dispatch_detail(request):
 
                     try:
                         user_1 = Post.objects.filter(email=user.email)[1]
-                        user_1_price = original_price / 2
+                        user_1_price = original_price * 2
                         if user.email1:
                             user_1_price += user_1_price * 0.1  # 10% 추가
 
-                        user_1.paid = user_1_price
+                        user_1.paid = user_1.price
                         user_1.reminder = True
                         user_1.toll = ""
                         user_1.cash = False

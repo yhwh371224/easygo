@@ -186,6 +186,10 @@ def payment_send_email(subject, html_content, recipient_list):
     email.send()
 
 
+def clean_float(value):
+    return "{:.2f}".format(value).rstrip('0').rstrip('.')
+
+
 # PayPal payment record and email 
 @shared_task
 def notify_user_payment_paypal(instance_id):
@@ -233,7 +237,7 @@ def notify_user_payment_paypal(instance_id):
                     paid_new = paid + remaining_amount
                     remaining_amount = 0.0
 
-                post.paid = "{:.2f}".format(paid_new)
+                post.paid = clean_float(paid_new)
                 post.toll = "" if paid_new >= price else "short payment"
                 post.cash = False
                 post.reminder = True
@@ -335,7 +339,7 @@ def notify_user_payment_stripe(instance_id):
                     paid_new = paid + remaining_amount
                     remaining_amount = 0.0
 
-                post.paid = "{:.2f}".format(paid_new)
+                post.paid = clean_float(paid_new)
                 post.toll = "" if paid_new >= price else "short payment"
                 post.cash = False
                 post.reminder = True
