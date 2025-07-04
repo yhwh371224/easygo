@@ -47,9 +47,9 @@ notify_user_payment_paypal(payment.id)
 from blog.models import Post, StripePayment
 from blog.tasks import notify_user_payment_stripe
 
-name = "Silvio Luiz"
-email = "sungkam718@gmail.com"
-amount = "400"  
+name = "sung kam"
+email = "sungkam3@gmail.com"
+amount = "280"  
 
 payment = StripePayment.objects.create(name=name, email=email, amount=amount)
 
