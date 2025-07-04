@@ -2139,22 +2139,19 @@ def stripe_webhook(request):
             payload, sig_header, endpoint_secret
         )
     except ValueError as e:
-        # Invalid payload
         print('Error parsing payload: {}'.format(str(e)))
         return HttpResponse(status=400)
     except stripe.error.SignatureVerificationError as e:
-        # Invalid signature
         print('Error verifying webhook signature: {}'.format(str(e)))
         return HttpResponse(status=400)
 
-    # Handle the event
     if event.type == 'checkout.session.completed':
         session = event.data.object
         print('PaymentIntent was successful!')
         handle_checkout_session_completed(session)
 
     else:
-        print('Unhandled event type {}'.format(event.type))
+        print(f'Unhandled event type: {event.type}')
 
     return HttpResponse(status=200)
 
@@ -2162,11 +2159,45 @@ def handle_checkout_session_completed(session):
     email = session.customer_details.email
     name = session.customer_details.name
     amount = session.amount_total / 100  # Amount is in cents
+    payment_intent_id = session.payment_intent or session.id  # session.id로 대체 가능
 
-    # Save payment information
-    p = StripePayment(name=name, email=email, amount=amount)
-    p.save()
 
+    try:
+        payment, created = StripePayment.objects.update_or_create(
+            payment_intent_id=payment_intent_id,
+            defaults={
+                "name": name,
+                "email": email,
+                "amount": amount,
+            }
+        )
+        print(f"StripePayment saved. created={created}")
+
+    except Exception as e:
+        stripe_payment_error_email(
+            'Stripe Payment Save Error',
+            str(e),
+            name,
+            email,
+            amount
+        )
+
+def stripe_payment_error_email(subject, message, name, email, amount):
+    content = f"""
+    Subject: {subject}
+    
+    Error: {message}
+    Name: {name}
+    Email: {email}
+    Amount: {amount}
+    """
+
+    send_mail(
+        subject=subject,
+        message=content,
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        recipient_list=[settings.RECIPIENT_EMAIL],
+    )
 
 @csrf_exempt
 def recaptcha_verify(request):

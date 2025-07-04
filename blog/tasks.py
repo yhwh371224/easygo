@@ -383,7 +383,7 @@ def notify_user_payment_stripe(instance_id):
         else:
             # 예약 찾지 못한 경우
             html_content = render_to_string(
-                "basecamp/html_email-noIdentity.html",
+                "basecamp/html_email-noIdentity-stripe.html",
                 {'name': instance.name, 'email': instance.email, 'amount': amount}
             )
             recipient_list = [email for email in [instance.email, RECIPIENT_EMAIL] if email]
