@@ -212,16 +212,27 @@ def notify_user_payment_paypal(instance_id):
             pickup_date__gte=timezone.now().date()
         ).order_by('pickup_date')
 
-        raw_amount = float(instance.amount or 0)
-        amount = round(raw_amount / 1.03, 2)  # 수수료 제외 반영금액
+        try:
+            raw_amount = float(instance.amount or 0)
+            amount = round(raw_amount / 1.03, 2)
+        except (ValueError, TypeError):
+            return
+         
         recipient_emails = set()
 
         if posts.exists():
             # 전체 미납액 계산 
             total_balance = 0.0
             for post in posts:
-                price = float(post.price or 0)
-                paid = float(post.paid or 0)
+                try:
+                    price = float(post.price or 0)
+                except (ValueError, TypeError):
+                    price = 0.0
+
+                try:
+                    paid = float(post.paid)
+                except (ValueError, TypeError):
+                    paid = 0.0
                 balance = round(price - paid, 2)
 
                 if balance > 0:
@@ -230,8 +241,16 @@ def notify_user_payment_paypal(instance_id):
             remaining_amount = amount
 
             for post in posts:
-                price = float(post.price or 0)
-                paid = float(post.paid or 0)
+                try:
+                    price = float(post.price or 0)
+                except (ValueError, TypeError):
+                    price = 0.0
+
+                try:
+                    paid = float(post.paid or 0)
+                except (ValueError, TypeError):
+                    paid = 0.0
+
                 balance = round(price - paid, 2)
 
                 if balance <= 0:
