@@ -3,6 +3,8 @@ import os
 import re
 import logging
 
+from decimal import Decimal, InvalidOperation
+
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
 from django.core.mail import send_mail, EmailMultiAlternatives
@@ -24,8 +26,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 @shared_task
 def create_event_on_calendar(instance_id):    
-    # Fetch the Post instance
-    instance = Post.objects.get(pk=instance_id)
+    try:
+        instance = Post.objects.get(pk=instance_id)
+    except Post.DoesNotExist:
+        return 
 
     event_id = (instance.calendar_event_id or '').strip()
 
@@ -187,7 +191,10 @@ def payment_send_email(subject, html_content, recipient_list):
 
 
 def clean_float(value):
-    return "{:.2f}".format(value).rstrip('0').rstrip('.')
+    try:
+        return "{:.2f}".format(float(value)).rstrip('0').rstrip('.')
+    except (ValueError, TypeError):
+        return "0"
 
 
 # PayPal payment record and email 
@@ -308,15 +315,27 @@ def notify_user_payment_stripe(instance_id):
             pickup_date__gte=timezone.now().date()  
         ).order_by('pickup_date')   
 
-        amount = round(float(instance.amount or 0), 2)
+        try:
+            amount = round(float(instance.amount or 0), 2)
+        except (ValueError, TypeError):
+            return
+        
         recipient_emails = set()
 
         if posts.exists():
             # 전체 미납액 계산
             total_balance = 0.0
             for post in posts:
-                price = float(post.price or 0)
-                paid = float(post.paid or 0)
+                try:
+                    price = float(post.price or 0)
+                except (ValueError, TypeError):
+                    price = 0.0
+
+                try:
+                    paid = float(post.paid or 0)
+                except (ValueError, TypeError):
+                    paid = 0.0
+
                 balance = round(price - paid, 2)
 
                 if balance > 0:
@@ -325,8 +344,16 @@ def notify_user_payment_stripe(instance_id):
             remaining_amount = amount
 
             for post in posts:
-                price = float(post.price or 0)
-                paid = float(post.paid or 0)
+                try:
+                    price = float(post.price or 0)
+                except (ValueError, TypeError):
+                    price = 0.0
+
+                try:
+                    paid = float(post.paid)
+                except (ValueError, TypeError):
+                    paid = 0.0
+
                 balance = round(price - paid, 2)
 
                 if balance <= 0:
