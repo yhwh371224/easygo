@@ -316,7 +316,8 @@ def notify_user_payment_stripe(instance_id):
         ).order_by('pickup_date')   
 
         try:
-            amount = round(float(instance.amount or 0), 2)
+            raw_amount = float(instance.amount or 0)
+            amount = round(raw_amount, 2)
         except (ValueError, TypeError):
             return
         
