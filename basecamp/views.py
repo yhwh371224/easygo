@@ -1554,13 +1554,15 @@ def invoice_detail(request):
         except ValueError:
             return HttpResponse("Invalid index value", status=400)
 
-        today = date.today()
-        inv_no = int(inv_no or 988390)
-
         users = Post.objects.filter(email__iexact=email)
         if not users.exists():
             return HttpResponse("No bookings found", status=404)
-
+        
+        else:
+            user = users[0]
+            today = date.today()
+            inv_no = f"98{user.pickup_date.toordinal()}" if user.pickup_date else "98826021"
+            
         # Multi booking 여부
         multiple = False
         if from_date and to_date:
