@@ -30,9 +30,13 @@ if ENVIRONMENT == 'production':
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     USE_X_FORWARDED_HOST = True
     X_FRAME_OPTIONS = 'DENY'
-    CSP_DEFAULT_SRC = ("'self'",)
-    CSP_STYLE_SRC = ("'self'", 'https://fonts.googleapis.com')
-    CSP_SCRIPT_SRC = ("'self'", 'https://cdnjs.cloudflare.com')
+    CONTENT_SECURITY_POLICY = {
+        'DIRECTIVES': {
+            'default-src': ("'self'",),
+            'script-src': ("'self'", 'https://cdnjs.cloudflare.com'),
+            'style-src': ("'self'", 'https://fonts.googleapis.com'),
+        }
+    }
     SECURE_REFERRER_POLICY = 'no-referrer-when-downgrade'
 
 else:
@@ -58,7 +62,6 @@ INSTALLED_APPS = [
     'compressor',
     'corsheaders',
     'paypal.standard.ipn',
-    'admin_honeypot',
     'markdownx',
     'csp',
     'axes',    
@@ -250,8 +253,8 @@ SOCIALACCOUNT_PROVIDERS = {
 
 SOCIALACCOUNT_LOGIN_ON_GET=True
 
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_LOGIN_METHODS = {'email'}
+ACCOUNT_SIGNUP_FIELDS = ['email*']
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
