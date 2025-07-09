@@ -146,7 +146,8 @@ MIDDLEWARE = [
     'htmlmin.middleware.MarkRequestMiddleware', 
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
-    'main.middlewares.block_ip_middleware.BlockIPMiddleware',  
+    'main.middlewares.block_ip_middleware.BlockIPMiddleware', 
+    'main.middleware.login_control.AccountLoginMethodMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -253,9 +254,6 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 SOCIALACCOUNT_LOGIN_ON_GET=True
-
-ACCOUNT_LOGIN_METHODS = {'email'}
-ACCOUNT_SIGNUP_FIELDS = ['email*']
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
