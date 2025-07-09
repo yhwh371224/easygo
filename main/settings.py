@@ -147,7 +147,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'main.middlewares.block_ip_middleware.BlockIPMiddleware', 
-    'main.middleware.login_control.AccountLoginMethodMiddleware',
+    'main.middlewares.login_control.AccountLoginMethodMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
