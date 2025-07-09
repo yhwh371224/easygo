@@ -10,8 +10,7 @@ from basecamp.views import stripe_webhook
 admin_site = user_passes_test(lambda u: u.is_superuser)(admin.site.urls)
 
 urlpatterns = [  
-    path('admin/', include('admin_honeypot.urls', namespace='admin_honeypot')),    
-    path('horeb_yhwh/', admin.site.urls),
+    path('admin/', admin.site.urls),
     path('markdownx/', include('markdownx.urls')),
     path('blog/', include('blog.urls')),
     path('easygo_review/', include('easygo_review.urls')),
