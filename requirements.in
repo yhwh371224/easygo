@@ -30,7 +30,7 @@ cryptography>=41.0.5
 defusedxml>=0.7.1
 Deprecated>=1.2.14
 deprecation>=2.1.0
-Django==5.1
+Django==5.2.4
 django-admin-honeypot>=1.1.0
 django-allauth>=0.58.2
 django-appconf>=1.0.6
