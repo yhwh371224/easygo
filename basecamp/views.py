@@ -1561,7 +1561,7 @@ def invoice_detail(request):
         else:
             user = users[0]
             today = date.today()
-            inv_no = f"98{user.pickup_date.toordinal()}" if user.pickup_date else "98826021"
+            inv_no = f"{user.pickup_date.toordinal()}" if user.pickup_date else "896021"
             
         # Multi booking 여부
         multiple = False
@@ -1838,6 +1838,7 @@ def email_dispatch_detail(request):
             "Gratitude For (M) Payment": ("basecamp/html_email-response-multi-payment-received.html", "(M) Payment Received - EasyGo"),
             "Pickup Notice for Today": ("basecamp/html_email-today1.html", "Important Update for Today's Pickup - EasyGo "),
             "Payment Method": ("basecamp/html_email-response-payment.html", "Payment Method - EasyGo"),
+            "PayPal Assistance": ("basecamp/html_email-response-payment-assistance.html", "PayPal Assistance - EasyGo"),
             "Inquiry for driver contact": ("basecamp/html_email-response-driver-contact.html", "Inquiry for driver contact - EasyGo"),
             "Airport Pickup Guide": ("basecamp/html_email-response-arrival-guide.html", "Airport Pickup Guide - EasyGo"),
             'Earlier Pickup Requested for Departure': ("basecamp/html_email-departure-early.html", "Urgent notice - EasyGo"),
