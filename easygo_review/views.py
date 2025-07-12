@@ -218,6 +218,7 @@ class CommentCreate(View):
             comment = comment_form.save(commit=False)
             comment.post = post
             comment.author = user_name
+            comment.email = email
             comment.save()
             return redirect(post.get_absolute_url())  # Redirect to post detail page
 
@@ -238,31 +239,16 @@ class CommentUpdate(UpdateView):
 
     def get_object(self, queryset=None):
         comment = super().get_object(queryset)        
-        email = self.request.session.get('email', None)
-        user_name = None
+        session_email = self.request.session.get('email', None)
 
-        if email:
-            blog_post = BlogPost.objects.filter(email=email).first()
-            if blog_post:
-                user_name = blog_post.name
-
-        if comment.author != user_name:
+        if comment.email != session_email:
             raise PermissionDenied('No right to edit')
 
         return comment
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        email = self.request.session.get('email', None)
-        user_name = None
-
-        if email:
-            blog_post = BlogPost.objects.filter(email=email).first()
-            if blog_post:
-                user_name = blog_post.name
-
-        context['email'] = email
-        context['user_name'] = user_name
+        context['email'] = self.request.session.get('email', None)
         return context
 
     def get_success_url(self):
@@ -276,31 +262,16 @@ class CommentDelete(DeleteView):
 
     def get_object(self, queryset=None):
         comment = super().get_object(queryset)        
-        email = self.request.session.get('email', None)
-        user_name = None
+        session_email = self.request.session.get('email', None)
 
-        if email:
-            blog_post = BlogPost.objects.filter(email=email).first()
-            if blog_post:
-                user_name = blog_post.name
-
-        if comment.author != user_name:
+        if comment.email != session_email:
             raise PermissionDenied('No right to delete Comment')
 
         return comment
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        email = self.request.session.get('email', None)
-        user_name = None
-
-        if email:
-            blog_post = BlogPost.objects.filter(email=email).first()
-            if blog_post:
-                user_name = blog_post.name
-
-        context['email'] = email
-        context['user_name'] = user_name
+        context['email'] = self.request.session.get('email', None)
         return context
 
     def get_success_url(self):

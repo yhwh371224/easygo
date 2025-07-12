@@ -34,7 +34,8 @@ class Post(models.Model):
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     text = MarkdownxField()
-    author = models.CharField(max_length=100, blank=True, null=True)    
+    author = models.CharField(max_length=100, blank=True, null=True) 
+    email = models.EmailField(blank=True, null=True)   
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
 
