@@ -1,56 +1,58 @@
 {% extends 'easygo_review/base.html' %}
 
-{% block title %}EasyGo Reivew{% endblock %}
+{% block title %}EasyGo Review{% endblock %}
 
 {% block content %}
-<div class="review-section" style="padding: 20px;">  
-    <br/> 
-    <!-- Author -->
+<div class="review-section" style="padding: 20px;">
+    <br/>
+
+    <!-- Author Info -->
     <div class="low" style="display: flex; align-items: center;">
         <div>
             <p class="lead">
-                Review by
-                <a href="#">{{ object.name }}</a>
+                Review by <a href="#">{{ object.name }}</a>
             </p>
             <p>posted on {{ object.date }}</p>
         </div>
-        
         {% if user_name == object.name %}
             <button type="button" class="btn btn-primary" style="margin-left: auto;" onclick="location.href='{{ object.get_update_url }}'">EDIT REVIEW</button>
         {% endif %}
     </div>
-    <br/>    
+
+    <br/>
+
     <!-- Post Content -->
     {{ object.get_markdown_content | safe }}
 
     <hr>
 
-    <!-- Comments Form -->
+    <!-- Comment Form -->
     <div class="card my-4">
         <h5 class="card-header">Leave a Comment:</h5>
         <div class="card-body">
             {% if not email %}
-            <button type="button" class="btn btn-outline-dark btn-block" data-toggle="modal" data-target="#loginModal">
-                Log in
-            </button>            
+                <button type="button" class="btn btn-outline-dark btn-block" data-toggle="modal" data-target="#loginModal">
+                    Log in
+                </button>
             {% else %}
-            <form method="post" action="{{ object.get_absolute_url }}new_comment/">{% csrf_token %}
-                <div class="form-group">
-                    {{ comment_form.as_p }}
-                </div>
-                <button type="submit" class="btn btn-primary btn-sm float-right">Submit Comment</button>                
-            </form>
+                <form method="post" action="{{ object.get_absolute_url }}new_comment/">{% csrf_token %}
+                    <div class="form-group">
+                        {{ comment_form.as_p }}
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-sm float-right">Submit Comment</button>
+                </form>
             {% endif %}
         </div>
     </div>
 
+    <!-- Comment List -->
     <div id="comment-list">
         {% for comment in object.comment_set.all %}
-            <div class="media mb-4" id="comment-id-{{ comment.pk }}">                
+            <div class="media mb-4" id="comment-id-{{ comment.pk }}">
                 <div class="media-body">
-                    {% if comment.author == user_name %}
+                    {% if comment.email|lower == email|lower %}
                         <button class="btn btn-sm btn-info float-right" onclick="location.href='/easygo_review/comment/{{ comment.pk }}/update/'">edit</button>
-                        <button class="btn btn-sm btn-warning float-right" data-toggle="modal" data-target="#deleteCommentModal-{{ comment.pk }}">delete</button>
+                        <button class="btn btn-sm btn-warning float-right mr-2" data-toggle="modal" data-target="#deleteCommentModal-{{ comment.pk }}">delete</button>
                     {% endif %}
                     <h5 class="mt-0">{{ comment.author }} <small class="text-muted">{{ comment.created_at }}</small></h5>
                     {{ comment.get_markdown_content | safe }}
@@ -59,24 +61,24 @@
         {% endfor %}
     </div>
 
+    <!-- Delete Confirmation Modals -->
     {% for comment in object.comment_set.all %}
-        {% if user_name == comment.author %}
-            <!-- Modal -->
+        {% if comment.email|lower == email|lower %}
             <div class="modal fade" id="deleteCommentModal-{{ comment.pk }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to delete the comments?</h5>
+                            <h5 class="modal-title">Are you sure you want to delete this comment?</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
-                            <p>{{ comment.get_markdown_content | safe  }}</p>
+                            <p>{{ comment.get_markdown_content|safe }}</p>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary" onclick="location.href='/easygo_review/comment/{{ comment.pk }}/delete/'">Delete</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-danger" onclick="location.href='/easygo_review/comment/{{ comment.pk }}/delete/'">Delete</button>
                         </div>
                     </div>
                 </div>
