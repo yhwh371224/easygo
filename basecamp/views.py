@@ -1302,19 +1302,46 @@ def sending_email_first_detail(request):
                 email.send()
                     
             else: 
-                html_content = render_to_string("basecamp/html_email-confirmation.html", 
-                                                {'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 'email': user.email, 
-                                                 'email1': user.email1, 'pickup_date': user.pickup_date, 'flight_number': user.flight_number, 
-                                                 'flight_time': user.flight_time, 'pickup_time': user.pickup_time, 'start_point': user.start_point,
-                                                 'end_point': user.end_point, 'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
-                                                 'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
-                                                 'return_direction': user.return_direction, 'return_pickup_date': user.return_pickup_date, 
-                                                 'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
-                                                 'return_pickup_time': user.return_pickup_time, 'return_start_point': user.return_start_point,
-                                                 'return_end_point': user.return_end_point, 'message': user.message, 'notice': user.notice, 
-                                                 'price': user.price, 'paid': user.paid, 'cash': user.cash})
+                # 템플릿 분기: 가격 조정이 된 경우 다른 템플릿 사용
+                if user.price_adjusted or user.company_name:
+                    template_name = "basecamp/html_email-confirmation-1.html"
+                else:
+                    template_name = "basecamp/html_email-confirmation.html"
                 
+                context = {
+                    'company_name': user.company_name,
+                    'name': user.name,
+                    'contact': user.contact,
+                    'email': user.email,
+                    'email1': user.email1,
+                    'pickup_date': user.pickup_date,
+                    'flight_number': user.flight_number,
+                    'flight_time': user.flight_time,
+                    'pickup_time': user.pickup_time,
+                    'start_point': user.start_point,
+                    'end_point': user.end_point,
+                    'direction': user.direction,
+                    'street': user.street,
+                    'suburb': user.suburb,
+                    'no_of_passenger': user.no_of_passenger,
+                    'no_of_baggage': user.no_of_baggage,
+                    'return_direction': user.return_direction,
+                    'return_pickup_date': user.return_pickup_date,
+                    'return_flight_number': user.return_flight_number,
+                    'return_flight_time': user.return_flight_time,
+                    'return_pickup_time': user.return_pickup_time,
+                    'return_start_point': user.return_start_point,
+                    'return_end_point': user.return_end_point,
+                    'message': user.message,
+                    'notice': user.notice,
+                    'price': user.price,
+                    'paid': user.paid,
+                    'cash': user.cash,
+                }
+
+                html_content = render_to_string(template_name, context)
                 text_content = strip_tags(html_content)
+
                 email = EmailMultiAlternatives(
                     "Booking confirmation - EasyGo",
                     text_content,
@@ -1330,7 +1357,7 @@ def sending_email_first_detail(request):
             return HttpResponse("No user found", status=400)
 
     else:
-        return render(request, 'basecamp/sending_email_first.html', {})   
+        return render(request, 'basecamp/sending_email_first.html', {})
     
 
 # sending confirmation email second one    
@@ -1365,26 +1392,54 @@ def sending_email_second_detail(request):
             email.send()
 
         else:
-            html_content = render_to_string("basecamp/html_email-confirmation.html",
-                                        {'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 'email': user.email, 
-                                         'email1': user.email1, 'pickup_date': user.pickup_date, 'flight_number': user.flight_number, 
-                                         'flight_time': user.flight_time, 'pickup_time': user.pickup_time, 'start_point': user.start_point,
-                                         'end_point': user.end_point, 'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
-                                         'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
-                                         'return_direction': user.return_direction, 'return_pickup_date': user.return_pickup_date, 
-                                         'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
-                                         'return_pickup_time': user.return_pickup_time, 'return_start_point': user.return_start_point,
-                                         'return_end_point': user.return_end_point, 'message': user.message, 'notice': user.notice, 
-                                         'price': double_price, 'paid': double_paid, 'cash': user.cash})
+            # 템플릿 선택 분기
+            if user.price_adjusted or user.company_name:
+                template_name = "basecamp/html_email-confirmation-1.html"
+            else:
+                template_name = "basecamp/html_email-confirmation.html"
+
+            context = {
+                'company_name': user.company_name,
+                'name': user.name,
+                'contact': user.contact,
+                'email': user.email,
+                'email1': user.email1,
+                'pickup_date': user.pickup_date,
+                'flight_number': user.flight_number,
+                'flight_time': user.flight_time,
+                'pickup_time': user.pickup_time,
+                'start_point': user.start_point,
+                'end_point': user.end_point,
+                'direction': user.direction,
+                'street': user.street,
+                'suburb': user.suburb,
+                'no_of_passenger': user.no_of_passenger,
+                'no_of_baggage': user.no_of_baggage,
+                'return_direction': user.return_direction,
+                'return_pickup_date': user.return_pickup_date,
+                'return_flight_number': user.return_flight_number,
+                'return_flight_time': user.return_flight_time,
+                'return_pickup_time': user.return_pickup_time,
+                'return_start_point': user.return_start_point,
+                'return_end_point': user.return_end_point,
+                'message': user.message,
+                'notice': user.notice,
+                'price': double_price,
+                'paid': double_paid,
+                'cash': user.cash,
+            }
+
+            html_content = render_to_string(template_name, context)
             text_content = strip_tags(html_content)
-            email = EmailMultiAlternatives(
+
+            email_message = EmailMultiAlternatives(
                 "Booking confirmation - EasyGo",
                 text_content,
                 '',
                 [email, RECIPIENT_EMAIL, user.email1]
             )
-            email.attach_alternative(html_content, "text/html")
-            email.send()
+            email_message.attach_alternative(html_content, "text/html")
+            email_message.send()
 
         if not user1.sent_email: 
             user1.sent_email = True
