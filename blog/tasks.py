@@ -205,9 +205,9 @@ def notify_user_payment_paypal(instance_id):
     if instance.name:
         posts = Post.objects.filter(
             (
-                Q(name__iexact=instance.name) |
-                Q(email__iexact=instance.email) |
-                Q(email1__iexact=instance.email)
+                Q(name__iexact=instance.name.strip()) |
+                Q(email__iexact=instance.email.strip()) |
+                Q(email1__iexact=instance.email.strip())
             ),
             pickup_date__gte=timezone.now().date()
         ).order_by('pickup_date')
@@ -327,9 +327,9 @@ def notify_user_payment_stripe(instance_id):
     if instance.name:
         posts = Post.objects.filter(
             (
-                Q(name__iexact=instance.name) |
-                Q(email__iexact=instance.email) |
-                Q(email1__iexact=instance.email)
+                Q(name__iexact=instance.name.strip()) |
+                Q(email__iexact=instance.email.strip()) |
+                Q(email1__iexact=instance.email.strip())
             ),
             pickup_date__gte=timezone.now().date()  
         ).order_by('pickup_date')   
