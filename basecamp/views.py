@@ -1273,6 +1273,7 @@ def confirm_booking_detail(request):
 def sending_email_first_detail(request):     
     if request.method == "POST":
         email = request.POST.get('email')
+        prepay = request.POST.get('prepay') == 'True'
         index = request.POST.get('index', '1')
 
         try:
@@ -1284,6 +1285,7 @@ def sending_email_first_detail(request):
         if users.exists() and 0 <= index < len(users):
             user = users[index]  
 
+            user.prepay = prepay  # ✅ 폼의 prepay 반영
             user.sent_email = True
             user.save()
             
@@ -1303,7 +1305,7 @@ def sending_email_first_detail(request):
                     
             else: 
                 # 템플릿 분기: 가격 조정이 된 경우 다른 템플릿 사용
-                if user.price_adjusted or user.company_name:
+                if user.prepay or user.company_name:
                     template_name = "basecamp/html_email-confirmation-1.html"
                 else:
                     template_name = "basecamp/html_email-confirmation.html"
@@ -1364,11 +1366,13 @@ def sending_email_first_detail(request):
 def sending_email_second_detail(request):     
     if request.method == "POST":
         email = request.POST.get('email')
+        prepay = request.POST.get('prepay') == 'True'
 
         user = Post.objects.filter(email__iexact=email)[1]
         user1 = Post.objects.filter(email__iexact=email).first()    
 
         user.sent_email = True
+        user.prepay = prepay  # ✅ 폼의 prepay 반영
         user.save()  
 
         double_price = float(user.price or 0) * 2
@@ -1393,7 +1397,7 @@ def sending_email_second_detail(request):
 
         else:
             # 템플릿 선택 분기
-            if user.price_adjusted or user.company_name:
+            if user.prepay or user.company_name:
                 template_name = "basecamp/html_email-confirmation-1.html"
             else:
                 template_name = "basecamp/html_email-confirmation.html"
