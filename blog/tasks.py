@@ -54,7 +54,8 @@ def create_event_on_calendar(instance_id):
     start_point_str = instance.start_point or ''
     flight_time_str = instance.flight_time or ''
     no_of_passenger_str = f'p{instance.no_of_passenger}' if instance.no_of_passenger is not None else ''
-    paid_str = 'paid' if instance.paid else ''    
+    paid_str = 'paid' if instance.paid else ''  
+    cash_str = 'cash' if instance.cash else ''  
     price_str = f'${instance.price}' if instance.price is not None else ''
     contact_str = instance.contact or ''
     suburb_str = instance.suburb or ''
@@ -71,6 +72,7 @@ def create_event_on_calendar(instance_id):
         flight_time_str, 
         no_of_passenger_str,
         paid_str, 
+        cash_str,  
         price_str,
         contact_str        
     ]).strip()    
