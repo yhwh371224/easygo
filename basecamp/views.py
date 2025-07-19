@@ -1276,7 +1276,7 @@ def confirm_booking_detail(request):
 def sending_email_first_detail(request):     
     if request.method == "POST":
         email = request.POST.get('email')
-        prepay = request.POST.get('prepay') == 'True'
+        prepay_raw = request.POST.get('prepay')  # May be None
         index = request.POST.get('index', '1')
 
         try:
@@ -1288,7 +1288,10 @@ def sending_email_first_detail(request):
         if users.exists() and 0 <= index < len(users):
             user = users[index]  
 
-            user.prepay = prepay  # ✅ 폼의 prepay 반영
+            # ✅ Only update prepay if it’s provided
+            if prepay_raw is not None:
+                user.prepay = (prepay_raw == 'True')
+
             user.sent_email = True
             user.save()
             
@@ -1307,8 +1310,8 @@ def sending_email_first_detail(request):
                 email.send()
                     
             else: 
-                # 템플릿 분기: 가격 조정이 된 경우 다른 템플릿 사용
-                if user.prepay or user.company_name:
+                # ✅ Now use the final saved value of user.prepay and company_name
+                if user.prepay or (user.company_name or "").strip():
                     template_name = "basecamp/html_email-confirmation-1.html"
                 else:
                     template_name = "basecamp/html_email-confirmation.html"
@@ -1369,13 +1372,16 @@ def sending_email_first_detail(request):
 def sending_email_second_detail(request):     
     if request.method == "POST":
         email = request.POST.get('email')
-        prepay = request.POST.get('prepay') == 'True'
+        prepay_raw = request.POST.get('prepay')  # May be None
 
         user = Post.objects.filter(email__iexact=email)[1]
-        user1 = Post.objects.filter(email__iexact=email).first()    
+        user1 = Post.objects.filter(email__iexact=email).first() 
+
+        # ✅ Only update prepay if it’s provided
+        if prepay_raw is not None:
+            user.prepay = (prepay_raw == 'True')   
 
         user.sent_email = True
-        user.prepay = prepay  # ✅ 폼의 prepay 반영
         user.save()  
 
         double_price = float(user.price or 0) * 2
@@ -1399,8 +1405,8 @@ def sending_email_second_detail(request):
             email.send()
 
         else:
-            # 템플릿 선택 분기
-            if user.prepay or user.company_name:
+            # ✅ Now use the final saved value of user.prepay and company_name
+            if user.prepay or (user.company_name or "").strip():
                 template_name = "basecamp/html_email-confirmation-1.html"
             else:
                 template_name = "basecamp/html_email-confirmation.html"
