@@ -45,7 +45,7 @@ def set_prepay_for_foreign_users(sender, instance, created, **kwargs):
     if instance.prepay:
         return
 
-    if is_foreign_number(instance.contact) or instance.company_name.strip():
+    if is_foreign_number(instance.contact) or (instance.company_name or "").strip():
         Post.objects.filter(pk=instance.pk).update(prepay=True)
 
 
