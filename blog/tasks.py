@@ -62,7 +62,7 @@ def create_event_on_calendar(instance_id):
     street_str = instance.street or ''    
     end_point_str = instance.end_point or ''
 
-    title = " ".join([ 
+    title = " ".join(filter(None, [ 
         reminder_str, 
         cancelled_str,
         pending_str, 
@@ -75,7 +75,7 @@ def create_event_on_calendar(instance_id):
         cash_str,  
         price_str,
         contact_str        
-    ]).strip()    
+    ])).strip()    
 
     if suburb_str and street_str:
         address = " ".join([street_str, suburb_str]).strip()
@@ -90,18 +90,20 @@ def create_event_on_calendar(instance_id):
                      'b:'+str(instance.no_of_baggage) if instance.no_of_baggage is not None else '', 
                      'm:'+instance.message if instance.message is not None else '', 
                      'n:'+instance.notice if instance.notice is not None else '', 
-                     "d:"+str(instance.return_pickup_date), 
+                     "d:"+str(instance.return_pickup_date) if instance.return_pickup_date is not None else '', 
                      '$'+str(instance.paid) if instance.paid is not None else '',
                      'opt:'+instance.end_point if instance.end_point is not None else '']
     message = " ".join(filter(None, message_parts))      
 
-    pickup_date = datetime.datetime.strptime(str(instance.pickup_date), '%Y-%m-%d')
+    try:
+        pickup_date = datetime.datetime.strptime(str(instance.pickup_date), '%Y-%m-%d')
+    except (ValueError, TypeError):
+        return  # 또는 로깅
 
-    if instance.pickup_time:
-        pickup_time = datetime.datetime.strptime(instance.pickup_time, '%H:%M')
-
-    else:
-        pickup_time = datetime.datetime.strptime('00:00', '%H:%M') 
+    try:
+        pickup_time = datetime.datetime.strptime(instance.pickup_time or '00:00', '%H:%M')
+    except ValueError:
+        pickup_time = datetime.datetime.strptime('00:00', '%H:%M')
 
     start = datetime.datetime.combine(pickup_date, pickup_time.time())        
     end = start + datetime.timedelta(hours=1)
@@ -121,12 +123,16 @@ def create_event_on_calendar(instance_id):
     }    
 
     # 구글 캘린더 이벤트 처리
-    if event_id:
-        service.events().update(calendarId='primary', eventId=event_id, body=event).execute()
-    else:
-        new_event = service.events().insert(calendarId='primary', body=event).execute()
-        instance.calendar_event_id = new_event['id']
-        instance.save(update_fields=['calendar_event_id'])
+    try:
+        if event_id:
+            service.events().update(calendarId='primary', eventId=event_id, body=event).execute()
+        else:
+            new_event = service.events().insert(calendarId='primary', body=event).execute()
+            instance.calendar_event_id = new_event['id']
+            instance.save(update_fields=['calendar_event_id'])
+    except Exception as e:
+        # 오류 로깅 (예: logger.error(str(e)))
+        return
 
 
 # Clicked confirm_booking form 
