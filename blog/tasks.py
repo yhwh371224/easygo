@@ -131,20 +131,28 @@ def create_event_on_calendar(instance_id):
 
 # Clicked confirm_booking form 
 @shared_task
-def send_confirm_email(name, email, pickup_date, return_flight_number):
+def send_confirm_email(name, email, contact, company_name, pickup_date, pickup_time, return_flight_number):
+    subject = f"Booking Confirmation Clicked"
+    
     content = f'''
-    {name}
-    clicked the 'confirm booking' \n
-    >> Sending email only! \n
-    https://easygoshuttle.com.au/sending_email_first/ \n  
-    https://easygoshuttle.com.au/sending_email_second/
+    {name} clicked the 'confirm booking' 
+
+    ✅ Sending email only! 
+
+    👉 https://easygoshuttle.com.au/sending_email_first/ 
+    👉 https://easygoshuttle.com.au/sending_email_second/
+
     =============================   
     Email:  {email}
+    Contact: {contact}
+    Company name: {company_name}
     Flight date: {pickup_date}
+    Pickup time: {pickup_time}
     Return flight number: {return_flight_number}
     ===============================          
     '''
-    send_mail(pickup_date, content, DEFAULT_FROM_EMAIL, [RECIPIENT_EMAIL])
+
+    send_mail(subject, content, DEFAULT_FROM_EMAIL, [RECIPIENT_EMAIL])
 
 
 # Home page for price 
