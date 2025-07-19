@@ -29,23 +29,30 @@ def create_event_on_calendar(instance_id):
     try:
         instance = Post.objects.get(pk=instance_id)
     except Post.DoesNotExist:
+        logger.warning(f"Post with id {instance_id} does not exist.")
         return 
 
     event_id = (instance.calendar_event_id or '').strip()
 
     # 취소 상태면서 기존 이벤트 없으면 새로 생성 안 함
     if instance.cancelled and not event_id:
+        logger.info(f"Cancelled post {instance_id} with no event_id. Skipping event creation.")
         return
 
     SCOPES = ['https://www.googleapis.com/auth/calendar']
     SERVICE_ACCOUNT_FILE = 'secure/calendar/calendar-service-account-file.json'
     DELEGATED_USER_EMAIL = RECIPIENT_EMAIL  
 
-    credentials = service_account.Credentials.from_service_account_file(
-        SERVICE_ACCOUNT_FILE, scopes=SCOPES, subject=DELEGATED_USER_EMAIL)
-
-    service = build('calendar', 'v3', credentials=credentials)  
-
+    try:
+        credentials = service_account.Credentials.from_service_account_file(
+            SERVICE_ACCOUNT_FILE, scopes=SCOPES, subject=DELEGATED_USER_EMAIL
+        )
+        service = build('calendar', 'v3', credentials=credentials)
+    except Exception as e:
+        logger.error(f"Failed to build Google Calendar service: {e}")
+        return
+  
+    # 구글해드(title)에 들어갈 것들 
     reminder_str = '!' if instance.reminder else ''
     cancelled_str = 'C' if instance.cancelled else ''
     pending_str = '?' if instance.price == 'TBA' else ''
@@ -77,6 +84,7 @@ def create_event_on_calendar(instance_id):
         contact_str        
     ])).strip()    
 
+    # address 구성
     if suburb_str and street_str:
         address = " ".join([street_str, suburb_str]).strip()
     elif street_str:
@@ -86,6 +94,7 @@ def create_event_on_calendar(instance_id):
     else:
         address = end_point_str
 
+    # description (message) 구성
     message_parts = [instance.name, instance.email, 
                      'b:'+str(instance.no_of_baggage) if instance.no_of_baggage is not None else '', 
                      'm:'+instance.message if instance.message is not None else '', 
@@ -95,15 +104,18 @@ def create_event_on_calendar(instance_id):
                      'opt:'+instance.end_point if instance.end_point is not None else '']
     message = " ".join(filter(None, message_parts))      
 
+    # 날짜와 시간 파싱
     try:
         pickup_date = datetime.datetime.strptime(str(instance.pickup_date), '%Y-%m-%d')
-    except (ValueError, TypeError):
-        return  # 또는 로깅
+    except Exception as e:
+        logger.error(f"Invalid date for post {instance_id}: {e}")
+        return 
 
     try:
         pickup_time = datetime.datetime.strptime(instance.pickup_time or '00:00', '%H:%M')
-    except ValueError:
-        pickup_time = datetime.datetime.strptime('00:00', '%H:%M')
+    except Exception as e:
+        logger.error(f"Invalid time for post {instance_id}: {e}")
+        return
 
     start = datetime.datetime.combine(pickup_date, pickup_time.time())        
     end = start + datetime.timedelta(hours=1)
@@ -131,7 +143,7 @@ def create_event_on_calendar(instance_id):
             instance.calendar_event_id = new_event['id']
             instance.save(update_fields=['calendar_event_id'])
     except Exception as e:
-        # 오류 로깅 (예: logger.error(str(e)))
+        logger.error(f"Failed to sync Google Calendar event for post {instance_id}: {e}")
         return
 
 
