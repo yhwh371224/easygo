@@ -158,6 +158,7 @@ def send_confirm_email(name, email, contact, company_name, pickup_date, pickup_t
     ✅ Sending email only! 
 
     👉 https://easygoshuttle.com.au/sending_email_first/ 
+    
     👉 https://easygoshuttle.com.au/sending_email_second/
 
     =============================   
@@ -313,6 +314,27 @@ def notify_user_payment_paypal(instance_id):
                     break
 
             remaining_balance_after_payment = total_balance - amount
+
+            # Check if no money was applied (means: all bookings were already paid)
+            if remaining_amount == amount:
+                # Notify admin (you)
+                admin_notice = f'''
+            ⚠️ PayPal Overpayment Detected
+
+            Name: {instance.name}
+            Email: {instance.email}
+            Paid: ${amount:.2f}
+
+            No bookings were updated because all are already paid in full.
+            Please check if refund or future booking credit is needed.
+                '''
+                send_mail(
+                    subject="⚠️ PayPal Overpayment Alert - EasyGo",
+                    message=admin_notice,
+                    from_email=DEFAULT_FROM_EMAIL,
+                    recipient_list=[RECIPIENT_EMAIL],  # only to you
+                )
+
             recipient_list = [email for email in recipient_emails if email] + [RECIPIENT_EMAIL]
 
             if remaining_balance_after_payment <= 0:
@@ -437,6 +459,26 @@ def notify_user_payment_stripe(instance_id):
                     break
 
             remaining_balance_after_payment = total_balance - amount
+
+            # Check if no money was applied (means: all bookings were already paid)
+            if remaining_amount == amount:
+                # Notify admin (you)
+                admin_notice = f'''
+            ⚠️ Stripe Overpayment Detected
+
+            Name: {instance.name}
+            Email: {instance.email}
+            Paid: ${amount:.2f}
+
+            No bookings were updated because all are already paid in full.
+            Please check if refund or future booking credit is needed.
+                '''
+                send_mail(
+                    subject="⚠️ Stripe Overpayment Alert - EasyGo",
+                    message=admin_notice,
+                    from_email=DEFAULT_FROM_EMAIL,
+                    recipient_list=[RECIPIENT_EMAIL],  # only to you
+                )
 
             # 이메일 한 번만 발송
             recipient_list = [email for email in recipient_emails if email] + [RECIPIENT_EMAIL]

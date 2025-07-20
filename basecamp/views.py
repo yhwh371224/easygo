@@ -1244,14 +1244,14 @@ def confirm_booking_detail(request):
         
         data = {
         'name': name,
-        'company_name': company_name,
-        'email': email,    
-        'contact': contact,         
+        'email': email,  
+        'contact': contact,
+        'company_name': company_name,                
         'pickup_date': pickup_date,
         'pickup_time': pickup_time,
         'return_flight_number': return_flight_number}                    
         
-        send_confirm_email.delay(data['name'], data['company_name'], data['email'], data['contact'], data['pickup_date'], data['pickup_time'], data['return_flight_number'])
+        send_confirm_email.delay(data['name'], data['email'], data['contact'], data['company_name'], data['pickup_date'], data['pickup_time'], data['return_flight_number'])
             
         sam_driver = Driver.objects.get(driver_name="Sam")    
             
