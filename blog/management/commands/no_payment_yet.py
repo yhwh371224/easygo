@@ -29,10 +29,19 @@ class Command(BaseCommand):
                     days_difference = (booking.pickup_date - start_date).days
                     if days_difference in [0, 1, 2]:  
                         email_subject = "Urgent notice for payment"
-                        email_template = "basecamp/html_email-nopayment-today.html"
+
+                        if booking.prepay or booking.company_name:                        
+                            email_template = "basecamp/html_email-nopayment-today.html"
+                        else: 
+                            email_template = "basecamp/html_email-nopayment-today-1.html"
+                        
                     else:
                         email_subject = "Payment notice"
-                        email_template = "basecamp/html_email-nopayment.html"
+
+                        if booking.prepay or booking.company_name:                        
+                            email_template = "basecamp/html_email-nopayment.html"
+                        else: 
+                            email_template = "basecamp/html_email-nopayment-1.html"
 
                     # 날짜 표시 조건 처리
                     if booking.return_pickup_time == 'x':
@@ -73,7 +82,7 @@ class Command(BaseCommand):
                         {'name': booking.name, 'price': booking.price, 'paid': booking.paid, 
                          'diff': diff, 'pickup_date': booking.pickup_date, 
                          'display_date': display_date, 'return_pickup_date': booking.return_pickup_date},                    
-                        [booking.email, booking.email1, RECIPIENT_EMAIL]
+                        [booking.email, RECIPIENT_EMAIL]
                     )
 
             self.stdout.write(self.style.SUCCESS('No_payment_yet emailed successfully'))

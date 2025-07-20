@@ -29,7 +29,8 @@ class Command(BaseCommand):
             final_notices = Post.objects.filter(
                     pickup_date__range=[today, day_after_tomorrow],
                     cancelled=False,
-                    reminder=False
+                    reminder=False,
+                    cash=False # Exclude customers who pay cash
                 ).filter(
                     Q(paid__isnull=True) | Q(paid__exact="")
                 )
