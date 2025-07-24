@@ -67,6 +67,7 @@ class Inquiry(models.Model):
     sent_email = models.BooleanField(default=False, blank=True)
     sms_reminder = models.BooleanField(default=False, blank=True)
     prepay = models.BooleanField(default=False, blank=True)
+    pending = models.BooleanField(default=False, blank=True)
     calendar_event_id = models.CharField(max_length=255, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
 
@@ -141,8 +142,9 @@ class Post(models.Model):
     private_ride = models.BooleanField(default=False, blank=True)
     reminder = models.BooleanField(default=False, blank=True)
     sent_email = models.BooleanField(default=False, blank=True)
-    sms_reminder = models.BooleanField(default=False, blank=True)
+    sms_reminder = models.BooleanField(default=False, blank=True)    
     prepay = models.BooleanField(default=False, blank=True)
+    pending = models.BooleanField(default=False, blank=True)
     calendar_event_id = models.CharField(max_length=255, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
 
