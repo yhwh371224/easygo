@@ -1243,15 +1243,24 @@ def confirm_booking_detail(request):
         cash = user.cash         
         
         data = {
-        'name': name,
-        'email': email,  
-        'contact': contact,
-        'company_name': company_name,                
-        'pickup_date': pickup_date,
-        'pickup_time': pickup_time,
-        'return_flight_number': return_flight_number}                    
-        
-        send_confirm_email.delay(data['name'], data['email'], data['contact'], data['company_name'], data['pickup_date'], data['pickup_time'], data['return_flight_number'])
+            'name': name,
+            'email': email,
+            'contact': contact,
+            'company_name': company_name,
+            'pickup_date': pickup_date,
+            'pickup_time': pickup_time,
+            'return_flight_number': return_flight_number,
+            'street': street,
+            'suburbs': suburbs,
+            'start_point': start_point,
+            'end_point': end_point
+        }
+
+        send_confirm_email.delay(
+            data['name'], data['email'], data['contact'], data['company_name'],
+            data['pickup_date'], data['pickup_time'], data['return_flight_number'],
+            data['street'], data['suburbs'], data['start_point'], data['end_point']
+        )
             
         sam_driver = Driver.objects.get(driver_name="Sam")    
             
