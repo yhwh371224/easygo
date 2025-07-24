@@ -1322,6 +1322,8 @@ def sending_email_first_detail(request):
                 # ✅ Now use the final saved value of user.prepay and company_name
                 if user.prepay or (user.company_name or "").strip():
                     template_name = "basecamp/html_email-confirmation-1.html"
+                elif user.pending:
+                    template_name = "basecamp/html_email-confirmation-pending.html"
                 else:
                     template_name = "basecamp/html_email-confirmation.html"
                 
