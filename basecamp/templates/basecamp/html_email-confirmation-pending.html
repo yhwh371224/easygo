@@ -231,41 +231,45 @@
 											<td align="left" style="padding-top:28px;padding-left:0;">
                                                 <p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                    
                                                     Thank you for your booking request with us!<br><br>	
-													Your booking will be confirmed by your email response <br><br>												                                        
-                                                    Please find your booking details below:<br>                                                   
+													
+													It’s a bit early for us to lock in bookings for that date just yet, 
+													so we’ll keep your request on file and get back to you once we’re in a position to confirm.<br><br>
+
+													Appreciate your understanding.<br>
+                                                 
                                                 </p>
 												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">  
 												{% if company_name %}
-													Company name: {{ company_name }}<br>													
+													{{ company_name }}: {{ email1 }}<br>													
 												{% endif %}
 												    Contact: {{ contact }}<br>
                                                     Email: {{ email }}<br>
-												{% if not direction %}
-                                                    Booking date: {{ pickup_date|slice:":10" }}<br>
+												{% if start_point %}
+                                                    Pickup date: {{ pickup_date|slice:":10" }}<br>
 													Pickup time: {{ pickup_time }}<br>
-													Start point: {{ flight_number }}<br>
-                                                    End point: {{ street }}<br>																									
+													Start point: {{ start_point }}<br>
+													{% if street %}
+														Street: {{ street|default:'' }}<br>
+													{% endif %}
+                                                    End point: {{ end_point }}<br>																									
 												{% else %}
                                                     Flight date: {{ pickup_date|slice:":10" }}<br>
                                                     Flight number: {{ flight_number }}<br>
-													Flight time: {{ flight_time }}<br>
+													Flight time: {{ flight_time|default:'' }}<br>
 													Pickup time: {{ pickup_time }}<br>
                                                     Direction: {{ direction }}<br>
-													Address: {{ street }}, {{ suburb }}<br>
+													Address: {{ street|default:'' }} {{ suburb|default:'' }}<br>
 												{% endif %}												
                                                     Number of Passenger: {{ no_of_passenger }}<br>
-													Number of baggage: {{ no_of_baggage }}<br>
+													Number of baggage: {{ no_of_baggage|default:'' }}<br>
                                                     Message: <br>
-													{{ message }}<br>
-													<!-- If notice -->
-												{% if notice %}													
-													<span style="font-weight:bold; color: #d39383">{{ notice }}</span><br><br>
-												{% endif %}
-												{% if not return_direction and return_pickup_time %}													
+													{{ message }}<br><br>
+												{% if return_start_point %}													
 													<span style="font-weight:bold; color: #bdb1a6">Return trip date:  {{ return_pickup_date }}</span><br>													
-													<span style="font-weight:bold; color: #bdb1a6">Return start point:  {{ return_flight_number }}</span><br>
+													<span style="font-weight:bold; color: #bdb1a6">Return start point:  {{ return_start_point }}</span><br>
+													<span style="font-weight:bold; color: #bdb1a6">Return end point:  {{ return_end_point }}</span><br>
 													<span style="font-weight:bold; color: #bdb1a6">Return pickup time:  {{ return_pickup_time }}</span><br>
-												{% elif return_direction %}
+												{% elif return_direction and return_flight_number %}
 													<span style="font-weight:bold; color: #bdb1a6">Return direction:  {{ return_direction }}</span><br>
 													<span style="font-weight:bold; color: #bdb1a6">Return flight date:  {{ return_pickup_date }}</span><br>
                                                     <span style="font-weight:bold; color: #bdb1a6">Return flight number:  {{ return_flight_number }}</span><br>
@@ -273,46 +277,31 @@
 													<span style="font-weight:bold; color: #bdb1a6">Return pickup time:  {{ return_pickup_time }}</span><br>
 												{% endif %}
 												</p>
-												<!-- Meeting point  -->
-												{% if direction == 'Pickup from Intl Airport' or direction == 'Pickup from Domestic Airport' %}
-												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
-													--- Meeting point ---</p> 														
-                                                <p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">                                                  
-                                                    Please refer to our website for the meeting point at the airport.<br>
-													Click here >>&nbsp;<a href="https://easygoshuttle.com.au/meeting_point/">easygoshuttle.com.au/meeting_point</a>&nbsp;to view the location of the meeting_point. 
-													(Please note that changes may occur on the day of your pickup, so remember to check your email for updates)<br><br></p>
-												</p><br>
-												{% endif %}	
 
-												<!-- Price -->
-												{% if return_flight_number %}
-												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
-													The cost for your booking for both trips will be ${{ price }}<br><br></p>
-												{% else %}
-												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
-													The cost for your booking for a single trip will be ${{ price }}<br><br></p>
-												{% endif %}
-
-												<!-- If paid or not-->
-												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
-													--- Payment ---</p>
+												<!-- <p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
+													💰 Payment </p>
 												{% if paid %}																								
 													<p style="Margin:0;font-size:12px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                  
-                                                    You have paid ${{ price }}, which we have received and greatly appreciate.
+                                                    You have paid ${{ paid }}, which we have received and greatly appreciate.
 												<br></p><br>
-												{% else %}	
+												{% elif cash %}	
 												<p style="Margin:0;font-size:12px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                  
-													Please pay ${{ price }} online in advance <a href="https://easygoshuttle.com.au/payonline/">easygoshuttle.com.au/payonline</a><br>
-													Payment is kindly required prior to the day of your pickup<br>
-													<!-- A booking may not be guaranteed without payment<br> -->
-												</p><br>											
-												{% endif %}
-												
-												<!-- Confirm your booking by responding this email  -->
-												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
-													If you are happy with the price, please confirm your booking by responding to this email.<br><br> 
-												<span style="font-weight:bold; color: #d39383">													
-													Your booking will be confirmed once we receive your response</span><br><br></p>
+													We have noted your preference to pay ${{ price }} in cash. Your driver will accept the cash payment on the day of pickup<br>													
+												</p><br>		
+												{% else %}
+												<p style="Margin:0;font-size:12px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">  
+													The total cost for your booking is ${{ price }}.
+													<br>
+													You can prepay securely via PayPal at the following link:  
+													<a href="https://easygoshuttle.com.au/payonline">easygoshuttle.com.au/payonline</a>  
+													<br><br>
+
+													Alternatively, to avoid any credit card surcharge, you may pay by cash directly to the driver on the day.  
+													
+													✅ Please reply with your preferred payment method to confirm your booking <br><br>
+													
+												</p><br>																
+												{% endif %} -->
 													 
 												<p style="Margin:0;font-size:13px;font-weight:bold;line-height:22px;Margin-bottom:12px;">
                                                     Best regards<br>
