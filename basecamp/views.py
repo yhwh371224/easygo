@@ -1251,7 +1251,7 @@ def confirm_booking_detail(request):
             'pickup_time': pickup_time,
             'return_flight_number': return_flight_number,
             'street': street,
-            'suburbs': suburbs,
+            'suburb': suburb,
             'start_point': start_point,
             'end_point': end_point
         }
@@ -1259,7 +1259,7 @@ def confirm_booking_detail(request):
         send_confirm_email.delay(
             data['name'], data['email'], data['contact'], data['company_name'],
             data['pickup_date'], data['pickup_time'], data['return_flight_number'],
-            data['street'], data['suburbs'], data['start_point'], data['end_point']
+            data['street'], data['suburb'], data['start_point'], data['end_point']
         )
             
         sam_driver = Driver.objects.get(driver_name="Sam")    
