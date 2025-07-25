@@ -149,7 +149,7 @@ def create_event_on_calendar(instance_id):
 
 # Clicked confirm_booking form 
 @shared_task
-def send_confirm_email(name, email, contact, company_name, pickup_date, pickup_time, return_flight_number, street, suburbs, start_point, end_point):
+def send_confirm_email(name, email, contact, company_name, pickup_date, pickup_time, return_flight_number, street, suburb, start_point, end_point):
     subject = f"Booking Confirmation Clicked"
     
     content = f'''
@@ -169,7 +169,7 @@ def send_confirm_email(name, email, contact, company_name, pickup_date, pickup_t
     Pickup time: {pickup_time}
     Return flight number: {return_flight_number}
     Street: {street}
-    Suburbs: {suburbs}
+    Suburb: {suburb}
     Start point: {start_point}
     End point: {end_point}
     ===============================          
