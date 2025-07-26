@@ -9,9 +9,8 @@ class DriverAdmin(admin.ModelAdmin):
 
 
 class InquiryAdmin(admin.ModelAdmin):
-    list_display = ['pickup_date', 'contact', 'name', 'suburb', 'street', 
-                    'pickup_time', 'price', 'is_confirmed', 
-                    'cancelled', 'direction', 'return_flight_number', 'created']
+    list_display = ['pickup_date', 'contact', 'name', 'suburb', 'pickup_time', 'price', 'is_confirmed', 
+                    'cancelled', 'pending', 'direction', 'return_flight_number', 'created']
     search_fields = ['pickup_date', 'pickup_time', 'suburb', 'email', 'street', 
                      'name', 'contact', 'email1']
 
@@ -27,9 +26,8 @@ class StripePaymentAdmin(admin.ModelAdmin):
 
 
 class PostAdmin(admin.ModelAdmin):
-    list_display = ['pickup_date', 'contact', 'name', 'suburb', 'street',
-                    'pickup_time', 'price', 'paid', 
-                    'cancelled', 'direction', 'return_flight_number', 'created']
+    list_display = ['pickup_date', 'contact', 'name', 'suburb', 'pickup_time', 'price', 
+                    'paid', 'cancelled', 'direction', 'return_flight_number', 'created']
     search_fields = ['pickup_date', 'pickup_time', 'suburb', 'email', 'street', 
                      'name', 'contact', 'price', 'paid', 'email1']
     # list_filter = ['paid']
