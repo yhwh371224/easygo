@@ -157,7 +157,8 @@ def send_confirm_email(name, email, contact, company_name, pickup_date, pickup_t
 
     ✅ Sending email only! 
 
-    👉 https://easygoshuttle.com.au/sending_email_first/ 
+    👉 https://easygoshuttle.com.au/sending_email_first/
+    
     
     👉 https://easygoshuttle.com.au/sending_email_second/
 
