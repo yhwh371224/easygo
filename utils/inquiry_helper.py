@@ -42,6 +42,12 @@ def send_inquiry_email(instance):
             'email': instance.email,
         })
 
+    elif instance.pending:
+        html_content = render_to_string("basecamp/html_email-inquiry-pending.html", {
+            'name': instance.name,
+            'email': instance.email,
+        })
+
     else:
         return  
 
