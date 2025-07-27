@@ -282,6 +282,7 @@
 													Message: {{ message }}<br>                                                   
 												</p>
 												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;">
+												💰 Payment <br><br>
 												{% if return_pickup_time %}
 													The total cost for this booking, including both the outbound and return trips, is ${{ price }}&nbsp;
 												{% else %}
@@ -293,15 +294,15 @@
 												<br><br>
 												<!-- notice to the customer -->
 												{% if notice %}
-													Note: <span style="font-weight:bold; color: #d39383">{{ notice }}</span><br><br>
+													✍️	Note: <span style="font-weight:bold; color: #d39383">{{ notice }}</span><br><br>
 												{% endif %}	 
 												{% if private_ride %} 
-													<span style="font-weight:bold; color: #d39383">This is a 'Private Ride'</span><br>
+													<span style="font-weight:bold; color: #d39383">🚐 This is a 'Private Ride'</span><br>
 													This transportation service being provided is exclusive to your group, and you will not be sharing the ride with any other passengers. 
 													The vehicle will be dedicated to your group only, and there won't be any detour routes or additional stops during the Ride.
 													It will take you directly to your destination.<br><br>
 												{% endif %}
-													Kindly confirm if you are ready to proceed with the booking <br><br></p>	
+													✅ Kindly confirm if you are ready to proceed with the booking <br><br></p>	
 
 												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;">---Booking---</p>
 												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;">	                                                   
