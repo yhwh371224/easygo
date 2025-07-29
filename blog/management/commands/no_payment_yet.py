@@ -15,78 +15,84 @@ class Command(BaseCommand):
         text_content = strip_tags(html_content)
         email = EmailMultiAlternatives(subject, text_content, '', recipient_list)
         email.attach_alternative(html_content, "text/html")
-        email.send(fail_silently=False)            
-        
+        email.send(fail_silently=False)
+
+    def get_display_date(self, booking):
+        if booking.return_pickup_time == 'x':
+            if booking.return_pickup_date and booking.return_pickup_date < date.today():
+                return str(booking.pickup_date)
+            else:
+                return f"{booking.pickup_date} & {booking.return_pickup_date}"
+        return str(booking.pickup_date)
+
     def handle(self, *args, **options):
-        try: 
+        try:
             start_date = date.today()
             end_date = start_date + timedelta(days=7)
 
-            bookings = Post.objects.filter(pickup_date__range=(start_date, end_date))
-                
-            for booking in bookings:
-                if not booking.cash and (booking.paid is None or booking.paid.strip() in ["", "0"]) and not booking.cancelled:
-                    days_difference = (booking.pickup_date - start_date).days
-                    if days_difference in [0, 1, 2]:  
-                        email_subject = "Urgent notice for payment"
+            bookings = Post.objects.filter(
+                pickup_date__range=(start_date, end_date),
+                cash=False,
+                cancelled=False
+            )
 
-                        if booking.prepay or booking.company_name:                        
-                            email_template = "basecamp/html_email-nopayment-today.html"
-                        else: 
-                            email_template = "basecamp/html_email-nopayment-today-1.html"
-                        
+            for booking in bookings:
+                # ----------------------------
+                # 1. 결제 미완료 메일
+                # ----------------------------
+                if booking.paid is None or booking.paid.strip() in ["", "0"]:
+                    days_difference = (booking.pickup_date - start_date).days
+                    if days_difference in [0, 1, 2]:
+                        email_subject = "Urgent notice for payment"
+                        template = "basecamp/html_email-nopayment-today.html" \
+                            if booking.prepay or booking.company_name \
+                            else "basecamp/html_email-nopayment-today-1.html"
                     else:
                         email_subject = "Payment notice"
+                        template = "basecamp/html_email-nopayment.html" \
+                            if booking.prepay or booking.company_name \
+                            else "basecamp/html_email-nopayment-1.html"
 
-                        if booking.prepay or booking.company_name:                        
-                            email_template = "basecamp/html_email-nopayment.html"
-                        else: 
-                            email_template = "basecamp/html_email-nopayment-1.html"
-
-                    # 날짜 표시 조건 처리
-                    if booking.return_pickup_time == 'x':
-                        if booking.return_pickup_date and booking.return_pickup_date < date.today():
-                            display_date = f"{booking.pickup_date}"
-                        else:
-                            display_date = f"{booking.pickup_date} & {booking.return_pickup_date}"
-                    else:
-                        display_date = f"{booking.pickup_date}"
-
+                    display_date = self.get_display_date(booking)
                     self.send_email(
                         email_subject,
-                        email_template,
-                        {'name': booking.name, 'email': booking.email, 'price': booking.price, 
-                         'pickup_date': booking.pickup_date, 
-                         'return_pickup_date': booking.return_pickup_date,
-                         'display_date': display_date},
+                        template,
+                        {
+                            'name': booking.name,
+                            'email': booking.email,
+                            'price': booking.price,
+                            'pickup_date': booking.pickup_date,
+                            'return_pickup_date': booking.return_pickup_date,
+                            'display_date': display_date,
+                        },
                         [booking.email, RECIPIENT_EMAIL]
                     )
 
-                if booking.paid is not None and float(booking.price or 0) > float(booking.paid or 0):
-                    diff = round(float(booking.price or 0) - float(booking.paid or 0), 2)
-
-                    # 날짜 표시 조건 처리
-                    if booking.return_pickup_time == 'x':
-                        if booking.return_pickup_date and booking.return_pickup_date < date.today():
-                            display_date = f"{booking.pickup_date}"
-                        else:
-                            display_date = f"{booking.pickup_date} & {booking.return_pickup_date}"
-                    else:
-                        display_date = f"{booking.pickup_date}"
-
-                    email_subject = "Urgent notice for payment discrepancy"
-                    email_template = "basecamp/html_email-response-discrepancy.html"
-                    self.send_email(
-                        email_subject,
-                        email_template,
-                        {'name': booking.name, 'price': booking.price, 'paid': booking.paid, 
-                         'diff': diff, 'pickup_date': booking.pickup_date, 
-                         'display_date': display_date, 'return_pickup_date': booking.return_pickup_date},                    
-                        [booking.email, RECIPIENT_EMAIL]
-                    )
+                # ----------------------------
+                # 2. 결제 차액 메일
+                # ----------------------------
+                if booking.paid is not None:
+                    price = float(booking.price or 0)
+                    paid = float(booking.paid or 0)
+                    if price > paid:
+                        diff = round(price - paid, 2)
+                        display_date = self.get_display_date(booking)
+                        self.send_email(
+                            "Urgent notice for payment discrepancy",
+                            "basecamp/html_email-response-discrepancy.html",
+                            {
+                                'name': booking.name,
+                                'price': booking.price,
+                                'paid': booking.paid,
+                                'diff': diff,
+                                'pickup_date': booking.pickup_date,
+                                'return_pickup_date': booking.return_pickup_date,
+                                'display_date': display_date,
+                            },
+                            [booking.email, RECIPIENT_EMAIL]
+                        )
 
             self.stdout.write(self.style.SUCCESS('No_payment_yet emailed successfully'))
 
         except Exception as e:
             self.stdout.write(self.style.ERROR(f'Failed to send no_payment_yet: {str(e)}'))
-        
