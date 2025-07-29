@@ -1007,7 +1007,7 @@ def booking_detail(request):
             Flight number: {}
             Address: {}, {}
             No of Pax: {}
-            Return flight date: {}
+            🚨 Return flight date: {}
             Return flight no: {}
             Return flight time: {}         
             ===============================\n        
@@ -1032,7 +1032,7 @@ def booking_detail(request):
             Flight number: {}
             Address: {}, {}
             No of Pax: {}
-            Return flight date: {}
+            🚨 Return flight date: {}
             Return flight no: {}
             Return flight time: {}         
             ===============================\n        
@@ -1132,7 +1132,7 @@ def cruise_booking_detail(request):
             End point: {}  
             No of passenger: {}
             no_of_baggage: {}
-            return_pickup_date: {}
+            🚨 return_pickup_date: {}
             return_start_point: {}
             Return pickup time: {}     
             Message: {}     
