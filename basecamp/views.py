@@ -1917,6 +1917,7 @@ def email_dispatch_detail(request):
         template_options = {
             "Gratitude For Payment": ("basecamp/html_email-response-payment-received.html", "Payment Received - EasyGo"),
             "Gratitude For (M) Payment": ("basecamp/html_email-response-multi-payment-received.html", "(M) Payment Received - EasyGo"),
+            "Cash Payment Confirmed": ("basecamp/html_email-response-cash-payment-confirmed.html", "Cash Payment Confirmed - EasyGo"),
             "Pickup Notice for Today": ("basecamp/html_email-today1.html", "Important Update for Today's Pickup - EasyGo "),
             "Payment Method": ("basecamp/html_email-response-payment.html", "Payment Method - EasyGo"),
             "PayPal Assistance": ("basecamp/html_email-response-payment-assistance.html", "PayPal Assistance - EasyGo"),
@@ -2119,6 +2120,20 @@ def email_dispatch_detail(request):
                     user.toll = "short payment"
                     context.update({'price': user.price, 'paid': user.paid, 'diff': f"{diff:.2f}"})
                     user.save()
+
+            if selected_option == "Cash Payment Confirmed" and user: 
+                
+                if user.return_pickup_time == "x":
+                    user.cash = True
+                    user.save()
+
+                    second_user = Post.objects.filter(email__iexact=email)[1]                    
+                    second_user.cash = True
+                    second_user.save()
+                    
+                else:
+                    user.cash = True
+                    user.save()                       
 
             handle_email_sending(email, subject, template_name, context, user.email1)
               
