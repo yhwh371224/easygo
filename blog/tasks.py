@@ -98,7 +98,7 @@ def create_event_on_calendar(instance_id):
     message_parts = [instance.name, instance.email, 
                      'b:'+str(instance.no_of_baggage) if instance.no_of_baggage is not None else '', 
                      'm:'+instance.message if instance.message is not None else '', 
-                     '✅'+instance.notice if instance.notice is not None else '', 
+                     'n:'+instance.notice if instance.notice is not None else '', 
                      "d:"+str(instance.return_pickup_date) if instance.return_pickup_date is not None else '', 
                      '$'+str(instance.paid) if instance.paid is not None else '',
                      'opt:'+instance.end_point if instance.end_point is not None else '']
