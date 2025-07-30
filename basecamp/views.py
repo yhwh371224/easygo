@@ -409,7 +409,7 @@ def inquiry_details(request):
             Street: {}
             Suburb: {}
             Passenger: {}
-            Return flight date {}
+            ⚠️❗Return flight date {}
             Return flight number {}
             Return pickup time: {}
             =============================\n        
@@ -436,7 +436,7 @@ def inquiry_details(request):
             Street: {}
             Suburb: {}
             Passenger: {}
-            Return flight date {}
+            ⚠️❗Return flight date {}
             Return flight number {}
             Return pickup time: {}
             =============================\n        
@@ -516,7 +516,7 @@ def inquiry_details1(request):
         if inquiry_email_exists or post_email_exists:
             content = '''
             Hello, {} \n
-            Exist in Inquiry or Post *\n 
+            ⚠️❗Exist in Inquiry or Post *\n 
             *** It starts from Home Page
             =============================
             Contact: {}
@@ -1007,7 +1007,7 @@ def booking_detail(request):
             Flight number: {}
             Address: {}, {}
             No of Pax: {}
-            🚨 Return flight date: {}
+            ⚠️❗Return flight date: {}
             Return flight no: {}
             Return flight time: {}         
             ===============================\n        
@@ -1032,7 +1032,7 @@ def booking_detail(request):
             Flight number: {}
             Address: {}, {}
             No of Pax: {}
-            🚨 Return flight date: {}
+            ⚠️❗Return flight date: {}
             Return flight no: {}
             Return flight time: {}         
             ===============================\n        
@@ -1132,7 +1132,7 @@ def cruise_booking_detail(request):
             End point: {}  
             No of passenger: {}
             no_of_baggage: {}
-            🚨 return_pickup_date: {}
+            ⚠️❗return_pickup_date: {}
             return_start_point: {}
             Return pickup time: {}     
             Message: {}     
@@ -1160,7 +1160,7 @@ def cruise_booking_detail(request):
             End point: {}  
             No of passenger: {}
             no_of_baggage: {}
-            return_pickup_date: {}
+            ⚠️❗return_pickup_date: {}
             return_flight_number: {}
             Return pickup time: {}     
             Message: {}     
@@ -2129,6 +2129,7 @@ def email_dispatch_detail(request):
 
                     second_user = Post.objects.filter(email__iexact=email)[1]                    
                     second_user.cash = True
+                    second_user.reminder = True
                     second_user.save()
                     
                 else:

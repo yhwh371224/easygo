@@ -168,7 +168,7 @@ def send_confirm_email(name, email, contact, company_name, pickup_date, pickup_t
     Company name: {company_name}
     Flight date: {pickup_date}
     Pickup time: {pickup_time}
-    🚨 Return flight number: {return_flight_number}
+    ⚠️❗ Return flight number: {return_flight_number}
     Street: {street}
     Suburb: {suburb}
     Start point: {start_point}
