@@ -409,7 +409,7 @@ def inquiry_details(request):
             Street: {}
             Suburb: {}
             Passenger: {}
-            ⚠️❗Return flight date {}
+            ✅ Return flight date {}
             Return flight number {}
             Return pickup time: {}
             =============================\n        
@@ -436,7 +436,7 @@ def inquiry_details(request):
             Street: {}
             Suburb: {}
             Passenger: {}
-            ⚠️❗Return flight date {}
+            ✅Return flight date {}
             Return flight number {}
             Return pickup time: {}
             =============================\n        
@@ -516,7 +516,7 @@ def inquiry_details1(request):
         if inquiry_email_exists or post_email_exists:
             content = '''
             Hello, {} \n
-            ⚠️❗Exist in Inquiry or Post *\n 
+            ✅ Exist in Inquiry or Post *\n 
             *** It starts from Home Page
             =============================
             Contact: {}
@@ -548,7 +548,7 @@ def inquiry_details1(request):
             Flight date: {}
             Flight number: {}
             Pickup time: {}
-            start_point: {}
+            ✅ start_point: {}
             Street: {}
             end_point: {}
             Passenger: {}            
@@ -1007,7 +1007,7 @@ def booking_detail(request):
             Flight number: {}
             Address: {}, {}
             No of Pax: {}
-            ⚠️❗Return flight date: {}
+            ✅ Return flight date: {}
             Return flight no: {}
             Return flight time: {}         
             ===============================\n        
@@ -1032,7 +1032,7 @@ def booking_detail(request):
             Flight number: {}
             Address: {}, {}
             No of Pax: {}
-            ⚠️❗Return flight date: {}
+            ✅ Return flight date: {}
             Return flight no: {}
             Return flight time: {}         
             ===============================\n        
@@ -1132,7 +1132,7 @@ def cruise_booking_detail(request):
             End point: {}  
             No of passenger: {}
             no_of_baggage: {}
-            ⚠️❗return_pickup_date: {}
+            ✅ return_pickup_date: {}
             return_start_point: {}
             Return pickup time: {}     
             Message: {}     
@@ -1160,7 +1160,7 @@ def cruise_booking_detail(request):
             End point: {}  
             No of passenger: {}
             no_of_baggage: {}
-            ⚠️❗return_pickup_date: {}
+            ✅return_pickup_date: {}
             return_flight_number: {}
             Return pickup time: {}     
             Message: {}     
@@ -1578,8 +1578,8 @@ def return_trip_detail(request):
             
         content = '''
             {} 
-            submitted the 'Return trip' \n
-            sending first email only \n
+            ✅ submitted the 'Return trip' \n
+            
             https://easygoshuttle.com.au/sending_email_first/ \n  
             https://easygoshuttle.com.au/sending_email_second/ \n
             ===============================
