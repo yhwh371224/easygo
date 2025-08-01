@@ -471,7 +471,7 @@ def inquiry_details(request):
                     
         p = Inquiry(name=name, contact=contact, email=email, pickup_date=pickup_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
-                 start_point=start_point, end_point=end_point, no_of_passenger=baggage_str, no_of_baggage=no_of_baggage, 
+                 start_point=start_point, end_point=end_point, no_of_passenger=baggage_str, no_of_baggage=baggage_str, 
                  return_direction=return_direction, return_pickup_date=return_pickup_date, return_flight_number=return_flight_number, 
                  return_flight_time=return_flight_time, return_pickup_time=return_pickup_time, 
                  return_start_point=return_start_point, return_end_point=return_end_point, message=message)
