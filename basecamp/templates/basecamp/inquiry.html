@@ -128,11 +128,64 @@
 				  <option value="-1" disabled="disabled">Over 13 (please email us)</option>
               </select>
                 </div>
-                <div class="mb-3 pb-1">
-                  <label class="form-label" >Baggage</label>
-                  <input class="form-control" type="text" placeholder="How many baggage?" name="no_of_baggage" required>
-                  <div class="invalid-feedback">Please enter the number of baggage!</div>
-                </div>
+				<br><br>
+				<hr>
+				<br><br> 
+                <!-- Regular Baggage -->
+				<div class="mb-3 pb-1">
+				<label class="form-label">Baggage (Regular)</label>
+					<div class="row g-2">
+						<div class="col">
+						<label for="baggage_large" class="form-label mb-0">Large size bag</label>
+						<input type="number" class="form-control" name="baggage_large" placeholder="Large" min="0" max="9" value="0">
+						</div>
+						<div class="col">
+						<label for="baggage_medium" class="form-label mb-0">Medium size bag</label>
+						<input type="number" class="form-control" name="baggage_medium" placeholder="Medium" min="0" max="9" value="0">
+						</div>
+						<div class="col">
+						<label for="baggage_small" class="form-label mb-0">Small size bag</label>
+						<input type="number" class="form-control" name="baggage_small" placeholder="Small" min="0" max="9" value="0">
+						</div>
+					</div>
+				</div>
+				<!-- Toggle Extra Luggage -->
+				<div class="mb-3 pb-1">
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox" id="extraLuggageCheck" onclick="toggleExtraLuggage()">
+						<label class="form-check-label" for="extraLuggageCheck">
+						Any extra luggage? (ski, golf, bike etc)
+						</label>
+					</div>
+				</div>
+				<!-- Extra Luggage (hidden by default) -->
+				<div id="extraLuggageFields" style="display: none;">
+					<div class="row g-2 mb-3">
+						<div class="col">
+							<label for="baggage_ski" class="form-label mb-0">Ski bags</label>
+							<input type="number" class="form-control" name="baggage_ski" placeholder="Ski bags" min="0" max="9" value="0"></div>
+						<div class="col">
+							<label for="baggage_snowboard" class="form-label mb-0">Snowboards</label>
+							<input type="number" class="form-control" name="baggage_snowboard" placeholder="Snowboards" min="0" max="9" value="0"></div>
+						<div class="col">
+							<label for="baggage_golf" class="form-label mb-0">Golf bags</label>
+							<input type="number" class="form-control" name="baggage_golf" placeholder="Golf bags" min="0" max="9" value="0"></div>
+					</div>
+					<div class="row g-2 mb-3">
+						<div class="col">
+							<label for="baggage_bike" class="form-label mb-0">Bike bags</label>
+							<input type="number" class="form-control" name="baggage_bike" placeholder="Bike bags" min="0" max="9" value="0"></div>
+						<div class="col">
+							<label for="baggage_boxes" class="form-label mb-0">Cartoon Boxes</label>
+							<input type="number" class="form-control" name="baggage_boxes" placeholder="Cartoon Boxes" min="0" max="9" value="0"></div>
+						<div class="col">
+							<label for="baggage_pram" class="form-label mb-0">Prams</label>
+							<input type="number" class="form-control" name="baggage_pram" placeholder="Musical Instruments" min="0" max="9" value="0"></div>
+					</div>
+				</div>
+				<br><br>
+				<hr>
+				<br><br> 
 				<!-- Return Flight Option -->
 				<br>
 				<div id="return-flight-fields">
