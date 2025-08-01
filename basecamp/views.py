@@ -2170,6 +2170,7 @@ def email_dispatch_detail(request):
                     context.update({
                         'pickup_date': user.pickup_date,
                         'price': full_price,
+                        'return_pickup_date': user.return_pickup_date if user else '',
                     })
 
             # multi payment 적용방식 
