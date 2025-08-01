@@ -259,10 +259,6 @@ def p2p_single(request):
     return render(request, 'basecamp/p2p_single.html', context)
 
 
-def p2p_single_1(request):     
-    return render(request, 'basecamp/p2p_single_1.html')
-
-
 def privacy(request):     
     return render(request, 'basecamp/privacy.html')
 
@@ -447,10 +443,35 @@ def inquiry_details(request):
                         data['return_pickup_date'], data['return_flight_number'],data['return_pickup_time'])
             
             send_mail(data['pickup_date'], content, '', [RECIPIENT_EMAIL]) 
-            
+
+        # 🧳 수하물 개별 항목 수집
+        large = int(request.POST.get('baggage_large', 0))
+        medium = int(request.POST.get('baggage_medium', 0))
+        small = int(request.POST.get('baggage_small', 0))
+        ski = int(request.POST.get('baggage_ski', 0))
+        snowboard = int(request.POST.get('baggage_snowboard', 0))
+        golf = int(request.POST.get('baggage_golf', 0))
+        bike = int(request.POST.get('baggage_bike', 0))
+        boxes = int(request.POST.get('baggage_boxes', 0))
+        pram = int(request.POST.get('baggage_pram', 0))
+
+        # 🎯 요약 문자열 생성
+        baggage_summary = []
+        if large: baggage_summary.append(f"L{large}")
+        if medium: baggage_summary.append(f"M{medium}")
+        if small: baggage_summary.append(f"S{small}")
+        if ski: baggage_summary.append(f"Ski{ski}")
+        if snowboard: baggage_summary.append(f"Snow{snowboard}")
+        if golf: baggage_summary.append(f"Golf{golf}")
+        if bike: baggage_summary.append(f"Bike{bike}")
+        if boxes: baggage_summary.append(f"Box{boxes}")
+        if pram: baggage_summary.append(f"Pram{pram}")
+
+        baggage_str = ", ".join(baggage_summary)
+                    
         p = Inquiry(name=name, contact=contact, email=email, pickup_date=pickup_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
-                 start_point=start_point, end_point=end_point, no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, 
+                 start_point=start_point, end_point=end_point, no_of_passenger=baggage_str, no_of_baggage=no_of_baggage, 
                  return_direction=return_direction, return_pickup_date=return_pickup_date, return_flight_number=return_flight_number, 
                  return_flight_time=return_flight_time, return_pickup_time=return_pickup_time, 
                  return_start_point=return_start_point, return_end_point=return_end_point, message=message)
@@ -581,10 +602,35 @@ def inquiry_details1(request):
             suburb = start_point
             end_point = ''
             start_point = ''  
+
+        # 🧳 수하물 개별 항목 수집
+        large = int(request.POST.get('baggage_large', 0))
+        medium = int(request.POST.get('baggage_medium', 0))
+        small = int(request.POST.get('baggage_small', 0))
+        ski = int(request.POST.get('baggage_ski', 0))
+        snowboard = int(request.POST.get('baggage_snowboard', 0))
+        golf = int(request.POST.get('baggage_golf', 0))
+        bike = int(request.POST.get('baggage_bike', 0))
+        boxes = int(request.POST.get('baggage_boxes', 0))
+        pram = int(request.POST.get('baggage_pram', 0))
+
+        # 🎯 요약 문자열 생성
+        baggage_summary = []
+        if large: baggage_summary.append(f"L{large}")
+        if medium: baggage_summary.append(f"M{medium}")
+        if small: baggage_summary.append(f"S{small}")
+        if ski: baggage_summary.append(f"Ski{ski}")
+        if snowboard: baggage_summary.append(f"Snow{snowboard}")
+        if golf: baggage_summary.append(f"Golf{golf}")
+        if bike: baggage_summary.append(f"Bike{bike}")
+        if boxes: baggage_summary.append(f"Box{boxes}")
+        if pram: baggage_summary.append(f"Pram{pram}")
+
+        baggage_str = ", ".join(baggage_summary)
         
         p = Inquiry(name=name, contact=contact, email=email, pickup_date=pickup_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
-                 start_point=start_point, end_point=end_point, no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, 
+                 start_point=start_point, end_point=end_point, no_of_passenger=no_of_passenger, no_of_baggage=baggage_str, 
                  message=message)
         
         p.save()
@@ -900,9 +946,34 @@ def confirmation_detail(request):
 
         sam_driver = Driver.objects.get(driver_name="Sam") 
 
+        # 🧳 수하물 개별 항목 수집
+        large = int(request.POST.get('baggage_large', 0))
+        medium = int(request.POST.get('baggage_medium', 0))
+        small = int(request.POST.get('baggage_small', 0))
+        ski = int(request.POST.get('baggage_ski', 0))
+        snowboard = int(request.POST.get('baggage_snowboard', 0))
+        golf = int(request.POST.get('baggage_golf', 0))
+        bike = int(request.POST.get('baggage_bike', 0))
+        boxes = int(request.POST.get('baggage_boxes', 0))
+        pram = int(request.POST.get('baggage_pram', 0))
+
+        # 🎯 요약 문자열 생성
+        baggage_summary = []
+        if large: baggage_summary.append(f"L{large}")
+        if medium: baggage_summary.append(f"M{medium}")
+        if small: baggage_summary.append(f"S{small}")
+        if ski: baggage_summary.append(f"Ski{ski}")
+        if snowboard: baggage_summary.append(f"Snow{snowboard}")
+        if golf: baggage_summary.append(f"Golf{golf}")
+        if bike: baggage_summary.append(f"Bike{bike}")
+        if boxes: baggage_summary.append(f"Box{boxes}")
+        if pram: baggage_summary.append(f"Pram{pram}")
+
+        baggage_str = ", ".join(baggage_summary)
+
         p = Post(company_name=company_name, name=name, contact=contact, email=email, email1=email1, pickup_date=pickup_date, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, start_point=start_point, end_point=end_point, direction=direction, suburb=suburb, street=street,
-                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, return_direction=return_direction, return_pickup_date=return_pickup_date, 
+                 no_of_passenger=no_of_passenger, no_of_baggage=baggage_str, message=message, return_direction=return_direction, return_pickup_date=return_pickup_date, 
                  return_flight_number=return_flight_number, return_flight_time=return_flight_time, return_pickup_time=return_pickup_time, return_start_point=return_start_point,
                  return_end_point=return_end_point, notice=notice, price=price, paid=paid, cash=cash, driver=sam_driver)
         
@@ -1046,9 +1117,34 @@ def booking_detail(request):
             
         sam_driver = Driver.objects.get(driver_name="Sam") 
 
+        # 🧳 수하물 개별 항목 수집
+        large = int(request.POST.get('baggage_large', 0))
+        medium = int(request.POST.get('baggage_medium', 0))
+        small = int(request.POST.get('baggage_small', 0))
+        ski = int(request.POST.get('baggage_ski', 0))
+        snowboard = int(request.POST.get('baggage_snowboard', 0))
+        golf = int(request.POST.get('baggage_golf', 0))
+        bike = int(request.POST.get('baggage_bike', 0))
+        boxes = int(request.POST.get('baggage_boxes', 0))
+        pram = int(request.POST.get('baggage_pram', 0))
+
+        # 🎯 요약 문자열 생성
+        baggage_summary = []
+        if large: baggage_summary.append(f"L{large}")
+        if medium: baggage_summary.append(f"M{medium}")
+        if small: baggage_summary.append(f"S{small}")
+        if ski: baggage_summary.append(f"Ski{ski}")
+        if snowboard: baggage_summary.append(f"Snow{snowboard}")
+        if golf: baggage_summary.append(f"Golf{golf}")
+        if bike: baggage_summary.append(f"Bike{bike}")
+        if boxes: baggage_summary.append(f"Box{boxes}")
+        if pram: baggage_summary.append(f"Pram{pram}")
+
+        baggage_str = ", ".join(baggage_summary)
+
         p = Post(name=name, contact=contact, email=email, pickup_date=pickup_date, flight_number=flight_number, flight_time=flight_time, 
                  pickup_time=pickup_time, start_point=start_point, end_point=end_point, direction=direction, suburb=suburb, street=street,
-                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, return_direction=return_direction, 
+                 no_of_passenger=no_of_passenger, no_of_baggage=baggage_str, message=message, return_direction=return_direction, 
                  return_pickup_date=return_pickup_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
                  return_pickup_time=return_pickup_time, return_start_point=return_start_point, return_end_point=return_end_point, driver=sam_driver,
                  price=price, )
@@ -1173,11 +1269,36 @@ def cruise_booking_detail(request):
                         data['return_pickup_time'], data['message'])
             send_mail(data['pickup_date'], content, '', [RECIPIENT_EMAIL])
             
-        sam_driver = Driver.objects.get(driver_name="Sam") 
+        sam_driver = Driver.objects.get(driver_name="Sam")
+
+        # 🧳 수하물 개별 항목 수집
+        large = int(request.POST.get('baggage_large', 0))
+        medium = int(request.POST.get('baggage_medium', 0))
+        small = int(request.POST.get('baggage_small', 0))
+        ski = int(request.POST.get('baggage_ski', 0))
+        snowboard = int(request.POST.get('baggage_snowboard', 0))
+        golf = int(request.POST.get('baggage_golf', 0))
+        bike = int(request.POST.get('baggage_bike', 0))
+        boxes = int(request.POST.get('baggage_boxes', 0))
+        pram = int(request.POST.get('baggage_pram', 0))
+
+        # 🎯 요약 문자열 생성
+        baggage_summary = []
+        if large: baggage_summary.append(f"L{large}")
+        if medium: baggage_summary.append(f"M{medium}")
+        if small: baggage_summary.append(f"S{small}")
+        if ski: baggage_summary.append(f"Ski{ski}")
+        if snowboard: baggage_summary.append(f"Snow{snowboard}")
+        if golf: baggage_summary.append(f"Golf{golf}")
+        if bike: baggage_summary.append(f"Bike{bike}")
+        if boxes: baggage_summary.append(f"Box{boxes}")
+        if pram: baggage_summary.append(f"Pram{pram}")
+
+        baggage_str = ", ".join(baggage_summary) 
 
         p = Post(name=name, contact=contact, email=email, pickup_date=pickup_date, start_point=start_point,
                  end_point=end_point, pickup_time=pickup_time, price=price,
-                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage,   
+                 no_of_passenger=no_of_passenger, no_of_baggage=baggage_str,   
                  return_pickup_date=return_pickup_date, return_start_point=return_start_point,  
                  return_pickup_time=return_pickup_time, return_end_point=return_end_point,
                  message=message, driver=sam_driver, )
