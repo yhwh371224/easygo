@@ -405,8 +405,8 @@ def inquiry_details(request):
             Street: {}
             Suburb: {}
             Passenger: {}
-            ✅ Return flight date {}
-            Return flight number {}
+            ✅ Return pickup date {}
+            ✅ Return flight number {}
             Return pickup time: {}
             =============================\n        
             Best Regards,
@@ -432,8 +432,8 @@ def inquiry_details(request):
             Street: {}
             Suburb: {}
             Passenger: {}
-            ✅Return flight date {}
-            Return flight number {}
+            ✅ Return pickup date {}
+            ✅ Return flight number {}
             Return pickup time: {}
             =============================\n        
             Best Regards,
@@ -1078,7 +1078,7 @@ def booking_detail(request):
             Flight number: {}
             Address: {}, {}
             No of Pax: {}
-            ✅ Return flight date: {}
+            ✅ Return pickup date: {}
             Return flight no: {}
             Return flight time: {}         
             ===============================\n        
@@ -1103,7 +1103,7 @@ def booking_detail(request):
             Flight number: {}
             Address: {}, {}
             No of Pax: {}
-            ✅ Return flight date: {}
+            ✅ Return pickup date: {}
             Return flight no: {}
             Return flight time: {}         
             ===============================\n        
