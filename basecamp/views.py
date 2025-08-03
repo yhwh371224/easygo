@@ -1053,14 +1053,17 @@ def booking_detail(request):
             'contact': contact,
             'email': email,            
             'pickup_date': pickup_date,
+            'pickup_time': pickup_time,
             'flight_number': flight_number,            
             'street': street, 
             'suburb': suburb,
             'no_of_passenger': no_of_passenger,
             'return_pickup_date': return_pickup_date,
             'return_flight_number': return_flight_number,
-            'return_flight_time': return_flight_time}       
-        
+            'return_flight_time': return_flight_time,
+            'return_pickup_time': return_pickup_time,
+        }
+
         inquiry_email = Inquiry.objects.filter(email=email).exists()
         post_email = Post.objects.filter(email=email).exists()  
 
@@ -1075,18 +1078,20 @@ def booking_detail(request):
             ===============================
             Contact: {}
             Email: {}  
+            Pickup time: {}
             Flight number: {}
             Address: {}, {}
             No of Pax: {}
             ✅ Return pickup date: {}
             Return flight no: {}
-            Return flight time: {}         
+            Return flight time: {}    
+            Return pickup time: {}   
             ===============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['flight_number'], data['street'], 
+            ''' .format(data['name'], data['contact'], data['email'], data['pickup_time'], data['flight_number'], data['street'], 
                         data['suburb'], data['no_of_passenger'], data['return_pickup_date'], data['return_flight_number'],
-                        data['return_flight_time'])
+                        data['return_flight_time'], data['return_pickup_time'])
             send_mail(data['pickup_date'], content,
                       '', [RECIPIENT_EMAIL])
         
@@ -1100,18 +1105,20 @@ def booking_detail(request):
            ===============================
             Contact: {}
             Email: {}  
+            Pickup time: {}
             Flight number: {}
             Address: {}, {}
             No of Pax: {}
             ✅ Return pickup date: {}
             Return flight no: {}
-            Return flight time: {}         
+            Return flight time: {}    
+            Return pickup time: {}   
             ===============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-           ''' .format(data['name'], data['contact'], data['email'], data['flight_number'], data['street'], 
+            ''' .format(data['name'], data['contact'], data['email'], data['pickup_time'], data['flight_number'], data['street'], 
                         data['suburb'], data['no_of_passenger'], data['return_pickup_date'], data['return_flight_number'],
-                        data['return_flight_time'])
+                        data['return_flight_time'], data['return_pickup_time'])
             send_mail(data['pickup_date'], content,
                       '', [RECIPIENT_EMAIL])
             
