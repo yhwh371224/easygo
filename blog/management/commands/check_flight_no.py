@@ -22,7 +22,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         try:
             today = date.today()
-            start_date = today + timedelta(days=1)
+            start_date = today
             end_date = today + timedelta(days=7)
 
             bookings = Post.objects.filter(
