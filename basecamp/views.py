@@ -1770,7 +1770,11 @@ def invoice_detail(request):
         else:
             user = users[0]
             today = date.today()
-            inv_no = f"{user.pickup_date.toordinal()}" if user.pickup_date else "896021"
+            # ✅ Use provided inv_no if exists, else use old logic
+            if inv_no and inv_no.strip():
+                inv_no = inv_no.strip()
+            else:
+                inv_no = f"{user.pickup_date.toordinal()}" if user.pickup_date else "896021"
             
         # Multi booking 여부
         multiple = False
