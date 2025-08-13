@@ -2230,10 +2230,12 @@ def email_dispatch_detail(request):
 
                 if user.return_pickup_time == "x":
                     user.cancelled = True
+                    user.is_confirmed = False
                     user.save()
 
                     second_user = Post.objects.filter(email__iexact=email)[1]
                     second_user.cancelled = True
+                    second_user.is_confirmed = False
                     second_user.cash = False
                     second_user.save()
 
