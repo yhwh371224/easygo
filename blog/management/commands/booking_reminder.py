@@ -1,4 +1,5 @@
 import os
+import sys
 import logging
 from datetime import datetime, date, timedelta
 
@@ -8,6 +9,7 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.conf import settings
 from blog.models import Post, Driver
+from utils import booking_helper
 
 from twilio.rest import Client
 from decouple import config
@@ -22,6 +24,9 @@ class Command(BaseCommand):
     help = 'Send booking reminders for upcoming flights'
 
     def handle(self, *args, **options):
+        # --- 오늘 국제선 도착 예약 meeting_point 업데이트 ---
+        booking_helper.update_meeting_point_for_international_arrivals()
+        
         # Initialize Twilio client once
         account_sid = config('TWILIO_ACCOUNT_SID')
         auth_token = config('TWILIO_AUTH_TOKEN')
