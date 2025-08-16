@@ -445,15 +445,15 @@ def inquiry_details(request):
             send_mail(data['pickup_date'], content, '', [RECIPIENT_EMAIL]) 
 
         # 🧳 수하물 개별 항목 수집
-        large = int(request.POST.get('baggage_large', 0))
-        medium = int(request.POST.get('baggage_medium', 0))
-        small = int(request.POST.get('baggage_small', 0))
-        ski = int(request.POST.get('baggage_ski', 0))
-        snowboard = int(request.POST.get('baggage_snowboard', 0))
-        golf = int(request.POST.get('baggage_golf', 0))
-        bike = int(request.POST.get('baggage_bike', 0))
-        boxes = int(request.POST.get('baggage_boxes', 0))
-        pram = int(request.POST.get('baggage_pram', 0))
+        large = int(request.POST.get('baggage_large') or 0)
+        medium = int(request.POST.get('baggage_medium') or 0)
+        small = int(request.POST.get('baggage_small') or 0)
+        ski = int(request.POST.get('baggage_ski') or 0)
+        snowboard = int(request.POST.get('baggage_snowboard') or 0)
+        golf = int(request.POST.get('baggage_golf') or 0)
+        bike = int(request.POST.get('baggage_bike') or 0)
+        boxes = int(request.POST.get('baggage_boxes') or 0)
+        pram = int(request.POST.get('baggage_pram') or 0)
 
         # 🎯 요약 문자열 생성
         baggage_summary = []
@@ -604,15 +604,15 @@ def inquiry_details1(request):
             start_point = ''  
 
         # 🧳 수하물 개별 항목 수집
-        large = int(request.POST.get('baggage_large', 0))
-        medium = int(request.POST.get('baggage_medium', 0))
-        small = int(request.POST.get('baggage_small', 0))
-        ski = int(request.POST.get('baggage_ski', 0))
-        snowboard = int(request.POST.get('baggage_snowboard', 0))
-        golf = int(request.POST.get('baggage_golf', 0))
-        bike = int(request.POST.get('baggage_bike', 0))
-        boxes = int(request.POST.get('baggage_boxes', 0))
-        pram = int(request.POST.get('baggage_pram', 0))
+        large = int(request.POST.get('baggage_large') or 0)
+        medium = int(request.POST.get('baggage_medium') or 0)
+        small = int(request.POST.get('baggage_small') or 0)
+        ski = int(request.POST.get('baggage_ski') or 0)
+        snowboard = int(request.POST.get('baggage_snowboard') or 0)
+        golf = int(request.POST.get('baggage_golf') or 0)
+        bike = int(request.POST.get('baggage_bike') or 0)
+        boxes = int(request.POST.get('baggage_boxes') or 0)
+        pram = int(request.POST.get('baggage_pram') or 0)
 
         # 🎯 요약 문자열 생성
         baggage_summary = []
@@ -947,15 +947,15 @@ def confirmation_detail(request):
         sam_driver = Driver.objects.get(driver_name="Sam") 
 
         # 🧳 수하물 개별 항목 수집
-        large = int(request.POST.get('baggage_large', 0))
-        medium = int(request.POST.get('baggage_medium', 0))
-        small = int(request.POST.get('baggage_small', 0))
-        ski = int(request.POST.get('baggage_ski', 0))
-        snowboard = int(request.POST.get('baggage_snowboard', 0))
-        golf = int(request.POST.get('baggage_golf', 0))
-        bike = int(request.POST.get('baggage_bike', 0))
-        boxes = int(request.POST.get('baggage_boxes', 0))
-        pram = int(request.POST.get('baggage_pram', 0))
+        large = int(request.POST.get('baggage_large') or 0)
+        medium = int(request.POST.get('baggage_medium') or 0)
+        small = int(request.POST.get('baggage_small') or 0)
+        ski = int(request.POST.get('baggage_ski') or 0)
+        snowboard = int(request.POST.get('baggage_snowboard') or 0)
+        golf = int(request.POST.get('baggage_golf') or 0)
+        bike = int(request.POST.get('baggage_bike') or 0)
+        boxes = int(request.POST.get('baggage_boxes') or 0)
+        pram = int(request.POST.get('baggage_pram') or 0)
 
         # 🎯 요약 문자열 생성
         baggage_summary = []
@@ -1125,15 +1125,16 @@ def booking_detail(request):
         sam_driver = Driver.objects.get(driver_name="Sam") 
 
         # 🧳 수하물 개별 항목 수집
-        large = int(request.POST.get('baggage_large', 0))
-        medium = int(request.POST.get('baggage_medium', 0))
-        small = int(request.POST.get('baggage_small', 0))
-        ski = int(request.POST.get('baggage_ski', 0))
-        snowboard = int(request.POST.get('baggage_snowboard', 0))
-        golf = int(request.POST.get('baggage_golf', 0))
-        bike = int(request.POST.get('baggage_bike', 0))
-        boxes = int(request.POST.get('baggage_boxes', 0))
-        pram = int(request.POST.get('baggage_pram', 0))
+        large = int(request.POST.get('baggage_large') or 0)
+        medium = int(request.POST.get('baggage_medium') or 0)
+        small = int(request.POST.get('baggage_small') or 0)
+        ski = int(request.POST.get('baggage_ski') or 0)
+        snowboard = int(request.POST.get('baggage_snowboard') or 0)
+        golf = int(request.POST.get('baggage_golf') or 0)
+        bike = int(request.POST.get('baggage_bike') or 0)
+        boxes = int(request.POST.get('baggage_boxes') or 0)
+        pram = int(request.POST.get('baggage_pram') or 0)
+
 
         # 🎯 요약 문자열 생성
         baggage_summary = []
@@ -1279,15 +1280,15 @@ def cruise_booking_detail(request):
         sam_driver = Driver.objects.get(driver_name="Sam")
 
         # 🧳 수하물 개별 항목 수집
-        large = int(request.POST.get('baggage_large', 0))
-        medium = int(request.POST.get('baggage_medium', 0))
-        small = int(request.POST.get('baggage_small', 0))
-        ski = int(request.POST.get('baggage_ski', 0))
-        snowboard = int(request.POST.get('baggage_snowboard', 0))
-        golf = int(request.POST.get('baggage_golf', 0))
-        bike = int(request.POST.get('baggage_bike', 0))
-        boxes = int(request.POST.get('baggage_boxes', 0))
-        pram = int(request.POST.get('baggage_pram', 0))
+        large = int(request.POST.get('baggage_large') or 0)
+        medium = int(request.POST.get('baggage_medium') or 0)
+        small = int(request.POST.get('baggage_small') or 0)
+        ski = int(request.POST.get('baggage_ski') or 0)
+        snowboard = int(request.POST.get('baggage_snowboard') or 0)
+        golf = int(request.POST.get('baggage_golf') or 0)
+        bike = int(request.POST.get('baggage_bike') or 0)
+        boxes = int(request.POST.get('baggage_boxes') or 0)
+        pram = int(request.POST.get('baggage_pram') or 0)
 
         # 🎯 요약 문자열 생성
         baggage_summary = []
