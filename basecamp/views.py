@@ -1790,9 +1790,10 @@ def invoice_detail(request):
         if multiple:
             for booking in bookings:
                 if booking.company_name and not booking.prepay:
-                    booking.price = round(float(booking.price) * 1.10, 2)
-                    booking.prepay = True
-                    booking.save()
+                    if not user.cash:  # 🚨 cash인 경우는 제외
+                        booking.price = round(float(booking.price) * 1.10, 2)
+                        booking.prepay = True
+                        booking.save()
 
             booking_data = []
             total_price_without_gst = total_paid = grand_total = 0
@@ -1982,9 +1983,10 @@ def invoice_detail(request):
         mail.send()
 
         if not multiple and user.company_name and not user.prepay:
-            user.price = round(float(user.price) * 1.10, 2)
-            user.prepay = True
-            user.save()
+            if not user.cash:  # 🚨 cash인 경우는 제외
+                user.price = round(float(user.price) * 1.10, 2)
+                user.prepay = True
+                user.save()
 
         return render(request, 'basecamp/inquiry_done.html')
 
