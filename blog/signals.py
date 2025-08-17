@@ -38,15 +38,12 @@ def notify_user_post_cancelled(sender, instance, created, **kwargs):
 # Automatically set prepay to True for foreign contacts or company names
 @receiver(post_save, sender=Post, dispatch_uid="set_prepay_for_foreign_users")
 def set_prepay_for_foreign_users(sender, instance, created, **kwargs):
-    if not instance.pk:
+    if not instance.pk or instance.cash:        
         return  # Skip if not saved properly
 
-    # Use a guard to prevent recursion
-    if instance.prepay:
-        return
-
-    if is_foreign_number(instance.contact) or (instance.company_name or "").strip():
-        Post.objects.filter(pk=instance.pk).update(prepay=True)
+    if not instance.prepay: 
+        if is_foreign_number(instance.contact) or (instance.company_name or "").strip():
+            Post.objects.filter(pk=instance.pk).update(prepay=True)
 
 
 # Payment signals (Paypal)   
