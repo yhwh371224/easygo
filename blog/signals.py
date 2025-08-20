@@ -72,4 +72,5 @@ def check_missing_direction(sender, instance, created, **kwargs):
     if created and instance.flight_number and not (instance.direction and instance.direction.strip()):
         send_missing_direction_email(instance)
 
+
                 
