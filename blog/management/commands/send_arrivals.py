@@ -1,11 +1,14 @@
 import logging
-from datetime import date
+from datetime import date, datetime
 
 from django.core.management.base import BaseCommand
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.conf import settings
+from django.utils import timezone
+
+import pytz
 
 from blog.models import Post, Driver
 from utils import booking_helper
@@ -48,13 +51,30 @@ class Command(BaseCommand):
             direction__icontains="Pickup from"
         ).exclude(cancelled=True).select_related('driver')
 
+        # 타입 필터
         if arrival_type == "intl":
             queryset = queryset.filter(direction="Pickup from Intl Airport")
         elif arrival_type == "domestic":
             queryset = queryset.filter(direction="Pickup from Domestic Airport")
 
-        if not queryset.exists():
-            logger.info(f"No {arrival_type} arrivals for today.")
+        # 현재 시드니 시간 기준으로 과거 픽업 시간 제거
+        sydney_tz = pytz.timezone('Australia/Sydney')
+        now_time = timezone.localtime(timezone.now(), sydney_tz).time()
+
+        filtered_queryset = []
+        for b in queryset:
+            if b.pickup_time:
+                try:
+                    pickup_time_obj = datetime.strptime(b.pickup_time.strip(), "%H:%M").time()
+                    if pickup_time_obj >= now_time:
+                        filtered_queryset.append(b)
+                except ValueError:
+                    # 형식 이상 시 일단 포함
+                    filtered_queryset.append(b)
+        queryset = filtered_queryset
+
+        if not queryset:
+            logger.info(f"No {arrival_type} arrivals for today (after current Sydney time).")
             return
 
         template_name = "basecamp/html_email-today.html"
@@ -64,7 +84,6 @@ class Command(BaseCommand):
         self.send_email_task(queryset, template_name, subject, target_date, sms_allowed)
 
     def format_pickup_time_12h(self, pickup_time_str):
-        from datetime import datetime
         try:
             time_obj = datetime.strptime(pickup_time_str.strip(), "%H:%M")
             return time_obj.strftime("%I:%M %p")
