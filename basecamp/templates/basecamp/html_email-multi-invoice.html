@@ -215,13 +215,13 @@
           <td style="padding-top: 20px;">
             <div style="font-size:12px; line-height:20px; border-top:1px solid #a09a9a; border-bottom:1px solid #a09a9a; padding:10px 0;">
               Payment options are as below:<br><br>
-              1. Via Online Banking<br>
-              &nbsp; • &nbsp;EasyGo Airport Transfers<br>
-              &nbsp; • &nbsp;BSB: 082 - 356<br>
-              &nbsp; • &nbsp;ACC: 98 098 0701<br>
-              &nbsp; • &nbsp;Please return receipt<br><br>
-              2. Via our website through PayPal<br>
-              &nbsp; • &nbsp;<a href="https://www.easygoshuttle.com.au/payonline">www.easygoshuttle.com.au/payonline</a><br><br>
+              1. <strong>Via Online Banking</strong><br>
+              {% include 'basecamp/includes/bank_details.html' with bank='anz' %}
+			  2. <strong>Via our website through PayPal</strong><br>
+				<span style="margin-left:12px;">
+					<a href="https://www.easygoshuttle.com.au/payonline">www.easygoshuttle.com.au/payonline</a>
+				</span>
+              <br><br>
             </div>
             <p style="font-size:13px; font-weight:bold; margin-top:15px;">
               <span style="color: #eb7828">Easy</span><span style="color: blue">Go</span> Airport Shuttle

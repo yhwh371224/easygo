@@ -1803,7 +1803,17 @@ def invoice_detail(request):
                 if booking.start_point:
                     start_point = booking.start_point
                     end_point = booking.end_point
+
+                    # 리턴 구간 존재 시 덮어쓰기 또는 별도 처리
+                    if getattr(booking, 'return_start_point', None):
+                        return_start_point = booking.return_start_point
+                        return_end_point = booking.return_end_point
+                    else:
+                        return_start_point = None
+                        return_end_point = None
+                        
                 else:
+                    direction = booking.direction or "" 
                     if "Drop off to Domestic" in booking.direction:
                         start_point = f"{booking.street}, {booking.suburb}"
                         end_point = "Domestic Airport"
