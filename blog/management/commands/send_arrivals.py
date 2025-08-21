@@ -1,14 +1,12 @@
 import logging
-from datetime import date, datetime
+from datetime import date, datetime, time
+import pytz
 
 from django.core.management.base import BaseCommand
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.conf import settings
-from django.utils import timezone
-
-import pytz
 
 from blog.models import Post, Driver
 from utils import booking_helper
@@ -45,6 +43,8 @@ class Command(BaseCommand):
 
     def send_today_arrivals(self, arrival_type="all"):
         target_date = date.today()
+        sydney_tz = pytz.timezone("Australia/Sydney")
+        now_time = datetime.now(sydney_tz).time()
 
         queryset = Post.objects.filter(
             pickup_date=target_date,
@@ -57,31 +57,30 @@ class Command(BaseCommand):
         elif arrival_type == "domestic":
             queryset = queryset.filter(direction="Pickup from Domestic Airport")
 
-        # 현재 시드니 시간 기준으로 과거 픽업 시간 제거
-        sydney_tz = pytz.timezone('Australia/Sydney')
-        now_time = timezone.localtime(timezone.now(), sydney_tz).time()
-
-        filtered_queryset = []
+        # 현재 시간 이전 예약 제외 (문자열 -> time)
+        booking_list = []
         for b in queryset:
             if b.pickup_time:
                 try:
-                    pickup_time_obj = datetime.strptime(b.pickup_time.strip(), "%H:%M").time()
+                    pickup_time_obj = datetime.strptime(b.pickup_time, "%H:%M").time()
                     if pickup_time_obj >= now_time:
-                        filtered_queryset.append(b)
+                        booking_list.append(b)
                 except ValueError:
-                    # 형식 이상 시 일단 포함
-                    filtered_queryset.append(b)
-        queryset = filtered_queryset
+                    booking_list.append(b)  # 형식 오류 시 포함
+            else:
+                booking_list.append(b)  # 시간 없는 경우 포함
 
-        if not queryset:
-            logger.info(f"No {arrival_type} arrivals for today (after current Sydney time).")
+        if not booking_list:
+            msg = f"No {arrival_type} arrivals for today (after current Sydney time)."
+            logger.info(msg)
+            self.stdout.write(msg)
             return
 
         template_name = "basecamp/html_email-today.html"
         subject = f"Reminder - Today ({arrival_type.capitalize()} Arrivals)"
         sms_allowed = True
 
-        self.send_email_task(queryset, template_name, subject, target_date, sms_allowed)
+        self.send_email_task(booking_list, template_name, subject, target_date, sms_allowed)
 
     def format_pickup_time_12h(self, pickup_time_str):
         try:
@@ -104,7 +103,9 @@ class Command(BaseCommand):
     def send_sms_reminder(self, sendto, name, pickup_date, email, price):
         formatted_number = self.format_phone_number(sendto)
         if not formatted_number:
-            logger.warning(f"Invalid phone number for {name}, skipping SMS.")
+            msg = f"Invalid phone number for {name}, skipping SMS."
+            logger.warning(msg)
+            self.stdout.write(msg)
             return
 
         message_body = f"Hi {name}, your EasyGo booking is on {pickup_date}. Please check your email for details."
@@ -114,14 +115,20 @@ class Command(BaseCommand):
                 from_=self.twilio_from,
                 to=formatted_number
             )
-            logger.info(f"SMS sent to {name} ({formatted_number}) | Email: {email} | Price: ${price}")
+            msg = f"SMS sent to {name} ({formatted_number}) | Email: {email} | Price: ${price}"
+            logger.info(msg)
+            self.stdout.write(msg)
         except Exception as e:
-            logger.error(f"Failed to send SMS to {name} ({formatted_number}) | Error: {str(e)}")
+            msg = f"Failed to send SMS to {name} ({formatted_number}) | Error: {str(e)}"
+            logger.error(msg)
+            self.stdout.write(msg)
 
     def send_whatsapp_reminder(self, sendto, name, pickup_date, email, price):
         formatted_number = self.format_phone_number(sendto)
         if not formatted_number:
-            logger.warning(f"Invalid phone number for WhatsApp ({name}, {email}), skipping.")
+            msg = f"Invalid phone number for WhatsApp ({name}, {email}), skipping."
+            logger.warning(msg)
+            self.stdout.write(msg)
             return
 
         message_body = f"Hi {name}, your EasyGo booking is on {pickup_date}. Please check your email for details."
@@ -131,9 +138,13 @@ class Command(BaseCommand):
                 from_=self.twilio_whatsapp_from,
                 to=f'whatsapp:{formatted_number}'
             )
-            logger.info(f"WhatsApp sent to {name} ({formatted_number}) | Email: {email} | Price: ${price}")
+            msg = f"WhatsApp sent to {name} ({formatted_number}) | Email: {email} | Price: ${price}"
+            logger.info(msg)
+            self.stdout.write(msg)
         except Exception as e:
-            logger.error(f"Failed to send WhatsApp to {name} ({formatted_number}) | Error: {str(e)}")
+            msg = f"Failed to send WhatsApp to {name} ({formatted_number}) | Error: {str(e)}"
+            logger.error(msg)
+            self.stdout.write(msg)
 
     def send_email_task(self, booking_reminders, template_name, subject, target_date, sms_allowed):
         for booking_reminder in booking_reminders:
@@ -178,9 +189,13 @@ class Command(BaseCommand):
 
             try:
                 email.send(fail_silently=False)
-                logger.info(f"Sent '{subject}' email to {booking_reminder.email}")
+                msg = f"Sent '{subject}' email to {booking_reminder.email}"
+                logger.info(msg)
+                self.stdout.write(msg)
             except Exception as e:
-                logger.error(f"Failed to send email to {booking_reminder.email}: {str(e)}")
+                msg = f"Failed to send email to {booking_reminder.email}: {str(e)}"
+                logger.error(msg)
+                self.stdout.write(msg)
 
             # SMS
             if booking_reminder.sms_reminder and (booking_reminder.paid or booking_reminder.cash):
@@ -203,3 +218,5 @@ class Command(BaseCommand):
                     booking_reminder.email,
                     booking_reminder.price
                 )
+
+        self.stdout.write(f"Total reminders processed: {len(booking_reminders)}")
