@@ -1495,6 +1495,7 @@ def sending_email_first_detail(request):
                     'message': user.message,
                     'notice': user.notice,
                     'price': user.price,
+                    'toll': user.toll,
                     'paid': user.paid,
                     'cash': user.cash,
                 }
@@ -1592,6 +1593,7 @@ def sending_email_second_detail(request):
                 'message': user.message,
                 'notice': user.notice,
                 'price': double_price,
+                'toll': user.toll,
                 'paid': double_paid,
                 'cash': user.cash,
             }
