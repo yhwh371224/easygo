@@ -2200,7 +2200,7 @@ def email_dispatch_detail(request):
             # multi payment 적용방식 
             if selected_option == "Gratitude For (M) Payment" and user:
                 posts = Post.objects.filter(
-                    Q(email__iexact=user.email) | Q(email1__iexact=(user.email1 or '')),
+                    Q(email__iexact=user.email),
                     pickup_date__gte=timezone.now().date()
                 ).order_by('pickup_date')
 
