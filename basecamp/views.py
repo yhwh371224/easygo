@@ -1367,6 +1367,7 @@ def confirm_booking_detail(request):
         message = user.message
         notice = user.notice
         price = user.price
+        toll = user.toll
         paid = user.paid 
         private_ride = user.private_ride
         cash = user.cash         
