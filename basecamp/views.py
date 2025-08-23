@@ -1371,6 +1371,12 @@ def confirm_booking_detail(request):
         private_ride = user.private_ride
         cash = user.cash         
         
+        # 최종 가격 계산
+        try:
+            final_price = float(price) + float(toll)
+        except Exception:
+            final_price = price  # 혹시 변환 에러 시 원래 price만 저장
+
         data = {
             'name': name,
             'email': email,
@@ -1392,16 +1398,22 @@ def confirm_booking_detail(request):
         )
             
         sam_driver = Driver.objects.get(driver_name="Sam")    
-            
-        p = Post(name=name, contact=contact, email=email, company_name=company_name, email1=email1, pickup_date=pickup_date, flight_number=flight_number,
-                flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street, start_point=start_point, end_point=end_point,
-                cruise=cruise, no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, return_direction=return_direction, private_ride=private_ride, 
-                return_pickup_date=return_pickup_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
-                return_pickup_time=return_pickup_time, return_start_point=return_start_point, return_end_point=return_end_point,
-                message=message, notice=notice, price=price, paid=paid, cash=cash, is_confirmed=is_confirmed, driver=sam_driver)
+
+        p = Post(
+            name=name, contact=contact, email=email, company_name=company_name, email1=email1, 
+            pickup_date=pickup_date, flight_number=flight_number, flight_time=flight_time, pickup_time=pickup_time, 
+            direction=direction, suburb=suburb, street=street, start_point=start_point, end_point=end_point,
+            cruise=cruise, no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, 
+            return_direction=return_direction, private_ride=private_ride, 
+            return_pickup_date=return_pickup_date, return_flight_number=return_flight_number, 
+            return_flight_time=return_flight_time, return_pickup_time=return_pickup_time, 
+            return_start_point=return_start_point, return_end_point=return_end_point,
+            message=message, notice=notice, 
+            price=final_price, toll=toll,  # 여기서 toll + 최종 가격 반영
+            paid=paid, cash=cash, is_confirmed=is_confirmed, driver=sam_driver
+        )
         
         p.save()    
-
         user.delete()
                 
         return render(request, 'basecamp/inquiry_done.html') 
