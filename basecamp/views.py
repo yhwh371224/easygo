@@ -1410,7 +1410,7 @@ def confirm_booking_detail(request):
             return_flight_time=return_flight_time, return_pickup_time=return_pickup_time, 
             return_start_point=return_start_point, return_end_point=return_end_point,
             message=message, notice=notice, 
-            price=final_price, toll=toll,  # 여기서 toll + 최종 가격 반영
+            price=final_price, toll="toll included", 
             paid=paid, cash=cash, is_confirmed=is_confirmed, driver=sam_driver
         )
         

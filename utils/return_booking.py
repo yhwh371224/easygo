@@ -61,7 +61,7 @@ def handle_return_trip(instance):
                  pickup_time=instance.return_pickup_time, direction=instance.return_direction, start_point=instance.return_start_point, 
                  end_point=instance.return_end_point, suburb=instance.suburb, street=instance.street, no_of_passenger=instance.no_of_passenger, 
                  no_of_baggage=instance.no_of_baggage, message=instance.message, return_pickup_time="x", return_pickup_date=instance.pickup_date, 
-                 notice=updated_notice, price=half_price, paid=half_paid, private_ride=instance.private_ride, driver=driver,)
+                 notice=updated_notice, price=half_price, paid=half_paid, private_ride=instance.private_ride, toll=instance.toll, driver=driver,)
 
         p.save() 
 
