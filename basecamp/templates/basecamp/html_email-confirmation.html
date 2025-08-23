@@ -298,7 +298,10 @@
 												</p><br>		
 												{% else %}
 												<p style="Margin:0;font-size:12px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">  
-													The total cost for your booking is ${{ price }}.
+													The total cost for your booking is ${{ price }}
+														{% if toll %}
+															, (including toll fee ${{ toll }})
+														{% endif %}
 													<br>
 													You can prepay securely via PayPal at the following link:  
 													<a href="https://easygoshuttle.com.au/payonline">easygoshuttle.com.au/payonline</a>  
