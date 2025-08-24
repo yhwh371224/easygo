@@ -1679,6 +1679,7 @@ def return_trip_detail(request):
         direction = request.POST.get('direction')               
         message = request.POST.get('message')
         price = request.POST.get('price')
+        toll = request.POST.get('toll')
         return_direction = request.POST.get('return_direction')
         return_pickup_date = request.POST.get('return_pickup_date')
         return_flight_number = request.POST.get('return_flight_number')
@@ -1742,7 +1743,7 @@ def return_trip_detail(request):
                  no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, return_direction=return_direction, 
                  return_pickup_date=return_pickup_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
                  return_pickup_time=return_pickup_time, return_start_point=return_start_point, return_end_point=return_end_point, driver=sam_driver,
-                 price=price, )
+                 price=price, toll=toll)
         
         p.save()
 
