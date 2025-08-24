@@ -297,9 +297,9 @@
 											<td align="left" style="padding-top:28px;padding-left:0;">												
 												<p style="border: 1px solid #af865f; padding: 10px; Margin:0;font-size:12px;line-height:20px;Margin-bottom:6px; ">
 													<strong>Price: ${{ price }}</strong> without gst <br>
+													{% if toll %}<strong>The price includes the toll fee</strong><br>{% endif %}
 													{% if company_name %}<strong>GST (10%): ${{ with_gst }}</strong><br>{% endif %}
-													{% if paid %}<strong>Surcharge: ${{ surcharge }}</strong><br>{% endif %}
-													{% if toll %}<strong>Toll Road Fee: ${{ toll }}</strong><br>{% endif %}
+													{% if paid %}<strong>Surcharge: ${{ surcharge }}</strong><br>{% endif %}													
 													{% if discount and discount != 'Yes' and discount != 0.0 %}
 														<strong>Discount: ${{ discount }}</strong><br>
 													{% endif %}					
