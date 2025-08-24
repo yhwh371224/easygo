@@ -280,6 +280,7 @@
 											<td align="left" style="padding-top:28px;padding-left:0;">												
 												<p style="border: 1px solid #af865f; padding: 10px; Margin:0;font-size:12px;line-height:20px;Margin-bottom:6px; ">
 													<strong>Price: ${{ price }}</strong> without gst <br>
+													{% if toll %}<strong>The price includes the toll fee</strong><br>{% endif %}
 													<strong>GST (10%): ${{ with_gst }}</strong><br>
 													{% if paid %}<strong>Surcharge (3%): ${{ surcharge }}</strong><br>{% endif %}
 													{% if discount %}<strong>Discount: ${{ discount }}</strong><br>{% endif %}
