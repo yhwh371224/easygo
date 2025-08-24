@@ -21,7 +21,7 @@ def handle_return_trip(instance):
 
         driver = instance.driver or Driver.objects.get(driver_name__iexact="Sam")
 
-        price_raw = (instance.price or '').strip()
+        price_raw = str(instance.price or '').strip()
 
         try:
             full_price = float(price_raw) if price_raw else 0.0
