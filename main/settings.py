@@ -12,7 +12,7 @@ SECRET_KEY = config('SECRET_KEY')
 ENVIRONMENT = config('ENVIRONMENT', default='production')
 
 if ENVIRONMENT == 'production':
-    DEBUG = config('DEBUG', cast=bool, default=True)
+    DEBUG = config('DEBUG', cast=bool, default=False)
     ALLOWED_HOSTS = [
         'ec2-13-54-242-110.ap-southeast-2.compute.amazonaws.com', 
         'easygoshuttle.com.au', 
@@ -28,7 +28,7 @@ if ENVIRONMENT == 'production':
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    USE_X_FORWARDED_HOST = True
+    USE_X_FORWARDED_HOST = False
     X_FRAME_OPTIONS = 'DENY'
     CONTENT_SECURITY_POLICY = {
         'DIRECTIVES': {
@@ -305,6 +305,7 @@ LOGOUT_REDIRECT_URL = '/home/'
 
 CORS_ALLOWED_ORIGINS = [
     "https://easygoshuttle.com.au",
+    "https://www.easygoshuttle.com.au",
     
 ]
 
