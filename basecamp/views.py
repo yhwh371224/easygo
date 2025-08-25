@@ -337,7 +337,7 @@ def inquiry_details(request):
         name = request.POST.get('name')
         contact = request.POST.get('contact')
         email = request.POST.get('email')
-        pickup_date = request.POST.get('pickup_date')
+        pickup_date = request.POST.get('pickup_date')  or None
         flight_number = request.POST.get('flight_number')
         flight_time = request.POST.get('flight_time')
         pickup_time = request.POST.get('pickup_time')
@@ -349,7 +349,7 @@ def inquiry_details(request):
         no_of_passenger = request.POST.get('no_of_passenger')
         no_of_baggage = request.POST.get('no_of_baggage')
         return_direction = request.POST.get('return_direction')
-        return_pickup_date = request.POST.get('return_pickup_date')
+        return_pickup_date = request.POST.get('return_pickup_date') or None
         return_flight_number = request.POST.get('return_flight_number')
         return_flight_time = request.POST.get('return_flight_time')
         return_pickup_time = request.POST.get('return_pickup_time')
@@ -495,7 +495,7 @@ def inquiry_details1(request):
         name = request.POST.get('name')
         contact = request.POST.get('contact')
         email = request.POST.get('email')
-        pickup_date = request.POST.get('pickup_date')
+        pickup_date = request.POST.get('pickup_date')  or None
         flight_number = request.POST.get('flight_number')
         flight_time = request.POST.get('flight_time')
         pickup_time = request.POST.get('pickup_time')        
@@ -648,7 +648,7 @@ def inquiry_details2(request):
         name = request.POST.get('name')
         contact = request.POST.get('contact')
         email = request.POST.get('email') 
-        pickup_date = request.POST.get('pickup_date')      
+        pickup_date = request.POST.get('pickup_date')  or None      
         message = request.POST.get('message')     
         
         recaptcha_response = request.POST.get('g-recaptcha-response')
@@ -826,7 +826,7 @@ def p2p_booking_detail(request):
 
 def price_detail(request):
     if request.method == "POST":
-        pickup_date = request.POST.get('pickup_date')
+        pickup_date = request.POST.get('pickup_date')  or None
         start_point = request.POST.get('start_point')
         end_point = request.POST.get('end_point')
         no_of_passenger = request.POST.get('no_of_passenger')
@@ -880,7 +880,7 @@ def confirmation_detail(request):
         contact = request.POST.get('contact')
         email = request.POST.get('email')
         email1 = request.POST.get('email1')
-        pickup_date = request.POST.get('pickup_date')
+        pickup_date = request.POST.get('pickup_date')  or None
         flight_number = request.POST.get('flight_number')
         flight_time = request.POST.get('flight_time')
         pickup_time = request.POST.get('pickup_time')
@@ -892,7 +892,7 @@ def confirmation_detail(request):
         no_of_passenger = request.POST.get('no_of_passenger')
         no_of_baggage = request.POST.get('no_of_baggage')
         return_direction = request.POST.get('return_direction')
-        return_pickup_date = request.POST.get('return_pickup_date')
+        return_pickup_date = request.POST.get('return_pickup_date') or None
         return_flight_number = request.POST.get('return_flight_number')
         return_flight_time = request.POST.get('return_flight_time')
         return_pickup_time = request.POST.get('return_pickup_time')
@@ -1012,7 +1012,7 @@ def booking_detail(request):
         name = request.POST.get('name')
         contact = request.POST.get('contact')
         email = request.POST.get('email')
-        pickup_date = request.POST.get('pickup_date')
+        pickup_date = request.POST.get('pickup_date')  or None
         flight_number = request.POST.get('flight_number')
         flight_time = request.POST.get('flight_time')
         pickup_time = request.POST.get('pickup_time')
@@ -1024,7 +1024,7 @@ def booking_detail(request):
         no_of_passenger = request.POST.get('no_of_passenger')
         no_of_baggage = request.POST.get('no_of_baggage')
         return_direction = request.POST.get('return_direction')
-        return_pickup_date = request.POST.get('return_pickup_date')
+        return_pickup_date = request.POST.get('return_pickup_date') or None
         return_flight_number = request.POST.get('return_flight_number')
         return_flight_time = request.POST.get('return_flight_time')
         return_pickup_time = request.POST.get('return_pickup_time')
@@ -1175,14 +1175,14 @@ def cruise_booking_detail(request):
         name = request.POST.get('name')
         contact = request.POST.get('contact')
         email = request.POST.get('email')
-        pickup_date = request.POST.get('pickup_date')        
+        pickup_date = request.POST.get('pickup_date')  or None        
         pickup_time = request.POST.get('pickup_time')
         start_point = request.POST.get('start_point', '')
         end_point = request.POST.get('end_point', '')        
         no_of_passenger = request.POST.get('no_of_passenger')
         no_of_baggage = request.POST.get('no_of_baggage')
         message = request.POST.get('message')
-        return_pickup_date = request.POST.get('return_pickup_date')        
+        return_pickup_date = request.POST.get('return_pickup_date') or None        
         return_pickup_time = request.POST.get('return_pickup_time')
         return_start_point = request.POST.get('return_start_point', '')
         return_end_point = request.POST.get('return_end_point', '')
@@ -1670,7 +1670,7 @@ def sending_email_input_data_detail(request):
 def return_trip_detail(request):     
     if request.method == "POST":
         email = request.POST.get('email')
-        pickup_date = request.POST.get('pickup_date')
+        pickup_date = request.POST.get('pickup_date')  or None
         flight_number = request.POST.get('flight_number')
         flight_time = request.POST.get('flight_time')
         pickup_time = request.POST.get('pickup_time')
@@ -1681,7 +1681,7 @@ def return_trip_detail(request):
         price = request.POST.get('price')
         toll = request.POST.get('toll')
         return_direction = request.POST.get('return_direction')
-        return_pickup_date = request.POST.get('return_pickup_date')
+        return_pickup_date = request.POST.get('return_pickup_date') or None
         return_flight_number = request.POST.get('return_flight_number')
         return_flight_time = request.POST.get('return_flight_time')
         return_pickup_time = request.POST.get('return_pickup_time')
