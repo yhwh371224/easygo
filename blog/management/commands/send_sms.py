@@ -30,7 +30,6 @@ class Command(BaseCommand):
                     pickup_date__range=[today, day_after_tomorrow],
                     cancelled=False,
                     reminder=False,
-                    cash=False # Exclude customers who pay cash
                 ).filter(
                     Q(paid__isnull=True) | Q(paid__exact="")
                 )
@@ -58,7 +57,7 @@ class Command(BaseCommand):
                 try:
                     message = client.messages.create(
                         body="EasyGo - Urgent notice \
-                            \n\nWe haven't received your payment and a response to our emails. \
+                            \n\nWe haven't received your response to our emails. \
                             \nPlease email us ASAP to ensure your booking remains confirmed \
                             \nReply only via email >> info@easygoshuttle.com.au",
                         from_=whatsapp_from,
