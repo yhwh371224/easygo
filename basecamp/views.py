@@ -2293,7 +2293,6 @@ def email_dispatch_detail(request):
 
                     second_user = Post.objects.filter(email__iexact=email)[1]                    
                     second_user.cash = True
-                    second_user.reminder = True
                     second_user.save()
                     
                 else:
