@@ -20,6 +20,10 @@ class BlockIPEmailMiddleware:
         self.load_blocked_lists()
 
     def __call__(self, request):
+        # Admin 페이지 제외
+        if request.path.startswith('/admin/'):
+            return self.get_response(request)
+        
         ip = self.get_client_ip(request)
         email = self.get_email_from_request(request)
 
