@@ -3,6 +3,7 @@ import time
 from django.http import HttpResponseForbidden
 from django.conf import settings
 
+
 class BlockIPEmailMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
