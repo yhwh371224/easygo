@@ -1,6 +1,6 @@
 # yourapp/management/commands/reload_blocked.py
 from django.core.management.base import BaseCommand
-from main.middlewares import BlockIPEmailMiddleware
+from main.middlewares.block_ip_middleware import BlockIPEmailMiddleware
 
 
 class Command(BaseCommand):
