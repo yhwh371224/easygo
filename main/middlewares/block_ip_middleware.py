@@ -20,8 +20,9 @@ class BlockIPEmailMiddleware:
         self.load_blocked_lists()
 
     def __call__(self, request):
-        # Admin 페이지 제외
-        if request.path.startswith('/admin/'):
+        ADMIN_PATHS = ['/admin/', '/static/', '/favicon.ico']
+
+        if any(request.path.startswith(p) for p in ADMIN_PATHS):
             return self.get_response(request)
         
         ip = self.get_client_ip(request)
@@ -56,5 +57,14 @@ class BlockIPEmailMiddleware:
 
     def get_email_from_request(self, request):
         if request.method == "POST":
-            return request.POST.get("email")
+            if request.content_type == "application/json":
+                import json
+                try:
+                    data = json.loads(request.body)
+                    return data.get("email")
+                except Exception:
+                    return None
+            else:
+                return request.POST.get("email")
         return None
+
