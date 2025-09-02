@@ -244,6 +244,9 @@ AUTHENTICATION_BACKENDS = (
     'blog.auth_backends.PostEmailBackend',
 )
 
+BLOCKED_IP_FILE = "/etc/django/blocked_ips.txt"
+BLOCKED_EMAIL_FILE = "/etc/django/blocked_emails.txt"
+
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
         'SCOPE': [
