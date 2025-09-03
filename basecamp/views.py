@@ -1385,6 +1385,9 @@ def confirm_booking_detail(request):
             'company_name': company_name,
             'pickup_date': pickup_date,
             'pickup_time': pickup_time,
+            'direction': direction,
+            'flight_number': flight_number,
+            'flight_time': flight_time,
             'return_flight_number': return_flight_number,
             'street': street,
             'suburb': suburb,
@@ -1394,6 +1397,7 @@ def confirm_booking_detail(request):
 
         send_confirm_email.delay(
             data['name'], data['email'], data['contact'], data['company_name'],
+            data['direction'], data['flight_number'], data['flight_time'],
             data['pickup_date'], data['pickup_time'], data['return_flight_number'],
             data['street'], data['suburb'], data['start_point'], data['end_point']
         )
