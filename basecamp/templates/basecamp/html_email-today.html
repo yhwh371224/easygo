@@ -233,13 +233,15 @@
 											<td align="left" style="padding-top:28px;padding-left:0;">																								
 											{% if direction == 'Pickup from Intl Airport' %}												
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">													
-													Please ensure that your mobile phone remains switched on.  
-													Once you have cleared customs, please contact the driver. 
-													This will help us estimate your arrival time at the meeting point, ensuring a smooth transition.<br><br>
-
+													
 													{% if cash %}
-														We kindly ask that you <span style="color: #eb7828">email us immediately</span> upon your arrival in Sydney</span><br><br>
-														Please note that the driver may not have a card machine available. We kindly ask you to prepare the cash in advance<br>											
+														We kindly ask that you <span style="color: #eb7828">email us immediately</span> upon your arrival in Sydney 
+														and ensure that your mobile phone remains switched on<br><br>
+														Please note that the driver may not have a card machine available. We kindly ask you to prepare the cash in advance<br>
+													{% else %}
+														<span style="color: #eb7828">After landing, please check your email.</span> You will be notified of the meeting details via email or SMS. 
+														Once you have cleared customs, please contact the driver. 
+														This will help us estimate your arrival time at the meeting point, ensuring a smooth transition.<br><br>
 													{% endif %}
 
 													</p>
@@ -282,16 +284,18 @@
 
 											{% elif direction == 'Pickup from Domestic Airport' %}
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
-													Please ensure that your mobile phone remains switched on.  
-													Once you have collected all your luggage, please contact the driver to inform them. 
-													This will help us estimate your arrival time at the meeting point, ensuring a smooth transition.<br><br>
 
 													{% if cash %}
-														We kindly ask that you <span style="color: #eb7828">email us immediately</span> upon your arrival in Sydney</span><br><br>
-														Please note that the driver may not have a card machine available. We kindly ask you to prepare the cash in advance<br>												
+														We kindly ask that you <span style="color: #eb7828">email us immediately</span> upon your arrival in Sydney 
+														and ensure that your mobile phone remains switched on<br><br>
+														Please note that the driver may not have a card machine available. We kindly ask you to prepare the cash in advance<br>
+													{% else %}
+														<span style="color: #eb7828">After landing, please check your email.</span> You will be notified of the meeting details via email or SMS. 
+														Once you have collected your luggage, please contact the driver. 
+														This will help us estimate your arrival time at the meeting point, ensuring a smooth transition.<br><br>
 													{% endif %}
 
-													</p>
+												</p>
 
 												<p style="border: 1px solid #af865f; padding: 10px; margin-bottom: 20px; color: #af865f;">
 													
