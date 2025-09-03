@@ -238,7 +238,11 @@
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
 													• Sydney arrival date: {{ pickup_date }}<br><br>
 												    • Flight number: {{ flight_number }} <small>(ETA {{ flight_time }})</small><br><br>													
-													• After landing, please check your email. You will be notified of the meeting details via email or SMS<br><br>
+													{% if cash %}
+														<span style="color: #eb7828">We kindly request that you email us before boarding your flight and after landing to Sydney</span><br><br>													
+													{% else %}
+														<span style="color: #eb7828">After landing, please check your email. You will be notified of the meeting details via email or SMS</span><br><br>
+													{% endif %}
 												</p>
 											{% elif not direction or start_point %}
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">													

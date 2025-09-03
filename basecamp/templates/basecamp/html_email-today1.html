@@ -237,15 +237,19 @@
                                                 </p>
                                                 <p style="margin:0; font-size:14px; line-height:22px; margin-bottom:12px;">
                                                     Your driver or meeting point has changed. Please disregard the previous details — here are the latest ones to ensure everything goes smoothly.<br><br>
-                                                
-                                                    Please keep your mobile phone switched on.  
-                                                    Once you’ve collected your luggage, kindly contact your driver to help us coordinate your arrival at the meeting point smoothly.  
-                                                </p>
-                                                
-                                                	{% if cash %}
-														We kindly ask that you <span style="color: #eb7828">email us immediately</span> upon your arrival in Sydney</span><br>
-														Please note that the driver may not have a card machine available. We kindly ask you to prepare the cash in advance<br><br>												
+
+													{% if cash %}
+														We kindly ask that you <span style="color: #eb7828">email us immediately</span> upon your arrival in Sydney 
+														and ensure that your mobile phone remains switched on<br><br>
+														Please note that the driver may not have a card machine available. We kindly ask you to prepare the cash in advance<br>
+													{% else %}
+														<span style="color: #eb7828">After landing, please check your email.</span> You will be notified of the meeting details via email or SMS. 
+														Once you have collected your luggage, please contact the driver. 
+														This will help us estimate your arrival time at the meeting point, ensuring a smooth transition.<br><br>
 													{% endif %}
+												</p>
+
+                                            <p style="border: 1px solid #af865f; padding: 10px; margin-bottom: 20px; color: #af865f;">
 													
 												<p style="border: 1px solid #af865f; padding: 10px; margin-bottom: 20px; color: #af865f;">
 													
@@ -287,17 +291,20 @@
                                                 <p style="margin:0; font-size:16px; line-height:24px; font-weight:bold;">
                                                     ✨ Important Update:  
                                                 </p>
+
                                                 <p style="margin:0; font-size:14px; line-height:22px; margin-bottom:12px;">
                                                     Your driver or meeting point has changed. Please disregard the previous details — here are the latest ones to ensure everything goes smoothly.<br><br>
                                                 
-                                                    Please keep your mobile phone switched on.  
-                                                    Once you’ve collected your luggage, kindly contact your driver to help us coordinate your arrival at the meeting point smoothly.  
-                                                </p>
-                                                
-                                                	{% if cash %}
-														We kindly ask that you <span style="color: #eb7828">email us immediately</span> upon your arrival in Sydney</span><br>
-														Please note that the driver may not have a card machine available. We kindly ask you to prepare the cash in advance<br><br>												
+                                                    {% if cash %}
+														We kindly ask that you <span style="color: #eb7828">email us immediately</span> upon your arrival in Sydney 
+														and ensure that your mobile phone remains switched on<br><br>
+														Please note that the driver may not have a card machine available. We kindly ask you to prepare the cash in advance<br>
+													{% else %}
+														<span style="color: #eb7828">After landing, please check your email.</span> You will be notified of the meeting details via email or SMS. 
+														Once you have collected your luggage, please contact the driver. 
+														This will help us estimate your arrival time at the meeting point, ensuring a smooth transition.<br><br>
 													{% endif %}
+												</p>
 
 												<p style="border: 1px solid #af865f; padding: 10px; margin-bottom: 20px; color: #af865f;">
 													
@@ -330,18 +337,17 @@
                                                     ✨ Important Update:  
                                                 </p>
                                                 <p style="margin:0; font-size:14px; line-height:22px; margin-bottom:12px;">
-                                                    Your driver or meeting point has changed. Please disregard the previous details — here are the latest ones to ensure everything goes smoothly.<br><br>
-                                                
-                                                    Please be ready at your scheduled pickup time of {{ pickup_time }}. <br>
-													We kindly request that you contact your driver 60 minutes before pickup to ensure a smooth and seamless experience<br><br> 
-                                                </p>
-
-													{% if cash %}
-														We kindly ask that you <span style="color: #eb7828">email us immediately</span> upon your arrival in Sydney</span><br>
-														Please note that the driver may not have a card machine available. We kindly ask you to prepare the cash in advance<br><br>												
+                                                    Your driver has changed. Please disregard the previous details — here are the latest ones to ensure everything goes smoothly.<br><br>
+													We kindly ask that you <span style="color: #eb7828">email us immediately</span> upon your arrival in Sydney 
+														and ensure that your mobile phone remains switched on<br><br>
+													
+													{% if cash %}														
+														Please note that the driver may not have a card machine available. We kindly ask you to prepare the cash in advance<br>
 													{% endif %}
-												
-												<p style="border: 1px solid #af865f; padding: 10px; margin-bottom: 20px; color: #af865f;">													
+													
+												</p>
+
+												<p style="border: 1px solid #af865f; padding: 10px; margin-bottom: 20px; color: #af865f;">		
 													<strong>=== Driver's details ===</strong><br>
 													• Name: {{ driver_name }}<br>
 													• Phone: {{ driver_contact }}<br>
