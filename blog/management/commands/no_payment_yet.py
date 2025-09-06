@@ -45,12 +45,12 @@ class Command(BaseCommand):
                     if days_difference in [0, 1, 2]:
                         email_subject = "Urgent notice for payment"
                         template = "basecamp/html_email-nopayment-today.html" \
-                            if booking.prepay or booking.company_name \
+                            if not booking.cash \
                             else "basecamp/html_email-nopayment-today-1.html"
                     else:
                         email_subject = "Payment notice"
                         template = "basecamp/html_email-nopayment.html" \
-                            if booking.prepay or booking.company_name \
+                            if not booking.cash \
                             else "basecamp/html_email-nopayment-1.html"
 
                     display_date = self.get_display_date(booking)
