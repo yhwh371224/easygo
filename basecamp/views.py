@@ -871,6 +871,8 @@ def price_detail(request):
             'home_suburbs': home_suburbs,
         })
 
+def to_bool(value):
+    return str(value).lower() in ["true", "1", "on", "yes"]
 
 # Booking by myself 
 def confirmation_detail(request):
@@ -902,7 +904,8 @@ def confirmation_detail(request):
         notice = request.POST.get('notice')       
         price = request.POST.get('price')
         paid = request.POST.get('paid')
-        cash = request.POST.get('cash') == 'True'         
+        cash = to_bool(request.POST.get('cash'))
+        prepay = to_bool(request.POST.get('prepay'))  
         
         data = {            
             'name': name,
@@ -975,7 +978,7 @@ def confirmation_detail(request):
                  flight_time=flight_time, pickup_time=pickup_time, start_point=start_point, end_point=end_point, direction=direction, suburb=suburb, street=street,
                  no_of_passenger=no_of_passenger, no_of_baggage=baggage_str, message=message, return_direction=return_direction, return_pickup_date=return_pickup_date, 
                  return_flight_number=return_flight_number, return_flight_time=return_flight_time, return_pickup_time=return_pickup_time, return_start_point=return_start_point,
-                 return_end_point=return_end_point, notice=notice, price=price, paid=paid, cash=cash, driver=sam_driver)
+                 return_end_point=return_end_point, notice=notice, price=price, paid=paid, cash=cash, prepay=prepay, driver=sam_driver)
         
         p.save()
 
@@ -1370,7 +1373,8 @@ def confirm_booking_detail(request):
         toll = user.toll
         paid = user.paid 
         private_ride = user.private_ride
-        cash = user.cash         
+        cash = user.cash 
+        prepay = user.prepay        
         
         # 최종 가격 계산
         try:
@@ -1388,6 +1392,8 @@ def confirm_booking_detail(request):
             'direction': direction,
             'flight_number': flight_number,
             'flight_time': flight_time,
+            'cash': cash,
+            'prepay': prepay,
             'return_flight_number': return_flight_number,
             'street': street,
             'suburb': suburb,
@@ -1399,7 +1405,8 @@ def confirm_booking_detail(request):
             data['name'], data['email'], data['contact'], data['company_name'],
             data['direction'], data['flight_number'], data['flight_time'],
             data['pickup_date'], data['pickup_time'], data['return_flight_number'],
-            data['street'], data['suburb'], data['start_point'], data['end_point']
+            data['street'], data['suburb'], data['start_point'], data['end_point'],
+            data['cash'], data['prepay']
         )
             
         sam_driver = Driver.objects.get(driver_name="Sam")    
@@ -1414,7 +1421,7 @@ def confirm_booking_detail(request):
             return_flight_time=return_flight_time, return_pickup_time=return_pickup_time, 
             return_start_point=return_start_point, return_end_point=return_end_point,
             message=message, notice=notice, 
-            price=final_price, toll="toll included", 
+            price=final_price, toll="toll included", prepay=prepay, 
             paid=paid, cash=cash, is_confirmed=is_confirmed, driver=sam_driver
         )
         
@@ -1432,6 +1439,7 @@ def sending_email_first_detail(request):
     if request.method == "POST":
         email = request.POST.get('email')
         prepay_raw = request.POST.get('prepay')  # May be None
+        cash_raw = request.POST.get('cash')  # May be None
         index = request.POST.get('index', '1')
 
         try:
@@ -1446,6 +1454,9 @@ def sending_email_first_detail(request):
             # ✅ Only update prepay if it’s provided
             if prepay_raw is not None:
                 user.prepay = (prepay_raw == 'True')
+
+            if cash_raw is not None:
+                user.cash = (cash_raw == 'True')  
 
             user.sent_email = True
             user.save()
@@ -1531,13 +1542,17 @@ def sending_email_second_detail(request):
     if request.method == "POST":
         email = request.POST.get('email')
         prepay_raw = request.POST.get('prepay')  # May be None
+        cash_raw = request.Post.get('cash') # May be Nonne
 
         user = Post.objects.filter(email__iexact=email)[1]
         user1 = Post.objects.filter(email__iexact=email).first() 
 
         # ✅ Only update prepay if it’s provided
         if prepay_raw is not None:
-            user.prepay = (prepay_raw == 'True')   
+            user.prepay = (prepay_raw == 'True')
+
+        if cash_raw is not None:
+            user.cash = (cash_raw == 'True')   
 
         user.sent_email = True
         user.save()  
@@ -1669,6 +1684,8 @@ def sending_email_input_data_detail(request):
     else:
         return render(request, 'basecamp/sending_email_first.html', {})   
 
+def to_bool(value):
+    return str(value).lower() in ["true", "1", "on", "yes"]
 
 # For Return Trip 
 def return_trip_detail(request):     
@@ -1684,6 +1701,8 @@ def return_trip_detail(request):
         message = request.POST.get('message')
         price = request.POST.get('price')
         toll = request.POST.get('toll')
+        cash = to_bool(request.POST.get('cash'))
+        prepay = to_bool(request.POST.get('prepay'))
         return_direction = request.POST.get('return_direction')
         return_pickup_date = request.POST.get('return_pickup_date') or None
         return_flight_number = request.POST.get('return_flight_number')
@@ -1744,7 +1763,7 @@ def return_trip_detail(request):
                     
         p = Post(name=name, contact=contact, email=email, pickup_date=pickup_date, flight_number=flight_number, flight_time=flight_time, 
                  pickup_time=pickup_time, start_point=start_point, end_point=end_point, direction=direction, suburb=suburb, street=street,
-                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, return_direction=return_direction, 
+                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, cash=cash, prepay=prepay, return_direction=return_direction, 
                  return_pickup_date=return_pickup_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
                  return_pickup_time=return_pickup_time, return_start_point=return_start_point, return_end_point=return_end_point, driver=sam_driver,
                  price=price, toll=toll)
