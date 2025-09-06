@@ -101,6 +101,7 @@ def create_event_on_calendar(instance_id):
                      'n:'+instance.notice if instance.notice is not None else '', 
                      "d:"+str(instance.return_pickup_date) if instance.return_pickup_date is not None else '', 
                      '$'+str(instance.paid) if instance.paid is not None else '',
+                     'private' if instance.private_ride is not None else '', 
                      'opt:'+instance.end_point if instance.end_point is not None else '']
     message = " ".join(filter(None, message_parts))      
 
@@ -151,7 +152,8 @@ def create_event_on_calendar(instance_id):
 @shared_task
 def send_confirm_email(
     name, email, contact, company_name, direction, flight_number, flight_time,
-    pickup_date, pickup_time, return_flight_number, street, suburb, start_point, end_point):
+    pickup_date, pickup_time, return_flight_number, street, suburb, start_point, 
+    end_point, cash, prepay):
     subject = f"Booking Confirmation Clicked"
     
     content = f'''
@@ -168,16 +170,18 @@ def send_confirm_email(
     Email:  {email}
     Contact: {contact}
     Company name: {company_name}
-    ✅Direction: {direction}
+    Direction: {direction}
     Flight number: {flight_number}
     Flight time: {flight_time}
-    ✅Flight date: {pickup_date}
+    Flight date: {pickup_date}
     Pickup time: {pickup_time}
     ✅ *** Return flight number: {return_flight_number} ***
     Street: {street}
     Suburb: {suburb}
     Start point: {start_point}
     End point: {end_point}
+    Cash: {cash}
+    Prepay: {prepay}
     ===============================          
     '''
 
