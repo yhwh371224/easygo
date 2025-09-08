@@ -1542,7 +1542,7 @@ def sending_email_second_detail(request):
     if request.method == "POST":
         email = request.POST.get('email')
         prepay_raw = request.POST.get('prepay')  # May be None
-        cash_raw = request.Post.get('cash') # May be Nonne
+        cash_raw = request.POST.get('cash') # May be Nonne
 
         user = Post.objects.filter(email__iexact=email)[1]
         user1 = Post.objects.filter(email__iexact=email).first() 
