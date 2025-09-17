@@ -56,13 +56,42 @@ def handle_return_trip(instance):
         instance.notice = updated_notice
         instance.save(update_fields=['price', 'paid', 'notice'])
 
-        p = Post(name=instance.name, contact=instance.contact, email=instance.email, company_name=instance.company_name, email1=instance.email1, 
-                 pickup_date=instance.return_pickup_date, flight_number=instance.return_flight_number, flight_time=instance.return_flight_time, 
-                 pickup_time=instance.return_pickup_time, direction=instance.return_direction, start_point=instance.return_start_point, 
-                 end_point=instance.return_end_point, suburb=instance.suburb, street=instance.street, no_of_passenger=instance.no_of_passenger, 
-                 no_of_baggage=instance.no_of_baggage, message=instance.message, return_pickup_time="x", return_pickup_date=instance.pickup_date, 
-                 notice=updated_notice, price=half_price, paid=half_paid, private_ride=instance.private_ride, toll=instance.toll, driver=driver,)
+        # ✅ return_start_point / return_end_point 있으면 street, suburb를 빈문자열로
+        street_val = instance.street
+        suburb_val = instance.suburb
+        if instance.return_start_point or instance.return_end_point:
+            street_val = ""
+            suburb_val = ""
 
-        p.save() 
+        p = Post(
+            name=instance.name,
+            contact=instance.contact,
+            email=instance.email,
+            company_name=instance.company_name,
+            email1=instance.email1,
+            pickup_date=instance.return_pickup_date,
+            flight_number=instance.return_flight_number,
+            flight_time=instance.return_flight_time,
+            pickup_time=instance.return_pickup_time,
+            direction=instance.return_direction,
+            start_point=instance.return_start_point,
+            end_point=instance.return_end_point,
+            suburb=suburb_val,      # ✅ 수정
+            street=street_val,      # ✅ 수정
+            no_of_passenger=instance.no_of_passenger,
+            no_of_baggage=instance.no_of_baggage,
+            message=instance.message,
+            return_pickup_time="x",
+            return_pickup_date=instance.pickup_date,
+            notice=updated_notice,
+            price=half_price,
+            paid=half_paid,
+            private_ride=instance.private_ride,
+            toll=instance.toll,
+            driver=driver,
+        )
+
+        p.save()
+
 
         
