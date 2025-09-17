@@ -1717,14 +1717,13 @@ def return_trip_detail(request):
             return render(request, 'basecamp/403.html')    
             
         else:
-            name = user.name            
+            name = user.name     
+            company_name = user.company_name       
             contact = user.contact
             suburb = user.suburb
             street = user.street
             no_of_passenger = user.no_of_passenger
-            no_of_baggage = user.no_of_baggage
-            if not company_name:
-                company_name = user.company_name
+            no_of_baggage = user.no_of_baggage            
             if not start_point:
                 start_point = user.start_point
             if not end_point:
