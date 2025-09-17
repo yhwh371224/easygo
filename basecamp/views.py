@@ -1717,12 +1717,14 @@ def return_trip_detail(request):
             return render(request, 'basecamp/403.html')    
             
         else:
-            name = user.name
+            name = user.name            
             contact = user.contact
             suburb = user.suburb
             street = user.street
             no_of_passenger = user.no_of_passenger
             no_of_baggage = user.no_of_baggage
+            if not company_name:
+                company_name = user.company_name
             if not start_point:
                 start_point = user.start_point
             if not end_point:
@@ -1761,7 +1763,7 @@ def return_trip_detail(request):
         
         sam_driver = Driver.objects.get(driver_name="Sam")  
                     
-        p = Post(name=name, contact=contact, email=email, pickup_date=pickup_date, flight_number=flight_number, flight_time=flight_time, 
+        p = Post(name=name, company_name=company_name, contact=contact, email=email, pickup_date=pickup_date, flight_number=flight_number, flight_time=flight_time, 
                  pickup_time=pickup_time, start_point=start_point, end_point=end_point, direction=direction, suburb=suburb, street=street,
                  no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, cash=cash, prepay=prepay, return_direction=return_direction, 
                  return_pickup_date=return_pickup_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
