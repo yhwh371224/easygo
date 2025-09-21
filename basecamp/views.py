@@ -1381,6 +1381,8 @@ def confirm_booking_detail(request):
             final_price = float(price) + float(toll)
         except Exception:
             final_price = price  # 혹시 변환 에러 시 원래 price만 저장
+        
+        toll_value = "toll included" if toll else ""
 
         data = {
             'name': name,
@@ -1421,7 +1423,7 @@ def confirm_booking_detail(request):
             return_flight_time=return_flight_time, return_pickup_time=return_pickup_time, 
             return_start_point=return_start_point, return_end_point=return_end_point,
             message=message, notice=notice, 
-            price=final_price, toll="toll included", prepay=prepay, 
+            price=final_price, toll=toll_value, prepay=prepay, 
             paid=paid, cash=cash, is_confirmed=is_confirmed, driver=sam_driver
         )
         
