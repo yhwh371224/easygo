@@ -1793,6 +1793,7 @@ def safe_float(value):
 def invoice_detail(request):
     if request.method == "POST":
         email = request.POST.get('email', '').strip()
+        extra_email = request.POST.get('extra_email', '').strip()  # ← 새 필드
         surcharge_flag = request.POST.get('surcharge')
         discount_input = request.POST.get('discount')
         inv_no = request.POST.get('inv_no')
@@ -2018,6 +2019,8 @@ def invoice_detail(request):
 
         text_content = strip_tags(html_content)
         recipient_list = [email, RECIPIENT_EMAIL]
+        if extra_email:                # 값이 있으면 추가
+            recipient_list.append(extra_email)
 
         mail = EmailMultiAlternatives(
             f"Tax Invoice #T{inv_no} - EasyGo",
