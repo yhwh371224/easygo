@@ -15,7 +15,8 @@ class Command(BaseCommand):
         self.lock = threading.Lock()
 
     def handle(self, *args, **options):
-        my_list = main()  
+        # 이메일 모두 소문자로 변환
+        my_list = [email.lower() for email in main()]
         unique_emails = set() 
 
         today = datetime.now()
@@ -28,10 +29,12 @@ class Command(BaseCommand):
                 else: 
                     unique_emails.add(list_email)
 
-                    posts = Post.objects.filter(email__iexact=list_email, pickup_date__range=[today, three_days_later])
+                    # DB에서도 소문자로 변환해서 비교
+                    posts = Post.objects.filter(
+                        pickup_date__range=[today, three_days_later]
+                    )
 
                     for post in posts:
-                        if not post.reminder:
+                        if post.email.lower() == list_email and not post.reminder:
                             post.reminder = True
                             post.save(update_fields=['reminder'])
-
