@@ -99,6 +99,10 @@ def xrp_payment(request):
     return JsonResponse({"error": "Invalid request method."})
 
 
+def xrp_payment_page(request):
+    return render(request, "basecamp/includes/xrp_payment.html")
+
+
 # 오류 핸들러
 def custom_bad_request(request, exception):
     return render(request, "400.html", status=400)
