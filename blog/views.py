@@ -4,9 +4,9 @@ from django.shortcuts import render
 from decimal import Decimal, ROUND_HALF_UP
 from main.settings import RECIPIENT_EMAIL
 from .models import XrpPayment
-import hashlib, qrcode, base64
-from io import BytesIO
+import hashlib
 from .tasks import send_xrp_internal_email, send_xrp_customer_email
+
 
 logger = logging.getLogger(__name__)
 
@@ -51,23 +51,14 @@ def xrp_payment(request):
             xrp_amount = (aud_amount / xrp_price).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
             dest_tag = email_to_tag(email)
 
-            # QR 코드
-            qr_uri = f"xrp:{XRP_ADDRESS}?dt={dest_tag}&amount={xrp_amount}"
-            qr = qrcode.QRCode(box_size=8, border=2)
-            qr.add_data(qr_uri)
-            qr.make(fit=True)
-            img = qr.make_image(fill_color="black", back_color="white")
-            buffer = BytesIO()
-            img.save(buffer, format="PNG")
-            qr_base64 = base64.b64encode(buffer.getvalue()).decode("utf-8")
+            # QR 코드 부분 제거됨
 
             result = {
                 "xrp_amount": xrp_amount,
                 "xrp_address": XRP_ADDRESS,
                 "dest_tag": dest_tag,
                 "email": email,
-                "aud_amount": aud_amount,
-                "qr_base64": qr_base64
+                "aud_amount": aud_amount
             }
 
             # 내부 알림 메일 (Celery)
@@ -80,16 +71,16 @@ def xrp_payment(request):
             send_xrp_internal_email.delay(
                 "New XRP Payment Request",
                 internal_msg,
-                "",
-                RECIPIENT_EMAIL,
+                RECIPIENT_EMAIL,  # 발신자
+                [RECIPIENT_EMAIL]  # 수신자
             )
 
-            # 고객 메일 (옵션) — Celery task uses its own HTML template
+            # 고객 메일 (옵션)
             email_sent = False
             if send_customer_email:
                 send_xrp_customer_email.delay(
                     email,
-                    str(xrp_amount),   # 문자열로 전달 (Decimal 처리 tasks.py에서)
+                    str(xrp_amount),
                     XRP_ADDRESS,
                     dest_tag
                 )
