@@ -4,7 +4,7 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from decimal import Decimal, ROUND_HALF_UP
 from main.settings import RECIPIENT_EMAIL
-from .models import XrpPayment
+from .models import XrpPayment, Post
 
 from .tasks import send_xrp_internal_email, send_xrp_customer_email
 
@@ -28,12 +28,15 @@ def xrp_payment(request):
         try:
             aud_amount = Decimal(aud_amount)
         except:
-            return JsonResponse({"error": "Invalid AUD amount."})
+            return JsonResponse({"error": "Invalid AUD amount"})
 
         if not email:
-            return JsonResponse({"error": "Email is required."})
+            return JsonResponse({"error": "Email is required"})
         if aud_amount <= 0:
-            return JsonResponse({"error": "AUD amount must be greater than 0."})
+            return JsonResponse({"error": "AUD amount must be greater than 0"})
+        
+        if not Post.objects.filter(email=email).exists():
+            return JsonResponse({"error": "Invalid email address"})
 
         # 실시간 XRP/AUD 시세 with retry
         xrp_price = None
