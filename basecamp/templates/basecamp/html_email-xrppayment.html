@@ -60,22 +60,12 @@
 							Please send <b>{{ amount }}</b> to the following XRP wallet:
 						</p>
 						<p style="font-size:14px;line-height:20px;">
-							Address: <code>{{ address }}</code><br>
+							Address: <code>{{ address }}</code><br><br>
 							Destination Tag: <code>{{ dest_tag }}</code>
 						</p>
 						<p style="font-size:14px;line-height:20px;">
 							Once the payment is confirmed, your booking will be processed.
 						</p>
-					</td>
-				</tr>
-
-				<!-- QR Code -->
-				<tr>
-					<td style="text-align:center;padding:20px;">
-						{% if qr_base64 %}
-						<p>Scan QR code:</p>
-						<img src="data:image/png;base64,{{ qr_base64 }}" alt="XRP QR Code" class="img-fluid">
-						{% endif %}
 					</td>
 				</tr>
 
