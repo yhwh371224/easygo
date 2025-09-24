@@ -1,7 +1,7 @@
 import datetime
 import os
 import re
-import logging
+import logging, qrcode, base64
 
 from decimal import Decimal, InvalidOperation
 
@@ -16,6 +16,7 @@ from main.settings import RECIPIENT_EMAIL, DEFAULT_FROM_EMAIL
 from .models import Post, PaypalPayment, StripePayment, XrpPayment
 from django.core.exceptions import ImproperlyConfigured
 from django.utils import timezone
+from io import BytesIO
 
 
 logger = logging.getLogger('easygo')
@@ -542,6 +543,17 @@ def send_xrp_customer_email(email: str, xrp_amount: str, xrp_address: str, dest_
     """
     고객에게 XRP 결제 안내 메일 전송 (HTML, 이름 없음)
     """
+
+    # QR 코드 생성
+    qr_uri = f"xrp:{xrp_address}?dt={dest_tag}&amount={xrp_amount}"
+    qr = qrcode.QRCode(box_size=8, border=2)
+    qr.add_data(qr_uri)
+    qr.make(fit=True)
+    img = qr.make_image(fill_color="black", back_color="white")
+    buffer = BytesIO()
+    img.save(buffer, format="PNG")
+    qr_base64 = base64.b64encode(buffer.getvalue()).decode("utf-8")
+
     html_content = render_to_string(
         "basecamp/html_email-xrppayment.html",  
         {
@@ -549,6 +561,7 @@ def send_xrp_customer_email(email: str, xrp_amount: str, xrp_address: str, dest_
             "amount": f"{Decimal(xrp_amount):.2f} XRP",
             "address": xrp_address,
             "dest_tag": dest_tag,
+            "qr_base64": qr_base64,  
         }
     )
     subject = "XRP Payment - EasyGo"
