@@ -542,26 +542,16 @@ def send_xrp_internal_email(subject, message, from_email, recipient_list):
 def send_xrp_customer_email(email: str, xrp_amount: str, xrp_address: str, dest_tag: int):
     """
     고객에게 XRP 결제 안내 메일 전송 (HTML, 이름 없음)
+    QR 코드 기능 제거 버전
     """
 
-    # QR 코드 생성
-    qr_uri = f"xrp:{xrp_address}?dt={dest_tag}&amount={xrp_amount}"
-    qr = qrcode.QRCode(box_size=8, border=2)
-    qr.add_data(qr_uri)
-    qr.make(fit=True)
-    img = qr.make_image(fill_color="black", back_color="white")
-    buffer = BytesIO()
-    img.save(buffer, format="PNG")
-    qr_base64 = base64.b64encode(buffer.getvalue()).decode("utf-8")
-
-    # context를 단일 dict로 구성
+    # context를 단일 dict로 구성 (QR코드 제거)
     context = {
         "email": email,
         "amount": f"{Decimal(xrp_amount):.2f} XRP",
         "address": xrp_address,
         "dest_tag": dest_tag,
-        "qr_base64": qr_base64,  # 반드시 포함
-    }   
+    }
 
     # HTML 렌더링
     html_content = render_to_string("basecamp/html_email-xrppayment.html", context)
@@ -570,7 +560,7 @@ def send_xrp_customer_email(email: str, xrp_amount: str, xrp_address: str, dest_
     subject = "XRP Payment - EasyGo"
     mail = EmailMultiAlternatives(
         subject,
-        html_content,  
+        html_content,
         RECIPIENT_EMAIL,  # 발신자
         [email],          # 수신자
     )
