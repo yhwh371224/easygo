@@ -47,7 +47,6 @@ document.getElementById("calculate_btn").addEventListener("click", function() {
         }
         const paymentText = `Send ${data.xrp_amount} XRP to:\nAddress: ${data.xrp_address}\nDestination Tag: ${data.dest_tag}`;
         document.getElementById("payment_info").innerText = paymentText;
-        document.getElementById("qr_code").src = "data:image/png;base64," + data.qr_base64;
         document.getElementById("result").style.display = "block";
     })
     .catch(err => alert("Error fetching XRP amount"));
