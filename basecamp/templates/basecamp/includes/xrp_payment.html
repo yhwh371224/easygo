@@ -5,8 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-lg-7 col-md-8 pb-2 mb-5">
             <div class="card border-1 shadow-lg" style="padding:2rem;">
-                <h5>Enter Your Payment Details</h5>
-                <p>Enter your AUD amount and your email to calculate the XRP payment.</p>
+                <h5>Enter Your Payment Details</h5>                
 
                 <!-- AUD Amount -->
                 <input type="number" step="0.01" id="aud_amount" class="form-control" 
@@ -31,10 +30,15 @@
                     <h5>Payment Instructions</h5>
                     <div style="margin-bottom: 1rem;">
                         <pre id="payment_info" style="white-space: pre-wrap; word-wrap: break-word; max-height:200px; overflow-y:auto;"></pre>
+                        <br>
+                        <button id="copy_btn">Copy Info</button>
                     </div>
-                    <div>
+                    <div style="color: red; font-weight: bold;">
+                            Please review all payment details carefully before making the payment 
+                    </div>
+                    <!-- <div>
                         <button class="btn btn-warning" id="copy_btn">Copy All Payment Info</button>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -65,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 alert(data.error);
                 return;
             }
-            const paymentText = `Send ${data.xrp_amount} XRP to:\nAddress: ${data.xrp_address}\nDestination Tag: ${data.dest_tag}`;
+            const paymentText = `XRP: ${data.xrp_amount} \nAddress: ${data.xrp_address}\nDestination Tag: ${data.dest_tag}`;
             document.getElementById("payment_info").innerText = paymentText;
             document.getElementById("result").style.display = "block";
         })
