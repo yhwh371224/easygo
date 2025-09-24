@@ -27,10 +27,14 @@
                 <hr>
 
                 <!-- Result -->
-                <div id="result" style="display:none;">
+                <div id="result" style="display:none; overflow: visible;">
                     <h5>Payment Instructions</h5>
-                    <pre id="payment_info" style="white-space: pre-wrap; word-wrap: break-word; margin-bottom:1rem;"></pre>
-                    <button class="btn btn-warning mb-3" id="copy_btn">Copy All Payment Info</button>
+                    <div style="margin-bottom: 1rem;">
+                        <pre id="payment_info" style="white-space: pre-wrap; word-wrap: break-word; max-height:200px; overflow-y:auto;"></pre>
+                    </div>
+                    <div>
+                        <button class="btn btn-warning" id="copy_btn">Copy All Payment Info</button>
+                    </div>
                 </div>
             </div>
         </div>
