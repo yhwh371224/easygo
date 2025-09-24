@@ -55,16 +55,19 @@
 				<!-- XRP Payment Instructions -->
 				<tr>
 					<td style="padding:20px;">
-						<p style="font-size:16px;line-height:22px;">Thank you for your payment request.</p>
-						<p style="font-size:14px;line-height:20px;">
-							Please send <b>{{ amount }}</b> to the following XRP wallet:
+						<p style="font-size:16px;line-height:20px;">
+							Hello, {{ email }}<br>
+							Thank you for your payment request
 						</p>
 						<p style="font-size:14px;line-height:20px;">
-							Address: <code>{{ address }}</code><br><br>
-							Destination Tag: <code>{{ dest_tag }}</code>
+							Please send <b>{{ amount }}</b> to the following EasyGo XRP wallet:
 						</p>
 						<p style="font-size:14px;line-height:20px;">
-							Once the payment is confirmed, your booking will be processed.
+							&nbsp; • &nbsp;Address: <code>{{ address }}</code><br>
+							&nbsp; • &nbsp;Destination Tag: <code>{{ dest_tag }}</code>
+						</p>
+						<p style="color: red; font-size:14px;line-height:20px;">							
+                            Please review all payment details carefully before making the payment                     
 						</p>
 					</td>
 				</tr>
