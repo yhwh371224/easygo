@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.admin import AdminSite
-from .models import Driver, Inquiry, PaypalPayment, StripePayment, Post
+from .models import Driver, Inquiry, PaypalPayment, StripePayment, Post, XrpPayment
 
 
 class DriverAdmin(admin.ModelAdmin):
@@ -31,6 +31,11 @@ class PostAdmin(admin.ModelAdmin):
     search_fields = ['pickup_date', 'pickup_time', 'suburb', 'email', 'street', 
                      'name', 'contact', 'price', 'paid', 'email1']
     # list_filter = ['paid']
+
+
+class XrpPaymentAdmin(admin.ModelAdmin):
+    list_display = ['email', 'aud_amount', 'xrp_amount', 'dest_tag', 'email_sent', 'created']
+    search_fields = ['email', 'aud_amount', 'xrp_amount', 'dest_tag']
 
 
 class MyAdminSite(AdminSite):
