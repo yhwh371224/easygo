@@ -24,13 +24,10 @@ class Command(BaseCommand):
 
 # python manage.py shell 
 from blog.models import Post
-
-Post.objects.filter(email="silvio.vichroski@fiero.org.br").update(email="sungkam718@gmail.com")
-Post.objects.filter(email="sungkam3@gmail.com").update(email="kate@diveplanit.com")
-Post.objects.filter(email="heather@blueplanetdc.com").update(email="kate@diveplanit.com")
+Post.objects.filter(email="janice@scenetobelieve.com").update(email="sungkam718@gmail.com")
+Post.objects.filter(email="sungkam718@gmail.com").update(email="janice@scenetobelieve.com")
 Post.objects.filter(email="kate@diveplanit.com").update(email="sungkam3@gmail.com")
-Post.objects.filter(email="kate@diveplanit.com").update(name="Kate Smillie")
-Post.objects.filter(email="heather@blueplanetdc.com").update(name="")
+Post.objects.filter(email="sungkam3@gmail.com").update(email="kate@diveplanit.com")
 
 
 from blog.models import Post, PaypalPayment
