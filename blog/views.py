@@ -2,6 +2,7 @@ import requests
 import logging
 from django.shortcuts import render
 from decimal import Decimal, ROUND_HALF_UP
+from main.settings import RECIPIENT_EMAIL
 from .models import XrpPayment
 import hashlib, qrcode, base64
 from io import BytesIO
@@ -79,8 +80,8 @@ def xrp_payment(request):
             send_xrp_internal_email.delay(
                 "New XRP Payment Request",
                 internal_msg,
-                "no-reply@yourcompany.com",
-                ["yourcompany@company.com"],
+                "",
+                RECIPIENT_EMAIL,
             )
 
             # 고객 메일 (옵션) — Celery task uses its own HTML template
