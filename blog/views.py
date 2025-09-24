@@ -1,10 +1,11 @@
-import requests
-import logging
+import requests, logging
+
+from django.http import JsonResponse
 from django.shortcuts import render
 from decimal import Decimal, ROUND_HALF_UP
 from main.settings import RECIPIENT_EMAIL
 from .models import XrpPayment
-import hashlib
+
 from .tasks import send_xrp_internal_email, send_xrp_customer_email
 
 
@@ -14,12 +15,11 @@ XRP_ADDRESS = "r9WZsBV3fhdHgXEkiJwGUDdgQJztGkYRGB"
 
 def email_to_tag(email: str) -> int:
     """이메일 기반 32비트 Destination Tag 생성"""
+    import hashlib
     hash_int = int(hashlib.md5(email.encode()).hexdigest(), 16)
     return hash_int % (2**32)
 
 def xrp_payment(request):
-    result = None
-
     if request.method == "POST":
         email = request.POST.get("email")
         aud_amount = request.POST.get("aud_amount")
@@ -28,74 +28,75 @@ def xrp_payment(request):
         try:
             aud_amount = Decimal(aud_amount)
         except:
-            aud_amount = None
+            return JsonResponse({"error": "Invalid AUD amount."})
 
-        if email and aud_amount and aud_amount > 0:
-            # 실시간 XRP/AUD 시세 with retry
-            xrp_price = None
-            for attempt in range(3):
-                try:
-                    res = requests.get(
-                        "https://api.coingecko.com/api/v3/simple/price?ids=ripple&vs_currencies=aud",
-                        timeout=5
-                    )
-                    res.raise_for_status()
-                    xrp_price = Decimal(res.json()["ripple"]["aud"])
-                    break
-                except Exception as e:
-                    logger.warning("CoinGecko price fetch failed (attempt %s): %s", attempt + 1, e)
-            if not xrp_price:
-                xrp_price = Decimal("1.5")  # fallback 시세
+        if not email:
+            return JsonResponse({"error": "Email is required."})
+        if aud_amount <= 0:
+            return JsonResponse({"error": "AUD amount must be greater than 0."})
 
-            # 2자리 반올림
-            xrp_amount = (aud_amount / xrp_price).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-            dest_tag = email_to_tag(email)
-
-            # QR 코드 부분 제거됨
-
-            result = {
-                "xrp_amount": xrp_amount,
-                "xrp_address": XRP_ADDRESS,
-                "dest_tag": dest_tag,
-                "email": email,
-                "aud_amount": aud_amount
-            }
-
-            # 내부 알림 메일 (Celery)
-            internal_msg = (
-                f"Customer Email: {email}\n"
-                f"AUD Amount: {aud_amount}\n"
-                f"XRP Amount: {xrp_amount}\n"
-                f"Destination Tag: {dest_tag}"
-            )
-            send_xrp_internal_email.delay(
-                "New XRP Payment Request",
-                internal_msg,
-                RECIPIENT_EMAIL,  # 발신자
-                [RECIPIENT_EMAIL]  # 수신자
-            )
-
-            # 고객 메일 (옵션)
-            email_sent = False
-            if send_customer_email:
-                send_xrp_customer_email.delay(
-                    email,
-                    str(xrp_amount),
-                    XRP_ADDRESS,
-                    dest_tag
+        # 실시간 XRP/AUD 시세 with retry
+        xrp_price = None
+        for attempt in range(3):
+            try:
+                res = requests.get(
+                    "https://api.coingecko.com/api/v3/simple/price?ids=ripple&vs_currencies=aud",
+                    timeout=5
                 )
-                email_sent = True
+                res.raise_for_status()
+                xrp_price = Decimal(res.json()["ripple"]["aud"])
+                break
+            except Exception as e:
+                logger.warning("CoinGecko price fetch failed (attempt %s): %s", attempt + 1, e)
+        if not xrp_price:
+            xrp_price = Decimal("1.5")  # fallback 시세
 
-            # DB 기록
-            XrpPayment.objects.create(
-                email=email,
-                aud_amount=aud_amount,
-                xrp_amount=xrp_amount,
-                dest_tag=dest_tag,
-                email_sent=email_sent
+        # XRP 금액 계산
+        xrp_amount = (aud_amount / xrp_price).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+        dest_tag = email_to_tag(email)
+
+        # 내부 알림 메일 (Celery)
+        internal_msg = (
+            f"Customer Email: {email}\n"
+            f"AUD Amount: {aud_amount}\n"
+            f"XRP Amount: {xrp_amount}\n"
+            f"Destination Tag: {dest_tag}"
+        )
+        send_xrp_internal_email.delay(
+            "New XRP Payment Request",
+            internal_msg,
+            RECIPIENT_EMAIL,      # 발신자
+            [RECIPIENT_EMAIL]     # 수신자
+        )
+
+        # 고객 메일 (옵션)
+        email_sent = False
+        if send_customer_email:
+            send_xrp_customer_email.delay(
+                email,
+                str(xrp_amount),
+                XRP_ADDRESS,
+                dest_tag
             )
+            email_sent = True
 
-    return render(request, "basecamp/includes/xrp_payment.html", {"result": result})
+        # DB 기록
+        XrpPayment.objects.create(
+            email=email,
+            aud_amount=aud_amount,
+            xrp_amount=xrp_amount,
+            dest_tag=dest_tag,
+            email_sent=email_sent
+        )
+
+        # JSON 반환
+        return JsonResponse({
+            "xrp_amount": str(xrp_amount),
+            "xrp_address": XRP_ADDRESS,
+            "dest_tag": dest_tag
+        })
+
+    return JsonResponse({"error": "Invalid request method."})
 
 
 # 오류 핸들러
