@@ -13,7 +13,7 @@ from django.utils.html import strip_tags
 from django.db.models import Q
 from celery import shared_task
 from main.settings import RECIPIENT_EMAIL, DEFAULT_FROM_EMAIL
-from .models import Post, PaypalPayment, StripePayment
+from .models import Post, PaypalPayment, StripePayment, XrpPayment
 from django.core.exceptions import ImproperlyConfigured
 from django.utils import timezone
 
@@ -525,3 +525,41 @@ def notify_user_payment_stripe(instance_id):
             payment_send_email("Payment - EasyGo", html_content, recipient_list)
 
             
+# XRP payment record and email
+@shared_task
+def send_xrp_internal_email(subject, message, from_email, recipient_list):
+    """회사 내부 알림(텍스트)"""
+    send_mail(
+        subject,
+        message,
+        from_email,
+        recipient_list,
+        fail_silently=False,
+    )
+
+@shared_task
+def send_xrp_customer_email(email: str, xrp_amount: str, xrp_address: str, dest_tag: int):
+    """
+    고객에게 XRP 결제 안내 메일 전송 (HTML, 이름 없음)
+    """
+    html_content = render_to_string(
+        "basecamp/html_email-xrppayment.html",  
+        {
+            "email": email,
+            "amount": f"{Decimal(xrp_amount):.2f} XRP",
+            "address": xrp_address,
+            "dest_tag": dest_tag,
+        }
+    )
+    subject = "XRP Payment - EasyGo"
+    msg = EmailMultiAlternatives(
+        subject,
+        html_content,  
+        RECIPIENT_EMAIL,
+        [email],
+    )
+    msg.attach_alternative(html_content, "text/html")
+    try:
+        msg.send()
+    except Exception as e:
+        logger.exception("Failed to send XRP payment email: %s", e)
