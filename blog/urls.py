@@ -2,7 +2,9 @@ from django.urls import path
 from . import views
 
 
+app_name = 'blog'
+
 urlpatterns = [
-    
+    path('pay/xrp/', views.xrp_payment, name='pay_xrp'),
 ]
 
