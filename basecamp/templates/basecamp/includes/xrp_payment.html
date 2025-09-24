@@ -7,18 +7,30 @@
             <div class="card border-1 shadow-lg" style="padding:2rem;">
                 <h5>Enter Your Payment Details</h5>
                 <p>Enter your AUD amount and your email to calculate the XRP payment.</p>
-                <input type="number" step="0.01" id="aud_amount" class="form-control" placeholder="AUD Amount"><br>
-                <input type="email" id="email" class="form-control" placeholder="Email"><br>
+
+                <!-- AUD Amount -->
+                <input type="number" step="0.01" id="aud_amount" class="form-control" 
+                       placeholder="Enter the final AUD amount we provided"><br>
+
+                <!-- Email -->
+                <input type="email" id="email" class="form-control" 
+                       placeholder="Enter the same email used for your booking"><br>
+
+                <!-- Send email checkbox -->
                 <label>
-                    <input type="checkbox" id="send_email">&nbsp; Send payment instructions to my email
+                    <input type="checkbox" id="send_email">&nbsp; Send payment information to my email
                 </label><br><br>
+
+                <!-- Calculate button -->
                 <button class="btn btn-primary" id="calculate_btn">Calculate XRP</button>
 
                 <hr>
+
+                <!-- Result -->
                 <div id="result" style="display:none;">
                     <h5>Payment Instructions</h5>
-                    <pre id="payment_info"></pre>
-                    <button class="btn btn-warning mb-3" onclick="copyAll()">Copy All Payment Info</button>
+                    <pre id="payment_info" style="white-space: pre-wrap; word-wrap: break-word; margin-bottom:1rem;"></pre>
+                    <button class="btn btn-warning mb-3" id="copy_btn">Copy All Payment Info</button>
                 </div>
             </div>
         </div>
@@ -26,35 +38,44 @@
 </section>
 
 <script>
-document.getElementById("calculate_btn").addEventListener("click", function() {
-    const email = document.getElementById("email").value;
-    const aud_amount = document.getElementById("aud_amount").value;
-    const send_email = document.getElementById("send_email").checked;
+// 안전하게 DOMContentLoaded 이벤트 안에서 JS 실행
+document.addEventListener("DOMContentLoaded", function() {
 
-    fetch("{% url 'blog:pay_xrp' %}", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-            "X-CSRFToken": "{{ csrf_token }}"
-        },
-        body: `email=${encodeURIComponent(email)}&aud_amount=${encodeURIComponent(aud_amount)}&send_email=${send_email ? "on" : ""}`
-    })
-    .then(response => response.json())
-    .then(data => {
-        if(data.error){
-            alert(data.error);
-            return;
-        }
-        const paymentText = `Send ${data.xrp_amount} XRP to:\nAddress: ${data.xrp_address}\nDestination Tag: ${data.dest_tag}`;
-        document.getElementById("payment_info").innerText = paymentText;
-        document.getElementById("result").style.display = "block";
-    })
-    .catch(err => alert("Error fetching XRP amount"));
+    // Calculate XRP button
+    document.getElementById("calculate_btn").addEventListener("click", function() {
+        const email = document.getElementById("email").value;
+        const aud_amount = document.getElementById("aud_amount").value;
+        const send_email = document.getElementById("send_email").checked;
+
+        fetch("{% url 'blog:pay_xrp' %}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                "X-CSRFToken": "{{ csrf_token }}"
+            },
+            body: `email=${encodeURIComponent(email)}&aud_amount=${encodeURIComponent(aud_amount)}&send_email=${send_email ? "on" : ""}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.error){
+                alert(data.error);
+                return;
+            }
+            const paymentText = `Send ${data.xrp_amount} XRP to:\nAddress: ${data.xrp_address}\nDestination Tag: ${data.dest_tag}`;
+            document.getElementById("payment_info").innerText = paymentText;
+            document.getElementById("result").style.display = "block";
+        })
+        .catch(err => alert("Error fetching XRP amount"));
+    });
+
+    // Copy button
+    document.getElementById("copy_btn").addEventListener("click", function() {
+        const text = document.getElementById("payment_info").innerText;
+        navigator.clipboard.writeText(text).then(() => {
+            alert("All payment info copied!");
+        });
+    });
+
 });
-
-function copyAll() {
-    const text = document.getElementById("payment_info").innerText;
-    navigator.clipboard.writeText(text).then(() => alert("All payment info copied!"));
-}
 </script>
 {% endblock %}
