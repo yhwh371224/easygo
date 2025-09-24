@@ -568,16 +568,16 @@ def send_xrp_customer_email(email: str, xrp_amount: str, xrp_address: str, dest_
 
     # 이메일 생성
     subject = "XRP Payment - EasyGo"
-    msg = EmailMultiAlternatives(
+    mail = EmailMultiAlternatives(
         subject,
         html_content,  
         RECIPIENT_EMAIL,  # 발신자
         [email],          # 수신자
     )
-    msg.attach_alternative(html_content, "text/html")
+    mail.attach_alternative(html_content, "text/html")
 
     # 이메일 전송
     try:
-        msg.send()
+        mail.send()
     except Exception as e:
         logger.exception("Failed to send XRP payment email: %s", e)
