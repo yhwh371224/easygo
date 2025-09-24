@@ -554,24 +554,29 @@ def send_xrp_customer_email(email: str, xrp_amount: str, xrp_address: str, dest_
     img.save(buffer, format="PNG")
     qr_base64 = base64.b64encode(buffer.getvalue()).decode("utf-8")
 
-    html_content = render_to_string(
-        "basecamp/html_email-xrppayment.html",  
-        {
-            "email": email,
-            "amount": f"{Decimal(xrp_amount):.2f} XRP",
-            "address": xrp_address,
-            "dest_tag": dest_tag,
-            "qr_base64": qr_base64,  
-        }
-    )
+    # context를 단일 dict로 구성
+    context = {
+        "email": email,
+        "amount": f"{Decimal(xrp_amount):.2f} XRP",
+        "address": xrp_address,
+        "dest_tag": dest_tag,
+        "qr_base64": qr_base64,  # 반드시 포함
+    }   
+
+    # HTML 렌더링
+    html_content = render_to_string("basecamp/html_email-xrppayment.html", context)
+
+    # 이메일 생성
     subject = "XRP Payment - EasyGo"
     msg = EmailMultiAlternatives(
         subject,
         html_content,  
-        RECIPIENT_EMAIL,
-        [email],
+        RECIPIENT_EMAIL,  # 발신자
+        [email],          # 수신자
     )
     msg.attach_alternative(html_content, "text/html")
+
+    # 이메일 전송
     try:
         msg.send()
     except Exception as e:
