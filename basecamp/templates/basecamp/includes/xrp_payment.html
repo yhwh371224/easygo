@@ -5,7 +5,8 @@
     <div class="row justify-content-center">
         <div class="col-lg-7 col-md-8 pb-2 mb-5">
             <div class="card border-1 shadow-lg" style="padding:2rem;">
-                <h5>Enter Your Payment Details</h5>                
+                <h5>Enter Your Payment Details</h5>    
+                <br>            
 
                 <!-- AUD Amount -->
                 <input type="number" step="0.01" id="aud_amount" class="form-control" 
@@ -27,14 +28,13 @@
 
                 <!-- Result -->
                 <div id="result" style="display:none; overflow: visible;">
-                    <h5>Payment Instructions</h5>
+                    <h5>Payment Information</h5>
                     <div style="margin-bottom: 1rem;">
-                        <pre id="payment_info" style="white-space: pre-wrap; word-wrap: break-word; max-height:200px; overflow-y:auto;"></pre>
-                        <br>
-                        <button id="copy_btn">Copy Info</button>
+                        <pre id="payment_info" style="white-space: pre-wrap; word-wrap: break-word; max-height:200px; overflow-y:auto;"></pre>                        
                     </div>
                     <div style="color: red; font-weight: bold;">
-                            Please review all payment details carefully before making the payment 
+                        <button class="btn btn-warning" id="copy_btn">Copy Payment Info</button><br>
+                        Please review all payment details carefully before making the payment
                     </div>
                     <!-- <div>
                         <button class="btn btn-warning" id="copy_btn">Copy All Payment Info</button>
