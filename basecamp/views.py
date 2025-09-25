@@ -364,13 +364,13 @@ def inquiry_details(request):
 
         recaptcha_response = request.POST.get('g-recaptcha-response')
         result = verify_recaptcha(recaptcha_response)
-        if not result.get('success'):
+        if not result or not result.get('success'):
             return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'})  
 
         # ✅ 중복 제출 방지 
         recent_duplicate = Inquiry.objects.filter(
             email=email,
-            created__gte=timezone.now() - timedelta(seconds=2)
+            created__gte=timezone.now() - timedelta(seconds=10)
         ).exists()
 
         if recent_duplicate:
@@ -394,6 +394,8 @@ def inquiry_details(request):
      
         inquiry_email_exists = Inquiry.objects.filter(email=email).exists()
         post_email_exists = Post.objects.filter(email=email).exists()
+
+        email_subject = f"Inquiry on {pickup_date}"
 
         if inquiry_email_exists or post_email_exists:
             content = '''
@@ -420,7 +422,7 @@ def inquiry_details(request):
                         data['pickup_time'], data['direction'], data['street'],  data['suburb'], data['no_of_passenger'], 
                         data['return_pickup_date'], data['return_flight_number'],data['return_pickup_time'])
             
-            send_mail(data['pickup_date'], content, '', [RECIPIENT_EMAIL])
+            send_mail(email_subject, content, '', [RECIPIENT_EMAIL])
 
         else:
             content = '''
@@ -447,7 +449,7 @@ def inquiry_details(request):
                         data['pickup_time'], data['direction'], data['street'],  data['suburb'], data['no_of_passenger'], 
                         data['return_pickup_date'], data['return_flight_number'],data['return_pickup_time'])
             
-            send_mail(data['pickup_date'], content, '', [RECIPIENT_EMAIL]) 
+            send_mail(email_subject, content, '', [RECIPIENT_EMAIL]) 
 
         # 🧳 수하물 개별 항목 수집
         large = int(request.POST.get('baggage_large') or 0)
@@ -848,9 +850,9 @@ def price_detail(request):
 
         if start_point == 'Select your option' or end_point == 'Select your option':
             return render(request, 'basecamp/home_error.html')
-        
-        today = date.today()        
-        if not pickup_date or pickup_date <= str(today):
+
+        today = date.today()
+        if not pickup_date or pickup_date <= today:
             return render(request, 'basecamp/home_error.html')
 
         request.session['original_start_point'] = start_point
