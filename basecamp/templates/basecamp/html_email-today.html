@@ -252,7 +252,9 @@
 													• Name: {{ driver_name }}<br>
 													• Phone: {{ driver_contact }}<br>
 													<!-- • Vehicle: {{ driver_car }}<br> -->
-													• Vehicle plate: {{ driver_plate }}<br><br>	
+													{% if driver_plate %}
+													• Vehicle plate: {{ driver_plate }}
+													{% endif %}<br><br>	
 													
 
 													{% if meeting_point  %}
@@ -303,13 +305,15 @@
 													• Name: {{ driver_name }}<br>
 													• Phone: {{ driver_contact }}<br>
 													<!-- • Vehicle: {{ driver_car }}<br> -->
-													• Vehicle plate: {{ driver_plate }}<br><br>														
+													{% if driver_plate %}
+													• Vehicle plate: {{ driver_plate }}
+													{% endif %}<br><br>														
 
 													{% if meeting_point %}
 														<strong>=== The meeting point ===</strong><br>
 														• {{ meeting_point }}<br><br>
 														• <a href="https://s3.ap-southeast-2.amazonaws.com/easygoshuttle.com.au/Domestic-T2-meeting-point.webp">Map of Shuttle bus bay</a><br>
-														• <a href="https://s3.ap-southeast-2.amazonaws.com/easygoshuttle.com.au/T2-Priority-Pickup-map.webp">Domestic Terminal Map</a>&nbsp;> Please proceed to the Priority Pick-up (Area C)<br><br>
+														• <a href="https://s3.ap-southeast-2.amazonaws.com/easygoshuttle.com.au/T2-Priority-Pickup-map.webp">Domestic Terminal Map</a><br><br>
 													{% else %}
 														<strong>=== The meeting point ===</strong><br>
 														• <a href="https://easygo.s3.ap-southeast-2.amazonaws.com/Express_pickup.webp">Domestic Terminal Map</a>&nbsp;> Please proceed to the Express Pick-up<br><br>
@@ -333,7 +337,10 @@
 													• Name: {{ driver_name }}<br>
 													• Phone: {{ driver_contact }}<br>
 													<!-- • Vehicle: {{ driver_car }}<br> -->
-													• Vehicle plate: {{ driver_plate }}<br><br></p>
+													{% if driver_plate %}
+													• Vehicle plate: {{ driver_plate }}
+													{% endif %}
+													<br><br></p>
 
 													{% if cash %}
 														We kindly ask that you <span style="color: #eb7828">email us immediately</span> upon your arrival in Sydney</span><br><br>
