@@ -26,6 +26,7 @@ from basecamp.area_full import get_more_suburbs
 from basecamp.area_home import get_home_suburbs
 
 from utils.pdf import render_to_pdf
+from utils.date_utils import parse_date_safe
 
 
 logger = logging.getLogger(__name__)
@@ -336,21 +337,7 @@ def inquiry_details(request):
     if request.method == "POST":
         name = request.POST.get('name')
         contact = request.POST.get('contact')
-        email = request.POST.get('email')
-
-        # ✅ Parse dates safely
-        pickup_date_str = request.POST.get('pickup_date')
-        try:
-            pickup_date = datetime.strptime(pickup_date_str, '%Y-%m-%d').date() if pickup_date_str else None
-        except ValueError:
-            return JsonResponse({'success': False, 'error': 'Invalid pickup date format. Use YYYY-MM-DD.'})
-
-        return_pickup_date_str = request.POST.get('return_pickup_date')
-        try:
-            return_pickup_date = datetime.strptime(return_pickup_date_str, '%Y-%m-%d').date() if return_pickup_date_str else None
-        except ValueError:
-            return JsonResponse({'success': False, 'error': 'Invalid return pickup date format. Use YYYY-MM-DD.'})
-        
+        email = request.POST.get('email')        
         flight_number = request.POST.get('flight_number')
         flight_time = request.POST.get('flight_time')
         pickup_time = request.POST.get('pickup_time')
@@ -368,6 +355,12 @@ def inquiry_details(request):
         return_start_point = request.POST.get('return_start_point', '')
         return_end_point = request.POST.get('return_end_point', '')
         message = request.POST.get('message')
+
+        try:
+            pickup_date = parse_date_safe(request.POST.get('pickup_date'), "pickup_date")
+            return_pickup_date = parse_date_safe(request.POST.get('return_pickup_date'), "return_pickup_date")
+        except ValueError as e:
+            return JsonResponse({'success': False, 'error': str(e)})
 
         recaptcha_response = request.POST.get('g-recaptcha-response')
         result = verify_recaptcha(recaptcha_response)
@@ -507,7 +500,6 @@ def inquiry_details1(request):
         name = request.POST.get('name')
         contact = request.POST.get('contact')
         email = request.POST.get('email')
-        pickup_date = request.POST.get('pickup_date')  or None
         flight_number = request.POST.get('flight_number')
         flight_time = request.POST.get('flight_time')
         pickup_time = request.POST.get('pickup_time')        
@@ -517,10 +509,14 @@ def inquiry_details1(request):
         no_of_passenger = request.POST.get('no_of_passenger')
         no_of_baggage = request.POST.get('no_of_baggage')        
         message = request.POST.get('message')
-
         original_start_point = request.session.get('original_start_point', start_point)
         original_end_point = request.session.get('original_end_point', end_point)
-
+        
+        try:
+            pickup_date = parse_date_safe(request.POST.get('pickup_date'), "pickup_date")
+        except ValueError as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+        
         # ✅ 중복 제출 방지 
         recent_duplicate = Inquiry.objects.filter(
             email=email,
@@ -659,9 +655,13 @@ def inquiry_details2(request):
     if request.method == "POST":
         name = request.POST.get('name')
         contact = request.POST.get('contact')
-        email = request.POST.get('email') 
-        pickup_date = request.POST.get('pickup_date')  or None      
-        message = request.POST.get('message')     
+        email = request.POST.get('email')      
+        message = request.POST.get('message') 
+
+        try:
+            pickup_date = parse_date_safe(request.POST.get('pickup_date'), "pickup_date")
+        except ValueError as e:
+            return JsonResponse({'success': False, 'error': str(e)})    
         
         recaptcha_response = request.POST.get('g-recaptcha-response')
         result = verify_recaptcha(recaptcha_response)
@@ -838,7 +838,10 @@ def p2p_booking_detail(request):
 
 def price_detail(request):
     if request.method == "POST":
-        pickup_date = request.POST.get('pickup_date')  or None
+        try:
+            pickup_date = parse_date_safe(request.POST.get('pickup_date'), "pickup_date")
+        except ValueError as e:
+            return render(request, 'basecamp/home_error.html')
         start_point = request.POST.get('start_point')
         end_point = request.POST.get('end_point')
         no_of_passenger = request.POST.get('no_of_passenger')
@@ -894,7 +897,6 @@ def confirmation_detail(request):
         contact = request.POST.get('contact')
         email = request.POST.get('email')
         email1 = request.POST.get('email1')
-        pickup_date = request.POST.get('pickup_date')  or None
         flight_number = request.POST.get('flight_number')
         flight_time = request.POST.get('flight_time')
         pickup_time = request.POST.get('pickup_time')
@@ -906,7 +908,6 @@ def confirmation_detail(request):
         no_of_passenger = request.POST.get('no_of_passenger')
         no_of_baggage = request.POST.get('no_of_baggage')
         return_direction = request.POST.get('return_direction')
-        return_pickup_date = request.POST.get('return_pickup_date') or None
         return_flight_number = request.POST.get('return_flight_number')
         return_flight_time = request.POST.get('return_flight_time')
         return_pickup_time = request.POST.get('return_pickup_time')
@@ -918,6 +919,12 @@ def confirmation_detail(request):
         paid = request.POST.get('paid')
         cash = to_bool(request.POST.get('cash'))
         prepay = to_bool(request.POST.get('prepay'))  
+
+        try:
+            pickup_date = parse_date_safe(request.POST.get('pickup_date'), "pickup_date")
+            return_pickup_date = parse_date_safe(request.POST.get('return_pickup_date'), "return_pickup_date")
+        except ValueError as e:
+            return JsonResponse({'success': False, 'error': str(e)})
         
         data = {            
             'name': name,
@@ -1027,7 +1034,6 @@ def booking_detail(request):
         name = request.POST.get('name')
         contact = request.POST.get('contact')
         email = request.POST.get('email')
-        pickup_date = request.POST.get('pickup_date')  or None
         flight_number = request.POST.get('flight_number')
         flight_time = request.POST.get('flight_time')
         pickup_time = request.POST.get('pickup_time')
@@ -1039,13 +1045,18 @@ def booking_detail(request):
         no_of_passenger = request.POST.get('no_of_passenger')
         no_of_baggage = request.POST.get('no_of_baggage')
         return_direction = request.POST.get('return_direction')
-        return_pickup_date = request.POST.get('return_pickup_date') or None
         return_flight_number = request.POST.get('return_flight_number')
         return_flight_time = request.POST.get('return_flight_time')
         return_pickup_time = request.POST.get('return_pickup_time')
         return_start_point = request.POST.get('return_start_point', '')
         return_end_point = request.POST.get('return_end_point', '') 
         message = request.POST.get('message')
+
+        try:
+            pickup_date = parse_date_safe(request.POST.get('pickup_date'), "pickup_date")
+            return_pickup_date = parse_date_safe(request.POST.get('return_pickup_date'), "return_pickup_date")
+        except ValueError as e:
+            return JsonResponse({'success': False, 'error': str(e)})
 
         price = 'TBA'  
 
@@ -1189,19 +1200,23 @@ def cruise_booking_detail(request):
     if request.method == "POST":        
         name = request.POST.get('name')
         contact = request.POST.get('contact')
-        email = request.POST.get('email')
-        pickup_date = request.POST.get('pickup_date')  or None        
+        email = request.POST.get('email')      
         pickup_time = request.POST.get('pickup_time')
         start_point = request.POST.get('start_point', '')
         end_point = request.POST.get('end_point', '')        
         no_of_passenger = request.POST.get('no_of_passenger')
         no_of_baggage = request.POST.get('no_of_baggage')
-        message = request.POST.get('message')
-        return_pickup_date = request.POST.get('return_pickup_date') or None        
+        message = request.POST.get('message')      
         return_pickup_time = request.POST.get('return_pickup_time')
         return_start_point = request.POST.get('return_start_point', '')
         return_end_point = request.POST.get('return_end_point', '')
         price = 'TBA'    
+
+        try:
+            pickup_date = parse_date_safe(request.POST.get('pickup_date'), "pickup_date")
+            return_pickup_date = parse_date_safe(request.POST.get('return_pickup_date'), "return_pickup_date")
+        except ValueError as e:
+            return JsonResponse({'success': False, 'error': str(e)})
 
         recaptcha_response = request.POST.get('g-recaptcha-response')
         result = verify_recaptcha(recaptcha_response)
@@ -1705,7 +1720,6 @@ def to_bool(value):
 def return_trip_detail(request):     
     if request.method == "POST":
         email = request.POST.get('email')
-        pickup_date = request.POST.get('pickup_date')  or None
         flight_number = request.POST.get('flight_number')
         flight_time = request.POST.get('flight_time')
         pickup_time = request.POST.get('pickup_time')
@@ -1718,12 +1732,17 @@ def return_trip_detail(request):
         cash = to_bool(request.POST.get('cash'))
         prepay = to_bool(request.POST.get('prepay'))
         return_direction = request.POST.get('return_direction')
-        return_pickup_date = request.POST.get('return_pickup_date') or None
         return_flight_number = request.POST.get('return_flight_number')
         return_flight_time = request.POST.get('return_flight_time')
         return_pickup_time = request.POST.get('return_pickup_time')
         return_start_point = request.POST.get('return_start_point', '')
         return_end_point = request.POST.get('return_end_point', '') 
+
+        try:
+            pickup_date = parse_date_safe(request.POST.get('pickup_date'), "pickup_date")
+            return_pickup_date = parse_date_safe(request.POST.get('return_pickup_date'), "return_pickup_date")
+        except ValueError as e:
+            return JsonResponse({'success': False, 'error': str(e)})
         
         user = Post.objects.filter(Q(email__iexact=email)).first()    
         
