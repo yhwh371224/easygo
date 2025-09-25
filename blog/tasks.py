@@ -102,7 +102,7 @@ def create_event_on_calendar(instance_id):
                      'n:'+instance.notice if instance.notice is not None else '', 
                      "d:"+str(instance.return_pickup_date) if instance.return_pickup_date is not None else '', 
                      '$'+str(instance.paid) if instance.paid is not None else '',
-                     'private' if instance.private_ride is not None else '', 
+                     'private' if instance.private_ride else '', 
                      'opt:'+instance.end_point if instance.end_point is not None else '']
     message = " ".join(filter(None, message_parts))      
 
