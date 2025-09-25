@@ -337,7 +337,20 @@ def inquiry_details(request):
         name = request.POST.get('name')
         contact = request.POST.get('contact')
         email = request.POST.get('email')
-        pickup_date = request.POST.get('pickup_date')  or None
+
+        # ✅ Parse dates safely
+        pickup_date_str = request.POST.get('pickup_date')
+        try:
+            pickup_date = datetime.strptime(pickup_date_str, '%Y-%m-%d').date() if pickup_date_str else None
+        except ValueError:
+            return JsonResponse({'success': False, 'error': 'Invalid pickup date format. Use YYYY-MM-DD.'})
+
+        return_pickup_date_str = request.POST.get('return_pickup_date')
+        try:
+            return_pickup_date = datetime.strptime(return_pickup_date_str, '%Y-%m-%d').date() if return_pickup_date_str else None
+        except ValueError:
+            return JsonResponse({'success': False, 'error': 'Invalid return pickup date format. Use YYYY-MM-DD.'})
+        
         flight_number = request.POST.get('flight_number')
         flight_time = request.POST.get('flight_time')
         pickup_time = request.POST.get('pickup_time')
@@ -348,8 +361,7 @@ def inquiry_details(request):
         street = request.POST.get('street', '')
         no_of_passenger = request.POST.get('no_of_passenger')
         no_of_baggage = request.POST.get('no_of_baggage')
-        return_direction = request.POST.get('return_direction')
-        return_pickup_date = request.POST.get('return_pickup_date') or None
+        return_direction = request.POST.get('return_direction')        
         return_flight_number = request.POST.get('return_flight_number')
         return_flight_time = request.POST.get('return_flight_time')
         return_pickup_time = request.POST.get('return_pickup_time')
