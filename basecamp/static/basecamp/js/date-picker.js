@@ -12,7 +12,8 @@ const datePicker = (() => {
   for (let i = 0; i < picker.length; i++) {
 
     let defaults = {
-      disableMobile: 'true'
+      disableMobile: 'true',
+      time_24hr: false
     }
     
     let userOptions;
