@@ -1100,9 +1100,7 @@ def booking_detail(request):
             content = '''
             Hello, {} \n  
             [Booking by client] >> Sending email only!\n
-            Exit in Inquiry or Post *\n 
-            https://easygoshuttle.com.au/sending_email_first/ \n 
-            https://easygoshuttle.com.au/sending_email_second/ \n            
+            Exit in Inquiry or Post *\n            
             ===============================
             Contact: {}
             Email: {}  
@@ -1127,9 +1125,7 @@ def booking_detail(request):
             content = '''
             Hello, {} \n  
             [Booking by client] >> Sending email only!\n
-            Neither in Inquiry & Post *\n 
-            https://easygoshuttle.com.au/sending_email_first/ \n  
-            https://easygoshuttle.com.au/sending_email_second/ \n       
+            Neither in Inquiry & Post *\n     
            ===============================
             Contact: {}
             Email: {}  
@@ -1257,9 +1253,7 @@ def cruise_booking_detail(request):
             content = '''
             Hello, {} \n  
             [Cruise Booking by client] >> Put price & Send email\n
-            Exit in Inquiry or Post *\n 
-            https://easygoshuttle.com.au/sending_email_first/ \n 
-            https://easygoshuttle.com.au/sending_email_second/ \n            
+     
             ===============================
             Email: {}  
             Contact: {}
@@ -1285,9 +1279,7 @@ def cruise_booking_detail(request):
             content = '''
             Hello, {} \n  
             [Cruise Booking by client] >> Put price & Send email \n
-            Neither in Inquiry & Post *\n 
-            https://easygoshuttle.com.au/sending_email_first/ \n  
-            https://easygoshuttle.com.au/sending_email_second/ \n       
+
            ===============================
             Email: {}  
             Contact: {}
