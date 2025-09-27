@@ -239,7 +239,7 @@
 														and ensure that your mobile phone remains switched on<br><br>
 														Please note that the driver may not have a card machine available. We kindly ask you to prepare the cash in advance<br>
 													{% else %}
-														<span style="color: #eb7828">After landing, please check your email.</span> You will be notified of the meeting details via email or SMS. 
+														<!-- <span style="color: #eb7828">After landing, please check your email.</span> You will be notified of the meeting details via email or SMS.  -->
 														Once you have cleared customs, please contact the driver. 
 														This will help us estimate your arrival time at the meeting point, ensuring a smooth transition.<br><br>
 													{% endif %}
@@ -248,16 +248,23 @@
 													
 												<p style="border: 1px solid #af865f; padding: 10px; margin-bottom: 20px; color: #af865f;">
 													
-													<strong>=== Driver's details ===</strong><br>
+													<!-- <strong>=== Driver's details ===</strong><br>
 													• Name: {{ driver_name }}<br>
 													• Phone: {{ driver_contact }}<br>
 													• Vehicle: {{ driver_car }}<br>
 													{% if driver_plate %}
 													• Vehicle plate: {{ driver_plate }}
+<<<<<<< HEAD
 													{% endif %}<br><br>
 													<small>
 													Please note that the driver may change, but they will contact you via text or phone 
 													</small><br><br>
+=======
+													{% endif %}<br> -->
+													<!-- <small>
+													Please note that our driver will contact you via text or phone 
+													</small><br><br> -->
+>>>>>>> 82d730e7 (update)
 
 													{% if meeting_point  %}
 														<strong>=== The meeting point ===</strong><br><br>
@@ -294,7 +301,7 @@
 														and ensure that your mobile phone remains switched on<br><br>
 														Please note that the driver may not have a card machine available. We kindly ask you to prepare the cash in advance<br>
 													{% else %}
-														<span style="color: #eb7828">After landing, please check your email.</span> You will be notified of the meeting details via email or SMS. 
+														<!-- <span style="color: #eb7828">After landing, please check your email.</span> You will be notified of the meeting details via email or SMS.  -->
 														Once you have collected your luggage, please contact the driver. 
 														This will help us estimate your arrival time at the meeting point, ensuring a smooth transition.<br><br>
 													{% endif %}
@@ -311,15 +318,15 @@
 													• Vehicle plate: {{ driver_plate }}
 													{% endif %}<br>
 													<small>
-													Please note that the driver may change, but they will contact you via text or phone 
+													Please note that our driver will contact you via text or phone 
 													</small><br><br>											
 
 													{% if meeting_point %}
 														<strong>=== The meeting point ===</strong><br>
 														• {{ meeting_point }}<br><br>
 														• <a href="https://s3.ap-southeast-2.amazonaws.com/easygoshuttle.com.au/Domestic-T2-meeting-point.webp">Map of Shuttle bus bay</a><br>
-														• <a href="https://easygo.s3.ap-southeast-2.amazonaws.com/Express_pickup.webp">Domestic Terminal Map</a><br><br>
-													{% else %}
+														<!-- • <a href="https://easygo.s3.ap-southeast-2.amazonaws.com/Express_pickup.webp">Domestic Terminal Map</a><br><br>
+													{% else %} -->
 														<strong>=== The meeting point ===</strong><br>
 														• Express Pick-up<br><br>
 														• <a href="https://easygo.s3.ap-southeast-2.amazonaws.com/Express_pickup.webp">Domestic Terminal Map</a><br><br>
