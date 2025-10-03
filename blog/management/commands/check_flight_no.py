@@ -61,7 +61,7 @@ class Command(BaseCommand):
                             if len(number_part_no_zero) <= 4:
                                 number_part = str(int(number_part_raw))  
                                 flight_number_final = airline_code + number_part
-                                flight_valid = bool(re.match(r'^[A-Z]{2,3}\d{1,4}$', flight_number_final))
+                                flight_valid = bool(re.match(r'^[A-Z]{1,3}\d{1,4}$', flight_number_final))
 
                     flight_issue = not flight_valid
                     if flight_issue:
