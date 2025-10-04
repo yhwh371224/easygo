@@ -51,7 +51,7 @@ class Command(BaseCommand):
                     if flight_number_cleaned.lower() == '5j39':
                         flight_valid = True
                     else:
-                        match = re.match(r'^([A-Z]{2,3})(\d+)$', flight_number_cleaned)
+                        match = re.match(r'^([A-Z]{1,3})(\d+)$', flight_number_cleaned)
 
                         if match:
                             airline_code = match.group(1)
