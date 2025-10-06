@@ -15,11 +15,12 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         try:
+            today = date.today()
             tomorrow = date.today() + timedelta(days=1)
             three_days_before = date.today() + timedelta(days=3)
 
             final_notices = Post.objects.filter(
-                    pickup_date__range=(tomorrow, three_days_before),
+                    pickup_date__range=(today, three_days_before),
                     cancelled=False,
                     reminder=False,                    
                 ).filter(
