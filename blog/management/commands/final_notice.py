@@ -21,8 +21,7 @@ class Command(BaseCommand):
             final_notices = Post.objects.filter(
                     pickup_date__range=(tomorrow, three_days_before),
                     cancelled=False,
-                    reminder=False,
-                    cash=False
+                    reminder=False,                    
                 ).filter(
                     Q(paid__isnull=True) | Q(paid__exact="")
                 )
