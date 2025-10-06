@@ -1713,7 +1713,7 @@ def to_bool(value):
 # For Return Trip 
 def return_trip_detail(request):     
     if request.method == "POST":
-        email = request.POST.get('email')
+        email = request.POST.get('email', '').strip()
         flight_number = request.POST.get('flight_number')
         flight_time = request.POST.get('flight_time')
         pickup_time = request.POST.get('pickup_time')
