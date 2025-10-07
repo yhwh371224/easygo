@@ -1,5 +1,14 @@
-from blog.models import Post
-from blog.models import Driver
+from blog.models import Post, Driver
+
+
+# ✅ street/suburb 처리 함수
+def filter_value(value, start_point, end_point):
+    if not value:
+        return ""
+    value_lower = value.lower()
+    if (start_point and value_lower in start_point.lower()) or (end_point and value_lower in end_point.lower()):
+        return value
+    return ""
 
 # Flight return booking
 def handle_return_trip(instance):
@@ -31,17 +40,14 @@ def handle_return_trip(instance):
         half_price = round(full_price / 2, 2)
 
         # paid 처리
-        full_paid = instance.paid
+        full_paid_float = None
         half_paid = None
-        if full_paid:
+        if instance.paid:
             try:
-                full_paid_float = round(float(full_paid), 2)
+                full_paid_float = round(float(instance.paid), 2)
                 half_paid = round(full_paid_float / 2, 2)
             except ValueError:
-                full_paid_float = None
-                half_paid = None
-        else:
-            full_paid_float = None
+                pass
 
         # notice 생성
         notice_parts = [original_notice.strip(), f"===RETURN=== (Total Price: ${int(full_price)})"]
@@ -57,41 +63,40 @@ def handle_return_trip(instance):
         instance.save(update_fields=['price', 'paid', 'notice'])
 
         # ✅ return_start_point / return_end_point 있으면 street, suburb를 빈문자열로
-        street_val = instance.street
-        suburb_val = instance.suburb
-        if instance.return_start_point or instance.return_end_point:
-            street_val = ""
-            suburb_val = ""
+        # 단, start_point나 end_point 안에 street/suburb 이름이 있으면 그대로 유지
+        street_val = filter_value(instance.street, instance.return_start_point, instance.return_end_point)
+        suburb_val = filter_value(instance.suburb, instance.return_start_point, instance.return_end_point)
 
-        p = Post(
-            name=instance.name,
-            contact=instance.contact,
-            email=instance.email,
-            company_name=instance.company_name,
-            email1=instance.email1,
-            pickup_date=instance.return_pickup_date,
-            flight_number=instance.return_flight_number,
-            flight_time=instance.return_flight_time,
-            pickup_time=instance.return_pickup_time,
-            direction=instance.return_direction,
-            start_point=instance.return_start_point,
-            end_point=instance.return_end_point,
-            suburb=suburb_val,      # ✅ 수정
-            street=street_val,      # ✅ 수정
-            no_of_passenger=instance.no_of_passenger,
-            no_of_baggage=instance.no_of_baggage,
-            message=instance.message,
-            return_pickup_time="x",
-            return_pickup_date=instance.pickup_date,
-            notice=updated_notice,
-            price=half_price,
-            paid=half_paid,
-            private_ride=instance.private_ride,
-            toll=instance.toll,
-            driver=driver,
-        )
+        # Post 생성에 필요한 필드들을 **kwargs로 묶음
+        post_fields = {
+            'name': instance.name,
+            'contact': instance.contact,
+            'email': instance.email,
+            'company_name': instance.company_name,
+            'email1': instance.email1,
+            'pickup_date': instance.return_pickup_date,
+            'flight_number': instance.return_flight_number,
+            'flight_time': instance.return_flight_time,
+            'pickup_time': instance.return_pickup_time,
+            'direction': instance.return_direction,
+            'start_point': instance.return_start_point,
+            'end_point': instance.return_end_point,
+            'suburb': suburb_val,
+            'street': street_val,
+            'no_of_passenger': instance.no_of_passenger,
+            'no_of_baggage': instance.no_of_baggage,
+            'message': instance.message,
+            'return_pickup_time': "x",
+            'return_pickup_date': instance.pickup_date,
+            'notice': updated_notice,
+            'price': half_price,
+            'paid': half_paid,
+            'private_ride': instance.private_ride,
+            'toll': instance.toll,
+            'driver': driver,
+        }
 
-        p.save()
+        Post.objects.create(**post_fields)
 
 
         

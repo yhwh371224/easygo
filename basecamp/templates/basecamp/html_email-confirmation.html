@@ -260,18 +260,28 @@
 													Number of baggage: {{ no_of_baggage|default:'' }}<br>
                                                     Message: <br>
 													{{ message }}<br><br>
+
 												{% if return_start_point %}													
 													<span style="font-weight:bold; color: #bdb1a6">Return trip date:  {{ return_pickup_date }}</span><br>													
 													<span style="font-weight:bold; color: #bdb1a6">Return start point:  {{ return_start_point }}</span><br>
 													<span style="font-weight:bold; color: #bdb1a6">Return end point:  {{ return_end_point }}</span><br>
 													<span style="font-weight:bold; color: #bdb1a6">Return pickup time:  {{ return_pickup_time }}</span><br>
+
+													{% if street and suburb %}
+														<span style="font-weight:bold; color: #bdb1a6">Return address:  {{ street|default:'' }} {{ suburb|default:'' }}</span><br>
+													{% endif %}
+
 												{% elif return_direction and return_flight_number %}
 													<span style="font-weight:bold; color: #bdb1a6">Return direction:  {{ return_direction }}</span><br>
 													<span style="font-weight:bold; color: #bdb1a6">Return flight date:  {{ return_pickup_date }}</span><br>
                                                     <span style="font-weight:bold; color: #bdb1a6">Return flight number:  {{ return_flight_number }}</span><br>
 													<span style="font-weight:bold; color: #bdb1a6">Return flight time:  {{ return_flight_time }}</span><br>
 													<span style="font-weight:bold; color: #bdb1a6">Return pickup time:  {{ return_pickup_time }}</span><br>
-													<span style="font-weight:bold; color: #bdb1a6">Return address:  {{ street|default:'' }} {{ suburb|default:'' }}</span><br>
+
+													{% if street and suburb %}
+														<span style="font-weight:bold; color: #bdb1a6">Return address:  {{ street|default:'' }} {{ suburb|default:'' }}</span><br>
+													{% endif %}
+
 												{% endif %}
 												</p>
 
@@ -331,8 +341,8 @@
 
 												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
 													We will send you a reminder email closer to the date of your booking.<br><br> 
-													Future communications will be conducted via email. Therefore, 
-													we will not be responsible for any issues arising from not checking your email<br><br>                                              
+													<span style="color: #eb7828">Future communications will be conducted via email. Therefore, 
+													we will not be responsible for any issues arising from not checking your email</span><br><br>                                              
                                                     Thank you again for booking with us. We look forward to seeing you on time<br><br></p>   
 												<p style="Margin:0;font-size:13px;font-weight:bold;line-height:22px;Margin-bottom:12px;">
                                                     Best regards<br>
