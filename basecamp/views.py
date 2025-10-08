@@ -1431,7 +1431,7 @@ def confirm_booking_detail(request):
             data['direction'], data['flight_number'], data['flight_time'],
             data['pickup_date'], data['pickup_time'], data['return_flight_number'],
             data['street'], data['suburb'], data['start_point'], data['end_point'],
-            data['cash'], data['prepay'], data['return_start_point', data['return_end_point']]
+            data['cash'], data['prepay'], data['return_start_point'], data['return_end_point']
         )
             
         sam_driver = Driver.objects.get(driver_name="Sam")    
