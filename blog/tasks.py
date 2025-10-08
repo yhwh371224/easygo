@@ -154,7 +154,7 @@ def create_event_on_calendar(instance_id):
 def send_confirm_email(
     name, email, contact, company_name, direction, flight_number, flight_time,
     pickup_date, pickup_time, return_flight_number, street, suburb, start_point, 
-    end_point, cash, prepay):
+    end_point, cash, prepay, return_start_point, return_end_point):
     subject = f"Booking Confirmation Clicked"
     
     content = f'''
@@ -183,6 +183,8 @@ def send_confirm_email(
     End point: {end_point}
     Cash: {cash}
     Prepay: {prepay}
+    ✅ *** Return start point: {return_start_point} ***
+    ✅ *** Return end point {return_end_point} ***
     ===============================          
     '''
 
