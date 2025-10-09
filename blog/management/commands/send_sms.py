@@ -25,7 +25,7 @@ class Command(BaseCommand):
         try: 
             today = date.today()
             # tomorrow = today + timedelta(days=1)
-            day_after_tomorrow = today + timedelta(days=1)
+            day_after_tomorrow = today + timedelta(days=3)
             final_notices = Post.objects.filter(
                     pickup_date__range=[today, day_after_tomorrow],
                     cancelled=False,
