@@ -2291,13 +2291,16 @@ def email_dispatch_detail(request):
                         post_price = float(post.price or 0)
 
                         if form_price is not None and form_price > 0:
-                            # 폼 금액이 있으면 순차 적용
+                            # 폼 금액이 있는 경우 순차 적용
                             applied = min(post_price, form_price)
                             post.paid = applied
                             form_price -= applied
-                        else:
-                            # 폼 금액이 없거나 소진되면 예약 금액 그대로 적용
+                        elif form_price is None:
+                            # 폼 금액이 없는 경우: 예약 금액 그대로 적용
                             post.paid = post_price
+                        else:
+                            # 폼 금액 소진 후 남은 예약: paid = 0
+                            post.paid = 0.0
 
                         total_paid_applied += post.paid
 
@@ -2305,14 +2308,15 @@ def email_dispatch_detail(request):
                         post.reminder = True
                         post.toll = ""
                         post.cash = False
+                        post.pending = False
                         post.discount = ""
 
                         updated_posts.append(post)
 
-                    # 총 결제 금액 노티스 생성
-                    if form_price_input:  # 폼 금액이 있을 때는 그 금액으로 메일
+                    # 메일에 표시할 결제 금액
+                    if form_price_input:
                         paid_text = f"===(M) GRATITUDE=== Total Paid: ${form_price_input} (applied to upcoming bookings)"
-                    else:  # 폼 금액 없으면 예약 금액 합산
+                    else:
                         paid_text = f"===(M) GRATITUDE=== Total Paid: ${int(total_paid_applied)} ({len(updated_posts)} bookings)"
 
                     for post in updated_posts:
@@ -2331,10 +2335,10 @@ def email_dispatch_detail(request):
 
                         post.save()
 
-                    # 컨텍스트에 총 금액 전달 (메일 렌더링용)
                     context.update({
                         'price': int(total_paid_applied),
                     })
+
             
             if selected_option in ["Cancellation of Booking", "Cancellation by Client", "Apologies Cancellation of Booking"] and user:
 
