@@ -12,7 +12,7 @@ from blog.models import Post
 from main.settings import RECIPIENT_EMAIL
 
 # Logging
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sms_logger = logging.getLogger('sms')
 sms_logger.setLevel(logging.INFO)
 
