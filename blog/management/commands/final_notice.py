@@ -13,17 +13,20 @@ from main.settings import RECIPIENT_EMAIL
 
 # Logging
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# -> /home/horeb/github/easygo
+
 LOG_DIR = os.path.join(BASE_DIR, 'logs')
+os.makedirs(LOG_DIR, exist_ok=True)  # logs 없으면 생성
+
+# sms logger 설정
 sms_logger = logging.getLogger('sms')
 sms_logger.setLevel(logging.INFO)
 
-# 파일 핸들러 추가
-fh = logging.FileHandler(os.path.join(LOG_DIR, 'sms.log'))
-fh.setLevel(logging.INFO)
-formatter = logging.Formatter('{levelname} {asctime} {message}', style='{')
-fh.setFormatter(formatter)
-
-if not sms_logger.handlers:  # 중복 핸들러 방지
+if not sms_logger.handlers:
+    fh = logging.FileHandler(os.path.join(LOG_DIR, 'sms.log'))
+    fh.setLevel(logging.INFO)
+    formatter = logging.Formatter('{levelname} {asctime} {message}', style='{')
+    fh.setFormatter(formatter)
     sms_logger.addHandler(fh)
 
 class Command(BaseCommand):
