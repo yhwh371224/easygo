@@ -2274,34 +2274,34 @@ def email_dispatch_detail(request):
                 posts = Post.objects.filter(
                     Q(email__iexact=user.email),
                     pickup_date__gte=timezone.now().date()
-                ).order_by('pickup_date')
+                ).order_by('pickup_date')  # 가까운 날짜 순서로 정렬
 
                 if posts.exists():
                     total_paid_applied = 0.0
                     updated_posts = []
 
-                    # check if form sent a price
-                    form_price = request.POST.get('adjustment_time')  
-
-                    if form_price:
-                        try:
-                            total_paid_applied = float(form_price)                            
-                            per_post_paid = total_paid_applied / len(posts)
-
-                        except ValueError:
-                            total_paid_applied = 0.0
-                            per_post_paid = None
-
-                    else:
-                        per_post_paid = None 
+                    # 폼에서 금액 가져오기
+                    form_price_input = request.POST.get('adjustment_time')
+                    try:
+                        form_price = float(form_price_input) if form_price_input else None
+                    except ValueError:
+                        form_price = None
 
                     for post in posts:
-                        if per_post_paid is not None:
-                            post.paid = per_post_paid
-                        else:
-                            post.paid = float(post.price or 0)
-                            total_paid_applied += post.paid
+                        post_price = float(post.price or 0)
 
+                        if form_price is not None and form_price > 0:
+                            # 폼 금액이 있으면 순차 적용
+                            applied = min(post_price, form_price)
+                            post.paid = applied
+                            form_price -= applied
+                        else:
+                            # 폼 금액이 없거나 소진되면 예약 금액 그대로 적용
+                            post.paid = post_price
+
+                        total_paid_applied += post.paid
+
+                        # 공통 필드 초기화
                         post.reminder = True
                         post.toll = ""
                         post.cash = False
@@ -2309,22 +2309,29 @@ def email_dispatch_detail(request):
 
                         updated_posts.append(post)
 
-                    actual_paid_text = f"===(M) GRATITUDE=== Total Paid: ${int(total_paid_applied)} ({len(updated_posts)} bookings)"
+                    # 총 결제 금액 노티스 생성
+                    if form_price_input:  # 폼 금액이 있을 때는 그 금액으로 메일
+                        paid_text = f"===(M) GRATITUDE=== Total Paid: ${form_price_input} (applied to upcoming bookings)"
+                    else:  # 폼 금액 없으면 예약 금액 합산
+                        paid_text = f"===(M) GRATITUDE=== Total Paid: ${int(total_paid_applied)} ({len(updated_posts)} bookings)"
 
                     for post in updated_posts:
                         original_notice = (post.notice or "").strip()
 
-                        # 기존 결제 기록 있는지 체크
-                        has_payment_record = any(keyword in original_notice for keyword in ["===STRIPE===", "===PAYPAL===", "===Gratitude===", "===(M) GRATITUDE==="])
+                        has_payment_record = any(
+                            keyword in original_notice 
+                            for keyword in ["===STRIPE===", "===PAYPAL===", "===Gratitude===", "===(M) GRATITUDE==="]
+                        )
 
                         if not has_payment_record:
                             post.notice = (
-                                f"{original_notice} | {actual_paid_text}"
-                                if original_notice else actual_paid_text
+                                f"{original_notice} | {paid_text}"
+                                if original_notice else paid_text
                             )
-                        
+
                         post.save()
 
+                    # 컨텍스트에 총 금액 전달 (메일 렌더링용)
                     context.update({
                         'price': int(total_paid_applied),
                     })
