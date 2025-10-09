@@ -12,17 +12,18 @@ from blog.models import Post
 from main.settings import RECIPIENT_EMAIL
 
 # Logging
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+LOG_DIR = os.path.join(BASE_DIR, 'logs')
 sms_logger = logging.getLogger('sms')
 sms_logger.setLevel(logging.INFO)
 
 # 파일 핸들러 추가
-fh = logging.FileHandler(os.path.join(BASE_DIR, 'logs/sms.log'))
+fh = logging.FileHandler(os.path.join(LOG_DIR, 'sms.log'))
 fh.setLevel(logging.INFO)
 formatter = logging.Formatter('{levelname} {asctime} {message}', style='{')
 fh.setFormatter(formatter)
 
-if not sms_logger.handlers:  # 중복 방지
+if not sms_logger.handlers:  # 중복 핸들러 방지
     sms_logger.addHandler(fh)
 
 class Command(BaseCommand):
