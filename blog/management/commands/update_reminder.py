@@ -38,4 +38,5 @@ class Command(BaseCommand):
                         if post.email.lower() == list_email and not post.reminder:
                             post.reminder = True
                             post.cancelled = False
-                            post.save(update_fields=['reminder', 'cancelled'])
+                            post.pending = False
+                            post.save(update_fields=['reminder', 'cancelled', 'pending'])
