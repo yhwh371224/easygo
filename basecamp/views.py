@@ -2280,15 +2280,33 @@ def email_dispatch_detail(request):
                     total_paid_applied = 0.0
                     updated_posts = []
 
+                    # check if form sent a price
+                    form_price = request.POST.get('adjustment_time')  
+
+                    if form_price:
+                        try:
+                            total_paid_applied = float(form_price)                            
+                            per_post_paid = total_paid_applied / len(posts)
+
+                        except ValueError:
+                            total_paid_applied = 0.0
+                            per_post_paid = None
+
+                    else:
+                        per_post_paid = None 
+
                     for post in posts:
-                        price = float(post.price or 0)
-                        post.paid = price
+                        if per_post_paid is not None:
+                            post.paid = per_post_paid
+                        else:
+                            post.paid = float(post.price or 0)
+                            total_paid_applied += post.paid
+
                         post.reminder = True
                         post.toll = ""
                         post.cash = False
                         post.discount = ""
 
-                        total_paid_applied += price
                         updated_posts.append(post)
 
                     actual_paid_text = f"===(M) GRATITUDE=== Total Paid: ${int(total_paid_applied)} ({len(updated_posts)} bookings)"
