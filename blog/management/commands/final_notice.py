@@ -35,10 +35,11 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         try:
             today = date.today()
+            tomorrow = today + timedelta(days=1)
             within_three_days = today + timedelta(days=3)
 
             final_notices = Post.objects.filter(
-                pickup_date__range=(today, within_three_days),
+                pickup_date__range=(tomorrow, within_three_days),
                 cancelled=False,
                 reminder=False
             ).filter(
