@@ -40,7 +40,7 @@ class Command(BaseCommand):
                 # ----------------------------
                 # 1. 결제 미완료 메일
                 # ----------------------------
-                if booking.paid is None or str(booking.paid).strip() in ["", "0"]:
+                if not booking.paid:
                     days_difference = (booking.pickup_date - start_date).days
                     if days_difference in [0, 1, 2]:
                         email_subject = "Urgent notice for payment"
