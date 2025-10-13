@@ -111,7 +111,10 @@ class Command(BaseCommand):
                 self.stdout.write(self.style.WARNING(f"\nSkipping {table_name}: not present in MySQL"))
                 continue
 
-            self.stdout.write(self.style.NOTICE if hasattr(self.style, 'NOTICE') else lambda x: x(f'\n=== Transferring: {table_name} ==='))
+            if hasattr(self.style, 'NOTICE'):
+                self.stdout.write(self.style.NOTICE(f'\n=== Transferring: {table_name} ==='))
+            else:
+                self.stdout.write(f'\n=== Transferring: {table_name} ===')
 
             # 가져오기
             try:
