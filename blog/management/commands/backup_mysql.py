@@ -9,7 +9,7 @@ class Command(BaseCommand):
     help = 'Transfer data from SQLite3 to MySQL database (robust, with diagnostics)'
 
     def handle(self, *args, **options):
-        sqlite_path = '/home/ubuntu/github/easygo/db.sqlite3'
+        sqlite_path = '/home/horeb/github/easygo/db.sqlite3'
 
         # 1) sqlite 파일 존재 확인
         if not os.path.exists(sqlite_path):
