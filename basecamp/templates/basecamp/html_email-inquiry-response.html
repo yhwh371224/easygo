@@ -269,8 +269,8 @@
 
 												{% if return_start_point %}
 													Return booking date:  {{ return_pickup_date }}<br>	
-													Return start point: {{ return_start_point }}<br>
-													Return end point: {{ return_end_point }}<br>													
+													Return Pickup Location: {{ return_start_point }}<br>
+													Return Drop-off Location: {{ return_end_point }}<br>													
 													Return pickup time:  {{ return_pickup_time }}<br>
 												{% elif return_direction %}
 													Return Direction: {{ return_direction }}<br>
@@ -278,6 +278,7 @@
 													Return Flight number: {{ return_flight_number }}<br>
 													Return Flight time: {{ return_flight_time }}<br>
 													Return Pickup time: {{ return_pickup_time }}<br>
+													Return Address: {{ street|default:'' }}, {{ suburb|default:'' }}<br>
 												{% endif %}
 													Message: {{ message }}<br>                                                   
 												</p>
