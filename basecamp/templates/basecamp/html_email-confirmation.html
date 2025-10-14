@@ -244,9 +244,6 @@
                                                     Pickup date: {{ pickup_date|slice:":10" }}<br>
 													Pickup time: {{ pickup_time }}<br>
 													Start point: {{ start_point }}<br>
-													{% if street %}
-														Street: {{ street|default:'' }}<br>
-													{% endif %}
                                                     End point: {{ end_point }}<br>																									
 												{% else %}
                                                     Flight date: {{ pickup_date|slice:":10" }}<br>
@@ -263,13 +260,9 @@
 
 												{% if return_start_point %}													
 													<span style="font-weight:bold; color: #bdb1a6">Return trip date:  {{ return_pickup_date }}</span><br>													
-													<span style="font-weight:bold; color: #bdb1a6">Return start point:  {{ return_start_point }}</span><br>
-													<span style="font-weight:bold; color: #bdb1a6">Return end point:  {{ return_end_point }}</span><br>
+													<span style="font-weight:bold; color: #bdb1a6">Return Pickup Location:  {{ return_start_point }}</span><br>
+													<span style="font-weight:bold; color: #bdb1a6">Return Drop-off Location:  {{ return_end_point }}</span><br>
 													<span style="font-weight:bold; color: #bdb1a6">Return pickup time:  {{ return_pickup_time }}</span><br>
-
-													{% if street and suburb %}
-														<span style="font-weight:bold; color: #bdb1a6">Return address:  {{ street|default:'' }} {{ suburb|default:'' }}</span><br>
-													{% endif %}
 
 												{% elif return_direction and return_flight_number %}
 													<span style="font-weight:bold; color: #bdb1a6">Return direction:  {{ return_direction }}</span><br>
@@ -277,9 +270,9 @@
                                                     <span style="font-weight:bold; color: #bdb1a6">Return flight number:  {{ return_flight_number }}</span><br>
 													<span style="font-weight:bold; color: #bdb1a6">Return flight time:  {{ return_flight_time }}</span><br>
 													<span style="font-weight:bold; color: #bdb1a6">Return pickup time:  {{ return_pickup_time }}</span><br>
-
+													
 													{% if street and suburb %}
-														<span style="font-weight:bold; color: #bdb1a6">Return address:  {{ street|default:'' }} {{ suburb|default:'' }}</span><br>
+														<span style="font-weight:bold; color: #bdb1a6">Return address:  {{ street|default:'' }}, {{ suburb|default:'' }}</span><br>
 													{% endif %}
 
 												{% endif %}

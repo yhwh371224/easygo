@@ -1,15 +1,6 @@
 from blog.models import Post, Driver
 
 
-# ✅ street/suburb 처리 함수
-def filter_value(value, start_point, end_point):
-    if not value:
-        return ""
-    value_lower = value.lower()
-    if (start_point and value_lower in start_point.lower()) or (end_point and value_lower in end_point.lower()):
-        return value
-    return ""
-
 # Flight return booking
 def handle_return_trip(instance):
     original_notice = instance.notice or ""
@@ -62,10 +53,13 @@ def handle_return_trip(instance):
         instance.notice = updated_notice
         instance.save(update_fields=['price', 'paid', 'notice'])
 
-        # ✅ return_start_point / return_end_point 있으면 street, suburb를 빈문자열로
-        # 단, start_point나 end_point 안에 street/suburb 이름이 있으면 그대로 유지
-        street_val = filter_value(instance.street, instance.return_start_point, instance.return_end_point)
-        suburb_val = filter_value(instance.suburb, instance.return_start_point, instance.return_end_point)
+        # ✅ return_start_point / return_end_point 처리
+        return_start_val = instance.return_start_point or ""
+        return_end_val = instance.return_end_point or ""
+
+        # ✅ suburb/street은 무조건 instance 값 유지
+        street_val = instance.street or ""
+        suburb_val = instance.suburb or ""
 
         # Post 생성에 필요한 필드들을 **kwargs로 묶음
         post_fields = {
@@ -79,8 +73,8 @@ def handle_return_trip(instance):
             'flight_time': instance.return_flight_time,
             'pickup_time': instance.return_pickup_time,
             'direction': instance.return_direction,
-            'start_point': instance.return_start_point,
-            'end_point': instance.return_end_point,
+            'start_point': return_start_val,
+            'end_point': return_end_val,
             'suburb': suburb_val,
             'street': street_val,
             'no_of_passenger': instance.no_of_passenger,

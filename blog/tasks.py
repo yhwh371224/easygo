@@ -183,8 +183,8 @@ def send_confirm_email(
     End point: {end_point}
     Cash: {cash}
     Prepay: {prepay}
-    ✅ *** Return start point: {return_start_point} ***
-    ✅ *** Return end point {return_end_point} ***
+    ✅ *** Return Pickup Location: {return_start_point} ***
+    ✅ *** Return Drop-off Location {return_end_point} ***
     ===============================          
     '''
 
