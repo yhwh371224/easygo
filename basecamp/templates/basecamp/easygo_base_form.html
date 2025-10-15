@@ -25,7 +25,26 @@
     <link rel="stylesheet" media="screen" href="/static/basecamp/css/tiny-slider.css"/>
     <link rel="stylesheet" media="screen" href="/static/basecamp/css/flatpickr.min.css"/>
     <!-- Main Theme Styles + Bootstrap-->
-    <link rel="stylesheet" media="screen" href="/static/basecamp/css/theme.min.css">    
+    <link rel="stylesheet" media="screen" href="/static/basecamp/css/theme.min.css">   
+    <style>
+    /* 버튼 안 spinner */
+    .spinner {
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top: 2px solid white;
+        border-radius: 50%;
+        width: 16px;
+        height: 16px;
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 8px;
+        animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    </style> 
   </head>
   <!-- Body-->
   <body>    
@@ -199,6 +218,23 @@
             }
         });
 
+        // --- Title spinner ---
+        let originalTitle = document.title;
+        let dots = 0;
+        let titleInterval;
+
+        function startTitleSpinner() {
+            titleInterval = setInterval(() => {
+                dots = (dots + 1) % 4;
+                document.title = "Submitting" + ".".repeat(dots);
+            }, 500);
+        }
+
+        function stopTitleSpinner() {
+            clearInterval(titleInterval);
+            document.title = originalTitle;
+        }
+
         // --- Form Submit Validation ---
         form.addEventListener('submit', function (event) {
             let isValid = true;
@@ -240,14 +276,21 @@
 
             // --- Disable submit button & show submitting ---
             submitButton.disabled = true;
-            submitButton.innerHTML = "Submitting...";
+            submitButton.innerHTML = "Submitting... <span class='spinner'></span>";
+            startTitleSpinner();
         });
+
+        // --- reCAPTCHA fallback (if grecaptcha not loaded) ---
+        if (typeof grecaptcha === 'undefined') {
+            console.log("reCAPTCHA not loaded – fallback enabled.");
+        }
 
         // --- Extra luggage toggle ---
         window.toggleExtraLuggage = function () {
             const extraFields = document.getElementById("extraLuggageFields");
             extraFields.style.display = extraFields.style.display === "none" ? "block" : "none";
         };
+
     });
     </script>
 
