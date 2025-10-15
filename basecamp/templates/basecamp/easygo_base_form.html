@@ -155,126 +155,90 @@
     <!-- Main theme script-->
     <script src="/static/basecamp/js/theme.min.js"></script>              
     <script src="https://www.google.com/recaptcha/api.js" defer></script>
-    <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const form = document.getElementById('booking-form');
-        const submitButton = document.getElementById('submitButton');
-        const returnFlightCheckbox = document.getElementById('return-flight');
-        const returnFlightFields = document.getElementById('return-flight-fields');
-        const flightDateInput = document.getElementById('flight-date');
-        const dateError = document.getElementById('date-error');
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('booking-form');
+    const submitButton = document.getElementById('submitButton');
+    const returnFlightCheckbox = document.getElementById('return-flight');
+    const returnFlightFields = document.getElementById('return-flight-fields');
+    const flightDateInput = document.getElementById('flight-date');
+    const dateError = document.getElementById('date-error');
 
-        // ✅ 동적으로 return-flight 필드 로딩 (Ajax)
-        returnFlightCheckbox.addEventListener("change", function () {
-            if (returnFlightCheckbox.checked) {
-                var xhr = new XMLHttpRequest();
-                xhr.open("GET", "{% url 'basecamp:return_flight_fields' %}");
-                xhr.onload = function () {
-                    if (xhr.status === 200) {
-                        returnFlightFields.innerHTML = xhr.responseText;
-                    } else {
-                        console.log("Request failed. Returned status of " + xhr.status);
-                    }
-                };
-                xhr.send();
-            } else {
-                returnFlightFields.innerHTML = "";
-            }
-        });
-
-        // ✅ return-flight 입력 필드 required 적용/제거
-        returnFlightCheckbox.addEventListener('change', function () {
-            if (this.checked) {
-                returnFlightFields.style.display = 'block';
-                const inputs = returnFlightFields.querySelectorAll('input');
-                inputs.forEach(input => input.setAttribute('required', 'required'));
-            } else {
-                returnFlightFields.style.display = 'none';
-                const inputs = returnFlightFields.querySelectorAll('input');
-                inputs.forEach(input => input.removeAttribute('required'));
-            }
-        });
-
-        // ✅ flight-date 과거 날짜 방지
-        flightDateInput.addEventListener('change', function () {
-            const selectedDate = new Date(flightDateInput.value);
-            const currentDate = new Date();
-            currentDate.setHours(0, 0, 0, 0);
-
-            if (selectedDate < currentDate) {
-                dateError.style.display = 'block';
-                flightDateInput.classList.add('is-invalid');
-            } else {
-                dateError.style.display = 'none';
-                flightDateInput.classList.remove('is-invalid');
-            }
-        });
-
-        // ✅ 전체 submit 처리 (유효성 검사 + 중복 방지 통합)
-        form.addEventListener('submit', function (event) {
-            let isValid = true;
-
-            // Return flight 유효성 검사
-            if (returnFlightCheckbox.checked) {
-                const returnFlightNumber = returnFlightFields.querySelector('input[name="return_flight_number"]');
-                const returnFlightDate = returnFlightFields.querySelector('input[name="return_flight_date"]');
-
-                if (!returnFlightNumber?.value.trim()) {
-                    returnFlightNumber.classList.add('is-invalid');
-                    isValid = false;
-                } else {
-                    returnFlightNumber.classList.remove('is-invalid');
-                }
-
-                if (!returnFlightDate?.value.trim()) {
-                    returnFlightDate.classList.add('is-invalid');
-                    isValid = false;
-                } else {
-                    returnFlightDate.classList.remove('is-invalid');
-                }
-            }
-
-            // 유효성 검사 통과하지 못하면 제출 방지
-            if (!isValid) {
-                event.preventDefault();
-                alert('Please fill in all required fields.');
-                return;
-            }
-
-            // 중복 제출 방지 및 메시지 표시
-            submitButton.disabled = true;
-            submitButton.innerHTML = "Submitting...";
-        });
-
-        // ✅ reCAPTCHA Fallback
-        if (typeof grecaptcha === 'undefined') {
-            grecaptcha = {};
+    // --- Dynamic Return Flight Fields ---
+    returnFlightCheckbox.addEventListener("change", function () {
+        if (this.checked) {
+            fetch("{% url 'basecamp:return_flight_fields' %}")
+                .then(res => res.text())
+                .then(html => {
+                    returnFlightFields.innerHTML = html;
+                    returnFlightFields.style.display = 'block';
+                    // Apply required to dynamically loaded inputs
+                    const inputs = returnFlightFields.querySelectorAll('input');
+                    inputs.forEach(input => input.setAttribute('required', 'required'));
+                })
+                .catch(err => console.log('Error loading return flight fields:', err));
+        } else {
+            returnFlightFields.innerHTML = '';
+            returnFlightFields.style.display = 'none';
         }
-
-        grecaptcha.ready = function (cb) {
-            if (typeof grecaptcha === 'undefined') {
-                const c = '___grecaptcha_cfg';
-                window[c] = window[c] || {};
-                (window[c]['fns'] = window[c]['fns'] || []).push(cb);
-            } else {
-                cb();
-            }
-        };
-
-        grecaptcha.ready(function () {
-            grecaptcha.render("container", {
-                sitekey: "{{ RECAPTCHA_V2_SITE_KEY }}"
-            });
-        });
     });
-    </script>
 
-    <!-- Extra baggage form -->
-    <script>
-      function toggleExtraLuggage() {
+    // --- Flight Date Validation ---
+    flightDateInput.addEventListener('change', function () {
+        const selectedDate = new Date(flightDateInput.value);
+        const currentDate = new Date();
+        currentDate.setHours(0,0,0,0);
+
+        if (selectedDate < currentDate) {
+            dateError.style.display = 'block';
+            flightDateInput.classList.add('is-invalid');
+        } else {
+            dateError.style.display = 'none';
+            flightDateInput.classList.remove('is-invalid');
+        }
+    });
+
+    // --- Extra Luggage Toggle ---
+    window.toggleExtraLuggage = function() {
         const extraFields = document.getElementById("extraLuggageFields");
         extraFields.style.display = extraFields.style.display === "none" ? "block" : "none";
-      }
-    </script>
-  </body> 
+    }
+
+    // --- Form Submit ---
+    form.addEventListener('submit', function (event) {
+        let isValid = true;
+
+        // Standard HTML5 validation
+        if (!form.checkValidity()) {
+            isValid = false;
+        }
+
+        // Return flight validation
+        if (returnFlightCheckbox.checked) {
+            const inputs = returnFlightFields.querySelectorAll('input');
+            inputs.forEach(input => {
+                if (!input.value.trim()) {
+                    input.classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    input.classList.remove('is-invalid');
+                }
+            });
+        }
+
+        // Prevent submit if validation fails
+        if (!isValid) {
+            event.preventDefault();
+            event.stopPropagation();
+            alert('Please fill in all required fields correctly.');
+            return;
+        }
+
+        // ✅ All validation passed — disable button & show "Submitting..."
+        submitButton.disabled = true;
+        submitButton.innerHTML = "Submitting...";
+    });
+});
+</script> 
+</body> 
 </html>
