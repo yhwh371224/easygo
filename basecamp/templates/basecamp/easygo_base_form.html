@@ -155,68 +155,57 @@
     <!-- Main theme script-->
     <script src="/static/basecamp/js/theme.min.js"></script>              
     <script src="https://www.google.com/recaptcha/api.js" defer></script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const form = document.getElementById('booking-form');
-    const submitButton = document.getElementById('submitButton');
-    const returnFlightCheckbox = document.getElementById('return-flight');
-    const returnFlightFields = document.getElementById('return-flight-fields');
-    const flightDateInput = document.getElementById('flight-date');
-    const dateError = document.getElementById('date-error');
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('booking-form');
+        const submitButton = document.getElementById('submitButton');
+        const returnFlightCheckbox = document.getElementById('return-flight');
+        const returnFlightFields = document.getElementById('return-flight-fields');
+        const flightDateInput = document.getElementById('flight-date');
+        const dateError = document.getElementById('date-error');
 
-    // --- Dynamic Return Flight Fields ---
-    returnFlightCheckbox.addEventListener("change", function () {
-        if (this.checked) {
-            fetch("{% url 'basecamp:return_flight_fields' %}")
-                .then(res => res.text())
-                .then(html => {
-                    returnFlightFields.innerHTML = html;
-                    returnFlightFields.style.display = 'block';
-                    // Apply required to dynamically loaded inputs
-                    const inputs = returnFlightFields.querySelectorAll('input');
-                    inputs.forEach(input => input.setAttribute('required', 'required'));
-                })
-                .catch(err => console.log('Error loading return flight fields:', err));
-        } else {
-            returnFlightFields.innerHTML = '';
-            returnFlightFields.style.display = 'none';
-        }
-    });
+        // --- Dynamic Return Flight Fields via AJAX ---
+        returnFlightCheckbox.addEventListener("change", function () {
+            if (returnFlightCheckbox.checked) {
+                const xhr = new XMLHttpRequest();
+                xhr.open("GET", "{% url 'basecamp:return_flight_fields' %}");
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        returnFlightFields.innerHTML = xhr.responseText;
+                        returnFlightFields.style.display = 'block';
+                    } else {
+                        console.log("Request failed. Status: " + xhr.status);
+                    }
+                };
+                xhr.send();
+            } else {
+                returnFlightFields.innerHTML = "";
+                returnFlightFields.style.display = 'none';
+            }
+        });
 
-    // --- Flight Date Validation ---
-    flightDateInput.addEventListener('change', function () {
-        const selectedDate = new Date(flightDateInput.value);
-        const currentDate = new Date();
-        currentDate.setHours(0,0,0,0);
+        // --- Flight Date Validation (no past dates) ---
+        flightDateInput.addEventListener('change', function () {
+            const selectedDate = new Date(flightDateInput.value);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
 
-        if (selectedDate < currentDate) {
-            dateError.style.display = 'block';
-            flightDateInput.classList.add('is-invalid');
-        } else {
-            dateError.style.display = 'none';
-            flightDateInput.classList.remove('is-invalid');
-        }
-    });
+            if (selectedDate < today) {
+                dateError.style.display = 'block';
+                flightDateInput.classList.add('is-invalid');
+            } else {
+                dateError.style.display = 'none';
+                flightDateInput.classList.remove('is-invalid');
+            }
+        });
 
-    // --- Extra Luggage Toggle ---
-    window.toggleExtraLuggage = function() {
-        const extraFields = document.getElementById("extraLuggageFields");
-        extraFields.style.display = extraFields.style.display === "none" ? "block" : "none";
-    }
+        // --- Form Submit Validation ---
+        form.addEventListener('submit', function (event) {
+            let isValid = true;
 
-    // --- Form Submit ---
-    form.addEventListener('submit', function (event) {
-        let isValid = true;
-
-        // Standard HTML5 validation
-        if (!form.checkValidity()) {
-            isValid = false;
-        }
-
-        // Return flight validation (only required inputs)
-        if (returnFlightCheckbox.checked) {
-            const requiredInputs = returnFlightFields.querySelectorAll('input[required]');
-            requiredInputs.forEach(input => {
+            // --- Always required fields outside return-flight ---
+            const alwaysRequired = form.querySelectorAll('input[required], select[required], textarea[required]');
+            alwaysRequired.forEach(input => {
                 if (!input.value.trim()) {
                     input.classList.add('is-invalid');
                     isValid = false;
@@ -224,21 +213,44 @@ document.addEventListener('DOMContentLoaded', function () {
                     input.classList.remove('is-invalid');
                 }
             });
-        }
 
-        // Prevent submit if validation fails
-        if (!isValid) {
-            event.preventDefault();
-            event.stopPropagation();
-            alert('Please fill in all required fields correctly.');
-            return;
-        }
+            // --- Return flight validation (only if checked) ---
+            if (returnFlightCheckbox.checked) {
+                const returnInputs = returnFlightFields.querySelectorAll('input, select, textarea');
+                returnInputs.forEach(input => {
+                    // Only enforce validation on fields we care about
+                    if (['return_flight_number', 'return_pickup_date', 'return_direction'].includes(input.name)) {
+                        if (!input.value.trim()) {
+                            input.classList.add('is-invalid');
+                            isValid = false;
+                        } else {
+                            input.classList.remove('is-invalid');
+                        }
+                    }
+                });
+            }
 
-        // ✅ All validation passed — disable button & show "Submitting..."
-        submitButton.disabled = true;
-        submitButton.innerHTML = "Submitting...";
+            // --- Prevent submission if invalid ---
+            if (!isValid) {
+                event.preventDefault();
+                event.stopPropagation();
+                alert('Please fill in all required fields correctly.');
+                return;
+            }
+
+            // --- Disable submit button & show submitting ---
+            submitButton.disabled = true;
+            submitButton.innerHTML = "Submitting...";
+        });
+
+        // --- Extra luggage toggle ---
+        window.toggleExtraLuggage = function () {
+            const extraFields = document.getElementById("extraLuggageFields");
+            extraFields.style.display = extraFields.style.display === "none" ? "block" : "none";
+        };
     });
-});
+    </script>
+
 </script> 
 </body> 
 </html>
