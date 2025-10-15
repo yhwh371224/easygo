@@ -213,10 +213,10 @@ document.addEventListener('DOMContentLoaded', function () {
             isValid = false;
         }
 
-        // Return flight validation
+        // Return flight validation (only required inputs)
         if (returnFlightCheckbox.checked) {
-            const inputs = returnFlightFields.querySelectorAll('input');
-            inputs.forEach(input => {
+            const requiredInputs = returnFlightFields.querySelectorAll('input[required]');
+            requiredInputs.forEach(input => {
                 if (!input.value.trim()) {
                     input.classList.add('is-invalid');
                     isValid = false;
