@@ -1,5 +1,5 @@
 <div class="card text-white bg-secondary p-4" id="return-flight-fields">
-  <h5 class="text-white mb-3">✈️ Return Trip Details</h5>
+  <h5 class="text-dark mb-3">✈️ Return Trip Details</h5>
 
   <div class="mb-3 pb-1">
     <label class="form-label">Return Direction<sup class="text-danger ms-1">*</sup></label>
@@ -36,16 +36,16 @@
   </div>
 
   <div class="mb-3 pb-1">
-    <p class="small text-light mb-3" style="opacity: 0.85;">
-      If your pickup or drop-off location is different for the return trip, please update it below.
+    <p class="small text-dark mb-3" style="opacity: 0.85;">
+      If your address for the return trip is different, please update it below. If it’s the same, you don’t need to fill out this form
     </p>
 
     <label class="form-label" for="return_start_point">Return Pickup Location</label>
-    <input class="form-control" type="text" name="return_start_point" id="return-start-point">
+    <input class="form-control" type="text" name="return_start_point" id="return-start-point" novalidate>
 
     <div class="mt-3">
       <label class="form-label" for="return_end_point">Return Drop-off Location</label>
-      <input class="form-control" type="text" name="return_end_point" id="return-end-point">
+      <input class="form-control" type="text" name="return_end_point" id="return-end-point" novalidate>
     </div>
   </div>
 </div>
