@@ -1,4 +1,3 @@
-# basecamp/utils.py
 from datetime import datetime, date
 
 def parse_future_date(date_str, field_name="date", required=True):
@@ -14,11 +13,17 @@ def parse_future_date(date_str, field_name="date", required=True):
             raise ValueError(f"{field_name} is required.")
         return None  # 값이 없으면 None 리턴
 
-    try:
-        parsed_date = datetime.strptime(date_str.strip(), "%Y-%m-%d").date()
-    except ValueError:
-        raise ValueError(f"Invalid format for {field_name}. Use YYYY-MM-DD.")
+    parsed_date = None
+    for fmt in ("%Y-%m-%d", "%b %d, %Y"):
+        try:
+            parsed_date = datetime.strptime(date_str.strip(), fmt).date()
+            break
+        except ValueError:
+            continue
 
+    if not parsed_date:
+        raise ValueError(f"Invalid format for {field_name}. Accepted formats: YYYY-MM-DD or 'Oct 21, 2025'.")
+    
     if parsed_date <= date.today():
         raise ValueError(
             f"You entered ({parsed_date}) | Pickup date must be a future date.\n\n"
