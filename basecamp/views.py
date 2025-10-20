@@ -2395,14 +2395,17 @@ def email_dispatch_detail(request):
                 
                 if user.return_pickup_time == "x":
                     user.cash = True
+                    user.reminder = True
                     user.save()
 
                     second_user = Post.objects.filter(email__iexact=email)[1]                    
                     second_user.cash = True
+                    second_user.reminder = True
                     second_user.save()
                     
                 else:
                     user.cash = True
+                    user.reminder = True
                     user.save()                       
 
             handle_email_sending(email, subject, template_name, context, user.email1)
