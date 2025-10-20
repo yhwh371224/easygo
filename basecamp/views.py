@@ -846,7 +846,7 @@ def p2p_booking_detail(request):
 
 def price_detail(request):
     if request.method == "POST":        
-        pickup_date_str = request.POST.get('pickup_date')
+        pickup_date = request.POST.get('pickup_date')
         start_point = request.POST.get('start_point')
         end_point = request.POST.get('end_point')
         no_of_passenger = request.POST.get('no_of_passenger')
@@ -854,16 +854,16 @@ def price_detail(request):
         if start_point == 'Select your option' or end_point == 'Select your option':
             return render(request, 'basecamp/home_error.html')
 
-        # pickup_date 처리
-        try:
-            pickup_date = parse_date_safe(pickup_date_str, "Pickup Date")
+        # # pickup_date 처리
+        # try:
+        #     pickup_date = parse_date_safe(pickup_date_str, "Pickup Date")
 
-        except ValueError:
-            return render(request, 'basecamp/home_error.html')
+        # except ValueError:
+        #     return render(request, 'basecamp/home_error.html')
 
-        today = date.today()
-        if pickup_date and pickup_date <= date.today():
-            return render(request, 'basecamp/home_error.html')
+        # today = date.today()
+        # if pickup_date and pickup_date <= date.today():
+        #     return render(request, 'basecamp/home_error.html')
 
         request.session['original_start_point'] = start_point
         request.session['original_end_point'] = end_point
