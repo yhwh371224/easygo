@@ -358,16 +358,15 @@ def inquiry_details(request):
         return_end_point = request.POST.get('return_end_point', '')
         message = request.POST.get('message')
 
-        # try:
-        #     pickup_date = parse_date_safe(request.POST.get('pickup_date'), "pickup_date")
-        #     return_pickup_date = parse_date_safe(
-        #         request.POST.get('return_pickup_date'),
-        #         "return_pickup_date",
-        #         required=False   # ✅ 이 한 줄이 핵심
-        #     )
-        # except ValueError as e:
-        #     return JsonResponse({'success': False, 'error': str(e)})
-
+        try:
+            pickup_date = parse_date_safe(request.POST.get('pickup_date'), "pickup_date")
+            return_pickup_date = parse_date_safe(
+                request.POST.get('return_pickup_date'),
+                "return_pickup_date",
+                required=False   # ✅ 빈 값 허용
+            )
+        except ValueError as e:
+            return JsonResponse({'success': False, 'error': str(e)})
 
         recaptcha_response = request.POST.get('g-recaptcha-response')
         result = verify_recaptcha(recaptcha_response)
