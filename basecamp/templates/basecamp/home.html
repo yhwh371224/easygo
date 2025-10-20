@@ -172,12 +172,13 @@
         <div class="d-lg-flex align-items-center bg-secondary border rounded-3 px-4 pt-4 pb-3" >
           <div class="d-sm-flex align-items-center flex-grow-1">
             <div class="mb-3 pb-1 w-100 mb-sm-4 me-sm-3">
-              <label class="form-label" for="pickup-date">Pickup date</label>
+              <!-- <label class="form-label" for="pickup-date">Pickup date</label>
               <div class="input-group">
-                <input id="pickup_date"
+                <input
+                  id="pickup_date"
                   class="form-control date-picker rounded"
                   name="pickup_date"
-                  type="text"  
+                  type="text"
                   required
                   placeholder="Choose date"
                   data-datepicker-options='{
@@ -187,14 +188,15 @@
                     "allowInput": false
                   }'
                 >
-                <a class="date-picker-trigger" href="#" aria-label="Choose date">
-                  <i class="ai-calendar position-absolute top-50 end-0 translate-middle-y me-3"></i>
-                </a>
-              </div>
-              <!-- <div class="input-group" >
+                <span class="input-group-text date-picker-trigger" aria-label="Choose date">
+                  <i class="ai-calendar"></i>
+                </span>
+              </div> -->
+
+              <div class="input-group" >
                 <input class="form-control date-picker rounded" name="pickup_date" required type="date" placeholder="Choose date" data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;F j, Y&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;}" >
 				        <a class="date-picker flatpickr-input" href="#" aria-label="Choose date"><i class="ai-calendar position-absolute top-50 end-0 translate-middle-y me-3"></i></a>
-              </div> -->
+              </div>
             </div>
             <div class="mb-3 pb-1 w-100 mb-sm-4 me-sm-3">
               <label class="form-label" for="start-point">From: Start Point</label>
