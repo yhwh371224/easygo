@@ -1,4 +1,6 @@
 from datetime import datetime, date
+from django.http import JsonResponse
+
 
 def parse_future_date(date_str, field_name="date", required=True):
     """
@@ -16,7 +18,7 @@ def parse_future_date(date_str, field_name="date", required=True):
     print(f"[DEBUG] Raw {field_name} received:", repr(date_str))
 
     parsed_date = None
-    for fmt in ("%Y-%m-%d", "%b %d, %Y", "%d %b, %Y"):
+    for fmt in ("%Y-%m-%d", "%b %d, %Y", "%d %b, %Y", "%B %d, %Y", "%d %B, %Y"):
         try:
             parsed_date = datetime.strptime(date_str.strip(), fmt).date()
             break
@@ -24,7 +26,8 @@ def parse_future_date(date_str, field_name="date", required=True):
             continue
 
     if not parsed_date:
-        raise ValueError(f"Invalid format for {field_name}. Accepted formats: YYYY-MM-DD or 'Oct 21, 2025'.")
+        raise ValueError(f"Invalid format for {field_name}. Accepted formats: YYYY-MM-DD or 'Oct 21, 2025'. ")
+    
     
     if parsed_date <= date.today():
         raise ValueError(
