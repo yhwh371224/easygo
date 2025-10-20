@@ -501,7 +501,7 @@ def inquiry_details(request):
 
 # inquiry (simple one) for airport from home page
 def inquiry_details1(request):
-    if request.method == "POST":
+    if request.method == "POST":        
         direction = ""
         suburb = ""
         name = request.POST.get('name')
@@ -837,8 +837,14 @@ def p2p_booking_detail(request):
 
 
 def price_detail(request):
-    if request.method == "POST":        
-        pickup_date = request.POST.get('pickup_date')
+    if request.method == "POST":  
+        try:
+            # 필수/선택 날짜 처리
+            pickup_date = parse_future_date(request.POST.get('pickup_date'), "pickup_date")
+            
+        except ValueError as e:
+            return JsonResponse({'success': False, 'error': str(e)})      
+        
         start_point = request.POST.get('start_point')
         end_point = request.POST.get('end_point')
         no_of_passenger = request.POST.get('no_of_passenger')
@@ -885,12 +891,22 @@ def to_bool(value):
 # Booking by myself 
 def confirmation_detail(request):
     if request.method == "POST":
+        try:
+            # 필수/선택 날짜 처리
+            pickup_date = parse_future_date(request.POST.get('pickup_date'), "pickup_date")
+            return_pickup_date = parse_future_date(
+                request.POST.get('return_pickup_date'),
+                "return_pickup_date",
+                required=False  # 선택사항
+            )
+        except ValueError as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+        
         company_name = request.POST.get('company_name')
         name = request.POST.get('name')
         contact = request.POST.get('contact')
         email = request.POST.get('email')
         email1 = request.POST.get('email1')   
-        pickup_date = request.POST.get('pickup_date')  
         flight_number = request.POST.get('flight_number')
         flight_time = request.POST.get('flight_time')
         pickup_time = request.POST.get('pickup_time')
@@ -902,7 +918,6 @@ def confirmation_detail(request):
         no_of_passenger = request.POST.get('no_of_passenger')
         no_of_baggage = request.POST.get('no_of_baggage')
         return_direction = request.POST.get('return_direction')
-        return_pickup_date = request.POST.get('return_pickup_date')
         return_flight_number = request.POST.get('return_flight_number')
         return_flight_time = request.POST.get('return_flight_time')
         return_pickup_time = request.POST.get('return_pickup_time')
@@ -1019,11 +1034,21 @@ def confirmation_detail(request):
 
 # airport booking by client
 def booking_detail(request):
-    if request.method == "POST":        
+    if request.method == "POST":   
+        try:
+            # 필수/선택 날짜 처리
+            pickup_date = parse_future_date(request.POST.get('pickup_date'), "pickup_date")
+            return_pickup_date = parse_future_date(
+                request.POST.get('return_pickup_date'),
+                "return_pickup_date",
+                required=False  # 선택사항
+            )
+        except ValueError as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+             
         name = request.POST.get('name')
         contact = request.POST.get('contact')
         email = request.POST.get('email')
-        pickup_date = request.POST.get('pickup_date')
         flight_number = request.POST.get('flight_number')
         flight_time = request.POST.get('flight_time')
         pickup_time = request.POST.get('pickup_time')
@@ -1035,7 +1060,6 @@ def booking_detail(request):
         no_of_passenger = request.POST.get('no_of_passenger')
         no_of_baggage = request.POST.get('no_of_baggage')
         return_direction = request.POST.get('return_direction')
-        return_pickup_date = request.POST.get('return_pickup_date')
         return_flight_number = request.POST.get('return_flight_number')
         return_flight_time = request.POST.get('return_flight_time')
         return_pickup_time = request.POST.get('return_pickup_time')
@@ -1178,18 +1202,27 @@ def booking_detail(request):
 
 # cruise booking by client
 def cruise_booking_detail(request):
-    if request.method == "POST":        
+    if request.method == "POST": 
+        try:
+            # 필수/선택 날짜 처리
+            pickup_date = parse_future_date(request.POST.get('pickup_date'), "pickup_date")
+            return_pickup_date = parse_future_date(
+                request.POST.get('return_pickup_date'),
+                "return_pickup_date",
+                required=False  # 선택사항
+            )
+        except ValueError as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+               
         name = request.POST.get('name')
         contact = request.POST.get('contact')
-        email = request.POST.get('email')    
-        pickup_date = request.POST.get('pickup_date')       
+        email = request.POST.get('email')          
         pickup_time = request.POST.get('pickup_time')
         start_point = request.POST.get('start_point', '')
         end_point = request.POST.get('end_point', '')        
         no_of_passenger = request.POST.get('no_of_passenger')
         no_of_baggage = request.POST.get('no_of_baggage')
         message = request.POST.get('message')      
-        return_pickup_date = request.POST.get('return_pickup_date') 
         return_pickup_time = request.POST.get('return_pickup_time')
         return_start_point = request.POST.get('return_start_point', '')
         return_end_point = request.POST.get('return_end_point', '')
