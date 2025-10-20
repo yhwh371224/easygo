@@ -1,17 +1,26 @@
 from datetime import datetime, date
-from datetime import datetime, date
 
 def parse_future_date(date_str, field_name="date", required=True):
+    """
+    YYYY-MM-DD 또는 Month Day, Year 형식의 날짜를 파싱하고,
+    오늘 이전 날짜면 ValueError 발생
+    :param date_str: 문자열
+    :param field_name: 필드명 (오류 메시지용)
+    :param required: True이면 값이 없으면 오류
+    :return: datetime.date 객체
+    """
     if not date_str or date_str.strip() == "":
         if required:
             raise ValueError(f"{field_name} is required.")
         return None
-    
-    # 마침표 제거
+
+    # ================= Debug =================
+    print(f"[DEBUG] Raw {field_name}: {repr(date_str)}")
+
+    # 마침표 제거 후 공백 정리
     clean_date_str = date_str.replace('.', '').strip()
 
     parsed_date = None
-    # 여러 포맷 시도
     for fmt in ("%Y-%m-%d", "%b %d, %Y", "%d %b, %Y", "%B %d, %Y", "%d %B, %Y"):
         try:
             parsed_date = datetime.strptime(clean_date_str, fmt).date()
