@@ -26,7 +26,7 @@ from basecamp.area_full import get_more_suburbs
 from basecamp.area_home import get_home_suburbs
 
 from utils.pdf import render_to_pdf
-# from utils.date_utils import parse_date_safe
+from utils.date_utils import parse_date_safe
 
 
 logger = logging.getLogger(__name__)
@@ -849,13 +849,8 @@ def p2p_booking_detail(request):
 
 
 def price_detail(request):
-    if request.method == "POST":
-        # try:
-        #     pickup_date = parse_date_safe(request.POST.get('pickup_date'), "pickup_date")
-        # except ValueError as e:
-        #     return JsonResponse({'success': False, 'error': str(e)})
-        
-        pickup_date = request.POST.get('pickup_date')
+    if request.method == "POST":        
+        pickup_date_str = request.POST.get('pickup_date')
         start_point = request.POST.get('start_point')
         end_point = request.POST.get('end_point')
         no_of_passenger = request.POST.get('no_of_passenger')
@@ -863,8 +858,14 @@ def price_detail(request):
         if start_point == 'Select your option' or end_point == 'Select your option':
             return render(request, 'basecamp/home_error.html')
 
+        # pickup_date 처리
+        try:
+            pickup_date = parse_date_safe(pickup_date_str, "Pickup Date")
+        except ValueError:
+            return render(request, 'basecamp/home_error.html')
+
         today = date.today()
-        if not pickup_date or pickup_date <= today:
+        if pickup_date and pickup_date <= date.today():
             return render(request, 'basecamp/home_error.html')
 
         request.session['original_start_point'] = start_point
