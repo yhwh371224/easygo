@@ -504,10 +504,17 @@ def inquiry_details1(request):
     if request.method == "POST":        
         direction = ""
         suburb = ""
+        
+        try:
+            # 필수/선택 날짜 처리
+            pickup_date = parse_future_date(request.POST.get('pickup_date'), "pickup_date")
+            
+        except ValueError as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+        
         name = request.POST.get('name')
         contact = request.POST.get('contact')
         email = request.POST.get('email')
-        pickup_date = request.POST.get('pickup_date')
         flight_number = request.POST.get('flight_number')
         flight_time = request.POST.get('flight_time')
         pickup_time = request.POST.get('pickup_time')        
