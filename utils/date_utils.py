@@ -1,13 +1,10 @@
 from datetime import datetime
 
-def parse_date_safe(value, field_name):
-    """
-    Parse a date from YYYY-MM-DD format.
-    If value is empty, returns None instead of raising an error.
-    """
+def parse_date_safe(value, field_name, required=True):
     if not value or value.strip() == "":
-        return None  # 빈 값이면 그냥 None 반환
-
+        if required:
+            raise ValueError(f"{field_name} is required.")
+        return None  # ✅ optional date
     try:
         return datetime.strptime(value.strip(), "%Y-%m-%d").date()
     except ValueError:
