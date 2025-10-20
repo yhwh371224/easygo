@@ -12,9 +12,11 @@ def parse_future_date(date_str, field_name="date", required=True):
         if required:
             raise ValueError(f"{field_name} is required.")
         return None  # 값이 없으면 None 리턴
+    
+    print(f"[DEBUG] Raw {field_name} received:", repr(date_str))
 
     parsed_date = None
-    for fmt in ("%Y-%m-%d", "%b %d, %Y"):
+    for fmt in ("%Y-%m-%d", "%b %d, %Y", "%d %b, %Y"):
         try:
             parsed_date = datetime.strptime(date_str.strip(), fmt).date()
             break
