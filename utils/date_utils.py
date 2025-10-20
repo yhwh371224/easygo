@@ -20,9 +20,9 @@ def parse_future_date(date_str, field_name="date", required=True):
         raise ValueError(f"Invalid format for {field_name}. Use YYYY-MM-DD.")
 
     if parsed_date <= date.today():
-        raise ValueError(f"{field_name} must be a future date.")
+        raise ValueError(
+            f"You entered ({parsed_date}) | Pickup date must be a future date.\n\n"
+            f"Please select a valid date for your future pickup."
+        )
 
     return parsed_date
-
-
-
