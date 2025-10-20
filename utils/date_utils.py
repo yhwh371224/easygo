@@ -6,11 +6,15 @@ def parse_future_date(date_str, field_name="date", required=True):
         if required:
             raise ValueError(f"{field_name} is required.")
         return None
+    
+    # 마침표 제거
+    clean_date_str = date_str.replace('.', '').strip()
 
     parsed_date = None
+    # 여러 포맷 시도
     for fmt in ("%Y-%m-%d", "%b %d, %Y", "%d %b, %Y", "%B %d, %Y", "%d %B, %Y"):
         try:
-            parsed_date = datetime.strptime(date_str.strip(), fmt).date()
+            parsed_date = datetime.strptime(clean_date_str, fmt).date()
             break
         except ValueError:
             continue
