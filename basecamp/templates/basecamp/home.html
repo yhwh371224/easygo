@@ -174,10 +174,27 @@
             <div class="mb-3 pb-1 w-100 mb-sm-4 me-sm-3">
               <label class="form-label" for="pickup-date">Pickup date</label>
               <div class="input-group">
-                <input id="pickup_date" class="form-control date-picker rounded" name="pickup_date" type="text" required placeholder="Choose date" data-datepicker-options='{"altInput": true, "altFormat": "F j, Y", "dateFormat": "Y-m-d"}'>
-                  <a class="date-picker-trigger" href="#" aria-label="Choose date">
-                  <i class="ai-calendar position-absolute top-50 end-0 translate-middle-y me-3"></i></a>              
+                <input id="pickup_date"
+                  class="form-control date-picker rounded"
+                  name="pickup_date"
+                  type="text"  
+                  required
+                  placeholder="Choose date"
+                  data-datepicker-options='{
+                    "altInput": true,
+                    "altFormat": "F j, Y",
+                    "dateFormat": "Y-m-d"
+                  }'
+                >
+                <a class="date-picker-trigger" href="#" aria-label="Choose date">
+                  <i class="ai-calendar position-absolute top-50 end-0 translate-middle-y me-3"></i>
+                </a>
               </div>
+              <!-- <div class="input-group" >
+                <input class="form-control date-picker rounded" name="pickup_date" required type="date" placeholder="Choose date" data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;F j, Y&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;}" >
+				        <a class="date-picker flatpickr-input" href="#" aria-label="Choose date"><i class="ai-calendar position-absolute top-50 end-0 translate-middle-y me-3"></i></a>
+              </div> -->
+            </div>
             <div class="mb-3 pb-1 w-100 mb-sm-4 me-sm-3">
               <label class="form-label" for="start-point">From: Start Point</label>
               <select class="form-select" name="start_point" required>
