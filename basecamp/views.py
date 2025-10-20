@@ -348,8 +348,7 @@ def inquiry_details(request):
         street = request.POST.get('street', '')
         no_of_passenger = request.POST.get('no_of_passenger')
         no_of_baggage = request.POST.get('no_of_baggage')
-        return_direction = request.POST.get('return_direction')  
-        return_pickup_date = request.POST.get('return_pickup_date')      
+        return_direction = request.POST.get('return_direction')        
         return_flight_number = request.POST.get('return_flight_number')
         return_flight_time = request.POST.get('return_flight_time')
         return_pickup_time = request.POST.get('return_pickup_time')
@@ -359,9 +358,14 @@ def inquiry_details(request):
 
         try:
             pickup_date = parse_date_safe(request.POST.get('pickup_date'), "pickup_date")
-            return_pickup_date = parse_date_safe(request.POST.get('return_pickup_date'), "return_pickup_date")
+            return_pickup_date = parse_date_safe(
+                request.POST.get('return_pickup_date'),
+                "return_pickup_date",
+                required=False   # ✅ 이 한 줄이 핵심
+            )
         except ValueError as e:
             return JsonResponse({'success': False, 'error': str(e)})
+
 
         recaptcha_response = request.POST.get('g-recaptcha-response')
         result = verify_recaptcha(recaptcha_response)
@@ -517,8 +521,14 @@ def inquiry_details1(request):
         
         try:
             pickup_date = parse_date_safe(request.POST.get('pickup_date'), "pickup_date")
+            return_pickup_date = parse_date_safe(
+                request.POST.get('return_pickup_date'),
+                "return_pickup_date",
+                required=False   # ✅ 이 한 줄이 핵심
+            )
         except ValueError as e:
             return JsonResponse({'success': False, 'error': str(e)})
+
         
         # ✅ 중복 제출 방지 
         recent_duplicate = Inquiry.objects.filter(
@@ -925,9 +935,15 @@ def confirmation_detail(request):
 
         try:
             pickup_date = parse_date_safe(request.POST.get('pickup_date'), "pickup_date")
-            return_pickup_date = parse_date_safe(request.POST.get('return_pickup_date'), "return_pickup_date")
+            return_pickup_date = parse_date_safe(
+                request.POST.get('return_pickup_date'),
+                "return_pickup_date",
+                required=False   # ✅ 이 한 줄이 핵심
+            )
         except ValueError as e:
             return JsonResponse({'success': False, 'error': str(e)})
+
+
         
         data = {            
             'name': name,
@@ -1057,9 +1073,15 @@ def booking_detail(request):
 
         try:
             pickup_date = parse_date_safe(request.POST.get('pickup_date'), "pickup_date")
-            return_pickup_date = parse_date_safe(request.POST.get('return_pickup_date'), "return_pickup_date")
+            return_pickup_date = parse_date_safe(
+                request.POST.get('return_pickup_date'),
+                "return_pickup_date",
+                required=False   # ✅ 이 한 줄이 핵심
+            )
         except ValueError as e:
             return JsonResponse({'success': False, 'error': str(e)})
+
+
 
         price = 'TBA'  
 
@@ -1213,9 +1235,15 @@ def cruise_booking_detail(request):
 
         try:
             pickup_date = parse_date_safe(request.POST.get('pickup_date'), "pickup_date")
-            return_pickup_date = parse_date_safe(request.POST.get('return_pickup_date'), "return_pickup_date")
+            return_pickup_date = parse_date_safe(
+                request.POST.get('return_pickup_date'),
+                "return_pickup_date",
+                required=False   # ✅ 이 한 줄이 핵심
+            )
         except ValueError as e:
             return JsonResponse({'success': False, 'error': str(e)})
+
+
 
         recaptcha_response = request.POST.get('g-recaptcha-response')
         result = verify_recaptcha(recaptcha_response)
