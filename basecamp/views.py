@@ -853,8 +853,14 @@ def price_detail(request):
     if request.method == "POST":
         try:
             pickup_date = parse_date_safe(request.POST.get('pickup_date'), "pickup_date")
+            return_pickup_date = parse_date_safe(
+                request.POST.get('return_pickup_date'),
+                "return_pickup_date",
+                required=False   # ✅ 이 한 줄이 핵심
+            )
         except ValueError as e:
-            return render(request, 'basecamp/home_error.html')
+            return JsonResponse({'success': False, 'error': str(e)})
+        
         start_point = request.POST.get('start_point')
         end_point = request.POST.get('end_point')
         no_of_passenger = request.POST.get('no_of_passenger')
