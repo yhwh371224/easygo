@@ -14,6 +14,7 @@ from django.db.models import Q
 from celery import shared_task
 from main.settings import RECIPIENT_EMAIL, DEFAULT_FROM_EMAIL
 from .models import Post, PaypalPayment, StripePayment, XrpPayment
+from utils.calendar_sync import sync_to_calendar
 from django.core.exceptions import ImproperlyConfigured
 from django.utils import timezone
 from io import BytesIO
@@ -40,113 +41,116 @@ def create_event_on_calendar(instance_id):
         logger.info(f"Cancelled post {instance_id} with no event_id. Skipping event creation.")
         return
 
-    SCOPES = ['https://www.googleapis.com/auth/calendar']
-    SERVICE_ACCOUNT_FILE = 'secure/calendar/calendar-service-account-file.json'
-    DELEGATED_USER_EMAIL = RECIPIENT_EMAIL  
+    # Google Calendar 동기화
+    sync_to_calendar(instance)
 
-    try:
-        credentials = service_account.Credentials.from_service_account_file(
-            SERVICE_ACCOUNT_FILE, scopes=SCOPES, subject=DELEGATED_USER_EMAIL
-        )
-        service = build('calendar', 'v3', credentials=credentials)
-    except Exception as e:
-        logger.error(f"Failed to build Google Calendar service: {e}")
-        return
+    # SCOPES = ['https://www.googleapis.com/auth/calendar']
+    # SERVICE_ACCOUNT_FILE = 'secure/calendar/calendar-service-account-file.json'
+    # DELEGATED_USER_EMAIL = RECIPIENT_EMAIL  
+
+    # try:
+    #     credentials = service_account.Credentials.from_service_account_file(
+    #         SERVICE_ACCOUNT_FILE, scopes=SCOPES, subject=DELEGATED_USER_EMAIL
+    #     )
+    #     service = build('calendar', 'v3', credentials=credentials)
+    # except Exception as e:
+    #     logger.error(f"Failed to build Google Calendar service: {e}")
+    #     return
   
-    # 구글해드(title)에 들어갈 것들 
-    reminder_str = '!' if instance.reminder else ''
-    cancelled_str = 'C' if instance.cancelled else ''
-    pending_str = '?' if instance.price == 'TBA' else ''
-    pickup_time_str = instance.pickup_time or ''
-    flight_number_str = instance.flight_number or ''
-    start_point_str = instance.start_point or ''
-    flight_time_str = instance.flight_time or ''
-    no_of_passenger_str = f'p{instance.no_of_passenger}' if instance.no_of_passenger is not None else ''
-    paid_str = 'paid' if instance.paid else ''  
-    cash_str = 'cash' if instance.cash else ''  
-    price_str = f'${instance.price}' if instance.price is not None else ''
-    contact_str = instance.contact or ''
-    suburb_str = instance.suburb or ''
-    street_str = instance.street or ''    
-    end_point_str = instance.end_point or ''
+    # # 구글해드(title)에 들어갈 것들 
+    # reminder_str = '!' if instance.reminder else ''
+    # cancelled_str = 'C' if instance.cancelled else ''
+    # pending_str = '?' if instance.price == 'TBA' else ''
+    # pickup_time_str = instance.pickup_time or ''
+    # flight_number_str = instance.flight_number or ''
+    # start_point_str = instance.start_point or ''
+    # flight_time_str = instance.flight_time or ''
+    # no_of_passenger_str = f'p{instance.no_of_passenger}' if instance.no_of_passenger is not None else ''
+    # paid_str = 'paid' if instance.paid else ''  
+    # cash_str = 'cash' if instance.cash else ''  
+    # price_str = f'${instance.price}' if instance.price is not None else ''
+    # contact_str = instance.contact or ''
+    # suburb_str = instance.suburb or ''
+    # street_str = instance.street or ''    
+    # end_point_str = instance.end_point or ''
 
-    title = " ".join(filter(None, [ 
-        reminder_str, 
-        cancelled_str,
-        pending_str, 
-        pickup_time_str, 
-        flight_number_str,
-        start_point_str, 
-        flight_time_str, 
-        no_of_passenger_str,
-        paid_str, 
-        cash_str,  
-        price_str,
-        contact_str        
-    ])).strip()    
+    # title = " ".join(filter(None, [ 
+    #     reminder_str, 
+    #     cancelled_str,
+    #     pending_str, 
+    #     pickup_time_str, 
+    #     flight_number_str,
+    #     start_point_str, 
+    #     flight_time_str, 
+    #     no_of_passenger_str,
+    #     paid_str, 
+    #     cash_str,  
+    #     price_str,
+    #     contact_str        
+    # ])).strip()    
 
-    # address 구성
-    if suburb_str and street_str:
-        address = " ".join([street_str, suburb_str]).strip()
-    elif street_str:
-        address = " ".join([street_str, end_point_str]).strip()
-    elif suburb_str:
-        address = suburb_str
-    else:
-        address = end_point_str
+    # # address 구성
+    # if suburb_str and street_str:
+    #     address = " ".join([street_str, suburb_str]).strip()
+    # elif street_str:
+    #     address = " ".join([street_str, end_point_str]).strip()
+    # elif suburb_str:
+    #     address = suburb_str
+    # else:
+    #     address = end_point_str
 
-    # description (message) 구성
-    message_parts = [instance.name, instance.email, 
-                     'b:'+str(instance.no_of_baggage) if instance.no_of_baggage is not None else '', 
-                     'm:'+instance.message if instance.message is not None else '', 
-                     'n:'+instance.notice if instance.notice is not None else '', 
-                     "d:"+str(instance.return_pickup_date) if instance.return_pickup_date is not None else '', 
-                     '$'+str(instance.paid) if instance.paid is not None else '',
-                     'private' if instance.private_ride else '', 
-                     'opt:'+instance.end_point if instance.end_point is not None else '']
-    message = " ".join(filter(None, message_parts))      
+    # # description (message) 구성
+    # message_parts = [instance.name, instance.email, 
+    #                  'b:'+str(instance.no_of_baggage) if instance.no_of_baggage is not None else '', 
+    #                  'm:'+instance.message if instance.message is not None else '', 
+    #                  'n:'+instance.notice if instance.notice is not None else '', 
+    #                  "d:"+str(instance.return_pickup_date) if instance.return_pickup_date is not None else '', 
+    #                  '$'+str(instance.paid) if instance.paid is not None else '',
+    #                  'private' if instance.private_ride else '', 
+    #                  'opt:'+instance.end_point if instance.end_point is not None else '']
+    # message = " ".join(filter(None, message_parts))      
 
-    # 날짜와 시간 파싱
-    try:
-        pickup_date = datetime.datetime.strptime(str(instance.pickup_date), '%Y-%m-%d')
-    except Exception as e:
-        logger.error(f"Invalid date for post {instance_id}: {e}")
-        return 
+    # # 날짜와 시간 파싱
+    # try:
+    #     pickup_date = datetime.datetime.strptime(str(instance.pickup_date), '%Y-%m-%d')
+    # except Exception as e:
+    #     logger.error(f"Invalid date for post {instance_id}: {e}")
+    #     return 
 
-    try:
-        pickup_time = datetime.datetime.strptime(instance.pickup_time or '00:00', '%H:%M')
-    except Exception as e:
-        logger.error(f"Invalid time for post {instance_id}: {e}")
-        return
+    # try:
+    #     pickup_time = datetime.datetime.strptime(instance.pickup_time or '00:00', '%H:%M')
+    # except Exception as e:
+    #     logger.error(f"Invalid time for post {instance_id}: {e}")
+    #     return
 
-    start = datetime.datetime.combine(pickup_date, pickup_time.time())        
-    end = start + datetime.timedelta(hours=1)
+    # start = datetime.datetime.combine(pickup_date, pickup_time.time())        
+    # end = start + datetime.timedelta(hours=1)
 
-    event = {
-        'summary': title,
-        'location': address,
-        'start': {
-            'dateTime': start.strftime('%Y-%m-%dT%H:%M:%S'),
-            'timeZone': 'Australia/Sydney',
-        },
-        'end': {
-            'dateTime': end.strftime('%Y-%m-%dT%H:%M:%S'),
-            'timeZone': 'Australia/Sydney',
-        },
-        'description': message,
-    }    
+    # event = {
+    #     'summary': title,
+    #     'location': address,
+    #     'start': {
+    #         'dateTime': start.strftime('%Y-%m-%dT%H:%M:%S'),
+    #         'timeZone': 'Australia/Sydney',
+    #     },
+    #     'end': {
+    #         'dateTime': end.strftime('%Y-%m-%dT%H:%M:%S'),
+    #         'timeZone': 'Australia/Sydney',
+    #     },
+    #     'description': message,
+    # }    
 
-    # 구글 캘린더 이벤트 처리
-    try:
-        if event_id:
-            service.events().update(calendarId='primary', eventId=event_id, body=event).execute()
-        else:
-            new_event = service.events().insert(calendarId='primary', body=event).execute()
-            instance.calendar_event_id = new_event['id']
-            instance.save(update_fields=['calendar_event_id'])
-    except Exception as e:
-        logger.error(f"Failed to sync Google Calendar event for post {instance_id}: {e}")
-        return
+    # # 구글 캘린더 이벤트 처리
+    # try:
+    #     if event_id:
+    #         service.events().update(calendarId='primary', eventId=event_id, body=event).execute()
+    #     else:
+    #         new_event = service.events().insert(calendarId='primary', body=event).execute()
+    #         instance.calendar_event_id = new_event['id']
+    #         instance.save(update_fields=['calendar_event_id'])
+    # except Exception as e:
+    #     logger.error(f"Failed to sync Google Calendar event for post {instance_id}: {e}")
+    #     return
 
 
 # Clicked confirm_booking form 
