@@ -174,8 +174,8 @@
             <div class="mb-3 pb-1 w-100 mb-sm-4 me-sm-3">
               <label class="form-label" for="pickup-date">Pickup date</label>
               <div class="input-group" >
-                <input class="form-control date-picker rounded" name="pickup_date" required type="text" placeholder="Choose date" data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;F j, Y&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;}" >
-				        <a class="date-picker-icon" href="#"><i class="ai-calendar position-absolute top-50 end-0 translate-middle-y me-3"></i></a>
+                <input class="form-control date-picker rounded" id="pickup-date" name="pickup_date" type="text" placeholder="Choose date" required >
+				          <i class="ai-calendar position-absolute top-50 end-0 translate-middle-y me-3" style="cursor:pointer;" id="pickup-date-icon"></i> 
               </div>
             </div>
             <div class="mb-3 pb-1 w-100 mb-sm-4 me-sm-3">
@@ -501,6 +501,25 @@
             });
         });
     });
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const pickupDateInput = document.getElementById('pickup-date');
+    const pickupDateIcon = document.getElementById('pickup-date-icon');
+
+    const fp = flatpickr(pickupDateInput, {
+        altInput: true,
+        altFormat: "F j, Y",
+        dateFormat: "Y-m-d",
+        allowInput: true,
+        clickOpens: true,
+    });
+
+    // Make icon trigger the calendar
+    pickupDateIcon.addEventListener('click', function() {
+        fp.open();
+    });
+});
 </script>
   </body>
 </html>
