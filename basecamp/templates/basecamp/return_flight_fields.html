@@ -19,24 +19,37 @@
     <input class="form-control date-picker rounded" name="return_pickup_date" id="return-flight-date" type="date" required>
     <div class="invalid-feedback">Please enter your pickup date!</div>
   </div>
-
-  <div class="mb-3 pb-1">
-    <label class="form-label" for="return_flight_number">Return Flight Number<sup class="text-danger ms-1">*</sup></label>
-    <input class="form-control" type="text" placeholder="Your flight number" name="return_flight_number" id="return-flight-number" required>
-    <div class="invalid-feedback">Please enter your flight number!</div>
-  </div>
-
-  <div class="mb-3 pb-1">
-    <label class="form-label" for="return_flight_time">Return Flight Time (Sydney)</label>
-    <input class="form-control" name="return_flight_time" id="return-flight-time" type="time">
-  </div>
-
   <div class="mb-3 pb-1">
     <label class="form-label" for="return_pickup_time">Return Pickup Time</label>
     <input class="form-control" type="time" name="return_pickup_time" id="return-pickup-time">
   </div>
 
-  <div class="mb-3 pb-1">
+   <br>
+				<!-- Start / End Point (hidden by default) -->
+				<div id="start-end-fields" style="display: none;">
+					<div class="mb-3 pb-1">
+						<label class="form-label">Start Point (Pickup Location)</label>
+						<input class="form-control" type="text" name="start_point" placeholder="Start Point">
+					</div>
+					<div class="mb-3 pb-1">
+						<label class="form-label">End Point (Drop-off Location)</label>
+						<input class="form-control" type="text" name="end_point" placeholder="End Point">
+					</div>
+				</div>
+
+				<!-- Flight info fields -->
+				<div id="flight-fields">
+					<div class="mb-3 pb-1">
+						<label class="form-label">Flight number</label>
+						<input class="form-control" type="text" placeholder="Your flight number" name="flight_number">
+					</div>
+					<div class="mb-3 pb-1">
+						<label class="form-label">Flight time (Sydney)</label>
+						<input class="form-control" name="flight_time" type="time">
+					</div>
+				</div>
+
+  <!-- <div class="mb-3 pb-1">
     <p class="small text-dark mb-3" style="opacity: 0.85;">
       If your return trip is a Cruise Transfer or Point-to-Point ride, please complete the fields below
     </p>
@@ -48,5 +61,5 @@
       <label class="form-label" for="return_end_point">Return Drop-off Location</label>
       <input class="form-control" type="text" name="return_end_point" id="return-end-point" novalidate>
     </div>
-  </div>
+  </div> -->
 </div>
