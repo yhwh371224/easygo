@@ -243,16 +243,26 @@
                                                 <p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
 													Contact:  {{ contact }}<br>
 													Email:  {{ email }}<br>
-													Flight date:  {{ pickup_date }}<br>
+													Pickup date:  {{ pickup_date }}<br>
 													Pickup time:  {{ pickup_time }}<br>
-												{% if direction %}                                                   
+												{% if flight_number %}                                                   
 													Direction:  {{ direction }}<br>				
 													Flight number:  {{ flight_number }}<br>
 													Flight time: {{ flight_time}}<br>
-													Address: {{ street }}, {{ suburub }}<br>													
+													Address: {{ street }}, {{ suburub }}<br>	
+													{% if return_flight_time %}		
+														Return flight number:  {{ return_flight_number }}<br>
+														Return flight time: {{ return_flight_time}}<br>
+														Return pickup date:  {{ return_pickup_date }}<br>
+														Return pickup time:  {{ return_pickup_time }}<br>
+													{% endif %}										
 												{% else %}
 													Start point: {{ flight_number }}
 													End point: {{ street }}
+													{% if return_start_point %}
+														Return start point: {{ return_start_point }}<br>
+														Return end point: {{ return_end_point }}<br>
+													{% endif %}
 												{% endif %}                              
 													Number of Passenger:  {{ no_of_passenger }}<br>
 													Number of baggage:  {{ no_of_baggage }}<br>

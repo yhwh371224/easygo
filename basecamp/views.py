@@ -346,26 +346,26 @@ def inquiry_details(request):
         except ValueError as e:
             return JsonResponse({'success': False, 'error': str(e)})
         
-        name = request.POST.get('name')
-        contact = request.POST.get('contact')
-        email = request.POST.get('email')             
-        flight_number = request.POST.get('flight_number')
-        flight_time = request.POST.get('flight_time')
+        name = request.POST.get('name', '')
+        contact = request.POST.get('contact', '')
+        email = request.POST.get('email', '')             
+        flight_number = request.POST.get('flight_number', '')
+        flight_time = request.POST.get('flight_time', '')
         pickup_time = request.POST.get('pickup_time')
         direction = request.POST.get('direction')
-        suburb = request.POST.get('suburb')
+        suburb = request.POST.get('suburb', '')
         start_point = request.POST.get('start_point', '')
         end_point = request.POST.get('end_point', '')        
         street = request.POST.get('street', '')
-        no_of_passenger = request.POST.get('no_of_passenger')
-        no_of_baggage = request.POST.get('no_of_baggage')
-        return_direction = request.POST.get('return_direction')   
-        return_flight_number = request.POST.get('return_flight_number')
-        return_flight_time = request.POST.get('return_flight_time')
+        no_of_passenger = request.POST.get('no_of_passenger', '')
+        no_of_baggage = request.POST.get('no_of_baggage', '')
+        return_direction = request.POST.get('return_direction', '')   
+        return_flight_number = request.POST.get('return_flight_number', '')
+        return_flight_time = request.POST.get('return_flight_time', '')
         return_pickup_time = request.POST.get('return_pickup_time')
         return_start_point = request.POST.get('return_start_point', '')
         return_end_point = request.POST.get('return_end_point', '')
-        message = request.POST.get('message')
+        message = request.POST.get('message', '')
 
         recaptcha_response = request.POST.get('g-recaptcha-response')
         result = verify_recaptcha(recaptcha_response)
@@ -386,16 +386,23 @@ def inquiry_details(request):
             'contact': contact,
             'email': email,
             'pickup_date': pickup_date,
-            'flight_number': flight_number,
             'pickup_time': pickup_time,
             'direction': direction,
             'street': street,
             'suburb': suburb,
             'no_of_passenger': no_of_passenger,
+            'flight_number': flight_number,
+            'flight_time': flight_time,
+            'start_point': start_point,
+            'end_point': end_point,
             'return_pickup_date': return_pickup_date,
             'return_flight_number': return_flight_number,
-            'return_pickup_time': return_pickup_time
-            }
+            'return_flight_time': return_flight_time,
+            'return_pickup_time': return_pickup_time,
+            'return_start_point': return_start_point,
+            'return_end_point': return_end_point,
+            'message': message
+        }
      
         inquiry_email_exists = Inquiry.objects.filter(email=email).exists()
         post_email_exists = Post.objects.filter(email=email).exists()
@@ -410,22 +417,30 @@ def inquiry_details(request):
             =============================
             Contact: {}
             Email: {}  
-            Flight date: {}
-            Flight number: {}
-            Pickup time: {}
-            Direction: {}
-            Street: {}
-            Suburb: {}
-            Passenger: {}
-            ✅ Return pickup date {}
-            ✅ Return flight number {}
-            Return pickup time: {}
+            Pickup date: {pickup_date}
+            Pickup time: {pickup_time}
+            Direction: {direction}
+            Street: {street}
+            Suburb: {suburb}
+            Passenger: {no_of_passenger}
+            Flight number: {flight_number}
+            Flight time: {flight_time}
+            Start Point: {start_point}
+            End Point: {end_point}
+            ✅ Return Pickup date: {return_pickup_date}
+            Return Flight number: {return_flight_number}
+            Return Flight time: {return_flight_time}
+            Return Pickup time: {return_pickup_time}
+            Return Start Point: {return_start_point}
+            Return End Point: {return_end_point}
+            Message: {message}
             =============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'],  data['pickup_date'], data['flight_number'],
-                        data['pickup_time'], data['direction'], data['street'],  data['suburb'], data['no_of_passenger'], 
-                        data['return_pickup_date'], data['return_flight_number'],data['return_pickup_time'])
+            ''' .format(data['name'], data['contact'], data['email'],  data['pickup_date'], data['pickup_time'], data['direction'], data['street'],  
+                        data['suburb'], data['no_of_passenger'], data['flight_number'], data['flight_time'], data['start_point'], data['end_point'], 
+                        data['return_pickup_date'], data['return_flight_number'], data['return_flight_time'], data['return_pickup_time'],                          
+                        data['return_start_point'], data['return_end_point'], data['message'])                        
             
             send_mail(email_subject, content, '', [RECIPIENT_EMAIL])
 
@@ -437,22 +452,30 @@ def inquiry_details(request):
             =============================
             Contact: {}
             Email: {}  
-            Flight date: {}
-            Flight number: {}
-            Pickup time: {}
-            Direction: {}
-            Street: {}
-            Suburb: {}
-            Passenger: {}
-            ✅ Return pickup date {}
-            ✅ Return flight number {}
-            Return pickup time: {}
+            Pickup date: {pickup_date}
+            Pickup time: {pickup_time}
+            Direction: {direction}
+            Street: {street}
+            Suburb: {suburb}
+            Passenger: {no_of_passenger}
+            Flight number: {flight_number}
+            Flight time: {flight_time}
+            Start Point: {start_point}
+            End Point: {end_point}
+            ✅ Return Pickup date: {return_pickup_date}
+            Return Flight number: {return_flight_number}
+            Return Flight time: {return_flight_time}
+            Return Pickup time: {return_pickup_time}
+            Return Start Point: {return_start_point}
+            Return End Point: {return_end_point}
+            Message: {message}
             =============================\n        
             Best Regards,
             EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'],  data['pickup_date'], data['flight_number'],
-                        data['pickup_time'], data['direction'], data['street'],  data['suburb'], data['no_of_passenger'], 
-                        data['return_pickup_date'], data['return_flight_number'],data['return_pickup_time'])
+            ''' .format(data['name'], data['contact'], data['email'],  data['pickup_date'], data['pickup_time'], data['direction'], data['street'],  
+                        data['suburb'], data['no_of_passenger'], data['flight_number'], data['flight_time'], data['start_point'], data['end_point'], 
+                        data['return_pickup_date'], data['return_flight_number'], data['return_flight_time'], data['return_pickup_time'],                          
+                        data['return_start_point'], data['return_end_point'], data['message'])
             
             send_mail(email_subject, content, '', [RECIPIENT_EMAIL]) 
 
@@ -523,15 +546,15 @@ def inquiry_details1(request):
         name = request.POST.get('name')
         contact = request.POST.get('contact')
         email = request.POST.get('email')
-        flight_number = request.POST.get('flight_number')
-        flight_time = request.POST.get('flight_time')
+        flight_number = request.POST.get('flight_number', '')
+        flight_time = request.POST.get('flight_time', '')
         pickup_time = request.POST.get('pickup_time')        
         start_point = request.POST.get('start_point', '')
         end_point = request.POST.get('end_point', '')        
         street = request.POST.get('street', '')  
         no_of_passenger = request.POST.get('no_of_passenger')
         no_of_baggage = request.POST.get('no_of_baggage')        
-        message = request.POST.get('message')
+        message = request.POST.get('message', '')
         original_start_point = request.session.get('original_start_point', start_point)
         original_end_point = request.session.get('original_end_point', end_point)
         
@@ -925,33 +948,33 @@ def confirmation_detail(request):
         except ValueError as e:
             return JsonResponse({'success': False, 'error': str(e)})
         
-        company_name = request.POST.get('company_name')
+        company_name = request.POST.get('company_name', '')
         name = request.POST.get('name')
         contact = request.POST.get('contact')
         email = request.POST.get('email')
-        email1 = request.POST.get('email1')   
-        flight_number = request.POST.get('flight_number')
-        flight_time = request.POST.get('flight_time')
+        email1 = request.POST.get('email1', '')   
+        flight_number = request.POST.get('flight_number', '')
+        flight_time = request.POST.get('flight_time', '')
         pickup_time = request.POST.get('pickup_time')
-        direction = request.POST.get('direction')
-        suburb = request.POST.get('suburb')
-        street = request.POST.get('street')
+        direction = request.POST.get('direction', '')
+        suburb = request.POST.get('suburb', '')
+        street = request.POST.get('street', '')
         start_point = request.POST.get('start_point', '')
         end_point = request.POST.get('end_point', '')
         no_of_passenger = request.POST.get('no_of_passenger')
         no_of_baggage = request.POST.get('no_of_baggage')
         return_direction = request.POST.get('return_direction')
-        return_flight_number = request.POST.get('return_flight_number')
-        return_flight_time = request.POST.get('return_flight_time')
+        return_flight_number = request.POST.get('return_flight_number', '')
+        return_flight_time = request.POST.get('return_flight_time', '')
         return_pickup_time = request.POST.get('return_pickup_time')
         return_start_point = request.POST.get('return_start_point', '')
         return_end_point = request.POST.get('return_end_point', '')
-        message = request.POST.get('message') 
-        notice = request.POST.get('notice')       
-        price = request.POST.get('price')
-        paid = request.POST.get('paid')
-        cash = to_bool(request.POST.get('cash'))
-        prepay = to_bool(request.POST.get('prepay'))  
+        message = request.POST.get('message', '') 
+        notice = request.POST.get('notice', '')       
+        price = request.POST.get('price', '')
+        paid = request.POST.get('paid', '')
+        cash = to_bool(request.POST.get('cash', ''))
+        prepay = to_bool(request.POST.get('prepay', ''))  
         
         data = {            
             'name': name,
@@ -1080,8 +1103,8 @@ def booking_detail(request):
         name = request.POST.get('name')
         contact = request.POST.get('contact')
         email = request.POST.get('email')
-        flight_number = request.POST.get('flight_number')
-        flight_time = request.POST.get('flight_time')
+        flight_number = request.POST.get('flight_number', '')
+        flight_time = request.POST.get('flight_time', '')
         pickup_time = request.POST.get('pickup_time')
         direction = request.POST.get('direction')      
         suburb = request.POST.get('suburb')
@@ -1090,10 +1113,10 @@ def booking_detail(request):
         end_point = request.POST.get('end_point', '')
         no_of_passenger = request.POST.get('no_of_passenger')
         no_of_baggage = request.POST.get('no_of_baggage')
-        return_direction = request.POST.get('return_direction')
-        return_flight_number = request.POST.get('return_flight_number')
-        return_flight_time = request.POST.get('return_flight_time')
-        return_pickup_time = request.POST.get('return_pickup_time')
+        return_direction = request.POST.get('return_direction', '')
+        return_flight_number = request.POST.get('return_flight_number', '')
+        return_flight_time = request.POST.get('return_flight_time', '')
+        return_pickup_time = request.POST.get('return_pickup_time', '')
         return_start_point = request.POST.get('return_start_point', '')
         return_end_point = request.POST.get('return_end_point', '') 
         message = request.POST.get('message')
@@ -1428,8 +1451,8 @@ def confirm_booking_detail(request):
         company_name = user.company_name
         email1 = user.email1            
         pickup_date = user.pickup_date
-        flight_number = user.flight_number
-        flight_time = user.flight_time 
+        flight_number = getattr(user, 'flight_number', "")
+        flight_time = getattr(user, 'flight_time', "") 
         pickup_time = user.pickup_time
         direction = user.direction
         suburb = user.suburb 
@@ -1438,11 +1461,11 @@ def confirm_booking_detail(request):
         end_point = getattr(user, 'end_point', "")
         no_of_passenger = user.no_of_passenger
         no_of_baggage = user.no_of_baggage
-        return_direction = user.return_direction
-        return_pickup_date = user.return_pickup_date
-        return_flight_number = user.return_flight_number
-        return_flight_time = user.return_flight_time
-        return_pickup_time = user.return_pickup_time 
+        return_direction = getattr(user, 'return_direction', "")
+        return_pickup_date = getattr(user, 'return_pickup_date', "")
+        return_flight_number = getattr(user, 'return_flight_number', "")
+        return_flight_time = getattr(user, 'return_flight_time', "")
+        return_pickup_time = getattr(user, 'return_pickup_time', "")
         return_start_point = getattr(user, 'return_start_point', "")
         return_end_point = getattr(user, 'return_end_point', "")
         cruise = user.cruise          
@@ -1747,6 +1770,8 @@ def sending_email_input_data_detail(request):
                                          'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
                                          'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
                                          'no_of_baggage': user.no_of_baggage, 'field': field, 
+                                         'start_point': user.start_point, 'end_point': user.end_point,
+                                         'return_start_point': user.return_start_point, 'return_end_point': user.return_end_point,
                                          'return_direction': user.return_direction, 'return_pickup_date': user.return_pickup_date, 
                                          'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
                                          'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
@@ -1774,23 +1799,23 @@ def to_bool(value):
 def return_trip_detail(request):     
     if request.method == "POST":
         email = request.POST.get('email', '').strip()
-        flight_number = request.POST.get('flight_number')
-        flight_time = request.POST.get('flight_time')
+        flight_number = request.POST.get('flight_number', '')
+        flight_time = request.POST.get('flight_time', '')
         pickup_date = request.POST.get('pickup_date')            
         pickup_time = request.POST.get('pickup_time')
         start_point = request.POST.get('start_point', '')
         end_point = request.POST.get('end_point', '') 
         direction = request.POST.get('direction')               
-        message = request.POST.get('message')
-        price = request.POST.get('price')
-        toll = request.POST.get('toll')
-        cash = to_bool(request.POST.get('cash'))
-        prepay = to_bool(request.POST.get('prepay'))
-        return_direction = request.POST.get('return_direction')
-        return_pickup_date = request.POST.get('return_pickup_date')
-        return_flight_number = request.POST.get('return_flight_number')
-        return_flight_time = request.POST.get('return_flight_time')
-        return_pickup_time = request.POST.get('return_pickup_time')
+        message = request.POST.get('message', '')
+        price = request.POST.get('price', '')
+        toll = request.POST.get('toll', '')
+        cash = to_bool(request.POST.get('cash', ''))
+        prepay = to_bool(request.POST.get('prepay', ''))
+        return_direction = request.POST.get('return_direction', '')
+        return_pickup_date = request.POST.get('return_pickup_date', '')
+        return_flight_number = request.POST.get('return_flight_number', '')
+        return_flight_time = request.POST.get('return_flight_time', '')
+        return_pickup_time = request.POST.get('return_pickup_time', '')
         return_start_point = request.POST.get('return_start_point', '')
         return_end_point = request.POST.get('return_end_point', '') 
         
