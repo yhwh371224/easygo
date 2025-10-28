@@ -218,7 +218,7 @@
             }
         });
 
-        // --- Title spinner ---
+        // --- Title Spinner ---
         let originalTitle = document.title;
         let dots = 0;
         let titleInterval;
@@ -235,11 +235,14 @@
             document.title = originalTitle;
         }
 
+        // --- Stop spinner when page unloads (after successful submission/redirect) ---
+        window.addEventListener('beforeunload', stopTitleSpinner);
+
         // --- Form Submit Validation ---
         form.addEventListener('submit', function (event) {
             let isValid = true;
 
-            // --- Always required fields outside return-flight ---
+            // --- Always required fields ---
             const alwaysRequired = form.querySelectorAll('input[required], select[required], textarea[required]');
             alwaysRequired.forEach(input => {
                 if (!input.value.trim()) {
@@ -254,7 +257,6 @@
             if (returnFlightCheckbox.checked) {
                 const returnInputs = returnFlightFields.querySelectorAll('input, select, textarea');
                 returnInputs.forEach(input => {
-                    // Only enforce validation on fields we care about
                     if (['return_flight_number', 'return_pickup_date', 'return_direction'].includes(input.name)) {
                         if (!input.value.trim()) {
                             input.classList.add('is-invalid');
@@ -274,13 +276,13 @@
                 return;
             }
 
-            // --- Disable submit button & show submitting ---
+            // --- Disable button & start spinner ---
             submitButton.disabled = true;
             submitButton.innerHTML = "Submitting... <span class='spinner'></span>";
             startTitleSpinner();
         });
 
-        // --- reCAPTCHA fallback (if grecaptcha not loaded) ---
+        // --- reCAPTCHA fallback ---
         if (typeof grecaptcha === 'undefined') {
             console.log("reCAPTCHA not loaded – fallback enabled.");
         }
@@ -288,11 +290,11 @@
         // --- Extra luggage toggle ---
         window.toggleExtraLuggage = function () {
             const extraFields = document.getElementById("extraLuggageFields");
-            extraFields.style.display = extraFields.style.display === "none" ? "block" : "none";
+            extraFields.style.display = document.getElementById('extraLuggageCheck').checked ? 'block' : 'none';
         };
-
     });
     </script>
+
 
 </script> 
 </body> 
