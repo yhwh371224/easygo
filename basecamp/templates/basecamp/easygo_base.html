@@ -223,7 +223,8 @@
     <script>
       function toggleExtraLuggage() {
         const extraFields = document.getElementById("extraLuggageFields");
-        extraFields.style.display = extraFields.style.display === "none" ? "block" : "none";
+        const checkbox = document.getElementById("extraLuggageCheck");
+        extraFields.style.display = checkbox.checked ? "block" : "none";
       }
     </script>
   </body>

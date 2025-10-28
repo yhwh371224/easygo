@@ -276,11 +276,12 @@
           });
           </script>
           <!-- Extra baggage form -->
-    <script>
-      function toggleExtraLuggage() {
-        const extraFields = document.getElementById("extraLuggageFields");
-        extraFields.style.display = extraFields.style.display === "none" ? "block" : "none";
-      }
-    </script>
+          <script>
+            function toggleExtraLuggage() {
+              const extraFields = document.getElementById("extraLuggageFields");
+              const checkbox = document.getElementById("extraLuggageCheck");
+              extraFields.style.display = checkbox.checked ? "block" : "none";
+            }
+          </script>
   </body>
 </html>
