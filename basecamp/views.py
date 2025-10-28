@@ -456,9 +456,6 @@ def inquiry_details(request):
             
             send_mail(email_subject, content, '', [RECIPIENT_EMAIL]) 
 
-        # 🧳 수하물 관련 데이터 수집
-        extra_luggage_enabled = request.POST.get('extraLuggageCheck') == 'on'
-
         # 🧳 개별 수하물 항목 수집
         large = int(request.POST.get('baggage_large') or 0)
         medium = int(request.POST.get('baggage_medium') or 0)
@@ -475,23 +472,20 @@ def inquiry_details(request):
 
         # 🎯 요약 문자열 생성
         baggage_summary = []
-
-        if extra_luggage_enabled:
-            if large: baggage_summary.append(f"L{large}")
-            if medium: baggage_summary.append(f"M{medium}")
-            if small: baggage_summary.append(f"S{small}")
-            if baby_seat: baggage_summary.append(f"Baby{baby_seat}")
-            if booster_seat: baggage_summary.append(f"Booster{booster_seat}")
-            if pram: baggage_summary.append(f"Pram{pram}")
-            if ski: baggage_summary.append(f"Ski{ski}")
-            if snowboard: baggage_summary.append(f"Snow{snowboard}")
-            if golf: baggage_summary.append(f"Golf{golf}")
-            if bike: baggage_summary.append(f"Bike{bike}")
-            if boxes: baggage_summary.append(f"Box{boxes}")
-            if musical_instrument: baggage_summary.append(f"Music{musical_instrument}")
-        else:
-            baggage_summary.append("No extra luggage")
-
+                
+        if large: baggage_summary.append(f"L{large}")
+        if medium: baggage_summary.append(f"M{medium}")
+        if small: baggage_summary.append(f"S{small}")
+        if baby_seat: baggage_summary.append(f"Baby{baby_seat}")
+        if booster_seat: baggage_summary.append(f"Booster{booster_seat}")
+        if pram: baggage_summary.append(f"Pram{pram}")
+        if ski: baggage_summary.append(f"Ski{ski}")
+        if snowboard: baggage_summary.append(f"Snow{snowboard}")
+        if golf: baggage_summary.append(f"Golf{golf}")
+        if bike: baggage_summary.append(f"Bike{bike}")
+        if boxes: baggage_summary.append(f"Box{boxes}")
+        if musical_instrument: baggage_summary.append(f"Music{musical_instrument}")
+        
         # 🧾 최종 요약 문자열
         baggage_str = ", ".join(baggage_summary)
                     
@@ -636,9 +630,6 @@ def inquiry_details1(request):
             end_point = ''
             start_point = ''  
 
-        # 🧳 수하물 관련 데이터 수집
-        extra_luggage_enabled = request.POST.get('extraLuggageCheck') == 'on'
-
         # 🧳 개별 수하물 항목 수집
         large = int(request.POST.get('baggage_large') or 0)
         medium = int(request.POST.get('baggage_medium') or 0)
@@ -655,23 +646,20 @@ def inquiry_details1(request):
 
         # 🎯 요약 문자열 생성
         baggage_summary = []
-
-        if extra_luggage_enabled:
-            if large: baggage_summary.append(f"L{large}")
-            if medium: baggage_summary.append(f"M{medium}")
-            if small: baggage_summary.append(f"S{small}")
-            if baby_seat: baggage_summary.append(f"Baby{baby_seat}")
-            if booster_seat: baggage_summary.append(f"Booster{booster_seat}")
-            if pram: baggage_summary.append(f"Pram{pram}")
-            if ski: baggage_summary.append(f"Ski{ski}")
-            if snowboard: baggage_summary.append(f"Snow{snowboard}")
-            if golf: baggage_summary.append(f"Golf{golf}")
-            if bike: baggage_summary.append(f"Bike{bike}")
-            if boxes: baggage_summary.append(f"Box{boxes}")
-            if musical_instrument: baggage_summary.append(f"Music{musical_instrument}")
-        else:
-            baggage_summary.append("No extra luggage")
-
+                
+        if large: baggage_summary.append(f"L{large}")
+        if medium: baggage_summary.append(f"M{medium}")
+        if small: baggage_summary.append(f"S{small}")
+        if baby_seat: baggage_summary.append(f"Baby{baby_seat}")
+        if booster_seat: baggage_summary.append(f"Booster{booster_seat}")
+        if pram: baggage_summary.append(f"Pram{pram}")
+        if ski: baggage_summary.append(f"Ski{ski}")
+        if snowboard: baggage_summary.append(f"Snow{snowboard}")
+        if golf: baggage_summary.append(f"Golf{golf}")
+        if bike: baggage_summary.append(f"Bike{bike}")
+        if boxes: baggage_summary.append(f"Box{boxes}")
+        if musical_instrument: baggage_summary.append(f"Music{musical_instrument}")
+        
         # 🧾 최종 요약 문자열
         baggage_str = ", ".join(baggage_summary)
         
@@ -1007,9 +995,6 @@ def confirmation_detail(request):
 
         sam_driver = Driver.objects.get(driver_name="Sam") 
 
-        # 🧳 수하물 관련 데이터 수집
-        extra_luggage_enabled = request.POST.get('extraLuggageCheck') == 'on'
-
         # 🧳 개별 수하물 항목 수집
         large = int(request.POST.get('baggage_large') or 0)
         medium = int(request.POST.get('baggage_medium') or 0)
@@ -1026,23 +1011,20 @@ def confirmation_detail(request):
 
         # 🎯 요약 문자열 생성
         baggage_summary = []
-
-        if extra_luggage_enabled:
-            if large: baggage_summary.append(f"L{large}")
-            if medium: baggage_summary.append(f"M{medium}")
-            if small: baggage_summary.append(f"S{small}")
-            if baby_seat: baggage_summary.append(f"Baby{baby_seat}")
-            if booster_seat: baggage_summary.append(f"Booster{booster_seat}")
-            if pram: baggage_summary.append(f"Pram{pram}")
-            if ski: baggage_summary.append(f"Ski{ski}")
-            if snowboard: baggage_summary.append(f"Snow{snowboard}")
-            if golf: baggage_summary.append(f"Golf{golf}")
-            if bike: baggage_summary.append(f"Bike{bike}")
-            if boxes: baggage_summary.append(f"Box{boxes}")
-            if musical_instrument: baggage_summary.append(f"Music{musical_instrument}")
-        else:
-            baggage_summary.append("No extra luggage")
-
+                
+        if large: baggage_summary.append(f"L{large}")
+        if medium: baggage_summary.append(f"M{medium}")
+        if small: baggage_summary.append(f"S{small}")
+        if baby_seat: baggage_summary.append(f"Baby{baby_seat}")
+        if booster_seat: baggage_summary.append(f"Booster{booster_seat}")
+        if pram: baggage_summary.append(f"Pram{pram}")
+        if ski: baggage_summary.append(f"Ski{ski}")
+        if snowboard: baggage_summary.append(f"Snow{snowboard}")
+        if golf: baggage_summary.append(f"Golf{golf}")
+        if bike: baggage_summary.append(f"Bike{bike}")
+        if boxes: baggage_summary.append(f"Box{boxes}")
+        if musical_instrument: baggage_summary.append(f"Music{musical_instrument}")
+        
         # 🧾 최종 요약 문자열
         baggage_str = ", ".join(baggage_summary)
 
@@ -1204,9 +1186,6 @@ def booking_detail(request):
             
         sam_driver = Driver.objects.get(driver_name="Sam") 
 
-        # 🧳 수하물 관련 데이터 수집
-        extra_luggage_enabled = request.POST.get('extraLuggageCheck') == 'on'
-
         # 🧳 개별 수하물 항목 수집
         large = int(request.POST.get('baggage_large') or 0)
         medium = int(request.POST.get('baggage_medium') or 0)
@@ -1223,23 +1202,20 @@ def booking_detail(request):
 
         # 🎯 요약 문자열 생성
         baggage_summary = []
-
-        if extra_luggage_enabled:
-            if large: baggage_summary.append(f"L{large}")
-            if medium: baggage_summary.append(f"M{medium}")
-            if small: baggage_summary.append(f"S{small}")
-            if baby_seat: baggage_summary.append(f"Baby{baby_seat}")
-            if booster_seat: baggage_summary.append(f"Booster{booster_seat}")
-            if pram: baggage_summary.append(f"Pram{pram}")
-            if ski: baggage_summary.append(f"Ski{ski}")
-            if snowboard: baggage_summary.append(f"Snow{snowboard}")
-            if golf: baggage_summary.append(f"Golf{golf}")
-            if bike: baggage_summary.append(f"Bike{bike}")
-            if boxes: baggage_summary.append(f"Box{boxes}")
-            if musical_instrument: baggage_summary.append(f"Music{musical_instrument}")
-        else:
-            baggage_summary.append("No extra luggage")
-
+                
+        if large: baggage_summary.append(f"L{large}")
+        if medium: baggage_summary.append(f"M{medium}")
+        if small: baggage_summary.append(f"S{small}")
+        if baby_seat: baggage_summary.append(f"Baby{baby_seat}")
+        if booster_seat: baggage_summary.append(f"Booster{booster_seat}")
+        if pram: baggage_summary.append(f"Pram{pram}")
+        if ski: baggage_summary.append(f"Ski{ski}")
+        if snowboard: baggage_summary.append(f"Snow{snowboard}")
+        if golf: baggage_summary.append(f"Golf{golf}")
+        if bike: baggage_summary.append(f"Bike{bike}")
+        if boxes: baggage_summary.append(f"Box{boxes}")
+        if musical_instrument: baggage_summary.append(f"Music{musical_instrument}")
+        
         # 🧾 최종 요약 문자열
         baggage_str = ", ".join(baggage_summary)
 
@@ -1377,9 +1353,6 @@ def cruise_booking_detail(request):
             
         sam_driver = Driver.objects.get(driver_name="Sam")
 
-        # 🧳 수하물 관련 데이터 수집
-        extra_luggage_enabled = request.POST.get('extraLuggageCheck') == 'on'
-
         # 🧳 개별 수하물 항목 수집
         large = int(request.POST.get('baggage_large') or 0)
         medium = int(request.POST.get('baggage_medium') or 0)
@@ -1396,23 +1369,20 @@ def cruise_booking_detail(request):
 
         # 🎯 요약 문자열 생성
         baggage_summary = []
-
-        if extra_luggage_enabled:
-            if large: baggage_summary.append(f"L{large}")
-            if medium: baggage_summary.append(f"M{medium}")
-            if small: baggage_summary.append(f"S{small}")
-            if baby_seat: baggage_summary.append(f"Baby{baby_seat}")
-            if booster_seat: baggage_summary.append(f"Booster{booster_seat}")
-            if pram: baggage_summary.append(f"Pram{pram}")
-            if ski: baggage_summary.append(f"Ski{ski}")
-            if snowboard: baggage_summary.append(f"Snow{snowboard}")
-            if golf: baggage_summary.append(f"Golf{golf}")
-            if bike: baggage_summary.append(f"Bike{bike}")
-            if boxes: baggage_summary.append(f"Box{boxes}")
-            if musical_instrument: baggage_summary.append(f"Music{musical_instrument}")
-        else:
-            baggage_summary.append("No extra luggage")
-
+                
+        if large: baggage_summary.append(f"L{large}")
+        if medium: baggage_summary.append(f"M{medium}")
+        if small: baggage_summary.append(f"S{small}")
+        if baby_seat: baggage_summary.append(f"Baby{baby_seat}")
+        if booster_seat: baggage_summary.append(f"Booster{booster_seat}")
+        if pram: baggage_summary.append(f"Pram{pram}")
+        if ski: baggage_summary.append(f"Ski{ski}")
+        if snowboard: baggage_summary.append(f"Snow{snowboard}")
+        if golf: baggage_summary.append(f"Golf{golf}")
+        if bike: baggage_summary.append(f"Bike{bike}")
+        if boxes: baggage_summary.append(f"Box{boxes}")
+        if musical_instrument: baggage_summary.append(f"Music{musical_instrument}")
+        
         # 🧾 최종 요약 문자열
         baggage_str = ", ".join(baggage_summary)
 
