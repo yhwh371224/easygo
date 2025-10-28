@@ -182,6 +182,9 @@
         const returnFlightFields = document.getElementById('return-flight-fields');
         const flightDateInput = document.getElementById('flight-date');
         const dateError = document.getElementById('date-error');
+        const directionSelect = document.getElementById('direction');
+        const startEndFields = document.getElementById('start-end-fields'); // start & end point wrapper
+        const flightFields = document.getElementById('flight-fields');     // flight number & time wrapper
 
         // --- Dynamic Return Flight Fields via AJAX ---
         returnFlightCheckbox.addEventListener("change", function () {
@@ -218,6 +221,20 @@
             }
         });
 
+        // --- Direction-based dynamic fields ---
+        function toggleDirectionFields() {
+            if (directionSelect.value === "Cruise or Point to Point") {
+                startEndFields.style.display = 'block';
+                flightFields.style.display = 'none';
+            } else {
+                startEndFields.style.display = 'none';
+                flightFields.style.display = 'block';
+            }
+        }
+
+        directionSelect.addEventListener('change', toggleDirectionFields);
+        toggleDirectionFields(); // initialize on page load
+
         // --- Title Spinner ---
         let originalTitle = document.title;
         let dots = 0;
@@ -235,7 +252,6 @@
             document.title = originalTitle;
         }
 
-        // --- Stop spinner when page unloads (after successful submission/redirect) ---
         window.addEventListener('beforeunload', stopTitleSpinner);
 
         // --- Form Submit Validation ---
@@ -268,6 +284,20 @@
                 });
             }
 
+            // --- Start/End Point validation if Cruise or Point to Point ---
+            if (directionSelect.value === "Cruise or Point to Point") {
+                const startInput = startEndFields.querySelector('input[name="start_point"]');
+                const endInput = startEndFields.querySelector('input[name="end_point"]');
+                if (!startInput.value.trim() || !endInput.value.trim()) {
+                    startInput.classList.add('is-invalid');
+                    endInput.classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    startInput.classList.remove('is-invalid');
+                    endInput.classList.remove('is-invalid');
+                }
+            }
+
             // --- Prevent submission if invalid ---
             if (!isValid) {
                 event.preventDefault();
@@ -294,8 +324,6 @@
         };
     });
     </script>
-
-
 </script> 
 </body> 
 </html>
