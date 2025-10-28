@@ -1,8 +1,8 @@
 <div class="card text-white bg-secondary p-4" id="return-cruise-fields">
-  <h5 class="text-dark mb-3">🛳️ Return Trip Details (Cruise)</h5>
+  <h5 class="text-dark mb-3">🛳️ Return Trip Details</h5>
 
   <div class="mb-3 pb-1">
-    <label class="form-label" for="return_cruise_date">Return Pickup Date (e.g., 31/07/2026)</label>
+    <label class="form-label" for="return_cruise_date">Return Pickup Date</label>
     <input class="form-control date-picker rounded" name="return_pickup_date" id="return-cruise-date" type="date" placeholder="Your trip date" required>
     <div class="invalid-feedback">Please enter your pickup date!</div>
   </div>
@@ -13,17 +13,13 @@
   </div>
 
   <div class="mb-3 pb-1">
-    <p class="small text-dark mb-3" style="opacity: 0.85;">
-      If your pickup or drop-off location for the return trip is different, please update it below.
-    </p>
-
     <label class="form-label" for="return_start_point">Return Pickup Location<sup class="text-danger ms-1">*</sup></label>
-    <input class="form-control" type="text" placeholder="e.g., Circular Quay Cruise Terminal" required name="return_start_point" id="return-cruise-start">
+    <input class="form-control" type="text" name="return_start_point" id="return-cruise-start">
     <div class="invalid-feedback">Please enter your pickup location!</div>
 
     <div class="mt-3">
       <label class="form-label" for="return_end_point">Return Drop-off Location<sup class="text-danger ms-1">*</sup></label>
-      <input class="form-control" type="text" placeholder="e.g., Sydney CBD Hotel" required name="return_end_point" id="return-cruise-end">
+      <input class="form-control" type="text" name="return_end_point" id="return-cruise-end">
       <div class="invalid-feedback">Please enter your drop-off location!</div>
     </div>
   </div>
