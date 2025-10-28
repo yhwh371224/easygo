@@ -460,19 +460,19 @@ def inquiry_details(request):
         large = int(request.POST.get('baggage_large') or 0)
         medium = int(request.POST.get('baggage_medium') or 0)
         small = int(request.POST.get('baggage_small') or 0)
-        baby_seat = int(request.POST.get('baby_seat') or 0)
-        booster_seat = int(request.POST.get('booster_seat') or 0)
+        baby_seat = int(request.POST.get('baggage_baby') or 0)
+        booster_seat = int(request.POST.get('baggage_booster') or 0)
         pram = int(request.POST.get('baggage_pram') or 0)
         ski = int(request.POST.get('baggage_ski') or 0)
         snowboard = int(request.POST.get('baggage_snowboard') or 0)
         golf = int(request.POST.get('baggage_golf') or 0)
         bike = int(request.POST.get('baggage_bike') or 0)
         boxes = int(request.POST.get('baggage_boxes') or 0)
-        musical_instrument = int(request.POST.get('musical_instrument') or 0)        
+        musical_instrument = int(request.POST.get('baggage_music') or 0)        
 
         # 🎯 요약 문자열 생성
         baggage_summary = []
-                
+
         if large: baggage_summary.append(f"L{large}")
         if medium: baggage_summary.append(f"M{medium}")
         if small: baggage_summary.append(f"S{small}")
@@ -634,19 +634,19 @@ def inquiry_details1(request):
         large = int(request.POST.get('baggage_large') or 0)
         medium = int(request.POST.get('baggage_medium') or 0)
         small = int(request.POST.get('baggage_small') or 0)
-        baby_seat = int(request.POST.get('baby_seat') or 0)
-        booster_seat = int(request.POST.get('booster_seat') or 0)
+        baby_seat = int(request.POST.get('baggage_baby') or 0)
+        booster_seat = int(request.POST.get('baggage_booster') or 0)
         pram = int(request.POST.get('baggage_pram') or 0)
         ski = int(request.POST.get('baggage_ski') or 0)
         snowboard = int(request.POST.get('baggage_snowboard') or 0)
         golf = int(request.POST.get('baggage_golf') or 0)
         bike = int(request.POST.get('baggage_bike') or 0)
         boxes = int(request.POST.get('baggage_boxes') or 0)
-        musical_instrument = int(request.POST.get('musical_instrument') or 0)        
+        musical_instrument = int(request.POST.get('baggage_music') or 0)        
 
         # 🎯 요약 문자열 생성
         baggage_summary = []
-                
+
         if large: baggage_summary.append(f"L{large}")
         if medium: baggage_summary.append(f"M{medium}")
         if small: baggage_summary.append(f"S{small}")
@@ -999,19 +999,19 @@ def confirmation_detail(request):
         large = int(request.POST.get('baggage_large') or 0)
         medium = int(request.POST.get('baggage_medium') or 0)
         small = int(request.POST.get('baggage_small') or 0)
-        baby_seat = int(request.POST.get('baby_seat') or 0)
-        booster_seat = int(request.POST.get('booster_seat') or 0)
+        baby_seat = int(request.POST.get('baggage_baby') or 0)
+        booster_seat = int(request.POST.get('baggage_booster') or 0)
         pram = int(request.POST.get('baggage_pram') or 0)
         ski = int(request.POST.get('baggage_ski') or 0)
         snowboard = int(request.POST.get('baggage_snowboard') or 0)
         golf = int(request.POST.get('baggage_golf') or 0)
         bike = int(request.POST.get('baggage_bike') or 0)
         boxes = int(request.POST.get('baggage_boxes') or 0)
-        musical_instrument = int(request.POST.get('musical_instrument') or 0)        
+        musical_instrument = int(request.POST.get('baggage_music') or 0)        
 
         # 🎯 요약 문자열 생성
         baggage_summary = []
-                
+
         if large: baggage_summary.append(f"L{large}")
         if medium: baggage_summary.append(f"M{medium}")
         if small: baggage_summary.append(f"S{small}")
@@ -1190,19 +1190,19 @@ def booking_detail(request):
         large = int(request.POST.get('baggage_large') or 0)
         medium = int(request.POST.get('baggage_medium') or 0)
         small = int(request.POST.get('baggage_small') or 0)
-        baby_seat = int(request.POST.get('baby_seat') or 0)
-        booster_seat = int(request.POST.get('booster_seat') or 0)
+        baby_seat = int(request.POST.get('baggage_baby') or 0)
+        booster_seat = int(request.POST.get('baggage_booster') or 0)
         pram = int(request.POST.get('baggage_pram') or 0)
         ski = int(request.POST.get('baggage_ski') or 0)
         snowboard = int(request.POST.get('baggage_snowboard') or 0)
         golf = int(request.POST.get('baggage_golf') or 0)
         bike = int(request.POST.get('baggage_bike') or 0)
         boxes = int(request.POST.get('baggage_boxes') or 0)
-        musical_instrument = int(request.POST.get('musical_instrument') or 0)        
+        musical_instrument = int(request.POST.get('baggage_music') or 0)        
 
         # 🎯 요약 문자열 생성
         baggage_summary = []
-                
+
         if large: baggage_summary.append(f"L{large}")
         if medium: baggage_summary.append(f"M{medium}")
         if small: baggage_summary.append(f"S{small}")
@@ -1357,19 +1357,19 @@ def cruise_booking_detail(request):
         large = int(request.POST.get('baggage_large') or 0)
         medium = int(request.POST.get('baggage_medium') or 0)
         small = int(request.POST.get('baggage_small') or 0)
-        baby_seat = int(request.POST.get('baby_seat') or 0)
-        booster_seat = int(request.POST.get('booster_seat') or 0)
+        baby_seat = int(request.POST.get('baggage_baby') or 0)
+        booster_seat = int(request.POST.get('baggage_booster') or 0)
         pram = int(request.POST.get('baggage_pram') or 0)
         ski = int(request.POST.get('baggage_ski') or 0)
         snowboard = int(request.POST.get('baggage_snowboard') or 0)
         golf = int(request.POST.get('baggage_golf') or 0)
         bike = int(request.POST.get('baggage_bike') or 0)
         boxes = int(request.POST.get('baggage_boxes') or 0)
-        musical_instrument = int(request.POST.get('musical_instrument') or 0)        
+        musical_instrument = int(request.POST.get('baggage_music') or 0)        
 
         # 🎯 요약 문자열 생성
         baggage_summary = []
-                
+
         if large: baggage_summary.append(f"L{large}")
         if medium: baggage_summary.append(f"M{medium}")
         if small: baggage_summary.append(f"S{small}")
