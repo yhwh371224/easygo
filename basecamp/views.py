@@ -226,7 +226,7 @@ def payment_cancel(request):
     return render(request, 'basecamp/payment_cancel.html')
 
 
-def payment_options(request): 
+def payment_options(request):
     return render(request, 'basecamp/payment_options.html')
 
 
