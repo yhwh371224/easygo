@@ -5,7 +5,7 @@
 
 
 const datePicker = (() => {
-  let picker = document.querySelectorAll('.date-picker');
+  let picker = document.querySelectorAll('input.date-picker'); // <-- only inputs
       
   if (picker.length === 0) return;
   
