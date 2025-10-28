@@ -210,6 +210,7 @@ def notify_user_payment_paypal(instance_id):
                 post.toll = "" if paid_new >= price else "short payment"
                 post.cash = False
                 post.reminder = True
+                post.pending = False
                 post.discount = ""
 
                 original_notice = post.notice or ""
@@ -354,6 +355,7 @@ def notify_user_payment_stripe(instance_id):
                 post.toll = "" if paid_new >= price else "short payment"
                 post.cash = False
                 post.reminder = True
+                post.pending = False
                 post.discount = ""
 
                 original_notice = post.notice or ""
