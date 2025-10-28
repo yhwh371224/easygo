@@ -2239,6 +2239,7 @@ def email_dispatch_detail(request):
                     user.reminder = True
                     user.toll = ""
                     user.cash = False
+                    user.pending = False
                     user.save()
 
                     context.update({
@@ -2257,6 +2258,7 @@ def email_dispatch_detail(request):
                         user_1.reminder = True
                         user_1.toll = ""
                         user_1.cash = False
+                        user_1.pending = False
                         user_1.notice = user.notice
                         user_1.save()
                     except IndexError:
@@ -2282,6 +2284,7 @@ def email_dispatch_detail(request):
                     user.reminder = True
                     user.toll = ""
                     user.cash = False
+                    user.pending = False
                     user.save()
 
                     context.update({
@@ -2366,12 +2369,14 @@ def email_dispatch_detail(request):
                 if user.return_pickup_time == "x":
                     user.cancelled = True
                     user.is_confirmed = False
+                    user.pending = False
                     user.save()
 
                     second_user = Post.objects.filter(email__iexact=email)[1]
                     second_user.cancelled = True
                     second_user.is_confirmed = False
                     second_user.cash = False
+                    second_user.pending = False
                     second_user.save()
 
                     context.update({
@@ -2396,16 +2401,19 @@ def email_dispatch_detail(request):
                 if user.return_pickup_time == "x":
                     user.cash = True
                     user.reminder = True
+                    user.pending = False
                     user.save()
 
                     second_user = Post.objects.filter(email__iexact=email)[1]                    
                     second_user.cash = True
                     second_user.reminder = True
+                    second_user.pending = False
                     second_user.save()
                     
                 else:
                     user.cash = True
                     user.reminder = True
+                    user.pending = False
                     user.save()                       
 
             handle_email_sending(email, subject, template_name, context, user.email1)
