@@ -29,11 +29,11 @@
 				<div id="start-end-fields" style="display: none;">
 					<div class="mb-3 pb-1">
 						<label class="form-label">Start Point (Pickup Location)</label>
-						<input class="form-control" type="text" name="start_point" placeholder="Start Point">
+						<input class="form-control" type="text" name="return_start_point" placeholder="Return Start Point">
 					</div>
 					<div class="mb-3 pb-1">
 						<label class="form-label">End Point (Drop-off Location)</label>
-						<input class="form-control" type="text" name="end_point" placeholder="End Point">
+						<input class="form-control" type="text" name="return_end_point" placeholder="Return End Point">
 					</div>
 				</div>
 
@@ -41,11 +41,11 @@
 				<div id="flight-fields">
 					<div class="mb-3 pb-1">
 						<label class="form-label">Flight number</label>
-						<input class="form-control" type="text" placeholder="Your flight number" name="flight_number">
+						<input class="form-control" type="text" placeholder="Your flight number" name="return_flight_number">
 					</div>
 					<div class="mb-3 pb-1">
 						<label class="form-label">Flight time (Sydney)</label>
-						<input class="form-control" name="flight_time" type="time">
+						<input class="form-control" name="return_flight_time" type="time">
 					</div>
 				</div>
 
@@ -63,3 +63,30 @@
     </div>
   </div> -->
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const returnDirection = document.getElementById('return-direction');
+  const startEndFields = document.getElementById('start-end-fields');
+
+  // Initialize visibility on page load
+  toggleStartEndFields();
+
+  // Show/hide based on selection
+  returnDirection.addEventListener('change', toggleStartEndFields);
+
+  function toggleStartEndFields() {
+    if (returnDirection.value === "Cruise or Point to Point") {
+      startEndFields.style.display = 'block';
+      // Make inputs required when visible
+      startEndFields.querySelectorAll('input').forEach(input => input.setAttribute('required', 'required'));
+    } else {
+      startEndFields.style.display = 'none';
+      // Remove required if hidden
+      startEndFields.querySelectorAll('input').forEach(input => input.removeAttribute('required'));
+    }
+  }
+});
+</script>
+
+
