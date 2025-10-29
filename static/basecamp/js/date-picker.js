@@ -5,51 +5,27 @@
 
 
 const datePicker = (() => {
-  const pickers = document.querySelectorAll('input.date-picker');
-  if (pickers.length === 0) return;
+  let picker = document.querySelectorAll('.date-picker');
+      
+  if (picker.length === 0) return;
+  
+  for (let i = 0; i < picker.length; i++) {
 
-  pickers.forEach(p => {
-    const defaults = {
-      disableMobile: true  // boolean
-    };
-    
-    const userOptions = p.dataset.datepickerOptions ? JSON.parse(p.dataset.datepickerOptions) : {};
-    
-    let linkedOptions = {};
-    if (p.classList.contains('date-range') && p.dataset.linkedInput) {
-      linkedOptions.plugins = [new rangePlugin({ input: p.dataset.linkedInput })];
+    let defaults = {
+      disableMobile: true,
     }
+    
+    let userOptions;
+    if(picker[i].dataset.datepickerOptions != undefined) userOptions = JSON.parse(picker[i].dataset.datepickerOptions);
+    let linkedInput = picker[i].classList.contains('date-range') && picker[i].dataset.linkedInput ? 
+                  { plugins: [new rangePlugin({ input: picker[i].dataset.linkedInput })] } : {};
+    let options = {...defaults, ...linkedInput, ...userOptions};
 
-    const options = {...defaults, ...linkedOptions, ...userOptions};
-
-    // 반드시 altInput 제거!
+    // altInput 제거
     if (options.altInput) delete options.altInput;
 
-    flatpickr(p, options);
-  });
+    flatpickr(picker[i], options);
+  }
 })();
 
-
-// const datePicker = (() => {
-//   let picker = document.querySelectorAll('input.date-picker');      
-//   if (picker.length === 0) return;
-  
-//   picker.forEach(p => {
-//     let defaults = { disableMobile: true };
-//     let userOptions = p.dataset.datepickerOptions ? JSON.parse(p.dataset.datepickerOptions) : {};
-//     flatpickr(p, {...defaults, ...userOptions});
-//   });
-// })();
-
-
-// document.addEventListener('DOMContentLoaded', function () {
-//   const pickers = document.querySelectorAll('input.date-picker');
-//   if (pickers.length === 0) return;
-
-//   pickers.forEach(p => {
-//     flatpickr(p, {
-//       dateFormat: "Y-m-d",   // Django가 요구하는 형식
-//       allowInput: true,       // 직접 입력 가능
-//     });
-//   });
-// });
+export default datePicker;
