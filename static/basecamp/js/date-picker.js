@@ -4,24 +4,24 @@
  */
 
 
-// const datePicker = (() => {
-//   let picker = document.querySelectorAll('input.date-picker'); // <-- only inputs      
-//   if (picker.length === 0) return;
+const datePicker = (() => {
+  let picker = document.querySelectorAll('input.date-picker'); // <-- only inputs      
+  if (picker.length === 0) return;
   
-//   for (let i = 0; i < picker.length; i++) {
+  for (let i = 0; i < picker.length; i++) {
 
-//     let defaults = {
-//       disableMobile: 'true'
-//     }
+    let defaults = {
+      disableMobile: 'true'
+    }
     
-//     let userOptions;
-//     if(picker[i].dataset.datepickerOptions != undefined) userOptions = JSON.parse(picker[i].dataset.datepickerOptions);
-//     let linkedInput = picker[i].classList.contains('date-range') ? {"plugins": [new rangePlugin({ input: picker[i].dataset.linkedInput })]} : '{}';
-//     let options = {...defaults, ...linkedInput, ...userOptions}
+    let userOptions;
+    if(picker[i].dataset.datepickerOptions != undefined) userOptions = JSON.parse(picker[i].dataset.datepickerOptions);
+    let linkedInput = picker[i].classList.contains('date-range') ? {"plugins": [new rangePlugin({ input: picker[i].dataset.linkedInput })]} : '{}';
+    let options = {...defaults, ...linkedInput, ...userOptions}
 
-//     flatpickr(picker[i], options);
-//   }
-// })();
+    flatpickr(picker[i], options);
+  }
+})();
 
 // const datePicker = (() => {
 //   let picker = document.querySelectorAll('input.date-picker');      
@@ -35,14 +35,14 @@
 // })();
 
 
-document.addEventListener('DOMContentLoaded', function () {
-  const pickers = document.querySelectorAll('input.date-picker');
-  if (pickers.length === 0) return;
+// document.addEventListener('DOMContentLoaded', function () {
+//   const pickers = document.querySelectorAll('input.date-picker');
+//   if (pickers.length === 0) return;
 
-  pickers.forEach(p => {
-    flatpickr(p, {
-      dateFormat: "Y-m-d",   // Django가 요구하는 형식
-      allowInput: true,       // 직접 입력 가능
-    });
-  });
-});
+//   pickers.forEach(p => {
+//     flatpickr(p, {
+//       dateFormat: "Y-m-d",   // Django가 요구하는 형식
+//       allowInput: true,       // 직접 입력 가능
+//     });
+//   });
+// });
