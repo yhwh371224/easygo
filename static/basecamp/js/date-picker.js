@@ -5,23 +5,30 @@
 
 
 const datePicker = (() => {
-  let picker = document.querySelectorAll('input.date-picker'); // <-- only inputs      
-  if (picker.length === 0) return;
-  
-  for (let i = 0; i < picker.length; i++) {
+  const pickers = document.querySelectorAll('input.date-picker');
+  if (pickers.length === 0) return;
 
-    let defaults = {
-      disableMobile: 'true'
-    }
+  pickers.forEach(p => {
+    const defaults = {
+      disableMobile: true  // boolean
+    };
     
-    let userOptions;
-    if(picker[i].dataset.datepickerOptions != undefined) userOptions = JSON.parse(picker[i].dataset.datepickerOptions);
-    let linkedInput = picker[i].classList.contains('date-range') ? {"plugins": [new rangePlugin({ input: picker[i].dataset.linkedInput })]} : '{}';
-    let options = {...defaults, ...linkedInput, ...userOptions}
+    const userOptions = p.dataset.datepickerOptions ? JSON.parse(p.dataset.datepickerOptions) : {};
+    
+    let linkedOptions = {};
+    if (p.classList.contains('date-range') && p.dataset.linkedInput) {
+      linkedOptions.plugins = [new rangePlugin({ input: p.dataset.linkedInput })];
+    }
 
-    flatpickr(picker[i], options);
-  }
+    const options = {...defaults, ...linkedOptions, ...userOptions};
+
+    // 반드시 altInput 제거!
+    if (options.altInput) delete options.altInput;
+
+    flatpickr(p, options);
+  });
 })();
+
 
 // const datePicker = (() => {
 //   let picker = document.querySelectorAll('input.date-picker');      
