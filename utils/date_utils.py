@@ -1,6 +1,6 @@
 from datetime import datetime, date
 
-def parse_future_date(date_str, field_name="date", required=True):
+def parse_future_date(date_str, field_name="pickup_date", required=True):
     """
     YYYY-MM-DD 또는 Month Day, Year 형식의 날짜를 파싱하고,
     오늘 이전 날짜면 ValueError 발생
