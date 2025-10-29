@@ -1802,7 +1802,7 @@ def return_trip_detail(request):
         flight_number = request.POST.get('flight_number', '')
         flight_time = request.POST.get('flight_time', '')
         pickup_date = request.POST.get('pickup_date', '')            
-        pickup_time = request.POST.get('pickup_time', '', '')
+        pickup_time = request.POST.get('pickup_time', '')
         start_point = request.POST.get('start_point', '')
         end_point = request.POST.get('end_point', '') 
         direction = request.POST.get('direction', '')               
