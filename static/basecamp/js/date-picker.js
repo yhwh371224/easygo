@@ -23,15 +23,26 @@
 //   }
 // })();
 
-const datePicker = (() => {
-  let picker = document.querySelectorAll('input.date-picker');      
-  if (picker.length === 0) return;
+// const datePicker = (() => {
+//   let picker = document.querySelectorAll('input.date-picker');      
+//   if (picker.length === 0) return;
   
-  picker.forEach(p => {
-    let defaults = { disableMobile: true };
-    let userOptions = p.dataset.datepickerOptions ? JSON.parse(p.dataset.datepickerOptions) : {};
-    flatpickr(p, {...defaults, ...userOptions});
+//   picker.forEach(p => {
+//     let defaults = { disableMobile: true };
+//     let userOptions = p.dataset.datepickerOptions ? JSON.parse(p.dataset.datepickerOptions) : {};
+//     flatpickr(p, {...defaults, ...userOptions});
+//   });
+// })();
+
+
+document.addEventListener('DOMContentLoaded', function () {
+  const pickers = document.querySelectorAll('input.date-picker');
+  if (pickers.length === 0) return;
+
+  pickers.forEach(p => {
+    flatpickr(p, {
+      dateFormat: "Y-m-d",   // Django가 요구하는 형식
+      allowInput: true,       // 직접 입력 가능
+    });
   });
-})();
-
-
+});
