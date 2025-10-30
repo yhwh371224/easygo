@@ -45,7 +45,7 @@ def parse_date(date_str, field_name="Date", required=True, reference_date=None):
 
 # email_dispatch_detail 
 def handle_email_sending(request, email, subject, template_name, context, cc_admin=True, email1=None):
-    html_content = render_to_string(template_name, context, request=request)
+    html_content = render_to_string(template_name, context)
     text_content = strip_tags(html_content)
     
     recipient_list = [email, ADMIN_EMAIL]
