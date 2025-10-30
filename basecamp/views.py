@@ -1577,45 +1577,44 @@ def sending_email_first_detail(request):
                 else:
                     template_name = "basecamp/html_email-confirmation.html"
 
-                html_content = render_to_string("basecamp/html_email-confirmation.html", 
-                                        {'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 'email': user.email, 'email1': user.email1,
-                                            'pickup_date': user.pickup_date, 'flight_number': user.flight_number,
-                                            'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
-                                            'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
-                                            'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
-                                            'return_direction': user.return_direction, 'return_pickup_date': user.return_pickup_date, 
-                                            'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
-                                            'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
-                                            'price': user.price, 'paid': user.paid, 'cash': user.cash})
+                # html_content = render_to_string("basecamp/html_email-confirmation.html", 
+                #                         {'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 'email': user.email, 'email1': user.email1,
+                #                             'pickup_date': user.pickup_date, 'flight_number': user.flight_number,
+                #                             'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
+                #                             'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
+                #                             'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
+                #                             'return_direction': user.return_direction, 'return_pickup_date': user.return_pickup_date, 
+                #                             'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
+                #                             'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
+                #                             'price': user.price, 'paid': user.paid, 'cash': user.cash})
             
-                text_content = strip_tags(html_content)
-                email = EmailMultiAlternatives(
-                    "Booking confirmation - EasyGo",
-                    text_content,
-                    '',
-                    [email, RECIPIENT_EMAIL]
-                )
-                email.attach_alternative(html_content, "text/html")
-                email.send()
+                # text_content = strip_tags(html_content)
+                # email = EmailMultiAlternatives(
+                #     "Booking confirmation - EasyGo",
+                #     text_content,
+                #     '',
+                #     [email, RECIPIENT_EMAIL]
+                # )
+                # email.attach_alternative(html_content, "text/html")
+                # email.send()
                 
-                # subject = "Booking confirmation - EasyGo" # 제목도 기존 로직에서 가져옴
+                subject = "Booking confirmation - EasyGo" 
 
-                # # 템플릿에 전달할 컨텍스트 딕셔너리 구성
-                # context = {
-                #     'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 
-                #     'email': user.email, 'email1': user.email1, 'pickup_date': user.pickup_date, 
-                #     'flight_number': user.flight_number, 'flight_time': user.flight_time, 'pickup_time': user.pickup_time, 
-                #     'start_point': user.start_point, 'end_point': user.end_point, 'direction': user.direction, 
-                #     'street': user.street, 'suburb': user.suburb, 'no_of_passenger': user.no_of_passenger, 
-                #     'no_of_baggage': user.no_of_baggage, 'return_direction': user.return_direction, 
-                #     'return_pickup_date': user.return_pickup_date, 'return_flight_number': user.return_flight_number, 
-                #     'return_flight_time': user.return_flight_time, 'return_pickup_time': user.return_pickup_time, 
-                #     'return_start_point': user.return_start_point, 'return_end_point': user.return_end_point, 
-                #     'message': user.message, 'notice': user.notice, 'price': user.price, 
-                #     'toll': user.toll, 'paid': user.paid, 'cash': user.cash,
-                # }
+                context = {
+                    'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 
+                    'email': user.email, 'email1': user.email1, 'pickup_date': user.pickup_date, 
+                    'flight_number': user.flight_number, 'flight_time': user.flight_time, 'pickup_time': user.pickup_time, 
+                    'start_point': user.start_point, 'end_point': user.end_point, 'direction': user.direction, 
+                    'street': user.street, 'suburb': user.suburb, 'no_of_passenger': user.no_of_passenger, 
+                    'no_of_baggage': user.no_of_baggage, 'return_direction': user.return_direction, 
+                    'return_pickup_date': user.return_pickup_date, 'return_flight_number': user.return_flight_number, 
+                    'return_flight_time': user.return_flight_time, 'return_pickup_time': user.return_pickup_time, 
+                    'return_start_point': user.return_start_point, 'return_end_point': user.return_end_point, 
+                    'message': user.message, 'notice': user.notice, 'price': user.price, 
+                    'toll': user.toll, 'paid': user.paid, 'cash': user.cash,
+                }
 
-                # handle_email_sending(request, user.email, subject, template_name, context, email1=user.email1)
+                handle_email_sending(request, user.email, subject, template_name, context, email1=user.email1)
 
             return render(request, 'basecamp/inquiry_done.html')  
         
