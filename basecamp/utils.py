@@ -57,7 +57,8 @@ def handle_email_sending(request, email, subject, template_name, context, cc_adm
         subject,
         text_content,
         f"EasyGo Airport Shuttle <{SENDER_EMAIL}>",
-        recipient_list
+        recipient_list,
+        encoding='utf-8'
     )
     email_message.attach_alternative(html_content, "text/html")
 
