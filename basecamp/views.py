@@ -26,7 +26,7 @@ from basecamp.area_full import get_more_suburbs
 from basecamp.area_home import get_home_suburbs
 
 from utils.pdf import render_to_pdf
-from utils.date_utils import parse_future_date
+from .utils import parse_date
 
 
 logger = logging.getLogger(__name__)
@@ -338,7 +338,11 @@ def inquiry_details(request):
         name = request.POST.get('name', '')
         contact = request.POST.get('contact', '')
         email = request.POST.get('email', '')  
-        pickup_date = request.POST.get('pickup_date')           
+
+        # ✅ Collect date strings
+        pickup_date_str = request.POST.get('pickup_date', '')           
+        return_pickup_date_str = request.POST.get('return_pickup_date', '')  
+
         flight_number = request.POST.get('flight_number', '')
         flight_time = request.POST.get('flight_time', '')
         pickup_time = request.POST.get('pickup_time')
@@ -348,9 +352,7 @@ def inquiry_details(request):
         end_point = request.POST.get('end_point', '')        
         street = request.POST.get('street', '')
         no_of_passenger = request.POST.get('no_of_passenger', '')
-        no_of_baggage = request.POST.get('no_of_baggage', '')
         return_direction = request.POST.get('return_direction', '')  
-        return_pickup_date = request.POST.get('return_pickup_date') 
         return_flight_number = request.POST.get('return_flight_number', '')
         return_flight_time = request.POST.get('return_flight_time', '')
         return_pickup_time = request.POST.get('return_pickup_time')
@@ -369,6 +371,22 @@ def inquiry_details(request):
             created__gte=timezone.now() - timedelta(seconds=10)
         ).exists()
 
+        try:
+            pickup_date_obj = parse_date(
+                pickup_date_str, 
+                field_name="Pickup Date", 
+                required=True
+            )
+
+            return_pickup_date_obj = parse_date(
+                return_pickup_date_str, 
+                field_name="Return Pickup Date", 
+                required=False, 
+                reference_date=pickup_date_obj 
+            )
+        except ValueError as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+
         if recent_duplicate:
             return JsonResponse({'success': False, 'message': 'Duplicate inquiry recently submitted. Please wait before trying again.'})       
 
@@ -376,7 +394,7 @@ def inquiry_details(request):
             'name': name,
             'contact': contact,
             'email': email,
-            'pickup_date': pickup_date,
+            'pickup_date': pickup_date_obj.strftime('%Y-%m-%d'),
             'pickup_time': pickup_time,
             'direction': direction,
             'street': street,
@@ -386,7 +404,7 @@ def inquiry_details(request):
             'flight_time': flight_time,
             'start_point': start_point,
             'end_point': end_point,
-            'return_pickup_date': return_pickup_date,
+            'return_pickup_date': return_pickup_date_obj.strftime('%Y-%m-%d') if return_pickup_date_obj else '',
             'return_flight_number': return_flight_number,
             'return_flight_time': return_flight_time,
             'return_pickup_time': return_pickup_time,
@@ -398,7 +416,7 @@ def inquiry_details(request):
         inquiry_email_exists = Inquiry.objects.filter(email=email).exists()
         post_email_exists = Post.objects.filter(email=email).exists()
 
-        email_subject = f"Inquiry on {pickup_date}"
+        email_subject = f"Inquiry on {data['pickup_date']}"
 
         email_content_template = '''
         Hello, {name} \n
@@ -472,13 +490,13 @@ def inquiry_details(request):
                     
         p = Inquiry(
             name=name, contact=contact, email=email, 
-            pickup_date=pickup_date, 
+            pickup_date=pickup_date_obj, 
             flight_number=flight_number, flight_time=flight_time, 
             pickup_time=pickup_time, direction=direction, suburb=suburb, 
             street=street, start_point=start_point, end_point=end_point, 
             no_of_passenger=no_of_passenger, no_of_baggage=baggage_str, 
             return_direction=return_direction, 
-            return_pickup_date=return_pickup_date, 
+            return_pickup_date=return_pickup_date_obj, 
             return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
             return_pickup_time=return_pickup_time, return_start_point=return_start_point, 
             return_end_point=return_end_point, message=message
@@ -497,32 +515,36 @@ def inquiry_details(request):
 
 # inquiry (simple one) for airport from home page
 def inquiry_details1(request):
-    if request.method == "POST":        
-        direction = ""
-        suburb = ""
-        
-        try:
-            # 필수/선택 날짜 처리
-            pickup_date = parse_future_date(request.POST.get('pickup_date'), "pickup_date")
-            
-        except ValueError as e:
-            return JsonResponse({'success': False, 'error': str(e)})
-        
-        name = request.POST.get('name')
-        contact = request.POST.get('contact')
-        email = request.POST.get('email')
+    if request.method == "POST":
+        pickup_date = request.POST.get('pickup_date', '') 
+        name = request.POST.get('name', '')
+        contact = request.POST.get('contact', '')
+        email = request.POST.get('email', '')
         flight_number = request.POST.get('flight_number', '')
         flight_time = request.POST.get('flight_time', '')
-        pickup_time = request.POST.get('pickup_time')        
+        pickup_time = request.POST.get('pickup_time', '')
         start_point = request.POST.get('start_point', '')
         end_point = request.POST.get('end_point', '')        
         street = request.POST.get('street', '')  
-        no_of_passenger = request.POST.get('no_of_passenger')
-        no_of_baggage = request.POST.get('no_of_baggage')        
+        no_of_passenger = request.POST.get('no_of_passenger', '')
         message = request.POST.get('message', '')
+        
         original_start_point = request.session.get('original_start_point', start_point)
         original_end_point = request.session.get('original_end_point', end_point)
         
+        direction = ""
+        suburb = ""
+
+        # ✅ 날짜 파싱 및 유효성 검증 
+        try:
+            parsed_date = datetime.strptime(pickup_date, '%Y-%m-%d').date()
+            
+            if parsed_date <= date.today():
+                return JsonResponse({'success': False, 'error': 'Pickup date must be a future date.'})
+
+        except ValueError:
+            return JsonResponse({'success': False, 'error': 'Invalid date format. Please use YYYY-MM-DD.'})
+
         
         # ✅ 중복 제출 방지 
         recent_duplicate = Inquiry.objects.filter(
@@ -533,6 +555,7 @@ def inquiry_details1(request):
         if recent_duplicate:
             return JsonResponse({'success': False, 'message': 'Duplicate inquiry recently submitted. Please wait before trying again.'})
 
+        # 2. data 딕셔너리 생성 (이메일 포맷팅 및 DB 저장을 위한 데이터 모음)
         data = {
             'name': name,
             'contact': contact,
@@ -543,82 +566,67 @@ def inquiry_details1(request):
             'start_point': start_point,
             'end_point': end_point,
             'street': street,
-            'no_of_passenger': no_of_passenger,           
-            }
+            'no_of_passenger': no_of_passenger,
+            'message': message, # 메시지도 data 딕셔너리에 추가합니다.
+            'status_message': '' # 이메일 템플릿용 임시 필드
+        }
      
         inquiry_email_exists = Inquiry.objects.filter(email=email).exists()
         post_email_exists = Post.objects.filter(email=email).exists()
+        
+        # 3. 이메일 템플릿 (키워드 기반 포맷팅으로 통일)
+        email_content_template = '''
+        Hello, {name} \n
+        {status_message}\n 
+        *** It starts from Home Page
+        =============================
+        Contact: {contact}
+        Email: {email}  
+        Flight date: {pickup_date}
+        Flight number: {flight_number}
+        Pickup time: {pickup_time}
+        start_point: {start_point}
+        Street: {street}
+        end_point: {end_point}
+        Passenger: {no_of_passenger}
+        Message: {message}
+        =============================\n        
+        Best Regards,
+        EasyGo Admin \n\n        
+        '''
 
         if inquiry_email_exists or post_email_exists:
-            content = '''
-            Hello, {} \n
-            ✅ Exist in Inquiry or Post *\n 
-            *** It starts from Home Page
-            =============================
-            Contact: {}
-            Email: {}  
-            Flight date: {}
-            Flight number: {}
-            Pickup time: {}
-            start_point: {}
-            Street: {}
-            end_point: {}
-            Passenger: {}            
-            =============================\n        
-            Best Regards,
-            EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'],  data['pickup_date'], data['flight_number'],
-                        data['pickup_time'], data['start_point'], data['street'],  data['end_point'], data['no_of_passenger'], 
-                        )
-            
-            send_mail(data['pickup_date'], content, '', [RECIPIENT_EMAIL])
-
+            data['status_message'] = "✅ Exist in Inquiry or Post *"
         else:
-            content = '''
-            Hello, {} \n
-            Neither in Inquiry & Post *\n 
-            *** It starts from Home Page
-            =============================
-            Contact: {}
-            Email: {}  
-            Flight date: {}
-            Flight number: {}
-            Pickup time: {}
-            ✅ start_point: {}
-            Street: {}
-            end_point: {}
-            Passenger: {}            
-            =============================\n        
-            Best Regards,
-            EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'],  data['pickup_date'], data['flight_number'],
-                        data['pickup_time'], data['start_point'], data['street'],  data['end_point'], data['no_of_passenger'], 
-                        )
+            data['status_message'] = "Neither in Inquiry & Post *"
             
-            send_mail(data['pickup_date'], content, '', [RECIPIENT_EMAIL])     
+        content = email_content_template.format(**data)
         
+        email_subject = f"Inquiry on {data['pickup_date']} - {data['name']}"
+        send_mail(email_subject, content, '', [RECIPIENT_EMAIL])
+
         if original_start_point == 'International Airport':
             direction = 'Pickup from Intl Airport'
-            suburb = end_point
+            suburb = original_end_point # end_point 대신 original_end_point 사용
             start_point = ''
             end_point = ''
         elif original_start_point == 'Domestic Airport':
             direction = 'Pickup from Domestic Airport'
-            suburb = end_point
+            suburb = original_end_point # end_point 대신 original_end_point 사용
             start_point = ''
             end_point = ''
         elif original_end_point == 'International Airport':
             direction = 'Drop off to Intl Airport'
-            suburb = start_point
+            suburb = original_start_point # start_point 대신 original_start_point 사용
             end_point = ''
             start_point = ''
         elif original_end_point == 'Domestic Airport':
             direction = 'Drop off to Domestic Airport'
-            suburb = start_point
+            suburb = original_start_point # start_point 대신 original_start_point 사용
             end_point = ''
-            start_point = ''  
-
-        # 🧳 개별 수하물 항목 수집
+            start_point = ''
+        
+        # 6. 개별 수하물 항목 수집 및 요약 (기존 로직 유지)
         large = int(request.POST.get('baggage_large') or 0)
         medium = int(request.POST.get('baggage_medium') or 0)
         small = int(request.POST.get('baggage_small') or 0)
@@ -632,9 +640,7 @@ def inquiry_details1(request):
         boxes = int(request.POST.get('baggage_boxes') or 0)
         musical_instrument = int(request.POST.get('baggage_music') or 0)        
 
-        # 🎯 요약 문자열 생성
         baggage_summary = []
-
         if large: baggage_summary.append(f"L{large}")
         if medium: baggage_summary.append(f"M{medium}")
         if small: baggage_summary.append(f"S{small}")
@@ -648,16 +654,18 @@ def inquiry_details1(request):
         if boxes: baggage_summary.append(f"Box{boxes}")
         if musical_instrument: baggage_summary.append(f"Music{musical_instrument}")
         
-        # 🧾 최종 요약 문자열
         baggage_str = ", ".join(baggage_summary)
         
-        p = Inquiry(name=name, contact=contact, email=email, pickup_date=pickup_date, flight_number=flight_number,
-                 flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
-                 start_point=start_point, end_point=end_point, no_of_passenger=no_of_passenger, no_of_baggage=baggage_str, 
-                 message=message)
+        p = Inquiry(
+            name=name, contact=contact, email=email, pickup_date=parsed_date, 
+            flight_number=flight_number, flight_time=flight_time, pickup_time=pickup_time, 
+            direction=direction, suburb=suburb, street=street,
+            start_point=start_point, end_point=end_point, 
+            no_of_passenger=no_of_passenger, no_of_baggage=baggage_str, 
+            message=message
+        )
         
         p.save()
-
 
         return render(request, 'basecamp/inquiry_done.html')
 
