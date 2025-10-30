@@ -56,15 +56,15 @@ def handle_email_sending(request, email, subject, template_name, context, email1
         '',
         recipient_list,
     )
-    email_message.attach_alternative(html_content.encode('utf-8'), "text/html; charset=UTF-8")
+    email_message.attach_alternative(html_content, "text/html; charset=UTF-8")
     email_message.encoding = 'utf-8'
 
-    # 🔸 Base MIME message 수정 (이메일 헤더에 UTF-8 명시)
+    # (선택) 메일 헤더에 charset 명시 — Outlook 호환성 향상
     email_message.extra_headers = {
         'Content-Type': 'text/html; charset=UTF-8',
         'Content-Transfer-Encoding': '8bit',
     }
-
+    
     email_message.send()
 
 
