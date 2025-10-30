@@ -2401,7 +2401,7 @@ def email_dispatch_detail(request):
                     if selected_option == "Apologies Cancellation of Booking":
                         if user.contact:
                             message = f"EasyGo - Urgent notice! \
-                                \n\n Dear {second_user.name}, We have sent an urgent email. Please check your email. \
+                                \n\n Dear {user.name}, We have sent an urgent email. Please check your email. \
                                 \n\n Reply only via email >> info@easygoshuttle.com.au"
                             send_sms_notice(user.contact, message)    
                             send_whatsapp_message(user.contact, message)              
