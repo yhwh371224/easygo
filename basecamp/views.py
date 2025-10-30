@@ -335,20 +335,10 @@ def wrong_date_today(request):
 # Inquiry for airport 
 def inquiry_details(request):
     if request.method == "POST":
-        try:
-            # 필수/선택 날짜 처리
-            pickup_date = parse_future_date(request.POST.get('pickup_date'), "pickup_date")
-            return_pickup_date = parse_future_date(
-                request.POST.get('return_pickup_date'),
-                "return_pickup_date",
-                required=False  # 선택사항
-            )
-        except ValueError as e:
-            return JsonResponse({'success': False, 'error': str(e)})
-        
         name = request.POST.get('name', '')
         contact = request.POST.get('contact', '')
-        email = request.POST.get('email', '')             
+        email = request.POST.get('email', '')  
+        pickup_date = request.POST.get('pickup_date')           
         flight_number = request.POST.get('flight_number', '')
         flight_time = request.POST.get('flight_time', '')
         pickup_time = request.POST.get('pickup_time')
@@ -359,7 +349,8 @@ def inquiry_details(request):
         street = request.POST.get('street', '')
         no_of_passenger = request.POST.get('no_of_passenger', '')
         no_of_baggage = request.POST.get('no_of_baggage', '')
-        return_direction = request.POST.get('return_direction', '')   
+        return_direction = request.POST.get('return_direction', '')  
+        return_pickup_date = request.POST.get('return_pickup_date') 
         return_flight_number = request.POST.get('return_flight_number', '')
         return_flight_time = request.POST.get('return_flight_time', '')
         return_pickup_time = request.POST.get('return_pickup_time')
@@ -385,7 +376,7 @@ def inquiry_details(request):
             'name': name,
             'contact': contact,
             'email': email,
-            'pickup_date': pickup_date.strftime('%Y-%m-%d') if pickup_date else None,
+            'pickup_date': pickup_date,
             'pickup_time': pickup_time,
             'direction': direction,
             'street': street,
@@ -395,7 +386,7 @@ def inquiry_details(request):
             'flight_time': flight_time,
             'start_point': start_point,
             'end_point': end_point,
-            'return_pickup_date': return_pickup_date.strftime('%Y-%m-%d') if return_pickup_date else None,
+            'return_pickup_date': return_pickup_date,
             'return_flight_number': return_flight_number,
             'return_flight_time': return_flight_time,
             'return_pickup_time': return_pickup_time,
