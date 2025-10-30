@@ -176,6 +176,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'context_processors.recaptcha_site_key',
                 'context_processors.add_custom_context',
+                'context_processors.bank_settings',
             ],
         },
     },
@@ -336,20 +337,26 @@ EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 EMAIL_BACKEND = config('EMAIL_BACKEND')
 
+# Gmail API settings
 GMAIL_API_SERVICE_ACCOUNT_FILE = config('GMAIL_API_SERVICE_ACCOUNT_FILE')
 
+# reCAPTCHA settings
 RECAPTCHA_V2_SITE_KEY = config('RECAPTCHA_V2_SITE_KEY')
 RECAPTCHA_V2_SECRET_KEY = config('RECAPTCHA_V2_SECRET_KEY')
 
 RECAPTCHA_V3_SITE_KEY = config('RECAPTCHA_V3_SITE_KEY')
 RECAPTCHA_V3_SECRET_KEY = config('RECAPTCHA_V3_SECRET_KEY')
 
+# MySQL Backup Database Configuration
 MYSQL_CONFIG = {
     'user': config('DB_USER'),
     'password': config('DB_USER_PASSWORD'),
     'host': config('DB_HOST'),
     'database': config('DB_NAME')
 }
+
+# Banking details (anz, commbank, westpac, nab)
+DEFAULT_BANK_CODE = 'westpac'
 
 MARKDOWNX_MEDIA_PATH = datetime.now().strftime('markdownx/%Y/%m/%d/')
 
