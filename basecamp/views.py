@@ -1831,7 +1831,7 @@ def return_trip_detail(request):
         '''
         content = content_template.format(**data)
 
-        subject = f"[New Return Trip] Submission from {data['name']} ({data['pickup_date']})"
+        subject = f"[New Return Trip] Submission from {data['name']})"
 
         send_mail(subject, content, '', [RECIPIENT_EMAIL])
          
