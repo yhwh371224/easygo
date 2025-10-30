@@ -1589,7 +1589,7 @@ def sending_email_first_detail(request):
                                             'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
                                             'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
                                             'price': user.price, 'paid': user.paid, 'cash': user.cash, 'start_point': getattr(user, 'start_point', ''),  
-                                            'return_start_point': getattr(user, 'return_start_point', ''),
+                                            'return_start_point': getattr(user, 'return_start_point', ''), 'toll': getattr(user, 'toll', 0), 
                                         })
 
                 text_content = strip_tags(html_content)
@@ -1665,7 +1665,7 @@ def sending_email_second_detail(request):
                 'return_direction': user.return_direction, 'return_pickup_date': user.return_pickup_date, 'return_flight_number': user.return_flight_number, 
                 'return_flight_time': user.return_flight_time, 'return_pickup_time': user.return_pickup_time, 'message': user.message, 'notice': user.notice, 
                 'price': double_price, 'toll': user.toll, 'paid': double_paid, 'cash': user.cash, 'start_point': getattr(user, 'start_point', ''),  
-                'return_start_point': getattr(user, 'return_start_point', ''),
+                'return_start_point': getattr(user, 'return_start_point', ''), 'toll': getattr(user, 'toll', 0), 
             }
 
             html_content = render_to_string(template_name, context)
