@@ -51,9 +51,24 @@ class Command(BaseCommand):
                     return '+61' + phone_number[1:]
                 else:
                     return '+' + phone_number
+                
+
+            def format_whatsapp_number(phone_number):
+                if not phone_number:
+                    return None
+
+                phone_number = phone_number.strip()
+
+                if phone_number.startswith('0'):
+                    return '+61' + phone_number[1:]
+                elif phone_number.startswith('+'):
+                    return phone_number
+                else:
+                    return '+' + phone_number
+                        
 
             def send_whatsapp_message(sendto, name, email, price):
-                formatted_number = format_phone_number(sendto)
+                formatted_number = format_whatsapp_number(sendto)
                 try:
                     message = client.messages.create(
                         body="EasyGo - Urgent notice \
