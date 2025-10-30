@@ -40,18 +40,12 @@ def parse_date(date_str, field_name="Date", required=True, reference_date=None):
 
 
 def sanitize_context(context):
-    """
-    context 딕셔너리의 모든 값들을 문자열로 변환하고 None은 빈 문자열로 치환.
-    이모지가 포함된 문자열도 안전하게 HTML로 전달됨.
-    """
     sanitized = {}
-    for key, value in context.items():
-        if value is None:
-            sanitized[key] = ""
-        elif isinstance(value, (int, float, date, datetime, bool)):
-            sanitized[key] = str(value)
+    for k, v in context.items():
+        if v is None:
+            sanitized[k] = ""  # None → 빈 문자열
         else:
-            sanitized[key] = str(value)
+            sanitized[k] = str(v)
     return sanitized
 
 
