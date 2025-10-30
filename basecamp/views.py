@@ -1653,6 +1653,16 @@ def sending_email_second_detail(request):
             else:
                 template_name = "basecamp/html_email-confirmation.html"
 
+            subject = "Booking confirmation - EasyGo"
+
+            context = { 'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 'email': user.email, 'email1': user.email1,
+                'pickup_date': user.pickup_date, 'flight_number': user.flight_number, 'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
+                'direction': user.direction, 'street': user.street, 'suburb': user.suburb, 'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
+                'return_direction': user.return_direction, 'return_pickup_date': user.return_pickup_date, 'return_flight_number': user.return_flight_number, 
+                'return_flight_time': user.return_flight_time, 'return_pickup_time': user.return_pickup_time, 'message': user.message, 'notice': user.notice, 
+                'price': double_price, 'toll': user.toll, 'paid': double_paid, 'cash': user.cash
+            }
+
             html_content = render_to_string(template_name, context)
             text_content = strip_tags(html_content)
 
