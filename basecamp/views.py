@@ -2382,11 +2382,23 @@ def email_dispatch_detail(request):
                         'booking_date': second_user.pickup_date,
                         'return_booking_date': second_user.return_pickup_date
                     })
+
+                    # ✅ Send SMS if option is "Apologies Cancellation of Booking"
+                    if selected_option == "Apologies Cancellation of Booking":
+                        sms_message = f"Dear {second_user.name}, We have sent an urgent email. Please check your email."
+                        if second_user.contact:
+                            send_sms_notice(second_user.contact, sms_message)
                     
                 else:
                     user.cancelled = True
                     user.save()
-                    context.update({'booking_date': user.pickup_date, 'return_booking_date': None})                    
+                    context.update({'booking_date': user.pickup_date, 'return_booking_date': None})  
+
+                    # ✅ SMS for Apologies Cancellation
+                    if selected_option == "Apologies Cancellation of Booking":
+                        if user.contact:
+                            sms_message = f"Dear {user.name}, We have sent an urgent email. Please check your email."
+                            send_sms_notice(user.contact, sms_message)                  
                     
             if selected_option == "Payment discrepancy" and user: 
                 diff = round(float(user.price) - float(user.paid), 2)
