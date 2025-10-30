@@ -56,11 +56,14 @@ def handle_email_sending(request, email, subject, template_name, context, email1
         '',
         recipient_list,
     )
-    # 이 부분이 중요!
-    email_message.attach_alternative(html_content, "text/html; charset=UTF-8")
-
-    # 명시적으로 인코딩을 UTF-8로 지정
+    email_message.attach_alternative(html_content.encode('utf-8'), "text/html; charset=UTF-8")
     email_message.encoding = 'utf-8'
+
+    # 🔸 Base MIME message 수정 (이메일 헤더에 UTF-8 명시)
+    email_message.extra_headers = {
+        'Content-Type': 'text/html; charset=UTF-8',
+        'Content-Transfer-Encoding': '8bit',
+    }
 
     email_message.send()
 
