@@ -60,20 +60,44 @@ def send_sms_notice(phone_number, message_body):
         sms_logger.error(f'Failed to send SMS to {formatted_number}: {e}')
 
 
-def send_whatsapp_message(phone_number, message_body):
-    """Send a WhatsApp message via Twilio."""
+def send_whatsapp_message(phone_number, name):
+    """Send a WhatsApp message via Twilio approved template."""
     formatted_number = format_whatsapp_number(phone_number)
     if not formatted_number:
         sms_logger.error(f"Cannot send message: invalid phone number {phone_number}")
         return
+
     try:
+        # 승인된 템플릿의 Content SID (Twilio Console에서 확인)
+        content_sid = "HX247229bb2bb4e0bcc4fb17ad94fb17a8"
+
         message = client.messages.create(
-            body=message_body,
             from_=whatsapp_from,
-            to=f'whatsapp:{formatted_number}'
+            to=f'whatsapp:{formatted_number}',
+            content_sid=content_sid,
         )
-        sms_logger.info(f'WhatsApp message sent to {formatted_number}')
+
+        sms_logger.info(f'✅ WhatsApp template sent to {formatted_number} ({message.sid})')
+
     except Exception as e:
-        sms_logger.error(f'Failed to send WhatsApp message to {formatted_number}: {e}')
+        sms_logger.error(f'❌ Failed to send WhatsApp message to {formatted_number}: {e}')
+
+
+
+# def send_whatsapp_message(phone_number, message_body):
+#     """Send a WhatsApp message via Twilio."""
+#     formatted_number = format_whatsapp_number(phone_number)
+#     if not formatted_number:
+#         sms_logger.error(f"Cannot send message: invalid phone number {phone_number}")
+#         return
+#     try:
+#         message = client.messages.create(
+#             body=message_body,
+#             from_=whatsapp_from,
+#             to=f'whatsapp:{formatted_number}'
+#         )
+#         sms_logger.info(f'WhatsApp message sent to {formatted_number}')
+#     except Exception as e:
+#         sms_logger.error(f'Failed to send WhatsApp message to {formatted_number}: {e}')
 
 
