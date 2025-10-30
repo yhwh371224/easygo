@@ -250,12 +250,10 @@
 												</p>
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
 													3. <strong>Bank transfer</strong>: You can transfer funds directly to our company's bank account. The transfer details are as follows:<br>
-													<!-- &nbsp; • &nbsp;Account Name: EasyGo Airport Transfers<br>
-													&nbsp; • &nbsp;BSB Number: 082 - 356<br>
-													&nbsp; • &nbsp;Account Number: 98 098 0701<br> -->
 
-													{% include 'basecamp/includes/bank_details.html' with bank='commbank' %}
+													{% include 'basecamp/includes/bank_details.html' with bank=DEFAULT_BANK %}
 													<br>
+													
 													<span style="color:#d9534f;"><strong>✨ Important:</strong> Please include the email address you used for the booking in the payment description.</span><br><br>
 												</p>
                                                 <p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">

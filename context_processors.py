@@ -15,3 +15,8 @@ def add_custom_context(request):
         'site_title': 'EasyGo Admin',   
         'subtitle': 'Welcome to the admin panel',  
     }
+
+def bank_settings(request):
+    return {
+        'DEFAULT_BANK': getattr(settings, 'DEFAULT_BANK_CODE', 'anz')
+    }
