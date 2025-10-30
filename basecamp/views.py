@@ -516,7 +516,7 @@ def inquiry_details(request):
 # inquiry (simple one) for airport from home page
 def inquiry_details1(request):
     if request.method == "POST":
-        pickup_date = request.POST.get('pickup_date', '') 
+        pickup_date_str = request.POST.get('pickup_date', '')  
         name = request.POST.get('name', '')
         contact = request.POST.get('contact', '')
         email = request.POST.get('email', '')
@@ -537,15 +537,15 @@ def inquiry_details1(request):
 
         # ✅ 날짜 파싱 및 유효성 검증 
         try:
-            parsed_date = datetime.strptime(pickup_date, '%Y-%m-%d').date()
-            
-            if parsed_date <= date.today():
-                return JsonResponse({'success': False, 'error': 'Pickup date must be a future date.'})
+            pickup_date_obj = parse_date(
+                pickup_date_str, 
+                field_name="Pickup Date", 
+                required=True
+            )
 
-        except ValueError:
-            return JsonResponse({'success': False, 'error': 'Invalid date format. Please use YYYY-MM-DD.'})
+        except ValueError as e:
+            return JsonResponse({'success': False, 'error': str(e)})
 
-        
         # ✅ 중복 제출 방지 
         recent_duplicate = Inquiry.objects.filter(
             email=email,
@@ -560,7 +560,7 @@ def inquiry_details1(request):
             'name': name,
             'contact': contact,
             'email': email,
-            'pickup_date': pickup_date,
+            'pickup_date': pickup_date_obj.strftime('%Y-%m-%d'),
             'flight_number': flight_number,
             'pickup_time': pickup_time,
             'start_point': start_point,
@@ -657,7 +657,7 @@ def inquiry_details1(request):
         baggage_str = ", ".join(baggage_summary)
         
         p = Inquiry(
-            name=name, contact=contact, email=email, pickup_date=parsed_date, 
+            name=name, contact=contact, email=email, pickup_date=pickup_date_obj,  
             flight_number=flight_number, flight_time=flight_time, pickup_time=pickup_time, 
             direction=direction, suburb=suburb, street=street,
             start_point=start_point, end_point=end_point, 
@@ -701,20 +701,21 @@ def inquiry_details2(request):
             else:
                 return render(request, 'basecamp/wrong_date_today.html')
                      
-        message = '''
-                Contact Form
-                =====================
-                name: {}
-                contact: {}        
-                email: {}
-                flight date: {}
-                message: {}              
-                '''.format(data['name'], data['contact'], data['pickup_date'],
-                           data['email'], data['message'])
-                
-        send_mail(data['name'], message, '', [RECIPIENT_EMAIL])         
-        
+        message_template = '''
+        Contact Form
+        =====================
+        name: {name}
+        contact: {contact}        
+        email: {email}
+        flight date: {pickup_date}
+        message: {message}              
+        '''
+        message = message_template.format(**data)
 
+        subject = f"[New Contact] Submission from {data['name']}"
+
+        send_mail(subject, message, '', [RECIPIENT_EMAIL])
+        
         if is_ajax(request):
             return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})
         else:
@@ -856,39 +857,54 @@ def p2p_booking_detail(request):
 
 
 def price_detail(request):
-    if request.method == "POST":  
-        try:
-            # 필수/선택 날짜 처리
-            pickup_date = parse_future_date(request.POST.get('pickup_date'), "pickup_date")
-            
-        except ValueError as e:
-            return JsonResponse({'success': False, 'error': str(e)})      
-        
+    if request.method == "POST":
+        pickup_date_str = request.POST.get('pickup_date', '')  
         start_point = request.POST.get('start_point')
         end_point = request.POST.get('end_point')
         no_of_passenger = request.POST.get('no_of_passenger')
-
+        
+        # 1. 'Select your option' 검증
         if start_point == 'Select your option' or end_point == 'Select your option':
             return render(request, 'basecamp/home_error.html')
+
+        # 2. 픽업 날짜 유효성 검사 적용 
+        try:
+            pickup_date = parse_date(pickup_date_str, field_name="Pickup Date")
+
+        except ValueError as e:
+            suburbs = get_suburbs()
+            home_suburbs = get_home_suburbs()
+            return render(request, 'basecamp/home.html', {
+                'error_message': str(e), 
+                'suburbs': suburbs,
+                'home_suburbs': home_suburbs,
+                
+                'start_point_value': start_point if start_point != 'Select your option' else '',
+                'end_point_value': end_point if end_point != 'Select your option' else '',
+                'no_of_passenger_value': no_of_passenger,
+            })
 
         request.session['original_start_point'] = start_point
         request.session['original_end_point'] = end_point
 
+        normalized_start_point = start_point
+        normalized_end_point = end_point
+
         if start_point in ['International Airport', 'Domestic Airport']:
-            start_point = 'Airport'
+            normalized_start_point = 'Airport'
 
         if end_point in ['International Airport', 'Domestic Airport']:
-            end_point = 'Airport'
+            normalized_end_point = 'Airport'
 
         condition_met = not (
-            (start_point in ['Overseas cruise terminal', 'WhiteBay cruise terminal'] and end_point == 'Airport') or
-            (start_point == 'Airport' and end_point in ['Overseas cruise terminal', 'WhiteBay cruise terminal'])
+            (normalized_start_point in ['Overseas cruise terminal', 'WhiteBay cruise terminal'] and normalized_end_point == 'Airport') or
+            (normalized_start_point == 'Airport' and normalized_end_point in ['Overseas cruise terminal', 'WhiteBay cruise terminal'])
         )
 
         context = {
-            'pickup_date': pickup_date,
-            'start_point': start_point,
-            'end_point': end_point,
+            'pickup_date': pickup_date.strftime('%Y-%m-%d'), 
+            'start_point': normalized_start_point,
+            'end_point': normalized_end_point,
             'no_of_passenger': no_of_passenger,
             'condition_met': condition_met
         }
@@ -903,24 +919,17 @@ def price_detail(request):
             'suburbs': suburbs,
             'home_suburbs': home_suburbs,
         })
+    
 
 def to_bool(value):
     return str(value).lower() in ["true", "1", "on", "yes"]
 
+
 # Booking by myself 
 def confirmation_detail(request):
     if request.method == "POST":
-        try:
-            # 필수/선택 날짜 처리
-            pickup_date = parse_future_date(request.POST.get('pickup_date'), "pickup_date")
-            return_pickup_date = parse_future_date(
-                request.POST.get('return_pickup_date'),
-                "return_pickup_date",
-                required=False  # 선택사항
-            )
-        except ValueError as e:
-            return JsonResponse({'success': False, 'error': str(e)})
-        
+        pickup_date_str = request.POST.get('pickup_date', '')           
+        return_pickup_date_str = request.POST.get('return_pickup_date', '')
         company_name = request.POST.get('company_name', '')
         name = request.POST.get('name')
         contact = request.POST.get('contact')
@@ -935,7 +944,6 @@ def confirmation_detail(request):
         start_point = request.POST.get('start_point', '')
         end_point = request.POST.get('end_point', '')
         no_of_passenger = request.POST.get('no_of_passenger')
-        no_of_baggage = request.POST.get('no_of_baggage')
         return_direction = request.POST.get('return_direction')
         return_flight_number = request.POST.get('return_flight_number', '')
         return_flight_time = request.POST.get('return_flight_time', '')
@@ -948,46 +956,62 @@ def confirmation_detail(request):
         paid = request.POST.get('paid', '')
         cash = to_bool(request.POST.get('cash', ''))
         prepay = to_bool(request.POST.get('prepay', ''))  
+
+        try:
+            pickup_date_obj = parse_date(
+                pickup_date_str, 
+                field_name="Pickup Date", 
+                required=True
+            )
+
+            return_pickup_date_obj = parse_date(
+                return_pickup_date_str, 
+                field_name="Return Pickup Date", 
+                required=False, 
+                reference_date=pickup_date_obj 
+            )
+        except ValueError as e:
+            return JsonResponse({'success': False, 'error': str(e)})
         
         data = {            
             'name': name,
             'contact': contact,
             'email': email,            
-            'pickup_date': pickup_date}       
+            'pickup_date': pickup_date_obj.strftime('%Y-%m-%d')}       
         
         inquiry_email = Inquiry.objects.filter(email=email).exists()
         post_email = Post.objects.filter(email=email).exists()  
 
-        if inquiry_email or post_email:             
-                        
-            content = '''
-            Hello, {} \n  
-            [Confirmation] 
-            Exist in Inquiry or Post *\n 
-            ===============================
-            Contact: {}
-            Email: {}              
-            ===============================\n        
-            Best Regards,
-            EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'])
-            send_mail(data['pickup_date'], content,
-                      '', [RECIPIENT_EMAIL])   
-        
+        email_content_template = '''
+        Hello, {name} \n
+        {status_message}\n 
+        *** It starts from Home Page
+        =============================
+        Contact: {contact}
+        Email: {email}  
+        Flight date: {pickup_date}
+        Flight number: {flight_number}
+        Pickup time: {pickup_time}
+        start_point: {start_point}
+        Street: {street}
+        end_point: {end_point}
+        Passenger: {no_of_passenger}
+        Message: {message}
+        =============================\n        
+        Best Regards,
+        EasyGo Admin \n\n        
+        '''
+
+        if inquiry_email or post_email:
+            data['status_message'] = "✅ **Exist in Inquiry or Post ***"
+            subject = f"[Confirmation] Existing Customer - {data['name']}"
         else:
-            content = '''
-            Hello, {} \n 
-            [Confirmation]  
-            Neither in Inquiry & Post *\n 
-            ===============================
-            Contact: {}
-            Email: {}              
-            ===============================\n        
-            Best Regards,
-            EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'])
-            send_mail(data['pickup_date'], content,
-                      '', [RECIPIENT_EMAIL])
+            data['status_message'] = "*** Neither in Inquiry & Post ***"
+            subject = f"[Confirmation] New Customer - {data['name']}"
+
+        content = email_content_template.format(**data)
+
+        send_mail(subject, content, '', [RECIPIENT_EMAIL])  
 
         sam_driver = Driver.objects.get(driver_name="Sam") 
 
@@ -1024,9 +1048,9 @@ def confirmation_detail(request):
         # 🧾 최종 요약 문자열
         baggage_str = ", ".join(baggage_summary)
 
-        p = Post(company_name=company_name, name=name, contact=contact, email=email, email1=email1, pickup_date=pickup_date, flight_number=flight_number,
+        p = Post(company_name=company_name, name=name, contact=contact, email=email, email1=email1, pickup_date=pickup_date_obj, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, start_point=start_point, end_point=end_point, direction=direction, suburb=suburb, street=street,
-                 no_of_passenger=no_of_passenger, no_of_baggage=baggage_str, message=message, return_direction=return_direction, return_pickup_date=return_pickup_date, 
+                 no_of_passenger=no_of_passenger, no_of_baggage=baggage_str, message=message, return_direction=return_direction, return_pickup_date=return_pickup_date_obj, 
                  return_flight_number=return_flight_number, return_flight_time=return_flight_time, return_pickup_time=return_pickup_time, return_start_point=return_start_point,
                  return_end_point=return_end_point, notice=notice, price=price, paid=paid, cash=cash, prepay=prepay, driver=sam_driver)
         
@@ -1035,12 +1059,12 @@ def confirmation_detail(request):
         rendering = render(request, 'basecamp/inquiry_done.html')   
         
         html_content = render_to_string("basecamp/html_email-confirmation.html",
-                                    {'company_name': company_name, 'name': name, 'contact': contact, 'email': email, 'email1': email1, 'pickup_date': pickup_date, 
+                                    {'company_name': company_name, 'name': name, 'contact': contact, 'email': email, 'email1': email1, 'pickup_date': pickup_date_obj, 
                                      'flight_number': flight_number, 'flight_time': flight_time, 'pickup_time': pickup_time, 'start_point': start_point, 
-                                     'end_point': end_point, 'return_direction': return_direction,'return_pickup_date': return_pickup_date, 'return_flight_number': return_flight_number, 
+                                     'end_point': end_point, 'return_direction': return_direction,'return_pickup_date': return_pickup_date_obj, 'return_flight_number': return_flight_number, 
                                      'return_flight_time': return_flight_time, 'return_pickup_time': return_pickup_time, 'return_start_point': return_start_point, 
                                      'return_end_point': return_end_point, 'direction': direction, 'street': street, 'suburb': suburb, 'no_of_passenger': no_of_passenger, 
-                                     'no_of_baggage': no_of_baggage, 'message': message, 'notice': notice , 'price': price, 'cash': cash, 'paid': paid })
+                                     'no_of_baggage': baggage_str, 'message': message, 'notice': notice , 'price': price, 'cash': cash, 'paid': paid })
         
         text_content = strip_tags(html_content)
         
@@ -1062,17 +1086,9 @@ def confirmation_detail(request):
 # airport booking by client
 def booking_detail(request):
     if request.method == "POST":   
-        try:
-            # 필수/선택 날짜 처리
-            pickup_date = parse_future_date(request.POST.get('pickup_date'), "pickup_date")
-            return_pickup_date = parse_future_date(
-                request.POST.get('return_pickup_date'),
-                "return_pickup_date",
-                required=False  # 선택사항
-            )
-        except ValueError as e:
-            return JsonResponse({'success': False, 'error': str(e)})
-             
+        # ✅ Collect date strings
+        pickup_date_str = request.POST.get('pickup_date', '')           
+        return_pickup_date_str = request.POST.get('return_pickup_date', '') 
         name = request.POST.get('name')
         contact = request.POST.get('contact')
         email = request.POST.get('email')
@@ -1085,7 +1101,6 @@ def booking_detail(request):
         start_point = request.POST.get('start_point', '')
         end_point = request.POST.get('end_point', '')
         no_of_passenger = request.POST.get('no_of_passenger')
-        no_of_baggage = request.POST.get('no_of_baggage')
         return_direction = request.POST.get('return_direction', '')
         return_flight_number = request.POST.get('return_flight_number', '')
         return_flight_time = request.POST.get('return_flight_time', '')
@@ -1093,6 +1108,22 @@ def booking_detail(request):
         return_start_point = request.POST.get('return_start_point', '')
         return_end_point = request.POST.get('return_end_point', '') 
         message = request.POST.get('message')
+
+        try:
+            pickup_date_obj = parse_date(
+                pickup_date_str, 
+                field_name="Pickup Date", 
+                required=True
+            )
+
+            return_pickup_date_obj = parse_date(
+                return_pickup_date_str, 
+                field_name="Return Pickup Date", 
+                required=False, 
+                reference_date=pickup_date_obj 
+            )
+        except ValueError as e:
+            return JsonResponse({'success': False, 'error': str(e)})
 
         price = 'TBA'  
 
@@ -1114,13 +1145,13 @@ def booking_detail(request):
             'name': name,
             'contact': contact,
             'email': email,            
-            'pickup_date': pickup_date,
+            'pickup_date': pickup_date_obj.strftime('%Y-%m-%d'),
             'pickup_time': pickup_time,
             'flight_number': flight_number,            
             'street': street, 
             'suburb': suburb,
             'no_of_passenger': no_of_passenger,
-            'return_pickup_date': return_pickup_date,
+            'return_pickup_date': return_pickup_date_obj.strftime('%Y-%m-%d') if return_pickup_date_obj else '',
             'return_flight_number': return_flight_number,
             'return_flight_time': return_flight_time,
             'return_pickup_time': return_pickup_time,
@@ -1129,56 +1160,37 @@ def booking_detail(request):
         inquiry_email = Inquiry.objects.filter(email=email).exists()
         post_email = Post.objects.filter(email=email).exists()  
 
-        if inquiry_email or post_email:             
-                        
-            content = '''
-            Hello, {} \n  
-            [Booking by client] >> Sending email only!\n
-            Exit in Inquiry or Post *\n            
-            ===============================
-            Contact: {}
-            Email: {}  
-            Pickup time: {}
-            Flight number: {}
-            Address: {}, {}
-            No of Pax: {}
-            ✅ Return pickup date: {}
-            Return flight no: {}
-            Return flight time: {}    
-            Return pickup time: {}   
-            ===============================\n        
-            Best Regards,
-            EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['pickup_time'], data['flight_number'], data['street'], 
-                        data['suburb'], data['no_of_passenger'], data['return_pickup_date'], data['return_flight_number'],
-                        data['return_flight_time'], data['return_pickup_time'])
-            send_mail(data['pickup_date'], content,
-                      '', [RECIPIENT_EMAIL])
-        
+        # 1. 템플릿 정의 (키워드 기반 포맷팅)
+        email_content_template = '''
+        Hello, {name} \n  
+        [Booking by client] >> Sending email only!\n
+        {status_message}\n            
+        ===============================
+        Contact: {contact}
+        Email: {email}  
+        Pickup time: {pickup_time}
+        Flight number: {flight_number}
+        Address: {street}, {suburb}
+        No of Pax: {no_of_passenger}
+        ✅ Return pickup date: {return_pickup_date}
+        Return flight no: {return_flight_number}
+        Return flight time: {return_flight_time}    
+        Return pickup time: {return_pickup_time}   
+        ===============================\n        
+        Best Regards,
+        EasyGo Admin \n\n        
+        '''
+
+        if inquiry_email or post_email:
+            data['status_message'] = "Exist in Inquiry or Post *"
+            subject = f"[Client Booking] Existing Customer - {data['name']}"
         else:
-            content = '''
-            Hello, {} \n  
-            [Booking by client] >> Sending email only!\n
-            Neither in Inquiry & Post *\n     
-           ===============================
-            Contact: {}
-            Email: {}  
-            Pickup time: {}
-            Flight number: {}
-            Address: {}, {}
-            No of Pax: {}
-            ✅ Return pickup date: {}
-            Return flight no: {}
-            Return flight time: {}    
-            Return pickup time: {}   
-            ===============================\n        
-            Best Regards,
-            EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'], data['pickup_time'], data['flight_number'], data['street'], 
-                        data['suburb'], data['no_of_passenger'], data['return_pickup_date'], data['return_flight_number'],
-                        data['return_flight_time'], data['return_pickup_time'])
-            send_mail(data['pickup_date'], content,
-                      '', [RECIPIENT_EMAIL])
+            data['status_message'] = "Neither in Inquiry & Post *"
+            subject = f"[Client Booking] New Customer - {data['name']}"
+
+        content = email_content_template.format(**data)
+
+        send_mail(subject, content, '', [RECIPIENT_EMAIL])
             
         sam_driver = Driver.objects.get(driver_name="Sam") 
 
@@ -1215,10 +1227,10 @@ def booking_detail(request):
         # 🧾 최종 요약 문자열
         baggage_str = ", ".join(baggage_summary)
 
-        p = Post(name=name, contact=contact, email=email, pickup_date=pickup_date, flight_number=flight_number, flight_time=flight_time, 
+        p = Post(name=name, contact=contact, email=email, pickup_date=pickup_date_obj, flight_number=flight_number, flight_time=flight_time, 
                  pickup_time=pickup_time, start_point=start_point, end_point=end_point, direction=direction, suburb=suburb, street=street,
                  no_of_passenger=no_of_passenger, no_of_baggage=baggage_str, message=message, return_direction=return_direction, 
-                 return_pickup_date=return_pickup_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
+                 return_pickup_date=return_pickup_date_obj, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
                  return_pickup_time=return_pickup_time, return_start_point=return_start_point, return_end_point=return_end_point, driver=sam_driver,
                  price=price, )
         
@@ -1237,17 +1249,9 @@ def booking_detail(request):
 # cruise booking by client
 def cruise_booking_detail(request):
     if request.method == "POST": 
-        try:
-            # 필수/선택 날짜 처리
-            pickup_date = parse_future_date(request.POST.get('pickup_date'), "pickup_date")
-            return_pickup_date = parse_future_date(
-                request.POST.get('return_pickup_date'),
-                "return_pickup_date",
-                required=False  # 선택사항
-            )
-        except ValueError as e:
-            return JsonResponse({'success': False, 'error': str(e)})
-               
+        # ✅ Collect date strings
+        pickup_date_str = request.POST.get('pickup_date', '')           
+        return_pickup_date_str = request.POST.get('return_pickup_date', '')
         name = request.POST.get('name')
         contact = request.POST.get('contact')
         email = request.POST.get('email')          
@@ -1271,22 +1275,38 @@ def cruise_booking_detail(request):
         recent_duplicate = Post.objects.filter(
             email=email,
             created__gte=timezone.now() - timedelta(seconds=2)
-        ).exists()
+        ).exists() 
 
         if recent_duplicate:
-            return JsonResponse({'success': False, 'message': 'Duplicate inquiry recently submitted. Please wait before trying again.'})  
+            return JsonResponse({'success': False, 'message': 'Duplicate inquiry recently submitted. Please wait before trying again.'}) 
+
+        try:
+            pickup_date_obj = parse_date(
+                pickup_date_str, 
+                field_name="Pickup Date", 
+                required=True
+            )
+
+            return_pickup_date_obj = parse_date(
+                return_pickup_date_str, 
+                field_name="Return Pickup Date", 
+                required=False, 
+                reference_date=pickup_date_obj 
+            )
+        except ValueError as e:
+            return JsonResponse({'success': False, 'error': str(e)})   
         
         data = {
             'name': name,
             'contact': contact, 
             'email': email,
-            'pickup_date': pickup_date,
+            'pickup_date': pickup_date_obj.strftime('%Y-%m-%d'),
             'pickup_time': pickup_time,
             'start_point': start_point,
             'end_point': end_point,
             'no_of_passenger': no_of_passenger,
             'no_of_baggage': no_of_baggage,
-            'return_pickup_date': return_pickup_date,
+            'return_pickup_date': return_pickup_date_obj.strftime('%Y-%m-%d') if return_pickup_date_obj else '',
             'return_pickup_time': return_pickup_time, 
             'return_start_point': return_start_point,
             'message': message}       
@@ -1382,10 +1402,10 @@ def cruise_booking_detail(request):
         # 🧾 최종 요약 문자열
         baggage_str = ", ".join(baggage_summary)
 
-        p = Post(name=name, contact=contact, email=email, pickup_date=pickup_date, start_point=start_point,
+        p = Post(name=name, contact=contact, email=email, pickup_date=pickup_date_obj, start_point=start_point,
                  end_point=end_point, pickup_time=pickup_time, price=price,
                  no_of_passenger=no_of_passenger, no_of_baggage=baggage_str,   
-                 return_pickup_date=return_pickup_date, return_start_point=return_start_point,  
+                 return_pickup_date=return_pickup_date_obj, return_start_point=return_start_point,  
                  return_pickup_time=return_pickup_time, return_end_point=return_end_point,
                  message=message, driver=sam_driver, )
         
@@ -1449,7 +1469,24 @@ def confirm_booking_detail(request):
         paid = user.paid 
         private_ride = user.private_ride
         cash = user.cash 
-        prepay = user.prepay        
+        prepay = user.prepay    
+
+        try:
+            pickup_date_obj = parse_date(
+                pickup_date, 
+                field_name="Pickup Date", 
+                required=True
+            )
+
+            return_pickup_date_obj = parse_date(
+                return_pickup_date, 
+                field_name="Return Pickup Date", 
+                required=False, 
+                reference_date=pickup_date
+            )
+
+        except ValueError as e:
+            return JsonResponse({'success': False, 'error': str(e)})    
         
         # 최종 가격 계산
         try:
@@ -1464,7 +1501,7 @@ def confirm_booking_detail(request):
             'email': email,
             'contact': contact,
             'company_name': company_name,
-            'pickup_date': pickup_date,
+            'pickup_date': pickup_date.strftime('%Y-%m-%d'),
             'pickup_time': pickup_time,
             'direction': direction,
             'flight_number': flight_number,
@@ -1492,11 +1529,11 @@ def confirm_booking_detail(request):
 
         p = Post(
             name=name, contact=contact, email=email, company_name=company_name, email1=email1, 
-            pickup_date=pickup_date, flight_number=flight_number, flight_time=flight_time, pickup_time=pickup_time, 
+            pickup_date=pickup_date_obj, flight_number=flight_number, flight_time=flight_time, pickup_time=pickup_time, 
             direction=direction, suburb=suburb, street=street, start_point=start_point, end_point=end_point,
             cruise=cruise, no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, 
             return_direction=return_direction, private_ride=private_ride, 
-            return_pickup_date=return_pickup_date, return_flight_number=return_flight_number, 
+            return_pickup_date=return_pickup_date_obj, return_flight_number=return_flight_number, 
             return_flight_time=return_flight_time, return_pickup_time=return_pickup_time, 
             return_start_point=return_start_point, return_end_point=return_end_point,
             message=message, notice=notice, 
@@ -1768,13 +1805,16 @@ def sending_email_input_data_detail(request):
 def to_bool(value):
     return str(value).lower() in ["true", "1", "on", "yes"]
 
+
 # For Return Trip 
 def return_trip_detail(request):     
     if request.method == "POST":
+        # ✅ Collect date strings
+        pickup_date_str = request.POST.get('pickup_date', '')           
+        return_pickup_date_str = request.POST.get('return_pickup_date', '')
         email = request.POST.get('email', '').strip()
         flight_number = request.POST.get('flight_number', '')
-        flight_time = request.POST.get('flight_time', '')
-        pickup_date = request.POST.get('pickup_date', '')            
+        flight_time = request.POST.get('flight_time', '')          
         pickup_time = request.POST.get('pickup_time', '')
         start_point = request.POST.get('start_point', '')
         end_point = request.POST.get('end_point', '') 
@@ -1785,7 +1825,6 @@ def return_trip_detail(request):
         cash = to_bool(request.POST.get('cash', ''))
         prepay = to_bool(request.POST.get('prepay', ''))
         return_direction = request.POST.get('return_direction', '')
-        return_pickup_date = request.POST.get('return_pickup_date', '')
         return_flight_number = request.POST.get('return_flight_number', '')
         return_flight_time = request.POST.get('return_flight_time', '')
         return_pickup_time = request.POST.get('return_pickup_time', '')
@@ -1810,6 +1849,23 @@ def return_trip_detail(request):
             if not end_point:
                 end_point = user.end_point
 
+            # 날짜 파싱 
+            try:
+                pickup_date_obj = parse_date(
+                    pickup_date_str, 
+                    field_name="Pickup Date", 
+                    required=True
+                )
+
+                return_pickup_date_obj = parse_date(
+                    return_pickup_date_str, 
+                    field_name="Return Pickup Date", 
+                    required=False, 
+                    reference_date=pickup_date_obj 
+                )
+            except ValueError as e:
+                return JsonResponse({'success': False, 'error': str(e)})
+
         # ✅ 중복 제출 방지 
         recent_duplicate = Post.objects.filter(
             email=email,
@@ -1823,30 +1879,33 @@ def return_trip_detail(request):
             'name': name,
             'contact': contact,
             'email': email,
-            'pickup_date': pickup_date,
             }       
             
-        content = '''
-            {} 
-            ✅ submitted the 'Return trip' \n
-            
-            https://easygoshuttle.com.au/sending_email_first/ \n  
-            https://easygoshuttle.com.au/sending_email_second/ \n
-            ===============================
-            Contact: {}
-            Email: {}  
-            ===============================\n        
-            Best Regards,
-            EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'])
-        send_mail(data['pickup_date'], content, '', [RECIPIENT_EMAIL])     
-        
+        content_template = '''
+        {name} 
+        ✅ submitted the 'Return trip' \n
+
+        https://easygoshuttle.com.au/sending_email_first/ \n  
+        https://easygoshuttle.com.au/sending_email_second/ \n
+        ===============================
+        Contact: {contact}
+        Email: {email}  
+        ===============================\n        
+        Best Regards,
+        EasyGo Admin \n\n        
+        '''
+        content = content_template.format(**data)
+
+        subject = f"[New Return Trip] Submission from {data['name']} ({data['pickup_date']})"
+
+        send_mail(subject, content, '', [RECIPIENT_EMAIL])
+         
         sam_driver = Driver.objects.get(driver_name="Sam")  
                     
-        p = Post(name=name, company_name=company_name, contact=contact, email=email, pickup_date=pickup_date, flight_number=flight_number, flight_time=flight_time, 
+        p = Post(name=name, company_name=company_name, contact=contact, email=email, pickup_date=pickup_date_obj, flight_number=flight_number, flight_time=flight_time, 
                  pickup_time=pickup_time, start_point=start_point, end_point=end_point, direction=direction, suburb=suburb, street=street,
                  no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, cash=cash, prepay=prepay, return_direction=return_direction, 
-                 return_pickup_date=return_pickup_date, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
+                 return_pickup_date=return_pickup_date_obj, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
                  return_pickup_time=return_pickup_time, return_start_point=return_start_point, return_end_point=return_end_point, driver=sam_driver,
                  price=price, toll=toll)
         
