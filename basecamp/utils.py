@@ -2,15 +2,11 @@ from datetime import datetime, date
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
 from django.utils.html import strip_tags
-from django.conf import settings
+from main.settings import RECIPIENT_EMAIL
 
 from django.template.loader import render_to_string
 from weasyprint import HTML
 from io import BytesIO
-
-
-ADMIN_EMAIL = getattr(settings, 'RECIPIENT_EMAIL', 'info@easygoshuttle.com.au') 
-SENDER_EMAIL = getattr(settings, 'SENDER_EMAIL', ADMIN_EMAIL) 
 
 
 def render_to_pdf(template_src, context_dict={}):
@@ -49,7 +45,7 @@ def handle_email_sending(request, email, subject, template_name, context, email1
     text_content = strip_tags(html_content)
     text_content = text_content.replace('✅', '').replace('🚨', '').replace('💰', '')
     
-    recipient_list = [email, ADMIN_EMAIL]
+    recipient_list = [email, RECIPIENT_EMAIL]
 
     if email1:  # email1이 제공되었을 경우 추가
         recipient_list.append(email1)
@@ -57,7 +53,7 @@ def handle_email_sending(request, email, subject, template_name, context, email1
     email_message = EmailMultiAlternatives(
         subject,
         text_content,
-        f"EasyGo Airport Shuttle <{SENDER_EMAIL}>",
+        '',
         recipient_list,
     )
     email_message.attach_alternative(html_content, "text/html")
