@@ -400,75 +400,42 @@ def inquiry_details(request):
 
         email_subject = f"Inquiry on {pickup_date}"
 
-        if inquiry_email_exists or post_email_exists:
-            content = '''
-            Hello, {} \n
-            Exist in Inquiry or Post *\n 
-            https://easygoshuttle.com.au
-            =============================
-            Contact: {}
-            Email: {}  
-            Pickup date: {pickup_date}
-            Pickup time: {pickup_time}
-            Direction: {direction}
-            Street: {street}
-            Suburb: {suburb}
-            Passenger: {no_of_passenger}
-            Flight number: {flight_number}
-            Flight time: {flight_time}
-            Start Point: {start_point}
-            End Point: {end_point}
-            ✅ Return Pickup date: {return_pickup_date}
-            Return Flight number: {return_flight_number}
-            Return Flight time: {return_flight_time}
-            Return Pickup time: {return_pickup_time}
-            Return Start Point: {return_start_point}
-            Return End Point: {return_end_point}
-            Message: {message}
-            =============================\n        
-            Best Regards,
-            EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'],  data['pickup_date'], data['pickup_time'], data['direction'], data['street'],  
-                        data['suburb'], data['no_of_passenger'], data['flight_number'], data['flight_time'], data['start_point'], data['end_point'], 
-                        data['return_pickup_date'], data['return_flight_number'], data['return_flight_time'], data['return_pickup_time'],                          
-                        data['return_start_point'], data['return_end_point'], data['message'])                        
-            
-            send_mail(email_subject, content, '', [RECIPIENT_EMAIL])
+        email_content_template = '''
+        Hello, {name} \n
+        {status_message}\n 
+        https://easygoshuttle.com.au
+        =============================
+        Contact: {contact}
+        Email: {email}  
+        Pickup date: {pickup_date}
+        Pickup time: {pickup_time}
+        Direction: {direction}
+        Street: {street}
+        Suburb: {suburb}
+        Passenger: {no_of_passenger}
+        Flight number: {flight_number}
+        Flight time: {flight_time}
+        Start Point: {start_point}
+        End Point: {end_point}
+        ✅ Return Pickup date: {return_pickup_date}
+        Return Flight number: {return_flight_number}
+        Return Flight time: {return_flight_time}
+        Return Pickup time: {return_pickup_time}
+        Return Start Point: {return_start_point}
+        Return End Point: {return_end_point}
+        Message: {message}
+        =============================\n        
+        Best Regards,
+        EasyGo Admin \n\n        
+        '''
 
+        if inquiry_email_exists or post_email_exists:
+            data['status_message'] = "Exist in Inquiry or Post *"
         else:
-            content = '''
-            Hello, {} \n
-            Neither in Inquiry & Post *\n 
-            https://easygoshuttle.com.au
-            =============================
-            Contact: {}
-            Email: {}  
-            Pickup date: {pickup_date}
-            Pickup time: {pickup_time}
-            Direction: {direction}
-            Street: {street}
-            Suburb: {suburb}
-            Passenger: {no_of_passenger}
-            Flight number: {flight_number}
-            Flight time: {flight_time}
-            Start Point: {start_point}
-            End Point: {end_point}
-            ✅ Return Pickup date: {return_pickup_date}
-            Return Flight number: {return_flight_number}
-            Return Flight time: {return_flight_time}
-            Return Pickup time: {return_pickup_time}
-            Return Start Point: {return_start_point}
-            Return End Point: {return_end_point}
-            Message: {message}
-            =============================\n        
-            Best Regards,
-            EasyGo Admin \n\n        
-            ''' .format(data['name'], data['contact'], data['email'],  data['pickup_date'], data['pickup_time'], data['direction'], data['street'],  
-                        data['suburb'], data['no_of_passenger'], data['flight_number'], data['flight_time'], data['start_point'], data['end_point'], 
-                        data['return_pickup_date'], data['return_flight_number'], data['return_flight_time'], data['return_pickup_time'],                          
-                        data['return_start_point'], data['return_end_point'], data['message'])
+            data['status_message'] = "Neither in Inquiry & Post *"
             
-            send_mail(email_subject, content, '', [RECIPIENT_EMAIL]) 
+        content = email_content_template.format(**data)
+        send_mail(email_subject, content, '', [RECIPIENT_EMAIL])
 
         # 🧳 개별 수하물 항목 수집
         large = int(request.POST.get('baggage_large') or 0)
@@ -503,12 +470,19 @@ def inquiry_details(request):
         # 🧾 최종 요약 문자열
         baggage_str = ", ".join(baggage_summary)
                     
-        p = Inquiry(name=name, contact=contact, email=email, pickup_date=pickup_date, flight_number=flight_number,
-                 flight_time=flight_time, pickup_time=pickup_time, direction=direction, suburb=suburb, street=street,
-                 start_point=start_point, end_point=end_point, no_of_passenger=no_of_passenger, no_of_baggage=baggage_str, 
-                 return_direction=return_direction, return_pickup_date=return_pickup_date, return_flight_number=return_flight_number, 
-                 return_flight_time=return_flight_time, return_pickup_time=return_pickup_time, 
-                 return_start_point=return_start_point, return_end_point=return_end_point, message=message)
+        p = Inquiry(
+            name=name, contact=contact, email=email, 
+            pickup_date=pickup_date, 
+            flight_number=flight_number, flight_time=flight_time, 
+            pickup_time=pickup_time, direction=direction, suburb=suburb, 
+            street=street, start_point=start_point, end_point=end_point, 
+            no_of_passenger=no_of_passenger, no_of_baggage=baggage_str, 
+            return_direction=return_direction, 
+            return_pickup_date=return_pickup_date, 
+            return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
+            return_pickup_time=return_pickup_time, return_start_point=return_start_point, 
+            return_end_point=return_end_point, message=message
+        )
         
         p.save()
 
