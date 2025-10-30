@@ -2390,7 +2390,7 @@ def email_dispatch_detail(request):
                                 \n\nDear {second_user.name}, We have sent an urgent email. Please check your email. \
                                 \n\nReply only via email >> info@easygoshuttle.com.au"
                             send_sms_notice(second_user.contact, message)
-                            send_whatsapp_message(second_user.contact, message)
+                            send_whatsapp_message(second_user.contact)
                     
                 else:
                     user.cancelled = True
@@ -2404,7 +2404,7 @@ def email_dispatch_detail(request):
                                 \n\nDear {user.name}, We have sent an urgent email. Please check your email. \
                                 \n\nReply only via email >> info@easygoshuttle.com.au"
                             send_sms_notice(user.contact, message)    
-                            send_whatsapp_message(user.contact, message)              
+                            send_whatsapp_message(user.contact)              
                     
             if selected_option == "Payment discrepancy" and user: 
                 diff = round(float(user.price) - float(user.paid), 2)
