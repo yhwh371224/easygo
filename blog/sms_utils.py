@@ -60,7 +60,7 @@ def send_sms_notice(phone_number, message_body):
         sms_logger.error(f'Failed to send SMS to {formatted_number}: {e}')
 
 
-def send_whatsapp_message(phone_number, name):
+def send_whatsapp_message(phone_number):
     """Send a WhatsApp message via Twilio approved template."""
     formatted_number = format_whatsapp_number(phone_number)
     if not formatted_number:
