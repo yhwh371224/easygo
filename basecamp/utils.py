@@ -53,7 +53,7 @@ def sanitize_context(context):
 def handle_email_sending(request, email, subject, template_name, context, email1=None):
     context = sanitize_context(context)
 
-    html_content = render_to_string(template_name, context)
+    html_content = render_to_string(template_name, context, request=request)
     print(html_content)
     with open("debug_email.html", "w", encoding="utf-8") as f:
         f.write(html_content)
