@@ -9,8 +9,8 @@ from weasyprint import HTML
 from io import BytesIO
 
 
-ADMIN_EMAIL = getattr(settings, 'RECIPIENT_EMAIL', 'admin@easygo.com') 
-SENDER_EMAIL = getattr(settings, 'SENDER_EMAIL', ADMIN_EMAIL) # 발신 전용 주소 사용 권장
+ADMIN_EMAIL = getattr(settings, 'RECIPIENT_EMAIL', 'info@easygoshuttle.com.au') 
+SENDER_EMAIL = getattr(settings, 'SENDER_EMAIL', ADMIN_EMAIL) 
 
 
 def render_to_pdf(template_src, context_dict={}):
@@ -48,10 +48,7 @@ def handle_email_sending(request, email, subject, template_name, context, cc_adm
     html_content = render_to_string(template_name, context, request=request)
     text_content = strip_tags(html_content)
     
-    recipient_list = [email]
-
-    if cc_admin:
-        recipient_list.append(ADMIN_EMAIL)
+    recipient_list = [email, ADMIN_EMAIL]
 
     if email1:  # email1이 제공되었을 경우 추가
         recipient_list.append(email1)
