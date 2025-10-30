@@ -71,7 +71,7 @@
 					
 				<div class="mb-3 pb-1">
 					<label class="form-label">Pickup date&nbsp;(Sydney)</label>
-					<input id="pickup-date" class="form-control date-picker rounded" required name="pickup_date" type="text" placeholder="Choose date" data-datepicker-options='{"dateFormat": "Y-m-d"}'>
+					<input id="pickup-date" class="form-control rounded" required name="pickup_date" type="date" placeholder="Choose date" min="{{ today|date:'Y-m-d' }}">
 					<div id="date-error" class="invalid-feedback" style="display: none;">Please enter a future date!</div>
 				</div>				
 				<div class="mb-3 pb-1">
