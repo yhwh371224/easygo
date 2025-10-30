@@ -21,7 +21,7 @@ from django.utils import timezone
 from main.settings import RECIPIENT_EMAIL, DEFAULT_FROM_EMAIL
 from blog.models import Post, Inquiry, PaypalPayment, StripePayment, Driver
 from blog.tasks import send_confirm_email, send_email_task, send_notice_email
-from blog.sms_utils import send_sms_notice
+from blog.sms_utils import send_sms_notice, send_whatsapp_message
 from basecamp.area import get_suburbs
 from basecamp.area_full import get_more_suburbs
 from basecamp.area_home import get_home_suburbs
@@ -2385,9 +2385,10 @@ def email_dispatch_detail(request):
 
                     # ✅ Send SMS if option is "Apologies Cancellation of Booking"
                     if selected_option == "Apologies Cancellation of Booking":
-                        sms_message = f"Dear {second_user.name}, We have sent an urgent email. Please check your email."
+                        message = f"Dear {second_user.name}, We have sent an urgent email. Please check your email."
                         if second_user.contact:
-                            send_sms_notice(second_user.contact, sms_message)
+                            send_sms_notice(second_user.contact, message)
+                            send_whatsapp_message(second_user.contact, message)
                     
                 else:
                     user.cancelled = True
@@ -2397,8 +2398,9 @@ def email_dispatch_detail(request):
                     # ✅ SMS for Apologies Cancellation
                     if selected_option == "Apologies Cancellation of Booking":
                         if user.contact:
-                            sms_message = f"Dear {user.name}, We have sent an urgent email. Please check your email."
-                            send_sms_notice(user.contact, sms_message)                  
+                            message = f"Dear {user.name}, We have sent an urgent email. Please check your email."
+                            send_sms_notice(user.contact, message)    
+                            send_whatsapp_message(user.contact, message)              
                     
             if selected_option == "Payment discrepancy" and user: 
                 diff = round(float(user.price) - float(user.paid), 2)
