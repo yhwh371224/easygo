@@ -61,3 +61,5 @@ def send_whatsapp_message(phone_number, message_body):
         sms_logger.info(f'WhatsApp message sent to {formatted_number}')
     except Exception as e:
         sms_logger.error(f'Failed to send WhatsApp message to {formatted_number}: {e}')
+
+
