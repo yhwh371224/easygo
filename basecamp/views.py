@@ -1,6 +1,7 @@
 from datetime import datetime, date, timedelta
 
 import logging
+from multiprocessing import context
 import requests
 import stripe
 import json
@@ -17,7 +18,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.utils import timezone
 
-from main.settings import RECIPIENT_EMAIL
+from main.settings import RECIPIENT_EMAIL, DEFAULT_FROM_EMAIL
 from blog.models import Post, Inquiry, PaypalPayment, StripePayment, Driver
 from blog.tasks import send_confirm_email, send_email_task, send_notice_email
 from blog.sms_utils import send_sms_notice
@@ -25,8 +26,7 @@ from basecamp.area import get_suburbs
 from basecamp.area_full import get_more_suburbs
 from basecamp.area_home import get_home_suburbs
 
-from utils.pdf import render_to_pdf
-from .utils import parse_date
+from .utils import parse_date, handle_email_sending, format_pickup_time_12h, render_to_pdf
 
 
 logger = logging.getLogger(__name__)
@@ -194,7 +194,6 @@ def inquiry_done(request):
 
 
 def information(request): 
-    # send_notice_email.delay('information accessed', 'information accessed', RECIPIENT_EMAIL)
     return render(request, 'basecamp/information.html')
 
 
@@ -211,13 +210,11 @@ def meeting_point(request):
 
 
 def more_suburbs(request): 
-    # send_notice_email.delay('suburbs accessed', 'A user accessed suburbs', RECIPIENT_EMAIL)
     more_suburbs = get_more_suburbs()
     return render(request, 'basecamp/more_suburbs.html', {'more_suburbs': more_suburbs})
 
 
 def more_suburbs1(request): 
-    # send_notice_email.delay('suburbs_1 accessed', 'A user accessed suburbs_1', RECIPIENT_EMAIL)
     more_suburbs = get_more_suburbs()
     return render(request, 'basecamp/more_suburbs1.html', {'more_suburbs': more_suburbs})
 
@@ -555,7 +552,6 @@ def inquiry_details1(request):
         if recent_duplicate:
             return JsonResponse({'success': False, 'message': 'Duplicate inquiry recently submitted. Please wait before trying again.'})
 
-        # 2. data 딕셔너리 생성 (이메일 포맷팅 및 DB 저장을 위한 데이터 모음)
         data = {
             'name': name,
             'contact': contact,
@@ -567,8 +563,8 @@ def inquiry_details1(request):
             'end_point': end_point,
             'street': street,
             'no_of_passenger': no_of_passenger,
-            'message': message, # 메시지도 data 딕셔너리에 추가합니다.
-            'status_message': '' # 이메일 템플릿용 임시 필드
+            'message': message, 
+            'status_message': '' 
         }
      
         inquiry_email_exists = Inquiry.objects.filter(email=email).exists()
@@ -756,34 +752,26 @@ def p2p_detail(request):
         
         # ✅ 중복 제출 방지 
         recent_duplicate = Inquiry.objects.filter(
-            email=email,
+            email=p2p_email,
             created__gte=timezone.now() - timedelta(seconds=2)
         ).exists()
 
         if recent_duplicate:
             return JsonResponse({'success': False, 'message': 'Duplicate inquiry recently submitted. Please wait before trying again.'})  
 
-        html_content = render_to_string("basecamp/html_email-p2p.html", 
-            {'p2p_name': p2p_name, 'p2p_phone': p2p_phone, 'p2p_email': p2p_email, 'p2p_date': p2p_date, 
+        subject = "Multiple points inquiry"
+        template_name = "basecamp/html_email-p2p.html"
+
+        context = {
+            'p2p_name': p2p_name, 'p2p_phone': p2p_phone, 'p2p_email': p2p_email, 'p2p_date': p2p_date, 
             'first_pickup_location': first_pickup_location, 'first_putime': first_putime, 'first_dropoff_location': first_dropoff_location, 
             'second_pickup_location': second_pickup_location, 'second_putime': second_putime, 'second_dropoff_location': second_dropoff_location, 
             'third_pickup_location': third_pickup_location, 'third_putime': third_putime, 'third_dropoff_location': third_dropoff_location, 
             'fourth_pickup_location': fourth_pickup_location, 'fourth_putime': fourth_putime, 'fourth_dropoff_location': fourth_dropoff_location, 
             'p2p_passengers': p2p_passengers, 'p2p_baggage': p2p_baggage, 'p2p_message': p2p_message,
-            })
+        }
 
-        text_content = strip_tags(html_content)
-
-        email = EmailMultiAlternatives(
-            "Multiple points inquiry",
-            text_content,
-            '',
-            [p2p_email, RECIPIENT_EMAIL]
-        )
-        
-        email.attach_alternative(html_content, "text/html")
-        email.send()       
-        
+        handle_email_sending(request, p2p_email, subject, template_name, context)
         
         if is_ajax(request):
             return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})
@@ -819,8 +807,11 @@ def p2p_booking_detail(request):
         p2p_message = request.POST.get('p2p_message')
         price = request.POST.get('price')
 
-        html_content = render_to_string("basecamp/html_email-p2p-confirmation.html", 
-            {'p2p_name': p2p_name, 'p2p_phone': p2p_phone, 'p2p_email': p2p_email, 'p2p_date': p2p_date, 
+        subject = "Multiple points booking confirmation"
+        template_name = "basecamp/html_email-p2p-confirmation.html"
+
+        context = {
+            'p2p_name': p2p_name, 'p2p_phone': p2p_phone, 'p2p_email': p2p_email, 'p2p_date': p2p_date, 
             'first_pickup_location': first_pickup_location, 'first_putime': first_putime,  
             'second_pickup_location': second_pickup_location, 'second_putime': second_putime, 
             'third_pickup_location': third_pickup_location, 'third_putime': third_putime, 
@@ -831,20 +822,9 @@ def p2p_booking_detail(request):
             'fourth_dropoff_location': fourth_dropoff_location, 
             'p2p_passengers': p2p_passengers, 'p2p_baggage': p2p_baggage, 'p2p_message': p2p_message,
             'price': price
-            })
+        }
 
-        text_content = strip_tags(html_content)
-
-        email = EmailMultiAlternatives(
-            "Multiple points inquiry",
-            text_content,
-            '',
-            [p2p_email, RECIPIENT_EMAIL]
-        )
-        
-        email.attach_alternative(html_content, "text/html")
-        email.send()       
-        
+        handle_email_sending(request, p2p_email, subject, template_name, context)        
         
         if is_ajax(request):
             return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})
@@ -1058,24 +1038,24 @@ def confirmation_detail(request):
 
         rendering = render(request, 'basecamp/inquiry_done.html')   
         
-        html_content = render_to_string("basecamp/html_email-confirmation.html",
-                                    {'company_name': company_name, 'name': name, 'contact': contact, 'email': email, 'email1': email1, 'pickup_date': pickup_date_obj, 
-                                     'flight_number': flight_number, 'flight_time': flight_time, 'pickup_time': pickup_time, 'start_point': start_point, 
-                                     'end_point': end_point, 'return_direction': return_direction,'return_pickup_date': return_pickup_date_obj, 'return_flight_number': return_flight_number, 
-                                     'return_flight_time': return_flight_time, 'return_pickup_time': return_pickup_time, 'return_start_point': return_start_point, 
-                                     'return_end_point': return_end_point, 'direction': direction, 'street': street, 'suburb': suburb, 'no_of_passenger': no_of_passenger, 
-                                     'no_of_baggage': baggage_str, 'message': message, 'notice': notice , 'price': price, 'cash': cash, 'paid': paid })
-        
-        text_content = strip_tags(html_content)
-        
-        email = EmailMultiAlternatives(
-            "Booking confirmation - EasyGo",
-            text_content,
-            '',
-            [email, RECIPIENT_EMAIL, email1]
-        )
-        email.attach_alternative(html_content, "text/html")
-        email.send()
+        template_name = "basecamp/html_email-confirmation.html"
+
+        context = {
+            'company_name': company_name, 'name': name, 'contact': contact, 
+            'email': email, 'email1': email1, 'pickup_date': pickup_date_obj, 
+            'flight_number': flight_number, 'flight_time': flight_time, 'pickup_time': pickup_time, 
+            'start_point': start_point, 'end_point': end_point, 'return_direction': return_direction,
+            'return_pickup_date': return_pickup_date_obj, 'return_flight_number': return_flight_number, 
+            'return_flight_time': return_flight_time, 'return_pickup_time': return_pickup_time, 
+            'return_start_point': return_start_point, 'return_end_point': return_end_point, 
+            'direction': direction, 'street': street, 'suburb': suburb, 
+            'no_of_passenger': no_of_passenger, 'no_of_baggage': baggage_str, 'message': message, 
+            'notice': notice, 'price': price, 'cash': cash, 'paid': paid
+        }
+
+        customer_subject = "Booking Confirmation - EasyGo Airport Shuttle" 
+
+        handle_email_sending(request, email, customer_subject, template_name, context, email1=email1)
         
         return rendering
 
@@ -1578,18 +1558,15 @@ def sending_email_first_detail(request):
             user.save()
             
             if user.cancelled: 
-                html_content = render_to_string("basecamp/html_email-cancelled.html", 
-                                                {'name': user.name, 'email': user.email })
+                template_name = "basecamp/html_email-cancelled.html"
+                subject = "Booking Cancellation Notice - EasyGo" 
                 
-                text_content = strip_tags(html_content)
-                email = EmailMultiAlternatives(
-                    "Booking confirmation - EasyGo",
-                    text_content,
-                    '',
-                    [email, RECIPIENT_EMAIL]
-                )
-                email.attach_alternative(html_content, "text/html")
-                email.send()
+                context = {
+                    'name': user.name, 
+                    'email': user.email 
+                }
+
+                handle_email_sending(request, user.email, subject, template_name, context)
                     
             else: 
                 # ✅ Now use the final saved value of user.prepay and company_name
@@ -1600,49 +1577,24 @@ def sending_email_first_detail(request):
                 else:
                     template_name = "basecamp/html_email-confirmation.html"
                 
+                subject = "Booking confirmation - EasyGo" # 제목도 기존 로직에서 가져옴
+
+                # 템플릿에 전달할 컨텍스트 딕셔너리 구성
                 context = {
-                    'company_name': user.company_name,
-                    'name': user.name,
-                    'contact': user.contact,
-                    'email': user.email,
-                    'email1': user.email1,
-                    'pickup_date': user.pickup_date,
-                    'flight_number': user.flight_number,
-                    'flight_time': user.flight_time,
-                    'pickup_time': user.pickup_time,
-                    'start_point': user.start_point,
-                    'end_point': user.end_point,
-                    'direction': user.direction,
-                    'street': user.street,
-                    'suburb': user.suburb,
-                    'no_of_passenger': user.no_of_passenger,
-                    'no_of_baggage': user.no_of_baggage,
-                    'return_direction': user.return_direction,
-                    'return_pickup_date': user.return_pickup_date,
-                    'return_flight_number': user.return_flight_number,
-                    'return_flight_time': user.return_flight_time,
-                    'return_pickup_time': user.return_pickup_time,
-                    'return_start_point': user.return_start_point,
-                    'return_end_point': user.return_end_point,
-                    'message': user.message,
-                    'notice': user.notice,
-                    'price': user.price,
-                    'toll': user.toll,
-                    'paid': user.paid,
-                    'cash': user.cash,
+                    'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 
+                    'email': user.email, 'email1': user.email1, 'pickup_date': user.pickup_date, 
+                    'flight_number': user.flight_number, 'flight_time': user.flight_time, 'pickup_time': user.pickup_time, 
+                    'start_point': user.start_point, 'end_point': user.end_point, 'direction': user.direction, 
+                    'street': user.street, 'suburb': user.suburb, 'no_of_passenger': user.no_of_passenger, 
+                    'no_of_baggage': user.no_of_baggage, 'return_direction': user.return_direction, 
+                    'return_pickup_date': user.return_pickup_date, 'return_flight_number': user.return_flight_number, 
+                    'return_flight_time': user.return_flight_time, 'return_pickup_time': user.return_pickup_time, 
+                    'return_start_point': user.return_start_point, 'return_end_point': user.return_end_point, 
+                    'message': user.message, 'notice': user.notice, 'price': user.price, 
+                    'toll': user.toll, 'paid': user.paid, 'cash': user.cash,
                 }
 
-                html_content = render_to_string(template_name, context)
-                text_content = strip_tags(html_content)
-
-                email = EmailMultiAlternatives(
-                    "Booking confirmation - EasyGo",
-                    text_content,
-                    '',
-                    [email, RECIPIENT_EMAIL, user.email1]
-                )
-                email.attach_alternative(html_content, "text/html")
-                email.send()
+                handle_email_sending(request, user.email, subject, template_name, context, email1=user.email1)
 
             return render(request, 'basecamp/inquiry_done.html')  
         
@@ -1680,18 +1632,15 @@ def sending_email_second_detail(request):
             double_paid = None
         
         if user.cancelled: 
-            html_content = render_to_string("basecamp/html_email-cancelled.html", 
-                                        {'name': user.name, 'email': user.email })
+            template_name = "basecamp/html_email-cancelled.html"
+            subject = "Booking Cancellation Notice - EasyGo" 
             
-            text_content = strip_tags(html_content)
-            email = EmailMultiAlternatives(
-                "Booking confirmation - EasyGo",
-                text_content,
-                '',
-                [email, RECIPIENT_EMAIL]
-            )
-            email.attach_alternative(html_content, "text/html")
-            email.send()
+            context = {
+                'name': user.name, 
+                'email': user.email 
+            }
+
+            handle_email_sending(request, user.email, subject, template_name, context)
 
         else:
             # ✅ Now use the final saved value of user.prepay and company_name
@@ -1703,48 +1652,21 @@ def sending_email_second_detail(request):
                 template_name = "basecamp/html_email-confirmation.html"
 
             context = {
-                'company_name': user.company_name,
-                'name': user.name,
-                'contact': user.contact,
-                'email': user.email,
-                'email1': user.email1,
-                'pickup_date': user.pickup_date,
-                'flight_number': user.flight_number,
-                'flight_time': user.flight_time,
-                'pickup_time': user.pickup_time,
-                'start_point': user.start_point,
-                'end_point': user.end_point,
-                'direction': user.direction,
-                'street': user.street,
-                'suburb': user.suburb,
-                'no_of_passenger': user.no_of_passenger,
-                'no_of_baggage': user.no_of_baggage,
-                'return_direction': user.return_direction,
-                'return_pickup_date': user.return_pickup_date,
-                'return_flight_number': user.return_flight_number,
-                'return_flight_time': user.return_flight_time,
-                'return_pickup_time': user.return_pickup_time,
-                'return_start_point': user.return_start_point,
-                'return_end_point': user.return_end_point,
-                'message': user.message,
-                'notice': user.notice,
-                'price': double_price,
-                'toll': user.toll,
-                'paid': double_paid,
-                'cash': user.cash,
+                'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 
+                'email': user.email, 'email1': user.email1, 'pickup_date': user.pickup_date, 
+                'flight_number': user.flight_number, 'flight_time': user.flight_time, 'pickup_time': user.pickup_time, 
+                'start_point': user.start_point, 'end_point': user.end_point, 'direction': user.direction, 
+                'street': user.street, 'suburb': user.suburb, 'no_of_passenger': user.no_of_passenger, 
+                'no_of_baggage': user.no_of_baggage, 'return_direction': user.return_direction, 
+                'return_pickup_date': user.return_pickup_date, 'return_flight_number': user.return_flight_number, 
+                'return_flight_time': user.return_flight_time, 'return_pickup_time': user.return_pickup_time, 
+                'return_start_point': user.return_start_point, 'return_end_point': user.return_end_point, 
+                'message': user.message, 'notice': user.notice, 'price': double_price, 
+                'toll': user.toll, 'paid': double_paid, 'cash': user.cash,
             }
 
-            html_content = render_to_string(template_name, context)
-            text_content = strip_tags(html_content)
-
-            email_message = EmailMultiAlternatives(
-                "Booking confirmation - EasyGo",
-                text_content,
-                '',
-                [email, RECIPIENT_EMAIL, user.email1]
-            )
-            email_message.attach_alternative(html_content, "text/html")
-            email_message.send()
+            subject = "Booking confirmation - EasyGo" 
+            handle_email_sending(request, user.email, subject, template_name, context, email1=user.email1)
 
         if not user1.sent_email: 
             user1.sent_email = True
@@ -1774,27 +1696,24 @@ def sending_email_input_data_detail(request):
             return render(request, 'basecamp/400.html')
 
         else:
-            html_content = render_to_string("basecamp/html_email-input-date.html", 
-                                        {'name': user.name, 'contact': user.contact, 'email': user.email, 
-                                         'pickup_date': user.pickup_date, 'flight_number': user.flight_number,
-                                         'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
-                                         'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
-                                         'no_of_baggage': user.no_of_baggage, 'field': field, 
-                                         'start_point': user.start_point, 'end_point': user.end_point,
-                                         'return_start_point': user.return_start_point, 'return_end_point': user.return_end_point,
-                                         'return_direction': user.return_direction, 'return_pickup_date': user.return_pickup_date, 
-                                         'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
-                                         'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
-                                         })
-            text_content = strip_tags(html_content)
-            email_message = EmailMultiAlternatives(
-                "Checking details - EasyGo",
-                text_content,
-                '',
-                [email, RECIPIENT_EMAIL]
-            )
-            email_message.attach_alternative(html_content, "text/html")
-            email_message.send()
+            template_name = "basecamp/html_email-input-date.html"
+            subject = "Checking details - EasyGo"
+
+            # 템플릿에 전달할 컨텍스트 구성
+            context = {
+                'name': user.name, 'contact': user.contact, 'email': user.email, 
+                'pickup_date': user.pickup_date, 'flight_number': user.flight_number,
+                'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
+                'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
+                'no_of_baggage': user.no_of_baggage, 'field': field, 
+                'start_point': user.start_point, 'end_point': user.end_point,
+                'return_start_point': user.return_start_point, 'return_end_point': user.return_end_point,
+                'return_direction': user.return_direction, 'return_pickup_date': user.return_pickup_date, 
+                'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
+                'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
+            }
+
+            handle_email_sending(request, user.email, subject, template_name, context)
 
 
         return render(request, 'basecamp/inquiry_done.html') 
@@ -2163,7 +2082,7 @@ def invoice_detail(request):
         mail = EmailMultiAlternatives(
             f"Tax Invoice #T{inv_no} - EasyGo",
             text_content,
-            '',
+            DEFAULT_FROM_EMAIL,
             recipient_list
         )
         mail.attach_alternative(html_content, "text/html")
@@ -2187,33 +2106,7 @@ def invoice_detail(request):
         return render(request, 'basecamp/invoice.html', {})
 
 
-# email_dispatch_detail 
-def handle_email_sending(email, subject, template_name, context, email1=None):
-    html_content = render_to_string(template_name, context)
-    text_content = strip_tags(html_content)
-    
-    recipient_list = [email, RECIPIENT_EMAIL]
-    if email1:  # email1이 제공되었을 경우 추가
-        recipient_list.append(email1)
-    
-    email_message = EmailMultiAlternatives(
-        subject,
-        text_content,
-        '',
-        recipient_list
-    )
-    email_message.attach_alternative(html_content, "text/html")
-    email_message.send()
-
-
-def format_pickup_time_12h(pickup_time_str):
-    try:
-        time_obj = datetime.strptime(pickup_time_str.strip(), "%H:%M")
-        return time_obj.strftime("%I:%M %p")  # 예: "06:30 PM"
-    except ValueError:
-        return pickup_time_str  # 실패 시 원래 값 반환
-    
-
+# email dispatching
 def email_dispatch_detail(request):     
     if request.method == "POST":
         email = request.POST.get('email', '').strip() 
@@ -2506,7 +2399,7 @@ def email_dispatch_detail(request):
                     user.pending = False
                     user.save()                       
 
-            handle_email_sending(email, subject, template_name, context, user.email1)
+            handle_email_sending(request, email, subject, template_name, context, user.email1)
               
         return render(request, 'basecamp/inquiry_done.html')  
     
