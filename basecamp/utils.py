@@ -43,7 +43,7 @@ def parse_date(date_str, field_name="Date", required=True, reference_date=None):
 def handle_email_sending(request, email, subject, template_name, context, email1=None):
     html_content = render_to_string(template_name, context, request=request)
     text_content = strip_tags(html_content)
-    text_content = text_content.replace('&#9989;', '').replace('&#9888;', '').replace('&#128176;', '')
+    text_content = text_content.replace('✅', '').replace('🚨', '').replace('💰', '')
     
     recipient_list = [email, RECIPIENT_EMAIL]
 
