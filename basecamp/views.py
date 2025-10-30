@@ -21,7 +21,7 @@ from django.utils import timezone
 from main.settings import RECIPIENT_EMAIL, DEFAULT_FROM_EMAIL
 from blog.models import Post, Inquiry, PaypalPayment, StripePayment, Driver
 from blog.tasks import send_confirm_email, send_email_task, send_notice_email
-from blog.sms_utils import send_sms_notice, send_whatsapp_message
+from blog.sms_utils import send_sms_notice, send_whatsapp_template
 from basecamp.area import get_suburbs
 from basecamp.area_full import get_more_suburbs
 from basecamp.area_home import get_home_suburbs
@@ -2390,7 +2390,7 @@ def email_dispatch_detail(request):
                                 \n\nDear {second_user.name}, We have sent an urgent email. Please check your email. \
                                 \n\nReply only via email >> info@easygoshuttle.com.au"
                             send_sms_notice(second_user.contact, message)
-                            send_whatsapp_message(second_user.contact)
+                            send_whatsapp_template(second_user.contact)
                     
                 else:
                     user.cancelled = True
@@ -2404,7 +2404,7 @@ def email_dispatch_detail(request):
                                 \n\nDear {user.name}, We have sent an urgent email. Please check your email. \
                                 \n\nReply only via email >> info@easygoshuttle.com.au"
                             send_sms_notice(user.contact, message)    
-                            send_whatsapp_message(user.contact)              
+                            send_whatsapp_template(user.contact)              
                     
             if selected_option == "Payment discrepancy" and user: 
                 diff = round(float(user.price) - float(user.paid), 2)
