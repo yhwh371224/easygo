@@ -39,9 +39,30 @@ def parse_date(date_str, field_name="Date", required=True, reference_date=None):
     return parsed_date
 
 
+def sanitize_context(context):
+    """
+    context 딕셔너리의 모든 값들을 문자열로 변환하고 None은 빈 문자열로 치환.
+    이모지가 포함된 문자열도 안전하게 HTML로 전달됨.
+    """
+    sanitized = {}
+    for key, value in context.items():
+        if value is None:
+            sanitized[key] = ""
+        elif isinstance(value, (int, float, date, datetime, bool)):
+            sanitized[key] = str(value)
+        else:
+            sanitized[key] = str(value)
+    return sanitized
+
+
 # email_dispatch_detail 
 def handle_email_sending(request, email, subject, template_name, context, email1=None):
+    context = sanitize_context(context)
+
     html_content = render_to_string(template_name, context)
+    print(html_content)
+    with open("debug_email.html", "w", encoding="utf-8") as f:
+        f.write(html_content)
     text_content = strip_tags(html_content)
     text_content = text_content.replace('✅', '').replace('🚨', '').replace('💰', '')
     
@@ -64,7 +85,7 @@ def handle_email_sending(request, email, subject, template_name, context, email1
         'Content-Type': 'text/html; charset=UTF-8',
         'Content-Transfer-Encoding': '8bit',
     }
-    
+
     email_message.send()
 
 
