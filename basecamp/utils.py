@@ -39,26 +39,11 @@ def parse_date(date_str, field_name="Date", required=True, reference_date=None):
     return parsed_date
 
 
-def sanitize_context(context):
-    sanitized = {}
-    for k, v in context.items():
-        if v is None:
-            sanitized[k] = ""  # None → 빈 문자열
-        else:
-            sanitized[k] = str(v)
-    return sanitized
-
-
 # email_dispatch_detail 
 def handle_email_sending(request, email, subject, template_name, context, email1=None):
-    context = sanitize_context(context)
 
     html_content = render_to_string(template_name, context, request=request)
-    print(html_content)
-    with open("debug_email.html", "w", encoding="utf-8") as f:
-        f.write(html_content)
     text_content = strip_tags(html_content)
-    text_content = text_content.replace('✅', '').replace('🚨', '').replace('💰', '')
     
     recipient_list = [email, RECIPIENT_EMAIL]
 
