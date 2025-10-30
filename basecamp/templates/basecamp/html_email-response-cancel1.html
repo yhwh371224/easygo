@@ -239,7 +239,7 @@
 											<td align="left" style="padding-top:28px;padding-left:0;">
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
                                                     We regret to inform you that due to unforeseen circumstances within our company, 
-                                                    we must cancel your booking on {{ booking_date }}.
+                                                    we must cancel your booking on {{ adjustment_time }}.
                                                     We sincerely apologize for any inconvenience this may cause.
                                                     <br><br>
 
@@ -247,8 +247,8 @@
                                                     If you have already made any payments, we will process a full refund promptly. 
                                                     <br><br>
 
-													{% if return_booking_date %}
-													• Please rest assured, your return booking on {{ return_booking_date }} remains confirmed as scheduled.
+													{% if wait_duration %}
+													• Please rest assured, your booking on {{ wait_duration }} remains confirmed as scheduled.
 													<br><br>
 													{% endif %}
 
