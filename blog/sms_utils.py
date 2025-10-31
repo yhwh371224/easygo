@@ -84,20 +84,3 @@ def send_whatsapp_template(phone_number):
 
 
 
-# def send_whatsapp_message(phone_number, message_body):
-#     """Send a WhatsApp message via Twilio."""
-#     formatted_number = format_whatsapp_number(phone_number)
-#     if not formatted_number:
-#         sms_logger.error(f"Cannot send message: invalid phone number {phone_number}")
-#         return
-#     try:
-#         message = client.messages.create(
-#             body=message_body,
-#             from_=whatsapp_from,
-#             to=f'whatsapp:{formatted_number}'
-#         )
-#         sms_logger.info(f'WhatsApp message sent to {formatted_number}')
-#     except Exception as e:
-#         sms_logger.error(f'Failed to send WhatsApp message to {formatted_number}: {e}')
-
-
