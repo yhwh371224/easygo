@@ -212,22 +212,23 @@
 
         <!-- PAYMENT INFO -->
         <tr>
-          <td style="padding-top: 20px;">
-            <div style="font-size:12px; line-height:20px; border-top:1px solid #a09a9a; padding:10px 0;">
-              Payment options are as below:<br><br>
-              1. {% include 'basecamp/includes/bank_details.html' with bank=DEFAULT_BANK %} 
-			  <br><br>
-			  2. <strong>Via our website through PayPal</strong><br>
-				<span style="margin-left:12px;">
-					<a href="https://www.easygoshuttle.com.au/payonline">www.easygoshuttle.com.au/payonline</a>
-				</span>
-              <br><br>
-            </div>
-            <p style="font-size:13px; font-weight:bold; margin-top:15px; border-top:1px solid #a09a9a; padding:10px 0;">
-              <span style="color: #eb7828">Easy</span><span style="color: blue">Go</span> Airport Shuttle
-            </p>
-          </td>
-        </tr>
+			<td align="left" style="padding-top:28px;padding-left:0;">												
+				<p style="Margin:0;font-size:12px;line-height:20px; Margin-bottom:12px; border-top: 1px solid #a09a9a; padding-top:9px;">
+					<strong>Payment options are as below</strong><br><br>
+					1. <strong>Via our website through PayPal</strong><br>
+						<span style="margin-left:12px;">
+							<a href="https://www.easygoshuttle.com.au/payonline">www.easygoshuttle.com.au/payonline</a>
+						</span>
+				</p>
+				<p style="Margin:0;font-size:12px;line-height:20px;margin-top:6px;Margin-bottom:12px; ">                                                  
+					
+					2. {% include 'basecamp/includes/bank_details.html' with bank=DEFAULT_BANK %}
+				</p>												
+				<p style="Margin:0;font-size:13px;font-weight:bold;line-height:22px;Margin-bottom:12px;">                                                    
+					<span style="color: #eb7828">Easy</span><span style="color: blue">Go&nbsp;</span>Airport Shuttle<br>	                                                          
+				</p>			
+			</td>	
+		</tr>
 
       </table>
     </div>
