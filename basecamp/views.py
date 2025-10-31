@@ -1992,6 +1992,8 @@ def invoice_detail(request):
             final_total = grand_total - discount
             total_balance = round(final_total - total_paid, 2)
 
+            DEFAULT_BANK = getattr(settings, "DEFAULT_BANK_CODE", "westpac")
+
             context = {
                 "inv_no": inv_no,
                 "company_name": bookings[0].company_name,
@@ -2006,6 +2008,7 @@ def invoice_detail(request):
                 "total_price": round(final_total, 2),
                 "paid": round(total_paid, 2),
                 "balance": round(total_balance, 2),
+                "DEFAULT_BANK": DEFAULT_BANK,
             }
 
             template_name = "basecamp/html_email-multi-invoice.html"
@@ -2047,7 +2050,7 @@ def invoice_detail(request):
                     "total_price": total_price, "toll": toll, "balance": cash_balance, 
                     "paid": float_paid, "message": user.message, "no_of_passenger": user.no_of_passenger,
                     "no_of_baggage": user.no_of_baggage, "notice": user.notice, "street": user.street, "suburb": user.suburb,
-                    "return_pickup_time": user.return_pickup_time, "return_pickup_date": user.return_pickup_date,
+                    "return_pickup_time": user.return_pickup_time, "return_pickup_date": user.return_pickup_date, "DEFAULT_BANK": DEFAULT_BANK, 
                 }
 
             elif user.return_pickup_time == "x":
@@ -2073,7 +2076,7 @@ def invoice_detail(request):
                     "total_price": doubled_total, "toll": toll, "balance": balance, "discount": discount,
                     "paid": doubled_paid, "message": user1.message, "no_of_passenger": user1.no_of_passenger,
                     "no_of_baggage": user1.no_of_baggage, "notice": user1.notice, "street": user1.street, "suburb": user1.suburb,
-                    "return_pickup_time": user1.return_pickup_time, "return_pickup_date": user1.return_pickup_date,
+                    "return_pickup_time": user1.return_pickup_time, "return_pickup_date": user1.return_pickup_date, "DEFAULT_BANK": DEFAULT_BANK, 
                 }
             else:
                 template_name = "basecamp/html_email-invoice.html"
@@ -2085,7 +2088,7 @@ def invoice_detail(request):
                     "total_price": total_price, "toll": toll, "balance": balance, "discount": discount,
                     "paid": float_paid, "message": user.message, "no_of_passenger": user.no_of_passenger,
                     "no_of_baggage": user.no_of_baggage, "notice": user.notice, "street": user.street, "suburb": user.suburb,
-                    "return_pickup_time": user.return_pickup_time, "return_pickup_date": user.return_pickup_date,
+                    "return_pickup_time": user.return_pickup_time, "return_pickup_date": user.return_pickup_date, "DEFAULT_BANK": DEFAULT_BANK, 
                 }
 
             html_content = render_to_string(template_name, context)
