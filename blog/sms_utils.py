@@ -75,8 +75,8 @@ def send_whatsapp_template(phone_number, user_name=None):
             to=f'whatsapp:{formatted_number}',
             content_sid="HX247229bb2bb4e0bcc4fb17ad94fb17a8",
             content_variables=json.dumps({
-                "1": "info@easygoshuttle.com.au",
-                "2": user_name if user_name else ""
+                "1": user_name if user_name else "",
+                "2": "info@easygoshuttle.com.au"
             })
         )
 
