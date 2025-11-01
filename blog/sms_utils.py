@@ -1,5 +1,7 @@
 import os
 import logging
+import json
+
 from twilio.rest import Client
 from decouple import config
 
@@ -60,7 +62,7 @@ def send_sms_notice(phone_number, message_body):
         sms_logger.error(f'Failed to send SMS to {formatted_number}: {e}')
 
 
-def send_whatsapp_template(phone_number):
+def send_whatsapp_template(phone_number, user_name=None):
     """Send a WhatsApp message via Twilio approved template."""
     formatted_number = format_whatsapp_number(phone_number)
     if not formatted_number:
@@ -68,21 +70,21 @@ def send_whatsapp_template(phone_number):
         return
 
     try:
-        # 승인된 템플릿의 Content SID (Twilio Console에서 확인)
-        # content_sid = "HX247229bb2bb4e0bcc4fb17ad94fb17a8"
-
-        template_body = "EasyGo - Urgent notice!\nWe have sent an urgent email. Please check your email asap.\nReply only via email >> info@easygoshuttle.com.au"
-
         message = client.messages.create(
-            from_=whatsapp_from,
+            from_=f'whatsapp:{whatsapp_from}',
             to=f'whatsapp:{formatted_number}',
-            body=template_body
+            content_sid="HX247229bb2bb4e0bcc4fb17ad94fb17a8",
+            content_variables=json.dumps({
+                "1": "info@easygoshuttle.com.au",
+                "2": user_name if user_name else ""
+            })
         )
 
         sms_logger.info(f'✅ WhatsApp template sent to {formatted_number} ({message.sid})')
 
     except Exception as e:
         sms_logger.error(f'❌ Failed to send WhatsApp message to {formatted_number}: {e}')
+
 
 
 
