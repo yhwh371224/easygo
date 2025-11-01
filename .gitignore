@@ -34,24 +34,19 @@ dump.rdb
 # Ignore auto-generated JS bundles, hash files, and compressed files 
 static/basecamp/js/*.c*.js
 static/basecamp/js/*.[0-9]*.js
-
 static/basecamp/js/*.js.br      
-static/basecamp/js/*.*.js.br  
-static/basecamp/js/*.*.*.js.br 
-static/basecamp/js/*.*.*.*.js.br 
-static/basecamp/js/*.*.*.*.*.js.br 
 static/basecamp/js/*.js.gz 
-static/basecamp/js/*.*.js.gz 
-static/basecamp/js/*.*.*.js.gz
-static/basecamp/js/*.*.*.*.js.gz
-static/basecamp/js/*.*.*.*.*.js.gz
 
 static/basecamp/js/min/*.*.js
 static/basecamp/js/min/*.js.br
 static/basecamp/js/min/*.js.gz        
-static/basecamp/js/min/*.*.js.br
-static/basecamp/js/min/*.*.js.gz
 
+# Ignore auto-generated CSS bundles, hash files, and compressed files
+
+static/basecamp/css/*.css.br 
+static/basecamp/css/*.css.gz 
+static/basecamp/css/*.[0-9]*.css 
+static/basecamp/css/*.[a-z]*.css
 
 
  
