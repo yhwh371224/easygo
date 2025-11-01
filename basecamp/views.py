@@ -2392,7 +2392,7 @@ def email_dispatch_detail(request):
                             message = f"EasyGo - Urgent notice! \
                                 \n\nDear {second_user.name}, We have sent an urgent email. Please check your email. \
                                 \n\nReply only via email >> info@easygoshuttle.com.au"
-                            send_sms_notice(second_user.contact, message)
+                            # send_sms_notice(second_user.contact, message)
                             send_whatsapp_template(second_user.contact)
                     
                 else:
@@ -2406,7 +2406,7 @@ def email_dispatch_detail(request):
                             message = f"EasyGo - Urgent notice! \
                                 \n\nDear {user.name}, We have sent an urgent email. Please check your email. \
                                 \n\nReply only via email >> info@easygoshuttle.com.au"
-                            send_sms_notice(user.contact, message)    
+                            # send_sms_notice(user.contact, message)    
                             send_whatsapp_template(user.contact)              
                     
             if selected_option == "Payment discrepancy" and user: 

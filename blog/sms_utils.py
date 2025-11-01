@@ -69,12 +69,14 @@ def send_whatsapp_template(phone_number):
 
     try:
         # 승인된 템플릿의 Content SID (Twilio Console에서 확인)
-        content_sid = "HX247229bb2bb4e0bcc4fb17ad94fb17a8"
+        # content_sid = "HX247229bb2bb4e0bcc4fb17ad94fb17a8"
+
+        template_body = "EasyGo - Urgent notice!\nWe have sent an urgent email. Please check your email asap.\nReply only via email >> info@easygoshuttle.com.au"
 
         message = client.messages.create(
             from_=whatsapp_from,
             to=f'whatsapp:{formatted_number}',
-            content_sid=content_sid,
+            body=template_body
         )
 
         sms_logger.info(f'✅ WhatsApp template sent to {formatted_number} ({message.sid})')
