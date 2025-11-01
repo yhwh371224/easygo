@@ -2387,13 +2387,13 @@ def email_dispatch_detail(request):
                     })
 
                     # ✅ Send SMS if option is "Apologies Cancellation of Booking"
-                    if selected_option == "Apologies Cancellation of Booking":                        
-                        if second_user.contact:
-                            message = f"EasyGo - Urgent notice! \
+                    if selected_option == "Apologies Cancellation of Booking": 
+                        message = f"EasyGo - Urgent notice! \
                                 \n\nDear {second_user.name}, We have sent an urgent email. Please check your email. \
-                                \n\nReply only via email >> info@easygoshuttle.com.au"
-                            # send_sms_notice(second_user.contact, message)
-                            send_whatsapp_template(second_user.contact)
+                                \n\nReply only via email >> info@easygoshuttle.com.au"                       
+                        if second_user.contact:                            
+                            send_sms_notice(second_user.contact, message)
+                            send_whatsapp_template(second_user.contact, second_user.name)
                     
                 else:
                     user.cancelled = True
@@ -2402,12 +2402,12 @@ def email_dispatch_detail(request):
 
                     # ✅ SMS for Apologies Cancellation
                     if selected_option == "Apologies Cancellation of Booking":
-                        if user.contact:
-                            message = f"EasyGo - Urgent notice! \
+                        message = f"EasyGo - Urgent notice! \
                                 \n\nDear {user.name}, We have sent an urgent email. Please check your email. \
                                 \n\nReply only via email >> info@easygoshuttle.com.au"
-                            # send_sms_notice(user.contact, message)    
-                            send_whatsapp_template(user.contact)              
+                        if user.contact:                            
+                            send_sms_notice(user.contact, message)    
+                            send_whatsapp_template(user.contact, user.name)              
                     
             if selected_option == "Payment discrepancy" and user: 
                 diff = round(float(user.price) - float(user.paid), 2)
