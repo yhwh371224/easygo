@@ -19,24 +19,33 @@ def render_to_pdf(template_src, context_dict={}):
 
 def parse_date(date_str, field_name="Date", required=True, reference_date=None):
 
-    if not date_str or date_str.strip() == "":
+    # ✅ 이미 datetime.date 타입이면 그대로 반환
+    if isinstance(date_str, date):
+        return date_str
+
+    # ✅ None 또는 빈 문자열 체크
+    if not date_str or str(date_str).strip() == "":
         if required:
             raise ValueError(f"'{field_name}' is a required field.")
         return None
 
+    # ✅ 문자열 -> datetime 변환
     try:
-        parsed_date = datetime.strptime(date_str, '%Y-%m-%d').date()
+        parsed_date = datetime.strptime(str(date_str), '%Y-%m-%d').date()
     except ValueError:
         raise ValueError(f"Invalid date format for '{field_name}' ({date_str}). Please use YYYY-MM-DD.")
 
+    # ✅ 오늘 날짜보다 미래인지 확인
     if parsed_date <= date.today():
         raise ValueError(f"'{field_name}' must be a date after today ({date.today().strftime('%Y-%m-%d')}).")
-        
+
+    # ✅ 기준 날짜(reference_date)보다 빠른지 확인
     if reference_date and parsed_date < reference_date:
         ref_str = reference_date.strftime('%Y-%m-%d')
         raise ValueError(f"'{field_name}' ({parsed_date}) cannot be before the initial pickup date ({ref_str}).")
 
     return parsed_date
+
 
 
 # email_dispatch_detail 
