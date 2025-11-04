@@ -342,7 +342,7 @@ def create_verse_image(verse_text, uploaded_image=None):
     font_path = os.path.join('static', 'fonts', 'NotoSansKR-Regular.ttf')
 
     # 글씨 크기 최대값 = 이미지 높이의 1/3
-    max_font_size = H // 3
+    max_font_size = H // 9
     min_font_size = 10  # 최소 글씨 크기
     font_size = max_font_size
 
