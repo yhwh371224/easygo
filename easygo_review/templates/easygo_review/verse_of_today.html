@@ -2,40 +2,45 @@
 
 {% block content %}
 <style>
-    /* 전체 마진/패딩 제거 */
     html, body {
         margin: 0;
         padding: 0;
+        height: 100%;
+        width: 100%;
+        font-family: 'Arial', sans-serif;
     }
 
-    /* 이미지 반응형 + 바짝 붙이기 */
-    img {
-        max-width: 100%;
-        height: auto;
-        display: block;
-        margin: 0 auto;
-        padding: 0;
-    }
-
-    /* 메시지 스타일 */
-    p {
+    /* 화면 전체를 배경 이미지로 사용 */
+    body {
+        background-image: url("{{ image_path }}");
+        background-size: cover;       /* 화면 꽉차게 */
+        background-position: center;  /* 중앙 기준 */
+        background-repeat: no-repeat;
+        display: flex;
+        justify-content: center;      /* 가로 중앙 */
+        align-items: center;          /* 세로 중앙 */
         text-align: center;
-        font-size: 16px;
-        color: #555;
-        margin: 0;
-        padding-top: 20px;
+        color: white;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    .verse-text {
+        font-size: 2em;               /* 필요 시 조정 */
+        text-shadow: 1px 1px 5px rgba(0,0,0,0.7); /* 글씨 읽기 쉽게 */
+        max-width: 90%;
+        word-wrap: break-word;
     }
 
     @media (max-width: 480px) {
-        p {
-            font-size: 14px;
-            padding-top: 10px;
+        .verse-text {
+            font-size: 1.5em;
         }
     }
 </style>
 
 {% if image_path %}
-    <img src="{{ image_path }}" alt="Verse Image">
+    <div class="verse-text">{{ verse_text|linebreaksbr }}</div>
 {% else %}
     <p>No image available.</p>
 {% endif %}
