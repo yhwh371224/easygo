@@ -319,6 +319,9 @@ def recaptcha_verify(request):
     return JsonResponse({'success': False, 'message': 'Invalid request method'})
 
 
+# ----------------------------
+# Verse 이미지 생성 함수
+# ----------------------------
 def create_verse_image(verse_text, uploaded_image=None):
     bg_dir = os.path.join('static', 'verse_backgrounds')
     bg_files = [f for f in os.listdir(bg_dir) if f.lower().endswith(('.jpg', '.png'))]
@@ -326,7 +329,9 @@ def create_verse_image(verse_text, uploaded_image=None):
     if uploaded_image:
         img = Image.open(uploaded_image).convert("RGB")
     elif bg_files:
-        bg_path = os.path.join(bg_dir, bg_files[0])  
+        # 배경 이미지 랜덤 선택 가능
+        import random
+        bg_path = os.path.join(bg_dir, random.choice(bg_files))
         img = Image.open(bg_path).convert("RGB")
     else:
         raise FileNotFoundError("No background images available.")
@@ -335,34 +340,55 @@ def create_verse_image(verse_text, uploaded_image=None):
     W, H = img.size
 
     font_path = os.path.join('static', 'fonts', 'NotoSansKR-Regular.ttf')
-    font_size = 60
-    line_spacing = font_size // 2
 
-    try:
+    # 글씨 크기 최대값 = 이미지 높이의 1/3
+    max_font_size = H // 3
+    min_font_size = 10  # 최소 글씨 크기
+    font_size = max_font_size
+
+    max_width_ratio = 0.8
+    max_height_ratio = 0.8
+
+    # 이전 verse 이미지 삭제 (덮어쓰기 대신)
+    output_dir = os.path.join(settings.MEDIA_ROOT, 'verse')
+    os.makedirs(output_dir, exist_ok=True)
+    for f in ['verse.jpg', 'verse.png']:
+        file_path = os.path.join(output_dir, f)
+        if os.path.exists(file_path):
+            os.remove(file_path)
+
+    # 글씨 크기 자동 조절
+    while font_size >= min_font_size:
         font = ImageFont.truetype(font_path, font_size)
-    except IOError:
-        raise FileNotFoundError(f"Font file not found at {font_path}")
+        line_spacing = font_size // 2
 
-    raw_lines = verse_text.split('\n')
-    lines = []
-    for raw_line in raw_lines:
-        words = raw_line.split()
-        line = ""
-        for word in words:
-            test_line = line + " " + word if line else word
-            bbox = draw.textbbox((0, 0), test_line, font=font)
-            line_width = bbox[2] - bbox[0]
-            if line_width < W * 0.8:
-                line = test_line
-            else:
+        raw_lines = verse_text.split('\n')
+        lines = []
+        for raw_line in raw_lines:
+            words = raw_line.split()
+            line = ""
+            for word in words:
+                test_line = line + " " + word if line else word
+                bbox = draw.textbbox((0, 0), test_line, font=font)
+                line_width = bbox[2] - bbox[0]
+                if line_width < W * max_width_ratio:
+                    line = test_line
+                else:
+                    lines.append(line)
+                    line = word
+            if line:
                 lines.append(line)
-                line = word
-        if line:
-            lines.append(line)
 
+        total_text_height = len(lines) * (font_size + line_spacing)
+        if total_text_height < H * max_height_ratio:
+            break
+        font_size -= 1  # 글씨 크기 줄이기
+
+    # 세로 중앙 정렬
     total_text_height = len(lines) * (font_size + line_spacing)
     y_text = (H - total_text_height) // 2
 
+    # 이미지에 텍스트 출력
     for line in lines:
         bbox = draw.textbbox((0, 0), line, font=font)
         line_width = bbox[2] - bbox[0]
@@ -370,31 +396,34 @@ def create_verse_image(verse_text, uploaded_image=None):
         draw.text((x_text, y_text), line, font=font, fill="white")
         y_text += font_size + line_spacing
 
-    output_dir = os.path.join(settings.MEDIA_ROOT, 'verse')
-    os.makedirs(output_dir, exist_ok=True)
-
+    # 이미지 저장
     jpg_path = os.path.join(output_dir, 'verse.jpg')
     png_path = os.path.join(output_dir, 'verse.png')
-
     img.save(jpg_path, format='JPEG')
     img.save(png_path, format='PNG')
 
 
+# ----------------------------
+# Verse 입력 view
+# ----------------------------
 def verse_input_view(request):
     if request.method == 'POST':
         verse_text = request.POST.get('verse')
-        uploaded_image = request.FILES.get('background_image')  
+        uploaded_image = request.FILES.get('background_image')
 
         if verse_text:
             try:
-                create_verse_image(verse_text, uploaded_image)  
+                create_verse_image(verse_text, uploaded_image)
                 return redirect('easygo_review:verse_of_today')
             except Exception as e:
-                print(f"Error creating image: {e}")
-                
+                print(f"Error creating verse image: {e}")
+
     return render(request, 'easygo_review/verse.html')
 
 
+# ----------------------------
+# Verse 출력 view
+# ----------------------------
 def verse_display_view(request):
     base_dir = os.path.join(settings.MEDIA_ROOT, 'verse')
     base_url = settings.MEDIA_URL.rstrip('/') + '/verse'
@@ -407,7 +436,8 @@ def verse_display_view(request):
             break
 
     context = {
-        'image_path': f"{base_url}/{image_filename}?v={int(time.time())}" if image_filename else None
+        'image_path': f"{base_url}/{image_filename}?v={int(time.time())}" if image_filename else None,
+        'verse_text': "",  # 필요 시 DB에서 구절 가져오기 가능
     }
 
     return render(request, 'easygo_review/verse_of_today.html', context)
