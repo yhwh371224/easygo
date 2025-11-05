@@ -1038,25 +1038,6 @@ def confirmation_detail(request):
 
         rendering = render(request, 'basecamp/inquiry_done.html')   
         
-        # template_name = "basecamp/html_email-confirmation.html"
-
-        # context = {
-        #     'company_name': company_name, 'name': name, 'contact': contact, 
-        #     'email': email, 'email1': email1, 'pickup_date': pickup_date_obj, 
-        #     'flight_number': flight_number, 'flight_time': flight_time, 'pickup_time': pickup_time, 
-        #     'start_point': start_point, 'end_point': end_point, 'return_direction': return_direction,
-        #     'return_pickup_date': return_pickup_date_obj, 'return_flight_number': return_flight_number, 
-        #     'return_flight_time': return_flight_time, 'return_pickup_time': return_pickup_time, 
-        #     'return_start_point': return_start_point, 'return_end_point': return_end_point, 
-        #     'direction': direction, 'street': street, 'suburb': suburb, 
-        #     'no_of_passenger': no_of_passenger, 'no_of_baggage': baggage_str, 'message': message, 
-        #     'notice': notice, 'price': price, 'cash': cash, 'paid': paid
-        # }
-
-        # customer_subject = "Booking Confirmation - EasyGo Airport Shuttle" 
-
-        # handle_email_sending(request, email, customer_subject, template_name, context, email1=email1)
-        
         return rendering
 
     else:
