@@ -1893,6 +1893,8 @@ def invoice_detail(request):
                 inv_no = inv_no.strip()
             else:
                 inv_no = f"{user.pickup_date.toordinal()}" if user.pickup_date else "896021"
+
+        DEFAULT_BANK = getattr(settings, "DEFAULT_BANK_CODE", "westpac")
             
         # Multi booking 여부
         multiple = False
