@@ -3,88 +3,96 @@
 {% block content %}
 
 <style>
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  width: 100%;
-}
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+  }
 
-.verse-page {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-image: url('{{ media_url }}/{{ image_basename }}.webp');
-  background-size: cover;       /* 화면 꽉 채움 */
-  background-position: center;
-  background-repeat: no-repeat;
-  overflow: hidden;
-}
+  /* 전체 화면 배경 */
+  .verse-page {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url('{{ media_url }}/{{ image_basename }}.webp');
+    background-size: cover;        /* 화면 꽉 채움 */
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: hidden;
+  }
 
-.verse-overlay {
-  width: 90%;
-  height: 90%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
+  /* 텍스트 래퍼: 그림자 제거 */
+  .verse-overlay {
+    background: none;
+    padding: 0;
+    max-width: 95%;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+  }
 
-.verse-text {
-  margin: 0;
-  color: #ffffff;
-  line-height: 1.2;
-  word-wrap: break-word;
-  white-space: pre-wrap;  /* 줄바꿈 유지 */
-  font-family: "Noto Sans KR", Arial, sans-serif;
-  font-size: 5vw;          /* 초기 글자 크기 */
-  max-height: 100%;
-  overflow: hidden;
-}
+  /* 글자 스타일 */
+  .verse-text {
+    margin: 0;
+    color: #ffffff;
+    line-height: 1.2;
+    font-family: "Noto Sans KR", Arial, sans-serif;
+    font-size: 5vw;
+    display: inline-block;
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
 
-/* 모바일 기기 */
-@media (max-width: 768px) {
-  .verse-text { font-size: 6vw; }
-}
-@media (max-width: 480px) {
-  .verse-text { font-size: 7vw; }
-}
+  /* 모바일 환경 */
+  @media (max-width: 768px) {
+    .verse-text { font-size: 6vw; }
+  }
+  @media (max-width: 480px) {
+    .verse-text { font-size: 7vw; }
+  }
 </style>
 
 <div class="verse-page">
-  <div class="verse-overlay">
-    <p id="verse-text" class="verse-text">{{ verse_text|linebreaksbr }}</p>
+  <div class="verse-overlay" id="verse-overlay">
+    <div id="verse-text" class="verse-text">{{ verse_text|linebreaksbr }}</div>
   </div>
 </div>
 
 <script>
 (function() {
   const textEl = document.getElementById('verse-text');
-  const container = document.querySelector('.verse-overlay');
+  const container = document.querySelector('.verse-page');
   if (!textEl || !container) return;
 
   function fitText() {
-    // 초기 font-size 가져오기
-    let style = window.getComputedStyle(textEl);
-    let fontSize = parseFloat(style.fontSize);
-
+    let fontSize = parseFloat(window.getComputedStyle(textEl).fontSize);
+    const minFontSize = 5; // 최소 글씨
     const step = 0.5;
-    const minSize = 8; // 최소 글자 크기
 
-    // 글자가 컨테이너보다 크면 줄이기
-    while ((textEl.scrollHeight > container.clientHeight || textEl.scrollWidth > container.clientWidth) && fontSize > minSize) {
+    // 글자가 컨테이너 안에 들어올 때까지 반복
+    while ((textEl.scrollHeight > container.clientHeight || textEl.scrollWidth > container.clientWidth) && fontSize > minFontSize) {
       fontSize -= step;
       textEl.style.fontSize = fontSize + 'px';
     }
+
+    // 컨테이너 대비 글자가 너무 작으면 scale로 확대
+    const scaleH = container.clientHeight / textEl.scrollHeight;
+    const scaleW = container.clientWidth / textEl.scrollWidth;
+    const scale = Math.min(scaleH, scaleW, 1);
+    textEl.style.transform = `scale(${scale})`;
+    textEl.style.transformOrigin = 'top center';
   }
 
   window.addEventListener('load', fitText);
   window.addEventListener('resize', fitText);
+  window.addEventListener('orientationchange', fitText);
 })();
 </script>
 
