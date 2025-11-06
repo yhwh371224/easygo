@@ -1,122 +1,52 @@
-{% extends "easygo_review/base_verse.html" %}
-
-{% block content %}
-
 <style>
-  /* 전체 페이지 영역 */
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+  }
+
   .verse-page {
-    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     background-image: url('{{ media_url }}/{{ image_basename }}.webp');
-    background-size: cover; /* 화면 꽉 채우기 */
-    background-position: center center;
-  }
-
-  /* 글씨만 보이도록 overlay 제거 */
-  .verse-overlay {
-    background: transparent;
-    padding: 0;
-    max-width: 92%;
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  /* 본문 텍스트 */
-  .verse-text {
-    margin: 0;
-    color: #ffffff;
-    line-height: 1.28;
-    word-wrap: break-word;
-    white-space: pre-wrap;
-    text-align: center;
-    font-family: "Noto Sans KR", Arial, sans-serif;
-    font-size: 6vh;
-    max-height: 88vh;
+    background-size: cover;        /* 화면 꽉 채움 */
+    background-position: center;
+    background-repeat: no-repeat;
     overflow: hidden;
   }
 
-  /* 모바일 환경에서 화면 + 글자 스케일 조정 */
-  @media (max-width: 768px) {
-    .verse-page {
-      transform: scale(0.75);
-      transform-origin: top center;
-    }
-    .verse-text {
-      font-size: 5vh;
-    }
+  .verse-overlay {
+    background: none;            /* 그림자 제거 */
+    padding: 0;
+    max-width: 95%;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 0;
   }
 
+  .verse-text {
+    margin: 0;
+    color: #ffffff;
+    line-height: 1.2;
+    text-align: center;
+    font-family: "Noto Sans KR", Arial, sans-serif;
+    font-size: 5vw;               /* 화면 비율 기반 */
+    word-wrap: break-word;
+    white-space: pre-wrap;
+  }
+
+  /* 모바일 */
+  @media (max-width: 768px) {
+    .verse-text { font-size: 6vw; }
+  }
   @media (max-width: 480px) {
-    .verse-page {
-      transform: scale(0.6);
-      transform-origin: top center;
-    }
-    .verse-text {
-      font-size: 4.5vh;
-    }
+    .verse-text { font-size: 7vw; }
   }
 </style>
-
-<div class="verse-page">
-  <div class="verse-overlay" id="verse-overlay">
-    <p id="verse-text" class="verse-text">{{ verse_text|linebreaksbr }}</p>
-  </div>
-</div>
-
-<script>
-(function() {
-  const textEl = document.getElementById('verse-text');
-  const wrapper = document.getElementById('verse-overlay');
-  if (!textEl || !wrapper) return;
-
-  function debounce(fn, ms) {
-    let t;
-    return function() {
-      clearTimeout(t);
-      t = setTimeout(() => fn.apply(this, arguments), ms);
-    };
-  }
-
-  function fits() {
-    return textEl.scrollHeight <= wrapper.clientHeight &&
-           textEl.scrollWidth <= wrapper.clientWidth;
-  }
-
-  function adjust() {
-    const style = window.getComputedStyle(textEl);
-    let fontSize = parseFloat(style.fontSize);
-    if (!fontSize || isNaN(fontSize)) {
-      fontSize = Math.max(Math.floor(window.innerHeight * 0.06), 12);
-      textEl.style.fontSize = fontSize + 'px';
-    }
-
-    const step = 0.75;
-    const minSize = 10;
-    while (!fits() && fontSize > minSize) {
-      fontSize = Math.max(minSize, fontSize - step);
-      textEl.style.fontSize = fontSize + 'px';
-    }
-  }
-
-  const debouncedAdjust = debounce(adjust, 120);
-
-  window.addEventListener('load', debouncedAdjust);
-  window.addEventListener('orientationchange', debouncedAdjust);
-  window.addEventListener('resize', debouncedAdjust);
-
-  if ('ResizeObserver' in window) {
-    const ro = new ResizeObserver(debouncedAdjust);
-    ro.observe(wrapper);
-  } else {
-    setInterval(debouncedAdjust, 800);
-  }
-
-  setTimeout(debouncedAdjust, 300);
-  setTimeout(debouncedAdjust, 1200);
-})();
-</script>
-
-{% endblock %}
