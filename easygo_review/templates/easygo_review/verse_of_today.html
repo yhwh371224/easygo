@@ -21,16 +21,18 @@
         align-items: center;          /* 세로 중앙 */
         text-align: center;
         color: white;
-        padding: 20px;        
+        padding: 20px;   
+        overflow-y: auto;     
     }
 
     /* 실제 성경 구절 텍스트 */
     .verse-text {
         margin: 0;
-        font-size: clamp(18px, 6vw, 36px);
-        line-height: 1.4em;
+        font-size: clamp(12px, 5vw, 28px);
+        line-height: 1.3em;
         text-shadow: 2px 2px 6px rgba(0,0,0,0.7); /* 글자 가독성 */
         color: white;
+        padding: 0 10px; /* 좌우 여백 */
     }
 
     @media (max-width: 480px) {
