@@ -23,28 +23,13 @@
         color: white;
         padding: 20px;
         box-sizing: border-box;
-    }
-
-    /* 텍스트를 감싸는 박스 */
-    .verse-box {
-        width: 50%;                  /* 화면 폭의 50% */
-        max-width: 800px;            /* 최대 폭 */
-        height: auto;                /* 높이는 글자에 맞춤 */
-        min-height: 150px;           /* 최소 높이 */
-        padding: 20px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        overflow: hidden;            /* 박스를 벗어나는 글자는 숨김 */
-        background-color: rgba(0,0,0,0.2); /* 반투명 박스로 글자 가독성 확보 */
-        border-radius: 15px;         /* 선택 사항: 부드러운 모서리 */
+        height: 100vh;
     }
 
     /* 실제 성경 구절 텍스트 */
     .verse-text {
         margin: 0;
-        font-size: 36px;             /* 초기 폰트 크기 */
+        font-size: clamp(18px, 6vw, 36px);
         line-height: 1.4em;
         word-wrap: break-word;
         text-shadow: 2px 2px 6px rgba(0,0,0,0.7); /* 글자 가독성 */
@@ -55,6 +40,7 @@
         .verse-box {
             width: 90%;
             padding: 10px;
+            min-height: 200px; /* ✅ 글씨 안 잘리게 */
         }
     }
 </style>
