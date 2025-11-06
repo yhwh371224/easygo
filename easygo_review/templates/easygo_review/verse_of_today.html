@@ -2,46 +2,43 @@
 
 {% block content %}
 <style>
-    html, body {
+html, body {
         margin: 0;
         padding: 0;
-        height: 100vh;
+        height: 100vh;           /* 화면 전체 높이 */
         width: 100%;
         font-family: 'Arial', sans-serif;
-    }
-
-    /* 화면 전체를 배경 이미지로 사용 */
-    body {
-        background-image: url("{{ image_path }}");
-        background-size: cover;       /* 화면 꽉차게 */
-        background-position: center;  /* 중앙 기준 */
-        background-repeat: no-repeat;
         display: flex;
-        justify-content: center;      /* 가로 중앙 */
-        align-items: center;          /* 세로 중앙 */
+        justify-content: center;  /* 가로 중앙 */
+        align-items: center;      /* 세로 중앙 */
         text-align: center;
+        background-image: url("{{ image_path }}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
         color: white;
-        padding: 20px;   
-        overflow-y: auto;     
+        overflow: hidden;         /* 배경만 보이도록 스크롤 제거 */
     }
 
     /* 실제 성경 구절 텍스트 */
     .verse-text {
         margin: 0;
-        font-size: clamp(12px, 5vw, 28px);
+        font-size: 6vw;           /* 초기 폰트 크기 */
+        max-width: 90%;           /* 좌우 여백 확보 */
         line-height: 1.3em;
-        text-shadow: 2px 2px 6px rgba(0,0,0,0.7); /* 글자 가독성 */
+        text-shadow: 2px 2px 6px rgba(0,0,0,0.7); 
         color: white;
-        padding: 0 10px; /* 좌우 여백 */
     }
 
+    /* 모바일 대응 */
     @media (max-width: 480px) {
         .verse-text {
-            font-size: clamp(14px, 5vw, 24px);
-            line-height: 1.3em;
+            font-size: 5vw;       /* 화면 작아도 글자 줄이기 */
+            line-height: 1.2em;
         }
     }
 </style>
+
 
 {% if image_path %}
 <p class="verse-text" id="verse-text">{{ verse_text|linebreaksbr }}</p>
