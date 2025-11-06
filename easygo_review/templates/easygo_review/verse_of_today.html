@@ -1,3 +1,7 @@
+{% extends "easygo_review/base_verse.html" %}
+
+{% block content %}
+
 <style>
   html, body {
     margin: 0;
@@ -50,3 +54,34 @@
     .verse-text { font-size: 7vw; }
   }
 </style>
+
+<div class="verse-page">
+  <div class="verse-overlay" id="verse-overlay">
+    <p id="verse-text" class="verse-text">{{ verse_text|linebreaksbr }}</p>
+  </div>
+</div>
+
+<script>
+(function() {
+  const textEl = document.getElementById('verse-text');
+  const container = document.querySelector('.verse-page');
+
+  if (!textEl || !container) return;
+
+  function fitText() {
+    let fontSize = parseFloat(window.getComputedStyle(textEl).fontSize);
+    const step = 0.5;
+
+    while ((textEl.scrollHeight > container.clientHeight || textEl.scrollWidth > container.clientWidth) && fontSize > 5) {
+      fontSize -= step;
+      textEl.style.fontSize = fontSize + 'px';
+    }
+  }
+
+  window.addEventListener('load', fitText);
+  window.addEventListener('resize', fitText);
+})();
+</script>
+
+
+{% endblock %}
