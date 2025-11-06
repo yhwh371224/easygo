@@ -39,6 +39,27 @@ html, body {
     }
 </style>
 
+<script>
+function fitTextToScreen() {
+    const textEl = document.getElementById("verse-text");
+    if (!textEl) return;
+
+    let fontSize = parseInt(window.getComputedStyle(textEl).fontSize);
+    const maxHeight = window.innerHeight * 0.9; // 화면의 90% 안에 들어오도록
+    const maxWidth = window.innerWidth * 0.9;   // 좌우 10% 여백
+
+    // 글자가 화면을 넘으면 폰트 줄이기
+    while ((textEl.scrollHeight > maxHeight || textEl.scrollWidth > maxWidth) && fontSize > 10) {
+        fontSize -= 1;
+        textEl.style.fontSize = fontSize + "px";
+    }
+}
+
+// 페이지 로드 시
+window.addEventListener('load', fitTextToScreen);
+// 화면 회전/크기 변경 시
+window.addEventListener('resize', fitTextToScreen);
+</script>
 
 {% if image_path %}
 <p class="verse-text" id="verse-text">{{ verse_text|linebreaksbr }}</p>
