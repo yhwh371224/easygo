@@ -34,10 +34,9 @@
     }
 
     @media (max-width: 480px) {
-        .verse-box {
-            width: 90%;
-            padding: 10px;
-            min-height: 200px; /* ✅ 글씨 안 잘리게 */
+        .verse-text {
+            font-size: clamp(14px, 5vw, 24px);
+            line-height: 1.3em;
         }
     }
 </style>
