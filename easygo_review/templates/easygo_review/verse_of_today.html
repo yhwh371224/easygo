@@ -3,83 +3,114 @@
 {% block content %}
 
 <style>
-/* ... (기존 스타일 유지) ... */
-html, body {
-        margin: 0;
-        padding: 0;
-        height: 100vh;
-        width: 100%;
-        font-family: 'Arial', sans-serif;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        background-image: url("{{ image_path }}");
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        color: white;
-        overflow-y: hidden;         /* 스크롤 제거 (텍스트가 넘치면 스크롤이 아닌 폰트 크기 조정) */
-    }
+  /* 전체 페이지 영역 */
+  .verse-page {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url('{{ image_path }}');
+    background-size: cover;
+    background-position: center center;
+  }
 
-    /* 실제 성경 구절 텍스트 */
+  /* 배경 어둡게 (글씨 가독성 향상용) */
+  .verse-overlay {
+    background: rgba(0, 0, 0, 0.35);
+    padding: 20px;
+    max-width: 92%;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 8px;
+  }
+
+  /* 본문 텍스트 */
+  .verse-text {
+    margin: 0;
+    color: #ffffff;
+    line-height: 1.28;
+    word-wrap: break-word;
+    white-space: pre-wrap; /* 줄바꿈 유지 */
+    text-align: center;
+    font-family: "Noto Sans KR", Arial, sans-serif;
+    font-size: 6vh; /* 기본 크기 */
+    max-height: 88vh;
+    overflow: hidden; /* 혹시 넘칠 때 대비 */
+  }
+
+  /* 모바일 기기 (폭 480px 이하) */
+  @media (max-width: 480px) {
     .verse-text {
-        margin: 0;
-        /* 초기 폰트 크기를 vw 대신 vh와 vw를 조합한 min()으로 설정하여 세로 공간도 고려합니다. */
-        font-size: min(6vw, 6vh);  /* **변경: 초기 폰트 크기** */ 
-        max-width: 90%;
-        line-height: 1.3em;
-        text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
-        padding: 0 10px;
-        color: white;
-        word-wrap: break-word;
-        box-sizing: border-box; /* **추가: 패딩이 너비/높이에 포함되도록** */
-        max-height: 100vh; /* **추가: 최대 높이 설정** */
+      font-size: 5.4vh;
+      line-height: 1.16;
     }
-
-    /* 모바일 대응 */
-    @media (max-width: 480px) {
-        .verse-text {
-            font-size: min(8vw, 8vh); /* **변경: 모바일 폰트 크기를 더 제어** */
-            line-height: 1.2em;
-        }
-    }
+  }
 </style>
 
+<div class="verse-page">
+  <div class="verse-overlay" id="verse-overlay">
+    <p id="verse-text" class="verse-text">{{ verse_text|linebreaksbr }}</p>
+  </div>
+</div>
+
 <script>
-function fitTextToScreen() {
-    const textEl = document.getElementById("verse-text");
-    if (!textEl) return;
+/*
+  Responsive text fit using ResizeObserver + debounce.
+  Ensures text always fits inside the overlay box without overflow.
+*/
+(function() {
+  const textEl = document.getElementById('verse-text');
+  const wrapper = document.getElementById('verse-overlay');
+  if (!textEl || !wrapper) return;
 
-    setTimeout(() => {
-        const parent = textEl.parentElement;
-        const paddingFactor = 0.9;
-        const parentHeight = parent.clientHeight * paddingFactor;
-        const parentWidth  = parent.clientWidth * paddingFactor;
+  function debounce(fn, ms) {
+    let t;
+    return function() {
+      clearTimeout(t);
+      t = setTimeout(() => fn.apply(this, arguments), ms);
+    };
+  }
 
-        let fontSize = parseFloat(window.getComputedStyle(textEl).fontSize);
-        const step = 0.5;
+  function fits() {
+    return (
+      textEl.scrollHeight <= wrapper.clientHeight &&
+      textEl.scrollWidth <= wrapper.clientWidth
+    );
+  }
 
-        while (
-            (textEl.scrollHeight > parentHeight ||
-            textEl.scrollWidth > parentWidth) &&
-            fontSize > 10
-        ) {
-            fontSize -= step;
-            textEl.style.fontSize = fontSize + "px";
-        }
-    }, 300); // 이미지와 폰트 로드 후 실행 보장
-}
+  function adjust() {
+    const style = window.getComputedStyle(textEl);
+    let fontSize = parseFloat(style.fontSize);
+    if (!fontSize || isNaN(fontSize)) {
+      fontSize = Math.max(Math.floor(window.innerHeight * 0.06), 12);
+      textEl.style.fontSize = fontSize + 'px';
+    }
 
-window.addEventListener('load', fitTextToScreen);
-window.addEventListener('resize', fitTextToScreen);
+    const step = 0.75;
+    const minSize = 10;
+    while (!fits() && fontSize > minSize) {
+      fontSize = Math.max(minSize, fontSize - step);
+      textEl.style.fontSize = fontSize + 'px';
+    }
+  }
 
+  const debouncedAdjust = debounce(adjust, 120);
+
+  window.addEventListener('load', debouncedAdjust);
+  window.addEventListener('orientationchange', debouncedAdjust);
+  window.addEventListener('resize', debouncedAdjust);
+
+  if ('ResizeObserver' in window) {
+    const ro = new ResizeObserver(debouncedAdjust);
+    ro.observe(wrapper);
+  } else {
+    setInterval(debouncedAdjust, 800);
+  }
+
+  setTimeout(debouncedAdjust, 300);
+  setTimeout(debouncedAdjust, 1200);
+})();
 </script>
-
-{% if image_path %}
-<p class="verse-text" id="verse-text">{{ verse_text|linebreaksbr }}</p>
-{% else %}
-<p>No image available.</p>
-{% endif %}
 
 {% endblock %}
