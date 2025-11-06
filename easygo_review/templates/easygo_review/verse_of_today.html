@@ -3,62 +3,60 @@
 {% block content %}
 
 <style>
-  html, body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    width: 100%;
-  }
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
 
-  .verse-page {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-image: url('{{ media_url }}/{{ image_basename }}.webp');
-    background-size: cover;        /* 화면 꽉 채움 */
-    background-position: center;
-    background-repeat: no-repeat;
-    overflow: hidden;
-  }
+.verse-page {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url('{{ media_url }}/{{ image_basename }}.webp');
+  background-size: cover;   /* 화면 꽉 채움 */
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+}
 
-  .verse-overlay {
-    background: none;            /* 그림자 제거 */
-    padding: 0;
-    max-width: 95%;
-    width: 100%;
-    box-sizing: border-box;
-    border-radius: 0;
-  }
+.verse-overlay {
+  background: none;
+  padding: 0 5%;
+  width: 100%;
+  max-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-  .verse-text {
-    margin: 0;
-    color: #ffffff;
-    line-height: 1.2;
-    text-align: center;
-    font-family: "Noto Sans KR", Arial, sans-serif;
-    font-size: 5vw;               /* 화면 비율 기반 */
-    display: inline-block;
-    white-space: pre-wrap;
-    word-break: break-word;
-    overflow-wrap: break-word;
-  }
+.verse-text {
+  color: #ffffff;
+  text-align: center;
+  font-family: "Noto Sans KR", Arial, sans-serif;
+  font-size: 6vw;
+  line-height: 1.2;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
 
-  /* 모바일 */
-  @media (max-width: 768px) {
-    .verse-text { font-size: 6vw; }
-  }
-  @media (max-width: 480px) {
-    .verse-text { font-size: 7vw; }
-  }
+/* 모바일 대응 */
+@media (max-width: 768px) {
+  .verse-text { font-size: 7vw; }
+}
+@media (max-width: 480px) {
+  .verse-text { font-size: 8vw; }
+}
 </style>
 
 <div class="verse-page">
-  <div class="verse-overlay" id="verse-overlay">
+  <div class="verse-overlay">
     <p id="verse-text" class="verse-text">{{ verse_text|linebreaksbr }}</p>
   </div>
 </div>
@@ -66,15 +64,18 @@
 <script>
 (function() {
   const textEl = document.getElementById('verse-text');
-  const container = document.querySelector('.verse-page');
+  const container = document.querySelector('.verse-overlay');
 
   if (!textEl || !container) return;
 
   function fitText() {
+    const containerWidth = container.clientWidth;
+    const containerHeight = container.clientHeight;
+
     let fontSize = parseFloat(window.getComputedStyle(textEl).fontSize);
     const step = 0.5;
 
-    while ((textEl.scrollHeight > container.clientHeight || textEl.scrollWidth > container.clientWidth) && fontSize > 5) {
+    while ((textEl.scrollHeight > containerHeight || textEl.scrollWidth > containerWidth) && fontSize > 5) {
       fontSize -= step;
       textEl.style.fontSize = fontSize + 'px';
     }
@@ -84,6 +85,5 @@
   window.addEventListener('resize', fitText);
 })();
 </script>
-
 
 {% endblock %}
