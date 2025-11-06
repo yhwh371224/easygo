@@ -20,38 +20,39 @@ html, body {
   align-items: center;
   justify-content: center;
   background-image: url('{{ media_url }}/{{ image_basename }}.webp');
-  background-size: cover;   /* 화면 꽉 채움 */
+  background-size: cover;       /* 화면 꽉 채움 */
   background-position: center;
   background-repeat: no-repeat;
   overflow: hidden;
 }
 
 .verse-overlay {
-  background: none;
-  padding: 0 5%;
-  width: 100%;
-  max-height: 100%;
+  width: 90%;
+  height: 90%;
   display: flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
 }
 
 .verse-text {
+  margin: 0;
   color: #ffffff;
-  text-align: center;
-  font-family: "Noto Sans KR", Arial, sans-serif;
-  font-size: 6vw;
   line-height: 1.2;
-  word-break: break-word;
-  white-space: pre-wrap;
+  word-wrap: break-word;
+  white-space: pre-wrap;  /* 줄바꿈 유지 */
+  font-family: "Noto Sans KR", Arial, sans-serif;
+  font-size: 5vw;          /* 초기 글자 크기 */
+  max-height: 100%;
+  overflow: hidden;
 }
 
-/* 모바일 대응 */
+/* 모바일 기기 */
 @media (max-width: 768px) {
-  .verse-text { font-size: 7vw; }
+  .verse-text { font-size: 6vw; }
 }
 @media (max-width: 480px) {
-  .verse-text { font-size: 8vw; }
+  .verse-text { font-size: 7vw; }
 }
 </style>
 
@@ -65,17 +66,18 @@ html, body {
 (function() {
   const textEl = document.getElementById('verse-text');
   const container = document.querySelector('.verse-overlay');
-
   if (!textEl || !container) return;
 
   function fitText() {
-    const containerWidth = container.clientWidth;
-    const containerHeight = container.clientHeight;
+    // 초기 font-size 가져오기
+    let style = window.getComputedStyle(textEl);
+    let fontSize = parseFloat(style.fontSize);
 
-    let fontSize = parseFloat(window.getComputedStyle(textEl).fontSize);
     const step = 0.5;
+    const minSize = 8; // 최소 글자 크기
 
-    while ((textEl.scrollHeight > containerHeight || textEl.scrollWidth > containerWidth) && fontSize > 5) {
+    // 글자가 컨테이너보다 크면 줄이기
+    while ((textEl.scrollHeight > container.clientHeight || textEl.scrollWidth > container.clientWidth) && fontSize > minSize) {
       fontSize -= step;
       textEl.style.fontSize = fontSize + 'px';
     }
