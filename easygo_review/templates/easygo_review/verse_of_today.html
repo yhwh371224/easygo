@@ -2,14 +2,6 @@
 
 {% block content %}
 
-{% if image_path %}
-<p class="verse-text" id="verse-text">{{ verse_text|linebreaksbr }}</p>
-{% else %}
-<p>No image available.</p>
-{% endif %}
-
-{% endblock %}
-
 <style>
 html, body {
         margin: 0;
@@ -74,3 +66,10 @@ window.addEventListener('load', fitTextToScreen);
 window.addEventListener('resize', fitTextToScreen);
 </script>
 
+{% if image_path %}
+<p class="verse-text" id="verse-text">{{ verse_text|linebreaksbr }}</p>
+{% else %}
+<p>No image available.</p>
+{% endif %}
+
+{% endblock %}
