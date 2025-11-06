@@ -3,14 +3,7 @@
 {% block content %}
 
 <style>
-  html, body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    width: 100%;
-  }
-
-  /* 전체 페이지 영역 */
+  /* 전체 페이지 영역 (배경 이미지 + 전체 화면) */
   .verse-page {
     height: 100vh;
     width: 100%;
@@ -18,19 +11,18 @@
     align-items: center;
     justify-content: center;
     background-image: url('{{ media_url }}/{{ image_basename }}.webp');
-    background-size: cover;
+    background-size: contain;  
     background-position: center center;
-    overflow: hidden;
+    margin: 0; /* 상단 여백 제거 */
   }
 
-  /* 글자만 보이도록 박스 제거 */
+  /* 글자 배경 박스 제거 (그림자 제거) */
   .verse-overlay {
-    background: transparent; /* 그림자/배경 제거 */
+    background: none; /* 박스 그림자 제거 */
     padding: 0;
     max-width: 92%;
     width: 100%;
     box-sizing: border-box;
-    border-radius: 0;
   }
 
   /* 본문 텍스트 */
@@ -43,22 +35,25 @@
     text-align: center;
     font-family: "Noto Sans KR", Arial, sans-serif;
     font-size: 6vh; /* 기본 크기 */
+    max-height: 88vh;
+    overflow: hidden;
   }
 
-  /* 모바일 기기 */
+  /* 모바일 환경에서 전체 화면과 글자 같이 축소 */
   @media (max-width: 768px) {
     .verse-page {
-      transform: scale(0.7); /* 화면 자체를 축소 */
+      transform: scale(0.7);
       transform-origin: top center;
     }
     .verse-text {
-      font-size: 5.4vh; /* 글자 크기도 같이 줄임 */
+      font-size: 5.4vh;
     }
   }
 
   @media (max-width: 480px) {
     .verse-page {
       transform: scale(0.55);
+      transform-origin: top center;
     }
     .verse-text {
       font-size: 4.5vh;
@@ -73,6 +68,10 @@
 </div>
 
 <script>
+/*
+  Responsive text fit using ResizeObserver + debounce.
+  Ensures text always fits inside the overlay box without overflow.
+*/
 (function() {
   const textEl = document.getElementById('verse-text');
   const wrapper = document.getElementById('verse-overlay');
@@ -87,8 +86,10 @@
   }
 
   function fits() {
-    return textEl.scrollHeight <= wrapper.clientHeight &&
-           textEl.scrollWidth <= wrapper.clientWidth;
+    return (
+      textEl.scrollHeight <= wrapper.clientHeight &&
+      textEl.scrollWidth <= wrapper.clientWidth
+    );
   }
 
   function adjust() {
@@ -98,6 +99,7 @@
       fontSize = Math.max(Math.floor(window.innerHeight * 0.06), 12);
       textEl.style.fontSize = fontSize + 'px';
     }
+
     const step = 0.75;
     const minSize = 10;
     while (!fits() && fontSize > minSize) {
