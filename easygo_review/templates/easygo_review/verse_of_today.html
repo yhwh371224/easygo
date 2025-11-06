@@ -52,11 +52,19 @@
 
   /* 모바일 환경 */
   @media (max-width: 768px) {
-    .verse-text { font-size: 6vw; }
+    .verse-page {
+        width: 90%;          /* 가로폭 줄임 */
+        margin: 0 auto;      /* 화면 가운데 정렬 */
+    }
+    }
+
+    @media (max-width: 480px) {
+    .verse-page {
+        width: 85%;          /* 더 줄임 */
+        margin: 0 auto;
+    }
   }
-  @media (max-width: 480px) {
-    .verse-text { font-size: 7vw; }
-  }
+
 </style>
 
 <div class="verse-page">
