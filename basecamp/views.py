@@ -2200,84 +2200,133 @@ def email_dispatch_detail(request):
                     })
 
             if selected_option == "Gratitude For Payment" and user:
-                original_price = float(user.price or 0)   
+                original_price = float(user.price or 0)
                 original_notice = (user.notice or "").strip()
+                has_payment_record = any(keyword in original_notice for keyword in ["===STRIPE===", "===PAYPAL===", "===Gratitude==="])
 
-                has_payment_record = any(keyword in original_notice for keyword in ["===STRIPE===", "===PAYPAL===", "===Gratitude==="])                
-
-                # 왕복 픽업 있는 경우
-                if user.return_pickup_time == 'x':
-                    full_price = original_price * 2
-                    if user.email1:
-                        full_price += full_price * 0.1  # 전체 왕복 요금에 10% 추가
-
-                    total_paid_text_full = f"===Gratitude=== Total Paid: ${int(full_price)}"
-
-                    if not has_payment_record:
-                        user.notice = (
-                            f"{original_notice} | {total_paid_text_full}"
-                            if original_notice else total_paid_text_full
-                        )
-                    else:
-                        user.notice = original_notice
-
-                    user.paid = user.price
-                    user.reminder = True
-                    user.toll = ""
-                    user.cash = False
-                    user.pending = False
-                    user.save()
-
-                    context.update({
-                        'pickup_date': user.pickup_date,
-                        'price': full_price,
-                        'return_pickup_date': user.return_pickup_date if user else '',
-                    })
-
+                # ✅ 1️⃣ adjustment_time이 있는 경우
+                if adjustment_time:
                     try:
-                        user_1 = Post.objects.filter(email=user.email)[1]
-                        user_1_price = original_price * 2
-                        if user.email1:
-                            user_1_price += user_1_price * 0.1  # 10% 추가
+                        adjusted_value = int(adjustment_time)
+                    except ValueError:
+                        adjusted_value = 0
 
-                        user_1.paid = user_1.price
-                        user_1.reminder = True
-                        user_1.toll = ""
-                        user_1.cash = False
-                        user_1.pending = False
-                        user_1.notice = user.notice
-                        user_1.save()
-                    except IndexError:
-                        pass  
+                    # 왕복인 경우: 두 개의 부킹에 절반씩 적용
+                    if user.return_pickup_time == 'x':
+                        half_value = int(adjusted_value / 2)
 
-                # 왕복 픽업 없는 경우
-                else:
-                    full_price = original_price
-                    if user.email1:
-                        full_price += full_price * 0.1  # 편도 요금에 10% 추가
+                        user.notice = f"{original_notice} | ===Adjusted=== {half_value}" if original_notice else f"===Adjusted=== {half_value}"
+                        user.paid = half_value
+                        user.reminder = True
+                        user.toll = ""
+                        user.cash = False
+                        user.pending = False
+                        user.save()
 
-                    total_paid_text_full = f"===Gratitude=== Total Paid: ${int(full_price)}"
+                        context.update({
+                            'pickup_date': user.pickup_date,
+                            'price': half_value,
+                            'return_pickup_date': user.return_pickup_date if user else '',
+                        })
 
-                    if not has_payment_record:
-                        user.notice = (
-                            f"{original_notice} | {total_paid_text_full}"
-                            if original_notice else total_paid_text_full
-                        )
+                        # 두 번째 예약도 동일하게 처리
+                        try:
+                            user_1 = Post.objects.filter(email=user.email)[1]
+                            user_1.notice = user.notice
+                            user_1.paid = half_value
+                            user_1.reminder = True
+                            user_1.toll = ""
+                            user_1.cash = False
+                            user_1.pending = False
+                            user_1.save()
+                        except IndexError:
+                            pass
+
+                    # 편도인 경우: 전체 값 적용
                     else:
-                        user.notice = original_notice
+                        user.notice = f"{original_notice} | ===Adjusted=== {adjusted_value}" if original_notice else f"===Adjusted=== {adjusted_value}"
+                        user.paid = adjusted_value
+                        user.reminder = True
+                        user.toll = ""
+                        user.cash = False
+                        user.pending = False
+                        user.save()
 
-                    user.paid = full_price
-                    user.reminder = True
-                    user.toll = ""
-                    user.cash = False
-                    user.pending = False
-                    user.save()
+                        context.update({
+                            'pickup_date': user.pickup_date,
+                            'price': adjusted_value,
+                            'return_pickup_date': user.return_pickup_date if user else '',
+                        })
 
-                    context.update({
-                        'pickup_date': user.pickup_date,
-                        'price': full_price,
-                        'return_pickup_date': user.return_pickup_date if user else '',
-                    })
+                # ✅ 2️⃣ adjustment_time이 없는 경우 기존 로직 그대로 유지
+                else:
+                    # 왕복 픽업 있는 경우
+                    if user.return_pickup_time == 'x':
+                        full_price = original_price * 2
+                        if user.email1:
+                            full_price += full_price * 0.1
+
+                        total_paid_text_full = f"===Gratitude=== Total Paid: ${int(full_price)}"
+
+                        if not has_payment_record:
+                            user.notice = f"{original_notice} | {total_paid_text_full}" if original_notice else total_paid_text_full
+                        else:
+                            user.notice = original_notice
+
+                        user.paid = user.price
+                        user.reminder = True
+                        user.toll = ""
+                        user.cash = False
+                        user.pending = False
+                        user.save()
+
+                        context.update({
+                            'pickup_date': user.pickup_date,
+                            'price': full_price,
+                            'return_pickup_date': user.return_pickup_date if user else '',
+                        })
+
+                        try:
+                            user_1 = Post.objects.filter(email=user.email)[1]
+                            user_1_price = original_price * 2
+                            if user.email1:
+                                user_1_price += user_1_price * 0.1
+
+                            user_1.paid = user_1.price
+                            user_1.reminder = True
+                            user_1.toll = ""
+                            user_1.cash = False
+                            user_1.pending = False
+                            user_1.notice = user.notice
+                            user_1.save()
+                        except IndexError:
+                            pass
+
+                    # 왕복 픽업 없는 경우
+                    else:
+                        full_price = original_price
+                        if user.email1:
+                            full_price += full_price * 0.1
+
+                        total_paid_text_full = f"===Gratitude=== Total Paid: ${int(full_price)}"
+
+                        if not has_payment_record:
+                            user.notice = f"{original_notice} | {total_paid_text_full}" if original_notice else total_paid_text_full
+                        else:
+                            user.notice = original_notice
+
+                        user.paid = full_price
+                        user.reminder = True
+                        user.toll = ""
+                        user.cash = False
+                        user.pending = False
+                        user.save()
+
+                        context.update({
+                            'pickup_date': user.pickup_date,
+                            'price': full_price,
+                            'return_pickup_date': user.return_pickup_date if user else '',
+                        })
 
             # multi payment 적용방식 
             if selected_option == "Gratitude For (M) Payment" and user:
@@ -2348,7 +2397,6 @@ def email_dispatch_detail(request):
                     context.update({
                         'price': int(total_paid_applied),
                     })
-
             
             if selected_option in ["Cancellation of Booking", "Cancellation by Client", "Apologies Cancellation of Booking"] and user:
 
