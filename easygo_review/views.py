@@ -321,13 +321,13 @@ def recaptcha_verify(request):
 
 
 # ----------------------------
-# Verse 이미지 생성 함수
+# Verse 이미지 생성 함수 (JPG + WebP)
 # ----------------------------
 def create_verse_image(verse_text, uploaded_image=None):
     bg_dir = os.path.join(settings.BASE_DIR, 'static', 'verse_backgrounds')
-    bg_files = [f for f in os.listdir(bg_dir) if f.lower().endswith(('.jpg', '.png'))]
+    bg_files = [f for f in os.listdir(bg_dir) if f.lower().endswith(('.jpg', '.png', '.webp'))]
 
-    # 배경 이미지 선택
+    # ✅ 배경 이미지 선택
     if uploaded_image:
         img = Image.open(uploaded_image).convert("RGB")
     elif bg_files:
@@ -336,30 +336,35 @@ def create_verse_image(verse_text, uploaded_image=None):
     else:
         raise FileNotFoundError("No background images available.")
 
-    draw = ImageDraw.Draw(img)
+    # ✅ 해상도 자동 조정 (1920x1080 이상)
+    max_width, max_height = 1920, 1080
     W, H = img.size
+    if W > max_width or H > max_height:
+        ratio = min(max_width / W, max_height / H)
+        img = img.resize((int(W * ratio), int(H * ratio)), Image.LANCZOS)
+        W, H = img.size
 
-    # 폰트 경로
+    draw = ImageDraw.Draw(img)
+
+    # ✅ 폰트 경로
     font_path = os.path.join(settings.BASE_DIR, 'static', 'fonts', 'NotoSansKR-Regular.ttf')
 
-    # 글씨 크기 자동 조절
-    max_font_size = H // 18
+    # ✅ 글씨 크기 자동 조정 (화면 세로의 50% 이하)
+    max_font_size = H // 28  # 최대 글씨 작게
     min_font_size = 10
     font_size = max_font_size
-
     max_width_ratio = 0.8
-    max_height_ratio = 0.8
+    max_height_ratio = 0.5  # 전체 글씨 높이 이미지의 50% 이하
 
-    # 출력 디렉토리
+    # ✅ 출력 디렉토리
     output_dir = os.path.join(settings.MEDIA_ROOT, 'verse')
     os.makedirs(output_dir, exist_ok=True)
 
-    # 파일명에 timestamp 추가 (덮어쓰기 방지)
+    # ✅ 파일명 timestamp
     timestamp = int(time.time())
-    jpg_path = os.path.join(output_dir, f"verse_{timestamp}.jpg")
-    png_path = os.path.join(output_dir, f"verse_{timestamp}.png")
+    webp_path = os.path.join(output_dir, f"verse_{timestamp}.webp")
 
-    # 글씨 크기 자동 조정 루프
+    # ✅ 글씨 크기 자동 조정 루프
     while font_size >= min_font_size:
         font = ImageFont.truetype(font_path, font_size)
         line_spacing = font_size // 2
@@ -386,15 +391,15 @@ def create_verse_image(verse_text, uploaded_image=None):
             break
         font_size -= 1
 
-    # 세로 중앙 정렬
+    # ✅ 세로 중앙 정렬
     total_text_height = len(lines) * (font_size + line_spacing)
     y_text = (H - total_text_height) // 2
 
-    # 배경 밝기 분석 → 글자색 자동 결정
+    # ✅ 배경 밝기 분석 → 글자색 자동 결정
     brightness = ImageStat.Stat(img).mean[0]
     text_color = "black" if brightness > 127 else "white"
 
-    # 이미지에 텍스트 출력
+    # ✅ 텍스트 이미지 출력
     for line in lines:
         bbox = draw.textbbox((0, 0), line, font=font)
         line_width = bbox[2] - bbox[0]
@@ -402,11 +407,10 @@ def create_verse_image(verse_text, uploaded_image=None):
         draw.text((x_text, y_text), line, font=font, fill=text_color)
         y_text += font_size + line_spacing
 
-    # 이미지 저장
-    img.save(jpg_path, format='JPEG')
-    img.save(png_path, format='PNG')
+    # ✅ 이미지 저장
+    img.save(webp_path, format='WEBP', quality=85, optimize=True)
 
-    return f"verse_{timestamp}.jpg"  # 저장된 파일명 반환
+    return f"verse_{timestamp}.webp"  # JPG/WEBP 공용 basename 반환
 
 
 # ----------------------------
@@ -419,7 +423,7 @@ def verse_input_view(request):
 
         if verse_text:
             try:
-                filename = create_verse_image(verse_text, uploaded_image)
+                basename = create_verse_image(verse_text, uploaded_image)
                 messages.success(request, "Verse image created successfully!")
                 return redirect('easygo_review:verse_of_today')
             except Exception as e:
@@ -440,15 +444,20 @@ def verse_display_view(request):
     image_filename = None
     if os.path.exists(base_dir):
         files = sorted(
-            [f for f in os.listdir(base_dir) if f.startswith('verse_') and f.endswith(('.jpg', '.png'))],
+            [f for f in os.listdir(base_dir)
+             if f.startswith('verse_') and f.endswith(('.jpg', '.webp'))],
             key=lambda x: os.path.getmtime(os.path.join(base_dir, x)),
             reverse=True
         )
-        image_filename = files[0] if files else None
+        if files:
+            # basename 추출
+            latest_file = files[0]
+            image_filename = os.path.splitext(latest_file)[0]
 
     context = {
-        'image_path': f"{base_url}/{image_filename}?v={int(time.time())}" if image_filename else None,
+        'image_basename': image_filename,  # <picture> 태그용 basename 전달
         'verse_text': "",
+        'media_url': base_url
     }
 
     return render(request, 'easygo_review/verse_of_today.html', context)
