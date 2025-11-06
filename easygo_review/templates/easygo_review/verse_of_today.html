@@ -3,7 +3,7 @@
 {% block content %}
 
 <style>
-  /* 전체 페이지 영역 (배경 이미지 + 전체 화면) */
+  /* 전체 페이지 영역 */
   .verse-page {
     height: 100vh;
     width: 100%;
@@ -11,14 +11,13 @@
     align-items: center;
     justify-content: center;
     background-image: url('{{ media_url }}/{{ image_basename }}.webp');
-    background-size: contain;  
+    background-size: cover; /* 화면 꽉 채우기 */
     background-position: center center;
-    margin: 0; /* 상단 여백 제거 */
   }
 
-  /* 글자 배경 박스 제거 (그림자 제거) */
+  /* 글씨만 보이도록 overlay 제거 */
   .verse-overlay {
-    background: none; /* 박스 그림자 제거 */
+    background: transparent;
     padding: 0;
     max-width: 92%;
     width: 100%;
@@ -31,28 +30,28 @@
     color: #ffffff;
     line-height: 1.28;
     word-wrap: break-word;
-    white-space: pre-wrap; /* 줄바꿈 유지 */
+    white-space: pre-wrap;
     text-align: center;
     font-family: "Noto Sans KR", Arial, sans-serif;
-    font-size: 6vh; /* 기본 크기 */
+    font-size: 6vh;
     max-height: 88vh;
     overflow: hidden;
   }
 
-  /* 모바일 환경에서 전체 화면과 글자 같이 축소 */
+  /* 모바일 환경에서 화면 + 글자 스케일 조정 */
   @media (max-width: 768px) {
     .verse-page {
-      transform: scale(0.7);
+      transform: scale(0.75);
       transform-origin: top center;
     }
     .verse-text {
-      font-size: 5.4vh;
+      font-size: 5vh;
     }
   }
 
   @media (max-width: 480px) {
     .verse-page {
-      transform: scale(0.55);
+      transform: scale(0.6);
       transform-origin: top center;
     }
     .verse-text {
@@ -68,10 +67,6 @@
 </div>
 
 <script>
-/*
-  Responsive text fit using ResizeObserver + debounce.
-  Ensures text always fits inside the overlay box without overflow.
-*/
 (function() {
   const textEl = document.getElementById('verse-text');
   const wrapper = document.getElementById('verse-overlay');
@@ -86,10 +81,8 @@
   }
 
   function fits() {
-    return (
-      textEl.scrollHeight <= wrapper.clientHeight &&
-      textEl.scrollWidth <= wrapper.clientWidth
-    );
+    return textEl.scrollHeight <= wrapper.clientHeight &&
+           textEl.scrollWidth <= wrapper.clientWidth;
   }
 
   function adjust() {
