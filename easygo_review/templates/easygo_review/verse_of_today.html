@@ -51,35 +51,29 @@ function fitTextToScreen() {
     const textEl = document.getElementById("verse-text");
     if (!textEl) return;
 
-    // 부모 요소 (body/html)의 크기
-    const parent = textEl.parentElement;
-    // 텍스트가 초과하지 않도록 확보할 여백 (예: 10% 여유 공간)
-    const paddingFactor = 0.95; 
+    setTimeout(() => {
+        const parent = textEl.parentElement;
+        const paddingFactor = 0.9;
+        const parentHeight = parent.clientHeight * paddingFactor;
+        const parentWidth  = parent.clientWidth * paddingFactor;
 
-    // 부모 요소 기준 실제 표시 높이
-    const parentHeight = parent.clientHeight * paddingFactor; 
-    const parentWidth  = parent.clientWidth * paddingFactor;
+        let fontSize = parseFloat(window.getComputedStyle(textEl).fontSize);
+        const step = 0.5;
 
-    let fontSize = parseFloat(window.getComputedStyle(textEl).fontSize);
-
-    // 폰트 크기를 줄여나가는 단위 (더 공격적인 폰트 축소를 위해 1 대신 0.5로 설정)
-    const step = 0.5;
-
-    // 글자가 부모 요소를 넘거나, 부모 요소의 높이보다 클 경우 폰트 줄이기
-    // **textEl.scrollHeight**와 **textEl.offsetHeight**를 모두 확인하여 정확도를 높입니다.
-    while ((textEl.scrollHeight > parentHeight || textEl.scrollWidth > parentWidth || textEl.offsetHeight > parentHeight) && fontSize > 10) {
-        fontSize -= step; // **변경: 폰트 감소 단위를 1에서 0.5로 변경**
-        textEl.style.fontSize = fontSize + "px";
-        // 텍스트를 줄일 때마다 레이아웃이 다시 계산되도록 합니다. (성능에 영향 가능)
-    }
+        while (
+            (textEl.scrollHeight > parentHeight ||
+            textEl.scrollWidth > parentWidth) &&
+            fontSize > 10
+        ) {
+            fontSize -= step;
+            textEl.style.fontSize = fontSize + "px";
+        }
+    }, 300); // 이미지와 폰트 로드 후 실행 보장
 }
 
-// 페이지 로드 시
 window.addEventListener('load', fitTextToScreen);
-// 화면 회전/크기 변경 시
 window.addEventListener('resize', fitTextToScreen);
-// 혹시 텍스트 로드 시점이 늦어질 경우를 대비해 DOMContentLoaded에도 추가
-document.addEventListener('DOMContentLoaded', fitTextToScreen); 
+
 </script>
 
 {% if image_path %}
