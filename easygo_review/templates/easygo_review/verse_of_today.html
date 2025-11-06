@@ -3,6 +3,13 @@
 {% block content %}
 
 <style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+  }
+
   /* 전체 페이지 영역 */
   .verse-page {
     height: 100vh;
@@ -13,16 +20,17 @@
     background-image: url('{{ media_url }}/{{ image_basename }}.webp');
     background-size: cover;
     background-position: center center;
+    overflow: hidden;
   }
 
-  /* 배경 어둡게 (글씨 가독성 향상용) */
+  /* 글자만 보이도록 박스 제거 */
   .verse-overlay {
-    background: rgba(0, 0, 0, 0.35);
-    padding: 20px;
+    background: transparent; /* 그림자/배경 제거 */
+    padding: 0;
     max-width: 92%;
     width: 100%;
     box-sizing: border-box;
-    border-radius: 8px;
+    border-radius: 0;
   }
 
   /* 본문 텍스트 */
@@ -35,15 +43,25 @@
     text-align: center;
     font-family: "Noto Sans KR", Arial, sans-serif;
     font-size: 6vh; /* 기본 크기 */
-    max-height: 88vh;
-    overflow: hidden; /* 혹시 넘칠 때 대비 */
   }
 
-  /* 모바일 기기 (폭 480px 이하) */
-  @media (max-width: 480px) {
+  /* 모바일 기기 */
+  @media (max-width: 768px) {
+    .verse-page {
+      transform: scale(0.7); /* 화면 자체를 축소 */
+      transform-origin: top center;
+    }
     .verse-text {
-      font-size: 5.4vh;
-      line-height: 1.16;
+      font-size: 5.4vh; /* 글자 크기도 같이 줄임 */
+    }
+  }
+
+  @media (max-width: 480px) {
+    .verse-page {
+      transform: scale(0.55);
+    }
+    .verse-text {
+      font-size: 4.5vh;
     }
   }
 </style>
@@ -55,10 +73,6 @@
 </div>
 
 <script>
-/*
-  Responsive text fit using ResizeObserver + debounce.
-  Ensures text always fits inside the overlay box without overflow.
-*/
 (function() {
   const textEl = document.getElementById('verse-text');
   const wrapper = document.getElementById('verse-overlay');
@@ -73,10 +87,8 @@
   }
 
   function fits() {
-    return (
-      textEl.scrollHeight <= wrapper.clientHeight &&
-      textEl.scrollWidth <= wrapper.clientWidth
-    );
+    return textEl.scrollHeight <= wrapper.clientHeight &&
+           textEl.scrollWidth <= wrapper.clientWidth;
   }
 
   function adjust() {
@@ -86,7 +98,6 @@
       fontSize = Math.max(Math.floor(window.innerHeight * 0.06), 12);
       textEl.style.fontSize = fontSize + 'px';
     }
-
     const step = 0.75;
     const minSize = 10;
     while (!fits() && fontSize > minSize) {
