@@ -3,7 +3,7 @@ venv/
 .idea/
 
 migrations/
-# media/
+media/
 
 temp/
 
