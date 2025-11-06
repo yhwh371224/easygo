@@ -5,7 +5,7 @@
     html, body {
         margin: 0;
         padding: 0;
-        height: 100%;
+        height: 100vh;
         width: 100%;
         font-family: 'Arial', sans-serif;
     }
@@ -21,9 +21,7 @@
         align-items: center;          /* 세로 중앙 */
         text-align: center;
         color: white;
-        padding: 20px;
-        box-sizing: border-box;
-        height: 100vh;
+        padding: 20px;        
     }
 
     /* 실제 성경 구절 텍스트 */
@@ -31,7 +29,6 @@
         margin: 0;
         font-size: clamp(18px, 6vw, 36px);
         line-height: 1.4em;
-        word-wrap: break-word;
         text-shadow: 2px 2px 6px rgba(0,0,0,0.7); /* 글자 가독성 */
         color: white;
     }
@@ -46,11 +43,9 @@
 </style>
 
 {% if image_path %}
-<div class="verse-box">
-    <p class="verse-text" id="verse-text">{{ verse_text|linebreaksbr }}</p>
-</div>
+<p class="verse-text" id="verse-text">{{ verse_text|linebreaksbr }}</p>
 {% else %}
-    <p>No image available.</p>
+<p>No image available.</p>
 {% endif %}
 
 {% endblock %}
