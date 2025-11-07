@@ -31,7 +31,7 @@ html, body {
   {% if image_file %}
     <img src="{{ media_url }}/{{ image_file }}" alt="Verse of the Day" class="bg-img">
   {% else %}
-    <p>No verse image yet.</p>
+    <div style="color:white; text-align:center;">Verse image is being generated, please wait...</div>
   {% endif %}
 </div>
 
