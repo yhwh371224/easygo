@@ -390,7 +390,7 @@ def create_verse_image(verse_text, uploaded_image=None):
         total_text_height = len(lines) * (font_size + line_spacing)
         if total_text_height < H * max_height_ratio:
             break
-        font_size -= 1
+        font_size -= 2
 
     # 세로 중앙 정렬
     total_text_height = len(lines) * (font_size + line_spacing)
@@ -409,7 +409,7 @@ def create_verse_image(verse_text, uploaded_image=None):
         y_text += font_size + line_spacing
 
     # WebP 저장 (최적화)
-    img.save(webp_path, format='WEBP', quality=85, optimize=True)
+    img.save(webp_path, format='WEBP', quality=85)
 
     return f"verse_{timestamp}.webp"
 
@@ -429,6 +429,7 @@ def verse_input_view(request):
                 temp_dir = os.path.join(settings.MEDIA_ROOT, 'temp_upload')
                 os.makedirs(temp_dir, exist_ok=True)
                 uploaded_image_path = os.path.join(temp_dir, uploaded_image.name)
+
                 with open(uploaded_image_path, 'wb') as f:
                     for chunk in uploaded_image.chunks():
                         f.write(chunk)
