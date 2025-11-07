@@ -18,7 +18,6 @@ from celery import shared_task
 from main.settings import RECIPIENT_EMAIL, DEFAULT_FROM_EMAIL
 from .models import Post, PaypalPayment, StripePayment, XrpPayment
 from utils.calendar_sync import sync_to_calendar
-from easygo_review.views import create_verse_image 
 
 
 logger = logging.getLogger('easygo')
@@ -478,12 +477,8 @@ def send_xrp_customer_email(email: str, xrp_amount: str, xrp_address: str, dest_
 # Verse image 생성 작업
 @shared_task
 def create_verse_image_task(verse_text, uploaded_image_path=None):
-    """
-    Celery task to create a verse image.
-    If uploaded_image_path is None, a default background image will be used.
-    After creating the image, delete temporary uploaded file.
-    """
     try:
+        from easygo_review.views import create_verse_image 
         create_verse_image(verse_text, uploaded_image_path)
     except Exception as e:
         print(f"Verse image task error: {e}")
