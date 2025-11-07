@@ -357,7 +357,7 @@ def verse_display_view(request):
     base_dir = os.path.join(settings.MEDIA_ROOT, 'verse')
     base_url = settings.MEDIA_URL.rstrip('/') + '/verse'
 
-    image_basename = None
+    image_file = None
     if os.path.exists(base_dir):
         files = sorted(
             [f for f in os.listdir(base_dir) if f.startswith('verse_') and f.endswith(('.webp', '.jpg', '.png'))],
@@ -365,11 +365,10 @@ def verse_display_view(request):
             reverse=True
         )
         if files:
-            image_basename = os.path.splitext(files[0])[0]
+            image_file = files[0]  # 확장자 포함
 
-    # 페이지에 이미지가 아직 없을 때 기본 이미지 또는 빈 화면 표시
     context = {
-        'image_basename': image_basename,  # None이면 템플릿에서 기본 처리
+        'image_file': image_file,  # None이면 템플릿에서 기본 처리
         'verse_text': "",
         'media_url': base_url
     }
