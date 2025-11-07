@@ -8,14 +8,13 @@ from PIL import Image, ImageDraw, ImageFont, ImageStat
 
 def create_verse_image(verse_text, uploaded_image=None):
     bg_dir = os.path.join(settings.BASE_DIR, 'static', 'verse_backgrounds')
-    bg_files = [f for f in os.listdir(bg_dir) if f.lower().endswith(('.jpg', '.png', '.webp'))]
-
+    default_bg = os.path.join(bg_dir, 'default.jpg')
+    
     # 배경 이미지 선택
     if uploaded_image:
         img = Image.open(uploaded_image).convert("RGB")
-    elif bg_files:
-        bg_path = os.path.join(bg_dir, random.choice(bg_files))
-        img = Image.open(bg_path).convert("RGB")
+    elif os.path.exists(default_bg):
+        img = Image.open(default_bg).convert("RGB")
     else:
         raise FileNotFoundError("No background images available.")
 
