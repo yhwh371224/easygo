@@ -29,10 +29,11 @@ html, body {
 
 <div class="verse-page">
   {% if image_basename %}
-    <img src="{{ media_url }}/{{ image_basename }}.webp" alt="Verse of the Day" class="bg-img">
+    <img src="{{ media_url }}/{{ image_basename }}{{ image_ext }}" alt="Verse of the Day" class="bg-img">
   {% else %}
     <div style="color:white; text-align:center;">Verse image is being generated, please wait...</div>
   {% endif %}
 </div>
+
 
 {% endblock %}

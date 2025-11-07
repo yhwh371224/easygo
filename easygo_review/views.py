@@ -357,18 +357,23 @@ def verse_display_view(request):
     base_dir = os.path.join(settings.MEDIA_ROOT, 'verse')
     base_url = settings.MEDIA_URL.rstrip('/') + '/verse'
 
-    image_file = None
+    image_basename = None
+    image_ext = None
+
     if os.path.exists(base_dir):
+        # verse_로 시작하고 이미지 확장자를 가진 파일만 가져오기
         files = sorted(
-            [f for f in os.listdir(base_dir) if f.startswith('verse_') and f.endswith(('.webp', '.jpg', '.png'))],
+            [f for f in os.listdir(base_dir) if f.startswith('verse_') and f.lower().endswith(('.webp', '.jpg', '.png'))],
             key=lambda x: os.path.getmtime(os.path.join(base_dir, x)),
             reverse=True
         )
         if files:
-            image_file = files[0]  # 확장자 포함
+            image_file = files[0]  # 최신 파일
+            image_basename, image_ext = os.path.splitext(image_file)  # 확장자 분리
 
     context = {
-        'image_file': image_file,  # None이면 템플릿에서 기본 처리
+        'image_basename': image_basename,  # None이면 템플릿에서 기본 처리
+        'image_ext': image_ext,            # 확장자를 템플릿에서 사용
         'verse_text': "",
         'media_url': base_url
     }
