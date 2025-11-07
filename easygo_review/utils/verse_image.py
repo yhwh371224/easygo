@@ -32,7 +32,7 @@ def create_verse_image(verse_text, uploaded_image=None):
     font_path = os.path.join(settings.BASE_DIR, 'static', 'fonts', 'NotoSansKR-Regular.ttf')
 
     # 글씨 크기 자동 조정 (이미지 세로의 50% 이하)
-    max_font_size = H // 24  # 최대 글씨 작게
+    max_font_size = H // 28  # 최대 글씨 작게
     min_font_size = 10
     font_size = max_font_size
     max_width_ratio = 0.8
