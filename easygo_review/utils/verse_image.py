@@ -71,7 +71,7 @@ def create_verse_image(verse_text, uploaded_image=None):
         total_text_height = len(lines) * (font_size + line_spacing)
         if total_text_height < H * max_height_ratio:
             break
-        font_size -= 4
+        font_size -= 3
 
     # 세로 중앙 정렬
     total_text_height = len(lines) * (font_size + line_spacing)
