@@ -1,6 +1,7 @@
 import os
 import time
 import random
+import uuid
 
 from django.conf import settings
 from PIL import Image, ImageDraw, ImageFont, ImageStat
@@ -31,25 +32,26 @@ def create_verse_image(verse_text, uploaded_image=None):
     # 폰트 경로
     font_path = os.path.join(settings.BASE_DIR, 'static', 'fonts', 'NotoSansKR-Regular.ttf')
 
-    # 글씨 크기 자동 조정 (이미지 세로의 50% 이하)
-    max_font_size = H // 18  
+    # 글씨 크기 자동 조정 
+    max_font_size = H // 16  
     min_font_size = 10
     font_size = max_font_size
-    max_width_ratio = 0.8
-    max_height_ratio = 0.7
+    max_width_ratio = 0.9
+    max_height_ratio = 0.8
 
     # 출력 디렉토리
     output_dir = os.path.join(settings.MEDIA_ROOT, 'verse')
     os.makedirs(output_dir, exist_ok=True)
 
     # 파일명 timestamp
-    timestamp = int(time.time())
-    webp_path = os.path.join(output_dir, f"verse_{timestamp}.webp")
+    timestamp = int(time.time() * 1000) 
+    unique_id = uuid.uuid4().hex[:8] 
+    webp_path = os.path.join(output_dir, f"verse_{timestamp}_{unique_id}.webp")
 
     # 글씨 크기 조정 루프
     while font_size >= min_font_size:
         font = ImageFont.truetype(font_path, font_size)
-        line_spacing = font_size // 2
+        line_spacing = font_size // 3
 
         raw_lines = verse_text.split('\n')
         lines = []
