@@ -8,6 +8,7 @@ from PIL import Image, ImageDraw, ImageFont, ImageStat
 
 
 def create_verse_image(verse_text, uploaded_image=None):
+    # 배경 이미지 경로
     bg_dir = os.path.join(settings.BASE_DIR, 'static', 'verse_backgrounds')
     default_bg = os.path.join(bg_dir, 'default.webp')
     
@@ -17,7 +18,9 @@ def create_verse_image(verse_text, uploaded_image=None):
     elif os.path.exists(default_bg):
         img = Image.open(default_bg).convert("RGB")
     else:
-        raise FileNotFoundError("No background images available.")
+        # default.webp가 없으면 단색 배경 생성
+        W, H = 1920, 1080
+        img = Image.new("RGB", (W, H), color=(255, 255, 255))  # 흰색 배경
 
     # 해상도 제한
     max_width, max_height = 1920, 1080
@@ -48,28 +51,24 @@ def create_verse_image(verse_text, uploaded_image=None):
     unique_id = uuid.uuid4().hex[:8]
     webp_path = os.path.join(output_dir, f"verse_{timestamp}_{unique_id}.webp")
 
-    # 최대 글씨 크기를 찾는 루프
+    # 최대 글씨 크기 찾기
     while font_size >= min_font_size:
         font = ImageFont.truetype(font_path, font_size)
         line_spacing = font_size // 4
 
+        # textwrap로 라인 나누기
         lines = []
         for raw_line in verse_text.split('\n'):
             wrapped = textwrap.wrap(raw_line, width=40)  # 글자 수 제한 조정 가능
             lines.extend(wrapped)
 
-        # 줄 길이가 이미지 너비를 넘는 경우 강제로 나누기
+        # 각 줄 너비 체크
         max_line_width = max(draw.textlength(line, font=font) for line in lines)
-        if max_line_width > W * max_width_ratio:
-            font_size -= 2
-            continue
-
         total_text_height = len(lines) * (font_size + line_spacing)
-        if total_text_height > H * max_height_ratio:
-            font_size -= 2
-            continue
 
-        break
+        if max_line_width <= W * max_width_ratio and total_text_height <= H * max_height_ratio:
+            break  # 적합한 글씨 크기 찾음
+        font_size -= 2  # 작게 줄여 다시 계산
 
     # 세로 중앙 정렬
     total_text_height = len(lines) * (font_size + line_spacing)
@@ -89,4 +88,5 @@ def create_verse_image(verse_text, uploaded_image=None):
     # WebP 저장
     img.save(webp_path, format='WEBP', quality=85)
 
+    # 정확한 파일명 반환
     return f"verse_{timestamp}_{unique_id}.webp"
