@@ -50,20 +50,39 @@
     overflow-wrap: break-word;
   }
 
-  /* 모바일 환경 */
-  @media (max-width: 768px) {
-    .verse-page {
-        width: 90%;          /* 가로폭 줄임 */
-        margin: 0 auto;      /* 화면 가운데 정렬 */
-    }
-    }
-
-    @media (max-width: 480px) {
-    .verse-page {
-        width: 85%;          /* 더 줄임 */
-        margin: 0 auto;
-    }
+/* @media (max-width: 768px) {
+  .verse-page {
+    width: 90%;                
+    height: auto;              
+    max-height: 100vh;
+    background-size: contain;  
+    margin: 0 auto;
   }
+}
+
+@media (max-width: 480px) {
+  .verse-page {
+    width: 85%;
+    height: auto;
+    max-height: 100vh;
+    background-size: contain;
+    margin: 0 auto;
+  }
+} */
+
+@media (max-width: 768px) {
+  .verse-page {
+    transform: scaleX(0.8);   /* 가로만 80% */
+    transform-origin: center top;
+  }
+}
+
+@media (max-width: 480px) {
+  .verse-page {
+    transform: scaleX(0.8);   /* 가로만 80% */
+    transform-origin: center top;
+  }
+}
 
 </style>
 
