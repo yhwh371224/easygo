@@ -115,6 +115,10 @@ def airport_transfers(request, suburb):
     return render(request, 'basecamp/airport-transfers-template.html', context)
 
 
+def arrival_guide(request): 
+    return render(request, 'basecamp/arrival_guide.html')
+
+
 def booking(request):
     context = {
         'RECAPTCHA_V2_SITE_KEY': settings.RECAPTCHA_V2_SITE_KEY,
