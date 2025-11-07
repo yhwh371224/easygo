@@ -39,11 +39,11 @@ def create_verse_image(verse_text, uploaded_image=None):
     # 폰트 설정
     # ----------------------------
     font_path = os.path.join(settings.BASE_DIR, 'static', 'fonts', 'NotoSansKR-Regular.ttf')
-    max_font_size = H // 12
+    max_font_size = H // 16
     min_font_size = 10
     font_size = max_font_size
     max_width_ratio = 0.9
-    max_height_ratio = 0.95
+    max_height_ratio = 0.9
 
     # ----------------------------
     # 출력 디렉토리 및 파일명
@@ -74,7 +74,7 @@ def create_verse_image(verse_text, uploaded_image=None):
         # 이미지에 맞는지 체크
         if max_line_width <= W * max_width_ratio and total_text_height <= H * max_height_ratio:
             break  # 적합한 글씨 크기
-        font_size -= 2  # 글자 크기 줄여 다시 계산
+        font_size -= 3  # 글자 크기 줄여 다시 계산
 
     # ----------------------------
     # 세로 중앙 정렬
