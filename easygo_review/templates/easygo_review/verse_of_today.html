@@ -37,29 +37,30 @@
     text-align: center;
   }
 
-  /* 글자 스타일 */
-  .verse-text {
-    margin: 0;
-    color: #ffffff;
-    line-height: 1.2;
-    font-family: "Noto Sans KR", Arial, sans-serif;
+  /* 글자 스타일 (중앙 정렬 유지) */
+.verse-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     font-size: 5vw;
-    display: inline-block;
-    white-space: pre-wrap;
-    word-break: break-word;
-    overflow-wrap: break-word;
-  }
+    line-height: 1.2;
+    color: white;
+    text-align: center;
+    white-space: pre-wrap;       /* 줄바꿈 유지 */
+    word-break: break-word;      /* 긴 단어 줄바꿈 */
+    }
 
 @media (max-width: 768px) {
   .verse-page {
-    transform: scaleX(1) scaleY(0.8);
+    transform: scaleY(0.8);
     transform-origin: top center;
   }
 }
 
 @media (max-width: 480px) {
   .verse-page {
-    transform: scaleX(1) scaleY(0.7);
+    transform: scaleY(0.7);
     transform-origin: top center;
   }
 }
