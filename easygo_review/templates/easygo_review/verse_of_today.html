@@ -3,56 +3,60 @@
 {% block content %}
 
 <style>
-  html, body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    width: 100%;
-  }
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
 
-  .verse-page {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    width: 100%;
-    background-image: url('{{ media_url }}/{{ image_basename }}.webp');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    overflow: hidden;
-  }
+/* 전체 화면 구성 */
+.verse-page {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: black; /* 이미지 여백 생길 때 자연스러운 배경색 */
+}
 
+/* 이미지 (잘리지 않게 contain 사용) */
+.bg-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;   /* ✅ 이미지 전체 보이게 */
+  object-position: center;
+  z-index: 0;
+}
+
+/* 글자 */
+.verse-text {
+  position: relative;
+  z-index: 2;
+  color: white;
+  text-align: center;
+  font-size: clamp(16px, 5vw, 48px);  /* ✅ 반응형 폰트 */
+  line-height: 1.3;
+  max-width: 90vw;
+  margin: 0 auto;
+  padding: 0 5vw;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* 작은 화면 (모바일)에서도 자연스럽게 보이도록 조정 */
+@media (max-width: 768px) {
   .verse-text {
-    color: white;
-    text-align: center;
-    font-weight: 600;
-    font-size: clamp(18px, 5vw, 48px);
-    line-height: 1.3;
-    white-space: pre-wrap;       /* 줄바꿈 유지 */
-    word-break: break-word;      /* 긴 단어도 줄바꿈 */
-    max-width: 90vw;             /* 화면 폭의 90%까지만 사용 */
-    padding: 0 2vw;              /* 좌우 여백 */
-    box-sizing: border-box;      /* 패딩 포함한 폭 계산 */
+    font-size: clamp(14px, 4.5vw, 36px);
+    max-width: 95vw;
   }
-
-  @media (max-width: 768px) {
-    .verse-text {
-      font-size: clamp(16px, 6vw, 36px);
-      max-width: 92vw;
-      padding: 0 3vw;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .verse-text {
-      font-size: clamp(14px, 7vw, 30px);
-      max-width: 95vw;
-      padding: 0 4vw;
-    }
-  }
+}
 </style>
-
 
 <div class="verse-page">
   <div class="container">
