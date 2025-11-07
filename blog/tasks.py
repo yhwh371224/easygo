@@ -475,7 +475,7 @@ def send_xrp_customer_email(email: str, xrp_amount: str, xrp_address: str, dest_
         logger.exception("Failed to send XRP payment email: %s", e)
 
 
-# easygo_review/Verse image 생성 작업
+# Verse image 생성 작업
 @shared_task
 def create_verse_image_task(verse_text, uploaded_image_path=None):
     """
@@ -488,7 +488,7 @@ def create_verse_image_task(verse_text, uploaded_image_path=None):
     except Exception as e:
         print(f"Verse image task error: {e}")
     finally:
-        # 임시 파일 삭제
+        # 임시 파일 삭제.
         if uploaded_image_path and os.path.exists(uploaded_image_path):
             try:
                 os.remove(uploaded_image_path)

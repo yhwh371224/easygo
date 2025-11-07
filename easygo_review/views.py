@@ -396,7 +396,7 @@ def create_verse_image(verse_text, uploaded_image=None):
     total_text_height = len(lines) * (font_size + line_spacing)
     y_text = (H - total_text_height) // 2
 
-    # 배경 밝기 분석 → 글자색 결정
+    # 배경 밝기에 따라 글자색 결정
     brightness = ImageStat.Stat(img).mean[0]
     text_color = "black" if brightness > 127 else "white"
 
