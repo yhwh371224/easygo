@@ -20,6 +20,7 @@ from .forms import CommentForm, PostForm
 from blog.models import Post as BlogPost
 from blog.tasks import send_notice_email
 from main.settings import RECIPIENT_EMAIL
+from blog.tasks import create_verse_image_task
 
 
 def custom_login_view(request):
@@ -421,16 +422,24 @@ def verse_input_view(request):
         uploaded_image = request.FILES.get('background_image')
 
         if verse_text:
-            try:
-                basename = create_verse_image(verse_text, uploaded_image)
-                messages.success(request, "Verse image created successfully!")
-                return redirect('easygo_review:verse_of_today')
-            except Exception as e:
-                messages.error(request, f"Error creating verse image: {str(e)}")
-                print(f"Error creating verse image: {e}")
-                return redirect('easygo_review:verse')
+            uploaded_image_path = None
+
+            # 업로드 파일 임시 저장
+            if uploaded_image:
+                temp_dir = os.path.join(settings.MEDIA_ROOT, 'temp_upload')
+                os.makedirs(temp_dir, exist_ok=True)
+                uploaded_image_path = os.path.join(temp_dir, uploaded_image.name)
+                with open(uploaded_image_path, 'wb') as f:
+                    for chunk in uploaded_image.chunks():
+                        f.write(chunk)
+
+            create_verse_image_task.delay(verse_text, uploaded_image_path)
+
+            messages.success(request, "Verse image creation started! It may take a few seconds.")
+            return redirect('easygo_review:verse_of_today')
 
     return render(request, 'easygo_review/verse.html')
+
 
 # ----------------------------
 # Verse 출력 view

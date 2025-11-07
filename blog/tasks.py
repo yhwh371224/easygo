@@ -3,21 +3,22 @@ import os
 import re
 import logging, qrcode, base64
 
+from io import BytesIO
 from decimal import Decimal, InvalidOperation
-
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
 from django.core.mail import send_mail, EmailMultiAlternatives
+from django.core.exceptions import ImproperlyConfigured
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.db.models import Q
+from django.utils import timezone
+
 from celery import shared_task
 from main.settings import RECIPIENT_EMAIL, DEFAULT_FROM_EMAIL
 from .models import Post, PaypalPayment, StripePayment, XrpPayment
 from utils.calendar_sync import sync_to_calendar
-from django.core.exceptions import ImproperlyConfigured
-from django.utils import timezone
-from io import BytesIO
+from easygo_review.views import create_verse_image 
 
 
 logger = logging.getLogger('easygo')
@@ -472,3 +473,28 @@ def send_xrp_customer_email(email: str, xrp_amount: str, xrp_address: str, dest_
         mail.send()
     except Exception as e:
         logger.exception("Failed to send XRP payment email: %s", e)
+
+
+# easygo_review/Verse image 생성 작업
+@shared_task
+def create_verse_image_task(verse_text, uploaded_image_path=None):
+    """
+    Celery task to create a verse image.
+    If uploaded_image_path is None, a default background image will be used.
+    After creating the image, delete temporary uploaded file.
+    """
+    try:
+        create_verse_image(verse_text, uploaded_image_path)
+    except Exception as e:
+        print(f"Verse image task error: {e}")
+    finally:
+        # 임시 파일 삭제
+        if uploaded_image_path and os.path.exists(uploaded_image_path):
+            try:
+                os.remove(uploaded_image_path)
+                # temp 폴더가 비어 있으면 삭제
+                temp_dir = os.path.dirname(uploaded_image_path)
+                if os.path.exists(temp_dir) and not os.listdir(temp_dir):
+                    os.rmdir(temp_dir)
+            except Exception as e:
+                print(f"Error deleting temp file: {e}")
