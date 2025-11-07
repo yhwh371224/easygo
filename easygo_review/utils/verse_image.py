@@ -1,7 +1,7 @@
 import os
 import time
-import random
 import uuid
+import textwrap
 
 from django.conf import settings
 from PIL import Image, ImageDraw, ImageFont, ImageStat
@@ -19,7 +19,7 @@ def create_verse_image(verse_text, uploaded_image=None):
     else:
         raise FileNotFoundError("No background images available.")
 
-    # 해상도 제한 (1920x1080 이상인 경우)
+    # 해상도 제한
     max_width, max_height = 1920, 1080
     W, H = img.size
     if W > max_width or H > max_height:
@@ -32,8 +32,8 @@ def create_verse_image(verse_text, uploaded_image=None):
     # 폰트 경로
     font_path = os.path.join(settings.BASE_DIR, 'static', 'fonts', 'NotoSansKR-Regular.ttf')
 
-    # 글씨 크기 자동 조정 
-    max_font_size = H // 14  
+    # 글씨 크기 자동 조정
+    max_font_size = H // 12
     min_font_size = 10
     font_size = max_font_size
     max_width_ratio = 0.9
@@ -43,37 +43,33 @@ def create_verse_image(verse_text, uploaded_image=None):
     output_dir = os.path.join(settings.MEDIA_ROOT, 'verse')
     os.makedirs(output_dir, exist_ok=True)
 
-    # 파일명 timestamp
-    timestamp = int(time.time() * 1000) 
-    unique_id = uuid.uuid4().hex[:8] 
+    # 파일명 생성
+    timestamp = int(time.time() * 1000)
+    unique_id = uuid.uuid4().hex[:8]
     webp_path = os.path.join(output_dir, f"verse_{timestamp}_{unique_id}.webp")
 
-    # 글씨 크기 조정 루프
+    # 최대 글씨 크기를 찾는 루프
     while font_size >= min_font_size:
         font = ImageFont.truetype(font_path, font_size)
         line_spacing = font_size // 4
 
-        raw_lines = verse_text.split('\n')
         lines = []
-        for raw_line in raw_lines:
-            words = raw_line.split()
-            line = ""
-            for word in words:
-                test_line = line + " " + word if line else word
-                bbox = draw.textbbox((0, 0), test_line, font=font)
-                line_width = bbox[2] - bbox[0]
-                if line_width < W * max_width_ratio:
-                    line = test_line
-                else:
-                    lines.append(line)
-                    line = word
-            if line:
-                lines.append(line)
+        for raw_line in verse_text.split('\n'):
+            wrapped = textwrap.wrap(raw_line, width=40)  # 글자 수 제한 조정 가능
+            lines.extend(wrapped)
+
+        # 줄 길이가 이미지 너비를 넘는 경우 강제로 나누기
+        max_line_width = max(draw.textlength(line, font=font) for line in lines)
+        if max_line_width > W * max_width_ratio:
+            font_size -= 2
+            continue
 
         total_text_height = len(lines) * (font_size + line_spacing)
-        if total_text_height < H * max_height_ratio:
-            break
-        font_size -= 2
+        if total_text_height > H * max_height_ratio:
+            font_size -= 2
+            continue
+
+        break
 
     # 세로 중앙 정렬
     total_text_height = len(lines) * (font_size + line_spacing)
@@ -85,8 +81,7 @@ def create_verse_image(verse_text, uploaded_image=None):
 
     # 텍스트 출력
     for line in lines:
-        bbox = draw.textbbox((0, 0), line, font=font)
-        line_width = bbox[2] - bbox[0]
+        line_width = draw.textlength(line, font=font)
         x_text = (W - line_width) // 2
         draw.text((x_text, y_text), line, font=font, fill=text_color)
         y_text += font_size + line_spacing
@@ -94,4 +89,4 @@ def create_verse_image(verse_text, uploaded_image=None):
     # WebP 저장
     img.save(webp_path, format='WEBP', quality=85)
 
-    return f"verse_{timestamp}.webp"
+    return f"verse_{timestamp}_{unique_id}.webp"
