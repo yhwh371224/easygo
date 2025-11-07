@@ -36,7 +36,7 @@ def create_verse_image(verse_text, uploaded_image=None):
     min_font_size = 10
     font_size = max_font_size
     max_width_ratio = 0.8
-    max_height_ratio = 0.55
+    max_height_ratio = 0.5
 
     # 출력 디렉토리
     output_dir = os.path.join(settings.MEDIA_ROOT, 'verse')
@@ -71,7 +71,7 @@ def create_verse_image(verse_text, uploaded_image=None):
         total_text_height = len(lines) * (font_size + line_spacing)
         if total_text_height < H * max_height_ratio:
             break
-        font_size -= 3
+        font_size -= 2
 
     # 세로 중앙 정렬
     total_text_height = len(lines) * (font_size + line_spacing)
