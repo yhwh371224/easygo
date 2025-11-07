@@ -70,16 +70,17 @@
   }
 } */
 
+/* 모바일: 가로·세로 모두 축소 */
 @media (max-width: 768px) {
   .verse-page {
-    transform: scaleX(0.8);   /* 가로만 80% */
+    transform: scale(0.8);   /* 전체 80% 축소 */
     transform-origin: center top;
   }
 }
 
 @media (max-width: 480px) {
   .verse-page {
-    transform: scaleX(0.8);   /* 가로만 80% */
+    transform: scale(0.7);   /* 전체 70% 축소 */
     transform-origin: center top;
   }
 }
