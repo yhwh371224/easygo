@@ -408,7 +408,7 @@ def create_verse_image(verse_text, uploaded_image=None):
         draw.text((x_text, y_text), line, font=font, fill=text_color)
         y_text += font_size + line_spacing
 
-    # WebP 저장 (최적화)
+    # WebP 저장
     img.save(webp_path, format='WEBP', quality=85)
 
     return f"verse_{timestamp}.webp"
@@ -429,14 +429,17 @@ def verse_input_view(request):
                 temp_dir = os.path.join(settings.MEDIA_ROOT, 'temp_upload')
                 os.makedirs(temp_dir, exist_ok=True)
                 uploaded_image_path = os.path.join(temp_dir, uploaded_image.name)
-
                 with open(uploaded_image_path, 'wb') as f:
                     for chunk in uploaded_image.chunks():
                         f.write(chunk)
 
+            # Celery 비동기 호출
             create_verse_image_task.delay(verse_text, uploaded_image_path)
 
-            messages.success(request, "Verse image creation started! It may take a few seconds.")
+            messages.success(
+                request,
+                "Verse image creation started! It may take a few seconds."
+            )
             return redirect('easygo_review:verse_of_today')
 
     return render(request, 'easygo_review/verse.html')
@@ -452,15 +455,16 @@ def verse_display_view(request):
     image_basename = None
     if os.path.exists(base_dir):
         files = sorted(
-            [f for f in os.listdir(base_dir) if f.startswith('verse_') and f.endswith('.webp')],
+            [f for f in os.listdir(base_dir) if f.startswith('verse_') and f.endswith(('.webp', '.jpg', '.png'))],
             key=lambda x: os.path.getmtime(os.path.join(base_dir, x)),
             reverse=True
         )
         if files:
             image_basename = os.path.splitext(files[0])[0]
 
+    # 페이지에 이미지가 아직 없을 때 기본 이미지 또는 빈 화면 표시
     context = {
-        'image_basename': image_basename,
+        'image_basename': image_basename,  # None이면 템플릿에서 기본 처리
         'verse_text': "",
         'media_url': base_url
     }
