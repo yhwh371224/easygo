@@ -17,7 +17,7 @@ from .forms import CommentForm, PostForm
 from blog.models import Post as BlogPost
 from blog.tasks import send_notice_email
 from main.settings import RECIPIENT_EMAIL
-from .tasks import create_verse_image_task
+from .utils import create_verse_image
 
 
 def custom_login_view(request):
@@ -329,7 +329,7 @@ def verse_input_view(request):
         if verse_text:
             uploaded_image_path = None
 
-            # 업로드 파일 임시 저장
+            # 1️⃣ 업로드 파일 임시 저장
             if uploaded_image:
                 temp_dir = os.path.join(settings.MEDIA_ROOT, 'temp_upload')
                 os.makedirs(temp_dir, exist_ok=True)
@@ -338,15 +338,16 @@ def verse_input_view(request):
                     for chunk in uploaded_image.chunks():
                         f.write(chunk)
 
-            # Celery 비동기 호출
-            create_verse_image_task.delay(verse_text, uploaded_image_path)
+            # 2️⃣ 셀러리 비동기 제거 — 대신 직접 즉시 실행
+            filename = create_verse_image(verse_text, uploaded_image=uploaded_image_path)
 
-            messages.success(
-                request,
-                "Verse image creation started! It may take a few seconds."
-            )
+            # 3️⃣ 메시지 출력 (성공)
+            messages.success(request, "Verse image created successfully!")
+
+            # 4️⃣ 결과 페이지나 다른 뷰로 이동
             return redirect('easygo_review:verse_of_today')
 
+    # GET 요청 시 입력 폼 보여주기
     return render(request, 'easygo_review/verse.html')
 
 
