@@ -8,7 +8,7 @@ from PIL import Image, ImageDraw, ImageFont, ImageStat
 
 def create_verse_image(verse_text, uploaded_image=None):
     bg_dir = os.path.join(settings.BASE_DIR, 'static', 'verse_backgrounds')
-    default_bg = os.path.join(bg_dir, 'default.jpg')
+    default_bg = os.path.join(bg_dir, 'default.webp')
     
     # 배경 이미지 선택
     if uploaded_image:
