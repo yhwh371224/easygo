@@ -17,7 +17,7 @@ from .forms import CommentForm, PostForm
 from blog.models import Post as BlogPost
 from blog.tasks import send_notice_email
 from main.settings import RECIPIENT_EMAIL
-from .utils import create_verse_image
+from .utils.verse_image import create_verse_image
 
 
 def custom_login_view(request):
@@ -318,9 +318,6 @@ def recaptcha_verify(request):
     return JsonResponse({'success': False, 'message': 'Invalid request method'})
 
 
-# ----------------------------
-# Verse 입력 view
-# ----------------------------
 def verse_input_view(request):
     if request.method == 'POST':
         verse_text = request.POST.get('verse')
@@ -329,7 +326,6 @@ def verse_input_view(request):
         if verse_text:
             uploaded_image_path = None
 
-            # 1️⃣ 업로드 파일 임시 저장
             if uploaded_image:
                 temp_dir = os.path.join(settings.MEDIA_ROOT, 'temp_upload')
                 os.makedirs(temp_dir, exist_ok=True)
@@ -338,22 +334,21 @@ def verse_input_view(request):
                     for chunk in uploaded_image.chunks():
                         f.write(chunk)
 
-            # 2️⃣ 셀러리 비동기 제거 — 대신 직접 즉시 실행
+            # --- 이미지 생성 ---
             filename = create_verse_image(verse_text, uploaded_image=uploaded_image_path)
 
-            # 3️⃣ 메시지 출력 (성공)
-            messages.success(request, "Verse image created successfully!")
+            # --- temp_upload 파일 정리 ---
+            if uploaded_image_path and os.path.exists(uploaded_image_path):
+                os.remove(uploaded_image_path)
 
-            # 4️⃣ 결과 페이지나 다른 뷰로 이동
+            # --- 성공 메시지 후 리다이렉트 ---
+            messages.success(request, "Verse image created successfully!")
             return redirect('easygo_review:verse_of_today')
 
     # GET 요청 시 입력 폼 보여주기
     return render(request, 'easygo_review/verse.html')
 
 
-# ----------------------------
-# Verse 출력 view
-# ----------------------------
 def verse_display_view(request):
     base_dir = os.path.join(settings.MEDIA_ROOT, 'verse')
     base_url = settings.MEDIA_URL.rstrip('/') + '/verse'
@@ -362,21 +357,19 @@ def verse_display_view(request):
     image_ext = None
 
     if os.path.exists(base_dir):
-        # verse_로 시작하고 이미지 확장자를 가진 파일만 가져오기
         files = sorted(
-            [f for f in os.listdir(base_dir) if f.startswith('verse_') and f.lower().endswith(('.webp', '.jpg', '.png'))],
+            [f for f in os.listdir(base_dir)
+             if f.startswith('verse_') and f.lower().endswith(('.webp', '.jpg', '.png'))],
             key=lambda x: os.path.getmtime(os.path.join(base_dir, x)),
             reverse=True
         )
         if files:
             image_file = files[0]  # 최신 파일
-            image_basename, image_ext = os.path.splitext(image_file)  # 확장자 분리
+            image_basename, image_ext = os.path.splitext(image_file)
 
     context = {
-        'image_basename': image_basename,  # None이면 템플릿에서 기본 처리
-        'image_ext': image_ext,            # 확장자를 템플릿에서 사용
-        'verse_text': "",
+        'image_basename': image_basename,
+        'image_ext': image_ext,
         'media_url': base_url
     }
-
     return render(request, 'easygo_review/verse_of_today.html', context)
