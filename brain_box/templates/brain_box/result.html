@@ -1,0 +1,38 @@
+{% extends "brain_box/base.html" %}
+{% block content %}
+{% load humanize %}
+<div class="container py-5 text-white text-center" style="background-color:rgb(112, 101, 101); min-height:100vh;">
+    <h2 class="mb-4">💹 Trade Calculation Result</h2>
+
+    <!-- 표시만 되는 부분 -->
+    <p>Trade Type: {{ trade_type }}</p>
+    <p>Buy Price: {{ buy_price|floatformat:4 }}</p>
+    <p>Sell Price: {{ sell_price|floatformat:4 }}</p>
+    <p>Quantity: {{ quantity }}</p><br>
+
+    <p><strong>Gross Profit:</strong> ${{ gross_profit|floatformat:2|intcomma }}</p>
+    <p>Total Fee: ${{ total_fee|floatformat:2|intcomma }}</p>
+    <p><strong>Net Profit:</strong> ${{ net_profit|floatformat:2|intcomma }}</p><br>
+
+    <p><strong>Gross Rate:</strong> {{ gross_rate|floatformat:2 }}%</p>
+    <p><strong>Net Rate (after fee):</strong> {{ net_rate|floatformat:2 }}%</p><br>
+
+    <!-- 저장 폼 (히든 필드만 포함) -->
+    <form method="post" action="{% url 'calculate_trade' %}">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="save_trade">
+        <input type="hidden" name="buy_price" value="{{ buy_price }}">
+        <input type="hidden" name="sell_price" value="{{ sell_price }}">
+        <input type="hidden" name="quantity" value="{{ quantity }}">
+        <input type="hidden" name="trade_type" value="{{ trade_type }}">
+        <input type="hidden" name="gross_profit" value="{{ gross_profit }}">
+        <input type="hidden" name="net_profit" value="{{ net_profit }}">
+        <input type="hidden" name="total_fee" value="{{ total_fee }}">
+        <input type="hidden" name="gross_rate" value="{{ gross_rate }}">
+        <input type="hidden" name="net_rate" value="{{ net_rate }}">
+        <button type="submit" class="btn btn-success mt-3">💾 Save Result</button>
+    </form>
+
+    <a href="{% url 'calculate_trade' %}" class="btn btn-primary mt-4">⬅ Back to Calculator</a>
+</div>
+{% endblock %}
