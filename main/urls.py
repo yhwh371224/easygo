@@ -15,6 +15,7 @@ urlpatterns = [
     path('markdownx/', include('markdownx.urls')),
     path('blog/', include(('blog.urls', 'blog'), namespace='blog')),
     path('easygo_review/', include('easygo_review.urls')),
+    path('brain_box/', include('brain_box.urls')),
     path('', include('basecamp.urls')),
     path('accounts/', include('allauth.urls')),
     path('paypal/', include('paypal.standard.ipn.urls')),
