@@ -5,6 +5,7 @@ import os
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
@@ -18,6 +19,7 @@ from blog.models import Post as BlogPost
 from blog.tasks import send_notice_email
 from main.settings import RECIPIENT_EMAIL
 from .utils.verse_image import create_verse_image
+
 
 
 def custom_login_view(request):
@@ -318,6 +320,7 @@ def recaptcha_verify(request):
     return JsonResponse({'success': False, 'message': 'Invalid request method'})
 
 
+@login_required
 def verse_input_view(request):
     if request.method == 'POST':
         verse_text = request.POST.get('verse')
