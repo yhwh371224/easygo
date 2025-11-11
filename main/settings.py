@@ -38,9 +38,9 @@ if ENVIRONMENT == 'production':
     }
     SECURE_REFERRER_POLICY = 'no-referrer-when-downgrade'
 
-else:
-    DEBUG = True
-    ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+#else:
+#    DEBUG = True
+#    ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
