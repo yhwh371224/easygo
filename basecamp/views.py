@@ -1986,6 +1986,7 @@ def invoice_detail(request):
             context = {
                 "inv_no": inv_no,
                 "company_name": bookings[0].company_name,
+                "apply_gst_flag": bool(apply_gst_flag),
                 "name": bookings[0].name,
                 "invoice_date": today,
                 "bookings": booking_data,
@@ -2032,6 +2033,7 @@ def invoice_detail(request):
                 template_name = "basecamp/html_email-invoice-cash.html"
                 context = {
                     "inv_no": inv_no, "name": user.name, "company_name": user.company_name,
+                    "apply_gst_flag": bool(apply_gst_flag),
                     "contact": user.contact, "discount": discount, "email": email,
                     "pickup_date": user.pickup_date, "pickup_time": user.pickup_time,    
                     "start_point": start_point, "end_point": end_point, "invoice_date": today,
@@ -2059,6 +2061,7 @@ def invoice_detail(request):
                 template_name = "basecamp/html_email-invoice.html"
                 context = {
                     "inv_no": inv_no, "name": user1.name, "company_name": user1.company_name,
+                    "apply_gst_flag": bool(apply_gst_flag),
                     "contact": user1.contact, "pickup_date": user1.pickup_date, "pickup_time": user1.pickup_time,   
                     "start_point": user1.start_point, "end_point": user1.end_point, "invoice_date": today,
                     "price": doubled_price, "with_gst": doubled_with_gst, "surcharge": doubled_surcharge,
@@ -2071,6 +2074,7 @@ def invoice_detail(request):
                 template_name = "basecamp/html_email-invoice.html"
                 context = {
                     "inv_no": inv_no, "name": user.name, "company_name": user.company_name,
+                    "apply_gst_flag": bool(apply_gst_flag),
                     "contact": user.contact, "pickup_date": user.pickup_date, "pickup_time": user.pickup_time,  
                     "start_point": start_point, "end_point": end_point, "invoice_date": today,
                     "price": user.price, "with_gst": with_gst, "surcharge": float_surcharge,
