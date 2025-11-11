@@ -1852,7 +1852,8 @@ def safe_float(value):
 def invoice_detail(request):
     if request.method == "POST":
         email = request.POST.get('email', '').strip()
-        extra_email = request.POST.get('extra_email', '').strip()  # ← 새 필드
+        extra_email = request.POST.get('extra_email', '').strip()  
+        apply_gst_flag = request.POST.get('apply_gst')
         surcharge_flag = request.POST.get('surcharge')
         discount_input = request.POST.get('discount')
         inv_no = request.POST.get('inv_no')
@@ -1935,7 +1936,7 @@ def invoice_detail(request):
                         end_point = "Unknown" 
 
                 price = safe_float(booking.price) or 0.0
-                with_gst = round(price * 0.10, 2) if booking.company_name else 0.0
+                with_gst = round(price * 0.10, 2) if apply_gst_flag else 0.0
                 surcharge = round(price * 0.03, 2) if surcharge_flag else 0.0
                 toll = safe_float(toll_input) if toll_input else safe_float(booking.toll) or 0.0  
                 paid = safe_float(booking.paid) or 0.0              
