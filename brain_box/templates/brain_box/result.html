@@ -8,6 +8,7 @@
     <p>Trade Type: {{ trade_type }}</p>
     <p>Buy Price: {{ buy_price|floatformat:4 }}</p>
     <p>Sell Price: {{ sell_price|floatformat:4 }}</p>
+    <p>Price difference: {{ price_difference|floatformat:4 }}</p> <!-- 추가한 것 -->
     <p>Quantity: {{ quantity }}</p><br>
 
     <p><strong>Gross Profit:</strong> ${{ gross_profit|floatformat:2|intcomma }}</p>
@@ -17,7 +18,6 @@
     <p><strong>Gross Rate:</strong> {{ gross_rate|floatformat:2 }}%</p>
     <p><strong>Net Rate (after fee):</strong> {{ net_rate|floatformat:2 }}%</p><br>
 
-    <!-- 저장 폼 (히든 필드만 포함) -->
     <form method="post" action="{% url 'calculate_trade' %}">
         {% csrf_token %}
         <input type="hidden" name="action" value="save_trade">

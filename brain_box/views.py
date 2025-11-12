@@ -17,7 +17,7 @@ def calculate_trade(request):
             quantity = Decimal(request.POST['quantity'])
             trade_type = request.POST['trade_type']
 
-            gross_profit, net_profit, total_fee = calc_stock_profit(buy_price, sell_price, quantity, trade_type)
+            gross_profit, net_profit, total_fee, price_difference = calc_stock_profit(buy_price, sell_price, quantity, trade_type)
             gross_rate, net_rate = calc_profit_rate(buy_price, sell_price, trade_type)
 
             # result.html 로 계산결과만 전달 (저장 X)
@@ -31,6 +31,7 @@ def calculate_trade(request):
                 'net_profit': round(net_profit, 2),
                 'gross_rate': round(gross_rate, 2),
                 'net_rate': round(net_rate, 2),
+                'price_difference': round(price_difference, 2),  # 추가
             }
             return render(request, 'brain_box/result.html', context)
 
