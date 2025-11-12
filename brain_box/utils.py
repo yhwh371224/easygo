@@ -15,17 +15,20 @@ def calc_stock_profit(buy_price, sell_price, quantity, trade_type, fee_rate=FEE_
     
     buy_total = buy_price * quantity
     sell_total = sell_price * quantity
-    total_fee = (buy_total + sell_total) * fee_rate
+    long_fee = (sell_total) * fee_rate
+    short_fee = (buy_total) * fee_rate
     price_difference = abs(sell_price - buy_price)  # 항상 양수
 
     if trade_type == 'Long':
         gross_profit = sell_total - buy_total
-        net_profit = sell_total - buy_total - total_fee
+        net_profit = gross_profit - long_fee
+        fee = long_fee
     else:  # Short
         gross_profit = -(buy_total - sell_total)
-        net_profit = -(buy_total - sell_total) - total_fee
+        net_profit = gross_profit - short_fee
+        fee = short_fee
 
-    return gross_profit, net_profit, total_fee, price_difference
+    return gross_profit, net_profit, fee, price_difference
 
 
 def calc_profit_rate(buy_price, sell_price, trade_type, fee_rate=FEE_RATE):
