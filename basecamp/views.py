@@ -1573,8 +1573,9 @@ def sending_email_first_detail(request):
                                             'return_direction': user.return_direction, 'return_pickup_date': user.return_pickup_date, 
                                             'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
                                             'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
-                                            'price': user.price, 'paid': user.paid, 'cash': user.cash, 'start_point': getattr(user, 'start_point', ''),  
-                                            'return_start_point': getattr(user, 'return_start_point', ''), 'toll': getattr(user, 'toll', 0), 
+                                            'price': user.price, 'paid': user.paid, 'cash': user.cash, 'toll': getattr(user, 'toll', 0), 
+                                            'start_point': getattr(user, 'start_point', ''), 'end_point': getattr(user, 'end_point', ''),
+                                            'return_start_point': getattr(user, 'return_start_point', ''), 
                                             'return_end_point': getattr(user, 'return_end_point', '')
                                         })
 
@@ -1647,11 +1648,13 @@ def sending_email_second_detail(request):
 
             context = { 'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 'email': user.email, 'email1': user.email1,
                 'pickup_date': user.pickup_date, 'flight_number': user.flight_number, 'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
-                'direction': user.direction, 'street': user.street, 'suburb': user.suburb, 'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
+                'direction': user.direction, 'street': user.street, 'suburb': user.suburb, 'start_point': getattr(user, 'start_point', ''),
+                'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage, 'end_point': getattr(user, 'end_point', ''),
                 'return_direction': user.return_direction, 'return_pickup_date': user.return_pickup_date, 'return_flight_number': user.return_flight_number, 
                 'return_flight_time': user.return_flight_time, 'return_pickup_time': user.return_pickup_time, 'message': user.message, 'notice': user.notice, 
                 'price': double_price, 'toll': user.toll, 'paid': double_paid, 'cash': user.cash, 'start_point': getattr(user, 'start_point', ''),  
-                'return_start_point': getattr(user, 'return_start_point', ''), 'toll': getattr(user, 'toll', 0), 'return_end_point': getattr(user, 'return_end_point', ''),
+                'return_start_point': getattr(user, 'return_start_point', ''), 'toll': getattr(user, 'toll', 0), 
+                'return_end_point': getattr(user, 'return_end_point', ''),
             }
 
             html_content = render_to_string(template_name, context)
