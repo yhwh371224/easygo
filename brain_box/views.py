@@ -31,7 +31,7 @@ def calculate_trade(request):
                 'net_profit': round(net_profit, 2),
                 'gross_rate': round(gross_rate, 2),
                 'net_rate': round(net_rate, 2),
-                'price_difference': round(price_difference, 2),  # 추가
+                'price_difference': round(price_difference, 4),  # 추가
             }
             return render(request, 'brain_box/result.html', context)
 
