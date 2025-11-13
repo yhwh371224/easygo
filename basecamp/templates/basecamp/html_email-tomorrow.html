@@ -287,7 +287,11 @@
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
 													• Direction: {{ direction }}<br>
 													• Pickup @ {{ pickup_time }}<br>
-													• Pickup address: {{ street }}, {{ suburb }}<br><br></p>
+													{% if street or suburb %}
+														• Pickup address:
+														{% if street %}{{ street }}{% endif %}
+														{% if suburb %}, {{ suburb }}{% endif %}<br>
+													{% endif %}<br></p>
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
 													Please be ready on your pickup time, {{ pickup_time }}<br><br></p>
 												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
