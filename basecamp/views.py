@@ -2225,32 +2225,23 @@ def email_dispatch_detail(request):
 
                     # 왕복인 경우: 두 개의 부킹에 절반씩 적용
                     if user.return_pickup_time == 'x':
-                        half_value = int(adjusted_value / 2)
 
-                        user.notice = f"{original_notice} | ===Adjusted=== {half_value}" if original_notice else f"===Adjusted=== {half_value}"
-                        user.paid = half_value
-                        user.reminder = True
-                        user.toll = ""
-                        user.cash = False
-                        user.pending = False
-                        user.save()
-
-                        context.update({
-                            'pickup_date': user.pickup_date,
-                            'price': half_value,
-                            'return_pickup_date': user.return_pickup_date if user else '',
-                        })
-
-                        # 두 번째 예약도 동일하게 처리
                         try:
                             user_1 = Post.objects.filter(email=user.email)[1]
-                            user_1.notice = user.notice
-                            user_1.paid = half_value
+                            user_1.notice = f"{original_notice} | ===Adjusted=== {adjusted_value}" if original_notice else f"===Adjusted=== {adjusted_value}"
+                            user_1.paid = adjusted_value
                             user_1.reminder = True
                             user_1.toll = ""
                             user_1.cash = False
                             user_1.pending = False
-                            user_1.save()
+                            user_1.save()                       
+
+                            context.update({
+                                'pickup_date': user.pickup_date,
+                                'price': adjusted_value,
+                                'return_pickup_date': user.return_pickup_date if user else '',
+                            })
+                        
                         except IndexError:
                             pass
 
