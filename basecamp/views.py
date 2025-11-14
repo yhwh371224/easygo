@@ -1618,11 +1618,13 @@ def sending_email_second_detail(request):
         user.sent_email = True
         user.save()  
 
-        double_price = float(user.price or 0) * 2
-        if user.paid:
-            double_paid = float(user.paid) * 2
-        else:
-            double_paid = None
+        price1 = float(user.price) if user.price else 0
+        price2 = float(user1.price) if user1.price else 0
+        double_price = price1 + price2
+        
+        paid1 = float(user.paid) if user.paid else 0
+        paid2 = float(user1.paid) if user1.paid else 0
+        double_paid = paid1 + paid2
         
         if user.cancelled: 
             template_name = "basecamp/html_email-cancelled.html"
