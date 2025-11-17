@@ -229,14 +229,25 @@
 										</tr>
 										<tr>
 											<td align="left" style="padding-top:28px;padding-left:0;">
+												{% if not paid %}
                                                 <p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                    
-                                                    Thank you for your booking with us!<br><br>
-													We are pleased to confirm that your booking has been successfully confirmed<br><br>                                        
-                                                    Please find your booking details below:<br>                                                   
+                                                    Thank you for your booking request<br><br>
+													To ensure we can provide the best service and secure your preferred time, 
+													your reservation will be officially confirmed once full payment is received<br><br> 
+													We kindly ask that payment be made at your earliest convenience so we can finalize all arrangements exclusively for your group.<br><br>                                       
+                                                    We appreciate your understanding and look forward to hosting you.<br><br>
+													Please find your booking details below:<br>                                                   
                                                 </p>
+												{% else %}
+												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                    
+													Thank you for your booking with us!<br><br>
+													We are pleased to confirm that your booking has been successfully confirmed<br><br>                                        
+                                                    Please find your booking details below:<br>
+												</p>
+												{% endif %}
 												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">  
 												{% if company_name %}
-													{{ company_name }}: {{ email1 }}<br>													
+													{{ company_name }} {% if email1 %}: {{ email1 }}{% endif %}<br>													
 												{% endif %}
 												    Contact: {{ contact }}<br>
                                                     Email: {{ email }}<br>
