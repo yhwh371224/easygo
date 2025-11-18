@@ -35,6 +35,21 @@ INDICATOR_MEANING = {
     "10Y_Treasury": "미국 10년물 국채 금리: 장기 금리 벤치마크",
 }
 
+# 큰 숫자를 읽기 좋은 단위로 변환
+def format_large_number(value):
+    if value is None:
+        return '-'
+    elif abs(value) >= 1_000_000_000_000:  # 1조 이상
+        return f"{value/1_000_000_000_000:.2f} T"
+    elif abs(value) >= 1_000_000_000:      # 10억 이상
+        return f"{value/1_000_000_000:.2f} B"
+    else:
+        # 소수점이 있는 경우는 2자리까지 표시
+        if isinstance(value, float):
+            return f"{value:.2f}"
+        else:
+            return str(value)
+
 def fetch_history(series_id, days):
     end = datetime.today()
     start = end - timedelta(days=days*2)
@@ -75,10 +90,10 @@ def check_and_alert(request=None):
     # HTML 테이블 생성
     html_rows = ""
     for row in alert_lines:
-        latest = f"{row['latest']:.2f}" if row['latest'] is not None else '-'
-        mean = f"{row['mean']:.2f}" if row['mean'] is not None else '-'
-        upper = f"{row['upper']:.2f}" if row['upper'] is not None else '-'
-        lower = f"{row['lower']:.2f}" if row['lower'] is not None else '-'
+        latest = format_large_number(row['latest'])
+        mean = format_large_number(row['mean'])
+        upper = format_large_number(row['upper'])
+        lower = format_large_number(row['lower'])
 
         html_rows += f"""
         <tr>
