@@ -68,6 +68,8 @@ def check_and_alert(request=None):
             else:
                 status = "✅ 정상 범위"
 
+        alert_lines.append({ "name": name, "latest": latest, "status": status, "mean": mean, "upper": upper, "lower": lower, })
+
 
     # HTML 테이블 생성
     html_rows = ""
