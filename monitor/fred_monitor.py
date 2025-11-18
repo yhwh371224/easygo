@@ -54,7 +54,7 @@ INDICATOR_MEANING = {
 # -------------------------------
 def fetch_history(series_id, days):
     end = datetime.today()
-    start = end - timedelta(days=days*2)  # 여유 있게
+    start = end - timedelta(days=days*2)
     data = fred.get_series(series_id, observation_start=start, observation_end=end)
     return data.dropna()
 
@@ -80,7 +80,7 @@ def compute_alert_signal(series, window, sigma_threshold):
 def run_all_alerts(data):
     results = {}
     for key, config in ALERT_CONFIG.items():
-        base_name = key.rsplit("_", 1)[0]  # 예: SOFR_3 → SOFR
+        base_name = key.rsplit("_", 1)[0]
         if base_name not in data:
             continue
         z = compute_alert_signal(
@@ -88,8 +88,8 @@ def run_all_alerts(data):
             window=config["window"],
             sigma_threshold=config["sigma_threshold"]
         )
-        if z is not None:
-            results[key] = z
+        # Record Z-score even if it didn't exceed threshold
+        results[key] = z if z is not None else 0
     return results
 
 # -------------------------------
@@ -110,13 +110,42 @@ def prioritize_signals(results):
 # -------------------------------
 # HTML alert 메시지 생성
 # -------------------------------
-def generate_alert_messages(prioritized):
+def generate_alert_messages(prioritized, data):
     messages = []
     for key, (_, z) in prioritized.items():
         name, window = key.rsplit("_", 1)
-        direction = "🔺↑ 상승 (유동성 악화)" if z > 0 else "🔻↓ 하락 (유동성 완화)"
-        msg = f"{name} ({window}일) Z-score={z:.2f} → {direction}"
-        messages.append(msg)
+        window_int = int(window)
+        latest = data[name].iloc[-1]
+        rolling = data[name][-ALERT_CONFIG[key]['window']:]
+        mean_val = statistics.mean(rolling)
+        stdev_val = statistics.stdev(rolling) if len(rolling) > 1 else 0
+        upper = mean_val + ALERT_CONFIG[key]['sigma_threshold'] * stdev_val
+        lower = mean_val - ALERT_CONFIG[key]['sigma_threshold'] * stdev_val
+
+        status = "⚠️" if abs(z) >= ALERT_CONFIG[key]['sigma_threshold'] else "✅"
+
+        if name == "TGA":
+            latest_fmt = f"{latest:,.0f}"
+            mean_fmt = f"{mean_val:,.0f}"
+            upper_fmt = f"{upper:,.0f}"
+            lower_fmt = f"{lower:,.0f}"
+        else:
+            latest_fmt = f"{latest:.2f}"
+            mean_fmt = f"{mean_val:.2f}"
+            upper_fmt = f"{upper:.2f}"
+            lower_fmt = f"{lower:.2f}"
+
+        messages.append(
+            f"<tr>"
+            f"<td>{name}</td>"
+            f"<td>{window_int}일</td>"
+            f"<td>{latest_fmt}</td>"
+            f"<td>{status}</td>"
+            f"<td>{mean_fmt}</td>"
+            f"<td>{upper_fmt}</td>"
+            f"<td>{lower_fmt}</td>"
+            f"</tr>"
+        )
     return messages
 
 # -------------------------------
@@ -126,17 +155,15 @@ def check_and_alert(request=None):
     # FRED 데이터 가져오기
     data = {}
     for name, series_id in SERIES.items():
-        data[name] = fetch_history(series_id, 20)  # 충분히 긴 기간
+        data[name] = fetch_history(series_id, 20)
 
     # 알람 계산
     results = run_all_alerts(data)
     prioritized = prioritize_signals(results)
-    alerts = generate_alert_messages(prioritized)
+    alerts = generate_alert_messages(prioritized, data)
 
     # HTML 테이블 생성
-    html_rows = ""
-    for msg in alerts:
-        html_rows += f"<tr><td colspan=6>{msg}</td></tr>"
+    html_rows = "".join(alerts)
 
     # 지표 설명
     indicators_html = ""
