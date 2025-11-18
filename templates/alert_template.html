@@ -129,18 +129,7 @@
                             </tr>
                           </thead>
                           <tbody>
-                            {% for line in alerts_html %}
-                            <tr>
-                              <td style="padding:8px 10px;font-size:14px;border-bottom:1px solid #eee;">{{ line.indicator }}</td>
-                              <td style="padding:8px 10px;font-size:14px;border-bottom:1px solid #eee;">{{ line.latest }}</td>
-                              <td style="padding:8px 10px;font-size:14px;border-bottom:1px solid #eee;">{{ line.status }}</td>
-                              <td style="padding:8px 10px;font-size:14px;border-bottom:1px solid #eee;">{{ line.mean }}</td>
-                              <td style="padding:8px 10px;font-size:14px;border-bottom:1px solid #eee;">{{ line.std }}</td>
-                              <td style="padding:8px 10px;font-size:14px;border-bottom:1px solid #eee;">{{ line.upper }}</td>
-                              <td style="padding:8px 10px;font-size:14px;border-bottom:1px solid #eee;">{{ line.lower }}</td>
-                              <td style="padding:8px 10px;font-size:14px;border-bottom:1px solid #eee;">{{ line.description }}</td>
-                            </tr>
-                            {% endfor %}
+                            {{ alerts_html|safe }}
                           </tbody>
                         </table>
 
