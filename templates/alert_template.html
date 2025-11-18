@@ -9,24 +9,16 @@
 	<title></title>
 	<style type="text/css">
 		@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
-      table {
-			border-spacing: 0;
-		}
-		td {
-			padding: 0;
-		}
-		p {
-			font-size: 15px;
-		}
-		img {
-			border: 0;
-			border-width:0;
-		}
-		a {
-			color: #277fd2;
-			text-decoration: none;
-		}
+      	body { margin:0; padding:0; font-family:'Lato', sans-serif; background-color:#F6F9FC; }
+		table { border-spacing:0; border-collapse:collapse; width:100%; max-width:600px; margin:auto; }
+		th, td { padding:8px 10px; text-align:left; font-size:14px; }
+		thead th { background-color:#f2f2f2; font-weight:bold; border-bottom:1px solid #ccc; }
+		tbody td { border-bottom:1px solid #eee; }
+		p { font-size: 15px; }
+		a { color: #277fd2; text-decoration: none; }
 		@media screen and (max-width: 599.98px) { 
+			td, th { font-size:13px; padding:6px 5px; 
+    		}
 			.px-600-0 {
 				padding-left: 0!important;
 				padding-right: 0!important;
@@ -77,10 +69,6 @@
 			.pt-400-0 {
 				padding-top: 0!important;
 			}
-			img.third-img {
-				width: 200px!important;
-				max-width: 200px!important;
-			}
 			.pr-large {
 				padding-right: 25px!important;
 			}
@@ -96,225 +84,81 @@
             background: #2d2d2d!important;
             color: #ffffff!important;
          }
+		thead th { background-color:#444; color:#fff; }
+        tbody td { border-bottom:1px solid #555; }
          .darkmode-transparent {
             background-color: transparent!important;
          }
       }
-	</style>
-
-	<!--[if (gte mso 9)|(IE)]>
-		<style type="text/css">
-			table {border-collapse: collapse !important;}
-		</style>
-	<![endif]-->
-	
+	</style>	
 </head>
-<body style="Margin:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;min-width:100%;background-color:#F6F9FC;">
 
-   <!--[if (gte mso 9)|(IE)]>
-      <style type="text/css">
-         body {background-color: #F6F9FC!important;}
-         body, table, td, p, a {font-family: sans-serif, Arial, Helvetica!important;}
-      </style>
-   <![endif]-->
+<body style="margin:0;padding:0;min-width:100%;background-color:#F6F9FC;font-family:'Lato',sans-serif;">
+  <center style="width:100%;table-layout:fixed;background-color:#F6F9FC;padding:20px 0 40px 0;">
+    <div style="max-width:600px;background-color:#ffffff;box-shadow:0 0 10px rgba(0,0,0,0.2);margin:auto;">
 
-	<center style="width: 100%;table-layout:fixed;background-color: #F6F9FC;padding-top:20px;padding-bottom: 40px;">
-		<div style="max-width: 600px;background-color: #ffffff;box-shadow: 0 0 10px rgba(0, 0, 0, .2);">
+      <!-- Preheader -->
+      <div style="display:none;font-size:0;color:#fafdfe;line-height:1px;max-width:0;max-height:0;opacity:0;overflow:hidden;mso-hide:all;">
+        Liquidity Monitor Alert
+      </div>
 
-         <!-- Preheader (remove comment) -->
-         <div style="font-size: 0px;color: #fafdfe;line-height: 1px;mso-line-height-rule:exactly;display: none;max-width: 0px;max-height: 0px;opacity: 0;overflow: hidden;mso-hide:all;">
-            <!-- Add Preheader Text Here (85-100 characters in length) -->
-         </div>
-         <!-- End Preheader (remove comment) -->
+      <table align="center" width="100%" style="border-spacing:0;color:#4F5557;background-color:#ffffff;margin:0;padding:0;">
+        <tr>
+          <td style="padding:10px 0;">
 
-			<!--[if (gte mso 9)|(IE)]>
-				<table width="600" align="center" style="border-spacing:0;" role="presentation">
-				<tr>
-				<td style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;">
-			<![endif]-->
+            <table width="100%" style="border-spacing:0;">
+              <tr>
+                <td style="font-size:0;text-align:center;">
 
-			<table align="center" style="border-spacing:0;color:#4F5557;font-family: 'Lato',sans-serif, Arial, Helvetica;background-color: #ffffff;Margin:0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;width: 100%;max-width: 600px;" role="presentation">
+                  <table width="100%" style="border-spacing:0;display:inline-block;vertical-align:top;max-width:500px;">
+                    <tr>
+                      <td style="padding:20px;">
 
+                        <!-- Table Content -->
+                        <table width="100%" style="border-spacing:0;text-align:center;border-collapse:collapse;">
+                          <thead>
+                            <tr>
+                              <th style="padding:8px 10px;font-size:14px;background-color:#f2f2f2;border-bottom:1px solid #ccc;">Indicator</th>
+                              <th style="padding:8px 10px;font-size:14px;background-color:#f2f2f2;border-bottom:1px solid #ccc;">Latest</th>
+                              <th style="padding:8px 10px;font-size:14px;background-color:#f2f2f2;border-bottom:1px solid #ccc;">Status</th>
+                              <th style="padding:8px 10px;font-size:14px;background-color:#f2f2f2;border-bottom:1px solid #ccc;">Mean</th>
+                              <th style="padding:8px 10px;font-size:14px;background-color:#f2f2f2;border-bottom:1px solid #ccc;">Std Dev</th>
+                              <th style="padding:8px 10px;font-size:14px;background-color:#f2f2f2;border-bottom:1px solid #ccc;">Upper</th>
+                              <th style="padding:8px 10px;font-size:14px;background-color:#f2f2f2;border-bottom:1px solid #ccc;">Lower</th>
+                              <th style="padding:8px 10px;font-size:14px;background-color:#f2f2f2;border-bottom:1px solid #ccc;">Description</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {% for line in alerts_html %}
+                            <tr>
+                              <td style="padding:8px 10px;font-size:14px;border-bottom:1px solid #eee;">{{ line.indicator }}</td>
+                              <td style="padding:8px 10px;font-size:14px;border-bottom:1px solid #eee;">{{ line.latest }}</td>
+                              <td style="padding:8px 10px;font-size:14px;border-bottom:1px solid #eee;">{{ line.status }}</td>
+                              <td style="padding:8px 10px;font-size:14px;border-bottom:1px solid #eee;">{{ line.mean }}</td>
+                              <td style="padding:8px 10px;font-size:14px;border-bottom:1px solid #eee;">{{ line.std }}</td>
+                              <td style="padding:8px 10px;font-size:14px;border-bottom:1px solid #eee;">{{ line.upper }}</td>
+                              <td style="padding:8px 10px;font-size:14px;border-bottom:1px solid #eee;">{{ line.lower }}</td>
+                              <td style="padding:8px 10px;font-size:14px;border-bottom:1px solid #eee;">{{ line.description }}</td>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
 
-
-<!-- START LOGO & SOCIAL ICONS -->
-				<tr>
-					<td class="three-columns" style="padding-top:0;padding-right:0;padding-bottom:8px;padding-left:0;text-align:center;font-size:0;">
-
-						<!--[if (gte mso 9)|(IE)]>
-							<table width="100%" style="border-spacing:0;" role="presentation">
-							<tr>
-							<td width="250" valign="top" style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;">
-						<![endif]-->
-
-						<table class="column" style="border-spacing:0;width:100%;max-width:250px;display:inline-block;" role="presentation">
-							<tr>
-								<td class="padded px-600-0" style="padding-top:20px;padding-right:0px;padding-bottom:5px;padding-left:22px;">
-									<table class="content" style="border-spacing:0;width:100%;text-align:center;" role="presentation">
-										
-
-									</table>
-								</td>
-							</tr>
-						</table>
-
-						<!--[if (gte mso 9)|(IE)]>
-							</td><td width="100" valign="top" style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;">
-						<![endif]-->
-						
-						<table class="d-600-none" style="border-spacing:0;width:100%;max-width:100px;display:inline-block;" role="presentation">
-							<tr>
-								<td class="padded px-600-0" style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;">
-									<table class="content" style="border-spacing:0;" role="presentation">
-										<tr>
-											<td style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;">
-											</td>
-										</tr>
-									</table>
-								</td>
-							</tr>
-						</table>
-					
-						<!--[if (gte mso 9)|(IE)]>
-							</td><td width="250" valign="top" style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;">
-						<![endif]-->
-
-						<table class="column" style="border-spacing:0;width:100%;max-width:250px;display:inline-block;" role="presentation">
-							<tr>
-								<td class="padded px-600-0" style="padding-top:13px;padding-right:0;padding-bottom:5px;padding-left:0px;">
-									<table class="content" style="border-spacing:0;text-align:center;" role="presentation">
-										<tr>
-											<td style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;width:100%;text-align:center; width:250px;">
-												<td style="padding-top:24px;padding-right:0;padding-bottom:0;padding-left:0;width:100%;text-align:center; width:250px;">
-													<a href="https://www.easygoshuttle.com.au" target="_blank"><img src="https://live.staticflickr.com/65535/52125551213_8369295e13_o.png" alt="" width="120" style="border-width:0;max-width: 175px;"></a>
-												</td>
-											</td>
-										</tr>
-									</table>
-								</td>
-							</tr>
-						</table>
-
-						<!--[if (gte mso 9)|(IE)]>
-							</td>
-							</tr>
-							</table>
-						<![endif]-->
-
-					</td>
-				</tr>
-<!-- END LOGO & SOCIAL ICONS -->
-
-
-<!-- START TWO THIRDS COLUMNS -->
-            <tr>
-               <td style="padding-top:10px;padding-right:0;padding-bottom:10px;padding-left:0;">
-                  <table width="100%" style="border-spacing:0;" role="presentation">
-                     <tr>
-                        <td class="two-third-columns" style="padding-right:0;padding-left:0;font-size:0;text-align: center;">
-
-                           <!--[if (gte mso 9)|(IE)]>
-                              <table width="100%" style="border-spacing:0;" role="presentation">
-                              <tr>
-                              <td width="400" valign="top" style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;">
-                           <![endif]-->
-
-                           <table class="column" style="border-spacing:0;vertical-align:top;width:100%;max-width:500px;display:inline-block;" role="presentation">
-                              <tr>
-                                 <td class="padding first" style="padding-top: 20px;padding-right: 20px;padding-bottom: 15px;padding-left: 20px;">
-
-                                    <table class="content" style="border-spacing:0;text-align: center;" role="presentation">
-										<tr>
-                                            <td align="left" style="padding-left:0px;">
-                                                <p style="Margin:0;font-size:18px;font-weight:bold;line-height:22px;">Liquidity Monitor Alert</p>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td align="left" style="padding-top:28px;padding-left:0;">
-                                                <p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
-                                                {{ alerts_html|safe }}
-                                                </p>
-                                            </td>
-                                        </tr>										
-                                    </table>
-									<!--[if (gte mso 9)|(IE)]>
-							            </td>
-							            </tr>
-							            </table>
-						            <![endif]-->
-                                 </td>
-                              </tr>
-                           </table>
-                        </td>
-                     </tr>
+                      </td>
+                    </tr>
                   </table>
-               </td>
-            </tr>
-<!-- END TWO THIRDS COLUMNS -->
 
-<!-- START FOOTER -->
-<tr>
-	<td style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;">
-		<table width="100%" style="border-spacing:0;background-color:#FAFAFA;" role="presentation">
-			
-			<tr>
-				<td style="padding-top:5px;padding-right:5px;padding-bottom:5px;padding-left:5px;">
-					<p style="font-size:11px;color:#a09f9f;text-align:center;">  
-						Website:<a href="https://www.easygoshuttle.com.au">www.easygoshuttle.com.au</a><br>                                  
-						Email:<a href="mailto:info@easygoshuttle.com.au">info@easygoshuttle.com.au</a><br>					
-						Whatsapp:<a href="tel:+61406883355">+61406883355</a><br>						
-                        SMS:<a href="tel:+61406883355">0406 883 355 (message only)</a>
-					</p>                                       
-					<p style="font-size:11px;color:#a09f9f;text-align:center;">     
-						EasyGo Airport Transfers&nbsp;ABN 27 695 661 227	
-					</p>
-				</td>
-			
-			<tr>
-				<td class="padded content" style="background-color: #FAFAFA;padding-top:0px;padding-bottom:0px;padding-right:0;padding-left:0;width:100%;text-align:center;font-family:'Neuton',serif;font-size: 24px;color: #727272;width:600px;">
-					<a href="https://www.facebook.com"><img src="https://easygo.s3.ap-southeast-2.amazonaws.com/icons8-facebook-50.png" alt="facebook-icon" width="14" style="border-width:0;padding-right:1px;"></a>
-					<a href="https://www.twitter.com"><img src="https://easygo.s3.ap-southeast-2.amazonaws.com/icons8-twitter-50.png" alt="twitter-icon" width="14" style="border-width:0;padding-right:1px;"></a>
-					<a href="https://www.youtube.com"><img src="https://easygo.s3.ap-southeast-2.amazonaws.com/icons8-youtube-50.png" alt="youtube-icon" width="14" style="border-width:0;padding-right:1px;"></a>
-					<a href="https://www.instagram.com"><img src="https://easygo.s3.ap-southeast-2.amazonaws.com/icons8-instagram-50.png" alt="instagram-icon" width="14" style="border-width:0;padding-right:1px;"></a>
-				</td>
-			</tr>
-		</table>
-		<!--[if (gte mso 9)|(IE)]>
-			  </td>
-			  </tr>
-			  </table>
-		<![endif]-->
-	</td>
-</tr>
-<!-- END FOOTER -->
+                </td>
+              </tr>
+            </table>
 
-<!-- START DISCLAIMER -->
-<tr>
-	<td style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;">
-		<table width="100%" style="border-spacing:0;background-color:#FAFAFA;" role="presentation">
-			<tr>
-				<td class="padded content" style="padding-top:6px;padding-right:20px;padding-bottom:24px;padding-left:20px;width:100%;text-align:center;font-size: 13px;color: #C4C7C9;width:600px;">
-					<p style="font-size:11px;line-height:15px;color: #a09f9f">
-						Attention: This email and attachments are intended solely for your use and may be confidential. 
-						Any review, dissemination, distribution or reproduction of this email is strictly prohibited. 
-						Please contact the sender if you have received this message in error.
-					</p>
-				</td>
-			</tr>
-		</table>
-		<!--[if (gte mso 9)|(IE)]>
-		</td>
-		</tr>
-		</table>
-		<![endif]-->
-	</td>
-</tr>
-<!-- END DISCLAIMER -->
+          </td>
+        </tr>
+      </table>
 
+    </div>
+  </center>
 
-
-			</table>
-		</div>
-	</center>
 </body>
+
 </html>
