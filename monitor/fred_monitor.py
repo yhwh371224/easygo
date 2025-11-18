@@ -53,11 +53,11 @@ def check_and_alert(request=None):
 
         if len(hist) == 0:
             latest = mean = upper = lower = None
-            status = "데이터 없음"
+            status = "Nil"
         elif len(hist) < conf["window"]:
             latest = hist.iloc[-1] if len(hist) > 0 else None
             mean = upper = lower = latest
-            status = "데이터 부족"
+            status = "Short"
         else:
             latest = hist.iloc[-1]
             mean = statistics.mean(hist)
