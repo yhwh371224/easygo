@@ -36,13 +36,16 @@ INDICATOR_MEANING = {
 }
 
 # 큰 숫자를 읽기 좋은 단위로 변환
-def format_large_number(value):
+def format_large_number(value, name=None):
     if value is None:
         return '-'
-    elif abs(value) >= 1_000_000_000_000:  # 1조 이상
-        return f"{value/1_000_000_000_000:.2f} T"
-    elif abs(value) >= 1_000_000_000:      # 10억 이상
-        return f"{value/1_000_000_000:.2f} B"
+    
+    if name == "TGA":
+        value *= 1_000_000
+        if abs(value) >= 1_000_000_000_000:  # 1조 이상
+            return f"{value/1_000_000_000_000:.2f} T"
+        elif abs(value) >= 1_000_000_000:      # 10억 이상
+            return f"{value/1_000_000_000:.2f} B"
     else:
         # 소수점이 있는 경우는 2자리까지 표시
         if isinstance(value, float):
@@ -91,9 +94,9 @@ def check_and_alert(request=None):
     html_rows = ""
     for row in alert_lines:
         latest = format_large_number(row['latest'])
-        mean = format_large_number(row['mean'])
-        upper = format_large_number(row['upper'])
-        lower = format_large_number(row['lower'])
+        mean   = format_large_number(row['mean'])
+        upper  = format_large_number(row['upper'])
+        lower  = format_large_number(row['lower'])
 
         html_rows += f"""
         <tr>
