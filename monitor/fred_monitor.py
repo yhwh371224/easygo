@@ -146,7 +146,7 @@ def generate_alert_messages_grouped(data):
                 upper_fmt = f"{upper:.2f}"
                 lower_fmt = f"{lower:.2f}"
 
-            # Add the table row
+            # Add the table row. 
             if first:
                 messages.append(
                     f"<tr>"
