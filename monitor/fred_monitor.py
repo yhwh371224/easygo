@@ -69,25 +69,26 @@ def check_and_alert(request=None):
             "latest": latest,
             "status": status,
             "mean": mean,
-            "stdev": stdev,
             "upper": upper,
             "lower": lower,
-            "description": INDICATOR_MEANING.get(name, "")
         })
 
     # HTML 테이블 생성
     html_rows = ""
     for row in alert_lines:
+        latest = f"{row['latest']:.2f}" if row['latest'] is not None else '-'
+        mean = f"{row['mean']:.2f}" if row['mean'] is not None else '-'
+        upper = f"{row['upper']:.2f}" if row['upper'] is not None else '-'
+        lower = f"{row['lower']:.2f}" if row['lower'] is not None else '-'
+
         html_rows += f"""
         <tr>
             <td>{row['name']}</td>
-            <td>{row['latest'] if row['latest'] is not None else '-'}</td>
+            <td>{latest}</td>
             <td>{row['status']}</td>
-            <td>{row['mean'] if row['mean'] is not None else '-'}</td>
-            <td>{row['stdev'] if row['stdev'] is not None else '-'}</td>
-            <td>{row['upper'] if row['upper'] is not None else '-'}</td>
-            <td>{row['lower'] if row['lower'] is not None else '-'}</td>
-            <td>{row['description']}</td>
+            <td>{mean}</td>
+            <td>{upper}</td>
+            <td>{lower}</td>
         </tr>
         """
 
