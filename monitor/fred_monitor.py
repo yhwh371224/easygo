@@ -108,44 +108,71 @@ def prioritize_signals(results):
     return dict(sorted(priority.items(), key=lambda x: (x[1][0], -abs(x[1][1]))))
 
 # -------------------------------
-# HTML alert 메시지 생성
+# HTML alert 메시지 생성 (그룹별)
 # -------------------------------
-def generate_alert_messages(prioritized, data):
+def generate_alert_messages_grouped(data):
     messages = []
-    for key, (_, z) in prioritized.items():
-        name, window = key.rsplit("_", 1)
-        window_int = int(window)
-        latest = data[name].iloc[-1]
-        rolling = data[name][-ALERT_CONFIG[key]['window']:]
-        mean_val = statistics.mean(rolling)
-        stdev_val = statistics.stdev(rolling) if len(rolling) > 1 else 0
-        upper = mean_val + ALERT_CONFIG[key]['sigma_threshold'] * stdev_val
-        lower = mean_val - ALERT_CONFIG[key]['sigma_threshold'] * stdev_val
 
-        status = "⚠️" if abs(z) >= ALERT_CONFIG[key]['sigma_threshold'] else "✅"
+    # Group by indicator
+    for name in SERIES.keys():
+        windows = [w for w in [3, 5, 20] if f"{name}_{w}" in ALERT_CONFIG]
+        first = True  # to use rowspan
+        for window in windows:
+            key = f"{name}_{window}"
+            latest = data[name].iloc[-1]
+            rolling = data[name][-ALERT_CONFIG[key]['window']:]
+            mean_val = statistics.mean(rolling)
+            stdev_val = statistics.stdev(rolling) if len(rolling) > 1 else 0
+            upper = mean_val + ALERT_CONFIG[key]['sigma_threshold'] * stdev_val
+            lower = mean_val - ALERT_CONFIG[key]['sigma_threshold'] * stdev_val
 
-        if name == "TGA":
-            latest_fmt = f"{latest:,.0f}"
-            mean_fmt = f"{mean_val:,.0f}"
-            upper_fmt = f"{upper:,.0f}"
-            lower_fmt = f"{lower:,.0f}"
-        else:
-            latest_fmt = f"{latest:.2f}"
-            mean_fmt = f"{mean_val:.2f}"
-            upper_fmt = f"{upper:.2f}"
-            lower_fmt = f"{lower:.2f}"
+            # Compute Z-score
+            z = compute_alert_signal(data[name], window, ALERT_CONFIG[key]['sigma_threshold'])
+            status = "⚠️" if z is not None and abs(z) >= ALERT_CONFIG[key]['sigma_threshold'] else "✅"
 
+            # Format numbers
+            if name == "TGA":
+                latest_fmt = f"{latest:,.0f}"
+                mean_fmt = f"{mean_val:,.0f}"
+                upper_fmt = f"{upper:,.0f}"
+                lower_fmt = f"{lower:,.0f}"
+            else:
+                latest_fmt = f"{latest:.2f}"
+                mean_fmt = f"{mean_val:.2f}"
+                upper_fmt = f"{upper:.2f}"
+                lower_fmt = f"{lower:.2f}"
+
+            # Add the table row
+            if first:
+                messages.append(
+                    f"<tr>"
+                    f"<td rowspan='{len(windows)}'>{name}</td>"
+                    f"<td>{window}일</td>"
+                    f"<td>{latest_fmt}</td>"
+                    f"<td>{status}</td>"
+                    f"<td>{mean_fmt}</td>"
+                    f"<td>{upper_fmt}</td>"
+                    f"<td>{lower_fmt}</td>"
+                    f"</tr>"
+                )
+                first = False
+            else:
+                messages.append(
+                    f"<tr>"
+                    f"<td>{window}일</td>"
+                    f"<td>{latest_fmt}</td>"
+                    f"<td>{status}</td>"
+                    f"<td>{mean_fmt}</td>"
+                    f"<td>{upper_fmt}</td>"
+                    f"<td>{lower_fmt}</td>"
+                    f"</tr>"
+                )
+
+        # Add a separator row for spacing
         messages.append(
-            f"<tr>"
-            f"<td>{name}</td>"
-            f"<td>{window_int}일</td>"
-            f"<td>{latest_fmt}</td>"
-            f"<td>{status}</td>"
-            f"<td>{mean_fmt}</td>"
-            f"<td>{upper_fmt}</td>"
-            f"<td>{lower_fmt}</td>"
-            f"</tr>"
+            "<tr style='height:10px;'><td colspan='7'></td></tr>"
         )
+
     return messages
 
 # -------------------------------
@@ -160,7 +187,7 @@ def check_and_alert(request=None):
     # 알람 계산
     results = run_all_alerts(data)
     prioritized = prioritize_signals(results)
-    alerts = generate_alert_messages(prioritized, data)
+    alerts = generate_alert_messages_grouped(data)
 
     # HTML 테이블 생성
     html_rows = "".join(alerts)
