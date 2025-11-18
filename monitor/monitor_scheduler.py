@@ -3,16 +3,16 @@ import os
 import django
 import time
 
-from monitor.config import CHECK_INTERVAL
-from monitor.fred_monitor import check_and_alert
+# 1️⃣ 프로젝트 루트 경로 추가 (monitor 모듈 탐색용)
+sys.path.insert(0, '/home/horeb/github/easygo')
 
-
-# Django 환경 설정
+# 2️⃣ Django 환경 설정
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'main.settings')
 django.setup()
 
-# Django 프로젝트 루트 경로 추가
-sys.path.append('/home/horeb/github/easygo')
+# 3️⃣ 모니터 모듈 import
+from monitor.config import CHECK_INTERVAL
+from monitor.fred_monitor import check_and_alert
 
 def start_monitor():
     print("Starting FRED monitor scheduler...")
