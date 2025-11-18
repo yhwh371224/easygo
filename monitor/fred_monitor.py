@@ -107,6 +107,7 @@ def prioritize_signals(results):
         priority[key] = (p, z)
     return dict(sorted(priority.items(), key=lambda x: (x[1][0], -abs(x[1][1]))))
 
+
 # -------------------------------
 # HTML alert 메시지 생성 (그룹별)
 # -------------------------------
