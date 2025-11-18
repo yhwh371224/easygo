@@ -22,7 +22,7 @@ ALERT_CONFIG = {
     "SOFR": {"window": 20, "sigma_threshold": 2},
     "RRP": {"window": 20, "sigma_threshold": 2},
     "RRP_AwardRate": {"window": 20, "sigma_threshold": 2},
-    "TGA": {"window": 20, "sigma_threshold": 2},
+    "TGA": {"window": 5, "sigma_threshold": 2},
     "10Y_Treasury": {"window": 20, "sigma_threshold": 2},
 }
 
@@ -49,11 +49,10 @@ def check_and_alert(request=None):
         hist = fetch_history(series_id, conf["window"])
 
         if len(hist) == 0:
-            latest = mean = upper = lower = None
+            latest = mean = stdev = upper = lower = None
             status = "데이터 없음"
         elif len(hist) < conf["window"]:
-            latest = hist.iloc[-1]
-            mean = upper = lower = None
+            latest = mean = stdev = upper = lower = None
             status = "데이터 부족"
         else:
             latest = hist.iloc[-1]
