@@ -93,7 +93,15 @@ def check_and_alert(request=None):
     # 지표 설명 생성
     indicators_html = ""
     for name, desc in INDICATOR_MEANING.items():
-        indicators_html += f"<p><strong>{name}</strong>: {desc}</p>"
+        indicators_html += f"""
+        <p style="
+            font-size:11px; 
+            line-height:1.2;  
+            font-style:italic; 
+            margin:2px 0;">
+            {name}: {desc}
+        </p>
+        """
 
     subject = f"[Liquidity Monitor] Status Update ({datetime.now().strftime('%Y-%m-%d %H:%M')})"
     handle_email_sending(
