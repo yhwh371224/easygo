@@ -23,7 +23,7 @@ ALERT_CONFIG = {
     "TGA": {"window": 20, "sigma_threshold": 2, "description": "TGA liquidity swing"},
 }
 
-# 지표 의미 설명 (상세)
+# 지표 의미 설명
 INDICATOR_MEANING = {
     "SOFR": "단기 은행간 달러 금리: 급등 시 은행 간 유동성 긴축 신호, Repo 시장 금리 변동에 민감",
     "RRP": "연준 역환매(RRP) 잔액: 급증 시 은행이 안전자산으로 현금을 이동시키는 신호",
@@ -38,15 +38,16 @@ def fetch_history(series_id, days):
     return data.dropna()
 
 def check_and_alert(request=None):
-    alerts = []
+    alert_lines = []
 
     for name, series_id in SERIES.items():
         conf = ALERT_CONFIG.get(name)
         if not conf:
-            continue  # ALERT_CONFIG에 정의되지 않은 지표는 건너뜀
+            continue
 
         hist = fetch_history(series_id, conf["window"])
         if len(hist) < conf["window"]:
+            alert_lines.append(f"<b>{name}</b>: 데이터 부족 ({len(hist)}/{conf['window']})")
             continue
 
         latest = hist.iloc[-1]
@@ -55,19 +56,29 @@ def check_and_alert(request=None):
         upper = mean + conf["sigma_threshold"] * stdev
         lower = mean - conf["sigma_threshold"] * stdev
 
+        # 상태 판단
         if latest > upper:
-            alerts.append(f"<b>{name}</b>: {latest:.4f} > upper threshold ({upper:.4f})<br>설명: {INDICATOR_MEANING[name]}")
+            status = "⚠️ 경고: 상단 임계값 초과"
         elif latest < lower:
-            alerts.append(f"<b>{name}</b>: {latest:.4f} < lower threshold ({lower:.4f})<br>설명: {INDICATOR_MEANING[name]}")
+            status = "⚠️ 경고: 하단 임계값 미달"
+        else:
+            status = "✅ 정상 범위"
 
-    if alerts:
-        subject = f"[ALERT] Liquidity Indicator Warning ({datetime.now().strftime('%Y-%m-%d %H:%M')})"
-        html_content = "<br>".join(alerts)
-
-        handle_email_sending(
-            request=request,
-            email=settings.DEFAULT_FROM_EMAIL,
-            subject=subject,
-            template_name="alert_template.html",
-            context={"alerts_html": html_content}
+        alert_lines.append(
+            f"<b>{name}</b>: {latest:.4f} ({status})<br>"
+            f"평균: {mean:.4f}, 표준편차: {stdev:.4f}, "
+            f"상단: {upper:.4f}, 하단: {lower:.4f}<br>"
+            f"설명: {INDICATOR_MEANING[name]}"
         )
+
+    # 메일 발송
+    subject = f"[Liquidity Monitor] Status Update ({datetime.now().strftime('%Y-%m-%d %H:%M')})"
+    html_content = "<br><br>".join(alert_lines)
+
+    handle_email_sending(
+        request=request,
+        email=settings.DEFAULT_FROM_EMAIL,
+        subject=subject,
+        template_name="alert_template.html",
+        context={"alerts_html": html_content}
+    )
