@@ -5,10 +5,14 @@ from django.conf import settings
 from basecamp.utils import handle_email_sending
 from monitor.config import FRED_API_KEY
 
+# -------------------------------
 # FRED API
+# -------------------------------
 fred = Fred(api_key=FRED_API_KEY)
 
+# -------------------------------
 # 감시할 지표
+# -------------------------------
 SERIES = {
     "SOFR": "SOFR30DAYAVG",
     "RRP": "RRPONTSYD",
@@ -17,16 +21,24 @@ SERIES = {
     "10Y_Treasury": "DGS10",
 }
 
-# 알람 설정
-ALERT_CONFIG = {
-    "SOFR": {"window": 20, "sigma_threshold": 2},
-    "RRP": {"window": 20, "sigma_threshold": 2},
-    "RRP_AR": {"window": 20, "sigma_threshold": 2},
-    "TGA": {"window": 5, "sigma_threshold": 2},
-    "10Y_Treasury": {"window": 20, "sigma_threshold": 2},
-}
+# -------------------------------
+# ALERT CONFIG
+# -------------------------------
+ALERT_CONFIG = {}
+COMMON_NAMES = ["SOFR", "RRP", "RRP_AR", "10Y_Treasury"]
 
+# 3일, 5일, 20일
+for name in COMMON_NAMES:
+    for window in [3, 5, 20]:
+        ALERT_CONFIG[f"{name}_{window}"] = {"window": window, "sigma_threshold": 2}
+
+# TGA는 단기만
+for window in [3, 5]:
+    ALERT_CONFIG[f"TGA_{window}"] = {"window": window, "sigma_threshold": 2}
+
+# -------------------------------
 # 지표 설명
+# -------------------------------
 INDICATOR_MEANING = {
     "SOFR": "단기 은행간 달러 금리: Repo 시장 금리 변동에 민감",
     "RRP": "연준 역환매(RRP) 잔액: 은행이 안전자산으로 이동",
@@ -37,80 +49,113 @@ INDICATOR_MEANING = {
     "✅": "정상범위, 걱정할 단계는 아니다."
 }
 
-
+# -------------------------------
+# FRED 데이터 가져오기
+# -------------------------------
 def fetch_history(series_id, days):
     end = datetime.today()
-    start = end - timedelta(days=days*2)
+    start = end - timedelta(days=days*2)  # 여유 있게
     data = fred.get_series(series_id, observation_start=start, observation_end=end)
     return data.dropna()
 
-def check_and_alert(request=None):
-    alert_lines = []
+# -------------------------------
+# Z-score 기반 시그널 계산
+# -------------------------------
+def compute_alert_signal(series, window, sigma_threshold):
+    if len(series) < window:
+        return None
+    rolling = series[-window:]
+    mean = statistics.mean(rolling)
+    stdev = statistics.stdev(rolling)
+    if stdev == 0:
+        return None
+    zscore = (series.iloc[-1] - mean) / stdev
+    if abs(zscore) >= sigma_threshold:
+        return zscore
+    return None
 
-    for name, series_id in SERIES.items():
-        conf = ALERT_CONFIG[name]
-        hist = fetch_history(series_id, conf["window"])
+# -------------------------------
+# 모든 지표 계산
+# -------------------------------
+def run_all_alerts(data):
+    results = {}
+    for key, config in ALERT_CONFIG.items():
+        base_name = key.rsplit("_", 1)[0]  # 예: SOFR_3 → SOFR
+        if base_name not in data:
+            continue
+        z = compute_alert_signal(
+            series=data[base_name],
+            window=config["window"],
+            sigma_threshold=config["sigma_threshold"]
+        )
+        if z is not None:
+            results[key] = z
+    return results
 
-        if len(hist) == 0:
-            latest = mean = upper = lower = None
-            status = "Nil"
-        elif len(hist) < conf["window"]:
-            latest = hist.iloc[-1] if len(hist) > 0 else None
-            mean = upper = lower = latest
-            status = "Short"
+# -------------------------------
+# 우선순위 정렬: 3일 > 5일 > 20일
+# -------------------------------
+def prioritize_signals(results):
+    priority = {}
+    for key, z in results.items():
+        if key.endswith("_3"):
+            p = 1
+        elif key.endswith("_5"):
+            p = 2
         else:
-            latest = hist.iloc[-1]
-            mean = statistics.mean(hist)
-            stdev = statistics.stdev(hist)
-            upper = mean + conf["sigma_threshold"] * stdev
-            lower = mean - conf["sigma_threshold"] * stdev
+            p = 3
+        priority[key] = (p, z)
+    return dict(sorted(priority.items(), key=lambda x: (x[1][0], -abs(x[1][1]))))
 
-            if latest > upper:
-                status = "⚠️"
-            elif latest < lower:
-                status = "⚠️"
-            else:
-                status = "✅"
+# -------------------------------
+# HTML alert 메시지 생성
+# -------------------------------
+def generate_alert_messages(prioritized):
+    messages = []
+    for key, (_, z) in prioritized.items():
+        name, window = key.rsplit("_", 1)
+        direction = "🔺↑ 상승 (유동성 악화)" if z > 0 else "🔻↓ 하락 (유동성 완화)"
+        msg = f"{name} ({window}일) Z-score={z:.2f} → {direction}"
+        messages.append(msg)
+    return messages
 
-        alert_lines.append({ "name": name, "latest": latest, "status": status, "mean": mean, "upper": upper, "lower": lower, })
+# -------------------------------
+# 메인 함수: 이메일 발송
+# -------------------------------
+def check_and_alert(request=None):
+    # FRED 데이터 가져오기
+    data = {}
+    for name, series_id in SERIES.items():
+        data[name] = fetch_history(series_id, 20)  # 충분히 긴 기간
 
+    # 알람 계산
+    results = run_all_alerts(data)
+    prioritized = prioritize_signals(results)
+    alerts = generate_alert_messages(prioritized)
 
     # HTML 테이블 생성
     html_rows = ""
-    for row in alert_lines:
-        latest = f"{row['latest']:.2f}" if row['latest'] is not None else '-' 
-        mean = f"{row['mean']:.2f}" if row['mean'] is not None else '-' 
-        upper = f"{row['upper']:.2f}" if row['upper'] is not None else '-' 
-        lower = f"{row['lower']:.2f}" if row['lower'] is not None else '-'
+    for msg in alerts:
+        html_rows += f"<tr><td colspan=6>{msg}</td></tr>"
 
-        html_rows += f"""
-        <tr>
-            <td>{row['name']}</td>
-            <td>{latest}</td>
-            <td>{row['status']}</td>
-            <td>{mean}</td>
-            <td>{upper}</td>
-            <td>{lower}</td>
-        </tr>
-        """
-    # 지표 설명 생성
+    # 지표 설명
     indicators_html = ""
     for name, desc in INDICATOR_MEANING.items():
         indicators_html += f"""
-        <p style="
-            font-size:11px; 
-            line-height:1.2;  
-            font-style:italic; 
-            margin:2px 0;">
+        <p style='font-size:11px; line-height:1.2; font-style:italic; margin:2px 0;'>
             {name}: {desc}
         </p>
         """
 
+    # 이메일 발송
     subject = f"[Liquidity Monitor] Status Update ({datetime.now().strftime('%Y-%m-%d %H:%M')})"
     handle_email_sending(
         request=request,
         email=settings.DEFAULT_FROM_EMAIL,
         subject=subject,
         template_name="alert_template.html",
-        context={"alerts_html": html_rows, "indicators_html": indicators_html,}
+        context={
+            "alerts_html": html_rows,
+            "indicators_html": indicators_html,
+        }
     )
