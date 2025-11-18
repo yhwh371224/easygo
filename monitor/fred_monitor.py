@@ -66,9 +66,9 @@ def check_and_alert(request=None):
             lower = mean - conf["sigma_threshold"] * stdev
 
             if latest > upper:
-                status = "⚠️상"
+                status = "⚠️"
             elif latest < lower:
-                status = "⚠️하"
+                status = "⚠️"
             else:
                 status = "✅"
 
