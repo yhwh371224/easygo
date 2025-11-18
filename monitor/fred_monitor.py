@@ -47,15 +47,13 @@ def check_and_alert(request=None):
     for name, series_id in SERIES.items():
         conf = ALERT_CONFIG[name]
         hist = fetch_history(series_id, conf["window"])
-        
+
         if len(hist) == 0:
-            # 데이터 전혀 없으면
             latest = mean = upper = lower = None
             status = "데이터 없음"
         elif len(hist) < conf["window"]:
-            # 데이터는 있지만 충분하지 않으면 최근값으로 대체
             latest = hist.iloc[-1]
-            mean = upper = lower = latest
+            mean = upper = lower = None
             status = "데이터 부족"
         else:
             latest = hist.iloc[-1]
@@ -70,6 +68,7 @@ def check_and_alert(request=None):
                 status = "⚠️ 경고: 하단 임계값 미달"
             else:
                 status = "✅ 정상 범위"
+
 
     # HTML 테이블 생성
     html_rows = ""
