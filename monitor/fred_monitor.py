@@ -19,13 +19,14 @@ SERIES = {
     "RRP_AR": "RRPONTSYAWARD",
     "TGA": "WTREGEN",
     "10Y_Treasury": "DGS10",
+    "USD_Index": "DTWEXBGS",
 }
 
 # -------------------------------
 # ALERT CONFIG
 # -------------------------------
 ALERT_CONFIG = {}
-COMMON_NAMES = ["SOFR", "RRP", "RRP_AR", "10Y_Treasury"]
+COMMON_NAMES = ["SOFR", "RRP", "RRP_AR", "10Y_Treasury", "USD_Index"]
 
 # 3일, 5일, 20일
 for name in COMMON_NAMES:
@@ -45,6 +46,7 @@ INDICATOR_MEANING = {
     "RRP_AR": "RRP 수수료율: 단기 자금시장 압력 신호",
     "TGA": "재무부 계정 잔액: 유동성 흡수/공급 신호",
     "10Y_Treasury": "미국 10년물 국채 금리: 장기 금리 벤치마크",
+    "USD_Index": "미국 달러 지수: 주요통화대비 달러강도",
     "⚠️": "위험신호, 상: 상단 임계값 초과, 하: 하단 임계값 미달", 
     "✅": "정상범위, 걱정할 단계는 아니다."
 }
@@ -54,7 +56,8 @@ INDICATOR_MEANING = {
 # -------------------------------
 def fetch_history(series_id, days):
     end = datetime.today()
-    start = end - timedelta(days=days*2)
+    # 최소 20일 윈도우라면 최소 30~40일치 데이터를 가져오는 것이 안전
+    start = end - timedelta(days=max(days*2, 50))
     data = fred.get_series(series_id, observation_start=start, observation_end=end)
     return data.dropna()
 
