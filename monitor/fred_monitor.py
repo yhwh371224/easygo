@@ -33,25 +33,10 @@ INDICATOR_MEANING = {
     "RRP_AR": "RRP 수수료율: 단기 자금시장 압력 신호",
     "TGA": "재무부 계정 잔액: 유동성 흡수/공급 신호",
     "10Y_Treasury": "미국 10년물 국채 금리: 장기 금리 벤치마크",
+    "⚠️": "위험신호, 상: 상단 임계값 초과, 하: 하단 임계값 미달", 
+    "✅": "정상범위, 걱정할 단계는 아니다."
 }
 
-# 큰 숫자를 읽기 좋은 단위로 변환
-def format_large_number(value, name=None):
-    if value is None:
-        return '-'
-    
-    if name == "TGA":
-        value *= 1_000_000
-        if abs(value) >= 1_000_000_000_000:  # 1조 이상
-            return f"{value/1_000_000_000_000:.2f} T"
-        elif abs(value) >= 1_000_000_000:      # 10억 이상
-            return f"{value/1_000_000_000:.2f} B"
-    else:
-        # 소수점이 있는 경우는 2자리까지 표시
-        if isinstance(value, float):
-            return f"{value:.2f}"
-        else:
-            return str(value)
 
 def fetch_history(series_id, days):
     end = datetime.today()
@@ -81,11 +66,11 @@ def check_and_alert(request=None):
             lower = mean - conf["sigma_threshold"] * stdev
 
             if latest > upper:
-                status = "⚠️ 경고: 상단 임계값 초과"
+                status = "⚠️상"
             elif latest < lower:
-                status = "⚠️ 경고: 하단 임계값 미달"
+                status = "⚠️하"
             else:
-                status = "✅ 정상 범위"
+                status = "✅"
 
         alert_lines.append({ "name": name, "latest": latest, "status": status, "mean": mean, "upper": upper, "lower": lower, })
 
@@ -93,10 +78,10 @@ def check_and_alert(request=None):
     # HTML 테이블 생성
     html_rows = ""
     for row in alert_lines:
-        latest = format_large_number(row['latest'])
-        mean   = format_large_number(row['mean'])
-        upper  = format_large_number(row['upper'])
-        lower  = format_large_number(row['lower'])
+        latest = f"{row['latest']:.2f}" if row['latest'] is not None else '-' 
+        mean = f"{row['mean']:.2f}" if row['mean'] is not None else '-' 
+        upper = f"{row['upper']:.2f}" if row['upper'] is not None else '-' 
+        lower = f"{row['lower']:.2f}" if row['lower'] is not None else '-'
 
         html_rows += f"""
         <tr>
