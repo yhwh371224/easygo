@@ -3,11 +3,14 @@ import statistics
 from fredapi import Fred
 from django.conf import settings
 from basecamp.utils import handle_email_sending
-from monitor.config import FRED_API_KEY
+from decouple import config
 
 # -------------------------------
 # FRED API
 # -------------------------------
+FRED_API_KEY = config('FRED_API_KEY')
+
+# fred 객체 생성
 fred = Fred(api_key=FRED_API_KEY)
 
 # -------------------------------
