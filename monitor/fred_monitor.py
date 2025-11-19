@@ -187,8 +187,6 @@ def check_and_alert(request=None):
         data[name] = fetch_history(series_id, 20)
 
     # 알람 계산
-    results = run_all_alerts(data)
-    prioritized = prioritize_signals(results)
     alerts = generate_alert_messages_grouped(data)
 
     # HTML 테이블 생성
@@ -199,7 +197,7 @@ def check_and_alert(request=None):
     for name, desc in INDICATOR_MEANING.items():
         indicators_html += f"""
         <p style='font-size:11px; line-height:1.2; font-style:italic; margin:2px 0;'>
-            {name}: {desc}
+            <strong>{name}</strong>: {desc}<br>
         </p>
         """
 
