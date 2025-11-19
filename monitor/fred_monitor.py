@@ -15,6 +15,7 @@ fred = Fred(api_key=FRED_API_KEY)
 # -------------------------------
 SERIES = {
     "SOFR": "SOFR30DAYAVG",
+    "SRF": "SRFTSYD",
     "RRP": "RRPONTSYD",
     "RRP_AR": "RRPONTSYAWARD",
     "TGA": "WTREGEN",
@@ -26,7 +27,7 @@ SERIES = {
 # ALERT CONFIG
 # -------------------------------
 ALERT_CONFIG = {}
-COMMON_NAMES = ["SOFR", "RRP", "RRP_AR", "10Y_Treasury", "USD_Index"]
+COMMON_NAMES = ["SOFR", "SRF", "RRP", "RRP_AR", "10Y_Treasury", "USD_Index"]
 
 # 3일, 5일, 20일
 for name in COMMON_NAMES:
@@ -42,6 +43,7 @@ for window in [3, 5]:
 # -------------------------------
 INDICATOR_MEANING = {
     "SOFR": "은행간 달러 금리: 이 수치가 낮으면 은행들이 자금을 적극적으로 시장에 풀고 있거나 또는 시장에 현금이 부족해서 단기 금리를 내리고 있는 상황으로 봐야 한다",
+    "SRF": "연준이 은행이 맡긴 국채를 담보로 돈을 단기로 빌려줄 때 금리. 이 금리를 낮추면 단기 유동성이 풍부해짐, 반대로 이 금리를 높이면 유동성이 줄어듬",
     "RRP": "연준 역환매(RRP) 잔액: 은행이 안전자산으로 이동. RRP 수치가 높으면 은행이 연준에 돈을 맡긴다는 것이므로 시장에 유동성이 낮아졌다는 의미로 해석, 반대로 수치가 낮으면 유동성이 좋다고 해석",
     "RRP_AR": "은행들이 단기 자금을 연준에 맡길 때 받는 이자율: 수치가 높다는 것은 은행들이 안전자산인 연준에 돈을 많이 맡겼다는 의미, 곧 시장 유동성은 낮아진 것임. 이 수치가 낮으면 유동성 증가",
     "TGA": "Treasury General Account. 수치가 높다는 것은 돈이 구좌에 많다는 것이므로 재무부가 돈을 풀지 않고 있다는 것. 상대적으로 시장엔 유동성이 낮다는 것으로 볼 수 있슴", 
