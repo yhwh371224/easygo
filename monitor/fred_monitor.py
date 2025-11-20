@@ -62,7 +62,7 @@ INDICATOR_MEANING = {
 def fetch_history(series_id, days):
     end = datetime.today()
     # 최소 20일 윈도우라면 최소 30~40일치 데이터를 가져오는 것이 안전
-    start = end - timedelta(days=max(days*2, 50))
+    start = end - timedelta(days=max(days*2, 40))
     data = fred.get_series(series_id, observation_start=start, observation_end=end)
     return data.dropna()
 
