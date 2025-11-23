@@ -227,10 +227,16 @@
 										</tr>
 										<tr>
 											<td align="left" style="padding-top:28px;padding-left:0;">
-                                                <p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                    
-                                                    Thank you for your booking with us!<br><br>
-													We are pleased to confirm that your booking has been successfully confirmed<br><br>                                        
-                                                    Please find your booking details below:<br>                                                   
+                                                <p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">   
+												{% if not prepay %}                                                 
+                                                    We are pleased to confirm that your booking request has been received.<br><br>
+													Before we can fully confirm your booking, please review the payment instructions below and reply to this email with your payment preference.<br><br>
+													Please check your booking details carefully below:      
+												{% else %}    
+													We are pleased to confirm that your booking request has been received.<br><br>
+													Once your payment is received, your booking will be **fully confirmed** immediately.<br><br>
+													Please check your booking details carefully below:  
+												{% endif %}                                            
                                                 </p>
 												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">  
 												{% if company_name %}
@@ -281,7 +287,7 @@
 												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
 													🚐 Meeting point</p> 														
                                                 <p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">                                                  
-                                                    Please refer to our website for the meeting point at the airport.<br>
+                                                    Please visit the link below to view the meeting point at the airport.<br>
 													Click here >>&nbsp;<a href="https://easygoshuttle.com.au/meeting_point/">easygoshuttle.com.au/meeting_point</a>&nbsp;to view the location of the meeting_point. 
 													(Please note that changes may occur on the day of your pickup, so remember to check your email for updates)<br><br></p>
 												</p><br>
@@ -292,30 +298,47 @@
 													<span style="font-weight:bold;">💰&nbsp;Payment</span> </p>
 												{% if paid %}																								
 													<p style="Margin:0;font-size:12px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                  
-                                                    You have paid ${{ paid }}, which we have received and greatly appreciate.
+                                                    We have received your payment of ${{ paid }}. Thank you very much.
 													<!-- We have received your full payment and greatly appreciate it. -->
 												<br></p><br>
 												{% elif cash %}	
-												<p style="Margin:0;font-size:12px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                  
-													We have noted your preference to pay ${{ price }} in cash. Your driver will accept the cash payment on the day of pickup<br>													
-												</p><br>		
-												{% else %}
-												<p style="Margin:0;font-size:12px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">  
-													The total cost for your booking is ${{ price }}
-														{% if toll %}
-															, (including toll fee)
-														{% endif %}
-													<br>
-													You can prepay securely via PayPal at the following link:  
-													<a href="https://easygoshuttle.com.au/payonline">easygoshuttle.com.au/payonline</a>  
-													<br><br>
+													<p style="Margin:0;font-size:12px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                  
+														🚨 You MUST reply to our reminder email before the travel date to reconfirm your cash payment.</span><br>
+														If we do not receive your reply, your booking may not be guaranteed.<br>													
+													</p><br>		
+												{% elif prepay %}
+													<p style="Margin:0;font-size:12px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">  
+														The total cost for your booking is ${{ price }}
+															{% if toll %}
+																, (including toll fee)
+															{% endif %}
+														<br>
+														You can prepay securely via PayPal at the following link:  
+														<a href="https://easygoshuttle.com.au/payonline">easygoshuttle.com.au/payonline</a> 
+														
+														Once your payment is received, your booking will be **fully confirmed** immediately.
 
-													<span style="font-weight: bold;">✅&nbsp;</span> Alternatively, to avoid any credit card surcharge, 
-													you may pay by cash directly to the driver on the day.<br><br>
+														<br><br>
+
+												{% else %}
+
+													<p style="Margin:0;font-size:12px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">  
+														The total cost for your booking is ${{ price }}
+															{% if toll %}
+																, (including toll fee)
+															{% endif %}
+														<br>
+														You can prepay securely via PayPal at the following link:  
+														<a href="https://easygoshuttle.com.au/payonline">easygoshuttle.com.au/payonline</a> 
+														
+														<span style="font-weight: bold;">✅&nbsp;</span> Alternatively, to avoid any credit card surcharge, 
+														you may pay by cash directly to the driver on the day.<br><br>
+
+														<br><br>													
 													
 													<span style="font-weight: bold; color: #eb7828 !important;">🚨&nbsp;</span> If you'd like to pay by cash, kindly confirm your booking by replying to this email<br><br>
 													
-												</p><br>																
+													</p><br>																
 												{% endif %}
 
 												<!-- For return trip -->	
@@ -334,7 +357,7 @@
 													We will send you a reminder email closer to the date of your booking.<br><br> 
 													<span style="color: #eb7828 !important; font-weight: bold !important;" >Future communications will be conducted via email. Therefore, 
 													we will not be responsible for any issues arising from not checking your email</span><br><br>                                              
-                                                    Thank you again for booking with us. We look forward to seeing you on time<br><br></p>   
+                                                    Thank you again for choosing EasyGo Airport Shuttle. We look forward to seeing you on the day<br><br></p>   
 												<p style="Margin:0;font-size:13px;font-weight:bold;line-height:22px;Margin-bottom:12px;">
                                                     Best regards<br>
 													<span style="color: #eb7828">Easy</span><span style="color: blue">Go&nbsp;</span>Airport Shuttle<br>	                                                          
