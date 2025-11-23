@@ -426,7 +426,7 @@ def inquiry_details(request):
         =============================
         Contact: {contact}
         Email: {email}  
-        Pickup date: {pickup_date}
+        ✅ Pickup date: {pickup_date}
         Pickup time: {pickup_time}
         Direction: {direction}
         Street: {street}
@@ -582,7 +582,7 @@ def inquiry_details1(request):
         =============================
         Contact: {contact}
         Email: {email}  
-        Flight date: {pickup_date}
+        ✅ Pickup date: {pickup_date}
         Flight number: {flight_number}
         Pickup time: {pickup_time}
         start_point: {start_point}
@@ -707,7 +707,7 @@ def inquiry_details2(request):
         name: {name}
         contact: {contact}        
         email: {email}
-        flight date: {pickup_date}
+        Pickup date: {pickup_date}
         message: {message}              
         '''
         message = message_template.format(**data)
@@ -973,7 +973,7 @@ def confirmation_detail(request):
         =============================
         Contact: {contact}
         Email: {email}  
-        Flight date: {pickup_date}
+        ✅ Pickup date: {pickup_date}
         Flight number: {flight_number}
         Pickup time: {pickup_time}
         start_point: {start_point}
@@ -1133,6 +1133,7 @@ def booking_detail(request):
         ===============================
         Contact: {contact}
         Email: {email}  
+        ✅ Pickup date: {pickup_date}
         Pickup time: {pickup_time}
         Flight number: {flight_number}
         Address: {street}, {suburb}
