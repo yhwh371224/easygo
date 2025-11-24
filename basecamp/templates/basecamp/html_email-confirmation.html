@@ -231,7 +231,11 @@
 												{% if not prepay %}                                                 
                                                     We are pleased to confirm that your booking request has been received.<br><br>
 													Before we can fully confirm your booking, please review the payment instructions below and reply to this email with your payment preference.<br><br>
-													Please check your booking details carefully below:      
+													Please check your booking details carefully below:     
+												{% elif paid %}    
+													We are pleased to inform you that your payment has been successfully received, and your booking is now fully confirmed.
+    												Thank you for your prompt payment.<br><br>    
+													Please review your booking details carefully below:   
 												{% else %}    
 													We are pleased to confirm that your booking request has been received.<br><br>
 													Once your payment is received, your booking will be **fully confirmed** immediately.<br><br>
