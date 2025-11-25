@@ -1577,7 +1577,7 @@ def sending_email_first_detail(request):
                                             'price': user.price, 'paid': user.paid, 'cash': user.cash, 'toll': getattr(user, 'toll', 0), 
                                             'start_point': getattr(user, 'start_point', ''), 'end_point': getattr(user, 'end_point', ''),
                                             'return_start_point': getattr(user, 'return_start_point', ''), 
-                                            'return_end_point': getattr(user, 'return_end_point', '')
+                                            'return_end_point': getattr(user, 'return_end_point', ''), 'prepay': user.prepay,
                                         })
 
                 text_content = strip_tags(html_content)
@@ -1655,9 +1655,9 @@ def sending_email_second_detail(request):
                 'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage, 'end_point': getattr(user, 'end_point', ''),
                 'return_direction': user.return_direction, 'return_pickup_date': user.return_pickup_date, 'return_flight_number': user.return_flight_number, 
                 'return_flight_time': user.return_flight_time, 'return_pickup_time': user.return_pickup_time, 'message': user.message, 'notice': user.notice, 
-                'price': double_price, 'toll': user.toll, 'paid': double_paid, 'cash': user.cash, 'start_point': getattr(user, 'start_point', ''),  
+                'price': double_price, 'paid': double_paid, 'cash': user.cash, 'start_point': getattr(user, 'start_point', ''), 'prepay': user.prepay,
                 'return_start_point': getattr(user, 'return_start_point', ''), 'toll': getattr(user, 'toll', 0), 
-                'return_end_point': getattr(user, 'return_end_point', ''),
+                'return_end_point': getattr(user, 'return_end_point', ''), 
             }
 
             html_content = render_to_string(template_name, context)
