@@ -36,8 +36,8 @@ def parse_date(date_str, field_name="Date", required=True, reference_date=None):
         raise ValueError(f"Invalid date format for '{field_name}' ({date_str}). Please use YYYY-MM-DD.")
 
     # ✅ 오늘 날짜보다 미래인지 확인
-    if parsed_date <= date.today():
-        raise ValueError(f"'{field_name}' must be a date after today ({date.today().strftime('%Y-%m-%d')}).")
+    if parsed_date < date.today():
+        raise ValueError(f"'{field_name}' cannot be in the past ({date.today().strftime('%Y-%m-%d')}).")
 
     # ✅ 기준 날짜(reference_date)보다 빠른지 확인
     if reference_date and parsed_date < reference_date:
