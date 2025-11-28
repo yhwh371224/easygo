@@ -20,7 +20,6 @@ SERIES = {
     "SOFR": "SOFR30DAYAVG",
     "SRF": "SRFTSYD",
     "RRP": "RRPONTSYD",
-    "RRP_AR": "RRPONTSYAWARD",
     "TGA": "WTREGEN",
     "10Y_Treasury": "DGS10",
     "USD_Index": "DTWEXBGS",
@@ -30,7 +29,7 @@ SERIES = {
 # ALERT CONFIG
 # -------------------------------
 ALERT_CONFIG = {}
-COMMON_NAMES = ["SOFR", "SRF", "RRP", "RRP_AR", "10Y_Treasury", "USD_Index"]
+COMMON_NAMES = ["SOFR", "SRF", "RRP", "10Y_Treasury", "USD_Index"]
 
 # 3일, 5일, 20일
 for name in COMMON_NAMES:
@@ -45,15 +44,16 @@ for window in [3, 5]:
 # 지표 설명
 # -------------------------------
 INDICATOR_MEANING = {
-    "SOFR": "(Secure Overnight Finaning Rate) 은행간 달러 금리: 금리가 낮으면 일반적으로 단기 유동성이 충분하다는 신호지만, 안전자산(국채) 수요 급증으로 낮아질 때는 오히려 스트레스 상황일 수 있어",
+    "SOFR": "(Secure Overnight Finaning Rate) 은행간 달러 금리: 금리가 낮으면 일반적으로 단기 유동성이 충분하다는 신호지만, 안전자산(국채) 수요 급증으로 낮아질 때는 오히려 스트레스 상황일 수 있슴",
     "SRF": "(Standing Repo Facility) 은행이 맡긴 국채를 담보로 연준이 돈을 단기로 빌려줄 때 금리. 이 금리가 낮으면 연준에서 자금을 싸게 조달할 수 있어 유동성이 늘고, 금리가 높으면 조달비용 상승으로 유동성 축소.",
     "RRP": "(Reverse Repurchase Agreement) 은행, MMF 기관이 여유자금을 연준에 맡기고 국채를 받는 거래 규모. RRP 수치가 높으면 자금이 시장에서 빠져 연준으로 이동한 것이므로 유동성 감소, 잔액이 낮으면 시장으로 자금이 풀린 상태라 유동성 증가로 해석.",
-    "RRP_AR": "은행들이 단기 자금을 연준에 맡길 때 받는 이자율: 이자율이 높으면 연준으로 돈이 몰리는 경욱가 많아 시장에 유동성이 줄어들지만 반대로 이 수치가 낮으면 시장으로 자금이 이동해 유동성이 증가",
     "TGA": "Treasury General Account. 수치가 높다는 것은 돈이 구좌에 많다는 것이므로 재무부가 돈을 풀지 않고 있다는 것. 상대적으로 시장엔 유동성이 낮다는 것으로 볼 수 있슴. 단, 잔액 증가는 세수 유입이나 국채 발행 증가로도 발생할 수 있음", 
     "10Y_Treasury": "미국 10년물 국채 금리: 국채금리가 높으면 돈과 자산이 국채쪽으로 몰리게 된다 그러므로 시장엔 유동성이 좋지 않고 국채금리가 낮으면 유동성이 좋아진다.",
     "USD_Index": "미국 달러 지수: 달러 지수가 높으면 유동성이 좋지 않게된다. 모든 자산이 달러 사재기로 향하여 시장엔 유동성이 줄어든다",
     "⚠️": "위험신호, 평균치보다 높거나 낮을 때를 말하는 것. 평균치에서 멀어질수록 위험증가", 
-    "✅": "정상범위, 걱정할 단계는 아니다."
+    "✅": "정상범위, 걱정할 단계는 아니다.",
+    "!": "지표별로 3일, 5일, 20일 윈도우로 각각 계산된 Z-score를 기준으로 우선순위를 매김. 3일 윈도우가 가장 민감하게 반응하므로 우선순위 1, 5일이 2, 20일이 3임. 동일 우선순위 내에서는 Z-score 절대값이 큰 순서대로 정렬. (위 수치를 매일 확인하면서 유동성 흐름을 예측하는 것이 중요하다)",
+    "형님!": "매일 아침 7시10분쯤에 메일이 발송됩니다. 원하지 않으시면 알려주세요",
 }
 
 # -------------------------------
@@ -218,5 +218,6 @@ def check_and_alert(request=None):
         context={
             "alerts_html": html_rows,
             "indicators_html": indicators_html,
-        }
+        },
+        email1="gwillbd@gmail.com"
     )
