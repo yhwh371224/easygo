@@ -955,13 +955,21 @@ def confirmation_detail(request):
                 reference_date=pickup_date_obj 
             )
         except ValueError as e:
-            return JsonResponse({'success': False, 'error': str(e)})
-        
+            return JsonResponse({'success': False, 'error': str(e)}) 
+
         data = {            
             'name': name,
             'contact': contact,
-            'email': email,            
-            'pickup_date': pickup_date_obj.strftime('%Y-%m-%d')}       
+            'email': email,
+            'pickup_date': pickup_date_obj.strftime('%Y-%m-%d'),
+            'flight_number': flight_number,
+            'pickup_time': pickup_time,
+            'start_point': start_point,
+            'street': street,
+            'end_point': end_point,
+            'no_of_passenger': no_of_passenger,
+            'message': message,
+        }    
         
         inquiry_email = Inquiry.objects.filter(email=email).exists()
         post_email = Post.objects.filter(email=email).exists()  

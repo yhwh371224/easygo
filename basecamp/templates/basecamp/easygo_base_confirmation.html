@@ -123,55 +123,24 @@
       });
   </script>   
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const returnFlightCheckbox = document.getElementById('return-flight');
-        const returnFlightFields = document.getElementById('return-flight-fields');
-  
-        returnFlightCheckbox.addEventListener('change', function() {
-            if (this.checked) {
-                returnFlightFields.style.display = 'block';
-                const inputs = returnFlightFields.querySelectorAll('input');
-                inputs.forEach(input => {
-                    input.setAttribute('required', 'required');
-                });
-            } else {
-                returnFlightFields.style.display = 'none';
-                const inputs = returnFlightFields.querySelectorAll('input');
-                inputs.forEach(input => {
-                    input.removeAttribute('required');
-                });
-            }
-        });
-  
-        document.getElementById('booking-form').addEventListener('submit', function(event) {
-            let isValid = true;
-            
-            // Return flight fields validation
-            if (returnFlightCheckbox.checked) {
-                const returnFlightNumber = returnFlightFields.querySelector('input[name="return_flight_number"]');
-                const returnFlightDate = returnFlightFields.querySelector('input[name="return_flight_date"]');
-  
-                if (!returnFlightNumber.value) {
-                    returnFlightNumber.classList.add('is-invalid');
-                    isValid = false;
-                } else {
-                    returnFlightNumber.classList.remove('is-invalid');
-                }
-  
-                if (!returnFlightDate.value) {
-                    returnFlightDate.classList.add('is-invalid');
-                    isValid = false;
-                } else {
-                    returnFlightDate.classList.remove('is-invalid');
-                }
-            }
-  
-            if (!isValid) {
-                event.preventDefault(); // Prevent form submission
-                alert('Please fill in all required fields.');
-            }
-        });
-    });
+  document.addEventListener('DOMContentLoaded', function() {
+      const returnFlightCheckbox = document.getElementById('return-flight');
+      const returnFlightFields = document.getElementById('return-flight-fields');
+
+      // 1) 체크하면 보이기 / 숨기기만 처리 (required 제거)
+      returnFlightCheckbox.addEventListener('change', function() {
+          if (this.checked) {
+              returnFlightFields.style.display = 'block';
+          } else {
+              returnFlightFields.style.display = 'none';
+          }
+      });
+
+      // 2) submit 검증에서 flight number/date 확인 부분 제거 (둘 다 optional)
+      document.getElementById('booking-form').addEventListener('submit', function(event) {
+          // 아무 validation도 하지 않음 → 항상 제출됨
+      });
+  });
   </script>
    <!-- Extra baggage form -->
     <script>
