@@ -234,12 +234,22 @@
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
 													I hope this email finds you well.<br><br>
 
-													Thank you for your recent payment of <strong>${{ price }}</strong> for the booking on 
-													
-													<strong>{{ pickup_date }}</strong>
-													{% if return_pickup_date %}
-														and <strong>{{ return_pickup_date }}</strong>
-													{% endif %}<br><br>
+													Thank you for your recent payment of 
+													{% if adjustment_time %}
+														<strong>${{ adjustment_time }}</strong> for the booking{% if pickup_date|length > 1 %}s{% endif %} on:<br>
+														<ul>
+															{% for date in pickup_date %}
+																<li><strong>{{ date }}</strong></li>
+															{% endfor %}
+														</ul>
+													{% else %}
+														<strong>${{ price }}</strong> for your bookings on 
+														<strong>{{ pickup_date }}</strong>
+														{% if return_pickup_date %}
+															and <strong>{{ return_pickup_date }}</strong>
+														{% endif %}<br><br>
+
+													{% endif %}	
 													
 													We appreciate your promptness in taking care of this.<br><br>
 
