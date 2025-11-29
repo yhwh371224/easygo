@@ -2234,43 +2234,46 @@ def email_dispatch_detail(request):
                     except ValueError:
                         adjusted_value = 0
 
-                    # 왕복인 경우: 두 개의 부킹에 절반씩 적용
-                    if user.return_pickup_time == 'x':
+                    # Get all future bookings for this user
+                    posts = Post.objects.filter(
+                        Q(email__iexact=user.email),
+                        pickup_date__gte=timezone.now().date()
+                    ).order_by('pickup_date')  # nearest first
 
-                        try:
-                            user_1 = Post.objects.filter(email=user.email)[1]
-                            user_1.notice = f"{original_notice} | ===Adjusted=== {adjusted_value}" if original_notice else f"===Adjusted=== {adjusted_value}"
-                            user_1.paid = adjusted_value
-                            user_1.reminder = True
-                            user_1.toll = ""
-                            user_1.cash = False
-                            user_1.pending = False
-                            user_1.save()                       
+                    total_adjustment = adjusted_value
+                    paid_dates = []
 
-                            context.update({
-                                'pickup_date': user.pickup_date,
-                                'price': adjusted_value,
-                                'return_pickup_date': user.return_pickup_date if user else '',
-                            })
-                        
-                        except IndexError:
-                            pass
+                    for post in posts:
+                        # Determine how much to apply
+                        post_price = float(post.price or 0)
 
-                    # 편도인 경우: 전체 값 적용
-                    else:
-                        user.notice = f"{original_notice} | ===Adjusted=== {adjusted_value}" if original_notice else f"===Adjusted=== {adjusted_value}"
-                        user.paid = adjusted_value
-                        user.reminder = True
-                        user.toll = ""
-                        user.cash = False
-                        user.pending = False
-                        user.save()
+                        if total_adjustment > 0:
+                            applied = min(post_price, total_adjustment)
+                            post.paid = applied
+                            total_adjustment -= applied
+                            if applied > 0:
+                                paid_dates.append(post.pickup_date)  # track applied dates
+                        else:
+                            post.paid = 0.0
 
-                        context.update({
-                            'pickup_date': user.pickup_date,
-                            'price': adjusted_value,
-                            'return_pickup_date': user.return_pickup_date if user else '',
-                        })
+                        # Update notice
+                        original_notice = (post.notice or "").strip()
+                        post.notice = f"{original_notice} | ===Adjusted=== {post.paid}" if original_notice else f"===Adjusted=== {post.paid}"
+
+                        # Common flags
+                        post.reminder = True
+                        post.toll = ""
+                        post.cash = False
+                        post.pending = False
+
+                        post.save()
+
+                    # Pass all applied dates in a single context variable
+                    context.update({
+                        'pickup_date': paid_dates,  # list of applied dates
+                        'price': adjusted_value,
+                        'adjustment_time': adjustment_time,
+                    })
 
                 # ✅ 2️⃣ adjustment_time이 없는 경우 기존 로직 그대로 유지
                 else:
@@ -2386,7 +2389,6 @@ def email_dispatch_detail(request):
 
                         updated_posts.append(post)
 
-                    # 메일에 표시할 결제 금액
                     if form_price_input:
                         paid_text = f"===(M) GRATITUDE=== Total Paid: ${form_price_input} (applied to upcoming bookings)"
                     else:
