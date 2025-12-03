@@ -101,15 +101,36 @@ class Command(BaseCommand):
 
             text_content = strip_tags(html_content)
 
-            email_recipients = [booking_reminder.email]
-            if booking_reminder.email1 and booking_reminder.email1.strip():
-                email_recipients.append(booking_reminder.email1.strip())
+            
+        # ---- 여기 수정됨: email, email1에서 여러 주소 split ----
+        email_recipients = []
 
-            email = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, email_recipients)
-            email.attach_alternative(html_content, "text/html")
+        if booking_reminder.email:
+            email_recipients.extend(
+                [e.strip() for e in booking_reminder.email.split(",") if e.strip()]
+            )
 
-            try:
-                email.send(fail_silently=False)
-                logger.info(f"Successfully sent '{subject}' email to {booking_reminder.email} for pickup on {target_date}")
-            except Exception as e:
-                logger.error(f"Failed to send email to {booking_reminder.email}: {str(e)}")
+        if booking_reminder.email1:
+            email_recipients.extend(
+                [e.strip() for e in booking_reminder.email1.split(",") if e.strip()]
+            )
+
+        # 중복 제거
+        email_recipients = list(set(email_recipients))
+        # ---------------------------------------------
+
+        email = EmailMultiAlternatives(
+            subject,
+            text_content,
+            settings.DEFAULT_FROM_EMAIL,
+            email_recipients
+        )
+        email.attach_alternative(html_content, "text/html")
+
+        try:
+            email.send(fail_silently=False)
+            logger.info(
+                f"Successfully sent '{subject}' email to {email_recipients} for pickup on {target_date}"
+            )
+        except Exception as e:
+            logger.error(f"Failed to send email to {email_recipients}: {str(e)}")
