@@ -2246,15 +2246,16 @@ def email_dispatch_detail(request):
                     for post in posts:
                         # Determine how much to apply
                         post_price = float(post.price or 0)
+                        current_paid = float(post.paid or 0)
 
                         if total_adjustment > 0:
-                            applied = min(post_price, total_adjustment)
-                            post.paid = applied
+                            remaining_to_apply = max(post_price - current_paid, 0)
+                            applied = min(remaining_to_apply, total_adjustment)
+                            post.paid = current_paid + applied
                             total_adjustment -= applied
+
                             if applied > 0:
                                 paid_dates.append(post.pickup_date.strftime("%Y-%m-%d"))  # 문자열로 변환
-                        else:
-                            post.paid = 0.0
 
                         # Update notice
                         original_notice = (post.notice or "").strip()
