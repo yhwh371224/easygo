@@ -12,7 +12,6 @@ from utils.return_booking import handle_return_trip
 from utils.inquiry_helper import send_inquiry_email  
 from utils.prepay_helper import is_foreign_number
 from utils.post_helper import send_post_cancelled_email, send_missing_direction_email
-from utils.calendar_sync import sync_to_calendar
 
 
 # Inquiry signals
@@ -25,12 +24,6 @@ def notify_user_inquiry(sender, instance, created, **kwargs):
 @receiver(post_save, sender=Post, dispatch_uid="notify_user_post_once")
 def notify_user_post(sender, instance, created, **kwargs):
     handle_return_trip(instance)
-
-
-@receiver(post_save, sender=Post)
-def update_calendar(sender, instance, created, **kwargs):
-    # created = False 이면 update 상황
-    sync_to_calendar(instance)
 
 
 # Send email notification if a Post is cancelled and email hasn't been sent yet
