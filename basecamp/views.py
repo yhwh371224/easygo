@@ -2252,7 +2252,7 @@ def email_dispatch_detail(request):
                             post.paid = applied
                             total_adjustment -= applied
                             if applied > 0:
-                                paid_dates.append(post.pickup_date)  # track applied dates
+                                paid_dates.append(post.pickup_date.strftime("%Y-%m-%d"))  # 문자열로 변환
                         else:
                             post.paid = 0.0
 
