@@ -26,6 +26,11 @@ def notify_user_post(sender, instance, created, **kwargs):
     handle_return_trip(instance)
 
 
+@receiver(post_save, sender=Post, dispatch_uid="sync_calendar_on_post_save")
+def sync_calendar_on_post_save(sender, instance, created, **kwargs):
+    create_event_on_calendar.delay(instance.id)
+
+
 # Send email notification if a Post is cancelled and email hasn't been sent yet
 @receiver(post_save, sender=Post, dispatch_uid="notify_user_post_cancelled_once")
 def notify_user_post_cancelled(sender, instance, created, **kwargs): 
