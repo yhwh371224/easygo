@@ -1903,6 +1903,12 @@ def invoice_detail(request):
             to_date_obj = datetime.strptime(to_date, "%Y-%m-%d").date()
             bookings = users.filter(pickup_date__range=(from_date_obj, to_date_obj)).order_by('pickup_date', 'pickup_time')
             multiple = True
+            
+            if not bookings.exists():
+                return HttpResponse(
+                    "No bookings found in selected date range",
+                    status=404
+                )
         else:
             bookings = [users[index]] if 0 <= index < len(users) else [users.first()]
 
@@ -1982,13 +1988,14 @@ def invoice_detail(request):
                     "total_price": total,
                 })
                 
+            first_booking = bookings.first() if hasattr(bookings, "first") else (bookings[0] if bookings else None)
             
             if (discount_input or '') == 'Yes':
-                    discount = 0.0
+                discount = 0.0
             elif (discount_input or '').replace('.', '', 1).isdigit():
                 discount = float(discount_input)
-            elif (bookings[0].discount or '').replace('.', '', 1).isdigit():
-                discount = float(bookings[0].discount)
+            elif first_booking and (first_booking.discount or '').replace('.', '', 1).isdigit():
+                discount = float(first_booking.discount)
             else:
                 discount = 0.0
 
@@ -1997,11 +2004,13 @@ def invoice_detail(request):
 
             DEFAULT_BANK = getattr(settings, "DEFAULT_BANK_CODE", "westpac")
 
+            first_booking = bookings[0] if bookings else None
+
             context = {
-                "inv_no": inv_no,
-                "company_name": bookings[0].company_name,
+                "inv_no": inv_no,                
+                "company_name": first_booking.company_name if first_booking else "",
+                "name": first_booking.name if first_booking else "",
                 "apply_gst_flag": bool(apply_gst_flag),
-                "name": bookings[0].name,
                 "invoice_date": today,
                 "bookings": booking_data,
                 "total_price_without_gst": round(total_price_without_gst, 2),
@@ -2020,6 +2029,8 @@ def invoice_detail(request):
 
         else:
             user = bookings[0]
+            if not user:
+                return HttpResponse("No booking found", status=404)
             
             start_point = user.start_point
             end_point = user.end_point
