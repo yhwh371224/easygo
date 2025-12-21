@@ -238,12 +238,12 @@
                                                 <p style="margin:0; font-size:14px; line-height:22px; margin-bottom:12px;">
                                                     Your driver or meeting point has changed. Please disregard the previous details — here are the latest ones to ensure everything goes smoothly.<br><br>
 
-													{% if cash %}
+													<!-- {% if cash %}
 														We kindly ask that you <span style="color: #eb7828">email us immediately</span> upon your arrival in Sydney 
 														and ensure that your mobile phone remains switched on<br><br>
-														Please note that the driver may not have a card machine available. We kindly ask you to prepare the cash in advance<br>
-													{% elif sms_reminder %}
-														The driver will meet you at the <strong>meeting point listed below</strong> 
+														Please note that the driver may not have a card machine available. We kindly ask you to prepare the cash in advance<br> -->
+													{% if sms_reminder %}
+														The driver will meet you at the meeting point listed below
 														at your <strong>requested pickup time, {{ pickup_time }}</strong>, as scheduled.<br><br>
 													{% else %}							 
 														<span style="color: #eb7828">Once you have collected your luggage, please contact the driver.</span> 
@@ -300,11 +300,11 @@
                                                 <p style="margin:0; font-size:14px; line-height:22px; margin-bottom:12px;">
                                                     Your driver or meeting point has changed. Please disregard the previous details — here are the latest ones to ensure everything goes smoothly.<br><br>
                                                 
-                                                    {% if cash %}
+                                                    <!-- {% if cash %}
 														We kindly ask that you <span style="color: #eb7828">email us immediately</span> upon your arrival in Sydney 
 														and ensure that your mobile phone remains switched on<br><br>
-														Please note that the driver may not have a card machine available. We kindly ask you to prepare the cash in advance<br>
-													{% elif sms_reminder %}
+														Please note that the driver may not have a card machine available. We kindly ask you to prepare the cash in advance<br> -->
+													{% if sms_reminder %}
 														The driver will meet you at the <strong>meeting point listed below</strong> 
 														at your <strong>requested pickup time, {{ pickup_time }}</strong>, as scheduled.<br><br>
 													{% else %}							 
