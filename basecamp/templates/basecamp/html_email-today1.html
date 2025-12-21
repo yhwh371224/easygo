@@ -242,6 +242,9 @@
 														We kindly ask that you <span style="color: #eb7828">email us immediately</span> upon your arrival in Sydney 
 														and ensure that your mobile phone remains switched on<br><br>
 														Please note that the driver may not have a card machine available. We kindly ask you to prepare the cash in advance<br>
+													{% elif sms_reminder %}
+														The driver will meet you at the <strong>meeting point listed below</strong> 
+														at your <strong>requested pickup time, {{ pickup_time }}</strong>, as scheduled.<br><br>
 													{% else %}							 
 														<span style="color: #eb7828">Once you have collected your luggage, please contact the driver.</span> 
 														This will help us estimate your arrival time at the meeting point, ensuring a smooth transition.<br><br>
@@ -301,6 +304,9 @@
 														We kindly ask that you <span style="color: #eb7828">email us immediately</span> upon your arrival in Sydney 
 														and ensure that your mobile phone remains switched on<br><br>
 														Please note that the driver may not have a card machine available. We kindly ask you to prepare the cash in advance<br>
+													{% elif sms_reminder %}
+														The driver will meet you at the <strong>meeting point listed below</strong> 
+														at your <strong>requested pickup time, {{ pickup_time }}</strong>, as scheduled.<br><br>
 													{% else %}							 
 														<span style="color: #eb7828">Once you have collected your luggage, please contact the driver.</span> 
 														This will help us estimate your arrival time at the meeting point, ensuring a smooth transition.<br><br>
