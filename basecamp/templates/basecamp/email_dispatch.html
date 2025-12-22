@@ -29,76 +29,149 @@
       <!-- Page content-->
       <!-- Page title-->	 
       <!-- Contact form + details-->  	  
-            <form method="post" enctype="multipart/form-data" action="/email_dispatch_detail/" id="booking-form" class="card-body needs-validation p-5" >
-                {% csrf_token %}							
-				<div class="card text-white bg-secondary p-4">
-				<div class="mb-3 pb-1">
-					<label class="form-label" >Email address<sup class="text-danger ms-1">*</sup></label>
-					<input class="form-control" type="email"  placeholder="j.doe@example.com" required name="email">
-					<div class="invalid-feedback">Please enter a valid email address!</div>
-				</div>   
-				<div class="mb-3 pb-1">
-                    <label class="form-label">Select an Option:</label>
-              		<select class="form-select" name="selected_option">
-					  <option disabled selected value="" style="color: blue">Select your option...</option>
-					  <option value="Gratitude For Payment">Gratitude For Payment</option>
-					  <option value="Gratitude For (M) Payment">Gratitude For (M) Payment</option>
-					  <option value="Cash Payment Confirmed">Cash Payment Confirmed</option>
-					  <option value="Payment Method">Payment Method</option>
-					  <option value="PayPal Assistance">PayPal Assistance</option>
-              		  <option value="Meeting Point Inquiry">Meeting Point Inquiry</option>	
-					  <option value="Pickup Notice for Today">Pickup Notice for Today</option>
-					  <option value="Airport Pickup Guide">Airport Pickup Guide</option>                  
-              		  <option value="Earlier Pickup Requested for Departure">Earlier Pickup Requested for Departure</option>
-              		  <option value="Later Pickup Requested for Departure">Later Pickup Requested for Departure</option>						
-              		  <option value="Early Arrival Notification">Early Arrival Notification</option>					
-              		  <option value="Arrival Later Than Scheduled">Arrival Later Than Scheduled</option>   
-					  <option value="Notice of Delay">Notice of Delay</option>
-					  <option value="Adjusted Pickup Time">Adjusted Pickup Time</option>
-					  <option disabled selected value="" style="color: red">Select your option...</option>
-					  <option value="Apology for oversight">Apology for oversight</option>
-					  <option value="Cancellation by Client">Cancellation by Client</option>
-					  <option value="Payment in Advance Required">Payment in Advance Required</option>
-					  <option value="Arrival Pickup Arrangement Without Payment">Arrival Pickup Arrangement Without Payment</option>			  
-					  <option value="Further details for booking">Further details for booking</option>
-					  <option value="Further details for booked">Further details for booked</option>
-					  <option value="Inquiry for driver contact">Inquiry for driver contact</option>
-					  <option value="Shared Ride (inquiry) Discount Offer">Shared Ride (inquiry) Discount Offer</option>
-					  <option value="Shared Ride (booking) Discount Offer">Shared Ride (booking) Discount Offer</option>					   
-					  <option value="Cancellation of Booking">Cancellation of Booking</option>
-					  <option value="Apologies Cancellation of Booking">Apologies Cancellation of Booking</option>
-					  <option value="Payment discrepancy">Payment discrepancy</option>
-					  <option value="Special promotion">Special promotion</option>
-					  <option value="Booking delay">Booking delay</option>
-					  <option value="Booking delay 1">Booking delay 1</option>            
-              		</select>
-                </div>                 
-				<div class="mb-3 pb-1">
-                    <label class="form-label" >Adjustment pickup time | amount paid | Cancel booking date</label>
-                    <input class="form-control" type="text"  placeholder="adjustment_time" name="adjustment_time">
-                    <div class="invalid-feedback">Please enter adjustment pickup time!</div>
-                </div>
-				<div class="mb-3 pb-1">
-                    <label class="form-label" >How long driver waited | how long earlier | Cancel return date</label>
-                    <input class="form-control" type="text"  placeholder="wait_duration" name="wait_duration">
-                    <div class="invalid-feedback">Please enter waiting time!</div>
-                </div>
-				<div class="mb-3 pb-1">
-                    <label class="form-label" >Discount price (or % discount) | additional price for waiting</label>
-                    <input class="form-control" type="text"  placeholder="Put only number" name="discount_price">
-                    <div class="invalid-feedback">Please enter only number!</div>
-                </div>
-			</div>							
-				<div class="text-center pt-2">
-					<button class="btn btn-primary" type="submit" id="submitButton">Submit</button>
-				</div>
-				<br>
-                <div><small>This form is protected by reCAPTCHA Enterprise and the Google
-					<a href="https://policies.google.com/privacy">Privacy Policy</a> and
-					<a href="https://policies.google.com/terms">Terms of Service</a> apply.</small>
-				</div>
-				<br>                
-              </form>
+            <!-- Contact form + details -->  	  
+				<!-- Contact form + details -->  	  
+				<form method="post"
+					enctype="multipart/form-data"
+					action="/email_dispatch_detail/"
+					id="booking-form"
+					class="card-body needs-validation p-5">
+
+					{% csrf_token %}
+
+					<div class="card text-white bg-secondary p-4">
+
+						<!-- Email -->
+						<div class="mb-3 pb-1">
+							<label class="form-label">
+								Email address <sup class="text-danger ms-1">*</sup>
+							</label>
+							<input class="form-control"
+								type="email"
+								placeholder="j.doe@example.com"
+								required
+								name="email">
+							<div class="invalid-feedback">
+								Please enter a valid email address!
+							</div>
+						</div>
+
+						<!-- Select Option -->
+						<div class="mb-3 pb-1">
+							<label class="form-label">Select an Option:</label>
+							<select class="form-select" name="selected_option" id="selected_option" required>
+								<option disabled selected value="">Select your option...</option>
+								<option value="Gratitude For Payment">Gratitude For Payment</option>
+								<option value="Gratitude For (M) Payment">Gratitude For (M) Payment</option>
+								<option value="Cash Payment Confirmed">Cash Payment Confirmed</option>
+								<option value="Payment Method">Payment Method</option>
+								<option value="PayPal Assistance">PayPal Assistance</option>
+								<option value="Meeting Point Inquiry">Meeting Point Inquiry</option>
+								<option value="Pickup Notice for Today">Pickup Notice for Today</option>
+								<option value="Airport Pickup Guide">Airport Pickup Guide</option>
+								<option value="Earlier Pickup Requested for Departure">Earlier Pickup Requested for Departure</option>
+								<option value="Later Pickup Requested for Departure">Later Pickup Requested for Departure</option>
+								<option value="Early Arrival Notification">Early Arrival Notification</option>
+								<option value="Arrival Later Than Scheduled">Arrival Later Than Scheduled</option>
+								<option value="Notice of Delay">Notice of Delay</option>
+								<option value="Adjusted Pickup Time">Adjusted Pickup Time</option>
+								<option value="Apology for oversight">Apology for oversight</option>
+								<option value="Cancellation by Client">Cancellation by Client</option>
+								<option value="Cancellation of Booking">Cancellation of Booking</option>
+								<option value="Apologies Cancellation of Booking">Apologies Cancellation of Booking</option>
+								<option value="Payment in Advance Required">Payment in Advance Required</option>
+								<option value="Arrival Pickup Arrangement Without Payment">Arrival Pickup Arrangement Without Payment</option>
+								<option value="Further details for booking">Further details for booking</option>
+								<option value="Further details for booked">Further details for booked</option>
+								<option value="Inquiry for driver contact">Inquiry for driver contact</option>
+								<option value="Shared Ride (inquiry) Discount Offer">Shared Ride (inquiry) Discount Offer</option>
+								<option value="Shared Ride (booking) Discount Offer">Shared Ride (booking) Discount Offer</option>
+								<option value="Payment discrepancy">Payment discrepancy</option>
+								<option value="Special promotion">Special promotion</option>
+								<option value="Booking delay">Booking delay</option>
+								<option value="Booking delay 1">Booking delay 1</option>
+							</select>
+						</div>
+
+						<!-- Adjusted Pickup Time -->
+						<div class="mb-3 pb-1">
+							<label class="form-label">Adjusted pickup time</label>
+							<input class="form-control"
+								type="time"
+								name="adjusted_pickup_time">
+							<small class="text-light">
+								Use only when pickup time has changed
+							</small>
+						</div>
+
+						<!-- Payment Amount -->
+						<div class="mb-3 pb-1">
+							<label class="form-label">Amount paid</label>
+							<input class="form-control"
+								type="number"
+								step="1"
+								min="0"
+								name="payment_amount"
+								placeholder="Put only number">
+							<small class="text-light">
+								For Gratitude / Multi-payment only
+							</small>
+						</div>
+
+						<!-- Cancel Date -->
+						<div class="mb-3 pb-1">
+							<label class="form-label">Cancel booking date</label>
+							<input class="form-control"
+								type="date"
+								name="cancel_date">
+							<small class="text-light">
+								Required only for cancellation related emails
+							</small>
+						</div>
+
+						<!-- Wait Duration -->
+						<div class="mb-3 pb-1">
+							<label class="form-label">
+								How long driver waited / how much earlier
+							</label>
+							<input class="form-control"
+								type="text"
+								name="wait_duration"
+								placeholder="e.g. 15 mins">
+						</div>
+
+						<!-- Discount / Additional Price -->
+						<div class="mb-3 pb-1">
+							<label class="form-label">
+								Discount price or additional waiting charge
+							</label>
+							<input class="form-control"
+								type="number"
+								step="1"
+								name="discount_price"
+								placeholder="Put only number">
+						</div>
+
+					</div>
+
+					<!-- Submit -->
+					<div class="text-center pt-3">
+						<button class="btn btn-primary" type="submit" id="submitButton">
+							Submit
+						</button>
+					</div>
+
+					<br>
+
+					<div>
+						<small>
+							This form is protected by reCAPTCHA Enterprise and the Google
+							<a href="https://policies.google.com/privacy">Privacy Policy</a> and
+							<a href="https://policies.google.com/terms">Terms of Service</a> apply.
+						</small>
+					</div>
+
+				</form>
               </div>
             </div>
 			</div>
