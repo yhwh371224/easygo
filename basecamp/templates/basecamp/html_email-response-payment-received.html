@@ -235,8 +235,8 @@
 													I hope this email finds you well.<br><br>
 
 													Thank you for your recent payment of 
-													{% if adjustment_time %}
-														<strong>${{ adjustment_time }}</strong> 
+													{% if payment_amount %}
+														<strong>${{ payment_amount }}</strong> 
 													{% else %}
 														<strong>${{ price }}</strong> for your bookings on 
 														<strong>{{ pickup_date }}</strong>
