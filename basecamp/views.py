@@ -2256,28 +2256,45 @@ def email_dispatch_detail(request):
             if selected_option == "Gratitude For Payment":
                 original_price = float(user.price or 0)
                 original_notice = (user.notice or "").strip()
-                has_payment_record = any(keyword in original_notice for keyword in ["===STRIPE===", "===PAYPAL===", "===Gratitude==="])
+                has_payment_record = any(
+                    keyword in original_notice
+                    for keyword in ["===STRIPE===", "===PAYPAL===", "===Gratitude==="]
+                )
 
                 # 왕복 여부 처리
                 if user.return_pickup_time == 'x':
                     full_price = original_price * 2
                 else:
                     full_price = original_price
+
                 if user.email1:
                     full_price += full_price * 0.1
 
+                # ✅ notice 문구 (그대로 유지)
                 total_paid_text = f"===Gratitude=== Total Paid: ${int(full_price)}"
                 if not has_payment_record:
-                    user.notice = f"{original_notice} | {total_paid_text}" if original_notice else total_paid_text
-                user.paid = full_price
+                    user.notice = (
+                        f"{original_notice} | {total_paid_text}"
+                        if original_notice else total_paid_text
+                    )
+
+                # ✅ 실제 받은 금액 처리
+                try:
+                    paid_amount = float(payment_amount) if payment_amount else full_price
+                except ValueError:
+                    paid_amount = full_price
+
+                user.paid = paid_amount
                 user.reminder = True
                 user.toll = ""
                 user.cash = False
                 user.pending = False
                 user.save()
+
                 context.update({
                     'pickup_date': user.pickup_date,
-                    'price': full_price,
+                    'price': full_price,              # 전체 금액
+                    'payment_amount': paid_amount,    # 이번에 받은 금액
                     'return_pickup_date': user.return_pickup_date if user else '',
                 })
 
