@@ -299,7 +299,7 @@
 													<strong>Price: ${{ price }}</strong> without gst <br>
 													{% if toll %}<strong>The price includes the toll fee</strong><br>{% endif %}
 													{% if apply_gst_flag %}<strong>GST (10%): ${{ with_gst }}</strong><br>{% endif %}
-													{% if paid %}<strong>Surcharge: ${{ surcharge }}</strong><br>{% endif %}													
+													{% if paid %}<strong>PayPal Card Surcharge: ${{ surcharge }} (on $82.50)</strong><br>{% endif %}													
 													{% if discount and discount != 'Yes' and discount != 0.0 %}
 														<strong>Discount: ${{ discount }}</strong><br>
 													{% endif %}					
