@@ -1868,7 +1868,7 @@ def invoice_detail(request):
         email = request.POST.get('email', '').strip()
         extra_email = request.POST.get('extra_email', '').strip()  
         apply_gst_flag = request.POST.get('apply_gst')
-        surcharge_flag = request.POST.get('surcharge')
+        surcharge_input = request.POST.get('surcharge')
         discount_input = request.POST.get('discount')
         inv_no = request.POST.get('inv_no')
         toll_input = request.POST.get('toll')
@@ -1884,7 +1884,6 @@ def invoice_detail(request):
         users = Post.objects.filter(email__iexact=email)
         if not users.exists():
             return HttpResponse("No bookings found", status=404)
-        
         else:
             user = users[0]
             today = date.today()
@@ -1895,7 +1894,7 @@ def invoice_detail(request):
                 inv_no = f"{user.pickup_date.toordinal()}" if user.pickup_date else "896021"
 
         DEFAULT_BANK = getattr(settings, "DEFAULT_BANK_CODE", "westpac")
-            
+
         # Multi booking 여부
         multiple = False
         if from_date and to_date:
@@ -1903,7 +1902,6 @@ def invoice_detail(request):
             to_date_obj = datetime.strptime(to_date, "%Y-%m-%d").date()
             bookings = users.filter(pickup_date__range=(from_date_obj, to_date_obj)).order_by('pickup_date', 'pickup_time')
             multiple = True
-            
             if not bookings.exists():
                 return HttpResponse(
                     "No bookings found in selected date range",
@@ -1928,7 +1926,6 @@ def invoice_detail(request):
                 if booking.start_point:
                     start_point = booking.start_point
                     end_point = booking.end_point
-
                     # 리턴 구간 존재 시 덮어쓰기 또는 별도 처리
                     if getattr(booking, 'return_start_point', None):
                         return_start_point = booking.return_start_point
@@ -1936,36 +1933,45 @@ def invoice_detail(request):
                     else:
                         return_start_point = None
                         return_end_point = None
-                        
                 else:
-                    direction = booking.direction or "" 
-                    if "Drop off to Domestic" in booking.direction:
+                    direction = booking.direction or ""
+                    if "Drop off to Domestic" in direction:
                         start_point = f"{booking.street}, {booking.suburb}"
                         end_point = "Domestic Airport"
-                    elif "Drop off to Intl" in booking.direction:
+                    elif "Drop off to Intl" in direction:
                         start_point = f"{booking.street}, {booking.suburb}"
                         end_point = "International Airport"
-                    elif "Pickup from Domestic" in booking.direction:
+                    elif "Pickup from Domestic" in direction:
                         start_point = "Domestic Airport"
                         end_point = f"{booking.street}, {booking.suburb}"
-                    elif "Pickup from Intl" in booking.direction:
+                    elif "Pickup from Intl" in direction:
                         start_point = "International Airport"
                         end_point = f"{booking.street}, {booking.suburb}"
                     else:
                         start_point = "Unknown"
-                        end_point = "Unknown" 
+                        end_point = "Unknown"
 
                 price = safe_float(booking.price) or 0.0
                 with_gst = round(price * 0.10, 2) if apply_gst_flag else 0.0
-                surcharge = round(price * 0.03, 2) if surcharge_flag else 0.0
-                toll = safe_float(toll_input) if toll_input else safe_float(booking.toll) or 0.0  
-                paid = safe_float(booking.paid) or 0.0              
 
-                total = price + with_gst + surcharge + toll 
-                
+                # ✅ Surcharge handling
+                if surcharge_input == "Yes":
+                    surcharge_calc = round(price * 0.03, 2)
+                    surcharge_display = surcharge_calc
+                elif surcharge_input:
+                    surcharge_calc = 0.0
+                    surcharge_display = surcharge_input
+                else:
+                    surcharge_calc = 0.0
+                    surcharge_display = 0.0
+
+                toll = safe_float(toll_input) if toll_input else safe_float(booking.toll) or 0.0
+                paid = safe_float(booking.paid) or 0.0
+                total = price + with_gst + surcharge_calc + toll
+
                 total_price_without_gst += price
                 total_gst += with_gst
-                total_surcharge += surcharge
+                total_surcharge += surcharge_calc
                 total_toll += toll
                 total_paid += paid
                 grand_total += total
@@ -1983,13 +1989,13 @@ def invoice_detail(request):
                     "notice": booking.notice,
                     "price": price,
                     "with_gst": with_gst,
-                    "surcharge": surcharge,
+                    "surcharge": surcharge_display,
                     "toll": toll,
                     "total_price": total,
                 })
-                
+
             first_booking = bookings.first() if hasattr(bookings, "first") else (bookings[0] if bookings else None)
-            
+
             if (discount_input or '') == 'Yes':
                 discount = 0.0
             elif (discount_input or '').replace('.', '', 1).isdigit():
@@ -2007,7 +2013,7 @@ def invoice_detail(request):
             first_booking = bookings[0] if bookings else None
 
             context = {
-                "inv_no": inv_no,                
+                "inv_no": inv_no,
                 "company_name": first_booking.company_name if first_booking else "",
                 "name": first_booking.name if first_booking else "",
                 "apply_gst_flag": bool(apply_gst_flag),
@@ -2031,15 +2037,26 @@ def invoice_detail(request):
             user = bookings[0]
             if not user:
                 return HttpResponse("No booking found", status=404)
-            
+
             start_point = user.start_point
             end_point = user.end_point
 
             price = safe_float(user.price) or 0.0
             with_gst = round(price * 0.10, 2) if user.company_name else 0.0
-            float_surcharge = round(price * 0.03, 2) if surcharge_flag else 0.0
-            toll = safe_float(toll_input) if toll_input else safe_float(user.toll) or 0.0            
-            
+
+            # Surcharge handling
+            if surcharge_input == "Yes":
+                surcharge_calc = round(price * 0.03, 2)
+                surcharge_display = surcharge_calc
+            elif surcharge_input:
+                surcharge_calc = 0.0
+                surcharge_display = surcharge_input
+            else:
+                surcharge_calc = 0.0
+                surcharge_display = 0.0
+
+            toll = safe_float(toll_input) if toll_input else safe_float(user.toll) or 0.0
+
             if (discount_input or '') == 'Yes':
                 discount = 0.0
             elif (discount_input or '').replace('.', '', 1).isdigit():
@@ -2049,12 +2066,12 @@ def invoice_detail(request):
             else:
                 discount = 0.0
 
-            total_price = price + with_gst + float_surcharge + toll - discount
+            total_price = price + with_gst + surcharge_calc + toll - discount
             float_paid = safe_float(user.paid) or 0.0
             balance = round(total_price - float_paid, 2)
 
             if user.cash and user.paid:
-                cash_balance = balance - (with_gst + float_surcharge)
+                cash_balance = balance - (with_gst + surcharge_calc)
                 template_name = "basecamp/html_email-invoice-cash.html"
                 context = {
                     "inv_no": inv_no, "name": user.name, "company_name": user.company_name,
@@ -2062,7 +2079,7 @@ def invoice_detail(request):
                     "contact": user.contact, "discount": discount, "email": email,
                     "pickup_date": user.pickup_date, "pickup_time": user.pickup_time,    
                     "start_point": start_point, "end_point": end_point, "invoice_date": today,
-                    "price": user.price, "with_gst": with_gst, "surcharge": float_surcharge,
+                    "price": user.price, "with_gst": with_gst, "surcharge": surcharge_display,
                     "total_price": total_price, "toll": toll, "balance": cash_balance, 
                     "paid": float_paid, "message": user.message, "no_of_passenger": user.no_of_passenger,
                     "no_of_baggage": user.no_of_baggage, "notice": user.notice, "street": user.street, "suburb": user.suburb,
@@ -2079,7 +2096,7 @@ def invoice_detail(request):
                 doubled_price = base_price * 2
                 doubled_paid = base_paid * 2  
                 doubled_with_gst = round(doubled_price * 0.10, 2) if user1.company_name else 0.0
-                doubled_surcharge = round(doubled_price * 0.03, 2) if surcharge_flag else 0.0
+                doubled_surcharge = round(doubled_price * 0.03, 2) if surcharge_input else 0.0
                 doubled_total = doubled_price + doubled_with_gst + doubled_surcharge + toll - discount
                 balance = round(doubled_total - doubled_paid, 2)
 
@@ -2102,7 +2119,7 @@ def invoice_detail(request):
                     "apply_gst_flag": bool(apply_gst_flag),
                     "contact": user.contact, "pickup_date": user.pickup_date, "pickup_time": user.pickup_time,  
                     "start_point": start_point, "end_point": end_point, "invoice_date": today,
-                    "price": user.price, "with_gst": with_gst, "surcharge": float_surcharge,
+                    "price": user.price, "with_gst": with_gst, "surcharge": surcharge_display,
                     "total_price": total_price, "toll": toll, "balance": balance, "discount": discount,
                     "paid": float_paid, "message": user.message, "no_of_passenger": user.no_of_passenger,
                     "no_of_baggage": user.no_of_baggage, "notice": user.notice, "street": user.street, "suburb": user.suburb,
