@@ -238,10 +238,7 @@
                                                 <p style="margin:0; font-size:14px; line-height:22px; margin-bottom:12px;">
                                                     Your driver or meeting point has changed. Please disregard the previous details — here are the latest ones to ensure everything goes smoothly.<br><br>
 
-													<!-- {% if cash %}
-														We kindly ask that you <span style="color: #eb7828">email us immediately</span> upon your arrival in Sydney 
-														and ensure that your mobile phone remains switched on<br><br>
-														Please note that the driver may not have a card machine available. We kindly ask you to prepare the cash in advance<br> -->
+													
 													{% if sms_reminder|default:False %}
 														The driver will meet you at the meeting point listed below
 														at your <strong>requested pickup time, {{ pickup_time }}</strong>, as scheduled.<br><br>
@@ -300,10 +297,7 @@
                                                 <p style="margin:0; font-size:14px; line-height:22px; margin-bottom:12px;">
                                                     Your driver or meeting point has changed. Please disregard the previous details — here are the latest ones to ensure everything goes smoothly.<br><br>
                                                 
-                                                    <!-- {% if cash %}
-														We kindly ask that you <span style="color: #eb7828">email us immediately</span> upon your arrival in Sydney 
-														and ensure that your mobile phone remains switched on<br><br>
-														Please note that the driver may not have a card machine available. We kindly ask you to prepare the cash in advance<br> -->
+                                                    
 													{% if sms_reminder|default:False %}
 														The driver will meet you at the <strong>meeting point listed below</strong> 
 														at your <strong>requested pickup time, {{ pickup_time }}</strong>, as scheduled.<br><br>
@@ -341,7 +335,7 @@
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
 													If there are any changes, you will be notified by email or SMS<br><br><br></p>
 
-											{% elif cruise %}
+											{% elif cruise|default:False %}
                                                 <p style="margin:0; font-size:16px; line-height:24px; font-weight:bold;">
                                                     ✨ Important Update:  
                                                 </p>
@@ -350,7 +344,7 @@
 													We kindly ask that you <span style="color: #eb7828">email us immediately</span> upon your arrival in Sydney 
 														and ensure that your mobile phone remains switched on<br><br>
 													
-													{% if cash %}														
+													{% if cash|default:False %}														
 														Please note that the driver may not have a card machine available. We kindly ask you to prepare the cash in advance<br>
 													{% endif %}
 													
@@ -377,7 +371,7 @@
 													and additional liabilities to other scheduled passengers, additional charge will apply<br>
 													More details >><a href="https://easygoshuttle.com.au/information">&nbsp;click here</a><br><br></p>
 
-													{% if cash %}
+													{% if cash|default:False %}
 														Please note that the driver may not have a card machine available. We kindly ask you to <span style="color: #eb7828; font-weight: bold">prepare the cash in advance</span><br><br>													
 													{% endif %}
 
