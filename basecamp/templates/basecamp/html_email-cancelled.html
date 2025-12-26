@@ -229,11 +229,28 @@
 										</tr>
 										<tr>
 											<td align="left" style="padding-top:28px;padding-left:0;">
-                                                <p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                    
-                                                    Thank you for your inquiry with EasyGo<br><br>
-                                                    Unfortunately, we are unavailable for the time frame you requested<br><br>
-                                                    My sincere apologies for any inconvenience this may have caused<br><br>
-                                                    However, we hope to assist you next time<br><br>	
+                                                <p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
+													Thank you for your inquiry with EasyGo.<br><br>
+
+													Unfortunately, we are unavailable for the time frame you requested:<br>
+
+													{% if pickup_date or pickup_time %}
+														Pickup:
+														{% if pickup_date %}{{ pickup_date }}{% endif %}
+														{% if pickup_time %} at {{ pickup_time }}{% endif %}<br>
+													{% endif %}
+
+													{% if return_pickup_date or return_pickup_time %}
+														Return:
+														{% if return_pickup_date %}{{ return_pickup_date }}{% endif %}
+														{% if return_pickup_time %} at {{ return_pickup_time }}{% endif %}<br>
+													{% endif %}
+
+													<br>
+													My sincere apologies for any inconvenience this may have caused.<br><br>
+													However, we hope to assist you next time.
+												</p>
+
 												<p style="Margin:0;font-size:13px; line-height:22px;Margin-bottom:12px;">
                                                     Best Regards,<br><br>
 												<span style="font-weight:bold; color: #eb7828">Easy</span><span style="font-weight:bold; color: blue">Go&nbsp;</span style="font-weight:bold">Airport Shuttle<br>	                                                          

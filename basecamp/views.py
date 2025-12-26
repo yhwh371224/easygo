@@ -1557,8 +1557,12 @@ def sending_email_first_detail(request):
                 
                 context = {
                     'name': user.name, 
-                    'email': user.email 
-                }
+                    'email': user.email,
+                    'pickup_date': user.pickup_date or "",
+                    'pickup_time': user.pickup_time or "",
+                    'return_pickup_date': user.return_pickup_date or "",
+                    'return_pickup_time': user.return_pickup_time or "", 
+                        }
 
                 handle_email_sending(request, user.email, subject, template_name, context)
                     
@@ -1641,7 +1645,11 @@ def sending_email_second_detail(request):
             
             context = {
                 'name': user.name, 
-                'email': user.email 
+                'email': user.email,
+                'pickup_date': user.pickup_date or "",
+                'pickup_time': user.pickup_time or "",
+                'return_pickup_date': user.return_pickup_date or "",
+                'return_pickup_time': user.return_pickup_time or "", 
             }
 
             handle_email_sending(request, user.email, subject, template_name, context)
