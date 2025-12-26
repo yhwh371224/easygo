@@ -8,6 +8,10 @@ def send_post_cancelled_email(instance):
     html_content = render_to_string("basecamp/html_email-cancelled.html", {
         'name': instance.name,
         'email': instance.email,
+        'pickup_date': instance.pickup_date or "",
+        'pickup_time': instance.pickup_time or "",
+        'return_pickup_date': instance.return_pickup_date or "",
+        'return_pickup_time': instance.return_pickup_time or "",
     })
     
     text_content = strip_tags(html_content)
