@@ -2272,48 +2272,90 @@ def email_dispatch_detail(request):
 
             # ✅ Gratitude For Payment
             if selected_option == "Gratitude For Payment":
-                original_price = float(user.price or 0)
+                # 기존 notice 확인
                 original_notice = (user.notice or "").strip()
                 has_payment_record = any(
                     keyword in original_notice
                     for keyword in ["===STRIPE===", "===PAYPAL===", "===Gratitude==="]
                 )
 
-                # 왕복 여부 처리
-                if user.return_pickup_time == 'x':
-                    full_price = original_price * 2
+                # Case 1: payment_amount exists
+                if payment_amount:
+                    try:
+                        paid_amount = float(payment_amount)
+                    except ValueError:
+                        paid_amount = float(user.price)
+
+                    # 첫 번째 예약에 먼저 적용
+                    first_price = float(user.price)
+                    user.paid = min(paid_amount, first_price)
+
+                    # notice 업데이트
+                    total_paid_text = f"===Gratitude=== Total Paid: ${int(paid_amount)}"
+                    if not has_payment_record:
+                        user.notice = f"{original_notice} | {total_paid_text}" if original_notice else total_paid_text
+
+                    # 공통 상태값
+                    user.reminder = True
+                    user.toll = ""
+                    user.cash = False
+                    user.pending = False
+                    user.save()
+
+                    remaining = paid_amount - user.paid
+
+                    # 왕복 → 남은 금액을 두 번째 예약에 적용
+                    if user.return_pickup_time == 'x':
+                        user1 = Post.objects.filter(email__iexact=email)[1]
+                        user1.paid = max(0, remaining)
+
+                        if not has_payment_record:
+                            user1.notice = total_paid_text
+
+                        user1.reminder = True
+                        user1.toll = ""
+                        user1.cash = False
+                        user1.pending = False
+                        user1.save()
+
+                # Case 2: payment_amount does NOT exist
                 else:
-                    full_price = original_price
+                    # 이미 price 가 편도 기준으로 저장돼 있으므로 그대로 paid 처리
+                    user.paid = float(user.price)
 
-                if user.email1:
-                    full_price += full_price * 0.1
+                    total_paid_text = f"===Gratitude=== Total Paid: ${int(user.price)}"
+                    if not has_payment_record:
+                        user.notice = f"{original_notice} | {total_paid_text}" if original_notice else total_paid_text
 
-                # ✅ notice 문구 (그대로 유지)
-                total_paid_text = f"===Gratitude=== Total Paid: ${int(full_price)}"
-                if not has_payment_record:
-                    user.notice = (
-                        f"{original_notice} | {total_paid_text}"
-                        if original_notice else total_paid_text
-                    )
+                    user.reminder = True
+                    user.toll = ""
+                    user.cash = False
+                    user.pending = False
+                    user.save()
 
-                # ✅ 실제 받은 금액 처리
-                try:
-                    paid_amount = float(payment_amount) if payment_amount else full_price
-                except ValueError:
-                    paid_amount = full_price
+                    if user.return_pickup_time == 'x':
+                        user1 = Post.objects.filter(email__iexact=email)[1]
+                        user1.paid = float(user1.price)
 
-                user.paid = paid_amount
-                user.reminder = True
-                user.toll = ""
-                user.cash = False
-                user.pending = False
-                user.save()
+                        if not has_payment_record:
+                            user1.notice = total_paid_text
 
+                        user1.reminder = True
+                        user1.toll = ""
+                        user1.cash = False
+                        user1.pending = False
+                        user1.save()
+
+                # 메일 템플릿용 context
                 context.update({
                     'pickup_date': user.pickup_date,
-                    'price': full_price,              # 전체 금액
-                    'payment_amount': paid_amount,    # 이번에 받은 금액
-                    'return_pickup_date': user.return_pickup_date if user else '',
+                    'price': (
+                        float(user.price) * 2
+                        if user.return_pickup_time == 'x'
+                        else float(user.price)
+                    ),
+                    'payment_amount': float(payment_amount) if payment_amount else '',
+                    'return_pickup_date': user.return_pickup_date if user.return_pickup_time == 'x' else '',
                 })
 
             # ✅ Multi-payment
