@@ -2299,7 +2299,7 @@ def email_dispatch_detail(request):
                     user.paid = min(paid_amount, first_price)
 
                     # notice 업데이트
-                    total_paid_text = f"===Gratitude=== Total Paid: ${int(paid_amount)}"
+                    total_paid_text = f"===Gratitude=== Total Paid: ${paid_amount}"
                     if not has_payment_record:
                         user.notice = f"{original_notice} | {total_paid_text}" if original_notice else total_paid_text
 
@@ -2331,7 +2331,7 @@ def email_dispatch_detail(request):
                     # 이미 price 가 편도 기준으로 저장돼 있으므로 그대로 paid 처리
                     user.paid = float(user.price)
 
-                    total_paid_text = f"===Gratitude=== Total Paid: ${int(user.price)}"
+                    total_paid_text = f"===Gratitude=== Total Paid: ${user.price}"
                     if not has_payment_record:
                         user.notice = f"{original_notice} | {total_paid_text}" if original_notice else total_paid_text
 
