@@ -319,7 +319,12 @@
 													<!-- We have received your full payment and greatly appreciate it. -->
 												<br></p><br>
 												{% elif cash %}	
-													<p style="Margin:0;font-size:12px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                  
+													<p style="Margin:0;font-size:12px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;"> 
+														The total cost for your booking is ${{ price }}
+															{% if toll %}
+																, (including toll fee)
+															{% endif %}
+															<br>                                                 
 														🚨  To finalise your booking with a cash payment, please reply to our reminder email before your travel date to reconfirm.
 															<br>
 															This helps us ensure that everything is arranged smoothly for your trip.
@@ -356,12 +361,6 @@
 													
 													</p><br>																
 												{% endif %}
-
-												<!-- For return trip -->	
-												<!-- {% if not return_pickup_time %}																	
-												<p style="Margin:0;font-size:13px;line-height:22px;margin-top:12px;Margin-bottom:12px;">
-													If you wish to book a return trip, click&nbsp;<a href="https://easygoshuttle.com.au/return_trip/">&raquo;&raquo;Book for return trip</a><br><br></p>
-												{% endif %} -->
 
 												<!-- If notice -->
 												{% if notice %}
