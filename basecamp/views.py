@@ -2275,7 +2275,7 @@ def email_dispatch_detail(request):
                         'direction': user_today.direction,
                         'cash': user_today.cash,
                         'cruise': user_today.cruise,
-                        'sms_reminder': True if user_today.contact else False
+                        'sms_reminder': user_today.sms_reminder 
                     })
 
             # ✅ Gratitude For Payment
