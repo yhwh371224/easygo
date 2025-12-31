@@ -238,7 +238,7 @@
 														We kindly ask that you <span style="color: #eb7828">email us immediately</span> upon your arrival in Sydney 
 														and ensure that your mobile phone remains switched on<br><br>
 														Please note that the driver may not have a card machine available. We kindly ask you to prepare the cash in advance<br>
-													{% elif sms_reminder|default:False %}
+													{% elif sms_reminder %}
 														The driver will meet you at the <strong>meeting point listed below</strong> 
 														at your <strong>requested pickup time, {{ pickup_time }}</strong>, as scheduled.<br><br>
 													{% else %}
@@ -294,7 +294,7 @@
 														We kindly ask that you <span style="color: #eb7828">email us immediately</span> upon your arrival in Sydney 
 														and ensure that your mobile phone remains switched on<br><br>
 														Please note that the driver may not have a card machine available. We kindly ask you to prepare the cash in advance<br>
-													{% elif sms_reminder|default:False %}
+													{% elif sms_reminder %}
 														The driver will meet you at the <strong>meeting point listed below</strong> 
 														at your <strong>requested pickup time, {{ pickup_time }}</strong>, as scheduled.<br><br>
 													{% else %}														
@@ -334,7 +334,7 @@
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
 													If there are any changes, you will be notified by email or SMS<br><br><br></p>
 
-											{% elif cruise|default:False %}
+											{% elif cruise %}
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
 													<br>
 													Please be ready at your scheduled pickup time of {{ pickup_time }}. <br>
@@ -354,7 +354,7 @@
 													</small><br>
 												</p>
 
-													{% if cash|default:False %}
+													{% if cash %}
 														We kindly ask that you <span style="color: #eb7828">email us immediately</span> upon your arrival in Sydney</span><br><br>
 														Please note that the driver may not have a card machine available. We kindly ask you to prepare the cash in advance<br>												
 													{% endif %}
