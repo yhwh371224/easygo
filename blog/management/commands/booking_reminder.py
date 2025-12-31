@@ -89,7 +89,7 @@ class Command(BaseCommand):
                 'suburb': booking_reminder.suburb,
                 'price': booking_reminder.price,
                 'reminder': booking_reminder.reminder,
-                'sms_reminder': booking_reminder.reminder,
+                'sms_reminder': booking_reminder.sms_reminder,
                 'meeting_point': booking_reminder.meeting_point,
                 'driver_name': driver.driver_name,
                 'driver_contact': driver.driver_contact,
