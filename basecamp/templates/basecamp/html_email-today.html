@@ -242,7 +242,6 @@
 														The driver will meet you at the <strong>meeting point listed below</strong> 
 														at your <strong>requested pickup time, {{ pickup_time }}</strong>, as scheduled.<br><br>
 													{% else %}
-														<!-- <span style="color: #eb7828">After landing, please check your email.</span> You will be notified of the meeting details via email or SMS.  -->
 														Once you have cleared customs, please contact the driver. 
 														This will help us estimate your arrival time at the meeting point, ensuring a smooth transition.<br><br>
 													{% endif %}
@@ -283,8 +282,7 @@
 														• Public pick-up (2 minutes area)<br><br>
 														• After exiting the arrivals hall, please follow the signs for “Rideshare & Pickup.” Once you reach the parking building (P7), continue following the signs for “Public Pickup.”<br><br>
 														• <a href="https://easygo.s3.ap-southeast-2.amazonaws.com/Intl_airport_map.webp">Map of the Public Pick-up Point</a><br>
-													{% endif %}
-													<!-- • Due to unforeseen circumstances, the above information may change. Please make sure to turn on your phone or check your email -->
+													{% endif %}									
 												</p>
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
 													If there are any changes, you will be notified by email or SMS<br><br><br></p>
@@ -299,8 +297,7 @@
 													{% elif sms_reminder|default:False %}
 														The driver will meet you at the <strong>meeting point listed below</strong> 
 														at your <strong>requested pickup time, {{ pickup_time }}</strong>, as scheduled.<br><br>
-													{% else %}
-														<!-- <span style="color: #eb7828">After landing, please check your email.</span> You will be notified of the meeting details via email or SMS.  -->
+													{% else %}														
 														Once you have collected your luggage, please contact the driver. 
 														This will help us estimate your arrival time at the meeting point, ensuring a smooth transition.<br><br>
 													{% endif %}
