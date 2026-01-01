@@ -268,6 +268,7 @@
 															• Please meet us **Accessible Pickup area**<br><br>
 															• The Accessible Pickup area is located outside McDonald's, which is on the Arrival A side of the terminal<br><br>
 															• <a href="https://easygo.s3.ap-southeast-2.amazonaws.com/mcdonalds.webp">Map of Accessible Pickup area</a><br>
+															• <a href="https://easygo.s3.ap-southeast-2.amazonaws.com/accessible_intl.webp">Photo of Accessible Pickup Signage</a><br>
 														{% elif meeting_point == "Rideshare" %}
 															• Rideshare<br><br>
 															• After exiting the arrivals hall, please follow the signs for “Rideshare & Pickup.” Once you reach the parking building (P7), continue following the signs for “Rideshare”<br><br>
@@ -319,17 +320,27 @@
 
 													{% if meeting_point %}
 														<strong>=== The meeting point ===</strong><br>
-														• {{ meeting_point }}<br><br>
-														• <a href="https://s3.ap-southeast-2.amazonaws.com/easygoshuttle.com.au/Domestic-T2-meeting-point.webp">Map of Shuttle bus bay</a><br>
-														• <a href="https://easygo.s3.ap-southeast-2.amazonaws.com/Express_pickup.webp">Domestic Terminal Map</a><br><br>
-														* If any passengers have difficulty walking or are elderly, please meet the driver at the **Accessible Pickup area** next to the public bus stop<br>
+														{% if meeting_point == "Accessible" %}
+															• Accessible Pickup area<br><br>
+															• Exit near Carousel 3, cross the zebra crossing, and stop at the disabled pickup bays on the left (next to the public bus stop)<br><br>
+															• <a href="https://easygo.s3.ap-southeast-2.amazonaws.com/accessbile_dom.webp">Photo of Accessible Pickup Signage</a><br>
+														{% elif meeting_point == "Shuttle Bus Bay" %}
+															• Shuttle Bus Bay No 4-7<br><br>
+															• After exiting the arrivals hall, please follow the signs for “Shuttle Bus Bay.”<br><br>
+															• <a href="https://s3.ap-southeast-2.amazonaws.com/easygoshuttle.com.au/Domestic-T2-meeting-point.webp">Map of Shuttle bus bay</a><br>															
+														{% else %}
+															• {{ meeting_point }}<br><br>
+															• After exiting the arrivals hall, please follow the signs for “Priority Pickup”<br><br>
+															• <a href="https://easygo.s3.ap-southeast-2.amazonaws.com/Express_pickup.webp">Domestic Terminal Map</a><br><br>																														
+														{% endif %}
+
 													{% else %}
 														<strong>=== The meeting point ===</strong><br>
 														• Express Pick-up<br><br>
-														• <a href="https://easygo.s3.ap-southeast-2.amazonaws.com/Express_pickup.webp">Domestic Terminal Map</a><br><br>	
-														* If any passengers have difficulty walking or are elderly, please meet the driver at the **Accessible Pickup area** next to the public bus stop<br>
+														• After exiting the arrivals hall, please follow the signs for “Express Pickup”<br><br>
+														• <a href="https://easygo.s3.ap-southeast-2.amazonaws.com/Express_pickup.webp">Domestic Terminal Map</a><br><br>
+														* If any passengers have difficulty walking or are elderly, please meet the driver at the <strong>Accessible Pickup area</strong> next to the public bus stop<br>
 													{% endif %}
-
 												</p>
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
 													If there are any changes, you will be notified by email or SMS<br><br><br></p>
