@@ -23,14 +23,16 @@ class Command(BaseCommand):
         ).exclude(
             Q(paid__isnull=False) & ~Q(paid__exact="")
         ).exclude(
-            paid__iexact="cash"
+            cash=True
+        ).exclude(
+            prepay=True
         )
 
         # 이메일 발송
         for notice in reminders:
             try:
                 html_content = render_to_string(
-                    "basecamp/html_email-reminder.html",
+                    "basecamp/html_email-payment-method.html",
                     {
                         "name": notice.name,
                         "email": notice.email,
@@ -59,4 +61,4 @@ class Command(BaseCommand):
                 # 실패해도 그냥 넘어감 (심플 버전)
                 continue
 
-        self.stdout.write(self.style.SUCCESS("Reminder emails sent."))
+        self.stdout.write(self.style.SUCCESS("Reminder method emails sent."))
