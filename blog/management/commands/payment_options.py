@@ -13,11 +13,9 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         today = date.today()
-        target_date = today - timedelta(days=2)
 
-        # 대상 예약 조회
         reminders = Post.objects.filter(
-            created__date=target_date,
+            pickup_date__gt=today,   # 🔥 미래 부킹만
             reminder=False,
             cancelled=False,
         ).exclude(
