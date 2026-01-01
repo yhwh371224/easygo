@@ -25,7 +25,7 @@ def build_event_data(instance):
     """Post instance로부터 Google Calendar event body 생성"""
     reminder_str = '!' if instance.reminder else ''
     cancelled_str = 'C' if instance.cancelled else ''
-    pending_str = '?' if instance.price == 'TBA' else ''
+    pending_str = '?' if instance.pending or instance.price == 'TBA' else ''
     pickup_time_str = instance.pickup_time or ''
     flight_number_str = instance.flight_number or ''
     start_point_str = instance.start_point or ''

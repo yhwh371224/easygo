@@ -2417,6 +2417,7 @@ def email_dispatch_detail(request):
                 user.cash = True
                 user.reminder = True
                 user.pending = False
+                user.cancelled = False
                 user.save()
 
             # ✅ Payment discrepancy

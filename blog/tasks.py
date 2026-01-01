@@ -211,6 +211,7 @@ def notify_user_payment_paypal(instance_id):
                 post.cash = False
                 post.reminder = True
                 post.pending = False
+                post.cancelled = False
                 post.discount = ""
 
                 original_notice = post.notice or ""
@@ -356,6 +357,7 @@ def notify_user_payment_stripe(instance_id):
                 post.cash = False
                 post.reminder = True
                 post.pending = False
+                post.cancelled = False
                 post.discount = ""
 
                 original_notice = post.notice or ""
