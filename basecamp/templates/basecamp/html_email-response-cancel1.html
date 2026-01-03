@@ -250,7 +250,7 @@
                                                     If you have already made any payments, we will process a full refund promptly. 
                                                     <br><br>
 
-													{% if remain_return_booking %}
+													{% if remain_return_booking and return_booking_date %}
 													• Please rest assured, your booking on {{ return_booking_date }} remains confirmed as scheduled.
 													<br><br>
 													{% endif %}
