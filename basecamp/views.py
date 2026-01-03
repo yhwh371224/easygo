@@ -2420,17 +2420,16 @@ def email_dispatch_detail(request):
                         user1.cancelled = True
                         user1.save()
                         context.update({'booking_date': user1.pickup_date, 
-                                        'return_booking_date': user1.return_pickup_date if user1.return_pickup_time == 'x' else None,
+                                        'return_booking_date': user1.return_pickup_date,
+                                        'remain_return_booking': remain_return_booking
                                     })
                     except IndexError:
                         pass
 
-                elif not user.return_pickup_time == 'x':
+                else:
                     user.cancelled = True
                     user.save()
-                    context.update({'booking_date': user.pickup_date, 
-                                    'return_booking_date': user.return_pickup_date if user.return_pickup_time == 'x' else None,
-                                })
+                    context.update({'booking_date': user.pickup_date})
 
                 # Apology SMS
                 if selected_option == "Apologies Cancellation of Booking" and user.contact:
