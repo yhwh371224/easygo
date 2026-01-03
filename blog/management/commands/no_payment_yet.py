@@ -3,6 +3,7 @@ from django.core.management.base import BaseCommand
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+from django.db.models import Q
 from blog.models import Post
 from main.settings import RECIPIENT_EMAIL
 
@@ -33,7 +34,9 @@ class Command(BaseCommand):
             bookings = Post.objects.filter(
                 pickup_date__range=(start_date, end_date),
                 cash=False,
-                cancelled=False
+                cancelled=False,
+            ).filter(
+                Q(paid__isnull=True) | Q(paid__exact="")
             )
 
             for booking in bookings:
