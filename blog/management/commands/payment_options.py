@@ -1,21 +1,21 @@
-from datetime import date, timedelta
 from django.core.management.base import BaseCommand
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.db.models import Q
 from django.conf import settings
+from django.utils import timezone
 from blog.models import Post
-
+from blog.sms_utils import send_sms_notice, send_whatsapp_template
 
 class Command(BaseCommand):
-    help = 'Send reminder email 2 days after booking if unpaid'
+    help = 'Send reminder email + SMS to all unpaid future bookings'
 
     def handle(self, *args, **options):
-        today = date.today()
+        now = timezone.now()
 
         reminders = Post.objects.filter(
-            pickup_date__gt=today,   # 🔥 미래 부킹만
+            pickup_date__gt=now,   # 미래 부킹만
             reminder=False,
             cancelled=False,
         ).exclude(
@@ -26,37 +26,45 @@ class Command(BaseCommand):
             prepay=True
         )
 
-        # 이메일 발송
         for notice in reminders:
             try:
+                # 1️⃣ 이메일 발송
                 html_content = render_to_string(
                     "basecamp/html_email-payment-method.html",
-                    {
-                        "name": notice.name,
-                        "email": notice.email,
-                    }
+                    {"name": notice.name, "email": notice.email}
                 )
                 text_content = strip_tags(html_content)
 
                 recipients = [addr for addr in [notice.email, notice.email1] if addr]
-                if not recipients:
-                    continue
+                if recipients:
+                    email = EmailMultiAlternatives(
+                        "Payment Method Reminder",
+                        text_content,
+                        settings.DEFAULT_FROM_EMAIL,
+                        recipients
+                    )
+                    email.attach_alternative(html_content, "text/html")
+                    email.send()
 
-                email = EmailMultiAlternatives(
-                    "Payment reminder",
-                    text_content,
-                    settings.DEFAULT_FROM_EMAIL,
-                    recipients
-                )
-                email.attach_alternative(html_content, "text/html")
-                email.send()
+                # 2️⃣ SMS 발송 
+                if notice.contact:
+                    sms_message = (
+                        f"EasyGo - Payment Method Reminder\n\n"
+                        f"Dear {notice.name},\n"
+                        f"We have sent you an email regarding your preferred payment method.\n"
+                        f"Please check the email and reply **via email only** to confirm.\n"
+                        f"Email: info@easygoshuttle.com.au"
+                    )
+                    send_sms_notice(notice.contact, sms_message)
 
-                # reminder 발송 완료 표시
+                    if notice.direction == 'Pickup from Intl Airport':
+                        send_whatsapp_template(notice.contact, user_name=notice.name)
+
+                # 3️⃣ pending 표시
                 notice.pending = True
                 notice.save()
 
-            except Exception:
-                # 실패해도 그냥 넘어감 (심플 버전)
-                continue
+            except Exception as e:
+                print(f"Failed to send email/SMS for {notice.email}: {e}")
 
-        self.stdout.write(self.style.SUCCESS("Reminder method emails sent."))
+        self.stdout.write(self.style.SUCCESS("Reminder emails + SMS sent."))
