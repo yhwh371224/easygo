@@ -2400,13 +2400,25 @@ def email_dispatch_detail(request):
 
             # ✅ Cancellation
             if selected_option in ["Cancellation of Booking", "Cancellation by Client", "Apologies Cancellation of Booking"]:
-                user.cancelled = True
-                user.is_confirmed = False
-                user.pending = False
-                user.save()
-                context.update({'booking_date': user.pickup_date, 
-                                'return_booking_date': user.return_pickup_date if user.return_pickup_time == 'x' else None,
-                            })
+                if user.return_pickup_time == 'x' and not remain_return_booking:
+                    try:
+                        user.cancelled = True
+                        user.save()
+                        context.update({'booking_date': user.pickup_date, 
+                                        'return_booking_date': user.return_pickup_date if user.return_pickup_time == 'x' else None,
+                                    })
+                        user1 = Post.objects.filter(email__iexact=user.email)[1]
+                        user1.cancelled = True
+                        user1.save()
+                    except IndexError:
+                        pass
+
+                elif not user.return_pickup_time == 'x':
+                    user.cancelled = True
+                    user.save()
+                    context.update({'booking_date': user.pickup_date, 
+                                    'return_booking_date': user.return_pickup_date if user.return_pickup_time == 'x' else None,
+                                })
 
                 # Apology SMS
                 if selected_option == "Apologies Cancellation of Booking" and user.contact:
@@ -2414,7 +2426,7 @@ def email_dispatch_detail(request):
                     send_sms_notice(user.contact, message)
                     send_whatsapp_template(user.contact, user.name)
 
-                if user.return_pickup_time == 'x':
+                if user.return_pickup_time == 'x' and not remain_return_booking:
                     try:
                         user1 = Post.objects.filter(email__iexact=user.email)[1]
                         user1.cancelled = True
