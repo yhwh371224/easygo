@@ -2412,6 +2412,14 @@ def email_dispatch_detail(request):
                     send_sms_notice(user.contact, message)
                     send_whatsapp_template(user.contact, user.name)
 
+                if user.return_pickup_time == 'x':
+                    try:
+                        user1 = Post.objects.filter(email__iexact=user.email)[1]
+                        user1.cancelled = True
+                        user1.save()
+                    except IndexError:
+                        pass
+
             # ✅ Cash Payment Confirmed
             if selected_option == "Cash Payment Confirmed":
                 user.cash = True
