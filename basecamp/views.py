@@ -2401,15 +2401,27 @@ def email_dispatch_detail(request):
             # ✅ Cancellation
             if selected_option in ["Cancellation of Booking", "Cancellation by Client", "Apologies Cancellation of Booking"]:
                 if user.return_pickup_time == 'x' and not remain_return_booking:
+                    user1 = Post.objects.filter(email__iexact=user.email)[1]
                     try:
                         user.cancelled = True
                         user.save()
                         context.update({'booking_date': user.pickup_date, 
                                         'return_booking_date': user.return_pickup_date if user.return_pickup_time == 'x' else None,
                                     })
-                        user1 = Post.objects.filter(email__iexact=user.email)[1]
+                        
                         user1.cancelled = True
                         user1.save()
+                    except IndexError:
+                        pass
+
+                elif user.return_pickup_time == 'x' and remain_return_booking:
+                    user1 = Post.objects.filter(email__iexact=user.email)[1]
+                    try:
+                        user1.cancelled = True
+                        user1.save()
+                        context.update({'booking_date': user1.pickup_date, 
+                                        'return_booking_date': user1.return_pickup_date if user1.return_pickup_time == 'x' else None,
+                                    })
                     except IndexError:
                         pass
 
