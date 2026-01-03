@@ -2176,7 +2176,7 @@ def email_dispatch_detail(request):
         selected_option = request.POST.get('selected_option')
         adjusted_pickup_time = request.POST.get('adjusted_pickup_time')
         payment_amount = request.POST.get('payment_amount')
-        cancel_date = request.POST.get('cancel_date')
+        remain_return_booking = request.POST.get('remain_return_booking') == 'on'
         wait_duration = request.POST.get('wait_duration')
         discount_price = request.POST.get('discount_price')
 
@@ -2245,7 +2245,7 @@ def email_dispatch_detail(request):
                 'name': user.name,
                 'adjusted_pickup_time': adjusted_pickup_time,
                 'payment_amount': payment_amount,
-                'cancel_date': cancel_date,
+                'remain_return_booking': remain_return_booking,
                 'wait_duration': wait_duration,
                 'discount_price': discount_price
             }
@@ -2404,7 +2404,9 @@ def email_dispatch_detail(request):
                 user.is_confirmed = False
                 user.pending = False
                 user.save()
-                context.update({'booking_date': user.pickup_date, 'return_booking_date': user.return_pickup_date if user.return_pickup_time == 'x' else None})
+                context.update({'booking_date': user.pickup_date, 
+                                'return_booking_date': user.return_pickup_date if user.return_pickup_time == 'x' else None,
+                            })
 
                 # Apology SMS
                 if selected_option == "Apologies Cancellation of Booking" and user.contact:
