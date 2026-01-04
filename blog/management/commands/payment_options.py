@@ -8,6 +8,7 @@ from django.utils import timezone
 from blog.models import Post
 from blog.sms_utils import send_sms_notice, send_whatsapp_template
 
+
 class Command(BaseCommand):
     help = 'Send reminder email + SMS to all unpaid future bookings'
 
@@ -47,17 +48,17 @@ class Command(BaseCommand):
                     email.send()
 
                 # 2️⃣ SMS 발송 
-                if notice.contact:
-                    sms_message = (
-                        f"EasyGo - Payment Method Reminder\n\n"
-                        f"Dear {notice.name},\n"
-                        f"We have sent you an email regarding your preferred payment method.\n"
-                        f"Please check the email and reply **via email only** to confirm.\n"
-                    )
-                    send_sms_notice(notice.contact, sms_message)
+                # if notice.contact:
+                #     sms_message = (
+                #         f"EasyGo - Payment Method Reminder\n\n"
+                #         f"Dear {notice.name},\n"
+                #         f"We have sent you an email regarding your preferred payment method.\n"
+                #         f"Please check the email and reply **via email only** to confirm.\n"
+                #     )
+                #     send_sms_notice(notice.contact, sms_message)
 
-                    if notice.direction == 'Pickup from Intl Airport':
-                        send_whatsapp_template(notice.contact, user_name=notice.name)
+                #     if notice.direction == 'Pickup from Intl Airport':
+                #         send_whatsapp_template(notice.contact, user_name=notice.name)
 
                 # 3️⃣ pending 표시
                 notice.pending = True
