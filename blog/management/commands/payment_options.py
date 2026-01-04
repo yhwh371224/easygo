@@ -53,7 +53,6 @@ class Command(BaseCommand):
                         f"Dear {notice.name},\n"
                         f"We have sent you an email regarding your preferred payment method.\n"
                         f"Please check the email and reply **via email only** to confirm.\n"
-                        f"Email: info@easygoshuttle.com.au"
                     )
                     send_sms_notice(notice.contact, sms_message)
 
