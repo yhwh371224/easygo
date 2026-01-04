@@ -52,3 +52,12 @@ amount = "280"
 payment = StripePayment.objects.create(name=name, email=email, amount=amount)
 
 notify_user_payment_stripe(payment.id)
+
+# pending = True 인 것들의 이름과 날짜 순으로 출력
+from blog.models import Post
+
+for name, pickup_date in Post.objects.filter(pending=True).order_by('pickup_date').values_list(
+    'name', 'pickup_date'
+):
+    print(name, pickup_date)
+
