@@ -63,7 +63,7 @@
 								<option disabled selected value="">Select your option...</option>
 								<option value="Gratitude For Payment">Gratitude For Payment</option>
 								<option value="Gratitude For (M) Payment">Gratitude For (M) Payment</option>
-								<option value="Cash Payment Confirmed">Cash Payment Confirmed</option>
+								<option value="Payment Confirmed">Payment Confirmed</option>
 								<option value="Payment Method">Payment Method</option>
 								<option value="PayPal Assistance">PayPal Assistance</option>
 								<option value="Meeting Point Inquiry">Meeting Point Inquiry</option>
@@ -103,6 +103,28 @@
 								Use only when pickup time has changed
 							</small>
 						</div>
+
+						<!-- Payment Method (RADIO) -->
+					<div class="mb-3 pb-1">
+						<label class="form-label">Payment cash/card method</label>
+
+						<div class="form-check">
+							<input class="form-check-input"
+								type="radio"
+								name="payment_method"
+								value="cash"
+								required>
+							<label class="form-check-label">Cash</label>
+						</div>
+
+						<div class="form-check">
+							<input class="form-check-input"
+								type="radio"
+								name="payment_method"
+								value="card">
+							<label class="form-check-label">Card</label>
+						</div>
+					</div>
 
 						<!-- Payment Amount -->
 						<div class="mb-3 pb-1">
