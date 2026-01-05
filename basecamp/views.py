@@ -2175,6 +2175,7 @@ def email_dispatch_detail(request):
         email = request.POST.get('email', '').strip()
         selected_option = request.POST.get('selected_option')
         adjusted_pickup_time = request.POST.get('adjusted_pickup_time')
+        payment_method = request.POST.get("payment_method")
         payment_amount = request.POST.get('payment_amount')
         remain_return_booking = request.POST.get('remain_return_booking') == 'on'
         wait_duration = request.POST.get('wait_duration')
@@ -2207,7 +2208,6 @@ def email_dispatch_detail(request):
         template_options = {
             "Gratitude For Payment": ("basecamp/html_email-response-payment-received.html", "Payment Received - EasyGo"),
             "Gratitude For (M) Payment": ("basecamp/html_email-response-multi-payment-received.html", "(M) Payment Received - EasyGo"),
-            "Cash Payment Confirmed": ("basecamp/html_email-response-cash-payment-confirmed.html", "Cash Payment Confirmed - EasyGo"),
             "Pickup Notice for Today": ("basecamp/html_email-today1.html", "Important Update for Today's Pickup - EasyGo "),
             "Payment Method": ("basecamp/html_email-response-payment.html", "Payment Method - EasyGo"),
             "PayPal Assistance": ("basecamp/html_email-response-payment-assistance.html", "PayPal Assistance - EasyGo"),
@@ -2236,233 +2236,243 @@ def email_dispatch_detail(request):
             "Booking delay 1": ("basecamp/html_email-booking-delay1.html", "Booking delay 1: EasyGo")
         }
 
-        # 5️⃣ Template 적용
-        if selected_option in template_options and user:
+        if selected_option in template_options:
             template_name, subject = template_options[selected_option]
 
-            context = {
-                'email': email,
-                'name': user.name,
-                'adjusted_pickup_time': adjusted_pickup_time,
-                'payment_amount': payment_amount,
-                'remain_return_booking': remain_return_booking,
-                'wait_duration': wait_duration,
-                'discount_price': discount_price
-            }
+        # 5️⃣ Template 적용
+        context = {
+            'email': email,
+            'name': user.name,
+            'adjusted_pickup_time': adjusted_pickup_time,
+            'payment_amount': payment_amount,
+            'remain_return_booking': remain_return_booking,
+            'wait_duration': wait_duration,
+            'discount_price': discount_price
+        }
 
-            if pickup_time_12h:
-                context['pickup_time_12h'] = pickup_time_12h
+        if pickup_time_12h:
+            context['pickup_time_12h'] = pickup_time_12h
 
-            # driver info
-            if hasattr(user, 'driver') and user.driver:
+        # driver info
+        if hasattr(user, 'driver') and user.driver:
+            context.update({
+                'driver': user.driver,
+                'driver_name': user.driver.driver_name,
+                'driver_contact': user.driver.driver_contact,
+                'driver_plate': user.driver.driver_plate,
+                'driver_car': user.driver.driver_car,
+            })
+
+        # 옵션별 특수 처리
+        # ✅ Pickup Notice Today
+        if selected_option == "Pickup Notice for Today":
+            today = date.today()
+            user_today = Post.objects.filter(email=email, pickup_date=today).first()
+            if user_today:
                 context.update({
-                    'driver': user.driver,
-                    'driver_name': user.driver.driver_name,
-                    'driver_contact': user.driver.driver_contact,
-                    'driver_plate': user.driver.driver_plate,
-                    'driver_car': user.driver.driver_car,
+                    'pickup_time': user_today.pickup_time,
+                    'meeting_point': user_today.meeting_point,
+                    'direction': user_today.direction,
+                    'cash': user_today.cash,
+                    'cruise': user_today.cruise,
+                    'sms_reminder': user_today.sms_reminder 
                 })
 
-            # 옵션별 특수 처리
-            # ✅ Pickup Notice Today
-            if selected_option == "Pickup Notice for Today":
-                today = date.today()
-                user_today = Post.objects.filter(email=email, pickup_date=today).first()
-                if user_today:
-                    context.update({
-                        'pickup_time': user_today.pickup_time,
-                        'meeting_point': user_today.meeting_point,
-                        'direction': user_today.direction,
-                        'cash': user_today.cash,
-                        'cruise': user_today.cruise,
-                        'sms_reminder': user_today.sms_reminder 
-                    })
+        # ✅ Gratitude For Payment
+        if selected_option == "Gratitude For Payment":
+            # 기존 notice 확인
+            original_notice = (user.notice or "").strip()
+            has_payment_record = any(
+                keyword in original_notice
+                for keyword in ["===STRIPE===", "===PAYPAL===", "===Gratitude==="]
+            )
 
-            # ✅ Gratitude For Payment
-            if selected_option == "Gratitude For Payment":
-                # 기존 notice 확인
-                original_notice = (user.notice or "").strip()
-                has_payment_record = any(
-                    keyword in original_notice
-                    for keyword in ["===STRIPE===", "===PAYPAL===", "===Gratitude==="]
-                )
+            # Case 1: payment_amount exists
+            if payment_amount:
+                try:
+                    paid_amount = float(payment_amount)
+                except ValueError:
+                    paid_amount = float(user.price)
 
-                # Case 1: payment_amount exists
-                if payment_amount:
-                    try:
-                        paid_amount = float(payment_amount)
-                    except ValueError:
-                        paid_amount = float(user.price)
+                # 첫 번째 예약에 먼저 적용
+                first_price = float(user.price)
+                user.paid = min(paid_amount, first_price)
 
-                    # 첫 번째 예약에 먼저 적용
-                    first_price = float(user.price)
-                    user.paid = min(paid_amount, first_price)
+                # notice 업데이트
+                total_paid_text = f"===Gratitude=== Total Paid: ${paid_amount}"
+                if not has_payment_record:
+                    user.notice = f"{original_notice} | {total_paid_text}" if original_notice else total_paid_text
 
-                    # notice 업데이트
-                    total_paid_text = f"===Gratitude=== Total Paid: ${paid_amount}"
-                    if not has_payment_record:
-                        user.notice = f"{original_notice} | {total_paid_text}" if original_notice else total_paid_text
-
-                    # 공통 상태값
-                    user.reminder = True
-                    user.toll = ""
-                    user.cash = False
-                    user.pending = False
-                    user.save()
-
-                    remaining = paid_amount - user.paid
-
-                    # 왕복 → 남은 금액을 두 번째 예약에 적용
-                    if user.return_pickup_time == 'x':
-                        user1 = Post.objects.filter(email__iexact=email)[1]
-                        user1.paid = max(0, remaining)
-
-                        if not has_payment_record:
-                            user1.notice = total_paid_text
-
-                        user1.reminder = True
-                        user1.toll = ""
-                        user1.cash = False
-                        user1.pending = False
-                        user1.save()
-
-                # Case 2: payment_amount does NOT exist
-                else:
-                    # 이미 price 가 편도 기준으로 저장돼 있으므로 그대로 paid 처리
-                    user.paid = float(user.price)
-
-                    total_paid_text = f"===Gratitude=== Total Paid: ${user.price}"
-                    if not has_payment_record:
-                        user.notice = f"{original_notice} | {total_paid_text}" if original_notice else total_paid_text
-
-                    user.reminder = True
-                    user.toll = ""
-                    user.cash = False
-                    user.pending = False
-                    user.save()
-
-                    if user.return_pickup_time == 'x':
-                        user1 = Post.objects.filter(email__iexact=email)[1]
-                        user1.paid = float(user1.price)
-
-                        if not has_payment_record:
-                            user1.notice = total_paid_text
-
-                        user1.reminder = True
-                        user1.toll = ""
-                        user1.cash = False
-                        user1.pending = False
-                        user1.save()
-
-                # 메일 템플릿용 context
-                context.update({
-                    'pickup_date': user.pickup_date,
-                    'price': (
-                        float(user.price) * 2
-                        if user.return_pickup_time == 'x'
-                        else float(user.price)
-                    ),
-                    'payment_amount': float(payment_amount) if payment_amount else '',
-                    'return_pickup_date': user.return_pickup_date if user.return_pickup_time == 'x' else '',
-                })
-
-            # ✅ Multi-payment
-            if selected_option == "Gratitude For (M) Payment":
-                posts = Post.objects.filter(email__iexact=user.email, pickup_date__gte=date.today()).order_by('pickup_date')
-                if posts.exists():
-                    form_price_input = payment_amount
-                    try:
-                        form_price = float(form_price_input) if form_price_input else None
-                    except ValueError:
-                        form_price = None
-
-                    total_paid_applied = 0.0
-                    for post in posts:
-                        post_price = float(post.price or 0)
-                        if form_price is not None and form_price > 0:
-                            applied = min(post_price, form_price)
-                            post.paid = applied
-                            form_price -= applied
-                        elif form_price is None:
-                            post.paid = post_price
-                        else:
-                            post.paid = 0.0
-
-                        post.reminder = True
-                        post.toll = ""
-                        post.cash = False
-                        post.pending = False
-                        post.discount = ""
-                        post.save()
-                        total_paid_applied += post.paid
-
-                    context.update({'price': int(total_paid_applied)})
-
-            # ✅ Cancellation
-            if selected_option in ["Cancellation of Booking", "Cancellation by Client", "Apologies Cancellation of Booking"]:
-                if user.return_pickup_time == 'x' and not remain_return_booking:
-                    user1 = Post.objects.filter(email__iexact=user.email)[1]
-                    try:
-                        user.cancelled = True
-                        user.save()
-                        context.update({'booking_date': user.pickup_date, 
-                                        'return_booking_date': user.return_pickup_date if user.return_pickup_time == 'x' else None,
-                                    })
-                        
-                        user1.cancelled = True
-                        user1.save()
-                    except IndexError:
-                        pass
-
-                elif user.return_pickup_time == 'x' and remain_return_booking:
-                    user1 = Post.objects.filter(email__iexact=user.email)[1]
-                    try:
-                        user1.cancelled = True
-                        user1.save()
-                        context.update({'booking_date': user1.pickup_date, 
-                                        'return_booking_date': user1.return_pickup_date,
-                                        'remain_return_booking': remain_return_booking
-                                    })
-                    except IndexError:
-                        pass
-
-                else:
-                    user.cancelled = True
-                    user.save()
-                    context.update({'booking_date': user.pickup_date})
-
-                # Apology SMS
-                if selected_option == "Apologies Cancellation of Booking" and user.contact:
-                    message = f"EasyGo - Urgent notice!\n\nDear {user.name}, We have sent an urgent email. Please check your email.\nReply only via email >> info@easygoshuttle.com.au"
-                    send_sms_notice(user.contact, message)
-                    send_whatsapp_template(user.contact, user.name)
-
-                if user.return_pickup_time == 'x' and not remain_return_booking:
-                    try:
-                        user1 = Post.objects.filter(email__iexact=user.email)[1]
-                        user1.cancelled = True
-                        user1.save()
-                    except IndexError:
-                        pass
-
-            # ✅ Cash Payment Confirmed
-            if selected_option == "Cash Payment Confirmed":
-                user.cash = True
+                # 공통 상태값
                 user.reminder = True
+                user.toll = ""
+                user.cash = False
                 user.pending = False
-                user.cancelled = False
                 user.save()
 
-            # ✅ Payment discrepancy
-            if selected_option == "Payment discrepancy" and user:
-                diff = round(float(user.price) - float(user.paid), 2)
-                if diff > 0:
-                    user.toll = "short payment"
-                    context.update({'price': user.price, 'paid': user.paid, 'diff': f"{diff:.2f}"})
-                    user.save()
+                remaining = paid_amount - user.paid
 
-            # 6️⃣ Send email
-            handle_email_sending(request, email, subject, template_name, context, getattr(user, 'email1', None))
+                # 왕복 → 남은 금액을 두 번째 예약에 적용
+                if user.return_pickup_time == 'x':
+                    user1 = Post.objects.filter(email__iexact=email)[1]
+                    user1.paid = max(0, remaining)
+
+                    if not has_payment_record:
+                        user1.notice = total_paid_text
+
+                    user1.reminder = True
+                    user1.toll = ""
+                    user1.cash = False
+                    user1.pending = False
+                    user1.save()
+
+            # Case 2: payment_amount does NOT exist
+            else:
+                # 이미 price 가 편도 기준으로 저장돼 있으므로 그대로 paid 처리
+                user.paid = float(user.price)
+
+                total_paid_text = f"===Gratitude=== Total Paid: ${user.price}"
+                if not has_payment_record:
+                    user.notice = f"{original_notice} | {total_paid_text}" if original_notice else total_paid_text
+
+                user.reminder = True
+                user.toll = ""
+                user.cash = False
+                user.pending = False
+                user.save()
+
+                if user.return_pickup_time == 'x':
+                    user1 = Post.objects.filter(email__iexact=email)[1]
+                    user1.paid = float(user1.price)
+
+                    if not has_payment_record:
+                        user1.notice = total_paid_text
+
+                    user1.reminder = True
+                    user1.toll = ""
+                    user1.cash = False
+                    user1.pending = False
+                    user1.save()
+
+            # 메일 템플릿용 context
+            context.update({
+                'pickup_date': user.pickup_date,
+                'price': (
+                    float(user.price) * 2
+                    if user.return_pickup_time == 'x'
+                    else float(user.price)
+                ),
+                'payment_amount': float(payment_amount) if payment_amount else '',
+                'return_pickup_date': user.return_pickup_date if user.return_pickup_time == 'x' else '',
+            })
+
+        # ✅ Multi-payment
+        if selected_option == "Gratitude For (M) Payment":
+            posts = Post.objects.filter(email__iexact=user.email, pickup_date__gte=date.today()).order_by('pickup_date')
+            if posts.exists():
+                form_price_input = payment_amount
+                try:
+                    form_price = float(form_price_input) if form_price_input else None
+                except ValueError:
+                    form_price = None
+
+                total_paid_applied = 0.0
+                for post in posts:
+                    post_price = float(post.price or 0)
+                    if form_price is not None and form_price > 0:
+                        applied = min(post_price, form_price)
+                        post.paid = applied
+                        form_price -= applied
+                    elif form_price is None:
+                        post.paid = post_price
+                    else:
+                        post.paid = 0.0
+
+                    post.reminder = True
+                    post.toll = ""
+                    post.cash = False
+                    post.pending = False
+                    post.discount = ""
+                    post.save()
+                    total_paid_applied += post.paid
+
+                context.update({'price': int(total_paid_applied)})
+
+        # ✅ Cancellation
+        if selected_option in ["Cancellation of Booking", "Cancellation by Client", "Apologies Cancellation of Booking"]:
+            if user.return_pickup_time == 'x' and not remain_return_booking:
+                user1 = Post.objects.filter(email__iexact=user.email)[1]
+                try:
+                    user.cancelled = True
+                    user.save()
+                    context.update({'booking_date': user.pickup_date, 
+                                    'return_booking_date': user.return_pickup_date if user.return_pickup_time == 'x' else None,
+                                })
+                    
+                    user1.cancelled = True
+                    user1.save()
+                except IndexError:
+                    pass
+
+            elif user.return_pickup_time == 'x' and remain_return_booking:
+                user1 = Post.objects.filter(email__iexact=user.email)[1]
+                try:
+                    user1.cancelled = True
+                    user1.save()
+                    context.update({'booking_date': user1.pickup_date, 
+                                    'return_booking_date': user1.return_pickup_date,
+                                    'remain_return_booking': remain_return_booking
+                                })
+                except IndexError:
+                    pass
+
+            else:
+                user.cancelled = True
+                user.save()
+                context.update({'booking_date': user.pickup_date})
+
+            # Apology SMS
+            if selected_option == "Apologies Cancellation of Booking" and user.contact:
+                message = f"EasyGo - Urgent notice!\n\nDear {user.name}, We have sent an urgent email. Please check your email.\nReply only via email >> info@easygoshuttle.com.au"
+                send_sms_notice(user.contact, message)
+                send_whatsapp_template(user.contact, user.name)
+
+            if user.return_pickup_time == 'x' and not remain_return_booking:
+                try:
+                    user1 = Post.objects.filter(email__iexact=user.email)[1]
+                    user1.cancelled = True
+                    user1.save()
+                except IndexError:
+                    pass
+
+        # ✅ Payment discrepancy
+        if selected_option == "Payment discrepancy" and user:
+            diff = round(float(user.price) - float(user.paid), 2)
+            if diff > 0:
+                user.toll = "short payment"
+                context.update({'price': user.price, 'paid': user.paid, 'diff': f"{diff:.2f}"})
+                user.save()
+
+        # ✅ Payment Confirmed
+        if selected_option == "Payment Confirmed":
+            if payment_method == "cash":
+                user.cash = True
+                user.prepay = False
+                template_name = "basecamp/html_email-response-cash-payment-confirmed.html"
+                subject = "Cash Payment Confirmed - EasyGo"
+            elif payment_method == "card":
+                user.cash = False
+                user.prepay = True
+                template_name = "basecamp/html_email-response-card-payment-confirmed.html"
+                subject = "Card Payment Confirmed - EasyGo"
+
+            user.reminder = True
+            user.pending = False
+            user.cancelled = False
+            user.save()           
+
+        # 6️⃣ Send email
+        handle_email_sending(request, email, subject, template_name, context, getattr(user, 'email1', None))
 
         return render(request, 'basecamp/inquiry_done.html')
 
