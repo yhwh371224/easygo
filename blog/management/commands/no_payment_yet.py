@@ -29,7 +29,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         try:
             start_date = date.today() + timedelta(days=1)
-            end_date = start_date + timedelta(days=7)
+            end_date = start_date + timedelta(days=14)
 
             bookings = Post.objects.filter(
                 pickup_date__range=(start_date, end_date),
@@ -45,7 +45,7 @@ class Command(BaseCommand):
                 # ----------------------------
                 if not booking.paid:
                     days_difference = (booking.pickup_date - start_date).days
-                    if days_difference in [0, 1, 2]:
+                    if days_difference in [0, 1, 2, 3]:
                         email_subject = "Urgent notice for payment"
                         template = "basecamp/html_email-nopayment-today.html" \
                             if not booking.cash \
