@@ -23,7 +23,7 @@ class Command(BaseCommand):
         try:
             today = date.today()
             start_date = today
-            end_date = today + timedelta(days=7)
+            end_date = today + timedelta(days=21)
 
             bookings = Post.objects.filter(
                 pickup_date__range=(start_date, end_date)

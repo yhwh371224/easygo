@@ -60,3 +60,4 @@ for name, contact, pickup_date in Post.objects.filter(pending=True).order_by('pi
     'name', 'contact', 'pickup_date'
 ):
     print(name, contact, pickup_date)
+
