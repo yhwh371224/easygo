@@ -2469,7 +2469,16 @@ def email_dispatch_detail(request):
             user.reminder = True
             user.pending = False
             user.cancelled = False
-            user.save()           
+            user.save()      
+
+            if user.return_pickup_time == 'x':
+                user1 = Post.objects.filter(email__iexact=user.email)[1]
+                user1.cash = True if payment_method == "cash" else False
+                user1.prepay = True if payment_method == "card" else False
+                user1.reminder = True
+                user1.pending = False
+                user1.cancelled = False
+                user1.save()     
 
         # 6️⃣ Send email
         handle_email_sending(request, email, subject, template_name, context, getattr(user, 'email1', None))
