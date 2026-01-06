@@ -54,10 +54,12 @@ payment = StripePayment.objects.create(name=name, email=email, amount=amount)
 notify_user_payment_stripe(payment.id)
 
 # pending = True 인 것들의 이름과 날짜 순으로 출력
+from django.utils import timezone
 from blog.models import Post
 
-for name, contact, pickup_date in Post.objects.filter(pending=True).order_by('pickup_date').values_list(
-    'name', 'contact', 'pickup_date'
-):
-    print(name, contact, pickup_date)
+now = timezone.now()
 
+for name, pickup_date, email in Post.objects.filter(pending=True, pickup_date__gte=now).order_by('pickup_date').values_list(
+    'name', 'pickup_date', 'email'
+):
+    print(name, pickup_date, email)
