@@ -6,6 +6,9 @@ from django.utils.html import strip_tags
 from django.db.models import Q
 from blog.models import Post
 from main.settings import RECIPIENT_EMAIL
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
@@ -26,37 +29,35 @@ class Command(BaseCommand):
                 return f"{booking.pickup_date} & {booking.return_pickup_date}"
         return str(booking.pickup_date)
 
-    def handle(self, *args, **options):
-        try:
-            start_date = date.today() + timedelta(days=1)
-            end_date = start_date + timedelta(days=14)
+    def handle(self, *args, **options):        
+        start_date = date.today() + timedelta(days=1)
+        end_date = start_date + timedelta(days=14)
 
-            bookings = Post.objects.filter(
-                pickup_date__range=(start_date, end_date),
-                cash=False,
-                cancelled=False,
-            ).filter(
-                Q(paid__isnull=True) | Q(paid__exact="")
-            )
+        bookings = Post.objects.filter(
+            pickup_date__range=(start_date, end_date),
+            cash=False,
+            cancelled=False,
+        ).filter(
+            Q(paid__isnull=True) | Q(paid__exact="")
+        )
 
-            for booking in bookings:
+        for booking in bookings:
+            display_date = self.get_display_date(booking)  # 먼저 계산
+
+            try: 
                 # ----------------------------
                 # 1. 결제 미완료 메일
                 # ----------------------------
                 if not booking.paid:
                     days_difference = (booking.pickup_date - start_date).days
-                    if days_difference in [0, 1, 2, 3]:
+                    if days_difference <= 2:
                         email_subject = "Urgent notice for payment"
-                        template = "basecamp/html_email-nopayment-today.html" \
-                            if not booking.cash \
-                            else "basecamp/html_email-nopayment-today-1.html"
+                        template = "basecamp/html_email-nopayment-today.html" 
+                            
                     else:
                         email_subject = "Payment notice"
-                        template = "basecamp/html_email-nopayment.html" \
-                            if not booking.cash \
-                            else "basecamp/html_email-nopayment-1.html"
+                        template = "basecamp/html_email-nopayment.html"                             
 
-                    display_date = self.get_display_date(booking)
                     self.send_email(
                         email_subject,
                         template,
@@ -94,8 +95,11 @@ class Command(BaseCommand):
                             },
                             [booking.email, RECIPIENT_EMAIL]
                         )
+            
+            except Exception as e:
+                logger.error(f"Failed to send email for booking {booking.id} ({booking.email}): {e}")
+                self.stdout.write(self.style.ERROR(f"Failed to send email for {booking.email}: {e}"))
 
-            self.stdout.write(self.style.SUCCESS('No_payment_yet emailed successfully'))
+        self.stdout.write(self.style.SUCCESS('No_payment_yet emailed successfully'))
 
-        except Exception as e:
-            self.stdout.write(self.style.ERROR(f'Failed to send no_payment_yet: {str(e)}'))
+
