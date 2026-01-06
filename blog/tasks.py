@@ -158,12 +158,14 @@ def notify_user_payment_paypal(instance_id):
         try:
             raw_amount = float(instance.amount or 0)
             amount = round(raw_amount / 1.03, 2)
+            valid_amount = True
         except (ValueError, TypeError):
-            return
+            amount = 0.0
+            valid_amount = False  # DB 업데이트는 하지 않음
          
         recipient_emails = set()
 
-        if posts.exists():
+        if posts.exists() and valid_amount:
             # 전체 미납액 계산 
             total_balance = 0.0
             for post in posts:
@@ -303,12 +305,15 @@ def notify_user_payment_stripe(instance_id):
         try:
             raw_amount = float(instance.amount or 0)
             amount = round(raw_amount, 2)
+            valid_amount = True
         except (ValueError, TypeError):
-            return
+            raw_amount = 0
+            amount = 0.0
+            valid_amount = False
         
         recipient_emails = set()
 
-        if posts.exists():
+        if posts.exists() and valid_amount:
             # 전체 미납액 계산
             total_balance = 0.0
             for post in posts:
