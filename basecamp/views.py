@@ -2290,41 +2290,62 @@ def email_dispatch_detail(request):
             # Case 1: payment_amount exists
             if payment_amount:
                 try:
-                    paid_amount = float(payment_amount)
+                    paid_amount = float(str(payment_amount).replace(',', '').strip())
                 except ValueError:
                     paid_amount = float(user.price)
 
-                # 첫 번째 예약에 먼저 적용
-                first_price = float(user.price)
-                user.paid = min(paid_amount, first_price)
-
-                # notice 업데이트
-                total_paid_text = f"===Gratitude=== Total Paid: ${paid_amount}"
-                if not has_payment_record:
-                    user.notice = f"{original_notice} | {total_paid_text}" if original_notice else total_paid_text
-
-                # 공통 상태값
-                user.reminder = True
-                user.toll = ""
-                user.cash = False
-                user.pending = False
-                user.save()
-
-                remaining = paid_amount - user.paid
-
-                # 왕복 → 남은 금액을 두 번째 예약에 적용
+                # 왕복인지 확인
                 if user.return_pickup_time == 'x':
+                    # 두 번째 예약 먼저 적용
                     user1 = Post.objects.filter(email__iexact=email)[1]
-                    user1.paid = max(0, remaining)
+                    first_price_user1 = float(user1.price)
+                    user1.paid = min(paid_amount, first_price_user1)
+                    remaining = paid_amount - user1.paid
 
+                    # notice 업데이트
+                    total_paid_text = f"===Gratitude=== Total Paid: ${paid_amount}"
                     if not has_payment_record:
                         user1.notice = total_paid_text
 
+                    # 상태값
                     user1.reminder = True
                     user1.toll = ""
                     user1.cash = False
                     user1.pending = False
                     user1.save()
+
+                    # 첫 번째 예약에 남은 금액 적용
+                    first_price_user = float(user.price)
+                    user.paid = min(remaining, first_price_user)
+
+                    if not has_payment_record:
+                        original_notice = user.notice or ""
+                        user.notice = f"{original_notice} | {total_paid_text}" if original_notice else total_paid_text
+
+                    # 공통 상태값
+                    user.reminder = True
+                    user.toll = ""
+                    user.cash = False
+                    user.pending = False
+                    user.save()
+
+                else:
+                    # 왕복 아님 → user에만 적용
+                    first_price_user = float(user.price)
+                    user.paid = min(paid_amount, first_price_user)
+
+                    total_paid_text = f"===Gratitude=== Total Paid: ${paid_amount}"
+                    if not has_payment_record:
+                        original_notice = user.notice or ""
+                        user.notice = f"{original_notice} | {total_paid_text}" if original_notice else total_paid_text
+
+                    # 공통 상태값
+                    user.reminder = True
+                    user.toll = ""
+                    user.cash = False
+                    user.pending = False
+                    user.save()
+
 
             # Case 2: payment_amount does NOT exist
             else:
