@@ -25,10 +25,8 @@ class Command(BaseCommand):
             cash=True
         ).exclude(
             prepay=True
-        ).exclude(
-            pending=True
         )
-
+        
         for notice in reminders:
             try:
                 # 1️⃣ 이메일 발송
