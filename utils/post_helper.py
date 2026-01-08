@@ -27,7 +27,7 @@ def send_post_cancelled_email(instance):
 
 def send_missing_direction_email(instance):
     subject = "Booking with Flight Number but Missing Direction"
-    template = "basecamp/html_email-missing-direction.html"
+    template = "basecamp/html_email-missing-flight-contact.html"
 
     html_content = render_to_string(template, {
         'name': instance.name,
