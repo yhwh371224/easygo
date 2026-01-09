@@ -144,147 +144,145 @@ def clean_float(value):
 @shared_task
 def notify_user_payment_paypal(instance_id):
     instance = PaypalPayment.objects.get(id=instance_id)
+    
+    name = (instance.name or "").strip()
+    email = instance.email.strip()
 
-    if instance.name:
-        posts = Post.objects.filter(
-            (
-                Q(name__iexact=instance.name.strip()) |
-                Q(email__iexact=instance.email.strip()) |
-                Q(email1__iexact=instance.email.strip())
-            ),
-            pickup_date__gte=timezone.now().date()
-        ).order_by('pickup_date')
+    posts = Post.objects.filter(
+        Q(email__iexact=email) |
+        Q(email1__iexact=email) |
+        (Q(name__iexact=name) if name else Q())
+    ).order_by('pickup_date')
 
-        try:
-            raw_amount = float(instance.amount or 0)
-            amount = round(raw_amount / 1.03, 2)
-            valid_amount = True
-        except (ValueError, TypeError):
-            amount = 0.0
-            valid_amount = False  # DB 업데이트는 하지 않음
-         
-        recipient_emails = set()
+    try:
+        raw_amount = float(instance.amount or 0)
+        amount = round(raw_amount / 1.03, 2)
+        valid_amount = True
+    except (ValueError, TypeError):
+        amount = 0.0
+        valid_amount = False  # DB 업데이트는 하지 않음
+        
+    recipient_emails = set()
 
-        if posts.exists() and valid_amount:
-            # 전체 미납액 계산 
-            total_balance = 0.0
-            for post in posts:
-                try:
-                    price = float(post.price or 0)
-                except (ValueError, TypeError):
-                    price = 0.0
+    if posts:
+        # 전체 미납액 계산 
+        total_balance = 0.0
+        for post in posts:
+            try:
+                price = float(post.price or 0)
+            except (ValueError, TypeError):
+                price = 0.0
 
-                try:
-                    paid = float(post.paid)
-                except (ValueError, TypeError):
-                    paid = 0.0
-                balance = round(price - paid, 2)
+            try:
+                paid = float(post.paid)
+            except (ValueError, TypeError):
+                paid = 0.0
+            balance = round(price - paid, 2)
 
-                if balance > 0:
-                    total_balance += balance
+            if balance > 0:
+                total_balance += balance
 
-            remaining_amount = amount
+        remaining_amount = amount
 
-            for post in posts:
-                try:
-                    price = float(post.price or 0)
-                except (ValueError, TypeError):
-                    price = 0.0
+        for post in posts:
+            try:
+                price = float(post.price or 0)
+            except (ValueError, TypeError):
+                price = 0.0
 
-                try:
-                    paid = float(post.paid or 0)
-                except (ValueError, TypeError):
-                    paid = 0.0
+            try:
+                paid = float(post.paid or 0)
+            except (ValueError, TypeError):
+                paid = 0.0
 
-                balance = round(price - paid, 2)
+            balance = round(price - paid, 2)
 
-                if balance <= 0:
-                    continue  # 이미 전액 결제된 예약 건너뜀
+            if balance <= 0:
+                continue  # 이미 전액 결제된 예약 건너뜀
 
-                if remaining_amount >= balance:
-                    paid_new = price
-                    remaining_amount -= balance
-                else:
-                    paid_new = paid + remaining_amount
-                    remaining_amount = 0.0
-
-                post.paid = clean_float(paid_new)
-                post.toll = "" if paid_new >= price else "short payment"
-                post.cash = False
-                post.reminder = True
-                post.pending = False
-                post.cancelled = False
-                post.discount = ""
-
-                original_notice = post.notice or ""
-                notice_parts = [original_notice.strip()]
-                new_notice_entry = f"===PAYPAL=== paid: ${amount:.2f}"
-
-                if new_notice_entry not in original_notice:
-                    notice_parts.append(new_notice_entry)
-                    post.notice = " | ".join(filter(None, notice_parts)).strip()
-
-                post.save()
-
-                recipient_emails.update([post.email, post.email1])
-
-                if remaining_amount <= 0:
-                    break
-
-            remaining_balance_after_payment = total_balance - amount
-
-            # Check if no money was applied (means: all bookings were already paid)
-            if remaining_amount == amount:
-                # Notify admin (you)
-                admin_notice = f'''
-            ⚠️ PayPal Overpayment Detected
-
-            Name: {instance.name}
-            Email: {instance.email}
-            Paid: ${amount:.2f}
-
-            No bookings were updated because all are already paid in full.
-            Please check if refund or future booking credit is needed.
-                '''
-                send_mail(
-                    subject="⚠️ PayPal Overpayment Alert - EasyGo",
-                    message=admin_notice,
-                    from_email=DEFAULT_FROM_EMAIL,
-                    recipient_list=[RECIPIENT_EMAIL],  # only to you
-                )
-
-            recipient_list = [email for email in recipient_emails if email] + [RECIPIENT_EMAIL]
-
-            if remaining_balance_after_payment <= 0:
-                html_content = render_to_string(
-                    "basecamp/html_email-payment-success.html",
-                    {
-                        'name': instance.name,
-                        'email': instance.email,
-                        'amount': amount,
-                        'raw_amount': raw_amount
-                    }
-                )
+            if remaining_amount >= balance:
+                paid_new = price
+                remaining_amount -= balance
             else:
-                html_content = render_to_string(
-                    "basecamp/html_email-response-discrepancy.html",
-                    {
-                        'name': instance.name,
-                        'price': round(total_balance, 2),
-                        'paid': round(amount, 2),
-                        'diff': round(remaining_balance_after_payment, 2)
-                    }
-                )
+                paid_new = paid + remaining_amount
+                remaining_amount = 0.0
 
-            payment_send_email("Payment - EasyGo", html_content, recipient_list)
+            post.paid = clean_float(paid_new)
+            post.toll = "" if paid_new >= price else "short payment"
+            post.cash = False
+            post.reminder = True
+            post.pending = False
+            post.cancelled = False
+            post.discount = ""
 
+            original_notice = post.notice or ""
+            notice_parts = [original_notice.strip()]
+            new_notice_entry = f"===PAYPAL=== paid: ${amount:.2f}"
+
+            if new_notice_entry not in original_notice:
+                notice_parts.append(new_notice_entry)
+                post.notice = " | ".join(filter(None, notice_parts)).strip()
+
+            post.save()
+
+            recipient_emails.update([post.email, post.email1])
+
+            if remaining_amount <= 0:
+                break
+
+        remaining_balance_after_payment = total_balance - amount
+
+        # Check if no money was applied (means: all bookings were already paid)
+        if remaining_amount == amount:
+            admin_notice = f'''
+        ⚠️ PayPal Overpayment Detected
+
+        Name: {instance.name}
+        Email: {instance.email}
+        Paid: ${amount:.2f}
+
+        No bookings were updated because all are already paid in full.
+        Please check if refund or future booking credit is needed.
+            '''
+            send_mail(
+                subject="⚠️ PayPal Overpayment Alert - EasyGo",
+                message=admin_notice,
+                from_email=DEFAULT_FROM_EMAIL,
+                recipient_list=[RECIPIENT_EMAIL],  # only to you
+            )
+
+        recipient_list = [email for email in recipient_emails if email] + [RECIPIENT_EMAIL]
+
+        if remaining_balance_after_payment <= 0:
+            html_content = render_to_string(
+                "basecamp/html_email-payment-success.html",
+                {
+                    'name': instance.name,
+                    'email': instance.email,
+                    'amount': amount,
+                    'raw_amount': raw_amount
+                }
+            )
         else:
             html_content = render_to_string(
-                "basecamp/html_email-noIdentity.html",
-                {'name': instance.name, 'email': instance.email, 'amount': amount}
+                "basecamp/html_email-response-discrepancy.html",
+                {
+                    'name': instance.name,
+                    'price': round(total_balance, 2),
+                    'paid': round(amount, 2),
+                    'diff': round(remaining_balance_after_payment, 2)
+                }
             )
-            recipient_list = [email for email in [instance.email, RECIPIENT_EMAIL] if email]
-            payment_send_email("Payment - EasyGo", html_content, recipient_list)
+
+        payment_send_email("Payment - EasyGo", html_content, recipient_list)
+
+    else:
+        html_content = render_to_string(
+            "basecamp/html_email-noIdentity.html",
+            {'name': instance.name, 'email': instance.email, 'amount': amount}
+        )
+        recipient_list = [email for email in [instance.email, RECIPIENT_EMAIL] if email]
+        payment_send_email("Payment - EasyGo", html_content, recipient_list)
 
 
 # Stripe > sending email & save
@@ -292,146 +290,145 @@ def notify_user_payment_paypal(instance_id):
 def notify_user_payment_stripe(instance_id):
     instance = StripePayment.objects.get(id=instance_id)
 
-    if instance.name:
-        posts = Post.objects.filter(
-            (
-                Q(name__iexact=instance.name.strip()) |
-                Q(email__iexact=instance.email.strip()) |
-                Q(email1__iexact=instance.email.strip())
-            ),
-            pickup_date__gte=timezone.now().date()  
-        ).order_by('pickup_date')   
+    name = (instance.name or "").strip()
+    email = instance.email.strip()
 
-        try:
-            raw_amount = float(instance.amount or 0)
-            amount = round(raw_amount, 2)
-            valid_amount = True
-        except (ValueError, TypeError):
-            raw_amount = 0
-            amount = 0.0
-            valid_amount = False
-        
-        recipient_emails = set()
+    posts = Post.objects.filter(
+        Q(email__iexact=email) |
+        Q(email1__iexact=email) |
+        (Q(name__iexact=name) if name else Q())
+    ).order_by('pickup_date')   
 
-        if posts.exists() and valid_amount:
-            # 전체 미납액 계산
-            total_balance = 0.0
-            for post in posts:
-                try:
-                    price = float(post.price or 0)
-                except (ValueError, TypeError):
-                    price = 0.0
+    try:
+        raw_amount = float(instance.amount or 0)
+        amount = round(raw_amount, 2)
+        valid_amount = True
+    except (ValueError, TypeError):
+        raw_amount = 0
+        amount = 0.0
+        valid_amount = False
+    
+    recipient_emails = set()
 
-                try:
-                    paid = float(post.paid or 0)
-                except (ValueError, TypeError):
-                    paid = 0.0
+    if posts.exists():
+        # 전체 미납액 계산
+        total_balance = 0.0
+        for post in posts:
+            try:
+                price = float(post.price or 0)
+            except (ValueError, TypeError):
+                price = 0.0
 
-                balance = round(price - paid, 2)
+            try:
+                paid = float(post.paid or 0)
+            except (ValueError, TypeError):
+                paid = 0.0
 
-                if balance > 0:
-                    total_balance += balance
+            balance = round(price - paid, 2)
 
-            remaining_amount = amount
+            if balance > 0:
+                total_balance += balance
 
-            for post in posts:
-                try:
-                    price = float(post.price or 0)
-                except (ValueError, TypeError):
-                    price = 0.0
+        remaining_amount = amount
 
-                try:
-                    paid = float(post.paid)
-                except (ValueError, TypeError):
-                    paid = 0.0
+        for post in posts:
+            try:
+                price = float(post.price or 0)
+            except (ValueError, TypeError):
+                price = 0.0
 
-                balance = round(price - paid, 2)
+            try:
+                paid = float(post.paid)
+            except (ValueError, TypeError):
+                paid = 0.0
 
-                if balance <= 0:
-                    continue  # 이미 결제된 예약은 건너뜀
+            balance = round(price - paid, 2)
 
-                if remaining_amount >= balance:
-                    paid_new = price
-                    remaining_amount -= balance
-                else:
-                    paid_new = paid + remaining_amount
-                    remaining_amount = 0.0
+            if balance <= 0:
+                continue  # 이미 결제된 예약은 건너뜀
 
-                post.paid = clean_float(paid_new)
-                post.toll = "" if paid_new >= price else "short payment"
-                post.cash = False
-                post.reminder = True
-                post.pending = False
-                post.cancelled = False
-                post.discount = ""
-
-                original_notice = post.notice or ""
-                notice_parts = [original_notice.strip()]
-                new_notice_entry = f"===STRIPE=== paid: ${amount:.2f}"
-
-                # 중복 방지 조건 추가
-                if new_notice_entry not in original_notice:
-                    notice_parts.append(new_notice_entry)
-                    post.notice = " | ".join(filter(None, notice_parts)).strip()
-
-                post.save()
-
-                recipient_emails.update([post.email, post.email1])
-
-                if remaining_amount <= 0:
-                    break
-
-            remaining_balance_after_payment = total_balance - amount
-
-            # Check if no money was applied (means: all bookings were already paid)
-            if remaining_amount == amount:
-                # Notify admin (you)
-                admin_notice = f'''
-            ⚠️ Stripe Overpayment Detected
-
-            Name: {instance.name}
-            Email: {instance.email}
-            Paid: ${amount:.2f}
-
-            No bookings were updated because all are already paid in full.
-            Please check if refund or future booking credit is needed.
-                '''
-                send_mail(
-                    subject="⚠️ Stripe Overpayment Alert - EasyGo",
-                    message=admin_notice,
-                    from_email=DEFAULT_FROM_EMAIL,
-                    recipient_list=[RECIPIENT_EMAIL],  # only to you
-                )
-
-            # 이메일 한 번만 발송
-            recipient_list = [email for email in recipient_emails if email] + [RECIPIENT_EMAIL]
-
-            if remaining_balance_after_payment <= 0:
-                html_content = render_to_string(
-                    "basecamp/html_email-payment-success-stripe.html",
-                    {'name': instance.name, 'email': instance.email, 'amount': amount}
-                )
+            if remaining_amount >= balance:
+                paid_new = price
+                remaining_amount -= balance
             else:
-                html_content = render_to_string(
-                    "basecamp/html_email-response-discrepancy.html",
-                    {
-                        'name': instance.name,
-                        'price': round(total_balance, 2),
-                        'paid': round(amount, 2),
-                        'diff': round(remaining_balance_after_payment, 2)
-                    }
-                )
+                paid_new = paid + remaining_amount
+                remaining_amount = 0.0
 
-            payment_send_email("Payment - EasyGo", html_content, recipient_list)
+            post.paid = clean_float(paid_new)
+            post.toll = "" if paid_new >= price else "short payment"
+            post.cash = False
+            post.reminder = True
+            post.pending = False
+            post.cancelled = False
+            post.discount = ""
 
-        else:
-            # 예약 찾지 못한 경우
+            original_notice = post.notice or ""
+            notice_parts = [original_notice.strip()]
+            new_notice_entry = f"===STRIPE=== paid: ${amount:.2f}"
+
+            # 중복 방지 조건 추가
+            if new_notice_entry not in original_notice:
+                notice_parts.append(new_notice_entry)
+                post.notice = " | ".join(filter(None, notice_parts)).strip()
+
+            post.save()
+
+            recipient_emails.update([post.email, post.email1])
+
+            if remaining_amount <= 0:
+                break
+
+        remaining_balance_after_payment = total_balance - amount
+
+        # Check if no money was applied (means: all bookings were already paid)
+        if remaining_amount == amount:
+            # Notify admin (you)
+            admin_notice = f'''
+        ⚠️ Stripe Overpayment Detected
+
+        Name: {instance.name}
+        Email: {instance.email}
+        Paid: ${amount:.2f}
+
+        No bookings were updated because all are already paid in full.
+        Please check if refund or future booking credit is needed.
+            '''
+            send_mail(
+                subject="⚠️ Stripe Overpayment Alert - EasyGo",
+                message=admin_notice,
+                from_email=DEFAULT_FROM_EMAIL,
+                recipient_list=[RECIPIENT_EMAIL],  # only to you
+            )
+
+        # 이메일 한 번만 발송
+        recipient_list = [email for email in recipient_emails if email] + [RECIPIENT_EMAIL]
+
+        if remaining_balance_after_payment <= 0:
             html_content = render_to_string(
-                "basecamp/html_email-noIdentity-stripe.html",
+                "basecamp/html_email-payment-success-stripe.html",
                 {'name': instance.name, 'email': instance.email, 'amount': amount}
             )
-            recipient_list = [email for email in [instance.email, RECIPIENT_EMAIL] if email]
-            payment_send_email("Payment - EasyGo", html_content, recipient_list)
+        else:
+            html_content = render_to_string(
+                "basecamp/html_email-response-discrepancy.html",
+                {
+                    'name': instance.name,
+                    'price': round(total_balance, 2),
+                    'paid': round(amount, 2),
+                    'diff': round(remaining_balance_after_payment, 2)
+                }
+            )
+
+        payment_send_email("Payment - EasyGo", html_content, recipient_list)
+
+    else:
+        # 예약 찾지 못한 경우
+        html_content = render_to_string(
+            "basecamp/html_email-noIdentity-stripe.html",
+            {'name': instance.name, 'email': instance.email, 'amount': amount}
+        )
+        recipient_list = [email for email in [instance.email, RECIPIENT_EMAIL] if email]
+        payment_send_email("Payment - EasyGo", html_content, recipient_list)
 
             
 # XRP payment record and email
