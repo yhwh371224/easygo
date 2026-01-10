@@ -26,12 +26,11 @@ class StripePaymentAdmin(admin.ModelAdmin):
 
 
 class PostAdmin(admin.ModelAdmin):
-    list_display = ['pickup_date', 'contact', 'name', 'suburb', 'pickup_time', 'price', 'is_confirmed', 
+    list_display = ['pickup_date', 'name', 'suburb', 'pickup_time', 'price', 'paid',
                     'cancelled', 'pending', 'direction', 'return_flight_number', 'created']    
     search_fields = ['pickup_date', 'pickup_time', 'suburb', 'email', 'street', 
                      'name', 'contact', 'price', 'paid', 'email1']
-    # list_filter = ['paid']
-
+    
 
 class XrpPaymentAdmin(admin.ModelAdmin):
     list_display = ['email', 'aud_amount', 'xrp_amount', 'dest_tag', 'email_sent', 'created']
