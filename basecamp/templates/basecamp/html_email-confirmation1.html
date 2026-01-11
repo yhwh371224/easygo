@@ -51,25 +51,26 @@
               <td style="padding:15px; font-size:14px; line-height:22px; color:#333;">
                 <strong>✅ Booking Summary</strong><br /><br />
 
-                📅 <strong>Pickup Date:</strong> {{ pickup_date|slice:":10" }}<br />
-                ⏰ <strong>Pickup Time:</strong> {{ pickup_time }}<br />
+                •  <strong>Pickup Date:</strong> {{ pickup_date|slice:":10" }}<br />
+                •  <strong>Pickup Time:</strong> {{ pickup_time }}<br />
 
                 {% if start_point %}
-                  📍 <strong>From:</strong> {{ start_point }}<br />
-                  📍 <strong>To:</strong> {{ end_point }}<br />
+                    •  <strong>From:</strong> {{ start_point }}<br />
+                    •  <strong>To:</strong> {{ end_point }}<br />
                 {% else %}
-                  ✈️ <strong>Flight:</strong> {{ flight_number }} ({{ direction }})<br />
+                    •  <strong>Address:</strong>
+                    {{ street|default:'' }} {{ suburb|default:'' }}<br />
                 {% endif %}
 
-                👥 <strong>Passengers:</strong> {{ no_of_passenger }}<br />
-                💼 <strong>Baggage:</strong> {{ no_of_baggage|default:'N/A' }}<br />
+                •  <strong>Passengers:</strong> {{ no_of_passenger }}<br />
+                •  <strong>Baggage:</strong> {{ no_of_baggage|default:'N/A' }}<br />
 
                 {% if paid %}
-                    💰 <strong>Payment:</strong> Paid<br />
+                    •  <strong>Payment:</strong> Paid<br />
                 {% elif cash %}
-                    💰 <strong>Payment:</strong> Cash to driver<br />
+                    •  <strong>Payment:</strong> Cash to driver<br />
                 {% else %}
-                    💰 <strong>Payment:</strong> Pending<br />
+                    •  <strong>Payment:</strong> Pending<br />
                 {% endif %}
 
 
@@ -83,16 +84,16 @@
                   <strong>🔁 Return Trip</strong><br />
 
                     {% if return_start_point %}
-                        📅 <strong>Date:</strong> {{ return_pickup_date }}<br />
-                        ⏰ <strong>Pickup Time:</strong> {{ return_pickup_time }}<br />
-                        📍 <strong>From:</strong> {{ return_start_point }}<br />
-                        📍 <strong>To:</strong> {{ return_end_point }}<br />
+                        •  <strong>Date:</strong> {{ return_pickup_date }}<br />
+                        •  <strong>Pickup Time:</strong> {{ return_pickup_time }}<br />
+                        •  <strong>From:</strong> {{ return_start_point }}<br />
+                        •  <strong>To:</strong> {{ return_end_point }}<br />
                     {% elif return_direction and return_flight_number %}
-                        ✈️ <strong>Flight:</strong> {{ return_flight_number }} ({{ return_direction }})<br />
-                        📅 <strong>Date:</strong> {{ return_pickup_date }}<br />
-                        ⏰ <strong>Pickup Time:</strong> {{ return_pickup_time }}<br />
+                        •  <strong>Flight:</strong> {{ return_flight_number }} ({{ return_direction }})<br />
+                        •  <strong>Date:</strong> {{ return_pickup_date }}<br />
+                        •  <strong>Pickup Time:</strong> {{ return_pickup_time }}<br />
                             {% if return_flight_time %}
-                                ⏱ <strong>Flight Time:</strong> {{ return_flight_time }}<br />
+                                •  <strong>Flight Time:</strong> {{ return_flight_time }}<br />
                             {% endif %}
                     {% endif %}
                 {% endif %}
