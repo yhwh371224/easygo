@@ -231,12 +231,24 @@
 										</tr>
 										<tr>
 											<td align="left" style="padding-top:28px;padding-left:0;">
-												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                    
-													Thank you once again for confirming your booking.<br><br>
-													We’d like to kindly remind you that we have not yet received your preferred payment method.<br>
-													Could you please let us know whether you will be paying <strong>cash on the day</strong> or <strong>by card in advance</strong>?<br><br>
+												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
+													Thank you once again for your booking.<br><br>
+
+													We’d like to kindly remind you that we have not yet received your preferred payment method for your booking 
+													{% if return_pickup_date %}
+														on <strong>{{ pickup_date }}</strong> and <strong>{{ return_pickup_date }}</strong>.
+													{% else %}
+														on <strong>{{ pickup_date }}</strong>.
+													{% endif %}
+													<br><br>
+
+													The total amount for this booking is <strong>${{ price }}</strong>.<br>
+													Could you please let us know whether you will be paying
+													<strong>cash on the day</strong> or <strong>by card in advance</strong>?<br><br>
+
 													Please note that your booking will remain in <strong>pending</strong> status until we receive your payment preference.<br>
 													If we do not receive a response promptly, we may not be able to secure your booking, as availability is subject to change and vehicles can become fully booked.<br><br>
+
 													Providing your payment preference will help us ensure a smooth and hassle-free experience on the day of your pickup.<br><br>
 												</p>
 							

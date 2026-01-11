@@ -11,7 +11,7 @@ from .tasks import create_event_on_calendar, notify_user_payment_paypal, notify_
 from utils.return_booking import handle_return_trip
 from utils.inquiry_helper import send_inquiry_email  
 from utils.prepay_helper import is_foreign_number
-from utils.post_helper import send_post_cancelled_email, send_missing_direction_email
+from utils.post_helper import send_post_confirmation_email, send_post_cancelled_email, send_missing_direction_email
 
 
 # Inquiry signals
@@ -25,13 +25,20 @@ def notify_user_inquiry(sender, instance, created, **kwargs):
 def notify_user_post(sender, instance, created, **kwargs):
     handle_return_trip(instance)
 
+    if instance.is_confirmed and not instance.sent_email:
+        send_post_confirmation_email(instance)
+        instance.sent_email = True
+        if not instance.cash or not instance.paid:
+            instance.pending = True
+        instance.save(update_fields=['sent_email', 'pending'])
+
 
 # Send email notification if a Post is cancelled and email hasn't been sent yet
 @receiver(post_save, sender=Post, dispatch_uid="notify_user_post_cancelled_once")
 def notify_user_post_cancelled(sender, instance, created, **kwargs): 
-    if not created and instance.cancelled and not instance.sent_email:
+    if instance.cancelled and not instance.sent_email:
         send_post_cancelled_email(instance)
-        instance.sent_email = True
+        instance.sent_email = True  
         instance.save(update_fields=['sent_email'])
 
 
