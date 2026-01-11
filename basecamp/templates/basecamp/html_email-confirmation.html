@@ -116,7 +116,7 @@
         <!-- GREETING / STATUS -->
         <tr>
             <td style="padding:0 30px 10px; font-size:14px; line-height:22px;">
-            Hello {{ name }},<br /><br />
+            Hello {% if company_name %}{{ company_name }}, Attn: {{ name }}{% else %}{{ name }}{% endif %}<br /><br />
             {% if paid %}
                 Thank you for your booking. Your booking is fully confirmed
             {% else %}
