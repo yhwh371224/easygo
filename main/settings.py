@@ -360,7 +360,7 @@ MYSQL_CONFIG = {
 }
 
 # Banking details (anz, commbank, westpac, nab)
-DEFAULT_BANK_CODE = 'anz'
+DEFAULT_BANK_CODE = 'nab'
 
 MARKDOWNX_MEDIA_PATH = datetime.now().strftime('markdownx/%Y/%m/%d/')
 
