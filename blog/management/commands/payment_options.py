@@ -29,10 +29,22 @@ class Command(BaseCommand):
         
         for notice in reminders:
             try:
+                # 💰 총 금액 계산 (return 있으면 2배)
+                if notice.return_pickup_date:
+                    total_price = float(notice.price) * 2
+                else:
+                    total_price = notice.price
+
                 # 1️⃣ 이메일 발송
                 html_content = render_to_string(
                     "basecamp/html_email-payment-method.html",
-                    {"name": notice.name, "email": notice.email}
+                    {
+                        "name": notice.name,
+                        "email": notice.email,
+                        "pickup_date": notice.pickup_date,
+                        "return_pickup_date": notice.return_pickup_date,
+                        "price": total_price,   
+                    }
                 )
                 text_content = strip_tags(html_content)
 

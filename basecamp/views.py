@@ -1500,6 +1500,7 @@ def confirm_booking_detail(request):
         )
 
         sam_driver = Driver.objects.get(driver_name="Sam")
+        is_confirmed = False
 
         # Post 모델 저장
         p = Post(
