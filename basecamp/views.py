@@ -1399,30 +1399,33 @@ def confirm_booking_detail(request):
     if request.method == "POST":
         email = request.POST.get('email')
         is_confirmed = request.POST.get('is_confirmed') == 'True'
-        index = request.POST.get('index', '1')
 
+        index = request.POST.get('index_visible') or request.POST.get('index', '1')
         try:
-            index = int(index) - 1  
+            index = int(index) - 1
         except ValueError:
-            return HttpResponse("Invalid index value", status=400)  
-        
-        users = Inquiry.objects.filter(email__iexact=email)
+            return HttpResponse("Invalid index value", status=400)
 
+        cash = request.POST.get('cash') == 'on'
+        prepay = request.POST.get('prepay') == 'on'
+
+        users = Inquiry.objects.filter(email__iexact=email)
         if users.exists() and 0 <= index < len(users):
             user = users[index]
         else:
             return render(request, 'basecamp/email_error_confirmbooking.html')
 
-        name = user.name            
+        # 기존 데이터
+        name = user.name
         contact = user.contact
         company_name = user.company_name
-        email1 = user.email1            
+        email1 = user.email1
         pickup_date = user.pickup_date
         flight_number = getattr(user, 'flight_number', "")
-        flight_time = getattr(user, 'flight_time', "") 
+        flight_time = getattr(user, 'flight_time', "")
         pickup_time = user.pickup_time
         direction = user.direction
-        suburb = user.suburb 
+        suburb = user.suburb
         street = user.street
         start_point = getattr(user, 'start_point', "")
         end_point = getattr(user, 'end_point', "")
@@ -1435,41 +1438,38 @@ def confirm_booking_detail(request):
         return_pickup_time = getattr(user, 'return_pickup_time', "")
         return_start_point = getattr(user, 'return_start_point', "")
         return_end_point = getattr(user, 'return_end_point', "")
-        cruise = user.cruise          
+        cruise = user.cruise
         message = user.message
         notice = user.notice
         price = user.price
         toll = user.toll
-        paid = user.paid 
+        paid = user.paid
         private_ride = user.private_ride
-        cash = user.cash 
-        prepay = user.prepay    
 
         try:
-            pickup_date_obj = parse_date(
-                pickup_date, 
-                field_name="Pickup Date", 
-                required=True
-            )
-
+            pickup_date_obj = parse_date(pickup_date, field_name="Pickup Date", required=True)
             return_pickup_date_obj = parse_date(
-                return_pickup_date, 
-                field_name="Return Pickup Date", 
-                required=False, 
-                reference_date=pickup_date
+                return_pickup_date, field_name="Return Pickup Date", required=False, reference_date=pickup_date
             )
-
         except ValueError as e:
-            return JsonResponse({'success': False, 'error': str(e)})    
-        
+            return JsonResponse({'success': False, 'error': str(e)})
+
         # 최종 가격 계산
         try:
             final_price = float(price) + float(toll)
         except Exception:
-            final_price = price  # 혹시 변환 에러 시 원래 price만 저장
-        
+            final_price = price
         toll_value = "toll included" if toll else ""
 
+        # pending 상태 결정
+        if paid or cash:
+            pending = False
+        elif prepay:
+            pending = True
+        else:
+            pending = True  
+
+        # 이메일 발송용 데이터
         data = {
             'name': name,
             'email': email,
@@ -1498,30 +1498,31 @@ def confirm_booking_detail(request):
             data['street'], data['suburb'], data['start_point'], data['end_point'],
             data['cash'], data['prepay'], data['return_start_point'], data['return_end_point']
         )
-            
-        sam_driver = Driver.objects.get(driver_name="Sam")    
 
+        sam_driver = Driver.objects.get(driver_name="Sam")
+
+        # Post 모델 저장
         p = Post(
-            name=name, contact=contact, email=email, company_name=company_name, email1=email1, 
-            pickup_date=pickup_date_obj, flight_number=flight_number, flight_time=flight_time, pickup_time=pickup_time, 
+            name=name, contact=contact, email=email, company_name=company_name, email1=email1,
+            pickup_date=pickup_date_obj, flight_number=flight_number, flight_time=flight_time, pickup_time=pickup_time,
             direction=direction, suburb=suburb, street=street, start_point=start_point, end_point=end_point,
-            cruise=cruise, no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, 
-            return_direction=return_direction, private_ride=private_ride, 
-            return_pickup_date=return_pickup_date_obj, return_flight_number=return_flight_number, 
-            return_flight_time=return_flight_time, return_pickup_time=return_pickup_time, 
+            cruise=cruise, no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage,
+            return_direction=return_direction, private_ride=private_ride,
+            return_pickup_date=return_pickup_date_obj, return_flight_number=return_flight_number,
+            return_flight_time=return_flight_time, return_pickup_time=return_pickup_time,
             return_start_point=return_start_point, return_end_point=return_end_point,
-            message=message, notice=notice, 
-            price=final_price, toll=toll_value, prepay=prepay, 
+            message=message, notice=notice,
+            price=final_price, toll=toll_value, prepay=prepay, pending=pending,
             paid=paid, cash=cash, is_confirmed=is_confirmed, driver=sam_driver
         )
-        
-        p.save()    
+
+        p.save()
         user.delete()
-                
-        return render(request, 'basecamp/inquiry_done.html') 
-        
+
+        return render(request, 'basecamp/inquiry_done.html')
+
     else:
-        return render(request, 'basecamp/confirm_booking.html', {}) 
+        return render(request, 'basecamp/confirm_booking.html', {})
 
      
 # sending confirmation email first one   
@@ -1573,10 +1574,10 @@ def sending_email_first_detail(request):
                 elif user.pending:
                     template_name = "basecamp/html_email-confirmation-pending.html"
                 else:
-                    template_name = "basecamp/html_email-confirmation1.html"
+                    template_name = "basecamp/html_email-confirmation.html"
 
                 html_content = render_to_string(
-                                        "basecamp/html_email-confirmation1.html", 
+                                        "basecamp/html_email-confirmation.html", 
                                         {
                                             'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 'email': user.email, 'email1': user.email1,
                                             'pickup_date': user.pickup_date, 'flight_number': user.flight_number,
@@ -1661,7 +1662,7 @@ def sending_email_second_detail(request):
             elif user.pending:
                     template_name = "basecamp/html_email-confirmation-pending.html"
             else:
-                template_name = "basecamp/html_email-confirmation1.html"
+                template_name = "basecamp/html_email-confirmation.html"
 
             subject = "Booking confirmation - EasyGo"
 
@@ -2419,12 +2420,14 @@ def email_dispatch_detail(request):
                 user1 = Post.objects.filter(email__iexact=user.email)[1]
                 try:
                     user.cancelled = True
+                    user.pending = False
                     user.save()
                     context.update({'booking_date': user.pickup_date, 
                                     'return_booking_date': user.return_pickup_date if user.return_pickup_time == 'x' else None,
                                 })
                     
                     user1.cancelled = True
+                    user1.pending = False
                     user1.save()
                 except IndexError:
                     pass
@@ -2433,6 +2436,7 @@ def email_dispatch_detail(request):
                 user1 = Post.objects.filter(email__iexact=user.email)[1]
                 try:
                     user1.cancelled = True
+                    user1.pending = False
                     user1.save()
                     context.update({'booking_date': user1.pickup_date, 
                                     'return_booking_date': user1.return_pickup_date,
@@ -2443,6 +2447,7 @@ def email_dispatch_detail(request):
 
             else:
                 user.cancelled = True
+                user.pending = False
                 user.save()
                 context.update({'booking_date': user.pickup_date})
 
@@ -2456,6 +2461,7 @@ def email_dispatch_detail(request):
                 try:
                     user1 = Post.objects.filter(email__iexact=user.email)[1]
                     user1.cancelled = True
+                    user1.pending = False
                     user1.save()
                 except IndexError:
                     pass
@@ -2473,25 +2479,26 @@ def email_dispatch_detail(request):
             if payment_method == "cash":
                 user.cash = True
                 user.prepay = False
+                user.pending = False
                 template_name = "basecamp/html_email-response-cash-payment-confirmed.html"
                 subject = "Cash Payment Confirmed - EasyGo"
             elif payment_method == "card":
                 user.cash = False
+                user.pending = True
                 user.prepay = True
                 template_name = "basecamp/html_email-response-card-payment-confirmed.html"
                 subject = "Card Payment Confirmed - EasyGo"
 
-            user.reminder = True
-            user.pending = False
+            user.reminder = True            
             user.cancelled = False
             user.save()      
 
             if user.return_pickup_time == 'x':
                 user1 = Post.objects.filter(email__iexact=user.email)[1]
                 user1.cash = True if payment_method == "cash" else False
-                user1.prepay = True if payment_method == "card" else False
+                user1.prepay = True if payment_method == "card" else False                
+                user1.pending = False if payment_method == "cash" else True
                 user1.reminder = True
-                user1.pending = False
                 user1.cancelled = False
                 user1.save()     
 
