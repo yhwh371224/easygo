@@ -1573,10 +1573,10 @@ def sending_email_first_detail(request):
                 elif user.pending:
                     template_name = "basecamp/html_email-confirmation-pending.html"
                 else:
-                    template_name = "basecamp/html_email-confirmation.html"
+                    template_name = "basecamp/html_email-confirmation1.html"
 
                 html_content = render_to_string(
-                                        "basecamp/html_email-confirmation.html", 
+                                        "basecamp/html_email-confirmation1.html", 
                                         {
                                             'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 'email': user.email, 'email1': user.email1,
                                             'pickup_date': user.pickup_date, 'flight_number': user.flight_number,
