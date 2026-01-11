@@ -232,18 +232,18 @@
                                                 <p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
 													Thank you for your inquiry with EasyGo.<br><br>
 
-													Unfortunately, we are unavailable for the time frame you requested:<br>
+													Unfortunately, we are unavailable for the pickup date you requested:<br>
 
 													{% if pickup_date or pickup_time %}
 														Pickup:
 														{% if pickup_date %}{{ pickup_date }}{% endif %}
-														{% if pickup_time %} at {{ pickup_time }}{% endif %}<br>
+														<br>
 													{% endif %}
 
 													{% if return_pickup_date or return_pickup_time %}
 														Return:
 														{% if return_pickup_date %}{{ return_pickup_date }}{% endif %}
-														{% if return_pickup_time %} at {{ return_pickup_time }}{% endif %}<br>
+														<br>
 													{% endif %}
 
 													<br>
