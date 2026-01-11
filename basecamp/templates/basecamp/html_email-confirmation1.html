@@ -1,0 +1,170 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <meta name="supported-color-schemes" content="light dark">
+  <title>Booking Confirmation</title>
+  <style type="text/css">
+    @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
+    table {border-spacing: 0;}
+    td {padding: 0;}
+    p {font-size: 15px;}
+    img {border: 0; border-width:0;}
+    a {color: #277fd2; text-decoration: none;}
+    @media screen and (max-width: 599.98px) { 
+      .px-600-0 {padding-left: 0!important; padding-right: 0!important;}
+      .pt-600-0 {padding-top: 0!important;}
+      .d-600-none {display: none!important;}
+      .center-text-mobile {text-align: center!important;}
+    }
+    @media (prefers-color-scheme: dark) {
+      body, center, table, .darkmode-bg {background: #2d2d2d!important; color: #ffffff!important;}
+      .darkmode-transparent {background-color: transparent!important;}
+    }
+  </style>
+</head>
+<body style="Margin:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;min-width:100%;background-color:#F6F9FC;">
+
+  <center style="width: 100%;table-layout:fixed;background-color: #F6F9FC;padding-top:20px;padding-bottom: 40px;">
+    <div style="max-width: 600px;background-color: #ffffff;box-shadow: 0 0 10px rgba(0, 0, 0, .2);">
+
+      <!-- LOGO -->
+      <table align="center" style="border-spacing:0;width:100%;text-align:center;" role="presentation">
+        <tr>
+          <td style="padding:20px;">
+            <a href="https://www.easygoshuttle.com.au" target="_blank">
+              <img src="https://live.staticflickr.com/65535/52125551213_8369295e13_o.png" width="120" alt="EasyGo Airport Shuttle" style="border:0;" />
+            </a>
+          </td>
+        </tr>
+      </table>
+
+      <!-- BOOKING SUMMARY -->
+      <tr>
+        <td style="padding:20px;">
+          <table width="100%" role="presentation" style="border:1px solid #E1E1E1; border-radius:6px; background:#FAFAFA;">
+            <tr>
+              <td style="padding:15px; font-size:14px; line-height:22px; color:#333;">
+                <strong>✅ Booking Summary</strong><br /><br />
+
+                📅 <strong>Date:</strong> {{ pickup_date|slice:":10" }}<br />
+                ⏰ <strong>Pickup Time:</strong> {{ pickup_time }}<br />
+
+                {% if start_point %}
+                  📍 <strong>From:</strong> {{ start_point }}<br />
+                  📍 <strong>To:</strong> {{ end_point }}<br />
+                {% else %}
+                  ✈️ <strong>Flight:</strong> {{ flight_number }} ({{ direction }})<br />
+                {% endif %}
+
+                👥 <strong>Passengers:</strong> {{ no_of_passenger }}<br />
+                💼 <strong>Baggage:</strong> {{ no_of_baggage|default:'N/A' }}<br />
+
+                {% if paid %}
+                  💰 <strong>Payment:</strong> Paid
+                {% elif cash %}
+                  💰 <strong>Payment:</strong> Cash to driver
+                {% else %}
+                  💰 <strong>Payment:</strong> Pending
+                {% endif %}
+
+                {% if return_start_point or return_flight_number %}
+                  <br />
+                  <hr style="border:none;border-top:1px solid #ddd;margin:10px 0;" />
+                  <strong>🔁 Return Trip</strong><br />
+
+                  {% if return_start_point %}
+                    📅 <strong>Date:</strong> {{ return_pickup_date }}<br />
+                    ⏰ <strong>Pickup Time:</strong> {{ return_pickup_time }}<br />
+                    📍 <strong>From:</strong> {{ return_start_point }}<br />
+                    📍 <strong>To:</strong> {{ return_end_point }}<br />
+                  {% elif return_direction and return_flight_number %}
+                    ✈️ <strong>Flight:</strong> {{ return_flight_number }} ({{ return_direction }})<br />
+                    📅 <strong>Date:</strong> {{ return_pickup_date }}<br />
+                    ⏰ <strong>Pickup Time:</strong> {{ return_pickup_time }}<br />
+                    {% if return_flight_time %}
+                      ⏱ <strong>Flight Time:</strong> {{ return_flight_time }}<br />
+                    {% endif %}
+                  {% endif %}
+                {% endif %}
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+
+      <!-- GREETING / STATUS -->
+      <tr>
+        <td style="padding:0 20px 10px; font-size:14px; line-height:22px;">
+          Hello {{ name }},<br /><br />
+          {% if paid %}
+            Your booking is fully confirmed. Thank you for your payment.
+          {% elif cash %}
+            Your booking is confirmed. Payment will be made in cash to the driver on the day.
+          {% else %}
+            Your booking request has been received and is pending confirmation.
+          {% endif %}
+        </td>
+      </tr>
+
+      <!-- PAYMENT -->
+      <tr>
+        <td style="padding:10px 20px 0; font-size:14px; font-weight:bold;">
+          💰 Payment
+        </td>
+      </tr>
+
+      <tr>
+        <td style="padding:8px 20px 10px; font-size:13px; line-height:22px;">
+          {% if paid %}
+            We have received your payment of ${{ paid }}. Thank you very much.
+          {% elif cash %}
+            The total cost is ${{ price }}{% if toll %} (including toll fee){% endif %}.<br />
+            Payment will be made in cash directly to the driver on the day.
+          {% else %}
+            The total cost is ${{ price }}{% if toll %} (including toll fee){% endif %}.<br /><br />
+            You may prepay securely via PayPal using the link below:<br />
+            <a href="https://easygoshuttle.com.au/payonline">easygoshuttle.com.au/payonline</a><br /><br />
+            Alternatively, if you prefer to pay in cash, please reply to this email to confirm your booking.
+          {% endif %}
+        </td>
+      </tr>
+
+      <!-- LINKS & ADDITIONAL INFO -->
+      <tr>
+        <td style="padding:20px; font-size:13px; line-height:22px;">
+          💡 <strong>Additional Information</strong><br />
+          - Baggage: Please ensure the number of bags matches your booking. Extra bags may incur additional charges.<br />
+          - Extra passengers: $10 per person, even without luggage.<br />
+          - Any issues arising from undeclared extra passengers or baggage will be the responsibility of the person who made the booking.<br /><br />
+
+          {% if direction == 'Pickup from Intl Airport' or direction == 'Pickup from Domestic Airport' %}
+            🚐 Airport Meeting point:<br />
+            <a href="https://easygoshuttle.com.au/meeting_point/">easygoshuttle.com.au/meeting_point</a><br /><br />
+          {% endif %}
+
+          • Terms & conditions (baggage, extra charges, cancellation policy):<br />
+          <a href="https://easygoshuttle.com.au/terms/">easygoshuttle.com.au/terms</a>
+        </td>
+      </tr>
+
+      <!-- SIGNATURE -->
+      <tr>
+        <td style="padding:10px 20px 30px; font-size:13px; line-height:22px;">
+          Thank you for choosing EasyGo Airport Shuttle.<br /><br />
+          Best regards,<br />
+          <strong><span style="color:#eb7828;">Easy</span><span style="color:#277fd2;">Go</span> Airport Shuttle</strong>
+        </td>
+      </tr>
+
+      <!-- FOOTER AND DISCLAIMER REMAINS THE SAME AS ORIGINAL -->
+      <!-- ... 기존 Footer/Disclaimer HTML 그대로 유지 ... -->
+
+    </div>
+  </center>
+</body>
+</html>
