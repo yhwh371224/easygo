@@ -1661,7 +1661,7 @@ def sending_email_second_detail(request):
             elif user.pending:
                     template_name = "basecamp/html_email-confirmation-pending.html"
             else:
-                template_name = "basecamp/html_email-confirmation.html"
+                template_name = "basecamp/html_email-confirmation1.html"
 
             subject = "Booking confirmation - EasyGo"
 
