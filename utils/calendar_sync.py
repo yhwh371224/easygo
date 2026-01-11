@@ -33,7 +33,6 @@ def build_event_data(instance):
     no_of_passenger_str = f'p{instance.no_of_passenger}' if instance.no_of_passenger else ''
     paid_str = 'paid' if instance.paid else ''
     cash_str = 'cash' if instance.cash else ''
-    toll_str = 'toll' if instance.toll else ''
     price_str = f'${instance.price}' if instance.price else ''
     contact_str = instance.contact or ''
     suburb_str = instance.suburb or ''
