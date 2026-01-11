@@ -107,41 +107,43 @@
         </td>
       </tr>
 
-      <!-- GREETING / STATUS -->
-      <tr>
-        <td style="padding:0 30px 10px; font-size:14px; line-height:22px;">
-          Hello {{ name }},<br /><br />
-          {% if paid %}
-            Your booking is fully confirmed. Thank you for your payment.
-          {% elif cash %}
-            Your booking is confirmed. Payment will be made in cash to the driver on the day.
-          {% else %}
-            Your booking request has been received and is pending confirmation.
-          {% endif %}
-        </td>
-      </tr>
-
-        <!-- PAYMENT -->
+        <!-- GREETING / STATUS -->
         <tr>
-            <td style="padding:10px 30px 0; font-size:14px; font-weight:bold;">
-            💰 Payment
+            <td style="padding:0 30px 10px; font-size:14px; line-height:22px;">
+            Hello {{ name }},<br /><br />
+            {% if paid %}
+                Your booking is fully confirmed. Thank you for your payment.
+            {% elif cash %}
+                Your booking is confirmed. Payment will be made in cash to the driver on the day.
+            {% else %}
+                Your booking request has been received and is pending confirmation.
+            {% endif %}
             </td>
         </tr>
 
+        <!-- PAYMENT SUMMARY -->
         <tr>
-            <td style="padding:8px 30px 10px; font-size:13px; line-height:22px;">
-            {% if paid %}
-                We have received your payment of ${{ paid }}. Thank you very much.
-            {% elif cash %}
-                The total cost is ${{ price }}{% if toll %} (including toll fee){% endif %}.<br />
-                Payment will be made in cash directly to the driver on the day.
-            {% else %}
-                The total cost is ${{ price }}{% if toll %} (including toll fee){% endif %}.<br /><br />
-                You may prepay securely via PayPal using the link below:<br />
-                <a href="https://easygoshuttle.com.au/payonline">easygoshuttle.com.au/payonline</a><br /><br />
-                Alternatively, if you prefer to pay in cash, please reply to this email to confirm your booking.
-            {% endif %}
-            </td>
+        <td style="padding:20px;">
+            <table width="100%" role="presentation" style="border:1px solid #E1E1E1; border-radius:6px; background:#FAFAFA;">
+            <tr>
+                <td style="padding:15px; font-size:14px; line-height:22px; color:#333;">
+                💰 <strong>Payment</strong><br /><br />
+                
+                • The total cost is ${{ price }}.<br />
+
+                {% if paid %}
+                    • We have received your payment. Thank you very much.<br />
+                {% elif cash %}
+                    • Payment will be made in cash directly to the driver on the day.<br />
+                {% else %}
+                    • You may prepay securely via PayPal using the link below:<br />
+                    &nbsp;&nbsp;<a href="https://easygoshuttle.com.au/payonline">easygoshuttle.com.au/payonline</a><br /><br />
+                    • Alternatively, if you prefer to pay in cash, please reply to this email to confirm your booking.<br />
+                {% endif %}
+                </td>
+            </tr>
+            </table>
+        </td>
         </tr>
 
         <!-- SIGNATURE -->
