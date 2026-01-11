@@ -51,7 +51,7 @@
               <td style="padding:15px; font-size:14px; line-height:22px; color:#333;">
                 <strong>✅ Booking Summary</strong><br /><br />
 
-                📅 <strong>Date:</strong> {{ pickup_date|slice:":10" }}<br />
+                📅 <strong>Pickup Date:</strong> {{ pickup_date|slice:":10" }}<br />
                 ⏰ <strong>Pickup Time:</strong> {{ pickup_time }}<br />
 
                 {% if start_point %}
@@ -65,11 +65,16 @@
                 💼 <strong>Baggage:</strong> {{ no_of_baggage|default:'N/A' }}<br />
 
                 {% if paid %}
-                  💰 <strong>Payment:</strong> Paid
+                    💰 <strong>Payment:</strong> Paid<br />
                 {% elif cash %}
-                  💰 <strong>Payment:</strong> Cash to driver
+                    💰 <strong>Payment:</strong> Cash to driver<br />
                 {% else %}
-                  💰 <strong>Payment:</strong> Pending
+                    💰 <strong>Payment:</strong> Pending<br />
+                {% endif %}
+
+
+                {% if message %}
+                    <br>📝 <strong>Message:</strong><br>{{ message }}
                 {% endif %}
 
                 {% if return_start_point or return_flight_number %}
@@ -77,19 +82,23 @@
                   <hr style="border:none;border-top:1px solid #ddd;margin:10px 0;" />
                   <strong>🔁 Return Trip</strong><br />
 
-                  {% if return_start_point %}
-                    📅 <strong>Date:</strong> {{ return_pickup_date }}<br />
-                    ⏰ <strong>Pickup Time:</strong> {{ return_pickup_time }}<br />
-                    📍 <strong>From:</strong> {{ return_start_point }}<br />
-                    📍 <strong>To:</strong> {{ return_end_point }}<br />
-                  {% elif return_direction and return_flight_number %}
-                    ✈️ <strong>Flight:</strong> {{ return_flight_number }} ({{ return_direction }})<br />
-                    📅 <strong>Date:</strong> {{ return_pickup_date }}<br />
-                    ⏰ <strong>Pickup Time:</strong> {{ return_pickup_time }}<br />
-                    {% if return_flight_time %}
-                      ⏱ <strong>Flight Time:</strong> {{ return_flight_time }}<br />
+                    {% if return_start_point %}
+                        📅 <strong>Date:</strong> {{ return_pickup_date }}<br />
+                        ⏰ <strong>Pickup Time:</strong> {{ return_pickup_time }}<br />
+                        📍 <strong>From:</strong> {{ return_start_point }}<br />
+                        📍 <strong>To:</strong> {{ return_end_point }}<br />
+                    {% elif return_direction and return_flight_number %}
+                        ✈️ <strong>Flight:</strong> {{ return_flight_number }} ({{ return_direction }})<br />
+                        📅 <strong>Date:</strong> {{ return_pickup_date }}<br />
+                        ⏰ <strong>Pickup Time:</strong> {{ return_pickup_time }}<br />
+                            {% if return_flight_time %}
+                                ⏱ <strong>Flight Time:</strong> {{ return_flight_time }}<br />
+                            {% endif %}
                     {% endif %}
-                  {% endif %}
+                {% endif %}
+
+                {% if notice %}
+                    <br>⚠️ <strong>Notice:</strong><br>{{ notice }}
                 {% endif %}
               </td>
             </tr>
@@ -111,58 +120,139 @@
         </td>
       </tr>
 
-      <!-- PAYMENT -->
-      <tr>
-        <td style="padding:10px 20px 0; font-size:14px; font-weight:bold;">
-          💰 Payment
-        </td>
-      </tr>
+        <!-- PAYMENT -->
+        <tr>
+            <td style="padding:10px 20px 0; font-size:14px; font-weight:bold;">
+            💰 Payment
+            </td>
+        </tr>
 
-      <tr>
-        <td style="padding:8px 20px 10px; font-size:13px; line-height:22px;">
-          {% if paid %}
-            We have received your payment of ${{ paid }}. Thank you very much.
-          {% elif cash %}
-            The total cost is ${{ price }}{% if toll %} (including toll fee){% endif %}.<br />
-            Payment will be made in cash directly to the driver on the day.
-          {% else %}
-            The total cost is ${{ price }}{% if toll %} (including toll fee){% endif %}.<br /><br />
-            You may prepay securely via PayPal using the link below:<br />
-            <a href="https://easygoshuttle.com.au/payonline">easygoshuttle.com.au/payonline</a><br /><br />
-            Alternatively, if you prefer to pay in cash, please reply to this email to confirm your booking.
-          {% endif %}
-        </td>
-      </tr>
+        <tr>
+            <td style="padding:8px 20px 10px; font-size:13px; line-height:22px;">
+            {% if paid %}
+                We have received your payment of ${{ paid }}. Thank you very much.
+            {% elif cash %}
+                The total cost is ${{ price }}{% if toll %} (including toll fee){% endif %}.<br />
+                Payment will be made in cash directly to the driver on the day.
+            {% else %}
+                The total cost is ${{ price }}{% if toll %} (including toll fee){% endif %}.<br /><br />
+                You may prepay securely via PayPal using the link below:<br />
+                <a href="https://easygoshuttle.com.au/payonline">easygoshuttle.com.au/payonline</a><br /><br />
+                Alternatively, if you prefer to pay in cash, please reply to this email to confirm your booking.
+            {% endif %}
+            </td>
+        </tr>
 
-      <!-- LINKS & ADDITIONAL INFO -->
-      <tr>
+        <!-- LINKS & ADDITIONAL INFO -->
+        <tr>
         <td style="padding:20px; font-size:13px; line-height:22px;">
-          💡 <strong>Additional Information</strong><br />
-          - Baggage: Please ensure the number of bags matches your booking. Extra bags may incur additional charges.<br />
-          - Extra passengers: $10 per person, even without luggage.<br />
-          - Any issues arising from undeclared extra passengers or baggage will be the responsibility of the person who made the booking.<br /><br />
+            💡 <strong>Additional Information</strong><br /><br />
 
-          {% if direction == 'Pickup from Intl Airport' or direction == 'Pickup from Domestic Airport' %}
-            🚐 Airport Meeting point:<br />
-            <a href="https://easygoshuttle.com.au/meeting_point/">easygoshuttle.com.au/meeting_point</a><br /><br />
-          {% endif %}
+            <a href="https://easygoshuttle.com.au/information">
+            easygoshuttle.com.au/information
+            </a><br />
 
-          • Terms & conditions (baggage, extra charges, cancellation policy):<br />
-          <a href="https://easygoshuttle.com.au/terms/">easygoshuttle.com.au/terms</a>
+            <a href="https://easygoshuttle.com.au/terms">
+            easygoshuttle.com.au/terms
+            </a><br />
+
+            <a href="https://easygoshuttle.com.au/payonline">
+            easygoshuttle.com.au/payonline
+            </a><br />
+
+            {% if direction == 'Pickup from Intl Airport' or direction == 'Pickup from Domestic Airport' %}
+            <a href="https://easygoshuttle.com.au/meeting_point/">
+                easygoshuttle.com.au/meeting_point
+            </a>
+            {% endif %}
         </td>
-      </tr>
+        </tr>
 
-      <!-- SIGNATURE -->
-      <tr>
-        <td style="padding:10px 20px 30px; font-size:13px; line-height:22px;">
-          Thank you for choosing EasyGo Airport Shuttle.<br /><br />
-          Best regards,<br />
-          <strong><span style="color:#eb7828;">Easy</span><span style="color:#277fd2;">Go</span> Airport Shuttle</strong>
-        </td>
-      </tr>
+        <!-- SIGNATURE -->
+        <tr>
+            <td style="padding:10px 20px 30px; font-size:13px; line-height:22px;">
+            Thank you for choosing EasyGo Airport Shuttle.<br /><br />
+            Best regards,<br />
+            <strong><span style="color:#eb7828;">Easy</span><span style="color:#277fd2;">Go</span> Airport Shuttle</strong>
+            </td>
+        </tr>
 
-      <!-- FOOTER AND DISCLAIMER REMAINS THE SAME AS ORIGINAL -->
-      <!-- ... 기존 Footer/Disclaimer HTML 그대로 유지 ... -->
+        <!-- START FOOTER -->
+        <tr>
+            <td style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;">
+                <table width="100%" style="border-spacing:0;background-color:#FAFAFA;" role="presentation">
+                    <tr>
+                        <td class="padded content" style="padding-top:40px;padding-right:0;padding-bottom:8px;padding-left:0;width:100%;text-align:center;">
+                            <a href="https://www.easygoshuttle.com.au"><img src="https://easygo.s3.ap-southeast-2.amazonaws.com/easygo_icon.webp" alt="" width="40" style="border-width:0;max-width: 200px;"></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding-top:5px;padding-right:5px;padding-bottom:5px;padding-left:5px;">
+                            <p style="font-size:10px;color:#a09f9f;text-align:center;">  
+                                Website:<a href="https://www.easygoshuttle.com.au">www.easygoshuttle.com.au</a><br>                                  
+                                Email:<a href="mailto:info@easygoshuttle.com.au">info@easygoshuttle.com.au</a><br>						
+                                Contact number:<a href="tel:+61406883355">0406 883 355 (message only)</a><br>		
+                                Whatsapp:<a href="tel:+61406883355">+61406883355</a>				
+
+                            </p>                                       
+                            <p style="font-size:10px;color:#a09f9f;text-align:center;">     
+                                EasyGo Airport Transfers&nbsp;ABN 27 695 661 227	
+                            </p>
+                        </td>
+                    </tr>            
+                        <td class="padded content" style="padding-top:0px;padding-right:20px;padding-bottom:14px;padding-left:20px;width:100%;text-align:center;font-size: 13px;color: #C4C7C9;width:600px;">
+                            <p style="font-size:9px;line-height:15px;color: #a09f9f">      
+                                A Little about EasyGo Airport Transfers: 
+                                We provide an express pickup and transport service to and from Sydney Airport, 
+                                delivering to and from hotels, homes, business offices or any other venue. 
+                                Catering to individual travellers, families or corporate groups we run the easiest 
+                                and most cost-effective of shuttle services. Our Services are conducted in clean, modern, air conditioned vehicles. 
+                                And our services are reliable, punctual and completely refund guaranteed.                                 
+                        
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="padded content" style="background-color: #FAFAFA;padding-top:0px;padding-bottom:0px;padding-right:0;padding-left:0;width:100%;text-align:center;font-family:'Neuton',serif;font-size: 24px;color: #727272;width:600px;">
+                            <a href="https://www.facebook.com"><img src="https://easygo.s3.ap-southeast-2.amazonaws.com/icons8-facebook-50.png" alt="" width="14" style="border-width:0;padding-right:1px;"></a>
+                            <a href="https://www.twitter.com"><img src="https://easygo.s3.ap-southeast-2.amazonaws.com/icons8-twitter-50.png" alt="" width="14" style="border-width:0;padding-right:1px;"></a>
+                            <a href="https://www.youtube.com"><img src="https://easygo.s3.ap-southeast-2.amazonaws.com/icons8-youtube-50.png" alt="" width="14" style="border-width:0;padding-right:1px;"></a>
+                            <a href="https://www.instagram.com"><img src="https://easygo.s3.ap-southeast-2.amazonaws.com/icons8-instagram-50.png" alt="" width="14" style="border-width:0;padding-right:1px;"></a>
+                        </td>
+                    </tr>
+                </table>
+                <!--[if (gte mso 9)|(IE)]>
+                    </td>
+                    </tr>
+                    </table>
+                <![endif]-->
+            </td>
+        </tr>
+        <!-- END FOOTER -->
+        
+
+        <!-- START DISCLAIMER -->
+        <tr>
+            <td style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;">
+                <table width="100%" style="border-spacing:0;background-color:#FAFAFA;" role="presentation">
+                    <tr>
+                        <td class="padded content" style="padding-top:6px;padding-right:20px;padding-bottom:24px;padding-left:20px;width:100%;text-align:center;font-size: 13px;color: #C4C7C9;width:600px;">
+                            <p style="font-size:9px;line-height:15px;color: #a09f9f">
+                                Attention: This email and attachments are intended solely for your use and may be confidential. 
+                                Any review, dissemination, distribution or reproduction of this email is strictly prohibited. 
+                                Please contact the sender if you have received this message in error.
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+                <!--[if (gte mso 9)|(IE)]>
+                </td>
+                </tr>
+                </table>
+                <![endif]-->
+            </td>
+        </tr>
+        <!-- END DISCLAIMER -->
 
     </div>
   </center>
