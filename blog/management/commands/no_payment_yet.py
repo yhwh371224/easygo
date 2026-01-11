@@ -37,18 +37,20 @@ class Command(BaseCommand):
             pickup_date__range=(start_date, end_date),
             cash=False,
             cancelled=False,
-        ).filter(
-            Q(paid__isnull=True) | Q(paid__exact="")
         )
 
         for booking in bookings:
             display_date = self.get_display_date(booking)  # 먼저 계산
 
             try: 
+                # paid 값 float로 안전하게 변환
+                price = float(booking.price or 0)
+                paid = float(booking.paid or 0)
+
                 # ----------------------------
                 # 1. 결제 미완료 메일
                 # ----------------------------
-                if not booking.paid:
+                if booking.paid is None or booking.paid == "" or paid == 0:
                     days_difference = (booking.pickup_date - start_date).days
                     if days_difference <= 2:
                         email_subject = "Urgent notice for payment"
@@ -75,26 +77,22 @@ class Command(BaseCommand):
                 # ----------------------------
                 # 2. 결제 차액 메일
                 # ----------------------------
-                if booking.paid is not None:
-                    price = float(booking.price or 0)
-                    paid = float(booking.paid or 0)
-                    if price > paid:
-                        diff = round(price - paid, 2)
-                        display_date = self.get_display_date(booking)
-                        self.send_email(
-                            "Urgent notice for payment discrepancy",
-                            "basecamp/html_email-response-discrepancy.html",
-                            {
-                                'name': booking.name,
-                                'price': booking.price,
-                                'paid': booking.paid,
-                                'diff': diff,
-                                'pickup_date': booking.pickup_date,
-                                'return_pickup_date': booking.return_pickup_date,
-                                'display_date': display_date,
-                            },
-                            [booking.email, RECIPIENT_EMAIL]
-                        )
+                elif 0 < paid < price:
+                    diff = round(price - paid, 2)
+                    self.send_email(
+                        "Urgent notice for payment discrepancy",
+                        "basecamp/html_email-response-discrepancy.html",
+                        {
+                            'name': booking.name,
+                            'price': booking.price,
+                            'paid': booking.paid,
+                            'diff': diff,
+                            'pickup_date': booking.pickup_date,
+                            'return_pickup_date': booking.return_pickup_date,
+                            'display_date': display_date,
+                        },
+                        [booking.email, RECIPIENT_EMAIL]
+                    )
             
             except Exception as e:
                 logger.error(f"Failed to send email for booking {booking.id} ({booking.email}): {e}")
