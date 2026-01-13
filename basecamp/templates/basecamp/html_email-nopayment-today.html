@@ -234,13 +234,17 @@
 												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;"> 
                                                     I hope this email finds you well.<br><br>
 
-                                                    This is a final follow-up regarding the pending payment (&#36;{{ price }}) for your booking scheduled for tomorrow. 
+                                                    This is a final follow-up regarding the pending payment (&#36;{{ price }}) for your booking. 
                                                     Despite our previous email, we have not yet received a response or payment confirmation.<br><br>
 
-                                                    As your booking is approaching very soon, it’s important that we confirm your payment method without delay. 
-                                                    Please respond immediately to let us know how you intend to pay.<br><br>
-
-                                                    ✅&nbsp;<strong>If you wish to pay in cash directly to the driver on the day of pickup, that is perfectly fine — we just need your confirmation by replying to this email.</strong><br><br>
+                                                    {% if not prepay %}
+														✅&nbsp;<strong>If you prefer to pay in cash to the driver on the day of your pickup, that is absolutely fine — just reply to this email to confirm.</strong><br>
+														Alternatively, if you’d like to pay online in advance, please visit the link below to view your payment options:<br>
+														<a href="https://easygoshuttle.com.au/payment_options1">👉 easygoshuttle.com.au/payment_options</a><br><br>
+													{% else %}
+														✅&nbsp;<strong>Please complete your payment using the link below to fully confirm your booking.</strong><br>
+														<a href="https://easygoshuttle.com.au/payment_options1">👉 easygoshuttle.com.au/payment_options</a><br><br>
+													{% endif %}
 
                                                     Ensuring clear communication helps us prepare your booking and avoid any disruptions. 
                                                     We truly appreciate your urgent attention to this matter.<br><br>

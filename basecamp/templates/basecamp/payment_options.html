@@ -30,11 +30,11 @@
                     You can make payments online through PayPal<br><br> 
                     &nbsp; • &nbsp;<a href="https://easygoshuttle.com.au/payonline">easygoshuttle.com.au/payonline</a><br><br><hr>
 
-                    <!-- 2. <strong>Online payment through Stripe</strong><br>
+                    2. <strong>Online payment through Stripe</strong><br>
                     You can make payments online through Stripe<br><br> 
-                    &nbsp; • &nbsp;<a href="{% url 'basecamp:pay_stripe' %}">easygoshuttle.com.au/pay/stripe</a><br><br><hr> -->
+                    &nbsp; • &nbsp;<a href="{% url 'basecamp:pay_stripe' %}">easygoshuttle.com.au/pay/stripe</a><br><br><hr>
 
-                    2. <strong>PayID</strong><br><br>
+                    3. <strong>PayID</strong><br><br>
                     &nbsp; • &nbsp;Mobile: 0406 883 355<br>                   
                     <span style="color: #eb7828;">Please email the receipt after PayID payment</span><hr><br>
 
@@ -42,7 +42,7 @@
                     You can make payments through your XRP coins<br><br> 
                     &nbsp; • &nbsp;<a href="{% url 'blog:pay_xrp_page' %}">Pay with XRP coins</a><br><br><hr> -->
 
-                    3. {% include 'basecamp/includes/bank_details.html' with bank=DEFAULT_BANK %}<br><br><hr>
+                    4. {% include 'basecamp/includes/bank_details.html' with bank=DEFAULT_BANK %}<br><br><hr>
 
                     Please choose the method that is most convenient for you to proceed with the payment.<br><br> 
                 </form>
