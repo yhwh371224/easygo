@@ -243,8 +243,14 @@
 													<br><br>
 
 													The total amount for this booking is <strong>${{ price }}</strong>.<br>
-													Could you please let us know whether you will be paying
-													<strong>cash on the day</strong> or <strong>by card in advance</strong>?<br><br>
+													{% if not prepay %}
+														Please let us know whether you would like to pay
+    													<strong>cash on the day</strong> or <strong>by card in advance</strong>.<br><br>
+													{% else %}
+														Please complete your payment via the following link:<br>
+    													<a href="https://easygoshuttle.com.au/payonline">easygoshuttle.com.au/payonline</a><br>
+														Once payment is received, your booking will be fully confirmed.<br><br>
+													{% endif %}
 
 													Please note that your booking will remain in <strong>pending</strong> status until we receive your payment preference.<br>
 													If we do not receive a response promptly, we may not be able to secure your booking, as availability is subject to change and vehicles can become fully booked.<br><br>

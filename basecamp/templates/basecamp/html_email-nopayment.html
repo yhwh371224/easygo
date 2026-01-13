@@ -232,24 +232,24 @@
 										<tr>
 											<td align="left" style="padding-top:28px;padding-left:0;">
                                                 <p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;"> 
-                                                    I hope this email finds you well.<br><br>
-                                                    
-                                                    I’m getting in touch regarding the payment (&#36;{{ price }}) for your booking(s).<br><br>
+													I hope this email finds you well.<br>													
+													I’m getting in touch regarding the payment (<strong>&#36;{{ price }}</strong>) for your booking.<br>
+													We are still awaiting payment confirmation. If you have already made the payment, please let us know.<br><br>
 
-                                                    We are still waiting for payment confirmation. If you've already made the payment, please let us know.<br><br>
+													{% if not prepay %}
+														✅&nbsp;<strong>If you prefer to pay in cash to the driver on the day of your pickup, that is absolutely fine — just reply to this email to confirm.</strong><br>
+														Alternatively, if you’d like to pay online in advance, please visit the link below to view your payment options:<br>
+														<a href="https://easygoshuttle.com.au/payment_options">👉 easygoshuttle.com.au/payment_options</a><br><br>
+													{% else %}
+														✅&nbsp;<strong>Please complete your payment using the link below to fully confirm your booking.</strong><br>
+														<a href="https://easygoshuttle.com.au/payment_options">👉 easygoshuttle.com.au/payment_options</a><br><br>
+													{% endif %}
 
-                                                    ✅&nbsp;<strong>If you prefer to pay in cash to the driver on the day of your pickup, that is absolutely fine—just reply to this email to confirm.</strong><br><br>
+													Your prompt reply will help us finalise your booking smoothly, and we truly appreciate your cooperation.<br>
+													If you have any questions or need assistance, please don’t hesitate to reach out.<br>
+													Thank you once again — we look forward to serving you soon.<br><br>
+												</p>
 
-                                                    Alternatively, if you’d like to pay online in advance, simply visit the link below and choose your preferred payment option: <br><br>
-
-													<a href="https://easygoshuttle.com.au/payment_options">👉 easygoshuttle.com.au/payment_options</a> <br><br>
-
-													Your prompt reply will help us finalize your booking smoothly, and we truly appreciate your cooperation. <br><br>
-
-													If you have any questions or need assistance, please don’t hesitate to reach out. <br><br>
-
-													Thank you once again—we look forward to serving you soon. <br><br>
-                                                </p>
 												<p style="Margin:0;font-size:13px; line-height:22px;Margin-bottom:12px;">
                                                     Best Regards,<br> 													
 													<span style="color: #eb7828">Easy</span><span style="color: blue">Go&nbsp;</span>Airport Shuttle<br>	                                                          

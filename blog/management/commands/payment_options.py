@@ -43,7 +43,8 @@ class Command(BaseCommand):
                         "email": notice.email,
                         "pickup_date": notice.pickup_date,
                         "return_pickup_date": notice.return_pickup_date,
-                        "price": total_price,   
+                        "price": total_price,
+                        "prepay": notice.prepay,      
                     }
                 )
                 text_content = strip_tags(html_content)

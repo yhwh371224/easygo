@@ -9,8 +9,8 @@ class DriverAdmin(admin.ModelAdmin):
 
 
 class InquiryAdmin(admin.ModelAdmin):
-    list_display = ['pickup_date', 'suburb', 'pickup_time', 'direction', 'no_of_passenger', 'return_flight_number','is_confirmed', 
-                    'cancelled', 'created']
+    list_display = ['pickup_date', 'contact', 'suburb', 'pickup_time', 'direction', 'no_of_passenger', 'return_flight_number','is_confirmed', 
+                    'cancelled', 'pending', 'created']
     search_fields = ['pickup_date', 'pickup_time', 'suburb', 'email', 'street', 
                      'name', 'contact', 'email1']
 
