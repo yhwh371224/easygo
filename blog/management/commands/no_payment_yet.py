@@ -70,6 +70,7 @@ class Command(BaseCommand):
                             'pickup_date': booking.pickup_date,
                             'return_pickup_date': booking.return_pickup_date,
                             'display_date': display_date,
+                            "prepay": booking.prepay,
                         },
                         [booking.email, RECIPIENT_EMAIL]
                     )
