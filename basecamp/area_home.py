@@ -209,6 +209,7 @@ def get_home_suburbs():
         "Pendle Hill",
         "Pennant Hills",
         "Penrith",
+        "Penshurst",
         "Plumpton",
         "Potts Point",
         "Prospect",
