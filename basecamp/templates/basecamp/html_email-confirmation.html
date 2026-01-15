@@ -130,17 +130,18 @@
             <tr>
                 <td style="padding:15px; font-size:14px; line-height:22px; color:#333;">
                 💰 <strong>Payment</strong><br /><br />
-                
-                • The total cost is ${{ price }}<br />
 
                 {% if paid %}
                     • We have received your payment. Thank you very much.<br />
                 {% elif cash %}
+                    • The total cost is ${{ price }}<br />
                     • Payment will be made in cash directly to the driver on the day.<br />
                 {% elif prepay %}
+                    • The total cost is ${{ price }}<br />
                     • Please make payment online in advance using the link below:<br />
                     &nbsp;&nbsp;<a href="https://easygoshuttle.com.au/payonline">easygoshuttle.com.au/payonline</a><br />
                 {% else %}
+                    • The total cost is ${{ price }}<br />
                     • You may prepay securely via PayPal using the link below:<br />
                     &nbsp;&nbsp;<a href="https://easygoshuttle.com.au/payonline">easygoshuttle.com.au/payonline</a><br />
                     • Alternatively, if you prefer to pay in cash, please reply to this email to confirm your booking.<br />
