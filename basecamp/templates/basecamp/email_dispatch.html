@@ -93,38 +93,25 @@
 							</select>
 						</div>
 
-						<!-- Adjusted Pickup Time -->
-						<div class="mb-3 pb-1">
-							<label class="form-label">Adjusted pickup time</label>
-							<input class="form-control"
-								type="time"
-								name="adjusted_pickup_time">
-							<small class="text-light">
-								Use only when pickup time has changed
-							</small>
-						</div>
-
 						<!-- Payment Method (RADIO) -->
-					<div class="mb-3 pb-1">
-						<label class="form-label">Payment cash/card method</label>
+						<div class="mb-3 pb-1">
+							<label class="form-label">Payment cash/card method</label>
+							<div class="form-check">
+								<input class="form-check-input"
+									type="radio"
+									name="payment_method"
+									value="cash">
+								<label class="form-check-label">Cash</label>
+							</div>
 
-						<div class="form-check">
-							<input class="form-check-input"
-								type="radio"
-								name="payment_method"
-								value="cash"
-								>
-							<label class="form-check-label">Cash</label>
+							<div class="form-check">
+								<input class="form-check-input"
+									type="radio"
+									name="payment_method"
+									value="card">
+								<label class="form-check-label">Card</label>
+							</div>
 						</div>
-
-						<div class="form-check">
-							<input class="form-check-input"
-								type="radio"
-								name="payment_method"
-								value="card">
-							<label class="form-check-label">Card</label>
-						</div>
-					</div>
 
 						<!-- Payment Amount -->
 						<div class="mb-3 pb-1">
@@ -139,6 +126,17 @@
 								For Gratitude / Multi-payment only
 							</small>
 						</div>
+
+						<!-- Adjusted Pickup Time -->
+						<div class="mb-3 pb-1">
+							<label class="form-label">Adjusted pickup time</label>
+							<input class="form-control"
+								type="time"
+								name="adjusted_pickup_time">
+							<small class="text-light">
+								Use only when pickup time has changed
+							</small>
+						</div>						
 
 						<!-- Remain Return Booking -->
 						<div class="mb-3 pb-1">
