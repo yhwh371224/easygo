@@ -25,7 +25,6 @@ from blog.sms_utils import send_sms_notice, send_whatsapp_template
 from basecamp.area import get_suburbs
 from basecamp.area_full import get_more_suburbs
 from basecamp.area_home import get_home_suburbs
-from basecamp.utils import check_and_send_missing_info_email
 
 from .utils import parse_date, handle_email_sending, format_pickup_time_12h, render_to_pdf
 
@@ -1047,10 +1046,7 @@ def confirmation_detail(request):
                  return_flight_number=return_flight_number, return_flight_time=return_flight_time, return_pickup_time=return_pickup_time, return_start_point=return_start_point,
                  return_end_point=return_end_point, notice=notice, price=price, paid=paid, cash=cash, prepay=prepay, driver=sam_driver)
         
-        p.save()
-
-        # ✅ 저장 직후 즉시 연락처/항공편 체크 및 이메일 발송
-        check_and_send_missing_info_email(p)
+        p.save()        
 
         rendering = render(request, 'basecamp/inquiry_done.html')   
         
@@ -1212,10 +1208,7 @@ def booking_detail(request):
                  return_pickup_time=return_pickup_time, return_start_point=return_start_point, return_end_point=return_end_point, driver=sam_driver,
                  price=price, )
         
-        p.save()
-
-        # ✅ 예약 저장 직후 연락처/비행편 체크
-        check_and_send_missing_info_email(p)
+        p.save()        
         
         if is_ajax(request):
             return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})
@@ -1525,8 +1518,7 @@ def confirm_booking_detail(request):
         )
 
         p.save()
-        # ✅ 저장 직후 즉시 체크 & 이메일 발송
-        check_and_send_missing_info_email(p)
+        
         user.delete()
 
         return render(request, 'basecamp/inquiry_done.html')
@@ -1741,7 +1733,6 @@ def sending_email_input_data_detail(request):
 
             handle_email_sending(request, user.email, subject, template_name, context)
 
-
         return render(request, 'basecamp/inquiry_done.html') 
     
     else:
@@ -1855,8 +1846,6 @@ def return_trip_detail(request):
                  price=price, toll=toll)
         
         p.save()
-
-        check_and_send_missing_info_email(p)
 
         rendering = render(request, 'basecamp/inquiry_done.html')    
         
@@ -2142,7 +2131,7 @@ def invoice_detail(request):
 
         text_content = strip_tags(html_content)
         recipient_list = [email, RECIPIENT_EMAIL]
-        if extra_email:                # 값이 있으면 추가
+        if extra_email:                
             recipient_list.append(extra_email)
 
         mail = EmailMultiAlternatives(
@@ -2161,7 +2150,7 @@ def invoice_detail(request):
         mail.send()
 
         if not multiple and user.company_name and not user.prepay:
-            if not user.cash:  # 🚨 cash인 경우는 제외
+            if not user.cash:  
                 user.price = round(float(user.price) * 1.10, 2)
                 user.prepay = True
                 user.save()
