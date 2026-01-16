@@ -1,10 +1,9 @@
+import re
 from datetime import datetime, date
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
 from django.utils.html import strip_tags
 from main.settings import RECIPIENT_EMAIL
-
-from django.template.loader import render_to_string
 from weasyprint import HTML
 from io import BytesIO
 
@@ -83,5 +82,65 @@ def format_pickup_time_12h(pickup_time_str):
         return time_obj.strftime("%I:%M %p")  # 예: "06:30 PM"
     except ValueError:
         return pickup_time_str  # 실패 시 원래 값 반환
+    
+
+def check_and_send_missing_info_email(post):
+    issues = []
+
+    # ---------- CONTACT CHECK ----------
+    contact = (post.contact or '').strip()
+    cleaned_contact = ''.join(filter(str.isdigit, contact))
+    if not cleaned_contact or len(cleaned_contact) < 10 or len(cleaned_contact) > 16:
+        issues.append('Contact number is missing or invalid')
+
+    # ---------- FLIGHT CHECK ----------
+    AIRPORT_PICKUPS = {
+        'pickup from intl airport',
+        'pickup from domestic airport',
+    }
+
+    flight_number = (post.flight_number or '').strip()
+    flight_number_cleaned = re.sub(r'[^A-Za-z0-9]', '', flight_number).upper()
+
+    flight_issue = False
+
+    if post.direction and post.direction.strip().lower() in AIRPORT_PICKUPS:
+
+        flight_valid = False
+
+        # 특별 예외: '5j39'
+        if flight_number_cleaned.lower() == '5j39':
+            flight_valid = True
+        else:
+            match = re.match(r'^([A-Z]{1,3})(\d+)$', flight_number_cleaned)
+            if match:
+                number_part_raw = match.group(2)
+                number_part_no_zero = number_part_raw.lstrip('0')
+                if len(number_part_no_zero) <= 4:
+                    flight_valid = True
+
+        if not flight_valid:
+            flight_issue = True
+            issues.append('Flight number is missing or invalid')
+
+    # ---------- SEND EMAIL ----------
+    if issues:
+        handle_email_sending(
+            request=None,
+            email=post.email,
+            subject="Missing or Invalid Flight/Contact Information Reminder",
+            template_name="basecamp/html_email-missing-flight-contact.html",
+            context={
+                'name': post.name,
+                'email': post.email,
+                'pickup_date': post.pickup_date,
+                'direction': post.direction,
+                'flight_number': post.flight_number,
+                'contact': post.contact,
+                'issues': issues,
+            }
+        )
+
+
     
 
