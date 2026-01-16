@@ -8,6 +8,7 @@ from main.settings import RECIPIENT_EMAIL
 
 from .models import Post, Inquiry, PaypalPayment, StripePayment
 from .tasks import create_event_on_calendar, notify_user_payment_paypal, notify_user_payment_stripe
+from basecamp.utils import check_and_send_missing_info_email
 from utils.return_booking import handle_return_trip
 from utils.inquiry_helper import send_inquiry_email  
 from utils.prepay_helper import is_foreign_number
@@ -80,4 +81,8 @@ def check_missing_direction(sender, instance, created, **kwargs):
         send_missing_direction_email(instance)
 
 
-                
+# check missing flight contact info
+@receiver(post_save, sender=Post, dispatch_uid="check_missing_flight_contact_once")
+def check_missing_flight_contact(sender, instance, created, **kwargs):
+    if created:
+        check_and_send_missing_info_email(instance)                
