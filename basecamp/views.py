@@ -25,6 +25,7 @@ from blog.sms_utils import send_sms_notice, send_whatsapp_template
 from basecamp.area import get_suburbs
 from basecamp.area_full import get_more_suburbs
 from basecamp.area_home import get_home_suburbs
+from basecamp.utils import check_and_send_missing_info_email
 
 from .utils import parse_date, handle_email_sending, format_pickup_time_12h, render_to_pdf
 
@@ -1048,6 +1049,9 @@ def confirmation_detail(request):
         
         p.save()
 
+        # ✅ 저장 직후 즉시 연락처/항공편 체크 및 이메일 발송
+        check_and_send_missing_info_email(p)
+
         rendering = render(request, 'basecamp/inquiry_done.html')   
         
         return rendering
@@ -1209,6 +1213,9 @@ def booking_detail(request):
                  price=price, )
         
         p.save()
+
+        # ✅ 예약 저장 직후 연락처/비행편 체크
+        check_and_send_missing_info_email(p)
         
         if is_ajax(request):
             return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})
@@ -1518,6 +1525,8 @@ def confirm_booking_detail(request):
         )
 
         p.save()
+        # ✅ 저장 직후 즉시 체크 & 이메일 발송
+        check_and_send_missing_info_email(p)
         user.delete()
 
         return render(request, 'basecamp/inquiry_done.html')
@@ -1543,13 +1552,14 @@ def sending_email_first_detail(request):
         if users.exists() and 0 <= index < len(users):
             user = users[index]  
 
-            # ✅ Only update prepay if it’s provided
-            if prepay_raw is not None:
-                user.prepay = (prepay_raw == 'True')
+            form_prepay = (prepay_raw == 'True') if prepay_raw is not None else False
+            final_prepay = bool(user.prepay) or form_prepay            
 
-            if cash_raw is not None:
-                user.cash = (cash_raw == 'True')  
+            form_cash = (cash_raw == 'True') if cash_raw is not None else False
+            final_cash = bool(user.cash) or form_cash
 
+            user.prepay = final_prepay
+            user.cash = final_cash  
             user.sent_email = True
             user.save()
             
@@ -1582,10 +1592,10 @@ def sending_email_first_detail(request):
                                             'return_direction': user.return_direction, 'return_pickup_date': user.return_pickup_date, 
                                             'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
                                             'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
-                                            'price': user.price, 'paid': user.paid, 'cash': user.cash, 'toll': getattr(user, 'toll', 0), 
-                                            'start_point': getattr(user, 'start_point', ''), 'end_point': getattr(user, 'end_point', ''),
-                                            'return_start_point': getattr(user, 'return_start_point', ''), 
-                                            'return_end_point': getattr(user, 'return_end_point', ''), 'prepay': user.prepay,
+                                            'price': user.price, 'paid': user.paid, 'cash': final_cash, 'prepay': final_prepay,
+                                            'toll': getattr(user, 'toll', 0), 'start_point': getattr(user, 'start_point', ''), 
+                                            'end_point': getattr(user, 'end_point', ''), 'return_start_point': getattr(user, 'return_start_point', ''), 
+                                            'return_end_point': getattr(user, 'return_end_point', ''), 
                                         })
 
                 text_content = strip_tags(html_content)
@@ -1617,15 +1627,21 @@ def sending_email_second_detail(request):
         user = Post.objects.filter(email__iexact=email)[1]
         user1 = Post.objects.filter(email__iexact=email).first() 
 
-        # ✅ Only update prepay if it’s provided
-        if prepay_raw is not None:
-            user.prepay = (prepay_raw == 'True')
+        form_prepay = (prepay_raw == 'True') if prepay_raw is not None else False
+        final_prepay = bool(user.prepay) or bool(user1.prepay) or form_prepay            
 
-        if cash_raw is not None:
-            user.cash = (cash_raw == 'True')   
+        form_cash = (cash_raw == 'True') if cash_raw is not None else False
+        final_cash   = bool(user.cash)   or bool(user1.cash)   or form_cash
 
+        user.prepay = final_prepay
+        user.cash = final_cash 
         user.sent_email = True
         user.save()  
+
+        user1.prepay = final_prepay
+        user1.cash   = final_cash
+        user1.sent_email = True
+        user1.save()
 
         price1 = float(user.price) if user.price else 0
         price2 = float(user1.price) if user1.price else 0
@@ -1635,7 +1651,7 @@ def sending_email_second_detail(request):
         paid2 = float(user1.paid) if user1.paid else 0
         double_paid = paid1 + paid2
         
-        if user.cancelled: 
+        if user.cancelled or user1.cancelled:
             template_name = "basecamp/html_email-cancelled.html"
             subject = "Booking Cancellation Notice - EasyGo" 
             
@@ -1681,10 +1697,6 @@ def sending_email_second_detail(request):
             )
             email_message.attach_alternative(html_content, "text/html")
             email_message.send()
-
-        if not user1.sent_email: 
-            user1.sent_email = True
-            user1.save()
             
         return render(request, 'basecamp/inquiry_done.html') 
     
@@ -1843,6 +1855,8 @@ def return_trip_detail(request):
                  price=price, toll=toll)
         
         p.save()
+
+        check_and_send_missing_info_email(p)
 
         rendering = render(request, 'basecamp/inquiry_done.html')    
         
