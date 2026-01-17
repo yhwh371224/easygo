@@ -238,34 +238,44 @@
 										<tr>
 											<td align="left" style="padding-top:28px;padding-left:0;">
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
-                                                    We regret to inform you that due to unforeseen circumstances within our company, 
-                                                    we must cancel your booking on {{ booking_date }}
-													{% if not remain_return_booking and return_booking_date %}
-													and {{ return_booking_date }}
+													
+													{% if return_booking_date %}			
+														{% comment %}왕복 예약인 경우{% endcomment %}
+
+														{% if not remain_first_booking and not remain_return_booking %}
+															We regret to inform you that due to unforeseen circumstances within our company,
+															your bookings on <strong>{{ booking_date }}</strong> and <strong>{{ return_booking_date }}</strong> have both been cancelled.
+														
+														{% elif not remain_first_booking and remain_return_booking %}
+															We regret to inform you that due to unforeseen circumstances within our company,
+															your bookings on <strong>{{ booking_date }}</strong> has been cancelled.
+															<br><br>
+															• Your booking on <strong>{{ return_booking_date }}</strong> remains confirmed as scheduled.
+														
+														{% elif remain_first_booking and not remain_return_booking %}
+															We regret to inform you that due to unforeseen circumstances within our company, 
+															your bookings on <strong>{{ return_booking_date }}</strong> has been cancelled.
+															<br><br>
+															• Your booking on <strong>{{ booking_date }}</strong> remains confirmed as scheduled.
+														{% endif %}
+													
+													{% else %}
+														{% comment %}단일 예약(편도)인 경우{% endcomment %}
+														We regret to inform you that your booking on <strong>{{ booking_date }}</strong> has been cancelled.
 													{% endif %}
-                                                    We sincerely apologize for any inconvenience this may cause.
-                                                    <br><br>
-
-                                                    We understand that this may disrupt your plans, and we truly appreciate your understanding. 
-                                                    If you have already made any payments, we will process a full refund promptly. 
-                                                    <br><br>
-
-													{% if remain_return_booking and return_booking_date %}
-													• Please rest assured, your booking on {{ return_booking_date }} remains confirmed as scheduled.
+													
 													<br><br>
-													{% endif %}
-
-                                                    Once again, we apologize for this unexpected change and appreciate your understanding.
-                                                    <br><br> 
-                                                    
-                                                    Best regards,                                                    
+													We sincerely apologize for any inconvenience this may cause.
+													<br><br>
+													If you have already made any payments, a full refund will be processed promptly.
+													<br><br>
+													Thank you for your understanding, and please do not hesitate to contact us if you require any further assistance.
+													<br><br>
+													Best regards,<br>
+													Peter
 												</p>
-												<p style="Margin:0;font-size:14px;font-weight:bold;line-height:22px;Margin-bottom:12px;">
-													<span style="color: #eb7828">Easy</span><span style="color: blue">Go&nbsp;</span>Airport Shuttle<br>	                                                          
-                                                </p>															
 											</td>
-										</tr>
-										
+										</tr>										
                                     </table>
 									<!--[if (gte mso 9)|(IE)]>
 							            </td>

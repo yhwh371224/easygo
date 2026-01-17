@@ -136,24 +136,29 @@
 							<small class="text-light">
 								Use only when pickup time has changed
 							</small>
-						</div>						
-
-						<!-- Remain Return Booking -->
+						</div>		
+						
+						<!-- Remain First or Second Booking -->
 						<div class="mb-3 pb-1">
-							<label class="form-label">Remain return booking</label>
+							<label class="form-label">Booking options to remain:</label>
+							
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox" name="remain_first_booking" id="remain_first_booking">
+								<label class="form-check-label" for="remain_first_booking">
+									Keep first booking
+								</label>
+							</div>
+
 							<div class="form-check">
 								<input class="form-check-input" type="checkbox" name="remain_return_booking" id="remain_return_booking">
 								<label class="form-check-label" for="remain_return_booking">
-									Remain return booking
+									Keep second booking
 								</label>
 							</div>
-							<small class="text-light">
-								Check this only for remaining return booking
-							</small>
 						</div>
 
 						<!-- Wait Duration -->
-						<div class="mb-3 pb-1">
+						<!-- <div class="mb-3 pb-1">
 							<label class="form-label">
 								How long driver waited / how much earlier
 							</label>
@@ -161,10 +166,10 @@
 								type="text"
 								name="wait_duration"
 								placeholder="e.g. 15 mins">
-						</div>
+						</div> -->
 
 						<!-- Discount / Additional Price -->
-						<div class="mb-3 pb-1">
+						<!-- <div class="mb-3 pb-1">
 							<label class="form-label">
 								Discount price or additional waiting charge
 							</label>
@@ -173,7 +178,7 @@
 								step="1"
 								name="discount_price"
 								placeholder="Put only number">
-						</div>
+						</div> -->
 
 					</div>
 
