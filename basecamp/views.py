@@ -2,6 +2,7 @@ from datetime import datetime, date, timedelta
 
 import logging
 from multiprocessing import context
+from urllib import request
 import requests
 import stripe
 import json
@@ -2170,6 +2171,7 @@ def email_dispatch_detail(request):
         adjusted_pickup_time = request.POST.get('adjusted_pickup_time')
         payment_method = request.POST.get("payment_method")
         payment_amount = request.POST.get('payment_amount')
+        remain_first_booking = request.POST.get('remain_first_booking') == 'on'
         remain_return_booking = request.POST.get('remain_return_booking') == 'on'
         wait_duration = request.POST.get('wait_duration')
         discount_price = request.POST.get('discount_price')
@@ -2408,35 +2410,59 @@ def email_dispatch_detail(request):
 
         # ✅ Cancellation
         if selected_option in ["Cancellation of Booking", "Cancellation by Client", "Apologies Cancellation of Booking"]:
-            if user.return_pickup_time == 'x' and not remain_return_booking:
-                user1 = Post.objects.filter(email__iexact=user.email)[1]
+
+            user1 = None
+            if user.return_pickup_time == 'x':
                 try:
-                    user.cancelled = True
-                    user.pending = False
-                    user.save()
-                    context.update({'booking_date': user.pickup_date, 
-                                    'return_booking_date': user.return_pickup_date if user.return_pickup_time == 'x' else None,
-                                })
-                    
+                    user1 = Post.objects.filter(email__iexact=user.email)[1]
+                except IndexError:
+                    user1 = None
+
+            # ① 첫 번째 ❌ / 두 번째 ❌ (모두 취소)
+            if user.return_pickup_time == 'x' and not remain_return_booking:                
+                user.cancelled = True
+                user.pending = False
+                user.save()
+
+                if user1:
                     user1.cancelled = True
                     user1.pending = False
                     user1.save()
-                except IndexError:
-                    pass
 
+                context.update({
+                    'booking_date': user.pickup_date,
+                    'return_booking_date': user1.pickup_date if user1 else None,
+                })
+
+            # ② 첫 번째 ✅ / 두 번째 ❌
             elif user.return_pickup_time == 'x' and remain_return_booking:
-                user1 = Post.objects.filter(email__iexact=user.email)[1]
-                try:
+                if user1:
                     user1.cancelled = True
                     user1.pending = False
                     user1.save()
-                    context.update({'booking_date': user1.pickup_date, 
-                                    'return_booking_date': user1.return_pickup_date,
-                                    'remain_return_booking': remain_return_booking
-                                })
-                except IndexError:
-                    pass
 
+                context.update({
+                    'booking_date': user.pickup_date,   
+                    'return_booking_date': user1.pickup_date if user1 else None,
+                    'remain_first_booking': remain_first_booking,
+                    'remain_return_booking': remain_return_booking,
+                })
+
+            # ③ 첫 번째 ❌ / 두 번째 ✅  
+            elif user.return_pickup_time == 'x' and remain_return_booking == "return":
+                # outbound 취소, return 유지
+                user.cancelled = True
+                user.pending = False
+                user.save()
+
+                context.update({
+                    'booking_date': user.pickup_date,
+                    'return_booking_date': user1.pickup_date if user1 else None,
+                    'remain_first_booking': remain_first_booking,
+                    'remain_return_booking': remain_return_booking,                    
+                })
+
+            # ④ 단일 예약 (왕복 아님)
             else:
                 user.cancelled = True
                 user.pending = False
@@ -2448,15 +2474,6 @@ def email_dispatch_detail(request):
                 message = f"EasyGo - Urgent notice!\n\nDear {user.name}, We have sent an urgent email. Please check your email.\nReply only via email >> info@easygoshuttle.com.au"
                 send_sms_notice(user.contact, message)
                 send_whatsapp_template(user.contact, user.name)
-
-            if user.return_pickup_time == 'x' and not remain_return_booking:
-                try:
-                    user1 = Post.objects.filter(email__iexact=user.email)[1]
-                    user1.cancelled = True
-                    user1.pending = False
-                    user1.save()
-                except IndexError:
-                    pass
 
         # ✅ Payment discrepancy
         if selected_option == "Payment discrepancy" and user:
