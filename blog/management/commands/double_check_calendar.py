@@ -13,25 +13,29 @@ class Command(BaseCommand):
     help = 'Double check calendar'
 
     def handle(self, *args, **options):
-        tomorrow = date.today() + timedelta(days=1)
-        tomorrow_bookings = Post.objects.filter(pickup_date=tomorrow)
-        
-        for booking in tomorrow_bookings:
+        start_date = date.today() + timedelta(days=1)
+        end_date = date.today() + timedelta(days=3)
+
+        upcoming_bookings = Post.objects.filter(
+            pickup_date__range=(start_date, end_date)
+        )
+
+        for booking in upcoming_bookings:
             self.check_and_notify_missing_calendar_id(booking)
             self.confirm_booking(booking)
             self.assign_default_driver(booking)
             
     def check_and_notify_missing_calendar_id(self, booking):
         if not booking.calendar_event_id:
-            subject = "Empty calendar ID for tomorrow"
+            subject = f"Empty calendar ID for {booking.pickup_date}"
             message = f"{booking.name} & {booking.email}"
             recipient_list = [RECIPIENT_EMAIL]
             send_mail(subject, message, '', recipient_list, fail_silently=False)
 
-    def confirm_booking(self, booking):
-        if not booking.cancelled:
-            booking.is_confirmed = True
-            booking.save(update_fields=['is_confirmed'])
+    # def confirm_booking(self, booking):
+    #     if not booking.cancelled:
+    #         booking.is_confirmed = True
+    #         booking.save(update_fields=['is_confirmed'])
 
     def assign_default_driver(self, booking):
         if booking.driver is None:
