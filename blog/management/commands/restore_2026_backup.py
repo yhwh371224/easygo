@@ -37,7 +37,7 @@ class Command(BaseCommand):
         try:
             mysql_cursor.execute("""
                 SELECT id, paid
-                FROM post
+                FROM blog_post
                 WHERE pickup_date LIKE '2026-%';
             """)
             rows = mysql_cursor.fetchall()
@@ -54,7 +54,7 @@ class Command(BaseCommand):
         for row in rows:
             try:
                 sqlite_cursor.execute("""
-                    UPDATE post
+                    UPDATE blog_post
                     SET paid = ?
                     WHERE id = ?
                 """, (row['paid'], row['id']))
