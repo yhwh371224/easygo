@@ -30,6 +30,15 @@ Post.objects.filter(email="sungkam3@gmail.com").update(email="janice@scenetobeli
 Post.objects.filter(email="kate@diveplanit.com").update(email="sungkam3@gmail.com")
 Post.objects.filter(email="sungkam3@gmail.com").update(email="kate@diveplanit.com")
 
+Post.objects.filter(
+    email="kate@diveplanit.com",
+    pickup_date__year=2025
+).update(email="sungkam3@gmail.com")
+
+Post.objects.filter(
+    pickup_date__year=2026
+).update(paid=False)
+
 
 from blog.models import Post, PaypalPayment
 from blog.tasks import notify_user_payment_paypal
