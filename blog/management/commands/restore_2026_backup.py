@@ -10,7 +10,7 @@ class Command(BaseCommand):
         mysql_config = {
             'host': 'localhost',
             'user': 'mysql-easygo',
-            'password': 'YOUR_MYSQL_PASSWORD',  # 실제 비밀번호 입력
+            'password': input("Enter MySQL password for mysql-easygo: "),
             'database': 'easygobank'
         }
 
