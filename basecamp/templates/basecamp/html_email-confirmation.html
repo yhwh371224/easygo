@@ -59,6 +59,11 @@
                     •  <strong>To:</strong> {{ end_point }}<br />
                 {% else %}
                     •  <strong>Direction:</strong> {{ direction }}<br />
+                    •  <strong>Flight:</strong> {{ flight_number }}<br />
+                    
+                        {% if flight_time %}
+                            •  <strong>Flight Time:</strong> {{ flight_time }}<br />
+                        {% endif %}
                     •  <strong>Address:</strong>
                     {{ street|default:'' }}, {{ suburb|default:'' }}<br />
                 {% endif %}
@@ -134,14 +139,14 @@
                 {% if paid %}
                     • We have received your payment. Thank you very much.<br />
                 {% elif cash %}
-                    • The total cost is ${{ price }}<br />
+                    • The total cost is ${{ price }} {% if toll %}, toll included {% endif %}<br />
                     • Payment will be made in cash directly to the driver on the day.<br />
                 {% elif prepay %}
-                    • The total cost is ${{ price }}<br />
+                    • The total cost is ${{ price }} {% if toll %}, toll included {% endif %}<br />
                     • Please make payment online in advance using the link below:<br />
                     &nbsp;&nbsp;<a href="https://easygoshuttle.com.au/payonline">easygoshuttle.com.au/payonline</a><br />
                 {% else %}
-                    • The total cost is ${{ price }}<br />
+                    • The total cost is ${{ price }} {% if toll %}, toll included {% endif %}<br />
                     • You may prepay securely via PayPal using the link below:<br />
                     &nbsp;&nbsp;<a href="https://easygoshuttle.com.au/payonline">easygoshuttle.com.au/payonline</a><br />
                     • Alternatively, if you prefer to pay in cash, please reply to this email to confirm your booking.<br />
