@@ -10,7 +10,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         models_to_check = [Post, Inquiry]
         total_deleted = 0
-        cutoff_date = timezone.now() - timedelta(days=30)  # 한 달 전 기준
+        cutoff_date = timezone.now() - timedelta(days=14)  # 한 달 전 기준
 
         for model in models_to_check:
             fields = [field.name for field in model._meta.fields]
