@@ -138,10 +138,12 @@
 
                 {% if paid %}
                     • We have received your payment. Thank you very much.<br />
+                {% elif company_name %}
+                    • An invoice will be sent to you via email shortly.<br />
                 {% elif cash %}
                     • The total cost is ${{ price }} {% if toll %}, toll included {% endif %}<br />
                     • Payment will be made in cash directly to the driver on the day.<br />
-                {% elif prepay %}
+                {% elif prepay and not company_name %}
                     • The total cost is ${{ price }} {% if toll %}, toll included {% endif %}<br />
                     • Please make payment online in advance using the link below:<br />
                     &nbsp;&nbsp;<a href="https://easygoshuttle.com.au/payonline">easygoshuttle.com.au/payonline</a><br />
