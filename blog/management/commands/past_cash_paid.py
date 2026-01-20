@@ -12,9 +12,8 @@ class Command(BaseCommand):
 
         qs = Post.objects.filter(
             pickup_date__lt=today,
-            cancelled=False,
-            # cash=True,
-            # paid__isnull=True,
+            cash=True,
+            paid__isnull=True,
         )
 
         updated_count = qs.update(paid=models.F('price'))
