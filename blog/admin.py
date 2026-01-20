@@ -27,7 +27,7 @@ class StripePaymentAdmin(admin.ModelAdmin):
 
 class PostAdmin(admin.ModelAdmin):
     list_display = ['pickup_date', 'name', 'suburb', 'pickup_time', 'price', 'paid',
-                    'cancelled', 'pending', 'direction', 'return_flight_number', 'created']    
+                    'cancelled', 'pending', 'cash', 'direction', 'return_flight_number', 'created']    
     search_fields = ['pickup_date', 'pickup_time', 'suburb', 'email', 'street', 
                      'name', 'contact', 'price', 'paid', 'email1']
     
