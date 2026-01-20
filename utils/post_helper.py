@@ -7,6 +7,12 @@ from main.settings import RECIPIENT_EMAIL
 def send_post_confirmation_email(instance):
     subject = "Booking Confirmation - EasyGo"
 
+    # ✅ total price 계산
+    if instance.return_pickup_time:
+        price = instance.price * 2
+    else:
+        price = instance.price
+
     html_content = render_to_string(
         "basecamp/html_email-confirmation.html",
         {
@@ -43,7 +49,7 @@ def send_post_confirmation_email(instance):
         'notice': instance.notice,
 
         # payment
-        'price': instance.price,
+        'price': price,
         'paid': instance.paid,
         'cash': instance.cash,
         'prepay': instance.prepay,
