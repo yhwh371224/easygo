@@ -2,16 +2,18 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from main.settings import RECIPIENT_EMAIL
+from decimal import Decimal
 
 
 def send_post_confirmation_email(instance):
     subject = "Booking Confirmation - EasyGo"
 
-    # ✅ total price 계산
     if instance.return_pickup_time:
-        price = instance.price * 2
+        price = Decimal(instance.price) * 2
     else:
-        price = instance.price
+        price = Decimal(instance.price)
+
+    price = int(price) 
 
     html_content = render_to_string(
         "basecamp/html_email-confirmation.html",
