@@ -29,7 +29,7 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-        booking_helper.update_meeting_point_for_international_arrivals()
+        booking_helper.update_meeting_point_for_arrivals()
 
         # Twilio init
         account_sid = config('TWILIO_ACCOUNT_SID')
