@@ -58,14 +58,8 @@ def handle_return_trip(instance):
         instance.price = half_price
         instance.paid = half_paid
         instance.notice = updated_notice
-        instance.sent_email = True
 
-        instance.cash = bool(instance.cash)
-
-        if not instance.paid and not instance.cash:
-            instance.pending = True
-
-        instance.save(update_fields=['price', 'paid', 'notice', 'sent_email', 'pending'])
+        instance.save(update_fields=['price', 'paid', 'notice'])
 
         # ✅ return_start_point / return_end_point 처리
         return_start_val = instance.return_start_point or ""
