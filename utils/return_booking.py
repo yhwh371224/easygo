@@ -1,4 +1,5 @@
 from blog.models import Post, Driver
+from utils.prepay_helper import is_foreign_number
 
 
 # Flight return booking
@@ -18,6 +19,12 @@ def handle_return_trip(instance):
             instance.return_pickup_time and
             "===RETURN===" not in original_notice  
         ):
+
+        # 🔑 원본 instance 기준으로 prepay 판단
+        prepay_val = instance.prepay or (
+            is_foreign_number(instance.contact) or
+            (instance.company_name or "").strip()
+        )
 
         driver = instance.driver or Driver.objects.get(driver_name__iexact="Sam")
 
@@ -51,7 +58,10 @@ def handle_return_trip(instance):
         instance.price = half_price
         instance.paid = half_paid
         instance.notice = updated_notice
-        instance.save(update_fields=['price', 'paid', 'notice'])
+        instance.sent_email = True
+        if not instance.cash and not instance.paid:
+            instance.pending = True
+        instance.save(update_fields=['price', 'paid', 'notice', 'sent_email', 'pending'])
 
         # ✅ return_start_point / return_end_point 처리
         return_start_val = instance.return_start_point or ""
@@ -83,6 +93,7 @@ def handle_return_trip(instance):
             'return_pickup_time': "x",
             'return_pickup_date': instance.pickup_date,
             'notice': updated_notice,
+            'prepay': prepay_val,
             'price': half_price,
             'paid': half_paid,
             'private_ride': instance.private_ride,
