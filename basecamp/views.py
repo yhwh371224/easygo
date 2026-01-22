@@ -2240,6 +2240,7 @@ def email_dispatch_detail(request):
             'name': user.name,
             'adjusted_pickup_time': adjusted_pickup_time,
             'payment_amount': payment_amount,
+            'remain_first_booking': remain_first_booking,    
             'remain_return_booking': remain_return_booking,
             'wait_duration': wait_duration,
             'discount_price': discount_price
@@ -2444,8 +2445,6 @@ def email_dispatch_detail(request):
                 context.update({
                     'booking_date': user.pickup_date,   
                     'return_booking_date': user1.pickup_date if user1 else None,
-                    'remain_first_booking': remain_first_booking,
-                    'remain_return_booking': remain_return_booking,
                 })
 
             # ③ 첫 번째 ❌ / 두 번째 ✅  
@@ -2457,9 +2456,7 @@ def email_dispatch_detail(request):
 
                 context.update({
                     'booking_date': user.pickup_date,
-                    'return_booking_date': user1.pickup_date if user1 else None,
-                    'remain_first_booking': remain_first_booking,
-                    'remain_return_booking': remain_return_booking,                    
+                    'return_booking_date': user1.pickup_date if user1 else None,                   
                 })
 
             # ④ 단일 예약 (왕복 아님)
