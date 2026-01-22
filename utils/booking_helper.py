@@ -11,13 +11,13 @@ def update_meeting_point_for_arrivals():
     rules = [
         {
             "direction": "Pickup from Intl Airport",
-            "primary_value": "Public",
-            "secondary_value": "Rideshare",
+            "primary_value": "Public Pickup",
+            "secondary_value": "Rideshare Pickup",
         },
         {
             "direction": "Pickup from Domestic Airport",
-            "primary_value": "Express",
-            "secondary_value": "Priority",
+            "primary_value": "Express Pickup",
+            "secondary_value": "Priority Pickup",
         },
     ]
 
