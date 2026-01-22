@@ -2171,8 +2171,8 @@ def email_dispatch_detail(request):
         adjusted_pickup_time = request.POST.get('adjusted_pickup_time')
         payment_method = request.POST.get("payment_method")
         payment_amount = request.POST.get('payment_amount')
-        remain_first_booking = request.POST.get('remain_first_booking') == 'on'
-        remain_return_booking = request.POST.get('remain_return_booking') == 'on'
+        remain_first_booking = 'remain_first_booking' in request.POST
+        remain_return_booking = 'remain_return_booking' in request.POST
         wait_duration = request.POST.get('wait_duration')
         discount_price = request.POST.get('discount_price')
 
@@ -2410,7 +2410,6 @@ def email_dispatch_detail(request):
                 context.update({'price': int(total_paid_applied)})
 
         # ✅ Cancellation
-        # ✅ Cancellation
         if selected_option in ["Cancellation of Booking", "Cancellation by Client", "Apologies Cancellation of Booking"]:
 
             user1 = None
@@ -2423,28 +2422,29 @@ def email_dispatch_detail(request):
             # 취소 처리
             if user.return_pickup_time == 'x':  # 왕복 예약
                 # ① 첫 번째 ❌ / 두 번째 ❌ (모두 취소)
-                if not remain_first_booking and not remain_return_booking:
-                    user.cancelled = True
-                    user.pending = False
-                    user.save()
-                    if user1:
-                        user1.cancelled = True
-                        user1.pending = False
-                        user1.save()
+                if 'remain_first_booking' in request.POST or 'remain_return_booking' in request.POST:
+                    if not remain_first_booking and not remain_return_booking:
+                        user.cancelled = True
+                        user.pending = False
+                        user.save()
 
-                # ② 첫 번째 ✅ / 두 번째 ❌
-                elif remain_first_booking and not remain_return_booking:
-                    user.cancelled = True
-                    user.pending = False
-                    user.save()
+                        if user1:
+                            user1.cancelled = True
+                            user1.pending = False
+                            user1.save()
 
-                # ③ 첫 번째 ❌ / 두 번째 ✅
-                elif not remain_first_booking and remain_return_booking:
-                    user1.cancelled = True
-                    user1.pending = False
-                    user1.save()
+                    # ② 첫 번째 ✅ / 두 번째 ❌
+                    elif remain_first_booking and not remain_return_booking:
+                        user.cancelled = True
+                        user.pending = False
+                        user.save()
 
-                # ④ 첫 번째 ✅ / 두 번째 ✅ → 둘 다 유지, 아무것도 하지 않음
+                    # ③ 첫 번째 ❌ / 두 번째 ✅
+                    elif not remain_first_booking and remain_return_booking:
+                        if user1:
+                            user1.cancelled = True
+                            user1.pending = False
+                            user1.save()
 
             else:  # 단일 예약
                 user.cancelled = True
