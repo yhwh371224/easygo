@@ -19,7 +19,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         # --- 오늘 국제선 도착 예약 meeting_point 업데이트 ---
-        booking_helper.update_meeting_point_for_international_arrivals()
+        booking_helper.update_meeting_point_for_arrivals()
 
         reminder_intervals = [0, 1, 3, 5, 7, 14, 28, -1]
         templates = [
