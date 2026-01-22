@@ -4,47 +4,60 @@ from blog.models import Post
 
 logger = logging.getLogger(__name__)
 
-def update_meeting_point_for_international_arrivals():
-    """
-    오늘 도착 예약 처리
-    - 국제선: flight_time 순, 첫 예약 보호, 나머지 → Rideshare
-    - 국내선: flight_time 순, 첫 예약 보호, 나머지 → Priority pickup
-    """
+
+def update_meeting_point_for_arrivals():
     today = date.today()
 
-    directions = [
-        ("Pickup from Intl Airport", "Rideshare"),
-        ("Pickup from Domestic Airport", "Priority pickup"),
+    rules = [
+        {
+            "direction": "Pickup from Intl Airport",
+            "primary_value": "Public",
+            "secondary_value": "Rideshare",
+        },
+        {
+            "direction": "Pickup from Domestic Airport",
+            "primary_value": "Express",
+            "secondary_value": "Priority",
+        },
     ]
 
-    for direction, default_meeting_point in directions:
-        arrivals = (
+    for rule in rules:
+        bookings = list(
             Post.objects.filter(
                 pickup_date=today,
-                direction=direction,
-                cancelled=False
-            )
-            .order_by("flight_time")
+                direction=rule["direction"],
+                cancelled=False,
+            ).order_by("flight_time")
         )
 
-        first = True
-        for booking in arrivals:
-            if first:
-                first = False
-                logger.info(
-                    f"First booking kept as-is ({direction}): "
-                    f"{booking.name} ({booking.flight_time})"
-                )
+        if not bookings:
+            continue
+
+        has_primary = any(
+            b.meeting_point == rule["primary_value"]
+            for b in bookings
+        )
+
+        for booking in bookings:
+            if booking.meeting_point and booking.meeting_point.strip():
                 continue
 
-            if not booking.meeting_point or booking.meeting_point.strip() == "":
-                booking.meeting_point = default_meeting_point
-                booking.save(update_fields=["meeting_point"])
+            # 1️⃣ primary 값이 아직 없으면 첫 번째 빈 값에 설정
+            if not has_primary:
+                booking.meeting_point = rule["primary_value"]
+                has_primary = True
+
                 logger.info(
-                    f"Updated meeting_point to {default_meeting_point} "
-                    f"for {booking.name} ({booking.flight_time})"
+                    f"Set first {rule['primary_value']} for "
+                    f"{booking.name} ({booking.flight_time})"
                 )
             else:
+                # 2️⃣ primary 이후는 secondary 값
+                booking.meeting_point = rule["secondary_value"]
+
                 logger.info(
-                    f"Skipped {booking.name} ({booking.flight_time}) – meeting_point already set"
+                    f"Set {rule['secondary_value']} for "
+                    f"{booking.name} ({booking.flight_time})"
                 )
+
+            booking.save(update_fields=["meeting_point"])
