@@ -61,9 +61,8 @@ def handle_return_trip(instance):
         instance.sent_email = True
 
         instance.cash = bool(instance.cash)
-        instance.paid = bool(instance.paid)
 
-        if not instance.cash and not instance.paid:
+        if not instance.paid and not instance.cash:
             instance.pending = True
 
         instance.save(update_fields=['price', 'paid', 'notice', 'sent_email', 'pending'])
