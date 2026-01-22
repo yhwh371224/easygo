@@ -244,16 +244,13 @@
 
 														{% if not remain_first_booking and not remain_return_booking %}
 															We regret to inform you that due to unforeseen circumstances within our company,
-															your bookings on <strong>{{ return_booking_date }}</strong> and <strong>{{ booking_date }}</strong> have both been cancelled.
-															<br><br>														
+															your bookings on <strong>{{ return_booking_date }}</strong> and <strong>{{ booking_date }}</strong> have both been cancelled.																													
 														{% elif not remain_first_booking and remain_return_booking %}
 															We regret to inform you that due to unforeseen circumstances within our company,
-															your bookings on <strong>{{ return_booking_date }}</strong> has been cancelled.
-															<br><br>
+															your bookings on <strong>{{ return_booking_date }}</strong> has been cancelled.															
 														{% elif remain_first_booking and not remain_return_booking %}
 															We regret to inform you that due to unforeseen circumstances within our company, 
-															your bookings on <strong>{{ booking_date }}</strong> has been cancelled.
-															<br><br>															
+															your bookings on <strong>{{ booking_date }}</strong> has been cancelled.																														
 														{% endif %}
 													
 													{% else %}

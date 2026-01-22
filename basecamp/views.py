@@ -2422,29 +2422,28 @@ def email_dispatch_detail(request):
             # 취소 처리
             if user.return_pickup_time == 'x':  # 왕복 예약
                 # ① 첫 번째 ❌ / 두 번째 ❌ (모두 취소)
-                if 'remain_first_booking' in request.POST or 'remain_return_booking' in request.POST:
-                    if not remain_first_booking and not remain_return_booking:
-                        user.cancelled = True
-                        user.pending = False
-                        user.save()
+                if not remain_first_booking and not remain_return_booking:
+                    user.cancelled = True
+                    user.pending = False
+                    user.save()
 
-                        if user1:
-                            user1.cancelled = True
-                            user1.pending = False
-                            user1.save()
+                    if user1:
+                        user1.cancelled = True
+                        user1.pending = False
+                        user1.save()
 
-                    # ② 첫 번째 ✅ / 두 번째 ❌
-                    elif remain_first_booking and not remain_return_booking:
-                        user.cancelled = True
-                        user.pending = False
-                        user.save()
+                # ② 첫 번째 ✅ / 두 번째 ❌
+                elif remain_first_booking and not remain_return_booking:
+                    user.cancelled = True
+                    user.pending = False
+                    user.save()
 
-                    # ③ 첫 번째 ❌ / 두 번째 ✅
-                    elif not remain_first_booking and remain_return_booking:
-                        if user1:
-                            user1.cancelled = True
-                            user1.pending = False
-                            user1.save()
+                # ③ 첫 번째 ❌ / 두 번째 ✅
+                elif not remain_first_booking and remain_return_booking:
+                    if user1:
+                        user1.cancelled = True
+                        user1.pending = False
+                        user1.save()
 
             else:  # 단일 예약
                 user.cancelled = True
