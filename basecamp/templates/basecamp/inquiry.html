@@ -148,7 +148,17 @@
 				<br><br> 
                 <!-- Regular Baggage -->
 				<div class="mb-3 pb-1">
-				<label class="form-label">Baggage (Regular)</label>
+					<label class="form-label">Baggage (Regular)</label>
+
+					<!-- 안내 문구 -->
+					<small class="text-muted d-block">
+					Please enter the accurate number and size of your luggage.
+					Incorrect information may result in vehicle changes, delays, or additional charges.
+					</small>
+					<small class="text-muted d-block mb-2">
+					Large = check-in / Medium = cabin / Small = backpack
+					</small>
+
 					<div class="row g-2">
 						<div class="col">
 						<label for="baggage_large" class="form-label mb-0">Large size bag</label>
@@ -164,6 +174,7 @@
 						</div>
 					</div>
 				</div>
+				
 				<!-- Toggle Extra Luggage -->
 				<div class="mb-3 pb-1">
 					<div class="form-check">
@@ -172,6 +183,10 @@
 							Any extra luggage? (baby seat, ski, golf, bike, etc)
 						</label>
 					</div>
+
+					<small class="text-muted d-block mt-1">
+						Items not listed may affect vehicle allocation on the day.
+					</small>
 				</div>
 
 				<!-- Extra Luggage (hidden by default) -->
