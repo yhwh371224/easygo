@@ -8,12 +8,14 @@ from decimal import Decimal
 def send_post_confirmation_email(instance):
     subject = "Booking Confirmation - EasyGo"
 
-    if instance.return_pickup_time:
-        price = Decimal(instance.price) * 2
+    if instance.price is not None:
+        if instance.return_pickup_time:
+            price = Decimal(instance.price) * 2
+        else:
+            price = Decimal(instance.price)
+        price = int(price)
     else:
-        price = Decimal(instance.price)
-
-    price = int(price) 
+        price = None 
 
     html_content = render_to_string(
         "basecamp/html_email-confirmation.html",
