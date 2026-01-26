@@ -26,17 +26,29 @@ def notify_user_inquiry(sender, instance, created, **kwargs):
 def notify_user_post(sender, instance, created, **kwargs):
     handle_return_trip(instance)
 
-    # price 처리: None 또는 빈 문자열이면 "TBA" 저장
+    update_fields = []
+
+    # price 처리
     if instance.price in [None, ""]:
         instance.price = "TBA"
-        instance.save(update_fields=['price'])
+        update_fields.append('price')
+
+    # ✅ paid 값이 있으면 cash = False
+    if instance.paid not in [None, ""] and instance.cash:
+        instance.cash = False
+        update_fields.append('cash')
 
     if instance.is_confirmed and not instance.sent_email:
         send_post_confirmation_email(instance)
         instance.sent_email = True
+        update_fields.append('sent_email')
+
         if not instance.cash and not instance.paid:
             instance.pending = True
-        instance.save(update_fields=['sent_email', 'pending'])
+            update_fields.append('pending')
+
+    if update_fields:
+        instance.save(update_fields=update_fields)
 
 
 # Send email notification if a Post is cancelled and email hasn't been sent yet
