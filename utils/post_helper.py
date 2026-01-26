@@ -8,12 +8,11 @@ from decimal import Decimal
 def send_post_confirmation_email(instance):
     subject = "Booking Confirmation - EasyGo"
 
-    if instance.price is not None:
+    if instance.price not in [None, "TBA", ""]:
         if instance.return_pickup_time:
-            price = Decimal(instance.price) * 2
+            price = int(Decimal(instance.price) * 2)
         else:
-            price = Decimal(instance.price)
-        price = int(price)
+            price = int(Decimal(instance.price))
     else:
         price = "TBA"
 
