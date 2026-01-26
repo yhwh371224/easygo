@@ -39,19 +39,18 @@ def abbreviate_baggage(baggage_str):
 
     short_items = []
     for item in items:
-        # Oversize 줄이기
-        item = re.sub(r"\(Oversize\)", "(o)", item, flags=re.IGNORECASE)
         # Label 매핑
         for long_label, abbr in label_map.items():
             if item.startswith(long_label):
                 item = item.replace(long_label, abbr, 1)
                 break
+        # Oversize 줄이기
+        item = re.sub(r"\(Oversize\)", "(o)", item, flags=re.IGNORECASE)        
         short_items.append(item)
 
     short_baggage_str = ", ".join(short_items)
-    # 너무 길면 50자로 잘라서 ...
-    if len(short_baggage_str) > 50:
-        short_baggage_str = short_baggage_str[:50] + "..."
+    if len(short_baggage_str) > 60:
+        short_baggage_str = short_baggage_str[:60] + "..."
     return short_baggage_str
 
 
