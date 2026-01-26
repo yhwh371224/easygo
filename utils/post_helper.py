@@ -15,7 +15,7 @@ def send_post_confirmation_email(instance):
             price = Decimal(instance.price)
         price = int(price)
     else:
-        price = None 
+        price = "TBA"
 
     html_content = render_to_string(
         "basecamp/html_email-confirmation.html",
