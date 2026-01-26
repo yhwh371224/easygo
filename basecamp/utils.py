@@ -1,13 +1,44 @@
 import re
+import requests
+import stripe
+
 from datetime import datetime, date
-from django.template.loader import render_to_string
-from django.core.mail import EmailMultiAlternatives
-from django.utils.html import strip_tags
-from main.settings import RECIPIENT_EMAIL
-from weasyprint import HTML
 from io import BytesIO
 
+from django.template.loader import render_to_string
+from django.core.mail import EmailMultiAlternatives, send_mail
+from django.utils.html import strip_tags
+from main import settings
+from weasyprint import HTML
+from blog.models import StripePayment
 
+
+# --------------------------
+# reCAPTCHA
+# --------------------------
+def verify_recaptcha(response, version='v2'):
+    if version == 'v2':
+        secret_key = settings.RECAPTCHA_V2_SECRET_KEY
+    elif version == 'v3':
+        secret_key = settings.RECAPTCHA_V3_SECRET_KEY
+    else:
+        return {'success': False, 'error-codes': ['invalid-version']}
+
+    data = {
+        'secret': secret_key,
+        'response': response
+    }
+    r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
+    return r.json()
+
+
+def is_ajax(request):
+    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+
+
+# --------------------------
+# PDF 렌더링
+# --------------------------
 def render_to_pdf(template_src, context_dict={}):
     html_string = render_to_string(template_src, context_dict)
     html = HTML(string=html_string, base_url=None)  # base_url 설정 가능
@@ -16,6 +47,9 @@ def render_to_pdf(template_src, context_dict={}):
     return result.getvalue()
 
 
+# --------------------------
+# Date parsing
+# --------------------------
 def parse_date(date_str, field_name="Date", required=True, reference_date=None):
 
     # ✅ 이미 datetime.date 타입이면 그대로 반환
@@ -46,14 +80,15 @@ def parse_date(date_str, field_name="Date", required=True, reference_date=None):
     return parsed_date
 
 
-
-# email_dispatch_detail 
+# --------------------------
+# Email sending
+# --------------------------
 def handle_email_sending(request, email, subject, template_name, context, email1=None):
 
     html_content = render_to_string(template_name, context, request=request)
     text_content = strip_tags(html_content)
     
-    recipient_list = [email, RECIPIENT_EMAIL]
+    recipient_list = [email, settings.RECIPIENT_EMAIL]
 
     if email1:  
         recipient_list.append(email1)
@@ -84,6 +119,9 @@ def format_pickup_time_12h(pickup_time_str):
         return pickup_time_str  # 실패 시 원래 값 반환
     
 
+# --------------------------
+# Missing info email
+# --------------------------
 def check_and_send_missing_info_email(post):
     issues = []
 
@@ -141,6 +179,108 @@ def check_and_send_missing_info_email(post):
             }
         )
 
+# --------------------------
+# Utility
+# --------------------------
+def to_int(value, default=0):
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return default
 
+
+def add_bag(summary_list, label, qty, oversize=False):
+    """
+    summary_list : list
+    label        : str (L, M, Ski, Bike 등)
+    qty          : int
+    oversize     : bool
+    """
+    if qty and qty > 0:
+        item = f"{label}{qty}"
+        if oversize:
+            item += "(Oversize)"
+        summary_list.append(item)
+
+
+def to_bool(value):
+    return str(value).lower() in ["true", "1", "on", "yes"]
+
+
+# 안전한 float 변환 함수 (inc toll 같은 것도 처리)
+def safe_float(value):
+    try:
+        return float(value)
+    except (ValueError, TypeError):
+        if value and 'inc' in value.lower():
+            return 0.0
+        return None
+
+
+# --------------------------
+# PayPal error email
+# --------------------------
+def paypal_ipn_error_email(subject, exception, item_name, payer_email, gross_amount):
+    error_message = (
+    f"Exception: {exception}\n"
+    f"Payer Name: {item_name}\n"
+    f"Payer Email: {payer_email}\n"
+    f"Gross Amount: {gross_amount}"
+    )
+    send_mail(
+        subject,
+        error_message,
+        settings.DEFAULT_FROM_EMAIL,
+        [settings.RECIPIENT_EMAIL],
+        fail_silently=False,
+    )
+
+
+# --------------------------
+# Stripe handling
+# --------------------------
+stripe.api_key = settings.STRIPE_LIVE_SECRET_KEY
+
+def handle_checkout_session_completed(session):
+    email = session.customer_details.email
+    name = session.customer_details.name
+    amount = session.amount_total / 100
+    payment_intent_id = session.payment_intent or session.id
+
+    try:
+        payment, created = StripePayment.objects.update_or_create(
+            payment_intent_id=payment_intent_id,
+            defaults={
+                "name": name,
+                "email": email,
+                "amount": amount,
+            }
+        )
+        print(f"StripePayment saved. created={created}")
+
+    except Exception as e:
+        stripe_payment_error_email(
+            'Stripe Payment Save Error',
+            str(e),
+            name,
+            email,
+            amount
+        )
+
+
+def stripe_payment_error_email(subject, message, name, email, amount):
+    content = f"""
+    Subject: {subject}
     
+    Error: {message}
+    Name: {name}
+    Email: {email}
+    Amount: {amount}
+    """
 
+    send_mail(
+        subject=subject,
+        message=content,
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        recipient_list=[settings.RECIPIENT_EMAIL],
+    )
