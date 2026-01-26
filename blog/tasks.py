@@ -74,14 +74,14 @@ def send_confirm_email(
     Flight date: {pickup_date}
     Pickup time: {pickup_time}
     ✅ *** Return flight number: {return_flight_number} ***
+    ✅ *** Return Pickup Location: {return_start_point} ***
+    ✅ *** Return Drop-off Location {return_end_point} ***
     Street: {street}
     Suburb: {suburb}
     Start point: {start_point}
     End point: {end_point}
     Cash: {cash}
-    Prepay: {prepay}
-    ✅ *** Return Pickup Location: {return_start_point} ***
-    ✅ *** Return Drop-off Location {return_end_point} ***
+    Prepay: {prepay}    
     ===============================          
     '''
 
