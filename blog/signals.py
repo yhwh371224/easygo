@@ -26,6 +26,11 @@ def notify_user_inquiry(sender, instance, created, **kwargs):
 def notify_user_post(sender, instance, created, **kwargs):
     handle_return_trip(instance)
 
+    # price 처리: None 또는 빈 문자열이면 "TBA" 저장
+    if instance.price in [None, ""]:
+        instance.price = "TBA"
+        instance.save(update_fields=['price'])
+
     if instance.is_confirmed and not instance.sent_email:
         send_post_confirmation_email(instance)
         instance.sent_email = True
