@@ -29,7 +29,7 @@ def notify_user_post(sender, instance, created, **kwargs):
     if instance.is_confirmed and not instance.sent_email:
         send_post_confirmation_email(instance)
         instance.sent_email = True
-        if not instance.cash or not instance.paid:
+        if not instance.cash and not instance.paid:
             instance.pending = True
         instance.save(update_fields=['sent_email', 'pending'])
 
