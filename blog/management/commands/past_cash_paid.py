@@ -12,6 +12,7 @@ class Command(BaseCommand):
 
         qs = Post.objects.filter(
             pickup_date__lt=today,
+            cancelled=False,
             cash=True,
             paid__isnull=True,
         )
