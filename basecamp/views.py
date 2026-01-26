@@ -1517,11 +1517,16 @@ def confirm_booking_detail(request):
             return JsonResponse({'success': False, 'error': str(e)})
 
         # 최종 가격 계산
-        try:
-            final_price = float(price) + float(toll)
-        except Exception:
-            final_price = price
-        toll_value = "toll included" if toll else ""
+        if price in [None, ""]:
+            final_price = "TBA"
+            toll_value = ""
+        else:
+            try:
+                final_price = float(price) + float(toll)
+                toll_value = "toll included" if toll else ""
+            except Exception:
+                final_price = price
+                toll_value = "toll included" if toll else ""
 
         # pending 상태 결정
         if paid or cash:
@@ -1606,6 +1611,12 @@ def sending_email_first_detail(request):
         if users.exists() and 0 <= index < len(users):
             user = users[index]  
 
+            # price 처리
+            if user.price in [None, ""]:
+                display_price = "TBA"
+            else:
+                display_price = user.price
+
             form_prepay = (prepay_raw == 'True') if prepay_raw is not None else False
             final_prepay = bool(user.prepay) or form_prepay            
 
@@ -1614,6 +1625,7 @@ def sending_email_first_detail(request):
 
             user.prepay = final_prepay
             user.cash = final_cash  
+            user.price = display_price
             user.sent_email = True
             user.save()
             
@@ -1646,7 +1658,7 @@ def sending_email_first_detail(request):
                                             'return_direction': user.return_direction, 'return_pickup_date': user.return_pickup_date, 
                                             'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
                                             'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
-                                            'price': user.price, 'paid': user.paid, 'cash': final_cash, 'prepay': final_prepay,
+                                            'price': display_price, 'paid': user.paid, 'cash': final_cash, 'prepay': final_prepay,
                                             'toll': getattr(user, 'toll', 0), 'start_point': getattr(user, 'start_point', ''), 
                                             'end_point': getattr(user, 'end_point', ''), 'return_start_point': getattr(user, 'return_start_point', ''), 
                                             'return_end_point': getattr(user, 'return_end_point', ''), 
@@ -1676,35 +1688,45 @@ def sending_email_second_detail(request):
     if request.method == "POST":
         email = request.POST.get('email')
         prepay_raw = request.POST.get('prepay')  # May be None
-        cash_raw = request.POST.get('cash') # May be Nonne
+        cash_raw = request.POST.get('cash')  # May be None
 
         user = Post.objects.filter(email__iexact=email)[1]
         user1 = Post.objects.filter(email__iexact=email).first() 
 
+        # prepay / cash 처리
         form_prepay = (prepay_raw == 'True') if prepay_raw is not None else False
         final_prepay = bool(user.prepay) or bool(user1.prepay) or form_prepay            
 
         form_cash = (cash_raw == 'True') if cash_raw is not None else False
-        final_cash   = bool(user.cash)   or bool(user1.cash)   or form_cash
+        final_cash = bool(user.cash) or bool(user1.cash) or form_cash
 
         user.prepay = final_prepay
         user.cash = final_cash 
         user.sent_email = True
-        user.save()  
 
         user1.prepay = final_prepay
-        user1.cash   = final_cash
+        user1.cash = final_cash
         user1.sent_email = True
+
+        # price 안전 처리 및 DB에 저장
+        if user.price in [None, ""]:
+            user.price = "TBA"
+        if user1.price in [None, ""]:
+            user1.price = "TBA"
+
+        user.save()
         user1.save()
 
-        price1 = float(user.price) if user.price else 0
-        price2 = float(user1.price) if user1.price else 0
+        # price 계산 (숫자가 아니면 0으로 처리)
+        price1 = float(user.price) if isinstance(user.price, (int, float, str)) and str(user.price).replace('.', '', 1).isdigit() else 0
+        price2 = float(user1.price) if isinstance(user1.price, (int, float, str)) and str(user1.price).replace('.', '', 1).isdigit() else 0
         double_price = price1 + price2
-        
+
+        # paid 계산
         paid1 = float(user.paid) if user.paid else 0
         paid2 = float(user1.paid) if user1.paid else 0
         double_paid = paid1 + paid2
-        
+
         if user.cancelled or user1.cancelled:
             template_name = "basecamp/html_email-cancelled.html"
             subject = "Booking Cancellation Notice - EasyGo" 
@@ -1722,17 +1744,38 @@ def sending_email_second_detail(request):
 
         else:
             template_name = "basecamp/html_email-confirmation.html"
-
             subject = "Booking confirmation - EasyGo"
 
-            context = { 'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 'email': user.email, 'email1': user.email1,
-                'pickup_date': user.pickup_date, 'flight_number': user.flight_number, 'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
-                'direction': user.direction, 'street': user.street, 'suburb': user.suburb, 'start_point': getattr(user, 'start_point', ''),
-                'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage, 'end_point': getattr(user, 'end_point', ''),
-                'return_direction': user.return_direction, 'return_pickup_date': user.return_pickup_date, 'return_flight_number': user.return_flight_number, 
-                'return_flight_time': user.return_flight_time, 'return_pickup_time': user.return_pickup_time, 'message': user.message, 'notice': user.notice, 
-                'price': double_price, 'paid': double_paid, 'cash': user.cash, 'start_point': getattr(user, 'start_point', ''), 'prepay': user.prepay,
-                'return_start_point': getattr(user, 'return_start_point', ''), 'toll': getattr(user, 'toll', 0), 
+            context = { 
+                'company_name': user.company_name, 
+                'name': user.name, 
+                'contact': user.contact, 
+                'email': user.email, 
+                'email1': user.email1,
+                'pickup_date': user.pickup_date, 
+                'flight_number': user.flight_number,
+                'flight_time': user.flight_time, 
+                'pickup_time': user.pickup_time,
+                'direction': user.direction, 
+                'street': user.street, 
+                'suburb': user.suburb, 
+                'start_point': getattr(user, 'start_point', ''),
+                'no_of_passenger': user.no_of_passenger, 
+                'no_of_baggage': user.no_of_baggage, 
+                'end_point': getattr(user, 'end_point', ''),
+                'return_direction': user.return_direction, 
+                'return_pickup_date': user.return_pickup_date, 
+                'return_flight_number': user.return_flight_number, 
+                'return_flight_time': user.return_flight_time, 
+                'return_pickup_time': user.return_pickup_time, 
+                'message': user.message, 
+                'notice': user.notice, 
+                'price': f"{user.price} + {user1.price}" if "TBA" in [user.price, user1.price] else double_price,
+                'paid': double_paid, 
+                'cash': user.cash, 
+                'prepay': user.prepay,
+                'toll': getattr(user, 'toll', 0), 
+                'return_start_point': getattr(user, 'return_start_point', ''), 
                 'return_end_point': getattr(user, 'return_end_point', ''), 
             }
 
