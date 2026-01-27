@@ -551,11 +551,7 @@
             }).then(response => {
                 return response.json();
             }).then(data => {
-                if (data.success) {
-                    console.log('reCAPTCHA validation succeeded');
-                } else {
-                    console.log('reCAPTCHA validation failed:', data.message);
-                }
+
             });
         });
     });
