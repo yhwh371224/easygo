@@ -158,7 +158,7 @@
 
             <div>
               <a role="button" class="btn btn-primary" href="/booking/">BOOK NOW</a> | 
-              <a class="btn btn-success" href="/inquiry/">PRICE NOW</a>
+              <a role="button" class="btn btn-success" href="/inquiry/">PRICE NOW</a>
             </div>
             <br><br>
 
@@ -244,8 +244,8 @@
 				  <option value="" disabled>Over 13(please contact us)</option>
               </select>
             </div>
-            <div class="text-center text-sm-start mt-2 mt-sm-4 mb-4">        
-				<button role="button" type="submit" class="btn btn-warning" href="/inquiry1/" id="submitButton">Go >>></button>
+            <div class="text-center text-sm-start mt-2 mt-sm-4 mb-4">
+                <button type="submit" class="btn btn-warning" id="submitButton">Go >>></button>
             </div>
           </div>
         </div>
@@ -326,7 +326,7 @@
         <div class="row pb-2">
           <div class="col-lg-6">
             <div class="accordion" id="faq">
-				<div class="accordion-item shadow">
+				      <div class="accordion-item shadow">
                 <h2 class="accordion-header" id="faq-heading-1">
                   <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-1" aria-expanded="true" aria-controls="faq-content-1">What are included in the price we get? Is there any extra charge?</button>
                 </h2>
@@ -336,7 +336,7 @@
                   </div>
                 </div>
               </div>
-				<div class="accordion-item shadow">
+				      <div class="accordion-item shadow">
                 <h2 class="accordion-header" id="faq-heading-2">
                   <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-2" aria-expanded="true" aria-controls="faq-content-2">What if my flight is delayed?</button>
                 </h2>
@@ -373,7 +373,7 @@
                 </h2>
                 <div class="accordion-collapse collapse" id="faq-content-5" aria-labelledby="faq-heading-5" data-bs-parent="#faq">
                   <div class="accordion-body">
-					  <div class="fs-sm">Our standard shuttle mini bus can accommodate up to thirteen (13) passengers. You can view a photo of the vehicle on our webpage.<a href="https://easygo-staticfiles-bucket.s3.ap-southeast-2.amazonaws.com/EasyGo+Vehicle.webp">'EASYGO SERVICES'</a></div>
+					          <div class="fs-sm">Our standard shuttle mini bus can accommodate up to thirteen (13) passengers. You can view a photo of the vehicle on our webpage.<a href="https://easygo-staticfiles-bucket.s3.ap-southeast-2.amazonaws.com/EasyGo+Vehicle.webp">'EASYGO SERVICES'</a></div>
                   </div>
                 </div>
               </div>
@@ -384,6 +384,48 @@
                 <div class="accordion-collapse collapse" id="faq-content-6" aria-labelledby="faq-heading-6" data-bs-parent="#faq">
                   <div class="accordion-body">
                     <div class="fs-sm">EASYGO allows one (1) bag plus one (1) carry-on per person. If you have additional bags, please inform our office.</div>
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item shadow">
+                <h2 class="accordion-header" id="faq-heading-7">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-7" aria-expanded="false" aria-controls="faq-content-7">
+                    Is EasyGo a private or shared airport shuttle service?
+                  </button>
+                </h2>
+                <div class="accordion-collapse collapse" id="faq-content-7" aria-labelledby="faq-heading-7" data-bs-parent="#faq">
+                  <div class="accordion-body">
+                    <div class="fs-sm">
+                      EasyGo operates primarily as a private airport transfer service. Your booking is for your group only, with no shared rides or additional passenger pickups along the way.
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item shadow">
+                <h2 class="accordion-header" id="faq-heading-8">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-8" aria-expanded="false" aria-controls="faq-content-8">
+                    Do you provide airport transfers from Sydney CBD hotels?
+                  </button>
+                </h2>
+                <div class="accordion-collapse collapse" id="faq-content-8" aria-labelledby="faq-heading-8" data-bs-parent="#faq">
+                  <div class="accordion-body">
+                    <div class="fs-sm">
+                      Yes. EasyGo provides airport transfers to and from Sydney CBD hotels, serviced apartments, and city accommodations.
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item shadow">
+                <h2 class="accordion-header" id="faq-heading-9">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-9" aria-expanded="false" aria-controls="faq-content-9">
+                    Which areas do you service in Sydney?
+                  </button>
+                </h2>
+                <div class="accordion-collapse collapse" id="faq-content-9" aria-labelledby="faq-heading-9" data-bs-parent="#faq">
+                  <div class="accordion-body">
+                    <div class="fs-sm">
+                      EasyGo services Sydney North Shore, CBD, Inner West, and Western Sydney suburbs. You can check availability and pricing for your suburb through our online booking system.
+                    </div>
                   </div>
                 </div>
               </div>
@@ -517,6 +559,86 @@
             });
         });
     });
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What are included in the price we get? Is there any extra charge?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The price you receive from EasyGo includes the airport parking fee, and we do not charge extra for any waiting time incurred due to flight delays. Our price is fixed, and there are no additional charges."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What if my flight is delayed?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "EasyGo drivers track your flight’s landing time in real time to ensure they meet you on time. Your driver will contact you around baggage collection time. Please check your phone and email messages, then proceed to the meeting point where your driver will be waiting."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What are the payment options available?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "EasyGo accepts all major credit cards including American Express, MasterCard and Visa. Cash payment to the driver is also available. For passengers arriving in Sydney, advance payment is kindly requested."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do you offer infant seats or baby capsules?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. EasyGo provides infant seats and baby capsules. Up to two child seats are available free of charge, with an additional $10 fee per extra seat. Please specify the number of seats required during booking."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How many passengers can I fit into EasyGo's shuttle?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Our standard shuttle mini bus can accommodate up to thirteen (13) passengers, making it suitable for families and large groups."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How many bags can I take with me?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Each passenger is allowed one (1) standard bag plus one (1) carry-on item. If you have additional or oversized luggage, please inform EasyGo in advance."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is EasyGo a private or shared airport shuttle service?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "EasyGo operates primarily as a private airport transfer service. Your booking is exclusively for your group, with no shared rides or additional passenger pickups."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do you provide airport transfers from Sydney CBD hotels?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. EasyGo provides airport transfers to and from Sydney CBD hotels, serviced apartments, and city accommodations."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which areas do you service in Sydney?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "EasyGo services Sydney North Shore, CBD, Inner West, and Western Sydney suburbs. Customers can check pricing and availability for their suburb using the online booking system."
+      }
+    }
+  ]
+}
 </script>
   </body>
 </html>
