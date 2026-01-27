@@ -17,48 +17,57 @@
 	  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'basecamp/favi/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'basecamp/favi/favicon-16x16.png' %}">
     <link rel="manifest" href="{% static 'basecamp/favi/site.webmanifest' %}"> 
-    {% compress css %}
+
+    <!-- 1️⃣ Critical CSS (inline, compress ❌, 최상단) -->
     <style>
       /* Critical CSS */
-      body { margin: 0; font-family: Arial, sans-serif; }
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+      }
+
       .jarallax-img {
         background-size: cover;
         background-position: center;
-        transition: background-image 1s ease-in-out;
       }
-    </style>
-    <link rel="stylesheet" media="screen" href="/static/basecamp/css/tiny-slider.css"/>
-    <link rel="stylesheet" media="screen" href="/static/basecamp/css/flatpickr.min.css"/> 
-    {% endcompress %}  
-    <link rel="stylesheet" href="/static/basecamp/css/theme.min.css" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="/static/basecamp/css/theme.min.css"></noscript>
-    <style>
+
+      /* award badge is layout-affecting → critical */
       .award-badge {
         position: fixed;
         top: 50px;
         left: 40px;
-        width: 320px; 
+        width: 320px;
         height: auto;
-        z-index: 1000; 
+        z-index: 1000;
       }
-  
+
       @media (max-width: 768px) {
         .award-badge {
           top: 30px;
           left: 20px;
-          width: 180px; 
+          width: 180px;
         }
       }
-  
+
       @media (max-width: 480px) {
         .award-badge {
           top: 60px;
           left: 10px;
-          width: 100px; 
+          width: 100px;
         }
       }
-    </style>    
+    </style>
+
+    <!-- 2️⃣ Main theme CSS (blocking, 절대 지연 ❌) -->
+    <link rel="stylesheet" href="/static/basecamp/css/theme.min.css">
+
+    <!-- 3️⃣ Non-critical CSS (compress OK) -->
+    {% compress css %}
+      <link rel="stylesheet" media="screen" href="/static/basecamp/css/tiny-slider.css">
+      <link rel="stylesheet" media="screen" href="/static/basecamp/css/flatpickr.min.css">
+    {% endcompress %}
   </head>
+
   <body>   
     <main class="page-wrapper">
       <header class="header navbar navbar-expand-lg navbar-dark navbar-floating navbar-sticky" data-scroll-header data-fixed-element>
