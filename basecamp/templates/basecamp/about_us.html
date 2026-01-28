@@ -1,7 +1,10 @@
 {% extends 'basecamp/easygo_base.html' %}
 {% block content %}
-<!-- Hero-->
-      <section class="jarallax bg-dark py-7" data-jarallax data-speed="0.1" style="position: relative;">
+      <!-- Hero-->
+      <section class="jarallax bg-dark py-7" data-jarallax data-speed="0.1">
+        <!-- Gradient overlay -->
+        <span class="position-absolute top-0 start-0 w-100 h-100 bg-gradient opacity-50"></span>
+        
         <!-- 배경 이미지 -->
         <div class="jarallax-img" 
             style="background-image: url('/static/basecamp/images/vehicle.webp'); 
@@ -9,9 +12,6 @@
                     background-size: cover; 
                     background-position: center;">
         </div>
-
-        <!-- Gradient overlay -->
-        <span class="position-absolute top-0 start-0 w-100 h-100 bg-gradient opacity-50"></span>
 
         <!-- Award Badge -->
         <a href="/static/basecamp/images/Digital-Certificate.webp">
