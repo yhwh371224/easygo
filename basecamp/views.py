@@ -75,6 +75,31 @@ def about_us(request):
     return render(request, 'basecamp/about_us.html')
 
 
+def maxi_taxi(request, suburb=None):
+    suburbs = get_suburbs()          
+    more_suburbs = get_more_suburbs() 
+
+    if suburb:
+        suburb = suburb.replace('-', ' ').title()
+    else:
+        suburb = "Sydney"  # 기본값
+
+    if suburb in suburbs:
+        details = suburbs[suburb]
+    elif suburb in more_suburbs:
+        details = more_suburbs[suburb]
+    else:
+        context = {'message': 'Suburb not found'}
+        return render(request, 'basecamp/error.html', context)
+
+    context = {
+        'suburb': suburb,
+        'details': details
+    }
+
+    return render(request, 'basecamp/airport-maxi-taxi.html', context)
+
+
 # Suburb names
 def airport_shuttle(request, suburb):
     suburbs = get_suburbs()
@@ -216,14 +241,19 @@ def meeting_point(request):
     return render(request, 'basecamp/meeting_point.html')
 
 
-def more_suburbs(request): 
+def more_suburbs_maxi_taxi(request):
     more_suburbs = get_more_suburbs()
-    return render(request, 'basecamp/more_suburbs.html', {'more_suburbs': more_suburbs})
+    return render(request, 'basecamp/more_suburbs_maxi_taxi.html', {'more_suburbs': more_suburbs})
 
 
 def more_suburbs1(request): 
     more_suburbs = get_more_suburbs()
     return render(request, 'basecamp/more_suburbs1.html', {'more_suburbs': more_suburbs})
+
+
+def more_suburbs_maxi_taxi(request):
+    more_suburbs = get_more_suburbs()
+    return render(request, 'basecamp/more_suburbs_maxi_taxi.html', {'more_suburbs': more_suburbs})
 
 
 def payment_cancel(request): 
