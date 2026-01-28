@@ -247,10 +247,9 @@
       }
     </script>
     <script>
-      // Jarallax 초기화 스크립트
-      document.addEventListener('DOMContentLoaded', function () {
+      window.addEventListener('load', function () {
         const jarallaxElements = document.querySelectorAll('.jarallax');
-        if (jarallaxElements.length > 0) {
+        if (jarallaxElements.length) {
           jarallax(jarallaxElements, {
             speed: 0.1
           });
