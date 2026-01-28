@@ -246,6 +246,11 @@ def more_suburbs_maxi_taxi(request):
     return render(request, 'basecamp/more_suburbs_maxi_taxi.html', {'more_suburbs': more_suburbs})
 
 
+def more_suburbs(request): 
+    more_suburbs = get_more_suburbs()
+    return render(request, 'basecamp/more_suburbs.html', {'more_suburbs': more_suburbs})
+
+
 def more_suburbs1(request): 
     more_suburbs = get_more_suburbs()
     return render(request, 'basecamp/more_suburbs1.html', {'more_suburbs': more_suburbs})
