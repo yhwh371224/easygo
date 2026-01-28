@@ -1,81 +1,117 @@
 {% extends 'basecamp/easygo_base.html' %}
+
 {% block content %}
-<!-- Hero-->
-      <section class="jarallax bg-dark py-5 min-vh-60" data-jarallax data-speed="0.1">
-        <div class="jarallax-img" style="background-image: url('/static/basecamp/images/vehicle.webp');"></div><span class="position-absolute top-0 start-0 w-100 h-100 bg-gradient opacity-50"></span>
-        <a href="/static/basecamp/images/Digital-Certificate.webp">
-          <img src="/static/basecamp/images/award-badge.webp" alt="Award Badge" class="award-badge">
-        </a>
-        <div class="container py-1 py-sm-7 text-center">
-          <div class="py-md-6">
-            <br><br><br>
-            <h1>About EasyGo Airport Shuttle – Sydney Airport Transfer Specialists</h1>
-            <p class="fs-lg text-light pb-3">
-              EasyGo Airport Shuttle is a Sydney-based private airport transfer service specialising in
-              group travel, family transfers, and luggage-friendly transport to and from Sydney Airport.
-            </p>
-          </div>
-        </div>
-      </section>
-      <!-- Booking form-->
-      <div class="container position-relative zindex-5">
-        <div class="d-lg-flex align-items-center bg-secondary border rounded-3 px-4 pt-4 pb-3">
-          <div class="entry-content">
-          <div id="pl-5"><div class="panel-grid" id="pg-5-0" ><div class="panel-grid-cell" id="pgc-5-0-0" ><div class="so-panel widget widget_text panel-first-child panel-last-child" id="panel-5-0-0-0" data-index="0"><h1 class="widget-title"></h1>
-            <div class="textwidget" >
-              <h2>Why Choose EasyGo Airport Shuttle?</h2>
-              <h3>EasyGo Airport Transfers – Service Highlights</h3>
-              <div class="entry-content"><div id="pl-11"><div class="panel-grid" id="pg-11-0" style="margin-bottom: 0px;" ><div class="panel-grid-cell" id="pgc-11-0-0" ><div class="so-panel widget widget_text panel-first-child panel-last-child" id="panel-11-0-0-0" data-index="0"><h3 class="widget-title"><sapn style="color: #eb7828">EASYGO</sapn> TRANSPORT – INFORMATION</h3><br><div class="textwidget"><ul>
 
-              <ul>
-                <li class="decimal"><span class="num">1.</span> At EasyGo Airport Transfers, we offer our passengers a direct, express service without any additional stops, sharing or extra costs</li>
-              </ul>
-              <br>
-              <ul>
-                <li class="decimal"><span class="num">2.</span> Our airport shuttle service is known for providing quick and efficient transport to</li>
-              </ul>
-                <ul>
-                  <li class="list-style">&nbsp; <i class="fal fa-ellipsis-h">&nbsp; Sydney airport, Sydney hotel, office or home</i></li>
-                  <li class="list-style">&nbsp; <i class="fal fa-ellipsis-h">&nbsp; For single passengers, large family or corporate group</i></li>
-                </ul>
-                <br>
+<!-- ================= HERO ================= -->
+<section class="jarallax bg-dark py-5 min-vh-60 position-relative"
+         data-jarallax
+         data-speed="0.1"
+         style="z-index:1;">
 
-                <ul>
-                  <li class="decimal"><span class="num">3.</span> We take pride in being the easiest and most cost-effective airport shuttle service. Our prices are fixed, regardless of traffic congestion, and our authorized vehicles can use the 'BUS LANE,' which is not accessible to other ride-hailing services such as Uber or Ola.</li>
-                </ul>
+  <div class="jarallax-img"
+       style="background-image: url('/static/basecamp/images/vehicle.webp');">
+  </div>
 
-                <br>
-                <ul>
-                  <li class="decimal"><span class="num">4.</span> Our shuttle buses are spacious and can accommodate plenty of luggage. We offer a door-to-door service, meaning we pick you up from your location and drop you off at your desired destination.</li>
-                </ul>
+  <!-- overlay -->
+  <span class="position-absolute top-0 start-0 w-100 h-100 bg-gradient opacity-50"></span>
 
-                <br>
-                <ul>
-                  <li class="decimal"><span class="num">5.</span> Our meet and greet service offers a warm welcome to our customers. Our drivers will be waiting for you at your destination, eager to help you with your bags.
-                  </li>
-                </ul>
-                <br>
-                <ul>
-                  <li class="decimal"><span class="num">6.</span> EasyGo Airport Transfers also offer...,
-                    <ul>
-                      <li>Cruise Ships connection service</li>
-                      <li>Service to Concerts, Weddings, Night events, and Sporting Events</li>
-                      <li>Group touring</li>
-                    </ul>
-                    <p>...and more! If you have a group, we can move them. No party is too small or too large!</li>
-                </ul>
-                <ul>
-                  <li class="decimal"><span class="num">7.</span> Our goal is to get you to your destination without any hassle. We take pride in our work, and our drivers treat all passengers with polite and considerate manners. We love what we do, and we believe it shows in our service</li>
-                </ul>
-              <br>
-              </ul></div></div>
-          </div></div><div class="panel-grid-cell" id="pgc-5-0-1" ><div class="so-panel widget widget_text panel-first-child panel-last-child" id="panel-5-0-1-0" data-index="1">
-          </div>
-          </div></div></div><div class="panel-grid" id="pg-5-1" ><div class="panel-grid-cell" id="pgc-5-1-0" ><div class="so-panel widget widget_text panel-first-child panel-last-child" id="panel-5-1-0-0" data-index="2"><div class="textwidget"><p><center><span class="thick" style="color: #eb7828">All our drivers are covid tested and fully vaccinated.</span></center></p><br>
-          </div>
-          </div></div></div></div>					</div>
-        </div>
-            <br>
-          </div></div>
-          </div></div></div>
+  <!-- award badge -->
+  <a href="/static/basecamp/images/Digital-Certificate.webp">
+    <img src="/static/basecamp/images/award-badge.webp"
+         alt="EasyGo Airport Shuttle Award – Trusted Sydney Airport Transfer Service"
+         class="award-badge">
+  </a>
+
+  <div class="container py-5 text-center position-relative" style="z-index:2;">
+    <h1 class="text-light mb-3">
+      About EasyGo Airport Shuttle – Sydney Airport Transfer Specialists
+    </h1>
+
+    <p class="fs-lg text-light">
+      EasyGo Airport Shuttle is a Sydney-based private airport transfer service specialising in
+      group travel, family transfers, and luggage-friendly transport to and from Sydney Airport.
+    </p>
+  </div>
+</section>
+<!-- ================= /HERO ================= -->
+
+
+<!-- ================= CONTENT ================= -->
+<div class="container position-relative" style="margin-top: -48px; z-index:2;">
+  <div class="bg-secondary border rounded-3 px-4 pt-4 pb-3 shadow-sm">
+
+    <div class="entry-content">
+
+      <h2 class="mb-3">Why Choose EasyGo Airport Shuttle?</h2>
+
+      <h3 class="mb-4">EasyGo Airport Transfers – Service Highlights</h3>
+
+      <ul class="list-unstyled">
+
+        <li class="mb-3">
+          <strong>1.</strong>
+          Direct, express airport transfer service with no sharing, no extra stops,
+          and no hidden costs.
+        </li>
+
+        <li class="mb-3">
+          <strong>2.</strong>
+          Fast and efficient transport to and from:
+          <ul>
+            <li>Sydney Airport</li>
+            <li>Sydney hotels, offices, and private residences</li>
+            <li>Single travellers, families, and corporate groups</li>
+          </ul>
+        </li>
+
+        <li class="mb-3">
+          <strong>3.</strong>
+          Fixed-price airport transfers with no surcharge for traffic.
+          Our authorised vehicles can use bus lanes, unlike Uber or Ola.
+        </li>
+
+        <li class="mb-3">
+          <strong>4.</strong>
+          Spacious vehicles designed for large groups and extra luggage,
+          with true door-to-door service.
+        </li>
+
+        <li class="mb-3">
+          <strong>5.</strong>
+          Professional meet-and-greet service.
+          Our drivers are ready to assist with your luggage upon arrival.
+        </li>
+
+        <li class="mb-3">
+          <strong>6.</strong>
+          Additional transport services include:
+          <ul>
+            <li>Cruise ship transfers</li>
+            <li>Concerts, weddings, and special events</li>
+            <li>Group tours and private charters</li>
+          </ul>
+          <p class="mb-0">
+            No group is too small or too large – if you have a group, we can move them.
+          </p>
+        </li>
+
+        <li class="mb-3">
+          <strong>7.</strong>
+          Our goal is hassle-free travel.
+          We take pride in courteous service, punctuality, and customer satisfaction.
+        </li>
+
+      </ul>
+
+      <p class="text-center mt-4">
+        <span class="fw-bold" style="color:#eb7828;">
+          All our drivers are fully vaccinated and professionally trained.
+        </span>
+      </p>
+
+    </div>
+  </div>
+</div>
+<!-- ================= /CONTENT ================= -->
+
 {% endblock %}
