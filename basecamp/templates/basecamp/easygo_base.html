@@ -52,22 +52,6 @@
         }
       }
     </style>    
-    <style>
-    .jarallax {
-    position: relative;
-    min-height: 60vh;
-    overflow: hidden;
-    }
-
-    .jarallax > .jarallax-img {
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: -1;
-    }
-</style>
   </head>
   <!-- Body-->
   <body>    
@@ -242,12 +226,6 @@
         const checkbox = document.getElementById("extraLuggageCheck");
         extraFields.style.display = checkbox.checked ? "block" : "none";
       }
-    </script>
-    <script>
-      // JS 초기화 window.load로 변경
-      window.addEventListener('load', function() {
-        jarallax(document.querySelectorAll('.jarallax'), { speed: 0.1 });
-        });
     </script>
   </body>
 </html>
