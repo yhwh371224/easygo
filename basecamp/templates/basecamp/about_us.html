@@ -1,15 +1,26 @@
 {% extends 'basecamp/easygo_base.html' %}
 {% block content %}
 <!-- Hero-->
-      <section class="jarallax bg-dark py-7" data-jarallax data-speed="0.1">        
-        <span class="position-absolute top-0 start-0 w-100 h-100 bg-gradient opacity-80"></span>
-        <div class="jarallax-img" style="background-image: url('/static/basecamp/images/vehicle.webp');"></div>
+      <section class="jarallax bg-dark py-7" data-jarallax data-speed="0.1" style="position: relative;">
+        <!-- 배경 이미지 -->
+        <div class="jarallax-img" 
+            style="background-image: url('/static/basecamp/images/vehicle.webp'); 
+                    min-height: 400px; 
+                    background-size: cover; 
+                    background-position: center;">
+        </div>
+
+        <!-- Gradient overlay -->
+        <span class="position-absolute top-0 start-0 w-100 h-100 bg-gradient opacity-50"></span>
+
+        <!-- Award Badge -->
         <a href="/static/basecamp/images/Digital-Certificate.webp">
           <img src="/static/basecamp/images/award-badge.webp" alt="Award Badge" class="award-badge">
         </a>
-        <div class="container py-5 py-sm-7 text-center">
+
+        <!-- Text content -->
+        <div class="container py-5 py-sm-7 text-center position-relative zindex-5">
           <div class="py-md-6">
-            <br><br><br>
             <h1 class="text-light pb-1">About EasyGo Airport Shuttle – Sydney Airport Transfer Specialists</h1>
             <p class="fs-lg text-light">
               EasyGo Airport Shuttle is a Sydney-based private airport transfer service specialising in
