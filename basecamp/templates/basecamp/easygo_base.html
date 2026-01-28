@@ -26,32 +26,45 @@
     <link rel="stylesheet" media="screen" href="/static/basecamp/css/flatpickr.min.css"/>
     <!-- Main Theme Styles + Bootstrap-->
     <link rel="stylesheet" media="screen" href="/static/basecamp/css/theme.min.css">
+    <!-- 1️⃣ Critical CSS (inline, compress ❌, 최상단) -->
     <style>
+      /* Critical CSS */
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+      }
+
+      .jarallax-img {
+        background-size: cover;
+        background-position: center;
+      }
+
+      /* award badge is layout-affecting → critical */
       .award-badge {
         position: fixed;
         top: 50px;
         left: 40px;
-        width: 300px; 
+        width: 320px;
         height: auto;
-        z-index: 1000; 
+        z-index: 1000;
       }
-  
+
       @media (max-width: 768px) {
         .award-badge {
           top: 30px;
           left: 20px;
-          width: 180px; 
+          width: 180px;
         }
       }
-  
+
       @media (max-width: 480px) {
         .award-badge {
-          top: 80px;
+          top: 60px;
           left: 10px;
-          width: 100px; 
+          width: 100px;
         }
       }
-    </style>    
+    </style>
   </head>
   <!-- Body-->
   <body>    
