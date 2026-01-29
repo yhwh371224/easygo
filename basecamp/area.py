@@ -30,12 +30,6 @@ def get_suburbs():
             'description': 'EasyGo Airport Shuttle provide a private/shared ride for two persons: $120, for three persons: $130',
             'extra': '*additional $10 per person*'
         },
-        'North Shore': {
-            'price': 100,
-            'image_url': '/static/basecamp/photos/northshore_opt.webp',
-            'description': 'EasyGo Airport Shuttle provide a private/shared ride for two persons: $, for three persons: $',
-            'extra': '*additional $10 per person*'
-        },
         # 'Blacktown': {
         #     'price': 120,
         #     'image_url': '/static/basecamp/photos/blacktown.webp',
