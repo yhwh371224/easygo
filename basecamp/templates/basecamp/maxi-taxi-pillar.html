@@ -1,20 +1,10 @@
-{% extends 'basecamp/easygo_base.html' %}
-
-{% block title %}
-    Sydney Airport Maxi Taxi | Private 8–13 Seater Group Transfers | EasyGo
-{% endblock %}
-
-{% block meta %}
-    <meta name="description"
-content="Sydney airport maxi taxi service for groups and luggage. Private 8–13 seater transfers across Sydney CBD, North Shore and Western Sydney. Book online in 1 minute.">
-{% endblock %}
-
-{% block content %}
-
-<section class="jarallax bg-dark py-7" data-jarallax data-speed="0.1">
+<section class="jarallax bg-dark py-7 position-relative" data-jarallax data-speed="0.1">
   <div class="jarallax-img" style="background-image: url('/static/basecamp/photos/vehicles.PNG');"></div>
 
-  <div class="container text-center py-5">
+  <!-- Dark overlay -->
+  <div class="position-absolute top-0 start-0 w-100 h-100" style="background-color: rgba(0,0,0,0.5); z-index:1;"></div>
+
+  <div class="container text-center py-5 position-relative" style="z-index:2;">
     <h1 class="text-light fw-bold">
       Sydney Airport Maxi Taxi for Groups & Luggage
     </h1>
@@ -29,14 +19,28 @@ content="Sydney airport maxi taxi service for groups and luggage. Private 8–13
   </div>
 </section>
 
-<section class="container py-6">
+<section class="container py-6 text-center">
   <h2>Sydney Airport Maxi Taxi – Areas We Cover</h2>
   <p>
     We provide airport maxi taxi services across Sydney including
     CBD, Inner West, North Shore, Eastern Suburbs and Western Sydney.
-  </p>
+  </p>  
 
-  <ul>
+  <!-- Search guidance -->
+  <div class="mb-2">
+    <small style="color: #555; font-size: 1rem;">
+      Enter your suburb name in the search box below to find your Sydney Maxi Taxi service quickly.
+    </small>
+  </div>
+
+  <!-- More suburbs CTA -->
+  <div class="mb-4">          
+    <a href="/more_suburbs_maxi_taxi/" style="color: #eb7828; font-size: 1.05rem;">
+      Search your Sydney suburb for Maxi Taxi airport transfers quickly &raquo;&raquo;&raquo;
+    </a>
+  </div>
+
+  <ul class="list-unstyled d-inline-block text-start">
     <li><a href="/maxi-taxi/Chatswood/">Chatswood Maxi Taxi</a></li>
     <li><a href="/maxi-taxi/Hornsby/">Hornsby Maxi Taxi</a></li>
     <li><a href="/maxi-taxi/Parramatta/">Parramatta Maxi Taxi</a></li>
@@ -44,20 +48,4 @@ content="Sydney airport maxi taxi service for groups and luggage. Private 8–13
     <li><a href="/maxi-taxi/Hotel in CBD/">Hotel in CBD Maxi Taxi</a></li>
     <li><a href="/maxi-taxi/Lindfield/">Lindfield Maxi Taxi</a></li>
   </ul>
-
-  <!-- Search guidance -->
-  <div class="text-center mb-2">
-    <small style="color: #555;">
-      Enter your suburb name in the search box below to find your Sydney Maxi Taxi service quickly.
-    </small>
-  </div>
-
-  <!-- More suburbs CTA -->
-  <div class="text-center mb-4">          
-    <a href="/more_suburbs_maxi_taxi/" style="color: #eb7828">
-      Search your Sydney suburb for Maxi Taxi airport transfers quickly &raquo;&raquo;&raquo;
-    </a>
-  </div>
 </section>
-
-{% endblock %}
