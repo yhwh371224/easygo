@@ -82,7 +82,7 @@ def maxi_taxi(request, suburb=None):
     if suburb:
         suburb = suburb.replace('-', ' ').title()
     else:
-        suburb = "Sydney"  # 기본값
+        return render(request, 'basecamp/maxi-taxi-pillar.html')
 
     if suburb in suburbs:
         details = suburbs[suburb]

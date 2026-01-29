@@ -1,0 +1,63 @@
+{% extends 'basecamp/easygo_base.html' %}
+
+{% block title %}
+    Sydney Airport Maxi Taxi | Private 8–13 Seater Group Transfers | EasyGo
+{% endblock %}
+
+{% block meta %}
+    <meta name="description"
+content="Sydney airport maxi taxi service for groups and luggage. Private 8–13 seater transfers across Sydney CBD, North Shore and Western Sydney. Book online in 1 minute.">
+{% endblock %}
+
+{% block content %}
+
+<section class="jarallax bg-dark py-7" data-jarallax data-speed="0.1">
+  <div class="jarallax-img" style="background-image: url('/static/basecamp/photos/sydney_airport_maxi_taxi.webp');"></div>
+
+  <div class="container text-center py-5">
+    <h1 class="text-light fw-bold">
+      Sydney Airport Maxi Taxi for Groups & Luggage
+    </h1>
+
+    <p class="text-light fs-lg">
+        Reliable <strong>Sydney airport maxi taxi</strong> services with private 8–13 seater vehicles.  
+        Ideal for families, groups and large luggage travelling across Sydney.
+    </p>
+
+    <a role="button" class="btn btn-primary" href="/booking/">BOOK NOW</a> | 
+    <a role="button" class="btn btn-success" href="/inquiry/">PRICE NOW</a>
+  </div>
+</section>
+
+<section class="container py-6">
+  <h2>Sydney Airport Maxi Taxi – Areas We Cover</h2>
+  <p>
+    We provide airport maxi taxi services across Sydney including
+    CBD, Inner West, North Shore, Eastern Suburbs and Western Sydney.
+  </p>
+
+  <ul>
+    <li><a href="/maxi-taxi/Chatswood/">Chatswood Maxi Taxi</a></li>
+    <li><a href="/maxi-taxi/Hornsby/">Hornsby Maxi Taxi</a></li>
+    <li><a href="/maxi-taxi/Parramatta/">Parramatta Maxi Taxi</a></li>
+    <li><a href="/maxi-taxi/Blacktown/">Blacktown Maxi Taxi</a></li>
+    <li><a href="/maxi-taxi/Hotel in CBD/">Hotel in CBD Maxi Taxi</a></li>
+    <li><a href="/maxi-taxi/Lindfield/">Lindfield Maxi Taxi</a></li>
+  </ul>
+
+  <!-- Search guidance -->
+  <div class="text-center mb-2">
+    <small style="color: #555;">
+      Enter your suburb name in the search box below to find your Sydney Maxi Taxi service quickly.
+    </small>
+  </div>
+
+  <!-- More suburbs CTA -->
+  <div class="text-center mb-4">          
+    <a href="{% url 'more_suburbs_maxi_taxi' %}" style="color: #eb7828">
+      Search your Sydney suburb for Maxi Taxi airport transfers quickly &raquo;&raquo;&raquo;
+    </a>
+  </div>
+</section>
+
+{% endblock %}
