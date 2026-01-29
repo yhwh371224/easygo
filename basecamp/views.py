@@ -343,6 +343,10 @@ def success(request):
     return render(request, 'basecamp/success.html')
 
 
+def sydney_airport_transfer(request):
+    return render(request, 'basecamp/sydney_airport_transfer.html')
+
+
 def terms(request): 
     return render(request, 'basecamp/terms.html')
 
