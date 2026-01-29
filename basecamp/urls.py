@@ -72,6 +72,7 @@ urlpatterns = [
     path('service/', views.service, name='service'),
     path('sitemap/', views.sitemap, name='sitemap'),
     path('success/', views.success, name='success'),
+    path('sydney-airport-transfer/', views.sydney_airport_transfer, name='sydney_airport_transfer'),
     path('terms/', views.terms, name='terms'),
     path('wrong_date_today/', views.wrong_date_today, name='wrong_date_today'),
     path('pay/stripe/', lambda request: redirect('https://buy.stripe.com/7sIcP940RbKH7LO6ow'), name='pay_stripe'),
