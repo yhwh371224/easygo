@@ -42,6 +42,7 @@ urlpatterns = [
     path('inquiry_details2/', views.inquiry_details2, name='inquiry_details2'),
     path('inquiry_done/', views.inquiry_done, name='inquiry_done'),
     path('meeting_point/', views.meeting_point, name='meeting_point'),
+    path('more_suburbs_maxi_taxi/', views.more_suburbs_maxi_taxi, name='more_suburbs_maxi_taxi'),
     path('more_suburbs/', views.more_suburbs, name='more_suburbs'),
     path('more_suburbs1/', views.more_suburbs1, name='more_suburbs1'),
     path('p2p/', views.p2p, name="p2p"),
