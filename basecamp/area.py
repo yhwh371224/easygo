@@ -31,8 +31,8 @@ def get_suburbs():
             'extra': '*additional $10 per person*'
         },
         'Northshore': {
-            'price': 80 - 150,
-            'image_url': '/static/basecamp/photos/northshore.png',
+            'price': 100,
+            'image_url': '/static/basecamp/photos/northshore_opt.webp',
             'description': 'EasyGo Airport Shuttle provide a private/shared ride for two persons: $, for three persons: $',
             'extra': '*additional $10 per person*'
         },
