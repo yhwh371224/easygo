@@ -8,7 +8,7 @@
 
 {% block content %}
 
-<section class="container py-5">
+<section class="container content-section">
 
   <!-- H1 (ONLY ONE) -->
   <h1 class="mb-4">
@@ -120,4 +120,23 @@
 
 </section>
 
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* navbar 겹침 방지 + 좌우 여백 */
+.content-section {
+    padding-top: 130px;  /* sticky navbar 높이 + 여유 */
+    padding-bottom: 60px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+@media (min-width: 992px) {
+    .content-section {
+        padding-left: 60px;
+        padding-right: 60px;
+    }
+}
+</style>
 {% endblock %}
