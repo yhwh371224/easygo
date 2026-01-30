@@ -22,8 +22,6 @@
 	  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'basecamp/favi/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'basecamp/favi/favicon-16x16.png' %}">
     <link rel="manifest" href="{% static 'basecamp/favi/site.webmanifest' %}"> 
-
-    <!-- 1️⃣ Critical CSS (inline, compress ❌, 최상단) -->
     <style>
       /* Critical CSS */
       body {
@@ -62,13 +60,8 @@
         }
       }
     </style>
-
-    <!-- 2️⃣ Main theme CSS (blocking, 절대 지연 ❌) -->
     <link rel="stylesheet" href="/static/basecamp/css/theme.min.css">
-    <!-- Custom CSS for Offers Carousel -->
     <link rel="stylesheet" href="/static/basecamp/css/styles.css">
-
-    <!-- 3️⃣ Non-critical CSS (compress OK) -->
     {% compress css %}
       <link rel="stylesheet" media="screen" href="/static/basecamp/css/tiny-slider.css">
       <link rel="stylesheet" media="screen" href="/static/basecamp/css/flatpickr.min.css">
@@ -139,14 +132,9 @@
                   <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Pay Online</a>
                   <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="/payonline/">Pay with PayPal</a></li>
-                    <!-- <li><a class="dropdown-item" href="/pay/stripe/">Pay with Stripe</a></li> -->
                     <li><a class="dropdown-item" href="/payment_options/">Pay with PayID</a></li>
-                    <!-- <li><a class="dropdown-item" href="/blog/pay/xrp/page/">Pay with XRP coins</a></li> -->
                   </ul>
                 </li>
-                <!-- <li class="nav-item active">
-                  <a class="nav-link" href="/payonline/">Pay Online</a>
-                </li> -->
                 <li class="nav-item dropdown active" ><a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" >contact</a>
                   <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="/inquiry2/"><i class="far fa-paper-plane"></i>&nbsp;contact by form</a></li>
@@ -181,18 +169,13 @@
             <p class="fs-lg text-light" id="changing-text">              
               <strong>Reliable Sydney airport transfer services for families and large groups,travelling comfortably with lots of luggage.</strong>
             </p>
-          <a href="/brain_box/">&nbsp;👍&nbsp;
-            <!-- <img src="/static/basecamp/images/thumbsup.webp" alt="thumps_up" width="30" height="auto"> -->
-          </a>
-          <a href="/easygo_review/verse/">&nbsp;👍&nbsp;
-            <!-- <img src="/static/basecamp/images/thumbsup.webp" alt="thumps_up" width="30" height="auto"> -->
-          </a>
-          <a href="/confirmation/">&nbsp;👍&nbsp;
-            <!-- <img src="/static/basecamp/images/thumbsup.webp" alt="thumps_up" width="30" height="auto"> -->
-          </a>
-        </p>
+            <div class="d-flex justify-content-center gap-2">
+              <a href="/brain_box/">&nbsp;👍&nbsp;</a>
+              <a href="/easygo_review/verse/">&nbsp;👍&nbsp;</a>
+              <a href="/confirmation/">&nbsp;👍&nbsp;</a>
+            </div>
           </div>
-		</div>
+		    </div>
       </section>
       <!-- Price checking form-->
       <form class="container position-relative zindex-5" action="/price_detail/" id="booking-form" method="post" style="margin-top: -125px;">
@@ -492,7 +475,7 @@
         </div>
         <div class="col-md-6 border-top border-bottom px-3 pe-xl-0 ps-lg-5 ps-xl-7">
 			<div class="ms-sm-4 my-2 py-5 my-sm-0 py-sm-6 py-md-7" style="max-width: 495px;">
-				<h2 class="mb-4"><span style="color:orange">7 Reasons to book with</span> <span style="color:navy">EasyGo </span></h2>
+				<h2 class="mb-4"><span style="color:orange">Why Families and Groups Trust EasyGo for Sydney Airport Pickups</span></h2>
 				<p style="line-height: 2.0; list-style-type:circle"><i class="fad fa-caret-right"></i>&nbsp;Competitive &amp; fixed price</p>
 				<p style="line-height: 2.0;"><i class="fad fa-caret-right"></i>&nbsp;Mostly non-shared ride, private ride&nbsp;</p>
 				<p style="line-height: 2.0;"><i class="fad fa-caret-right"></i>&nbsp;Direct Express Service, No additional stops</p>
