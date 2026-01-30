@@ -7,15 +7,12 @@
     <!-- SEO Title -->
     <title>
       {% block title %}
-      Airport Transfers Sydney - EasyGo Shuttle
+        Airport Transfers Sydney - EasyGo Shuttle
       {% endblock %}
     </title>
 
-    <!-- SEO Meta Description -->
-    <meta name="description" content="{% block meta_description %}
-    Reliable Sydney airport transfer with private & maxi vans.
-    Perfect for families, groups & large luggage. Book online in 1 minute.
-    {% endblock %}">
+    <!-- SEO Meta Description (개행 제거 ✔) -->
+    <meta name="description" content="{% block meta_description %}Reliable Sydney airport transfer with private & maxi vans. Perfect for families, groups & large luggage. Book online in 1 minute.{% endblock %}">
 
     <meta name="author" content="easygoshuttle.com.au">
 
@@ -33,27 +30,28 @@
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'basecamp/favi/favicon-16x16.png' %}">
     <link rel="manifest" href="{% static 'basecamp/favi/site.webmanifest' %}">
 
-    <!-- jQuery -->
+    <!-- jQuery (버전 유지, 구조 변경 없음) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
     <!-- Vendor Styles -->
-    <link rel="stylesheet" media="screen" href="/static/basecamp/css/simplebar.min.css"/>
-    <link rel="stylesheet" media="screen" href="/static/basecamp/css/tiny-slider.css"/>
-    <link rel="stylesheet" media="screen" href="/static/basecamp/css/flatpickr.min.css"/>
+    <link rel="stylesheet" media="screen" href="{% static 'basecamp/css/simplebar.min.css' %}">
+    <link rel="stylesheet" media="screen" href="{% static 'basecamp/css/tiny-slider.css' %}">
+    <link rel="stylesheet" media="screen" href="{% static 'basecamp/css/flatpickr.min.css' %}">
 
     <!-- Main Theme Styles + Bootstrap -->
-    <link rel="stylesheet" media="screen" href="/static/basecamp/css/theme.min.css">
+    <link rel="stylesheet" media="screen" href="{% static 'basecamp/css/theme.min.css' %}">
 
     <!-- Google Ads / Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-346352014"></script>    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-346352014"></script>
   </head>
 
   <body>
     <main class="page-wrapper">
 
-      <!-- Navbar -->
+      <!-- Navbar (구조 유지, include만 추가) -->
       <header class="header navbar navbar-expand-lg navbar-dark navbar-floating navbar-sticky"
               data-scroll-header data-fixed-element>
+        {% include 'basecamp/navbar.html' %}
       </header>
 
       <!-- Page Content -->
@@ -94,23 +92,23 @@
           </li>
         </ul>
         <p class="fs-sm mb-3 order-md-1">
-          <span class="text-light opacity-50 me-1">© 2024 EasyGo. All rights reserved. Made by</span>
+          <span class="text-light opacity-50 me-1">© {% now "Y" %} EasyGo. All rights reserved. Made by</span>
           <a href="https://sungkam.github.io" target="_blank">EasyCoding</a>
         </p>
       </div>
     </footer>
 
     <!-- Vendor Scripts -->
-    <script src="/static/basecamp/js/bootstrap.bundle.min.js"></script>
-    <script src="/static/basecamp/js/simplebar.min.js"></script>
-    <script src="/static/basecamp/js/smooth-scroll.polyfills.min.js"></script>
-    <script src="/static/basecamp/js/jarallax.min.js"></script>
-    <script src="/static/basecamp/js/min/tiny-slider.js"></script>
-    <script src="/static/basecamp/js/flatpickr.min.js"></script>
-    <script src="/static/basecamp/js/rangePlugin.js"></script>
-    <script src="/static/basecamp/js/date-picker.js"></script>
+    <script src="{% static 'basecamp/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'basecamp/js/simplebar.min.js' %}"></script>
+    <script src="{% static 'basecamp/js/smooth-scroll.polyfills.min.js' %}"></script>
+    <script src="{% static 'basecamp/js/jarallax.min.js' %}"></script>
+    <script src="{% static 'basecamp/js/min/tiny-slider.js' %}"></script>
+    <script src="{% static 'basecamp/js/flatpickr.min.js' %}"></script>
+    <script src="{% static 'basecamp/js/rangePlugin.js' %}"></script>
+    <script src="{% static 'basecamp/js/date-picker.js' %}"></script>
 
     <!-- Main Theme Script -->
-    <script src="/static/basecamp/js/theme.min.js"></script>
+    <script src="{% static 'basecamp/js/theme.min.js' %}"></script>
   </body>
 </html>
