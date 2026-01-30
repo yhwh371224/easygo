@@ -130,16 +130,15 @@
 {% block extra_css %}
 
 <style>
-/* ul 기본 점 제거, Bootstrap override */
-.content-section ul {
-    list-style: none !important;   /* 점 제거 */
-    padding-left: 0 !important;    /* 기본 들여쓰기 제거 */
-    margin-left: 0 !important;     /* 여백 제거 */
+ul {
+    list-style: none;  /* 점 제거 */
+    padding-left: 0;   /* 기본 들여쓰기 제거 */
+    margin-left: 0;
 }
 
-/* li 간 간격 조금 유지 */
-.content-section ul li {
-    margin-bottom: 0.5rem !important;
+ul li {
+    margin-bottom: 0.5rem; /* 간격 */
 }
 </style>
+
 {% endblock %}
