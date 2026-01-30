@@ -48,11 +48,7 @@
   <body>
     <main class="page-wrapper">
 
-      <!-- Navbar (구조 유지, include만 추가) -->
-      <header class="header navbar navbar-expand-lg navbar-dark navbar-floating navbar-sticky"
-              data-scroll-header data-fixed-element>
-        {% include 'basecamp/navbar.html' %}
-      </header>
+      {% include 'basecamp/navbar.html' %}
 
       <!-- Page Content -->
       {% block content %}
