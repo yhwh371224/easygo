@@ -126,3 +126,20 @@
 </main>
 
 {% endblock %}
+
+{% block extra_css %}
+
+<style>
+/* ul 기본 점 제거 */
+.content-section ul {
+    list-style: none;   /* 점 제거 */
+    padding-left: 0;    /* 기본 들여쓰기 제거 */
+    margin-left: 0;     /* 여백 제거 */
+}
+
+/* li 간 간격 조금 유지 */
+.content-section ul li {
+    margin-bottom: 0.5rem;
+}
+</style>
+{% endblock %}
