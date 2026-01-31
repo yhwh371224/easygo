@@ -50,6 +50,10 @@
           left: 20px;
           width: 180px;
         }
+
+        #booking-form {
+          margin-top: 40px !important; 
+        }
       }
 
       @media (max-width: 480px) {
@@ -57,6 +61,9 @@
           top: 60px;
           left: 10px;
           width: 100px;
+        }
+        #booking-form {
+          margin-top: 50px !important;
         }
       }
     </style>
@@ -559,8 +566,13 @@
           <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="/maxi-taxi/">Maxi Taxi Info</a></li>
           <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="/sydney_airport_transfer/">Sydney Airport Transfer</a></li>
         </ul>
-        <p class="fs-sm mb-3 order-md-1"><span class="text-light opacity-50 me-1">© 2025 EasyGo. All rights reserved. Designed and built by 
-          <a href="https://sungkam.github.io" target="_blank">EasyCoding</a></p>        
+        <!-- Copyright -->
+        <p class="fs-sm mb-3 order-md-1">
+          <span class="text-light opacity-50 me-1">
+            © <span id="current-year"></span> EasyGo. All rights reserved. Designed and built by 
+            <a href="https://sungkam.github.io" target="_blank" rel="noopener" style="color: #ffb347;">EasyCoding</a>
+          </span>
+        </p>        
       </div>
     </footer> 
 {% compress js %}
@@ -591,6 +603,10 @@
             });
         });
     });
+</script>
+<!-- JavaScript to auto-update the year -->
+<script>
+  document.getElementById('current-year').textContent = new Date().getFullYear();
 </script>
 <script type="application/ld+json">
 {

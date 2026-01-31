@@ -182,8 +182,13 @@
           <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="/privacy/">Privacy policy</a></li>
           <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="/terms/">Terms &amp; Conditions</a></li>
         </ul>
-        <p class="fs-sm mb-3 order-md-1"><span class="text-light opacity-50 me-1">© 2024 EasyGo. All rights reserved. Made by</span>
-          <a href="https://sungkam.github.io" target="_blank">EasyCoding</a></p>
+        <!-- Copyright -->
+        <p class="fs-sm mb-3 order-md-1">
+          <span class="text-light opacity-50 me-1">
+            © <span id="current-year"></span> EasyGo. All rights reserved. Designed and built by 
+            <a href="https://sungkam.github.io" target="_blank" rel="noopener" style="color: #ffb347;">EasyCoding</a>
+          </span>
+        </p>       
       </div>
     </footer>
     <!-- Vendor scrits: js libraries and plugins-->
@@ -249,6 +254,10 @@
       jarallax(document.querySelectorAll('.jarallax'), {
       speed: 0.2,
       });
+    </script>
+    <!-- JavaScript to auto-update the year -->
+    <script>
+      document.getElementById('current-year').textContent = new Date().getFullYear();
     </script>
   </body>
 </html>
