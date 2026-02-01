@@ -3,11 +3,6 @@ def get_home_suburbs():
         # --- 1. SYDNEY CITY & CBD ---
         "Sydney City",
         "Sydney CBD",
-        "Hotels In City",
-        "Sydney Intl Airport",
-        "Sydney Domestic Airport",
-        "White Bay Cruise Terminal",
-        "Overseas Passenger Terminal",
         "Darlinghurst",
         "Darling Point",
         "Pyrmont",
