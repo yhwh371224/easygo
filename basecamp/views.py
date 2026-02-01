@@ -52,7 +52,7 @@ def home(request):
     fixed_items = [
         "Select your option",
         "Hotels In City",  
-        "Sydey Intl Airport",
+        "Sydney Int'l Airport",
         "Sydney Domestic Airport",
         "WhiteBay cruise terminal",
         "Overseas cruise terminal"
