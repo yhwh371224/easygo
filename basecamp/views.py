@@ -50,8 +50,8 @@ def home(request):
     fixed_items = [
         "Select your option",
         "Hotels In City",  
-        "International Airport",
-        "Domestic Airport",
+        "Sydey Intl Airport",
+        "Sydney Domestic Airport",
         "WhiteBay cruise terminal",
         "Overseas cruise terminal"
     ]
