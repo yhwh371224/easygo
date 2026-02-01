@@ -41,10 +41,10 @@
         {% for suburb, details in more_suburbs.items %}
         <div class="card card-body bg-light text-center align-items-center">           
             <div class="icon-xl mb-3">                
-                    <a  href="/airport-transfers-{{ suburb|slugify }}/"></a>
+                    <a  href="/airport-transfer-{{ suburb|slugify }}/"></a>
             </div>
             <h6 class="mb-0">
-                <a href="/airport-transfers-{{ suburb|slugify }}/">{{ suburb|title }}</a>
+                <a href="/airport-transfer-{{ suburb|slugify }}/">{{ suburb|title }}</a>
             </h6>
         </div>
         {% endfor %} 
