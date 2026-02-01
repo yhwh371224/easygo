@@ -78,32 +78,52 @@ def about_us(request):
 
 
 def maxi_taxi(request, suburb=None):
-    more_suburbs = get_more_suburbs()  
-    
-    if suburb:
-        suburb_formatted = suburb.replace('-', ' ').title()
-    else:
-        return render(request, 'basecamp/maxi-taxi-pillar.html') 
+    more_suburbs = get_more_suburbs()
 
-    if suburb_formatted in more_suburbs:
-        details = more_suburbs[suburb_formatted]
-        area_type = details['area_type']
-        zone_info = area_zones.get(area_type, {})
-
-        context = {
-            'suburb': suburb_formatted,
-            'details': details,
-            'title': zone_info.get('title', f"{suburb_formatted} Maxi Taxi Airport Transfer | EasyGo Airport Shuttle"),
-            'meta_description': zone_info.get('meta_description', f"Reliable maxi taxi service for {suburb_formatted} airport transfers"),
-            'h1': zone_info.get('h1', f"{suburb_formatted} Maxi Taxi Airport Shuttle"),
-            'h2': zone_info.get('h2', ""),
-            'route_info': zone_info.get('route_info', []),
-            'landmarks': zone_info.get('landmarks', []),
-        }
-        return render(request, 'basecamp/airport-maxi-taxi.html', context)
-    
-    else:
+    if not suburb:
         return render(request, 'basecamp/maxi-taxi-pillar.html')
+
+    suburb_formatted = suburb.replace('-', ' ').title()
+
+    if suburb_formatted not in more_suburbs:
+        return render(request, 'basecamp/maxi-taxi-pillar.html')
+
+    details = more_suburbs[suburb_formatted]
+    area_type = details.get('area_type')
+
+    zone_info = area_zones.get(area_type, {})
+
+    # 🔥 여기서 핵심: {suburb} 치환
+    title = zone_info.get(
+        'title',
+        f"{suburb_formatted} Maxi Taxi Airport Transfer | EasyGo Airport Shuttle"
+    ).format(suburb=suburb_formatted)
+
+    meta_description = zone_info.get(
+        'meta_description',
+        f"Reliable maxi taxi service for {suburb_formatted} airport transfers"
+    ).format(suburb=suburb_formatted)
+
+    h1 = zone_info.get(
+        'h1',
+        f"{suburb_formatted} Maxi Taxi Airport Shuttle"
+    ).format(suburb=suburb_formatted)
+
+    h2 = zone_info.get('h2', "")
+
+    context = {
+        'suburb': suburb_formatted,
+        'details': details,
+        'title': title,
+        'meta_description': meta_description,
+        'h1': h1,
+        'h2': h2,
+        'route_info': zone_info.get('route_info', ""),
+        'landmark': zone_info.get('landmark', ""),
+    }
+
+    return render(request, 'basecamp/airport-maxi-taxi.html', context)
+
 
 
 # Suburb names
