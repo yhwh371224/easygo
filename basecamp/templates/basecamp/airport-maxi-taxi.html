@@ -93,25 +93,20 @@
                             <li>Larger luggage is easily accommodated with our shuttles.</li>
                             <li>For more information about Airport Transfers to and from {{ suburb }}, <a href="/contact/">contact us</a>.</li>
                           </ul>  
-
+                          
+                          {% if route_info or landmarks %}
                           <!-- Service Area / Route Info --> 
                           <br><br>
-                          <h5>Service Area & Routes</h5>
-                          <ul style="list-style-type: disc;">
-                            {% if route_info %}
-                            <h3>Routes Covered</h3>
-                              <li>{{ route_info }}</li>
-                            {% endif %}
-                          </ul>
-
-                          <br><br>
-                          <h5>Nearby Landmarks</h5>
-                          <ul style="list-style-type: disc;">
-                            {% if landmarks %}
-                            <h3>Nearby Landmarks</h3>
-                              <li>{{ landmarks }}</li>
-                            {% endif %}
-                          </ul>
+                          <h5>Service Routes</h5>
+                            <ul style="list-style-type: disc;">
+                              {% if route_info %}
+                                <li>Routes Covered: {{ route_info }}</li>
+                              {% endif %}
+                              {% if landmarks %}
+                                <li>Nearby Landmarks: {{ landmarks }}</li>
+                              {$ endif %}
+                            </ul>
+                          {% endif %}
                           
                           <br><br>
                           <h5>Price</h5>
