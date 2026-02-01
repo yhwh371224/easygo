@@ -1,13 +1,13 @@
 {% extends 'basecamp/easygo_base.html' %}
 
 {% block title %}
-Sydney Airport Transfer – {{ suburb }} | Private, Luggage-Friendly Transfers
+  {{ title }}
 {% endblock %}
 
 {% block meta %}
-<meta name="description" content="Reliable Sydney airport shuttle & transfers to and from {{ suburb }}. Private 8–13 seater vehicles for groups and luggage. Book online with EasyGo.">
-<meta name="keywords" content="Sydney airport shuttle, {{ suburb }} airport transfer, group airport transfer, private shuttle, luggage-friendly shuttle">
-<meta name="author" content="easygoshuttle.com.au">
+  <meta name="description" content="{{ meta_description }}">
+  <meta name="keywords" content="Sydney airport shuttle, {{ suburb }} airport transfer, group airport transfer, private shuttle, luggage-friendly shuttle">
+  <meta name="author" content="easygoshuttle.com.au">
 {% endblock %}
 
 {% block content %}
@@ -19,14 +19,27 @@ Sydney Airport Transfer – {{ suburb }} | Private, Luggage-Friendly Transfers
       <br><br><br>
       <h1 class="text-light pb-1">
         <span style="color: #eb7828">
-          Reliable Airport Shuttle & Transfers in {{ suburb }} – Sydney's Private Minivan Service
+          {{ h1 }}
         </span>
       </h1>
-      <p class="fs-lg text-light">
-        Book comfortable, punctual, and affordable airport transfers in Sydney with EasyGo. Ideal for families, groups, and travelers with oversized luggage.
-      </p>
+      {% if h2 %}
+      <p class="fs-lg text-light">{{ h2 }}</p>
+      {% endif %}
     </div>
   </div>
+</section>
+
+<!-- Route info and landmarks -->
+<section class="container py-5">
+  {% if route_info %}
+  <h5>Routes Covered</h5>
+  <p>{{ route_info }}</p>
+  {% endif %}
+  
+  {% if landmarks %}
+  <h5>Nearby Landmarks</h5>
+  <p>{{ landmarks }}</p>
+  {% endif %}
 </section>
 
 <!-- Booking form-->
@@ -36,59 +49,47 @@ Sydney Airport Transfer – {{ suburb }} | Private, Luggage-Friendly Transfers
       <div class="full-container">
         <div id="primary" class="content-area">
           <div id="content" class="site-content" role="main">
-            <article id="post-11" class="post-11 page type-page status-publish hentry post">
+            <article class="post page type-page">
               <div class="entry-main">                      
                 <div class="entry-content">
-                  <div id="pl-11">
-                    <div class="panel-grid" id="pg-11-0" style="margin-bottom: 0px;">
-                      <div class="panel-grid-cell" id="pgc-11-0-0">
-                        <div class="so-panel widget widget_text panel-first-child panel-last-child" id="panel-11-0-0-0" data-index="0">
-                          <br>
-                          <h5 style="list-style-type: disc;">EASYGO AIRPORT SHUTTLE – <span style="color: #eb7828">{{ suburb }}</span></h5>
-                          <ul style="list-style-type: disc;">
-                            <li>Need an <strong>airport transfer service</strong> to or from {{ suburb }}?</li>
-                            <li>EasyGo Airport Shuttle covers various suburbs within Sydney, such as {{ suburb }}.</li>     
-                            <li>Our services to and from the airport are <strong>time and cost efficient</strong>.</li>
-                            <li>If you and your group want to arrive at {{ suburb }} or at the Airport, why not travel together.</li>
-                            <li>This reduces the chances of someone being late and is also much cheaper.</li>                          
-                            <li>For more information about our Airport Transfers service, see reviews left by our clients: <a href="/easygo_review/">Reviews for our service</a></li>
-                          </ul>                                  
-                          
-                          <br><br>
-                          <h5>Booking in Advance</h5>
-                          <ul style="list-style-type: disc;">
-                            <li>Make sure you arrive at your event or special occasion on time.</li>
-                            <li>We recommend you book at least 36 hours prior to your service.</li>
-                            <li>However, we can sometimes accommodate for shorter frames if plans change.</li>
-                            <li>All bookings are online via our <a href="/inquiry/">Price & Booking page</a>.</li>
-                            <li>Specify whether your flight is Domestic or International for an accurate quote.</li>
-                            <li>If you are still unsure, feel free to contact us via message, email, or contact form. We will respond promptly.</li>
-                          </ul>
-                          
-                          <br><br>
-                          <h5>Door to Door</h5>
-                          <ul style="list-style-type: disc;">
-                            <li>{{ suburb }} airport transfer services are <strong>door-to-door</strong>, perfect for reaching your destination quickly.</li>
-                            <li>Relax while EasyGo Shuttle handles all your transportation and transfer services.</li>
-                            <li>We provide prestige yet cost-effective service in clean, modern, air-conditioned vehicles.</li>
-                            <li>Our premium services are reliable, punctual, and fully refund guaranteed.</li>
-                            <li>Larger luggage is easily accommodated with our shuttles.</li>
-                            <li>For more information about Airport Transfers to and from {{ suburb }}, <a href="/contact/">contact us</a>.</li>
-                          </ul>  
-                          
-                          <br><br>
-                          <h5>Price</h5>
-                          <ul style="list-style-type: disc;">
-                            <li>Prices are divided into two main categories: shared ride and private ride, and vary depending on:</li>
-                            <li>Pickup time, number of passengers, luggage, special requests, etc.</li>
-                            <li>Exceptions: Baby seats and booster seats are free. No extra charge for flight delays.</li>
-                            <li>Price starts at ${{ details.price }} for one person, with an additional $10 per extra passenger.</li>
-                            <li><strong>For an accurate quote, please fill out the <a href="/inquiry/">Inquiry Form</a> to get the exact price.</strong></li>
-                          </ul>                                 
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <h5>EASYGO AIRPORT SHUTTLE – <span style="color: #eb7828">{{ suburb }}</span></h5>
+                  <ul style="list-style-type: disc;">
+                    <li>Need an <strong>airport transfer service</strong> to or from {{ suburb }}?</li>
+                    <li>EasyGo Airport Shuttle covers various suburbs within Sydney, such as {{ suburb }}.</li>
+                    <li>Our services to and from the airport are <strong>time and cost efficient</strong>.</li>
+                    <li>If you and your group want to arrive at {{ suburb }} or at the Airport, why not travel together?</li>
+                    <li>This reduces the chances of someone being late and is also much cheaper.</li>
+                    <li>For more information about our Airport Transfers service, see reviews left by our clients: <a href="/easygo_review/">Reviews for our service</a></li>
+                  </ul>
+                  
+                  <h5>Booking in Advance</h5>
+                  <ul style="list-style-type: disc;">
+                    <li>Make sure you arrive at your event or special occasion on time.</li>
+                    <li>We recommend you book at least 36 hours prior to your service.</li>
+                    <li>However, we can sometimes accommodate for shorter frames if plans change.</li>
+                    <li>All bookings are online via our <a href="/inquiry/">Price & Booking page</a>.</li>
+                    <li>Specify whether your flight is Domestic or International for an accurate quote.</li>
+                    <li>If you are still unsure, feel free to contact us via message, email, or contact form. We will respond promptly.</li>
+                  </ul>
+                  
+                  <h5>Door to Door</h5>
+                  <ul style="list-style-type: disc;">
+                    <li>{{ suburb }} airport transfer services are <strong>door-to-door</strong>, perfect for reaching your destination quickly.</li>
+                    <li>Relax while EasyGo Shuttle handles all your transportation and transfer services.</li>
+                    <li>We provide prestige yet cost-effective service in clean, modern, air-conditioned vehicles.</li>
+                    <li>Our premium services are reliable, punctual, and fully refund guaranteed.</li>
+                    <li>Larger luggage is easily accommodated with our shuttles.</li>
+                    <li>For more information about Airport Transfers to and from {{ suburb }}, <a href="/contact/">contact us</a>.</li>
+                  </ul>
+                  
+                  <h5>Price</h5>
+                  <ul style="list-style-type: disc;">
+                    <li>Prices are divided into two main categories: shared ride and private ride, and vary depending on:</li>
+                    <li>Pickup time, number of passengers, luggage, special requests, etc.</li>
+                    <li>Exceptions: Baby seats and booster seats are free. No extra charge for flight delays.</li>
+                    <li>Price starts at ${{ details.price }} for one person, with an additional $10 per extra passenger.</li>
+                    <li><strong>For an accurate quote, please fill out the <a href="/inquiry/">Inquiry Form</a> to get the exact price.</strong></li>
+                  </ul>                                 
                 </div>
               </div>
             </article>
