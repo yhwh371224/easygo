@@ -98,17 +98,19 @@
                           <br><br>
                           <h5>Service Area & Routes</h5>
                           <ul style="list-style-type: disc;">
-                            {% for suburb in route_info %}
-                              <li>{{ suburb }}</li>
-                            {% endfor %}
+                            {% if route_info %}
+                            <h3>Routes Covered</h3>
+                              <li>{{ route_info }}</li>
+                            {% endif %}
                           </ul>
 
                           <br><br>
                           <h5>Nearby Landmarks</h5>
                           <ul style="list-style-type: disc;">
-                            {% for landmark in landmarks %}
-                              <li>{{ landmark }}</li>
-                            {% endfor %}
+                            {% if landmarks %}
+                            <h3>Nearby Landmarks</h3>
+                              <li>{{ landmarks }}</li>
+                            {% endif %}
                           </ul>
                           
                           <br><br>
