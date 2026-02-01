@@ -15,6 +15,7 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+
 from django.utils import timezone
 
 from main.settings import RECIPIENT_EMAIL, DEFAULT_FROM_EMAIL
@@ -24,6 +25,7 @@ from blog.sms_utils import send_sms_notice, send_whatsapp_template
 from basecamp.area import get_suburbs
 from basecamp.area_full import get_more_suburbs
 from basecamp.area_home import get_home_suburbs
+from basecamp.area_zones import area_zones
 
 from .utils import (
     verify_recaptcha, is_ajax, parse_date, handle_email_sending, format_pickup_time_12h, 
@@ -76,71 +78,82 @@ def about_us(request):
 
 
 def maxi_taxi(request, suburb=None):
-    suburbs = get_suburbs()          
-    more_suburbs = get_more_suburbs() 
-
+    more_suburbs = get_more_suburbs()  
     if suburb:
-        suburb = suburb.replace('-', ' ').title()
+        suburb_formatted = suburb.replace('-', ' ').title()
     else:
         return render(request, 'basecamp/maxi-taxi-pillar.html')
 
-    if suburb in suburbs:
-        details = suburbs[suburb]
-    elif suburb in more_suburbs:
-        details = more_suburbs[suburb]
+    if suburb_formatted in more_suburbs:
+        details = more_suburbs[suburb_formatted]
+        area_type = details['area_type']
+        zone_info = area_zones.get(area_type, {})
+
+        context = {
+            'suburb': suburb_formatted,
+            'details': details,
+            'title': zone_info.get('title', f"{suburb_formatted} Maxi Taxi Airport Transfer"),
+            'meta_description': zone_info.get('meta_description', f"Reliable maxi taxi service for {suburb_formatted} airport transfers"),
+            'h1': zone_info.get('h1', f"{suburb_formatted} Maxi Taxi Airport Shuttle"),
+            'h2': zone_info.get('h2', ""),
+            'route_info': zone_info.get('route_info', []),
+            'landmarks': zone_info.get('landmarks', []),
+        }
+        return render(request, 'basecamp/airport-maxi-taxi.html', context)
+    
     else:
-        context = {'message': 'Suburb not found'}
-        return render(request, 'basecamp/error.html', context)
-
-    context = {
-        'suburb': suburb,
-        'details': details
-    }
-
-    return render(request, 'basecamp/airport-maxi-taxi.html', context)
+        return render(request, 'basecamp/sydney_airport_transfer.html')
 
 
 # Suburb names
 def airport_shuttle(request, suburb):
-    suburbs = get_suburbs()
     more_suburbs = get_more_suburbs()
-    suburb = suburb.replace('-', ' ').title()  
-    if suburb in suburbs:
+    suburb_formatted = suburb.replace('-', ' ').title() 
+
+    if suburb_formatted in more_suburbs:
+        details = more_suburbs[suburb_formatted]
+        area_type = details['area_type']
+        zone_info = area_zones.get(area_type, {})  
+
         context = {
-            'suburb': suburb,
-            'details': suburbs[suburb]
+            'suburb': suburb_formatted,
+            'details': details,
+            'title': zone_info.get('title', f"{suburb_formatted} Airport Transfer"),
+            'meta_description': zone_info.get('meta_description', f"Reliable airport transfer service for {suburb_formatted}"),
+            'h1': zone_info.get('h1', f"{suburb_formatted} Airport Shuttle"),
+            'h2': zone_info.get('h2', ""),
+            'route_info': zone_info.get('route_info', []),
+            'landmarks': zone_info.get('landmarks', []),
         }
-    elif suburb in more_suburbs:
-        context = {
-            'suburb': suburb, 
-            'details': more_suburbs[suburb]
-        }
-    else:        
-        context = {'message': 'Suburb not found'}
-        return render(request, 'basecamp/error.html', context)
+        return render(request, 'basecamp/airport-shuttle-template.html', context)
 
-    return render(request, 'basecamp/airport-shuttle-template.html', context)    
+    else:
+        return render(request, 'basecamp/sydney_airport_transfer.html')
 
 
-def airport_transfers(request, suburb):
-    suburbs = get_suburbs()
+def airport_transfer(request, suburb):
     more_suburbs = get_more_suburbs()
-    suburb = suburb.replace('-', ' ').title()  
-    if suburb in suburbs:
+    suburb_formatted = suburb.replace('-', ' ').title() 
+
+    if suburb_formatted in more_suburbs:
+        details = more_suburbs[suburb_formatted]
+        area_type = details['area_type']
+        zone_info = area_zones.get(area_type, {})  
+
         context = {
-            'suburb': suburb,
-            'details': suburbs[suburb]
+            'suburb': suburb_formatted,
+            'details': details,
+            'title': zone_info.get('title', f"{suburb_formatted} Airport Transfer"),
+            'meta_description': zone_info.get('meta_description', f"Reliable airport transfer service for {suburb_formatted}"),
+            'h1': zone_info.get('h1', f"{suburb_formatted} Airport Shuttle"),
+            'h2': zone_info.get('h2', ""),
+            'route_info': zone_info.get('route_info', []),
+            'landmarks': zone_info.get('landmarks', []),
         }
-    elif suburb in more_suburbs:
-        context = {
-            'suburb': suburb, 
-            'details': more_suburbs[suburb]
-        }
-    else:        
-        context = {'message': 'Suburb not found'}
-        return render(request, 'basecamp/error.html', context)
-    
-    return render(request, 'basecamp/airport-transfers-template.html', context)
+        return render(request, 'basecamp/airport-transfer-template.html', context)
+
+    else:
+        return render(request, 'basecamp/sydney_airport_transfer.html')
 
 
 def arrival_guide(request): 
