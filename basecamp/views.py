@@ -79,7 +79,11 @@ def about_us(request):
 
 def maxi_taxi(request, suburb=None):
     more_suburbs = get_more_suburbs()  
-    suburb_formatted = suburb.replace('-', ' ').title() 
+    
+    if suburb:
+        suburb_formatted = suburb.replace('-', ' ').title()
+    else:
+        return render(request, 'basecamp/maxi-taxi-pillar.html') 
 
     if suburb_formatted in more_suburbs:
         details = more_suburbs[suburb_formatted]
@@ -105,6 +109,10 @@ def maxi_taxi(request, suburb=None):
 # Suburb names
 def airport_shuttle(request, suburb):
     more_suburbs = get_more_suburbs()
+
+    if not suburb:
+        return render(request, 'basecamp/sydney_airport_transfer.html')
+    
     suburb_formatted = suburb.replace('-', ' ').title() 
 
     if suburb_formatted in more_suburbs:
@@ -130,6 +138,10 @@ def airport_shuttle(request, suburb):
 
 def airport_transfer(request, suburb):
     more_suburbs = get_more_suburbs()
+
+    if not suburb:
+        return render(request, 'basecamp/sydney_airport_transfer.html')
+    
     suburb_formatted = suburb.replace('-', ' ').title() 
 
     if suburb_formatted in more_suburbs:
