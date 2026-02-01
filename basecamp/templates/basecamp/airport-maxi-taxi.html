@@ -95,15 +95,21 @@
                           </ul>  
 
                           <!-- Service Area / Route Info --> 
-                           <br><br> 
-                           <h5>Service Area & Routes</h5> 
-                           <p> We provide airport transfers covering the following suburbs and routes: 
-                            <strong>{{ route_info|join:", " }}</strong>. 
-                           </p> <br><br> 
-                           <h5>Nearby Landmarks</h5> 
-                           <p> Notable landmarks in the service area include: 
-                            <strong>{{ landmarks|join:", " }}</strong>. 
-                           </p>
+                          <br><br>
+                          <h5>Service Area & Routes</h5>
+                          <ul style="list-style-type: disc;">
+                            {% for suburb in route_info %}
+                              <li>{{ suburb }}</li>
+                            {% endfor %}
+                          </ul>
+
+                          <br><br>
+                          <h5>Nearby Landmarks</h5>
+                          <ul style="list-style-type: disc;">
+                            {% for landmark in landmarks %}
+                              <li>{{ landmark }}</li>
+                            {% endfor %}
+                          </ul>
                           
                           <br><br>
                           <h5>Price</h5>
