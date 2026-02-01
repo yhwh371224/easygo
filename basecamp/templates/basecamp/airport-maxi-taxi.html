@@ -100,11 +100,10 @@
                           <h5>Service Routes</h5>
                             <ul style="list-style-type: disc;">
                               {% if route_info %}
-                                <li>Routes Covered: {{ route_info }}</li>
-                              {% endif %}
-                              {% if landmarks %}
+                                <li>Routes Covered: {{ route_info }}</li>                             
+                              {% elif landmarks %}
                                 <li>Nearby Landmarks: {{ landmarks }}</li>
-                              {$ endif %}
+                              {% endif %}
                             </ul>
                           {% endif %}
                           
