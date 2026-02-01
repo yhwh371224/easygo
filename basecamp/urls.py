@@ -2,6 +2,7 @@ from django.urls import path
 from . import views
 from .views import paypal_ipn, create_stripe_checkout_session
 from django.shortcuts import redirect
+from django.views.generic import RedirectView
 
 
 app_name = "basecamp"
@@ -9,11 +10,13 @@ app_name = "basecamp"
 urlpatterns = [
     path('', views.index, name='index'),
     path('about_us/', views.about_us, name='about_us'),
-    path('maxi-taxi/', views.maxi_taxi, name='maxi_taxi'),
-    path('maxi-taxi/<str:suburb>/', views.maxi_taxi, name='maxi_taxi_suburb'),
     path('maxi-taxi/choose-suburb/', views.more_suburbs_maxi_taxi, name='more_suburbs_maxi_taxi'),
-    path('airport-shuttle-<str:suburb>/', views.airport_shuttle, name='airport_shuttle'),
-    path('airport-transfers-<str:suburb>/', views.airport_transfers, name='airport_transfers'),
+    path('maxi-taxi/<slug:suburb>/', views.maxi_taxi, name='maxi_taxi_suburb'),
+    path('maxi-taxi/', views.maxi_taxi, name='maxi_taxi'),
+    path('airport-shuttle-<slug:suburb>/', RedirectView.as_view( url='/sydney-airport-transfer/%(suburb)s/', permanent=True), name='airport_shuttle_redirect'),
+    path('airport-transfer-<slug:suburb>/', RedirectView.as_view( url='/sydney-airport-transfer/%(suburb)s/', permanent=True), name='airport_transfer_redirect'),
+    path('sydney-airport-transfer/<slug:suburb>/', views.airport_transfers, name='sydney_airport_transfer_suburb'),
+    path('sydney-airport-transfer/', views.sydney_airport_transfer, name='sydney_airport_transfer'),
     path('arrival_guide/', views.arrival_guide, name='arrival_guide'),
     path('booking/', views.booking, name="booking"),
     path('booking_detail/', views.booking_detail, name="booking_detail"),
@@ -72,7 +75,6 @@ urlpatterns = [
     path('service/', views.service, name='service'),
     path('sitemap/', views.sitemap, name='sitemap'),
     path('success/', views.success, name='success'),
-    path('sydney-airport-transfer/', views.sydney_airport_transfer, name='sydney_airport_transfer'),
     path('terms/', views.terms, name='terms'),
     path('wrong_date_today/', views.wrong_date_today, name='wrong_date_today'),
     path('pay/stripe/', lambda request: redirect('https://buy.stripe.com/7sIcP940RbKH7LO6ow'), name='pay_stripe'),
