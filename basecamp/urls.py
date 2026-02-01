@@ -15,7 +15,7 @@ urlpatterns = [
     path('maxi-taxi/', views.maxi_taxi, name='maxi_taxi'),
     path('airport-shuttle-<slug:suburb>/', RedirectView.as_view( url='/sydney-airport-transfer/%(suburb)s/', permanent=True), name='airport_shuttle_redirect'),
     path('airport-transfer-<slug:suburb>/', RedirectView.as_view( url='/sydney-airport-transfer/%(suburb)s/', permanent=True), name='airport_transfer_redirect'),
-    path('sydney-airport-transfer/<slug:suburb>/', views.airport_transfers, name='sydney_airport_transfer_suburb'),
+    path('sydney-airport-transfer/<slug:suburb>/', views.airport_transfer, name='sydney_airport_transfer_suburb'),
     path('sydney-airport-transfer/', views.sydney_airport_transfer, name='sydney_airport_transfer'),
     path('arrival_guide/', views.arrival_guide, name='arrival_guide'),
     path('booking/', views.booking, name="booking"),
