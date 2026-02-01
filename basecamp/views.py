@@ -92,7 +92,7 @@ def maxi_taxi(request, suburb=None):
         context = {
             'suburb': suburb_formatted,
             'details': details,
-            'title': zone_info.get('title', f"{suburb_formatted} Maxi Taxi Airport Transfer"),
+            'title': zone_info.get('title', f"{suburb_formatted} Maxi Taxi Airport Transfer | EasyGo Airport Shuttle"),
             'meta_description': zone_info.get('meta_description', f"Reliable maxi taxi service for {suburb_formatted} airport transfers"),
             'h1': zone_info.get('h1', f"{suburb_formatted} Maxi Taxi Airport Shuttle"),
             'h2': zone_info.get('h2', ""),
@@ -118,12 +118,12 @@ def airport_shuttle(request, suburb):
         context = {
             'suburb': suburb_formatted,
             'details': details,
-            'title': zone_info.get('title', f"{suburb_formatted} Airport Transfer"),
-            'meta_description': zone_info.get('meta_description', f"Reliable airport transfer service for {suburb_formatted}"),
-            'h1': zone_info.get('h1', f"{suburb_formatted} Airport Shuttle"),
+            'title': zone_info.get('title', "{suburb} Airport shuttle").format(suburb=suburb_formatted),
+            'meta_description': zone_info.get('meta_description', "Reliable airport transfer service for {suburb}").format(suburb=suburb_formatted),
+            'h1': zone_info.get('h1', "{suburb} Airport Shuttle").format(suburb=suburb_formatted),
             'h2': zone_info.get('h2', ""),
             'route_info': zone_info.get('route_info', []),
-            'landmarks': zone_info.get('landmarks', []),
+            'landmarks': zone_info.get('landmark', []),
         }
         return render(request, 'basecamp/airport-shuttle-template.html', context)
 
@@ -143,17 +143,18 @@ def airport_transfer(request, suburb):
         context = {
             'suburb': suburb_formatted,
             'details': details,
-            'title': zone_info.get('title', f"{suburb_formatted} Airport Transfer"),
-            'meta_description': zone_info.get('meta_description', f"Reliable airport transfer service for {suburb_formatted}"),
-            'h1': zone_info.get('h1', f"{suburb_formatted} Airport Shuttle"),
+            'title': zone_info.get('title', "{suburb} Airport Transfer").format(suburb=suburb_formatted),
+            'meta_description': zone_info.get('meta_description', "Reliable airport transfer service for {suburb}").format(suburb=suburb_formatted),
+            'h1': zone_info.get('h1', "{suburb} Airport Shuttle").format(suburb=suburb_formatted),
             'h2': zone_info.get('h2', ""),
             'route_info': zone_info.get('route_info', []),
-            'landmarks': zone_info.get('landmarks', []),
+            'landmarks': zone_info.get('landmark', []),
         }
         return render(request, 'basecamp/airport-transfer-template.html', context)
 
     else:
         return render(request, 'basecamp/sydney_airport_transfer.html')
+
 
 
 def arrival_guide(request): 
