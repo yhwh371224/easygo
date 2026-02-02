@@ -17,6 +17,9 @@ from decouple import config
 logger = logging.getLogger(__name__)
 
 
+### intl/domestic/all 오늘 도착 알림 전송 명령어 ###
+
+
 class Command(BaseCommand):
     help = 'Send reminders ONLY for today\'s arrivals (intl/domestic/all)'
 
@@ -118,10 +121,12 @@ class Command(BaseCommand):
             msg = f"SMS sent to {name} ({formatted_number}) | Email: {email} | Price: ${price}"
             logger.info(msg)
             self.stdout.write(msg)
+            return True
         except Exception as e:
             msg = f"Failed to send SMS to {name} ({formatted_number}) | Error: {str(e)}"
             logger.error(msg)
             self.stdout.write(msg)
+            return False
 
     def send_whatsapp_reminder(self, sendto, name, pickup_date, email, price):
         formatted_number = self.format_phone_number(sendto)
@@ -198,8 +203,13 @@ class Command(BaseCommand):
                 self.stdout.write(msg)
 
             # SMS
-            if booking_reminder.sms_reminder and (booking_reminder.paid or booking_reminder.cash):
-                self.send_sms_reminder(
+            sms_sent = False
+
+            if (
+                booking_reminder.sms_reminder
+                and (booking_reminder.paid or booking_reminder.cash)
+            ):
+                sms_sent = self.send_sms_reminder(
                     booking_reminder.contact,
                     booking_reminder.name,
                     booking_reminder.pickup_date,
@@ -207,10 +217,13 @@ class Command(BaseCommand):
                     booking_reminder.price
                 )
 
-            # WhatsApp (국제선 도착만)
-            if (booking_reminder.sms_reminder
+            # WhatsApp (SMS 실패 시, 국제선만)
+            if (
+                not sms_sent
+                and booking_reminder.sms_reminder
                 and (booking_reminder.paid or booking_reminder.cash)
-                and booking_reminder.direction == "Pickup from Intl Airport"):
+                and booking_reminder.direction == "Pickup from Intl Airport"
+            ):
                 self.send_whatsapp_reminder(
                     booking_reminder.contact,
                     booking_reminder.name,
