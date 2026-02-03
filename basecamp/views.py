@@ -2562,12 +2562,12 @@ def email_dispatch_detail(request):
                 send_sms_notice(user.contact, message)
                 send_whatsapp_template(user.contact, user.name)
 
-
             # Apology SMS
             if selected_option == "Apologies Cancellation of Booking" and user.contact:
                 message = f"EasyGo - Urgent notice!\n\nDear {user.name}, We have sent an urgent email. Please check your email.\nReply only via email >> info@easygoshuttle.com.au"
                 send_sms_notice(user.contact, message)
                 send_whatsapp_template(user.contact, user.name)
+
 
         # ✅ Payment discrepancy
         if selected_option == "Payment discrepancy" and user:
