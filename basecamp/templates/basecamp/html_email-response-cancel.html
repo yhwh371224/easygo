@@ -245,12 +245,12 @@
 
                                                     We apologize for any inconvenience this may cause, 
                                                     but it is essential for us to manage our bookings effectively.
-                                                    <br><br>
-
-													• Your booking on {{ booking_date }} has been cancelled.<br><br>
+                                                    <br><br>													
 
 													{% if return_booking_date %}
-													• Your return booking on {{ return_booking_date }} has also been cancelled.<br><br>
+														• Your bookings on {{ return_booking_date }} and {{ booking_date}} has been cancelled.<br><br>
+													{% else %}
+														• Your booking on {{ booking_date }} has been cancelled.<br><br>
 													{% endif %}
 
                                                     Thank you for your understanding.
