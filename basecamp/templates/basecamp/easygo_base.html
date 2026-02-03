@@ -9,7 +9,32 @@
     <!-- SEO Meta Tags -->
     {% block meta %}
     <meta name="google-site-verification" content="hae39L0Kv7JIxVc3YclvckH7Im5SdYa2hk_vZbGJIkA" />
-    <meta name="description" content="EasyGo Airport Shuttle provides private airport transfers across Sydney. Punctual, luggage-friendly service for individuals, families, and groups.">
+    <meta name="description" content="EasyGo Airport Shuttle provides private airport transfer across Sydney. Punctual, luggage-friendly service for individuals, families, and groups.">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "EasyGo Airport Shuttle",
+      "image": "https://www.easygoshuttle.com.au/static/basecamp/images/easygo-logo-final.webp",
+      "url": "https://www.easygoshuttle.com.au/",
+      "telephone": "+61 406 883 355",
+      "email": "info@easygoshuttle.com.au",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Sydney Airport Shuttle Office",
+        "addressLocality": "Sydney",
+        "addressRegion": "NSW",
+        "postalCode": "2000",
+        "addressCountry": "AU"
+      },
+      "description": "Private airport shuttle service across Sydney. Fast, punctual, luggage-friendly transfer for individuals, families, and groups.",
+      "openingHours": "Mo-Su 00:00-23:59",
+      "sameAs": [
+        "https://www.facebook.com/easygoshuttle",
+        "https://www.instagram.com/easygoshuttle"
+      ]
+    }
+    </script>
     <meta name="keywords" content="Sydney airport transfer, private airport shuttle, group airport transfer, luggage-friendly shuttle">
     <meta name="author" content="easygoshuttle.com.au">
     {% endblock %}
@@ -30,7 +55,6 @@
     <link rel="stylesheet" media="screen" href="/static/basecamp/css/flatpickr.min.css"/>
     <!-- Main Theme Styles + Bootstrap-->
     <link rel="stylesheet" media="screen" href="/static/basecamp/css/theme.min.css">
-    <!-- 1️⃣ Critical CSS (inline, compress ❌, 최상단) -->
     <style>
       /* Critical CSS */
       body {
@@ -44,7 +68,6 @@
         background-position: center;
       }
 
-      /* award badge is layout-affecting → critical */
       .award-badge {
         position: fixed;
         top: 50px;
@@ -107,7 +130,7 @@
                       <a class="dropdown-item" href="/meeting_point/">Airport Meeting Point</a></div>
                   </div>
                 </li>				  
-                <li class="nav-item dropdown active"><a class="nav-link dropdown-toggle" href="#"data-bs-toggle="dropdown">Airport Transfers</a>
+                <li class="nav-item dropdown active"><a class="nav-link dropdown-toggle" href="#"data-bs-toggle="dropdown">Airport Transfer</a>
                   <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="/inquiry/">Price Inquiry for airport</a></li>
                     <li><a class="dropdown-item" href="/booking/">Book Now for airport</a></li>                    
@@ -120,7 +143,7 @@
                     <li><a class="dropdown-item" href="/home/#reasons">Why Book With Us?</a></li>                   
                   </ul>
                       </li>       
-                <li class="nav-item dropdown active"><a class="nav-link dropdown-toggle" href="#"data-bs-toggle="dropdown">Cruise Transfers</a>
+                <li class="nav-item dropdown active"><a class="nav-link dropdown-toggle" href="#"data-bs-toggle="dropdown">Cruise Transfer</a>
                   <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="/cruise_inquiry/">Price Inquiry for cruise</a></li>
                     <li><a class="dropdown-item" href="/cruise_booking/">Book Now for cruise</a></li>                      
@@ -258,6 +281,86 @@
     <!-- JavaScript to auto-update the year -->
     <script>
       document.getElementById('current-year').textContent = new Date().getFullYear();
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What are included in the price we get? Is there any extra charge?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The price you receive from EasyGo includes the airport parking fee, and we do not charge extra for any waiting time incurred due to flight delays. Our price is fixed, and there are no additional charges."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What if my flight is delayed?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "EasyGo drivers track your flight’s landing time in real time to ensure they meet you on time. Your driver will contact you around baggage collection time. Please check your phone and email messages, then proceed to the meeting point where your driver will be waiting."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What are the payment options available?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "EasyGo accepts all major credit cards including American Express, MasterCard and Visa. Cash payment to the driver is also available. For passengers arriving in Sydney, advance payment is kindly requested."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do you offer infant seats or baby capsules?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. EasyGo provides infant seats and baby capsules. Up to two child seats are available free of charge, with an additional $10 fee per extra seat. Please specify the number of seats required during booking."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do you provide Sydney airport pickup services from both International and Domestic terminals?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. EasyGo provides private Sydney airport pickup services from both Sydney International and Domestic terminals. Our drivers track your flight in real time and meet you at the designated airport meeting point for a smooth door-to-door transfer."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How many bags can I take with me?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Each passenger is allowed one (1) standard bag plus one (1) carry-on item. If you have additional or oversized luggage, please inform EasyGo in advance."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is EasyGo a private Sydney airport pickup service or a shared shuttle?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "EasyGo operates as a private Sydney airport pickup and transfer service. Your booking is exclusively for your group only, with no shared rides, additional pickups, or waiting for other passengers."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do you provide transfers from Sydney CBD hotels?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. EasyGo provides transfers to and from Sydney CBD hotels, serviced apartments, and city accommodations."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Which areas do you service in Sydney?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "EasyGo services Sydney North Shore, CBD, Inner West, and Western Sydney suburbs. Customers can check pricing and availability for their suburb using the online booking system."
+          }
+        }
+      ]
+    }
     </script>
   </body>
 </html>
