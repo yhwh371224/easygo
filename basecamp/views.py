@@ -2375,7 +2375,6 @@ def email_dispatch_detail(request):
         # 4️⃣ Email template mapping
         template_options = {
             "Gratitude For Payment": ("basecamp/html_email-response-payment-received.html", "Payment Received - EasyGo"),
-            "Gratitude For (M) Payment": ("basecamp/html_email-response-multi-payment-received.html", "(M) Payment Received - EasyGo"),
             "Pickup Notice for Today": ("basecamp/html_email-today1.html", "Important Update for Today's Pickup - EasyGo "),
             "Payment Method": ("basecamp/html_email-response-payment.html", "Payment Method - EasyGo"),
             "PayPal Assistance": ("basecamp/html_email-response-payment-assistance.html", "PayPal Assistance - EasyGo"),
@@ -2448,139 +2447,75 @@ def email_dispatch_detail(request):
                 })
 
         # ✅ Gratitude For Payment
-        if selected_option == "Gratitude For Payment":
-            # 기존 notice 확인
-            original_notice = (user.notice or "").strip()
-            has_payment_record = any(
-                keyword in original_notice
-                for keyword in ["===STRIPE===", "===PAYPAL===", "===Gratitude==="]
+        if selected_option == "Gratitude For Payment" and payment_amount:
+            payment_amount = float(payment_amount)
+            remaining_amount = payment_amount
+
+            bookings = (
+                Post.objects
+                .filter(email__iexact=email, pickup_date__gte=date.today())
+                .order_by('pickup_date')
             )
 
-            # Case 1: payment_amount exists
-            if payment_amount:
-                total_paid_text = f"===Gratitude=== Total Paid: ${payment_amount}"
+            applied_bookings = []
 
-                if user.return_pickup_time == 'x':
-                    user1 = Post.objects.filter(email__iexact=email)[1]
+            for booking in bookings:
+                price = float(booking.price)
+                paid = float(booking.paid or 0)
 
-                    # ✅ 두 번째 예약에 이미 paid 값이 있으면 → 첫 번째 예약에 적용
-                    if user1.paid:
-                        user.paid = payment_amount
+                # 이미 전액 결제 → 완전히 스킵
+                if paid >= price:
+                    continue
 
-                        if not has_payment_record:
-                            original_notice = user.notice or ""
-                            user.notice = (
-                                f"{original_notice} | {total_paid_text}"
-                                if original_notice else total_paid_text
-                            )
-                        
-                        user.reminder = True
-                        user.toll = ""
-                        user.cash = False
-                        user.pending = False
-                        user.save()
+                due = price - paid
+                apply_amount = min(remaining_amount, due)
 
-                    # ✅ 두 번째 예약에 paid 값이 없으면 → 두 번째 예약에 적용
-                    else:
-                        user1.paid = payment_amount
+                # 적용할 금액이 없으면 스킵
+                if apply_amount <= 0:
+                    continue
 
-                        if not has_payment_record:
-                            user1.notice = total_paid_text
+                # ✅ 여기부터가 "돈이 실제로 적용된 예약"만
+                booking.paid = paid + apply_amount
 
-                        user1.reminder = True
-                        user1.toll = ""
-                        user1.cash = False
-                        user1.pending = False
-                        user1.save()
+                original_notice = (booking.notice or "").strip()
+                paid_text = f"===Gratitude=== Applied: ${apply_amount}"
+                if "===Gratitude===" not in original_notice:
+                    booking.notice = (
+                        f"{original_notice} | {paid_text}"
+                        if original_notice else paid_text
+                    )
 
-                else:
-                    # 왕복 아님 → user에만 적용
-                    user.paid = payment_amount
+                booking.reminder = True
+                booking.toll = ""
+                booking.cash = False
+                booking.pending = False
+                booking.save()
 
-                    if not has_payment_record:
-                        original_notice = user.notice or ""
-                        user.notice = (
-                            f"{original_notice} | {total_paid_text}"
-                            if original_notice else total_paid_text
-                        )
+                applied_bookings.append(booking) 
 
-                    user.reminder = True
-                    user.toll = ""
-                    user.cash = False
-                    user.pending = False
-                    user.save()
+                remaining_amount -= apply_amount
 
-            # Case 2: payment_amount does NOT exist
+                if remaining_amount <= 0:
+                    break
+
+            if applied_bookings:
+                context.update({
+                    'pickup_date': applied_bookings[0].pickup_date,
+                    'applied_bookings': applied_bookings,
+                })
             else:
-                # 이미 price 가 편도 기준으로 저장돼 있으므로 그대로 paid 처리
-                user.paid = float(user.price)
+                context.update({
+                    'applied_bookings': [],
+                })
 
-                total_paid_text = f"===Gratitude=== Total Paid: ${user.price}"
-                if not has_payment_record:
-                    user.notice = f"{original_notice} | {total_paid_text}" if original_notice else total_paid_text
-
-                user.reminder = True
-                user.toll = ""
-                user.cash = False
-                user.pending = False
-                user.save()
-
-                if user.return_pickup_time == 'x':
-                    user1 = Post.objects.filter(email__iexact=email)[1]
-                    user1.paid = float(user1.price)
-
-                    if not has_payment_record:
-                        user1.notice = total_paid_text
-
-                    user1.reminder = True
-                    user1.toll = ""
-                    user1.cash = False
-                    user1.pending = False
-                    user1.save()
-
-            # 메일 템플릿용 context
             context.update({
-                'pickup_date': user.pickup_date,
-                'price': (
-                    float(user.price) + float(user1.price)
-                    if user.return_pickup_time == 'x'
-                    else float(user.price)
+                'payment_amount': float(payment_amount),
+                'return_pickup_date': (
+                    applied_bookings[1].pickup_date
+                    if len(applied_bookings) > 1
+                    else ''
                 ),
-                'payment_amount': float(payment_amount) if payment_amount else '',
-                'return_pickup_date': user.return_pickup_date if user.return_pickup_time == 'x' else '',
             })
-
-        # ✅ Multi-payment
-        if selected_option == "Gratitude For (M) Payment":
-            posts = Post.objects.filter(email__iexact=user.email, pickup_date__gte=date.today()).order_by('pickup_date')
-            if posts.exists():
-                form_price_input = payment_amount
-                try:
-                    form_price = float(form_price_input) if form_price_input else None
-                except ValueError:
-                    form_price = None
-
-                total_paid_applied = 0.0
-                for post in posts:
-                    post_price = float(post.price or 0)
-                    if form_price is not None and form_price > 0:
-                        applied = min(post_price, form_price)
-                        post.paid = applied
-                        form_price -= applied
-                    elif form_price is None:
-                        post.paid = post_price
-                    else:
-                        post.paid = 0.0
-
-                    post.reminder = True
-                    post.toll = ""
-                    post.cash = False
-                    post.pending = False
-                    post.discount = ""
-                    post.save()
-                    total_paid_applied += post.paid
-
-                context.update({'price': int(total_paid_applied)})
 
         # ✅ Cancellation
         if selected_option in ["Cancellation of Booking", "Cancellation by Client", "Apologies Cancellation of Booking"]:
