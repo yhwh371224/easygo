@@ -234,22 +234,28 @@
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
 													I hope this email finds you well.<br><br>
 
-													Thank you for your recent payment of 
-													{% if payment_amount %}
-														<strong>${{ payment_amount }}</strong> 
-													{% else %}
-														<strong>${{ price }}</strong> for your bookings on 
-														<strong>{{ pickup_date }}</strong>
-														{% if return_pickup_date %}
-															and <strong>{{ return_pickup_date }}</strong>
-														{% endif %}<br><br>
-													{% endif %}	
-													
+													Thank you for your recent payment
+												</p>
+
+												{% if applied_bookings %}
+													<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:6px;">
+															We have received your payment for the pickup scheduled on
+															{% for booking in applied_bookings %}
+																{{ booking.pickup_date|date:"d M Y" }}{% if not forloop.last %}, {% endif %}
+															{% endfor %}
+													</p>
+												{% else %}
+													<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
+														We have successfully received and noted your payment.
+													</p>
+												{% endif %}
+												
+												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
 													We appreciate your promptness in taking care of this.<br><br>
 
 													Should you have any questions or need further assistance, please don't hesitate to reach out to us.<br><br>
 
-													Once again, thank you for choosing our services. 
+													Once again, thank you for choosing our services.
 													We look forward to serving you and providing you with an excellent experience.<br><br>
 
 													Best regards,<br>
