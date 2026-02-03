@@ -232,38 +232,46 @@
 										<tr>
 											<td align="left" style="padding-top:28px;padding-left:0;">
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
-													I hope this email finds you well.<br><br>
+													I hope this email finds you well
+												</p>
 
-													Thank you for your recent payment 
-													{% if payment_amount %} <strong>${{ payment_amount }}</strong> {% endif %}
-												</p><br>
+												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
+													Thank you for your recent payment {% if payment_amount %}<strong>${{ payment_amount }}</strong>{% endif %}
+												</p>
 
 												{% if applied_bookings %}
-													<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:6px;">
-															We have received your payment for the pickup scheduled on
-															{% for booking in applied_bookings %}
-																<strong>{{ booking.pickup_date|date:"d M Y" }}</strong>{% if not forloop.last %}, {% endif %}
-															{% endfor %}
-													</p><br>
+													<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
+														We have received your payment for the pickup scheduled on
+														{% for booking in applied_bookings %}
+															<strong>{{ booking.pickup_date|date:"d M Y" }}</strong>{% if not forloop.last %}, {% endif %}
+														{% endfor %}
+													</p>
 												{% else %}
 													<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
-														We have successfully received and noted your payment.
-													</p><br>
+														We have successfully received and noted your payment
+													</p>
 												{% endif %}
-												
+
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
-													We appreciate your promptness in taking care of this.<br><br>
-
-													Should you have any questions or need further assistance, please don't hesitate to reach out to us.<br><br>
-
-													Once again, thank you for choosing our services.
-													We look forward to serving you and providing you with an excellent experience.<br><br>
-
-													Best regards,<br>
+													We appreciate your promptness in taking care of this
 												</p>
+
+												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
+													Should you have any questions or need further assistance, please don't hesitate to reach out to us
+												</p>
+
+												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
+													Once again, thank you for choosing our services. We look forward to serving you and providing you with an excellent experience
+												</p>
+
+												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
+													Best regards,
+												</p>
+
 												<p style="Margin:0;font-size:14px;font-weight:bold;line-height:22px;Margin-bottom:12px;">
-													<span style="color: #eb7828">Easy</span><span style="color: blue">Go&nbsp;</span>Airport Shuttle<br>	                                                          
-                                                </p>															
+													<span style="color: #eb7828">Easy</span><span style="color: blue">Go&nbsp;</span>Airport Shuttle
+												</p>
+							
 											</td>
 										</tr>
 										
