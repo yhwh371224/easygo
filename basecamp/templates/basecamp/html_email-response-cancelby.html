@@ -237,13 +237,16 @@
 										</tr>
 										<tr>
 											<td align="left" style="padding-top:28px;padding-left:0;">
-												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
-                                                    Thank you for letting us know about your cancellation. 
-                                                    We confirm that your booking on {{ booking_date }} has been successfully canceled.
-                                                    <br><br>													
+												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;"> 
+													
+													Thank you for letting us know about your cancellation. 
 
-													{% if return_booking_date %}
-													• Your return booking on {{ return_booking_date }} has also been cancelled.<br><br>
+													{% if return_booking_date %}													
+														We confirm that your bookings on {{ return_booking_date }} and {{ booking_date }} have been successfully canceled.
+														<br><br>
+													{% else %}												 
+                                                    	We confirm that your booking on {{ booking_date }} has been successfully canceled.
+                                                    <br><br>
 													{% endif %}
 
                                                     We’re sorry to hear you won’t be joining us this time.
