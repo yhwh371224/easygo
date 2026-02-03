@@ -2498,23 +2498,9 @@ def email_dispatch_detail(request):
                 if remaining_amount <= 0:
                     break
 
-            if applied_bookings:
-                context.update({
-                    'pickup_date': applied_bookings[0].pickup_date,
-                    'applied_bookings': applied_bookings,
-                })
-            else:
-                context.update({
-                    'applied_bookings': [],
-                })
-
             context.update({
+                'applied_bookings': applied_bookings if applied_bookings else [],
                 'payment_amount': float(payment_amount),
-                'return_pickup_date': (
-                    applied_bookings[1].pickup_date
-                    if len(applied_bookings) > 1
-                    else ''
-                ),
             })
 
         # ✅ Cancellation
