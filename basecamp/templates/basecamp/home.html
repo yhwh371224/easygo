@@ -102,6 +102,7 @@
       <link rel="stylesheet" media="screen" href="/static/basecamp/css/tiny-slider.css">
       <link rel="stylesheet" media="screen" href="/static/basecamp/css/flatpickr.min.css">
     {% endcompress %}
+    <link rel="preload" fetchpriority="high" as="image" href="/static/basecamp/photos/sydney_airport.webp" type="image/webp">
   </head>
 
   <body>   
@@ -185,7 +186,7 @@
       <!-- Page content-->
       <!-- Hero-->
       <section class="jarallax bg-dark py-7" data-jarallax data-speed="0.1" >
-        <div class="jarallax-img" style="background-image: url('/static/basecamp/photos/sydney_airport.webp');"></div>
+        <div class="jarallax-img" fetchpriority="high" style="background-image: url('/static/basecamp/photos/sydney_airport.webp');"></div>
           <a href="/static/basecamp/images/Digital-Certificate.webp"><img src="/static/basecamp/images/award-badge.webp" alt="Award Badge" class="award-badge"></a>
         <div class="container py-4 py-sm-5 text-center">
           <div class="py-md-6">
@@ -201,6 +202,15 @@
               <a role="button" class="btn btn-success" href="/inquiry/">PRICE NOW</a>
             </div>
             <br><br>
+
+            <div class="mt-4">
+                <a href="https://easygoshuttle.com.au/easygo_review/" class="text-light text-decoration-none me-3">
+                    <span class="fs-lg">🏆🏆🏆</span> <strong>Reviews on our website</strong>
+                </a>
+                <a href="https://bit.ly/3xkLEUD" target="_blank" class="text-light text-decoration-none">
+                    <span class="fs-lg">🥇🥇🥇</span> <strong>Google reviews</strong>
+                </a>
+            </div>
 
             <p class="fs-lg text-light" id="changing-text">              
               <strong>Reliable Sydney airport transfer services for families and large groups,travelling comfortably with lots of luggage.</strong>
@@ -419,43 +429,55 @@
             <div class="accordion" id="faq">
 				      <div class="accordion-item shadow">
                 <h2 class="accordion-header" id="faq-heading-1">
-                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-1" aria-expanded="true" aria-controls="faq-content-1">What are included in the price we get? Is there any extra charge?</button>
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-1" aria-expanded="true" aria-controls="faq-content-1">
+                    What are included in the price we get? Is there any extra charge?</button>
                 </h2>
                 <div class="accordion-collapse collapse show" id="faq-content-1" aria-labelledby="faq-heading-1" data-bs-parent="#faq">
                   <div class="accordion-body">
-                    <div class="fs-sm">The price you receive from EasyGo includes the airport parking fee, and we do not charge extra for any waiting time incurred due to flight delays. Our price is fixed, and there are no additional charges.</div>
+                    <div class="fs-sm">The price you receive from EasyGo includes the airport parking fee, 
+                      and we do not charge extra for any waiting time incurred due to flight delays. Our price is fixed, 
+                      and there are no additional charges. <a href="/terms/">See our full Pricing Terms</a></div>
                   </div>
                 </div>
               </div>
 				      <div class="accordion-item shadow">
                 <h2 class="accordion-header" id="faq-heading-2">
-                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-2" aria-expanded="true" aria-controls="faq-content-2">What if my flight is delayed?</button>
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-2" aria-expanded="true" aria-controls="faq-content-2">
+                    What if my flight is delayed?</button>
                 </h2>
                 <div class="accordion-collapse collapse show" id="faq-content-2" aria-labelledby="faq-heading-2" data-bs-parent="#faq">
                   <div class="accordion-body">
                     <div class="fs-sm">EasyGo drivers will keep track of your flight’s landing time to ensure they meet you on time. 
                       Please make sure to check your email and phone messages before and after collecting your baggage for any important updates from us. 
-                      Simply proceed to the meeting point — your driver will be waiting for you there.</div>
+                      Simply proceed to the meeting point — your driver will be waiting for you there. 
+                      You can find more details in our <a href="/arrival_guide/">Arrival Guide</a></div>
                   </div>
                 </div>
               </div>
               <div class="accordion-item shadow">
                 <h2 class="accordion-header" id="faq-heading-3">
-                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-3" aria-expanded="true" aria-controls="faq-content-3">What are the payment options available?</button>
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-3" aria-expanded="true" aria-controls="faq-content-3">
+                    What are the payment options available?</button>
                 </h2>
                 <div class="accordion-collapse collapse show" id="faq-content-3" aria-labelledby="faq-heading-3" data-bs-parent="#faq">
                   <div class="accordion-body">
-                    <div class="fs-sm">EasyGo accepts all major credit cards, including American Express, MasterCard, and VisaCard. Alternatively, you can pay cash to your driver on the day of your booking. However, for those arriving in Sydney, we kindly request payment in advance.</div>
+                    <div class="fs-sm">EasyGo accepts all major credit cards, including American Express, MasterCard, and VisaCard. Alternatively, 
+                      you can pay cash to your driver on the day of your booking. However, for those arriving in Sydney, 
+                      we kindly request payment in advance. You can find more details in our <a href="/payment_options/">View all Payment Options</a></div>
                   </div>
                 </div>
               </div>
               <div class="accordion-item shadow">
                 <h2 class="accordion-header" id="faq-heading-4">
-                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-4" aria-expanded="false" aria-controls="faq-content-4">Do you offer infant seats or baby capsules?</button>
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-4" aria-expanded="false" aria-controls="faq-content-4">
+                    Do you offer infant seats or baby capsules?</button>
                 </h2>
                 <div class="accordion-collapse collapse" id="faq-content-4" aria-labelledby="faq-heading-4" data-bs-parent="#faq">
                   <div class="accordion-body">
-                    <div class="fs-sm">We do provide an infant seat or baby capsule, and two car seats are available free of charge. If you require more than two seats, we charge an extra $10 per additional seat. Please specify the number of seats you require during the booking process.</div>
+                    <div class="fs-sm">We do provide an infant seat or baby capsule, and two car seats are available free of charge. 
+                      If you require more than two seats, we charge an extra $10 per additional seat. 
+                      Please specify the number of seats you require during the booking process.
+                    </div>
                   </div>
                 </div>
               </div>
@@ -465,7 +487,9 @@
                 </h2>
                 <div class="accordion-collapse collapse" id="faq-content-5" aria-labelledby="faq-heading-5" data-bs-parent="#faq">
                   <div class="accordion-body">
-					          <div class="fs-sm">"Our standard shuttle mini bus can accommodate up to thirteen (13) passengers, making it suitable for families and large groups. <a href='/maxi-taxi/' style='color:#eb7828;'>Check Maxi Taxi options here</a></div>
+					          <div class="fs-sm">"Our standard shuttle mini bus can accommodate up to thirteen (13) passengers, 
+                      making it suitable for families and large groups. 
+                      <a href='/maxi-taxi/' style='color:#eb7828;'>Check Maxi Taxi options here</a></div>
                   </div>
                 </div>
               </div>
@@ -475,7 +499,8 @@
                 </h2>
                 <div class="accordion-collapse collapse" id="faq-content-6" aria-labelledby="faq-heading-6" data-bs-parent="#faq">
                   <div class="accordion-body">
-                    <div class="fs-sm">EASYGO allows one (1) bag plus one (1) carry-on per person. If you have additional bags, please inform our office.</div>
+                    <div class="fs-sm">EASYGO allows one (1) bag plus one (1) carry-on per person. If you have additional bags, 
+                      please inform our office. You can find more details in our <a href="/terms/">Terms and Conditions</a></div>
                   </div>
                 </div>
               </div>
@@ -488,7 +513,8 @@
                 <div class="accordion-collapse collapse" id="faq-content-7" aria-labelledby="faq-heading-7" data-bs-parent="#faq">
                   <div class="accordion-body">
                     <div class="fs-sm">
-                      EasyGo operates primarily as a private airport transfer service. Your booking is for your group only, with no shared rides or additional passenger pickups along the way.
+                      EasyGo operates primarily as a private airport transfer service. Your booking is for your group only, 
+                      with no shared rides or additional passenger pickups along the way.
                     </div>
                   </div>
                 </div>
@@ -518,7 +544,9 @@
                 <div class="accordion-collapse collapse" id="faq-content-9" aria-labelledby="faq-heading-9" data-bs-parent="#faq">
                   <div class="accordion-body">
                     <div class="fs-sm">
-                      EasyGo services Sydney North Shore, CBD, Inner West, and Western Sydney suburbs. You can check availability and pricing for your suburb through our online booking system.
+                      EasyGo services Sydney North Shore, CBD, Inner West, and Western Sydney suburbs. 
+                      You can check availability and pricing for your suburb through our online booking system.
+                      <a href="/more_suburbs/">Explore all Service Areas</a>                      
                     </div>
                   </div>
                 </div>
