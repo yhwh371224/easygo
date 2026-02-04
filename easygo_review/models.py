@@ -9,7 +9,7 @@ class Post(models.Model):
     content = MarkdownxField()
     name = models.CharField(max_length=100, blank=False, null=True)
     date = models.DateField(blank=True, null=True, default=datetime.date.today)
-    link = models.URLField(max_length=100, default="https://bit.ly/3xkLEUD")
+    link = models.URLField(max_length=100, default="https://www.google.com/search?q=EasyGo+Airport+Shuttle+Reviews")
     rating = models.IntegerField(default=5, choices=[(i, i) for i in range(1, 6)])
     is_published = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
