@@ -8,7 +8,7 @@ from django.views.generic import RedirectView
 app_name = "basecamp"
 
 urlpatterns = [
-    path('', views.index, name='index'),
+    path('', views.home, name='home'),
     path('about_us/', views.about_us, name='about_us'),
     path('maxi-taxi/choose-suburb/', views.more_suburbs_maxi_taxi, name='more_suburbs_maxi_taxi'),
     path('maxi-taxi/<slug:suburb>/', views.maxi_taxi, name='maxi_taxi_suburb'),
@@ -32,7 +32,7 @@ urlpatterns = [
     path('email_dispatch/', views.email_dispatch, name='email_dispatch'),
     path('email_dispatch_detail/', views.email_dispatch_detail, name='email_dispatch_detail'),
     path('email_error_confirmbooking/', views.email_error_confirmbooking, name='email_error_confirmbooking'),
-    path('home/', views.home, name='home'),
+    path('home/', RedirectView.as_view(url='/', permanent=True)),
     path('home_error/', views.home_error, name='home_error'),
     path('information/', views.information, name='information'),
     path('invoice-6gv4vPYs/', views.invoice, name="invoice"),
