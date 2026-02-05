@@ -1,15 +1,39 @@
 User-agent: *
+Allow: /
+
+# 관리 페이지
 Disallow: /admin/
+Disallow: /horeb_yhwh/
+
+# 보안 및 시스템 파일
 Disallow: /secure/
-Disallow: /generate_uuid.py
-Disallow: /retrieve.py
-Disallow: /schedule.py
-Disallow: /db.sqlite3
-Disallow: /awskeypair.pem
-Disallow: /manage.py
 Disallow: /private/
+Disallow: /*.py$
+Disallow: /db.sqlite3
+Disallow: /*.pem$
+
+# 테스트 및 에러 페이지
 Disallow: /test/
+Disallow: /error/
+Disallow: /home_error/
+Disallow: /wrong_date_today/
 
+# 중복 및 리다이렉트 URL
+Disallow: /home/
+
+# 내부 API 및 Webhook
+Disallow: /paypal_ipn/
+Disallow: /stripe_webhook/
+Disallow: /recaptcha-verify/
+
+# 폼 처리 URL (인덱싱 불필요)
+Disallow: /*_detail/
+Disallow: /confirm_booking/
+Disallow: /email_dispatch/
+Disallow: /sending_email_*/
+
+# 쿼리 파라미터 URL
+Disallow: /*?
+
+# Sitemap
 Sitemap: https://www.easygoshuttle.com.au/sitemap.xml
-Sitemap: https://www.easygoshuttle.com.au/sitemap_schemalocation.xml
-

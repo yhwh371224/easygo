@@ -37,9 +37,6 @@ from .utils import (
 logger = logging.getLogger(__name__)
 
 
-def index(request): return redirect('/home/')
-
-
 def home(request):
     suburbs = get_suburbs()
     home_suburbs = get_home_suburbs()
