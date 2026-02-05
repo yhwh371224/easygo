@@ -12,10 +12,6 @@ Disallow: /*.py$
 Disallow: /db.sqlite3
 Disallow: /*.pem$
 
-# 내부 도구 차단 (로그인 필요)
-Disallow: /brain_box/
-Disallow: /monitor/
-
 # 테스트 및 에러 페이지
 Disallow: /test/
 Disallow: /error/
