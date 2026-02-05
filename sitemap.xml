@@ -2,10 +2,124 @@
 
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 
+  <!-- 메인 홈페이지 -->
   <url>
-       <loc>https://easygoshuttle.com.au/home/</loc>
-       <lastmod>2024-06-24T19:13:53+00:00</lastmod>
+       <loc>https://easygoshuttle.com.au/</loc>
+       <lastmod>2025-02-05T00:00:00+00:00</lastmod>
        <changefreq>daily</changefreq>
        <priority>1.0000</priority>
   </url>
+
+  <!-- 핵심 서비스 페이지 -->
+  <url>
+       <loc>https://easygoshuttle.com.au/sydney-airport-transfer/</loc>
+       <lastmod>2025-02-05T00:00:00+00:00</lastmod>
+       <changefreq>weekly</changefreq>
+       <priority>0.9000</priority>
+  </url>
+
+  <url>
+       <loc>https://easygoshuttle.com.au/maxi-taxi/</loc>
+       <lastmod>2025-02-05T00:00:00+00:00</lastmod>
+       <changefreq>weekly</changefreq>
+       <priority>0.9000</priority>
+  </url>
+
+  <!-- 예약 및 문의 -->
+  <url>
+       <loc>https://easygoshuttle.com.au/booking/</loc>
+       <lastmod>2025-02-05T00:00:00+00:00</lastmod>
+       <changefreq>weekly</changefreq>
+       <priority>0.8000</priority>
+  </url>
+
+  <url>
+       <loc>https://easygoshuttle.com.au/inquiry/</loc>
+       <lastmod>2025-02-05T00:00:00+00:00</lastmod>
+       <changefreq>weekly</changefreq>
+       <priority>0.8000</priority>
+  </url>
+
+  <url>
+       <loc>https://easygoshuttle.com.au/cruise_inquiry/</loc>
+       <lastmod>2025-02-05T00:00:00+00:00</lastmod>
+       <changefreq>weekly</changefreq>
+       <priority>0.7000</priority>
+  </url>
+
+  <!-- 정보 페이지 -->
+  <url>
+       <loc>https://easygoshuttle.com.au/about_us/</loc>
+       <lastmod>2025-02-05T00:00:00+00:00</lastmod>
+       <changefreq>monthly</changefreq>
+       <priority>0.7000</priority>
+  </url>
+
+  <url>
+       <loc>https://easygoshuttle.com.au/easygo_review/</loc>
+       <lastmod>2025-02-05T00:00:00+00:00</lastmod>
+       <changefreq>weekly</changefreq>
+       <priority>0.7000</priority>
+  </url>
+
+  <url>
+       <loc>https://easygoshuttle.com.au/information/</loc>
+       <lastmod>2025-02-05T00:00:00+00:00</lastmod>
+       <changefreq>monthly</changefreq>
+       <priority>0.6000</priority>
+  </url>
+
+  <!-- 공항 관련 정보 -->
+  <url>
+       <loc>https://easygoshuttle.com.au/meeting_point/</loc>
+       <lastmod>2025-02-05T00:00:00+00:00</lastmod>
+       <changefreq>monthly</changefreq>
+       <priority>0.6000</priority>
+  </url>
+
+  <url>
+       <loc>https://easygoshuttle.com.au/arrival_guide/</loc>
+       <lastmod>2025-02-05T00:00:00+00:00</lastmod>
+       <changefreq>monthly</changefreq>
+       <priority>0.6000</priority>
+  </url>
+
+  <!-- 지역 정보 -->
+  <url>
+       <loc>https://easygoshuttle.com.au/more_suburbs/</loc>
+       <lastmod>2025-02-05T00:00:00+00:00</lastmod>
+       <changefreq>weekly</changefreq>
+       <priority>0.6000</priority>
+  </url>
+
+  <!-- 결제 정보 -->
+  <url>
+       <loc>https://easygoshuttle.com.au/payment_options/</loc>
+       <lastmod>2025-02-05T00:00:00+00:00</lastmod>
+       <changefreq>monthly</changefreq>
+       <priority>0.5000</priority>
+  </url>
+
+  <url>
+       <loc>https://easygoshuttle.com.au/payonline/</loc>
+       <lastmod>2025-02-05T00:00:00+00:00</lastmod>
+       <changefreq>monthly</changefreq>
+       <priority>0.5000</priority>
+  </url>
+
+  <!-- 법적 문서 -->
+  <url>
+       <loc>https://easygoshuttle.com.au/terms/</loc>
+       <lastmod>2025-02-05T00:00:00+00:00</lastmod>
+       <changefreq>yearly</changefreq>
+       <priority>0.3000</priority>
+  </url>
+
+  <url>
+       <loc>https://easygoshuttle.com.au/privacy/</loc>
+       <lastmod>2025-02-05T00:00:00+00:00</lastmod>
+       <changefreq>yearly</changefreq>
+       <priority>0.3000</priority>
+  </url>
+
 </urlset>
