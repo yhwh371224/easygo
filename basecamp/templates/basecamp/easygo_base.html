@@ -6,6 +6,9 @@
     <!-- Basic Meta Tags (Base Template) -->
     <!-- Title -->
     <title>{% block title %}EasyGo Airport Shuttle – Sydney Transfers{% endblock %}</title>
+    {% block canonical %}
+    <link rel="canonical" href="https://easygoshuttle.com.au{{ request.path }}">
+    {% endblock %}
     <!-- SEO Meta Tags -->
     {% block meta %}
     <meta name="google-site-verification" content="hae39L0Kv7JIxVc3YclvckH7Im5SdYa2hk_vZbGJIkA" />
