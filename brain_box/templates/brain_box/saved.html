@@ -1,9 +1,0 @@
-{% extends "brain_box/base.html" %}
-
-{% block content %}
-<div class="container text-center py-5 text-white" style="background-color:rgb(90, 85, 85); min-height:100vh;">
-  <h2>✅ Trade record has been saved successfully!</h2>
-  <p>Trade Type: {{ trade_type }}</p>
-  <a href="{% url 'calculate_trade' %}" class="btn btn-light mt-4">🔁 New Calculation</a>
-</div>
-{% endblock %}
