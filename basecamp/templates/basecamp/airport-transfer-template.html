@@ -4,16 +4,70 @@
   {{ title }}
 {% endblock %}
 
+{% block canonical %}
+  <!-- Base의 canonical을 오버라이드 -->
+  <link rel="canonical" href="https://easygoshuttle.com.au/airport-transfer-{{ suburb|slugify }}">
+{% endblock %}
+
 {% block meta %}
   <meta name="description" content="{{ meta_description }}">
-  <meta name="keywords" content="Sydney airport shuttle, {{ suburb }} airport transfer, group airport transfer, private shuttle, luggage-friendly shuttle">
+  <meta name="keywords" content="Sydney airport transfer, {{ suburb }} airport transfer, group airport transfer, private shuttle, luggage-friendly shuttle">
   <meta name="author" content="easygoshuttle.com.au">
 {% endblock %}
 
 {% block content %}
+<!-- Breadcrumb -->
+<nav aria-label="breadcrumb" class="container pt-3">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/">Home</a></li>
+    <li class="breadcrumb-item"><a href="/sydney_airport_transfer/">Airport Transfer</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ suburb }}</li>
+  </ol>
+</nav>
+
+<!-- Service Schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "serviceType": "Airport Transfer",
+  "name": "{{ suburb }} Airport Transfer to Sydney Airport",
+  "description": "{{ meta_description }}",
+  "provider": {
+    "@type": "LocalBusiness",
+    "name": "EasyGo Airport Shuttle",
+    "telephone": "+61 406 883 355",
+    "url": "https://www.easygoshuttle.com.au"
+  },
+  "areaServed": [
+    {% for main_suburb in main_suburbs %}
+    {
+      "@type": "City",
+      "name": "{{ main_suburb }}",
+      "containedInPlace": {
+        "@type": "City",
+        "name": "Sydney",
+        "@type": "City",
+        "addressCountry": "AU"
+      }
+    }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+  ],
+  "offers": {
+    "@type": "Offer",
+    "price": "{{ details.price }}",
+    "priceCurrency": "AUD",
+    "availability": "https://schema.org/InStock",
+    "priceValidUntil": "2026-12-31",
+    "url": "https://easygoshuttle.com.au/inquiry/"
+  }
+}
+</script>
+
+
 <!-- Hero-->
 <section class="jarallax bg-dark py-3" data-jarallax data-speed="0.1">
-  <div class="jarallax-img" style="background-image: url('/static/basecamp/photos/bg-pattern02.webp');"></div>
+  <div class="jarallax-img" style="background-image: url('/static/basecamp/photos/bg-pattern02.webp');" role="img" aria-label="{{ suburb }} airport transfer"></div>
   <div class="container py-5 py-sm-7 text-center">
     <div class="py-md-6">
       <br><br><br>
