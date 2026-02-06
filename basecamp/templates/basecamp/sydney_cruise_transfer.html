@@ -141,13 +141,18 @@
 {% block extra_css %}
 
 <style>
-/* 전체 페이지 배경색 */
+/* 전체 페이지 배경색 및 글자색 */
 body {
     background-color: #e3f2fd !important;
+    color: #212529 !important;
 }
 
 .page-wrapper {
     background-color: #e3f2fd;
+}
+
+.container {
+    color: #212529;
 }
 
 ul {
@@ -158,6 +163,46 @@ ul {
 
 ul li {
     margin-bottom: 0.5rem; /* 간격 */
+    color: #212529;
+}
+
+p {
+    color: #212529;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #212529;
+}
+
+/* H1, H2, H3 안의 span 색상은 유지 */
+h1 span {
+    color: #eb7828 !important;
+}
+
+h2 span[style*="#c9814d"] {
+    color: #c9814d !important;
+}
+
+h2 span[style*="#316acf"] {
+    color: #316acf !important;
+}
+
+h3 span {
+    color: #c3b5aa !important;
+}
+
+/* 링크 색상 */
+a {
+    color: #0d6efd;
+}
+
+a:hover {
+    color: #0a58ca;
+}
+
+/* 오렌지 링크는 유지 */
+a[style*="#eb7828"] {
+    color: #eb7828 !important;
 }
 </style>
 
