@@ -378,6 +378,10 @@ def success(request):
     return render(request, 'basecamp/success.html')
 
 
+def sydney_cruise_transfer(request):
+    return render(request, 'basecamp/sydney_cruise_transfer.html')
+
+
 def sydney_airport_shuttle(request):
     return render(request, 'basecamp/sydney_airport_shuttle.html')
 
