@@ -17,6 +17,7 @@ urlpatterns = [
     path('airport-transfer-<slug:suburb>/', views.airport_transfer, name='airport_transfer_suburb'),  
     path('airport-transfers-<slug:suburb>/', RedirectView.as_view(url='/sydney-airport-transfer/%(suburb)s/', permanent=True), name='old_airport_transfers_redirect'),
     path('sydney-airport-transfer/<slug:suburb>/', views.airport_transfer, name='sydney_airport_transfer_suburb'),
+    path('sydney-cruise-transfer/', views.sydney_cruise_transfer, name='sydney_cruise_transfer'),
     path('sydney-airport-shuttle/', views.sydney_airport_shuttle, name='sydney_airport_shuttle'),
     path('sydney-airport-transfer/', views.sydney_airport_transfer, name='sydney_airport_transfer'),
     path('arrival_guide/', views.arrival_guide, name='arrival_guide'),
