@@ -5,7 +5,7 @@
   <!-- 메인 홈페이지 -->
   <url>
        <loc>https://easygoshuttle.com.au/</loc>
-       <lastmod>2025-02-05T00:00:00+00:00</lastmod>
+       <lastmod>2025-02-06T00:00:00+00:00</lastmod>
        <changefreq>daily</changefreq>
        <priority>1.0000</priority>
   </url>
@@ -13,14 +13,22 @@
   <!-- 핵심 서비스 페이지 -->
   <url>
        <loc>https://easygoshuttle.com.au/sydney-airport-transfer/</loc>
-       <lastmod>2025-02-05T00:00:00+00:00</lastmod>
+       <lastmod>2025-02-06T00:00:00+00:00</lastmod>
+       <changefreq>weekly</changefreq>
+       <priority>0.9000</priority>
+  </url>
+
+  <!-- 🆕 새로 추가 -->
+  <url>
+       <loc>https://easygoshuttle.com.au/sydney-airport-shuttle/</loc>
+       <lastmod>2025-02-06T00:00:00+00:00</lastmod>
        <changefreq>weekly</changefreq>
        <priority>0.9000</priority>
   </url>
 
   <url>
        <loc>https://easygoshuttle.com.au/maxi-taxi/</loc>
-       <lastmod>2025-02-05T00:00:00+00:00</lastmod>
+       <lastmod>2025-02-06T00:00:00+00:00</lastmod>
        <changefreq>weekly</changefreq>
        <priority>0.9000</priority>
   </url>
@@ -28,21 +36,21 @@
   <!-- 예약 및 문의 -->
   <url>
        <loc>https://easygoshuttle.com.au/booking/</loc>
-       <lastmod>2025-02-05T00:00:00+00:00</lastmod>
+       <lastmod>2025-02-06T00:00:00+00:00</lastmod>
        <changefreq>weekly</changefreq>
        <priority>0.8000</priority>
   </url>
 
   <url>
        <loc>https://easygoshuttle.com.au/inquiry/</loc>
-       <lastmod>2025-02-05T00:00:00+00:00</lastmod>
+       <lastmod>2025-02-06T00:00:00+00:00</lastmod>
        <changefreq>weekly</changefreq>
        <priority>0.8000</priority>
   </url>
 
   <url>
        <loc>https://easygoshuttle.com.au/cruise_inquiry/</loc>
-       <lastmod>2025-02-05T00:00:00+00:00</lastmod>
+       <lastmod>2025-02-06T00:00:00+00:00</lastmod>
        <changefreq>weekly</changefreq>
        <priority>0.7000</priority>
   </url>

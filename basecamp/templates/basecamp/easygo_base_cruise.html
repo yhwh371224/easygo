@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <title>Sydney Airport Maxi Taxi & 8–13 Seater Transfers | EasyGo Airport Shuttle</title>
     {% block canonical %}
-    <link rel="canonical" href="https://easygoshuttle.com.au{{ request.path }}">
+      <link rel="canonical" href="https://easygoshuttle.com.au{{ request.path|slice:':-1' }}{% if not request.path|slice:'-1:' == '/' %}/{% endif %}">
     {% endblock %}
     <meta name="google-site-verification" content="hae39L0Kv7JIxVc3YclvckH7Im5SdYa2hk_vZbGJIkA" />
     <!-- SEO Meta Tags-->
