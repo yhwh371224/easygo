@@ -128,7 +128,7 @@ def airport_shuttle(request, suburb):
     more_suburbs = get_more_suburbs()
 
     if not suburb:
-        return render(request, 'basecamp/sydney_airport_transfer.html')
+        return render(request, 'basecamp/sydney_airport_shuttle.html')
     
     suburb_formatted = suburb.replace('-', ' ').title() 
 
@@ -141,7 +141,7 @@ def airport_shuttle(request, suburb):
             'suburb': suburb_formatted,
             'details': details,
             'title': zone_info.get('title', "{suburb} Airport shuttle").format(suburb=suburb_formatted),
-            'meta_description': zone_info.get('meta_description', "Reliable airport transfer service for {suburb}").format(suburb=suburb_formatted),
+            'meta_description': zone_info.get('meta_description', "Reliable airport shuttle service for {suburb}").format(suburb=suburb_formatted),
             'h1': zone_info.get('h1', "{suburb} Airport Shuttle").format(suburb=suburb_formatted),
             'h2': zone_info.get('h2', ""),
             'route_info': zone_info.get('route_info', []),
@@ -150,7 +150,7 @@ def airport_shuttle(request, suburb):
         return render(request, 'basecamp/airport-shuttle-template.html', context)
 
     else:
-        return render(request, 'basecamp/sydney_airport_transfer.html')
+        return render(request, 'basecamp/sydney_airport_shuttle.html')
 
 
 def airport_transfer(request, suburb):
@@ -171,7 +171,7 @@ def airport_transfer(request, suburb):
             'details': details,
             'title': zone_info.get('title', "{suburb} Airport Transfer").format(suburb=suburb_formatted),
             'meta_description': zone_info.get('meta_description', "Reliable airport transfer service for {suburb}").format(suburb=suburb_formatted),
-            'h1': zone_info.get('h1', "{suburb} Airport Shuttle").format(suburb=suburb_formatted),
+            'h1': zone_info.get('h1', "{suburb} Airport Transfer").format(suburb=suburb_formatted),
             'h2': zone_info.get('h2', ""),
             'route_info': zone_info.get('route_info', []),
             'landmarks': zone_info.get('landmark', []),
@@ -281,11 +281,6 @@ def meeting_point(request):
     return render(request, 'basecamp/meeting_point.html')
 
 
-def more_suburbs_maxi_taxi(request):
-    more_suburbs = get_more_suburbs()
-    return render(request, 'basecamp/more_suburbs_maxi_taxi.html', {'more_suburbs': more_suburbs})
-
-
 def more_suburbs(request): 
     more_suburbs = get_more_suburbs()
     return render(request, 'basecamp/more_suburbs.html', {'more_suburbs': more_suburbs})
@@ -381,6 +376,10 @@ def sitemap(request):
 
 def success(request): 
     return render(request, 'basecamp/success.html')
+
+
+def sydney_airport_shuttle(request):
+    return render(request, 'basecamp/sydney_airport_shuttle.html')
 
 
 def sydney_airport_transfer(request):
