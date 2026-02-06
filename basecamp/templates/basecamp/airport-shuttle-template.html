@@ -4,16 +4,69 @@
   {{ title }}
 {% endblock %}
 
+{% block canonical %}
+  <!-- Base의 canonical을 오버라이드 -->
+  <link rel="canonical" href="https://easygoshuttle.com.au/airport-shuttle-{{ suburb|slugify }}">
+{% endblock %}
+
 {% block meta %}
   <meta name="description" content="{{ meta_description }}">
-  <meta name="keywords" content="Sydney airport shuttle, {{ suburb }} airport transfer, group airport transfer, private shuttle, luggage-friendly shuttle">
+  <meta name="keywords" content="Sydney airport shuttle, {{ suburb }} airport shuttle, group airport shuttle, private shuttle, luggage-friendly shuttle">
   <meta name="author" content="easygoshuttle.com.au">
 {% endblock %}
 
 {% block content %}
+<!-- Breadcrumb -->
+<nav aria-label="breadcrumb" class="container pt-3">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/">Home</a></li>
+    <li class="breadcrumb-item"><a href="/sydney-airport-shuttle/">Sydney Airport Shuttle</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ suburb }}</li>
+  </ol>
+</nav>
+
+<!-- Service Schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "serviceType": "Airport Shuttle",
+  "name": "{{ suburb }} Airport Shuttle to Sydney Airport",
+  "description": "{{ meta_description }}",
+  "provider": {
+    "@type": "LocalBusiness",
+    "name": "EasyGo Airport Shuttle",
+    "telephone": "+61 406 883 355",
+    "url": "https://www.easygoshuttle.com.au"
+  },
+  "areaServed": [
+    {% for main_suburb in main_suburbs %}
+    {
+      "@type": "City",
+      "name": "{{ main_suburb }}",
+      "containedInPlace": {
+        "@type": "City",
+        "name": "Sydney",
+        "@type": "City",
+        "addressCountry": "AU"
+      }
+    }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+  ],
+  "offers": {
+    "@type": "Offer",
+    "price": "{{ details.price }}",
+    "priceCurrency": "AUD",
+    "availability": "https://schema.org/InStock",
+    "priceValidUntil": "2026-12-31",
+    "url": "https://easygoshuttle.com.au/inquiry/"
+  }
+}
+</script>
+
 <!-- Hero-->
 <section class="jarallax bg-dark py-3" data-jarallax data-speed="0.1">
-  <div class="jarallax-img" style="background-image: url('/static/basecamp/photos/bg-pattern02.webp');"></div>
+  <div class="jarallax-img" style="background-image: url('/static/basecamp/photos/bg-pattern02.webp');" role="img" aria-label="{{ suburb }} airport shuttle"></div>
   <div class="container py-5 py-sm-7 text-center">
     <div class="py-md-6">
       <br><br><br>
@@ -55,12 +108,12 @@
                 <div class="entry-content">
                   <h5>EASYGO AIRPORT SHUTTLE – <span style="color: #eb7828">{{ suburb }}</span></h5>
                   <ul style="list-style-type: disc;">
-                    <li>Need an <strong>airport transfer service</strong> to or from {{ suburb }}?</li>
+                    <li>Need an <strong>airport shuttle service</strong> to or from {{ suburb }}?</li>
                     <li>EasyGo Airport Shuttle covers various suburbs within Sydney, such as {{ suburb }}.</li>
                     <li>Our services to and from the airport are <strong>time and cost efficient</strong>.</li>
                     <li>If you and your group want to arrive at {{ suburb }} or at the Airport, why not travel together?</li>
                     <li>This reduces the chances of someone being late and is also much cheaper.</li>
-                    <li>For more information about our Airport Transfers service, see reviews left by our clients: <a href="/easygo_review/">Reviews for our service</a></li>
+                    <li>For more information about our Airport shuttle service, see reviews left by our clients: <a href="/easygo_review/">Reviews for our service</a></li>
                   </ul>
                   
                   <h5>Booking in Advance</h5>
@@ -75,12 +128,12 @@
                   
                   <h5>Door to Door</h5>
                   <ul style="list-style-type: disc;">
-                    <li>{{ suburb }} airport transfer services are <strong>door-to-door</strong>, perfect for reaching your destination quickly.</li>
-                    <li>Relax while EasyGo Shuttle handles all your transportation and transfer services.</li>
+                    <li>{{ suburb }} airport shuttle services are <strong>door-to-door</strong>, perfect for reaching your destination quickly.</li>
+                    <li>Relax while EasyGo Shuttle handles all your transportation and shuttle services.</li>
                     <li>We provide prestige yet cost-effective service in clean, modern, air-conditioned vehicles.</li>
                     <li>Our premium services are reliable, punctual, and fully refund guaranteed.</li>
                     <li>Larger luggage is easily accommodated with our shuttles.</li>
-                    <li>For more information about Airport Transfers to and from {{ suburb }}, <a href="/contact/">contact us</a>.</li>
+                    <li>For more information about Airport shuttle to and from {{ suburb }}, <a href="/contact/">contact us</a>.</li>
                   </ul>
                   
                   <h5>Price</h5>
