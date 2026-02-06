@@ -1,83 +1,102 @@
 # area_zones.py
 area_zones = {
     "sydney_city": {
-        "title": "Sydney City Airport Transfer from {suburb} – Fast & Private Service | EasyGo Airport Shuttle",
-        "meta_description": "Book your Sydney City airport transfer from {suburb} with EasyGo Airport Shuttle. Fast, private, and reliable service from Sydney CBD and surrounding areas.",
-        "h1": "Sydney City Airport Transfers – {suburb}",
-        "h2": "Private & Reliable Transfers from Sydney CBD",
-        "route_info": "Sydney Airport to Sydney CBD, Darlinghurst, Pyrmont, Surry Hills, Ultimo, Barangaroo",
-        "landmark": "Sydney Opera House, Darling Harbour, Barangaroo Reserve"
+        "title": "{suburb} Airport Transfer Sydney | EasyGo Shuttle",
+        "meta_description": "Book private airport transfer from {suburb} to Sydney Airport. From $60. Door-to-door service. Free child seats. Book online now.",
+        "h1": "Airport Transfer {suburb} to Sydney Airport",
+        "h2": "Private & Reliable Door-to-Door Service",
+        "route_info": "Sydney Airport ↔ Sydney CBD, {suburb}, Darlinghurst, Pyrmont",
+        "landmark": "Sydney Opera House, Darling Harbour, Barangaroo Reserve",
+        "main_suburbs": ["Sydney CBD", "Darlinghurst", "Pyrmont", "Surry Hills", "Ultimo", "Barangaroo"]
     },
+    
     "inner_west": {
-        "title": "Inner West Airport Transfer from {suburb} – Private Pickup | EasyGo Airport Shuttle",
-        "meta_description": "Travel from Inner West suburbs to Sydney Airport with EasyGo Airport Shuttle. Comfortable private transfers from {suburb}, Ashfield, Balmain, Newtown, and more.",
-        "h1": "Inner West Airport Transfers – {suburb}",
-        "h2": "Comfortable Private Transfers from Inner West Suburbs",
-        "route_info": "Ashfield, Balmain, Newtown, Leichhardt, Five Dock, Drummoyne",
-        "landmark": "Parramatta River, Inner West Local Parks"
+        "title": "{suburb} Airport Transfer | Inner West Sydney Shuttle",
+        "meta_description": "Private airport transfer from {suburb} to Sydney Airport. Reliable, comfortable service. Free child seats. No hidden fees. Book now.",
+        "h1": "Airport Transfer {suburb} to Sydney Airport",
+        "h2": "Comfortable Private Transfers from Inner West",
+        "route_info": "Sydney Airport ↔ {suburb}, Ashfield, Balmain, Newtown",
+        "landmark": "Parramatta River, Inner West Local Parks",
+        "main_suburbs": ["Ashfield", "Balmain", "Newtown", "Leichhardt", "Five Dock", "Drummoyne"]
     },
+    
     "central_west": {
-        "title": "Central West Airport Transfer from {suburb} – Family-Friendly & Private Vans | EasyGo Airport Shuttle",
-        "meta_description": "EasyGo Airport Shuttle provides private and family-friendly transfers from {suburb}, Parramatta, Westmead, North Parramatta, and surrounding suburbs to Sydney Airport.",
-        "h1": "Central West Airport Transfers – {suburb}",
-        "h2": "Family-Friendly Private Airport Transfers from Parramatta & Surrounds",
-        "route_info": "Parramatta, Westmead, North Parramatta, Merrylands, Toongabbie",
-        "landmark": "Parramatta Park, Westfield Parramatta"
+        "title": "{suburb} Airport Transfer Parramatta | EasyGo Shuttle",
+        "meta_description": "Family airport transfer from {suburb} to Sydney Airport. Spacious vans for groups. Free child seats. Track your driver. Book online.",
+        "h1": "Airport Transfer {suburb} to Sydney Airport",
+        "h2": "Family-Friendly Private Vans from Parramatta Area",
+        "route_info": "Sydney Airport ↔ {suburb}, Parramatta, Westmead, Merrylands",
+        "landmark": "Parramatta Park, Westfield Parramatta",
+        "main_suburbs": ["Parramatta", "Westmead", "North Parramatta", "Merrylands", "Toongabbie", "Granville"]
     },
+    
     "west": {
-        "title": "Western Sydney Airport Transfer from {suburb} – Private Service | EasyGo Airport Shuttle",
-        "meta_description": "Reliable private airport transfers from Western Sydney suburbs including {suburb}, Auburn, Bankstown, and Liverpool. Book your shuttle with EasyGo Airport Shuttle today.",
-        "h1": "Western Sydney Airport Transfers – {suburb}",
-        "h2": "Private Transfers from Western Suburbs",
-        "route_info": "Auburn, Bankstown, Liverpool, Cabramatta, Punchbowl",
-        "landmark": "Bankstown Central, Auburn Botanical Gardens"
+        "title": "{suburb} Airport Transfer Western Sydney | EasyGo",
+        "meta_description": "Reliable airport transfer from {suburb} to Sydney Airport. Professional drivers. Flight tracking. Free child seats. Book online 24/7.",
+        "h1": "Airport Transfer {suburb} to Sydney Airport",
+        "h2": "Private Transfers from Western Sydney Suburbs",
+        "route_info": "Sydney Airport ↔ {suburb}, Auburn, Bankstown, Liverpool",
+        "landmark": "Bankstown Central, Auburn Botanical Gardens",
+        "main_suburbs": ["Auburn", "Bankstown", "Liverpool", "Cabramatta", "Punchbowl", "Lakemba"]
     },
+    
     "north_west": {
-        "title": "North West Sydney Airport Transfer from {suburb} – Hills District Private Vans | EasyGo Airport Shuttle",
-        "meta_description": "EasyGo Airport Shuttle offers private and fast transfers from North West Sydney suburbs like {suburb}, Castle Hill, Baulkham Hills, Kellyville, and Rouse Hill.",
-        "h1": "North West Sydney Airport Transfers – {suburb}",
+        "title": "{suburb} Airport Transfer Hills District | EasyGo",
+        "meta_description": "Fast airport transfer from {suburb} to Sydney Airport. Hills District specialist. Luggage-friendly vans. Book online, save time.",
+        "h1": "Airport Transfer {suburb} to Sydney Airport",
         "h2": "Fast & Private Transfers from Hills District",
-        "route_info": "Castle Hill, Baulkham Hills, Kellyville, Rouse Hill, North Ryde",
-        "landmark": "Castle Hill Heritage Park, Rouse Hill Town Centre"
+        "route_info": "Sydney Airport ↔ {suburb}, Castle Hill, Baulkham Hills, Kellyville",
+        "landmark": "Castle Hill Heritage Park, Rouse Hill Town Centre",
+        "main_suburbs": ["Castle Hill", "Baulkham Hills", "Kellyville", "Rouse Hill", "North Ryde", "West Pennant Hills"]
     },
+    
     "outer_west": {
-        "title": "Outer West Sydney Airport Transfer from {suburb} – Private Pickup | EasyGo Airport Shuttle",
-        "meta_description": "Book private airport transfers from Outer West Sydney suburbs including {suburb}, Blacktown, Penrith, Windsor, and Richmond with EasyGo Airport Shuttle.",
-        "h1": "Outer West Sydney Airport Transfers – {suburb}",
-        "h2": "Private & Comfortable Transfers from Outer West Suburbs",
-        "route_info": "Blacktown, Penrith, Windsor, Richmond, St Marys",
-        "landmark": "Penrith Panthers, Raging Waters Sydney"
+        "title": "{suburb} Airport Transfer Penrith Blacktown | EasyGo",
+        "meta_description": "Airport transfer from {suburb} to Sydney Airport. Comfortable long-distance service. Flight tracking. Free child seats. Book now.",
+        "h1": "Airport Transfer {suburb} to Sydney Airport",
+        "h2": "Private & Comfortable Transfers from Outer West",
+        "route_info": "Sydney Airport ↔ {suburb}, Blacktown, Penrith, Windsor, Richmond",
+        "landmark": "Penrith Panthers, Raging Waters Sydney",
+        "main_suburbs": ["Blacktown", "Penrith", "Windsor", "Richmond", "St Marys", "Mount Druitt"]
     },
+    
     "upper_north_shore": {
-        "title": "Upper North Shore Airport Transfer from {suburb} – Fast Private Pickup | EasyGo Airport Shuttle",
-        "meta_description": "EasyGo Airport Shuttle provides fast and private airport transfers from Upper North Shore suburbs like {suburb}, Hornsby, Wahroonga, and Pennant Hills.",
-        "h1": "Upper North Shore Airport Transfers – {suburb}",
-        "h2": "Private Transfers from Hornsby Area",
-        "route_info": "Hornsby, Wahroonga, Waitara, Thornleigh, Berowra",
-        "landmark": "Hornsby Westfield, Ku-ring-gai Chase National Park"
+        "title": "{suburb} Airport Transfer Hornsby | EasyGo Shuttle",
+        "meta_description": "Airport transfer from {suburb} to Sydney Airport. Upper North Shore specialist. Punctual service. Track your driver. Book online.",
+        "h1": "Airport Transfer {suburb} to Sydney Airport",
+        "h2": "Private Transfers from Upper North Shore",
+        "route_info": "Sydney Airport ↔ {suburb}, Hornsby, Wahroonga, Waitara",
+        "landmark": "Hornsby Westfield, Ku-ring-gai Chase National Park",
+        "main_suburbs": ["Hornsby", "Wahroonga", "Waitara", "Thornleigh", "Pennant Hills", "Berowra"]
     },
+    
     "north_shore": {
-        "title": "Lower North Shore Airport Transfer from {suburb} – Private Service | EasyGo Airport Shuttle",
-        "meta_description": "Book a private airport transfer from Lower North Shore suburbs including {suburb}, Chatswood, Artarmon, Lane Cove, and Mosman with EasyGo Airport Shuttle.",
-        "h1": "Lower North Shore Airport Transfers – {suburb}",
-        "h2": "Private & Reliable Transfers from North Shore",
-        "route_info": "Chatswood, Artarmon, Lane Cove, Mosman, St Leonards",
-        "landmark": "Chatswood Chase, Lane Cove National Park"
+        "title": "{suburb} Airport Transfer North Shore | EasyGo Shuttle",
+        "meta_description": "Private airport transfer from {suburb} to Sydney Airport. Lower North Shore service. Free child seats. Flight tracking. Book online now.",
+        "h1": "Airport Transfer {suburb} to Sydney Airport",
+        "h2": "Private & Reliable Transfers from Lower North Shore",
+        "route_info": "Sydney Airport ↔ {suburb}, Chatswood, Artarmon, Lane Cove",
+        "landmark": "Chatswood Chase, Lane Cove National Park",
+        "main_suburbs": ["Chatswood", "Artarmon", "Lane Cove", "Mosman", "St Leonards", "Crows Nest"]
     },
+    
     "northern_beaches": {
-        "title": "Northern Beaches Airport Transfer from {suburb} – Private Pickup | EasyGo Airport Shuttle",
-        "meta_description": "Travel from Northern Beaches suburbs like {suburb}, Manly, Dee Why, and Brookvale to Sydney Airport with private transfers from EasyGo Airport Shuttle.",
-        "h1": "Northern Beaches Airport Transfers – {suburb}",
-        "h2": "Private Transfers from Manly & Surrounding Beaches",
-        "route_info": "Manly, Dee Why, Brookvale, Collaroy, Mona Vale",
-        "landmark": "Manly Beach, Dee Why Lagoon, Curl Curl Beach"
+        "title": "{suburb} Airport Transfer Northern Beaches | EasyGo",
+        "meta_description": "Airport transfer from {suburb} to Sydney Airport. Northern Beaches specialist. Surfboard-friendly vans. Track driver. Book now.",
+        "h1": "Airport Transfer {suburb} to Sydney Airport",
+        "h2": "Private Transfers from Manly & Northern Beaches",
+        "route_info": "Sydney Airport ↔ {suburb}, Manly, Dee Why, Brookvale",
+        "landmark": "Manly Beach, Dee Why Lagoon, Curl Curl Beach",
+        "main_suburbs": ["Manly", "Dee Why", "Brookvale", "Collaroy", "Mona Vale", "Freshwater"]
     },
+    
     "eastern_suburbs": {
-        "title": "Eastern Suburbs Airport Transfer from {suburb} – Private Pickup | EasyGo Airport Shuttle",
-        "meta_description": "EasyGo Airport Shuttle offers private and reliable airport transfers from Eastern Suburbs including {suburb}, Bondi, Coogee, Maroubra, and Watsons Bay.",
-        "h1": "Eastern Suburbs Airport Transfers – {suburb}",
+        "title": "{suburb} Airport Transfer Eastern Suburbs | EasyGo",
+        "meta_description": "Private airport transfer from {suburb} to Sydney Airport. Eastern Suburbs service. Free child seats. No surge pricing. Book online.",
+        "h1": "Airport Transfer {suburb} to Sydney Airport",
         "h2": "Private & Comfortable Transfers from Eastern Suburbs",
-        "route_info": "Bondi, Coogee, Maroubra, Watsons Bay, Randwick",
-        "landmark": "Bondi Beach, Coogee Beach, Watsons Bay"
+        "route_info": "Sydney Airport ↔ {suburb}, Bondi, Coogee, Maroubra",
+        "landmark": "Bondi Beach, Coogee Beach, Watsons Bay",
+        "main_suburbs": ["Bondi", "Coogee", "Maroubra", "Randwick", "Watsons Bay", "Bronte"]
     },
 }

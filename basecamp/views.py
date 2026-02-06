@@ -122,7 +122,6 @@ def maxi_taxi(request, suburb=None):
     return render(request, 'basecamp/airport-maxi-taxi.html', context)
 
 
-
 # Suburb names
 def airport_shuttle(request, suburb):
     more_suburbs = get_more_suburbs()
@@ -135,20 +134,21 @@ def airport_shuttle(request, suburb):
     if suburb_formatted in more_suburbs:
         details = more_suburbs[suburb_formatted]
         area_type = details['area_type']
-        zone_info = area_zones.get(area_type, {})  
+        zone_info = area_zones.get(area_type, {})
 
         context = {
             'suburb': suburb_formatted,
             'details': details,
-            'title': zone_info.get('title', "{suburb} Airport shuttle").format(suburb=suburb_formatted),
-            'meta_description': zone_info.get('meta_description', "Reliable airport shuttle service for {suburb}").format(suburb=suburb_formatted),
-            'h1': zone_info.get('h1', "{suburb} Airport Shuttle").format(suburb=suburb_formatted),
+            'area_type': area_type,
+            'main_suburbs': zone_info.get('main_suburbs', [suburb_formatted]),  # ✅ 추가
+            'title': zone_info.get('title', "").format(suburb=suburb_formatted),
+            'meta_description': zone_info.get('meta_description', "").format(suburb=suburb_formatted),
+            'h1': zone_info.get('h1', "").format(suburb=suburb_formatted),
             'h2': zone_info.get('h2', ""),
-            'route_info': zone_info.get('route_info', []),
-            'landmarks': zone_info.get('landmark', []),
+            'route_info': zone_info.get('route_info', ""),
+            'landmarks': zone_info.get('landmark', ""),
         }
         return render(request, 'basecamp/airport-shuttle-template.html', context)
-
     else:
         return render(request, 'basecamp/sydney_airport_shuttle.html')
 
@@ -164,23 +164,23 @@ def airport_transfer(request, suburb):
     if suburb_formatted in more_suburbs:
         details = more_suburbs[suburb_formatted]
         area_type = details['area_type']
-        zone_info = area_zones.get(area_type, {})  
+        zone_info = area_zones.get(area_type, {})
 
         context = {
             'suburb': suburb_formatted,
             'details': details,
-            'title': zone_info.get('title', "{suburb} Airport Transfer").format(suburb=suburb_formatted),
-            'meta_description': zone_info.get('meta_description', "Reliable airport transfer service for {suburb}").format(suburb=suburb_formatted),
-            'h1': zone_info.get('h1', "{suburb} Airport Transfer").format(suburb=suburb_formatted),
+            'area_type': area_type,
+            'main_suburbs': zone_info.get('main_suburbs', [suburb_formatted]),  # ✅ 추가
+            'title': zone_info.get('title', "").format(suburb=suburb_formatted),
+            'meta_description': zone_info.get('meta_description', "").format(suburb=suburb_formatted),
+            'h1': zone_info.get('h1', "").format(suburb=suburb_formatted),
             'h2': zone_info.get('h2', ""),
-            'route_info': zone_info.get('route_info', []),
-            'landmarks': zone_info.get('landmark', []),
+            'route_info': zone_info.get('route_info', ""),
+            'landmarks': zone_info.get('landmark', ""),
         }
         return render(request, 'basecamp/airport-transfer-template.html', context)
-
     else:
         return render(request, 'basecamp/sydney_airport_transfer.html')
-
 
 
 def arrival_guide(request): 
