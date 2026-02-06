@@ -1,3 +1,6 @@
+from functools import lru_cache
+
+@lru_cache(maxsize=1)
 def get_more_suburbs():
     more_suburbs = {
         # --- 1. SYDNEY CITY & CBD ---
@@ -390,5 +393,3 @@ def get_more_suburbs():
         "Chippendale": {'price': 50, "area_type": "eastern_suburbs"},
     }
     return more_suburbs
-
-more_suburbs = get_more_suburbs() 
