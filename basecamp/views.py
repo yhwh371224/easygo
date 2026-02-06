@@ -370,16 +370,8 @@ def service(request):
     return render(request, 'basecamp/service.html')
 
 
-def sitemap(request): 
-    return render(request, 'basecamp/sitemap.xml')
-
-
 def success(request): 
     return render(request, 'basecamp/success.html')
-
-
-def sydney_cruise_transfer(request):
-    return render(request, 'basecamp/sydney_cruise_transfer.html')
 
 
 def sydney_airport_shuttle(request):
@@ -388,6 +380,10 @@ def sydney_airport_shuttle(request):
 
 def sydney_airport_transfer(request):
     return render(request, 'basecamp/sydney_airport_transfer.html')
+
+
+def sydney_cruise_transfer(request):
+    return render(request, 'basecamp/sydney_cruise_transfer.html')
 
 
 def terms(request): 
