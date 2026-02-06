@@ -12,7 +12,7 @@
     </title>
 
     {% block canonical %}
-    <link rel="canonical" href="https://easygoshuttle.com.au{{ request.path }}">
+      <link rel="canonical" href="https://easygoshuttle.com.au{{ request.path|slice:':-1' }}{% if not request.path|slice:'-1:' == '/' %}/{% endif %}">
     {% endblock %}
 
     <!-- SEO Meta Description (개행 제거 ✔) -->
