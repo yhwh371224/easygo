@@ -102,17 +102,21 @@
     <div class="card my-4">
         <h5 class="card-header" style="color:red">Note!</h5>
         <div class="card-body">
-            {% if email %}
             <p class="card-text">
                 Click the 'New Post' button to leave a review. Only customers who have used our service can leave a review
             </p>
             <br><br>
-            {% else %}
             <p class="card-text">
-                Most of the reviews here, except for those left directly on this site, are identical as the ones on Google.
+                For more customer reviews, please visit our Google Reviews page.
             </p>
-            <br><br><a href="https://www.google.com/search?q=EasyGo+Airport+Shuttle&ludocid=15709254108877640867#lrd=0x6b12a791a1292781:0xda027b617dff54a3,1" target="_blank">Google Reviews</a> 
-            {% endif %}             
+            <br><br>
+            <a href="https://www.google.com/search?q=EasyGo+Airport+Shuttle&ludocid=15709254108877640867#lrd=0x6b12a791a1292781:0xda027b617dff54a3,1" 
+               id="google-review-link"
+               target="_blank" 
+               rel="noopener"
+               style="color: #4285f4; font-weight: bold; text-decoration: none;">
+               🥇 Google Reviews →
+            </a>             
         </div> 
     </div>
     <!-- Search Widget -->  
