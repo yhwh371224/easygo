@@ -36,4 +36,4 @@ Disallow: /sending_email_*/
 Disallow: /*?
 
 # Sitemap
-Sitemap: https://www.easygoshuttle.com.au/sitemap.xml
+Sitemap: https://easygoshuttle.com.au/sitemap.xml
