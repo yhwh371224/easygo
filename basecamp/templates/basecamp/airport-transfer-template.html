@@ -36,29 +36,28 @@
   "provider": {
     "@type": "LocalBusiness",
     "name": "EasyGo Airport Shuttle",
-    "telephone": "+61 406 883 355",
+    "telephone": "+61406883355",
     "url": "https://www.easygoshuttle.com.au"
   },
-  "areaServed": [
-    {% for main_suburb in main_suburbs %}
-    {
-      "@type": "City",
-      "name": "{{ main_suburb }}",
+  "areaServed": {
+    "@type": "City",
+    "name": "{{ suburb }}",
+    "containedInPlace": {
+      "@type": "State",
+      "name": "New South Wales",
       "containedInPlace": {
-        "@type": "City",
-        "name": "Sydney",
-        "addressCountry": "AU"
+        "@type": "Country",
+        "name": "Australia"
       }
-    }{% if not forloop.last %},{% endif %}
-    {% endfor %}
-  ],
+    }
+  },
   "offers": {
     "@type": "Offer",
     "price": "{{ details.price }}",
     "priceCurrency": "AUD",
     "availability": "https://schema.org/InStock",
-    "priceValidUntil": "2026-12-31",
-    "url": "https://easygoshuttle.com.au/inquiry/"
+    "validFrom": "2025-01-01",
+    "url": "https://easygoshuttle.com.au/airport-transfer-{{ suburb|slugify }}"
   }
 }
 </script>
