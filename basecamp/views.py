@@ -140,12 +140,12 @@ def airport_shuttle(request, suburb):
             'suburb': suburb_formatted,
             'details': details,
             'area_type': area_type,
-            'main_suburbs': zone_info.get('main_suburbs', [suburb_formatted]),  # ✅ 추가
+            'main_suburbs': zone_info.get('main_suburbs', [suburb_formatted]),  
             'title': zone_info.get('title', "").format(suburb=suburb_formatted),
             'meta_description': zone_info.get('meta_description', "").format(suburb=suburb_formatted),
             'h1': zone_info.get('h1', "").format(suburb=suburb_formatted),
             'h2': zone_info.get('h2', ""),
-            'route_info': zone_info.get('route_info', ""),
+            'route_info': zone_info.get('route_info', "").format(suburb=suburb_formatted),  
             'landmarks': zone_info.get('landmark', ""),
         }
         return render(request, 'basecamp/airport-shuttle-template.html', context)
@@ -170,12 +170,12 @@ def airport_transfer(request, suburb):
             'suburb': suburb_formatted,
             'details': details,
             'area_type': area_type,
-            'main_suburbs': zone_info.get('main_suburbs', [suburb_formatted]),  # ✅ 추가
+            'main_suburbs': zone_info.get('main_suburbs', [suburb_formatted]), 
             'title': zone_info.get('title', "").format(suburb=suburb_formatted),
             'meta_description': zone_info.get('meta_description', "").format(suburb=suburb_formatted),
             'h1': zone_info.get('h1', "").format(suburb=suburb_formatted),
             'h2': zone_info.get('h2', ""),
-            'route_info': zone_info.get('route_info', ""),
+            'route_info': zone_info.get('route_info', "").format(suburb=suburb_formatted), 
             'landmarks': zone_info.get('landmark', ""),
         }
         return render(request, 'basecamp/airport-transfer-template.html', context)

@@ -16,14 +16,6 @@
 {% endblock %}
 
 {% block content %}
-<!-- Breadcrumb -->
-<nav aria-label="breadcrumb" class="container pt-3">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="/">Home</a></li>
-    <li class="breadcrumb-item"><a href="/sydney-airport-shuttle/">Sydney Airport Shuttle</a></li>
-    <li class="breadcrumb-item active" aria-current="page">{{ suburb }}</li>
-  </ol>
-</nav>
 
 <!-- Service Schema -->
 <script type="application/ld+json">
@@ -62,6 +54,16 @@
 <!-- Hero-->
 <section class="jarallax bg-dark py-3" data-jarallax data-speed="0.1">
   <div class="jarallax-img" style="background-image: url('/static/basecamp/photos/bg-pattern02.webp');" role="img" aria-label="{{ suburb }} airport shuttle"></div>
+
+  <!-- Breadcrumb -->
+  <nav aria-label="breadcrumb" class="container pt-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/">Home</a></li>
+      <li class="breadcrumb-item"><a href="/sydney-airport-shuttle/">Sydney Airport Shuttle</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{ suburb }}</li>
+    </ol>
+  </nav>
+
   <div class="container py-5 py-sm-7 text-center">
     <div class="py-md-6">
       <br><br><br>
