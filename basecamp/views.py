@@ -311,8 +311,10 @@ def payment_options1(request):
     return render(request, 'basecamp/payment_options1.html')
 
 
-def payonline(request):     
-    return render(request, 'basecamp/payonline.html')
+def payonline(request):
+    return render(request, 'basecamp/payonline.html', {
+        'paypal_client_id': settings.PAYPAL_CLIENT_ID,
+    })
 
 
 def p2p(request):     
