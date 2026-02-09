@@ -37,6 +37,7 @@ def get_more_suburbs():
         "Dulwich Hill": {'price': 60, "area_type": "inner_west"},
         "Enmore": {'price': 50, "area_type": "inner_west"},
         "Five Dock": {'price': 60, "area_type": "inner_west"},
+        "Forest Lodge": {'price': 60, "area_type": "inner_west"},
         "Haberfield": {'price': 60, "area_type": "inner_west"},
         "Leichhardt": {'price': 60, "area_type": "inner_west"},
         "Lilyfield": {'price': 50, "area_type": "inner_west"},
