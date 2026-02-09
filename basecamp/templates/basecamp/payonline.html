@@ -149,7 +149,7 @@
                               <a href="https://policies.google.com/terms">Terms of Service</a> apply.
                    </small></small></p>
                 </section>
-  <script src="https://www.paypal.com/sdk/js?client-id=AZ2xYI2bgydBrPHtPNum5eMNhxKhjgoBGlGYhbDGOVA5PwA99rfia8KitgAW0LErRFnjYnGVdkrbeLKn&components=buttons&enable-funding=card&disable-funding=paylater,venmo&currency=AUD" data-sdk-integration-source="integrationbuilder_sc"></script>
+  <script src="https://www.paypal.com/sdk/js?client-id={{ paypal_client_id }}&components=buttons&enable-funding=card&disable-funding=paylater,venmo&currency=AUD" data-sdk-integration-source="integrationbuilder_sc"></script>
   <script>
     paypal.Buttons({
       createOrder: function(data, actions) {
