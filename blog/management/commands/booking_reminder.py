@@ -78,6 +78,7 @@ class Command(BaseCommand):
                 'company_name': booking_reminder.company_name,
                 'email': booking_reminder.email,
                 'email1': booking_reminder.email1,
+                'contact': booking_reminder.contact,
                 'pickup_date': booking_reminder.pickup_date,
                 'flight_number': booking_reminder.flight_number,
                 'flight_time': booking_reminder.flight_time,
