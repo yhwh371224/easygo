@@ -66,6 +66,7 @@ def home(request):
     return render(request, 'basecamp/home.html', {
         'suburbs': suburbs,
         'home_suburbs': sorted_home_suburbs,
+        'google_review_url': settings.GOOGLE_REVIEW_URL,
     })
 
 
@@ -110,7 +111,7 @@ def maxi_taxi(request, suburb=None):
 
     context = {
         'suburb': suburb_formatted,
-        'details': details,
+        'details': details,google_review_url }}
         'title': title,
         'meta_description': meta_description,
         'h1': h1,

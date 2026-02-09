@@ -360,6 +360,9 @@ MYSQL_CONFIG = {
 # Banking details (anz, commbank, westpac, nab)
 DEFAULT_BANK_CODE = 'nab'
 
+# GOOGLE REVIEW URL
+GOOGLE_REVIEW_URL = config('GOOGLE_REVIEW_URL')
+
 MARKDOWNX_MEDIA_PATH = datetime.now().strftime('markdownx/%Y/%m/%d/')
 
 SESSION_COOKIE_AGE = 3600
