@@ -111,7 +111,7 @@ def maxi_taxi(request, suburb=None):
 
     context = {
         'suburb': suburb_formatted,
-        'details': details,google_review_url }}
+        'details': details,
         'title': title,
         'meta_description': meta_description,
         'h1': h1,
@@ -262,8 +262,10 @@ def inquiry2(request):
     return render(request, 'basecamp/inquiry2.html', context)
 
 
-def inquiry_done(request): 
-    return render(request, 'basecamp/inquiry_done.html')
+def inquiry_done(request):
+    return render(request, 'basecamp/inquiry_done.html', {
+        'google_review_url': settings.GOOGLE_REVIEW_URL,
+    })
 
 
 def information(request): 
