@@ -315,10 +315,6 @@ def payonline(request):
     return render(request, 'basecamp/payonline.html')
 
 
-def payonline_stripe(request):     
-    return render(request, 'basecamp/payonline_stripe.html')
-
-
 def p2p(request):     
     return render(request, 'basecamp/p2p.html')
 
