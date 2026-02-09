@@ -2436,6 +2436,7 @@ def email_dispatch_detail(request):
             if user_today:
                 context.update({
                     'pickup_time': user_today.pickup_time,
+                    'contact': user_today.contact,
                     'meeting_point': user_today.meeting_point,
                     'direction': user_today.direction,
                     'cash': user_today.cash,
