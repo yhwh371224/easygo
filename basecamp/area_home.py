@@ -33,6 +33,7 @@ def get_home_suburbs():
         "Dulwich Hill",
         "Enmore",
         "Five Dock",
+        "Forest Lodge",
         "Haberfield",
         "Leichhardt",
         "Lilyfield",
