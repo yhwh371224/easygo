@@ -80,7 +80,8 @@ class PostList(ListView):
             context['user_name'] = None
 
         context['email'] = email 
-        context['search_error'] = self.request.session.get('search_error', None)  
+        context['search_error'] = self.request.session.get('search_error', None)
+        context['google_review_url'] = settings.GOOGLE_REVIEW_URL    
 
         return context
     
