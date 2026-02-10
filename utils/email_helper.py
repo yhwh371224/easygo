@@ -15,7 +15,7 @@ class EmailSender:
 
     def setup_gmail_service(self):
         credentials = service_account.Credentials.from_service_account_file(
-            settings.GMAIL_API_SERVICE_ACCOUNT_FILE,
+            settings.GMAIL_SERVICE_ACCOUNT_FILE,
             scopes=['https://www.googleapis.com/auth/gmail.send']
         )
         service = build('gmail', 'v1', credentials=credentials)

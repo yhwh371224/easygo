@@ -3,6 +3,8 @@ from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from main.settings import RECIPIENT_EMAIL
+from django.conf import settings 
+
 
 SCOPES = ["https://www.googleapis.com/auth/gmail.readonly"]
 LABEL_NAME = "Re-reminder"
@@ -10,7 +12,7 @@ EXCLUDED_EMAILS = [
     "info@easygoshuttle.com.au",
     "info+canned.response@easygoshuttle.com.au",
 ]
-SERVICE_ACCOUNT_FILE = 'secure/reminder/service-account-file.json'
+SERVICE_ACCOUNT_FILE = settings.GMAIL_SERVICE_ACCOUNT_FILE
 DELEGATED_USER_EMAIL = RECIPIENT_EMAIL
 
 # 이메일 주소 추출 정규식 (콤마, 세미콜론 등 여러 구분자 포함)
