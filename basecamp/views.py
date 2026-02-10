@@ -2606,8 +2606,9 @@ def email_dispatch_detail(request):
         # 6️⃣ Send email
         handle_email_sending(request, email, subject, template_name, context, getattr(user, 'email1', None))
 
-        return render(request, 'basecamp/inquiry_done.html')
-
+        return render(request, 'basecamp/inquiry_done.html', {
+            'google_review_url': settings.GOOGLE_REVIEW_URL,
+        })
     return render(request, 'basecamp/email_dispatch.html', {})
 
 
