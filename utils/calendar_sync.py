@@ -8,7 +8,7 @@ import re
 logger = logging.getLogger(__name__)
 
 SCOPES = ['https://www.googleapis.com/auth/calendar']
-SERVICE_ACCOUNT_FILE = 'secure/calendar/calendar-service-account-file.json'
+SERVICE_ACCOUNT_FILE = settings.CALENDAR_SERVICE_ACCOUNT_FILE
 DELEGATED_USER_EMAIL = getattr(settings, 'RECIPIENT_EMAIL', None)
 
 

@@ -4,11 +4,13 @@ from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from main.settings import RECIPIENT_EMAIL
+from django.conf import settings 
+
 
 # If modifying these scopes, delete the file token.json.
 SCOPES = ["https://www.googleapis.com/auth/gmail.readonly"]
 LABEL_NAME = "Inquiry to confirm"
-SERVICE_ACCOUNT_FILE = 'secure/reminder/service-account-file.json'
+SERVICE_ACCOUNT_FILE = settings.GMAIL_SERVICE_ACCOUNT_FILE
 DELEGATED_USER_EMAIL = RECIPIENT_EMAIL  # 위임받은 사용자의 이메일 주소
 
 def get_scheduled_emails(service):
