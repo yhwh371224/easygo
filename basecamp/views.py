@@ -586,7 +586,9 @@ def inquiry_details(request):
         if is_ajax(request):
             return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})        
         else:
-            return render(request, 'basecamp/inquiry_done.html')
+            return render(request, 'basecamp/inquiry_done.html', {
+            'google_review_url': settings.GOOGLE_REVIEW_URL,            
+        })
         
     else:
         return render(request, 'basecamp/inquiry.html', {})
@@ -764,7 +766,9 @@ def inquiry_details1(request):
         
         p.save()
 
-        return render(request, 'basecamp/inquiry_done.html')
+        return render(request, 'basecamp/inquiry_done.html', {
+            'google_review_url': settings.GOOGLE_REVIEW_URL,            
+        })
 
     else:
         return redirect('basecamp:home')
@@ -816,8 +820,9 @@ def inquiry_details2(request):
         if is_ajax(request):
             return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})
         else:
-            return render(request, 'basecamp/inquiry_done.html')
-
+            return render(request, 'basecamp/inquiry_done.html', {
+            'google_review_url': settings.GOOGLE_REVIEW_URL,            
+        })
     else:
         return render(request, 'basecamp/inquiry2.html', {})
     
@@ -878,7 +883,9 @@ def p2p_detail(request):
             return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})
         
         else:
-            return render(request, 'basecamp/inquiry_done.html')
+            return render(request, 'basecamp/inquiry_done.html', {
+            'google_review_url': settings.GOOGLE_REVIEW_URL,            
+        })
 
     else:
         return render(request, 'basecamp/p2p.html', {})
@@ -931,7 +938,9 @@ def p2p_booking_detail(request):
             return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})
         
         else:
-            return render(request, 'basecamp/inquiry_done.html')
+            return render(request, 'basecamp/inquiry_done.html', {
+            'google_review_url': settings.GOOGLE_REVIEW_URL,            
+        })
 
     else:
         return render(request, 'basecamp/p2p.html', {})
@@ -1157,7 +1166,9 @@ def confirmation_detail(request):
         
         p.save()        
 
-        rendering = render(request, 'basecamp/inquiry_done.html')   
+        rendering = render(request, 'basecamp/inquiry_done.html', {
+            'google_review_url': settings.GOOGLE_REVIEW_URL,            
+        })
         
         return rendering
 
@@ -1339,7 +1350,9 @@ def booking_detail(request):
             return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})
         
         else:
-            return render(request, 'basecamp/inquiry_done.html')
+            return render(request, 'basecamp/inquiry_done.html', {
+            'google_review_url': settings.GOOGLE_REVIEW_URL,            
+        })
 
     else:
         return render(request, 'basecamp/booking.html', {})
@@ -1530,7 +1543,9 @@ def cruise_booking_detail(request):
             return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})
         
         else:
-            return render(request, 'basecamp/inquiry_done.html')
+            return render(request, 'basecamp/inquiry_done.html', {
+            'google_review_url': settings.GOOGLE_REVIEW_URL,            
+        })
 
     else:
         return render(request, 'basecamp/cruise_booking.html', {})
@@ -1667,7 +1682,9 @@ def confirm_booking_detail(request):
         
         user.delete()
 
-        return render(request, 'basecamp/inquiry_done.html')
+        return render(request, 'basecamp/inquiry_done.html', {
+            'google_review_url': settings.GOOGLE_REVIEW_URL,            
+        })
 
     else:
         return render(request, 'basecamp/confirm_booking.html', {})
@@ -1753,7 +1770,9 @@ def sending_email_first_detail(request):
                 email.attach_alternative(html_content, "text/html")
                 email.send()
 
-            return render(request, 'basecamp/inquiry_done.html')  
+            return render(request, 'basecamp/inquiry_done.html', {
+                'google_review_url': settings.GOOGLE_REVIEW_URL,            
+            })  
         
         else:            
             return HttpResponse("No user found", status=400)
@@ -1874,7 +1893,9 @@ def sending_email_second_detail(request):
             email_message.attach_alternative(html_content, "text/html")
             email_message.send()
             
-        return render(request, 'basecamp/inquiry_done.html') 
+        return render(request, 'basecamp/inquiry_done.html', {
+            'google_review_url': settings.GOOGLE_REVIEW_URL,            
+        }) 
     
     else:
         return render(request, 'basecamp/sending_email_second.html', {})
@@ -1917,7 +1938,9 @@ def sending_email_input_data_detail(request):
 
             handle_email_sending(request, user.email, subject, template_name, context)
 
-        return render(request, 'basecamp/inquiry_done.html') 
+        return render(request, 'basecamp/inquiry_done.html', {
+            'google_review_url': settings.GOOGLE_REVIEW_URL,            
+        })
     
     else:
         return render(request, 'basecamp/sending_email_first.html', {})   
@@ -2027,7 +2050,9 @@ def return_trip_detail(request):
         
         p.save()
 
-        rendering = render(request, 'basecamp/inquiry_done.html')    
+        rendering = render(request, 'basecamp/inquiry_done.html', {
+            'google_review_url': settings.GOOGLE_REVIEW_URL,            
+        })   
         
         return rendering
     
@@ -2326,7 +2351,9 @@ def invoice_detail(request):
                 user.prepay = True
                 user.save()
 
-        return render(request, 'basecamp/inquiry_done.html')
+        return render(request, 'basecamp/inquiry_done.html', {
+            'google_review_url': settings.GOOGLE_REVIEW_URL,            
+        })
 
     else:
         return render(request, 'basecamp/invoice.html', {})
@@ -2609,6 +2636,7 @@ def email_dispatch_detail(request):
         return render(request, 'basecamp/inquiry_done.html', {
             'google_review_url': settings.GOOGLE_REVIEW_URL,
         })
+    
     return render(request, 'basecamp/email_dispatch.html', {})
 
 
