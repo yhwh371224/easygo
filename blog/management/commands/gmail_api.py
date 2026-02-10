@@ -6,6 +6,7 @@ from blog.models import Post
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from email.message import EmailMessage
+from django.conf import settings 
 import base64
 
 
@@ -25,8 +26,9 @@ class Command(BaseCommand):
         )
 
         SCOPES = ['https://mail.google.com/']
+        SERVICE_ACCOUNT_FILE = settings.GMAIL_SERVICE_ACCOUNT_FILE
         creds = service_account.Credentials.from_service_account_file(
-            'secure/reminder/service-account-file.json', scopes=SCOPES
+            SERVICE_ACCOUNT_FILE, scopes=SCOPES
         )
         delegated_creds = creds.with_subject("info@easygoshuttle.com.au")
 
