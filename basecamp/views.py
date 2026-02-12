@@ -30,7 +30,7 @@ from basecamp.area_zones import area_zones
 from .utils import (
     verify_recaptcha, is_ajax, parse_date, handle_email_sending, format_pickup_time_12h, 
     render_to_pdf, add_bag, to_int, to_bool, safe_float, 
-    handle_checkout_session_completed, paypal_ipn_error_email
+    handle_checkout_session_completed, paypal_ipn_error_email, get_sorted_suburbs
 )
 
 
@@ -190,6 +190,7 @@ def arrival_guide(request):
 
 def booking(request):
     context = {
+        'home_suburbs': get_sorted_suburbs(),
         'RECAPTCHA_V2_SITE_KEY': settings.RECAPTCHA_V2_SITE_KEY,
     }
     return render(request, 'basecamp/booking.html', context)
@@ -197,7 +198,10 @@ def booking(request):
 
 @login_required
 def confirmation(request): 
-    return render(request, 'basecamp/confirmation.html')
+    context = {
+        'home_suburbs': get_sorted_suburbs(),
+    }
+    return render(request, 'basecamp/confirmation.html', context)
 
 
 def confirmation_multiplebookings(request): 
@@ -240,6 +244,7 @@ def home_error(request):
 
 def inquiry(request): 
     context = {
+        'home_suburbs': get_sorted_suburbs(),
         'RECAPTCHA_V2_SITE_KEY': settings.RECAPTCHA_V2_SITE_KEY,
     }    
     return render(request, 'basecamp/inquiry.html', context)

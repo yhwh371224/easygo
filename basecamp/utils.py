@@ -8,6 +8,7 @@ from io import BytesIO
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives, send_mail
 from django.utils.html import strip_tags
+from basecamp.area_home import get_home_suburbs
 from main import settings
 from weasyprint import HTML
 from blog.models import StripePayment
@@ -284,3 +285,10 @@ def stripe_payment_error_email(subject, message, name, email, amount):
         from_email=settings.DEFAULT_FROM_EMAIL,
         recipient_list=[settings.RECIPIENT_EMAIL],
     )
+
+
+def get_sorted_suburbs():
+    raw = get_home_suburbs()
+    fixed = ["Select your option", "Hotels In City", "Sydney Int'l Airport", ...]
+    remaining = sorted([item for item in raw if item not in fixed])
+    return fixed + remaining
