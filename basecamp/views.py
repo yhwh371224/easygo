@@ -39,33 +39,13 @@ logger = logging.getLogger(__name__)
 
 def home(request):
     suburbs = get_suburbs()
-    home_suburbs = get_home_suburbs()
+    sorted_home_suburbs = get_sorted_suburbs()
 
-    if not isinstance(home_suburbs, list):
-        home_suburbs = []  # 기본값 설정
-
-    logger.debug(f"home_suburbs: {home_suburbs}") 
-    
-    fixed_items = [
-        "Select your option",
-        "Hotels In City",  
-        "Sydney Int'l Airport",
-        "Sydney Domestic Airport",
-        "WhiteBay cruise terminal",
-        "Overseas cruise terminal"
-    ]
-    
-    remaining_items = sorted(
-        [item for item in home_suburbs if isinstance(item, str) and item not in fixed_items]
-        )
-    
-    sorted_home_suburbs = fixed_items + remaining_items
-    
-    # send_notice_email.delay('homepage accessed', 'homepage accessed', RECIPIENT_EMAIL)    
+    logger.debug(f"home_suburbs count: {len(sorted_home_suburbs)}") 
     
     return render(request, 'basecamp/home.html', {
         'suburbs': suburbs,
-        'home_suburbs': sorted_home_suburbs,
+        'home_suburbs': sorted_home_suburbs, # suburbs.html에서 사용할 이름
         'google_review_url': settings.GOOGLE_REVIEW_URL,
     })
 
@@ -189,8 +169,9 @@ def arrival_guide(request):
 
 
 def booking(request):
+    sorted_home_suburbs = get_sorted_suburbs()
     context = {
-        'home_suburbs': get_sorted_suburbs(),
+        'home_suburbs': sorted_home_suburbs,
         'RECAPTCHA_V2_SITE_KEY': settings.RECAPTCHA_V2_SITE_KEY,
     }
     return render(request, 'basecamp/booking.html', context)
@@ -198,8 +179,9 @@ def booking(request):
 
 @login_required
 def confirmation(request): 
+    sorted_home_suburbs = get_sorted_suburbs()
     context = {
-        'home_suburbs': get_sorted_suburbs(),
+        'home_suburbs': sorted_home_suburbs,
     }
     return render(request, 'basecamp/confirmation.html', context)
 
@@ -243,8 +225,9 @@ def home_error(request):
 
 
 def inquiry(request): 
+    sorted_home_suburbs = get_sorted_suburbs()
     context = {
-        'home_suburbs': get_sorted_suburbs(),
+        'home_suburbs': sorted_home_suburbs,
         'RECAPTCHA_V2_SITE_KEY': settings.RECAPTCHA_V2_SITE_KEY,
     }    
     return render(request, 'basecamp/inquiry.html', context)
