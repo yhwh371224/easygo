@@ -289,6 +289,13 @@ def stripe_payment_error_email(subject, message, name, email, amount):
 
 def get_sorted_suburbs():
     raw = get_home_suburbs()
-    fixed = ["Select your option", "Hotels In City", "Sydney Int'l Airport", ...]
+    fixed = [
+        "Select your option",
+        "Hotels In City",  
+        "Sydney Int'l Airport",
+        "Sydney Domestic Airport",
+        "WhiteBay cruise terminal",
+        "Overseas cruise terminal"
+    ]
     remaining = sorted([item for item in raw if item not in fixed])
     return fixed + remaining
