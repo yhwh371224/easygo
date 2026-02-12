@@ -10,6 +10,7 @@ temp/
 secure/
 
 .env 
+.claude/
 
 __pycache__/
 
