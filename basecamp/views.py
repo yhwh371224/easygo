@@ -45,7 +45,7 @@ def home(request):
     
     return render(request, 'basecamp/home.html', {
         'suburbs': suburbs,
-        'home_suburbs': sorted_home_suburbs, # suburbs.html에서 사용할 이름
+        'home_suburbs': sorted_home_suburbs, 
         'google_review_url': settings.GOOGLE_REVIEW_URL,
     })
 
