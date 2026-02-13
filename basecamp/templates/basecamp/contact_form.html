@@ -3,9 +3,17 @@
 {% block title %}Contact – EasyGo Airport Shuttle{% endblock %}
 
 {% block content %}
+
+<style>
+  /* Contact page 전용 navbar 글씨 색만 검정으로 */
+  header.header.navbar .nav-link {
+      color: #000 !important; /* 검정색 글씨 */
+  }
+</style>
+
 <section class="container py-5">
   <div class="row justify-content-center">
-    <h3 class="text-center mb-4">Contact Form</h3>
+    <h3 class="text-center mb-4 mt-5">Contact Form</h3>
     <div class="col-lg-8">
       <div class="card border-0 shadow-lg">
         <form action="{% url 'basecamp:contact_submit' %}" method="post" id="booking-form" class="card-body p-5 needs-validation" novalidate>
