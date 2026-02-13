@@ -304,7 +304,8 @@
             <div class="mb-3 pb-1 w-100 mb-sm-4 me-sm-3">
               <label class="form-label" for="start-point">Pickup Location</label>
               <select class="form-select" name="start_point" required>
-                  {% include 'basecamp/suburbs.html' %}
+                  <option value="" disabled selected>Select your option</option>
+                  {% include 'basecamp/suburbs.html' with suburbs=home_suburbs %}
               </select>
             </div>
           </div>
@@ -312,7 +313,8 @@
             <div class="mb-3 pb-1 w-100 mb-sm-4 me-sm-3">
               <label class="form-label" for="end-point">Drop-off Location</label>
               <select class="form-select" name="end_point" required>
-                  {% include 'basecamp/suburbs.html' %}
+                  <option value="" disabled selected>Select your option</option>
+                  {% include 'basecamp/suburbs.html' with suburbs=home_suburbs %}
               </select>
             </div>
             <div class="mb-3 pb-1 w-100 mb-sm-4 me-sm-3">

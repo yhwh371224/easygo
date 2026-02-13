@@ -128,11 +128,13 @@ EasyGo Airport Shuttle Booking Form – Sydney Airport Transfers
 					<div class="invalid-feedback">Please enter street no & name!</div>
 				  </div>    
 				<div class="mb-3 pb-1">
-					<label class="form-label" >Suburb or Hotel</label>
+					<label class="form-label">Suburb or Hotel</label>
 					<select class="form-select" name="suburb" required>
-						{% include 'basecamp/suburbs.html' %}
-				  </select>
-				  </div></div>			               
+						<option value="" disabled selected>Select your option</option>
+						{% include 'basecamp/suburbs.html' with suburbs=home_suburbs %}
+					</select>
+				</div>
+				</div>			               
 				<br><br>
 				<hr>
 				<br><br>                

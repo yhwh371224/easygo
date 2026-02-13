@@ -286,7 +286,9 @@ def stripe_payment_error_email(subject, message, name, email, amount):
         recipient_list=[settings.RECIPIENT_EMAIL],
     )
 
-
+# --------------------------
+# get_sorted_suburbs
+# --------------------------
 def get_sorted_suburbs():
     raw = get_home_suburbs()
     fixed = [
