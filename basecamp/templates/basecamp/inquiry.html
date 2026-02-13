@@ -126,7 +126,7 @@
 				<div class="mb-3 pb-1">
 					<label class="form-label" >Suburb or Hotel</label>
 					<select class="form-select" name="suburb" required>					
-						{% include 'basecamp/suburbs.html' %}
+						{% include 'basecamp/suburbs.html' with suburbs=home_suburbs %}
 				  </select>
 				  </div></div>			               
 				<br><br>
