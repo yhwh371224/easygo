@@ -7,6 +7,10 @@ migrations/
 
 temp/
 
+static_backup_*/
+*.br
+*.gz
+
 secure/
 
 .env 
