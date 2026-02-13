@@ -247,13 +247,6 @@ def inquiry1(request):
     return render(request, 'basecamp/inquiry.html', context)
 
 
-def inquiry2(request): 
-    context = {
-        'RECAPTCHA_V2_SITE_KEY': settings.RECAPTCHA_V2_SITE_KEY,
-    }    
-    return render(request, 'basecamp/inquiry2.html', context)
-
-
 def inquiry_done(request):
     return render(request, 'basecamp/inquiry_done.html', {
         'google_review_url': settings.GOOGLE_REVIEW_URL,
