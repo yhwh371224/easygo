@@ -7,7 +7,7 @@
   <div class="row justify-content-center">
     <div class="col-lg-8">
       <div class="card border-0 shadow-lg">
-        <form action="{% url 'contact_submit' %}" method="post" id="booking-form" class="card-body p-5 needs-validation" novalidate>
+        <form action="{% url 'basecamp:contact_submit' %}" method="post" id="booking-form" class="card-body p-5 needs-validation" novalidate>
           {% csrf_token %}
 
           <!-- Honeypot field -->
