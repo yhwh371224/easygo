@@ -194,6 +194,10 @@ def confirm_booking(request):
     return render(request, 'basecamp/confirm_booking.html')
 
 
+def contact_form(request):
+    return render(request, 'basecamp/contact_form.html')
+
+
 def cruise_booking(request):
     context = {
         'RECAPTCHA_V2_SITE_KEY': settings.RECAPTCHA_V2_SITE_KEY,
@@ -763,8 +767,16 @@ def inquiry_details1(request):
 
 
 # Contact form
-def inquiry_details2(request):
+def contact_submit(request):
     if request.method == "POST":
+        # --- Honeypot check ---
+        honeypot = request.POST.get("website", "")
+        if honeypot:  # 봇이 채우면 무효
+            if is_ajax(request):
+                return JsonResponse({'success': False, 'error': 'Spam detected.'})
+            else:
+                return render(request, 'basecamp/spam_detected.html')  # 간단한 페이지
+            
         name = request.POST.get('name')
         contact = request.POST.get('contact')
         email = request.POST.get('email') 
@@ -775,13 +787,6 @@ def inquiry_details2(request):
         result = verify_recaptcha(recaptcha_response)
         if not result.get('success'):
             return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'}) 
-
-        data = {
-            'name': name,
-            'contact': contact,
-            'email': email,
-            'pickup_date': pickup_date,
-            'message': message}
         
         today = date.today()
         if pickup_date != str(today):
@@ -789,6 +794,13 @@ def inquiry_details2(request):
                 return render(request, 'basecamp/wrong_date_today.html')
             else:
                 return render(request, 'basecamp/wrong_date_today.html')
+
+        data = {
+            'name': name,
+            'contact': contact,
+            'email': email,
+            'pickup_date': pickup_date,
+            'message': message}       
                      
         message_template = '''
         Contact Form
@@ -812,7 +824,7 @@ def inquiry_details2(request):
             'google_review_url': settings.GOOGLE_REVIEW_URL,            
         })
     else:
-        return render(request, 'basecamp/inquiry2.html', {})
+        return render(request, 'basecamp/contact_form.html', {})
     
     
 # Multiple points Inquiry 
