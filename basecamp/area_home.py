@@ -373,4 +373,3 @@ def get_home_suburbs():
     ]    
     return home_suburbs
 
-home_suburbs = get_home_suburbs()
