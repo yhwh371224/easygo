@@ -1,66 +1,71 @@
+# ==============================
+# Virtual Environment
+# ==============================
 venv/
 
+# ==============================
+# IDE / OS
+# ==============================
 .idea/
+.vscode/
+.DS_Store
 
-migrations/
-#media/
-
-temp/
-
-static_backup_*/
-*.br
-*.gz
-
-secure/
-
-.env 
-.claude/
-
+# ==============================
+# Django / Python
+# ==============================
 __pycache__/
-
+migrations/
 db.sqlite3
 
+# ==============================
+# Media / Temp / Backups
+# ==============================
+media/
+temp/
+.backup/
+static_backup_*/
+
+# ==============================
+# Compressed / Auto-generated
+# ==============================
+*.br
+*.gz
+*.css~
+*.js~
+
+# JS bundles
+static/basecamp/js/*.c*.js
+static/basecamp/js/*.[0-9]*.js
+static/basecamp/js/*.js.br
+static/basecamp/js/*.js.gz
+static/basecamp/js/min/*.*.js
+static/basecamp/js/min/*.js.br
+static/basecamp/js/min/*.js.gz
+
+# CSS bundles
+static/basecamp/css/*.css.br
+static/basecamp/css/*.css.gz
+static/basecamp/css/*.[0-9]*.css
+static/basecamp/css/*.[a-z]*.css
+
+# ==============================
+# Sensitive / Credentials
+# ==============================
+.env
 credentials.json
 token.json
 service-account-file.json
 calendar-service-account-file.json
+secure/
+.claude/
 
+# ==============================
+# Other / Misc
+# ==============================
+dump.rdb
 *.cmd
 *.pem
 *.log
 *.pyo
 *.pyd
 *.pyc
-.vscode/
-.DS_Store
-
-dump.rdb 
-
-# Ignore auto-generated JS bundles, hash files, and compressed files 
-static/basecamp/js/*.c*.js
-static/basecamp/js/*.[0-9]*.js
-static/basecamp/js/*.js.br      
-static/basecamp/js/*.js.gz 
-
-static/basecamp/js/min/*.*.js
-static/basecamp/js/min/*.js.br
-static/basecamp/js/min/*.js.gz        
-
-# Ignore auto-generated CSS bundles, hash files, and compressed files
-
-static/basecamp/css/*.css.br 
-static/basecamp/css/*.css.gz 
-static/basecamp/css/*.[0-9]*.css 
-static/basecamp/css/*.[a-z]*.css
-
-
- 
-
-
-
-
-
-
-
-
-
