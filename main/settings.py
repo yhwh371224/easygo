@@ -39,9 +39,12 @@ if ENVIRONMENT == 'production':
     }
     SECURE_REFERRER_POLICY = 'no-referrer-when-downgrade'
 
+    COMPRESS_OFFLINE = True
+
 else:
    DEBUG = True
    ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+   COMPRESS_OFFLINE = False
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -145,7 +148,6 @@ MIDDLEWARE = [
     'htmlmin.middleware.HtmlMinifyMiddleware', 
     'htmlmin.middleware.MarkRequestMiddleware', 
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'main.middlewares.login_control.AccountLoginMethodMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -210,8 +212,6 @@ CACHES = {
         }
     }
 }
-
-WHITENOISE_MAX_AGE = 60 * 60 * 24 * 365  # 1 year in seconds
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -279,7 +279,7 @@ STORAGES = {
         "LOCATION": os.path.join(BASE_DIR, 'media'),
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
     },
 }
 
