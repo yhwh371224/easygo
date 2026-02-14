@@ -169,9 +169,9 @@ def arrival_guide(request):
 
 
 def booking(request):
-    sorted_home_suburbs = get_sorted_suburbs()
+    all_suburbs = get_home_suburbs()
     context = {
-        'home_suburbs': sorted_home_suburbs,
+        'home_suburbs': all_suburbs,
         'RECAPTCHA_V2_SITE_KEY': settings.RECAPTCHA_V2_SITE_KEY,
     }
     return render(request, 'basecamp/booking.html', context)
@@ -179,9 +179,9 @@ def booking(request):
 
 @login_required
 def confirmation(request): 
-    sorted_home_suburbs = get_sorted_suburbs()
+    all_suburbs = get_home_suburbs()
     context = {
-        'home_suburbs': sorted_home_suburbs,
+        'home_suburbs': all_suburbs,
     }
     return render(request, 'basecamp/confirmation.html', context)
 
@@ -229,9 +229,9 @@ def home_error(request):
 
 
 def inquiry(request): 
-    sorted_home_suburbs = get_sorted_suburbs()
+    all_suburbs = get_sorted_suburbs()
     context = {
-        'home_suburbs': sorted_home_suburbs,
+        'home_suburbs': all_suburbs,
         'RECAPTCHA_V2_SITE_KEY': settings.RECAPTCHA_V2_SITE_KEY,
     }    
     return render(request, 'basecamp/inquiry.html', context)
