@@ -236,7 +236,7 @@
                                                     ✨ Important Update:  
                                                 </p>
                                                 <p style="margin:0; font-size:14px; line-height:22px; margin-bottom:12px;">
-                                                    Your driver or meeting point has changed. Please disregard the previous details — here are the latest ones to ensure everything goes smoothly.<br><br>
+                                                    There has been a slight update to your pickup details. Please refer to the information below as the most accurate and up-to-date.<br><br>
 													
 													{% if cash %}
 														We kindly ask that you <span style="color: #eb7828">email us immediately</span> upon your arrival in Sydney 
@@ -245,9 +245,11 @@
 														Please note that the driver may not have a card machine available. 
 														We kindly ask you to prepare the cash in advance.<br><br>
 													{% endif %}
-
-													The driver will meet you at the <strong>meeting point listed below</strong> 
-													at your <strong>requested pickup time, {{ pickup_time }}</strong>, as scheduled.<br><br>
+													
+													{% if not sms_reminder %}
+														The driver will meet you at the <strong>meeting point listed below</strong> 
+														at your <strong>requested pickup time, {{ pickup_time }}</strong>, as scheduled.<br><br>
+													{% endif %}
 
 													Once you have collected your luggage, please contact the driver.  
 													This helps us ensure a smooth process.<br><br>
