@@ -14,7 +14,7 @@ venv/
 # Django / Python
 # ==============================
 __pycache__/
-migrations/
+**/migrations/__pycache__/
 db.sqlite3
 
 # ==============================
@@ -28,6 +28,7 @@ static_backup_*/
 # ==============================
 # Compressed / Auto-generated
 # ==============================
+static/CACHE/
 *.br
 *.gz
 *.css~
