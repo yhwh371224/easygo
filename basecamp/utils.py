@@ -292,7 +292,6 @@ def stripe_payment_error_email(subject, message, name, email, amount):
 def get_sorted_suburbs():
     raw = get_home_suburbs()
     fixed = [
-        "Select your option",
         "Hotels In City",  
         "Sydney Int'l Airport",
         "Sydney Domestic Airport",
