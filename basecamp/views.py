@@ -940,6 +940,7 @@ def p2p_booking_detail(request):
 
 
 def price_detail(request):
+    sorted_suburbs = get_sorted_suburbs() 
     if request.method == "POST":
         pickup_date_str = request.POST.get('pickup_date', '')  
         start_point = request.POST.get('start_point')
@@ -973,10 +974,10 @@ def price_detail(request):
         normalized_start_point = start_point
         normalized_end_point = end_point
 
-        if start_point in ['International Airport', 'Domestic Airport']:
+        if start_point in ["Sydney Int'l Airport", "Sydney Domestic Airport"]:
             normalized_start_point = 'Airport'
 
-        if end_point in ['International Airport', 'Domestic Airport']:
+        if end_point in ["Sydney Int'l Airport", "Sydney Domestic Airport"]:
             normalized_end_point = 'Airport'
 
         condition_met = not (
@@ -995,12 +996,8 @@ def price_detail(request):
         return render(request, 'basecamp/inquiry1.html', context)
 
     else:
-        suburbs = get_suburbs()
-        home_suburbs = get_home_suburbs()
-
         return render(request, 'basecamp/home.html', {
-            'suburbs': suburbs,
-            'home_suburbs': home_suburbs,
+            'home_suburbs': sorted_suburbs,
         })
     
 
