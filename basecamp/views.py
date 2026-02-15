@@ -336,10 +336,6 @@ def return_trip(request):
     return render(request, 'basecamp/return_trip.html')
 
 
-def return_trip_inquiry(request): 
-    return render(request, 'basecamp/return_trip_inquiry.html')
-
-
 def sending_email_first(request): 
     return render(request, 'basecamp/sending_email_first.html')
 
