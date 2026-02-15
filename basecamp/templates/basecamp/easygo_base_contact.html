@@ -63,63 +63,63 @@
         document.addEventListener("DOMContentLoaded", function () {
             const form = document.getElementById("booking-form");
             const submitButton = document.getElementById("submitButton");
-            const dateInput = document.querySelector('input[name="pickup_date"]');
+            const dateInput = document.getElementById("pickup_date");
             const dateError = document.getElementById('date-error');
-            
-            // 연도 업데이트
-            document.getElementById('current-year').textContent = new Date().getFullYear();
 
             if (form && submitButton) {
                 form.addEventListener("submit", function (event) {
-                    // [핵심] 일단 제출을 중단시킴 (검증 후 수동 제출)
+                    // 1. 우선 제출을 중단 (검증이 끝날 때까지)
                     event.preventDefault();
 
                     let isValid = true;
 
-                    // 1. reCAPTCHA 검증
+                    // 2. reCAPTCHA 검증
                     const recaptchaResponse = (typeof grecaptcha !== 'undefined') ? grecaptcha.getResponse() : null;
                     if (!recaptchaResponse) {
                         alert('Please complete the reCAPTCHA verification.');
-                        return; // 여기서 중단하면 스피너 안 돌아감
+                        return; // 캡차 실패 시 스피너 안 돌고 중단
                     }
 
-                    // 2. 날짜 검증 (문자열 비교)
+                    // 3. 오늘 날짜 검증 (YYYY-MM-DD 비교)
                     if (dateInput && dateInput.value) {
                         const now = new Date();
-                        // 오늘 날짜 생성 (YYYY-MM-DD)
+                        // 오늘 날짜 문자열 생성 (예: "2026-02-16")
                         const todayStr = now.getFullYear() + '-' + 
-                                         String(now.getMonth() + 1).padStart(2, '0') + '-' + 
-                                         String(now.getDate()).padStart(2, '0');
-
+                                        String(now.getMonth() + 1).padStart(2, '0') + '-' + 
+                                        String(now.getDate()).padStart(2, '0');
+                        
+                        // 입력된 값과 오늘 날짜가 다르면 에러 표시
                         if (dateInput.value !== todayStr) {
-                            if (dateError) dateError.style.display = 'block';
-                            dateInput.classList.add('is-invalid');
+                            dateError.style.display = 'block'; // 메시지 보이게 함
+                            dateInput.classList.add('is-invalid'); // 테두리 빨갛게
                             isValid = false;
                         } else {
-                            if (dateError) dateError.style.display = 'none';
+                            dateError.style.display = 'none';
                             dateInput.classList.remove('is-invalid');
                         }
                     }
 
-                    // 3. HTML5 유효성 (필수값 등) 최종 확인
+                    // 4. HTML5 기본 검증 (Name, Email 등 필수값)
                     if (!form.checkValidity() || !isValid) {
                         form.classList.add('was-validated');
-                        return; // 검증 실패 시 여기서 끝 (스피너 안 돌아감)
+                        // 에러가 있다면 제출하지 않고 중단 (스피너 작동 X)
+                        return; 
                     }
 
-                    // 4. 모든 검증 통과 시에만 스피너 실행 및 제출
+                    // 5. 모든 검증 통과 시에만 스피너 돌리고 수동 제출
                     submitButton.disabled = true;
                     submitButton.innerHTML = "Submitting... <span class='spinner-border spinner-border-sm ms-2'></span>";
                     startTitleSpinner();
                     
-                    // 실제 제출 실행
+                    // 실제 전송
                     form.submit();
                 });
             }
 
+            // 사용자가 날짜를 변경하면 에러 메시지 즉시 숨기기
             if (dateInput) {
-                dateInput.addEventListener('change', () => {
-                    if (dateError) dateError.style.display = 'none';
+                dateInput.addEventListener('change', function() {
+                    dateError.style.display = 'none';
                     dateInput.classList.remove('is-invalid');
                 });
             }
