@@ -9,17 +9,17 @@
 
 {% block content %}
 <!-- Hero-->
-      <section class="jarallax bg-dark py-3" data-jarallax data-speed="0.1">
-        <div class="jarallax-img" style="
+      <section class="bg-dark py-3" style="position: relative; overflow: hidden;">
+        <div class="position-absolute top-0 start-0 w-100 h-100" style="
             background-image: url('/static/basecamp/photos/back4.PNG');
-            min-height: 400px;
             background-size: cover;
-            background-position: center;">
+            background-position: center;
+            z-index: 0;">
         </div>
         <a href="/static/basecamp/images/Digital-Certificate.webp">
-          <img src="/static/basecamp/images/award-badge.webp" alt="Award Badge" class="award-badge">
+          <img src="/static/basecamp/images/award-badge.webp" alt="Award Badge" class="award-badge" style="position: relative; z-index: 10;">
         </a>
-        <div class="container py-5 py-sm-7 text-center">
+        <div class="container py-5 py-sm-7 text-center" style="position: relative; z-index: 5; min-height: 400px;">
           <div class="py-md-6">
             <p></p>
             <br>
