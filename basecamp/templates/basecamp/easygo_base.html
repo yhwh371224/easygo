@@ -76,12 +76,6 @@
         font-family: Arial, sans-serif;
       }
 
-      .jarallax-img {
-        min-height: 400px; /* 필요 시 더 크게 */
-        background-size: cover;
-        background-position: center;
-      }
-
       .award-badge {
         position: fixed;
         top: 50px;
@@ -234,11 +228,6 @@
     <script src="/static/basecamp/js/bootstrap.bundle.min.js"></script>
     <!-- Main theme script-->
     <script src="/static/basecamp/js/theme.min.js"></script>     
-    <script>
-      jarallax(document.querySelectorAll('.jarallax'), {
-      speed: 0.2,
-      });
-    </script>
     <!-- JavaScript to auto-update the year -->
     <script>
       document.getElementById('current-year').textContent = new Date().getFullYear();
