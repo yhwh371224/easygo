@@ -173,8 +173,6 @@
     <!-- Vendor scrits: js libraries and plugins-->    
     <script src="/static/basecamp/js/bootstrap.bundle.min.js"></script>
     <script src="/static/basecamp/js/simplebar.min.js"></script>
-    <script src="/static/basecamp/js/smooth-scroll.polyfills.min.js"></script>
-    <script src="/static/basecamp/js/jarallax.min.js"></script>
     <script src="/static/basecamp/js/min/tiny-slider.js"></script>
     <script src="/static/basecamp/js/flatpickr.min.js"></script>
     <script src="/static/basecamp/js/rangePlugin.js"></script>
@@ -267,6 +265,15 @@
         form.addEventListener('submit', function (event) {
             let isValid = true;
 
+            // --- reCAPTCHA 검증 추가 (맨 앞에) ---
+            const recaptchaResponse = grecaptcha.getResponse();
+            if (!recaptchaResponse) {
+                alert('Please complete the reCAPTCHA verification.');
+                event.preventDefault();
+                event.stopPropagation();
+                return;
+            }
+
             // --- Always required fields ---
             const alwaysRequired = form.querySelectorAll('input[required], select[required], textarea[required]');
             alwaysRequired.forEach(input => {
@@ -320,11 +327,6 @@
             submitButton.innerHTML = "Submitting... <span class='spinner'></span>";
             startTitleSpinner();
         });
-
-        // --- reCAPTCHA fallback ---
-        if (typeof grecaptcha === 'undefined') {
-            console.log("reCAPTCHA not loaded – fallback enabled.");
-        }
 
         // --- Extra luggage toggle ---
         window.toggleExtraLuggage = function () {
