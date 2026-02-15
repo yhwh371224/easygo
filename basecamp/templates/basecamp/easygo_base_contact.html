@@ -4,42 +4,35 @@
   <head>
     <meta charset="utf-8">
     <title>{% block title %}Airport Transfers Sydney - EasyGo Shuttle{% endblock %}</title>
-    {% block canonical %}
-      <link rel="canonical" href="https://easygoshuttle.com.au{{ request.path }}">
-    {% endblock %}
-    <meta name="description" content="{% block meta_description %}Reliable Sydney airport transfer with private & maxi vans. Perfect for families, groups & large luggage. Book online in 1 minute.{% endblock %}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
-    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'basecamp/favi/favicon-32x32.png' %}">    
     <link rel="stylesheet" media="screen" href="/static/basecamp/css/theme.min.css">
     <style>
       body { margin: 0; font-family: Arial, sans-serif; }
-      /* 날짜 에러 스타일 */
-      .is-invalid { border-color: #dc3545 !important; }
-      #date-error { font-weight: 600; color: #dc3545; }
+      /* 날짜 에러 스타일 보강 */
+      .is-invalid { border-color: #dc3545 !important; background-image: none !important; }
+      #date-error { 
+        display: none; 
+        font-weight: 600; 
+        color: #dc3545; 
+        font-size: 0.875rem; 
+        margin-top: 5px; 
+      }
     </style>
   </head>
   
   <body>    
     <main class="page-wrapper">      
-      <header class="header navbar navbar-expand-lg navbar-dark navbar-floating navbar-sticky">
-        </header>
+      <header class="header navbar navbar-expand-lg navbar-dark navbar-floating navbar-sticky"></header>
       
-      {% block content %}
-      {% endblock %}
+      {% block content %}{% endblock %}
       
       <section class="container py-5 text-center">
-        <p><small>This site is protected by reCAPTCHA and the Google 
-          <a href="https://policies.google.com/privacy">Privacy Policy</a> apply.</small></p>
+        <p><small>This site is protected by reCAPTCHA and Google.</small></p>
       </section>
     </main>
 
-    <footer class="site-footer bg-dark pt-5 pb-4">
-      <div class="container d-md-flex justify-content-between align-items-center text-center">
-        <p class="fs-sm mb-3 text-light opacity-50">
-          © <span id="current-year"></span> EasyGo. All rights reserved.
-        </p>       
-      </div>
+    <footer class="site-footer bg-dark pt-5 pb-4 text-center">
+      <p class="text-light opacity-50">© <span id="current-year"></span> EasyGo. All rights reserved.</p>
     </footer>
 
     <script src="/static/basecamp/js/bootstrap.bundle.min.js"></script>
@@ -47,9 +40,6 @@
     <script src="https://www.google.com/recaptcha/api.js" defer></script>
     
     <script>
-        /* ===============================
-           1. Title Spinner & Form Logic
-           =============================== */
         let titleSpinnerInterval = null;
         const originalTitle = document.title;
 
@@ -58,7 +48,7 @@
             const frames = ["⏳", "⌛"];
             let i = 0;
             titleSpinnerInterval = setInterval(() => {
-                document.title = frames[i % frames.length] + " Processing booking...";
+                document.title = frames[i % frames.length] + " Processing...";
                 i++;
             }, 700);
         }
@@ -75,26 +65,28 @@
             const submitButton = document.getElementById("submitButton");
             const dateInput = document.querySelector('input[name="pickup_date"]');
             const dateError = document.getElementById('date-error');
-            const yearSpan = document.getElementById('current-year');
-
-            // Footer Year Update
-            if (yearSpan) yearSpan.textContent = new Date().getFullYear();
+            
+            // 연도 업데이트
+            document.getElementById('current-year').textContent = new Date().getFullYear();
 
             if (form && submitButton) {
                 form.addEventListener("submit", function (event) {
+                    // [핵심] 일단 제출을 중단시킴 (검증 후 수동 제출)
+                    event.preventDefault();
+
                     let isValid = true;
 
-                    // A. reCAPTCHA 검증
-                    const recaptchaResponse = (typeof grecaptcha !== 'undefined') ? grecaptcha.getResponse() : "skipped";
+                    // 1. reCAPTCHA 검증
+                    const recaptchaResponse = (typeof grecaptcha !== 'undefined') ? grecaptcha.getResponse() : null;
                     if (!recaptchaResponse) {
                         alert('Please complete the reCAPTCHA verification.');
-                        isValid = false;
+                        return; // 여기서 중단하면 스피너 안 돌아감
                     }
 
-                    // B. 오늘 날짜 검증
+                    // 2. 날짜 검증 (문자열 비교)
                     if (dateInput && dateInput.value) {
-                        // 문자열 비교 방식 (가장 안전)
                         const now = new Date();
+                        // 오늘 날짜 생성 (YYYY-MM-DD)
                         const todayStr = now.getFullYear() + '-' + 
                                          String(now.getMonth() + 1).padStart(2, '0') + '-' + 
                                          String(now.getDate()).padStart(2, '0');
@@ -102,38 +94,37 @@
                         if (dateInput.value !== todayStr) {
                             if (dateError) dateError.style.display = 'block';
                             dateInput.classList.add('is-invalid');
-                            alert('Please select today\'s date only.');
                             isValid = false;
+                        } else {
+                            if (dateError) dateError.style.display = 'none';
+                            dateInput.classList.remove('is-invalid');
                         }
                     }
 
-                    // C. 유효성 검사 통과 여부 확인
+                    // 3. HTML5 유효성 (필수값 등) 최종 확인
                     if (!form.checkValidity() || !isValid) {
-                        event.preventDefault();
-                        event.stopPropagation();
                         form.classList.add('was-validated');
-                        return;
+                        return; // 검증 실패 시 여기서 끝 (스피너 안 돌아감)
                     }
 
-                    // D. 최종 제출 처리
+                    // 4. 모든 검증 통과 시에만 스피너 실행 및 제출
                     submitButton.disabled = true;
                     submitButton.innerHTML = "Submitting... <span class='spinner-border spinner-border-sm ms-2'></span>";
                     startTitleSpinner();
+                    
+                    // 실제 제출 실행
+                    form.submit();
                 });
             }
 
-            // 날짜 변경 시 에러 초기화
             if (dateInput) {
-                dateInput.addEventListener('change', function() {
+                dateInput.addEventListener('change', () => {
                     if (dateError) dateError.style.display = 'none';
-                    this.classList.remove('is-invalid');
+                    dateInput.classList.remove('is-invalid');
                 });
             }
         });
 
-        /* ===============================
-           2. Back/Forward Cache Recovery
-           =============================== */
         window.addEventListener("pageshow", function (event) {
             if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
                 stopTitleSpinner();
