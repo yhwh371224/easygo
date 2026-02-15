@@ -3,11 +3,19 @@
 {% block title %}Contact – EasyGo Airport Shuttle{% endblock %}
 
 {% block content %}
-
 <style>
   /* Contact page 전용 navbar 글씨 색만 검정으로 */
   header.header.navbar .nav-link {
       color: #000 !important; /* 검정색 글씨 */
+  }
+  /* 날짜 에러 강조 스타일 */
+  #date-error {
+      display: none;
+      width: 100%;
+      margin-top: .25rem;
+      font-size: .875em;
+      color: #dc3545;
+      font-weight: bold;
   }
 </style>
 
@@ -19,7 +27,6 @@
         <form action="{% url 'basecamp:contact_submit' %}" method="post" id="booking-form" class="card-body p-5 needs-validation" novalidate>
           {% csrf_token %}
 
-          <!-- Honeypot field -->
           <div style="display:none;">
             <input type="text" name="website" value="" style="display:none" tabindex="-1" autocomplete="off">
           </div>
@@ -44,7 +51,14 @@
 
           <div class="mb-3">
             <label class="form-label">Choose today date</label>
-            <input class="form-control date-picker rounded" type="text" name="pickup_date" required placeholder="Select today date" data-datepicker-options='{"defaultDate": null}'>
+            <input class="form-control date-picker rounded" 
+                   type="text" 
+                   name="pickup_date" 
+                   id="pickup_date" 
+                   required 
+                   placeholder="Select today date" 
+                   data-datepicker-options='{"defaultDate": null}'>
+            <div id="date-error">⚠️ Please select today's date only to proceed.</div>
             <div class="invalid-feedback">Please select today date!</div>
           </div>
 
