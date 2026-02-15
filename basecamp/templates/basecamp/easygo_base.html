@@ -69,8 +69,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>    
     <!-- Vendor Styles-->
     <link rel="stylesheet" media="screen" href="/static/basecamp/css/simplebar.min.css"/>
-    <link rel="stylesheet" media="screen" href="/static/basecamp/css/tiny-slider.css"/>
-    <link rel="stylesheet" media="screen" href="/static/basecamp/css/flatpickr.min.css"/>
+    <!-- <link rel="stylesheet" media="screen" href="/static/basecamp/css/tiny-slider.css"/>
+    <link rel="stylesheet" media="screen" href="/static/basecamp/css/flatpickr.min.css"/> -->
     <!-- Main Theme Styles + Bootstrap-->
     <link rel="stylesheet" media="screen" href="/static/basecamp/css/theme.min.css">
     <style>
@@ -237,62 +237,9 @@
     <!-- Vendor scrits: js libraries and plugins-->
     <script src="/static/basecamp/js/bootstrap.bundle.min.js"></script>
     <script src="/static/basecamp/js/simplebar.min.js"></script>
-    <script src="/static/basecamp/js/smooth-scroll.polyfills.min.js"></script>
-    <script src="/static/basecamp/js/jarallax.min.js"></script>
-    <script src="/static/basecamp/js/min/tiny-slider.js"></script>
-    <!-- <script src="/static/basecamp/js/flatpickr.min.js"></script> -->
     <script src="/static/basecamp/js/rangePlugin.js"></script>
-    <script src="/static/basecamp/js/date-picker.js"></script>
     <!-- Main theme script-->
     <script src="/static/basecamp/js/theme.min.js"></script>     
-    <script src="https://www.google.com/recaptcha/api.js?render={{ RECAPTCHA_V3_SITE_KEY }}" defer></script>
-    <script>
-      document.addEventListener('DOMContentLoaded', function () {
-          const form = document.getElementById('booking-form');
-          const submitButton = document.getElementById('submitButton');
-          const csrftoken = '{{ csrf_token }}';
-
-          // ✅ 폼 제출 시 중복 제출 방지 + reCAPTCHA 확인 후 제출
-          form.addEventListener('submit', function (event) {
-              event.preventDefault(); // 기본 제출 방지
-
-              // 중복 제출 방지
-              submitButton.disabled = true;
-              submitButton.innerHTML = "Submitting...";
-
-              // reCAPTCHA 실행 및 서버 확인
-              grecaptcha.ready(function () {
-                  grecaptcha.execute("{{ RECAPTCHA_V3_SITE_KEY }}", {action: 'submit'}).then(function (token) {
-                      fetch('/recaptcha-verify/', {
-                          method: 'POST',
-                          headers: {
-                              'Content-Type': 'application/json',
-                              'X-CSRFToken': csrftoken
-                          },
-                          body: JSON.stringify({recaptchaToken: token})
-                      }).then(response => response.json())
-                        .then(data => {
-                          if (data.success) {
-                              form.submit(); // reCAPTCHA 통과 시 폼 제출
-                          } else {
-                              alert('reCAPTCHA validation failed. Please try again.');
-                              submitButton.disabled = false;
-                              submitButton.innerHTML = "Submit";
-                          }
-                      });
-                  });
-              });
-          });
-      });
-     </script>
-     <!-- Extra baggage form -->
-    <script>
-      function toggleExtraLuggage() {
-        const extraFields = document.getElementById("extraLuggageFields");
-        const checkbox = document.getElementById("extraLuggageCheck");
-        extraFields.style.display = checkbox.checked ? "block" : "none";
-      }
-    </script>
     <script>
       jarallax(document.querySelectorAll('.jarallax'), {
       speed: 0.2,
