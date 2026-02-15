@@ -44,3 +44,28 @@
         height: 140px;  /* 모바일 높이 */
     }
 }
+
+.fake-badge {
+    position: fixed; 
+    bottom: 15px; 
+    right: 0;
+    display: flex; 
+    align-items: center;
+    background: #f9f9f9; 
+    border: 1px solid #d3d3d3;
+    padding: 8px 10px; 
+    border-radius: 2px 0 0 2px;
+    box-shadow: 0 0 4px rgba(0,0,0,0.1); 
+    z-index: 999;
+}
+
+.fake-badge img { 
+    width: 30px; 
+    margin-right: 8px; 
+}
+
+.badge-text { 
+    font-size: 8px; 
+    color: #555; 
+    line-height: 1.2; 
+}

@@ -700,6 +700,14 @@
         </p>        
       </div>
     </footer> 
+  <div class="fake-badge">
+    <img src="https://www.gstatic.com/recaptcha/api2/logo_48.png" alt="reCAPTCHA">
+    <div class="badge-text">
+        <span>protected by</span><br>
+        <strong>reCAPTCHA</strong>
+        <p style="margin:0;">Privacy - Terms</p>
+    </div>
+</div>
 {% compress js %}
 <script src="/static/basecamp/js/bootstrap.bundle.min.js" defer></script>
 <script src="/static/basecamp/js/smooth-scroll.polyfills.min.js" defer></script>
@@ -709,7 +717,7 @@
 <script src="/static/basecamp/js/date-picker.js" defer></script>
 <script src="/static/basecamp/js/theme.min.js" defer></script>
 {% endcompress js %}
-<script src="https://www.google.com/recaptcha/api.js?render={{ RECAPTCHA_V3_SITE_KEY }}" defer></script>
+<!-- <script src="https://www.google.com/recaptcha/api.js?render={{ RECAPTCHA_V3_SITE_KEY }}" defer></script>
 <script>
     grecaptcha.ready(function() {
         grecaptcha.execute("{{ RECAPTCHA_V3_SITE_KEY }}", {action: 'homepage'}).then(function(token) {
@@ -728,7 +736,7 @@
             });
         });
     });
-</script>
+</script> -->
 <!-- JavaScript to auto-update the year -->
 <script>
   document.getElementById('current-year').textContent = new Date().getFullYear();
