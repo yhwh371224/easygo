@@ -670,22 +670,22 @@ def inquiry_details1(request):
         email_subject = f"Inquiry on {data['pickup_date']} - {data['name']}"
         send_mail(email_subject, content, '', [RECIPIENT_EMAIL])
 
-        if original_start_point == 'International Airport':
+        if original_start_point == "Sydney Int'l Airport":
             direction = 'Pickup from Intl Airport'
             suburb = original_end_point # end_point 대신 original_end_point 사용
             start_point = ''
             end_point = ''
-        elif original_start_point == 'Domestic Airport':
+        elif original_start_point == "Sydney Domestic Airport":
             direction = 'Pickup from Domestic Airport'
             suburb = original_end_point # end_point 대신 original_end_point 사용
             start_point = ''
             end_point = ''
-        elif original_end_point == 'International Airport':
+        elif original_end_point == "Sydney Int'l Airport":
             direction = 'Drop off to Intl Airport'
             suburb = original_start_point # start_point 대신 original_start_point 사용
             end_point = ''
             start_point = ''
-        elif original_end_point == 'Domestic Airport':
+        elif original_end_point == "Sydney Domestic Airport":
             direction = 'Drop off to Domestic Airport'
             suburb = original_start_point # start_point 대신 original_start_point 사용
             end_point = ''
