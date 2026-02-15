@@ -51,9 +51,18 @@
 
           <div class="mb-3">
             <label class="form-label">Choose today date</label>
-            <input class="form-control date-picker" type="text" name="pickup_date" id="pickup_date" required placeholder="YYYY-MM-DD">
-            <div id="date-error">⚠️ Please select today's date only.</div>
-            <div class="invalid-feedback">Field is required.</div>
+            <input class="form-control date-picker rounded" 
+                  type="text" 
+                  name="pickup_date" 
+                  id="pickup_date" 
+                  required 
+                  placeholder="Select today date">
+            
+            <div id="date-error" style="display:none; color: #dc3545; font-size: 0.875em; margin-top: 0.25rem; font-weight: bold;">
+              ⚠️ Please select today's date (2026-02-16) only.
+            </div>
+            
+            <div class="invalid-feedback">Please select today date!</div>
           </div>
 
           <div class="mb-3">
