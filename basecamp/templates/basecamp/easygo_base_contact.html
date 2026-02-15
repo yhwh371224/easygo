@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>{% block title %}Airport Transfers Sydney - EasyGo Shuttle{% endblock %}</title>
+    {% block canonical %}
+      <link rel="canonical" href="https://easygoshuttle.com.au{{ request.path }}">
+    {% endblock %}
+    <meta name="description" content="{% block meta_description %}Reliable Sydney airport transfer with private & maxi vans. Perfect for families, groups & large luggage. Book online in 1 minute.{% endblock %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'basecamp/favi/favicon-32x32.png' %}">    
+    <link rel="stylesheet" media="screen" href="/static/basecamp/css/theme.min.css">
+    <style>
+      body { margin: 0; font-family: Arial, sans-serif; }
+      /* 날짜 에러 스타일 */
+      .is-invalid { border-color: #dc3545 !important; }
+      #date-error { font-weight: 600; color: #dc3545; }
+    </style>
+  </head>
+  
+  <body>    
+    <main class="page-wrapper">      
+      <header class="header navbar navbar-expand-lg navbar-dark navbar-floating navbar-sticky">
+        </header>
+      
+      {% block content %}
+      {% endblock %}
+      
+      <section class="container py-5 text-center">
+        <p><small>This site is protected by reCAPTCHA and the Google 
+          <a href="https://policies.google.com/privacy">Privacy Policy</a> apply.</small></p>
+      </section>
+    </main>
+
+    <footer class="site-footer bg-dark pt-5 pb-4">
+      <div class="container d-md-flex justify-content-between align-items-center text-center">
+        <p class="fs-sm mb-3 text-light opacity-50">
+          © <span id="current-year"></span> EasyGo. All rights reserved.
+        </p>       
+      </div>
+    </footer>
+
+    <script src="/static/basecamp/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/basecamp/js/theme.min.js"></script>     
+    <script src="https://www.google.com/recaptcha/api.js" defer></script>
+    
+    <script>
+        /* ===============================
+           1. Title Spinner & Form Logic
+           =============================== */
+        let titleSpinnerInterval = null;
+        const originalTitle = document.title;
+
+        function startTitleSpinner() {
+            if (titleSpinnerInterval) return;
+            const frames = ["⏳", "⌛"];
+            let i = 0;
+            titleSpinnerInterval = setInterval(() => {
+                document.title = frames[i % frames.length] + " Processing booking...";
+                i++;
+            }, 700);
+        }
+
+        function stopTitleSpinner() {
+            if (!titleSpinnerInterval) return;
+            clearInterval(titleSpinnerInterval);
+            titleSpinnerInterval = null;
+            document.title = originalTitle;
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.getElementById("booking-form");
+            const submitButton = document.getElementById("submitButton");
+            const dateInput = document.querySelector('input[name="pickup_date"]');
+            const dateError = document.getElementById('date-error');
+            const yearSpan = document.getElementById('current-year');
+
+            // Footer Year Update
+            if (yearSpan) yearSpan.textContent = new Date().getFullYear();
+
+            if (form && submitButton) {
+                form.addEventListener("submit", function (event) {
+                    let isValid = true;
+
+                    // A. reCAPTCHA 검증
+                    const recaptchaResponse = (typeof grecaptcha !== 'undefined') ? grecaptcha.getResponse() : "skipped";
+                    if (!recaptchaResponse) {
+                        alert('Please complete the reCAPTCHA verification.');
+                        isValid = false;
+                    }
+
+                    // B. 오늘 날짜 검증
+                    if (dateInput && dateInput.value) {
+                        // 문자열 비교 방식 (가장 안전)
+                        const now = new Date();
+                        const todayStr = now.getFullYear() + '-' + 
+                                         String(now.getMonth() + 1).padStart(2, '0') + '-' + 
+                                         String(now.getDate()).padStart(2, '0');
+
+                        if (dateInput.value !== todayStr) {
+                            if (dateError) dateError.style.display = 'block';
+                            dateInput.classList.add('is-invalid');
+                            alert('Please select today\'s date only.');
+                            isValid = false;
+                        }
+                    }
+
+                    // C. 유효성 검사 통과 여부 확인
+                    if (!form.checkValidity() || !isValid) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        form.classList.add('was-validated');
+                        return;
+                    }
+
+                    // D. 최종 제출 처리
+                    submitButton.disabled = true;
+                    submitButton.innerHTML = "Submitting... <span class='spinner-border spinner-border-sm ms-2'></span>";
+                    startTitleSpinner();
+                });
+            }
+
+            // 날짜 변경 시 에러 초기화
+            if (dateInput) {
+                dateInput.addEventListener('change', function() {
+                    if (dateError) dateError.style.display = 'none';
+                    this.classList.remove('is-invalid');
+                });
+            }
+        });
+
+        /* ===============================
+           2. Back/Forward Cache Recovery
+           =============================== */
+        window.addEventListener("pageshow", function (event) {
+            if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+                stopTitleSpinner();
+                const btn = document.getElementById("submitButton");
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = "Submit";
+                }
+            }
+        });
+    </script>
+  </body>
+</html>
