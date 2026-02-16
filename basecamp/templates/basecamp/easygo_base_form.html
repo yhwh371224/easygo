@@ -28,7 +28,26 @@
     <link rel="stylesheet" media="screen" href="/static/basecamp/css/tiny-slider.css"/>
     <link rel="stylesheet" media="screen" href="/static/basecamp/css/flatpickr.min.css"/>
     <!-- Main Theme Styles + Bootstrap-->
-    <link rel="stylesheet" media="screen" href="/static/basecamp/css/theme.min.css">
+    <link rel="stylesheet" media="screen" href="/static/basecamp/css/theme.min.css">   
+    <style>
+    /* 버튼 안 spinner */
+    .spinner {
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top: 2px solid white;
+        border-radius: 50%;
+        width: 16px;
+        height: 16px;
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 8px;
+        animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    </style> 
   </head>
   <!-- Body-->
   <body>    
@@ -158,97 +177,165 @@
     <script src="/static/basecamp/js/flatpickr.min.js"></script>
     <script src="/static/basecamp/js/rangePlugin.js"></script>
     <script src="/static/basecamp/js/date-picker.js"></script>
+    <script src="/static/basecamp/js/form_handler.js" defer></script>
     <!-- Main theme script-->
     <script src="/static/basecamp/js/theme.min.js"></script>              
-    <script src="https://www.google.com/recaptcha/api.js"></script>
-    <script src="/static/basecamp/js/form_handler.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js" defer></script>
     <script>
-    function initFormHandlers() {
-        const form = document.getElementById("booking-form");
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('booking-form');
+        const submitButton = document.getElementById('submitButton');
+        const returnFlightCheckbox = document.getElementById('return-flight');
+        const returnFlightFields = document.getElementById('return-flight-fields');
+        const flightDateInput = document.getElementById('flight-date');
+        const dateError = document.getElementById('date-error');
+        const directionSelect = document.getElementById('direction');
+        const startEndFields = document.getElementById('start-end-fields'); // start & end point wrapper
+        const flightFields = document.getElementById('flight-fields');     // flight number & time wrapper
 
-        // --- Extra Luggage Toggle ---
-        const extraCheckbox = document.getElementById("extraLuggageCheck");
-        const extraFields = document.getElementById("extraLuggageFields");
-
-        if (extraCheckbox && extraFields) {
-            // 초기 상태
-            extraFields.style.display = extraCheckbox.checked ? "block" : "none";
-
-            extraCheckbox.addEventListener("change", function () {
-                extraFields.style.display = this.checked ? "block" : "none";
-            });
-        }
-
-        // --- Return Flight Toggle ---
-        const returnFlightCheck = document.getElementById("return-flight");
-        const returnFlightFields = document.getElementById("return-flight-fields");
-
-        if (returnFlightCheck && returnFlightFields) {
-            // 초기 상태
-            returnFlightFields.style.display = returnFlightCheck.checked ? "block" : "none";
-
-            returnFlightCheck.addEventListener("change", function () {
-                returnFlightFields.style.display = this.checked ? "block" : "none";
-            });
-        }
-
-        // --- Direction Toggle ---
-        const directionSelect = document.getElementById("direction");
-        const startEndFields = document.getElementById("start-end-fields");
-        const flightFields = document.getElementById("flight-fields");
-
-        function toggleDirectionFields() {
-            if (directionSelect && directionSelect.value === "Cruise or Point to Point") {
-                if (startEndFields) startEndFields.style.display = "block";
-                if (flightFields) flightFields.style.display = "none";
+        // --- Dynamic Return Flight Fields via AJAX ---
+        returnFlightCheckbox.addEventListener("change", function () {
+            if (returnFlightCheckbox.checked) {
+                const xhr = new XMLHttpRequest();
+                xhr.open("GET", "{% url 'basecamp:return_flight_fields' %}");
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        returnFlightFields.innerHTML = xhr.responseText;
+                        returnFlightFields.style.display = 'block';
+                    } else {
+                        console.log("Request failed. Status: " + xhr.status);
+                    }
+                };
+                xhr.send();
             } else {
-                if (startEndFields) startEndFields.style.display = "none";
-                if (flightFields) flightFields.style.display = "block";
+                returnFlightFields.innerHTML = "";
+                returnFlightFields.style.display = 'none';
+            }
+        });
+
+        // --- Flight Date Validation (no past dates) ---
+        flightDateInput.addEventListener('change', function () {
+            const selectedDate = new Date(flightDateInput.value);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            if (selectedDate < today) {
+                dateError.style.display = 'block';
+                flightDateInput.classList.add('is-invalid');
+            } else {
+                dateError.style.display = 'none';
+                flightDateInput.classList.remove('is-invalid');
+            }
+        });
+
+        // --- Direction-based dynamic fields ---
+        function toggleDirectionFields() {
+            if (directionSelect.value === "Cruise or Point to Point") {
+                startEndFields.style.display = 'block';
+                flightFields.style.display = 'none';
+            } else {
+                startEndFields.style.display = 'none';
+                flightFields.style.display = 'block';
             }
         }
 
-        if (directionSelect) {
-            directionSelect.addEventListener("change", toggleDirectionFields);
-            toggleDirectionFields();
+        directionSelect.addEventListener('change', toggleDirectionFields);
+        toggleDirectionFields(); // initialize on page load
+
+        // --- Title Spinner ---
+        let originalTitle = document.title;
+        let dots = 0;
+        let titleInterval;
+
+        function startTitleSpinner() {
+            titleInterval = setInterval(() => {
+                dots = (dots + 1) % 4;
+                document.title = "Submitting" + ".".repeat(dots);
+            }, 500);
         }
 
-        // --- Flight Date Validation ---
-        const flightDateInput = document.getElementById("flight-date");
-        const dateError = document.getElementById("date-error");
+        function stopTitleSpinner() {
+            clearInterval(titleInterval);
+            document.title = originalTitle;
+        }
 
-        if (flightDateInput && dateError) {
-            flightDateInput.addEventListener("change", function () {
-                const selectedDate = new Date(flightDateInput.value);
-                const today = new Date();
-                today.setHours(0, 0, 0, 0);
-                if (selectedDate < today) {
-                    dateError.style.display = "block";
-                    flightDateInput.classList.add("is-invalid");
+        window.addEventListener('beforeunload', stopTitleSpinner);
+
+        // --- Form Submit Validation ---
+        form.addEventListener('submit', function (event) {
+            let isValid = true;
+
+            // --- reCAPTCHA 검증 추가 (맨 앞에) ---
+            const recaptchaResponse = grecaptcha.getResponse();
+            if (!recaptchaResponse) {
+                alert('Please complete the reCAPTCHA verification.');
+                event.preventDefault();
+                event.stopPropagation();
+                return;
+            }
+
+            // --- Always required fields ---
+            const alwaysRequired = form.querySelectorAll('input[required], select[required], textarea[required]');
+            alwaysRequired.forEach(input => {
+                if (!input.value.trim()) {
+                    input.classList.add('is-invalid');
+                    isValid = false;
                 } else {
-                    dateError.style.display = "none";
-                    flightDateInput.classList.remove("is-invalid");
+                    input.classList.remove('is-invalid');
                 }
             });
-        }
-    } // ✅ 함수 종료
 
-    // --- BFCache / Back Button Recovery ---
-    window.addEventListener("pageshow", function (event) {
-        if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
-            if (typeof stopTitleSpinner === "function") stopTitleSpinner();
-            const submitButton = document.getElementById("submitButton");
-            if (submitButton) {
-                submitButton.disabled = false;
-                submitButton.innerHTML = "Submit Booking";
+            // --- Return flight validation (only if checked) ---
+            if (returnFlightCheckbox.checked) {
+                const returnInputs = returnFlightFields.querySelectorAll('input, select, textarea');
+                returnInputs.forEach(input => {
+                    if (['return_flight_number', 'return_pickup_date', 'return_direction'].includes(input.name)) {
+                        if (!input.value.trim()) {
+                            input.classList.add('is-invalid');
+                            isValid = false;
+                        } else {
+                            input.classList.remove('is-invalid');
+                        }
+                    }
+                });
             }
-        }
+
+            // --- Start/End Point validation if Cruise or Point to Point ---
+            if (directionSelect.value === "Cruise or Point to Point") {
+                const startInput = startEndFields.querySelector('input[name="start_point"]');
+                const endInput = startEndFields.querySelector('input[name="end_point"]');
+                if (!startInput.value.trim() || !endInput.value.trim()) {
+                    startInput.classList.add('is-invalid');
+                    endInput.classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    startInput.classList.remove('is-invalid');
+                    endInput.classList.remove('is-invalid');
+                }
+            }
+
+            // --- Prevent submission if invalid ---
+            if (!isValid) {
+                event.preventDefault();
+                event.stopPropagation();
+                alert('Please fill in all required fields correctly.');
+                return;
+            }
+
+            // --- Disable button & start spinner ---
+            submitButton.disabled = true;
+            submitButton.innerHTML = "Submitting... <span class='spinner'></span>";
+            startTitleSpinner();
+        });
+
+        // --- Extra luggage toggle ---
+        window.toggleExtraLuggage = function () {
+            const extraFields = document.getElementById("extraLuggageFields");
+            extraFields.style.display = document.getElementById('extraLuggageCheck').checked ? 'block' : 'none';
+        };
     });
-
-    // ✅ 함수 실행
-    initFormHandlers();
-    </script>
-
-    <!-- JavaScript to auto-update the year -->
+  </script>
+  <!-- JavaScript to auto-update the year -->
     <script>
       document.getElementById('current-year').textContent = new Date().getFullYear();
     </script>
