@@ -161,9 +161,9 @@
     <!-- Main theme script-->
     <script src="/static/basecamp/js/theme.min.js"></script>              
     <script src="https://www.google.com/recaptcha/api.js" defer></script>
-    <script src="/static/basecamp/js/form_handler.js" defer></script>
+    <script src="/static/basecamp/js/form_handler.js?v=100" defer></script>
     <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    function initFormHandlers() {
         const form = document.getElementById("booking-form");
 
         // --- Extra Luggage Toggle ---
@@ -198,12 +198,12 @@
         const flightFields = document.getElementById("flight-fields");
 
         function toggleDirectionFields() {
-            if (directionSelect.value === "Cruise or Point to Point") {
-                startEndFields.style.display = "block";
-                flightFields.style.display = "none";
+            if (directionSelect && directionSelect.value === "Cruise or Point to Point") {
+                if (startEndFields) startEndFields.style.display = "block";
+                if (flightFields) flightFields.style.display = "none";
             } else {
-                startEndFields.style.display = "none";
-                flightFields.style.display = "block";
+                if (startEndFields) startEndFields.style.display = "none";
+                if (flightFields) flightFields.style.display = "block";
             }
         }
 
@@ -230,7 +230,7 @@
                 }
             });
         }
-    });
+    } // ✅ 함수 종료
 
     // --- BFCache / Back Button Recovery ---
     window.addEventListener("pageshow", function (event) {
@@ -243,6 +243,10 @@
             }
         }
     });
+
+    // ✅ 함수 실행
+    initFormHandlers();
+    console.log("Form handlers initialized");
     </script>
 
     <!-- JavaScript to auto-update the year -->
