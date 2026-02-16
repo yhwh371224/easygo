@@ -173,17 +173,6 @@
             form.addEventListener("submit", function (event) {
                 let isValid = true;
 
-                // HTML5 required fields 체크
-                const alwaysRequired = form.querySelectorAll('input[required], select[required]');
-                alwaysRequired.forEach(input => {
-                    if (!input.value.trim()) {
-                        input.classList.add('is-invalid');
-                        isValid = false;
-                    } else {
-                        input.classList.remove('is-invalid');
-                    }
-                });
-
                 // reCAPTCHA
                 if (typeof grecaptcha !== "undefined") {
                     const recaptchaResponse = grecaptcha.getResponse();
@@ -192,12 +181,6 @@
                         event.preventDefault();
                         return;
                     }
-                }
-
-                if (!isValid) {
-                    event.preventDefault();
-                    alert("Please fill in all required fields correctly.");
-                    return;
                 }
 
                 // 성공 시 버튼 비활성화 + 스피너
