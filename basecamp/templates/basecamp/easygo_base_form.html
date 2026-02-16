@@ -29,25 +29,6 @@
     <link rel="stylesheet" media="screen" href="/static/basecamp/css/flatpickr.min.css"/>
     <!-- Main Theme Styles + Bootstrap-->
     <link rel="stylesheet" media="screen" href="/static/basecamp/css/theme.min.css">
-    <style>
-      /* 버튼 내 회전 스피너 */
-      .btn-spinner {
-        display: inline-block;
-        width: 16px;
-        height: 16px;
-        border: 2px solid transparent;
-        border-top-color: #fff; /* 회전색 */
-        border-radius: 50%;
-        animation: spin 0.7s linear infinite;
-        vertical-align: middle;
-        margin-left: 6px;
-      }
-
-      @keyframes spin {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(360deg); }
-      }
-    </style>   
   </head>
   <!-- Body-->
   <body>    
@@ -183,115 +164,125 @@
     <script src="https://www.google.com/recaptcha/api.js" defer></script>
 
     <script>
-      document.addEventListener('DOMContentLoaded', function () {
-        const form = document.getElementById('booking-form');
-        const submitButton = document.getElementById('submitButton');
-        const flightDateInput = document.getElementById('flight-date');
-        const dateError = document.getElementById('date-error');
-        const directionSelect = document.getElementById('direction');
-        const startEndFields = document.getElementById('start-end-fields');
-        const flightFields = document.getElementById('flight-fields');
-
-        // --- Extra Luggage Fields Toggle ---
-        const extraLuggageCheck = document.getElementById('extraLuggageCheck');
-        const extraLuggageFields = document.getElementById('extraLuggageFields');
-
-        // 초기 표시 상태 설정
-        extraLuggageFields.style.display = extraLuggageCheck.checked ? 'block' : 'none';
-
-        extraLuggageCheck.addEventListener('change', function() {
-            extraLuggageFields.style.display = extraLuggageCheck.checked ? 'block' : 'none';
-        });
-
-        const returnFlightCheck = document.getElementById('return-flight');
-        const returnFlightFields = document.getElementById('return-flight-fields');
-
-        // 초기 표시 상태 설정
-        returnFlightFields.style.display = returnFlightCheck.checked ? 'block' : 'none';
-
-        returnFlightCheck.addEventListener('change', function() {
-            returnFlightFields.style.display = returnFlightCheck.checked ? 'block' : 'none';
-        });
-
-        function stopTitleSpinner() {
-            if (!titleSpinnerInterval) return;
-            clearInterval(titleSpinnerInterval);
-            titleSpinnerInterval = null;
-            document.title = originalTitle;
-        }
-
-        // --- BFcache Recovery (Back Button Fix) ---
-        window.addEventListener("pageshow", function (event) {
-            if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
-                stopTitleSpinner();
-                if (submitButton) {
-                    submitButton.disabled = false;
-                    submitButton.innerHTML = "Submit"; // 버튼 텍스트 통일
-                }
-            }
-        });
-
-        // --- Direction Toggle ---
-        function toggleDirectionFields() {
-            if (directionSelect.value === "Cruise or Point to Point") {
-                startEndFields.style.display = 'block';
-                flightFields.style.display = 'none';
-            } else {
-                startEndFields.style.display = 'none';
-                flightFields.style.display = 'block';
-            }
-        }
-        directionSelect.addEventListener('change', toggleDirectionFields);
-        toggleDirectionFields();
-
-        // --- Flight Date Validation ---
-        flightDateInput.addEventListener('change', function () {
-            const selectedDate = new Date(flightDateInput.value);
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            if (selectedDate < today) {
-                dateError.style.display = 'block';
-                flightDateInput.classList.add('is-invalid');
-            } else {
-                dateError.style.display = 'none';
-                flightDateInput.classList.remove('is-invalid');
-            }
-        });
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("booking-form");
+        const submitButton = document.getElementById("submitButton");
 
         // --- Form Submit ---
-        form.addEventListener('submit', function (event) {
-            let isValid = true;
+        if (form && submitButton) {
+            form.addEventListener("submit", function (event) {
+                let isValid = true;
 
-            // reCAPTCHA
-            const recaptchaResponse = grecaptcha.getResponse();
-            if (!recaptchaResponse) {
-                alert('Please complete the reCAPTCHA verification.');
-                event.preventDefault();
-                return;
+                // HTML5 required fields 체크
+                const alwaysRequired = form.querySelectorAll('input[required], select[required]');
+                alwaysRequired.forEach(input => {
+                    if (!input.value.trim()) {
+                        input.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        input.classList.remove('is-invalid');
+                    }
+                });
+
+                // reCAPTCHA
+                if (typeof grecaptcha !== "undefined") {
+                    const recaptchaResponse = grecaptcha.getResponse();
+                    if (!recaptchaResponse) {
+                        alert("Please complete the reCAPTCHA verification.");
+                        event.preventDefault();
+                        return;
+                    }
+                }
+
+                if (!isValid) {
+                    event.preventDefault();
+                    alert("Please fill in all required fields correctly.");
+                    return;
+                }
+
+                // 성공 시 버튼 비활성화 + 스피너
+                submitButton.disabled = true;
+                submitButton.innerHTML = "Submitting... <span class='spinner-border spinner-border-sm ms-2'></span>";
+                if (typeof startTitleSpinner === "function") startTitleSpinner();
+            });
+        }
+
+        // --- Extra Luggage Toggle ---
+        const extraCheckbox = document.getElementById("extraLuggageCheck");
+        const extraFields = document.getElementById("extraLuggageFields");
+
+        if (extraCheckbox && extraFields) {
+            // 초기 상태
+            extraFields.style.display = extraCheckbox.checked ? "block" : "none";
+
+            extraCheckbox.addEventListener("change", function () {
+                extraFields.style.display = this.checked ? "block" : "none";
+            });
+        }
+
+        // --- Return Flight Toggle ---
+        const returnFlightCheck = document.getElementById("return-flight");
+        const returnFlightFields = document.getElementById("return-flight-fields");
+
+        if (returnFlightCheck && returnFlightFields) {
+            // 초기 상태
+            returnFlightFields.style.display = returnFlightCheck.checked ? "block" : "none";
+
+            returnFlightCheck.addEventListener("change", function () {
+                returnFlightFields.style.display = this.checked ? "block" : "none";
+            });
+        }
+
+        // --- Direction Toggle ---
+        const directionSelect = document.getElementById("direction");
+        const startEndFields = document.getElementById("start-end-fields");
+        const flightFields = document.getElementById("flight-fields");
+
+        function toggleDirectionFields() {
+            if (directionSelect.value === "Cruise or Point to Point") {
+                startEndFields.style.display = "block";
+                flightFields.style.display = "none";
+            } else {
+                startEndFields.style.display = "none";
+                flightFields.style.display = "block";
             }
+        }
 
-            // Required fields
-            const alwaysRequired = form.querySelectorAll('input[required], select[required]');
-            alwaysRequired.forEach(input => {
-                if (!input.value.trim()) {
-                    input.classList.add('is-invalid');
-                    isValid = false;
+        if (directionSelect) {
+            directionSelect.addEventListener("change", toggleDirectionFields);
+            toggleDirectionFields();
+        }
+
+        // --- Flight Date Validation ---
+        const flightDateInput = document.getElementById("flight-date");
+        const dateError = document.getElementById("date-error");
+
+        if (flightDateInput && dateError) {
+            flightDateInput.addEventListener("change", function () {
+                const selectedDate = new Date(flightDateInput.value);
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                if (selectedDate < today) {
+                    dateError.style.display = "block";
+                    flightDateInput.classList.add("is-invalid");
                 } else {
-                    input.classList.remove('is-invalid');
+                    dateError.style.display = "none";
+                    flightDateInput.classList.remove("is-invalid");
                 }
             });
+        }
+    });
 
-            if (!isValid) {
-                event.preventDefault();
-                alert('Please fill in all required fields correctly.');
-                return;
+    // --- BFCache / Back Button Recovery ---
+    window.addEventListener("pageshow", function (event) {
+        if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+            if (typeof stopTitleSpinner === "function") stopTitleSpinner();
+            const submitButton = document.getElementById("submitButton");
+            if (submitButton) {
+                submitButton.disabled = false;
+                submitButton.innerHTML = "Submit Booking";
             }
-
-            // Success feedback
-            submitButton.disabled = true;
-            submitButton.innerHTML = "Submitting... <span class='btn-spinner'></span>";
-            startTitleSpinner();
-        });
+        }
     });
     </script>
 
