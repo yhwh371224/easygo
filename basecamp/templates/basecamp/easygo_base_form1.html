@@ -167,64 +167,51 @@
     <script src="/static/basecamp/js/theme.min.js"></script>
 
     <script>
-      // Jarallax
-      jarallax(document.querySelectorAll('.jarallax'), { speed: 0.2 });
+    document.addEventListener("DOMContentLoaded", function () {
+        // --- Form Submit ---
+        const form = document.getElementById("booking-form");
+        const submitButton = document.getElementById("submitButton");
 
-      // Title Spinner
-      let titleSpinnerInterval = null;
-      const originalTitle = document.title;
-      function startTitleSpinner() {
-          if (titleSpinnerInterval) return;
-          const frames = ["⏳", "⌛"];
-          let i = 0;
-          titleSpinnerInterval = setInterval(() => {
-              document.title = frames[i % frames.length] + " Processing booking...";
-              i++;
-          }, 700);
-      }
-      function stopTitleSpinner() {
-          if (!titleSpinnerInterval) return;
-          clearInterval(titleSpinnerInterval);
-          titleSpinnerInterval = null;
-          document.title = originalTitle;
-      }
+        if (form && submitButton) {
+            form.addEventListener("submit", function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    return;
+                }
+                submitButton.disabled = true;
+                submitButton.innerHTML = "Submitting... <span class='spinner-border spinner-border-sm ms-2'></span>";
+                if (typeof startTitleSpinner === "function") startTitleSpinner();
+            });
+        }
 
-      document.addEventListener("DOMContentLoaded", function () {
-          const form = document.getElementById("booking-form");
-          const submitButton = document.getElementById("submitButton");
-          if (form && submitButton) {
-              form.addEventListener("submit", function (event) {
-                  if (!form.checkValidity()) {
-                      event.preventDefault();
-                      event.stopPropagation();
-                      return;
-                  }
-                  submitButton.disabled = true;
-                  submitButton.innerHTML = "Submitting... <span class='spinner-border spinner-border-sm ms-2'></span>";
-                  startTitleSpinner();
-              });
-          }
+        // --- Extra Luggage Toggle ---
+        const extraCheckbox = document.getElementById("extraLuggageCheck");
+        const extraFields = document.getElementById("extraLuggageFields");
 
-          const checkbox = document.getElementById("extraLuggageCheck");
-          const extraFields = document.getElementById("extraLuggageFields");
-          if (checkbox && extraFields) {
-              extraFields.style.display = checkbox.checked ? "block" : "none";
-              checkbox.addEventListener("change", function () {
-                  extraFields.style.display = this.checked ? "block" : "none";
-              });
-          }
-      });
+        if (extraCheckbox && extraFields) {
+            // 초기 상태 설정
+            extraFields.style.display = extraCheckbox.checked ? "block" : "none";
 
-      window.addEventListener("pageshow", function (event) {
-          if (event.persisted) {
-              stopTitleSpinner();
-              const submitButton = document.getElementById("submitButton");
-              if (submitButton) {
-                  submitButton.disabled = false;
-                  submitButton.innerHTML = "Submit Booking";
-              }
-          }
-      });
+            // 체크박스 이벤트
+            extraCheckbox.addEventListener("change", function () {
+                extraFields.style.display = this.checked ? "block" : "none";
+            });
+        }
+    });
+
+    // --- BFCache / Back Button Recovery ---
+    window.addEventListener("pageshow", function (event) {
+        if (event.persisted) {
+            if (typeof stopTitleSpinner === "function") stopTitleSpinner();
+            const submitButton = document.getElementById("submitButton");
+            if (submitButton) {
+                submitButton.disabled = false;
+                submitButton.innerHTML = "Submit Booking";
+            }
+        }
+    });
     </script>
+
   </body>
 </html>
