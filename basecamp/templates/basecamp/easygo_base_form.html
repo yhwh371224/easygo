@@ -182,6 +182,9 @@
     <script src="/static/basecamp/js/theme.min.js"></script>              
     <script src="https://www.google.com/recaptcha/api.js" defer></script>
     <script>
+        const returnFlightURL = "{% url 'basecamp:return_flight_fields' %}";
+    </script>
+    <script>
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('booking-form');
         const submitButton = document.getElementById('submitButton');
@@ -196,8 +199,9 @@
         // --- Dynamic Return Flight Fields via AJAX ---
         returnFlightCheckbox.addEventListener("change", function () {
             if (returnFlightCheckbox.checked) {
+                const url = returnFlightURL; 
                 const xhr = new XMLHttpRequest();
-                xhr.open("GET", "{% url 'basecamp:return_flight_fields' %}");
+                xhr.open("GET", url);
                 xhr.onload = function () {
                     if (xhr.status === 200) {
                         returnFlightFields.innerHTML = xhr.responseText;
