@@ -302,13 +302,12 @@
 				<br><br>  		
 
 				<!-- Return Flight Option -->
-				<div class="mb-3 pb-1">
-					<label for="return-flight">Return Trip:&nbsp;&nbsp;</label>
-					<input type="checkbox" name="return_flight" id="return-flight">
+				<label for="return-flight">Return Trip:&nbsp;&nbsp;</label>
+				<input type="checkbox" name="return_flight" id="return-flight">
+				<br>
+				<div id="return-flight-fields">
+					<!-- Fields will be dynamically added here -->
 				</div>
-
-				<!-- Include the return flight fields, hidden by default -->
-				{% include 'basecamp/return_flight_fields.html' %}
 
 				<br><br>
                 <div class="mb-3 pb-1">
