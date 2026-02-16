@@ -203,19 +203,15 @@
             extraLuggageFields.style.display = extraLuggageCheck.checked ? 'block' : 'none';
         });
 
-        // --- Title Spinner Logic ---
-        let titleSpinnerInterval = null;
-        const originalTitle = document.title;
+        const returnFlightCheck = document.getElementById('return-flight');
+        const returnFlightFields = document.getElementById('return-flight-fields');
 
-        function startTitleSpinner() {
-            if (titleSpinnerInterval) return;
-            const frames = ["⏳", "⌛"];
-            let i = 0;
-            titleSpinnerInterval = setInterval(() => {
-                document.title = frames[i % frames.length] + " Processing booking...";
-                i++;
-            }, 700);
-        }
+        // 초기 표시 상태 설정
+        returnFlightFields.style.display = returnFlightCheck.checked ? 'block' : 'none';
+
+        returnFlightCheck.addEventListener('change', function() {
+            returnFlightFields.style.display = returnFlightCheck.checked ? 'block' : 'none';
+        });
 
         function stopTitleSpinner() {
             if (!titleSpinnerInterval) return;
