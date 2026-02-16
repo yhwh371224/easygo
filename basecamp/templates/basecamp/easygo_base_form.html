@@ -199,9 +199,8 @@
         // --- Dynamic Return Flight Fields via AJAX ---
         returnFlightCheckbox.addEventListener("change", function () {
             if (returnFlightCheckbox.checked) {
-                const url = returnFlightURL; 
-                const xhr = new XMLHttpRequest();
-                xhr.open("GET", url);
+                const xhr = new XMLHttpRequest();                
+                xhr.open("GET", returnFlightURL);
                 xhr.onload = function () {
                     if (xhr.status === 200) {
                         returnFlightFields.innerHTML = xhr.responseText;
