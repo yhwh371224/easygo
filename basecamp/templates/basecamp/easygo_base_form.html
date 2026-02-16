@@ -161,33 +161,10 @@
     <!-- Main theme script-->
     <script src="/static/basecamp/js/theme.min.js"></script>              
     <script src="https://www.google.com/recaptcha/api.js" defer></script>
-
+    <script src="/static/basecamp/js/form_handler.js" defer></script>
     <script>
     document.addEventListener("DOMContentLoaded", function () {
         const form = document.getElementById("booking-form");
-        const submitButton = document.getElementById("submitButton");
-
-        // --- Form Submit ---
-        if (form && submitButton) {
-            form.addEventListener("submit", function (event) {
-                let isValid = true;
-
-                // reCAPTCHA
-                if (typeof grecaptcha !== "undefined") {
-                    const recaptchaResponse = grecaptcha.getResponse();
-                    if (!recaptchaResponse) {
-                        alert("Please complete the reCAPTCHA verification.");
-                        event.preventDefault();
-                        return;
-                    }
-                }
-
-                // 성공 시 버튼 비활성화 + 스피너
-                submitButton.disabled = true;
-                submitButton.innerHTML = "Submitting... <span class='spinner-border spinner-border-sm ms-2'></span>";
-                if (typeof startTitleSpinner === "function") startTitleSpinner();
-            });
-        }
 
         // --- Extra Luggage Toggle ---
         const extraCheckbox = document.getElementById("extraLuggageCheck");
