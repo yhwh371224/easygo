@@ -296,14 +296,14 @@
               <!-- Pickup date issue fixed on home page -->
               <label class="form-label" for="pickup-date">Pickup date</label> 
               <div class="input-group" > 
-                <input class="form-control date-picker rounded" name="pickup_date" required type="date" placeholder="Choose date" data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;F j, Y&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;}" > 
+                <input class="form-control date-picker rounded" id="pickup-date" name="pickup_date" required type="date" placeholder="Choose date" data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;F j, Y&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;}" > 
                 <a class="date-picker flatpickr-input" href="#" aria-label="Choose date"><i class="ai-calendar position-absolute top-50 end-0 translate-middle-y me-3"></i></a> 
               </div>
 
             </div>
             <div class="mb-3 pb-1 w-100 mb-sm-4 me-sm-3">
               <label class="form-label" for="start-point">Pickup Location</label>
-              <select class="form-select" name="start_point" required>
+              <select class="form-select" id="start-point" name="start_point" required>
                   <option value="" disabled selected>Select your option</option>
                   {% include 'basecamp/suburbs.html' with suburbs=home_suburbs %}
               </select>
@@ -312,14 +312,14 @@
           <div class="d-sm-flex align-items-center">
             <div class="mb-3 pb-1 w-100 mb-sm-4 me-sm-3">
               <label class="form-label" for="end-point">Drop-off Location</label>
-              <select class="form-select" name="end_point" required>
+              <select class="form-select" id="end-point" name="end_point" required>
                   <option value="" disabled selected>Select your option</option>
                   {% include 'basecamp/suburbs.html' with suburbs=home_suburbs %}
               </select>
             </div>
             <div class="mb-3 pb-1 w-100 mb-sm-4 me-sm-3">
               <label class="form-label" for="passengers">Passengers</label>
-              <select class="form-select" name="no_of_passenger" required>
+              <select class="form-select" id="passengers" name="no_of_passenger" required>
           <option disabled selected value="" style="background-color: beige;">Number of people</option>                 
 				  <option value="1">1</option>
 				  <option value="2">2</option>
