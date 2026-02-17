@@ -37,105 +37,105 @@
               <form action="/p2p_detail/" method="post" id="booking-form" class="card-body needs-validation p-5" novalidate>
                 {% csrf_token %}
                 <div class="mb-3 pb-1">
-                  <label class="form-label" >Full name</label>
-                  <input class="form-control" type="text"  placeholder="John Doe" required name="p2p_name">
+                  <label class="form-label" for="p2p_name">Full name</label>
+                  <input class="form-control" type="text"  placeholder="John Doe" required name="p2p_name" id="p2p_name">
                   <div class="invalid-feedback">Please enter your full name!</div>
                 </div>
                 <div class="mb-3 pb-1">
-                  <label class="form-label" >Mobile phone number</label>
-                  <input class="form-control" type="text"  placeholder="Your mobile phone number" required name="p2p_phone">
+                  <label class="form-label" for="p2p_phone">Mobile phone number</label>
+                  <input class="form-control" type="text"  placeholder="Your mobile phone number" required name="p2p_phone" id="p2p_phone">
                   <div class="invalid-feedback">Please enter a valid number!</div>
                 </div>
                 <div class="mb-3 pb-1">
-                  <label class="form-label" >Email address</label>
-                  <input class="form-control" type="email"  placeholder="j.doe@example.com" required name="p2p_email">
+                  <label class="form-label" for="p2p_email">Email address</label>
+                  <input class="form-control" type="email"  placeholder="j.doe@example.com" required name="p2p_email" id="p2p_email">
                   <div class="invalid-feedback">Please enter a valid email address!</div>
                 </div>
                 <br>
                 <hr>
                 <br>
                 <div class="mb-3 pb-1">
-                  <label class="form-label" >Trip date</label>
-                  <input class="form-control date-picker rounded" name="p2p_date" type="text" placeholder="Your booking date" data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;F j, Y&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;}" required>
+                  <label class="form-label" id="label-p2p-date">Trip date</label>
+                  <input class="form-control date-picker rounded" name="p2p_date" type="text" placeholder="Your booking date" data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;F j, Y&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;}" required aria-labelledby="label-p2p-date">
                 </div>
                 <div class="mb-3 pb-1">
-                  <label class="form-label" >First Pickup location</label>
-                    <input class="form-control" type="text" name="first_pickup_location"  placeholder="Full address" required>
+                  <label class="form-label" for="first_pickup_location">First Pickup location</label>
+                    <input class="form-control" type="text" name="first_pickup_location"  placeholder="Full address" required id="first_pickup_location">
                   <div class="invalid-feedback">Please enter your pickup location!</div>
                 </div>
                 <div class="mb-3 pb-1">
-                  <label class="form-label" >Pickup time</label>
-                    <input class="form-control" type="time" name="first_putime"  placeholder="Pickup time" required>
+                  <label class="form-label" for="first_putime">Pickup time</label>
+                    <input class="form-control" type="time" name="first_putime"  placeholder="Pickup time" required id="first_putime">
                   <div class="invalid-feedback">Please enter your pickup time!</div>
                 </div>
                 <div class="mb-3 pb-1">
-                  <label class="form-label" >Drop off location</label>
-                    <input class="form-control" type="text" name="first_dropoff_location"  placeholder="Your destination" >
+                  <label class="form-label" for="first_dropoff_location">Drop off location</label>
+                    <input class="form-control" type="text" name="first_dropoff_location"  placeholder="Your destination" id="first_dropoff_location">
                   <div class="invalid-feedback">Please enter your drop off location!</div>
                 </div>
                 <br>
                 <hr>
                 <br>
                 <div class="mb-3 pb-1">
-                  <label class="form-label" >If more way points, continue......</label>                    
+                  <p class="form-label mb-1">If more way points, continue......</p>
                 </div>
                 <div class="mb-3 pb-1">
-                  <label class="form-label" >Second Pickup location</label>
-                    <input class="form-control" type="text" name="second_pickup_location"  placeholder="Full address">
+                  <label class="form-label" for="second_pickup_location">Second Pickup location</label>
+                    <input class="form-control" type="text" name="second_pickup_location"  placeholder="Full address" id="second_pickup_location">
                   <div class="invalid-feedback">Please enter your pickup location!</div>
                 </div>
                 <div class="mb-3 pb-1">
-                  <label class="form-label" >Pickup time</label>
-                    <input class="form-control" type="time" name="second_putime"  placeholder="Pickup time">
+                  <label class="form-label" for="second_putime">Pickup time</label>
+                    <input class="form-control" type="time" name="second_putime"  placeholder="Pickup time" id="second_putime">
                   <div class="invalid-feedback">Please enter your pickup time!</div>
                 </div>
                 <div class="mb-3 pb-1">
-                  <label class="form-label" >Drop off location</label>
-                    <input class="form-control" type="text" name="second_dropoff_location"  placeholder="Your destination">
+                  <label class="form-label" for="second_dropoff_location">Drop off location</label>
+                    <input class="form-control" type="text" name="second_dropoff_location"  placeholder="Your destination" id="second_dropoff_location">
                   <div class="invalid-feedback">Please enter your drop off location!</div>
                 </div>
                   <br>
                   <hr>
                   <br>
                   <div class="mb-3 pb-1">
-                    <label class="form-label" >Third Pickup location</label>
-                      <input class="form-control" type="text" name="third_pickup_location"  placeholder="Full address">
+                    <label class="form-label" for="third_pickup_location">Third Pickup location</label>
+                      <input class="form-control" type="text" name="third_pickup_location"  placeholder="Full address" id="third_pickup_location">
                     <div class="invalid-feedback">Please enter your pickup location!</div>
                   </div>
                   <div class="mb-3 pb-1">
-                    <label class="form-label" >Pickup time</label>
-                      <input class="form-control" type="time" name="third_putime"  placeholder="Pickup time">
+                    <label class="form-label" for="third_putime">Pickup time</label>
+                      <input class="form-control" type="time" name="third_putime"  placeholder="Pickup time" id="third_putime">
                     <div class="invalid-feedback">Please enter your pickup time!</div>
                   </div>
                   <div class="mb-3 pb-1">
-                    <label class="form-label" >Drop off location</label>
-                      <input class="form-control" type="text" name="third_dropoff_location"  placeholder="Your destination">
+                    <label class="form-label" for="third_dropoff_location">Drop off location</label>
+                      <input class="form-control" type="text" name="third_dropoff_location"  placeholder="Your destination" id="third_dropoff_location">
                     <div class="invalid-feedback">Please enter your drop off location!</div>
                   </div>
                     <br>
                 <hr>
                 <br>
                 <div class="mb-3 pb-1">
-                  <label class="form-label" >Fourth Pickup location</label>
-                    <input class="form-control" type="text" name="fourth_pickup_location"  placeholder="Full address">
+                  <label class="form-label" for="fourth_pickup_location">Fourth Pickup location</label>
+                    <input class="form-control" type="text" name="fourth_pickup_location"  placeholder="Full address" id="fourth_pickup_location">
                   <div class="invalid-feedback">Please enter your pickup location!</div>
                 </div>
                 <div class="mb-3 pb-1">
-                  <label class="form-label" >Pickup time</label>
-                    <input class="form-control" type="time" name="fourth_putime"  placeholder="Pickup time">
+                  <label class="form-label" for="fourth_putime">Pickup time</label>
+                    <input class="form-control" type="time" name="fourth_putime"  placeholder="Pickup time" id="fourth_putime">
                   <div class="invalid-feedback">Please enter your pickup time!</div>
                 </div>
                 <div class="mb-3 pb-1">
-                  <label class="form-label" >Drop off location</label>
-                    <input class="form-control" type="text" name="fourth_dropoff_location"  placeholder="Your destination">
+                  <label class="form-label" for="fourth_dropoff_location">Drop off location</label>
+                    <input class="form-control" type="text" name="fourth_dropoff_location"  placeholder="Your destination" id="fourth_dropoff_location">
                   <div class="invalid-feedback">Please enter your drop off location!</div>
                 </div>
                 <br>
                 <hr>
                 <br>
                 <div class="mb-3 pb-1">
-                  <label class="form-label" >Passengers</label>
-                  <select class="form-select" name="p2p_passengers" required>
+                  <label class="form-label" for="p2p_passengers">Passengers</label>
+                  <select class="form-select" name="p2p_passengers" required id="p2p_passengers">
                   <option value="0">How many people?</option>
 				  <option value="1">1</option>
 				  <option value="2">2</option>
@@ -167,12 +167,12 @@
               </select>
                 </div>
                 <div class="mb-3 pb-1">
-                  <label class="form-label" >Baggage</label>
-                  <input class="form-control" type="text" placeholder="How many baggage?" name="p2p_baggage">
+                  <label class="form-label" for="p2p_baggage">Baggage</label>
+                  <input class="form-control" type="text" placeholder="How many baggage?" name="p2p_baggage" id="p2p_baggage">
                   <div class="invalid-feedback">Please enter the number of baggage!</div>
                   </div>	
                 <div class="mb-3 pb-1">
-                  <label class="form-label" >Message</label>
+                  <label class="form-label" for="cont-message">Message</label>
                   <textarea class="form-control" name="p2p_message" id="cont-message" rows="5" placeholder="Write your message here"></textarea>
                   <div class="invalid-feedback">Please write a message!</div>
                 </div>

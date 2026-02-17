@@ -43,14 +43,15 @@
 
 						<!-- Email -->
 						<div class="mb-3 pb-1">
-							<label class="form-label">
+							<label class="form-label" for="email">
 								Email address <sup class="text-danger ms-1">*</sup>
 							</label>
 							<input class="form-control"
 								type="email"
 								placeholder="j.doe@example.com"
 								required
-								name="email">
+								name="email"
+								id="email">
 							<div class="invalid-feedback">
 								Please enter a valid email address!
 							</div>
@@ -58,7 +59,7 @@
 
 						<!-- Select Option -->
 						<div class="mb-3 pb-1">
-							<label class="form-label">Select an Option:</label>
+							<label class="form-label" for="selected_option">Select an Option:</label>
 							<select class="form-select" name="selected_option" id="selected_option" required>
 								<option disabled selected value="">Select your option...</option>
 								<option value="Gratitude For Payment">Gratitude For Payment</option>
@@ -94,33 +95,36 @@
 
 						<!-- Payment Method (RADIO) -->
 						<div class="mb-3 pb-1">
-							<label class="form-label">Payment cash/card method</label>
+							<p class="form-label mb-1">Payment cash/card method</p>
 							<div class="form-check">
 								<input class="form-check-input"
 									type="radio"
 									name="payment_method"
-									value="cash">
-								<label class="form-check-label">Cash</label>
+									value="cash"
+									id="payment_method_cash">
+								<label class="form-check-label" for="payment_method_cash">Cash</label>
 							</div>
 
 							<div class="form-check">
 								<input class="form-check-input"
 									type="radio"
 									name="payment_method"
-									value="card">
-								<label class="form-check-label">Card</label>
+									value="card"
+									id="payment_method_card">
+								<label class="form-check-label" for="payment_method_card">Card</label>
 							</div>
 						</div>
 
 						<!-- Payment Amount -->
 						<div class="mb-3 pb-1">
-							<label class="form-label">Amount paid</label>
+							<label class="form-label" for="payment_amount">Amount paid</label>
 							<input class="form-control"
 								type="number"
 								step="0.01"
 								min="0"
 								name="payment_amount"
-								placeholder="Put only number">
+								placeholder="Put only number"
+								id="payment_amount">
 							<small class="text-light">
 								For Gratitude / Multi-payment only
 							</small>
@@ -128,10 +132,11 @@
 
 						<!-- Adjusted Pickup Time -->
 						<div class="mb-3 pb-1">
-							<label class="form-label">Adjusted pickup time</label>
+							<label class="form-label" for="adjusted_pickup_time">Adjusted pickup time</label>
 							<input class="form-control"
 								type="time"
-								name="adjusted_pickup_time">
+								name="adjusted_pickup_time"
+								id="adjusted_pickup_time">
 							<small class="text-light">
 								Use only when pickup time has changed
 							</small>
@@ -139,8 +144,8 @@
 						
 						<!-- Remain First or Second Booking -->
 						<div class="mb-3 pb-1">
-							<label class="form-label">Booking options to remain (체크 둘 다 안하면 모두 캔슬)</label>
-							
+							<p class="form-label mb-1">Booking options to remain (체크 둘 다 안하면 모두 캔슬)</p>
+
 							<div class="form-check">
 								<input class="form-check-input" type="checkbox" name="remain_first_booking" id="remain_first_booking">
 								<label class="form-check-label" for="remain_first_booking">
