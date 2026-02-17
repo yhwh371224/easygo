@@ -29,19 +29,19 @@
 
           <div class="card text-white bg-secondary p-4 mb-4">
             <div class="mb-3">
-              <label class="form-label">Email address<sup class="text-danger ms-1">*</sup></label>
-              <input class="form-control" type="email" name="email" placeholder="j.doe@example.com" required>
+              <label class="form-label" for="email">Email address<sup class="text-danger ms-1">*</sup></label>
+              <input class="form-control" type="email" name="email" placeholder="j.doe@example.com" required id="email">
               <div class="invalid-feedback">Please enter a valid email address!</div>
             </div>
           </div>
           <div class="mb-3 pb-1">
-                <label class="form-label">It has to be prepaid&nbsp;&nbsp;&nbsp;</label>
-                <input type="checkbox" name="prepay" value="True">
+                <input type="checkbox" name="prepay" value="True" id="prepay">
+                <label class="form-label" for="prepay">It has to be prepaid&nbsp;&nbsp;&nbsp;</label>
                 <div class="invalid-feedback">Please check this box for prepay</div>
             </div>
           <div class="mb-3 pb-1">
-                <label class="form-label">It has to be cash&nbsp;&nbsp;&nbsp;</label>
-                <input type="checkbox" name="cash" value="True">
+                <input type="checkbox" name="cash" value="True" id="cash">
+                <label class="form-label" for="cash">It has to be cash&nbsp;&nbsp;&nbsp;</label>
                 <div class="invalid-feedback">Please check this box for cash</div>
             </div>
 
