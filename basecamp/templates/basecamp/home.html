@@ -11,7 +11,6 @@
     <meta name="keywords" content="sydney airport transfer, sydney airport maxi taxi, large group airport transfer sydney, airport transfer with luggage sydney, 8 seater airport transfer sydney, 13 seater airport transfer sydney, sydney cbd airport transfer, north shore airport pickup, western sydney airport transfer">
     <meta name="author" content="easygoshuttle.com.au">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Open Graph / Social Sharing -->
     <meta property="og:title" content="EasyGo Airport Shuttle – 8–13 Seater Sydney">
     <meta property="og:description" content="Traveling with a large group or lots of luggage? EasyGo Airport Shuttle offers private 8–13 seater transfers across Sydney North, CBD & Western suburbs. Perfect for families, hotel guests & oversized luggage.">
     <meta property="og:url" content="https://easygoshuttle.com.au/">
@@ -94,18 +93,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700&display=swap" rel="stylesheet">
     <style>
-      /* Critical CSS */
       body {
         margin: 0;
         font-family: 'Inter', Arial, sans-serif;
       }
-
       .jarallax-img {
         background-size: cover;
         background-position: center;
       }
-
-      /* award badge is layout-affecting → critical */
       .award-badge {
         position: fixed;
         top: 50px;
@@ -114,19 +109,16 @@
         height: auto;
         z-index: 1000;
       }
-
       @media (max-width: 768px) {
         .award-badge {
           top: 25px;
           left: 20px;
           width: 180px;
         }
-
         #booking-form {
           margin-top: 5px !important; 
         }
       }
-
       @media (max-width: 480px) {
         .award-badge {
           top: 45px;
@@ -138,20 +130,14 @@
         }
       }
     </style>
-
     <link rel="preload" href="/static/basecamp/css/theme.min.css" as="style">
     <link rel="preload" href="/static/basecamp/css/styles.css" as="style">
-
     <link rel="stylesheet" href="/static/basecamp/css/theme.min.css">
     <link rel="stylesheet" href="/static/basecamp/css/styles.css">
-
     <link rel="stylesheet" href="/static/basecamp/css/tiny-slider.css" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="/static/basecamp/css/flatpickr.min.css" media="print" onload="this.media='all'">
-
     <link rel="preload" fetchpriority="high" as="image" href="/static/basecamp/photos/sydney_airport.webp" type="image/webp">
-
   </head>
-
   <body>   
     <main class="page-wrapper">
       <header class="header navbar navbar-expand-lg navbar-dark navbar-floating navbar-sticky" data-scroll-header data-fixed-element>
@@ -167,9 +153,7 @@
               <button class="btn-close lead" type="button" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
-              <!-- Menu-->
               <ul class="navbar-nav">
-
                 <li class="nav-item active">
                   <a class="nav-link" href="/" >Home</a>
                 </li>
@@ -179,7 +163,6 @@
                     <p class="dropdown-column dropdown-column-img bg-secondary" style="background-image: url('/static/basecamp/images/aboutus.webp');"></p>
                     <div class="dropdown-column">
                       <a class="dropdown-item" href="/about_us/">Learn About Us</a>
-                      <!-- <a class="dropdown-item" href="/service/">View Our Services</a> -->
                       <a class="dropdown-item" href="/information/">More Information About Booking</a>
                       <a class="dropdown-item" href="/easygo_review/">Read Customer Reviews</a>
                       <a class="dropdown-item" href="/more_suburbs/">Explore Service Areas</a>
@@ -240,19 +223,16 @@
             <h2 class="text-light fs-6 fs-md-5 fw-bold mb-4">
               <span style="color: #eb7828;"><strong>8–13 Seater Private across Sydney CBD, North Shore & Western Sydney</span></strong></span>
             </h2><br>
-
             <div>
               <a role="button" class="btn btn-primary" href="/booking/">BOOK NOW</a> | 
               <a role="button" class="btn btn-success" href="/inquiry/">PRICE NOW</a>
             </div>
             <br><br>
-
             <div class="mt-4">
               <a href="/easygo_review/" 
                 class="me-4 fw-bold" 
                 style="color: #ffffff; text-decoration: none; ">
                   <span class="fs-lg">🏆🏆🏆</span> Reviews on our website <i class="ai-external-link ms-1" style="color: #00aaff;"></i>
-
               <a href="{{ google_review_url }}" 
                 target="_blank" 
                 rel="noopener" 
@@ -262,7 +242,6 @@
               </a>
           </div>
             <br>
-
             <p class="fs-lg text-light" id="changing-text">              
               <strong>Reliable Sydney airport transfer services for families and large groups,travelling comfortably with lots of luggage.</strong>
             </p>
@@ -274,7 +253,6 @@
           </div>
 		    </div>
       </section>
-
       <section class="container py-5 py-md-6">
         <div class="row justify-content-center">
           <div class="col-lg-10 text-center">
@@ -284,7 +262,6 @@
               Our <strong>private airport transfer Sydney</strong> service includes real-time flight tracking 
               and meet-and-greet at the designated airport meeting point.
             </p>
-
             <p class="fs-lg mb-0">
               We specialise in <strong>Sydney airport transfer</strong> for families and large groups, 
               offering comfortable 8–13 seater maxi taxis across Sydney CBD, North Shore, Inner West, 
@@ -293,21 +270,18 @@
           </div>
         </div>
       </section>
-
       <!-- Price checking form-->
       <form class="container position-relative zindex-5" action="/price_detail/" id="booking-form" method="post" style="margin-top: 20px;">
 		  {% csrf_token %}      
         <div class="d-lg-flex align-items-center bg-secondary border rounded-3 px-4 pt-4 pb-3" >
           <div class="d-sm-flex align-items-center flex-grow-1">
             <div class="mb-3 pb-1 w-100 mb-sm-4 me-sm-3">
-
               <!-- Pickup date issue fixed on home page -->
               <label class="form-label" id="label-pickup">Pickup date</label> 
               <div class="input-group" > 
                 <input class="form-control date-picker rounded" aria-labelledby="label-pickup" name="pickup_date" aria-label="Pickup date" required type="date" placeholder="Choose date" data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;F j, Y&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;}" > 
                 <a class="date-picker flatpickr-input" href="#" aria-label="Choose date"><i class="ai-calendar position-absolute top-50 end-0 translate-middle-y me-3"></i></a> 
               </div>
-
             </div>
             <div class="mb-3 pb-1 w-100 mb-sm-4 me-sm-3">
               <label class="form-label" for="start-point">Pickup Location</label>
@@ -350,19 +324,15 @@
             </div>
           </div>
         </div>
-      </form>
- 
+      </form> 
 	<!-- Offers carousel-->
       <section class="container rounded bg-dark py-5 my-4 my-sm-0 py-sm-6 py-md-7">
 		  <h2 class="text-center mb-4" style="color:white"><span style="color: #eb7828">HOT OFFER</span> - Best Price Guaranteed</h2>
-        <div class="tns-carousel-wrapper">
-          
+        <div class="tns-carousel-wrapper">          
             <div class="text-end" style="margin-bottom: 40px; margin-right: 20px;">
               <a href="/more_suburbs/" style="color: #eb7828">View all &raquo;&raquo;&raquo;</a>
-            </div>
-                  
+            </div>                  
           <div class="tns-carousel-inner" data-carousel-options="{&quot;items&quot;: 3, &quot;nav&quot;: false, &quot;gutter&quot;: 23, &quot;responsive&quot;: {&quot;0&quot;:{&quot;items&quot;:1},&quot;540&quot;:{&quot;items&quot;:2},&quot;900&quot;:{&quot;items&quot;:3}}}">
-
             {% for suburb, details in suburbs.items %}
               <div class="pb-1">
                   <a class="card border-0 shadow card-hover mx-1" href="/sydney-airport-transfer/{{ suburb|slugify }}/">
@@ -381,15 +351,13 @@
                   </a>
               </div>
              {% endfor %}     
-
           </div>
         </div>
         <br>
         <div class="text-center mb-4">          
           <a href="/more_suburbs1/" style="color: #eb7828">Search your area &raquo;&raquo;&raquo;</a>
         </div>
-      </section>
-      
+      </section>      
       <!-- Quick Info: Maxi-Taxi & Sydney Airport Services -->
       <section class="container py-5">
         <div class="row text-center text-lg-start">
@@ -414,7 +382,6 @@
               </ul>
             </div>
           </div>
-
           <!-- Right Column: Airport Transfer & Shuttle -->
           <div class="col-lg-6 d-flex flex-column justify-content-between">
             <div>
@@ -436,10 +403,8 @@
               </ul>
             </div>
           </div>
-
         </div>
       </section>
-
       <!-- Features CTA-->
       <section class="bg-gradient position-relative pt-6 pb-5 py-sm-6">
         <div class="position-absolute top-0 start-0 w-100 h-100 bg-size-cover" style="background-image: url('/static/basecamp/photos/bg-pattern01.webp');"></div>
@@ -455,8 +420,7 @@
               <div class="row">
                 <div class="col-sm-4 mb-2 pb-4 mb-sm-0 pb-sm-0">
                   <div class="px-2 text-center"><img loading="lazy" class="bg-light rounded-circle mb-2 img-fluid" src="/static/basecamp/images/01.svg" alt="Sydney airport transfer booking system" width="105" height="auto">
-                    <p class="fs-sm fw-medium text-light mb-0 pt-1">Make it easier to experience the 
-                                          </p>
+                    <p class="fs-sm fw-medium text-light mb-0 pt-1">Make it easier to experience the Sydney Airport Transfer</p>
                   </div>
                 </div>
                 <div class="col-sm-4 mb-2 pb-4 mb-sm-0 pb-sm-0">
