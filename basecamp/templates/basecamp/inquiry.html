@@ -90,51 +90,51 @@
 				<!-- Start / End Point (hidden by default) -->
 				<div id="start-end-fields" style="display: none;">
 					<div class="mb-3 pb-1">
-						<label class="form-label">Start Point (Pickup Location)</label>
-						<input class="form-control" type="text" name="start_point" placeholder="Start Point">
+						<label class="form-label" for="start_point">Start Point (Pickup Location)</label>
+						<input class="form-control" type="text" name="start_point" placeholder="Start Point" id="start_point">
 					</div>
 					<div class="mb-3 pb-1">
-						<label class="form-label">End Point (Drop-off Location)</label>
-						<input class="form-control" type="text" name="end_point" placeholder="End Point">
+						<label class="form-label" for="end_point">End Point (Drop-off Location)</label>
+						<input class="form-control" type="text" name="end_point" placeholder="End Point" id="end_point">
 					</div>
 				</div>
 
 				<!-- Flight info fields -->
 				<div id="flight-fields">
 					<div class="mb-3 pb-1">
-						<label class="form-label">Flight number</label>
-						<input class="form-control" type="text" placeholder="Your flight number" name="flight_number">
+						<label class="form-label" for="flight_number">Flight number</label>
+						<input class="form-control" type="text" placeholder="Your flight number" name="flight_number" id="flight_number">
 					</div>
 					<div class="mb-3 pb-1">
-						<label class="form-label">Flight time (Sydney)</label>
-						<input class="form-control" name="flight_time" type="time">
+						<label class="form-label" for="flight_time">Flight time (Sydney)</label>
+						<input class="form-control" name="flight_time" type="time" id="flight_time">
 					</div>
 				</div>
 				<br><br>
 				<hr>
 				<br><br>
-				<div class="mb3 pb-1" >					
-					<label class="form-label" >Full Address of Suburb/Hotel</label>					
+				<div class="mb3 pb-1" >
+					<p class="form-label mb-1">Full Address of Suburb/Hotel</p>
 				</div>
-				
-				<div class="card text-white bg-secondary p-4">				
+
+				<div class="card text-white bg-secondary p-4">
 				<div class="mb-3 pb-1">
-					<label class="form-label" >Street No & Street Name</label>
-					<input class="form-control" type="text"  placeholder="Street No and Street Name" required name="street">
+					<label class="form-label" for="street">Street No & Street Name</label>
+					<input class="form-control" type="text"  placeholder="Street No and Street Name" required name="street" id="street">
 					<div class="invalid-feedback">Please enter street no & name!</div>
-				  </div>    
+				  </div>
 				<div class="mb-3 pb-1">
-					<label class="form-label" >Suburb or Hotel</label>
-					<select class="form-select" name="suburb" required>					
+					<label class="form-label" for="suburb">Suburb or Hotel</label>
+					<select class="form-select" name="suburb" required id="suburb">
 						{% include 'basecamp/suburbs.html' with suburbs=home_suburbs %}
 				  </select>
-				  </div></div>			               
+				  </div></div>
 				<br><br>
 				<hr>
-				<br><br>                
+				<br><br>
                 <div class="mb-3 pb-1">
-                   <label class="form-label" >Passengers</label>
-                  <select class="form-select" name="no_of_passenger" required>                  
+                   <label class="form-label" for="no_of_passenger">Passengers</label>
+                  <select class="form-select" name="no_of_passenger" required id="no_of_passenger">                  
 				  <option value="1">1</option>
 				  <option value="2">2</option>
 				  <option value="3">3</option>
@@ -156,7 +156,7 @@
 				<br><br> 
                 <!-- Regular Baggage -->
 				<div class="mb-3 pb-1">
-					<label class="form-label">Baggage (Regular)</label>
+					<p class="form-label mb-1">Baggage (Regular)</p>
 
 					<!-- 안내 문구 -->
 					<small class="text-muted d-block">
@@ -170,15 +170,15 @@
 					<div class="row g-2">
 						<div class="col">
 						<label for="baggage_large" class="form-label mb-0">Large size bag</label>
-						<input type="number" class="form-control" name="baggage_large" placeholder="Large" min="0" max="9" value="0">
+						<input type="number" class="form-control" name="baggage_large" placeholder="Large" min="0" max="9" value="0" id="baggage_large">
 						</div>
 						<div class="col">
 						<label for="baggage_medium" class="form-label mb-0">Medium size bag</label>
-						<input type="number" class="form-control" name="baggage_medium" placeholder="Medium" min="0" max="9" value="0">
+						<input type="number" class="form-control" name="baggage_medium" placeholder="Medium" min="0" max="9" value="0" id="baggage_medium">
 						</div>
 						<div class="col">
 						<label for="baggage_small" class="form-label mb-0">Small size bag</label>
-						<input type="number" class="form-control" name="baggage_small" placeholder="Small" min="0" max="9" value="0">
+						<input type="number" class="form-control" name="baggage_small" placeholder="Small" min="0" max="9" value="0" id="baggage_small">
 						</div>
 					</div>
 				</div>
@@ -203,15 +203,15 @@
 					<div class="row g-2 mb-3">
 						<div class="col">
 							<label for="baggage_baby" class="form-label mb-0">Baby seats</label>
-							<input type="number" class="form-control" name="baggage_baby" placeholder="Baby seats" min="0" max="9" value="0">
+							<input type="number" class="form-control" name="baggage_baby" placeholder="Baby seats" min="0" max="9" value="0" id="baggage_baby">
 						</div>
 						<div class="col">
 							<label for="baggage_booster" class="form-label mb-0">Booster seats</label>
-							<input type="number" class="form-control" name="baggage_booster" placeholder="Booster seats" min="0" max="9" value="0">
+							<input type="number" class="form-control" name="baggage_booster" placeholder="Booster seats" min="0" max="9" value="0" id="baggage_booster">
 						</div>
 						<div class="col">
 							<label for="baggage_pram" class="form-label mb-0">Prams</label>
-							<input type="number" class="form-control" name="baggage_pram" placeholder="Prams" min="0" max="9" value="0">
+							<input type="number" class="form-control" name="baggage_pram" placeholder="Prams" min="0" max="9" value="0" id="baggage_pram">
 						</div>
 					</div>
 
@@ -219,7 +219,7 @@
 					<div class="row g-2 mb-3">
 						<div class="col">
 							<label for="baggage_ski" class="form-label mb-0">Ski bags</label>
-							<input type="number" class="form-control" name="baggage_ski" placeholder="Ski bags" min="0" max="9" value="0">
+							<input type="number" class="form-control" name="baggage_ski" placeholder="Ski bags" min="0" max="9" value="0" id="baggage_ski">
 							<div class="form-check mt-1">
 								<input class="form-check-input" type="checkbox" name="ski_oversize" id="ski_oversize">
 								<label class="form-check-label" for="ski_oversize">Oversize</label>
@@ -227,7 +227,7 @@
 						</div>
 						<div class="col">
 							<label for="baggage_snowboard" class="form-label mb-0">Snowboards</label>
-							<input type="number" class="form-control" name="baggage_snowboard" placeholder="Snowboards" min="0" max="9" value="0">
+							<input type="number" class="form-control" name="baggage_snowboard" placeholder="Snowboards" min="0" max="9" value="0" id="baggage_snowboard">
 							<div class="form-check mt-1">
 								<input class="form-check-input" type="checkbox" name="snowboard_oversize" id="snowboard_oversize">
 								<label class="form-check-label" for="snowboard_oversize">Oversize</label>
@@ -235,7 +235,7 @@
 						</div>
 						<div class="col">
 							<label for="baggage_golf" class="form-label mb-0">Golf bags</label>
-							<input type="number" class="form-control" name="baggage_golf" placeholder="Golf bags" min="0" max="9" value="0">
+							<input type="number" class="form-control" name="baggage_golf" placeholder="Golf bags" min="0" max="9" value="0" id="baggage_golf">
 							<div class="form-check mt-1">
 								<input class="form-check-input" type="checkbox" name="golf_oversize" id="golf_oversize">
 								<label class="form-check-label" for="golf_oversize">Oversize</label>
@@ -247,7 +247,7 @@
 					<div class="row g-2 mb-3">
 						<div class="col">
 							<label for="baggage_bike" class="form-label mb-0">Bike bags</label>
-							<input type="number" class="form-control" name="baggage_bike" placeholder="Bike bags" min="0" max="9" value="0">
+							<input type="number" class="form-control" name="baggage_bike" placeholder="Bike bags" min="0" max="9" value="0" id="baggage_bike">
 							<div class="form-check mt-1">
 								<input class="form-check-input" type="checkbox" name="bike_oversize" id="bike_oversize">
 								<label class="form-check-label" for="bike_oversize">Oversize</label>
@@ -255,7 +255,7 @@
 						</div>
 						<div class="col">
 							<label for="baggage_boxes" class="form-label mb-0">Carton boxes</label>
-							<input type="number" class="form-control" name="baggage_boxes" placeholder="Carton boxes" min="0" max="9" value="0">
+							<input type="number" class="form-control" name="baggage_boxes" placeholder="Carton boxes" min="0" max="9" value="0" id="baggage_boxes">
 							<div class="form-check mt-1">
 								<input class="form-check-input" type="checkbox" name="boxes_oversize" id="boxes_oversize">
 								<label class="form-check-label" for="boxes_oversize">Oversize</label>
@@ -263,7 +263,7 @@
 						</div>
 						<div class="col">
 							<label for="baggage_music" class="form-label mb-0">Musical instruments</label>
-							<input type="number" class="form-control" name="baggage_music" placeholder="Musical instruments" min="0" max="9" value="0">
+							<input type="number" class="form-control" name="baggage_music" placeholder="Musical instruments" min="0" max="9" value="0" id="baggage_music">
 							<div class="form-check mt-1">
 								<input class="form-check-input" type="checkbox" name="music_oversize" id="music_oversize">
 								<label class="form-check-label" for="music_oversize">Oversize</label>
@@ -285,7 +285,7 @@
 				
 				<br><br>
                 <div class="mb-3 pb-1">
-                  <label class="form-label" >Message</label>
+                  <label class="form-label" for="cont-message">Message</label>
                   <textarea class="form-control" name="message" id="cont-message" rows="5" placeholder="Write your message here"></textarea>
                   <div class="invalid-feedback">Please write a message!</div>
                 </div>
