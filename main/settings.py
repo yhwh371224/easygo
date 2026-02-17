@@ -268,7 +268,11 @@ SOCIALACCOUNT_PROVIDERS = {
 SOCIALACCOUNT_LOGIN_ON_GET=True
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -279,7 +283,7 @@ STORAGES = {
         "LOCATION": os.path.join(BASE_DIR, 'media'),
     },
     "staticfiles": {
-        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
     },
 }
 
