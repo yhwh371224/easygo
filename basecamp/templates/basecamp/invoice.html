@@ -36,13 +36,13 @@
 							
 				<div class="card text-white bg-secondary p-4">
 				<div class="mb-3 pb-1">
-					<label class="form-label" >Email address<sup class="text-danger ms-1">*</sup></label>
-					<input class="form-control" type="email"  placeholder="j.doe@example.com" required name="email">
+					<label class="form-label" for="email">Email address<sup class="text-danger ms-1">*</sup></label>
+					<input class="form-control" type="email"  placeholder="j.doe@example.com" required name="email" id="email">
 					<div class="invalid-feedback">Please enter a valid email address!</div>
 				</div>
 				<div class="mb-3 pb-1">
-					<label class="form-label" >Extra email address<sup class="text-danger ms-1">*</sup></label>
-					<input class="form-control" type="email"  name="extra_email">
+					<label class="form-label" for="extra_email">Extra email address<sup class="text-danger ms-1">*</sup></label>
+					<input class="form-control" type="email"  name="extra_email" id="extra_email">
 				</div>
 				<div class="mb-3 pb-1">
 				<label class="form-label">Apply GST (10%)</label>
@@ -54,35 +54,35 @@
 					</div>
 				</div>
 				<div class="mb-3 pb-1">
-					<label class="form-label" >If surcharge (if paypal paid, then 3% to be applied)</label>
-					<input class="form-control" type="text"  placeholder="Yes or blank" name="surcharge">
+					<label class="form-label" for="surcharge">If surcharge (if paypal paid, then 3% to be applied)</label>
+					<input class="form-control" type="text"  placeholder="Yes or blank" name="surcharge" id="surcharge">
 				  </div>
 				<div class="mb-3 pb-1">
-					<label class="form-label" >If discount (if apply discount, figure only)</label>
-					<input class="form-control" type="text"  placeholder="discount amount" name="discount">
+					<label class="form-label" for="discount">If discount (if apply discount, figure only)</label>
+					<input class="form-control" type="text"  placeholder="discount amount" name="discount" id="discount">
 				  </div>
 				<div class="mb-3 pb-1">
-					<label class="form-label" >If toll (if charges tolls. figure only)</label>
-					<input class="form-control" type="text"  placeholder="toll amount" name="toll">
+					<label class="form-label" for="toll">If toll (if charges tolls. figure only)</label>
+					<input class="form-control" type="text"  placeholder="toll amount" name="toll" id="toll">
 				  </div>
 				<div class="mb-3 pb-1">
-					<label class="form-label">From Date (Start Date)<sup class="text-danger ms-1">*</sup></label>
-					<input class="form-control" type="date" name="from_date" >
+					<label class="form-label" for="from_date">From Date (Start Date)<sup class="text-danger ms-1">*</sup></label>
+					<input class="form-control" type="date" name="from_date" id="from_date">
 					<div class="invalid-feedback">Please select the start date!</div>
-				</div>				
+				</div>
 				<div class="mb-3 pb-1">
-					<label class="form-label">To Date (End Date)<sup class="text-danger ms-1">*</sup></label>
-					<input class="form-control" type="date" name="to_date" >
+					<label class="form-label" for="to_date">To Date (End Date)<sup class="text-danger ms-1">*</sup></label>
+					<input class="form-control" type="date" name="to_date" id="to_date">
 					<div class="invalid-feedback">Please select the end date!</div>
-				</div>				
+				</div>
 				<div class="mb-3 pb-1">
-					<label class="form-label">Index<sup class="text-danger ms-1">*</sup></label>
-					<input class="form-control" type="number" placeholder="1" name="index" value="1">
+					<label class="form-label" for="index">Index<sup class="text-danger ms-1">*</sup></label>
+					<input class="form-control" type="number" placeholder="1" name="index" value="1" id="index">
 				<div class="invalid-feedback">Please enter a valid index!</div>
 				</div>	
 				<div class="mb-3 pb-1">
-					<label class="form-label" >#T988268 >> Invoice number (number only withough #T)</label>
-					<textarea class="form-control" name="inv_no" id="cont-message" rows="2" placeholder="Notice from EasyGo"></textarea>					
+					<label class="form-label" for="cont-message">#T988268 >> Invoice number (number only withough #T)</label>
+					<textarea class="form-control" name="inv_no" id="cont-message" rows="2" placeholder="Notice from EasyGo"></textarea>
 				</div>
 			</div>
 				<br><br>

@@ -32,31 +32,31 @@
           </div>
 
           <div class="mb-3">
-            <label class="form-label">Full name</label>
-            <input class="form-control" type="text" name="name" placeholder="John Doe" required>
+            <label class="form-label" for="name">Full name</label>
+            <input class="form-control" type="text" name="name" placeholder="John Doe" required id="name">
             <div class="invalid-feedback">Please enter your full name!</div>
           </div>
 
           <div class="mb-3">
-            <label class="form-label">Mobile phone number</label>
-            <input class="form-control" type="text" name="contact" placeholder="Your mobile phone number" required>
+            <label class="form-label" for="contact">Mobile phone number</label>
+            <input class="form-control" type="text" name="contact" placeholder="Your mobile phone number" required id="contact">
             <div class="invalid-feedback">Please enter a valid number!</div>
           </div>
 
           <div class="mb-3">
-            <label class="form-label">Email address</label>
-            <input class="form-control" type="email" name="email" placeholder="j.doe@example.com" required>
+            <label class="form-label" for="email">Email address</label>
+            <input class="form-control" type="email" name="email" placeholder="j.doe@example.com" required id="email">
             <div class="invalid-feedback">Please enter a valid email address!</div>
           </div>
 
           <div class="mb-3">
-            <label class="form-label">Choose today date</label>
-            <input class="form-control date-picker rounded" 
-                  type="text" 
-                  name="pickup_date" 
-                  id="pickup_date" 
-                  required 
-                  placeholder="Select today date">
+            <label class="form-label" id="label-pickup-date">Choose today date</label>
+            <input class="form-control date-picker rounded"
+                  type="text"
+                  name="pickup_date"
+                  required
+                  placeholder="Select today date"
+                  aria-labelledby="label-pickup-date">
             
             <div id="date-error" style="display:none; color: #dc3545; font-size: 0.875em; margin-top: 0.25rem; font-weight: bold;">
               ⚠️ Please select today's date (2026-02-16) only.
@@ -66,8 +66,8 @@
           </div>
 
           <div class="mb-3">
-            <label class="form-label">Message</label>
-            <textarea class="form-control" name="message" rows="5" placeholder="Write your message here"></textarea>
+            <label class="form-label" for="message">Message</label>
+            <textarea class="form-control" name="message" rows="5" placeholder="Write your message here" id="message"></textarea>
           </div>
 
           <div class="g-recaptcha" data-sitekey="{{ RECAPTCHA_V2_SITE_KEY }}"></div>
