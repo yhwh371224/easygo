@@ -56,11 +56,9 @@
   <div class="jarallax-img" style="background-image: url('/static/basecamp/photos/bg-pattern02.webp');" role="img" aria-label="{{ suburb }} airport transfer"></div>
 
   <!-- Breadcrumb -->
-  <nav aria-label="breadcrumb" class="container mb-0" style="padding-top: 80px;">
-    <ol class="breadcrumb bg-transparent mb-0">
-      <li class="breadcrumb-item"><a href="/sydney_airport_transfer/" class="text-light">Sydney Airport Transfer</a></li>
-      <li class="breadcrumb-item active text-light opacity-70" aria-current="page">{{ suburb }}</li>
-    </ol>
+  <nav class="container mb-0" style="padding-top: 110px;">
+    <span><a href="/sydney_airport_transfer/" class="text-light">Sydney Airport Transfer</a></span>
+    <span class="text-light opacity-70"> / {{ suburb }}</span>
   </nav>
 
   <div class="container py-5 py-sm-6 text-center">
@@ -80,12 +78,12 @@
 <!-- Route info and landmarks -->
 <section class="container py-5">
   {% if route_info %}
-  <h5>Routes Covered</h5>
+  <h5 style="margin-bottom: 0.3rem;">Routes Covered</h5>
   <p>{{ route_info }}</p>
   {% endif %}
-  
+
   {% if landmarks %}
-  <h5>Nearby Landmarks</h5>
+  <h5 style="margin-bottom: 0.3rem;">Nearby Landmarks</h5>
   <p>{{ landmarks }}</p>
   {% endif %}
 </section>

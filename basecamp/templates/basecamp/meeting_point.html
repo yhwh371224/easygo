@@ -8,72 +8,107 @@
 {% endblock %}
 
 {% block content %}
-      <section class="jarallax bg-gradient pt-5 pb-7 pt-md-7" data-jarallax data-speed="0.1">
-        <span class="position-absolute top-0 start-0 w-100 h-100 bg-gradient opacity-80"></span>
-        <div class="jarallax-img" style="background-image: url('/static/basecamp/images/meeting_point.webp');"></div>
-        <div class="shape shape-bottom shape-slant bg-body">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 260">
-            <polygon fill="currentColor" points="0,257 0,260 3000,260 3000,0"></polygon>
-          </svg>
-        </div>
-        <div class="container position-relative zindex-5 pt-3 pb-7 pt-md-0">
-          <div class="row justify-content-center pb-7">
-            <div class="col-lg-10">
-              <br>
-              <h1 class="text-light">Airport Meeting Points</h1>
-              <p class="text-light">Makes it easier to experience the transport</p>
-            </div>
-          </div>
-        </div>
-      </section>
+
+<!-- ===== Hero CSS (page-only) ===== -->
+<style>
+  .hero-meeting {
+    position: relative;
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .hero-meeting::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url('/static/basecamp/images/meeting_point.webp');
+    background-size: cover;
+    background-position: center center;
+    z-index: 0;
+  }
+
+  .hero-meeting .hero-content {
+    position: relative;
+    z-index: 2;
+  }
+
+  .form-control hr {
+    border: none;
+    border-top: 1px solid #e0e0e0;
+    opacity: 0.5;
+    margin: 2.5rem 0;
+  }
+
+  .form-control h3 {
+    margin-top: 4rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .form-control .mb-3 p {
+    margin-bottom: 0.8rem;
+  }
+
+</style>
+<!-- ===== /Hero CSS ===== -->
+
+<!-- ===== Hero Section ===== -->
+<section class="hero-meeting">
+  <span class="position-absolute top-0 start-0 w-100 h-100 bg-gradient opacity-80" style="z-index:1;"></span>
+  <div class="shape shape-bottom shape-slant bg-body">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 260">
+      <polygon fill="currentColor" points="0,257 0,260 3000,260 3000,0"></polygon>
+    </svg>
+  </div>
+  <div class="container hero-content pt-5 pb-7">
+    <div class="row justify-content-center pb-7">
+      <div class="col-lg-10">
+        <h1 class="text-light">Airport Meeting Points</h1>
+        <p class="fs-lg text-light fw-bold">Enjoy a Stress-Free Sydney Airport Pickup Service with Real-Time Flight Tracking</p>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ===== /Hero Section ===== -->
 
       <!-- Contact form + details-->
       <section class="container position-relative zindex-5 pb-5">
         <div class="row">
-          <div class="col-lg-6 col-md-7 offset-lg-1 pb-2 mb-5" style="margin-top: -260px;">
+          <div class="col-lg-6 col-md-7 offset-lg-1 pb-2 mb-5" style="margin-top: -100px;">
             <div class="card border-0 shadow-lg" >
               <div class="form-control" style="padding:2rem">
                 <div class="mb-3 pb-1">
-                  <h3>Airport Meeting Points</h3>
+                  <h2>Airport Meeting Points</h2>
                 </div>                
                 <div class="mb-3 pb-1">
-                  <p><strong>International Terminal &#8211; T1</strong><br><br/>
-                    <span style="color: #eb7828">Public Pick-up </span>, Please proceed to the P7 parking building first after exiting the arrival halls, and then follow the signs for 'Public Pick-up'
-                  </p>
-                 <p>
-                    <small><span style="color: #eb7828">Please note: </span> On landing simply turn on your mobile phone</small><br>
-                    <small>The meeting point may vary by the notification of your driver on the flight day</small><br><br>
-                    <small><a href="https://easygo.s3.ap-southeast-2.amazonaws.com/Intl_airport_map.webp">Map of the International Airport Pick-up Points (Public & Rideshare)</a></small></p>
+                  <h3><strong>International Terminal &#8211; T1</strong></h3>
+                  <p><span style="color: #eb7828">Public Pick-up </span>, Please proceed to the P7 parking building first after exiting the arrival halls, and then follow the signs for 'Public Pick-up'</p>
+                  <p><span style="color: #eb7828">Please note: </span> On landing simply turn on your mobile phone</p>
+                  <p>The meeting point may vary by the notification of your driver on the flight day</p><br>
+                  <p><small><a href="https://easygo.s3.ap-southeast-2.amazonaws.com/Intl_airport_map.webp">Map of the International Airport Pick-up Points (Public & Rideshare)</a></small></p>
                 </div>
                 <hr>
-                <br>
                 <div class="mb-3 pb-1">
-                  <p><strong>Domestic Terminal &#8211; T2</strong><br><br/>
-                    Please proceed to the<span style="color: #eb7828">&nbsp;Express Pick-up</span>
-                  This is where you meet your driver</p>
-                  <p>
-                    <small><span style="color: #eb7828">Please note: </span> On landing simply turn on your mobile phone</small><br>
-                    <small>The meeting point may vary by the notification of your driver on the flight day</small><br><br>
-                    <small><a href="https://easygo.s3.ap-southeast-2.amazonaws.com/Express_pickup.webp">Express Pick-up Location Map</a></small><br>
-                    <small><a href="https://s3.ap-southeast-2.amazonaws.com/easygoshuttle.com.au/Domestic-T2-meeting-point.webp">Shuttle Bus Pick-up Location Map</a></small><br>
-                  </p>
+                  <h3><strong>Domestic Terminal &#8211; T2</strong></h3>
+                  <p>Please proceed to the<span style="color: #eb7828">&nbsp;Express Pick-up</span> This is where you meet your driver</p>
+                  <p><span style="color: #eb7828">Please note: </span> On landing simply turn on your mobile phone</p>
+                  <p>The meeting point may vary by the notification of your driver on the flight day</p><br>
+                  <small>
+                    <a href="https://easygo.s3.ap-southeast-2.amazonaws.com/Express_pickup.webp">Express Pick-up Location Map</a><br>
+                    <a href="https://s3.ap-southeast-2.amazonaws.com/easygoshuttle.com.au/Domestic-T2-meeting-point.webp">Shuttle Bus Pick-up Location Map</a>
+                  </small>
                 </div>
                 <hr>
-                <br>
                 <div class="mb-3 pb-1">
-                 <p><strong>Qantas Terminal &#8211; T3</strong><br><br/>
-                  Please proceed to the<span style="color: #eb7828">&nbsp;Express Pick-up</span>
-                  This is where you meet your driver</p>
-                  <!-- Inside the Qantas Terminal at the <span style="color: #eb7828"> baggage carousel number one (1).</span>
-                  This is where you meet your driver, who will then lead you out to the bus. -->
-                </p>
-                 <p>
-                    <small><span style="color: #eb7828">Please note: </span> On landing simply turn on your mobile phone</small><br><br>
-                    <small><a href="https://s3.ap-southeast-2.amazonaws.com/easygoshuttle.com.au/Domestic-T2-meeting-point.webp">Shuttle Bus Pick-up Location Map</a></small><br>
-
-                    <!-- <small><a href="https://s3.ap-southeast-2.amazonaws.com/easygoshuttle.com.au/Domestic-T3-baggage-carousel-1.webp">Map of Qantas baggage carousel</a></small><br>             -->
+                  <h3><strong>Qantas Terminal &#8211; T3</strong></h3>
+                  <p>Please proceed to the<span style="color: #eb7828">&nbsp;Express Pick-up</span> This is where you meet your driver</p>
+                  <p><span style="color: #eb7828">Please note: </span> On landing simply turn on your mobile phone</p><br>
+                  <small>
+                    <a href="https://easygo.s3.ap-southeast-2.amazonaws.com/Express_pickup.webp">Express Pick-up Location Map</a><br>
+                    <a href="https://s3.ap-southeast-2.amazonaws.com/easygoshuttle.com.au/Domestic-T2-meeting-point.webp">Shuttle Bus Pick-up Location Map</a>
+                  </small>
                 </div>
-                <hr>
                 <br>                              
               </div>
             </div>
@@ -86,10 +121,10 @@
                 <a href="mailto:info@easygoshuttle.com.au">info@easygoshuttle.com.au</a>
               </li>
               <li class="d-flex align-items-center mb-3"><i class="ai-map-pin fs-xl text-muted me-2 pe-1"></i>
-                <a href="sms:+61406883355">sms: message us</a>
+                <a href="sms:+61406883355">sms: message only</a>
               </li>
               <li class="d-flex align-items-center mb-3"><i class="ai-phone fs-xl text-muted me-2 pe-1"></i>
-                <a href="tel:+61406883355">0406 883 355</a></div>
+                <a href="tel:+61406883355">+61 406 883 355</a></div>
               </li>
             </ul>
           </div>
