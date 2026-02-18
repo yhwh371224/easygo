@@ -9,71 +9,99 @@
 {% endblock %}
 
 {% block content %}
-      <!-- Page content-->
-      <!-- Page title-->
-      <section class="jarallax bg-gradient pt-5 pb-7 pt-md-7" data-jarallax data-speed="0.1"><span class="position-absolute top-0 start-0 w-100 h-100 bg-gradient opacity-70"></span>
-        <div class="jarallax-img" style="background-image: url('/static/basecamp/images/page-title-bg.webp');"></div>
-        <div class="shape shape-bottom shape-slant bg-body">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 260">
-            <polygon fill="currentColor" points="0,257 0,260 3000,260 3000,0"></polygon>
-          </svg>
-        </div>
-		  <br>
-		  <br>
-        <div class="container position-relative zindex-5 pt-3 pb-7 pt-md-0">
-          <div class="row justify-content-center pb-7">
-            <div class="col-lg-10">
-              <h3 class="text-light">Payment Options</h3>
-              <div class="active" style="color:white">Please choose your option below</div>
-            </div>
-          </div>
-        </div>
-	</section>
 
-  <section class="container position-relative zindex-5 px-0 px-xl-3">
-    <div class="row">
-        <div class="col-lg-7 col-md-7 pb-2 mb-5" style="margin-top: -260px;">
-            <div class="card border-1 shadow-lg" style="padding:2rem;">
-                <form class="p-0">
-                    1. <strong>Online payment through PayPal</strong><br>
-                    You can make payments online through PayPal<br><br> 
-                    &nbsp; • &nbsp;<a href="https://easygoshuttle.com.au/payonline">easygoshuttle.com.au/payonline</a><br><br><hr>
+<!-- ===== Hero CSS (page-only) ===== -->
+<style>
+  .hero-payment {
+    position: relative;
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
 
-                    <!-- 2. <strong>Online payment through Stripe</strong><br>
-                    You can make payments online through Stripe<br><br> 
-                    &nbsp; • &nbsp;<a href="{% url 'basecamp:pay_stripe' %}">easygoshuttle.com.au/pay/stripe</a><br><br><hr> -->
+  .hero-payment::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url('/static/basecamp/images/page-title-bg.webp');
+    background-size: cover;
+    background-position: center center;
+    z-index: 0;
+  }
 
-                    2. <strong>PayID</strong><br><br>
-                    &nbsp; • &nbsp;Mobile: 0406 883 355<br>
-                    &nbsp; • &nbsp;Email: info@easygoshuttle.com.au<br><br>                    
-                    <span style="color: #eb7828;">Please email the receipt after PayID payment</span><hr><br>
-                    
-                    <!-- 4. <strong>Payment through XRP Coins</strong><br>
-                    You can make payments through your XRP coins<br><br> 
-                    &nbsp; • &nbsp;<a href="{% url 'blog:pay_xrp_page' %}">Pay with XRP coins</a><br><br><hr> -->
+  .hero-payment .hero-content {
+    position: relative;
+    z-index: 2;
+  }
 
-                    Please choose the method that is most convenient for you to proceed with the payment.<br><br> 
-                </form>
-            </div>
-        </div>          
-        <div class="col-lg-4 col-md-4 offset-md-1">
-            <!-- Categories Widget -->
-            <div class="card my-4" id="category-card">
-                <h5 class="card-header" style="color:red">Note!</h5>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-lg-10 list-unstyled">
-                            <li>
-                              <p><strong>If the name and email you use for online payment differ from those used for booking, 
-                              please notify us to confirm that the payment has been processed.</strong></p>								  
-                            </li>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+  .form-control hr {
+    border: none;
+    border-top: 1px solid #e0e0e0;
+    opacity: 0.5;
+    margin: 2.5rem 0;
+  }
+</style>
+<!-- ===== /Hero CSS ===== -->
+
+<!-- ===== Hero Section ===== -->
+<section class="hero-payment">
+  <span class="position-absolute top-0 start-0 w-100 h-100 bg-gradient opacity-70" style="z-index:1;"></span>
+  <div class="shape shape-bottom shape-slant bg-body">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 260">
+      <polygon fill="currentColor" points="0,257 0,260 3000,260 3000,0"></polygon>
+    </svg>
+  </div>
+  <div class="container hero-content pt-5 pb-7 text-center" style="margin-top:-7rem;">
+    <div class="row justify-content-center pb-7">
+      <div class="col-lg-10">
+        <h1 class="text-light">Payment Options</h1>
+        <p class="fs-lg text-light fw-bold">Please choose your option below</p>
+      </div>
     </div>
+  </div>
 </section>
+<!-- ===== /Hero Section ===== -->
+
+<section class="container position-relative zindex-5 pb-5">
+  <div class="row">
+    <div class="col-lg-8 col-md-10 offset-lg-2 pb-2 mb-5" style="margin-top: -210px;">
+      <div class="card border-0 shadow-lg">
+        <div class="form-control" style="padding:3.5rem 2rem 2rem;">
+
+          <div class="mb-3 pb-1">
+            1. <strong>Online payment through PayPal</strong><br>
+            You can make payments online through PayPal<br><br>
+            &nbsp; • &nbsp;<a href="https://easygoshuttle.com.au/payonline">easygoshuttle.com.au/payonline</a>
+          </div>
+          <hr>
+
+          <!-- 2. <strong>Online payment through Stripe</strong><br>
+          You can make payments online through Stripe<br><br>
+          &nbsp; • &nbsp;<a href="{% url 'basecamp:pay_stripe' %}">easygoshuttle.com.au/pay/stripe</a><br><br><hr> -->
+
+          <div class="mb-3 pb-1">
+            2. <strong>PayID</strong><br><br>
+            &nbsp; • &nbsp;Mobile: 0406 883 355<br>
+            &nbsp; • &nbsp;Email: info@easygoshuttle.com.au<br><br>
+            <span style="color: #eb7828;">Please email the receipt after PayID payment</span>
+          </div>
+          <hr>
+
+          <!-- 4. <strong>Payment through XRP Coins</strong><br>
+          You can make payments through your XRP coins<br><br>
+          &nbsp; • &nbsp;<a href="{% url 'blog:pay_xrp_page' %}">Pay with XRP coins</a><br><br><hr> -->
+
+          <div class="mb-3 pb-1">
+            <strong style="color:red">Note!</strong><br>
+            If the name and email you use for online payment differ from those used for booking,
+            please notify us to confirm that the payment has been processed.
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 {% endblock %}
-
-

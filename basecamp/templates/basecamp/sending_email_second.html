@@ -1,65 +1,78 @@
-{% extends 'basecamp/easygo_base_error.html' %}
+{% extends 'basecamp/easygo_base.html' %}
 
 {% block content %}
-<section class="jarallax bg-gradient pt-5 pb-7 pt-md-7" data-jarallax data-speed="0.1">
-  <span class="position-absolute top-0 start-0 w-100 h-100 bg-gradient opacity-70"></span>
-  <div class="jarallax-img" style="background-image: url('/static/basecamp/images/page-title-bg.webp');"></div>
-  <div class="shape shape-bottom shape-slant bg-body">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 260">
-      <polygon fill="currentColor" points="0,257 0,260 3000,260 3000,0"></polygon>
-    </svg>
-  </div>
 
-  <div class="container position-relative zindex-5 pt-5 pb-5">
-    <div class="row justify-content-center">
-      <div class="col-lg-10 text-center text-light">
-        <h1>Sending Second Email Only</h1>
-        <p class="lead">Please fill out the booking form</p>
-      </div>
-    </div>
-  </div>
-</section>
+	<!-- Form for sending second email -->
+	<section class="container pt-5 pb-5 px-3" style="margin-top: 5rem;">
+        <div class="row justify-content-center">
+          <div class="col-lg-8 col-md-10">
+				<div class="card shadow-lg">
+				<form method="post"
+					enctype="multipart/form-data"
+					action="/sending_email_second_detail/"
+					id="booking-form"
+					class="card-body needs-validation p-4 m-3">
 
-<section class="container position-relative zindex-5 px-0 px-xl-3 mt-n6">
-  <div class="row justify-content-center">
-    <div class="col-lg-7 col-md-7 pb-5">
-      <div class="card border-1 shadow-lg">
-        <form method="post" enctype="multipart/form-data" action="/sending_email_second_detail/" id="booking-form" class="card-body needs-validation p-5">
-          {% csrf_token %}
+					{% csrf_token %}
 
-          <div class="card text-white bg-secondary p-4 mb-4">
-            <div class="mb-3">
-              <label class="form-label" for="email">Email address<sup class="text-danger ms-1">*</sup></label>
-              <input class="form-control" type="email" name="email" placeholder="j.doe@example.com" required id="email">
-              <div class="invalid-feedback">Please enter a valid email address!</div>
-            </div>
-          </div>
-          <div class="mb-3 pb-1">
-                <input type="checkbox" name="prepay" value="True" id="prepay">
-                <label class="form-label" for="prepay">It has to be prepaid&nbsp;&nbsp;&nbsp;</label>
-                <div class="invalid-feedback">Please check this box for prepay</div>
-            </div>
-          <div class="mb-3 pb-1">
-                <input type="checkbox" name="cash" value="True" id="cash">
-                <label class="form-label" for="cash">It has to be cash&nbsp;&nbsp;&nbsp;</label>
-                <div class="invalid-feedback">Please check this box for cash</div>
-            </div>
+					<div class="card text-white bg-secondary" style="padding: 2.5rem 3rem;">
 
-          <hr class="my-4">
+						<h5 class="mb-5 pb-3">Sending email second only</h5>
 
-          <div class="text-center">
-            <button class="btn btn-primary" type="submit" id="submitButton">Submit</button>
-          </div>
+						<!-- Email -->
+						<div class="mb-5 pb-3">
+							<label class="form-label mb-3" for="email">
+								Email address <sup class="text-danger ms-1">*</sup>
+							</label>
+							<input class="form-control"
+								type="email"
+								placeholder="j.doe@example.com"
+								required
+								name="email"
+								id="email">
+							<div class="invalid-feedback">
+								Please enter a valid email address!
+							</div>
+						</div>
 
-          <div class="mt-4 text-muted small text-center">
-            This form is protected by reCAPTCHA Enterprise and the Google
-            <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a> and
-            <a href="https://policies.google.com/terms" target="_blank">Terms of Service</a> apply.
-          </div>
+						<!-- Prepay -->
+						<div class="mb-5 pb-3">
+							<div class="form-check mt-3">
+								<input class="form-check-input" type="checkbox" name="prepay" value="True" id="prepay">
+								<label class="form-check-label fs-6" for="prepay">It has to be prepaid</label>
+								<div class="invalid-feedback">Please check this box for prepay</div>
+							</div>
+						</div>
 
-        </form>
-      </div>
-    </div>
-  </div>
-</section>
+						<!-- Cash -->
+						<div class="mb-0">
+							<div class="form-check mt-3">
+								<input class="form-check-input" type="checkbox" name="cash" value="True" id="cash">
+								<label class="form-check-label fs-6" for="cash">It has to be cash</label>
+								<div class="invalid-feedback">Please check this box for cash</div>
+							</div>
+						</div>
+
+					</div>
+
+					<!-- Submit -->
+					<div class="text-center mt-4 mb-2">
+						<button class="btn btn-primary" type="submit" id="submitButton">
+							Submit
+						</button>
+					</div>
+
+					<div class="mt-3">
+						<small>
+							This form is protected by reCAPTCHA Enterprise and the Google
+							<a href="https://policies.google.com/privacy">Privacy Policy</a> and
+							<a href="https://policies.google.com/terms">Terms of Service</a> apply.
+						</small>
+					</div>
+
+				</form>
+				</div>
+		  </div>
+	</div>
+	</section>
 {% endblock %}

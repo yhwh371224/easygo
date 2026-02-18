@@ -290,7 +290,7 @@
                   <div class="invalid-feedback">Please write a message!</div>
                 </div>
 				<br>
-				<div class="g-recaptcha" data-sitekey="{{ RECAPTCHA_V2_SITE_KEY }}"></div>	
+				{% if not RECAPTCHA_DISABLED %}<div class="g-recaptcha" data-sitekey="{{ RECAPTCHA_V2_SITE_KEY }}"></div>{% endif %}
 				<div id="errorMessage" style="display:none; color: red; margin-top: 20px;" ></div>
 				<br>
 				<div class="text-center pt-2">
