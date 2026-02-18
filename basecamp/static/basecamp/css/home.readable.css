@@ -9897,3 +9897,8 @@ _:-ms-lang(x),
 .shape.bg-dark{
   color:#37384e !important
 }
+
+
+li {
+  list-style: none;
+}

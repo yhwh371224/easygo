@@ -287,6 +287,9 @@ def index(request):
 
 
 def verify_recaptcha(response, version='v2'):
+    if getattr(settings, 'RECAPTCHA_DISABLED', False):
+        return {'success': True}
+
     if version == 'v2':
         secret_key = settings.RECAPTCHA_V2_SECRET_KEY
     elif version == 'v3':
