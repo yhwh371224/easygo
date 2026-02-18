@@ -178,7 +178,7 @@
     <script src="/static/basecamp/js/form_handler.js" defer></script>
     <!-- Main theme script-->
     <script src="/static/basecamp/js/theme.min.js"></script>              
-    <script src="https://www.google.com/recaptcha/api.js" defer></script>
+    {% if not RECAPTCHA_DISABLED %}<script src="https://www.google.com/recaptcha/api.js" defer></script>{% endif %}
     <script>
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('booking-form');
@@ -270,9 +270,10 @@
         form.addEventListener('submit', function (event) {
             let isValid = true;
 
-            // --- reCAPTCHA 검증 추가 (맨 앞에) ---
-            const recaptchaResponse = grecaptcha.getResponse();
-            if (!recaptchaResponse) {
+            // --- reCAPTCHA 검증 (위젯이 DOM에 있을 때만 체크) ---
+            const recaptchaWidget = document.querySelector('.g-recaptcha');
+            const recaptchaResponse = (recaptchaWidget && typeof grecaptcha !== 'undefined') ? grecaptcha.getResponse() : null;
+            if (recaptchaWidget && !recaptchaResponse) {
                 alert('Please complete the reCAPTCHA verification.');
                 event.preventDefault();
                 event.stopPropagation();
