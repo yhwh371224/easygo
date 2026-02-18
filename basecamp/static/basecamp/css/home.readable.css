@@ -9899,6 +9899,8 @@ _:-ms-lang(x),
 }
 
 
+ul,
+ol,
 li {
-  list-style: none;
+  list-style: none !important;
 }
