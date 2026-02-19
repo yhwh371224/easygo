@@ -31,17 +31,17 @@ console.log("=== form_handler.js loaded ===");
         }
         console.log("✅ Date validation passed");
 
-        // 2. reCAPTCHA 확인
-        if (typeof grecaptcha !== "undefined") {
-            const recaptchaResponse = grecaptcha.getResponse();
-            console.log("reCAPTCHA response:", recaptchaResponse);
-            if (!recaptchaResponse) {
-                console.log("❌ reCAPTCHA not completed");
-                alert("Please complete the reCAPTCHA verification.");
+        // 2. Turnstile 확인
+        const turnstileInput = document.querySelector('[name="cf-turnstile-response"]');
+        if (turnstileInput !== null) {
+            console.log("Turnstile response:", turnstileInput.value);
+            if (!turnstileInput.value) {
+                console.log("❌ Turnstile not completed");
+                alert("Please complete the Turnstile verification.");
                 return;
             }
         }
-        console.log("✅ reCAPTCHA passed");
+        console.log("✅ Turnstile passed");
 
         // 3. 버튼 잠금
         if (submitButton) {
