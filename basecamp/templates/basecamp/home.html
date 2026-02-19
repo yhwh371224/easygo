@@ -252,25 +252,8 @@
           </div>
 		    </div>
       </section>
-      <section class="container py-5 py-md-6">
-        <div class="row justify-content-center">
-          <div class="col-lg-10 text-center">
-            <p class="fs-lg mb-3">
-              Looking for a reliable <strong>Sydney airport transfer</strong>? EasyGo provides professional 
-              <strong>Sydney airport pickup</strong> services from both International and Domestic terminals. 
-              Our <strong>private airport transfer Sydney</strong> service includes real-time flight tracking 
-              and meet-and-greet at the designated airport meeting point.
-            </p>
-            <p class="fs-lg mb-0">
-              We specialise in <strong>Sydney airport transfer</strong> for families and large groups, 
-              offering comfortable 8–13 seater maxi taxis across Sydney CBD, North Shore, Inner West, 
-              and Western Sydney. Book your <strong>airport transfer Sydney</strong> today!
-            </p>
-          </div>
-        </div>
-      </section>
       <!-- Price checking form-->
-      <form class="container position-relative zindex-5" action="/price_detail/" id="booking-form" method="post" style="margin-top: 20px;">
+      <form class="container position-relative zindex-5" action="/price_detail/" id="booking-form" method="post" style="margin-top: -120px;">
 		  {% csrf_token %}      
         <div class="d-lg-flex align-items-center bg-secondary border rounded-3 px-4 pt-4 pb-3" >
           <div class="d-sm-flex align-items-center flex-grow-1">
@@ -329,7 +312,7 @@
 		  <h2 class="text-center mb-4" style="color:white"><span style="color: #eb7828">HOT OFFER</span> - Best Price Guaranteed</h2>
         <div class="tns-carousel-wrapper">          
             <div class="text-end" style="margin-bottom: 40px; margin-right: 20px;">
-              <a href="/more_suburbs/" style="color: #eb7828">View all &raquo;&raquo;&raquo;</a>
+              <a href="/more_suburbs/" style="color: #eb7828">Search your area &raquo;&raquo;&raquo;</a>
             </div>                  
           <div class="tns-carousel-inner" data-carousel-options="{&quot;items&quot;: 3, &quot;nav&quot;: false, &quot;gutter&quot;: 23, &quot;responsive&quot;: {&quot;0&quot;:{&quot;items&quot;:1},&quot;540&quot;:{&quot;items&quot;:2},&quot;900&quot;:{&quot;items&quot;:3}}}">
             {% for suburb, details in suburbs.items %}
@@ -352,55 +335,51 @@
              {% endfor %}     
           </div>
         </div>
-        <br>
-        <div class="text-center mb-4">          
-          <a href="/more_suburbs1/" style="color: #eb7828">Search your area &raquo;&raquo;&raquo;</a>
-        </div>
-      </section>      
-      <!-- Quick Info: Maxi-Taxi & Sydney Airport Services -->
-      <section class="container py-5">
-        <div class="row text-center text-lg-start">
-          <!-- Left Column: Maxi Taxi -->
-          <div class="col-lg-6 d-flex flex-column justify-content-between mb-4 mb-lg-0">
-            <div>
-              <h2 class="fw-bold mb-3">Sydney Airport Maxi Taxi</h2>
-              <p class="fs-lg mb-4">
-                Need a private 8–13 seater for groups or luggage?
-              </p>
-              <ul class="list-unstyled fs-lg">                
-                <li class="mb-2">
-                  <a href="/maxi-taxi/" class="fw-semibold">
-                    🚐 Sydney Airport Maxi Taxi
-                  </a> - 8–13 seater for groups & luggage
-                </li>
-                <li class="mb-2">
-                  <a href="/sydney-cruise-transfer/" class="fw-semibold">
-                    🚢 Sydney Cruise Transfer
-                  </a> - Port to airport & city transfers
-                </li>              
-              </ul>
-            </div>
+        <!-- Introduction -->
+        <div class="row justify-content-center" style="margin-top: 8rem;">
+          <div class="col-lg-10 text-center">
+            <p class="fs-md mb-2" style="color: #b9cbdb;">
+              Looking for a reliable <strong>Sydney airport transfer</strong>? EasyGo provides professional
+              <strong>Sydney airport pickup</strong> services from both International and Domestic terminals.
+              Our <strong>private airport transfer Sydney</strong> service includes real-time flight tracking
+              and meet-and-greet at the designated airport meeting point.
+            </p>
+            <p class="fs-md mb-2" style="color: #b9cbdb;">
+              We specialise in <strong>Sydney airport transfer</strong> for families and large groups,
+              offering comfortable 8–13 seater maxi taxis across Sydney CBD, North Shore, Inner West,
+              and Western Sydney. Book your <strong>airport transfer Sydney</strong> today!
+            </p>
           </div>
-          <!-- Right Column: Airport Transfer & Shuttle -->
-          <div class="col-lg-6 d-flex flex-column justify-content-between">
-            <div>
-              <h2 class="fw-bold mb-3">Sydney Airport Services</h2>
-              <p class="fs-lg mb-4">
-                Choose your preferred airport service:
-              </p>
-              <ul class="list-unstyled fs-lg">
-                <li class="mb-2">
-                  <a href="/sydney-airport-transfer/" class="fw-semibold">
-                    🚗 Sydney Airport Transfer
-                  </a> - Private door-to-door service
-                </li>
-                <li class="mb-2">
-                  <a href="/sydney-airport-shuttle/" class="fw-semibold">
-                    🚐 Sydney Airport Shuttle
-                  </a> - Flexible, comfortable rides
-                </li>
-              </ul>
-            </div>
+        </div>
+        <!-- Airport transfer options -->
+        <div class="row text-center" style="margin-top: 4rem;">
+          <div class="col-lg-6 mb-3 mb-lg-0">
+            <h3 class="fs-sm fw-bold mb-2 text-light">Sydney Airport Maxi Taxi</h3>
+            <p class="fs-sm mb-2 text-light">Need a private 8–13 seater for groups or luggage?</p>
+            <ul class="list-unstyled fs-sm text-light">
+              <li class="mb-1">
+                <a href="/maxi-taxi/" class="fw-semibold" style="color: #8db5ed;">🚐 Sydney Airport Maxi Taxi</a>
+                - 8–13 seater for groups &amp; luggage
+              </li>
+              <li class="mb-1">
+                <a href="/sydney-cruise-transfer/" class="fw-semibold" style="color: #8db5ed;">🚢 Sydney Cruise Transfer</a>
+                - Port to airport &amp; city transfers
+              </li>
+            </ul>
+          </div>
+          <div class="col-lg-6">
+            <h3 class="fs-sm fw-bold mb-2 text-light">Sydney Airport Services</h3>
+            <p class="fs-sm mb-2 text-light">Choose your preferred airport service:</p>
+            <ul class="list-unstyled fs-sm text-light">
+              <li class="mb-1">
+                <a href="/sydney-airport-transfer/" class="fw-semibold" style="color: #8db5ed;">🚗 Sydney Airport Transfer</a>
+                - Private door-to-door service
+              </li>
+              <li class="mb-1">
+                <a href="/sydney-airport-shuttle/" class="fw-semibold" style="color: #8db5ed;">🚐 Sydney Airport Shuttle</a>
+                - Flexible, comfortable rides
+              </li>
+            </ul>
           </div>
         </div>
       </section>
@@ -627,8 +606,17 @@
                   </div>
                 </div>
                 <div class="col-12 mt-4">
-                  <div class="h5">
-                    <a href="/easygo_review/">More Reviews&nbsp;&nbsp;&raquo;&raquo;&raquo;</a>
+                    <a href="/easygo_review/" 
+                      class="me-4 fw-bold" 
+                      style="text-decoration: none; ">
+                        <span class="fs-lg">🏆🏆🏆</span> Reviews on our website <i class="ai-external-link ms-1" style="color: #00aaff;"></i>
+                    <a href="{{ google_review_url }}" 
+                      target="_blank" 
+                      rel="noopener" 
+                      class="fw-bold" 
+                      style="text-decoration: none; white-space: nowrap;">
+                        <span class="fs-lg">🥇🥇🥇</span> Google reviews <i class="ai-external-link ms-1" style="color: #00aaff;"></i>
+                    </a>
                   </div>                                    
                 </div>
               </div>                
