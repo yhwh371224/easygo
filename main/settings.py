@@ -57,7 +57,11 @@ if ENVIRONMENT == 'production':
                 "'self'",
                 'https://fonts.gstatic.com',
             ),
-            'img-src': ("'self'", "data:"),
+            'img-src': (
+                "'self'", 
+                "data:", 
+                'https://s3.ap-southeast-2.amazonaws.com/easygoshuttle.com.au/',
+            ),
         }
     }
     SECURE_REFERRER_POLICY = 'no-referrer-when-downgrade'
