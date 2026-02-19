@@ -44,7 +44,7 @@ EasyGo Airport Shuttle Booking Form – Sydney Airport Transfers
       <!-- Contact form + details-->  
             <form method="post" enctype="multipart/form-data" action="/booking_detail/" id="booking-form" class="card-body needs-validation p-5" >
                 {% csrf_token %}
-				<input type="text" name="phone_verify" value="" style="display:none !important" tabindex="-1" autocomplete="off">
+				{# <input type="text" name="phone_verify" value="" style="display:none !important" tabindex="-1" autocomplete="off"> #}
 				<div class="mb3 pb-1" >					
 					<label class="form-label">Personal Information</label>									      
 				</div>					
@@ -310,7 +310,7 @@ EasyGo Airport Shuttle Booking Form – Sydney Airport Transfers
                   <div class="invalid-feedback">Please write a message!</div>
                 </div>
 				<br>
-				<!-- <div class="cf-turnstile" data-sitekey="{{ CLOUDFLARE_TURNSTILE_SITE_KEY }}"></div> -->
+				<div class="cf-turnstile" data-sitekey="{{ CLOUDFLARE_TURNSTILE_SITE_KEY }}"></div>
 				<div id="errorMessage" style="display:none; color: red; margin-top: 20px;" ></div>
 				<br>		
 				<div class="text-center pt-2">
