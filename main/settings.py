@@ -31,14 +31,13 @@ if ENVIRONMENT == 'production':
     USE_X_FORWARDED_HOST = False
     X_FRAME_OPTIONS = 'DENY'
     CONTENT_SECURITY_POLICY = {
+        'INCLUDE_NONCE_IN': ['script-src'],
         'DIRECTIVES': {
             'default-src': ("'self'",),
             'script-src': (
                 "'self'",
                 'https://cdnjs.cloudflare.com',
-                'https://challenges.cloudflare.com',
-                # "'unsafe-eval'",   
-                # "'unsafe-inline'",     
+                'https://challenges.cloudflare.com', 
             ),
             'frame-src': (
                 "'self'",
@@ -65,7 +64,7 @@ if ENVIRONMENT == 'production':
         }
     }
     SECURE_REFERRER_POLICY = 'no-referrer-when-downgrade'
-
+    
     COMPRESS_OFFLINE = True
 
 else:
