@@ -3,6 +3,7 @@ import os
 
 from decouple import config
 from datetime import datetime, timedelta 
+from csp.constants import NONCE
 from django.core.exceptions import DisallowedHost
 
 
@@ -31,13 +32,13 @@ if ENVIRONMENT == 'production':
     USE_X_FORWARDED_HOST = False
     X_FRAME_OPTIONS = 'DENY'
     CONTENT_SECURITY_POLICY = {
-        'INCLUDE_NONCE_IN': ['script-src'],
         'DIRECTIVES': {
             'default-src': ("'self'",),
             'script-src': (
                 "'self'",
                 'https://cdnjs.cloudflare.com',
                 'https://challenges.cloudflare.com', 
+                NONCE,
             ),
             'frame-src': (
                 "'self'",
@@ -206,7 +207,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                # 'context_processors.turnstile_site_key',
+                'csp.context_processors.nonce',
                 'context_processors.add_custom_context',
                 'context_processors.bank_settings',
             ],
