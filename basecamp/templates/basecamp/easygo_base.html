@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
+{% load compress %}
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -206,8 +207,8 @@
       </div>
     </footer>
     {% compress js %}
-      <script src="/static/basecamp/js/bootstrap.bundle.min.js" defer></script>
-      <script src="/static/basecamp/js/theme.min.js" defer></script>
+    <script src="/static/basecamp/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/basecamp/js/theme.min.js"></script>
     {% endcompress js %}
     <script>
       document.getElementById('current-year').textContent = new Date().getFullYear();
