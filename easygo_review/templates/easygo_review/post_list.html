@@ -16,7 +16,7 @@
             <h5 id="easygo_review-list-title">
                 <br/>
                 {% if email %}
-                    <button class="btn btn-primary btn-sm float-right" onclick="location.href='/easygo_review/create/'">New Post</button>
+                    <button id="new-post-btn" class="btn btn-primary btn-sm float-right">New Post</button>
                 {% else %}
                     <button type="button" class="btn btn-primary btn-sm float-right" data-toggle="modal" data-target="#loginModal" >
                         Log in
@@ -126,7 +126,7 @@
             <div class="input-group">
                 <input type="text" id="search-input" onkeyup="wait_for_enterkey()" class="form-control" placeholder="Search for..."/>
                     <span class="input-group-btn">
-                        <button class="btn btn-primary" type="button" onclick="search_post();">Go !</button>
+                        <button id="search-btn" class="btn btn-primary" type="button">Go !</button>
                     </span>
             </div>
             <div id="error-message" class="text-danger mt-2" style="display: none;"></div>

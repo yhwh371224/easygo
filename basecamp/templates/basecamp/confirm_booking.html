@@ -59,7 +59,7 @@
 
             <!-- Admin Access Button -->
             <div class="text-center pt-2">
-              <button type="button" class="btn btn-secondary btn-sm admin-btn" style="opacity: 0.15; font-size: 11px;" onclick="toggleAdminFields()">
+              <button type="button" id="admin-access-btn" class="btn btn-secondary btn-sm admin-btn" style="opacity: 0.15; font-size: 11px;">
                 Admin Access
               </button>
             </div>
@@ -88,21 +88,8 @@
   </div>
 </section>
 
+<script src="/static/basecamp/js/confirm_booking.js" defer></script>
 <script>
-function toggleAdminFields() {
-    var hiddenField = document.getElementById('index');
-    var adminFields = document.getElementById('admin-fields');
-    var indexInput = document.querySelector('input[name="index_visible"]');
-
-    if (adminFields.classList.contains('d-none')) {
-        adminFields.classList.remove('d-none');
-        indexInput.value = hiddenField.value;
-    } else {
-        hiddenField.value = indexInput.value;
-        adminFields.classList.add('d-none');
-    }
-}
-
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("booking-form");
     const submitButton = document.getElementById("submitButton");
