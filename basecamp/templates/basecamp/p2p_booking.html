@@ -36,7 +36,7 @@
             <div class="card border-0 shadow-lg">
               <form action="/p2p_booking_detail/" method="post" id="booking-form" class="card-body needs-validation p-5" novalidate>
                 {% csrf_token %}
-                <input type="text" name="phone_verify" value="" style="display:none !important" tabindex="-1" autocomplete="off">
+                {# <input type="text" name="phone_verify" value="" style="display:none !important" tabindex="-1" autocomplete="off"> #}
                 <div class="mb-3 pb-1">
                   <label class="form-label" for="p2p_name">Full name</label>
                   <input class="form-control" type="text"  placeholder="John Doe" required name="p2p_name" id="p2p_name">
@@ -187,6 +187,7 @@
                 <br>
                 <div id="errorMessage" style="display:none; color: red; margin-top: 20px;" ></div>
                 <br>	
+                <div class="cf-turnstile" data-sitekey="{{ CLOUDFLARE_TURNSTILE_SITE_KEY }}"></div>
                 <div class="text-center pt-2">
                   <button class="btn btn-primary" type="submit" id="submitButton">Submit</button>
                 </div>

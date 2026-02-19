@@ -36,7 +36,7 @@
         <!-- Contact form + details-->  	  
         <form method="post" enctype="multipart/form-data" id="booking-form" action="/inquiry_details1/" class="card-body needs-validation p-5" >
           {% csrf_token %}
-          <input type="text" name="phone_verify" value="" style="display:none !important" tabindex="-1" autocomplete="off">
+          {# <input type="text" name="phone_verify" value="" style="display:none !important" tabindex="-1" autocomplete="off"> #}
             <div class="mb3 pb-1" >
               <p class="form-label mb-1">Personal Information</p>
             </div>
@@ -224,6 +224,7 @@
             <input type="hidden" name="end_point" value="{{ end_point }}">
             <input type="hidden" name="no_of_passenger" value="{{ no_of_passenger }}">  
 			
+	            <div class="cf-turnstile" data-sitekey="{{ CLOUDFLARE_TURNSTILE_SITE_KEY }}"></div>
 	            <div class="text-center pt-2">
               <button class="btn btn-primary" type="submit" id="submitButton">Submit</button>
             </div>        

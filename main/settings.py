@@ -87,7 +87,7 @@ INSTALLED_APPS = [
     'basecamp.apps.BasecampConfig', 
     'easygo_review.apps.EasygoReviewConfig',
     'admin_honeypot',
-    'honeypot',
+    # 'honeypot',  # replaced by Cloudflare Turnstile
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -208,6 +208,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'basecamp.context_processors.turnstile_site_key', 
                 'csp.context_processors.nonce',
                 'context_processors.add_custom_context',
                 'context_processors.bank_settings',
@@ -377,14 +378,13 @@ GMAIL_SERVICE_ACCOUNT_FILE = config('GMAIL_SERVICE_ACCOUNT_FILE')
 CALENDAR_SERVICE_ACCOUNT_FILE = config('CALENDAR_SERVICE_ACCOUNT_FILE')
 
 # Cloudfare Turnstile settings
-# TURNSTILE_DISABLED = (ENVIRONMENT != 'production')
-# TURNSTILE_DISABLED = True 
-# CLOUDFLARE_TURNSTILE_SITE_KEY = config('CLOUDFLARE_TURNSTILE_SITE_KEY')
-# CLOUDFLARE_TURNSTILE_SECRET_KEY = config('CLOUDFLARE_TURNSTILE_SECRET_KEY')
+TURNSTILE_DISABLED = (ENVIRONMENT != 'production')
+CLOUDFLARE_TURNSTILE_SITE_KEY = config('CLOUDFLARE_TURNSTILE_SITE_KEY')
+CLOUDFLARE_TURNSTILE_SECRET_KEY = config('CLOUDFLARE_TURNSTILE_SECRET_KEY')
 
 # Honeypot settings
-HONEYPOT_FIELD_NAME = 'phone_verify'  
-HONEYPOT_VALUE = ''
+# HONEYPOT_FIELD_NAME = 'phone_verify'  # replaced by Cloudflare Turnstile
+# HONEYPOT_VALUE = ''
 
 # MySQL Backup Database Configuration
 MYSQL_CONFIG = {

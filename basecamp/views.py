@@ -30,7 +30,8 @@ from basecamp.area_zones import area_zones
 from .utils import (
     is_ajax, parse_date, handle_email_sending, format_pickup_time_12h,
     render_to_pdf, add_bag, to_int, to_bool, safe_float,
-    handle_checkout_session_completed, paypal_ipn_error_email, get_sorted_suburbs
+    handle_checkout_session_completed, paypal_ipn_error_email, get_sorted_suburbs,
+    verify_turnstile,
 )
 
 
@@ -368,6 +369,10 @@ def inquiry_details(request):
         honeypot = request.POST.get('phone_verify', '')
         if honeypot != '':
             return JsonResponse({'success': False, 'error': 'Bot detected.'})
+        token = request.POST.get('cf-turnstile-response', '')
+        ip = request.META.get('HTTP_CF_CONNECTING_IP') or request.META.get('REMOTE_ADDR')
+        if not verify_turnstile(token, ip):
+            return JsonResponse({'success': False, 'error': 'Security verification failed. Please try again.'})
         name = request.POST.get('name', '')
         contact = request.POST.get('contact', '')
         email = request.POST.get('email', '')  
@@ -565,6 +570,10 @@ def inquiry_details1(request):
         honeypot = request.POST.get('phone_verify', '')
         if honeypot != '':
             return JsonResponse({'success': False, 'error': 'Bot detected.'})
+        token = request.POST.get('cf-turnstile-response', '')
+        ip = request.META.get('HTTP_CF_CONNECTING_IP') or request.META.get('REMOTE_ADDR')
+        if not verify_turnstile(token, ip):
+            return JsonResponse({'success': False, 'error': 'Security verification failed. Please try again.'})
         pickup_date_str = request.POST.get('pickup_date', '')
         name = request.POST.get('name', '')
         contact = request.POST.get('contact', '')
@@ -807,6 +816,10 @@ def p2p_detail(request):
         honeypot = request.POST.get('phone_verify', '')
         if honeypot != '':
             return JsonResponse({'success': False, 'error': 'Bot detected.'})
+        token = request.POST.get('cf-turnstile-response', '')
+        ip = request.META.get('HTTP_CF_CONNECTING_IP') or request.META.get('REMOTE_ADDR')
+        if not verify_turnstile(token, ip):
+            return JsonResponse({'success': False, 'error': 'Security verification failed. Please try again.'})
         p2p_name = request.POST.get('p2p_name')
         p2p_phone = request.POST.get('p2p_phone')
         p2p_email = request.POST.get('p2p_email')
@@ -868,6 +881,10 @@ def p2p_booking_detail(request):
         honeypot = request.POST.get('phone_verify', '')
         if honeypot != '':
             return JsonResponse({'success': False, 'error': 'Bot detected.'})
+        token = request.POST.get('cf-turnstile-response', '')
+        ip = request.META.get('HTTP_CF_CONNECTING_IP') or request.META.get('REMOTE_ADDR')
+        if not verify_turnstile(token, ip):
+            return JsonResponse({'success': False, 'error': 'Security verification failed. Please try again.'})
         p2p_name = request.POST.get('p2p_name')
         p2p_phone = request.POST.get('p2p_phone')
         p2p_email = request.POST.get('p2p_email')
@@ -1149,12 +1166,16 @@ def confirmation_detail(request):
 
 # airport booking by client
 def booking_detail(request):
-    if request.method == "POST":  
+    if request.method == "POST":
         honeypot = request.POST.get('phone_verify', '')
         if honeypot != '':
             return JsonResponse({'success': False, 'error': 'Bot detected.'})
-        pickup_date_str = request.POST.get('pickup_date', '')           
-        return_pickup_date_str = request.POST.get('return_pickup_date', '') 
+        token = request.POST.get('cf-turnstile-response', '')
+        ip = request.META.get('HTTP_CF_CONNECTING_IP') or request.META.get('REMOTE_ADDR')
+        if not verify_turnstile(token, ip):
+            return JsonResponse({'success': False, 'error': 'Security verification failed. Please try again.'})
+        pickup_date_str = request.POST.get('pickup_date', '')
+        return_pickup_date_str = request.POST.get('return_pickup_date', '')
         name = request.POST.get('name')
         contact = request.POST.get('contact')
         email = request.POST.get('email')
@@ -1336,6 +1357,10 @@ def cruise_booking_detail(request):
         honeypot = request.POST.get('phone_verify', '')
         if honeypot != '':
             return JsonResponse({'success': False, 'error': 'Bot detected.'})
+        token = request.POST.get('cf-turnstile-response', '')
+        ip = request.META.get('HTTP_CF_CONNECTING_IP') or request.META.get('REMOTE_ADDR')
+        if not verify_turnstile(token, ip):
+            return JsonResponse({'success': False, 'error': 'Security verification failed. Please try again.'})
         # ✅ Collect date strings
         pickup_date_str = request.POST.get('pickup_date', '')
         return_pickup_date_str = request.POST.get('return_pickup_date', '')
@@ -1920,11 +1945,15 @@ def sending_email_input_data_detail(request):
 
 
 # For Return Trip 
-def return_trip_detail(request):     
+def return_trip_detail(request):
     if request.method == "POST":
         honeypot = request.POST.get('phone_verify', '')
         if honeypot != '':
             return JsonResponse({'success': False, 'error': 'Bot detected.'})
+        token = request.POST.get('cf-turnstile-response', '')
+        ip = request.META.get('HTTP_CF_CONNECTING_IP') or request.META.get('REMOTE_ADDR')
+        if not verify_turnstile(token, ip):
+            return JsonResponse({'success': False, 'error': 'Security verification failed. Please try again.'})
         pickup_date_str = request.POST.get('pickup_date', '')
         return_pickup_date_str = request.POST.get('return_pickup_date', '')
         email = request.POST.get('email', '').strip()
@@ -2041,8 +2070,12 @@ def invoice_detail(request):
         honeypot = request.POST.get('phone_verify', '')
         if honeypot != '':
             return JsonResponse({'success': False, 'error': 'Bot detected.'})
+        token = request.POST.get('cf-turnstile-response', '')
+        ip = request.META.get('HTTP_CF_CONNECTING_IP') or request.META.get('REMOTE_ADDR')
+        if not verify_turnstile(token, ip):
+            return JsonResponse({'success': False, 'error': 'Security verification failed. Please try again.'})
         email = request.POST.get('email', '').strip()
-        extra_email = request.POST.get('extra_email', '').strip()  
+        extra_email = request.POST.get('extra_email', '').strip()
         apply_gst_flag = request.POST.get('apply_gst')
         surcharge_input = request.POST.get('surcharge')
         discount_input = request.POST.get('discount')
