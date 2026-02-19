@@ -24,7 +24,6 @@ Disallow: /home/
 # 내부 API 및 Webhook
 Disallow: /paypal_ipn/
 Disallow: /stripe_webhook/
-Disallow: /recaptcha-verify/
 
 # 폼 처리 URL (인덱싱 불필요)
 Disallow: /*_detail/
