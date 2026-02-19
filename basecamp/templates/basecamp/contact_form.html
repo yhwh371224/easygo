@@ -26,6 +26,7 @@
       <div class="card border-0 shadow-lg">
         <form action="{% url 'basecamp:contact_submit' %}" method="post" id="booking-form" class="card-body p-5 needs-validation" novalidate>
           {% csrf_token %}
+          <input type="text" name="phone_verify" value="" style="display:none !important" tabindex="-1" autocomplete="off">
 
           <div style="display:none;">
             <input type="text" name="website" value="" style="display:none" tabindex="-1" autocomplete="off">
@@ -69,9 +70,6 @@
             <label class="form-label" for="message">Message</label>
             <textarea class="form-control" name="message" rows="5" placeholder="Write your message here" id="message"></textarea>
           </div>
-
-          <div class="cf-turnstile" data-sitekey="{{ CLOUDFLARE_TURNSTILE_SITE_KEY }}"></div>
-          <br>
 
           <div class="text-center">
             <button type="submit" class="btn btn-primary" id="submitButton">Submit</button>

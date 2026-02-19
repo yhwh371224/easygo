@@ -40,6 +40,7 @@
       <!-- Contact form + details-->  	  
             <form method="post" enctype="multipart/form-data" id="booking-form" action="/inquiry_details/" class="card-body needs-validation p-5" >
                 {% csrf_token %}
+                <input type="text" name="phone_verify" value="" style="display:none !important" tabindex="-1" autocomplete="off">
 				<div class="mb3 pb-1" >
 					<p class="form-label mb-1">Personal Information</p>
 				</div>
@@ -290,7 +291,6 @@
                   <div class="invalid-feedback">Please write a message!</div>
                 </div>
 				<br>
-				{% if not TURNSTILE_DISABLED %}<div class="cf-turnstile" data-sitekey="{{ CLOUDFLARE_TURNSTILE_SITE_KEY }}"></div>{% endif %}
 				<div id="errorMessage" style="display:none; color: red; margin-top: 20px;" ></div>
 				<br>
 				<div class="text-center pt-2">
