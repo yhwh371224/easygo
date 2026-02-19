@@ -37,7 +37,8 @@ if ENVIRONMENT == 'production':
                 "'self'",
                 'https://cdnjs.cloudflare.com',
                 'https://challenges.cloudflare.com',
-                "'unsafe-eval'",       
+                "'unsafe-eval'",   
+                "'unsafe-inline'",     
             ),
             'frame-src': (
                 "'self'",
