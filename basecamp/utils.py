@@ -15,25 +15,21 @@ from blog.models import StripePayment
 
 
 # --------------------------
-# reCAPTCHA
+# Cloudflare Turnstile
 # --------------------------
-def verify_recaptcha(response, version='v2'):
-    if getattr(settings, 'RECAPTCHA_DISABLED', False):
-        return {'success': True}
-
-    if version == 'v2':
-        secret_key = settings.RECAPTCHA_V2_SECRET_KEY
-    elif version == 'v3':
-        secret_key = settings.RECAPTCHA_V3_SECRET_KEY
-    else:
-        return {'success': False, 'error-codes': ['invalid-version']}
+def verify_turnstile(turnstile_response, remoteip=None):
+    if getattr(settings, 'TURNSTILE_DISABLED', False):
+        return True
 
     data = {
-        'secret': secret_key,
-        'response': response
+        'secret': settings.CLOUDFLARE_TURNSTILE_SECRET_KEY,
+        'response': turnstile_response,
     }
-    r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
-    return r.json()
+    if remoteip:
+        data['remoteip'] = remoteip
+
+    r = requests.post('https://challenges.cloudflare.com/turnstile/v0/siteverify', data=data)
+    return r.json().get('success', False)
 
 
 def is_ajax(request):

@@ -28,8 +28,8 @@ from basecamp.area_home import get_home_suburbs
 from basecamp.area_zones import area_zones
 
 from .utils import (
-    verify_recaptcha, is_ajax, parse_date, handle_email_sending, format_pickup_time_12h, 
-    render_to_pdf, add_bag, to_int, to_bool, safe_float, 
+    verify_turnstile, is_ajax, parse_date, handle_email_sending, format_pickup_time_12h,
+    render_to_pdf, add_bag, to_int, to_bool, safe_float,
     handle_checkout_session_completed, paypal_ipn_error_email, get_sorted_suburbs
 )
 
@@ -172,7 +172,6 @@ def booking(request):
     all_suburbs = get_home_suburbs()
     context = {
         'home_suburbs': all_suburbs,
-        'RECAPTCHA_V2_SITE_KEY': settings.RECAPTCHA_V2_SITE_KEY,
     }
     return render(request, 'basecamp/booking.html', context)
 
@@ -199,17 +198,11 @@ def contact_form(request):
 
 
 def cruise_booking(request):
-    context = {
-        'RECAPTCHA_V2_SITE_KEY': settings.RECAPTCHA_V2_SITE_KEY,
-    }
-    return render(request, 'basecamp/cruise_booking.html', context)
+    return render(request, 'basecamp/cruise_booking.html')
 
 
-def cruise_inquiry(request):  
-    context = {
-        'RECAPTCHA_V2_SITE_KEY': settings.RECAPTCHA_V2_SITE_KEY,
-    }   
-    return render(request, 'basecamp/cruise_inquiry.html', context)
+def cruise_inquiry(request):
+    return render(request, 'basecamp/cruise_inquiry.html')
 
 
 def error(request): 
@@ -228,12 +221,11 @@ def home_error(request):
     return render(request, 'basecamp/home_error.html')
 
 
-def inquiry(request): 
+def inquiry(request):
     all_suburbs = get_sorted_suburbs()
     context = {
         'home_suburbs': all_suburbs,
-        'RECAPTCHA_V2_SITE_KEY': settings.RECAPTCHA_V2_SITE_KEY,
-    }    
+    }
     return render(request, 'basecamp/inquiry.html', context)
 
 
@@ -306,18 +298,12 @@ def p2p(request):
     return render(request, 'basecamp/p2p.html')
 
 
-def p2p_booking(request): 
-    context = {
-        'RECAPTCHA_V2_SITE_KEY': settings.RECAPTCHA_V2_SITE_KEY,
-    }       
-    return render(request, 'basecamp/p2p_booking.html', context)
+def p2p_booking(request):
+    return render(request, 'basecamp/p2p_booking.html')
 
 
 def p2p_single(request):
-    context = {
-        'RECAPTCHA_V2_SITE_KEY': settings.RECAPTCHA_V2_SITE_KEY,
-    }   
-    return render(request, 'basecamp/p2p_single.html', context)
+    return render(request, 'basecamp/p2p_single.html')
 
 
 def privacy(request):     
@@ -404,10 +390,9 @@ def inquiry_details(request):
         return_end_point = request.POST.get('return_end_point', '')
         message = request.POST.get('message', '')
 
-        recaptcha_response = request.POST.get('g-recaptcha-response')
-        result = verify_recaptcha(recaptcha_response)
-        if not result or not result.get('success'):
-            return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'})  
+        turnstile_response = request.POST.get('cf-turnstile-response')
+        if not verify_turnstile(turnstile_response, remoteip=request.META.get('REMOTE_ADDR')):
+            return JsonResponse({'success': False, 'error': 'Turnstile verification failed. Please try again.'})  
 
         # ✅ 중복 제출 방지 
         recent_duplicate = Inquiry.objects.filter(
@@ -772,11 +757,10 @@ def contact_submit(request):
         pickup_date = request.POST.get('pickup_date')     
         message = request.POST.get('message')  
         
-        recaptcha_response = request.POST.get('g-recaptcha-response')
-        result = verify_recaptcha(recaptcha_response)
-        if not result.get('success'):
-            return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'}) 
-        
+        turnstile_response = request.POST.get('cf-turnstile-response')
+        if not verify_turnstile(turnstile_response, remoteip=request.META.get('REMOTE_ADDR')):
+            return JsonResponse({'success': False, 'error': 'Turnstile verification failed. Please try again.'})
+
         today = date.today()
         if pickup_date != str(today):
             if is_ajax(request):
@@ -840,12 +824,11 @@ def p2p_detail(request):
         p2p_message = request.POST.get('p2p_message')
 
         
-        recaptcha_response = request.POST.get('g-recaptcha-response')
-        result = verify_recaptcha(recaptcha_response)
-        if not result.get('success'):
-            return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'}) 
-        
-        # ✅ 중복 제출 방지 
+        turnstile_response = request.POST.get('cf-turnstile-response')
+        if not verify_turnstile(turnstile_response, remoteip=request.META.get('REMOTE_ADDR')):
+            return JsonResponse({'success': False, 'error': 'Turnstile verification failed. Please try again.'})
+
+        # ✅ 중복 제출 방지
         recent_duplicate = Inquiry.objects.filter(
             email=p2p_email,
             created__gte=timezone.now() - timedelta(seconds=2)
@@ -1204,14 +1187,13 @@ def booking_detail(request):
         except ValueError as e:
             return JsonResponse({'success': False, 'error': str(e)})
 
-        price = 'TBA'  
+        price = 'TBA'
 
-        recaptcha_response = request.POST.get('g-recaptcha-response')
-        result = verify_recaptcha(recaptcha_response)
-        if not result.get('success'):
-            return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'}) 
-        
-        # ✅ 중복 제출 방지 
+        turnstile_response = request.POST.get('cf-turnstile-response')
+        if not verify_turnstile(turnstile_response, remoteip=request.META.get('REMOTE_ADDR')):
+            return JsonResponse({'success': False, 'error': 'Turnstile verification failed. Please try again.'})
+
+        # ✅ 중복 제출 방지
         recent_duplicate = Post.objects.filter(
             email=email,
             created__gte=timezone.now() - timedelta(seconds=2)
@@ -1362,18 +1344,17 @@ def cruise_booking_detail(request):
         return_pickup_time = request.POST.get('return_pickup_time')
         return_start_point = request.POST.get('return_start_point', '')
         return_end_point = request.POST.get('return_end_point', '')
-        price = 'TBA'    
+        price = 'TBA'
 
-        recaptcha_response = request.POST.get('g-recaptcha-response')
-        result = verify_recaptcha(recaptcha_response)
-        if not result.get('success'):
-            return JsonResponse({'success': False, 'error': 'Invalid reCAPTCHA. Please try the checkbox again.'}) 
-        
-        # ✅ 중복 제출 방지 
+        turnstile_response = request.POST.get('cf-turnstile-response')
+        if not verify_turnstile(turnstile_response, remoteip=request.META.get('REMOTE_ADDR')):
+            return JsonResponse({'success': False, 'error': 'Turnstile verification failed. Please try again.'})
+
+        # ✅ 중복 제출 방지
         recent_duplicate = Post.objects.filter(
             email=email,
             created__gte=timezone.now() - timedelta(seconds=2)
-        ).exists() 
+        ).exists()
 
         if recent_duplicate:
             return JsonResponse({'success': False, 'message': 'Duplicate inquiry recently submitted. Please wait before trying again.'}) 
@@ -2723,30 +2704,4 @@ def stripe_webhook(request):
         print(f'Unhandled event type: {event.type}')
 
     return HttpResponse(status=200)
-
-
-# --------------------------
-# reCAPTCHA v3 Verify
-# --------------------------
-@csrf_exempt
-def recaptcha_verify(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        recaptcha_token = data.get('recaptchaToken')
-        
-        if not recaptcha_token:
-            return JsonResponse({'success': False, 'message': 'No reCAPTCHA token provided'})
-
-        # Verify the reCAPTCHA v3 token
-        result = verify_recaptcha(recaptcha_token, version='v3')
-        
-        if result.get('success'):
-            # The token is valid, handle your logic here
-            return JsonResponse({'success': True})
-        else:
-            # The token is invalid
-            return JsonResponse({'success': False, 'message': result.get('error-codes', 'Invalid reCAPTCHA token')})
-    
-    return JsonResponse({'success': False, 'message': 'Invalid request method'})
-
 

@@ -1,11 +1,10 @@
 from django.conf import settings
 
 
-def recaptcha_site_key(request):
+def turnstile_site_key(request):
     return {
-        'RECAPTCHA_V2_SITE_KEY': settings.RECAPTCHA_V2_SITE_KEY,
-        'RECAPTCHA_V3_SITE_KEY': settings.RECAPTCHA_V3_SITE_KEY,
-        'RECAPTCHA_DISABLED': getattr(settings, 'RECAPTCHA_DISABLED', False),
+        'CLOUDFLARE_TURNSTILE_SITE_KEY': settings.CLOUDFLARE_TURNSTILE_SITE_KEY,
+        'TURNSTILE_DISABLED': getattr(settings, 'TURNSTILE_DISABLED', False),
     }
 
 def add_custom_context(request):
