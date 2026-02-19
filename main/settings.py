@@ -62,6 +62,7 @@ if ENVIRONMENT == 'production':
                 "data:", 
                 'https://s3.ap-southeast-2.amazonaws.com/easygoshuttle.com.au/',
             ),
+            'frame-ancestors': ("'self'",),
         }
     }
     SECURE_REFERRER_POLICY = 'no-referrer-when-downgrade'
