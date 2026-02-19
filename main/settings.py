@@ -33,8 +33,30 @@ if ENVIRONMENT == 'production':
     CONTENT_SECURITY_POLICY = {
         'DIRECTIVES': {
             'default-src': ("'self'",),
-            'script-src': ("'self'", 'https://cdnjs.cloudflare.com'),
-            'style-src': ("'self'", 'https://fonts.googleapis.com'),
+            'script-src': (
+                "'self'",
+                'https://cdnjs.cloudflare.com',
+                'https://challenges.cloudflare.com',
+                "'unsafe-eval'",       
+            ),
+            'frame-src': (
+                "'self'",
+                'https://challenges.cloudflare.com',
+            ),
+            'connect-src': (          
+                "'self'",
+                'https://challenges.cloudflare.com',
+            ),
+            'style-src': (
+                "'self'",
+                'https://fonts.googleapis.com',
+                "'unsafe-inline'",
+            ),
+            'font-src': (            
+                "'self'",
+                'https://fonts.gstatic.com',
+            ),
+            'img-src': ("'self'", "data:"),
         }
     }
     SECURE_REFERRER_POLICY = 'no-referrer-when-downgrade'
@@ -148,6 +170,7 @@ MIDDLEWARE = [
     'htmlmin.middleware.HtmlMinifyMiddleware', 
     'htmlmin.middleware.MarkRequestMiddleware', 
     'django.middleware.security.SecurityMiddleware',
+    'csp.middleware.CSPMiddleware',  
     'main.middlewares.login_control.AccountLoginMethodMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
