@@ -286,43 +286,6 @@ def index(request):
     return render(request, 'easygo_review/index.html', {'posts': posts})
 
 
-def verify_recaptcha(response, version='v2'):
-    if getattr(settings, 'RECAPTCHA_DISABLED', False):
-        return {'success': True}
-
-    if version == 'v2':
-        secret_key = settings.RECAPTCHA_V2_SECRET_KEY
-    elif version == 'v3':
-        secret_key = settings.RECAPTCHA_V3_SECRET_KEY
-    else:
-        return {'success': False, 'error-codes': ['invalid-version']}
-
-    data = {
-        'secret': secret_key,
-        'response': response
-    }
-    r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
-    return r.json()
-
-
-@csrf_exempt
-def recaptcha_verify(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        recaptcha_token = data.get('recaptchaToken')
-        
-        if not recaptcha_token:
-            return JsonResponse({'success': False, 'message': 'No reCAPTCHA token provided'})
-
-        result = verify_recaptcha(recaptcha_token, version='v3')
-        
-        if result.get('success'):
-            return JsonResponse({'success': True})
-        else:
-            return JsonResponse({'success': False, 'message': result.get('error-codes', 'Invalid reCAPTCHA token')})
-    
-    return JsonResponse({'success': False, 'message': 'Invalid request method'})
-
 
 @login_required
 def verse_input_view(request):
