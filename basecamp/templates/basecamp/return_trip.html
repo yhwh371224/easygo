@@ -33,6 +33,7 @@
       <!-- Contact form + details-->  	  
             <form method="post" enctype="multipart/form-data" action="/return_trip_detail/" id="booking-form" class="card-body needs-validation p-5" >
                 {% csrf_token %}
+                <input type="text" name="phone_verify" value="" style="display:none !important" tabindex="-1" autocomplete="off">
 				<div class="mb3 pb-1" >
 					<p class="form-label mb-1">Personal Information</p>
 				</div>

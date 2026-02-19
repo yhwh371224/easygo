@@ -28,6 +28,7 @@
         <div class="card shadow-lg">
           <form method="post" enctype="multipart/form-data" action="/invoice_detail/" id="booking-form" class="card-body needs-validation p-4 m-3">
             {% csrf_token %}
+            <input type="text" name="phone_verify" value="" style="display:none !important" tabindex="-1" autocomplete="off">
             <div class="card text-white bg-secondary" style="padding: 2.5rem 3rem;">
 
               <div class="mb-5 pb-3">
@@ -89,7 +90,6 @@
             </div>
 
             <!-- Submit Button -->
-            <div class="cf-turnstile" data-sitekey="{{ CLOUDFLARE_TURNSTILE_SITE_KEY }}"></div>
             <div class="text-center mt-4 mb-2">
               <button class="btn btn-primary" type="submit" id="submitButton">Submit</button>
             </div>

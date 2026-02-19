@@ -133,10 +133,9 @@
         <br/>
         <br/>
         <h2 class="text-center mb-4">Best Service Guaranteed</h2>
-         <p class="text-center"><small>This site is protected by Cloudflare Turnstile to keep your data safe and secure
-                    <a href="https://www.cloudflare.com/privacypolicy/">Privacy Policy</a> and
-                    <a href="https://www.cloudflare.com/website-terms/">Terms of Service</a> apply.
-         </small></p>
+         <p class="text-center">
+          <small>🔒 This site is secured by Cloudflare security & SSL encryption.</small>
+        </p>
       </section>
   </main>
     <footer class="site-footer bg-dark pt-5 pb-4">
@@ -163,7 +162,7 @@
     </script>
     <script src="/static/basecamp/js/form_handler.js" defer></script>
     <script src="/static/basecamp/js/theme.min.js"></script>              
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    <!-- <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script> -->
     <script>
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('booking-form');
@@ -248,14 +247,14 @@
 
         form.addEventListener('submit', function (event) {
             let isValid = true;
-            const turnstileWidget = document.querySelector('.cf-turnstile');
-            const turnstileResponse = turnstileWidget ? (document.querySelector('[name="cf-turnstile-response"]') || {}).value : null;
-            if (turnstileWidget && !turnstileResponse) {
-                alert('Please complete the Turnstile verification.');
-                event.preventDefault();
-                event.stopPropagation();
-                return;
-            }
+            // const turnstileWidget = document.querySelector('.cf-turnstile');
+            // const turnstileResponse = turnstileWidget ? (document.querySelector('[name="cf-turnstile-response"]') || {}).value : null;
+            // if (turnstileWidget && !turnstileResponse) {
+            //     alert('Please complete the Turnstile verification.');
+            //     event.preventDefault();
+            //     event.stopPropagation();
+            //     return;
+            // }
             const alwaysRequired = form.querySelectorAll('input[required], select[required], textarea[required]');
             alwaysRequired.forEach(input => {
                 if (!input.value.trim()) {

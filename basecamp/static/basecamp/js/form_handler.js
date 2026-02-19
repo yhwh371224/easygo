@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function() {
             })
             .then(data => {
                 if (data.success) {
-                    window.location.href = '/inquiry_done'; // Redirect to the desired URL
+                    window.location.href = '/inquiry_done/'; // Redirect to the desired URL
                 } else {
                     var errorMessageDiv = document.getElementById("errorMessage");
                     if (errorMessageDiv) { // Check if the errorMessage element exists
@@ -37,11 +37,11 @@ document.addEventListener("DOMContentLoaded", function() {
             })
             .catch(error => {
                 console.error('Error:', error);
+                alert('Error: ' + error.message);  // 임시로 alert로 확인
                 var errorMessageDiv = document.getElementById("errorMessage");
-                if (errorMessageDiv) { // Check if the errorMessage element exists
-                    window.location.href = '/date_error';
-                    // errorMessageDiv.textContent = 'There was a problem processing your request.';
-                    // errorMessageDiv.style.display = 'block';
+                if (errorMessageDiv) { 
+                    errorMessageDiv.textContent = 'There was a problem processing your request.';
+                    errorMessageDiv.style.display = 'block';
                 } else {
                     console.error('Error message div not found on the page.');
                 }

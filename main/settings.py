@@ -37,8 +37,8 @@ if ENVIRONMENT == 'production':
                 "'self'",
                 'https://cdnjs.cloudflare.com',
                 'https://challenges.cloudflare.com',
-                "'unsafe-eval'",   
-                "'unsafe-inline'",     
+                # "'unsafe-eval'",   
+                # "'unsafe-inline'",     
             ),
             'frame-src': (
                 "'self'",
@@ -82,6 +82,7 @@ INSTALLED_APPS = [
     'basecamp.apps.BasecampConfig', 
     'easygo_review.apps.EasygoReviewConfig',
     'admin_honeypot',
+    'honeypot',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -202,7 +203,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'context_processors.turnstile_site_key',
+                # 'context_processors.turnstile_site_key',
                 'context_processors.add_custom_context',
                 'context_processors.bank_settings',
             ],
@@ -322,7 +323,6 @@ COMPRESS_CSS_HASHING_METHOD = 'content'
 COMPRESS_FILTERS = {
     'css':[
         'compressor.filters.css_default.CssAbsoluteFilter',
-        # 'compressor.filters.cssmin.rCSSMinFilter',
     ],
     'js':[
         'compressor.filters.jsmin.JSMinFilter',
@@ -372,9 +372,14 @@ GMAIL_SERVICE_ACCOUNT_FILE = config('GMAIL_SERVICE_ACCOUNT_FILE')
 CALENDAR_SERVICE_ACCOUNT_FILE = config('CALENDAR_SERVICE_ACCOUNT_FILE')
 
 # Cloudfare Turnstile settings
-TURNSTILE_DISABLED = (ENVIRONMENT != 'production')
-CLOUDFLARE_TURNSTILE_SITE_KEY = config('CLOUDFLARE_TURNSTILE_SITE_KEY')
-CLOUDFLARE_TURNSTILE_SECRET_KEY = config('CLOUDFLARE_TURNSTILE_SECRET_KEY')
+# TURNSTILE_DISABLED = (ENVIRONMENT != 'production')
+# TURNSTILE_DISABLED = True 
+# CLOUDFLARE_TURNSTILE_SITE_KEY = config('CLOUDFLARE_TURNSTILE_SITE_KEY')
+# CLOUDFLARE_TURNSTILE_SECRET_KEY = config('CLOUDFLARE_TURNSTILE_SECRET_KEY')
+
+# Honeypot settings
+HONEYPOT_FIELD_NAME = 'phone_verify'  
+HONEYPOT_VALUE = ''
 
 # MySQL Backup Database Configuration
 MYSQL_CONFIG = {

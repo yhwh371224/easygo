@@ -126,6 +126,7 @@
                 <!-- Paypal form -->
 			          <form method="post" id="paypal-form">
 			          	{% csrf_token %}
+			          	<input type="text" name="phone_verify" value="" style="display:none !important" tabindex="-1" autocomplete="off">
 			          	<h3 class="text-center">PayPal Checkout</h3>
 			          	<br><br>
 			          	<div id="smart-button-container">
@@ -141,10 +142,7 @@
 			          </form>
                 <section class="container" style="margin-top: 60px;">
                   <h5 class="text-center mb-4">Safe Security Guaranteed</h5>
-                   <p class="text-center"><small><small>This site is protected by Cloudflare Turnstile to keep your data safe and secure
-                              <a href="https://www.cloudflare.com/privacypolicy/">Privacy Policy</a> and
-                              <a href="https://www.cloudflare.com/website-terms/">Terms of Service</a> apply.
-                   </small></small></p>
+                   <p class="text-center"><small>🔒 This site is secured by Cloudflare security & SSL encryption.</small></p>
                 </section>
   <script src="https://www.paypal.com/sdk/js?client-id={{ paypal_client_id }}&components=buttons&enable-funding=card&disable-funding=paylater,venmo&currency=AUD" data-sdk-integration-source="integrationbuilder_sc"></script>
   <script>
@@ -196,7 +194,6 @@
       }
     }).render('#paypal-button-container');
   </script>
-  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   </main>
     <footer class="site-footer bg-dark pt-5 pb-4">
       <div class="container d-md-flex justify-content-between align-items-center text-center">

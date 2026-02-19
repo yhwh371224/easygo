@@ -120,10 +120,7 @@
         <br/>
         <br/>
         <h2 class="text-center mb-4">Best Service Guaranteed</h2>
-         <p class="text-center"><small>This site is protected by Cloudflare Turnstile to keep your data safe and secure
-                    <a href="https://www.cloudflare.com/privacypolicy/">Privacy Policy</a> and
-                    <a href="https://www.cloudflare.com/website-terms/">Terms of Service</a> apply.
-         </small></p>
+         <p class="text-center"><small>🔒 This site is secured by Cloudflare security & SSL encryption.</small></p>
       </section>
   </main>
     <footer class="site-footer bg-dark pt-5 pb-4">
@@ -148,8 +145,6 @@
     <script src="/static/basecamp/js/flatpickr.min.js" defer></script>
     <script src="/static/basecamp/js/date-picker.js" defer></script>
     <script src="/static/basecamp/js/theme.min.js"></script>     
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-    
     <script>
         let titleSpinnerInterval = null;
         const originalTitle = document.title;
@@ -184,15 +179,7 @@
 
                     let isValid = true;
 
-                    // 2. Turnstile 검증 (위젯이 DOM에 있을 때만 체크)
-                    const turnstileWidget = document.querySelector('.cf-turnstile');
-                    const turnstileInput = document.querySelector('[name="cf-turnstile-response"]');
-                    if (turnstileWidget && (!turnstileInput || !turnstileInput.value)) {
-                        alert('Please complete the Turnstile verification.');
-                        return;
-                    }
-
-                    // 3. 오늘 날짜 검증 (YYYY-MM-DD 비교)
+                    // 2. 오늘 날짜 검증 (YYYY-MM-DD 비교)
                     if (dateInput && dateInput.value) {
                         const now = new Date();
                         // 오늘 날짜 문자열 생성 (예: "2026-02-16")

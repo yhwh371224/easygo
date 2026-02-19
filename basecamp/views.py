@@ -28,7 +28,7 @@ from basecamp.area_home import get_home_suburbs
 from basecamp.area_zones import area_zones
 
 from .utils import (
-    verify_turnstile, is_ajax, parse_date, handle_email_sending, format_pickup_time_12h,
+    is_ajax, parse_date, handle_email_sending, format_pickup_time_12h,
     render_to_pdf, add_bag, to_int, to_bool, safe_float,
     handle_checkout_session_completed, paypal_ipn_error_email, get_sorted_suburbs
 )
@@ -365,6 +365,9 @@ def wrong_date_today(request):
 # Inquiry for airport 
 def inquiry_details(request):
     if request.method == "POST":
+        honeypot = request.POST.get('phone_verify', '')
+        if honeypot != '':
+            return JsonResponse({'success': False, 'error': 'Bot detected.'})
         name = request.POST.get('name', '')
         contact = request.POST.get('contact', '')
         email = request.POST.get('email', '')  
@@ -390,11 +393,7 @@ def inquiry_details(request):
         return_end_point = request.POST.get('return_end_point', '')
         message = request.POST.get('message', '')
 
-        turnstile_response = request.POST.get('cf-turnstile-response')
-        if not verify_turnstile(turnstile_response, remoteip=request.META.get('REMOTE_ADDR')):
-            return JsonResponse({'success': False, 'error': 'Turnstile verification failed. Please try again.'})  
-
-        # ✅ 중복 제출 방지 
+        # ✅ 중복 제출 방지
         recent_duplicate = Inquiry.objects.filter(
             email=email,
             created__gte=timezone.now() - timedelta(seconds=10)
@@ -563,7 +562,10 @@ def inquiry_details(request):
 # inquiry (simple one) for airport from home page
 def inquiry_details1(request):
     if request.method == "POST":
-        pickup_date_str = request.POST.get('pickup_date', '')  
+        honeypot = request.POST.get('phone_verify', '')
+        if honeypot != '':
+            return JsonResponse({'success': False, 'error': 'Bot detected.'})
+        pickup_date_str = request.POST.get('pickup_date', '')
         name = request.POST.get('name', '')
         contact = request.POST.get('contact', '')
         email = request.POST.get('email', '')
@@ -743,23 +745,22 @@ def inquiry_details1(request):
 # Contact form
 def contact_submit(request):
     if request.method == "POST":
+        honeypot = request.POST.get('phone_verify', '')
+        if honeypot != '':
+            return JsonResponse({'success': False, 'error': 'Bot detected.'})
         # --- Honeypot check ---
-        honeypot = request.POST.get("website", "")
-        if honeypot:  # 봇이 채우면 무효
+        website_honeypot = request.POST.get("website", "")
+        if website_honeypot:  # 봇이 채우면 무효
             if is_ajax(request):
                 return JsonResponse({'success': False, 'error': 'Spam detected.'})
             else:
                 return render(request, 'basecamp/spam_detected.html')  # 간단한 페이지
-            
+
         name = request.POST.get('name')
         contact = request.POST.get('contact')
-        email = request.POST.get('email') 
-        pickup_date = request.POST.get('pickup_date')     
-        message = request.POST.get('message')  
-        
-        turnstile_response = request.POST.get('cf-turnstile-response')
-        if not verify_turnstile(turnstile_response, remoteip=request.META.get('REMOTE_ADDR')):
-            return JsonResponse({'success': False, 'error': 'Turnstile verification failed. Please try again.'})
+        email = request.POST.get('email')
+        pickup_date = request.POST.get('pickup_date')
+        message = request.POST.get('message')
 
         today = date.today()
         if pickup_date != str(today):
@@ -801,8 +802,11 @@ def contact_submit(request):
     
     
 # Multiple points Inquiry 
-def p2p_detail(request):    
+def p2p_detail(request):
     if request.method == "POST":
+        honeypot = request.POST.get('phone_verify', '')
+        if honeypot != '':
+            return JsonResponse({'success': False, 'error': 'Bot detected.'})
         p2p_name = request.POST.get('p2p_name')
         p2p_phone = request.POST.get('p2p_phone')
         p2p_email = request.POST.get('p2p_email')
@@ -822,11 +826,6 @@ def p2p_detail(request):
         p2p_passengers = request.POST.get('p2p_passengers')
         p2p_baggage = request.POST.get('p2p_baggage')
         p2p_message = request.POST.get('p2p_message')
-
-        
-        turnstile_response = request.POST.get('cf-turnstile-response')
-        if not verify_turnstile(turnstile_response, remoteip=request.META.get('REMOTE_ADDR')):
-            return JsonResponse({'success': False, 'error': 'Turnstile verification failed. Please try again.'})
 
         # ✅ 중복 제출 방지
         recent_duplicate = Inquiry.objects.filter(
@@ -864,8 +863,11 @@ def p2p_detail(request):
     
 
 # p2p multiple points booking by myself 
-def p2p_booking_detail(request):    
+def p2p_booking_detail(request):
     if request.method == "POST":
+        honeypot = request.POST.get('phone_verify', '')
+        if honeypot != '':
+            return JsonResponse({'success': False, 'error': 'Bot detected.'})
         p2p_name = request.POST.get('p2p_name')
         p2p_phone = request.POST.get('p2p_phone')
         p2p_email = request.POST.get('p2p_email')
@@ -1147,8 +1149,10 @@ def confirmation_detail(request):
 
 # airport booking by client
 def booking_detail(request):
-    if request.method == "POST":   
-        # ✅ Collect date strings
+    if request.method == "POST":  
+        honeypot = request.POST.get('phone_verify', '')
+        if honeypot != '':
+            return JsonResponse({'success': False, 'error': 'Bot detected.'})
         pickup_date_str = request.POST.get('pickup_date', '')           
         return_pickup_date_str = request.POST.get('return_pickup_date', '') 
         name = request.POST.get('name')
@@ -1189,9 +1193,9 @@ def booking_detail(request):
 
         price = 'TBA'
 
-        turnstile_response = request.POST.get('cf-turnstile-response')
-        if not verify_turnstile(turnstile_response, remoteip=request.META.get('REMOTE_ADDR')):
-            return JsonResponse({'success': False, 'error': 'Turnstile verification failed. Please try again.'})
+        # turnstile_response = request.POST.get('cf-turnstile-response')
+        # if not verify_turnstile(turnstile_response, remoteip=request.META.get('REMOTE_ADDR')):
+        #     return JsonResponse({'success': False, 'error': 'Turnstile verification failed. Please try again.'})
 
         # ✅ 중복 제출 방지
         recent_duplicate = Post.objects.filter(
@@ -1328,27 +1332,26 @@ def booking_detail(request):
 
 # cruise booking by client
 def cruise_booking_detail(request):
-    if request.method == "POST": 
+    if request.method == "POST":
+        honeypot = request.POST.get('phone_verify', '')
+        if honeypot != '':
+            return JsonResponse({'success': False, 'error': 'Bot detected.'})
         # ✅ Collect date strings
-        pickup_date_str = request.POST.get('pickup_date', '')           
+        pickup_date_str = request.POST.get('pickup_date', '')
         return_pickup_date_str = request.POST.get('return_pickup_date', '')
         name = request.POST.get('name')
         contact = request.POST.get('contact')
-        email = request.POST.get('email')          
+        email = request.POST.get('email')
         pickup_time = request.POST.get('pickup_time')
         start_point = request.POST.get('start_point', '')
-        end_point = request.POST.get('end_point', '')        
+        end_point = request.POST.get('end_point', '')
         no_of_passenger = request.POST.get('no_of_passenger')
         no_of_baggage = request.POST.get('no_of_baggage')
-        message = request.POST.get('message')      
+        message = request.POST.get('message')
         return_pickup_time = request.POST.get('return_pickup_time')
         return_start_point = request.POST.get('return_start_point', '')
         return_end_point = request.POST.get('return_end_point', '')
         price = 'TBA'
-
-        turnstile_response = request.POST.get('cf-turnstile-response')
-        if not verify_turnstile(turnstile_response, remoteip=request.META.get('REMOTE_ADDR')):
-            return JsonResponse({'success': False, 'error': 'Turnstile verification failed. Please try again.'})
 
         # ✅ 중복 제출 방지
         recent_duplicate = Post.objects.filter(
@@ -1520,6 +1523,9 @@ def cruise_booking_detail(request):
 
 def confirm_booking_detail(request):
     if request.method == "POST":
+        honeypot = request.POST.get('phone_verify', '')
+        if honeypot != '':
+            return JsonResponse({'success': False, 'error': 'Bot detected.'})
         email = request.POST.get('email')
         is_confirmed = request.POST.get('is_confirmed') == 'True'
 
@@ -1916,15 +1922,18 @@ def sending_email_input_data_detail(request):
 # For Return Trip 
 def return_trip_detail(request):     
     if request.method == "POST":
-        pickup_date_str = request.POST.get('pickup_date', '')           
+        honeypot = request.POST.get('phone_verify', '')
+        if honeypot != '':
+            return JsonResponse({'success': False, 'error': 'Bot detected.'})
+        pickup_date_str = request.POST.get('pickup_date', '')
         return_pickup_date_str = request.POST.get('return_pickup_date', '')
         email = request.POST.get('email', '').strip()
         flight_number = request.POST.get('flight_number', '')
-        flight_time = request.POST.get('flight_time', '')          
+        flight_time = request.POST.get('flight_time', '')
         pickup_time = request.POST.get('pickup_time', '')
         start_point = request.POST.get('start_point', '')
-        end_point = request.POST.get('end_point', '') 
-        direction = request.POST.get('direction', '')               
+        end_point = request.POST.get('end_point', '')
+        direction = request.POST.get('direction', '')
         message = request.POST.get('message', '')
         price = request.POST.get('price', '')
         toll = request.POST.get('toll', '')
@@ -2029,6 +2038,9 @@ def return_trip_detail(request):
 
 def invoice_detail(request):
     if request.method == "POST":
+        honeypot = request.POST.get('phone_verify', '')
+        if honeypot != '':
+            return JsonResponse({'success': False, 'error': 'Bot detected.'})
         email = request.POST.get('email', '').strip()
         extra_email = request.POST.get('extra_email', '').strip()  
         apply_gst_flag = request.POST.get('apply_gst')
@@ -2329,6 +2341,9 @@ def invoice_detail(request):
 # email dispatching
 def email_dispatch_detail(request):
     if request.method == "POST":
+        honeypot = request.POST.get('phone_verify', '')
+        if honeypot != '':
+            return JsonResponse({'success': False, 'error': 'Bot detected.'})
         # 1️⃣ Form fields
         email = request.POST.get('email', '').strip()
         selected_option = request.POST.get('selected_option')

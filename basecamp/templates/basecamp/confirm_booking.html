@@ -31,6 +31,7 @@
         <div class="card shadow-lg">
           <form method="post" id="booking-form" action="/confirm_booking_detail/" class="card-body needs-validation p-4 m-3">
             {% csrf_token %}
+            <input type="text" name="phone_verify" value="" style="display:none !important" tabindex="-1" autocomplete="off">
             <div class="card text-white bg-secondary" style="padding: 2.5rem 3rem;">
 
               <!-- Email Address Field -->
