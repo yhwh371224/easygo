@@ -25,7 +25,6 @@
   </head>
   <body>
     <main class="page-wrapper">
-      <!-- Header / Navbar -->
       <header class="header navbar navbar-expand-lg navbar-dark navbar-floating navbar-sticky" data-scroll-header data-fixed-element>
         <div class="container px-0 px-xl-3">
           <button class="navbar-toggler ms-n2 me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#primaryMenu" aria-label="Toggle navigation">
@@ -126,7 +125,6 @@
         </small></p>
       </section>
     </main>
-
     <footer class="site-footer bg-dark pt-5 pb-4">
       <div class="container d-md-flex justify-content-between align-items-center text-center">
         <ul class="list-inline fs-sm mb-3 order-md-2">
@@ -143,19 +141,16 @@
         </p>
       </div>
     </footer>
-
     <script src="/static/basecamp/js/bootstrap.bundle.min.js"></script>
     <script src="/static/basecamp/js/simplebar.min.js"></script>
     <script src="/static/basecamp/js/rangePlugin.js"></script>
     <script src="/static/basecamp/js/theme.min.js"></script>
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-
     <script>
     document.addEventListener("DOMContentLoaded", function () {
         // --- Form Submit ---
         const form = document.getElementById("booking-form");
         const submitButton = document.getElementById("submitButton");
-
         if (form && submitButton) {
             form.addEventListener("submit", function (event) {
                 if (!form.checkValidity()) {
@@ -168,22 +163,18 @@
                 if (typeof startTitleSpinner === "function") startTitleSpinner();
             });
         }
-
         // --- Extra Luggage Toggle ---
         const extraCheckbox = document.getElementById("extraLuggageCheck");
         const extraFields = document.getElementById("extraLuggageFields");
-
         if (extraCheckbox && extraFields) {
             // 초기 상태 설정
             extraFields.style.display = extraCheckbox.checked ? "block" : "none";
-
             // 체크박스 이벤트
             extraCheckbox.addEventListener("change", function () {
                 extraFields.style.display = this.checked ? "block" : "none";
             });
         }
     });
-
     // --- BFCache / Back Button Recovery ---
     window.addEventListener("pageshow", function (event) {
         if (event.persisted) {
