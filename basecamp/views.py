@@ -366,9 +366,6 @@ def wrong_date_today(request):
 # Inquiry for airport 
 def inquiry_details(request):
     if request.method == "POST":
-        honeypot = request.POST.get('phone_verify', '')
-        if honeypot != '':
-            return JsonResponse({'success': False, 'error': 'Bot detected.'})
         token = request.POST.get('cf-turnstile-response', '')
         ip = request.META.get('HTTP_CF_CONNECTING_IP') or request.META.get('REMOTE_ADDR')
         if not verify_turnstile(token, ip):
@@ -567,9 +564,6 @@ def inquiry_details(request):
 # inquiry (simple one) for airport from home page
 def inquiry_details1(request):
     if request.method == "POST":
-        honeypot = request.POST.get('phone_verify', '')
-        if honeypot != '':
-            return JsonResponse({'success': False, 'error': 'Bot detected.'})
         token = request.POST.get('cf-turnstile-response', '')
         ip = request.META.get('HTTP_CF_CONNECTING_IP') or request.META.get('REMOTE_ADDR')
         if not verify_turnstile(token, ip):
@@ -754,9 +748,10 @@ def inquiry_details1(request):
 # Contact form
 def contact_submit(request):
     if request.method == "POST":
-        honeypot = request.POST.get('phone_verify', '')
-        if honeypot != '':
-            return JsonResponse({'success': False, 'error': 'Bot detected.'})
+        token = request.POST.get('cf-turnstile-response', '')
+        ip = request.META.get('HTTP_CF_CONNECTING_IP') or request.META.get('REMOTE_ADDR')
+        if not verify_turnstile(token, ip):
+            return JsonResponse({'success': False, 'error': 'Security verification failed. Please try again.'})
         # --- Honeypot check ---
         website_honeypot = request.POST.get("website", "")
         if website_honeypot:  # 봇이 채우면 무효
@@ -813,9 +808,6 @@ def contact_submit(request):
 # Multiple points Inquiry 
 def p2p_detail(request):
     if request.method == "POST":
-        honeypot = request.POST.get('phone_verify', '')
-        if honeypot != '':
-            return JsonResponse({'success': False, 'error': 'Bot detected.'})
         token = request.POST.get('cf-turnstile-response', '')
         ip = request.META.get('HTTP_CF_CONNECTING_IP') or request.META.get('REMOTE_ADDR')
         if not verify_turnstile(token, ip):
@@ -878,9 +870,6 @@ def p2p_detail(request):
 # p2p multiple points booking by myself 
 def p2p_booking_detail(request):
     if request.method == "POST":
-        honeypot = request.POST.get('phone_verify', '')
-        if honeypot != '':
-            return JsonResponse({'success': False, 'error': 'Bot detected.'})
         token = request.POST.get('cf-turnstile-response', '')
         ip = request.META.get('HTTP_CF_CONNECTING_IP') or request.META.get('REMOTE_ADDR')
         if not verify_turnstile(token, ip):
@@ -1167,9 +1156,6 @@ def confirmation_detail(request):
 # airport booking by client
 def booking_detail(request):
     if request.method == "POST":
-        honeypot = request.POST.get('phone_verify', '')
-        if honeypot != '':
-            return JsonResponse({'success': False, 'error': 'Bot detected.'})
         token = request.POST.get('cf-turnstile-response', '')
         ip = request.META.get('HTTP_CF_CONNECTING_IP') or request.META.get('REMOTE_ADDR')
         if not verify_turnstile(token, ip):
@@ -1354,9 +1340,6 @@ def booking_detail(request):
 # cruise booking by client
 def cruise_booking_detail(request):
     if request.method == "POST":
-        honeypot = request.POST.get('phone_verify', '')
-        if honeypot != '':
-            return JsonResponse({'success': False, 'error': 'Bot detected.'})
         token = request.POST.get('cf-turnstile-response', '')
         ip = request.META.get('HTTP_CF_CONNECTING_IP') or request.META.get('REMOTE_ADDR')
         if not verify_turnstile(token, ip):
@@ -1947,9 +1930,6 @@ def sending_email_input_data_detail(request):
 # For Return Trip 
 def return_trip_detail(request):
     if request.method == "POST":
-        honeypot = request.POST.get('phone_verify', '')
-        if honeypot != '':
-            return JsonResponse({'success': False, 'error': 'Bot detected.'})
         token = request.POST.get('cf-turnstile-response', '')
         ip = request.META.get('HTTP_CF_CONNECTING_IP') or request.META.get('REMOTE_ADDR')
         if not verify_turnstile(token, ip):
@@ -2067,9 +2047,6 @@ def return_trip_detail(request):
 
 def invoice_detail(request):
     if request.method == "POST":
-        honeypot = request.POST.get('phone_verify', '')
-        if honeypot != '':
-            return JsonResponse({'success': False, 'error': 'Bot detected.'})
         token = request.POST.get('cf-turnstile-response', '')
         ip = request.META.get('HTTP_CF_CONNECTING_IP') or request.META.get('REMOTE_ADDR')
         if not verify_turnstile(token, ip):
