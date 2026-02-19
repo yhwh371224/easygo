@@ -13,7 +13,7 @@
     <meta name="keywords" content="Sydney airport transfer, private airport shuttle, group airport transfer, luggage-friendly shuttle">
     <meta name="author" content="easygoshuttle.com.au">
     {% endblock %}
-    <script type="application/ld+json">
+    <script type="application/ld+json" nonce="{{ CSP_NONCE }}">
     {
       "@context": "https://schema.org",
       "@type": "LocalBusiness",
@@ -210,7 +210,7 @@
     <script>
       document.getElementById('current-year').textContent = new Date().getFullYear();
     </script>
-    <script type="application/ld+json">
+    <script type="application/ld+json" nonce="{{ CSP_NONCE }}">
     {
       "@context": "https://schema.org",
       "@type": "FAQPage",
