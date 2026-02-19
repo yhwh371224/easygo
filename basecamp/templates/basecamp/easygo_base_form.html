@@ -162,7 +162,6 @@
     </script>
     <script src="/static/basecamp/js/form_handler.js" defer></script>
     <script src="/static/basecamp/js/theme.min.js"></script>              
-    <!-- <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script> -->
     <script>
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('booking-form');
@@ -174,22 +173,25 @@
         const directionSelect = document.getElementById('direction');
         const startEndFields = document.getElementById('start-end-fields');
         const flightFields = document.getElementById('flight-fields');
+        const extraLuggageCheck = document.getElementById('extraLuggageCheck');
+        const extraLuggageFields = document.getElementById('extraLuggageFields');
+
+        if (extraLuggageCheck && extraLuggageFields) {
+            extraLuggageCheck.addEventListener("change", function () {
+                extraLuggageFields.style.display = this.checked ? 'block' : 'none';
+            });
+        }
 
         if (returnFlightCheckbox && returnFlightFields) {
             returnFlightCheckbox.addEventListener("change", function () {
-                if (returnFlightCheckbox.checked) {
+                if (this.checked) {
                     const xhr = new XMLHttpRequest();
                     xhr.open("GET", returnFlightURL);
                     xhr.onload = function () {
                         if (xhr.status === 200) {
                             returnFlightFields.innerHTML = xhr.responseText;
                             returnFlightFields.style.display = 'block';
-                        } else {
-                            console.log("Request failed. Status: " + xhr.status);
                         }
-                    };
-                    xhr.onerror = function() {
-                        console.log("Network error while loading return flight fields.");
                     };
                     xhr.send();
                 } else {
@@ -197,25 +199,26 @@
                     returnFlightFields.style.display = 'none';
                 }
             });
-        } else {
-            console.error("Return flight checkbox or fields not found in DOM.");
         }
 
-        flightDateInput.addEventListener('change', function () {
-            const selectedDate = new Date(flightDateInput.value);
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
+        if (flightDateInput) {
+            flightDateInput.addEventListener('change', function () {
+                const selectedDate = new Date(this.value);
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
 
-            if (selectedDate < today) {
-                dateError.style.display = 'block';
-                flightDateInput.classList.add('is-invalid');
-            } else {
-                dateError.style.display = 'none';
-                flightDateInput.classList.remove('is-invalid');
-            }
-        });
+                if (selectedDate < today) {
+                    dateError.style.display = 'block';
+                    this.classList.add('is-invalid');
+                } else {
+                    dateError.style.display = 'none';
+                    this.classList.remove('is-invalid');
+                }
+            });
+        }
 
         function toggleDirectionFields() {
+            if (!directionSelect || !startEndFields || !flightFields) return;
             if (directionSelect.value === "Cruise or Point to Point") {
                 startEndFields.style.display = 'block';
                 flightFields.style.display = 'none';
@@ -224,89 +227,69 @@
                 flightFields.style.display = 'block';
             }
         }
-
-        directionSelect.addEventListener('change', toggleDirectionFields);
-        toggleDirectionFields(); 
+        if (directionSelect) {
+            directionSelect.addEventListener('change', toggleDirectionFields);
+            toggleDirectionFields(); 
+        }
 
         let originalTitle = document.title;
-        let dots = 0;
         let titleInterval;
-
         function startTitleSpinner() {
+            let dots = 0;
             titleInterval = setInterval(() => {
                 dots = (dots + 1) % 4;
                 document.title = "Submitting" + ".".repeat(dots);
             }, 500);
         }
-        function stopTitleSpinner() {
-            clearInterval(titleInterval);
-            document.title = originalTitle;
-        }
+        window.addEventListener('beforeunload', () => clearInterval(titleInterval));
 
-        window.addEventListener('beforeunload', stopTitleSpinner);
-
-        form.addEventListener('submit', function (event) {
-            let isValid = true;
-            // const turnstileWidget = document.querySelector('.cf-turnstile');
-            // const turnstileResponse = turnstileWidget ? (document.querySelector('[name="cf-turnstile-response"]') || {}).value : null;
-            // if (turnstileWidget && !turnstileResponse) {
-            //     alert('Please complete the Turnstile verification.');
-            //     event.preventDefault();
-            //     event.stopPropagation();
-            //     return;
-            // }
-            const alwaysRequired = form.querySelectorAll('input[required], select[required], textarea[required]');
-            alwaysRequired.forEach(input => {
-                if (!input.value.trim()) {
-                    input.classList.add('is-invalid');
-                    isValid = false;
-                } else {
-                    input.classList.remove('is-invalid');
-                }
-            });
-            if (returnFlightCheckbox.checked) {
-                const returnInputs = returnFlightFields.querySelectorAll('input, select, textarea');
-                returnInputs.forEach(input => {
-                    if (['return_flight_number', 'return_pickup_date', 'return_direction'].includes(input.name)) {
-                        if (!input.value.trim()) {
-                            input.classList.add('is-invalid');
-                            isValid = false;
-                        } else {
-                            input.classList.remove('is-invalid');
-                        }
+        if (form) {
+            form.addEventListener('submit', function (event) {
+                let isValid = true;
+                
+                const alwaysRequired = form.querySelectorAll('input[required], select[required], textarea[required]');
+                alwaysRequired.forEach(input => {
+                    if (!input.value.trim()) {
+                        input.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        input.classList.remove('is-invalid');
                     }
                 });
-            }
-            if (directionSelect.value === "Cruise or Point to Point") {
-                const startInput = startEndFields.querySelector('input[name="start_point"]');
-                const endInput = startEndFields.querySelector('input[name="end_point"]');
-                if (!startInput.value.trim() || !endInput.value.trim()) {
-                    startInput.classList.add('is-invalid');
-                    endInput.classList.add('is-invalid');
-                    isValid = false;
-                } else {
-                    startInput.classList.remove('is-invalid');
-                    endInput.classList.remove('is-invalid');
+
+                if (returnFlightCheckbox && returnFlightCheckbox.checked) {
+                    const returnInputs = returnFlightFields.querySelectorAll('input, select, textarea');
+                    returnInputs.forEach(input => {
+                        if (['return_flight_number', 'return_pickup_date', 'return_direction'].includes(input.name)) {
+                            if (!input.value.trim()) {
+                                input.classList.add('is-invalid');
+                                isValid = false;
+                            } else {
+                                input.classList.remove('is-invalid');
+                            }
+                        }
+                    });
                 }
-            }
-            if (!isValid) {
-                event.preventDefault();
-                event.stopPropagation();
-                alert('Please fill in all required fields correctly.');
-                return;
-            }
-            submitButton.disabled = true;
-            submitButton.innerHTML = "Submitting... <span class='spinner'></span>";
-            startTitleSpinner();
-        });
-        window.toggleExtraLuggage = function () {
-            const extraFields = document.getElementById("extraLuggageFields");
-            extraFields.style.display = document.getElementById('extraLuggageCheck').checked ? 'block' : 'none';
-        };
+
+                if (!isValid) {
+                    event.preventDefault();
+                    alert('Please fill in all required fields correctly.');
+                    return;
+                }
+
+                if (submitButton) {
+                    submitButton.disabled = true;
+                    submitButton.innerHTML = "Submitting... <span class='spinner'></span>";
+                }
+                startTitleSpinner();
+            });
+        }
+
+        const currentYearElement = document.getElementById('current-year');
+        if (currentYearElement) {
+            currentYearElement.textContent = new Date().getFullYear();
+        }
     });
-  </script>
-    <script>
-      document.getElementById('current-year').textContent = new Date().getFullYear();
-    </script>
+</script>
 </body> 
 </html>
