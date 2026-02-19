@@ -624,7 +624,7 @@
           </div>              
         </div>
       </section>
-      <section class="row g-0 mt-3" id="quality-award" style="background-image: url('/static/basecamp/images/Digital-Certificate.webp'); background-size: contain; background-repeat: no-repeat; background-position: center; height: 40vh; min-height: 200px; cursor: pointer;" onclick="location.href='https://easygo.s3.ap-southeast-2.amazonaws.com/panel_members.webp';">
+      <section class="row g-0 mt-3" id="quality-award" style="background-image: url('/static/basecamp/images/Digital-Certificate.webp'); background-size: contain; background-repeat: no-repeat; background-position: center; height: 40vh; min-height: 200px; cursor: pointer;">
         <div class="col-12">
             <div class="py-6" style="min-height: 200px;"></div>
         </div>
@@ -665,9 +665,10 @@
 <script src="/static/basecamp/js/flatpickr.min.js" defer></script>
 <script src="/static/basecamp/js/date-picker.js" defer></script>
 <script src="/static/basecamp/js/theme.min.js" defer></script>
+<script src="/static/basecamp/js/home.js" defer></script>
 {% endcompress js %}
 <!-- JavaScript to auto-update the year -->
-<script>
+<script nonce="{{ CSP_NONCE }}">
   document.getElementById('current-year').textContent = new Date().getFullYear();
 </script>
 <script type="application/ld+json" nonce="{{ CSP_NONCE }}">

@@ -40,11 +40,11 @@
                         <td>
                             <label for="rating">Click star rating:</label>
                             <div class="star-rating" style="white-space: nowrap;">
-                                <span class="star" onclick="setRating(1)">&#9733;</span>
-                                <span class="star" onclick="setRating(2)">&#9733;</span>
-                                <span class="star" onclick="setRating(3)">&#9733;</span>
-                                <span class="star" onclick="setRating(4)">&#9733;</span>
-                                <span class="star" onclick="setRating(5)">&#9733;</span>
+                                <span class="star">&#9733;</span>
+                                <span class="star">&#9733;</span>
+                                <span class="star">&#9733;</span>
+                                <span class="star">&#9733;</span>
+                                <span class="star">&#9733;</span>
                             </div>
                             <input type="hidden" id="rating" name="rating" required>
                         </td>
@@ -63,14 +63,5 @@
     </div>
 </div>
 {{ form.media }}
-
-<script>
-function setRating(rating) {
-    const stars = document.querySelectorAll('.star-rating .star');
-    stars.forEach((star, index) => {
-        star.style.color = index < rating ? 'gold' : '#ccc';
-    });
-    document.getElementById('rating').value = rating;
-}
-</script>
+<script src="{% static 'easygo_review/js/post_form.js' %}" defer></script>
 {% endblock %}

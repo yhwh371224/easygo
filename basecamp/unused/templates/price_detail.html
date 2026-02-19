@@ -1,4 +1,5 @@
 {% extends 'basecamp/easygo_base_error.html' %}
+{% load static %}
 {% block content %}
 <!-- Hero-->
 <section class="jarallax bg-dark py-0" data-jarallax data-speed="0.05">
@@ -10,7 +11,7 @@
                 <br>
                 <p class="fs-lg text-light" ><span style="color: #eb7828">The price is Around ${{ price }} for {{ no_of_passenger }} persons</span></p>
                 <br>
-                <p class="fs-lg text-light"><small>More accurate price &nbsp;&nbsp;</small><button class="btn btn-warning" onclick="location.href='/inquiry/'">&raquo;&raquo; Quick Price</button></p>                
+                <p class="fs-lg text-light"><small>More accurate price &nbsp;&nbsp;</small><button id="quick-price-btn" class="btn btn-warning">&raquo;&raquo; Quick Price</button></p>
                 <br/>                
                 <p class="fs-lg text-light" ><span style="color: #eb7828">If it's a shared ride, save up to 20-30%</span></p>                        
                 <br/>
@@ -22,5 +23,15 @@
             </div>
         </div>
 </section>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var btn = document.getElementById('quick-price-btn');
+  if (btn) {
+    btn.addEventListener('click', function () {
+      location.href = '/inquiry/';
+    });
+  }
+});
+</script>
 {% endblock %}
 
