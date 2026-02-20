@@ -54,7 +54,7 @@ if ENVIRONMENT == 'production':
             'style-src': (
                 "'self'",
                 'https://fonts.googleapis.com',
-                "'unsafe-inline'",
+                NONCE,
             ),
             'font-src': (            
                 "'self'",
