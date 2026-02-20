@@ -1,0 +1,77 @@
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+.card-header {
+    padding: 1rem 1.25rem !important;
+    margin-bottom: 0;
+    background-color: rgba(0, 0, 0, 0.03); 
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125); 
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+    align-items: flex-start;
+}
+
+.list-unstyled {
+    padding-left: 0;
+    list-style: none;
+}
+
+@media (min-width: 992px) { 
+
+    .col-lg-7 {
+        flex: 0 0 58.33333% !important; 
+        max-width: 58.33333% !important;
+    }
+
+    .col-lg-4.offset-md-1 {
+        flex: 0 0 33.33333% !important; 
+        max-width: 33.33333% !important;
+        margin-left: 8.33333% !important; 
+    }
+}
+
+#booking-form, .card {
+    width: 100%;
+    overflow: hidden; 
+}
+
+.card-body .widget-content p {
+    font-size: 0.9rem; 
+    line-height: 1.5;
+    margin-bottom: 0.5rem; 
+    word-break: keep-all;
+}
+
+.card-body .fw-bold {
+    font-size: 0.95rem;
+    color: #333;
+    display: block;
+}
+
+.card-body .small {
+    font-size: 0.85rem !important;
+    color: #666;
+}
+
+.card-body a {
+    font-weight: 500;
+}
+
+.header-red {
+    color: #dc3545 !important; 
+}
+
+.header-blue {
+    color: #0d6efd !important; 
+}
+
+.card-header {
+    font-weight: bold !important;
+    font-size: 1.1rem !important;
+}

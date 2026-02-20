@@ -19,18 +19,13 @@
   }
 </style>
 
-<section class="container py-5">
+<section class="container py-5 mt-5">
   <div class="row justify-content-center">
     <h3 class="text-center mb-4 mt-5">Contact Form</h3>
     <div class="col-lg-8">
       <div class="card border-0 shadow-lg">
         <form action="{% url 'basecamp:contact_submit' %}" method="post" id="booking-form" class="card-body p-5 needs-validation" novalidate>
           {% csrf_token %}
-          {# <input type="text" name="phone_verify" value="" style="display:none !important" tabindex="-1" autocomplete="off"> #}
-
-          <div style="display:none;">
-            <input type="text" name="website" value="" style="display:none" tabindex="-1" autocomplete="off">
-          </div>
 
           <div class="mb-3">
             <label class="form-label" for="name">Full name</label>
@@ -66,14 +61,15 @@
             <div class="invalid-feedback">Please select today date!</div>
           </div>
 
-          <div class="mb-3">
+          <div class="mb-5">
             <label class="form-label" for="message">Message</label>
             <textarea class="form-control" name="message" rows="5" placeholder="Write your message here" id="message"></textarea>
           </div>
 
-          <div class="cf-turnstile" data-sitekey="{{ CLOUDFLARE_TURNSTILE_SITE_KEY }}"></div>
-          <div class="text-center">
-            <button type="submit" class="btn btn-primary" id="submitButton">Submit</button>
+          <div class="cf-turnstile mb-4" data-sitekey="{{ CLOUDFLARE_TURNSTILE_SITE_KEY }}"></div>
+          <div id="errorMessage" class="mb-4" style="display:none; color: red;"></div>
+          <div class="text-center pt-4 pb-5"> 
+            <button class="btn btn-primary" type="submit" id="submitButton">Submit</button>
           </div>
 
         </form>
