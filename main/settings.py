@@ -52,6 +52,8 @@ if ENVIRONMENT == 'production':
                 "'self'",
                 'https://challenges.cloudflare.com',
                 'https://www.paypal.com',
+                'https://*.paypal.com',       
+                'https://*.paypalobjects.com', 
             ),
             'style-src': (
                 "'self'",
@@ -66,8 +68,14 @@ if ENVIRONMENT == 'production':
                 "'self'", 
                 "data:", 
                 'https://s3.ap-southeast-2.amazonaws.com/easygoshuttle.com.au/',
-                'https://www.paypalobjects.com',   # 추가 (아이콘 이미지 출처)
+                'https://www.paypalobjects.com',   
                 'https://*.paypal.com',
+            ),
+            'frame-src': (
+                "'self'",
+                'https://challenges.cloudflare.com',
+                'https://www.paypal.com',
+                'https://*.paypal.com',         
             ),
             'frame-ancestors': ("'self'",),
         }
