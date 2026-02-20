@@ -2368,11 +2368,14 @@ def email_dispatch_detail(request):
         discount_price = request.POST.get('discount_price')
 
         # 2️⃣ User 찾기
-        user = Post.objects.filter(email__iexact=email).first()
+        user = (
+            Post.objects.filter(email__iexact=email).first()
+            or Post.objects.filter(email1__iexact=email).first()
+            or Inquiry.objects.filter(email__iexact=email).first()
+        )
+
         if not user:
-            user = Post.objects.filter(email1=email).first()
-        if not user:
-            user = Inquiry.objects.filter(email__iexact=email).first()
+            logger.warning(f"User not found for email: {email}")
 
         pickup_time_12h = None
 
@@ -2427,7 +2430,7 @@ def email_dispatch_detail(request):
         # 5️⃣ Template 적용
         context = {
             'email': email,
-            'name': user.name,
+            'name': user.name if user else '',
             'adjusted_pickup_time': adjusted_pickup_time,
             'payment_amount': payment_amount,
             'remain_first_booking': remain_first_booking,    
@@ -2466,8 +2469,17 @@ def email_dispatch_detail(request):
                 })
 
         # ✅ Gratitude For Payment
-        if selected_option == "Gratitude For Payment" and payment_amount:
-            payment_amount = float(payment_amount)
+        if selected_option == "Gratitude For Payment":
+            try:
+                payment_amount = float(payment_amount)
+                if payment_amount <= 0:
+                    raise ValueError
+            except (TypeError, ValueError):
+                return JsonResponse({
+                    'success': False,
+                    'error': "Payment amount must be a number greater than 0."
+                }, status=400)
+
             remaining_amount = payment_amount
 
             bookings = (
@@ -2518,8 +2530,8 @@ def email_dispatch_detail(request):
                     break
 
             context.update({
-                'applied_bookings': applied_bookings if applied_bookings else [],
-                'payment_amount': float(payment_amount),
+                'applied_bookings': applied_bookings,
+                'payment_amount': payment_amount,
             })
 
         # ✅ Cancellation
