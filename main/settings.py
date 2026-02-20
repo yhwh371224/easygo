@@ -39,6 +39,7 @@ if ENVIRONMENT == 'production':
                 'https://cdnjs.cloudflare.com',
                 'https://challenges.cloudflare.com', 
                 'https://www.paypal.com',
+                'https://www.paypalobjects.com',
                 'https://ajax.googleapis.com',
                 "'unsafe-inline'", 
                 # NONCE,
@@ -65,6 +66,8 @@ if ENVIRONMENT == 'production':
                 "'self'", 
                 "data:", 
                 'https://s3.ap-southeast-2.amazonaws.com/easygoshuttle.com.au/',
+                'https://www.paypalobjects.com',   # 추가 (아이콘 이미지 출처)
+                'https://*.paypal.com',
             ),
             'frame-ancestors': ("'self'",),
         }
