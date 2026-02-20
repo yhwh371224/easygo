@@ -121,9 +121,8 @@
       <!-- Contact form + details-->
       <section class="container position-relative zindex-5 pb-5"  >
         <div class="row">
-          <div class="col-lg-1 col-md-2 offset-lg-1 pb-2 mb-5" style="margin-top: -280px;"></div>
-          <div class="col-lg-5 col-md-4 offset-lg-1 pb-2 mb-5" style="margin-top: -280px;">
-            <div class="card border-3 shadow-lg" style="padding:2rem">
+          <div class="col-lg-6 col-md-8 mx-auto pb-2 mb-5" style="margin-top: -280px;">
+            <section class="card border-0 shadow-lg" style="padding:2rem; background-color: #f0f8ff;">
                 <!-- Paypal form -->
 			          <form method="post" id="paypal-form">
 			          	{% csrf_token %}
@@ -141,10 +140,21 @@
                   <div style="text-align: center; margin-top: 0.625rem;" id="paypal-button-container"></div>
 			          	</div>				
 			          </form>
-                <section class="container" style="margin-top: 60px;">
+                <div class="container" style="margin-top: 60px;">
                   <h5 class="text-center mb-4">Safe Security Guaranteed</h5>
-                   <p class="text-center"><small>🔒 This site is secured by Cloudflare security & SSL encryption.</small></p>
-                </section>
+                </div>
+                <div class="text-center" style="margin-top: 16px; margin-bottom: 8px;">
+                  <span style="display: inline-flex; align-items: center; flex-wrap: wrap; justify-content: center; gap: 6px; color: #888; font-size: 0.8rem;">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="#003087" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+                      </svg>
+                      Secured by PayPal's encryption & buyer protection.&nbsp;
+                      <a href="https://www.paypal.com/us/legalhub/privacy-full" target="_blank" rel="noopener">Privacy Policy</a>&
+                      <a href="https://www.paypal.com/us/legalhub/useragreement-full" target="_blank" rel="noopener">Terms</a>
+                  </span>
+              </div>
+              </section>
+
   <script src="https://www.paypal.com/sdk/js?client-id={{ paypal_client_id }}&components=buttons&enable-funding=card&disable-funding=paylater,venmo&currency=AUD" data-sdk-integration-source="integrationbuilder_sc"></script>
   <script>
     paypal.Buttons({

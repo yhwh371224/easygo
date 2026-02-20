@@ -17,13 +17,19 @@
       color: #dc3545;
       font-weight: bold;
   }
+
+  .custom-card {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 0.75rem;
+  }
 </style>
 
 <section class="container py-5 mt-5">
   <div class="row justify-content-center">
     <h3 class="text-center mb-4 mt-5">Contact Form</h3>
     <div class="col-lg-8">
-      <div class="card border-0 shadow-lg">
+      <div class="card shadow-lg custom-card">
         <form action="{% url 'basecamp:contact_submit' %}" method="post" id="booking-form" class="card-body p-5 needs-validation" novalidate>
           {% csrf_token %}
 
