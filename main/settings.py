@@ -40,7 +40,8 @@ if ENVIRONMENT == 'production':
                 'https://challenges.cloudflare.com', 
                 'https://www.paypal.com',
                 'https://ajax.googleapis.com',
-                NONCE,
+                "'unsafe-inline'", 
+                # NONCE,
             ),
             'frame-src': (
                 "'self'",
