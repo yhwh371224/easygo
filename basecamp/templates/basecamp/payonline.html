@@ -7,13 +7,10 @@
     <title>Airport Transfers Sydney - EasyGo Shuttle bus</title>
     <meta name="google-site-verification" content="hae39L0Kv7JIxVc3YclvckH7Im5SdYa2hk_vZbGJIkA" />
     <meta name="robots" content="noindex, nofollow">
-    <!-- SEO Meta Tags-->
     <meta name="description" content="EasyGo airport shuttle bus provide Sydney airport transport service, private ride with the cheap price. ">
     <meta name="keywords" content="Sydney airport shuttle, Sydney airport transfers, private transfers, cheap airport transfers, maxi taxi, mini bus, uber, airport transport, airport shuttle, airport pickup service, airport private transfers, Sydney hotel transfers, airport cheapest shuttle">
     <meta name="author" content="easycoding.live">
-    <!-- Viewport-->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Favicon and Touch Icons-->
     <link rel="shortcut icon" type="image/x-icon" href="{% static 'basecamp/favi/favicon.ico' %}">
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'basecamp/favi/apple-touch-icon.png' %}">
     <link rel="android-chrome" type="image/png" sizes="192x192" href="{% static 'basecamp/favi/android-chrome-192x192.png' %}">
@@ -94,7 +91,6 @@
 		  </div></div>
       </header>
       <!-- Page content-->
-      <!-- Hero-->
       <!-- Page title-->
       <section class="jarallax bg-gradient pt-5 pb-7 pt-md-7" data-jarallax data-speed="0.25"><span class="position-absolute top-0 start-0 w-100 h-100 bg-gradient opacity-80"></span>
         <div class="jarallax-img" style="background-image: url('/static/basecamp/images/page-title-bg.webp');"></div>
@@ -118,7 +114,6 @@
                 <!-- Paypal form -->
 			          <form method="post" id="paypal-form">
 			          	{% csrf_token %}
-			          	{# <input type="text" name="phone_verify" value="" style="display:none !important" tabindex="-1" autocomplete="off"> #}
 			          	<h3 class="text-center">PayPal Checkout</h3>
 			          	<br><br>
 			          	<div id="smart-button-container">
@@ -126,14 +121,14 @@
                   <div style="text-align: center"><label for="description"></label><input type="text" name="descriptionInput" id="description" value=""></div>
                   <p id="descriptionError" style="visibility: hidden; color:red; text-align: center;">Please enter your booking name</p>
                     <div style="text-align: center"><small>ENTER AMOUNT</small></div>
-                    <div style="text-align: center"><label for="amount"> </label><input name="amountInput" type="number" id="amount" value="" ></div>
+                    <div style="text-align: center"><label for="amount"> </label><input name="amountInput" type="number" id="amount" min="1" step="0.01" value="" ></div>
                   <p id="priceLabelError" style="visibility: hidden; color:red; text-align: center;">Price only without $ sign</p>
                   <br><br>
                   <div style="text-align: center; margin-top: 0.625rem;" id="paypal-button-container"></div>
 			          	</div>				
 			          </form>
                 <div class="container" style="margin-top: 60px;">
-                  <h5 class="text-center mb-4">Safe Security Guaranteed</h5>
+                  <h5 class="text-center mb-4">Secure Payment Guaranteed</h5>
                 </div>
                 <div class="text-center" style="margin-top: 16px; margin-bottom: 8px;">
                   <span style="display: inline-flex; align-items: center; flex-wrap: wrap; justify-content: center; gap: 6px; color: #888; font-size: 0.8rem;">
@@ -152,6 +147,7 @@
     paypal.Buttons({
       createOrder: function(data, actions) {
         var item_name = document.getElementById("description").value;
+        item_name = item_name.trim(); 
         var amount = document.getElementById("amount").value;
         if(!item_name || isNaN(amount) || amount <= 0){
                       alert("Please enter a valid booking name and amount.");
@@ -197,31 +193,29 @@
       }
     }).render('#paypal-button-container');
   </script>
-  </main>
-    <footer class="site-footer bg-dark pt-5 pb-4">
-      <div class="container d-md-flex justify-content-between align-items-center text-center">
-        <ul class="list-inline fs-sm mb-3 order-md-2">
-          <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="mailto:info@easygoshuttle.com.au">Support</a></li>
-          <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="mailto:info@easygoshuttle.com.au">Contact</a></li>
-          <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="/privacy/">Privacy policy</a></li>
-          <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="/terms/">Terms &amp; Conditions</a></li>
-        </ul>
-        <!-- Copyright -->
-        <p class="fs-sm mb-3 order-md-1">
-          <span class="text-light opacity-50 me-1">
-            © <span id="current-year"></span> EasyGo. All rights reserved. Designed and built by 
-            <a href="https://sungkam.github.io" target="_blank" rel="noopener" style="color: #ffb347;">EasyCoding</a>
-          </span>
-        </p>      
-      </div>
-    </footer>
-    <!-- Vendor scrits: js libraries and plugins-->
-    <script src="/static/basecamp/js/bootstrap.bundle.min.js" defer></script>
-    <!-- Main theme script-->
-    <script src="/static/basecamp/js/theme.min.js" defer></script>
-    <!-- JavaScript to auto-update the year -->
-    <script>
-      document.getElementById('current-year').textContent = new Date().getFullYear();
-    </script>      
+          </div>
+        </section>
+     </main>
+      <footer class="site-footer bg-dark pt-5 pb-4">
+        <div class="container d-md-flex justify-content-between align-items-center text-center">
+          <ul class="list-inline fs-sm mb-3 order-md-2">
+            <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="mailto:info@easygoshuttle.com.au">Support</a></li>
+            <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="mailto:info@easygoshuttle.com.au">Contact</a></li>
+            <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="/privacy/">Privacy policy</a></li>
+            <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="/terms/">Terms &amp; Conditions</a></li>
+          </ul>
+          <p class="fs-sm mb-3 order-md-1">
+            <span class="text-light opacity-50 me-1">
+              © <span id="current-year"></span> EasyGo. All rights reserved. Designed and built by 
+              <a href="https://sungkam.github.io" target="_blank" rel="noopener" style="color: #ffb347;">EasyCoding</a>
+            </span>
+          </p>      
+        </div>
+      </footer>
+      <script src="/static/basecamp/js/bootstrap.bundle.min.js" defer></script>
+      <script src="/static/basecamp/js/theme.min.js" defer></script>
+      <script>
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+      </script>      
   </body>
 </html>
