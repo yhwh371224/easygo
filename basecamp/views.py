@@ -3,9 +3,9 @@ from datetime import datetime, date, timedelta
 import logging
 import requests
 import stripe
-import json
 
 from django.conf import settings
+from csp.constants import NONCE
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail, EmailMultiAlternatives
@@ -290,9 +290,11 @@ def payment_options1(request):
 
 
 def payonline(request):
-    return render(request, 'basecamp/payonline.html', {
+    context = {
         'paypal_client_id': settings.PAYPAL_CLIENT_ID,
-    })
+        'csp_nonce': NONCE, 
+    }
+    return render(request, 'basecamp/payonline.html', context)
 
 
 def p2p(request):     

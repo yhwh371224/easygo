@@ -38,6 +38,8 @@ if ENVIRONMENT == 'production':
                 "'self'",
                 'https://cdnjs.cloudflare.com',
                 'https://challenges.cloudflare.com', 
+                'https://www.paypal.com',
+                'https://ajax.googleapis.com',
                 NONCE,
             ),
             'frame-src': (
@@ -47,6 +49,7 @@ if ENVIRONMENT == 'production':
             'connect-src': (          
                 "'self'",
                 'https://challenges.cloudflare.com',
+                'https://www.paypal.com',
             ),
             'style-src': (
                 "'self'",
@@ -87,7 +90,7 @@ INSTALLED_APPS = [
     'basecamp.apps.BasecampConfig', 
     'easygo_review.apps.EasygoReviewConfig',
     'admin_honeypot',
-    # 'honeypot',  # replaced by Cloudflare Turnstile
+    # 'honeypot',  
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
