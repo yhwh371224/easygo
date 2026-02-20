@@ -39,7 +39,6 @@
       <!-- Contact form + details-->  	  
             <form method="post" enctype="multipart/form-data" id="booking-form" action="/inquiry_details/" class="card-body needs-validation p-5" >
                 {% csrf_token %}
-                {# <input type="text" name="phone_verify" value="" style="display:none !important" tabindex="-1" autocomplete="off"> #}
 				<div class="mb-3 pb-1" >
 					<p class="form-label mb-1">Personal Information</p>
 				</div>
@@ -199,6 +198,13 @@
 
 				<!-- Extra Luggage (hidden by default) -->
 				<div id="extraLuggageFields" style="display: none;">
+
+					<!-- 안내 문구: Oversize items -->
+					<small class="text-muted d-block mb-2">
+						Oversized items may incur additional charges and could affect vehicle allocation.
+						Please specify the size of your equipment to provide the appropriate vehicle.
+					</small>
+
 					<!-- Row 1: Baby / Booster / Prams -->
 					<div class="row g-2 mb-3">
 						<div class="col">
@@ -219,7 +225,7 @@
 					<div class="row g-2 mb-3">
 						<div class="col">
 							<label for="baggage_ski" class="form-label mb-0">Ski bags</label>
-							<input type="number" class="form-control" name="baggage_ski" placeholder="Ski bags" min="0" max="9" value="0" id="baggage_ski">
+							<input type="number" class="form-control" id="baggage_ski" name="baggage_ski" placeholder="Ski bags" min="0" max="9" value="0">
 							<div class="form-check mt-1">
 								<input class="form-check-input" type="checkbox" name="ski_oversize" id="ski_oversize">
 								<label class="form-check-label" for="ski_oversize">Oversize</label>
@@ -227,7 +233,7 @@
 						</div>
 						<div class="col">
 							<label for="baggage_snowboard" class="form-label mb-0">Snowboards</label>
-							<input type="number" class="form-control" name="baggage_snowboard" placeholder="Snowboards" min="0" max="9" value="0" id="baggage_snowboard">
+							<input type="number" class="form-control" id="baggage_snowboard" name="baggage_snowboard" placeholder="Snowboards" min="0" max="9" value="0">
 							<div class="form-check mt-1">
 								<input class="form-check-input" type="checkbox" name="snowboard_oversize" id="snowboard_oversize">
 								<label class="form-check-label" for="snowboard_oversize">Oversize</label>
@@ -235,7 +241,7 @@
 						</div>
 						<div class="col">
 							<label for="baggage_golf" class="form-label mb-0">Golf bags</label>
-							<input type="number" class="form-control" name="baggage_golf" placeholder="Golf bags" min="0" max="9" value="0" id="baggage_golf">
+							<input type="number" class="form-control" id="baggage_golf" name="baggage_golf" placeholder="Golf bags" min="0" max="9" value="0">
 							<div class="form-check mt-1">
 								<input class="form-check-input" type="checkbox" name="golf_oversize" id="golf_oversize">
 								<label class="form-check-label" for="golf_oversize">Oversize</label>
@@ -247,7 +253,7 @@
 					<div class="row g-2 mb-3">
 						<div class="col">
 							<label for="baggage_bike" class="form-label mb-0">Bike bags</label>
-							<input type="number" class="form-control" name="baggage_bike" placeholder="Bike bags" min="0" max="9" value="0" id="baggage_bike">
+							<input type="number" class="form-control" id="baggage_bike" name="baggage_bike" placeholder="Bike bags" min="0" max="9" value="0">
 							<div class="form-check mt-1">
 								<input class="form-check-input" type="checkbox" name="bike_oversize" id="bike_oversize">
 								<label class="form-check-label" for="bike_oversize">Oversize</label>
@@ -255,7 +261,7 @@
 						</div>
 						<div class="col">
 							<label for="baggage_boxes" class="form-label mb-0">Carton boxes</label>
-							<input type="number" class="form-control" name="baggage_boxes" placeholder="Carton boxes" min="0" max="9" value="0" id="baggage_boxes">
+							<input type="number" class="form-control" id="baggage_boxes" name="baggage_boxes" placeholder="Carton boxes" min="0" max="9" value="0">
 							<div class="form-check mt-1">
 								<input class="form-check-input" type="checkbox" name="boxes_oversize" id="boxes_oversize">
 								<label class="form-check-label" for="boxes_oversize">Oversize</label>
@@ -263,7 +269,7 @@
 						</div>
 						<div class="col">
 							<label for="baggage_music" class="form-label mb-0">Musical instruments</label>
-							<input type="number" class="form-control" name="baggage_music" placeholder="Musical instruments" min="0" max="9" value="0" id="baggage_music">
+							<input type="number" class="form-control" id="baggage_music" name="baggage_music" placeholder="Musical instruments" min="0" max="9" value="0">
 							<div class="form-check mt-1">
 								<input class="form-check-input" type="checkbox" name="music_oversize" id="music_oversize">
 								<label class="form-check-label" for="music_oversize">Oversize</label>
@@ -276,79 +282,58 @@
 				<br><br> 
 
 				<!-- Return Flight Option -->
-				<label for="return-flight">Return Trip:&nbsp;&nbsp;</label>
-				<input type="checkbox" name="return_flight" id="return-flight">
-				<br>
-				<div id="return-flight-fields">
-					<!-- Fields will be dynamically added here -->
+				<div class="d-flex align-items-center mb-4">
+					<label class="form-label mb-0 me-3" for="return-flight">Need a Return Trip?</label>
+					<input class="form-check-input" type="checkbox" name="return_flight" id="return-flight" style="margin-top: 0; width: 1.25rem; height: 1.25rem;">
 				</div>
+
+				<div id="return-flight-fields" class="mb-4" style="display:none;">
+					</div>
 				
-				<br><br>
-                <div class="mb-3 pb-1">
-                  <label class="form-label" for="cont-message">Message</label>
+                <div class="mb-5">
+                  <label class="form-label" >Message</label>
                   <textarea class="form-control" name="message" id="cont-message" rows="5" placeholder="Write your message here"></textarea>
                   <div class="invalid-feedback">Please write a message!</div>
                 </div>
-				<br>
-				<div id="errorMessage" style="display:none; color: red; margin-top: 20px;" ></div>
-				<br>
-				<div class="cf-turnstile" data-sitekey="{{ CLOUDFLARE_TURNSTILE_SITE_KEY }}"></div>
-				<div class="text-center pt-2">
+				<div class="cf-turnstile mb-4" data-sitekey="{{ CLOUDFLARE_TURNSTILE_SITE_KEY }}"></div>
+				<div id="errorMessage" class="mb-4" style="display:none; color: red;"></div>
+				<div class="text-center pt-4 pb-5"> 
 					<button class="btn btn-primary" type="submit" id="submitButton">Submit</button>
-				</div>        
-              </form>			  
+				</div>         
+              </form>
               </div>
-            </div>          
+            </div>
+
+			<!-- Categories Widget -->
 			<div class="col-lg-4 col-md-4 offset-md-1">
-				<!-- Categories Widget -->
-				<div class="card my-4" id="category-card" >
-					<h5 class="card-header">Reviews from our clients</h5>
-					<div class="card-body" >
-						<div class="row">
-							<div class="col-lg-10 list-unstyled">
-								<li>
-								  <p><strong>You can check the reviews from the clients who have used our company's services</strong></p>								  
-								  <p><a href="/easygo_review/">
-									&raquo;&raquo;&raquo;&nbsp;&nbsp;More Reviews&nbsp;&nbsp;&laquo;&laquo;&laquo;</a></p>
-								</li>
-							</div>
+				<div class="card my-4">
+					<h5 class="card-header header-red">Note!</h5>
+					<div class="card-body">
+						<div class="widget-content">
+							<p class="fw-bold mb-1">For arrivals</p>
+							<p class="mb-1">Your driver will keep track of arrival time to meet you on time.</p>
+							<p class="mb-1">Please check &raquo; 
+								<a href="/meeting_point/" target="_blank" class="text-decoration-underline">Airport Meeting Points</a>
+							</p>
 						</div>
 					</div>
 				</div>
-				<div class="card my-4" id="category-card" >
-				  <h5 class="card-header" style="color:red">Note!</h5>
-				  <div class="card-body" >
-					  <div class="row">
-						  <div class="col-lg-10 list-unstyled">
-							  <li>
-								  <p><strong>For arrivals</strong></p>								  
-								  <p><small>Your driver will keep track of arrival time in order to meet you on time</small></p>								  
-								  <p><small>Please check where the meeting point is &raquo; <a href="/meeting_point/" target="_blank">Airport Meeting Points</a></small></p>
-							  </li>
-						  </div>
-					  </div>
-				  </div>
-				</div>
-				<div class="card my-4" id="category-second_card" >
-				  <h5 class="card-header" style="color:blue">Note!</h5>
-				  <div class="card-body">
-					  <div class="row">
-						  <div class="col-lg-10 list-unstyled">
-							  <li>
-								<p><strong>For departure</strong></p>
-								<p>Please inform us your preferred pickup time</p>
-								<p><small>Our vehicles are entitled to use <strong>BUS LANE</strong></small></p>
-								<p><small>So even if there is traffic congestion, it won't take long</small></p>
-								<p><small>For domestic departure, you should be at airport two hours before the flight time and for international departure, at least 3 hours </small></p>
-								<p><small></small></p>
-							  </li>
-						  </div>
-					  </div>
-				  </div>
-				</div>			  
-			  </div>
+				<div class="card my-4">
+					<h5 class="card-header header-blue">Note!</h5>
+					<div class="card-body">
+						<div class="widget-content">
+							<p class="fw-bold mb-1">For departure</p>
+							<p class="mb-2">Please inform us your preferred pickup time.</p>
+							<div class="small border-start ps-2">
+								<p class="mb-1">Our vehicles are entitled to use BUS LANE.</p>
+							</div>
+						</div>
+					</div>
+				</div>            
 			</div>
-		</section>	
+
+		</div>
+	</section>	
 {% endblock %}
 
 
