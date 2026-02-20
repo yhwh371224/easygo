@@ -1,4 +1,4 @@
-{% extends 'basecamp/easygo_base_error.html' %}
+{% extends 'basecamp/easygo_base.html' %}
 
 {% block title %}
   Sydney Airport Shuttle – Door-to-Door Shuttle Service | EasyGo
@@ -8,24 +8,43 @@
 
 {% block content %}
 <style>
+  .navbar.navbar-dark .nav-link {
+    color: #212529 !important; 
+  }
+  .navbar.navbar-dark .nav-link:hover {
+    color: #0d6efd !important; 
+  }
+  .navbar-toggler-icon {
+    filter: invert(1); 
+  }
   hr {
     border: none;
-    border-top: 1px solid #e0e0e0;
-    opacity: 0.5;
+    border-top: 1px solid #e0e0e0 !important;
+    opacity: 1;
     margin: 2.5rem 0;
   }
+  body { background-color: #ffffff; color: #212529 !important; }
+  .page-wrapper { padding-top: 60px !important; background-color: #ffffff; }
+  .container { color: #212529; }
+  ul { list-style: none; padding-left: 0; margin-left: 0; }
+  ul li { margin-bottom: 0.5rem; color: #212529; }
+  p { color: #212529; }
+  h1 { margin-bottom: 2.5rem !important; }
+  h1, h2, h3, h4, h5, h6 { color: #212529; }
+  h1 span, h2 span, h3 span { color: #ffffff !important; }  
+  a { color: #0d6efd; }
+  a:hover { color: #063d91; }
+  a[style*="#eb7828"] { color: #0d6efd !important; }
 </style>
 
-
-<main class="page-wrapper">
     <!-- Page content-->
     <div class="container d-flex flex-column justify-content-center min-vh-100 py-5">
       <lottie-player class="d-dark-mode-none mt-n5" src="assets/json/animation-404-light.json" background="transparent" speed="1" loop autoplay></lottie-player>
       <lottie-player class="d-none d-dark-mode-block mt-n5" src="assets/json/animation-404-dark.json" background="transparent" speed="1" loop autoplay></lottie-player>
       <div class="text-center pt-4 mt-lg-2">
         <br><br>
-        <h1 class="mb-4">          
-          <span style="color: #eb7828">Sydney Airport Shuttle & Transfer Service</span>
+        <h1 class="mb-4">                  
+          Sydney Airport Shuttle & Transfer Service
         </h1>
 
         <p>
@@ -144,54 +163,5 @@
         </p>
     </div>
   </div>
-</main>
-
-{% endblock %}
-
-{% block extra_css %}
-
-<style>
-/* 전체 페이지 배경색 */
-body {
-    background-color: #ffffff !important;
-    color: #212529 !important;
-}
-
-.page-wrapper {
-    background-color: #ffffff;
-}
-
-.container {
-    color: #212529;
-}
-
-ul {
-    list-style: none;  /* 점 제거 */
-    padding-left: 0;   /* 기본 들여쓰기 제거 */
-    margin-left: 0;
-}
-
-ul li {
-    margin-bottom: 0.5rem; /* 간격 */
-    color: #212529;
-}
-
-p {
-    color: #212529;
-}
-
-h1, h2, h3, h4, h5, h6 {
-    color: #212529;
-}
-
-/* 링크 색상 유지 */
-a {
-    color: #0d6efd;
-}
-
-a:hover {
-    color: #0a58ca;
-}
-</style>
 
 {% endblock %}
