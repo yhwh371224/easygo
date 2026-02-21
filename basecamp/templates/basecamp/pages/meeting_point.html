@@ -7,52 +7,28 @@
 <meta name="keywords" content="Sydney airport meeting points, T1 International Airport pickup, T2 Domestic Airport pickup, T3 Qantas pickup, EasyGo Airport Shuttle, airport transfer Sydney, airport pickup map">
 {% endblock %}
 
-{% block content %}
-
-<!-- ===== Hero CSS (page-only) ===== -->
+{% block extra_css %}
 <style>
-  .hero {
-    position: relative;
-    min-height: 600px;
-    display: flex;
-    align-items: center;
-    overflow: hidden;
-  }
-
   .hero::before {
-    content: "";
-    position: absolute;
-    inset: 0;
     background-image: url('/static/basecamp/images/meeting_point.webp');
-    background-size: cover;
-    background-position: center center;
-    z-index: 0;
   }
-
-  .hero .hero-content {
-    position: relative;
-    z-index: 2;
-  }
-
   .form-control hr {
     border: none;
     border-top: 1px solid #e0e0e0;
     opacity: 0.5;
     margin: 2.5rem 0;
   }
-
   .form-control h2 {
     margin-top: 3rem;
     margin-bottom: 1.5rem;
   }
-
   .form-control .mb-3 p {
     margin-bottom: 0.8rem;
   }
-
 </style>
-<!-- ===== /Hero CSS ===== -->
+{% endblock %}
 
+{% block content %}
 <!-- ===== Hero Section ===== -->
 <section class="hero">
   <span class="position-absolute top-0 start-0 w-100 h-100 bg-gradient opacity-80" style="z-index:1;"></span>
