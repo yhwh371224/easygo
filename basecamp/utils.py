@@ -15,7 +15,7 @@ from blog.models import StripePayment
 
 
 # 이메일 템플릿 최상위 경로
-EMAIL_TEMPLATE_BASE = "basecamp/emails/html_email/"
+EMAIL_TEMPLATE_BASE = "basecamp/email/html_email/"
 
 def render_email_template(template_name, context, request=None):
     if not template_name.startswith("basecamp/email/html_email/"):
