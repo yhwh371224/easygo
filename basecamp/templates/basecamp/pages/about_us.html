@@ -1,0 +1,140 @@
+{% extends 'basecamp/base/easygo_base.html' %}
+
+{% block title %}
+  About EasyGo Airport Shuttle – Sydney Airport Transfers | Private, Luggage-Friendly Shuttle
+{% endblock %}
+
+{% block meta %}
+<meta name="description" content="Learn why EasyGo Airport Shuttle is Sydney's trusted airport transfer service. Private, punctual, luggage-friendly shuttle service for individuals, families, and groups to and from Sydney Airport.">
+<meta name="author" content="easygoshuttle.com.au">
+{% endblock %}
+
+{% block content %}
+
+<!-- ===== Hero CSS (page-only) ===== -->
+<style>
+  .hero-about {
+    position: relative;
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  /* 배경 이미지 레이어 */
+  .hero-about::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url('/static/basecamp/photos/vehicle-1.PNG');
+    background-size: cover;
+    background-position: center center;
+    z-index: 0;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+  }
+
+  .entry-content h2 {
+    margin-bottom: 1.5rem;
+  }
+
+  .entry-content h3 {
+    margin-top: 1.8rem;
+    margin-bottom: 1.3rem;
+  }
+
+  .entry-content > ul {
+    list-style: none;
+    padding-left: 2rem;
+    margin-top: 1rem;
+  }
+
+  .entry-content li {
+    margin-bottom: 1rem;
+    line-height: 1.8;
+  }
+
+  .entry-content ul ul {
+    list-style: none;
+    padding-left: 1.5rem;
+    margin-top: 0.5rem;
+  }
+</style>
+<!-- ===== /Hero CSS ===== -->
+
+<!-- ===== Hero Section ===== -->
+<section class="hero-about">
+
+  <!-- Award Badge -->
+  <a href="/static/basecamp/images/Digital-Certificate.webp">
+    <img src="/static/basecamp/images/award-badge.webp"
+         width="320" 
+         height="320"
+         alt="Award Badge"
+         class="award-badge">
+  </a>
+
+  <span class="position-absolute top-0 start-0 w-100 h-100 bg-gradient opacity-80"></span>
+
+  <!-- Text content -->
+  <div class="container text-center hero-content">
+    <h1 class="text-light pb-1">
+      About EasyGo Airport Shuttle – Sydney Airport Transfer Specialists
+    </h1>
+    <p class="fs-lg text-light">
+      EasyGo Airport Shuttle is a Sydney-based private airport transfer service specialising in
+      group travel, family transfers, and luggage-friendly transport to and from Sydney Airport.
+    </p>
+  </div>
+
+</section>
+<!-- ===== /Hero Section ===== -->
+
+<!-- ===== Main Content ===== -->
+<div class="container position-relative zindex-5" style="margin-top: -120px;">
+  <div class="d-lg-flex align-items-center bg-secondary border rounded-3 py-5" style="padding-left: 3.5rem; padding-right: 3.5rem;">
+    <div class="entry-content">
+
+      <h2>Why Choose EasyGo Airport Shuttle?</h2>
+      <h3>EasyGo Airport Transfers – Service Highlights</h3>
+
+      <h3 class="widget-title" style="margin-bottom: 1.5rem;">
+        <span style="color:#eb7828;">EASYGO</span> TRANSPORT – INFORMATION
+      </h3>
+
+      <ul>
+        <li><strong>1.</strong> Direct, express service with no additional stops or sharing</li>
+
+        <li><strong>2.</strong> Fast and efficient transport to:
+          <ul>
+            <li>Sydney Airport, hotels, offices, or homes</li>
+            <li>Single passengers, families, or corporate groups</li>
+          </ul>
+        </li>
+
+        <li><strong>3.</strong> Fixed pricing regardless of traffic, with bus-lane access unavailable to Uber or Ola</li>
+
+        <li><strong>4.</strong> Spacious vehicles with generous luggage capacity and true door-to-door service</li>
+
+        <li><strong>5.</strong> Friendly meet-and-greet service with assistance for your bags</li>
+
+        <li><strong>6.</strong> Additional services include:
+          <ul>
+            <li>Cruise ship connections</li>
+            <li>Concerts, weddings, night events, and sporting events</li>
+            <li>Group touring</li>
+          </ul>
+        </li>
+
+        <li><strong>7.</strong> Professional, polite drivers who genuinely care about your journey</li>
+      </ul>
+
+    </div>
+  </div>
+</div>
+<!-- ===== /Main Content ===== -->
+
+{% endblock %}

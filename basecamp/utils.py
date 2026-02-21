@@ -14,6 +14,15 @@ from weasyprint import HTML
 from blog.models import StripePayment
 
 
+# 이메일 템플릿 최상위 경로
+EMAIL_TEMPLATE_BASE = "basecamp/emails/html_email/"
+
+def render_email_template(template_name, context, request=None):
+    if not template_name.startswith("basecamp/emails/html_email/"):
+        template_name = f"{EMAIL_TEMPLATE_BASE}{template_name}"
+
+    return render_to_string(template_name, context, request=request)
+
 # --------------------------
 # Cloudflare Turnstile
 # --------------------------
@@ -40,7 +49,7 @@ def is_ajax(request):
 # PDF 렌더링
 # --------------------------
 def render_to_pdf(template_src, context_dict={}):
-    html_string = render_to_string(template_src, context_dict)
+    html_string = render_email_template(template_src, context_dict)
     html = HTML(string=html_string, base_url=None)  # base_url 설정 가능
     result = BytesIO()
     html.write_pdf(target=result)
@@ -85,7 +94,7 @@ def parse_date(date_str, field_name="Date", required=True, reference_date=None):
 # --------------------------
 def handle_email_sending(request, email, subject, template_name, context, email1=None):
 
-    html_content = render_to_string(template_name, context, request=request)
+    html_content = render_email_template(template_name, context, request=request)
     text_content = strip_tags(html_content)
     
     recipient_list = [email, settings.RECIPIENT_EMAIL]
@@ -167,7 +176,7 @@ def check_and_send_missing_info_email(post):
             request=None,
             email=post.email,
             subject="Missing or Invalid Flight/Contact Information Reminder",
-            template_name="basecamp/html_email-missing-flight-contact.html",
+            template_name="html_email-missing-flight-contact.html",
             context={
                 'name': post.name,
                 'email': post.email,

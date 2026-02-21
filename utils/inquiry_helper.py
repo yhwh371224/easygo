@@ -1,12 +1,12 @@
 from django.core.mail import EmailMultiAlternatives
 from main.settings import RECIPIENT_EMAIL
-from django.template.loader import render_to_string
+from basecamp.utils import render_email_template
 from django.utils.html import strip_tags
 
 
 def send_inquiry_email(instance):
     if instance.is_confirmed:
-        html_content = render_to_string("basecamp/html_email-inquiry-response.html", {
+        html_content = render_email_template("html_email-inquiry-response.html", {
             'company_name': instance.company_name or "",
             'name': instance.name or "",
             'contact': instance.contact or "",
@@ -37,7 +37,7 @@ def send_inquiry_email(instance):
         })
 
     elif instance.cancelled:
-        html_content = render_to_string("basecamp/html_email-cancelled.html", {
+        html_content = render_email_template("html_email-cancelled.html", {
             'name': instance.name,
             'email': instance.email,
             'pickup_date': instance.pickup_date or "",
@@ -47,7 +47,7 @@ def send_inquiry_email(instance):
         })
 
     elif instance.pending:
-        html_content = render_to_string("basecamp/html_email-inquiry-pending.html", {
+        html_content = render_email_template("html_email-inquiry-pending.html", {
             'name': instance.name,
             'email': instance.email,
             'pickup_date': instance.pickup_date or "",

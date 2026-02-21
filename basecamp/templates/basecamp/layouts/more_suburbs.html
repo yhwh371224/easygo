@@ -1,0 +1,107 @@
+{% extends 'easygo_review/base_sub.html' %}
+
+{% block title %}
+    Sydney Airport Shuttle | Choose Your Suburb | EasyGo
+{% endblock %}
+
+{% block meta %}
+    <meta name="description" content="Find your suburb for Sydney Airport Shuttle services. EasyGo provides private airport transfers across Sydney CBD, North Shore & Western Sydney. Book online quickly and reliably.">
+    <meta name="keywords" content="sydney airport shuttle, sydney airport transfer, group airport shuttle, north shore airport pickup, western sydney airport shuttle">
+    <meta name="author" content="easygoshuttle.com.au">
+{% endblock %}
+
+{% block content %}
+<div class="col-md-12" id="main-div" style="margin: 20px;">
+    <div class="search-container" style="padding: 20px;">
+        <div class="row">
+            <div class="col-md-6">                                 
+                <div class="card-body p-0">
+                    <p class="card-text mb-0" style="font-size: 1.05rem;">
+                        <span class="text-warning"><strong>Note:</strong></span> Click on your desired area from the list below,<br>
+                        or enter the name of your area in the search box<br>
+                        <small>If your area is not listed, please email us at 
+                            <a href="mailto:info@easygoshuttle.com.au">info@easygoshuttle.com.au</a></small>
+                    </p>
+                </div>                
+            </div>
+            <div class="col-md-2"><br></div>
+            <div class="col-md-4">
+                <h5>Search your area</h5>
+                <div class="input-group">
+                    <input type="text" id="searchInput" class="form-control" placeholder="Search for ......">
+                    <span class="input-group-btn">
+                        <button id="searchButton" class="btn btn-primary" type="button">Go!</button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" id="suburbCards" style="margin-top: 10px;">
+
+        {% for suburb, details in more_suburbs.items %}
+        <div class="card card-body bg-light text-center align-items-center">           
+            <div class="icon-xl mb-3">                
+                    <a  href="/airport-shuttle-{{ suburb|slugify }}/"></a>
+            </div>
+            <h6 class="mb-0">
+                <a href="/airport-shuttle-{{ suburb|slugify }}/">{{ suburb|title }}</a>
+            </h6>
+        </div>
+        {% endfor %} 
+
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const searchInput = document.getElementById('searchInput');
+        const suburbCards = document.getElementById('suburbCards');
+        const cards = suburbCards.getElementsByClassName('card');
+
+        searchInput.addEventListener('keyup', function() {
+            const filter = searchInput.value.toLowerCase();
+            
+            Array.from(cards).forEach(function(card) {
+                const text = card.textContent.toLowerCase();
+                if (text.includes(filter)) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const searchButton = document.getElementById('searchButton');
+        const searchInput = document.getElementById('searchInput');
+        const suburbCards = document.getElementById('suburbCards');
+        const cards = suburbCards.getElementsByClassName('card');
+        searchButton.addEventListener('click', function() {
+            const searchText = searchInput.value.trim().toLowerCase();
+            if (searchText) {
+                const slugifiedSearchText = searchText.replace(/\s+/g, '-');
+                let suburbExists = false;
+                Array.from(cards).forEach(function(card) {
+                    const text = card.textContent.toLowerCase();
+                    if (text.includes(searchText)) {
+                        suburbExists = true;
+                    }
+                });
+                if (suburbExists) {
+                    const url = `/airport-transfers-${slugifiedSearchText}/`;
+                    window.location.href = url;
+                } else {
+                    alert(
+                        'The entered suburb does not exist. You may have entered the name incorrectly, ' +
+                        'or the suburb might not be in our list. Please re-enter the correct name or select it from the list. ' +
+                        'If the suburb is not listed, kindly notify us via email. Thank you.'
+                    );
+                }
+            } else {
+                alert('Please enter a search term.');
+            }
+        });
+    });
+</script>
+{% endblock %}

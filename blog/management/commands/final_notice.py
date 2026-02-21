@@ -1,14 +1,15 @@
+import logging
+import os
+
+from datetime import date, timedelta
 from django.core.management.base import BaseCommand
 from django.core.mail import EmailMultiAlternatives
-from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.db.models import Q
 from blog.models import Post
 from blog.sms_utils import send_sms_notice, send_whatsapp_template
 from main.settings import RECIPIENT_EMAIL
-from datetime import date, timedelta
-import logging
-import os
+from basecamp.utils import render_email_template
 
 # Logger setup
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -45,7 +46,7 @@ class Command(BaseCommand):
             for notice in final_notices:
                 try:
                     # 1️⃣ 이메일 발송
-                    html_content = render_to_string("basecamp/html_email-fnotice.html", {
+                    html_content = render_email_template("html_email-fnotice.html", {
                         'name': notice.name,
                         'email': notice.email
                     })

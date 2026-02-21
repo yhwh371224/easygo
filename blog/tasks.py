@@ -1,10 +1,9 @@
 import datetime
 import os
 import re
-import logging, qrcode, base64
+import logging
 
-from io import BytesIO
-from decimal import Decimal, InvalidOperation
+from decimal import Decimal
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
 from django.core.mail import send_mail, EmailMultiAlternatives
@@ -16,8 +15,9 @@ from django.utils import timezone
 
 from celery import shared_task
 from main.settings import RECIPIENT_EMAIL, DEFAULT_FROM_EMAIL
-from .models import Post, PaypalPayment, StripePayment, XrpPayment
+from .models import Post, PaypalPayment, StripePayment
 from utils.calendar_sync import sync_to_calendar
+from basecamp.utils import render_email_template
 
 
 logger = logging.getLogger('easygo')
@@ -254,8 +254,8 @@ def notify_user_payment_paypal(instance_id):
         recipient_list = [email for email in recipient_emails if email] + [RECIPIENT_EMAIL]
 
         if remaining_balance_after_payment <= 0:
-            html_content = render_to_string(
-                "basecamp/html_email-payment-success.html",
+            html_content = render_email_template(
+                "html_email-payment-success.html",
                 {
                     'name': instance.name,
                     'email': instance.email,
@@ -264,8 +264,8 @@ def notify_user_payment_paypal(instance_id):
                 }
             )
         else:
-            html_content = render_to_string(
-                "basecamp/html_email-response-discrepancy.html",
+            html_content = render_email_template(
+                "html_email-response-discrepancy.html",
                 {
                     'name': instance.name,
                     'price': round(total_balance, 2),
@@ -277,8 +277,8 @@ def notify_user_payment_paypal(instance_id):
         payment_send_email("Payment - EasyGo", html_content, recipient_list)
 
     else:
-        html_content = render_to_string(
-            "basecamp/html_email-noIdentity.html",
+        html_content = render_email_template(
+            "html_email-noIdentity.html",
             {'name': instance.name, 'email': instance.email, 'amount': amount}
         )
         recipient_list = [email for email in [instance.email, RECIPIENT_EMAIL] if email]
@@ -404,13 +404,13 @@ def notify_user_payment_stripe(instance_id):
         recipient_list = [email for email in recipient_emails if email] + [RECIPIENT_EMAIL]
 
         if remaining_balance_after_payment <= 0:
-            html_content = render_to_string(
-                "basecamp/html_email-payment-success-stripe.html",
+            html_content = render_email_template(
+                "html_email-payment-success-stripe.html",
                 {'name': instance.name, 'email': instance.email, 'amount': amount}
             )
         else:
-            html_content = render_to_string(
-                "basecamp/html_email-response-discrepancy.html",
+            html_content = render_email_template(
+                "html_email-response-discrepancy.html",
                 {
                     'name': instance.name,
                     'price': round(total_balance, 2),
@@ -423,8 +423,8 @@ def notify_user_payment_stripe(instance_id):
 
     else:
         # 예약 찾지 못한 경우
-        html_content = render_to_string(
-            "basecamp/html_email-noIdentity-stripe.html",
+        html_content = render_email_template(
+            "html_email-noIdentity-stripe.html",
             {'name': instance.name, 'email': instance.email, 'amount': amount}
         )
         recipient_list = [email for email in [instance.email, RECIPIENT_EMAIL] if email]
@@ -459,7 +459,7 @@ def send_xrp_customer_email(email: str, xrp_amount: str, xrp_address: str, dest_
     }
 
     # HTML 렌더링
-    html_content = render_to_string("basecamp/html_email-xrppayment.html", context)
+    html_content = render_email_template("html_email-xrppayment.html", context)
 
     # 이메일 생성
     subject = "XRP Payment - EasyGo"
