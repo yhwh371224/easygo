@@ -21,14 +21,25 @@
     opacity: 0.5;
     margin: 2.5rem 0;
   }
-
   .form-control h3 {
     margin-top: 4rem;
     margin-bottom: 1.5rem;
   }
-
   .form-control .mb-3 p {
     margin-bottom: 0.8rem;
+  }
+  .faq-card-wrapper {
+    margin-top: -240px;
+  }
+  @media (max-width: 768px) {
+    .faq-card-wrapper {
+      margin-top: -80px;
+    }
+  }
+  @media (max-width: 480px) {
+    .faq-card-wrapper {
+      margin-top: -40px;
+    }
   }
 </style>
 {% endblock %}
@@ -57,7 +68,7 @@
       <!-- FAQ content-->
       <section class="container position-relative zindex-5 pb-5">
         <div class="row">
-          <div class="col-lg-8 col-md-10 offset-lg-2 pb-2 mb-5" style="margin-top: -240px;">
+          <div class="col-lg-8 col-md-10 offset-lg-2 pb-2 mb-5 faq-card-wrapper">
             <div class="card border-0 shadow-lg">
               <div class="form-control" style="padding:3.5rem 2rem 2rem;">
                 <div class="text-center" style="margin-bottom:3rem;">
