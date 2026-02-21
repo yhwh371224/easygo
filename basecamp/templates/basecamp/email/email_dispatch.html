@@ -5,6 +5,10 @@
   .form-check-label {
     color: #000000 !important;
   }
+  .form-check-label,
+	small {
+	color: #000000 !important;
+  }
 </style>
 {% endblock %}
 
@@ -110,8 +114,8 @@
 								name="payment_amount"
 								placeholder="Put only number"
 								id="payment_amount">
-							<small class="text-dark">
-								For Gratitude / Multi-payment only
+							<small>
+								'Gratitude For Payment' only
 							</small>
 						</div>
 
@@ -122,7 +126,7 @@
 								type="time"
 								name="adjusted_pickup_time"
 								id="adjusted_pickup_time">
-							<small class="text-dark">
+							<small>
 								Use only when pickup time has changed
 							</small>
 						</div>		
