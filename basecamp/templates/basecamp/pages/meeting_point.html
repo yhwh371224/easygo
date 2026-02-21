@@ -11,7 +11,7 @@
 
 <!-- ===== Hero CSS (page-only) ===== -->
 <style>
-  .hero-meeting {
+  .hero {
     position: relative;
     min-height: 600px;
     display: flex;
@@ -19,7 +19,7 @@
     overflow: hidden;
   }
 
-  .hero-meeting::before {
+  .hero::before {
     content: "";
     position: absolute;
     inset: 0;
@@ -29,7 +29,7 @@
     z-index: 0;
   }
 
-  .hero-meeting .hero-content {
+  .hero .hero-content {
     position: relative;
     z-index: 2;
   }
@@ -54,7 +54,7 @@
 <!-- ===== /Hero CSS ===== -->
 
 <!-- ===== Hero Section ===== -->
-<section class="hero-meeting">
+<section class="hero">
   <span class="position-absolute top-0 start-0 w-100 h-100 bg-gradient opacity-80" style="z-index:1;"></span>
   <div class="shape shape-bottom shape-slant bg-body">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 260">
