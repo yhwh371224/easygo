@@ -18,7 +18,7 @@ from blog.models import StripePayment
 EMAIL_TEMPLATE_BASE = "basecamp/emails/html_email/"
 
 def render_email_template(template_name, context, request=None):
-    if not template_name.startswith("basecamp/emails/html_email/"):
+    if not template_name.startswith("basecamp/email/html_email/"):
         template_name = f"{EMAIL_TEMPLATE_BASE}{template_name}"
 
     return render_to_string(template_name, context, request=request)
