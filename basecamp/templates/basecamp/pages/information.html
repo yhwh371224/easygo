@@ -7,6 +7,26 @@
 <meta name="keywords" content="EasyGo Airport Shuttle, Sydney airport transfers, airport shuttle information, luggage-friendly shuttle, booking information, shuttle service Sydney">
 {% endblock %}
 
+{% block extra_css %}
+<style>
+  .booking-form-wrapper {
+    margin-top: -70px;
+  }
+
+  @media (max-width: 768px) {
+    .booking-form-wrapper {
+      margin-top: -80px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .booking-form-wrapper {
+      margin-top: -60px;
+    }
+  }
+</style>
+{% endblock %}
+
 {% block content %}
 <!-- Hero-->
       <section class="bg-dark py-3" style="position: relative; overflow: hidden; min-height: 550px; display: flex; align-items: center; justify-content: center;">
@@ -27,7 +47,7 @@
         </div>
       </section>
       <!-- Booking form-->
-      <form class="container position-relative zindex-5" style="margin-top: -68px;">
+      <form class="container position-relative zindex-5 booking-form-wrapper">
         <div class="d-lg-flex align-items-center bg-secondary border rounded-3 px-4 pt-4 pb-3">
           <div id="main" class="site-main">
             <div class="full-container">

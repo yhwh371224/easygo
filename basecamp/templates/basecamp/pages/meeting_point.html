@@ -25,6 +25,19 @@
   .form-control .mb-3 p {
     margin-bottom: 0.8rem;
   }
+  .faq-card-wrapper {
+    margin-top: -240px;
+  }
+  @media (max-width: 768px) {
+    .faq-card-wrapper {
+      margin-top: -80px;
+    }
+  }
+  @media (max-width: 480px) {
+    .faq-card-wrapper {
+      margin-top: -40px;
+    }
+  }
 </style>
 {% endblock %}
 
@@ -51,7 +64,7 @@
       <!-- Contact form + details-->
       <section class="container position-relative zindex-5 pb-5">
         <div class="row">
-          <div class="col-lg-6 col-md-7 offset-lg-1 pb-2 mb-5" style="margin-top: -230px;">
+          <div class="col-lg-6 col-md-7 offset-lg-1 pb-2 mb-5 faq-card-wrapper">
             <div class="card border-0 shadow-lg" >
               <div class="form-control" style="padding:2rem">               
                 <div class="mb-3 pb-1">
