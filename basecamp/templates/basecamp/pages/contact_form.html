@@ -2,13 +2,11 @@
 
 {% block title %}Contact – EasyGo Airport Shuttle{% endblock %}
 
-{% block content %}
+{% block extra_css %}
 <style>
-  /* Contact page 전용 navbar 글씨 색만 검정으로 */
   header.header.navbar .nav-link {
-      color: #000 !important; /* 검정색 글씨 */
+      color: #000 !important;
   }
-  /* 날짜 에러 강조 스타일 */
   #date-error {
       display: none;
       width: 100%;
@@ -17,14 +15,15 @@
       color: #dc3545;
       font-weight: bold;
   }
-
   .custom-card {
     background-color: #f8f9fa;
     border: 1px solid #dee2e6;
     border-radius: 0.75rem;
   }
 </style>
+{% endblock %}
 
+{% block content %}
 <section class="container py-5 mt-5">
   <div class="row justify-content-center">
     <h3 class="text-center mb-4 mt-5">Contact Form</h3>

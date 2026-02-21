@@ -5,16 +5,14 @@
 {% endblock %}
 
 {% block meta %}
-<meta name="description" content="Frequently asked questions for Sydney arrival passengers. Learn how to meet your driver, find meeting points, and ensure a smooth EasyGo Airport Shuttle pickup.">
+<meta name="description" content="Frequently asked questions for Sydney passengers. Learn how to meet your driver, find meeting points, and ensure a smooth EasyGo Airport Shuttle pickup.">
 <meta name="keywords" content="Sydney airport shuttle FAQ, Sydney airport pickup, EasyGo Airport Shuttle guide, meeting point Sydney airport">
 <meta name="author" content="easygoshuttle.com.au">
 {% endblock %}
 
-{% block content %}
-
-<!-- ===== Hero CSS (page-only) ===== -->
+{% block extra_css %}
 <style>
-  .hero-arrival {
+  .hero {
     position: relative;
     min-height: 600px;
     display: flex;
@@ -22,7 +20,7 @@
     overflow: hidden;
   }
 
-  .hero-arrival::before {
+  .hero::before {
     content: "";
     position: absolute;
     inset: 0;
@@ -32,7 +30,7 @@
     z-index: 0;
   }
 
-  .hero-arrival .hero-content {
+  .hero .hero-content {
     position: relative;
     z-index: 2;
   }
@@ -53,10 +51,12 @@
     margin-bottom: 0.8rem;
   }
 </style>
-<!-- ===== /Hero CSS ===== -->
+{% endblock %}
 
+
+{% block content %}
 <!-- ===== Hero Section ===== -->
-<section class="hero-arrival">
+<section class="hero">
   <span class="position-absolute top-0 start-0 w-100 h-100 bg-gradient opacity-80" style="z-index:1;"></span>
   <div class="shape shape-bottom shape-slant bg-body">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 260">
