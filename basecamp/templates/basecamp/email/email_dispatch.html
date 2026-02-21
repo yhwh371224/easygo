@@ -1,4 +1,13 @@
 {% extends 'basecamp/base/easygo_base.html' %}
+
+{% block extra_css %}
+<style>
+  .form-check-label {
+    color: #000000 !important;
+  }
+</style>
+{% endblock %}
+
 {% block content %}
 
 	<!-- Form for email dispatch -->
@@ -101,7 +110,7 @@
 								name="payment_amount"
 								placeholder="Put only number"
 								id="payment_amount">
-							<small class="text-light">
+							<small class="text-dark">
 								For Gratitude / Multi-payment only
 							</small>
 						</div>
@@ -113,7 +122,7 @@
 								type="time"
 								name="adjusted_pickup_time"
 								id="adjusted_pickup_time">
-							<small class="text-light">
+							<small class="text-dark">
 								Use only when pickup time has changed
 							</small>
 						</div>		
