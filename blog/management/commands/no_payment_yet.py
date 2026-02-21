@@ -1,21 +1,22 @@
+import logging
+
 from datetime import date, timedelta
 from django.core.management.base import BaseCommand
 from django.core.mail import EmailMultiAlternatives
-from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.db.models import Q
 from blog.models import Post
 from main.settings import RECIPIENT_EMAIL
-import logging
+from basecamp.utils import render_email_template
+
 
 logger = logging.getLogger(__name__)
-
 
 class Command(BaseCommand):
     help = 'Send reminders for payment'
 
     def send_email(self, subject, template, context, recipient_list):
-        html_content = render_to_string(template, context)
+        html_content = render_email_template(template, context)
         text_content = strip_tags(html_content)
         email = EmailMultiAlternatives(subject, text_content, '', recipient_list)
         email.attach_alternative(html_content, "text/html")
@@ -54,11 +55,11 @@ class Command(BaseCommand):
                     days_difference = (booking.pickup_date - start_date).days
                     if days_difference <= 2:
                         email_subject = "Urgent notice for payment"
-                        template = "basecamp/html_email-nopayment-today.html" 
+                        template = "html_email-nopayment-today.html" 
                             
                     else:
                         email_subject = "Payment notice"
-                        template = "basecamp/html_email-nopayment.html"                             
+                        template = "html_email-nopayment.html"                             
 
                     self.send_email(
                         email_subject,
@@ -82,7 +83,7 @@ class Command(BaseCommand):
                     diff = round(price - paid, 2)
                     self.send_email(
                         "Urgent notice for payment discrepancy",
-                        "basecamp/html_email-response-discrepancy.html",
+                        "html_email-response-discrepancy.html",
                         {
                             'name': booking.name,
                             'price': booking.price,

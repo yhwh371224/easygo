@@ -3,11 +3,11 @@ import logging
 import os 
 from django.core.management.base import BaseCommand
 from django.core.mail import EmailMultiAlternatives
-from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from blog.models import Post
 from django.utils import timezone
 from main.settings import RECIPIENT_EMAIL
+from basecamp.utils import render_email_template
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -27,7 +27,7 @@ class Command(BaseCommand):
         posts = Post.objects.filter(created__date=current_datetime.date())
         
         if posts.exists():
-            self.send_email_task(posts, "basecamp/html_email-confirmation.html", "EasyGo Booking confirmation")
+            self.send_email_task(posts, "html_email-confirmation.html", "EasyGo Booking confirmation")
 
     def send_email_task(self, posts, template_name, subject):
         with self.lock:
@@ -36,7 +36,7 @@ class Command(BaseCommand):
                     post.sent_email = True
                     post.save(update_fields=['sent_email'])
 
-                    html_content = render_to_string(template_name, {
+                    html_content = render_email_template(template_name, {
                         'company_name': post.company_name,
                         'name': post.name,
                         'contact': post.contact,

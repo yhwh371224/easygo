@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>{% block title %}Airport Transfers Sydney - EasyGo Shuttle{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" media="screen" href="/static/basecamp/css/flatpickr.min.css"/>
+    <link rel="stylesheet" media="screen" href="/static/basecamp/css/home.css">
+  </head> 
+    <!-- Body-->
+  <body>  
+    {% include "basecamp/layouts/navbar.html" %}
+
+    <main class="page-wrapper">
+        <div style="padding-top: 120px;"></div>
+      
+           {% block content %}
+            {% endblock %}
+      
+    </main>
+
+    {% include "basecamp/layouts/footer.html" %}
+
+    <script src="/static/basecamp/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/basecamp/js/theme.min.js"></script> 
+    <script src="/static/basecamp/js/flatpickr.min.js" defer></script>
+    <script src="/static/basecamp/js/date-picker.js" defer></script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>              
+    
+    <script>
+        let titleSpinnerInterval = null;
+        const originalTitle = document.title;
+
+        function startTitleSpinner() {
+            if (titleSpinnerInterval) return;
+            const frames = ["⏳", "⌛"];
+            let i = 0;
+            titleSpinnerInterval = setInterval(() => {
+                document.title = frames[i % frames.length] + " Processing...";
+                i++;
+            }, 700);
+        }
+
+        function stopTitleSpinner() {
+            if (!titleSpinnerInterval) return;
+            clearInterval(titleSpinnerInterval);
+            titleSpinnerInterval = null;
+            document.title = originalTitle;
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.getElementById("booking-form");
+            const submitButton = document.getElementById("submitButton");
+            const dateInput = document.getElementById("pickup_date");
+            const dateError = document.getElementById('date-error');
+
+            if (form && submitButton) {
+                form.addEventListener("submit", function (event) {
+                    // 1. 우선 제출을 중단 (검증이 끝날 때까지)
+                    event.preventDefault();
+
+                    let isValid = true;
+
+                    // 2. 오늘 날짜 검증 (YYYY-MM-DD 비교)
+                    if (dateInput && dateInput.value) {
+                        const now = new Date();
+                        // 오늘 날짜 문자열 생성 (예: "2026-02-16")
+                        const todayStr = now.getFullYear() + '-' + 
+                                        String(now.getMonth() + 1).padStart(2, '0') + '-' + 
+                                        String(now.getDate()).padStart(2, '0');
+                        
+                        // 입력된 값과 오늘 날짜가 다르면 에러 표시
+                        if (dateInput.value !== todayStr) {
+                            dateError.style.display = 'block'; // 메시지 보이게 함
+                            dateInput.classList.add('is-invalid'); // 테두리 빨갛게
+                            isValid = false;
+                        } else {
+                            dateError.style.display = 'none';
+                            dateInput.classList.remove('is-invalid');
+                        }
+                    }
+
+                    // 4. HTML5 기본 검증 (Name, Email 등 필수값)
+                    if (!form.checkValidity() || !isValid) {
+                        form.classList.add('was-validated');
+                        // 에러가 있다면 제출하지 않고 중단 (스피너 작동 X)
+                        return; 
+                    }
+
+                    // 5. 모든 검증 통과 시에만 스피너 돌리고 수동 제출
+                    submitButton.disabled = true;
+                    submitButton.innerHTML = "Submitting... <span class='spinner-border spinner-border-sm ms-2'></span>";
+                    startTitleSpinner();
+                    
+                    // 실제 전송
+                    form.submit();
+                });
+            }
+
+            // 사용자가 날짜를 변경하면 에러 메시지 즉시 숨기기
+            if (dateInput) {
+                dateInput.addEventListener('change', function() {
+                    dateError.style.display = 'none';
+                    dateInput.classList.remove('is-invalid');
+                });
+            }
+        });
+
+        window.addEventListener("pageshow", function (event) {
+            if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+                stopTitleSpinner();
+                const btn = document.getElementById("submitButton");
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = "Submit";
+                }
+            }
+        });
+    </script>
+  </body>
+</html>

@@ -11,7 +11,6 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
-from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
@@ -20,7 +19,7 @@ from django.utils import timezone
 
 from main.settings import RECIPIENT_EMAIL, DEFAULT_FROM_EMAIL
 from blog.models import Post, Inquiry, PaypalPayment, StripePayment, Driver
-from blog.tasks import send_confirm_email, send_email_task, send_notice_email
+from blog.tasks import send_confirm_email
 from blog.sms_utils import send_sms_notice, send_whatsapp_template
 from basecamp.area import get_suburbs
 from basecamp.area_full import get_more_suburbs
@@ -31,7 +30,7 @@ from .utils import (
     is_ajax, parse_date, handle_email_sending, format_pickup_time_12h,
     render_to_pdf, add_bag, to_int, to_bool, safe_float,
     handle_checkout_session_completed, paypal_ipn_error_email, get_sorted_suburbs,
-    verify_turnstile,
+    verify_turnstile, render_email_template
 )
 
 
@@ -53,19 +52,19 @@ def home(request):
 
 def about_us(request): 
     # send_notice_email.delay('about_us accessed', 'about_us accessed', RECIPIENT_EMAIL)
-    return render(request, 'basecamp/about_us.html')
+    return render(request, 'basecamp/pages/about_us.html')
 
 
 def maxi_taxi(request, suburb=None):
     more_suburbs = get_more_suburbs()
 
     if not suburb:
-        return render(request, 'basecamp/maxi-taxi-pillar.html')
+        return render(request, 'basecamp/pillars/maxi-taxi-pillar.html')
 
     suburb_formatted = suburb.replace('-', ' ').title()
 
     if suburb_formatted not in more_suburbs:
-        return render(request, 'basecamp/maxi-taxi-pillar.html')
+        return render(request, 'basecamp/pillars/maxi-taxi-pillar.html')
 
     details = more_suburbs[suburb_formatted]
     area_type = details.get('area_type')
@@ -101,7 +100,7 @@ def maxi_taxi(request, suburb=None):
         'landmark': zone_info.get('landmark', ""),
     }
 
-    return render(request, 'basecamp/airport-maxi-taxi.html', context)
+    return render(request, 'basecamp/pillars/airport-maxi-taxi.html', context)
 
 
 # Suburb names
@@ -109,7 +108,7 @@ def airport_shuttle(request, suburb):
     more_suburbs = get_more_suburbs()
 
     if not suburb:
-        return render(request, 'basecamp/sydney_airport_shuttle.html')
+        return render(request, 'basecamp/pillars/sydney_airport_shuttle.html')
     
     suburb_formatted = suburb.replace('-', ' ').title() 
 
@@ -130,16 +129,16 @@ def airport_shuttle(request, suburb):
             'route_info': zone_info.get('route_info', "").format(suburb=suburb_formatted),  
             'landmarks': zone_info.get('landmark', ""),
         }
-        return render(request, 'basecamp/airport-shuttle-template.html', context)
+        return render(request, 'basecamp/pillars/airport-shuttle-template.html', context)
     else:
-        return render(request, 'basecamp/sydney_airport_shuttle.html')
+        return render(request, 'basecamp/pillars/sydney_airport_shuttle.html')
 
 
 def airport_transfer(request, suburb):
     more_suburbs = get_more_suburbs()
 
     if not suburb:
-        return render(request, 'basecamp/sydney_airport_transfer.html')
+        return render(request, 'basecamp/pillars/sydney_airport_transfer.html')
     
     suburb_formatted = suburb.replace('-', ' ').title() 
 
@@ -160,13 +159,13 @@ def airport_transfer(request, suburb):
             'route_info': zone_info.get('route_info', "").format(suburb=suburb_formatted), 
             'landmarks': zone_info.get('landmark', ""),
         }
-        return render(request, 'basecamp/airport-transfer-template.html', context)
+        return render(request, 'basecamp/pillars/airport-transfer-template.html', context)
     else:
-        return render(request, 'basecamp/sydney_airport_transfer.html')
+        return render(request, 'basecamp/pillars/sydney_airport_transfer.html')
 
 
 def arrival_guide(request): 
-    return render(request, 'basecamp/arrival_guide.html')
+    return render(request, 'basecamp/pages/arrival_guide.html')
 
 
 def booking(request):
@@ -174,7 +173,7 @@ def booking(request):
     context = {
         'home_suburbs': all_suburbs,
     }
-    return render(request, 'basecamp/booking.html', context)
+    return render(request, 'basecamp/booking/booking.html', context)
 
 
 @login_required
@@ -183,7 +182,7 @@ def confirmation(request):
     context = {
         'home_suburbs': all_suburbs,
     }
-    return render(request, 'basecamp/confirmation.html', context)
+    return render(request, 'basecamp/booking/confirmation.html', context)
 
 
 def confirmation_multiplebookings(request): 
@@ -191,35 +190,35 @@ def confirmation_multiplebookings(request):
 
 
 def confirm_booking(request): 
-    return render(request, 'basecamp/confirm_booking.html')
+    return render(request, 'basecamp/booking/confirm_booking.html')
 
 
 def contact_form(request):
-    return render(request, 'basecamp/contact_form.html')
+    return render(request, 'basecamp/pages/contact_form.html')
 
 
 def cruise_booking(request):
-    return render(request, 'basecamp/cruise_booking.html')
+    return render(request, 'basecamp/booking/cruise_booking.html')
 
 
 def cruise_inquiry(request):
-    return render(request, 'basecamp/cruise_inquiry.html')
+    return render(request, 'basecamp/booking/cruise_booking.html')
 
 
 def error(request): 
-    return render(request, 'basecamp/error.html')
+    return render(request, 'basecamp/error/error.html')
 
 
 def email_dispatch(request): 
-    return render(request, 'basecamp/email_dispatch.html')
+    return render(request, 'basecamp/email/email_dispatch.html')
 
 
 def email_error_confirmbooking(request): 
-    return render(request, 'basecamp/email_error_confirmbooking.html')
+    return render(request, 'basecamp/email/email_error_confirmbooking.html')
 
 
 def home_error(request): 
-    return render(request, 'basecamp/home_error.html')
+    return render(request, 'basecamp/error/home_error.html')
 
 
 def inquiry(request):
@@ -227,7 +226,7 @@ def inquiry(request):
     context = {
         'home_suburbs': all_suburbs,
     }
-    return render(request, 'basecamp/inquiry.html', context)
+    return render(request, 'basecamp/booking/inquiry.html', context)
 
 
 def inquiry1(request):
@@ -237,7 +236,7 @@ def inquiry1(request):
         'suburb': None,
         'no_of_passenger': None,
     }    
-    return render(request, 'basecamp/inquiry.html', context)
+    return render(request, 'basecamp/booking/inquiry.html', context)
 
 
 def inquiry_done(request):
@@ -247,7 +246,7 @@ def inquiry_done(request):
 
 
 def information(request): 
-    return render(request, 'basecamp/information.html')
+    return render(request, 'basecamp/pages/information.html')
 
 
 def invoice(request): 
@@ -259,34 +258,34 @@ def invoice_details(request):
 
 
 def meeting_point(request): 
-    return render(request, 'basecamp/meeting_point.html')
+    return render(request, 'basecamp/pages/meeting_point.html')
 
 
 def more_suburbs(request): 
     more_suburbs = get_more_suburbs()
-    return render(request, 'basecamp/more_suburbs.html', {'more_suburbs': more_suburbs})
+    return render(request, 'basecamp/layouts/more_suburbs.html', {'more_suburbs': more_suburbs})
 
 
 def more_suburbs1(request): 
     more_suburbs = get_more_suburbs()
-    return render(request, 'basecamp/more_suburbs1.html', {'more_suburbs': more_suburbs})
+    return render(request, 'basecamp/layouts/more_suburbs1.html', {'more_suburbs': more_suburbs})
 
 
 def more_suburbs_maxi_taxi(request):
     more_suburbs = get_more_suburbs()
-    return render(request, 'basecamp/more_suburbs_maxi_taxi.html', {'more_suburbs': more_suburbs})
+    return render(request, 'basecamp/layouts/more_suburbs_maxi_taxi.html', {'more_suburbs': more_suburbs})
 
 
 def payment_cancel(request): 
-    return render(request, 'basecamp/payment_cancel.html')
+    return render(request, 'basecamp/payments/payment_cancel.html')
 
 
 def payment_options(request):
-    return render(request, 'basecamp/payment_options.html')
+    return render(request, 'basecamp/payments/payment_options.html')
 
 
 def payment_options1(request): 
-    return render(request, 'basecamp/payment_options1.html')
+    return render(request, 'basecamp/payments/payment_options1.html')
 
 
 def payonline(request):
@@ -294,75 +293,75 @@ def payonline(request):
         'paypal_client_id': settings.PAYPAL_CLIENT_ID,
         'csp_nonce': NONCE, 
     }
-    return render(request, 'basecamp/payonline.html', context)
+    return render(request, 'basecamp/payments/payonline.html', context)
 
 
 def p2p(request):     
-    return render(request, 'basecamp/p2p.html')
+    return render(request, 'basecamp/booking/p2p.html')
 
 
 def p2p_booking(request):
-    return render(request, 'basecamp/p2p_booking.html')
+    return render(request, 'basecamp/booking/p2p_booking.html')
 
 
 def p2p_single(request):
-    return render(request, 'basecamp/p2p_single.html')
+    return render(request, 'basecamp/booking/p2p_single.html')
 
 
 def privacy(request):     
-    return render(request, 'basecamp/privacy.html')
+    return render(request, 'basecamp/pages/privacy.html')
 
 
 def return_cruise_fields(request): 
-    return render(request, 'basecamp/return_cruise_fields.html')
+    return render(request, 'basecamp/layouts/return_cruise_fields.html')
 
 
 def return_flight_fields(request): 
-    return render(request, 'basecamp/return_flight_fields.html')
+    return render(request, 'basecamp/layouts/return_flight_fields.html')
 
 
 def return_trip(request): 
-    return render(request, 'basecamp/return_trip.html')
+    return render(request, 'basecamp/booking/return_trip.html')
 
 
 def sending_email_first(request): 
-    return render(request, 'basecamp/sending_email_first.html')
+    return render(request, 'basecamp/email/sending_email_first.html')
 
 
 def sending_email_second(request): 
-    return render(request, 'basecamp/sending_email_second.html')
+    return render(request, 'basecamp/email/sending_email_second.html')
 
 
 def sending_email_input_data(request): 
-    return render(request, 'basecamp/sending_email_input_data.html')
+    return render(request, 'basecamp/email/sending_email_input_data.html')
 
 
 def service(request):     
-    return render(request, 'basecamp/service.html')
+    return render(request, 'basecamp/pages/service.html')
 
 
 def success(request): 
-    return render(request, 'basecamp/success.html')
+    return render(request, 'basecamp/layouts/success.html')
 
 
 def sydney_airport_shuttle(request):
-    return render(request, 'basecamp/sydney_airport_shuttle.html')
+    return render(request, 'basecamp/pillars/sydney_airport_shuttle.html')
 
 
 def sydney_airport_transfer(request):
-    return render(request, 'basecamp/sydney_airport_transfer.html')
+    return render(request, 'basecamp/pillars/sydney_airport_transfer.html')
 
 
 def sydney_cruise_transfer(request):
-    return render(request, 'basecamp/sydney_cruise_transfer.html')
+    return render(request, 'basecamp/pillars/sydney_cruise_transfer.html')
 
 
 def terms(request): 
-    return render(request, 'basecamp/terms.html')
+    return render(request, 'basecamp/pages/terms.html')
 
 
 def wrong_date_today(request): 
-    return render(request, 'basecamp/wrong_date_today.html')
+    return render(request, 'basecamp/error/wrong_date_today.html')
 
 
 # Inquiry for airport 
@@ -560,7 +559,7 @@ def inquiry_details(request):
         })
         
     else:
-        return render(request, 'basecamp/inquiry.html', {})
+        return render(request, 'basecamp/booking/inquiry.html', {})
 
 
 # inquiry (simple one) for airport from home page
@@ -771,9 +770,9 @@ def contact_submit(request):
         today = date.today()
         if pickup_date != str(today):
             if is_ajax(request):
-                return render(request, 'basecamp/wrong_date_today.html')
+                return render(request, 'basecamp/error/wrong_date_today.html')
             else:
-                return render(request, 'basecamp/wrong_date_today.html')
+                return render(request, 'basecamp/error/wrong_date_today.html')
 
         data = {
             'name': name,
@@ -804,7 +803,7 @@ def contact_submit(request):
             'google_review_url': settings.GOOGLE_REVIEW_URL,            
         })
     else:
-        return render(request, 'basecamp/contact_form.html', {})
+        return render(request, 'basecamp/pages/contact_form.html', {})
     
     
 # Multiple points Inquiry 
@@ -844,7 +843,7 @@ def p2p_detail(request):
             return JsonResponse({'success': False, 'message': 'Duplicate inquiry recently submitted. Please wait before trying again.'})  
 
         subject = "Multiple points inquiry"
-        template_name = "basecamp/html_email-p2p.html"
+        template_name = "html_email-p2p.html"
 
         context = {
             'p2p_name': p2p_name, 'p2p_phone': p2p_phone, 'p2p_email': p2p_email, 'p2p_date': p2p_date, 
@@ -866,7 +865,7 @@ def p2p_detail(request):
         })
 
     else:
-        return render(request, 'basecamp/p2p.html', {})
+        return render(request, 'basecamp/booking/p2p.html', {})
     
 
 # p2p multiple points booking by myself 
@@ -898,7 +897,7 @@ def p2p_booking_detail(request):
         price = request.POST.get('price')
 
         subject = "Multiple points booking confirmation"
-        template_name = "basecamp/html_email-p2p-confirmation.html"
+        template_name = "html_email-p2p-confirmation.html"
 
         context = {
             'p2p_name': p2p_name, 'p2p_phone': p2p_phone, 'p2p_email': p2p_email, 'p2p_date': p2p_date, 
@@ -925,7 +924,7 @@ def p2p_booking_detail(request):
         })
 
     else:
-        return render(request, 'basecamp/p2p.html', {})
+        return render(request, 'basecamp/booking/p2p.html', {})
 
 
 def price_detail(request):
@@ -938,7 +937,7 @@ def price_detail(request):
         
         # 1. 'Select your option' 검증
         if start_point == 'Select your option' or end_point == 'Select your option':
-            return render(request, 'basecamp/home_error.html')
+            return render(request, 'basecamp/error/home_error.html')
 
         # 2. 픽업 날짜 유효성 검사 적용 
         try:
@@ -982,7 +981,7 @@ def price_detail(request):
             'condition_met': condition_met
         }
 
-        return render(request, 'basecamp/inquiry1.html', context)
+        return render(request, 'basecamp/booking/inquiry1.html', context)
 
     else:
         return render(request, 'basecamp/home.html', {
@@ -1152,7 +1151,7 @@ def confirmation_detail(request):
         return rendering
 
     else:
-        return render(request, 'basecamp/confirmation.html', {})
+        return render(request, 'basecamp/booking/confirmation.html', {})
 
 
 # airport booking by client
@@ -1336,7 +1335,7 @@ def booking_detail(request):
         })
 
     else:
-        return render(request, 'basecamp/booking.html', {})
+        return render(request, 'basecamp/booking/booking.html', {})
     
 
 # cruise booking by client
@@ -1528,7 +1527,7 @@ def cruise_booking_detail(request):
         })
 
     else:
-        return render(request, 'basecamp/cruise_booking.html', {})
+        return render(request, 'basecamp/booking/cruise_booking.html', {})
 
 
 def confirm_booking_detail(request):
@@ -1552,7 +1551,7 @@ def confirm_booking_detail(request):
         if users.exists() and 0 <= index < len(users):
             user = users[index]
         else:
-            return render(request, 'basecamp/email_error_confirmbooking.html')
+            return render(request, 'basecamp/email/email_error_confirmbooking.html')
 
         # 기존 데이터
         name = user.name
@@ -1670,7 +1669,7 @@ def confirm_booking_detail(request):
         })
 
     else:
-        return render(request, 'basecamp/confirm_booking.html', {})
+        return render(request, 'basecamp/booking/confirm_booking.html', {})
 
      
 # sending confirmation email first one   
@@ -1709,7 +1708,7 @@ def sending_email_first_detail(request):
             user.save()
             
             if user.cancelled: 
-                template_name = "basecamp/html_email-cancelled.html"
+                template_name = "html_email-cancelled.html"
                 subject = "Booking Cancellation Notice - EasyGo" 
                 
                 context = {
@@ -1724,10 +1723,10 @@ def sending_email_first_detail(request):
                 handle_email_sending(request, user.email, subject, template_name, context)
                     
             else: 
-                template_name = "basecamp/html_email-confirmation.html"
+                template_name = "html_email-confirmation.html"
 
-                html_content = render_to_string(
-                                        "basecamp/html_email-confirmation.html", 
+                html_content = render_email_template(
+                                        "html_email-confirmation.html", 
                                         {
                                             'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 'email': user.email, 'email1': user.email1,
                                             'pickup_date': user.pickup_date, 'flight_number': user.flight_number,
@@ -1761,7 +1760,7 @@ def sending_email_first_detail(request):
             return HttpResponse("No user found", status=400)
 
     else:
-        return render(request, 'basecamp/sending_email_first.html', {})
+        return render(request, 'basecamp/email/sending_email_first.html', {})
     
 
 # sending confirmation email second one    
@@ -1809,7 +1808,7 @@ def sending_email_second_detail(request):
         double_paid = paid1 + paid2
 
         if user.cancelled or user1.cancelled:
-            template_name = "basecamp/html_email-cancelled.html"
+            template_name = "html_email-cancelled.html"
             subject = "Booking Cancellation Notice - EasyGo" 
             
             context = {
@@ -1824,7 +1823,7 @@ def sending_email_second_detail(request):
             handle_email_sending(request, user.email, subject, template_name, context)
 
         else:
-            template_name = "basecamp/html_email-confirmation.html"
+            template_name = "html_email-confirmation.html"
             subject = "Booking confirmation - EasyGo"
 
             context = { 
@@ -1860,7 +1859,7 @@ def sending_email_second_detail(request):
                 'return_end_point': getattr(user, 'return_end_point', ''), 
             }
 
-            html_content = render_to_string(template_name, context)
+            html_content = render_email_template(template_name, context)
             text_content = strip_tags(html_content)
 
             recipient_list = [user.email, RECIPIENT_EMAIL]
@@ -1881,7 +1880,7 @@ def sending_email_second_detail(request):
         }) 
     
     else:
-        return render(request, 'basecamp/sending_email_second.html', {})
+        return render(request, 'basecamp/email/sending_email_second.html', {})
     
 
 def sending_email_input_data_detail(request):     
@@ -1902,7 +1901,7 @@ def sending_email_input_data_detail(request):
             return render(request, 'basecamp/400.html')
 
         else:
-            template_name = "basecamp/html_email-input-date.html"
+            template_name = "html_email-input-date.html"
             subject = "Checking details - EasyGo"
 
             # 템플릿에 전달할 컨텍스트 구성
@@ -1926,7 +1925,7 @@ def sending_email_input_data_detail(request):
         })
     
     else:
-        return render(request, 'basecamp/sending_email_first.html', {})   
+        return render(request, 'basecamp/email/sending_email_first.html', {})   
 
 
 # For Return Trip 
@@ -2044,7 +2043,7 @@ def return_trip_detail(request):
         return rendering
     
     else:
-        return render(request, 'basecamp/return_trip.html', {})  
+        return render(request, 'basecamp/booking/return_trip.html', {})  
 
 
 def invoice_detail(request):
@@ -2218,8 +2217,8 @@ def invoice_detail(request):
                 "DEFAULT_BANK": DEFAULT_BANK,
             }
 
-            template_name = "basecamp/html_email-multi-invoice.html"
-            html_content = render_to_string(template_name, context)
+            template_name = "html_email-multi-invoice.html"
+            html_content = render_email_template(template_name, context)
 
         else:
             user = bookings[0]
@@ -2260,7 +2259,7 @@ def invoice_detail(request):
 
             if user.cash and user.paid:
                 cash_balance = balance - (with_gst + surcharge_calc)
-                template_name = "basecamp/html_email-invoice-cash.html"
+                template_name = "html_email-invoice-cash.html"
                 context = {
                     "inv_no": inv_no, "name": user.name, "company_name": user.company_name,
                     "apply_gst_flag": bool(apply_gst_flag),
@@ -2288,7 +2287,7 @@ def invoice_detail(request):
                 doubled_total = doubled_price + doubled_with_gst + doubled_surcharge + toll - discount
                 balance = round(doubled_total - doubled_paid, 2)
 
-                template_name = "basecamp/html_email-invoice.html"
+                template_name = "html_email-invoice.html"
                 context = {
                     "inv_no": inv_no, "name": user1.name, "company_name": user1.company_name,
                     "apply_gst_flag": bool(apply_gst_flag),
@@ -2301,7 +2300,7 @@ def invoice_detail(request):
                     "return_pickup_time": user1.return_pickup_time, "return_pickup_date": user1.return_pickup_date, "DEFAULT_BANK": DEFAULT_BANK, 
                 }
             else:
-                template_name = "basecamp/html_email-invoice.html"
+                template_name = "html_email-invoice.html"
                 context = {
                     "inv_no": inv_no, "name": user.name, "company_name": user.company_name,
                     "apply_gst_flag": bool(apply_gst_flag),
@@ -2314,7 +2313,7 @@ def invoice_detail(request):
                     "return_pickup_time": user.return_pickup_time, "return_pickup_date": user.return_pickup_date, "DEFAULT_BANK": DEFAULT_BANK, 
                 }
 
-            html_content = render_to_string(template_name, context)
+            html_content = render_email_template(template_name, context)
 
         text_content = strip_tags(html_content)
         recipient_list = [email, RECIPIENT_EMAIL]
@@ -2395,33 +2394,33 @@ def email_dispatch_detail(request):
 
         # 4️⃣ Email template mapping
         template_options = {
-            "Gratitude For Payment": ("basecamp/html_email-response-payment-received.html", "Payment Received - EasyGo"),
-            "Pickup Notice for Today": ("basecamp/html_email-today1.html", "Important Update for Today's Pickup - EasyGo "),
-            "Payment Method": ("basecamp/html_email-response-payment.html", "Payment Method - EasyGo"),
-            "PayPal Assistance": ("basecamp/html_email-response-payment-assistance.html", "PayPal Assistance - EasyGo"),
-            "Inquiry for driver contact": ("basecamp/html_email-response-driver-contact.html", "Inquiry for driver contact - EasyGo"),
-            "Airport Pickup Guide": ("basecamp/html_email-response-arrival-guide.html", "Airport Pickup Guide - EasyGo"),
-            'Earlier Pickup Requested for Departure': ("basecamp/html_email-departure-early.html", "Urgent notice - EasyGo"),
-            'Later Pickup Requested for Departure': ("basecamp/html_email-departure-late.html", "Urgent notice - EasyGo"),
-            'Early Arrival Notification': ("basecamp/html_email-arrival-early.html", "Urgent notice - EasyGo"),
-            'Arrival Later Than Scheduled': ("basecamp/html_email-arrival-late.html", "Urgent notice - EasyGo"),
-            'Notice of Delay': ("basecamp/html_email-just-late-notice.html", "Urgent notice - EasyGo"),
-            'Adjusted Pickup Time': ("basecamp/html_email-just-adjustment.html", "Urgent notice - EasyGo"),
-            "Meeting Point Inquiry": ("basecamp/html_email-response-meeting.html", "Meeting Point - EasyGo"),
-            "Payment in Advance Required": ("basecamp/html_email-response-prepayment.html", "Payment in Advance Required - EasyGo"),
-            "Further details for booking": ("basecamp/html_email-response-more-details.html", "Further details for booking - EasyGo"),
-            "Further details for booked": ("basecamp/html_email-response-details-booked.html", "Further details for booked - EasyGo"),
-            "Arrival Pickup Arrangement Without Payment": ("basecamp/html_email-urgent-arrival-pickup.html", "Arrival Pickup Arrangement Without Payment - EasyGo"),
-            "Shared Ride (inquiry) Discount Offer": ("basecamp/html_email-shared-inquiry-discount.html", "Discount notice - EasyGo"),
-            "Shared Ride (booking) Discount Offer": ("basecamp/html_email-shared-booking-discount.html", "Discount notice - EasyGo"),
-            "Cancellation of Booking": ("basecamp/html_email-response-cancel.html", "Cancellation of Booking: EasyGo"),
-            "Apologies Cancellation of Booking": ("basecamp/html_email-response-cancel1.html", "Apologies Cancellation of Booking: EasyGo"),
-            "Cancellation by Client": ("basecamp/html_email-response-cancelby.html", "Confirmed Booking Cancellation: EasyGo"),
-            "Apology for oversight": ("basecamp/html_email-apology-for-oversight.html", "Apology for oversight: EasyGo"),
-            "Payment discrepancy": ("basecamp/html_email-response-discrepancy.html", "Payment discrepancy: EasyGo"),
-            "Special promotion": ("basecamp/html_email-special-promotion.html", "Special promotion: EasyGo"),
-            "Booking delay": ("basecamp/html_email-booking-delay.html", "Booking delay: EasyGo"),
-            "Booking delay 1": ("basecamp/html_email-booking-delay1.html", "Booking delay 1: EasyGo")
+            "Gratitude For Payment": ("html_email-response-payment-received.html", "Payment Received - EasyGo"),
+            "Pickup Notice for Today": ("html_email-today1.html", "Important Update for Today's Pickup - EasyGo "),
+            "Payment Method": ("html_email-response-payment.html", "Payment Method - EasyGo"),
+            "PayPal Assistance": ("html_email-response-payment-assistance.html", "PayPal Assistance - EasyGo"),
+            "Inquiry for driver contact": ("html_email-response-driver-contact.html", "Inquiry for driver contact - EasyGo"),
+            "Airport Pickup Guide": ("html_email-response-arrival-guide.html", "Airport Pickup Guide - EasyGo"),
+            'Earlier Pickup Requested for Departure': ("html_email-departure-early.html", "Urgent notice - EasyGo"),
+            'Later Pickup Requested for Departure': ("html_email-departure-late.html", "Urgent notice - EasyGo"),
+            'Early Arrival Notification': ("html_email-arrival-early.html", "Urgent notice - EasyGo"),
+            'Arrival Later Than Scheduled': ("html_email-arrival-late.html", "Urgent notice - EasyGo"),
+            'Notice of Delay': ("html_email-just-late-notice.html", "Urgent notice - EasyGo"),
+            'Adjusted Pickup Time': ("html_email-just-adjustment.html", "Urgent notice - EasyGo"),
+            "Meeting Point Inquiry": ("html_email-response-meeting.html", "Meeting Point - EasyGo"),
+            "Payment in Advance Required": ("html_email-response-prepayment.html", "Payment in Advance Required - EasyGo"),
+            "Further details for booking": ("html_email-response-more-details.html", "Further details for booking - EasyGo"),
+            "Further details for booked": ("html_email-response-details-booked.html", "Further details for booked - EasyGo"),
+            "Arrival Pickup Arrangement Without Payment": ("html_email-urgent-arrival-pickup.html", "Arrival Pickup Arrangement Without Payment - EasyGo"),
+            "Shared Ride (inquiry) Discount Offer": ("html_email-shared-inquiry-discount.html", "Discount notice - EasyGo"),
+            "Shared Ride (booking) Discount Offer": ("html_email-shared-booking-discount.html", "Discount notice - EasyGo"),
+            "Cancellation of Booking": ("html_email-response-cancel.html", "Cancellation of Booking: EasyGo"),
+            "Apologies Cancellation of Booking": ("html_email-response-cancel1.html", "Apologies Cancellation of Booking: EasyGo"),
+            "Cancellation by Client": ("html_email-response-cancelby.html", "Confirmed Booking Cancellation: EasyGo"),
+            "Apology for oversight": ("html_email-apology-for-oversight.html", "Apology for oversight: EasyGo"),
+            "Payment discrepancy": ("html_email-response-discrepancy.html", "Payment discrepancy: EasyGo"),
+            "Special promotion": ("html_email-special-promotion.html", "Special promotion: EasyGo"),
+            "Booking delay": ("html_email-booking-delay.html", "Booking delay: EasyGo"),
+            "Booking delay 1": ("html_email-booking-delay1.html", "Booking delay 1: EasyGo")
         }
 
         if selected_option in template_options:
@@ -2614,13 +2613,13 @@ def email_dispatch_detail(request):
                 user.cash = True
                 user.prepay = False
                 user.pending = False
-                template_name = "basecamp/html_email-response-cash-payment-confirmed.html"
+                template_name = "html_email-response-cash-payment-confirmed.html"
                 subject = "Cash Payment Confirmed - EasyGo"
             elif payment_method == "card":
                 user.cash = False
                 user.pending = True
                 user.prepay = True
-                template_name = "basecamp/html_email-response-card-payment-confirmed.html"
+                template_name = "html_email-response-card-payment-confirmed.html"
                 subject = "Card Payment Confirmed - EasyGo"
 
             user.reminder = True            
@@ -2643,7 +2642,7 @@ def email_dispatch_detail(request):
             'google_review_url': settings.GOOGLE_REVIEW_URL,
         })
     
-    return render(request, 'basecamp/email_dispatch.html', {})
+    return render(request, 'basecamp/email/email_dispatch.html', {})
 
 
 # --------------------------

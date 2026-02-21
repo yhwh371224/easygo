@@ -1,0 +1,270 @@
+{% extends 'basecamp/base/easygo_base_cruise.html' %}
+
+{% block title %}
+EasyGo Cruise Transfer Booking Form – Sydney Airport & Port Transfers
+{% endblock %}
+
+{% block meta %}
+<meta name="description" content="Book your cruise transfer quickly and easily with EasyGo Airport Shuttle. Fill out our cruise booking form for private, luggage-friendly shuttle service to Sydney cruise terminals.">
+<meta name="keywords" content="Sydney cruise transfer booking, airport to cruise shuttle Sydney, private cruise shuttle, EasyGo Airport Shuttle">
+<meta name="author" content="easygoshuttle.com.au">
+{% endblock %}
+
+{% block content %}
+      <!-- Page content-->
+      <!-- Page title-->
+      <section class="jarallax bg-gradient pt-5 pb-7 pt-md-7" data-jarallax data-speed="0.1"><span class="position-absolute top-0 start-0 w-100 h-100 bg-gradient opacity-50"></span>
+        <div class="jarallax-img" style="background-image: url('/static/basecamp/photos/cruise2.webp');"></div>
+        <div class="shape shape-bottom shape-slant bg-body">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 260">
+            <polygon fill="currentColor" points="0,257 0,260 3000,260 3000,0"></polygon>
+          </svg>
+        </div>
+        <br>
+		  <br>
+		  <br/>
+        <div class="container position-relative zindex-5 pt-3 pb-7 pt-md-0">
+          <div class="row justify-content-center pb-7">
+            <div class="col-lg-10">
+              <h1 class="text-light">Cruise Booking Form</h1>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Contact form + details-->
+      <section class="container position-relative zindex-5 pb-5">
+        <div class="row">
+          <div class="col-lg-6 col-md-7 offset-lg-1 pb-2 mb-5" style="margin-top: -260px;">
+            <div class="card border-0 shadow-lg">
+              <form action="/cruise_booking_detail/" method="post" id="booking-form" class="card-body needs-validation p-5" novalidate>
+                {% csrf_token %}
+                {# <input type="text" name="phone_verify" value="" style="display:none !important" tabindex="-1" autocomplete="off"> #}
+                <div class="mb-3 pb-1">
+                  <label class="form-label" for="name">Full name</label>
+                  <input class="form-control" type="text"  placeholder="John Doe" required name="name" id="name">
+                  <div class="invalid-feedback">Please enter your full name!</div>
+                </div>
+                <div class="mb-3 pb-1">
+                  <label class="form-label" for="contact">Mobile phone number</label>
+                  <input class="form-control" type="text"  placeholder="Your mobile phone number" required name="contact" id="contact">
+                  <div class="invalid-feedback">Please enter a valid number!</div>
+                </div>
+                <div class="mb-3 pb-1">
+                  <label class="form-label" for="email">Email address</label>
+                  <input class="form-control" type="email"  placeholder="j.doe@example.com" required name="email" id="email">
+                  <div class="invalid-feedback">Please enter a valid email address!</div>
+                </div>
+                <br>
+                <hr>
+                <br>
+                <div class="mb-3 pb-1">
+                  <label class="form-label" for="flight-date">Pickup date</label>
+                  <input id="flight-date" class="form-control date-picker rounded" required name="pickup_date" type="text" placeholder="Choose pickup date" data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;F j, Y&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;}" required>
+                  <div id="date-error" class="invalid-feedback" style="display: none;">Please enter a future date!</div>
+                </div>
+                <div class="mb-3 pb-1">
+                  <label class="form-label" for="pickup_time">Pickup time</label>
+                  <input class="form-control" type="time" name="pickup_time"  placeholder="Pickup time" required id="pickup_time">
+                <div class="invalid-feedback">Please enter your pickup time!</div>
+                </div>
+                <div class="mb-3 pb-1">
+                  <label class="form-label" for="start_point">Pickup location - Start point</label>
+                    <input class="form-control" type="text" name="start_point"  placeholder="From where" required id="start_point">
+                  <div class="invalid-feedback">Please enter your pickup location!</div>
+                </div>
+                <div class="mb-3 pb-1">
+                  <label class="form-label" for="end_point">Drop off location - End point</label>
+                  <input class="form-control" type="text" name="end_point"  placeholder="Your destination" required id="end_point">
+                </div>
+                <br>
+                <hr>
+                <br>
+                <div class="mb-3 pb-1">
+                  <label class="form-label" for="no_of_passenger">Passengers</label>
+                  <select class="form-select" name="no_of_passenger" required id="no_of_passenger">
+                  <option value="0">How many people?</option>
+				  <option value="1">1</option>
+				  <option value="2">2</option>
+				  <option value="3">3</option>
+				  <option value="4">4</option>
+				  <option value="5">5</option>
+				  <option value="6">6</option>
+				  <option value="7">7</option>
+				  <option value="8">8</option>
+				  <option value="9">9</option>
+				  <option value="10">10</option>
+				  <option value="11">11</option>
+				  <option value="12">12</option>
+				  <option value="13">13</option>
+				  <option value="-1" disabled="disabled">Over 13 (please leave message below)</option>
+              </select>
+                </div>
+            <br><br>
+				<hr>
+				<br><br> 
+               <!-- Regular Baggage -->
+				<div class="mb-3 pb-1">
+					<p class="form-label mb-1">Baggage (Regular)</p>
+
+					<!-- 안내 문구 -->
+					<small class="text-muted d-block">
+					Please enter the accurate number of your luggage.
+					<!-- Incorrect information may result in vehicle changes, delays, or additional charges. -->
+					</small>
+					<small class="text-muted d-block mb-2">
+					Large = check-in / Medium = cabin / Small = backpack
+					</small>
+
+					<div class="row g-2">
+						<div class="col">
+						<label for="baggage_large" class="form-label mb-0">Large size bag</label>
+						<input type="number" class="form-control" name="baggage_large" placeholder="Large" min="0" max="9" value="0" id="baggage_large">
+						</div>
+						<div class="col">
+						<label for="baggage_medium" class="form-label mb-0">Medium size bag</label>
+						<input type="number" class="form-control" name="baggage_medium" placeholder="Medium" min="0" max="9" value="0" id="baggage_medium">
+						</div>
+						<div class="col">
+						<label for="baggage_small" class="form-label mb-0">Small size bag</label>
+						<input type="number" class="form-control" name="baggage_small" placeholder="Small" min="0" max="9" value="0" id="baggage_small">
+						</div>
+					</div>
+				</div>
+				
+				<!-- Toggle Extra Luggage -->
+				<div class="mb-3 pb-1">
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox" id="extraLuggageCheck">
+						<label class="form-check-label" for="extraLuggageCheck">
+							Any extra luggage? (baby seat, ski, golf, bike, etc)
+						</label>
+					</div>
+
+					<small class="text-muted d-block mt-1">
+						Items not listed may affect vehicle allocation on the day.
+					</small>
+				</div>
+
+				<!-- Extra Luggage (hidden by default) -->
+				<div id="extraLuggageFields" style="display: none;">
+					<!-- Row 1: Baby / Booster / Prams -->
+					<div class="row g-2 mb-3">
+						<div class="col">
+							<label for="baggage_baby" class="form-label mb-0">Baby seats</label>
+							<input type="number" class="form-control" name="baggage_baby" placeholder="Baby seats" min="0" max="9" value="0" id="baggage_baby">
+						</div>
+						<div class="col">
+							<label for="baggage_booster" class="form-label mb-0">Booster seats</label>
+							<input type="number" class="form-control" name="baggage_booster" placeholder="Booster seats" min="0" max="9" value="0" id="baggage_booster">
+						</div>
+						<div class="col">
+							<label for="baggage_pram" class="form-label mb-0">Prams</label>
+							<input type="number" class="form-control" name="baggage_pram" placeholder="Prams" min="0" max="9" value="0" id="baggage_pram">
+						</div>
+					</div>
+
+					<!-- Row 2: Ski / Snowboards / Golf -->
+					<div class="row g-2 mb-3">
+						<div class="col">
+							<label for="baggage_ski" class="form-label mb-0">Ski bags</label>
+							<input type="number" class="form-control" name="baggage_ski" placeholder="Ski bags" min="0" max="9" value="0" id="baggage_ski">
+							<div class="form-check mt-1">
+								<input class="form-check-input" type="checkbox" name="ski_oversize" id="ski_oversize">
+								<label class="form-check-label" for="ski_oversize">Oversize</label>
+							</div>
+						</div>
+						<div class="col">
+							<label for="baggage_snowboard" class="form-label mb-0">Snowboards</label>
+							<input type="number" class="form-control" name="baggage_snowboard" placeholder="Snowboards" min="0" max="9" value="0" id="baggage_snowboard">
+							<div class="form-check mt-1">
+								<input class="form-check-input" type="checkbox" name="snowboard_oversize" id="snowboard_oversize">
+								<label class="form-check-label" for="snowboard_oversize">Oversize</label>
+							</div>
+						</div>
+						<div class="col">
+							<label for="baggage_golf" class="form-label mb-0">Golf bags</label>
+							<input type="number" class="form-control" name="baggage_golf" placeholder="Golf bags" min="0" max="9" value="0" id="baggage_golf">
+							<div class="form-check mt-1">
+								<input class="form-check-input" type="checkbox" name="golf_oversize" id="golf_oversize">
+								<label class="form-check-label" for="golf_oversize">Oversize</label>
+							</div>
+						</div>
+					</div>
+
+					<!-- Row 3: Bike / Carton Boxes / Musical Instruments -->
+					<div class="row g-2 mb-3">
+						<div class="col">
+							<label for="baggage_bike" class="form-label mb-0">Bike bags</label>
+							<input type="number" class="form-control" name="baggage_bike" placeholder="Bike bags" min="0" max="9" value="0" id="baggage_bike">
+							<div class="form-check mt-1">
+								<input class="form-check-input" type="checkbox" name="bike_oversize" id="bike_oversize">
+								<label class="form-check-label" for="bike_oversize">Oversize</label>
+							</div>
+						</div>
+						<div class="col">
+							<label for="baggage_boxes" class="form-label mb-0">Carton boxes</label>
+							<input type="number" class="form-control" name="baggage_boxes" placeholder="Carton boxes" min="0" max="9" value="0" id="baggage_boxes">
+							<div class="form-check mt-1">
+								<input class="form-check-input" type="checkbox" name="boxes_oversize" id="boxes_oversize">
+								<label class="form-check-label" for="boxes_oversize">Oversize</label>
+							</div>
+						</div>
+						<div class="col">
+							<label for="baggage_music" class="form-label mb-0">Musical instruments</label>
+							<input type="number" class="form-control" name="baggage_music" placeholder="Musical instruments" min="0" max="9" value="0" id="baggage_music">
+							<div class="form-check mt-1">
+								<input class="form-check-input" type="checkbox" name="music_oversize" id="music_oversize">
+								<label class="form-check-label" for="music_oversize">Oversize</label>
+							</div>
+						</div>
+					</div>
+				</div>
+				<br><br>
+				<hr>
+				<br><br> 
+          
+          		<!-- Return Cruise Option -->
+		  		<label for="return-cruise">Return Trip:&nbsp;&nbsp;</label>
+				<input type="checkbox" name="return_cruise" id="return-cruise">
+				<br>
+				  <div id="return-cruise-fields">
+				  	<!-- Fields will be dynamically added here -->
+				  </div>				
+				  
+				  <br><br>
+
+                <div class="mb-3 pb-1">
+                  <label class="form-label" for="cont-message">Message</label>
+                  <textarea class="form-control" name="message" id="cont-message" rows="5" placeholder="Write your message here"></textarea>
+                  <div class="invalid-feedback">Please write a message!</div>
+                </div>
+				<br>
+        <div id="errorMessage" style="display:none; color: red; margin-top: 20px;" ></div><br>
+                <div class="cf-turnstile" data-sitekey="{{ CLOUDFLARE_TURNSTILE_SITE_KEY }}"></div>
+                <div class="text-center pt-2">
+                  <button class="btn btn-primary" type="submit" id="submitButton">Submit</button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-4 offset-md-1">
+            <!-- Categories Widget -->
+			<div class="card my-4" id="category-card" >
+				<h5 class="card-header">Reviews from our clients</h5>
+				<div class="card-body" >
+					<div class="row">
+						<div class="col-lg-10 list-unstyled">
+							<li>
+							  <p><strong>You can check the reviews from the clients who have used our company's services</strong></p>								  
+							  <p><a href="/easygo_review/" target="_blank">
+									&raquo;&raquo;&raquo;&nbsp;&nbsp;More Reviews&nbsp;&nbsp;&laquo;&laquo;&laquo;</a></p>
+							</li>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+		  </div>
+		</div>
+	</section>	
+{% endblock %}

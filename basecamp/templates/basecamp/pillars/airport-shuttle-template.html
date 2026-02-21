@@ -1,0 +1,150 @@
+{% extends 'basecamp/base/easygo_base.html' %}
+
+{% block title %}
+  {{ title }}
+{% endblock %}
+
+{% block canonical %}
+  <!-- Base의 canonical을 오버라이드 -->
+  <link rel="canonical" href="https://easygoshuttle.com.au/airport-shuttle-{{ suburb|slugify }}">
+{% endblock %}
+
+{% block meta %}
+  <meta name="description" content="{{ meta_description }}">
+  <meta name="keywords" content="Sydney airport shuttle, {{ suburb }} airport shuttle, group airport shuttle, private shuttle, luggage-friendly shuttle">
+  <meta name="author" content="easygoshuttle.com.au">
+{% endblock %}
+
+{% block content %}
+
+<!-- Service Schema -->
+<script type="application/ld+json" nonce="{{ CSP_NONCE }}">
+{
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "serviceType": "Airport Shuttle",
+  "name": "{{ suburb }} Airport Shuttle to Sydney Airport",
+  "description": "{{ meta_description }}",
+  "provider": {
+    "@id": "https://easygoshuttle.com.au/#localbusiness"
+  },
+  "areaServed": {
+    "@type": "City",
+    "name": "{{ suburb }}",
+    "containedInPlace": {
+      "@type": "State",
+      "name": "New South Wales",
+      "containedInPlace": {
+        "@type": "Country",
+        "name": "Australia"
+      }
+    }
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": "{{ details.price }}",
+    "priceCurrency": "AUD",
+    "availability": "https://schema.org/InStock",
+    "validFrom": "2025-01-01",
+    "url": "https://easygoshuttle.com.au/airport-shuttle-{{ suburb|slugify }}"
+  }
+}
+</script>
+
+<!-- Hero-->
+<section class="jarallax bg-dark py-3" data-jarallax data-speed="0.1">
+  <div class="jarallax-img" style="background-image: url('/static/basecamp/photos/bg-pattern02.webp');" role="img" aria-label="{{ suburb }} airport shuttle"></div>
+
+  <!-- Breadcrumb (Hero 안, navbar 아래 여백 확보) -->
+  <nav class="container mb-0" style="padding-top: 110px;">
+    <span><a href="/sydney-airport-shuttle/" class="text-light">Sydney Airport Shuttle</a></span>
+    <span class="text-light opacity-70"> - {{ suburb }}</span>
+  </nav>
+
+  <div class="container py-5 py-sm-6 text-center">
+    <div class="py-md-5">
+      <h1 class="text-light pb-1">
+        <span style="color: #eb7828">
+          {{ h1 }}
+        </span>
+      </h1>
+      {% if h2 %}
+      <p class="fs-lg text-light">{{ h2 }}</p>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<!-- Route info and landmarks -->
+<section class="container py-5">
+  {% if route_info %}
+  <h5 style="margin-bottom: 0.3rem;">Routes Covered</h5>
+  <p>{{ route_info }}</p>
+  {% endif %}
+
+  {% if landmarks %}
+  <h5 style="margin-bottom: 0.3rem;">Nearby Landmarks</h5>
+  <p>{{ landmarks }}</p>
+  {% endif %}
+</section>
+<br>
+
+<!-- Booking form-->
+<form class="container position-relative zindex-5" style="margin-top: -68px;">
+  <div class="d-lg-flex align-items-center bg-secondary border rounded-3 px-4 pt-4 pb-3">
+    <div id="main" class="site-main">
+      <div class="full-container">
+        <div id="primary" class="content-area">
+          <div id="content" class="site-content" role="main">
+            <article class="post page type-page">
+              <div class="entry-main">                      
+                <div class="entry-content">
+                  <h5>EASYGO AIRPORT SHUTTLE – <span style="color: #eb7828">{{ suburb }}</span></h5>
+                  <ul style="list-style-type: disc;">
+                    <li>Need an <strong>airport shuttle service</strong> to or from {{ suburb }}?</li>
+                    <li>EasyGo Airport Shuttle covers various suburbs within Sydney, such as {{ suburb }}.</li>
+                    <li>Our services to and from the airport are <strong>time and cost efficient</strong>.</li>
+                    <li>If you and your group want to arrive at {{ suburb }} or at the Airport, why not travel together?</li>
+                    <li>This reduces the chances of someone being late and is also much cheaper.</li>
+                    <li>For more information about our Airport shuttle service, see reviews left by our clients: <a href="/easygo_review/">Reviews for our service</a></li>
+                  </ul>
+                  
+                  <h5>Booking in Advance</h5>
+                  <ul style="list-style-type: disc;">
+                    <li>Make sure you arrive at your event or special occasion on time.</li>
+                    <li>We recommend you book at least 36 hours prior to your service.</li>
+                    <li>However, we can sometimes accommodate for shorter frames if plans change.</li>
+                    <li>All bookings are online via our <a href="/inquiry/">Price & Booking page</a>.</li>
+                    <li>Specify whether your flight is Domestic or International for an accurate quote.</li>
+                    <li>If you are still unsure, feel free to contact us via message, email, or contact form. We will respond promptly.</li>
+                  </ul>
+                  
+                  <h5>Door to Door</h5>
+                  <ul style="list-style-type: disc;">
+                    <li>{{ suburb }} airport shuttle services are <strong>door-to-door</strong>, perfect for reaching your destination quickly.</li>
+                    <li>Relax while EasyGo Shuttle handles all your transportation and shuttle services.</li>
+                    <li>We provide prestige yet cost-effective service in clean, modern, air-conditioned vehicles.</li>
+                    <li>Our premium services are reliable, punctual, and fully refund guaranteed.</li>
+                    <li>Larger luggage is easily accommodated with our shuttles.</li>
+                    <li>For more information about Airport shuttle to and from {{ suburb }}, <a href="/contact/">contact us</a>.</li>
+                  </ul>
+                  
+                  <h5>Price</h5>
+                  <ul style="list-style-type: disc;">
+                    <li>Prices are divided into two main categories: shared ride and private ride, and vary depending on:</li>
+                    <li>Pickup time, number of passengers, luggage, special requests, etc.</li>
+                    <li>Exceptions: Baby seats and booster seats are free. No extra charge for flight delays.</li>
+                    <li>Price starts at ${{ details.price }} for one person, with an additional $10 per extra passenger.</li>
+                    <li><strong>For an accurate quote, please fill out the <a href="/inquiry/">Inquiry Form</a> to get the exact price.</strong></li>
+                  </ul>                                 
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+{% endblock %}

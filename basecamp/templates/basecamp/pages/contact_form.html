@@ -1,0 +1,86 @@
+{% extends 'basecamp/base/easygo_base_contact.html' %}
+
+{% block title %}Contact – EasyGo Airport Shuttle{% endblock %}
+
+{% block content %}
+<style>
+  /* Contact page 전용 navbar 글씨 색만 검정으로 */
+  header.header.navbar .nav-link {
+      color: #000 !important; /* 검정색 글씨 */
+  }
+  /* 날짜 에러 강조 스타일 */
+  #date-error {
+      display: none;
+      width: 100%;
+      margin-top: .25rem;
+      font-size: .875em;
+      color: #dc3545;
+      font-weight: bold;
+  }
+
+  .custom-card {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 0.75rem;
+  }
+</style>
+
+<section class="container py-5 mt-5">
+  <div class="row justify-content-center">
+    <h3 class="text-center mb-4 mt-5">Contact Form</h3>
+    <div class="col-lg-8">
+      <div class="card shadow-lg custom-card">
+        <form action="{% url 'basecamp:contact_submit' %}" method="post" id="booking-form" class="card-body p-5 needs-validation" novalidate>
+          {% csrf_token %}
+
+          <div class="mb-3">
+            <label class="form-label" for="name">Full name</label>
+            <input class="form-control" type="text" name="name" placeholder="John Doe" required id="name">
+            <div class="invalid-feedback">Please enter your full name!</div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label" for="contact">Mobile phone number</label>
+            <input class="form-control" type="text" name="contact" placeholder="Your mobile phone number" required id="contact">
+            <div class="invalid-feedback">Please enter a valid number!</div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label" for="email">Email address</label>
+            <input class="form-control" type="email" name="email" placeholder="j.doe@example.com" required id="email">
+            <div class="invalid-feedback">Please enter a valid email address!</div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label" id="label-pickup-date">Choose today date</label>
+            <input class="form-control date-picker rounded"
+                  type="text"
+                  name="pickup_date"
+                  required
+                  placeholder="Select today date"
+                  aria-labelledby="label-pickup-date">
+            
+            <div id="date-error" style="display:none; color: #dc3545; font-size: 0.875em; margin-top: 0.25rem; font-weight: bold;">
+              ⚠️ Please select today's date (2026-02-16) only.
+            </div>
+            
+            <div class="invalid-feedback">Please select today date!</div>
+          </div>
+
+          <div class="mb-5">
+            <label class="form-label" for="message">Message</label>
+            <textarea class="form-control" name="message" rows="5" placeholder="Write your message here" id="message"></textarea>
+          </div>
+
+          <div class="cf-turnstile mb-4" data-sitekey="{{ CLOUDFLARE_TURNSTILE_SITE_KEY }}"></div>
+          <div id="errorMessage" class="mb-4" style="display:none; color: red;"></div>
+          <div class="text-center pt-4 pb-5"> 
+            <button class="btn btn-primary" type="submit" id="submitButton">Submit</button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

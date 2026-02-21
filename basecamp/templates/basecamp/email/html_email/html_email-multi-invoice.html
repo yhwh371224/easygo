@@ -1,0 +1,260 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <meta name="supported-color-schemes" content="light dark">
+	<title></title>
+	<style type="text/css">
+		@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
+      table {
+			border-spacing: 0;
+		}
+		td {
+			padding: 0;
+		}
+		p {
+			font-size: 15px;
+		}
+		img {
+			border: 0;
+			border-width:0;
+		}
+		a {
+			color: #277fd2;
+			text-decoration: none;
+		}
+		@media screen and (max-width: 599.98px) { 
+			.px-600-0 {
+				padding-left: 0!important;
+				padding-right: 0!important;
+			}
+			.pt-600-0 {
+				padding-top: 0!important;
+			}
+			img.third-img-last {
+				width: 200px!important;
+				max-width: 200px!important;
+			}
+			.d-600-none {
+				display: none!important;
+			}
+			.pr-large {
+				padding-right: 140px!important;
+			}
+			.center-text-mobile {
+				text-align: center!important;
+			}
+		}
+		@media screen and (max-width: 549.98px) { 
+			.pt-550-0 {
+				padding-top: 0!important;
+			}
+			.pr-large {
+				padding-right: 100px!important;
+			}
+		}
+		@media screen and (max-width: 499.98px) { 
+			.pt-500-0 {
+				padding-top: 0!important;
+			}
+			.pr-large {
+				padding-right: 60px!important;
+			}
+		}
+		@media screen and (max-width: 399.98px) {
+			.banner {
+            height: auto!important;
+            padding-top: 20px!important;
+            padding-bottom: 30px!important;
+         }
+			.px-sm-0 {
+				padding-left: 0!important;
+				padding-right: 0!important;
+			}
+			.pt-400-0 {
+				padding-top: 0!important;
+			}
+			img.third-img {
+				width: 200px!important;
+				max-width: 200px!important;
+			}
+			.pr-large {
+				padding-right: 25px!important;
+			}
+		}
+
+		@media print {
+			body {
+				margin: 0;
+				padding: 0;
+				background: #F6F9FC;
+			}
+			body > center {
+				width: 100%;
+			}
+			body > center > div {
+				margin-left: auto !important;
+				margin-right: auto !important;
+			}
+			.no-print {
+				display: none !important;
+			}
+		}
+
+		/* Custom Dark Mode Colors */
+      :root {
+         color-scheme: light dark;
+         supported-color-schemes: light dark;
+      }
+      @media (prefers-color-scheme: dark) {
+         body, center, table, .darkmode-bg {
+            background: #2d2d2d!important;
+            color: #ffffff!important;
+         }
+         .darkmode-transparent {
+            background-color: transparent!important;
+         }
+      }
+	</style>
+
+	<!--[if (gte mso 9)|(IE)]>
+		<style type="text/css">
+			table {border-collapse: collapse !important;}
+		</style>
+	<![endif]-->
+	
+</head>
+<body style="Margin:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;min-width:100%;background-color:#F6F9FC;">
+
+   <!--[if (gte mso 9)|(IE)]>
+      <style type="text/css">
+         body {background-color: #F6F9FC!important;}
+         body, table, td, p, a {font-family: sans-serif, Arial, Helvetica!important;}
+      </style>
+   <![endif]-->
+
+<div style="width:100%; background-color:#F6F9FC; padding-top:20px; padding-bottom:40px;">
+  <div style="max-width:600px; margin:0 auto; background-color:#ffffff; box-shadow:0 0 10px rgba(0,0,0,0.2);">
+
+    <!-- Preheader -->
+    <div style="font-size:0px; color:#fafdfe; line-height:1px; display:none; max-width:0px; max-height:0px; opacity:0; overflow:hidden; mso-hide:all;">
+      <!-- Add Preheader Text Here -->
+    </div>
+
+    <!-- Wrapper for padded content -->
+    <div style="padding: 0 80px;">
+      <table width="100%" align="center" style="border-spacing:0; font-family:'Lato',sans-serif, Arial, Helvetica; background-color:#ffffff; max-width:600px;" role="presentation">
+
+        <!-- LOGO & HEADER -->
+		<table width="100%" style="max-width: 600px; margin: 0 auto; border-spacing: 0; font-family:'Lato',sans-serif, Arial, Helvetica; background-color:#ffffff; text-align: center;" role="presentation">
+			<tr>
+				<td style="padding: 30px 0 20px;">
+				<a href="https://easygoshuttle.com.au" target="_blank">
+					<img src="https://live.staticflickr.com/65535/52125551213_8369295e13_o.png" alt="Logo" width="120" style="border:0; max-width:175px;">
+				</a>
+				</td>
+			</tr>
+		</table>
+
+        <!-- INVOICE HEADER -->
+        <tr>
+			<td style="text-align: center;">
+				<p style="font-size:18px; font-weight:bold; margin:0;">TAX INVOICE</p>
+				<div style="font-size:12px; line-height:20px; border-bottom:1px solid #a09a9a; margin: 30px auto 0; padding-bottom:10px; text-align: center;">
+					<strong>Invoice number: #T{{ inv_no }}</strong><br>
+					{% if company_name %}
+						<strong>Invoice to: {{ company_name }} (attn: {{ name }})</strong><br>
+					{% else %}
+						<strong>Invoice to: {{ name }}</strong><br>
+					{% endif %}
+					<strong>Invoice date: {{ invoice_date }}</strong>
+				</div>
+			</td>
+        </tr>
+
+        <!-- BOOKINGS -->
+        <tr>
+          <td style="padding-top: 20px;">
+            {% for booking in bookings %}
+            <div style="margin-bottom: 15px; font-size:12px; line-height:20px;">
+              <strong>Booking {{ forloop.counter }}:</strong><br>
+              Pickup Date: {{ booking.pickup_date }}<br>
+              Pickup Time: {{ booking.pickup_time }}<br>
+              From: {{ booking.start_point }}<br>
+              To: {{ booking.end_point }}<br>
+              Number of Passenger: {{ booking.no_of_passenger }}<br>
+              Number of Baggage: {{ booking.no_of_baggage }}<br>
+              {% if booking.message %}Message: {{ booking.message }}<br>{% endif %}
+              {% if booking.notice %}Notice: {{ booking.notice }}<br>{% endif %}
+            </div>
+            {% endfor %}
+          </td>
+        </tr>
+
+        <!-- PRICE DETAILS -->
+        <tr>
+          <td>
+            <div style="border: 1px solid #af865f; padding: 10px; font-size:12px; line-height:20px;">
+              <strong>Price: ${{ total_price_without_gst }}</strong> without gst<br>
+			  {% if toll %}<strong>The price includes the toll fee</strong><br>{% endif %}
+              {% if with_gst %}<strong>GST (10%): ${{ with_gst }}</strong><br>{% endif %}
+              {% if surcharge %}<strong>Surcharge: ${{ surcharge }}</strong><br>{% endif %}
+              {% if discount and discount != 'Yes' %}<strong>Discount: -${{ discount }}</strong><br>{% endif %}
+              <strong><u>Total: ${{ total_price }}</u></strong><br>
+              <strong><u>Paid: ${{ paid }}</u></strong><br>
+              <strong style="text-decoration: underline double;">Balance due: ${{ balance }}</strong>
+            </div>
+          </td>
+        </tr>
+
+        <!-- PAYMENT INFO -->
+        <tr>
+			<td align="left" style="padding-top:28px;padding-left:0;">												
+				<p style="Margin:0;font-size:12px;line-height:20px; Margin-bottom:12px; border-top: 1px solid #a09a9a; padding-top:9px;">
+					<strong>Payment options are as below</strong><br><br>
+					1. <strong>Via our website through PayPal</strong><br>
+						<span style="margin-left:12px;">
+							<a href="https://wweasygoshuttle.com.au/payonline">easygoshuttle.com.au/payonline</a>
+						</span>
+				</p>
+				<p style="Margin:0;font-size:12px;line-height:20px;margin-top:6px;Margin-bottom:12px; ">                                                  
+					
+					2. {% include 'basecamp/includes/bank_details.html' with bank=DEFAULT_BANK %}
+				</p>												
+				<p style="Margin:0;font-size:13px;font-weight:bold;line-height:22px;Margin-bottom:12px;">                                                    
+					<span style="color: #eb7828">Easy</span><span style="color: blue">Go&nbsp;</span>Airport Shuttle<br>	                                                          
+				</p>			
+			</td>	
+		</tr>
+
+      </table>
+    </div>
+
+    <!-- FOOTER (No padding) -->
+    <table width="100%" style="background-color:#FAFAFA;" role="presentation">
+      <tr>
+        <td style="padding: 30px 20px; font-size:10px; color:#a09f9f; text-align:center;">
+          Website: <a href="https://easygoshuttle.com.au">easygoshuttle.com.au</a><br>
+          Email: <a href="mailto:info@easygoshuttle.com.au">info@easygoshuttle.com.au</a><br>
+          Contact: <a href="tel:+61406883355">0406 883 355 (message only)</a><br>
+          WhatsApp: <a href="tel:+61406883355">+61406883355</a><br><br>
+          EasyGo Airport Transfers ABN 27 695 661 227	
+        </td>
+      </tr>
+
+      <tr>
+        <td style="padding: 10px 20px 30px; font-size:9px; color:#a09f9f; text-align:center;">
+          Attention: This email and attachments are intended solely for your use and may be confidential. Any review, dissemination, distribution or reproduction of this email is strictly prohibited. Please contact the sender if you have received this message in error.
+        </td>
+      </tr>
+    </table>
+
+  </div>
+</div>
+
+
+</body>
+</html>

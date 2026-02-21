@@ -1,0 +1,112 @@
+{% extends 'basecamp/easygo_base_xrp.html' %}
+{% block content %}
+<br><br>
+<section class="container position-relative zindex-5 px-0 px-xl-3 mt-5 pt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-7 col-md-8 pb-2 mb-5">
+            <div class="card border-1 shadow-lg" style="padding:2rem;">
+                <h5>Enter Your Payment Details</h5>
+                <br>
+
+                <!-- AUD Amount -->
+                <input type="number" step="0.01" id="aud_amount" class="form-control mb-3"
+                    placeholder="Enter the final AUD amount we provided">
+
+                <!-- Email -->
+                <input type="email" id="email" class="form-control mb-3"
+                    placeholder="Enter the same email used for your booking">
+
+                <!-- Send email checkbox -->
+                <div class="form-check mb-3">
+                    <input type="checkbox" class="form-check-input" id="send_email">
+                    <label class="form-check-label" for="send_email">
+                        Send payment information to my email
+                    </label>
+                </div>
+
+                <!-- Calculate button -->
+                <button class="btn btn-primary mb-3" id="calculate_btn">Calculate XRP</button>
+                <small class="text-muted d-block mb-3">
+                    XRP price in AUD is fetched at the moment you click Calculate.
+                </small>
+
+                <hr>
+
+                <!-- Result -->
+                <div id="result" style="display:none; overflow: visible;">
+                    <h5>Payment Information</h5>
+
+                    <div style="margin-bottom: 1rem;">
+                        <pre id="payment_info"
+                             style="white-space: pre-wrap; word-wrap: break-word; max-height:200px; overflow-y:auto;">
+                        </pre>
+                    </div>
+
+                    <!-- Rate / source / timestamp -->
+                    <div id="xrp_price_info" class="mb-3 text-muted small"></div>
+
+                    <div style="margin-bottom: 0.5rem;">
+                        <button class="btn btn-warning" id="copy_btn">Copy Payment Info</button>
+                        <small class="text-muted d-block">
+                            You can copy the payment information above and paste it into your secure document
+                        </small>
+                    </div>
+
+                    <div style="color: red;">
+                        Please review all payment details before making the payment
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    // Calculate XRP
+    document.getElementById("calculate_btn").addEventListener("click", function () {
+        const email = document.getElementById("email").value;
+        const aud_amount = document.getElementById("aud_amount").value;
+        const send_email = document.getElementById("send_email").checked;
+
+        fetch("{% url 'blog:pay_xrp' %}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                "X-CSRFToken": "{{ csrf_token }}"
+            },
+            body: `email=${encodeURIComponent(email)}&aud_amount=${encodeURIComponent(aud_amount)}&send_email=${send_email ? "on" : ""}`
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.error) {
+                alert(data.error);
+                return;
+            }
+
+            // Payment info
+            document.getElementById("payment_info").innerText =
+                `XRP: ${data.xrp_amount} units for AUD $${aud_amount}\n` +
+                `Address: ${data.xrp_address}\n` +
+                `Destination Tag: ${data.dest_tag}`;
+
+            // XRP rate / source / time
+            const t = new Date(data.timestamp);
+            document.getElementById("xrp_price_info").innerText =
+                `Rate: 1 XRP = ${data.xrp_price} AUD | Source: ${data.price_source} | Time: ${t.toLocaleString()}`;
+
+            document.getElementById("result").style.display = "block";
+        })
+        .catch(() => alert("Error fetching XRP amount"));
+    });
+
+    // Copy Payment Info
+    document.getElementById("copy_btn").addEventListener("click", function () {
+        const text = document.getElementById("payment_info").innerText;
+        navigator.clipboard.writeText(text).then(() => {
+            alert("All payment info copied!");
+        });
+    });
+});
+</script>
+{% endblock %}
