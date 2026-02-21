@@ -12,29 +12,9 @@
 
 {% block extra_css %}
 <style>
-  .hero {
-    position: relative;
-    min-height: 600px;
-    display: flex;
-    align-items: center;
-    overflow: hidden;
-  }
-
   .hero::before {
-    content: "";
-    position: absolute;
-    inset: 0;
     background-image: url('/static/basecamp/photos/home_background1.webp');
-    background-size: cover;
-    background-position: center 38%;
-    z-index: 0;
   }
-
-  .hero .hero-content {
-    position: relative;
-    z-index: 2;
-  }
-
   .form-control hr {
     border: none;
     border-top: 1px solid #e0e0e0;
