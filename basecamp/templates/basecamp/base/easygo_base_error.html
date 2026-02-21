@@ -25,8 +25,13 @@
     <link rel="stylesheet" href="/static/basecamp/css/home.css">
     <style>
     body { margin:0; font-family:Arial,sans-serif; }
-    .faq-content { padding:3.5rem 2rem 2rem; }
     .award-badge { position:fixed; top:70px; left:40px; width:280px; height:auto; z-index:1000; }
+    @media(max-width:768px) { 
+      .award-badge { top:30px; left:20px; width:180px; }
+    }
+    @media(max-width:480px) { 
+      .award-badge { top:60px; left:10px; width:100px; }
+    }
     </style>
 
     {% block extra_css %}

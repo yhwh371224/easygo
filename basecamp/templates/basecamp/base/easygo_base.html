@@ -25,23 +25,20 @@
     <link rel="stylesheet" media="screen" href="/static/basecamp/css/home.css">
     <style>
     body { margin:0; font-family:Arial,sans-serif; }
-    .faq-content { padding:3.5rem 2rem 2rem; }
     .award-badge { position:fixed; top:70px; left:40px; width:280px; height:auto; z-index:1000; }
+    .hero{position:relative;min-height:600px;display:flex;align-items:center;overflow:hidden;}
+    .hero::before{content:"";position:absolute;inset:0;background-size:cover;background-position:center 38%;z-index:0;}
+    .hero .hero-content{position:relative;z-index:2;}
     @media(max-width:768px) { 
-      .faq-content { padding:2rem 1rem 2rem; }
       .award-badge { top:30px; left:20px; width:180px; }
       .hero { min-height:400px; }
       .hero::before { background-position: center 30%; }
     }
     @media(max-width:480px) { 
-      .faq-content { padding:1.5rem 0.8rem 1.5rem; }
       .award-badge { top:60px; left:10px; width:100px; }
       .hero { min-height:300px; }
       .hero::before { background-position: center 25%; }
-    }
-    .hero{position:relative;min-height:600px;display:flex;align-items:center;overflow:hidden;}
-    .hero::before{content:"";position:absolute;inset:0;background-size:cover;background-position:center 38%;z-index:0;}
-    .hero .hero-content{position:relative;z-index:2;}
+    }    
     </style>
     {% block extra_css %}{% endblock %}
     <script type="application/ld+json" nonce="{{ CSP_NONCE }}">
