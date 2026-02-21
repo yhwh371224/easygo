@@ -1,0 +1,217 @@
+{% extends 'basecamp/base/easygo_base_form.html' %}
+
+{% block title %}Multiple Way Points / Point-to-Point Booking – EasyGo Airport Shuttle{% endblock %}
+
+{% block meta %}
+<meta name="description" content="Book multiple way points or point-to-point transfers in Sydney with EasyGo Airport Shuttle. Enter pickup and drop-off details to get an exact price for your journey.">
+<meta name="keywords" content="Sydney point-to-point shuttle, multiple way points booking, EasyGo Airport Shuttle, Sydney airport transfers, airport pickup, airport drop-off, Sydney transport service">
+{% endblock %}
+
+{% block content %}
+      <!-- Page content-->
+      <!-- Page title-->
+      <section class="jarallax bg-gradient pt-5 pb-7 pt-md-7" data-jarallax data-speed="0.1"><span class="position-absolute top-0 start-0 w-100 h-100 bg-gradient opacity-50"></span>
+        <div class="jarallax-img" style="background-image: url('/static/basecamp/photos/cruise2.webp');"></div>
+        <div class="shape shape-bottom shape-slant bg-body">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 260">
+            <polygon fill="currentColor" points="0,257 0,260 3000,260 3000,0"></polygon>
+          </svg>
+        </div>
+        <br>
+		  <br>
+		  <br/>
+        <div class="container position-relative zindex-5 pt-3 pb-7 pt-md-0">
+          <div class="row justify-content-center pb-7">
+            <div class="col-lg-10">
+              <h1 class="text-light">Multiple Way Points</h1>
+              <h3 class="text-light">Complete the form to get the exact price</h3>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Contact form + details-->
+      <section class="container position-relative zindex-5 pb-5">
+        <div class="row">
+          <div class="col-lg-6 col-md-7 offset-lg-1 pb-2 mb-5" style="margin-top: -260px;">
+            <div class="card border-0 shadow-lg">
+              <form action="/p2p_booking_detail/" method="post" id="booking-form" class="card-body needs-validation p-5" novalidate>
+                {% csrf_token %}
+                {# <input type="text" name="phone_verify" value="" style="display:none !important" tabindex="-1" autocomplete="off"> #}
+                <div class="mb-3 pb-1">
+                  <label class="form-label" for="p2p_name">Full name</label>
+                  <input class="form-control" type="text"  placeholder="John Doe" required name="p2p_name" id="p2p_name">
+                  <div class="invalid-feedback">Please enter your full name!</div>
+                </div>
+                <div class="mb-3 pb-1">
+                  <label class="form-label" for="p2p_phone">Mobile phone number</label>
+                  <input class="form-control" type="text"  placeholder="Your mobile phone number" required name="p2p_phone" id="p2p_phone">
+                  <div class="invalid-feedback">Please enter a valid number!</div>
+                </div>
+                <div class="mb-3 pb-1">
+                  <label class="form-label" for="p2p_email">Email address</label>
+                  <input class="form-control" type="email"  placeholder="j.doe@example.com" required name="p2p_email" id="p2p_email">
+                  <div class="invalid-feedback">Please enter a valid email address!</div>
+                </div>
+                <br>
+                <hr>
+                <br>
+                <div class="mb-3 pb-1">
+                  <label class="form-label" for="flight-date">Pickup date</label>
+                  <input id="flight-date" class="form-control date-picker rounded" name="p2p_date" type="text" placeholder="Your booking date" data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;F j, Y&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;}" required>
+                  <div id="date-error" class="invalid-feedback" style="display: none;">Please enter a future date!</div>
+                </div>
+                <div class="mb-3 pb-1">
+                  <label class="form-label" for="first_pickup_location">First Pickup location</label>
+                    <input class="form-control" type="text" name="first_pickup_location"  placeholder="Full address" required id="first_pickup_location">
+                  <div class="invalid-feedback">Please enter your pickup location!</div>
+                </div>
+                <div class="mb-3 pb-1">
+                  <label class="form-label" for="first_putime">Pickup time</label>
+                    <input class="form-control" type="time" name="first_putime"  placeholder="Pickup time" required id="first_putime">
+                  <div class="invalid-feedback">Please enter your pickup time!</div>
+                </div>
+                <div class="mb-3 pb-1">
+                  <label class="form-label" for="first_dropoff_location">Drop off location</label>
+                    <input class="form-control" type="text" name="first_dropoff_location"  placeholder="Your destination" id="first_dropoff_location">
+                  <div class="invalid-feedback">Please enter your drop off location!</div>
+                </div>
+                <br>
+                <hr>
+                <br>
+                <div class="mb-3 pb-1">
+                  <p class="form-label mb-1">If more way points, continue......</p>
+                </div>
+                <div class="mb-3 pb-1">
+                  <label class="form-label" for="second_pickup_location">Second Pickup location</label>
+                    <input class="form-control" type="text" name="second_pickup_location"  placeholder="Full address" id="second_pickup_location">
+                  <div class="invalid-feedback">Please enter your pickup location!</div>
+                </div>
+                <div class="mb-3 pb-1">
+                  <label class="form-label" for="second_putime">Pickup time</label>
+                    <input class="form-control" type="time" name="second_putime"  placeholder="Pickup time" id="second_putime">
+                  <div class="invalid-feedback">Please enter your pickup time!</div>
+                </div>
+                <div class="mb-3 pb-1">
+                  <label class="form-label" for="second_dropoff_location">Drop off location</label>
+                    <input class="form-control" type="text" name="second_dropoff_location"  placeholder="Your destination" id="second_dropoff_location">
+                  <div class="invalid-feedback">Please enter your drop off location!</div>
+                </div>
+                  <br>
+                  <hr>
+                  <br>
+                  <div class="mb-3 pb-1">
+                    <label class="form-label" for="third_pickup_location">Third Pickup location</label>
+                      <input class="form-control" type="text" name="third_pickup_location"  placeholder="Full address" id="third_pickup_location">
+                    <div class="invalid-feedback">Please enter your pickup location!</div>
+                  </div>
+                  <div class="mb-3 pb-1">
+                    <label class="form-label" for="third_putime">Pickup time</label>
+                      <input class="form-control" type="time" name="third_putime"  placeholder="Pickup time" id="third_putime">
+                    <div class="invalid-feedback">Please enter your pickup time!</div>
+                  </div>
+                  <div class="mb-3 pb-1">
+                    <label class="form-label" for="third_dropoff_location">Drop off location</label>
+                      <input class="form-control" type="text" name="third_dropoff_location"  placeholder="Your destination" id="third_dropoff_location">
+                    <div class="invalid-feedback">Please enter your drop off location!</div>
+                  </div>
+                    <br>
+                <hr>
+                <br>
+                <div class="mb-3 pb-1">
+                  <label class="form-label" for="fourth_pickup_location">Fourth Pickup location</label>
+                    <input class="form-control" type="text" name="fourth_pickup_location"  placeholder="Full address" id="fourth_pickup_location">
+                  <div class="invalid-feedback">Please enter your pickup location!</div>
+                </div>
+                <div class="mb-3 pb-1">
+                  <label class="form-label" for="fourth_putime">Pickup time</label>
+                    <input class="form-control" type="time" name="fourth_putime"  placeholder="Pickup time" id="fourth_putime">
+                  <div class="invalid-feedback">Please enter your pickup time!</div>
+                </div>
+                <div class="mb-3 pb-1">
+                  <label class="form-label" for="fourth_dropoff_location">Drop off location</label>
+                    <input class="form-control" type="text" name="fourth_dropoff_location"  placeholder="Your destination" id="fourth_dropoff_location">
+                  <div class="invalid-feedback">Please enter your drop off location!</div>
+                </div>
+                <br>
+                <hr>
+                <br>
+                <div class="mb-3 pb-1">
+                  <label class="form-label" for="p2p_passengers">Passengers</label>
+                  <select class="form-select" name="p2p_passengers" required id="p2p_passengers">
+                  <option value="0">How many people?</option>
+				  <option value="1">1</option>
+				  <option value="2">2</option>
+				  <option value="3">3</option>
+				  <option value="4">4</option>
+				  <option value="5">5</option>
+				  <option value="6">6</option>
+				  <option value="7">7</option>
+				  <option value="8">8</option>
+				  <option value="9">9</option>
+				  <option value="10">10</option>
+				  <option value="11">11</option>
+				  <option value="12">12</option>
+				  <option value="13">13</option>
+          <option value="14">14</option>
+          <option value="15">15</option>
+          <option value="16">16</option>
+          <option value="17">17</option>
+          <option value="18">18</option>
+          <option value="19">19</option>
+          <option value="20">20</option>
+          <option value="21">21</option>
+          <option value="22">22</option>
+          <option value="23">23</option>
+          <option value="24">24</option>
+          <option value="25">25</option>
+          <option value="26">26</option>
+				  <option value="-1" disabled="disabled">Over 26 (please leave message below)</option>
+              </select>
+                </div>
+                <div class="mb-3 pb-1">
+                  <label class="form-label" for="p2p_baggage">Baggage</label>
+                  <input class="form-control" type="text" placeholder="How many baggage?" name="p2p_baggage" id="p2p_baggage">
+                  <div class="invalid-feedback">Please enter the number of baggage!</div>
+                  </div>
+                <div class="mb-3 pb-1">
+                  <label class="form-label" for="cont-message">Message</label>
+                  <textarea class="form-control" name="p2p_message" id="cont-message" rows="5" placeholder="Write your message here"></textarea>
+                  <div class="invalid-feedback">Please write a message!</div>
+                </div>
+                <br>
+                <div class="mb-3 pb-1">
+                    <label class="form-label" for="price">Price</label>
+                      <input class="form-control" type="text" name="price"  placeholder="Price" id="price">
+                    <div class="invalid-feedback">Please enter price!</div>
+                </div>
+                <br>
+                <div id="errorMessage" style="display:none; color: red; margin-top: 20px;" ></div>
+                <br>	
+                <div class="cf-turnstile" data-sitekey="{{ CLOUDFLARE_TURNSTILE_SITE_KEY }}"></div>
+                <div class="text-center pt-2">
+                  <button class="btn btn-primary" type="submit" id="submitButton">Submit</button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-4 offset-md-1">
+            <!-- Categories Widget -->
+			<div class="card my-4" id="category-card" >
+				<h5 class="card-header">Reviews from our clients</h5>
+				<div class="card-body" >
+					<div class="row">
+						<div class="col-lg-10 list-unstyled">
+							<li>
+							  <p><strong>You can check the 245 reviews from the clients who have used our company's services</strong></p>								  
+							  <p><a href="/easygo_review/">
+									&raquo;&raquo;&raquo;&nbsp;&nbsp;More Reviews&nbsp;&nbsp;&laquo;&laquo;&laquo;</a></p>
+							</li>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+		  </div>
+		</div>
+	</section>	
+{% endblock %}

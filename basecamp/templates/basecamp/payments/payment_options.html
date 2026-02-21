@@ -1,0 +1,114 @@
+{% extends 'basecamp/base/easygo_base.html' %}
+
+{% block title %}Payment Options – EasyGo Airport Shuttle{% endblock %}
+
+{% block meta %}
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Choose convenient payment methods for your EasyGo Airport Shuttle booking. Pay online via PayPal or Stripe, use PayID, or bank transfer. Secure and easy!">
+<meta name="keywords" content="EasyGo Airport Shuttle payment, PayPal payment, Stripe payment, PayID, bank transfer, Sydney airport shuttle payment">
+{% endblock %}
+
+{% block content %}
+
+<!-- ===== Hero CSS (page-only) ===== -->
+<style>
+  .hero-payment {
+    position: relative;
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .hero-payment::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url('/static/basecamp/images/page-title-bg.webp');
+    background-size: cover;
+    background-position: center center;
+    z-index: 0;
+  }
+
+  .hero-payment .hero-content {
+    position: relative;
+    z-index: 2;
+  }
+
+  .form-control hr {
+    border: none;
+    border-top: 1px solid #e0e0e0;
+    opacity: 0.5;
+    margin: 2.5rem 0;
+  }
+</style>
+<!-- ===== /Hero CSS ===== -->
+
+<!-- ===== Hero Section ===== -->
+<section class="hero-payment">
+  <span class="position-absolute top-0 start-0 w-100 h-100 bg-gradient opacity-70" style="z-index:1;"></span>
+  <div class="shape shape-bottom shape-slant bg-body">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 260">
+      <polygon fill="currentColor" points="0,257 0,260 3000,260 3000,0"></polygon>
+    </svg>
+  </div>
+  <div class="container hero-content pt-5 pb-7 text-center" style="margin-top:2rem;">
+    <div class="row justify-content-center pb-7">
+      <div class="col-lg-10">
+        <h1 class="text-light">Payment Options</h1>
+        <p class="fs-lg text-light fw-bold">Please choose your option below</p>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ===== /Hero Section ===== -->
+
+<section class="container position-relative zindex-5 pb-5">
+  <div class="row">
+    <div class="col-lg-8 col-md-10 offset-lg-2 pb-2 mb-5" style="margin-top: -240px;">
+      <div class="card border-0 shadow-lg">
+        <div class="form-control" style="padding:3.5rem 2rem 2rem;">
+
+          <div class="mb-3 pb-1">
+            1. <strong>Online payment through PayPal</strong><br>
+            You can make payments online through PayPal<br><br>
+            &nbsp; • &nbsp;<a href="https://easygoshuttle.com.au/payonline">easygoshuttle.com.au/payonline</a>
+          </div>
+          <hr>
+
+          <div class="mb-3 pb-1">
+            2. <strong>Online payment through Stripe</strong><br>
+            You can make payments online through Stripe<br><br>
+            &nbsp; • &nbsp;<a href="{% url 'basecamp:pay_stripe' %}">easygoshuttle.com.au/pay/stripe</a>
+          </div>
+          <hr>
+
+          <div class="mb-3 pb-1">
+            3. <strong>PayID</strong><br><br>
+            &nbsp; • &nbsp;Mobile: 0406 883 355<br>
+            <span style="color: #eb7828;">Please email the receipt after PayID payment</span>
+          </div>
+          <hr>
+
+          <!-- 4. <strong>Payment through XRP Coins</strong><br>
+          You can make payments through your XRP coins<br><br>
+          &nbsp; • &nbsp;<a href="{% url 'blog:pay_xrp_page' %}">Pay with XRP coins</a><br><br><hr> -->
+
+          <div class="mb-3 pb-1">
+            4. {% include 'basecamp/includes/bank_details.html' with bank=DEFAULT_BANK %}
+          </div>
+          <hr>
+
+          <div class="mb-3 pb-1">
+            <strong style="color:red">Note!</strong><br>
+            If the name and email you use for online payment differ from those used for booking,
+            please notify us to confirm that the payment has been processed.
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

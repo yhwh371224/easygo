@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta name="color-scheme" content="light dark">
+   <meta name="supported-color-schemes" content="light dark">
+   <title>Missing Direction Alert</title>
+   <style type="text/css">
+      @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
+      table { border-spacing: 0; }
+      td { padding: 0; }
+      p { font-size: 15px; }
+      img { border: 0; }
+      a { color: #277fd2; text-decoration: none; }
+   </style>
+</head>
+<body style="Margin:0;padding:0;min-width:100%;background-color:#F6F9FC;">
+   <center style="width: 100%;table-layout:fixed;background-color: #F6F9FC;padding:20px 0;">
+      <div style="max-width: 600px;background-color: #ffffff;box-shadow: 0 0 10px rgba(0, 0, 0, .2);">
+         <table align="center" style="border-spacing:0;color:#4F5557;font-family: 'Lato',sans-serif, Arial, Helvetica;background-color: #ffffff;width: 100%;max-width: 600px;" role="presentation">
+            
+            <!-- LOGO -->
+            <tr>
+               <td style="padding: 20px; text-align: center;">
+                  <a href="https://easygoshuttle.com.au" target="_blank">
+                     <img src="https://live.staticflickr.com/65535/52125551213_8369295e13_o.png" alt="EasyGo Airport Transfers" width="150">
+                  </a>
+               </td>
+            </tr>
+
+            <!-- CONTENT -->
+            <tr>
+               <td style="padding: 20px;">
+                  <h2 style="font-size:20px;color:#eb7828;">Missing Direction Alert</h2>
+                  <p>Dear Admin,</p>
+                  <p>The following bookings have missing or incomplete details:</p>
+                  <table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; width:100%; margin-top:15px;">
+                     <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Pickup Date</th>
+                        <th>Issues</th>
+                     </tr>
+                     {% for booking in bookings %}
+                     <tr>
+                        <td>{{ booking.name }}</td>
+                        <td>{{ booking.email }}</td>
+                        <td>{{ booking.pickup_date }}</td>
+                        <td>{{ booking.issues }}</td>
+                     </tr>
+                     {% endfor %}
+                  </table>
+
+                  <p style="margin-top:20px;">
+                     Please review this booking and update the missing direction information as soon as possible to ensure proper service.
+                  </p>
+
+                  <p>Thank you,<br>
+                  EasyGo Airport Transfers</p>
+               </td>
+            </tr>
+
+            <!-- FOOTER -->
+            <tr>
+               <td style="padding: 15px; background-color: #FAFAFA; text-align: center; font-size: 12px; color: #a09f9f;">
+                  <p>
+                     <a href="https://easygoshuttle.com.au">easygoshuttle.com.au</a> | 
+                     <a href="mailto:info@easygoshuttle.com.au">info@easygoshuttle.com.au</a> | 
+                     <a href="tel:+61406883355">0406 883 355</a>
+                  </p>
+                  <p>EasyGo Airport Transfers&nbsp;ABN 27 695 661 227	</p>
+               </td>
+            </tr>
+
+         </table>
+      </div>
+   </center>
+</body>
+</html>

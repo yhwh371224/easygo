@@ -10,6 +10,7 @@ from django.utils.html import strip_tags
 from django.conf import settings
 from blog.models import Post, Driver
 from utils import booking_helper
+from basecamp.utils import render_email_template
 
 logger = logging.getLogger(__name__)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -23,14 +24,14 @@ class Command(BaseCommand):
 
         reminder_intervals = [0, 1, 3, 5, 7, 14, 28, -1]
         templates = [
-            "basecamp/html_email-today.html",
-            "basecamp/html_email-tomorrow.html",
-            "basecamp/html_email-upcoming3.html",
-            "basecamp/html_email-upcoming5.html",
-            "basecamp/html_email-upcoming7.html",
-            "basecamp/html_email-upcoming14.html",
-            "basecamp/html_email-upcoming28.html",
-            "basecamp/html_email-yesterday.html",
+            "html_email-today.html",
+            "html_email-tomorrow.html",
+            "html_email-upcoming3.html",
+            "html_email-upcoming5.html",
+            "html_email-upcoming7.html",
+            "html_email-upcoming14.html",
+            "html_email-upcoming28.html",
+            "html_email-yesterday.html",
         ]
         subjects = [
             "Reminder-Today",
@@ -73,7 +74,7 @@ class Command(BaseCommand):
             driver = booking_reminder.driver
             pickup_time_12h = self.format_pickup_time_12h(booking_reminder.pickup_time)
 
-            html_content = render_to_string(template_name, {
+            html_content = render_email_template(template_name, {
                 'name': booking_reminder.name,
                 'company_name': booking_reminder.company_name,
                 'email': booking_reminder.email,

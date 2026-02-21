@@ -1,17 +1,17 @@
 from datetime import date, timedelta
 from django.core.management.base import BaseCommand
-from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.core.mail import EmailMultiAlternatives
 from blog.models import Post
 from main.settings import RECIPIENT_EMAIL
+from basecamp.utils import render_email_template
 
 
 class Command(BaseCommand):
     help = 'Check bookings with missing details (consolidated report)'
 
     def send_email(self, subject, template, context, recipient_list):
-        html_content = render_to_string(template, context)
+        html_content = render_email_template(template, context)
         text_content = strip_tags(html_content)
         email = EmailMultiAlternatives(subject, text_content, '', recipient_list)
         email.attach_alternative(html_content, "text/html")
@@ -59,7 +59,7 @@ class Command(BaseCommand):
 
             if consolidated_list:
                 email_subject = "Summary: Bookings with Missing Details"
-                email_template = "basecamp/html_email-missing-details.html"
+                email_template = "html_email-missing-details.html"
 
                 self.send_email(
                     email_subject,

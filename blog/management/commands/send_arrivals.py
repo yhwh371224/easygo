@@ -4,11 +4,11 @@ import pytz
 
 from django.core.management.base import BaseCommand
 from django.core.mail import EmailMultiAlternatives
-from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.conf import settings
 
 from blog.models import Post, Driver
+from basecamp.utils import render_email_template
 from utils import booking_helper
 
 from twilio.rest import Client
@@ -79,7 +79,7 @@ class Command(BaseCommand):
             self.stdout.write(msg)
             return
 
-        template_name = "basecamp/html_email-today.html"
+        template_name = "html_email-today.html"
         subject = f"Reminder - Today ({arrival_type.capitalize()} Arrivals)"
         sms_allowed = True
 
@@ -161,7 +161,7 @@ class Command(BaseCommand):
             driver = booking_reminder.driver
             pickup_time_12h = self.format_pickup_time_12h(booking_reminder.pickup_time)
 
-            html_content = render_to_string(template_name, {
+            html_content = render_email_template(template_name, {
                 'name': booking_reminder.name,
                 'company_name': booking_reminder.company_name,
                 'email': booking_reminder.email,

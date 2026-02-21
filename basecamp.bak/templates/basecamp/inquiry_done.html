@@ -1,0 +1,38 @@
+{% extends 'basecamp/easygo_base_error.html' %}
+{% block content %}
+
+<!-- Hero -->
+<section class="bg-dark py-3" style="position: relative; overflow: hidden; min-height: 400px;">
+  <div class="position-absolute top-0 start-0 w-100 h-100" style="
+      background-image: url('/static/basecamp/photos/bg-pattern02.webp');
+      background-size: cover;
+      background-position: center;
+      z-index: 0;">
+  </div>
+
+  <a href="/static/basecamp/images/Digital-Certificate.webp">
+    <img src="/static/basecamp/images/award-badge.webp" alt="Award Badge" class="award-badge" style="position: relative; z-index: 10; margin-top: 3.5rem; width: clamp(120px, 20vw, 240px); height: auto; margin-left: clamp(1rem, 8vw, 8rem);">
+  </a>
+
+  <div class="container pb-4 text-center" style="position: relative; z-index: 5; margin-top: 2rem;">
+    <div>
+      <h3 class="text-light pb-1">✨ Thank you! </h3>
+      <p class="fs-lg text-light">You will review an email shortly</p>
+
+      <p class="fs-lg text-light mt-4">
+        You can check the reviews from the clients who have used our company's services
+      </p>
+
+      <p class="fs-lg text-light">
+        <a href="https://easygoshuttle.com.au/easygo_review/" target="_blank" style="color: #8db5ed;">🏆🏆🏆 Reviews on our website</a><br>
+        <a href="{{ google_review_url }}" target="_blank" style="color: #8db5ed;">🥇🥇🥇 Google reviews</a>
+      </p>
+
+      <p class="fs-lg text-light">
+        <a href="https://s3.ap-southeast-2.amazonaws.com/easygoshuttle.com.au/easygo-vehicle-photo.webp" target="_blank" style="color: #8db5ed;">🚐 Standard mini bus</a>
+      </p>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

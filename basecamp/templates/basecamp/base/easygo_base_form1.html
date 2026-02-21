@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>{% block title %}EasyGo Airport Shuttle – Sydney Transfers{% endblock %}</title>
+    {% block canonical %}
+      <link rel="canonical" href="https://easygoshuttle.com.au{{ request.path }}">
+    {% endblock %}
+    {% block meta %}
+      <meta name="google-site-verification" content="hae39L0Kv7JIxVc3YclvckH7Im5SdYa2hk_vZbGJIkA" />
+      <meta name="description" content="EasyGo Airport Shuttle provides private airport transfer across Sydney. Punctual, luggage-friendly service for individuals, families, and groups.">    
+      <meta name="keywords" content="Sydney airport transfer, private airport shuttle, group airport transfer, luggage-friendly shuttle">
+      <meta name="author" content="easygoshuttle.com.au">
+    {% endblock %}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'basecamp/favi/favicon.ico' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'basecamp/favi/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'basecamp/favi/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'basecamp/favi/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'basecamp/favi/site.webmanifest' %}">      
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="/static/basecamp/css/simplebar.min.css"/>
+    <link rel="stylesheet" href="/static/basecamp/css/theme.min.css">
+  </head>
+  <body>
+    {% include "basecamp/layouts/navbar.html" %}
+
+    <main class="page-wrapper">
+      
+           {% block content %}
+            {% endblock %}
+      
+    </main>
+
+    {% include "basecamp/layouts/footer.html" %}
+
+    <script src="/static/basecamp/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/basecamp/js/simplebar.min.js" defer></script>
+    <script src="/static/basecamp/js/rangePlugin.js" defer></script>
+    <script src="/static/basecamp/js/theme.min.js"></script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // --- Form Submit ---
+        const form = document.getElementById("booking-form");
+        const submitButton = document.getElementById("submitButton");
+        if (form && submitButton) {
+            form.addEventListener("submit", function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    return;
+                }
+                submitButton.disabled = true;
+                submitButton.innerHTML = "Submitting... <span class='spinner-border spinner-border-sm ms-2'></span>";
+                if (typeof startTitleSpinner === "function") startTitleSpinner();
+            });
+        }
+        // --- Extra Luggage Toggle ---
+        const extraCheckbox = document.getElementById("extraLuggageCheck");
+        const extraFields = document.getElementById("extraLuggageFields");
+        if (extraCheckbox && extraFields) {
+            // 초기 상태 설정
+            extraFields.style.display = extraCheckbox.checked ? "block" : "none";
+            // 체크박스 이벤트
+            extraCheckbox.addEventListener("change", function () {
+                extraFields.style.display = this.checked ? "block" : "none";
+            });
+        }
+    });
+    // --- BFCache / Back Button Recovery ---
+    window.addEventListener("pageshow", function (event) {
+        if (event.persisted) {
+            if (typeof stopTitleSpinner === "function") stopTitleSpinner();
+            const submitButton = document.getElementById("submitButton");
+            if (submitButton) {
+                submitButton.disabled = false;
+                submitButton.innerHTML = "Submit Booking";
+            }
+        }
+    });
+    </script>
+
+  </body>
+</html>

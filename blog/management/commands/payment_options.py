@@ -1,12 +1,11 @@
 from django.core.management.base import BaseCommand
 from django.core.mail import EmailMultiAlternatives
-from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.db.models import Q
 from django.conf import settings
 from django.utils import timezone
 from blog.models import Post
-from blog.sms_utils import send_sms_notice, send_whatsapp_template
+from basecamp.utils import render_email_template
 
 
 class Command(BaseCommand):
@@ -36,8 +35,8 @@ class Command(BaseCommand):
                     total_price = notice.price
 
                 # 1️⃣ 이메일 발송
-                html_content = render_to_string(
-                    "basecamp/html_email-payment-method.html",
+                html_content = render_email_template(
+                    "html_email-payment-method.html",
                     {
                         "name": notice.name,
                         "email": notice.email,

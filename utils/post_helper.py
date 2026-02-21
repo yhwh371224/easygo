@@ -1,7 +1,7 @@
 from django.core.mail import EmailMultiAlternatives
-from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from main.settings import RECIPIENT_EMAIL
+from basecamp.utils import render_email_template
 from decimal import Decimal
 
 
@@ -16,8 +16,8 @@ def send_post_confirmation_email(instance):
     else:
         price = "TBA"
 
-    html_content = render_to_string(
-        "basecamp/html_email-confirmation.html",
+    html_content = render_email_template(
+        "html_email-confirmation.html",
         {
         'company_name': instance.company_name,
         'name': instance.name,
@@ -76,7 +76,7 @@ def send_post_confirmation_email(instance):
 
 
 def send_post_cancelled_email(instance):
-    html_content = render_to_string("basecamp/html_email-cancelled.html", {
+    html_content = render_email_template("html_email-cancelled.html", {
         'name': instance.name,
         'email': instance.email,
         'pickup_date': instance.pickup_date or "",
@@ -98,9 +98,9 @@ def send_post_cancelled_email(instance):
 
 def send_missing_direction_email(instance):
     subject = "Booking with Flight Number but Missing Direction"
-    template = "basecamp/html_email-missing-flight-contact.html"
+    template = "html_email-missing-flight-contact.html"
 
-    html_content = render_to_string(template, {
+    html_content = render_email_template(template, {
         'name': instance.name,
         'email': instance.email,
         'pickup_date': instance.pickup_date,
