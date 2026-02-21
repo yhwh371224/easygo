@@ -21,8 +21,26 @@
     <link rel="manifest" href="{% static 'basecamp/favi/site.webmanifest' %}">      
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>    
     <link rel="stylesheet" href="/static/basecamp/css/flatpickr.min.css"/>
-    <link rel="stylesheet" href="/static/basecamp/css/theme.min.css"> 
-    {% block extra_css %}{% endblock %}  
+    <link rel="stylesheet" href="/static/basecamp/css/theme.min.css">
+    <style>
+    .spinner {
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top: 2px solid white;
+        border-radius: 50%;
+        width: 16px;
+        height: 16px;
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 8px;
+        animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    </style> 
+    {% block extra_css %}{% endblock %}
   </head>
   <body>    
     {% include "basecamp/layouts/navbar.html" %}
