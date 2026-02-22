@@ -103,7 +103,7 @@ INSTALLED_APPS = [
     'basecamp.apps.BasecampConfig', 
     'easygo_review.apps.EasygoReviewConfig',
     'admin_honeypot',
-    # 'honeypot',  
+    # 'honeypot', 
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
