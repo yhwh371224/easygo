@@ -9,79 +9,43 @@
 <meta name="author" content="easygoshuttle.com.au">
 {% endblock %}
 
-{% block content %}
-
-<!-- ===== Hero CSS (page-only) ===== -->
+{% block extra_css %}
 <style>
-  .hero-about {
-    position: relative;
-    min-height: 600px;
-    display: flex;
-    align-items: center;
-    overflow: hidden;
+  .hero-about         { position: relative; min-height: 600px; display: flex; align-items: center; overflow: hidden; padding-top: 80px;}
+  .hero-about::before { content: ""; position: absolute; inset: 0; background: url('/static/basecamp/photos/vehicle-1.PNG') center/cover; z-index: 0; }
+  .hero-content       { position: relative; z-index: 2; }  
+  .hero-overlap-container { margin-top: -120px; }
+  .content-card-box   { padding: 3rem 3.5rem !important; }
+  .entry-content h2, .entry-content h3 { margin-bottom: 1.5rem; }
+  .entry-content h3   { margin-top: 1.8rem; }
+  .entry-content li   { margin-bottom: 1rem; line-height: 1.8; }
+  .entry-content ul, .entry-content ul ul { list-style: none; padding-left: 2rem; margin-top: 1rem; }
+  .entry-content ul ul { padding-left: 1.5rem; margin-top: 0.5rem; }
+  .highlight-title    { margin-bottom: 1.5rem; }
+  .text-brand         { color: #eb7828; }
+  @media (max-width: 768px) {
+    .hero-about             { min-height: 400px; }
+    .hero-title             { font-size: 1.8rem; }    
+    .hero-overlap-container { margin-top: -60px; }
+    .content-card-box       { padding: 2rem 1.5rem !important; }
   }
-
-  /* 배경 이미지 레이어 */
-  .hero-about::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image: url('/static/basecamp/photos/vehicle-1.PNG');
-    background-size: cover;
-    background-position: center center;
-    z-index: 0;
-  }
-
-  .hero-content {
-    position: relative;
-    z-index: 2;
-  }
-
-  .entry-content h2 {
-    margin-bottom: 1.5rem;
-  }
-
-  .entry-content h3 {
-    margin-top: 1.8rem;
-    margin-bottom: 1.3rem;
-  }
-
-  .entry-content > ul {
-    list-style: none;
-    padding-left: 2rem;
-    margin-top: 1rem;
-  }
-
-  .entry-content li {
-    margin-bottom: 1rem;
-    line-height: 1.8;
-  }
-
-  .entry-content ul ul {
-    list-style: none;
-    padding-left: 1.5rem;
-    margin-top: 0.5rem;
+  @media (max-width: 480px) {
+    .hero-about             { min-height: 300px; }
+    .hero-title             { font-size: 1.6rem; }    
+    .hero-overlap-container { margin-top: -5px; }
+    .content-card-box       { padding: 2rem 1.5rem !important; }
   }
 </style>
-<!-- ===== /Hero CSS ===== -->
+{% endblock %}
 
-<!-- ===== Hero Section ===== -->
+{% block content %}
 <section class="hero-about">
-
-  <!-- Award Badge -->
-  <a href="/static/basecamp/images/Digital-Certificate.webp">
-    <img src="/static/basecamp/images/award-badge.webp"
-         width="320" 
-         height="320"
-         alt="Award Badge"
-         class="award-badge">
-  </a>
-
   <span class="position-absolute top-0 start-0 w-100 h-100 bg-gradient opacity-80"></span>
-
-  <!-- Text content -->
-  <div class="container text-center hero-content">
-    <h1 class="text-light pb-1">
+    <div class="container text-center hero-content pt-3">
+      <a href="/static/basecamp/images/Digital-Certificate.webp" class="hero-award-link">
+        <img src="/static/basecamp/images/award-badge.webp" width="320" height="320" alt="Award Badge" class="award-badge">
+      </a>
+    <h1 class="text-light pb-3 hero-title">
       About EasyGo Airport Shuttle – Sydney Airport Transfer Specialists
     </h1>
     <p class="fs-lg text-light">
@@ -89,20 +53,17 @@
       group travel, family transfers, and luggage-friendly transport to and from Sydney Airport.
     </p>
   </div>
-
 </section>
-<!-- ===== /Hero Section ===== -->
 
-<!-- ===== Main Content ===== -->
-<div class="container position-relative zindex-5" style="margin-top: -120px;">
-  <div class="d-lg-flex align-items-center bg-secondary border rounded-3 py-5" style="padding-left: 3.5rem; padding-right: 3.5rem;">
+<div class="container position-relative zindex-5 hero-overlap-container">
+  <div class="d-lg-flex align-items-center bg-secondary border rounded-3 py-5 content-card-box">
     <div class="entry-content">
 
       <h2>Why Choose EasyGo Airport Shuttle?</h2>
       <h3>EasyGo Airport Transfers – Service Highlights</h3>
 
-      <h3 class="widget-title" style="margin-bottom: 1.5rem;">
-        <span style="color:#eb7828;">EASYGO</span> TRANSPORT – INFORMATION
+      <h3 class="widget-title highlight-title">
+        <span class="text-brand">EASYGO</span> TRANSPORT – INFORMATION
       </h3>
 
       <ul>
@@ -135,6 +96,4 @@
     </div>
   </div>
 </div>
-<!-- ===== /Main Content ===== -->
-
 {% endblock %}

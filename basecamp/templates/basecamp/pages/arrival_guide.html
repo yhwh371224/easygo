@@ -12,38 +12,26 @@
 
 {% block extra_css %}
 <style>
-  .hero::before {
-    background-image: url('/static/basecamp/photos/home_background1.webp');
-  }
-  .form-control hr {
-    border: none;
-    border-top: 1px solid #e0e0e0;
-    opacity: 0.5;
-    margin: 2.5rem 0;
-  }
-  .form-control h3 {
-    margin-top: 4rem;
-    margin-bottom: 1.5rem;
-  }
-  .form-control .mb-3 p {
-    margin-bottom: 0.8rem;
-  }
-  .faq-card-wrapper {
-    margin-top: -240px;
-  }
+  .hero::before { background-image: url('/static/basecamp/photos/home_background1.webp'); }
+  .page-form { background-color: #fff; border-radius: 0.75rem; padding: 5rem 2rem 2rem; text-align: center; width: 100%; box-sizing: border-box; }
+  .page-form hr { border: none; border-top: 1px solid #e0e0e0; opacity: 0.5; margin: 2.5rem 0; }
+  .page-form h2 { color: #eb7828; margin-bottom: 2.2rem; }
+  .page-form h3 { margin-top: 4rem; margin-bottom: 1.5rem; }
+  .page-form .mb-3 p { margin-bottom: 0.8rem; }
+  .faq-card-wrapper { margin-top: -230px; }
+  .faq-list { list-style-position: outside; padding-left: 3.5rem !important; padding-right: 2rem !important; line-height: 1.8; }
   @media (max-width: 768px) {
-    .faq-card-wrapper {
-      margin-top: -80px;
-    }
+    .faq-card-wrapper { margin-top: -85px; }
+    .page-form { padding: 3.5rem 1.5rem 2rem; }
+    .faq-list { padding-left: 1.5rem !important; padding-right: 1.5rem !important; line-height: 1.6; }
   }
   @media (max-width: 480px) {
-    .faq-card-wrapper {
-      margin-top: -40px;
-    }
+    .faq-card-wrapper { margin-top: -75px; }
+    .page-form { padding: 3.5rem 1.5rem 2rem; }
+    .faq-list { padding-left: 2.25rem !important; padding-right: 1.5rem !important; line-height: 1.6; }
   }
 </style>
 {% endblock %}
-
 
 {% block content %}
 <!-- ===== Hero Section ===== -->
@@ -54,34 +42,25 @@
       <polygon fill="currentColor" points="0,257 0,260 3000,260 3000,0"></polygon>
     </svg>
   </div>
-  <div class="container hero-content pt-5 pb-7 text-center" style="margin-top:-7rem;">
-    <div class="row justify-content-center pb-7">
-      <div class="col-lg-10">
-        <h1 class="text-light"></h1>
-        <p class="fs-lg text-light fw-bold"></p>
-      </div>
-    </div>
-  </div>
 </section>
 <!-- ===== /Hero Section ===== -->
 
       <!-- FAQ content-->
-      <section class="container position-relative zindex-5 pb-5">
+      <section class="container position-relative zindex-5 pb-3">
         <div class="row">
           <div class="col-lg-8 col-md-10 offset-lg-2 pb-2 mb-5 faq-card-wrapper">
             <div class="card border-0 shadow-lg">
-              <div class="form-control" style="padding:3.5rem 2rem 2rem;">
-                <div class="text-center" style="margin-bottom:3rem;">
-                  <h2 style="color:#eb7828; margin-bottom:1.8rem;">🧭 Sydney Arrival Guide & FAQ</h2>
+              <div class="page-form text-center">
+                  <h2 >🧭 Sydney Arrival Guide</h2>
                   <h3 style="margin-top:0; margin-bottom:1.8rem;">Welcome to Sydney! Below are the most common questions and important information for passengers arriving at Sydney Airport.</h3>
                   <p><strong>Please read carefully to ensure a smooth and comfortable pickup experience.</strong></p>
                 </div>
 
-                <ol style="line-height:1.8;">
+                <ol class="faq-list">
                   <li>
                     <strong>🚗 How will I meet my driver?</strong><br>
                     Our drivers <span style="color:#eb7828;">monitor your flight’s landing time</span> to ensure they meet you on time.  
-                    Please <strong>keep your phone switched on</strong> and <strong>check your email</strong> ✉️ before and after collecting your baggage for any important updates from us.
+                    Please <strong>keep your phone switched on</strong> and <strong>check your email</strong> before and after collecting your baggage for any important updates from us.
                   </li>
                   <br>
 
@@ -125,14 +104,12 @@
                 🙏 Thank you for your understanding and cooperation.<br>
                 We look forward to serving you soon!<br><br>            
             
-                </p>
-              </div>
+                </p>              
             </div>
           </div>
-
         </div>
       </section>
-      <section class="container pb-5">
+      <section class="container pb-0">
         <div class="row justify-content-center text-center">
           <div class="col-lg-6">
             <h2 class="h4 pb-3">Contact details</h2>
