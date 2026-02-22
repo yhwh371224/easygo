@@ -12,82 +12,83 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = config('SECRET_KEY')
 
 ENVIRONMENT = config('ENVIRONMENT', default='production')
+DEBUG = config('DEBUG', cast=bool, default=False)
 
 if ENVIRONMENT == 'production':
-    DEBUG = config('DEBUG', cast=bool, default=False)
-    ALLOWED_HOSTS = [
-        'easygoshuttle.com.au', 
-        'www.easygoshuttle.com.au', 
-        '45.32.241.98']
+    ALLOWED_HOSTS = config(
+        'PRO_ALLOWED_HOSTS',
+        cast=lambda v: [s.strip() for s in v.split(',')]
+    )
+else:
+    ALLOWED_HOSTS = config(
+        'DEV_ALLOWED_HOSTS',
+        default='127.0.0.1,localhost',
+        cast=lambda v: [s.strip() for s in v.split(',')]
+    )
 
+if ENVIRONMENT == 'production':
     SECURE_SSL_REDIRECT = True
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_SECURE = True
-    SECURE_HSTS_SECONDS = 31536000 
+    SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
-    SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_BROWSER_XSS_FILTER = True
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     USE_X_FORWARDED_HOST = False
     X_FRAME_OPTIONS = 'DENY'
+    SECURE_REFERRER_POLICY = 'no-referrer-when-downgrade'
+    COMPRESS_OFFLINE = True
     CONTENT_SECURITY_POLICY = {
         'DIRECTIVES': {
             'default-src': ("'self'",),
             'script-src': (
                 "'self'",
                 'https://cdnjs.cloudflare.com',
-                'https://challenges.cloudflare.com', 
+                'https://ajax.googleapis.com',
+                'https://challenges.cloudflare.com',
                 'https://www.paypal.com',
                 'https://www.paypalobjects.com',
-                'https://ajax.googleapis.com',
-                "'unsafe-inline'", 
+                "'unsafe-inline'",
                 # NONCE,
-            ),
-            'frame-src': (
-                "'self'",
-                'https://challenges.cloudflare.com',
-            ),
-            'connect-src': (          
-                "'self'",
-                'https://challenges.cloudflare.com',
-                'https://www.paypal.com',
-                'https://*.paypal.com',       
-                'https://*.paypalobjects.com', 
             ),
             'style-src': (
                 "'self'",
                 'https://fonts.googleapis.com',
-                "'unsafe-inline'",                
+                "'unsafe-inline'",
             ),
-            'font-src': (            
+            'font-src': (
                 "'self'",
                 'https://fonts.gstatic.com',
             ),
             'img-src': (
-                "'self'", 
-                "data:", 
+                "'self'",
+                "data:",
                 'https://s3.ap-southeast-2.amazonaws.com/easygoshuttle.com.au/',
-                'https://www.paypalobjects.com',   
+                'https://www.paypalobjects.com',
                 'https://*.paypal.com',
+            ),
+            'connect-src': (
+                "'self'",
+                'https://challenges.cloudflare.com',
+                'https://www.paypal.com',
+                'https://*.paypal.com',
+                'https://*.paypalobjects.com',
             ),
             'frame-src': (
                 "'self'",
                 'https://challenges.cloudflare.com',
                 'https://www.paypal.com',
-                'https://*.paypal.com',         
+                'https://*.paypal.com',
             ),
             'frame-ancestors': ("'self'",),
         }
     }
-    SECURE_REFERRER_POLICY = 'no-referrer-when-downgrade'
-    
-    COMPRESS_OFFLINE = True
 
 else:
-   DEBUG = True
-   ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
-   COMPRESS_OFFLINE = False
+    DEBUG = True
+    COMPRESS_OFFLINE = False
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -102,7 +103,7 @@ INSTALLED_APPS = [
     'basecamp.apps.BasecampConfig', 
     'easygo_review.apps.EasygoReviewConfig',
     'admin_honeypot',
-    # 'honeypot',  
+    'honeypot',  
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -399,8 +400,8 @@ CLOUDFLARE_TURNSTILE_SITE_KEY = config('CLOUDFLARE_TURNSTILE_SITE_KEY')
 CLOUDFLARE_TURNSTILE_SECRET_KEY = config('CLOUDFLARE_TURNSTILE_SECRET_KEY')
 
 # Honeypot settings
-# HONEYPOT_FIELD_NAME = 'phone_verify'  # replaced by Cloudflare Turnstile
-# HONEYPOT_VALUE = ''
+HONEYPOT_FIELD_NAME = 'phone_verify'  # replaced by Cloudflare Turnstile
+HONEYPOT_VALUE = ''
 
 # MySQL Backup Database Configuration
 MYSQL_CONFIG = {
