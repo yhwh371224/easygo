@@ -9,34 +9,20 @@
 
 {% block extra_css %}
 <style>
-  .hero::before {
-    background-image: url('/static/basecamp/images/meeting_point.webp');
-  }
-  .form-control hr {
-    border: none;
-    border-top: 1px solid #e0e0e0;
-    opacity: 0.5;
-    margin: 2.5rem 0;
-  }
-  .form-control h2 {
-    margin-top: 3rem;
-    margin-bottom: 1.5rem;
-  }
-  .form-control .mb-3 p {
-    margin-bottom: 0.8rem;
-  }
-  .faq-card-wrapper {
-    margin-top: -200px;
-  }
+  .hero::before { background-image: url('/static/basecamp/images/meeting_point.webp'); }
+  .form-control hr { border: none; border-top: 1px solid #e0e0e0; opacity: 0.5; margin: 2.5rem 0; }
+  .form-control h2 { margin-top: 3rem; margin-bottom: 1.5rem; }
+  .form-control .mb-3 p { margin-bottom: 0.8rem; }
+  .faq-card-wrapper { margin-top: -230px; }
   @media (max-width: 768px) {
-    .faq-card-wrapper {
-      margin-top: -80px;
-    }
+    .hero .hero-content { padding-top: 150px !important; }
+    .faq-card-wrapper { margin-top: -140px; }
+    .card-section { padding-left: 30px !important; }
   }
   @media (max-width: 480px) {
-    .faq-card-wrapper {
-      margin-top: -40px;
-    }
+    .hero .hero-content { padding-top: 120px !important; }
+    .faq-card-wrapper { margin-top: -140px; }
+    .card-section { padding-left: 30px !important; }
   }
 </style>
 {% endblock %}
@@ -62,7 +48,7 @@
 <!-- ===== /Hero Section ===== -->
 
       <!-- Contact form + details-->
-      <section class="container position-relative zindex-5 pb-5">
+      <section class="container position-relative zindex-5 pb-0">
         <div class="row">
           <div class="col-lg-6 col-md-7 offset-lg-1 pb-2 mb-5 faq-card-wrapper">
             <div class="card border-0 shadow-lg" >
@@ -71,7 +57,7 @@
                   <h2><strong>International Terminal &#8211; T1</strong></h2>
                   <p><span style="color: #eb7828">Public Pick-up </span>, Please proceed to the P7 parking building first after exiting the arrival halls, and then follow the signs for 'Public Pick-up'</p>
                   <p><span style="color: #eb7828">Please note: </span> On landing simply turn on your mobile phone</p>
-                  <p>The meeting point may vary by the notification of your driver on the flight day</p><br>
+                  <p>The meeting point may vary by the notification of your driver on the flight day</p>
                   <p><small><a href="https://easygo.s3.ap-southeast-2.amazonaws.com/Intl_airport_map.webp">Map of the International Airport Pick-up Points (Public & Rideshare)</a></small></p>
                 </div>
                 <hr>
@@ -79,27 +65,26 @@
                   <h2><strong>Domestic Terminal &#8211; T2</strong></h2>
                   <p>Please proceed to the<span style="color: #eb7828">&nbsp;Express Pick-up</span> This is where you meet your driver</p>
                   <p><span style="color: #eb7828">Please note: </span> On landing simply turn on your mobile phone</p>
-                  <p>The meeting point may vary by the notification of your driver on the flight day</p><br>
-                  <small>
-                    <a href="https://easygo.s3.ap-southeast-2.amazonaws.com/Express_pickup.webp">Express Pick-up Location Map</a><br>
+                  <p>The meeting point may vary by the notification of your driver on the flight day</p>
+                  <p><small>
+                    <a href="https://easygo.s3.ap-southeast-2.amazonaws.com/Express_pickup.webp" class="d-block">Express Pick-up Location Map</a>
                     <a href="https://s3.ap-southeast-2.amazonaws.com/easygoshuttle.com.au/Domestic-T2-meeting-point.webp">Shuttle Bus Pick-up Location Map</a>
-                  </small>
+                  </small></p>
                 </div>
                 <hr>
                 <div class="mb-3 pb-1">
                   <h2><strong>Qantas Terminal &#8211; T3</strong></h2>
                   <p>Please proceed to the<span style="color: #eb7828">&nbsp;Express Pick-up</span> This is where you meet your driver</p>
-                  <p><span style="color: #eb7828">Please note: </span> On landing simply turn on your mobile phone</p><br>
+                  <p><span style="color: #eb7828">Please note: </span> On landing simply turn on your mobile phone</p>
                   <small>
-                    <a href="https://easygo.s3.ap-southeast-2.amazonaws.com/Express_pickup.webp">Express Pick-up Location Map</a><br>
+                    <a href="https://easygo.s3.ap-southeast-2.amazonaws.com/Express_pickup.webp" class="d-block">Express Pick-up Location Map</a>
                     <a href="https://s3.ap-southeast-2.amazonaws.com/easygoshuttle.com.au/Domestic-T2-meeting-point.webp">Shuttle Bus Pick-up Location Map</a>
                   </small>
-                </div>
-                <br>                              
+                </div>                            
               </div>
             </div>
           </div>
-          <div class="col-lg-4 col-md-4 offset-md-1">
+          <div class="col-lg-4 col-md-4 offset-md-1 card-section">
             <h2 class="h4 pb-3">Contact details</h2>
             <h3 class="h6 pb-2">Sydney, Australia</h3>
             <ul class="list-unstyled fs-sm pb-3">

@@ -8,44 +8,30 @@
 <meta name="keywords" content="EasyGo Airport Shuttle payment, PayPal payment, Stripe payment, PayID, bank transfer, Sydney airport shuttle payment">
 {% endblock %}
 
-{% block content %}
-
-<!-- ===== Hero CSS (page-only) ===== -->
+{% block extra_css %}
 <style>
-  .hero-payment {
-    position: relative;
-    min-height: 600px;
-    display: flex;
-    align-items: center;
-    overflow: hidden;
+  .hero-payment::before { content: ""; background-image: url('/static/basecamp/images/page-title-bg.webp') !important; background-position: center; display: block; }
+  .faq-card-wrapper { margin-top: -230px; }
+  .page-form{background:#fff;border-radius:.75rem;padding:5rem 2rem 2rem;text-align:center;width:100%;box-sizing:border-box}
+  .page-form hr{border:none;border-top:1px solid #e0e0e0;opacity:.5;margin:2.5rem 0}
+  .page-form .mb-3 p{margin-bottom:.8rem}
+  .form-control hr { border: none; border-top: 1px solid #e0e0e0; opacity: .5; margin: 2.5rem 0; }
+  .direct-details { display: inline-block; text-align: left; width: max-content; max-width: 100%; margin: 0 auto; }
+  .note-text { color: #dc3545 !important; font-weight: 700; }
+  @media (max-width: 768px) {
+    .faq-card-wrapper { margin-top: -85px; }
+    .page-form { padding: 3.5rem 1.5rem 2rem; }
   }
-
-  .hero-payment::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image: url('/static/basecamp/images/page-title-bg.webp');
-    background-size: cover;
-    background-position: center center;
-    z-index: 0;
-  }
-
-  .hero-payment .hero-content {
-    position: relative;
-    z-index: 2;
-  }
-
-  .form-control hr {
-    border: none;
-    border-top: 1px solid #e0e0e0;
-    opacity: 0.5;
-    margin: 2.5rem 0;
+  @media (max-width: 480px) {
+    .faq-card-wrapper { margin-top: -85px; }
+    .page-form { padding: 3.5rem 1.5rem 2rem; }
   }
 </style>
-<!-- ===== /Hero CSS ===== -->
+{% endblock %}
 
+{% block content %}
 <!-- ===== Hero Section ===== -->
-<section class="hero-payment">
+<section class="hero hero-payment">
   <span class="position-absolute top-0 start-0 w-100 h-100 bg-gradient opacity-70" style="z-index:1;"></span>
   <div class="shape shape-bottom shape-slant bg-body">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 260">
@@ -62,40 +48,32 @@
   </div>
 </section>
 <!-- ===== /Hero Section ===== -->
-
-<section class="container position-relative zindex-5 pb-5">
+<section class="container position-relative zindex-5 pb-3">
   <div class="row">
-    <div class="col-lg-8 col-md-10 offset-lg-2 pb-2 mb-5" style="margin-top: -240px;">
+    <div class="col-lg-8 col-md-10 offset-lg-2 pb-2 mb-5 faq-card-wrapper">
       <div class="card border-0 shadow-lg">
-        <div class="form-control" style="padding:3.5rem 2rem 2rem;">
+        <div class="page-form text-center">
 
           <div class="mb-3 pb-1">
-            1. <strong>Online payment through PayPal</strong><br>
-            You can make payments online through PayPal<br><br>
-            &nbsp; • &nbsp;<a href="https://easygoshuttle.com.au/payonline">easygoshuttle.com.au/payonline</a>
+            <strong class="d-block mb-4">1. Online payment through PayPal</strong>
+            <p class="mb-2">You can make payments online through PayPal</p>
+            <p class="mb-0">&bull; <a href="https://easygoshuttle.com.au/payonline">easygoshuttle.com.au/payonline</a></p>
           </div>
+          
           <hr>
 
-          <!-- 2. <strong>Online payment through Stripe</strong><br>
-          You can make payments online through Stripe<br><br>
-          &nbsp; • &nbsp;<a href="{% url 'basecamp:pay_stripe' %}">easygoshuttle.com.au/pay/stripe</a><br><br><hr> -->
-
           <div class="mb-3 pb-1">
-            2. <strong>PayID</strong><br><br>
-            &nbsp; • &nbsp;Mobile: 0406 883 355<br>
-            &nbsp; • &nbsp;Email: info@easygoshuttle.com.au<br><br>
-            <span style="color: #eb7828;">Please email the receipt after PayID payment</span>
+            <strong class="d-block mb-4">2. PayID</strong>
+            <p class="mb-2">&bull; Mobile: 0406 883 355</p>
+            <small class="d-block mb-0" style="color: #eb7828;">Please email the receipt after PayID payment</small>
           </div>
-          <hr>
 
-          <!-- 4. <strong>Payment through XRP Coins</strong><br>
-          You can make payments through your XRP coins<br><br>
-          &nbsp; • &nbsp;<a href="{% url 'blog:pay_xrp_page' %}">Pay with XRP coins</a><br><br><hr> -->
-
-          <div class="mb-3 pb-1">
-            <strong style="color:red">Note!</strong><br>
-            If the name and email you use for online payment differ from those used for booking,
-            please notify us to confirm that the payment has been processed.
+          <div class="mb-3 pb-3">
+            <strong class="d-block note-text mb-2">Note!</strong>
+            <p class="mb-0 fw-bold text-dark">
+              If the name and email you use for online payment differ from those used for booking,
+              please notify us to confirm that the payment has been processed.
+            </p>
           </div>
 
         </div>
@@ -103,5 +81,4 @@
     </div>
   </div>
 </section>
-
 {% endblock %}
