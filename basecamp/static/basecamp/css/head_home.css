@@ -1,0 +1,54 @@
+body { margin: 0; font-family: Arial, sans-serif; }
+  .jarallax-img { background-size: cover; background-position: center; }
+  .jarallax-hero { background-image: url('/static/basecamp/photos/sydney_airport.webp'); min-height: 330px; }
+  .booking-form-wrapper { margin-top: -70px; position: relative; z-index: 5; }
+  .booking-form-top { margin-top: -120px; }
+  .hero-about         { position: relative; min-height: 600px; display: flex; align-items: center; overflow: hidden; padding-top: 80px; }
+  .hero-about::before { content: ""; position: absolute; inset: 0; background: url('/static/basecamp/photos/vehicle-1.PNG') center/cover; z-index: 0; }
+  .hero-content       { position: relative; z-index: 2; }
+  .hero-overlap-container { margin-top: -120px; }
+  .content-card-box   { padding: 3rem 3.5rem !important; }
+  .highlight-title    { margin-bottom: 1.5rem; }
+  .entry-content h2, .entry-content h3 { margin-bottom: 1.5rem; }
+  .entry-content h3   { margin-top: 1.8rem; }
+  .entry-content li   { margin-bottom: 1rem; line-height: 1.8; }
+  .entry-content ul, .entry-content ul ul { list-style: none; padding-left: 2rem; margin-top: 1rem; }
+  .entry-content ul ul { padding-left: 1.5rem; margin-top: 0.5rem; }
+  .award-badge        { position: fixed; top: 70px; left: 40px; width: 280px; height: auto; z-index: 1000; }
+  .text-brand         { color: #eb7828; }
+  .text-blue-link     { color: #8db5ed; }
+  .text-ext-icon      { color: #00aaff; }
+  .text-orange        { color: orange; }
+  .services-content   { max-width: 495px; }
+  .services-list-item { line-height: 2.0; }
+  .review-link        { text-decoration: none; white-space: nowrap; }
+  .review-link-white  { color: #ffffff; text-decoration: none; }
+  .offer-search-end   { margin-bottom: 40px; margin-right: 20px; }
+  .offer-card-img { position: relative; overflow: hidden; width: 100%; max-height: 360px; line-height: 0; display: block; border-top-left-radius: calc(1rem - 1px); border-top-right-radius: calc(1rem - 1px); padding: 0; margin: 0; }
+  .offer-card-inner-img { width: 100%; height: 250px; display: block; object-fit: cover; margin: 0; padding: 0; }
+  .tns-carousel-wrapper .tns-carousel-inner { overflow: hidden; }
+  .badge-price        { width: 5rem; }
+  .intro-text         { color: #b9cbdb; }
+  .intro-top          { margin-top: 8rem; }
+  .service-options-top { margin-top: 4rem; }
+  .option-beige       { background-color: beige; }
+  .award-section-inner { min-height: 200px; }
+  .award-panel-link   { color: white; text-decoration: none; }
+  .features-bg        { background-image: url('/static/basecamp/images/bg-pattern01.webp'); }
+  .services-cover     { background-image: url('/static/basecamp/photos/services-cover.webp'); background-size: cover; }
+  .testimonials-bg    { background-image: url('/static/basecamp/images/map.svg'); background-position: center left; background-size: cover; }
+  .award-section      { background-image: url('/static/basecamp/images/Digital-Certificate.webp'); background-size: contain; background-repeat: no-repeat; background-position: center; height: 40vh; min-height: 200px; cursor: pointer; }
+  @media (max-width: 768px) {
+    .booking-form-wrapper { margin-top: -190px; }
+    .hero-about { min-height: 400px; }
+    .hero-about h1 { font-size: 1.6rem; }
+    .hero-overlap-container { margin-top: -60px; }
+    .content-card-box { padding: 2rem 1.5rem !important; }
+    .award-badge { top: 25px; left: 20px; width: 180px; }
+    #booking-form { margin-top: 5px !important; }
+  }
+  @media (max-width: 480px) {
+    .booking-form-wrapper { margin-top: -140px; }
+    .award-badge { top: 45px; left: 10px; width: 100px; }
+    #booking-form { margin-top: 10px !important; }
+  }
