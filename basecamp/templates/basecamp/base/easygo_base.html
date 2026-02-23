@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
-{% load compress %}
+
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -54,13 +54,11 @@
 
     {% include "basecamp/layouts/footer.html" %}
     
-    {% compress js %}
     <script src="{% static 'basecamp/js/bootstrap.bundle.min.js' %}" defer></script>
     <script src="{% static 'basecamp/js/smooth-scroll.polyfills.min.js' %}" defer></script>
     <script src="{% static 'basecamp/js/flatpickr.min.js' %}" defer></script>
     <script src="{% static 'basecamp/js/date-picker.js' %}" defer></script>
     <script src="{% static 'basecamp/js/theme.min.js' %}" defer></script>
-    {% endcompress js %}
     <script>
       document.getElementById('current-year').textContent = new Date().getFullYear();
     </script>
