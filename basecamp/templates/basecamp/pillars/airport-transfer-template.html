@@ -1,5 +1,7 @@
 {% extends 'basecamp/base/easygo_base.html' %}
 
+{% load static %}
+
 {% block title %}
   {{ title }}
 {% endblock %}
@@ -15,8 +17,10 @@
   <meta name="author" content="easygoshuttle.com.au">
 {% endblock %}
 
-{% block content %}
 {% static 'basecamp/photos/bg-pattern02.webp' as page_bg %}
+
+{% block content %}
+
 <!-- Service Schema -->
 <script type="application/ld+json" nonce="{{ CSP_NONCE }}">
 {
