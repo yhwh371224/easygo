@@ -10,7 +10,7 @@
 
 {% block extra_css %}
 <style>
-  .hero-payment::before { content: ""; background-image: url('/static/basecamp/images/page-title-bg.webp') !important; background-position: center; display: block; }
+  .hero-payment::before { content: ""; background-image: url("{% static 'basecamp/images/page-title-bg.webp' %}") !important; background-position: center; display: block; }
   .faq-card-wrapper { margin-top: -230px; }
   .page-form{background:#fff;border-radius:.75rem;padding:5rem 2rem 2rem;text-align:center;width:100%;box-sizing:border-box}
   .page-form hr{border:none;border-top:1px solid #e0e0e0;opacity:.5;margin:2.5rem 0}
