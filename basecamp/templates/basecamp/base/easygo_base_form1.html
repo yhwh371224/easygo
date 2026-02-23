@@ -21,45 +21,31 @@
     <link rel="manifest" href="{% static 'basecamp/favi/site.webmanifest' %}">      
     <link rel="stylesheet" href="/static/basecamp/css/simplebar.min.css"/>
     <link rel="stylesheet" href="/static/basecamp/css/theme.min.css">
-    <style>
-    .spinner {
-        border: 2px solid rgba(255, 255, 255, 0.3);
-        border-top: 2px solid white;
-        border-radius: 50%;
-        width: 16px;
-        height: 16px;
-        display: inline-block;
-        vertical-align: middle;
-        margin-left: 8px;
-        animation: spin 0.8s linear infinite;
-    }
-
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-    }
-    </style> 
+    <style nonce="{{ csp_nonce }}">
+    .spinner{border:2px solid rgba(255,255,255,0.3);border-top:2px solid white;border-radius:50%;width:16px;height:16px;display:inline-block;vertical-align:middle;margin-left:8px;animation:spin 0.8s linear infinite}
+    @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+    </style>
     {% block extra_css %}{% endblock %}
   </head>
   
   <body>
     {% include "basecamp/layouts/navbar.html" %}
 
-    <main class="page-wrapper">
-      
+    <main class="page-wrapper">      
            {% block content %}
-            {% endblock %}
-      
+            {% endblock %}      
     </main>
 
     {% include "basecamp/layouts/footer.html" %}
 
-    <script src="/static/basecamp/js/bootstrap.bundle.min.js" defer></script>
-    <script src="/static/basecamp/js/smooth-scroll.polyfills.min.js" defer></script>
-    <script src="/static/basecamp/js/simplebar.min.js" defer></script>
-    <script src="/static/basecamp/js/rangePlugin.js" defer></script>
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-    <script>
+    {% compress js %}
+    <script src="/static/basecamp/js/bootstrap.bundle.min.js" defer nonce="{{ csp_nonce }}"></script>
+    <script src="/static/basecamp/js/smooth-scroll.polyfills.min.js" defer nonce="{{ csp_nonce }}"></script>
+    <script src="/static/basecamp/js/simplebar.min.js" defer nonce="{{ csp_nonce }}"></script>
+    <script src="/static/basecamp/js/rangePlugin.js" defer nonce="{{ csp_nonce }}"></script>
+    {% endcompress js %}
+
+    <script nonce="{{ csp_nonce }}">
     document.addEventListener("DOMContentLoaded", function () {
         // --- Form Submit ---
         const form = document.getElementById("booking-form");
@@ -100,8 +86,9 @@
         }
     });
     </script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" defer></script>
-    <script src="/static/basecamp/js/theme.min.js" defer></script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer nonce="{{ csp_nonce }}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" defer nonce="{{ csp_nonce }}"></script>
+    <script src="/static/basecamp/js/theme.min.js" defer nonce="{{ csp_nonce }}"></script>
 
   </body>
 </html>

@@ -21,141 +21,126 @@
     <link rel="manifest" href="{% static 'basecamp/favi/site.webmanifest' %}">      
     <link rel="stylesheet" href="/static/basecamp/css/flatpickr.min.css"/>
     <link rel="stylesheet" href="/static/basecamp/css/theme.min.css">
-    <style>
-    .spinner {
-        border: 2px solid rgba(255, 255, 255, 0.3);
-        border-top: 2px solid white;
-        border-radius: 50%;
-        width: 16px;
-        height: 16px;
-        display: inline-block;
-        vertical-align: middle;
-        margin-left: 8px;
-        animation: spin 0.8s linear infinite;
-    }
-
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-    }
+    <style nonce="{{ csp_nonce }}">
+    .spinner { width: 16px; height: 16px; border: 2px solid #ffffff4d; border-top-color: #fff; border-radius: 50%; display: inline-block; vertical-align: middle; margin-left: 8px; animation: spin .8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
     </style> 
     {% block extra_css %}{% endblock %}
   </head>
   <body>    
     {% include "basecamp/layouts/navbar.html" %}
 
-    <main class="page-wrapper">
-      
+    <main class="page-wrapper">      
            {% block content %}
-            {% endblock %}
-      
+            {% endblock %}      
     </main>
 
     {% include "basecamp/layouts/footer.html" %}
 
-          <script src="/static/basecamp/js/bootstrap.bundle.min.js" defer></script>
-          <script src="/static/basecamp/js/smooth-scroll.polyfills.min.js" defer></script>
-          <script src="/static/basecamp/js/flatpickr.min.js" defer></script>
-          <script src="/static/basecamp/js/date-picker.js" defer></script>
-          <script src="/static/basecamp/js/form_handler.js" defer></script>
-          <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>              
-          <script>
-          document.addEventListener('DOMContentLoaded', function () {
-              const form = document.getElementById('booking-form');
-              const submitButton = document.getElementById('submitButton');
+    {% compress js %}
+    <script src="/static/basecamp/js/bootstrap.bundle.min.js" defer nonce="{{ csp_nonce }}"></script>
+    <script src="/static/basecamp/js/smooth-scroll.polyfills.min.js" defer nonce="{{ csp_nonce }}"></script>
+    <script src="/static/basecamp/js/flatpickr.min.js" defer nonce="{{ csp_nonce }}"></script>
+    <script src="/static/basecamp/js/date-picker.js" defer nonce="{{ csp_nonce }}"></script>
+    <script src="/static/basecamp/js/form_handler.js" defer nonce="{{ csp_nonce }}"></script>    
+    {% endcompress %}
+                
+    <script nonce="{{ csp_nonce }}">
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('booking-form');
+        const submitButton = document.getElementById('submitButton');
 
-              const flightDateInput = document.getElementById('flight-date');
-              const dateError = document.getElementById('date-error');
+        const flightDateInput = document.getElementById('flight-date');
+        const dateError = document.getElementById('date-error');
 
-              const returnCruiseCheckbox = document.getElementById('return-cruise');
-              const returnCruiseFields = document.getElementById('return-cruise-fields');
+        const returnCruiseCheckbox = document.getElementById('return-cruise');
+        const returnCruiseFields = document.getElementById('return-cruise-fields');
 
-              flightDateInput.addEventListener('change', function () {
-                  const selectedDate = new Date(flightDateInput.value);
-                  const currentDate = new Date();
-                  currentDate.setHours(0, 0, 0, 0);
+        flightDateInput.addEventListener('change', function () {
+            const selectedDate = new Date(flightDateInput.value);
+            const currentDate = new Date();
+            currentDate.setHours(0, 0, 0, 0);
 
-                  if (selectedDate < currentDate) {
-                      dateError.style.display = 'block';
-                      flightDateInput.classList.add('is-invalid');
-                  } else {
-                      dateError.style.display = 'none';
-                      flightDateInput.classList.remove('is-invalid');
-                  }
-              });
+            if (selectedDate < currentDate) {
+                dateError.style.display = 'block';
+                flightDateInput.classList.add('is-invalid');
+            } else {
+                dateError.style.display = 'none';
+                flightDateInput.classList.remove('is-invalid');
+            }
+        });
 
-              returnCruiseCheckbox.addEventListener("change", function () {
-                  if (this.checked) {
-                      const xhr = new XMLHttpRequest();
-                      xhr.open("GET", "{% url 'basecamp:return_cruise_fields' %}");
-                      xhr.onload = function () {
-                          if (xhr.status === 200) {
-                              returnCruiseFields.innerHTML = xhr.responseText;
-                              returnCruiseFields.style.display = 'block';
+        returnCruiseCheckbox.addEventListener("change", function () {
+            if (this.checked) {
+                const xhr = new XMLHttpRequest();
+                xhr.open("GET", "{% url 'basecamp:return_cruise_fields' %}");
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        returnCruiseFields.innerHTML = xhr.responseText;
+                        returnCruiseFields.style.display = 'block';
 
-                              const inputs = returnCruiseFields.querySelectorAll('input');
-                              inputs.forEach(input => input.setAttribute('required', 'required'));
-                          } else {
-                              console.log("Request failed. Returned status of " + xhr.status);
-                          }
-                      };
-                      xhr.send();
-                  } else {
-                      returnCruiseFields.innerHTML = '';
-                      returnCruiseFields.style.display = 'none';
-                  }
-              });
+                        const inputs = returnCruiseFields.querySelectorAll('input');
+                        inputs.forEach(input => input.setAttribute('required', 'required'));
+                    } else {
+                        console.log("Request failed. Returned status of " + xhr.status);
+                    }
+                };
+                xhr.send();
+            } else {
+                returnCruiseFields.innerHTML = '';
+                returnCruiseFields.style.display = 'none';
+            }
+        });
 
-              returnCruiseCheckbox.addEventListener('change', function () {
-                  if (this.checked) {
-                      returnCruiseFields.style.display = 'block';
-                      const inputs = returnCruiseFields.querySelectorAll('input');
-                      inputs.forEach(input => input.setAttribute('required', 'required'));
-                  } else {
-                      returnCruiseFields.style.display = 'none';
-                      const inputs = returnCruiseFields.querySelectorAll('input');
-                      inputs.forEach(input => input.removeAttribute('required'));
-                  }
-              });
+        returnCruiseCheckbox.addEventListener('change', function () {
+            if (this.checked) {
+                returnCruiseFields.style.display = 'block';
+                const inputs = returnCruiseFields.querySelectorAll('input');
+                inputs.forEach(input => input.setAttribute('required', 'required'));
+            } else {
+                returnCruiseFields.style.display = 'none';
+                const inputs = returnCruiseFields.querySelectorAll('input');
+                inputs.forEach(input => input.removeAttribute('required'));
+            }
+        });
 
-              form.addEventListener('submit', function (event) {
-                  let isValid = true;
+        form.addEventListener('submit', function (event) {
+            let isValid = true;
 
-                  if (returnCruiseCheckbox.checked) {
-                      const returnPickupTime = returnCruiseFields.querySelector('input[name="return_pickup_time"]');
-                      const returnPickupDate = returnCruiseFields.querySelector('input[name="return_pickup_date"]');
+            if (returnCruiseCheckbox.checked) {
+                const returnPickupTime = returnCruiseFields.querySelector('input[name="return_pickup_time"]');
+                const returnPickupDate = returnCruiseFields.querySelector('input[name="return_pickup_date"]');
 
-                      if (!returnPickupTime?.value.trim()) {
-                          returnPickupTime.classList.add('is-invalid');
-                          isValid = false;
-                      } else {
-                          returnPickupTime.classList.remove('is-invalid');
-                      }
+                if (!returnPickupTime?.value.trim()) {
+                    returnPickupTime.classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    returnPickupTime.classList.remove('is-invalid');
+                }
 
-                      if (!returnPickupDate?.value.trim()) {
-                          returnPickupDate.classList.add('is-invalid');
-                          isValid = false;
-                      } else {
-                          returnPickupDate.classList.remove('is-invalid');
-                      }
-                  }
+                if (!returnPickupDate?.value.trim()) {
+                    returnPickupDate.classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    returnPickupDate.classList.remove('is-invalid');
+                }
+            }
 
-                  if (!isValid) {
-                      event.preventDefault();
-                      alert('Please fill in all required fields.');
-                      return;
-                  }
+            if (!isValid) {
+                event.preventDefault();
+                alert('Please fill in all required fields.');
+                return;
+            }
 
-                  submitButton.disabled = true;
-                  submitButton.innerHTML = "Submitting...";
-              });
-          });
-          </script>
-          <script src="/static/basecamp/js/cruise_form.js" defer></script>
-          <script>
-            document.getElementById('current-year').textContent = new Date().getFullYear();
-          </script>
-          <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" defer></script>
-          <script src="/static/basecamp/js/theme.min.js" defer></script>
+            submitButton.disabled = true;
+            submitButton.innerHTML = "Submitting...";
+        });
+    });
+    </script>
+    <script src="/static/basecamp/js/cruise_form.js" defer nonce="{{ csp_nonce }}"></script>
+    <script nonce="{{ csp_nonce }}">document.getElementById('current-year').textContent = new Date().getFullYear();</script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer nonce="{{ csp_nonce }}"></script> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" defer nonce="{{ csp_nonce }}"></script>
+    <script src="/static/basecamp/js/theme.min.js" defer nonce="{{ csp_nonce }}"></script>
   </body>
 </html>
