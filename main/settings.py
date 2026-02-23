@@ -40,6 +40,7 @@ if ENVIRONMENT == 'production':
     X_FRAME_OPTIONS = 'DENY'
     SECURE_REFERRER_POLICY = 'no-referrer-when-downgrade'
     COMPRESS_OFFLINE = True
+    COMPRESS_OFFLINE_CONTEXT = { 'csp_nonce': 'STATIC_NONCE', }
     CONTENT_SECURITY_POLICY = {
         'DIRECTIVES': {
             'default-src': ("'self'",),
@@ -341,6 +342,9 @@ STATICFILES_FINDERS = (
     'compressor.finders.CompressorFinder',
 )
 
+COMPRESS_ROOT = STATIC_ROOT
+COMPRESS_URL = STATIC_URL
+COMPRESS_STORAGE = 'compressor.storage.CompressorFileStorage'
 COMPRESS_ENABLED = not DEBUG  
 COMPRESS_CSS_HASHING_METHOD = 'content'
 COMPRESS_FILTERS = {

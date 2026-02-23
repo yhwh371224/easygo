@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-{% load static %}\n{% load compress %}
+{% load static %}
+{% load compress %}
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -19,8 +20,8 @@
 	  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'basecamp/favi/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'basecamp/favi/favicon-16x16.png' %}">
     <link rel="manifest" href="{% static 'basecamp/favi/site.webmanifest' %}">      
-    <link rel="stylesheet" href="/static/basecamp/css/flatpickr.min.css"/>
-    <link rel="stylesheet" href="/static/basecamp/css/theme.min.css">
+    <link rel="stylesheet" href="{% static 'basecamp/css/flatpickr.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'basecamp/css/theme.min.css' %}">
     <style nonce="{{ csp_nonce }}">
     .spinner{border:2px solid rgba(255,255,255,0.3);border-top:2px solid white;border-radius:50%;width:16px;height:16px;display:inline-block;vertical-align:middle;margin-left:8px;animation:spin 0.8s linear infinite}
     @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
@@ -46,7 +47,7 @@
     <script src="date-picker.js" defer nonce="{{ csp_nonce }}"></script>
     {% endcompress js %}
     <script nonce="{{ csp_nonce }}">const returnFlightURL = "{% url 'basecamp:return_flight_fields' %}";</script>
-    <script src="/static/basecamp/js/form_handler.js" defer nonce="{{ csp_nonce }}"></script>
+    <script src="{% static 'basecamp/js/form_handler.js' %}" defer nonce="{{ csp_nonce }}"></script>
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer nonce="{{ csp_nonce }}"></script>
 
 
@@ -180,6 +181,6 @@
     });
 </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" defer nonce="{{ csp_nonce }}"></script>
-    <script src="/static/basecamp/js/theme.min.js" defer nonce="{{ csp_nonce }}"></script>
+    <script src="{% static 'basecamp/js/theme.min.js' %}" defer nonce="{{ csp_nonce }}"></script>
 </body>
 </html>

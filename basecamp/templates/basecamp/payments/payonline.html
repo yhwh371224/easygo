@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-{% load static %}\n{% load compress %}
+{% load static %}
+{% load compress %}
 
 <html lang="en">
   <head>
@@ -18,7 +19,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'basecamp/favi/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'basecamp/favi/favicon-16x16.png' %}">
     <link rel="manifest" href="{% static 'basecamp/favi/site.webmanifest' %}">
-    <link rel="stylesheet" media="screen" href="/static/basecamp/css/theme.min.css">
+    <link rel="stylesheet" media="screen" href="{% static 'basecamp/css/theme.min.css' %}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
     <!-- CSP-safe inline styles -->
@@ -188,8 +189,10 @@
 
     {% include "basecamp/layouts/footer.html" %}
 
-    <script src="/static/basecamp/js/bootstrap.bundle.min.js" defer nonce="{{ csp_nonce }}"></script>
-    <script src="/static/basecamp/js/smooth-scroll.polyfills.min.js" defer nonce="{{ csp_nonce }}"></script>
-    <script src="/static/basecamp/js/theme.min.js" defer nonce="{{ csp_nonce }}"></script>
+    {% compress js %}
+    <script src="{% static 'basecamp/js/bootstrap.bundle.min.js' %}" defer nonce="{{ csp_nonce }}"></script>
+    <script src="{% static 'basecamp/js/smooth-scroll.polyfills.min.js' %}" defer nonce="{{ csp_nonce }}"></script>
+    <script src="{% static 'basecamp/js/theme.min.js' %}" defer nonce="{{ csp_nonce }}"></script>
+    {% endcompress %}
   </body>
 </html>
