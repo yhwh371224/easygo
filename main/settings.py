@@ -28,8 +28,7 @@ else:
 
 if ENVIRONMENT == 'production':
     SECURE_SSL_REDIRECT = True
-    CSRF_COOKIE_SECURE = True
-    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True    
     SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
@@ -39,8 +38,10 @@ if ENVIRONMENT == 'production':
     USE_X_FORWARDED_HOST = False
     X_FRAME_OPTIONS = 'DENY'
     SECURE_REFERRER_POLICY = 'no-referrer-when-downgrade'
-    COMPRESS_OFFLINE = True
-    COMPRESS_OFFLINE_CONTEXT = { 'csp_nonce': 'STATIC_NONCE', }
+    SESSION_COOKIE_SECURE = True
+    SESSION_COOKIE_HTTPONLY = True
+    SESSION_COOKIE_AGE = 3600
+    SESSION_EXPIRE_AT_BROWSER_CLOSE = True
     CONTENT_SECURITY_POLICY = {
         'DIRECTIVES': {
             'default-src': ("'self'",),
@@ -87,9 +88,9 @@ if ENVIRONMENT == 'production':
 
 else:
     DEBUG = True
-    COMPRESS_OFFLINE = False
     TURNSTILE_DISABLED = True
     SESSION_COOKIE_SECURE = False
+    SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -110,7 +111,6 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'storages',
-    'compressor',
     'corsheaders',
     'paypal.standard.ipn',
     'markdownx',
@@ -343,19 +343,6 @@ STATICFILES_FINDERS = (
     'compressor.finders.CompressorFinder',
 )
 
-COMPRESS_ROOT = STATIC_ROOT
-COMPRESS_URL = STATIC_URL
-COMPRESS_STORAGE = 'compressor.storage.CompressorFileStorage'
-COMPRESS_ENABLED = not DEBUG  
-COMPRESS_CSS_HASHING_METHOD = 'content'
-COMPRESS_FILTERS = {
-    'css':[
-        'compressor.filters.css_default.CssAbsoluteFilter',
-    ],
-    'js':[
-        'compressor.filters.jsmin.JSMinFilter',
-    ]
-}
 
 HTML_MINIFY = True
 KEEP_COMMENTS_ON_MINIFYING = True
@@ -404,7 +391,7 @@ CLOUDFLARE_TURNSTILE_SITE_KEY = config('CLOUDFLARE_TURNSTILE_SITE_KEY')
 CLOUDFLARE_TURNSTILE_SECRET_KEY = config('CLOUDFLARE_TURNSTILE_SECRET_KEY')
 
 # Honeypot settings
-HONEYPOT_FIELD_NAME = 'phone_verify'  # replaced by Cloudflare Turnstile
+HONEYPOT_FIELD_NAME = 'phone_verify' 
 HONEYPOT_VALUE = ''
 
 # MySQL Backup Database Configuration
@@ -423,14 +410,10 @@ GOOGLE_REVIEW_URL = config('GOOGLE_REVIEW_URL')
 
 MARKDOWNX_MEDIA_PATH = datetime.now().strftime('markdownx/%Y/%m/%d/')
 
-SESSION_COOKIE_AGE = 3600
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 SESSION_COOKIE_NAME = 'my_session_cookie'
 SESSION_COOKIE_DOMAIN = None
 SESSION_COOKIE_PATH = '/'
-SESSION_COOKIE_SECURE = True
-SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SIGNED = True
 
 RECIPIENT_EMAIL = config('RECIPIENT_EMAIL')
