@@ -25,7 +25,7 @@
     <!-- CSP-safe inline styles -->
     <style nonce="{{ csp_nonce }}">
     .custom-card{padding:2rem;background-color:#f0f8ff;z-index:10;position:relative}
-    .jarallax-img{background-image:url('/static/basecamp/images/page-title-bg.webp')}
+    .jarallax-img{background-image:url("{% static 'basecamp/images/page-title-bg.webp' %}")}
     .col-offset-top{margin-top:-280px}
     .card.info .card-header{background-color:#f0f8ff}
     .card.info .card-body{padding:1.75rem}

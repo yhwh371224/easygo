@@ -9,7 +9,7 @@
 
 {% block extra_css %}
 <style>
-  .hero::before { background-image: url('/static/basecamp/images/meeting_point.webp'); }
+  .hero::before { background-image: url("{% static 'basecamp/images/meeting_point.webp' %}"); }
   .form-control hr { border: none; border-top: 1px solid #e0e0e0; opacity: 0.5; margin: 2.5rem 0; }
   .form-control h2 { margin-top: 3rem; margin-bottom: 1.5rem; }
   .form-control .mb-3 p { margin-bottom: 0.8rem; }
