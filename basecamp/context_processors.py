@@ -20,3 +20,8 @@ def bank_settings(request):
     return {
         'DEFAULT_BANK': getattr(settings, 'DEFAULT_BANK_CODE', 'anz')
     }
+
+def navbar_defaults(request):
+    return {
+        'navbar_theme': 'navbar-dark'  # 기본값
+    }

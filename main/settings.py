@@ -228,6 +228,7 @@ TEMPLATES = [
                 'basecamp.context_processors.add_custom_context',
                 'basecamp.context_processors.bank_settings',
                 'basecamp.context_processors.turnstile_site_key', 
+                'basecamp.context_processors.navbar_defaults', 
 
             ],
         },
