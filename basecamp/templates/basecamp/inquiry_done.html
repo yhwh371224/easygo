@@ -1,14 +1,13 @@
 {% extends 'basecamp/base/easygo_base_error.html' %}
 {% block content %}
 {% load static %}
-
+{% static 'basecamp/photos/bg-pattern02.webp' as page_bg %}
 <!-- Hero -->
 <section class="bg-dark py-3" style="position: relative; overflow: hidden; min-height: 400px;">
-  <div class="position-absolute top-0 start-0 w-100 h-100" style="
-      background-image: url("{% static 'basecamp/photos/bg-pattern02.webp' %}");
+  <div class="position-absolute top-0 start-0 w-100 h-100" style="background-image: url('{{ page_bg }}');"
       background-size: cover;
       background-position: center;
-      z-index: 0;">
+      z-index: 0;>
   </div>
 
   <a href="{% static 'basecamp/images/Digital-Certificate.webp' %}">

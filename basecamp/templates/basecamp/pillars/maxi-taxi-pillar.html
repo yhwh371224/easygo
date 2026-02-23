@@ -10,10 +10,10 @@ Sydney Airport Maxi Taxi | Private 8–13 Seater Group Transfers | EasyGo
 {% endblock %}
 
 {% block content %}
-
+{% static 'basecamp/photos/vehicles.PNG' as page_bg %}
 <!-- Hero section -->
 <section class="jarallax bg-dark py-7 position-relative" data-jarallax data-speed="0.1">
-  <div class="jarallax-img" style="background-image: url("{% static 'basecamp/photos/vehicles.PNG' %}");"></div>
+  <div class="jarallax-img" style="background-image: url('{{ page_bg }}');"></div>
 
   <!-- Dark overlay -->
   <div class="position-absolute top-0 start-0 w-100 h-100"
