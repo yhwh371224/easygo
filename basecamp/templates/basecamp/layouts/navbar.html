@@ -1,3 +1,6 @@
+{% load static %}
+{% static 'basecamp/images/aboutus.webp' as page_bg %}
+
 <header class="header navbar navbar-expand-lg {{ navbar_theme|default:'navbar-dark' }} navbar-floating navbar-sticky" data-scroll-header data-fixed-element>
     <div class="container px-0 px-xl-3">
         <button class="navbar-toggler ms-n2 me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#primaryMenu" aria-label="Toggle navigation">
@@ -29,7 +32,7 @@
             <li class="nav-item dropdown dropdown-mega active">
                 <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">About Us</a>
                 <div class="dropdown-menu">
-                <p class="dropdown-column dropdown-column-img bg-secondary" style="background-image: url("{% static 'basecamp/images/aboutus.webp' %}");"></p>
+                <p class="dropdown-column dropdown-column-img bg-secondary" style="background-image: url('{{ page_bg }}');"></p>
                 <div class="dropdown-column">
                     <a class="dropdown-item" href="/about_us/">Learn About Us</a>
                     <a class="dropdown-item" href="/information/">More Information About Booking</a>
