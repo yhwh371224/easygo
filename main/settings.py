@@ -89,6 +89,7 @@ else:
     DEBUG = True
     COMPRESS_OFFLINE = False
     TURNSTILE_DISABLED = True
+    SESSION_COOKIE_SECURE = False
 
 INSTALLED_APPS = [
     'django.contrib.admin',
