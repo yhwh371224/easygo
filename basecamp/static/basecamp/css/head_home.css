@@ -34,7 +34,7 @@ body { margin: 0; font-family: Arial, sans-serif; }
   .option-beige       { background-color: beige; }
   .award-section-inner { min-height: 200px; }
   .award-panel-link   { color: white; text-decoration: none; }
-  .features-bg        { background-image: url('/static/basecamp/images/bg-pattern01.webp'); }
+  .features-bg        { background-image: url('/static/basecamp/photos/bg-pattern01.webp'); }
   .services-cover     { background-image: url('/static/basecamp/photos/services-cover.webp'); background-size: cover; }
   .testimonials-bg    { background-image: url('/static/basecamp/images/map.svg'); background-position: center left; background-size: cover; }
   .award-section      { background-image: url('/static/basecamp/images/Digital-Certificate.webp'); background-size: contain; background-repeat: no-repeat; background-position: center; height: 40vh; min-height: 200px; cursor: pointer; }
