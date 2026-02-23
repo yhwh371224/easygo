@@ -19,7 +19,6 @@
 	  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'basecamp/favi/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'basecamp/favi/favicon-16x16.png' %}">
     <link rel="manifest" href="{% static 'basecamp/favi/site.webmanifest' %}">      
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>    
     <link rel="stylesheet" href="/static/basecamp/css/flatpickr.min.css"/>
     <link rel="stylesheet" href="/static/basecamp/css/theme.min.css">
     <style>
@@ -54,12 +53,11 @@
 
     {% include "basecamp/layouts/footer.html" %}
 
-          <script src="/static/basecamp/js/bootstrap.bundle.min.js"></script>
+          <script src="/static/basecamp/js/bootstrap.bundle.min.js" defer></script>
           <script src="/static/basecamp/js/flatpickr.min.js" defer></script>
           <script src="/static/basecamp/js/date-picker.js" defer></script>
-          <script src="/static/basecamp/js/form_handler.js" defer></script>          
+          <script src="/static/basecamp/js/form_handler.js" defer></script>
           <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>              
-          <script src="/static/basecamp/js/theme.min.js"></script>              
           <script>
           document.addEventListener('DOMContentLoaded', function () {
               const form = document.getElementById('booking-form');
@@ -156,5 +154,7 @@
           <script>
             document.getElementById('current-year').textContent = new Date().getFullYear();
           </script>
+          <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" defer></script>
+          <script src="/static/basecamp/js/theme.min.js" defer></script>
   </body>
 </html>
