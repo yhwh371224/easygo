@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-{% load static %}\n{% load compress %}
+{% load static %}
+{% load compress %}
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -22,7 +23,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'basecamp/favi/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'basecamp/favi/favicon-16x16.png' %}">
     <link rel="manifest" href="{% static 'basecamp/favi/site.webmanifest' %}">
-    <link rel="stylesheet" href="/static/basecamp/css/home.css">
+    <link rel="stylesheet" href="{% static 'basecamp/css/home.css' %}">
     <style nonce="{{ csp_nonce }}">
     body { margin:0; font-family:Arial,sans-serif; }
     .award-badge { position:fixed; top:70px; left:40px; width:280px; height:auto; z-index:1000; }
@@ -53,7 +54,7 @@
     
     {% compress js %} 
     <script src="{% static 'basecamp/js/bootstrap.bundle.min.js' %}" defer nonce="{{ csp_nonce }}"></script>
-    <script src="/static/basecamp/js/smooth-scroll.polyfills.min.js" defer nonce="{{ csp_nonce }}"></script>
+    <script src="{% static 'basecamp/js/smooth-scroll.polyfills.min.js' %}" defer nonce="{{ csp_nonce }}"></script>
     <script src="{% static 'basecamp/js/theme.min.js' %}" defer nonce="{{ csp_nonce }}"></script>
     {% endcompress js %}
   </body>
