@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" media="screen" href="/static/basecamp/css/flatpickr.min.css"/>
     <link rel="stylesheet" media="screen" href="/static/basecamp/css/home.css">
-    <style>
+    <style nonce="{{ csp_nonce }}">
     body { margin:0; font-family:Arial,sans-serif; }
     </style>
     {% block extra_css %}{% endblock %}
@@ -25,13 +25,14 @@
 
     {% include "basecamp/layouts/footer.html" %}
 
-    <script src="/static/basecamp/js/bootstrap.bundle.min.js" defer></script>
-    <script src="/static/basecamp/js/smooth-scroll.polyfills.min.js" defer></script>
-    <script src="/static/basecamp/js/flatpickr.min.js" defer></script>
-    <script src="/static/basecamp/js/date-picker.js" defer></script>
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>              
+    {% compress js %}
+    <script src="/static/basecamp/js/bootstrap.bundle.min.js" defer nonce="{{ csp_nonce }}"></script>
+    <script src="/static/basecamp/js/smooth-scroll.polyfills.min.js" defer nonce="{{ csp_nonce }}"></script>
+    <script src="/static/basecamp/js/flatpickr.min.js" defer nonce="{{ csp_nonce }}"></script>
+    <script src="/static/basecamp/js/date-picker.js" defer nonce="{{ csp_nonce }}"></script>
+    {% endcompress %}          
     
-    <script>
+    <script nonce="{{ csp_nonce }}">
         let titleSpinnerInterval = null;
         const originalTitle = document.title;
 
@@ -112,6 +113,7 @@
             }
         });
     </script>
-    <script src="/static/basecamp/js/theme.min.js" defer></script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer nonce="{{ csp_nonce }}"></script>    
+    <script src="/static/basecamp/js/theme.min.js" defer nonce="{{ csp_nonce }}"></script>
   </body>
 </html>
