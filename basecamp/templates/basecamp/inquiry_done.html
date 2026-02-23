@@ -1,10 +1,11 @@
 {% extends 'basecamp/base/easygo_base_error.html' %}
 {% block content %}
+{% load static %}
 
 <!-- Hero -->
 <section class="bg-dark py-3" style="position: relative; overflow: hidden; min-height: 400px;">
   <div class="position-absolute top-0 start-0 w-100 h-100" style="
-      background-image: url('/static/basecamp/photos/bg-pattern02.webp');
+      background-image: url("{% static 'basecamp/photos/bg-pattern02.webp' %}");
       background-size: cover;
       background-position: center;
       z-index: 0;">

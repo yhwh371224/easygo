@@ -1,4 +1,5 @@
 {% extends 'basecamp/base/easygo_base.html' %}
+{% load static %}
 
 {% block title %}
   About EasyGo Airport Shuttle – Sydney Airport Transfers | Private, Luggage-Friendly Shuttle
@@ -12,7 +13,7 @@
 {% block extra_css %}
 <style>
   .hero-about         { position: relative; min-height: 600px; display: flex; align-items: center; overflow: hidden; padding-top: 80px;}
-  .hero-about::before { content: ""; position: absolute; inset: 0; background: url('/static/basecamp/photos/vehicle-1.PNG') center/cover; z-index: 0; }
+  .hero-about::before { content: ""; position: absolute; inset: 0; background: url("{% static 'basecamp/photos/vehicle-1.PNG' %}") center/cover; z-index: 0; }
   .hero-content       { position: relative; z-index: 2; }  
   .hero-overlap-container { margin-top: -120px; }
   .content-card-box   { padding: 3rem 3.5rem !important; }

@@ -12,7 +12,7 @@
 
 {% block extra_css %}
 <style>
-  .hero::before { background-image: url('/static/basecamp/photos/home_background1.webp'); }
+  .hero::before { background-image: url("{% static 'basecamp/photos/home_background1.webp' %}"); }
   .page-form { background-color: #fff; border-radius: 0.75rem; padding: 5rem 2rem 2rem; text-align: center; width: 100%; box-sizing: border-box; }
   .page-form hr { border: none; border-top: 1px solid #e0e0e0; opacity: 0.5; margin: 2.5rem 0; }
   .page-form h2 { color: #eb7828; margin-bottom: 2.2rem; }
