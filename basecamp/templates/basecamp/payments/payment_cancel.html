@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-{% load static %}\n{% load compress %}
+{% load static %}
 
 <html lang="en">
   <head>
@@ -22,7 +22,7 @@
     <link rel="manifest" href="{% static 'basecamp/favi/site.webmanifest' %}">    
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <!-- Main Theme Styles + Bootstrap-->
-    <link rel="stylesheet" media="screen" href="/static/basecamp/css/theme.min.css">
+    <link rel="stylesheet" media="screen" href="{% static 'basecamp/css/theme.min.css' %}">
   </head>
   <!-- Body-->
   <body>   
@@ -33,10 +33,10 @@
       <!-- Remove "navbar-sticky" class to make navigation bar scrollable with the page.-->
       <header class="header navbar navbar-expand-lg navbar-dark navbar-floating navbar-sticky" data-scroll-header data-fixed-element>
         <div class="container px-0 px-xl-3">
-          <button class="navbar-toggler ms-n2 me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#primaryMenu" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button><a class="navbar-brand flex-shrink-0 order-lg-1 mx-auto ms-lg-0 pe-lg-2 me-lg-4" href="/"><img class="navbar-floating-logo d-none d-lg-block" src="/static/basecamp/images/easygo_icon.webp" style="border-radius: 30%; height: auto; width: 45px" alt="EasyGo_image"></a>
+          <button class="navbar-toggler ms-n2 me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#primaryMenu" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button><a class="navbar-brand flex-shrink-0 order-lg-1 mx-auto ms-lg-0 pe-lg-2 me-lg-4" href="/"><img class="navbar-floating-logo d-none d-lg-block" src="{% static 'basecamp/images/easygo_icon.webp' %}" style="border-radius: 30%; height: auto; width: 45px" alt="EasyGo_image"></a>
           <div class="d-flex align-items-center order-lg-3 ms-lg-auto">
 			  <a class="nav-link-style fs-sm text-nowrap" data-view="modal-signin-view">
-				  <img class="fs-xl me-2 align-middle" src="/static/basecamp/images/easygo-logo-final.webp" alt="EasyGo_logo" width="120"></a>
+				  <img class="fs-xl me-2 align-middle" src="{% static 'basecamp/images/easygo-logo-final.webp' %}" alt="EasyGo_logo" width="120"></a>
 			</div>
           <div class="offcanvas offcanvas-collapse order-lg-2" id="primaryMenu">
             <div class="offcanvas-header navbar-shadow">
@@ -133,11 +133,9 @@
     <p class="fs-sm mb-3 order-md-1"><span class="text-light opacity-50 me-1">© 2023 EasyGo. All rights reserved. Made by</span><a class="nav-link-style nav-link-light" href="https://sungkam.github.io" target="_blank" rel="noopener">EasyCoding</a></p>
   </div>
 </footer>
-<!-- Vendor scrits: js libraries and plugins-->
-<script src="/static/basecamp/js/bootstrap.bundle.min.js"></script>
 
-<!-- Main theme script-->
-<script src="/static/basecamp/js/theme.min.js"></script>   
+<script src="{% static 'basecamp/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'basecamp/js/theme.min.js' %}"></script>   
 
 </body>
 </html>

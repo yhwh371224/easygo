@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-{% load static %}\n{% load compress %}
+{% load static %}
+{% load compress %}
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -16,7 +17,7 @@
 	  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'basecamp/favi/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'basecamp/favi/favicon-16x16.png' %}">
     <link rel="manifest" href="{% static 'basecamp/favi/site.webmanifest' %}">         
-    <link rel="stylesheet" media="screen" href="/static/basecamp/css/theme.min.css">
+    <link rel="stylesheet" media="screen" href="{% static 'basecamp/css/theme.min.css' %}">
     <style nonce="{{ csp_nonce }}">
     .award-badge{position:fixed;top:50px;left:40px;width:300px;height:auto;z-index:1000}
     @media(max-width:768px){.award-badge{top:30px;left:20px;width:180px}}
@@ -35,9 +36,9 @@
     {% include "basecamp/layouts/footer.html" %}
 
     {% compress js %}
-    <script src="/static/basecamp/js/bootstrap.bundle.min.js" defer></script>
-    <script src="/static/basecamp/js/smooth-scroll.polyfills.min.js" defer></script>
-    <script src="/static/basecamp/js/theme.min.js" defer></script> 
+    <script src="{% static 'basecamp/js/bootstrap.bundle.min.js' %}" defer></script>
+    <script src="{% static 'basecamp/js/smooth-scroll.polyfills.min.js' %}" defer></script>
+    <script src="{% static 'basecamp/js/theme.min.js' %}" defer></script> 
     {% endcompress js %}
         
     <script>
