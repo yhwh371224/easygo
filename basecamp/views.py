@@ -1145,11 +1145,7 @@ def confirmation_detail(request):
         
         p.save()        
 
-        rendering = render(request, 'basecamp/inquiry_done.html', {
-            'google_review_url': settings.GOOGLE_REVIEW_URL,            
-        })
-        
-        return rendering
+        return JsonResponse({'success': True, 'redirect_url': '/inquiry_done/'})
 
     else:
         return render(request, 'basecamp/booking/confirmation.html', {})
@@ -2037,11 +2033,7 @@ def return_trip_detail(request):
         
         p.save()
 
-        rendering = render(request, 'basecamp/inquiry_done.html', {
-            'google_review_url': settings.GOOGLE_REVIEW_URL,            
-        })   
-        
-        return rendering
+        return JsonResponse({'success': True, 'redirect_url': '/inquiry_done/'})
     
     else:
         return render(request, 'basecamp/booking/return_trip.html', {})  
