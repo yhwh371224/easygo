@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
-{% load compress %}
+{% static 'basecamp/photos/sydney_airport.webp' as page_bg %}
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -67,7 +67,7 @@
 
     <main class="page-wrapper">
       <section class="jarallax bg-dark py-7">
-        <div class="jarallax-img" fetchpriority="high" style="background-image: url("{% static 'basecamp/photos/sydney_airport.webp' %}"); min-height: 330px;"></div>
+        <div class="jarallax-img" fetchpriority="high" style="background-image: url('{{ page_bg }}'); min-height: 330px;"></div>
         <a href="{% static 'basecamp/images/Digital-Certificate.webp' %}" aria-label="View EasyGo 2024 Quality Business Award Certificate"><img src="{% static 'basecamp/images/award-badge.webp' %}" width="320" height="320" alt="EasyGo 2024 Quality Business Award Badge" class="award-badge"></a>
         <div class="container py-4 py-sm-5 text-center">
           <div class="py-md-6">
@@ -448,7 +448,6 @@
         </p>        
       </div>
     </footer> 
-    {% compress js %}
     <script src="{% static 'basecamp/js/bootstrap.bundle.min.js' %}" defer></script>
     <script src="{% static 'basecamp/js/smooth-scroll.polyfills.min.js' %}" defer></script>
     <script src="{% static 'basecamp/js/min/tiny-slider.js' %}" defer></script>
@@ -456,7 +455,6 @@
     <script src="{% static 'basecamp/js/date-picker.js' %}" defer></script>
     <script src="{% static 'basecamp/js/theme.min.js' %}" defer></script>
     <script src="{% static 'basecamp/js/home.js' %}" defer></script>
-    {% endcompress js %}
     <!-- JavaScript to auto-update the year -->
     <script nonce="{{ CSP_NONCE }}">
       document.getElementById('current-year').textContent = new Date().getFullYear();
