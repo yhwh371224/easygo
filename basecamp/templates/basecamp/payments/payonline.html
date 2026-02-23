@@ -23,72 +23,19 @@
 
     <!-- CSP-safe inline styles -->
     <style nonce="{{ csp_nonce }}">
-      .custom-card {
-        padding: 2rem;
-        background-color: #f0f8ff;
-        z-index: 10;
-        position: relative;
-      }
-      .jarallax-img {
-        background-image: url('/static/basecamp/images/page-title-bg.webp');
-      }
-      .col-offset-top {
-        margin-top: -280px;
-      }
-      /* Payment instructions card */
-      .card.info .card-header {
-        background-color: #f0f8ff;
-      }
-      .card.info .card-body {
-        padding: 1.75rem;      /* 카드 안쪽 여백 */
-      }
-      .card.info .card-body p {
-        margin-bottom: 2.4rem; /* 문단 간 간격 */
-      }
-      .card.info .card-body p:last-child {
-        margin-bottom: 0;      /* 마지막 문단만 여백 제거 */
-      }
-      /* 제목(굵은 글씨)과 본문 간격 */
-      .card.info .card-body strong {
-        display: inline-block;
-        font-size: 1rem;
-        font-weight: bold; 
-      }     
-      .card.info .info-step {
-        margin-bottom: 2.4rem; 
-      }
-      .card.info .info-step .info-option {
-        display: block;
-        margin-left: 1.5rem;    
-        margin-top: 0.3rem; 
-        margin-bottom: 0.9rem;  
-      }
-      .card.info .info-step .info-option:last-child {
-        margin-bottom: 0;
-      }
-      .card.info .info-step strong {
-        display: inline-block;
-        margin-bottom: 0.2rem;
-        font-size: 0.9rem;
-      }
-
-      @media (max-width: 767px) { 
-        .jarallax-img {
-          min-height: 400px; 
-        }
-        .col-offset-top {
-          margin-top: -100px; 
-        }
-      }
-      @media (max-width: 767px) {
-        .card.info .card-body {
-          padding: 1.4rem;
-        }
-
-        .card.info .card-body p {
-          margin-bottom: 1.2rem;
-        }
-      }
+    .custom-card{padding:2rem;background-color:#f0f8ff;z-index:10;position:relative}
+    .jarallax-img{background-image:url('/static/basecamp/images/page-title-bg.webp')}
+    .col-offset-top{margin-top:-280px}
+    .card.info .card-header{background-color:#f0f8ff}
+    .card.info .card-body{padding:1.75rem}
+    .card.info .card-body p{margin-bottom:2.4rem}
+    .card.info .card-body p:last-child{margin-bottom:0}
+    .card.info .card-body strong{display:inline-block;font-size:1rem;font-weight:bold}
+    .card.info .info-step{margin-bottom:2.4rem}
+    .card.info .info-step .info-option{display:block;margin-left:1.5rem;margin-top:0.3rem;margin-bottom:0.9rem}
+    .card.info .info-step .info-option:last-child{margin-bottom:0}
+    .card.info .info-step strong{display:inline-block;margin-bottom:0.2rem;font-size:0.9rem}
+    @media(max-width:767px){.jarallax-img{min-height:400px}.col-offset-top{margin-top:-100px}.card.info .card-body{padding:1.4rem}.card.info .card-body p{margin-bottom:1.2rem}}
     </style>
   </head>
 
@@ -242,6 +189,7 @@
     {% include "basecamp/layouts/footer.html" %}
 
     <script src="/static/basecamp/js/bootstrap.bundle.min.js" defer nonce="{{ csp_nonce }}"></script>
+    <script src="/static/basecamp/js/smooth-scroll.polyfills.min.js" defer nonce="{{ csp_nonce }}"></script>
     <script src="/static/basecamp/js/theme.min.js" defer nonce="{{ csp_nonce }}"></script>
   </body>
 </html>
