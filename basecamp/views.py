@@ -203,7 +203,7 @@ def cruise_booking(request):
 
 
 def cruise_inquiry(request):
-    return render(request, 'basecamp/booking/cruise_booking.html')
+    return render(request, 'basecamp/booking/cruise_inquiry.html')
 
 
 def error(request): 

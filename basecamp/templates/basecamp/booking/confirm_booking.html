@@ -1,29 +1,17 @@
 {% extends 'basecamp/base/easygo_base.html' %}
-{% block content %}
 {% load static %}
 
+{% block extra_css %}
 <style>
-  .hero-confirm {
-    position: relative;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    overflow: hidden;
-  }
-  .hero-confirm::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image: url("{% static 'basecamp/images/page-title-bg.webp' %}");
-    background-size: cover;
-    background-position: center center;
-    z-index: 0;
-  }
-  .admin-btn:hover {
-    opacity: 0.35 !important;
-  }
+.hero-confirm { position: relative; min-height: 100vh; display: flex; align-items: center; overflow: hidden; }
+.hero-confirm::before { content:""; position: absolute; inset:0; background-image:url("{% static 'basecamp/images/page-title-bg.webp' %}"); background-size: cover; background-position: center center; z-index:0; }
+.admin-btn { opacity:0; position: fixed; bottom:30px; left:50%; transform:translateX(-50%); font-size:11px; transition:opacity 0.3s ease; pointer-events:auto; z-index:9999; padding:4px 8px; min-width:80px; }
+.admin-btn:hover { opacity:0.9 !important; }
+@media (max-width:576px) { .admin-btn { bottom:15px; font-size:10px; min-width:70px; padding:3px 6px; } }
 </style>
+{% endblock %}
 
+{% block content %}
 <section class="hero-confirm">
   <span class="position-absolute top-0 start-0 w-100 h-100 bg-gradient opacity-80" style="z-index:1;"></span>
   <div class="container py-5" style="position: relative; z-index: 2;">
@@ -58,13 +46,6 @@
               <button class="btn btn-primary" type="submit" id="submitButton">Submit</button>
             </div>
 
-            <!-- Admin Access Button -->
-            <div class="text-center pt-2">
-              <button type="button" id="admin-access-btn" class="btn btn-secondary btn-sm admin-btn" style="opacity: 0.15; font-size: 11px;">
-                Admin Access
-              </button>
-            </div>
-
             <!-- Admin Fields (hidden initially) -->
             <div class="mb-3 pb-1 d-none" id="admin-fields">
               <label class="form-label text-warning">Admin Use Only – Payment Override</label>
@@ -87,6 +68,10 @@
       </div>
     </div>
   </div>
+  <!-- Admin Access Button (폼 바깥, 화면 중앙) -->
+  <button type="button" id="admin-access-btn" class="btn btn-secondary btn-sm admin-btn">
+    Admin Access
+  </button>
 </section>
 
 <script src="{% static 'basecamp/js/confirm_booking.js' %}" defer></script>
