@@ -2,6 +2,82 @@
   'use strict';
 
   /**
+   * Fix aria-hidden focusable descendants in tns (tiny-slider) carousels.
+   *
+   * tiny-slider sets aria-hidden="true" on inactive .tns-item slides and
+   * tabindex="-1" on the slide element itself, but does NOT propagate
+   * tabindex="-1" to focusable descendants (links, buttons, etc.).  This
+   * means keyboard users can still Tab into content that is hidden from
+   * screen readers — a WCAG 2.1 SC 1.3.1 / 4.1.2 violation.
+   *
+   * This fix uses a MutationObserver to detect aria-hidden changes on slide
+   * items and mirrors tabindex="-1" / removal onto all focusable descendants.
+   */
+  var carouselA11yFix = function () {
+    var FOCUSABLE = [
+      'a[href]',
+      'area[href]',
+      'button:not([disabled])',
+      'input:not([disabled])',
+      'select:not([disabled])',
+      'textarea:not([disabled])',
+      '[tabindex]:not([tabindex="-1"])'
+    ].join(',');
+
+    function syncSlideTabbing(slide) {
+      var isHidden = slide.getAttribute('aria-hidden') === 'true';
+      var focusables = slide.querySelectorAll(FOCUSABLE);
+      for (var i = 0; i < focusables.length; i++) {
+        if (isHidden) {
+          focusables[i].setAttribute('tabindex', '-1');
+        } else {
+          focusables[i].removeAttribute('tabindex');
+        }
+      }
+    }
+
+    function watchSlide(slide) {
+      syncSlideTabbing(slide);
+      new MutationObserver(function (mutations) {
+        for (var i = 0; i < mutations.length; i++) {
+          if (mutations[i].attributeName === 'aria-hidden') {
+            syncSlideTabbing(mutations[i].target);
+          }
+        }
+      }).observe(slide, { attributes: true, attributeFilter: ['aria-hidden'] });
+    }
+
+    function initSlider(slider) {
+      var slides = slider.querySelectorAll('.tns-item');
+      for (var i = 0; i < slides.length; i++) {
+        watchSlide(slides[i]);
+      }
+    }
+
+    // Watch for tns creating .tns-slider wrappers dynamically (tns injects
+    // a new inner wrapper element with this class during initialisation).
+    var domObserver = new MutationObserver(function (mutations) {
+      for (var i = 0; i < mutations.length; i++) {
+        var added = mutations[i].addedNodes;
+        for (var j = 0; j < added.length; j++) {
+          if (added[j].nodeType === 1 && added[j].classList.contains('tns-slider')) {
+            initSlider(added[j]);
+          }
+        }
+      }
+    });
+    domObserver.observe(document.documentElement, { childList: true, subtree: true });
+
+    // Also handle any sliders already present when this script runs.
+    document.addEventListener('DOMContentLoaded', function () {
+      var existing = document.querySelectorAll('.tns-slider');
+      for (var i = 0; i < existing.length; i++) {
+        initSlider(existing[i]);
+      }
+    });
+  }();
+
+  /**
    * Enable sticky behaviour of navigation bar on page scroll
    * Extracted from theme.js (Around Bootstrap Template)
    */
