@@ -1,10 +1,7 @@
 {% extends 'basecamp/base/easygo_base_form.html' %}
 {% load static %}
 
-
-{% block title %}
-EasyGo Airport Shuttle Booking Form – Sydney Airport Transfers
-{% endblock %}
+{% block title %}EasyGo Airport Shuttle Booking Form – Sydney Airport Transfers{% endblock %}
 
 {% block meta %}
 <meta name="description" content="Book your Sydney Airport transfer quickly and easily with EasyGo Airport Shuttle. Fill out our booking form for private, luggage-friendly shuttle service.">
@@ -12,30 +9,27 @@ EasyGo Airport Shuttle Booking Form – Sydney Airport Transfers
 <meta name="author" content="easygoshuttle.com.au">
 {% endblock %}
 
-{% static 'basecamp/images/page-title-bg.webp' as page_bg %}
+{% block extra_css %}
+<style nonce="{{ csp_nonce }}">
+.booking-hero {position: relative; background-image: url("{% static 'basecamp/images/page-title-bg.webp' %}"); background-size: cover; background-position: center; padding-top: 5rem; padding-bottom: 7rem;}
+</style>
+{% endblock %}
 
 {% block content %}
 
-      <!-- Page title-->
-      <section class="jarallax bg-gradient pt-5 pb-7 pt-md-7" data-jarallax data-speed="0.1"><span class="position-absolute top-0 start-0 w-100 h-100 bg-gradient opacity-70"></span>
-        <div class="jarallax-img"
-			style="background-image: url('{{ page_bg }}');">
-		</div>
+    <!-- Booking-Hero -->
+    <section class="jarallax booking-hero">
+		<span class="position-absolute top-0 start-0 w-100 h-100 bg-gradient opacity-50"></span>
         <div class="shape shape-bottom shape-slant bg-body">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 260">
             <polygon fill="currentColor" points="0,257 0,260 3000,260 3000,0"></polygon>
           </svg>
         </div>
-		  <br>
-		  <br>
-		  <br>
-		  <br>
-        <div class="container position-relative zindex-5 pt-3 pb-7 pt-md-0">
+        <div class="container position-relative zindex-5 pt-5 pb-7 pt-md-5">
           <div class="row justify-content-center pb-7">
-            <div class="col-lg-10">
-              <h1 class="text-light">Booking Confirmation Form</h1>
-              <div class="active" style="color:white">Please fill out the booking form</div>
-			  <br>			  
+            <div class="col-lg-10 mt-lg-5">
+              <h1 class="text-light">Booking Request Form</h1>
+              <div class="active" style="color:white">Please complete the form to get the exact price</div>
             </div>
           </div>
         </div>
@@ -43,7 +37,7 @@ EasyGo Airport Shuttle Booking Form – Sydney Airport Transfers
 
  	<section class="container position-relative zindex-5 px-0 px-xl-3">
         <div class="row">
-          <div class="col-lg-7 col-md-7 pb-2 mb-5" style="margin-top: -260px;">
+          <div class="col-lg-7 col-md-7 pb-2 mb-5 booking-form-col">
             <div class="card border-1 shadow-lg">
       <!-- Page content-->	 
       <!-- Contact form + details-->  
