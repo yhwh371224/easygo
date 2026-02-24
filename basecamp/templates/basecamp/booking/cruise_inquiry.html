@@ -12,12 +12,13 @@
 {% block extra_css %}
 <style nonce="{{ csp_nonce }}">
 .booking-hero {position: relative; background-image: url("{% static 'basecamp/photos/cruise2.webp' %}"); background-size: cover; background-position: center; padding-top: 5rem; padding-bottom: 7rem;}
+.booking-form-col {margin-top: -220px;}
 </style>
 {% endblock %}
 
 {% block content %}
     <!-- Booking-Hero -->
-    <section class="booking-hero">
+    <section class="jarallax booking-hero">
 		<span class="position-absolute top-0 start-0 w-100 h-100 bg-gradient opacity-70"></span>
         <div class="shape shape-bottom shape-slant bg-body">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 260">

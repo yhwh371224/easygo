@@ -13,38 +13,44 @@
 <meta name="author" content="easygoshuttle.com.au">
 {% endblock %}
 
-{% static 'basecamp/images/page-title-bg.webp' as page_bg %}
+{% block extra_css %}
+<style nonce="{{ csp_nonce }}">
+.booking-hero {position: relative; background-image: url("{% static 'basecamp/images/page-title-bg.webp' %}"); background-size: cover; background-position: center; padding-top: 5rem; padding-bottom: 7rem;}
+.booking-form-col {margin-top: -220px;}
+</style>
+{% endblock %}
 
 {% block content %}
+    <section class="jarallax booking-hero">
+		<span class="position-absolute top-0 start-0 w-100 h-100 bg-gradient opacity-70"></span>
+        <div class="shape shape-bottom shape-slant bg-body">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 260">
+            <polygon fill="currentColor" points="0,257 0,260 3000,260 3000,0"></polygon>
+          </svg>
+        </div>
 
-      <!-- Page content-->
-      <!-- Page title-->
-      <section class="jarallax bg-gradient pt-5 pb-7 pt-md-7" data-jarallax data-speed="0.1">
-        <div class="jarallax-img" style="background-image: url('{{ page_bg }}');"></div>    
-		<span class="position-absolute top-0 start-0 w-100 h-100 bg-gradient opacity-70" style="z-index: 1;"></span>		
-		<div class="container position-relative zindex-5" style="z-index: 2;"></div>
-		<div class="shape shape-bottom shape-slant bg-body" style="z-index: 3;">
-		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 260">
-			<polygon fill="currentColor" points="0,257 0,260 3000,260 3000,0"></polygon>
-		</svg>
-		</div>
-		  <br>
-		  <br>
-		  <br>
-		  <br>
         <div class="container position-relative zindex-5 pt-3 pb-7 pt-md-0">
           <div class="row justify-content-center pb-7">
-            <div class="col-lg-10">
-              <h1 class="text-light">Booking Confirmation Form</h1>
-              <div class="active" style="color:white">Please fill out the booking form&nbsp;		  
+            <div class="col-lg-10 mt-3 mt-md-5">
+              <h1 class="text-light mb-5">Booking Confirmation Form</h1>
+              <div class="active mb-5" style="color:white">Please fill out the booking form&nbsp;		  
 				<a href="/horeb_yhwh/"><img src="https://s3.ap-southeast-2.amazonaws.com/easygoshuttle.com.au/thumbsup_120241.webp" title="source: aws_s3" alt="thumps_up" width="30"></a>
 			  </div>
-			  <br>
-			  <br>
-				<a class="btn btn-primary" href="/sending_email_first/">Sending Email only (first)</a>&nbsp;|&nbsp;<a class="btn btn-success" href="/sending_email_second/">Sending Email only (second)</a><br>
-				<a class="btn btn-warning" href="/return_trip/">return_trip</a>&nbsp;|&nbsp;<a class="btn btn-info" href="/invoice-6gv4vPYs/">Send_invoice</a><br>
-				<a class="btn btn-primary" href="/email_dispatch/">email_dispatch</a>&nbsp;|&nbsp;<a class="btn btn-info" href="/confirm_booking/">confirm_booking</a><br>				
-				<a class="btn btn-primary" href="/sending_email_input_data/">Sending email for wrong data</a>&nbsp;<br>				
+			  <div class="mb-2">
+				<a class="btn btn-primary me-1" href="/sending_email_first/">Sending Email only (first)</a>
+				<a class="btn btn-success" href="/sending_email_second/">Sending Email only (second)</a>
+				</div>
+				<div class="mb-2">
+				<a class="btn btn-warning me-1" href="/return_trip/">return_trip</a>
+				<a class="btn btn-info" href="/invoice-6gv4vPYs/">Send_invoice</a>
+				</div>
+				<div class="mb-2">
+				<a class="btn btn-primary me-1" href="/email_dispatch/">email_dispatch</a>
+				<a class="btn btn-info" href="/confirm_booking/">confirm_booking</a>
+				</div>
+				<div class="mb-2">
+				<a class="btn btn-primary" href="/sending_email_input_data/">Sending email for wrong data</a>
+			  </div>	
 			</div>
             </div>
           </div>
@@ -53,7 +59,7 @@
 
  	<section class="container position-relative zindex-5 px-0 px-xl-3">
         <div class="row">
-          <div class="col-lg-7 col-md-7 pb-2 mb-5" style="margin-top: -260px;">
+          <div class="col-lg-7 col-md-7 pb-2 mb-5 booking-form-col">
             <div class="card border-1 shadow-lg">    
             <form method="post" enctype="multipart/form-data" action="/confirmation_detail/" id="booking-form" class="card-body needs-validation p-5" >
                 {% csrf_token %}
