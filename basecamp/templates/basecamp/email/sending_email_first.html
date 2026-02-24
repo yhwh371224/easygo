@@ -1,7 +1,6 @@
 {% extends 'basecamp/base/easygo_base.html' %}
 
 {% block content %}
-
 	<!-- Form for sending first email -->
 	<section class="container pt-5 pb-5 px-3" style="margin-top: 5rem;">
         <div class="row justify-content-center">
@@ -15,12 +14,12 @@
 
 					{% csrf_token %}
 
-					<div class="card text-white bg-secondary" style="padding: 2.5rem 3rem;">
+					<div class="card text-dark bg-secondary" style="padding: 2.5rem 3rem;">
 
-						<h5 class="mb-5 pb-3">Sending email first only</h5>
+						<h5 class="mb-3 pb-1">Single trip email</h5>
 
 						<!-- Email -->
-						<div class="mb-5 pb-3">
+						<div class="mb-3 pb-1">
 							<label class="form-label mb-3" for="email">
 								Email address <sup class="text-danger ms-1">*</sup>
 							</label>
@@ -36,8 +35,8 @@
 						</div>
 
 						<!-- Prepay -->
-						<div class="mb-5 pb-3">
-							<div class="form-check mt-3">
+						<div class="mb-3 pb-1">
+							<div class="form-check d-flex align-items-center gap-2">
 								<input class="form-check-input" type="checkbox" name="prepay" value="True" id="prepay">
 								<label class="form-check-label fs-6" for="prepay">It has to be prepaid</label>
 								<div class="invalid-feedback">Please check this box for prepay</div>
@@ -45,8 +44,8 @@
 						</div>
 
 						<!-- Cash -->
-						<div class="mb-5 pb-3">
-							<div class="form-check mt-3">
+						<div class="mb-3 pb-1">
+							<div class="form-check d-flex align-items-center gap-2">
 								<input class="form-check-input" type="checkbox" name="cash" value="True" id="cash">
 								<label class="form-check-label fs-6" for="cash">It has to be cash</label>
 								<div class="invalid-feedback">Please check this box for cash</div>
