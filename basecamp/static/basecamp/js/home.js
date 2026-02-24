@@ -17,12 +17,10 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // 딜레이 늘리기
   setTimeout(fixSliderA11y, 500);
-  setTimeout(fixSliderA11y, 1000);  // 한 번 더 실행
-  setTimeout(fixSliderA11y, 2000);  // 혹시 늦게 초기화되는 경우 대비
+  setTimeout(fixSliderA11y, 1000); 
+  setTimeout(fixSliderA11y, 2000);  
 
-  // 슬라이드 변경 감지 - parentElement까지 감시 범위 확장
   const sliderContainer = document.querySelector('.tns-carousel-wrapper');
   if (sliderContainer) {
     const observer = new MutationObserver(fixSliderA11y);
