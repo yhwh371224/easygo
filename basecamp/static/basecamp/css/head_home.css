@@ -1,8 +1,9 @@
 body { margin: 0; font-family: Arial, sans-serif; }
   .jarallax-img { background-size: cover; background-position: center; }
   .jarallax-hero { background-image: url('/static/basecamp/photos/sydney_airport.webp'); min-height: 330px; }
+  section.jarallax { display: flex; flex-direction: column; justify-content: space-between; }
   .booking-form-wrapper { margin-top: -70px; position: relative; z-index: 5; }
-  .booking-form-top { margin-top: -120px; }
+  .booking-form-top { margin-top: auto; margin-bottom: -98px; position: relative; z-index: 10; }
   .hero-about         { position: relative; min-height: 600px; display: flex; align-items: center; overflow: hidden; padding-top: 80px; }
   .hero-about::before { content: ""; position: absolute; inset: 0; background: url('/static/basecamp/photos/vehicle-1.PNG') center/cover; z-index: 0; }
   .hero-content       { position: relative; z-index: 2; }
@@ -39,7 +40,6 @@ body { margin: 0; font-family: Arial, sans-serif; }
   .testimonials-bg    { background-image: url('/static/basecamp/images/map.svg'); background-position: center left; background-size: cover; }
   .award-section      { background-image: url('/static/basecamp/images/Digital-Certificate.webp'); background-size: contain; background-repeat: no-repeat; background-position: center; height: 40vh; min-height: 200px; cursor: pointer; }
   @media (max-width: 768px) {
-    .booking-form-wrapper { margin-top: -190px; }
     .hero-about { min-height: 400px; }
     .hero-about h1 { font-size: 1.6rem; }
     .hero-overlap-container { margin-top: -60px; }
@@ -48,7 +48,5 @@ body { margin: 0; font-family: Arial, sans-serif; }
     #booking-form { margin-top: 5px !important; }
   }
   @media (max-width: 480px) {
-    .booking-form-wrapper { margin-top: -140px; }
     .award-badge { top: 45px; left: 10px; width: 100px; }
-    #booking-form { margin-top: 10px !important; }
   }
