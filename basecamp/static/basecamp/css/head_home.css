@@ -1,9 +1,7 @@
 body { margin: 0; font-family: Arial, sans-serif; }
   .jarallax-img { background-size: cover; background-position: center; }
   .jarallax-hero { background-image: url('/static/basecamp/photos/sydney_airport.webp'); min-height: 330px; }
-  section.jarallax { display: flex; flex-direction: column; justify-content: space-between; }
-  .booking-form-wrapper { margin-top: -70px; position: relative; z-index: 5; }
-  .booking-form-top { margin-top: auto; margin-bottom: -98px; position: relative; z-index: 10; }
+  .booking-form-top { margin-top: -138px; position: relative; z-index: 10; }
   .hero-about         { position: relative; min-height: 600px; display: flex; align-items: center; overflow: hidden; padding-top: 80px; }
   .hero-about::before { content: ""; position: absolute; inset: 0; background: url('/static/basecamp/photos/vehicle-1.PNG') center/cover; z-index: 0; }
   .hero-content       { position: relative; z-index: 2; }
