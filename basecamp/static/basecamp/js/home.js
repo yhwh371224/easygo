@@ -17,17 +17,22 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // 초기 실행 (슬라이더 초기화 후 약간 딜레이)
+  // 딜레이 늘리기
   setTimeout(fixSliderA11y, 500);
+  setTimeout(fixSliderA11y, 1000);  // 한 번 더 실행
+  setTimeout(fixSliderA11y, 2000);  // 혹시 늦게 초기화되는 경우 대비
 
-  // 슬라이드 변경 감지
-  const sliderContainer = document.querySelector('.tns-carousel-inner');
+  // 슬라이드 변경 감지 - parentElement까지 감시 범위 확장
+  const sliderContainer = document.querySelector('.tns-carousel-wrapper');
   if (sliderContainer) {
     const observer = new MutationObserver(fixSliderA11y);
-    observer.observe(sliderContainer, { attributes: true, subtree: true });
+    observer.observe(sliderContainer, { 
+      attributes: true, 
+      subtree: true,
+      attributeFilter: ['aria-hidden']  // aria-hidden 변경만 감지
+    });
   }
 });
-
 
   // 2. 폼 위치 자동 조정
   // function adjustFormPosition() {
