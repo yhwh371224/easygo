@@ -1,4 +1,5 @@
 body { margin: 0; font-family: Arial, sans-serif; }
+  .page-wrapper { width: 100%; overflow-x: hidden; }
   .jarallax-img { background-size: cover; background-position: center; }
   .jarallax-hero { background-image: url('/static/basecamp/photos/sydney_airport.webp'); min-height: 330px; }
   .booking-form-top { margin-top: -138px; position: relative; z-index: 10; }
@@ -30,6 +31,10 @@ body { margin: 0; font-family: Arial, sans-serif; }
   .intro-text         { color: #b9cbdb; }
   .intro-top          { margin-top: 8rem; }
   .service-options-top { margin-top: 4rem; }
+  .card-img-top { position: relative; width: 100%; height: 220px; overflow: hidden; border-radius: 0.25rem; }
+  .card-img-top img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .tns-carousel-inner .card { display: flex; flex-direction: column; height: 100%; }
+  .card-body { flex-grow: 1; }
   .option-beige       { background-color: beige; }
   .award-section-inner { min-height: 200px; }
   .award-panel-link   { color: white; text-decoration: none; }
@@ -45,6 +50,9 @@ body { margin: 0; font-family: Arial, sans-serif; }
     .award-badge { top: 25px; left: 20px; width: 180px; }
     #booking-form { margin-top: 5px !important; }
   }
-  @media (max-width: 480px) {
-    .award-badge { top: 45px; left: 10px; width: 100px; }
+  @media (max-width: 576px) {
+    .award-badge { top: 45px; left: 10px; width: 100px; } 
+    .card-img-top { height: 140px; }
   }
+  @media (max-width: 992px) { .card-img-top { height: 180px; } }
+  @media (min-width: 992px) and (max-width: 1279px) { .container { max-width: 100%; } }

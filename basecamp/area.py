@@ -3,37 +3,37 @@ def get_suburbs():
         'Sydney City Hotels': {
             'price': 35,
             'image_url': '/static/basecamp/photos/sydney-city-hotels.webp',
-            'description': 'Easygo Airport Shuttle provide a shared ride for $25 per person and a private ride for $70 tow persons',
+            'description': 'EasyGo Airport Shuttle offers shared rides starting from $35, and private rides starting from $60',
             'extra': ''
         },        
         'Chatswood': {
             'price': 70,
             'image_url': '/static/basecamp/photos/chatswood.webp',
-            'description': 'Easygo Airport Shuttle provide a private/shared ride for two persons: $80, for three persons: $90',
+            'description': 'EasyGo Airport Shuttle offers shared rides starting from $70, and private rides starting from $90',
             'extra': '*additional $10 per person*'
         },    
         'St Ives': {
-            'price': 100,
+            'price': 90,
             'image_url': '/static/basecamp/photos/st-ives.webp',
-            'description': 'Easygo Airport Shuttle provide a private/shared ride for two persons: $110, for three persons: $120',
+            'description': 'EasyGo Airport Shuttle offers shared rides starting from $90, and private rides starting from $100',
             'extra': '*additional $10 per person*'
         },  
         'Ryde': {
             'price': 70,
             'image_url': '/static/basecamp/photos/ryde.webp',
-            'description': 'Easygo Airport Shuttle provide a private/shared ride for two persons: $80, for three persons: $90',
+            'description': 'EasyGo Airport Shuttle offers shared rides starting from $70, and private rides starting from $90',
             'extra': '*additional $10 per person*'
         },                     
         'Hornsby': {
-            'price': 120,
+            'price': 110,
             'image_url': '/static/basecamp/photos/hornsby.webp',
-            'description': 'EasyGo Airport Shuttle provide a private/shared ride for two persons: $130, for three persons: $140',
+            'description': 'EasyGo Airport Shuttle offers shared rides starting from $110, and private rides starting from $125',
             'extra': '*additional $10 per person*'
         },  
         'Blacktown': {
-            'price': 120,
+            'price': 110,
             'image_url': '/static/basecamp/photos/blacktown.webp',
-            'description': 'EasyGo Airport Shuttle provide a private/shared ride for two persons: $130, for three persons: $140',
+            'description': 'EasyGo Airport Shuttle offers shared rides starting from $110, and private rides starting from $125',
             'extra': '*additional $10 per person*'
         },  
 
