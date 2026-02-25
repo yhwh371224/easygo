@@ -1,19 +1,9 @@
 {% extends 'basecamp/base/easygo_base.html' %}
 
 {% block extra_css %}
-<style>
-  .form-check-label {
-    color: #000000 !important;
-  }
-  .form-check-label,
-	small {
-	color: #000000 !important;
-  }
-</style>
 {% endblock %}
 
 {% block content %}
-
 	<!-- Form for email dispatch -->
  	<section class="container pt-5 pb-5 px-3" style="margin-top: 5rem;">
         <div class="row justify-content-center">
@@ -24,14 +14,10 @@
 					action="/email_dispatch_detail/"
 					id="booking-form"
 					class="card-body needs-validation p-4 m-3">
-
 					{% csrf_token %}
-					{# <input type="text" name="phone_verify" value="" style="display:none !important" tabindex="-1" autocomplete="off"> #}
-
-					<div class="card text-white bg-secondary" style="padding: 2.5rem 3rem;">
-
+					<div class="card bg-secondary" style="padding: 2.5rem 3rem;">
 						<!-- Email -->
-						<div class="mb-5 pb-3">
+						<div class="mb-4 pb-1">
 							<label class="form-label mb-3" for="email">
 								Email address <sup class="text-danger ms-1">*</sup>
 							</label>
@@ -45,9 +31,8 @@
 								Please enter a valid email address!
 							</div>
 						</div>
-
 						<!-- Select Option -->
-						<div class="mb-5 pb-3">
+						<div class="mb-4 pb-1">
 							<label class="form-label mb-3" for="selected_option">Select an Option:</label>
 							<select class="form-select" name="selected_option" id="selected_option" required>
 								<option disabled selected value="">Select your option...</option>
@@ -81,9 +66,8 @@
 								<option value="Booking delay 1">Booking delay 1</option>
 							</select>
 						</div>
-
 						<!-- Payment Method (RADIO) -->
-						<div class="mb-5 pb-3">
+						<div class="mb-4 pb-1">
 							<p class="form-label mb-3">Payment cash/card method</p>
 							<div class="form-check mt-3">
 								<input class="form-check-input"
@@ -91,7 +75,7 @@
 									name="payment_method"
 									value="cash"
 									id="payment_method_cash">
-								<label class="form-check-label fs-6" for="payment_method_cash">Cash</label>
+								<label class="fs-6" for="payment_method_cash">Cash</label>
 							</div>
 
 							<div class="form-check mt-3">
@@ -100,12 +84,11 @@
 									name="payment_method"
 									value="card"
 									id="payment_method_card">
-								<label class="form-check-label fs-6" for="payment_method_card">Card</label>
+								<label class="fs-6" for="payment_method_card">Card</label>
 							</div>
 						</div>
-
 						<!-- Payment Amount -->
-						<div class="mb-5 pb-3">
+						<div class="mb-4 pb-1">
 							<label class="form-label mb-3" for="payment_amount">Amount paid</label>
 							<input class="form-control"
 								type="number"
@@ -118,57 +101,45 @@
 								'Gratitude For Payment' only
 							</small>
 						</div>
-
 						<!-- Adjusted Pickup Time -->
-						<div class="mb-5 pb-3">
+						<div class="mb-4 pb-1">
 							<label class="form-label mb-3" for="adjusted_pickup_time">Adjusted pickup time</label>
 							<input class="form-control"
-								type="time"
+								type="text"
 								name="adjusted_pickup_time"
 								id="adjusted_pickup_time">
 							<small>
 								Use only when pickup time has changed
 							</small>
-						</div>		
-						
+						</div>
 						<!-- Remain First or Second Booking -->
 						<div class="mb-0">
 							<p class="form-label mb-3">Booking options to remain (체크 둘 다 안하면 모두 캔슬)</p>
 
 							<div class="form-check mt-3">
 								<input class="form-check-input" type="checkbox" name="remain_first_booking" id="remain_first_booking">
-								<label class="form-check-label fs-6" for="remain_first_booking">
+								<label class="fs-6" for="remain_first_booking">
 									Keep first booking (체크하면 두번째만 캔슬)
 								</label>
 							</div>
 
 							<div class="form-check mt-3">
 								<input class="form-check-input" type="checkbox" name="remain_return_booking" id="remain_return_booking">
-								<label class="form-check-label fs-6" for="remain_return_booking">
+								<label class="fs-6" for="remain_return_booking">
 									Keep second booking (체크하면 첫번째만 캔슬)
 								</label>
 							</div>
 						</div>
 					</div>
-
 					<!-- Submit -->
 					<div class="text-center mt-4 mb-2">
 						<button class="btn btn-primary" type="submit" id="submitButton">
 							Submit
 						</button>
 					</div>
-
-					<div class="mt-3">
-						<small>
-							This site is protected by Cloudflare Turnstile to keep your data safe and secure
-							<a href="https://www.cloudflare.com/privacypolicy/">Privacy Policy</a> and
-							<a href="https://www.cloudflare.com/website-terms/">Terms of Service</a> apply.
-						</small>
-					</div>
-
 				</form>
-				</div>
+			  </div>
 		  </div>
-	</div>
+	    </div>
 	</section>	
 {% endblock %}
