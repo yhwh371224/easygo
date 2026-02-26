@@ -10,7 +10,7 @@
     #booking-form { margin-top: 5px !important; transform: translateY(-20px);}
   }
   @media (max-width: 576px) {
-    .award-badge { top: 10px; left: 10px; width: 80px !important; } 
+    .award-badge { top: 10px; left: 15px; width: 80px !important; } 
     .card-img-top { height: 140px; }
   }
   @media (max-width: 992px) { .card-img-top { height: 180px; } }
@@ -30,7 +30,7 @@ body { margin: 0; font-family: Arial, sans-serif; }
   .entry-content li   { margin-bottom: 1rem; line-height: 1.8; }
   .entry-content ul, .entry-content ul ul { list-style: none; padding-left: 2rem; margin-top: 1rem; }
   .entry-content ul ul { padding-left: 1.5rem; margin-top: 0.5rem; }
-  .award-badge        { position: absolute; top: 70px; left: 40px; width: 280px; height: auto; z-index: 1000; }
+  .award-badge        { position: absolute; top: 70px; left: 40px; width: 260px; height: auto; z-index: 1000; }
   .text-brand         { color: #b85500; } /* was #eb7828 — darkened to 4.84:1 on white (WCAG AA) */
   .text-blue-link     { color: #3b73b8; } /* was #8db5ed — darkened to 4.85:1 on white (WCAG AA) */
   .text-ext-icon      { color: #00aaff; }
