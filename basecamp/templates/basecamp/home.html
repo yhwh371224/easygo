@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 {% load static %}
-{% static 'basecamp/photos/sydney_airport.webp' as page_bg %}
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -50,22 +49,25 @@
     <link rel="manifest" href="{% static 'basecamp/favi/site.webmanifest' %}"> 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Inter:400,600,700&display=swap" rel="stylesheet">
     <link rel="preload" fetchpriority="high" as="image" href="{% static 'basecamp/photos/sydney_airport.webp' %}" type="image/webp">
     <link rel="preload" href="{% static 'basecamp/css/home.css' %}" as="style">
     <link rel="preload" href="{% static 'basecamp/css/styles.css' %}" as="style">
     <link rel="preload" href="{% static 'basecamp/css/head_home.css' %}" as="style">
     <link rel="stylesheet" href="{% static 'basecamp/css/home.css' %}">
     <link rel="stylesheet" href="{% static 'basecamp/css/styles.css' %}">
-    <link rel="stylesheet" href="{% static 'basecamp/css/tiny-slider.css' %}">
-    <link rel="stylesheet" href="{% static 'basecamp/css/flatpickr.min.css' %}">
+    <link rel="stylesheet" href="{% static 'basecamp/css/tiny-slider.css' %}" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="{% static 'basecamp/css/flatpickr.min.css' %}" media="print" onload="this.media='all'">
+    <noscript>
+      <link rel="stylesheet" href="{% static 'basecamp/css/tiny-slider.css' %}">
+    </noscript>
     <link rel="stylesheet" href="{% static 'basecamp/css/head_home.css' %}">  
   </head>
   <body>   
     {% include "basecamp/layouts/navbar.html" %}
     <main class="page-wrapper">
       <section class="jarallax bg-dark py-7">
-        <div class="jarallax-img" fetchpriority="high" style="background-image: url('{{ page_bg }}'); min-height: 330px;"></div>
+        <div class="jarallax-img" fetchpriority="high"></div>
         <a href="{% static 'basecamp/images/Digital-Certificate.webp' %}" aria-label="View EasyGo 2024 Quality Business Award Certificate"><img src="{% static 'basecamp/images/award-badge.webp' %}" width="320" height="320" alt="EasyGo 2024 Quality Business Award Badge" class="award-badge"></a>
         <div class="container py-4 py-sm-5 text-center">
           <div class="py-md-6">
@@ -167,7 +169,7 @@
                 <a class="card border-0 shadow card-hover mx-1" href="/sydney-airport-transfer/{{ suburb|slugify }}/">
                   <span class="badge badge-lg badge-floating badge-floating-end bg-danger badge-price">${{ details.price }}</span>
                   <div class="card-img-top card-img-gradient offer-card-img">
-                    <img loading="lazy" src="{{ details.image_url }}" alt="Sydney airport shuttle from {{ suburb }} for large groups and luggage" class="offer-card-inner-img">
+                    <img loading="lazy" src="{{ details.image_url }}" alt="Sydney airport shuttle from {{ suburb }} for large groups and luggage" width="400" height="461" class="offer-card-inner-img">
                     <span class="card-floating-text text-light fw-medium">Discover the trip<i class="ai-chevron-right align-middle fs-lg ms-1"></i></span>
                   </div>
                   <div class="card-body text-center">

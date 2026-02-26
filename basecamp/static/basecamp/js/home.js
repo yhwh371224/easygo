@@ -1,4 +1,14 @@
 document.addEventListener('DOMContentLoaded', function () {
+  
+  // ✅ 추가: 모바일에서 jarallax 비활성화 (성능 향상)
+  if (window.innerWidth <= 768) {
+    var jarallaxEl = document.querySelector('.jarallax');
+    if (jarallaxEl) {
+      jarallaxEl.style.backgroundImage = "none"; // CSS에서 이미 처리
+      jarallaxEl.classList.remove('jarallax');    // jarallax 라이브러리 비활성화
+    }
+  }  
+  
   // 1. 품질 인증서 클릭 이벤트
   var qualityAward = document.getElementById('quality-award');
   if (qualityAward) {
