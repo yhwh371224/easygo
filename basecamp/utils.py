@@ -308,3 +308,8 @@ def get_sorted_suburbs():
     ]
     remaining = sorted([item for item in raw if item not in fixed])
     return fixed + remaining
+
+def parse_baggage(request) -> str:
+    large = to_int(request.POST.get('baggage_large'))
+    # ... 나머지 파싱
+    return ", ".join(baggage_summary)
