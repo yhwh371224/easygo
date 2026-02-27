@@ -14,20 +14,12 @@
 <style>
   .hero-payment::before { content: ""; background-image: url("{% static 'basecamp/images/page-title-bg.webp' %}") !important; background-position: center; display: block; }
   .faq-card-wrapper { margin-top: -230px; }
-  .page-form{background:#fff;border-radius:.75rem;padding:5rem 2rem 2rem;text-align:center;width:100%;box-sizing:border-box}
-  .page-form hr{border:none;border-top:1px solid #e0e0e0;opacity:.5;margin:2.5rem 0}
-  .page-form .mb-3 p{margin-bottom:.8rem}
-  .form-control hr { border: none; border-top: 1px solid #e0e0e0; opacity: .5; margin: 2.5rem 0; }
+  .page-form { background: #fff; border-radius: .75rem; padding: 5rem 2rem 2rem; text-align: center; width: 100%; box-sizing: border-box; }
+  .page-form hr, .form-control hr { border: none; border-top: 1px solid #e0e0e0; opacity: .5; margin: 2.5rem 0; }
+  .page-form .mb-3 p { margin-bottom: .8rem; }
   .direct-details { display: inline-block; text-align: left; width: max-content; max-width: 100%; margin: 0 auto; }
   .note-text { color: #dc3545 !important; font-weight: 700; }
-  @media (max-width: 768px) {
-    .faq-card-wrapper { margin-top: -85px; }
-    .page-form { padding: 3.5rem 1.5rem 2rem; }
-  }
-  @media (max-width: 480px) {
-    .faq-card-wrapper { margin-top: -85px; }
-    .page-form { padding: 3.5rem 1.5rem 2rem; }
-  }
+  @media (max-width: 768px) { .faq-card-wrapper { margin-top: -85px; } .page-form { padding: 3.5rem 1.5rem 2rem; } }
 </style>
 {% endblock %}
 

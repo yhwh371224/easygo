@@ -13,9 +13,10 @@
   .booking-form-wrapper { margin-top: -70px; position: relative; z-index: 5; }
   @media (max-width: 768px) { .booking-form-wrapper { margin-top: -190px; } }
   @media (max-width: 480px) { .booking-form-wrapper { margin-top: -140px; } }
-  .hero-section  { position: relative; overflow: hidden; min-height: 550px; display: flex; align-items: center; justify-content: center; }
-  .hero-bg       { background: url("{% static 'basecamp/photos/back4.PNG' %}") center/cover; z-index: 0; }
+  .hero-section { position: relative; overflow: hidden; min-height: 550px; display: flex; align-items: center; justify-content: center; }
+  .hero-bg { position: absolute; inset: 0; background: url("{% static 'basecamp/photos/back4.PNG' %}") center/cover; z-index: 0; }
   .hero-award-link { position: absolute; bottom: 20px; right: 20px; z-index: 10; }
+  .hero-award-link .award-badge { position: relative; top: auto; left: auto; width: clamp(80px, 15vw, 160px) !important; height: clamp(80px, 15vw, 160px); }
 </style>
 {% endblock %}
 
@@ -24,9 +25,9 @@
       <!-- Hero -->
       <section class="bg-dark py-3 hero-section">
         <div class="position-absolute top-0 start-0 w-100 h-100 hero-bg"></div>
-        <a href="{% static 'basecamp/images/Digital-Certificate.webp' %}" class="hero-award-link">
-          <img src="{% static 'basecamp/images/award-badge.webp' %}" width="320" height="320" alt="Award Badge" class="award-badge">
-        </a>
+          <a href="{% static 'basecamp/images/Digital-Certificate.webp' %}" class="hero-award-link" aria-label="View Award Certificate">
+            <div class="award-badge"></div>
+          </a>
         <div class="container py-5 py-sm-7 text-center" style="position: relative; z-index: 5;">
           <div class="py-md-4">
             <h1 class="text-light pb-1">Information of EasyGo</h1>

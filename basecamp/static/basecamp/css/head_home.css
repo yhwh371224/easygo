@@ -1,21 +1,19 @@
-/* 1. 모바일 우선 기본 설정 (가벼운 이미지) */
+/* 1. 기본 설정 (모바일 우선: 가장 가벼운 sm 이미지) */
+.award-badge { position: absolute; top: 10px; left: 15px; width: 80px !important; height: 80px; background-image: url('/static/basecamp/images/award-badge-sm.webp'); background-size: contain; background-repeat: no-repeat; background-position: center; image-rendering: -webkit-optimize-contrast; z-index: 1000; transition: all 0.3s ease; }
+
+/* 2. 태블릿 (768px 이상: md 이미지로 교체 및 크기 조정) */
+@media (min-width: 768px) { .award-badge { top: 15px; left: 15px; width: 100px !important; height: 100px; background-image: url('/static/basecamp/images/award-badge-md.webp'); transform: translateY(-20px); } }
+
+/* 3. 데스크탑 (992px 이상: 위치 고정 및 최적화) */
+@media (min-width: 992px) { .award-badge { top: 70px; left: 40px; width: 160px !important; height: 160px; transform: none; } }
+
+/* 나머지 요소 최적화 (기존 코드 유지 및 정리) */
 .jarallax-img { background-image: url("/static/basecamp/photos/sydney_airport.webp"); background-size: cover; background-position: center; min-height: 330px; }
-@media (min-width: 992px) { .jarallax-img { background-image: url("/static/basecamp/photos/sydney_airport.webp"); min-height: 500px; } }
-@media (max-width: 768px) {
-    .hero-about { min-height: 400px; }
-    .hero-about h1 { font-size: 1.6rem; }
-    .hero-overlap-container { margin-top: -60px; }
-    .content-card-box { padding: 2rem 1.5rem !important; }
-    .award-badge { top: 15px; left: 15px; width: 100px !important; transform: translateY(-20px);}
-    #booking-form { margin-top: 5px !important; transform: translateY(-20px);}
-  }
-  @media (max-width: 576px) {
-    .award-badge { top: 10px; left: 15px; width: 80px !important; } 
-    .card-img-top { height: 140px; }
-  }
-  @media (max-width: 992px) { .card-img-top { height: 180px; } }
-  @media (min-width: 992px) and (max-width: 1279px) { .container { max-width: 100%; } }
-  @media (min-width: 769px) {.offer-card-inner-img { aspect-ratio: 1230 / 501; } }
+@media (min-width: 992px) { .jarallax-img { min-height: 500px; } }
+@media (max-width: 768px) { .hero-about { min-height: 400px; } .hero-about h1 { font-size: 1.6rem; } .hero-overlap-container { margin-top: -60px; } .content-card-box { padding: 2rem 1.5rem !important; } #booking-form { margin-top: 5px !important; transform: translateY(-20px); } }
+@media (max-width: 576px) { .card-img-top { height: 140px; } }
+@media (max-width: 992px) { .card-img-top { height: 180px; } }
+@media (min-width: 992px) and (max-width: 1279px) { .container { max-width: 100%; } }
 body { margin: 0; font-family: Arial, sans-serif; }
   .page-wrapper { width: 100%; overflow-x: hidden; }
   .booking-form-top { margin-top: -138px; position: relative; z-index: 10; }
