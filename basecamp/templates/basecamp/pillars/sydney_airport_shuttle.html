@@ -6,37 +6,24 @@
 
 {% block meta_description %}Sydney airport shuttle with private transfers & maxi vans. Door-to-door service from Sydney Airport to all suburbs. Book in 1 minute.{% endblock %}
 
-{% block content %}
+{% block extra_css %}
 <style>
-  .navbar.navbar-dark .nav-link {
-    color: #212529 !important; 
-  }
-  .navbar.navbar-dark .nav-link:hover {
-    color: #0d6efd !important; 
-  }
-  .navbar-toggler-icon {
-    filter: invert(1); 
-  }
-  hr {
-    border: none;
-    border-top: 1px solid #e0e0e0 !important;
-    opacity: 1;
-    margin: 2.5rem 0;
-  }
-  body { background-color: #ffffff; color: #212529 !important; }
+  .navbar.navbar-dark .nav-link { color: #212529 !important; }
+  .navbar.navbar-dark .nav-link:hover { color: #0d6efd !important; }
+  .navbar-toggler-icon { filter: invert(1); }
+  hr { border: none; border-top: 1px solid #e0e0e0 !important; opacity: 1; margin: 2.5rem 0; }
+  body, .container, ul li, p, h1, h2, h3, h4, h5, h6 { color: #212529 !important; background-color: #ffffff; }
   .page-wrapper { padding-top: 60px !important; background-color: #ffffff; }
-  .container { color: #212529; }
-  ul { list-style: none; padding-left: 0; margin-left: 0; }
-  ul li { margin-bottom: 0.5rem; color: #212529; }
-  p { color: #212529; }
+  ul { list-style: none; padding: 0; margin: 0; }
+  ul li { margin-bottom: 0.5rem; }
   h1 { margin-bottom: 2.5rem !important; }
-  h1, h2, h3, h4, h5, h6 { color: #212529; }
-  h1 span, h2 span, h3 span { color: #ffffff !important; }  
-  a { color: #0d6efd; }
+  h1 span, h2 span, h3 span { color: #ffffff !important; }
+  a, a[style*="#eb7828"] { color: #0d6efd !important; }
   a:hover { color: #063d91; }
-  a[style*="#eb7828"] { color: #0d6efd !important; }
 </style>
+{% endblock %}
 
+{% block content %}
     <!-- Page content-->
     <div class="container d-flex flex-column justify-content-center min-vh-100 py-5">
       <lottie-player class="d-dark-mode-none mt-n5" src="assets/json/animation-404-light.json" background="transparent" speed="1" loop autoplay></lottie-player>

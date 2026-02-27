@@ -6,26 +6,20 @@
 
 {% block meta_description %}Sydney airport transfer with private shuttle & maxi vans. Ideal for families, groups & large luggage. Book in 1 minute.{% endblock %}
 
-{% block content %}
+{% block extra_css %}
 <style>
-  hr {
-    border: none;
-    border-top: 1px solid rgba(255,255,255,0.3);
-    opacity: 0.5;
-    margin: 2.5rem 0;
-  }
-  body { background-color: #6982b8 !important; color: #ffffff !important; }
-  .page-wrapper { padding-top: 60px !important; background-color: #6982b8; }
-  .container { color: #ffffff; }
-  ul { list-style: none; padding-left: 0; margin-left: 0; }
-  ul li { margin-bottom: 0.5rem; color: #ffffff; }
-  p { color: #ffffff; }
-  h1, h2, h3, h4, h5, h6 { color: #ffffff; }
+  hr { border: none; border-top: 1px solid rgba(255,255,255,0.3); opacity: 0.5; margin: 2.5rem 0; }
+  body, .page-wrapper, .container, p, ul li, h1, h2, h3, h4, h5, h6 { background-color: #6982b8 !important; color: #ffffff !important; }
+  .page-wrapper { padding-top: 60px !important; }
+  ul { list-style: none; padding: 0; margin: 0; }
+  ul li { margin-bottom: 0.5rem; }
   a { color: #e69e18; }
   a:hover { color: #ffffff; }
   a[style*="#eb7828"] { color: #ffe082 !important; }
 </style>
+{% endblock %}
 
+{% block content %}
     <!-- Page content-->
     <div class="container d-flex flex-column justify-content-center min-vh-100 py-5">
       <lottie-player class="d-dark-mode-none mt-n5" src="assets/json/animation-404-light.json" background="transparent" speed="1" loop autoplay></lottie-player>

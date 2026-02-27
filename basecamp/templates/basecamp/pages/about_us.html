@@ -12,30 +12,19 @@
 
 {% block extra_css %}
 <style>
-  .hero-about         { position: relative; min-height: 600px; display: flex; align-items: center; overflow: hidden; padding-top: 80px;}
-  .hero-about::before { content: ""; position: absolute; inset: 0; background: url("{% static 'basecamp/photos/vehicle-1.PNG' %}") center/cover; z-index: 0; }
-  .hero-content       { position: relative; z-index: 2; }  
+  .hero-about { padding-top: 80px; }
+  .hero-about::before { background: url("{% static 'basecamp/photos/vehicle-1.PNG' %}") center/cover; }
   .hero-overlap-container { margin-top: -120px; }
-  .content-card-box   { padding: 3rem 3.5rem !important; }
+  .content-card-box { padding: 3rem 3.5rem !important; }
   .entry-content h2, .entry-content h3 { margin-bottom: 1.5rem; }
-  .entry-content h3   { margin-top: 1.8rem; }
-  .entry-content li   { margin-bottom: 1rem; line-height: 1.8; }
+  .entry-content h3 { margin-top: 1.8rem; }
+  .entry-content li { margin-bottom: 1rem; line-height: 1.8; }
   .entry-content ul, .entry-content ul ul { list-style: none; padding-left: 2rem; margin-top: 1rem; }
   .entry-content ul ul { padding-left: 1.5rem; margin-top: 0.5rem; }
-  .highlight-title    { margin-bottom: 1.5rem; }
-  .text-brand         { color: #eb7828; }
-  @media (max-width: 768px) {
-    .hero-about             { min-height: 400px; }
-    .hero-title             { font-size: 1.8rem; }    
-    .hero-overlap-container { margin-top: -60px; }
-    .content-card-box       { padding: 2rem 1.5rem !important; }
-  }
-  @media (max-width: 480px) {
-    .hero-about             { min-height: 300px; }
-    .hero-title             { font-size: 1.6rem; }    
-    .hero-overlap-container { margin-top: -5px; }
-    .content-card-box       { padding: 2rem 1.5rem !important; }
-  }
+  .highlight-title { margin-bottom: 1.5rem; }
+  .text-brand { color: #eb7828; }
+  @media (max-width: 768px) { .hero-title { font-size: 1.8rem; } .hero-overlap-container { margin-top: -60px; } .content-card-box { padding: 2rem 1.5rem !important; } }
+  @media (max-width: 480px) { .hero-title { font-size: 1.6rem; } .hero-overlap-container { margin-top: -5px; } }
 </style>
 {% endblock %}
 
@@ -43,8 +32,8 @@
 <section class="hero-about">
   <span class="position-absolute top-0 start-0 w-100 h-100 bg-gradient opacity-80"></span>
     <div class="container text-center hero-content pt-3">
-      <a href="{% static 'basecamp/images/Digital-Certificate.webp' %}" class="hero-award-link">
-        <img src="{% static 'basecamp/images/award-badge.webp' %}" width="320" height="320" alt="Award Badge" class="award-badge">
+      <a href="{% static 'basecamp/images/Digital-Certificate.webp' %}" class="hero-award-link" aria-label="View Award Certificate">
+        <div class="award-badge"></div>
       </a>
     <h1 class="text-light pb-3 hero-title">
       About EasyGo Airport Shuttle – Sydney Airport Transfer Specialists
