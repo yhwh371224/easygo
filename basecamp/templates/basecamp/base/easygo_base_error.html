@@ -25,14 +25,11 @@
     <link rel="manifest" href="{% static 'basecamp/favi/site.webmanifest' %}">
     <link rel="stylesheet" href="{% static 'basecamp/css/home.css' %}">
     <style nonce="{{ csp_nonce }}">
-    body { margin:0; font-family:Arial,sans-serif; }
-    .award-badge { position:fixed; top:70px; left:40px; width:280px; height:auto; z-index:1000; }
-    @media(max-width:768px) { 
-      .award-badge { top:30px; left:20px; width:180px; }
-    }
-    @media(max-width:480px) { 
-      .award-badge { top:60px; left:10px; width:100px; }
-    }
+        body { margin:0; font-family:Arial,sans-serif; }
+        .award-badge { position: fixed; top: 60px; left: 10px; width: 100px !important; height: 100px; background: url('/static/basecamp/images/award-badge-sm.webp') center/contain no-repeat; image-rendering: -webkit-optimize-contrast; z-index: 1000; }
+        .award-badge-container { position: relative; z-index: 10; margin-top: 3.5rem; margin-left: clamp(1rem, 8vw, 8rem); width: clamp(120px, 20vw, 240px); height: clamp(120px, 20vw, 240px); background: url('/static/basecamp/images/award-badge-sm.webp') center/contain no-repeat; image-rendering: -webkit-optimize-contrast; display: block; }
+        @media (min-width: 768px) { .award-badge { top: 30px; left: 20px; width: 180px !important; height: 180px; background-image: url('/static/basecamp/images/award-badge-md.webp'); } .award-badge-container { background-image: url('/static/basecamp/images/award-badge-md.webp'); } }
+        @media (min-width: 992px) { .award-badge { top: 70px; left: 40px; width: 280px !important; height: 280px; } }
     </style>
 
     {% block extra_css %}

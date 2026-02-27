@@ -6,35 +6,22 @@
 
 {% block meta_description %}Sydney cruise transfer with private shuttle & maxi vans. White Bay & Overseas Passenger Terminal to airport & hotels. Book in 1 minute.{% endblock %}
 
-{% block content %}
+{% block extra_css %}
 <style>
-  .navbar.navbar-dark .nav-link {
-    color: #212529 !important; 
-  }
-  .navbar.navbar-dark .nav-link:hover {
-    color: #0d6efd !important; 
-  }
-  .navbar-toggler-icon {
-    filter: invert(1); 
-  }
-  hr {
-    border: none;
-    border-top: 1px solid #b0c4de;
-    opacity: 0.5;
-    margin: 2.5rem 0;
-  }
-  body { background-color: #e0f0ff !important; color: #212529 !important; }
-  .page-wrapper { padding-top: 60px !important; background-color: #e0f0ff; }
-  .container { color: #212529; }
-  ul { list-style: none; padding-left: 0; margin-left: 0; }
-  ul li { margin-bottom: 0.5rem; color: #212529; }
-  p { color: #212529; }
-  h1, h2, h3, h4, h5, h6 { color: #212529; }
-  a { color: #0d6efd; }
+  .navbar.navbar-dark .nav-link { color: #212529 !important; }
+  .navbar.navbar-dark .nav-link:hover { color: #0d6efd !important; }
+  .navbar-toggler-icon { filter: invert(1); }
+  hr { border: none; border-top: 1px solid #b0c4de; opacity: 0.5; margin: 2.5rem 0; }
+  body, .page-wrapper, .container, p, ul li, h1, h2, h3, h4, h5, h6 { background-color: #e0f0ff !important; color: #212529 !important; }
+  .page-wrapper { padding-top: 60px !important; }
+  ul { list-style: none; padding: 0; margin: 0; }
+  ul li { margin-bottom: 0.5rem; }
+  a, a[style*="#eb7828"] { color: #0d6efd !important; }
   a:hover { color: #074cb4; }
-  a[style*="#eb7828"] { color: #0d6efd !important; }
 </style>
+{% endblock %}
 
+{% block content %}
     <!-- Page content-->
     <div class="container d-flex flex-column justify-content-center min-vh-100 py-5">
       <lottie-player class="d-dark-mode-none mt-n5" src="assets/json/animation-404-light.json" background="transparent" speed="1" loop autoplay></lottie-player>
