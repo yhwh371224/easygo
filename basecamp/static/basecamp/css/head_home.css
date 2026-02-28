@@ -1,14 +1,10 @@
-/* 1. 기본 설정 (모바일 우선: 가장 가벼운 sm 이미지) */
-.award-badge { position: absolute; top: 10px; left: 15px; width: 80px !important; height: 80px; background-image: url('/static/basecamp/images/award-badge-sm.webp'); background-size: contain; background-repeat: no-repeat; background-position: center; image-rendering: -webkit-optimize-contrast; z-index: 1000; transition: all 0.3s ease; }
+.award-badge { position: fixed; top: 12px; left: 35%; transform: translateX(-35%); width: 80px !important; height: 80px; image-rendering: -webkit-optimize-contrast; z-index: 1000; display: block;}
 
-/* 2. 태블릿 (768px 이상: md 이미지로 교체 및 크기 조정) */
-@media (min-width: 768px) { .award-badge { top: 15px; left: 15px; width: 100px !important; height: 100px; background-image: url('/static/basecamp/images/award-badge-md.webp'); transform: translateY(-20px); } }
+@media (min-width: 768px) { .award-badge { top: 20px; left: auto; transform: none; right: 20px; width: 140px !important; height: auto; }}
 
-/* 3. 데스크탑 (992px 이상: 위치 고정 및 최적화) */
-@media (min-width: 992px) { .award-badge { top: 70px; left: 40px; width: 160px !important; height: 160px; transform: none; } }
+@media (min-width: 992px) { .award-badge { top: 140px; right: 10px; width: 260px !important; height: auto; }}
 
 /* 나머지 요소 최적화 (기존 코드 유지 및 정리) */
-.jarallax-img { background-image: url("/static/basecamp/photos/sydney_airport.webp"); background-size: cover; background-position: center; min-height: 330px; }
 @media (min-width: 992px) { .jarallax-img { min-height: 500px; } }
 @media (max-width: 768px) { .hero-about { min-height: 400px; } .hero-about h1 { font-size: 1.6rem; } .hero-overlap-container { margin-top: -60px; } .content-card-box { padding: 2rem 1.5rem !important; } #booking-form { margin-top: 5px !important; transform: translateY(-20px); } }
 @media (max-width: 576px) { .card-img-top { height: 140px; } }
@@ -18,7 +14,7 @@ body { margin: 0; font-family: Arial, sans-serif; }
   .page-wrapper { width: 100%; overflow-x: hidden; }
   .booking-form-top { margin-top: -138px; position: relative; z-index: 10; }
   .hero-about         { position: relative; min-height: 600px; display: flex; align-items: center; overflow: hidden; padding-top: 80px; }
-  .hero-about::before { content: ""; position: absolute; inset: 0; background: url('/static/basecamp/photos/vehicle-1.PNG') center/cover; z-index: 0; }
+  .hero-about::before { content: ""; position: absolute; inset: 0; z-index: 0; }
   .hero-content       { position: relative; z-index: 2; }
   .hero-overlap-container { margin-top: -120px; }
   .content-card-box   { padding: 3rem 3.5rem !important; }
@@ -28,7 +24,6 @@ body { margin: 0; font-family: Arial, sans-serif; }
   .entry-content li   { margin-bottom: 1rem; line-height: 1.8; }
   .entry-content ul, .entry-content ul ul { list-style: none; padding-left: 2rem; margin-top: 1rem; }
   .entry-content ul ul { padding-left: 1.5rem; margin-top: 0.5rem; }
-  .award-badge        { position: absolute; top: 70px; left: 40px; width: 260px; height: auto; z-index: 1000; }
   .text-brand         { color: #b85500; } /* was #eb7828 — darkened to 4.84:1 on white (WCAG AA) */
   .text-blue-link     { color: #3b73b8; } /* was #8db5ed — darkened to 4.85:1 on white (WCAG AA) */
   .text-ext-icon      { color: #00aaff; }
@@ -53,8 +48,5 @@ body { margin: 0; font-family: Arial, sans-serif; }
   .option-beige       { background-color: beige; }
   .award-section-inner { min-height: 200px; }
   .award-panel-link   { color: white; text-decoration: none; }
-  .features-bg        { background-image: url('/static/basecamp/photos/bg-pattern01.webp'); }
-  .services-cover     { background-image: url('/static/basecamp/photos/services-cover.webp'); background-size: cover; }
-  .testimonials-bg    { background-image: url('/static/basecamp/images/map.svg'); background-position: center left; background-size: cover; }
-  .award-section      { background-image: url('/static/basecamp/images/Digital-Certificate.webp'); background-size: contain; background-repeat: no-repeat; background-position: center; height: 40vh; min-height: 200px; cursor: pointer; }
+  .award-section      { height: 40vh; min-height: 200px; cursor: pointer; }
   
