@@ -12,6 +12,7 @@
 @media (min-width: 992px) and (max-width: 1279px) { .container { max-width: 100%; } }
 body { margin: 0; font-family: Arial, sans-serif; }
   .page-wrapper { width: 100%; overflow-x: hidden; }
+  .main-img { position: relative; background-image: url('/static/basecamp/photos/sydney_airport.webp'); background-size: cover; background-position: center; min-height: 330px; }
   .booking-form-top { margin-top: -138px; position: relative; z-index: 10; }
   .hero-about         { position: relative; min-height: 600px; display: flex; align-items: center; overflow: hidden; padding-top: 80px; }
   .hero-about::before { content: ""; position: absolute; inset: 0; z-index: 0; }
