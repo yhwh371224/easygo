@@ -1,11 +1,11 @@
-.award-badge { position: fixed; top: 12px; left: 35%; transform: translateX(-35%); width: 80px !important; height: 80px; image-rendering: -webkit-optimize-contrast; z-index: 1000; display: block;}
+.award-badge { position: fixed; top: 4px; left: 35%; transform: translateX(-35%); width: 80px !important; height: 80px; image-rendering: -webkit-optimize-contrast; z-index: 1000; display: block;}
 
-@media (min-width: 768px) { .award-badge { top: 20px; left: auto; transform: none; right: 20px; width: 140px !important; height: auto; }}
+@media (min-width: 768px) { .award-badge { position: absolute; top: 100px; left: auto; transform: none; right: 20px; width: 140px !important; height: auto; }}
 
-@media (min-width: 992px) { .award-badge { top: 140px; right: 10px; width: 260px !important; height: auto; }}
+@media (min-width: 992px) { .award-badge { position: fixed; top: 140px; right: 10px; width: 240px !important; height: auto; }}
 
 /* 나머지 요소 최적화 (기존 코드 유지 및 정리) */
-@media (min-width: 992px) { .jarallax-img { min-height: 500px; } }
+@media (min-width: 992px) { .main-img { min-height: 500px; } }
 @media (max-width: 768px) { .hero-about { min-height: 400px; } .hero-about h1 { font-size: 1.6rem; } .hero-overlap-container { margin-top: -60px; } .content-card-box { padding: 2rem 1.5rem !important; } #booking-form { margin-top: 5px !important; transform: translateY(-20px); } }
 @media (max-width: 576px) { .card-img-top { height: 140px; } }
 @media (max-width: 992px) { .card-img-top { height: 180px; } }
@@ -24,10 +24,10 @@ body { margin: 0; font-family: Arial, sans-serif; }
   .entry-content li   { margin-bottom: 1rem; line-height: 1.8; }
   .entry-content ul, .entry-content ul ul { list-style: none; padding-left: 2rem; margin-top: 1rem; }
   .entry-content ul ul { padding-left: 1.5rem; margin-top: 0.5rem; }
-  .text-brand         { color: #b85500; } /* was #eb7828 — darkened to 4.84:1 on white (WCAG AA) */
-  .text-blue-link     { color: #3b73b8; } /* was #8db5ed — darkened to 4.85:1 on white (WCAG AA) */
+  .text-brand         { color: #b85500; }
+  .text-blue-link     { color: #3b73b8; } 
   .text-ext-icon      { color: #00aaff; }
-  .text-orange        { color: #935e00; } /* was orange/#ffa500 — darkened to 5.62:1 on white (WCAG AA) */
+  .text-orange        { color: #935e00; } 
   .services-content   { max-width: 495px; }
   .services-list-item { line-height: 2.0; }
   .review-link        { text-decoration: none; white-space: nowrap; }
