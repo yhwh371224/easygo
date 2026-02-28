@@ -35,8 +35,8 @@ body { margin: 0; font-family: Arial, sans-serif; }
   .offer-search-end   { margin-bottom: 40px; margin-right: 20px; }
   .offer-card-img { position: relative; overflow: visible; width: 100%; max-height: 360px; line-height: 0; display: block; border-top-left-radius: calc(1rem - 1px); border-top-right-radius: calc(1rem - 1px); padding: 0; margin: 0; }
   .tns-carousel-inner .card { display: flex; flex-direction: column; height: 100%; overflow: visible; }
-  .offer-card-inner-img { width: 100%; height: auto; display: block; object-fit: cover; object-position: center; margin: 0; padding: 0; aspect-ratio: 400 / 461; }
-  .tns-carousel-wrapper .tns-carousel-inner { overflow: hidden; }
+  .offer-card-inner-img { width: 100%; height: auto; display: block; object-fit: cover; object-position: top; margin: 0; padding: 0; aspect-ratio: 400 / 461; }
+  .tns-carousel-wrapper .tns-carousel-inner { overflow: hidden;  }
   .badge-price { width: 5.5rem; overflow: visible; white-space: nowrap; }
   .intro-text         { color: #b9cbdb; }
   .intro-top          { margin-top: 8rem; }
