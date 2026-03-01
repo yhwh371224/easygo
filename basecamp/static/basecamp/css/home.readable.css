@@ -9851,3 +9851,23 @@ ol,
 li {
   list-style: none !important;
 }
+
+ul,ol,li{list-style:none !important}
+/* inquiry.html - from theme.min.css */
+.pb-7{padding-bottom:6rem !important}
+.pt-3{padding-top:1rem !important}
+.border-1{border-width:1px !important}
+.shadow-lg{box-shadow:-0.0625rem 0 0.625rem 0 rgba(0,0,0,0.07),0.3125rem 1.25rem 2.5rem 0 rgba(0,0,0,0.04) !important}
+.p-5{padding:3rem !important}
+.mb-1{margin-bottom:.25rem !important}
+.text-white{color:#fff !important}
+.p-4{padding:1.5rem !important}
+.invalid-feedback{display:none;width:100%;margin-top:.375rem;font-size:.75rem;color:#f74f78}
+.g-2,.gx-2{--bs-gutter-x:.5rem}
+.g-2,.gy-2{--bs-gutter-y:.5rem}
+.col{flex:1 0 0%}
+.form-check{display:block;min-height:1.5rem;padding-left:1.5em;margin-bottom:.125rem}
+.form-check-label{font-size:.875rem}
+.d-block{display:block !important}
+.pt-2{padding-top:.5rem !important}.bg-dark .text-muted{color:#a4a5c0 !important}.bg-dark strong{color:#aeafca}.bg-dark a{color:#8db5ed}.bg-dark .text-brand{color:#ff9a55 !important}.bg-dark .text-blue-link{color:#8db5ed !important}.bg-dark .text-orange{color:#ffb347 !important}.site-footer a{text-decoration:underline}.site-footer a:hover,.site-footer a:focus{text-decoration:underline}.bg-dark .text-brand strong{color:inherit}#changing-text strong{color:#fff}.intro-text strong{color:#fff}
+
