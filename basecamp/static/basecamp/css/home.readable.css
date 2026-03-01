@@ -30,23 +30,23 @@
 }
 
 .ai-arrow-left:before{
-  content:"\ue911"
+  content:"\e911"
 }
 
 .ai-arrow-right:before{
-  content:"\ue913"
+  content:"\e913"
 }
 
 .ai-calendar:before{
-  content:""
+  content:"\e928"
 }
 
 .ai-chevron-right:before{
-  content:""
+  content:"\e931"
 }
 
 .ai-external-link:before{
-  content:""
+  content:"\e95f"
 }
 
 a{
