@@ -333,8 +333,8 @@ STORAGES = {
         "LOCATION": os.path.join(BASE_DIR, 'media'),
     },
     "staticfiles": {
-        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
-        # "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
+        # "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
     },
 }
 
