@@ -37,6 +37,10 @@ def inquiry_details(request):
         pickup_time = request.POST.get('pickup_time')
         direction = request.POST.get('direction')
         suburb = request.POST.get('suburb', '')
+        # ✅ suburb 검증
+        valid_suburbs = get_home_suburbs()
+        if suburb not in valid_suburbs:
+            return JsonResponse({'success': False, 'error': 'Invalid suburb selected.'})
         start_point = request.POST.get('start_point', '')
         end_point = request.POST.get('end_point', '')        
         street = request.POST.get('street', '')
@@ -519,65 +523,6 @@ def p2p_detail(request):
 
     else:
         return render(request, 'basecamp/booking/p2p.html', {})
-    
-
-# p2p multiple points booking by myself 
-def p2p_booking_detail(request):
-    if request.method == "POST":
-        token = request.POST.get('cf-turnstile-response', '')
-        ip = request.META.get('HTTP_CF_CONNECTING_IP') or request.META.get('REMOTE_ADDR')
-        if not verify_turnstile(token, ip):
-            return JsonResponse({'success': False, 'error': 'Security verification failed. Please try again.'})
-        p2p_name = request.POST.get('p2p_name')
-        p2p_phone = request.POST.get('p2p_phone')
-        p2p_email = request.POST.get('p2p_email')
-        p2p_date = request.POST.get('p2p_date')
-        first_pickup_location = request.POST.get('first_pickup_location')
-        first_putime = request.POST.get('first_putime')
-        first_dropoff_location = request.POST.get('first_dropoff_location')
-        second_pickup_location = request.POST.get('second_pickup_location')
-        second_putime = request.POST.get('second_putime')
-        second_dropoff_location = request.POST.get('second_dropoff_location')
-        third_pickup_location = request.POST.get('third_pickup_location')
-        third_putime = request.POST.get('third_putime')
-        third_dropoff_location = request.POST.get('third_dropoff_location')
-        fourth_pickup_location = request.POST.get('fourth_pickup_location')
-        fourth_putime = request.POST.get('fourth_putime')
-        fourth_dropoff_location = request.POST.get('fourth_dropoff_location')
-        p2p_passengers = request.POST.get('p2p_passengers')
-        p2p_baggage = request.POST.get('p2p_baggage')
-        p2p_message = request.POST.get('p2p_message')
-        price = request.POST.get('price')
-
-        subject = "Multiple points booking confirmation"
-        template_name = "html_email-p2p-confirmation.html"
-
-        context = {
-            'p2p_name': p2p_name, 'p2p_phone': p2p_phone, 'p2p_email': p2p_email, 'p2p_date': p2p_date, 
-            'first_pickup_location': first_pickup_location, 'first_putime': first_putime,  
-            'second_pickup_location': second_pickup_location, 'second_putime': second_putime, 
-            'third_pickup_location': third_pickup_location, 'third_putime': third_putime, 
-            'fourth_pickup_location': fourth_pickup_location, 'fourth_putime': fourth_putime,
-            'first_dropoff_location': first_dropoff_location, 
-            'second_dropoff_location': second_dropoff_location, 
-            'third_dropoff_location': third_dropoff_location,  
-            'fourth_dropoff_location': fourth_dropoff_location, 
-            'p2p_passengers': p2p_passengers, 'p2p_baggage': p2p_baggage, 'p2p_message': p2p_message,
-            'price': price
-        }
-
-        handle_email_sending(request, p2p_email, subject, template_name, context)        
-        
-        if is_ajax(request):
-            return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})
-        
-        else:
-            return render(request, 'basecamp/inquiry_done.html', {
-            'google_review_url': settings.GOOGLE_REVIEW_URL,            
-        })
-
-    else:
-        return render(request, 'basecamp/booking/p2p.html', {})
 
 
 def price_detail(request):
@@ -658,6 +603,10 @@ def booking_detail(request):
         pickup_time = request.POST.get('pickup_time')
         direction = request.POST.get('direction')      
         suburb = request.POST.get('suburb')
+        # ✅ suburb 검증
+        valid_suburbs = get_home_suburbs()
+        if suburb not in valid_suburbs:
+            return JsonResponse({'success': False, 'error': 'Invalid suburb selected.'})
         street = request.POST.get('street')
         start_point = request.POST.get('start_point', '')
         end_point = request.POST.get('end_point', '')
@@ -687,10 +636,6 @@ def booking_detail(request):
             return JsonResponse({'success': False, 'error': str(e)})
 
         price = 'TBA'
-
-        # turnstile_response = request.POST.get('cf-turnstile-response')
-        # if not verify_turnstile(turnstile_response, remoteip=request.META.get('REMOTE_ADDR')):
-        #     return JsonResponse({'success': False, 'error': 'Turnstile verification failed. Please try again.'})
 
         # ✅ 중복 제출 방지
         recent_duplicate = Post.objects.filter(
