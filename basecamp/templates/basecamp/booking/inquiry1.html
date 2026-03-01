@@ -63,9 +63,9 @@
                   <input class="form-control" type="email" id="email" placeholder="j.doe@example.com" required name="email">
                   <div class="invalid-feedback">Please enter a valid email address!</div>
                 </div></div>
-            <br><br>
-            <hr>
-            <br><br>
+
+				<hr class="my-4">
+            
           {% if start_point == 'Airport' or end_point == 'Airport' %}
               <!-- Flight Information Section -->
               <div class="card text-white bg-secondary p-4">
@@ -87,9 +87,9 @@
                 <input class="form-control" type="time" name="pickup_time" id="pickup_time">
                 <small class="form-text text-muted">Click the icon on the right to select the time.</small>
               </div>
-            <br><br>
-            <hr>
-            <br><br>            
+            
+			  <hr class="my-4">
+
           {% if condition_met %}           
             <div class="mb-3 pb-1" >
               <p class="form-label mb-1">Full Address of Suburb/Hotel</p>
@@ -102,9 +102,9 @@
                 </div>
               </div><br>
           {% endif %}
-              <br><br>
-				<hr>
-				<br><br> 
+              
+		  <hr class="my-4">
+
         <!-- Regular Baggage -->
 				<div class="mb-3 pb-1">
 					<p class="form-label mb-1">Baggage (Regular)</p>
@@ -222,9 +222,9 @@
 						</div>
 					</div>
 				</div>
-				<br><br>
-				<hr>
-				<br><br>  
+				
+				<hr class="my-4">
+
 						<input type="hidden" name="pickup_date" value="{{ pickup_date }}">
 						<input type="hidden" name="start_point" value="{{ start_point }}">
 						<input type="hidden" name="end_point" value="{{ end_point }}">
@@ -233,11 +233,9 @@
 	            <div id="errorMessage" style="display:none; color: red; margin-top: 20px;" ></div>
 				<br>
 				<div class="cf-turnstile" data-sitekey="{{ CLOUDFLARE_TURNSTILE_SITE_KEY }}"></div>
-				<div class="text-center pt-2">
+				<div class="text-center pt-2 mb-5">
 					<button class="btn btn-primary" type="submit" id="submitButton">Submit</button>
-				</div>
-				<br>
-				<br>        
+				</div>       
             </form>
 	        </div>
 	    </div>			  
