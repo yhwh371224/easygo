@@ -24,7 +24,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'basecamp/favi/favicon-16x16.png' %}">
     <link rel="manifest" href="{% static 'basecamp/favi/site.webmanifest' %}">
     <link rel="stylesheet" href="{% static 'basecamp/css/home.css' %}">
-    <style nonce="{{ csp_nonce }}">
+    <style nonce="{{ CSP_NONCE }}">
         body { margin:0; font-family:Arial,sans-serif; }
         .award-badge { position: fixed; top: 60px; left: 10px; width: 100px !important; height: 100px; background: url('/static/basecamp/images/award-badge-sm.webp') center/contain no-repeat; image-rendering: -webkit-optimize-contrast; z-index: 1000; }
         .award-badge-container { position: relative; z-index: 10; margin-top: 3.5rem; margin-left: clamp(1rem, 8vw, 8rem); width: clamp(120px, 20vw, 240px); height: clamp(120px, 20vw, 240px); background: url('/static/basecamp/images/award-badge-sm.webp') center/contain no-repeat; image-rendering: -webkit-optimize-contrast; display: block; }
@@ -47,9 +47,9 @@
       
     </main>
     
-    <script src="{% static 'basecamp/js/bootstrap.bundle.min.js' %}" defer nonce="{{ csp_nonce }}"></script>
-    <script src="{% static 'basecamp/js/smooth-scroll.polyfills.min.js' %}" defer nonce="{{ csp_nonce }}"></script>
-    <script src="{% static 'basecamp/js/theme.min.js' %}" defer nonce="{{ csp_nonce }}"></script>
+    <script src="{% static 'basecamp/js/bootstrap.bundle.min.js' %}" defer nonce="{{ CSP_NONCE }}"></script>
+    <script src="{% static 'basecamp/js/smooth-scroll.polyfills.min.js' %}" defer nonce="{{ CSP_NONCE }}"></script>
+    <script src="{% static 'basecamp/js/theme.min.js' %}" defer nonce="{{ CSP_NONCE }}"></script>
 
   </body>
 </html>
