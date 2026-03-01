@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" media="screen" href="{% static 'basecamp/css/flatpickr.min.css' %}"/>
     <link rel="stylesheet" media="screen" href="{% static 'basecamp/css/home.css' %}">
-    <style nonce="{{ csp_nonce }}">
+    <style nonce="{{ CSP_NONCE }}">
     body { margin:0; font-family:Arial,sans-serif; }
     </style>
     {% block extra_css %}{% endblock %}
@@ -26,12 +26,12 @@
 
     {% include "basecamp/layouts/footer.html" %}
 
-    <script src="{% static 'basecamp/js/bootstrap.bundle.min.js' %}" defer nonce="{{ csp_nonce }}"></script>
-    <script src="{% static 'basecamp/js/smooth-scroll.polyfills.min.js' %}" defer nonce="{{ csp_nonce }}"></script>
-    <script src="{% static 'basecamp/js/flatpickr.min.js' %}" defer nonce="{{ csp_nonce }}"></script>
-    <script src="{% static 'basecamp/js/date-picker.js' %}" defer nonce="{{ csp_nonce }}"></script>        
+    <script src="{% static 'basecamp/js/bootstrap.bundle.min.js' %}" defer nonce="{{ CSP_NONCE }}"></script>
+    <script src="{% static 'basecamp/js/smooth-scroll.polyfills.min.js' %}" defer nonce="{{ CSP_NONCE }}"></script>
+    <script src="{% static 'basecamp/js/flatpickr.min.js' %}" defer nonce="{{ CSP_NONCE }}"></script>
+    <script src="{% static 'basecamp/js/date-picker.js' %}" defer nonce="{{ CSP_NONCE }}"></script>        
     
-    <script nonce="{{ csp_nonce }}">
+    <script nonce="{{ CSP_NONCE }}">
         let titleSpinnerInterval = null;
         const originalTitle = document.title;
 
@@ -112,7 +112,7 @@
             }
         });
     </script>
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer nonce="{{ csp_nonce }}"></script>    
-    <script src="{% static 'basecamp/js/theme.min.js' %}" defer nonce="{{ csp_nonce }}"></script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer nonce="{{ CSP_NONCE }}"></script>    
+    <script src="{% static 'basecamp/js/theme.min.js' %}" defer nonce="{{ CSP_NONCE }}"></script>
   </body>
 </html>

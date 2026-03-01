@@ -23,7 +23,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'basecamp/favi/favicon-16x16.png' %}">
     <link rel="manifest" href="{% static 'basecamp/favi/site.webmanifest' %}">        
     <link rel="stylesheet" media="screen" href="{% static 'basecamp/css/home.css' %}">
-    <style nonce="{{ csp_nonce }}">
+    <style nonce="{{ CSP_NONCE }}">
         body { margin:0; font-family:Arial,sans-serif; }
         .award-badge { position: fixed; top: 60px; left: 10px; width: 80px !important; height: 80px; background: url('/static/basecamp/images/award-badge-sm.webp') center/contain no-repeat; image-rendering: -webkit-optimize-contrast; z-index: 1000; }
         .hero-award-link { display: inline-block; text-decoration: none; }

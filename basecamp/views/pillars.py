@@ -124,6 +124,7 @@ def maxi_taxi(request, suburb=None):
         'h2': h2,
         'route_info': zone_info.get('route_info', ""),
         'landmark': zone_info.get('landmark', ""),
+        'page_bg': 'basecamp/photos/bg-pattern02.webp', 
     }
 
     return render(request, 'basecamp/pillars/airport-maxi-taxi.html', context)

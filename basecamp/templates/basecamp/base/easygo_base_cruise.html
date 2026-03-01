@@ -21,7 +21,7 @@
     <link rel="manifest" href="{% static 'basecamp/favi/site.webmanifest' %}">      
     <link rel="stylesheet" href="{% static 'basecamp/css/flatpickr.min.css' %}"/>
     <link rel="stylesheet" href="{% static 'basecamp/css/theme.min.css' %}">
-    <style nonce="{{ csp_nonce }}">
+    <style nonce="{{ CSP_NONCE }}">
     .spinner { width: 16px; height: 16px; border: 2px solid #ffffff4d; border-top-color: #fff; border-radius: 50%; display: inline-block; vertical-align: middle; margin-left: 8px; animation: spin .8s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
     .booking-hero::before {content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(180deg, rgba(0,0,0,0.3), rgba(0,0,0,0.7)); opacity: 0.7;}
@@ -41,13 +41,13 @@
 
     {% include "basecamp/layouts/footer.html" %}
 
-    <script src="{% static 'basecamp/js/bootstrap.bundle.min.js' %}" defer nonce="{{ csp_nonce }}"></script>
-    <script src="{% static 'basecamp/js/smooth-scroll.polyfills.min.js' %}" defer nonce="{{ csp_nonce }}"></script>
-    <script src="{% static 'basecamp/js/flatpickr.min.js' %}" defer nonce="{{ csp_nonce }}"></script>
-    <script src="{% static 'basecamp/js/date-picker.js' %}" defer nonce="{{ csp_nonce }}"></script>
-    <script src="{% static 'basecamp/js/form_handler.js' %}" defer nonce="{{ csp_nonce }}"></script>    
+    <script src="{% static 'basecamp/js/bootstrap.bundle.min.js' %}" defer nonce="{{ CSP_NONCE }}"></script>
+    <script src="{% static 'basecamp/js/smooth-scroll.polyfills.min.js' %}" defer nonce="{{ CSP_NONCE }}"></script>
+    <script src="{% static 'basecamp/js/flatpickr.min.js' %}" defer nonce="{{ CSP_NONCE }}"></script>
+    <script src="{% static 'basecamp/js/date-picker.js' %}" defer nonce="{{ CSP_NONCE }}"></script>
+    <script src="{% static 'basecamp/js/form_handler.js' %}" defer nonce="{{ CSP_NONCE }}"></script>    
                 
-    <script nonce="{{ csp_nonce }}">
+    <script nonce="{{ CSP_NONCE }}">
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('booking-form');
         const submitButton = document.getElementById('submitButton');
@@ -139,10 +139,10 @@
         });
     });
     </script>
-    <script src="{% static 'basecamp/js/cruise_form.js' %}" defer nonce="{{ csp_nonce }}"></script>
-    <script nonce="{{ csp_nonce }}">document.getElementById('current-year').textContent = new Date().getFullYear();</script>
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer nonce="{{ csp_nonce }}"></script> 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" defer nonce="{{ csp_nonce }}"></script>
-    <script src="{% static 'basecamp/js/theme.min.js' %}" defer nonce="{{ csp_nonce }}"></script>
+    <script src="{% static 'basecamp/js/cruise_form.js' %}" defer nonce="{{ CSP_NONCE }}"></script>
+    <script nonce="{{ CSP_NONCE }}">document.getElementById('current-year').textContent = new Date().getFullYear();</script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer nonce="{{ CSP_NONCE }}"></script> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" defer nonce="{{ CSP_NONCE }}"></script>
+    <script src="{% static 'basecamp/js/theme.min.js' %}" defer nonce="{{ CSP_NONCE }}"></script>
   </body>
 </html>
