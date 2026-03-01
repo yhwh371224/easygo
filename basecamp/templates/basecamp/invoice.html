@@ -1,142 +1,91 @@
 {% extends 'basecamp/base/easygo_base_form1.html' %}
-{% load static %}
+
 {% block content %}
+  <section class="hero-invoice">
+    <span class="position-absolute top-0 start-0 w-100 h-100 bg-gradient opacity-80" style="z-index:1;"></span>
+    <div class="container" style="position: relative; z-index: 2; padding-top: 10rem; padding-bottom: 3rem;">
+      <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+          <div class="card shadow-lg">
+            <form method="post" enctype="multipart/form-data" action="/invoice_detail/" id="booking-form" class="card-body needs-validation p-4 m-3">
+              {% csrf_token %}
+              {# <input type="text" name="phone_verify" value="" style="display:none !important" tabindex="-1" autocomplete="off"> #}
+              <div class="card text-white bg-secondary" style="padding: 2.5rem 3rem;">
 
-<style>
-  .hero-invoice {
-    position: relative;
-    min-height: 100vh;
-    display: flex;
-    align-items: flex-start;
-    overflow: hidden;
-  }
-  .hero-invoice::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image: url("{% static 'basecamp/images/page-title-bg.webp' %}");
-    background-size: cover;
-    background-position: center center;
-    z-index: 0;
-  }
-</style>
+                <div class="mb-5 pb-3">
+                  <label class="form-label mb-3" for="email">Email address<sup class="text-danger ms-1">*</sup></label>
+                  <input class="form-control" type="email" placeholder="j.doe@example.com" required name="email" id="email">
+                  <div class="invalid-feedback">Please enter a valid email address!</div>
+                </div>
 
-<section class="hero-invoice">
-  <span class="position-absolute top-0 start-0 w-100 h-100 bg-gradient opacity-80" style="z-index:1;"></span>
-  <div class="container" style="position: relative; z-index: 2; padding-top: 10rem; padding-bottom: 3rem;">
-    <div class="row justify-content-center">
-      <div class="col-lg-8 col-md-10">
-        <div class="card shadow-lg">
-          <form method="post" enctype="multipart/form-data" action="/invoice_detail/" id="booking-form" class="card-body needs-validation p-4 m-3">
-            {% csrf_token %}
-            {# <input type="text" name="phone_verify" value="" style="display:none !important" tabindex="-1" autocomplete="off"> #}
-            <div class="card text-white bg-secondary" style="padding: 2.5rem 3rem;">
+                <div class="mb-5 pb-3">
+                  <label class="form-label mb-3" for="extra_email">Extra email address</label>
+                  <input class="form-control" type="email" name="extra_email" id="extra_email">
+                </div>
 
-              <div class="mb-5 pb-3">
-                <label class="form-label mb-3" for="email">Email address<sup class="text-danger ms-1">*</sup></label>
-                <input class="form-control" type="email" placeholder="j.doe@example.com" required name="email" id="email">
-                <div class="invalid-feedback">Please enter a valid email address!</div>
-              </div>
+                <div class="mb-5 pb-3">
+                  <label class="form-label mb-3">Apply GST (10%)</label>
+                  <div class="form-check mt-3">
+                    <input class="form-check-input" type="checkbox" name="apply_gst" value="yes" id="apply_gst">
+                    <label class="form-check-label fs-6" for="apply_gst">Include 10% GST in the invoice</label>
+                  </div>
+                </div>
 
-              <div class="mb-5 pb-3">
-                <label class="form-label mb-3" for="extra_email">Extra email address</label>
-                <input class="form-control" type="email" name="extra_email" id="extra_email">
-              </div>
+                <div class="mb-5 pb-3">
+                  <label class="form-label mb-3" for="surcharge">If surcharge (if paypal paid, then 3% to be applied)</label>
+                  <input class="form-control" type="text" placeholder="Yes or blank" name="surcharge" id="surcharge">
+                </div>
 
-              <div class="mb-5 pb-3">
-                <label class="form-label mb-3">Apply GST (10%)</label>
-                <div class="form-check mt-3">
-                  <input class="form-check-input" type="checkbox" name="apply_gst" value="yes" id="apply_gst">
-                  <label class="form-check-label fs-6" for="apply_gst">Include 10% GST in the invoice</label>
+                <div class="mb-5 pb-3">
+                  <label class="form-label mb-3" for="discount">If discount (if apply discount, figure only)</label>
+                  <input class="form-control" type="text" placeholder="discount amount" name="discount" id="discount">
+                </div>
+
+                <div class="mb-5 pb-3">
+                  <label class="form-label mb-3" for="toll">If toll (if charges tolls. figure only)</label>
+                  <input class="form-control" type="text" placeholder="toll amount" name="toll" id="toll">
+                </div>
+
+                <div class="mb-5 pb-3">
+                  <label class="form-label mb-3" for="from_date">From Date (Start Date)<sup class="text-danger ms-1">*</sup></label>
+                  <input class="form-control" type="date" name="from_date" id="from_date">
+                  <div class="invalid-feedback">Please select the start date!</div>
+                </div>
+
+                <div class="mb-5 pb-3">
+                  <label class="form-label mb-3" for="to_date">To Date (End Date)<sup class="text-danger ms-1">*</sup></label>
+                  <input class="form-control" type="date" name="to_date" id="to_date">
+                  <div class="invalid-feedback">Please select the end date!</div>
+                </div>
+
+                <div class="mb-5 pb-3">
+                  <label class="form-label mb-3" for="index">Index<sup class="text-danger ms-1">*</sup></label>
+                  <input class="form-control" type="number" placeholder="1" name="index" value="1" id="index">
+                  <div class="invalid-feedback">Please enter a valid index!</div>
+                </div>
+
+                <div class="mb-0">
+                  <label class="form-label mb-3" for="cont-message">#T988268 >> Invoice number (number only without #T)</label>
+                  <textarea class="form-control" name="inv_no" id="cont-message" rows="2" placeholder="Notice from EasyGo"></textarea>
                 </div>
               </div>
 
-              <div class="mb-5 pb-3">
-                <label class="form-label mb-3" for="surcharge">If surcharge (if paypal paid, then 3% to be applied)</label>
-                <input class="form-control" type="text" placeholder="Yes or blank" name="surcharge" id="surcharge">
+              <!-- Submit Button -->
+              <div class="cf-turnstile" data-sitekey="{{ CLOUDFLARE_TURNSTILE_SITE_KEY }}"></div>
+              <div class="text-center mt-4 mb-2">
+                <button class="btn btn-primary" type="submit" id="submitButton">Submit</button>
               </div>
 
-              <div class="mb-5 pb-3">
-                <label class="form-label mb-3" for="discount">If discount (if apply discount, figure only)</label>
-                <input class="form-control" type="text" placeholder="discount amount" name="discount" id="discount">
+              <div class="mt-3">
+                <small>This site is protected by Cloudflare Turnstile to keep your data safe and secure
+                  <a href="https://www.cloudflare.com/privacypolicy/">Privacy Policy</a> and
+                  <a href="https://www.cloudflare.com/website-terms/">Terms of Service</a> apply.
+                </small>
               </div>
-
-              <div class="mb-5 pb-3">
-                <label class="form-label mb-3" for="toll">If toll (if charges tolls. figure only)</label>
-                <input class="form-control" type="text" placeholder="toll amount" name="toll" id="toll">
-              </div>
-
-              <div class="mb-5 pb-3">
-                <label class="form-label mb-3" for="from_date">From Date (Start Date)<sup class="text-danger ms-1">*</sup></label>
-                <input class="form-control" type="date" name="from_date" id="from_date">
-                <div class="invalid-feedback">Please select the start date!</div>
-              </div>
-
-              <div class="mb-5 pb-3">
-                <label class="form-label mb-3" for="to_date">To Date (End Date)<sup class="text-danger ms-1">*</sup></label>
-                <input class="form-control" type="date" name="to_date" id="to_date">
-                <div class="invalid-feedback">Please select the end date!</div>
-              </div>
-
-              <div class="mb-5 pb-3">
-                <label class="form-label mb-3" for="index">Index<sup class="text-danger ms-1">*</sup></label>
-                <input class="form-control" type="number" placeholder="1" name="index" value="1" id="index">
-                <div class="invalid-feedback">Please enter a valid index!</div>
-              </div>
-
-              <div class="mb-0">
-                <label class="form-label mb-3" for="cont-message">#T988268 >> Invoice number (number only without #T)</label>
-                <textarea class="form-control" name="inv_no" id="cont-message" rows="2" placeholder="Notice from EasyGo"></textarea>
-              </div>
-            </div>
-
-            <!-- Submit Button -->
-            <div class="cf-turnstile" data-sitekey="{{ CLOUDFLARE_TURNSTILE_SITE_KEY }}"></div>
-            <div class="text-center mt-4 mb-2">
-              <button class="btn btn-primary" type="submit" id="submitButton">Submit</button>
-            </div>
-
-            <div class="mt-3">
-              <small>This site is protected by Cloudflare Turnstile to keep your data safe and secure
-                <a href="https://www.cloudflare.com/privacypolicy/">Privacy Policy</a> and
-                <a href="https://www.cloudflare.com/website-terms/">Terms of Service</a> apply.
-              </small>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
-
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    const form = document.getElementById("booking-form");
-    const submitButton = document.getElementById("submitButton");
-
-    if (form && submitButton) {
-        form.addEventListener("submit", function (event) {
-            if (!form.checkValidity()) {
-                event.preventDefault();
-                event.stopPropagation();
-                form.classList.add('was-validated');
-                return;
-            }
-            submitButton.disabled = true;
-            submitButton.innerHTML = "Submitting... <span class='spinner-border spinner-border-sm ms-2'></span>";
-        });
-    }
-});
-
-window.addEventListener("pageshow", function (event) {
-    if (event.persisted) {
-        const btn = document.getElementById("submitButton");
-        if (btn) {
-            btn.disabled = false;
-            btn.innerHTML = "Submit";
-        }
-    }
-});
-</script>
-
+  </section>
 {% endblock %}
