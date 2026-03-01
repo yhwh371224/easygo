@@ -8,14 +8,17 @@
 <style>
   header.header.navbar .nav-link { color: #000 !important; }
   #date-error { display: none; width: 100%; margin-top: .25rem; font-size: .875em; color: #dc3545; font-weight: bold; }
-  .custom-card { background: #f8f9fa; border: 1px solid #dee2e6; border-radius: .75rem; }
+  .custom-card { background: #e7eaec; border: 1px solid #dee2e6; border-radius: .75rem; }
+  .contact-section { margin-top: 120px; } 
+  @media (max-width: 768px) { .contact-section { margin-top: 60px; } } 
+  @media (max-width: 576px) { .contact-section { margin-top: 40px; } }
 </style>
 {% endblock %}
 
 {% block content %}
-<section class="container py-5 mt-4 mt-md-7">
-  <div class="row justify-content-center">
-    <h3 class="text-center mb-4 mt-5">Contact Form</h3>
+<section class="container py-5 contact-section">
+  <h3 class="text-center mb-4 mt-5">Contact Form</h3>
+  <div class="row justify-content-center">    
     <div class="col-lg-8">
       <div class="card shadow-lg custom-card">
         <form action="{% url 'basecamp:contact_submit' %}" method="post" id="booking-form" class="card-body p-5 needs-validation" novalidate>
