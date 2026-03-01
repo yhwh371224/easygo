@@ -1041,7 +1041,6 @@ def email_dispatch_detail(request):
 def payonline(request):
     context = {
         'paypal_client_id': settings.PAYPAL_CLIENT_ID,
-        'csp_nonce': NONCE, 
     }
     return render(request, 'basecamp/payments/payonline.html', context)
 
