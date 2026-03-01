@@ -1,6 +1,16 @@
 {% extends 'basecamp/base/easygo_base_error.html' %}
-{% block content %}
 {% load static %}
+
+{% block extra_css %}
+<style>
+  .admin-btn{ position: fixed; opacity:0;bottom:20px;right:80px;font-size:4px;transition:opacity .3s ease;pointer-events:auto;z-index:9999;padding:2px 4px;min-width:40px;}
+  .admin-btn:hover{opacity:.9!important;}
+  @media (max-width: 576px) { .admin-btn{display:none;} }
+</style>
+    {% endblock %}
+
+
+{% block content %}
 <!-- Hero -->
 <section class="bg-dark py-3" style="position: relative; overflow: hidden; min-height: 400px;">
   <img src="{% static 'basecamp/photos/bg-pattern01.webp' %}"
@@ -32,5 +42,5 @@
     </div>
   </div>
 </section>
-
+<a href="/confirmation/" class="btn btn-secondary btn-sm admin-btn" role="button">Warning!</a>
 {% endblock %}
