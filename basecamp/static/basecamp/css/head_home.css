@@ -23,7 +23,6 @@ body { margin: 0; font-family: Arial, sans-serif; }
   .entry-content ul, .entry-content ul ul { list-style: none; padding-left: 2rem; margin-top: 1rem; }
   .entry-content ul ul { padding-left: 1.5rem; margin-top: 0.5rem; }
   .text-brand         { color: #b85500; }
-  .text-blue-link     { color: #3b73b8; } 
   .text-ext-icon      { color: #00aaff; }
   .text-orange        { color: #935e00; } 
   .services-content   { max-width: 495px; }
@@ -49,4 +48,16 @@ body { margin: 0; font-family: Arial, sans-serif; }
   .award-section      { height: 40vh; min-height: 200px; cursor: pointer; }
   .admin-btn{ position: fixed; opacity:0;bottom:20px;right:80px;font-size:4px;transition:opacity .3s ease;pointer-events:auto;z-index:9999;padding:2px 4px;min-width:40px;}
   .admin-btn:hover{opacity:.9!important;}
+  .btn-primary { background-color: #5549f1; border-color: #5549f1; color: #fff; }
+  .btn-primary:hover, .btn-primary:focus, .btn-primary:active { background-color: #4439e0; border-color: #4439e0; color: #fff; }
+  .btn-success { background-color: #0e9e75; border-color: #0e9e75; color: #fff; }
+  .btn-success:hover, .btn-success:focus, .btn-success:active { background-color: #0b8762; border-color: #0b8762; color: #fff; }
+  .btn-warning { background-color: #e07800; border-color: #e07800; color: #fff; }
+  .btn-warning:hover, .btn-warning:focus, .btn-warning:active { background-color: #c46a00; border-color: #c46a00; color: #fff; }
+  .badge.bg-danger { background-color: #c0183f !important; }
+  .text-muted { color: #6b6c84 !important; }
+  .bg-dark .text-muted { color: #a4a5c0 !important; }
+  .text-blue-link { color: #0057a8 !important; }
+  .accordion-button:not(.collapsed) { color: #4439e0; }
+  a.card.card-hover, a.card.card-hover p, a.card.card-hover span { color: #37384e; }
   
