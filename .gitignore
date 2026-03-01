@@ -29,7 +29,6 @@ static_backup_*/
 # Compressed / Auto-generated
 # ==============================
 staticfiles/
-static/CACHE/
 *.br
 *.gz
 *.css~
