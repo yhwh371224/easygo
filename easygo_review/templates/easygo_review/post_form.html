@@ -3,24 +3,19 @@
 
 {% block title %} EasyGo Reviews {% endblock %}
 
-{% block content %}
+{% block extra_css %}
 <style>
-    form {
-        display: block;
-        margin-top: 60px;
-    }
-    .col-md-4 {
-        margin-top: 60px; 
-    }
-    .star {
-        color: #ccc; 
-        cursor: pointer;
-        font-size: 20px;
-    }
-    .star.rated {
-        color: gold; 
-    }
+form { display: block; margin-top: 60px; }
+.col-md-4 { margin-top: 60px; }
+.star { color: #ccc; cursor: pointer; font-size: 20px; }
+.star.rated { color: gold; }
 </style>
+{% endblock %}
+
+{% block canonical %}
+{% endblock %}
+
+{% block content %}
 <div class="container">
     <div class="row">
         <div class="col-md-8">
@@ -58,7 +53,7 @@
         </div>
         <div class="col-md-4">
             <a href="{% static 'basecamp/images/Digital-Certificate.webp' %}">
-                <img src="{% static 'basecamp/images/award-badge.webp' %}" width="320" height="320" alt="Award Badge" class="award-badge">
+                <img src="{% static 'basecamp/images/award-badge-sm.webp' %}" width="240" height="240" alt="EasyGo Quality Business Award Badge" class="award-badge" fetchpriority="high">
               </a>
         </div>
     </div>
