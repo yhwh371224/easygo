@@ -509,7 +509,7 @@ var tns = function(options) {
     center: false,
     controls: true,
     controlsPosition: 'top',
-    controlsText: ['prev', 'next'],
+    controlsText: ['<span aria-label="Previous">&#8249;</span>', '<span aria-label="Next">&#8250;</span>'],
     controlsContainer: false,
     prevButton: false,
     nextButton: false,
