@@ -190,10 +190,10 @@ SITE_ID = 1
 SITE_URL = 'https://easygoshuttle.com.au'
 
 MIDDLEWARE = [     
+    'django.middleware.security.SecurityMiddleware',
     'htmlmin.middleware.HtmlMinifyMiddleware', 
     'htmlmin.middleware.MarkRequestMiddleware', 
     'django.middleware.gzip.GZipMiddleware',    
-    'django.middleware.security.SecurityMiddleware',
     'csp.middleware.CSPMiddleware',  
     'main.middlewares.login_control.AccountLoginMethodMiddleware',
     'corsheaders.middleware.CorsMiddleware',
