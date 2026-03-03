@@ -1525,7 +1525,7 @@ var tns = function(options) {
     // == controlsInit ==
     if (hasControls) {
       if (!controlsContainer && (!prevButton || !nextButton)) {
-        outerWrapper.insertAdjacentHTML(getInsertPosition(options.controlsPosition), '<div class="tns-controls" aria-label="Carousel Navigation"><button type="button" data-controls="prev" tabindex="-1" aria-controls="' + slideId +'">' + controlsText[0] + '</button><button type="button" data-controls="next" tabindex="-1" aria-controls="' + slideId +'">' + controlsText[1] + '</button></div>');
+        outerWrapper.insertAdjacentHTML(getInsertPosition(options.controlsPosition), '<div class="tns-controls"><button type="button" data-controls="prev" tabindex="-1" aria-controls="' + slideId +'">' + controlsText[0] + '</button><button type="button" data-controls="next" tabindex="-1" aria-controls="' + slideId +'">' + controlsText[1] + '</button></div>');
 
         controlsContainer = outerWrapper.querySelector('.tns-controls');
       }
@@ -1868,7 +1868,9 @@ var tns = function(options) {
 
       if (controls && controlsText !== controlsTextTem) {
         prevButton.innerHTML = controlsText[0];
+        prevButton.setAttribute('aria-label', 'Previous slide');
         nextButton.innerHTML = controlsText[1];
+        nextButton.setAttribute('aria-label', 'Next slide');
       }
 
       if (autoplayButton && autoplayText !== autoplayTextTem) {
