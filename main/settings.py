@@ -191,9 +191,9 @@ SITE_URL = 'https://easygoshuttle.com.au'
 
 MIDDLEWARE = [     
     'django.middleware.security.SecurityMiddleware',
+    'django.middleware.gzip.GZipMiddleware', 
     'htmlmin.middleware.HtmlMinifyMiddleware', 
-    'htmlmin.middleware.MarkRequestMiddleware', 
-    'django.middleware.gzip.GZipMiddleware',    
+    'htmlmin.middleware.MarkRequestMiddleware',        
     'csp.middleware.CSPMiddleware',  
     'main.middlewares.login_control.AccountLoginMethodMiddleware',
     'corsheaders.middleware.CorsMiddleware',
