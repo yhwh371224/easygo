@@ -10,7 +10,7 @@ from django.utils.html import strip_tags
 from django.conf import settings
 from blog.models import Post, Driver
 from utils import booking_helper
-from basecamp.utils import render_email_template
+from basecamp.basecamp_utils import render_email_template
 
 logger = logging.getLogger(__name__)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

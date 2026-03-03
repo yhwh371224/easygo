@@ -8,7 +8,7 @@ from main.settings import RECIPIENT_EMAIL
 
 from .models import Post, Inquiry, PaypalPayment, StripePayment
 from .tasks import create_event_on_calendar, notify_user_payment_paypal, notify_user_payment_stripe
-from basecamp.utils import check_and_send_missing_info_email
+from basecamp.basecamp_utils import check_and_send_missing_info_email
 from utils.return_booking import handle_return_trip
 from utils.inquiry_helper import send_inquiry_email  
 from utils.prepay_helper import is_foreign_number

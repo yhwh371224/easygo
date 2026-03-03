@@ -10,7 +10,7 @@ from blog.models import Post, Inquiry, Driver
 from blog.tasks import send_confirm_email
 from basecamp.area import get_suburbs
 from basecamp.area_home import get_home_suburbs
-from basecamp.utils import (
+from basecamp.basecamp_utils import (
     is_ajax, parse_date, handle_email_sending,
     add_bag, to_int, to_bool,
     verify_turnstile, get_sorted_suburbs

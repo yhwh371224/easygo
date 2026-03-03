@@ -9,6 +9,7 @@ from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives, send_mail
 from django.utils.html import strip_tags
 from basecamp.area_home import get_home_suburbs
+from blog.tasks import notify_user_payment_stripe
 from main import settings
 from weasyprint import HTML
 from blog.models import StripePayment
@@ -265,6 +266,7 @@ def handle_checkout_session_completed(session):
                 "amount": amount,
             }
         )
+
         print(f"StripePayment saved. created={created}")
 
     except Exception as e:

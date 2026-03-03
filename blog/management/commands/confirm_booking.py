@@ -7,7 +7,7 @@ from django.utils.html import strip_tags
 from blog.models import Post
 from django.utils import timezone
 from main.settings import RECIPIENT_EMAIL
-from basecamp.utils import render_email_template
+from basecamp.basecamp_utils import render_email_template
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

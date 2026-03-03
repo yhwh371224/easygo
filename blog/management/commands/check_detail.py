@@ -4,7 +4,7 @@ from django.utils.html import strip_tags
 from django.core.mail import EmailMultiAlternatives
 from blog.models import Post
 from main.settings import RECIPIENT_EMAIL
-from basecamp.utils import render_email_template
+from basecamp.basecamp_utils import render_email_template
 
 
 class Command(BaseCommand):

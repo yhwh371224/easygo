@@ -9,7 +9,7 @@ from django.db.models import Q
 from blog.models import Post
 from blog.sms_utils import send_sms_notice, send_whatsapp_template
 from main.settings import RECIPIENT_EMAIL
-from basecamp.utils import render_email_template
+from basecamp.basecamp_utils import render_email_template
 
 # Logger setup
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

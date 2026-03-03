@@ -1,7 +1,7 @@
 from django.core.mail import EmailMultiAlternatives
 from django.utils.html import strip_tags
 from main.settings import RECIPIENT_EMAIL
-from basecamp.utils import render_email_template
+from basecamp.basecamp_utils import render_email_template
 from decimal import Decimal
 
 

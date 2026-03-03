@@ -79,15 +79,21 @@ class PaypalPayment(models.Model):
     name = models.CharField(max_length=100, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    txn_id = models.CharField(max_length=100, blank=True, null=True)
+    txn_id = models.CharField(max_length=100, blank=True, null=True) 
     created = models.DateTimeField(auto_now_add=True)
+
+    # --- 새로 추가할 필드 ---
+    is_processed = models.BooleanField(default=False)
+    processed_at = models.DateTimeField(null=True, blank=True)
+    # -----------------------
 
     class Meta:
         ordering = ['-created']
 
     def __str__(self):
-        return f"{self.name} - {self.amount}"  
-
+        status = "Done" if self.is_processed else "Pending"
+        return f"{self.name} - {self.amount} ({status})"
+    
 
 class StripePayment(models.Model):
     name = models.CharField(max_length=100, blank=True, null=True)
@@ -95,12 +101,17 @@ class StripePayment(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     payment_intent_id = models.CharField(max_length=100, unique=True, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
+    
+    # --- 새로 추가할 필드 ---
+    is_processed = models.BooleanField(default=False)  
+    processed_at = models.DateTimeField(null=True, blank=True) 
+    # -----------------------
 
     class Meta:
         ordering = ['-created']
 
     def __str__(self):
-        return f"{self.name} - {self.amount}"  
+        return f"{self.name} - {self.amount} ({'Done' if self.is_processed else 'Pending'})"
 
         
 class Post(models.Model):
