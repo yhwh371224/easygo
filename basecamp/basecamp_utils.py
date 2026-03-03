@@ -9,7 +9,6 @@ from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives, send_mail
 from django.utils.html import strip_tags
 from basecamp.area_home import get_home_suburbs
-from blog.tasks import notify_user_payment_stripe
 from main import settings
 from weasyprint import HTML
 from blog.models import StripePayment
@@ -312,6 +311,44 @@ def get_sorted_suburbs():
     return fixed + remaining
 
 def parse_baggage(request) -> str:
+    # 1. 바구니(리스트)를 먼저 만듭니다. (이게 없어서 노란색 경고가 뜬 거예요!)
+    baggage_summary = []
+
+    # 2. POST 데이터에서 숫자들을 가져옵니다.
     large = to_int(request.POST.get('baggage_large'))
-    # ... 나머지 파싱
+    medium = to_int(request.POST.get('baggage_medium'))
+    small = to_int(request.POST.get('baggage_small'))
+    baby_seat = to_int(request.POST.get('baggage_baby'))
+    booster_seat = to_int(request.POST.get('baggage_booster'))
+    pram = to_int(request.POST.get('baggage_pram'))
+    ski = to_int(request.POST.get('baggage_ski'))
+    snowboard = to_int(request.POST.get('baggage_snowboard'))
+    golf = to_int(request.POST.get('baggage_golf'))
+    bike = to_int(request.POST.get('baggage_bike'))
+    boxes = to_int(request.POST.get('baggage_boxes'))
+    musical_instrument = to_int(request.POST.get('baggage_music'))
+
+    # 3. Oversize 여부를 확인합니다.
+    ski_os = ski > 0 and to_bool(request.POST.get('ski_oversize'))
+    snow_os = snowboard > 0 and to_bool(request.POST.get('snowboard_oversize'))
+    golf_os = golf > 0 and to_bool(request.POST.get('golf_oversize'))
+    bike_os = bike > 0 and to_bool(request.POST.get('bike_oversize'))
+    box_os = boxes > 0 and to_bool(request.POST.get('boxes_oversize'))
+    music_os = musical_instrument > 0 and to_bool(request.POST.get('music_oversize'))
+
+    # 4. 이미 파일 하단에 있는 add_bag 함수를 사용하여 내용을 담습니다.
+    add_bag(baggage_summary, "L", large)
+    add_bag(baggage_summary, "M", medium)
+    add_bag(baggage_summary, "S", small)
+    add_bag(baggage_summary, "Baby", baby_seat)
+    add_bag(baggage_summary, "Booster", booster_seat)
+    add_bag(baggage_summary, "Pram", pram)
+    add_bag(baggage_summary, "Ski", ski, ski_os)
+    add_bag(baggage_summary, "Snow", snowboard, snow_os)
+    add_bag(baggage_summary, "Golf", golf, golf_os)
+    add_bag(baggage_summary, "Bike", bike, bike_os)
+    add_bag(baggage_summary, "Box", boxes, box_os)
+    add_bag(baggage_summary, "Music", musical_instrument, music_os)
+
+    # 5. 이제 안전하게 합쳐서 반환합니다.
     return ", ".join(baggage_summary)
