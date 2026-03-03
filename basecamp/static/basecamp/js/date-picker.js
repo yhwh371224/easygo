@@ -11,6 +11,8 @@ const datePicker = (() => {
   
   for (let i = 0; i < picker.length; i++) {
 
+    if (picker[i]._flatpickr) continue; // already initialized — skip to avoid double-init
+
     let defaults = {
       disableMobile: true
     }
