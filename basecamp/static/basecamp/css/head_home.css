@@ -3,8 +3,8 @@
 @media (min-width: 768px) { .award-badge { position: absolute; top: 100px; left: auto; transform: none; right: 20px; width: 140px !important; height: auto; }}
 @media (min-width: 992px) { .award-badge { position: fixed; top: 140px; right: 10px; width: 240px !important; height: auto; }}
 @media (min-width: 992px) { .main-img { min-height: 500px; } }
-@media (max-width: 768px) { .hero-about { min-height: 400px; } .hero-about h1 { font-size: 1.6rem; } .hero-overlap-container { margin-top: -60px; } .content-card-box { padding: 2rem 1.5rem !important; } #booking-form { margin-top: 5px !important; transform: translateY(-20px); } }
-@media (max-width: 576px) { .card-img-top { height: 140px; } .admin-btn{display:none;} }
+@media (max-width: 768px) { .hero-about { min-height: 400px; } .hero-about h1 { font-size: 1.6rem; } .hero-overlap-container { margin-top: -60px; } .content-card-box { padding: 2rem 1.5rem !important; } #booking-form { margin-top: 5px !important; transform: translateY(-20px); } .admin-btn { display: none !important; }}
+@media (max-width: 576px) { .card-img-top { height: 140px; } .admin-btn { display: none !important; } }
 @media (max-width: 992px) { .card-img-top { height: 180px; } }
 @media (min-width: 992px) and (max-width: 1279px) { .container { max-width: 100%; } }
 body { margin: 0; font-family: Arial, sans-serif; }

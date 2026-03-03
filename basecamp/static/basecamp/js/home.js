@@ -32,24 +32,5 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // 3. Testimonials 슬라이더 초기화 (.tiny-slider-inner)
-  // theme.min.js는 .tns-carousel-wrapper만 처리하므로 여기서 별도 초기화
-  document.querySelectorAll('.tiny-slider-inner').forEach(function (el) {
-    if (typeof tns === 'undefined') return;
-    var autoplayTimeout = parseInt(el.dataset.autoplay, 10) || 0;
-    tns({
-      container: el,
-      items: parseInt(el.dataset.items, 10) || 1,
-      autoplay: autoplayTimeout > 0,
-      autoplayTimeout: autoplayTimeout,
-      autoplayHoverPause: true,
-      autoplayButtonOutput: false,
-      controls: el.dataset.arrow !== 'false',
-      nav: el.dataset.dots !== 'false',
-      edgePadding: parseInt(el.dataset.edge, 10) || 0,
-      mouseDrag: true,
-      speed: 600,
-    });
-  });
 });
 
