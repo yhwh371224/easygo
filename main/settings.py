@@ -360,6 +360,8 @@ CORS_ALLOW_METHODS = [ 'GET', 'POST', ]
 
 CORS_ALLOW_HEADERS = [ 'Content-Type', 'X-CSRFToken', ]
 
+APPEND_SLASH = True
+
 #PayPal settings
 PAYPAL_MODE = 'live'  
 PAYPAL_CLIENT_ID = config('PAYPAL_CLIENT_ID')
