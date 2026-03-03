@@ -145,7 +145,12 @@ def notify_user_payment_paypal(instance_id):
         
         if not success: return
 
-    send_payment_notification_email(instance, total_balance, recipient_emails, RECIPIENT_EMAIL)
+    send_payment_notification_email(
+        instance, total_balance, recipient_emails, RECIPIENT_EMAIL,
+        method_label="PAYPAL",
+        raw_amount=raw_amount,
+        net_amount=calculated_amount
+    )
 
 
 # Stripe payment 
@@ -162,13 +167,14 @@ def notify_user_payment_stripe(instance_id):
             Q(name__iexact=instance.name)
         ).order_by('pickup_date')
 
-        success, total_balance, recipient_emails = process_generic_payment(
-            instance, posts, RECIPIENT_EMAIL
-        )
-        
+        success, total_balance, recipient_emails = process_generic_payment(instance, posts, RECIPIENT_EMAIL)
+       
         if not success: return 
-
-    send_payment_notification_email(instance, total_balance, recipient_emails, RECIPIENT_EMAIL)
+    
+    send_payment_notification_email(
+        instance, total_balance, recipient_emails, RECIPIENT_EMAIL, 
+        method="STRIPE"
+    )
 
             
 # XRP payment record and email
