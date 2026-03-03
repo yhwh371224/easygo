@@ -1,51 +1,58 @@
+from django.core.management.base import BaseCommand
 from datetime import datetime
-import pytz  # 설치: pip install pytz
+import pytz
+import os
 
-# Sydney 시간대 설정
-sydney_tz = pytz.timezone("Australia/Sydney")
-today_sydney = datetime.now(sydney_tz).strftime("%Y-%m-%dT00:00:00+11:00")  # AEDT 기준
+class Command(BaseCommand):
+    help = "Generate Sydney time sitemap.xml"
 
-# 사이트맵 URL 목록
-urls = [
-    {"loc": "https://easygoshuttle.com.au/", "changefreq": "daily", "priority": "1.0000"},
-    {"loc": "https://easygoshuttle.com.au/pillars/sydney-airport-transfer/", "changefreq": "weekly", "priority": "0.9000"},
-    {"loc": "https://easygoshuttle.com.au/pillars/sydney-cruise-transfer/", "changefreq": "weekly", "priority": "0.9000"},
-    {"loc": "https://easygoshuttle.com.au/pillars/sydney-airport-shuttle/", "changefreq": "weekly", "priority": "0.9000"},
-    {"loc": "https://easygoshuttle.com.au/pillars/maxi-taxi/", "changefreq": "weekly", "priority": "0.9000"},
-    {"loc": "https://easygoshuttle.com.au/booking/booking/", "changefreq": "weekly", "priority": "0.8000"},
-    {"loc": "https://easygoshuttle.com.au/booking/inquiry/", "changefreq": "weekly", "priority": "0.8000"},
-    {"loc": "https://easygoshuttle.com.au/booking/cruise_inquiry/", "changefreq": "weekly", "priority": "0.7000"},
-    {"loc": "https://easygoshuttle.com.au/pages/about_us/", "changefreq": "monthly", "priority": "0.7000"},
-    {"loc": "https://easygoshuttle.com.au/easygo_review/", "changefreq": "weekly", "priority": "0.7000"},
-    {"loc": "https://easygoshuttle.com.au/pages/information/", "changefreq": "monthly", "priority": "0.6000"},
-    {"loc": "https://easygoshuttle.com.au/pages/meeting_point/", "changefreq": "monthly", "priority": "0.6000"},
-    {"loc": "https://easygoshuttle.com.au/pages/arrival_guide/", "changefreq": "monthly", "priority": "0.6000"},
-    {"loc": "https://easygoshuttle.com.au/layouts/more_suburbs/", "changefreq": "weekly", "priority": "0.6000"},
-    {"loc": "https://easygoshuttle.com.au/layouts/more_suburbs_maxi_taxi/", "changefreq": "weekly", "priority": "0.6000"},
-    {"loc": "https://easygoshuttle.com.au/layouts/more_suburbs1/", "changefreq": "weekly", "priority": "0.6000"},
-    {"loc": "https://easygoshuttle.com.au/pages/payment_options/", "changefreq": "monthly", "priority": "0.5000"},
-    {"loc": "https://easygoshuttle.com.au/payments/payonline/", "changefreq": "monthly", "priority": "0.5000"},
-    {"loc": "https://easygoshuttle.com.au/payments/payment_options/", "changefreq": "monthly", "priority": "0.5000"},
-    {"loc": "https://easygoshuttle.com.au/pages/terms/", "changefreq": "yearly", "priority": "0.3000"},
-    {"loc": "https://easygoshuttle.com.au/pages/privacy/", "changefreq": "yearly", "priority": "0.3000"},
-]
+    def handle(self, *args, **options):
+        # Sydney 시간대 설정
+        sydney_tz = pytz.timezone("Australia/Sydney")
+        today_sydney = datetime.now(sydney_tz).strftime("%Y-%m-%dT00:00:00+11:00")
 
-# 사이트맵 생성
-sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n\n'
-sitemap += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n\n'
+        # 사이트맵 URL 목록
+        urls = [
+            {"loc": "https://easygoshuttle.com.au/", "changefreq": "daily", "priority": "1.0000"},
+            {"loc": "https://easygoshuttle.com.au/pillars/sydney-airport-transfer/", "changefreq": "weekly", "priority": "0.9000"},
+            {"loc": "https://easygoshuttle.com.au/pillars/sydney-cruise-transfer/", "changefreq": "weekly", "priority": "0.9000"},
+            {"loc": "https://easygoshuttle.com.au/pillars/sydney-airport-shuttle/", "changefreq": "weekly", "priority": "0.9000"},
+            {"loc": "https://easygoshuttle.com.au/pillars/maxi-taxi/", "changefreq": "weekly", "priority": "0.9000"},
+            {"loc": "https://easygoshuttle.com.au/booking/booking/", "changefreq": "weekly", "priority": "0.8000"},
+            {"loc": "https://easygoshuttle.com.au/booking/inquiry/", "changefreq": "weekly", "priority": "0.8000"},
+            {"loc": "https://easygoshuttle.com.au/booking/cruise_inquiry/", "changefreq": "weekly", "priority": "0.7000"},
+            {"loc": "https://easygoshuttle.com.au/pages/about_us/", "changefreq": "monthly", "priority": "0.7000"},
+            {"loc": "https://easygoshuttle.com.au/easygo_review/", "changefreq": "weekly", "priority": "0.7000"},
+            {"loc": "https://easygoshuttle.com.au/pages/information/", "changefreq": "monthly", "priority": "0.6000"},
+            {"loc": "https://easygoshuttle.com.au/pages/meeting_point/", "changefreq": "monthly", "priority": "0.6000"},
+            {"loc": "https://easygoshuttle.com.au/pages/arrival_guide/", "changefreq": "monthly", "priority": "0.6000"},
+            {"loc": "https://easygoshuttle.com.au/layouts/more_suburbs/", "changefreq": "weekly", "priority": "0.6000"},
+            {"loc": "https://easygoshuttle.com.au/layouts/more_suburbs_maxi_taxi/", "changefreq": "weekly", "priority": "0.6000"},
+            {"loc": "https://easygoshuttle.com.au/layouts/more_suburbs1/", "changefreq": "weekly", "priority": "0.6000"},
+            {"loc": "https://easygoshuttle.com.au/pages/payment_options/", "changefreq": "monthly", "priority": "0.5000"},
+            {"loc": "https://easygoshuttle.com.au/payments/payonline/", "changefreq": "monthly", "priority": "0.5000"},
+            {"loc": "https://easygoshuttle.com.au/payments/payment_options/", "changefreq": "monthly", "priority": "0.5000"},
+            {"loc": "https://easygoshuttle.com.au/pages/terms/", "changefreq": "yearly", "priority": "0.3000"},
+            {"loc": "https://easygoshuttle.com.au/pages/privacy/", "changefreq": "yearly", "priority": "0.3000"},
+        ]
 
-for url in urls:
-    sitemap += f'  <url>\n'
-    sitemap += f'       <loc>{url["loc"]}</loc>\n'
-    sitemap += f'       <lastmod>{today_sydney}</lastmod>\n'
-    sitemap += f'       <changefreq>{url["changefreq"]}</changefreq>\n'
-    sitemap += f'       <priority>{url["priority"]}</priority>\n'
-    sitemap += f'  </url>\n\n'
+        # 사이트맵 생성
+        sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n\n'
+        sitemap += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n\n'
 
-sitemap += '</urlset>'
+        for url in urls:
+            sitemap += f'  <url>\n'
+            sitemap += f'       <loc>{url["loc"]}</loc>\n'
+            sitemap += f'       <lastmod>{today_sydney}</lastmod>\n'
+            sitemap += f'       <changefreq>{url["changefreq"]}</changefreq>\n'
+            sitemap += f'       <priority>{url["priority"]}</priority>\n'
+            sitemap += f'  </url>\n\n'
 
-# 파일로 저장 (원하는 경로로 바꾸면 웹서버 루트에 바로 저장 가능)
-with open("sitemap.xml", "w", encoding="utf-8") as f:
-    f.write(sitemap)
+        sitemap += '</urlset>'
 
-print("Sydney 시간 기준 sitemap.xml 파일이 생성되었습니다. 날짜:", today_sydney)
+        # 파일 저장 (프로젝트 루트 또는 원하는 경로)
+        output_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "sitemap.xml")
+        with open(output_path, "w", encoding="utf-8") as f:
+            f.write(sitemap)
+
+        self.stdout.write(self.style.SUCCESS(f"Sydney 시간 기준 sitemap.xml 파일이 생성되었습니다. 날짜: {today_sydney}"))
