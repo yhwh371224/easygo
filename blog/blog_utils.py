@@ -103,32 +103,42 @@ def process_generic_payment(payment_instance, posts, recipient_email_config):
     return True, total_balance, recipient_emails
 
 
-def send_payment_notification_email(instance, total_balance, recipient_emails, admin_email):
+def send_payment_notification_email(instance, total_balance, recipient_emails, admin_email, method="STRIPE", raw_amount=None, net_amount=None):
     """
-    결제 결과에 따라 사용자 및 관리자에게 이메일을 발송합니다.
+    Stripe/PayPal 각각의 템플릿과 금액을 처리합니다.
     """
-    amount = float(instance.amount or 0)
-    remaining_balance = round(total_balance - amount, 2)
-    
+    if net_amount is None:
+        net_amount = float(instance.amount or 0)
+    if raw_amount is None:
+        raw_amount = net_amount
+
+    remaining_balance = round(total_balance - net_amount, 2)
     recipient_list = [email for email in recipient_emails if email] + [admin_email]
 
-    if instance.email and instance.email not in recipient_list:
-        recipient_list.append(instance.email)
+    context = {
+        'name': instance.name,
+        'email': instance.email,
+        'raw_amount': raw_amount,  
+        'amount': net_amount,     
+    }
 
-    if total_balance == 0: 
-        template = "html_email-noIdentity-stripe.html"
-        context = {'name': instance.name, 'email': instance.email, 'amount': amount}
+    if total_balance == 0:
+        if method == "PAYPAL":
+            template = "html_email-noIdentity.html" 
+        else:
+            template = "html_email-noIdentity-stripe.html"
     elif remaining_balance <= 0:
-        template = "html_email-payment-success-stripe.html"
-        context = {'name': instance.name, 'email': instance.email, 'amount': amount}
+        if method == "PAYPAL":
+            template = "html_email-payment-success.html"
+        else:
+            template = "html_email-payment-success-stripe.html"
     else:
         template = "html_email-response-discrepancy.html"
-        context = {
-            'name': instance.name,
+        context.update({
             'price': round(total_balance, 2),
-            'paid': round(amount, 2),
+            'paid': round(net_amount, 2),
             'diff': round(remaining_balance, 2)
-        }
+        })
 
     html_content = render_email_template(template, context)
-    payment_send_email("Payment - EasyGo", html_content, recipient_list)
+    payment_send_email("Payment Received - EasyGo", html_content, recipient_list)
