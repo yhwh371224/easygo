@@ -35,12 +35,10 @@ def create_event_on_calendar(instance_id):
 
     event_id = (instance.calendar_event_id or '').strip()
 
-    # 취소 상태면서 기존 이벤트 없으면 새로 생성 안 함
     if instance.cancelled and not event_id:
         logger.info(f"Cancelled post {instance_id} with no event_id. Skipping event creation.")
         return
 
-    # Google Calendar 동기화
     sync_to_calendar(instance)
 
 
@@ -131,9 +129,7 @@ def notify_user_payment_paypal(instance_id):
         raw_amount = float(instance.amount or 0)
         calculated_amount = round(raw_amount / 1.03, 2)
         
-        # 원본 금액 보존 (이메일 발송용)
         original_amount = instance.amount
-        # 배분 로직용 금액 설정
         instance.amount = calculated_amount 
 
         posts = Post.objects.filter(
@@ -145,7 +141,6 @@ def notify_user_payment_paypal(instance_id):
             instance, posts, RECIPIENT_EMAIL
         )
         
-        # 배분 후 다시 원금으로 복구 (이메일 템플릿의 raw_amount 표시를 위해)
         instance.amount = original_amount
         
         if not success: return
@@ -167,14 +162,12 @@ def notify_user_payment_stripe(instance_id):
             Q(name__iexact=instance.name)
         ).order_by('pickup_date')
 
-        # 2. 금액 배분 로직 실행
         success, total_balance, recipient_emails = process_generic_payment(
             instance, posts, RECIPIENT_EMAIL
         )
         
-        if not success: return # 중복 건이면 종료
+        if not success: return 
 
-    # 3. 이메일 발송 (트랜잭션 밖에서 실행)
     send_payment_notification_email(instance, total_balance, recipient_emails, RECIPIENT_EMAIL)
 
             
@@ -196,8 +189,6 @@ def send_xrp_customer_email(email: str, xrp_amount: str, xrp_address: str, dest_
     고객에게 XRP 결제 안내 메일 전송 (HTML, 이름 없음)
     QR 코드 기능 제거 버전
     """
-
-    # context를 단일 dict로 구성 (QR코드 제거)
     context = {
         "email": email,
         "amount": f"{Decimal(xrp_amount):.2f} XRP",
@@ -205,20 +196,17 @@ def send_xrp_customer_email(email: str, xrp_amount: str, xrp_address: str, dest_
         "dest_tag": dest_tag,
     }
 
-    # HTML 렌더링
     html_content = render_email_template("html_email-xrppayment.html", context)
 
-    # 이메일 생성
     subject = "XRP Payment - EasyGo"
     mail = EmailMultiAlternatives(
         subject,
         html_content,
-        RECIPIENT_EMAIL,  # 발신자
-        [email],          # 수신자
+        RECIPIENT_EMAIL,
+        [email],          
     )
     mail.attach_alternative(html_content, "text/html")
 
-    # 이메일 전송
     try:
         mail.send()
     except Exception as e:
