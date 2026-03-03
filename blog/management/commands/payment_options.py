@@ -5,7 +5,7 @@ from django.db.models import Q
 from django.conf import settings
 from django.utils import timezone
 from blog.models import Post
-from basecamp.utils import render_email_template
+from basecamp.basecamp_utils import render_email_template
 
 
 class Command(BaseCommand):

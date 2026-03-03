@@ -8,7 +8,7 @@ from django.utils.html import strip_tags
 from django.conf import settings
 
 from blog.models import Post, Driver
-from basecamp.utils import render_email_template
+from basecamp.basecamp_utils import render_email_template
 from utils import booking_helper
 
 from twilio.rest import Client

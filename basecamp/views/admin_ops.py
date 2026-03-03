@@ -14,12 +14,13 @@ from main.settings import RECIPIENT_EMAIL, DEFAULT_FROM_EMAIL
 from blog.models import Post, Inquiry, PaypalPayment, Driver
 from blog.sms_utils import send_sms_notice, send_whatsapp_template
 from csp.constants import NONCE
-from basecamp.utils import (
+from basecamp.basecamp_utils import (
     is_ajax, parse_date, handle_email_sending, format_pickup_time_12h,
     render_to_pdf, add_bag, to_int, to_bool, safe_float,
     handle_checkout_session_completed, paypal_ipn_error_email,
     verify_turnstile, render_email_template
 )
+from blog.tasks import notify_user_payment_paypal, notify_user_payment_stripe
 
 logger = logging.getLogger(__name__)
 
@@ -1066,6 +1067,7 @@ def paypal_ipn(request):
 
         try:
             p.save()
+
         except Exception as e:
             paypal_ipn_error_email('PayPal IPN Error', str(e), item_name, payer_email, gross_amount)
             return HttpResponse(status=500, content="Error processing PayPal IPN")

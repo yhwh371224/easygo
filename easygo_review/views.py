@@ -18,8 +18,7 @@ from .forms import CommentForm, PostForm
 from blog.models import Post as BlogPost
 from blog.tasks import send_notice_email
 from main.settings import RECIPIENT_EMAIL
-from .utils.verse_image import create_verse_image
-
+from .review_utils import create_verse_image
 
 
 def custom_login_view(request):

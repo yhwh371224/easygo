@@ -6,7 +6,7 @@ from basecamp.area import get_suburbs
 from basecamp.area_full import get_more_suburbs
 from basecamp.area_home import get_home_suburbs
 from basecamp.area_zones import area_zones
-from basecamp.utils import get_sorted_suburbs
+from basecamp.basecamp_utils import get_sorted_suburbs
 
 logger = logging.getLogger(__name__)
 
