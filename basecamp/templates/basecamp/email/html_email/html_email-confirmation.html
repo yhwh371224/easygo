@@ -13,21 +13,32 @@
     table {border-spacing: 0;}
     td {padding: 0;}
     p {font-size: 15px;}
-    img {border: 0; border-width:0;}
-    a {color: #277fd2; text-decoration: none;}
-
-    /* 반응형: 모바일 클래스 실제 적용 */
+    img {
+      border: 0;
+      border-width:0;
+    }
+    a {
+      color: #277fd2;
+      text-decoration: none;
+    }
     @media screen and (max-width: 599.98px) {
-      .px-600-0 {padding-left: 0!important; padding-right: 0!important;}
+      .px-600-0 {
+        padding-left: 0!important;
+        padding-right: 0!important;
+      }
       .pt-600-0 {padding-top: 0!important;}
       .d-600-none {display: none!important;}
       .center-text-mobile {text-align: center!important;}
-      .mobile-pad {padding-left: 16px!important; padding-right: 16px!important;}
+      .mobile-pad {
+        padding-left: 16px!important;
+        padding-right: 16px!important;
+      }
     }
-
-    /* 다크모드: div 포함하여 적용 범위 확대 */
     @media (prefers-color-scheme: dark) {
-      body, center, table, div, .darkmode-bg {background: #2d2d2d!important; color: #ffffff!important;}
+      body, center, table, div, .darkmode-bg {
+        background: #2d2d2d!important;
+        color: #ffffff!important;
+      }
       .darkmode-transparent {background-color: transparent!important;}
       .darkmode-border {border-color: #555!important;}
       .darkmode-card {background: #3a3a3a!important;}
@@ -62,8 +73,6 @@
                 <td style="padding:15px;font-size:14px;line-height:22px;color:#333;">
                   <strong>✅ Booking Summary</strong><br /><br />
 
-                  <!-- 수정: Booking ID 추가 -->
-                  •&nbsp;<strong>Booking ID:</strong> {{ booking_id|default:'N/A' }}<br />
                   <!-- 수정: slice 필터 → date 필터로 변경 -->
                   •&nbsp;<strong>Pickup Date:</strong> {{ pickup_date|date:"Y-m-d" }}<br />
                   •&nbsp;<strong>Pickup Time:</strong> {{ pickup_time }}<br />
@@ -121,7 +130,7 @@
                     {% else %}
                       •&nbsp;<strong>Direction:</strong> {{ return_direction }}<br />
                       <!-- 수정: 리턴 전용 주소 변수 사용, 없으면 원래 주소로 폴백 -->
-                      •&nbsp;<strong>Address:</strong> {{ return_street|default:street|default:'' }}, {{ return_suburb|default:suburb|default:'' }}<br />
+                      •&nbsp;<strong>Address:</strong> {{ street|default:street|default:'' }}, {{ suburb|default:suburb|default:'' }}<br />
                     {% endif %}
 
                   {% endif %}
@@ -239,10 +248,8 @@
                 </td>
               </tr>
 
-              <!-- 수정: 소셜 아이콘 alt 텍스트 추가, URL placeholder 명시 -->
               <tr>
                 <td style="background-color:#FAFAFA;padding-bottom:10px;text-align:center;">
-                  <!-- ⚠️ 아래 소셜 URL들을 실제 계정 URL로 교체하세요 -->
                   <a href="https://www.facebook.com/easygoshuttle" target="_blank">
                     <img src="https://easygo.s3.ap-southeast-2.amazonaws.com/icons8-facebook-50.png" alt="Facebook" width="14" style="border-width:0;padding-right:1px;">
                   </a>

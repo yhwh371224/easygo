@@ -92,7 +92,7 @@
          supported-color-schemes: light dark;
       }
       @media (prefers-color-scheme: dark) {
-         body, center, table, .darkmode-bg {
+         body, center, table, div, .darkmode-bg {
             background: #2d2d2d!important;
             color: #ffffff!important;
          }
@@ -133,7 +133,7 @@
 				<td style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;">
 			<![endif]-->
 
-			<table align="center" style="border-spacing:0;color:#4F5557;font-family: 'Lato',sans-serif, Arial, Helvetica;background-color: #ffffff;Margin:0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;width: 100%;max-width: 600px;" role="presentation">
+			<table align="center" width="100%" style="border-spacing:0;color:#4F5557;font-family:'Lato',sans-serif,Arial,Helvetica;background-color:#ffffff;" role="presentation">
 
 
 
@@ -248,9 +248,9 @@
                                                     <br><br>													
 
 													{% if return_booking_date %}
-														• Your bookings on {{ return_booking_date }} and {{ booking_date}} has been cancelled.<br><br>
+														• Your bookings on {{ return_booking_date|date:"Y-m-d" }} and {{ booking_date|date:"Y-m-d" }} has been cancelled.<br><br>
 													{% else %}
-														• Your booking on {{ booking_date }} has been cancelled.<br><br>
+														• Your booking on {{ booking_date|date:"Y-m-d" }} has been cancelled.<br><br>
 													{% endif %}
 
                                                     Thank you for your understanding.

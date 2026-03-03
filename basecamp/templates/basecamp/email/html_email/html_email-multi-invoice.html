@@ -110,7 +110,7 @@
          supported-color-schemes: light dark;
       }
       @media (prefers-color-scheme: dark) {
-         body, center, table, .darkmode-bg {
+         body, center, table, div, .darkmode-bg {
             background: #2d2d2d!important;
             color: #ffffff!important;
          }
@@ -146,7 +146,7 @@
 
     <!-- Wrapper for padded content -->
     <div style="padding: 0 80px;">
-      <table width="100%" align="center" style="border-spacing:0; font-family:'Lato',sans-serif, Arial, Helvetica; background-color:#ffffff; max-width:600px;" role="presentation">
+      <table align="center" width="100%" style="border-spacing:0;color:#4F5557;font-family:'Lato',sans-serif,Arial,Helvetica;background-color:#ffffff;" role="presentation">
 
         <!-- LOGO & HEADER -->
 		<table width="100%" style="max-width: 600px; margin: 0 auto; border-spacing: 0; font-family:'Lato',sans-serif, Arial, Helvetica; background-color:#ffffff; text-align: center;" role="presentation">
@@ -170,7 +170,7 @@
 					{% else %}
 						<strong>Invoice to: {{ name }}</strong><br>
 					{% endif %}
-					<strong>Invoice date: {{ invoice_date }}</strong>
+					<strong>Invoice date: {{ invoice_date|date:"Y-m-d" }}</strong>
 				</div>
 			</td>
         </tr>
@@ -181,7 +181,7 @@
             {% for booking in bookings %}
             <div style="margin-bottom: 15px; font-size:12px; line-height:20px;">
               <strong>Booking {{ forloop.counter }}:</strong><br>
-              Pickup Date: {{ booking.pickup_date }}<br>
+              Pickup Date: {{ booking.pickup_date|date:"Y-m-d" }}<br>
               Pickup Time: {{ booking.pickup_time }}<br>
               From: {{ booking.start_point }}<br>
               To: {{ booking.end_point }}<br>

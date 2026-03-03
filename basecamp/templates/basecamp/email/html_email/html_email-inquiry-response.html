@@ -92,7 +92,7 @@
          supported-color-schemes: light dark;
       }
       @media (prefers-color-scheme: dark) {
-         body, center, table, .darkmode-bg {
+         body, center, table, div, .darkmode-bg {
             background: #2d2d2d!important;
             color: #ffffff!important;
          }
@@ -133,7 +133,7 @@
 				<td style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;">
 			<![endif]-->
 
-			<table align="center" style="border-spacing:0;color:#4F5557;font-family: 'Lato',sans-serif, Arial, Helvetica;background-color: #ffffff;Margin:0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;width: 100%;max-width: 600px;" role="presentation">
+			<table align="center" width="100%" style="border-spacing:0;color:#4F5557;font-family:'Lato',sans-serif,Arial,Helvetica;background-color:#ffffff;" role="presentation">
 
 
 
@@ -243,14 +243,14 @@
 													Email: {{ email }}<br>
 												{% if direction %}
 													Direction: {{ direction }}<br>
-													Flight date: {{ pickup_date }}<br>
+													Flight date: {{ pickup_date|date:"Y-m-d" }}<br>
 													Flight number: {{ flight_number }}<br>
 													Flight time: {{ flight_time|default:'' }}<br>
 													Pickup time: {{ pickup_time }}<br>
 													Address: {{ street|default:'' }} {{ suburb|default:'' }}<br>
 												{% endif %}
 												{% if start_point %}
-													Pickup date:  {{ pickup_date }}<br>
+													Pickup date:  {{ pickup_date|date:"Y-m-d" }}<br>
 													Pickup time:  {{ pickup_time|default:'' }}<br>
 
 													{% if start_point == 'Overseas cruise terminal' or start_point == 'WhieBay cruise terminal' %}
@@ -268,13 +268,13 @@
 													Number of baggage:  {{ no_of_baggage|default:'' }}<br>
 
 												{% if return_start_point %}
-													Return booking date:  {{ return_pickup_date }}<br>	
+													Return booking date:  {{ return_pickup_date|date:"Y-m-d" }}<br>	
 													Return Pickup Location: {{ return_start_point }}<br>
 													Return Drop-off Location: {{ return_end_point }}<br>													
 													Return pickup time:  {{ return_pickup_time }}<br>
 												{% elif return_direction %}
 													Return Direction: {{ return_direction }}<br>
-													Return Flight date: {{ return_pickup_date }}<br>
+													Return Flight date: {{ return_pickup_date|date:"Y-m-d" }}<br>
 													Return Flight number: {{ return_flight_number }}<br>
 													Return Flight time: {{ return_flight_time }}<br>
 													Return Pickup time: {{ return_pickup_time }}<br>
@@ -381,10 +381,10 @@
 			</tr>
 			<tr>
 				<td class="padded content" style="background-color: #FAFAFA;padding-top:0px;padding-bottom:0px;padding-right:0;padding-left:0;width:100%;text-align:center;font-family:'Neuton',serif;font-size: 24px;color: #727272;width:600px;">
-					<a href="https://www.facebook.com"><img src="https://easygo.s3.ap-southeast-2.amazonaws.com/icons8-facebook-50.png" alt="" width="14" style="border-width:0;padding-right:1px;"></a>
-					<a href="https://www.twitter.com"><img src="https://easygo.s3.ap-southeast-2.amazonaws.com/icons8-twitter-50.png" alt="" width="14" style="border-width:0;padding-right:1px;"></a>
-					<a href="https://www.youtube.com"><img src="https://easygo.s3.ap-southeast-2.amazonaws.com/icons8-youtube-50.png" alt="" width="14" style="border-width:0;padding-right:1px;"></a>
-					<a href="https://www.instagram.com"><img src="https://easygo.s3.ap-southeast-2.amazonaws.com/icons8-instagram-50.png" alt="" width="14" style="border-width:0;padding-right:1px;"></a>
+					<a href="https://www.facebook.com"><img src="https://easygo.s3.ap-southeast-2.amazonaws.com/icons8-facebook-50.png" alt="Facebook" width="14" style="border-width:0;padding-right:1px;"></a>
+					<a href="https://www.twitter.com"><img src="https://easygo.s3.ap-southeast-2.amazonaws.com/icons8-twitter-50.png" alt="Twitter" width="14" style="border-width:0;padding-right:1px;"></a>
+					<a href="https://www.youtube.com"><img src="https://easygo.s3.ap-southeast-2.amazonaws.com/icons8-youtube-50.png" alt="YouTube" width="14" style="border-width:0;padding-right:1px;"></a>
+					<a href="https://www.instagram.com"><img src="https://easygo.s3.ap-southeast-2.amazonaws.com/icons8-instagram-50.png" alt="Instagram" width="14" style="border-width:0;padding-right:1px;"></a>
 				</td>
 			</tr>
 		</table>

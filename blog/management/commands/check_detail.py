@@ -34,13 +34,6 @@ class Command(BaseCommand):
             for booking in bookings:
                 issues = []
 
-                # flight_number = (booking.flight_number or '').strip()
-                # direction = (booking.direction or '').strip()
-
-                # if flight_number and not direction:
-                #     issues.append('Direction missing (flight number present)')
-
-
                 for field in fields_to_check:
                     value = getattr(booking, field, None)
                     value = value.strip() if value else ''
