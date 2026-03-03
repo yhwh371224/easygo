@@ -92,7 +92,7 @@
          supported-color-schemes: light dark;
       }
       @media (prefers-color-scheme: dark) {
-         body, center, table, .darkmode-bg {
+         body, center, table, div, .darkmode-bg {
             background: #2d2d2d!important;
             color: #ffffff!important;
          }
@@ -133,7 +133,7 @@
 				<td style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;">
 			<![endif]-->
 
-			<table align="center" style="border-spacing:0;color:#4F5557;font-family: 'Lato',sans-serif, Arial, Helvetica;background-color: #ffffff;Margin:0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;width: 100%;max-width: 600px;" role="presentation">
+			<table align="center" width="100%" style="border-spacing:0;color:#4F5557;font-family:'Lato',sans-serif,Arial,Helvetica;background-color:#ffffff;" role="presentation">
 
 
 
@@ -244,18 +244,18 @@
 
 														{% if not remain_first_booking and not remain_return_booking %}
 															We regret to inform you that due to unforeseen circumstances within our company,
-															your bookings on <strong>{{ return_booking_date }}</strong> and <strong>{{ booking_date }}</strong> have both been cancelled.																													
+															your bookings on <strong>{{ return_booking_date|date:"Y-m-d" }}</strong> and <strong>{{ booking_date|date:"Y-m-d" }}</strong> have both been cancelled.																													
 														{% elif not remain_first_booking and remain_return_booking %}
 															We regret to inform you that due to unforeseen circumstances within our company,
-															your bookings on <strong>{{ return_booking_date }}</strong> has been cancelled.															
+															your bookings on <strong>{{ return_booking_date|date:"Y-m-d" }}</strong> has been cancelled.															
 														{% elif remain_first_booking and not remain_return_booking %}
 															We regret to inform you that due to unforeseen circumstances within our company, 
-															your bookings on <strong>{{ booking_date }}</strong> has been cancelled.																														
+															your bookings on <strong>{{ booking_date|date:"Y-m-d" }}</strong> has been cancelled.																														
 														{% endif %}
 													
 													{% else %}
 														{% comment %}단일 예약(편도)인 경우{% endcomment %}
-														We regret to inform you that your booking on <strong>{{ booking_date }}</strong> has been cancelled.
+														We regret to inform you that your booking on <strong>{{ booking_date|date:"Y-m-d" }}</strong> has been cancelled.
 													{% endif %}
 													
 													<br><br>

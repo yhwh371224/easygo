@@ -92,7 +92,7 @@
          supported-color-schemes: light dark;
       }
       @media (prefers-color-scheme: dark) {
-         body, center, table, .darkmode-bg {
+         body, center, table, div, .darkmode-bg {
             background: #2d2d2d!important;
             color: #ffffff!important;
          }
@@ -133,7 +133,7 @@
 				<td style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;">
 			<![endif]-->
 
-			<table align="center" style="border-spacing:0;color:#4F5557;font-family: 'Lato',sans-serif, Arial, Helvetica;background-color: #ffffff;Margin:0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;width: 100%;max-width: 600px;" role="presentation">
+			<table align="center" width="100%" style="border-spacing:0;color:#4F5557;font-family:'Lato',sans-serif,Arial,Helvetica;background-color:#ffffff;" role="presentation">
 
 
 
@@ -236,7 +236,7 @@
 												<p style="Margin:0;font-size:12px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                    
 													Contact: {{ p2p_phone }}<br>
                                                     Email: {{ p2p_email }}<br>
-                                                    Booking date: {{ p2p_date }}<br>
+                                                    Booking date: {{ p2p_date|date:"Y-m-d" }}<br>
                                                     First point: {{ first_pickup_location }}<br>
 													Pickup time: {{ first_putime }}<br>
                                                     End point: {{ first_dropoff_location }}<br>											
@@ -328,10 +328,10 @@
 			</tr>
 			<tr>
 				<td class="padded content" style="background-color: #FAFAFA;padding-top:0px;padding-bottom:0px;padding-right:0;padding-left:0;width:100%;text-align:center;font-family:'Neuton',serif;font-size: 24px;color: #727272;width:600px;">
-					<a href="https://www.facebook.com"><img src="https://easygo.s3.ap-southeast-2.amazonaws.com/icons8-facebook-50.png" alt="" width="14" style="border-width:0;padding-right:1px;"></a>
-					<a href="https://www.twitter.com"><img src="https://easygo.s3.ap-southeast-2.amazonaws.com/icons8-twitter-50.png" alt="" width="14" style="border-width:0;padding-right:1px;"></a>
-					<a href="https://www.youtube.com"><img src="https://easygo.s3.ap-southeast-2.amazonaws.com/icons8-youtube-50.png" alt="" width="14" style="border-width:0;padding-right:1px;"></a>
-					<a href="https://www.instagram.com"><img src="https://easygo.s3.ap-southeast-2.amazonaws.com/icons8-instagram-50.png" alt="" width="14" style="border-width:0;padding-right:1px;"></a>
+					<a href="https://www.facebook.com"><img src="https://easygo.s3.ap-southeast-2.amazonaws.com/icons8-facebook-50.png" alt="Facebook" width="14" style="border-width:0;padding-right:1px;"></a>
+					<a href="https://www.twitter.com"><img src="https://easygo.s3.ap-southeast-2.amazonaws.com/icons8-twitter-50.png" alt="Twitter" width="14" style="border-width:0;padding-right:1px;"></a>
+					<a href="https://www.youtube.com"><img src="https://easygo.s3.ap-southeast-2.amazonaws.com/icons8-youtube-50.png" alt="YouTube" width="14" style="border-width:0;padding-right:1px;"></a>
+					<a href="https://www.instagram.com"><img src="https://easygo.s3.ap-southeast-2.amazonaws.com/icons8-instagram-50.png" alt="Instagram" width="14" style="border-width:0;padding-right:1px;"></a>
 				</td>
 			</tr>
 		</table>

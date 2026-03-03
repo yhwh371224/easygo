@@ -12,21 +12,43 @@
       table { border-spacing: 0; }
 		td { padding: 0; }
 		p { font-size: 15px; }
-		img { border: 0; border-width:0; }
-		a { color: #277fd2; text-decoration: none; }
+		img {
+			border: 0;
+			border-width:0;
+		}
+		a {
+			color: #277fd2;
+			text-decoration: none;
+		}
 		@media screen and (max-width: 599.98px) { 
-			.px-600-0 { padding-left: 0!important; padding-right: 0!important; }
+			.px-600-0 {
+				padding-left: 0!important;
+				padding-right: 0!important;
+			}
 			.pt-600-0 { padding-top: 0!important; }
 			.d-600-none { display: none!important; }
 			.center-text-mobile { text-align: center!important; }
 		}
 		@media screen and (max-width: 399.98px) {
-			.banner { height: auto!important; padding-top: 20px!important; padding-bottom: 30px!important; }
-			.px-sm-0 { padding-left: 0!important; padding-right: 0!important; }
+			.banner {
+				height: auto!important;
+				padding-top: 20px!important;
+				padding-bottom: 30px!important;
+			}
+			.px-sm-0 {
+				padding-left: 0!important;
+				padding-right: 0!important;
+			}
 		}
-		:root { color-scheme: light dark; supported-color-schemes: light dark; }
+		:root {
+			color-scheme: light dark;
+			supported-color-schemes: light dark;
+		}
 		@media (prefers-color-scheme: dark) {
-			body, center, table, .darkmode-bg { background: #2d2d2d!important; color: #ffffff!important; }
+			body, center, table, div, .darkmode-bg {
+				background: #2d2d2d!important;
+				color: #ffffff!important;
+			}
 			.darkmode-transparent { background-color: transparent!important; }
 		}
 	</style>
@@ -41,7 +63,7 @@
 				XRP Payment Instructions
 			</div>
 
-			<table align="center" style="border-spacing:0;color:#4F5557;font-family: 'Lato',sans-serif;background-color:#ffffff;width:100%;max-width:600px;" role="presentation">
+			<table align="center" width="100%" style="border-spacing:0;color:#4F5557;font-family:'Lato',sans-serif,Arial,Helvetica;background-color:#ffffff;" role="presentation">
 				
 				<!-- Logo -->
 				<tr>
