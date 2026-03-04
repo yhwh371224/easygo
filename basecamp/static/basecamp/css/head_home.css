@@ -48,16 +48,26 @@ body { margin: 0; font-family: Arial, sans-serif; }
   .award-section      { height: 40vh; min-height: 200px; cursor: pointer; }
   .admin-btn{ position: fixed; opacity:0;bottom:20px;right:80px;font-size:4px;transition:opacity .3s ease;pointer-events:auto;z-index:9999;padding:2px 4px;min-width:40px;}
   .admin-btn:hover{opacity:.9!important;}
-  .btn-primary { background-color: #5549f1; border-color: #5549f1; color: #fff; }
-  .btn-primary:hover, .btn-primary:focus, .btn-primary:active { background-color: #4439e0; border-color: #4439e0; color: #fff; }
-  .btn-success { background-color: #0e9e75; border-color: #0e9e75; color: #fff; }
-  .btn-success:hover, .btn-success:focus, .btn-success:active { background-color: #0b8762; border-color: #0b8762; color: #fff; }
-  .btn-warning { background-color: #e07800; border-color: #e07800; color: #fff; }
-  .btn-warning:hover, .btn-warning:focus, .btn-warning:active { background-color: #c46a00; border-color: #c46a00; color: #fff; }
+  /* !important overrides home.css (loaded after this file) and .bg-dark a specificity */
+  .btn-primary { background-color: #5549f1 !important; border-color: #5549f1 !important; color: #fff !important; }
+  .btn-primary:hover, .btn-primary:focus, .btn-primary:active { background-color: #4439e0 !important; border-color: #4439e0 !important; color: #fff !important; }
+  /* btn-success/warning use dark text: white on #0e9e75=3.4:1 fails, dark text passes (6.2:1 / 6.9:1) */
+  .btn-success { background-color: #0e9e75 !important; border-color: #0e9e75 !important; color: #000 !important; }
+  .btn-success:hover, .btn-success:focus, .btn-success:active { background-color: #0b8762 !important; border-color: #0b8762 !important; color: #000 !important; }
+  .btn-warning { background-color: #e07800 !important; border-color: #e07800 !important; color: #000 !important; }
+  .btn-warning:hover, .btn-warning:focus, .btn-warning:active { background-color: #c46a00 !important; border-color: #c46a00 !important; color: #000 !important; }
   .badge.bg-danger { background-color: #c0183f !important; }
   .text-muted { color: #6b6c84 !important; }
   .bg-dark .text-muted { color: #a4a5c0 !important; }
+  /* cards inside bg-dark have a white background; restore readable muted colour (#6b6c84 on #fff = 5.1:1) */
+  .bg-dark .card .text-muted { color: #6b6c84 !important; }
   .text-blue-link { color: #0057a8 !important; }
-  .accordion-button:not(.collapsed) { color: #4439e0; }
+  /* home.css .bg-dark .text-blue-link overrides to #8db5ed (2.1:1 on white); restore with higher specificity */
+  .bg-dark .card .text-blue-link { color: #0057a8 !important; }
+  /* accordion active/hover: home.css sets #766df4 (4.0:1); darken to #4439e0 (7.2:1) */
+  .accordion-button:not(.collapsed) { color: #4439e0 !important; }
+  .accordion-button:hover { color: #4439e0 !important; }
   a.card.card-hover, a.card.card-hover p, a.card.card-hover span { color: #37384e; }
+  /* explicit white background so Lighthouse resolves contrast against the card, not the dark section */
+  a.card.card-hover { background-color: #fff; }
   
