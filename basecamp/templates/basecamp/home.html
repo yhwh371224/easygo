@@ -152,7 +152,12 @@
           <div class="text-end offer-search-end">
             <a href="/more_suburbs/" class="text-brand">Search your area &raquo;&raquo;&raquo;</a>
           </div>                  
-          <div class="tns-carousel-inner" data-carousel-options="{&quot;items&quot;: 3, &quot;nav&quot;: false, &quot;gutter&quot;: 23, &quot;responsive&quot;: {&quot;0&quot;:{&quot;items&quot;:1},&quot;540&quot;:{&quot;items&quot;:2},&quot;900&quot;:{&quot;items&quot;:3}}}">
+          <div class="tns-carousel-inner" data-carousel-options="{
+              &quot;items&quot;: 3, &quot;nav&quot;: false, &quot;gutter&quot;: 23, 
+              &quot;responsive&quot;: {&quot;0&quot;:{&quot;items&quot;:1},&quot;540&quot;:{&quot;items&quot;:2},&quot;900&quot;:{&quot;items&quot;:3}},
+              &quot;prevButtonText&quot;: &quot;&lt;span aria-hidden='true'&gt;&amp;lsaquo;&lt;/span&gt;&lt;span class='visually-hidden'&gt;Previous slide&lt;/span&gt;&quot;,
+              &quot;nextButtonText&quot;: &quot;&lt;span aria-hidden='true'&gt;&amp;rsaquo;&lt;/span&gt;&lt;span class='visually-hidden'&gt;Next slide&lt;/span&gt;&quot;,  ...
+            }">
             {% for suburb, details in suburbs.items %}
               <div class="pb-1">
                 <a class="card border-0 shadow card-hover mx-1" href="/sydney-airport-transfer/{{ suburb|slugify }}/">
