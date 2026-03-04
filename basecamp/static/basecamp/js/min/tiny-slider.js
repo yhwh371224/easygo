@@ -1866,7 +1866,7 @@ var tns = function(options) {
         if (!autoHeight) { innerWrapper.style.height = ''; }
       }
 
-      if (controls && controlsText !== controlsTextTem) {
+      if (controls) {
         prevButton.innerHTML = controlsText[0];
         prevButton.setAttribute('aria-label', 'Previous slide');
         nextButton.innerHTML = controlsText[1];
