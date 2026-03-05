@@ -69,4 +69,6 @@ body { margin: 0; font-family: Arial, sans-serif; }
   a.card.card-hover, a.card.card-hover p, a.card.card-hover span { color: #37384e; }
   /* explicit white background so Lighthouse resolves contrast against the card, not the dark section */
   a.card.card-hover { background-color: #fff; }
+  /* inline links inside div.fs-sm (accordion body) must have a non-color indicator — underline */
+  div.fs-sm a { text-decoration: underline; }
   
