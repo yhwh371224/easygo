@@ -89,34 +89,23 @@ def sending_email_first(request):
 def sending_email_second(request): 
     return render(request, 'basecamp/email/sending_email_second.html')
 
-
 def sending_email_input_data(request): 
     return render(request, 'basecamp/email/sending_email_input_data.html')
-
-
-def service(request):     
-    return render(request, 'basecamp/pages/service.html')
-
 
 def success(request): 
     return render(request, 'basecamp/layouts/success.html')
 
-
 def sydney_airport_shuttle(request):
     return render(request, 'basecamp/pillars/sydney_airport_shuttle.html')
-
 
 def sydney_airport_transfer(request):
     return render(request, 'basecamp/pillars/sydney_airport_transfer.html')
 
-
 def sydney_cruise_transfer(request):
     return render(request, 'basecamp/pillars/sydney_cruise_transfer.html')
 
-
 def terms(request): 
     return render(request, 'basecamp/pages/terms.html')
-
 
 def wrong_date_today(request): 
     return render(request, 'basecamp/error/wrong_date_today.html')
