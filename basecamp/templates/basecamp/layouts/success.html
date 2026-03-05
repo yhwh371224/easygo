@@ -1,11 +1,11 @@
 {% extends 'basecamp/base/easygo_base_error.html' %}
 
 {% load static %}
-{% static 'basecamp/photos/bg-pattern01.webp' as page_bg %}
 
 {% include "basecamp/layouts/sub_navbar.html" %}
 
 {% block content %}
+{% static 'basecamp/photos/bg-pattern01.webp' as page_bg %}
   <body class="bg-dark text-light">
       <section class="jarallax bg-dark py-0" data-jarallax data-speed="0.1">
         <div class="jarallax-img" style="background-image: url('{{ page_bg }}');"></div>

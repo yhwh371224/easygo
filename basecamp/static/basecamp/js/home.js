@@ -31,6 +31,16 @@ document.addEventListener('DOMContentLoaded', function () {
       attributeFilter: ['aria-hidden']  // aria-hidden 변경만 감지
     });
   }
-
+  // 3. 날짜 필드 유효성 검사
+  const bookingForm = document.getElementById('booking-form');
+  if (bookingForm) {
+    bookingForm.addEventListener('submit', function (e) {
+      const pickupDate = document.querySelector('[name="pickup_date"]').value;
+      if (!pickupDate) {
+        e.preventDefault();
+        alert('Please select a pickup date.');
+      }
+    });
+  }
 });
 

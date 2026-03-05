@@ -548,7 +548,8 @@ def price_detail(request):
                 'error_message': str(e), 
                 'suburbs': suburbs,
                 'home_suburbs': home_suburbs,
-                
+                'google_review_url': settings.GOOGLE_REVIEW_URL, 
+
                 'start_point_value': start_point if start_point != 'Select your option' else '',
                 'end_point_value': end_point if end_point != 'Select your option' else '',
                 'no_of_passenger_value': no_of_passenger,
@@ -584,6 +585,7 @@ def price_detail(request):
     else:
         return render(request, 'basecamp/home.html', {
             'home_suburbs': sorted_suburbs,
+            'google_review_url': settings.GOOGLE_REVIEW_URL, 
         })
 
 # airport booking by client
