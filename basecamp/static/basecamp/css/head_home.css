@@ -56,10 +56,10 @@ body { margin: 0; font-family: Arial, sans-serif; }
   .btn-warning { background-color: #e07800 !important; border-color: #e07800 !important; color: #000 !important; }
   .btn-warning:hover, .btn-warning:focus, .btn-warning:active { background-color: #c46a00 !important; border-color: #c46a00 !important; color: #000 !important; }
   .badge.bg-danger { background-color: #c0183f !important; }
-  .text-muted { color: #6b6c84 !important; }
+  .text-muted { color: #595959 !important; }
   .bg-dark .text-muted { color: #a4a5c0 !important; }
-  /* cards inside bg-dark have a white background; restore readable muted colour (#6b6c84 on #fff = 5.1:1) */
-  .bg-dark .card .text-muted { color: #6b6c84 !important; }
+  /* cards inside bg-dark have a white background; restore readable muted colour (#595959 on #fff = 7.0:1) */
+  .bg-dark .card .text-muted { color: #595959 !important; }
   .text-blue-link { color: #0057a8 !important; }
   /* home.css .bg-dark .text-blue-link overrides to #8db5ed (2.1:1 on white); restore with higher specificity */
   .bg-dark .card .text-blue-link { color: #0057a8 !important; }
