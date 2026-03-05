@@ -173,3 +173,9 @@ def inquiry1(request):
     }    
     return render(request, 'basecamp/booking/inquiry.html', context)
 
+def payonline(request):
+    context = {
+        'paypal_client_id': settings.PAYPAL_CLIENT_ID,
+    }
+    return render(request, 'basecamp/payments/payonline.html', context)
+
