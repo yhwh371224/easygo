@@ -103,7 +103,7 @@ def process_generic_payment(payment_instance, posts, recipient_email_config):
     return True, total_balance, recipient_emails
 
 
-def send_payment_notification_email(instance, total_balance, recipient_emails, admin_email, method="STRIPE", raw_amount=None, net_amount=None):
+def send_payment_notification_email(instance, total_balance, recipient_emails, admin_email, method, raw_amount=None, net_amount=None):
     """
     Stripe/PayPal 각각의 템플릿과 금액을 처리합니다.
     """
