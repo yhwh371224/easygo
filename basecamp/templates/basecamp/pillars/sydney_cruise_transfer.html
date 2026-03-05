@@ -8,16 +8,21 @@
 
 {% block extra_css %}
 <style>
-  .navbar.navbar-dark .nav-link { color: #212529 !important; }
-  .navbar.navbar-dark .nav-link:hover { color: #0d6efd !important; }
-  .navbar-toggler-icon { filter: invert(1); }
-  hr { border: none; border-top: 1px solid #b0c4de; opacity: 0.5; margin: 2.5rem 0; }
-  body, .page-wrapper, .container, p, ul li, h1, h2, h3, h4, h5, h6 { background-color: #e0f0ff !important; color: #212529 !important; }
-  .page-wrapper { padding-top: 60px !important; }
+  hr { border: none; border-top: 1px solid rgba(255,255,255,0.3); opacity: 0.5; margin: 2.5rem 0; }
+  .page-wrapper { padding-top: 60px !important; background-color: #e0f0ff !important; }
+  body { background-color: #e0f0ff; }
+  .container:not(.navbar .container):not(.site-footer .container) { background-color: #e0f0ff; }
+  .container:not(.navbar .container):not(.site-footer .container) ul li, .container:not(.navbar .container):not(.site-footer .container) p, .container:not(.navbar .container):not(.site-footer .container) h1, .container:not(.navbar .container):not(.site-footer .container) h2, .container:not(.navbar .container):not(.site-footer .container) h3, .container:not(.navbar .container):not(.site-footer .container) h4, .container:not(.navbar .container):not(.site-footer .container) h5, .container:not(.navbar .container):not(.site-footer .container) h6 { color: #212529 !important; } 
+  .navbar .nav-link { color: #212529 !important; }
+  .navbar .nav-link:hover { color: #074cb4 !important; } 
   ul { list-style: none; padding: 0; margin: 0; }
   ul li { margin-bottom: 0.5rem; }
-  a, a[style*="#eb7828"] { color: #0d6efd !important; }
+  h1 { margin-bottom: 2.5rem !important; }
+  h1 span, h2 span, h3 span { color: #e6b635 !important; }
+  a { color: #0d6efd; }
   a:hover { color: #074cb4; }
+  .site-footer .container, .site-footer ul, .site-footer li, .site-footer p, .site-footer span { background-color: transparent !important; }
+  .site-footer a { color: #f09144 !important; text-decoration: none !important; }
 </style>
 {% endblock %}
 
@@ -28,7 +33,7 @@
       <lottie-player class="d-none d-dark-mode-block mt-n5" src="assets/json/animation-404-dark.json" background="transparent" speed="1" loop autoplay></lottie-player>
       <div class="text-center pt-4 mt-lg-2">
         <br><br>
-        <h1 class="mb-4" style="color: #eb7828">         
+        <h1 class="mb-4">         
           Sydney Cruise Transfer & Port Pickup Service
         </h1>
 
@@ -45,7 +50,7 @@
 
         <hr>
 
-        <h2><span style="color: #c9814d">Why Choose EasyGo for Sydney Cruise Transfers?</span></h2>
+        <h2><span>Why Choose EasyGo for Sydney Cruise Transfers?</span></h2>
         <ul>
           <li>🚐 <strong>Private Transfers Only</strong> – No ride sharing, no waiting</li>
           <li>🧳 <strong>Perfect for Cruise Luggage &amp; Families</strong> – Maxi vans available</li>
@@ -61,7 +66,7 @@
 
         <hr>
 
-        <h2><span style="color: #c9814d">Sydney Cruise Terminal Pickup &amp; Drop-off Services</span></h2>
+        <h2><span>Sydney Cruise Terminal Pickup &amp; Drop-off Services</span></h2>
 
         <h3><span style="color: #c3b5aa">🚢 Cruise Port Pickup (Disembarkation)</span></h3>
         <ul>
@@ -79,7 +84,7 @@
 
         <hr>
 
-        <h2><span style="color: #c9814d">Our Vehicles – From Private Cars to Maxi Vans</span></h2>
+        <h2><span>Our Vehicles – From Private Cars to Maxi Vans</span></h2>
         <ul>
           <li><strong>Standard Private Shuttle</strong> – Couples or solo travellers</li>
           <li><strong>Maxi Vans / Maxi Taxi Style Vehicles</strong> for:
@@ -99,7 +104,7 @@
 
         <hr>
 
-        <h2><span style="color: #c9814d">Sydney Cruise Terminals We Service</span></h2>
+        <h2><span>Sydney Cruise Terminals We Service</span></h2>
         <ul>
           <li>🚢 <strong>White Bay Cruise Terminal</strong> – Balmain (P&O, Carnival, Princess Cruises)</li>
           <li>🚢 <strong>Overseas Passenger Terminal</strong> – Circular Quay (Royal Caribbean, Celebrity Cruises)</li>
@@ -114,7 +119,7 @@
 
         <hr>
 
-        <h2><span style="color: #c9814d">Sydney Cruise Transfer Pricing</span></h2>
+        <h2><span>Sydney Cruise Transfer Pricing</span></h2>
         <p>Pricing depends on:</p>
         <ul>
           <li>Cruise terminal location</li>
