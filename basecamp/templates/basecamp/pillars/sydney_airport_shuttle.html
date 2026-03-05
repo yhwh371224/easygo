@@ -8,18 +8,19 @@
 
 {% block extra_css %}
 <style>
-  .navbar.navbar-dark .nav-link { color: #212529 !important; }
-  .navbar.navbar-dark .nav-link:hover { color: #0d6efd !important; }
-  .navbar-toggler-icon { filter: invert(1); }
-  hr { border: none; border-top: 1px solid #e0e0e0 !important; opacity: 1; margin: 2.5rem 0; }
-  body, .container, ul li, p, h1, h2, h3, h4, h5, h6 { color: #212529 !important; background-color: #ffffff; }
-  .page-wrapper { padding-top: 60px !important; background-color: #ffffff; }
+  hr { border: none; border-top: 1px solid #e0dae6 !important; opacity: 1; margin: 2.5rem 0; }
+  .page-wrapper { padding-top: 60px !important; background-color: #e0dae6; }
+  body { background-color: #e0dae6; }
+  .container:not(.navbar .container):not(.site-footer .container) { background-color: #e0dae6; }
+  .container:not(.navbar .container):not(.site-footer .container) ul li, .container:not(.navbar .container):not(.site-footer .container) p, .container:not(.navbar .container):not(.site-footer .container) h1, .container:not(.navbar .container):not(.site-footer .container) h2, .container:not(.navbar .container):not(.site-footer .container) h3, .container:not(.navbar .container):not(.site-footer .container) h4, .container:not(.navbar .container):not(.site-footer .container) h5, .container:not(.navbar .container):not(.site-footer .container) h6 { color: #212529 !important; }  
   ul { list-style: none; padding: 0; margin: 0; }
   ul li { margin-bottom: 0.5rem; }
   h1 { margin-bottom: 2.5rem !important; }
-  h1 span, h2 span, h3 span { color: #ffffff !important; }
-  a, a[style*="#eb7828"] { color: #0d6efd !important; }
-  a:hover { color: #063d91; }
+  h1 span, h2 span, h3 span { color: #867070 !important; }
+  a { color: #ee710a !important; }
+  a:hover { color: #cfa07f !important; }
+  .site-footer .container, .site-footer ul, .site-footer li, .site-footer p, .site-footer span { background-color: transparent !important; }
+  .site-footer a { color: #f09144 !important; text-decoration: none !important; }
 </style>
 {% endblock %}
 
@@ -35,7 +36,8 @@
         </h1>
 
         <p>
-          Reliable, door-to-door <strong>Sydney airport shuttle</strong> services with EasyGo Airport Shuttle.
+          Reliable, door-to-door <strong>Sydney airport shuttle</strong> services with 
+          <a href="/"><strong>EasyGo Airport Shuttle</strong></a>.
           We specialise in private transfers, maxi vans, and family-friendly airport pickups from
           <strong>Sydney Kingsford Smith Airport (SYD)</strong> to all Sydney suburbs, hotels, and the CBD.
         </p>
@@ -134,7 +136,8 @@
         <h2><span style="color: #316acf">Book Your Sydney Airport Shuttle Today</span></h2>
         <p>
           Skip the stress of taxis and ride-share apps.
-          Book a <strong>reliable Sydney airport shuttle</strong> with EasyGo Airport Shuttle.
+          Book a <strong>reliable Sydney airport shuttle</strong> with 
+          <a href="/"><strong>EasyGo Airport Shuttle</strong></a>.
         </p>
 
         <p>
@@ -144,7 +147,7 @@
         <!-- More suburbs CTA -->
         <p>
           <a href="/more_suburbs/"
-            style="color: #eb7828; font-size: 1.05rem;">
+            style="font-size: 1.05rem;">
             👉 Search your Sydney suburb for airport shuttle 🔍 
           </a>
         </p>

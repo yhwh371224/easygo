@@ -9,13 +9,18 @@
 {% block extra_css %}
 <style>
   hr { border: none; border-top: 1px solid rgba(255,255,255,0.3); opacity: 0.5; margin: 2.5rem 0; }
-  body, .page-wrapper, .container, p, ul li, h1, h2, h3, h4, h5, h6 { background-color: #6982b8 !important; color: #ffffff !important; }
-  .page-wrapper { padding-top: 60px !important; }
+  .page-wrapper { padding-top: 60px !important; background-color: #6982b8 !important; }
+  body { background-color: #6982b8; }
+  .container:not(.navbar .container):not(.site-footer .container) { background-color: #6982b8; }
+  .container:not(.navbar .container):not(.site-footer .container) ul li, .container:not(.navbar .container):not(.site-footer .container) p, .container:not(.navbar .container):not(.site-footer .container) h1, .container:not(.navbar .container):not(.site-footer .container) h2, .container:not(.navbar .container):not(.site-footer .container) h3, .container:not(.navbar .container):not(.site-footer .container) h4, .container:not(.navbar .container):not(.site-footer .container) h5, .container:not(.navbar .container):not(.site-footer .container) h6 { color: #ffffff !important; }  
   ul { list-style: none; padding: 0; margin: 0; }
   ul li { margin-bottom: 0.5rem; }
-  a { color: #e69e18; }
-  a:hover { color: #ffffff; }
-  a[style*="#eb7828"] { color: #ffe082 !important; }
+  h1 { margin-bottom: 2.5rem !important; }
+  h1 span, h2 span, h3 span { color: #e6b635 !important; }
+  a { color: #eed48d; }
+  a:hover { color: #e0a12b; }
+  .site-footer .container, .site-footer ul, .site-footer li, .site-footer p, .site-footer span { background-color: transparent !important; }
+  .site-footer a { color: #f09144 !important; text-decoration: none !important; }
 </style>
 {% endblock %}
 
@@ -27,11 +32,11 @@
       <div class="text-center pt-4 mt-lg-2">
         <br><br>
         <h1 class="mb-4">          
-          <span style="color: #ffe082">Sydney Airport Transfer – Local Family-Friendly Service</span>
+          <span>Sydney Airport Transfer – Local Family-Friendly Service</span>
         </h1>
 
         <p>
-          Personalized <strong>Sydney airport transfer</strong> with EasyGo's dedicated private service.
+          Personalized <a href="/"><strong>Sydney airport transfer</strong></a> with EasyGo's dedicated private service.
           We provide direct, no-sharing transfers with friendly local drivers from
           <strong>Sydney International &amp; Domestic Airport</strong> to your home, hotel or workplace.
         </p>
@@ -43,7 +48,7 @@
 
         <hr>
 
-        <h2><span style="color: #ffe082">Why Families Choose Our Transfer Service</span></h2>
+        <h2><span>Why Families Choose Our Transfer Service</span></h2>
         <ul>
           <li>🚗 <strong>Dedicated Private Vehicles</strong> – Your family only, no strangers</li>
           <li>👨‍👩‍👧 <strong>Family-Friendly Local Drivers</strong> – Patient, helpful, know Sydney well</li>
@@ -60,16 +65,16 @@
 
         <hr>
 
-        <h2><span style="color: #ffe082">Personalized Transfer Options</span></h2>
+        <h2><span>Personalized Transfer Options</span></h2>
 
-        <h3><span style="color: #e0c46e">👨‍👩‍👧‍👦 Family Airport Transfers</span></h3>
+        <h3><span>👨‍👩‍👧‍👦 Family Airport Transfers</span></h3>
         <ul>
           <li>Child seats and booster seats provided free</li>
           <li>Extra help with prams, strollers and baby bags</li>
           <li>Patient drivers experienced with young children</li>
         </ul>
 
-        <h3><span style="color: #e0c46e">👴 Senior-Friendly Transfers</span></h3>
+        <h3><span>👴 Senior-Friendly Transfers</span></h3>
         <ul>
           <li>Extra time and assistance getting in and out</li>
           <li>Help with heavy luggage and walking aids</li>
@@ -78,7 +83,7 @@
 
         <hr>
 
-        <h2><span style="color: #ffe082">Comfortable Vehicle Options</span></h2>
+        <h2><span>Comfortable Vehicle Options</span></h2>
         <ul>
           <li><strong>Standard Private Cars</strong> – Clean, reliable sedans for couples or small families</li>
           <li><strong>Spacious Family Vehicles & Maxi Vans</strong> for:
@@ -98,7 +103,7 @@
 
         <hr>
 
-        <h2><span style="color: #ffe082">Serving Sydney Families – All Suburbs</span></h2>
+        <h2><span>Serving Sydney Families – All Suburbs</span></h2>
         <p>
           Direct transfers to your home in Parramatta, Blacktown, Liverpool, Penrith,
           Sydney CBD, Inner West suburbs, North Shore neighborhoods, Hills District,
@@ -112,7 +117,7 @@
 
         <hr>
 
-        <h2><span style="color: #ffe082">Simple, Honest Pricing</span></h2>
+        <h2><span>Simple, Honest Pricing</span></h2>
         <ul>
           <li>Your pickup and drop-off locations</li>
           <li>Vehicle size needed for your group</li>
@@ -124,9 +129,9 @@
 
         <hr>
 
-        <h2><span style="color: #ffe082">Book Your Family-Friendly Airport Transfer</span></h2>
+        <h2><span>Book Your Family-Friendly Airport Transfer</span></h2>
         <p>
-          Enjoy a comfortable, direct journey with a <strong>reliable Sydney airport transfer</strong> 
+          Enjoy a comfortable, direct journey with a reliable <a href="/"><strong>Sydney airport transfer</strong></a> 
           designed for families, seniors, and local travellers.
         </p>
 
