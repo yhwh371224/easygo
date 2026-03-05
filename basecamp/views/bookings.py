@@ -11,7 +11,7 @@ from blog.tasks import send_confirm_email
 from basecamp.area import get_suburbs
 from basecamp.area_home import get_home_suburbs
 from basecamp.basecamp_utils import (
-    is_ajax, parse_date, handle_email_sending,
+    is_ajax, parse_baggage, parse_date, handle_email_sending,
     add_bag, to_int, to_bool,
     verify_turnstile, get_sorted_suburbs
 )
@@ -144,53 +144,7 @@ def inquiry_details(request):
         send_mail(email_subject, content, '', [RECIPIENT_EMAIL])
 
         # 🧳 개별 수하물 항목 수집
-        large = to_int(request.POST.get('baggage_large'))
-        medium = to_int(request.POST.get('baggage_medium'))
-        small = to_int(request.POST.get('baggage_small'))
-
-        baby_seat = to_int(request.POST.get('baggage_baby'))
-        booster_seat = to_int(request.POST.get('baggage_booster'))
-        pram = to_int(request.POST.get('baggage_pram'))
-
-        ski = to_int(request.POST.get('baggage_ski'))
-        snowboard = to_int(request.POST.get('baggage_snowboard'))
-        golf = to_int(request.POST.get('baggage_golf'))
-        bike = to_int(request.POST.get('baggage_bike'))
-        boxes = to_int(request.POST.get('baggage_boxes'))
-        musical_instrument = to_int(request.POST.get('baggage_music'))
-
-        # Oversize flags (수량 있을 때만 유효)
-        ski_oversize = ski > 0 and request.POST.get('ski_oversize') == 'on'
-        snowboard_oversize = snowboard > 0 and request.POST.get('snowboard_oversize') == 'on'
-        golf_oversize = golf > 0 and request.POST.get('golf_oversize') == 'on'
-        bike_oversize = bike > 0 and request.POST.get('bike_oversize') == 'on'
-        boxes_oversize = boxes > 0 and request.POST.get('boxes_oversize') == 'on'
-        musical_instrument_oversize = (
-            musical_instrument > 0 and request.POST.get('music_oversize') == 'on'
-        )
-
-        # 🎯 요약 문자열 생성
-        baggage_summary = []
-
-        # Standard luggage
-        add_bag(baggage_summary, "L", large)
-        add_bag(baggage_summary, "M", medium)
-        add_bag(baggage_summary, "S", small)
-
-        # Seats / prams
-        add_bag(baggage_summary, "Baby", baby_seat)
-        add_bag(baggage_summary, "Booster", booster_seat)
-        add_bag(baggage_summary, "Pram", pram)
-
-        # Oversize-capable items
-        add_bag(baggage_summary, "Ski", ski, ski_oversize)
-        add_bag(baggage_summary, "Snow", snowboard, snowboard_oversize)
-        add_bag(baggage_summary, "Golf", golf, golf_oversize)
-        add_bag(baggage_summary, "Bike", bike, bike_oversize)
-        add_bag(baggage_summary, "Box", boxes, boxes_oversize)
-        add_bag(baggage_summary, "Music", musical_instrument, musical_instrument_oversize)
-
-        baggage_str = ", ".join(baggage_summary)
+        baggage_str = parse_baggage(request)
                     
         p = Inquiry(
             name=name, contact=contact, email=email, 
@@ -336,53 +290,7 @@ def inquiry_details1(request):
             start_point = ''
         
         # 🧳 개별 수하물 항목 수집
-        large = to_int(request.POST.get('baggage_large'))
-        medium = to_int(request.POST.get('baggage_medium'))
-        small = to_int(request.POST.get('baggage_small'))
-
-        baby_seat = to_int(request.POST.get('baggage_baby'))
-        booster_seat = to_int(request.POST.get('baggage_booster'))
-        pram = to_int(request.POST.get('baggage_pram'))
-
-        ski = to_int(request.POST.get('baggage_ski'))
-        snowboard = to_int(request.POST.get('baggage_snowboard'))
-        golf = to_int(request.POST.get('baggage_golf'))
-        bike = to_int(request.POST.get('baggage_bike'))
-        boxes = to_int(request.POST.get('baggage_boxes'))
-        musical_instrument = to_int(request.POST.get('baggage_music'))
-
-        # Oversize flags (수량 있을 때만 유효)
-        ski_oversize = ski > 0 and request.POST.get('ski_oversize') == 'on'
-        snowboard_oversize = snowboard > 0 and request.POST.get('snowboard_oversize') == 'on'
-        golf_oversize = golf > 0 and request.POST.get('golf_oversize') == 'on'
-        bike_oversize = bike > 0 and request.POST.get('bike_oversize') == 'on'
-        boxes_oversize = boxes > 0 and request.POST.get('boxes_oversize') == 'on'
-        musical_instrument_oversize = (
-            musical_instrument > 0 and request.POST.get('music_oversize') == 'on'
-        )
-
-        # 🎯 요약 문자열 생성
-        baggage_summary = []
-
-        # Standard luggage
-        add_bag(baggage_summary, "L", large)
-        add_bag(baggage_summary, "M", medium)
-        add_bag(baggage_summary, "S", small)
-
-        # Seats / prams
-        add_bag(baggage_summary, "Baby", baby_seat)
-        add_bag(baggage_summary, "Booster", booster_seat)
-        add_bag(baggage_summary, "Pram", pram)
-
-        # Oversize-capable items
-        add_bag(baggage_summary, "Ski", ski, ski_oversize)
-        add_bag(baggage_summary, "Snow", snowboard, snowboard_oversize)
-        add_bag(baggage_summary, "Golf", golf, golf_oversize)
-        add_bag(baggage_summary, "Bike", bike, bike_oversize)
-        add_bag(baggage_summary, "Box", boxes, boxes_oversize)
-        add_bag(baggage_summary, "Music", musical_instrument, musical_instrument_oversize)
-
-        baggage_str = ", ".join(baggage_summary)
+        baggage_str = parse_baggage(request)
         
         p = Inquiry(
             name=name, contact=contact, email=email, pickup_date=pickup_date_obj,  
@@ -588,6 +496,7 @@ def price_detail(request):
             'google_review_url': settings.GOOGLE_REVIEW_URL, 
         })
 
+
 # airport booking by client
 def booking_detail(request):
     if request.method == "POST":
@@ -703,53 +612,7 @@ def booking_detail(request):
         sam_driver = Driver.objects.get(driver_name="Sam") 
 
         # 🧳 개별 수하물 항목 수집
-        large = to_int(request.POST.get('baggage_large'))
-        medium = to_int(request.POST.get('baggage_medium'))
-        small = to_int(request.POST.get('baggage_small'))
-
-        baby_seat = to_int(request.POST.get('baggage_baby'))
-        booster_seat = to_int(request.POST.get('baggage_booster'))
-        pram = to_int(request.POST.get('baggage_pram'))
-
-        ski = to_int(request.POST.get('baggage_ski'))
-        snowboard = to_int(request.POST.get('baggage_snowboard'))
-        golf = to_int(request.POST.get('baggage_golf'))
-        bike = to_int(request.POST.get('baggage_bike'))
-        boxes = to_int(request.POST.get('baggage_boxes'))
-        musical_instrument = to_int(request.POST.get('baggage_music'))
-
-        # Oversize flags (수량 있을 때만 유효)
-        ski_oversize = ski > 0 and request.POST.get('ski_oversize') == 'on'
-        snowboard_oversize = snowboard > 0 and request.POST.get('snowboard_oversize') == 'on'
-        golf_oversize = golf > 0 and request.POST.get('golf_oversize') == 'on'
-        bike_oversize = bike > 0 and request.POST.get('bike_oversize') == 'on'
-        boxes_oversize = boxes > 0 and request.POST.get('boxes_oversize') == 'on'
-        musical_instrument_oversize = (
-            musical_instrument > 0 and request.POST.get('music_oversize') == 'on'
-        )
-
-        # 🎯 요약 문자열 생성
-        baggage_summary = []
-
-        # Standard luggage
-        add_bag(baggage_summary, "L", large)
-        add_bag(baggage_summary, "M", medium)
-        add_bag(baggage_summary, "S", small)
-
-        # Seats / prams
-        add_bag(baggage_summary, "Baby", baby_seat)
-        add_bag(baggage_summary, "Booster", booster_seat)
-        add_bag(baggage_summary, "Pram", pram)
-
-        # Oversize-capable items
-        add_bag(baggage_summary, "Ski", ski, ski_oversize)
-        add_bag(baggage_summary, "Snow", snowboard, snowboard_oversize)
-        add_bag(baggage_summary, "Golf", golf, golf_oversize)
-        add_bag(baggage_summary, "Bike", bike, bike_oversize)
-        add_bag(baggage_summary, "Box", boxes, boxes_oversize)
-        add_bag(baggage_summary, "Music", musical_instrument, musical_instrument_oversize)
-
-        baggage_str = ", ".join(baggage_summary)
+        baggage_str = parse_baggage(request)
 
         p = Post(name=name, contact=contact, email=email, pickup_date=pickup_date_obj, flight_number=flight_number, flight_time=flight_time, 
                  pickup_time=pickup_time, start_point=start_point, end_point=end_point, direction=direction, suburb=suburb, street=street,
@@ -895,53 +758,7 @@ def cruise_booking_detail(request):
         sam_driver = Driver.objects.get(driver_name="Sam")
 
         # 🧳 개별 수하물 항목 수집
-        large = to_int(request.POST.get('baggage_large'))
-        medium = to_int(request.POST.get('baggage_medium'))
-        small = to_int(request.POST.get('baggage_small'))
-
-        baby_seat = to_int(request.POST.get('baggage_baby'))
-        booster_seat = to_int(request.POST.get('baggage_booster'))
-        pram = to_int(request.POST.get('baggage_pram'))
-
-        ski = to_int(request.POST.get('baggage_ski'))
-        snowboard = to_int(request.POST.get('baggage_snowboard'))
-        golf = to_int(request.POST.get('baggage_golf'))
-        bike = to_int(request.POST.get('baggage_bike'))
-        boxes = to_int(request.POST.get('baggage_boxes'))
-        musical_instrument = to_int(request.POST.get('baggage_music'))
-
-        # Oversize flags (수량 있을 때만 유효)
-        ski_oversize = ski > 0 and request.POST.get('ski_oversize') == 'on'
-        snowboard_oversize = snowboard > 0 and request.POST.get('snowboard_oversize') == 'on'
-        golf_oversize = golf > 0 and request.POST.get('golf_oversize') == 'on'
-        bike_oversize = bike > 0 and request.POST.get('bike_oversize') == 'on'
-        boxes_oversize = boxes > 0 and request.POST.get('boxes_oversize') == 'on'
-        musical_instrument_oversize = (
-            musical_instrument > 0 and request.POST.get('music_oversize') == 'on'
-        )
-
-        # 🎯 요약 문자열 생성
-        baggage_summary = []
-
-        # Standard luggage
-        add_bag(baggage_summary, "L", large)
-        add_bag(baggage_summary, "M", medium)
-        add_bag(baggage_summary, "S", small)
-
-        # Seats / prams
-        add_bag(baggage_summary, "Baby", baby_seat)
-        add_bag(baggage_summary, "Booster", booster_seat)
-        add_bag(baggage_summary, "Pram", pram)
-
-        # Oversize-capable items
-        add_bag(baggage_summary, "Ski", ski, ski_oversize)
-        add_bag(baggage_summary, "Snow", snowboard, snowboard_oversize)
-        add_bag(baggage_summary, "Golf", golf, golf_oversize)
-        add_bag(baggage_summary, "Bike", bike, bike_oversize)
-        add_bag(baggage_summary, "Box", boxes, boxes_oversize)
-        add_bag(baggage_summary, "Music", musical_instrument, musical_instrument_oversize)
-
-        baggage_str = ", ".join(baggage_summary)                    
+        baggage_str = parse_baggage(request)         
 
         p = Post(name=name, contact=contact, email=email, pickup_date=pickup_date_obj, start_point=start_point,
                  end_point=end_point, pickup_time=pickup_time, price=price,

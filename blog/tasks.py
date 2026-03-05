@@ -147,7 +147,7 @@ def notify_user_payment_paypal(instance_id):
 
     send_payment_notification_email(
         instance, total_balance, recipient_emails, RECIPIENT_EMAIL,
-        method_label="PAYPAL",
+        method="PAYPAL",
         raw_amount=raw_amount,
         net_amount=calculated_amount
     )
