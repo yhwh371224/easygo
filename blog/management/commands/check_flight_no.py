@@ -36,7 +36,7 @@ class Command(BaseCommand):
 
                 contact = booking.contact.strip() if booking.contact else ''
                 cleaned_contact = ''.join(filter(str.isdigit, contact))
-                contact_issue = not cleaned_contact or len(cleaned_contact) < 10 or len(cleaned_contact) > 16
+                contact_issue = not cleaned_contact or len(cleaned_contact) < 9 or len(cleaned_contact) > 13
 
                 if contact_issue:
                     issues.append('Contact number is missing or invalid')
