@@ -189,6 +189,7 @@ SITE_ID = 1
 SITE_URL = 'https://easygoshuttle.com.au'
 
 MIDDLEWARE = [     
+    'main.middlewares.cloudflare.CloudflareMiddleware', 
     'django.middleware.security.SecurityMiddleware',
     'django.middleware.gzip.GZipMiddleware', 
     'htmlmin.middleware.HtmlMinifyMiddleware', 
@@ -346,8 +347,6 @@ STATICFILES_FINDERS = (
 
 HTML_MINIFY = True
 KEEP_COMMENTS_ON_MINIFYING = True
-
-ACCOUNT_RATE_LIMITS = False
 
 LOGIN_REDIRECT_URL = '/easygo_review/'
 LOGOUT_REDIRECT_URL = '/'
