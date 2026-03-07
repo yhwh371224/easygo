@@ -179,7 +179,8 @@ LOGGING = {
 }
 
 
-CELERY_BROKER_URL = config('CELERY_BROKER', 'redis://redis:6379')
+CELERY_BROKER_URL = config('CELERY_BROKER', 'redis://127.0.0.1:6379')
+CELERY_RESULT_BACKEND = config('CELERY_BACKEND', 'django-db')
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Australia/Sydney'
