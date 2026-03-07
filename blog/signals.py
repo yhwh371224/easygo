@@ -1,3 +1,4 @@
+import logging
 from django.db.models.signals import post_save
 from django.db import transaction
 from django.dispatch import receiver
@@ -15,6 +16,8 @@ from .tasks import (
 )
 from utils.return_booking import handle_return_trip
 from utils.prepay_helper import is_foreign_number
+
+logger = logging.getLogger('easygo')
 
 
 # Inquiry signals
