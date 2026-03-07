@@ -23,6 +23,7 @@ logger = logging.getLogger('easygo')
 # Inquiry signals
 @receiver(post_save, sender=Inquiry, dispatch_uid="notify_user_inquiry_once")
 def notify_user_inquiry(sender, instance, created, **kwargs):
+    logger.info(f"Signal fired: inquiry_id={instance.id}, created={created}")
     if created:
         pk = instance.pk
         transaction.on_commit(lambda: send_inquiry_email_task.delay(pk))
