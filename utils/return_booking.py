@@ -59,7 +59,11 @@ def handle_return_trip(instance):
         instance.paid = half_paid
         instance.notice = updated_notice
 
-        instance.save(update_fields=['price', 'paid', 'notice'])
+        Post.objects.filter(id=instance.id).update(
+            price=half_price,
+            paid=half_paid,
+            notice=updated_notice
+        )
 
         # ✅ return_start_point / return_end_point 처리
         return_start_val = instance.return_start_point or ""
