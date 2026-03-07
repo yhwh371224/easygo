@@ -22,16 +22,33 @@
 	  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'basecamp/favi/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'basecamp/favi/favicon-16x16.png' %}">
     <link rel="manifest" href="{% static 'basecamp/favi/site.webmanifest' %}">        
-    <link rel="stylesheet" href="{% static 'basecamp/css/home.css' %}">
+    <link rel="stylesheet" href="{% static 'basecamp/css/base_home.css' %}">
     <style nonce="{{ CSP_NONCE }}">
-        /* === 기존 스타일 === */
-        body { margin:0; font-family:Arial,sans-serif; }
+        /* === Critical CSS – above-the-fold only (prevents FOUC) === */
+        /* Font rendering */
+        html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+        body { margin:0; font-family:Arial,sans-serif; background-color:#fff; color:#737491; }
+        /* Page wrapper */
+        .page-wrapper { width:100%; overflow-x:hidden; }
+        /* Navbar – position and colours */
+        .header { position:relative; z-index:1030; }
+        .navbar { position:relative; display:flex; align-items:center; justify-content:space-between; padding:.75rem .9375rem; }
+        .navbar-brand { padding-top:0; padding-bottom:0; margin-right:1rem; white-space:nowrap; text-decoration:none; }
+        .navbar-floating { position:absolute; top:0; left:0; width:100%; }
+        .navbar-dark .navbar-brand { color:#fff; }
+        .navbar-dark .navbar-nav .nav-link { color:rgba(255,255,255,.7); }
+        .navbar-dark .navbar-toggler { color:rgba(255,255,255,.7); border-color:rgba(0,0,0,0); }
+        .navbar-toggler { padding:.75rem; background-color:transparent; border:1px solid transparent; border-radius:0; }
+        .offcanvas { visibility:hidden; }
+        @media (min-width:992px) { .navbar-expand-lg .offcanvas-collapse { width: auto !important; max-width: none !important; visibility: visible !important; }}
+        /* Hero layout */
         .award-badge { position: fixed; top: 60px; left: 10px; width: 80px !important; height: 80px; background: url('/static/basecamp/images/award-badge-sm.webp') center/contain no-repeat; image-rendering: -webkit-optimize-contrast; z-index: 1000; }
         .hero-award-link { display: inline-block; text-decoration: none; }
         .hero, .hero-about { position: relative; min-height: 600px; display: flex; align-items: center; overflow: hidden; }
         .hero::before, .hero-about::before { content: ""; position: absolute; inset: 0; z-index: 0; }
         .hero::before { background-size: cover; background-position: center 38%; }
         .hero-content { position: relative; z-index: 2; }
+        /* Responsive overrides */
         @media(max-width: 768px) { .award-badge { top: 30px; left: 20px; width: 100px !important; height: 100px; background-image: url('/static/basecamp/images/award-badge-md.webp'); } .hero, .hero-about { min-height: 400px; } .hero::before { background-position: center 30%; } }
         @media(min-width: 992px) { .award-badge { top: 70px; left: 40px; width: 280px !important; height: 280px; background-image: url('/static/basecamp/images/award-badge-md.webp'); } }
         @media(max-width: 480px) { .hero, .hero-about { min-height: 300px; } .hero::before { background-position: center 25%; } }
