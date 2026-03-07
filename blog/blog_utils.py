@@ -1,24 +1,12 @@
 import logging
 from django.utils import timezone
-from django.core.mail import send_mail, EmailMultiAlternatives
-from django.utils.html import strip_tags
 from django.conf import settings
 from main.settings import RECIPIENT_EMAIL, DEFAULT_FROM_EMAIL
 from basecamp.basecamp_utils import render_email_template
+from utils.email import send_text_email, send_html_email
 
 logger = logging.getLogger('easygo')
 
-
-def payment_send_email(subject, html_content, recipient_list):
-    text_content = strip_tags(html_content)
-    email = EmailMultiAlternatives(
-        subject,
-        text_content,
-        DEFAULT_FROM_EMAIL,
-        recipient_list
-    )
-    email.attach_alternative(html_content, "text/html")
-    email.send()
 
 
 def clean_float(value):
@@ -50,10 +38,9 @@ def process_generic_payment(payment_instance, posts, recipient_email_config):
         - 거래ID: {txn_id}
         - 최초처리일: {instance.processed_at}
         '''
-        send_mail(
+        send_text_email(
             subject=f"⚠️ [Duplicate] {instance.name} - {method}",
             message=admin_notice,
-            from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=[admin_email],
         )
         return False, 0.0, set()
@@ -141,4 +128,4 @@ def send_payment_notification_email(instance, total_balance, recipient_emails, a
         })
 
     html_content = render_email_template(template, context)
-    payment_send_email("Payment Received - EasyGo", html_content, recipient_list)
+    send_html_email("Payment Received - EasyGo", html_content, recipient_list, from_email=DEFAULT_FROM_EMAIL)

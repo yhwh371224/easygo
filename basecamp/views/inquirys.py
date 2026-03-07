@@ -1,7 +1,7 @@
 from datetime import timedelta
 from django.shortcuts import render, redirect
 from django.conf import settings
-from django.core.mail import send_mail
+from utils.email import send_text_email
 from django.db.models import Q
 from django.http import JsonResponse
 from django.utils import timezone
@@ -154,7 +154,7 @@ def inquiry_details(request):
         
         p.save()
 
-        send_mail(email_subject, content, '', [RECIPIENT_EMAIL])
+        send_text_email(email_subject, content, [RECIPIENT_EMAIL])
 
         if is_ajax(request):
             return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})        
@@ -260,7 +260,7 @@ def inquiry_details1(request):
         content = email_content_template.format(**data)
         
         email_subject = f"Inquiry on {data['pickup_date']} - {data['name']}"
-        send_mail(email_subject, content, '', [RECIPIENT_EMAIL])
+        send_text_email(email_subject, content, [RECIPIENT_EMAIL])
 
         if original_start_point == "Sydney Int'l Airport":
             direction = 'Pickup from Intl Airport'

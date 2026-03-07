@@ -1,21 +1,12 @@
 from datetime import date, timedelta
 from django.core.management.base import BaseCommand
-from django.utils.html import strip_tags
-from django.core.mail import EmailMultiAlternatives
 from blog.models import Post
 from main.settings import RECIPIENT_EMAIL
-from basecamp.basecamp_utils import render_email_template
+from utils.email import send_template_email
 
 
 class Command(BaseCommand):
     help = 'Check bookings with missing details (consolidated report)'
-
-    def send_email(self, subject, template, context, recipient_list):
-        html_content = render_email_template(template, context)
-        text_content = strip_tags(html_content)
-        email = EmailMultiAlternatives(subject, text_content, '', recipient_list)
-        email.attach_alternative(html_content, "text/html")
-        email.send(fail_silently=False)
 
     def handle(self, *args, **options):
         try:
@@ -54,11 +45,12 @@ class Command(BaseCommand):
                 email_subject = "Summary: Bookings with Missing Details"
                 email_template = "html_email-missing-details.html"
 
-                self.send_email(
+                send_template_email(
                     email_subject,
                     email_template,
                     {'bookings': consolidated_list},
-                    [RECIPIENT_EMAIL]
+                    [RECIPIENT_EMAIL],
+                    fail_silently=False,
                 )
 
                 self.stdout.write(self.style.SUCCESS(

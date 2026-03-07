@@ -6,7 +6,8 @@ from datetime import datetime, date
 from io import BytesIO
 
 from django.template.loader import render_to_string
-from django.core.mail import EmailMultiAlternatives, send_mail
+from django.core.mail import EmailMultiAlternatives
+from utils.email import send_text_email
 from django.utils.html import strip_tags
 from basecamp.area_home import get_home_suburbs
 from main import settings
@@ -236,13 +237,7 @@ def paypal_ipn_error_email(subject, exception, item_name, payer_email, gross_amo
     f"Payer Email: {payer_email}\n"
     f"Gross Amount: {gross_amount}"
     )
-    send_mail(
-        subject,
-        error_message,
-        settings.DEFAULT_FROM_EMAIL,
-        [settings.RECIPIENT_EMAIL],
-        fail_silently=False,
-    )
+    send_text_email(subject, error_message, [settings.RECIPIENT_EMAIL])
 
 
 # --------------------------
@@ -288,12 +283,7 @@ def stripe_payment_error_email(subject, message, name, email, amount):
     Amount: {amount}
     """
 
-    send_mail(
-        subject=subject,
-        message=content,
-        from_email=settings.DEFAULT_FROM_EMAIL,
-        recipient_list=[settings.RECIPIENT_EMAIL],
-    )
+    send_text_email(subject, content, [settings.RECIPIENT_EMAIL])
 
 # --------------------------
 # get_sorted_suburbs

@@ -1,7 +1,7 @@
 import os
 from datetime import date, timedelta
 from django.core.management.base import BaseCommand
-from django.core.mail import send_mail
+from utils.email import send_text_email
 from blog.models import Post, Driver
 from main.settings import RECIPIENT_EMAIL
 
@@ -30,7 +30,7 @@ class Command(BaseCommand):
             subject = f"Empty calendar ID for {booking.pickup_date}"
             message = f"{booking.name} & {booking.email}"
             recipient_list = [RECIPIENT_EMAIL]
-            send_mail(subject, message, '', recipient_list, fail_silently=False)
+            send_text_email(subject, message, recipient_list)
 
     # def confirm_booking(self, booking):
     #     if not booking.cancelled:

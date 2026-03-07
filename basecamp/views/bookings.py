@@ -1,7 +1,7 @@
 from datetime import timedelta
 from django.shortcuts import render
 from django.conf import settings
-from django.core.mail import send_mail
+from utils.email import send_text_email
 from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
 from django.utils import timezone
@@ -121,7 +121,7 @@ def booking_detail(request):
 
         content = email_content_template.format(**data)
 
-        send_mail(subject, content, '', [RECIPIENT_EMAIL])
+        send_text_email(subject, content, [RECIPIENT_EMAIL])
             
         sam_driver = Driver.objects.get(driver_name="Sam") 
 
@@ -241,7 +241,7 @@ def cruise_booking_detail(request):
             ''' .format(data['name'], data['email'], data['contact'], data['pickup_time'], data['start_point'], data['end_point'], 
                         data['no_of_passenger'], data['no_of_baggage'], data['return_pickup_date'], data['return_start_point'],
                         data['return_pickup_time'], data['message'])
-            send_mail(data['pickup_date'], content, '', [RECIPIENT_EMAIL])
+            send_text_email(data['pickup_date'], content, [RECIPIENT_EMAIL])
         
         else:
             content = '''
@@ -267,7 +267,7 @@ def cruise_booking_detail(request):
             ''' .format(data['name'], data['email'], data['contact'], data['pickup_time'], data['start_point'], data['end_point'], 
                         data['no_of_passenger'], data['no_of_baggage'], data['return_pickup_date'], data['return_start_point'],
                         data['return_pickup_time'], data['message'])
-            send_mail(data['pickup_date'], content, '', [RECIPIENT_EMAIL])
+            send_text_email(data['pickup_date'], content, [RECIPIENT_EMAIL])
             
         sam_driver = Driver.objects.get(driver_name="Sam")
 
@@ -531,7 +531,7 @@ def return_trip_detail(request):
 
         subject = f"[New Return Trip] Submission from {data['name']})"
 
-        send_mail(subject, content, '', [RECIPIENT_EMAIL])
+        send_text_email(subject, content, [RECIPIENT_EMAIL])
          
         sam_driver = Driver.objects.get(driver_name="Sam")  
                     

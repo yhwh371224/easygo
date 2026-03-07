@@ -1,7 +1,6 @@
-from django.core.mail import EmailMultiAlternatives
-from django.utils.html import strip_tags
 from main.settings import RECIPIENT_EMAIL
 from basecamp.basecamp_utils import render_email_template
+from utils.email import send_html_email
 from decimal import Decimal
 
 
@@ -63,16 +62,7 @@ def send_post_confirmation_email(instance):
         }
     )
 
-    text_content = strip_tags(html_content)
-
-    email = EmailMultiAlternatives(
-        subject,
-        text_content,
-        '',  # DEFAULT_FROM_EMAIL 사용
-        [instance.email, RECIPIENT_EMAIL],
-    )
-    email.attach_alternative(html_content, "text/html")
-    email.send()
+    send_html_email(subject, html_content, [instance.email, RECIPIENT_EMAIL])
 
 
 def send_post_cancelled_email(instance):
@@ -85,15 +75,7 @@ def send_post_cancelled_email(instance):
         'return_pickup_time': instance.return_pickup_time or "",
     })
     
-    text_content = strip_tags(html_content)
-    email = EmailMultiAlternatives(
-        "EasyGo Booking Cancelled",
-        text_content,
-        '',
-        [instance.email, RECIPIENT_EMAIL]
-    )
-    email.attach_alternative(html_content, "text/html")
-    email.send()
+    send_html_email("EasyGo Booking Cancelled", html_content, [instance.email, RECIPIENT_EMAIL])
 
 
 def send_missing_direction_email(instance):
@@ -107,12 +89,4 @@ def send_missing_direction_email(instance):
         'flight_number': instance.flight_number,
     })
 
-    text_content = strip_tags(html_content)
-    email = EmailMultiAlternatives(
-        subject,
-        text_content,
-        '',
-        [RECIPIENT_EMAIL]  
-    )
-    email.attach_alternative(html_content, "text/html")
-    email.send()
+    send_html_email(subject, html_content, [RECIPIENT_EMAIL])
