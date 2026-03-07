@@ -1,6 +1,7 @@
 import re
 
 from django.db.models.signals import post_save
+from django.db import transaction
 from django.dispatch import receiver
 from django.template.loader import render_to_string
 from utils.email_helper import EmailSender
@@ -88,8 +89,9 @@ def async_notify_user_payment_stripe(sender, instance, created, **kwargs):
 # google calendar recording 
 @receiver(post_save, sender=Post, dispatch_uid="async_create_event_on_calendar_once")
 def async_create_event_on_calendar(sender, instance, created, **kwargs):
-    create_event_on_calendar.delay(instance.id)
-
+    pk = instance.pk
+    transaction.on_commit(lambda: create_event_on_calendar.delay(pk))
+    
 
 # check missing direction when flight number exists
 @receiver(post_save, sender=Post, dispatch_uid="check_missing_direction_once")
