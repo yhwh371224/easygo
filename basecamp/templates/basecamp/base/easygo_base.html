@@ -22,7 +22,8 @@
 	  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'basecamp/favi/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'basecamp/favi/favicon-16x16.png' %}">
     <link rel="manifest" href="{% static 'basecamp/favi/site.webmanifest' %}">        
-    <link rel="stylesheet" href="{% static 'basecamp/css/base_home.css' %}">
+    <link rel="preload" href="{% static 'basecamp/css/base_home.css' %}" as="style" />
+    <link rel="stylesheet" href="{% static 'basecamp/css/base_home.css' %}" media="all" />
     <style nonce="{{ CSP_NONCE }}">
         /* === Critical CSS – above-the-fold only (prevents FOUC) === */
         /* Font rendering */
