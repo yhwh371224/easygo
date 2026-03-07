@@ -1,25 +1,26 @@
 import os
 import logging
 
-from django.core.mail import send_mail, EmailMultiAlternatives
+from decimal import Decimal
+
 from django.core.exceptions import ImproperlyConfigured
-from django.template.loader import render_to_string
-from django.utils.html import strip_tags
+from django.core.mail import EmailMultiAlternatives, send_mail
 from django.db import transaction
 from django.db.models import Q
 from django.utils import timezone
-from decimal import Decimal
 
 from celery import shared_task
+
 from main.settings import RECIPIENT_EMAIL, DEFAULT_FROM_EMAIL
-from .models import Post, PaypalPayment, StripePayment
+from .models import Inquiry, Post, PaypalPayment, StripePayment
 from .blog_utils import process_generic_payment, send_payment_notification_email
 from utils.calendar_sync import sync_to_calendar
-from basecamp.basecamp_utils import render_email_template
+from utils.inquiry_helper import send_inquiry_email
+from utils.post_helper import send_missing_direction_email, send_post_cancelled_email, send_post_confirmation_email
+from basecamp.basecamp_utils import check_and_send_missing_info_email, render_email_template
 
 
 logger = logging.getLogger('easygo')
-
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -217,5 +218,35 @@ def send_xrp_customer_email(email: str, xrp_amount: str, xrp_address: str, dest_
         mail.send()
     except Exception as e:
         logger.exception("Failed to send XRP payment email: %s", e)
+
+
+@shared_task
+def send_post_confirmation_email_task(pk):
+    instance = Post.objects.get(pk=pk)
+    send_post_confirmation_email(instance)
+
+
+@shared_task
+def send_post_cancelled_email_task(pk):
+    instance = Post.objects.get(pk=pk)
+    send_post_cancelled_email(instance)
+
+
+@shared_task
+def send_missing_direction_email_task(pk):
+    instance = Post.objects.get(pk=pk)
+    send_missing_direction_email(instance)
+
+
+@shared_task
+def check_and_send_missing_info_email_task(pk):
+    instance = Post.objects.get(pk=pk)
+    check_and_send_missing_info_email(instance)
+
+
+@shared_task
+def send_inquiry_email_task(pk):
+    instance = Inquiry.objects.get(pk=pk)
+    send_inquiry_email(instance)
 
 
