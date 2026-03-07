@@ -32,6 +32,7 @@ Disallow: /email_dispatch/
 Disallow: /sending_email_*/
 
 # 쿼리 파라미터 URL
+Allow: /easygo_review/*?page=
 Disallow: /*?
 
 # Sitemap
