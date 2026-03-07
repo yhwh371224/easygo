@@ -88,7 +88,8 @@ def async_notify_user_payment_stripe(sender, instance, created, **kwargs):
 # google calendar recording 
 @receiver(post_save, sender=Post, dispatch_uid="async_create_event_on_calendar_once")
 def async_create_event_on_calendar(sender, instance, created, **kwargs):
-    create_event_on_calendar.delay(instance.id)
+    if created:
+        create_event_on_calendar.delay(instance.id)
 
 
 # check missing direction when flight number exists
