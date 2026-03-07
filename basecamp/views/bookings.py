@@ -31,11 +31,7 @@ def booking_detail(request):
         flight_time = request.POST.get('flight_time', '')
         pickup_time = request.POST.get('pickup_time')
         direction = request.POST.get('direction')      
-        suburb = request.POST.get('suburb')
-        # ✅ suburb 검증
-        valid_suburbs = get_home_suburbs()
-        if suburb not in valid_suburbs:
-            return JsonResponse({'success': False, 'error': 'Invalid suburb selected.'})
+        suburb = request.POST.get('suburb', '')
         street = request.POST.get('street')
         start_point = request.POST.get('start_point', '')
         end_point = request.POST.get('end_point', '')
