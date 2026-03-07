@@ -23,9 +23,9 @@ logger = logging.getLogger('easygo')
 # Inquiry signals
 @receiver(post_save, sender=Inquiry, dispatch_uid="notify_user_inquiry_once")
 def notify_user_inquiry(sender, instance, created, **kwargs):
-    logger.info(f"Signal fired: inquiry_id={instance.id}, created={created}")
-    pk = instance.pk
-    transaction.on_commit(lambda: send_inquiry_email_task.delay(pk))
+    if not instance.sent_email:
+        pk = instance.pk
+        transaction.on_commit(lambda: send_inquiry_email_task.delay(pk))
 
 
 # Post signals
@@ -70,7 +70,7 @@ def notify_user_post_cancelled(sender, instance, created, **kwargs):
 @receiver(post_save, sender=Post, dispatch_uid="set_prepay_for_foreign_users")
 def set_prepay_for_foreign_users(sender, instance, created, **kwargs):
     if not instance.pk or instance.cash:        
-        return  # Skip if not saved properly
+        return  
 
     if not instance.prepay: 
         if is_foreign_number(instance.contact) or (instance.company_name or "").strip():
@@ -100,8 +100,7 @@ def async_create_event_on_calendar(sender, instance, created, **kwargs):
     transaction.on_commit(lambda: create_event_on_calendar.delay(pk))
     
 
-# check missing direction when flight number exists
-# check missing flight contact info
+# check missing direction when flight number exists and missing flight contact info
 @receiver(post_save, sender=Post, dispatch_uid="check_missing_info_once")
 def check_missing_info(sender, instance, created, **kwargs):
     if created:

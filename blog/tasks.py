@@ -248,5 +248,6 @@ def check_and_send_missing_info_email_task(pk):
 def send_inquiry_email_task(pk):
     instance = Inquiry.objects.get(pk=pk)
     send_inquiry_email(instance)
+    Inquiry.objects.filter(pk=pk).update(sent_email=True)
 
 
