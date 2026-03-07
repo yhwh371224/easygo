@@ -158,7 +158,7 @@ def confirmation(request):
     return render(request, 'basecamp/booking/confirmation.html', context)
 
 def inquiry(request):
-    all_suburbs = get_sorted_suburbs()
+    all_suburbs = get_home_suburbs()
     context = {
         'home_suburbs': all_suburbs,
     }

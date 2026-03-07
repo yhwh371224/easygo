@@ -34,10 +34,6 @@ def inquiry_details(request):
         pickup_time = request.POST.get('pickup_time')
         direction = request.POST.get('direction')
         suburb = request.POST.get('suburb', '')
-        # ✅ suburb 검증
-        valid_suburbs = get_home_suburbs()
-        if suburb not in valid_suburbs:
-            return JsonResponse({'success': False, 'error': 'Invalid suburb selected.'})
         start_point = request.POST.get('start_point', '')
         end_point = request.POST.get('end_point', '')        
         street = request.POST.get('street', '')
@@ -137,8 +133,7 @@ def inquiry_details(request):
         else:
             data['status_message'] = "Neither in Inquiry & Post *"
             
-        content = email_content_template.format(**data)
-        send_mail(email_subject, content, '', [RECIPIENT_EMAIL])
+        content = email_content_template.format(**data)        
 
         # 🧳 개별 수하물 항목 수집
         baggage_str = parse_baggage(request)
@@ -158,6 +153,8 @@ def inquiry_details(request):
         )
         
         p.save()
+
+        send_mail(email_subject, content, '', [RECIPIENT_EMAIL])
 
         if is_ajax(request):
             return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})        
