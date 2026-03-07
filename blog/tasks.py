@@ -4,7 +4,6 @@ import logging
 from decimal import Decimal
 
 from django.core.exceptions import ImproperlyConfigured
-from django.core.mail import EmailMultiAlternatives, send_mail
 from django.db import transaction
 from django.db.models import Q
 from django.utils import timezone
@@ -17,6 +16,7 @@ from .blog_utils import process_generic_payment, send_payment_notification_email
 from utils.calendar_sync import sync_to_calendar
 from utils.inquiry_helper import send_inquiry_email
 from utils.post_helper import send_missing_direction_email, send_post_cancelled_email, send_post_confirmation_email
+from utils.email import send_text_email, send_html_email
 from basecamp.basecamp_utils import check_and_send_missing_info_email, render_email_template
 
 
@@ -82,22 +82,22 @@ def send_confirm_email(
     ===============================          
     '''
 
-    send_mail(subject, content, DEFAULT_FROM_EMAIL, [RECIPIENT_EMAIL])
+    send_text_email(subject, content, [RECIPIENT_EMAIL])
 
 
-# Home page for price 
+# Home page for price
 @shared_task
 def send_email_task(pickup_date, direction, suburb, no_of_passenger):
     content = f'''
-    someone checked the price from homepage    
-    =============================  
+    someone checked the price from homepage
+    =============================
     flight date:  {pickup_date}
     Direction: {direction}
     Suburbs: {suburb}
     No of Pax: {no_of_passenger}
-    ===============================        
+    ===============================
     '''
-    send_mail(pickup_date, content, DEFAULT_FROM_EMAIL, [RECIPIENT_EMAIL])
+    send_text_email(pickup_date, content, [RECIPIENT_EMAIL])
 
 
 # Review page, service, information, terms, policy
@@ -109,13 +109,7 @@ def send_notice_email(subject, message, RECIPIENT_EMAIL):
     if not DEFAULT_FROM_EMAIL:
         raise ImproperlyConfigured("DEFAULT_FROM_EMAIL is not set in environment variables")
     
-    send_mail(
-        subject,
-        message,
-        DEFAULT_FROM_EMAIL,
-        [RECIPIENT_EMAIL],
-        fail_silently=False,
-    )
+    send_text_email(subject, message, [RECIPIENT_EMAIL])
 
 
 # PayPal payment 
@@ -182,13 +176,7 @@ def notify_user_payment_stripe(instance_id):
 @shared_task
 def send_xrp_internal_email(subject, message, from_email, recipient_list):
     """회사 내부 알림(텍스트)"""
-    send_mail(
-        subject,
-        message,
-        from_email,
-        recipient_list,
-        fail_silently=False,
-    )
+    send_text_email(subject, message, recipient_list, from_email=from_email)
 
 @shared_task
 def send_xrp_customer_email(email: str, xrp_amount: str, xrp_address: str, dest_tag: int):
@@ -205,17 +193,8 @@ def send_xrp_customer_email(email: str, xrp_amount: str, xrp_address: str, dest_
 
     html_content = render_email_template("html_email-xrppayment.html", context)
 
-    subject = "XRP Payment - EasyGo"
-    mail = EmailMultiAlternatives(
-        subject,
-        html_content,
-        RECIPIENT_EMAIL,
-        [email],          
-    )
-    mail.attach_alternative(html_content, "text/html")
-
     try:
-        mail.send()
+        send_html_email("XRP Payment - EasyGo", html_content, [email], from_email=RECIPIENT_EMAIL)
     except Exception as e:
         logger.exception("Failed to send XRP payment email: %s", e)
 

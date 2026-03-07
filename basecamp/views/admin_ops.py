@@ -3,16 +3,15 @@ import logging
 import stripe
 from django.conf import settings
 from django.shortcuts import render
-from django.core.mail import send_mail, EmailMultiAlternatives
 from django.http import HttpResponse, JsonResponse
-from django.utils.html import strip_tags
+from utils.email import send_text_email, send_template_email
 from main.settings import RECIPIENT_EMAIL
 from blog.models import Post, Inquiry, Driver
 from blog.sms_utils import send_sms_notice, send_whatsapp_template
 from csp.constants import NONCE
 from basecamp.basecamp_utils import (
     parse_baggage, parse_date, handle_email_sending, format_pickup_time_12h,
-    to_bool, render_email_template
+    to_bool
 )
 
 
@@ -115,7 +114,7 @@ def confirmation_detail(request):
 
         content = email_content_template.format(**data)
 
-        send_mail(subject, content, '', [RECIPIENT_EMAIL])  
+        send_text_email(subject, content, [RECIPIENT_EMAIL])
 
         sam_driver = Driver.objects.get(driver_name="Sam") 
 
@@ -188,32 +187,26 @@ def sending_email_first_detail(request):
             else: 
                 template_name = "html_email-confirmation.html"
 
-                html_content = render_email_template(
-                                        "html_email-confirmation.html", 
-                                        {
-                                            'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 'email': user.email, 'email1': user.email1,
-                                            'pickup_date': user.pickup_date, 'flight_number': user.flight_number,
-                                            'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
-                                            'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
-                                            'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
-                                            'return_direction': user.return_direction, 'return_pickup_date': user.return_pickup_date, 
-                                            'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
-                                            'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
-                                            'price': display_price, 'paid': user.paid, 'cash': final_cash, 'prepay': final_prepay,
-                                            'toll': getattr(user, 'toll', 0), 'start_point': getattr(user, 'start_point', ''), 
-                                            'end_point': getattr(user, 'end_point', ''), 'return_start_point': getattr(user, 'return_start_point', ''), 
-                                            'return_end_point': getattr(user, 'return_end_point', ''), 
-                                        })
-
-                text_content = strip_tags(html_content)
-                email = EmailMultiAlternatives(
+                send_template_email(
                     "Booking confirmation - EasyGo",
-                    text_content,
-                    '',
-                    [email, RECIPIENT_EMAIL]
+                    "html_email-confirmation.html",
+                    {
+                        'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 'email': user.email, 'email1': user.email1,
+                        'pickup_date': user.pickup_date, 'flight_number': user.flight_number,
+                        'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
+                        'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
+                        'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
+                        'return_direction': user.return_direction, 'return_pickup_date': user.return_pickup_date,
+                        'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time,
+                        'return_pickup_time': user.return_pickup_time, 'message': user.message, 'notice': user.notice,
+                        'price': display_price, 'paid': user.paid, 'cash': final_cash, 'prepay': final_prepay,
+                        'toll': getattr(user, 'toll', 0), 'start_point': getattr(user, 'start_point', ''),
+                        'end_point': getattr(user, 'end_point', ''), 'return_start_point': getattr(user, 'return_start_point', ''),
+                        'return_end_point': getattr(user, 'return_end_point', ''),
+                    },
+                    [email, RECIPIENT_EMAIL],
+                    request=request,
                 )
-                email.attach_alternative(html_content, "text/html")
-                email.send()
 
             return render(request, 'basecamp/inquiry_done.html', {
                 'google_review_url': settings.GOOGLE_REVIEW_URL,            
@@ -322,21 +315,11 @@ def sending_email_second_detail(request):
                 'return_end_point': getattr(user, 'return_end_point', ''), 
             }
 
-            html_content = render_email_template(template_name, context)
-            text_content = strip_tags(html_content)
-
             recipient_list = [user.email, RECIPIENT_EMAIL]
             if user.email1:
                 recipient_list.append(user.email1)
 
-            email_message = EmailMultiAlternatives(
-                subject,
-                text_content,
-                '',
-                recipient_list,
-            )
-            email_message.attach_alternative(html_content, "text/html")
-            email_message.send()
+            send_template_email(subject, template_name, context, recipient_list, request=request)
             
         return render(request, 'basecamp/inquiry_done.html', {
             'google_review_url': settings.GOOGLE_REVIEW_URL,            

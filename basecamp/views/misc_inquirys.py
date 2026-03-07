@@ -1,7 +1,7 @@
 from datetime import date
 from django.shortcuts import render
 from django.conf import settings
-from django.core.mail import send_mail
+from utils.email import send_text_email
 from django.db.models import Q
 from django.http import JsonResponse
 from main.settings import RECIPIENT_EMAIL
@@ -118,7 +118,7 @@ def contact_submit(request):
 
         subject = f"[New Contact] Submission from {data['name']}"
 
-        send_mail(subject, message, '', [RECIPIENT_EMAIL])
+        send_text_email(subject, message, [RECIPIENT_EMAIL])
         
         if is_ajax(request):
             return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})

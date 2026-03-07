@@ -1,7 +1,6 @@
-from django.core.mail import EmailMultiAlternatives
 from main.settings import RECIPIENT_EMAIL
 from basecamp.basecamp_utils import render_email_template
-from django.utils.html import strip_tags
+from utils.email import send_html_email
 
 
 def send_inquiry_email(instance):
@@ -59,12 +58,4 @@ def send_inquiry_email(instance):
     else:
         return  
 
-    text_content = strip_tags(html_content)
-    email = EmailMultiAlternatives(
-        "EasyGo Booking Inquiry",
-        text_content,
-        '',
-        [instance.email, RECIPIENT_EMAIL]
-    )
-    email.attach_alternative(html_content, "text/html")
-    email.send()
+    send_html_email("EasyGo Booking Inquiry", html_content, [instance.email, RECIPIENT_EMAIL])

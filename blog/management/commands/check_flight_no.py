@@ -2,22 +2,13 @@ import re
 
 from datetime import date, timedelta
 from django.core.management.base import BaseCommand
-from django.core.mail import EmailMultiAlternatives
-from django.utils.html import strip_tags
 from blog.models import Post
 from main.settings import RECIPIENT_EMAIL
-from basecamp.basecamp_utils import render_email_template
+from utils.email import send_template_email
 
 
 class Command(BaseCommand):
     help = 'Check for missing flight or contact numbers and send reminder emails'
-
-    def send_email(self, subject, template, context, recipient_list):
-        html_content = render_email_template(template, context)
-        text_content = strip_tags(html_content)
-        email = EmailMultiAlternatives(subject, text_content, '', recipient_list)
-        email.attach_alternative(html_content, "text/html")
-        email.send(fail_silently=False)
 
     def handle(self, *args, **options):
         try:
@@ -68,12 +59,9 @@ class Command(BaseCommand):
                         issues.append('Flight number is missing or invalid')
 
                 if contact_issue or flight_issue:
-                    email_subject = "Missing or Invalid Flight/Contact Information Reminder"
-                    email_template = "html_email-missing-flight-contact.html"
-
-                    self.send_email(
-                        email_subject,
-                        email_template,
+                    send_template_email(
+                        "Missing or Invalid Flight/Contact Information Reminder",
+                        "html_email-missing-flight-contact.html",
                         {
                             'name': booking.name,
                             'email': booking.email,
@@ -83,7 +71,8 @@ class Command(BaseCommand):
                             'contact': booking.contact,
                             'issues': issues,
                         },
-                        [booking.email, RECIPIENT_EMAIL]
+                        [booking.email, RECIPIENT_EMAIL],
+                        fail_silently=False,
                     )
 
             self.stdout.write(self.style.SUCCESS('Missing flight/contact number reminders sent successfully'))

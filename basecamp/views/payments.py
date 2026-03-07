@@ -3,9 +3,8 @@ import requests
 import stripe
 from django.conf import settings
 from django.shortcuts import render
-from django.core.mail import EmailMultiAlternatives
 from django.http import HttpResponse, JsonResponse
-from django.utils.html import strip_tags
+from utils.email import send_html_email
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from main.settings import RECIPIENT_EMAIL, DEFAULT_FROM_EMAIL
@@ -287,25 +286,22 @@ def invoice_detail(request):
 
             html_content = render_email_template(template_name, context)
 
-        text_content = strip_tags(html_content)
         recipient_list = [email, RECIPIENT_EMAIL]
-        if extra_email:                
+        if extra_email:
             recipient_list.append(extra_email)
 
-        mail = EmailMultiAlternatives(
-            f"Tax Invoice #T{inv_no} - EasyGo",
-            text_content,
-            DEFAULT_FROM_EMAIL,
-            recipient_list
-        )
-        mail.attach_alternative(html_content, "text/html")
-
-        # PDF 생성 및 첨부
+        attachments = []
         pdf = render_to_pdf(template_name, context)
         if pdf:
-            mail.attach(f"Tax-Invoice-T{inv_no}.pdf", pdf, 'application/pdf')
+            attachments.append((f"Tax-Invoice-T{inv_no}.pdf", pdf, 'application/pdf'))
 
-        mail.send()
+        send_html_email(
+            f"Tax Invoice #T{inv_no} - EasyGo",
+            html_content,
+            recipient_list,
+            from_email=DEFAULT_FROM_EMAIL,
+            attachments=attachments,
+        )
 
         if not multiple and user.company_name and not user.prepay:
             if not user.cash:  

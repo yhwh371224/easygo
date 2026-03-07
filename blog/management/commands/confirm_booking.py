@@ -1,13 +1,11 @@
 import threading
 import logging
-import os 
+import os
 from django.core.management.base import BaseCommand
-from django.core.mail import EmailMultiAlternatives
-from django.utils.html import strip_tags
 from blog.models import Post
 from django.utils import timezone
 from main.settings import RECIPIENT_EMAIL
-from basecamp.basecamp_utils import render_email_template
+from utils.email import send_template_email
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -36,7 +34,7 @@ class Command(BaseCommand):
                     post.sent_email = True
                     post.save(update_fields=['sent_email'])
 
-                    html_content = render_email_template(template_name, {
+                    context = {
                         'company_name': post.company_name,
                         'name': post.name,
                         'contact': post.contact,
@@ -59,12 +57,9 @@ class Command(BaseCommand):
                         'message': post.message,
                         'notice': post.notice,
                         'price': post.price,
-                        'paid': post.paid
-                    })
-                    text_content = strip_tags(html_content)
-                    email = EmailMultiAlternatives(subject, text_content, '', [post.email, post.email1, RECIPIENT_EMAIL])
-                    email.attach_alternative(html_content, "text/html")
-                    email.send()
+                        'paid': post.paid,
+                    }
+                    send_template_email(subject, template_name, context, [post.email, post.email1, RECIPIENT_EMAIL])
 
 
 

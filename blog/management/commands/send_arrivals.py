@@ -3,13 +3,10 @@ from datetime import date, datetime, time
 import pytz
 
 from django.core.management.base import BaseCommand
-from django.core.mail import EmailMultiAlternatives
-from django.utils.html import strip_tags
-from django.conf import settings
 
 from blog.models import Post, Driver
-from basecamp.basecamp_utils import render_email_template
 from utils import booking_helper
+from utils.email import send_template_email
 
 from twilio.rest import Client
 from decouple import config
@@ -161,7 +158,7 @@ class Command(BaseCommand):
             driver = booking_reminder.driver
             pickup_time_12h = self.format_pickup_time_12h(booking_reminder.pickup_time)
 
-            html_content = render_email_template(template_name, {
+            context = {
                 'name': booking_reminder.name,
                 'company_name': booking_reminder.company_name,
                 'email': booking_reminder.email,
@@ -182,18 +179,14 @@ class Command(BaseCommand):
                 'driver_car': driver.driver_car,
                 'paid': booking_reminder.paid,
                 'cash': booking_reminder.cash,
-            })
+            }
 
-            text_content = strip_tags(html_content)
             email_recipients = [booking_reminder.email]
             if booking_reminder.email1 and booking_reminder.email1.strip():
                 email_recipients.append(booking_reminder.email1.strip())
 
-            email = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, email_recipients)
-            email.attach_alternative(html_content, "text/html")
-
             try:
-                email.send(fail_silently=False)
+                send_template_email(subject, template_name, context, email_recipients, fail_silently=False)
                 msg = f"Sent '{subject}' email to {booking_reminder.email}"
                 logger.info(msg)
                 self.stdout.write(msg)

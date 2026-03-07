@@ -2,25 +2,16 @@ import logging
 
 from datetime import date, timedelta
 from django.core.management.base import BaseCommand
-from django.core.mail import EmailMultiAlternatives
-from django.utils.html import strip_tags
 from django.db.models import Q
 from blog.models import Post
 from main.settings import RECIPIENT_EMAIL
-from basecamp.basecamp_utils import render_email_template
+from utils.email import send_template_email
 
 
 logger = logging.getLogger(__name__)
 
 class Command(BaseCommand):
     help = 'Send reminders for payment'
-
-    def send_email(self, subject, template, context, recipient_list):
-        html_content = render_email_template(template, context)
-        text_content = strip_tags(html_content)
-        email = EmailMultiAlternatives(subject, text_content, '', recipient_list)
-        email.attach_alternative(html_content, "text/html")
-        email.send(fail_silently=False)
 
     def get_display_date(self, booking):
         if booking.return_pickup_time == 'x':
@@ -61,7 +52,7 @@ class Command(BaseCommand):
                         email_subject = "Payment notice"
                         template = "html_email-nopayment.html"                             
 
-                    self.send_email(
+                    send_template_email(
                         email_subject,
                         template,
                         {
@@ -81,7 +72,7 @@ class Command(BaseCommand):
                 # ----------------------------
                 elif 0 < paid < price:
                     diff = round(price - paid, 2)
-                    self.send_email(
+                    send_template_email(
                         "Urgent notice for payment discrepancy",
                         "html_email-response-discrepancy.html",
                         {
