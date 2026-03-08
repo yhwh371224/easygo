@@ -56,6 +56,7 @@ def send_inquiry_email(instance):
         })
 
     else:
-        return  
+        return False
 
     send_html_email("EasyGo Booking Inquiry", html_content, [instance.email, RECIPIENT_EMAIL])
+    return True
