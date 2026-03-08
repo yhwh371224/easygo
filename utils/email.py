@@ -1,7 +1,6 @@
 import logging
 import uuid
 
-from django.utils import timezone
 from django.conf import settings
 from django.core.mail import send_mail as _django_send_mail, EmailMultiAlternatives
 from django.utils.html import strip_tags
@@ -29,9 +28,6 @@ def send_html_email(subject, html_content, recipient_list, from_email=None, fail
     Args:
         attachments: list of (filename, content, mimetype) tuples, e.g. for PDF
     """
-    now = timezone.localtime(timezone.now()).strftime("%d %b %H:%M")
-    ref = str(uuid.uuid4())[:8].upper()
-    subject = f"{subject} (sent {now}) [Ref: {ref}]"
     text_content = strip_tags(html_content)
     msg = EmailMultiAlternatives(
         subject,
@@ -77,8 +73,6 @@ def send_template_email(subject, template_name, context, recipient_list, from_em
         request:       Django request for template rendering context (optional)
     """
     from basecamp.basecamp_utils import render_email_template
-    ref = str(uuid.uuid4())[:8].upper()
-    context['ref'] = ref
     html_content = render_email_template(template_name, context, request=request)
     send_html_email(subject, html_content, recipient_list, from_email=from_email,
                     fail_silently=fail_silently, attachments=attachments)
