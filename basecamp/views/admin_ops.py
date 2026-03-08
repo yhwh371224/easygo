@@ -2,6 +2,7 @@ from datetime import datetime, date, timedelta
 import logging
 import stripe
 from django.conf import settings
+from django.db.models import Q
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from utils.email import send_text_email, send_template_email
@@ -203,8 +204,9 @@ def sending_email_second_detail(request):
         prepay_raw = request.POST.get('prepay')  # May be None
         cash_raw = request.POST.get('cash')  # May be None
 
-        user = Post.objects.filter(email__iexact=email)[1]
-        user1 = Post.objects.filter(email__iexact=email).first() 
+        users = list(Post.objects.filter(email__iexact=email)[:2])
+        user1 = users[0] if len(users) > 0 else None
+        user  = users[1] if len(users) > 1 else None
 
         # prepay / cash 처리
         final_prepay, final_cash = resolve_payment_flags(prepay_raw, cash_raw, user, user1)
@@ -362,8 +364,9 @@ def email_dispatch_detail(request):
 
         # 2️⃣ User 찾기
         user = (
-            Post.objects.filter(email__iexact=email).first()
-            or Post.objects.filter(email1__iexact=email).first()
+            Post.objects.select_related('driver').filter(
+                Q(email__iexact=email) | Q(email1__iexact=email)
+            ).first()
             or Inquiry.objects.filter(email__iexact=email).first()
         )
 
@@ -513,14 +516,20 @@ def email_dispatch_detail(request):
                 booking.toll = ""
                 booking.cash = False
                 booking.pending = False
-                booking.save()
 
-                applied_bookings.append(booking) 
+                applied_bookings.append(booking)
 
                 remaining_amount -= apply_amount
 
                 if remaining_amount <= 0:
                     break
+
+            if applied_bookings:
+                Post.objects.bulk_update(
+                    applied_bookings,
+                    ['paid', 'notice', 'reminder', 'toll', 'cash', 'pending'],
+                    batch_size=50,
+                )
 
             context.update({
                 'applied_bookings': applied_bookings,

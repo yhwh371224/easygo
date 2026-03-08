@@ -1,14 +1,15 @@
 import logging
 from datetime import date
+from django.core.cache import cache
 from blog.models import Post
 
 logger = logging.getLogger(__name__)
 
 
 def get_default_driver():
-    """Return the default (Sam) driver object."""
+    """Return the default (Sam) driver object, cached indefinitely."""
     from blog.models import Driver
-    return Driver.objects.get(driver_name="Sam")
+    return cache.get_or_set('driver_sam', lambda: Driver.objects.get(driver_name="Sam"), timeout=None)
 
 
 def assign_default_driver(booking):

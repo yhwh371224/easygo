@@ -243,7 +243,7 @@ def invoice_detail(request):
                 }
 
             elif user.return_pickup_time == "x":
-                user1 = Post.objects.filter(email__iexact=email)[1]
+                user1 = users[1] if len(list(users[:2])) > 1 else None
 
                 # 두 배 가격 계산
                 base_price = safe_float(user1.price) or 0.0
