@@ -1,27 +1,23 @@
-from datetime import timedelta
 from django.shortcuts import render
-from django.conf import settings
 from utils.email import send_text_email
 from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
-from django.utils import timezone
 from main.settings import RECIPIENT_EMAIL
 from blog.models import Post, Inquiry, Driver
 from blog.tasks import send_confirm_email
 from basecamp.area_home import get_home_suburbs
 from basecamp.basecamp_utils import (
-    is_ajax, parse_baggage, parse_date, 
-    to_bool, verify_turnstile
+    is_ajax, parse_baggage, parse_date,
+    to_bool, verify_turnstile,
+    render_inquiry_done, booking_success_response, require_turnstile,
+    is_duplicate_submission, parse_booking_dates, get_customer_status,
 )
 
 
 # airport booking by client
+@require_turnstile
 def booking_detail(request):
     if request.method == "POST":
-        token = request.POST.get('cf-turnstile-response', '')
-        ip = request.META.get('HTTP_CF_CONNECTING_IP') or request.META.get('REMOTE_ADDR')
-        if not verify_turnstile(token, ip):
-            return JsonResponse({'success': False, 'error': 'Security verification failed. Please try again.'})
         pickup_date_str = request.POST.get('pickup_date', '')
         return_pickup_date_str = request.POST.get('return_pickup_date', '')
         name = request.POST.get('name')
@@ -45,30 +41,14 @@ def booking_detail(request):
         message = request.POST.get('message')
 
         try:
-            pickup_date_obj = parse_date(
-                pickup_date_str, 
-                field_name="Pickup Date", 
-                required=True
-            )
-
-            return_pickup_date_obj = parse_date(
-                return_pickup_date_str, 
-                field_name="Return Pickup Date", 
-                required=False, 
-                reference_date=pickup_date_obj 
-            )
+            pickup_date_obj, return_pickup_date_obj = parse_booking_dates(pickup_date_str, return_pickup_date_str)
         except ValueError as e:
             return JsonResponse({'success': False, 'error': str(e)})
 
         price = 'TBA'
 
         # ✅ 중복 제출 방지
-        recent_duplicate = Post.objects.filter(
-            email=email,
-            created__gte=timezone.now() - timedelta(seconds=2)
-        ).exists()
-
-        if recent_duplicate:
+        if is_duplicate_submission(Post, email):
             return JsonResponse({'success': False, 'message': 'Duplicate form recently submitted. Please wait before trying again.'})  
         
         data = {
@@ -87,17 +67,17 @@ def booking_detail(request):
             'return_pickup_time': return_pickup_time,
         }
 
-        inquiry_email = Inquiry.objects.filter(email=email).exists()
-        post_email = Post.objects.filter(email=email).exists()  
+        status_message, subject = get_customer_status(email, name, subject_prefix="[Client Booking] ")
+        data['status_message'] = status_message
 
         # 1. 템플릿 정의 (키워드 기반 포맷팅)
         email_content_template = '''
-        Hello, {name} \n  
+        Hello, {name} \n
         [Booking by client] >> Sending email only!\n
-        {status_message}\n            
+        {status_message}\n
         ===============================
         Contact: {contact}
-        Email: {email}  
+        Email: {email}
         ✅ Pickup date: {pickup_date}
         Pickup time: {pickup_time}
         Flight number: {flight_number}
@@ -105,19 +85,12 @@ def booking_detail(request):
         No of Pax: {no_of_passenger}
         ✅ Return pickup date: {return_pickup_date}
         Return flight no: {return_flight_number}
-        Return flight time: {return_flight_time}    
-        Return pickup time: {return_pickup_time}   
-        ===============================\n        
+        Return flight time: {return_flight_time}
+        Return pickup time: {return_pickup_time}
+        ===============================\n
         Best Regards,
-        EasyGo Admin \n\n        
+        EasyGo Admin \n\n
         '''
-
-        if inquiry_email or post_email:
-            data['status_message'] = "Exist in Inquiry or Post *"
-            subject = f"[Client Booking] Existing Customer - {data['name']}"
-        else:
-            data['status_message'] = "Neither in Inquiry & Post *"
-            subject = f"[Client Booking] New Customer - {data['name']}"
 
         content = email_content_template.format(**data)
 
@@ -137,25 +110,16 @@ def booking_detail(request):
         
         p.save()        
         
-        if is_ajax(request):
-            return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})
-        
-        else:
-            return render(request, 'basecamp/inquiry_done.html', {
-            'google_review_url': settings.GOOGLE_REVIEW_URL,            
-        })
+        return booking_success_response(request)
 
     else:
         return render(request, 'basecamp/booking/booking.html', {})
-    
+
 
 # cruise booking by client
+@require_turnstile
 def cruise_booking_detail(request):
     if request.method == "POST":
-        token = request.POST.get('cf-turnstile-response', '')
-        ip = request.META.get('HTTP_CF_CONNECTING_IP') or request.META.get('REMOTE_ADDR')
-        if not verify_turnstile(token, ip):
-            return JsonResponse({'success': False, 'error': 'Security verification failed. Please try again.'})
         # ✅ Collect date strings
         pickup_date_str = request.POST.get('pickup_date', '')
         return_pickup_date_str = request.POST.get('return_pickup_date', '')
@@ -174,29 +138,13 @@ def cruise_booking_detail(request):
         price = 'TBA'
 
         # ✅ 중복 제출 방지
-        recent_duplicate = Post.objects.filter(
-            email=email,
-            created__gte=timezone.now() - timedelta(seconds=2)
-        ).exists()
-
-        if recent_duplicate:
-            return JsonResponse({'success': False, 'message': 'Duplicate inquiry recently submitted. Please wait before trying again.'}) 
+        if is_duplicate_submission(Post, email):
+            return JsonResponse({'success': False, 'message': 'Duplicate inquiry recently submitted. Please wait before trying again.'})
 
         try:
-            pickup_date_obj = parse_date(
-                pickup_date_str, 
-                field_name="Pickup Date", 
-                required=True
-            )
-
-            return_pickup_date_obj = parse_date(
-                return_pickup_date_str, 
-                field_name="Return Pickup Date", 
-                required=False, 
-                reference_date=pickup_date_obj 
-            )
+            pickup_date_obj, return_pickup_date_obj = parse_booking_dates(pickup_date_str, return_pickup_date_str)
         except ValueError as e:
-            return JsonResponse({'success': False, 'error': str(e)})   
+            return JsonResponse({'success': False, 'error': str(e)})
         
         data = {
             'name': name,
@@ -283,13 +231,7 @@ def cruise_booking_detail(request):
         
         p.save()
 
-        if is_ajax(request):
-            return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})
-        
-        else:
-            return render(request, 'basecamp/inquiry_done.html', {
-            'google_review_url': settings.GOOGLE_REVIEW_URL,            
-        })
+        return booking_success_response(request)
 
     else:
         return render(request, 'basecamp/booking/cruise_booking.html', {})
@@ -350,10 +292,7 @@ def confirm_booking_detail(request):
         private_ride = user.private_ride
 
         try:
-            pickup_date_obj = parse_date(pickup_date, field_name="Pickup Date", required=True)
-            return_pickup_date_obj = parse_date(
-                return_pickup_date, field_name="Return Pickup Date", required=False, reference_date=pickup_date
-            )
+            pickup_date_obj, return_pickup_date_obj = parse_booking_dates(pickup_date, return_pickup_date)
         except ValueError as e:
             return JsonResponse({'success': False, 'error': str(e)})
 
@@ -429,20 +368,15 @@ def confirm_booking_detail(request):
         
         user.delete()
 
-        return render(request, 'basecamp/inquiry_done.html', {
-            'google_review_url': settings.GOOGLE_REVIEW_URL,            
-        })
+        return render_inquiry_done(request)
 
     else:
         return render(request, 'basecamp/booking/confirm_booking.html', {})
 
-# For Return Trip 
+# For Return Trip
+@require_turnstile
 def return_trip_detail(request):
     if request.method == "POST":
-        token = request.POST.get('cf-turnstile-response', '')
-        ip = request.META.get('HTTP_CF_CONNECTING_IP') or request.META.get('REMOTE_ADDR')
-        if not verify_turnstile(token, ip):
-            return JsonResponse({'success': False, 'error': 'Security verification failed. Please try again.'})
         pickup_date_str = request.POST.get('pickup_date', '')
         return_pickup_date_str = request.POST.get('return_pickup_date', '')
         email = request.POST.get('email', '').strip()
@@ -482,30 +416,14 @@ def return_trip_detail(request):
             if not end_point:
                 end_point = user.end_point
 
-            # 날짜 파싱 
+            # 날짜 파싱
             try:
-                pickup_date_obj = parse_date(
-                    pickup_date_str, 
-                    field_name="Pickup Date", 
-                    required=True
-                )
-
-                return_pickup_date_obj = parse_date(
-                    return_pickup_date_str, 
-                    field_name="Return Pickup Date", 
-                    required=False, 
-                    reference_date=pickup_date_obj 
-                )
+                pickup_date_obj, return_pickup_date_obj = parse_booking_dates(pickup_date_str, return_pickup_date_str)
             except ValueError as e:
                 return JsonResponse({'success': False, 'error': str(e)})
 
-        # ✅ 중복 제출 방지 
-        recent_duplicate = Post.objects.filter(
-            email=email,
-            created__gte=timezone.now() - timedelta(seconds=2)
-        ).exists()
-
-        if recent_duplicate:
+        # ✅ 중복 제출 방지
+        if is_duplicate_submission(Post, email):
             return JsonResponse({'success': False, 'message': 'Duplicate inquiry recently submitted. Please wait before trying again.'})             
             
         data = {

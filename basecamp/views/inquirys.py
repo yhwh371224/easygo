@@ -1,26 +1,22 @@
-from datetime import timedelta
 from django.shortcuts import render, redirect
-from django.conf import settings
 from utils.email import send_text_email
 from django.db.models import Q
 from django.http import JsonResponse
-from django.utils import timezone
 from main.settings import RECIPIENT_EMAIL
 from blog.models import Post, Inquiry
 from basecamp.area_home import get_home_suburbs
 from basecamp.basecamp_utils import (
     is_ajax, parse_baggage, parse_date, handle_email_sending,
-    verify_turnstile
+    verify_turnstile,
+    render_inquiry_done, booking_success_response, require_turnstile,
+    is_duplicate_submission, parse_booking_dates, get_customer_status,
 )
 
 
-# Inquiry for airport 
+# Inquiry for airport
+@require_turnstile
 def inquiry_details(request):
     if request.method == "POST":
-        token = request.POST.get('cf-turnstile-response', '')
-        ip = request.META.get('HTTP_CF_CONNECTING_IP') or request.META.get('REMOTE_ADDR')
-        if not verify_turnstile(token, ip):
-            return JsonResponse({'success': False, 'error': 'Security verification failed. Please try again.'})
         name = request.POST.get('name', '')
         contact = request.POST.get('contact', '')
         email = request.POST.get('email', '')  
@@ -47,29 +43,13 @@ def inquiry_details(request):
         message = request.POST.get('message', '')
 
         # ✅ 중복 제출 방지
-        recent_duplicate = Inquiry.objects.filter(
-            email=email,
-            created__gte=timezone.now() - timedelta(seconds=10)
-        ).exists()
+        if is_duplicate_submission(Inquiry, email):
+            return JsonResponse({'success': False, 'message': 'Duplicate inquiry recently submitted. Please wait before trying again.'})
 
         try:
-            pickup_date_obj = parse_date(
-                pickup_date_str, 
-                field_name="Pickup Date", 
-                required=True
-            )
-
-            return_pickup_date_obj = parse_date(
-                return_pickup_date_str, 
-                field_name="Return Pickup Date", 
-                required=False, 
-                reference_date=pickup_date_obj 
-            )
+            pickup_date_obj, return_pickup_date_obj = parse_booking_dates(pickup_date_str, return_pickup_date_str)
         except ValueError as e:
-            return JsonResponse({'success': False, 'error': str(e)})
-
-        if recent_duplicate:
-            return JsonResponse({'success': False, 'message': 'Duplicate inquiry recently submitted. Please wait before trying again.'})       
+            return JsonResponse({'success': False, 'error': str(e)})       
 
         data = {
             'name': name,
@@ -94,18 +74,18 @@ def inquiry_details(request):
             'message': message
         }
      
-        inquiry_email_exists = Inquiry.objects.filter(email=email).exists()
-        post_email_exists = Post.objects.filter(email=email).exists()
+        status_message, _ = get_customer_status(email, name)
+        data['status_message'] = status_message
 
         email_subject = f"Inquiry on {data['pickup_date']}"
 
         email_content_template = '''
         Hello, {name} \n
-        {status_message}\n 
+        {status_message}\n
         https://easygoshuttle.com.au
         =============================
         Contact: {contact}
-        Email: {email}  
+        Email: {email}
         ✅ Pickup date: {pickup_date}
         Pickup time: {pickup_time}
         Direction: {direction}
@@ -123,16 +103,11 @@ def inquiry_details(request):
         Return Start Point: {return_start_point}
         Return End Point: {return_end_point}
         Message: {message}
-        =============================\n        
+        =============================\n
         Best Regards,
-        EasyGo Admin \n\n        
+        EasyGo Admin \n\n
         '''
 
-        if inquiry_email_exists or post_email_exists:
-            data['status_message'] = "Exist in Inquiry or Post *"
-        else:
-            data['status_message'] = "Neither in Inquiry & Post *"
-            
         content = email_content_template.format(**data)        
 
         # 🧳 개별 수하물 항목 수집
@@ -156,24 +131,16 @@ def inquiry_details(request):
 
         send_text_email(email_subject, content, [RECIPIENT_EMAIL])
 
-        if is_ajax(request):
-            return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})        
-        else:
-            return render(request, 'basecamp/inquiry_done.html', {
-            'google_review_url': settings.GOOGLE_REVIEW_URL,            
-        })
-        
+        return booking_success_response(request)
+
     else:
         return render(request, 'basecamp/booking/inquiry.html', {})
 
 
 # inquiry (simple one) for airport from home page
+@require_turnstile
 def inquiry_details1(request):
     if request.method == "POST":
-        token = request.POST.get('cf-turnstile-response', '')
-        ip = request.META.get('HTTP_CF_CONNECTING_IP') or request.META.get('REMOTE_ADDR')
-        if not verify_turnstile(token, ip):
-            return JsonResponse({'success': False, 'error': 'Security verification failed. Please try again.'})
         pickup_date_str = request.POST.get('pickup_date', '')
         name = request.POST.get('name', '')
         contact = request.POST.get('contact', '')
@@ -204,13 +171,8 @@ def inquiry_details1(request):
         except ValueError as e:
             return JsonResponse({'success': False, 'error': str(e)})
 
-        # ✅ 중복 제출 방지 
-        recent_duplicate = Inquiry.objects.filter(
-            email=email,
-            created__gte=timezone.now() - timedelta(seconds=2)
-        ).exists()
-
-        if recent_duplicate:
+        # ✅ 중복 제출 방지
+        if is_duplicate_submission(Inquiry, email):
             return JsonResponse({'success': False, 'message': 'Duplicate inquiry recently submitted. Please wait before trying again.'})
 
         data = {
@@ -228,17 +190,17 @@ def inquiry_details1(request):
             'status_message': '' 
         }
      
-        inquiry_email_exists = Inquiry.objects.filter(email=email).exists()
-        post_email_exists = Post.objects.filter(email=email).exists()
-        
+        status_message, _ = get_customer_status(email, name)
+        data['status_message'] = status_message
+
         # 3. 이메일 템플릿 (키워드 기반 포맷팅으로 통일)
         email_content_template = '''
         Hello, {name} \n
-        {status_message}\n 
+        {status_message}\n
         *** It starts from Home Page
         =============================
         Contact: {contact}
-        Email: {email}  
+        Email: {email}
         ✅ Pickup date: {pickup_date}
         Flight number: {flight_number}
         Pickup time: {pickup_time}
@@ -247,16 +209,11 @@ def inquiry_details1(request):
         end_point: {end_point}
         Passenger: {no_of_passenger}
         Message: {message}
-        =============================\n        
+        =============================\n
         Best Regards,
-        EasyGo Admin \n\n        
+        EasyGo Admin \n\n
         '''
 
-        if inquiry_email_exists or post_email_exists:
-            data['status_message'] = "✅ Exist in Inquiry or Post *"
-        else:
-            data['status_message'] = "Neither in Inquiry & Post *"
-            
         content = email_content_template.format(**data)
         
         email_subject = f"Inquiry on {data['pickup_date']} - {data['name']}"
@@ -297,21 +254,16 @@ def inquiry_details1(request):
         
         p.save()
 
-        return render(request, 'basecamp/inquiry_done.html', {
-            'google_review_url': settings.GOOGLE_REVIEW_URL,            
-        })
+        return render_inquiry_done(request)
 
     else:
         return redirect('basecamp:home')
     
 
-# Multiple points Inquiry 
+# Multiple points Inquiry
+@require_turnstile
 def p2p_detail(request):
     if request.method == "POST":
-        token = request.POST.get('cf-turnstile-response', '')
-        ip = request.META.get('HTTP_CF_CONNECTING_IP') or request.META.get('REMOTE_ADDR')
-        if not verify_turnstile(token, ip):
-            return JsonResponse({'success': False, 'error': 'Security verification failed. Please try again.'})
         p2p_name = request.POST.get('p2p_name')
         p2p_phone = request.POST.get('p2p_phone')
         p2p_email = request.POST.get('p2p_email')
@@ -333,12 +285,7 @@ def p2p_detail(request):
         p2p_message = request.POST.get('p2p_message')
 
         # ✅ 중복 제출 방지
-        recent_duplicate = Inquiry.objects.filter(
-            email=p2p_email,
-            created__gte=timezone.now() - timedelta(seconds=2)
-        ).exists()
-
-        if recent_duplicate:
+        if is_duplicate_submission(Inquiry, p2p_email):
             return JsonResponse({'success': False, 'message': 'Duplicate inquiry recently submitted. Please wait before trying again.'})  
 
         subject = "Multiple points inquiry"
@@ -355,13 +302,7 @@ def p2p_detail(request):
 
         handle_email_sending(request, p2p_email, subject, template_name, context)
         
-        if is_ajax(request):
-            return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})
-        
-        else:
-            return render(request, 'basecamp/inquiry_done.html', {
-            'google_review_url': settings.GOOGLE_REVIEW_URL,            
-        })
+        return booking_success_response(request)
 
     else:
         return render(request, 'basecamp/booking/p2p.html', {})

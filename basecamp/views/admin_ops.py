@@ -11,7 +11,9 @@ from blog.sms_utils import send_sms_notice, send_whatsapp_template
 from csp.constants import NONCE
 from basecamp.basecamp_utils import (
     parse_baggage, parse_date, handle_email_sending, format_pickup_time_12h,
-    to_bool
+    to_bool,
+    render_inquiry_done, parse_booking_dates, get_customer_status,
+    parse_one_based_index, resolve_payment_flags,
 )
 
 
@@ -53,20 +55,9 @@ def confirmation_detail(request):
         prepay = to_bool(request.POST.get('prepay', ''))  
 
         try:
-            pickup_date_obj = parse_date(
-                pickup_date_str, 
-                field_name="Pickup Date", 
-                required=True
-            )
-
-            return_pickup_date_obj = parse_date(
-                return_pickup_date_str, 
-                field_name="Return Pickup Date", 
-                required=False, 
-                reference_date=pickup_date_obj 
-            )
+            pickup_date_obj, return_pickup_date_obj = parse_booking_dates(pickup_date_str, return_pickup_date_str)
         except ValueError as e:
-            return JsonResponse({'success': False, 'error': str(e)}) 
+            return JsonResponse({'success': False, 'error': str(e)})
 
         data = {            
             'name': name,
@@ -82,16 +73,16 @@ def confirmation_detail(request):
             'message': message,
         }    
         
-        inquiry_email = Inquiry.objects.filter(email=email).exists()
-        post_email = Post.objects.filter(email=email).exists()  
+        status_message, subject = get_customer_status(email, name, subject_prefix="[Confirmation] ")
+        data['status_message'] = status_message
 
         email_content_template = '''
         Hello, {name} \n
-        {status_message}\n 
+        {status_message}\n
         *** It starts from Home Page
         =============================
         Contact: {contact}
-        Email: {email}  
+        Email: {email}
         ✅ Pickup date: {pickup_date}
         Flight number: {flight_number}
         Pickup time: {pickup_time}
@@ -100,17 +91,10 @@ def confirmation_detail(request):
         end_point: {end_point}
         Passenger: {no_of_passenger}
         Message: {message}
-        =============================\n        
+        =============================\n
         Best Regards,
-        EasyGo Admin \n\n        
+        EasyGo Admin \n\n
         '''
-
-        if inquiry_email or post_email:
-            data['status_message'] = "✅ **Exist in Inquiry or Post ***"
-            subject = f"[Confirmation] Existing Customer - {data['name']}"
-        else:
-            data['status_message'] = "*** Neither in Inquiry & Post ***"
-            subject = f"[Confirmation] New Customer - {data['name']}"
 
         content = email_content_template.format(**data)
 
@@ -141,13 +125,12 @@ def sending_email_first_detail(request):
         prepay_raw = request.POST.get('prepay')  # May be None
         cash_raw = request.POST.get('cash')  # May be None
         index = request.POST.get('index', '1')
-
         try:
-            index = int(index) - 1  
+            index = parse_one_based_index(index)
         except ValueError:
-            return HttpResponse("Invalid index value", status=400)  
-        
-        users = Post.objects.filter(email__iexact=email)        
+            return HttpResponse("Invalid index value", status=400)
+
+        users = Post.objects.filter(email__iexact=email)
         if users.exists() and 0 <= index < len(users):
             user = users[index]  
 
@@ -157,14 +140,10 @@ def sending_email_first_detail(request):
             else:
                 display_price = user.price
 
-            form_prepay = (prepay_raw == 'True') if prepay_raw is not None else False
-            final_prepay = bool(user.prepay) or form_prepay            
-
-            form_cash = (cash_raw == 'True') if cash_raw is not None else False
-            final_cash = bool(user.cash) or form_cash
+            final_prepay, final_cash = resolve_payment_flags(prepay_raw, cash_raw, user)
 
             user.prepay = final_prepay
-            user.cash = final_cash  
+            user.cash = final_cash
             user.price = display_price
             user.sent_email = True
             user.save()
@@ -208,11 +187,9 @@ def sending_email_first_detail(request):
                     request=request,
                 )
 
-            return render(request, 'basecamp/inquiry_done.html', {
-                'google_review_url': settings.GOOGLE_REVIEW_URL,            
-            })  
-        
-        else:            
+            return render_inquiry_done(request)
+
+        else:
             return HttpResponse("No user found", status=400)
 
     else:
@@ -230,14 +207,10 @@ def sending_email_second_detail(request):
         user1 = Post.objects.filter(email__iexact=email).first() 
 
         # prepay / cash 처리
-        form_prepay = (prepay_raw == 'True') if prepay_raw is not None else False
-        final_prepay = bool(user.prepay) or bool(user1.prepay) or form_prepay            
-
-        form_cash = (cash_raw == 'True') if cash_raw is not None else False
-        final_cash = bool(user.cash) or bool(user1.cash) or form_cash
+        final_prepay, final_cash = resolve_payment_flags(prepay_raw, cash_raw, user, user1)
 
         user.prepay = final_prepay
-        user.cash = final_cash 
+        user.cash = final_cash
         user.sent_email = True
 
         user1.prepay = final_prepay
@@ -321,10 +294,8 @@ def sending_email_second_detail(request):
 
             send_template_email(subject, template_name, context, recipient_list, request=request)
             
-        return render(request, 'basecamp/inquiry_done.html', {
-            'google_review_url': settings.GOOGLE_REVIEW_URL,            
-        }) 
-    
+        return render_inquiry_done(request)
+
     else:
         return render(request, 'basecamp/email/sending_email_second.html', {})
     
@@ -366,12 +337,10 @@ def sending_email_input_data_detail(request):
 
             handle_email_sending(request, user.email, subject, template_name, context)
 
-        return render(request, 'basecamp/inquiry_done.html', {
-            'google_review_url': settings.GOOGLE_REVIEW_URL,            
-        })
-    
+        return render_inquiry_done(request)
+
     else:
-        return render(request, 'basecamp/email/sending_email_first.html', {})   
+        return render(request, 'basecamp/email/sending_email_first.html', {})
 
 
 # email dispatching
@@ -663,9 +632,7 @@ def email_dispatch_detail(request):
         # 6️⃣ Send email
         handle_email_sending(request, email, subject, template_name, context, getattr(user, 'email1', None))
 
-        return render(request, 'basecamp/inquiry_done.html', {
-            'google_review_url': settings.GOOGLE_REVIEW_URL,
-        })
-    
+        return render_inquiry_done(request)
+
     return render(request, 'basecamp/email/email_dispatch.html', {})
 
