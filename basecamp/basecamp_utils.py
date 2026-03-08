@@ -94,6 +94,7 @@ def handle_email_sending(request, email, subject, template_name, context, email1
     email_message.extra_headers = {
         'Content-Type': 'text/html; charset=UTF-8',
         'Content-Transfer-Encoding': '8bit',
+        'X-Entity-Ref-ID': str(uuid.uuid4()),
     }
     email_message.send()
 
