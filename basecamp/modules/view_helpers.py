@@ -3,6 +3,7 @@ import requests
 from datetime import timedelta
 from functools import wraps
 
+from django.core.cache import cache
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.utils import timezone
@@ -54,10 +55,11 @@ def require_turnstile(view_func):
 
 
 def is_duplicate_submission(model_class, email, seconds=2):
-    return model_class.objects.filter(
-        email=email,
-        created__gte=timezone.now() - timedelta(seconds=seconds)
-    ).exists()
+    cache_key = f'submit_{model_class.__name__}_{email}'
+    if cache.get(cache_key):
+        return True
+    cache.set(cache_key, True, timeout=seconds)
+    return False
 
 
 def get_customer_status(email, name, subject_prefix=""):

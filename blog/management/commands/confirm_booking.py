@@ -23,10 +23,13 @@ class Command(BaseCommand):
             self.send_email_task(posts, "html_email-confirmation.html", "EasyGo Booking confirmation")
 
     def send_email_task(self, posts, template_name, subject):
+        to_update = []
+        email_tasks = []
+
         for post in posts:
             if not post.sent_email:
                 post.sent_email = True
-                post.save(update_fields=['sent_email'])
+                to_update.append(post)
 
                 context = {
                     'company_name': post.company_name,
@@ -53,4 +56,9 @@ class Command(BaseCommand):
                     'price': post.price,
                     'paid': post.paid,
                 }
-                send_template_email(subject, template_name, context, [post.email, post.email1, RECIPIENT_EMAIL])
+                email_tasks.append((subject, template_name, context, [post.email, post.email1, RECIPIENT_EMAIL]))
+
+        if to_update:
+            Post.objects.bulk_update(to_update, ['sent_email'], batch_size=50)
+            for args in email_tasks:
+                send_template_email(*args)
