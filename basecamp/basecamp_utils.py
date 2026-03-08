@@ -3,7 +3,6 @@ import uuid
 
 from io import BytesIO
 
-from django.utils import timezone
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
 from django.utils.html import strip_tags
@@ -72,10 +71,6 @@ def render_to_pdf(template_src, context_dict={}):
 # Email sending (Outlook 호환 헤더 포함)
 # --------------------------
 def handle_email_sending(request, email, subject, template_name, context, email1=None):
-    now = timezone.localtime(timezone.now()).strftime("%d %b %H:%M")
-    ref = str(uuid.uuid4())[:8].upper()
-    subject = f"{subject} (sent {now}) [Ref: {ref}]"
-    context['ref'] = ref  
     html_content = render_email_template(template_name, context, request=request)
     text_content = strip_tags(html_content)
 
@@ -94,7 +89,6 @@ def handle_email_sending(request, email, subject, template_name, context, email1
     email_message.extra_headers = {
         'Content-Type': 'text/html; charset=UTF-8',
         'Content-Transfer-Encoding': '8bit',
-        'X-Entity-Ref-ID': str(uuid.uuid4()),
     }
     email_message.send()
 
