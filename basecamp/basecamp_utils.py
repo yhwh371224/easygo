@@ -2,6 +2,7 @@ import re
 
 from io import BytesIO
 
+from django.utils import timezone
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
 from django.utils.html import strip_tags
@@ -70,6 +71,8 @@ def render_to_pdf(template_src, context_dict={}):
 # Email sending (Outlook 호환 헤더 포함)
 # --------------------------
 def handle_email_sending(request, email, subject, template_name, context, email1=None):
+    now = timezone.localtime(timezone.now()).strftime("%d %b %H:%M")
+    subject = f"{subject} (sent {now})"
     html_content = render_email_template(template_name, context, request=request)
     text_content = strip_tags(html_content)
 
