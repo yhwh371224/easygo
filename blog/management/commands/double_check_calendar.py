@@ -1,12 +1,9 @@
-import os
 from datetime import date, timedelta
 from django.core.management.base import BaseCommand
 from utils.email import send_text_email
-from blog.models import Post, Driver
+from utils.booking_helper import assign_default_driver
+from blog.models import Post
 from main.settings import RECIPIENT_EMAIL
-
-
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 class Command(BaseCommand):
@@ -38,7 +35,4 @@ class Command(BaseCommand):
     #         booking.save(update_fields=['is_confirmed'])
 
     def assign_default_driver(self, booking):
-        if booking.driver is None:
-            sam_driver = Driver.objects.get(driver_name="Sam")
-            booking.driver = sam_driver
-            booking.save(update_fields=['driver'])
+        assign_default_driver(booking)

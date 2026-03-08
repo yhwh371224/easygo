@@ -41,6 +41,25 @@ def send_html_email(subject, html_content, recipient_list, from_email=None, fail
     msg.send(fail_silently=fail_silently)
 
 
+def collect_recipients(*emails):
+    """
+    Collect unique, non-empty email addresses.
+    Each argument can be a single address or a comma-separated string (or None).
+    Preserves order and removes duplicates.
+    """
+    seen = set()
+    result = []
+    for addr in emails:
+        if not addr:
+            continue
+        for part in str(addr).split(','):
+            part = part.strip()
+            if part and part not in seen:
+                seen.add(part)
+                result.append(part)
+    return result
+
+
 def send_template_email(subject, template_name, context, recipient_list, from_email=None,
                         fail_silently=False, attachments=None, request=None):
     """

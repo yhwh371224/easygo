@@ -1,16 +1,16 @@
-import os
 import logging
-from datetime import datetime, date, timedelta
+from datetime import date, timedelta
 from itertools import zip_longest
 
 from django.core.management.base import BaseCommand
-from django.conf import settings
-from blog.models import Post, Driver
+from blog.models import Post
 from utils import booking_helper
-from utils.email import send_template_email
+from utils.booking_helper import assign_default_driver, build_reminder_context
+from utils.email import send_template_email, collect_recipients
+from basecamp.modules.date_utils import format_pickup_time_12h
 
 logger = logging.getLogger(__name__)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 
 class Command(BaseCommand):
     help = 'Send booking reminder emails for upcoming flights'
@@ -44,13 +44,6 @@ class Command(BaseCommand):
         for interval, template, subject in zip_longest(reminder_intervals, templates, subjects, fillvalue=""):
             self.send_email(interval, template, subject)
 
-    def format_pickup_time_12h(self, pickup_time_str):
-        try:
-            time_obj = datetime.strptime(pickup_time_str.strip(), "%H:%M")
-            return time_obj.strftime("%I:%M %p")
-        except (ValueError, AttributeError):
-            return pickup_time_str
-
     def send_email(self, date_offset, template_name, subject):
         target_date = date.today() + timedelta(days=date_offset)
         booking_reminders = (
@@ -63,53 +56,10 @@ class Command(BaseCommand):
 
     def send_email_task(self, booking_reminders, template_name, subject, target_date):
         for booking_reminder in booking_reminders:
-            if not booking_reminder.driver:
-                sam_driver = Driver.objects.get(driver_name="Sam")
-                booking_reminder.driver = sam_driver
-                booking_reminder.save()
-
-            driver = booking_reminder.driver
-            pickup_time_12h = self.format_pickup_time_12h(booking_reminder.pickup_time)
-
-            context = {
-                'name': booking_reminder.name,
-                'company_name': booking_reminder.company_name,
-                'email': booking_reminder.email,
-                'email1': booking_reminder.email1,
-                'contact': booking_reminder.contact,
-                'pickup_date': booking_reminder.pickup_date,
-                'flight_number': booking_reminder.flight_number,
-                'flight_time': booking_reminder.flight_time,
-                'direction': booking_reminder.direction,
-                'pickup_time': pickup_time_12h,
-                'start_point': booking_reminder.start_point or "",
-                'end_point': booking_reminder.end_point or "",
-                'street': booking_reminder.street,
-                'suburb': booking_reminder.suburb,
-                'price': booking_reminder.price,
-                'reminder': getattr(booking_reminder, 'reminder', False),
-                'sms_reminder': getattr(booking_reminder, 'sms_reminder', False),
-                'meeting_point': booking_reminder.meeting_point,
-                'driver_name': driver.driver_name,
-                'driver_contact': driver.driver_contact,
-                'driver_plate': driver.driver_plate,
-                'driver_car': driver.driver_car,
-                'paid': booking_reminder.paid,
-                'cash': booking_reminder.cash,
-                'cruise': booking_reminder.cruise,
-            }
-
-            # email, email1에서 여러 주소 split 후 중복 제거
-            email_recipients = []
-            if booking_reminder.email:
-                email_recipients.extend(
-                    [e.strip() for e in booking_reminder.email.split(",") if e.strip()]
-                )
-            if booking_reminder.email1:
-                email_recipients.extend(
-                    [e.strip() for e in booking_reminder.email1.split(",") if e.strip()]
-                )
-            email_recipients = list(set(email_recipients))
+            driver = assign_default_driver(booking_reminder)
+            pickup_time_12h = format_pickup_time_12h(booking_reminder.pickup_time)
+            context = build_reminder_context(booking_reminder, pickup_time_12h, driver)
+            email_recipients = collect_recipients(booking_reminder.email, booking_reminder.email1)
 
             try:
                 send_template_email(subject, template_name, context, email_recipients, fail_silently=False)

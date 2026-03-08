@@ -1,24 +1,12 @@
-import os
 import logging
+
 from datetime import date, timedelta
 from django.core.management.base import BaseCommand
 from django.db.models import Q
 from blog.models import Post
 from blog.sms_utils import send_sms_notice, send_whatsapp_template
 
-# Logger setup
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-LOG_DIR = os.path.join(BASE_DIR, 'logs')
-os.makedirs(LOG_DIR, exist_ok=True)
-
 sms_logger = logging.getLogger('sms')
-sms_logger.setLevel(logging.INFO)
-if not sms_logger.handlers:
-    fh = logging.FileHandler(os.path.join(LOG_DIR, 'sms.log'))
-    fh.setLevel(logging.INFO)
-    formatter = logging.Formatter('{levelname} {asctime} {message}', style='{')
-    fh.setFormatter(formatter)
-    sms_logger.addHandler(fh)
 
 
 class Command(BaseCommand):

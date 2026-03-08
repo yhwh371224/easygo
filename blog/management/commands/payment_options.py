@@ -1,8 +1,12 @@
+import logging
+
 from django.core.management.base import BaseCommand
 from django.db.models import Q
 from django.utils import timezone
 from blog.models import Post
 from utils.email import send_template_email
+
+logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
@@ -66,6 +70,7 @@ class Command(BaseCommand):
                 notice.save()
 
             except Exception as e:
-                print(f"Failed to send email/SMS for {notice.email}: {e}")
+                logger.error(f"Failed to send email/SMS for {notice.email}: {e}")
+                self.stdout.write(self.style.ERROR(f"Failed to send email/SMS for {notice.email}: {e}"))
 
         self.stdout.write(self.style.SUCCESS("Reminder emails + SMS sent."))

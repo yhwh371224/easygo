@@ -5,7 +5,7 @@ from django.core.management.base import BaseCommand
 from django.db.models import Q
 from blog.models import Post
 from main.settings import RECIPIENT_EMAIL
-from utils.email import send_template_email
+from utils.email import send_template_email, collect_recipients
 
 
 logger = logging.getLogger(__name__)
@@ -64,7 +64,7 @@ class Command(BaseCommand):
                             'display_date': display_date,
                             "prepay": booking.prepay,
                         },
-                        [booking.email, RECIPIENT_EMAIL]
+                        collect_recipients(booking.email, None, RECIPIENT_EMAIL)
                     )
 
                 # ----------------------------
@@ -84,7 +84,7 @@ class Command(BaseCommand):
                             'return_pickup_date': booking.return_pickup_date,
                             'display_date': display_date,
                         },
-                        [booking.email, RECIPIENT_EMAIL]
+                        collect_recipients(booking.email, None, RECIPIENT_EMAIL)
                     )
             
             except Exception as e:
