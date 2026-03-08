@@ -1,49 +1,58 @@
 import re
-import requests
-import stripe
 
-from datetime import datetime, date
 from io import BytesIO
 
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
-from utils.email import send_text_email
 from django.utils.html import strip_tags
-from basecamp.area_home import get_home_suburbs
 from main import settings
 from weasyprint import HTML
-from blog.models import StripePayment
+
+# --------------------------
+# Re-exports (하위호환 유지)
+# --------------------------
+from basecamp.modules.view_helpers import (   # noqa: F401
+    verify_turnstile,
+    is_ajax,
+    render_inquiry_done,
+    booking_success_response,
+    require_turnstile,
+    is_duplicate_submission,
+    get_customer_status,
+    parse_one_based_index,
+    resolve_payment_flags,
+)
+from basecamp.modules.date_utils import (      # noqa: F401
+    parse_date,
+    parse_booking_dates,
+    format_pickup_time_12h,
+)
+from basecamp.modules.baggage_utils import (   # noqa: F401
+    to_int,
+    to_bool,
+    add_bag,
+    safe_float,
+    parse_baggage,
+)
+from basecamp.modules.payment_utils import (   # noqa: F401
+    paypal_ipn_error_email,
+    handle_checkout_session_completed,
+    stripe_payment_error_email,
+)
+from basecamp.modules.suburb_utils import (    # noqa: F401
+    get_sorted_suburbs,
+)
 
 
-# 이메일 템플릿 최상위 경로
+# --------------------------
+# 이메일 템플릿 렌더링
+# --------------------------
 EMAIL_TEMPLATE_BASE = "basecamp/email/html_email/"
 
 def render_email_template(template_name, context, request=None):
     if not template_name.startswith("basecamp/email/html_email/"):
         template_name = f"{EMAIL_TEMPLATE_BASE}{template_name}"
-
     return render_to_string(template_name, context, request=request)
-
-# --------------------------
-# Cloudflare Turnstile
-# --------------------------
-def verify_turnstile(turnstile_response, remoteip=None):
-    if getattr(settings, 'TURNSTILE_DISABLED', False):
-        return True
-
-    data = {
-        'secret': settings.CLOUDFLARE_TURNSTILE_SECRET_KEY,
-        'response': turnstile_response,
-    }
-    if remoteip:
-        data['remoteip'] = remoteip
-
-    r = requests.post('https://challenges.cloudflare.com/turnstile/v0/siteverify', data=data)
-    return r.json().get('success', False)
-
-
-def is_ajax(request):
-    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 
 
 # --------------------------
@@ -51,58 +60,23 @@ def is_ajax(request):
 # --------------------------
 def render_to_pdf(template_src, context_dict={}):
     html_string = render_email_template(template_src, context_dict)
-    html = HTML(string=html_string, base_url=None)  # base_url 설정 가능
+    html = HTML(string=html_string, base_url=None)
     result = BytesIO()
     html.write_pdf(target=result)
     return result.getvalue()
 
 
 # --------------------------
-# Date parsing
-# --------------------------
-def parse_date(date_str, field_name="Date", required=True, reference_date=None):
-
-    # ✅ 이미 datetime.date 타입이면 그대로 반환
-    if isinstance(date_str, date):
-        return date_str
-
-    # ✅ None 또는 빈 문자열 체크
-    if not date_str or str(date_str).strip() == "":
-        if required:
-            raise ValueError(f"'{field_name}' is a required field.")
-        return None
-
-    # ✅ 문자열 -> datetime 변환
-    try:
-        parsed_date = datetime.strptime(str(date_str), '%Y-%m-%d').date()
-    except ValueError:
-        raise ValueError(f"Invalid date format for '{field_name}' ({date_str}). Please use YYYY-MM-DD.")
-
-    # ✅ 오늘 날짜보다 미래인지 확인
-    if parsed_date <= date.today():
-        raise ValueError(f"'{field_name}' cannot be in the past ({date.today().strftime('%Y-%m-%d')}).")
-
-    # ✅ 기준 날짜(reference_date)보다 빠른지 확인
-    if reference_date and parsed_date < reference_date:
-        ref_str = reference_date.strftime('%Y-%m-%d')
-        raise ValueError(f"'{field_name}' ({parsed_date}) cannot be before the initial pickup date ({ref_str}).")
-
-    return parsed_date
-
-
-# --------------------------
-# Email sending
+# Email sending (Outlook 호환 헤더 포함)
 # --------------------------
 def handle_email_sending(request, email, subject, template_name, context, email1=None):
-
     html_content = render_email_template(template_name, context, request=request)
     text_content = strip_tags(html_content)
-    
-    recipient_list = [email, settings.RECIPIENT_EMAIL]
 
-    if email1:  
+    recipient_list = [email, settings.RECIPIENT_EMAIL]
+    if email1:
         recipient_list.append(email1)
-    
+
     email_message = EmailMultiAlternatives(
         subject,
         text_content,
@@ -111,23 +85,12 @@ def handle_email_sending(request, email, subject, template_name, context, email1
     )
     email_message.attach_alternative(html_content, "text/html; charset=UTF-8")
     email_message.encoding = 'utf-8'
-
-    # (선택) 메일 헤더에 charset 명시 — Outlook 호환성 향상
     email_message.extra_headers = {
         'Content-Type': 'text/html; charset=UTF-8',
         'Content-Transfer-Encoding': '8bit',
     }
-
     email_message.send()
 
-
-def format_pickup_time_12h(pickup_time_str):
-    try:
-        time_obj = datetime.strptime(pickup_time_str.strip(), "%H:%M")
-        return time_obj.strftime("%I:%M %p")  # 예: "06:30 PM"
-    except ValueError:
-        return pickup_time_str  # 실패 시 원래 값 반환
-    
 
 # --------------------------
 # Missing info email
@@ -135,13 +98,11 @@ def format_pickup_time_12h(pickup_time_str):
 def check_and_send_missing_info_email(post):
     issues = []
 
-    # ---------- CONTACT CHECK ----------
     contact = (post.contact or '').strip()
     cleaned_contact = ''.join(filter(str.isdigit, contact))
     if not cleaned_contact or len(cleaned_contact) < 10 or len(cleaned_contact) > 16:
         issues.append('Contact number is missing or invalid')
 
-    # ---------- FLIGHT CHECK ----------
     AIRPORT_PICKUPS = {
         'pickup from intl airport',
         'pickup from domestic airport',
@@ -150,13 +111,9 @@ def check_and_send_missing_info_email(post):
     flight_number = (post.flight_number or '').strip()
     flight_number_cleaned = re.sub(r'[^A-Za-z0-9]', '', flight_number).upper()
 
-    flight_issue = False
-
     if post.direction and post.direction.strip().lower() in AIRPORT_PICKUPS:
-
         flight_valid = False
 
-        # 특별 예외: '5j39'
         if flight_number_cleaned.lower() == '5j39':
             flight_valid = True
         else:
@@ -168,10 +125,8 @@ def check_and_send_missing_info_email(post):
                     flight_valid = True
 
         if not flight_valid:
-            flight_issue = True
             issues.append('Flight number is missing or invalid')
 
-    # ---------- SEND EMAIL ----------
     if issues:
         handle_email_sending(
             request=None,
@@ -188,157 +143,3 @@ def check_and_send_missing_info_email(post):
                 'issues': issues,
             }
         )
-
-# --------------------------
-# Utility
-# --------------------------
-def to_int(value, default=0):
-    try:
-        return int(value)
-    except (TypeError, ValueError):
-        return default
-
-
-def add_bag(summary_list, label, qty, oversize=False):
-    """
-    summary_list : list
-    label        : str (L, M, Ski, Bike 등)
-    qty          : int
-    oversize     : bool
-    """
-    if qty and qty > 0:
-        item = f"{label}{qty}"
-        if oversize:
-            item += "(Oversize)"
-        summary_list.append(item)
-
-
-def to_bool(value):
-    return str(value).lower() in ["true", "1", "on", "yes"]
-
-
-# 안전한 float 변환 함수 (inc toll 같은 것도 처리)
-def safe_float(value):
-    try:
-        return float(value)
-    except (ValueError, TypeError):
-        if value and 'inc' in value.lower():
-            return 0.0
-        return None
-
-
-# --------------------------
-# PayPal error email
-# --------------------------
-def paypal_ipn_error_email(subject, exception, item_name, payer_email, gross_amount):
-    error_message = (
-    f"Exception: {exception}\n"
-    f"Payer Name: {item_name}\n"
-    f"Payer Email: {payer_email}\n"
-    f"Gross Amount: {gross_amount}"
-    )
-    send_text_email(subject, error_message, [settings.RECIPIENT_EMAIL])
-
-
-# --------------------------
-# Stripe handling
-# --------------------------
-stripe.api_key = settings.STRIPE_LIVE_SECRET_KEY
-
-def handle_checkout_session_completed(session):
-    email = session.customer_details.email
-    name = session.customer_details.name
-    amount = session.amount_total / 100
-    payment_intent_id = session.payment_intent or session.id
-
-    try:
-        payment, created = StripePayment.objects.update_or_create(
-            payment_intent_id=payment_intent_id,
-            defaults={
-                "name": name,
-                "email": email,
-                "amount": amount,
-            }
-        )
-
-        print(f"StripePayment saved. created={created}")
-
-    except Exception as e:
-        stripe_payment_error_email(
-            'Stripe Payment Save Error',
-            str(e),
-            name,
-            email,
-            amount
-        )
-
-
-def stripe_payment_error_email(subject, message, name, email, amount):
-    content = f"""
-    Subject: {subject}
-    
-    Error: {message}
-    Name: {name}
-    Email: {email}
-    Amount: {amount}
-    """
-
-    send_text_email(subject, content, [settings.RECIPIENT_EMAIL])
-
-# --------------------------
-# get_sorted_suburbs
-# --------------------------
-def get_sorted_suburbs():
-    raw = get_home_suburbs()
-    fixed = [
-        "Hotels In City",  
-        "Sydney Int'l Airport",
-        "Sydney Domestic Airport",
-        "WhiteBay cruise terminal",
-        "Overseas cruise terminal"
-    ]
-    remaining = sorted([item for item in raw if item not in fixed])
-    return fixed + remaining
-
-def parse_baggage(request) -> str:
-    # 1. 바구니(리스트)를 먼저 만듭니다. (이게 없어서 노란색 경고가 뜬 거예요!)
-    baggage_summary = []
-
-    # 2. POST 데이터에서 숫자들을 가져옵니다.
-    large = to_int(request.POST.get('baggage_large'))
-    medium = to_int(request.POST.get('baggage_medium'))
-    small = to_int(request.POST.get('baggage_small'))
-    baby_seat = to_int(request.POST.get('baggage_baby'))
-    booster_seat = to_int(request.POST.get('baggage_booster'))
-    pram = to_int(request.POST.get('baggage_pram'))
-    ski = to_int(request.POST.get('baggage_ski'))
-    snowboard = to_int(request.POST.get('baggage_snowboard'))
-    golf = to_int(request.POST.get('baggage_golf'))
-    bike = to_int(request.POST.get('baggage_bike'))
-    boxes = to_int(request.POST.get('baggage_boxes'))
-    musical_instrument = to_int(request.POST.get('baggage_music'))
-
-    # 3. Oversize 여부를 확인합니다.
-    ski_os = ski > 0 and to_bool(request.POST.get('ski_oversize'))
-    snow_os = snowboard > 0 and to_bool(request.POST.get('snowboard_oversize'))
-    golf_os = golf > 0 and to_bool(request.POST.get('golf_oversize'))
-    bike_os = bike > 0 and to_bool(request.POST.get('bike_oversize'))
-    box_os = boxes > 0 and to_bool(request.POST.get('boxes_oversize'))
-    music_os = musical_instrument > 0 and to_bool(request.POST.get('music_oversize'))
-
-    # 4. 이미 파일 하단에 있는 add_bag 함수를 사용하여 내용을 담습니다.
-    add_bag(baggage_summary, "L", large)
-    add_bag(baggage_summary, "M", medium)
-    add_bag(baggage_summary, "S", small)
-    add_bag(baggage_summary, "Baby", baby_seat)
-    add_bag(baggage_summary, "Booster", booster_seat)
-    add_bag(baggage_summary, "Pram", pram)
-    add_bag(baggage_summary, "Ski", ski, ski_os)
-    add_bag(baggage_summary, "Snow", snowboard, snow_os)
-    add_bag(baggage_summary, "Golf", golf, golf_os)
-    add_bag(baggage_summary, "Bike", bike, bike_os)
-    add_bag(baggage_summary, "Box", boxes, box_os)
-    add_bag(baggage_summary, "Music", musical_instrument, music_os)
-
-    # 5. 이제 안전하게 합쳐서 반환합니다.
-    return ", ".join(baggage_summary)

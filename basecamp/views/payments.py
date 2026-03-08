@@ -10,19 +10,17 @@ from django.views.decorators.http import require_POST
 from main.settings import RECIPIENT_EMAIL, DEFAULT_FROM_EMAIL
 from blog.models import Post, PaypalPayment
 from csp.constants import NONCE
-from basecamp.basecamp_utils import (    
+from basecamp.basecamp_utils import (
     render_to_pdf, safe_float,
     handle_checkout_session_completed, paypal_ipn_error_email,
-    verify_turnstile, render_email_template
+    verify_turnstile, render_email_template,
+    render_inquiry_done, require_turnstile, parse_one_based_index,
 )
 
 
+@require_turnstile
 def invoice_detail(request):
     if request.method == "POST":
-        token = request.POST.get('cf-turnstile-response', '')
-        ip = request.META.get('HTTP_CF_CONNECTING_IP') or request.META.get('REMOTE_ADDR')
-        if not verify_turnstile(token, ip):
-            return JsonResponse({'success': False, 'error': 'Security verification failed. Please try again.'})
         email = request.POST.get('email', '').strip()
         extra_email = request.POST.get('extra_email', '').strip()
         apply_gst_flag = request.POST.get('apply_gst')
@@ -35,7 +33,7 @@ def invoice_detail(request):
         to_date = request.POST.get('to_date')
 
         try:
-            index = int(index) - 1
+            index = parse_one_based_index(index)
         except ValueError:
             return HttpResponse("Invalid index value", status=400)
 
@@ -309,9 +307,7 @@ def invoice_detail(request):
                 user.prepay = True
                 user.save()
 
-        return render(request, 'basecamp/inquiry_done.html', {
-            'google_review_url': settings.GOOGLE_REVIEW_URL,            
-        })
+        return render_inquiry_done(request)
 
     else:
         return render(request, 'basecamp/invoice.html', {})

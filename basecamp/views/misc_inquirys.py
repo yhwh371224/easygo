@@ -8,8 +8,9 @@ from main.settings import RECIPIENT_EMAIL
 from basecamp.area import get_suburbs
 from basecamp.area_home import get_home_suburbs
 from basecamp.basecamp_utils import (
-    is_ajax, parse_date, 
-    verify_turnstile, get_sorted_suburbs
+    is_ajax, parse_date,
+    verify_turnstile, get_sorted_suburbs,
+    render_inquiry_done, booking_success_response, require_turnstile,
 )
 
 
@@ -78,12 +79,9 @@ def price_detail(request):
     
 
 # Contact form
+@require_turnstile
 def contact_submit(request):
     if request.method == "POST":
-        token = request.POST.get('cf-turnstile-response', '')
-        ip = request.META.get('HTTP_CF_CONNECTING_IP') or request.META.get('REMOTE_ADDR')
-        if not verify_turnstile(token, ip):
-            return JsonResponse({'success': False, 'error': 'Security verification failed. Please try again.'})
 
         name = request.POST.get('name')
         contact = request.POST.get('contact')
@@ -120,11 +118,6 @@ def contact_submit(request):
 
         send_text_email(subject, message, [RECIPIENT_EMAIL])
         
-        if is_ajax(request):
-            return JsonResponse({'success': True, 'message': 'Inquiry submitted successfully.'})
-        else:
-            return render(request, 'basecamp/inquiry_done.html', {
-            'google_review_url': settings.GOOGLE_REVIEW_URL,            
-        })
+        return booking_success_response(request)
     else:
         return render(request, 'basecamp/pages/contact_form.html', {})
