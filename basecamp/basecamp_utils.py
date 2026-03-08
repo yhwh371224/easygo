@@ -1,4 +1,5 @@
 import re
+import uuid
 
 from io import BytesIO
 
@@ -72,7 +73,9 @@ def render_to_pdf(template_src, context_dict={}):
 # --------------------------
 def handle_email_sending(request, email, subject, template_name, context, email1=None):
     now = timezone.localtime(timezone.now()).strftime("%d %b %H:%M")
-    subject = f"{subject} (sent {now})"
+    ref = str(uuid.uuid4())[:8].upper()
+    subject = f"{subject} (sent {now}) [Ref: {ref}]"
+    context['ref'] = ref  
     html_content = render_email_template(template_name, context, request=request)
     text_content = strip_tags(html_content)
 
