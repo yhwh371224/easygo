@@ -184,10 +184,8 @@
 								<td class="padded px-600-0" style="padding-top:13px;padding-right:0;padding-bottom:5px;padding-left:0px;">
 									<table class="content" style="border-spacing:0;text-align:center;" role="presentation">
 										<tr>
-											<td style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;width:100%;text-align:center; width:250px;">
-												<td style="padding-top:24px;padding-right:0;padding-bottom:0;padding-left:0;width:100%;text-align:center; width:250px;">
-													<a href="https://easygoshuttle.com.au" target="_blank"><img src="https://live.staticflickr.com/65535/52125551213_8369295e13_o.png" alt="" width="120" style="border-width:0;max-width: 175px;"></a>
-												</td>
+											<td style="padding-top:24px;padding-right:0;padding-bottom:0;padding-left:0;width:100%;text-align:center; width:250px;">
+												<a href="https://easygoshuttle.com.au" target="_blank"><img src="https://live.staticflickr.com/65535/52125551213_8369295e13_o.png" alt="" width="120" style="border-width:0;max-width: 175px;"></a>
 											</td>
 										</tr>
 									</table>
@@ -255,7 +253,9 @@
 													This helps us ensure a smooth process.<br><br>
 												</p>
 
-                                            	<p style="border: 1px solid #af865f; padding: 10px; margin-bottom: 20px; color: #af865f;">
+                                            	<table width="100%" style="border-spacing:0;background-color:#fed8cc;margin-bottom:20px;" role="presentation">
+                                            	    <tr>
+                                            	        <td style="padding:15px;color:#af865f;">
 													
 													<strong>=== Driver's details ===</strong><br>
 													• Name: {{ driver_name }}<br>
@@ -297,7 +297,9 @@
 														• <a href="https://easygo.s3.ap-southeast-2.amazonaws.com/Intl_airport_map.webp">Map of the Public Pick-up Point</a><br>
 													{% endif %}
 													
-												</p>
+												</td>
+                                            	    </tr>
+                                            	</table>
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
 													If there are any changes, you will be notified by email or SMS<br><br><br></p>
 
@@ -324,7 +326,9 @@
 													This helps us ensure a smooth process.<br><br>
 												</p>
 
-												<p style="border: 1px solid #af865f; padding: 10px; margin-bottom: 20px; color: #af865f;">
+												<table width="100%" style="border-spacing:0;background-color:#fed8cc;margin-bottom:20px;" role="presentation">
+												    <tr>
+												        <td style="padding:15px;color:#af865f;">
 													
 													<strong>=== Driver's details ===</strong><br>
 													• Name: {{ driver_name }}<br>
@@ -369,7 +373,9 @@
 														• <a href="https://easygo.s3.ap-southeast-2.amazonaws.com/Express_pickup.webp">Domestic Terminal Map</a><br><br>
 														* If any passengers have difficulty walking or are elderly, please meet the driver at the <strong>Accessible Pickup area</strong> next to the public bus stop<br>
 													{% endif %}
-												</p>
+												</td>
+												    </tr>
+												</table>
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
 													If there are any changes, you will be notified by email or SMS<br><br><br></p>
 
@@ -388,7 +394,9 @@
 													
 												</p>
 
-												<p style="border: 1px solid #af865f; padding: 10px; margin-bottom: 20px; color: #af865f;">		
+												<table width="100%" style="border-spacing:0;background-color:#fed8cc;margin-bottom:20px;" role="presentation">
+												    <tr>
+												        <td style="padding:15px;color:#af865f;">		
 													<strong>=== Driver's details ===</strong><br>
 													• Name: {{ driver_name }}<br>
 													• Phone: {{ driver_contact }}<br>
@@ -399,7 +407,9 @@
 													<small>
 													Please note that our driver may contact you via text or phone at {{ contact }}. 
 													</small><br><br>
-												</p>
+												</td>
+												    </tr>
+												</table>
 
 											{% else %} 
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
