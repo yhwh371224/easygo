@@ -1,5 +1,4 @@
 import logging
-import os
 
 from datetime import date, timedelta
 from django.core.management.base import BaseCommand
@@ -7,20 +6,9 @@ from django.db.models import Q
 from blog.models import Post
 from blog.sms_utils import send_sms_notice, send_whatsapp_template
 from main.settings import RECIPIENT_EMAIL
-from utils.email import send_template_email
+from utils.email import send_template_email, collect_recipients
 
-# Logger setup
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-LOG_DIR = os.path.join(BASE_DIR, 'logs')
-os.makedirs(LOG_DIR, exist_ok=True)
 sms_logger = logging.getLogger('sms')
-sms_logger.setLevel(logging.INFO)
-if not sms_logger.handlers:
-    fh = logging.FileHandler(os.path.join(LOG_DIR, 'sms.log'))
-    fh.setLevel(logging.INFO)
-    formatter = logging.Formatter('{levelname} {asctime} {message}', style='{')
-    fh.setFormatter(formatter)
-    sms_logger.addHandler(fh)
 
 
 class Command(BaseCommand):
@@ -44,7 +32,7 @@ class Command(BaseCommand):
             for notice in final_notices:
                 try:
                     # 1️⃣ 이메일 발송
-                    recipients = [addr for addr in [notice.email, notice.email1, RECIPIENT_EMAIL] if addr]
+                    recipients = collect_recipients(notice.email, notice.email1, RECIPIENT_EMAIL)
                     if recipients:
                         send_template_email(
                             "Final notice",

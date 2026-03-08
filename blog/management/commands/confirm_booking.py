@@ -1,6 +1,4 @@
-import threading
 import logging
-import os
 from django.core.management.base import BaseCommand
 from blog.models import Post
 from django.utils import timezone
@@ -8,14 +6,11 @@ from main.settings import RECIPIENT_EMAIL
 from utils.email import send_template_email
 
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
     help = 'Send booking confirmation'
-
-    def __init__(self):
-        self.lock = threading.Lock()
 
     def handle(self, *args, **options):
         self.send_email()
@@ -23,46 +18,39 @@ class Command(BaseCommand):
     def send_email(self):
         current_datetime = timezone.localtime(timezone.now())
         posts = Post.objects.filter(created__date=current_datetime.date())
-        
+
         if posts.exists():
             self.send_email_task(posts, "html_email-confirmation.html", "EasyGo Booking confirmation")
 
     def send_email_task(self, posts, template_name, subject):
-        with self.lock:
-            for post in posts:
-                if not post.sent_email:
-                    post.sent_email = True
-                    post.save(update_fields=['sent_email'])
+        for post in posts:
+            if not post.sent_email:
+                post.sent_email = True
+                post.save(update_fields=['sent_email'])
 
-                    context = {
-                        'company_name': post.company_name,
-                        'name': post.name,
-                        'contact': post.contact,
-                        'email': post.email,
-                        'email1': post.email1,
-                        'pickup_date': post.pickup_date,
-                        'flight_number': post.flight_number,
-                        'flight_time': post.flight_time,
-                        'pickup_time': post.pickup_time,
-                        'return_direction': post.return_direction,
-                        'return_pickup_date': post.return_pickup_date,
-                        'return_flight_number': post.return_flight_number,
-                        'return_flight_time': post.return_flight_time,
-                        'return_pickup_time': post.return_pickup_time,
-                        'direction': post.direction,
-                        'street': post.street,
-                        'suburb': post.suburb,
-                        'no_of_passenger': post.no_of_passenger,
-                        'no_of_baggage': post.no_of_baggage,
-                        'message': post.message,
-                        'notice': post.notice,
-                        'price': post.price,
-                        'paid': post.paid,
-                    }
-                    send_template_email(subject, template_name, context, [post.email, post.email1, RECIPIENT_EMAIL])
-
-
-
-
-
-          
+                context = {
+                    'company_name': post.company_name,
+                    'name': post.name,
+                    'contact': post.contact,
+                    'email': post.email,
+                    'email1': post.email1,
+                    'pickup_date': post.pickup_date,
+                    'flight_number': post.flight_number,
+                    'flight_time': post.flight_time,
+                    'pickup_time': post.pickup_time,
+                    'return_direction': post.return_direction,
+                    'return_pickup_date': post.return_pickup_date,
+                    'return_flight_number': post.return_flight_number,
+                    'return_flight_time': post.return_flight_time,
+                    'return_pickup_time': post.return_pickup_time,
+                    'direction': post.direction,
+                    'street': post.street,
+                    'suburb': post.suburb,
+                    'no_of_passenger': post.no_of_passenger,
+                    'no_of_baggage': post.no_of_baggage,
+                    'message': post.message,
+                    'notice': post.notice,
+                    'price': post.price,
+                    'paid': post.paid,
+                }
+                send_template_email(subject, template_name, context, [post.email, post.email1, RECIPIENT_EMAIL])
