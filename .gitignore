@@ -16,7 +16,7 @@ venv/
 __pycache__/
 **/migrations/__pycache__/
 db.sqlite3
-tests.py 
+tests/
 
 # ==============================
 # Media / Temp / Backups
