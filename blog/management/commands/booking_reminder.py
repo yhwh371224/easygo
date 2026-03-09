@@ -59,7 +59,11 @@ class Command(BaseCommand):
             driver = assign_default_driver(booking_reminder)
             pickup_time_12h = format_pickup_time_12h(booking_reminder.pickup_time)
             context = build_reminder_context(booking_reminder, pickup_time_12h, driver)
-            email_recipients = collect_recipients(booking_reminder.email, booking_reminder.email1)
+            # 당일(Reminder-Today)은 email만, 나머지는 booker_email도 추가
+            if subject == "Reminder-Today":
+                email_recipients = collect_recipients(booking_reminder.email, booking_reminder.email1)
+            else:
+                email_recipients = collect_recipients(booking_reminder.email, booking_reminder.email1, booking_reminder.booker_email)
 
             try:
                 send_template_email(subject, template_name, context, email_recipients, fail_silently=False)

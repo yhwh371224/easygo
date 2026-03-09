@@ -1,4 +1,5 @@
 from django.core.management.base import BaseCommand
+from django.conf import settings
 from datetime import datetime
 import pytz
 import os
@@ -51,7 +52,7 @@ class Command(BaseCommand):
         sitemap += '</urlset>'
 
         # 파일 저장 (프로젝트 루트 또는 원하는 경로)
-        output_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "sitemap.xml")
+        output_path = os.path.join(settings.BASE_DIR, "sitemap.xml")
         with open(output_path, "w", encoding="utf-8") as f:
             f.write(sitemap)
 
