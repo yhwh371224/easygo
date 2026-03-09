@@ -65,6 +65,7 @@ secure/
 # Other / Misc
 # ==============================
 dump.rdb
+sitemap.xml
 *.cmd
 *.pem
 *.log
