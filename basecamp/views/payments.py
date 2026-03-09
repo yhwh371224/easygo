@@ -22,7 +22,6 @@ from basecamp.basecamp_utils import (
 def invoice_detail(request):
     if request.method == "POST":
         email = request.POST.get('email', '').strip()
-        booker_email = request.POST.get('booker_email', '').strip()
         apply_gst_flag = request.POST.get('apply_gst')
         surcharge_input = request.POST.get('surcharge')
         discount_input = request.POST.get('discount')
@@ -39,9 +38,8 @@ def invoice_detail(request):
 
         users = Post.objects.filter(email__iexact=email)
         if not users.exists():
-            users = Post.objects.filter(email__iexact=booker_email)
-            if not users.exists():   
-                return HttpResponse("No bookings found", status=404)
+            return HttpResponse("No bookings found", status=404)
+
         else:
             user = users[0]
             today = date.today()
@@ -286,7 +284,8 @@ def invoice_detail(request):
 
             html_content = render_email_template(template_name, context)
 
-        invoice_recipient = booker_email if booker_email else email
+        user = users[0]
+        invoice_recipient = user.booker_email if user.booker_email else email
         recipient_list = [invoice_recipient, RECIPIENT_EMAIL]
 
         attachments = []
