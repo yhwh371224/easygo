@@ -22,7 +22,7 @@ from basecamp.basecamp_utils import (
 def invoice_detail(request):
     if request.method == "POST":
         email = request.POST.get('email', '').strip()
-        extra_email = request.POST.get('extra_email', '').strip()
+        booker_email = request.POST.get('booker_email', '').strip()
         apply_gst_flag = request.POST.get('apply_gst')
         surcharge_input = request.POST.get('surcharge')
         discount_input = request.POST.get('discount')
@@ -39,7 +39,9 @@ def invoice_detail(request):
 
         users = Post.objects.filter(email__iexact=email)
         if not users.exists():
-            return HttpResponse("No bookings found", status=404)
+            users = Post.objects.filter(email__iexact=booker_email)
+            if not users.exists():   
+                return HttpResponse("No bookings found", status=404)
         else:
             user = users[0]
             today = date.today()
@@ -171,7 +173,7 @@ def invoice_detail(request):
             context = {
                 "inv_no": inv_no,
                 "company_name": first_booking.company_name if first_booking else "",
-                "name": first_booking.name if first_booking else "",
+                "name": first_booking.invoice_name if first_booking else "",
                 "apply_gst_flag": bool(apply_gst_flag),
                 "invoice_date": today,
                 "bookings": booking_data,
@@ -230,9 +232,9 @@ def invoice_detail(request):
                 cash_balance = balance - (with_gst + surcharge_calc)
                 template_name = "html_email-invoice-cash.html"
                 context = {
-                    "inv_no": inv_no, "name": user.name, "company_name": user.company_name,
+                    "inv_no": inv_no, "name": user.invoice_name, "company_name": user.company_name,
                     "apply_gst_flag": bool(apply_gst_flag),
-                    "contact": user.contact, "discount": discount, "email": email,
+                    "contact": user.contact, "discount": discount, "email": booker_email or email,
                     "pickup_date": user.pickup_date, "pickup_time": user.pickup_time,    
                     "start_point": start_point, "end_point": end_point, "invoice_date": today,
                     "price": user.price, "with_gst": with_gst, "surcharge": surcharge_display,
@@ -258,7 +260,7 @@ def invoice_detail(request):
 
                 template_name = "html_email-invoice.html"
                 context = {
-                    "inv_no": inv_no, "name": user1.name, "company_name": user1.company_name,
+                    "inv_no": inv_no, "name": user1.invoice_name, "company_name": user1.company_name,
                     "apply_gst_flag": bool(apply_gst_flag),
                     "contact": user1.contact, "pickup_date": user1.pickup_date, "pickup_time": user1.pickup_time,   
                     "start_point": user1.start_point, "end_point": user1.end_point, "invoice_date": today,
@@ -271,7 +273,7 @@ def invoice_detail(request):
             else:
                 template_name = "html_email-invoice.html"
                 context = {
-                    "inv_no": inv_no, "name": user.name, "company_name": user.company_name,
+                    "inv_no": inv_no, "name": user.invoice_name, "company_name": user.company_name,
                     "apply_gst_flag": bool(apply_gst_flag),
                     "contact": user.contact, "pickup_date": user.pickup_date, "pickup_time": user.pickup_time,  
                     "start_point": start_point, "end_point": end_point, "invoice_date": today,
@@ -284,9 +286,8 @@ def invoice_detail(request):
 
             html_content = render_email_template(template_name, context)
 
-        recipient_list = [email, RECIPIENT_EMAIL]
-        if extra_email:
-            recipient_list.append(extra_email)
+        invoice_recipient = booker_email if booker_email else email
+        recipient_list = [invoice_recipient, RECIPIENT_EMAIL]
 
         attachments = []
         pdf = render_to_pdf(template_name, context)
