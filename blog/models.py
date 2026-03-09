@@ -29,6 +29,8 @@ class Driver(models.Model):
 class Inquiry(models.Model):
     name = models.CharField(max_length=100, blank=False)
     company_name = models.CharField(max_length=100, blank=True, null=True)
+    booker_name = models.CharField(max_length=100, blank=True, null=True)  
+    booker_email = models.EmailField(blank=True, null=True)
     contact = models.CharField(max_length=150, blank=True, null=True)
     email = models.EmailField(blank=False, db_index=True)
     email1 = models.EmailField(blank=True, null=True)
@@ -111,6 +113,8 @@ class StripePayment(models.Model):
 class Post(models.Model):
     name = models.CharField(max_length=100, blank=False)    
     company_name = models.CharField(max_length=100, blank=True, null=True)
+    booker_name = models.CharField(max_length=100, blank=True, null=True)  
+    booker_email = models.EmailField(blank=True, null=True)
     contact = models.CharField(max_length=150, blank=True, null=True)
     email = models.EmailField(blank=False, db_index=True, verbose_name='email')
     email1 = models.EmailField(blank=True, null=True)
@@ -152,6 +156,10 @@ class Post(models.Model):
     pending = models.BooleanField(default=False, blank=True)
     calendar_event_id = models.CharField(max_length=255, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def invoice_name(self):
+        return self.booker_name if self.booker_name else self.name
 
     class Meta:
         ordering = ['-created'] 
