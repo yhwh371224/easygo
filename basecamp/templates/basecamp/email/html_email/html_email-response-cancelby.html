@@ -249,15 +249,15 @@
 
 														{% elif remain_first_booking and not remain_return_booking %}
 															{# ② 첫 번째 ✅ / 두 번째(return) ❌ → return 날짜만 취소 #}
-															We confirm that your booking on <strong>{{ return_booking_date|date:"Y-m-d" }}</strong> has been successfully canceled.
-															<br><br>
-															Please note that your booking on <strong>{{ booking_date|date:"Y-m-d" }}</strong> remains active.
-
-														{% elif not remain_first_booking and remain_return_booking %}
-															{# ③ 첫 번째 ❌ / 두 번째(return) ✅ → 첫 번째 날짜만 취소 #}
 															We confirm that your booking on <strong>{{ booking_date|date:"Y-m-d" }}</strong> has been successfully canceled.
 															<br><br>
 															Please note that your booking on <strong>{{ return_booking_date|date:"Y-m-d" }}</strong> remains active.
+
+														{% elif not remain_first_booking and remain_return_booking %}
+															{# ③ 첫 번째 ❌ / 두 번째(return) ✅ → 첫 번째 날짜만 취소 #}
+															We confirm that your booking on <strong>{{ return_booking_date|date:"Y-m-d" }}</strong> has been successfully canceled.
+															<br><br>
+															Please note that your booking on <strong>{{ booking_date|date:"Y-m-d" }}</strong> remains active.
 
 														{% endif %}
 
