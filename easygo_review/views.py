@@ -54,6 +54,9 @@ class PostList(ListView):
     template_name = 'easygo_review/post_list.html'
     paginate_by = 6
 
+    def get_queryset(self):
+        return Post.objects.prefetch_related('comment_set')
+
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(PostList, self).get_context_data(**kwargs)
         context['post_count'] = Post.objects.all().count()
@@ -118,7 +121,7 @@ class PostCreate(View):
 class PostSearch(PostList):
     def get_queryset(self):
         q = self.kwargs['q']
-        object_list = Post.objects.filter(Q(name__contains=q) | Q(content__contains=q)) 
+        object_list = Post.objects.prefetch_related('comment_set').filter(Q(name__contains=q) | Q(content__contains=q))
         return object_list
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -130,6 +133,9 @@ class PostSearch(PostList):
 class PostDetail(DetailView):
     model = Post
     template_name = 'easygo_review/post_detail1.html'
+
+    def get_queryset(self):
+        return Post.objects.prefetch_related('comment_set')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
