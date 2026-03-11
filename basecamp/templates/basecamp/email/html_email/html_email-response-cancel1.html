@@ -235,38 +235,44 @@
 										</tr>
 										<tr>
 											<td align="left" style="padding-top:28px;padding-left:0;">
-												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;"> 													
-													Thank you for letting us know about your cancellation. 
-													{% if return_booking_date %}
-														{# 왕복 예약 케이스 #}
+												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
+													
+													{% if return_booking_date %}	
+															
+														{% comment %}왕복 예약인 경우{% endcomment %}
+
 														{% if not remain_first_booking and not remain_return_booking %}
-															{# ① 둘 다 취소 #}
-															We confirm that your bookings on <strong>{{ booking_date|date:"Y-m-d" }}</strong> 
-															and <strong>{{ return_booking_date|date:"Y-m-d" }}</strong> have been successfully canceled.
+															We regret to inform you that due to unforeseen circumstances within our company,
+															your bookings on <strong>{{ return_booking_date|date:"Y-m-d" }}</strong> and <strong>{{ booking_date|date:"Y-m-d" }}</strong> have both been cancelled.	
+
 														{% elif remain_first_booking and not remain_return_booking %}
-															{# ② 첫 번째 ✅ / 두 번째(return) ❌ → return 날짜만 취소 #}
-															We confirm that your booking on <strong>{{ booking_date|date:"Y-m-d" }}</strong> has been successfully canceled.
+															We regret to inform you that due to unforeseen circumstances within our company, 
+															your bookings on <strong>{{ booking_date|date:"Y-m-d" }}</strong> has been cancelled.
 															<br><br>
 															Please note that your booking on <strong>{{ return_booking_date|date:"Y-m-d" }}</strong> remains active.
+
 														{% elif not remain_first_booking and remain_return_booking %}
-															{# ③ 첫 번째 ❌ / 두 번째(return) ✅ → 첫 번째 날짜만 취소 #}
-															We confirm that your booking on <strong>{{ return_booking_date|date:"Y-m-d" }}</strong> has been successfully canceled.
+															We regret to inform you that due to unforeseen circumstances within our company,
+															your bookings on <strong>{{ return_booking_date|date:"Y-m-d" }}</strong> has been cancelled.
 															<br><br>
-															Please note that your booking on <strong>{{ booking_date|date:"Y-m-d" }}</strong> remains active.
+															Please note that your booking on <strong>{{ booking_date|date:"Y-m-d" }}</strong> remains active.																		
+
 														{% endif %}
+													
 													{% else %}
-														{# 단일 예약 취소 #}
-														We confirm that your booking on <strong>{{ booking_date|date:"Y-m-d" }}</strong> has been successfully canceled.
-													{% endif %}													
+														{% comment %}단일 예약(편도)인 경우{% endcomment %}
+														We regret to inform you that your booking on <strong>{{ booking_date|date:"Y-m-d" }}</strong> has been cancelled.
+													{% endif %}
+													
 													<br><br>
-													We're sorry to hear you won't be joining us this time.
+													We sincerely apologize for any inconvenience this may cause.
 													<br><br>
-													If you wish to make a new booking in the future, 
-													please don't hesitate to reach out. We'll be delighted to assist you.
+													If you have already made any payments, a full refund will be processed promptly.
 													<br><br>
-													Thank you again, and we hope to welcome you soon.
-													<br><br> 													
-													Best regards,                                                    
+													Thank you for your understanding, and please do not hesitate to contact us if you require any further assistance.
+													<br><br>
+													Best regards,<br>
+													Peter
 												</p>
 											</td>
 										</tr>										
