@@ -238,22 +238,26 @@
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;"> 													
 													Thank you for letting us know about your cancellation. 
 													{% if return_booking_date %}
-														{# 왕복 예약 케이스 #}
+
 														{% if not remain_first_booking and not remain_return_booking %}
 															{# ① 둘 다 취소 #}
 															We confirm that your bookings on <strong>{{ booking_date|date:"Y-m-d" }}</strong> 
 															and <strong>{{ return_booking_date|date:"Y-m-d" }}</strong> have been successfully canceled.
+
 														{% elif remain_first_booking and not remain_return_booking %}
 															{# ② 첫 번째 ✅ / 두 번째(return) ❌ → return 날짜만 취소 #}
 															We confirm that your booking on <strong>{{ booking_date|date:"Y-m-d" }}</strong> has been successfully canceled.
 															<br><br>
 															Please note that your booking on <strong>{{ return_booking_date|date:"Y-m-d" }}</strong> remains active.
+
 														{% elif not remain_first_booking and remain_return_booking %}
 															{# ③ 첫 번째 ❌ / 두 번째(return) ✅ → 첫 번째 날짜만 취소 #}
 															We confirm that your booking on <strong>{{ return_booking_date|date:"Y-m-d" }}</strong> has been successfully canceled.
 															<br><br>
 															Please note that your booking on <strong>{{ booking_date|date:"Y-m-d" }}</strong> remains active.
+
 														{% endif %}
+														
 													{% else %}
 														{# 단일 예약 취소 #}
 														We confirm that your booking on <strong>{{ booking_date|date:"Y-m-d" }}</strong> has been successfully canceled.
