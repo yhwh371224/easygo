@@ -1,5 +1,5 @@
 import requests, logging
-from decimal import Decimal, ROUND_HALF_UP
+from decimal import ROUND_HALF_UP
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.utils import timezone
@@ -11,7 +11,7 @@ from main.settings import RECIPIENT_EMAIL
 
 logger = logging.getLogger(__name__)
 
-XRP_ADDRESS = "r9WZsBV3fhdHgXEkiJwGUDdgQJztGkYRGB"
+# XRP_ADDRESS = "r9WZsBV3fhdHgXEkiJwGUDdgQJztGkYRGB"
 
 def email_to_tag(email: str) -> int:
     """이메일 기반 32비트 Destination Tag 생성"""
