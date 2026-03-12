@@ -1,9 +1,6 @@
 import os
 import logging
 
-from decimal import Decimal
-
-from django.core.exceptions import ImproperlyConfigured
 from django.db import transaction
 from django.db.models import Q
 from django.utils import timezone
@@ -12,12 +9,9 @@ from celery import shared_task
 
 from main.settings import RECIPIENT_EMAIL, DEFAULT_FROM_EMAIL
 from .models import Inquiry, Post, PaypalPayment, StripePayment
-from .blog_utils import process_generic_payment, send_payment_notification_email
-from utils.calendar_sync import sync_to_calendar
 from utils.inquiry_helper import send_inquiry_email
 from utils.post_helper import send_missing_direction_email, send_post_cancelled_email, send_post_confirmation_email
-from utils.email import send_text_email, send_html_email
-from basecamp.basecamp_utils import check_and_send_missing_info_email, render_email_template
+from utils.email import send_text_email
 
 
 logger = logging.getLogger('easygo')
@@ -27,7 +21,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Google Calendar event 
 @shared_task
-def create_event_on_calendar(instance_id):    
+def create_event_on_calendar(instance_id):
+    from utils.calendar_sync import sync_to_calendar    
     try:
         instance = Post.objects.get(pk=instance_id)
     except Post.DoesNotExist:
@@ -103,6 +98,7 @@ def send_email_task(pickup_date, direction, suburb, no_of_passenger):
 # Review page, service, information, terms, policy
 @shared_task
 def send_notice_email(subject, message, RECIPIENT_EMAIL):
+    from django.core.exceptions import ImproperlyConfigured
     if not all([subject, message, RECIPIENT_EMAIL]):
         raise ValueError("Subject, message, and recipient email must be provided")
             
@@ -115,6 +111,7 @@ def send_notice_email(subject, message, RECIPIENT_EMAIL):
 # PayPal payment 
 @shared_task
 def notify_user_payment_paypal(instance_id):
+    from .blog_utils import process_generic_payment, send_payment_notification_email
     with transaction.atomic():
         try:
             instance = PaypalPayment.objects.select_for_update().get(id=instance_id)
@@ -151,6 +148,7 @@ def notify_user_payment_paypal(instance_id):
 # Stripe payment 
 @shared_task
 def notify_user_payment_stripe(instance_id):
+    from .blog_utils import process_generic_payment, send_payment_notification_email
     with transaction.atomic():
         try:
             instance = StripePayment.objects.select_for_update().get(id=instance_id)
@@ -170,33 +168,6 @@ def notify_user_payment_stripe(instance_id):
         instance, total_balance, recipient_emails, RECIPIENT_EMAIL, 
         method="STRIPE"
     )
-
-            
-# XRP payment record and email
-@shared_task
-def send_xrp_internal_email(subject, message, from_email, recipient_list):
-    """회사 내부 알림(텍스트)"""
-    send_text_email(subject, message, recipient_list, from_email=from_email)
-
-@shared_task
-def send_xrp_customer_email(email: str, xrp_amount: str, xrp_address: str, dest_tag: int):
-    """
-    고객에게 XRP 결제 안내 메일 전송 (HTML, 이름 없음)
-    QR 코드 기능 제거 버전
-    """
-    context = {
-        "email": email,
-        "amount": f"{Decimal(xrp_amount):.2f} XRP",
-        "address": xrp_address,
-        "dest_tag": dest_tag,
-    }
-
-    html_content = render_email_template("html_email-xrppayment.html", context)
-
-    try:
-        send_html_email("XRP Payment - EasyGo", html_content, [email], from_email=RECIPIENT_EMAIL)
-    except Exception as e:
-        logger.exception("Failed to send XRP payment email: %s", e)
 
 
 @shared_task
@@ -219,6 +190,7 @@ def send_missing_direction_email_task(pk):
 
 @shared_task
 def check_and_send_missing_info_email_task(pk):
+    from basecamp.basecamp_utils import check_and_send_missing_info_email
     instance = Post.objects.get(pk=pk)
     check_and_send_missing_info_email(instance)
 
@@ -228,5 +200,35 @@ def send_inquiry_email_task(pk):
     instance = Inquiry.objects.get(pk=pk)
     if send_inquiry_email(instance):
         Inquiry.objects.filter(pk=pk).update(sent_email=True)
+
+            
+# XRP payment record and email
+# @shared_task
+# def send_xrp_internal_email(subject, message, from_email, recipient_list):
+#     """회사 내부 알림(텍스트)"""
+#     send_text_email(subject, message, recipient_list, from_email=from_email)
+
+# @shared_task
+# def send_xrp_customer_email(email: str, xrp_amount: str, xrp_address: str, dest_tag: int):
+#     """
+#     고객에게 XRP 결제 안내 메일 전송 (HTML, 이름 없음)
+#     QR 코드 기능 제거 버전
+#     """
+#     context = {
+#         "email": email,
+#         "amount": f"{Decimal(xrp_amount):.2f} XRP",
+#         "address": xrp_address,
+#         "dest_tag": dest_tag,
+#     }
+
+#     html_content = render_email_template("html_email-xrppayment.html", context)
+
+#     try:
+#         send_html_email("XRP Payment - EasyGo", html_content, [email], from_email=RECIPIENT_EMAIL)
+#     except Exception as e:
+#         logger.exception("Failed to send XRP payment email: %s", e)
+
+
+
 
 
