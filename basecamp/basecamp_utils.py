@@ -6,7 +6,6 @@ from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
 from django.utils.html import strip_tags
 from main import settings
-from weasyprint import HTML
 
 # --------------------------
 # Re-exports (하위호환 유지)
@@ -59,6 +58,7 @@ def render_email_template(template_name, context, request=None):
 # PDF 렌더링
 # --------------------------
 def render_to_pdf(template_src, context_dict={}):
+    from weasyprint import HTML
     html_string = render_email_template(template_src, context_dict)
     html = HTML(string=html_string, base_url=None)
     result = BytesIO()
