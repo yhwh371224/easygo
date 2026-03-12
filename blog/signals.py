@@ -58,13 +58,16 @@ def notify_user_post(sender, instance, created, **kwargs):
 
 # Send email notification if a Post is cancelled and email hasn't been sent yet
 @receiver(post_save, sender=Post, dispatch_uid="notify_user_post_cancelled_once")
-def notify_user_post_cancelled(sender, instance, created, **kwargs): 
-    if instance.cancelled and not instance.sent_email:
-        instance.sent_email = True  
-        instance.save(update_fields=['sent_email'])
+def notify_user_post_cancelled(sender, instance, created, **kwargs):
+    update_fields = kwargs.get('update_fields')
+    # 캔슬 뷰에서 update_fields로 저장한 경우 → 시그널 스킵
+    if update_fields and 'cancelled' in update_fields:
+        return
+    
+    if instance.cancelled:
         pk = instance.pk
         transaction.on_commit(lambda: send_post_cancelled_email_task.delay(pk))
-
+        
 
 # Automatically set prepay to True for foreign contacts or company names
 @receiver(post_save, sender=Post, dispatch_uid="set_prepay_for_foreign_users")

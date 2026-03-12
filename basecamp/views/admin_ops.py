@@ -552,30 +552,30 @@ def email_dispatch_detail(request):
                 if not remain_first_booking and not remain_return_booking:
                     user.cancelled = True
                     user.pending = False
-                    user.save()
+                    user.save(update_fields=['cancelled', 'pending']) 
 
                     if user1:
                         user1.cancelled = True
                         user1.pending = False
-                        user1.save()
+                        user1.save(update_fields=['cancelled', 'pending']) 
 
                 # ② 첫 번째 ✅ / 두 번째 ❌
                 elif remain_first_booking and not remain_return_booking:
                     user.cancelled = True
                     user.pending = False
-                    user.save()
+                    user.save(update_fields=['cancelled', 'pending']) 
 
                 # ③ 첫 번째 ❌ / 두 번째 ✅
                 elif not remain_first_booking and remain_return_booking:
                     if user1:
                         user1.cancelled = True
                         user1.pending = False
-                        user1.save()
+                        user1.save(update_fields=['cancelled', 'pending']) 
 
             else:  # 단일 예약
                 user.cancelled = True
                 user.pending = False
-                user.save()
+                user.save(update_fields=['cancelled', 'pending']) 
 
             # context 업데이트 (한 번만)
             context.update({
