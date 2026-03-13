@@ -21,7 +21,7 @@ class Command(BaseCommand):
                 userId='me',
                 body={
                     'labelIds': ['INBOX'],
-                    'topicName': 'projects/gmail-watch-490101/topics/gmail-watch-topic'
+                    'topicName': 'projects/gmail-watch-406009/topics/gmail-watch-topic'
                 }
             ).execute()
 
