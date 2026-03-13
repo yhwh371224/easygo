@@ -6,6 +6,7 @@ from django.views.static import serve
 from django.views.generic import TemplateView
 from django.contrib.auth.decorators import user_passes_test
 from basecamp.views import stripe_webhook
+from easygo_review import views
 
 
 admin_site = user_passes_test(lambda u: u.is_superuser)(admin.site.urls)
@@ -20,6 +21,7 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('paypal/', include('paypal.standard.ipn.urls')),
     path('stripe_webhook/', stripe_webhook, name='stripe_webhook'),
+    path('gmail_webhook/', views.gmail_webhook, name='gmail_webhook'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
