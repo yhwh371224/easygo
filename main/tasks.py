@@ -55,28 +55,33 @@ def get_thread_history(service, thread_id, max_messages=3):
 def gmail_watch_topic(payload):
     service = get_gmail_service()
     
-    email_id = payload.get('emailId')  # historyId 아니고 emailId
     history_id = payload.get('historyId')
+    print(f"Received historyId: {history_id}")
     
     if not history_id:
         return
     
-    # historyId로 새 이메일 찾기
     try:
-        history = service.users().history().list(
+        # historyId 에서 1 빼서 직전부터 조회
+        start_history_id = str(int(history_id) - 1)
+        
+        history_response = service.users().history().list(
             userId='me',
-            startHistoryId=history_id,
+            startHistoryId=start_history_id,
             historyTypes=['messageAdded'],
             labelId='INBOX'
         ).execute()
         
+        print(f"History response: {history_response}")
+        
         messages = []
-        for record in history.get('history', []):
+        for record in history_response.get('history', []):
             for msg in record.get('messagesAdded', []):
                 messages.append(msg['message']['id'])
         
+        print(f"Found {len(messages)} new messages")
+        
         for msg_id in messages:
-            # 이메일 전체 내용 가져오기
             email = service.users().messages().get(
                 userId='me',
                 id=msg_id,
@@ -90,7 +95,6 @@ def gmail_watch_topic(payload):
             subject = headers.get('Subject', '')
             body = get_email_body(email['payload'])
             
-            # Thread 이전 대화 가져오기
             history_msgs = get_thread_history(service, thread_id)
             
             print(f"From: {sender}")
