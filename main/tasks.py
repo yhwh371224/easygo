@@ -1,4 +1,3 @@
-# tasks.py
 from celery import shared_task
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
