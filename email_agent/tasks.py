@@ -13,13 +13,13 @@ PROCESSED_LABEL_ID = 'Label_956123326350558597'
 
 EMAIL_SIGNATURE = """
 <br>
-<div style="font-family: Arial, sans-serif; font-size: 11px; color: #555; line-height: 1.2;">
-<strong>Kind regards,</strong>
-<strong>EasyGo Airport Shuttle Team</strong><br>
-E&nbsp; <a href="mailto:info@easygoshuttle.com.au">info@easygoshuttle.com.au</a>
-W&nbsp; <a href="http://www.easygoshuttle.com.au">www.EasyGoShuttle.com.au</a><br>
+<div style="font-family: Arial, sans-serif; color: #555; line-height: 1.2;">
+<p style="font-size: 13px; margin: 2px 0;"><strong>Kind regards,</strong></p>
+<p style="font-size: 13px; margin: 2px 0;"><strong>EasyGo Airport Shuttle Team</strong></p><br>
+<p style="font-size: 11px; margin: 2px 0;">E&nbsp; <a href="mailto:info@easygoshuttle.com.au">info@easygoshuttle.com.au</a></p>
+<p style="font-size: 11px; margin: 2px 0;">W&nbsp; <a href="http://www.easygoshuttle.com.au">www.EasyGoShuttle.com.au</a></p>
 <em>Please consider the environment before printing this email</em><br>
-<p style="margin: 2px 0;"><i>A Little about EasyGo Airport Shuttle: We provide an express pickup and transport service to and from Sydney Airport, delivering to and from hotels, homes, business offices or any other venue. Catering to individual travellers, families or corporate groups we run the easiest and most cost-effective of shuttle services. Our Services are conducted in clean, modern, air conditioned vehicles. And our services are reliable, punctual and completely refund guaranteed.</i></p>
+<p style="font-size: 10px; margin: 2px 0;"><i>A Little about EasyGo Airport Shuttle: We provide an express pickup and transport service to and from Sydney Airport, delivering to and from hotels, homes, business offices or any other venue. Catering to individual travellers, families or corporate groups we run the easiest and most cost-effective of shuttle services. Our Services are conducted in clean, modern, air conditioned vehicles. And our services are reliable, punctual and completely refund guaranteed.</i></p>
 <p style="color: #888; font-size: 10px; margin: 2px 0;"><i>Attention: This email and attachments are intended solely for your use and may be confidential. Any review, dissemination, distribution or reproduction of this email is strictly prohibited. Please contact the sender if you have received this message in error.</i></p>
 </div>
 """
