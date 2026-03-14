@@ -32,7 +32,7 @@ Body:
 Analyze this email carefully and respond in JSON format only. No explanation, no markdown, just raw JSON.
 
 {{
-    "email_type": "price_inquiry" or "general_inquiry" or "booking_related" or "other",
+    "email_type": "price_inquiry" or "general_inquiry" or "booking_request" or "booking_related" or "other",
     "extracted_info": {{
         "suburb": "exact suburb name from the list above, or null if not found or not mentioned",
         "direction": "Pickup from Intl Airport" or "Pickup from Domestic Airport" or "Drop off to Intl Airport" or "Drop off to Domestic Airport" or "Cruise transfers or Point to Point" or null,
@@ -41,12 +41,21 @@ Analyze this email carefully and respond in JSON format only. No explanation, no
         "pickup_time": "HH:MM or null",
         "passengers": number or null,
         "large_luggage": number or null,
-        "medium_small_luggage": number or null
+        "medium_small_luggage": number or null,
+        "flight_number": "flight number or null",
+        "contact_number": "phone number or null"
     }},
     "has_enough_info": true or false,
     "missing_fields": [],
     "suggested_reply": "draft reply in English"
 }}
+
+Rules for email_type:
+- price_inquiry: customer asking for price/quote
+- booking_request: customer wants to confirm/proceed with booking
+- booking_related: existing booking change/cancel/question
+- general_inquiry: other questions
+- other: everything else
 
 Rules for direction:
 - Customer going TO airport = Drop off to (Intl or Domestic) Airport
@@ -80,6 +89,16 @@ Rules for suggested_reply:
 - Never repeat back all the details the customer provided
 - For general_inquiry: answer helpfully
 - Do NOT include sign-off or signature (it will be added automatically)
+
+Rules for booking_request:
+- Always ask for flight_number and contact_number if not provided
+- Add "flight number" and "contact number" to missing_fields if absent
+- If customer says they have no contact number: suggested_reply must tell them that we communicate via email, 
+  so please make sure to check your email regularly, especially on the day of travel
+- If has_enough_info is true (all fields including flight_number and contact_number present):
+  suggested_reply must say we will hold the booking and send a confirmation email shortly
+- has_enough_info for booking_request requires: suburb, direction, date, passengers, flight_number, contact_number,
+  and either flight_time or pickup_time
 """
 
     message = client.messages.create(
