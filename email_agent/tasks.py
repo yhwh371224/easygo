@@ -4,7 +4,9 @@ from google.oauth2 import service_account
 from django.conf import settings
 from .email_ai import analyze_email_with_claude
 from .price_utils import calculate_pickup_time, calculate_price
+import base64
 import os
+from email.mime.text import MIMEText
 
 
 LAST_HISTORY_ID_FILE = '/home/horeb/github/easygo/last_history_id.txt'
@@ -37,7 +39,6 @@ def get_gmail_service():
 
 
 def get_email_body(payload):
-    import base64
     if 'parts' in payload:
         for part in payload['parts']:
             if part['mimeType'] == 'text/plain':
@@ -71,6 +72,23 @@ def get_thread_history(service, thread_id, max_messages=3):
             'body': body
         })
     return history
+
+
+def create_gmail_draft(service, to, subject, body):
+    """Gmail Draft 생성"""
+    message = MIMEText(body)
+    message['to'] = to
+    message['subject'] = f"Re: {subject}"
+
+    raw = base64.urlsafe_b64encode(message.as_bytes()).decode('utf-8')
+
+    draft = service.users().drafts().create(
+        userId='me',
+        body={'message': {'raw': raw}}
+    ).execute()
+
+    print(f"Draft created: {draft['id']}")
+    return draft['id']
 
 
 @shared_task
@@ -124,7 +142,16 @@ def gmail_watch_topic(payload):
             print(f"Subject: {subject}")
 
             # Claude API 호출
-            result = analyze_email_with_claude(sender, subject, body, thread_history)
+            try:
+                result = analyze_email_with_claude(sender, subject, body, thread_history)
+
+            except Exception as e:
+                print(f"Claude API failed for message {msg_id}: {e}")
+                continue
+
+            if not result:
+                print(f"Claude API returned empty for message {msg_id}")
+                continue
 
             print(f"Email type: {result['email_type']}")
             print(f"Extracted: {result['extracted_info']}")
@@ -132,7 +159,7 @@ def gmail_watch_topic(payload):
             print(f"Missing: {result['missing_fields']}")
             print(f"Reply draft: {result['suggested_reply'][:300]}")
 
-            # 가격문의이고 정보 충분하면 가격 계산
+            # 가격문의이고 정보 충분하면 가격 계산 후 suggested_reply에 가격 추가
             if result['email_type'] == 'price_inquiry' and result['has_enough_info']:
                 info = result['extracted_info']
 
@@ -152,6 +179,20 @@ def gmail_watch_topic(payload):
 
                 print(f"Pickup time: {pickup_time}")
                 print(f"Price: ${price}")
+
+                # 가격 정보를 reply에 추가
+                reply_body = result['suggested_reply']
+                if price:
+                    reply_body += f"\n\nPickup Time: {pickup_time}\nTotal Price: ${price} AUD"
+
+            else:
+                reply_body = result['suggested_reply']
+
+            # Gmail Draft 생성
+            try:
+                create_gmail_draft(service, sender, subject, reply_body)
+            except Exception as e:
+                print(f"Draft creation failed for message {msg_id}: {e}")
 
     except Exception as e:
         print(f"Error: {e}")
