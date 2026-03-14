@@ -84,4 +84,13 @@ Rules for suggested_reply:
         messages=[{"role": "user", "content": prompt}]
     )
 
-    return json.loads(message.content[0].text)
+    response_text = message.content[0].text
+
+    # markdown 코드블록 제거
+    response_text = response_text.strip()
+    if response_text.startswith('```'):
+        response_text = response_text.split('```')[1]
+        if response_text.startswith('json'):
+            response_text = response_text[4:]
+
+    return json.loads(response_text.strip())
