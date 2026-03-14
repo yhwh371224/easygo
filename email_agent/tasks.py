@@ -13,12 +13,10 @@ PROCESSED_LABEL_ID = 'Label_956123326350558597'
 
 EMAIL_SIGNATURE = """
 <br>
-<div style="font-family: Arial, sans-serif; font-size: 12px; color: #555; line-height: 1.2;">
-<strong>Kind regards,</strong><br>
-<strong>EasyGo Airport Shuttle Team</strong>
-</div>
-<div style="font-family: Arial, sans-serif; font-size: 10px; color: #555; line-height: 1.2;">
-E&nbsp; <a href="mailto:info@easygoshuttle.com.au">info@easygoshuttle.com.au</a><br>
+<div style="font-family: Arial, sans-serif; font-size: 11px; color: #555; line-height: 1.2;">
+<strong>Kind regards,</strong>
+<strong>EasyGo Airport Shuttle Team</strong><br>
+E&nbsp; <a href="mailto:info@easygoshuttle.com.au">info@easygoshuttle.com.au</a>
 W&nbsp; <a href="http://www.easygoshuttle.com.au">www.EasyGoShuttle.com.au</a><br>
 <em>Please consider the environment before printing this email</em><br>
 <p style="margin: 2px 0;"><i>A Little about EasyGo Airport Shuttle: We provide an express pickup and transport service to and from Sydney Airport, delivering to and from hotels, homes, business offices or any other venue. Catering to individual travellers, families or corporate groups we run the easiest and most cost-effective of shuttle services. Our Services are conducted in clean, modern, air conditioned vehicles. And our services are reliable, punctual and completely refund guaranteed.</i></p>
@@ -272,7 +270,7 @@ def gmail_watch_topic(payload):
                 reply_body = result['suggested_reply']
                 if price:                    
                     reply_body = reply_body.replace('{PICKUP_TIME}', str(pickup_time))
-                    reply_body = reply_body.replace('{PRICE}', str(price))
+                    reply_body = reply_body.replace('{PRICE}', f'${price} AUD')
                 reply_body += EMAIL_SIGNATURE
 
             else:
