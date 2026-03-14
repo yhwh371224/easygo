@@ -13,14 +13,13 @@ PROCESSED_LABEL_ID = 'Label_956123326350558597'
 
 EMAIL_SIGNATURE = """
 <br>
-<div style="font-family: Arial, sans-serif; font-size: 9px; color: #555; line-height: 1.2;">
-<img src="cid:easygo_logo" alt="EasyGo Airport Shuttle" style="max-width: 120px; margin-bottom: 3px;"><br>
+<div style="font-family: Arial, sans-serif; font-size: 10px; color: #555; line-height: 1.3;">
 <strong>EasyGo Airport Shuttle Team</strong><br>
 E&nbsp; <a href="mailto:info@easygoshuttle.com.au">info@easygoshuttle.com.au</a><br>
 W&nbsp; <a href="http://www.easygoshuttle.com.au">www.EasyGoShuttle.com.au</a><br>
 <em>Please consider the environment before printing this email</em><br>
 <p style="margin: 2px 0;"><i>A Little about EasyGo Airport Shuttle: We provide an express pickup and transport service to and from Sydney Airport, delivering to and from hotels, homes, business offices or any other venue. Catering to individual travellers, families or corporate groups we run the easiest and most cost-effective of shuttle services. Our Services are conducted in clean, modern, air conditioned vehicles. And our services are reliable, punctual and completely refund guaranteed.</i></p>
-<p style="color: #888; font-size: 9px; margin: 2px 0;"><i>Attention: This email and attachments are intended solely for your use and may be confidential. Any review, dissemination, distribution or reproduction of this email is strictly prohibited. Please contact the sender if you have received this message in error.</i></p>
+<p style="color: #888; font-size: 10px; margin: 2px 0;"><i>Attention: This email and attachments are intended solely for your use and may be confidential. Any review, dissemination, distribution or reproduction of this email is strictly prohibited. Please contact the sender if you have received this message in error.</i></p>
 </div>
 """
 
@@ -254,7 +253,13 @@ def gmail_watch_topic(payload):
                     passengers=info['passengers'],
                     direction=info['direction'],
                     large_luggage=info.get('large_luggage') or 0,
-                    medium_small_luggage=info.get('medium_small_luggage') or 0
+                    medium_small_luggage=info.get('medium_small_luggage') or 0,
+                    bike=info.get('bike') or 0,
+                    ski=info.get('ski') or 0,
+                    snow_board=info.get('snow_board') or 0,
+                    golf_bag=info.get('golf_bag') or 0,
+                    musical_instrument=info.get('musical_instrument') or 0,
+                    carton_box=info.get('carton_box') or 0,
                 )
 
                 print(f"Pickup time: {pickup_time}")
@@ -263,8 +268,9 @@ def gmail_watch_topic(payload):
                 # 가격 정보를 reply에 추가
                 reply_body = result['suggested_reply']
                 if price:
-                    reply_body += f"\n\nPickup Time: {pickup_time}\nTotal Price: ${price} AUD"
-                reply_body += EMAIL_SIGNATURE 
+                    reply_body = reply_body.replace('{{PICKUP_TIME}}', str(pickup_time))
+                    reply_body = reply_body.replace('{{PRICE}}', str(price))
+                reply_body += EMAIL_SIGNATURE
 
             else:
                 reply_body = result['suggested_reply'] + EMAIL_SIGNATURE
