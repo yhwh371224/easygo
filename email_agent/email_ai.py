@@ -105,7 +105,6 @@ Rules for suggested_reply:
 - If has_enough_info is true for booking_request: say we will hold the booking and send a confirmation email shortly
 - Never repeat back details the customer already provided
 - For general_inquiry: answer helpfully
-- Always end with "Kind regards,"
 - Do NOT include signature (it will be added automatically)
 """
 
