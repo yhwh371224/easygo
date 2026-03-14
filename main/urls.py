@@ -4,7 +4,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth.decorators import user_passes_test
 from basecamp.views import stripe_webhook
-from main.views import gmail_webhook
+from email_agent.views import gmail_webhook
 
 
 admin_site = user_passes_test(lambda u: u.is_superuser)(admin.site.urls)
