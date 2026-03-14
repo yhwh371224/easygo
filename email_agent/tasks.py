@@ -12,14 +12,15 @@ LAST_HISTORY_ID_FILE = '/home/horeb/github/easygo/last_history_id.txt'
 PROCESSED_LABEL_ID = 'Label_956123326350558597'
 
 EMAIL_SIGNATURE = """
-<div style="font-family: Arial, sans-serif; font-size: 9px; color: #555; line-height: 1.4;">
-<img src="https://easygoshuttle.com.au/static/basecamp/images/easygo-logo-final.webp" alt="EasyGo Airport Shuttle" style="max-width: 60px; margin-bottom: 5px;"><br>
+<br>
+<div style="font-family: Arial, sans-serif; font-size: 9px; color: #555; line-height: 1.2;">
+<img src="https://easygoshuttle.com.au/static/basecamp/images/easygo-logo-final.webp" alt="EasyGo Airport Shuttle" style="max-width: 90px; margin-bottom: 3px;"><br>
 <strong>EasyGo Airport Shuttle Team</strong><br>
 E&nbsp; <a href="mailto:info@easygoshuttle.com.au">info@easygoshuttle.com.au</a><br>
 W&nbsp; <a href="http://www.easygoshuttle.com.au">www.EasyGoShuttle.com.au</a><br><br>
 <em>Please consider the environment before printing this email</em><br>
-<p><i>A Little about EasyGo Airport Shuttle: We provide an express pickup and transport service to and from Sydney Airport, delivering to and from hotels, homes, business offices or any other venue. Catering to individual travellers, families or corporate groups we run the easiest and most cost-effective of shuttle services. Our Services are conducted in clean, modern, air conditioned vehicles. And our services are reliable, punctual and completely refund guaranteed.</i></p>
-<p style="color: #888; font-size: 9px; margin: 4px 0;"><i>Attention: This email and attachments are intended solely for your use and may be confidential. Any review, dissemination, distribution or reproduction of this email is strictly prohibited. Please contact the sender if you have received this message in error.</i></p>
+<p style="margin: 2px 0;"><i>A Little about EasyGo Airport Shuttle: We provide an express pickup and transport service to and from Sydney Airport, delivering to and from hotels, homes, business offices or any other venue. Catering to individual travellers, families or corporate groups we run the easiest and most cost-effective of shuttle services. Our Services are conducted in clean, modern, air conditioned vehicles. And our services are reliable, punctual and completely refund guaranteed.</i></p>
+<p style="color: #888; font-size: 9px; margin: 2px 0;"><i>Attention: This email and attachments are intended solely for your use and may be confidential. Any review, dissemination, distribution or reproduction of this email is strictly prohibited. Please contact the sender if you have received this message in error.</i></p>
 </div>
 """
 
