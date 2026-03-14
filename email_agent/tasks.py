@@ -13,8 +13,11 @@ PROCESSED_LABEL_ID = 'Label_956123326350558597'
 
 EMAIL_SIGNATURE = """
 <br>
-<div style="font-family: Arial, sans-serif; font-size: 10px; color: #555; line-height: 1.3;">
+<div style="font-family: Arial, sans-serif; font-size: 12px; color: #555; line-height: 1.3;">
+Kind regards,<br>
 <strong>EasyGo Airport Shuttle Team</strong><br>
+</div>
+<div style="font-family: Arial, sans-serif; font-size: 10px; color: #555; line-height: 1.3;">
 E&nbsp; <a href="mailto:info@easygoshuttle.com.au">info@easygoshuttle.com.au</a><br>
 W&nbsp; <a href="http://www.easygoshuttle.com.au">www.EasyGoShuttle.com.au</a><br>
 <em>Please consider the environment before printing this email</em><br>
