@@ -10,19 +10,24 @@ from email.mime.text import MIMEText
 
 
 LAST_HISTORY_ID_FILE = '/home/horeb/github/easygo/last_history_id.txt'
-PROCESSED_MESSAGES_FILE = '/home/horeb/github/easygo/processed_messages.txt'
+PROCESSED_LABEL_ID = 'Label_956123326350558597'
+
+def is_message_processed(service, msg_id):
+    email = service.users().messages().get(
+        userId='me',
+        id=msg_id,
+        format='metadata',
+        metadataHeaders=['labelIds']
+    ).execute()
+    return PROCESSED_LABEL_ID in email.get('labelIds', [])
 
 
-def is_message_processed(msg_id):
-    if os.path.exists(PROCESSED_MESSAGES_FILE):
-        with open(PROCESSED_MESSAGES_FILE, 'r') as f:
-            return msg_id in f.read()
-    return False
-
-
-def mark_message_processed(msg_id):
-    with open(PROCESSED_MESSAGES_FILE, 'a') as f:
-        f.write(msg_id + '\n')
+def mark_message_processed(service, msg_id):
+    service.users().messages().modify(
+        userId='me',
+        id=msg_id,
+        body={'addLabelIds': [PROCESSED_LABEL_ID]}
+    ).execute()
 
 
 def get_last_history_id():
@@ -87,17 +92,21 @@ def get_thread_history(service, thread_id, max_messages=3):
     return history
 
 
-def create_gmail_draft(service, to, subject, body):
+def create_gmail_draft(service, to, subject, body, thread_id=None):
     """Gmail Draft 생성"""
     message = MIMEText(body)
     message['to'] = to
-    message['subject'] = f"Re: {subject}"
+    message['subject'] = f"Re: {subject}" if subject else "Re: Your Inquiry"
 
     raw = base64.urlsafe_b64encode(message.as_bytes()).decode('utf-8')
 
+    draft_body = {'message': {'raw': raw}}
+    if thread_id:
+        draft_body['message']['threadId'] = thread_id  
+
     draft = service.users().drafts().create(
         userId='me',
-        body={'message': {'raw': raw}}
+        body=draft_body
     ).execute()
 
     print(f"Draft created: {draft['id']}")
@@ -111,6 +120,7 @@ def gmail_watch_topic(payload):
     history_id = payload.get('historyId')
     if not history_id:
         return
+    history_id = str(history_id)
 
     start_history_id = get_last_history_id()
     if not start_history_id:
@@ -151,7 +161,7 @@ def gmail_watch_topic(payload):
             subject = headers.get('Subject', '')
 
             # 이미 처리한 메시지 스킵
-            if is_message_processed(msg_id):
+            if is_message_processed(service, msg_id):
                 print(f"Already processed message {msg_id}, skipping")
                 continue
 
@@ -160,8 +170,11 @@ def gmail_watch_topic(payload):
                 print(f"Skipping own email: {subject}")
                 continue
 
-            # 처리 완료 표시
-            mark_message_processed(msg_id)
+            # 스팸/자동발송 스킵
+            skip_senders = ['noreply', 'no-reply', 'mailer-daemon', 'postmaster']
+            if any(skip in sender.lower() for skip in skip_senders):
+                print(f"Skipping automated email: {sender}")
+                continue
             
             body = get_email_body(email['payload'])
             thread_history = get_thread_history(service, thread_id)
@@ -218,7 +231,8 @@ def gmail_watch_topic(payload):
 
             # Gmail Draft 생성
             try:
-                create_gmail_draft(service, sender, subject, reply_body)
+                create_gmail_draft(service, sender, subject, reply_body, thread_id=thread_id)
+                mark_message_processed(service, msg_id)
             except Exception as e:
                 print(f"Draft creation failed for message {msg_id}: {e}")
 
