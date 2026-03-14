@@ -17,7 +17,7 @@ EMAIL_SIGNATURE = """
 <strong>Kind regards,</strong><br>
 <strong>EasyGo Airport Shuttle Team</strong>
 </div>
-<div style="font-family: Arial, sans-serif; font-size: 10px; color: #555; line-height: 1.3;">
+<div style="font-family: Arial, sans-serif; font-size: 10px; color: #555; line-height: 1.2;">
 E&nbsp; <a href="mailto:info@easygoshuttle.com.au">info@easygoshuttle.com.au</a><br>
 W&nbsp; <a href="http://www.easygoshuttle.com.au">www.EasyGoShuttle.com.au</a><br>
 <em>Please consider the environment before printing this email</em><br>
