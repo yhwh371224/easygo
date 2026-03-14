@@ -16,7 +16,7 @@ def clean_float(value):
         return "0"
 
 
-def process_generic_payment(payment_instance, posts, recipient_email_config):
+def process_generic_payment(payment_instance, posts, recipient_email_config, calculated_amount=None):
     """
     Stripe/PayPal 결제 건을 분석하여 여러 예약(Post)에 금액을 배분합니다.
     """
@@ -33,7 +33,7 @@ def process_generic_payment(payment_instance, posts, recipient_email_config):
 
         - 이름: {instance.name}
         - 이메일: {instance.email}
-        - 금액: ${instance.amount}
+        - 금액: ${calculated_amount if calculated_amount is not None else instance.amount}
         - 결제수단: {method}
         - 거래ID: {txn_id}
         - 최초처리일: {instance.processed_at}
@@ -45,7 +45,7 @@ def process_generic_payment(payment_instance, posts, recipient_email_config):
         )
         return False, 0.0, set()
 
-    remaining_amount = float(instance.amount or 0)
+    remaining_amount = float(calculated_amount or instance.amount or 0)
     total_balance = 0.0
     recipient_emails = set()
     method_label = "STRIPE" if hasattr(instance, 'payment_intent_id') else "PAYPAL"
