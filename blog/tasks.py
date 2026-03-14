@@ -108,7 +108,7 @@ def send_notice_email(subject, message, RECIPIENT_EMAIL):
     send_text_email(subject, message, [RECIPIENT_EMAIL])
 
 
-# PayPal payment 
+# PayPal payment in tasks.py
 @shared_task
 def notify_user_payment_paypal(instance_id):
     from .blog_utils import process_generic_payment, send_payment_notification_email
@@ -120,9 +120,6 @@ def notify_user_payment_paypal(instance_id):
         
         raw_amount = float(instance.amount or 0)
         calculated_amount = round(raw_amount / 1.03, 2)
-        
-        original_amount = instance.amount
-        instance.amount = calculated_amount 
 
         posts = Post.objects.filter(
             Q(email__iexact=instance.email) | 
@@ -130,10 +127,8 @@ def notify_user_payment_paypal(instance_id):
         ).order_by('pickup_date')
         
         success, total_balance, recipient_emails = process_generic_payment(
-            instance, posts, RECIPIENT_EMAIL
+            instance, posts, RECIPIENT_EMAIL, calculated_amount
         )
-        
-        instance.amount = original_amount
         
         if not success: return
 
