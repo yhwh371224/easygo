@@ -49,10 +49,12 @@ Analyze this email carefully and respond in JSON format only. No explanation, no
 }}
 
 Rules for direction:
-- Customer going TO airport = Drop off (Intl or Domestic)
-- Customer coming FROM airport = Pickup (Intl or Domestic)
-- No airport mentioned = Cruise transfers or Point to Point
-- If international/domestic is unclear, set direction to null and add to missing_fields
+- Customer going TO airport = Drop off to (Intl or Domestic) Airport
+- Customer coming FROM airport = Pickup from (Intl or Domestic) Airport
+- No airport mentioned (hotel to hotel, home to hotel, cruise, point to point, etc.) = Cruise transfers or Point to Point
+- If airport involved but international/domestic is unclear, set direction to null and add "international or domestic flight" to missing_fields
+- If no airport mentioned, always use "Cruise transfers or Point to Point" regardless of distance or route
+- For "Cruise transfers or Point to Point", flight_time is not needed, only pickup_time
 
 Rules for suburb:
 - Match customer's location to the closest suburb in the list above
@@ -60,7 +62,7 @@ Rules for suburb:
 - If no match found, set to null and add "suburb" to missing_fields
 
 Rules for has_enough_info (price_inquiry only):
-- Must have: suburb, direction, date, passengers
+- Must have: suburb, direction, pickup_date, no_of_passengers
 - Must have either flight_time OR pickup_time
 - If Cruise transfers or Point to Point: must have pickup_time only
 - large_luggage and medium_small_luggage: if not mentioned, assume 0
@@ -71,11 +73,13 @@ Rules for missing_fields:
   "departing or arriving", "pickup time"
 
 Rules for suggested_reply:
-- Professional and friendly tone
-- If missing info: ask only for the missing fields
+- Keep it simple and concise, 3-4 sentences max
+- Professional and friendly tone but not overly verbose
+- If missing info: politely ask only for the missing fields 
 - If has_enough_info is true: say you will check availability and get back shortly
-- Always sign off as: EasyGo Airport Shuttle Team
+- Never repeat back all the details the customer provided
 - For general_inquiry: answer helpfully
+- Do NOT include sign-off or signature (it will be added automatically)
 """
 
     message = client.messages.create(
