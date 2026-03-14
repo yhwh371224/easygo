@@ -11,17 +11,10 @@ import os
 LAST_HISTORY_ID_FILE = '/home/horeb/github/easygo/last_history_id.txt'
 PROCESSED_LABEL_ID = 'Label_956123326350558597'
 
-def get_logo_base64():
-    logo_path = '/home/horeb/github/easygo/staticfiles/basecamp/images/easygo-logo-final.webp'
-    with open(logo_path, 'rb') as f:
-        return base64.b64encode(f.read()).decode('utf-8')
-
-def get_email_signature():
-    logo_b64 = get_logo_base64()
-    return f"""
+EMAIL_SIGNATURE = """
 <br>
 <div style="font-family: Arial, sans-serif; font-size: 9px; color: #555; line-height: 1.2;">
-<img src="data:image/webp;base64,{logo_b64}" alt="EasyGo Airport Shuttle" style="max-width: 120px; margin-bottom: 3px;"><br>
+<img src="cid:easygo_logo" alt="EasyGo Airport Shuttle" style="max-width: 120px; margin-bottom: 3px;"><br>
 <strong>EasyGo Airport Shuttle Team</strong><br>
 E&nbsp; <a href="mailto:info@easygoshuttle.com.au">info@easygoshuttle.com.au</a><br>
 W&nbsp; <a href="http://www.easygoshuttle.com.au">www.EasyGoShuttle.com.au</a><br>
@@ -114,9 +107,11 @@ def get_thread_history(service, thread_id, max_messages=3):
 def create_gmail_draft(service, to, subject, body, thread_id=None):
     """Gmail Draft 생성"""
     from email.mime.multipart import MIMEMultipart
+    from email.mime.text import MIMEText
+    from email.mime.image import MIMEImage
     
     # HTML 이메일
-    msg = MIMEMultipart('alternative')
+    msg = MIMEMultipart('related')
     msg['to'] = to
     msg['subject'] = f"Re: {subject}" if subject else "Re: Your Inquiry"
 
@@ -131,9 +126,16 @@ def create_gmail_draft(service, to, subject, body, thread_id=None):
 </html>
 """
     
-    from email.mime.text import MIMEText
     html_part = MIMEText(html_content, 'html')
     msg.attach(html_part)
+
+    # 로고 이미지 첨부 (CID 방식)
+    logo_path = '/home/horeb/github/easygo/staticfiles/basecamp/images/easygo-logo-final.webp'
+    with open(logo_path, 'rb') as f:
+        img = MIMEImage(f.read(), _subtype='webp')
+        img.add_header('Content-ID', '<easygo_logo>')
+        img.add_header('Content-Disposition', 'inline', filename='logo.webp')
+        msg.attach(img)
 
     raw = base64.urlsafe_b64encode(msg.as_bytes()).decode('utf-8')
 
@@ -262,10 +264,10 @@ def gmail_watch_topic(payload):
                 reply_body = result['suggested_reply']
                 if price:
                     reply_body += f"\n\nPickup Time: {pickup_time}\nTotal Price: ${price} AUD"
-                reply_body += get_email_signature() 
+                reply_body += EMAIL_SIGNATURE 
 
             else:
-                reply_body = result['suggested_reply'] + get_email_signature()
+                reply_body = result['suggested_reply'] + EMAIL_SIGNATURE
 
             # Gmail Draft 생성
             try:
