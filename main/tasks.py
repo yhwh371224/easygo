@@ -16,8 +16,13 @@ def get_last_history_id():
 
 
 def save_last_history_id(history_id):
-    with open(LAST_HISTORY_ID_FILE, 'w') as f:
-        f.write(str(history_id))
+    # 현재 저장된 것보다 클 때만 저장
+    current = get_last_history_id()
+    if not current or int(history_id) > int(current):
+        with open(LAST_HISTORY_ID_FILE, 'w') as f:
+            f.write(str(history_id))
+        return True
+    return False
 
 
 def get_gmail_service():
@@ -72,7 +77,6 @@ def gmail_watch_topic(payload):
     service = get_gmail_service()
     
     history_id = payload.get('historyId')
-    print(f"Received historyId: {history_id}")
     
     if not history_id:
         return
@@ -81,6 +85,16 @@ def gmail_watch_topic(payload):
     if not start_history_id:
         start_history_id = str(int(history_id) - 10)
 
+    # 이미 처리한 historyId면 스킵
+    if int(history_id) <= int(start_history_id):
+        print(f"Already processed historyId: {history_id}, skipping")
+        return
+
+    # 먼저 저장해서 다른 worker가 중복 처리 못하게
+    if not save_last_history_id(history_id):
+        print(f"historyId {history_id} already being processed, skipping")
+        return
+
     try:
         history_response = service.users().history().list(
             userId='me',
@@ -88,14 +102,10 @@ def gmail_watch_topic(payload):
             historyTypes=['messageAdded'],
         ).execute()
 
-        print(f"History response: {history_response}")
-
         messages = []
         for record in history_response.get('history', []):
             for msg in record.get('messagesAdded', []):
                 messages.append(msg['message']['id'])
-
-        print(f"Found {len(messages)} new messages")
 
         save_last_history_id(history_id)
 
