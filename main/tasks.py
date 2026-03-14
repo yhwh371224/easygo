@@ -69,9 +69,8 @@ def gmail_watch_topic(payload):
             userId='me',
             startHistoryId=start_history_id,
             historyTypes=['messageAdded'],
-            labelId='INBOX'
         ).execute()
-        
+
         print(f"History response: {history_response}")
         
         messages = []
