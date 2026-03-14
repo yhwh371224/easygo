@@ -2,6 +2,8 @@ from celery import shared_task
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
 from django.conf import settings
+from .email_ai import analyze_email_with_claude
+from .price_utils import calculate_pickup_time, calculate_price
 import os
 
 
@@ -16,7 +18,6 @@ def get_last_history_id():
 
 
 def save_last_history_id(history_id):
-    # 현재 저장된 것보다 클 때만 저장
     current = get_last_history_id()
     if not current or int(history_id) > int(current):
         with open(LAST_HISTORY_ID_FILE, 'w') as f:
@@ -56,9 +57,9 @@ def get_thread_history(service, thread_id, max_messages=3):
         id=thread_id,
         format='full'
     ).execute()
-    
+
     messages = thread.get('messages', [])[-max_messages:]
-    
+
     history = []
     for msg in messages:
         headers = {h['name']: h['value'] for h in msg['payload']['headers']}
@@ -75,9 +76,8 @@ def get_thread_history(service, thread_id, max_messages=3):
 @shared_task
 def gmail_watch_topic(payload):
     service = get_gmail_service()
-    
+
     history_id = payload.get('historyId')
-    
     if not history_id:
         return
 
@@ -85,12 +85,10 @@ def gmail_watch_topic(payload):
     if not start_history_id:
         start_history_id = str(int(history_id) - 10)
 
-    # 이미 처리한 historyId면 스킵
     if int(history_id) <= int(start_history_id):
         print(f"Already processed historyId: {history_id}, skipping")
         return
 
-    # 먼저 저장해서 다른 worker가 중복 처리 못하게
     if not save_last_history_id(history_id):
         print(f"historyId {history_id} already being processed, skipping")
         return
@@ -107,8 +105,6 @@ def gmail_watch_topic(payload):
             for msg in record.get('messagesAdded', []):
                 messages.append(msg['message']['id'])
 
-        save_last_history_id(history_id)
-
         for msg_id in messages:
             email = service.users().messages().get(
                 userId='me',
@@ -122,13 +118,40 @@ def gmail_watch_topic(payload):
             sender = headers.get('From', '')
             subject = headers.get('Subject', '')
             body = get_email_body(email['payload'])
-
-            history_msgs = get_thread_history(service, thread_id)
+            thread_history = get_thread_history(service, thread_id)
 
             print(f"From: {sender}")
             print(f"Subject: {subject}")
-            print(f"Body: {body[:200]}")
-            print(f"Thread history: {len(history_msgs)} messages")
+
+            # Claude API 호출
+            result = analyze_email_with_claude(sender, subject, body, thread_history)
+
+            print(f"Email type: {result['email_type']}")
+            print(f"Extracted: {result['extracted_info']}")
+            print(f"Has enough info: {result['has_enough_info']}")
+            print(f"Missing: {result['missing_fields']}")
+            print(f"Reply draft: {result['suggested_reply'][:300]}")
+
+            # 가격문의이고 정보 충분하면 가격 계산
+            if result['email_type'] == 'price_inquiry' and result['has_enough_info']:
+                info = result['extracted_info']
+
+                pickup_time = calculate_pickup_time(
+                    direction=info['direction'],
+                    flight_time=info.get('flight_time'),
+                    pickup_time=info.get('pickup_time')
+                )
+
+                price = calculate_price(
+                    suburb_name=info['suburb'],
+                    passengers=info['passengers'],
+                    direction=info['direction'],
+                    large_luggage=info.get('large_luggage') or 0,
+                    medium_small_luggage=info.get('medium_small_luggage') or 0
+                )
+
+                print(f"Pickup time: {pickup_time}")
+                print(f"Price: ${price}")
 
     except Exception as e:
         print(f"Error: {e}")

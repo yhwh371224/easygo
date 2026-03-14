@@ -104,7 +104,7 @@ INSTALLED_APPS = [
     'blog.apps.BlogConfig',
     'basecamp.apps.BasecampConfig', 
     'easygo_review.apps.EasygoReviewConfig',
-    'main',
+    'email_agent.apps.EmailAgentConfig',
     'admin_honeypot',
     'allauth',
     'allauth.account',
