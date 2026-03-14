@@ -6,11 +6,31 @@ from .email_ai import analyze_email_with_claude
 from .price_utils import calculate_pickup_time, calculate_price
 import base64
 import os
-from email.mime.text import MIMEText
 
 
 LAST_HISTORY_ID_FILE = '/home/horeb/github/easygo/last_history_id.txt'
 PROCESSED_LABEL_ID = 'Label_956123326350558597'
+
+EMAIL_SIGNATURE = """
+<br><br>
+<div style="font-family: Arial, sans-serif; font-size: 9px; color: #555;">
+<img src="https://easygoshuttle.com.au/static/basecamp/images/easygo-logo-final.webp" 
+     alt="EasyGo Airport Shuttle" style="width: 60px; margin-bottom: 10px;"><br>
+<strong>EasyGo Airport Shuttle Team</strong><br>
+E&nbsp; <a href="mailto:info@easygoshuttle.com.au">info@easygoshuttle.com.au</a><br>
+W&nbsp; <a href="http://www.easygoshuttle.com.au">www.EasyGoShuttle.com.au</a><br><br>
+<em> Please consider the environment before printing this email</em><br><br>
+<p><i>A Little about EasyGo Airport Shuttle: We provide an express pickup and transport service 
+to and from Sydney Airport, delivering to and from hotels, homes, business offices or any other venue. 
+Catering to individual travellers, families or corporate groups we run the easiest and most 
+cost-effective of shuttle services. Our Services are conducted in clean, modern, air conditioned 
+vehicles. And our services are reliable, punctual and completely refund guaranteed.</i></p>
+<p style="color: #888; font-size: 9px;"><i>Attention: This email and attachments are intended solely 
+for your use and may be confidential. Any review, dissemination, distribution or reproduction of 
+this email is strictly prohibited. Please contact the sender if you have received this message 
+in error.</i></p>
+</div>
+"""
 
 def is_message_processed(service, msg_id):
     email = service.users().messages().get(
@@ -94,15 +114,33 @@ def get_thread_history(service, thread_id, max_messages=3):
 
 def create_gmail_draft(service, to, subject, body, thread_id=None):
     """Gmail Draft 생성"""
-    message = MIMEText(body)
-    message['to'] = to
-    message['subject'] = f"Re: {subject}" if subject else "Re: Your Inquiry"
+    from email.mime.multipart import MIMEMultipart
+    
+    # HTML 이메일
+    msg = MIMEMultipart('alternative')
+    msg['to'] = to
+    msg['subject'] = f"Re: {subject}" if subject else "Re: Your Inquiry"
 
-    raw = base64.urlsafe_b64encode(message.as_bytes()).decode('utf-8')
+    # body의 줄바꿈을 HTML로 변환
+    html_body = body.replace('\n', '<br>')
+    
+    html_content = f"""
+<html>
+<body style="font-family: Arial, sans-serif; font-size: 14px; color: #333;">
+{html_body}
+</body>
+</html>
+"""
+    
+    from email.mime.text import MIMEText
+    html_part = MIMEText(html_content, 'html')
+    msg.attach(html_part)
+
+    raw = base64.urlsafe_b64encode(msg.as_bytes()).decode('utf-8')
 
     draft_body = {'message': {'raw': raw}}
     if thread_id:
-        draft_body['message']['threadId'] = thread_id  
+        draft_body['message']['threadId'] = thread_id
 
     draft = service.users().drafts().create(
         userId='me',
@@ -225,9 +263,10 @@ def gmail_watch_topic(payload):
                 reply_body = result['suggested_reply']
                 if price:
                     reply_body += f"\n\nPickup Time: {pickup_time}\nTotal Price: ${price} AUD"
+                reply_body += EMAIL_SIGNATURE 
 
             else:
-                reply_body = result['suggested_reply']
+                reply_body = result['suggested_reply'] + EMAIL_SIGNATURE 
 
             # Gmail Draft 생성
             try:
