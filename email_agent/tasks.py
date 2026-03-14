@@ -12,7 +12,6 @@ LAST_HISTORY_ID_FILE = '/home/horeb/github/easygo/last_history_id.txt'
 PROCESSED_LABEL_ID = 'Label_956123326350558597'
 
 EMAIL_SIGNATURE = """
-<br><br>
 <div style="font-family: Arial, sans-serif; font-size: 9px; color: #555; line-height: 1.4;">
 <img src="https://easygoshuttle.com.au/static/basecamp/images/easygo-logo-final.webp" alt="EasyGo Airport Shuttle" style="max-width: 60px; margin-bottom: 5px;"><br>
 <strong>EasyGo Airport Shuttle Team</strong><br>
