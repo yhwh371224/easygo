@@ -12,9 +12,8 @@ LAST_HISTORY_ID_FILE = '/home/horeb/github/easygo/last_history_id.txt'
 PROCESSED_LABEL_ID = 'Label_956123326350558597'
 
 EMAIL_SIGNATURE = """
-<br>
 <div style="font-family: Arial, sans-serif; font-size: 12px; color: #555; line-height: 1.3;">
-Kind regards,<br>
+<strong>Kind regards,</strong><br>
 <strong>EasyGo Airport Shuttle Team</strong><br>
 </div>
 <div style="font-family: Arial, sans-serif; font-size: 10px; color: #555; line-height: 1.3;">
@@ -270,9 +269,9 @@ def gmail_watch_topic(payload):
 
                 # 가격 정보를 reply에 추가
                 reply_body = result['suggested_reply']
-                if price:
-                    reply_body = reply_body.replace('{{PICKUP_TIME}}', str(pickup_time))
-                    reply_body = reply_body.replace('{{PRICE}}', str(price))
+                if price:                    
+                    reply_body = reply_body.replace('{PICKUP_TIME}', str(pickup_time))
+                    reply_body = reply_body.replace('{PRICE}', str(price))
                 reply_body += EMAIL_SIGNATURE
 
             else:
