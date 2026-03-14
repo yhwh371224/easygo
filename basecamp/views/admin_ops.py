@@ -372,6 +372,7 @@ def email_dispatch_detail(request):
 
         if not user:
             logger.warning(f"User not found for email: {email}")
+            return JsonResponse({'success': False, 'error': 'User not found'})
 
         pickup_time_12h = None
 
