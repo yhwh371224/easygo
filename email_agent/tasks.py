@@ -10,6 +10,19 @@ from email.mime.text import MIMEText
 
 
 LAST_HISTORY_ID_FILE = '/home/horeb/github/easygo/last_history_id.txt'
+PROCESSED_MESSAGES_FILE = '/home/horeb/github/easygo/processed_messages.txt'
+
+
+def is_message_processed(msg_id):
+    if os.path.exists(PROCESSED_MESSAGES_FILE):
+        with open(PROCESSED_MESSAGES_FILE, 'r') as f:
+            return msg_id in f.read()
+    return False
+
+
+def mark_message_processed(msg_id):
+    with open(PROCESSED_MESSAGES_FILE, 'a') as f:
+        f.write(msg_id + '\n')
 
 
 def get_last_history_id():
@@ -121,7 +134,8 @@ def gmail_watch_topic(payload):
         messages = []
         for record in history_response.get('history', []):
             for msg in record.get('messagesAdded', []):
-                messages.append(msg['message']['id'])
+                if 'INBOX' in msg['message'].get('labelIds', []):
+                    messages.append(msg['message']['id'])
 
         for msg_id in messages:
             email = service.users().messages().get(
@@ -135,6 +149,20 @@ def gmail_watch_topic(payload):
 
             sender = headers.get('From', '')
             subject = headers.get('Subject', '')
+
+            # 이미 처리한 메시지 스킵
+            if is_message_processed(msg_id):
+                print(f"Already processed message {msg_id}, skipping")
+                continue
+
+            # 내가 보낸 이메일 스킵
+            if 'info@easygoshuttle.com.au' in sender:
+                print(f"Skipping own email: {subject}")
+                continue
+
+            # 처리 완료 표시
+            mark_message_processed(msg_id)
+            
             body = get_email_body(email['payload'])
             thread_history = get_thread_history(service, thread_id)
 
