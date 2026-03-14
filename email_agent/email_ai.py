@@ -43,7 +43,13 @@ Analyze this email carefully and respond in JSON format only. No explanation, no
         "large_luggage": number or null,
         "medium_small_luggage": number or null,
         "flight_number": "flight number or null",
-        "contact_number": "phone number or null"
+        "contact_number": "phone number or null",
+        "bike": number or null,
+        "ski": number or null,
+        "snow_board": number or null,
+        "golf_bag": number or null,
+        "musical_instrument": number or null,
+        "carton_box": number or null
     }},
     "has_enough_info": true or false,
     "missing_fields": [],
@@ -60,45 +66,47 @@ Rules for email_type:
 Rules for direction:
 - Customer going TO airport = Drop off to (Intl or Domestic) Airport
 - Customer coming FROM airport = Pickup from (Intl or Domestic) Airport
-- No airport mentioned (hotel to hotel, home to hotel, cruise, point to point, etc.) = Cruise transfers or Point to Point
-- If airport involved but international/domestic is unclear, set direction to null and add "international or domestic flight" to missing_fields
-- If no airport mentioned, always use "Cruise transfers or Point to Point" regardless of distance or route
-- For "Cruise transfers or Point to Point", flight_time is not needed, only pickup_time
+- No airport mentioned = Cruise transfers or Point to Point
+- If airport involved but international/domestic unclear: direction = null, add "international or domestic flight" to missing_fields
+- For Cruise transfers or Point to Point: flight_time is not needed, only pickup_time
+
+Rules for flight_time vs pickup_time:
+- flight_time: actual flight arrival or departure time (e.g. "arriving at HH:MM", "flight at HH:MM")
+- pickup_time: only when customer explicitly says "pickup at HH:MM" or "please pick me up at HH:MM"
 
 Rules for suburb:
 - Match customer's location to the closest suburb in the list above
 - Handle typos and variations
-- If no match found, set to null and add "suburb" to missing_fields
+- If no match found: suburb = null, add "suburb" to missing_fields
 
-Rules for has_enough_info (price_inquiry only):
-- Must have: suburb, direction, pickup_date, no_of_passengers
-- Must have either flight_time OR pickup_time
-- If Cruise transfers or Point to Point: must have pickup_time only
-- large_luggage and medium_small_luggage: if not mentioned, assume 0
+Rules for has_enough_info:
+- price_inquiry requires: suburb, direction, date, passengers, large_luggage, medium_small_luggage,  and either flight_time or pickup_time
+  (For Cruise transfers or Point to Point: pickup_time only. Luggage fields default to 0 if not mentioned)
+- booking_request requires: suburb, direction, date, passengers, large_luggage, medium_small_luggage, flight_number, contact_number, and either flight_time or pickup_time
+- Special items (bike, ski, snow_board, golf_bag, musical_instrument, carton_box): ask only if customer mentions them, otherwise assume 0
+- If customer says no luggage: set all luggage fields to 0 and do not ask again
 
-Rules for missing_fields:
-- Use clear English labels: "suburb", "travel date", "number of passengers",
-  "flight time or pickup time", "international or domestic flight",
-  "departing or arriving", "pickup time"
-
-Rules for suggested_reply:
-- Keep it simple and concise, 3-4 sentences max
-- Professional and friendly tone but not overly verbose
-- If missing info: politely ask only for the missing fields 
-- If has_enough_info is true: say you will check availability and get back shortly
-- Never repeat back all the details the customer provided
-- For general_inquiry: answer helpfully
-- Do NOT include sign-off or signature (it will be added automatically)
+Rules for missing_fields labels:
+"suburb", "travel date", "number of passengers", "number of large luggage", "number of medium/small luggage", "flight time or pickup time",
+"international or domestic flight", "departing or arriving", "pickup time",
+"flight number", "contact number"
 
 Rules for booking_request:
 - Always ask for flight_number and contact_number if not provided
-- Add "flight number" and "contact number" to missing_fields if absent
-- If customer says they have no contact number: suggested_reply must tell them that we communicate via email, 
-  so please make sure to check your email regularly, especially on the day of travel
-- If has_enough_info is true (all fields including flight_number and contact_number present):
-  suggested_reply must say we will hold the booking and send a confirmation email shortly
-- has_enough_info for booking_request requires: suburb, direction, date, passengers, flight_number, contact_number,
-  and either flight_time or pickup_time
+- If customer has no contact number: tell them we communicate via email, so please check email regularly especially on the day of travel
+- If has_enough_info is true: say we will hold the booking and send a confirmation email shortly
+
+Rules for suggested_reply:
+- Keep it simple and concise, 3-4 sentences max
+- Professional and friendly tone
+- If missing info: ask only for the missing fields
+- For luggage: if customer says no luggage or doesn't have any, treat as 0 and do not ask again
+- If has_enough_info is true for price_inquiry: write naturally including {{PICKUP_TIME}} and {{PRICE}} placeholders, and invite customer to proceed with booking
+- If has_enough_info is true for booking_request: say we will hold the booking and send a confirmation email shortly
+- Never repeat back details the customer already provided
+- For general_inquiry: answer helpfully
+- Always end with "Kind regards,"
+- Do NOT include signature (it will be added automatically)
 """
 
     message = client.messages.create(

@@ -26,7 +26,8 @@ def calculate_pickup_time(direction, flight_time=None, pickup_time=None):
     return (ft + offset).strftime("%H:%M")
 
 
-def calculate_price(suburb_name, passengers, direction, large_luggage=0, medium_small_luggage=0):
+def calculate_price(suburb_name, passengers, direction, large_luggage=0, medium_small_luggage=0,
+                    bike=0, ski=0, snow_board=0, golf_bag=0, musical_instrument=0, carton_box=0):
     suburbs = get_more_suburbs()
 
     if suburb_name not in suburbs:
@@ -48,6 +49,10 @@ def calculate_price(suburb_name, passengers, direction, large_luggage=0, medium_
     extra_large = max(0, large_luggage - no_p)
     extra_medium_small = max(0, medium_small_luggage - no_p)
     luggage_surcharge = (extra_large + extra_medium_small) * 5
+
+    # 특수 짐 추가요금
+    special_surcharge = (bike + ski) * 20
+    special_surcharge += (snow_board + golf_bag + musical_instrument + carton_box) * 10
 
     return base_price + luggage_surcharge
 
