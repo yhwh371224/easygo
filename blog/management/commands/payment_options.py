@@ -19,12 +19,11 @@ class Command(BaseCommand):
             pickup_date__gt=now,   # 미래 부킹만
             reminder=False,
             cancelled=False,
+            pending=False
         ).exclude(
             Q(paid__isnull=False) & ~Q(paid__exact="")
         ).exclude(
-            cash=True
-        ).exclude(
-            prepay=True
+            Q(cash=True) | Q(card=True)
         )
         
         for notice in reminders:

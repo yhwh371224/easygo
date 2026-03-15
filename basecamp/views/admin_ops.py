@@ -615,18 +615,15 @@ def email_dispatch_detail(request):
         if selected_option == "Payment Confirmed":
             if payment_method == "cash":
                 user.cash = True
-                user.prepay = False
-                user.pending = False
                 template_name = "html_email-response-cash-payment-confirmed.html"
                 subject = "Cash Payment Confirmed - EasyGo"
             elif payment_method == "card":
-                user.cash = False
-                user.pending = True
                 user.prepay = True
                 template_name = "html_email-response-card-payment-confirmed.html"
                 subject = "Card Payment Confirmed - EasyGo"
 
-            user.reminder = True            
+            user.reminder = True
+            user.pending = False            
             user.cancelled = False
             user.save()      
 
