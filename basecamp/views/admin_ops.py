@@ -11,7 +11,7 @@ from blog.models import Post, Inquiry, Driver
 from blog.sms_utils import send_sms_notice, send_whatsapp_template
 from csp.constants import NONCE
 from basecamp.basecamp_utils import (
-    parse_baggage, parse_date, handle_email_sending, format_pickup_time_12h,
+    parse_baggage, handle_email_sending, format_pickup_time_12h,
     to_bool,
     render_inquiry_done, parse_booking_dates, get_customer_status,
     parse_one_based_index, resolve_payment_flags,

@@ -173,8 +173,15 @@ def send_post_confirmation_email_task(pk):
 
 @shared_task
 def send_post_cancelled_email_task(pk):
-    instance = Post.objects.get(pk=pk)
-    send_post_cancelled_email(instance)
+    affected = Post.objects.filter(
+        pk=pk,
+        sent_email=False,
+        cancelled=True
+    ).update(sent_email=True)
+    
+    if affected:
+        instance = Post.objects.get(pk=pk)
+        send_post_cancelled_email(instance)
 
 
 @shared_task

@@ -60,8 +60,12 @@ def notify_user_post(sender, instance, created, **kwargs):
 @receiver(post_save, sender=Post, dispatch_uid="notify_user_post_cancelled_once")
 def notify_user_post_cancelled(sender, instance, created, **kwargs):
     update_fields = kwargs.get('update_fields')
-    # 캔슬 뷰에서 update_fields로 저장한 경우 → 시그널 스킵
+    
+    # 뷰에서 update_fields=['cancelled', 'pending']으로 저장한 경우 → 시그널 스킵
     if update_fields and 'cancelled' in update_fields:
+        return
+    
+    if instance.sent_email:
         return
     
     if instance.cancelled:
