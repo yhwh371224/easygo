@@ -134,8 +134,16 @@ Rules for suggested_reply:
 - Never repeat back details the customer already provided
 - For general_inquiry: answer helpfully
 - Do NOT include signature (it will be added automatically)
-"""
 
+Rules for payment:
+- We do NOT accept payment over the phone. If a customer offers to pay by phone, politely inform them and direct them to the available payment options.
+- Available payment methods:
+  1. PayPal – easygoshuttle.com.au/payonline
+  2. Stripe – easygoshuttle.com.au/pay/stripe
+  3. PayID – Mobile: 0406 883 355 
+  4. Direct Bank Transfer – AC Name: EasyGo Airport Transfers / Account Number: 980980701 / BSB: 082-356
+  5. Cash – paid directly to the driver on the day
+"""
     message = client.messages.create(
         model="claude-haiku-4-5-20251001",
         max_tokens=1000,
