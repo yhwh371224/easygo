@@ -1,8 +1,8 @@
 import anthropic
 import json
 from django.conf import settings
-from prompts.system_prompt import STATIC_SYSTEM_PROMPT
-from prompts.user_template import build_user_prompt, get_suburb_list
+from email_agent.prompts.system_prompt import STATIC_SYSTEM_PROMPT
+from email_agent.prompts.user_template import build_user_prompt, get_suburb_list
 
 
 def analyze_email_with_claude(sender, subject, body, thread_history):
