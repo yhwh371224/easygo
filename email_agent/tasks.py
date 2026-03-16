@@ -1,11 +1,13 @@
+import re
+import base64
+import os
+
 from celery import shared_task
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
 from django.conf import settings
 from .email_ai import analyze_email_with_claude
 from .price_utils import calculate_pickup_time, calculate_price
-import base64
-import os
 
 
 LAST_HISTORY_ID_FILE = '/home/horeb/github/easygo/last_history_id.txt'
@@ -209,7 +211,7 @@ def gmail_watch_topic(payload):
                 continue
 
             # 내가 보낸 이메일 스킵
-            if 'info@easygoshuttle.com.au' in sender:
+            if 'info@easygoshuttle.com.au' in sender and '[New Contact] Submission from' not in subject:
                 print(f"Skipping own email: {subject}")
                 continue
 
@@ -280,9 +282,16 @@ def gmail_watch_topic(payload):
             else:
                 reply_body = result['suggested_reply'] + EMAIL_SIGNATURE
 
+            # Contact Form 이메일이면 본문에서 이메일 추출
+            if '[New Contact] Submission from' in subject:
+                match = re.search(r'email:\s*(\S+)', body)
+                reply_to = match.group(1) if match else sender
+            else:
+                reply_to = sender
+
             # Gmail Draft 생성
             try:
-                create_gmail_draft(service, sender, subject, reply_body, thread_id=thread_id)
+                create_gmail_draft(service, reply_to, subject, reply_body, thread_id=thread_id)
                 mark_message_processed(service, msg_id)
             except Exception as e:
                 print(f"Draft creation failed for message {msg_id}: {e}")
