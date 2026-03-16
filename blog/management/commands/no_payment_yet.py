@@ -27,7 +27,7 @@ class Command(BaseCommand):
         end_date = start_date + timedelta(days=14)
 
         bookings = Post.objects.filter(
-            pickup_date=(today),
+            pickup_date__range=(start_date, end_date),
             cash=False,
             cancelled=False,
         )
