@@ -191,6 +191,12 @@ def gmail_watch_topic(payload):
                 format='full'
             ).execute()
 
+            # ✅ 현재 메시지의 실제 labelIds 확인
+            current_labels = email.get('labelIds', [])
+            if 'INBOX' not in current_labels:
+                print(f"Skipping message {msg_id}: not in INBOX (labels: {current_labels})")
+                continue
+
             thread_id = email['threadId']
             headers = {h['name']: h['value'] for h in email['payload']['headers']}
 
@@ -283,3 +289,5 @@ def gmail_watch_topic(payload):
 
     except Exception as e:
         print(f"Error: {e}")
+
+
