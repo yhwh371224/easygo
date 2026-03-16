@@ -21,12 +21,13 @@ class Command(BaseCommand):
                 return f"{booking.pickup_date} & {booking.return_pickup_date}"
         return str(booking.pickup_date)
 
-    def handle(self, *args, **options):        
+    def handle(self, *args, **options):       
+        today = date.today() 
         start_date = date.today() + timedelta(days=1)
         end_date = start_date + timedelta(days=14)
 
         bookings = Post.objects.filter(
-            pickup_date__range=(start_date, end_date),
+            pickup_date=(today),
             cash=False,
             cancelled=False,
         )

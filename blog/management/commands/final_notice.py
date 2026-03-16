@@ -21,7 +21,7 @@ class Command(BaseCommand):
             within_three_days = today + timedelta(days=3)
 
             final_notices = Post.objects.filter(
-                pickup_date__range=(today, within_three_days),
+                pickup_date__range=(tomorrow, within_three_days),
                 cancelled=False,
             ).filter(
                 Q(paid__isnull=True) | Q(paid__exact="")
