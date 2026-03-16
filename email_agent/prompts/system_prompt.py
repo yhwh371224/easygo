@@ -90,6 +90,8 @@ CASE A: Thread history exists AND all required fields confirmed across the conve
 CASE B: Thread history has only 1 message (the current email itself) 
 OR thread history is empty — meaning there is no prior exchange to verify details from.
 - has_enough_info = true, missing_fields = []
+- suggested_reply: short and warm. Thank them, let them know you will review their details, proceed with the booking, and send a confirmation email shortly. 1-2 sentences max. No questions.
+- Example: "Thank you for confirming! We will review your details, proceed with the booking, and send a confirmation email shortly."
 
 CASE C: Thread history exists BUT either flight_number or contact_number (or both) are missing from the entire conversation
 - has_enough_info = false, missing_fields = only the missing field(s) among ["flight number", "contact number"]
