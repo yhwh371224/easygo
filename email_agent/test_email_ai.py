@@ -147,7 +147,7 @@ result = analyze_email_with_claude(
     body="Do you provide child seats for toddlers?",
     thread_history=[{}]
 )
-check("일반문의", result, "general_inquiry", None)
+check("일반문의", result, "general_inquiry", True)
 
 # ──────────────────────────────────────────────
 # 10. 결제 전화 요청
@@ -158,7 +158,7 @@ result = analyze_email_with_claude(
     body="Can I pay by credit card over the phone?",
     thread_history=[{}]
 )
-check("결제 전화 요청", result, "general_inquiry", None)
+check("결제 전화 요청", result, "general_inquiry", True)
 
 # ──────────────────────────────────────────────
 # 결과 출력
