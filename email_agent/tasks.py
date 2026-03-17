@@ -7,7 +7,6 @@ from googleapiclient.discovery import build
 from google.oauth2 import service_account
 from django.conf import settings
 from .email_ai import analyze_email_with_claude
-from .price_utils import calculate_pickup_time, calculate_price
 
 
 LAST_HISTORY_ID_FILE = '/home/horeb/github/easygo/last_history_id.txt'
@@ -129,14 +128,6 @@ def create_gmail_draft(service, to, subject, body, thread_id=None):
     html_part = MIMEText(html_content, 'html')
     msg.attach(html_part)
 
-    # 로고 이미지 첨부 (CID 방식)
-    logo_path = '/home/horeb/github/easygo/staticfiles/basecamp/images/easygo-logo-final.webp'
-    with open(logo_path, 'rb') as f:
-        img = MIMEImage(f.read(), _subtype='webp')
-        img.add_header('Content-ID', '<easygo_logo>')
-        img.add_header('Content-Disposition', 'inline', filename='logo.webp')
-        msg.attach(img)
-
     raw = base64.urlsafe_b64encode(msg.as_bytes()).decode('utf-8')
 
     draft_body = {'message': {'raw': raw}}
@@ -245,42 +236,7 @@ def gmail_watch_topic(payload):
             print(f"Missing: {result['missing_fields']}")
             print(f"Reply draft: {result['suggested_reply'][:300]}")
 
-            # 가격문의이고 정보 충분하면 가격 계산 후 suggested_reply에 가격 추가
-            if result['email_type'] == 'price_inquiry' and result['has_enough_info']:
-                info = result['extracted_info']
-
-                pickup_time = calculate_pickup_time(
-                    direction=info['direction'],
-                    flight_time=info.get('flight_time'),
-                    pickup_time=info.get('pickup_time')
-                )
-
-                price = calculate_price(
-                    suburb_name=info['suburb'],
-                    passengers=info['passengers'],
-                    direction=info['direction'],
-                    large_luggage=info.get('large_luggage') or 0,
-                    medium_small_luggage=info.get('medium_small_luggage') or 0,
-                    bike=info.get('bike') or 0,
-                    ski=info.get('ski') or 0,
-                    snow_board=info.get('snow_board') or 0,
-                    golf_bag=info.get('golf_bag') or 0,
-                    musical_instrument=info.get('musical_instrument') or 0,
-                    carton_box=info.get('carton_box') or 0,
-                )
-
-                print(f"Pickup time: {pickup_time}")
-                print(f"Price: ${price}")
-
-                # 가격 정보를 reply에 추가
-                reply_body = result['suggested_reply']
-                if price:                    
-                    reply_body = reply_body.replace('{PICKUP_TIME}', str(pickup_time))
-                    reply_body = reply_body.replace('{PRICE}', f'${price} AUD')
-                reply_body += EMAIL_SIGNATURE
-
-            else:
-                reply_body = result['suggested_reply'] + EMAIL_SIGNATURE
+            reply_body = result['suggested_reply'] + EMAIL_SIGNATURE
 
             # Contact Form 이메일이면 본문에서 이메일 추출
             if '[New Contact] Submission from' in subject:
