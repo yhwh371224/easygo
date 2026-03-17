@@ -2,15 +2,14 @@ import anthropic
 import json
 from django.conf import settings
 from email_agent.prompts.system_prompt import STATIC_SYSTEM_PROMPT
-from email_agent.prompts.user_template import build_user_prompt, get_suburb_list
+from email_agent.prompts.user_template import build_user_prompt
 
 
 def analyze_email_with_claude(sender, subject, body, thread_history):
     client = anthropic.Anthropic(api_key=settings.ANTHROPIC_API_KEY)
 
     history_text = _build_history_text(thread_history)
-    suburb_list = get_suburb_list()
-    user_prompt = build_user_prompt(sender, subject, body, history_text, suburb_list)
+    user_prompt = build_user_prompt(sender, subject, body, history_text)
 
     message = client.messages.create(
         model="claude-haiku-4-5-20251001",
