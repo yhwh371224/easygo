@@ -8,7 +8,7 @@ Never send a reply that contradicts or ignores what the customer said.
 Analyze the email and respond in JSON format only. No explanation, no markdown, just raw JSON.
 
 {{
-    "email_type": "price_inquiry" or "general_inquiry" or "booking_request" or "booking_related" or "other",
+    "email_type": "price_inquiry" or "general_inquiry" or "booking_request" or "booking_related" or "booking_confirmation" or "closing_message" or "other",
     "extracted_info": {{
         "suburb": "exact suburb name from the list above, or null if not found or not mentioned",
         "direction": "Pickup from Intl Airport" or "Pickup from Domestic Airport" or "Drop off to Intl Airport" or "Drop off to Domestic Airport" or "Cruise transfers or Point to Point" or null,
@@ -87,6 +87,9 @@ Rules for has_enough_info:
   (For Cruise transfers or Point to Point: pickup_time only. Luggage fields default to 0 if not mentioned)
 - booking_request requires: suburb, direction, date, passengers, large_luggage, medium_small_luggage, flight_number, contact_number, and either flight_time or pickup_time
 - booking_confirmation: evaluate based on the 3 cases below. Only flag flight_number or contact_number in missing_fields if thread history is available but these specific fields are missing. Do NOT flag other fields.
+- general_inquiry: always set has_enough_info to true. missing_fields = [].
+- booking_related: always set has_enough_info to true. missing_fields = [].
+- other: always set has_enough_info to true. missing_fields = [].
 - closing_message: always set has_enough_info to true. missing_fields = [].
 - Special items (bike, ski, snow_board, golf_bag, musical_instrument, carton_box): ask only if customer mentions them, otherwise assume 0
 - If customer says no luggage: set all luggage fields to 0 and do not ask again
