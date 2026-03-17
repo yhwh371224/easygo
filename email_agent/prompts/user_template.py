@@ -3,8 +3,13 @@ from basecamp.area_full import get_more_suburbs
 
 
 def build_user_prompt(sender, subject, body, history_text, suburb_list):
+    if isinstance(suburb_list, list):
+        suburb_str = ', '.join(suburb_list)
+    else:
+        suburb_str = suburb_list
     return f"""[Available Suburbs]
-{suburb_list}
+    
+{suburb_str}
 
 {history_text}
 

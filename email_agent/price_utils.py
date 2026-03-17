@@ -54,7 +54,7 @@ def calculate_price(suburb_name, passengers, direction, large_luggage=0, medium_
     special_surcharge = (bike + ski) * 20
     special_surcharge += (snow_board + golf_bag + musical_instrument + carton_box) * 10
 
-    return base_price + luggage_surcharge
+    return base_price + luggage_surcharge + special_surcharge
 
 
 def calculate_luggage_surcharge(passengers, large_luggage, medium_small_luggage):
