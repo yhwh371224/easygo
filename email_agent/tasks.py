@@ -230,12 +230,6 @@ def gmail_watch_topic(payload):
                 print(f"Claude API returned empty for message {msg_id}")
                 continue
 
-            print(f"Email type: {result['email_type']}")
-            print(f"Extracted: {result['extracted_info']}")
-            print(f"Has enough info: {result['has_enough_info']}")
-            print(f"Missing: {result['missing_fields']}")
-            print(f"Reply draft: {result['suggested_reply'][:300]}")
-
             reply_body = result['suggested_reply'] + EMAIL_SIGNATURE
 
             # Contact Form 이메일이면 본문에서 이메일 추출
