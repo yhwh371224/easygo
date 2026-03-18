@@ -10,7 +10,7 @@
       {% endblock %}
     </title>
     {% block canonical %}
-      <link rel="canonical" href="https://easygoshuttle.com.au{{ request.path|slice:':-1' }}{% if not request.path|slice:'-1:' == '/' %}/{% endif %}">
+      <link rel="canonical" href="https://easygoshuttle.com.au{{ request.path }}">
     {% endblock %}
     <meta name="description" content="{% block meta_description %}Reliable Sydney airport transfer with private & maxi vans. Perfect for families, groups & large luggage. Book online in 1 minute.{% endblock %}">
     <meta name="author" content="easygoshuttle.com.au">
