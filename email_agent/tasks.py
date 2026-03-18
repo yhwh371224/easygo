@@ -18,9 +18,6 @@ EMAIL_SIGNATURE = """
 <br>
 <div style="font-family: Arial, sans-serif; color: #555; line-height: 1.1;">
 <p style="font-size: 12px; margin: 2px 0;"><strong>EasyGo Airport Shuttle Team</strong></p>
-<p style="font-size: 11px; margin: 2px 0;">E&nbsp; <a href="mailto:info@easygoshuttle.com.au">info@easygoshuttle.com.au</a></p>
-<p style="font-size: 11px; margin: 2px 0;">W&nbsp; <a href="https://www.easygoshuttle.com.au">www.easygoshuttle.com.au</a></p>
-
 </div>
 """
 
@@ -200,7 +197,7 @@ def gmail_watch_topic(payload):
                 continue
 
             # 스팸/자동발송 스킵
-            skip_senders = ['noreply', 'no-reply', 'mailer-daemon', 'postmaster']
+            skip_senders = ['noreply', 'no-reply', 'mailer-daemon', 'postmaster', 'notifications']
             if any(skip in sender.lower() for skip in skip_senders):
                 print(f"Skipping automated email: {sender}")
                 continue
