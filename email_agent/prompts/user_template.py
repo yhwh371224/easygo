@@ -10,6 +10,5 @@ From: {sender}
 Subject: {subject}
 Body:
 {body}
+"""
 
-Instructions:
-- Ask only for missing info (flight number, contact number, pickup time, the number of passengers, full address, travel date) if needed """

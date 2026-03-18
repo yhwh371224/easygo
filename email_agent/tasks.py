@@ -16,9 +16,7 @@ PROCESSED_LABEL_ID = 'Label_956123326350558597'
 
 EMAIL_SIGNATURE = """
 <br>
-<div style="font-family: Arial, sans-serif; color: #555; line-height: 1.1;">
-<p style="font-size: 12px; margin: 2px 0;"><strong>EasyGo Airport Shuttle Team</strong></p>
-</div>
+<p style="font-family: Arial, sans-serif; font-size: 12px; color: #555;"><strong>EasyGo Airport Shuttle Team</strong></p>
 """
 
 def is_message_processed(service, msg_id):
