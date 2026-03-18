@@ -5,6 +5,8 @@ import os
 from celery import shared_task
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 from django.conf import settings
 from .email_ai import analyze_email_with_claude
 
@@ -18,8 +20,7 @@ EMAIL_SIGNATURE = """
 <p style="font-size: 12px; margin: 2px 0;"><strong>EasyGo Airport Shuttle Team</strong></p>
 <p style="font-size: 11px; margin: 2px 0;">E&nbsp; <a href="mailto:info@easygoshuttle.com.au">info@easygoshuttle.com.au</a></p>
 <p style="font-size: 11px; margin: 2px 0;">W&nbsp; <a href="https://www.easygoshuttle.com.au">www.easygoshuttle.com.au</a></p>
-<p style="color: #888; font-size: 10px; margin: 2px 0;"><i>A Little about EasyGo Airport Shuttle: We provide an express pickup and transport service to and from Sydney Airport, delivering to and from hotels, homes, business offices or any other venue. Catering to individual travellers, families or corporate groups we run the easiest and most cost-effective of shuttle services. Our Services are conducted in clean, modern, air conditioned vehicles. And our services are reliable, punctual and completely refund guaranteed.</i></p>
-<p style="color: #888; font-size: 10px; margin: 2px 0;"><i>Attention: This email and attachments are intended solely for your use and may be confidential. Any review, dissemination, distribution or reproduction of this email is strictly prohibited. Please contact the sender if you have received this message in error.</i></p>
+
 </div>
 """
 
@@ -104,17 +105,10 @@ def get_thread_history(service, thread_id, max_messages=3):
 
 
 def create_gmail_draft(service, to, subject, body, thread_id=None):
-    """Gmail Draft 생성"""
-    from email.mime.multipart import MIMEMultipart
-    from email.mime.text import MIMEText
-    from email.mime.image import MIMEImage
-    
-    # HTML 이메일
     msg = MIMEMultipart('related')
     msg['to'] = to
     msg['subject'] = f"Re: {subject}" if subject else "Re: Your Inquiry"
 
-    # body의 줄바꿈을 HTML로 변환
     html_body = body.replace('\n', '<br>')
     
     html_content = f"""
@@ -184,7 +178,6 @@ def gmail_watch_topic(payload):
                 format='full'
             ).execute()
 
-            # ✅ 현재 메시지의 실제 labelIds 확인
             current_labels = email.get('labelIds', [])
             if 'INBOX' not in current_labels:
                 print(f"Skipping message {msg_id}: not in INBOX (labels: {current_labels})")
