@@ -63,7 +63,8 @@ class Command(BaseCommand):
             'blog_paypalpayment',
             'blog_stripepayment',
             'blog_inquiry',
-            'blog_post'
+            'blog_post',
+            'posting_agent_blogpost',
         ]
 
         # SQLite 테이블 목록
