@@ -1,21 +1,28 @@
 import asyncio
 from django.core.management.base import BaseCommand
-from posting_agent.content_ai import generate_post_content
+from posting_agent.content_ai import pick_topic, generate_all_content
 from posting_agent.image_ai import generate_post_image
 from posting_agent.telegram_bot import send_preview
 
 
 class Command(BaseCommand):
-    help = 'Generate and preview a Google Business post via Telegram'
+    help = 'Generate post content and send to Telegram for approval'
 
     def handle(self, *args, **options):
-        self.stdout.write("Generating post content...")
-        text = generate_post_content()
+        self.stdout.write("🔍 토픽 선정 중...")
+        topic_slug, topic_title = pick_topic()
+        self.stdout.write(f"📌 선정된 토픽: {topic_title}")
 
-        self.stdout.write("Generating image...")
-        image_bytes = generate_post_image()
+        self.stdout.write("✍️  글 생성 중...")
+        content = generate_all_content(topic_slug, topic_title)
 
-        self.stdout.write("Sending preview to Telegram...")
-        asyncio.run(send_preview(text, image_bytes))
+        self.stdout.write("🎨 이미지 생성 중...")
+        image_result = generate_post_image(
+            alt_text=content['image_alt'],
+            filename_slug=topic_slug,
+        )
 
-        self.stdout.write(self.style.SUCCESS("Preview sent! Waiting for approval in Telegram."))
+        self.stdout.write("📨 Telegram 미리보기 전송 중...")
+        asyncio.run(send_preview(content, image_result['image_bytes']))
+
+        self.stdout.write(self.style.SUCCESS("✅ Telegram에서 확인 후 승인해주세요!"))
