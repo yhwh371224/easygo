@@ -4,7 +4,8 @@ from django.conf import settings
 from telegram import Update
 from telegram.ext import Application, CallbackQueryHandler, ContextTypes
 from posting_agent.telegram_bot import load_pending, clear_pending
-from posting_agent.gmb_poster import post_to_google_business
+from posting_agent.blog_poster import save_blog_post
+from posting_agent.social_poster import post_to_facebook, post_to_instagram
 
 logging.basicConfig(level=logging.INFO)
 
@@ -13,22 +14,35 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
 
-    if query.data == "approve":
-        text, image_bytes = load_pending()
-        if not text:
-            await query.edit_message_caption("❌ 저장된 포스트가 없어요. 다시 generate_post 실행해주세요.")
+    if query.data == "approve_all":
+        content, image_bytes = load_pending()
+        if not content:
+            await query.edit_message_caption("❌ 저장된 포스트가 없어요.")
             return
 
-        success = post_to_google_business(text, image_bytes)
-        if success:
-            clear_pending()
-            await query.edit_message_caption("✅ 포스팅 완료!")
-        else:
-            await query.edit_message_caption("❌ 포스팅 실패. 다시 시도해주세요.")
+        results = []
+
+        # 1. Django 블로그 저장
+        try:
+            post = save_blog_post(content, image_bytes, f"{content['topic_slug']}.webp")
+            results.append(f"✅ 블로그: {post.get_absolute_url()}")
+        except Exception as e:
+            results.append(f"❌ 블로그 실패: {e}")
+
+        # 2. Facebook
+        fb_ok = post_to_facebook(content['social_content'], image_bytes)
+        results.append("✅ Facebook 발행" if fb_ok else "❌ Facebook 실패")
+
+        # 3. Instagram (이미지 URL 필요 - 블로그 저장 후 URL 사용)
+        # TODO: Meta API 셋업 후 활성화
+        results.append("⏸️ Instagram (Meta API 셋업 후 활성화)")
+
+        clear_pending()
+        await query.edit_message_caption("\n".join(results))
 
     elif query.data == "regenerate":
         clear_pending()
-        await query.edit_message_caption("🔄 재생성하려면 generate_post 를 다시 실행해주세요.")
+        await query.edit_message_caption("🔄 재생성: python manage.py generate_post 를 다시 실행해주세요.")
 
     elif query.data == "cancel":
         clear_pending()
@@ -36,10 +50,10 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 class Command(BaseCommand):
-    help = 'Run Telegram bot for post approval (polling)'
+    help = 'Run Telegram bot for post approval'
 
     def handle(self, *args, **options):
         app = Application.builder().token(settings.TELEGRAM_BOT_TOKEN).build()
         app.add_handler(CallbackQueryHandler(button_handler))
-        self.stdout.write(self.style.SUCCESS("Telegram bot running (polling)..."))
+        self.stdout.write(self.style.SUCCESS("🤖 Telegram bot running..."))
         app.run_polling()

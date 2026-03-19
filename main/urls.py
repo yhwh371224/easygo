@@ -13,7 +13,7 @@ urlpatterns = [
     path('admin/', include('admin_honeypot.urls', namespace='admin_honeypot')),
     path('horeb_yhwh/', admin.site.urls),
     path('markdownx/', include('markdownx.urls')),
-    path('blog/', include(('blog.urls', 'blog'), namespace='blog')),
+    path('blog/', include('posting_agent.urls', namespace='posting_agent')),  # 기존 blog/ URL 교체
     path('easygo_review/', include('easygo_review.urls')),
     path('', include('basecamp.urls')),
     path('accounts/', include('allauth.urls')),
