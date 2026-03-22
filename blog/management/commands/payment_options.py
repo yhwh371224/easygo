@@ -5,6 +5,7 @@ from django.db.models import Q
 from django.utils import timezone
 from blog.models import Post
 from utils.email import send_template_email
+from datetime import date, timedelta
 
 logger = logging.getLogger(__name__)
 
