@@ -24,6 +24,7 @@ def send_inquiry_email(instance):
             'return_direction': instance.return_direction or "",
             'toll': instance.toll or "",
             'fuel_surcharge': instance.fuel_surcharge or "",
+            'fuel_surcharge': instance.fuel_surcharge or "",
             'return_pickup_date': instance.return_pickup_date or "",
             'return_flight_number': instance.return_flight_number or "",
             'return_flight_time': instance.return_flight_time or "",
