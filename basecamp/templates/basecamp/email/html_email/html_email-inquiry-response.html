@@ -205,8 +205,12 @@
 												{% else %}
 													The cost for this booking is ${{ price }} for a one-way trip.&nbsp;
 												{% endif %}
-												{% if toll %}
+												{% if toll and fuel_surcharge %}
+													plus ${{ toll }} toll and ${{ fuel_surcharge }} fuel surcharge
+												{% elif toll %}
 													plus a ${{ toll }} toll fee
+												{% elif fuel_surcharge %}
+													plus ${{ fuel_surcharge }} fuel surcharge
 												{% endif %}
 												<br><br>
 												<!-- notice to the customer -->
