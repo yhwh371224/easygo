@@ -58,7 +58,7 @@ def send_post_confirmation_email(instance):
 
         # extra
         'toll': getattr(instance, 'toll', 0),
-  
+        'fuel_surcharge': getattr(instance, 'fuel_surcharge', 0),  
         }
     )
 
