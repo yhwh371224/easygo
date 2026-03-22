@@ -15,14 +15,15 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         now = timezone.now()
 
-        reminders = Post.objects.filter(
-            pickup_date__gt=now,   # 미래 부킹만
-            reminder=False,
-            cancelled=False,
-        ).exclude(
-            Q(paid__isnull=False) & ~Q(paid__exact="")
-        ).exclude(
-            Q(cash=True) | Q(card=True)
+        reminders = (
+            Post.objects.filter(
+                pickup_date__gt=now,
+                created__gte=now - timedelta(days=3),
+                reminder=False,
+                cancelled=False,
+            )
+            .filter(Q(paid__isnull=True) | Q(paid=""))
+            .exclude(Q(cash=True) | Q(card=True))
         )
         
         for notice in reminders:
