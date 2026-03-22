@@ -66,6 +66,7 @@ secure/
 # ==============================
 dump.rdb
 sitemap.xml
+last_history_id.txt
 *.cmd
 *.pem
 *.log
