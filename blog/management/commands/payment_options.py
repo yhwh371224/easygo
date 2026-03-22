@@ -19,7 +19,6 @@ class Command(BaseCommand):
             pickup_date__gt=now,   # 미래 부킹만
             reminder=False,
             cancelled=False,
-            pending=False
         ).exclude(
             Q(paid__isnull=False) & ~Q(paid__exact="")
         ).exclude(
