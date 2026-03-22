@@ -199,6 +199,12 @@ def gmail_watch_topic(payload):
             if any(skip in sender.lower() for skip in skip_senders):
                 print(f"Skipping automated email: {sender}")
                 continue
+
+            # Reminder 관련 이메일 스킵
+            skip_subjects = ['re: reminder', 'reminder']
+            if any(skip in subject.lower() for skip in skip_subjects):
+                print(f"Skipping reminder email: {subject}")
+                continue
             
             body = get_email_body(email['payload'])
             thread_history = get_thread_history(service, thread_id)
