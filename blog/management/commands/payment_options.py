@@ -24,7 +24,7 @@ class Command(BaseCommand):
                 cancelled=False,
             )
             .filter(Q(paid__isnull=True) | Q(paid=""))
-            .exclude(Q(cash=True) | Q(card=True))
+            .exclude(cash=True) 
         )
         
         for notice in reminders:
