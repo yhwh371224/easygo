@@ -8,6 +8,7 @@
     <meta name="description" content="Find your suburb for Sydney Airport Shuttle services. EasyGo provides private airport transfers across Sydney CBD, North Shore & Western Sydney. Book online quickly and reliably.">
     <meta name="keywords" content="sydney airport shuttle, sydney airport transfer, group airport shuttle, north shore airport pickup, western sydney airport shuttle">
     <meta name="author" content="easygoshuttle.com.au">
+    <link rel="canonical" href="https://easygoshuttle.com.au/more_suburbs/" />
 {% endblock %}
 
 {% block content %}
@@ -89,7 +90,7 @@
                     }
                 });
                 if (suburbExists) {
-                    const url = `/airport-transfers-${slugifiedSearchText}/`;
+                    const url = `/airport-shuttle-${slugifiedSearchText}/`;
                     window.location.href = url;
                 } else {
                     alert(
