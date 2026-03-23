@@ -7,7 +7,7 @@
 
 {% block canonical %}
   <!-- Base의 canonical을 오버라이드 -->
-  <link rel="canonical" href="https://easygoshuttle.com.au/airport-shuttle-{{ suburb|slugify }}">
+  <link rel="canonical" href="{{ request.build_absolute_uri }}">
 {% endblock %}
 
 {% block meta %}
