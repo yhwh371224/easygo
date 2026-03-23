@@ -32,8 +32,8 @@ def send_post_confirmation_email(instance):
         'direction': instance.direction,
         'street': instance.street,
         'suburb': instance.suburb,
-        'start_point': getattr(instance, 'start_point', ''),
-        'end_point': getattr(instance, 'end_point', ''),
+        'start_point': instance.start_point,
+        'end_point': instance.end_point,
 
         'no_of_passenger': instance.no_of_passenger,
         'no_of_baggage': instance.no_of_baggage,
@@ -44,8 +44,8 @@ def send_post_confirmation_email(instance):
         'return_flight_number': instance.return_flight_number,
         'return_flight_time': instance.return_flight_time,
         'return_pickup_time': instance.return_pickup_time,
-        'return_start_point': getattr(instance, 'return_start_point', ''),
-        'return_end_point': getattr(instance, 'return_end_point', ''),
+        'return_start_point': instance.return_start_point,
+        'return_end_point': instance.return_end_point,
 
         'message': instance.message,
         'notice': instance.notice,
@@ -57,8 +57,8 @@ def send_post_confirmation_email(instance):
         'prepay': instance.prepay,
 
         # extra
-        'toll': getattr(instance, 'toll', 0),
-        'fuel_surcharge': getattr(instance, 'fuel_surcharge', 0),  
+        'toll': instance.toll,
+        'fuel_surcharge': instance.fuel_surcharge,  
         }
     )
 
@@ -69,10 +69,10 @@ def send_post_cancelled_email(instance):
     html_content = render_email_template("html_email-cancelled.html", {
         'name': instance.name,
         'email': instance.email,
-        'pickup_date': instance.pickup_date or "",
-        'pickup_time': instance.pickup_time or "",
-        'return_pickup_date': instance.return_pickup_date or "",
-        'return_pickup_time': instance.return_pickup_time or "",
+        'pickup_date': instance.pickup_date,
+        'pickup_time': instance.pickup_time,
+        'return_pickup_date': instance.return_pickup_date,
+        'return_pickup_time': instance.return_pickup_time,
     })
     
     send_html_email("EasyGo Booking Cancelled", html_content, [instance.email, RECIPIENT_EMAIL])
