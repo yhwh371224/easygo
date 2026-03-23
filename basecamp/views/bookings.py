@@ -301,6 +301,7 @@ def confirm_booking_detail(request):
         if price in [None, ""]:
             final_price = "TBA"
             toll_value = ""
+            fuel_surcharge_value = ""
         else:
             try:
                 final_price = float(price)
@@ -308,24 +309,14 @@ def confirm_booking_detail(request):
                     final_price += float(toll)
                 if fuel_surcharge:
                     final_price += float(fuel_surcharge)
-
-                if toll and fuel_surcharge:
-                    toll_value = "toll & fuel surcharge included"
-                elif toll:
-                    toll_value = "toll included"
-                elif fuel_surcharge:
-                    toll_value = "fuel surcharge included"
-                else:
-                    toll_value = ""
             except Exception:
                 final_price = price
-                toll_value = "toll included" if toll else ""
+            toll_value = "toll included" if toll else ""
+            fuel_surcharge_value = "fs included" if fuel_surcharge else ""
 
         # pending 상태 결정
         if paid or cash:
             pending = False
-        elif prepay:
-            pending = True
         else:
             pending = True  
 
@@ -372,8 +363,8 @@ def confirm_booking_detail(request):
             return_pickup_date=return_pickup_date_obj, return_flight_number=return_flight_number,
             return_flight_time=return_flight_time, return_pickup_time=return_pickup_time,
             return_start_point=return_start_point, return_end_point=return_end_point,
-            message=message, notice=notice,
-            price=final_price, toll=toll_value, fuel_surcharge=fuel_surcharge, prepay=prepay, pending=pending,
+            message=message, notice=notice, price=final_price, toll=toll_value, 
+            fuel_surcharge=fuel_surcharge_value, prepay=prepay, pending=pending,
             paid=paid, cash=cash, is_confirmed=is_confirmed, driver=sam_driver
         )
 
@@ -438,32 +429,7 @@ def return_trip_detail(request):
 
         # ✅ 중복 제출 방지
         if is_duplicate_submission(Post, email):
-            return JsonResponse({'success': False, 'message': 'Duplicate inquiry recently submitted. Please wait before trying again.'})             
-            
-        data = {
-            'name': name,
-            'contact': contact,
-            'email': email,
-            }       
-            
-        content_template = '''
-        {name} 
-        ✅ submitted the 'Return trip' \n
-
-        https://easygoshuttle.com.au/sending_email_first/ \n  
-        https://easygoshuttle.com.au/sending_email_second/ \n
-        ===============================
-        Contact: {contact}
-        Email: {email}  
-        ===============================\n        
-        Best Regards,
-        EasyGo Admin \n\n        
-        '''
-        content = content_template.format(**data)
-
-        subject = f"[New Return Trip] Submission from {data['name']})"
-
-        send_text_email(subject, content, [RECIPIENT_EMAIL])
+            return JsonResponse({'success': False, 'message': 'Duplicate inquiry recently submitted. Please wait before trying again.'})
          
         sam_driver = Driver.objects.get(driver_name="Sam")  
                     
