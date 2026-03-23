@@ -207,12 +207,12 @@
 												{% endif %}
 												{% if toll and fuel_surcharge %}
 													plus ${{ toll }} toll and ${{ fuel_surcharge }} fuel surcharge
-													<span style="font-size:11px; color:#888;"> (temporary surcharge due to the recent rise in fuel costs)</span>
+													<span style="color:#666;"> (temporary surcharge due to the recent rise in fuel costs)</span>
 												{% elif toll %}
 													plus a ${{ toll }} toll fee
 												{% elif fuel_surcharge %}
 													plus ${{ fuel_surcharge }} fuel surcharge
-													<span style="font-size:11px; color:#888;"> (temporary surcharge due to the recent rise in fuel costs)</span>
+													<span style="color:#666;"> (temporary surcharge due to the recent rise in fuel costs)</span>
 												{% endif %}
 												<br><br>
 												<!-- notice to the customer -->
