@@ -153,16 +153,16 @@
                       • An invoice will be sent to you via email shortly.<br />
                   {% elif cash %}
                       • The total cost is ${{ price }}{% if toll and fuel_surcharge %}, toll & fuel surcharge included{% elif toll %}, toll included{% elif fuel_surcharge %}, fuel surcharge included{% endif %}<br />
-                      {% if fuel_surcharge %}<span style="font-size:11px; color:#888;">&nbsp;&nbsp;* Fuel surcharge is temporary due to the recent rise in fuel costs.</span><br />{% endif %}
+                      {% if fuel_surcharge %}<span style="color:#666;">&nbsp;&nbsp;* Fuel surcharge is temporary due to the recent rise in fuel costs.</span><br />{% endif %}
                       • Payment will be made in cash directly to the driver on the day.<br />
                   {% elif prepay %}
                       • The total cost is ${{ price }}{% if toll and fuel_surcharge %}, toll & fuel surcharge included{% elif toll %}, toll included{% elif fuel_surcharge %}, fuel surcharge included{% endif %}<br />
-                      {% if fuel_surcharge %}<span style="font-size:11px; color:#888;">&nbsp;&nbsp;* Fuel surcharge is temporary due to the recent rise in fuel costs.</span><br />{% endif %}
+                      {% if fuel_surcharge %}<span style="color:#666;">&nbsp;&nbsp;* Fuel surcharge is temporary due to the recent rise in fuel costs.</span><br />{% endif %}
                       • Please make payment online in advance using the link below:<br />
                       &nbsp;&nbsp;<a href="https://easygoshuttle.com.au/payonline">easygoshuttle.com.au/payonline</a><br />
                   {% else %}
                       • The total cost is ${{ price }}{% if toll and fuel_surcharge %}, toll & fuel surcharge included{% elif toll %}, toll included{% elif fuel_surcharge %}, fuel surcharge included{% endif %}<br />
-                      {% if fuel_surcharge %}<span style="font-size:11px; color:#888;">&nbsp;&nbsp;* Fuel surcharge is temporary due to the recent rise in fuel costs.</span><br />{% endif %}
+                      {% if fuel_surcharge %}<span style="color:#666;">&nbsp;&nbsp;* Fuel surcharge is temporary due to the recent rise in fuel costs.</span><br />{% endif %}
                       • You may prepay securely via PayPal using the link below:<br />
                       &nbsp;&nbsp;<a href="https://easygoshuttle.com.au/payonline">easygoshuttle.com.au/payonline</a><br />
                       • Alternatively, if you prefer to pay in cash, please reply to this email to confirm your booking.<br />
