@@ -106,6 +106,7 @@ INSTALLED_APPS = [
     'easygo_review.apps.EasygoReviewConfig',
     'email_agent.apps.EmailAgentConfig',
     'posting_agent.apps.PostingAgentConfig',
+    'articles.apps.ArticlesConfig',
     'admin_honeypot',
     'allauth',
     'allauth.account',

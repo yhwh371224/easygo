@@ -15,6 +15,7 @@ urlpatterns = [
     path('markdownx/', include('markdownx.urls')),
     path('posting_agent/', include('posting_agent.urls', namespace='posting_agent')),  
     path('easygo_review/', include('easygo_review.urls')),
+    path('', include('articles.urls', namespace='articles')),
     path('', include('basecamp.urls')),
     path('accounts/', include('allauth.urls')),
     path('paypal/', include('paypal.standard.ipn.urls')),
