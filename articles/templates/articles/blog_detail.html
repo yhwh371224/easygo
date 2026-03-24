@@ -1,0 +1,550 @@
+{% extends 'articles/base.html' %}
+{% load static %}
+
+{% block title %}{{ post.title }} – EasyGo Airport Pickup Blog{% endblock %}
+
+{% block meta_description %}
+<meta name="description" content="{{ post.get_meta_description }}">
+{% endblock %}
+
+{% block meta_keywords %}
+<meta name="keywords" content="{{ post.category.name }}, airport pickup, Sydney airport transfer">
+{% endblock %}
+
+{% block canonical %}
+<link rel="canonical" href="https://easygoshuttle.com.au/blog/{{ post.slug }}/">
+{% endblock %}
+
+{% block extra_css %}
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blog-primary: #0d6efd;
+    --blog-ink: #0f1923;
+    --blog-mist: #f5f7fa;
+    --blog-rule: #e2e8f0;
+    --blog-accent: #f59e0b;
+  }
+
+  /* ── Progress bar ── */
+  #readProgress {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #0d6efd, #f59e0b);
+    width: 0%;
+    z-index: 9999;
+    transition: width .1s linear;
+  }
+
+  /* ── Article hero ── */
+  .article-hero {
+    margin-top: 56px;
+    background: linear-gradient(135deg, #0d1f44 0%, #0d6efd 100%);
+    padding: 72px 0 56px;
+    position: relative;
+    overflow: hidden;
+  }
+  .article-hero::after {
+    content: '✈';
+    position: absolute;
+    right: -30px; bottom: -20px;
+    font-size: 14rem;
+    opacity: .04;
+    line-height: 1;
+  }
+  .article-back {
+    font-family: 'DM Sans', sans-serif;
+    font-size: .82rem;
+    font-weight: 500;
+    color: rgba(255,255,255,.7);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 20px;
+    transition: color .15s;
+  }
+  .article-back:hover { color: #fff; }
+  .article-badge {
+    display: inline-block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .72rem;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: #fbbf24;
+    background: rgba(251,191,36,.15);
+    border: 1px solid rgba(251,191,36,.3);
+    padding: 4px 12px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+  }
+  .article-hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4.5vw, 2.8rem);
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    max-width: 720px;
+  }
+  .article-meta {
+    font-family: 'DM Sans', sans-serif;
+    font-size: .85rem;
+    color: rgba(255,255,255,.65);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: center;
+  }
+  .article-meta span { display: flex; align-items: center; gap: 6px; }
+
+  /* ── Thumbnail ── */
+  .article-thumbnail {
+    width: 100%;
+    max-height: 440px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 40px;
+    box-shadow: 0 8px 40px rgba(0,0,0,.12);
+  }
+  .article-thumb-placeholder {
+    width: 100%;
+    height: 280px;
+    background: linear-gradient(135deg, #e8f0fe, #dbeafe);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 5rem;
+    margin-bottom: 40px;
+  }
+
+  /* ── Article layout ── */
+  .article-wrap { padding: 48px 0 64px; }
+  .article-main { max-width: 720px; }
+
+  /* ── TOC ── */
+  .toc-box {
+    background: var(--blog-mist);
+    border-left: 4px solid var(--blog-primary);
+    border-radius: 0 8px 8px 0;
+    padding: 20px 24px;
+    margin-bottom: 36px;
+  }
+  .toc-box h4 {
+    font-family: 'DM Sans', sans-serif;
+    font-size: .82rem;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--blog-primary);
+    margin-bottom: 12px;
+  }
+  .toc-box ol { padding-left: 18px; margin: 0; }
+  .toc-box li {
+    font-family: 'DM Sans', sans-serif;
+    font-size: .88rem;
+    color: #475569;
+    margin-bottom: 6px;
+  }
+  .toc-box li a { color: inherit; text-decoration: none; }
+  .toc-box li a:hover { color: var(--blog-primary); }
+
+  /* ── Article body typography ── */
+  .article-body {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    line-height: 1.8;
+    color: #334155;
+  }
+  .article-body h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--blog-ink);
+    margin: 40px 0 14px;
+    padding-top: 8px;
+    border-top: 2px solid var(--blog-rule);
+  }
+  .article-body h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--blog-ink);
+    margin: 28px 0 10px;
+  }
+  .article-body p { margin-bottom: 20px; }
+  .article-body ul, .article-body ol { padding-left: 22px; margin-bottom: 20px; }
+  .article-body li { margin-bottom: 8px; }
+  .article-body strong { color: var(--blog-ink); }
+  .article-body a { color: var(--blog-primary); text-decoration: underline; }
+  .article-body blockquote {
+    border-left: 4px solid var(--blog-accent);
+    background: #fffbeb;
+    padding: 16px 20px;
+    margin: 28px 0;
+    border-radius: 0 8px 8px 0;
+    font-style: italic;
+    color: #92400e;
+  }
+  .article-body .tip-box {
+    background: #eff6ff;
+    border: 1.5px solid #bfdbfe;
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin: 28px 0;
+  }
+  .article-body .tip-box::before {
+    content: '💡 TIP';
+    display: block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    color: var(--blog-primary);
+    margin-bottom: 8px;
+  }
+
+  /* ── Share bar ── */
+  .share-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 24px 0;
+    border-top: 1.5px solid var(--blog-rule);
+    border-bottom: 1.5px solid var(--blog-rule);
+    margin: 40px 0;
+    flex-wrap: wrap;
+  }
+  .share-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: .82rem;
+    font-weight: 600;
+    color: #94a3b8;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    margin-right: 4px;
+  }
+  .share-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .82rem;
+    font-weight: 500;
+    padding: 7px 16px;
+    border-radius: 50px;
+    border: 1.5px solid var(--blog-rule);
+    text-decoration: none;
+    color: #475569;
+    background: #fff;
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .share-btn:hover { border-color: var(--blog-primary); color: var(--blog-primary); }
+  .share-btn.copy-btn.copied { background: #dcfce7; border-color: #4ade80; color: #16a34a; }
+
+  /* ── Sidebar ── */
+  .article-sidebar { padding-left: 28px; }
+  @media (max-width: 991px) { .article-sidebar { padding-left: 0; margin-top: 48px; } }
+
+  .sidebar-card {
+    background: #fff;
+    border: 1.5px solid var(--blog-rule);
+    border-radius: 12px;
+    padding: 22px;
+    margin-bottom: 24px;
+  }
+  .sidebar-card h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--blog-ink);
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1.5px solid var(--blog-rule);
+  }
+
+  /* ── CTA card ── */
+  .cta-card {
+    background: linear-gradient(135deg, #0d6efd, #0a4fcf);
+    color: #fff;
+    border-radius: 12px;
+    padding: 28px 22px;
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .cta-card .icon { font-size: 2.5rem; margin-bottom: 10px; }
+  .cta-card h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .cta-card p {
+    font-family: 'DM Sans', sans-serif;
+    font-size: .85rem;
+    opacity: .85;
+    margin-bottom: 18px;
+  }
+  .cta-btn {
+    display: inline-block;
+    background: #fff;
+    color: var(--blog-primary);
+    font-family: 'DM Sans', sans-serif;
+    font-size: .88rem;
+    font-weight: 700;
+    padding: 10px 24px;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: transform .15s, box-shadow .15s;
+  }
+  .cta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,.18);
+    color: var(--blog-primary);
+  }
+
+  /* ── Related / Recent posts ── */
+  .related-post {
+    display: flex;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--blog-rule);
+    text-decoration: none;
+    color: inherit;
+    transition: color .15s;
+  }
+  .related-post:last-child { border-bottom: none; }
+  .related-post:hover { color: var(--blog-primary); }
+  .rp-thumb {
+    width: 58px; height: 58px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #e8f0fe, #dbeafe);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+  .rp-thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .rp-info h5 {
+    font-family: 'DM Sans', sans-serif;
+    font-size: .85rem;
+    font-weight: 500;
+    line-height: 1.35;
+    margin: 0 0 4px;
+  }
+  .rp-info span {
+    font-family: 'DM Sans', sans-serif;
+    font-size: .75rem;
+    color: #94a3b8;
+  }
+
+  /* ── Animations ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .fade-up { animation: fadeUp .5s ease both; }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- Reading progress bar -->
+<div id="readProgress"></div>
+
+<!-- Article hero -->
+<div class="col-12 px-0">
+  <div class="article-hero">
+    <div class="container">
+      <a href="{% url 'articles:post_list' %}" class="article-back">← Back to Blog</a>
+      <div>
+        <span class="article-badge">{{ post.category.name|default:"Airport Pickup Guide" }}</span>
+      </div>
+      <h1>{{ post.title }}</h1>
+      <div class="article-meta">
+        <span>📅 {{ post.published_at|date:"N j, Y" }}</span>
+        <span>⏱ {{ post.read_time }} min read</span>
+        <span>👁 {{ post.view_count }} views</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Article content -->
+<div class="col-12">
+  <div class="article-wrap container">
+    <div class="row">
+
+      <!-- Main article -->
+      <div class="col-lg-8">
+        <div class="article-main fade-up">
+
+          {% if post.thumbnail %}
+            <img class="article-thumbnail" src="{{ post.thumbnail.url }}" alt="{{ post.title }}">
+          {% else %}
+            <div class="article-thumb-placeholder">✈</div>
+          {% endif %}
+
+          <!-- TOC (auto-built by JS from h2 tags) -->
+          <div class="toc-box" id="tocBox" style="display:none">
+            <h4>📋 Contents</h4>
+            <ol id="tocList"></ol>
+          </div>
+
+          <div class="article-body" id="articleBody">
+            {{ post.content|safe }}
+          </div>
+
+          <!-- Tags -->
+          {% if post.tags.all %}
+          <div style="margin: 32px 0 0; display:flex; flex-wrap:wrap; gap:8px;">
+            {% for tag in post.tags.all %}
+            <a href="{% url 'articles:post_list' %}?tag={{ tag.slug }}"
+               style="font-family:'DM Sans',sans-serif; font-size:.78rem; font-weight:500;
+                      background:#f1f5f9; border:1px solid #e2e8f0; border-radius:50px;
+                      padding:4px 14px; color:#475569; text-decoration:none;">
+              #{{ tag.name }}
+            </a>
+            {% endfor %}
+          </div>
+          {% endif %}
+
+          <!-- Share bar -->
+          <div class="share-bar">
+            <span class="share-label">Share</span>
+            <a class="share-btn"
+               href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}"
+               target="_blank" rel="noopener">
+              📘 Facebook
+            </a>
+            <a class="share-btn"
+               href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}&text={{ post.title }}"
+               target="_blank" rel="noopener">
+              🐦 Twitter
+            </a>
+            <button class="share-btn copy-btn" onclick="copyLink(this)">
+              🔗 Copy link
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="col-lg-4 fade-up">
+        <div class="article-sidebar">
+
+          <!-- CTA -->
+          <div class="cta-card">
+            <div class="icon">🚐</div>
+            <h4>Book Airport Pickup</h4>
+            <p>Sydney Airport Transfer · 24/7<br>Affordable price, instant booking</p>
+            <a href="/" class="cta-btn">Book Now →</a>
+          </div>
+
+          <!-- Related posts -->
+          {% if related_posts %}
+          <div class="sidebar-card">
+            <h4>Related Posts</h4>
+            {% for rp in related_posts %}
+            <a href="{% url 'articles:post_detail' rp.slug %}" class="related-post">
+              <div class="rp-thumb">
+                {% if rp.thumbnail %}
+                  <img src="{{ rp.thumbnail.url }}" alt="{{ rp.title }}">
+                {% else %}
+                  ✈
+                {% endif %}
+              </div>
+              <div class="rp-info">
+                <h5>{{ rp.title|truncatechars:55 }}</h5>
+                <span>{{ rp.published_at|date:"N j" }}</span>
+              </div>
+            </a>
+            {% endfor %}
+          </div>
+          {% endif %}
+
+          <!-- Recent posts -->
+          {% if recent_posts %}
+          <div class="sidebar-card">
+            <h4>Recent Posts</h4>
+            {% for rp in recent_posts %}
+            <a href="{% url 'articles:post_detail' rp.slug %}" class="related-post">
+              <div class="rp-thumb">
+                {% if rp.thumbnail %}
+                  <img src="{{ rp.thumbnail.url }}" alt="{{ rp.title }}">
+                {% else %}
+                  ✈
+                {% endif %}
+              </div>
+              <div class="rp-info">
+                <h5>{{ rp.title|truncatechars:55 }}</h5>
+                <span>{{ rp.published_at|date:"N j" }}</span>
+              </div>
+            </a>
+            {% endfor %}
+          </div>
+          {% endif %}
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // Reading progress bar
+  window.addEventListener('scroll', () => {
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const scrollHeight = doc.scrollHeight - doc.clientHeight;
+    const pct = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+    document.getElementById('readProgress').style.width = pct + '%';
+  });
+
+  // Auto TOC from h2 tags
+  (function buildTOC() {
+    const body = document.getElementById('articleBody');
+    const tocList = document.getElementById('tocList');
+    const tocBox = document.getElementById('tocBox');
+    if (!body || !tocList) return;
+    const headings = body.querySelectorAll('h2');
+    if (headings.length < 2) return;
+    headings.forEach((h, i) => {
+      const id = 'section-' + i;
+      h.id = id;
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = '#' + id;
+      a.textContent = h.textContent;
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+      li.appendChild(a);
+      tocList.appendChild(li);
+    });
+    tocBox.style.display = 'block';
+  })();
+
+  // Copy link
+  function copyLink(btn) {
+    navigator.clipboard.writeText(window.location.href).then(() => {
+      btn.classList.add('copied');
+      btn.textContent = '✅ Copied!';
+      setTimeout(() => {
+        btn.classList.remove('copied');
+        btn.textContent = '🔗 Copy link';
+      }, 2000);
+    });
+  }
+</script>
+{% endblock %}

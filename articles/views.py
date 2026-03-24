@@ -43,7 +43,7 @@ def post_list(request):
         'category_slug' : category_slug,
         'tag_slug'      : tag_slug,
     }
-    return render(request, 'articles/post_list.html', context)
+    return render(request, 'articles/blog_list.html', context)
 
 
 def post_detail(request, slug):
@@ -68,4 +68,4 @@ def post_detail(request, slug):
         'related_posts' : related_posts,
         'recent_posts'  : recent_posts,
     }
-    return render(request, 'articles/post_detail.html', context)
+    return render(request, 'articles/blog_detail.html', context)
