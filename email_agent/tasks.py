@@ -15,8 +15,7 @@ LAST_HISTORY_ID_FILE = '/home/horeb/github/easygo/last_history_id.txt'
 PROCESSED_LABEL_ID = 'Label_956123326350558597'
 
 EMAIL_SIGNATURE = """
-<br>
-<p style="font-family: Arial, sans-serif; font-size: 12px; color: #555;"><strong>EasyGo Airport Shuttle Team</strong></p>
+<p style="font-family: Arial, sans-serif; font-size: 12px; color: #555;"><strong>EasyGo Airport Shuttle</strong></p>
 """
 
 def is_message_processed(service, msg_id):
