@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en-us">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}EasyGo Airport Pickup Blog{% endblock %}</title>
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'basecamp/favi/favicon.ico' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="google-site-verification" content="hae39L0Kv7JIxVc3YclvckH7Im5SdYa2hk_vZbGJIkA" />
+    <!-- SEO Meta Tags -->
+    {% block meta_description %}
+    <meta name="description" content="Airport pickup tips, Sydney airport guides, and travel information updated weekly by EasyGo Airport Shuttle.">
+    {% endblock %}
+    {% block meta_keywords %}
+    <meta name="keywords" content="airport pickup, Sydney airport transfer, airport shuttle, EasyGo blog, travel tips">
+    {% endblock %}
+    <!-- Canonical -->
+    {% block canonical %}
+    <link rel="canonical" href="https://easygoshuttle.com.au{{ request.path }}">
+    {% endblock %}
+    <meta name="author" content="easycoding.live">
+    <link rel="stylesheet" href="{% static 'easygo_review/css/bootstrap.css' %}" media="screen">
+    <link rel="stylesheet" href="{% static 'easygo_review/css/custom.min.css' %}">
+    <link rel="stylesheet" href="{% static 'easygo_review/css/styles.css' %}">
+    {% block extra_css %}
+    {% endblock %}
+</head>
+<body>
+
+{% include 'articles/navbar.html' %}
+
+<div class="container">
+    <div class="row">
+        {% block content %}
+        {% endblock %}
+    </div>
+</div>
+
+<!-- footer -->
+<div class="container" style="margin-top: 80px; padding: 0;">
+    <div class="footer container-xl width-full p-responsive" role="contentinfo" style="padding-right: 10px;">
+        <ul class="list-style-none border-top d-flex justify-content-end">
+            <li class="mr-3 mr-lg-2 list-unstyled">
+                <small><a href="#">2024 All rights reserved by EasyGo Airport Shuttle</a></small>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<script src="{% static 'easygo_review/js/jquery.min.js' %}"></script>
+<script src="{% static 'easygo_review/js/bootstrap.min.js' %}"></script>
+<script>
+    document.querySelectorAll('.fade-up').forEach((el, i) => {
+        el.style.animationDelay = (i * 100) + 'ms';
+    });
+</script>
+{% block extra_js %}
+{% endblock %}
+</body>
+</html>
