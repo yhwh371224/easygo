@@ -7,6 +7,7 @@ from basecamp.area_full import get_more_suburbs
 from basecamp.area_home import get_home_suburbs
 from basecamp.area_zones import area_zones
 from basecamp.basecamp_utils import get_sorted_suburbs
+from articles.models import Post
 
 logger = logging.getLogger(__name__)
 
@@ -31,11 +32,14 @@ def home(request):
     sorted_home_suburbs = get_sorted_suburbs()
 
     logger.debug(f"home_suburbs count: {len(sorted_home_suburbs)}") 
+
+    latest_post = Post.objects.filter(status='published').order_by('-created_at').first()
     
     return render(request, 'basecamp/home.html', {
         'suburbs': suburbs,
         'home_suburbs': sorted_home_suburbs, 
         'google_review_url': settings.GOOGLE_REVIEW_URL,
+        'latest_post': latest_post
     })
 
 def airport_shuttle(request, suburb):
