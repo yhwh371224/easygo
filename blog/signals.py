@@ -2,6 +2,7 @@ import logging
 from django.db.models.signals import post_save
 from django.db import transaction
 from django.dispatch import receiver
+from django.core.management import call_command
 
 from .models import Post, Inquiry, PaypalPayment, StripePayment
 from .tasks import (
@@ -14,6 +15,7 @@ from .tasks import (
     check_and_send_missing_info_email_task,
     send_inquiry_email_task,
 )
+from articles.models import Post
 from utils.return_booking import handle_return_trip
 from utils.prepay_helper import is_foreign_number
 
@@ -115,3 +117,10 @@ def check_missing_info(sender, instance, created, **kwargs):
         if instance.flight_number and not (instance.direction and instance.direction.strip()):
             transaction.on_commit(lambda: send_missing_direction_email_task.delay(pk))
         transaction.on_commit(lambda: check_and_send_missing_info_email_task.delay(pk))
+
+
+# sender를 문자열로 지정: "앱이름.모델이름"
+@receiver(post_save, sender='articles.Post')
+def update_sitemap_from_blog(sender, instance, created, **kwargs):
+    if instance.status == 'published':
+        call_command('generate_sitemap')
