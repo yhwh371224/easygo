@@ -399,7 +399,7 @@
             </div>
           </div>
           <div class="text-center mt-4">
-            <a href="/more_suburbs/" class="btn btn-outline-primary">Check Your Suburb &raquo;</a>
+            <a href="/more_suburbs/" class="btn btn-primary">Check Your Suburb &raquo;</a>
           </div>
         </div>
       </section>
@@ -593,7 +593,7 @@
                   
                   {% if latest_post %}
                       <p class="text-muted mb-4">{{ latest_post.excerpt|truncatechars:150 }}</p>
-                      <a href="{% url 'articles:post_detail' latest_post.slug %}" class="btn btn-outline-primary" aria-label="Read more about Sydney Airport Pick-up">
+                      <a href="{% url 'articles:post_detail' latest_post.slug %}" class="btn btn-primary" aria-label="Read more about Sydney Airport Pick-up">
                           Read More &rarr;
                       </a>
                   {% else %}
