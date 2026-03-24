@@ -586,20 +586,21 @@
       </section>
 
       <!-- ===== AIRPORT PICKUP GUIDE (BLOG PREVIEW) ===== -->
-      <section class="airport-pickup-preview">
-          <h2>Arriving at Sydney Airport? Don't Panic! – Your Essential Pick-up Guide</h2>
-          
-          {% if latest_post %}
-              <div class="post-preview">
-                  <p>{{ latest_post.excerpt|truncatechars:150 }}</p> 
+      <section class="container py-5 my-2">
+          <div class="row justify-content-center">
+              <div class="col-lg-8 col-md-10 col-12 text-center">
+                  <h2 class="mb-4">Arriving at Sydney Airport? Don't Panic! – Your Essential Pick-up Guide</h2>
                   
-                  <a href="{% url 'articles:post_detail' latest_post.slug %}" class="btn-more" aria-label="Read more about Sydney Airport Pick-up">
-                      Read More &rarr;
-                  </a>
+                  {% if latest_post %}
+                      <p class="text-muted mb-4">{{ latest_post.excerpt|truncatechars:150 }}</p>
+                      <a href="{% url 'articles:post_detail' latest_post.slug %}" class="btn btn-outline-primary" aria-label="Read more about Sydney Airport Pick-up">
+                          Read More &rarr;
+                      </a>
+                  {% else %}
+                      <p class="text-muted">Stay tuned for the latest Sydney travel tips and airport transfer guides.</p>
+                  {% endif %}
               </div>
-          {% else %}
-              <p>Stay tuned for the latest Sydney travel tips and airport transfer guides.</p>
-          {% endif %}
+          </div>
       </section>
 
       <!-- ===== WHY TRUST EASYGO ===== -->
