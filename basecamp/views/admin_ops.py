@@ -395,30 +395,19 @@ def email_dispatch_detail(request):
             "Gratitude For Payment": ("html_email-response-payment-received.html", "Payment Received - EasyGo"),
             "Pickup Notice for Today": ("html_email-today1.html", "Important Update for Today's Pickup - EasyGo "),
             "Payment Method": ("html_email-response-payment.html", "Payment Method - EasyGo"),
-            "PayPal Assistance": ("html_email-response-payment-assistance.html", "PayPal Assistance - EasyGo"),
-            "Inquiry for driver contact": ("html_email-response-driver-contact.html", "Inquiry for driver contact - EasyGo"),
             "Airport Pickup Guide": ("html_email-response-arrival-guide.html", "Airport Pickup Guide - EasyGo"),
             'Earlier Pickup Requested for Departure': ("html_email-departure-early.html", "Urgent notice - EasyGo"),
-            'Later Pickup Requested for Departure': ("html_email-departure-late.html", "Urgent notice - EasyGo"),
             'Early Arrival Notification': ("html_email-arrival-early.html", "Urgent notice - EasyGo"),
-            'Arrival Later Than Scheduled': ("html_email-arrival-late.html", "Urgent notice - EasyGo"),
-            'Notice of Delay': ("html_email-just-late-notice.html", "Urgent notice - EasyGo"),
             'Adjusted Pickup Time': ("html_email-just-adjustment.html", "Urgent notice - EasyGo"),
             "Meeting Point Inquiry": ("html_email-response-meeting.html", "Meeting Point - EasyGo"),
-            "Payment in Advance Required": ("html_email-response-prepayment.html", "Payment in Advance Required - EasyGo"),
-            "Further details for booking": ("html_email-response-more-details.html", "Further details for booking - EasyGo"),
-            "Further details for booked": ("html_email-response-details-booked.html", "Further details for booked - EasyGo"),
-            "Arrival Pickup Arrangement Without Payment": ("html_email-urgent-arrival-pickup.html", "Arrival Pickup Arrangement Without Payment - EasyGo"),
             "Shared Ride (inquiry) Discount Offer": ("html_email-shared-inquiry-discount.html", "Discount notice - EasyGo"),
             "Shared Ride (booking) Discount Offer": ("html_email-shared-booking-discount.html", "Discount notice - EasyGo"),
             "Cancellation of Booking": ("html_email-response-cancel.html", "Cancellation of Booking: EasyGo"),
             "Apologies Cancellation of Booking": ("html_email-response-cancel1.html", "Apologies Cancellation of Booking: EasyGo"),
             "Cancellation by Client": ("html_email-response-cancelby.html", "Confirmed Booking Cancellation: EasyGo"),
-            "Apology for oversight": ("html_email-apology-for-oversight.html", "Apology for oversight: EasyGo"),
             "Payment discrepancy": ("html_email-response-discrepancy.html", "Payment discrepancy: EasyGo"),
             "Special promotion": ("html_email-special-promotion.html", "Special promotion: EasyGo"),
-            "Booking delay": ("html_email-booking-delay.html", "Booking delay: EasyGo"),
-            "Booking delay 1": ("html_email-booking-delay1.html", "Booking delay 1: EasyGo")
+            "Inquiry Return Availability Notice": ("html_email-inquiry-return-availability.html", "Booking Availability Notice - EasyGo"),
         }
 
         if selected_option in template_options:
@@ -634,7 +623,22 @@ def email_dispatch_detail(request):
                 user1.pending = False if payment_method == "cash" else True
                 user1.reminder = True
                 user1.cancelled = False
-                user1.save()     
+                user1.save()   
+
+        # ✅ Inquiry Return Availability Notice (새로 추가)
+        if selected_option == "Inquiry Return Availability Notice":
+            if isinstance(user, Inquiry):
+                context.update({
+                    'remain_first_booking': remain_first_booking,
+                    'remain_return_booking': remain_return_booking,
+                    'first_booking_date': user.pickup_date,   
+                    'return_booking_date': user.return_pickup_date,  
+                })
+            else:
+                return JsonResponse({
+                    'success': False,
+                    'error': 'This option is only for Inquiry users.'
+                }, status=400)  
 
         # 6️⃣ Send email
         handle_email_sending(request, email, subject, template_name, context, getattr(user, 'email1', None))

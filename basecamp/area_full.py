@@ -137,6 +137,7 @@ def get_more_suburbs():
     "Glendenning": {'price': 110, "area_type": "outer_west"},
     "Glenhaven": {'price': 110, "area_type": "north_west"},
     "Glenmore Park": {'price': 190, "area_type": "outer_west"},
+    "Glenorie": {'price': 140, "area_type": "outer_west"},
     "Glenwood": {'price': 120, "area_type": "north_west"},
     "Gordon": {'price': 80, "area_type": "north_shore"},
     "Granville": {'price': 80, "area_type": "central_west"},

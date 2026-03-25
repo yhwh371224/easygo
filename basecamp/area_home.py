@@ -134,6 +134,7 @@ def get_home_suburbs():
         "Glendenning",
         "Glenhaven",
         "Glenmore Park",
+        "Glenorie",
         "Glenwood",
         "Gordon",
         "Granville",
