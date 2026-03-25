@@ -15,7 +15,7 @@ from .tasks import (
     check_and_send_missing_info_email_task,
     send_inquiry_email_task,
 )
-from articles.models import Post
+
 from utils.return_booking import handle_return_trip
 from utils.prepay_helper import is_foreign_number
 
@@ -129,4 +129,5 @@ def check_missing_info(sender, instance, created, **kwargs):
 @receiver(post_save, sender='articles.Post')
 def update_sitemap_from_blog(sender, instance, created, **kwargs):
     if instance.status == 'published':
+        from articles.models import Post
         call_command('generate_sitemap')
