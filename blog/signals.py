@@ -105,14 +105,8 @@ def async_notify_user_payment_stripe(sender, instance, created, **kwargs):
 # google calendar recording 
 @receiver(post_save, sender=Post, dispatch_uid="async_create_event_on_calendar_once")
 def async_create_event_on_calendar(sender, instance, created, **kwargs):
-    logger.info(f"[Signal] post_save fired for Post {instance.pk}")
     pk = instance.pk
-
-    def on_commit_callback():
-        logger.info(f"[on_commit] Sending task for Post {pk}")  # 여기
-        create_event_on_calendar.delay(pk)
-
-    transaction.on_commit(on_commit_callback)
+    transaction.on_commit(lambda: create_event_on_calendar.delay(pk))
     
 
 # check missing direction when flight number exists and missing flight contact info

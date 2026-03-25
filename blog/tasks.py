@@ -30,7 +30,6 @@ def create_event_on_calendar(instance_id):
         return 
 
     event_id = (instance.calendar_event_id or '').strip()
-    logger.info(f"[Calendar] Post {instance_id} | event_id={event_id!r} | cancelled={instance.cancelled}")
 
     if instance.cancelled and not event_id:
         logger.info(f"Cancelled post {instance_id} with no event_id. Skipping event creation.")
