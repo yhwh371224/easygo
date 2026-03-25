@@ -1,12 +1,10 @@
 import logging
 from django.utils import timezone
-from django.conf import settings
-from main.settings import RECIPIENT_EMAIL, DEFAULT_FROM_EMAIL
+from main.settings import DEFAULT_FROM_EMAIL
 from basecamp.basecamp_utils import render_email_template
 from utils.email import send_text_email, send_html_email
 
 logger = logging.getLogger('easygo')
-
 
 
 def clean_float(value):
@@ -16,12 +14,11 @@ def clean_float(value):
         return "0"
 
 
-def process_generic_payment(payment_instance, posts, recipient_email_config, calculated_amount=None):
+def process_generic_payment(payment_instance, posts, admin_email, calculated_amount=None):
     """
     Stripe/PayPal 결제 건을 분석하여 여러 예약(Post)에 금액을 배분합니다.
     """
     instance = payment_instance
-    admin_email = RECIPIENT_EMAIL
 
     if instance.is_processed:
         txn_id = getattr(instance, 'payment_intent_id', getattr(instance, 'txn_id', 'N/A'))
@@ -101,6 +98,10 @@ def send_payment_notification_email(instance, total_balance, recipient_emails, a
 
     remaining_balance = round(total_balance - net_amount, 2)
     recipient_list = [email for email in recipient_emails if email] + [admin_email]
+
+    # noIdentity 케이스: PayPal/Stripe 발신자 이메일 추가
+    if total_balance == 0 and instance.email and instance.email not in recipient_list:
+        recipient_list.append(instance.email)
 
     context = {
         'name': instance.name,
