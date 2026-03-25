@@ -1,9 +1,11 @@
 import logging
 import datetime
+import re
+
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
 from django.conf import settings
-import re
+from blog.models import Post
 
 logger = logging.getLogger(__name__)
 
@@ -141,7 +143,9 @@ def sync_to_calendar(instance):
             service.events().update(calendarId="primary", eventId=event_id, body=event).execute()
         else:
             new_event = service.events().insert(calendarId="primary", body=event).execute()
-            instance.calendar_event_id = new_event["id"]
-            instance.save(update_fields=["calendar_event_id"])
+            # 시그널 없이 저장 (무한루프 방지)
+            Post.objects.filter(pk=instance.pk).update(
+                calendar_event_id=new_event["id"]
+            )
     except Exception as e:
         logger.error(f"Calendar sync failed for post {instance.id}: {e}")
