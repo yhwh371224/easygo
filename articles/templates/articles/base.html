@@ -23,39 +23,72 @@
     <link rel="stylesheet" href="{% static 'easygo_review/css/bootstrap.css' %}" media="screen">
     <link rel="stylesheet" href="{% static 'easygo_review/css/custom.min.css' %}">
     <link rel="stylesheet" href="{% static 'easygo_review/css/styles.css' %}">
+
+    <style>
+        /* Skip link — visually hidden until focused */
+        .skip-link {
+            position: absolute;
+            top: -100%;
+            left: 0;
+            z-index: 9999;
+            padding: 10px 18px;
+            background: #0d6efd;
+            color: #fff;
+            font-weight: 600;
+            border-radius: 0 0 6px 0;
+            text-decoration: none;
+            transition: top 0.2s;
+        }
+        .skip-link:focus {
+            top: 0;
+        }
+    </style>
+
     {% block extra_css %}
     {% endblock %}
 </head>
 <body>
 
-{% include 'articles/navbar.html' %}
+    <!-- Skip navigation link (fix #4 bonus) -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
 
-<div class="container">
-    <div class="row">
-        {% block content %}
-        {% endblock %}
+    {% include 'articles/navbar.html' %}
+
+    <div class="container">
+        <div class="row">
+            <!-- Fix #4: main landmark wraps all page content -->
+            <main id="main-content" class="col-12 px-0">
+                {% block content %}
+                {% endblock %}
+            </main>
+        </div>
     </div>
-</div>
 
-<!-- footer -->
-<div class="container" style="margin-top: 80px; padding: 0;">
-    <div class="footer container-xl width-full p-responsive" role="contentinfo" style="padding-right: 10px;">
-        <ul class="list-style-none border-top d-flex justify-content-end">
-            <li class="mr-3 mr-lg-2 list-unstyled">
-                <small><a href="#">2026 All rights reserved by EasyGo Airport Shuttle</a></small>
-            </li>
-        </ul>
+    <!-- footer -->
+    <div class="container" style="margin-top: 80px; padding: 0;">
+        <!-- Fix: role="contentinfo" already correct here, no change needed -->
+        <div class="footer container-xl width-full p-responsive" role="contentinfo" style="padding-right: 10px;">
+            <ul class="list-style-none border-top d-flex justify-content-end">
+                <li class="mr-3 mr-lg-2 list-unstyled">
+                    <small>
+                        <!-- Fix: meaningful link text instead of bare # -->
+                        <a href="https://easygoshuttle.com.au">
+                            2026 All rights reserved by EasyGo Airport Shuttle
+                        </a>
+                    </small>
+                </li>
+            </ul>
+        </div>
     </div>
-</div>
 
-<script src="{% static 'easygo_review/js/jquery.min.js' %}"></script>
-<script src="{% static 'easygo_review/js/bootstrap.min.js' %}"></script>
-<script>
-    document.querySelectorAll('.fade-up').forEach((el, i) => {
-        el.style.animationDelay = (i * 100) + 'ms';
-    });
-</script>
-{% block extra_js %}
-{% endblock %}
+    <script src="{% static 'easygo_review/js/jquery.min.js' %}"></script>
+    <script src="{% static 'easygo_review/js/bootstrap.min.js' %}"></script>
+    <script>
+        document.querySelectorAll('.fade-up').forEach((el, i) => {
+            el.style.animationDelay = (i * 100) + 'ms';
+        });
+    </script>
+    {% block extra_js %}
+    {% endblock %}
 </body>
 </html>

@@ -223,14 +223,14 @@
   .fc-body p {
     font-family: 'DM Sans', sans-serif;
     font-size: .93rem;
-    color: #64748b;
+    color: #4b5563;
     line-height: 1.65;
     margin-bottom: 18px;
   }
   .post-meta {
     font-family: 'DM Sans', sans-serif;
     font-size: .8rem;
-    color: #94a3b8;
+    color: #6b7280;
     display: flex;
     align-items: center;
     gap: 14px;
@@ -285,7 +285,7 @@
   .bc-body p {
     font-family: 'DM Sans', sans-serif;
     font-size: .86rem;
-    color: #64748b;
+    color: #4b5563;
     line-height: 1.6;
     flex: 1;
     margin-bottom: 14px;
@@ -366,7 +366,7 @@
             value="{{ query }}"
             autocomplete="off"
           />
-          <button type="submit" class="blog-search-btn">Search</button>
+          <button type="submit" class="blog-search-btn" aria-label="Search blog posts">Search</button>
         </div>
       </form>
     </div>
@@ -457,14 +457,14 @@
     {% if posts.has_other_pages %}
     <nav class="blog-pagination">
       {% if posts.has_previous %}
-        <a class="page-btn" href="?page={{ posts.previous_page_number }}{% if query %}&q={{ query }}{% endif %}">‹</a>
+        <a class="page-btn" href="?page={{ posts.previous_page_number }}{% if query %}&q={{ query }}{% endif %}" aria-label="Previous page">'‹</a>
       {% endif %}
       {% for num in posts.paginator.page_range %}
         <a class="page-btn {% if posts.number == num %}active{% endif %}"
            href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}">{{ num }}</a>
       {% endfor %}
       {% if posts.has_next %}
-        <a class="page-btn" href="?page={{ posts.next_page_number }}{% if query %}&q={{ query }}{% endif %}">›</a>
+        <a class="page-btn" href="?page={{ posts.next_page_number }}{% if query %}&q={{ query }}{% endif %}" aria-label="Next page">'›</a>
       {% endif %}
     </nav>
     {% endif %}
