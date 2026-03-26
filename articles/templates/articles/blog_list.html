@@ -17,333 +17,7 @@
 
 {% block extra_css %}
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --blog-primary: #0d6efd;
-    --blog-ink: #0f1923;
-    --blog-mist: #f5f7fa;
-    --blog-rule: #e2e8f0;
-    --blog-accent: #f59e0b;
-    --blog-card-radius: 12px;
-  }
-
-  /* ── Hero banner ── */
-  .blog-hero {
-    background: linear-gradient(135deg, #0d6efd 0%, #0a4fcf 60%, #072ea8 100%);
-    color: #fff;
-    padding: 90px 0 60px;
-    margin-top: 56px;
-    position: relative;
-    overflow: hidden;
-  }
-  .blog-hero::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-  }
-  .blog-hero-label {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    opacity: .7;
-    margin-bottom: 12px;
-  }
-  .blog-hero h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2rem, 5vw, 3.2rem);
-    font-weight: 900;
-    line-height: 1.15;
-    margin-bottom: 16px;
-  }
-  .blog-hero p {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 1.05rem;
-    opacity: .85;
-    max-width: 520px;
-  }
-  .blog-hero-plane {
-    position: absolute;
-    right: -20px;
-    bottom: -10px;
-    font-size: 9rem;
-    opacity: .06;
-    line-height: 1;
-    pointer-events: none;
-  }
-
-  /* ── Search bar ── */
-  .blog-search-wrap {
-    background: #fff;
-    border-radius: 50px;
-    box-shadow: 0 4px 24px rgba(13,110,253,.18);
-    display: flex;
-    align-items: center;
-    padding: 6px 6px 6px 20px;
-    max-width: 560px;
-    margin-top: 32px;
-  }
-  .blog-search-wrap input {
-    border: none;
-    outline: none;
-    flex: 1;
-    font-family: 'DM Sans', sans-serif;
-    font-size: .95rem;
-    color: var(--blog-ink);
-    background: transparent;
-  }
-  .blog-search-wrap input::placeholder { color: #aab4c4; }
-  .blog-search-btn {
-    background: var(--blog-primary);
-    color: #fff;
-    border: none;
-    border-radius: 50px;
-    padding: 9px 22px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: .88rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background .2s;
-  }
-  .blog-search-btn:hover { background: #0a56c4; }
-
-  /* ── Category chips ── */
-  .blog-section { padding: 56px 0 20px; }
-  .cat-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 36px; }
-  .cat-chip {
-    font-family: 'DM Sans', sans-serif;
-    font-size: .82rem;
-    font-weight: 500;
-    padding: 6px 16px;
-    border-radius: 50px;
-    border: 1.5px solid var(--blog-rule);
-    color: #64748b;
-    background: #fff;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all .18s;
-  }
-  .cat-chip:hover, .cat-chip.active {
-    background: var(--blog-primary);
-    border-color: var(--blog-primary);
-    color: #fff;
-  }
-
-  /* ── Section heading ── */
-  .blog-section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.65rem;
-    font-weight: 700;
-    color: var(--blog-ink);
-    margin-bottom: 24px;
-    padding-bottom: 12px;
-    border-bottom: 2px solid var(--blog-rule);
-  }
-  .blog-section-title span {
-    display: inline-block;
-    width: 28px;
-    height: 4px;
-    background: var(--blog-accent);
-    border-radius: 4px;
-    vertical-align: middle;
-    margin-right: 10px;
-    margin-bottom: 3px;
-  }
-
-  /* ── Featured card ── */
-  .featured-card {
-    border-radius: var(--blog-card-radius);
-    overflow: hidden;
-    background: var(--blog-mist);
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 2px 20px rgba(0,0,0,.07);
-    transition: transform .22s, box-shadow .22s;
-    text-decoration: none;
-    color: inherit;
-    margin-bottom: 28px;
-  }
-  .featured-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 36px rgba(13,110,253,.14);
-    color: inherit;
-    text-decoration: none;
-  }
-  @media (min-width: 768px) {
-    .featured-card { flex-direction: row; }
-    .featured-card .fc-img { width: 48%; flex-shrink: 0; }
-  }
-  .fc-img {
-    background: linear-gradient(135deg, #0d6efd22, #0d6efd08);
-    min-height: 220px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 5rem;
-    position: relative;
-    overflow: hidden;
-  }
-  .fc-img-inner {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    position: absolute;
-    inset: 0;
-  }
-  .fc-body {
-    padding: 32px 28px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-  .post-badge {
-    display: inline-block;
-    font-family: 'DM Sans', sans-serif;
-    font-size: .72rem;
-    font-weight: 600;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    color: var(--blog-primary);
-    background: #e8f0fe;
-    padding: 3px 10px;
-    border-radius: 4px;
-    margin-bottom: 12px;
-  }
-  .post-badge.amber { color: #b45309; background: #fef3c7; }
-  .fc-body h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.45rem;
-    font-weight: 700;
-    color: var(--blog-ink);
-    margin-bottom: 10px;
-    line-height: 1.3;
-  }
-  .fc-body p {
-    font-family: 'DM Sans', sans-serif;
-    font-size: .93rem;
-    color: #4b5563;
-    line-height: 1.65;
-    margin-bottom: 18px;
-  }
-  .post-meta {
-    font-family: 'DM Sans', sans-serif;
-    font-size: .8rem;
-    color: #6b7280;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    flex-wrap: wrap;
-  }
-
-  /* ── Grid cards ── */
-  .blog-grid { margin-bottom: 48px; }
-  .blog-card {
-    border-radius: var(--blog-card-radius);
-    overflow: hidden;
-    background: #fff;
-    border: 1.5px solid var(--blog-rule);
-    transition: transform .22s, box-shadow .22s, border-color .22s;
-    text-decoration: none;
-    color: inherit;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
-  .blog-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 36px rgba(13,110,253,.12);
-    border-color: #c7d8ff;
-    color: inherit;
-    text-decoration: none;
-  }
-  .bc-thumb {
-    height: 180px;
-    background: linear-gradient(135deg, #e8f0fe, #dbeafe);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 3.5rem;
-    position: relative;
-    overflow: hidden;
-  }
-  .bc-thumb img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    position: absolute; inset: 0;
-  }
-  .bc-body { padding: 20px; flex: 1; display: flex; flex-direction: column; }
-  .bc-body h3 {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: var(--blog-ink);
-    margin-bottom: 8px;
-    line-height: 1.35;
-  }
-  .bc-body p {
-    font-family: 'DM Sans', sans-serif;
-    font-size: .86rem;
-    color: #4b5563;
-    line-height: 1.6;
-    flex: 1;
-    margin-bottom: 14px;
-  }
-  .read-more {
-    font-family: 'DM Sans', sans-serif;
-    font-size: .82rem;
-    font-weight: 600;
-    color: var(--blog-primary);
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-  }
-  .read-more::after { content: '→'; transition: transform .15s; }
-  .blog-card:hover .read-more::after { transform: translateX(4px); }
-
-  /* ── Pagination ── */
-  .blog-pagination {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    padding: 24px 0 56px;
-  }
-  .page-btn {
-    width: 38px; height: 38px;
-    border-radius: 50%;
-    border: 1.5px solid var(--blog-rule);
-    background: #fff;
-    font-family: 'DM Sans', sans-serif;
-    font-size: .88rem;
-    color: #64748b;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all .15s;
-  }
-  .page-btn:hover, .page-btn.active {
-    background: var(--blog-primary);
-    border-color: var(--blog-primary);
-    color: #fff;
-  }
-
-  /* ── Animations ── */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(22px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  .fade-up { animation: fadeUp .5s ease both; }
-
-  /* ── No results ── */
-  .no-results {
-    text-align: center;
-    padding: 60px 20px;
-    font-family: 'DM Sans', sans-serif;
-    color: #94a3b8;
-  }
-  .no-results .icon { font-size: 3rem; margin-bottom: 12px; }
-</style>
+<link rel="stylesheet" href="{% static 'articles/css/blog_list.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -455,16 +129,30 @@
 
     <!-- Pagination -->
     {% if posts.has_other_pages %}
-    <nav class="blog-pagination">
+    <nav class="blog-pagination" aria-label="Blog pagination">
       {% if posts.has_previous %}
-        <a class="page-btn" href="?page={{ posts.previous_page_number }}{% if query %}&q={{ query }}{% endif %}" aria-label="Previous page">'‹</a>
+        <a class="page-btn"
+          href="?page={{ posts.previous_page_number }}{% if query %}&q={{ query }}{% endif %}"
+          aria-label="Previous page">
+          <span aria-hidden="true">‹</span>
+        </a>
       {% endif %}
+
       {% for num in posts.paginator.page_range %}
         <a class="page-btn {% if posts.number == num %}active{% endif %}"
-           href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}">{{ num }}</a>
+          href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}"
+          aria-label="Page {{ num }}"
+          {% if posts.number == num %}aria-current="page"{% endif %}>
+          {{ num }}
+        </a>
       {% endfor %}
+
       {% if posts.has_next %}
-        <a class="page-btn" href="?page={{ posts.next_page_number }}{% if query %}&q={{ query }}{% endif %}" aria-label="Next page">'›</a>
+        <a class="page-btn"
+          href="?page={{ posts.next_page_number }}{% if query %}&q={{ query }}{% endif %}"
+          aria-label="Next page">
+          <span aria-hidden="true">›</span>
+        </a>
       {% endif %}
     </nav>
     {% endif %}
