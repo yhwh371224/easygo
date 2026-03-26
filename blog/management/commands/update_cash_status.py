@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 from blog.models import Post
-from retrieve_cash import main as get_cash_emails_list
+from utils.gmail_utils import fetch_cash_emails as get_cash_emails_list
 
 
 class Command(BaseCommand):
