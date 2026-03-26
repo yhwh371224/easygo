@@ -2,7 +2,7 @@ import threading
 from django.core.management.base import BaseCommand
 from blog.models import Post, Inquiry
 from utils.booking_helper import get_default_driver
-from schedule import fetch_scheduled_emails
+from utils.gmail_utils import fetch_scheduled_emails
 
 
 class Command(BaseCommand):

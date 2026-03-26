@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from blog.models import Post
 from datetime import datetime, timedelta
-from retrieve import main
+from utils.gmail_utils import fetch_reminder_emails
 
 
 class Command(BaseCommand):
@@ -9,7 +9,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         # 이메일 모두 소문자로 변환
-        my_list = [email.lower() for email in main()]
+        my_list = [email.lower() for email in fetch_reminder_emails()]
         unique_emails = set()
 
         today = datetime.now()
