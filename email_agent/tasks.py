@@ -11,7 +11,7 @@ from django.conf import settings
 from .email_ai import analyze_email_with_claude
 
 
-LAST_HISTORY_ID_FILE = '/home/horeb/github/easygo/last_history_id.txt'
+LAST_HISTORY_ID_FILE = os.path.join(settings.BASE_DIR, 'scripts', 'last_history_id.txt')
 PROCESSED_LABEL_ID = 'Label_956123326350558597'
 
 EMAIL_SIGNATURE = """
