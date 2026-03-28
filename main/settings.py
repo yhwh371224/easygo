@@ -150,16 +150,22 @@ LOGGING = {
             'filename': os.path.join(BASE_DIR, 'logs/sms.log'),
             'formatter': 'verbose',
         },
-        'console': {  
+        'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
             'formatter': 'verbose',
+        },
+        'telegram': {
+            'level': 'ERROR',
+            'class': 'telegram_handler.TelegramHandler',
+            'token': config('TELEGRAM_BOT_TOKEN'),
+            'chat_id': config('TELEGRAM_CHAT_ID'),
         },
     },
 
     'loggers': {
         'django': {
-            'handlers': ['file'],
+            'handlers': ['file', 'telegram'],  
             'level': 'DEBUG',
             'propagate': False,
         },
@@ -174,7 +180,7 @@ LOGGING = {
             'propagate': False,
         },
         'easygo': {
-            'handlers': ['file', 'console'],  
+            'handlers': ['file', 'console', 'telegram'],  
             'level': 'DEBUG',
             'propagate': False,
         },
