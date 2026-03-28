@@ -31,6 +31,7 @@ Disallow: /*_detail/
 Disallow: /confirm_booking/
 Disallow: /email_dispatch/
 Disallow: /sending_email_*/
+Disallow: /price_detail/
 
 # 쿼리 파라미터 URL
 Allow: /easygo_review/
