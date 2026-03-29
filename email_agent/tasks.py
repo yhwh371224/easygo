@@ -208,12 +208,17 @@ def gmail_watch_topic(payload):
             body = get_email_body(email['payload'])
             thread_history = get_thread_history(service, thread_id)
 
+            thread_history_without_current = [
+                m for m in thread_history
+                if m.get('body', '').strip() != body.strip()
+            ]
+
             print(f"From: {sender}")
             print(f"Subject: {subject}")
 
             # Claude API 호출
             try:
-                result = analyze_email_with_claude(sender, subject, body, thread_history)
+                result = analyze_email_with_claude(sender, subject, body, thread_history_without_current)
 
             except Exception as e:
                 print(f"Claude API failed for message {msg_id}: {e}")
