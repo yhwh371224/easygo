@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UX/UI 6주 학습 플랜</title>
+<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f6f3;
+    --card: #ffffff;
+    --border: #e8e6e0;
+    --text: #1a1a18;
+    --muted: #888780;
+    --hint: #b4b2a9;
+    --teal: #0f6e56;
+    --teal-light: #e1f5ee;
+    --teal-mid: #1d9e75;
+    --amber: #854f0b;
+    --amber-light: #faeeda;
+    --amber-mid: #ba7517;
+    --green: #3b6d11;
+    --green-light: #eaf3de;
+    --green-mid: #639922;
+    --success: #3b6d11;
+    --success-bg: #eaf3de;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Pretendard', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 40px 20px 80px;
+  }
+  .container { max-width: 720px; margin: 0 auto; }
+
+  header { margin-bottom: 36px; }
+  header h1 { font-size: 22px; font-weight: 600; margin-bottom: 6px; }
+  header p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+  .overall-progress { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px 24px; margin-bottom: 28px; }
+  .overall-progress .label { font-size: 12px; color: var(--muted); margin-bottom: 10px; font-weight: 500; letter-spacing: 0.04em; }
+  .overall-progress .nums { font-size: 28px; font-weight: 600; margin-bottom: 12px; }
+  .overall-progress .nums span { font-size: 15px; font-weight: 400; color: var(--muted); }
+  .bar-wrap { height: 6px; background: var(--bg); border-radius: 4px; }
+  .bar { height: 6px; border-radius: 4px; background: var(--teal-mid); transition: width 0.4s ease; }
+
+  .weeks { display: flex; flex-direction: column; gap: 10px; }
+
+  .week { background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+  .week-header {
+    display: flex; align-items: center; gap: 12px;
+    padding: 16px 20px; cursor: pointer;
+    transition: background 0.15s;
+    user-select: none;
+  }
+  .week-header:hover { background: var(--bg); }
+  .badge {
+    font-size: 11px; font-weight: 600; padding: 4px 11px;
+    border-radius: 20px; white-space: nowrap; letter-spacing: 0.02em;
+  }
+  .week-title { font-size: 14px; font-weight: 500; flex: 1; }
+  .week-meta { font-size: 12px; color: var(--muted); white-space: nowrap; }
+  .chevron { font-size: 11px; color: var(--hint); transition: transform 0.2s; flex-shrink: 0; }
+  .chevron.open { transform: rotate(180deg); }
+
+  .week-body { border-top: 1px solid var(--border); }
+  .prog-row { padding: 12px 20px 0; }
+  .prog-label { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+  .prog-bar-wrap { height: 4px; background: var(--bg); border-radius: 3px; }
+  .prog-bar { height: 4px; border-radius: 3px; transition: width 0.3s ease; }
+
+  .days { display: flex; flex-direction: column; padding: 8px 0; }
+  .day-row {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 11px 20px; transition: background 0.1s;
+  }
+  .day-row:hover { background: var(--bg); }
+
+  .check-btn {
+    width: 22px; height: 22px; border-radius: 50%;
+    border: 1.5px solid var(--border);
+    background: none; cursor: pointer; flex-shrink: 0;
+    margin-top: 1px; transition: all 0.15s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .check-btn.done {
+    background: var(--success-bg);
+    border-color: var(--success);
+  }
+  .check-btn.done::after {
+    content: '';
+    display: block;
+    width: 5px; height: 9px;
+    border: 2px solid var(--success);
+    border-top: none; border-left: none;
+    transform: rotate(45deg) translate(-1px, -1px);
+  }
+
+  .day-label { font-size: 11px; font-weight: 600; color: var(--muted); min-width: 22px; padding-top: 3px; }
+  .day-content { flex: 1; transition: opacity 0.2s; }
+  .day-content.done { opacity: 0.4; }
+  .day-title { font-size: 13px; font-weight: 500; margin-bottom: 3px; }
+  .day-desc { font-size: 12px; color: var(--muted); line-height: 1.55; }
+  .day-link { display: inline-block; font-size: 11px; color: var(--teal); margin-top: 4px; text-decoration: none; }
+  .day-link:hover { text-decoration: underline; }
+
+  .ask-row { padding: 10px 20px 16px; }
+  .ask-btn {
+    width: 100%; padding: 10px 16px;
+    background: none; border: 1px solid var(--border);
+    border-radius: 10px; font-size: 12px; color: var(--muted);
+    cursor: pointer; text-align: left; font-family: inherit;
+    transition: all 0.15s;
+  }
+  .ask-btn:hover { border-color: var(--teal-mid); color: var(--teal); background: var(--teal-light); }
+
+  .tip {
+    margin-top: 28px; padding: 18px 22px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; font-size: 13px; color: var(--muted); line-height: 1.7;
+  }
+  .tip strong { color: var(--text); font-weight: 500; }
+
+  .reset-btn {
+    display: block; margin: 20px auto 0;
+    padding: 8px 20px; background: none;
+    border: 1px solid var(--border); border-radius: 8px;
+    font-size: 12px; color: var(--muted); cursor: pointer;
+    font-family: inherit; transition: all 0.15s;
+  }
+  .reset-btn:hover { border-color: #e24b4a; color: #a32d2d; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <h1>UX/UI 6주 학습 플랜</h1>
+    <p>하루 30분 · 시드니 프리랜서 목표 · Figma + Figma Make + 개발 강점 활용</p>
+  </header>
+
+  <div class="overall-progress">
+    <div class="label">전체 진행률</div>
+    <div class="nums" id="overall-nums">0 <span>/ 30일 완료</span></div>
+    <div class="bar-wrap"><div class="bar" id="overall-bar" style="width:0%"></div></div>
+  </div>
+
+  <div class="weeks" id="weeks"></div>
+
+  <div class="tip">
+    <strong>막히는 날엔</strong> — 억지로 새 내용 안 해도 돼요. 전날 한 걸 다시 열어보는 것도 30분이에요.<br>
+    <strong>체크 현황</strong>은 이 파일을 닫아도 브라우저에 자동 저장돼요 (localStorage).<br>
+    <strong>Claude에게 질문</strong>하려면 각 주차 하단 버튼을 클릭하세요 — claude.ai로 바로 이동해요.
+  </div>
+
+  <button class="reset-btn" onclick="resetAll()">처음부터 다시 시작 (초기화)</button>
+
+</div>
+
+<script>
+const plan = [
+  {
+    num: "1주차", theme: "Figma 인터페이스 익히기",
+    color: "#e1f5ee", textColor: "#085041", barColor: "#1d9e75",
+    days: [
+      { d: "월", title: "계정 만들기 + 화면 둘러보기", desc: "figma.com 무료 가입, 패널·툴바·레이어 위치 파악", link: "https://figma.com" },
+      { d: "화", title: "도형 그리기 기초", desc: "사각형, 원, 선 그리기. 색상·테두리·크기 변경해보기" },
+      { d: "수", title: "텍스트 툴 연습", desc: "폰트 크기·굵기·줄간격 바꿔보기. 한글 폰트 설정" },
+      { d: "목", title: "정렬과 간격", desc: "오브젝트 정렬(Align), 균등 간격(Distribute) 기능 익히기" },
+      { d: "금", title: "첫 따라그리기", desc: "간단한 버튼 하나 보고 그대로 만들기 (카카오 로그인 버튼 등)" },
+    ],
+    ask: "Figma 1주차를 마쳤어. 2주차 오토레이아웃을 시작하기 전에 꼭 알아야 할 게 있어?"
+  },
+  {
+    num: "2주차", theme: "프레임 + 오토레이아웃",
+    color: "#e1f5ee", textColor: "#085041", barColor: "#1d9e75",
+    days: [
+      { d: "월", title: "프레임 개념", desc: "Frame vs Group 차이. 모바일·데스크톱 프레임 만들기" },
+      { d: "화", title: "오토레이아웃 기초", desc: "CSS Flexbox랑 똑같아요. Horizontal/Vertical 레이아웃" },
+      { d: "수", title: "오토레이아웃 실습", desc: "버튼에 오토레이아웃 적용 → 텍스트 길어져도 자동 늘어나게" },
+      { d: "목", title: "중첩 프레임", desc: "프레임 안에 프레임. 카드 컴포넌트 구조 이해" },
+      { d: "금", title: "카드 UI 따라만들기", desc: "넷플릭스·당근마켓 상품카드 하나 보고 따라 제작" },
+    ],
+    ask: "오토레이아웃을 배웠는데 헷갈리는 부분이 있어. CSS Flexbox랑 비교해서 설명해줘"
+  },
+  {
+    num: "3주차", theme: "컴포넌트 + 디자인 시스템",
+    color: "#faeeda", textColor: "#633806", barColor: "#ba7517",
+    days: [
+      { d: "월", title: "컴포넌트 만들기", desc: "버튼을 컴포넌트로 만들고 재사용하는 법" },
+      { d: "화", title: "Variants 기능", desc: "버튼의 Default·Hover·Disabled 상태를 하나로 관리" },
+      { d: "수", title: "색상 스타일 정의", desc: "Primary·Secondary·텍스트 색상을 스타일로 저장" },
+      { d: "목", title: "텍스트 스타일 정의", desc: "H1·H2·Body·Caption 폰트 스타일 세팅" },
+      { d: "금", title: "미니 디자인 시스템 완성", desc: "버튼·색상·폰트 묶어서 내 첫 디자인 시스템 완성" },
+    ],
+    ask: "Figma 컴포넌트와 Variants로 디자인 시스템 만드는 방법을 단계별로 알려줘"
+  },
+  {
+    num: "4주차", theme: "UX 기초 + 와이어프레임",
+    color: "#faeeda", textColor: "#633806", barColor: "#ba7517",
+    days: [
+      { d: "월", title: "UX 핵심 원칙 5가지", desc: "계층·근접성·일관성·피드백·가시성. 실제 앱에서 찾아보기" },
+      { d: "화", title: "사용자 플로우 그리기", desc: "로그인 → 메인화면 → 구매완료 흐름을 박스로 정리" },
+      { d: "수", title: "로우파이 와이어프레임", desc: "회색 박스로만 구성된 앱 화면 3개 만들기" },
+      { d: "목", title: "내 Django 사이트 분석", desc: "현재 사이트의 UX 문제점 3가지 찾아서 메모" },
+      { d: "금", title: "개선 와이어프레임", desc: "문제점 해결한 새 레이아웃을 Figma로 스케치" },
+    ],
+    ask: "UX 원칙 5가지를 내 Django 웹사이트에 적용하는 방법을 구체적으로 알려줘"
+  },
+  {
+    num: "5주차", theme: "Figma Make로 AI 프로토타입",
+    color: "#eaf3de", textColor: "#27500a", barColor: "#639922",
+    days: [
+      { d: "월", title: "Figma Make 첫 실행", desc: "간단한 랜딩페이지 프롬프트로 생성해보기", link: "https://figma.com/make" },
+      { d: "화", title: "AI 결과물 수정하기", desc: "Make가 만든 결과에서 색상·폰트·간격 직접 고치기" },
+      { d: "수", title: "내 디자인 시스템 적용", desc: "Make 결과물에 3주차에 만든 컴포넌트로 교체해보기" },
+      { d: "목", title: "프로토타입 연결", desc: "화면 간 클릭 연결. 인터랙션 기초 (화면 전환 효과)" },
+      { d: "금", title: "Django 사이트 리디자인 시작", desc: "내 사이트를 AI로 초안 생성 → 수정 시작" },
+    ],
+    ask: "Figma Make로 만든 결과물을 Figma 디자인 시스템과 합치는 방법을 알려줘"
+  },
+  {
+    num: "6주차", theme: "포트폴리오 + 프리랜서 준비",
+    color: "#eaf3de", textColor: "#27500a", barColor: "#639922",
+    days: [
+      { d: "월", title: "케이스 스터디 구조 잡기", desc: "문제 정의 → 과정 → 결과 3단계. 내 Django 리디자인 정리" },
+      { d: "화", title: "Before/After 비교 화면", desc: "기존 사이트 vs 리디자인 나란히 보여주는 화면 제작" },
+      { d: "수", title: "Behance 포트폴리오 올리기", desc: "케이스 스터디 1개 온라인에 업로드", link: "https://behance.net" },
+      { d: "목", title: "Upwork 프로필 초안", desc: "개발+디자인 강점 내세운 프리랜서 프로필 작성", link: "https://upwork.com" },
+      { d: "금", title: "회고 + 다음 계획", desc: "6주 돌아보기. 부족한 부분 파악 → 7주차 이후 방향 설정" },
+    ],
+    ask: "UX/UI 프리랜서 포트폴리오 케이스 스터디를 어떻게 작성하면 시드니 클라이언트에게 어필할 수 있어?"
+  }
+];
+
+const STORAGE_KEY = 'uxui_plan_checked';
+let checked = {};
+let open = { 0: true };
+
+function load() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) checked = JSON.parse(saved);
+  } catch(e) {}
+}
+
+function save() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(checked)); } catch(e) {}
+}
+
+function totalDone() {
+  return Object.values(checked).filter(Boolean).length;
+}
+
+function weekDone(wi) {
+  return plan[wi].days.filter((_, di) => checked[`${wi}-${di}`]).length;
+}
+
+function updateOverall() {
+  const done = totalDone();
+  const total = plan.reduce((s, w) => s + w.days.length, 0);
+  const pct = Math.round((done / total) * 100);
+  document.getElementById('overall-nums').innerHTML = `${done} <span>/ ${total}일 완료 (${pct}%)</span>`;
+  document.getElementById('overall-bar').style.width = pct + '%';
+}
+
+function toggleCheck(wi, di) {
+  const key = `${wi}-${di}`;
+  checked[key] = !checked[key];
+  save();
+  renderWeek(wi);
+  updateOverall();
+}
+
+function toggleOpen(wi) {
+  open[wi] = !open[wi];
+  renderWeek(wi);
+}
+
+function renderWeek(wi) {
+  const week = plan[wi];
+  const done = weekDone(wi);
+  const total = week.days.length;
+  const pct = Math.round((done / total) * 100);
+  const isOpen = open[wi];
+  const el = document.getElementById(`week-${wi}`);
+
+  el.innerHTML = `
+    <div class="week-header" onclick="toggleOpen(${wi})">
+      <span class="badge" style="background:${week.color};color:${week.textColor}">${week.num}</span>
+      <span class="week-title">${week.theme}</span>
+      <span class="week-meta">${done}/${total}</span>
+      <span class="chevron ${isOpen ? 'open' : ''}">▼</span>
+    </div>
+    ${isOpen ? `
+    <div class="week-body">
+      <div class="prog-row">
+        <div class="prog-label">${pct}% 완료</div>
+        <div class="prog-bar-wrap"><div class="prog-bar" style="width:${pct}%;background:${week.barColor}"></div></div>
+      </div>
+      <div class="days">
+        ${week.days.map((day, di) => {
+          const isDone = !!checked[`${wi}-${di}`];
+          return `
+          <div class="day-row">
+            <button class="check-btn ${isDone ? 'done' : ''}" onclick="toggleCheck(${wi},${di})"></button>
+            <span class="day-label">${day.d}</span>
+            <div class="day-content ${isDone ? 'done' : ''}">
+              <div class="day-title">${day.title}</div>
+              <div class="day-desc">${day.desc}</div>
+              ${day.link ? `<a class="day-link" href="${day.link}" target="_blank">${day.link} →</a>` : ''}
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+      <div class="ask-row">
+        <button class="ask-btn" onclick="window.open('https://claude.ai/new?q=${encodeURIComponent(week.ask)}','_blank')">
+          Claude에게 묻기 → ${week.ask}
+        </button>
+      </div>
+    </div>` : ''}
+  `;
+}
+
+function render() {
+  const container = document.getElementById('weeks');
+  container.innerHTML = '';
+  plan.forEach((_, wi) => {
+    const el = document.createElement('div');
+    el.className = 'week';
+    el.id = `week-${wi}`;
+    container.appendChild(el);
+    renderWeek(wi);
+  });
+  updateOverall();
+}
+
+function resetAll() {
+  if (confirm('모든 체크 기록을 지울까요?')) {
+    checked = {};
+    save();
+    render();
+  }
+}
+
+load();
+render();
+</script>
+</body>
+</html>

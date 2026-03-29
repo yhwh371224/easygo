@@ -28,11 +28,11 @@ def analyze_email_with_claude(sender, subject, body, thread_history):
 
 
 def _build_history_text(thread_history):
-    if len(thread_history) <= 1:
-        return ""
-    lines = ["\n\n[Previous conversation]"]
-    for msg in thread_history[:-1]:
-        lines.append(f"From: {msg['from']}\nDate: {msg['date']}\n{msg['body']}\n---")
+    if not thread_history:
+        return "No previous emails."
+    lines = []
+    for msg in thread_history:
+        lines.append(f"From: {msg['from']}\nDate: {msg['date']}\n{msg['body'][:300]}\n---")
     return "\n".join(lines)
 
 
