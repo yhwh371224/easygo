@@ -14,6 +14,10 @@ SECRET_KEY = config('SECRET_KEY')
 ENVIRONMENT = config('ENVIRONMENT', default='production')
 DEBUG = config('DEBUG', cast=bool, default=False)
 
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+
 if ENVIRONMENT == 'production':
     ALLOWED_HOSTS = config(
         'PRO_ALLOWED_HOSTS',
@@ -91,6 +95,7 @@ else:
     TURNSTILE_DISABLED = True
     SESSION_COOKIE_SECURE = False
     SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+    STATICFILES_DIRS.append(os.path.join(BASE_DIR, 'docs')) 
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -328,10 +333,6 @@ SOCIALACCOUNT_LOGIN_ON_GET=True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
