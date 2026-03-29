@@ -112,24 +112,28 @@
 						<input class="form-control" name="flight_time" type="time" id="flight_time">
 					</div>
 				</div>
-				<hr class="my-5">
-				<div class="mb-3 pb-1" >
-					<p class="form-label mb-1">Full Address of Suburb/Hotel</p>
-				</div>
 
-				<div class="card text-white bg-secondary p-4">
-				<div class="mb-3 pb-1">
-					<label class="form-label" for="street">Street No & Street Name</label>
-					<input class="form-control" type="text"  placeholder="Street No and Street Name" required name="street" id="street">
-					<div class="invalid-feedback">Please enter street no & name!</div>
-				  </div>
-				<div class="mb-3 pb-1">
-					<label class="form-label" for="suburb">Suburb</label>
-					<select class="form-select" name="suburb" required id="suburb">
-						<option value="" disabled selected>Select your suburb</option>
-						{% include 'basecamp/layouts/suburbs.html' with suburbs=home_suburbs %}
-				  </select>
-				  </div></div>
+				<div id="address-fields">
+					<hr class="my-5">
+					<div class="mb-3 pb-1" >
+						<p class="form-label mb-1">Full Address of Suburb/Hotel</p>
+					</div>
+
+					<div class="card text-white bg-secondary p-4">
+					<div class="mb-3 pb-1">
+						<label class="form-label" for="street">Street No & Street Name</label>
+						<input class="form-control" type="text"  placeholder="Street No and Street Name" required name="street" id="street">
+						<div class="invalid-feedback">Please enter street no & name!</div>
+					</div>
+					<div class="mb-3 pb-1">
+						<label class="form-label" for="suburb">Suburb</label>
+						<select class="form-select" name="suburb" required id="suburb">
+							<option value="" disabled selected>Select your suburb</option>
+							{% include 'basecamp/layouts/suburbs.html' with suburbs=home_suburbs %}
+					</select>
+					</div></div>
+				</div>
+				
 				<hr class="my-5">
                 <div class="mb-3 pb-1">
                    <label class="form-label" for="no_of_passenger">Passengers</label>
@@ -283,8 +287,8 @@
 					<input class="form-check-input" type="checkbox" name="return_flight" id="return-flight" style="margin-top: 0; width: 1.25rem; height: 1.25rem;">
 				</div>
 
-				<div id="return-flight-fields" class="mb-4" style="display:none;">
-					</div>
+				<div id="return-flight-fields" class="mb-4" style="display:none;"></div>
+				<div id="return-cruise-fields" class="mb-4" style="display:none;"></div>
 				
                 <div class="mb-5">
                   <label class="form-label" >Message</label>
