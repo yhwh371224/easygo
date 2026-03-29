@@ -138,24 +138,28 @@
 					 <input class="form-control" type="text" name="end_point" id="end_point">
 				 </div>
 				</div>
-				<hr class="my-5">
-				<div class="mb-3 pb-1" >
-					<p class="form-label mb-1">Full Address of Suburb</p>
+
+				<div id="address-fields">
+					<hr class="my-5">
+					<div class="mb-3 pb-1" >
+						<p class="form-label mb-1">Full Address of Suburb/Hotel</p>
+					</div>
+
+					<div class="card text-white bg-secondary p-4">
+					<div class="mb-3 pb-1">
+						<label class="form-label" for="street">Street No & Street Name</label>
+						<input class="form-control" type="text"  placeholder="Street No and Street Name" required name="street" id="street">
+						<div class="invalid-feedback">Please enter street no & name!</div>
+					</div>
+					<div class="mb-3 pb-1">
+						<label class="form-label" for="suburb">Suburb</label>
+						<select class="form-select" name="suburb" required id="suburb">
+							<option value="" disabled selected>Select your suburb</option>
+							{% include 'basecamp/layouts/suburbs.html' with suburbs=home_suburbs %}
+					</select>
+					</div></div>
 				</div>
 
-				<div class="card text-white bg-secondary p-4">
-				<div class="mb-3 pb-1">
-					<label class="form-label" for="street">Street No & Street Name (ep)</label>
-					<input class="form-control" type="text"  placeholder="Street No and Street Name" name="street" id="street">
-					<div class="invalid-feedback">Please enter street no & name!</div>
-				  </div>
-				<div class="mb-3 pb-1">
-					<label class="form-label" for="suburb">Suburb(n)</label>
-					<select class="form-select" name="suburb" required id="suburb">
-						<option value="" disabled selected>Select your option</option>
-						{% include 'basecamp/layouts/suburbs.html' with suburbs=home_suburbs %}
-					</select>
-				  </div></div>
 				<hr class="my-5">
                 <div class="mb-3 pb-1">
                    <label class="form-label" for="no_of_passenger">Passengers</label>
@@ -306,9 +310,8 @@
 				<label for="return-flight">Return Trip:&nbsp;&nbsp;</label>
 				<input type="checkbox" name="return_flight" id="return-flight">
 				<br>
-				<div id="return-flight-fields">
-					<!-- Fields will be dynamically added here -->
-				</div>
+				<div id="return-flight-fields" class="mb-4" style="display:none;"></div>
+				<div id="return-cruise-fields" class="mb-4" style="display:none;"></div>
 
 				<br><br>
                 <div class="mb-3 pb-1">

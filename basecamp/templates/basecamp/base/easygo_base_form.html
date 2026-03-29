@@ -46,7 +46,10 @@
     <script src="{% static 'basecamp/js/smooth-scroll.polyfills.min.js' %}" defer nonce="{{ CSP_NONCE }}"></script>
     <script src="{% static 'basecamp/js/flatpickr.min.js' %}" defer nonce="{{ CSP_NONCE }}"></script>
     <script src="{% static 'basecamp/js/date-picker.js' %}" defer nonce="{{ CSP_NONCE }}"></script>
-    <script nonce="{{ CSP_NONCE }}">const returnFlightURL = "{% url 'basecamp:return_flight_fields' %}";</script>
+    <script nonce="{{ CSP_NONCE }}">
+        const returnFlightURL = "{% url 'basecamp:return_flight_fields' %}";
+        const returnCruiseURL = "{% url 'basecamp:return_cruise_fields' %}";
+    </script>
     <script src="{% static 'basecamp/js/form_handler.js' %}" defer nonce="{{ CSP_NONCE }}"></script>
 
     <script nonce="{{ CSP_NONCE }}">
@@ -62,6 +65,7 @@
         const flightFields = document.getElementById('flight-fields');
         const extraLuggageCheck = document.getElementById('extraLuggageCheck');
         const extraLuggageFields = document.getElementById('extraLuggageFields');
+        const addressFields = document.getElementById('address-fields');
 
         if (extraLuggageCheck && extraLuggageFields) {
             extraLuggageCheck.addEventListener("change", function () {
@@ -70,22 +74,42 @@
         }
 
         if (returnFlightCheckbox && returnFlightFields) {
-            returnFlightCheckbox.addEventListener("change", function () {
-                if (this.checked) {
-                    const xhr = new XMLHttpRequest();
-                    xhr.open("GET", returnFlightURL);
-                    xhr.onload = function () {
-                        if (xhr.status === 200) {
-                            returnFlightFields.innerHTML = xhr.responseText;
-                            returnFlightFields.style.display = 'block';
-                        }
-                    };
-                    xhr.send();
-                } else {
-                    returnFlightFields.innerHTML = "";
-                    returnFlightFields.style.display = 'none';
+            function updateReturnFields() {
+                const direction = directionSelect ? directionSelect.value : '';
+                const isCruise = direction === 'Cruise or Point to Point';
+                const returnCruiseFields = document.getElementById('return-cruise-fields');
+
+                returnFlightFields.innerHTML = "";
+                returnFlightFields.style.display = 'none';
+                if (returnCruiseFields) {
+                    returnCruiseFields.innerHTML = "";
+                    returnCruiseFields.style.display = 'none';
                 }
-            });
+
+                if (!returnFlightCheckbox.checked) return;
+
+                const targetURL = isCruise ? returnCruiseURL : returnFlightURL;
+                const targetFields = isCruise ? returnCruiseFields : returnFlightFields;
+
+                if (!targetFields) return;
+
+                const xhr = new XMLHttpRequest();
+                xhr.open("GET", targetURL);
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        targetFields.innerHTML = xhr.responseText;
+                        targetFields.style.display = 'block';
+                    }
+                };
+                xhr.send();
+            }
+
+            returnFlightCheckbox.addEventListener("change", updateReturnFields);
+            if (directionSelect) {
+                directionSelect.addEventListener("change", function () {
+                    if (returnFlightCheckbox.checked) updateReturnFields();
+                });
+            }
         }
 
         if (flightDateInput) {
@@ -106,17 +130,23 @@
 
         function toggleDirectionFields() {
             if (!directionSelect || !startEndFields || !flightFields) return;
-            if (directionSelect.value === "Cruise or Point to Point") {
+            
+            const isCruise = directionSelect.value === "Cruise or Point to Point";
+            
+            if (isCruise) {
                 startEndFields.style.display = 'block';
                 flightFields.style.display = 'none';
+                addressFields.style.display = 'none';
             } else {
                 startEndFields.style.display = 'none';
                 flightFields.style.display = 'block';
+                addressFields.style.display = 'block';
             }
         }
+
         if (directionSelect) {
             directionSelect.addEventListener('change', toggleDirectionFields);
-            toggleDirectionFields(); 
+            toggleDirectionFields();
         }
 
         let originalTitle = document.title;
