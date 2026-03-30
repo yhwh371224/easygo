@@ -120,6 +120,7 @@ INSTALLED_APPS = [
     'storages',
     'corsheaders',
     'paypal.standard.ipn',
+    'meta',
     'markdownx',
     'csp',
     'axes',    
@@ -369,6 +370,9 @@ CORS_ALLOWED_ORIGINS = [
 CORS_ALLOW_METHODS = [ 'GET', 'POST', ]
 
 CORS_ALLOW_HEADERS = [ 'Content-Type', 'X-CSRFToken', ]
+
+META_SITE_PROTOCOL = 'https'
+META_USE_OG_PROPERTIES = True 
 
 APPEND_SLASH = True
 
