@@ -136,11 +136,11 @@
             if (isCruise) {
                 startEndFields.style.display = 'block';
                 flightFields.style.display = 'none';
-                addressFields.style.display = 'none';
+                if (addressFields) addressFields.style.display = 'none';
             } else {
                 startEndFields.style.display = 'none';
                 flightFields.style.display = 'block';
-                addressFields.style.display = 'block';
+                if (addressFields) addressFields.style.display = 'block';
             }
         }
 
