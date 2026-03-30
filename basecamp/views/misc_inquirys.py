@@ -12,10 +12,11 @@ from basecamp.basecamp_utils import (
     verify_turnstile, get_sorted_suburbs,
     render_inquiry_done, booking_success_response, require_turnstile,
 )
-
+from articles.models import Post
 
 def price_detail(request):
     sorted_suburbs = get_sorted_suburbs() 
+    latest_post = Post.objects.filter(status='published').order_by('-created_at').first() 
     if request.method == "POST":
         pickup_date_str = request.POST.get('pickup_date', '')  
         start_point = request.POST.get('start_point')
@@ -66,7 +67,8 @@ def price_detail(request):
             'start_point': normalized_start_point,
             'end_point': normalized_end_point,
             'no_of_passenger': no_of_passenger,
-            'condition_met': condition_met
+            'condition_met': condition_met,
+            'latest_post': latest_post,
         }
 
         return render(request, 'basecamp/booking/inquiry1.html', context)
@@ -75,6 +77,7 @@ def price_detail(request):
         return render(request, 'basecamp/home.html', {
             'home_suburbs': sorted_suburbs,
             'google_review_url': settings.GOOGLE_REVIEW_URL, 
+            'latest_post': latest_post,
         })
     
 
