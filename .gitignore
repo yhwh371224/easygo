@@ -62,6 +62,7 @@ calendar-service-account-file.json
 secure/
 backup/
 .claude/
+logs/
 
 # ==============================
 # Other / Misc
