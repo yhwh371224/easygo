@@ -2,6 +2,7 @@
 # Virtual Environment
 # ==============================
 venv/
+myenv/
 
 # ==============================
 # IDE / OS
@@ -59,6 +60,7 @@ token.json
 service-account-file.json
 calendar-service-account-file.json
 secure/
+backup/
 .claude/
 
 # ==============================
