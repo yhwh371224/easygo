@@ -56,9 +56,9 @@ def auto_fetch_thumbnail(sender, instance, created, **kwargs):
 
         # 저장 (시그널 재귀 방지: update_fields 사용)
         filename = f"{instance.slug}.webp"
-        Post.objects.filter(pk=instance.pk).update(
-            thumbnail=ContentFile(buffer.getvalue(), name=filename)
-        )
+        post = Post.objects.get(pk=instance.pk)
+        post.thumbnail.save(filename, ContentFile(buffer.getvalue()), save=False)
+        Post.objects.filter(pk=instance.pk).update(thumbnail=post.thumbnail.name)
         print(f"Unsplash thumbnail saved: {filename}")
 
     except Exception as e:
