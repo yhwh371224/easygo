@@ -309,7 +309,11 @@ def invoice_detail(request):
     except ValueError:
         return HttpResponse("Invalid index value", status=400)
 
-    users = Post.objects.filter(email__iexact=email)
+    # booker_email로 먼저 검색, 없으면 email로 검색
+    users = Post.objects.filter(booker_email__iexact=email)
+    if not users.exists():
+        users = Post.objects.filter(email__iexact=email)
+
     if not users.exists():
         return HttpResponse("No bookings found", status=404)
 
