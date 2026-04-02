@@ -72,20 +72,35 @@ def update_meeting_point_for_arrivals():
             pickup_date=today,
             direction=rule["direction"],
             cancelled=False
-        ).order_by("flight_time")
+        ).select_related("driver").order_by("flight_time")
 
-        first = True  # 빈값 기준으로 첫 번째는 primary
+        driver_first_flag = {}  # 🔥 driver별 상태 관리
 
         for booking in bookings:
             if booking.meeting_point and booking.meeting_point.strip():
-                continue  # 이미 값이 있으면 건너뜀
+                continue
 
-            if first:
+            # 🔥 driver 없으면 Sam 자동 지정
+            driver = assign_default_driver(booking)
+            driver_id = driver.id
+
+            if driver_id not in driver_first_flag:
+                driver_first_flag[driver_id] = True
+
+            if driver_first_flag[driver_id]:
                 booking.meeting_point = rule["primary_value"]
-                first = False
-                logger.info(f"Set first {rule['primary_value']} for {booking.name} ({booking.flight_time})")
+                driver_first_flag[driver_id] = False
+
+                logger.info(
+                    f"Set first {rule['primary_value']} for driver {driver.driver_name} "
+                    f"- {booking.name} ({booking.flight_time})"
+                )
             else:
                 booking.meeting_point = rule["secondary_value"]
-                logger.info(f"Set {rule['secondary_value']} for {booking.name} ({booking.flight_time})")
+
+                logger.info(
+                    f"Set {rule['secondary_value']} for driver {driver.driver_name} "
+                    f"- {booking.name} ({booking.flight_time})"
+                )
 
             booking.save(update_fields=["meeting_point"])
