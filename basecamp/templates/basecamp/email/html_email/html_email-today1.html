@@ -199,6 +199,11 @@
 															• Public Pick-up (2 minutes area)<br><br>
 															• After exiting the arrivals hall, please follow the signs for “Rideshare & Pickup.” Once you reach the parking building (P7), continue following the signs for “Public Pick-up”<br><br>
 															• <a href="https://easygo.s3.ap-southeast-2.amazonaws.com/Intl_airport_map.webp">Map of the Public Pick-up Point</a><br>
+														{% elif meeting_point == "Lux" %}
+															• Premium Meet & Greet Service (Luxury Vehicle)<br><br>
+															• Your driver will be waiting inside the Arrival Hall holding a name sign<br><br>
+															• After meeting you, the driver will escort you to your vehicle<br><br>
+															• Meeting point is just outside the Arrival Hall exits (A or B)<br>
 														{% else %}														
 															• {{ meeting_point }}<br><br>
 															• After exiting the arrivals hall, please follow the signs for “Rideshare & Pickup.” Once you reach the parking building (P7), continue following the signs for “{{ meeting_point }}”<br><br>
@@ -274,7 +279,12 @@
 															• Express Pick-up<br><br>
 															• After exiting the arrivals hall, please follow the signs for “Express Pickup”<br><br>
 															• <a href="https://easygo.s3.ap-southeast-2.amazonaws.com/Express_pickup.webp">Domestic Terminal Map</a><br><br>
-															* If any passengers have difficulty walking or are elderly, please meet the driver at the <strong>Accessible Pickup area</strong> next to the public bus stop<br>															
+															* If any passengers have difficulty walking or are elderly, please meet the driver at the <strong>Accessible Pickup area</strong> next to the public bus stop<br>
+														{% elif meeting_point == "Lux" %}
+															• Premium Meet & Greet Service (Luxury Vehicle)<br><br>
+															• Your driver will be waiting inside the Arrival Hall holding a name sign<br><br>
+															• After meeting you, the driver will escort you to your vehicle<br><br>
+															• Meeting point is just outside the Arrival Hall exits (A or B)<br>															
 														{% else %}
 															• {{ meeting_point }}<br><br>
 															• After exiting the arrivals hall, please follow the signs for “{{ meeting_point }}”<br><br>
