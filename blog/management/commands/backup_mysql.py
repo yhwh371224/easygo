@@ -65,6 +65,10 @@ class Command(BaseCommand):
             'blog_inquiry',
             'blog_post',
             'posting_agent_blogpost',
+            'articles_category',      
+            'articles_tag',           
+            'articles_post',          
+            'articles_post_tags',     
         ]
 
         # SQLite 테이블 목록
