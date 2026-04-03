@@ -52,6 +52,9 @@ class Post(models.Model):
     # ── 이미지 ─────────────────────────────────
     thumbnail = models.ImageField(upload_to='articles/thumbnails/%Y/%m/',
                                   null=True, blank=True, verbose_name='Thumbnail')
+    thumbnail_query = models.CharField(max_length=100, blank=True,
+                                       verbose_name='Thumbnail Query',
+                                       help_text='Search keyword for Unsplash')
 
     # ── SEO ────────────────────────────────────
     meta_title       = models.CharField(max_length=70, blank=True,

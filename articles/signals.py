@@ -22,13 +22,16 @@ def regenerate_sitemap_on_publish(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Post)
 def auto_fetch_thumbnail(sender, instance, created, **kwargs):
-    # 썸네일 없을 때만 실행
     if instance.thumbnail:
         return
 
+    # thumbnail_query 없으면 실행 안 함
+    if not instance.thumbnail_query:
+        print(f"Unsplash: no thumbnail_query set for '{instance.title}'")
+        return
+
     try:
-        # 제목으로 Unsplash 검색
-        query = urllib.parse.quote(instance.title)
+        query = urllib.parse.quote(instance.thumbnail_query)
         api_url = (
             f"https://api.unsplash.com/search/photos"
             f"?query={query}&per_page=1&orientation=landscape"
@@ -40,21 +43,18 @@ def auto_fetch_thumbnail(sender, instance, created, **kwargs):
 
         results = data.get('results', [])
         if not results:
-            print(f"Unsplash: no results for '{instance.title}'")
+            print(f"Unsplash: no results for '{instance.thumbnail_query}'")
             return
 
-        # 이미지 다운로드
         image_url = results[0]['urls']['regular']
         with urllib.request.urlopen(image_url, timeout=10) as img_response:
             img_data = img_response.read()
 
-        # webp 변환
         img = Image.open(io.BytesIO(img_data)).convert('RGB')
         buffer = io.BytesIO()
         img.save(buffer, format='WEBP', quality=85)
         buffer.seek(0)
 
-        # 저장 (시그널 재귀 방지: update_fields 사용)
         filename = f"{instance.slug}.webp"
         post = Post.objects.get(pk=instance.pk)
         post.thumbnail.save(filename, ContentFile(buffer.getvalue()), save=False)
