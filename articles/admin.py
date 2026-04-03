@@ -30,7 +30,7 @@ class PostAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ('Content', {
-            'fields': ('title', 'slug', 'excerpt', 'content', 'thumbnail')
+            'fields': ('title', 'slug', 'excerpt', 'content', 'thumbnail', 'thumbnail_query')
         }),
         ('Classification', {
             'fields': ('category', 'tags')
