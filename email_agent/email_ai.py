@@ -1,8 +1,11 @@
 import anthropic
 import json
+import logging
 from django.conf import settings
 from email_agent.prompts.system_prompt import STATIC_SYSTEM_PROMPT
 from email_agent.prompts.user_template import build_user_prompt
+
+logger = logging.getLogger(__name__)
 
 
 def analyze_email_with_claude(sender, subject, body, thread_history):
@@ -22,6 +25,16 @@ def analyze_email_with_claude(sender, subject, body, thread_history):
             }
         ],
         messages=[{"role": "user", "content": user_prompt}],
+    )
+
+    # 토큰 사용량 로깅
+    usage = message.usage
+    logger.info(
+        f"[Claude Token Usage] subject='{subject}' | "
+        f"cache_creation={usage.cache_creation_input_tokens} | "
+        f"cache_read={usage.cache_read_input_tokens} | "
+        f"input={usage.input_tokens} | "
+        f"output={usage.output_tokens}"
     )
 
     return _parse_response(message.content[0].text)
