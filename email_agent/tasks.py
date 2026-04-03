@@ -187,23 +187,6 @@ def gmail_watch_topic(payload):
             if is_message_processed(service, msg_id):
                 print(f"Already processed message {msg_id}, skipping")
                 continue
-
-            # 내가 보낸 이메일 스킵
-            if 'info@easygoshuttle.com.au' in sender and '[New Contact] Submission from' not in subject:
-                print(f"Skipping own email: {subject}")
-                continue
-
-            # 스팸/자동발송 스킵
-            skip_senders = ['noreply', 'no-reply', 'mailer-daemon', 'postmaster', 'notifications']
-            if any(skip in sender.lower() for skip in skip_senders):
-                print(f"Skipping automated email: {sender}")
-                continue
-
-            # Reminder 관련 이메일 스킵
-            skip_subjects = ['re: reminder', 'reminder']
-            if any(skip in subject.lower() for skip in skip_subjects):
-                print(f"Skipping reminder email: {subject}")
-                continue
             
             body = get_email_body(email['payload'])
             thread_history = get_thread_history(service, thread_id)
