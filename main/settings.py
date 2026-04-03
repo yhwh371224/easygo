@@ -155,6 +155,13 @@ LOGGING = {
             'filename': os.path.join(BASE_DIR, 'logs/sms.log'),
             'formatter': 'verbose',
         },
+        # ✅ 추가
+        'email_agent_file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs/email_agent.log'),
+            'formatter': 'verbose',
+        },
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
@@ -187,6 +194,12 @@ LOGGING = {
         'easygo': {
             'handlers': ['file', 'console', 'telegram'],  
             'level': 'DEBUG',
+            'propagate': False,
+        },
+        # ✅ 추가
+        'email_agent': {
+            'handlers': ['email_agent_file', 'console'],
+            'level': 'INFO',
             'propagate': False,
         },
     },
