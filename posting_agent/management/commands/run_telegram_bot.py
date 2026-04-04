@@ -26,6 +26,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         results = []
 
         # 1. Django 블로그 저장
+        post = None
         try:
             post = save_blog_post(content, image_bytes, f"{content['topic_slug']}.webp")
             results.append(f"✅ 블로그: {post.get_absolute_url()}")
@@ -33,18 +34,18 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             results.append(f"❌ 블로그 실패: {e}")
 
         # 2. Facebook
-        fb_ok = post_to_facebook(content['social_content'], image_bytes)
-        results.append("✅ Facebook 발행" if fb_ok else "❌ Facebook 실패")
+        # fb_ok = post_to_facebook(content['social_content'], image_bytes)
+        # results.append("✅ Facebook 발행" if fb_ok else "❌ Facebook 실패")
 
         # 3. Google My Business
         blog_url = f"https://easygoairportshuttle.com.au/blog/{content['topic_slug']}/"
-        image_url = f"https://easygoairportshuttle.com.au{post.image.url}" if post.image else None
+        image_url = f"https://easygoairportshuttle.com.au{post.image.url}" if post and post.image else None
         gmb_ok = post_to_google_business(content['gmb_content'], call_to_action_url=blog_url, image_url=image_url)
         results.append("✅ GMB 포스트 발행" if gmb_ok else "❌ GMB 실패")
 
         # 4. Instagram (이미지 URL 필요 - 블로그 저장 후 URL 사용)
         # TODO: Meta API 셋업 후 활성화
-        results.append("⏸️ Instagram (Meta API 셋업 후 활성화)")
+        # results.append("⏸️ Instagram (Meta API 셋업 후 활성화)")
 
         clear_pending()
         await query.edit_message_caption("\n".join(results))
