@@ -50,7 +50,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         clear_pending()
         await query.edit_message_caption("❌ 취소됐습니다.")
 
-    elif query.data.startswith("review_approve:"):
+    elif query.data.startswith("ra:"):
         review_id = query.data.split(":")[1]
         review, reply = load_pending_review(review_id)
         if not review:
@@ -63,12 +63,13 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await query.edit_message_text("❌ 답변 발행 실패")
         clear_pending_review(review_id)
 
-    elif query.data.startswith("review_skip:"):
+    elif query.data.startswith("rs:"):
         review_id = query.data.split(":")[1]
         clear_pending_review(review_id)
         await query.edit_message_text("⏭️ 건너뛰었습니다.")
 
-    elif query.data.startswith("review_edit:"):
+    elif query.data.startswith("re:"):
+        review_id = query.data.split(":")[1]
         await query.edit_message_text("✏️ 수정할 답변 내용을 입력해주세요:")
 
 
