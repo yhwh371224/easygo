@@ -1,6 +1,7 @@
 import logging
 from django.core.management.base import BaseCommand
 from django.conf import settings
+from asgiref.sync import sync_to_async
 from telegram import Update
 from telegram.ext import Application, CallbackQueryHandler, ContextTypes
 from posting_agent.telegram_bot import load_pending, clear_pending, load_pending_review, clear_pending_review
@@ -28,10 +29,11 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         # 1. Django 블로그 저장
         post = None
         try:
-            post = save_blog_post(content, image_bytes, f"{content['topic_slug']}.webp")
+            post = await sync_to_async(save_blog_post)(content, image_bytes, f"{content['topic_slug']}.webp")
             results.append(f"✅ 블로그: {post.get_absolute_url()}")
         except Exception as e:
             results.append(f"❌ 블로그 실패: {e}")
+            print(f"❌ 블로그 저장 실패: {e}")
 
         # 2. Facebook
         # fb_ok = post_to_facebook(content['social_content'], image_bytes)
