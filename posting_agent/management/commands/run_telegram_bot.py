@@ -7,6 +7,7 @@ from posting_agent.telegram_bot import load_pending, clear_pending, load_pending
 from posting_agent.blog_poster import save_blog_post
 from posting_agent.social_poster import post_to_facebook, post_to_instagram
 from posting_agent.review_manager import post_reply
+from posting_agent.gmb_poster import post_to_google_business
 
 
 logging.basicConfig(level=logging.INFO)
@@ -35,7 +36,12 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         fb_ok = post_to_facebook(content['social_content'], image_bytes)
         results.append("✅ Facebook 발행" if fb_ok else "❌ Facebook 실패")
 
-        # 3. Instagram (이미지 URL 필요 - 블로그 저장 후 URL 사용)
+        # 3. Google My Business
+        blog_url = f"https://easygoairportshuttle.com.au/blog/{content['topic_slug']}/"
+        gmb_ok = post_to_google_business(content['gmb_content'], call_to_action_url=blog_url)
+        results.append("✅ GMB 포스트 발행" if gmb_ok else "❌ GMB 실패")
+
+        # 4. Instagram (이미지 URL 필요 - 블로그 저장 후 URL 사용)
         # TODO: Meta API 셋업 후 활성화
         results.append("⏸️ Instagram (Meta API 셋업 후 활성화)")
 
