@@ -85,6 +85,7 @@ def clear_pending_review(review_id: str):
 
 async def send_review_for_approval(review: dict, reply: str, current: int, total: int):
     save_pending_review(review, reply)
+    review_id = review.get('reviewId', 'unknown')
 
     reviewer = review.get('reviewer', {}).get('displayName', '익명')
     rating = review.get('starRating', 'FIVE')
@@ -92,6 +93,9 @@ async def send_review_for_approval(review: dict, reply: str, current: int, total
 
     rating_map = {'ONE': '⭐', 'TWO': '⭐⭐', 'THREE': '⭐⭐⭐', 'FOUR': '⭐⭐⭐⭐', 'FIVE': '⭐⭐⭐⭐⭐'}
     stars = rating_map.get(rating, '⭐⭐⭐⭐⭐')
+
+    # reviewId 앞 20자만 사용
+    short_id = review_id[:20]
 
     message = (
         f"💬 *리뷰 답변 승인 ({current}/{total})*\n\n"
@@ -108,9 +112,9 @@ async def send_review_for_approval(review: dict, reply: str, current: int, total
         parse_mode="Markdown",
         reply_markup=telegram.InlineKeyboardMarkup([
             [
-                telegram.InlineKeyboardButton("✅ 승인", callback_data=f"review_approve:{review.get('reviewId')}"),
-                telegram.InlineKeyboardButton("✏️ 수정", callback_data=f"review_edit:{review.get('reviewId')}"),
-                telegram.InlineKeyboardButton("⏭️ 건너뛰기", callback_data=f"review_skip:{review.get('reviewId')}"),
+                telegram.InlineKeyboardButton("✅ 승인", callback_data=f"ra:{short_id}"),
+                telegram.InlineKeyboardButton("✏️ 수정", callback_data=f"re:{short_id}"),
+                telegram.InlineKeyboardButton("⏭️ 건너뛰기", callback_data=f"rs:{short_id}"),
             ]
         ])
     )
