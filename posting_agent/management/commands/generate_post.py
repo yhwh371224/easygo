@@ -25,6 +25,7 @@ class Command(BaseCommand):
             filename_slug=topic_slug,
             query="sydney airport terminal transfer",
         )
+        content['image_url'] = image_result.get('source_url')
 
         self.stdout.write("📨 Telegram 미리보기 전송 중...")
         asyncio.run(send_preview(content, image_result['image_bytes']))

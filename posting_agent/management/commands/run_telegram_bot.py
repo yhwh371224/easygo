@@ -41,7 +41,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         # 3. Google My Business
         blog_url = f"https://easygoairportshuttle.com.au/blog/{content['topic_slug']}/"
-        image_url = f"https://easygoairportshuttle.com.au{post.image.url}" if post and post.image else None
+        image_url = content.get('image_url')
         gmb_ok = post_to_google_business(content['gmb_content'], call_to_action_url=blog_url, image_url=image_url)
         results.append("✅ GMB 포스트 발행" if gmb_ok else "❌ GMB 실패")
 
