@@ -15,7 +15,7 @@ def get_gmb_service():
     return build(
         'mybusiness', 'v4',
         credentials=creds,
-        discoveryServiceUrl='https://mybusiness.googleapis.com/$discovery/rest'
+        discoveryServiceUrl='https://mybusiness.googleapis.com/$discovery/rest?version=v4'
     )
 
 
