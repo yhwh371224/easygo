@@ -21,14 +21,13 @@ TOPICS = [
 
 def pick_topic():
     """발행 이력 기반으로 안 쓴 토픽 선택"""
-    from posting_agent.models import BlogPost
-    used_slugs = BlogPost.objects.values_list('slug', flat=True)
-    for slug, title_en, title_ko in TOPICS:
-        if not any(slug in s for s in used_slugs):
-            return slug, title_en
+    from articles.models import Post
+    used_slugs = Post.objects.values_list('slug', flat=True)
+    for slug, title in TOPICS:
+        if slug not in used_slugs:
+            return slug, title
     # 전부 사용했으면 첫 번째로 순환
     return TOPICS[0][0], TOPICS[0][1]
-
 
 def generate_all_content(topic_slug: str, topic_title: str):
     """SEO 롱폼 + 소셜 + GMB 글 한 번에 생성"""
