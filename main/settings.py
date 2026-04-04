@@ -429,6 +429,8 @@ UNSPLASH_SECRET_KEY = config('UNSPLASH_SECRET_KEY')
 
 GMB_OAUTH_CLIENT_FILE = config('GMB_OAUTH_CLIENT_FILE', default='')
 GMB_TOKEN_FILE = config('GMB_TOKEN_FILE', default='')
+GMB_ACCOUNT_NAME = config('GMB_ACCOUNT_NAME', default='')
+GMB_LOCATION_NAME = config('GMB_LOCATION_NAME', default='')
 
 FACEBOOK_PAGE_ID = config('FACEBOOK_PAGE_ID', default='')
 FACEBOOK_PAGE_TOKEN = config('FACEBOOK_PAGE_TOKEN', default='')
