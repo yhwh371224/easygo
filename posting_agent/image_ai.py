@@ -5,8 +5,8 @@ import io
 
 
 def generate_post_image(alt_text: str, filename_slug: str, query: str = None):
-    search_query = query or alt_text
-
+    search_query = query or "sydney airport transfer shuttle"
+    
     # Unsplash API로 이미지 검색
     response = requests.get(
         "https://api.unsplash.com/search/photos",

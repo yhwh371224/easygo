@@ -23,6 +23,7 @@ class Command(BaseCommand):
         image_result = generate_post_image(
             alt_text=content['image_alt'],
             filename_slug=topic_slug,
+            query="sydney airport terminal transfer",
         )
 
         self.stdout.write("📨 Telegram 미리보기 전송 중...")
