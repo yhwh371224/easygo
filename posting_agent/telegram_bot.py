@@ -1,3 +1,4 @@
+import os
 import json
 import telegram
 from django.conf import settings
@@ -53,6 +54,60 @@ async def send_preview(content: dict, image_bytes: bytes):
                 telegram.InlineKeyboardButton("✅ 전체 발행", callback_data="approve_all"),
                 telegram.InlineKeyboardButton("🔄 재생성", callback_data="regenerate"),
                 telegram.InlineKeyboardButton("❌ 취소", callback_data="cancel"),
+            ]
+        ])
+    )
+
+PENDING_REVIEW_FILE = '/tmp/easygo_pending_review.json'
+
+
+def save_pending_review(review: dict, reply: str):
+    with open(PENDING_REVIEW_FILE, 'w') as f:
+        json.dump({'review': review, 'reply': reply}, f, ensure_ascii=False)
+
+
+def load_pending_review():
+    try:
+        with open(PENDING_REVIEW_FILE, 'r') as f:
+            data = json.load(f)
+        return data['review'], data['reply']
+    except FileNotFoundError:
+        return None, None
+
+
+def clear_pending_review():
+    if os.path.exists(PENDING_REVIEW_FILE):
+        os.remove(PENDING_REVIEW_FILE)
+
+
+async def send_review_for_approval(review: dict, reply: str, current: int, total: int):
+    save_pending_review(review, reply)
+
+    reviewer = review.get('reviewer', {}).get('displayName', '익명')
+    rating = review.get('starRating', 'FIVE')
+    comment = review.get('comment', '내용 없음')
+
+    rating_map = {'ONE': '⭐', 'TWO': '⭐⭐', 'THREE': '⭐⭐⭐', 'FOUR': '⭐⭐⭐⭐', 'FIVE': '⭐⭐⭐⭐⭐'}
+    stars = rating_map.get(rating, '⭐⭐⭐⭐⭐')
+
+    message = (
+        f"💬 *리뷰 답변 승인 ({current}/{total})*\n\n"
+        f"*리뷰어:* {reviewer}\n"
+        f"*별점:* {stars}\n"
+        f"*리뷰:*\n{comment}\n\n"
+        f"*AI 답변 초안:*\n{reply}"
+    )
+
+    bot = telegram.Bot(token=settings.TELEGRAM_BOT_TOKEN)
+    await bot.send_message(
+        chat_id=settings.TELEGRAM_CHAT_ID,
+        text=message,
+        parse_mode="Markdown",
+        reply_markup=telegram.InlineKeyboardMarkup([
+            [
+                telegram.InlineKeyboardButton("✅ 승인", callback_data="review_approve"),
+                telegram.InlineKeyboardButton("✏️ 수정", callback_data="review_edit"),
+                telegram.InlineKeyboardButton("⏭️ 건너뛰기", callback_data="review_skip"),
             ]
         ])
     )
