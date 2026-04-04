@@ -18,7 +18,8 @@ def get_unanswered_reviews(max_reviews=10):
     creds = get_credentials()
     location_name = settings.GMB_LOCATION_NAME
 
-    url = f"https://mybusiness.googleapis.com/v4/{location_name}/reviews"
+    account_name = settings.GMB_ACCOUNT_NAME
+    url = f"https://mybusiness.googleapis.com/v4/{account_name}/{location_name}/reviews"
     headers = {"Authorization": f"Bearer {creds.token}"}
     params = {"pageSize": 50}
 
