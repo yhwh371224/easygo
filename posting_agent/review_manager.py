@@ -1,39 +1,32 @@
-import os
+import requests
 from django.conf import settings
 from google.oauth2.credentials import Credentials
 from google.auth.transport.requests import Request
-from googleapiclient.discovery import build
 import anthropic
 
 
-def get_gmb_service():
+def get_credentials():
     creds = Credentials.from_authorized_user_file(settings.GMB_TOKEN_FILE)
     if creds.expired and creds.refresh_token:
         creds.refresh(Request())
         with open(settings.GMB_TOKEN_FILE, 'w') as f:
             f.write(creds.to_json())
-    return build(
-        'mybusiness', 'v4',
-        credentials=creds,
-        discoveryServiceUrl='https://mybusiness.googleapis.com/$discovery/rest?version=v4'
-    )
+    return creds
 
 
 def get_unanswered_reviews(max_reviews=10):
-    service = get_gmb_service()
+    creds = get_credentials()
     location_name = settings.GMB_LOCATION_NAME
 
-    response = service.accounts().locations().reviews().list(
-        parent=location_name,
-        pageSize=50,
-    ).execute()
+    url = f"https://mybusiness.googleapis.com/v4/{location_name}/reviews"
+    headers = {"Authorization": f"Bearer {creds.token}"}
+    params = {"pageSize": 50}
 
-    reviews = response.get('reviews', [])
+    response = requests.get(url, headers=headers, params=params)
+    response.raise_for_status()
 
-    unanswered = [
-        r for r in reviews
-        if not r.get('reviewReply')
-    ]
+    reviews = response.json().get('reviews', [])
+    unanswered = [r for r in reviews if not r.get('reviewReply')]
 
     return unanswered[:max_reviews]
 
@@ -43,9 +36,7 @@ def generate_reply(review: dict) -> str:
     rating = review.get('starRating', 'FIVE')
     comment = review.get('comment', '')
 
-    rating_map = {
-        'ONE': 1, 'TWO': 2, 'THREE': 3, 'FOUR': 4, 'FIVE': 5
-    }
+    rating_map = {'ONE': 1, 'TWO': 2, 'THREE': 3, 'FOUR': 4, 'FIVE': 5}
     stars = rating_map.get(rating, 5)
 
     prompt = f"""You are a professional customer service manager for EasyGo Airport Shuttle, a premium airport transfer service in Sydney, Australia.
@@ -77,13 +68,14 @@ Reply only, no preamble."""
 
 
 def post_reply(review_name: str, reply_text: str) -> bool:
-    service = get_gmb_service()
-    try:
-        service.accounts().locations().reviews().updateReply(
-            name=review_name,
-            body={'comment': reply_text}
-        ).execute()
+    creds = get_credentials()
+    url = f"https://mybusiness.googleapis.com/v4/{review_name}/reply"
+    headers = {
+        "Authorization": f"Bearer {creds.token}",
+        "Content-Type": "application/json"
+    }
+    response = requests.put(url, headers=headers, json={"comment": reply_text})
+    if response.status_code == 200:
         return True
-    except Exception as e:
-        print(f"[GMB] Reply failed: {e}")
-        return False
+    print(f"[GMB] Reply failed: {response.status_code} {response.text}")
+    return False
