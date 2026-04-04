@@ -39,7 +39,7 @@ async def send_preview(content: dict, image_bytes: bytes):
         f"📋 *Post Preview*\n\n"
         f"*제목:* {content['title']}\n\n"
         # f"*소셜 (FB/IG):*\n{content['social_content']}\n\n"
-        f"*GMB:*\n{content['gmb_content'][:150]}"
+        f"*GMB:*\n{content['gmb_content'][:300]}"
     )
 
     bot = telegram.Bot(token=settings.TELEGRAM_BOT_TOKEN)

@@ -21,16 +21,15 @@ TOPICS = [
 
 def pick_topic():
     """발행 이력 기반으로 안 쓴 토픽 선택"""
-    from articles.models import Post
-    used_slugs = Post.objects.values_list('slug', flat=True)
+    from posting_agent.models import BlogPost
+    used_slugs = BlogPost.objects.values_list('slug', flat=True)
     for slug, title in TOPICS:
         if slug not in used_slugs:
             return slug, title
-    # 전부 사용했으면 첫 번째로 순환
     return TOPICS[0][0], TOPICS[0][1]
 
 def generate_all_content(topic_slug: str, topic_title: str):
-    """SEO 롱폼 + 소셜 + GMB 글 한 번에 생성"""
+    """GMB 글 생성"""
     client = anthropic.Anthropic(api_key=settings.ANTHROPIC_API_KEY)
 
     message = client.messages.create(
@@ -40,18 +39,12 @@ def generate_all_content(topic_slug: str, topic_title: str):
             "role": "user",
             "content": f"""You are a content writer for EasyGo Airport Shuttle, a professional airport transfer service in Sydney, Australia.
 
-Generate THREE versions of content for the topic: "{topic_title}"
+Generate content for the topic: "{topic_title}"
 
 Return ONLY this exact format, no extra text:
 
-===SEO===
-[Write a 300-400 word SEO blog post. Include H2 subheadings. Natural keyword usage: Sydney airport pickup, airport transfer Sydney, EasyGo shuttle. Professional and helpful tone.]
-
-===SOCIAL===
-[Write a 2-3 sentence Facebook/Instagram post. Engaging, friendly tone. End with a call to action. Include 3-5 relevant hashtags.]
-
 ===GMB===
-[Write 2 sentences for Google Business Profile. Professional, local focus. No hashtags.]
+[Write 150-200 words for Google Business Profile. Professional, engaging, local focus. Mention EasyGo Airport Shuttle naturally. Include key benefits like fixed pricing, door-to-door service, flight tracking. End with a call to action. No hashtags.]
 
 ===ALT===
 [Write one image alt text describing a professional airport shuttle scene relevant to this topic. Under 15 words.]
@@ -78,8 +71,8 @@ def parse_content(raw: str, topic_slug: str):
     return {
         "topic_slug": topic_slug,
         "title": extract("TITLE"),
-        "seo_content": extract("SEO"),
-        "social_content": extract("SOCIAL"),
+        "seo_content": "",
+        "social_content": "",
         "gmb_content": extract("GMB"),
         "image_alt": extract("ALT"),
     }
