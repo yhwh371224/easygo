@@ -21,6 +21,20 @@ def generate_post_image(alt_text: str, filename_slug: str, query: str = None):
     results = response.json().get("results", [])
 
     if not results:
+        # 기본 검색어로 재시도
+        response = requests.get(
+            "https://api.unsplash.com/search/photos",
+            params={
+                "query": "sydney airport shuttle transfer",
+                "per_page": 1,
+                "orientation": "landscape",
+            },
+            headers={"Authorization": f"Client-ID {settings.UNSPLASH_ACCESS_KEY}"}
+        )
+        response.raise_for_status()
+        results = response.json().get("results", [])
+
+    if not results:
         raise ValueError(f"Unsplash에서 이미지를 찾을 수 없어요: {search_query}")
 
     image_url = results[0]["urls"]["regular"]

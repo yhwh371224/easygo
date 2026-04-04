@@ -23,7 +23,7 @@ class Command(BaseCommand):
         image_result = generate_post_image(
             alt_text=content['image_alt'],
             filename_slug=topic_slug,
-            query="sydney airport terminal transfer",
+            query=content['image_query'],
         )
         content['image_url'] = image_result.get('source_url')
 

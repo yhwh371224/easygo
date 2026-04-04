@@ -49,6 +49,9 @@ Return ONLY this exact format, no extra text:
 ===ALT===
 [Write one image alt text describing a professional airport shuttle scene relevant to this topic. Under 15 words.]
 
+===QUERY===
+[Write 2-3 keywords for image search. Simple and specific. e.g. "sydney airport terminal", "family luggage shuttle"]
+
 ===TITLE===
 [Write an SEO-optimized blog post title. Under 60 characters.]"""
         }]
@@ -75,4 +78,5 @@ def parse_content(raw: str, topic_slug: str):
         "social_content": "",
         "gmb_content": extract("GMB"),
         "image_alt": extract("ALT"),
+        "image_query": extract("QUERY"),
     }
