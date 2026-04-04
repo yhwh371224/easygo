@@ -58,26 +58,29 @@ async def send_preview(content: dict, image_bytes: bytes):
         ])
     )
 
-PENDING_REVIEW_FILE = '/tmp/easygo_pending_review.json'
+PENDING_REVIEW_FILE = '/tmp/easygo_pending_review_{review_id}.json'
 
 
 def save_pending_review(review: dict, reply: str):
-    with open(PENDING_REVIEW_FILE, 'w') as f:
+    review_id = review.get('reviewId', 'unknown')
+    path = PENDING_REVIEW_FILE.format(review_id=review_id)
+    with open(path, 'w') as f:
         json.dump({'review': review, 'reply': reply}, f, ensure_ascii=False)
 
-
-def load_pending_review():
+def load_pending_review(review_id: str):
+    path = PENDING_REVIEW_FILE.format(review_id=review_id)
     try:
-        with open(PENDING_REVIEW_FILE, 'r') as f:
+        with open(path, 'r') as f:
             data = json.load(f)
         return data['review'], data['reply']
     except FileNotFoundError:
         return None, None
 
 
-def clear_pending_review():
-    if os.path.exists(PENDING_REVIEW_FILE):
-        os.remove(PENDING_REVIEW_FILE)
+def clear_pending_review(review_id: str):
+    path = PENDING_REVIEW_FILE.format(review_id=review_id)
+    if os.path.exists(path):
+        os.remove(path)
 
 
 async def send_review_for_approval(review: dict, reply: str, current: int, total: int):
@@ -105,9 +108,9 @@ async def send_review_for_approval(review: dict, reply: str, current: int, total
         parse_mode="Markdown",
         reply_markup=telegram.InlineKeyboardMarkup([
             [
-                telegram.InlineKeyboardButton("✅ 승인", callback_data="review_approve"),
-                telegram.InlineKeyboardButton("✏️ 수정", callback_data="review_edit"),
-                telegram.InlineKeyboardButton("⏭️ 건너뛰기", callback_data="review_skip"),
+                telegram.InlineKeyboardButton("✅ 승인", callback_data=f"review_approve:{review.get('reviewId')}"),
+                telegram.InlineKeyboardButton("✏️ 수정", callback_data=f"review_edit:{review.get('reviewId')}"),
+                telegram.InlineKeyboardButton("⏭️ 건너뛰기", callback_data=f"review_skip:{review.get('reviewId')}"),
             ]
         ])
     )
