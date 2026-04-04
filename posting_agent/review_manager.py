@@ -24,6 +24,8 @@ def get_unanswered_reviews(max_reviews=10):
     params = {"pageSize": 50}
 
     response = requests.get(url, headers=headers, params=params)
+    print(f"[DEBUG] Status: {response.status_code}")
+    print(f"[DEBUG] Response: {response.text}")
     response.raise_for_status()
 
     reviews = response.json().get('reviews', [])
