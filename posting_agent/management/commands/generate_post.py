@@ -3,6 +3,9 @@ from django.core.management.base import BaseCommand
 from posting_agent.content_ai import pick_topic, generate_all_content
 from posting_agent.image_ai import generate_post_image
 from posting_agent.telegram_bot import send_preview
+from django.conf import settings
+from telegram.ext import Application, CallbackQueryHandler
+from posting_agent.management.commands.run_telegram_bot import button_handler
 
 
 class Command(BaseCommand):
@@ -25,4 +28,7 @@ class Command(BaseCommand):
         self.stdout.write("📨 Telegram 미리보기 전송 중...")
         asyncio.run(send_preview(content, image_result['image_bytes']))
 
-        self.stdout.write(self.style.SUCCESS("✅ Telegram에서 확인 후 승인해주세요!"))
+        self.stdout.write("🤖 Telegram 봇 시작 - 승인 후 Ctrl+C 로 종료하세요")
+        app = Application.builder().token(settings.TELEGRAM_BOT_TOKEN).build()
+        app.add_handler(CallbackQueryHandler(button_handler))
+        app.run_polling()
