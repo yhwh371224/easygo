@@ -3,9 +3,11 @@ from django.core.management.base import BaseCommand
 from django.conf import settings
 from telegram import Update
 from telegram.ext import Application, CallbackQueryHandler, ContextTypes
-from posting_agent.telegram_bot import load_pending, clear_pending
+from posting_agent.telegram_bot import load_pending, clear_pending, load_pending_review, clear_pending_review
 from posting_agent.blog_poster import save_blog_post
 from posting_agent.social_poster import post_to_facebook, post_to_instagram
+from posting_agent.review_manager import post_reply
+
 
 logging.basicConfig(level=logging.INFO)
 
@@ -47,6 +49,25 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif query.data == "cancel":
         clear_pending()
         await query.edit_message_caption("❌ 취소됐습니다.")
+
+    elif query.data == "review_approve":
+        review, reply = load_pending_review()
+        if not review:
+            await query.edit_message_text("❌ 저장된 리뷰가 없어요.")
+            return
+        ok = post_reply(review['name'], reply)
+        if ok:
+            await query.edit_message_text(f"✅ 답변 발행 완료!\n\n{reply}")
+        else:
+            await query.edit_message_text("❌ 답변 발행 실패")
+        clear_pending_review()
+
+    elif query.data == "review_skip":
+        clear_pending_review()
+        await query.edit_message_text("⏭️ 건너뛰었습니다.")
+
+    elif query.data == "review_edit":
+        await query.edit_message_text("✏️ 수정할 답변 내용을 입력해주세요:")
 
 
 class Command(BaseCommand):
