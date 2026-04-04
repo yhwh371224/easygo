@@ -39,4 +39,5 @@ def generate_post_image(alt_text: str, filename_slug: str, query: str = None):
         "filename": f"{filename_slug}.webp",
         "alt_text": alt_text,
         "content_type": "image/webp",
+        "source_url": results[0]["urls"]["regular"],
     }
