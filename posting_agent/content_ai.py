@@ -2,14 +2,22 @@ from django.conf import settings
 import anthropic
 
 TOPICS = [
-    ("sydney-airport-pickup-tips", "Sydney Airport Pickup Tips", "시드니 공항 픽업 팁"),
-    ("early-morning-flight-sydney", "Early Morning Flight Sydney Airport Transfer", "새벽 비행기 시드니 공항 픽업"),
-    ("sydney-airport-terminals", "Sydney Airport T1 T2 T3 Terminal Guide", "시드니 공항 터미널 가이드"),
-    ("airport-to-city-sydney", "Sydney Airport to City Transfer Guide", "시드니 공항에서 시티까지"),
-    ("family-airport-transfer", "Family Airport Transfer Sydney Tips", "가족 공항 픽업 팁"),
-    ("business-travel-sydney-airport", "Business Travel Sydney Airport Shuttle", "비즈니스 출장 시드니 공항 셔틀"),
-]
+    # ✅ 이미 발행됨 - 건너뜀
+    # ("sydney-airport-to-cbd-transfer-guide", ...),
+    # ("sydney-airport-pickup-fees-explained", ...),
+    # ("maxi-taxi-vs-uber-at-sydney-airport-what-nobody-tells-you-about-group-travel", ...),
 
+    # 남은 9개
+    ("sydney-airport-international-terminal-arrivals-guide", "The Complete Guide to Sydney Airport International Terminal (T1) Arrivals"),
+    ("sydney-airport-domestic-terminal-t2-t3-pickup", "Sydney Airport Domestic Terminal Pickup: T2 vs T3 – What's the Difference?"),
+    ("how-early-leave-for-sydney-airport-by-suburb", "How Early Should You Leave for Sydney Airport? A Suburb-by-Suburb Guide"),
+    ("north-shore-sydney-airport-transfer", "North Shore to Sydney Airport: The Fastest and Cheapest Options in 2025"),
+    ("child-seats-sydney-airport-transfer", "Travelling with Kids? Everything You Need to Know About Child Seats on Airport Transfers"),
+    ("western-sydney-airport-transfer-guide", "Western Sydney to the Airport: Why a Private Transfer Makes Sense"),
+    ("flight-delay-airport-pickup-sydney", "What Happens If Your Flight Is Delayed? How EasyGo Handles It"),
+    ("sydney-airport-to-hotel-cbd-transfer", "Sydney Airport to Hotel: Which CBD Hotels Are Easiest to Get To?"),
+    ("inner-west-sydney-airport-transfer", "Inner West Sydney Airport Transfers: Suburbs, Pricing & Tips"),
+]
 
 def pick_topic():
     """발행 이력 기반으로 안 쓴 토픽 선택"""
