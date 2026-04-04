@@ -58,17 +58,18 @@ async def send_preview(content: dict, image_bytes: bytes):
         ])
     )
 
+
 PENDING_REVIEW_FILE = '/tmp/easygo_pending_review_{review_id}.json'
 
 
 def save_pending_review(review: dict, reply: str):
-    review_id = review.get('reviewId', 'unknown')
+    review_id = review.get('reviewId', 'unknown')[:20]
     path = PENDING_REVIEW_FILE.format(review_id=review_id)
     with open(path, 'w') as f:
         json.dump({'review': review, 'reply': reply}, f, ensure_ascii=False)
 
 def load_pending_review(review_id: str):
-    path = PENDING_REVIEW_FILE.format(review_id=review_id)
+    path = f'/tmp/easygo_pending_review_{review_id}.json'
     try:
         with open(path, 'r') as f:
             data = json.load(f)
@@ -76,9 +77,8 @@ def load_pending_review(review_id: str):
     except FileNotFoundError:
         return None, None
 
-
 def clear_pending_review(review_id: str):
-    path = PENDING_REVIEW_FILE.format(review_id=review_id)
+    path = f'/tmp/easygo_pending_review_{review_id}.json'
     if os.path.exists(path):
         os.remove(path)
 
