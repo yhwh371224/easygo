@@ -29,8 +29,12 @@ def _generate_gmb_content(post) -> str:
                 "content": (
                     f"Summarize the following blog post for a Google My Business update. "
                     f"Keep it under {GMB_MAX_LENGTH} characters. "
-                    f"Make it engaging and customer-friendly.\n\n"
-                    f"Title: {post.title}\n\n"
+                    f"Make it engaging and customer-friendly. "
+                    f"Naturally include relevant SEO keywords from the post. "
+                    f"Focus on local search terms related to Sydney airport transfers. "
+                    f"End with a subtle call to action encouraging readers to visit the website for more information.\n\n"
+                    f"Title: {post.title}\n"
+                    f"Meta description: {post.meta_description}\n\n"
                     f"Content:\n{_strip_html(post.content)}"
                 ),
             }
