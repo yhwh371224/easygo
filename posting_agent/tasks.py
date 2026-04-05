@@ -2,6 +2,8 @@ import re
 
 import anthropic
 from celery import shared_task
+from django.conf import settings
+
 
 GMB_MAX_LENGTH = 1000
 CLAUDE_MODEL = "claude-haiku-4-5-20251001"
@@ -74,6 +76,7 @@ def post_to_gmb_from_article(post_pk: int):
     success = post_to_google_business(
         text=gmb_text,
         image_url=image_url,
+        call_to_action_url=f"{settings.SITE_URL}/blog/{post.slug}/",
     )
 
     # Mark as posted only if successful
