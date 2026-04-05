@@ -3,7 +3,7 @@ import re
 import anthropic
 from celery import shared_task
 
-GMB_MAX_LENGTH = 1500
+GMB_MAX_LENGTH = 1000
 CLAUDE_MODEL = "claude-haiku-4-5-20251001"
 
 
