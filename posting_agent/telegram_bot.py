@@ -82,6 +82,28 @@ def clear_pending_review(review_id: str):
         os.remove(path)
 
 
+async def send_article_notification(post_id: int, title: str, category: str, excerpt: str, admin_url: str):
+    bot = telegram.Bot(token=settings.TELEGRAM_BOT_TOKEN)
+    message = (
+        f"📝 *새 블로그 글 초안 생성*\n\n"
+        f"*제목:* {title}\n"
+        f"*카테고리:* {category}\n\n"
+        f"*요약:*\n{excerpt}\n\n"
+        f"[어드민에서 확인]({admin_url})"
+    )
+    await bot.send_message(
+        chat_id=settings.TELEGRAM_CHAT_ID,
+        text=message,
+        parse_mode="Markdown",
+        reply_markup=telegram.InlineKeyboardMarkup([
+            [
+                telegram.InlineKeyboardButton("✅ 발행하기", callback_data=f"ap:{post_id}"),
+                telegram.InlineKeyboardButton("❌ 삭제하기", callback_data=f"ad:{post_id}"),
+            ]
+        ])
+    )
+
+
 async def send_review_for_approval(review: dict, reply: str, current: int, total: int):
     save_pending_review(review, reply)
     review_id = review.get('reviewId', 'unknown')
