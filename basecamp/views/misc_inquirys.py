@@ -13,7 +13,7 @@ from basecamp.basecamp_utils import (
     render_inquiry_done, booking_success_response, require_turnstile,
 )
 from articles.models import Post
-from ratelimit.decorators import ratelimit
+from django_ratelimit.decorators import ratelimit
 
 
 @ratelimit(key='ip', rate='5/m', method='POST', block=False)
