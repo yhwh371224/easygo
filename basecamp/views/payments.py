@@ -15,7 +15,9 @@ from basecamp.basecamp_utils import (
     handle_checkout_session_completed, paypal_ipn_error_email,
     verify_turnstile, render_email_template,
     render_inquiry_done, require_turnstile, parse_one_based_index,
+    is_ajax,
 )
+from ratelimit.decorators import ratelimit
 
 
 # ---------------------------------------------------------------------------
@@ -396,10 +398,15 @@ def paypal_ipn(request):
 # Stripe Checkout Session
 # --------------------------
 
+@ratelimit(key='ip', rate='5/m', method='POST', block=False)
 @csrf_exempt
 @require_POST
 def create_stripe_checkout_session(request):
     if request.method == 'POST':
+        if getattr(request, 'limited', False):
+            if is_ajax(request):
+                return JsonResponse({'success': False, 'message': 'Too many requests. Please wait a moment and try again.'}, status=429)
+            return render(request, 'basecamp/403.html', status=429)
         session = stripe.checkout.Session.create(
             payment_method_types=['card'],
             line_items=[{

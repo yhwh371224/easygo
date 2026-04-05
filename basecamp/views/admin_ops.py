@@ -2,6 +2,7 @@ from datetime import datetime, date, timedelta
 import logging
 import stripe
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
@@ -12,10 +13,11 @@ from blog.sms_utils import send_sms_notice, send_whatsapp_template
 from csp.constants import NONCE
 from basecamp.basecamp_utils import (
     parse_baggage, handle_email_sending, format_pickup_time_12h,
-    to_bool,
+    to_bool, is_ajax,
     render_inquiry_done, parse_booking_dates, get_customer_status,
     parse_one_based_index, resolve_payment_flags,
 )
+from ratelimit.decorators import ratelimit
 
 
 logger = logging.getLogger(__name__)
@@ -23,9 +25,15 @@ logger = logging.getLogger(__name__)
 stripe.api_key = settings.STRIPE_LIVE_SECRET_KEY
 
 
-# Booking by myself 
+# Booking by myself
+@login_required
+@ratelimit(key='ip', rate='5/m', method='POST', block=False)
 def confirmation_detail(request):
     if request.method == "POST":
+        if getattr(request, 'limited', False):
+            if is_ajax(request):
+                return JsonResponse({'success': False, 'message': 'Too many requests. Please wait a moment and try again.'}, status=429)
+            return render(request, 'basecamp/403.html', status=429)
         pickup_date_str = request.POST.get('pickup_date', '')           
         return_pickup_date_str = request.POST.get('return_pickup_date', '')
         company_name = request.POST.get('company_name', '')
@@ -119,9 +127,15 @@ def confirmation_detail(request):
     else:
         return render(request, 'basecamp/booking/confirmation.html', {})
 
-# sending confirmation email first one   
-def sending_email_first_detail(request):     
+# sending confirmation email first one
+@login_required
+@ratelimit(key='ip', rate='5/m', method='POST', block=False)
+def sending_email_first_detail(request):
     if request.method == "POST":
+        if getattr(request, 'limited', False):
+            if is_ajax(request):
+                return JsonResponse({'success': False, 'message': 'Too many requests. Please wait a moment and try again.'}, status=429)
+            return render(request, 'basecamp/403.html', status=429)
         email = request.POST.get('email')
         prepay_raw = request.POST.get('prepay')  # May be None
         cash_raw = request.POST.get('cash')  # May be None
@@ -198,9 +212,15 @@ def sending_email_first_detail(request):
         return render(request, 'basecamp/email/sending_email_first.html', {})
     
 
-# sending confirmation email second one    
-def sending_email_second_detail(request):     
+# sending confirmation email second one
+@login_required
+@ratelimit(key='ip', rate='5/m', method='POST', block=False)
+def sending_email_second_detail(request):
     if request.method == "POST":
+        if getattr(request, 'limited', False):
+            if is_ajax(request):
+                return JsonResponse({'success': False, 'message': 'Too many requests. Please wait a moment and try again.'}, status=429)
+            return render(request, 'basecamp/403.html', status=429)
         email = request.POST.get('email')
         prepay_raw = request.POST.get('prepay')  # May be None
         cash_raw = request.POST.get('cash')  # May be None
@@ -304,8 +324,14 @@ def sending_email_second_detail(request):
         return render(request, 'basecamp/email/sending_email_second.html', {})
     
 
-def sending_email_input_data_detail(request):     
+@login_required
+@ratelimit(key='ip', rate='5/m', method='POST', block=False)
+def sending_email_input_data_detail(request):
     if request.method == "POST":
+        if getattr(request, 'limited', False):
+            if is_ajax(request):
+                return JsonResponse({'success': False, 'message': 'Too many requests. Please wait a moment and try again.'}, status=429)
+            return render(request, 'basecamp/403.html', status=429)
         email = request.POST.get('email')   
         field = request.POST.get('field')        
 
@@ -348,8 +374,14 @@ def sending_email_input_data_detail(request):
 
 
 # email dispatching
+@login_required
+@ratelimit(key='ip', rate='5/m', method='POST', block=False)
 def email_dispatch_detail(request):
     if request.method == "POST":
+        if getattr(request, 'limited', False):
+            if is_ajax(request):
+                return JsonResponse({'success': False, 'message': 'Too many requests. Please wait a moment and try again.'}, status=429)
+            return render(request, 'basecamp/403.html', status=429)
         honeypot = request.POST.get('phone_verify', '')
         if honeypot != '':
             return JsonResponse({'success': False, 'error': 'Bot detected.'})
