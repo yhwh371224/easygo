@@ -1,17 +1,21 @@
+import io
+import json
+import urllib.parse
+import urllib.request
+
+from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.conf import settings
-from .models import Post
-import urllib.request
-import urllib.parse
-import json
-import io
+
 from PIL import Image
 from django.core.files.base import ContentFile
+
+from .models import Post
 
 
 @receiver(post_save, sender=Post)
 def regenerate_sitemap_on_publish(sender, instance, **kwargs):
+    """Regenerate sitemap whenever a post is saved with published status."""
     if instance.status == 'published':
         try:
             from django.core.management import call_command
@@ -22,10 +26,10 @@ def regenerate_sitemap_on_publish(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Post)
 def auto_fetch_thumbnail(sender, instance, created, **kwargs):
+    """Automatically fetch and save a thumbnail from Unsplash if not set."""
     if instance.thumbnail:
         return
 
-    # thumbnail_query 없으면 실행 안 함
     if not instance.thumbnail_query:
         print(f"Unsplash: no thumbnail_query set for '{instance.title}'")
         return
@@ -58,8 +62,19 @@ def auto_fetch_thumbnail(sender, instance, created, **kwargs):
         filename = f"{instance.slug}.webp"
         post = Post.objects.get(pk=instance.pk)
         post.thumbnail.save(filename, ContentFile(buffer.getvalue()), save=False)
-        Post.objects.filter(pk=instance.pk).update(thumbnail=post.thumbnail.name)
+        Post.objects.filter(pk=instance.pk).update(thumbnail=post.thumbnail.name, thumbnail_source_url=image_url)
         print(f"Unsplash thumbnail saved: {filename}")
 
     except Exception as e:
         print(f"Unsplash thumbnail fetch failed: {e}")
+
+
+@receiver(post_save, sender=Post)
+def trigger_gmb_posting(sender, instance, created, **kwargs):
+    """Trigger GMB posting when a post is published and not yet posted to Google."""
+    if instance.status == 'published' and not instance.posted_to_google:
+        try:
+            from posting_agent.tasks import post_to_gmb_from_article
+            post_to_gmb_from_article.delay(instance.pk)
+        except Exception as e:
+            print(f"GMB posting trigger failed: {e}")
