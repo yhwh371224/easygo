@@ -55,6 +55,9 @@ class Post(models.Model):
     thumbnail_query = models.CharField(max_length=100, blank=True,
                                        verbose_name='Thumbnail Query',
                                        help_text='Search keyword for Unsplash')
+    thumbnail_source_url = models.URLField(max_length=500, blank=True,  # 추가
+                                           verbose_name='Thumbnail Source URL',
+                                           help_text='Original Unsplash image URL for GMB posting.')
 
     # ── SEO ────────────────────────────────────
     meta_title       = models.CharField(max_length=70, blank=True,
@@ -78,6 +81,8 @@ class Post(models.Model):
     posted_to_google    = models.BooleanField(default=False, verbose_name='Posted to Google Business')
     posted_to_facebook  = models.BooleanField(default=False, verbose_name='Posted to Facebook')
     posted_to_instagram = models.BooleanField(default=False, verbose_name='Posted to Instagram')
+
+    gmb_content = models.TextField(blank=True, null=True, verbose_name='GMB content', help_text='비워두면 AI가 자동으로 1500자 이내로 요약합니다.', max_length=1500,)
 
     # ── 통계 ───────────────────────────────────
     view_count = models.PositiveIntegerField(default=0, verbose_name='View Count')
