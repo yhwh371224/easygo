@@ -11,12 +11,18 @@ from basecamp.basecamp_utils import (
     render_inquiry_done, booking_success_response, require_turnstile,
     is_duplicate_submission, parse_booking_dates, get_customer_status,
 )
+from ratelimit.decorators import ratelimit
 
 
 # Inquiry for airport
+@ratelimit(key='ip', rate='5/m', method='POST', block=False)
 @require_turnstile
 def inquiry_details(request):
     if request.method == "POST":
+        if getattr(request, 'limited', False):
+            if is_ajax(request):
+                return JsonResponse({'success': False, 'message': 'Too many requests. Please wait a moment and try again.'}, status=429)
+            return render(request, 'basecamp/403.html', status=429)
         name = request.POST.get('name', '')
         contact = request.POST.get('contact', '')
         email = request.POST.get('email', '')  
@@ -138,9 +144,14 @@ def inquiry_details(request):
 
 
 # inquiry (simple one) for airport from home page
+@ratelimit(key='ip', rate='5/m', method='POST', block=False)
 @require_turnstile
 def inquiry_details1(request):
     if request.method == "POST":
+        if getattr(request, 'limited', False):
+            if is_ajax(request):
+                return JsonResponse({'success': False, 'message': 'Too many requests. Please wait a moment and try again.'}, status=429)
+            return render(request, 'basecamp/403.html', status=429)
         pickup_date_str = request.POST.get('pickup_date', '')
         name = request.POST.get('name', '')
         contact = request.POST.get('contact', '')
@@ -261,9 +272,14 @@ def inquiry_details1(request):
     
 
 # Multiple points Inquiry
+@ratelimit(key='ip', rate='5/m', method='POST', block=False)
 @require_turnstile
 def p2p_detail(request):
     if request.method == "POST":
+        if getattr(request, 'limited', False):
+            if is_ajax(request):
+                return JsonResponse({'success': False, 'message': 'Too many requests. Please wait a moment and try again.'}, status=429)
+            return render(request, 'basecamp/403.html', status=429)
         p2p_name = request.POST.get('p2p_name')
         p2p_phone = request.POST.get('p2p_phone')
         p2p_email = request.POST.get('p2p_email')

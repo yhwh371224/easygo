@@ -12,6 +12,7 @@ from django.views.generic import ListView, DetailView, UpdateView, CreateView, D
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
 from django.http import JsonResponse
+from ratelimit.decorators import ratelimit
 
 from .models import Post, Comment
 from .forms import CommentForm, PostForm
@@ -21,9 +22,12 @@ from main.settings import RECIPIENT_EMAIL
 from .review_utils import create_verse_image
 
 
+@ratelimit(key='ip', rate='5/m', method='POST', block=False)
 def custom_login_view(request):
     error = None
     if request.method == 'POST':
+        if getattr(request, 'limited', False):
+            return render(request, 'easygo_review/custom_login.html', {'error': 'Too many attempts. Please wait a moment and try again.'})
         email = request.POST['email']
         posts = BlogPost.objects.filter(email=email)
         if posts.exists():

@@ -12,12 +12,18 @@ from basecamp.basecamp_utils import (
     render_inquiry_done, booking_success_response, require_turnstile,
     is_duplicate_submission, parse_booking_dates, get_customer_status,
 )
+from ratelimit.decorators import ratelimit
 
 
 # airport booking by client
+@ratelimit(key='ip', rate='5/m', method='POST', block=False)
 @require_turnstile
 def booking_detail(request):
     if request.method == "POST":
+        if getattr(request, 'limited', False):
+            if is_ajax(request):
+                return JsonResponse({'success': False, 'message': 'Too many requests. Please wait a moment and try again.'}, status=429)
+            return render(request, 'basecamp/403.html', status=429)
         pickup_date_str = request.POST.get('pickup_date', '')
         return_pickup_date_str = request.POST.get('return_pickup_date', '')
         name = request.POST.get('name')
@@ -117,9 +123,14 @@ def booking_detail(request):
 
 
 # cruise booking by client
+@ratelimit(key='ip', rate='5/m', method='POST', block=False)
 @require_turnstile
 def cruise_booking_detail(request):
     if request.method == "POST":
+        if getattr(request, 'limited', False):
+            if is_ajax(request):
+                return JsonResponse({'success': False, 'message': 'Too many requests. Please wait a moment and try again.'}, status=429)
+            return render(request, 'basecamp/403.html', status=429)
         # ✅ Collect date strings
         pickup_date_str = request.POST.get('pickup_date', '')
         return_pickup_date_str = request.POST.get('return_pickup_date', '')
@@ -237,8 +248,13 @@ def cruise_booking_detail(request):
         return render(request, 'basecamp/booking/cruise_booking.html', {})
 
 
+@ratelimit(key='ip', rate='5/m', method='POST', block=False)
 def confirm_booking_detail(request):
     if request.method == "POST":
+        if getattr(request, 'limited', False):
+            if is_ajax(request):
+                return JsonResponse({'success': False, 'message': 'Too many requests. Please wait a moment and try again.'}, status=429)
+            return render(request, 'basecamp/403.html', status=429)
         honeypot = request.POST.get('phone_verify', '')
         if honeypot != '':
             return JsonResponse({'success': False, 'error': 'Bot detected.'})

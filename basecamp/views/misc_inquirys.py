@@ -13,11 +13,18 @@ from basecamp.basecamp_utils import (
     render_inquiry_done, booking_success_response, require_turnstile,
 )
 from articles.models import Post
+from ratelimit.decorators import ratelimit
 
+
+@ratelimit(key='ip', rate='5/m', method='POST', block=False)
 def price_detail(request):
-    sorted_suburbs = get_sorted_suburbs() 
-    latest_post = Post.objects.filter(status='published').order_by('-created_at').first() 
+    sorted_suburbs = get_sorted_suburbs()
+    latest_post = Post.objects.filter(status='published').order_by('-created_at').first()
     if request.method == "POST":
+        if getattr(request, 'limited', False):
+            if is_ajax(request):
+                return JsonResponse({'success': False, 'message': 'Too many requests. Please wait a moment and try again.'}, status=429)
+            return render(request, 'basecamp/403.html', status=429)
         pickup_date_str = request.POST.get('pickup_date', '')  
         start_point = request.POST.get('start_point')
         end_point = request.POST.get('end_point')
@@ -83,9 +90,14 @@ def price_detail(request):
     
 
 # Contact form
+@ratelimit(key='ip', rate='5/m', method='POST', block=False)
 @require_turnstile
 def contact_submit(request):
     if request.method == "POST":
+        if getattr(request, 'limited', False):
+            if is_ajax(request):
+                return JsonResponse({'success': False, 'message': 'Too many requests. Please wait a moment and try again.'}, status=429)
+            return render(request, 'basecamp/403.html', status=429)
 
         name = request.POST.get('name')
         contact = request.POST.get('contact')
