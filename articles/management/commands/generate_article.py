@@ -99,7 +99,7 @@ class Command(BaseCommand):
 
         self.stdout.write(f"Topic    : {topic}")
         self.stdout.write(f"Category : {category_name}")
-        self.stdout.write("AI로 글 생성 중...")
+        self.stdout.write("🤖 AI가 블로그 글을 생성 중입니다... 잠시만 기다려주세요.")
 
         data = generate_article_content(topic, category_name)
 
@@ -131,13 +131,12 @@ class Command(BaseCommand):
 
         admin_url = f"{settings.SITE_URL}/admin/articles/post/{post.id}/change/"
 
-        self.stdout.write(self.style.SUCCESS(f"\n글 생성 완료! (draft)"))
+        self.stdout.write(self.style.SUCCESS("\n✅ 블로그 글 초안이 생성되었습니다. 텔레그램을 확인해주세요."))
         self.stdout.write(f"  ID    : {post.id}")
         self.stdout.write(f"  Title : {post.title}")
         self.stdout.write(f"  Slug  : {post.slug}")
         self.stdout.write(f"  Admin : {admin_url}")
 
-        self.stdout.write("📨 Telegram 알림 전송 중...")
         asyncio.run(send_article_notification(
             post_id   = post.id,
             title     = post.title,
@@ -145,8 +144,9 @@ class Command(BaseCommand):
             excerpt   = post.excerpt,
             admin_url = admin_url,
         ))
+        self.stdout.write("📱 텔레그램으로 알림을 전송했습니다. 어드민에서 내용 확인 후 승인 버튼을 눌러주세요.")
 
-        self.stdout.write("🤖 Telegram 봇 시작 - 버튼 누른 후 Ctrl+C 로 종료하세요")
+        self.stdout.write("⏳ 봇이 대기 중입니다. 승인 후 Ctrl+C 로 종료하세요.")
         app = Application.builder().token(settings.TELEGRAM_BOT_TOKEN).build()
         app.add_handler(CallbackQueryHandler(button_handler))
         app.run_polling()
