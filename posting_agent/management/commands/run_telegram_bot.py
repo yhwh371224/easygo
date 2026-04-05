@@ -82,6 +82,28 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         review_id = query.data.split(":")[1]
         await query.edit_message_text("✏️ 수정할 답변 내용을 입력해주세요:")
 
+    elif query.data.startswith("ap:"):
+        from articles.models import Post
+        post_id = int(query.data.split(":")[1])
+        try:
+            post = await sync_to_async(Post.objects.get)(id=post_id)
+            post.status = 'published'
+            await sync_to_async(post.save)()
+            await query.edit_message_text(f"✅ 발행 완료!\n\n{post.title}")
+        except Post.DoesNotExist:
+            await query.edit_message_text("❌ 포스트를 찾을 수 없어요.")
+
+    elif query.data.startswith("ad:"):
+        from articles.models import Post
+        post_id = int(query.data.split(":")[1])
+        try:
+            post = await sync_to_async(Post.objects.get)(id=post_id)
+            title = post.title
+            await sync_to_async(post.delete)()
+            await query.edit_message_text(f"🗑️ 삭제 완료!\n\n{title}")
+        except Post.DoesNotExist:
+            await query.edit_message_text("❌ 포스트를 찾을 수 없어요.")
+
 
 class Command(BaseCommand):
     help = 'Run Telegram bot for post approval'
