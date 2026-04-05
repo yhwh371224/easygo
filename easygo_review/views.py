@@ -12,7 +12,7 @@ from django.views.generic import ListView, DetailView, UpdateView, CreateView, D
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
 from django.http import JsonResponse
-from ratelimit.decorators import ratelimit
+from django_ratelimit.decorators import ratelimit
 
 from .models import Post, Comment
 from .forms import CommentForm, PostForm

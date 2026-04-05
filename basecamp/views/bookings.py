@@ -12,7 +12,7 @@ from basecamp.basecamp_utils import (
     render_inquiry_done, booking_success_response, require_turnstile,
     is_duplicate_submission, parse_booking_dates, get_customer_status,
 )
-from ratelimit.decorators import ratelimit
+from django_ratelimit.decorators import ratelimit
 
 
 # airport booking by client

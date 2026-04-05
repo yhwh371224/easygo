@@ -17,7 +17,7 @@ from basecamp.basecamp_utils import (
     render_inquiry_done, parse_booking_dates, get_customer_status,
     parse_one_based_index, resolve_payment_flags,
 )
-from ratelimit.decorators import ratelimit
+from django_ratelimit.decorators import ratelimit
 
 
 logger = logging.getLogger(__name__)

@@ -17,7 +17,7 @@ from basecamp.basecamp_utils import (
     render_inquiry_done, require_turnstile, parse_one_based_index,
     is_ajax,
 )
-from ratelimit.decorators import ratelimit
+from django_ratelimit.decorators import ratelimit
 
 
 # ---------------------------------------------------------------------------
