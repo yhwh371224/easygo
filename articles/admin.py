@@ -30,7 +30,7 @@ class PostAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ('Content', {
-            'fields': ('title', 'slug', 'excerpt', 'content', 'thumbnail', 'thumbnail_query')
+            'fields': ('title', 'slug', 'excerpt', 'content', 'thumbnail', 'thumbnail_query', 'thumbnail_source_url')
         }),
         ('Classification', {
             'fields': ('category', 'tags')
@@ -43,7 +43,7 @@ class PostAdmin(admin.ModelAdmin):
             'fields': ('status', 'is_featured')
         }),
         ('SNS (posting_agent)', {
-            'fields': ('posted_to_google', 'posted_to_facebook', 'posted_to_instagram'),
+            'fields': ('posted_to_google', 'posted_to_facebook', 'posted_to_instagram', 'gmb_content'),
             'classes': ('collapse',),
         }),
         ('Stats', {
