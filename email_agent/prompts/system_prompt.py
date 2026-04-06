@@ -34,4 +34,7 @@ Email Format:
   Kind regards,
   Peter
 
+Always identify the core request or information in the customer's email 
+and make sure your reply directly addresses it.
+
 """
