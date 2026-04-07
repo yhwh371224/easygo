@@ -397,8 +397,10 @@ def email_dispatch_detail(request):
         discount_price = request.POST.get('discount_price')
 
         # 2️⃣ User 찾기
+        # booker_email 우선, 없으면 email로 fallback 
         user = (
-            Post.objects.select_related('driver').filter(
+            Post.objects.select_related('driver').filter(booker_email__iexact=email).first()
+            or Post.objects.select_related('driver').filter(
                 Q(email__iexact=email) | Q(email1__iexact=email)
             ).first()
             or Inquiry.objects.filter(email__iexact=email).first()
@@ -407,12 +409,14 @@ def email_dispatch_detail(request):
         if not user:
             logger.warning(f"User not found for email: {email}")
             return JsonResponse({'success': False, 'error': 'User not found'})
+        
+        _email = getattr(user, 'booker_email', None) or user.email
 
         pickup_time_12h = None
 
         # 3️⃣ Adjusted pickup time 처리
         if adjusted_pickup_time and user:
-            users = Post.objects.filter(email=email, pickup_date__gte=date.today()).order_by('pickup_date')
+            users = Post.objects.filter(email=_email, pickup_date__gte=date.today()).order_by('pickup_date')
             if users.exists():
                 closest_user = users.first()
                 closest_user.pickup_time = adjusted_pickup_time
@@ -504,7 +508,7 @@ def email_dispatch_detail(request):
 
             bookings = (
                 Post.objects
-                .filter(email__iexact=email, pickup_date__gte=date.today())
+                .filter(email__iexact=_email, pickup_date__gte=date.today())
                 .order_by('pickup_date')
             )
 
@@ -566,7 +570,7 @@ def email_dispatch_detail(request):
             user1 = None
             if user.return_pickup_time == 'x':
                 try:
-                    user1 = Post.objects.filter(email__iexact=user.email)[1]
+                    user1 = Post.objects.filter(email__iexact=_email)[1]
                 except IndexError:
                     user1 = None
 
@@ -619,12 +623,6 @@ def email_dispatch_detail(request):
                 send_sms_notice(user.contact, message)
                 send_whatsapp_template(user.contact, user.name)
 
-            # Apology SMS
-            if selected_option == "Apologies Cancellation of Booking" and user.contact:
-                message = f"EasyGo - Urgent notice!\n\nDear {user.name}, We have sent an urgent email. Please check your email.\nReply only via email >> info@easygoshuttle.com.au"
-                send_sms_notice(user.contact, message)
-                send_whatsapp_template(user.contact, user.name)
-
 
         # ✅ Payment discrepancy
         if selected_option == "Payment discrepancy" and user:
@@ -651,7 +649,7 @@ def email_dispatch_detail(request):
             user.save()      
 
             if user.return_pickup_time == 'x':
-                user1 = Post.objects.filter(email__iexact=user.email)[1]
+                user1 = Post.objects.filter(email__iexact=_email)[1]
                 user1.cash = True if payment_method == "cash" else False
                 user1.prepay = True if payment_method == "card" else False                
                 user1.pending = False if payment_method == "cash" else True
