@@ -162,10 +162,30 @@
                                                     <br><br>													
 
 													{% if return_booking_date %}
-														• Your bookings on {{ return_booking_date|date:"Y-m-d" }} and {{ booking_date|date:"Y-m-d" }} has been cancelled.<br><br>
+
+														{% if not remain_first_booking and not remain_return_booking %}
+															{# ① 둘 다 취소 #}
+															We inform that your bookings on <strong>{{ return_booking_date|date:"Y-m-d" }}</strong> 
+															and <strong>{{ booking_date|date:"Y-m-d" }}</strong> have been canceled.
+
+														{% elif remain_first_booking and not remain_return_booking %}
+															{# ② 첫 번째 ✅ / 두 번째(return) ❌ → return 날짜만 취소 #}
+															We inform that your booking on <strong>{{ booking_date|date:"Y-m-d" }}</strong> has been canceled.
+															<br><br>
+															Please note that your booking on <strong>{{ return_booking_date|date:"Y-m-d" }}</strong> remains active.
+
+														{% elif not remain_first_booking and remain_return_booking %}
+															{# ③ 첫 번째 ❌ / 두 번째(return) ✅ → 첫 번째 날짜만 취소 #}
+															We inform that your booking on <strong>{{ return_booking_date|date:"Y-m-d" }}</strong> has been canceled.
+															<br><br>
+															Please note that your booking on <strong>{{ booking_date|date:"Y-m-d" }}</strong> remains active.
+
+														{% endif %}
+														
 													{% else %}
-														• Your booking on {{ booking_date|date:"Y-m-d" }} has been cancelled.<br><br>
-													{% endif %}
+														{# 단일 예약 취소 #}
+														We inform that your booking on <strong>{{ booking_date|date:"Y-m-d" }}</strong> has been canceled.
+													{% endif %}									
 
                                                     Thank you for your understanding.
                                                     <br><br> 
