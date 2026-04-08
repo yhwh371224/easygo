@@ -55,12 +55,14 @@
                     </p>  
                     {% endif %}
                 </div>
-                {% if post.reply %}
+                {% for comment in post.comment_set.all %}
+                    {% if comment.author == 'EasyGo' %}
                     <div class="card-body border-top bg-light">
                         <p class="text-muted small mb-1"><strong>Reply from EasyGo:</strong></p>
-                        <p class="card-text small mb-0">{{ post.reply }}</p>
+                        <p class="card-text small mb-0">{{ comment.text }}</p>
                     </div>
-                {% endif %}
+                    {% endif %}
+                {% endfor %}
                 {% if post.author %}
                     <div class="card-footer text-muted">
                             {{ post.name }} left this review directly on our website
