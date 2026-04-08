@@ -2,11 +2,13 @@ import anthropic
 from celery import shared_task
 from django.conf import settings
 
+EASYGO_AUTHOR = "EasyGo"
+
 
 @shared_task
 def generate_review_reply(post_pk: int):
-    """Generate a Claude AI reply for a review and save it to the Post."""
-    from easygo_review.models import Post
+    """Generate a Claude AI reply for a review and save it as a Comment (author='EasyGo')."""
+    from easygo_review.models import Comment, Post
 
     try:
         post = Post.objects.get(pk=post_pk)
@@ -14,8 +16,8 @@ def generate_review_reply(post_pk: int):
         print(f"[review_reply] Post {post_pk} not found.")
         return
 
-    if post.reply:
-        print(f"[review_reply] Post {post_pk} already has a reply, skipping.")
+    if Comment.objects.filter(post=post, author=EASYGO_AUTHOR).exists():
+        print(f"[review_reply] Post {post_pk} already has an EasyGo reply, skipping.")
         return
 
     reviewer = post.name or "valued customer"
@@ -49,5 +51,5 @@ Reply only, no preamble."""
     )
     reply_text = message.content[0].text.strip()
 
-    Post.objects.filter(pk=post_pk).update(reply=reply_text)
-    print(f"[review_reply] Reply saved for Post {post_pk}.")
+    Comment.objects.create(post=post, author=EASYGO_AUTHOR, text=reply_text)
+    print(f"[review_reply] Reply comment saved for Post {post_pk}.")
