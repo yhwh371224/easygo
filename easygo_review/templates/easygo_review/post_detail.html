@@ -24,5 +24,13 @@
     <!-- Post Content -->
     {{ object.get_markdown_content | safe }}
 
+    {% if object.reply %}
+    <hr>
+    <div class="p-3 bg-light rounded">
+        <p class="text-muted small mb-1"><strong>Reply from EasyGo:</strong></p>
+        <p class="mb-0">{{ object.reply }}</p>
+    </div>
+    {% endif %}
+
 </div>
 {% endblock %}

@@ -55,8 +55,14 @@
                     </p>  
                     {% endif %}
                 </div>
+                {% if post.reply %}
+                    <div class="card-body border-top bg-light">
+                        <p class="text-muted small mb-1"><strong>Reply from EasyGo:</strong></p>
+                        <p class="card-text small mb-0">{{ post.reply }}</p>
+                    </div>
+                {% endif %}
                 {% if post.author %}
-                    <div class="card-footer text-muted">                    
+                    <div class="card-footer text-muted">
                             {{ post.name }} left this review directly on our website
                     </div>
                 {% else %}
