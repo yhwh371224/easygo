@@ -11,7 +11,7 @@ class Post(models.Model):
     date = models.DateField(blank=True, null=True, default=datetime.date.today)
     link = models.URLField(max_length=100, default="https://g.page/r/CaNU_31hewLaEAI/review")
     rating = models.IntegerField(default=5, choices=[(i, i) for i in range(1, 6)])
-    is_published = models.BooleanField(default=False)
+    is_published = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     author = models.CharField(max_length=100, blank=True, null=True)
 

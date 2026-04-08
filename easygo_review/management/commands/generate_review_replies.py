@@ -6,7 +6,7 @@ from easygo_review.tasks import generate_review_reply
 
 
 class Command(BaseCommand):
-    help = "Queue generate_review_reply tasks for all published reviews without a reply."
+    help = "Queue generate_review_reply tasks for all reviews without a reply."
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -16,13 +16,13 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-        qs = Post.objects.filter(is_published=True).filter(
+        qs = Post.objects.filter(
             Q(reply__isnull=True) | Q(reply='')
         )
 
         count = qs.count()
         if count == 0:
-            self.stdout.write("No published reviews without a reply.")
+            self.stdout.write("No reviews without a reply.")
             return
 
         self.stdout.write(f"Found {count} review(s) without a reply.")

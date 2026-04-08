@@ -5,7 +5,7 @@ from django.conf import settings
 
 @shared_task
 def generate_review_reply(post_pk: int):
-    """Generate a Claude AI reply for a published review and save it to the Post."""
+    """Generate a Claude AI reply for a review and save it to the Post."""
     from easygo_review.models import Post
 
     try:
