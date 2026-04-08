@@ -27,6 +27,8 @@ class Post(models.Model):
     def get_update_url(self):
         return self.get_absolute_url() + 'update/'
 
+    reply = models.TextField(blank=True, null=True)
+
     def get_markdown_content(self):
         return markdown(self.content)
 
