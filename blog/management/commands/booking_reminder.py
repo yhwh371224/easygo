@@ -59,11 +59,29 @@ class Command(BaseCommand):
             driver = assign_default_driver(booking_reminder)
             pickup_time_12h = format_pickup_time_12h(booking_reminder.pickup_time)
             context = build_reminder_context(booking_reminder, pickup_time_12h, driver)
-            # 당일(Reminder-Today)은 email만, 나머지는 booker_email도 추가
-            if subject == "Reminder-Today":
-                email_recipients = collect_recipients(booking_reminder.email, booking_reminder.email1)
+
+            booker_email = booking_reminder.booker_email
+            is_today = subject == "Reminder-Today"
+            is_tomorrow = subject == "Reminder-Tomorrow"
+
+            if booker_email:
+                # booker_email 있음
+                # - email: D-1, D-day만
+                # - booker_email: D-1까지 (D-day 제외)
+                if is_today:
+                    email_recipients = collect_recipients(booking_reminder.email, booking_reminder.email1)
+                elif is_tomorrow:
+                    email_recipients = collect_recipients(booking_reminder.email, booking_reminder.email1, booker_email)
+                else:
+                    # D-2 이상: booker_email만
+                    email_recipients = collect_recipients(booker_email)
             else:
-                email_recipients = collect_recipients(booking_reminder.email, booking_reminder.email1, booking_reminder.booker_email)
+                # booker_email 없음: email 전체 발송
+                email_recipients = collect_recipients(booking_reminder.email, booking_reminder.email1)
+
+            if not email_recipients:
+                logger.warning(f"No recipients for booking {booking_reminder.id}, skipping.")
+                continue
 
             try:
                 send_template_email(subject, template_name, context, email_recipients, fail_silently=False)
