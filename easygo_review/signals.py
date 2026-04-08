@@ -6,8 +6,8 @@ from .models import Post
 
 @receiver(post_save, sender=Post)
 def auto_generate_review_reply(sender, instance, created, **kwargs):
-    """When a review is published and has no reply yet, generate one via Claude AI."""
-    if instance.is_published and not instance.reply:
+    """When a review has no reply yet, generate one via Claude AI."""
+    if not instance.reply:
         try:
             from easygo_review.tasks import generate_review_reply
             generate_review_reply.delay(instance.pk)
