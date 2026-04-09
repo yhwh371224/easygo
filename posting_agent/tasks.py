@@ -1,5 +1,3 @@
-import re
-
 import anthropic
 from celery import shared_task
 from django.conf import settings
@@ -7,11 +5,6 @@ from django.conf import settings
 
 GMB_MAX_LENGTH = 1000
 CLAUDE_MODEL = "claude-haiku-4-5-20251001"
-
-
-def _strip_html(html: str) -> str:
-    """Remove HTML tags from content."""
-    return re.sub(r'<[^>]+>', '', html).strip()
 
 
 def _generate_gmb_content(post) -> str:
@@ -27,15 +20,14 @@ def _generate_gmb_content(post) -> str:
             {
                 "role": "user",
                 "content": (
-                    f"Summarize the following blog post for a Google My Business update. "
-                    f"Keep it under {GMB_MAX_LENGTH} characters. "
+                    f"Write a Google My Business post under {GMB_MAX_LENGTH} characters. "
                     f"Make it engaging and customer-friendly. "
-                    f"Naturally include relevant SEO keywords from the post. "
+                    f"Naturally include relevant SEO keywords. "
                     f"Focus on local search terms related to Sydney airport transfers. "
                     f"End with a subtle call to action encouraging readers to visit the website for more information.\n\n"
                     f"Title: {post.title}\n"
-                    f"Meta description: {post.meta_description}\n\n"
-                    f"Content:\n{_strip_html(post.content)}"
+                    f"Meta description: {post.meta_description}\n"
+                    f"Excerpt: {post.excerpt}"
                 ),
             }
         ],
