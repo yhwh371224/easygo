@@ -1,11 +1,11 @@
 import logging
-import asyncio
 
 from django.utils import timezone
 from main.settings import DEFAULT_FROM_EMAIL
 from basecamp.basecamp_utils import render_email_template
 from utils.email import send_text_email, send_html_email
-from utils.telegram import send_telegram_notification
+from utils.telegram import send_telegram_sync
+
 
 logger = logging.getLogger('easygo')
 
@@ -127,9 +127,9 @@ def send_payment_notification_email(instance, total_balance, recipient_emails, a
     send_html_email("Payment Received - EasyGo", html_content, recipient_list, from_email=DEFAULT_FROM_EMAIL)
 
     # ✅ 관리자에게는 텔레그램 알림
-    asyncio.run(send_telegram_notification(
-        f"💳 Payment received via {method}\n\n"
-        f"👤 {instance.name}\n"
-        f"📧 {instance.email}\n"
-        f"💰 ${net_amount}"
-    ))
+    send_telegram_sync(
+    f"💳 Payment received via {method}\n\n"
+    f"👤 {instance.name}\n"
+    f"📧 {instance.email}\n"
+    f"💰 ${net_amount}"
+)
