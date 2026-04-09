@@ -1,10 +1,7 @@
+import asyncio
 from django.shortcuts import render, redirect
-from utils.email import send_text_email
-from django.db.models import Q
 from django.http import JsonResponse
-from main.settings import RECIPIENT_EMAIL
-from blog.models import Post, Inquiry
-from basecamp.area_home import get_home_suburbs
+from blog.models import Inquiry
 from basecamp.basecamp_utils import (
     is_ajax, parse_baggage, parse_date, handle_email_sending,
     verify_turnstile,
@@ -12,6 +9,7 @@ from basecamp.basecamp_utils import (
     is_duplicate_submission, parse_booking_dates, get_customer_status,
 )
 from django_ratelimit.decorators import ratelimit
+from utils.telegram import send_telegram_notification
 
 
 # Inquiry for airport
@@ -55,66 +53,7 @@ def inquiry_details(request):
         try:
             pickup_date_obj, return_pickup_date_obj = parse_booking_dates(pickup_date_str, return_pickup_date_str)
         except ValueError as e:
-            return JsonResponse({'success': False, 'error': str(e)})       
-
-        data = {
-            'name': name,
-            'contact': contact,
-            'email': email,
-            'pickup_date': pickup_date_obj.strftime('%Y-%m-%d'),
-            'pickup_time': pickup_time,
-            'direction': direction,
-            'street': street,
-            'suburb': suburb,
-            'no_of_passenger': no_of_passenger,
-            'flight_number': flight_number,
-            'flight_time': flight_time,
-            'start_point': start_point,
-            'end_point': end_point,
-            'return_pickup_date': return_pickup_date_obj.strftime('%Y-%m-%d') if return_pickup_date_obj else '',
-            'return_flight_number': return_flight_number,
-            'return_flight_time': return_flight_time,
-            'return_pickup_time': return_pickup_time,
-            'return_start_point': return_start_point,
-            'return_end_point': return_end_point,
-            'message': message
-        }
-     
-        status_message, _ = get_customer_status(email, name)
-        data['status_message'] = status_message
-
-        email_subject = f"Inquiry on {data['pickup_date']}"
-
-        email_content_template = '''
-        Hello, {name} \n
-        {status_message}\n
-        https://easygoshuttle.com.au
-        =============================
-        Contact: {contact}
-        Email: {email}
-        ✅ Pickup date: {pickup_date}
-        Pickup time: {pickup_time}
-        Direction: {direction}
-        Street: {street}
-        Suburb: {suburb}
-        Passenger: {no_of_passenger}
-        Flight number: {flight_number}
-        Flight time: {flight_time}
-        Start Point: {start_point}
-        End Point: {end_point}
-        ✅ Return Pickup date: {return_pickup_date}
-        Return Flight number: {return_flight_number}
-        Return Flight time: {return_flight_time}
-        Return Pickup time: {return_pickup_time}
-        Return Start Point: {return_start_point}
-        Return End Point: {return_end_point}
-        Message: {message}
-        =============================\n
-        Best Regards,
-        EasyGo Admin \n\n
-        '''
-
-        content = email_content_template.format(**data)        
+            return JsonResponse({'success': False, 'error': str(e)})            
 
         # 🧳 개별 수하물 항목 수집
         baggage_str = parse_baggage(request)
@@ -135,7 +74,7 @@ def inquiry_details(request):
         
         p.save()
 
-        send_text_email(email_subject, content, [RECIPIENT_EMAIL])
+        asyncio.run(send_telegram_notification("✈️ New airport inquiry has been received."))
 
         return booking_success_response(request)
 
@@ -171,89 +110,37 @@ def inquiry_details1(request):
         direction = ""
         suburb = ""
 
-        # ✅ 날짜 파싱 및 유효성 검증 
         try:
-            pickup_date_obj = parse_date(
-                pickup_date_str, 
-                field_name="Pickup Date", 
-                required=True
-            )
-
+            pickup_date_obj = parse_date(pickup_date_str, field_name="Pickup Date", required=True)
         except ValueError as e:
             return JsonResponse({'success': False, 'error': str(e)})
 
-        # ✅ 중복 제출 방지
         if is_duplicate_submission(Inquiry, email):
             return JsonResponse({'success': False, 'message': 'Duplicate inquiry recently submitted. Please wait before trying again.'})
 
-        data = {
-            'name': name,
-            'contact': contact,
-            'email': email,
-            'pickup_date': pickup_date_obj.strftime('%Y-%m-%d'),
-            'flight_number': flight_number,
-            'pickup_time': pickup_time,
-            'start_point': start_point,
-            'end_point': end_point,
-            'street': street,
-            'no_of_passenger': no_of_passenger,
-            'message': message, 
-            'status_message': '' 
-        }
-     
-        status_message, _ = get_customer_status(email, name)
-        data['status_message'] = status_message
-
-        # 3. 이메일 템플릿 (키워드 기반 포맷팅으로 통일)
-        email_content_template = '''
-        Hello, {name} \n
-        {status_message}\n
-        *** It starts from Home Page
-        =============================
-        Contact: {contact}
-        Email: {email}
-        ✅ Pickup date: {pickup_date}
-        Flight number: {flight_number}
-        Pickup time: {pickup_time}
-        start_point: {start_point}
-        Street: {street}
-        end_point: {end_point}
-        Passenger: {no_of_passenger}
-        Message: {message}
-        =============================\n
-        Best Regards,
-        EasyGo Admin \n\n
-        '''
-
-        content = email_content_template.format(**data)
-        
-        email_subject = f"Inquiry on {data['pickup_date']} - {data['name']}"
-        send_text_email(email_subject, content, [RECIPIENT_EMAIL])
-
         if original_start_point == "Sydney Int'l Airport":
             direction = 'Pickup from Intl Airport'
-            suburb = original_end_point # end_point 대신 original_end_point 사용
+            suburb = original_end_point
             start_point = ''
             end_point = ''
         elif original_start_point == "Sydney Domestic Airport":
             direction = 'Pickup from Domestic Airport'
-            suburb = original_end_point # end_point 대신 original_end_point 사용
+            suburb = original_end_point
             start_point = ''
             end_point = ''
         elif original_end_point == "Sydney Int'l Airport":
             direction = 'Drop off to Intl Airport'
-            suburb = original_start_point # start_point 대신 original_start_point 사용
+            suburb = original_start_point
             end_point = ''
             start_point = ''
         elif original_end_point == "Sydney Domestic Airport":
             direction = 'Drop off to Domestic Airport'
-            suburb = original_start_point # start_point 대신 original_start_point 사용
+            suburb = original_start_point
             end_point = ''
             start_point = ''
-        
-        # 🧳 개별 수하물 항목 수집
+
         baggage_str = parse_baggage(request)
-        
+
         p = Inquiry(
             name=name, contact=contact, email=email, pickup_date=pickup_date_obj,  
             flight_number=flight_number, flight_time=flight_time, pickup_time=pickup_time, 
@@ -262,8 +149,9 @@ def inquiry_details1(request):
             no_of_passenger=no_of_passenger, no_of_baggage=baggage_str, 
             message=message
         )
-        
         p.save()
+
+        asyncio.run(send_telegram_notification("🏠 New inquiry from home page has been received."))
 
         return render_inquiry_done(request)
 

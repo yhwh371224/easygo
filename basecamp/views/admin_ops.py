@@ -6,15 +6,14 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
-from utils.email import send_text_email, send_template_email
-from main.settings import RECIPIENT_EMAIL
+from utils.email import send_template_email
 from blog.models import Post, Inquiry, Driver
 from blog.sms_utils import send_sms_notice, send_whatsapp_template
 from csp.constants import NONCE
 from basecamp.basecamp_utils import (
     parse_baggage, handle_email_sending, format_pickup_time_12h,
     to_bool, is_ajax,
-    render_inquiry_done, parse_booking_dates, get_customer_status,
+    render_inquiry_done, parse_booking_dates,
     parse_one_based_index, resolve_payment_flags,
 )
 from django_ratelimit.decorators import ratelimit
@@ -67,47 +66,6 @@ def confirmation_detail(request):
             pickup_date_obj, return_pickup_date_obj = parse_booking_dates(pickup_date_str, return_pickup_date_str)
         except ValueError as e:
             return JsonResponse({'success': False, 'error': str(e)})
-
-        data = {            
-            'name': name,
-            'contact': contact,
-            'email': email,
-            'pickup_date': pickup_date_obj.strftime('%Y-%m-%d'),
-            'flight_number': flight_number,
-            'pickup_time': pickup_time,
-            'start_point': start_point,
-            'street': street,
-            'end_point': end_point,
-            'no_of_passenger': no_of_passenger,
-            'message': message,
-        }    
-        
-        status_message, subject = get_customer_status(email, name, subject_prefix="[Confirmation] ")
-        data['status_message'] = status_message
-
-        email_content_template = '''
-        Hello, {name} \n
-        {status_message}\n
-        *** It starts from Home Page
-        =============================
-        Contact: {contact}
-        Email: {email}
-        ✅ Pickup date: {pickup_date}
-        Flight number: {flight_number}
-        Pickup time: {pickup_time}
-        start_point: {start_point}
-        Street: {street}
-        end_point: {end_point}
-        Passenger: {no_of_passenger}
-        Message: {message}
-        =============================\n
-        Best Regards,
-        EasyGo Admin \n\n
-        '''
-
-        content = email_content_template.format(**data)
-
-        send_text_email(subject, content, [RECIPIENT_EMAIL])
 
         sam_driver = Driver.objects.get(driver_name="Sam") 
 
@@ -199,7 +157,7 @@ def sending_email_first_detail(request):
                         'return_start_point': user.return_start_point, 'return_end_point': user.return_end_point,
                         'fuel_surcharge': user.fuel_surcharge,
                     },
-                    [email, RECIPIENT_EMAIL],
+                    [email],
                     request=request,
                 )
 
@@ -312,7 +270,7 @@ def sending_email_second_detail(request):
                 'fuel_surcharge': user.fuel_surcharge,
             }
 
-            recipient_list = [user.email, RECIPIENT_EMAIL]
+            recipient_list = [user.email]
             if user.email1:
                 recipient_list.append(user.email1)
 

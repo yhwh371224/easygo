@@ -4,12 +4,11 @@ import stripe
 from django.conf import settings
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
+from main.settings import RECIPIENT_EMAIL
 from utils.email import send_html_email
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
-from main.settings import RECIPIENT_EMAIL, DEFAULT_FROM_EMAIL
 from blog.models import Post, PaypalPayment
-from csp.constants import NONCE
 from basecamp.basecamp_utils import (
     render_to_pdf, safe_float,
     handle_checkout_session_completed, paypal_ipn_error_email,
@@ -289,7 +288,7 @@ def _send_invoice_email(template_name, context, recipient_list, inv_no):
         f"Tax Invoice #T{inv_no} - EasyGo",
         html_content,
         recipient_list,
-        from_email=DEFAULT_FROM_EMAIL,
+        from_email=settings.DEFAULT_FROM_EMAIL,
         attachments=attachments,
     )
 

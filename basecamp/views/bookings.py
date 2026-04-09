@@ -1,18 +1,16 @@
 from django.shortcuts import render
-from utils.email import send_text_email
 from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
-from main.settings import RECIPIENT_EMAIL
 from blog.models import Post, Inquiry, Driver
-from blog.tasks import send_confirm_email
-from basecamp.area_home import get_home_suburbs
 from basecamp.basecamp_utils import (
     is_ajax, parse_baggage, parse_date,
     to_bool, verify_turnstile,
     render_inquiry_done, booking_success_response, require_turnstile,
-    is_duplicate_submission, parse_booking_dates, get_customer_status,
+    is_duplicate_submission, parse_booking_dates
 )
 from django_ratelimit.decorators import ratelimit
+import asyncio
+from utils.telegram import send_telegram_notification
 
 
 # airport booking by client
@@ -51,58 +49,13 @@ def booking_detail(request):
         except ValueError as e:
             return JsonResponse({'success': False, 'error': str(e)})
 
-        price = 'TBA'
-
         # ✅ 중복 제출 방지
         if is_duplicate_submission(Post, email):
             return JsonResponse({'success': False, 'message': 'Duplicate form recently submitted. Please wait before trying again.'})  
-        
-        data = {
-            'name': name,
-            'contact': contact,
-            'email': email,            
-            'pickup_date': pickup_date_obj.strftime('%Y-%m-%d'),
-            'pickup_time': pickup_time,
-            'flight_number': flight_number,            
-            'street': street, 
-            'suburb': suburb,
-            'no_of_passenger': no_of_passenger,
-            'return_pickup_date': return_pickup_date_obj.strftime('%Y-%m-%d') if return_pickup_date_obj else '',
-            'return_flight_number': return_flight_number,
-            'return_flight_time': return_flight_time,
-            'return_pickup_time': return_pickup_time,
-        }
-
-        status_message, subject = get_customer_status(email, name, subject_prefix="[Client Booking] ")
-        data['status_message'] = status_message
-
-        # 1. 템플릿 정의 (키워드 기반 포맷팅)
-        email_content_template = '''
-        Hello, {name} \n
-        [Booking by client] >> Sending email only!\n
-        {status_message}\n
-        ===============================
-        Contact: {contact}
-        Email: {email}
-        ✅ Pickup date: {pickup_date}
-        Pickup time: {pickup_time}
-        Flight number: {flight_number}
-        Address: {street}, {suburb}
-        No of Pax: {no_of_passenger}
-        ✅ Return pickup date: {return_pickup_date}
-        Return flight no: {return_flight_number}
-        Return flight time: {return_flight_time}
-        Return pickup time: {return_pickup_time}
-        ===============================\n
-        Best Regards,
-        EasyGo Admin \n\n
-        '''
-
-        content = email_content_template.format(**data)
-
-        send_text_email(subject, content, [RECIPIENT_EMAIL])
             
         sam_driver = Driver.objects.get(driver_name="Sam") 
+
+        asyncio.run(send_telegram_notification("✈️ New airport booking has been received."))
 
         # 🧳 개별 수하물 항목 수집
         baggage_str = parse_baggage(request)
@@ -112,7 +65,7 @@ def booking_detail(request):
                  no_of_passenger=no_of_passenger, no_of_baggage=baggage_str, message=message, return_direction=return_direction, 
                  return_pickup_date=return_pickup_date_obj, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
                  return_pickup_time=return_pickup_time, return_start_point=return_start_point, return_end_point=return_end_point, driver=sam_driver,
-                 price=price, )
+                 price='TBA', )
         
         p.save()        
         
@@ -156,79 +109,10 @@ def cruise_booking_detail(request):
             pickup_date_obj, return_pickup_date_obj = parse_booking_dates(pickup_date_str, return_pickup_date_str)
         except ValueError as e:
             return JsonResponse({'success': False, 'error': str(e)})
-        
-        data = {
-            'name': name,
-            'contact': contact, 
-            'email': email,
-            'pickup_date': pickup_date_obj.strftime('%Y-%m-%d'),
-            'pickup_time': pickup_time,
-            'start_point': start_point,
-            'end_point': end_point,
-            'no_of_passenger': no_of_passenger,
-            'no_of_baggage': no_of_baggage,
-            'return_pickup_date': return_pickup_date_obj.strftime('%Y-%m-%d') if return_pickup_date_obj else '',
-            'return_pickup_time': return_pickup_time, 
-            'return_start_point': return_start_point,
-            'message': message}       
-        
-        cruise_email = Inquiry.objects.filter(email=email).exists()
-        post_email = Post.objects.filter(email=email).exists()  
-
-        if cruise_email or post_email:             
-                        
-            content = '''
-            Hello, {} \n  
-            [Cruise Booking by client] >> Put price & Send email\n
-     
-            ===============================
-            Email: {}  
-            Contact: {}
-            Pick up time: {}      
-            Start point: {}            
-            End point: {}  
-            No of passenger: {}
-            no_of_baggage: {}
-            ✅ return_pickup_date: {}
-            return_start_point: {}
-            Return pickup time: {}     
-            Message: {}     
-
-            =============================\n        
-            Best Regards,
-            EasyGo Admin \n\n        
-            ''' .format(data['name'], data['email'], data['contact'], data['pickup_time'], data['start_point'], data['end_point'], 
-                        data['no_of_passenger'], data['no_of_baggage'], data['return_pickup_date'], data['return_start_point'],
-                        data['return_pickup_time'], data['message'])
-            send_text_email(data['pickup_date'], content, [RECIPIENT_EMAIL])
-        
-        else:
-            content = '''
-            Hello, {} \n  
-            [Cruise Booking by client] >> Put price & Send email \n
-
-           ===============================
-            Email: {}  
-            Contact: {}
-            Pick up time: {}      
-            Start point: {}            
-            End point: {}  
-            No of passenger: {}
-            no_of_baggage: {}
-            ✅return_pickup_date: {}
-            return_flight_number: {}
-            Return pickup time: {}     
-            Message: {}     
-            
-            =============================\n        
-            Best Regards,
-            EasyGo Admin \n\n        
-            ''' .format(data['name'], data['email'], data['contact'], data['pickup_time'], data['start_point'], data['end_point'], 
-                        data['no_of_passenger'], data['no_of_baggage'], data['return_pickup_date'], data['return_start_point'],
-                        data['return_pickup_time'], data['message'])
-            send_text_email(data['pickup_date'], content, [RECIPIENT_EMAIL])
             
         sam_driver = Driver.objects.get(driver_name="Sam")
+
+        asyncio.run(send_telegram_notification("🚢 New cruise booking has been received."))
 
         # 🧳 개별 수하물 항목 수집
         baggage_str = parse_baggage(request)         
@@ -312,6 +196,8 @@ def confirm_booking_detail(request):
             pickup_date_obj, return_pickup_date_obj = parse_booking_dates(pickup_date, return_pickup_date)
         except ValueError as e:
             return JsonResponse({'success': False, 'error': str(e)})
+        
+        asyncio.run(send_telegram_notification("📋 Booking confirmed and transferred to schedule."))
 
         # 최종 가격 계산
         if price in [None, ""]:
@@ -335,36 +221,6 @@ def confirm_booking_detail(request):
             pending = False
         else:
             pending = True  
-
-        # 이메일 발송용 데이터
-        data = {
-            'name': name,
-            'email': email,
-            'contact': contact,
-            'company_name': company_name,
-            'pickup_date': pickup_date.strftime('%Y-%m-%d'),
-            'pickup_time': pickup_time,
-            'direction': direction,
-            'flight_number': flight_number,
-            'flight_time': flight_time,
-            'cash': cash,
-            'prepay': prepay,
-            'return_flight_number': return_flight_number,
-            'street': street,
-            'suburb': suburb,
-            'start_point': start_point,
-            'end_point': end_point,
-            'return_start_point': return_start_point,
-            'return_end_point': return_end_point
-        }
-
-        send_confirm_email.delay(
-            data['name'], data['email'], data['contact'], data['company_name'],
-            data['direction'], data['flight_number'], data['flight_time'],
-            data['pickup_date'], data['pickup_time'], data['return_flight_number'],
-            data['street'], data['suburb'], data['start_point'], data['end_point'],
-            data['cash'], data['prepay'], data['return_start_point'], data['return_end_point']
-        )
 
         sam_driver = Driver.objects.get(driver_name="Sam")
         is_confirmed = False
