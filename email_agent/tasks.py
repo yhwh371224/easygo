@@ -199,6 +199,11 @@ def gmail_watch_topic(payload):
             print(f"From: {sender}")
             print(f"Subject: {subject}")
 
+            # ✅ 자신한테 오는 메일 스킵 (Contact Form 제외)
+            if 'info@easygoshuttle.com.au' in sender and '[New Contact] Submission from' not in subject:
+                print(f"Skipping own email: {subject}")
+                continue
+
             # Claude API 호출
             try:
                 result = analyze_email_with_claude(sender, subject, body, thread_history_without_current)
