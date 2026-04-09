@@ -157,45 +157,45 @@ A: Yes, free cancellation if done more than 24 hours before pickup. No refund wi
 """
 
 
-def get_relevant_context(email_content):
-    """
-    이메일 내용에서 키워드를 감지해서
-    관련된 회사 자료 섹션만 골라서 반환
-    """
-    context = []
-    email = email_content.lower()
-
-    if any(w in email for w in ["cancel", "refund", "reschedule", "rebook"]):
-        context.append(CANCELLATION_POLICY)
-
-    if any(w in email for w in ["luggage", "bag", "suitcase", "golf", "ski", "bike", "surfboard"]):
-        context.append(LUGGAGE_POLICY)
-
-    if any(w in email for w in ["child", "baby", "infant", "seat", "capsule", "kid"]):
-        context.append(CHILD_SEAT_POLICY)
-
-    if any(w in email for w in ["pay", "payment", "card", "cash", "price", "charge", "fee", "cost"]):
-        context.append(BOOKING_POLICY)
-
-    if any(w in email for w in ["delay", "flight", "wait", "meet", "driver", "late", "arrive", "arrival", "pickup", "pick up"]):
-        context.append(WAITING_AND_ARRIVAL_POLICY)
-
-    if any(w in email for w in ["book", "booking", "reserve", "reservation", "schedule"]):
-        context.append(BOOKING_POLICY)
-
-    if any(w in email for w in ["smoke", "alcohol", "food", "drink", "damage", "behaviour"]):
-        context.append(VEHICLE_CONDUCT)
-
-    if any(w in email for w in ["email", "contact", "communicate", "message", "redirect", "stop"]):
-        context.append(COMMUNICATIONS)
-
-    # 중복 제거
-    context = list(dict.fromkeys(context))
-
-    # FAQ는 항상 포함
-    context.append(FAQ)
-
-    return "\n\n".join(context)
+# def get_relevant_context(email_content):
+#     """
+#     이메일 내용에서 키워드를 감지해서
+#     관련된 회사 자료 섹션만 골라서 반환
+#     """
+#     context = []
+#     email = email_content.lower()
+#
+#     if any(w in email for w in ["cancel", "refund", "reschedule", "rebook"]):
+#         context.append(CANCELLATION_POLICY)
+#
+#     if any(w in email for w in ["luggage", "bag", "suitcase", "golf", "ski", "bike", "surfboard"]):
+#         context.append(LUGGAGE_POLICY)
+#
+#     if any(w in email for w in ["child", "baby", "infant", "seat", "capsule", "kid"]):
+#         context.append(CHILD_SEAT_POLICY)
+#
+#     if any(w in email for w in ["pay", "payment", "card", "cash", "price", "charge", "fee", "cost"]):
+#         context.append(BOOKING_POLICY)
+#
+#     if any(w in email for w in ["delay", "flight", "wait", "meet", "driver", "late", "arrive", "arrival", "pickup", "pick up"]):
+#         context.append(WAITING_AND_ARRIVAL_POLICY)
+#
+#     if any(w in email for w in ["book", "booking", "reserve", "reservation", "schedule"]):
+#         context.append(BOOKING_POLICY)
+#
+#     if any(w in email for w in ["smoke", "alcohol", "food", "drink", "damage", "behaviour"]):
+#         context.append(VEHICLE_CONDUCT)
+#
+#     if any(w in email for w in ["email", "contact", "communicate", "message", "redirect", "stop"]):
+#         context.append(COMMUNICATIONS)
+#
+#     # 중복 제거
+#     context = list(dict.fromkeys(context))
+#
+#     # FAQ는 항상 포함
+#     context.append(FAQ)
+#
+#     return "\n\n".join(context)
 
 
 # Combined full context for Claude API system prompt (필요시 사용)
