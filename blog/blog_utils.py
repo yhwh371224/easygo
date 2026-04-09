@@ -1,8 +1,11 @@
 import logging
+import asyncio
+
 from django.utils import timezone
 from main.settings import DEFAULT_FROM_EMAIL
 from basecamp.basecamp_utils import render_email_template
 from utils.email import send_text_email, send_html_email
+from utils.telegram import send_telegram_notification
 
 logger = logging.getLogger('easygo')
 
@@ -88,18 +91,16 @@ def process_generic_payment(payment_instance, posts, admin_email, calculated_amo
 
 
 def send_payment_notification_email(instance, total_balance, recipient_emails, admin_email, method, raw_amount=None, net_amount=None):
-    """
-    Stripe/PayPal 각각의 템플릿과 금액을 처리합니다.
-    """
     if net_amount is None:
         net_amount = float(instance.amount or 0)
     if raw_amount is None:
         raw_amount = net_amount
 
     remaining_balance = round(total_balance - net_amount, 2)
-    recipient_list = [email for email in recipient_emails if email] + [admin_email]
+    
+    # ✅ 고객에게만 이메일 (admin_email 제거)
+    recipient_list = [email for email in recipient_emails if email]
 
-    # noIdentity 케이스: PayPal/Stripe 발신자 이메일 추가
     if total_balance == 0 and instance.email and instance.email not in recipient_list:
         recipient_list.append(instance.email)
 
@@ -111,15 +112,9 @@ def send_payment_notification_email(instance, total_balance, recipient_emails, a
     }
 
     if total_balance == 0:
-        if method == "PAYPAL":
-            template = "html_email-noIdentity.html" 
-        else:
-            template = "html_email-noIdentity-stripe.html"
+        template = "html_email-noIdentity.html" if method == "PAYPAL" else "html_email-noIdentity-stripe.html"
     elif remaining_balance <= 0:
-        if method == "PAYPAL":
-            template = "html_email-payment-success.html"
-        else:
-            template = "html_email-payment-success-stripe.html"
+        template = "html_email-payment-success.html" if method == "PAYPAL" else "html_email-payment-success-stripe.html"
     else:
         template = "html_email-response-discrepancy.html"
         context.update({
@@ -130,3 +125,11 @@ def send_payment_notification_email(instance, total_balance, recipient_emails, a
 
     html_content = render_email_template(template, context)
     send_html_email("Payment Received - EasyGo", html_content, recipient_list, from_email=DEFAULT_FROM_EMAIL)
+
+    # ✅ 관리자에게는 텔레그램 알림
+    asyncio.run(send_telegram_notification(
+        f"💳 Payment received via {method}\n\n"
+        f"👤 {instance.name}\n"
+        f"📧 {instance.email}\n"
+        f"💰 ${net_amount}"
+    ))

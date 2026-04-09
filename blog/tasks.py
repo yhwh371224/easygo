@@ -6,11 +6,10 @@ from django.db.models import Q
 
 from celery import shared_task
 
-from main.settings import RECIPIENT_EMAIL, DEFAULT_FROM_EMAIL
+from main.settings import RECIPIENT_EMAIL
 from .models import Inquiry, Post, PaypalPayment, StripePayment
 from utils.inquiry_helper import send_inquiry_email
 from utils.post_helper import send_missing_direction_email, send_post_cancelled_email, send_post_confirmation_email
-from utils.email import send_text_email
 
 
 logger = logging.getLogger('easygo')
@@ -35,76 +34,6 @@ def create_event_on_calendar(instance_id):
         return
 
     sync_to_calendar(instance)
-
-
-# Clicked confirm_booking form 
-@shared_task
-def send_confirm_email(
-    name, email, contact, company_name, direction, flight_number, flight_time,
-    pickup_date, pickup_time, return_flight_number, street, suburb, start_point, 
-    end_point, cash, prepay, return_start_point, return_end_point):
-    subject = f"Booking Confirmation Clicked"
-    
-    content = f'''
-    {name} clicked the 'confirm booking' 
-
-    ✅ Sending email only! 
-
-    👉 https://easygoshuttle.com.au/sending_email_first/
-    
-    
-    👉 https://easygoshuttle.com.au/sending_email_second/
-
-    =============================   
-    Email:  {email}
-    Contact: {contact}
-    Company name: {company_name}
-    Direction: {direction}
-    Flight number: {flight_number}
-    Flight time: {flight_time}
-    Flight date: {pickup_date}
-    Pickup time: {pickup_time}
-    ✅ *** Return flight number: {return_flight_number} ***
-    ✅ *** Return Pickup Location: {return_start_point} ***
-    ✅ *** Return Drop-off Location {return_end_point} ***
-    Street: {street}
-    Suburb: {suburb}
-    Start point: {start_point}
-    End point: {end_point}
-    Cash: {cash}
-    Prepay: {prepay}    
-    ===============================          
-    '''
-
-    send_text_email(subject, content, [RECIPIENT_EMAIL])
-
-
-# Home page for price
-@shared_task
-def send_email_task(pickup_date, direction, suburb, no_of_passenger):
-    content = f'''
-    someone checked the price from homepage
-    =============================
-    flight date:  {pickup_date}
-    Direction: {direction}
-    Suburbs: {suburb}
-    No of Pax: {no_of_passenger}
-    ===============================
-    '''
-    send_text_email(pickup_date, content, [RECIPIENT_EMAIL])
-
-
-# Review page, service, information, terms, policy
-@shared_task
-def send_notice_email(subject, message, RECIPIENT_EMAIL):
-    from django.core.exceptions import ImproperlyConfigured
-    if not all([subject, message, RECIPIENT_EMAIL]):
-        raise ValueError("Subject, message, and recipient email must be provided")
-            
-    if not DEFAULT_FROM_EMAIL:
-        raise ImproperlyConfigured("DEFAULT_FROM_EMAIL is not set in environment variables")
-    
-    send_text_email(subject, message, [RECIPIENT_EMAIL])
 
 
 # PayPal payment in tasks.py
