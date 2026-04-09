@@ -62,7 +62,7 @@ def send_post_confirmation_email(instance):
         }
     )
 
-    send_html_email(subject, html_content, [instance.email, RECIPIENT_EMAIL])
+    send_html_email(subject, html_content, [instance.email])
 
 
 def send_post_cancelled_email(instance):
@@ -75,7 +75,7 @@ def send_post_cancelled_email(instance):
         'return_pickup_time': instance.return_pickup_time,
     })
     
-    send_html_email("EasyGo Booking Cancelled", html_content, [instance.email, RECIPIENT_EMAIL])
+    send_html_email("EasyGo Booking Cancelled", html_content, [instance.email])
 
 
 def send_missing_direction_email(instance):
