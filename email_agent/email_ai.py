@@ -1,7 +1,7 @@
 import anthropic
-import json
 import logging
 from django.conf import settings
+from email_agent.prompts.company_data import FULL_COMPANY_CONTEXT
 from email_agent.prompts.system_prompt import STATIC_SYSTEM_PROMPT
 from email_agent.prompts.user_template import build_user_prompt
 
@@ -21,8 +21,12 @@ def analyze_email_with_claude(sender, subject, body, thread_history):
             {
                 "type": "text",
                 "text": STATIC_SYSTEM_PROMPT,
+            },
+            {
+                "type": "text",
+                "text": FULL_COMPANY_CONTEXT,
                 "cache_control": {"type": "ephemeral"},
-            }
+            },
         ],
         messages=[{"role": "user", "content": user_prompt}],
     )
