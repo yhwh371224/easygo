@@ -17,7 +17,6 @@ from django_ratelimit.decorators import ratelimit
 from .models import Post, Comment
 from .forms import CommentForm, PostForm
 from blog.models import Post as BlogPost
-from blog.tasks import send_notice_email
 from main.settings import RECIPIENT_EMAIL
 from .review_utils import create_verse_image
 
