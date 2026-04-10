@@ -1,10 +1,10 @@
-import anthropic
 from celery import shared_task
 from django.conf import settings
-
+from services.claude_service import ClaudeService
 
 GMB_MAX_LENGTH = 1000
-CLAUDE_MODEL = "claude-haiku-4-5-20251001"
+
+_claude = ClaudeService()
 
 
 def _generate_gmb_content(post) -> str:
@@ -12,27 +12,19 @@ def _generate_gmb_content(post) -> str:
     if post.gmb_content and post.gmb_content.strip():
         return post.gmb_content[:GMB_MAX_LENGTH]
 
-    client = anthropic.Anthropic()
-    message = client.messages.create(
-        model=CLAUDE_MODEL,
-        max_tokens=1024,
-        messages=[
-            {
-                "role": "user",
-                "content": (
-                    f"Write a Google My Business post under {GMB_MAX_LENGTH} characters. "
-                    f"Make it engaging and customer-friendly. "
-                    f"Naturally include relevant SEO keywords. "
-                    f"Focus on local search terms related to Sydney airport transfers. "
-                    f"End with a subtle call to action encouraging readers to visit the website for more information.\n\n"
-                    f"Title: {post.title}\n"
-                    f"Meta description: {post.meta_description}\n"
-                    f"Excerpt: {post.excerpt}"
-                ),
-            }
-        ],
+    system_prompt = "You are a content writer for EasyGo Airport Shuttle, a professional airport transfer service in Sydney, Australia."
+    user_prompt = (
+        f"Write a Google My Business post under {GMB_MAX_LENGTH} characters. "
+        f"Make it engaging and customer-friendly. "
+        f"Naturally include relevant SEO keywords. "
+        f"Focus on local search terms related to Sydney airport transfers. "
+        f"End with a subtle call to action encouraging readers to visit the website for more information.\n\n"
+        f"Title: {post.title}\n"
+        f"Meta description: {post.meta_description}\n"
+        f"Excerpt: {post.excerpt}"
     )
-    summary = message.content[0].text[:GMB_MAX_LENGTH]
+
+    summary = _claude.generate(system_prompt, user_prompt, max_tokens=1024)[:GMB_MAX_LENGTH]
     post.gmb_content = summary
     post.save(update_fields=["gmb_content"])
     return summary

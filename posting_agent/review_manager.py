@@ -2,7 +2,9 @@ import requests
 from django.conf import settings
 from google.oauth2.credentials import Credentials
 from google.auth.transport.requests import Request
-import anthropic
+from services.claude_service import ClaudeService
+
+_claude = ClaudeService()
 
 
 def get_credentials():
@@ -42,15 +44,9 @@ def generate_reply(review: dict) -> str:
     rating_map = {'ONE': 1, 'TWO': 2, 'THREE': 3, 'FOUR': 4, 'FIVE': 5}
     stars = rating_map.get(rating, 5)
 
-    prompt = f"""You are a professional customer service manager for EasyGo Airport Shuttle, a premium airport transfer service in Sydney, Australia.
+    system_prompt = """You are a professional customer service manager for EasyGo Airport Shuttle, a premium airport transfer service in Sydney, Australia.
 
-Write a warm, professional reply to this Google review.
-
-Reviewer: {reviewer}
-Star rating: {stars}/5
-Review: {comment}
-
-Guidelines:
+Guidelines for review replies:
 - Keep it concise (2-4 sentences)
 - Thank them genuinely
 - If negative (1-2 stars): apologize sincerely, offer to make it right
@@ -58,16 +54,15 @@ Guidelines:
 - Mention EasyGo Airport Shuttle naturally once
 - Do NOT use generic phrases like "We value your feedback"
 - Write in the same language as the review
+- Reply only, no preamble."""
 
-Reply only, no preamble."""
+    user_prompt = f"""Write a warm, professional reply to this Google review.
 
-    client = anthropic.Anthropic(api_key=settings.ANTHROPIC_API_KEY)
-    message = client.messages.create(
-        model="claude-haiku-4-5-20251001",
-        max_tokens=300,
-        messages=[{"role": "user", "content": prompt}]
-    )
-    return message.content[0].text.strip()
+Reviewer: {reviewer}
+Star rating: {stars}/5
+Review: {comment}"""
+
+    return _claude.generate(system_prompt, user_prompt, max_tokens=300)
 
 
 def post_reply(review_name: str, reply_text: str) -> bool:
