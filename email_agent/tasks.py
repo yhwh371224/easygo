@@ -8,11 +8,13 @@ from google.oauth2 import service_account
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from django.conf import settings
-from .email_ai import analyze_email_with_claude
+from .email_ai import analyze_email_with_claude, analyze_email_dual
+from services.gmail_draft_service import GmailDraftService
 
 
 LAST_HISTORY_ID_FILE = os.path.join(settings.BASE_DIR, 'scripts', 'last_history_id.txt')
 PROCESSED_LABEL_ID = 'Label_956123326350558597'
+DUAL_MODE = getattr(settings, 'EMAIL_AI_DUAL_MODE', False)
 
 EMAIL_SIGNATURE = """
 <p style="font-family: Arial, sans-serif; font-size: 12px; color: #555;"><strong>EasyGo Airport Shuttle</strong></p>
@@ -204,20 +206,6 @@ def gmail_watch_topic(payload):
                 print(f"Skipping own email: {subject}")
                 continue
 
-            # Claude API 호출
-            try:
-                result = analyze_email_with_claude(sender, subject, body, thread_history_without_current)
-
-            except Exception as e:
-                print(f"Claude API failed for message {msg_id}: {e}")
-                continue
-
-            if not result:
-                print(f"Claude API returned empty for message {msg_id}")
-                continue
-
-            reply_body = result['suggested_reply'] + EMAIL_SIGNATURE
-
             # Contact Form 이메일이면 본문에서 이메일 추출
             if '[New Contact] Submission from' in subject:
                 match = re.search(r'email:\s*(\S+)', body)
@@ -225,12 +213,36 @@ def gmail_watch_topic(payload):
             else:
                 reply_to = sender
 
-            # Gmail Draft 생성
-            try:
-                create_gmail_draft(service, reply_to, subject, reply_body, thread_id=thread_id)
-                mark_message_processed(service, msg_id)
-            except Exception as e:
-                print(f"Draft creation failed for message {msg_id}: {e}")
+            if DUAL_MODE:
+                try:
+                    dual_result = analyze_email_dual(sender, subject, body, thread_history_without_current)
+                    GmailDraftService().build_comparison_draft(
+                        to=reply_to,
+                        subject=subject,
+                        thread_id=thread_id,
+                        analysis_result=dual_result,
+                    )
+                    mark_message_processed(service, msg_id)
+                except Exception as e:
+                    print(f"Dual mode draft creation failed for message {msg_id}: {e}")
+            else:
+                try:
+                    result = analyze_email_with_claude(sender, subject, body, thread_history_without_current)
+                except Exception as e:
+                    print(f"Claude API failed for message {msg_id}: {e}")
+                    continue
+
+                if not result:
+                    print(f"Claude API returned empty for message {msg_id}")
+                    continue
+
+                reply_body = result['suggested_reply'] + EMAIL_SIGNATURE
+
+                try:
+                    create_gmail_draft(service, reply_to, subject, reply_body, thread_id=thread_id)
+                    mark_message_processed(service, msg_id)
+                except Exception as e:
+                    print(f"Draft creation failed for message {msg_id}: {e}")
 
     except Exception as e:
         print(f"Error: {e}")
