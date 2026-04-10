@@ -17,16 +17,15 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         try:
             today = date.today()
-            tomorrow = today + timedelta(days=1)
             within_three_days = today + timedelta(days=3)
 
             final_notices = Post.objects.filter(
-                pickup_date__range=(tomorrow, within_three_days),
+                pickup_date__range=(today, within_three_days),
                 cancelled=False,
             ).filter(
                 Q(paid__isnull=True) | Q(paid__exact="")
-            ).exclude(
-                cash=True
+            ).filter(
+                Q(reminder=False) | Q(pending=True)
             )
 
             for notice in final_notices:
