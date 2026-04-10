@@ -85,7 +85,7 @@ class ClaudeService:
             f"output={usage.output_tokens}"
         )
 
-        return self._extract_text(message)
+        return self._extract_text(message).strip()
 
     # ==================================================
     # Helpers
