@@ -1,5 +1,10 @@
+import logging
+
+logger = logging.getLogger('email_agent')  # settings.py의 'email_agent' logger 사용
+
+
 def build_user_prompt(sender, subject, body, history_text):
-    return f"""[Email History - for context only, do not reply to this]
+    prompt = f"""[Email History - for context only, do not reply to this]
 {history_text}
 
 [New Email - reply to THIS only]
@@ -10,4 +15,10 @@ Body:
 
 Write a reply to the [New Email] above.
 """
+    # ✅ 로깅
+    logger.info("===== FINAL PROMPT =====")
+    logger.info(prompt)
+    logger.info("========================")
+
+    return prompt
 
