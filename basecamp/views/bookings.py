@@ -65,7 +65,7 @@ def booking_detail(request):
                  no_of_passenger=no_of_passenger, no_of_baggage=baggage_str, message=message, return_direction=return_direction, 
                  return_pickup_date=return_pickup_date_obj, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
                  return_pickup_time=return_pickup_time, return_start_point=return_start_point, return_end_point=return_end_point, driver=sam_driver,
-                 price='TBA', )
+                 price='TBA', pending=True, reminder=False)
         
         p.save()        
         
@@ -122,7 +122,7 @@ def cruise_booking_detail(request):
                  no_of_passenger=no_of_passenger, no_of_baggage=baggage_str,   
                  return_pickup_date=return_pickup_date_obj, return_start_point=return_start_point,  
                  return_pickup_time=return_pickup_time, return_end_point=return_end_point,
-                 message=message, driver=sam_driver, )
+                 message=message, driver=sam_driver, pending=True, reminder=False)
         
         p.save()
 
@@ -217,7 +217,7 @@ def confirm_booking_detail(request):
             fuel_surcharge_value = "fs included" if fuel_surcharge else ""
 
         # pending 상태 결정
-        if paid or cash:
+        if paid or cash or prepay:
             pending = False
         else:
             pending = True  

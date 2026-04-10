@@ -50,6 +50,7 @@ def notify_user_payment_paypal(instance_id):
         calculated_amount = round(raw_amount / 1.03, 2)
 
         posts = Post.objects.filter(
+            Q(booker_email__iexact=instance.email) |
             Q(email__iexact=instance.email) | 
             Q(name__iexact=instance.name)
         ).order_by('pickup_date')
