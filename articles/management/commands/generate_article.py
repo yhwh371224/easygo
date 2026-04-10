@@ -1,5 +1,4 @@
 import asyncio
-import anthropic
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 from django.utils.text import slugify
@@ -8,19 +7,15 @@ from telegram.ext import Application, CallbackQueryHandler
 from articles.models import Category, Post
 from posting_agent.telegram_bot import send_article_notification
 from posting_agent.management.commands.run_telegram_bot import button_handler
+from services.claude_service import ClaudeService
+
+_claude = ClaudeService()
 
 
 def generate_article_content(topic: str, category_name: str) -> dict:
-    client = anthropic.Anthropic(api_key=settings.ANTHROPIC_API_KEY)
+    system_prompt = "You are a content writer for EasyGo Airport Shuttle, a professional airport transfer service in Sydney, Australia."
 
-    message = client.messages.create(
-        model="claude-haiku-4-5-20251001",
-        max_tokens=4000,
-        messages=[{
-            "role": "user",
-            "content": f"""You are a content writer for EasyGo Airport Shuttle, a professional airport transfer service in Sydney, Australia.
-
-Write a complete blog post about: "{topic}"
+    user_prompt = f"""Write a complete blog post about: "{topic}"
 Category: "{category_name}"
 
 Return ONLY this exact format with no extra text outside the markers:
@@ -48,10 +43,8 @@ Return ONLY this exact format with no extra text outside the markers:
 
 ===THUMBNAIL_QUERY===
 [2-4 keywords for Unsplash image search. Simple and specific. e.g. "sydney airport terminal shuttle"]"""
-        }]
-    )
 
-    raw = message.content[0].text.strip()
+    raw = _claude.generate(system_prompt, user_prompt, max_tokens=4000)
     return parse_response(raw)
 
 

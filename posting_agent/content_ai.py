@@ -1,5 +1,6 @@
-from django.conf import settings
-import anthropic
+from services.claude_service import ClaudeService
+
+_claude = ClaudeService()
 
 TOPICS = [
     # ✅ 이미 발행됨 - 건너뜀
@@ -30,16 +31,9 @@ def pick_topic():
 
 def generate_all_content(topic_slug: str, topic_title: str):
     """GMB 글 생성"""
-    client = anthropic.Anthropic(api_key=settings.ANTHROPIC_API_KEY)
+    system_prompt = "You are a content writer for EasyGo Airport Shuttle, a professional airport transfer service in Sydney, Australia."
 
-    message = client.messages.create(
-        model="claude-haiku-4-5-20251001",
-        max_tokens=2000,
-        messages=[{
-            "role": "user",
-            "content": f"""You are a content writer for EasyGo Airport Shuttle, a professional airport transfer service in Sydney, Australia.
-
-Generate content for the topic: "{topic_title}"
+    user_prompt = f"""Generate content for the topic: "{topic_title}"
 
 Return ONLY this exact format, no extra text:
 
@@ -54,10 +48,8 @@ Return ONLY this exact format, no extra text:
 
 ===TITLE===
 [Write an SEO-optimized blog post title. Under 60 characters.]"""
-        }]
-    )
 
-    raw = message.content[0].text.strip()
+    raw = _claude.generate(system_prompt, user_prompt, max_tokens=2000)
     return parse_content(raw, topic_slug)
 
 
