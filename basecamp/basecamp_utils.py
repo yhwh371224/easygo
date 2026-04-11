@@ -69,13 +69,16 @@ def render_to_pdf(template_src, context_dict={}):
 # --------------------------
 # Email sending (Outlook 호환 헤더 포함)
 # --------------------------
-def handle_email_sending(request, email, subject, template_name, context, email1=None):
+def handle_email_sending(request, email, subject, template_name, context, email1=None, booker_email=None):
     html_content = render_email_template(template_name, context, request=request)
     text_content = strip_tags(html_content)
 
-    recipient_list = [email, settings.RECIPIENT_EMAIL]
-    if email1:
-        recipient_list.append(email1)
+    if booker_email:
+        recipient_list = [booker_email]
+    else:
+        recipient_list = [email]
+        if email1:
+            recipient_list.append(email1)
 
     email_message = EmailMultiAlternatives(
         subject,
