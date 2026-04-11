@@ -626,7 +626,10 @@ def email_dispatch_detail(request):
                 }, status=400)  
 
         # 6️⃣ Send email
-        handle_email_sending(request, email, subject, template_name, context, getattr(user, 'email1', None))
+        if selected_option == "Pickup Notice for Today":
+            handle_email_sending(request, email, subject, template_name, context, getattr(user, 'email1', None))
+        else:
+            handle_email_sending(request, email, subject, template_name, context, getattr(user, 'email1', None), booker_email=getattr(user, 'booker_email', None))
 
         return render_inquiry_done(request)
 
