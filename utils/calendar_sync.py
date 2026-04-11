@@ -100,7 +100,7 @@ def build_event_data(instance):
         instance.name,
         instance.email,
         f"b:{baggage_str}" if baggage_str else "",
-        f"t:{instance.toll}" if instance.toll else "",
+        f"toll:${instance.toll}" if instance.toll else "",
         f"m:{instance.message}" if instance.message else "",
         f"n:{instance.notice}" if instance.notice else "",
         f"d:{instance.return_pickup_date}" if instance.return_pickup_date else "",
