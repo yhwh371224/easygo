@@ -33,7 +33,12 @@ def create_event_on_calendar(instance_id):
         logger.info(f"Cancelled post {instance_id} with no event_id. Skipping event creation.")
         return
 
+    # ✅ 회사 캘린더 (기존)
     sync_to_calendar(instance)
+
+    # ✅ 드라이버 캘린더 (추가)
+    if instance.driver and getattr(instance.driver, 'google_calendar_id', None):
+        sync_to_calendar(instance, calendar_id=instance.driver.google_calendar_id)
 
 
 # PayPal payment in tasks.py
