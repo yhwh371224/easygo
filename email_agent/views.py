@@ -18,6 +18,6 @@ def gmail_webhook(request):
             payload = json.loads(message_data)
             
             # 여기서 Celery task로 넘김
-            gmail_watch_topic.delay(payload)
+            gmail_watch_topic.apply_async(args=[payload], countdown=10)
         
         return HttpResponse(status=200)
