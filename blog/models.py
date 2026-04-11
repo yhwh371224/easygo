@@ -20,7 +20,8 @@ class Driver(models.Model):
     driver_address = models.CharField(max_length=200, blank=True, null=True)
     driver_plate = models.CharField(max_length=30, blank=True, null=True)
     driver_car = models.CharField(max_length=30, blank=True, null=True)
-    driver_bankdetails = models.TextField(blank=True, null=True)
+    driver_bankdetails = models.TextField(blank=True, null=True)    
+    google_calendar_id = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
         return self.driver_name
@@ -157,6 +158,7 @@ class Post(models.Model):
     prepay = models.BooleanField(default=False, blank=True)
     pending = models.BooleanField(default=False, blank=True)
     calendar_event_id = models.CharField(max_length=255, blank=True, null=True)
+    driver_calendar_event_id = models.CharField(max_length=255, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
 
     @property

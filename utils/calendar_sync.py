@@ -149,3 +149,52 @@ def sync_to_calendar(instance):
             )
     except Exception as e:
         logger.error(f"Calendar sync failed for post {instance.id}: {e}")
+
+
+def sync_to_calendar(instance, calendar_id="primary"):
+    service = get_calendar_service()
+    event = build_event_data(instance)
+    if not event:
+        return
+
+    event_id = (instance.calendar_event_id or "").strip()
+    try:
+        if event_id:
+            service.events().update(calendarId=calendar_id, eventId=event_id, body=event).execute()
+        else:
+            new_event = service.events().insert(calendarId=calendar_id, body=event).execute()
+            if calendar_id == "primary":  
+                Post.objects.filter(pk=instance.pk).update(
+                    calendar_event_id=new_event["id"]
+                )
+    except Exception as e:
+        logger.error(f"Calendar sync failed for post {instance.id} (calendar: {calendar_id}): {e}")
+
+
+def sync_to_calendar(instance, calendar_id="primary", is_driver=False):
+    service = get_calendar_service()
+    event = build_event_data(instance)
+    if not event:
+        return
+
+    event_id = (
+        (instance.driver_calendar_event_id or "").strip()
+        if is_driver
+        else (instance.calendar_event_id or "").strip()
+    )
+
+    try:
+        if event_id:
+            service.events().update(calendarId=calendar_id, eventId=event_id, body=event).execute()
+        else:
+            new_event = service.events().insert(calendarId=calendar_id, body=event).execute()
+            if is_driver:
+                Post.objects.filter(pk=instance.pk).update(
+                    driver_calendar_event_id=new_event["id"]
+                )
+            else:
+                Post.objects.filter(pk=instance.pk).update(
+                    calendar_event_id=new_event["id"]
+                )
+    except Exception as e:
+        logger.error(f"Calendar sync failed for post {instance.id} (calendar: {calendar_id}): {e}")

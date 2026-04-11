@@ -1,5 +1,5 @@
 import logging
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 from django.db import transaction
 from django.dispatch import receiver
 from django.core.management import call_command
@@ -100,6 +100,19 @@ def async_notify_user_payment_stripe(sender, instance, created, **kwargs):
     if created:
         pk = instance.pk
         transaction.on_commit(lambda: notify_user_payment_stripe.delay(pk))
+
+
+# 드라이버 변경 시 driver_calendar_event_id 초기화
+@receiver(pre_save, sender=Post)
+def reset_driver_calendar_event_id(sender, instance, **kwargs):
+    if not instance.pk:
+        return
+    try:
+        old = Post.objects.get(pk=instance.pk)
+        if old.driver != instance.driver:
+            instance.driver_calendar_event_id = None
+    except Post.DoesNotExist:
+        pass
 
 
 # google calendar recording 
