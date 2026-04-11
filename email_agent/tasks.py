@@ -130,6 +130,18 @@ def create_gmail_draft(service, to, subject, body, thread_id=None):
     ).execute()
 
     print(f"Draft created: {draft['id']}")
+
+    draft_msg_id = draft.get('message', {}).get('id')
+    if draft_msg_id:
+        try:
+            service.users().messages().modify(
+                userId='me',
+                id=draft_msg_id,
+                body={'removeLabelIds': ['INBOX']}
+            ).execute()
+        except Exception as e:
+            print(f"Failed to remove INBOX label from draft: {e}")
+
     return draft['id']
 
 
@@ -168,29 +180,55 @@ def gmail_watch_topic(payload):
                     messages.append(msg['message']['id'])
 
         for msg_id in messages:
+            # 1) email get() 호출
             email = service.users().messages().get(
                 userId='me',
                 id=msg_id,
-                format='full'
+                format='metadata',
+                metadataHeaders=['From', 'Subject']
             ).execute()
 
+            # 2) INBOX 없으면 skip
             current_labels = email.get('labelIds', [])
             if 'INBOX' not in current_labels:
                 print(f"Skipping message {msg_id}: not in INBOX (labels: {current_labels})")
                 continue
 
-            thread_id = email['threadId']
-            headers = {h['name']: h['value'] for h in email['payload']['headers']}
+            # 3) DRAFT 라벨 있으면 skip
+            if 'DRAFT' in current_labels:
+                print(f"Skipping message {msg_id}: is a DRAFT")
+                continue
 
+            # 4) SENT 라벨 있으면 skip
+            if 'SENT' in current_labels:
+                print(f"Skipping message {msg_id}: is SENT")
+                continue
+
+            # 5) headers에서 sender, subject 추출
+            headers = {h['name']: h['value'] for h in email['payload']['headers']}
             sender = headers.get('From', '')
             subject = headers.get('Subject', '')
 
-            # 이미 처리한 메시지 스킵
-            if is_message_processed(service, msg_id):
+            # 6) is_message_processed 체크
+            if PROCESSED_LABEL_ID in current_labels:
                 print(f"Already processed message {msg_id}, skipping")
                 continue
-            
-            body = get_email_body(email['payload'])
+
+            # 7) 자신한테 오는 메일 스킵 (Contact Form 제외)
+            if 'info@easygoshuttle.com.au' in sender and '[New Contact] Submission from' not in subject:
+                print(f"Skipping own email: {subject}")
+                mark_message_processed(service, msg_id)
+                continue
+
+            # 8) body, thread_history 로딩
+            full_email = service.users().messages().get(
+                userId='me',
+                id=msg_id,
+                format='full'
+            ).execute()
+
+            thread_id = full_email['threadId']
+            body = get_email_body(full_email['payload'])
             thread_history = get_thread_history(service, thread_id)
 
             thread_history_without_current = [
@@ -200,11 +238,6 @@ def gmail_watch_topic(payload):
 
             print(f"From: {sender}")
             print(f"Subject: {subject}")
-
-            # ✅ 자신한테 오는 메일 스킵 (Contact Form 제외)
-            if 'info@easygoshuttle.com.au' in sender and '[New Contact] Submission from' not in subject:
-                print(f"Skipping own email: {subject}")
-                continue
 
             # Contact Form 이메일이면 본문에서 이메일 추출
             if '[New Contact] Submission from' in subject:
