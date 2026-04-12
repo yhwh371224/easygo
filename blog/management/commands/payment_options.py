@@ -42,6 +42,7 @@ class Command(BaseCommand):
                         "Payment Method Reminder",
                         "html_email-payment-method.html",
                         {
+                            "booker_name": notice.booker_name,
                             "name": notice.name,
                             "email": notice.email,
                             "pickup_date": notice.pickup_date,

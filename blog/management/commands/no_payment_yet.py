@@ -57,6 +57,7 @@ class Command(BaseCommand):
                         email_subject,
                         template,
                         {
+                            'booker_name': booking.booker_name,
                             'name': booking.name,
                             'email': booking.email,
                             'price': booking.price,
@@ -77,6 +78,7 @@ class Command(BaseCommand):
                         "Urgent notice for payment discrepancy",
                         "html_email-response-discrepancy.html",
                         {
+                            'booker_name': booking.booker_name,
                             'name': booking.name,
                             'price': booking.price,
                             'paid': booking.paid,

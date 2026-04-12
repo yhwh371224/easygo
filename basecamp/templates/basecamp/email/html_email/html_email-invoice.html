@@ -154,9 +154,9 @@
 													<strong>Invoice to: {{ booker_name }}</strong><br>
 													{% endif %}
 												{% elif company_name %}     
-													<strong>Invoice to: {{ company_name }} (attn: {{ name }} )</strong><br>
+													<strong>Invoice to: {{ company_name }} (attn: {% if booker_name %}{{ booker_name }}{% else %}{{ name }}{% endif %} )</strong><br>
 												{% else %}
-                                                    <strong>Invoice to: {{ name }}</strong><br>
+                                                    <strong>Invoice to: {% if booker_name %}{{ booker_name }}{% else %}{{ name }}{% endif %}</strong><br>
 												{% endif %}
 													<strong>Invoice date: {{ invoice_date|date:"Y-m-d" }}</strong><br><br>
                                                 </p>

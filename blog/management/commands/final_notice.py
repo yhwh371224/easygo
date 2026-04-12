@@ -36,7 +36,7 @@ class Command(BaseCommand):
                         send_template_email(
                             "Final notice",
                             "html_email-fnotice.html",
-                            {'name': notice.name, 'email': notice.email},
+                            {'booker_name': notice.booker_name, 'name': notice.name, 'email': notice.email},
                             recipients,
                         )
                         sms_logger.info(f"Email sent to {notice.email}")

@@ -126,12 +126,13 @@ def sending_email_first_detail(request):
                 subject = "Booking Cancellation Notice - EasyGo" 
                 
                 context = {
-                    'name': user.name, 
+                    'booker_name': user.booker_name,
+                    'name': user.name,
                     'email': user.email,
                     'pickup_date': user.pickup_date or "",
                     'pickup_time': user.pickup_time or "",
                     'return_pickup_date': user.return_pickup_date or "",
-                    'return_pickup_time': user.return_pickup_time or "", 
+                    'return_pickup_time': user.return_pickup_time or "",
                         }
 
                 handle_email_sending(request, user.email, subject, template_name, context)
@@ -222,12 +223,13 @@ def sending_email_second_detail(request):
             subject = "Booking Cancellation Notice - EasyGo" 
             
             context = {
-                'name': user.name, 
+                'booker_name': user.booker_name,
+                'name': user.name,
                 'email': user.email,
                 'pickup_date': user.pickup_date or "",
                 'pickup_time': user.pickup_time or "",
                 'return_pickup_date': user.return_pickup_date or "",
-                'return_pickup_time': user.return_pickup_time or "", 
+                'return_pickup_time': user.return_pickup_time or "",
             }
 
             handle_email_sending(request, user.email, subject, template_name, context)
@@ -236,8 +238,9 @@ def sending_email_second_detail(request):
             template_name = "html_email-confirmation.html"
             subject = "Booking confirmation - EasyGo"
 
-            context = { 
-                'company_name': user.company_name, 
+            context = {
+                'company_name': user.company_name,
+                'booker_name': user.booker_name,
                 'name': user.name, 
                 'contact': user.contact, 
                 'email': user.email, 
@@ -311,7 +314,8 @@ def sending_email_input_data_detail(request):
 
             # 템플릿에 전달할 컨텍스트 구성
             context = {
-                'name': user.name, 'contact': user.contact, 'email': user.email, 
+                'booker_name': getattr(user, 'booker_name', None),
+                'name': user.name, 'contact': user.contact, 'email': user.email,
                 'pickup_date': user.pickup_date, 'flight_number': user.flight_number,
                 'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
                 'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
@@ -413,6 +417,7 @@ def email_dispatch_detail(request):
         context = {
             'email': email,
             'name': user.name if user else '',
+            'booker_name': getattr(user, 'booker_name', None),
             'adjusted_pickup_time': adjusted_pickup_time,
             'payment_amount': payment_amount,
             'remain_first_booking': remain_first_booking,    

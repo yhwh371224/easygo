@@ -141,7 +141,7 @@
 										<tr>
 											<td align="left" style="padding-left:0px;">
 												<p style="Margin:0;font-size:18px;font-weight:bold;line-height:22px;">													
-														Dear {{ name }}, 
+														Dear {% if booker_name %}{{ booker_name }}{% else %}{{ name }}{% endif %}, 
 														({{ email }})
 												</p>
 											</td>

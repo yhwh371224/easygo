@@ -63,6 +63,7 @@ class Command(BaseCommand):
                         "Missing or Invalid Flight/Contact Information Reminder",
                         "html_email-missing-flight-contact.html",
                         {
+                            'booker_name': booking.booker_name,
                             'name': booking.name,
                             'email': booking.email,
                             'pickup_date': booking.pickup_date,
