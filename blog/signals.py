@@ -103,13 +103,20 @@ def async_notify_user_payment_stripe(sender, instance, created, **kwargs):
 
 
 # 드라이버 변경 시 driver_calendar_event_id 초기화
-@receiver(pre_save, sender=Post)
+@receiver(pre_save, sender=Post, dispatch_uid="reset_driver_calendar_event_id_once")
 def reset_driver_calendar_event_id(sender, instance, **kwargs):
     if not instance.pk:
         return
     try:
         old = Post.objects.get(pk=instance.pk)
         if old.driver != instance.driver:
+            if (
+                old.driver_calendar_event_id
+                and old.driver
+                and old.driver.google_calendar_id
+            ):
+                from utils.calendar_sync import delete_from_calendar
+                delete_from_calendar(old.driver.google_calendar_id, old.driver_calendar_event_id)
             instance.driver_calendar_event_id = None
     except Post.DoesNotExist:
         pass

@@ -14,10 +14,15 @@ SERVICE_ACCOUNT_FILE = settings.CALENDAR_SERVICE_ACCOUNT_FILE
 DELEGATED_USER_EMAIL = getattr(settings, 'RECIPIENT_EMAIL', None)
 
 
-def get_calendar_service():
-    """Google Calendar API 서비스 객체 생성"""
+def get_calendar_service(subject=DELEGATED_USER_EMAIL):
+    """Google Calendar API 서비스 객체 생성.
+    subject=None 이면 서비스 계정 자체로 접근 (드라이버 캘린더용).
+    """
+    kwargs = {'scopes': SCOPES}
+    if subject:
+        kwargs['subject'] = subject
     credentials = service_account.Credentials.from_service_account_file(
-        SERVICE_ACCOUNT_FILE, scopes=SCOPES, subject=DELEGATED_USER_EMAIL
+        SERVICE_ACCOUNT_FILE, **kwargs
     )
     service = build('calendar', 'v3', credentials=credentials)
     return service
@@ -131,8 +136,18 @@ def build_event_data(instance):
     return event
 
 
+def delete_from_calendar(calendar_id, event_id):
+    """드라이버 캘린더에서 이벤트 삭제 (서비스 계정 직접 접근, delegation 없음)"""
+    service = get_calendar_service(subject=None)
+    try:
+        service.events().delete(calendarId=calendar_id, eventId=event_id).execute()
+        logger.info(f"Deleted event {event_id} from calendar {calendar_id}")
+    except Exception as e:
+        logger.error(f"Calendar delete failed (calendar: {calendar_id}, event: {event_id}): {e}")
+
+
 def sync_to_calendar(instance, calendar_id="primary", is_driver=False):
-    service = get_calendar_service()
+    service = get_calendar_service(subject=None if is_driver else DELEGATED_USER_EMAIL)
     event = build_event_data(instance)
     if not event:
         return
