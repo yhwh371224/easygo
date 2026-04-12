@@ -197,7 +197,7 @@ def confirm_booking_detail(request):
         except ValueError as e:
             return JsonResponse({'success': False, 'error': str(e)})
         
-        asyncio.run(send_telegram_notification("📋 Booking confirmed and transferred to schedule."))
+        asyncio.run(send_telegram_notification("📋 clicked confirm booking."))
 
         # 최종 가격 계산
         if price in [None, ""]:

@@ -74,7 +74,7 @@ def inquiry_details(request):
         
         p.save()
 
-        asyncio.run(send_telegram_notification("✈️ New airport inquiry has been received."))
+        asyncio.run(send_telegram_notification("✈️ New inquiry has been received."))
 
         return booking_success_response(request)
 
@@ -151,7 +151,7 @@ def inquiry_details1(request):
         )
         p.save()
 
-        asyncio.run(send_telegram_notification("🏠 New inquiry from home page has been received."))
+        asyncio.run(send_telegram_notification("🏠 Inquiry home page has been received."))
 
         return render_inquiry_done(request)
 
