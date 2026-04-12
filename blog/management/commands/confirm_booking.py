@@ -57,7 +57,11 @@ class Command(BaseCommand):
                     'price': post.price,
                     'paid': post.paid,
                 }
-                email_tasks.append((subject, template_name, context, [post.email, post.email1, RECIPIENT_EMAIL]))
+                if post.booker_email:
+                    recipients = [post.booker_email, RECIPIENT_EMAIL]
+                else:
+                    recipients = [r for r in [post.email, post.email1, RECIPIENT_EMAIL] if r]
+                email_tasks.append((subject, template_name, context, recipients))
 
         if to_update:
             Post.objects.bulk_update(to_update, ['sent_email'], batch_size=50)

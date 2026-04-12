@@ -66,7 +66,7 @@ class Command(BaseCommand):
                             'display_date': display_date,
                             "prepay": booking.prepay,
                         },
-                        collect_recipients(booking.email, None, RECIPIENT_EMAIL)
+                        collect_recipients(booking.booker_email or booking.email, None, RECIPIENT_EMAIL)
                     )
 
                 # ----------------------------
@@ -87,9 +87,9 @@ class Command(BaseCommand):
                             'return_pickup_date': booking.return_pickup_date,
                             'display_date': display_date,
                         },
-                        collect_recipients(booking.email, None, RECIPIENT_EMAIL)
+                        collect_recipients(booking.booker_email or booking.email, None, RECIPIENT_EMAIL)
                     )
-            
+
             except Exception as e:
                 logger.error(f"Failed to send email for booking {booking.id} ({booking.email}): {e}")
                 self.stdout.write(self.style.ERROR(f"Failed to send email for {booking.email}: {e}"))

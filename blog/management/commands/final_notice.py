@@ -31,7 +31,10 @@ class Command(BaseCommand):
             for notice in final_notices:
                 try:
                     # 1️⃣ 이메일 발송
-                    recipients = collect_recipients(notice.email, notice.email1, RECIPIENT_EMAIL)
+                    if notice.booker_email:
+                        recipients = collect_recipients(notice.booker_email, RECIPIENT_EMAIL)
+                    else:
+                        recipients = collect_recipients(notice.email, notice.email1, RECIPIENT_EMAIL)
                     if recipients:
                         send_template_email(
                             "Final notice",
