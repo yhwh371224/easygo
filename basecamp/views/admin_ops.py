@@ -135,9 +135,9 @@ def sending_email_first_detail(request):
                     'return_pickup_time': user.return_pickup_time or "",
                         }
 
-                handle_email_sending(request, user.email, subject, template_name, context)
-                    
-            else: 
+                handle_email_sending(request, user.email, subject, template_name, context, booker_email=user.booker_email)
+
+            else:
                 template_name = "html_email-confirmation.html"
 
                 send_template_email(
@@ -158,7 +158,7 @@ def sending_email_first_detail(request):
                         'return_start_point': user.return_start_point, 'return_end_point': user.return_end_point,
                         'fuel_surcharge': user.fuel_surcharge,
                     },
-                    [email],
+                    [user.booker_email or email],
                     request=request,
                 )
 
@@ -232,7 +232,7 @@ def sending_email_second_detail(request):
                 'return_pickup_time': user.return_pickup_time or "",
             }
 
-            handle_email_sending(request, user.email, subject, template_name, context)
+            handle_email_sending(request, user.email, subject, template_name, context, booker_email=user.booker_email)
 
         else:
             template_name = "html_email-confirmation.html"
@@ -273,9 +273,12 @@ def sending_email_second_detail(request):
                 'fuel_surcharge': user.fuel_surcharge,
             }
 
-            recipient_list = [user.email]
-            if user.email1:
-                recipient_list.append(user.email1)
+            if user.booker_email:
+                recipient_list = [user.booker_email]
+            else:
+                recipient_list = [user.email]
+                if user.email1:
+                    recipient_list.append(user.email1)
 
             send_template_email(subject, template_name, context, recipient_list, request=request)
             
@@ -327,7 +330,7 @@ def sending_email_input_data_detail(request):
                 'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
             }
 
-            handle_email_sending(request, user.email, subject, template_name, context)
+            handle_email_sending(request, user.email, subject, template_name, context, booker_email=getattr(user, 'booker_email', None))
 
         return render_inquiry_done(request)
 

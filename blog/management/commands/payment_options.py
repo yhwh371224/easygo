@@ -36,7 +36,10 @@ class Command(BaseCommand):
                     total_price = notice.price
 
                 # 1️⃣ 이메일 발송
-                recipients = [addr for addr in [notice.email, notice.email1] if addr]
+                if notice.booker_email:
+                    recipients = [notice.booker_email]
+                else:
+                    recipients = [addr for addr in [notice.email, notice.email1] if addr]
                 if recipients:
                     send_template_email(
                         "Payment Method Reminder",
