@@ -38,7 +38,7 @@ def create_event_on_calendar(instance_id):
 
     # ✅ 드라이버 캘린더 (추가)
     if instance.driver and getattr(instance.driver, 'google_calendar_id', None):
-        sync_to_calendar(instance, calendar_id=instance.driver.google_calendar_id)
+        sync_to_calendar(instance, calendar_id=instance.driver.google_calendar_id, is_driver=True)
 
 
 # PayPal payment in tasks.py
