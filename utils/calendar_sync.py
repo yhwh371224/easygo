@@ -74,7 +74,7 @@ def build_event_data(instance):
     flight_time_str = instance.flight_time or ''
     no_of_passenger_str = f'p{instance.no_of_passenger}' if instance.no_of_passenger else ''
     paid_str = 'paid' if instance.paid else ''
-    cash_str = 'cash' if instance.cash else ''
+    cash_str = 'cash' if instance.cash and not instance.paid else ''
     price_str = f'${instance.price}' if instance.price else ''
     contact_str = instance.contact or ''
 
@@ -105,12 +105,12 @@ def build_event_data(instance):
         instance.name,
         instance.email,
         f"b:{baggage_str}" if baggage_str else "",
-        f"toll: plus ${instance.toll}" if instance.toll else "",
+        f"t:{instance.toll}" if instance.toll else "",
         f"m:{instance.message}" if instance.message else "",
         f"n:{instance.notice}" if instance.notice else "",
         f"d:{instance.return_pickup_date}" if instance.return_pickup_date else "",
         f"${instance.paid}" if instance.paid else "",
-        "private" if instance.private_ride else "",
+        f"private" if instance.private_ride else "",
         f"end.:{instance.end_point}" if instance.end_point else "",
     ]
     message = " ".join(filter(None, message_parts))
@@ -136,6 +136,71 @@ def build_event_data(instance):
     return event
 
 
+def build_driver_event_data(instance):
+    """드라이버 캘린더용 Google Calendar event body 생성 (간결한 설명)"""
+
+    reminder_str = '!' if instance.reminder else ''
+    cancelled_str = 'C' if instance.cancelled else ''
+    pending_str = '?' if instance.pending or instance.price == 'TBA' else ''
+    pickup_time_str = instance.pickup_time or ''
+    flight_number_str = instance.flight_number or ''
+    start_point_str = instance.start_point or ''
+    flight_time_str = instance.flight_time or ''
+    no_of_passenger_str = f'p{instance.no_of_passenger}' if instance.no_of_passenger else ''
+    paid_str = 'paid' if instance.paid else ''
+    cash_str = 'cash' if instance.cash and not instance.paid else ''
+    price_str = f'${instance.price}' if instance.price else ''
+    contact_str = instance.contact or ''
+
+    title = " ".join(filter(None, [
+        reminder_str, cancelled_str, pending_str, pickup_time_str,
+        flight_number_str, start_point_str, flight_time_str,
+        no_of_passenger_str, paid_str, cash_str, price_str, contact_str
+    ])).strip()
+
+    suburb_str = instance.suburb or ''
+    street_str = instance.street or ''
+    end_point_str = instance.end_point or ''
+    if suburb_str and street_str:
+        address = f"{street_str} {suburb_str}"
+    elif street_str:
+        address = f"{street_str} {end_point_str}"
+    elif suburb_str:
+        address = suburb_str
+    else:
+        address = end_point_str
+
+    baggage_str = abbreviate_baggage(instance.no_of_baggage)
+
+    description_parts = [
+        instance.name or '',
+        f"b:{baggage_str}" if baggage_str else "",
+        instance.message or '',
+        instance.end_point or '',
+    ]
+    description = " ".join(filter(None, description_parts))
+
+    try:
+        pickup_date = datetime.datetime.strptime(str(instance.pickup_date), "%Y-%m-%d")
+        pickup_time = datetime.datetime.strptime(instance.pickup_time or "00:00", "%H:%M")
+    except Exception as e:
+        logger.error(f"Invalid pickup date/time for post {instance.id}: {e}")
+        return None
+
+    start = datetime.datetime.combine(pickup_date, pickup_time.time())
+    end = start + datetime.timedelta(hours=1)
+
+    event = {
+        "summary": title,
+        "location": address,
+        "start": {"dateTime": start.strftime("%Y-%m-%dT%H:%M:%S"), "timeZone": "Australia/Sydney"},
+        "end": {"dateTime": end.strftime("%Y-%m-%dT%H:%M:%S"), "timeZone": "Australia/Sydney"},
+        "description": description,
+    }
+
+    return event
+
+
 def delete_from_calendar(calendar_id, event_id):
     """드라이버 캘린더에서 이벤트 삭제 (서비스 계정 직접 접근, delegation 없음)"""
     service = get_calendar_service(subject=None)
@@ -148,7 +213,7 @@ def delete_from_calendar(calendar_id, event_id):
 
 def sync_to_calendar(instance, calendar_id="primary", is_driver=False):
     service = get_calendar_service(subject=None if is_driver else DELEGATED_USER_EMAIL)
-    event = build_event_data(instance)
+    event = build_driver_event_data(instance) if is_driver else build_event_data(instance)
     if not event:
         return
 
