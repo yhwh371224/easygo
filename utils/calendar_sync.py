@@ -115,8 +115,6 @@ def build_event_data(instance):
     ]
     message = " ".join(filter(None, message_parts))
 
-    logger.info(f"[DEBUG] post {instance.pk} pickup_time raw value: {repr(instance.pickup_time)}")
-
     try:
         pickup_date = datetime.datetime.strptime(str(instance.pickup_date), "%Y-%m-%d")
         pickup_time = datetime.datetime.strptime(instance.pickup_time or "00:00", "%H:%M")
