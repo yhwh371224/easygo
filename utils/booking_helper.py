@@ -23,8 +23,10 @@ def assign_default_driver(booking):
 def build_reminder_context(booking, pickup_time_12h, driver):
     """Build the standard template context dict for reminder emails."""
     return {
+        'booker_name': booking.booker_name,
         'name': booking.name,
         'company_name': booking.company_name,
+        'booking_email': booking.booking_email,
         'email': booking.email,
         'email1': getattr(booking, 'email1', None),
         'contact': getattr(booking, 'contact', None),

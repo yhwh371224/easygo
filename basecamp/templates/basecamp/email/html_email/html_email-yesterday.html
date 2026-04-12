@@ -140,7 +140,7 @@
                                     <table class="content" style="border-spacing:0;text-align: center;" role="presentation">
 										<tr>
 											<td align="left" style="padding-left:0px;">
-												<p style="Margin:0;font-size:18px;font-weight:bold;line-height:22px;">Hello! {{ name }}</p>
+												<p style="Margin:0;font-size:18px;font-weight:bold;line-height:22px;">Hello! {% if booker_name %}{{ booker_name }}{% else %}{{ name }}{% endif %}</p>
 											</td>
 										</tr>
 										<tr>
@@ -159,7 +159,7 @@
 													<a href="https://easygoshuttle.com.au/easygo_review/custom_login">Log In for a Review</a><br>
 													<br></p>
                                                 <p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
-                                                    Thank you! we will remember you, {{ name }}<br><br>
+                                                    Thank you! we will remember you, {% if booker_name %}{{ booker_name }}{% else %}{{ name }}{% endif %}<br><br>
                                                     Regards,<br>
                                                     Peter<br><br></p>
 												<p style="Margin:0;font-size:14px;font-weight:bold;line-height:22px;Margin-bottom:12px;">

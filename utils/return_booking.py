@@ -75,6 +75,8 @@ def handle_return_trip(instance):
 
         # Post 생성에 필요한 필드들을 **kwargs로 묶음
         post_fields = {
+            'booker_name': instance.booker_name,
+            'booking_email': instance.booking_email,
             'name': instance.name,
             'contact': instance.contact,
             'email': instance.email,

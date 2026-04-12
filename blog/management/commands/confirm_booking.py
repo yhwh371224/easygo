@@ -33,6 +33,7 @@ class Command(BaseCommand):
 
                 context = {
                     'company_name': post.company_name,
+                    'booker_name': post.booker_name,
                     'name': post.name,
                     'contact': post.contact,
                     'email': post.email,
