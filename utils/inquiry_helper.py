@@ -7,7 +7,7 @@ def send_inquiry_email(instance):
     if instance.is_confirmed:
         html_content = render_email_template("html_email-inquiry-response.html", {
             'booker_name': instance.booker_name,
-            'booking_email': instance.booking_email,
+            'booker_email': instance.booker_email,
             'company_name': instance.company_name,
             'name': instance.name,
             'contact': instance.contact,
@@ -41,7 +41,7 @@ def send_inquiry_email(instance):
     elif instance.cancelled:
         html_content = render_email_template("html_email-cancelled.html", {
             'booker_name': instance.booker_name,
-            'booking_email': instance.booking_email,
+            'booker_email': instance.booker_email,
             'name': instance.name,
             'email': instance.email,
             'pickup_date': instance.pickup_date,
@@ -53,7 +53,7 @@ def send_inquiry_email(instance):
     elif instance.pending:
         html_content = render_email_template("html_email-inquiry-pending.html", {
             'booker_name': instance.booker_name,
-            'booking_email': instance.booking_email,
+            'booker_email': instance.booker_email,
             'name': instance.name,
             'email': instance.email,
             'pickup_date': instance.pickup_date,

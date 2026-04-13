@@ -19,7 +19,7 @@ def send_post_confirmation_email(instance):
         "html_email-confirmation.html",
         {
         'booker_name': instance.booker_name,
-        'booking_email': instance.booking_email,
+        'booker_email': instance.booker_email,
         'company_name': instance.company_name,
         'name': instance.name,
         'contact': instance.contact,
@@ -70,7 +70,7 @@ def send_post_confirmation_email(instance):
 def send_post_cancelled_email(instance):
     html_content = render_email_template("html_email-cancelled.html", {
         'booker_name': instance.booker_name,
-        'booking_email': instance.booking_email,
+        'booker_email': instance.booker_email,
         'name': instance.name,
         'email': instance.email,
         'pickup_date': instance.pickup_date,
@@ -88,7 +88,7 @@ def send_missing_direction_email(instance):
 
     html_content = render_email_template(template, {
         'booker_name': instance.booker_name,
-        'booking_email': instance.booking_email,
+        'booker_email': instance.booker_email,
         'name': instance.name,
         'email': instance.email,
         'pickup_date': instance.pickup_date,
