@@ -30,29 +30,28 @@ def notify_user_inquiry(sender, instance, created, **kwargs):
         transaction.on_commit(lambda: send_inquiry_email_task.delay(pk))
 
 
-# Post signals
 @receiver(post_save, sender=Post, dispatch_uid="notify_user_post_once")
 def notify_user_post(sender, instance, created, **kwargs):
     handle_return_trip(instance)
 
-    update_fields = []
+    update_data = {}
 
     # price 처리
     if instance.price in [None, ""]:
-        instance.price = "TBA"
-        update_fields.append('price')
+        update_data['price'] = "TBA"
 
-    # ✅ paid 값이 있으면 cash = False
-    if instance.is_confirmed and not instance.sent_email:
-        if not instance.cash and not instance.paid:
-            instance.pending = True
-            update_fields.append('pending')
+    # 이메일 조건
+    if not instance.cash and not instance.paid:
+        update_data['pending'] = True
 
+    if instance.is_confirmed:
         pk = instance.pk
-        transaction.on_commit(lambda: send_post_confirmation_email_task.delay(pk))
+        transaction.on_commit(
+            lambda: send_post_confirmation_email_task.delay(pk)
+        )
 
-    if update_fields:
-        instance.save(update_fields=update_fields)
+    if update_data:
+        Post.objects.filter(pk=instance.pk).update(**update_data)
 
 
 # Send email notification if a Post is cancelled and email hasn't been sent yet
