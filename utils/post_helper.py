@@ -64,7 +64,8 @@ def send_post_confirmation_email(instance):
         }
     )
 
-    send_html_email(subject, html_content, [instance.booker_email or instance.email])
+    recipients = [instance.booker_email] if instance.booker_email else list(filter(None, [instance.email, instance.email1]))
+    send_html_email(subject, html_content, recipients)
 
 
 def send_post_cancelled_email(instance):
@@ -79,7 +80,8 @@ def send_post_cancelled_email(instance):
         'return_pickup_time': instance.return_pickup_time,
     })
     
-    send_html_email("EasyGo Booking Cancelled", html_content, [instance.booker_email or instance.email])
+    recipients = [instance.booker_email] if instance.booker_email else list(filter(None, [instance.email, instance.email1]))
+    send_html_email("EasyGo Booking Cancelled", html_content, recipients)
 
 
 def send_missing_direction_email(instance):

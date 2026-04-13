@@ -135,7 +135,7 @@ def sending_email_first_detail(request):
                     'return_pickup_time': user.return_pickup_time or "",
                         }
 
-                handle_email_sending(request, user.email, subject, template_name, context, booker_email=user.booker_email)
+                handle_email_sending(request, user.email, subject, template_name, context, email1=user.email1, booker_email=user.booker_email)
 
             else:
                 template_name = "html_email-confirmation.html"
@@ -144,9 +144,9 @@ def sending_email_first_detail(request):
                     "Booking confirmation - EasyGo",
                     "html_email-confirmation.html",
                     {
-                        'company_name': user.company_name, 'name': user.name, 'contact': user.contact, 
-                        'booker_name': user.booker_name, 'booker_email': user.booker_email, 
-                        'email': user.email, 'email1': user.email1, 'pickup_date': user.pickup_date, 
+                        'company_name': user.company_name, 'name': user.name, 'contact': user.contact,
+                        'booker_name': user.booker_name, 'booker_email': user.booker_email,
+                        'email': user.email, 'email1': user.email1, 'pickup_date': user.pickup_date,
                         'flight_number': user.flight_number, 'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
                         'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
                         'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
@@ -154,11 +154,11 @@ def sending_email_first_detail(request):
                         'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time,
                         'return_pickup_time': user.return_pickup_time, 'message': user.message, 'notice': user.notice,
                         'price': display_price, 'paid': user.paid, 'cash': final_cash, 'prepay': final_prepay,
-                        'toll': user.toll, 'start_point': user.start_point, 'end_point': user.end_point, 
+                        'toll': user.toll, 'start_point': user.start_point, 'end_point': user.end_point,
                         'return_start_point': user.return_start_point, 'return_end_point': user.return_end_point,
                         'fuel_surcharge': user.fuel_surcharge,
                     },
-                    [user.booker_email or email],
+                    [user.booker_email] if user.booker_email else list(filter(None, [user.email, user.email1])),
                     request=request,
                 )
 
@@ -232,7 +232,7 @@ def sending_email_second_detail(request):
                 'return_pickup_time': user.return_pickup_time or "",
             }
 
-            handle_email_sending(request, user.email, subject, template_name, context, booker_email=user.booker_email)
+            handle_email_sending(request, user.email, subject, template_name, context, email1=user.email1, booker_email=user.booker_email)
 
         else:
             template_name = "html_email-confirmation.html"
@@ -330,7 +330,7 @@ def sending_email_input_data_detail(request):
                 'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
             }
 
-            handle_email_sending(request, user.email, subject, template_name, context, booker_email=getattr(user, 'booker_email', None))
+            handle_email_sending(request, user.email, subject, template_name, context, email1=getattr(user, 'email1', None), booker_email=getattr(user, 'booker_email', None))
 
         return render_inquiry_done(request)
 
@@ -634,10 +634,7 @@ def email_dispatch_detail(request):
                 }, status=400)  
 
         # 6️⃣ Send email
-        if selected_option == "Pickup Notice for Today":
-            handle_email_sending(request, email, subject, template_name, context, getattr(user, 'email1', None))
-        else:
-            handle_email_sending(request, email, subject, template_name, context, getattr(user, 'email1', None), booker_email=getattr(user, 'booker_email', None))
+        handle_email_sending(request, email, subject, template_name, context, getattr(user, 'email1', None), booker_email=getattr(user, 'booker_email', None))
 
         return render_inquiry_done(request)
 

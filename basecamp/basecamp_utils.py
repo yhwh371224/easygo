@@ -145,5 +145,7 @@ def check_and_send_missing_info_email(post):
                 'flight_number': post.flight_number,
                 'contact': post.contact,
                 'issues': issues,
-            }
+            },
+            email1=post.email1,
+            booker_email=post.booker_email,
         )

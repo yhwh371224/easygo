@@ -335,8 +335,9 @@ def invoice_detail(request):
             return HttpResponse("No booking found", status=404)
         template_name, context = _build_single_context(user, users, params, inv_no, today, DEFAULT_BANK)
 
-    invoice_recipient = users[0].booker_email if users[0].booker_email else email
-    _send_invoice_email(template_name, context, [invoice_recipient, RECIPIENT_EMAIL], inv_no)
+    first_user = users[0]
+    customer_recipients = [first_user.booker_email] if first_user.booker_email else list(filter(None, [first_user.email, first_user.email1]))
+    _send_invoice_email(template_name, context, customer_recipients + [RECIPIENT_EMAIL], inv_no)
 
     if not multiple and user.company_name and not user.prepay and not user.cash:
         user.price = round(float(user.price) * 1.10, 2)
