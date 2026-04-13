@@ -81,7 +81,10 @@ def process_generic_payment(payment_instance, posts, admin_email, calculated_amo
         
         post.save()
         remaining_amount -= apply_now
-        recipient_emails.update([post.email, post.email1])
+        if post.booker_email:
+            recipient_emails.add(post.booker_email)
+        else:
+            recipient_emails.update(filter(None, [post.email, post.email1]))
 
     instance.is_processed = True
     instance.processed_at = timezone.now()

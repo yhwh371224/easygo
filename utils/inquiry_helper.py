@@ -65,5 +65,6 @@ def send_inquiry_email(instance):
     else:
         return False
 
-    send_html_email("EasyGo Booking Inquiry", html_content, [instance.booker_email or instance.email])
+    recipients = [instance.booker_email] if instance.booker_email else list(filter(None, [instance.email, instance.email1]))
+    send_html_email("EasyGo Booking Inquiry", html_content, recipients)
     return True
