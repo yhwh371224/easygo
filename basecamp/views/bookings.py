@@ -154,7 +154,10 @@ def confirm_booking_detail(request):
         cash = request.POST.get('cash') == 'on'
         prepay = request.POST.get('prepay') == 'on'
 
-        users = Inquiry.objects.filter(email__iexact=email)
+        users = Inquiry.objects.filter(booker_email__iexact=email)
+        if not users.exists():
+            users = Inquiry.objects.filter(email__iexact=email)
+
         if users.exists() and 0 <= index < len(users):
             user = users[index]
         else:
@@ -162,6 +165,8 @@ def confirm_booking_detail(request):
 
         # 기존 데이터
         name = user.name
+        booker_name = user.booker_name
+        booer_email = user.booker_email
         contact = user.contact
         company_name = user.company_name
         email1 = user.email1
@@ -263,6 +268,7 @@ def return_trip_detail(request):
         end_point = request.POST.get('end_point', '')
         direction = request.POST.get('direction', '')
         message = request.POST.get('message', '')
+        notice = request.POST.get('notice', '')
         price = request.POST.get('price', '')
         toll = request.POST.get('toll', '')
         fuel_surcharge = request.POST.get('fuel_surcharge', '')
@@ -292,6 +298,18 @@ def return_trip_detail(request):
                 start_point = user.start_point
             if not end_point:
                 end_point = user.end_point
+            
+            # message 추가 (기존 내용 보존)
+            if message and user.message:
+                message = f"{user.message} | {message}"
+            elif not message:
+                message = user.message
+
+            # notice 추가 (기존 내용 보존)
+            if notice and user.notice:
+                notice = f"{user.notice} | {notice}"
+            elif not notice:
+                notice = user.notice
 
             # 날짜 파싱
             try:
