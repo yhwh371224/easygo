@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
+from main.settings import RECIPIENT_EMAIL
 from utils.email import send_template_email
 from blog.models import Post, Inquiry, Driver
 from blog.sms_utils import send_sms_notice, send_whatsapp_template
@@ -158,7 +159,7 @@ def sending_email_first_detail(request):
                         'return_start_point': user.return_start_point, 'return_end_point': user.return_end_point,
                         'fuel_surcharge': user.fuel_surcharge,
                     },
-                    [user.booker_email] if user.booker_email else list(filter(None, [user.email, user.email1])),
+                    ([user.booker_email] if user.booker_email else list(filter(None, [user.email, user.email1]))) + [RECIPIENT_EMAIL],
                     request=request,
                 )
 
@@ -273,12 +274,8 @@ def sending_email_second_detail(request):
                 'fuel_surcharge': user.fuel_surcharge,
             }
 
-            if user.booker_email:
-                recipient_list = [user.booker_email]
-            else:
-                recipient_list = [user.email]
-                if user.email1:
-                    recipient_list.append(user.email1)
+            customer_recipients = [user.booker_email] if user.booker_email else list(filter(None, [user.email, user.email1]))
+            recipient_list = customer_recipients + [RECIPIENT_EMAIL]
 
             send_template_email(subject, template_name, context, recipient_list, request=request)
             
