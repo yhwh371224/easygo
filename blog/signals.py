@@ -44,9 +44,6 @@ def notify_user_post(sender, instance, created, **kwargs):
 
     # ✅ paid 값이 있으면 cash = False
     if instance.is_confirmed and not instance.sent_email:
-        instance.sent_email = True
-        update_fields.append('sent_email')
-
         if not instance.cash and not instance.paid:
             instance.pending = True
             update_fields.append('pending')
