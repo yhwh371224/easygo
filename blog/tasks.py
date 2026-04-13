@@ -134,7 +134,9 @@ def check_and_send_missing_info_email_task(pk):
 @shared_task
 def send_inquiry_email_task(pk):
     instance = Inquiry.objects.get(pk=pk)
-    if send_inquiry_email(instance):
+    result = send_inquiry_email(instance)
+    print(f"send_inquiry_email result: {result}")  # 임시 디버깅
+    if result:
         Inquiry.objects.filter(pk=pk).update(sent_email=True)
 
             
