@@ -64,7 +64,8 @@ def send_post_confirmation_email(instance):
         }
     )
 
-    recipients = [instance.booker_email] if instance.booker_email else list(filter(None, [instance.email, instance.email1]))
+    customer_recipients = [instance.booker_email] if instance.booker_email else list(filter(None, [instance.email, instance.email1]))
+    recipients = customer_recipients + [RECIPIENT_EMAIL]
     send_html_email(subject, html_content, recipients)
 
 
