@@ -8,13 +8,14 @@ from google.oauth2 import service_account
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from django.conf import settings
-from .email_ai import analyze_email_with_claude, analyze_email_dual
+from .email_ai import analyze_email_with_claude, analyze_email_with_openai, analyze_email_dual
 from services.gmail_draft_service import GmailDraftService
 
 
 LAST_HISTORY_ID_FILE = os.path.join(settings.BASE_DIR, 'scripts', 'last_history_id.txt')
 PROCESSED_LABEL_ID = 'Label_956123326350558597'
 DUAL_MODE = getattr(settings, 'EMAIL_AI_DUAL_MODE', False)
+OPENAI_ONLY = getattr(settings, 'EMAIL_AI_OPENAI_ONLY', False)
 
 EMAIL_SIGNATURE = """
 <p style="font-family: Arial, sans-serif; font-size: 12px; color: #555;"><strong>EasyGo Airport Shuttle</strong></p>
@@ -246,7 +247,26 @@ def gmail_watch_topic(payload):
             else:
                 reply_to = sender
 
-            if DUAL_MODE:
+            if OPENAI_ONLY:
+                try:
+                    result = analyze_email_with_openai(sender, subject, body, thread_history_without_current)
+                except Exception as e:
+                    print(f"OpenAI API failed for message {msg_id}: {e}")
+                    continue
+
+                if not result:
+                    print(f"OpenAI API returned empty for message {msg_id}")
+                    continue
+
+                reply_body = result['suggested_reply'] + EMAIL_SIGNATURE
+
+                try:
+                    create_gmail_draft(service, reply_to, subject, reply_body, thread_id=thread_id)
+                    mark_message_processed(service, msg_id)
+                except Exception as e:
+                    print(f"Draft creation failed for message {msg_id}: {e}")
+
+            elif DUAL_MODE:
                 try:
                     dual_result = analyze_email_dual(sender, subject, body, thread_history_without_current)
                     GmailDraftService().build_comparison_draft(

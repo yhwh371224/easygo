@@ -12,6 +12,15 @@ class AIRouter:
         self.claude = ClaudeService()
         self.openai = OpenAIService()
 
+    def analyze_email_openai(self, sender, subject, body, thread_history):
+        """
+        Run OpenAI only (OPENAI_ONLY mode)
+        """
+        logger.info("[AI Router] OPENAI ONLY MODE START")
+        result = self.openai.analyze_email(sender, subject, body, thread_history)
+        logger.info(f"[AI Router] OPENAI ONLY MODE DONE | subject={subject}")
+        return result
+
     def analyze_email_dual(self, sender, subject, body, thread_history):
         """
         Run BOTH models for comparison (TEST MODE)
