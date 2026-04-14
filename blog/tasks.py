@@ -126,14 +126,22 @@ def send_post_cancelled_email_task(pk):
 
 @shared_task
 def send_missing_direction_email_task(pk):
-    instance = Post.objects.get(pk=pk)
+    try:
+        instance = Post.objects.get(pk=pk)
+    except Post.DoesNotExist:
+        logger.warning(f"Post {pk} does not exist.")
+        return
     send_missing_direction_email(instance)
 
 
 @shared_task
 def check_and_send_missing_info_email_task(pk):
     from basecamp.basecamp_utils import check_and_send_missing_info_email
-    instance = Post.objects.get(pk=pk)
+    try:
+        instance = Post.objects.get(pk=pk)
+    except Post.DoesNotExist:
+        logger.warning(f"Post {pk} does not exist.")
+        return
     check_and_send_missing_info_email(instance)
 
 
@@ -142,40 +150,12 @@ def send_inquiry_email_task(pk):
     affected = Inquiry.objects.filter(
         pk=pk,
         sent_email=False,
+    ).filter(
+        Q(is_confirmed=True) | Q(cancelled=True) | Q(pending=True)
     ).update(sent_email=True)
-    
+
     if affected:
         instance = Inquiry.objects.get(pk=pk)
         send_inquiry_email(instance)
-
-            
-# XRP payment record and email
-# @shared_task
-# def send_xrp_internal_email(subject, message, from_email, recipient_list):
-#     """회사 내부 알림(텍스트)"""
-#     send_text_email(subject, message, recipient_list, from_email=from_email)
-
-# @shared_task
-# def send_xrp_customer_email(email: str, xrp_amount: str, xrp_address: str, dest_tag: int):
-#     """
-#     고객에게 XRP 결제 안내 메일 전송 (HTML, 이름 없음)
-#     QR 코드 기능 제거 버전
-#     """
-#     context = {
-#         "email": email,
-#         "amount": f"{Decimal(xrp_amount):.2f} XRP",
-#         "address": xrp_address,
-#         "dest_tag": dest_tag,
-#     }
-
-#     html_content = render_email_template("html_email-xrppayment.html", context)
-
-#     try:
-#         send_html_email("XRP Payment - EasyGo", html_content, [email], from_email=RECIPIENT_EMAIL)
-#     except Exception as e:
-#         logger.exception("Failed to send XRP payment email: %s", e)
-
-
-
 
 
