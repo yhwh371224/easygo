@@ -33,8 +33,8 @@ class Command(BaseCommand):
         )
 
         for booking in bookings:
-            display_date = self.get_display_date(booking)  # 먼저 계산
-
+            display_date = self.get_display_date(booking)  
+            
             try: 
                 # paid 값 float로 안전하게 변환
                 price = float(booking.price or 0)
@@ -66,7 +66,7 @@ class Command(BaseCommand):
                             'display_date': display_date,
                             "prepay": booking.prepay,
                         },
-                        collect_recipients(booking.booker_email or booking.email, None, RECIPIENT_EMAIL)
+                        collect_recipients(booking.booker_email or booking.email)
                     )
 
                 # ----------------------------
@@ -87,7 +87,7 @@ class Command(BaseCommand):
                             'return_pickup_date': booking.return_pickup_date,
                             'display_date': display_date,
                         },
-                        collect_recipients(booking.booker_email or booking.email, None, RECIPIENT_EMAIL)
+                        collect_recipients(booking.booker_email or booking.email)
                     )
 
             except Exception as e:

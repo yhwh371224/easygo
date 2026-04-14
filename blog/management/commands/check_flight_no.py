@@ -72,7 +72,7 @@ class Command(BaseCommand):
                             'contact': booking.contact,
                             'issues': issues,
                         },
-                        [booking.booker_email or booking.email, RECIPIENT_EMAIL],
+                        [booking.booker_email or booking.email],
                         fail_silently=False,
                     )
 
