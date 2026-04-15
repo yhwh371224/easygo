@@ -30,6 +30,7 @@ def notify_user_inquiry(sender, instance, created, **kwargs):
         transaction.on_commit(lambda: send_inquiry_email_task.delay(pk))
 
 
+# Post signals
 @receiver(post_save, sender=Post, dispatch_uid="notify_user_post_once")
 def notify_user_post(sender, instance, created, **kwargs):
     handle_return_trip(instance)
