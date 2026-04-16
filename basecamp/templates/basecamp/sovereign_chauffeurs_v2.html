@@ -1,0 +1,1029 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sovereign Chauffeurs Sydney | Luxury Airport Transfers & Chauffeur Service</title>
+<meta name="description" content="Sydney's premier luxury chauffeur service. Airport transfers, corporate hire, weddings & tours. Instant online booking. Available 24/7 across Greater Sydney.">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --gold:#C9A84C;--gold-light:#E8D5A3;--gold-dark:#A07830;--gold-faint:rgba(201,168,76,0.08);
+  --black:#0A0A0A;--dark:#111111;--dark2:#1A1A1A;--dark3:#242424;
+  --mid:#333;--muted:#888;--light:#F5F3EE;--white:#fff;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Montserrat',sans-serif;background:var(--black);color:var(--white);font-size:14px;line-height:1.7;overflow-x:hidden;}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0 4rem;height:76px;background:rgba(10,10,10,0.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(201,168,76,0.15);}
+.logo{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;letter-spacing:0.14em;color:var(--gold);text-transform:uppercase;text-decoration:none;}
+.logo span{color:var(--white);}
+.nav-links{display:flex;gap:2.5rem;list-style:none;}
+.nav-links a{font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.3s;}
+.nav-links a:hover{color:var(--gold);}
+.nav-cta{font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);text-decoration:none;border:1px solid rgba(201,168,76,0.5);padding:10px 22px;transition:all 0.3s;}
+.nav-cta:hover{background:var(--gold);color:var(--black);}
+.nav-phone{font-size:11px;color:var(--muted);letter-spacing:0.05em;display:flex;align-items:center;gap:6px;}
+.nav-phone strong{color:var(--white);}
+
+/* ── HERO ── */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:var(--black);}
+.hero-img{position:absolute;inset:0;background-image:url('{% static "basecamp/images/hero-bg.jpg" %}');background-size:cover;background-position:center 40%;opacity:0.35;transform:scale(1.04);transition:transform 8s ease-out;}
+.hero-img.loaded{transform:scale(1.0);}
+.hero-bg{position:absolute;inset:0;background:linear-gradient(to bottom, rgba(10,10,10,0.55) 0%, rgba(10,10,10,0.3) 40%, rgba(10,10,10,0.7) 100%);}
+.hero-bg2{position:absolute;inset:0;background:radial-gradient(ellipse 65% 55% at 50% 55%,rgba(201,168,76,0.06) 0%,transparent 68%);}
+.vline{position:absolute;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,transparent,rgba(201,168,76,0.25) 35%,rgba(201,168,76,0.25) 65%,transparent);}
+.vl-l{left:4rem;}.vl-r{right:4rem;}
+.hero-content{text-align:center;position:relative;z-index:2;padding:0 2rem;max-width:820px;}
+.eyebrow{font-size:10px;letter-spacing:0.4em;text-transform:uppercase;color:var(--gold);margin-bottom:2rem;display:flex;align-items:center;justify-content:center;gap:1.2rem;}
+.eyebrow::before,.eyebrow::after{content:'';width:32px;height:1px;background:var(--gold-dark);}
+h1{font-family:'Cormorant Garamond',serif;font-size:clamp(48px,7.5vw,90px);font-weight:300;line-height:1.04;margin-bottom:1.8rem;}
+h1 em{font-style:italic;color:var(--gold);}
+.hero-sub{font-size:12.5px;letter-spacing:0.06em;color:var(--muted);max-width:380px;margin:0 auto 3rem;line-height:2;font-weight:300;}
+.hero-btns{display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;}
+.btn-gold{background:var(--gold);color:var(--black);font-size:11px;letter-spacing:0.22em;text-transform:uppercase;padding:15px 36px;text-decoration:none;font-weight:600;transition:all 0.3s;border:none;cursor:pointer;}
+.btn-gold:hover{background:var(--gold-light);}
+.btn-line{border:1px solid rgba(201,168,76,0.4);color:var(--gold);font-size:11px;letter-spacing:0.22em;text-transform:uppercase;padding:15px 36px;text-decoration:none;font-weight:500;transition:all 0.3s;background:none;cursor:pointer;}
+.btn-line:hover{border-color:var(--gold);}
+.scroll-hint{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;}
+.scroll-hint span{font-size:9px;letter-spacing:0.3em;color:var(--muted);text-transform:uppercase;}
+.scroll-bar{width:1px;height:36px;background:linear-gradient(to bottom,var(--gold),transparent);animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:0.3;}50%{opacity:1;}}
+
+/* ── BOOKING ENGINE ── */
+.booking-engine{background:var(--dark2);border-top:1px solid rgba(201,168,76,0.2);border-bottom:1px solid rgba(201,168,76,0.2);padding:0;}
+.booking-tabs{display:flex;border-bottom:1px solid rgba(201,168,76,0.12);}
+.btab{flex:1;padding:1.2rem;font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--muted);background:none;border:none;cursor:pointer;transition:all 0.3s;border-bottom:2px solid transparent;font-family:'Montserrat',sans-serif;}
+.btab.active{color:var(--gold);border-bottom-color:var(--gold);background:rgba(201,168,76,0.04);}
+.btab:hover:not(.active){color:var(--white);}
+.booking-form-wrap{padding:2.5rem 3rem;}
+.bform{display:none;}
+.bform.active{display:block;}
+.bform-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;gap:1rem;align-items:end;}
+.bform-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:1rem;align-items:end;}
+.bf-group{display:flex;flex-direction:column;gap:0.4rem;}
+.bf-label{font-size:9px;letter-spacing:0.25em;text-transform:uppercase;color:var(--muted);}
+.bf-input{background:rgba(255,255,255,0.04);border:1px solid rgba(201,168,76,0.18);color:var(--white);padding:12px 14px;font-family:'Montserrat',sans-serif;font-size:13px;outline:none;transition:border-color 0.3s;-webkit-appearance:none;width:100%;}
+.bf-input:focus{border-color:var(--gold);}
+.bf-input::placeholder{color:rgba(255,255,255,0.2);}
+select.bf-input option{background:var(--dark2);color:var(--white);}
+.bf-submit{background:var(--gold);color:var(--black);border:none;padding:13px 28px;font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:0.22em;text-transform:uppercase;font-weight:600;cursor:pointer;transition:all 0.3s;white-space:nowrap;height:47px;}
+.bf-submit:hover{background:var(--gold-light);}
+
+/* PRICE RESULT */
+.price-result{display:none;margin-top:2rem;padding:1.8rem 2.5rem;background:rgba(201,168,76,0.06);border:1px solid rgba(201,168,76,0.2);animation:fadeIn 0.4s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.price-result-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1.5rem;}
+.price-label{font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:0.3rem;}
+.price-amount{font-family:'Cormorant Garamond',serif;font-size:48px;font-weight:300;color:var(--gold);line-height:1;}
+.price-note{font-size:11px;color:var(--muted);margin-top:0.3rem;}
+.price-details{display:flex;gap:2.5rem;flex-wrap:wrap;}
+.pd-item{font-size:11px;color:rgba(255,255,255,0.6);}
+.pd-item strong{color:var(--white);display:block;margin-bottom:2px;}
+.price-actions{display:flex;gap:1rem;align-items:center;}
+
+/* ── STATS ── */
+.stats{background:var(--dark3);display:flex;justify-content:center;border-bottom:1px solid rgba(201,168,76,0.1);}
+.stat{flex:1;max-width:200px;text-align:center;padding:2.2rem 1rem;border-right:1px solid rgba(255,255,255,0.06);}
+.stat:last-child{border-right:none;}
+.stat-n{font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:300;color:var(--gold);line-height:1;margin-bottom:0.3rem;}
+.stat-l{font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--muted);}
+
+/* ── SECTION ── */
+.sec{padding:7rem 4rem;max-width:1260px;margin:0 auto;}
+.sec-eye{font-size:10px;letter-spacing:0.38em;text-transform:uppercase;color:var(--gold);margin-bottom:1.4rem;}
+h2{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,4.5vw,56px);font-weight:300;line-height:1.1;color:var(--white);margin-bottom:1.4rem;}
+h2 em{font-style:italic;color:var(--gold);}
+.sec-desc{font-size:12.5px;color:var(--muted);max-width:440px;line-height:1.95;font-weight:300;}
+
+/* ── SERVICES ── */
+.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5px;background:rgba(201,168,76,0.12);margin-top:4rem;}
+.svc{background:var(--dark);padding:2.6rem 2.2rem;transition:background 0.3s;cursor:default;}
+.svc:hover{background:var(--dark3);}
+.svc-icon{width:44px;height:44px;border:1px solid rgba(201,168,76,0.28);display:flex;align-items:center;justify-content:center;margin-bottom:1.6rem;}
+.svc-icon svg{width:20px;height:20px;stroke:var(--gold);fill:none;stroke-width:1.3;}
+.svc-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;color:var(--white);margin-bottom:0.7rem;}
+.svc-desc{font-size:11.5px;color:var(--muted);line-height:1.95;font-weight:300;}
+.svc-price{margin-top:1.2rem;font-size:11px;color:var(--gold);letter-spacing:0.05em;}
+.svc-link{margin-top:1.5rem;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);text-decoration:none;display:inline-flex;align-items:center;gap:7px;transition:gap 0.3s;background:none;border:none;cursor:pointer;font-family:'Montserrat',sans-serif;}
+.svc:hover .svc-link{gap:13px;}
+
+/* ── WHY US ── */
+.why-wrap{background:var(--dark2);border-top:1px solid rgba(201,168,76,0.1);border-bottom:1px solid rgba(201,168,76,0.1);}
+.why-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5px;background:rgba(201,168,76,0.1);margin-top:4rem;}
+.why-card{background:var(--dark);padding:2.5rem 2rem;text-align:center;}
+.why-num{font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:300;color:rgba(201,168,76,0.15);line-height:1;margin-bottom:1rem;}
+.why-title{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--white);margin-bottom:0.7rem;}
+.why-desc{font-size:11px;color:var(--muted);line-height:1.9;font-weight:300;}
+
+/* ── FLEET ── */
+.fleet-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:1.5px;background:rgba(201,168,76,0.1);margin-top:4rem;}
+.fleet-main{background:var(--dark2);padding:3.5rem;min-height:360px;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;background-image:url('{% static "basecamp/images/fleet-main.jpg" %}');background-size:cover;background-position:center;}
+.fleet-main-bg{position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,0,0,0.88) 0%,rgba(0,0,0,0.5) 60%,rgba(201,168,76,0.04) 100%);}
+.fleet-tag{font-size:9px;letter-spacing:0.28em;text-transform:uppercase;color:var(--gold);background:rgba(201,168,76,0.1);padding:5px 12px;display:inline-block;margin-bottom:1.1rem;position:relative;z-index:2;}
+.fleet-name{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:300;color:var(--white);position:relative;z-index:2;line-height:1.1;}
+.fleet-spec{font-size:11px;color:var(--muted);letter-spacing:0.1em;position:relative;z-index:2;margin-top:0.5rem;}
+.fleet-price{font-size:12px;color:var(--gold);position:relative;z-index:2;margin-top:1rem;}
+.fleet-side{display:flex;flex-direction:column;gap:1.5px;}
+.fleet-item{background:var(--dark2);padding:2rem;flex:1;display:flex;flex-direction:column;justify-content:flex-end;transition:background 0.3s;cursor:default;position:relative;overflow:hidden;}
+.fleet-item:hover{background:var(--dark3);}
+.fi-img{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform 0.6s ease;}
+.fleet-itag{font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:rgba(201,168,76,0.55);margin-bottom:0.5rem;}
+.fleet-iname{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:300;color:var(--white);}
+.fleet-iprice{font-size:11px;color:var(--gold);margin-top:0.4rem;}
+
+/* ── PROCESS ── */
+.process-row{display:flex;border-top:1px solid rgba(201,168,76,0.15);margin-top:4.5rem;}
+.p-step{flex:1;padding:3rem 2rem;border-right:1px solid rgba(201,168,76,0.1);}
+.p-step:last-child{border-right:none;}
+.p-num{font-family:'Cormorant Garamond',serif;font-size:58px;font-weight:300;color:rgba(201,168,76,0.1);line-height:1;margin-bottom:1.2rem;}
+.p-title{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--white);margin-bottom:0.7rem;}
+.p-desc{font-size:11.5px;color:var(--muted);line-height:1.95;font-weight:300;}
+
+/* ── COVERAGE ── */
+.coverage-wrap{background:var(--dark2);border-top:1px solid rgba(201,168,76,0.1);}
+.coverage-inner{max-width:1260px;margin:0 auto;padding:7rem 4rem;display:grid;grid-template-columns:1fr 1fr;gap:7rem;align-items:center;}
+.area-list{display:flex;flex-wrap:wrap;gap:0.6rem;margin-top:2rem;}
+.area-tag{font-size:9.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(201,168,76,0.22);padding:5px 12px;}
+.coverage-highlight{font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;color:var(--gold-light);border-left:2px solid var(--gold);padding-left:1.4rem;margin:2rem 0;line-height:1.65;}
+.coverage-map{background:var(--dark3);border:1px solid rgba(201,168,76,0.1);padding:2.5rem;min-height:400px;display:flex;align-items:center;justify-content:center;position:relative;background-image:url('{% static "basecamp/images/sydney-night.jpg" %}');background-size:cover;background-position:center;}
+.coverage-map::before{content:'';position:absolute;inset:0;background:rgba(10,10,10,0.72);}
+
+/* ── REVIEWS ── */
+.reviews-wrap{background:var(--black);border-top:1px solid rgba(201,168,76,0.08);}
+.reviews-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:3.5rem;}
+.google-badge{display:flex;align-items:center;gap:12px;background:var(--dark2);border:1px solid rgba(201,168,76,0.15);padding:1rem 1.5rem;}
+.google-stars{color:var(--gold);font-size:18px;letter-spacing:2px;}
+.google-info{font-size:11px;color:var(--muted);}
+.google-info strong{color:var(--white);display:block;font-size:13px;}
+.test-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.8rem;}
+.test{background:var(--dark2);border:1px solid rgba(201,168,76,0.1);padding:2.2rem;}
+.test-stars{color:var(--gold);font-size:14px;letter-spacing:2px;margin-bottom:1rem;}
+.qmark{font-family:'Cormorant Garamond',serif;font-size:52px;line-height:1;color:var(--gold);opacity:0.25;}
+.qtext{font-family:'Cormorant Garamond',serif;font-size:16px;font-style:italic;font-weight:300;color:var(--light);line-height:1.75;margin-bottom:1.3rem;}
+.qauthor{font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);}
+.qrole{font-size:11px;color:var(--muted);margin-top:2px;}
+
+/* ── CONTACT / BOOK ── */
+.book-wrap{background:var(--dark2);border-top:1px solid rgba(201,168,76,0.15);}
+.book-inner{max-width:1260px;margin:0 auto;padding:7rem 4rem;display:grid;grid-template-columns:1fr 1.2fr;gap:7rem;align-items:start;}
+.contact-block{margin-top:2.5rem;display:flex;flex-direction:column;gap:1.8rem;}
+.ci-label{font-size:9px;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);margin-bottom:0.3rem;}
+.ci-val{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--white);}
+.ci-sub{font-size:12.5px;color:var(--muted);}
+.full-form{display:flex;flex-direction:column;gap:1.2rem;}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.f-group{display:flex;flex-direction:column;gap:0.4rem;}
+.f-label{font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--muted);}
+.f-input{background:rgba(255,255,255,0.04);border:1px solid rgba(201,168,76,0.18);color:var(--white);padding:12px 14px;font-family:'Montserrat',sans-serif;font-size:13px;outline:none;transition:border-color 0.3s;-webkit-appearance:none;width:100%;}
+.f-input:focus{border-color:var(--gold);}
+.f-input::placeholder{color:rgba(255,255,255,0.18);}
+select.f-input option{background:var(--dark2);}
+.f-submit{background:var(--gold);color:var(--black);border:none;padding:16px;font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:0.26em;text-transform:uppercase;font-weight:600;cursor:pointer;transition:all 0.3s;margin-top:0.3rem;}
+.f-submit:hover{background:var(--gold-light);}
+
+/* ── FOOTER ── */
+footer{background:var(--black);border-top:1px solid rgba(201,168,76,0.12);padding:5rem 4rem 2.5rem;}
+.footer-in{max-width:1260px;margin:0 auto;}
+.ft{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:4rem;padding-bottom:3.5rem;border-bottom:1px solid rgba(255,255,255,0.05);margin-bottom:2rem;}
+.flogo{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1.2rem;}
+.flogo span{color:var(--white);}
+.fdesc{font-size:11.5px;color:var(--muted);line-height:1.95;font-weight:300;max-width:260px;margin-bottom:1.5rem;}
+.fsocial{display:flex;gap:10px;}
+.fsoc{width:32px;height:32px;border:1px solid rgba(201,168,76,0.2);display:flex;align-items:center;justify-content:center;text-decoration:none;transition:all 0.3s;}
+.fsoc:hover{border-color:var(--gold);background:rgba(201,168,76,0.08);}
+.fsoc svg{width:14px;height:14px;stroke:var(--muted);fill:none;stroke-width:1.5;}
+.fhead{font-size:9.5px;letter-spacing:0.26em;text-transform:uppercase;color:var(--gold);margin-bottom:1.3rem;}
+.flinks{list-style:none;display:flex;flex-direction:column;gap:0.65rem;}
+.flinks a{font-size:11.5px;color:var(--muted);text-decoration:none;transition:color 0.3s;}
+.flinks a:hover{color:var(--white);}
+.fb{display:flex;justify-content:space-between;align-items:center;}
+.fcopy{font-size:10.5px;color:rgba(255,255,255,0.17);}
+.fbadge{font-size:10px;color:var(--gold);letter-spacing:0.15em;text-transform:uppercase;border:1px solid rgba(201,168,76,0.2);padding:5px 14px;}
+
+/* ── MODAL ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:500;align-items:center;justify-content:center;padding:2rem;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--dark2);border:1px solid rgba(201,168,76,0.2);max-width:560px;width:100%;padding:3rem;position:relative;animation:fadeIn 0.3s ease;}
+.modal-close{position:absolute;top:1.2rem;right:1.5rem;background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer;transition:color 0.3s;font-family:'Montserrat',sans-serif;}
+.modal-close:hover{color:var(--white);}
+.modal-eye{font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;}
+.modal-title{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:var(--white);margin-bottom:0.5rem;}
+.modal-price{font-family:'Cormorant Garamond',serif;font-size:44px;color:var(--gold);line-height:1;margin:1.5rem 0;}
+.modal-price span{font-size:16px;color:var(--muted);font-family:'Montserrat',sans-serif;}
+.modal-details{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.5rem 0;padding:1.5rem;background:rgba(201,168,76,0.04);border:1px solid rgba(201,168,76,0.1);}
+.md-item{font-size:11px;color:var(--muted);}
+.md-item strong{color:var(--white);display:block;margin-bottom:2px;font-size:12px;}
+.modal-form{display:flex;flex-direction:column;gap:1rem;margin-top:1.5rem;}
+.modal-form .f-row{display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:960px){
+  nav{padding:0 1.5rem;}
+  .nav-links,.nav-phone{display:none;}
+  .bform-grid,.bform-grid-3{grid-template-columns:1fr;}
+  .bf-submit{width:100%;}
+  .svc-grid{grid-template-columns:1fr;}
+  .fleet-grid{grid-template-columns:1fr;}
+  .why-grid{grid-template-columns:1fr 1fr;}
+  .test-grid{grid-template-columns:1fr;}
+  .book-inner{grid-template-columns:1fr;gap:3rem;}
+  .coverage-inner{grid-template-columns:1fr;gap:3rem;}
+  .ft{grid-template-columns:1fr 1fr;gap:2rem;}
+  .stats{flex-wrap:wrap;}
+  .stat{min-width:120px;}
+  .process-row{flex-direction:column;}
+  .sec{padding:4.5rem 1.5rem;}
+  h1{font-size:44px;}
+  .booking-form-wrap{padding:1.8rem 1.5rem;}
+  .f-row{grid-template-columns:1fr;}
+  .modal-form .f-row{grid-template-columns:1fr;}
+  .modal-details{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAVIGATION ── -->
+<nav>
+  <a href="#" class="logo">Sovereign <span>Chauffeurs</span></a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#fleet">Fleet</a></li>
+    <li><a href="#coverage">Sydney</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div style="display:flex;align-items:center;gap:1.5rem;">
+    <div class="nav-phone">📞 <strong>(02) 9XXX XXXX</strong></div>
+    <a href="#booking" class="nav-cta">Book Now</a>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <div class="hero-img" id="heroImg"></div>
+  <div class="hero-bg"></div>
+  <div class="hero-bg2"></div>
+  <div class="vline vl-l"></div>
+  <div class="vline vl-r"></div>
+  <div class="hero-content">
+    <div class="eyebrow">Sydney's Premier Chauffeur Service</div>
+    <h1>Arrive in<br><em>Sovereign</em><br>Style</h1>
+    <p class="hero-sub">Luxury chauffeur-driven transfers across Greater Sydney — airport, corporate, weddings & tours. Available 24/7.</p>
+    <div class="hero-btns">
+      <a href="#booking" class="btn-gold">Get Instant Quote</a>
+      <a href="#fleet" class="btn-line">View Our Fleet</a>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-bar"></div>
+  </div>
+</div>
+
+<!-- ── BOOKING ENGINE ── -->
+<div class="booking-engine" id="booking">
+  <div class="booking-tabs">
+    <button class="btab active" onclick="switchTab('airport')">✈ Airport Transfer</button>
+    <button class="btab" onclick="switchTab('hourly')">⏱ Hourly Hire</button>
+    <button class="btab" onclick="switchTab('wedding')">💍 Wedding & Events</button>
+    <button class="btab" onclick="switchTab('corporate')">💼 Corporate</button>
+  </div>
+  <div class="booking-form-wrap">
+
+    <!-- AIRPORT TAB -->
+    <div class="bform active" id="tab-airport">
+      <div class="bform-grid">
+        <div class="bf-group">
+          <div class="bf-label">Pickup Location</div>
+          <input class="bf-input" id="ap-from" type="text" placeholder="Sydney Airport (SYD) or Address">
+        </div>
+        <div class="bf-group">
+          <div class="bf-label">Destination</div>
+          <input class="bf-input" id="ap-to" type="text" placeholder="Hotel, Suburb or Address">
+        </div>
+        <div class="bf-group">
+          <div class="bf-label">Vehicle Class</div>
+          <select class="bf-input" id="ap-vehicle">
+            <option value="sedan">Business Sedan — from $95</option>
+            <option value="luxury">Luxury Sedan (S-Class) — from $145</option>
+            <option value="suv">Premium SUV — from $125</option>
+            <option value="van">People Mover (7 seat) — from $155</option>
+            <option value="limo">Stretch Limousine — from $280</option>
+          </select>
+        </div>
+        <div class="bf-group">
+          <div class="bf-label">Date & Time</div>
+          <input class="bf-input" id="ap-date" type="datetime-local">
+        </div>
+        <button class="bf-submit" onclick="calcPrice('airport')">Calculate Price →</button>
+      </div>
+      <div class="price-result" id="price-airport">
+        <div class="price-result-inner">
+          <div>
+            <div class="price-label">Estimated Fare</div>
+            <div class="price-amount" id="pa-amount">$0</div>
+            <div class="price-note">Includes all tolls · GST inclusive · No hidden fees</div>
+          </div>
+          <div class="price-details">
+            <div class="pd-item"><strong id="pa-vehicle">—</strong>Vehicle</div>
+            <div class="pd-item"><strong id="pa-dist">—</strong>Est. Distance</div>
+            <div class="pd-item"><strong id="pa-time">—</strong>Est. Duration</div>
+            <div class="pd-item"><strong>60 min</strong>Free Wait Time</div>
+          </div>
+          <div class="price-actions">
+            <button class="btn-gold" onclick="openModal('airport')">Book This Journey</button>
+            <button class="btn-line" onclick="callUs()">Call to Book</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HOURLY TAB -->
+    <div class="bform" id="tab-hourly">
+      <div class="bform-grid-3">
+        <div class="bf-group">
+          <div class="bf-label">Pickup Location</div>
+          <input class="bf-input" id="hr-from" type="text" placeholder="Sydney CBD or Address">
+        </div>
+        <div class="bf-group">
+          <div class="bf-label">Vehicle Class</div>
+          <select class="bf-input" id="hr-vehicle">
+            <option value="sedan">Business Sedan — $95/hr</option>
+            <option value="luxury">Luxury Sedan (S-Class) — $145/hr</option>
+            <option value="suv">Premium SUV — $125/hr</option>
+            <option value="van">People Mover — $155/hr</option>
+          </select>
+        </div>
+        <div class="bf-group">
+          <div class="bf-label">Hours Required</div>
+          <select class="bf-input" id="hr-hours">
+            <option value="2">2 hours</option>
+            <option value="3">3 hours</option>
+            <option value="4">4 hours</option>
+            <option value="5">5 hours</option>
+            <option value="6">6 hours</option>
+            <option value="8">8 hours (full day)</option>
+            <option value="10">10 hours</option>
+          </select>
+        </div>
+        <button class="bf-submit" onclick="calcPrice('hourly')">Calculate Price →</button>
+      </div>
+      <div class="price-result" id="price-hourly">
+        <div class="price-result-inner">
+          <div>
+            <div class="price-label">Estimated Fare</div>
+            <div class="price-amount" id="ph-amount">$0</div>
+            <div class="price-note">Includes fuel & GST · Minimum 2 hours</div>
+          </div>
+          <div class="price-details">
+            <div class="pd-item"><strong id="ph-vehicle">—</strong>Vehicle</div>
+            <div class="pd-item"><strong id="ph-hours">—</strong>Duration</div>
+            <div class="pd-item"><strong id="ph-rate">—</strong>Hourly Rate</div>
+          </div>
+          <div class="price-actions">
+            <button class="btn-gold" onclick="openModal('hourly')">Book This Journey</button>
+            <button class="btn-line" onclick="callUs()">Call to Book</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEDDING TAB -->
+    <div class="bform" id="tab-wedding">
+      <div class="bform-grid">
+        <div class="bf-group">
+          <div class="bf-label">Venue / Location</div>
+          <input class="bf-input" id="wd-loc" type="text" placeholder="Ceremony or Reception Venue">
+        </div>
+        <div class="bf-group">
+          <div class="bf-label">Vehicle</div>
+          <select class="bf-input" id="wd-vehicle">
+            <option value="limo">Stretch Limousine — from $280</option>
+            <option value="luxury">Luxury Sedan (S-Class) — from $145</option>
+            <option value="suv">Premium SUV — from $125</option>
+            <option value="van">Bridal Party Van — from $195</option>
+          </select>
+        </div>
+        <div class="bf-group">
+          <div class="bf-label">Wedding Date</div>
+          <input class="bf-input" id="wd-date" type="date">
+        </div>
+        <div class="bf-group">
+          <div class="bf-label">Hours Required</div>
+          <select class="bf-input" id="wd-hours">
+            <option value="3">3 hours</option>
+            <option value="4">4 hours</option>
+            <option value="5">5 hours</option>
+            <option value="6">6 hours</option>
+            <option value="8">Full Day (8 hrs)</option>
+          </select>
+        </div>
+        <button class="bf-submit" onclick="calcPrice('wedding')">Get Wedding Quote →</button>
+      </div>
+      <div class="price-result" id="price-wedding">
+        <div class="price-result-inner">
+          <div>
+            <div class="price-label">Wedding Package From</div>
+            <div class="price-amount" id="pw-amount">$0</div>
+            <div class="price-note">Includes ribbon decoration, champagne & red carpet</div>
+          </div>
+          <div class="price-details">
+            <div class="pd-item"><strong id="pw-vehicle">—</strong>Vehicle</div>
+            <div class="pd-item"><strong id="pw-hours">—</strong>Duration</div>
+          </div>
+          <div class="price-actions">
+            <button class="btn-gold" onclick="openModal('wedding')">Book Wedding Package</button>
+            <button class="btn-line" onclick="callUs()">Speak to Us</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CORPORATE TAB -->
+    <div class="bform" id="tab-corporate">
+      <div class="bform-grid-3">
+        <div class="bf-group">
+          <div class="bf-label">Company Name</div>
+          <input class="bf-input" id="co-company" type="text" placeholder="Your Company">
+        </div>
+        <div class="bf-group">
+          <div class="bf-label">Service Type</div>
+          <select class="bf-input" id="co-type">
+            <option value="airport">Airport Transfer</option>
+            <option value="roadshow">Roadshow / Day Hire</option>
+            <option value="event">Conference / Event</option>
+            <option value="account">Monthly Account</option>
+          </select>
+        </div>
+        <div class="bf-group">
+          <div class="bf-label">Estimated Trips/Month</div>
+          <select class="bf-input" id="co-volume">
+            <option value="1-5">1–5 trips</option>
+            <option value="5-20">5–20 trips</option>
+            <option value="20-50">20–50 trips</option>
+            <option value="50+">50+ trips</option>
+          </select>
+        </div>
+        <button class="bf-submit" onclick="calcPrice('corporate')">Get Corporate Rate →</button>
+      </div>
+      <div class="price-result" id="price-corporate">
+        <div class="price-result-inner">
+          <div>
+            <div class="price-label">Corporate Account</div>
+            <div class="price-amount" style="font-size:28px;" id="pc-msg">Tailored pricing for your business</div>
+            <div class="price-note">Volume discounts · Monthly invoicing · Priority dispatch</div>
+          </div>
+          <div class="price-actions">
+            <button class="btn-gold" onclick="openModal('corporate')">Apply for Account</button>
+            <button class="btn-line" onclick="callUs()">Speak to Our Team</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── STATS ── -->
+<div class="stats">
+  <div class="stat"><div class="stat-n">10+</div><div class="stat-l">Years in Sydney</div></div>
+  <div class="stat"><div class="stat-n">30K+</div><div class="stat-l">Journeys Completed</div></div>
+  <div class="stat"><div class="stat-n">4.9★</div><div class="stat-l">Google Rating</div></div>
+  <div class="stat"><div class="stat-n">24/7</div><div class="stat-l">Always Available</div></div>
+  <div class="stat"><div class="stat-n">$0</div><div class="stat-l">Hidden Fees</div></div>
+</div>
+
+<!-- ── SERVICES ── -->
+<div id="services">
+<div class="sec">
+  <div class="sec-eye">What We Offer</div>
+  <h2>Every Occasion,<br><em>Perfectly Served</em></h2>
+  <p class="sec-desc">From Sydney Airport arrivals to Hunter Valley day tours — tailored luxury for every journey.</p>
+  <div class="svc-grid">
+    <div class="svc">
+      <div class="svc-icon"><svg viewBox="0 0 24 24"><path d="M20 7H4C3 7 2 8 2 9v6c0 1 1 2 2 2h16c1 0 2-1 2-2V9c0-1-1-2-2-2z"/><circle cx="6" cy="17" r="2"/><circle cx="18" cy="17" r="2"/></svg></div>
+      <div class="svc-title">Airport Transfers</div>
+      <div class="svc-desc">Sydney Airport (SYD) pickups and drop-offs with real-time flight monitoring, 60-minute complimentary wait, and meet-and-greet in arrivals.</div>
+      <div class="svc-price">From $95 · All terminals covered</div>
+      <button class="svc-link" onclick="switchTab('airport');document.getElementById('booking').scrollIntoView({behavior:'smooth'})">Get Instant Quote →</button>
+    </div>
+    <div class="svc">
+      <div class="svc-icon"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="1"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></div>
+      <div class="svc-title">Corporate & Executive</div>
+      <div class="svc-desc">Discreet transfers for CBD executives, board members and visiting VIPs. On-account monthly billing available with dedicated account manager.</div>
+      <div class="svc-price">From $95 · Priority dispatch</div>
+      <button class="svc-link" onclick="switchTab('corporate');document.getElementById('booking').scrollIntoView({behavior:'smooth'})">Get Corporate Rate →</button>
+    </div>
+    <div class="svc">
+      <div class="svc-icon"><svg viewBox="0 0 24 24"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2z"/></svg></div>
+      <div class="svc-title">Weddings & Events</div>
+      <div class="svc-desc">Ribbon-dressed vehicles, champagne on arrival, red carpet service, and white-glove coordination for your Sydney wedding or gala.</div>
+      <div class="svc-price">From $280 · Packages available</div>
+      <button class="svc-link" onclick="switchTab('wedding');document.getElementById('booking').scrollIntoView({behavior:'smooth'})">Get Wedding Quote →</button>
+    </div>
+    <div class="svc">
+      <div class="svc-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+      <div class="svc-title">Hourly Hire</div>
+      <div class="svc-desc">Retain your chauffeur for as long as needed. Ideal for shopping, multi-stop business days, or exploring Sydney at your own pace.</div>
+      <div class="svc-price">From $95/hr · 2 hour minimum</div>
+      <button class="svc-link" onclick="switchTab('hourly');document.getElementById('booking').scrollIntoView({behavior:'smooth'})">Book By the Hour →</button>
+    </div>
+    <div class="svc">
+      <div class="svc-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
+      <div class="svc-title">Winery & Day Tours</div>
+      <div class="svc-desc">Hunter Valley wine tours, Blue Mountains escapes, and Southern Highlands day journeys in ultimate comfort from Sydney.</div>
+      <div class="svc-price">From $580 · Full day packages</div>
+      <button class="svc-link" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Enquire Now →</button>
+    </div>
+    <div class="svc">
+      <div class="svc-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+      <div class="svc-title">Group Transfers</div>
+      <div class="svc-desc">Coordinated fleet logistics for groups up to 50. Corporate roadshows, sporting events, cruise terminals, and private Sydney Harbour functions.</div>
+      <div class="svc-price">From $155 · Fleet coordination</div>
+      <button class="svc-link" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Get Group Quote →</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── WHY US ── -->
+<div class="why-wrap">
+<div class="sec">
+  <div class="sec-eye">Why Sovereign</div>
+  <h2>The Difference You<br><em>Can Feel</em></h2>
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="why-num">01</div>
+      <div class="why-title">Instant Online Booking</div>
+      <div class="why-desc">Get a real price in seconds. Book and confirm immediately — no waiting for a callback like other services.</div>
+    </div>
+    <div class="why-card">
+      <div class="why-num">02</div>
+      <div class="why-title">Flight Tracking</div>
+      <div class="why-desc">We monitor your flight in real-time. Delayed? Your chauffeur already knows and adjusts accordingly.</div>
+    </div>
+    <div class="why-card">
+      <div class="why-num">03</div>
+      <div class="why-title">Fixed Pricing</div>
+      <div class="why-desc">The price you see is the price you pay. No surge pricing, no surprise tolls, no hidden extras. Ever.</div>
+    </div>
+    <div class="why-card">
+      <div class="why-num">04</div>
+      <div class="why-title">Sydney Specialists</div>
+      <div class="why-desc">Born and based in Sydney. Our chauffeurs know every shortcut, every entrance, every preferred drop-off point in the city.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── FLEET ── -->
+<div id="fleet">
+<div class="sec">
+  <div class="sec-eye">Our Fleet</div>
+  <h2>Vehicles Worthy<br>of <em>Distinction</em></h2>
+  <p class="sec-desc">Every vehicle is less than 3 years old, immaculately maintained, and presented to the highest standard.</p>
+  <div class="fleet-grid">
+    <div class="fleet-main">
+      <div class="fleet-main-bg"></div>
+      <div class="fleet-tag">Flagship · Most Popular</div>
+      <div class="fleet-name">Mercedes-Benz<br>S-Class</div>
+      <div class="fleet-spec">Long Wheelbase · Executive Rear Suite · Ambient Lighting · Wi-Fi</div>
+      <div class="fleet-price">From $145 per transfer</div>
+    </div>
+    <div class="fleet-side">
+      <div class="fleet-item">
+        <div class="fi-img" style="background-image:url('{% static "basecamp/images/fleet-sedan.jpg" %}');"></div>
+        <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.92) 0%,rgba(0,0,0,0.35) 100%);"></div>
+        <div style="position:relative;z-index:2;">
+          <div class="fleet-itag">Business Sedan</div>
+          <div class="fleet-iname">Mercedes E-Class / BMW 5</div>
+          <div class="fleet-iprice">From $95</div>
+        </div>
+      </div>
+      <div class="fleet-item">
+        <div class="fi-img" style="background-image:url('{% static "basecamp/images/fleet-suv.jpg" %}');"></div>
+        <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.92) 0%,rgba(0,0,0,0.35) 100%);"></div>
+        <div style="position:relative;z-index:2;">
+          <div class="fleet-itag">Premium SUV</div>
+          <div class="fleet-iname">Mercedes GLS / BMW X7</div>
+          <div class="fleet-iprice">From $125</div>
+        </div>
+      </div>
+      <div class="fleet-item">
+        <div class="fi-img" style="background-image:url('{% static "basecamp/images/fleet-limo.jpg" %}');"></div>
+        <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.92) 0%,rgba(0,0,0,0.35) 100%);"></div>
+        <div style="position:relative;z-index:2;">
+          <div class="fleet-itag">Special Occasions</div>
+          <div class="fleet-iname">Stretch Limousine</div>
+          <div class="fleet-iprice">From $280</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── PROCESS ── -->
+<div style="background:var(--dark2);border-top:1px solid rgba(201,168,76,0.1);border-bottom:1px solid rgba(201,168,76,0.1);">
+<div class="sec">
+  <div class="sec-eye">How It Works</div>
+  <h2>Booked in Under<br><em>60 Seconds</em></h2>
+  <div class="process-row">
+    <div class="p-step">
+      <div class="p-num">01</div>
+      <div class="p-title">Get Instant Price</div>
+      <div class="p-desc">Enter your pickup and destination above. See your exact price immediately — no forms, no callbacks.</div>
+    </div>
+    <div class="p-step">
+      <div class="p-num">02</div>
+      <div class="p-title">Confirm & Pay</div>
+      <div class="p-desc">Book securely online in under a minute. Instant confirmation email with your chauffeur details.</div>
+    </div>
+    <div class="p-step">
+      <div class="p-num">03</div>
+      <div class="p-title">We Prepare</div>
+      <div class="p-desc">Your chauffeur is briefed on your preferences. Flight tracked in real-time. Chilled water ready.</div>
+    </div>
+    <div class="p-step">
+      <div class="p-num">04</div>
+      <div class="p-title">Arrive in Style</div>
+      <div class="p-desc">Your uniformed chauffeur is waiting — 15 minutes early. Every time, without exception.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── COVERAGE ── -->
+<div class="coverage-wrap" id="coverage">
+  <div class="coverage-inner">
+    <div>
+      <div class="sec-eye">Sydney Coverage</div>
+      <h2>Every Corner<br>of <em>Sydney</em></h2>
+      <p class="sec-desc">From Bondi to the Blue Mountains, Manly to Macquarie Park — our Sydney knowledge is unmatched.</p>
+      <div class="coverage-highlight">"Our chauffeurs know Sydney like no one else — every shortcut, every landmark, every preferred entrance."</div>
+      <div class="area-list">
+        <span class="area-tag">CBD & City</span>
+        <span class="area-tag">Sydney Airport</span>
+        <span class="area-tag">Eastern Suburbs</span>
+        <span class="area-tag">North Shore</span>
+        <span class="area-tag">Northern Beaches</span>
+        <span class="area-tag">Inner West</span>
+        <span class="area-tag">Parramatta</span>
+        <span class="area-tag">Hills District</span>
+        <span class="area-tag">Southern Suburbs</span>
+        <span class="area-tag">Hunter Valley</span>
+        <span class="area-tag">Blue Mountains</span>
+        <span class="area-tag">Wollongong</span>
+      </div>
+    </div>
+    <div class="coverage-map">
+      <div style="position:relative;z-index:2;">
+      <svg viewBox="0 0 300 360" width="260" height="310" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M90 115 Q118 95 148 106 Q180 116 200 100 Q222 86 244 94 L252 136 Q232 146 212 134 Q190 122 170 138 Q148 155 128 144 Q108 134 90 144 Z" fill="rgba(201,168,76,0.07)" stroke="rgba(201,168,76,0.3)" stroke-width="1"/>
+        <rect x="128" y="142" width="34" height="42" rx="2" fill="rgba(201,168,76,0.09)" stroke="rgba(201,168,76,0.45)" stroke-width="1.1"/>
+        <path d="M118 133 Q148 112 180 133" stroke="rgba(201,168,76,0.55)" stroke-width="1.4" fill="none"/>
+        <line x1="118" y1="133" x2="118" y2="142" stroke="rgba(201,168,76,0.35)" stroke-width="1"/>
+        <line x1="180" y1="133" x2="180" y2="142" stroke="rgba(201,168,76,0.35)" stroke-width="1"/>
+        <circle cx="188" cy="132" r="3.5" fill="var(--gold)" opacity="0.65"/>
+        <line x1="145" y1="184" x2="145" y2="320" stroke="rgba(201,168,76,0.13)" stroke-width="1"/>
+        <line x1="70" y1="192" x2="240" y2="192" stroke="rgba(201,168,76,0.13)" stroke-width="1"/>
+        <line x1="92" y1="144" x2="52" y2="252" stroke="rgba(201,168,76,0.09)" stroke-width="1"/>
+        <line x1="200" y1="144" x2="252" y2="272" stroke="rgba(201,168,76,0.09)" stroke-width="1"/>
+        <circle cx="145" cy="163" r="5" fill="var(--gold)" opacity="0.9"/>
+        <text x="154" y="167" fill="rgba(201,168,76,0.85)" font-size="8.5" font-family="Montserrat,sans-serif" letter-spacing="0.05em">CBD</text>
+        <circle cx="232" cy="158" r="3" fill="var(--gold)" opacity="0.55"/>
+        <text x="238" y="162" fill="rgba(201,168,76,0.55)" font-size="7.5" font-family="Montserrat,sans-serif">Eastern</text>
+        <circle cx="80" cy="202" r="3" fill="var(--gold)" opacity="0.55"/>
+        <text x="50" y="218" fill="rgba(201,168,76,0.55)" font-size="7.5" font-family="Montserrat,sans-serif">Inner West</text>
+        <circle cx="145" cy="262" r="3" fill="var(--gold)" opacity="0.55"/>
+        <text x="152" y="266" fill="rgba(201,168,76,0.55)" font-size="7.5" font-family="Montserrat,sans-serif">South</text>
+        <circle cx="92" cy="148" r="3" fill="var(--gold)" opacity="0.55"/>
+        <text x="52" y="145" fill="rgba(201,168,76,0.55)" font-size="7.5" font-family="Montserrat,sans-serif">N. Shore</text>
+        <circle cx="232" cy="252" r="3.5" fill="var(--gold)" opacity="0.7"/>
+        <text x="238" y="256" fill="rgba(201,168,76,0.65)" font-size="7.5" font-family="Montserrat,sans-serif">Airport ✈</text>
+        <circle cx="268" cy="46" r="14" stroke="rgba(201,168,76,0.18)" stroke-width="1" fill="none"/>
+        <text x="265" y="39" fill="rgba(201,168,76,0.5)" font-size="7.5" font-family="Montserrat,sans-serif" font-weight="500">N</text>
+        <line x1="268" y1="41" x2="268" y2="60" stroke="rgba(201,168,76,0.25)" stroke-width="0.7"/>
+        <line x1="258" y1="51" x2="278" y2="51" stroke="rgba(201,168,76,0.18)" stroke-width="0.7"/>
+      </svg>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── REVIEWS ── -->
+<div class="reviews-wrap" id="reviews">
+<div class="sec">
+  <div class="reviews-header">
+    <div>
+      <div class="sec-eye">Client Reviews</div>
+      <h2>Trusted by Sydney's<br><em>Finest</em></h2>
+    </div>
+    <div class="google-badge">
+      <div>
+        <div class="google-stars">★★★★★</div>
+        <div class="google-info"><strong>4.9 / 5.0</strong>Based on 180+ Google Reviews</div>
+      </div>
+    </div>
+  </div>
+  <div class="test-grid">
+    <div class="test">
+      <div class="test-stars">★★★★★</div>
+      <div class="qmark">"</div>
+      <div class="qtext">Sovereign is the only car service I trust for CBD meetings. The instant online booking was so easy — price shown upfront, no surprises.</div>
+      <div class="qauthor">James Whitfield</div>
+      <div class="qrole">Managing Director · Sydney CBD</div>
+    </div>
+    <div class="test">
+      <div class="test-stars">★★★★★</div>
+      <div class="qmark">"</div>
+      <div class="qtext">Our wedding day was flawless. The Sovereign team coordinated everything perfectly — the S-Class was stunning and our chauffeur was exceptional.</div>
+      <div class="qauthor">Sophie & Michael Chen</div>
+      <div class="qrole">Wedding · Northern Beaches</div>
+    </div>
+    <div class="test">
+      <div class="test-stars">★★★★★</div>
+      <div class="qmark">"</div>
+      <div class="qtext">Flight was delayed 2 hours and my chauffeur already knew when I landed. That level of service is why I book Sovereign every Sydney visit.</div>
+      <div class="qauthor">Alexandra Voss</div>
+      <div class="qrole">International Executive · Regular Client</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── CONTACT ── -->
+<div class="book-wrap" id="contact">
+  <div class="book-inner">
+    <div>
+      <div class="sec-eye">Get In Touch</div>
+      <h2>Ready to<br><em>Ride?</em></h2>
+      <p class="sec-desc">Our Sydney team is available around the clock. Bookings accepted from 2 hours to months in advance.</p>
+      <div class="contact-block">
+        <div>
+          <div class="ci-label">Phone</div>
+          <div class="ci-val">(02) 9XXX XXXX</div>
+        </div>
+        <div>
+          <div class="ci-label">After Hours</div>
+          <div class="ci-sub">0400 XXX XXX · Available 24/7</div>
+        </div>
+        <div>
+          <div class="ci-label">Email</div>
+          <div class="ci-sub">reservations@sovereignchauffeurs.com.au</div>
+        </div>
+        <div>
+          <div class="ci-label">Service Area</div>
+          <div class="ci-sub">Greater Sydney · Hunter Valley · Blue Mountains</div>
+        </div>
+      </div>
+    </div>
+    <div class="full-form">
+      <div class="f-row">
+        <div class="f-group"><div class="f-label">First Name</div><input class="f-input" type="text" placeholder="James"></div>
+        <div class="f-group"><div class="f-label">Last Name</div><input class="f-input" type="text" placeholder="Whitfield"></div>
+      </div>
+      <div class="f-group"><div class="f-label">Phone Number</div><input class="f-input" type="tel" placeholder="0400 000 000"></div>
+      <div class="f-group"><div class="f-label">Email Address</div><input class="f-input" type="email" placeholder="james@company.com.au"></div>
+      <div class="f-group">
+        <div class="f-label">Service Type</div>
+        <select class="f-input">
+          <option>Airport Transfer (SYD)</option>
+          <option>Corporate & Executive</option>
+          <option>Wedding & Events</option>
+          <option>Hourly Hire</option>
+          <option>Winery / Day Tour</option>
+          <option>Group Transfer</option>
+          <option>Corporate Account Enquiry</option>
+        </select>
+      </div>
+      <div class="f-row">
+        <div class="f-group"><div class="f-label">Date</div><input class="f-input" type="date"></div>
+        <div class="f-group"><div class="f-label">Time</div><input class="f-input" type="time"></div>
+      </div>
+      <div class="f-group"><div class="f-label">Pickup Location</div><input class="f-input" type="text" placeholder="Sydney CBD / Airport / Suburb"></div>
+      <div class="f-group"><div class="f-label">Destination</div><input class="f-input" type="text" placeholder="Address, Suburb or Venue"></div>
+      <button class="f-submit" onclick="submitEnquiry()">Send Enquiry →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-in">
+    <div class="ft">
+      <div>
+        <div class="flogo">Sovereign <span>Chauffeurs</span></div>
+        <div class="fdesc">Sydney's most distinguished chauffeur service. Delivering exceptional journeys since 2014 for those who demand nothing but the finest.</div>
+        <div class="fsocial">
+          <a href="#" class="fsoc"><svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+          <a href="#" class="fsoc"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+          <a href="#" class="fsoc"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+        </div>
+      </div>
+      <div>
+        <div class="fhead">Services</div>
+        <ul class="flinks">
+          <li><a href="#">Airport Transfers</a></li>
+          <li><a href="#">Corporate Hire</a></li>
+          <li><a href="#">Weddings</a></li>
+          <li><a href="#">Hourly Hire</a></li>
+          <li><a href="#">Day Tours</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="fhead">Sydney Areas</div>
+        <ul class="flinks">
+          <li><a href="#">CBD & City</a></li>
+          <li><a href="#">Eastern Suburbs</a></li>
+          <li><a href="#">North Shore</a></li>
+          <li><a href="#">Northern Beaches</a></li>
+          <li><a href="#">Inner West & West</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="fhead">Company</div>
+        <ul class="flinks">
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Our Fleet</a></li>
+          <li><a href="#">Corporate Accounts</a></li>
+          <li><a href="#">Join Our Fleet</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="fb">
+      <div class="fcopy">© 2025 Sovereign Chauffeurs Pty Ltd · ABN 00 000 000 000 · Sydney NSW 2000 · Passenger Transport Accredited</div>
+      <div class="fbadge">Est. 2014 · Sydney</div>
+    </div>
+  </div>
+</footer>
+
+<!-- ── BOOKING MODAL ── -->
+<div class="modal-overlay" id="bookingModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <div class="modal-eye">Confirm Your Booking</div>
+    <div class="modal-title" id="modal-title">Airport Transfer</div>
+    <div class="modal-price" id="modal-price">$145 <span>est. fare</span></div>
+    <div class="modal-details" id="modal-details">
+      <div class="md-item"><strong id="md-from">—</strong>Pickup</div>
+      <div class="md-item"><strong id="md-to">—</strong>Destination</div>
+      <div class="md-item"><strong id="md-vehicle">—</strong>Vehicle</div>
+      <div class="md-item"><strong>Fixed Price</strong>No hidden fees</div>
+    </div>
+    <div class="modal-form">
+      <div class="f-row">
+        <div class="f-group"><div class="f-label">First Name</div><input class="f-input" type="text" placeholder="James"></div>
+        <div class="f-group"><div class="f-label">Last Name</div><input class="f-input" type="text" placeholder="Whitfield"></div>
+      </div>
+      <div class="f-group"><div class="f-label">Mobile Number</div><input class="f-input" type="tel" placeholder="0400 000 000"></div>
+      <div class="f-group"><div class="f-label">Email (confirmation sent here)</div><input class="f-input" type="email" placeholder="you@email.com"></div>
+      <div class="f-group"><div class="f-label">Special Requests (optional)</div><input class="f-input" type="text" placeholder="Child seat, extra luggage, preferences..."></div>
+      <button class="f-submit" onclick="confirmBooking()" style="margin-top:0.5rem;">Confirm & Book →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Hero image ken-burns effect
+window.addEventListener('load',function(){
+  var img=document.getElementById('heroImg');
+  if(img) setTimeout(function(){img.classList.add('loaded');},100);
+});
+
+// Tab switching
+function switchTab(tab){
+  document.querySelectorAll('.btab').forEach((b,i)=>{
+    const tabs=['airport','hourly','wedding','corporate'];
+    b.classList.toggle('active',tabs[i]===tab);
+  });
+  document.querySelectorAll('.bform').forEach(f=>f.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+}
+
+// Price data
+const vehicleRates={
+  sedan:{name:'Business Sedan',base:95,perKm:2.2,hrRate:95},
+  luxury:{name:'S-Class Sedan',base:145,perKm:3.1,hrRate:145},
+  suv:{name:'Premium SUV',base:125,perKm:2.7,hrRate:125},
+  van:{name:'People Mover',base:155,perKm:3.0,hrRate:155},
+  limo:{name:'Stretch Limousine',base:280,perKm:4.5,hrRate:280}
+};
+
+const routeEstimates={
+  'airport':{'cbd':{dist:15,dur:'25 min'},'bondi':{dist:18,dur:'30 min'},'north sydney':{dist:22,dur:'35 min'},'manly':{dist:28,dur:'45 min'},'parramatta':{dist:32,dur:'50 min'},'default':{dist:20,dur:'30 min'}},
+};
+
+function getRouteEstimate(from,to){
+  const toLC=to.toLowerCase();
+  if(toLC.includes('cbd')||toLC.includes('city')||toLC.includes('circular')||toLC.includes('darling')) return {dist:15,dur:'25 min'};
+  if(toLC.includes('bondi')||toLC.includes('eastern')) return {dist:18,dur:'30 min'};
+  if(toLC.includes('north sydney')||toLC.includes('north shore')) return {dist:22,dur:'35 min'};
+  if(toLC.includes('manly')||toLC.includes('northern beach')) return {dist:28,dur:'45 min'};
+  if(toLC.includes('parramatta')||toLC.includes('western')) return {dist:32,dur:'50 min'};
+  if(toLC.includes('hunter')||toLC.includes('newcastle')) return {dist:165,dur:'2 hr 10 min'};
+  if(toLC.includes('blue mountain')) return {dist:105,dur:'1 hr 30 min'};
+  return {dist:20,dur:'30 min'};
+}
+
+function calcPrice(type){
+  if(type==='airport'){
+    const from=document.getElementById('ap-from').value||'Sydney Airport';
+    const to=document.getElementById('ap-to').value||'Sydney CBD';
+    const vKey=document.getElementById('ap-vehicle').value;
+    const v=vehicleRates[vKey];
+    const route=getRouteEstimate(from,to);
+    const price=Math.round(v.base+(route.dist*v.perKm));
+    document.getElementById('pa-amount').textContent='$'+price;
+    document.getElementById('pa-vehicle').textContent=v.name;
+    document.getElementById('pa-dist').textContent=route.dist+' km';
+    document.getElementById('pa-time').textContent=route.dur;
+    document.getElementById('price-airport').style.display='block';
+  } else if(type==='hourly'){
+    const vKey=document.getElementById('hr-vehicle').value;
+    const hours=parseInt(document.getElementById('hr-hours').value);
+    const v=vehicleRates[vKey];
+    const price=v.hrRate*hours;
+    document.getElementById('ph-amount').textContent='$'+price;
+    document.getElementById('ph-vehicle').textContent=v.name;
+    document.getElementById('ph-hours').textContent=hours+' hours';
+    document.getElementById('ph-rate').textContent='$'+v.hrRate+'/hr';
+    document.getElementById('price-hourly').style.display='block';
+  } else if(type==='wedding'){
+    const vKey=document.getElementById('wd-vehicle').value;
+    const hours=parseInt(document.getElementById('wd-hours').value);
+    const weddingRates={limo:280,luxury:175,suv:150,van:195};
+    const vNames={limo:'Stretch Limousine',luxury:'S-Class Sedan',suv:'Premium SUV',van:'Bridal Party Van'};
+    const price=weddingRates[vKey]*hours;
+    document.getElementById('pw-amount').textContent='$'+price;
+    document.getElementById('pw-vehicle').textContent=vNames[vKey];
+    document.getElementById('pw-hours').textContent=hours+' hours';
+    document.getElementById('price-wedding').style.display='block';
+  } else if(type==='corporate'){
+    const vol=document.getElementById('co-volume').value;
+    const discounts={'1-5':'Standard rates apply','5-20':'5% volume discount','20-50':'10% volume discount','50+':'15%+ custom pricing'};
+    document.getElementById('pc-msg').textContent=discounts[vol];
+    document.getElementById('price-corporate').style.display='block';
+  }
+}
+
+function openModal(type){
+  const modal=document.getElementById('bookingModal');
+  if(type==='airport'){
+    document.getElementById('modal-title').textContent='Airport Transfer';
+    document.getElementById('modal-price').innerHTML=document.getElementById('pa-amount').textContent+' <span>est. fare</span>';
+    document.getElementById('md-from').textContent=document.getElementById('ap-from').value||'Sydney Airport';
+    document.getElementById('md-to').textContent=document.getElementById('ap-to').value||'Sydney CBD';
+    document.getElementById('md-vehicle').textContent=document.getElementById('pa-vehicle').textContent;
+  } else if(type==='hourly'){
+    document.getElementById('modal-title').textContent='Hourly Hire';
+    document.getElementById('modal-price').innerHTML=document.getElementById('ph-amount').textContent+' <span>total fare</span>';
+    document.getElementById('md-from').textContent=document.getElementById('hr-from').value||'Sydney CBD';
+    document.getElementById('md-to').textContent='As directed';
+    document.getElementById('md-vehicle').textContent=document.getElementById('ph-vehicle').textContent;
+  } else if(type==='wedding'){
+    document.getElementById('modal-title').textContent='Wedding Package';
+    document.getElementById('modal-price').innerHTML=document.getElementById('pw-amount').textContent+' <span>package from</span>';
+    document.getElementById('md-from').textContent=document.getElementById('wd-loc').value||'Venue TBC';
+    document.getElementById('md-to').textContent='Wedding venue';
+    document.getElementById('md-vehicle').textContent=document.getElementById('pw-vehicle').textContent;
+  } else {
+    document.getElementById('modal-title').textContent='Corporate Account';
+    document.getElementById('modal-price').innerHTML='Custom <span>pricing</span>';
+    document.getElementById('md-from').textContent=document.getElementById('co-company').value||'Your company';
+    document.getElementById('md-to').textContent='Multiple locations';
+    document.getElementById('md-vehicle').textContent='Fleet assignment';
+  }
+  modal.classList.add('open');
+}
+
+function closeModal(){
+  document.getElementById('bookingModal').classList.remove('open');
+}
+
+function confirmBooking(){
+  closeModal();
+  alert('Thank you! Your booking request has been received.\n\nA Sovereign Chauffeurs specialist will contact you within 15 minutes to confirm.\n\nFor urgent bookings call: (02) 9XXX XXXX');
+}
+
+function callUs(){
+  alert('Call us anytime on (02) 9XXX XXXX\nAfter hours: 0400 XXX XXX\n\nWe\'re available 24/7.');
+}
+
+function submitEnquiry(){
+  alert('Thank you for your enquiry!\n\nOur Sydney team will respond within 30 minutes.\n\nFor urgent bookings: (02) 9XXX XXXX');
+}
+
+// Close modal on overlay click
+document.getElementById('bookingModal').addEventListener('click',function(e){
+  if(e.target===this) closeModal();
+});
+</script>
+</body>
+</html>
