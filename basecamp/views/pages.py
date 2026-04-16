@@ -2,6 +2,9 @@ from django.shortcuts import render
 from django.conf import settings
 
 
+def sovereign_chauffeurs_v2(request): 
+    return render(request, 'basecamp/sovereign_chauffeurs_v2.html')
+
 def about_us(request): 
     # send_notice_email.delay('about_us accessed', 'about_us accessed', RECIPIENT_EMAIL)
     return render(request, 'basecamp/pages/about_us.html')
