@@ -155,7 +155,6 @@ LOGGING = {
             'filename': os.path.join(BASE_DIR, 'logs/sms.log'),
             'formatter': 'verbose',
         },
-        # ✅ 추가
         'email_agent_file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
@@ -177,8 +176,14 @@ LOGGING = {
 
     'loggers': {
         'django': {
-            'handlers': ['file', 'telegram'],  
+            'handlers': ['file', 'telegram'],
             'level': 'DEBUG',
+            'propagate': False,
+        },
+        # ✅ 추가 — template DEBUG 경고 숨김
+        'django.template': {
+            'handlers': ['file'],
+            'level': 'INFO',
             'propagate': False,
         },
         'blog.management.commands.booking_reminder': {
@@ -192,11 +197,10 @@ LOGGING = {
             'propagate': False,
         },
         'easygo': {
-            'handlers': ['file', 'console', 'telegram'],  
+            'handlers': ['file', 'console', 'telegram'],
             'level': 'DEBUG',
             'propagate': False,
         },
-        # ✅ 추가
         'email_agent': {
             'handlers': ['email_agent_file', 'console'],
             'level': 'INFO',
