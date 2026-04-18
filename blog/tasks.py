@@ -85,7 +85,8 @@ def notify_user_payment_stripe(instance_id):
             return
 
         posts = Post.objects.filter(
-            Q(email__iexact=instance.email) | 
+            Q(booker_email__iexact=instance.email) |
+            Q(email__iexact=instance.email) |
             Q(name__iexact=instance.name)
         ).order_by('pickup_date')
 
