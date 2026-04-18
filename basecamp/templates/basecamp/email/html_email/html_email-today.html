@@ -172,7 +172,7 @@
 													
 													<strong>=== Driver's details ===</strong><br>
 													• Name: {{ driver_name }}<br>
-													• Phone: {{ driver_contact }}<br>
+													• Phone: {% if proxy_number %}{{ proxy_number }}{% else %}{{ driver_contact }}{% endif %}<br>
 													• Vehicle: {{ driver_car }}<br>
 													{% if driver_plate %}
 													• Vehicle plate: {{ driver_plate }}<br>
@@ -247,7 +247,7 @@
 													
 													<strong>=== Driver's details ===</strong><br>
 													• Name: {{ driver_name }}<br>
-													• Phone: {{ driver_contact }}<br>
+													• Phone: {% if proxy_number %}{{ proxy_number }}{% else %}{{ driver_contact }}{% endif %}<br>
 													• Vehicle: {{ driver_car }}<br>
 													{% if driver_plate %}
 													• Vehicle plate: {{ driver_plate }}<br>
@@ -311,7 +311,7 @@
 												        <td style="padding:15px;color:#af865f;">													
 													<strong>=== Driver's details ===</strong><br>
 													• Name: {{ driver_name }}<br>
-													• Phone: {{ driver_contact }}<br>
+													• Phone: {% if proxy_number %}{{ proxy_number }}{% else %}{{ driver_contact }}{% endif %}<br>
 													• Vehicle: {{ driver_car }}<br>
 													{% if driver_plate %}
 													• Vehicle plate: {{ driver_plate }}<br>
