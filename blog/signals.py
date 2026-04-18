@@ -99,7 +99,7 @@ def async_notify_user_payment_stripe(sender, instance, created, **kwargs):
         transaction.on_commit(lambda: notify_user_payment_stripe.delay(pk))
 
 
-# 드라이버 변경 시 driver_calendar_event_id 초기화
+# 드라이버 변경 시 driver_calendar_event_id 초기화 + proxy_number 자동 설정
 @receiver(pre_save, sender=Post, dispatch_uid="reset_driver_calendar_event_id_once")
 def reset_driver_calendar_event_id(sender, instance, **kwargs):
     if not instance.pk:
@@ -115,8 +115,17 @@ def reset_driver_calendar_event_id(sender, instance, **kwargs):
                 from utils.calendar_sync import delete_from_calendar
                 delete_from_calendar(old.driver.google_calendar_id, old.driver_calendar_event_id)
             instance.driver_calendar_event_id = None
+
+            if instance.driver:
+                from decouple import config as decouple_config
+                instance.proxy_number = decouple_config('TWILIO_PROXY_NUMBER', default=None)
+            else:
+                instance.proxy_number = None
     except Post.DoesNotExist:
-        pass
+        # 신규 생성 시 driver가 있으면 proxy_number 설정
+        if instance.driver:
+            from decouple import config as decouple_config
+            instance.proxy_number = decouple_config('TWILIO_PROXY_NUMBER', default=None)
 
 
 # google calendar recording 

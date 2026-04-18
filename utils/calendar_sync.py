@@ -62,9 +62,11 @@ def abbreviate_baggage(baggage_str):
     return short_baggage_str
 
 
-def _build_common(instance):
+def _build_common(instance, contact_display=None):
     """title, address, start/end 등 두 캘린더가 공유하는 공통 필드 계산.
     날짜/시간 파싱 실패 시 None 반환."""
+    if contact_display is None:
+        contact_display = instance.contact
 
     title = " ".join(filter(None, [
         '!' if instance.reminder else '',
@@ -78,7 +80,7 @@ def _build_common(instance):
         'paid' if instance.paid else '',
         'cash' if instance.cash and not instance.paid else '',
         f'${instance.price}' if instance.price else '',
-        instance.contact or '',
+        contact_display or '',
     ])).strip()
 
     suburb_str = instance.suburb or ''
@@ -142,7 +144,8 @@ def build_event_data(instance):
 
 def build_driver_event_data(instance):
     """드라이버 캘린더용 event body 생성 (간결한 설명)"""
-    common = _build_common(instance)
+    contact_display = instance.proxy_number if instance.proxy_number else instance.contact
+    common = _build_common(instance, contact_display=contact_display)
     if common is None:
         return None
 
