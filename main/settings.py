@@ -471,6 +471,9 @@ SESSION_COOKIE_SIGNED = True
 RECIPIENT_EMAIL = config('RECIPIENT_EMAIL')
 DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
 
+# Twilio Proxy
+TWILIO_PROXY_SERVICE_SID = config('TWILIO_PROXY_SERVICE_SID')
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 logging.getLogger('django.security.DisallowedHost').setLevel(logging.CRITICAL)

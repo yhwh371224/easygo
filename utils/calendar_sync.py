@@ -144,7 +144,7 @@ def build_event_data(instance):
 
 def build_driver_event_data(instance):
     """드라이버 캘린더용 event body 생성 (간결한 설명)"""
-    contact_display = instance.proxy_number if instance.proxy_number else instance.contact
+    contact_display = instance.customer_proxy_number if instance.customer_proxy_number else instance.contact
     common = _build_common(instance, contact_display=contact_display)
     if common is None:
         return None

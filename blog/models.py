@@ -62,11 +62,13 @@ class Inquiry(models.Model):
     fuel_surcharge = models.CharField(max_length=30, blank=True, null=True)
     driver = models.ForeignKey('Driver', on_delete=models.CASCADE, null=True, blank=True)
     proxy_number = models.CharField(max_length=20, blank=True, null=True)
+    customer_proxy_number = models.CharField(max_length=20, blank=True, null=True)
+    proxy_session_sid = models.CharField(max_length=50, blank=True, null=True)
     meeting_point = models.CharField(max_length=100, blank=True, null=True)
     is_confirmed = models.BooleanField(default=False, blank=True)
     cash = models.BooleanField(default=False, blank=True)
-    cruise = models.BooleanField(default=False, blank=True)  
-    cancelled = models.BooleanField(default=False, blank=True)    
+    cruise = models.BooleanField(default=False, blank=True)
+    cancelled = models.BooleanField(default=False, blank=True)
     private_ride = models.BooleanField(default=False, blank=True)
     reminder = models.BooleanField(default=False, blank=True)
     sent_email = models.BooleanField(default=False, blank=True)
@@ -76,7 +78,7 @@ class Inquiry(models.Model):
     calendar_event_id = models.CharField(max_length=255, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
 
-    class Meta:        
+    class Meta:
         ordering = ['-created']
 
 
@@ -148,15 +150,17 @@ class Post(models.Model):
     fuel_surcharge = models.CharField(max_length=30, blank=True, null=True)
     driver = models.ForeignKey('Driver', on_delete=models.CASCADE, null=True, blank=True)
     proxy_number = models.CharField(max_length=20, blank=True, null=True)
+    customer_proxy_number = models.CharField(max_length=20, blank=True, null=True)
+    proxy_session_sid = models.CharField(max_length=50, blank=True, null=True)
     meeting_point = models.CharField(max_length=100, blank=True, null=True)
     is_confirmed = models.BooleanField(default=False, blank=True)
     cash = models.BooleanField(default=False, blank=True)
-    cruise = models.BooleanField(default=False, blank=True)  
-    cancelled = models.BooleanField(default=False, blank=True)    
+    cruise = models.BooleanField(default=False, blank=True)
+    cancelled = models.BooleanField(default=False, blank=True)
     private_ride = models.BooleanField(default=False, blank=True)
     reminder = models.BooleanField(default=False, blank=True)
     sent_email = models.BooleanField(default=False, blank=True)
-    sms_reminder = models.BooleanField(default=False, blank=True)    
+    sms_reminder = models.BooleanField(default=False, blank=True)
     prepay = models.BooleanField(default=False, blank=True)
     pending = models.BooleanField(default=False, blank=True)
     calendar_event_id = models.CharField(max_length=255, blank=True, null=True)
