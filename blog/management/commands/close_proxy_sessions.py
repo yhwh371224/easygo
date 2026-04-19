@@ -1,5 +1,5 @@
 """
-Close Twilio Proxy sessions for today's completed airport arrivals (default).
+Close Bird phone mappings for today's completed airport arrivals (default).
 
 Usage:
     python manage.py close_proxy_sessions                # 오늘 날짜
@@ -15,13 +15,13 @@ from datetime import date, datetime, timedelta
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 from blog.models import Post
-from blog.twilio_proxy import close_proxy_session
+from blog.bird_proxy import close_bird_mapping
 
 logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
-    help = 'Close Twilio Proxy sessions for airport arrivals on a given date (default: today)'
+    help = 'Close Bird phone mappings for airport arrivals on a given date (default: today)'
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -41,19 +41,16 @@ class Command(BaseCommand):
         else:
             target_date = timezone.localdate()
 
-        self.stdout.write(f"[close_proxy_sessions] Target date: {target_date}")
+        self.stdout.write(f'[close_proxy_sessions] Target date: {target_date}')
 
         bookings = Post.objects.filter(
             pickup_date=target_date,
             direction__icontains='Pickup from',
-        ).exclude(
-            proxy_session_sid__isnull=True,
-        ).exclude(
-            proxy_session_sid='',
-        )
+            driver__isnull=False,
+        ).select_related('driver')
 
         if not bookings.exists():
-            self.stdout.write("No active proxy sessions found for this date.")
+            self.stdout.write('No bookings found for this date.')
             return
 
         now = timezone.localtime()
@@ -67,21 +64,19 @@ class Command(BaseCommand):
                 )
                 pickup_dt = timezone.make_aware(pickup_naive)
             except (ValueError, TypeError):
-                logger.warning(
-                    "Post %s: pickup_time 파싱 실패 (%r) — 스킵", booking.id, booking.pickup_time
-                )
+                logger.warning('Post %s: pickup_time 파싱 실패 (%r) — 스킵', booking.id, booking.pickup_time)
                 skipped += 1
                 continue
 
             if pickup_dt + timedelta(hours=1) > now:
                 continue
 
-            ok = close_proxy_session(booking)
+            ok = close_bird_mapping(booking)
             if ok:
                 success += 1
-                self.stdout.write(f"  OK  Post {booking.id} | {booking.name} | {booking.pickup_time}")
+                self.stdout.write(f'  OK  Post {booking.id} | {booking.name} | {booking.pickup_time}')
             else:
                 fail += 1
-                self.stdout.write(f"  FAIL Post {booking.id} | {booking.name} | {booking.pickup_time}")
+                self.stdout.write(f'  FAIL Post {booking.id} | {booking.name} | {booking.pickup_time}')
 
-        self.stdout.write(f"\nDone. Success: {success}, Failed: {fail}, Skipped (parse error): {skipped}")
+        self.stdout.write(f'\nDone. Success: {success}, Failed: {fail}, Skipped (parse error): {skipped}')

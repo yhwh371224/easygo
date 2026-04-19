@@ -4,6 +4,7 @@ from django.db import models
 from django.apps import AppConfig
 from django.urls import reverse
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 
 class BlogAppConfig(AppConfig):
@@ -61,9 +62,6 @@ class Inquiry(models.Model):
     toll = models.CharField(max_length=30, blank=True, null=True)
     fuel_surcharge = models.CharField(max_length=30, blank=True, null=True)
     driver = models.ForeignKey('Driver', on_delete=models.CASCADE, null=True, blank=True)
-    proxy_number = models.CharField(max_length=20, blank=True, null=True)
-    customer_proxy_number = models.CharField(max_length=20, blank=True, null=True)
-    proxy_session_sid = models.CharField(max_length=50, blank=True, null=True)
     meeting_point = models.CharField(max_length=100, blank=True, null=True)
     is_confirmed = models.BooleanField(default=False, blank=True)
     cash = models.BooleanField(default=False, blank=True)
@@ -149,9 +147,6 @@ class Post(models.Model):
     toll = models.CharField(max_length=30, blank=True, null=True)
     fuel_surcharge = models.CharField(max_length=30, blank=True, null=True)
     driver = models.ForeignKey('Driver', on_delete=models.CASCADE, null=True, blank=True)
-    proxy_number = models.CharField(max_length=20, blank=True, null=True)
-    customer_proxy_number = models.CharField(max_length=20, blank=True, null=True)
-    proxy_session_sid = models.CharField(max_length=50, blank=True, null=True)
     meeting_point = models.CharField(max_length=100, blank=True, null=True)
     is_confirmed = models.BooleanField(default=False, blank=True)
     cash = models.BooleanField(default=False, blank=True)
@@ -184,6 +179,20 @@ class XrpPayment(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['-created'] 
+        ordering = ['-created']
 
+
+class PhoneMapping(models.Model):
+    from_number = models.CharField(max_length=20, db_index=True)
+    to_number = models.CharField(max_length=20)
+    created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def is_active(self):
+        if self.expires_at is None:
+            return True
+        return timezone.now() < self.expires_at
 

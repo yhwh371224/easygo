@@ -1,5 +1,6 @@
 import logging
 from datetime import date
+from django.conf import settings
 from django.core.cache import cache
 from blog.models import Post
 
@@ -50,7 +51,7 @@ def build_reminder_context(booking, pickup_time_12h, driver):
         'paid': booking.paid,
         'cash': booking.cash,
         'cruise': getattr(booking, 'cruise', None),
-        'proxy_number': booking.proxy_number,
+        'bird_number': settings.BIRD_NUMBER,
     }
 
 
