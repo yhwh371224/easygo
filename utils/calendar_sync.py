@@ -144,7 +144,8 @@ def build_event_data(instance):
 
 def build_driver_event_data(instance):
     """드라이버 캘린더용 event body 생성 (간결한 설명)"""
-    contact_display = instance.customer_proxy_number if instance.customer_proxy_number else instance.contact
+    from django.conf import settings
+    contact_display = settings.BIRD_NUMBER if getattr(settings, 'BIRD_NUMBER', None) else instance.contact
     common = _build_common(instance, contact_display=contact_display)
     if common is None:
         return None
