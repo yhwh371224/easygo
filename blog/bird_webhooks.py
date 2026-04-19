@@ -5,7 +5,7 @@ from django.conf import settings
 from django.http import JsonResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_GET, require_POST
 
 from blog.models import PhoneMapping
 from blog.bird_proxy import send_bird_sms
@@ -33,13 +33,10 @@ def sms_webhook(request):
         return JsonResponse({'error': 'invalid json'}, status=400)
 
     try:
-        sender_contacts = data.get('sender', {}).get('contacts', [])
-        from_number = sender_contacts[0].get('identifierValue') if sender_contacts else None
-        message_text = (
-            data.get('body', {}).get('text', {}).get('text', '')
-            or data.get('message', {}).get('text', '')
-        )
-    except (IndexError, AttributeError, KeyError) as e:
+        msg = data.get('payload', {})
+        from_number = msg.get('sender', {}).get('contact', {}).get('identifierValue')
+        message_text = msg.get('body', {}).get('text', {}).get('text', '')
+    except (AttributeError, KeyError) as e:
         logger.error('[Bird SMS] Payload parse error: %s', e)
         return JsonResponse({'error': 'payload parse error'}, status=400)
 
@@ -63,37 +60,33 @@ def sms_webhook(request):
 
 
 @csrf_exempt
-@require_POST
+@require_GET
 def voice_webhook(request):
-    """Bird 인바운드 전화 수신 → 매핑된 상대방에게 연결."""
-    try:
-        data = json.loads(request.body)
-    except (json.JSONDecodeError, ValueError):
-        data = {}
+    """Bird 인바운드 전화 수신 → 매핑된 상대방에게 연결.
 
-    from_number = (
-        data.get('from')
-        or data.get('caller')
-        or data.get('source', {}).get('number')
-    )
+    Bird sends GET with query params: source (caller), destination (called number).
+    Must respond with a call flow JSON: {"steps": [...]}
+    """
+    from_number = request.GET.get('source') or request.GET.get('from')
 
     if not from_number:
-        logger.warning('[Bird Voice] No from_number in payload')
-        ncco = [{'action': 'talk', 'text': 'We could not connect your call. Please try again.'}]
-        return JsonResponse(ncco, safe=False)
+        logger.warning('[Bird Voice] No from_number in query params: %s', dict(request.GET))
+        flow = {'steps': [{'action': 'say', 'options': {'payload': 'We could not connect your call. Please try again.'}}]}
+        return JsonResponse(flow)
 
     mapping = _get_active_mapping(from_number)
     if not mapping:
         logger.info('[Bird Voice] No active mapping for %s', from_number)
-        ncco = [{'action': 'talk', 'text': 'No active connection found for this number.'}]
-        return JsonResponse(ncco, safe=False)
+        flow = {'steps': [{'action': 'say', 'options': {'payload': 'No active connection found for this number.'}}]}
+        return JsonResponse(flow)
 
     logger.info('[Bird Voice] Connecting %s → %s', from_number, mapping.to_number)
-    ncco = [
-        {
-            'action': 'connect',
-            'from': settings.BIRD_NUMBER,
-            'endpoint': [{'type': 'phone', 'number': mapping.to_number}],
-        }
-    ]
-    return JsonResponse(ncco, safe=False)
+    flow = {
+        'steps': [
+            {
+                'action': 'transfer',
+                'options': {'destination': mapping.to_number},
+            }
+        ]
+    }
+    return JsonResponse(flow)

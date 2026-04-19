@@ -32,7 +32,7 @@ def send_bird_sms(to_number, body):
     """Bird SMS API로 메시지 발송."""
     url = f'{BIRD_API_BASE}/workspaces/{settings.BIRD_WORKSPACE_ID}/channels/{settings.BIRD_CHANNEL_ID}/messages'
     payload = {
-        'receiver': {'contacts': [{'identifierValue': to_number}]},
+        'receiver': {'contacts': [{'identifierKey': 'phonenumber', 'identifierValue': to_number}]},
         'body': {'type': 'text', 'text': {'text': body}},
     }
     resp = requests.post(url, json=payload, headers=_bird_headers(), timeout=10)
