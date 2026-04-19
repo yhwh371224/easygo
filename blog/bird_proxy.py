@@ -67,12 +67,13 @@ def create_bird_mapping(instance):
     except Exception:
         expires_at = timezone.now() + timedelta(hours=24)
 
-    PhoneMapping.objects.filter(from_number__in=[customer_phone, driver_phone]).delete()
+    # 손님번호 → 드라이버번호 단방향만 관리 (이전 매핑 교체)
+    # 드라이버 → 손님 연결은 bird_webhooks._get_driver_target() 에서 Post 모델 직접 조회
+    PhoneMapping.objects.filter(from_number=customer_phone).delete()
 
     PhoneMapping.objects.create(from_number=customer_phone, to_number=driver_phone, expires_at=expires_at)
-    PhoneMapping.objects.create(from_number=driver_phone, to_number=customer_phone, expires_at=expires_at)
 
-    logger.info('[Bird] Post %s: mapping created. customer=%s driver=%s', instance.id, customer_phone, driver_phone)
+    logger.info('[Bird] Post %s: mapping created. customer=%s → driver=%s', instance.id, customer_phone, driver_phone)
     return True
 
 
