@@ -16,6 +16,7 @@ from django.core.management.base import BaseCommand
 from django.db.models import Q
 from blog.models import Post
 from blog.twilio_proxy import create_proxy_session
+from utils.calendar_sync import sync_to_calendar
 
 logger = logging.getLogger(__name__)
 
@@ -43,11 +44,11 @@ class Command(BaseCommand):
 
         self.stdout.write(f"[create_proxy_sessions] Target date: {target_date}")
 
-        # proxy_session_sid가 없거나 빈 값인 도착 트립만 대상 (취소 제외)
+        # proxy_session_sid가 없거나 빈 값인 트립 대상 (취소 제외, 드라이버 미배정 제외)
         bookings = Post.objects.filter(
             pickup_date=target_date,
-            direction__icontains='Pickup from',
             cancelled=False,
+            driver__isnull=False,
         ).filter(
             Q(proxy_session_sid='') | Q(proxy_session_sid__isnull=True)
         ).select_related('driver')
@@ -63,6 +64,10 @@ class Command(BaseCommand):
             if ok:
                 success += 1
                 self.stdout.write(f"  OK   Post {booking.id} | {booking.name} | {booking.pickup_time}")
+                # .update()는 시그널을 bypass하므로 드라이버 캘린더에 프록시 번호를 반영하기 위해 직접 동기화
+                booking.refresh_from_db()
+                if booking.driver and getattr(booking.driver, 'google_calendar_id', None):
+                    sync_to_calendar(booking, calendar_id=booking.driver.google_calendar_id, is_driver=True)
             else:
                 fail += 1
                 self.stdout.write(f"  FAIL Post {booking.id} | {booking.name} | {booking.pickup_time}")
