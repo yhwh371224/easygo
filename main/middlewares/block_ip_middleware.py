@@ -56,6 +56,8 @@ class BlockIPEmailMiddleware:
         return x_forwarded_for.split(",")[0].strip() if x_forwarded_for else request.META.get("REMOTE_ADDR")
 
     def get_email_from_request(self, request):
+        if request.path.startswith('/webhook/bird/'):
+            return None
         if request.method == "POST":
             if request.content_type == "application/json":
                 import json
