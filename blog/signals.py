@@ -136,6 +136,28 @@ def check_missing_info(sender, instance, created, **kwargs):
         transaction.on_commit(lambda: check_and_send_missing_info_email_task.delay(pk))
 
 
+# driver가 None이거나 use_proxy가 False이면 매핑 해제,
+# driver가 있고 use_proxy가 True이면 매핑 재생성
+@receiver(post_save, sender=Post, dispatch_uid="close_bird_mapping_on_no_driver_once")
+def close_bird_mapping_on_no_driver(sender, instance, **kwargs):
+    from blog.bird_proxy import close_bird_mapping, create_bird_mapping
+
+    if instance.driver is None or not instance.use_proxy:
+        ok = close_bird_mapping(instance)
+        if ok:
+            logger.info('Bird mapping closed for Post %s (driver=%s, use_proxy=%s)',
+                        instance.pk, instance.driver, instance.use_proxy)
+        else:
+            logger.warning('Bird mapping close failed for Post %s', instance.pk)
+    else:
+        close_bird_mapping(instance)
+        ok = create_bird_mapping(instance)
+        if ok:
+            logger.info('Bird mapping recreated for Post %s (driver=%s)', instance.pk, instance.driver)
+        else:
+            logger.warning('Bird mapping recreate failed for Post %s', instance.pk)
+
+
 # sender를 문자열로 지정: "앱이름.모델이름"
 @receiver(post_save, sender='articles.Post')
 def update_sitemap_from_blog(sender, instance, created, **kwargs):

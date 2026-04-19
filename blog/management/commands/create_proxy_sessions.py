@@ -47,6 +47,7 @@ class Command(BaseCommand):
             pickup_date=target_date,
             cancelled=False,
             driver__isnull=False,
+            use_proxy=True,
         ).select_related('driver')
 
         if not bookings.exists():
