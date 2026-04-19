@@ -160,6 +160,7 @@ class Post(models.Model):
     pending = models.BooleanField(default=False, blank=True)
     calendar_event_id = models.CharField(max_length=255, blank=True, null=True)
     driver_calendar_event_id = models.CharField(max_length=255, blank=True, null=True)
+    use_proxy = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
 
     @property

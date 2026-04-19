@@ -51,7 +51,7 @@ def build_reminder_context(booking, pickup_time_12h, driver):
         'paid': booking.paid,
         'cash': booking.cash,
         'cruise': getattr(booking, 'cruise', None),
-        'bird_number': settings.BIRD_NUMBER,
+        'bird_number': settings.BIRD_NUMBER if booking.use_proxy else None,
     }
 
 
