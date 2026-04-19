@@ -10,9 +10,10 @@ Cron example (매일 자정):
 """
 
 import logging
-from datetime import date
+from datetime import date, datetime, timedelta
 
 from django.core.management.base import BaseCommand
+from django.utils import timezone
 from blog.models import Post
 from blog.twilio_proxy import close_proxy_session
 
@@ -38,7 +39,7 @@ class Command(BaseCommand):
                 self.stderr.write(f"Invalid date format: {options['date']}. Use YYYY-MM-DD.")
                 return
         else:
-            target_date = date.today()
+            target_date = timezone.localdate()
 
         self.stdout.write(f"[close_proxy_sessions] Target date: {target_date}")
 
@@ -55,9 +56,26 @@ class Command(BaseCommand):
             self.stdout.write("No active proxy sessions found for this date.")
             return
 
+        now = timezone.localtime()
         success = 0
         fail = 0
+        skipped = 0
         for booking in bookings:
+            try:
+                pickup_naive = datetime.strptime(booking.pickup_time, '%H:%M').replace(
+                    year=target_date.year, month=target_date.month, day=target_date.day
+                )
+                pickup_dt = timezone.make_aware(pickup_naive)
+            except (ValueError, TypeError):
+                logger.warning(
+                    "Post %s: pickup_time 파싱 실패 (%r) — 스킵", booking.id, booking.pickup_time
+                )
+                skipped += 1
+                continue
+
+            if pickup_dt + timedelta(hours=1) > now:
+                continue
+
             ok = close_proxy_session(booking)
             if ok:
                 success += 1
@@ -66,4 +84,4 @@ class Command(BaseCommand):
                 fail += 1
                 self.stdout.write(f"  FAIL Post {booking.id} | {booking.name} | {booking.pickup_time}")
 
-        self.stdout.write(f"\nDone. Success: {success}, Failed: {fail}")
+        self.stdout.write(f"\nDone. Success: {success}, Failed: {fail}, Skipped (parse error): {skipped}")
