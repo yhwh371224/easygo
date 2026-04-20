@@ -121,14 +121,20 @@ def voice_webhook(request):
         logger.error('[Bird Voice] Invalid JSON payload')
         return JsonResponse({'error': 'invalid json'}, status=400)
 
-    call_id = data.get('callId')
-    from_number = data.get('from')
+    event_payload = data.get('payload', {})
+    call_id = event_payload.get('id')
+    from_number = event_payload.get('from')
+    status = event_payload.get('status')
 
     if not call_id or not from_number:
         logger.warning('[Bird Voice] Missing callId or from: %s', data)
         return JsonResponse({'error': 'missing callId or from'}, status=400)
 
-    logger.debug('[Bird Voice] Incoming call: from=%s callId=%s', from_number, call_id)
+    logger.debug('[Bird Voice] Incoming call: from=%s callId=%s status=%s', from_number, call_id, status)
+
+    if status != 'starting':
+        logger.debug('[Bird Voice] Ignoring status=%s for callId=%s', status, call_id)
+        return JsonResponse({'status': 'ignored'})
 
     mapping = _get_active_mapping(from_number)
     if mapping:
