@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.admin import AdminSite
-from .models import Driver, Inquiry, PaypalPayment, StripePayment, Post, XrpPayment
+from .models import Driver, Inquiry, PaypalPayment, PhoneMapping, StripePayment, Post, XrpPayment
 
 
 class DriverAdmin(admin.ModelAdmin):
@@ -37,6 +37,13 @@ class XrpPaymentAdmin(admin.ModelAdmin):
     search_fields = ['email', 'aud_amount', 'xrp_amount', 'dest_tag']
 
 
+class PhoneMappingAdmin(admin.ModelAdmin):
+    list_display = ['from_number', 'to_number', 'post', 'created_at']
+    search_fields = ['from_number', 'to_number']
+    readonly_fields = ['created_at']
+    ordering = ['-created_at']
+
+
 class MyAdminSite(AdminSite):
     site_header = 'EasyGo administration'
 
@@ -47,6 +54,7 @@ admin_site.register(PaypalPayment, PaypalPaymentAdmin)
 admin_site.register(StripePayment, StripePaymentAdmin)
 admin_site.register(Post, PostAdmin)
 admin_site.register(XrpPayment, XrpPaymentAdmin)
+admin_site.register(PhoneMapping, PhoneMappingAdmin)
 
 admin.site.register(Driver, DriverAdmin)
 admin.site.register(Inquiry, InquiryAdmin)
@@ -54,3 +62,4 @@ admin.site.register(PaypalPayment, PaypalPaymentAdmin)
 admin.site.register(StripePayment, StripePaymentAdmin)
 admin.site.register(Post, PostAdmin)
 admin.site.register(XrpPayment, XrpPaymentAdmin)
+admin.site.register(PhoneMapping, PhoneMappingAdmin) 
