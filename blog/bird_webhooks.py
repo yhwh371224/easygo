@@ -2,11 +2,12 @@ import json
 import logging
 from datetime import datetime, timedelta
 
+import requests
 from django.conf import settings
 from django.http import JsonResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_GET, require_POST
+from django.views.decorators.http import require_POST
 
 from blog.models import PhoneMapping
 from blog.bird_proxy import send_bird_sms, _format_e164
@@ -110,46 +111,61 @@ def sms_webhook(request):
     return JsonResponse({'status': 'ok'})
 
 
-def _say_step(text):
-    """레거시 Bird Call Flows say 액션."""
-    return {'action': 'say', 'options': {'payload': text, 'voice': 'male', 'language': 'en-AU'}}
-
-
 @csrf_exempt
-@require_GET
+@require_POST
 def voice_webhook(request):
-    """Bird 인바운드 전화 수신 → 매핑된 상대방에게 연결.
+    """Bird voice.inbound 웹훅 → Bridge API로 발신자별 번호 포워딩."""
+    try:
+        data = json.loads(request.body)
+    except (json.JSONDecodeError, ValueError):
+        logger.error('[Bird Voice] Invalid JSON payload')
+        return JsonResponse({'error': 'invalid json'}, status=400)
 
-    레거시 MessageBird/Bird Call Flows 방식:
-    - Bird가 GET 요청으로 웹훅 호출 (query params: source=발신자, destination=착신번호)
-    - 응답 JSON {"steps": [...]} 으로 콜 플로우 제어
-    - 웹훅 URL은 Bird 대시보드 Phone Number 설정에서 등록 (SMS 웹훅 구독과 다름)
+    call_id = data.get('callId')
+    from_number = data.get('from')
 
-    신규 Bird API는 Flows + REST API 방식으로 변경됐으나
-    레거시 방식이 여전히 동작하는 동안 이 방식을 유지.
-    """
-    from_number = request.GET.get('source') or request.GET.get('from')
-    destination = request.GET.get('destination') or request.GET.get('to')
-    logger.debug('[Bird Voice] Incoming call: source=%s destination=%s params=%s',
-                 from_number, destination, dict(request.GET))
+    if not call_id or not from_number:
+        logger.warning('[Bird Voice] Missing callId or from: %s', data)
+        return JsonResponse({'error': 'missing callId or from'}, status=400)
 
-    if not from_number:
-        logger.warning('[Bird Voice] No from_number in query params: %s', dict(request.GET))
-        return JsonResponse({'steps': [_say_step('We could not connect your call. Please try again.')]})
+    logger.debug('[Bird Voice] Incoming call: from=%s callId=%s', from_number, call_id)
 
     mapping = _get_active_mapping(from_number)
     if mapping:
-        to_number = mapping.to_number
+        destination = mapping.to_number
     else:
-        to_number = _get_driver_target(from_number)
+        destination = _get_driver_target(from_number)
 
-    if not to_number:
+    if not destination:
         logger.info('[Bird Voice] No active mapping or driver trip for %s', from_number)
-        return JsonResponse({'steps': [_say_step('No active connection found for this number.')]})
+        return JsonResponse({'status': 'no mapping'})
 
-    logger.info('[Bird Voice] Connecting %s → %s', from_number, to_number)
-    return JsonResponse({
-        'steps': [
-            {'action': 'transfer', 'options': {'destination': to_number}},
-        ]
-    })
+    workspace_id = settings.BIRD_WORKSPACE_ID
+    channel_id = settings.BIRD_CHANNEL_ID
+    api_key = settings.BIRD_API_KEY
+    bird_number = settings.BIRD_NUMBER
+
+    url = (
+        f'https://api.bird.com/workspaces/{workspace_id}'
+        f'/channels/{channel_id}/calls/{call_id}/bridge'
+    )
+    payload = {
+        'to': destination,
+        'from': bird_number,
+        'ringTimeout': 30,
+        'hangupAfterBridge': True,
+    }
+    headers = {
+        'Authorization': f'AccessKey {api_key}',
+        'Content-Type': 'application/json',
+    }
+
+    try:
+        resp = requests.post(url, json=payload, headers=headers, timeout=10)
+        resp.raise_for_status()
+        logger.info('[Bird Voice] Bridged %s → %s (callId=%s)', from_number, destination, call_id)
+    except requests.RequestException as e:
+        logger.error('[Bird Voice] Bridge API failed: %s', e)
+        return JsonResponse({'error': 'bridge failed'}, status=500)
+
+    return JsonResponse({'status': 'ok'})
