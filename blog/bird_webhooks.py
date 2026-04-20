@@ -141,7 +141,7 @@ def voice_webhook(request):
         return JsonResponse({'status': 'no mapping'})
 
     workspace_id = settings.BIRD_WORKSPACE_ID
-    channel_id = settings.BIRD_CHANNEL_ID
+    channel_id = settings.BIRD_VOICE_CHANNEL_ID
     api_key = settings.BIRD_API_KEY
     bird_number = settings.BIRD_NUMBER
 
