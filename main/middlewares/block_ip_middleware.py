@@ -59,14 +59,16 @@ class BlockIPEmailMiddleware:
         if request.path.startswith('/webhook/bird/'):
             return None
         if request.method == "POST":
-            if request.content_type == "application/json":
-                import json
-                try:
-                    data = json.loads(request.body)
-                    return data.get("email")
-                except Exception:
-                    return None
-            else:
+            try:
+                if request.content_type == "application/json":
+                    import json
+                    try:
+                        data = json.loads(request.body)
+                        return data.get("email")
+                    except Exception:
+                        return None
                 return request.POST.get("email")
+            except Exception:
+                return None
         return None
 
