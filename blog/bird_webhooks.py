@@ -170,6 +170,12 @@ def voice_webhook(request):
         resp = requests.post(url, json=payload, headers=headers, timeout=10)
         resp.raise_for_status()
         logger.info('[Bird Voice] Bridged %s → %s (callId=%s)', from_number, destination, call_id)
+    except requests.exceptions.HTTPError as e:
+        if resp.status_code == 400:
+            logger.warning('[Bird Voice] Bridge 400 (call already ended) callId=%s: %s', call_id, e)
+            return JsonResponse({'status': 'ok'})
+        logger.error('[Bird Voice] Bridge API failed: %s', e)
+        return JsonResponse({'error': 'bridge failed'}, status=500)
     except requests.RequestException as e:
         logger.error('[Bird Voice] Bridge API failed: %s', e)
         return JsonResponse({'error': 'bridge failed'}, status=500)
