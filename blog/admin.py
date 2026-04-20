@@ -38,7 +38,7 @@ class XrpPaymentAdmin(admin.ModelAdmin):
 
 
 class PhoneMappingAdmin(admin.ModelAdmin):
-    list_display = ['from_number', 'to_number', 'post', 'created_at']
+    list_display = ['from_number', 'to_number', 'created_at']
     search_fields = ['from_number', 'to_number']
     readonly_fields = ['created_at']
     ordering = ['-created_at']
