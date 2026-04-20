@@ -91,5 +91,7 @@ def close_bird_mapping(instance):
         return True
 
     deleted, _ = PhoneMapping.objects.filter(from_number__in=numbers).delete()
+    instance.use_proxy = False
+    instance.save(update_fields=['use_proxy'])
     logger.info('[Bird] Post %s: %d mappings deleted.', instance.id, deleted)
     return True

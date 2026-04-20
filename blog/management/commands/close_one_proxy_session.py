@@ -79,4 +79,6 @@ class Command(BaseCommand):
             return
 
         deleted, _ = PhoneMapping.objects.filter(from_number__in=numbers).delete()
-        self.stdout.write(f'Done. {deleted} mapping(s) deleted.')
+        booking.use_proxy = False
+        booking.save(update_fields=['use_proxy'])
+        self.stdout.write(f'Done. {deleted} mapping(s) deleted. use_proxy=False 설정됨.')

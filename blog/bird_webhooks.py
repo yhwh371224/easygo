@@ -42,6 +42,7 @@ def _get_driver_target(driver_phone):
             driver__driver_contact=driver_phone,
             pickup_date=today,
             cancelled=False,
+            use_proxy=True,
         )
         .exclude(contact__isnull=True)
         .exclude(contact='')
