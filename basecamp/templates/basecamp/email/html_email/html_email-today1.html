@@ -174,14 +174,19 @@
 													
 													<strong>=== Driver's details ===</strong><br>
 													• Name: {{ driver_name }}<br>
-													• Phone: {% if bird_number %}{{ bird_number }}{% else %}{{ driver_contact }}{% endif %}<br>
+													• Phone:
+													{% if bird_number %}
+														<a href="tel:{{ bird_number }}">{{ bird_number }}</a>
+													{% else %}
+														<a href="tel:{{ driver_contact }}">{{ driver_contact }}</a>
+													{% endif %}<br>
 													• Vehicle: {{ driver_car }}<br>
 													{% if driver_plate %}
-													• Vehicle plate: {{ driver_plate }}<br>	
-													{% endif %}	
+													• Vehicle plate: {{ driver_plate }}<br>
+													{% endif %}
 													<small>
 													Please note that our driver may contact you via text or phone at {{ contact }}.
-													</small><br><br>												
+													</small><br><br>									
 
 													{% if meeting_point  %}
 														<strong>=== The meeting point ===</strong><br>
@@ -252,12 +257,18 @@
 													
 													<strong>=== Driver's details ===</strong><br>
 													• Name: {{ driver_name }}<br>
-													• Phone: {% if bird_number %}{{ bird_number }}{% else %}{{ driver_contact }}{% endif %}<br>
+													• Phone:
+													{% if bird_number %}
+														<a href="tel:{{ bird_number }}">{{ bird_number }}</a>
+													{% else %}
+														<a href="tel:{{ driver_contact }}">{{ driver_contact }}</a>
+													{% endif %}<br>
+													• Vehicle: {{ driver_car }}<br>
 													{% if driver_plate %}
 													• Vehicle plate: {{ driver_plate }}<br>
 													{% endif %}
 													<small>
-													Please note that our driver may contact you via text or phone at {{ contact }}. 
+													Please note that our driver may contact you via text or phone at {{ contact }}.
 													</small><br><br>											
 
 													{% if meeting_point %}
@@ -281,10 +292,10 @@
 															• <a href="https://easygo.s3.ap-southeast-2.amazonaws.com/Express_pickup.webp">Domestic Terminal Map</a><br><br>
 															* If any passengers have difficulty walking or are elderly, please meet the driver at the <strong>Accessible Pickup area</strong> next to the public bus stop<br>
 														{% elif meeting_point == "Lux" %}
-															• Premium Meet & Greet Service (Luxury Vehicle)<br><br>
+															• Meet & Greet Service<br><br>
 															• Your driver will be waiting inside the Arrival Hall holding a name sign<br><br>
 															• After meeting you, the driver will escort you to your vehicle<br><br>
-															• Meeting point is just outside the Arrival Hall exits (A or B)<br>															
+															• The meeting point is at the baggage claim area<br>															
 														{% else %}
 															• {{ meeting_point }}<br><br>
 															• After exiting the arrivals hall, please follow the signs for “{{ meeting_point }}”<br><br>
