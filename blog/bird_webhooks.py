@@ -34,7 +34,7 @@ def _get_driver_target(driver_phone):
     from blog.models import Post
 
     now = timezone.now()
-    today = now.date()
+    today = timezone.localdate()
 
     posts = (
         Post.objects
