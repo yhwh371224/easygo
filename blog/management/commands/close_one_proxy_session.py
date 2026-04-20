@@ -78,7 +78,7 @@ class Command(BaseCommand):
             self.stderr.write('No valid phone numbers found — nothing to delete.')
             return
 
+        from blog.models import Post as PostModel
         deleted, _ = PhoneMapping.objects.filter(from_number__in=numbers).delete()
-        booking.use_proxy = False
-        booking.save(update_fields=['use_proxy'])
+        PostModel.objects.filter(pk=booking.pk).update(use_proxy=False)
         self.stdout.write(f'Done. {deleted} mapping(s) deleted. use_proxy=False 설정됨.')

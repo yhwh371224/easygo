@@ -13,6 +13,7 @@ import logging
 from datetime import date, timedelta
 
 from django.core.management.base import BaseCommand
+from django.utils import timezone
 from blog.models import Post
 from blog.bird_proxy import create_bird_mapping
 from utils.calendar_sync import sync_to_calendar
@@ -39,7 +40,7 @@ class Command(BaseCommand):
                 self.stderr.write(f"Invalid date format: {options['date']}. Use YYYY-MM-DD.")
                 return
         else:
-            target_date = date.today() + timedelta(days=1)
+            target_date = timezone.localdate() + timedelta(days=1)
 
         self.stdout.write(f'[create_proxy_sessions] Target date: {target_date}')
 

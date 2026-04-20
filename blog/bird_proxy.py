@@ -13,7 +13,7 @@ BIRD_API_BASE = 'https://api.bird.com'
 def _format_e164(phone):
     if not phone:
         return None
-    phone = phone.strip()
+    phone = phone.strip().replace(' ', '').replace('-', '')
     if phone.startswith('+'):
         return phone
     if phone.startswith('0'):
@@ -42,7 +42,7 @@ def send_bird_sms(to_number, body):
 
 def create_bird_mapping(instance):
     """트립 생성 시 고객↔드라이버 양방향 PhoneMapping 저장."""
-    from blog.models import PhoneMapping
+    from blog.models import PhoneMapping, Post
 
     driver = instance.driver
     if not driver or not driver.driver_contact:
@@ -72,6 +72,7 @@ def create_bird_mapping(instance):
     PhoneMapping.objects.filter(from_number=customer_phone).delete()
 
     PhoneMapping.objects.create(from_number=customer_phone, to_number=driver_phone, expires_at=expires_at)
+    Post.objects.filter(pk=instance.pk).update(use_proxy=True)
 
     logger.info('[Bird] Post %s: mapping created. customer=%s → driver=%s', instance.id, customer_phone, driver_phone)
     return True
@@ -79,7 +80,7 @@ def create_bird_mapping(instance):
 
 def close_bird_mapping(instance):
     """트립 종료 시 PhoneMapping 삭제."""
-    from blog.models import PhoneMapping
+    from blog.models import PhoneMapping, Post
 
     driver = instance.driver
     customer_phone = _format_e164(getattr(instance, 'contact', None))
@@ -91,7 +92,6 @@ def close_bird_mapping(instance):
         return True
 
     deleted, _ = PhoneMapping.objects.filter(from_number__in=numbers).delete()
-    instance.use_proxy = False
-    instance.save(update_fields=['use_proxy'])
+    Post.objects.filter(pk=instance.pk).update(use_proxy=False)
     logger.info('[Bird] Post %s: %d mappings deleted.', instance.id, deleted)
     return True
