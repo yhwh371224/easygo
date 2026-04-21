@@ -1,19 +1,9 @@
-"""
-Close Bird phone mappings for today's airport arrivals (default).
-
-Usage:
-    python manage.py close_proxy_sessions                # 오늘 날짜
-    python manage.py close_proxy_sessions --date 2025-06-01
-
-Cron example (매일 자정):
-    0 0 * * * /path/to/venv/bin/python /path/to/manage.py close_proxy_sessions
-"""
-
 import logging
 from datetime import date
 
 from django.core.management.base import BaseCommand
 from django.utils import timezone
+
 from blog.models import Post
 from blog.bird_proxy import close_bird_mapping
 
@@ -28,43 +18,82 @@ class Command(BaseCommand):
             '--date',
             type=str,
             default=None,
-            help='Target pickup date in YYYY-MM-DD format (default: today)',
+            help='YYYY-MM-DD (default: today)',
         )
 
     def handle(self, *args, **options):
+
+        # =========================
+        # DATE RESOLVE
+        # =========================
         if options['date']:
             try:
                 target_date = date.fromisoformat(options['date'])
             except ValueError:
-                self.stderr.write(f"Invalid date format: {options['date']}. Use YYYY-MM-DD.")
+                self.stderr.write(f"Invalid date format: {options['date']}")
                 return
         else:
             target_date = timezone.localdate()
 
-        self.stdout.write(f'[close_proxy_sessions] Target date: {target_date}')
+        logger.info('[close_proxy_sessions] Start date=%s', target_date)
 
-        bookings = list(
-            Post.objects.filter(
-                pickup_date=target_date,
-                cancelled=False,
-                use_proxy=True,
-                driver__isnull=False,
-            ).select_related('driver')
-        )
+        # =========================
+        # QUERY
+        # =========================
+        bookings = list(Post.objects.filter(
+            pickup_date=target_date,
+            cancelled=False,
+            use_proxy=True,
+            driver__isnull=False,
+        ).select_related('driver'))
 
         if not bookings:
-            self.stdout.write('No bookings found for this date.')
+            logger.info('[close_proxy_sessions] No bookings found')
             return
 
         success = 0
         fail = 0
-        for booking in bookings:
-            ok = close_bird_mapping(booking)
-            if ok:
-                success += 1
-                self.stdout.write(f'  OK  Post {booking.id} | {booking.name} | {booking.pickup_time}')
-            else:
-                fail += 1
-                self.stdout.write(f'  FAIL Post {booking.id} | {booking.name} | {booking.pickup_time}')
 
-        self.stdout.write(f'\nDone. Success: {success}, Failed: {fail}')
+        # =========================
+        # PROCESS
+        # =========================
+        for booking in bookings:
+            try:
+                ok = close_bird_mapping(booking)
+
+                if ok:
+                    success += 1
+                    logger.info(
+                        '[CLOSE OK] Post=%s name=%s time=%s',
+                        booking.id,
+                        booking.name,
+                        booking.pickup_time,
+                    )
+                else:
+                    fail += 1
+                    logger.warning(
+                        '[CLOSE FAIL] Post=%s name=%s',
+                        booking.id,
+                        booking.name,
+                    )
+
+            except Exception as e:
+                fail += 1
+                logger.error(
+                    '[CLOSE ERROR] Post=%s error=%s',
+                    booking.id,
+                    str(e),
+                )
+
+        # =========================
+        # SUMMARY
+        # =========================
+        logger.info(
+            '[close_proxy_sessions DONE] success=%s fail=%s',
+            success,
+            fail,
+        )
+
+        self.stdout.write(
+            f'Done. Success: {success}, Failed: {fail}'
+        )

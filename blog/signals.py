@@ -99,13 +99,15 @@ def async_notify_user_payment_stripe(sender, instance, created, **kwargs):
         transaction.on_commit(lambda: notify_user_payment_stripe.delay(pk))
 
 
-# 드라이버 변경 시 driver_calendar_event_id 초기화
+# 드라이버 변경 시 driver_calendar_event_id 초기화 + proxy 비교용 이전 값 보존
 @receiver(pre_save, sender=Post, dispatch_uid="reset_driver_calendar_event_id_once")
 def reset_driver_calendar_event_id(sender, instance, **kwargs):
     if not instance.pk:
         return
     try:
         old = Post.objects.get(pk=instance.pk)
+        instance._pre_save_driver_id = old.driver_id
+        instance._pre_save_use_proxy = old.use_proxy
         if old.driver != instance.driver:
             if (
                 old.driver_calendar_event_id
@@ -139,13 +141,24 @@ def check_missing_info(sender, instance, created, **kwargs):
 # driver가 None이거나 use_proxy가 False이면 매핑 해제,
 # driver가 있고 use_proxy가 True이면 매핑 재생성
 @receiver(post_save, sender=Post, dispatch_uid="close_bird_mapping_on_no_driver_once")
-def close_bird_mapping_on_no_driver(sender, instance, **kwargs):
+def close_bird_mapping_on_no_driver(sender, instance, created, **kwargs):
     from blog.bird_proxy import close_bird_mapping, create_bird_mapping
+
+    if created:
+        if instance.use_proxy and instance.driver:
+            create_bird_mapping(instance)
+        return
 
     update_fields = kwargs.get('update_fields')
     if update_fields is not None:
         proxy_fields = {'use_proxy', 'driver', 'driver_id'}
         if not proxy_fields.intersection(update_fields):
+            return
+    elif hasattr(instance, '_pre_save_use_proxy'):
+        # full save() — 실제로 proxy 관련 필드가 변경된 경우에만 실행
+        driver_changed = instance._pre_save_driver_id != instance.driver_id
+        use_proxy_changed = instance._pre_save_use_proxy != instance.use_proxy
+        if not driver_changed and not use_proxy_changed:
             return
 
     if instance.driver is None or not instance.use_proxy:
@@ -156,12 +169,10 @@ def close_bird_mapping_on_no_driver(sender, instance, **kwargs):
         else:
             logger.warning('Bird mapping close failed for Post %s', instance.pk)
     else:
-        close_bird_mapping(instance)
+        closed = close_bird_mapping(instance)
+        if not closed:
+            logger.warning('Bird mapping close failed before recreate for Post %s', instance.pk)
         ok = create_bird_mapping(instance)
-        if ok:
-            logger.info('Bird mapping recreated for Post %s (driver=%s)', instance.pk, instance.driver)
-        else:
-            logger.warning('Bird mapping recreate failed for Post %s', instance.pk)
 
 
 # sender를 문자열로 지정: "앱이름.모델이름"

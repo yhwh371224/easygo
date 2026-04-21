@@ -1,19 +1,9 @@
-"""
-Create Bird phone mappings for tomorrow's airport arrivals (default).
-
-Usage:
-    python manage.py create_proxy_sessions               # 내일 날짜
-    python manage.py create_proxy_sessions --date 2025-06-01
-
-Cron example (매일 저녁 19:00 — 서버 시간대 확인 후 조정):
-    0 19 * * * /path/to/venv/bin/python /path/to/manage.py create_proxy_sessions
-"""
-
 import logging
 from datetime import date, timedelta
 
 from django.core.management.base import BaseCommand
 from django.utils import timezone
+
 from blog.models import Post
 from blog.bird_proxy import create_bird_mapping
 from utils.calendar_sync import sync_to_calendar
@@ -22,50 +12,108 @@ logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
-    help = 'Create Bird phone mappings for airport arrivals on a given date (default: tomorrow)'
+    help = 'Create Bird phone mappings for use_proxy=True bookings (default: tomorrow)'
 
     def add_arguments(self, parser):
         parser.add_argument(
             '--date',
             type=str,
             default=None,
-            help='Target pickup date in YYYY-MM-DD format (default: tomorrow)',
+            help='YYYY-MM-DD (default: tomorrow)',
         )
 
     def handle(self, *args, **options):
+
+        # =========================
+        # DATE RESOLVE
+        # =========================
         if options['date']:
             try:
                 target_date = date.fromisoformat(options['date'])
             except ValueError:
-                self.stderr.write(f"Invalid date format: {options['date']}. Use YYYY-MM-DD.")
+                self.stderr.write("Invalid date format")
                 return
         else:
             target_date = timezone.localdate() + timedelta(days=1)
 
-        self.stdout.write(f'[create_proxy_sessions] Target date: {target_date}')
+        logger.info('[create_proxy_sessions] Start date=%s', target_date)
 
-        bookings = Post.objects.filter(
-            pickup_date=target_date,
-            cancelled=False,
-            driver__isnull=False,
-            use_proxy=True,
-        ).select_related('driver')
+        # =========================
+        # QUERY
+        # =========================
+        bookings = list(
+            Post.objects.filter(
+                pickup_date=target_date,
+                cancelled=False,
+                driver__isnull=False,
+                use_proxy=True,
+            ).select_related('driver')
+        )
 
-        if not bookings.exists():
-            self.stdout.write('No eligible bookings found.')
+        if not bookings:
+            logger.info('No eligible bookings found.')
             return
 
         success = 0
         fail = 0
-        for booking in bookings:
-            ok = create_bird_mapping(booking)
-            if ok:
-                success += 1
-                self.stdout.write(f'  OK   Post {booking.id} | {booking.name} | {booking.pickup_time}')
-                if booking.driver and getattr(booking.driver, 'google_calendar_id', None):
-                    sync_to_calendar(booking, calendar_id=booking.driver.google_calendar_id, is_driver=True)
-            else:
-                fail += 1
-                self.stdout.write(f'  FAIL Post {booking.id} | {booking.name} | {booking.pickup_time}')
 
-        self.stdout.write(f'\nDone. Success: {success}, Failed: {fail}')
+        # =========================
+        # PROCESS
+        # =========================
+        for booking in bookings:
+
+            try:
+                ok = create_bird_mapping(booking)
+
+                if not ok:
+                    fail += 1
+                    logger.warning(
+                        '[CREATE FAIL] Post=%s name=%s reason=mapping_failed',
+                        booking.id,
+                        booking.name,
+                    )
+                    continue
+
+                success += 1
+                logger.info(
+                    '[CREATE OK] Post=%s name=%s time=%s',
+                    booking.id,
+                    booking.name,
+                    booking.pickup_time,
+                )
+
+                # =========================
+                # Calendar sync (NON-BLOCKING)
+                # =========================
+                try:
+                    if booking.driver.google_calendar_id:
+                        sync_to_calendar(
+                            booking,
+                            calendar_id=booking.driver.google_calendar_id,
+                            is_driver=True,
+                        )
+                except Exception as e:
+                    logger.warning(
+                        '[CALENDAR WARN] Post=%s error=%s',
+                        booking.id,
+                        str(e),
+                    )
+
+            except Exception as e:
+                fail += 1
+                logger.error(
+                    '[CREATE ERROR] Post=%s error=%s',
+                    booking.id,
+                    str(e),
+                )
+
+        # =========================
+        # SUMMARY
+        # =========================
+        logger.info(
+            '[create_proxy_sessions DONE] success=%s fail=%s',
+            success,
+            fail,
+        )
+
+        self.stdout.write(f'Done. Success: {success}, Failed: {fail}')

@@ -1,8 +1,9 @@
 import logging
-from datetime import date, timedelta
+from datetime import timedelta
 from itertools import zip_longest
 
 from django.core.management.base import BaseCommand
+from django.utils import timezone
 from blog.models import Post
 from utils import booking_helper
 from utils.booking_helper import assign_default_driver, build_reminder_context
@@ -45,7 +46,7 @@ class Command(BaseCommand):
             self.send_email(interval, template, subject)
 
     def send_email(self, date_offset, template_name, subject):
-        target_date = date.today() + timedelta(days=date_offset)
+        target_date = timezone.localdate() + timedelta(days=date_offset)
         booking_reminders = (
             Post.objects.filter(pickup_date=target_date)
             .exclude(cancelled=True)

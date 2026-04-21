@@ -1,90 +1,143 @@
-import os
 import logging
 import json
 
 from twilio.rest import Client
+from twilio.base.exceptions import TwilioRestException
 from decouple import config
 
-# Configure logging
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+import phonenumbers
+from phonenumbers import NumberParseException
 
+
+# =========================
+# Logging
+# =========================
 sms_logger = logging.getLogger('sms')
 
 
-# Initialize Twilio client once
-account_sid = config('TWILIO_ACCOUNT_SID')
-auth_token = config('TWILIO_AUTH_TOKEN')
-sms_from = config('TWILIO_SMS_FROM')
-whatsapp_from = config('TWILIO_WHATSAPP_FROM')
-client = Client(account_sid, auth_token)
+# =========================
+# Twilio Lazy Init
+# =========================
+_client = None
+
+def get_client():
+    global _client
+    if _client is None:
+        _client = Client(config('TWILIO_ACCOUNT_SID'), config('TWILIO_AUTH_TOKEN'))
+    return _client
 
 
-def format_phone_number(phone_number):
+# =========================
+# Phone Normalization (GLOBAL STANDARD)
+# =========================
+def normalize_phone(phone_number, default_region="AU"):
+    """
+    Convert any international/local number to E.164 format safely.
+    Returns None if invalid.
+    """
     if not phone_number:
         return None
-    phone_number = phone_number.strip()
-    if phone_number.startswith('+'):
-        return phone_number
-    elif phone_number.startswith('0'):
-        return '+61' + phone_number[1:]
-    else:
-        return '+' + phone_number
-    
 
-def format_whatsapp_number(phone_number):
-    if not phone_number:
-        return None
-
-    phone_number = phone_number.strip()
-
-    if phone_number.startswith('0'):
-        return '+61' + phone_number[1:]
-    elif phone_number.startswith('+'):
-        return phone_number
-    else:
-        return '+' + phone_number
-
-
-def send_sms_notice(phone_number, message_body):
-    """Send a regular SMS via Twilio."""
-    formatted_number = format_phone_number(phone_number)
-    if not formatted_number:
-        sms_logger.error(f"Cannot send message: invalid phone number {phone_number}")
-        return
     try:
-        message = client.messages.create(
+        parsed = phonenumbers.parse(phone_number, default_region)
+
+        if not phonenumbers.is_valid_number(parsed):
+            return None
+
+        return phonenumbers.format_number(
+            parsed,
+            phonenumbers.PhoneNumberFormat.E164
+        )
+
+    except NumberParseException:
+        return None
+
+
+# =========================
+# SMS (Twilio)
+# =========================
+def send_sms_notice(phone_number, message_body):
+    """
+    Send SMS via Twilio.
+    Returns message SID or None.
+    """
+    formatted_number = normalize_phone(phone_number)
+
+    if not formatted_number:
+        sms_logger.error(f"[SMS] Invalid phone number: {phone_number}")
+        return None
+
+    if not message_body:
+        sms_logger.error(f"[SMS] Empty message body for {formatted_number}")
+        return None
+
+    try:
+        message = get_client().messages.create(
             body=message_body,
-            from_=sms_from,
+            from_=config('TWILIO_SMS_FROM'),
             to=formatted_number
         )
-        sms_logger.info(f'SMS sent to {formatted_number}')
+
+        sms_logger.info(
+            f"[SMS SENT] to={formatted_number} sid={message.sid}"
+        )
+
+        return message.sid
+
+    except TwilioRestException as e:
+        sms_logger.error(
+            f"[SMS ERROR] Twilio error to={formatted_number} "
+            f"status={e.status} code={e.code} msg={e.msg}"
+        )
+        return None
+
     except Exception as e:
-        sms_logger.error(f'Failed to send SMS to {formatted_number}: {e}')
+        sms_logger.error(
+            f"[SMS ERROR] Unexpected error to={formatted_number} error={str(e)}"
+        )
+        return None
 
 
+# =========================
+# WhatsApp (Twilio)
+# =========================
 def send_whatsapp_template(phone_number, user_name=None):
-    """Send a WhatsApp message via Twilio approved template."""
-    formatted_number = format_whatsapp_number(phone_number)
+    """
+    Send WhatsApp template message via Twilio.
+    Returns message SID or None.
+    """
+    formatted_number = normalize_phone(phone_number)
+
     if not formatted_number:
-        sms_logger.error(f"Cannot send message: invalid phone number {phone_number}")
-        return
+        sms_logger.error(f"[WA] Invalid phone number: {phone_number}")
+        return None
 
     try:
-        message = client.messages.create(
-            from_=f'whatsapp:{whatsapp_from}',
+        message = get_client().messages.create(
+            from_=f'whatsapp:{config("TWILIO_WHATSAPP_FROM")}',
             to=f'whatsapp:{formatted_number}',
             content_sid="HX247229bb2bb4e0bcc4fb17ad94fb17a8",
             content_variables=json.dumps({
-                "1": user_name if user_name else "",
+                "1": user_name or "",
                 "2": "info@easygoshuttle.com.au"
             })
         )
 
-        sms_logger.info(f'✅ WhatsApp template sent to {formatted_number} ({message.sid})')
+        sms_logger.info(
+            f"[WA SENT] to={formatted_number} sid={message.sid}"
+        )
+
+        return message.sid
+
+    except TwilioRestException as e:
+        sms_logger.error(
+            f"[WA ERROR] Twilio error to={formatted_number} "
+            f"status={e.status} code={e.code} msg={e.msg}"
+        )
+        return None
 
     except Exception as e:
-        sms_logger.error(f'❌ Failed to send WhatsApp message to {formatted_number}: {e}')
-
-
-
-
+        sms_logger.error(
+            f"[WA ERROR] Unexpected error to={formatted_number} error={str(e)}"
+        )
+        return None
