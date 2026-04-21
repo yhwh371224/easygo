@@ -439,12 +439,21 @@ def email_dispatch_detail(request):
                 'driver_car': user.driver.driver_car,
             })
 
-        # 옵션별 특수 처리
         # ✅ Pickup Notice Today
         if selected_option == "Pickup Notice for Today":
             today = date.today()
             user_today = Post.objects.filter(email=email, pickup_date=today).first()
             if user_today:
+                # bird_number 조회
+                bird_number = None
+                if user_today.use_proxy:
+                    from blog.models import PhoneMapping
+                    from blog.bird_proxy import _format_e164
+                    customer_phone = _format_e164(user_today.contact)
+                    mapping = PhoneMapping.objects.filter(from_number=customer_phone).first()
+                    if mapping:
+                        bird_number = settings.BIRD_NUMBER
+
                 context.update({
                     'pickup_time': user_today.pickup_time,
                     'contact': user_today.contact,
@@ -452,7 +461,8 @@ def email_dispatch_detail(request):
                     'direction': user_today.direction,
                     'cash': user_today.cash,
                     'cruise': user_today.cruise,
-                    'sms_reminder': user_today.sms_reminder 
+                    'sms_reminder': user_today.sms_reminder,
+                    'bird_number': bird_number,
                 })
 
         # ✅ Gratitude For Payment

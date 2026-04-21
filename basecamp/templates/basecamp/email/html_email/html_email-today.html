@@ -321,15 +321,19 @@
 												        <td style="padding:15px;color:#af865f;">													
 													<strong>=== Driver's details ===</strong><br>
 													• Name: {{ driver_name }}<br>
-													• Phone: {% if bird_number %}{{ bird_number }}{% else %}{{ driver_contact }}{% endif %}<br>
+													• Phone:
+													{% if bird_number %}
+														<a href="tel:{{ bird_number }}">{{ bird_number }}</a>
+													{% else %}
+														<a href="tel:{{ driver_contact }}">{{ driver_contact }}</a>
+													{% endif %}<br>
 													• Vehicle: {{ driver_car }}<br>
 													{% if driver_plate %}
 													• Vehicle plate: {{ driver_plate }}<br>
 													{% endif %}
-													<br>
 													<small>
 													Please note that our driver may contact you via text or phone at {{ contact }}.
-													</small><br>
+													</small><br>			
 												</td>
 												    </tr>
 												</table>
