@@ -1,88 +1,204 @@
 import logging
-
 import requests
+
 from django.conf import settings
+from django.db import transaction
+
+from sms_utils import normalize_phone
 
 logger = logging.getLogger(__name__)
 
-BIRD_API_BASE = 'https://api.bird.com'
+BIRD_API_BASE = "https://api.bird.com"
 
 
-def _format_e164(phone):
-    if not phone:
-        return None
-    phone = phone.strip().replace(' ', '').replace('-', '')
-    if phone.startswith('+'):
-        return phone
-    if phone.startswith('0'):
-        return '+61' + phone[1:]
-    return '+' + phone
-
-
+# =========================
+# Headers
+# =========================
 def _bird_headers():
     return {
-        'Authorization': f'AccessKey {settings.BIRD_API_KEY}',
-        'Content-Type': 'application/json',
+        "Authorization": f"AccessKey {settings.BIRD_API_KEY}",
+        "Content-Type": "application/json",
     }
 
 
+# =========================
+# Send SMS via Bird
+# =========================
 def send_bird_sms(to_number, body):
-    """Bird SMS API로 메시지 발송."""
-    url = f'{BIRD_API_BASE}/workspaces/{settings.BIRD_WORKSPACE_ID}/channels/{settings.BIRD_CHANNEL_ID}/messages'
+    """
+    Send SMS using Bird API.
+    Returns response JSON or None.
+    """
+
+    if not to_number or not body:
+        logger.error("[Bird SMS] Invalid input to=%s body_empty=%s", to_number, not body)
+        return None
+
+    url = (
+        f"{BIRD_API_BASE}/workspaces/"
+        f"{settings.BIRD_WORKSPACE_ID}/channels/"
+        f"{settings.BIRD_CHANNEL_ID}/messages"
+    )
+
     payload = {
-        'receiver': {'contacts': [{'identifierKey': 'phonenumber', 'identifierValue': to_number}]},
-        'body': {'type': 'text', 'text': {'text': body}},
+        "receiver": {
+            "contacts": [
+                {
+                    "identifierKey": "phonenumber",
+                    "identifierValue": to_number,
+                }
+            ]
+        },
+        "body": {
+            "type": "text",
+            "text": {"text": body},
+        },
     }
-    resp = requests.post(url, json=payload, headers=_bird_headers(), timeout=10)
-    resp.raise_for_status()
-    return resp.json()
+
+    try:
+        resp = requests.post(
+            url,
+            json=payload,
+            headers=_bird_headers(),
+            timeout=10,
+        )
+
+        # ❗ 실패 응답도 명확하게 기록
+        if not resp.ok:
+            logger.error(
+                "[Bird SMS FAILED] to=%s status=%s response=%s",
+                to_number,
+                resp.status_code,
+                resp.text,
+            )
+            return None
+
+        logger.info("[Bird SMS SENT] to=%s", to_number)
+        return resp.json()
+
+    except requests.RequestException as e:
+        logger.error(
+            "[Bird SMS ERROR] to=%s error=%s",
+            to_number,
+            str(e),
+        )
+        return None
 
 
+# =========================
+# Create Proxy Mapping (Trip Start)
+# =========================
 def create_bird_mapping(instance):
-    """트립 생성 시 고객↔드라이버 양방향 PhoneMapping 저장."""
+    """
+    Create one-way mapping:
+    Customer → Driver
+    """
+
     from blog.models import PhoneMapping, Post
 
     driver = instance.driver
+
     if not driver or not driver.driver_contact:
-        logger.warning('[Bird] Post %s: driver or driver_contact missing, skipping.', instance.id)
-        return False
-
-    customer_phone = _format_e164(instance.contact)
-    driver_phone = _format_e164(driver.driver_contact)
-
-    if not customer_phone or not driver_phone:
         logger.warning(
-            '[Bird] Post %s: invalid phone numbers. customer=%r driver=%r',
-            instance.id, instance.contact, driver.driver_contact,
+            "[Bird] Missing driver for post=%s",
+            instance.id,
         )
         return False
 
-    # 손님번호 → 드라이버번호 단방향만 관리 (이전 매핑 교체)
-    # 드라이버 → 손님 연결은 bird_webhooks._get_driver_target() 에서 Post 모델 직접 조회
-    PhoneMapping.objects.filter(from_number=customer_phone).delete()
+    # ✅ ONLY ONE SOURCE OF TRUTH
+    customer_phone = normalize_phone(instance.contact)
+    driver_phone = normalize_phone(driver.driver_contact)
 
-    PhoneMapping.objects.create(from_number=customer_phone, to_number=driver_phone)
-    Post.objects.filter(pk=instance.pk).update(use_proxy=True)
+    if not customer_phone or not driver_phone:
+        logger.warning(
+            "[Bird] Invalid phone post=%s customer=%s driver=%s",
+            instance.id,
+            instance.contact,
+            driver.driver_contact,
+        )
+        return False
 
-    logger.info('[Bird] Post %s: mapping created. customer=%s → driver=%s', instance.id, customer_phone, driver_phone)
-    return True
+    try:
+        with transaction.atomic():
+            # 기존 mapping 제거
+            PhoneMapping.objects.filter(
+                from_number=customer_phone
+            ).delete()
 
+            # 새 mapping 생성
+            PhoneMapping.objects.create(
+                from_number=customer_phone,
+                to_number=driver_phone,
+            )
 
-def close_bird_mapping(instance):
-    """트립 종료 시 PhoneMapping 삭제."""
-    from blog.models import PhoneMapping, Post
+            # proxy 활성화
+            Post.objects.filter(pk=instance.pk).update(
+                use_proxy=True
+            )
 
-    driver = instance.driver
-    customer_phone = _format_e164(getattr(instance, 'contact', None))
-    driver_phone = _format_e164(driver.driver_contact if driver else None)
+        logger.info(
+            "[Bird] Mapping created post=%s customer=%s → driver=%s",
+            instance.id,
+            customer_phone,
+            driver_phone,
+        )
 
-    numbers = [n for n in [customer_phone, driver_phone] if n]
-    if not numbers:
-        logger.info('[Bird] Post %s: no phone numbers found, nothing to delete.', instance.id)
         return True
 
-    deleted, _ = PhoneMapping.objects.filter(from_number__in=numbers).delete()
-    if deleted > 0:
-        Post.objects.filter(pk=instance.pk).update(use_proxy=False)
-    logger.info('[Bird] Post %s: %d mappings deleted.', instance.id, deleted)
-    return True
+    except Exception as e:
+        logger.error(
+            "[Bird] Mapping ERROR post=%s error=%s",
+            instance.id,
+            str(e),
+        )
+        return False
+
+
+# =========================
+# Close Proxy Mapping (Trip End)
+# =========================
+def close_bird_mapping(instance):
+    """
+    Remove mapping + disable proxy
+    """
+
+    from blog.models import PhoneMapping, Post
+
+    customer_phone = normalize_phone(
+        getattr(instance, "contact", None)
+    )
+
+    if not customer_phone:
+        logger.info(
+            "[Bird] No customer phone post=%s",
+            instance.id,
+        )
+        Post.objects.filter(pk=instance.pk).update(
+            use_proxy=False
+        )
+        return True
+
+    try:
+        deleted, _ = PhoneMapping.objects.filter(
+            from_number=customer_phone
+        ).delete()
+
+        Post.objects.filter(pk=instance.pk).update(
+            use_proxy=False
+        )
+
+        logger.info(
+            "[Bird] Mapping closed post=%s deleted=%s",
+            instance.id,
+            deleted,
+        )
+
+        return True
+
+    except Exception as e:
+        logger.error(
+            "[Bird] Close mapping ERROR post=%s error=%s",
+            instance.id,
+            str(e),
+        )
+        return False

@@ -3,6 +3,7 @@ import datetime
 import re
 
 from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
 from google.oauth2 import service_account
 from django.conf import settings
 from blog.models import Post
@@ -21,22 +22,25 @@ def _get_contact_display(instance):
 
 
 SCOPES = ['https://www.googleapis.com/auth/calendar']
-SERVICE_ACCOUNT_FILE = settings.CALENDAR_SERVICE_ACCOUNT_FILE
-DELEGATED_USER_EMAIL = getattr(settings, 'RECIPIENT_EMAIL', None)
 
+_UNSET = object()
 
-def get_calendar_service(subject=DELEGATED_USER_EMAIL):
-    """Google Calendar API 서비스 객체 생성.
-    subject=None 이면 서비스 계정 자체로 접근 (드라이버 캘린더용).
-    """
+def get_calendar_service(subject=_UNSET):
+    service_account_file = settings.CALENDAR_SERVICE_ACCOUNT_FILE
+
+    # 명시적으로 None을 넘긴 경우 → 서비스 계정 직접 접근 (드라이버용)
+    # 아무것도 안 넘긴 경우 → settings에서 기본값 읽기 (회사 캘린더용)
+    if subject is _UNSET:
+        subject = getattr(settings, 'RECIPIENT_EMAIL', None)
+
     kwargs = {'scopes': SCOPES}
     if subject:
         kwargs['subject'] = subject
+
     credentials = service_account.Credentials.from_service_account_file(
-        SERVICE_ACCOUNT_FILE, **kwargs
+        service_account_file, **kwargs
     )
-    service = build('calendar', 'v3', credentials=credentials)
-    return service
+    return build('calendar', 'v3', credentials=credentials)
 
 
 def abbreviate_baggage(baggage_str):
@@ -44,25 +48,34 @@ def abbreviate_baggage(baggage_str):
     if not baggage_str:
         return ""
 
-    # 라벨 약어 매핑
-    label_map = {
-        "L": "L", "M": "M", "S": "S",
-        "Baby": "Bb", "Booster": "Bt", "Pram": "Pr",
-        "Ski": "Sk", "Snow": "Sn", "Golf": "Gf", "Bike": "Bk",
-        "Box": "Bx", "Music": "Mu"
-    }
+    # ✅ 4번: 긴 라벨을 먼저 치환하도록 OrderedDict 대신 리스트로 순서 보장
+    # (짧은 패턴이 먼저 매칭돼서 긴 라벨이 깨지는 것을 방지)
+    label_map = [
+        ("Booster", "Bt"),
+        ("Oversize", "o"),  # 괄호 없이도 대응
+        ("Music", "Mu"),
+        ("Baby", "Bb"),
+        ("Snow", "Sn"),
+        ("Golf", "Gf"),
+        ("Bike", "Bk"),
+        ("Pram", "Pr"),
+        ("Ski", "Sk"),
+        ("Box", "Bx"),
+        ("L", "L"),
+        ("M", "M"),
+        ("S", "S"),
+    ]
 
-    # 각 아이템을 쉼표 기준으로 분리
     items = [item.strip() for item in baggage_str.split(",") if item.strip()]
 
     short_items = []
     for item in items:
-        # Label 매핑
-        for long_label, abbr in label_map.items():
+        # ✅ 4번: 각 아이템을 순서대로 한 번씩만 치환 (재매칭 방지)
+        for long_label, abbr in label_map:
             pattern = r"\b" + re.escape(long_label) + r"\b"
-            item = re.sub(pattern, abbr, item, flags=re.IGNORECASE)
+            item = re.sub(pattern, abbr, item, count=1, flags=re.IGNORECASE)
 
-        # Oversize 줄이기
+        # (Oversize) 형태도 별도 처리
         item = re.sub(r"\(\s*Oversize\s*\)", "(o)", item, flags=re.IGNORECASE)
 
         short_items.append(item)
@@ -100,6 +113,7 @@ def _build_common(instance, contact_display=None):
     if suburb_str and street_str:
         address = f"{street_str} {suburb_str}"
     elif street_str:
+        # suburb 없을 때 end_point를 보조 지역명으로 사용
         address = f"{street_str} {end_point_str}"
     elif suburb_str:
         address = suburb_str
@@ -126,7 +140,8 @@ def _build_common(instance, contact_display=None):
 
 def build_event_data(instance):
     """회사 캘린더용 event body 생성"""
-    common = _build_common(instance, contact_display=_get_contact_display(instance))
+    contact_display = _get_contact_display(instance)
+    common = _build_common(instance, contact_display=contact_display)
     if common is None:
         return None
 
@@ -142,7 +157,7 @@ def build_event_data(instance):
         f"${instance.paid}" if instance.paid else "",
         "private" if instance.private_ride else "",
         f"end.:{instance.end_point}" if instance.end_point else "",
-        _get_contact_display(instance),
+        contact_display,
     ]))
 
     return {
@@ -178,17 +193,23 @@ def build_driver_event_data(instance):
 
 
 def delete_from_calendar(calendar_id, event_id):
-    """드라이버 캘린더에서 이벤트 삭제 (서비스 계정 직접 접근, delegation 없음)"""
+    """캘린더에서 이벤트 삭제 (서비스 계정 직접 접근, delegation 없음)"""
     service = get_calendar_service(subject=None)
     try:
         service.events().delete(calendarId=calendar_id, eventId=event_id).execute()
         logger.info(f"Deleted event {event_id} from calendar {calendar_id}")
+    except HttpError as e:
+        # ✅ 5번: 404(이미 삭제된 이벤트)는 warning, 그 외는 error
+        if e.resp.status == 404:
+            logger.warning(f"Event {event_id} not found in calendar {calendar_id} (already deleted?)")
+        else:
+            logger.error(f"Calendar delete failed (calendar: {calendar_id}, event: {event_id}): {e}")
     except Exception as e:
         logger.error(f"Calendar delete failed (calendar: {calendar_id}, event: {event_id}): {e}")
 
 
 def sync_to_calendar(instance, calendar_id="primary", is_driver=False):
-    service = get_calendar_service(subject=None if is_driver else DELEGATED_USER_EMAIL)
+    service = get_calendar_service(subject=None) if is_driver else get_calendar_service()
     event = build_driver_event_data(instance) if is_driver else build_event_data(instance)
     if not event:
         return
@@ -201,16 +222,30 @@ def sync_to_calendar(instance, calendar_id="primary", is_driver=False):
 
     try:
         if event_id:
-            service.events().update(calendarId=calendar_id, eventId=event_id, body=event).execute()
-        else:
+            try:
+                service.events().update(calendarId=calendar_id, eventId=event_id, body=event).execute()
+            except HttpError as e:
+                # ✅ 6번: 이벤트가 Google에서 삭제된 경우 insert로 폴백
+                if e.resp.status == 404:
+                    logger.warning(
+                        f"Event {event_id} not found for post {instance.id}, falling back to insert"
+                    )
+                    event_id = ""  # 아래 insert 분기로 진행
+                else:
+                    raise
+        
+        if not event_id:
             new_event = service.events().insert(calendarId=calendar_id, body=event).execute()
+            new_event_id = new_event["id"]
+
             if is_driver:
-                Post.objects.filter(pk=instance.pk).update(
-                    driver_calendar_event_id=new_event["id"]
-                )
+                Post.objects.filter(pk=instance.pk).update(driver_calendar_event_id=new_event_id)
+                # ✅ 1번: 메모리상 인스턴스도 동기화
+                instance.driver_calendar_event_id = new_event_id
             else:
-                Post.objects.filter(pk=instance.pk).update(
-                    calendar_event_id=new_event["id"]
-                )
+                Post.objects.filter(pk=instance.pk).update(calendar_event_id=new_event_id)
+                # ✅ 1번: 메모리상 인스턴스도 동기화
+                instance.calendar_event_id = new_event_id
+
     except Exception as e:
         logger.error(f"Calendar sync failed for post {instance.id} (calendar: {calendar_id}): {e}")

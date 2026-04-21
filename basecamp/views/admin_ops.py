@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
+from django.utils import timezone
 from main.settings import RECIPIENT_EMAIL
 from utils.email import send_template_email
 from blog.models import Post, Inquiry, Driver
@@ -378,7 +379,7 @@ def email_dispatch_detail(request):
 
         # 3️⃣ Adjusted pickup time 처리
         if adjusted_pickup_time and user:
-            users = Post.objects.filter(email=_email, pickup_date__gte=date.today()).order_by('pickup_date')
+            users = Post.objects.filter(email=_email, pickup_date__gte=timezone.localdate()).order_by('pickup_date')
             if users.exists():
                 closest_user = users.first()
                 closest_user.pickup_time = adjusted_pickup_time
@@ -441,9 +442,8 @@ def email_dispatch_detail(request):
 
         # ✅ Pickup Notice Today
         if selected_option == "Pickup Notice for Today":
-            from django.utils import timezone
             today = timezone.localdate()
-            user_today = Post.objects.filter(email=email, pickup_date=today).first()
+            user_today = Post.objects.filter(email=email, pickup_date=today).order_by('pickup_time').first()
             if user_today:
                 # bird_number 조회
                 bird_number = None
@@ -482,7 +482,7 @@ def email_dispatch_detail(request):
 
             bookings = (
                 Post.objects
-                .filter(email__iexact=_email, pickup_date__gte=date.today())
+                .filter(email__iexact=_email, pickup_date__gte=timezone.localdate())
                 .order_by('pickup_date')
             )
 
