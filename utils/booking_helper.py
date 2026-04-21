@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.db import transaction
 
 from blog.models import Post, Driver, PhoneMapping
-from sms_utils import normalize_phone
+from blog.sms_utils import normalize_phone
 
 logger = logging.getLogger(__name__)
 

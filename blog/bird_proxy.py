@@ -4,7 +4,7 @@ import requests
 from django.conf import settings
 from django.db import transaction
 
-from sms_utils import normalize_phone
+from blog.sms_utils import normalize_phone
 
 logger = logging.getLogger(__name__)
 
