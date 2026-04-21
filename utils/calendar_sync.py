@@ -157,7 +157,7 @@ def build_event_data(instance):
         f"${instance.paid}" if instance.paid else "",
         "private" if instance.private_ride else "",
         f"end.:{instance.end_point}" if instance.end_point else "",
-        contact_display,
+        instance.contact if contact_display != instance.contact else '',
     ]))
 
     return {
