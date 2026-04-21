@@ -9,6 +9,17 @@ from blog.models import Post
 
 logger = logging.getLogger(__name__)
 
+
+def _get_contact_display(instance):
+    from blog.models import PhoneMapping
+    from blog.bird_proxy import _format_e164
+    if getattr(instance, 'use_proxy', False):
+        customer_phone = _format_e164(instance.contact)
+        if PhoneMapping.objects.filter(from_number=customer_phone).exists():
+            return settings.BIRD_NUMBER
+    return instance.contact
+
+
 SCOPES = ['https://www.googleapis.com/auth/calendar']
 SERVICE_ACCOUNT_FILE = settings.CALENDAR_SERVICE_ACCOUNT_FILE
 DELEGATED_USER_EMAIL = getattr(settings, 'RECIPIENT_EMAIL', None)
@@ -115,7 +126,7 @@ def _build_common(instance, contact_display=None):
 
 def build_event_data(instance):
     """회사 캘린더용 event body 생성"""
-    common = _build_common(instance)
+    common = _build_common(instance, contact_display=_get_contact_display(instance))
     if common is None:
         return None
 
@@ -131,6 +142,7 @@ def build_event_data(instance):
         f"${instance.paid}" if instance.paid else "",
         "private" if instance.private_ride else "",
         f"end.:{instance.end_point}" if instance.end_point else "",
+        instance.contact,
     ]))
 
     return {
@@ -144,9 +156,7 @@ def build_event_data(instance):
 
 def build_driver_event_data(instance):
     """드라이버 캘린더용 event body 생성 (간결한 설명)"""
-    from django.conf import settings
-    contact_display = settings.BIRD_NUMBER if getattr(settings, 'BIRD_NUMBER', None) else instance.contact
-    common = _build_common(instance, contact_display=contact_display)
+    common = _build_common(instance, contact_display=_get_contact_display(instance))
     if common is None:
         return None
 
