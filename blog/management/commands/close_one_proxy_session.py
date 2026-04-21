@@ -12,7 +12,7 @@ from datetime import date
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 
-from blog.bird_proxy import _format_e164, close_bird_mapping
+from blog.bird_proxy import _format_e164
 from blog.models import PhoneMapping, Post
 
 
@@ -37,27 +37,27 @@ class Command(BaseCommand):
         driver_query = options['driver']
         trip_num = options['trip']
 
-        trips = (
+        trips_list = list(
             Post.objects.filter(
                 pickup_date=target_date,
                 driver__driver_name__icontains=driver_query,
+                cancelled=False,
+                use_proxy=True,
             )
             .select_related('driver')
             .order_by('pickup_time')
         )
 
-        if not trips.exists():
+        if not trips_list:
             self.stdout.write(f'No trips found for driver "{driver_query}" on {target_date}.')
             return
 
         if trip_num is None:
             self.stdout.write(f'Trips for driver matching "{driver_query}" on {target_date}:')
-            for i, trip in enumerate(trips, start=1):
+            for i, trip in enumerate(trips_list, start=1):
                 customer_phone = _format_e164(trip.contact) or trip.contact or 'N/A'
                 self.stdout.write(f'  {i}. {trip.pickup_time} - 손님: {trip.name} ({customer_phone})')
             return
-
-        trips_list = list(trips)
         if trip_num < 1 or trip_num > len(trips_list):
             self.stderr.write(f'Trip number {trip_num} is out of range (1–{len(trips_list)}).')
             return
@@ -73,12 +73,17 @@ class Command(BaseCommand):
             f'{driver.driver_name if driver else "N/A"} ({driver_phone})'
         )
 
+        if not driver_phone:
+            self.stderr.write(f'경고: 드라이버 번호 없음 ({driver.driver_name if driver else "N/A"})')
+
         numbers = [n for n in [customer_phone, driver_phone] if n]
         if not numbers:
             self.stderr.write('No valid phone numbers found — nothing to delete.')
             return
 
-        from blog.models import Post as PostModel
         deleted, _ = PhoneMapping.objects.filter(from_number__in=numbers).delete()
-        PostModel.objects.filter(pk=booking.pk).update(use_proxy=False)
-        self.stdout.write(f'Done. {deleted} mapping(s) deleted. use_proxy=False 설정됨.')
+        if deleted > 0:
+            Post.objects.filter(pk=booking.pk).update(use_proxy=False)
+            self.stdout.write(f'Done. {deleted} mapping(s) deleted. use_proxy=False 설정됨.')
+        else:
+            self.stdout.write('매핑이 없습니다. use_proxy 변경 안 함.')

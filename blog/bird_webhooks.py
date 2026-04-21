@@ -16,12 +16,7 @@ logger = logging.getLogger(__name__)
 
 
 def _get_active_mapping(from_number):
-    return (
-        PhoneMapping.objects
-        .filter(from_number=from_number)
-        .filter(expires_at__gt=timezone.now())
-        .first()
-    )
+    return PhoneMapping.objects.filter(from_number=from_number).first()
 
 
 def _get_driver_target(driver_phone):
@@ -36,10 +31,13 @@ def _get_driver_target(driver_phone):
     now = timezone.now()
     today = timezone.localdate()
 
+    from blog.bird_proxy import _format_e164 as _fmt
+    e164_driver = _fmt(driver_phone) or driver_phone
+
     posts = (
         Post.objects
         .filter(
-            driver__driver_contact=driver_phone,
+            driver__driver_contact=e164_driver,
             pickup_date=today,
             cancelled=False,
             use_proxy=True,

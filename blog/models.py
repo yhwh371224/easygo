@@ -187,13 +187,7 @@ class PhoneMapping(models.Model):
     from_number = models.CharField(max_length=20, db_index=True)
     to_number = models.CharField(max_length=20)
     created_at = models.DateTimeField(auto_now_add=True)
-    expires_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         ordering = ['-created_at']
-
-    def is_active(self):
-        if self.expires_at is None:
-            return True
-        return timezone.now() < self.expires_at
 

@@ -1,5 +1,5 @@
 """
-Close Bird phone mappings for today's completed airport arrivals (default).
+Close Bird phone mappings for today's airport arrivals (default).
 
 Usage:
     python manage.py close_proxy_sessions                # 오늘 날짜
@@ -10,7 +10,7 @@ Cron example (매일 자정):
 """
 
 import logging
-from datetime import date, datetime, timedelta
+from datetime import date
 
 from django.core.management.base import BaseCommand
 from django.utils import timezone
@@ -43,34 +43,22 @@ class Command(BaseCommand):
 
         self.stdout.write(f'[close_proxy_sessions] Target date: {target_date}')
 
-        bookings = Post.objects.filter(
-            pickup_date=target_date,
-            direction__icontains='Pickup from',
-            driver__isnull=False,
-        ).select_related('driver')
+        bookings = list(
+            Post.objects.filter(
+                pickup_date=target_date,
+                cancelled=False,
+                use_proxy=True,
+                driver__isnull=False,
+            ).select_related('driver')
+        )
 
-        if not bookings.exists():
+        if not bookings:
             self.stdout.write('No bookings found for this date.')
             return
 
-        now = timezone.localtime()
         success = 0
         fail = 0
-        skipped = 0
         for booking in bookings:
-            try:
-                pickup_naive = datetime.strptime(booking.pickup_time, '%H:%M').replace(
-                    year=target_date.year, month=target_date.month, day=target_date.day
-                )
-                pickup_dt = timezone.make_aware(pickup_naive)
-            except (ValueError, TypeError):
-                logger.warning('Post %s: pickup_time 파싱 실패 (%r) — 스킵', booking.id, booking.pickup_time)
-                skipped += 1
-                continue
-
-            if pickup_dt + timedelta(hours=1) > now:
-                continue
-
             ok = close_bird_mapping(booking)
             if ok:
                 success += 1
@@ -79,4 +67,4 @@ class Command(BaseCommand):
                 fail += 1
                 self.stdout.write(f'  FAIL Post {booking.id} | {booking.name} | {booking.pickup_time}')
 
-        self.stdout.write(f'\nDone. Success: {success}, Failed: {fail}, Skipped (parse error): {skipped}')
+        self.stdout.write(f'\nDone. Success: {success}, Failed: {fail}')

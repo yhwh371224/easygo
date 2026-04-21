@@ -441,7 +441,8 @@ def email_dispatch_detail(request):
 
         # ✅ Pickup Notice Today
         if selected_option == "Pickup Notice for Today":
-            today = date.today()
+            from django.utils import timezone
+            today = timezone.localdate()
             user_today = Post.objects.filter(email=email, pickup_date=today).first()
             if user_today:
                 # bird_number 조회
