@@ -93,6 +93,8 @@ def sms_webhook(request):
     except Exception:
         return JsonResponse({'error': 'invalid json'}, status=400)
 
+    logger.debug('[Bird SMS RAW] %s', json.dumps(data, indent=2))
+
     try:
         msg = data.get('payload', {})
         from_number = msg.get('sender', {}).get('contact', {}).get('identifierValue')
