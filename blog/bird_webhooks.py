@@ -12,7 +12,7 @@ from django.views.decorators.http import require_POST
 from blog.models import PhoneMapping
 from blog.bird_proxy import send_bird_sms
 
-from sms_utils import normalize_phone as _format_e164
+from blog.sms_utils import normalize_phone as _format_e164
 
 logger = logging.getLogger(__name__)
 
