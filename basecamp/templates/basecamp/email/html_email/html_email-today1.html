@@ -333,18 +333,23 @@
 												<table width="100%" style="border-spacing:0;background-color:#fef6f0;margin-bottom:20px;" role="presentation">
 												    <tr>
 												        <td style="padding:15px;color:#af865f;">		
-													<strong>=== Driver's details ===</strong><br>
-													• Name: {{ driver_name }}<br>
-													• Phone: {% if proxy_number %}{{ proxy_number }}{% else %}{{ driver_contact }}{% endif %}<br>
-													• Vehicle: {{ driver_car }}<br>
-													{% if driver_plate %}
-													• Vehicle plate: {{ driver_plate }}<br>
-													{% endif %}
-													<small>
-													Please note that our driver may contact you via text or phone at {{ contact }}. 
-													</small><br><br>
-												</td>
-												    </tr>
+															<strong>=== Driver's details ===</strong><br>
+															• Name: {{ driver_name }}<br>
+															• Phone:
+															{% if bird_number %}
+																<a href="tel:{{ bird_number }}">{{ bird_number }}</a>
+															{% else %}
+																<a href="tel:{{ driver_contact }}">{{ driver_contact }}</a>
+															{% endif %}<br>
+															• Vehicle: {{ driver_car }}<br>
+															{% if driver_plate %}
+															• Vehicle plate: {{ driver_plate }}<br>
+															{% endif %}
+															<small>
+															Please note that our driver may contact you via text or phone at {{ contact }}.
+															</small><br><br>				
+														</td>
+													</tr>
 												</table>
 
 											{% else %} 
