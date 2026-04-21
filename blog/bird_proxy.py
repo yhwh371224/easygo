@@ -1,9 +1,7 @@
 import logging
-from datetime import datetime, timedelta
 
 import requests
 from django.conf import settings
-from django.utils import timezone
 
 logger = logging.getLogger(__name__)
 
@@ -59,19 +57,11 @@ def create_bird_mapping(instance):
         )
         return False
 
-    try:
-        pickup_date = instance.pickup_date
-        pickup_time_str = instance.pickup_time or '00:00'
-        pickup_naive = datetime.strptime(f'{pickup_date} {pickup_time_str}', '%Y-%m-%d %H:%M')
-        expires_at = timezone.make_aware(pickup_naive) + timedelta(hours=4)
-    except Exception:
-        expires_at = timezone.now() + timedelta(hours=24)
-
     # 손님번호 → 드라이버번호 단방향만 관리 (이전 매핑 교체)
     # 드라이버 → 손님 연결은 bird_webhooks._get_driver_target() 에서 Post 모델 직접 조회
     PhoneMapping.objects.filter(from_number=customer_phone).delete()
 
-    PhoneMapping.objects.create(from_number=customer_phone, to_number=driver_phone, expires_at=expires_at)
+    PhoneMapping.objects.create(from_number=customer_phone, to_number=driver_phone)
     Post.objects.filter(pk=instance.pk).update(use_proxy=True)
 
     logger.info('[Bird] Post %s: mapping created. customer=%s → driver=%s', instance.id, customer_phone, driver_phone)
@@ -92,6 +82,7 @@ def close_bird_mapping(instance):
         return True
 
     deleted, _ = PhoneMapping.objects.filter(from_number__in=numbers).delete()
-    Post.objects.filter(pk=instance.pk).update(use_proxy=False)
+    if deleted > 0:
+        Post.objects.filter(pk=instance.pk).update(use_proxy=False)
     logger.info('[Bird] Post %s: %d mappings deleted.', instance.id, deleted)
     return True

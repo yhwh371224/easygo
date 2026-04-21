@@ -142,6 +142,12 @@ def check_missing_info(sender, instance, created, **kwargs):
 def close_bird_mapping_on_no_driver(sender, instance, **kwargs):
     from blog.bird_proxy import close_bird_mapping, create_bird_mapping
 
+    update_fields = kwargs.get('update_fields')
+    if update_fields is not None:
+        proxy_fields = {'use_proxy', 'driver', 'driver_id'}
+        if not proxy_fields.intersection(update_fields):
+            return
+
     if instance.driver is None or not instance.use_proxy:
         ok = close_bird_mapping(instance)
         if ok:
