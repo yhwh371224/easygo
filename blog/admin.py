@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.admin import AdminSite
-from .models import Driver, Inquiry, PaypalPayment, PhoneMapping, StripePayment, Post, XrpPayment
+from .models import Driver, Inquiry, PaypalPayment, PhoneMapping, StripePayment, Post, VirtualNumber, XrpPayment
 
 
 class DriverAdmin(admin.ModelAdmin):
@@ -44,6 +44,11 @@ class PhoneMappingAdmin(admin.ModelAdmin):
     ordering = ['-created_at']
 
 
+class VirtualNumberAdmin(admin.ModelAdmin):
+    list_display = ['number']
+    search_fields = ['number']
+
+
 class MyAdminSite(AdminSite):
     site_header = 'EasyGo administration'
 
@@ -55,6 +60,7 @@ admin_site.register(StripePayment, StripePaymentAdmin)
 admin_site.register(Post, PostAdmin)
 admin_site.register(XrpPayment, XrpPaymentAdmin)
 admin_site.register(PhoneMapping, PhoneMappingAdmin)
+admin_site.register(VirtualNumber, VirtualNumberAdmin)
 
 admin.site.register(Driver, DriverAdmin)
 admin.site.register(Inquiry, InquiryAdmin)
@@ -63,3 +69,4 @@ admin.site.register(StripePayment, StripePaymentAdmin)
 admin.site.register(Post, PostAdmin)
 admin.site.register(XrpPayment, XrpPaymentAdmin)
 admin.site.register(PhoneMapping, PhoneMappingAdmin) 
+admin.site.register(VirtualNumber, VirtualNumberAdmin)
