@@ -91,7 +91,7 @@ def send_bird_sms(to_number, body):
 def create_bird_mapping(instance):
     """
     Create one-way mapping:
-    Customer → Driver
+    Customer → Driver's virtual number
     """
 
     from blog.models import PhoneMapping, Post
@@ -105,44 +105,45 @@ def create_bird_mapping(instance):
         )
         return False
 
-    # ✅ ONLY ONE SOURCE OF TRUTH
-    customer_phone = normalize_phone(instance.contact)
-    driver_phone = normalize_phone(driver.driver_contact)
-
-    if not customer_phone or not driver_phone:
+    # virtual_number 체크
+    if not driver.virtual_number:
         logger.warning(
-            "[Bird] Invalid phone post=%s customer=%s driver=%s",
+            "[Bird] Missing virtual_number for driver=%s post=%s",
+            driver.id,
+            instance.id,
+        )
+        return False
+
+    customer_phone = normalize_phone(instance.contact)
+    virtual_number = normalize_phone(driver.virtual_number.number)  # ← ForeignKey라 .number
+
+    if not customer_phone or not virtual_number:
+        logger.warning(
+            "[Bird] Invalid phone post=%s customer=%s virtual=%s",
             instance.id,
             instance.contact,
-            driver.driver_contact,
+            driver.virtual_number.number,
         )
         return False
 
     try:
         with transaction.atomic():
-            # 기존 mapping 제거
-            PhoneMapping.objects.filter(
-                from_number=customer_phone
-            ).delete()
+            PhoneMapping.objects.filter(from_number=customer_phone).delete()
 
-            # 새 mapping 생성
             PhoneMapping.objects.create(
                 from_number=customer_phone,
-                to_number=driver_phone,
+                to_number=virtual_number,
             )
 
-            # proxy 활성화
-            Post.objects.filter(pk=instance.pk).update(
-                use_proxy=True
-            )
+            Post.objects.filter(pk=instance.pk).update(use_proxy=True)
 
         logger.info(
-            "[Bird] Mapping created post=%s customer=%s → driver=%s",
+            "[Bird] Mapping created post=%s customer=%s → virtual=%s (driver=%s)",
             instance.id,
             customer_phone,
-            driver_phone,
+            virtual_number,
+            driver.id,
         )
-
         return True
 
     except Exception as e:
@@ -152,7 +153,6 @@ def create_bird_mapping(instance):
             str(e),
         )
         return False
-
 
 # =========================
 # Close Proxy Mapping (Trip End)
@@ -179,13 +179,14 @@ def close_bird_mapping(instance):
         return True
 
     try:
-        deleted, _ = PhoneMapping.objects.filter(
-            from_number=customer_phone
-        ).delete()
+        with transaction.atomic():  # ← 추가
+            deleted, _ = PhoneMapping.objects.filter(
+                from_number=customer_phone
+            ).delete()
 
-        Post.objects.filter(pk=instance.pk).update(
-            use_proxy=False
-        )
+            Post.objects.filter(pk=instance.pk).update(
+                use_proxy=False
+            )
 
         logger.info(
             "[Bird] Mapping closed post=%s deleted=%s",

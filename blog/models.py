@@ -14,6 +14,13 @@ class BlogAppConfig(AppConfig):
         from . import signals
 
 
+class VirtualNumber(models.Model):
+    number = models.CharField(max_length=20, unique=True)
+    
+    def __str__(self):
+        return self.number
+
+
 class Driver(models.Model):
     user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True)
     driver_name = models.CharField(max_length=100, blank=True, null=True)
@@ -24,6 +31,7 @@ class Driver(models.Model):
     driver_car = models.CharField(max_length=30, blank=True, null=True)
     driver_bankdetails = models.TextField(blank=True, null=True)    
     google_calendar_id = models.CharField(max_length=255, blank=True, null=True)
+    virtual_number = models.ForeignKey( 'VirtualNumber', on_delete=models.SET_NULL, null=True, blank=True )
 
     def __str__(self):
         return self.driver_name
