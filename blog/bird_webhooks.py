@@ -60,7 +60,7 @@ def _get_driver_target(driver_phone):
         except Exception:
             continue
 
-        if pickup_dt + timedelta(hours=4) > now:
+        if pickup_dt + timedelta(hours=1) > now:
             active.append((pickup_dt, post))
 
     if not active:

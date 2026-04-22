@@ -22,6 +22,7 @@ urlpatterns = [
     path('paypal/', include('paypal.standard.ipn.urls')),
     path('stripe_webhook/', stripe_webhook, name='stripe_webhook'),
     path('gmail_webhook/', gmail_webhook, name='gmail_webhook'),
+    path('', include('blog.urls', namespace='blog')),
     path('webhook/bird/sms/', bird_webhooks.sms_webhook, name='bird_sms_webhook'),
     path('webhook/bird/voice/', bird_webhooks.voice_webhook, name='bird_voice_webhook'),
 ]

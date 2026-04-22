@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Driver Login – EasyGo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" type="image/x-icon" href="{% static 'basecamp/favi/favicon.ico' %}">
+  <link rel="stylesheet" href="{% static 'basecamp/css/base_home.css' %}" media="all" />
+</head>
+<body class="bg-dark">
+<section class="position-relative pt-6 pb-5 py-sm-6" style="min-height:100vh;display:flex;align-items:center;">
+  <div class="container">
+    <div class="mx-auto" style="max-width:420px;">
+      <div class="text-center mb-4">
+        <h3 class="text-light mt-3">Driver Login</h3>
+      </div>
+
+      {% if error %}
+      <div class="alert alert-danger text-center" role="alert">{{ error }}</div>
+      {% endif %}
+
+      <form method="POST" action="{% url 'blog:driver_login' %}">
+        {% csrf_token %}
+        <div class="mb-3">
+          <input
+            type="text"
+            name="username"
+            class="form-control form-control-lg"
+            placeholder="Username"
+            autocomplete="username"
+            required
+            style="font-size:1.1rem;padding:0.75rem 1rem;"
+          >
+        </div>
+        <div class="mb-4">
+          <input
+            type="password"
+            name="password"
+            class="form-control form-control-lg"
+            placeholder="Password"
+            autocomplete="current-password"
+            required
+            style="font-size:1.1rem;padding:0.75rem 1rem;"
+          >
+        </div>
+        <button
+          type="submit"
+          class="btn btn-warning w-100"
+          style="font-size:1.2rem;padding:0.85rem;font-weight:600;letter-spacing:.03em;"
+        >
+          Log In
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+</body>
+</html>
