@@ -74,7 +74,7 @@ def send_sms_notice(phone_number, message_body):
     try:
         message = get_client().messages.create(
             body=message_body,
-            from_=config('TWILIO_SMS_FROM'),
+            messaging_service_sid=config('TWILIO_MESSAGING_SERVICE_SID'),
             to=formatted_number
         )
 

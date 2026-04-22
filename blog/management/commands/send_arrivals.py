@@ -4,47 +4,45 @@ import pytz
 
 from django.core.management.base import BaseCommand
 from blog.models import Post
+
 from utils import booking_helper
 from utils.booking_helper import assign_default_driver, build_reminder_context
 from utils.email import send_template_email, collect_recipients
 from basecamp.modules.date_utils import format_pickup_time_12h
+from blog.sms_utils import normalize_phone
 
 from twilio.rest import Client
+from twilio.base.exceptions import TwilioRestException
 from decouple import config
 
 logger = logging.getLogger(__name__)
 
 
-### intl/domestic/all 오늘 도착 알림 전송 명령어 ###
-
-
 class Command(BaseCommand):
-    help = 'Send reminders ONLY for today\'s arrivals (intl/domestic/all)'
+    help = "Send reminders ONLY for today's arrivals (intl/domestic/all)"
 
-    def add_arguments(self, parser):
-        parser.add_argument(
-            '--arrivals',
-            choices=['intl', 'domestic', 'all'],
-            required=True,
-            help='Send today\'s arrivals reminders (intl/domestic/all)'
-        )
-
+    # =========================
+    # INIT
+    # =========================
     def handle(self, *args, **options):
         booking_helper.update_meeting_point_for_arrivals()
 
-        # Twilio init
-        account_sid = config('TWILIO_ACCOUNT_SID')
-        auth_token = config('TWILIO_AUTH_TOKEN')
-        self.twilio_from = config('TWILIO_SMS_FROM')
+        self.account_sid = config('TWILIO_ACCOUNT_SID')
+        self.auth_token = config('TWILIO_AUTH_TOKEN')
+        self.messaging_service_sid = config('TWILIO_MESSAGING_SERVICE_SID')
         self.twilio_whatsapp_from = config('TWILIO_WHATSAPP_FROM')
-        self.twilio_client = Client(account_sid, auth_token)
+
+        self.twilio_client = Client(self.account_sid, self.auth_token)
 
         self.send_today_arrivals(options['arrivals'])
 
+    # =========================
+    # MAIN FLOW
+    # =========================
     def send_today_arrivals(self, arrival_type="all"):
         target_date = date.today()
         sydney_tz = pytz.timezone("Australia/Sydney")
-        now_time = datetime.now(sydney_tz).time()
+        now_dt = datetime.now(sydney_tz)
 
         queryset = Post.objects.filter(
             pickup_date=target_date,
@@ -56,135 +54,163 @@ class Command(BaseCommand):
         elif arrival_type == "domestic":
             queryset = queryset.filter(direction="Pickup from Domestic Airport")
 
-        # 현재 시간 이전 예약 제외
         booking_list = []
+
         for b in queryset:
             if b.pickup_time:
                 try:
                     pickup_time_obj = datetime.strptime(b.pickup_time, "%H:%M").time()
-                    if pickup_time_obj >= now_time:
+                    pickup_dt = datetime.combine(target_date, pickup_time_obj)
+
+                    if pickup_dt >= now_dt.replace(tzinfo=None):
                         booking_list.append(b)
+
                 except ValueError:
-                    booking_list.append(b)  # 형식 오류 시 포함
+                    booking_list.append(b)
             else:
-                booking_list.append(b)  # 시간 없는 경우 포함
+                booking_list.append(b)
 
         if not booking_list:
-            msg = f"No {arrival_type} arrivals for today (after current Sydney time)."
+            msg = f"No {arrival_type} arrivals for today."
             logger.info(msg)
             self.stdout.write(msg)
             return
 
         template_name = "html_email-today.html"
         subject = f"Reminder - Today ({arrival_type.capitalize()} Arrivals)"
-        sms_allowed = True
 
-        self.send_email_task(booking_list, template_name, subject, target_date, sms_allowed)
+        self.send_email_task(booking_list, template_name, subject)
 
-    def format_phone_number(self, phone_number):
-        if not phone_number:
-            return None
-        phone_number = phone_number.strip()
-        if phone_number.startswith('+'):
-            return phone_number
-        elif phone_number.startswith('0'):
-            return '+61' + phone_number[1:]
-        else:
-            return '+' + phone_number
+        self.stdout.write(f"Total reminders processed: {len(booking_list)}")
 
+    # =========================
+    # SMS (EasyGo Messaging Service)
+    # =========================
     def send_sms_reminder(self, sendto, name, pickup_date, email, price):
-        formatted_number = self.format_phone_number(sendto)
-        if not formatted_number:
-            msg = f"Invalid phone number for {name}, skipping SMS."
-            logger.warning(msg)
-            self.stdout.write(msg)
-            return
+        formatted_number = normalize_phone(sendto)
 
-        message_body = f"Hi {name}, your EasyGo booking is on {pickup_date}. Please check your email for details."
-        try:
-            self.twilio_client.messages.create(
-                body=message_body,
-                from_=self.twilio_from,
-                to=formatted_number
-            )
-            msg = f"SMS sent to {name} ({formatted_number}) | Email: {email} | Price: ${price}"
-            logger.info(msg)
-            self.stdout.write(msg)
-            return True
-        except Exception as e:
-            msg = f"Failed to send SMS to {name} ({formatted_number}) | Error: {str(e)}"
-            logger.error(msg)
-            self.stdout.write(msg)
+        if not formatted_number:
+            logger.warning(f"[SMS] Invalid number for {name}")
             return False
 
-    def send_whatsapp_reminder(self, sendto, name, pickup_date, email, price):
-        formatted_number = self.format_phone_number(sendto)
-        if not formatted_number:
-            msg = f"Invalid phone number for WhatsApp ({name}, {email}), skipping."
-            logger.warning(msg)
-            self.stdout.write(msg)
-            return
+        message_body = self.build_message(name, pickup_date)
 
-        message_body = f"Hi {name}, your EasyGo booking is on {pickup_date}. Please check your email for details."
         try:
             self.twilio_client.messages.create(
                 body=message_body,
-                from_=self.twilio_whatsapp_from,
+                messaging_service_sid=self.messaging_service_sid,
+                to=formatted_number
+            )
+
+            logger.info(f"[SMS SENT] {name} {formatted_number}")
+            return True
+
+        except TwilioRestException as e:
+            logger.error(
+                f"[SMS ERROR] {name} {formatted_number} "
+                f"code={e.code} msg={e.msg}"
+            )
+            return False
+
+    # =========================
+    # WhatsApp fallback
+    # =========================
+    def send_whatsapp_reminder(self, sendto, name, pickup_date, email, price):
+        formatted_number = normalize_phone(sendto)
+
+        if not formatted_number:
+            logger.warning(f"[WA] Invalid number for {name}")
+            return
+
+        message_body = self.build_message(name, pickup_date)
+
+        try:
+            self.twilio_client.messages.create(
+                body=message_body,
+                from_=f'whatsapp:{self.twilio_whatsapp_from}',
                 to=f'whatsapp:{formatted_number}'
             )
-            msg = f"WhatsApp sent to {name} ({formatted_number}) | Email: {email} | Price: ${price}"
-            logger.info(msg)
-            self.stdout.write(msg)
-        except Exception as e:
-            msg = f"Failed to send WhatsApp to {name} ({formatted_number}) | Error: {str(e)}"
-            logger.error(msg)
-            self.stdout.write(msg)
 
-    def send_email_task(self, booking_reminders, template_name, subject, target_date, sms_allowed):
-        for booking_reminder in booking_reminders:
-            driver = assign_default_driver(booking_reminder)
-            pickup_time_12h = format_pickup_time_12h(booking_reminder.pickup_time)
-            context = build_reminder_context(booking_reminder, pickup_time_12h, driver)
-            email_recipients = collect_recipients(booking_reminder.email, booking_reminder.email1)
+            logger.info(f"[WA SENT] {name} {formatted_number}")
 
+        except TwilioRestException as e:
+            logger.error(
+                f"[WA ERROR] {name} {formatted_number} "
+                f"code={e.code} msg={e.msg}"
+            )
+
+    # =========================
+    # EMAIL + NOTIFICATION FLOW
+    # =========================
+    def send_email_task(self, booking_reminders, template_name, subject):
+        for booking in booking_reminders:
+
+            # future-safe hook (optional DB field)
+            if getattr(booking, "notification_sent", False):
+                continue
+
+            driver = assign_default_driver(booking)
+            pickup_time_12h = format_pickup_time_12h(booking.pickup_time)
+
+            context = build_reminder_context(
+                booking,
+                pickup_time_12h,
+                driver
+            )
+
+            recipients = collect_recipients(
+                booking.email,
+                booking.email1
+            )
+
+            # EMAIL
             try:
-                send_template_email(subject, template_name, context, email_recipients, fail_silently=False)
-                msg = f"Sent '{subject}' email to {booking_reminder.email}"
-                logger.info(msg)
-                self.stdout.write(msg)
+                send_template_email(
+                    subject,
+                    template_name,
+                    context,
+                    recipients,
+                    fail_silently=False
+                )
+                logger.info(f"[EMAIL SENT] {booking.email}")
+
             except Exception as e:
-                msg = f"Failed to send email to {booking_reminder.email}: {str(e)}"
-                logger.error(msg)
-                self.stdout.write(msg)
+                logger.error(f"[EMAIL ERROR] {booking.email} {str(e)}")
 
             # SMS
             sms_sent = False
 
-            if (
-                booking_reminder.sms_reminder
-                and (booking_reminder.paid or booking_reminder.cash)
-            ):
+            if booking.sms_reminder and (booking.paid or booking.cash):
                 sms_sent = self.send_sms_reminder(
-                    booking_reminder.contact,
-                    booking_reminder.name,
-                    booking_reminder.pickup_date,
-                    booking_reminder.email,
-                    booking_reminder.price
+                    booking.contact,
+                    booking.name,
+                    booking.pickup_date,
+                    booking.email,
+                    booking.price
                 )
 
-            # WhatsApp (SMS 실패 시, 국제선만)
+            # WhatsApp fallback (intl only)
             if (
                 not sms_sent
-                and booking_reminder.sms_reminder
-                and (booking_reminder.paid or booking_reminder.cash)
-                and booking_reminder.direction == "Pickup from Intl Airport"
+                and booking.sms_reminder
+                and (booking.paid or booking.cash)
+                and booking.direction == "Pickup from Intl Airport"
             ):
+                logger.warning(f"SMS failed → WhatsApp fallback {booking.name}")
+
                 self.send_whatsapp_reminder(
-                    booking_reminder.contact,
-                    booking_reminder.name,
-                    booking_reminder.pickup_date,
-                    booking_reminder.email,
-                    booking_reminder.price
+                    booking.contact,
+                    booking.name,
+                    booking.pickup_date,
+                    booking.email,
+                    booking.price
                 )
 
-        self.stdout.write(f"Total reminders processed: {len(booking_reminders)}")
+    # =========================
+    # MESSAGE BUILDER
+    # =========================
+    def build_message(self, name, pickup_date):
+        return (
+            f"Hi {name}, your EasyGo booking is on {pickup_date}. "
+            f"Please check your email for details."
+        )
