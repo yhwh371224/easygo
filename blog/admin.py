@@ -47,8 +47,8 @@ class XrpPaymentAdmin(admin.ModelAdmin):
 
 
 class PhoneMappingAdmin(admin.ModelAdmin):
-    list_display = ['from_number', 'to_number', 'created_at']
-    search_fields = ['from_number', 'to_number']
+    list_display = ['pickup_date', 'pickup_time', 'driver_name', 'from_number', 'to_number', 'created_at']
+    search_fields = ['from_number', 'to_number', 'driver_name', 'pickup_date']
     readonly_fields = ['created_at']
     ordering = ['-created_at']
 
