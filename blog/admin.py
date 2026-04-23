@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.admin import AdminSite
 from django.utils.html import format_html
 from django.urls import reverse
-from .models import Driver, Inquiry, PaypalPayment, PhoneMapping, StripePayment, Post, VirtualNumber, XrpPayment
+from .models import Driver, Inquiry, PaypalPayment, PhoneMapping, StripePayment, Post, VirtualNumber
 
 
 class DriverAdmin(admin.ModelAdmin):
@@ -39,11 +39,6 @@ class PostAdmin(admin.ModelAdmin):
                     'cancelled', 'pending', 'cash', 'direction', 'return_flight_number', 'created']    
     search_fields = ['pickup_date', 'pickup_time', 'suburb', 'email', 'street', 'booker_email', 'booker_name',
                      'name', 'contact', 'price', 'paid', 'email1', 'message', 'notice']
-    
-
-class XrpPaymentAdmin(admin.ModelAdmin):
-    list_display = ['email', 'aud_amount', 'xrp_amount', 'dest_tag', 'email_sent', 'created']
-    search_fields = ['email', 'aud_amount', 'xrp_amount', 'dest_tag']
 
 
 class PhoneMappingAdmin(admin.ModelAdmin):
@@ -67,7 +62,6 @@ admin_site.register(Inquiry, InquiryAdmin)
 admin_site.register(PaypalPayment, PaypalPaymentAdmin)
 admin_site.register(StripePayment, StripePaymentAdmin)
 admin_site.register(Post, PostAdmin)
-admin_site.register(XrpPayment, XrpPaymentAdmin)
 admin_site.register(PhoneMapping, PhoneMappingAdmin)
 admin_site.register(VirtualNumber, VirtualNumberAdmin)
 
@@ -76,6 +70,5 @@ admin.site.register(Inquiry, InquiryAdmin)
 admin.site.register(PaypalPayment, PaypalPaymentAdmin)
 admin.site.register(StripePayment, StripePaymentAdmin)
 admin.site.register(Post, PostAdmin)
-admin.site.register(XrpPayment, XrpPaymentAdmin)
 admin.site.register(PhoneMapping, PhoneMappingAdmin) 
 admin.site.register(VirtualNumber, VirtualNumberAdmin)
