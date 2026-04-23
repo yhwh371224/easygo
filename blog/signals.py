@@ -169,10 +169,11 @@ def close_bird_mapping_on_no_driver(sender, instance, created, **kwargs):
         else:
             logger.warning('Bird mapping close failed for Post %s', instance.pk)
     else:
-        closed = close_bird_mapping(instance)
-        if not closed:
-            logger.warning('Bird mapping close failed before recreate for Post %s', instance.pk)
         ok = create_bird_mapping(instance)
+        if ok:
+            logger.info('Bird mapping created for Post %s', instance.pk)
+        else:
+            logger.warning('Bird mapping create failed for Post %s', instance.pk)
 
 
 # sender를 문자열로 지정: "앱이름.모델이름"
