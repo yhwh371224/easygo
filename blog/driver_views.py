@@ -25,14 +25,47 @@ def driver_login(request):
             try:
                 driver = user.driver
             except Exception:
-                error = '드라이버 계정이 연결되어 있지 않습니다.'
+                error = 'No driver account is linked to this user.'
                 return render(request, 'basecamp/driver/login.html', {'error': error})
             login(request, user)
+            # 첫 로그인이면 비밀번호 변경 페이지로 강제 이동
+            if driver.must_change_password:
+                return redirect('blog:driver_change_password')
             return redirect('blog:driver_dashboard')
         else:
-            error = '아이디 또는 비밀번호가 올바르지 않습니다.'
+            error = 'Incorrect username or password.'
 
     return render(request, 'basecamp/driver/login.html', {'error': error})
+
+
+@login_required(login_url='/driver/login/')
+def driver_change_password(request):
+    try:
+        driver = request.user.driver
+    except Exception:
+        return redirect('blog:driver_login')
+
+    error = None
+    if request.method == 'POST':
+        new_password = request.POST.get('new_password', '').strip()
+        confirm = request.POST.get('confirm_password', '').strip()
+
+        if len(new_password) < 8:
+            error = 'Password must be at least 8 characters.'
+        elif new_password != confirm:
+            error = 'Passwords do not match.'
+        else:
+            request.user.set_password(new_password)
+            request.user.save()
+            driver.must_change_password = False
+            driver.save()
+            # 비밀번호 변경 후 재로그인
+            user = authenticate(request, username=request.user.username, password=new_password)
+            if user:
+                login(request, user)
+            return redirect('blog:driver_dashboard')
+
+    return render(request, 'basecamp/driver/change_password.html', {'error': error})
 
 
 def driver_logout(request):
@@ -94,7 +127,7 @@ def driver_complete_trip(request, post_id):
     try:
         driver = request.user.driver
     except Exception:
-        return JsonResponse({'ok': False, 'error': 'no driver'}, status=403)
+        return JsonResponse({'ok': False, 'error': 'No driver account linked.'}, status=403)
 
     from blog.models import Post
     from blog.bird_proxy import close_bird_mapping
