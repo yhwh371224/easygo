@@ -78,6 +78,14 @@
 </head>
 <body>
 
+{% if request.session.impersonator_id %}
+<div style="background:#dc2626;color:#fff;padding:.75rem 1.25rem;text-align:center;font-weight:600;">
+  ⚠️ Logged in as {{ driver.driver_name }} (Admin mode)
+  &nbsp;|&nbsp;
+  <a href="{% url 'blog:driver_impersonate_exit' %}" style="color:#fff;text-decoration:underline;">Exit & Return to Admin</a>
+</div>
+{% endif %}
+
 <div class="driver-header">
   <h1>{{ today|date:"D, d M Y" }} &nbsp;·&nbsp; {{ driver.driver_name }}</h1>
   <a href="{% url 'blog:driver_logout' %}" style="color:#9ca3af;font-size:.85rem;text-decoration:none;">Logout</a>
