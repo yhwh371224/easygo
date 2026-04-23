@@ -181,18 +181,6 @@ class Post(models.Model):
         ordering = ['-created'] 
 
 
-class XrpPayment(models.Model):
-    email = models.EmailField()
-    aud_amount = models.DecimalField(max_digits=10, decimal_places=2)
-    xrp_amount = models.DecimalField(max_digits=12, decimal_places=6)
-    dest_tag = models.BigIntegerField()
-    email_sent = models.BooleanField(default=False)
-    created = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ['-created']
-
-
 class PhoneMapping(models.Model):
     from_number = models.CharField(max_length=20, db_index=True)
     to_number = models.CharField(max_length=20)
