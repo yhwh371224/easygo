@@ -133,6 +133,9 @@ def create_bird_mapping(instance):
             PhoneMapping.objects.create(
                 from_number=customer_phone,
                 to_number=virtual_number,
+                driver_name=driver.driver_name,
+                pickup_date=instance.pickup_date,
+                pickup_time=instance.pickup_time,
             )
 
             Post.objects.filter(pk=instance.pk).update(use_proxy=True)
