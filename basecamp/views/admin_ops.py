@@ -443,7 +443,7 @@ def email_dispatch_detail(request):
         # ✅ Pickup Notice Today
         if selected_option == "Pickup Notice for Today":
             today = timezone.localdate()
-            user_today = Post.objects.filter(email=email, pickup_date=today).order_by('pickup_time').first()
+            user_today = Post.objects.select_related('driver').filter(email=email, pickup_date=today).order_by('pickup_time').first()
             if user_today:
                 # bird_number 조회
                 bird_number = None
@@ -464,6 +464,11 @@ def email_dispatch_detail(request):
                     'cruise': user_today.cruise,
                     'sms_reminder': user_today.sms_reminder,
                     'bird_number': bird_number,
+                    'driver': user_today.driver,
+                    'driver_name': user_today.driver.driver_name,
+                    'driver_contact': user_today.driver.driver_contact,
+                    'driver_plate': user_today.driver.driver_plate,
+                    'driver_car': user_today.driver.driver_car,
                 })
 
         # ✅ Gratitude For Payment
