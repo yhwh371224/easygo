@@ -132,7 +132,7 @@ def create_bird_mapping(instance):
 
             PhoneMapping.objects.create(
                 from_number=customer_phone,
-                to_number=virtual_number,
+                to_number=normalize_phone(driver.driver_contact),
                 driver_name=driver.driver_name,
                 pickup_date=instance.pickup_date,
                 pickup_time=instance.pickup_time,
