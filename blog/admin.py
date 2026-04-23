@@ -4,7 +4,7 @@ from .models import Driver, Inquiry, PaypalPayment, PhoneMapping, StripePayment,
 
 
 class DriverAdmin(admin.ModelAdmin):
-    list_display = ['driver_name', 'driver_contact', 'driver_email', 'driver_address', 'driver_plate']
+    list_display = ['driver_name', 'driver_contact', 'driver_email', 'driver_address', 'driver_plate', 'user', 'must_change_password']
     search_fields = ['driver_name', 'driver_contact', 'driver_email', 'driver_address', 'driver_plate']
 
 
