@@ -6,6 +6,39 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from django.views.decorators.http import require_POST
+from django.contrib.admin.views.decorators import staff_member_required
+
+
+@staff_member_required
+def driver_impersonate(request, driver_id):
+    from blog.models import Driver
+    from django.contrib.auth import login
+
+    driver = get_object_or_404(Driver, pk=driver_id)
+    if not driver.user:
+        return redirect('/horeb_yhwh/')
+
+    # superuser 세션 저장 (나중에 돌아오기 위해)
+    request.session['impersonator_id'] = request.user.id
+
+    login(request, driver.user, backend='django.contrib.auth.backends.ModelBackend')
+    return redirect('blog:driver_dashboard')
+
+
+@login_required(login_url='/driver/login/')
+def driver_impersonate_exit(request):
+    from django.contrib.auth.models import User
+
+    impersonator_id = request.session.get('impersonator_id')
+    if impersonator_id:
+        try:
+            superuser = User.objects.get(pk=impersonator_id)
+            login(request, superuser, backend='django.contrib.auth.backends.ModelBackend')
+            del request.session['impersonator_id']
+            return redirect('/horeb_yhwh/')
+        except User.DoesNotExist:
+            pass
+    return redirect('/horeb_yhwh/')
 
 
 def driver_login(request):
