@@ -4,7 +4,7 @@ from django.core.management.base import BaseCommand
 from django.utils import timezone
 
 from blog.bird_proxy import close_bird_mapping
-from sms_utils import normalize_phone  # ✔ FIX: single source of truth
+from blog.sms_utils import normalize_phone  # ✔ FIX: single source of truth
 from blog.models import Post
 
 
