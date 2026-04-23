@@ -18,10 +18,11 @@ def driver_impersonate(request, driver_id):
     if not driver.user:
         return redirect('/horeb_yhwh/')
 
-    # superuser 세션 저장 (나중에 돌아오기 위해)
-    request.session['impersonator_id'] = request.user.id
-
+    impersonator_id = request.user.id  # 먼저 저장
     login(request, driver.user, backend='django.contrib.auth.backends.ModelBackend')
+    request.session['impersonator_id'] = impersonator_id  # login() 후에 세션에 저장
+    request.session.modified = True
+
     return redirect('blog:driver_dashboard')
 
 
@@ -33,8 +34,8 @@ def driver_impersonate_exit(request):
     if impersonator_id:
         try:
             superuser = User.objects.get(pk=impersonator_id)
+            request.session.pop('impersonator_id', None)
             login(request, superuser, backend='django.contrib.auth.backends.ModelBackend')
-            del request.session['impersonator_id']
             return redirect('/horeb_yhwh/')
         except User.DoesNotExist:
             pass
