@@ -12,7 +12,7 @@ from django.views.decorators.http import require_POST
 from blog.models import PhoneMapping
 from blog.bird_proxy import send_bird_sms
 
-from blog.sms_utils import normalize_phone as _format_e164
+from blog.sms_utils import normalize_phone 
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 # Mapping lookup (FIX #3: normalize key)
 # =========================
 def _get_active_mapping(from_number):
-    from_number = _format_e164(from_number)
+    from_number = normalize_phone(from_number)
     return PhoneMapping.objects.filter(from_number=from_number).first()
 
 
@@ -69,7 +69,7 @@ def _get_driver_target(driver_phone):
     active.sort(key=lambda x: abs((x[0] - now).total_seconds()))
     _, closest = active[0]
 
-    customer_phone = _format_e164(closest.contact)
+    customer_phone = normalize_phone(closest.contact)
 
     logger.debug(
         '[Bird] Driver %s → Post %s → customer %s',
@@ -107,7 +107,7 @@ def sms_webhook(request):
         return JsonResponse({'status': 'no from_number'})
 
     # ✔ normalize ONLY customer side
-    from_number = _format_e164(from_number)
+    from_number = normalize_phone(from_number)
 
     mapping = _get_active_mapping(from_number)
 
@@ -158,7 +158,7 @@ def voice_webhook(request):
     if not call_id or not from_number:
         return JsonResponse({'error': 'missing data'}, status=400)
 
-    from_number = _format_e164(from_number)
+    from_number = normalize_phone(from_number)
 
     # ✔ relaxed status handling
     if status not in ['starting', 'initiated']:

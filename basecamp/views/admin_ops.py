@@ -449,8 +449,8 @@ def email_dispatch_detail(request):
                 bird_number = None
                 if user_today.use_proxy:
                     from blog.models import PhoneMapping
-                    from blog.bird_proxy import _format_e164
-                    customer_phone = _format_e164(user_today.contact)
+                    from blog.sms_utils import normalize_phone
+                    customer_phone = normalize_phone(user_today.contact)
                     mapping = PhoneMapping.objects.filter(from_number=customer_phone).first()
                     if mapping:
                         bird_number = settings.BIRD_NUMBER
