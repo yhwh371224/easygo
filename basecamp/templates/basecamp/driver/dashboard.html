@@ -17,7 +17,7 @@
       align-items:center;
       justify-content:space-between;
     }
-    .driver-header h1 { font-size:1.1rem; margin:0; font-weight:600; color:#c4c9d4;  }
+    .driver-header h1 { font-size:1.1rem; margin:0; font-weight:600; color:#c4c9d4; }
     .driver-header a { color:#c4c9d4; font-size:1.8rem; font-weight:600; text-decoration:none; }
     .trip-card {
       background:#fff;
@@ -46,6 +46,65 @@
     }
     .trip-route .arrow { margin:0 .4rem; color:#9ca3af; }
     .trip-meta { font-size:.8rem; color:#9ca3af; margin-top:.25rem; }
+
+    /* 클릭 가능한 주소 */
+    .trip-address {
+      display:flex;
+      align-items:center;
+      gap:.4rem;
+      margin-top:.5rem;
+      font-size:.875rem;
+      color:#2563eb;
+      font-weight:500;
+      text-decoration:none;
+    }
+    .trip-address:active { color:#1d4ed8; }
+    .trip-address .icon { font-size:1rem; }
+
+    /* 결제 + 가격 */
+    .trip-payment {
+      display:flex;
+      align-items:center;
+      gap:.5rem;
+      margin-top:.4rem;
+      font-size:.85rem;
+    }
+    .badge-paid {
+      background:#d1fae5;
+      color:#065f46;
+      border-radius:4px;
+      padding:.1rem .45rem;
+      font-size:.75rem;
+      font-weight:600;
+    }
+    .badge-cash {
+      background:#fef3c7;
+      color:#92400e;
+      border-radius:4px;
+      padding:.1rem .45rem;
+      font-size:.75rem;
+      font-weight:600;
+    }
+    .trip-price {
+      font-size:.95rem;
+      font-weight:700;
+      color:#1f2937;
+    }
+
+    /* 클릭 가능한 전화번호 */
+    .trip-phone {
+      display:flex;
+      align-items:center;
+      gap:.4rem;
+      margin-top:.4rem;
+      font-size:.875rem;
+      color:#16a34a;
+      font-weight:500;
+      text-decoration:none;
+    }
+    .trip-phone:active { color:#15803d; }
+    .trip-phone .icon { font-size:1rem; }
+
     .btn-complete {
       width:100%;
       padding:.85rem;
@@ -105,22 +164,61 @@
   {% with post=t.post %}
   <div class="trip-card" id="trip-{{ post.id }}">
     <div class="trip-card-body">
+
+      <!-- 시간 + proxy badge -->
       <div class="trip-time">
         {{ post.pickup_time|default:"--:--" }}
         {% if post.use_proxy %}<span class="badge-proxy">proxy on</span>{% endif %}
       </div>
+
+      <!-- 손님 이름 -->
       <div class="trip-name">{{ post.name }}</div>
+
+      <!-- 출발 → 도착 -->
       <div class="trip-route">
         <span>{{ post.start_point|default:"–" }}</span>
         <span class="arrow">→</span>
         <span>{{ post.end_point|default:"–" }}</span>
       </div>
+
+      <!-- 인원 / 짐 / 항공편 -->
       <div class="trip-meta">
         {{ post.no_of_passenger }} pax
         {% if post.no_of_baggage %} · {{ post.no_of_baggage }} bags{% endif %}
         {% if post.flight_number %} · {{ post.flight_number }}{% endif %}
       </div>
+
+      <!-- 주소 → 구글맵 연결 -->
+      {% with address=post.street|add:" "|add:post.suburb %}
+      {% if post.street or post.suburb %}
+      <a class="trip-address"
+         href="https://www.google.com/maps/search/?api=1&query={{ address|urlencode }}"
+         target="_blank" rel="noopener">
+        <span class="icon">📍</span>
+        {{ post.street }}{% if post.street and post.suburb %}, {% endif %}{{ post.suburb }}
+      </a>
+      {% endif %}
+      {% endwith %}
+
+      <!-- 가격 + 결제방법 -->
+      {% if post.price or post.paid or post.cash %}
+      <div class="trip-payment">
+        {% if post.price %}<span class="trip-price">${{ post.price }}</span>{% endif %}
+        {% if post.paid %}<span class="badge-paid">Paid</span>{% endif %}
+        {% if post.cash and not post.paid %}<span class="badge-cash">Cash</span>{% endif %}
+      </div>
+      {% endif %}
+
+      <!-- 전화번호 → 전화 연결 -->
+      {% if post.contact %}
+      <a class="trip-phone" href="tel:{{ post.contact }}">
+        <span class="icon">📞</span>
+        {{ post.contact }}
+      </a>
+      {% endif %}
+
     </div>
+
     {% if post.use_proxy %}
     <button
       class="btn-complete active"
