@@ -33,6 +33,7 @@ def _get_driver_target(driver_phone):
 
     now = timezone.now()
     today = timezone.localdate()
+    tomorrow = today + timedelta(days=1)
 
     # ❗ FIX: driver is already +61 → DO NOT re-normalize again
     e164_driver = driver_phone
@@ -41,7 +42,7 @@ def _get_driver_target(driver_phone):
         Post.objects
         .filter(
             driver__driver_contact=e164_driver,
-            pickup_date=today,
+            pickup_date__in=[today, tomorrow],
             cancelled=False,
             use_proxy=True,
         )
