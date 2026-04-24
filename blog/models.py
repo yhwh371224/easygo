@@ -43,7 +43,7 @@ class DriverSettlement(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     note = models.TextField(blank=True, null=True)
     settled_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    settled_at = models.DateTimeField(auto_now_add=True)
+    settled_at = models.DateTimeField(default=timezone.now)
 
     class Meta:
         ordering = ['-settled_at']
