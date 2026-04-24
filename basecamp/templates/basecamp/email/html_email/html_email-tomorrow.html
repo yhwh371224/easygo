@@ -147,79 +147,77 @@
 											<td align="left" style="padding-top:28px;padding-left:0;">	
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
 													Tomorrow is your trip day! {{ pickup_date|date:"Y-m-d" }}<br><br></p>
-											{% if not reminder or cash %}	
-												<p style="margin:0; font-size:16px; line-height:24px; font-weight:bold;">
-													✨ Important Notice:  
-												</p>										
-												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
-													<span style="color: #eb7828">Please reply "Yes" to this email for reconfirming your booking and details below</span><br><br>													
-													Please note that we can not guarantee your booking unless we receive a confirmation with a "Yes" response<br><br>
+
+												{% if not reminder %}	
+													<p style="margin:0; font-size:16px; line-height:24px; font-weight:bold;">
+														✨ Important Notice:  
+													</p>										
+													<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
+														<span style="color: #eb7828">To secure your booking, could you please reply with a quick "Yes" to confirm? This helps us ensure everything is ready for you 😊</span><br><br>
+													</p>
+												{% endif %}
+
+												{% if cash %}	
+													<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">													
+														Please note that the driver may not have a card machine available. We kindly ask you to prepare the cash in advance<br><br>
+													</p>											
+												{% endif %}
+
+												{% if direction == 'Pickup from Intl Airport' or direction == 'Pickup from Domestic Airport' %}												
+													<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
+														• Sydney Arrival Date: {{ pickup_date|date:"Y-m-d" }}<br> 
+														• Flight number: {{ flight_number }} <small>(ETA {{ flight_time }})</small><br>
+														• Pickup around {{ pickup_time }}<br><br>
+
+														{% if cash %}
+															<span style="color: #eb7828">We kindly request that you email us before boarding your flight and after landing to Sydney</span><br><br>													
+														{% else %}
+															<span style="color: #eb7828">After landing, please check your email. You will be notified of the meeting details via email or SMS</span><br><br>
+														{% endif %}
+
+														<span style="color:#eb7828;">
+															✨ For more detailed Sydney arrival information, please visit: 
+															<a href="https://easygoshuttle.com.au/arrival_guide" target="_blank">easygoshuttle.com.au/arrival_guide</a>
+														</span><br>
+													</p>												
+												{% elif start_point or not direction %}
+													<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">													
+														• See you on time, {{ pickup_time }}<br>											
+														• Start point: {{ start_point|default:"" }}<br>
+														{% if street %}
+														• {{ street }}<br>
+														{% endif %}
+														• End point: {{ end_point|default:"" }}<br>
+													</p>	
+													<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
+														To avoid any inconvenience for you and other passengers, please be ready at your pickup time. 
+														Late changes may incur additional costs.<br>
+														More details >><a href="https://easygoshuttle.com.au/information">&nbsp;click here</a><br><br>
+													</p>
+												{% else %} 
+													<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
+														• Direction: {{ direction }}<br>
+														• Pickup @ {{ pickup_time }}<br>
+														{% if street or suburb %}
+															• Pickup address:
+															{% if street %}{{ street }}{% endif %}
+															{% if suburb %}, {{ suburb }}{% endif %}<br>
+														{% endif %}
+													</p>
+													<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
+														To avoid any inconvenience for you and other passengers, please be ready at your pickup time. 
+														Late changes may incur additional costs.<br>
+														More details >><a href="https://easygoshuttle.com.au/information">&nbsp;click here</a><br><br>
+													</p>					
+												{% endif %} 		
+																																		
+												<p style="Margin:0;font-size:12px;line-height:21px;Margin-top:12px;Margin-bottom:12px;">    
+													<span style="color: #eb7828">Please note:</span><br>
+													If you have anything to change or cancel, please let us know asap<br><br>
 												</p>
-											{% endif %}
-
-											{% if cash %}	
-												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">													
-													Please note that the driver may not have a card machine available. We kindly ask you to prepare the cash in advance<br><br></p>											
-											{% endif %}
-
-											{% if direction == 'Pickup from Intl Airport' or direction == 'Pickup from Domestic Airport' %}												
-												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
-													• Sydney Arrival Date: {{ pickup_date|date:"Y-m-d" }}<br> 
-													• Flight number: {{ flight_number }} <small>(ETA {{ flight_time }})</small><br>
-													• Pickup around {{ pickup_time }}<br><br>
-
-													{% if cash %}
-														<span style="color: #eb7828">We kindly request that you email us before boarding your flight and after landing to Sydney</span><br><br>													
-													{% else %}
-														<span style="color: #eb7828">After landing, please check your email. You will be notified of the meeting details via email or SMS</span><br><br>
-													{% endif %}
-
-													<!-- 안내문구와 링크 추가 -->
-													<span style="color:#eb7828;">
-														✨ For more detailed Sydney arrival information, please visit: 
-														<a href="https://easygoshuttle.com.au/arrival_guide" target="_blank">easygoshuttle.com.au/arrival_guide</a>
-													</span>
-												</p>												
-											{% elif start_point or not direction %}
-												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">													
-													• See you on time, {{ pickup_time }}<br>											
-													• Start point: {{ start_point|default:"" }}<br>
-													{% if street %}
-													• {{ street }}<br>
-													{% endif %}
-													• End point: {{ end_point|default:"" }}<br><br>
-												</p>	
-												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
-													Please be ready on time, {{ pickup_time }}<br><br>
-												</p>
-												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
-													Delays greater than 5 mins from pickup time creates last min reschedule expenses 
-													and additional liabilities to other scheduled passengers, additional charge will apply<br>
-													More details >><a href="https://easygoshuttle.com.au/information">&nbsp;click here</a></small><br><br><br>
-												</p>
-											{% else %} 
-												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
-													• Direction: {{ direction }}<br>
-													• Pickup @ {{ pickup_time }}<br>
-													{% if street or suburb %}
-														• Pickup address:
-														{% if street %}{{ street }}{% endif %}
-														{% if suburb %}, {{ suburb }}{% endif %}<br>
-													{% endif %}<br></p>
-												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
-													Please be ready on your pickup time, {{ pickup_time }}<br><br></p>
-												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
-													Delays greater than 5 mins from pickup time creates last min reschedule expenses 
-													and additional liabilities to other scheduled passengers, additional charge will apply<br>
-													More details >><a href="https://easygoshuttle.com.au/information">&nbsp;click here</a><br><br><br></p>					
-                                            {% endif %} 		
-																														                                                 
-												<p style="Margin:0;font-size:12px;line-height:21px;Margin-top:16px;Margin-bottom:12px;">    
-												<span style="color: #eb7828">Please note:</span><br>
-												If you have anything to change or cancel, Please let us know asap<br><br><br></p>
 												<p style="Margin:0;font-size:14px;font-weight:bold;line-height:22px;Margin-bottom:12px;">
 													<span style="color: #eb7828">Easy</span><span style="color: blue">Go&nbsp;</span>Airport Shuttle<br>
-                                                </p>
+												</p>
 												<p style="font-size: 12px; color: #888888;">
 													For your privacy, your personal mobile number is not shared with your driver — all calls and messages are connected through a secure, intermediary number in compliance with Australian telecommunications regulations.
 												</p>

@@ -48,6 +48,7 @@ class Command(BaseCommand):
                 driver__isnull=False,
                 use_proxy=True,
             ).select_related('driver')
+            .order_by('pickup_time') 
         )
 
         if not bookings:
