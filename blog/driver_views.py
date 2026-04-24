@@ -1,7 +1,9 @@
 from datetime import datetime, timedelta
 
-from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
@@ -100,6 +102,25 @@ def driver_change_password(request):
             return redirect('blog:driver_dashboard')
 
     return render(request, 'basecamp/driver/change_password.html', {'error': error})
+
+
+@login_required(login_url='/driver/login/')
+def driver_password_change(request):
+    try:
+        driver = request.user.driver
+    except Exception:
+        return redirect('blog:driver_login')
+
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, 'Password changed successfully.')
+            return redirect('blog:driver_dashboard')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'basecamp/driver/driver_password_change.html', {'form': form, 'driver': driver})
 
 
 def driver_logout(request):

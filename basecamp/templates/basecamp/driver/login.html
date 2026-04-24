@@ -7,6 +7,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="shortcut icon" type="image/x-icon" href="{% static 'basecamp/favi/favicon.ico' %}">
   <link rel="stylesheet" href="{% static 'basecamp/css/base_home.css' %}" media="all" />
+  <style>
+    .btn-submit {
+      background:#f59e0b;
+      color:#fff;
+      border:none;
+      padding:.85rem;
+      width:100%;
+      font-size:1rem;
+      font-weight:600;
+      border-radius:8px;
+      cursor:pointer;
+      transition:background .2s;
+    }
+    .btn-submit:hover { background:#d97706; }
+    .btn-submit:active { background:#92400e; opacity:.8; }
+  </style>
 </head>
 <body class="bg-dark">
 <section class="position-relative pt-6 pb-5 py-sm-6" style="min-height:100vh;display:flex;align-items:center;">
@@ -44,16 +60,23 @@
             style="font-size:1.1rem;padding:0.75rem 1rem;"
           >
         </div>
-        <button
-          type="submit"
-          class="btn btn-warning w-100"
-          style="font-size:1.2rem;padding:0.85rem;font-weight:600;letter-spacing:.03em;"
-        >
-          Log In
-        </button>
+        <button type="submit" class="btn-submit">Log In</button>
       </form>
     </div>
   </div>
 </section>
+<script>
+document.querySelectorAll('.btn-submit').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const original = this.textContent;
+    this.textContent = 'Submitting…';
+    this.style.background = '#92400e';
+    setTimeout(() => {
+      this.textContent = original;
+      this.style.background = '';
+    }, 1000);
+  });
+});
+</script>
 </body>
 </html>
