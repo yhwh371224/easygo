@@ -14,7 +14,7 @@ from blog.bird_proxy import send_bird_sms
 
 from blog.sms_utils import normalize_phone 
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('bird_webhooks') 
 
 
 # =========================
