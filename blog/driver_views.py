@@ -138,17 +138,15 @@ def driver_dashboard(request):
     today = timezone.localdate()
     now = timezone.now()
 
-    # 오늘 트립
+    # 오늘 이후 미래 트립 (날짜 + 시간 순)
     posts = (
         Post.objects
         .filter(
             driver=driver,
-            pickup_date=today,
+            pickup_date__gte=today,
             cancelled=False,
         )
-        .exclude(contact__isnull=True)
-        .exclude(contact='')
-        .order_by('pickup_time')
+        .order_by('pickup_date', 'pickup_time')
     )
 
     trips = []
@@ -226,7 +224,7 @@ def driver_dashboard(request):
         elif post.cash:
             current_total_cash += amount
 
-    # 오늘 트립도 current 합계에 포함
+    # 오늘 이후 트립도 current 합계에 포함
     for t in trips:
         post = t['post']
         try:

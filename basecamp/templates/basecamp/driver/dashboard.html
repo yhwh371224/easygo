@@ -133,6 +133,16 @@
       margin-left:.4rem;
       vertical-align:middle;
     }
+    /* 날짜 구분 */
+    .trip-date-label {
+      font-size:.75rem;
+      font-weight:600;
+      color:#9ca3af;
+      text-transform:uppercase;
+      letter-spacing:.05em;
+      margin:.25rem 0 .25rem .25rem;
+    }
+    .trip-date-label.today { color:#f59e0b; }
     .empty-state {
       text-align:center;
       padding:3rem 1rem;
@@ -237,6 +247,12 @@
   {% with post=t.post %}
   <div class="trip-card" id="trip-{{ post.id }}">
     <div class="trip-card-body">
+
+      {% if post.pickup_date == today %}
+        <div class="trip-date-label today">📅 Today</div>
+      {% else %}
+        <div class="trip-date-label">📅 {{ post.pickup_date|date:"D, d M" }}</div>
+      {% endif %}
 
       <div class="trip-time">
         {{ post.pickup_time|default:"--:--" }}
