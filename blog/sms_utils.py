@@ -28,6 +28,21 @@ def get_client():
 
 
 # =========================
+# Phone Formatting
+# =========================
+def format_au_phone(number):
+    """Convert +61XXXXXXXXX to 0XXX XXX XXX format."""
+    if not number:
+        return number
+    number = str(number).strip().replace(' ', '')
+    if number.startswith('+61'):
+        number = '0' + number[3:]
+    if len(number) == 10:
+        return f"{number[:4]} {number[4:7]} {number[7:]}"
+    return number
+
+
+# =========================
 # Phone Normalization (GLOBAL STANDARD)
 # =========================
 def normalize_phone(phone_number, default_region="AU"):

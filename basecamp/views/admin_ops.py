@@ -10,7 +10,7 @@ from django.utils import timezone
 from main.settings import RECIPIENT_EMAIL
 from utils.email import send_template_email
 from blog.models import Post, Inquiry, Driver
-from blog.sms_utils import send_sms_notice, send_whatsapp_template
+from blog.sms_utils import send_sms_notice, send_whatsapp_template, format_au_phone
 from csp.constants import NONCE
 from basecamp.basecamp_utils import (
     parse_baggage, handle_email_sending, format_pickup_time_12h,
@@ -453,7 +453,7 @@ def email_dispatch_detail(request):
                     customer_phone = normalize_phone(user_today.contact)
                     mapping = PhoneMapping.objects.filter(from_number=customer_phone).first()
                     if mapping:
-                        bird_number = settings.BIRD_NUMBER
+                        bird_number = format_au_phone(settings.BIRD_NUMBER)
 
                 context.update({
                     'pickup_time': user_today.pickup_time,

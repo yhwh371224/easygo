@@ -1,4 +1,5 @@
 {% load static %}
+{% load phone_filters %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -134,6 +135,17 @@
       color:#9ca3af;
     }
     .empty-state .icon { font-size:3rem; margin-bottom:1rem; }
+    .trip-direction {
+      display:inline-block;
+      font-size:.75rem;
+      font-weight:600;
+      border-radius:4px;
+      padding:.15rem .5rem;
+      margin-top:.3rem;
+    }
+    .trip-direction.to-airport { background:#dbeafe; color:#1d4ed8; }
+    .trip-direction.from-airport { background:#ede9fe; color:#6d28d9; }
+    .trip-direction.cruise { background:#fce7f3; color:#9d174d; }
   </style>
 </head>
 <body>
@@ -170,9 +182,28 @@
         {{ post.pickup_time|default:"--:--" }}
         {% if post.use_proxy %}<span class="badge-proxy">proxy on</span>{% endif %}
       </div>
-
       <!-- 손님 이름 -->
       <div class="trip-name">{{ post.name }}</div>
+
+      <!-- 방향 표시 -->
+      {% if post.direction == "Drop off to Domestic Airport" %}
+        <div class="trip-direction to-airport">✈️ To Domestic</div>
+      {% elif post.direction == "Drop off to Intl Airport" %}
+        <div class="trip-direction to-airport">✈️ To International</div>
+      {% elif post.direction == "Pickup from Domestic Airport" %}
+        <div class="trip-direction from-airport">✈️ From Domestic</div>
+      {% elif post.direction == "Pickup from Intl Airport" %}
+        <div class="trip-direction from-airport">✈️ From International</div>
+      {% elif post.direction == "Cruise or Point to Point" %}
+        {% with sp=post.start_point|lower ep=post.end_point|lower %}
+          {% if "white bay" in sp %}<div class="trip-direction cruise">🚢 From White Bay</div>
+          {% elif "white bay" in ep %}<div class="trip-direction cruise">🚢 To White Bay</div>
+          {% elif "opt" in sp %}<div class="trip-direction cruise">🚢 From OPT</div>
+          {% elif "opt" in ep %}<div class="trip-direction cruise">🚢 To OPT</div>
+          {% else %}<div class="trip-direction cruise">🚗 Point to Point</div>
+          {% endif %}
+        {% endwith %}
+      {% endif %}
 
       <!-- 출발 → 도착 -->
       <div class="trip-route">
@@ -210,10 +241,15 @@
       {% endif %}
 
       <!-- 전화번호 → 전화 연결 -->
-      {% if post.contact %}
+      {% if post.driver.virtual_number %}
+      <a class="trip-phone" href="tel:{{ post.driver.virtual_number.number }}">
+        <span class="icon">📞</span>
+        {{ post.driver.virtual_number.number|format_au_phone }}
+      </a>
+      {% elif post.contact %}
       <a class="trip-phone" href="tel:{{ post.contact }}">
         <span class="icon">📞</span>
-        {{ post.contact }}
+        {{ post.contact|format_au_phone }}
       </a>
       {% endif %}
 
