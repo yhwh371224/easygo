@@ -145,6 +145,7 @@ def driver_dashboard(request):
             driver=driver,
             pickup_date__gte=today,
             cancelled=False,
+            use_proxy=True,
         )
         .order_by('pickup_date', 'pickup_time')
     )
