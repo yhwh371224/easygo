@@ -180,14 +180,18 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': False,
         },
-        # ✅ 추가 — template DEBUG 경고 숨김
-        'django.template': {
-            'handlers': ['file'],
+        'blog.management.commands.booking_reminder': {
+            'handlers': ['email_file'],
             'level': 'INFO',
             'propagate': False,
         },
-        'blog.management.commands.booking_reminder': {
-            'handlers': ['email_file'],
+        'bird_webhooks': {
+            'handlers': ['sms_file', 'console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'bird_proxy': {
+            'handlers': ['sms_file', 'console'],
             'level': 'INFO',
             'propagate': False,
         },
@@ -208,7 +212,7 @@ LOGGING = {
         },
         'blog': {
             'handlers': ['file', 'console'],
-            'level': 'DEBUG',
+            'level': 'INFO',
             'propagate': False,
         },
     },
