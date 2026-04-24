@@ -38,6 +38,20 @@ class Driver(models.Model):
         return self.driver_name
 
 
+class DriverSettlement(models.Model):
+    driver = models.ForeignKey('Driver', on_delete=models.CASCADE, related_name='settlements')
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    note = models.TextField(blank=True, null=True)
+    settled_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    settled_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-settled_at']
+
+    def __str__(self):
+        return f"{self.driver} - ${self.amount} on {self.settled_at.date()}"
+
+
 class Inquiry(models.Model):
     name = models.CharField(max_length=100, blank=False)
     company_name = models.CharField(max_length=100, blank=True, null=True)

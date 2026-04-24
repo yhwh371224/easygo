@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from decimal import Decimal
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
@@ -20,9 +21,9 @@ def driver_impersonate(request, driver_id):
     if not driver.user:
         return redirect('/horeb_yhwh/')
 
-    impersonator_id = request.user.id  # 먼저 저장
+    impersonator_id = request.user.id
     login(request, driver.user, backend='django.contrib.auth.backends.ModelBackend')
-    request.session['impersonator_id'] = impersonator_id  # login() 후에 세션에 저장
+    request.session['impersonator_id'] = impersonator_id
     request.session.modified = True
 
     return redirect('blog:driver_dashboard')
@@ -64,7 +65,6 @@ def driver_login(request):
                 error = 'No driver account is linked to this user.'
                 return render(request, 'basecamp/driver/login.html', {'error': error})
             login(request, user)
-            # 첫 로그인이면 비밀번호 변경 페이지로 강제 이동
             if driver.must_change_password:
                 return redirect('blog:driver_change_password')
             return redirect('blog:driver_dashboard')
@@ -95,7 +95,6 @@ def driver_change_password(request):
             request.user.save()
             driver.must_change_password = False
             driver.save()
-            # 비밀번호 변경 후 재로그인
             user = authenticate(request, username=request.user.username, password=new_password)
             if user:
                 login(request, user)
@@ -135,10 +134,11 @@ def driver_dashboard(request):
     except Exception:
         return redirect('blog:driver_login')
 
-    from blog.models import Post
+    from blog.models import Post, DriverSettlement
     today = timezone.localdate()
     now = timezone.now()
 
+    # 오늘 트립
     posts = (
         Post.objects
         .filter(
@@ -169,10 +169,85 @@ def driver_dashboard(request):
             'is_past': is_past,
         })
 
+    # 정산 내역 (최신순, 최대 2개)
+    settlements = list(
+        DriverSettlement.objects
+        .filter(driver=driver)
+        .order_by('-settled_at')[:2]
+    )
+
+    last_settlement = settlements[0] if len(settlements) >= 1 else None
+    prev_settlement = settlements[1] if len(settlements) >= 2 else None
+
+    # 과거 트립: prev_settlement 이후 ~ today 미만
+    past_posts = (
+        Post.objects
+        .filter(
+            driver=driver,
+            pickup_date__lt=today,
+            cancelled=False,
+        )
+        .exclude(price__isnull=True)
+        .exclude(price='')
+    )
+    if prev_settlement:
+        past_posts = past_posts.filter(pickup_date__gt=prev_settlement.settled_at.date())
+    past_posts = past_posts.order_by('-pickup_date', '-pickup_time')
+
+    # 트립과 정산을 날짜순으로 인터리브
+    timeline = []
+    for post in past_posts:
+        timeline.append({
+            'type': 'trip',
+            'date': post.pickup_date,
+            'data': post,
+        })
+    for s in settlements:
+        timeline.append({
+            'type': 'settlement',
+            'date': s.settled_at.date(),
+            'data': s,
+        })
+    timeline.sort(key=lambda x: x['date'], reverse=True)
+
+    # 마지막 정산 이후 트립만 current 합계 계산
+    current_total_paid = Decimal('0')
+    current_total_cash = Decimal('0')
+
+    for post in past_posts:
+        if last_settlement and post.pickup_date <= last_settlement.settled_at.date():
+            break
+        try:
+            amount = Decimal(str(post.price))
+        except Exception:
+            continue
+        if post.paid:
+            current_total_paid += amount
+        elif post.cash:
+            current_total_cash += amount
+
+    # 오늘 트립도 current 합계에 포함
+    for t in trips:
+        post = t['post']
+        try:
+            amount = Decimal(str(post.price))
+        except Exception:
+            continue
+        if post.paid:
+            current_total_paid += amount
+        elif post.cash:
+            current_total_cash += amount
+
+    current_grand_total = current_total_paid + current_total_cash
+
     return render(request, 'basecamp/driver/dashboard.html', {
         'driver': driver,
         'trips': trips,
         'today': today,
+        'timeline': timeline,
+        'current_total_paid': current_total_paid,
+        'current_total_cash': current_total_cash,
+        'current_grand_total': current_grand_total,
     })
 
 

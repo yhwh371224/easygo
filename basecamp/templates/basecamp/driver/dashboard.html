@@ -1,4 +1,5 @@
 {% load static %}
+{% load phone_filters %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -46,8 +47,6 @@
     }
     .trip-route .arrow { margin:0 .4rem; color:#9ca3af; }
     .trip-meta { font-size:.8rem; color:#9ca3af; margin-top:.25rem; }
-
-    /* 클릭 가능한 주소 */
     .trip-address {
       display:flex;
       align-items:center;
@@ -60,8 +59,6 @@
     }
     .trip-address:active { color:#1d4ed8; }
     .trip-address .icon { font-size:1rem; }
-
-    /* 결제 + 가격 */
     .trip-payment {
       display:flex;
       align-items:center;
@@ -90,8 +87,6 @@
       font-weight:700;
       color:#1f2937;
     }
-
-    /* 클릭 가능한 전화번호 */
     .trip-phone {
       display:flex;
       align-items:center;
@@ -104,7 +99,6 @@
     }
     .trip-phone:active { color:#15803d; }
     .trip-phone .icon { font-size:1rem; }
-
     .btn-complete {
       width:100%;
       padding:.85rem;
@@ -145,6 +139,74 @@
       color:#9ca3af;
     }
     .empty-state .icon { font-size:3rem; margin-bottom:1rem; }
+
+    /* Past Trips */
+    .past-trips-header {
+      font-size:.75rem;
+      font-weight:600;
+      color:#9ca3af;
+      text-transform:uppercase;
+      letter-spacing:.05em;
+      margin:1.5rem 0 .5rem;
+      text-align:center;
+    }
+    .past-trip-row {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:.4rem .25rem;
+      font-size:.8rem;
+      color:#6b7280;
+      border-bottom:1px solid #f3f4f6;
+    }
+    .past-trip-left { display:flex; gap:.75rem; align-items:center; }
+    .past-trip-date { font-weight:500; color:#374151; }
+    .past-trip-time { color:#9ca3af; }
+    .past-trip-right { display:flex; align-items:center; gap:.4rem; }
+    .past-trip-price { font-weight:600; color:#1f2937; }
+
+    /* 정산 구분선 */
+    .settlement-divider {
+      display:flex;
+      align-items:center;
+      gap:.5rem;
+      margin:.75rem 0;
+      font-size:.75rem;
+      font-weight:700;
+      color:#f59e0b;
+    }
+    .settlement-divider::before,
+    .settlement-divider::after {
+      content:'';
+      flex:1;
+      height:2px;
+      background:#f59e0b;
+      opacity:.4;
+    }
+
+    /* 총액 */
+    .totals-section {
+      background:#fff;
+      border-radius:12px;
+      padding:1rem 1.25rem;
+      margin-top:1rem;
+      margin-bottom:5rem;
+    }
+    .totals-row {
+      display:flex;
+      justify-content:space-between;
+      font-size:.85rem;
+      color:#6b7280;
+      padding:.25rem 0;
+    }
+    .totals-row.grand {
+      border-top:2px solid #e5e7eb;
+      margin-top:.5rem;
+      padding-top:.75rem;
+      font-size:1.1rem;
+      font-weight:700;
+      color:#1f2937;
+    }
   </style>
 </head>
 <body>
@@ -176,16 +238,13 @@
   <div class="trip-card" id="trip-{{ post.id }}">
     <div class="trip-card-body">
 
-      <!-- 시간 + proxy badge -->
       <div class="trip-time">
         {{ post.pickup_time|default:"--:--" }}
         {% if post.use_proxy %}<span class="badge-proxy">proxy on</span>{% endif %}
       </div>
 
-      <!-- 손님 이름 -->
       <div class="trip-name">{{ post.name }}</div>
 
-      <!-- 방향 표시 -->
       {% if post.direction == "Drop off to Domestic Airport" %}
         <div class="trip-direction to-airport">✈️ To Domestic</div>
       {% elif post.direction == "Drop off to Intl Airport" %}
@@ -196,37 +255,28 @@
         <div class="trip-direction from-airport">✈️ From International</div>
       {% elif post.direction == "Cruise or Point to Point" %}
         {% with sp=post.start_point|lower ep=post.end_point|lower %}
-          {% if "white bay" in sp %}
-            <div class="trip-direction cruise">🚢 From White Bay</div>
-          {% elif "white bay" in ep %}
-            <div class="trip-direction cruise">🚢 To White Bay</div>
-          {% elif "opt" in sp %}
-            <div class="trip-direction cruise">🚢 From OPT</div>
-          {% elif "opt" in ep %}
-            <div class="trip-direction cruise">🚢 To OPT</div>
-          {% else %}
-            <div class="trip-direction cruise">🚗 Point to Point</div>
+          {% if "white bay" in sp %}<div class="trip-direction cruise">🚢 From White Bay</div>
+          {% elif "white bay" in ep %}<div class="trip-direction cruise">🚢 To White Bay</div>
+          {% elif "opt" in sp %}<div class="trip-direction cruise">🚢 From OPT</div>
+          {% elif "opt" in ep %}<div class="trip-direction cruise">🚢 To OPT</div>
+          {% else %}<div class="trip-direction cruise">🚗 Point to Point</div>
           {% endif %}
         {% endwith %}
       {% endif %}
 
-      <!-- 출발 → 도착 -->
       <div class="trip-route">
         <span>{{ post.start_point|default:"–" }}</span>
         <span class="arrow">→</span>
         <span>{{ post.end_point|default:"–" }}</span>
       </div>
 
-      <!-- 인원 / 짐 / 항공편 -->
       <div class="trip-meta">
         {{ post.no_of_passenger }} pax
         {% if post.no_of_baggage %} · {{ post.no_of_baggage }} bags{% endif %}
         {% if post.flight_number %} · {{ post.flight_number }}{% endif %}
       </div>
 
-      <!-- 주소 → 구글맵 연결 -->
       {% if post.street or post.suburb %}
-        {# street/suburb 있으면 기존대로 #}
         {% with address=post.street|add:" "|add:post.suburb %}
         <a class="trip-address"
            href="https://www.google.com/maps/search/?api=1&query={{ address|urlencode }}"
@@ -254,7 +304,6 @@
         {% endwith %}
       {% endif %}
 
-      <!-- 가격 + 결제방법 -->
       {% if post.price or post.paid or post.cash %}
       <div class="trip-payment">
         {% if post.price %}<span class="trip-price">${{ post.price }}</span>{% endif %}
@@ -263,16 +312,15 @@
       </div>
       {% endif %}
 
-      <!-- 전화번호 → 전화 연결 (드라이버 가상번호 경유) -->
       {% if post.driver.virtual_number %}
       <a class="trip-phone" href="tel:{{ post.driver.virtual_number.number }}">
         <span class="icon">📞</span>
-        {{ post.driver.virtual_number.number }}
+        {{ post.driver.virtual_number.number|format_au_phone }}
       </a>
       {% elif post.contact %}
       <a class="trip-phone" href="tel:{{ post.contact }}">
         <span class="icon">📞</span>
-        {{ post.contact }}
+        {{ post.contact|format_au_phone }}
       </a>
       {% endif %}
 
@@ -294,6 +342,52 @@
   </div>
   {% endwith %}
   {% endfor %}
+
+  <!-- Past Trips -->
+  {% if timeline %}
+  <div class="past-trips-header">Past Trips</div>
+
+  {% for item in timeline %}
+    {% if item.type == 'settlement' %}
+      <div class="settlement-divider">
+        Settled {{ item.data.settled_at|date:"d M Y" }} &nbsp;${{ item.data.amount }}
+      </div>
+    {% else %}
+      {% with post=item.data %}
+      <div class="past-trip-row">
+        <div class="past-trip-left">
+          <span class="past-trip-date">{{ post.pickup_date|date:"d M" }}</span>
+          <span class="past-trip-time">{{ post.pickup_time }}</span>
+        </div>
+        <div class="past-trip-right">
+          {% if post.price %}<span class="past-trip-price">${{ post.price }}</span>{% endif %}
+          {% if post.paid %}<span class="badge-paid">Paid</span>{% endif %}
+          {% if post.cash and not post.paid %}<span class="badge-cash">Cash</span>{% endif %}
+        </div>
+      </div>
+      {% endwith %}
+    {% endif %}
+  {% endfor %}
+
+  {% endif %}
+
+  <!-- 총액: timeline 밖 - 오늘 트립만 있어도 표시 -->
+  {% if current_grand_total %}
+  <div class="totals-section">
+    <div class="totals-row">
+      <span>Total Paid</span>
+      <span>${{ current_total_paid }}</span>
+    </div>
+    <div class="totals-row">
+      <span>Total Cash</span>
+      <span>${{ current_total_cash }}</span>
+    </div>
+    <div class="totals-row grand">
+      <span>Grand Total</span>
+      <span>${{ current_grand_total }}</span>
+    </div>
+  </div>
+  {% endif %}
 
 </div>
 

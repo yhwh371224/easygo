@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.admin import AdminSite
 from django.utils.html import format_html
 from django.urls import reverse
-from .models import Driver, Inquiry, PaypalPayment, PhoneMapping, StripePayment, Post, VirtualNumber
+from .models import Driver, DriverSettlement, Inquiry, PaypalPayment, PhoneMapping, StripePayment, Post, VirtualNumber
 
 
 class DriverAdmin(admin.ModelAdmin):
@@ -15,6 +15,16 @@ class DriverAdmin(admin.ModelAdmin):
             return format_html('<a class="button" href="{}">Login as Driver</a>', url)
         return '-'
     impersonate_button.short_description = 'Impersonate'
+
+
+@admin.register(DriverSettlement)
+class DriverSettlementAdmin(admin.ModelAdmin):
+    list_display = ['driver', 'amount', 'note', 'settled_by', 'settled_at']
+    list_filter = ['driver']
+    
+    def save_model(self, request, obj, form, change):
+        obj.settled_by = request.user
+        super().save_model(request, obj, form, change)
 
 
 class InquiryAdmin(admin.ModelAdmin):
