@@ -171,13 +171,12 @@ def driver_dashboard(request):
     settlements = list(
         DriverSettlement.objects
         .filter(driver=driver)
-        .order_by('-settled_at')[:2]
+        .order_by('-settled_at')[:1]
     )
 
     last_settlement = settlements[0] if len(settlements) >= 1 else None
-    prev_settlement = settlements[1] if len(settlements) >= 2 else None
 
-    # 과거 트립: prev_settlement 이후 ~ today 미만
+    # 과거 트립: last_settlement 이후 ~ today 미만
     past_posts = (
         Post.objects
         .filter(
@@ -188,8 +187,8 @@ def driver_dashboard(request):
         .exclude(price__isnull=True)
         .exclude(price='')
     )
-    if prev_settlement:
-        past_posts = past_posts.filter(pickup_date__gt=prev_settlement.settled_at.date())
+    if last_settlement:
+        past_posts = past_posts.filter(pickup_date__gt=last_settlement.settled_at.date())
     past_posts = past_posts.order_by('-pickup_date', '-pickup_time')
 
     # 트립과 정산을 날짜순으로 인터리브
@@ -213,8 +212,6 @@ def driver_dashboard(request):
     current_total_cash = Decimal('0')
 
     for post in past_posts:
-        if last_settlement and post.pickup_date <= last_settlement.settled_at.date():
-            break
         try:
             amount = Decimal(str(post.price))
         except Exception:
