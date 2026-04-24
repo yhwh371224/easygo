@@ -65,6 +65,7 @@ def driver_login(request):
                 error = 'No driver account is linked to this user.'
                 return render(request, 'basecamp/driver/login.html', {'error': error})
             login(request, user)
+            request.session.set_expiry(60 * 60 * 24)
             if driver.must_change_password:
                 return redirect('blog:driver_change_password')
             return redirect('blog:driver_dashboard')
