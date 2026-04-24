@@ -261,6 +261,18 @@
 
       <div class="trip-name">{{ post.name }}</div>
 
+      {% if post.driver.virtual_number %}
+      <a class="trip-phone" href="tel:{{ post.driver.virtual_number.number }}">
+        <span class="icon">📞</span>
+        {{ post.driver.virtual_number.number|format_au_phone }}
+      </a>
+      {% elif post.contact %}
+      <a class="trip-phone" href="tel:{{ post.contact }}">
+        <span class="icon">📞</span>
+        {{ post.contact|format_au_phone }}
+      </a>
+      {% endif %}
+
       {% if post.direction == "Drop off to Domestic Airport" %}
         <div class="trip-direction to-airport">✈️ To Domestic</div>
       {% elif post.direction == "Drop off to Intl Airport" %}
@@ -328,17 +340,6 @@
       </div>
       {% endif %}
 
-      {% if post.driver.virtual_number %}
-      <a class="trip-phone" href="tel:{{ post.driver.virtual_number.number }}">
-        <span class="icon">📞</span>
-        {{ post.driver.virtual_number.number|format_au_phone }}
-      </a>
-      {% elif post.contact %}
-      <a class="trip-phone" href="tel:{{ post.contact }}">
-        <span class="icon">📞</span>
-        {{ post.contact|format_au_phone }}
-      </a>
-      {% endif %}
 
     </div>
 
