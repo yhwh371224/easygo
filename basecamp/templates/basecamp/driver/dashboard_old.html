@@ -1,4 +1,5 @@
 {% load static %}
+{% load phone_filters %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -118,17 +119,6 @@
     .btn-complete.active { background:#f59e0b; color:#fff; }
     .btn-complete.active:hover { background:#d97706; }
     .btn-complete.done { background:#d1fae5; color:#065f46; cursor:default; }
-    .trip-direction {
-      display:inline-block;
-      font-size:.75rem;
-      font-weight:600;
-      border-radius:4px;
-      padding:.15rem .5rem;
-      margin-top:.3rem;
-    }
-    .trip-direction.to-airport { background:#dbeafe; color:#1d4ed8; }
-    .trip-direction.from-airport { background:#ede9fe; color:#6d28d9; }
-    .trip-direction.cruise { background:#fce7f3; color:#9d174d; }
     .badge-proxy {
       display:inline-block;
       font-size:.7rem;
@@ -145,6 +135,17 @@
       color:#9ca3af;
     }
     .empty-state .icon { font-size:3rem; margin-bottom:1rem; }
+    .trip-direction {
+      display:inline-block;
+      font-size:.75rem;
+      font-weight:600;
+      border-radius:4px;
+      padding:.15rem .5rem;
+      margin-top:.3rem;
+    }
+    .trip-direction.to-airport { background:#dbeafe; color:#1d4ed8; }
+    .trip-direction.from-airport { background:#ede9fe; color:#6d28d9; }
+    .trip-direction.cruise { background:#fce7f3; color:#9d174d; }
   </style>
 </head>
 <body>
@@ -181,7 +182,6 @@
         {{ post.pickup_time|default:"--:--" }}
         {% if post.use_proxy %}<span class="badge-proxy">proxy on</span>{% endif %}
       </div>
-
       <!-- 손님 이름 -->
       <div class="trip-name">{{ post.name }}</div>
 
@@ -196,16 +196,11 @@
         <div class="trip-direction from-airport">✈️ From International</div>
       {% elif post.direction == "Cruise or Point to Point" %}
         {% with sp=post.start_point|lower ep=post.end_point|lower %}
-          {% if "white bay" in sp %}
-            <div class="trip-direction cruise">🚢 From White Bay</div>
-          {% elif "white bay" in ep %}
-            <div class="trip-direction cruise">🚢 To White Bay</div>
-          {% elif "opt" in sp %}
-            <div class="trip-direction cruise">🚢 From OPT</div>
-          {% elif "opt" in ep %}
-            <div class="trip-direction cruise">🚢 To OPT</div>
-          {% else %}
-            <div class="trip-direction cruise">🚗 Point to Point</div>
+          {% if "white bay" in sp %}<div class="trip-direction cruise">🚢 From White Bay</div>
+          {% elif "white bay" in ep %}<div class="trip-direction cruise">🚢 To White Bay</div>
+          {% elif "opt" in sp %}<div class="trip-direction cruise">🚢 From OPT</div>
+          {% elif "opt" in ep %}<div class="trip-direction cruise">🚢 To OPT</div>
+          {% else %}<div class="trip-direction cruise">🚗 Point to Point</div>
           {% endif %}
         {% endwith %}
       {% endif %}
@@ -225,34 +220,16 @@
       </div>
 
       <!-- 주소 → 구글맵 연결 -->
+      {% with address=post.street|add:" "|add:post.suburb %}
       {% if post.street or post.suburb %}
-        {# street/suburb 있으면 기존대로 #}
-        {% with address=post.street|add:" "|add:post.suburb %}
-        <a class="trip-address"
-           href="https://www.google.com/maps/search/?api=1&query={{ address|urlencode }}"
-           target="_blank" rel="noopener">
-          <span class="icon">📍</span>
-          {{ post.street }}{% if post.street and post.suburb %}, {% endif %}{{ post.suburb }}
-        </a>
-        {% endwith %}
-      {% elif post.direction == "Cruise or Point to Point" %}
-        {% with sp=post.start_point ep=post.end_point %}
-          {% if sp and sp|slice:":1" >= "0" and sp|slice:":1" <= "9" %}
-          <a class="trip-address"
-             href="https://www.google.com/maps/search/?api=1&query={{ sp|urlencode }}"
-             target="_blank" rel="noopener">
-            <span class="icon">📍</span>{{ sp }}
-          </a>
-          {% endif %}
-          {% if ep and ep|slice:":1" >= "0" and ep|slice:":1" <= "9" %}
-          <a class="trip-address"
-             href="https://www.google.com/maps/search/?api=1&query={{ ep|urlencode }}"
-             target="_blank" rel="noopener">
-            <span class="icon">📍</span>{{ ep }}
-          </a>
-          {% endif %}
-        {% endwith %}
+      <a class="trip-address"
+         href="https://www.google.com/maps/search/?api=1&query={{ address|urlencode }}"
+         target="_blank" rel="noopener">
+        <span class="icon">📍</span>
+        {{ post.street }}{% if post.street and post.suburb %}, {% endif %}{{ post.suburb }}
+      </a>
       {% endif %}
+      {% endwith %}
 
       <!-- 가격 + 결제방법 -->
       {% if post.price or post.paid or post.cash %}
@@ -263,16 +240,16 @@
       </div>
       {% endif %}
 
-      <!-- 전화번호 → 전화 연결 (드라이버 가상번호 경유) -->
+      <!-- 전화번호 → 전화 연결 -->
       {% if post.driver.virtual_number %}
       <a class="trip-phone" href="tel:{{ post.driver.virtual_number.number }}">
         <span class="icon">📞</span>
-        {{ post.driver.virtual_number.number }}
+        {{ post.driver.virtual_number.number|format_au_phone }}
       </a>
       {% elif post.contact %}
       <a class="trip-phone" href="tel:{{ post.contact }}">
         <span class="icon">📞</span>
-        {{ post.contact }}
+        {{ post.contact|format_au_phone }}
       </a>
       {% endif %}
 
