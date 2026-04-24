@@ -20,25 +20,17 @@ class Command(BaseCommand):
         # --- 오늘 국제선 도착 예약 meeting_point 업데이트 ---
         booking_helper.update_meeting_point_for_arrivals()
 
-        reminder_intervals = [0, 1, 3, 5, 7, 14, 28, -1]
+        reminder_intervals = [0, 1, 7, -5]  # -5: 5일 전 픽업 완료 고객 리뷰 요청
         templates = [
             "html_email-today.html",
             "html_email-tomorrow.html",
-            "html_email-upcoming3.html",
-            "html_email-upcoming5.html",
             "html_email-upcoming7.html",
-            "html_email-upcoming14.html",
-            "html_email-upcoming28.html",
             "html_email-yesterday.html",
         ]
         subjects = [
             "Reminder-Today",
             "Reminder-Tomorrow",
-            "Reminder-3days",
-            "Reminder-5days",
             "Reminder-7days",
-            "Reminder-2wks",
-            "Reminder-4wks",
             "Review-EasyGo",
         ]
 
@@ -64,20 +56,20 @@ class Command(BaseCommand):
             booker_email = booking_reminder.booker_email
             is_today = subject == "Reminder-Today"
             is_tomorrow = subject == "Reminder-Tomorrow"
+            is_review = subject == "Review-EasyGo"
 
-            if booker_email:
-                # booker_email 있음
-                # - email: D-1, D-day만
-                # - booker_email: D-1까지 (D-day 제외)
+            if is_review:
+                # 리뷰 요청: 실제 탑승자에게만 (booker 제외)
+                email_recipients = collect_recipients(booking_reminder.email, booking_reminder.email1)
+            elif booker_email:
                 if is_today:
                     email_recipients = collect_recipients(booking_reminder.email, booking_reminder.email1)
                 elif is_tomorrow:
                     email_recipients = collect_recipients(booking_reminder.email, booking_reminder.email1, booker_email)
                 else:
-                    # D-2 이상: booker_email만
+                    # 7days: booker_email만
                     email_recipients = collect_recipients(booker_email)
             else:
-                # booker_email 없음: email 전체 발송
                 email_recipients = collect_recipients(booking_reminder.email, booking_reminder.email1)
 
             if not email_recipients:
