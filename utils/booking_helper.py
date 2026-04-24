@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.db import transaction
 
 from blog.models import Post, Driver, PhoneMapping
-from blog.sms_utils import normalize_phone
+from blog.sms_utils import normalize_phone, format_au_phone
 
 logger = logging.getLogger(__name__)
 
@@ -38,7 +38,7 @@ def build_reminder_context(booking, pickup_time_12h, driver):
     bird_number = None
     if booking.use_proxy and customer_phone:
         if PhoneMapping.objects.filter(from_number=customer_phone).exists():
-            bird_number = settings.BIRD_NUMBER
+            bird_number = format_au_phone(settings.BIRD_NUMBER)
 
     return {
         'booker_name': booking.booker_name,
