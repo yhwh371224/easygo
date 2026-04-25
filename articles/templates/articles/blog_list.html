@@ -1,7 +1,7 @@
 {% extends 'articles/base.html' %}
 {% load static %}
 
-{% block title %}EasyGo Airport Pickup Blog – Travel Tips & Guides{% endblock %}
+{% block title %}{% if current_category %}Blog - {{ current_category.name }} | EasyGo Shuttle{% else %}EasyGo Airport Pickup Blog – Travel Tips & Guides{% endif %}{% endblock %}
 
 {% block meta_description %}
 <meta name="description" content="Airport pickup tips, Sydney airport guides, and travel information updated weekly by EasyGo Airport Shuttle.">
@@ -89,7 +89,7 @@
 
     <!-- Post grid -->
     <h2 class="blog-section-title fade-up"><span></span>
-      {% if query %}"{{ query }}" Results{% else %}Latest Posts{% endif %}
+      {% if query %}"{{ query }}" Results{% elif current_category %}{{ current_category.name }}{% else %}Latest Posts{% endif %}
     </h2>
 
     <div class="row blog-grid g-3" id="postGrid">
