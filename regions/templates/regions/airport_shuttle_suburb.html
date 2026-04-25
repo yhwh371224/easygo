@@ -1,14 +1,14 @@
 {% extends "regions/base.html" %}
 {% load static %}
 
-{% block title %}{{ suburb.meta_title|default:suburb.name }} to {{ region.name }} Airport Shuttle | EasyGo{% endblock %}
+{% block title %}{% if suburb.meta_title %}{{ suburb.meta_title }}{% else %}{{ suburb.name }} to {{ region.name }} Airport Shuttle | EasyGo{% endif %}{% endblock %}
 
 {% block canonical %}
 <link rel="canonical" href="https://easygoshuttle.com.au/{{ region.slug }}/airport-shuttle/{{ suburb.slug }}/">
 {% endblock %}
 
 {% block meta %}
-<meta name="description" content="{{ suburb.meta_description|default:"Private airport shuttle from "|add:suburb.name|add:" to "|add:region.airport_name|add:". Fixed price, door-to-door. Book online." }}">
+<meta name="description" content="{% if suburb.meta_description %}{{ suburb.meta_description }}{% else %}Private airport shuttle from {{ suburb.name }} to {{ region.airport_name }}. Fixed price, door-to-door. Book online.{% endif %}">
 <meta name="keywords" content="{{ suburb.name }} airport shuttle, {{ suburb.name }} to {{ region.airport_name }}, airport transfer {{ suburb.name }} {{ region.name }}">
 <meta name="author" content="easygoshuttle.com.au">
 {% endblock %}
@@ -23,7 +23,7 @@
   "@type": "Service",
   "serviceType": "Airport Shuttle",
   "name": "{{ suburb.name }} to {{ region.airport_name }} Shuttle",
-  "description": "Private airport shuttle from {{ suburb.name }} to {{ region.airport_name }}. Fixed price ${{ suburb.price }}, door-to-door service.",
+  "description": "Private airport shuttle from {{ suburb.name }} to {{ region.airport_name }}. {% if suburb.price %}Fixed price ${{ suburb.price }}, {% endif %}door-to-door service.",
   "provider": {
     "@type": "LocalBusiness",
     "@id": "https://easygoshuttle.com.au/{{ region.slug }}/#localbusiness",
@@ -39,9 +39,9 @@
     }
   },
   "offers": {
-    "@type": "Offer",
+    "@type": "Offer",{% if suburb.price %}
     "price": "{{ suburb.price }}",
-    "priceCurrency": "AUD",
+    "priceCurrency": "AUD",{% endif %}
     "availability": "https://schema.org/InStock",
     "url": "https://easygoshuttle.com.au/{{ region.slug }}/airport-shuttle/{{ suburb.slug }}/"
   }
@@ -74,15 +74,21 @@
     </p>
 
     <!-- Price badge -->
+    {% if suburb.price %}
     <div class="d-inline-flex align-items-center bg-white rounded-3 px-4 py-2 mb-4 shadow-sm">
       <span class="text-muted fs-sm me-2">From</span>
       <span class="fw-bold fs-3" style="color: #eb7828;">${{ suburb.price }}</span>
       <span class="text-muted fs-sm ms-2">/ vehicle</span>
     </div>
+    {% else %}
+    <div class="d-inline-flex align-items-center bg-white rounded-3 px-4 py-2 mb-4 shadow-sm">
+      <span class="fw-semibold fs-5" style="color: #eb7828;">Call for Pricing</span>
+    </div>
+    {% endif %}
 
     <div class="d-flex flex-wrap gap-3">
       <a href="/{{ region.slug }}/booking/" class="btn btn-primary btn-lg px-5">Book Now</a>
-      <a href="/inquiry/" class="btn btn-outline-light btn-lg px-4">Get a Quote</a>
+      <a href="/contact/" class="btn btn-outline-light btn-lg px-4">Get a Quote</a>
     </div>
   </div>
 </section>
@@ -104,7 +110,7 @@
 
       <h3 class="h5 fw-semibold mt-4 mb-2">What's Included</h3>
       <ul>
-        <li>Fixed price — ${{ suburb.price }} per vehicle (not per person)</li>
+        {% if suburb.price %}<li>Fixed price — ${{ suburb.price }} per vehicle (not per person)</li>{% endif %}
         <li>Door-to-door from {{ suburb.name }} to {{ region.airport_name }}</li>
         <li>Meet &amp; greet at arrival terminal</li>
         <li>Flight tracking — no extra charge for delays</li>
@@ -129,8 +135,12 @@
       <!-- CTA box -->
       <div class="p-4 rounded-3 mt-4" style="background: #f8f4ff; border-left: 4px solid #eb7828;">
         <p class="mb-2 fw-semibold">Ready to book your {{ suburb.name }} airport transfer?</p>
+        {% if suburb.price %}
         <a href="/{{ region.slug }}/booking/" class="btn btn-primary me-2">Book Now — ${{ suburb.price }}</a>
-        <a href="/inquiry/" class="btn btn-outline-secondary">Inquiry First</a>
+        {% else %}
+        <a href="/{{ region.slug }}/booking/" class="btn btn-primary me-2">Book Now</a>
+        {% endif %}
+        <a href="/contact/" class="btn btn-outline-secondary">Inquiry First</a>
       </div>
     </div>
 
@@ -149,7 +159,11 @@
           </li>
           <li class="py-2 border-bottom d-flex justify-content-between">
             <span class="text-muted">Price</span>
+            {% if suburb.price %}
             <span class="fw-bold" style="color: #eb7828;">${{ suburb.price }}</span>
+            {% else %}
+            <span class="fw-bold" style="color: #eb7828;">Call Us</span>
+            {% endif %}
           </li>
           <li class="py-2 border-bottom d-flex justify-content-between">
             <span class="text-muted">Vehicle</span>

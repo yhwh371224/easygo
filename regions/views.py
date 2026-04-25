@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Region, RegionSuburb
 
 
@@ -19,6 +19,10 @@ def region_booking(request, region_slug):
 def region_confirmation(request, region_slug):
     region = get_object_or_404(Region, slug=region_slug, is_active=True)
     return render(request, 'regions/confirmation.html', {'region': region})
+
+
+def region_airport_shuttle_list(request, region_slug):
+    return redirect('regions:home', region_slug=region_slug, permanent=True)
 
 
 def airport_shuttle_suburb(request, region_slug, suburb_slug):
