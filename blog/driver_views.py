@@ -245,6 +245,7 @@ def driver_dashboard(request):
         'current_total_paid': current_total_paid,
         'current_total_cash': current_total_cash,
         'current_grand_total': current_grand_total,
+        'impersonator_id': request.session.get('impersonator_id'),
     })
 
 

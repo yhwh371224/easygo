@@ -93,14 +93,14 @@ def process_generic_payment(payment_instance, posts, admin_email, calculated_amo
     return True, total_balance, recipient_emails
 
 
-def send_payment_notification_email(instance, total_balance, recipient_emails, admin_email, method, raw_amount=None, net_amount=None):
+def send_payment_notification_email(instance, total_balance, recipient_emails, admin_email, method, raw_amount=None, net_amount=None, booker_name=None):
     if net_amount is None:
         net_amount = float(instance.amount or 0)
     if raw_amount is None:
         raw_amount = net_amount
 
     remaining_balance = round(total_balance - net_amount, 2)
-    
+
     # ✅ 고객에게만 이메일 (admin_email 제거)
     recipient_list = [email for email in recipient_emails if email]
 
@@ -109,9 +109,10 @@ def send_payment_notification_email(instance, total_balance, recipient_emails, a
 
     context = {
         'name': instance.name,
+        'booker_name': booker_name,
         'email': instance.email,
-        'raw_amount': raw_amount,  
-        'amount': net_amount,     
+        'raw_amount': raw_amount,
+        'amount': net_amount,
     }
 
     if total_balance == 0:

@@ -168,6 +168,7 @@ def _build_multi_context(bookings, params, inv_no, today, DEFAULT_BANK):
         "inv_no": inv_no,
         "company_name": first_booking.company_name if first_booking else "",
         "name": first_booking.invoice_name if first_booking else "",
+        "booker_name": first_booking.booker_name if first_booking else "",
         "apply_gst_flag": bool(apply_gst_flag),
         "invoice_date": today,
         "bookings": booking_data,
@@ -218,6 +219,7 @@ def _build_single_context(user, users, params, inv_no, today, DEFAULT_BANK):
         context = {
             **shared,
             "name": user.invoice_name, "company_name": user.company_name,
+            "booker_name": user.booker_name,
             "contact": user.contact, "email": booker_email or email,
             "pickup_date": user.pickup_date, "pickup_time": user.pickup_time,
             "start_point": start_point, "end_point": end_point,
@@ -245,6 +247,7 @@ def _build_single_context(user, users, params, inv_no, today, DEFAULT_BANK):
         context = {
             **shared,
             "name": user1.invoice_name, "company_name": user1.company_name,
+            "booker_name": user1.booker_name,
             "contact": user1.contact,
             "pickup_date": user1.pickup_date, "pickup_time": user1.pickup_time,
             "start_point": user1.start_point, "end_point": user1.end_point,
@@ -263,6 +266,7 @@ def _build_single_context(user, users, params, inv_no, today, DEFAULT_BANK):
     context = {
         **shared,
         "name": user.invoice_name, "company_name": user.company_name,
+        "booker_name": user.booker_name,
         "contact": user.contact,
         "pickup_date": user.pickup_date, "pickup_time": user.pickup_time,
         "start_point": start_point, "end_point": end_point,
