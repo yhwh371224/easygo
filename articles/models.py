@@ -63,7 +63,7 @@ class Post(models.Model):
     meta_title       = models.CharField(max_length=70, blank=True,
                                         verbose_name='SEO Post',
                                         help_text='Overrides title in search results (max 70 chars).')
-    meta_description = models.CharField(max_length=160, blank=True,
+    meta_description = models.CharField(max_length=500, blank=True,
                                         verbose_name='SEO Description',
                                         help_text='Displayed in Google search results (max 160 chars).')
 
