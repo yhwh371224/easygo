@@ -2,12 +2,28 @@ from django.db import models
 
 
 class Region(models.Model):
+    # Core identity
     slug = models.SlugField(unique=True)
     name = models.CharField(max_length=100)
-    airport_code = models.CharField(max_length=10)
+    state_code = models.CharField(max_length=10, blank=True)
     timezone = models.CharField(max_length=50)
-    phone = models.CharField(max_length=20)
     is_active = models.BooleanField(default=True)
+
+    # Airport
+    airport_code = models.CharField(max_length=10)
+    airport_name = models.CharField(max_length=100, blank=True)
+    airport_lat = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True)
+    airport_lng = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True)
+
+    # Contact & location
+    phone = models.CharField(max_length=20)
+    phone_display = models.CharField(max_length=20, blank=True)
+    address = models.CharField(max_length=200, blank=True)
+    latitude = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True)
+    longitude = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True)
+
+    # SEO
+    meta_description = models.TextField(blank=True)
 
     class Meta:
         ordering = ['name']
@@ -16,40 +32,19 @@ class Region(models.Model):
         return self.name
 
 
-REGION_DEFAULTS = [
-    {
-        'slug': 'melbourne',
-        'name': 'Melbourne',
-        'airport_code': 'MEL',
-        'timezone': 'Australia/Melbourne',
-        'phone': '03 9999 9999',
-    },
-    {
-        'slug': 'brisbane',
-        'name': 'Brisbane',
-        'airport_code': 'BNE',
-        'timezone': 'Australia/Brisbane',
-        'phone': '07 9999 9999',
-    },
-    {
-        'slug': 'adelaide',
-        'name': 'Adelaide',
-        'airport_code': 'ADL',
-        'timezone': 'Australia/Adelaide',
-        'phone': '08 9999 9999',
-    },
-    {
-        'slug': 'perth',
-        'name': 'Perth',
-        'airport_code': 'PER',
-        'timezone': 'Australia/Perth',
-        'phone': '08 9999 9998',
-    },
-    {
-        'slug': 'gold-coast',
-        'name': 'Gold Coast',
-        'airport_code': 'OOL',
-        'timezone': 'Australia/Brisbane',
-        'phone': '07 9999 9998',
-    },
-]
+class RegionSuburb(models.Model):
+    region = models.ForeignKey(Region, on_delete=models.CASCADE, related_name='suburbs')
+    name = models.CharField(max_length=100)
+    slug = models.SlugField()
+    price = models.DecimalField(max_digits=6, decimal_places=2)
+    zone = models.CharField(max_length=50)
+    is_active = models.BooleanField(default=True)
+    meta_title = models.CharField(max_length=60, blank=True)
+    meta_description = models.CharField(max_length=500, blank=True)
+
+    class Meta:
+        unique_together = ('region', 'slug')
+        ordering = ['zone', 'name']
+
+    def __str__(self):
+        return f"{self.region.name} — {self.name}"
