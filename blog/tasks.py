@@ -63,14 +63,17 @@ def notify_user_payment_paypal(instance_id):
         success, total_balance, recipient_emails = process_generic_payment(
             instance, posts, RECIPIENT_EMAIL, calculated_amount
         )
-        
+        first_post = posts.first()
+        booker_name = first_post.booker_name if first_post else None
+
         if not success: return
 
     send_payment_notification_email(
         instance, total_balance, recipient_emails, RECIPIENT_EMAIL,
         method="PAYPAL",
         raw_amount=raw_amount,
-        net_amount=calculated_amount
+        net_amount=calculated_amount,
+        booker_name=booker_name,
     )
 
 
@@ -91,12 +94,15 @@ def notify_user_payment_stripe(instance_id):
         ).order_by('pickup_date')
 
         success, total_balance, recipient_emails = process_generic_payment(instance, posts, RECIPIENT_EMAIL)
-       
-        if not success: return 
-    
+        first_post = posts.first()
+        booker_name = first_post.booker_name if first_post else None
+
+        if not success: return
+
     send_payment_notification_email(
-        instance, total_balance, recipient_emails, RECIPIENT_EMAIL, 
-        method="STRIPE"
+        instance, total_balance, recipient_emails, RECIPIENT_EMAIL,
+        method="STRIPE",
+        booker_name=booker_name,
     )
 
 

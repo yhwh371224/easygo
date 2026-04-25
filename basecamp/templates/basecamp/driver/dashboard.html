@@ -221,7 +221,7 @@
 </head>
 <body>
 
-{% if request.session.impersonator_id %}
+{% if impersonator_id %}
 <div style="background:#dc2626;color:#fff;padding:.75rem 1.25rem;text-align:center;font-weight:600;">
   ⚠️ Logged in as {{ driver.driver_name }} (Admin mode)
   &nbsp;|&nbsp;
