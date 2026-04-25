@@ -40,7 +40,7 @@
       <a href="/{{ region.slug }}/booking/" class="btn btn-primary btn-lg px-5">
         Book Now
       </a>
-      <a href="/inquiry/" class="btn btn-outline-light btn-lg px-5">
+      <a href="/contact/" class="btn btn-outline-light btn-lg px-5">
         Get a Quote
       </a>
     </div>
@@ -48,31 +48,31 @@
 </section>
 
 <!-- Why EasyGo -->
-<section class="container py-5">
+<section id="why" class="container py-5">
   <h2 class="text-center mb-4">Why Choose EasyGo in {{ region.name }}?</h2>
-  <div class="row g-4 text-center">
-    <div class="col-sm-6 col-lg-3">
+  <div class="row g-4 text-center justify-content-center">
+    <div class="col-6 col-md-3">
       <div class="p-3 border rounded h-100">
         <div class="fs-1 mb-2">✈️</div>
         <h5>Fixed Price</h5>
         <p class="fs-sm mb-0">No surge pricing. The price you see is the price you pay.</p>
       </div>
     </div>
-    <div class="col-sm-6 col-lg-3">
+    <div class="col-6 col-md-3">
       <div class="p-3 border rounded h-100">
         <div class="fs-1 mb-2">🚗</div>
         <h5>Private Vehicle</h5>
         <p class="fs-sm mb-0">Your booking, your car. No shared rides or extra stops.</p>
       </div>
     </div>
-    <div class="col-sm-6 col-lg-3">
+    <div class="col-6 col-md-3">
       <div class="p-3 border rounded h-100">
         <div class="fs-1 mb-2">📍</div>
         <h5>Flight Tracking</h5>
         <p class="fs-sm mb-0">Driver monitors your flight in real time. No extra wait charge.</p>
       </div>
     </div>
-    <div class="col-sm-6 col-lg-3">
+    <div class="col-6 col-md-3">
       <div class="p-3 border rounded h-100">
         <div class="fs-1 mb-2">🧳</div>
         <h5>Luggage Friendly</h5>
@@ -103,7 +103,7 @@
                class="d-block text-decoration-none p-2 border rounded bg-white h-100"
                style="transition: box-shadow .15s;">
               <span class="d-block fw-medium text-dark">{{ suburb.name }}</span>
-              <span class="fs-sm text-muted">From ${{ suburb.price }}</span>
+              {% if suburb.price %}<span class="fs-sm text-muted">From ${{ suburb.price }}</span>{% else %}<span class="fs-sm text-muted">Call for pricing</span>{% endif %}
             </a>
           </div>
           {% endfor %}
