@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
 from blog.models import Post, Inquiry, Driver
+from regions.models import Region
 from basecamp.basecamp_utils import (
     is_ajax, parse_baggage, parse_date,
     to_bool, verify_turnstile,
@@ -11,6 +12,17 @@ from basecamp.basecamp_utils import (
 from django_ratelimit.decorators import ratelimit
 import asyncio
 from utils.telegram import send_telegram_notification
+
+
+def _get_request_region(request):
+    """URL 접두사에서 감지된 Region을 반환. 없으면 Sydney 기본값."""
+    region = getattr(request, 'region', None)
+    if isinstance(region, Region):
+        return region
+    try:
+        return Region.objects.get(slug='sydney')
+    except Region.DoesNotExist:
+        return None
 
 
 # airport booking by client
@@ -60,15 +72,15 @@ def booking_detail(request):
         # 🧳 개별 수하물 항목 수집
         baggage_str = parse_baggage(request)
 
-        p = Post(name=name, contact=contact, email=email, pickup_date=pickup_date_obj, flight_number=flight_number, flight_time=flight_time, 
+        p = Post(name=name, contact=contact, email=email, pickup_date=pickup_date_obj, flight_number=flight_number, flight_time=flight_time,
                  pickup_time=pickup_time, start_point=start_point, end_point=end_point, direction=direction, suburb=suburb, street=street,
-                 no_of_passenger=no_of_passenger, no_of_baggage=baggage_str, message=message, return_direction=return_direction, 
-                 return_pickup_date=return_pickup_date_obj, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
+                 no_of_passenger=no_of_passenger, no_of_baggage=baggage_str, message=message, return_direction=return_direction,
+                 return_pickup_date=return_pickup_date_obj, return_flight_number=return_flight_number, return_flight_time=return_flight_time,
                  return_pickup_time=return_pickup_time, return_start_point=return_start_point, return_end_point=return_end_point, driver=sam_driver,
                  price='TBA', pending=True, reminder=False)
-        
-        p.save()        
-        
+        p.region = _get_request_region(request)
+        p.save()
+
         return booking_success_response(request)
 
     else:
@@ -119,11 +131,11 @@ def cruise_booking_detail(request):
 
         p = Post(name=name, contact=contact, email=email, pickup_date=pickup_date_obj, start_point=start_point,
                  end_point=end_point, pickup_time=pickup_time, price=price,
-                 no_of_passenger=no_of_passenger, no_of_baggage=baggage_str,   
-                 return_pickup_date=return_pickup_date_obj, return_start_point=return_start_point,  
+                 no_of_passenger=no_of_passenger, no_of_baggage=baggage_str,
+                 return_pickup_date=return_pickup_date_obj, return_start_point=return_start_point,
                  return_pickup_time=return_pickup_time, return_end_point=return_end_point,
                  message=message, driver=sam_driver, pending=True, reminder=False)
-        
+        p.region = _get_request_region(request)
         p.save()
 
         return booking_success_response(request)
@@ -240,13 +252,13 @@ def confirm_booking_detail(request):
             return_pickup_date=return_pickup_date_obj, return_flight_number=return_flight_number,
             return_flight_time=return_flight_time, return_pickup_time=return_pickup_time,
             return_start_point=return_start_point, return_end_point=return_end_point,
-            message=message, notice=notice, price=final_price, toll=toll_value, 
+            message=message, notice=notice, price=final_price, toll=toll_value,
             fuel_surcharge=fuel_surcharge_value, prepay=prepay, pending=pending,
             paid=paid, cash=cash, is_confirmed=is_confirmed, driver=sam_driver
         )
-
+        p.region = user.region  # Inquiry에 기록된 region 그대로 이어받기
         p.save()
-        
+
         user.delete()
 
         return render_inquiry_done(request)
@@ -323,13 +335,13 @@ def return_trip_detail(request):
          
         sam_driver = Driver.objects.get(driver_name="Sam")  
                     
-        p = Post(name=name, company_name=company_name, contact=contact, email=email, pickup_date=pickup_date_obj, flight_number=flight_number, flight_time=flight_time, 
+        p = Post(name=name, company_name=company_name, contact=contact, email=email, pickup_date=pickup_date_obj, flight_number=flight_number, flight_time=flight_time,
                  pickup_time=pickup_time, start_point=start_point, end_point=end_point, direction=direction, suburb=suburb, street=street,
-                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, cash=cash, prepay=prepay, return_direction=return_direction, 
-                 return_pickup_date=return_pickup_date_obj, return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
+                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, cash=cash, prepay=prepay, return_direction=return_direction,
+                 return_pickup_date=return_pickup_date_obj, return_flight_number=return_flight_number, return_flight_time=return_flight_time,
                  return_pickup_time=return_pickup_time, return_start_point=return_start_point, return_end_point=return_end_point, driver=sam_driver,
                  price=price, toll=toll, fuel_surcharge=fuel_surcharge)
-        
+        p.region = user.region  # 원래 예약의 region 그대로 이어받기
         p.save()
 
         return JsonResponse({'success': True, 'redirect_url': '/inquiry_done/'})
