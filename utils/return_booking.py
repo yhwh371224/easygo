@@ -1,4 +1,5 @@
 from blog.models import Post, Driver
+from regions.models import Region
 from utils.prepay_helper import is_foreign_number
 
 
@@ -73,6 +74,13 @@ def handle_return_trip(instance):
         street_val = instance.street or ""
         suburb_val = instance.suburb or ""
 
+        region = instance.region
+        if not region:
+            try:
+                region = Region.objects.get(slug='sydney')
+            except Region.DoesNotExist:
+                region = None
+
         # Post 생성에 필요한 필드들을 **kwargs로 묶음
         post_fields = {
             'booker_name': instance.booker_name,
@@ -105,6 +113,7 @@ def handle_return_trip(instance):
             'toll': instance.toll,
             'fuel_surcharge': instance.fuel_surcharge,
             'driver': driver,
+            'region': region,
         }
 
         Post.objects.create(**post_fields)

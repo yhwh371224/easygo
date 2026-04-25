@@ -1,0 +1,199 @@
+{% extends "regions/base.html" %}
+{% load static %}
+
+{% block title %}{{ suburb.meta_title|default:suburb.name }} to {{ region.name }} Airport Shuttle | EasyGo{% endblock %}
+
+{% block canonical %}
+<link rel="canonical" href="https://easygoshuttle.com.au/{{ region.slug }}/airport-shuttle/{{ suburb.slug }}/">
+{% endblock %}
+
+{% block meta %}
+<meta name="description" content="{{ suburb.meta_description|default:"Private airport shuttle from "|add:suburb.name|add:" to "|add:region.airport_name|add:". Fixed price, door-to-door. Book online." }}">
+<meta name="keywords" content="{{ suburb.name }} airport shuttle, {{ suburb.name }} to {{ region.airport_name }}, airport transfer {{ suburb.name }} {{ region.name }}">
+<meta name="author" content="easygoshuttle.com.au">
+{% endblock %}
+
+{% block schema_org %}
+{# LocalBusiness from parent #}
+{{ block.super }}
+{# Service schema for this suburb route #}
+<script type="application/ld+json" nonce="{{ CSP_NONCE }}">
+{
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "serviceType": "Airport Shuttle",
+  "name": "{{ suburb.name }} to {{ region.airport_name }} Shuttle",
+  "description": "Private airport shuttle from {{ suburb.name }} to {{ region.airport_name }}. Fixed price ${{ suburb.price }}, door-to-door service.",
+  "provider": {
+    "@type": "LocalBusiness",
+    "@id": "https://easygoshuttle.com.au/{{ region.slug }}/#localbusiness",
+    "name": "EasyGo Airport Shuttle {{ region.name }}",
+    "telephone": "{{ region.phone }}"
+  },
+  "areaServed": {
+    "@type": "City",
+    "name": "{{ suburb.name }}",
+    "containedInPlace": {
+      "@type": "State",
+      "name": "{{ region.state_code }}, Australia"
+    }
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": "{{ suburb.price }}",
+    "priceCurrency": "AUD",
+    "availability": "https://schema.org/InStock",
+    "url": "https://easygoshuttle.com.au/{{ region.slug }}/airport-shuttle/{{ suburb.slug }}/"
+  }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+{% static 'basecamp/photos/bg-pattern02.webp' as hero_bg %}
+
+<!-- Hero -->
+<section class="bg-dark" style="background-image: url('{{ hero_bg }}'); background-size: cover; background-position: center 38%; position: relative; min-height: 480px; display: flex; align-items: center;">
+  <div style="position: absolute; inset: 0; background: rgba(0,0,0,0.55);"></div>
+
+  <div class="container position-relative py-5" style="z-index: 2; padding-top: 110px !important;">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-3">
+      <ol class="breadcrumb" style="background: none; padding: 0;">
+        <li class="breadcrumb-item"><a href="/" class="text-light opacity-75">Home</a></li>
+        <li class="breadcrumb-item"><a href="/{{ region.slug }}/" class="text-light opacity-75">{{ region.name }} Airport Shuttle</a></li>
+        <li class="breadcrumb-item active text-light" aria-current="page">{{ suburb.name }}</li>
+      </ol>
+    </nav>
+
+    <h1 class="text-white fw-bold mb-2">
+      <span style="color: #eb7828;">{{ suburb.name }}</span> to {{ region.name }} Airport Shuttle
+    </h1>
+    <p class="fs-lg text-white opacity-90 mb-3">
+      Fixed price private transfer to {{ region.airport_name }}
+    </p>
+
+    <!-- Price badge -->
+    <div class="d-inline-flex align-items-center bg-white rounded-3 px-4 py-2 mb-4 shadow-sm">
+      <span class="text-muted fs-sm me-2">From</span>
+      <span class="fw-bold fs-3" style="color: #eb7828;">${{ suburb.price }}</span>
+      <span class="text-muted fs-sm ms-2">/ vehicle</span>
+    </div>
+
+    <div class="d-flex flex-wrap gap-3">
+      <a href="/{{ region.slug }}/booking/" class="btn btn-primary btn-lg px-5">Book Now</a>
+      <a href="/inquiry/" class="btn btn-outline-light btn-lg px-4">Get a Quote</a>
+    </div>
+  </div>
+</section>
+
+<!-- Service Details -->
+<section class="container py-5">
+  <div class="row g-4">
+    <!-- Left: content -->
+    <div class="col-lg-8">
+      <h2 class="h4 fw-bold mb-3">
+        {{ suburb.name }} Airport Shuttle Service
+      </h2>
+
+      <p>
+        Need an airport transfer from <strong>{{ suburb.name }}</strong> to
+        <strong>{{ region.airport_name }}</strong>? EasyGo provides private, fixed-price
+        door-to-door shuttle service across {{ region.name }}, including {{ suburb.name }}.
+      </p>
+
+      <h3 class="h5 fw-semibold mt-4 mb-2">What's Included</h3>
+      <ul>
+        <li>Fixed price — ${{ suburb.price }} per vehicle (not per person)</li>
+        <li>Door-to-door from {{ suburb.name }} to {{ region.airport_name }}</li>
+        <li>Meet &amp; greet at arrival terminal</li>
+        <li>Flight tracking — no extra charge for delays</li>
+        <li>Private vehicle, no shared rides</li>
+        <li>Up to 2 child seats at no cost</li>
+      </ul>
+
+      <h3 class="h5 fw-semibold mt-4 mb-2">Booking in Advance</h3>
+      <ul>
+        <li>We recommend booking at least 36 hours prior to your transfer.</li>
+        <li>Same-day bookings may be available — <a href="/contact/">contact us</a> to confirm.</li>
+        <li>All bookings are confirmed via email with driver details.</li>
+      </ul>
+
+      <h3 class="h5 fw-semibold mt-4 mb-2">About the Route</h3>
+      <p>
+        {{ suburb.name }} is located in {{ suburb.zone }}, {{ region.state_code }}.
+        Your driver will collect you from your door in {{ suburb.name }} and take you
+        directly to {{ region.airport_name }} — no detours, no shared pickups.
+      </p>
+
+      <!-- CTA box -->
+      <div class="p-4 rounded-3 mt-4" style="background: #f8f4ff; border-left: 4px solid #eb7828;">
+        <p class="mb-2 fw-semibold">Ready to book your {{ suburb.name }} airport transfer?</p>
+        <a href="/{{ region.slug }}/booking/" class="btn btn-primary me-2">Book Now — ${{ suburb.price }}</a>
+        <a href="/inquiry/" class="btn btn-outline-secondary">Inquiry First</a>
+      </div>
+    </div>
+
+    <!-- Right: aside -->
+    <div class="col-lg-4">
+      <div class="border rounded-3 p-4 bg-light sticky-top" style="top: 90px;">
+        <h4 class="h5 fw-bold mb-3">Transfer Summary</h4>
+        <ul class="list-unstyled fs-sm">
+          <li class="py-2 border-bottom d-flex justify-content-between">
+            <span class="text-muted">Pickup</span>
+            <span class="fw-medium">{{ suburb.name }}</span>
+          </li>
+          <li class="py-2 border-bottom d-flex justify-content-between">
+            <span class="text-muted">Destination</span>
+            <span class="fw-medium">{{ region.airport_name }}</span>
+          </li>
+          <li class="py-2 border-bottom d-flex justify-content-between">
+            <span class="text-muted">Price</span>
+            <span class="fw-bold" style="color: #eb7828;">${{ suburb.price }}</span>
+          </li>
+          <li class="py-2 border-bottom d-flex justify-content-between">
+            <span class="text-muted">Vehicle</span>
+            <span class="fw-medium">Private</span>
+          </li>
+          <li class="py-2 d-flex justify-content-between">
+            <span class="text-muted">Availability</span>
+            <span class="fw-medium">24/7</span>
+          </li>
+        </ul>
+        <a href="/{{ region.slug }}/booking/" class="btn btn-primary w-100 mt-3">Book This Transfer</a>
+        <p class="text-center fs-xs text-muted mt-2 mb-0">Fixed price · No surprises</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Other suburbs in zone -->
+{% with zone_suburbs=suburb.region.suburbs.all %}
+{% if zone_suburbs %}
+<section class="bg-light py-5">
+  <div class="container">
+    <h2 class="h5 fw-semibold mb-3">Other {{ suburb.zone }} Suburbs</h2>
+    <div class="row g-2">
+      {% for s in zone_suburbs %}
+      {% if s.slug != suburb.slug and s.is_active %}
+      <div class="col-6 col-md-4 col-lg-3">
+        <a href="/{{ region.slug }}/airport-shuttle/{{ s.slug }}/"
+           class="d-block text-decoration-none p-2 border rounded bg-white">
+          <span class="d-block fw-medium text-dark fs-sm">{{ s.name }}</span>
+          <span class="text-muted fs-xs">From ${{ s.price }}</span>
+        </a>
+      </div>
+      {% endif %}
+      {% endfor %}
+    </div>
+    <div class="mt-3">
+      <a href="/{{ region.slug }}/" class="text-decoration-none fs-sm">
+        ← View all {{ region.name }} service areas
+      </a>
+    </div>
+  </div>
+</section>
+{% endif %}
+{% endwith %}
+
+{% endblock %}
