@@ -24,6 +24,7 @@ urlpatterns = [
     path('gmail_webhook/', gmail_webhook, name='gmail_webhook'),
     path('', include('blog.urls', namespace='blog')),
     path('webhook/bird/sms/', bird_webhooks.sms_webhook, name='bird_sms_webhook'),
+    path('', include('regions.urls', namespace='regions')),
     path('webhook/bird/voice/', bird_webhooks.voice_webhook, name='bird_voice_webhook'),
 ]
 

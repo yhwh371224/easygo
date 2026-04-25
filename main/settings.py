@@ -112,6 +112,7 @@ INSTALLED_APPS = [
     'email_agent.apps.EmailAgentConfig',
     'posting_agent.apps.PostingAgentConfig',
     'articles.apps.ArticlesConfig',
+    'regions.apps.RegionsConfig',
     'admin_honeypot',
     'allauth',
     'allauth.account',
@@ -243,8 +244,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware', 
-    'allauth.account.middleware.AccountMiddleware',    
+    'allauth.account.middleware.AccountMiddleware',
     'axes.middleware.AxesMiddleware',
+    'regions.middleware.RegionMiddleware',
 ]
 
 AXES_ENABLED = True
@@ -269,8 +271,8 @@ TEMPLATES = [
                 'basecamp.context_processors.add_custom_context',
                 'basecamp.context_processors.bank_settings',
                 'basecamp.context_processors.turnstile_site_key', 
-                'basecamp.context_processors.navbar_defaults', 
-
+                'basecamp.context_processors.navbar_defaults',
+                'regions.context_processors.region_config',
             ],
         },
     },
