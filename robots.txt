@@ -37,7 +37,7 @@ Disallow: /price_detail/
 Allow: /easygo_review/
 Allow: /easygo_review/*?page=* 
 Allow: /blog/?category=* 
-Disallow: /*?
+
 
 User-agent: Barkrowler
 Disallow: /
