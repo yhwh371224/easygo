@@ -2,6 +2,7 @@ import asyncio
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from blog.models import Inquiry
+from regions.models import Region
 from basecamp.basecamp_utils import (
     is_ajax, parse_baggage, parse_date, handle_email_sending,
     verify_turnstile,
@@ -10,6 +11,17 @@ from basecamp.basecamp_utils import (
 )
 from django_ratelimit.decorators import ratelimit
 from utils.telegram import send_telegram_notification
+
+
+def _get_request_region(request):
+    """URL 접두사에서 감지된 Region을 반환. 없으면 Sydney 기본값."""
+    region = getattr(request, 'region', None)
+    if isinstance(region, Region):
+        return region
+    try:
+        return Region.objects.get(slug='sydney')
+    except Region.DoesNotExist:
+        return None
 
 
 # Inquiry for airport
@@ -59,19 +71,19 @@ def inquiry_details(request):
         baggage_str = parse_baggage(request)
                     
         p = Inquiry(
-            name=name, contact=contact, email=email, 
-            pickup_date=pickup_date_obj, 
-            flight_number=flight_number, flight_time=flight_time, 
-            pickup_time=pickup_time, direction=direction, suburb=suburb, 
-            street=street, start_point=start_point, end_point=end_point, 
-            no_of_passenger=no_of_passenger, no_of_baggage=baggage_str, 
-            return_direction=return_direction, 
-            return_pickup_date=return_pickup_date_obj, 
-            return_flight_number=return_flight_number, return_flight_time=return_flight_time, 
-            return_pickup_time=return_pickup_time, return_start_point=return_start_point, 
+            name=name, contact=contact, email=email,
+            pickup_date=pickup_date_obj,
+            flight_number=flight_number, flight_time=flight_time,
+            pickup_time=pickup_time, direction=direction, suburb=suburb,
+            street=street, start_point=start_point, end_point=end_point,
+            no_of_passenger=no_of_passenger, no_of_baggage=baggage_str,
+            return_direction=return_direction,
+            return_pickup_date=return_pickup_date_obj,
+            return_flight_number=return_flight_number, return_flight_time=return_flight_time,
+            return_pickup_time=return_pickup_time, return_start_point=return_start_point,
             return_end_point=return_end_point, message=message
         )
-        
+        p.region = _get_request_region(request)
         p.save()
 
         asyncio.run(send_telegram_notification("✈️ New inquiry has been received."))
@@ -142,13 +154,14 @@ def inquiry_details1(request):
         baggage_str = parse_baggage(request)
 
         p = Inquiry(
-            name=name, contact=contact, email=email, pickup_date=pickup_date_obj,  
-            flight_number=flight_number, flight_time=flight_time, pickup_time=pickup_time, 
+            name=name, contact=contact, email=email, pickup_date=pickup_date_obj,
+            flight_number=flight_number, flight_time=flight_time, pickup_time=pickup_time,
             direction=direction, suburb=suburb, street=street,
-            start_point=start_point, end_point=end_point, 
-            no_of_passenger=no_of_passenger, no_of_baggage=baggage_str, 
+            start_point=start_point, end_point=end_point,
+            no_of_passenger=no_of_passenger, no_of_baggage=baggage_str,
             message=message
         )
+        p.region = _get_request_region(request)
         p.save()
 
         asyncio.run(send_telegram_notification("🏠 Inquiry home page has been received."))
