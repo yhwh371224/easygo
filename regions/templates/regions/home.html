@@ -1,0 +1,158 @@
+{% extends "regions/base.html" %}
+{% load static %}
+
+{% block title %}{{ region.name }} Airport Shuttle | Fixed Price Private Transfer{% endblock %}
+
+{% block canonical %}
+<link rel="canonical" href="https://easygoshuttle.com.au/{{ region.slug }}/">
+{% endblock %}
+
+{% block meta %}
+<meta name="description" content="Private airport shuttle across {{ region.name }}. Fixed price door-to-door transfer to {{ region.airport_name }}. No sharing, 24/7 service, flight tracking included.">
+<meta name="keywords" content="{{ region.name }} airport shuttle, {{ region.airport_name }} transfer, private transfer {{ region.name }}, airport pickup {{ region.name }}">
+<meta name="author" content="easygoshuttle.com.au">
+{% endblock %}
+
+{% block content %}
+{% static 'basecamp/photos/bg-pattern02.webp' as hero_bg %}
+
+<!-- Hero -->
+<section class="bg-dark" style="background-image: url('{{ hero_bg }}'); background-size: cover; background-position: center 40%; position: relative; min-height: 520px; display: flex; align-items: center;">
+  <div style="position: absolute; inset: 0; background: rgba(0,0,0,0.52);"></div>
+
+  <div class="container py-5 py-sm-6 text-center position-relative" style="z-index: 2;">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-3">
+      <ol class="breadcrumb justify-content-center" style="background: none; padding: 0;">
+        <li class="breadcrumb-item"><a href="/" class="text-light opacity-75">Home</a></li>
+        <li class="breadcrumb-item active text-light" aria-current="page">{{ region.name }}</li>
+      </ol>
+    </nav>
+
+    <h1 class="display-5 fw-bold text-white pb-2">
+      <span style="color: #eb7828;">{{ region.name }}</span> Airport Shuttle
+    </h1>
+    <p class="fs-lg text-white opacity-90 mb-4">
+      Fixed price private transfer to {{ region.airport_name }}<br>
+      Meet &amp; greet · No sharing · Flight tracking · 24/7 service
+    </p>
+    <div class="d-flex flex-wrap justify-content-center gap-3">
+      <a href="/{{ region.slug }}/booking/" class="btn btn-primary btn-lg px-5">
+        Book Now
+      </a>
+      <a href="/inquiry/" class="btn btn-outline-light btn-lg px-5">
+        Get a Quote
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Why EasyGo -->
+<section class="container py-5">
+  <h2 class="text-center mb-4">Why Choose EasyGo in {{ region.name }}?</h2>
+  <div class="row g-4 text-center">
+    <div class="col-sm-6 col-lg-3">
+      <div class="p-3 border rounded h-100">
+        <div class="fs-1 mb-2">✈️</div>
+        <h5>Fixed Price</h5>
+        <p class="fs-sm mb-0">No surge pricing. The price you see is the price you pay.</p>
+      </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+      <div class="p-3 border rounded h-100">
+        <div class="fs-1 mb-2">🚗</div>
+        <h5>Private Vehicle</h5>
+        <p class="fs-sm mb-0">Your booking, your car. No shared rides or extra stops.</p>
+      </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+      <div class="p-3 border rounded h-100">
+        <div class="fs-1 mb-2">📍</div>
+        <h5>Flight Tracking</h5>
+        <p class="fs-sm mb-0">Driver monitors your flight in real time. No extra wait charge.</p>
+      </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+      <div class="p-3 border rounded h-100">
+        <div class="fs-1 mb-2">🧳</div>
+        <h5>Luggage Friendly</h5>
+        <p class="fs-sm mb-0">Large vehicles for families, groups, and oversized luggage.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Suburb Listing -->
+<section class="bg-light py-5">
+  <div class="container">
+    <h2 class="mb-2">{{ region.name }} Service Areas</h2>
+    <p class="text-muted mb-4">Select your suburb for fixed pricing and direct booking.</p>
+
+    {% regroup suburbs by zone as zone_groups %}
+
+    {% if zone_groups %}
+      {% for zone_group in zone_groups %}
+      <div class="mb-4">
+        <h3 class="h5 fw-semibold border-bottom pb-2 mb-3" style="color: #eb7828;">
+          {{ zone_group.grouper }}
+        </h3>
+        <div class="row g-2">
+          {% for suburb in zone_group.list %}
+          <div class="col-6 col-md-4 col-lg-3">
+            <a href="/{{ region.slug }}/airport-shuttle/{{ suburb.slug }}/"
+               class="d-block text-decoration-none p-2 border rounded bg-white h-100"
+               style="transition: box-shadow .15s;">
+              <span class="d-block fw-medium text-dark">{{ suburb.name }}</span>
+              <span class="fs-sm text-muted">From ${{ suburb.price }}</span>
+            </a>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+
+    {% else %}
+      <div class="alert alert-info">
+        Service areas for {{ region.name }} are being added. Please
+        <a href="/contact/">contact us</a> for a quote.
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<!-- How It Works -->
+<section class="container py-5">
+  <h2 class="text-center mb-4">How It Works</h2>
+  <div class="row g-4">
+    <div class="col-md-4 text-center">
+      <div class="fs-1 mb-3" style="color: #eb7828;">1</div>
+      <h5>Book Online</h5>
+      <p class="fs-sm">Fill in your pickup details, suburb, and flight information. Instant confirmation.</p>
+    </div>
+    <div class="col-md-4 text-center">
+      <div class="fs-1 mb-3" style="color: #eb7828;">2</div>
+      <h5>Driver Assigned</h5>
+      <p class="fs-sm">A local {{ region.name }} driver is assigned. You receive driver contact details.</p>
+    </div>
+    <div class="col-md-4 text-center">
+      <div class="fs-1 mb-3" style="color: #eb7828;">3</div>
+      <h5>Door-to-Door</h5>
+      <p class="fs-sm">Your driver meets you and takes you directly to {{ region.airport_name }}.</p>
+    </div>
+  </div>
+  <div class="text-center mt-4">
+    <a href="/{{ region.slug }}/booking/" class="btn btn-primary btn-lg px-5">Book Your Transfer</a>
+  </div>
+</section>
+
+<!-- Contact strip -->
+<section class="bg-dark py-4">
+  <div class="container text-center text-white">
+    <p class="mb-1 fs-sm opacity-75">Questions? We're available 24/7</p>
+    <a href="sms:{{ region.phone }}" class="text-white fs-5 fw-semibold text-decoration-none">
+      {{ region.phone_display|default:region.phone }}
+    </a>
+  </div>
+</section>
+
+{% endblock %}
