@@ -18,8 +18,11 @@ def post_list(request):
 
     # 카테고리 필터
     category_slug = request.GET.get('category', '').strip()
+    current_category = None
     if category_slug:
-        posts = posts.filter(category__slug=category_slug)
+        current_category = Category.objects.filter(slug=category_slug).first()
+        if current_category:
+            posts = posts.filter(category=current_category)
 
     # 태그 필터
     tag_slug = request.GET.get('tag', '').strip()
@@ -36,12 +39,13 @@ def post_list(request):
     posts_page = paginator.get_page(page)
 
     context = {
-        'posts'         : posts_page,
-        'featured_post' : featured_post,
-        'categories'    : Category.objects.all(),
-        'query'         : query,
-        'category_slug' : category_slug,
-        'tag_slug'      : tag_slug,
+        'posts'            : posts_page,
+        'featured_post'    : featured_post,
+        'categories'       : Category.objects.all(),
+        'query'            : query,
+        'category_slug'    : category_slug,
+        'current_category' : current_category,
+        'tag_slug'         : tag_slug,
     }
     return render(request, 'articles/blog_list.html', context)
 
