@@ -86,6 +86,14 @@ class Inquiry(models.Model):
     toll = models.CharField(max_length=30, blank=True, null=True)
     fuel_surcharge = models.CharField(max_length=30, blank=True, null=True)
     driver = models.ForeignKey('Driver', on_delete=models.SET_NULL, null=True, blank=True)
+    region = models.ForeignKey(
+        'regions.Region',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='inquiries',
+        default=None,
+    )
     meeting_point = models.CharField(max_length=100, blank=True, null=True)
     is_confirmed = models.BooleanField(default=False, blank=True)
     cash = models.BooleanField(default=False, blank=True)
@@ -171,6 +179,14 @@ class Post(models.Model):
     toll = models.CharField(max_length=30, blank=True, null=True)
     fuel_surcharge = models.CharField(max_length=30, blank=True, null=True)
     driver = models.ForeignKey('Driver', on_delete=models.SET_NULL, null=True, blank=True)
+    region = models.ForeignKey(
+        'regions.Region',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='posts',
+        default=None,
+    )
     meeting_point = models.CharField(max_length=100, blank=True, null=True)
     is_confirmed = models.BooleanField(default=False, blank=True)
     cash = models.BooleanField(default=False, blank=True)

@@ -28,8 +28,9 @@ class DriverSettlementAdmin(admin.ModelAdmin):
 
 
 class InquiryAdmin(admin.ModelAdmin):
-    list_display = ['pickup_date', 'contact', 'suburb', 'pickup_time', 'direction', 'no_of_passenger', 'return_flight_number','is_confirmed', 
+    list_display = ['pickup_date', 'region', 'contact', 'suburb', 'pickup_time', 'direction', 'no_of_passenger', 'return_flight_number','is_confirmed',
                     'cancelled', 'pending', 'created']
+    list_filter = ['region']
     search_fields = ['pickup_date', 'pickup_time', 'suburb', 'email', 'street', 'booker_email', 'booker_name',
                      'name', 'contact', 'email1', 'message', 'notice']
 
@@ -45,8 +46,9 @@ class StripePaymentAdmin(admin.ModelAdmin):
 
 
 class PostAdmin(admin.ModelAdmin):
-    list_display = ['pickup_date', 'name', 'suburb', 'pickup_time', 'price', 'paid',
-                    'cancelled', 'pending', 'cash', 'direction', 'return_flight_number', 'created']    
+    list_display = ['pickup_date', 'region', 'name', 'suburb', 'pickup_time', 'price', 'paid',
+                    'cancelled', 'pending', 'cash', 'direction', 'return_flight_number', 'created']
+    list_filter = ['region']
     search_fields = ['pickup_date', 'pickup_time', 'suburb', 'email', 'street', 'booker_email', 'booker_name',
                      'name', 'contact', 'price', 'paid', 'email1', 'message', 'notice']
 
