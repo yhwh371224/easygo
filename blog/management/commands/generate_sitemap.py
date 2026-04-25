@@ -38,6 +38,31 @@ class Command(BaseCommand):
             {"loc": "https://easygoshuttle.com.au/privacy/", "changefreq": "yearly", "priority": "0.3000"},
         ]
 
+        # 지역 페이지 동적 추가 (sydney 제외)
+        try:
+            from regions.models import Region, RegionSuburb
+            regions = Region.objects.filter(is_active=True).exclude(slug='sydney')
+            for region in regions:
+                urls.append({
+                    "loc": f"https://easygoshuttle.com.au/{region.slug}/",
+                    "changefreq": "weekly",
+                    "priority": "0.9000",
+                })
+            self.stdout.write(f"  Added {regions.count()} region pages to sitemap.")
+
+            suburbs = RegionSuburb.objects.filter(
+                is_active=True
+            ).exclude(region__slug='sydney').select_related('region')
+            for suburb in suburbs:
+                urls.append({
+                    "loc": f"https://easygoshuttle.com.au/{suburb.region.slug}/airport-shuttle/{suburb.slug}/",
+                    "changefreq": "weekly",
+                    "priority": "0.8000",
+                })
+            self.stdout.write(f"  Added {suburbs.count()} suburb pages to sitemap.")
+        except Exception as e:
+            self.stdout.write(self.style.WARNING(f"  Could not load region/suburb pages: {e}"))
+
         # 블로그 글 동적 추가
         try:
             from articles.models import Post
