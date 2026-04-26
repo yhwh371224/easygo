@@ -29,6 +29,10 @@ class RegionAdmin(admin.ModelAdmin):
         ('SEO', {
             'fields': ('meta_description',),
         }),
+        ('Guides & Terminals', {
+            'fields': ('terminal_info', 'meeting_point', 'arrival_guide'),
+            'classes': ('collapse',),
+        }),
     )
 
 

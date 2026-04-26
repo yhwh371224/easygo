@@ -1,0 +1,105 @@
+{% extends "regions/base.html" %}
+{% load static %}
+
+{% block title %}{{ region.name }} Airport Meeting Point | EasyGo{% endblock %}
+
+{% block canonical %}
+<link rel="canonical" href="https://easygoshuttle.com.au/{{ region.slug }}/meeting-point/">
+{% endblock %}
+
+{% block meta %}
+<meta name="description" content="Find your EasyGo driver at {{ region.airport_name }}. Meeting point details for each terminal — T1 International, T2 Qantas, T3 Virgin/Rex, T4 Budget.">
+<meta name="keywords" content="{{ region.name }} airport meeting point, {{ region.airport_code }} driver pickup, EasyGo {{ region.name }}">
+<meta name="author" content="easygoshuttle.com.au">
+{% endblock %}
+
+{% block extra_css %}
+<style nonce="{{ CSP_NONCE }}">
+  .mp-hero { background: linear-gradient(135deg, #1a1f2e 0%, #2d3748 100%); padding: 4rem 0 3rem; }
+  .mp-hero h1 { color: #fff; font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 600; }
+  .mp-hero p  { color: rgba(255,255,255,0.7); font-size: 1rem; }
+  .tab-nav { display: flex; flex-wrap: wrap; gap: 8px; border-bottom: 2px solid #e5e7eb; margin-bottom: 2rem; }
+  .tab-btn {
+    background: none; border: none; padding: 10px 18px; font-size: 14px; font-weight: 500;
+    color: #6b7280; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px;
+    transition: color .15s, border-color .15s;
+  }
+  .tab-btn.active { color: #185FA5; border-bottom-color: #185FA5; }
+  .tab-btn:hover:not(.active) { color: #374151; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+  .terminal-icon { font-size: 2.5rem; line-height: 1; margin-bottom: 0.75rem; }
+  .terminal-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.75rem; }
+  .meeting-box { background: #EFF6FF; border-left: 4px solid #185FA5; border-radius: 0 8px 8px 0; padding: 1.25rem 1.5rem; margin-top: 2rem; }
+  .meeting-box h3 { color: #185FA5; font-size: 1rem; font-weight: 600; margin: 0 0 8px; }
+  .cta-strip { background: #1a1f2e; padding: 3rem 0; margin-top: 3rem; }
+  .cta-strip h2 { color: #fff; font-size: 1.4rem; margin-bottom: 1rem; }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="mp-hero">
+  <div class="container">
+    <p class="text-warning fw-semibold mb-2 small">{{ region.airport_code }} · {{ region.airport_name }}</p>
+    <h1>Airport Meeting Point</h1>
+    <p class="mb-0">Select your terminal below to find where your EasyGo driver will be waiting.</p>
+  </div>
+</section>
+
+<section class="container py-5">
+  {% if terminals %}
+  <div class="tab-nav" id="terminalTabs">
+    {% for t in terminals %}
+    <button class="tab-btn {% if forloop.first %}active{% endif %}"
+            data-tab="terminal-{{ forloop.counter }}"
+            onclick="switchTab(this, 'terminal-{{ forloop.counter }}')">
+      {{ t.icon }} {{ t.name }}
+    </button>
+    {% endfor %}
+  </div>
+
+  {% for t in terminals %}
+  <div class="tab-panel {% if forloop.first %}active{% endif %}" id="terminal-{{ forloop.counter }}">
+    <div class="terminal-card">
+      <div class="terminal-icon">{{ t.icon }}</div>
+      <h2 class="h4 fw-semibold mb-3">{{ t.name }}</h2>
+      <p class="text-muted mb-0">{{ t.description }}</p>
+    </div>
+
+    <div class="meeting-box">
+      <h3>📍 Where to find your driver</h3>
+      <p class="mb-0">{{ region.meeting_point }}</p>
+    </div>
+  </div>
+  {% endfor %}
+
+  {% else %}
+  <div class="alert alert-info">
+    Meeting point information for {{ region.name }} is coming soon. Please contact us for details.
+  </div>
+  {% endif %}
+
+  <div class="mt-5 p-4 rounded-3 border text-center" style="background:#f8fafc;">
+    <p class="text-muted mb-1 small">Can't find your driver?</p>
+    <p class="fw-semibold mb-3">Call or text the number on your booking confirmation and we'll assist immediately.</p>
+    <a href="tel:{{ region.phone }}" class="btn btn-outline-primary me-2">📞 {{ region.phone_display|default:region.phone }}</a>
+    <a href="/contact/" class="btn btn-outline-secondary">Send a Message</a>
+  </div>
+</section>
+
+<section class="cta-strip">
+  <div class="container text-center">
+    <h2>Ready to book your {{ region.name }} airport transfer?</h2>
+    <a href="/{{ region.slug }}/booking/" class="btn btn-warning btn-lg px-5">Book Now →</a>
+  </div>
+</section>
+
+<script nonce="{{ CSP_NONCE }}">
+function switchTab(btn, panelId) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(panelId).classList.add('active');
+}
+</script>
+{% endblock %}

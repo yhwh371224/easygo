@@ -3,14 +3,16 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Sydney Airport Maxi Taxi & 8–13 Seater Transfers | EasyGo Airport Shuttle</title>
+    <title>{% block title %}Sydney Airport Maxi Taxi & 8–13 Seater Transfers | EasyGo Airport Shuttle{% endblock %}</title>
     {% block canonical %}
     <link rel="canonical" href="https://easygoshuttle.com.au{{ request.path }}">
     {% endblock %}
     <meta name="google-site-verification" content="hae39L0Kv7JIxVc3YclvckH7Im5SdYa2hk_vZbGJIkA" />
+    {% block meta %}
     <meta name="description" content="Traveling with a large group or lots of luggage? EasyGo Airport Shuttle provides private 8–13 seater airport transfers across Sydney North, CBD & Western suburbs. Perfect for families, hotel guests & oversized luggage. Book online in 1 minute.">
     <meta name="keywords" content="sydney airport transfer large group, airport transfer lots of luggage sydney, 8 seater airport transfer sydney, 13 seater airport transfer sydney, sydney north airport transfer, western sydney airport pickup, cbd hotel airport transfer, private airport shuttle sydney">
     <meta name="author" content="easygoshuttle.com.au">
+    {% endblock %}
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" type="image/x-icon" href="{% static 'basecamp/favi/favicon.ico' %}">
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'basecamp/favi/apple-touch-icon.png' %}">
