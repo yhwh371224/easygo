@@ -13,7 +13,11 @@ def region_home(request, region_slug):
 
 def region_booking(request, region_slug):
     region = get_object_or_404(Region, slug=region_slug, is_active=True)
-    return render(request, 'regions/booking.html', {'region': region})
+    suburbs = region.suburbs.filter(is_active=True).order_by('zone', 'name')
+    return render(request, 'regions/booking.html', {
+        'region': region,
+        'suburbs': suburbs,
+    })
 
 
 def region_confirmation(request, region_slug):

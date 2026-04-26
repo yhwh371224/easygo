@@ -1,0 +1,454 @@
+{% extends "regions/base.html" %}
+{% load static %}
+
+{% block title %}{{ region.name }} Airport Shuttle Booking | EasyGo{% endblock %}
+
+{% block canonical %}
+<link rel="canonical" href="https://easygoshuttle.com.au/{{ region.slug }}/booking/">
+{% endblock %}
+
+{% block meta %}
+<meta name="description" content="Book your {{ region.name }} airport transfer online. Fixed price door-to-door private shuttle to {{ region.airport_name }}. Fast, easy, 24/7.">
+<meta name="keywords" content="{{ region.name }} airport shuttle booking, {{ region.airport_name }} transfer, private airport transfer {{ region.name }}">
+<meta name="author" content="easygoshuttle.com.au">
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'basecamp/css/flatpickr.min.css' %}">
+<style nonce="{{ CSP_NONCE }}">
+  .booking-hero {
+    position: relative;
+    min-height: 240px;
+    display: flex;
+    align-items: center;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+  }
+  .form-card { border: none; box-shadow: 0 4px 24px rgba(0,0,0,0.10); border-radius: 12px; }
+  .section-label { font-weight: 600; color: #eb7828; font-size: .85rem; text-transform: uppercase; letter-spacing: .05em; }
+  .card-section { background: #f8f9fa; border-radius: 8px; padding: 1.25rem; margin-bottom: 1rem; }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- Hero -->
+<section class="booking-hero">
+  <div style="position:absolute;inset:0;background:rgba(0,0,0,0.45);z-index:0;"></div>
+  <div class="container position-relative py-5" style="z-index:1; padding-top: 90px !important;">
+    <nav aria-label="breadcrumb" class="mb-2">
+      <ol class="breadcrumb" style="background:none;padding:0;">
+        <li class="breadcrumb-item"><a href="/{{ region.slug }}/" class="text-light opacity-75">{{ region.name }}</a></li>
+        <li class="breadcrumb-item active text-light" aria-current="page">Booking</li>
+      </ol>
+    </nav>
+    <h1 class="text-white fw-bold mb-1">{{ region.name }} Airport Transfer</h1>
+    <p class="text-white opacity-75 mb-0">Complete the form — we'll confirm your booking by email</p>
+  </div>
+</section>
+
+<!-- Main -->
+<section class="container py-5">
+  <div class="row g-4">
+
+    <!-- Form column -->
+    <div class="col-lg-8">
+      <div class="card form-card p-4 p-md-5">
+
+        <!-- Region selector -->
+        <div class="mb-4 pb-3 border-bottom">
+          <label class="form-label section-label mb-1">Select Region</label>
+          <select id="region-select" class="form-select form-select-sm" style="max-width:220px;">
+            {% for r in active_regions %}
+              <option value="{{ r.slug }}" {% if r.slug == region.slug %}selected{% endif %}>
+                {{ r.name }}
+              </option>
+            {% endfor %}
+          </select>
+          <small class="text-muted d-block mt-1">Switching region will take you to that region's booking page.</small>
+        </div>
+
+        <form method="post"
+              action="/booking_detail/"
+              id="booking-form"
+              enctype="multipart/form-data"
+              class="needs-validation"
+              data-success-url="/{{ region.slug }}/confirmation/"
+              novalidate>
+          {% csrf_token %}
+          <input type="hidden" name="region_slug" value="{{ region.slug }}">
+
+          <!-- ① Personal Information -->
+          <p class="section-label mb-2">① Personal Information</p>
+          <div class="card-section">
+            <div class="mb-3">
+              <label class="form-label" for="user_name">Full name <span class="text-danger">*</span></label>
+              <input class="form-control" type="text" id="user_name" name="name" placeholder="John Smith" required>
+              <div class="invalid-feedback">Please enter your full name.</div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="user_contact">Mobile number <span class="text-danger">*</span></label>
+              <input class="form-control" type="text" id="user_contact" name="contact" placeholder="04xx xxx xxx" required>
+              <div class="invalid-feedback">Please enter your mobile number.</div>
+            </div>
+            <div class="mb-0">
+              <label class="form-label" for="user_email">Email address <span class="text-danger">*</span></label>
+              <input class="form-control" type="email" id="user_email" name="email" placeholder="john@example.com" required>
+              <div class="invalid-feedback">Please enter a valid email address.</div>
+            </div>
+          </div>
+
+          <hr class="my-4">
+
+          <!-- ② Travel Details -->
+          <p class="section-label mb-2">② Travel Details</p>
+          <div class="card-section">
+            <div class="mb-3">
+              <label class="form-label" for="direction">Direction <span class="text-danger">*</span></label>
+              <select class="form-select" name="direction" id="direction" required>
+                <option value="Drop off to Domestic Airport">Drop off — Domestic Terminal</option>
+                <option value="Drop off to Intl Airport">Drop off — International Terminal</option>
+                <option value="Pickup from Domestic Airport">Pick up — Domestic Terminal</option>
+                <option value="Pickup from Intl Airport">Pick up — International Terminal</option>
+                <option value="Cruise or Point to Point">Cruise / Point to Point</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="flight-date">
+                Pickup date <span class="text-danger">*</span>
+              </label>
+              <input id="flight-date" class="form-control date-picker" type="text" name="pickup_date"
+                     placeholder="Select date" required
+                     data-datepicker-options='{"altInput":true,"altFormat":"F j, Y","dateFormat":"Y-m-d","minDate":"today"}'>
+              <div id="date-error" class="invalid-feedback">Please choose a future date.</div>
+            </div>
+            <div class="mb-0">
+              <label class="form-label" for="pickup-time">Preferred pickup time <span class="text-danger">*</span></label>
+              <input class="form-control" type="time" name="pickup_time" id="pickup-time" required>
+            </div>
+          </div>
+
+          <!-- Flight info (hidden for P2P) -->
+          <div id="flight-fields" class="card-section mb-3">
+            <div class="mb-3">
+              <label class="form-label" for="flight_number">Flight number</label>
+              <input class="form-control" type="text" id="flight_number" name="flight_number" placeholder="e.g. QF400">
+            </div>
+            <div class="mb-0">
+              <label class="form-label" for="flight_time">Flight time</label>
+              <input class="form-control" type="time" id="flight_time" name="flight_time">
+            </div>
+          </div>
+
+          <!-- P2P fields (hidden by default) -->
+          <div id="start-end-fields" class="card-section mb-3" style="display:none;">
+            <div class="mb-3">
+              <label class="form-label" for="start_point">Start point (pickup location)</label>
+              <input class="form-control" type="text" id="start_point" name="start_point" placeholder="Full address">
+            </div>
+            <div class="mb-0">
+              <label class="form-label" for="end_point">End point (drop-off location)</label>
+              <input class="form-control" type="text" id="end_point" name="end_point" placeholder="Full address">
+            </div>
+          </div>
+
+          <hr class="my-4">
+
+          <!-- ③ Address (hidden for P2P) -->
+          <div id="address-fields">
+            <p class="section-label mb-2">③ Pickup / Drop-off Address</p>
+            <div class="card-section">
+              <div class="mb-3">
+                <label class="form-label" for="street">Street address <span class="text-danger">*</span></label>
+                <input class="form-control" type="text" id="street" name="street"
+                       placeholder="e.g. 42 Collins Street" required>
+                <div class="invalid-feedback">Please enter your street address.</div>
+              </div>
+              <div class="mb-0">
+                <label class="form-label" for="suburb-select">Suburb <span class="text-danger">*</span></label>
+                {% if suburbs %}
+                <select class="form-select" id="suburb-select" name="suburb" required>
+                  <option value="" disabled selected>Select your suburb</option>
+                  {% regroup suburbs by zone as zone_groups %}
+                  {% for zone_group in zone_groups %}
+                    <optgroup label="{{ zone_group.grouper }}">
+                      {% for s in zone_group.list %}
+                        <option value="{{ s.name }}">{{ s.name }}</option>
+                      {% endfor %}
+                    </optgroup>
+                  {% endfor %}
+                  <option value="Other">Other (please specify in message)</option>
+                </select>
+                {% else %}
+                <input class="form-control" type="text" id="suburb-select" name="suburb"
+                       placeholder="Your suburb" required>
+                {% endif %}
+                <div class="invalid-feedback">Please select or enter your suburb.</div>
+              </div>
+            </div>
+          </div>
+
+          <hr class="my-4">
+
+          <!-- ④ Passengers & Baggage -->
+          <p class="section-label mb-2">④ Passengers &amp; Baggage</p>
+          <div class="mb-3">
+            <label class="form-label" for="no_of_passenger">Number of passengers <span class="text-danger">*</span></label>
+            <select class="form-select" name="no_of_passenger" id="no_of_passenger" required>
+              <option value="">How many people?</option>
+              {% for i in "123456789" %}
+              <option value="{{ i }}">{{ i }}</option>
+              {% endfor %}
+              <option value="10">10</option>
+              <option value="11">11</option>
+              <option value="12">12</option>
+              <option value="13">13</option>
+              <option value="-1" disabled>Over 13 — please email us</option>
+            </select>
+            <div class="invalid-feedback">Please select number of passengers.</div>
+          </div>
+
+          <!-- Regular baggage -->
+          <div class="mb-3">
+            <p class="form-label mb-1">Regular baggage</p>
+            <small class="text-muted d-block mb-2">Large = check-in / Medium = cabin / Small = backpack</small>
+            <div class="row g-2">
+              <div class="col">
+                <label for="baggage_large" class="form-label mb-0">Large</label>
+                <input type="number" class="form-control" id="baggage_large" name="baggage_large" min="0" max="9" value="0">
+              </div>
+              <div class="col">
+                <label for="baggage_medium" class="form-label mb-0">Medium</label>
+                <input type="number" class="form-control" id="baggage_medium" name="baggage_medium" min="0" max="9" value="0">
+              </div>
+              <div class="col">
+                <label for="baggage_small" class="form-label mb-0">Small</label>
+                <input type="number" class="form-control" id="baggage_small" name="baggage_small" min="0" max="9" value="0">
+              </div>
+            </div>
+          </div>
+
+          <!-- Extra luggage toggle -->
+          <div class="mb-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="extraLuggageCheck">
+              <label class="form-check-label" for="extraLuggageCheck">
+                Any extra / oversized luggage? (baby seat, ski, golf, bike, etc.)
+              </label>
+            </div>
+          </div>
+          <div id="extraLuggageFields" style="display:none;" class="card-section mb-3">
+            <small class="text-muted d-block mb-2">Oversized items may affect vehicle allocation. Please be specific.</small>
+            <div class="row g-2 mb-2">
+              <div class="col"><label class="form-label mb-0">Baby seats</label>
+                <input type="number" class="form-control" name="baggage_baby" min="0" max="9" value="0"></div>
+              <div class="col"><label class="form-label mb-0">Booster seats</label>
+                <input type="number" class="form-control" name="baggage_booster" min="0" max="9" value="0"></div>
+              <div class="col"><label class="form-label mb-0">Prams</label>
+                <input type="number" class="form-control" name="baggage_pram" min="0" max="9" value="0"></div>
+            </div>
+            <div class="row g-2 mb-2">
+              <div class="col"><label class="form-label mb-0">Ski bags</label>
+                <input type="number" class="form-control" name="baggage_ski" min="0" max="9" value="0"></div>
+              <div class="col"><label class="form-label mb-0">Golf bags</label>
+                <input type="number" class="form-control" name="baggage_golf" min="0" max="9" value="0"></div>
+              <div class="col"><label class="form-label mb-0">Bikes</label>
+                <input type="number" class="form-control" name="baggage_bike" min="0" max="9" value="0"></div>
+            </div>
+          </div>
+
+          <hr class="my-4">
+
+          <!-- ⑤ Return trip -->
+          <div class="d-flex align-items-center mb-3">
+            <label class="form-label mb-0 me-3" for="return-flight">Need a return trip?</label>
+            <input class="form-check-input" type="checkbox" id="return-flight" name="return_flight"
+                   style="margin-top:0;width:1.25rem;height:1.25rem;">
+          </div>
+          <div id="return-flight-fields" class="card-section mb-4" style="display:none;">
+            <div class="mb-3">
+              <label class="form-label" for="return_direction">Return direction</label>
+              <select class="form-select" name="return_direction" id="return_direction">
+                <option value="">Select direction</option>
+                <option value="Drop off to Domestic Airport">Drop off — Domestic Terminal</option>
+                <option value="Drop off to Intl Airport">Drop off — International Terminal</option>
+                <option value="Pickup from Domestic Airport">Pick up — Domestic Terminal</option>
+                <option value="Pickup from Intl Airport">Pick up — International Terminal</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="return-pickup-date">Return pickup date</label>
+              <input id="return-pickup-date" class="form-control date-picker" type="text"
+                     name="return_pickup_date" placeholder="Select date"
+                     data-datepicker-options='{"altInput":true,"altFormat":"F j, Y","dateFormat":"Y-m-d","minDate":"today"}'>
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="return_pickup_time">Return pickup time</label>
+              <input class="form-control" type="time" name="return_pickup_time" id="return_pickup_time">
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="return_flight_number">Return flight number</label>
+              <input class="form-control" type="text" name="return_flight_number" id="return_flight_number" placeholder="e.g. QF401">
+            </div>
+            <div class="mb-0">
+              <label class="form-label" for="return_flight_time">Return flight time</label>
+              <input class="form-control" type="time" name="return_flight_time" id="return_flight_time">
+            </div>
+          </div>
+
+          <!-- ⑥ Message -->
+          <p class="section-label mb-2">⑥ Additional Information</p>
+          <div class="mb-4">
+            <textarea class="form-control" name="message" id="cont-message" rows="4"
+                      placeholder="Any special requests, accessibility needs, or notes for the driver..."></textarea>
+          </div>
+
+          <!-- Turnstile -->
+          <div class="cf-turnstile mb-4" data-sitekey="{{ CLOUDFLARE_TURNSTILE_SITE_KEY }}"></div>
+          <div id="errorMessage" class="alert alert-danger mb-3" style="display:none;"></div>
+
+          <div class="text-center">
+            <button class="btn btn-primary btn-lg px-5" type="submit" id="submitButton">
+              Submit Booking Request
+            </button>
+            <p class="text-muted fs-sm mt-2 mb-0">We'll confirm your booking by email within a few hours.</p>
+          </div>
+        </form>
+
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="col-lg-4">
+      <div class="card p-4 mb-4" style="border-left: 4px solid #eb7828;">
+        <h5 class="fw-bold mb-3" style="color:#eb7828;">For Arrivals</h5>
+        <p class="fs-sm mb-1">Your driver monitors your flight in real time.</p>
+        <p class="fs-sm mb-0">No extra charge for flight delays. Driver will be waiting at the arrivals hall.</p>
+      </div>
+      <div class="card p-4 mb-4" style="border-left: 4px solid #0d6efd;">
+        <h5 class="fw-bold mb-3">For Departures</h5>
+        <p class="fs-sm mb-1">Please inform us your preferred pickup time.</p>
+        <p class="fs-sm mb-0">Our vehicles are entitled to use the BUS LANE — arrival times are reliable.</p>
+      </div>
+      <div class="card p-4 bg-light">
+        <h5 class="fw-bold mb-3">{{ region.name }} Airport</h5>
+        <ul class="list-unstyled fs-sm mb-0">
+          <li class="mb-1">🛬 {{ region.airport_name }}</li>
+          <li class="mb-1">📞 <a href="sms:{{ region.phone }}">{{ region.phone_display|default:region.phone }}</a></li>
+          <li class="mb-0">🕐 Available 24 / 7</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'basecamp/js/flatpickr.min.js' %}" nonce="{{ CSP_NONCE }}"></script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer nonce="{{ CSP_NONCE }}"></script>
+<script nonce="{{ CSP_NONCE }}">
+document.addEventListener('DOMContentLoaded', function () {
+
+  /* ── Region selector redirect ── */
+  var regionSelect = document.getElementById('region-select');
+  if (regionSelect) {
+    regionSelect.addEventListener('change', function () {
+      var slug = this.value;
+      window.location.href = (slug === 'sydney') ? '/booking/' : '/' + slug + '/booking/';
+    });
+  }
+
+  /* ── Flatpickr date pickers ── */
+  document.querySelectorAll('.date-picker').forEach(function (el) {
+    var opts = el.dataset.datepickerOptions ? JSON.parse(el.dataset.datepickerOptions) : {};
+    flatpickr(el, Object.assign({ disableMobile: true }, opts));
+  });
+
+  /* ── Direction field toggle ── */
+  var dirSelect = document.getElementById('direction');
+  function applyDirectionToggle() {
+    if (!dirSelect) return;
+    var val = dirSelect.value;
+    var isP2P = val === 'Cruise or Point to Point';
+    document.getElementById('start-end-fields').style.display = isP2P ? '' : 'none';
+    document.getElementById('address-fields').style.display = isP2P ? 'none' : '';
+    document.getElementById('flight-fields').style.display = isP2P ? 'none' : '';
+    /* street required only for non-P2P */
+    var streetEl = document.getElementById('street');
+    if (streetEl) streetEl.required = !isP2P;
+  }
+  if (dirSelect) {
+    dirSelect.addEventListener('change', applyDirectionToggle);
+    applyDirectionToggle();
+  }
+
+  /* ── Extra luggage toggle ── */
+  var extraCheck = document.getElementById('extraLuggageCheck');
+  if (extraCheck) {
+    extraCheck.addEventListener('change', function () {
+      document.getElementById('extraLuggageFields').style.display = this.checked ? '' : 'none';
+    });
+  }
+
+  /* ── Return trip toggle ── */
+  var returnCheck = document.getElementById('return-flight');
+  if (returnCheck) {
+    returnCheck.addEventListener('change', function () {
+      document.getElementById('return-flight-fields').style.display = this.checked ? '' : 'none';
+    });
+  }
+
+  /* ── AJAX form submit ── */
+  var form = document.getElementById('booking-form');
+  if (!form) return;
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!form.checkValidity()) {
+      form.classList.add('was-validated');
+      return;
+    }
+
+    var submitBtn = document.getElementById('submitButton');
+    var errorDiv  = document.getElementById('errorMessage');
+    var successUrl = form.dataset.successUrl;
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Submitting…';
+    errorDiv.style.display = 'none';
+
+    fetch(form.action, {
+      method: 'POST',
+      body: new FormData(form),
+      headers: { 'X-Requested-With': 'XMLHttpRequest' },
+    })
+    .then(function (r) {
+      if (!r.headers.get('content-type').includes('application/json')) {
+        throw new Error('Unexpected server response.');
+      }
+      return r.json();
+    })
+    .then(function (data) {
+      if (data.success) {
+        window.location.href = successUrl;
+      } else {
+        errorDiv.textContent = data.message || data.error || 'An error occurred. Please try again.';
+        errorDiv.style.display = 'block';
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit Booking Request';
+      }
+    })
+    .catch(function (err) {
+      errorDiv.textContent = 'There was a problem submitting your request. Please try again.';
+      errorDiv.style.display = 'block';
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Submit Booking Request';
+    });
+  });
+
+});
+</script>
+{% endblock %}
