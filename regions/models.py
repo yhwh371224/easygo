@@ -25,6 +25,11 @@ class Region(models.Model):
     # SEO
     meta_description = models.TextField(blank=True)
 
+    # Guides & Terminals
+    terminal_info = models.JSONField(blank=True, null=True)
+    meeting_point = models.TextField(blank=True)
+    arrival_guide = models.TextField(blank=True)
+
     class Meta:
         ordering = ['name']
 

@@ -216,6 +216,28 @@ def region_confirmation(request, region_slug):
     return render(request, 'regions/confirmation.html', {'region': region})
 
 
+# ── Meeting Point ─────────────────────────────────────────────────────────────
+
+def region_meeting_point(request, region_slug):
+    region = get_object_or_404(Region, slug=region_slug, is_active=True)
+    terminals = region.terminal_info or []
+    return render(request, 'regions/meeting_point.html', {
+        'region': region,
+        'terminals': terminals,
+    })
+
+
+# ── Arrival Guide ─────────────────────────────────────────────────────────────
+
+def region_arrival_guide(request, region_slug):
+    region = get_object_or_404(Region, slug=region_slug, is_active=True)
+    steps = [s.strip() for s in region.arrival_guide.split('\n') if s.strip()]
+    return render(request, 'regions/arrival_guide.html', {
+        'region': region,
+        'steps': steps,
+    })
+
+
 # ── Airport Shuttle ───────────────────────────────────────────────────────────
 
 def region_airport_shuttle_list(request, region_slug):
