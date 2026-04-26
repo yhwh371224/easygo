@@ -1,0 +1,84 @@
+{% extends "regions/base.html" %}
+{% load static %}
+
+{% block title %}Booking Received — {{ region.name }} Airport Shuttle | EasyGo{% endblock %}
+
+{% block canonical %}
+<link rel="canonical" href="https://easygoshuttle.com.au/{{ region.slug }}/confirmation/">
+{% endblock %}
+
+{% block meta %}
+<meta name="robots" content="noindex, nofollow">
+{% endblock %}
+
+{% block content %}
+{% static 'basecamp/photos/bg-pattern02.webp' as hero_bg %}
+
+<section class="bg-dark text-center"
+         style="background-image:url('{{ hero_bg }}');background-size:cover;background-position:center;
+                position:relative;min-height:480px;display:flex;align-items:center;">
+  <div style="position:absolute;inset:0;background:rgba(0,0,0,0.55);"></div>
+
+  <div class="container position-relative py-5" style="z-index:2;">
+    <div class="mb-4" style="font-size:3.5rem;">✅</div>
+    <h1 class="text-white fw-bold mb-3">Booking Request Received!</h1>
+    <p class="fs-lg text-white opacity-90 mb-2">
+      Thank you for choosing EasyGo {{ region.name }} Airport Shuttle.
+    </p>
+    <p class="text-white opacity-75 mb-4">
+      We'll send a confirmation email shortly with your driver details.<br>
+      If you don't hear from us within a few hours, please
+      <a href="/contact/" class="text-warning">contact us</a>.
+    </p>
+
+    <div class="d-flex flex-wrap justify-content-center gap-3 mb-5">
+      <a href="/{{ region.slug }}/" class="btn btn-outline-light btn-lg px-5">
+        Back to {{ region.name }} Home
+      </a>
+      <a href="/contact/" class="btn btn-outline-warning btn-lg px-4">
+        Contact Us
+      </a>
+    </div>
+
+    <!-- What to expect -->
+    <div class="row g-3 justify-content-center" style="max-width:720px;margin:0 auto;">
+      <div class="col-sm-4">
+        <div class="p-3 rounded" style="background:rgba(255,255,255,0.10);">
+          <div class="fs-3 mb-1">📧</div>
+          <p class="text-white fw-semibold mb-0 fs-sm">Confirmation email</p>
+          <p class="text-white opacity-70 fs-xs mb-0">Sent within a few hours</p>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="p-3 rounded" style="background:rgba(255,255,255,0.10);">
+          <div class="fs-3 mb-1">🚗</div>
+          <p class="text-white fw-semibold mb-0 fs-sm">Driver assigned</p>
+          <p class="text-white opacity-70 fs-xs mb-0">Local {{ region.name }} driver</p>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="p-3 rounded" style="background:rgba(255,255,255,0.10);">
+          <div class="fs-3 mb-1">✈️</div>
+          <p class="text-white fw-semibold mb-0 fs-sm">Flight tracked</p>
+          <p class="text-white opacity-70 fs-xs mb-0">No extra delay charges</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Reviews nudge -->
+<section class="container py-5 text-center">
+  <h2 class="h4 mb-3">See What Our Customers Say</h2>
+  <p class="text-muted mb-4">Hundreds of 5-star reviews from {{ region.name }} travellers.</p>
+  <div class="d-flex flex-wrap justify-content-center gap-3">
+    <a href="/easygo_review/" class="btn btn-outline-primary px-4">
+      Reviews on Our Site
+    </a>
+    <a href="{{ region.slug }}/airport-shuttle/" class="btn btn-outline-secondary px-4">
+      Browse {{ region.name }} Service Areas
+    </a>
+  </div>
+</section>
+
+{% endblock %}
