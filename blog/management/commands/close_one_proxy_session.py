@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, timedelta
 
 from django.core.management.base import BaseCommand
 from django.utils import timezone
@@ -14,21 +14,25 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('--driver', required=True, help='Driver name (partial match)')
         parser.add_argument('--trip', type=int, default=None, help='Trip number (1-based)')
-        parser.add_argument('--date', type=str, default=None, help='YYYY-MM-DD (default: today)')
+        parser.add_argument('--date', type=str, default=None, help='0=today (default), 1=tomorrow, or YYYY-MM-DD')
 
     def handle(self, *args, **options):
 
         # =========================
         # DATE HANDLING
         # =========================
-        if options['date']:
-            try:
-                target_date = date.fromisoformat(options['date'])
-            except ValueError:
-                self.stderr.write(f"Invalid date format: {options['date']}")
-                return
-        else:
+        raw_date = options['date']
+
+        if raw_date is None or raw_date == '0':
             target_date = timezone.localdate()
+        elif raw_date == '1':
+            target_date = timezone.localdate() + timedelta(days=1)
+        else:
+            try:
+                target_date = date.fromisoformat(raw_date)
+            except ValueError:
+                self.stderr.write(f"Invalid date format: {raw_date}")
+                return
 
         driver_query = options['driver']
         trip_num = options['trip']
