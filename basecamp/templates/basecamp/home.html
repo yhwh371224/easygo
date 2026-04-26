@@ -117,6 +117,20 @@
     <link rel="stylesheet" href="{% static 'basecamp/css/tiny-slider.css' %}" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="{% static 'basecamp/css/flatpickr.min.css' %}" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="{% static 'basecamp/css/tiny-slider.css' %}"></noscript>
+    <style nonce="{{ CSP_NONCE }}">
+      .site-footer a { text-decoration: none !important; }
+      .site-footer a:hover, .site-footer a:focus, .site-footer a:active { text-decoration: none !important; }
+      .city-card { background: #fbf6ee; transition: background-color .15s ease, border-color .15s ease; }
+      .city-card:hover { background: #f6eddf; }
+      .city-card.is-active { background: #f3e6d2; border-color: rgba(243, 128, 32, 0.35) !important; }
+      .city-name { white-space: nowrap; }
+      .badge-current{ background: rgba(34,197,94,.18); color:#14532d; border: 1px solid rgba(34,197,94,.30); }
+      .live-pill{ display:inline-flex; align-items:center; gap:.5rem; padding:.25rem .6rem; border:1px solid rgba(0,0,0,.08); border-radius:999px; background: rgba(255,255,255,.65); color: rgba(17,24,39,.72); }
+      .live-pill strong{ color:#111827; }
+      .live-pill .live-muted{ color: rgba(17,24,39,.58); }
+      .live-dot{ width:.5rem; height:.5rem; border-radius:999px; background:#22c55e; box-shadow: 0 0 0 0 rgba(34,197,94,.55); animation: livePulse 1.4s infinite; }
+      @keyframes livePulse { 0%{ box-shadow:0 0 0 0 rgba(34,197,94,.55);} 70%{ box-shadow:0 0 0 .5rem rgba(34,197,94,0);} 100%{ box-shadow:0 0 0 0 rgba(34,197,94,0);} }
+    </style>
   </head>
   <body>
     {% include "basecamp/layouts/navbar.html" %}
@@ -475,6 +489,48 @@
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section class="container py-4 py-md-5">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+          <h2 class="mb-0">Choose your city</h2>
+          <span class="live-pill fs-sm">
+            <span class="live-dot" aria-hidden="true"></span>
+            <span><strong>{{ region.name }}</strong> <span class="live-muted">Live now</span> • More cities launching soon</span>
+          </span>
+        </div>
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
+          {% for r in active_regions %}
+            <div class="col">
+              <div class="city-card h-100 border rounded-3 p-3 p-md-4 {% if r.slug == region.slug %}is-active{% endif %}">
+                <div class="d-flex align-items-start justify-content-between gap-3">
+                  <div>
+                    <div class="city-name fw-semibold">{{ r.name }}</div>
+                    <div class="text-muted fs-sm">
+                      {% if r.airport_code %}{{ r.airport_code }}{% else %}Airport transfers{% endif %}
+                    </div>
+                  </div>
+                  <div class="text-end">
+                    {% if r.slug == region.slug %}
+                      <span class="badge badge-current">Current</span>
+                    {% elif r.slug == 'brisbane' or r.slug == 'perth' or r.slug == 'adelaide' or r.slug == 'gold-coast' %}
+                      <span class="badge bg-warning text-dark">Coming Soon</span>
+                    {% endif %}
+                  </div>
+                </div>
+
+                <div class="mt-3">
+                  {% if r.slug == 'sydney' %}
+                    <a class="btn btn-sm btn-outline-primary w-100" href="/" aria-label="Go to Sydney">→</a>
+                  {% else %}
+                    <a class="btn btn-sm btn-outline-primary w-100" href="/{{ r.slug }}/" aria-label="Go to {{ r.name }}">→</a>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          {% endfor %}
         </div>
       </section>
 

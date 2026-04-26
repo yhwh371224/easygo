@@ -4,6 +4,12 @@ from . import views
 app_name = 'regions'
 
 urlpatterns = [
+    # Coming soon regions must match before the generic home route.
+    path('brisbane/', views.region_coming_soon, {'region_slug': 'brisbane'}, name='coming_soon_brisbane'),
+    path('perth/', views.region_coming_soon, {'region_slug': 'perth'}, name='coming_soon_perth'),
+    path('adelaide/', views.region_coming_soon, {'region_slug': 'adelaide'}, name='coming_soon_adelaide'),
+    path('gold-coast/', views.region_coming_soon, {'region_slug': 'gold-coast'}, name='coming_soon_gold_coast'),
+
     path('<slug:region_slug>/', views.region_home, name='home'),
     path('<slug:region_slug>/inquiry/', views.region_inquiry, name='inquiry'),
     path('<slug:region_slug>/inquiry_detail/', views.region_inquiry_details, name='inquiry_details'),

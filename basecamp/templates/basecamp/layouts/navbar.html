@@ -1,6 +1,18 @@
 {% load static %}
 {% static 'basecamp/images/aboutus.webp' as page_bg %}
 
+<style nonce="{{ CSP_NONCE }}">
+  @media (min-width: 992px){
+    .navbar-nav .dropdown.hover-open:hover > .dropdown-menu{
+      display:block;
+      margin-top: 0;
+    }
+  }
+  .dropdown-menu .dropdown-item.active{
+    font-weight: 700;
+  }
+</style>
+
 <header class="header navbar navbar-expand-lg {{ navbar_theme|default:'navbar-dark' }} navbar-floating navbar-sticky" data-scroll-header data-fixed-element>
     <div class="container px-0 px-xl-3">
         <button class="navbar-toggler ms-n2 me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#primaryMenu" aria-label="Toggle navigation">
@@ -25,8 +37,30 @@
         
         <div class="offcanvas-body d-lg-flex justify-content-lg-center">
             <ul class="navbar-nav">
-            <li class="nav-item active">
-                <a class="nav-link" href="{% if current_region %}/{{ current_region.slug }}/{% else %}/{% endif %}">Home</a>
+            <li class="nav-item dropdown hover-open active">
+                <a class="nav-link dropdown-toggle" href="{% if current_region %}/{{ current_region.slug }}/{% else %}/{% endif %}" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">Home</a>
+                <ul class="dropdown-menu">
+                  {% if active_regions %}
+                    {% for r in active_regions %}
+                      {% if r.slug == 'sydney' %}
+                        <li>
+                          <a class="dropdown-item {% if not current_region and request.path == '/' %}active{% endif %}" href="/">Sydney</a>
+                        </li>
+                      {% else %}
+                        <li>
+                          <a class="dropdown-item {% if current_region and current_region.slug == r.slug %}active{% endif %}" href="/{{ r.slug }}/">{{ r.name }}</a>
+                        </li>
+                      {% endif %}
+                    {% endfor %}
+                  {% else %}
+                    <li><a class="dropdown-item {% if request.path == '/' %}active{% endif %}" href="/">Sydney</a></li>
+                    <li><a class="dropdown-item {% if request.path|slice:':11' == '/melbourne/' %}active{% endif %}" href="/melbourne/">Melbourne</a></li>
+                    <li><a class="dropdown-item {% if request.path|slice:':10' == '/brisbane/' %}active{% endif %}" href="/brisbane/">Brisbane</a></li>
+                    <li><a class="dropdown-item {% if request.path|slice:':7' == '/perth/' %}active{% endif %}" href="/perth/">Perth</a></li>
+                    <li><a class="dropdown-item {% if request.path|slice:':10' == '/adelaide/' %}active{% endif %}" href="/adelaide/">Adelaide</a></li>
+                    <li><a class="dropdown-item {% if request.path|slice:':12' == '/gold-coast/' %}active{% endif %}" href="/gold-coast/">Gold Coast</a></li>
+                  {% endif %}
+                </ul>
             </li>
 
             <li class="nav-item dropdown dropdown-mega active">

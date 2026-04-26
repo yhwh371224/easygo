@@ -12,18 +12,49 @@
 </section>
 
 <footer class="site-footer bg-dark py-5">
-      <div class="container d-md-flex justify-content-between align-items-center text-center">
-        <ul class="list-inline fs-sm mb-3 order-md-2">
+  <style nonce="{{ CSP_NONCE }}">
+    .site-footer a { text-decoration: none !important; }
+    .site-footer a:hover { text-decoration: none !important; }
+    .site-footer a:focus { text-decoration: none !important; }
+    .site-footer a:active { text-decoration: none !important; }
+  </style>
+  <div class="container">
+    <div class="row g-5 align-items-start text-center text-md-start">
+      <div class="col-12 col-md-4">
+        <p class="fs-sm mb-2">
+          <span class="text-light opacity-80">
+            © <span id="current-year"></span> EasyGo. All rights reserved.
+          </span>
+        </p>
+        <p class="fs-sm mb-0">
+          <span class="text-light opacity-80">
+            Designed and built by
+            <a href="https://sungkam.github.io" target="_blank" rel="noopener" style="color: #ffb347;">EasyCoding</a>
+          </span>
+        </p>
+      </div>
+
+      <div class="col-12 col-md-4 mt-3 mt-md-0">
+        <div class="fs-sm text-light opacity-80 fw-semibold mt-1 mb-3">Our service regions</div>
+        <div class="d-flex flex-wrap gap-2 justify-content-center justify-content-md-start">
+          {% for r in active_regions %}
+            {% if r.slug == 'sydney' %}
+              <a class="footer-region-link nav-link-style nav-link-light fs-sm px-2 py-1 border border-light border-opacity-10 rounded" href="/">Sydney</a>
+            {% else %}
+              <a class="footer-region-link nav-link-style nav-link-light fs-sm px-2 py-1 border border-light border-opacity-10 rounded" href="/{{ r.slug }}/">{{ r.name }}</a>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="col-12 col-md-4">
+        <ul class="list-inline fs-sm mb-0 text-center text-md-end">
           <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="mailto:info@easygoshuttle.com.au">Support</a></li>
           <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="/contact/">Contact</a></li>
           <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="/privacy/">Privacy policy</a></li>
           <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="/terms/">Terms &amp; Conditions</a></li>
         </ul>
-        <p class="fs-sm mb-3 order-md-1">
-          <span class="text-light opacity-80 me-1">
-            © <span id="current-year"></span> EasyGo. All rights reserved. Designed and built by 
-            <a href="https://sungkam.github.io" target="_blank" rel="noopener" style="color: #ffb347;">EasyCoding</a>
-          </span>
-        </p>       
       </div>
+    </div>
+  </div>
 </footer>

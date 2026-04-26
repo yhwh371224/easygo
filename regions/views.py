@@ -24,6 +24,22 @@ def _get_region_from_post(request):
         return None
 
 
+# ── Coming Soon ───────────────────────────────────────────────────────────────
+
+def region_coming_soon(request, region_slug):
+    """
+    Coming soon landing for regions not yet launched.
+    Melbourne is intentionally excluded.
+    """
+    coming_soon_slugs = {'brisbane', 'perth', 'adelaide', 'gold-coast'}
+
+    if region_slug == 'melbourne' or region_slug not in coming_soon_slugs:
+        return redirect('regions:home', region_slug=region_slug, permanent=False)
+
+    region = get_object_or_404(Region, slug=region_slug, is_active=True)
+    return render(request, 'regions/coming_soon.html', {'region': region})
+
+
 # ── Home ──────────────────────────────────────────────────────────────────────
 
 def region_home(request, region_slug):
