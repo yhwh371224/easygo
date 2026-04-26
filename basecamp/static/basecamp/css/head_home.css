@@ -71,4 +71,35 @@ body { margin: 0; font-family: Arial, sans-serif; }
   a.card.card-hover { background-color: #fff; }
   /* inline links inside div.fs-sm (accordion body) must have a non-color indicator — underline */
   div.fs-sm a { text-decoration: underline; }
-  
+
+  /* ===== Choose Your City Section ===== */
+  .city-chooser { background: #1a1f2e; border-radius: 12px; padding: 2.5rem 2rem; margin: 3rem 0; }
+  .city-chooser__header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 1.5rem; }
+  .city-chooser__title { color: #fff; font-size: 22px; font-weight: 500; margin: 0; }
+  .city-chooser__status { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: #9ca3b0; background: rgba(255,255,255,0.07); border: 0.5px solid rgba(255,255,255,0.12); border-radius: 20px; padding: 4px 12px; }
+  .city-chooser__status-dot { width: 7px; height: 7px; border-radius: 50%; background: #1D9E75; flex-shrink: 0; display: inline-block; }
+  .city-chooser__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+  .city-chooser__card { background: #fff; border-radius: 12px; padding: 1.25rem; display: flex; flex-direction: column; gap: 12px; text-decoration: none; }
+  .city-chooser__card--dim { opacity: 0.85; }
+  .city-chooser__card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+  .city-chooser__icon-box { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .city-chooser__icon-box--blue { background: #E6F1FB; }
+  .city-chooser__icon-box--blue svg { stroke: #378ADD; }
+  .city-chooser__icon-box--yellow { background: #FAEEDA; }
+  .city-chooser__icon-box--yellow svg { stroke: #BA7517; }
+  .city-chooser__badge { font-size: 11px; font-weight: 500; padding: 3px 8px; border-radius: 20px; }
+  .city-chooser__badge--current { background: #E6F1FB; color: #185FA5; }
+  .city-chooser__badge--soon { background: #FAEEDA; color: #854F0B; }
+  .city-chooser__city-name { font-size: 15px; font-weight: 500; color: #1a1f2e; margin: 0; }
+  .city-chooser__airport { font-size: 13px; color: #6b7280; margin: 4px 0 0; }
+  .city-chooser__cta { margin-top: auto; }
+  .city-chooser__btn { display: block; width: 100%; text-align: center; padding: 7px; border-radius: 8px; font-size: 13px; font-weight: 500; box-sizing: border-box; }
+  .city-chooser__btn--soon { border: 0.5px dashed #d1d5db; color: #9ca3af; }
+  .city-chooser__btn--current { background: #185FA5; color: #fff; }
+  .city-chooser__btn--other { border: 0.5px solid #d1d5db; color: #1a1f2e; }
+  @media (max-width: 575.98px) {
+    .city-chooser-section { padding-left: 1.25rem !important; padding-right: 1.25rem !important; }
+    .city-chooser-section .city-card { padding: 1rem !important; }
+    .city-chooser-section .row { --bs-gutter-x: 0.75rem; --bs-gutter-y: 0.75rem; }
+    .city-name { white-space: normal; word-break: break-word; }
+  }
