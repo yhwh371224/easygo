@@ -1,60 +1,39 @@
-<section class="container py-5 my-4 my-sm-0 py-sm-6 py-md-7">
-        <h2 class="text-center mb-4">Best Service Guaranteed</h2>
-         <p class="text-center">            
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="#F38020" xmlns="http://www.w3.org/2000/svg">
-                <path d="M23.53 13.911l-1.123-.374a.458.458 0 01-.264-.225 6.075 6.075 0 00-4.66-3.21.464.464 0 01-.39-.413 5.378 5.378 0 00-10.742-.321.464.464 0 01-.433.435 4.341 4.341 0 00-3.92 4.339c0 .114.004.227.013.34a.465.465 0 01-.418.5l-1.127.126a.466.466 0 01-.502-.349 6.202 6.202 0 01-.137-1.3c0-3.414 2.766-6.182 6.177-6.182.261 0 .518.016.771.047a7.24 7.24 0 0113.886.914 7.94 7.94 0 012.865 5.68c0 .167-.006.333-.018.498a.466.466 0 01-.418.42l-1.545.171a.464.464 0 01-.49-.371z"/>
-            </svg>
-            <small>This site is protected by Cloudflare security &amp; SSL encryption
-              <a href="https://cloudflare.com/privacypolicy/" target="_blank" rel="noopener">&nbsp;Privacy Policy</a> and 
-              <a href="https://cloudflare.com/terms/" target="_blank" rel="noopener">Terms</a> apply
-            </small>             
-        </p>
-</section>
-
 <footer class="site-footer bg-dark py-5">
-  <style nonce="{{ CSP_NONCE }}">
-    .site-footer a { text-decoration: none !important; }
-    .site-footer a:hover { text-decoration: none !important; }
-    .site-footer a:focus { text-decoration: none !important; }
-    .site-footer a:active { text-decoration: none !important; }
-  </style>
   <div class="container">
-    <div class="row g-5 align-items-start text-center text-md-start">
-      <div class="col-12 col-md-4">
-        <p class="fs-sm mb-2">
-          <span class="text-light opacity-80">
-            © <span id="current-year"></span> EasyGo. All rights reserved.
-          </span>
-        </p>
-        <p class="fs-sm mb-0">
-          <span class="text-light opacity-80">
-            Designed and built by
-            <a href="https://sungkam.github.io" target="_blank" rel="noopener" style="color: #ffb347;">EasyCoding</a>
-          </span>
-        </p>
+    <div class="ft-top">
+      <div>
+        <p class="ft-brand-name">EasyGo Airport Shuttle</p>
+        <p class="ft-brand-tag">Fixed price · Door-to-door · Australia wide</p>
+        <div class="ft-rating">
+          <span class="ft-stars">★★★★★</span>
+          <span class="ft-rating-text">4.9 · 200+ reviews</span>
+        </div>
       </div>
-
-      <div class="col-12 col-md-4 mt-3 mt-md-0">
-        <div class="fs-sm text-light opacity-80 fw-semibold mt-1 mb-3">Our service regions</div>
-        <div class="d-flex flex-wrap gap-2 justify-content-center justify-content-md-start">
+      <div>
+        <p class="ft-col-title">Service regions</p>
+        <div class="ft-regions">
           {% for r in active_regions %}
             {% if r.slug == 'sydney' %}
-              <a class="footer-region-link nav-link-style nav-link-light fs-sm px-2 py-1 border border-light border-opacity-10 rounded" href="/">Sydney</a>
+              <a class="ft-region-link" href="/">Sydney</a>
             {% else %}
-              <a class="footer-region-link nav-link-style nav-link-light fs-sm px-2 py-1 border border-light border-opacity-10 rounded" href="/{{ r.slug }}/">{{ r.name }}</a>
+              <a class="ft-region-link" href="/{{ r.slug }}/">{{ r.name }}</a>
             {% endif %}
           {% endfor %}
         </div>
       </div>
-
-      <div class="col-12 col-md-4">
-        <ul class="list-inline fs-sm mb-0 text-center text-md-end">
-          <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="mailto:info@easygoshuttle.com.au">Support</a></li>
-          <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="/contact/">Contact</a></li>
-          <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="/privacy/">Privacy policy</a></li>
-          <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="/terms/">Terms &amp; Conditions</a></li>
-        </ul>
+      <div>
+        <p class="ft-col-title">Company</p>
+        <div class="ft-links">
+          <a class="ft-link" href="mailto:info@easygoshuttle.com.au">Support</a>
+          <a class="ft-link" href="/contact/">Contact</a>
+          <a class="ft-link" href="/privacy/">Privacy policy</a>
+          <a class="ft-link" href="/terms/">Terms &amp; Conditions</a>
+        </div>
       </div>
+    </div>
+    <div class="ft-bottom">
+      <p class="ft-copy">© <span id="current-year"></span> EasyGo. All rights reserved.</p>
+      <p class="ft-credit">Built by <a href="https://sungkam.github.io" target="_blank" rel="noopener">EasyCoding</a></p>
     </div>
   </div>
 </footer>
