@@ -1,13 +1,18 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.conf import settings
 from .models import Region, RegionSuburb
+from articles.models import Post
 
 
 def region_home(request, region_slug):
     region = get_object_or_404(Region, slug=region_slug, is_active=True)
     suburbs = region.suburbs.filter(is_active=True).order_by('zone', 'name')
+    latest_post = Post.objects.filter(status='published').order_by('-created_at').first()
     return render(request, 'regions/home.html', {
         'region': region,
         'suburbs': suburbs,
+        'google_review_url': settings.GOOGLE_REVIEW_URL,
+        'latest_post': latest_post,
     })
 
 

@@ -90,7 +90,7 @@
 						</select>
 					</div>
 				<div class="mb-3 pb-1">
-					<label class="form-label" id="label-pickup">Pickup date&nbsp;(Sydney)</label>
+					<label class="form-label" id="label-pickup">Pickup date&nbsp;({{ region.name }})</label>
 					<input id="flight-date" class="form-control date-picker rounded" required name="pickup_date" aria-labelledby="label-pickup" type="text" placeholder="Choose flight date" data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;F j, Y&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;}" >
 					<div id="date-error" class="invalid-feedback" style="display: none;">Please enter a future date!</div>
 				</div>
@@ -117,7 +117,7 @@
 						<input class="form-control" type="text" id="flight_number" placeholder="Your flight number" name="flight_number">
 					</div>
 					<div class="mb-3 pb-1">
-						<label class="form-label" for="flight_time">Flight time (Sydney)</label>
+						<label class="form-label" for="flight_time">Flight time ({{ region.name }})</label>
 						<input class="form-control" id="flight_time" name="flight_time" type="time">
 					</div>
 				</div>

@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <title>Melbourne Airport Transfer | Fixed Price & Private (8-13 Seater) | EasyGo</title>
-    <link rel="canonical" href="https://easygoshuttle.com.au/melbourne/">
+    <link rel="canonical" href="https://easygoshuttle.com.au/{{ region.slug }}/">
     <meta name="google-site-verification" content="hae39L0Kv7JIxVc3YclvckH7Im5SdYa2hk_vZbGJIkA" />
     <meta name="description" content="Book your Melbourne airport transfer now! Private pickup service with 8-13 seater vehicles. Serving Melbourne CBD, North Shore & Western Melbourne. Fixed prices, no hidden fees. Available 24/7">
     <meta name="keywords" content="melbourne airport transfer, melbourne airport maxi taxi, large group airport transfer melbourne, airport transfer with luggage melbourne, 8 seater airport transfer melbourne, 13 seater airport transfer melbourne, melbourne cbd airport transfer, north shore airport pickup, western melbourne airport transfer">
@@ -13,75 +13,73 @@
     <meta property="og:title" content="EasyGo Airport Shuttle – 8–13 Seater Melbourne">
     <meta property="og:image" content="https://easygoshuttle.com.au/static/basecamp/photos/vehicles.webp">
     <meta property="og:description" content="Traveling with a large group or lots of luggage? EasyGo Airport Shuttle offers private 8–13 seater transfers across Melbourne North, CBD & Western suburbs. Perfect for families, hotel guests & oversized luggage.">
-    <meta property="og:url" content="https://easygoshuttle.com.au/melbourne/">
+    <meta property="og:url" content="https://easygoshuttle.com.au/{{ region.slug }}/">
     <meta property="og:type" content="website">
     <script type="application/ld+json" nonce="{{ CSP_NONCE }}">
     {
       "@context": "https://schema.org",
       "@type": "LocalBusiness",
-      "@id": "https://easygoshuttle.com.au/melbourne/#localbusiness",
-      "name": "EasyGo Airport Shuttle Melbourne",
+      "@id": "https://easygoshuttle.com.au/{{ region.slug }}/#localbusiness",
+      "name": "EasyGo Airport Shuttle {{ region.name }}",
       "image": "https://easygoshuttle.com.au/static/basecamp/images/easygo-logo-final.webp",
-      "url": "https://easygoshuttle.com.au/melbourne/",
-      "telephone": "+61406883355",
-      "address": { "@type": "PostalAddress", "streetAddress": "119 Willoughby Road", "addressLocality": "Crows Nest", "addressRegion": "NSW", "postalCode": "2065", "addressCountry": "AU" },
-      "geo": { "@type": "GeoCoordinates", "latitude": "-33.8688", "longitude": "151.2093" },
+      "url": "https://easygoshuttle.com.au/{{ region.slug }}/",
+      "telephone": "{{ region.phone }}",
       "areaServed": [
         {
           "@type": "AdministrativeArea",
-          "name": "North Shore",
+          "name": "Inner Melbourne",
           "containsPlace": [
-            { "@type": "AdministrativeArea", "name": "Chatswood" },
-            { "@type": "AdministrativeArea", "name": "Lane Cove" },
-            { "@type": "AdministrativeArea", "name": "Willoughby" },
-            { "@type": "AdministrativeArea", "name": "Lindfield" },
-            { "@type": "AdministrativeArea", "name": "Killara" },
-            { "@type": "AdministrativeArea", "name": "Roseville" },
-            { "@type": "AdministrativeArea", "name": "Pymble" },
-            { "@type": "AdministrativeArea", "name": "Gordon" }
-          ]
-        },
-        {
-          "@type": "AdministrativeArea",
-          "name": "Melbourne CBD",
-          "containsPlace": [
-            { "@type": "AdministrativeArea", "name": "Haymarket" },
-            { "@type": "AdministrativeArea", "name": "The Rocks" },
-            { "@type": "AdministrativeArea", "name": "Pyrmont" },
-            { "@type": "AdministrativeArea", "name": "Darling Harbour" },
-            { "@type": "AdministrativeArea", "name": "Surry Hills" }
-          ]
-        },
-        {
-          "@type": "AdministrativeArea",
-          "name": "Western Melbourne",
-          "containsPlace": [
-            { "@type": "AdministrativeArea", "name": "Parramatta" },
-            { "@type": "AdministrativeArea", "name": "Seven Hills" },
-            { "@type": "AdministrativeArea", "name": "Greystanes" },
-            { "@type": "AdministrativeArea", "name": "Blacktown" }
-          ]
-        },
-        {
-          "@type": "AdministrativeArea",
-          "name": "Inner West",
-          "containsPlace": [
-            { "@type": "AdministrativeArea", "name": "Leichhardt" },
-            { "@type": "AdministrativeArea", "name": "Concord" },
-            { "@type": "AdministrativeArea", "name": "Five Dock" },
-            { "@type": "AdministrativeArea", "name": "Drummoyne" }
+            { "@type": "AdministrativeArea", "name": "Melbourne CBD" },
+            { "@type": "AdministrativeArea", "name": "Southbank" },
+            { "@type": "AdministrativeArea", "name": "Docklands" },
+            { "@type": "AdministrativeArea", "name": "South Yarra" },
+            { "@type": "AdministrativeArea", "name": "Richmond" },
+            { "@type": "AdministrativeArea", "name": "Fitzroy" },
+            { "@type": "AdministrativeArea", "name": "Carlton" }
           ]
         },
         {
           "@type": "AdministrativeArea",
           "name": "Northern Suburbs",
           "containsPlace": [
-            { "@type": "AdministrativeArea", "name": "Epping" },
-            { "@type": "AdministrativeArea", "name": "Ryde" },
-            { "@type": "AdministrativeArea", "name": "Hornsby" },
-            { "@type": "AdministrativeArea", "name": "St Ives" },
-            { "@type": "AdministrativeArea", "name": "Turramurra" },
-            { "@type": "AdministrativeArea", "name": "Wahroonga" }
+            { "@type": "AdministrativeArea", "name": "Coburg" },
+            { "@type": "AdministrativeArea", "name": "Brunswick" },
+            { "@type": "AdministrativeArea", "name": "Reservoir" },
+            { "@type": "AdministrativeArea", "name": "Preston" },
+            { "@type": "AdministrativeArea", "name": "Bundoora" },
+            { "@type": "AdministrativeArea", "name": "Epping" }
+          ]
+        },
+        {
+          "@type": "AdministrativeArea",
+          "name": "Eastern Suburbs",
+          "containsPlace": [
+            { "@type": "AdministrativeArea", "name": "Camberwell" },
+            { "@type": "AdministrativeArea", "name": "Box Hill" },
+            { "@type": "AdministrativeArea", "name": "Doncaster" },
+            { "@type": "AdministrativeArea", "name": "Ringwood" }
+          ]
+        },
+        {
+          "@type": "AdministrativeArea",
+          "name": "Western Suburbs",
+          "containsPlace": [
+            { "@type": "AdministrativeArea", "name": "Footscray" },
+            { "@type": "AdministrativeArea", "name": "Williamstown" },
+            { "@type": "AdministrativeArea", "name": "Altona" },
+            { "@type": "AdministrativeArea", "name": "Werribee" },
+            { "@type": "AdministrativeArea", "name": "Point Cook" }
+          ]
+        },
+        {
+          "@type": "AdministrativeArea",
+          "name": "Inner South",
+          "containsPlace": [
+            { "@type": "AdministrativeArea", "name": "St Kilda" },
+            { "@type": "AdministrativeArea", "name": "Prahran" },
+            { "@type": "AdministrativeArea", "name": "Windsor" },
+            { "@type": "AdministrativeArea", "name": "Toorak" },
+            { "@type": "AdministrativeArea", "name": "Hawthorn" }
           ]
         }
       ],
@@ -213,7 +211,7 @@
           </h2><br>
           <div>
             <a role="button" class="btn btn-primary" href="/melbourne/booking/">BOOK NOW</a> |
-            <a role="button" class="btn btn-success" href="/inquiry/">PRICE NOW</a>
+            <a role="button" class="btn btn-success" href="/{{ region.slug }}/booking/">PRICE NOW</a>
           </div>
           <div class="mt-4">
             <a href="/easygo_review/" class="me-4 fw-bold review-link-white">
@@ -230,23 +228,21 @@
         <h2 class="text-center mb-4 text-white"><span class="text-brand">HOT OFFER</span> - Best Price Guaranteed</h2>
         <div class="tns-carousel-wrapper">
           <div class="text-end offer-search-end">
-            <a href="/more_suburbs/" class="text-brand">Search your area &raquo;&raquo;&raquo;</a>
+            <a href="/{{ region.slug }}/airport-shuttle/" class="text-brand">Search your area &raquo;&raquo;&raquo;</a>
           </div>
           <div class="tns-carousel-inner" data-carousel-options="{
               &quot;items&quot;: 3, &quot;nav&quot;: false, &quot;gutter&quot;: 23,
               &quot;responsive&quot;: {&quot;0&quot;:{&quot;items&quot;:1},&quot;540&quot;:{&quot;items&quot;:2},&quot;900&quot;:{&quot;items&quot;:3}}}">
-            {% for suburb, details in suburbs.items %}
+            {% for suburb in suburbs %}
               <div class="pb-1">
-                <a class="card border-0 shadow card-hover mx-1" href="/melbourne-airport-transfer/{{ suburb|slugify }}/">
-                  <span class="badge badge-lg badge-floating badge-floating-end bg-danger badge-price">${{ details.price }}</span>
+                <a class="card border-0 shadow card-hover mx-1" href="/{{ region.slug }}-airport-transfer/{{ suburb.slug }}/">
+                  <span class="badge badge-lg badge-floating badge-floating-end bg-danger badge-price">${{ suburb.price }}</span>
                   <div class="card-img-top card-img-gradient offer-card-img">
-                    <img loading="lazy" src="{{ details.image_url }}" alt="Melbourne airport transfer from {{ suburb }} – private 8-13 seater for families and large groups" width="400" height="461" class="offer-card-inner-img">
                     <span class="card-floating-text text-light fw-medium">Discover the trip<i class="ai-chevron-right align-middle fs-lg ms-1"></i></span>
                   </div>
                   <div class="card-body text-center">
-                    <h3 class="h5 pt-1 mb-3">{{ suburb|title }}</h3>
-                    <p class="fs-sm text-muted mb-2">{{ details.description }}</p>
-                    <p class="fs-sm text-muted mb-2">{{ details.extra }}</p>
+                    <h3 class="h5 pt-1 mb-3">{{ suburb.name }}</h3>
+                    <p class="fs-sm text-muted mb-2">{{ suburb.meta_description }}</p>
                     <p class="fs-sm mb-2 text-blue-link">more details >>></p>
                   </div>
                 </a>
@@ -508,7 +504,7 @@
                 </div>
                 <div class="col-12 col-sm-4 mb-2 pb-4 mb-sm-0 pb-sm-0">
                   <div class="px-2 text-center d-flex flex-column align-items-center">
-                    <img loading="lazy" class="bg-light rounded-circle mb-2 img-fluid" src="{% static 'basecamp/images/02.svg' %}" alt="North Shore airport transfer from Chatswood and Lane Cove - Private 8-13 seater maxi taxi" width="105" height="auto">
+                    <img loading="lazy" class="bg-light rounded-circle mb-2 img-fluid" src="{% static 'basecamp/images/02.svg' %}" alt="{{ region.name }} airport transfer - Private 8-13 seater maxi taxi for large groups" width="105" height="auto">
                     <p class="fs-sm fw-medium text-light mb-0 pt-1">Chartered Bus Hire for Groups</p>
                   </div>
                 </div>
@@ -617,7 +613,7 @@
                 </h2>
                 <div class="accordion-collapse collapse" id="faq-content-9" aria-labelledby="faq-heading-9" data-bs-parent="#faq">
                   <div class="accordion-body">
-                    <div class="fs-sm">EasyGo services Melbourne North Shore, CBD, Inner West, and Western Melbourne suburbs. Use our online booking system to check availability and get a fixed price for your specific suburb. <a href="/more_suburbs/">Explore all Service Areas</a></div>
+                    <div class="fs-sm">EasyGo services Melbourne North Shore, CBD, Inner West, and Western Melbourne suburbs. Use our online booking system to check availability and get a fixed price for your specific suburb. <a href="/{{ region.slug }}/airport-shuttle/">Explore all Service Areas</a></div>
                   </div>
                 </div>
               </div>
@@ -795,6 +791,6 @@
       ]
     }
     </script>
-    <a href="/confirmation/" class="btn btn-secondary btn-sm admin-btn" role="button">Warning!</a>
+    <a href="/{{ region.slug }}/confirmation/" class="btn btn-secondary btn-sm admin-btn" role="button">Warning!</a>
   </body>
 </html>
