@@ -117,41 +117,20 @@
     <link rel="stylesheet" href="{% static 'basecamp/css/tiny-slider.css' %}" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="{% static 'basecamp/css/flatpickr.min.css' %}" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="{% static 'basecamp/css/tiny-slider.css' %}"></noscript>
-    <style nonce="{{ CSP_NONCE }}">.main-img { background-image: url("{% static 'basecamp/photos/melbourne_airport.webp' %}") !important; }</style>
+    <style nonce="{{ CSP_NONCE }}">
+      #mel-hero { position: relative; isolation: isolate; background-image: url("{% static 'basecamp/photos/melbourne_airport.webp' %}"); background-size: cover; background-position: center; min-height: 100vh; }
+      #mel-hero::before { content: ""; position: absolute; inset: 0; background: rgba(0,0,0,0.45); z-index: -1; }
+      .main-img { display: none; }
+    </style>
   </head>
   <body>
     {% include "basecamp/layouts/navbar.html" %}
     <main class="page-wrapper">
 
       <!-- ===== HERO SECTION ===== -->
-      <section class="bg-dark pt-6 pb-5 py-sm-6">
+      <section id="mel-hero" class="bg-dark pt-6 pb-5 py-sm-6">
         <div class="main-img" fetchpriority="high"></div>
         <img src="{% static 'basecamp/images/award-badge-sm.webp' %}" width="240" height="240" alt="EasyGo 2024 Quality Business Award Badge – Melbourne Airport Transfer" class="award-badge" fetchpriority="high">
-        <div class="container py-4 py-sm-5 text-center">
-          <div class="py-md-6">
-            <h1 class="text-light fs-4 fs-md-3 fw-semibold mb-2">
-              Melbourne Airport Transfer - Private Pickup & Shuttle Service
-            </h1>
-            <h2 class="text-light fs-6 fs-md-5 fw-bold mb-4">
-              <span class="text-brand"><strong>8–13 Seater Private Transfer across Melbourne CBD, North Shore & Western Melbourne</strong></span>
-            </h2><br>
-            <div>
-              <a role="button" class="btn btn-primary" href="/melbourne/booking/">BOOK NOW</a> |
-              <a role="button" class="btn btn-success" href="/inquiry/">PRICE NOW</a>
-            </div>
-            <div class="mt-4">
-              <a href="/easygo_review/" class="me-4 fw-bold review-link-white">
-                <span class="fs-lg">🏆🏆🏆</span> Reviews on our website <i class="ai-external-link ms-1 text-ext-icon"></i>
-              </a>
-              <a href="{{ google_review_url }}" target="_blank" rel="noopener" class="fw-bold review-link-white review-link">
-                <span class="fs-lg">🥇🥇🥇</span> Google reviews <i class="ai-external-link ms-1 text-ext-icon"></i>
-              </a>
-            </div>
-            <p class="fs-lg text-light" id="changing-text">
-              <strong>Reliable Melbourne airport transfer services for families and large groups, travelling comfortably with lots of luggage.</strong>
-            </p>
-          </div>
-        </div>
       </section>
 
       <!-- ===== BOOKING FORM ===== -->
@@ -225,6 +204,29 @@
 
       <!-- ===== HOT OFFER CAROUSEL ===== -->
       <section class="container rounded bg-dark py-5 my-4 my-sm-0 py-sm-6 py-md-7">
+        <div class="text-center mb-5">
+          <h1 class="text-light fs-4 fs-md-3 fw-semibold mb-2">
+            Melbourne Airport Transfer - Private Pickup & Shuttle Service
+          </h1>
+          <h2 class="text-light fs-6 fs-md-5 fw-bold mb-4">
+            <span class="text-brand"><strong>8–13 Seater Private Transfer across Melbourne CBD, North Shore & Western Melbourne</strong></span>
+          </h2><br>
+          <div>
+            <a role="button" class="btn btn-primary" href="/melbourne/booking/">BOOK NOW</a> |
+            <a role="button" class="btn btn-success" href="/inquiry/">PRICE NOW</a>
+          </div>
+          <div class="mt-4">
+            <a href="/easygo_review/" class="me-4 fw-bold review-link-white">
+              <span class="fs-lg">🏆🏆🏆</span> Reviews on our website <i class="ai-external-link ms-1 text-ext-icon"></i>
+            </a>
+            <a href="{{ google_review_url }}" target="_blank" rel="noopener" class="fw-bold review-link-white review-link">
+              <span class="fs-lg">🥇🥇🥇</span> Google reviews <i class="ai-external-link ms-1 text-ext-icon"></i>
+            </a>
+          </div>
+          <p class="fs-lg text-light mt-3" id="changing-text">
+            <strong>Reliable Melbourne airport transfer services for families and large groups, travelling comfortably with lots of luggage.</strong>
+          </p>
+        </div>
         <h2 class="text-center mb-4 text-white"><span class="text-brand">HOT OFFER</span> - Best Price Guaranteed</h2>
         <div class="tns-carousel-wrapper">
           <div class="text-end offer-search-end">
