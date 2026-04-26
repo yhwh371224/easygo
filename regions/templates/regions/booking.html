@@ -8,339 +8,364 @@
 {% endblock %}
 
 {% block meta %}
-<meta name="description" content="Book your {{ region.name }} airport transfer online. Fixed price door-to-door private shuttle to {{ region.airport_name }}. Fast, easy, 24/7.">
-<meta name="keywords" content="{{ region.name }} airport shuttle booking, {{ region.airport_name }} transfer, private airport transfer {{ region.name }}">
+<meta name="description" content="Book your {{ region.name }} airport transfer quickly and easily with EasyGo Airport Shuttle. Fill out our booking form for private, luggage-friendly shuttle service.">
+<meta name="keywords" content="{{ region.name }} airport shuttle booking, airport transfer {{ region.name }}, private shuttle booking, EasyGo Airport Shuttle">
 <meta name="author" content="easygoshuttle.com.au">
 {% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'basecamp/css/flatpickr.min.css' %}">
 <style nonce="{{ CSP_NONCE }}">
-  .booking-hero {
-    position: relative;
-    min-height: 240px;
-    display: flex;
-    align-items: center;
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
-  }
-  .form-card { border: none; box-shadow: 0 4px 24px rgba(0,0,0,0.10); border-radius: 12px; }
-  .section-label { font-weight: 600; color: #eb7828; font-size: .85rem; text-transform: uppercase; letter-spacing: .05em; }
-  .card-section { background: #f8f9fa; border-radius: 8px; padding: 1.25rem; margin-bottom: 1rem; }
+.booking-hero {position: relative; background-image: url("{% static 'basecamp/images/page-title-bg.webp' %}"); background-size: cover; background-position: center; padding-top: 5rem; padding-bottom: 7rem;}
+.booking-form-col {margin-top: -220px;}
 </style>
 {% endblock %}
 
 {% block content %}
 
-<!-- Hero -->
-<section class="booking-hero">
-  <div style="position:absolute;inset:0;background:rgba(0,0,0,0.45);z-index:0;"></div>
-  <div class="container position-relative py-5" style="z-index:1; padding-top: 90px !important;">
-    <nav aria-label="breadcrumb" class="mb-2">
-      <ol class="breadcrumb" style="background:none;padding:0;">
-        <li class="breadcrumb-item"><a href="/{{ region.slug }}/" class="text-light opacity-75">{{ region.name }}</a></li>
-        <li class="breadcrumb-item active text-light" aria-current="page">Booking</li>
-      </ol>
-    </nav>
-    <h1 class="text-white fw-bold mb-1">{{ region.name }} Airport Transfer</h1>
-    <p class="text-white opacity-75 mb-0">Complete the form — we'll confirm your booking by email</p>
-  </div>
-</section>
+	<!-- Booking-Hero -->
+	<section class="jarallax booking-hero">
+		<span class="position-absolute top-0 start-0 w-100 h-100 bg-gradient opacity-50"></span>
+		<div class="shape shape-bottom shape-slant bg-body">
+		  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 260">
+			<polygon fill="currentColor" points="0,257 0,260 3000,260 3000,0"></polygon>
+		  </svg>
+		</div>
+		<div class="container position-relative zindex-5 pt-5 pb-7 pt-md-5">
+		  <div class="row justify-content-center pb-7">
+			<div class="col-lg-10 mt-lg-5">
+			  <h1 class="text-light">Booking Request Form</h1>
+			  <div class="active" style="color:white">Please complete the form to get the exact price</div>
+			</div>
+		  </div>
+		</div>
+	</section>
 
-<!-- Main -->
-<section class="container py-5">
-  <div class="row g-4">
+	<section class="container position-relative zindex-5 px-0 px-xl-3">
+		<div class="row">
+		  <div class="col-lg-7 col-md-7 pb-2 mb-5 booking-form-col">
+			<div class="card border-1 shadow-lg">
+	<!-- Page content-->
+	<!-- Contact form + details-->
+			<form method="post" enctype="multipart/form-data" action="/booking_detail/" id="booking-form" class="card-body needs-validation p-5"
+				  data-success-url="/{{ region.slug }}/confirmation/">
+				{% csrf_token %}
+				<input type="hidden" name="region_slug" value="{{ region.slug }}">
 
-    <!-- Form column -->
-    <div class="col-lg-8">
-      <div class="card form-card p-4 p-md-5">
+				<!-- Region selector -->
+				<div class="mb-3 pb-1">
+					<label class="form-label">Select Region</label>
+					<select id="region-select" class="form-select" style="max-width:220px;">
+					  {% for r in active_regions %}
+						<option value="{{ r.slug }}" {% if r.slug == region.slug %}selected{% endif %}>{{ r.name }}</option>
+					  {% endfor %}
+					</select>
+					<small class="text-muted d-block mt-1">Switching region will take you to that region's booking page.</small>
+				</div>
 
-        <!-- Region selector -->
-        <div class="mb-4 pb-3 border-bottom">
-          <label class="form-label section-label mb-1">Select Region</label>
-          <select id="region-select" class="form-select form-select-sm" style="max-width:220px;">
-            {% for r in active_regions %}
-              <option value="{{ r.slug }}" {% if r.slug == region.slug %}selected{% endif %}>
-                {{ r.name }}
-              </option>
-            {% endfor %}
-          </select>
-          <small class="text-muted d-block mt-1">Switching region will take you to that region's booking page.</small>
-        </div>
+				<hr class="my-4">
 
-        <form method="post"
-              action="/booking_detail/"
-              id="booking-form"
-              enctype="multipart/form-data"
-              class="needs-validation"
-              data-success-url="/{{ region.slug }}/confirmation/"
-              novalidate>
-          {% csrf_token %}
-          <input type="hidden" name="region_slug" value="{{ region.slug }}">
+				<div class="mb-3 pb-1">
+					<label class="form-label">Personal Information</label>
+				</div>
+				<div class="card text-white bg-secondary p-4">
+				<div class="mb-3 pb-1">
+				  <label class="form-label" for="user_name">Full name</label>
+				  <input class="form-control" type="text" id="user_name" placeholder="John Doe" required name="name">
+				  <div class="invalid-feedback">Please enter your full name!</div>
+				</div>
+				<div class="mb-3 pb-1">
+					<label class="form-label" for="user_contact">Contact number</label>
+					<input class="form-control" type="text" id="user_contact" placeholder="Your mobile phone number" required name="contact">
+					<div class="invalid-feedback">Please enter your mobile phone number!</div>
+				</div>
+				<div class="mb-3 pb-1">
+					<label class="form-label" for="user_email">Email address</label>
+					<input class="form-control" type="email" id="user_email" placeholder="j.doe@example.com" required name="email">
+					<div class="invalid-feedback">Please enter a valid email address!</div>
+				</div></div>
 
-          <!-- ① Personal Information -->
-          <p class="section-label mb-2">① Personal Information</p>
-          <div class="card-section">
-            <div class="mb-3">
-              <label class="form-label" for="user_name">Full name <span class="text-danger">*</span></label>
-              <input class="form-control" type="text" id="user_name" name="name" placeholder="John Smith" required>
-              <div class="invalid-feedback">Please enter your full name.</div>
-            </div>
-            <div class="mb-3">
-              <label class="form-label" for="user_contact">Mobile number <span class="text-danger">*</span></label>
-              <input class="form-control" type="text" id="user_contact" name="contact" placeholder="04xx xxx xxx" required>
-              <div class="invalid-feedback">Please enter your mobile number.</div>
-            </div>
-            <div class="mb-0">
-              <label class="form-label" for="user_email">Email address <span class="text-danger">*</span></label>
-              <input class="form-control" type="email" id="user_email" name="email" placeholder="john@example.com" required>
-              <div class="invalid-feedback">Please enter a valid email address.</div>
-            </div>
-          </div>
+				<hr class="my-5">
 
-          <hr class="my-4">
+				<div class="mb-3 pb-1">
+					<label class="form-label">Travel Details</label>
+				</div>
+				<div class="card text-white bg-secondary p-4">
+					<div class="mb-3 pb-1">
+						<label class="form-label" for="direction">Direction</label>
+						<select class="form-select" name="direction" id="direction" required>
+							<option value="Drop off to Domestic Airport">Drop off to Domestic Airport</option>
+							<option value="Drop off to Intl Airport">Drop off to Intl Airport</option>
+							<option value="Pickup from Domestic Airport">Pickup from Domestic Airport</option>
+							<option value="Pickup from Intl Airport">Pickup from Intl Airport</option>
+							<option value="Cruise or Point to Point">Cruise transfers or Point to Point</option>
+						</select>
+					</div>
+				<div class="mb-3 pb-1">
+					<label class="form-label" id="label-pickup">Pickup date&nbsp;({{ region.name }})</label>
+					<input id="flight-date" class="form-control date-picker rounded" required name="pickup_date" aria-labelledby="label-pickup" type="text" placeholder="Choose flight date" data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;F j, Y&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;}" >
+					<div id="date-error" class="invalid-feedback" style="display: none;">Please enter a future date!</div>
+				</div>
+				<div class="mb-3 pb-1">
+					<label class="form-label" for="pickup-time">Pickup time preferred</label>
+					 <input class="form-control" type="time" name="pickup_time" id="pickup-time" required>
+				</div></div>
+				 <br>
+				<!-- Start / End Point (hidden by default) -->
+				<div id="start-end-fields" style="display: none;">
+					<div class="mb-3 pb-1">
+						<label class="form-label" for="start_point">Start Point (Pickup Location)</label>
+						<input class="form-control" type="text" id="start_point" name="start_point" placeholder="Start Point">
+					</div>
+					<div class="mb-3 pb-1">
+						<label class="form-label" for="end_point">End Point (Drop-off Location)</label>
+						<input class="form-control" type="text" id="end_point" name="end_point" placeholder="End Point">
+					</div>
+				</div>
+				<!-- Flight info fields -->
+				<div id="flight-fields">
+					<div class="mb-3 pb-1">
+						<label class="form-label" for="flight_number">Flight number</label>
+						<input class="form-control" type="text" id="flight_number" placeholder="Your flight number" name="flight_number">
+					</div>
+					<div class="mb-3 pb-1">
+						<label class="form-label" for="flight_time">Flight time ({{ region.name }})</label>
+						<input class="form-control" id="flight_time" name="flight_time" type="time">
+					</div>
+				</div>
 
-          <!-- ② Travel Details -->
-          <p class="section-label mb-2">② Travel Details</p>
-          <div class="card-section">
-            <div class="mb-3">
-              <label class="form-label" for="direction">Direction <span class="text-danger">*</span></label>
-              <select class="form-select" name="direction" id="direction" required>
-                <option value="Drop off to Domestic Airport">Drop off — Domestic Terminal</option>
-                <option value="Drop off to Intl Airport">Drop off — International Terminal</option>
-                <option value="Pickup from Domestic Airport">Pick up — Domestic Terminal</option>
-                <option value="Pickup from Intl Airport">Pick up — International Terminal</option>
-                <option value="Cruise or Point to Point">Cruise / Point to Point</option>
-              </select>
-            </div>
-            <div class="mb-3">
-              <label class="form-label" for="flight-date">
-                Pickup date <span class="text-danger">*</span>
-              </label>
-              <input id="flight-date" class="form-control date-picker" type="text" name="pickup_date"
-                     placeholder="Select date" required
-                     data-datepicker-options='{"altInput":true,"altFormat":"F j, Y","dateFormat":"Y-m-d","minDate":"today"}'>
-              <div id="date-error" class="invalid-feedback">Please choose a future date.</div>
-            </div>
-            <div class="mb-0">
-              <label class="form-label" for="pickup-time">Preferred pickup time <span class="text-danger">*</span></label>
-              <input class="form-control" type="time" name="pickup_time" id="pickup-time" required>
-            </div>
-          </div>
+				<div id="address-fields">
+					<hr class="my-5">
+					<div class="mb-3 pb-1">
+						<p class="form-label mb-1">Full Address of Suburb/Hotel</p>
+					</div>
 
-          <!-- Flight info (hidden for P2P) -->
-          <div id="flight-fields" class="card-section mb-3">
-            <div class="mb-3">
-              <label class="form-label" for="flight_number">Flight number</label>
-              <input class="form-control" type="text" id="flight_number" name="flight_number" placeholder="e.g. QF400">
-            </div>
-            <div class="mb-0">
-              <label class="form-label" for="flight_time">Flight time</label>
-              <input class="form-control" type="time" id="flight_time" name="flight_time">
-            </div>
-          </div>
+					<div class="card text-white bg-secondary p-4">
+					<div class="mb-3 pb-1">
+						<label class="form-label" for="street">Street No &amp; Street Name</label>
+						<input class="form-control" type="text" placeholder="Street No and Street Name" required name="street" id="street">
+						<div class="invalid-feedback">Please enter street no &amp; name!</div>
+					</div>
+					<div class="mb-3 pb-1">
+						<label class="form-label" for="suburb">Suburb</label>
+						{% if suburbs %}
+						<select class="form-select" name="suburb" required id="suburb">
+							<option value="" disabled selected>Select your suburb</option>
+							{% regroup suburbs by zone as zone_groups %}
+							{% for zone_group in zone_groups %}
+							  <optgroup label="{{ zone_group.grouper }}">
+								{% for s in zone_group.list %}
+								  <option value="{{ s.name }}">{{ s.name }}</option>
+								{% endfor %}
+							  </optgroup>
+							{% endfor %}
+							<option value="Other">Other (please specify in message)</option>
+						</select>
+						{% else %}
+						<input class="form-control" type="text" id="suburb" name="suburb" placeholder="Your suburb" required>
+						{% endif %}
+						<div class="invalid-feedback">Please select your suburb!</div>
+					</div></div>
+				</div>
 
-          <!-- P2P fields (hidden by default) -->
-          <div id="start-end-fields" class="card-section mb-3" style="display:none;">
-            <div class="mb-3">
-              <label class="form-label" for="start_point">Start point (pickup location)</label>
-              <input class="form-control" type="text" id="start_point" name="start_point" placeholder="Full address">
-            </div>
-            <div class="mb-0">
-              <label class="form-label" for="end_point">End point (drop-off location)</label>
-              <input class="form-control" type="text" id="end_point" name="end_point" placeholder="Full address">
-            </div>
-          </div>
+				<hr class="my-5">
+				<div class="mb-3 pb-1">
+				   <label class="form-label" for="no_of_passenger">Passengers</label>
+				  <select class="form-select" name="no_of_passenger" id="no_of_passenger" required>
+				  <option value="">How many people?</option>
+				  <option value="1">1</option>
+				  <option value="2">2</option>
+				  <option value="3">3</option>
+				  <option value="4">4</option>
+				  <option value="5">5</option>
+				  <option value="6">6</option>
+				  <option value="7">7</option>
+				  <option value="8">8</option>
+				  <option value="9">9</option>
+				  <option value="10">10</option>
+				  <option value="11">11</option>
+				  <option value="12">12</option>
+				  <option value="13">13</option>
+				  <option value="-1" disabled="disabled">Over 13 (please email us)</option>
+			  </select>
+				</div>
+				<hr class="my-5">
+				<!-- Regular Baggage -->
+				<div class="mb-3 pb-1">
+					<p class="form-label mb-1">Baggage (Regular)</p>
 
-          <hr class="my-4">
+					<small class="text-muted d-block">
+					Please enter the accurate number of your luggage.
+					</small>
+					<small class="text-muted d-block mb-2">
+					Large = check-in / Medium = cabin / Small = backpack
+					</small>
 
-          <!-- ③ Address (hidden for P2P) -->
-          <div id="address-fields">
-            <p class="section-label mb-2">③ Pickup / Drop-off Address</p>
-            <div class="card-section">
-              <div class="mb-3">
-                <label class="form-label" for="street">Street address <span class="text-danger">*</span></label>
-                <input class="form-control" type="text" id="street" name="street"
-                       placeholder="e.g. 42 Collins Street" required>
-                <div class="invalid-feedback">Please enter your street address.</div>
-              </div>
-              <div class="mb-0">
-                <label class="form-label" for="suburb-select">Suburb <span class="text-danger">*</span></label>
-                {% if suburbs %}
-                <select class="form-select" id="suburb-select" name="suburb" required>
-                  <option value="" disabled selected>Select your suburb</option>
-                  {% regroup suburbs by zone as zone_groups %}
-                  {% for zone_group in zone_groups %}
-                    <optgroup label="{{ zone_group.grouper }}">
-                      {% for s in zone_group.list %}
-                        <option value="{{ s.name }}">{{ s.name }}</option>
-                      {% endfor %}
-                    </optgroup>
-                  {% endfor %}
-                  <option value="Other">Other (please specify in message)</option>
-                </select>
-                {% else %}
-                <input class="form-control" type="text" id="suburb-select" name="suburb"
-                       placeholder="Your suburb" required>
-                {% endif %}
-                <div class="invalid-feedback">Please select or enter your suburb.</div>
-              </div>
-            </div>
-          </div>
+					<div class="row g-2">
+						<div class="col">
+						<label for="baggage_large" class="form-label mb-0">Large size bag</label>
+						<input type="number" class="form-control" id="baggage_large" name="baggage_large" placeholder="Large" min="0" max="9" value="0">
+						</div>
+						<div class="col">
+						<label for="baggage_medium" class="form-label mb-0">Medium size bag</label>
+						<input type="number" class="form-control" id="baggage_medium" name="baggage_medium" placeholder="Medium" min="0" max="9" value="0">
+						</div>
+						<div class="col">
+						<label for="baggage_small" class="form-label mb-0">Small size bag</label>
+						<input type="number" class="form-control" id="baggage_small" name="baggage_small" placeholder="Small" min="0" max="9" value="0">
+						</div>
+					</div>
+				</div>
 
-          <hr class="my-4">
+				<!-- Toggle Extra Luggage -->
+				<div class="mb-3 pb-1">
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox" id="extraLuggageCheck">
+						<label class="form-check-label" for="extraLuggageCheck">
+							Any extra luggage? (baby seat, ski, golf, bike, etc)
+						</label>
+					</div>
 
-          <!-- ④ Passengers & Baggage -->
-          <p class="section-label mb-2">④ Passengers &amp; Baggage</p>
-          <div class="mb-3">
-            <label class="form-label" for="no_of_passenger">Number of passengers <span class="text-danger">*</span></label>
-            <select class="form-select" name="no_of_passenger" id="no_of_passenger" required>
-              <option value="">How many people?</option>
-              {% for i in "123456789" %}
-              <option value="{{ i }}">{{ i }}</option>
-              {% endfor %}
-              <option value="10">10</option>
-              <option value="11">11</option>
-              <option value="12">12</option>
-              <option value="13">13</option>
-              <option value="-1" disabled>Over 13 — please email us</option>
-            </select>
-            <div class="invalid-feedback">Please select number of passengers.</div>
-          </div>
+					<small class="text-muted d-block mt-1">
+						Items not listed may affect vehicle allocation on the day.
+					</small>
+				</div>
 
-          <!-- Regular baggage -->
-          <div class="mb-3">
-            <p class="form-label mb-1">Regular baggage</p>
-            <small class="text-muted d-block mb-2">Large = check-in / Medium = cabin / Small = backpack</small>
-            <div class="row g-2">
-              <div class="col">
-                <label for="baggage_large" class="form-label mb-0">Large</label>
-                <input type="number" class="form-control" id="baggage_large" name="baggage_large" min="0" max="9" value="0">
-              </div>
-              <div class="col">
-                <label for="baggage_medium" class="form-label mb-0">Medium</label>
-                <input type="number" class="form-control" id="baggage_medium" name="baggage_medium" min="0" max="9" value="0">
-              </div>
-              <div class="col">
-                <label for="baggage_small" class="form-label mb-0">Small</label>
-                <input type="number" class="form-control" id="baggage_small" name="baggage_small" min="0" max="9" value="0">
-              </div>
-            </div>
-          </div>
+				<!-- Extra Luggage (hidden by default) -->
+				<div id="extraLuggageFields" style="display: none;">
 
-          <!-- Extra luggage toggle -->
-          <div class="mb-3">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="extraLuggageCheck">
-              <label class="form-check-label" for="extraLuggageCheck">
-                Any extra / oversized luggage? (baby seat, ski, golf, bike, etc.)
-              </label>
-            </div>
-          </div>
-          <div id="extraLuggageFields" style="display:none;" class="card-section mb-3">
-            <small class="text-muted d-block mb-2">Oversized items may affect vehicle allocation. Please be specific.</small>
-            <div class="row g-2 mb-2">
-              <div class="col"><label class="form-label mb-0">Baby seats</label>
-                <input type="number" class="form-control" name="baggage_baby" min="0" max="9" value="0"></div>
-              <div class="col"><label class="form-label mb-0">Booster seats</label>
-                <input type="number" class="form-control" name="baggage_booster" min="0" max="9" value="0"></div>
-              <div class="col"><label class="form-label mb-0">Prams</label>
-                <input type="number" class="form-control" name="baggage_pram" min="0" max="9" value="0"></div>
-            </div>
-            <div class="row g-2 mb-2">
-              <div class="col"><label class="form-label mb-0">Ski bags</label>
-                <input type="number" class="form-control" name="baggage_ski" min="0" max="9" value="0"></div>
-              <div class="col"><label class="form-label mb-0">Golf bags</label>
-                <input type="number" class="form-control" name="baggage_golf" min="0" max="9" value="0"></div>
-              <div class="col"><label class="form-label mb-0">Bikes</label>
-                <input type="number" class="form-control" name="baggage_bike" min="0" max="9" value="0"></div>
-            </div>
-          </div>
+					<small class="text-muted d-block mb-2">
+						Oversized items may incur additional charges and could affect vehicle allocation.
+						Please specify the size of your equipment to provide the appropriate vehicle.
+					</small>
 
-          <hr class="my-4">
+					<!-- Row 1: Baby / Booster / Prams -->
+					<div class="row g-2 mb-3">
+						<div class="col">
+							<label for="baggage_baby" class="form-label mb-0">Baby seats</label>
+							<input type="number" class="form-control" id="baggage_baby" name="baggage_baby" placeholder="Baby seats" min="0" max="9" value="0">
+						</div>
+						<div class="col">
+							<label for="baggage_booster" class="form-label mb-0">Booster seats</label>
+							<input type="number" class="form-control" id="baggage_booster" name="baggage_booster" placeholder="Booster seats" min="0" max="9" value="0">
+						</div>
+						<div class="col">
+							<label for="baggage_pram" class="form-label mb-0">Prams</label>
+							<input type="number" class="form-control" id="baggage_pram" name="baggage_pram" placeholder="Prams" min="0" max="9" value="0">
+						</div>
+					</div>
 
-          <!-- ⑤ Return trip -->
-          <div class="d-flex align-items-center mb-3">
-            <label class="form-label mb-0 me-3" for="return-flight">Need a return trip?</label>
-            <input class="form-check-input" type="checkbox" id="return-flight" name="return_flight"
-                   style="margin-top:0;width:1.25rem;height:1.25rem;">
-          </div>
-          <div id="return-flight-fields" class="card-section mb-4" style="display:none;">
-            <div class="mb-3">
-              <label class="form-label" for="return_direction">Return direction</label>
-              <select class="form-select" name="return_direction" id="return_direction">
-                <option value="">Select direction</option>
-                <option value="Drop off to Domestic Airport">Drop off — Domestic Terminal</option>
-                <option value="Drop off to Intl Airport">Drop off — International Terminal</option>
-                <option value="Pickup from Domestic Airport">Pick up — Domestic Terminal</option>
-                <option value="Pickup from Intl Airport">Pick up — International Terminal</option>
-              </select>
-            </div>
-            <div class="mb-3">
-              <label class="form-label" for="return-pickup-date">Return pickup date</label>
-              <input id="return-pickup-date" class="form-control date-picker" type="text"
-                     name="return_pickup_date" placeholder="Select date"
-                     data-datepicker-options='{"altInput":true,"altFormat":"F j, Y","dateFormat":"Y-m-d","minDate":"today"}'>
-            </div>
-            <div class="mb-3">
-              <label class="form-label" for="return_pickup_time">Return pickup time</label>
-              <input class="form-control" type="time" name="return_pickup_time" id="return_pickup_time">
-            </div>
-            <div class="mb-3">
-              <label class="form-label" for="return_flight_number">Return flight number</label>
-              <input class="form-control" type="text" name="return_flight_number" id="return_flight_number" placeholder="e.g. QF401">
-            </div>
-            <div class="mb-0">
-              <label class="form-label" for="return_flight_time">Return flight time</label>
-              <input class="form-control" type="time" name="return_flight_time" id="return_flight_time">
-            </div>
-          </div>
+					<!-- Row 2: Ski / Snowboards / Golf -->
+					<div class="row g-2 mb-3">
+						<div class="col">
+							<label for="baggage_ski" class="form-label mb-0">Ski bags</label>
+							<input type="number" class="form-control" id="baggage_ski" name="baggage_ski" placeholder="Ski bags" min="0" max="9" value="0">
+							<div class="form-check mt-1">
+								<input class="form-check-input" type="checkbox" name="ski_oversize" id="ski_oversize">
+								<label class="form-check-label" for="ski_oversize">Oversize</label>
+							</div>
+						</div>
+						<div class="col">
+							<label for="baggage_snowboard" class="form-label mb-0">Snowboards</label>
+							<input type="number" class="form-control" id="baggage_snowboard" name="baggage_snowboard" placeholder="Snowboards" min="0" max="9" value="0">
+							<div class="form-check mt-1">
+								<input class="form-check-input" type="checkbox" name="snowboard_oversize" id="snowboard_oversize">
+								<label class="form-check-label" for="snowboard_oversize">Oversize</label>
+							</div>
+						</div>
+						<div class="col">
+							<label for="baggage_golf" class="form-label mb-0">Golf bags</label>
+							<input type="number" class="form-control" id="baggage_golf" name="baggage_golf" placeholder="Golf bags" min="0" max="9" value="0">
+							<div class="form-check mt-1">
+								<input class="form-check-input" type="checkbox" name="golf_oversize" id="golf_oversize">
+								<label class="form-check-label" for="golf_oversize">Oversize</label>
+							</div>
+						</div>
+					</div>
 
-          <!-- ⑥ Message -->
-          <p class="section-label mb-2">⑥ Additional Information</p>
-          <div class="mb-4">
-            <textarea class="form-control" name="message" id="cont-message" rows="4"
-                      placeholder="Any special requests, accessibility needs, or notes for the driver..."></textarea>
-          </div>
+					<!-- Row 3: Bike / Carton Boxes / Musical Instruments -->
+					<div class="row g-2 mb-3">
+						<div class="col">
+							<label for="baggage_bike" class="form-label mb-0">Bike bags</label>
+							<input type="number" class="form-control" id="baggage_bike" name="baggage_bike" placeholder="Bike bags" min="0" max="9" value="0">
+							<div class="form-check mt-1">
+								<input class="form-check-input" type="checkbox" name="bike_oversize" id="bike_oversize">
+								<label class="form-check-label" for="bike_oversize">Oversize</label>
+							</div>
+						</div>
+						<div class="col">
+							<label for="baggage_boxes" class="form-label mb-0">Carton boxes</label>
+							<input type="number" class="form-control" id="baggage_boxes" name="baggage_boxes" placeholder="Carton boxes" min="0" max="9" value="0">
+							<div class="form-check mt-1">
+								<input class="form-check-input" type="checkbox" name="boxes_oversize" id="boxes_oversize">
+								<label class="form-check-label" for="boxes_oversize">Oversize</label>
+							</div>
+						</div>
+						<div class="col">
+							<label for="baggage_music" class="form-label mb-0">Musical instruments</label>
+							<input type="number" class="form-control" id="baggage_music" name="baggage_music" placeholder="Musical instruments" min="0" max="9" value="0">
+							<div class="form-check mt-1">
+								<input class="form-check-input" type="checkbox" name="music_oversize" id="music_oversize">
+								<label class="form-check-label" for="music_oversize">Oversize</label>
+							</div>
+						</div>
+					</div>
+				</div>
 
-          <!-- Turnstile -->
-          <div class="cf-turnstile mb-4" data-sitekey="{{ CLOUDFLARE_TURNSTILE_SITE_KEY }}"></div>
-          <div id="errorMessage" class="alert alert-danger mb-3" style="display:none;"></div>
+				<hr class="my-5">
 
-          <div class="text-center">
-            <button class="btn btn-primary btn-lg px-5" type="submit" id="submitButton">
-              Submit Booking Request
-            </button>
-            <p class="text-muted fs-sm mt-2 mb-0">We'll confirm your booking by email within a few hours.</p>
-          </div>
-        </form>
+				<!-- Return Flight Option -->
+				<div class="d-flex align-items-center mb-4">
+					<label class="form-label mb-0 me-3" for="return-flight">Need a Return Trip?</label>
+					<input class="form-check-input" type="checkbox" name="return_flight" id="return-flight" style="margin-top: 0; width: 1.25rem; height: 1.25rem;">
+				</div>
 
-      </div>
-    </div>
+				<div id="return-flight-fields" class="mb-4" style="display:none;"></div>
+				<div id="return-cruise-fields" class="mb-4" style="display:none;"></div>
 
-    <!-- Sidebar -->
-    <div class="col-lg-4">
-      <div class="card p-4 mb-4" style="border-left: 4px solid #eb7828;">
-        <h5 class="fw-bold mb-3" style="color:#eb7828;">For Arrivals</h5>
-        <p class="fs-sm mb-1">Your driver monitors your flight in real time.</p>
-        <p class="fs-sm mb-0">No extra charge for flight delays. Driver will be waiting at the arrivals hall.</p>
-      </div>
-      <div class="card p-4 mb-4" style="border-left: 4px solid #0d6efd;">
-        <h5 class="fw-bold mb-3">For Departures</h5>
-        <p class="fs-sm mb-1">Please inform us your preferred pickup time.</p>
-        <p class="fs-sm mb-0">Our vehicles are entitled to use the BUS LANE — arrival times are reliable.</p>
-      </div>
-      <div class="card p-4 bg-light">
-        <h5 class="fw-bold mb-3">{{ region.name }} Airport</h5>
-        <ul class="list-unstyled fs-sm mb-0">
-          <li class="mb-1">🛬 {{ region.airport_name }}</li>
-          <li class="mb-1">📞 <a href="sms:{{ region.phone }}">{{ region.phone_display|default:region.phone }}</a></li>
-          <li class="mb-0">🕐 Available 24 / 7</li>
-        </ul>
-      </div>
-    </div>
+				<div class="mb-5">
+				  <label class="form-label">Message</label>
+				  <textarea class="form-control" name="message" id="cont-message" rows="5" placeholder="Write your message here"></textarea>
+				  <div class="invalid-feedback">Please write a message!</div>
+				</div>
+				<div class="cf-turnstile mb-4" data-sitekey="{{ CLOUDFLARE_TURNSTILE_SITE_KEY }}"></div>
+				<div id="errorMessage" class="mb-4" style="display:none; color: red;"></div>
+				<div class="text-center pt-4 pb-5">
+					<button class="btn btn-primary" type="submit" id="submitButton">Submit</button>
+				</div>
+			  </form>
+			  </div>
+			</div>
 
-  </div>
-</section>
+			<!-- Categories Widget -->
+			<div class="col-lg-4 col-md-4 offset-md-1">
+				<div class="card my-4">
+					<h5 class="card-header text-danger">Note!</h5>
+					<div class="card-body">
+						<div class="widget-content">
+							<p class="fw-bold mb-1">For arrivals</p>
+							<p class="mb-1">Your driver will keep track of arrival time to meet you on time.</p>
+							<p class="mb-1">Please check &raquo;
+								<a href="/meeting_point/" target="_blank" class="text-decoration-underline">Airport Meeting Points</a>
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="card my-4">
+					<h5 class="card-header text-primary">Note!</h5>
+					<div class="card-body">
+						<div class="widget-content">
+							<p class="fw-bold mb-1">For departure</p>
+							<p class="mb-2">Please inform us your preferred pickup time.</p>
+							<div class="small border-start ps-2">
+								<p class="mb-1">Our vehicles are entitled to use BUS LANE.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
 
 {% endblock %}
 
@@ -367,35 +392,75 @@ document.addEventListener('DOMContentLoaded', function () {
 
   /* ── Direction field toggle ── */
   var dirSelect = document.getElementById('direction');
-  function applyDirectionToggle() {
+  function toggleDirectionFields() {
     if (!dirSelect) return;
-    var val = dirSelect.value;
-    var isP2P = val === 'Cruise or Point to Point';
-    document.getElementById('start-end-fields').style.display = isP2P ? '' : 'none';
-    document.getElementById('address-fields').style.display = isP2P ? 'none' : '';
-    document.getElementById('flight-fields').style.display = isP2P ? 'none' : '';
-    /* street required only for non-P2P */
+    var isCruise = dirSelect.value === 'Cruise or Point to Point';
+    document.getElementById('start-end-fields').style.display = isCruise ? 'block' : 'none';
+    document.getElementById('address-fields').style.display = isCruise ? 'none' : 'block';
+    document.getElementById('flight-fields').style.display = isCruise ? 'none' : 'block';
     var streetEl = document.getElementById('street');
-    if (streetEl) streetEl.required = !isP2P;
+    if (streetEl) streetEl.required = !isCruise;
+    if (document.getElementById('return-flight').checked) updateReturnFields();
   }
   if (dirSelect) {
-    dirSelect.addEventListener('change', applyDirectionToggle);
-    applyDirectionToggle();
+    dirSelect.addEventListener('change', toggleDirectionFields);
+    toggleDirectionFields();
   }
 
   /* ── Extra luggage toggle ── */
   var extraCheck = document.getElementById('extraLuggageCheck');
   if (extraCheck) {
     extraCheck.addEventListener('change', function () {
-      document.getElementById('extraLuggageFields').style.display = this.checked ? '' : 'none';
+      document.getElementById('extraLuggageFields').style.display = this.checked ? 'block' : 'none';
     });
   }
 
-  /* ── Return trip toggle ── */
+  /* ── Return trip toggle (XHR) ── */
   var returnCheck = document.getElementById('return-flight');
+  var returnFlightFields = document.getElementById('return-flight-fields');
+  var returnCruiseFields = document.getElementById('return-cruise-fields');
+
+  function updateReturnFields() {
+    var isCruise = dirSelect && dirSelect.value === 'Cruise or Point to Point';
+    returnFlightFields.innerHTML = '';
+    returnFlightFields.style.display = 'none';
+    returnCruiseFields.innerHTML = '';
+    returnCruiseFields.style.display = 'none';
+
+    if (!returnCheck.checked) return;
+
+    var url = isCruise ? '/return_cruise_fields/' : '/return_flight_fields/';
+    var target = isCruise ? returnCruiseFields : returnFlightFields;
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url);
+    xhr.onload = function () {
+      if (xhr.status === 200) {
+        target.innerHTML = xhr.responseText;
+        target.style.display = 'block';
+      }
+    };
+    xhr.send();
+  }
+
   if (returnCheck) {
-    returnCheck.addEventListener('change', function () {
-      document.getElementById('return-flight-fields').style.display = this.checked ? '' : 'none';
+    returnCheck.addEventListener('change', updateReturnFields);
+  }
+
+  /* ── Date validation ── */
+  var flightDateInput = document.getElementById('flight-date');
+  var dateError = document.getElementById('date-error');
+  if (flightDateInput) {
+    flightDateInput.addEventListener('change', function () {
+      var selected = new Date(this.value);
+      var today = new Date();
+      today.setHours(0, 0, 0, 0);
+      if (selected < today) {
+        dateError.style.display = 'block';
+        this.classList.add('is-invalid');
+      } else {
+        dateError.style.display = 'none';
+        this.classList.remove('is-invalid');
+      }
     });
   }
 
@@ -438,14 +503,14 @@ document.addEventListener('DOMContentLoaded', function () {
         errorDiv.textContent = data.message || data.error || 'An error occurred. Please try again.';
         errorDiv.style.display = 'block';
         submitBtn.disabled = false;
-        submitBtn.textContent = 'Submit Booking Request';
+        submitBtn.textContent = 'Submit';
       }
     })
-    .catch(function (err) {
+    .catch(function () {
       errorDiv.textContent = 'There was a problem submitting your request. Please try again.';
       errorDiv.style.display = 'block';
       submitBtn.disabled = false;
-      submitBtn.textContent = 'Submit Booking Request';
+      submitBtn.textContent = 'Submit';
     });
   });
 
