@@ -4,7 +4,7 @@ import urllib.parse
 import urllib.request
 
 from django.conf import settings
-from django.db.models.signals import post_save
+from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 
 from PIL import Image
@@ -13,10 +13,20 @@ from django.core.files.base import ContentFile
 from .models import Post
 
 
+@receiver(pre_save, sender=Post)
+def capture_previous_status(sender, instance, **kwargs):
+    instance._previous_status = None
+    if not instance.pk:
+        return
+    previous = Post.objects.only("status").filter(pk=instance.pk).first()
+    if previous:
+        instance._previous_status = previous.status
+
+
 @receiver(post_save, sender=Post)
 def regenerate_sitemap_on_publish(sender, instance, **kwargs):
-    """Regenerate sitemap whenever a post is saved with published status."""
-    if instance.status == 'published':
+    """Regenerate sitemap on first publish."""
+    if instance.was_just_published():
         try:
             from django.core.management import call_command
             call_command('generate_sitemap')
@@ -71,8 +81,8 @@ def auto_fetch_thumbnail(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=Post)
 def trigger_gmb_posting(sender, instance, created, **kwargs):
-    """Trigger GMB posting when a post is published and not yet posted to Google."""
-    if instance.status == 'published' and not instance.posted_to_google:
+    """Trigger GMB posting on first publish if not yet posted to Google."""
+    if instance.was_just_published() and not instance.posted_to_google:
         try:
             from posting_agent.tasks import post_to_gmb_from_article
             post_to_gmb_from_article.delay(instance.pk)
