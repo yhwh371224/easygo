@@ -1,5 +1,5 @@
 .site-footer a { text-decoration: none !important; }
-.ft-top { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 2.5rem; padding-bottom: 2rem; border-bottom: 0.5px solid rgba(255,255,255,0.08); }
+.ft-top { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; padding-bottom: 2rem; border-bottom: 0.5px solid rgba(255,255,255,0.08); }
 .ft-brand-name { font-size: 18px; font-weight: 500; color: #fff; margin: 0 0 6px; }
 .ft-brand-tag { font-size: 13px; color: rgba(255,255,255,0.45); margin: 0 0 16px; }
 .ft-rating { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.05); border: 0.5px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 4px 10px; }
@@ -15,7 +15,7 @@
 .ft-bottom { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding-top: 1.25rem; }
 .ft-copy { font-size: 12px; color: rgba(255,255,255,0.3); margin: 0; }
 .ft-credit { font-size: 12px; color: rgba(255,255,255,0.3); margin: 0; }
-.ft-credit a { color: #ffb347; text-decoration: none; }
+.ft-credit a { color: rgba(255,255,255,0.3); text-decoration: none; }
 @media (max-width: 768px) {
   .ft-top { grid-template-columns: 1fr; gap: 1.5rem; }
   .ft-bottom { justify-content: center; text-align: center; }
