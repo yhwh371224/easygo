@@ -37,6 +37,8 @@
         
         <div class="offcanvas-body d-lg-flex justify-content-lg-center">
             <ul class="navbar-nav">
+            <!-- TODO: 멀티 지역 완성 후 주석 해제 -->
+            {% comment %}
             <li class="nav-item dropdown hover-open active">
                 <a class="nav-link dropdown-toggle" href="{% if current_region %}/{{ current_region.slug }}/{% else %}/{% endif %}" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">Home</a>
                 <ul class="dropdown-menu">
@@ -58,10 +60,11 @@
                     <li><a class="dropdown-item {% if request.path|slice:':10' == '/brisbane/' %}active{% endif %}" href="/brisbane/">Brisbane</a></li>
                     <li><a class="dropdown-item {% if request.path|slice:':7' == '/perth/' %}active{% endif %}" href="/perth/">Perth</a></li>
                     <li><a class="dropdown-item {% if request.path|slice:':10' == '/adelaide/' %}active{% endif %}" href="/adelaide/">Adelaide</a></li>
-                    <li><a class="dropdown-item {% if request.path|slice:':12' == '/gold-coast/' %}active{% endif %}" href="/gold-coast/">Gold Coast</a></li> 
+                    <li><a class="dropdown-item {% if request.path|slice:':12' == '/gold-coast/' %}active{% endif %}" href="/gold-coast/">Gold Coast</a></li>
                   {% endif %}
                 </ul>
             </li>
+            {% endcomment %}
 
             <li class="nav-item dropdown dropdown-mega active">
                 <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" data-bs-display="static">About Us</a>
