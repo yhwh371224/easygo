@@ -1,14 +1,9 @@
-from basecamp.area_home import get_home_suburbs
+from regions.models import RegionSuburb
 
 
 def get_sorted_suburbs():
-    raw = get_home_suburbs()
-    fixed = [
-        "Hotels In City",
-        "Sydney Int'l Airport",
-        "Sydney Domestic Airport",
-        "WhiteBay cruise terminal",
-        "Overseas cruise terminal"
-    ]
-    remaining = sorted([item for item in raw if item not in fixed])
-    return fixed + remaining
+    qs = RegionSuburb.objects.filter(
+        region__slug='sydney',
+        is_active=True,
+    ).order_by('-is_pinned', 'sort_order', 'name')
+    return [s.name for s in qs]

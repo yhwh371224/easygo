@@ -36,13 +36,13 @@
     </div>
     <div class="row" id="suburbCards" style="margin-top: 10px;">
 
-        {% for suburb, details in more_suburbs.items %}
-        <div class="card card-body bg-light text-center align-items-center">           
+        {% for s in more_suburbs %}
+        <div class="card card-body bg-light text-center align-items-center">
             <h6 class="mb-0">
-                <a href="/maxi-taxi/{{ suburb|slugify }}/">{{ suburb|title }}</a>
+                <a href="/maxi-taxi/{{ s.slug }}/">{{ s.name }}</a>
             </h6>
         </div>
-        {% endfor %} 
+        {% endfor %}
 
     </div>
 </div>
