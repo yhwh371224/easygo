@@ -127,6 +127,12 @@ class Post(models.Model):
         minutes = math.ceil(word_count / 200)
         return max(1, minutes)
 
+    def was_just_published(self):
+        return (
+            self.status == "published"
+            and getattr(self, "_previous_status", None) != "published"
+        )
+
     # ── posting_agent 에서 쓸 헬퍼 ─────────────
     @property
     def is_fully_posted(self):

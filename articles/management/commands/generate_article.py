@@ -2,11 +2,8 @@ import asyncio
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 from django.utils.text import slugify
-from telegram.ext import Application, CallbackQueryHandler
 
 from articles.models import Category, Post
-from posting_agent.telegram_bot import send_article_notification
-from posting_agent.management.commands.run_telegram_bot import button_handler
 from services.claude_service import ClaudeService
 
 _claude = ClaudeService()
@@ -135,42 +132,40 @@ def parse_response(raw: str) -> dict:
 
 
 class Command(BaseCommand):
-    help = 'Generate a blog article with AI and save as draft'
+    help = 'Generate a blog article with AI and manual approval'
 
     def add_arguments(self, parser):
-        parser.add_argument('--topic',    default=None, help='Topic or title for the article')
-        parser.add_argument('--category', default=None, help='Category name (must already exist in DB)')
+        parser.add_argument('--topic', default=None)
+        parser.add_argument('--category', default=None)
 
     def handle(self, *args, **options):
+
         # --- topic ---
         topic = options['topic']
         while not topic or not topic.strip():
-            topic = input("\n🖊  Topic (블로그 주제): ").strip()
+            topic = input("\n🖊 Topic (블로그 주제): ").strip()
 
         # --- category ---
         existing = list(Category.objects.values_list('name', flat=True))
         category_name = options['category']
+
         while True:
             if not category_name or not category_name.strip():
-                self.stdout.write(f"\n📂  Available categories: {', '.join(existing)}")
-                category_name = input("📂  Category: ").strip()
-                if not category_name:
-                    continue
+                self.stdout.write(f"\n📂 Available categories: {', '.join(existing)}")
+                category_name = input("📂 Category: ").strip()
+
             try:
                 category = Category.objects.get(name=category_name)
                 break
             except Category.DoesNotExist:
-                self.stdout.write(self.style.ERROR(f"    '{category_name}' not found. Please try again."))
-                self.stdout.write(f"📂  Available categories: {', '.join(existing)}")
+                self.stdout.write(self.style.ERROR("❌ Category not found"))
                 category_name = ""
 
-        self.stdout.write(f"Topic    : {topic}")
-        self.stdout.write(f"Category : {category_name}")
-        self.stdout.write("🤖 AI가 블로그 글을 생성 중입니다... 잠시만 기다려주세요.")
+        self.stdout.write("\n🤖 Generating article...\n")
 
         data = generate_article_content(topic, category_name)
 
-        # slug 중복 방지
+        # slug 처리
         base_slug = data['slug'] or slugify(data['title'], allow_unicode=True)
         slug = base_slug
         counter = 1
@@ -178,42 +173,57 @@ class Command(BaseCommand):
             slug = f"{base_slug}-{counter}"
             counter += 1
 
-        # gmb_content 1000자 초과 방지
+        # 🔥 PREVIEW 출력
+        self.stdout.write("\n" + "="*70)
+        self.stdout.write("📝 ARTICLE PREVIEW")
+        self.stdout.write("="*70)
+
+        self.stdout.write(f"\nTITLE: {data['title']}")
+        self.stdout.write(f"SLUG : {slug}")
+        self.stdout.write(f"CATEGORY: {category_name}")
+
+        self.stdout.write("\n--- EXCERPT ---")
+        self.stdout.write(data['excerpt'])
+
+        self.stdout.write("\n--- CONTENT (preview 1200 chars) ---")
+        self.stdout.write(data['content'][:1200])
+
+        self.stdout.write("\n" + "="*70)
+
+        # 🚀 승인 단계
+        confirm = input("\n🚀 Publish this article? (y/n): ").strip().lower()
+
+        if confirm == "y":
+            status = "published"
+            self.stdout.write(self.style.SUCCESS("\n✅ Published!"))
+        else:
+            status = "draft"
+            self.stdout.write(self.style.WARNING("\n💾 Saved as draft"))
+
+        # GMB 처리
         gmb = data['gmb_content']
         if len(gmb) > 1000:
             gmb = gmb[:997] + "..."
 
+        # DB 저장
         post = Post.objects.create(
-            title            = data['title'],
-            slug             = slug,
-            excerpt          = data['excerpt'],
-            content          = data['content'],
-            meta_title       = data['meta_title'],
-            meta_description = data['meta_description'],
-            gmb_content      = gmb,
-            thumbnail_query  = data['thumbnail_query'],
-            category         = category,
-            status           = 'draft',
+            title=data['title'],
+            slug=slug,
+            excerpt=data['excerpt'],
+            content=data['content'],
+            meta_title=data['meta_title'],
+            meta_description=data['meta_description'],
+            gmb_content=gmb,
+            thumbnail_query=data['thumbnail_query'],
+            category=category,
+            status=status,
         )
 
         admin_url = f"{settings.SITE_URL}/admin/articles/post/{post.id}/change/"
 
-        self.stdout.write(self.style.SUCCESS("\n✅ 블로그 글 초안이 생성되었습니다. 텔레그램을 확인해주세요."))
-        self.stdout.write(f"  ID    : {post.id}")
-        self.stdout.write(f"  Title : {post.title}")
-        self.stdout.write(f"  Slug  : {post.slug}")
-        self.stdout.write(f"  Admin : {admin_url}")
+        self.stdout.write("\n📌 RESULT")
+        self.stdout.write(f"ID    : {post.id}")
+        self.stdout.write(f"STATUS: {status}")
+        self.stdout.write(f"ADMIN : {admin_url}")
 
-        asyncio.run(send_article_notification(
-            post_id   = post.id,
-            title     = post.title,
-            category  = category.name,
-            excerpt   = post.excerpt,
-            admin_url = admin_url,
-        ))
-        self.stdout.write("📱 텔레그램으로 알림을 전송했습니다. 어드민에서 내용 확인 후 승인 버튼을 눌러주세요.")
-
-        self.stdout.write("⏳ 봇이 대기 중입니다. 승인 후 Ctrl+C 로 종료하세요.")
-        app = Application.builder().token(settings.TELEGRAM_BOT_TOKEN).build()
-        app.add_handler(CallbackQueryHandler(button_handler))
-        app.run_polling()
+        self.stdout.write("\n🎉 Done.")
