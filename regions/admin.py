@@ -6,7 +6,7 @@ from .models import Region, RegionSuburb
 class RegionSuburbInline(admin.TabularInline):
     model = RegionSuburb
     extra = 1
-    fields = ('name', 'slug', 'zone', 'price', 'is_active', 'meta_title')
+    fields = ('name', 'slug', 'zone', 'price', 'is_active', 'is_pinned', 'sort_order', 'meta_title')
     prepopulated_fields = {'slug': ('name',)}
 
 
@@ -38,8 +38,20 @@ class RegionAdmin(admin.ModelAdmin):
 
 @admin.register(RegionSuburb)
 class RegionSuburbAdmin(admin.ModelAdmin):
-    list_display = ('name', 'region', 'zone', 'price', 'is_active')
-    list_filter = ('region', 'zone', 'is_active')
+    list_display = ('name', 'region', 'zone', 'price', 'is_active', 'is_pinned')
+    list_filter = ('region', 'zone', 'is_active', 'is_pinned')
     list_editable = ('price', 'is_active')
     prepopulated_fields = {'slug': ('name',)}
     search_fields = ('name', 'slug')
+    fieldsets = (
+        (None, {
+            'fields': ('region', 'name', 'slug', 'zone', 'price', 'is_active'),
+        }),
+        ('Dropdown ordering', {
+            'fields': ('is_pinned', 'sort_order'),
+        }),
+        ('SEO', {
+            'fields': ('meta_title', 'meta_description'),
+            'classes': ('collapse',),
+        }),
+    )

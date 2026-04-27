@@ -6,7 +6,6 @@ from django.db.models import Q
 from django.http import JsonResponse
 from main.settings import RECIPIENT_EMAIL
 from basecamp.area import get_suburbs
-from basecamp.area_home import get_home_suburbs
 from basecamp.basecamp_utils import (
     is_ajax, parse_date,
     verify_turnstile, get_sorted_suburbs,
@@ -39,12 +38,10 @@ def price_detail(request):
             pickup_date = parse_date(pickup_date_str, field_name="Pickup Date")
 
         except ValueError as e:
-            suburbs = get_suburbs()
-            home_suburbs = get_home_suburbs()
             return render(request, 'basecamp/home.html', {
-                'error_message': str(e), 
-                'suburbs': suburbs,
-                'home_suburbs': home_suburbs,
+                'error_message': str(e),
+                'suburbs': get_suburbs(),
+                'home_suburbs': get_sorted_suburbs(),
                 'google_review_url': settings.GOOGLE_REVIEW_URL, 
                 'latest_post': latest_post, 
                 'start_point_value': start_point if start_point != 'Select your option' else '',
@@ -82,10 +79,10 @@ def price_detail(request):
 
     else:
         return render(request, 'basecamp/home.html', {
+            'suburbs': get_suburbs(),
             'home_suburbs': sorted_suburbs,
-            'google_review_url': settings.GOOGLE_REVIEW_URL, 
+            'google_review_url': settings.GOOGLE_REVIEW_URL,
             'latest_post': latest_post,
-            'suburbs': get_suburbs(), 
         })
     
 

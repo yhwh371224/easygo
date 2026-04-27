@@ -48,6 +48,10 @@ class RegionSuburb(models.Model):
     meta_title = models.CharField(max_length=60, blank=True)
     meta_description = models.CharField(max_length=500, blank=True)
 
+    # Dropdown ordering: pinned items (airports, terminals) appear first
+    is_pinned = models.BooleanField(default=False)
+    sort_order = models.PositiveSmallIntegerField(default=0)
+
     class Meta:
         unique_together = ('region', 'slug')
         ordering = ['zone', 'name']
