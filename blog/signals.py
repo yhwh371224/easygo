@@ -121,9 +121,20 @@ def reset_driver_calendar_event_id(sender, instance, **kwargs):
         pass
 
 
-# google calendar recording 
+# google calendar recording
+CALENDAR_EXCLUDED_FIELDS = {
+    'company_name', 'booker_name', 'booker_email', 'email1',
+    'return_direction', 'return_flight_number', 'return_flight_time',
+    'return_pickup_time', 'return_start_point', 'return_end_point',
+    'discount', 'fuel_surcharge', 'region', 'is_confirmed',
+    'cruise', 'sms_reminder', 'prepay',
+    'calendar_event_id', 'driver_calendar_event_id', 'use_proxy', 'created',
+}
+
 @receiver(post_save, sender=Post, dispatch_uid="async_create_event_on_calendar_once")
-def async_create_event_on_calendar(sender, instance, created, **kwargs):
+def async_create_event_on_calendar(sender, instance, created, update_fields, **kwargs):
+    if update_fields is not None and set(update_fields).issubset(CALENDAR_EXCLUDED_FIELDS):
+        return
     pk = instance.pk
     transaction.on_commit(lambda: create_event_on_calendar.delay(pk))
     
@@ -177,7 +188,7 @@ def close_bird_mapping_on_no_driver(sender, instance, created, **kwargs):
 
 
 # sender를 문자열로 지정: "앱이름.모델이름"
-@receiver(post_save, sender='articles.Post')
+@receiver(post_save, sender='articles.Post', dispatch_uid="update_sitemap_from_blog_once")
 def update_sitemap_from_blog(sender, instance, created, **kwargs):
     if instance.status == 'published':
         from articles.models import Post
