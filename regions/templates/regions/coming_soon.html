@@ -1,358 +1,339 @@
-{% load static %}
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Coming Soon — EasyGo Airport Transfers {{ region.name }}</title>
+<head>
+  <meta charset="utf-8">
+  <title>{{ region.name }} Airport Transfer | Coming Soon | EasyGo</title>
+  <meta name="description" content="EasyGo premium airport transfer service is coming to {{ region.name }}. Fixed prices, professional drivers, door-to-door service. Register to be notified at launch.">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta property="og:title" content="EasyGo Airport Shuttle – Coming to {{ region.name }}">
+  <meta property="og:description" content="Premium airport transfer service coming to {{ region.name }} in 2026. Fixed prices, professional drivers, door-to-door.">
+  <meta property="og:type" content="website">
+  <link rel="shortcut icon" type="image/x-icon" href="{% static 'basecamp/favi/favicon.ico' %}">
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'basecamp/favi/apple-touch-icon.png' %}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'basecamp/favi/favicon-32x32.png' %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css?family=Inter:400,600,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'basecamp/css/base_home.css' %}">
+  <style nonce="{{ CSP_NONCE }}">
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: 'Inter', Arial, sans-serif; overflow-x: hidden; }
 
-    <link rel="shortcut icon" type="image/x-icon" href="{% static 'basecamp/favi/favicon.ico' %}">
-    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'basecamp/favi/apple-touch-icon.png' %}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'basecamp/favi/favicon-32x32.png' %}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'basecamp/favi/favicon-16x16.png' %}">
-
-    <style nonce="{{ CSP_NONCE }}">
-      :root{
-        --bg0:#060913;
-        --bg1:#0b1430;
-        --card: rgba(12, 18, 40, .70);
-        --border: rgba(255,255,255,.12);
-        --text: rgba(255,255,255,.92);
-        --muted: rgba(255,255,255,.72);
-        --muted2: rgba(255,255,255,.56);
-        --accent: #9ae6ff;
-        --accent2:#a78bfa;
-        --success:#22c55e;
-      }
-
-      * { box-sizing: border-box; }
-      html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
-      body{
-        margin:0;
-        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-        color: var(--text);
-        background: radial-gradient(1200px 600px at 20% 10%, rgba(154,230,255,.12), transparent 55%),
-                    radial-gradient(900px 520px at 80% 30%, rgba(167,139,250,.13), transparent 55%),
-                    linear-gradient(180deg, var(--bg0), var(--bg1));
-        min-height: 100vh;
-      }
-
-      .bg-photo{
-        position: fixed;
-        inset: 0;
-        z-index: -2;
-        background:
-          linear-gradient(180deg, rgba(0,0,0,.68), rgba(0,0,0,.80)),
-          radial-gradient(1200px 680px at 50% 35%, rgba(255,255,255,.10), rgba(0,0,0,0) 65%),
-          url("{% static 'basecamp/images/sydney-night.jpg' %}") center/cover no-repeat;
-        filter: saturate(.9) contrast(1.05);
-        opacity: .55;
-      }
-
-      .overlay{
-        position: fixed;
-        inset: 0;
-        z-index: -1;
-        background: radial-gradient(900px 520px at 60% 20%, rgba(154,230,255,.10), transparent 55%),
-                    radial-gradient(900px 520px at 20% 70%, rgba(167,139,250,.10), transparent 55%),
-                    linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.60));
-      }
-
-      .wrap{
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 28px 16px;
-      }
-
-      .card{
-        width: min(920px, 100%);
-        background: var(--card);
-        border: 1px solid var(--border);
-        border-radius: 22px;
-        box-shadow: 0 30px 80px rgba(0,0,0,.45);
-        padding: 28px;
-        backdrop-filter: blur(10px);
-      }
-
-      .topbar{
-        display:flex;
-        align-items:center;
-        justify-content: space-between;
-        gap: 12px;
-        margin-bottom: 22px;
-      }
-
-      .logo{
-        display:flex;
-        align-items:center;
-        gap: 10px;
-        text-decoration:none;
-        color: var(--text);
-      }
-      .logo img{ height: 34px; width:auto; display:block; }
-      .badge{
-        display:flex;
-        align-items:center;
-        gap:10px;
-        padding: 10px 12px;
-        border: 1px solid var(--border);
-        border-radius: 999px;
-        background: rgba(255,255,255,.06);
-        color: var(--muted);
-        font-size: 13px;
-        white-space: nowrap;
-      }
-      .badge strong{ color: var(--text); font-weight: 700; }
-      .stars{
-        display:flex;
-        align-items:center;
-        gap: 2px;
-      }
-      .star{
-        width: 14px;
-        height: 14px;
-        display:inline-block;
-        background: linear-gradient(180deg, #ffd54a, #ffb400);
-        clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 92%, 50% 72%, 21% 92%, 32% 57%, 2% 35%, 39% 35%);
-      }
-
-      h1{
-        margin: 0 0 12px 0;
-        font-size: clamp(28px, 4vw, 44px);
-        letter-spacing: -0.02em;
-        line-height: 1.08;
-      }
-      .sub{
-        margin: 0 0 22px 0;
-        color: var(--muted);
-        font-size: 16px;
-        line-height: 1.55;
-        max-width: 62ch;
-      }
-
-      .grid{
-        display:grid;
-        grid-template-columns: 1.25fr .75fr;
-        gap: 18px;
-        margin-top: 18px;
-      }
-
-      .panel{
-        border: 1px solid var(--border);
-        border-radius: 16px;
-        padding: 18px;
-        background: rgba(255,255,255,.04);
-      }
-
-      .form-row{
-        display:flex;
-        gap: 10px;
-        align-items: stretch;
-        margin-top: 10px;
-      }
-      .input{
-        flex: 1;
-        border-radius: 12px;
-        border: 1px solid rgba(255,255,255,.14);
-        background: rgba(0,0,0,.18);
-        color: var(--text);
-        padding: 12px 14px;
-        font-size: 15px;
-        outline: none;
-      }
-      .input::placeholder{ color: rgba(255,255,255,.45); }
-      .btn{
-        border: 1px solid rgba(255,255,255,.14);
-        border-radius: 12px;
-        padding: 12px 16px;
-        font-size: 15px;
-        font-weight: 700;
-        cursor: pointer;
-        color: #07111f;
-        background: linear-gradient(135deg, var(--accent), var(--accent2));
-        transition: transform .08s ease, filter .12s ease;
-        white-space: nowrap;
-      }
-      .btn:active{ transform: translateY(1px); }
-      .hint{
-        margin-top: 10px;
-        color: var(--muted2);
-        font-size: 13px;
-      }
-
-      .launch{
-        display:flex;
-        flex-direction: column;
-        gap: 12px;
-      }
-      .launch .title{
-        display:flex;
-        align-items:center;
-        justify-content: space-between;
-        gap: 10px;
-      }
-      .pill{
-        display:inline-flex;
-        align-items:center;
-        gap: 8px;
-        padding: 8px 10px;
-        border-radius: 999px;
-        border: 1px solid rgba(255,255,255,.14);
-        background: rgba(0,0,0,.16);
-        color: var(--muted);
-        font-size: 12px;
-      }
-      .dot{
-        width: 8px;
-        height: 8px;
-        border-radius: 999px;
-        background: var(--success);
-        box-shadow: 0 0 0 4px rgba(34,197,94,.16);
-      }
-      .countdown{
-        display:grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 10px;
-      }
-      .timebox{
-        border-radius: 14px;
-        border: 1px solid rgba(255,255,255,.12);
-        background: rgba(0,0,0,.18);
-        padding: 12px 10px;
-        text-align:center;
-      }
-      .timebox .num{
-        font-size: 20px;
-        font-weight: 800;
-        letter-spacing: -0.02em;
-      }
-      .timebox .lbl{
-        margin-top: 4px;
-        font-size: 11px;
-        color: var(--muted2);
-        text-transform: uppercase;
-        letter-spacing: .12em;
-      }
-
-      .actions{
-        margin-top: 18px;
-        display:flex;
-        align-items:center;
-        justify-content: flex-start;
-        gap: 12px;
-        flex-wrap: wrap;
-      }
-      .back{
-        display:inline-flex;
-        align-items:center;
-        gap: 8px;
-        padding: 10px 12px;
-        border-radius: 12px;
-        border: 1px solid rgba(255,255,255,.14);
-        background: rgba(255,255,255,.06);
-        color: var(--text);
-        text-decoration: none;
-        font-weight: 700;
-      }
-      .back:hover{ filter: brightness(1.05); }
-      .mini{
-        color: var(--muted2);
-        font-size: 13px;
-      }
-
-      @media (max-width: 860px){
-        .grid{ grid-template-columns: 1fr; }
-      }
-      @media (max-width: 520px){
-        .card{ padding: 18px; border-radius: 18px; }
-        .topbar{ flex-direction: column; align-items: flex-start; }
-        .form-row{ flex-direction: column; }
-        .btn{ width: 100%; }
-        .countdown{ grid-template-columns: repeat(2, 1fr); }
-      }
-    </style>
-  </head>
-
-  <body>
-    <div class="bg-photo" aria-hidden="true"></div>
-    <div class="overlay" aria-hidden="true"></div>
-
-    <div class="wrap">
-      <div class="card" role="region" aria-label="Coming soon">
-        <div class="topbar">
-          <a class="logo" href="{% url 'regions:home' region_slug='sydney' %}">
-            <img src="{% static 'basecamp/images/easygo-logo-final.webp' %}" alt="EasyGo" />
-          </a>
-
-          <div class="badge" aria-label="Trust badge">
-            <span class="stars" aria-hidden="true">
-              <span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span>
-            </span>
-            <span><strong>4.8</strong> • 393 reviews</span>
-          </div>
-        </div>
-
-        <h1>Premium Airport Transfers Coming to {{ region.name }}</h1>
-        <p class="sub">
-          We&apos;re expanding our award-winning airport transfer service to {{ region.name }}.
-          <br />Fixed prices, professional drivers, door-to-door service.
-        </p>
-
-        <div class="grid">
-          <div class="panel">
-            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
-              <strong style="font-size:14px;letter-spacing:.04em;text-transform:uppercase;color:rgba(255,255,255,.78);">Get notified</strong>
-              <span class="pill"><span class="dot"></span> Launching 2026</span>
-            </div>
-
-            <div class="form-row" role="group" aria-label="Notify me">
-              <input class="input" id="notify-email" type="email" name="email" placeholder="Enter your email" autocomplete="email" />
-              <button class="btn" type="button" onclick="handleNotify()">Notify Me</button>
-            </div>
-            <div class="hint" id="notify-hint">UI only for now — we&apos;ll connect this later.</div>
-
-            <div class="actions">
-              <a class="back" href="{% url 'regions:home' region_slug='sydney' %}">← Back to Sydney</a>
-              <span class="mini">Meanwhile, Sydney bookings are available 24/7.</span>
-            </div>
-          </div>
-
-          <div class="panel launch" aria-label="Countdown">
-            <div class="title">
-              <strong style="font-size:14px;letter-spacing:.04em;text-transform:uppercase;color:rgba(255,255,255,.78);">Countdown</strong>
-              <span class="pill" style="gap:6px;">
-                <span style="width:8px;height:8px;border-radius:999px;background:rgba(154,230,255,.9);box-shadow:0 0 0 4px rgba(154,230,255,.12);"></span>
-                Coming soon
-              </span>
-            </div>
-            <div class="countdown">
-              <div class="timebox"><div class="num">—</div><div class="lbl">Days</div></div>
-              <div class="timebox"><div class="num">—</div><div class="lbl">Hours</div></div>
-              <div class="timebox"><div class="num">—</div><div class="lbl">Min</div></div>
-              <div class="timebox"><div class="num">2026</div><div class="lbl">Launch</div></div>
-            </div>
-            <div class="hint" style="margin-top:2px;">We&apos;ll publish the exact date soon.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <script nonce="{{ CSP_NONCE }}">
-    function handleNotify() {
-      const email = document.getElementById('notify-email').value.trim();
-      const hint = document.getElementById('notify-hint');
-      if (!email || !email.includes('@')) {
-        hint.textContent = 'Please enter a valid email address.';
-        hint.style.color = '#f87171';
-        return;
-      }
-      hint.textContent = "✓ Thanks! We'll notify you when we launch.";
-      hint.style.color = 'var(--success)';
-      document.getElementById('notify-email').disabled = true;
-      document.querySelector('.btn').disabled = true;
+    .cs-page {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0a0e1a 0%, #0d1b3e 35%, #112240 60%, #0a0e1a 100%);
+      position: relative;
+      display: flex;
+      flex-direction: column;
     }
-    </script>
-  </body>
-</html>
+    .cs-page::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(255, 107, 53, 0.08) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 20%, rgba(0, 112, 243, 0.10) 0%, transparent 50%);
+      pointer-events: none;
+    }
 
+    .cs-nav {
+      position: relative;
+      z-index: 10;
+      padding: 1.25rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .cs-logo img { height: 36px; width: auto; }
+    .cs-back {
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: color 0.2s;
+    }
+    .cs-back:hover { color: #fff; }
+    .cs-back::before { content: "←"; font-size: 1rem; }
+
+    .cs-hero {
+      position: relative;
+      z-index: 5;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 1.5rem 4rem;
+      text-align: center;
+    }
+    .cs-inner { max-width: 680px; width: 100%; }
+
+    .cs-trust-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 100px;
+      padding: 0.35rem 1rem;
+      color: rgba(255,255,255,0.9);
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-bottom: 2rem;
+      backdrop-filter: blur(8px);
+    }
+    .cs-stars { color: #ffc107; letter-spacing: 1px; }
+
+    .cs-launch-badge {
+      display: inline-block;
+      background: linear-gradient(90deg, #ff6b35, #ff8c42);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.9rem;
+      border-radius: 100px;
+      margin-bottom: 1.5rem;
+    }
+
+    .cs-headline {
+      font-size: clamp(1.75rem, 5vw, 2.75rem);
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.2;
+      margin: 0 0 1.25rem;
+    }
+    .cs-headline .cs-city {
+      background: linear-gradient(90deg, #ff6b35, #ffb347);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .cs-sub {
+      font-size: 1.05rem;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.7;
+      margin: 0 0 2.5rem;
+    }
+
+    .cs-features {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.75rem 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .cs-feature {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: rgba(255,255,255,0.75);
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+    .cs-feature::before {
+      content: "✓";
+      color: #4ade80;
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .cs-notify-form {
+      display: flex;
+      gap: 0.5rem;
+      max-width: 460px;
+      margin: 0 auto 2rem;
+    }
+    .cs-notify-input {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+      font-size: 0.9rem;
+      outline: none;
+      backdrop-filter: blur(8px);
+      transition: border-color 0.2s;
+    }
+    .cs-notify-input::placeholder { color: rgba(255,255,255,0.4); }
+    .cs-notify-input:focus { border-color: rgba(255, 107, 53, 0.6); }
+    .cs-notify-btn {
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(90deg, #ff6b35, #ff8c42);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+    .cs-notify-btn:hover { opacity: 0.92; transform: translateY(-1px); }
+
+    .cs-note {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 3rem;
+    }
+
+    .cs-launch-section {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 1.5rem 2rem;
+      display: inline-block;
+      margin-bottom: 2.5rem;
+    }
+    .cs-launch-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 0.75rem;
+    }
+    .cs-launch-year {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1;
+    }
+    .cs-launch-year span { color: #ff6b35; }
+
+    .cs-existing {
+      padding: 0.6rem 1.2rem;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 8px;
+      background: transparent;
+      color: rgba(255,255,255,0.7);
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .cs-existing:hover {
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+      border-color: rgba(255,255,255,0.4);
+    }
+
+    .cs-footer {
+      position: relative;
+      z-index: 5;
+      text-align: center;
+      padding: 1.5rem 2rem;
+      color: rgba(255,255,255,0.35);
+      font-size: 0.78rem;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .cs-footer a { color: rgba(255,255,255,0.4); text-decoration: none; }
+    .cs-footer a:hover { color: rgba(255,255,255,0.7); }
+
+    @media (max-width: 480px) {
+      .cs-nav { padding: 1rem; }
+      .cs-notify-form { flex-direction: column; }
+      .cs-notify-btn { width: 100%; text-align: center; }
+      .cs-launch-year { font-size: 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="cs-page">
+
+  <nav class="cs-nav">
+    <div class="cs-logo">
+      <a href="/">
+        <img src="{% static 'basecamp/images/easygo-logo-final.webp' %}" alt="EasyGo Airport Shuttle" width="120">
+      </a>
+    </div>
+    <a href="/" class="cs-back">Back to Sydney</a>
+  </nav>
+
+  <div class="cs-hero">
+    <div class="cs-inner">
+
+      <div class="cs-trust-badge">
+        <span class="cs-stars">★★★★★</span>
+        4.8 / 5 &nbsp;·&nbsp; 376+ Reviews &nbsp;·&nbsp; Award-Winning Service
+      </div>
+
+      <div class="cs-launch-badge">Coming 2026</div>
+
+      <h1 class="cs-headline">
+        Premium Airport Transfers<br>
+        Coming to <span class="cs-city">{{ region.name }}</span>
+      </h1>
+
+      <p class="cs-sub">
+        We're expanding our award-winning airport transfer service to {{ region.name }}.
+        Fixed prices, professional drivers, door-to-door service — the same quality
+        Sydney and Melbourne travellers already trust.
+      </p>
+
+      <div class="cs-features">
+        <span class="cs-feature">Fixed prices, no surprises</span>
+        <span class="cs-feature">100% private ride</span>
+        <span class="cs-feature">Real-time flight tracking</span>
+        <span class="cs-feature">8–13 seater vehicles</span>
+        <span class="cs-feature">Available 24/7</span>
+      </div>
+
+      <div class="cs-launch-section">
+        <div class="cs-launch-label">Estimated Launch</div>
+        <div class="cs-launch-year"><span>2026</span></div>
+      </div>
+
+      <p class="cs-sub" style="font-size:0.95rem; margin-top: 1.5rem;">
+        Be the first to know when we launch in {{ region.name }}.<br>
+        Enter your email and we'll notify you at launch — with an exclusive early-bird offer.
+      </p>
+
+      <form class="cs-notify-form" onsubmit="return false;" aria-label="Notify me form">
+        <input
+          type="email"
+          class="cs-notify-input"
+          placeholder="Your email address"
+          aria-label="Email address"
+          autocomplete="email"
+        >
+        <button type="submit" class="cs-notify-btn">Notify Me</button>
+      </form>
+
+      <p class="cs-note">No spam. Unsubscribe anytime. Early-bird discount included.</p>
+
+      <div>
+        <a href="/" class="cs-existing">
+          ← Need a transfer now? View Sydney services
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <footer class="cs-footer">
+    <p>
+      © <span id="cs-year"></span> EasyGo Airport Shuttle &nbsp;·&nbsp;
+      <a href="/privacy/">Privacy Policy</a> &nbsp;·&nbsp;
+      <a href="/terms/">Terms</a> &nbsp;·&nbsp;
+      <a href="/contact/">Contact</a>
+    </p>
+  </footer>
+
+</div>
+
+<script>
+  document.getElementById('cs-year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>

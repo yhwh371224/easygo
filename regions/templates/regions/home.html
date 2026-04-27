@@ -579,6 +579,46 @@
         </div>
       </section>
 
+      <!-- TODO: 멀티 지역 완성 후 주석 해제 -->
+      {% comment %}
+      <!-- ===== OUR SERVICE AREAS (REGIONS) ===== -->
+      <section class="bg-light py-5 my-2">
+        <div class="container">
+          <h2 class="text-center mb-2">Our Service Areas</h2>
+          <p class="text-center text-muted mb-5 col-lg-8 mx-auto">
+            EasyGo Airport Shuttle operates across multiple cities in Australia. Select your city to explore services and pricing.
+          </p>
+          <div class="row g-4 justify-content-center">
+            {% for r in active_regions %}
+            <div class="col-lg-3 col-md-4 col-sm-6">
+              <div class="card h-100 border-0 shadow-sm text-center p-4{% if r.slug == region.slug %} border-primary{% endif %}">
+                {% if r.slug == region.slug %}
+                <span class="badge bg-primary mb-2 align-self-center" style="width:fit-content;">Current Region</span>
+                {% endif %}
+                <div class="fs-2 mb-2">
+                  {% if r.slug == 'sydney' %}🏙️
+                  {% elif r.slug == 'melbourne' %}🌆
+                  {% elif r.slug == 'brisbane' %}☀️
+                  {% elif r.slug == 'perth' %}🌅
+                  {% else %}✈️
+                  {% endif %}
+                </div>
+                <h3 class="h5 mb-2">{{ r.name }}</h3>
+                <p class="fs-sm text-muted mb-3">
+                  {% if r.meta_description %}{{ r.meta_description|truncatechars:100 }}{% else %}Private airport transfer service in {{ r.name }}.{% endif %}
+                </p>
+                <a href="{% if r.slug == 'sydney' %}/{% else %}/{{ r.slug }}/{% endif %}"
+                   class="btn btn-sm {% if r.slug == region.slug %}btn-primary{% else %}btn-outline-primary{% endif %} mt-auto">
+                  {% if r.slug == region.slug %}View {{ r.name }}{% else %}View {{ r.name }}{% endif %}
+                </a>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </section>
+      {% endcomment %}
+
       <!-- ===== FAQ SECTION ===== -->
       <section class="container py-3 my-4 my-sm-0 py-sm-4 py-md-7">
         <h2 class="text-center mb-4 text-brand">Melbourne Airport Transfer FAQs - Everything You Need to Know</h2>
