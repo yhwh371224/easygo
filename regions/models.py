@@ -23,6 +23,7 @@ class Region(models.Model):
     longitude = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True)
 
     # SEO
+    meta_title = models.CharField(max_length=100, blank=True)
     meta_description = models.TextField(blank=True)
 
     # Guides & Terminals

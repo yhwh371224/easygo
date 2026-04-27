@@ -42,6 +42,11 @@ class Post(models.Model):
                                  help_text='Short summary displayed on list pages (300 characters max)')
     content   = models.TextField(verbose_name='Content (HTML)')
 
+    # ── 지역 ───────────────────────────────────
+    region    = models.ForeignKey('regions.Region', on_delete=models.SET_NULL,
+                                  null=True, blank=True,
+                                  related_name='blog_posts', verbose_name='Region')
+
     # ── 분류 ───────────────────────────────────
     category  = models.ForeignKey(Category, on_delete=models.SET_NULL,
                                   null=True, blank=True,
