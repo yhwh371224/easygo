@@ -56,9 +56,9 @@
                     <li><a class="dropdown-item {% if request.path == '/' %}active{% endif %}" href="/">Sydney</a></li>
                     <li><a class="dropdown-item {% if request.path|slice:':11' == '/melbourne/' %}active{% endif %}" href="/melbourne/">Melbourne</a></li>
                     <li><a class="dropdown-item {% if request.path|slice:':10' == '/brisbane/' %}active{% endif %}" href="/brisbane/">Brisbane</a></li>
-                    {% comment %} <li><a class="dropdown-item {% if request.path|slice:':7' == '/perth/' %}active{% endif %}" href="/perth/">Perth</a></li>
+                    <li><a class="dropdown-item {% if request.path|slice:':7' == '/perth/' %}active{% endif %}" href="/perth/">Perth</a></li>
                     <li><a class="dropdown-item {% if request.path|slice:':10' == '/adelaide/' %}active{% endif %}" href="/adelaide/">Adelaide</a></li>
-                    <li><a class="dropdown-item {% if request.path|slice:':12' == '/gold-coast/' %}active{% endif %}" href="/gold-coast/">Gold Coast</a></li> {% endcomment %}
+                    <li><a class="dropdown-item {% if request.path|slice:':12' == '/gold-coast/' %}active{% endif %}" href="/gold-coast/">Gold Coast</a></li> 
                   {% endif %}
                 </ul>
             </li>
