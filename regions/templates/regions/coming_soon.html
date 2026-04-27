@@ -308,10 +308,10 @@
             </div>
 
             <div class="form-row" role="group" aria-label="Notify me">
-              <input class="input" type="email" name="email" placeholder="Enter your email" autocomplete="email" />
-              <button class="btn" type="button">Notify Me</button>
+              <input class="input" id="notify-email" type="email" name="email" placeholder="Enter your email" autocomplete="email" />
+              <button class="btn" type="button" onclick="handleNotify()">Notify Me</button>
             </div>
-            <div class="hint">UI only for now — we&apos;ll connect this later.</div>
+            <div class="hint" id="notify-hint">UI only for now — we&apos;ll connect this later.</div>
 
             <div class="actions">
               <a class="back" href="{% url 'regions:home' region_slug='sydney' %}">← Back to Sydney</a>
@@ -338,6 +338,21 @@
         </div>
       </div>
     </div>
+    <script nonce="{{ CSP_NONCE }}">
+    function handleNotify() {
+      const email = document.getElementById('notify-email').value.trim();
+      const hint = document.getElementById('notify-hint');
+      if (!email || !email.includes('@')) {
+        hint.textContent = 'Please enter a valid email address.';
+        hint.style.color = '#f87171';
+        return;
+      }
+      hint.textContent = "✓ Thanks! We'll notify you when we launch.";
+      hint.style.color = 'var(--success)';
+      document.getElementById('notify-email').disabled = true;
+      document.querySelector('.btn').disabled = true;
+    }
+    </script>
   </body>
 </html>
 
