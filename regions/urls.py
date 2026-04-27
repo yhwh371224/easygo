@@ -1,10 +1,12 @@
 from django.urls import path
 from . import views
+from django.views.generic import RedirectView
 
 app_name = 'regions'
 
 urlpatterns = [
     # Coming soon regions must match before the generic home route.
+    path('sydney/', RedirectView.as_view(url='/', permanent=False)), 
     path('brisbane/', views.region_coming_soon, {'region_slug': 'brisbane'}, name='coming_soon_brisbane'),
     path('perth/', views.region_coming_soon, {'region_slug': 'perth'}, name='coming_soon_perth'),
     path('adelaide/', views.region_coming_soon, {'region_slug': 'adelaide'}, name='coming_soon_adelaide'),
