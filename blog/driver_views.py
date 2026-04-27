@@ -219,6 +219,25 @@ def driver_dashboard(request):
             'date': s.settled_at.date(),
             'data': s,
         })
+    # 오늘 완료된 잡 (use_proxy=False, 대시보드에 표시 안 되지만 timeline엔 표시)
+    completed_today = (
+        Post.objects
+        .filter(
+            driver=driver,
+            pickup_date=today,
+            cancelled=False,
+            use_proxy=False,
+        )
+        .exclude(price__isnull=True)
+        .exclude(price='')
+    )
+
+    for post in completed_today:
+        timeline.append({
+            'type': 'trip',
+            'date': post.pickup_date,
+            'data': post,
+        })
     timeline.sort(key=lambda x: x['date'], reverse=True)
 
     # 마지막 정산 이후 트립만 current 합계 계산
