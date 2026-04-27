@@ -17,10 +17,10 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         try:
             today = date.today()
-            within_three_days = today + timedelta(days=3)
+            within_one_day = today + timedelta(days=1)
 
             final_notices = Post.objects.filter(
-                pickup_date__range=(today, within_three_days),
+                pickup_date__range=(today, within_one_day),
                 cancelled=False,
             ).filter(
                 Q(paid__isnull=True) | Q(paid__exact="")
