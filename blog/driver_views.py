@@ -139,7 +139,7 @@ def driver_dashboard(request):
     today = timezone.localdate()
     now = timezone.now()
 
-    # 오늘 이후 미래 트립 (날짜 + 시간 순)
+    # 대시보드 표시용 오늘 이후 트립 (use_proxy=True 인 것만)
     posts = (
         Post.objects
         .filter(
@@ -149,6 +149,18 @@ def driver_dashboard(request):
             use_proxy=True,
         )
         .order_by('pickup_date', 'pickup_time')
+    )
+
+    # 밸런스용 오늘 이후 트립 (완료 포함, use_proxy 무관)
+    balance_posts_today = (
+        Post.objects
+        .filter(
+            driver=driver,
+            pickup_date__gte=today,
+            cancelled=False,
+        )
+        .exclude(price__isnull=True)
+        .exclude(price='')
     )
 
     trips = []
@@ -169,7 +181,7 @@ def driver_dashboard(request):
             'is_past': is_past,
         })
 
-    # 정산 내역 (최신순, 최대 2개)
+    # 정산 내역 (최신순, 최대 1개)
     settlements = list(
         DriverSettlement.objects
         .filter(driver=driver)
@@ -223,9 +235,8 @@ def driver_dashboard(request):
         elif post.cash:
             current_total_cash += amount
 
-    # 오늘 이후 트립도 current 합계에 포함
-    for t in trips:
-        post = t['post']
+    # 오늘 이후 트립도 current 합계에 포함 (완료된 것 포함)
+    for post in balance_posts_today:
         try:
             amount = Decimal(str(post.price))
         except Exception:
