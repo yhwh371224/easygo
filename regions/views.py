@@ -4,6 +4,7 @@ from django.conf import settings
 from django.http import JsonResponse
 from django_ratelimit.decorators import ratelimit
 from .models import Region, RegionSuburb
+from .area import get_suburbs
 from articles.models import Post as BlogPost
 from blog.models import Post as Booking, Inquiry, Driver
 from basecamp.basecamp_utils import (
@@ -11,7 +12,7 @@ from basecamp.basecamp_utils import (
     booking_success_response, require_turnstile, is_duplicate_submission,
 )
 from utils.telegram import send_telegram_notification
-from region.area import get_suburbs
+
 
 
 # ── Coming Soon ───────────────────────────────────────────────────────────────
@@ -39,6 +40,7 @@ def region_home(request, region_slug):
     latest_post = BlogPost.objects.filter(status='published', region=region).order_by('-created_at').first()
     return render(request, 'regions/home.html', {
         'region': region,
+        'suburbs': suburbs,
         'home_suburbs': home_suburbs,
         'google_review_url': settings.GOOGLE_REVIEW_URL,
         'latest_post': latest_post,
