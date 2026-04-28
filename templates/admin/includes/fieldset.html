@@ -1,14 +1,14 @@
-{% with id_suffix=id_suffix|default:"0" name=fieldset.name|default:""|slugify %}
+{% with name=fieldset.name|default:""|slugify %}
 {% if name %}
     {% if fieldset.is_collapsible %}
         <details>
             <summary>
-                <h{{ heading_level|default:2 }} id="{{ prefix }}-{{ id_prefix }}-{{ name }}-{{ id_suffix }}-heading" class="fieldset-heading">{{ fieldset.name }}</h{{ heading_level|default:2 }}>
+                <h{{ heading_level|default:2 }} id="{{ id_prefix }}-{{ name }}-heading" class="fieldset-heading">{{ fieldset.name }}</h{{ heading_level|default:2 }}>
             </summary>
             <fieldset class="module aligned {{ fieldset.classes }}">
     {% else %}
-        <fieldset class="module aligned {{ fieldset.classes }}" aria-labelledby="{{ prefix }}-{{ id_prefix }}-{{ name }}-{{ id_suffix }}-heading">
-            <h{{ heading_level|default:2 }} id="{{ prefix }}-{{ id_prefix }}-{{ name }}-{{ id_suffix }}-heading" class="fieldset-heading">{{ fieldset.name }}</h{{ heading_level|default:2 }}>
+        <fieldset class="module aligned {{ fieldset.classes }}" aria-labelledby="{{ id_prefix }}-{{ name }}-heading">
+            <h{{ heading_level|default:2 }} id="{{ id_prefix }}-{{ name }}-heading" class="fieldset-heading">{{ fieldset.name }}</h{{ heading_level|default:2 }}>
     {% endif %}
 {% else %}
     <fieldset class="module aligned {{ fieldset.classes }}">
