@@ -44,11 +44,11 @@ def region_coming_soon(request, region_slug):
 
 def region_home(request, region_slug):
     region = get_object_or_404(Region, slug=region_slug, is_active=True)
-    suburbs = region.suburbs.filter(is_active=True).order_by('-is_pinned', 'sort_order', 'name')
+    home_suburbs = region.suburbs.filter(is_active=True).order_by('-is_pinned', 'sort_order', 'name')
     latest_post = BlogPost.objects.filter(status='published', region=region).order_by('-created_at').first()
     return render(request, 'regions/home.html', {
         'region': region,
-        'suburbs': suburbs,
+        'home_suburbs': home_suburbs,
         'google_review_url': settings.GOOGLE_REVIEW_URL,
         'latest_post': latest_post,
     })
