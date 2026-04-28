@@ -27,7 +27,7 @@ class RegionAdmin(admin.ModelAdmin):
             'fields': ('phone', 'phone_display', 'address', 'latitude', 'longitude'),
         }),
         ('SEO', {
-            'fields': ('meta_description',),
+            'fields': ('meta_title', 'meta_description',),
         }),
         ('Guides & Terminals', {
             'fields': ('terminal_info', 'meeting_point', 'arrival_guide'),
