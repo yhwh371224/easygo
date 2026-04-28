@@ -38,7 +38,7 @@ class RegionAdmin(admin.ModelAdmin):
 
 @admin.register(RegionSuburb)
 class RegionSuburbAdmin(admin.ModelAdmin):
-    ordering = ('-is_pinned', 'sort_order', 'name') 
+    ordering = ('region', '-is_pinned', 'sort_order', 'name')  # ← region 먼저
     list_display = ('name', 'region', 'zone', 'price', 'is_active', 'is_pinned')
     list_filter = ('region', 'zone', 'is_active', 'is_pinned')
     list_editable = ('price', 'is_active')
