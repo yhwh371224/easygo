@@ -11,6 +11,7 @@ from basecamp.basecamp_utils import (
     booking_success_response, require_turnstile, is_duplicate_submission,
 )
 from utils.telegram import send_telegram_notification
+from region.area import get_suburbs
 
 
 # ── Coming Soon ───────────────────────────────────────────────────────────────
@@ -33,6 +34,7 @@ def region_coming_soon(request, region_slug):
 
 def region_home(request, region_slug):
     region = get_object_or_404(Region, slug=region_slug, is_active=True)
+    suburbs = get_suburbs()
     home_suburbs = region.suburbs.filter(is_active=True).order_by('-is_pinned', 'sort_order', 'name')
     latest_post = BlogPost.objects.filter(status='published', region=region).order_by('-created_at').first()
     return render(request, 'regions/home.html', {
