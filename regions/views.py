@@ -13,17 +13,6 @@ from basecamp.basecamp_utils import (
 from utils.telegram import send_telegram_notification
 
 
-def _get_region_from_post(request):
-    """POST의 region_slug로 Region 조회. 없거나 못 찾으면 None."""
-    region_slug = request.POST.get('region_slug', '')
-    if not region_slug:
-        return None
-    try:
-        return Region.objects.get(slug=region_slug)
-    except Region.DoesNotExist:
-        return None
-
-
 # ── Coming Soon ───────────────────────────────────────────────────────────────
 
 def region_coming_soon(request, region_slug):
@@ -119,7 +108,7 @@ def region_inquiry_details(request, region_slug):
             return_pickup_time=return_pickup_time, return_start_point=return_start_point,
             return_end_point=return_end_point, message=message,
         )
-        p.region = _get_region_from_post(request)
+        p.region = get_object_or_404(Region, slug=region_slug, is_active=True)
         p.save()
 
         asyncio.run(send_telegram_notification("✈️ New inquiry has been received."))
@@ -199,7 +188,7 @@ def region_booking_detail(request, region_slug):
             return_end_point=return_end_point,
             driver=driver, price='TBA', pending=True, reminder=False,
         )
-        p.region = _get_region_from_post(request)
+        p.region = get_object_or_404(Region, slug=region_slug, is_active=True)
         p.save()
 
         return booking_success_response(request)

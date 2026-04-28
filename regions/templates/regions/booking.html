@@ -44,7 +44,6 @@
       <!-- Contact form + details-->
             <form method="post" enctype="multipart/form-data" action="/{{ region.slug }}/booking_detail/" id="booking-form" class="card-body needs-validation p-5">
                 {% csrf_token %}
-				<input type="hidden" name="region_slug" value="{{ region.slug }}">
 				<div class="mb-3 pb-1">
 					<label class="form-label">Select Region</label>
 					<select id="region-select" class="form-select" style="max-width:220px;" onchange="var s=this.value;window.location.href=(s==='sydney')?'/booking/':'/'+s+'/booking/';">
