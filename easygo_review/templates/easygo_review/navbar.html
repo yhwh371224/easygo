@@ -31,9 +31,7 @@
                     </li>
                 {% else %}
                     <li class="nav-item">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#loginModal">
-                            Log in
-                        </button>
+                        <a href="{% url 'easygo_review:custom_login' %}" class="btn btn-primary">Log in</a>
                     </li>
                 {% endif %}
             </ul>
@@ -42,32 +40,3 @@
     </div>
 </div>
 
-{% load socialaccount %}
-
-<!-- Modal -->
-<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Please Log in</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <a role="button" class="btn btn-outline-danger" href="{% provider_login_url 'google' %}"><i class="fab fa-google"></i>  Log in with Google</a>
-                    </div>
-                    <div class="col-md-6">
-                        <a role="button" class="btn btn-outline-info" href="{% url 'easygo_review:custom_login' %}"><i class="fas fa-envelope"></i>  Log in with Email</a>
-                    </div>
-                </div>
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>

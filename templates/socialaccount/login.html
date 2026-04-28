@@ -7,6 +7,7 @@
 {% block head_title %}{% trans "Sign In" %}{% endblock %}
 
 {% block content %}
+{% get_providers as socialaccount_providers %}
 <section class="bg-dark position-relative pt-6 pb-5 py-sm-6">
     <div class="position-absolute top-0 start-0 w-100 h-100 bg-size-cover" ></div>
         <div class="position-relative zindex-5 container pb-3 pt-sm-2">
