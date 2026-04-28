@@ -163,7 +163,7 @@
               <label class="form-label" for="start-point">Pickup Location</label>
               <select class="form-select" id="start-point" name="start_point" required>
                 <option value="" disabled selected>Select your option</option>
-                {% for s in suburbs %}
+                {% for s in home_suburbs %}
                   <option value="{{ s.name }}">{{ s.name }}</option>
                 {% endfor %}
               </select>
@@ -174,7 +174,7 @@
               <label class="form-label" for="end-point">Drop-off Location</label>
               <select class="form-select" id="end-point" name="end_point" required>
                 <option value="" disabled selected>Select your option</option>
-                {% for s in suburbs %}
+                {% for s in home_suburbs %}
                   <option value="{{ s.name }}">{{ s.name }}</option>
                 {% endfor %}
               </select>

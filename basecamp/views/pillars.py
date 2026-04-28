@@ -1,10 +1,10 @@
 import logging
 
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 
-from regions.models import RegionSuburb
+from regions.models import Region, RegionSuburb
 from basecamp.area import get_suburbs
 from basecamp.area_zones import area_zones
 from basecamp.basecamp_utils import get_sorted_suburbs
@@ -32,19 +32,19 @@ def _build_pillar_context(suburb_obj, zone_info):
 
 
 def home(request):
-    suburbs = get_suburbs()
-    sorted_home_suburbs = get_sorted_suburbs()
-
-    logger.debug(f"home_suburbs count: {len(sorted_home_suburbs)}")
-
+    suburbs = get_suburbs()  # carousel - 그대로 유지
+    region = get_object_or_404(Region, slug='sydney', is_active=True)
+    home_suburbs = region.suburbs.filter(is_active=True).order_by('-is_pinned', 'sort_order', 'name')
+    
     latest_post = Post.objects.filter(status='published').order_by('-created_at').first()
 
     return render(request, 'basecamp/home.html', {
         'suburbs': suburbs,
-        'home_suburbs': sorted_home_suburbs,
+        'home_suburbs': home_suburbs,
         'google_review_url': settings.GOOGLE_REVIEW_URL,
         'latest_post': latest_post,
-    })
+
+    })    
 
 
 def airport_shuttle(request, suburb):
