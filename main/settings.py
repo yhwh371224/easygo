@@ -481,7 +481,7 @@ MYSQL_CONFIG = {
 }
 
 # Banking details (anz, commbank, westpac, nab)
-DEFAULT_BANK_CODE = 'nab'
+DEFAULT_BANK_CODE = 'anz'
 
 # GOOGLE REVIEW URL
 GOOGLE_REVIEW_URL = config('GOOGLE_REVIEW_URL')

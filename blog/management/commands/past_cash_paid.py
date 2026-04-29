@@ -15,6 +15,7 @@ class Command(BaseCommand):
             cancelled=False,
             cash=True,
             paid__isnull=True,
+            driver__driver_name="Sam",
         )
 
         updated_count = qs.update(paid=models.F('price'))
