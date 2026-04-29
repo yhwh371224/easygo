@@ -1,3 +1,4 @@
+from blog.blog_utils import resolve_driver
 from blog.models import Post, Driver
 from regions.models import Region
 from utils.prepay_helper import is_foreign_number
@@ -27,7 +28,7 @@ def handle_return_trip(instance):
             (instance.company_name or "").strip()
         )
 
-        driver = instance.driver or Driver.objects.get(driver_name__iexact="Sam")
+        driver = instance.driver or resolve_driver(instance.suburb)
 
         price_raw = str(instance.price or '').strip()
 

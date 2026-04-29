@@ -10,24 +10,6 @@ logger = logging.getLogger(__name__)
 
 
 # =========================
-# DRIVER CACHE (FIXED)
-# =========================
-def get_default_driver():
-    """
-    Cached safe driver lookup (Sam)
-    """
-    driver, _ = Driver.objects.get_or_create(driver_name="Sam")
-    return driver
-
-
-def assign_default_driver(booking):
-    if not booking.driver:
-        booking.driver = get_default_driver()
-        booking.save(update_fields=['driver'])
-    return booking.driver
-
-
-# =========================
 # CONTEXT BUILDER
 # =========================
 def build_reminder_context(booking, pickup_time_12h, driver):
@@ -111,7 +93,7 @@ def update_meeting_point_for_arrivals():
 
         for booking in bookings:
 
-            driver = assign_default_driver(booking)
+            driver = booking.driver
             driver_id = driver.id
 
             if driver_id not in driver_first_flag:

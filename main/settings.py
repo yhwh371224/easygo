@@ -295,6 +295,7 @@ DATABASES = {
         'PASSWORD': config('DB_PASSWORD'),
         'HOST': config('DB_HOST', default='localhost'),
         'PORT': config('DB_PORT', default='5432'),
+        "TEST": { "NAME": "test_easygobank" },
     }
 }
 

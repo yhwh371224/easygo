@@ -1,7 +1,6 @@
 from datetime import date, timedelta
 from django.core.management.base import BaseCommand
 from utils.email import send_text_email
-from utils.booking_helper import assign_default_driver
 from blog.models import Post
 from main.settings import RECIPIENT_EMAIL
 
@@ -15,12 +14,10 @@ class Command(BaseCommand):
 
         upcoming_bookings = Post.objects.filter(
             pickup_date__range=(start_date, end_date)
-        )
+        ).only("name", "email", "pickup_date", "calendar_event_id")
 
         for booking in upcoming_bookings:
             self.check_and_notify_missing_calendar_id(booking)
-            self.confirm_booking(booking)
-            self.assign_default_driver(booking)
             
     def check_and_notify_missing_calendar_id(self, booking):
         if not booking.calendar_event_id:
@@ -29,10 +26,3 @@ class Command(BaseCommand):
             recipient_list = [RECIPIENT_EMAIL]
             send_text_email(subject, message, recipient_list)
 
-    # def confirm_booking(self, booking):
-    #     if not booking.cancelled:
-    #         booking.is_confirmed = True
-    #         booking.save(update_fields=['is_confirmed'])
-
-    def assign_default_driver(self, booking):
-        assign_default_driver(booking)

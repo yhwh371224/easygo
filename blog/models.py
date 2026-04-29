@@ -16,6 +16,8 @@ class VirtualNumber(models.Model):
 class Driver(models.Model):
     user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True)
     must_change_password = models.BooleanField(default=True)
+    region = models.ForeignKey('regions.Region', null=True, blank=True, on_delete=models.SET_NULL)
+    is_default = models.BooleanField(default=False) 
     driver_name = models.CharField(max_length=100, blank=True, null=True)
     driver_contact = models.CharField(max_length=50, blank=True, null=True)
     driver_email = models.EmailField(blank=True, null=True)

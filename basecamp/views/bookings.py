@@ -1,7 +1,10 @@
+from asyncio.log import logger
+
 from django.shortcuts import render
 from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
 from blog.models import Post, Inquiry, Driver
+from blog.blog_utils import get_default_driver_for_region, resolve_driver
 from regions.models import Region
 from basecamp.basecamp_utils import (
     is_ajax, parse_baggage, parse_date,
@@ -65,7 +68,15 @@ def booking_detail(request):
         if is_duplicate_submission(Post, email):
             return JsonResponse({'success': False, 'message': 'Duplicate form recently submitted. Please wait before trying again.'})  
             
-        sam_driver = Driver.objects.get(driver_name="Sam") 
+        driver = resolve_driver(suburb)
+
+        if not driver:
+            logger.error(f"Driver missing for suburb: {suburb}")
+            driver = Driver.objects.filter(is_default=True).first()
+
+        if not driver:
+            raise Exception("No default driver configured in system")
+
 
         asyncio.run(send_telegram_notification("✈️ New airport booking has been received."))
 
@@ -76,7 +87,7 @@ def booking_detail(request):
                  pickup_time=pickup_time, start_point=start_point, end_point=end_point, direction=direction, suburb=suburb, street=street,
                  no_of_passenger=no_of_passenger, no_of_baggage=baggage_str, message=message, return_direction=return_direction,
                  return_pickup_date=return_pickup_date_obj, return_flight_number=return_flight_number, return_flight_time=return_flight_time,
-                 return_pickup_time=return_pickup_time, return_start_point=return_start_point, return_end_point=return_end_point, driver=sam_driver,
+                 return_pickup_time=return_pickup_time, return_start_point=return_start_point, return_end_point=return_end_point, driver=driver,
                  price='TBA', pending=True, reminder=False)
         p.region = _get_request_region(request)
         p.save()
@@ -121,8 +132,9 @@ def cruise_booking_detail(request):
             pickup_date_obj, return_pickup_date_obj = parse_booking_dates(pickup_date_str, return_pickup_date_str)
         except ValueError as e:
             return JsonResponse({'success': False, 'error': str(e)})
-            
-        sam_driver = Driver.objects.get(driver_name="Sam")
+        
+        region = _get_request_region(request)
+        driver = get_default_driver_for_region(region)
 
         asyncio.run(send_telegram_notification("🚢 New cruise booking has been received."))
 
@@ -134,8 +146,8 @@ def cruise_booking_detail(request):
                  no_of_passenger=no_of_passenger, no_of_baggage=baggage_str,
                  return_pickup_date=return_pickup_date_obj, return_start_point=return_start_point,
                  return_pickup_time=return_pickup_time, return_end_point=return_end_point,
-                 message=message, driver=sam_driver, pending=True, reminder=False)
-        p.region = _get_request_region(request)
+                 message=message, driver=driver, pending=True, reminder=False, region=region)
+
         p.save()
 
         return booking_success_response(request)
@@ -239,7 +251,7 @@ def confirm_booking_detail(request):
         else:
             pending = True  
 
-        sam_driver = Driver.objects.get(driver_name="Sam")
+        driver = resolve_driver(suburb)
         is_confirmed = False
 
         # Post 모델 저장
@@ -254,7 +266,7 @@ def confirm_booking_detail(request):
             return_start_point=return_start_point, return_end_point=return_end_point,
             message=message, notice=notice, price=final_price, toll=toll_value,
             fuel_surcharge=fuel_surcharge_value, prepay=prepay, pending=pending,
-            paid=paid, cash=cash, is_confirmed=is_confirmed, driver=sam_driver
+            paid=paid, cash=cash, is_confirmed=is_confirmed, driver=driver
         )
         p.region = user.region  # Inquiry에 기록된 region 그대로 이어받기
         p.save()
@@ -333,13 +345,13 @@ def return_trip_detail(request):
         if is_duplicate_submission(Post, email):
             return JsonResponse({'success': False, 'message': 'Duplicate inquiry recently submitted. Please wait before trying again.'})
          
-        sam_driver = Driver.objects.get(driver_name="Sam")  
+        driver = resolve_driver(suburb)  
                     
         p = Post(name=name, company_name=company_name, contact=contact, email=email, pickup_date=pickup_date_obj, flight_number=flight_number, flight_time=flight_time,
                  pickup_time=pickup_time, start_point=start_point, end_point=end_point, direction=direction, suburb=suburb, street=street,
                  no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, cash=cash, prepay=prepay, return_direction=return_direction,
                  return_pickup_date=return_pickup_date_obj, return_flight_number=return_flight_number, return_flight_time=return_flight_time,
-                 return_pickup_time=return_pickup_time, return_start_point=return_start_point, return_end_point=return_end_point, driver=sam_driver,
+                 return_pickup_time=return_pickup_time, return_start_point=return_start_point, return_end_point=return_end_point, driver=driver,
                  price=price, toll=toll, fuel_surcharge=fuel_surcharge)
         p.region = user.region  # 원래 예약의 region 그대로 이어받기
         p.save()

@@ -6,7 +6,7 @@ from django.core.management.base import BaseCommand
 from django.utils import timezone
 from blog.models import Post
 from utils import booking_helper
-from utils.booking_helper import assign_default_driver, build_reminder_context
+from utils.booking_helper import build_reminder_context
 from utils.email import send_template_email, collect_recipients
 from basecamp.modules.date_utils import format_pickup_time_12h
 
@@ -49,7 +49,7 @@ class Command(BaseCommand):
 
     def send_email_task(self, booking_reminders, template_name, subject, target_date):
         for booking_reminder in booking_reminders:
-            driver = assign_default_driver(booking_reminder)
+            driver = booking_reminder.driver
             pickup_time_12h = format_pickup_time_12h(booking_reminder.pickup_time)
             context = build_reminder_context(booking_reminder, pickup_time_12h, driver)
 

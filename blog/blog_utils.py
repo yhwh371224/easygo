@@ -1,8 +1,11 @@
 import logging
 
 from django.utils import timezone
+from django.db.models import Q
 from main.settings import DEFAULT_FROM_EMAIL
 from basecamp.basecamp_utils import render_email_template
+from blog.models import Driver
+from regions.models import RegionSuburb
 from utils.email import send_text_email, send_html_email
 from utils.telegram import send_telegram_sync
 
@@ -137,3 +140,35 @@ def send_payment_notification_email(instance, total_balance, recipient_emails, a
     f"📧 {instance.email}\n"
     f"💰 ${net_amount}"
 )
+    
+   
+def get_default_driver_for_region(region):
+    return Driver.objects.filter(
+        region=region,
+        is_default=True
+    ).first()
+
+
+def resolve_driver(suburb):
+    if not suburb:
+        logger.warning("resolve_driver called with empty suburb")
+        return None
+
+    suburb_obj = RegionSuburb.objects.filter(Q(slug=suburb.lower()) | Q(name__iexact=suburb)).first()
+
+    if not suburb_obj:
+        logger.warning(f"No suburb found for value '{suburb}'")
+        return None
+
+    driver = get_default_driver_for_region(suburb_obj.region)
+
+    if driver: 
+        return driver
+
+    else:
+        logger.warning(
+            f"No default driver for region '{suburb_obj.region.name}' "
+            f"(suburb: '{suburb}')"
+        )
+
+    return Driver.objects.filter(is_default=True).first()

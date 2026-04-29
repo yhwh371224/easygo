@@ -7,6 +7,7 @@ from .models import Region, RegionSuburb
 from .area import get_suburbs
 from articles.models import Post as BlogPost
 from blog.models import Post as Booking, Inquiry, Driver
+from blog.blog_utils import get_default_driver_for_region
 from basecamp.basecamp_utils import (
     is_ajax, parse_baggage, parse_booking_dates,
     booking_success_response, require_turnstile, is_duplicate_submission,
@@ -174,7 +175,7 @@ def region_booking_detail(request, region_slug):
             return JsonResponse({'success': False, 'error': str(e)})
 
         baggage_str = parse_baggage(request)
-        driver = Driver.objects.filter(driver_name="Sam").first()
+        driver = get_default_driver_for_region(region)
 
         asyncio.run(send_telegram_notification("✈️ New airport booking has been received."))
 

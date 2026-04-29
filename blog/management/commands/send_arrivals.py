@@ -6,7 +6,7 @@ from django.core.management.base import BaseCommand
 from blog.models import Post
 
 from utils import booking_helper
-from utils.booking_helper import assign_default_driver, build_reminder_context
+from utils.booking_helper import build_reminder_context
 from utils.email import send_template_email, collect_recipients
 from basecamp.modules.date_utils import format_pickup_time_12h
 from blog.sms_utils import normalize_phone
@@ -149,7 +149,7 @@ class Command(BaseCommand):
             if getattr(booking, "notification_sent", False):
                 continue
 
-            driver = assign_default_driver(booking)
+            driver = booking.driver
             pickup_time_12h = format_pickup_time_12h(booking.pickup_time)
 
             context = build_reminder_context(

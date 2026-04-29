@@ -11,6 +11,7 @@ from main.settings import RECIPIENT_EMAIL
 from utils.email import send_template_email
 from blog.models import Post, Inquiry, Driver
 from blog.sms_utils import send_sms_notice, send_whatsapp_template, format_au_phone
+from blog.blog_utils import resolve_driver
 from csp.constants import NONCE
 from basecamp.basecamp_utils import (
     parse_baggage, handle_email_sending, format_pickup_time_12h,
@@ -69,8 +70,8 @@ def confirmation_detail(request):
         except ValueError as e:
             return JsonResponse({'success': False, 'error': str(e)})
 
-        sam_driver = Driver.objects.get(driver_name="Sam") 
-
+        driver = resolve_driver(suburb)
+        
         # 🧳 개별 수하물 항목 수집
         baggage_str = parse_baggage(request)
 
@@ -78,7 +79,7 @@ def confirmation_detail(request):
                  flight_time=flight_time, pickup_time=pickup_time, start_point=start_point, end_point=end_point, direction=direction, suburb=suburb, street=street,
                  no_of_passenger=no_of_passenger, no_of_baggage=baggage_str, message=message, return_direction=return_direction, return_pickup_date=return_pickup_date_obj, 
                  return_flight_number=return_flight_number, return_flight_time=return_flight_time, return_pickup_time=return_pickup_time, return_start_point=return_start_point,
-                 return_end_point=return_end_point, notice=notice, price=price, paid=paid, cash=cash, prepay=prepay, driver=sam_driver)
+                 return_end_point=return_end_point, notice=notice, price=price, paid=paid, cash=cash, prepay=prepay, driver=driver)
         
         p.save()        
 
