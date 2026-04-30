@@ -95,6 +95,9 @@ def price_detail(request):
             'pickup_date': pickup_date.strftime('%Y-%m-%d'), 
             'start_point': normalized_start_point,
             'end_point': normalized_end_point,
+            # Keep original values (e.g., terminal IDs) for downstream direction resolution.
+            'original_start_point': start_point,
+            'original_end_point': end_point,
             'no_of_passenger': no_of_passenger,
             'condition_met': condition_met,
             'latest_post': latest_post,

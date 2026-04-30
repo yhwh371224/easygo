@@ -137,8 +137,17 @@ def inquiry_details1(request):
         no_of_passenger = request.POST.get('no_of_passenger', '')
         message = request.POST.get('message', '')
         
-        original_start_point = request.session.get('original_start_point', start_point)
-        original_end_point = request.session.get('original_end_point', end_point)
+        # Prefer explicitly carried values (e.g., terminal IDs) over session fallback.
+        original_start_point = (
+            request.POST.get('original_start_point')
+            or request.session.get('original_start_point')
+            or start_point
+        )
+        original_end_point = (
+            request.POST.get('original_end_point')
+            or request.session.get('original_end_point')
+            or end_point
+        )
         
         direction = ""
         suburb = ""
