@@ -11,8 +11,7 @@
 
 {% block extra_css %}
 <style nonce="{{ CSP_NONCE }}">
-{# Avoid ManifestStaticFilesStorage 500s if a region hero image is missing. #}
-.booking-hero {position: relative; background-image: url("/static/basecamp/photos/{{ region.slug }}airport.webp"); background-size: cover; background-position: center; padding-top: 5rem; padding-bottom: 7rem;}
+.booking-hero {position: relative; background-image: url("{% static 'basecamp/photos/' %}{{ region.slug }}airport.webp"); background-size: cover; background-position: center; padding-top: 5rem; padding-bottom: 7rem;}
 .booking-form-col {margin-top: -220px;}
 </style>
 {% endblock %}
