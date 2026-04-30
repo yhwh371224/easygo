@@ -136,7 +136,8 @@ def cruise_booking_detail(request):
         except ValueError as e:
             return JsonResponse({'success': False, 'error': str(e)})
         
-        region = _get_request_region(request)
+        # Cruise transfers are Sydney-only (no region selection required).
+        region = Region.objects.filter(slug='sydney', is_active=True).first()
         driver = get_default_driver_for_region(region)
 
         asyncio.run(send_telegram_notification("🚢 New cruise booking has been received."))
@@ -158,6 +159,74 @@ def cruise_booking_detail(request):
     else:
         return render(request, 'basecamp/booking/cruise_booking.html', {})
 
+
+# point-to-point booking by client (region required)
+@ratelimit(key='ip', rate='5/m', method='POST', block=False)
+@require_turnstile
+def p2p_booking_detail(request):
+    if request.method == "POST":
+        if getattr(request, 'limited', False):
+            if is_ajax(request):
+                return JsonResponse({'success': False, 'message': 'Too many requests. Please wait a moment and try again.'}, status=429)
+            return render(request, '403.html', status=429)
+
+        # Region selection is mandatory (no default region).
+        region = _get_request_region(request)
+        if not region:
+            if is_ajax(request):
+                return JsonResponse({'success': False, 'message': 'Region is required. Please select your city and try again.'}, status=400)
+            return render(request, '400.html', status=400)
+
+        pickup_date_str = request.POST.get('pickup_date', '')
+        return_pickup_date_str = request.POST.get('return_pickup_date', '')
+        name = request.POST.get('name')
+        contact = request.POST.get('contact')
+        email = request.POST.get('email')
+        pickup_time = request.POST.get('pickup_time')
+        start_point = request.POST.get('start_point', '')
+        end_point = request.POST.get('end_point', '')
+        no_of_passenger = request.POST.get('no_of_passenger')
+        message = request.POST.get('message')
+        return_pickup_time = request.POST.get('return_pickup_time')
+        return_start_point = request.POST.get('return_start_point', '')
+        return_end_point = request.POST.get('return_end_point', '')
+
+        # ✅ 중복 제출 방지
+        if is_duplicate_submission(Post, email):
+            return JsonResponse({'success': False, 'message': 'Duplicate inquiry recently submitted. Please wait before trying again.'})
+
+        try:
+            pickup_date_obj, return_pickup_date_obj = parse_booking_dates(pickup_date_str, return_pickup_date_str)
+        except ValueError as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+
+        driver = get_default_driver_for_region(region)
+
+        asyncio.run(send_telegram_notification("🧭 New point-to-point booking has been received."))
+
+        baggage_str = parse_baggage(request)
+
+        p = Post(
+            name=name, contact=contact, email=email,
+            pickup_date=pickup_date_obj,
+            start_point=start_point, end_point=end_point,
+            pickup_time=pickup_time,
+            price='TBA',
+            no_of_passenger=no_of_passenger, no_of_baggage=baggage_str,
+            return_pickup_date=return_pickup_date_obj,
+            return_start_point=return_start_point,
+            return_pickup_time=return_pickup_time,
+            return_end_point=return_end_point,
+            message=message,
+            driver=driver,
+            pending=True, reminder=False,
+            region=region,
+        )
+        p.save()
+
+        return booking_success_response(request)
+
+    return render(request, 'basecamp/booking/p2p_booking_form.html', {"region": _get_request_region(request)})
 
 @ratelimit(key='ip', rate='5/m', method='POST', block=False)
 def confirm_booking_detail(request):

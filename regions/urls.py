@@ -16,6 +16,10 @@ urlpatterns = [
     # Legacy basecamp flows made region-aware (region selection is mandatory).
     path('<slug:region_slug>/price_detail/', views.region_price_detail, name='price_detail'),
     path('<slug:region_slug>/inquiry_details1/', views.region_inquiry_details1, name='inquiry_details1'),
+    path('<slug:region_slug>/p2p_booking/', views.region_p2p_booking, name='p2p_booking'),
+    path('<slug:region_slug>/p2p_booking_detail/', views.region_p2p_booking_detail, name='p2p_booking_detail'),
+    path('<slug:region_slug>/p2p_multi/', views.region_p2p_multi, name='p2p_multi'),
+    path('<slug:region_slug>/p2p_detail/', views.region_p2p_detail, name='p2p_detail'),
     path('<slug:region_slug>/inquiry/', views.region_inquiry, name='inquiry'),
     path('<slug:region_slug>/inquiry_detail/', views.region_inquiry_details, name='inquiry_details'),
     path('<slug:region_slug>/booking/', views.region_booking, name='booking'),

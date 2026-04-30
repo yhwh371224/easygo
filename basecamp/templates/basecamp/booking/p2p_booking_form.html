@@ -1,0 +1,144 @@
+{% extends 'basecamp/base/easygo_base_cruise.html' %}
+{% load static %}
+
+{% block title %}
+EasyGo Point-to-Point Booking Form – {{ region.name|default:"EasyGo" }}
+{% endblock %}
+
+{% block meta %}
+<meta name="description" content="Book your point-to-point transfer with EasyGo Airport Shuttle. Private, luggage-friendly shuttle service.">
+<meta name="keywords" content="point to point booking, private shuttle booking, EasyGo Airport Shuttle">
+<meta name="author" content="easygoshuttle.com.au">
+{% endblock %}
+
+{% block extra_css %}
+<style nonce="{{ CSP_NONCE }}">
+.booking-hero {position: relative; background-image: url("{% static 'basecamp/photos/cruise2.webp' %}"); background-size: cover; background-position: center; padding-top: 5rem; padding-bottom: 7rem;}
+.booking-form-col {margin-top: -220px;}
+@media (max-width: 767.98px){
+  .booking-form-col {margin-top: -140px;}
+}
+</style>
+{% endblock %}
+
+{% block content %}
+  <section class="jarallax booking-hero">
+    <span class="position-absolute top-0 start-0 w-100 h-100 bg-gradient opacity-70"></span>
+    <div class="shape shape-bottom shape-slant bg-body">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 260">
+        <polygon fill="currentColor" points="0,257 0,260 3000,260 3000,0"></polygon>
+      </svg>
+    </div>
+    <div class="container position-relative zindex-5 pt-5 pb-7 pt-md-5">
+      <div class="row justify-content-center pb-7">
+        <div class="col-lg-10 mt-3 mt-md-5 text-center">
+          <h1 class="text-light">Point-to-Point Booking Form</h1>
+          <div class="active" style="color:white">Please complete the form</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="container position-relative zindex-5 pb-5">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-10 col-lg-7 pb-2 mb-5 booking-form-col">
+        <div class="card border-0 shadow-lg">
+          <form action="{% if region %}/{{ region.slug }}/p2p_booking_detail/{% endif %}" method="post" id="booking-form" class="card-body needs-validation p-5" novalidate>
+            {% csrf_token %}
+
+            <div class="mb-3 pb-1">
+              <label class="form-label">Select Region</label>
+              <select id="region-select" class="form-select" style="max-width:220px;"
+                      onchange="var s=this.value;window.location.href=(s==='sydney')?'/p2p_booking/':'/'+s+'/p2p_booking/';" required>
+                <option value="" {% if not region %}selected{% endif %} disabled>Select your city</option>
+                {% for r in active_regions %}
+                  <option value="{{ r.slug }}" {% if region and r.slug == region.slug %}selected{% endif %}>{{ r.name }}</option>
+                {% endfor %}
+              </select>
+              <div class="invalid-feedback">Please select your city.</div>
+            </div>
+
+            <div class="mb-3 pb-1">
+              <label class="form-label" for="name">Full name</label>
+              <input class="form-control" type="text" placeholder="John Doe" required name="name" id="name">
+              <div class="invalid-feedback">Please enter your full name!</div>
+            </div>
+            <div class="mb-3 pb-1">
+              <label class="form-label" for="contact">Mobile phone number</label>
+              <input class="form-control" type="text" placeholder="Your mobile phone number" required name="contact" id="contact">
+              <div class="invalid-feedback">Please enter a valid number!</div>
+            </div>
+            <div class="mb-3 pb-1">
+              <label class="form-label" for="email">Email address</label>
+              <input class="form-control" type="email" placeholder="j.doe@example.com" required name="email" id="email">
+              <div class="invalid-feedback">Please enter a valid email address!</div>
+            </div>
+
+            <br><hr><br>
+
+            <div class="mb-3 pb-1">
+              <label class="form-label" for="flight-date">Pickup date{% if region %}&nbsp;({{ region.name }}){% endif %}</label>
+              <input id="flight-date" class="form-control date-picker rounded" required name="pickup_date" type="text"
+                     placeholder="Choose pickup date"
+                     data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;F j, Y&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;}" required>
+              <div id="date-error" class="invalid-feedback" style="display: none;">Please enter a future date!</div>
+            </div>
+            <div class="mb-3 pb-1">
+              <label class="form-label" for="pickup_time">Pickup time</label>
+              <input class="form-control" type="time" name="pickup_time" required id="pickup_time">
+              <div class="invalid-feedback">Please enter your pickup time!</div>
+            </div>
+            <div class="mb-3 pb-1">
+              <label class="form-label" for="start_point">Pickup location - Start point</label>
+              <input class="form-control" type="text" name="start_point" placeholder="From where" id="start_point" required>
+              <div class="invalid-feedback">Please enter your pickup location!</div>
+            </div>
+            <div class="mb-3 pb-1">
+              <label class="form-label" for="end_point">Drop off location - End point</label>
+              <input class="form-control" type="text" name="end_point" placeholder="Your destination" id="end_point" required>
+              <div class="invalid-feedback">Please enter your drop off location!</div>
+            </div>
+
+            <br><hr><br>
+
+            <div class="mb-3 pb-1">
+              <label class="form-label" for="no_of_passenger">Passengers</label>
+              <select class="form-select" name="no_of_passenger" required id="no_of_passenger">
+                <option value="0">How many people?</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="-1" disabled="disabled">Over 13 (please leave message below)</option>
+              </select>
+            </div>
+
+            <hr class="my-5">
+
+            <div class="mb-3 pb-1">
+              <label class="form-label" for="cont-message">Message</label>
+              <textarea class="form-control" name="message" id="cont-message" rows="5" placeholder="Write your message here"></textarea>
+            </div>
+
+            <br>
+            <div id="errorMessage" style="display:none; color: red; margin-top: 20px;" ></div><br>
+            <div class="cf-turnstile" data-sitekey="{{ CLOUDFLARE_TURNSTILE_SITE_KEY }}"></div>
+            <div class="text-center pt-2">
+              <button class="btn btn-primary" type="submit" id="submitButton">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}
+

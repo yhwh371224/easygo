@@ -18,6 +18,8 @@
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'basecamp/favi/favicon-16x16.png' %}">
     <link rel="manifest" href="{% static 'basecamp/favi/site.webmanifest' %}">         
     <link rel="stylesheet" media="screen" href="{% static 'basecamp/css/theme.min.css' %}">
+    <link rel="preload" href="{% static 'basecamp/css/footer.css' %}" as="style">
+    <link rel="stylesheet" href="{% static 'basecamp/css/footer.css' %}">
     {% block extra_css %}{% endblock %} 
   </head>
   <body>    

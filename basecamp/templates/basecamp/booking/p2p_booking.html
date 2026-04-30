@@ -13,6 +13,9 @@
 <style nonce="{{ CSP_NONCE }}">
 .booking-hero {position: relative; background-image: url("{% static 'basecamp/photos/cruise2.webp' %}"); background-size: cover; background-position: center; padding-top: 5rem; padding-bottom: 7rem;}
 .booking-form-col {margin-top: -220px;}
+@media (max-width: 767.98px){
+  .booking-form-col {margin-top: -140px;}
+}
 </style>
 {% endblock %}
 
@@ -27,7 +30,7 @@
         </div>
         <div class="container position-relative zindex-5 pt-5 pb-7 pt-md-5">
           <div class="row justify-content-center pb-7">
-            <div class="col-lg-10 mt-3 mt-md-5">
+            <div class="col-lg-10 mt-3 mt-md-5 text-center">
               <h1 class="text-light">Multiple Way Points</h1>
               <div class="active" style="color:white">Please complete the form to get the exact price</div>
             </div>
@@ -36,12 +39,23 @@
 	</section>
       <!-- Contact form + details-->
       <section class="container position-relative zindex-5 pb-5">
-        <div class="row">
-          <div class="col-lg-6 col-md-7 offset-lg-1 pb-2 mb-5 booking-form-col">
+        <div class="row justify-content-center">
+          <div class="col-12 col-md-10 col-lg-7 pb-2 mb-5 booking-form-col">
             <div class="card border-0 shadow-lg">
-              <form action="/p2p_booking_detail/" method="post" id="booking-form" class="card-body needs-validation p-5" novalidate>
+              <form action="{% if region %}/{{ region.slug }}/p2p_detail/{% endif %}" method="post" id="booking-form" class="card-body needs-validation p-5" novalidate>
                 {% csrf_token %}
                 {# <input type="text" name="phone_verify" value="" style="display:none !important" tabindex="-1" autocomplete="off"> #}
+				<div class="mb-3 pb-1">
+				  <label class="form-label">Select Region</label>
+				  <select id="region-select" class="form-select" style="max-width:220px;" required
+				          onchange="var s=this.value; document.getElementById('booking-form').action = s ? ('/' + s + '/p2p_detail/') : '';">
+				    <option value="" selected disabled>Select your city</option>
+				    {% for r in active_regions %}
+				      <option value="{{ r.slug }}" {% if region and r.slug == region.slug %}selected{% endif %}>{{ r.name }}</option>
+				    {% endfor %}
+				  </select>
+				  <div class="invalid-feedback">Please select your city.</div>
+				</div>
                 <div class="mb-3 pb-1">
                   <label class="form-label" for="p2p_name">Full name</label>
                   <input class="form-control" type="text"  placeholder="John Doe" required name="p2p_name" id="p2p_name">
@@ -199,24 +213,6 @@
               </form>
             </div>
           </div>
-          <div class="col-lg-4 col-md-4 offset-md-1">
-            <!-- Categories Widget -->
-			<div class="card my-4" id="category-card" >
-				<h5 class="card-header">Reviews from our clients</h5>
-				<div class="card-body" >
-					<div class="row">
-						<div class="col-lg-10 list-unstyled">
-							<li>
-							  <p><strong>You can check the 245 reviews from the clients who have used our company's services</strong></p>								  
-							  <p><a href="/easygo_review/">
-									&raquo;&raquo;&raquo;&nbsp;&nbsp;More Reviews&nbsp;&nbsp;&laquo;&laquo;&laquo;</a></p>
-							</li>
-						</div>
-					</div>
-				</div>
-			</div>
-			
-		  </div>
 		</div>
 	</section>	
 {% endblock %}

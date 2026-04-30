@@ -57,6 +57,8 @@
     <link rel="preload" href="{% static 'basecamp/css/home.css' %}" as="style">
     <link rel="stylesheet" href="{% static 'basecamp/css/head_home.css' %}">
     <link rel="stylesheet" href="{% static 'basecamp/css/home.css' %}">
+    <link rel="preload" href="{% static 'basecamp/css/footer.css' %}" as="style">
+    <link rel="stylesheet" href="{% static 'basecamp/css/footer.css' %}">
     <link rel="stylesheet" href="{% static 'basecamp/css/tiny-slider.css' %}" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="{% static 'basecamp/css/flatpickr.min.css' %}" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="{% static 'basecamp/css/tiny-slider.css' %}"></noscript>
@@ -768,25 +770,7 @@
     </main>
 
     <!-- ===== FOOTER ===== -->
-    <footer class="site-footer bg-dark pt-5 pb-4">
-      <div class="container d-md-flex justify-content-between align-items-center text-center">
-        <ul class="list-inline fs-sm mb-3 order-md-2">
-          <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="mailto:info@easygoshuttle.com.au">Support</a></li>
-          <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="/contact/">Contact</a></li>
-          <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="/privacy/">Privacy Policy</a></li>
-          <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="/terms/">Terms &amp; Conditions</a></li>
-          <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="/maxi-taxi/">Maxi Taxi Info</a></li>
-          <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="/melbourne_airport_transfer/">Melbourne Airport Transfer</a></li>
-          <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="{% url 'articles:post_list' %}">Blog</a></li>
-        </ul>
-        <p class="fs-sm mb-3 order-md-1">
-          <span class="text-light opacity-80 me-1">
-            © <span id="current-year"></span> EasyGo. All rights reserved. Designed and built by
-            <a href="https://sungkam.github.io" target="_blank" rel="noopener" style="color: #ffb347;">EasyCoding</a>
-          </span>
-        </p>
-      </div>
-    </footer>
+    {% include "basecamp/layouts/footer.html" %}
 
     <script src="{% static 'basecamp/js/bootstrap.bundle.min.js' %}" defer></script>
     <script src="{% static 'basecamp/js/min/tiny-slider.js' %}" defer></script>

@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.conf import settings
+from regions.models import Region
 
 
 def sovereign_chauffeurs_v2(request): 
@@ -69,6 +70,16 @@ def p2p(request):
     return render(request, 'basecamp/booking/p2p.html')
 
 def p2p_booking(request):
+    # Booking (creates Post) – region must be explicitly selected.
+    # For the non-prefixed route, show the city selector first (no default region).
+    region = getattr(request, "region", None)
+    if not isinstance(region, Region):
+        region = None
+    return render(request, 'basecamp/booking/p2p_booking_form.html', {"region": region})
+
+
+def p2p_multi(request):
+    # Inquiry/email form for multiple way points (legacy template).
     return render(request, 'basecamp/booking/p2p_booking.html')
 
 def p2p_single(request):

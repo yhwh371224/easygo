@@ -22,3 +22,11 @@ CELERY_TASK_EAGER_PROPAGATES = True
 
 # Disable rate limiting in test environment (tests can exceed per-minute limits).
 RATELIMIT_ENABLE = False
+
+# Tests should not depend on collectstatic/manifest static files.
+STORAGES = {
+    **STORAGES,
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}

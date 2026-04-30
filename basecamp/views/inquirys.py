@@ -287,4 +287,6 @@ def p2p_detail(request):
         return booking_success_response(request)
 
     else:
-        return render(request, 'basecamp/booking/p2p.html', {})
+        # This endpoint is intended for POST submissions only.
+        # Redirect to the P2P booking form instead of rendering a missing template.
+        return redirect('basecamp:p2p_multi')

@@ -33,6 +33,39 @@ def region_inquiry_details1(request, region_slug):
     return inquiry_details1(request)
 
 
+def region_p2p_detail(request, region_slug):
+    """
+    Region-aware wrapper for legacy /p2p_detail/ (basecamp).
+    RegionMiddleware injects request.region based on the URL prefix.
+    """
+    from basecamp.views.inquirys import p2p_detail
+    return p2p_detail(request)
+
+
+def region_p2p_booking(request, region_slug):
+    """
+    Region-aware wrapper for /p2p_booking/ (basecamp).
+    """
+    from basecamp.views.pages import p2p_booking
+    return p2p_booking(request)
+
+
+def region_p2p_multi(request, region_slug):
+    """
+    Region-aware wrapper for /p2p_multi/ (basecamp).
+    """
+    from basecamp.views.pages import p2p_multi
+    return p2p_multi(request)
+
+
+def region_p2p_booking_detail(request, region_slug):
+    """
+    Region-aware wrapper for /p2p_booking_detail/ (basecamp booking).
+    """
+    from basecamp.views.bookings import p2p_booking_detail
+    return p2p_booking_detail(request)
+
+
 # ── Coming Soon ───────────────────────────────────────────────────────────────
 
 def region_coming_soon(request, region_slug):
@@ -69,7 +102,7 @@ def region_home(request, region_slug):
 
 def region_inquiry(request, region_slug):
     region = get_object_or_404(Region, slug=region_slug, is_active=True)
-    suburbs = region.suburbs.filter(is_active=True).order_by('zone', 'name')
+    suburbs = region.suburbs.filter(is_active=True).order_by('name')
     return render(request, 'regions/inquiry.html', {
         'region': region,
         'suburbs': suburbs,
@@ -137,7 +170,7 @@ def region_inquiry_details(request, region_slug):
         return booking_success_response(request)
 
     region = get_object_or_404(Region, slug=region_slug, is_active=True)
-    suburbs = region.suburbs.filter(is_active=True).order_by('zone', 'name')
+    suburbs = region.suburbs.filter(is_active=True).order_by('name')
     return render(request, 'regions/inquiry.html', {'region': region, 'suburbs': suburbs})
 
 
@@ -145,7 +178,7 @@ def region_inquiry_details(request, region_slug):
 
 def region_booking(request, region_slug):
     region = get_object_or_404(Region, slug=region_slug, is_active=True)
-    suburbs = region.suburbs.filter(is_active=True).order_by('zone', 'name')
+    suburbs = region.suburbs.filter(is_active=True).order_by('name')
     return render(request, 'regions/booking.html', {
         'region': region,
         'suburbs': suburbs,

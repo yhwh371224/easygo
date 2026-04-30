@@ -23,6 +23,8 @@
     <link rel="manifest" href="{% static 'basecamp/favi/site.webmanifest' %}">      
     <link rel="stylesheet" href="{% static 'basecamp/css/flatpickr.min.css' %}"/>
     <link rel="stylesheet" href="{% static 'basecamp/css/theme.min.css' %}">
+    <link rel="preload" href="{% static 'basecamp/css/footer.css' %}" as="style">
+    <link rel="stylesheet" href="{% static 'basecamp/css/footer.css' %}">
     <style nonce="{{ CSP_NONCE }}">
     .spinner{border:2px solid rgba(255,255,255,0.3);border-top:2px solid white;border-radius:50%;width:16px;height:16px;display:inline-block;vertical-align:middle;margin-left:8px;animation:spin 0.8s linear infinite}
     @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}

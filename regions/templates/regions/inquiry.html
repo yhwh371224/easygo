@@ -45,6 +45,14 @@
             <form method="post" enctype="multipart/form-data" id="booking-form" action="/{{ region.slug }}/inquiry_detail/" class="card-body needs-validation p-5">
                 {% csrf_token %}
 				<div class="mb-3 pb-1">
+					<label class="form-label">Select Region</label>
+					<select id="region-select" class="form-select" style="max-width:220px;" onchange="var s=this.value;window.location.href=(s==='sydney')?'/inquiry/':'/'+s+'/inquiry/';">
+					  {% for r in active_regions %}
+					    <option value="{{ r.slug }}" {% if r.slug == region.slug %}selected{% endif %}>{{ r.name }}</option>
+					  {% endfor %}
+					</select>
+				</div>
+				<div class="mb-3 pb-1">
 					<p class="form-label mb-1">Personal Information</p>
 				</div>
 				<div class="card text-white bg-secondary p-4">
@@ -129,13 +137,8 @@
 						<label class="form-label" for="suburb">Suburb</label>
 						<select class="form-select" name="suburb" required id="suburb">
 							<option value="" disabled selected>Select your suburb</option>
-							{% regroup suburbs by zone as zone_groups %}
-							{% for zone_group in zone_groups %}
-							  <optgroup label="{{ zone_group.grouper }}">
-							    {% for s in zone_group.list %}
-							      <option value="{{ s.name }}">{{ s.name }}</option>
-							    {% endfor %}
-							  </optgroup>
+							{% for s in suburbs %}
+							  <option value="{{ s.name }}">{{ s.name }}</option>
 							{% endfor %}
 					</select>
 					</div></div>
