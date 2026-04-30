@@ -11,8 +11,8 @@
     {% endblock %}
 
     {% block meta %}
-    <meta name="description" content="Private airport shuttle to {{ region.airport_name }}. Fixed price, meet &amp; greet, 24/7 service. Book online – all {{ region.name }} suburbs covered.">
-    <meta name="keywords" content="{{ region.name }} airport shuttle, {{ region.airport_name }} transfer, private airport transfer {{ region.name }}">
+    <meta name="description" content="Private airport shuttle{% if region and region.primary_airport %} to {{ region.primary_airport.name }}{% endif %}. Fixed price, meet &amp; greet, 24/7 service. Book online – all {{ region.name }} suburbs covered.">
+    <meta name="keywords" content="{{ region.name }} airport shuttle{% if region and region.primary_airport %}, {{ region.primary_airport.name }} transfer{% endif %}, private airport transfer {{ region.name }}">
     <meta name="author" content="easygoshuttle.com.au">
     {% endblock %}
 
@@ -68,7 +68,7 @@
         "@type": "State",
         "name": "{{ region.state_code }}, Australia"
       },
-      "description": "Private airport shuttle service across {{ region.name }}. Fixed price, punctual, luggage-friendly transfer to and from {{ region.airport_name }}.",
+      "description": "Private airport shuttle service across {{ region.name }}. Fixed price, punctual, luggage-friendly transfer{% if region and region.primary_airport %} to and from {{ region.primary_airport.name }}{% endif %}.",
       "priceRange": "$$",
       "openingHours": "Mo-Su 00:00-23:59",
       "aggregateRating": {

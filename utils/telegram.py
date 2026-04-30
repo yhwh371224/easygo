@@ -1,8 +1,17 @@
 import requests
 from django.conf import settings
 
+import os
+
+
+def is_test_env():
+    return os.environ.get("PYTEST_RUNNING") == "1"
+
 
 async def send_telegram_notification(text: str):
+    if is_test_env():
+        return
+    
     import telegram
     bot = telegram.Bot(token=settings.TELEGRAM_BOT_TOKEN)
     await bot.send_message(
@@ -13,6 +22,9 @@ async def send_telegram_notification(text: str):
 
 
 def send_telegram_sync(text: str):
+    if is_test_env():
+        return
+
     token = settings.TELEGRAM_BOT_TOKEN
     chat_id = settings.TELEGRAM_CHAT_ID
     url = f"https://api.telegram.org/bot{token}/sendMessage"

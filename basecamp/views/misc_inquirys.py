@@ -6,6 +6,7 @@ from django.db.models import Q
 from django.http import JsonResponse
 from main.settings import RECIPIENT_EMAIL
 from basecamp.area import get_suburbs
+from regions.models import Terminal
 from basecamp.basecamp_utils import (
     is_ajax, parse_date,
     verify_turnstile, get_sorted_suburbs,
@@ -13,6 +14,14 @@ from basecamp.basecamp_utils import (
 )
 from articles.models import Post
 from django_ratelimit.decorators import ratelimit
+from basecamp.views.inquirys import _get_request_region, _resolve_terminal
+
+
+def _airport_terminals_for_request(request):
+    region = _get_request_region(request)
+    if not region:
+        return Terminal.objects.none()
+    return Terminal.objects.filter(airport__in=region.airports.all()).select_related("airport")
 
 
 @ratelimit(key='ip', rate='5/m', method='POST', block=False)
@@ -23,7 +32,13 @@ def price_detail(request):
         if getattr(request, 'limited', False):
             if is_ajax(request):
                 return JsonResponse({'success': False, 'message': 'Too many requests. Please wait a moment and try again.'}, status=429)
-            return render(request, 'basecamp/403.html', status=429)
+            return render(request, '403.html', status=429)
+
+        # Region selection is mandatory for airport terminal resolution.
+        if not _get_request_region(request):
+            if is_ajax(request):
+                return JsonResponse({'success': False, 'message': 'Region is required. Please select your city and try again.'}, status=400)
+            return render(request, 'basecamp/error/home_error.html', status=400)
         pickup_date_str = request.POST.get('pickup_date', '')  
         start_point = request.POST.get('start_point')
         end_point = request.POST.get('end_point')
@@ -42,6 +57,7 @@ def price_detail(request):
                 'error_message': str(e),
                 'suburbs': get_suburbs(),
                 'home_suburbs': get_sorted_suburbs(),
+                'airport_terminals': _airport_terminals_for_request(request),
                 'google_review_url': settings.GOOGLE_REVIEW_URL,
                 'latest_post': latest_post,
                 'start_point_value': start_point if start_point != 'Select your option' else '',
@@ -55,10 +71,19 @@ def price_detail(request):
         normalized_start_point = start_point
         normalized_end_point = end_point
 
-        if start_point in ["Sydney Int'l Airport", "Sydney Domestic Airport"]:
+        region = _get_request_region(request)
+
+        if not region:
+            start_terminal = None
+            end_terminal = None
+        else:
+            start_terminal = _resolve_terminal(region, start_point)
+            end_terminal = _resolve_terminal(region, end_point)
+
+        if start_terminal:
             normalized_start_point = 'Airport'
 
-        if end_point in ["Sydney Int'l Airport", "Sydney Domestic Airport"]:
+        if end_terminal:
             normalized_end_point = 'Airport'
 
         condition_met = not (
@@ -78,9 +103,11 @@ def price_detail(request):
         return render(request, 'basecamp/booking/inquiry1.html', context)
 
     else:
+        # Region-less legacy home can still render, but it won't allow terminal-based pricing.
         return render(request, 'basecamp/home.html', {
             'suburbs': get_suburbs(),
             'home_suburbs': sorted_suburbs,
+            'airport_terminals': _airport_terminals_for_request(request),
             'google_review_url': settings.GOOGLE_REVIEW_URL,
             'latest_post': latest_post,
         })
@@ -94,7 +121,7 @@ def contact_submit(request):
         if getattr(request, 'limited', False):
             if is_ajax(request):
                 return JsonResponse({'success': False, 'message': 'Too many requests. Please wait a moment and try again.'}, status=429)
-            return render(request, 'basecamp/403.html', status=429)
+            return render(request, '403.html', status=429)
 
         name = request.POST.get('name')
         contact = request.POST.get('contact')

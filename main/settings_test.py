@@ -19,3 +19,6 @@ CACHES = {
 
 CELERY_TASK_ALWAYS_EAGER = True
 CELERY_TASK_EAGER_PROPAGATES = True
+
+# Disable rate limiting in test environment (tests can exceed per-minute limits).
+RATELIMIT_ENABLE = False

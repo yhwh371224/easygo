@@ -9,12 +9,6 @@ class Region(models.Model):
     timezone = models.CharField(max_length=50)
     is_active = models.BooleanField(default=True)
 
-    # Airport
-    airport_code = models.CharField(max_length=10)
-    airport_name = models.CharField(max_length=100, blank=True)
-    airport_lat = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True)
-    airport_lng = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True)
-
     # Contact & location
     phone = models.CharField(max_length=20)
     phone_display = models.CharField(max_length=20, blank=True)
@@ -30,12 +24,62 @@ class Region(models.Model):
     terminal_info = models.JSONField(blank=True, null=True)
     meeting_point = models.TextField(blank=True)
     arrival_guide = models.TextField(blank=True)
+    # New scalable airport structure (backward compatible)
+    airports = models.ManyToManyField("Airport", blank=True, related_name="regions")
+    primary_airport = models.ForeignKey(
+        "Airport",
+        on_delete=models.PROTECT,
+        related_name="primary_for_regions",
+        null=True,
+        blank=True,
+    )
 
     class Meta:
         ordering = ['name']
 
     def __str__(self):
         return self.name
+
+class Country(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+
+    class Meta:
+        ordering = ["name"]
+
+    def __str__(self):
+        return self.name
+
+
+class Airport(models.Model):
+    country = models.ForeignKey(Country, on_delete=models.PROTECT, related_name="airports")
+    city = models.CharField(max_length=100)
+    code = models.CharField(max_length=10, unique=True)
+    name = models.CharField(max_length=150, blank=True)
+    lat = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True)
+    lng = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True)
+
+    class Meta:
+        ordering = ["code"]
+
+    def __str__(self):
+        return f"{self.code} — {self.city}"
+
+
+class Terminal(models.Model):
+    class TerminalType(models.TextChoices):
+        INTL = "intl", "International"
+        DOMESTIC = "domestic", "Domestic"
+
+    airport = models.ForeignKey(Airport, on_delete=models.CASCADE, related_name="terminals")
+    name = models.CharField(max_length=100)
+    type = models.CharField(max_length=10, choices=TerminalType.choices)
+
+    class Meta:
+        ordering = ["airport__code", "type", "name"]
+        unique_together = [("airport", "type", "name")]
+
+    def __str__(self):
+        return f"{self.airport.code} {self.get_type_display()} — {self.name}"
 
 
 class RegionSuburb(models.Model):

@@ -1,8 +1,10 @@
 import asyncio
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
+from django.conf import settings
 from blog.models import Inquiry
 from regions.models import Region
+from regions.models import Terminal
 from basecamp.basecamp_utils import (
     is_ajax, parse_baggage, parse_date, handle_email_sending,
     verify_turnstile,
@@ -14,14 +16,33 @@ from utils.telegram import send_telegram_notification
 
 
 def _get_request_region(request):
-    """URL 접두사에서 감지된 Region을 반환. 없으면 Sydney 기본값."""
+    """URL 접두사에서 감지된 Region을 반환. 없으면 None."""
     region = getattr(request, 'region', None)
     if isinstance(region, Region):
         return region
-    try:
-        return Region.objects.get(slug='sydney')
-    except Region.DoesNotExist:
+    return None
+
+
+def _terminals_for_region(region: Region):
+    if not region:
+        return Terminal.objects.none()
+    return Terminal.objects.filter(airport__in=region.airports.all()).select_related("airport")
+
+
+def _resolve_terminal(region: Region, raw_value: str):
+    """
+    Resolve a Terminal object from a form value.
+    - Preferred: terminal id (stringified int)
+    """
+    if not region or not raw_value:
         return None
+    qs = _terminals_for_region(region)
+    value = str(raw_value).strip()
+
+    if value.isdigit():
+        return qs.filter(pk=int(value)).first()
+
+    return None
 
 
 # Inquiry for airport
@@ -32,7 +53,7 @@ def inquiry_details(request):
         if getattr(request, 'limited', False):
             if is_ajax(request):
                 return JsonResponse({'success': False, 'message': 'Too many requests. Please wait a moment and try again.'}, status=429)
-            return render(request, 'basecamp/403.html', status=429)
+            return render(request, '403.html', status=429)
         name = request.POST.get('name', '')
         contact = request.POST.get('contact', '')
         email = request.POST.get('email', '')  
@@ -102,7 +123,7 @@ def inquiry_details1(request):
         if getattr(request, 'limited', False):
             if is_ajax(request):
                 return JsonResponse({'success': False, 'message': 'Too many requests. Please wait a moment and try again.'}, status=429)
-            return render(request, 'basecamp/403.html', status=429)
+            return render(request, '403.html', status=429)
         pickup_date_str = request.POST.get('pickup_date', '')
         name = request.POST.get('name', '')
         contact = request.POST.get('contact', '')
@@ -122,6 +143,13 @@ def inquiry_details1(request):
         direction = ""
         suburb = ""
 
+        region = _get_request_region(request)
+        if not region:
+            # Region selection is mandatory for terminal-based inquiry routing.
+            if is_ajax(request):
+                return JsonResponse({'success': False, 'message': 'Region is required. Please select your city and try again.'}, status=400)
+            return render(request, '400.html', status=400)
+
         try:
             pickup_date_obj = parse_date(pickup_date_str, field_name="Pickup Date", required=True)
         except ValueError as e:
@@ -130,26 +158,42 @@ def inquiry_details1(request):
         if is_duplicate_submission(Inquiry, email):
             return JsonResponse({'success': False, 'message': 'Duplicate inquiry recently submitted. Please wait before trying again.'})
 
-        if original_start_point == "Sydney Int'l Airport":
-            direction = 'Pickup from Intl Airport'
-            suburb = original_end_point
-            start_point = ''
-            end_point = ''
-        elif original_start_point == "Sydney Domestic Airport":
-            direction = 'Pickup from Domestic Airport'
-            suburb = original_end_point
-            start_point = ''
-            end_point = ''
-        elif original_end_point == "Sydney Int'l Airport":
-            direction = 'Drop off to Intl Airport'
-            suburb = original_start_point
-            end_point = ''
-            start_point = ''
-        elif original_end_point == "Sydney Domestic Airport":
-            direction = 'Drop off to Domestic Airport'
-            suburb = original_start_point
-            end_point = ''
-            start_point = ''
+        start_terminal = _resolve_terminal(region, original_start_point)
+        end_terminal = _resolve_terminal(region, original_end_point)
+
+        direction = ""
+        suburb = ""
+
+        # ❗ 핵심 추가: region 없으면 무조건 skip
+        if not region:
+            start_terminal = None
+            end_terminal = None
+
+        # ✅ 1. pickup 우선
+        if start_terminal:
+            if start_terminal.type == Terminal.TerminalType.INTL:
+                direction = 'Pickup from Intl Airport'
+                suburb = original_end_point
+                start_point = ''
+                end_point = ''
+            elif start_terminal.type == Terminal.TerminalType.DOMESTIC:
+                direction = 'Pickup from Domestic Airport'
+                suburb = original_end_point
+                start_point = ''
+                end_point = ''
+
+        # ✅ 2. dropoff (pickup 없을 때만)
+        elif end_terminal:
+            if end_terminal.type == Terminal.TerminalType.INTL:
+                direction = 'Drop off to Intl Airport'
+                suburb = original_start_point
+                start_point = ''
+                end_point = ''
+            elif end_terminal.type == Terminal.TerminalType.DOMESTIC:
+                direction = 'Drop off to Domestic Airport'
+                suburb = original_start_point
+                start_point = ''
+                end_point = ''
 
         baggage_str = parse_baggage(request)
 
@@ -180,7 +224,7 @@ def p2p_detail(request):
         if getattr(request, 'limited', False):
             if is_ajax(request):
                 return JsonResponse({'success': False, 'message': 'Too many requests. Please wait a moment and try again.'}, status=429)
-            return render(request, 'basecamp/403.html', status=429)
+            return render(request, '403.html', status=429)
         p2p_name = request.POST.get('p2p_name')
         p2p_phone = request.POST.get('p2p_phone')
         p2p_email = request.POST.get('p2p_email')

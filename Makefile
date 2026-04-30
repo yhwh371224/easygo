@@ -23,3 +23,15 @@ article:
 
 bot:
 	python3 manage.py run_telegram_bo
+
+check:
+	python3 manage.py check
+
+pytest:
+	pytest -v --cov=. --cov-report=term-missing
+
+testflow:
+	pytest tests/test_terminal_flow.py -v
+
+
+

@@ -12,7 +12,7 @@ class RegionSuburbInline(admin.TabularInline):
 
 @admin.register(Region)
 class RegionAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug', 'airport_code', 'state_code', 'phone', 'phone_display', 'is_active')
+    list_display = ('name', 'slug', 'primary_airport', 'state_code', 'phone', 'phone_display', 'is_active')
     list_editable = ('is_active',)
     prepopulated_fields = {'slug': ('name',)}
     inlines = [RegionSuburbInline]
@@ -20,8 +20,8 @@ class RegionAdmin(admin.ModelAdmin):
         (None, {
             'fields': ('slug', 'name', 'state_code', 'timezone', 'is_active'),
         }),
-        ('Airport', {
-            'fields': ('airport_code', 'airport_name', 'airport_lat', 'airport_lng'),
+        ('Airports', {
+            'fields': ('primary_airport', 'airports',),
         }),
         ('Contact & Location', {
             'fields': ('phone', 'phone_display', 'address', 'latitude', 'longitude'),

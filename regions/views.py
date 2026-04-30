@@ -15,6 +15,23 @@ from basecamp.basecamp_utils import (
 from utils.telegram import send_telegram_notification
 
 
+def region_price_detail(request, region_slug):
+    """
+    Region-aware wrapper for legacy /price_detail/ (basecamp).
+    RegionMiddleware injects request.region based on the URL prefix.
+    """
+    from basecamp.views.misc_inquirys import price_detail
+    return price_detail(request)
+
+
+def region_inquiry_details1(request, region_slug):
+    """
+    Region-aware wrapper for legacy /inquiry_details1/ (basecamp).
+    RegionMiddleware injects request.region based on the URL prefix.
+    """
+    from basecamp.views.inquirys import inquiry_details1
+    return inquiry_details1(request)
+
 
 # ── Coming Soon ───────────────────────────────────────────────────────────────
 
@@ -66,7 +83,7 @@ def region_inquiry_details(request, region_slug):
         if getattr(request, 'limited', False):
             if is_ajax(request):
                 return JsonResponse({'success': False, 'message': 'Too many requests. Please wait a moment and try again.'}, status=429)
-            return render(request, 'basecamp/403.html', status=429)
+            return render(request, '403.html', status=429)
 
         name = request.POST.get('name', '')
         contact = request.POST.get('contact', '')
@@ -142,7 +159,7 @@ def region_booking_detail(request, region_slug):
         if getattr(request, 'limited', False):
             if is_ajax(request):
                 return JsonResponse({'success': False, 'message': 'Too many requests. Please wait a moment and try again.'}, status=429)
-            return render(request, 'basecamp/403.html', status=429)
+            return render(request, '403.html', status=429)
 
         name = request.POST.get('name')
         contact = request.POST.get('contact')

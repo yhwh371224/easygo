@@ -473,14 +473,6 @@ BIRD_VOICE_CHANNEL_ID = config('BIRD_VOICE_CHANNEL_ID')
 HONEYPOT_FIELD_NAME = 'phone_verify' 
 HONEYPOT_VALUE = ''
 
-# MySQL Backup Database Configuration
-MYSQL_CONFIG = {
-    'user': config('DB_USER'),
-    'password': config('DB_USER_PASSWORD'),
-    'host': config('DB_HOST'),
-    'database': config('DB_NAME')
-}
-
 # Banking details (anz, commbank, westpac, nab)
 DEFAULT_BANK_CODE = 'anz'
 

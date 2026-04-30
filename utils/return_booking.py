@@ -76,11 +76,6 @@ def handle_return_trip(instance):
         suburb_val = instance.suburb or ""
 
         region = instance.region
-        if not region:
-            try:
-                region = Region.objects.get(slug='sydney')
-            except Region.DoesNotExist:
-                region = None
 
         # Post 생성에 필요한 필드들을 **kwargs로 묶음
         post_fields = {

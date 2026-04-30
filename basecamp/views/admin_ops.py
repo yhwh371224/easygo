@@ -35,7 +35,7 @@ def confirmation_detail(request):
         if getattr(request, 'limited', False):
             if is_ajax(request):
                 return JsonResponse({'success': False, 'message': 'Too many requests. Please wait a moment and try again.'}, status=429)
-            return render(request, 'basecamp/403.html', status=429)
+            return render(request, '403.html', status=429)
         pickup_date_str = request.POST.get('pickup_date', '')           
         return_pickup_date_str = request.POST.get('return_pickup_date', '')
         company_name = request.POST.get('company_name', '')
@@ -96,7 +96,7 @@ def sending_email_first_detail(request):
         if getattr(request, 'limited', False):
             if is_ajax(request):
                 return JsonResponse({'success': False, 'message': 'Too many requests. Please wait a moment and try again.'}, status=429)
-            return render(request, 'basecamp/403.html', status=429)
+            return render(request, '403.html', status=429)
         email = request.POST.get('email')
         prepay_raw = request.POST.get('prepay')  # May be None
         cash_raw = request.POST.get('cash')  # May be None
@@ -182,7 +182,7 @@ def sending_email_second_detail(request):
         if getattr(request, 'limited', False):
             if is_ajax(request):
                 return JsonResponse({'success': False, 'message': 'Too many requests. Please wait a moment and try again.'}, status=429)
-            return render(request, 'basecamp/403.html', status=429)
+            return render(request, '403.html', status=429)
         email = request.POST.get('email')
         prepay_raw = request.POST.get('prepay')  # May be None
         cash_raw = request.POST.get('cash')  # May be None
@@ -294,7 +294,7 @@ def sending_email_input_data_detail(request):
         if getattr(request, 'limited', False):
             if is_ajax(request):
                 return JsonResponse({'success': False, 'message': 'Too many requests. Please wait a moment and try again.'}, status=429)
-            return render(request, 'basecamp/403.html', status=429)
+            return render(request, '403.html', status=429)
         email = request.POST.get('email')   
         field = request.POST.get('field')        
 
@@ -308,7 +308,7 @@ def sending_email_input_data_detail(request):
                     user = obj
 
         if not user:
-            return render(request, 'basecamp/400.html')
+            return render(request, '400.html')
 
         else:
             template_name = "html_email-input-date.html"
@@ -345,7 +345,7 @@ def email_dispatch_detail(request):
         if getattr(request, 'limited', False):
             if is_ajax(request):
                 return JsonResponse({'success': False, 'message': 'Too many requests. Please wait a moment and try again.'}, status=429)
-            return render(request, 'basecamp/403.html', status=429)
+            return render(request, '403.html', status=429)
         honeypot = request.POST.get('phone_verify', '')
         if honeypot != '':
             return JsonResponse({'success': False, 'error': 'Bot detected.'})

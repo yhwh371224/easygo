@@ -18,14 +18,11 @@ from utils.telegram import send_telegram_notification
 
 
 def _get_request_region(request):
-    """URL 접두사에서 감지된 Region을 반환. 없으면 Sydney 기본값."""
+    """URL 접두사에서 감지된 Region을 반환. 없으면 None."""
     region = getattr(request, 'region', None)
     if isinstance(region, Region):
         return region
-    try:
-        return Region.objects.get(slug='sydney')
-    except Region.DoesNotExist:
-        return None
+    return None
 
 
 # airport booking by client
@@ -36,7 +33,13 @@ def booking_detail(request):
         if getattr(request, 'limited', False):
             if is_ajax(request):
                 return JsonResponse({'success': False, 'message': 'Too many requests. Please wait a moment and try again.'}, status=429)
-            return render(request, 'basecamp/403.html', status=429)
+            return render(request, '403.html', status=429)
+
+        # Region selection is mandatory (no default region).
+        if not _get_request_region(request):
+            if is_ajax(request):
+                return JsonResponse({'success': False, 'message': 'Region is required. Please select your city and try again.'}, status=400)
+            return render(request, '400.html', status=400)
         pickup_date_str = request.POST.get('pickup_date', '')
         return_pickup_date_str = request.POST.get('return_pickup_date', '')
         name = request.POST.get('name')
@@ -106,7 +109,7 @@ def cruise_booking_detail(request):
         if getattr(request, 'limited', False):
             if is_ajax(request):
                 return JsonResponse({'success': False, 'message': 'Too many requests. Please wait a moment and try again.'}, status=429)
-            return render(request, 'basecamp/403.html', status=429)
+            return render(request, '403.html', status=429)
         # ✅ Collect date strings
         pickup_date_str = request.POST.get('pickup_date', '')
         return_pickup_date_str = request.POST.get('return_pickup_date', '')
@@ -162,7 +165,7 @@ def confirm_booking_detail(request):
         if getattr(request, 'limited', False):
             if is_ajax(request):
                 return JsonResponse({'success': False, 'message': 'Too many requests. Please wait a moment and try again.'}, status=429)
-            return render(request, 'basecamp/403.html', status=429)
+            return render(request, '403.html', status=429)
         honeypot = request.POST.get('phone_verify', '')
         if honeypot != '':
             return JsonResponse({'success': False, 'error': 'Bot detected.'})
@@ -308,7 +311,7 @@ def return_trip_detail(request):
         user = Post.objects.filter(Q(email__iexact=email)).first()    
         
         if not user:
-            return render(request, 'basecamp/403.html')    
+            return render(request, '403.html')    
             
         else:
             name = user.name     

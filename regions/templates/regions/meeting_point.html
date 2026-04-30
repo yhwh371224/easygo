@@ -8,8 +8,8 @@
 {% endblock %}
 
 {% block meta %}
-<meta name="description" content="Find your EasyGo driver at {{ region.airport_name }}. Meeting point details for each terminal — T1 International, T2 Qantas, T3 Virgin/Rex, T4 Budget.">
-<meta name="keywords" content="{{ region.name }} airport meeting point, {{ region.airport_code }} driver pickup, EasyGo {{ region.name }}">
+<meta name="description" content="Find your EasyGo driver{% if region and region.primary_airport %} at {{ region.primary_airport.name }}{% endif %}. Meeting point details for each terminal — T1 International, T2 Qantas, T3 Virgin/Rex, T4 Budget.">
+<meta name="keywords" content="{{ region.name }} airport meeting point{% if region and region.primary_airport %}, {{ region.primary_airport.code }} driver pickup{% endif %}, EasyGo {{ region.name }}">
 <meta name="author" content="easygoshuttle.com.au">
 {% endblock %}
 
@@ -40,7 +40,11 @@
 {% block content %}
 <section class="mp-hero">
   <div class="container">
-    <p class="text-warning fw-semibold mb-2 small">{{ region.airport_code }} · {{ region.airport_name }}</p>
+    <p class="text-warning fw-semibold mb-2 small">
+      {% if region and region.primary_airport %}
+        {{ region.primary_airport.code }} · {{ region.primary_airport.name }}
+      {% endif %}
+    </p>
     <h1>Airport Meeting Point</h1>
     <p class="mb-0">Select your terminal below to find where your EasyGo driver will be waiting.</p>
   </div>

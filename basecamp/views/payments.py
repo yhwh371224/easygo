@@ -410,7 +410,7 @@ def create_stripe_checkout_session(request):
         if getattr(request, 'limited', False):
             if is_ajax(request):
                 return JsonResponse({'success': False, 'message': 'Too many requests. Please wait a moment and try again.'}, status=429)
-            return render(request, 'basecamp/403.html', status=429)
+            return render(request, '403.html', status=429)
         session = stripe.checkout.Session.create(
             payment_method_types=['card'],
             line_items=[{

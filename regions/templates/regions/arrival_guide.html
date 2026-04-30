@@ -8,8 +8,8 @@
 {% endblock %}
 
 {% block meta %}
-<meta name="description" content="Step-by-step arrival guide for {{ region.airport_name }}. From landing to meeting your EasyGo driver — baggage claim, customs, and meeting point explained.">
-<meta name="keywords" content="{{ region.name }} airport arrival guide, {{ region.airport_code }} arrivals, what to do after landing {{ region.name }}">
+<meta name="description" content="Step-by-step arrival guide{% if region and region.primary_airport %} for {{ region.primary_airport.name }}{% endif %}. From landing to meeting your EasyGo driver — baggage claim, customs, and meeting point explained.">
+<meta name="keywords" content="{{ region.name }} airport arrival guide{% if region and region.primary_airport %}, {{ region.primary_airport.code }} arrivals{% endif %}, what to do after landing {{ region.name }}">
 <meta name="author" content="easygoshuttle.com.au">
 {% endblock %}
 
@@ -41,7 +41,11 @@
 {% block content %}
 <section class="ag-hero">
   <div class="container">
-    <p class="text-success fw-semibold mb-2 small">{{ region.airport_code }} · {{ region.airport_name }}</p>
+    <p class="text-success fw-semibold mb-2 small">
+      {% if region and region.primary_airport %}
+        {{ region.primary_airport.code }} · {{ region.primary_airport.name }}
+      {% endif %}
+    </p>
     <h1>{{ region.name }} Arrival Guide</h1>
     <p class="mb-0">Follow these steps after landing and your EasyGo driver will be waiting for you.</p>
   </div>

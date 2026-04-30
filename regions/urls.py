@@ -13,6 +13,9 @@ urlpatterns = [
     path('gold-coast/', views.region_coming_soon, {'region_slug': 'gold-coast'}, name='coming_soon_gold_coast'),
 
     path('<slug:region_slug>/', views.region_home, name='home'),
+    # Legacy basecamp flows made region-aware (region selection is mandatory).
+    path('<slug:region_slug>/price_detail/', views.region_price_detail, name='price_detail'),
+    path('<slug:region_slug>/inquiry_details1/', views.region_inquiry_details1, name='inquiry_details1'),
     path('<slug:region_slug>/inquiry/', views.region_inquiry, name='inquiry'),
     path('<slug:region_slug>/inquiry_detail/', views.region_inquiry_details, name='inquiry_details'),
     path('<slug:region_slug>/booking/', views.region_booking, name='booking'),

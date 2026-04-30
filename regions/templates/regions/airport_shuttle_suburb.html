@@ -8,8 +8,8 @@
 {% endblock %}
 
 {% block meta %}
-<meta name="description" content="{% if suburb.meta_description %}{{ suburb.meta_description }}{% else %}Private airport shuttle from {{ suburb.name }} to {{ region.airport_name }}. Fixed price, door-to-door. Book online.{% endif %}">
-<meta name="keywords" content="{{ suburb.name }} airport shuttle, {{ suburb.name }} to {{ region.airport_name }}, airport transfer {{ suburb.name }} {{ region.name }}">
+<meta name="description" content="{% if suburb.meta_description %}{{ suburb.meta_description }}{% else %}Private airport shuttle from {{ suburb.name }}{% if region and region.primary_airport %} to {{ region.primary_airport.name }}{% endif %}. Fixed price, door-to-door. Book online.{% endif %}">
+<meta name="keywords" content="{{ suburb.name }} airport shuttle{% if region and region.primary_airport %}, {{ suburb.name }} to {{ region.primary_airport.name }}{% endif %}, airport transfer {{ suburb.name }} {{ region.name }}">
 <meta name="author" content="easygoshuttle.com.au">
 {% endblock %}
 
@@ -22,8 +22,8 @@
   "@context": "https://schema.org",
   "@type": "Service",
   "serviceType": "Airport Shuttle",
-  "name": "{{ suburb.name }} to {{ region.airport_name }} Shuttle",
-  "description": "Private airport shuttle from {{ suburb.name }} to {{ region.airport_name }}. {% if suburb.price %}Fixed price ${{ suburb.price }}, {% endif %}door-to-door service.",
+  "name": "{{ suburb.name }}{% if region and region.primary_airport %} to {{ region.primary_airport.name }}{% endif %} Shuttle",
+  "description": "Private airport shuttle from {{ suburb.name }}{% if region and region.primary_airport %} to {{ region.primary_airport.name }}{% endif %}. {% if suburb.price %}Fixed price ${{ suburb.price }}, {% endif %}door-to-door service.",
   "provider": {
     "@type": "LocalBusiness",
     "@id": "https://easygoshuttle.com.au/{{ region.slug }}/#localbusiness",
@@ -70,7 +70,7 @@
       <span style="color: #eb7828;">{{ suburb.name }}</span> to {{ region.name }} Airport Shuttle
     </h1>
     <p class="fs-lg text-white opacity-90 mb-3">
-      Fixed price private transfer to {{ region.airport_name }}
+      Fixed price private transfer{% if region and region.primary_airport %} to {{ region.primary_airport.name }}{% endif %}
     </p>
 
     <!-- Price badge -->
@@ -104,14 +104,14 @@
 
       <p>
         Need an airport transfer from <strong>{{ suburb.name }}</strong> to
-        <strong>{{ region.airport_name }}</strong>? EasyGo provides private, fixed-price
+        {% if region and region.primary_airport %}<strong>{{ region.primary_airport.name }}</strong>?{% endif %} EasyGo provides private, fixed-price
         door-to-door shuttle service across {{ region.name }}, including {{ suburb.name }}.
       </p>
 
       <h3 class="h5 fw-semibold mt-4 mb-2">What's Included</h3>
       <ul>
         {% if suburb.price %}<li>Fixed price — ${{ suburb.price }} per vehicle (not per person)</li>{% endif %}
-        <li>Door-to-door from {{ suburb.name }} to {{ region.airport_name }}</li>
+        <li>Door-to-door from {{ suburb.name }}{% if region and region.primary_airport %} to {{ region.primary_airport.name }}{% endif %}</li>
         <li>Meet &amp; greet at arrival terminal</li>
         <li>Flight tracking — no extra charge for delays</li>
         <li>Private vehicle, no shared rides</li>
@@ -129,7 +129,7 @@
       <p>
         {{ suburb.name }} is located in {{ suburb.zone }}, {{ region.state_code }}.
         Your driver will collect you from your door in {{ suburb.name }} and take you
-        directly to {{ region.airport_name }} — no detours, no shared pickups.
+        directly{% if region and region.primary_airport %} to {{ region.primary_airport.name }}{% endif %} — no detours, no shared pickups.
       </p>
 
       <!-- CTA box -->
@@ -155,7 +155,7 @@
           </li>
           <li class="py-2 border-bottom d-flex justify-content-between">
             <span class="text-muted">Destination</span>
-            <span class="fw-medium">{{ region.airport_name }}</span>
+            <span class="fw-medium">{% if region and region.primary_airport %}{{ region.primary_airport.name }}{% endif %}</span>
           </li>
           <li class="py-2 border-bottom d-flex justify-content-between">
             <span class="text-muted">Price</span>
