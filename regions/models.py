@@ -89,6 +89,8 @@ class RegionSuburb(models.Model):
     price = models.DecimalField(max_digits=6, decimal_places=2)
     zone = models.CharField(max_length=50)
     is_active = models.BooleanField(default=True)
+    is_featured = models.BooleanField(default=False)
+    featured_order = models.PositiveSmallIntegerField(default=999)
     meta_title = models.CharField(max_length=60, blank=True)
     meta_description = models.CharField(max_length=500, blank=True)
 
@@ -98,7 +100,7 @@ class RegionSuburb(models.Model):
 
     class Meta:
         unique_together = ('region', 'slug')
-        ordering = ['zone', 'name']
+        ordering = ['featured_order', 'name']
 
     def __str__(self):
         return f"{self.region.name} — {self.name}"

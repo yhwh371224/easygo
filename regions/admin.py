@@ -39,17 +39,17 @@ class RegionAdmin(admin.ModelAdmin):
 @admin.register(RegionSuburb)
 class RegionSuburbAdmin(admin.ModelAdmin):
     ordering = ('region', '-is_pinned', 'sort_order', 'name')  # ← region 먼저
-    list_display = ('name', 'region', 'zone', 'price', 'is_active', 'is_pinned')
-    list_filter = ('region', 'zone', 'is_active', 'is_pinned')
-    list_editable = ('price', 'is_active')
+    list_display = ('name', 'region', 'zone', 'price', 'is_active', 'is_pinned', 'is_featured')
+    list_filter = ('region', 'zone', 'is_active', 'is_pinned', 'is_featured')
+    list_editable = ('price', 'is_active', 'is_featured')
     prepopulated_fields = {'slug': ('name',)}
     search_fields = ('name', 'slug')
     fieldsets = (
         (None, {
             'fields': ('region', 'name', 'slug', 'zone', 'price', 'is_active'),
         }),
-        ('Dropdown ordering', {
-            'fields': ('is_pinned', 'sort_order'),
+        ('Display & Ordering', {
+            'fields': ('is_pinned', 'is_featured', 'sort_order'),
         }),
         ('SEO', {
             'fields': ('meta_title', 'meta_description'),

@@ -33,17 +33,17 @@ def _build_pillar_context(suburb_obj, zone_info):
 
 
 def home(request):
-    suburbs = get_suburbs()  # carousel - 그대로 유지
+    carousel_suburbs = get_suburbs()  # carousel - 그대로 유지
     region = get_object_or_404(Region, slug='sydney', is_active=True)
     home_suburbs = region.suburbs.filter(is_active=True).order_by('-is_pinned', 'sort_order', 'name')
     airport_terminals = Terminal.objects.filter(
-        airport__in=region.airports.all(),
+        airport__in=region.airports.all()
     ).select_related("airport")
     
     latest_post = Post.objects.filter(status='published').order_by('-created_at').first()
 
     return render(request, 'basecamp/home.html', {
-        'suburbs': suburbs,
+        'carousel_suburbs': carousel_suburbs,
         'home_suburbs': home_suburbs,
         'airport_terminals': airport_terminals,
         'google_review_url': settings.GOOGLE_REVIEW_URL,

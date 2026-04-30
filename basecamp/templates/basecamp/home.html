@@ -246,7 +246,7 @@
           <div class="tns-carousel-inner" data-carousel-options="{
               &quot;items&quot;: 3, &quot;nav&quot;: false, &quot;gutter&quot;: 23,
               &quot;responsive&quot;: {&quot;0&quot;:{&quot;items&quot;:1},&quot;540&quot;:{&quot;items&quot;:2},&quot;900&quot;:{&quot;items&quot;:3}}}">
-            {% for suburb, details in suburbs.items %}
+            {% for suburb, details in carousel_suburbs.items %}
               <div class="pb-1">
                 <a class="card border-0 shadow card-hover mx-1" href="/sydney-airport-transfer/{{ suburb|slugify }}/">
                   <span class="badge badge-lg badge-floating badge-floating-end bg-danger badge-price">${{ details.price }}</span>
