@@ -204,6 +204,18 @@ def inquiry_details1(request):
                 start_point = ''
                 end_point = ''
 
+        # Fallback: if normalized "Airport" got posted without a terminal id.
+        elif str(original_start_point).strip().lower() == "airport":
+            direction = "Pickup from Airport"
+            suburb = original_end_point
+            start_point = ''
+            end_point = ''
+        elif str(original_end_point).strip().lower() == "airport":
+            direction = "Drop off to Airport"
+            suburb = original_start_point
+            start_point = ''
+            end_point = ''
+
         baggage_str = parse_baggage(request)
 
         p = Inquiry(
