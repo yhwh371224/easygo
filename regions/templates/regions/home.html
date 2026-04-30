@@ -11,7 +11,7 @@
     <meta name="author" content="easygoshuttle.com.au">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta property="og:title" content="{% if region.meta_title %}{{ region.meta_title }}{% else %}EasyGo Airport Shuttle – 8–13 Seater {{ region.name }}{% endif %}">
-    <meta property="og:image" content="https://easygoshuttle.com.au/static/basecamp/photos/{{ region.slug }}_airport.webp">
+    <meta property="og:image" content="https://easygoshuttle.com.au/static/basecamp/photos/{{ region.slug }}airport.webp">
     <meta property="og:description" content="{% if region.meta_description %}{{ region.meta_description }}{% else %}Traveling with a large group or lots of luggage? EasyGo Airport Shuttle offers private 8–13 seater transfers across {{ region.name }}. Perfect for families, hotel guests & oversized luggage.{% endif %}">
     <meta property="og:url" content="https://easygoshuttle.com.au/{{ region.slug }}/">
     <meta property="og:type" content="website">
@@ -62,7 +62,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css?family=Inter:400,600,700&display=swap" rel="stylesheet">
-    <link rel="preload" fetchpriority="high" as="image" href="{% static 'basecamp/photos/' %}{{ region.slug }}_airport.webp" type="image/webp">
+    {# Avoid ManifestStaticFilesStorage 500s if a region hero image is missing. #}
+    <link rel="preload" fetchpriority="high" as="image" href="/static/basecamp/photos/{{ region.slug }}airport.webp" type="image/webp">
     <link rel="preload" href="{% static 'basecamp/css/head_home.css' %}" as="style">
     <link rel="preload" href="{% static 'basecamp/css/home.css' %}" as="style">
     <link rel="stylesheet" href="{% static 'basecamp/css/head_home.css' %}">
@@ -73,7 +74,7 @@
     <link rel="stylesheet" href="{% static 'basecamp/css/flatpickr.min.css' %}" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="{% static 'basecamp/css/tiny-slider.css' %}"></noscript>
     <style nonce="{{ CSP_NONCE }}">
-      #region-hero { position: relative; isolation: isolate; background-image: url("{% static 'basecamp/photos/' %}{{ region.slug }}_airport.webp"); background-size: cover; background-position: center top; min-height: 100vh; }
+      #region-hero { position: relative; isolation: isolate; background-image: url("/static/basecamp/photos/{{ region.slug }}airport.webp"); background-size: cover; background-position: center top; min-height: 100vh; }
       #region-hero::before { content: ""; position: absolute; inset: 0; background: rgba(0,0,0,0.45); z-index: -1; }
       @media (max-width: 576px) {
         #region-hero { min-height: 60vh; background-position: center; }
