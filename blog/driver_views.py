@@ -249,7 +249,7 @@ def driver_dashboard(request):
             amount = Decimal(str(post.price))
         except Exception:
             continue
-        if post.paid:
+        if post.paid and not post.cash:
             current_total_paid += amount
         elif post.cash:
             current_total_cash += amount

@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from django.utils import timezone
+from django.utils import timezone, timedelta
 from django.db import models
 from blog.models import Post
 
@@ -8,14 +8,14 @@ class Command(BaseCommand):
     help = 'For past bookings with cash=True and paid is empty, fill paid with price'
 
     def handle(self, *args, **kwargs):
-        today = timezone.now().date()
+
+        yesterday = timezone.now().date() - timedelta(days=1)
 
         qs = Post.objects.filter(
-            pickup_date__lt=today,
+            pickup_date=yesterday,
             cancelled=False,
             cash=True,
-            paid__isnull=True,
-            driver__driver_name="Sam",
+            paid__isnull=True,            
         )
 
         updated_count = qs.update(paid=models.F('price'))
