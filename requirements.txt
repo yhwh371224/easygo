@@ -101,6 +101,7 @@ propcache==0.3.2
 proto-plus==1.26.1
 protobuf==6.33.5
 psutil==7.2.2
+psycopg2-binary==2.9.12
 pyasn1==0.6.2
 pyasn1_modules==0.4.2
 pycodestyle==2.14.0
@@ -123,6 +124,7 @@ python-dateutil==2.9.0.post0
 python-decouple==3.8
 python-ipware==3.0.0
 python-memcached==1.62
+python-telegram-bot==22.7
 python-telegram-handler==2.2.1
 python3-openid==3.2.0
 pytz==2026.1.post1
