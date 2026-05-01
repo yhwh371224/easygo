@@ -1,47 +1,63 @@
-import re
 import base64
+import logging
 import os
 
 from celery import shared_task
-from googleapiclient.discovery import build
+from django.conf import settings
 from google.oauth2 import service_account
+from googleapiclient.discovery import build
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from django.conf import settings
-from .email_ai import analyze_email_with_claude, analyze_email_with_openai, analyze_email_dual
+
 from services.gmail_draft_service import GmailDraftService
 
+from .email_ai import analyze_email_dual, analyze_email_with_claude, analyze_email_with_openai
+from .inbound_email import (
+    classify_with_optional_ai_fallback,
+    extract_inbox_message_ids_from_history,
+    extract_plain_body_from_payload,
+    get_thread_history,
+    headers_dict_from_message,
+    load_full_message,
+    load_message_metadata,
+    reply_to_address,
+    system_filter_skip_reason,
+)
 
-LAST_HISTORY_ID_FILE = os.path.join(settings.BASE_DIR, 'scripts', 'last_history_id.txt')
-PROCESSED_LABEL_ID = 'Label_956123326350558597'
-DUAL_MODE = getattr(settings, 'EMAIL_AI_DUAL_MODE', False)
-OPENAI_ONLY = getattr(settings, 'EMAIL_AI_OPENAI_ONLY', False)
+logger = logging.getLogger(__name__)
+
+LAST_HISTORY_ID_FILE = os.path.join(settings.BASE_DIR, "scripts", "last_history_id.txt")
+PROCESSED_LABEL_ID = "Label_956123326350558597"
+DUAL_MODE = getattr(settings, "EMAIL_AI_DUAL_MODE", False)
+OPENAI_ONLY = getattr(settings, "EMAIL_AI_OPENAI_ONLY", False)
+OWN_INBOX_ADDRESS = "info@easygoshuttle.com.au"
 
 EMAIL_SIGNATURE = """
 <p style="font-family: Arial, sans-serif; font-size: 12px; color: #555;"><strong>EasyGo Airport Shuttle</strong></p>
 """
 
+
 def is_message_processed(service, msg_id):
-    email = service.users().messages().get(
-        userId='me',
-        id=msg_id,
-        format='metadata',
-        metadataHeaders=['labelIds']
-    ).execute()
-    return PROCESSED_LABEL_ID in email.get('labelIds', [])
+    email = (
+        service.users()
+        .messages()
+        .get(userId="me", id=msg_id, format="metadata", metadataHeaders=["labelIds"])
+        .execute()
+    )
+    return PROCESSED_LABEL_ID in email.get("labelIds", [])
 
 
 def mark_message_processed(service, msg_id):
     service.users().messages().modify(
-        userId='me',
+        userId="me",
         id=msg_id,
-        body={'addLabelIds': [PROCESSED_LABEL_ID]}
+        body={"addLabelIds": [PROCESSED_LABEL_ID]},
     ).execute()
 
 
 def get_last_history_id():
     if os.path.exists(LAST_HISTORY_ID_FILE):
-        with open(LAST_HISTORY_ID_FILE, 'r') as f:
+        with open(LAST_HISTORY_ID_FILE, "r") as f:
             return f.read().strip()
     return None
 
@@ -49,65 +65,29 @@ def get_last_history_id():
 def save_last_history_id(history_id):
     current = get_last_history_id()
     if not current or int(history_id) > int(current):
-        with open(LAST_HISTORY_ID_FILE, 'w') as f:
+        with open(LAST_HISTORY_ID_FILE, "w") as f:
             f.write(str(history_id))
         return True
     return False
 
 
 def get_gmail_service():
-    SCOPES = ['https://mail.google.com/']
+    scopes = ["https://mail.google.com/"]
     creds = service_account.Credentials.from_service_account_file(
         settings.GMAIL_SERVICE_ACCOUNT_FILE,
-        scopes=SCOPES,
-        subject="info@easygoshuttle.com.au"
+        scopes=scopes,
+        subject=OWN_INBOX_ADDRESS,
     )
-    return build('gmail', 'v1', credentials=creds)
-
-
-def get_email_body(payload):
-    if 'parts' in payload:
-        for part in payload['parts']:
-            if part['mimeType'] == 'text/plain':
-                data = part['body'].get('data', '')
-                if data:
-                    return base64.urlsafe_b64decode(data).decode('utf-8')
-    else:
-        data = payload['body'].get('data', '')
-        if data:
-            return base64.urlsafe_b64decode(data).decode('utf-8')
-    return ''
-
-
-def get_thread_history(service, thread_id, max_messages=3):
-    thread = service.users().threads().get(
-        userId='me',
-        id=thread_id,
-        format='full'
-    ).execute()
-
-    messages = thread.get('messages', [])[-max_messages:]
-
-    history = []
-    for msg in messages:
-        headers = {h['name']: h['value'] for h in msg['payload']['headers']}
-        body = get_email_body(msg['payload'])
-        history.append({
-            'from': headers.get('From', ''),
-            'date': headers.get('Date', ''),
-            'subject': headers.get('Subject', ''),
-            'body': body
-        })
-    return history
+    return build("gmail", "v1", credentials=creds)
 
 
 def create_gmail_draft(service, to, subject, body, thread_id=None):
-    msg = MIMEMultipart('related')
-    msg['to'] = to
-    msg['subject'] = f"Re: {subject}" if subject else "Re: Your Inquiry"
+    msg = MIMEMultipart("related")
+    msg["to"] = to
+    msg["subject"] = f"Re: {subject}" if subject else "Re: Your Inquiry"
 
-    html_body = body.replace('\n', '<br>')
-    
+    html_body = body.replace("\n", "<br>")
+
     html_content = f"""
 <html>
 <body style="font-family: Arial, sans-serif; font-size: 14px; color: #333;">
@@ -115,42 +95,120 @@ def create_gmail_draft(service, to, subject, body, thread_id=None):
 </body>
 </html>
 """
-    
-    html_part = MIMEText(html_content, 'html')
+
+    html_part = MIMEText(html_content, "html")
     msg.attach(html_part)
 
-    raw = base64.urlsafe_b64encode(msg.as_bytes()).decode('utf-8')
+    raw = base64.urlsafe_b64encode(msg.as_bytes()).decode("utf-8")
 
-    draft_body = {'message': {'raw': raw}}
+    draft_body = {"message": {"raw": raw}}
     if thread_id:
-        draft_body['message']['threadId'] = thread_id
+        draft_body["message"]["threadId"] = thread_id
 
-    draft = service.users().drafts().create(
-        userId='me',
-        body=draft_body
-    ).execute()
+    draft = service.users().drafts().create(userId="me", body=draft_body).execute()
 
-    print(f"Draft created: {draft['id']}")
+    logger.info("Draft created: %s", draft.get("id"))
 
-    draft_msg_id = draft.get('message', {}).get('id')
+    draft_msg_id = draft.get("message", {}).get("id")
     if draft_msg_id:
         try:
             service.users().messages().modify(
-                userId='me',
+                userId="me",
                 id=draft_msg_id,
-                body={'removeLabelIds': ['INBOX']}
+                body={"removeLabelIds": ["INBOX"]},
             ).execute()
         except Exception as e:
-            print(f"Failed to remove INBOX label from draft: {e}")
+            logger.warning("Failed to remove INBOX label from draft: %s", e)
 
-    return draft['id']
+    return draft["id"]
+
+
+def _log_skip_non_airport(msg_id: str, detail_reason: str) -> None:
+    """User-facing skip lines; map internal classifier reasons to required log text."""
+    if detail_reason == "no_airport_keywords" and not getattr(
+        settings, "EMAIL_AI_CLASSIFIER_FALLBACK", False
+    ):
+        logger.info("Skipping message %s: no airport keywords", msg_id)
+    else:
+        logger.info("Skipping message %s: classified as OTHER (%s)", msg_id, detail_reason)
+
+
+def _run_ai_reply_and_draft(
+    service,
+    msg_id: str,
+    *,
+    sender: str,
+    reply_to: str,
+    subject: str,
+    body: str,
+    thread_id: str,
+    thread_history_without_current: list,
+) -> None:
+    """Steps 6–7: full AI analysis (existing dual / OpenAI / Claude paths) + draft."""
+    if OPENAI_ONLY:
+        try:
+            result = analyze_email_with_openai(
+                sender, subject, body, thread_history_without_current
+            )
+        except Exception as e:
+            logger.exception("OpenAI API failed for message %s: %s", msg_id, e)
+            return
+
+        if not result:
+            logger.warning("OpenAI API returned empty for message %s", msg_id)
+            return
+
+        reply_body = result["suggested_reply"] + EMAIL_SIGNATURE
+        try:
+            create_gmail_draft(service, reply_to, subject, reply_body, thread_id=thread_id)
+            mark_message_processed(service, msg_id)
+        except Exception as e:
+            logger.exception("Draft creation failed for message %s: %s", msg_id, e)
+
+    elif DUAL_MODE:
+        try:
+            dual_result = analyze_email_dual(
+                sender, subject, body, thread_history_without_current
+            )
+            GmailDraftService().build_comparison_draft(
+                to=reply_to,
+                subject=subject,
+                thread_id=thread_id,
+                analysis_result=dual_result,
+            )
+            mark_message_processed(service, msg_id)
+        except Exception as e:
+            logger.exception("Dual mode draft creation failed for message %s: %s", msg_id, e)
+    else:
+        try:
+            result = analyze_email_with_claude(
+                sender, subject, body, thread_history_without_current
+            )
+        except Exception as e:
+            logger.exception("Claude API failed for message %s: %s", msg_id, e)
+            return
+
+        if not result:
+            logger.warning("Claude API returned empty for message %s", msg_id)
+            return
+
+        reply_body = result["suggested_reply"] + EMAIL_SIGNATURE
+        try:
+            create_gmail_draft(service, reply_to, subject, reply_body, thread_id=thread_id)
+            mark_message_processed(service, msg_id)
+        except Exception as e:
+            logger.exception("Draft creation failed for message %s: %s", msg_id, e)
 
 
 @shared_task
 def gmail_watch_topic(payload):
+    """
+    Pub/Sub → Gmail history → message IDs → metadata → system filters →
+    airport classification → (airport only) AI reply → draft → processed label.
+    """
     service = get_gmail_service()
 
-    history_id = payload.get('historyId')
+    history_id = payload.get("historyId")
     if not history_id:
         return
     history_id = str(history_id)
@@ -160,144 +218,86 @@ def gmail_watch_topic(payload):
         start_history_id = str(int(history_id) - 10)
 
     if int(history_id) <= int(start_history_id):
-        print(f"Already processed historyId: {history_id}, skipping")
+        logger.info("Already processed historyId %s, skipping", history_id)
         return
 
     if not save_last_history_id(history_id):
-        print(f"historyId {history_id} already being processed, skipping")
+        logger.info("historyId %s already being processed, skipping", history_id)
         return
 
     try:
-        history_response = service.users().history().list(
-            userId='me',
-            startHistoryId=start_history_id,
-            historyTypes=['messageAdded'],
-        ).execute()
+        # 1) Fetch Gmail history (INBOX additions only)
+        history_response = (
+            service.users()
+            .history()
+            .list(
+                userId="me",
+                startHistoryId=start_history_id,
+                historyTypes=["messageAdded"],
+            )
+            .execute()
+        )
 
-        messages = []
-        for record in history_response.get('history', []):
-            for msg in record.get('messagesAdded', []):
-                if 'INBOX' in msg['message'].get('labelIds', []):
-                    messages.append(msg['message']['id'])
+        # 2) Extract message IDs (history list pre-filters INBOX)
+        message_ids = extract_inbox_message_ids_from_history(history_response)
 
-        for msg_id in messages:
-            # 1) email get() 호출
-            email = service.users().messages().get(
-                userId='me',
-                id=msg_id,
-                format='metadata',
-                metadataHeaders=['From', 'Subject']
-            ).execute()
+        for msg_id in message_ids:
+            # 3) Load message metadata (labels + From/Subject)
+            meta = load_message_metadata(service, msg_id)
+            label_ids = meta.get("labelIds", [])
+            headers = headers_dict_from_message(meta)
+            sender = headers.get("From", "")
+            subject = headers.get("Subject", "")
 
-            # 2) INBOX 없으면 skip
-            current_labels = email.get('labelIds', [])
-            if 'INBOX' not in current_labels:
-                print(f"Skipping message {msg_id}: not in INBOX (labels: {current_labels})")
+            # 4) System filters (no full body yet)
+            skip_reason = system_filter_skip_reason(
+                label_ids,
+                sender,
+                subject,
+                PROCESSED_LABEL_ID,
+                OWN_INBOX_ADDRESS,
+            )
+            if skip_reason:
+                logger.info("Skipping message %s: %s", msg_id, skip_reason)
+                if "own outbound" in skip_reason.lower():
+                    mark_message_processed(service, msg_id)
                 continue
 
-            # 3) DRAFT 라벨 있으면 skip
-            if 'DRAFT' in current_labels:
-                print(f"Skipping message {msg_id}: is a DRAFT")
-                continue
+            # 5) Full message for body + classification
+            full_email = load_full_message(service, msg_id)
+            body = extract_plain_body_from_payload(full_email.get("payload") or {})
+            thread_id = full_email["threadId"]
 
-            # 4) SENT 라벨 있으면 skip
-            if 'SENT' in current_labels:
-                print(f"Skipping message {msg_id}: is SENT")
-                continue
-
-            # 5) headers에서 sender, subject 추출
-            headers = {h['name']: h['value'] for h in email['payload']['headers']}
-            sender = headers.get('From', '')
-            subject = headers.get('Subject', '')
-
-            # 6) is_message_processed 체크
-            if PROCESSED_LABEL_ID in current_labels:
-                print(f"Already processed message {msg_id}, skipping")
-                continue
-
-            # 7) 자신한테 오는 메일 스킵 (Contact Form 제외)
-            if 'info@easygoshuttle.com.au' in sender and '[New Contact] Submission from' not in subject:
-                print(f"Skipping own email: {subject}")
+            classification, cls_detail = classify_with_optional_ai_fallback(subject, body)
+            if classification != "airport":
+                _log_skip_non_airport(msg_id, cls_detail)
                 mark_message_processed(service, msg_id)
                 continue
 
-            # 8) body, thread_history 로딩
-            full_email = service.users().messages().get(
-                userId='me',
-                id=msg_id,
-                format='full'
-            ).execute()
-
-            thread_id = full_email['threadId']
-            body = get_email_body(full_email['payload'])
+            # Thread context only when we will call reply AI
             thread_history = get_thread_history(service, thread_id)
-
             thread_history_without_current = [
-                m for m in thread_history
-                if m.get('body', '').strip() != body.strip()
+                m for m in thread_history if m.get("body", "").strip() != body.strip()
             ]
 
-            print(f"From: {sender}")
-            print(f"Subject: {subject}")
+            reply_to = reply_to_address(subject, body, sender)
+            logger.info(
+                "Processing airport message %s | classification=%s | reply_to=%s",
+                msg_id,
+                cls_detail,
+                reply_to,
+            )
 
-            # Contact Form 이메일이면 본문에서 이메일 추출
-            if '[New Contact] Submission from' in subject:
-                match = re.search(r'email:\s*(\S+)', body)
-                reply_to = match.group(1) if match else sender
-            else:
-                reply_to = sender
+            _run_ai_reply_and_draft(
+                service,
+                msg_id,
+                sender=sender,
+                reply_to=reply_to,
+                subject=subject,
+                body=body,
+                thread_id=thread_id,
+                thread_history_without_current=thread_history_without_current,
+            )
 
-            if OPENAI_ONLY:
-                try:
-                    result = analyze_email_with_openai(sender, subject, body, thread_history_without_current)
-                except Exception as e:
-                    print(f"OpenAI API failed for message {msg_id}: {e}")
-                    continue
-
-                if not result:
-                    print(f"OpenAI API returned empty for message {msg_id}")
-                    continue
-
-                reply_body = result['suggested_reply'] + EMAIL_SIGNATURE
-
-                try:
-                    create_gmail_draft(service, reply_to, subject, reply_body, thread_id=thread_id)
-                    mark_message_processed(service, msg_id)
-                except Exception as e:
-                    print(f"Draft creation failed for message {msg_id}: {e}")
-
-            elif DUAL_MODE:
-                try:
-                    dual_result = analyze_email_dual(sender, subject, body, thread_history_without_current)
-                    GmailDraftService().build_comparison_draft(
-                        to=reply_to,
-                        subject=subject,
-                        thread_id=thread_id,
-                        analysis_result=dual_result,
-                    )
-                    mark_message_processed(service, msg_id)
-                except Exception as e:
-                    print(f"Dual mode draft creation failed for message {msg_id}: {e}")
-            else:
-                try:
-                    result = analyze_email_with_claude(sender, subject, body, thread_history_without_current)
-                except Exception as e:
-                    print(f"Claude API failed for message {msg_id}: {e}")
-                    continue
-
-                if not result:
-                    print(f"Claude API returned empty for message {msg_id}")
-                    continue
-
-                reply_body = result['suggested_reply'] + EMAIL_SIGNATURE
-
-                try:
-                    create_gmail_draft(service, reply_to, subject, reply_body, thread_id=thread_id)
-                    mark_message_processed(service, msg_id)
-                except Exception as e:
-                    print(f"Draft creation failed for message {msg_id}: {e}")
-
-    except Exception as e:
-        print(f"Error: {e}")
-
-
+    except Exception:
+        logger.exception("gmail_watch_topic failed")

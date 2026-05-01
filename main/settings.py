@@ -438,6 +438,9 @@ CLOUDFLARE_TURNSTILE_SECRET_KEY = config('CLOUDFLARE_TURNSTILE_SECRET_KEY')
 ANTHROPIC_API_KEY = config('ANTHROPIC_API_KEY')
 EMAIL_AI_DUAL_MODE = config('EMAIL_AI_DUAL_MODE', default=False, cast=bool)
 EMAIL_AI_OPENAI_ONLY = config('EMAIL_AI_OPENAI_ONLY', default=False, cast=bool)
+# If True, emails with no airport keywords still get a cheap one-shot AIRPORT/OTHER LLM gate
+# before skipping (extra API cost; default off for strict keyword-only gating).
+EMAIL_AI_CLASSIFIER_FALLBACK = config('EMAIL_AI_CLASSIFIER_FALLBACK', default=False, cast=bool)
 
 # Telegram Bot settings
 TELEGRAM_BOT_TOKEN = config('TELEGRAM_BOT_TOKEN')
