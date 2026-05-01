@@ -216,6 +216,17 @@ LOGGING = {
             'level': 'INFO',
             'propagate': False,
         },
+        # Public booking / inquiry views (logger = logging.getLogger(__name__))
+        'basecamp': {
+            'handlers': ['file', 'console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'regions': {
+            'handlers': ['file', 'console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
     },
 }
 
