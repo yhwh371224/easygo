@@ -35,7 +35,7 @@
       },
       {% endif %}
       "areaServed": [
-        {% for suburb in home_suburbs %}{ "@type": "Place", "name": "{{ suburb.name }}" }{% if not forloop.last %},{% endif %}
+        {% for suburb in form_suburbs %}{ "@type": "Place", "name": "{{ suburb.name }}" }{% if not forloop.last %},{% endif %}
         {% endfor %}
       ],
       "priceRange": "$$",
