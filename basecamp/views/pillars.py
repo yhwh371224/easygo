@@ -13,8 +13,6 @@ from articles.models import Post
 
 logger = logging.getLogger(__name__)
 
-_SYDNEY_SUBURBS = RegionSuburb.objects.filter(region__slug='sydney', is_active=True)
-
 
 def _build_pillar_context(suburb_obj, zone_info):
     name = suburb_obj.name

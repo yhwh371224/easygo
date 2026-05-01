@@ -29,4 +29,5 @@ urlpatterns = [
     path('<slug:region_slug>/arrival-guide/', views.region_arrival_guide, name='arrival_guide'),
     path('<slug:region_slug>/airport-shuttle/', views.region_airport_shuttle_list, name='airport_shuttle_list'),
     path('<slug:region_slug>/airport-shuttle/<slug:suburb_slug>/', views.airport_shuttle_suburb, name='airport_shuttle_suburb'),
+    path('<slug:region_slug>-airport-transfer/<slug:suburb_slug>/', views.airport_shuttle_suburb, name='airport_transfer_suburb'),
 ]

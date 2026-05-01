@@ -79,9 +79,6 @@ def region_coming_soon(request, region_slug):
     """
     Coming soon landing for regions not yet launched.
     """
-    if region_slug == 'melbourne':
-        return redirect('regions:home', region_slug=region_slug, permanent=False)
-
     region = get_object_or_404(Region, slug=region_slug, is_active=True)
     if not region.is_coming_soon:
         return redirect('regions:home', region_slug=region_slug, permanent=False)
