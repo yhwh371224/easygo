@@ -8,6 +8,7 @@ class Region(models.Model):
     state_code = models.CharField(max_length=10, blank=True)
     timezone = models.CharField(max_length=50)
     is_active = models.BooleanField(default=True)
+    is_coming_soon = models.BooleanField(default=False)
 
     # Contact & location
     phone = models.CharField(max_length=20)

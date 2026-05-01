@@ -508,7 +508,7 @@
                   <div class="text-end">
                     {% if current_region and current_region.slug == r.slug %}
                       <span class="badge badge-current">Current</span>
-                    {% elif r.slug == 'brisbane' or r.slug == 'perth' or r.slug == 'adelaide' or r.slug == 'gold-coast' %}
+                    {% elif r.is_coming_soon %}
                       <span class="badge bg-warning text-dark">Coming Soon</span>
                     {% endif %}
                   </div>

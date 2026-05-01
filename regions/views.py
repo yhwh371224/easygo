@@ -78,14 +78,14 @@ def region_p2p_booking_detail(request, region_slug):
 def region_coming_soon(request, region_slug):
     """
     Coming soon landing for regions not yet launched.
-    Melbourne is intentionally excluded.
     """
-    coming_soon_slugs = {'brisbane', 'perth', 'adelaide', 'gold-coast'}
-
-    if region_slug == 'melbourne' or region_slug not in coming_soon_slugs:
+    if region_slug == 'melbourne':
         return redirect('regions:home', region_slug=region_slug, permanent=False)
 
     region = get_object_or_404(Region, slug=region_slug, is_active=True)
+    if not region.is_coming_soon:
+        return redirect('regions:home', region_slug=region_slug, permanent=False)
+
     return render(request, 'regions/coming_soon.html', {'region': region})
 
 

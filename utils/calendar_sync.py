@@ -145,6 +145,8 @@ def build_event_data(instance):
     if common is None:
         return None
 
+    tz = (instance.region.timezone if instance.region_id else None) or 'Australia/Sydney'
+
     baggage_str = abbreviate_baggage(instance.no_of_baggage)
     message = " ".join(filter(None, [
         instance.name,
@@ -164,8 +166,8 @@ def build_event_data(instance):
     return {
         "summary": common["title"],
         "location": common["address"],
-        "start": {"dateTime": common["start"].strftime("%Y-%m-%dT%H:%M:%S"), "timeZone": "Australia/Sydney"},
-        "end": {"dateTime": common["end"].strftime("%Y-%m-%dT%H:%M:%S"), "timeZone": "Australia/Sydney"},
+        "start": {"dateTime": common["start"].strftime("%Y-%m-%dT%H:%M:%S"), "timeZone": tz},
+        "end": {"dateTime": common["end"].strftime("%Y-%m-%dT%H:%M:%S"), "timeZone": tz},
         "description": message,
     }
 
@@ -175,6 +177,8 @@ def build_driver_event_data(instance):
     common = _build_common(instance, contact_display=_get_contact_display(instance))
     if common is None:
         return None
+
+    tz = (instance.region.timezone if instance.region_id else None) or 'Australia/Sydney'
 
     baggage_str = abbreviate_baggage(instance.no_of_baggage)
     description = " ".join(filter(None, [
@@ -187,8 +191,8 @@ def build_driver_event_data(instance):
     return {
         "summary": common["title"],
         "location": common["address"],
-        "start": {"dateTime": common["start"].strftime("%Y-%m-%dT%H:%M:%S"), "timeZone": "Australia/Sydney"},
-        "end": {"dateTime": common["end"].strftime("%Y-%m-%dT%H:%M:%S"), "timeZone": "Australia/Sydney"},
+        "start": {"dateTime": common["start"].strftime("%Y-%m-%dT%H:%M:%S"), "timeZone": tz},
+        "end": {"dateTime": common["end"].strftime("%Y-%m-%dT%H:%M:%S"), "timeZone": tz},
         "description": description,
     }
 
