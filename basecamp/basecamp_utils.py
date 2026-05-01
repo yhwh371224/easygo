@@ -13,6 +13,7 @@ from main import settings
 from basecamp.modules.view_helpers import (   # noqa: F401
     verify_turnstile,
     is_ajax,
+    get_client_ip,
     render_inquiry_done,
     booking_success_response,
     require_turnstile,

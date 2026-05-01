@@ -1,5 +1,6 @@
 from datetime import date
-from django.shortcuts import render
+from django.contrib import messages
+from django.shortcuts import render, redirect
 from django.conf import settings
 from utils.email import send_text_email
 from django.db.models import Q
@@ -24,21 +25,20 @@ def _airport_terminals_for_request(request):
     return Terminal.objects.filter(airport__in=region.airports.all()).select_related("airport")
 
 
-@ratelimit(key='ip', rate='5/m', method='POST', block=False)
+@ratelimit(key='ip', rate='5/m', method='POST', block=True)
 def price_detail(request):
     sorted_suburbs = get_sorted_suburbs()
     latest_post = Post.objects.filter(status='published').order_by('-created_at').first()
     if request.method == "POST":
-        if getattr(request, 'limited', False):
-            if is_ajax(request):
-                return JsonResponse({'success': False, 'message': 'Too many requests. Please wait a moment and try again.'}, status=429)
-            return render(request, '403.html', status=429)
-
         # Region selection is mandatory for airport terminal resolution.
         if not _get_request_region(request):
             if is_ajax(request):
                 return JsonResponse({'success': False, 'message': 'Region is required. Please select your city and try again.'}, status=400)
             return render(request, 'basecamp/error/home_error.html', status=400)
+        post_region = _get_request_region(request)
+        if post_region.slug == 'melbourne':
+            messages.info(request, "Melbourne bookings are not open yet. Please try another region.")
+            return redirect('regions:booking', region_slug='melbourne')
         pickup_date_str = request.POST.get('pickup_date', '')  
         start_point = request.POST.get('start_point')
         end_point = request.POST.get('end_point')
@@ -71,7 +71,7 @@ def price_detail(request):
         normalized_start_point = start_point
         normalized_end_point = end_point
 
-        region = _get_request_region(request)
+        region = post_region
 
         if not region:
             start_terminal = None
@@ -117,15 +117,10 @@ def price_detail(request):
     
 
 # Contact form
-@ratelimit(key='ip', rate='5/m', method='POST', block=False)
+@ratelimit(key='ip', rate='5/m', method='POST', block=True)
 @require_turnstile
 def contact_submit(request):
     if request.method == "POST":
-        if getattr(request, 'limited', False):
-            if is_ajax(request):
-                return JsonResponse({'success': False, 'message': 'Too many requests. Please wait a moment and try again.'}, status=429)
-            return render(request, '403.html', status=429)
-
         name = request.POST.get('name')
         contact = request.POST.get('contact')
         email = request.POST.get('email')

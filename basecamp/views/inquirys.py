@@ -1,4 +1,7 @@
 import asyncio
+import logging
+
+from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.conf import settings
@@ -10,9 +13,13 @@ from basecamp.basecamp_utils import (
     verify_turnstile,
     render_inquiry_done, booking_success_response, require_turnstile,
     is_duplicate_submission, parse_booking_dates, get_customer_status,
+    get_client_ip,
 )
 from django_ratelimit.decorators import ratelimit
 from utils.telegram import send_telegram_notification
+from regions.models import RequestLog
+
+logger = logging.getLogger(__name__)
 
 
 def _get_request_region(request):
@@ -46,14 +53,25 @@ def _resolve_terminal(region: Region, raw_value: str):
 
 
 # Inquiry for airport
-@ratelimit(key='ip', rate='5/m', method='POST', block=False)
+@ratelimit(key='ip', rate='5/m', method='POST', block=True)
 @require_turnstile
 def inquiry_details(request):
     if request.method == "POST":
-        if getattr(request, 'limited', False):
-            if is_ajax(request):
-                return JsonResponse({'success': False, 'message': 'Too many requests. Please wait a moment and try again.'}, status=429)
-            return render(request, '403.html', status=429)
+        post_region = _get_request_region(request)
+        if post_region and post_region.slug == 'melbourne':
+            messages.info(request, "Melbourne inquiries are not open yet. Please try another region.")
+            return redirect('regions:inquiry', region_slug='melbourne')
+        logger.info(
+            f"[INQUIRY] IP={get_client_ip(request)} "
+            f"path={request.path} "
+            f"email={request.POST.get('email')}"
+        )
+        RequestLog.objects.create(
+            region=post_region,
+            path=request.path,
+            ip=get_client_ip(request),
+            user_agent=request.META.get("HTTP_USER_AGENT", ""),
+        )
         name = request.POST.get('name', '')
         contact = request.POST.get('contact', '')
         email = request.POST.get('email', '')  
@@ -104,7 +122,7 @@ def inquiry_details(request):
             return_pickup_time=return_pickup_time, return_start_point=return_start_point,
             return_end_point=return_end_point, message=message
         )
-        p.region = _get_request_region(request)
+        p.region = post_region
         p.save()
 
         asyncio.run(send_telegram_notification("✈️ New inquiry has been received."))
@@ -116,14 +134,25 @@ def inquiry_details(request):
 
 
 # inquiry (simple one) for airport from home page
-@ratelimit(key='ip', rate='5/m', method='POST', block=False)
+@ratelimit(key='ip', rate='5/m', method='POST', block=True)
 @require_turnstile
 def inquiry_details1(request):
     if request.method == "POST":
-        if getattr(request, 'limited', False):
-            if is_ajax(request):
-                return JsonResponse({'success': False, 'message': 'Too many requests. Please wait a moment and try again.'}, status=429)
-            return render(request, '403.html', status=429)
+        post_region = _get_request_region(request)
+        if post_region and post_region.slug == 'melbourne':
+            messages.info(request, "Melbourne inquiries are not open yet. Please try another region.")
+            return redirect('regions:inquiry', region_slug='melbourne')
+        logger.info(
+            f"[INQUIRY] IP={get_client_ip(request)} "
+            f"path={request.path} "
+            f"email={request.POST.get('email')}"
+        )
+        RequestLog.objects.create(
+            region=post_region,
+            path=request.path,
+            ip=get_client_ip(request),
+            user_agent=request.META.get("HTTP_USER_AGENT", ""),
+        )
         pickup_date_str = request.POST.get('pickup_date', '')
         name = request.POST.get('name', '')
         contact = request.POST.get('contact', '')
@@ -152,7 +181,7 @@ def inquiry_details1(request):
         direction = ""
         suburb = ""
 
-        region = _get_request_region(request)
+        region = post_region
         if not region:
             # Region selection is mandatory for terminal-based inquiry routing.
             if is_ajax(request):
@@ -226,7 +255,7 @@ def inquiry_details1(request):
             no_of_passenger=no_of_passenger, no_of_baggage=baggage_str,
             message=message
         )
-        p.region = _get_request_region(request)
+        p.region = post_region
         p.save()
 
         asyncio.run(send_telegram_notification("🏠 Inquiry home page has been received."))
@@ -238,14 +267,25 @@ def inquiry_details1(request):
     
 
 # Multiple points Inquiry
-@ratelimit(key='ip', rate='5/m', method='POST', block=False)
+@ratelimit(key='ip', rate='5/m', method='POST', block=True)
 @require_turnstile
 def p2p_detail(request):
     if request.method == "POST":
-        if getattr(request, 'limited', False):
-            if is_ajax(request):
-                return JsonResponse({'success': False, 'message': 'Too many requests. Please wait a moment and try again.'}, status=429)
-            return render(request, '403.html', status=429)
+        post_region = _get_request_region(request)
+        if post_region and post_region.slug == 'melbourne':
+            messages.info(request, "Melbourne inquiries are not open yet. Please try another region.")
+            return redirect('regions:p2p_multi', region_slug='melbourne')
+        logger.info(
+            f"[INQUIRY] IP={get_client_ip(request)} "
+            f"path={request.path} "
+            f"email={request.POST.get('email')}"
+        )
+        RequestLog.objects.create(
+            region=post_region,
+            path=request.path,
+            ip=get_client_ip(request),
+            user_agent=request.META.get("HTTP_USER_AGENT", ""),
+        )
         p2p_name = request.POST.get('p2p_name')
         p2p_phone = request.POST.get('p2p_phone')
         p2p_email = request.POST.get('p2p_email')

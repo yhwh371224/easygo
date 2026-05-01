@@ -1,4 +1,7 @@
 import asyncio
+import logging
+
+from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 from django.http import JsonResponse
@@ -11,8 +14,12 @@ from blog.blog_utils import get_default_driver_for_region
 from basecamp.basecamp_utils import (
     is_ajax, parse_baggage, parse_booking_dates,
     booking_success_response, require_turnstile, is_duplicate_submission,
+    get_client_ip,
 )
 from utils.telegram import send_telegram_notification
+
+logger = logging.getLogger(__name__)
+from .models import RequestLog
 
 
 def region_price_detail(request, region_slug):
@@ -126,14 +133,25 @@ def region_inquiry(request, region_slug):
     })
 
 
-@ratelimit(key='ip', rate='5/m', method='POST', block=False)
+@ratelimit(key='ip', rate='5/m', method='POST', block=True)
 @require_turnstile
 def region_inquiry_details(request, region_slug):
     if request.method == 'POST':
-        if getattr(request, 'limited', False):
-            if is_ajax(request):
-                return JsonResponse({'success': False, 'message': 'Too many requests. Please wait a moment and try again.'}, status=429)
-            return render(request, '403.html', status=429)
+        if region_slug == 'melbourne':
+            messages.info(request, "Melbourne inquiries are not open yet. Please try another region.")
+            return redirect('regions:inquiry', region_slug='melbourne')
+        region = get_object_or_404(Region, slug=region_slug, is_active=True)
+        logger.info(
+            f"[INQUIRY] IP={get_client_ip(request)} "
+            f"path={request.path} "
+            f"email={request.POST.get('email')}"
+        )
+        RequestLog.objects.create(
+            region=region,
+            path=request.path,
+            ip=get_client_ip(request),
+            user_agent=request.META.get("HTTP_USER_AGENT", ""),
+        )
 
         name = request.POST.get('name', '')
         contact = request.POST.get('contact', '')
@@ -180,7 +198,7 @@ def region_inquiry_details(request, region_slug):
             return_pickup_time=return_pickup_time, return_start_point=return_start_point,
             return_end_point=return_end_point, message=message,
         )
-        p.region = get_object_or_404(Region, slug=region_slug, is_active=True)
+        p.region = region
         p.save()
 
         asyncio.run(send_telegram_notification("✈️ New inquiry has been received."))
@@ -202,14 +220,26 @@ def region_booking(request, region_slug):
     })
 
 
-@ratelimit(key='ip', rate='5/m', method='POST', block=False)
+@ratelimit(key='ip', rate='5/m', method='POST', block=True)
 @require_turnstile
 def region_booking_detail(request, region_slug):
+    region = get_object_or_404(Region, slug=region_slug, is_active=True)
+
     if request.method == 'POST':
-        if getattr(request, 'limited', False):
-            if is_ajax(request):
-                return JsonResponse({'success': False, 'message': 'Too many requests. Please wait a moment and try again.'}, status=429)
-            return render(request, '403.html', status=429)
+        if region.slug == 'melbourne':
+            messages.info(request, "Melbourne bookings are not open yet. Please try another region.")
+            return redirect('regions:booking', region_slug='melbourne')
+        logger.info(
+            f"[BOOKING] IP={get_client_ip(request)} "
+            f"path={request.path} "
+            f"email={request.POST.get('email')}"
+        )
+        RequestLog.objects.create(
+            region=region,
+            path=request.path,
+            ip=get_client_ip(request),
+            user_agent=request.META.get("HTTP_USER_AGENT", ""),
+        )
 
         name = request.POST.get('name')
         contact = request.POST.get('contact')
@@ -260,12 +290,11 @@ def region_booking_detail(request, region_slug):
             return_end_point=return_end_point,
             driver=driver, price='TBA', pending=True, reminder=False,
         )
-        p.region = get_object_or_404(Region, slug=region_slug, is_active=True)
+        p.region = region
         p.save()
 
         return booking_success_response(request)
 
-    region = get_object_or_404(Region, slug=region_slug, is_active=True)
     suburbs = region.suburbs.filter(is_active=True).order_by('zone', 'name')
     return render(request, 'regions/booking.html', {'region': region, 'suburbs': suburbs})
 

@@ -1,6 +1,7 @@
-from asyncio.log import logger
+import logging
 
-from django.shortcuts import render
+from django.contrib import messages
+from django.shortcuts import render, redirect
 from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
 from blog.models import Post, Inquiry, Driver
@@ -10,11 +11,15 @@ from basecamp.basecamp_utils import (
     is_ajax, parse_baggage, parse_date,
     to_bool, verify_turnstile,
     render_inquiry_done, booking_success_response, require_turnstile,
-    is_duplicate_submission, parse_booking_dates
+    is_duplicate_submission, parse_booking_dates, get_client_ip,
 )
 from django_ratelimit.decorators import ratelimit
 import asyncio
 from utils.telegram import send_telegram_notification
+
+logger = logging.getLogger(__name__)
+
+from regions.models import RequestLog
 
 
 def _get_request_region(request):
@@ -26,17 +31,28 @@ def _get_request_region(request):
 
 
 # airport booking by client
-@ratelimit(key='ip', rate='5/m', method='POST', block=False)
+@ratelimit(key='ip', rate='5/m', method='POST', block=True)
 @require_turnstile
 def booking_detail(request):
     if request.method == "POST":
-        if getattr(request, 'limited', False):
-            if is_ajax(request):
-                return JsonResponse({'success': False, 'message': 'Too many requests. Please wait a moment and try again.'}, status=429)
-            return render(request, '403.html', status=429)
+        post_region = _get_request_region(request)
+        if post_region and post_region.slug == 'melbourne':
+            messages.info(request, "Melbourne bookings are not open yet. Please try another region.")
+            return redirect('regions:booking', region_slug='melbourne')
+        logger.info(
+            f"[BOOKING] IP={get_client_ip(request)} "
+            f"path={request.path} "
+            f"email={request.POST.get('email')}"
+        )
+        RequestLog.objects.create(
+            region=post_region,
+            path=request.path,
+            ip=get_client_ip(request),
+            user_agent=request.META.get("HTTP_USER_AGENT", ""),
+        )
 
         # Region selection is mandatory (no default region).
-        if not _get_request_region(request):
+        if not post_region:
             if is_ajax(request):
                 return JsonResponse({'success': False, 'message': 'Region is required. Please select your city and try again.'}, status=400)
             return render(request, '400.html', status=400)
@@ -92,7 +108,7 @@ def booking_detail(request):
                  return_pickup_date=return_pickup_date_obj, return_flight_number=return_flight_number, return_flight_time=return_flight_time,
                  return_pickup_time=return_pickup_time, return_start_point=return_start_point, return_end_point=return_end_point, driver=driver,
                  price='TBA', pending=True, reminder=False)
-        p.region = _get_request_region(request)
+        p.region = post_region
         p.save()
 
         return booking_success_response(request)
@@ -102,14 +118,21 @@ def booking_detail(request):
 
 
 # cruise booking by client
-@ratelimit(key='ip', rate='5/m', method='POST', block=False)
+@ratelimit(key='ip', rate='5/m', method='POST', block=True)
 @require_turnstile
 def cruise_booking_detail(request):
     if request.method == "POST":
-        if getattr(request, 'limited', False):
-            if is_ajax(request):
-                return JsonResponse({'success': False, 'message': 'Too many requests. Please wait a moment and try again.'}, status=429)
-            return render(request, '403.html', status=429)
+        logger.info(
+            f"[BOOKING] IP={get_client_ip(request)} "
+            f"path={request.path} "
+            f"email={request.POST.get('email')}"
+        )
+        RequestLog.objects.create(
+            region=region if 'region' in locals() else None,
+            path=request.path,
+            ip=get_client_ip(request),
+            user_agent=request.META.get("HTTP_USER_AGENT", ""),
+        )
         # ✅ Collect date strings
         pickup_date_str = request.POST.get('pickup_date', '')
         return_pickup_date_str = request.POST.get('return_pickup_date', '')
@@ -161,17 +184,28 @@ def cruise_booking_detail(request):
 
 
 # point-to-point booking by client (region required)
-@ratelimit(key='ip', rate='5/m', method='POST', block=False)
+@ratelimit(key='ip', rate='5/m', method='POST', block=True)
 @require_turnstile
 def p2p_booking_detail(request):
     if request.method == "POST":
-        if getattr(request, 'limited', False):
-            if is_ajax(request):
-                return JsonResponse({'success': False, 'message': 'Too many requests. Please wait a moment and try again.'}, status=429)
-            return render(request, '403.html', status=429)
+        post_region = _get_request_region(request)
+        if post_region and post_region.slug == 'melbourne':
+            messages.info(request, "Melbourne bookings are not open yet. Please try another region.")
+            return redirect('regions:booking', region_slug='melbourne')
+        logger.info(
+            f"[BOOKING] IP={get_client_ip(request)} "
+            f"path={request.path} "
+            f"email={request.POST.get('email')}"
+        )
+        RequestLog.objects.create(
+            region=post_region,
+            path=request.path,
+            ip=get_client_ip(request),
+            user_agent=request.META.get("HTTP_USER_AGENT", ""),
+        )
 
         # Region selection is mandatory (no default region).
-        region = _get_request_region(request)
+        region = post_region
         if not region:
             if is_ajax(request):
                 return JsonResponse({'success': False, 'message': 'Region is required. Please select your city and try again.'}, status=400)
@@ -228,13 +262,20 @@ def p2p_booking_detail(request):
 
     return render(request, 'basecamp/booking/p2p_booking_form.html', {"region": _get_request_region(request)})
 
-@ratelimit(key='ip', rate='5/m', method='POST', block=False)
+@ratelimit(key='ip', rate='5/m', method='POST', block=True)
 def confirm_booking_detail(request):
     if request.method == "POST":
-        if getattr(request, 'limited', False):
-            if is_ajax(request):
-                return JsonResponse({'success': False, 'message': 'Too many requests. Please wait a moment and try again.'}, status=429)
-            return render(request, '403.html', status=429)
+        logger.info(
+            f"[BOOKING] IP={get_client_ip(request)} "
+            f"path={request.path} "
+            f"email={request.POST.get('email')}"
+        )
+        RequestLog.objects.create(
+            region=region if 'region' in locals() else None,
+            path=request.path,
+            ip=get_client_ip(request),
+            user_agent=request.META.get("HTTP_USER_AGENT", ""),
+        )
         honeypot = request.POST.get('phone_verify', '')
         if honeypot != '':
             return JsonResponse({'success': False, 'error': 'Bot detected.'})
@@ -351,9 +392,21 @@ def confirm_booking_detail(request):
         return render(request, 'basecamp/booking/confirm_booking.html', {})
 
 # For Return Trip
+@ratelimit(key='ip', rate='5/m', method='POST', block=True)
 @require_turnstile
 def return_trip_detail(request):
     if request.method == "POST":
+        logger.info(
+            f"[BOOKING] IP={get_client_ip(request)} "
+            f"path={request.path} "
+            f"email={request.POST.get('email')}"
+        )
+        RequestLog.objects.create(
+            region=region if 'region' in locals() else None,
+            path=request.path,
+            ip=get_client_ip(request),
+            user_agent=request.META.get("HTTP_USER_AGENT", ""),
+        )
         pickup_date_str = request.POST.get('pickup_date', '')
         return_pickup_date_str = request.POST.get('return_pickup_date', '')
         email = request.POST.get('email', '').strip()

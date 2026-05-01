@@ -9,6 +9,7 @@ from django.http import JsonResponse
 from django.utils import timezone
 from main import settings
 from blog.models import Inquiry, Post
+from regions.models import RequestLog
 
 
 def verify_turnstile(turnstile_response, remoteip=None):
@@ -28,6 +29,28 @@ def verify_turnstile(turnstile_response, remoteip=None):
 
 def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+
+
+def get_client_ip(request):
+    # 1. Cloudflare (최우선)
+    cf_ip = request.META.get('HTTP_CF_CONNECTING_IP')
+    if cf_ip:
+        return cf_ip
+
+    # 2. X-Forwarded-For
+    xff = request.META.get('HTTP_X_FORWARDED_FOR')
+    if xff:
+        return xff.split(',')[0].strip()
+
+    # 3. fallback
+    return request.META.get('REMOTE_ADDR')
+
+
+def is_suspicious(ip):
+    return RequestLog.objects.filter(
+        ip=ip,
+        created_at__gte=timezone.now() - timedelta(hours=1)
+    ).count() > 20
 
 
 def render_inquiry_done(request):

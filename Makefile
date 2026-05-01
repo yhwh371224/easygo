@@ -33,5 +33,6 @@ pytest:
 testflow:
 	pytest tests/test_terminal_flow.py -v
 
-
+blockip:
+	python3 manage.py reload_blocked
 
