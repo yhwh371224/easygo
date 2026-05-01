@@ -1,5 +1,5 @@
 import logging
-from datetime import date, datetime
+from datetime import datetime
 import pytz
 
 from django.core.management.base import BaseCommand
@@ -40,35 +40,48 @@ class Command(BaseCommand):
     # MAIN FLOW
     # =========================
     def send_today_arrivals(self, arrival_type="all"):
-        target_date = date.today()
-        sydney_tz = pytz.timezone("Australia/Sydney")
-        now_dt = datetime.now(sydney_tz)
+        from regions.models import Region
 
-        queryset = Post.objects.filter(
-            pickup_date=target_date,
-            direction__icontains="Pickup from"
-        ).exclude(cancelled=True).select_related('driver')
+        _DEFAULT_TZ = 'Australia/Sydney'
 
-        if arrival_type == "intl":
-            queryset = queryset.filter(direction="Pickup from Intl Airport")
-        elif arrival_type == "domestic":
-            queryset = queryset.filter(direction="Pickup from Domestic Airport")
+        # One entry per active region; None catches legacy posts with no region assigned.
+        region_tz_pairs = [
+            (r, pytz.timezone(r.timezone or _DEFAULT_TZ))
+            for r in Region.objects.filter(is_active=True).only('id', 'timezone')
+        ]
+        region_tz_pairs.append((None, pytz.timezone(_DEFAULT_TZ)))
 
         booking_list = []
 
-        for b in queryset:
-            if b.pickup_time:
-                try:
-                    pickup_time_obj = datetime.strptime(b.pickup_time, "%H:%M").time()
-                    pickup_dt = datetime.combine(target_date, pickup_time_obj)
+        for region, tz in region_tz_pairs:
+            now_dt = datetime.now(tz)
+            target_date = now_dt.date()
+            now_naive = now_dt.replace(tzinfo=None)
 
-                    if pickup_dt >= now_dt.replace(tzinfo=None):
+            queryset = Post.objects.filter(
+                region=region,
+                pickup_date=target_date,
+                direction__icontains="Pickup from",
+            ).exclude(cancelled=True).select_related('driver')
+
+            if arrival_type == "intl":
+                queryset = queryset.filter(direction="Pickup from Intl Airport")
+            elif arrival_type == "domestic":
+                queryset = queryset.filter(direction="Pickup from Domestic Airport")
+
+            for b in queryset:
+                if b.pickup_time:
+                    try:
+                        pickup_time_obj = datetime.strptime(b.pickup_time, "%H:%M").time()
+                        pickup_dt = datetime.combine(target_date, pickup_time_obj)
+
+                        if pickup_dt >= now_naive:
+                            booking_list.append(b)
+
+                    except ValueError:
                         booking_list.append(b)
-
-                except ValueError:
+                else:
                     booking_list.append(b)
-            else:
-                booking_list.append(b)
 
         if not booking_list:
             msg = f"No {arrival_type} arrivals for today."
