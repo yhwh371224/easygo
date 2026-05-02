@@ -91,6 +91,9 @@ def region_coming_soon(request, region_slug):
 def region_home(request, region_slug):
     region = get_object_or_404(Region, slug=region_slug, is_active=True)
 
+    if region.is_coming_soon:
+        return render(request, 'regions/coming_soon.html', {'region': region})
+
      # Booking form용 (전체 활성 suburb)
     form_suburbs = region.suburbs.filter(is_active=True).order_by('-is_pinned', 'sort_order', 'name')
 

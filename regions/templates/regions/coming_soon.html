@@ -4,336 +4,136 @@
 <head>
   <meta charset="utf-8">
   <title>{{ region.name }} Airport Transfer | Coming Soon | EasyGo</title>
-  <meta name="description" content="EasyGo premium airport transfer service is coming to {{ region.name }}. Fixed prices, professional drivers, door-to-door service. Register to be notified at launch.">
+  <meta name="description" content="EasyGo premium airport transfer service is coming to {{ region.name }}. Fixed prices, professional drivers, door-to-door service.">
   <meta name="robots" content="noindex, nofollow">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta property="og:title" content="EasyGo Airport Shuttle – Coming to {{ region.name }}">
-  <meta property="og:description" content="Premium airport transfer service coming to {{ region.name }} in 2026. Fixed prices, professional drivers, door-to-door.">
-  <meta property="og:type" content="website">
   <link rel="shortcut icon" type="image/x-icon" href="{% static 'basecamp/favi/favicon.ico' %}">
   <link rel="apple-touch-icon" sizes="180x180" href="{% static 'basecamp/favi/apple-touch-icon.png' %}">
   <link rel="icon" type="image/png" sizes="32x32" href="{% static 'basecamp/favi/favicon-32x32.png' %}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css?family=Inter:400,600,700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{% static 'basecamp/css/base_home.css' %}">
+  <link href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700&display=swap" rel="stylesheet">
   <style nonce="{{ CSP_NONCE }}">
-    * { box-sizing: border-box; }
-    body { margin: 0; font-family: 'Inter', Arial, sans-serif; overflow-x: hidden; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    .cs-page {
+    body {
+      font-family: 'Inter', Arial, sans-serif;
       min-height: 100vh;
-      background: linear-gradient(135deg, #0a0e1a 0%, #0d1b3e 35%, #112240 60%, #0a0e1a 100%);
-      position: relative;
-      display: flex;
-      flex-direction: column;
-    }
-    .cs-page::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse at 20% 50%, rgba(255, 107, 53, 0.08) 0%, transparent 60%),
-        radial-gradient(ellipse at 80% 20%, rgba(0, 112, 243, 0.10) 0%, transparent 50%);
-      pointer-events: none;
-    }
-
-    .cs-nav {
-      position: relative;
-      z-index: 10;
-      padding: 1.25rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-    }
-    .cs-logo img { height: 36px; width: auto; }
-    .cs-back {
-      color: rgba(255,255,255,0.7);
-      text-decoration: none;
-      font-size: 0.875rem;
-      font-weight: 500;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      transition: color 0.2s;
-    }
-    .cs-back:hover { color: #fff; }
-    .cs-back::before { content: "←"; font-size: 1rem; }
-
-    .cs-hero {
-      position: relative;
-      z-index: 5;
-      flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 3rem 1.5rem 4rem;
+      background: #0b0f1c;
+      background-image:
+        radial-gradient(ellipse at 15% 40%, rgba(255, 107, 53, 0.12) 0%, transparent 55%),
+        radial-gradient(ellipse at 85% 15%, rgba(0, 112, 243, 0.12) 0%, transparent 50%),
+        radial-gradient(ellipse at 60% 80%, rgba(99, 102, 241, 0.08) 0%, transparent 50%);
+      padding: 2rem 1rem;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 480px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      border-radius: 20px;
+      padding: 3rem 2.5rem 2.5rem;
       text-align: center;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 32px 64px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255,255,255,0.03) inset;
     }
-    .cs-inner { max-width: 680px; width: 100%; }
 
-    .cs-trust-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 100px;
-      padding: 0.35rem 1rem;
-      color: rgba(255,255,255,0.9);
-      font-size: 0.82rem;
-      font-weight: 600;
-      margin-bottom: 2rem;
-      backdrop-filter: blur(8px);
+    .logo {
+      margin-bottom: 2.25rem;
     }
-    .cs-stars { color: #ffc107; letter-spacing: 1px; }
+    .logo img {
+      height: 32px;
+      width: auto;
+      opacity: 0.9;
+    }
 
-    .cs-launch-badge {
+    .badge {
       display: inline-block;
-      background: linear-gradient(90deg, #ff6b35, #ff8c42);
-      color: #fff;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       font-weight: 700;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      padding: 0.3rem 0.9rem;
+      color: #ff6b35;
+      background: rgba(255, 107, 53, 0.12);
+      border: 1px solid rgba(255, 107, 53, 0.25);
       border-radius: 100px;
-      margin-bottom: 1.5rem;
+      padding: 0.3rem 0.9rem;
+      margin-bottom: 1.75rem;
     }
 
-    .cs-headline {
-      font-size: clamp(1.75rem, 5vw, 2.75rem);
+    h1 {
+      font-size: clamp(1.6rem, 5vw, 2.1rem);
       font-weight: 700;
       color: #fff;
       line-height: 1.2;
-      margin: 0 0 1.25rem;
+      margin-bottom: 1rem;
     }
-    .cs-headline .cs-city {
+    h1 .city {
       background: linear-gradient(90deg, #ff6b35, #ffb347);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
 
-    .cs-sub {
-      font-size: 1.05rem;
-      color: rgba(255,255,255,0.7);
-      line-height: 1.7;
-      margin: 0 0 2.5rem;
-    }
-
-    .cs-features {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 0.75rem 1.5rem;
+    .tagline {
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.55);
+      line-height: 1.6;
       margin-bottom: 2.5rem;
     }
-    .cs-feature {
-      display: flex;
+
+    .divider {
+      width: 40px;
+      height: 2px;
+      background: linear-gradient(90deg, #ff6b35, #ffb347);
+      border-radius: 2px;
+      margin: 0 auto 2.5rem;
+    }
+
+    .back-link {
+      display: inline-flex;
       align-items: center;
       gap: 0.4rem;
-      color: rgba(255,255,255,0.75);
-      font-size: 0.875rem;
+      font-size: 0.82rem;
       font-weight: 500;
-    }
-    .cs-feature::before {
-      content: "✓";
-      color: #4ade80;
-      font-weight: 700;
-      font-size: 1rem;
-    }
-
-    .cs-notify-form {
-      display: flex;
-      gap: 0.5rem;
-      max-width: 460px;
-      margin: 0 auto 2rem;
-    }
-    .cs-notify-input {
-      flex: 1;
-      padding: 0.75rem 1rem;
-      border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 8px;
-      background: rgba(255,255,255,0.08);
-      color: #fff;
-      font-size: 0.9rem;
-      outline: none;
-      backdrop-filter: blur(8px);
-      transition: border-color 0.2s;
-    }
-    .cs-notify-input::placeholder { color: rgba(255,255,255,0.4); }
-    .cs-notify-input:focus { border-color: rgba(255, 107, 53, 0.6); }
-    .cs-notify-btn {
-      padding: 0.75rem 1.5rem;
-      background: linear-gradient(90deg, #ff6b35, #ff8c42);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      font-weight: 600;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: opacity 0.2s, transform 0.15s;
-    }
-    .cs-notify-btn:hover { opacity: 0.92; transform: translateY(-1px); }
-
-    .cs-note {
-      font-size: 0.78rem;
-      color: rgba(255,255,255,0.4);
-      margin-bottom: 3rem;
-    }
-
-    .cs-launch-section {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 12px;
-      padding: 1.5rem 2rem;
-      display: inline-block;
-      margin-bottom: 2.5rem;
-    }
-    .cs-launch-label {
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: rgba(255,255,255,0.5);
-      margin-bottom: 0.75rem;
-    }
-    .cs-launch-year {
-      font-size: 2.5rem;
-      font-weight: 700;
-      color: #fff;
-      line-height: 1;
-    }
-    .cs-launch-year span { color: #ff6b35; }
-
-    .cs-existing {
-      padding: 0.6rem 1.2rem;
-      border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 8px;
-      background: transparent;
-      color: rgba(255,255,255,0.7);
-      font-size: 0.85rem;
-      font-weight: 500;
-      cursor: pointer;
+      color: rgba(255, 255, 255, 0.4);
       text-decoration: none;
-      display: inline-block;
-      transition: background 0.2s, color 0.2s, border-color 0.2s;
+      transition: color 0.2s;
     }
-    .cs-existing:hover {
-      background: rgba(255,255,255,0.08);
-      color: #fff;
-      border-color: rgba(255,255,255,0.4);
-    }
-
-    .cs-footer {
-      position: relative;
-      z-index: 5;
-      text-align: center;
-      padding: 1.5rem 2rem;
-      color: rgba(255,255,255,0.35);
-      font-size: 0.78rem;
-      border-top: 1px solid rgba(255,255,255,0.06);
-    }
-    .cs-footer a { color: rgba(255,255,255,0.4); text-decoration: none; }
-    .cs-footer a:hover { color: rgba(255,255,255,0.7); }
+    .back-link:hover { color: rgba(255, 255, 255, 0.75); }
+    .back-link::before { content: "←"; }
 
     @media (max-width: 480px) {
-      .cs-nav { padding: 1rem; }
-      .cs-notify-form { flex-direction: column; }
-      .cs-notify-btn { width: 100%; text-align: center; }
-      .cs-launch-year { font-size: 2rem; }
+      .card { padding: 2.25rem 1.5rem 2rem; border-radius: 16px; }
     }
   </style>
 </head>
 <body>
 
-<div class="cs-page">
+  <div class="card">
 
-  <nav class="cs-nav">
-    <div class="cs-logo">
+    <div class="logo">
       <a href="/">
-        <img src="{% static 'basecamp/images/easygo-logo-final.webp' %}" alt="EasyGo Airport Shuttle" width="120">
+        <img src="{% static 'basecamp/images/easygo-logo-final.webp' %}" alt="EasyGo Airport Shuttle">
       </a>
     </div>
-    <a href="/" class="cs-back">Back to Sydney</a>
-  </nav>
 
-  <div class="cs-hero">
-    <div class="cs-inner">
+    <div class="badge">Coming Soon</div>
 
-      <div class="cs-trust-badge">
-        <span class="cs-stars">★★★★★</span>
-        4.8 / 5 &nbsp;·&nbsp; 376+ Reviews &nbsp;·&nbsp; Award-Winning Service
-      </div>
+    <h1>Airport Transfers<br>to <span class="city">{{ region.name }}</span></h1>
 
-      <div class="cs-launch-badge">Coming 2026</div>
+    <p class="tagline">We're preparing something great.</p>
 
-      <h1 class="cs-headline">
-        Premium Airport Transfers<br>
-        Coming to <span class="cs-city">{{ region.name }}</span>
-      </h1>
+    <div class="divider"></div>
 
-      <p class="cs-sub">
-        We're expanding our award-winning airport transfer service to {{ region.name }}.
-        Fixed prices, professional drivers, door-to-door service — the same quality
-        Sydney and Melbourne travellers already trust.
-      </p>
+    <a href="/" class="back-link">Back to Sydney</a>
 
-      <div class="cs-features">
-        <span class="cs-feature">Fixed prices, no surprises</span>
-        <span class="cs-feature">100% private ride</span>
-        <span class="cs-feature">Real-time flight tracking</span>
-        <span class="cs-feature">8–13 seater vehicles</span>
-        <span class="cs-feature">Available 24/7</span>
-      </div>
-
-      <div class="cs-launch-section">
-        <div class="cs-launch-label">Estimated Launch</div>
-        <div class="cs-launch-year"><span>2026</span></div>
-      </div>
-
-      <p class="cs-sub" style="font-size:0.95rem; margin-top: 1.5rem;">
-        Be the first to know when we launch in {{ region.name }}.<br>
-        Enter your email and we'll notify you at launch — with an exclusive early-bird offer.
-      </p>
-
-      <form class="cs-notify-form" onsubmit="return false;" aria-label="Notify me form">
-        <input
-          type="email"
-          class="cs-notify-input"
-          placeholder="Your email address"
-          aria-label="Email address"
-          autocomplete="email"
-        >
-        <button type="submit" class="cs-notify-btn">Notify Me</button>
-      </form>
-
-      <p class="cs-note">No spam. Unsubscribe anytime. Early-bird discount included.</p>
-
-      <div>
-        <a href="/" class="cs-existing">
-          ← Need a transfer now? View Sydney services
-        </a>
-      </div>
-
-    </div>
   </div>
 
-  <footer class="cs-footer">
-    <p>
-      © <span id="cs-year"></span> EasyGo Airport Shuttle &nbsp;·&nbsp;
-      <a href="/privacy/">Privacy Policy</a> &nbsp;·&nbsp;
-      <a href="/terms/">Terms</a> &nbsp;·&nbsp;
-      <a href="/contact/">Contact</a>
-    </p>
-  </footer>
-
-</div>
-
-<script>
-  document.getElementById('cs-year').textContent = new Date().getFullYear();
-</script>
 </body>
 </html>
