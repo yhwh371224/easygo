@@ -132,7 +132,7 @@ def region_home(request, region_slug):
 
 def region_inquiry(request, region_slug):
     region = get_object_or_404(Region, slug=region_slug, is_active=True)
-    suburbs = region.suburbs.filter(is_active=True).order_by('name')
+    suburbs = region.suburbs.filter(is_active=True).order_by('-is_pinned', 'sort_order', 'name')
     return render(request, 'regions/inquiry.html', {
         'region': region,
         'suburbs': suburbs,
@@ -211,7 +211,7 @@ def region_inquiry_details(request, region_slug):
         return booking_success_response(request)
 
     region = get_object_or_404(Region, slug=region_slug, is_active=True)
-    suburbs = region.suburbs.filter(is_active=True).order_by('name')
+    suburbs = region.suburbs.filter(is_active=True).order_by('-is_pinned', 'sort_order', 'name')
     return render(request, 'regions/inquiry.html', {'region': region, 'suburbs': suburbs})
 
 
@@ -219,7 +219,7 @@ def region_inquiry_details(request, region_slug):
 
 def region_booking(request, region_slug):
     region = get_object_or_404(Region, slug=region_slug, is_active=True)
-    suburbs = region.suburbs.filter(is_active=True).order_by('name')
+    suburbs = region.suburbs.filter(is_active=True).order_by('-is_pinned', 'sort_order', 'name')
     return render(request, 'regions/booking.html', {
         'region': region,
         'suburbs': suburbs,
@@ -301,7 +301,7 @@ def region_booking_detail(request, region_slug):
 
         return booking_success_response(request)
 
-    suburbs = region.suburbs.filter(is_active=True).order_by('zone', 'name')
+    suburbs = region.suburbs.filter(is_active=True).order_by('-is_pinned', 'sort_order', 'name')
     return render(request, 'regions/booking.html', {'region': region, 'suburbs': suburbs})
 
 
