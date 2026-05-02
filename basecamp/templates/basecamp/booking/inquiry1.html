@@ -41,7 +41,7 @@
           <div class="col-lg-7 col-md-7 pb-2 mb-5 booking-form-col">
       <div class="card border-1 shadow-lg">
         <!-- Contact form + details-->  	  
-        <form method="post" enctype="multipart/form-data" id="booking-form" action="/sydney/inquiry_details1/" class="card-body needs-validation p-5" >
+        <form method="post" enctype="multipart/form-data" id="booking-form" action="{% if region_slug %}{% url 'regions:inquiry_details1' region_slug %}{% else %}{% url 'basecamp:inquiry_details1' %}{% endif %}" class="card-body needs-validation p-5" >
           {% csrf_token %}
           {# <input type="text" name="phone_verify" value="" style="display:none !important" tabindex="-1" autocomplete="off"> #}
             <div class="mb-3 pb-1" >

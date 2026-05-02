@@ -119,6 +119,13 @@
               <label class="form-label" for="start-point">Pickup Location</label>
               <select class="form-select" id="start-point" name="start_point" required>
                 <option value="" disabled selected>Select your option</option>
+                {% if airport_terminals %}
+                  <optgroup label="Airport terminals">
+                    {% for t in airport_terminals %}
+                      <option value="{{ t.id }}">{{ t.name }}</option>
+                    {% endfor %}
+                  </optgroup>
+                {% endif %}
                 {% for suburb in form_suburbs %}
                   <option value="{{ suburb.name }}">{{ suburb.name }}</option>
                 {% endfor %}
@@ -130,6 +137,13 @@
               <label class="form-label" for="end-point">Drop-off Location</label>
               <select class="form-select" id="end-point" name="end_point" required>
                 <option value="" disabled selected>Select your option</option>
+                {% if airport_terminals %}
+                  <optgroup label="Airport terminals">
+                    {% for t in airport_terminals %}
+                      <option value="{{ t.id }}">{{ t.name }}</option>
+                    {% endfor %}
+                  </optgroup>
+                {% endif %}
                 {% for suburb in form_suburbs %}
                   <option value="{{ suburb.name }}">{{ suburb.name }}</option>
                 {% endfor %}

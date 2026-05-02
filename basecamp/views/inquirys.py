@@ -33,7 +33,7 @@ def _get_request_region(request):
 def _terminals_for_region(region: Region):
     if not region:
         return Terminal.objects.none()
-    return Terminal.objects.filter(airport__in=region.airports.all()).select_related("airport")
+    return Terminal.objects.filter(airport__regions=region).select_related("airport")
 
 
 def _resolve_terminal(region: Region, raw_value: str):

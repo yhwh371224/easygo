@@ -19,10 +19,12 @@ from basecamp.views.inquirys import _get_request_region, _resolve_terminal
 
 
 def _airport_terminals_for_request(request):
-    region = _get_request_region(request)
+    region = getattr(request, 'region', None)
     if not region:
         return Terminal.objects.none()
-    return Terminal.objects.filter(airport__in=region.airports.all()).select_related("airport")
+    return Terminal.objects.filter(
+        airport__regions=region
+    ).select_related('airport').order_by('type', 'name')
 
 
 @ratelimit(key='ip', rate='5/m', method='POST', block=True)
@@ -92,7 +94,7 @@ def price_detail(request):
         )
 
         context = {
-            'pickup_date': pickup_date.strftime('%Y-%m-%d'), 
+            'pickup_date': pickup_date.strftime('%Y-%m-%d'),
             'start_point': normalized_start_point,
             'end_point': normalized_end_point,
             # Keep original values (e.g., terminal IDs) for downstream direction resolution.
@@ -102,6 +104,9 @@ def price_detail(request):
             'condition_met': condition_met,
             'latest_post': latest_post,
         }
+
+        if hasattr(request, 'region') and request.region:
+            context['region_slug'] = request.region.slug
 
         return render(request, 'basecamp/booking/inquiry1.html', context)
 

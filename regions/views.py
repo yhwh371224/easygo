@@ -113,10 +113,16 @@ def region_home(request, region_slug):
         .first()
     )
 
+    from .models import Terminal
+    airport_terminals = Terminal.objects.filter(
+        airport__regions=region
+    ).select_related('airport').order_by('type', 'name')
+
     return render(request, 'regions/home.html', {
         'region': region,
         'form_suburbs': form_suburbs,
         'featured_suburbs': featured_suburbs,
+        'airport_terminals': airport_terminals,
         'google_review_url': settings.GOOGLE_REVIEW_URL,
         'latest_post': latest_post,
     })
