@@ -1,6 +1,20 @@
 from django.contrib import admin
 
-from .models import Region, RegionSuburb
+from .models import Region, RegionSuburb, Airport, Terminal
+
+
+class TerminalInline(admin.TabularInline):
+    model = Terminal
+    extra = 1
+    fields = ('name', 'type')
+
+
+@admin.register(Airport)
+class AirportAdmin(admin.ModelAdmin):
+    list_display = ('code', 'city', 'name', 'country')
+    search_fields = ('code', 'city', 'name')
+    ordering = ('code',)
+    inlines = [TerminalInline]
 
 
 class RegionSuburbInline(admin.TabularInline):
