@@ -2,7 +2,7 @@
 .site-footer .ft-link { color: #8db5ed !important; }
 .site-footer .ft-region-link { color: #8db5ed !important; }
 .site-footer .ft-credit-link { color: #f59e0b !important; }
-.ft-top { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem; padding-bottom: 2rem; border-bottom: 0.5px solid rgba(255,255,255,0.08); width: 100%; }
+.ft-top { display: flex !important; flex-direction: row !important; justify-content: space-between !important; flex-wrap: nowrap !important; gap: 2.5rem; padding-bottom: 2rem; border-bottom: 0.5px solid rgba(255,255,255,0.08); width: 100%; }
 .ft-top > div { min-width: 0; }
 .ft-brand-name { font-size: 18px; font-weight: 500; color: #fff; margin: 0 0 6px; }
 .ft-brand-tag { font-size: 13px; color: rgba(255,255,255,0.45); margin: 0 0 16px; }
@@ -22,6 +22,13 @@
 .ft-credit-link { color: #f59e0b; text-decoration: none; }
 .ft-credit-link:hover { color: #ffb347; }
 @media (max-width: 768px) {
-  .ft-top { grid-template-columns: 1fr; gap: 1.5rem; }
+  .ft-top { flex-direction: column; gap: 2rem; }
   .ft-bottom { justify-content: center; text-align: center; }
+}
+@media (min-width: 769px) {
+  /* 1. 가운데 섹션(Service Regions)을 오른쪽으로 밀기 */
+  .site-footer .ft-top > div:nth-child(2) {
+    margin-left: auto !important;
+    /* 너무 바짝 붙는게 싫다면 margin-right: 2rem; 정도 추가해도 좋습니다. */
+  }
 }

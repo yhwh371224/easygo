@@ -14,67 +14,62 @@
 {% block content %}
 
 <section class="bg-dark text-center"
-         style="min-height:480px;display:flex;align-items:center;">
+         style="min-height:480px;display:flex;align-items:center; padding-top: 140px;">
 
-  <div class="container position-relative py-5">
-    <h1 class="text-white fw-bold mb-3">Booking Request Received!</h1>
-    <p class="fs-lg text-white opacity-90 mb-2">
+  <div class="container position-relative pt-7 py-5">
+    <h1 class="text-white fw-bold mb-4">Booking Request Received!</h1>
+    <p class="fs-lg text-white opacity-90 mb-4 lh-lg">
       Thank you for choosing EasyGo {{ region.name }} Airport Shuttle.
     </p>
-    <p class="text-white opacity-75 mb-4">
-      We'll send a confirmation email shortly with your driver details.<br>
-      If you don't hear from us within a few hours, please
-      <a href="/contact/" class="text-warning">contact us</a>.
+    <p class="text-white opacity-75 mb-5 lh-base pt-3">
+      You will receive a confirmation email with your booking details shortly.<br>
+      <strong>Please review your details carefully.</strong> If you need to make any changes or have any questions, 
+      feel free to contact us.
     </p>
 
     <div class="d-flex flex-wrap justify-content-center gap-3 mb-5">
       <a href="/{{ region.slug }}/" class="btn btn-outline-light btn-lg px-5">
         Back to {{ region.name }} Home
       </a>
-      <a href="/contact/" class="btn btn-outline-warning btn-lg px-4">
+      <a href="mailto:info@easygoshuttle.com?subject=Booking Inquiry / Change Request&body=Hello, I would like to check or modify my booking details." 
+        class="btn btn-outline-warning btn-lg px-4">
         Contact Us
       </a>
     </div>
 
-    <!-- What to expect -->
-    <div class="row g-4 justify-content-center" style="max-width:760px;margin:0 auto;">
-      <div class="col-sm-4">
-        <div class="p-4 rounded" style="background:rgba(255,255,255,0.10);min-height:110px;">
-          <div class="fs-3 mb-2">📧</div>
-          <p class="text-white fw-semibold mb-1 fs-sm">Confirmation email</p>
-          <p class="text-white opacity-70 fs-xs mb-0">Sent within a few hours</p>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div class="p-4 rounded" style="background:rgba(255,255,255,0.10);min-height:110px;">
-          <div class="fs-3 mb-2">🚗</div>
-          <p class="text-white fw-semibold mb-1 fs-sm">Driver assigned</p>
-          <p class="text-white opacity-70 fs-xs mb-0">Local {{ region.name }} driver</p>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div class="p-4 rounded" style="background:rgba(255,255,255,0.10);min-height:110px;">
-          <div class="fs-3 mb-2">✈️</div>
-          <p class="text-white fw-semibold mb-1 fs-sm">Flight tracked</p>
-          <p class="text-white opacity-70 fs-xs mb-0">No extra delay charges</p>
-        </div>
-      </div>
-    </div>
+    
   </div>
 </section>
 
-<!-- Reviews nudge -->
+<!-- What to expect -->
 <section class="container py-5 text-center">
-  <h2 class="h4 mb-3">See What Our Customers Say</h2>
-  <p class="text-muted mb-4">Hundreds of 5-star reviews from {{ region.name }} travellers.</p>
-  <div class="d-flex flex-wrap justify-content-center gap-3">
-    <a href="/easygo_review/" class="btn btn-outline-primary px-4">
-      Reviews on Our Site
-    </a>
-    <a href="/{{ region.slug }}/airport-shuttle/" class="btn btn-outline-secondary px-4">
-      Browse {{ region.name }} Service Areas
-    </a>
-  </div>
+    <h2 class="fw-bold mb-4">What to expect</h2> <div class="row g-4 justify-content-center" style="max-width:760px;margin:0 auto;">
+      
+      <div class="col-sm-4">
+        <div class="p-4 rounded border" style="background:rgba(0,0,0,0.08); min-height:110px;">
+          <div class="fs-3 mb-2">📧</div>
+          <p class="text-dark fw-semibold mb-1 fs-sm">Email Confirmation</p>
+          <p class="text-muted fs-xs mb-0">Arriving in a few hours</p>
+        </div>
+      </div>
+
+      <div class="col-sm-4">
+        <div class="p-4 rounded border" style="background:rgba(0,0,0,0.08); min-height:110px;">
+          <div class="fs-3 mb-2">🚗</div>
+          <p class="text-dark fw-semibold mb-1 fs-sm">Driver Dispatch</p>
+          <p class="text-muted fs-xs mb-0">Professional local {{ region.name }} drivers</p>
+        </div>
+      </div>
+
+      <div class="col-sm-4">
+        <div class="p-4 rounded border" style="background:rgba(0,0,0,0.08); min-height:110px;">
+          <div class="fs-3 mb-2">✈️</div>
+          <p class="text-dark fw-semibold mb-1 fs-sm">Flight Monitoring</p>
+          <p class="text-muted fs-xs mb-0">Adjustment for delays</p>
+        </div>
+      </div>
+
+    </div>
 </section>
 
 {% endblock %}

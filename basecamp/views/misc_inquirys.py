@@ -29,7 +29,6 @@ def _airport_terminals_for_request(request):
 
 @ratelimit(key='ip', rate='5/m', method='POST', block=True)
 def price_detail(request):
-    sorted_suburbs = get_sorted_suburbs()
     latest_post = Post.objects.filter(status='published').order_by('-created_at').first()
     if request.method == "POST":
         # Region selection is mandatory for airport terminal resolution.
@@ -55,6 +54,8 @@ def price_detail(request):
             pickup_date = parse_date(pickup_date_str, field_name="Pickup Date")
 
         except ValueError as e:
+            if getattr(request, 'region', None):
+                return redirect('regions:home', region_slug=request.region.slug)
             return render(request, 'basecamp/home.html', {
                 'error_message': str(e),
                 'suburbs': get_suburbs(),
@@ -111,10 +112,12 @@ def price_detail(request):
         return render(request, 'basecamp/booking/inquiry1.html', context)
 
     else:
+        if getattr(request, 'region', None):
+            return redirect('regions:home', region_slug=request.region.slug)
         # Region-less legacy home can still render, but it won't allow terminal-based pricing.
         return render(request, 'basecamp/home.html', {
             'suburbs': get_suburbs(),
-            'home_suburbs': sorted_suburbs,
+            'home_suburbs': get_sorted_suburbs(),
             'airport_terminals': _airport_terminals_for_request(request),
             'google_review_url': settings.GOOGLE_REVIEW_URL,
             'latest_post': latest_post,
