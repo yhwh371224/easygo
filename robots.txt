@@ -45,5 +45,11 @@ Disallow: /
 User-agent: MJ12bot
 Disallow: /
 
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: BacklinksExtendedBot
+Disallow: /
+
 # Sitemap
 Sitemap: https://easygoshuttle.com.au/sitemap.xml
