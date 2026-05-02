@@ -12,15 +12,11 @@
 {% endblock %}
 
 {% block content %}
-{% static 'basecamp/photos/bg-pattern02.webp' as hero_bg %}
 
 <section class="bg-dark text-center"
-         style="background-image:url('{{ hero_bg }}');background-size:cover;background-position:center;
-                position:relative;min-height:480px;display:flex;align-items:center;">
-  <div style="position:absolute;inset:0;background:rgba(0,0,0,0.55);"></div>
+         style="min-height:480px;display:flex;align-items:center;">
 
-  <div class="container position-relative py-5" style="z-index:2;">
-    <div class="mb-4" style="font-size:3.5rem;">✅</div>
+  <div class="container position-relative py-5">
     <h1 class="text-white fw-bold mb-3">Booking Request Received!</h1>
     <p class="fs-lg text-white opacity-90 mb-2">
       Thank you for choosing EasyGo {{ region.name }} Airport Shuttle.
@@ -41,25 +37,25 @@
     </div>
 
     <!-- What to expect -->
-    <div class="row g-3 justify-content-center" style="max-width:720px;margin:0 auto;">
+    <div class="row g-4 justify-content-center" style="max-width:760px;margin:0 auto;">
       <div class="col-sm-4">
-        <div class="p-3 rounded" style="background:rgba(255,255,255,0.10);">
-          <div class="fs-3 mb-1">📧</div>
-          <p class="text-white fw-semibold mb-0 fs-sm">Confirmation email</p>
+        <div class="p-4 rounded" style="background:rgba(255,255,255,0.10);min-height:110px;">
+          <div class="fs-3 mb-2">📧</div>
+          <p class="text-white fw-semibold mb-1 fs-sm">Confirmation email</p>
           <p class="text-white opacity-70 fs-xs mb-0">Sent within a few hours</p>
         </div>
       </div>
       <div class="col-sm-4">
-        <div class="p-3 rounded" style="background:rgba(255,255,255,0.10);">
-          <div class="fs-3 mb-1">🚗</div>
-          <p class="text-white fw-semibold mb-0 fs-sm">Driver assigned</p>
+        <div class="p-4 rounded" style="background:rgba(255,255,255,0.10);min-height:110px;">
+          <div class="fs-3 mb-2">🚗</div>
+          <p class="text-white fw-semibold mb-1 fs-sm">Driver assigned</p>
           <p class="text-white opacity-70 fs-xs mb-0">Local {{ region.name }} driver</p>
         </div>
       </div>
       <div class="col-sm-4">
-        <div class="p-3 rounded" style="background:rgba(255,255,255,0.10);">
-          <div class="fs-3 mb-1">✈️</div>
-          <p class="text-white fw-semibold mb-0 fs-sm">Flight tracked</p>
+        <div class="p-4 rounded" style="background:rgba(255,255,255,0.10);min-height:110px;">
+          <div class="fs-3 mb-2">✈️</div>
+          <p class="text-white fw-semibold mb-1 fs-sm">Flight tracked</p>
           <p class="text-white opacity-70 fs-xs mb-0">No extra delay charges</p>
         </div>
       </div>

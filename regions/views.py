@@ -102,7 +102,7 @@ def region_home(request, region_slug):
         region.suburbs
         .filter(is_active=True, is_featured=True)
         .only('name', 'slug', 'price', 'meta_description', 'featured_order')
-        .order_by('featured_order', 'name')[:6]
+        .order_by('featured_order', 'name')[:7]
     )
 
     latest_post = (
