@@ -248,7 +248,7 @@
               &quot;responsive&quot;: {&quot;0&quot;:{&quot;items&quot;:1},&quot;540&quot;:{&quot;items&quot;:2},&quot;900&quot;:{&quot;items&quot;:3}}}">
             {% for suburb, details in carousel_suburbs.items %}
               <div class="pb-1">
-                <a class="card border-0 shadow card-hover mx-1" href="/sydney-airport-transfer/{{ suburb|slugify }}/">
+                <a class="card border-0 shadow card-hover mx-1" href="/sydney_airport_transfer/{{ suburb|slugify }}/">
                   <span class="badge badge-lg badge-floating badge-floating-end bg-danger badge-price">${{ details.price }}</span>
                   <div class="card-img-top card-img-gradient offer-card-img">
                     <img loading="lazy" src="{{ details.image_url }}" alt="Sydney airport transfer from {{ suburb }} – private 8-13 seater for families and large groups" width="400" height="461" class="offer-card-inner-img">
@@ -289,16 +289,16 @@
             <h3 class="fs-sm fw-bold mb-2 text-light">Sydney Airport Maxi Taxi</h3>
             <p class="fs-sm mb-2 text-light">Need a private 8–13 seater for groups or luggage?</p>
             <ul class="list-unstyled fs-sm text-light">
-              <li class="mb-1"><a href="/maxi-taxi/" class="fw-semibold text-blue-link">🚐 Sydney Airport Maxi Taxi</a> - 8–13 seater for groups &amp; luggage</li>
-              <li class="mb-1"><a href="/sydney-cruise-transfer/" class="fw-semibold text-blue-link">🚢 Sydney Cruise Transfer</a> - Port to airport &amp; city transfers</li>
+              <li class="mb-1"><a href="/maxi_taxi/" class="fw-semibold text-blue-link">🚐 Sydney Airport Maxi Taxi</a> - 8–13 seater for groups &amp; luggage</li>
+              <li class="mb-1"><a href="/sydney_cruise_transfer/" class="fw-semibold text-blue-link">🚢 Sydney Cruise Transfer</a> - Port to airport &amp; city transfers</li>
             </ul>
           </div>
           <div class="col-lg-6">
             <h3 class="fs-sm fw-bold mb-2 text-light">Sydney Airport Services</h3>
             <p class="fs-sm mb-2 text-light">Choose your preferred airport service:</p>
             <ul class="list-unstyled fs-sm text-light">
-              <li class="mb-1"><a href="/sydney-airport-transfer/" class="fw-semibold text-blue-link">🚗 Sydney Airport Transfer</a> - Private door-to-door service</li>
-              <li class="mb-1"><a href="/sydney-airport-shuttle/" class="fw-semibold text-blue-link">🚐 Sydney Airport Shuttle</a> - Flexible, comfortable rides</li>
+              <li class="mb-1"><a href="/sydney_airport_transfer/" class="fw-semibold text-blue-link">🚗 Sydney Airport Transfer</a> - Private door-to-door service</li>
+              <li class="mb-1"><a href="/sydney_airport_shuttle/" class="fw-semibold text-blue-link">🚐 Sydney Airport Shuttle</a> - Flexible, comfortable rides</li>
             </ul>
           </div>
         </div>
@@ -605,7 +605,7 @@
                 </h2>
                 <div class="accordion-collapse collapse" id="faq-content-5" aria-labelledby="faq-heading-5" data-bs-parent="#faq">
                   <div class="accordion-body">
-                    <div class="fs-sm">Our maxi vans accommodate up to 13 passengers, making them ideal for families, large groups, and travellers with plenty of luggage. <a href='/maxi-taxi/' class="text-brand">Check Maxi Taxi options here</a></div>
+                    <div class="fs-sm">Our maxi vans accommodate up to 13 passengers, making them ideal for families, large groups, and travellers with plenty of luggage. <a href='/maxi_taxi/' class="text-brand">Check Maxi Taxi options here</a></div>
                   </div>
                 </div>
               </div>
@@ -784,7 +784,7 @@
           <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="/contact/">Contact</a></li>
           <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="/privacy/">Privacy Policy</a></li>
           <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="/terms/">Terms &amp; Conditions</a></li>
-          <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="/maxi-taxi/">Maxi Taxi Info</a></li>
+          <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="/maxi_taxi/">Maxi Taxi Info</a></li>
           <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="/sydney_airport_transfer/">Sydney Airport Transfer</a></li>
           <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="{% url 'articles:post_list' %}">Blog</a></li>
         </ul>
