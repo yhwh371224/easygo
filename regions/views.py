@@ -341,9 +341,21 @@ def region_airport_shuttle_list(request, region_slug):
 
 
 def airport_shuttle_suburb(request, region_slug, suburb_slug):
-    region = get_object_or_404(Region, slug=region_slug, is_active=True)
-    suburb = get_object_or_404(RegionSuburb, region=region, slug=suburb_slug, is_active=True)
+    region = get_object_or_404(
+        Region.objects.select_related('primary_airport'),
+        slug=region_slug, is_active=True,
+    )
+    suburb = get_object_or_404(
+        RegionSuburb, region=region, slug=suburb_slug, is_active=True,
+    )
+    zone_suburbs = (
+        RegionSuburb.objects
+        .filter(region=region, zone=suburb.zone, is_active=True)
+        .exclude(slug=suburb_slug)
+        .order_by('name')
+    )
     return render(request, 'regions/airport_shuttle_suburb.html', {
         'region': region,
         'suburb': suburb,
+        'zone_suburbs': zone_suburbs,
     })
