@@ -1,6 +1,6 @@
 import logging
 
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 
@@ -81,9 +81,12 @@ def airport_transfer(request, suburb):
 
 
 def maxi_taxi(request, suburb=None):
+    if suburb and suburb != suburb.lower():
+        return redirect('basecamp:maxi_taxi_suburb', suburb=suburb.lower(), permanent=True)
+    
     if not suburb:
         return render(request, 'basecamp/pillars/maxi-taxi-pillar.html')
-
+    
     suburb_obj = RegionSuburb.objects.filter(
         region__slug='sydney', slug=suburb, is_active=True,
     ).first()
