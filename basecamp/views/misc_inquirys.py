@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.conf import settings
 from utils.email import send_text_email
+from utils.telegram import send_telegram_sync
 from django.db.models import Q
 from django.http import JsonResponse
 from main.settings import RECIPIENT_EMAIL
@@ -163,7 +164,15 @@ def contact_submit(request):
         subject = f"[New Contact] Submission from {data['name']}"
 
         send_text_email(subject, message, [RECIPIENT_EMAIL])
-        
+
+        telegram_text = (
+            f"📬 *New Contact Form*\n"
+            f"Name: {data['name']}\n"
+            f"Email: {data['email']}\n"
+            f"Message: {data['message']}"
+        )
+        send_telegram_sync(telegram_text)
+
         return booking_success_response(request)
     else:
         return render(request, 'basecamp/pages/contact_form.html', {})
