@@ -107,7 +107,7 @@ def price_detail(request):
 
         if region is not None:
             context['region'] = region
-            return render(request, 'regions/booking/inquiry1.html', context)
+            return render(request, 'regions/inquiry/inquiry1.html', context)
 
         return render(request, 'basecamp/booking/inquiry1.html', context)
 
