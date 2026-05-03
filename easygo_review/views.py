@@ -48,7 +48,7 @@ def custom_login_view(request):
 @require_POST
 def custom_logout_view(request):
     request.session.flush()
-    return redirect('easygo_review:easygo_review')
+    return redirect('easygo_review:custom_login')
 
 
 def get_authenticated_post(request):
