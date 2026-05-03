@@ -39,7 +39,7 @@
 {% endblock %}
 
 {% block content %}
-<section class="mp-hero">
+<section class="mp-hero" style="padding-top: 120px; padding-bottom: 60px;">
   <div class="container">
     <p class="text-warning fw-semibold mb-2 small">
       {% if region and region.primary_airport %}
@@ -85,9 +85,8 @@
   {% endif %}
 
   <div class="mt-5 p-4 rounded-3 border text-center" style="background:#f8fafc;">
-    <p class="text-muted mb-1 small">Can't find your driver?</p>
-    <p class="fw-semibold mb-3">Call or text the number on your booking confirmation and we'll assist immediately.</p>
-    <a href="tel:{{ business_phone }}" class="btn btn-outline-primary me-2">📞 {{ business_phone }}</a>
+    <p class="text-muted mb-1 small">Running late / Need assistance?</p>
+    <p class="fw-semibold mb-3">If you are delayed for any reason, please notify your driver or our office as soon as possible. Your driver's contact number can be found in the reminder email sent by our office on the day of your arrival.</p>
     <a href="/contact/" class="btn btn-outline-secondary">Send a Message</a>
   </div>
 </section>
