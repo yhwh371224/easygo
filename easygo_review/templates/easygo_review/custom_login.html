@@ -21,13 +21,19 @@
                 <small class="text-light d-block mb-2">
                     The email you used when booking your transfer
                 </small>
-                <input type="email" id="email" name="email" required><br><br><br>
+                <input type="email" id="email" name="email" required><br><br>
+                {% if not TURNSTILE_DISABLED %}
+                <div class="cf-turnstile mb-3" data-sitekey="{{ CLOUDFLARE_TURNSTILE_SITE_KEY }}" data-theme="dark"></div>
+                {% endif %}
                 <button class="primaryAction btn btn-warning" type="submit">{% trans "Log In" %}</button>
                 <br><br>
                 {% if error %}
                     <p style="color: red;"><large>{{ error }}</large></p>
                 {% endif %}
             </form>
-            
+
 </section>
+{% if not TURNSTILE_DISABLED %}
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+{% endif %}
 {% endblock %}
