@@ -20,6 +20,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Google Calendar event 
 @shared_task
 def create_event_on_calendar(instance_id):
+    if settings.DEBUG:
+        return
     from utils.calendar_sync import sync_to_calendar    
     try:
         instance = Post.objects.get(pk=instance_id)
