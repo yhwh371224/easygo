@@ -32,14 +32,13 @@ def price_detail(request):
     latest_post = Post.objects.filter(status='published').order_by('-created_at').first()
     if request.method == "POST":
         # Region selection is mandatory for airport terminal resolution.
-        if not _get_request_region(request):
+        if not request.region:
             if is_ajax(request):
-                return JsonResponse({'success': False, 'message': 'Region is required. Please select your city and try again.'}, status=400)
+                return JsonResponse(...)
             return render(request, 'basecamp/error/home_error.html', status=400)
-        post_region = _get_request_region(request)
-        if post_region.slug == 'melbourne':
-            messages.info(request, "Melbourne bookings are not open yet. Please try another region.")
-            return redirect('regions:booking', region_slug='melbourne')
+        
+        print("REGION:", request.region)
+
         pickup_date_str = request.POST.get('pickup_date', '')  
         start_point = request.POST.get('start_point')
         end_point = request.POST.get('end_point')
@@ -74,7 +73,7 @@ def price_detail(request):
         normalized_start_point = start_point
         normalized_end_point = end_point
 
-        region = post_region
+        region = request.region
 
         if not region:
             start_terminal = None
@@ -106,8 +105,9 @@ def price_detail(request):
             'latest_post': latest_post,
         }
 
-        if hasattr(request, 'region') and request.region:
-            context['region_slug'] = request.region.slug
+        if region is not None:
+            context['region'] = region
+            return render(request, 'regions/booking/inquiry1.html', context)
 
         return render(request, 'basecamp/booking/inquiry1.html', context)
 
