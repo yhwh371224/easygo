@@ -10,9 +10,11 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 from django.db.models import Q
 from django.http import JsonResponse
 from django_ratelimit.decorators import ratelimit
+from basecamp.modules.view_helpers import verify_turnstile, get_client_ip
 
 from .models import Post, Comment
 from .forms import CommentForm, PostForm
@@ -28,19 +30,24 @@ def custom_login_view(request):
     if request.method == 'POST':
         if getattr(request, 'limited', False):
             return render(request, 'easygo_review/custom_login.html', {'error': 'Too many attempts. Please wait a moment and try again.'})
+        token = request.POST.get('cf-turnstile-response', '')
+        if not verify_turnstile(token, get_client_ip(request)):
+            return render(request, 'easygo_review/custom_login.html', {'error': 'Security verification failed. Please try again.'})
         email = request.POST['email']
         posts = BlogPost.objects.filter(email=email)
         if posts.exists():
-            post = posts.first()  
+            post = posts.first()
+            request.session.cycle_key()
             request.session['email'] = post.email
             return redirect('easygo_review:easygo_review')
         else:
-            error = 'This is not the email address used for booking'
+            error = 'No review access found. Please use your booking email.'
     return render(request, 'easygo_review/custom_login.html', {'error': error})
 
 
+@require_POST
 def custom_logout_view(request):
-    request.session.flush()    
+    request.session.flush()
     return redirect('easygo_review:easygo_review')
 
 

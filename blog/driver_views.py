@@ -5,11 +5,14 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 from django.contrib.admin.views.decorators import staff_member_required
+from basecamp.modules.view_helpers import verify_turnstile, get_client_ip
 
 
 @staff_member_required
@@ -55,6 +58,9 @@ def driver_login(request):
 
     error = None
     if request.method == 'POST':
+        token = request.POST.get('cf-turnstile-response', '')
+        if not verify_turnstile(token, get_client_ip(request)):
+            return render(request, 'basecamp/driver/login.html', {'error': 'Security verification failed. Please try again.'})
         username = request.POST.get('username', '').strip()
         password = request.POST.get('password', '').strip()
         user = authenticate(request, username=username, password=password)
@@ -87,11 +93,14 @@ def driver_change_password(request):
         new_password = request.POST.get('new_password', '').strip()
         confirm = request.POST.get('confirm_password', '').strip()
 
-        if len(new_password) < 8:
-            error = 'Password must be at least 8 characters.'
-        elif new_password != confirm:
+        if new_password != confirm:
             error = 'Passwords do not match.'
         else:
+            try:
+                validate_password(new_password, request.user)
+            except ValidationError as e:
+                error = ' '.join(e.messages)
+        if not error:
             request.user.set_password(new_password)
             request.user.save()
             driver.must_change_password = False
@@ -123,6 +132,7 @@ def driver_password_change(request):
     return render(request, 'basecamp/driver/driver_password_change.html', {'form': form, 'driver': driver})
 
 
+@require_POST
 def driver_logout(request):
     logout(request)
     return redirect('blog:driver_login')

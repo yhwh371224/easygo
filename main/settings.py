@@ -44,6 +44,7 @@ if ENVIRONMENT == 'production':
     SECURE_REFERRER_POLICY = 'no-referrer-when-downgrade'
     SESSION_COOKIE_SECURE = True
     SESSION_COOKIE_HTTPONLY = True
+    SESSION_COOKIE_SAMESITE = 'Lax'
     SESSION_COOKIE_AGE = 3600
     SESSION_EXPIRE_AT_BROWSER_CLOSE = True
     CONTENT_SECURITY_POLICY = {
@@ -259,9 +260,10 @@ MIDDLEWARE = [
 ]
 
 AXES_ENABLED = True
-AXES_FAILURE_LIMIT = 7  
-AXES_COOLOFF_TIME = timedelta(minutes=60)  
+AXES_FAILURE_LIMIT = 7
+AXES_COOLOFF_TIME = timedelta(minutes=60)
 AXES_LOCKOUT_MESSAGE = "Access locked. Please contact the office"
+AXES_LOCKOUT_PARAMETERS = [['ip_address', 'username']]
 
 ROOT_URLCONF = 'main.urls'
 
