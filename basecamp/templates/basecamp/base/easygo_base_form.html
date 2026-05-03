@@ -170,6 +170,10 @@
                 
                 const alwaysRequired = form.querySelectorAll('input[required], select[required], textarea[required]');
                 alwaysRequired.forEach(input => {
+                    if (input.offsetParent === null) {
+                        input.classList.remove('is-invalid');
+                        return;
+                    }
                     if (!input.value.trim()) {
                         input.classList.add('is-invalid');
                         isValid = false;
