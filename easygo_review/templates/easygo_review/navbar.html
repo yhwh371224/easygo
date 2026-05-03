@@ -26,7 +26,10 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" id="download">{{ user_name }} <span class="caret"></span></a>
                         <div class="dropdown-menu" aria-labelledby="download">                            
-                            <a class="dropdown-item" href="/easygo_review/custom_logout">Log out</a>
+                            <form method="POST" action="/easygo_review/custom_logout" style="margin:0;">
+                                {% csrf_token %}
+                                <button type="submit" class="dropdown-item" style="background:none;border:none;width:100%;text-align:left;">Log out</button>
+                            </form>
                         </div>
                     </li>
                 {% else %}
