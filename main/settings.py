@@ -116,8 +116,6 @@ INSTALLED_APPS = [
     'admin_honeypot',
     'allauth',
     'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
     'storages',
     'corsheaders',
     'paypal.standard.ipn',
