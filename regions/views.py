@@ -143,9 +143,6 @@ def region_inquiry(request, region_slug):
 @require_turnstile
 def region_inquiry_details(request, region_slug):
     if request.method == 'POST':
-        if region_slug == 'melbourne':
-            messages.info(request, "Melbourne inquiries are not open yet. Please try another region.")
-            return redirect('regions:inquiry', region_slug='melbourne')
         region = get_object_or_404(Region, slug=region_slug, is_active=True)
         logger.info(
             f"[INQUIRY] IP={get_client_ip(request)} "
@@ -231,10 +228,7 @@ def region_booking(request, region_slug):
 def region_booking_detail(request, region_slug):
     region = get_object_or_404(Region, slug=region_slug, is_active=True)
 
-    if request.method == 'POST':
-        if region.slug == 'melbourne':
-            messages.info(request, "Melbourne bookings are not open yet. Please try another region.")
-            return redirect('regions:booking', region_slug='melbourne')
+    if request.method == 'POST':        
         logger.info(
             f"[BOOKING] IP={get_client_ip(request)} "
             f"path={request.path} "
