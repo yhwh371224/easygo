@@ -289,13 +289,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'main.wsgi.application'
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     },
-# }
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -352,25 +345,6 @@ AUTHENTICATION_BACKENDS = (
 
 BLOCKED_IP_FILE = "/etc/django/blocked_ips.txt"
 BLOCKED_EMAIL_FILE = "/etc/django/blocked_emails.txt"
-
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'SCOPE': [
-            'profile',
-            'email',
-        ],
-        'AUTH_PARAMS': {
-            'access_type': 'online',
-        },
-        'APP': {
-            'client_id': config('GOOGLE_CLIENT_ID'),
-            'secret': config('GOOGLE_CLIENT_SECRET'),
-            'key': ''
-        }
-    }
-}
-
-SOCIALACCOUNT_LOGIN_ON_GET=False
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
