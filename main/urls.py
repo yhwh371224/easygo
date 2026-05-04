@@ -3,6 +3,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth.decorators import user_passes_test
+from django.views.decorators.csrf import csrf_exempt
 from basecamp.views import stripe_webhook
 from email_agent.views import gmail_webhook
 from blog import bird_webhooks
@@ -26,7 +27,7 @@ urlpatterns = [
     path('paypal/', include('paypal.standard.ipn.urls')),
 
     path('stripe_webhook/', stripe_webhook, name='stripe_webhook'),
-    path('gmail_webhook/', gmail_webhook, name='gmail_webhook'),
+    path('gmail_webhook/', csrf_exempt(gmail_webhook), name='gmail_webhook'),
 
     path('webhook/bird/sms/', bird_webhooks.sms_webhook, name='bird_sms_webhook'),
     path('webhook/bird/voice/', bird_webhooks.voice_webhook, name='bird_voice_webhook'),
