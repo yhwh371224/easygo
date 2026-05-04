@@ -32,5 +32,5 @@ urlpatterns = [
     path('<slug:region_slug>/airport-shuttle/<slug:suburb_slug>/', views.airport_shuttle_suburb, name='airport_shuttle_suburb'),
     path('<slug:region_slug>-airport-transfer/<slug:suburb_slug>/', views.airport_shuttle_suburb, name='airport_transfer_suburb'),
 
-    path('<slug:region_slug>/inquiry_done/', views.region_inquiry_done, name='inquiry_done'),
+    # path('<slug:region_slug>/inquiry_done/', views.region_inquiry_done, name='inquiry_done'),
 ]
