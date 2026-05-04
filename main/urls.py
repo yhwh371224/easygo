@@ -4,7 +4,6 @@ from django.conf import settings
 from django.conf.urls.static import static
 from email_agent.views import GmailWebhookView
 from basecamp.views import stripe_webhook
-from email_agent.views import gmail_webhook
 from blog import bird_webhooks
 from decouple import config
 
