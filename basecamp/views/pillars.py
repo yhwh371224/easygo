@@ -133,6 +133,7 @@ def booking(request):
 def confirmation(request):
     return render(request, 'basecamp/booking/confirmation.html', {
         'home_suburbs': get_sorted_suburbs(),
+        'ADMIN_URL': settings.SECRET_ADMIN_URL,
     })
 
 

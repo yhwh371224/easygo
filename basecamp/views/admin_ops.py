@@ -87,7 +87,7 @@ def confirmation_detail(request):
 
     else:
         print("ADMIN_URL =", settings.SECRET_ADMIN_URL) 
-        return render(request, 'basecamp/booking/confirmation.html', {"ADMIN_URL": settings.SECRET_ADMIN_URL})
+        return render(request, 'basecamp/booking/confirmation.html', {})
 
 # sending confirmation email first one
 @login_required
