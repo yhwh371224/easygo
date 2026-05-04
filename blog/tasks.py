@@ -6,6 +6,7 @@ from django.db.models import Q
 
 from celery import shared_task
 
+from main import settings
 from main.settings import RECIPIENT_EMAIL
 from .models import Inquiry, Post, PaypalPayment, StripePayment
 from utils.inquiry_helper import send_inquiry_email
