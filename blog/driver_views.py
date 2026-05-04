@@ -13,6 +13,7 @@ from django.utils import timezone
 from django.views.decorators.http import require_POST
 from django.contrib.admin.views.decorators import staff_member_required
 from basecamp.modules.view_helpers import verify_turnstile, get_client_ip
+from main import settings
 
 
 @staff_member_required
@@ -22,7 +23,7 @@ def driver_impersonate(request, driver_id):
 
     driver = get_object_or_404(Driver, pk=driver_id)
     if not driver.user:
-        return redirect('/horeb_yhwh/')
+        return redirect(f'/{settings.SECRET_ADMIN_URL}/')
 
     impersonator_id = request.user.id
     login(request, driver.user, backend='django.contrib.auth.backends.ModelBackend')
@@ -42,10 +43,10 @@ def driver_impersonate_exit(request):
             superuser = User.objects.get(pk=impersonator_id)
             request.session.pop('impersonator_id', None)
             login(request, superuser, backend='django.contrib.auth.backends.ModelBackend')
-            return redirect('/horeb_yhwh/')
+            return redirect(f'/{settings.SECRET_ADMIN_URL}/')
         except User.DoesNotExist:
             pass
-    return redirect('/horeb_yhwh/')
+    return redirect(f'/{settings.SECRET_ADMIN_URL}/')
 
 
 def driver_login(request):
