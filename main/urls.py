@@ -6,25 +6,29 @@ from django.contrib.auth.decorators import user_passes_test
 from basecamp.views import stripe_webhook
 from email_agent.views import gmail_webhook
 from blog import bird_webhooks
+from decouple import config
 
-
-admin_site = user_passes_test(lambda u: u.is_superuser)(admin.site.urls)
+SECRET_ADMIN_URL = config('SECRET_ADMIN_URL', default='secure-admin-x9k2p7')
 
 urlpatterns = [  
     path('admin/', include('admin_honeypot.urls', namespace='admin_honeypot')),
-    path('horeb_yhwh/', admin.site.urls),
+    path(f'{SECRET_ADMIN_URL}/', admin.site.urls),
     path('markdownx/', include('markdownx.urls')),
     path('posting_agent/', include('posting_agent.urls', namespace='posting_agent')),  
     path('easygo_review/', include('easygo_review.urls')),
-    path('', include('articles.urls', namespace='articles')),
-    path('', include('basecamp.urls')),
+
+    path('articles/', include(('articles.urls', 'articles'), namespace='articles')),
+    path('basecamp/', include(('basecamp.urls', 'basecamp'), namespace='basecamp')),
+    path('blog/', include(('blog.urls', 'blog'), namespace='blog')),
+    path('regions/', include(('regions.urls', 'regions'), namespace='regions')),
+
     path('accounts/', include('allauth.urls')),
     path('paypal/', include('paypal.standard.ipn.urls')),
+
     path('stripe_webhook/', stripe_webhook, name='stripe_webhook'),
     path('gmail_webhook/', gmail_webhook, name='gmail_webhook'),
-    path('', include('blog.urls', namespace='blog')),
+
     path('webhook/bird/sms/', bird_webhooks.sms_webhook, name='bird_sms_webhook'),
-    path('', include('regions.urls', namespace='regions')),
     path('webhook/bird/voice/', bird_webhooks.voice_webhook, name='bird_voice_webhook'),
 ]
 
