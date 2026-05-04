@@ -26,13 +26,6 @@ def region_inquiry(request, region_slug):
     })
 
 
-def region_inquiry_done(request, region_slug):
-    region = get_object_or_404(Region, slug=region_slug, is_active=True)
-    return render(request, 'basecamp/inquiry_done.html', {
-        'region': region,
-    })
-
-
 @ratelimit(key='ip', rate='5/m', method='POST', block=True)
 @require_turnstile
 def region_inquiry_details(request, region_slug):
@@ -104,3 +97,10 @@ def region_inquiry_details(request, region_slug):
     region = get_object_or_404(Region, slug=region_slug, is_active=True)
     suburbs = region.suburbs.filter(is_active=True).order_by('-is_pinned', 'sort_order', 'name')
     return render(request, 'regions/inquiry/inquiry.html', {'region': region, 'suburbs': suburbs})
+
+
+def region_inquiry_done(request, region_slug):
+    region = get_object_or_404(Region, slug=region_slug, is_active=True)
+    return render(request, 'basecamp/inquiry_done.html', {
+        'region': region,
+    })
