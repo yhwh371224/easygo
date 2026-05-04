@@ -1,23 +1,21 @@
+# email_agent/views.py
 import json
 import base64
-from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
+from django.views import View
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 from .tasks import gmail_watch_topic
 
-
-@csrf_exempt
-def gmail_webhook(request):
-    if request.method == 'POST':
+@method_decorator(csrf_exempt, name='dispatch')
+class GmailWebhookView(View):
+    def post(self, request):
         data = json.loads(request.body)
-        # Pub/Sub 메시지 디코딩
         pubsub_message = data.get('message', {})
         if pubsub_message:
             message_data = base64.b64decode(
                 pubsub_message['data']
             ).decode('utf-8')
             payload = json.loads(message_data)
-            
-            # 여기서 Celery task로 넘김
             gmail_watch_topic.apply_async(args=[payload], countdown=10)
-        
         return HttpResponse(status=200)
