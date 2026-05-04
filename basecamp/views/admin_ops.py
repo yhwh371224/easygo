@@ -86,7 +86,7 @@ def confirmation_detail(request):
         return JsonResponse({'success': True, 'redirect_url': '/inquiry_done/'})
 
     else:
-        return render(request, 'basecamp/booking/confirmation.html', {})
+        return render(request, 'basecamp/booking/confirmation.html', {"ADMIN_URL": settings.SECRET_ADMIN_URL})
 
 # sending confirmation email first one
 @login_required
