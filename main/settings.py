@@ -10,7 +10,7 @@ from django.core.exceptions import DisallowedHost
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = config('SECRET_KEY')
-SECRET_ADMIN_URL = config('SECRET_ADMIN_URL', default='secure-admin-x9k2p7/')
+SECRET_ADMIN_URL = config('SECRET_ADMIN_URL', default='secure-admin-x9k2p7')
 
 ENVIRONMENT = config('ENVIRONMENT', default='production')
 DEBUG = config('DEBUG', cast=bool, default=False)

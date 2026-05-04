@@ -12,7 +12,7 @@ SECRET_ADMIN_URL = config('SECRET_ADMIN_URL', default='secure-admin-x9k2p7')
 
 urlpatterns = [  
     path('admin/', include('admin_honeypot.urls', namespace='admin_honeypot')),
-    path(f'{SECRET_ADMIN_URL}/', admin.site.urls),
+    path(f'{SECRET_ADMIN_URL}', admin.site.urls),
     path('markdownx/', include('markdownx.urls')),
     path('posting_agent/', include('posting_agent.urls', namespace='posting_agent')),  
     path('easygo_review/', include('easygo_review.urls')),
