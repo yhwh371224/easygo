@@ -1,9 +1,13 @@
 def region_price_detail(request, region_slug):
+    region = get_object_or_404(Region, slug=region_slug, is_active=True)
+    request.region = region
     from basecamp.views.misc_inquirys import price_detail
     return price_detail(request)
 
 
 def region_inquiry_details1(request, region_slug):
+    region = get_object_or_404(Region, slug=region_slug, is_active=True)
+    request.region = region
     from basecamp.views.inquirys import inquiry_details1
     return inquiry_details1(request)
 

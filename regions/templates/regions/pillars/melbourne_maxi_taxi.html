@@ -1,0 +1,75 @@
+{% extends 'basecamp/base/easygo_base.html' %}
+{% load static %}
+
+{% block title %}
+ Melbourne Airport Maxi Taxi | Private 8–13 Seater Group Transfers | EasyGo
+{% endblock %}
+
+{% block meta %}
+<meta name="description"
+      content="Melbourne airport maxi taxi service for groups and luggage. Private 8–13 seater transfers across CBD, St Kilda, Richmond, South Yarra, Docklands and all Melbourne suburbs. Book online in 1 minute.">
+{% endblock %}
+
+{% block content %}
+{% static 'basecamp/photos/vehicles.webp' as page_bg %}
+<!-- Hero section -->
+<section class="jarallax bg-dark py-7 position-relative" data-jarallax data-speed="0.1">
+  <div class="jarallax-img" style="background-image: url('{{ page_bg }}');"></div>
+
+  <!-- Dark overlay -->
+  <div class="position-absolute top-0 start-0 w-100 h-100"
+       style="background-color: rgba(0,0,0,0.5); z-index:1;"></div>
+
+  <div class="container text-center py-5 position-relative" style="z-index:2;">
+    <h1 class="text-light fw-bold mt-4">
+      Melbourne Airport Maxi Taxi for Groups & Luggage
+    </h1>
+
+    <p class="text-light fs-lg mt-3">
+      Reliable <strong>Melbourne airport maxi taxi</strong> services with private
+      <strong>8–13 seater vehicles</strong>, ideal for families, groups and large luggage
+      travelling across Melbourne.
+    </p>
+  </div>
+</section>
+
+<!-- Areas we cover -->
+<section class="container py-6 text-center">
+
+  <h2>Melbourne Airport Maxi Taxi – Areas We Cover</h2>
+
+  <p>
+    We provide <strong>Melbourne Airport Maxi Taxi</strong> services across
+    <strong>CBD, St Kilda, Richmond, South Yarra</strong> and surrounding suburbs,
+    including Docklands, Southbank, Carlton, Fitzroy, Port Melbourne, and all Melbourne suburbs.
+  </p>
+
+  <!-- Search guidance -->
+  <div class="mb-2">
+    <small style="color: #555; font-size: 1rem;">
+      Enter your suburb name in the search box below to quickly find your
+      Melbourne Airport Maxi Taxi service.
+    </small>
+  </div>
+
+  <!-- More suburbs CTA -->
+  <div class="mb-4">
+    <a href="/more_suburbs_maxi_taxi/"
+       style="color: #eb7828; font-size: 1.05rem;">
+      👉 Search your Melbourne suburb for Maxi Taxi airport transfers 🔍
+    </a>
+  </div>
+
+  <!-- Popular suburbs list -->
+  <ul class="list-unstyled d-inline-block text-start">
+    <li><a href="/maxi_taxi/melbourne-cbd/">Melbourne CBD Maxi Taxi</a></li>
+    <li><a href="/maxi_taxi/st-kilda/">St Kilda Maxi Taxi</a></li>
+    <li><a href="/maxi_taxi/richmond/">Richmond Maxi Taxi</a></li>
+    <li><a href="/maxi_taxi/south-yarra/">South Yarra Maxi Taxi</a></li>
+    <li><a href="/maxi_taxi/docklands/">Docklands Maxi Taxi</a></li>
+    <li><a href="/maxi_taxi/carlton/">Carlton Maxi Taxi</a></li>
+  </ul>
+
+</section>
+
+{% endblock %}

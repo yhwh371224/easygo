@@ -5,8 +5,14 @@ from django.views.generic import RedirectView
 app_name = 'regions'
 
 urlpatterns = [
+    # Region pillar pages
+    path('<slug:region_slug>/airport-shuttle/', views.region_airport_shuttle, name='region_airport_shuttle'),
+    path('<slug:region_slug>/airport-transfer/', views.region_airport_transfer, name='region_airport_transfer'),
+    path('<slug:region_slug>/cruise-transfer/', views.region_cruise_transfer, name='region_cruise_transfer'),
+    path('<slug:region_slug>/maxi-taxi/', views.region_maxi_taxi, name='region_maxi_taxi'),
+
     # Coming soon regions must match before the generic home route.
-    path('sydney/', RedirectView.as_view(url='/', permanent=False)), 
+    path('sydney/', RedirectView.as_view(url='/', permanent=False)),
 
     path('<slug:region_slug>/', views.region_home, name='home'),
     # Legacy basecamp flows made region-aware (region selection is mandatory).
@@ -23,7 +29,6 @@ urlpatterns = [
     path('<slug:region_slug>/confirmation/', views.region_confirmation, name='confirmation'),
     path('<slug:region_slug>/meeting-point/', views.region_meeting_point, name='region_meeting_point'),
     path('<slug:region_slug>/arrival-guide/', views.region_arrival_guide, name='arrival_guide'),
-    path('<slug:region_slug>/airport-shuttle/', views.region_airport_shuttle_list, name='airport_shuttle_list'),
     path('<slug:region_slug>/airport-shuttle/<slug:suburb_slug>/', views.airport_shuttle_suburb, name='airport_shuttle_suburb'),
     path('<slug:region_slug>-airport-transfer/<slug:suburb_slug>/', views.airport_shuttle_suburb, name='airport_transfer_suburb'),
 ]

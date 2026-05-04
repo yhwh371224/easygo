@@ -1,7 +1,10 @@
 import logging
 
 from django.conf import settings
+from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
+from django.template import TemplateDoesNotExist
+from django.template.loader import get_template
 
 from regions.models import Region, RegionSuburb
 from articles.models import Post as BlogPost
@@ -77,6 +80,30 @@ def region_arrival_guide(request, region_slug):
     })
 
 
+def _render_pillar(request, template_path):
+    try:
+        get_template(template_path)
+    except TemplateDoesNotExist:
+        raise Http404
+    return render(request, template_path)
+
+
+def region_airport_shuttle(request, region_slug):
+    return _render_pillar(request, f'regions/pillars/{region_slug}_airport_shuttle.html')
+
+
+def region_airport_transfer(request, region_slug):
+    return _render_pillar(request, f'regions/pillars/{region_slug}_airport_transfer.html')
+
+
+def region_cruise_transfer(request, region_slug):
+    return _render_pillar(request, f'regions/pillars/{region_slug}_cruise_transfer.html')
+
+
+def region_maxi_taxi(request, region_slug):
+    return _render_pillar(request, f'regions/pillars/{region_slug}_maxi_taxi.html')
+
+
 def region_airport_shuttle_list(request, region_slug):
     return redirect('regions:home', region_slug=region_slug, permanent=True)
 
@@ -99,4 +126,12 @@ def airport_shuttle_suburb(request, region_slug, suburb_slug):
         'region': region,
         'suburb': suburb,
         'zone_suburbs': zone_suburbs,
+    })
+
+
+def region_inquiry_done(request, region_slug):
+    region = get_object_or_404(Region, slug=region_slug, is_active=True)
+    return render(request, 'basecamp/inquiry_done.html', {
+        'region': region,
+        'google_review_url': settings.GOOGLE_REVIEW_URL,
     })

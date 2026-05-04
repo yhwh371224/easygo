@@ -16,4 +16,8 @@ from .pages import (
     region_arrival_guide,
     region_airport_shuttle_list,
     airport_shuttle_suburb,
+    region_airport_shuttle,
+    region_airport_transfer,
+    region_cruise_transfer,
+    region_maxi_taxi,
 )
