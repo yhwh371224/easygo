@@ -18,7 +18,7 @@ urlpatterns = [
     path('easygo_review/', include('easygo_review.urls')),
 
     path('articles/', include(('articles.urls', 'articles'), namespace='articles')),
-    path('basecamp/', include(('basecamp.urls', 'basecamp'), namespace='basecamp')),
+    path('', include(('basecamp.urls', 'basecamp'), namespace='basecamp')),
     path('blog/', include(('blog.urls', 'blog'), namespace='blog')),
     path('regions/', include(('regions.urls', 'regions'), namespace='regions')),
 
