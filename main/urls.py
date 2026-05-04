@@ -12,6 +12,12 @@ SECRET_ADMIN_URL = config('SECRET_ADMIN_URL', default='secure-admin-x9k2p7')
 urlpatterns = [  
     path('admin/', include('admin_honeypot.urls', namespace='admin_honeypot')),
     path(f'{SECRET_ADMIN_URL}/', admin.site.urls),
+
+    path('stripe_webhook/', stripe_webhook, name='stripe_webhook'),
+    path('gmail_webhook/', GmailWebhookView.as_view(), name='gmail_webhook'),  # 위로 이동
+    path('webhook/bird/sms/', bird_webhooks.sms_webhook, name='bird_sms_webhook'),
+    path('webhook/bird/voice/', bird_webhooks.voice_webhook, name='bird_voice_webhook'),
+
     path('markdownx/', include('markdownx.urls')),
     path('posting_agent/', include('posting_agent.urls', namespace='posting_agent')),  
     path('easygo_review/', include('easygo_review.urls')),
@@ -23,12 +29,6 @@ urlpatterns = [
 
     path('accounts/', include('allauth.urls')),
     path('paypal/', include('paypal.standard.ipn.urls')),
-
-    path('stripe_webhook/', stripe_webhook, name='stripe_webhook'),
-    path('gmail_webhook/', GmailWebhookView.as_view(), name='gmail_webhook'),
-
-    path('webhook/bird/sms/', bird_webhooks.sms_webhook, name='bird_sms_webhook'),
-    path('webhook/bird/voice/', bird_webhooks.voice_webhook, name='bird_voice_webhook'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
