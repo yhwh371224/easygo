@@ -1,6 +1,10 @@
 from django.urls import path
 from . import views
 from django.views.generic import RedirectView
+from regions.views.wrappers import make_region_view
+from basecamp.views.misc_inquirys import price_detail
+from basecamp.views.inquirys import inquiry_details1
+
 
 app_name = 'regions'
 
@@ -11,17 +15,13 @@ urlpatterns = [
     path('<slug:region_slug>/cruise-transfer/', views.region_cruise_transfer, name='region_cruise_transfer'),
     path('<slug:region_slug>/maxi-taxi/', views.region_maxi_taxi, name='region_maxi_taxi'),
 
-    # Coming soon regions must match before the generic home route.
     path('sydney/', RedirectView.as_view(url='/', permanent=False)),
 
     path('<slug:region_slug>/', views.region_home, name='home'),
-    # Legacy basecamp flows made region-aware (region selection is mandatory).
-    path('<slug:region_slug>/price_detail/', views.region_price_detail, name='price_detail'),
-    path('<slug:region_slug>/inquiry_details1/', views.region_inquiry_details1, name='inquiry_details1'),
-    path('<slug:region_slug>/p2p_booking/', views.region_p2p_booking, name='p2p_booking'),
-    path('<slug:region_slug>/p2p_booking_detail/', views.region_p2p_booking_detail, name='p2p_booking_detail'),
-    path('<slug:region_slug>/p2p_multi/', views.region_p2p_multi, name='p2p_multi'),
-    path('<slug:region_slug>/p2p_detail/', views.region_p2p_detail, name='p2p_detail'),
+
+    # Legacy basecamp flows made region-aware
+    path('<slug:region_slug>/price_detail/', make_region_view(price_detail), name='price_detail'),
+    path('<slug:region_slug>/inquiry_details1/', make_region_view(inquiry_details1), name='inquiry_details1'),
     path('<slug:region_slug>/inquiry/', views.region_inquiry, name='inquiry'),
     path('<slug:region_slug>/inquiry_detail/', views.region_inquiry_details, name='inquiry_details'),
     path('<slug:region_slug>/booking/', views.region_booking, name='booking'),

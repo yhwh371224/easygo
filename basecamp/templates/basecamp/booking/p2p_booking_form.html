@@ -48,10 +48,10 @@ EasyGo Point-to-Point Booking Form – {{ region.name|default:"EasyGo" }}
 
             <div class="mb-3 pb-1">
               <label class="form-label">Select Region</label>
-              <select id="region-select" class="form-select" style="max-width:220px;"
+              <select id="region-select" name="region" class="form-select" style="max-width:220px;"
                       onchange="var s=this.value;window.location.href=(s==='sydney')?'/p2p_booking/':'/'+s+'/p2p_booking/';" required>
                 <option value="" {% if not region %}selected{% endif %} disabled>Select your city</option>
-                {% for r in active_regions %}
+                {% for r in regions %}
                   <option value="{{ r.slug }}" {% if region and r.slug == region.slug %}selected{% endif %}>{{ r.name }}</option>
                 {% endfor %}
               </select>

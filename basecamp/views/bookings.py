@@ -180,7 +180,9 @@ def cruise_booking_detail(request):
         return booking_success_response(request)
 
     else:
-        return render(request, 'basecamp/booking/cruise_booking.html', {})
+        return render(request, 'basecamp/booking/cruise_booking.html', {
+            "regions": Region.objects.filter(is_active=True, is_coming_soon=False).order_by('name'),
+        })
 
 
 # point-to-point booking by client (region required)
@@ -260,7 +262,10 @@ def p2p_booking_detail(request):
 
         return booking_success_response(request)
 
-    return render(request, 'basecamp/booking/p2p_booking_form.html', {"region": _get_request_region(request)})
+    return render(request, 'basecamp/booking/p2p_booking_form.html', {
+        "region": _get_request_region(request),
+        "regions": Region.objects.filter(is_active=True, is_coming_soon=False).order_by('name'),
+    })
 
 @ratelimit(key='ip', rate='5/m', method='POST', block=True)
 def confirm_booking_detail(request):

@@ -23,10 +23,14 @@ def contact_form(request):
     return render(request, 'basecamp/pages/contact_form.html')
 
 def cruise_booking(request):
-    return render(request, 'basecamp/booking/cruise_booking.html')
+    return render(request, 'basecamp/booking/cruise_booking.html', {
+        "regions": Region.objects.filter(is_active=True, is_coming_soon=False).order_by('name'),
+    })
 
 def cruise_inquiry(request):
-    return render(request, 'basecamp/booking/cruise_inquiry.html')
+    return render(request, 'basecamp/booking/cruise_inquiry.html', {
+        "regions": Region.objects.filter(is_active=True, is_coming_soon=False).order_by('name'),
+    })
 
 def error(request): 
     return render(request, 'basecamp/error/error.html')
@@ -75,12 +79,17 @@ def p2p_booking(request):
     region = getattr(request, "region", None)
     if not isinstance(region, Region):
         region = None
-    return render(request, 'basecamp/booking/p2p_booking_form.html', {"region": region})
+    return render(request, 'basecamp/booking/p2p_booking_form.html', {
+        "region": region,
+        "regions": Region.objects.filter(is_active=True, is_coming_soon=False).order_by('name'),
+    })
 
 
 def p2p_multi(request):
     # Inquiry/email form for multiple way points (legacy template).
-    return render(request, 'basecamp/booking/p2p_booking.html')
+    return render(request, 'basecamp/booking/p2p_booking.html', {
+        "regions": Region.objects.filter(is_active=True, is_coming_soon=False).order_by('name'),
+    })
 
 def p2p_single(request):
     return render(request, 'basecamp/booking/p2p_single.html')
