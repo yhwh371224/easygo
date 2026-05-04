@@ -384,6 +384,11 @@ CORS_ALLOWED_ORIGINS = [
     
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://easygoshuttle.com.au',
+    'https://www.easygoshuttle.com.au',
+]
+
 CORS_ALLOW_METHODS = [ 'GET', 'POST', ]
 
 CORS_ALLOW_HEADERS = [ 'Content-Type', 'X-CSRFToken', ]
