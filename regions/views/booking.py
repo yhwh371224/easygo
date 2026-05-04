@@ -6,7 +6,7 @@ from django.shortcuts import render, get_object_or_404
 from django_ratelimit.decorators import ratelimit
 
 from regions.models import Region, RequestLog
-from blog.models import Post as Booking
+from blog.models import Inquiry, Post as Booking
 from blog.blog_utils import get_default_driver_for_region
 from basecamp.basecamp_utils import (
     require_turnstile, is_duplicate_submission,
@@ -67,7 +67,7 @@ def region_booking_detail(request, region_slug):
         return_end_point = request.POST.get('return_end_point', '')
         message = request.POST.get('message')
 
-        if is_duplicate_submission(Booking, email):
+        if is_duplicate_submission(Inquiry, email, region_slug=region_slug):
             return JsonResponse({'success': False, 'message': 'Duplicate form recently submitted. Please wait before trying again.'})
 
         try:
@@ -76,9 +76,7 @@ def region_booking_detail(request, region_slug):
             return JsonResponse({'success': False, 'error': str(e)})
 
         baggage_str = parse_baggage(request)
-        driver = get_default_driver_for_region(region)
-
-        asyncio.run(send_telegram_notification("✈️ New airport booking has been received."))
+        driver = get_default_driver_for_region(region)        
 
         p = Booking(
             name=name, contact=contact, email=email,
@@ -97,6 +95,7 @@ def region_booking_detail(request, region_slug):
         p.region = region
         p.save()
 
+        asyncio.run(send_telegram_notification("✈️ New airport booking has been received."))
         return booking_success_response(request)
 
     suburbs = region.suburbs.filter(is_active=True).order_by('-is_pinned', 'sort_order', 'name')

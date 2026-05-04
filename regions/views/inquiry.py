@@ -65,7 +65,7 @@ def region_inquiry_details(request, region_slug):
         return_end_point = request.POST.get('return_end_point', '')
         message = request.POST.get('message', '')
 
-        if is_duplicate_submission(Inquiry, email):
+        if is_duplicate_submission(Inquiry, email, region_slug=region_slug):
             return JsonResponse({'success': False, 'message': 'Duplicate inquiry recently submitted. Please wait before trying again.'})
 
         try:
@@ -98,9 +98,3 @@ def region_inquiry_details(request, region_slug):
     suburbs = region.suburbs.filter(is_active=True).order_by('-is_pinned', 'sort_order', 'name')
     return render(request, 'regions/inquiry/inquiry.html', {'region': region, 'suburbs': suburbs})
 
-
-# def region_inquiry_done(request, region_slug):
-#     region = get_object_or_404(Region, slug=region_slug, is_active=True)
-#     return render(request, 'basecamp/inquiry_done.html', {
-#         'region': region,
-#     })

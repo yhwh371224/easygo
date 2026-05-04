@@ -20,7 +20,7 @@ urlpatterns = [
     path('articles/', include(('articles.urls', 'articles'), namespace='articles')),
     path('', include(('basecamp.urls', 'basecamp'), namespace='basecamp')),
     path('blog/', include(('blog.urls', 'blog'), namespace='blog')),
-    path('regions/', include(('regions.urls', 'regions'), namespace='regions')),
+    path('', include(('regions.urls', 'regions'), namespace='regions')),
 
     path('accounts/', include('allauth.urls')),
     path('paypal/', include('paypal.standard.ipn.urls')),

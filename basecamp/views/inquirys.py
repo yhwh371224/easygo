@@ -52,12 +52,6 @@ def _resolve_terminal(region: Region, raw_value: str):
     return None
 
 
-def render_inquiry_done(request):
-    if hasattr(request, 'region') and request.region:
-        return redirect('regions:inquiry_done', region_slug=request.region.slug)
-    return render(request, 'basecamp/inquiry_done.html')
-
-
 # Inquiry for airport
 @ratelimit(key='ip', rate='5/m', method='POST', block=True)
 @require_turnstile
@@ -144,10 +138,7 @@ def inquiry_details(request):
 @require_turnstile
 def inquiry_details1(request):
     if request.method == "POST":
-        post_region = _get_request_region(request)
-        if post_region and post_region.slug == 'melbourne':
-            messages.info(request, "Melbourne inquiries are not open yet. Please try another region.")
-            return redirect('regions:inquiry', region_slug='melbourne')
+        post_region = _get_request_region(request)        
         logger.info(
             f"[INQUIRY] IP={get_client_ip(request)} "
             f"path={request.path} "
@@ -199,7 +190,7 @@ def inquiry_details1(request):
         except ValueError as e:
             return JsonResponse({'success': False, 'error': str(e)})
 
-        if is_duplicate_submission(Inquiry, email):
+        if is_duplicate_submission(Inquiry, email, region_slug=post_region.slug if post_region else None):
             return JsonResponse({'success': False, 'message': 'Duplicate inquiry recently submitted. Please wait before trying again.'})
 
         start_terminal = _resolve_terminal(region, original_start_point)

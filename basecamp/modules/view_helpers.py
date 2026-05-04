@@ -77,8 +77,11 @@ def require_turnstile(view_func):
     return _wrapped
 
 
-def is_duplicate_submission(model_class, email, seconds=2):
-    cache_key = f'submit_{model_class.__name__}_{email}'
+def is_duplicate_submission(model_class, email, seconds=2, region_slug=None):
+    key_parts = ['submit', model_class.__name__, email]
+    if region_slug:
+        key_parts.append(region_slug)
+    cache_key = '_'.join(key_parts)
     if cache.get(cache_key):
         return True
     cache.set(cache_key, True, timeout=seconds)
