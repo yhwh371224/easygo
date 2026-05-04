@@ -30,7 +30,7 @@ urlpatterns = [
     # Empty prefix apps - 맨 아래
     path('', include(('basecamp.urls', 'basecamp'), namespace='basecamp')),
     path('', include(('regions.urls', 'regions'), namespace='regions')),
-    path('blog/', include(('blog.urls', 'blog'), namespace='blog')),
+    path('', include(('blog.urls', 'blog'), namespace='blog')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
