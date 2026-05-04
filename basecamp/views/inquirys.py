@@ -52,6 +52,12 @@ def _resolve_terminal(region: Region, raw_value: str):
     return None
 
 
+def render_inquiry_done(request):
+    if hasattr(request, 'region') and request.region:
+        return redirect('regions:inquiry_done', region_slug=request.region.slug)
+    return render(request, 'basecamp/inquiry_done.html')
+
+
 # Inquiry for airport
 @ratelimit(key='ip', rate='5/m', method='POST', block=True)
 @require_turnstile
