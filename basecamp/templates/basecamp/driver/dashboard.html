@@ -252,7 +252,7 @@
     <div class="trip-card-body">
 
       {% if post.pickup_date == today %}
-        <div class="trip-date-label today">📅 Today</div>
+        <div class="trip-date-label today">📅 Today: {{ today|date:"D, d M Y" }}</div>
       {% else %}
         <div class="trip-date-label">📅 {{ post.pickup_date|date:"D, d M" }}</div>
       {% endif %}
@@ -266,12 +266,12 @@
 
       {% if post.driver.virtual_number %}
       <a class="trip-phone" href="tel:{{ post.driver.virtual_number.number }}">
-        <span class="icon">📞</span>
+        <span class="icon"></span>
         {{ post.driver.virtual_number.number|format_au_phone }}
       </a>
       {% elif post.contact %}
       <a class="trip-phone" href="tel:{{ post.contact }}">
-        <span class="icon">📞</span>
+        <span class="icon"></span>
         {{ post.contact|format_au_phone }}
       </a>
       {% endif %}
@@ -345,6 +345,12 @@
         {% if post.paid %}<span class="badge-paid">Paid</span>{% endif %}
         {% if post.cash and not post.paid %}<span class="badge-cash">Cash</span>{% endif %}
       </div>
+      {% endif %}
+
+      {% if post.message %}
+        <div class="trip-message">
+          {{ post.message }}
+        </div>
       {% endif %}
 
     </div>
