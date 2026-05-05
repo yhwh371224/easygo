@@ -258,6 +258,7 @@ def driver_dashboard(request):
     current_total_paid = Decimal('0')
     current_total_cash = Decimal('0')
     to_be_paid = Decimal('0')
+    to_be_cash = Decimal('0')
 
     for post in past_posts:
         try:
