@@ -149,6 +149,7 @@ def driver_dashboard(request):
     from blog.models import Post, DriverSettlement
     today = timezone.localdate()
     now = timezone.now()
+    tomorrow = today + timedelta(days=1)
 
     # 대시보드 표시용 오늘 이후 트립 (use_proxy=True 인 것만)
     posts = (
@@ -162,12 +163,13 @@ def driver_dashboard(request):
         .order_by('pickup_date', 'pickup_time')
     )
 
-    # 밸런스용 오늘 이후 트립 (완료 포함, use_proxy 무관)
+    # 밸런스용 오늘~내일까지 트립 (완료 포함, use_proxy 무관) - 모레 이후 제외
     balance_posts_today = (
         Post.objects
         .filter(
             driver=driver,
             pickup_date__gte=today,
+            pickup_date__lt=today + timedelta(days=2),
             cancelled=False,
         )
         .exclude(price__isnull=True)
@@ -260,21 +262,21 @@ def driver_dashboard(request):
             amount = Decimal(str(post.price))
         except Exception:
             continue
-        if post.paid and not post.cash:
-            current_total_paid += amount
-        elif post.cash:
+        if post.cash:
             current_total_cash += amount
+        elif post.paid:
+            current_total_paid += amount
 
-    # 오늘 이후 트립도 current 합계에 포함 (완료된 것 포함)
+    # 오늘~내일 트립도 current 합계에 포함
     for post in balance_posts_today:
         try:
             amount = Decimal(str(post.price))
         except Exception:
             continue
-        if post.paid:
-            current_total_paid += amount
-        elif post.cash:
+        if post.cash:
             current_total_cash += amount
+        elif post.paid:
+            current_total_paid += amount
 
     current_grand_total = current_total_paid + current_total_cash
 
