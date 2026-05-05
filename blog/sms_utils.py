@@ -129,7 +129,7 @@ def send_whatsapp_template(phone_number, user_name=None):
 
     try:
         message = get_client().messages.create(
-            from_=f'whatsapp:{config("TWILIO_WHATSAPP_FROM")}',
+            from_=config("TWILIO_WHATSAPP_FROM"),
             to=f'whatsapp:{formatted_number}',
             content_sid="HXa9e4cea4ee0afe0d29c26a2b691700ec",
             content_variables=json.dumps({
