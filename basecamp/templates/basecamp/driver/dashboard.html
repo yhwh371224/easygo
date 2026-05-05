@@ -337,6 +337,12 @@
           </a>
           {% endif %}
         {% endwith %}
+      {% endif %}      
+
+      {% if post.meta %}
+        <div class="trip-message">
+          {{ post.message }}
+        </div>
       {% endif %}
 
       {% if post.price or post.paid or post.cash %}
@@ -345,12 +351,6 @@
         {% if post.paid %}<span class="badge-paid">Paid</span>{% endif %}
         {% if post.cash and not post.paid %}<span class="badge-cash">Cash</span>{% endif %}
       </div>
-      {% endif %}
-
-      {% if post.message %}
-        <div class="trip-message">
-          {{ post.message }}
-        </div>
       {% endif %}
 
     </div>
