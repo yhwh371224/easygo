@@ -392,8 +392,11 @@
         </div>
         <div class="past-trip-right">
           {% if post.price %}<span class="past-trip-price">${{ post.price }}</span>{% endif %}
-          {% if post.paid %}<span class="badge-paid">Paid</span>{% endif %}
-          {% if post.cash and not post.paid %}<span class="badge-cash">Cash</span>{% endif %}
+          {% if post.cash %}
+            <span class="badge-cash">Cash</span>
+          {% elif post.paid %}
+            <span class="badge-paid">Paid</span>
+          {% endif %}
         </div>
       </div>
       {% endwith %}
@@ -404,14 +407,14 @@
 
   <!-- 총액: timeline 밖 - 오늘 트립만 있어도 표시 -->
   {% if timeline or trips %}
-  <div class="totals-section">
-    <div class="totals-row">
-      <span>Total Paid</span>
-      <span>${{ current_total_paid }}</span>
-    </div>
+  <div class="totals-section">    
     <div class="totals-row">
       <span>Total Cash</span>
       <span>${{ current_total_cash }}</span>
+    </div>
+    <div class="totals-row">
+      <span>Total Paid</span>
+      <span>${{ current_total_paid }}</span>
     </div>
     <div class="totals-row grand">
       <span>Grand Total</span>
