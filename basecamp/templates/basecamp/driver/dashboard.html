@@ -47,6 +47,7 @@
     }
     .trip-route .arrow { margin:0 .4rem; color:#9ca3af; }
     .trip-meta { font-size:.8rem; color:#9ca3af; margin-top:.25rem; }
+    .trip-message { font-size:.8rem; color:#9ca3af; margin-top:.25rem; }
     .trip-address {
       display:flex;
       align-items:center;
@@ -339,7 +340,7 @@
         {% endwith %}
       {% endif %}      
 
-      {% if post.meta %}
+      {% if post.message %}
         <div class="trip-message">
           {{ post.message }}
         </div>
