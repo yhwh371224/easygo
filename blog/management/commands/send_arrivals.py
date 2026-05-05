@@ -128,29 +128,31 @@ class Command(BaseCommand):
     # =========================
     # WhatsApp fallback
     # =========================
+    # DISABLED: Twilio WhatsApp sending — do not uncomment without approval
     def send_whatsapp_reminder(self, sendto, name, pickup_date, email, price):
-        formatted_number = normalize_phone(sendto)
-
-        if not formatted_number:
-            logger.warning(f"[WA] Invalid number for {name}")
-            return
-
-        message_body = self.build_message(name, pickup_date)
-
-        try:
-            self.twilio_client.messages.create(
-                body=message_body,
-                from_=f'whatsapp:{self.twilio_whatsapp_from}',
-                to=f'whatsapp:{formatted_number}'
-            )
-
-            logger.info(f"[WA SENT] {name} {formatted_number}")
-
-        except TwilioRestException as e:
-            logger.error(
-                f"[WA ERROR] {name} {formatted_number} "
-                f"code={e.code} msg={e.msg}"
-            )
+        return
+#         formatted_number = normalize_phone(sendto)
+#
+#         if not formatted_number:
+#             logger.warning(f"[WA] Invalid number for {name}")
+#             return
+#
+#         message_body = self.build_message(name, pickup_date)
+#
+#         try:
+#             self.twilio_client.messages.create(
+#                 body=message_body,
+#                 from_=f'whatsapp:{self.twilio_whatsapp_from}',
+#                 to=f'whatsapp:{formatted_number}'
+#             )
+#
+#             logger.info(f"[WA SENT] {name} {formatted_number}")
+#
+#         except TwilioRestException as e:
+#             logger.error(
+#                 f"[WA ERROR] {name} {formatted_number} "
+#                 f"code={e.code} msg={e.msg}"
+#             )
 
     # =========================
     # EMAIL + NOTIFICATION FLOW
@@ -202,22 +204,23 @@ class Command(BaseCommand):
                     booking.price
                 )
 
+            # DISABLED: Twilio WhatsApp sending — do not uncomment without approval
             # WhatsApp fallback (intl only)
-            if (
-                not sms_sent
-                and booking.sms_reminder
-                and (booking.paid or booking.cash)
-                and booking.direction == "Pickup from Intl Airport"
-            ):
-                logger.warning(f"SMS failed → WhatsApp fallback {booking.name}")
-
-                self.send_whatsapp_reminder(
-                    booking.contact,
-                    booking.name,
-                    booking.pickup_date,
-                    booking.email,
-                    booking.price
-                )
+            # if (
+            #     not sms_sent
+            #     and booking.sms_reminder
+            #     and (booking.paid or booking.cash)
+            #     and booking.direction == "Pickup from Intl Airport"
+            # ):
+            #     logger.warning(f"SMS failed → WhatsApp fallback {booking.name}")
+            #
+            #     self.send_whatsapp_reminder(
+            #         booking.contact,
+            #         booking.name,
+            #         booking.pickup_date,
+            #         booking.email,
+            #         booking.price
+            #     )
 
     # =========================
     # MESSAGE BUILDER

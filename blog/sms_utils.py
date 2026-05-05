@@ -116,43 +116,45 @@ def send_sms_notice(phone_number, message_body):
 # =========================
 # WhatsApp (Twilio)
 # =========================
+# DISABLED: Twilio WhatsApp sending — do not uncomment without approval
 def send_whatsapp_template(phone_number, user_name=None):
     """
     Send WhatsApp template message via Twilio.
     Returns message SID or None.
     """
-    formatted_number = normalize_phone(phone_number)
-
-    if not formatted_number:
-        sms_logger.error(f"[WA] Invalid phone number: {phone_number}")
-        return None
-
-    try:
-        message = get_client().messages.create(
-            from_=config("TWILIO_WHATSAPP_FROM"),
-            to=f'whatsapp:{formatted_number}',
-            content_sid="HXa9e4cea4ee0afe0d29c26a2b691700ec",
-            content_variables=json.dumps({
-                "1": str(user_name) if user_name else "Customer",
-                "2": "info@easygoshuttle.com.au"
-            })
-        )
-
-        sms_logger.info(
-            f"[WA SENT] to={formatted_number} sid={message.sid}"
-        )
-
-        return message.sid
-
-    except TwilioRestException as e:
-        sms_logger.error(
-            f"[WA ERROR] Twilio error to={formatted_number} "
-            f"status={e.status} code={e.code} msg={e.msg}"
-        )
-        return None
-
-    except Exception as e:
-        sms_logger.error(
-            f"[WA ERROR] Unexpected error to={formatted_number} error={str(e)}"
-        )
-        return None
+    return None
+#     formatted_number = normalize_phone(phone_number)
+#
+#     if not formatted_number:
+#         sms_logger.error(f"[WA] Invalid phone number: {phone_number}")
+#         return None
+#
+#     try:
+#         message = get_client().messages.create(
+#             from_=config("TWILIO_WHATSAPP_FROM"),
+#             to=f'whatsapp:{formatted_number}',
+#             content_sid="HXa9e4cea4ee0afe0d29c26a2b691700ec",
+#             content_variables=json.dumps({
+#                 "1": str(user_name) if user_name else "Customer",
+#                 "2": "info@easygoshuttle.com.au"
+#             })
+#         )
+#
+#         sms_logger.info(
+#             f"[WA SENT] to={formatted_number} sid={message.sid}"
+#         )
+#
+#         return message.sid
+#
+#     except TwilioRestException as e:
+#         sms_logger.error(
+#             f"[WA ERROR] Twilio error to={formatted_number} "
+#             f"status={e.status} code={e.code} msg={e.msg}"
+#         )
+#         return None
+#
+#     except Exception as e:
+#         sms_logger.error(
+#             f"[WA ERROR] Unexpected error to={formatted_number} error={str(e)}"
+#         )
+#         return None

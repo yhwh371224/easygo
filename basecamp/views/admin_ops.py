@@ -597,7 +597,8 @@ def email_dispatch_detail(request):
                     "Reply only via email >> info@easygoshuttle.com.au"
                 )
                 send_sms_notice(user.contact, message)
-                send_whatsapp_template(user.contact, user.name)
+                # DISABLED: Twilio WhatsApp sending — do not uncomment without approval
+                # send_whatsapp_template(user.contact, user.name)
 
 
         # ✅ Payment discrepancy

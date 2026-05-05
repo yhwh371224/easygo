@@ -91,21 +91,22 @@ class Command(BaseCommand):
                 # =========================
                 # WhatsApp fallback
                 # =========================
-                if not sms_sent and notice.direction == 'Pickup from Intl Airport':
-                    try:
-                        client.messages.create(
-                            body=sms_message,
-                            from_=f'whatsapp:{whatsapp_from}',
-                            to=f'whatsapp:{formatted_number}'
-                        )
-
-                        sms_logger.info(f"[WA SENT] {notice.name} {formatted_number}")
-
-                    except TwilioRestException as e:
-                        sms_logger.error(
-                            f"[WA ERROR] {notice.name} {formatted_number} "
-                            f"code={e.code} msg={e.msg}"
-                        )
+                # DISABLED: Twilio WhatsApp sending — do not uncomment without approval
+                # if not sms_sent and notice.direction == 'Pickup from Intl Airport':
+                #     try:
+                #         client.messages.create(
+                #             body=sms_message,
+                #             from_=f'whatsapp:{whatsapp_from}',
+                #             to=f'whatsapp:{formatted_number}'
+                #         )
+                #
+                #         sms_logger.info(f"[WA SENT] {notice.name} {formatted_number}")
+                #
+                #     except TwilioRestException as e:
+                #         sms_logger.error(
+                #             f"[WA ERROR] {notice.name} {formatted_number} "
+                #             f"code={e.code} msg={e.msg}"
+                #         )
 
                 # =========================
                 # STATUS UPDATE

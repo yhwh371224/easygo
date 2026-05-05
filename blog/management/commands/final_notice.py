@@ -54,7 +54,8 @@ class Command(BaseCommand):
                         )
                         send_sms_notice(notice.contact, sms_message)
                         if notice.direction == 'Pickup from Intl Airport':
-                            send_whatsapp_template(notice.contact, user_name=notice.name)
+                            # DISABLED: Twilio WhatsApp sending — do not uncomment without approval
+                            pass  # send_whatsapp_template(notice.contact, user_name=notice.name)
 
                     # 3️⃣ pending 표시
                     notice.pending = True
