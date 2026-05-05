@@ -133,7 +133,6 @@ CALENDAR_EXCLUDED_FIELDS = {
 
 @receiver(post_save, sender=Post, dispatch_uid="async_create_event_on_calendar_once")
 def async_create_event_on_calendar(sender, instance, created, update_fields, **kwargs):
-    logger.warning(f"[CALENDAR SIGNAL] post_save fired. update_fields={update_fields}")  # 추가
     if update_fields is not None and set(update_fields).issubset(CALENDAR_EXCLUDED_FIELDS):
         return
     pk = instance.pk
