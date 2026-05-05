@@ -198,10 +198,11 @@ def driver_dashboard(request):
     settlements = list(
         DriverSettlement.objects
         .filter(driver=driver)
-        .order_by('-settled_at')[:1]
+        .order_by('-settled_at')[:2]
     )
 
     last_settlement = settlements[0] if len(settlements) >= 1 else None
+    second_last_settlement = settlements[1] if len(settlements) >= 2 else None
 
     # 과거 트립: last_settlement 이후 ~ today 미만
     past_posts = (
@@ -256,31 +257,47 @@ def driver_dashboard(request):
     # 마지막 정산 이후 트립만 current 합계 계산
     current_total_paid = Decimal('0')
     current_total_cash = Decimal('0')
+    to_be_paid = Decimal('0')
+    to_be_cash = Decimal('0')
 
     for post in past_posts:
         try:
             amount = Decimal(str(post.price))
         except Exception:
             continue
-        if post.cash:
-            current_total_cash += amount
-        elif post.paid:
-            current_total_paid += amount
+        # Grand Total: 두 번째 마지막 정산 이후
+        if not second_last_settlement or post.pickup_date > second_last_settlement.settled_at.date():
+            if post.cash:
+                current_total_cash += amount
+            elif post.paid:
+                current_total_paid += amount
+        # To be paid: 마지막 정산 이후
+        if not last_settlement or post.pickup_date > last_settlement.settled_at.date():
+            if post.cash:
+                to_be_cash += amount
+            elif post.paid:
+                to_be_paid += amount
 
-    # 오늘~내일 트립도 current 합계에 포함 (정산일 이후만)
     for post in balance_posts_today:
-        if last_settlement and post.pickup_date <= last_settlement.settled_at.date():
-            continue
         try:
             amount = Decimal(str(post.price))
         except Exception:
             continue
-        if post.cash:
-            current_total_cash += amount
-        elif post.paid:
-            current_total_paid += amount
+        # Grand Total: 두 번째 마지막 정산 이후
+        if not second_last_settlement or post.pickup_date > second_last_settlement.settled_at.date():
+            if post.cash:
+                current_total_cash += amount
+            elif post.paid:
+                current_total_paid += amount
+        # To be paid: 마지막 정산 이후
+        if not last_settlement or post.pickup_date > last_settlement.settled_at.date():
+            if post.cash:
+                to_be_cash += amount
+            elif post.paid:
+                to_be_paid += amount
 
     current_grand_total = current_total_paid + current_total_cash
+    to_be_paid_total = to_be_paid + to_be_cash
 
     return render(request, 'basecamp/driver/dashboard.html', {
         'driver': driver,
@@ -290,6 +307,8 @@ def driver_dashboard(request):
         'current_total_paid': current_total_paid,
         'current_total_cash': current_total_cash,
         'current_grand_total': current_grand_total,
+        'to_be_paid': to_be_paid,
+        'to_be_paid_total': to_be_paid_total,
         'impersonator_id': request.session.get('impersonator_id'),
     })
 
