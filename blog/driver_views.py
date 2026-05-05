@@ -215,8 +215,8 @@ def driver_dashboard(request):
         .exclude(price__isnull=True)
         .exclude(price='')
     )
-    if last_settlement:
-        past_posts = past_posts.filter(pickup_date__gt=last_settlement.settled_at.date())
+    if second_last_settlement:
+        past_posts = past_posts.filter(pickup_date__gt=second_last_settlement.settled_at.date())
     past_posts = past_posts.order_by('-pickup_date', '-pickup_time')
 
     # 트립과 정산을 날짜순으로 인터리브
@@ -258,19 +258,16 @@ def driver_dashboard(request):
     current_total_paid = Decimal('0')
     current_total_cash = Decimal('0')
     to_be_paid = Decimal('0')
-    to_be_cash = Decimal('0')
 
     for post in past_posts:
         try:
             amount = Decimal(str(post.price))
         except Exception:
             continue
-        # Grand Total: 두 번째 마지막 정산 이후
-        if not second_last_settlement or post.pickup_date > second_last_settlement.settled_at.date():
-            if post.cash:
-                current_total_cash += amount
-            elif post.paid:
-                current_total_paid += amount
+        if post.cash:
+            current_total_cash += amount
+        elif post.paid:
+            current_total_paid += amount
         # To be paid: 마지막 정산 이후
         if not last_settlement or post.pickup_date > last_settlement.settled_at.date():
             if post.cash:
@@ -283,12 +280,10 @@ def driver_dashboard(request):
             amount = Decimal(str(post.price))
         except Exception:
             continue
-        # Grand Total: 두 번째 마지막 정산 이후
-        if not second_last_settlement or post.pickup_date > second_last_settlement.settled_at.date():
-            if post.cash:
-                current_total_cash += amount
-            elif post.paid:
-                current_total_paid += amount
+        if post.cash:
+            current_total_cash += amount
+        elif post.paid:
+            current_total_paid += amount
         # To be paid: 마지막 정산 이후
         if not last_settlement or post.pickup_date > last_settlement.settled_at.date():
             if post.cash:
@@ -297,7 +292,6 @@ def driver_dashboard(request):
                 to_be_paid += amount
 
     current_grand_total = current_total_paid + current_total_cash
-    to_be_paid_total = to_be_paid + to_be_cash
 
     return render(request, 'basecamp/driver/dashboard.html', {
         'driver': driver,
@@ -308,7 +302,6 @@ def driver_dashboard(request):
         'current_total_cash': current_total_cash,
         'current_grand_total': current_grand_total,
         'to_be_paid': to_be_paid,
-        'to_be_paid_total': to_be_paid_total,
         'impersonator_id': request.session.get('impersonator_id'),
     })
 
