@@ -131,7 +131,7 @@ def send_whatsapp_template(phone_number, user_name=None):
         message = get_client().messages.create(
             from_=f'whatsapp:{config("TWILIO_WHATSAPP_FROM")}',
             to=f'whatsapp:{formatted_number}',
-            content_sid="HX247229bb2bb4e0bcc4fb17ad94fb17a8",
+            content_sid="HXa9e4cea4ee0afe0d29c26a2b691700ec",
             content_variables=json.dumps({
                 "1": str(user_name) if user_name else "Customer",
                 "2": "info@easygoshuttle.com.au"
