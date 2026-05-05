@@ -267,8 +267,10 @@ def driver_dashboard(request):
         elif post.paid:
             current_total_paid += amount
 
-    # 오늘~내일 트립도 current 합계에 포함
+    # 오늘~내일 트립도 current 합계에 포함 (정산일 이후만)
     for post in balance_posts_today:
+        if last_settlement and post.pickup_date <= last_settlement.settled_at.date():
+            continue
         try:
             amount = Decimal(str(post.price))
         except Exception:
