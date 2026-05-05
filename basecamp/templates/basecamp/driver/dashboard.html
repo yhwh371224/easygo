@@ -350,17 +350,19 @@
     </div>
 
     {% if post.use_proxy %}
-    <button
-      class="btn-complete active"
-      id="btn-{{ post.id }}"
-      onclick="completeTrip({{ post.id }})"
-    >
-      Complete Trip
-    </button>
+      <button
+        class="btn-complete active"
+        id="btn-{{ post.id }}"
+        data-price="{{ post.price }}"
+        data-cash="{{ post.cash|yesno:'true,false' }}"
+        onclick="completeTrip({{ post.id }})"
+      >
+        Complete Trip
+      </button>
     {% else %}
-    <button class="btn-complete done" disabled>
-      Completed
-    </button>
+      <button class="btn-complete done" disabled>
+        Completed
+      </button>
     {% endif %}
   </div>
   {% endwith %}
@@ -410,8 +412,8 @@
       <span>${{ current_grand_total }}</span>
     </div>
     <div class="totals-row" style="border-top:1px dashed #e5e7eb; margin-top:.75rem; padding-top:.75rem; background:#fffbeb; border-radius:8px; padding:.65rem .75rem; color:#92400e; font-weight:600; font-size:.95rem;">
-      <span>💰 To be paid to driver</span>
-      <span>${{ current_total_paid }}</span>
+      <span>💰 To be paid to {{ driver.driver_name }}</span>
+      <span id="to-be-paid-amount">${{ current_total_paid }}</span>
     </div>
   </div>
   {% endif %}
@@ -419,38 +421,49 @@
 </div>
 
 <script>
-function completeTrip(postId) {
-  const btn = document.getElementById('btn-' + postId);
-  if (!btn || btn.disabled) return;
-  btn.disabled = true;
-  btn.textContent = 'Processing…';
+  function completeTrip(postId) {
+    const btn = document.getElementById('btn-' + postId);
+    if (!btn || btn.disabled) return;
+    btn.disabled = true;
+    btn.textContent = 'Processing…';
 
-  fetch("{% url 'blog:driver_complete_trip' 0 %}".replace('/0/', '/' + postId + '/'), {
-    method: 'POST',
-    headers: {
-      'X-CSRFToken': '{{ csrf_token }}',
-      'Content-Type': 'application/json',
-    },
-  })
-  .then(r => r.json())
-  .then(data => {
-    if (data.ok) {
-      btn.textContent = 'Completed';
-      btn.className = 'btn-complete done';
-      const badge = document.querySelector('#trip-' + postId + ' .badge-proxy');
-      if (badge) badge.remove();
-    } else {
+    fetch("{% url 'blog:driver_complete_trip' 0 %}".replace('/0/', '/' + postId + '/'), {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': '{{ csrf_token }}',
+        'Content-Type': 'application/json',
+      },
+    })
+    .then(r => r.json())
+    .then(data => {
+      if (data.ok) {
+        btn.textContent = 'Completed';
+        btn.className = 'btn-complete done';
+        const badge = document.querySelector('#trip-' + postId + ' .badge-proxy');
+        if (badge) badge.remove();
+
+        // cash 잡이 아닌 경우만 to be paid 에서 차감
+        const isCash = btn.dataset.cash === 'true';
+        if (isCash) {
+          const price = parseFloat(btn.dataset.price) || 0;
+          const el = document.getElementById('to-be-paid-amount');
+          if (el) {
+            const current = parseFloat(el.textContent.replace('$', '')) || 0;
+            el.textContent = '$' + (current - price).toFixed(2);
+          }
+        }
+      } else {
+        btn.disabled = false;
+        btn.textContent = 'Complete Trip';
+        alert('Failed. Please try again.');
+      }
+    })
+    .catch(() => {
       btn.disabled = false;
       btn.textContent = 'Complete Trip';
-      alert('Failed. Please try again.');
-    }
-  })
-  .catch(() => {
-    btn.disabled = false;
-    btn.textContent = 'Complete Trip';
-    alert('Network error. Please try again.');
-  });
-}
+      alert('Network error. Please try again.');
+    });
+  }
 </script>
 
 <a href="{% url 'blog:driver_password_change' %}" style="
