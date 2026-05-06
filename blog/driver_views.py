@@ -233,7 +233,7 @@ def driver_dashboard(request):
     if second_last_settlement:
         timeline_posts = timeline_posts.filter(pickup_date__gt=second_last_settlement.local_date)
     if last_settlement:  # ← 이거 추가
-        timeline_posts = timeline_posts.filter(pickup_date__gt=last_settlement.local_date)
+        timeline_posts = timeline_posts.exclude(pickup_date=last_settlement.local_date)
     timeline_posts = timeline_posts.order_by('-pickup_date', '-pickup_time')
 
     # 트립과 정산을 날짜순으로 인터리브
