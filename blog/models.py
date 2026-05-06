@@ -42,8 +42,18 @@ class DriverSettlement(models.Model):
     class Meta:
         ordering = ['-settled_at']
 
+    @property
+    def local_date(self):
+        import pytz
+        from django.utils.timezone import localtime
+        try:
+            tz = pytz.timezone(self.driver.region.timezone)
+            return self.settled_at.astimezone(tz).date()
+        except Exception:
+            return localtime(self.settled_at).date()  # fallback
+
     def __str__(self):
-        return f"{self.driver} - ${self.amount} on {self.settled_at.date()}"
+        return f"{self.driver} - ${self.amount} on {self.local_date}"
 
 
 class Inquiry(models.Model):
