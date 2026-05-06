@@ -215,9 +215,14 @@ def driver_dashboard(request):
         .exclude(price__isnull=True)
         .exclude(price='')
     )
+    # 수정 - last_settlement 당일은 제외 (이미 정산된 것으로 간주)
+    if last_settlement:
+        past_posts = past_posts.filter(
+            pickup_date__gt=last_settlement.local_date  # 21일 제외, 22일부터
+        )
     if second_last_settlement:
         past_posts = past_posts.filter(
-            pickup_date__gt=second_last_settlement.local_date  
+            pickup_date__gt=second_last_settlement.local_date  # 19일 이전 제외
         )
     past_posts = past_posts.order_by('-pickup_date', '-pickup_time')
 
