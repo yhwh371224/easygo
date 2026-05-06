@@ -194,7 +194,7 @@ def driver_dashboard(request):
             'is_past': is_past,
         })
 
-    # 정산 내역 (최신순, 최대 1개)
+    # 정산 내역 (최신순, 최대 2개)
     settlements = list(
         DriverSettlement.objects
         .filter(driver=driver)
@@ -204,7 +204,7 @@ def driver_dashboard(request):
     last_settlement = settlements[0] if len(settlements) >= 1 else None
     second_last_settlement = settlements[1] if len(settlements) >= 2 else None
 
-    # 과거 트립: last_settlement 이후 ~ today 미만
+    # 계산용 past_posts: last_settlement 이후 ~ today 미만
     past_posts = (
         Post.objects
         .filter(
@@ -215,20 +215,28 @@ def driver_dashboard(request):
         .exclude(price__isnull=True)
         .exclude(price='')
     )
-    # 수정 - last_settlement 당일은 제외 (이미 정산된 것으로 간주)
     if last_settlement:
-        past_posts = past_posts.filter(
-            pickup_date__gt=last_settlement.local_date  # 21일 제외, 22일부터
-        )
-    if second_last_settlement:
-        past_posts = past_posts.filter(
-            pickup_date__gt=second_last_settlement.local_date  # 19일 이전 제외
-        )
+        past_posts = past_posts.filter(pickup_date__gt=last_settlement.local_date)
     past_posts = past_posts.order_by('-pickup_date', '-pickup_time')
+
+    # timeline용 posts: second_last_settlement 이후 ~ today 미만 (히스토리 표시용)
+    timeline_posts = (
+        Post.objects
+        .filter(
+            driver=driver,
+            pickup_date__lt=today,
+            cancelled=False,
+        )
+        .exclude(price__isnull=True)
+        .exclude(price='')
+    )
+    if second_last_settlement:
+        timeline_posts = timeline_posts.filter(pickup_date__gt=second_last_settlement.local_date)
+    timeline_posts = timeline_posts.order_by('-pickup_date', '-pickup_time')
 
     # 트립과 정산을 날짜순으로 인터리브
     timeline = []
-    for post in past_posts:
+    for post in timeline_posts:
         timeline.append({
             'type': 'trip',
             'date': post.pickup_date,
@@ -240,6 +248,7 @@ def driver_dashboard(request):
             'date': s.local_date,
             'data': s,
         })
+
     # 오늘 완료된 잡 (use_proxy=False, 대시보드에 표시 안 되지만 timeline엔 표시)
     completed_today = (
         Post.objects
@@ -252,7 +261,6 @@ def driver_dashboard(request):
         .exclude(price__isnull=True)
         .exclude(price='')
     )
-
     for post in completed_today:
         timeline.append({
             'type': 'trip',
@@ -261,7 +269,7 @@ def driver_dashboard(request):
         })
     timeline.sort(key=lambda x: x['date'], reverse=True)
 
-    # 마지막 정산 이후 트립만 current 합계 계산
+    # 마지막 정산 이후 트립만 합계 계산
     current_total_paid = Decimal('0')
     current_total_cash = Decimal('0')
     to_be_paid = Decimal('0')
@@ -276,8 +284,7 @@ def driver_dashboard(request):
             current_total_cash += amount
         elif post.paid:
             current_total_paid += amount
-        # To be paid: 마지막 정산 이후
-        if not last_settlement or post.pickup_date > last_settlement.local_date:    
+        if not last_settlement or post.pickup_date > last_settlement.local_date:
             if post.cash:
                 to_be_cash += amount
             elif post.paid:
@@ -292,8 +299,7 @@ def driver_dashboard(request):
             current_total_cash += amount
         elif post.paid:
             current_total_paid += amount
-        # To be paid: 마지막 정산 이후
-        if not last_settlement or post.pickup_date > last_settlement.local_date:    
+        if not last_settlement or post.pickup_date > last_settlement.local_date:
             if post.cash:
                 to_be_cash += amount
             elif post.paid:
