@@ -10,6 +10,7 @@ from django.core.exceptions import ValidationError
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
+from django.utils.timezone import localtime
 from django.views.decorators.http import require_POST
 from django.contrib.admin.views.decorators import staff_member_required
 from basecamp.modules.view_helpers import verify_turnstile, get_client_ip
@@ -216,7 +217,9 @@ def driver_dashboard(request):
         .exclude(price='')
     )
     if second_last_settlement:
-        past_posts = past_posts.filter(pickup_date__gt=second_last_settlement.settled_at.date())
+        past_posts = past_posts.filter(
+            pickup_date__gt=localtime(second_last_settlement.settled_at).date() 
+        )
     past_posts = past_posts.order_by('-pickup_date', '-pickup_time')
 
     # 트립과 정산을 날짜순으로 인터리브
@@ -230,7 +233,7 @@ def driver_dashboard(request):
     for s in settlements:
         timeline.append({
             'type': 'settlement',
-            'date': s.settled_at.date(),
+            'date': localtime(s.settled_at).date(), 
             'data': s,
         })
     # 오늘 완료된 잡 (use_proxy=False, 대시보드에 표시 안 되지만 timeline엔 표시)
@@ -270,7 +273,7 @@ def driver_dashboard(request):
         elif post.paid:
             current_total_paid += amount
         # To be paid: 마지막 정산 이후
-        if not last_settlement or post.pickup_date > last_settlement.settled_at.date():
+        if not last_settlement or post.pickup_date > localtime(last_settlement.settled_at).date(): 
             if post.cash:
                 to_be_cash += amount
             elif post.paid:
@@ -286,7 +289,7 @@ def driver_dashboard(request):
         elif post.paid:
             current_total_paid += amount
         # To be paid: 마지막 정산 이후
-        if not last_settlement or post.pickup_date > last_settlement.settled_at.date():
+        if not last_settlement or post.pickup_date > localtime(last_settlement.settled_at).date():
             if post.cash:
                 to_be_cash += amount
             elif post.paid:
