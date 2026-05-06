@@ -96,6 +96,7 @@ def send_missing_direction_email(instance):
         'email': instance.email,
         'pickup_date': instance.pickup_date,
         'flight_number': instance.flight_number,
+        'issues': ['Direction is missing or not specified'],
     })
 
     send_html_email(subject, html_content, [RECIPIENT_EMAIL])
