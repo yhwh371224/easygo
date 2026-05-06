@@ -85,6 +85,15 @@
       "sameAs": ["https://www.facebook.com/easygoshuttle"]
     }
     </script>
+    {% if GOOGLE_ANALYTICS_ID %}
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ GOOGLE_ANALYTICS_ID }}"></script>
+    <script nonce="{{ CSP_NONCE }}">
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '{{ GOOGLE_ANALYTICS_ID }}');
+    </script>
+    {% endif %}
   </head>
   <body>
     {% include "basecamp/layouts/navbar.html" %}

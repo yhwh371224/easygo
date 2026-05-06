@@ -25,3 +25,8 @@ def navbar_defaults(request):
     return {
         'navbar_theme': 'navbar-dark'  # 기본값
     }
+
+def google_analytics(request):
+    if settings.DEBUG:
+        return {}
+    return {'GOOGLE_ANALYTICS_ID': getattr(settings, 'GOOGLE_ANALYTICS_ID', '')}

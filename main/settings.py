@@ -55,9 +55,10 @@ if ENVIRONMENT == 'production':
                 "'self'",
                 'https://cdnjs.cloudflare.com',
                 'https://ajax.googleapis.com',
+                'https://www.googletagmanager.com',
                 'https://challenges.cloudflare.com',
-                'https://*.paypal.com',      
-                'https://*.paypalobjects.com', 
+                'https://*.paypal.com',
+                'https://*.paypalobjects.com',
                 "'unsafe-inline'",
                 # NONCE,
             ),
@@ -76,12 +77,16 @@ if ENVIRONMENT == 'production':
                 'https://s3.ap-southeast-2.amazonaws.com/easygoshuttle.com.au/',
                 'https://www.paypalobjects.com',
                 'https://*.paypal.com',
+                'https://www.google-analytics.com',
             ),
             'connect-src': (
                 "'self'",
                 'https://challenges.cloudflare.com',
                 'https://*.paypal.com',
                 'https://*.paypalobjects.com',
+                'https://www.google-analytics.com',
+                'https://analytics.google.com',
+                'https://www.googletagmanager.com',
             ),
             'frame-src': (
                 "'self'",
@@ -284,8 +289,9 @@ TEMPLATES = [
                 'basecamp.context_processors.add_custom_context',
                 'basecamp.context_processors.bank_settings',
                 'basecamp.context_processors.turnstile_site_key', 
-                'basecamp.context_processors.navbar_defaults',        
+                'basecamp.context_processors.navbar_defaults',
                 'regions.context_processors.region_config',
+                'basecamp.context_processors.google_analytics',
             ],
         },
     },
@@ -470,6 +476,8 @@ HONEYPOT_VALUE = ''
 
 # Banking details (anz, commbank, westpac, nab)
 DEFAULT_BANK_CODE = 'anz'
+
+GOOGLE_ANALYTICS_ID = 'G-YZ51V54FK0'
 
 # GOOGLE REVIEW URL
 GOOGLE_REVIEW_URL = config('GOOGLE_REVIEW_URL')
