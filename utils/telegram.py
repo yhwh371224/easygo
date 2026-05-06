@@ -30,3 +30,14 @@ def send_telegram_sync(text: str):
     url = f"https://api.telegram.org/bot{token}/sendMessage"
     requests.post(url, data={"chat_id": chat_id, "text": text, "parse_mode": "Markdown"})
     
+
+def get_ip_info(ip: str) -> str:
+    try:
+        resp = requests.get(f"https://ipinfo.io/{ip}/json", timeout=3)
+        data = resp.json()
+        city = data.get('city', '')
+        region = data.get('region', '')
+        org = data.get('org', '')
+        return f"{city}, {region} ({org})"
+    except Exception:
+        return "Unknown"

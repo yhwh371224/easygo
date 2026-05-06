@@ -16,7 +16,7 @@ from basecamp.basecamp_utils import (
     get_client_ip,
 )
 from django_ratelimit.decorators import ratelimit
-from utils.telegram import send_telegram_notification
+from utils.telegram import send_telegram_notification, get_ip_info
 from regions.models import RequestLog
 
 logger = logging.getLogger(__name__)
@@ -66,12 +66,7 @@ def inquiry_details(request):
             f"path={request.path} "
             f"email={request.POST.get('email')}"
         )
-        RequestLog.objects.create(
-            region=post_region,
-            path=request.path,
-            ip=get_client_ip(request),
-            user_agent=request.META.get("HTTP_USER_AGENT", ""),
-        )
+        
         name = request.POST.get('name', '')
         contact = request.POST.get('contact', '')
         email = request.POST.get('email', '')  
@@ -125,7 +120,13 @@ def inquiry_details(request):
         p.region = post_region
         p.save()
 
-        asyncio.run(send_telegram_notification("✈️ New inquiry has been received."))
+        ip = get_client_ip(request)
+        ip_info = get_ip_info(ip)
+        asyncio.run(send_telegram_notification(
+            f"✈️ New inquiry:\n"
+            f"IP: `{ip}`\n"
+            f"Location: {ip_info}"
+        ))
 
         return booking_success_response(request)
 
@@ -144,12 +145,7 @@ def inquiry_details1(request):
             f"path={request.path} "
             f"email={request.POST.get('email')}"
         )
-        RequestLog.objects.create(
-            region=post_region,
-            path=request.path,
-            ip=get_client_ip(request),
-            user_agent=request.META.get("HTTP_USER_AGENT", ""),
-        )
+        
         pickup_date_str = request.POST.get('pickup_date', '')
         name = request.POST.get('name', '')
         contact = request.POST.get('contact', '')
@@ -255,7 +251,13 @@ def inquiry_details1(request):
         p.region = post_region
         p.save()
 
-        asyncio.run(send_telegram_notification("🏠 Inquiry home page has been received."))
+        ip = get_client_ip(request)
+        ip_info = get_ip_info(ip)
+        asyncio.run(send_telegram_notification(
+            f"✈️ Home Inquiry:\n"
+            f"IP: `{ip}`\n"
+            f"Location: {ip_info}"
+        ))
 
         return render_inquiry_done(request)
 
@@ -277,12 +279,7 @@ def p2p_detail(request):
             f"path={request.path} "
             f"email={request.POST.get('email')}"
         )
-        RequestLog.objects.create(
-            region=post_region,
-            path=request.path,
-            ip=get_client_ip(request),
-            user_agent=request.META.get("HTTP_USER_AGENT", ""),
-        )
+        
         p2p_name = request.POST.get('p2p_name')
         p2p_phone = request.POST.get('p2p_phone')
         p2p_email = request.POST.get('p2p_email')

@@ -15,7 +15,7 @@ from basecamp.basecamp_utils import (
 )
 from django_ratelimit.decorators import ratelimit
 import asyncio
-from utils.telegram import send_telegram_notification
+from utils.telegram import send_telegram_notification, get_ip_info
 
 logger = logging.getLogger(__name__)
 
@@ -43,12 +43,6 @@ def booking_detail(request):
             f"[BOOKING] IP={get_client_ip(request)} "
             f"path={request.path} "
             f"email={request.POST.get('email')}"
-        )
-        RequestLog.objects.create(
-            region=post_region,
-            path=request.path,
-            ip=get_client_ip(request),
-            user_agent=request.META.get("HTTP_USER_AGENT", ""),
         )
 
         # Region selection is mandatory (no default region).
@@ -96,9 +90,6 @@ def booking_detail(request):
         if not driver:
             raise Exception("No default driver configured in system")
 
-
-        asyncio.run(send_telegram_notification("✈️ New airport booking has been received."))
-
         # 🧳 개별 수하물 항목 수집
         baggage_str = parse_baggage(request)
 
@@ -110,6 +101,14 @@ def booking_detail(request):
                  price='TBA', pending=True, reminder=False)
         p.region = post_region
         p.save()
+
+        ip = get_client_ip(request)
+        ip_info = get_ip_info(ip)
+        asyncio.run(send_telegram_notification(
+            f"✈️ New booking:\n"
+            f"IP: `{ip}`\n"
+            f"Location: {ip_info}"
+        ))
 
         return booking_success_response(request)
 
@@ -127,12 +126,7 @@ def cruise_booking_detail(request):
             f"path={request.path} "
             f"email={request.POST.get('email')}"
         )
-        RequestLog.objects.create(
-            region=region if 'region' in locals() else None,
-            path=request.path,
-            ip=get_client_ip(request),
-            user_agent=request.META.get("HTTP_USER_AGENT", ""),
-        )
+
         # ✅ Collect date strings
         pickup_date_str = request.POST.get('pickup_date', '')
         return_pickup_date_str = request.POST.get('return_pickup_date', '')
@@ -163,8 +157,6 @@ def cruise_booking_detail(request):
         region = Region.objects.filter(slug='sydney', is_active=True).first()
         driver = get_default_driver_for_region(region)
 
-        asyncio.run(send_telegram_notification("🚢 New cruise booking has been received."))
-
         # 🧳 개별 수하물 항목 수집
         baggage_str = parse_baggage(request)         
 
@@ -176,6 +168,14 @@ def cruise_booking_detail(request):
                  message=message, driver=driver, pending=True, reminder=False, region=region)
 
         p.save()
+
+        ip = get_client_ip(request)
+        ip_info = get_ip_info(ip)
+        asyncio.run(send_telegram_notification(
+            f"🚢 New cruise booking:\n"
+            f"IP: `{ip}`\n"
+            f"Location: {ip_info}"
+        ))
 
         return booking_success_response(request)
 
@@ -198,12 +198,6 @@ def p2p_booking_detail(request):
             f"[BOOKING] IP={get_client_ip(request)} "
             f"path={request.path} "
             f"email={request.POST.get('email')}"
-        )
-        RequestLog.objects.create(
-            region=post_region,
-            path=request.path,
-            ip=get_client_ip(request),
-            user_agent=request.META.get("HTTP_USER_AGENT", ""),
         )
 
         # Region selection is mandatory (no default region).
@@ -238,8 +232,6 @@ def p2p_booking_detail(request):
 
         driver = get_default_driver_for_region(region)
 
-        asyncio.run(send_telegram_notification("🧭 New point-to-point booking has been received."))
-
         baggage_str = parse_baggage(request)
 
         p = Post(
@@ -260,6 +252,14 @@ def p2p_booking_detail(request):
         )
         p.save()
 
+        ip = get_client_ip(request)
+        ip_info = get_ip_info(ip)
+        asyncio.run(send_telegram_notification(
+            f"P2P booking:\n"
+            f"IP: `{ip}`\n"
+            f"Location: {ip_info}"
+        ))
+
         return booking_success_response(request)
 
     return render(request, 'basecamp/booking/p2p_booking_form.html', {
@@ -275,12 +275,7 @@ def confirm_booking_detail(request):
             f"path={request.path} "
             f"email={request.POST.get('email')}"
         )
-        RequestLog.objects.create(
-            region=region if 'region' in locals() else None,
-            path=request.path,
-            ip=get_client_ip(request),
-            user_agent=request.META.get("HTTP_USER_AGENT", ""),
-        )
+        
         honeypot = request.POST.get('phone_verify', '')
         if honeypot != '':
             return JsonResponse({'success': False, 'error': 'Bot detected.'})
@@ -343,8 +338,6 @@ def confirm_booking_detail(request):
             pickup_date_obj, return_pickup_date_obj = parse_booking_dates(pickup_date, return_pickup_date)
         except ValueError as e:
             return JsonResponse({'success': False, 'error': str(e)})
-        
-        asyncio.run(send_telegram_notification("📋 clicked confirm booking."))
 
         # 최종 가격 계산
         if price in [None, ""]:
@@ -391,6 +384,14 @@ def confirm_booking_detail(request):
 
         user.delete()
 
+        ip = get_client_ip(request)
+        ip_info = get_ip_info(ip)
+        asyncio.run(send_telegram_notification(
+            f"Clicked the confirm button:\n"
+            f"IP: `{ip}`\n"
+            f"Location: {ip_info}"
+        ))
+
         return render_inquiry_done(request)
 
     else:
@@ -406,12 +407,7 @@ def return_trip_detail(request):
             f"path={request.path} "
             f"email={request.POST.get('email')}"
         )
-        RequestLog.objects.create(
-            region=region if 'region' in locals() else None,
-            path=request.path,
-            ip=get_client_ip(request),
-            user_agent=request.META.get("HTTP_USER_AGENT", ""),
-        )
+        
         pickup_date_str = request.POST.get('pickup_date', '')
         return_pickup_date_str = request.POST.get('return_pickup_date', '')
         email = request.POST.get('email', '').strip()
