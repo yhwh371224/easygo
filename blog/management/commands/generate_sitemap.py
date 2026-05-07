@@ -41,6 +41,24 @@ class Command(BaseCommand):
         # 지역 페이지 동적 추가 (sydney 제외)
         try:
             from regions.models import Region, RegionSuburb
+
+            # 기존 sydney suburb 추가 코드 없음 → 추가 필요
+            sydney_suburbs = RegionSuburb.objects.filter(
+                is_active=True, region__slug='sydney'
+            ).select_related('region')
+            for suburb in sydney_suburbs:
+                urls.append({
+                    "loc": f"https://easygoshuttle.com.au/sydney-airport-shuttle/{suburb.slug}/",
+                    "changefreq": "weekly",
+                    "priority": "0.8000",
+                })
+                urls.append({
+                    "loc": f"https://easygoshuttle.com.au/maxi-taxi/{suburb.slug}/",
+                    "changefreq": "weekly",
+                    "priority": "0.8000",
+                })
+
+            # 다른 지역   
             regions = Region.objects.filter(is_active=True).exclude(slug='sydney')
             for region in regions:
                 urls.append({

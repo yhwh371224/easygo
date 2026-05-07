@@ -42,10 +42,10 @@
         {% for s in more_suburbs %}
         <div class="card card-body bg-light text-center align-items-center">
             <div class="icon-xl mb-3">
-                    <a href="/sydney-airport-transfer/{{ s.slug }}/"></a>
+                    <a href="/sydney/airport-transfer/{{ s.slug }}/"></a>
             </div>
             <h6 class="mb-0">
-                <a href="/sydney-airport-transfer/{{ s.slug }}/">{{ s.name }}</a>
+                <a href="/sydney/airport-transfer/{{ s.slug }}/">{{ s.name }}</a>
             </h6>
         </div>
         {% endfor %}
@@ -90,7 +90,7 @@
                     }
                 });
                 if (suburbExists) {
-                    const url = `/sydney-airport-transfer/${slugifiedSearchText}/`;
+                    const url = `/sydney/airport-transfer/${slugifiedSearchText}/`;
                     window.location.href = url;
                 } else {
                     alert(

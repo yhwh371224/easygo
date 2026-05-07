@@ -39,7 +39,7 @@
         {% for s in more_suburbs %}
         <div class="card card-body bg-light text-center align-items-center">
             <h6 class="mb-0">
-                <a href="/maxi-taxi/{{ s.slug }}/">{{ s.name }}</a>
+                <a href="/maxi_taxi/{{ s.slug }}/">{{ s.name }}</a>
             </h6>
         </div>
         {% endfor %}
@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
         if (suburbExists) {
             const slug = searchText.replace(/\s+/g, '-');
-            window.location.href = `/maxi-taxi/${slug}/`;
+            window.location.href = `/maxi_taxi/${slug}/`;
         } else {
             alert('The entered suburb does not exist. Please check the name or select it from the list. If missing, email us.');
         }
