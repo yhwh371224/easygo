@@ -142,7 +142,7 @@ def region_more_suburbs(request, region_slug):
     suburbs = RegionSuburb.objects.filter(
         region=region, is_active=True
     ).order_by('name')
-    return render(request, 'regions/pages/more_suburbs.html', {
+    return render(request, 'regions/pages/regions_more_suburbs.html', {
         'region': region,
         'suburbs': suburbs,
     })
