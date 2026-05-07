@@ -135,3 +135,14 @@ def region_inquiry_done(request, region_slug):
         'region': region,
         'google_review_url': settings.GOOGLE_REVIEW_URL,
     })
+
+
+def region_more_suburbs(request, region_slug):
+    region = get_object_or_404(Region, slug=region_slug, is_active=True)
+    suburbs = RegionSuburb.objects.filter(
+        region=region, is_active=True
+    ).order_by('name')
+    return render(request, 'regions/pages/more_suburbs.html', {
+        'region': region,
+        'suburbs': suburbs,
+    })
