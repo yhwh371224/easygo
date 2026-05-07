@@ -1,6 +1,7 @@
 {% extends 'basecamp/base/easygo_base_form.html' %}
 
 {% load static %}
+{% load form_widgets %}
 
 {% block title %}
 	EasyGo Airport Shuttle Booking Form – Sydney Airport Transfers
@@ -113,7 +114,7 @@
 					</div>
 				<div class="mb-3 pb-1">
 					<label class="form-label" id="label-pickup-date">Flight date&nbsp;(Sydney)</label>
-					 <input class="form-control date-picker rounded" name="pickup_date" type="text" placeholder="Choose flight date" data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;m/d/Y&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;, &quot;defaultDate&quot;: &quot;today&quot;}" aria-labelledby="label-pickup-date">
+					 <input class="form-control date-picker rounded" name="pickup_date" type="text" placeholder="Choose pickup date" data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;m/d/Y&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;, &quot;defaultDate&quot;: &quot;today&quot;}" aria-labelledby="label-pickup-date">
 					<div class="invalid-feedback">Please enter a valid email address!</div>
 				</div>
 				<div class="mb-3 pb-1">
@@ -121,14 +122,8 @@
 					 <input class="form-control" type="text" placeholder="Your flight number" name="flight_number" id="flight_number">
 					<div class="invalid-feedback">Please enter your flight number!</div>
 				 </div>
-				<div class="mb-3 pb-1">
-				  <label class="form-label" for="flight_time">Flight time&nbsp;(Sydney)</label>
-				   <input class="form-control" name="flight_time" type="time" id="flight_time">
-				</div>
-				<div class="mb-3 pb-1">
-					<label class="form-label" for="pickup_time">Pickup time</label>
-					 <input class="form-control" type="time" name="pickup_time" id="pickup_time">
-				 </div>
+				{% time_picker "flight_time" "Flight time (Sydney)" %}
+				{% time_picker "pickup_time" "Pickup time" %}
 				 <div class="mb-3 pb-1">
 					<label class="form-label" for="start_point">Start Point (Pickup Location)</label>
 					 <input class="form-control" type="text" name="start_point" id="start_point">

@@ -1,4 +1,5 @@
 {% load static %}
+{% load form_widgets %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -804,7 +805,7 @@ footer{background:var(--black);border-top:1px solid rgba(201,168,76,0.12);paddin
       </div>
       <div class="f-row">
         <div class="f-group"><div class="f-label">Date</div><input class="f-input" type="date"></div>
-        <div class="f-group"><div class="f-label">Time</div><input class="f-input" type="time"></div>
+        {% time_picker "pickup_time" "Time" %}
       </div>
       <div class="f-group"><div class="f-label">Pickup Location</div><input class="f-input" type="text" placeholder="Sydney CBD / Airport / Suburb"></div>
       <div class="f-group"><div class="f-label">Destination</div><input class="f-input" type="text" placeholder="Address, Suburb or Venue"></div>

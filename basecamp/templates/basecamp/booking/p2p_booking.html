@@ -1,6 +1,7 @@
 {% extends 'basecamp/base/easygo_base_form.html' %}
 
 {% load static %}
+{% load form_widgets %}
 
 {% block title %}Multiple Way Points / Point-to-Point Booking – EasyGo Airport Shuttle{% endblock %}
 
@@ -84,11 +85,7 @@
                     <input class="form-control" type="text" name="first_pickup_location"  placeholder="Full address" required id="first_pickup_location">
                   <div class="invalid-feedback">Please enter your pickup location!</div>
                 </div>
-                <div class="mb-3 pb-1">
-                  <label class="form-label" for="first_putime">Pickup time</label>
-                    <input class="form-control" type="time" name="first_putime"  placeholder="Pickup time" required id="first_putime">
-                  <div class="invalid-feedback">Please enter your pickup time!</div>
-                </div>
+                {% time_picker "first_putime" "Pickup time" %}
                 <div class="mb-3 pb-1">
                   <label class="form-label" for="first_dropoff_location">Drop off location</label>
                     <input class="form-control" type="text" name="first_dropoff_location"  placeholder="Your destination" id="first_dropoff_location">
@@ -105,11 +102,7 @@
                     <input class="form-control" type="text" name="second_pickup_location"  placeholder="Full address" id="second_pickup_location">
                   <div class="invalid-feedback">Please enter your pickup location!</div>
                 </div>
-                <div class="mb-3 pb-1">
-                  <label class="form-label" for="second_putime">Pickup time</label>
-                    <input class="form-control" type="time" name="second_putime"  placeholder="Pickup time" id="second_putime">
-                  <div class="invalid-feedback">Please enter your pickup time!</div>
-                </div>
+                {% time_picker "second_putime" "Pickup time" %}
                 <div class="mb-3 pb-1">
                   <label class="form-label" for="second_dropoff_location">Drop off location</label>
                     <input class="form-control" type="text" name="second_dropoff_location"  placeholder="Your destination" id="second_dropoff_location">
@@ -123,11 +116,7 @@
                       <input class="form-control" type="text" name="third_pickup_location"  placeholder="Full address" id="third_pickup_location">
                     <div class="invalid-feedback">Please enter your pickup location!</div>
                   </div>
-                  <div class="mb-3 pb-1">
-                    <label class="form-label" for="third_putime">Pickup time</label>
-                      <input class="form-control" type="time" name="third_putime"  placeholder="Pickup time" id="third_putime">
-                    <div class="invalid-feedback">Please enter your pickup time!</div>
-                  </div>
+                  {% time_picker "third_putime" "Pickup time" %}
                   <div class="mb-3 pb-1">
                     <label class="form-label" for="third_dropoff_location">Drop off location</label>
                       <input class="form-control" type="text" name="third_dropoff_location"  placeholder="Your destination" id="third_dropoff_location">
@@ -141,11 +130,7 @@
                     <input class="form-control" type="text" name="fourth_pickup_location"  placeholder="Full address" id="fourth_pickup_location">
                   <div class="invalid-feedback">Please enter your pickup location!</div>
                 </div>
-                <div class="mb-3 pb-1">
-                  <label class="form-label" for="fourth_putime">Pickup time</label>
-                    <input class="form-control" type="time" name="fourth_putime"  placeholder="Pickup time" id="fourth_putime">
-                  <div class="invalid-feedback">Please enter your pickup time!</div>
-                </div>
+                {% time_picker "fourth_putime" "Pickup time" %}
                 <div class="mb-3 pb-1">
                   <label class="form-label" for="fourth_dropoff_location">Drop off location</label>
                     <input class="form-control" type="text" name="fourth_dropoff_location"  placeholder="Your destination" id="fourth_dropoff_location">

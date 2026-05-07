@@ -1,16 +1,14 @@
+{% load form_widgets %}
 <div class="card text-white bg-secondary p-4" id="return-cruise-fields">
   <h5 class="text-dark mb-3">🛳️ Return Trip Details</h5>
 
   <div class="mb-3 pb-1">
     <label class="form-label" id="label-ret-cruise-date">Return Pickup Date</label>
-    <input class="form-control date-picker rounded" name="return_pickup_date" type="date" autocomplete="off" placeholder="Your trip date" aria-labelledby="label-ret-cruise-date">
+    <input class="form-control date-picker rounded" name="return_pickup_date" type="text" autocomplete="off" placeholder="Choose pickup date" data-datepicker-options='{"altInput": true, "altFormat": "F j, Y", "dateFormat": "Y-m-d", "minDate": "today"}'>
     <div class="invalid-feedback">Please enter your pickup date!</div>
   </div>
 
-  <div class="mb-3 pb-1">
-    <label class="form-label" for="ret-cruise-pickup-time">Return Pickup Time</label>
-    <input class="form-control" type="time" name="return_pickup_time" id="ret-cruise-pickup-time">
-  </div>
+  {% time_picker "return_pickup_time" "Return Pickup Time" %}
 
   <div class="mb-3 pb-1">
     <label class="form-label" for="ret-cruise-start">Return Pickup Location</label>

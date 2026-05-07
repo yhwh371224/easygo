@@ -1,6 +1,7 @@
 {% extends 'basecamp/base/easygo_base_cruise.html' %}
 
 {% load static %}
+{% load form_widgets %}
 
 {% block title %}Multiple Way Points / Point-to-Point Booking – EasyGo Airport Shuttle{% endblock %}
 
@@ -76,11 +77,7 @@
                   <input id="flight-date" class="form-control date-picker rounded" name="pickup_date" type="text" placeholder="Your booking date" data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;F j, Y&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;}" required>
                   <div id="date-error" class="invalid-feedback" style="display: none;">Please enter a future date!</div>
                 </div>
-                <div class="mb-3 pb-1">
-                  <label class="form-label" for="pickup_time">Pickup time</label>
-                  <input class="form-control" type="time" name="pickup_time"  placeholder="Pickup time" required id="pickup_time">
-                <div class="invalid-feedback">Please enter your pickup time!</div>
-                </div>
+                {% time_picker "pickup_time" "Pickup time" %}
                 <div class="mb-3 pb-1">
                   <label class="form-label" for="start_point">Pickup location - Start point</label>
                     <input class="form-control" type="text" name="start_point"  placeholder="From where" id="start_point">

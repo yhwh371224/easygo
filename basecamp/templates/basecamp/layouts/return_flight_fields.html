@@ -1,3 +1,4 @@
+{% load form_widgets %}
 <div class="card text-white bg-secondary p-4" id="return-flight-fields">
   <h5 class="text-dark mb-3">✈️ Return Trip Details</h5>
 
@@ -15,14 +16,11 @@
 
   <div class="mb-3 pb-1">
     <label class="form-label" id="label-ret-flight-date">Return Pickup Date</label>
-    <input class="form-control date-picker rounded" name="return_pickup_date" type="date" autocomplete="off" aria-labelledby="label-ret-flight-date">
+    <input class="form-control date-picker rounded" name="return_pickup_date" type="text" autocomplete="off" placeholder="Choose pickup date" aria-labelledby="label-ret-flight-date" data-datepicker-options='{"altInput": true, "altFormat": "F j, Y", "dateFormat": "Y-m-d", "minDate": "today"}'>
     <div class="invalid-feedback">Please enter your pickup date!</div>
   </div>
 
-  <div class="mb-3 pb-1">
-    <label class="form-label" for="ret-flight-pickup-time">Return Pickup Time</label>
-    <input class="form-control" type="time" name="return_pickup_time" id="ret-flight-pickup-time">
-  </div>
+  {% time_picker "return_pickup_time" "Return Pickup Time" %}
   
   <hr class="my-5">
 
@@ -32,8 +30,5 @@
     <div class="invalid-feedback">Please enter your flight number!</div>
   </div>
 
-  <div class="mb-3 pb-1">
-    <label class="form-label" for="ret-flight-time">Return Flight Time</label>
-    <input class="form-control" name="return_flight_time" id="ret-flight-time" type="time">
-  </div>
+  {% time_picker "return_flight_time" "Return Flight Time" %}
 </div>

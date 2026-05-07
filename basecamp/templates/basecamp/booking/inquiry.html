@@ -1,5 +1,6 @@
 {% extends 'basecamp/base/easygo_base_form.html' %}
 {% load static %}
+{% load form_widgets %}
 
 {% block title %}Booking Inquiry Form – EasyGo Airport Shuttle Sydney{% endblock %}
 
@@ -84,10 +85,7 @@
 					<input id="flight-date" class="form-control date-picker rounded" required name="pickup_date" type="text" placeholder="Choose pickup date" data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;F j, Y&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;}" >
 					<div id="date-error" class="invalid-feedback" style="display: none;">Please enter a future date!</div>
 				</div>
-				<div class="mb-3 pb-1">
-					<label class="form-label" for="pickup_time">Pickup time preferred</label>
-					 <input class="form-control" type="time" name="pickup_time" required id="pickup_time">
-				</div></div>
+				{% time_picker "pickup_time" "Pickup time preferred" %}</div>
 				 <br>
 				<!-- Start / End Point (hidden by default) -->
 				<div id="start-end-fields" style="display: none;">
@@ -107,10 +105,7 @@
 						<label class="form-label" for="flight_number">Flight number</label>
 						<input class="form-control" type="text" placeholder="Your flight number" name="flight_number" id="flight_number">
 					</div>
-					<div class="mb-3 pb-1">
-						<label class="form-label" for="flight_time">Flight time (Sydney)</label>
-						<input class="form-control" name="flight_time" type="time" id="flight_time">
-					</div>
+					{% time_picker "flight_time" "Flight time (Sydney)" %}
 				</div>
 
 				<div id="address-fields">
