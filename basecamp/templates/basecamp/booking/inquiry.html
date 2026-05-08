@@ -43,7 +43,7 @@
             <div class="card border-1 shadow-lg">
       <!-- Page content-->	 
       <!-- Contact form + details-->  	  
-            <form method="post" enctype="multipart/form-data" id="booking-form" action="/sydney/inquiry_detail/" class="card-body needs-validation p-5" >
+            <form method="post" enctype="multipart/form-data" id="booking-form" action="{% url 'basecamp:inquiry_details' %}" class="card-body needs-validation p-5" >
                 {% csrf_token %}
 				<div class="mb-3 pb-1" >
 					<p class="form-label mb-1">Personal Information</p>

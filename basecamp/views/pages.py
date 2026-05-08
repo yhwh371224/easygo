@@ -24,12 +24,12 @@ def contact_form(request):
 
 def cruise_booking(request):
     return render(request, 'basecamp/booking/cruise_booking.html', {
-        "regions": Region.objects.filter(is_active=True, is_coming_soon=False).order_by('name'),
+        "active_regions": Region.objects.filter(is_active=True, is_coming_soon=False).order_by('name'),
     })
 
 def cruise_inquiry(request):
     return render(request, 'basecamp/booking/cruise_inquiry.html', {
-        "regions": Region.objects.filter(is_active=True, is_coming_soon=False).order_by('name'),
+        "active_regions": Region.objects.filter(is_active=True, is_coming_soon=False).order_by('name'),
     })
 
 def error(request): 
@@ -70,25 +70,22 @@ def payment_options(request):
 def payment_options1(request): 
     return render(request, 'basecamp/payments/payment_options1.html')
 
-def p2p(request):     
-    return render(request, 'basecamp/booking/p2p.html')
-
 def p2p_booking(request):
     # Booking (creates Post) – region must be explicitly selected.
     # For the non-prefixed route, show the city selector first (no default region).
     region = getattr(request, "region", None)
     if not isinstance(region, Region):
         region = None
-    return render(request, 'basecamp/booking/p2p_booking_form.html', {
+    return render(request, 'basecamp/booking/p2p_booking.html', {
         "region": region,
-        "regions": Region.objects.filter(is_active=True, is_coming_soon=False).order_by('name'),
+        "active_regions": Region.objects.filter(is_active=True, is_coming_soon=False).order_by('name'),
     })
 
 
 def p2p_multi(request):
     # Inquiry/email form for multiple way points (legacy template).
     return render(request, 'basecamp/booking/p2p_booking.html', {
-        "regions": Region.objects.filter(is_active=True, is_coming_soon=False).order_by('name'),
+        "active_regions": Region.objects.filter(is_active=True, is_coming_soon=False).order_by('name'),
     })
 
 def p2p_single(request):

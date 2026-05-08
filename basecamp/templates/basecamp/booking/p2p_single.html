@@ -40,19 +40,17 @@
         <div class="row">
           <div class="col-lg-6 col-md-7 offset-lg-1 pb-2 mb-5 booking-form-col">
             <div class="card border-0 shadow-lg">
-              <form action="" method="post" id="booking-form" class="card-body needs-validation p-5" novalidate>
-                {% csrf_token %}
-                {# <input type="text" name="phone_verify" value="" style="display:none !important" tabindex="-1" autocomplete="off"> #}
+              <form action="{% url 'basecamp:inquiry_details' %}" method="post" id="booking-form" class="card-body needs-validation p-5" novalidate>
+				{% csrf_token %}
 				<div class="mb-3 pb-1">
-				  <label class="form-label">Select Region</label>
-				  <select id="region-select" class="form-select" style="max-width:220px;" required
-				          onchange="var s=this.value; document.getElementById('booking-form').action = s ? ('/' + s + '/inquiry_detail/') : '';">
-				    <option value="" selected disabled>Select your city</option>
-				    {% for r in active_regions %}
-				      <option value="{{ r.slug }}">{{ r.name }}</option>
-				    {% endfor %}
-				  </select>
-				  <div class="invalid-feedback">Please select your city.</div>
+					<label class="form-label">Select Region</label>
+					<select name="region" class="form-select" style="max-width:220px;" required>
+						<option value="" selected disabled>Select your city</option>
+						{% for r in active_regions %}
+							<option value="{{ r.slug }}">{{ r.name }}</option>
+						{% endfor %}
+					</select>
+					<div class="invalid-feedback">Please select your city.</div>
 				</div>
                 <div class="mb-3 pb-1">
                   <label class="form-label" for="name">Full name</label>

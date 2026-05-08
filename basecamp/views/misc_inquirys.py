@@ -176,3 +176,6 @@ def contact_submit(request):
         return booking_success_response(request)
     else:
         return render(request, 'basecamp/pages/contact_form.html', {})
+    
+
+    

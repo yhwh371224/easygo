@@ -95,6 +95,7 @@ def region_inquiry_details(request, region_slug):
         ip_info = get_ip_info(ip)
         asyncio.run(send_telegram_notification(
             f"✈️ New inquiry:\n"
+            f"Region: {region.name}\n"
             f"IP: `{ip}`\n"
             f"Location: {ip_info}"
         ))

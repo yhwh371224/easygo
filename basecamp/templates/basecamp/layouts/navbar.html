@@ -38,7 +38,7 @@
         <div class="offcanvas-body d-lg-flex justify-content-lg-center">
             <ul class="navbar-nav">
             <li class="nav-item active">
-                <a class="nav-link" href="/">Home</a>
+                <a class="nav-link" href="{% if region %}{% url 'regions:home' region.slug %}{% else %}{% url 'basecamp:home' %}{% endif %}">Home</a>
             </li>
 
             <!-- TODO: 멀티 지역 완성 후 주석 해제 -->

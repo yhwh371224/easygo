@@ -121,6 +121,11 @@ def booking_detail(request):
 @require_turnstile
 def cruise_booking_detail(request):
     if request.method == "POST":
+        post_region = _get_request_region(request)
+        if not post_region:
+            region_slug = request.POST.get('region')
+            if region_slug:
+                post_region = Region.objects.filter(slug=region_slug, is_active=True).first()
         logger.info(
             f"[BOOKING] IP={get_client_ip(request)} "
             f"path={request.path} "
@@ -153,9 +158,7 @@ def cruise_booking_detail(request):
         except ValueError as e:
             return JsonResponse({'success': False, 'error': str(e)})
         
-        # Cruise transfers are Sydney-only (no region selection required).
-        region = Region.objects.filter(slug='sydney', is_active=True).first()
-        driver = get_default_driver_for_region(region)
+        driver = get_default_driver_for_region(post_region)
 
         # 🧳 개별 수하물 항목 수집
         baggage_str = parse_baggage(request)         
@@ -165,23 +168,29 @@ def cruise_booking_detail(request):
                  no_of_passenger=no_of_passenger, no_of_baggage=baggage_str,
                  return_pickup_date=return_pickup_date_obj, return_start_point=return_start_point,
                  return_pickup_time=return_pickup_time, return_end_point=return_end_point,
-                 message=message, driver=driver, pending=True, reminder=False, region=region)
+                 message=message, driver=driver, pending=True, reminder=False, region=post_region)
 
         p.save()
 
         ip = get_client_ip(request)
         ip_info = get_ip_info(ip)
-        asyncio.run(send_telegram_notification(
-            f"🚢 New cruise booking:\n"
-            f"IP: `{ip}`\n"
-            f"Location: {ip_info}"
-        ))
+        try:
+            asyncio.run(send_telegram_notification(
+                f"🚢 New cruise booking:\n"
+                f"Region: {post_region.name if post_region else 'Unknown'}\n"
+                f"IP: `{ip}`\n"
+                f"Location: {ip_info}"
+            ))
+        except Exception as e:
+            logger.error(f"[TELEGRAM] Failed to send: {e}")
 
         return booking_success_response(request)
 
     else:
+        active_regions = Region.objects.filter(is_active=True)
         return render(request, 'basecamp/booking/cruise_booking.html', {
-            "regions": Region.objects.filter(is_active=True, is_coming_soon=False).order_by('name'),
+            "region": _get_request_region(request),
+            "active_regions": active_regions,
         })
 
 
@@ -191,21 +200,15 @@ def cruise_booking_detail(request):
 def p2p_booking_detail(request):
     if request.method == "POST":
         post_region = _get_request_region(request)
-        if post_region and post_region.slug == 'melbourne':
-            messages.info(request, "Melbourne bookings are not open yet. Please try another region.")
-            return redirect('regions:booking', region_slug='melbourne')
+        if not post_region:
+            region_slug = request.POST.get('region')
+            if region_slug:
+                post_region = Region.objects.filter(slug=region_slug, is_active=True).first()
         logger.info(
             f"[BOOKING] IP={get_client_ip(request)} "
             f"path={request.path} "
             f"email={request.POST.get('email')}"
         )
-
-        # Region selection is mandatory (no default region).
-        region = post_region
-        if not region:
-            if is_ajax(request):
-                return JsonResponse({'success': False, 'message': 'Region is required. Please select your city and try again.'}, status=400)
-            return render(request, '400.html', status=400)
 
         pickup_date_str = request.POST.get('pickup_date', '')
         return_pickup_date_str = request.POST.get('return_pickup_date', '')
@@ -230,7 +233,7 @@ def p2p_booking_detail(request):
         except ValueError as e:
             return JsonResponse({'success': False, 'error': str(e)})
 
-        driver = get_default_driver_for_region(region)
+        driver = get_default_driver_for_region(post_region)
 
         baggage_str = parse_baggage(request)
 
@@ -248,24 +251,31 @@ def p2p_booking_detail(request):
             message=message,
             driver=driver,
             pending=True, reminder=False,
-            region=region,
+            region=post_region,
         )
         p.save()
 
         ip = get_client_ip(request)
         ip_info = get_ip_info(ip)
-        asyncio.run(send_telegram_notification(
-            f"P2P booking:\n"
-            f"IP: `{ip}`\n"
-            f"Location: {ip_info}"
-        ))
+        try:
+            asyncio.run(send_telegram_notification(
+                f"🚗 P2P booking:\n"
+                f"Region: {post_region.name if post_region else 'Unknown'}\n"
+                f"IP: `{ip}`\n"
+                f"Location: {ip_info}"
+            ))
+        except Exception as e:
+            logger.error(f"[TELEGRAM] Failed to send: {e}")
 
         return booking_success_response(request)
 
-    return render(request, 'basecamp/booking/p2p_booking_form.html', {
-        "region": _get_request_region(request),
-        "regions": Region.objects.filter(is_active=True, is_coming_soon=False).order_by('name'),
-    })
+    else:
+        active_regions = Region.objects.filter(is_active=True)
+        return render(request, 'basecamp/booking/p2p_booking.html', {
+            "region": _get_request_region(request),
+            "active_regions": active_regions,
+        })
+
 
 @ratelimit(key='ip', rate='5/m', method='POST', block=True)
 def confirm_booking_detail(request):

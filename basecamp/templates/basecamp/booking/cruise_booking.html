@@ -44,14 +44,13 @@ EasyGo Cruise Transfer Booking Form – Sydney Airport & Port Transfers
         <div class="row">
           <div class="col-lg-7 col-md-7 pb-2 mb-5 booking-form-col">
             <div class="card border-0 shadow-lg">
-              <form action="/cruise_booking_detail/" method="post" id="booking-form" class="card-body needs-validation p-5" novalidate>
+              <form action="{% url 'basecamp:cruise_booking_detail' %}" method="post" id="booking-form" class="card-body needs-validation p-5" novalidate>
                 {% csrf_token %}
-                {# <input type="text" name="phone_verify" value="" style="display:none !important" tabindex="-1" autocomplete="off"> #}
                 <div class="mb-3 pb-1">
                   <label class="form-label">Select Region</label>
-                  <select name="region" class="form-select" style="max-width:220px;">
-                    <option value="">-- Select Region --</option>
-                    {% for r in regions %}
+                  <select name="region" class="form-select" style="max-width:220px;" required>
+                    <option value="" selected disabled>-- Select Region --</option>
+                    {% for r in active_regions %}
                       <option value="{{ r.slug }}">{{ r.name }}</option>
                     {% endfor %}
                   </select>

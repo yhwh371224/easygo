@@ -252,7 +252,7 @@ document.addEventListener('DOMContentLoaded',()=>{
         update();
       });
     });
-    wrap.querySelectorAll('input[type=number]').forEach(inp=>{
+    wrap.querySelectorAll('.tp-hour,.tp-min').forEach(inp=>{
       inp.addEventListener('input',update);
       inp.addEventListener('blur',function(){
         const isHour=this.classList.contains('tp-hour');

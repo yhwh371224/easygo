@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.conf import settings
+from requests import request
 from blog.models import Inquiry
 from regions.models import Region
 from regions.models import Terminal
@@ -58,9 +59,10 @@ def _resolve_terminal(region: Region, raw_value: str):
 def inquiry_details(request):
     if request.method == "POST":
         post_region = _get_request_region(request)
-        if post_region and post_region.slug == 'melbourne':
-            messages.info(request, "Melbourne inquiries are not open yet. Please try another region.")
-            return redirect('regions:inquiry', region_slug='melbourne')
+        if not post_region:
+            region_slug = request.POST.get('region')
+            if region_slug:
+                post_region = Region.objects.filter(slug=region_slug, is_active=True).first()
         logger.info(
             f"[INQUIRY] IP={get_client_ip(request)} "
             f"path={request.path} "
@@ -115,9 +117,9 @@ def inquiry_details(request):
             return_pickup_date=return_pickup_date_obj,
             return_flight_number=return_flight_number, return_flight_time=return_flight_time,
             return_pickup_time=return_pickup_time, return_start_point=return_start_point,
-            return_end_point=return_end_point, message=message
+            return_end_point=return_end_point, message=message, region=post_region,
         )
-        p.region = post_region
+
         p.save()
 
         ip = get_client_ip(request)
@@ -125,6 +127,7 @@ def inquiry_details(request):
         try:
             asyncio.run(send_telegram_notification(
                 f"✈️ New inquiry:\n"
+                f"Region: {post_region.name if post_region else 'Unknown'}\n"
                 f"IP: `{ip}`\n"
                 f"Location: {ip_info}"
             ))
@@ -134,7 +137,11 @@ def inquiry_details(request):
         return booking_success_response(request)
 
     else:
-        return render(request, 'basecamp/booking/inquiry.html', {})
+        active_regions = Region.objects.filter(is_active=True)
+        return render(request, 'basecamp/booking/inquiry.html', {
+            'active_regions': active_regions,
+            'region': _get_request_region(request),
+        })
 
 
 # inquiry (simple one) for airport from home page
