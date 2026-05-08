@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 # =========================
 def build_reminder_context(booking, pickup_time_12h, driver):
 
-    customer_phone = normalize_phone(booking.contact)
+    customer_phone = normalize_phone(getattr(booking, "contact", None))
 
     # ✔ FIX: safer proxy detection (not just exists)
     bird_number = None
@@ -23,32 +23,35 @@ def build_reminder_context(booking, pickup_time_12h, driver):
             bird_number = format_au_phone(settings.BIRD_NUMBER)
 
     return {
-        'booker_name': booking.booker_name,
-        'name': booking.name,
-        'company_name': booking.company_name,
-        'booker_email': booking.booker_email,
-        'email': booking.email,
-        'contact': booking.contact,
-        'pickup_date': booking.pickup_date,
-        'flight_number': booking.flight_number,
-        'flight_time': booking.flight_time,
-        'direction': booking.direction,
+        'booker_name': getattr(booking, "booker_name", None),
+        'name': getattr(booking, "name", None),
+        'company_name': getattr(booking, "company_name", None),
+        'booker_email': getattr(booking, "booker_email", None),
+        'email': getattr(booking, "email", None),
+        'contact': getattr(booking, "contact", None),
+        'pickup_date': getattr(booking, "pickup_date", None),
+        'flight_number': getattr(booking, "flight_number", None),
+        'flight_time': getattr(booking, "flight_time", None),
+        'direction': getattr(booking, "direction", None),
         'pickup_time': pickup_time_12h,
-        'start_point': booking.start_point or "",
-        'end_point': booking.end_point or "",
-        'street': booking.street,
-        'suburb': booking.suburb,
-        'price': booking.price,
-        'reminder': booking.reminder,
-        'sms_reminder': booking.sms_reminder,
-        'meeting_point': booking.meeting_point,
-        'driver_name': driver.driver_name,
-        'driver_contact': driver.driver_contact,
-        'driver_plate': driver.driver_plate,
-        'driver_car': driver.driver_car,
-        'paid': booking.paid,
-        'cash': booking.cash,
-        'cruise': booking.cruise,
+        'start_point': getattr(booking, "start_point", "") or "",
+        'end_point': getattr(booking, "end_point", "") or "",
+        'street': getattr(booking, "street", None),
+        'suburb': getattr(booking, "suburb", None),
+        'price': getattr(booking, "price", None),
+        'reminder': getattr(booking, "reminder", None),
+        'sms_reminder': getattr(booking, "sms_reminder", None),
+        'meeting_point': getattr(booking, "meeting_point", None),
+
+        'driver_name': getattr(driver, "driver_name", None) if driver else None,
+        'driver_contact': getattr(driver, "driver_contact", None) if driver else None,
+        'driver_plate': getattr(driver, "driver_plate", None) if driver else None,
+        'driver_car': getattr(driver, "driver_car", None) if driver else None,
+
+        'paid': getattr(booking, "paid", False),
+        'cash': getattr(booking, "cash", False),
+        'cruise': getattr(booking, "cruise", False),
+
         'bird_number': bird_number,
     }
 
@@ -94,6 +97,9 @@ def update_meeting_point_for_arrivals():
         for booking in bookings:
 
             driver = booking.driver
+            if not driver:
+                logger.warning(f"No driver for booking {booking.id}")
+                continue
             driver_id = driver.id
 
             if driver_id not in driver_first_flag:
@@ -115,11 +121,11 @@ def update_meeting_point_for_arrivals():
             logger.info(
                 'Set %s for %s - %s',
                 booking.meeting_point,
-                driver.driver_name,
+                getattr(driver, "driver_name", ""),
                 booking.name
             )
 
         # ✔ FIX: batch DB update
         with transaction.atomic():
-            for b in to_update:
-                b.save(update_fields=["meeting_point"])
+            if to_update:
+                Post.objects.bulk_update(to_update, ["meeting_point"])

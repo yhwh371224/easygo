@@ -49,37 +49,48 @@ class Command(BaseCommand):
 
     def send_email_task(self, booking_reminders, template_name, subject, target_date):
         for booking_reminder in booking_reminders:
-            driver = booking_reminder.driver
-            pickup_time_12h = format_pickup_time_12h(booking_reminder.pickup_time)
-            context = build_reminder_context(booking_reminder, pickup_time_12h, driver)
-
-            booker_email = booking_reminder.booker_email
-            is_today = subject == "Reminder-Today"
-            is_tomorrow = subject == "Reminder-Tomorrow"
-            is_review = subject == "Review-EasyGo"
-
-            if is_review:
-                # 리뷰 요청: 실제 탑승자에게만 (booker 제외)
-                email_recipients = collect_recipients(booking_reminder.email, booking_reminder.email1)
-            elif booker_email:
-                if is_today:
-                    email_recipients = collect_recipients(booking_reminder.email, booking_reminder.email1)
-                elif is_tomorrow:
-                    email_recipients = collect_recipients(booking_reminder.email, booking_reminder.email1, booker_email)
-                else:
-                    # 7days: booker_email만
-                    email_recipients = collect_recipients(booker_email)
-            else:
-                email_recipients = collect_recipients(booking_reminder.email, booking_reminder.email1)
-
-            if not email_recipients:
-                logger.warning(f"No recipients for booking {booking_reminder.id}, skipping.")
-                continue
-
             try:
-                send_template_email(subject, template_name, context, email_recipients, fail_silently=False)
-                logger.info(
-                    f"Successfully sent '{subject}' email to {email_recipients} for pickup on {target_date}"
-                )
+                if not booking_reminder.driver:
+                    logger.warning(f"No driver for booking {booking_reminder.id}")
+                    continue
+                
+                driver = getattr(booking_reminder, "driver", None)
+                pickup_time_12h = format_pickup_time_12h(booking_reminder.pickup_time)
+                context = build_reminder_context(booking_reminder, pickup_time_12h, driver)
+
+                booker_email = booking_reminder.booker_email
+                is_today = subject == "Reminder-Today"
+                is_tomorrow = subject == "Reminder-Tomorrow"
+                is_review = subject == "Review-EasyGo"
+
+                if is_review:
+                    # 리뷰 요청: 실제 탑승자에게만 (booker 제외)
+                    email_recipients = collect_recipients(booking_reminder.email, booking_reminder.email1)
+                elif booker_email:
+                    if is_today:
+                        email_recipients = collect_recipients(booking_reminder.email, booking_reminder.email1)
+                    elif is_tomorrow:
+                        email_recipients = collect_recipients(booking_reminder.email, booking_reminder.email1, booker_email)
+                    else:
+                        # 7days: booker_email만
+                        email_recipients = collect_recipients(booker_email)
+                else:
+                    email_recipients = collect_recipients(booking_reminder.email, booking_reminder.email1)
+
+                if not email_recipients:
+                    logger.warning(f"No recipients for booking {booking_reminder.id}, skipping.")
+                    continue
+
+                try:
+                    send_template_email(subject, template_name, context, email_recipients, fail_silently=False)
+                    logger.info(
+                        f"Successfully sent '{subject}' email to {email_recipients} for pickup on {target_date}"
+                    )
+                except Exception as e:
+                    logger.error(f"Failed to send email to {email_recipients}: {str(e)}")
+
             except Exception as e:
-                logger.error(f"Failed to send email to {email_recipients}: {str(e)}")
+                logger.exception(
+                    f"FAILED booking_reminder.id={booking_reminder.id} error={str(e)}"
+                )
+                continue
