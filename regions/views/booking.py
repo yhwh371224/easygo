@@ -13,7 +13,7 @@ from basecamp.basecamp_utils import (
     booking_success_response, parse_baggage, parse_booking_dates,
     get_client_ip,
 )
-from utils.telegram import send_telegram_notification
+from utils.telegram import send_telegram_notification, get_ip_info
 
 logger = logging.getLogger(__name__)
 
@@ -95,7 +95,13 @@ def region_booking_detail(request, region_slug):
         p.region = region
         p.save()
 
-        asyncio.run(send_telegram_notification("✈️ New airport booking has been received."))
+        ip = get_client_ip(request)
+        ip_info = get_ip_info(ip)
+        asyncio.run(send_telegram_notification(
+            f"✈️ New inquiry:\n"
+            f"IP: `{ip}`\n"
+            f"Location: {ip_info}"
+        ))
         return booking_success_response(request)
 
     suburbs = region.suburbs.filter(is_active=True).order_by('-is_pinned', 'sort_order', 'name')
