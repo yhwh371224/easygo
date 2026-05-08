@@ -122,11 +122,14 @@ def inquiry_details(request):
 
         ip = get_client_ip(request)
         ip_info = get_ip_info(ip)
-        asyncio.run(send_telegram_notification(
-            f"✈️ New inquiry:\n"
-            f"IP: `{ip}`\n"
-            f"Location: {ip_info}"
-        ))
+        try:
+            asyncio.run(send_telegram_notification(
+                f"✈️ New inquiry:\n"
+                f"IP: `{ip}`\n"
+                f"Location: {ip_info}"
+            ))
+        except Exception as e:
+            logger.error(f"[TELEGRAM] Failed to send: {e}")
 
         return booking_success_response(request)
 
