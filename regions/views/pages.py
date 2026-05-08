@@ -126,6 +126,7 @@ def airport_shuttle_suburb(request, region_slug, suburb_slug):
         'region': region,
         'suburb': suburb,
         'zone_suburbs': zone_suburbs,
+        'current_region': region,
     })
 
 
@@ -133,6 +134,7 @@ def region_inquiry_done(request, region_slug):
     region = get_object_or_404(Region, slug=region_slug, is_active=True)
     return render(request, 'basecamp/inquiry_done.html', {
         'region': region,
+        'current_region': region,
         'google_review_url': settings.GOOGLE_REVIEW_URL,
     })
 
@@ -144,5 +146,6 @@ def region_more_suburbs(request, region_slug):
     ).order_by('name')
     return render(request, 'regions/pages/regions_more_suburbs.html', {
         'region': region,
+        'current_region': region,
         'suburbs': suburbs,
     })

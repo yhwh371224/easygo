@@ -79,18 +79,10 @@
       </div>
 
       <div class="mt-4 text-center">
-        <a href="/{{ region.slug }}/meeting-point/" class="btn btn-success me-2">📍 Meeting Point Details</a>
-        <a href="/{{ region.slug }}/booking/" class="btn btn-success">Book Your Transfer →</a>
+        <a href="/{{ region.slug }}/meeting-point/" class="btn btn-success me-2">📍 {{ region.name }} Meeting Point Details</a>
       </div>
 
     </div>
-  </div>
-</section>
-
-<section class="cta-strip">
-  <div class="container text-center">
-    <h2>Fixed price. Door-to-door. No surprises.</h2>
-    <a href="/{{ region.slug }}/booking/" class="btn btn-success btn-lg px-5">Book Now →</a>
   </div>
 </section>
 {% endblock %}

@@ -16,7 +16,7 @@
 
 {% block extra_css %}
 <style nonce="{{ CSP_NONCE }}">
-  .mp-hero { background: linear-gradient(135deg, #1a1f2e 0%, #2d3748 100%); padding: 4rem 0 3rem; }
+  .mp-hero { background: linear-gradient(135deg, #3d4a5c 0%, #212529 100%); padding: 4rem 0 3rem; }
   .mp-hero h1 { color: #fff; font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 600; }
   .mp-hero p  { color: rgba(255,255,255,0.7); font-size: 1rem; }
   .tab-nav { display: flex; flex-wrap: wrap; gap: 8px; border-bottom: 2px solid #e5e7eb; margin-bottom: 2rem; }
@@ -83,20 +83,23 @@
     Meeting point information for {{ region.name }} is coming soon. Please contact us for details.
   </div>
   {% endif %}
+</section>
 
-  <div class="mt-5 p-4 rounded-3 border text-center" style="background:#f8fafc;">
+<section class="container py-5">
+  <div class="p-4 rounded-3 border text-center" style="background:#f8fafc;">
     <p class="text-muted mb-1 small">Running late / Need assistance?</p>
     <p class="fw-semibold mb-3">If you are delayed for any reason, please notify your driver or our office as soon as possible. Your driver's contact number can be found in the reminder email sent by our office on the day of your arrival.</p>
-    <a href="/contact/" class="btn btn-outline-secondary">Send a Message</a>
+    <a href="/contact/" class="btn btn-secondary">Send a Message</a>
   </div>
 </section>
 
-<section class="cta-strip">
+
   <div class="container text-center">
-    <h2>Ready to book your {{ region.name }} airport transfer?</h2>
-    <a href="/{{ region.slug }}/booking/" class="btn btn-warning btn-lg px-5">Book Now →</a>
+    <div class="mt-4 text-center" style="padding-bottom: 4rem;">
+        <a href="/{{ region.slug }}/arrival-guide/" class="btn btn-secondary me-2">📍 {{ region.name }} Airport Arrival Guide</a>
+      </div>
   </div>
-</section>
+
 
 <script nonce="{{ CSP_NONCE }}">
 function switchTab(btn, panelId) {
