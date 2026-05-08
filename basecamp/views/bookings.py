@@ -36,9 +36,15 @@ def _get_request_region(request):
 def booking_detail(request):
     if request.method == "POST":
         post_region = _get_request_region(request)
-        if post_region and post_region.slug == 'melbourne':
-            messages.info(request, "Melbourne bookings are not open yet. Please try another region.")
-            return redirect('regions:booking', region_slug='melbourne')
+        if not post_region:
+            region_slug = request.POST.get('region')
+            if region_slug:
+                post_region = Region.objects.filter(slug=region_slug, is_active=True).first()
+        
+        # Sydney fallback
+        if not post_region:
+            post_region = Region.objects.filter(slug='sydney', is_active=True).first()
+
         logger.info(
             f"[BOOKING] IP={get_client_ip(request)} "
             f"path={request.path} "
@@ -126,6 +132,11 @@ def cruise_booking_detail(request):
             region_slug = request.POST.get('region')
             if region_slug:
                 post_region = Region.objects.filter(slug=region_slug, is_active=True).first()
+        
+        # Sydney fallback
+        if not post_region:
+            post_region = Region.objects.filter(slug='sydney', is_active=True).first()
+
         logger.info(
             f"[BOOKING] IP={get_client_ip(request)} "
             f"path={request.path} "
@@ -204,6 +215,11 @@ def p2p_booking_detail(request):
             region_slug = request.POST.get('region')
             if region_slug:
                 post_region = Region.objects.filter(slug=region_slug, is_active=True).first()
+        
+        # Sydney fallback
+        if not post_region:
+            post_region = Region.objects.filter(slug='sydney', is_active=True).first()
+
         logger.info(
             f"[BOOKING] IP={get_client_ip(request)} "
             f"path={request.path} "
@@ -343,6 +359,7 @@ def confirm_booking_detail(request):
         fuel_surcharge = user.fuel_surcharge
         paid = user.paid
         private_ride = user.private_ride
+        region = user.region 
 
         try:
             pickup_date_obj, return_pickup_date_obj = parse_booking_dates(pickup_date, return_pickup_date)
@@ -387,9 +404,9 @@ def confirm_booking_detail(request):
             return_start_point=return_start_point, return_end_point=return_end_point,
             message=message, notice=notice, price=final_price, toll=toll_value,
             fuel_surcharge=fuel_surcharge_value, prepay=prepay, pending=pending,
-            paid=paid, cash=cash, is_confirmed=is_confirmed, driver=driver
+            paid=paid, cash=cash, is_confirmed=is_confirmed, driver=driver, region=region,
         )
-        p.region = user.region  # Inquiry에 기록된 region 그대로 이어받기
+
         p.save()
 
         user.delete()
@@ -453,7 +470,8 @@ def return_trip_detail(request):
             suburb = user.suburb
             street = user.street
             no_of_passenger = user.no_of_passenger
-            no_of_baggage = user.no_of_baggage            
+            no_of_baggage = user.no_of_baggage   
+            region = user.region         
             if not start_point:
                 start_point = user.start_point
             if not end_point:
@@ -488,8 +506,8 @@ def return_trip_detail(request):
                  no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, cash=cash, prepay=prepay, return_direction=return_direction,
                  return_pickup_date=return_pickup_date_obj, return_flight_number=return_flight_number, return_flight_time=return_flight_time,
                  return_pickup_time=return_pickup_time, return_start_point=return_start_point, return_end_point=return_end_point, driver=driver,
-                 price=price, toll=toll, fuel_surcharge=fuel_surcharge)
-        p.region = user.region  # 원래 예약의 region 그대로 이어받기
+                 price=price, toll=toll, fuel_surcharge=fuel_surcharge, region=region)
+
         p.save()
 
         return JsonResponse({'success': True, 'redirect_url': '/inquiry_done/'})

@@ -63,6 +63,11 @@ def inquiry_details(request):
             region_slug = request.POST.get('region')
             if region_slug:
                 post_region = Region.objects.filter(slug=region_slug, is_active=True).first()
+
+        # Sydney fallback
+        if not post_region:
+            post_region = Region.objects.filter(slug='sydney', is_active=True).first()
+        
         logger.info(
             f"[INQUIRY] IP={get_client_ip(request)} "
             f"path={request.path} "
@@ -149,7 +154,11 @@ def inquiry_details(request):
 @require_turnstile
 def inquiry_details1(request):
     if request.method == "POST":
-        post_region = _get_request_region(request)        
+        post_region = _get_request_region(request)
+        if not post_region:
+            region_slug = request.POST.get('region')
+            if region_slug:
+                post_region = Region.objects.filter(slug=region_slug, is_active=True).first()      
         logger.info(
             f"[INQUIRY] IP={get_client_ip(request)} "
             f"path={request.path} "

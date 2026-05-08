@@ -8,7 +8,7 @@ from django.db.models import Q
 from django.http import JsonResponse
 from main.settings import RECIPIENT_EMAIL
 from basecamp.area import get_suburbs
-from regions.models import Terminal
+from regions.models import Region, Terminal
 from basecamp.basecamp_utils import (
     is_ajax, parse_date,
     verify_turnstile, get_sorted_suburbs,
@@ -32,13 +32,15 @@ def _airport_terminals_for_request(request):
 def price_detail(request):
     latest_post = Post.objects.filter(status='published').order_by('-created_at').first()
     if request.method == "POST":
-        # Region selection is mandatory for airport terminal resolution.
-        if not request.region:
-            if is_ajax(request):
-                return JsonResponse(...)
-            return render(request, 'basecamp/error/home_error.html', status=400)
-        
-        print("REGION:", request.region)
+        post_region = _get_request_region(request)
+        if not post_region:
+            region_slug = request.POST.get('region')
+            if region_slug:
+                post_region = Region.objects.filter(slug=region_slug, is_active=True).first()
+
+        # Sydney fallback
+        if not post_region:
+            post_region = Region.objects.filter(slug='sydney', is_active=True).first()
 
         pickup_date_str = request.POST.get('pickup_date', '')  
         start_point = request.POST.get('start_point')
