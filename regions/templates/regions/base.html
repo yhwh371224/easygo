@@ -51,9 +51,6 @@
       @media (max-width: 768px) { .hero, .hero-about { min-height: 400px; } }
       @media (max-width: 480px) { .hero, .hero-about { min-height: 300px; } }
       .tp-active{background:#adb5bd!important;color:#fff!important}
-      .tp-wrap input[type=number]::-webkit-outer-spin-button,
-      .tp-wrap input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
-      .tp-wrap input[type=number]{-moz-appearance:textfield}
     </style>
 
     {% block extra_css %}{% endblock %}
@@ -147,7 +144,7 @@ document.addEventListener('DOMContentLoaded',()=>{
         update();
       });
     });
-    wrap.querySelectorAll('input[type=number]').forEach(inp=>{
+    wrap.querySelectorAll('input[type=tel]').forEach(inp=>{
       inp.addEventListener('input',update);
       inp.addEventListener('blur',function(){
         const isHour=this.classList.contains('tp-hour');
