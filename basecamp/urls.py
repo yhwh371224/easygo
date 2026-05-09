@@ -57,7 +57,6 @@ urlpatterns = [
     path('more_suburbs_maxi_taxi/', views.more_suburbs_maxi_taxi, name='more_suburbs_maxi_taxi'),
     path('more_suburbs/', views.more_suburbs, name='more_suburbs'),
     path('more_suburbs1/', views.more_suburbs1, name='more_suburbs1'),
-    path('p2p_detail/', views.p2p_detail, name='p2p_detail'),
     path('p2p_single/', views.p2p_single, name="p2p_single"),    
     path('payment_cancel/', views.payment_cancel, name='payment_cancel'),   
     path('payment_options/', views.payment_options, name='payment_options'),
