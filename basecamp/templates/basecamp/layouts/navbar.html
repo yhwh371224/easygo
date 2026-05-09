@@ -118,15 +118,6 @@
             {% endif %}
 
             <li class="nav-item dropdown active">
-                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" data-bs-display="static">Point to Point</a>
-                <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="/p2p_single/">Price Inquiry</a></li>
-                <li><a class="dropdown-item" href="/p2p_booking/">Book Now</a></li>
-                <li><a class="dropdown-item" href="/p2p_multi/">Multiple points</a></li>
-                </ul>
-            </li>
-
-            <li class="nav-item dropdown active">
                 <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" data-bs-display="static">Cruise Transfer</a>
                 <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="/cruise_inquiry/">Price Inquiry</a></li>
@@ -141,6 +132,7 @@
                     <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="{% if current_region %}/{{ current_region.slug }}/inquiry/{% else %}/inquiry/{% endif %}">Airport</a></li>
                     <li><a class="dropdown-item" href="/cruise_inquiry/">Cruise</a></li>
+                    <li><a class="dropdown-item" href="/p2p_single/">Point to Point</a></li>
                     </ul>
                 </li>
                 <li class="dropdown"><a class="dropdown-item dropdown-toggle" href="#" data-bs-toggle="dropdown">Booking</a>
