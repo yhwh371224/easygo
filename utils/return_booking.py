@@ -32,10 +32,13 @@ def handle_return_trip(instance):
 
         price_raw = str(instance.price or '').strip()
 
+        if price_raw in ('', 'TBA'):
+            return
+
         try:
-            full_price = float(price_raw) if price_raw else 0.0
+            full_price = float(price_raw)
         except ValueError:
-            full_price = 0.0  
+            return
 
         half_price = round(full_price / 2, 2)
 

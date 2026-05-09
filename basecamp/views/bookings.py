@@ -87,14 +87,16 @@ def booking_detail(request):
         if is_duplicate_submission(Post, email):
             return JsonResponse({'success': False, 'message': 'Duplicate form recently submitted. Please wait before trying again.'})  
             
-        driver = resolve_driver(suburb)
+        driver = get_default_driver_for_region(post_region)
+
+        if not driver and post_region:
+            sydney_region = Region.objects.filter(slug='sydney', is_active=True).first()
+            if sydney_region:
+                driver = get_default_driver_for_region(sydney_region)
 
         if not driver:
-            logger.error(f"Driver missing for suburb: {suburb}")
-            driver = Driver.objects.filter(is_default=True).first()
-
-        if not driver:
-            raise Exception("No default driver configured in system")
+            logger.error(f"No default driver found for region: {post_region} or sydney fallback")
+            return JsonResponse({'success': False, 'message': 'Service unavailable. Please contact us directly.'})
 
         # 🧳 개별 수하물 항목 수집
         baggage_str = parse_baggage(request)
@@ -110,16 +112,26 @@ def booking_detail(request):
 
         ip = get_client_ip(request)
         ip_info = get_ip_info(ip)
-        asyncio.run(send_telegram_notification(
-            f"✈️ New booking:\n"
-            f"IP: `{ip}`\n"
-            f"Location: {ip_info}"
-        ))
+        try:
+            asyncio.run(send_telegram_notification(
+                f"✈️ New booking:\n"
+                f"IP: `{ip}`\n"
+                f"Location: {ip_info}"
+            ))
+        except Exception as e:
+            logger.error(f"[TELEGRAM] Failed to send: {e}")
 
         return booking_success_response(request)
 
     else:
-        return render(request, 'basecamp/booking/booking.html', {})
+        active_regions = Region.objects.filter(is_active=True)
+        region = _get_request_region(request)
+        if not region:
+            region = Region.objects.filter(slug='sydney', is_active=True).first()
+        return render(request, 'basecamp/booking/booking.html', {
+            "region": region,
+            "active_regions": active_regions,
+        })
 
 
 # cruise booking by client
@@ -171,6 +183,15 @@ def cruise_booking_detail(request):
         
         driver = get_default_driver_for_region(post_region)
 
+        if not driver and post_region:
+            sydney_region = Region.objects.filter(slug='sydney', is_active=True).first()
+            if sydney_region:
+                driver = get_default_driver_for_region(sydney_region)
+
+        if not driver:
+            logger.error(f"No default driver found for region: {post_region} or sydney fallback")
+            return JsonResponse({'success': False, 'message': 'Service unavailable. Please contact us directly.'})
+
         # 🧳 개별 수하물 항목 수집
         baggage_str = parse_baggage(request)         
 
@@ -199,8 +220,11 @@ def cruise_booking_detail(request):
 
     else:
         active_regions = Region.objects.filter(is_active=True)
+        region = _get_request_region(request)
+        if not region:
+            region = Region.objects.filter(slug='sydney', is_active=True).first()
         return render(request, 'basecamp/booking/cruise_booking.html', {
-            "region": _get_request_region(request),
+            "region": region,
             "active_regions": active_regions,
         })
 
@@ -251,6 +275,15 @@ def p2p_booking_detail(request):
 
         driver = get_default_driver_for_region(post_region)
 
+        if not driver and post_region:
+            sydney_region = Region.objects.filter(slug='sydney', is_active=True).first()
+            if sydney_region:
+                driver = get_default_driver_for_region(sydney_region)
+
+        if not driver:
+            logger.error(f"No default driver found for region: {post_region} or sydney fallback")
+            return JsonResponse({'success': False, 'message': 'Service unavailable. Please contact us directly.'})
+
         baggage_str = parse_baggage(request)
 
         p = Post(
@@ -287,8 +320,11 @@ def p2p_booking_detail(request):
 
     else:
         active_regions = Region.objects.filter(is_active=True)
+        region = _get_request_region(request)
+        if not region:
+            region = Region.objects.filter(slug='sydney', is_active=True).first()
         return render(request, 'basecamp/booking/p2p_booking.html', {
-            "region": _get_request_region(request),
+            "region": region,
             "active_regions": active_regions,
         })
 
@@ -389,8 +425,18 @@ def confirm_booking_detail(request):
         else:
             pending = True  
 
-        driver = resolve_driver(suburb)
-        is_confirmed = False
+        driver = get_default_driver_for_region(region)
+
+        if not driver:
+            sydney_region = Region.objects.filter(slug='sydney', is_active=True).first()
+            if sydney_region:
+                driver = get_default_driver_for_region(sydney_region)
+
+        if not driver:
+            logger.error(f"No default driver found for region: {region} or sydney fallback")
+            return JsonResponse({'success': False, 'message': 'Service unavailable. Please contact us directly.'})
+
+        is_confirmed = False  
 
         # Post 모델 저장
         p = Post(
@@ -499,7 +545,19 @@ def return_trip_detail(request):
         if is_duplicate_submission(Post, email):
             return JsonResponse({'success': False, 'message': 'Duplicate inquiry recently submitted. Please wait before trying again.'})
          
-        driver = resolve_driver(suburb)  
+        driver = resolve_driver(suburb)
+
+        if not driver:
+            driver = get_default_driver_for_region(region)
+
+        if not driver:
+            sydney_region = Region.objects.filter(slug='sydney', is_active=True).first()
+            if sydney_region:
+                driver = get_default_driver_for_region(sydney_region)
+
+        if not driver:
+            logger.error(f"No default driver found for suburb: {suburb}, region: {region}")
+            return JsonResponse({'success': False, 'message': 'Service unavailable. Please contact us directly.'})  
                     
         p = Post(name=name, company_name=company_name, contact=contact, email=email, pickup_date=pickup_date_obj, flight_number=flight_number, flight_time=flight_time,
                  pickup_time=pickup_time, start_point=start_point, end_point=end_point, direction=direction, suburb=suburb, street=street,

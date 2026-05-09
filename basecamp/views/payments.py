@@ -102,6 +102,8 @@ def _apply_gst_updates_multi(bookings):
     """Apply 10% GST price update for corporate non-cash bookings (multi-invoice)."""
     for booking in bookings:
         if booking.company_name and not booking.prepay and not booking.cash:
+            if booking.price in (None, '', 'TBA'):
+                continue
             booking.price = round(float(booking.price) * 1.10, 2)
             booking.prepay = True
             booking.save()
@@ -344,9 +346,10 @@ def invoice_detail(request):
     _send_invoice_email(template_name, context, customer_recipients + [RECIPIENT_EMAIL], inv_no)
 
     if not multiple and user.company_name and not user.prepay and not user.cash:
-        user.price = round(float(user.price) * 1.10, 2)
-        user.prepay = True
-        user.save()
+        if user.price not in (None, '', 'TBA'):
+            user.price = round(float(user.price) * 1.10, 2)
+            user.prepay = True
+            user.save()
 
     return render_inquiry_done(request)
     

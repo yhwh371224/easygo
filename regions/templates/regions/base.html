@@ -124,6 +124,8 @@
 <script>
 document.addEventListener('DOMContentLoaded',()=>{
   document.querySelectorAll('.tp-wrap').forEach(wrap=>{
+    if(wrap._tpInit)return;
+    wrap._tpInit=true;
     const hidden=document.getElementById('id_'+wrap.dataset.field);
     function update(){
       const hEl=wrap.querySelector('.tp-hour');
@@ -153,13 +155,10 @@ document.addEventListener('DOMContentLoaded',()=>{
         update();
       });
     });
-    wrap.querySelector('.tp-hour').addEventListener('input', function() {
-      const v = parseInt(this.value);
-      if (this.value.length === 2 || v > 1) {
-        wrap.querySelector('.tp-min').focus();
-      }
+    wrap.querySelector('.tp-hour').addEventListener('input',function(){
+      const v=parseInt(this.value);
+      if(this.value.length===2||v>1){wrap.querySelector('.tp-min').focus();}
     });
-    update();
   });
 });
 </script>

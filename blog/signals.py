@@ -38,8 +38,11 @@ def notify_user_post(sender, instance, created, **kwargs):
     update_data = {}
 
     # price 처리
-    if instance.price in [None, ""]:
-        update_data['price'] = "TBA"
+    try:
+        if instance.price in [None, "", "TBA"] or float(instance.price) == 0.0:
+            update_data['price'] = "TBA"
+    except (ValueError, TypeError):
+        pass
 
     # 이메일 조건
     if not instance.cash and not instance.paid:
