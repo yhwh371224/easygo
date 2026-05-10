@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.conf import settings
 from regions.models import Region
 
@@ -13,6 +13,9 @@ def about_us(request):
 def arrival_guide(request): 
     return render(request, 'basecamp/pages/arrival_guide.html')
 
+def booking(request):
+    return redirect('/sydney/inquiry/')
+
 def confirmation_multiplebookings(request): 
     return render(request, 'basecamp/confirmation_multiplebookings.html')
 
@@ -21,11 +24,6 @@ def confirm_booking(request):
 
 def contact_form(request):
     return render(request, 'basecamp/pages/contact_form.html')
-
-def cruise_booking(request):
-    return render(request, 'basecamp/booking/cruise_booking.html', {
-        "active_regions": Region.objects.filter(is_active=True, is_coming_soon=False).order_by('name'),
-    })
 
 def cruise_inquiry(request):
     return render(request, 'basecamp/booking/cruise_inquiry.html', {

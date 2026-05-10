@@ -112,10 +112,10 @@
     <link rel="preload" fetchpriority="high" as="image" href="{% static 'basecamp/photos/sydney_airport.webp' %}" type="image/webp">
     <link rel="preload" href="{% static 'basecamp/css/head_home.css' %}" as="style">
     <link rel="preload" href="{% static 'basecamp/css/home.css' %}" as="style">
-    <link rel="stylesheet" href="{% static 'basecamp/css/head_home.css' %}">
-    <link rel="stylesheet" href="{% static 'basecamp/css/home.css' %}">
     <link rel="stylesheet" href="{% static 'basecamp/css/tiny-slider.css' %}" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="{% static 'basecamp/css/flatpickr.min.css' %}" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="{% static 'basecamp/css/head_home.css' %}">
+    <link rel="stylesheet" href="{% static 'basecamp/css/home.css' %}">
     <noscript><link rel="stylesheet" href="{% static 'basecamp/css/tiny-slider.css' %}"></noscript>
     <style nonce="{{ CSP_NONCE }}">
       .site-footer a { text-decoration: none !important; }
@@ -157,9 +157,8 @@
             <h2 class="text-light fs-6 fs-md-5 fw-bold mb-4">
               <span class="text-brand"><strong>8–13 Seater Private Transfer across Sydney CBD, North Shore & Western Sydney</strong></span>
             </h2><br>
-            <div>
-              <a role="button" class="btn btn-primary" href="/booking/">BOOK NOW</a> |
-              <a role="button" class="btn btn-success" href="/inquiry/">PRICE NOW</a>
+            <div>|
+              <a role="button" class="btn btn-success" href="/inquiry/">Check Price & Availability</a>
             </div>
             <div class="mt-4">
               <a href="/easygo_review/" class="me-4 fw-bold review-link-white">
@@ -177,73 +176,142 @@
       </section>
 
       <!-- ===== BOOKING FORM ===== -->
-      <form class="container position-relative zindex-5 booking-form-top" action="/sydney/price_detail/" id="booking-form" method="post">
-        {% csrf_token %}
-        <div class="d-lg-flex align-items-center bg-secondary border rounded-3 px-4 pt-4 pb-3">
-          <div class="d-sm-flex align-items-center flex-grow-1">
-            <div class="mb-3 pb-1 w-100 mb-sm-4 me-sm-3">
-              <label class="form-label" id="label-pickup">Pickup date</label>
-              <div class="input-group">
-                <input class="form-control date-picker rounded" aria-labelledby="label-pickup" name="pickup_date" aria-label="Pickup date" required type="date" placeholder="Choose date" data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;F j, Y&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;}">
-                <a class="date-picker flatpickr-input" href="#" aria-label="Choose date"><i class="ai-calendar position-absolute top-50 end-0 translate-middle-y me-3"></i></a>
-              </div>
-            </div>
-            <div class="mb-3 pb-1 w-100 mb-sm-4 me-sm-3">
-              <label class="form-label" for="start-point">Pickup Location</label>
-              <select class="form-select" id="start-point" name="start_point" required>
-                <option value="" disabled selected>Select your option</option>
-                {% if airport_terminals %}
-                  <optgroup label="Airport terminals">
-                    {% for t in airport_terminals %}
-                      <option value="{{ t.id }}">{{ t.name }}</option>
-                    {% endfor %}
-                  </optgroup>
-                {% endif %}
-                {% for area in home_suburbs %}<option value="{{ area.name }}">{{ area.name }}</option>{% endfor %}
-              </select>
-            </div>
+      <section class="container position-relative zindex-5 booking-form-top" id="booking-tabs" data-rebook-error="{{ rebook_error|yesno:'true,false' }}">
+        <div class="booking-tabs-wrapper">
+
+          {# --- TAB NAV --- #}
+          <div class="booking-tab-nav">
+            <button class="booking-tab-btn active" data-tab="new-booking" onclick="switchBookingTab(this, 'new-booking')">
+              Check Availability & Price
+            </button>
+            <button class="booking-tab-btn" data-tab="quick-rebook" onclick="switchBookingTab(this, 'quick-rebook')">
+              Book Again
+              <span class="rebook-badge">Returning?</span>
+            </button>
           </div>
-          <div class="d-sm-flex align-items-center">
-            <div class="mb-3 pb-1 w-100 mb-sm-4 me-sm-3">
-              <label class="form-label" for="end-point">Drop-off Location</label>
-              <select class="form-select" id="end-point" name="end_point" required>
-                <option value="" disabled selected>Select your option</option>
-                {% if airport_terminals %}
-                  <optgroup label="Airport terminals">
-                    {% for t in airport_terminals %}
-                      <option value="{{ t.id }}">{{ t.name }}</option>
-                    {% endfor %}
-                  </optgroup>
-                {% endif %}
-                {% for area in home_suburbs %}<option value="{{ area.name }}">{{ area.name }}</option>{% endfor %}
-              </select>
+
+          {# --- TAB CONTENT --- #}
+          <div class="booking-tab-body">
+
+            {# ===== TAB 1: NEW BOOKING ===== #}
+            <div class="booking-tab-pane active" id="tab-new-booking">
+              <form action="/sydney/price_detail/" id="booking-form" method="post">
+                {% csrf_token %}
+                <div class="booking-fields">
+
+                  <div class="booking-field">
+                    <label class="booking-label">Pickup date</label>
+                    <input class="booking-input date-picker"
+                      name="pickup_date" required type="date"
+                      placeholder="Choose date"
+                      data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;F j, Y&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;}">
+                  </div>
+
+                  <div class="booking-field">
+                    <label class="booking-label" for="start-point">Pickup Location</label>
+                    <select class="booking-input" id="start-point" name="start_point" required>
+                      <option value="" disabled selected>Select your option</option>
+                      {% if airport_terminals %}
+                        <optgroup label="Airport terminals">
+                          {% for t in airport_terminals %}
+                            <option value="{{ t.id }}">{{ t.name }}</option>
+                          {% endfor %}
+                        </optgroup>
+                      {% endif %}
+                      {% for area in home_suburbs %}
+                        <option value="{{ area.name }}">{{ area.name }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+
+                  <div class="booking-field">
+                    <label class="booking-label" for="end-point">Drop-off Location</label>
+                    <select class="booking-input" id="end-point" name="end_point" required>
+                      <option value="" disabled selected>Select your option</option>
+                      {% if airport_terminals %}
+                        <optgroup label="Airport terminals">
+                          {% for t in airport_terminals %}
+                            <option value="{{ t.id }}">{{ t.name }}</option>
+                          {% endfor %}
+                        </optgroup>
+                      {% endif %}
+                      {% for area in home_suburbs %}
+                        <option value="{{ area.name }}">{{ area.name }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+
+                  <div class="booking-field booking-field--sm">
+                    <label class="booking-label" for="passengers">Passengers</label>
+                    <select class="booking-input" id="passengers" name="no_of_passenger" required>
+                      <option disabled selected value="">No. of people</option>
+                      <option value="1">1</option><option value="2">2</option>
+                      <option value="3">3</option><option value="4">4</option>
+                      <option value="5">5</option><option value="6">6</option>
+                      <option value="7">7</option><option value="8">8</option>
+                      <option value="9">9</option><option value="10">10</option>
+                      <option value="11">11</option><option value="12">12</option>
+                      <option value="13">13</option>
+                      <option value="" disabled>Over 13 — contact us</option>
+                    </select>
+                  </div>
+
+                  <div class="booking-field booking-field--btn">
+                    <button type="submit" class="booking-submit booking-submit--orange" id="submitButton">
+                      See your price &rsaquo;&rsaquo;
+                    </button>
+                  </div>
+
+                </div>
+              </form>
             </div>
-            <div class="mb-3 pb-1 w-100 mb-sm-4 me-sm-3">
-              <label class="form-label" for="passengers">Passengers</label>
-              <select class="form-select" id="passengers" name="no_of_passenger" required>
-                <option disabled selected value="" class="option-beige">Number of people</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
-                <option value="11">11</option>
-                <option value="12">12</option>
-                <option value="13">13</option>
-                <option value="" disabled>Over 13 (please contact us)</option>
-              </select>
+
+            {# ===== TAB 2: QUICK REBOOK ===== #}
+            <div class="booking-tab-pane" id="tab-quick-rebook">
+
+              {% if rebook_error %}
+                <div class="rebook-error">{{ rebook_error }}</div>
+              {% endif %}
+
+              <p class="rebook-hint">Used EasyGo before? Enter your email — we'll fill in your previous route automatically.</p>
+
+              <form action="{% url 'basecamp:quick_rebook_step1' %}" method="post" id="quick-rebook-form">
+                {% csrf_token %}
+                <div class="booking-fields">
+
+                  <div class="booking-field booking-field--lg">
+                    <label class="booking-label">Email address <span class="booking-label-muted">(from previous booking)</span></label>
+                    <input type="email" class="booking-input" name="email"
+                      placeholder="your@email.com" required autocomplete="email">
+                  </div>
+
+                  <div class="booking-field">
+                    <label class="booking-label">Pickup date</label>
+                    <input class="booking-input date-picker"
+                      name="pickup_date" required type="date"
+                      placeholder="Choose date"
+                      data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;F j, Y&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;}">
+                  </div>
+
+                  <div class="booking-field">
+                    <label class="booking-label">Flight number</label>
+                    <input type="text" class="booking-input" name="flight_number"
+                      placeholder="e.g. QF400" autocomplete="off">
+                  </div>
+
+                  <div class="booking-field booking-field--btn">
+                    <button type="submit" class="booking-submit booking-submit--green">
+                      Next — final stop &rsaquo;&rsaquo;
+                    </button>
+                  </div>
+
+                </div>
+              </form>
             </div>
-            <div class="text-center text-sm-start mt-2 mt-sm-4 mb-4">
-              <button type="submit" class="btn btn-warning" id="submitButton">Go >>></button>
-            </div>
+
           </div>
         </div>
-      </form>
+      </section>
 
       <!-- ===== HOT OFFER CAROUSEL ===== -->
       <section class="container rounded bg-dark py-5 my-4 my-sm-0 py-sm-6 py-md-7">

@@ -1,0 +1,87 @@
+{% extends 'basecamp/base/easygo_base.html' %}
+{% load static %}
+
+{% block title %}{{ region.name }} Airport Transfer – Private Pickup &amp; Transfer Service | EasyGo{% endblock %}
+{% block meta_description %}{{ region.name }} airport transfer with private shuttle &amp; maxi vans. Ideal for families, groups &amp; large luggage. Book in 1 minute.{% endblock %}
+
+{% block extra_css %}
+<style>
+  .page-wrapper { padding-top:60px !important; background-color:#6982b8 !important; }
+  hr { border:none; border-top:1px solid rgba(255,255,255,0.3); opacity:0.5; margin:2.5rem 0; }
+  body { background-color:#6982b8; }
+  .container:not(.navbar .container):not(.site-footer .container) { background-color:#6982b8; }
+  .container:not(.navbar .container):not(.site-footer .container) p,
+  .container:not(.navbar .container):not(.site-footer .container) li,
+  .container:not(.navbar .container):not(.site-footer .container) h1,
+  .container:not(.navbar .container):not(.site-footer .container) h2,
+  .container:not(.navbar .container):not(.site-footer .container) h3 { color:#ffffff !important; }
+  ul { list-style:none; padding:0; margin:0; }
+  ul li { margin-bottom:0.5rem; }
+  h1 { margin-bottom:2.5rem !important; }
+  h1 span, h2 span, h3 span { color:#e6b635 !important; }
+  a { color:#eed48d; }
+  a:hover { color:#e0a12b; }
+  .site-footer .container, .site-footer ul, .site-footer li,
+  .site-footer p, .site-footer span { background-color:transparent !important; }
+  .site-footer a { color:#f09144 !important; text-decoration:none !important; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container d-flex flex-column justify-content-center min-vh-100 py-5">
+  <div class="text-center pt-4 mt-lg-2">
+
+    <h1><span>{{ region.name }} Airport Transfer – Local Family-Friendly Service</span></h1>
+
+    <p>
+      Personalised <a href="/{{ region.slug }}/"><strong>{{ region.name }} airport transfer</strong></a> with EasyGo's dedicated private service.
+      We provide direct, no-sharing transfers with friendly local drivers from
+      <strong>{{ region.name }} Airport</strong> to your home, hotel, or workplace.
+    </p>
+    <p>
+      Ideal for families travelling with children, seniors needing extra assistance,
+      or anyone who values a reliable, comfortable ride without the stress of shared vehicles.
+    </p>
+
+    <hr>
+
+    <h2><span>Why Families Choose Our {{ region.name }} Transfer Service</span></h2>
+    <ul>
+      <li>🚗 <strong>Dedicated Private Vehicles</strong> – Your family only, no strangers</li>
+      <li>👨‍👩‍👧 <strong>Family-Friendly Local Drivers</strong> – Patient, helpful, know {{ region.name }} well</li>
+      <li>🧳 <strong>Plenty of Space</strong> – Comfortable vehicles for luggage and kids</li>
+      <li>📱 <strong>Flight Tracking</strong> – We adjust pickup time if your flight is delayed</li>
+      <li>🎯 <strong>Direct to Your Door</strong> – No extra stops, straight home or hotel</li>
+    </ul>
+
+    <hr>
+
+    <h2><span>Transfer Options</span></h2>
+    <h3><span>👨‍👩‍👧‍👦 Family Airport Transfers</span></h3>
+    <ul>
+      <li>Child seats and booster seats provided free</li>
+      <li>Extra help with prams, strollers and baby bags</li>
+      <li>Patient drivers experienced with young children</li>
+    </ul>
+    <h3><span>👴 Senior-Friendly Transfers</span></h3>
+    <ul>
+      <li>Extra time and assistance getting in and out</li>
+      <li>Help with heavy luggage and walking aids</li>
+      <li>Gentle driving for comfort and safety</li>
+    </ul>
+
+    <hr>
+
+    <h2><span>Book Your {{ region.name }} Airport Transfer</span></h2>
+    <p>
+      👉 <strong><a href="/{{ region.slug }}/inquiry/">Book online in 1 minute</a></strong>
+    </p>
+    <p>
+      <a href="/{{ region.slug }}/suburbs/" style="font-size:1.05rem;">
+        👉 Search transfer options for your {{ region.name }} suburb 🔍
+      </a>
+    </p>
+
+  </div>
+</div>
+{% endblock %}

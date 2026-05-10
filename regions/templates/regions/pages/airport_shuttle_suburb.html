@@ -76,8 +76,7 @@
     {% endif %}
 
     <div class="d-flex flex-wrap gap-3">
-      <a href="/{{ region.slug }}/booking/" class="btn btn-primary btn-lg px-5">Book Now</a>
-      <a href="/{{ region.slug }}/inquiry/" class="btn btn-outline-light btn-lg px-4">Get a Quote</a>
+      <a href="/{{ region.slug }}/inquiry/" class="btn btn-primary btn-lg px-5">Book Now</a>
     </div>
   </div>
 </section>
@@ -125,9 +124,9 @@
       <div class="p-4 rounded-3 mt-4" style="background: #f8f4ff; border-left: 4px solid #eb7828;">
         <p class="mb-2 fw-semibold">Ready to book your {{ suburb.name }} airport transfer?</p>
         {% if suburb.price %}
-        <a href="/{{ region.slug }}/booking/" class="btn btn-primary me-2">Book Now — ${{ suburb.price }}</a>
+        <a href="/{{ region.slug }}/inquiry/" class="btn btn-primary me-2">Book Now — ${{ suburb.price }}</a>
         {% else %}
-        <a href="/{{ region.slug }}/booking/" class="btn btn-primary me-2">Book Now</a>
+        <a href="/{{ region.slug }}/inquiry/" class="btn btn-primary me-2">Book Now</a>
         {% endif %}
         <a href="/contact/" class="btn btn-outline-secondary">Inquiry First</a>
       </div>
@@ -163,7 +162,7 @@
             <span class="fw-medium">24/7</span>
           </li>
         </ul>
-        <a href="/{{ region.slug }}/booking/" class="btn btn-primary w-100 mt-3">Book This Transfer</a>
+        <a href="/{{ region.slug }}/inquiry/" class="btn btn-primary w-100 mt-3">Book This Transfer</a>
         <p class="text-center fs-xs text-muted mt-2 mb-0">Fixed price · No surprises</p>
       </div>
     </div>

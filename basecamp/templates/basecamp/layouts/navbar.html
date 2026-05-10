@@ -19,7 +19,7 @@
         <span class="navbar-toggler-icon"></span>
         </button>
         
-        <a class="navbar-brand flex-shrink-0 order-lg-1 mx-auto ms-lg-0 pe-lg-2 me-lg-4" href="{% if current_region %}/{{ current_region.slug }}/{% else %}/{% endif %}" aria-label="EasyGo Home">
+        <a class="navbar-brand flex-shrink-0 order-lg-1 mx-auto ms-lg-0 pe-lg-2 me-lg-4" href="/" aria-label="EasyGo Home">
         <img class="navbar-floating-logo d-none d-lg-block" src="{% static 'basecamp/images/easygo_icon.webp' %}" style="border-radius: 30%; height: auto !important; width: 45px" alt="EasyGo_image">
         </a>
 
@@ -40,60 +40,25 @@
             <li class="nav-item active">
                 <a class="nav-link" href="{% if region %}{% url 'regions:home' region.slug %}{% else %}{% url 'basecamp:home' %}{% endif %}">Home</a>
             </li>
-
-            <!-- TODO: 멀티 지역 완성 후 주석 해제 -->
-            {% comment %}
-            <li class="nav-item dropdown hover-open active">
-                <a class="nav-link dropdown-toggle" href="{% if current_region %}/{{ current_region.slug }}/{% else %}/{% endif %}" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">Home</a>
-                <ul class="dropdown-menu">
-                  {% if active_regions %}
-                    {% for r in active_regions %}
-                      {% if r.slug == 'sydney' %}
-                        <li>
-                          <a class="dropdown-item {% if not current_region and request.path == '/' %}active{% endif %}" href="/">Sydney</a>
-                        </li>
-                      {% else %}
-                        <li>
-                          <a class="dropdown-item {% if current_region and current_region.slug == r.slug %}active{% endif %}" href="/{{ r.slug }}/">{{ r.name }}</a>
-                        </li>
-                      {% endif %}
-                    {% endfor %}
-                  {% else %}
-                    <li><a class="dropdown-item {% if request.path == '/' %}active{% endif %}" href="/">Sydney</a></li>
-                    <li><a class="dropdown-item {% if request.path|slice:':11' == '/melbourne/' %}active{% endif %}" href="/melbourne/">Melbourne</a></li>
-                    <li><a class="dropdown-item {% if request.path|slice:':10' == '/brisbane/' %}active{% endif %}" href="/brisbane/">Brisbane</a></li>
-                    <li><a class="dropdown-item {% if request.path|slice:':7' == '/perth/' %}active{% endif %}" href="/perth/">Perth</a></li>
-                    <li><a class="dropdown-item {% if request.path|slice:':10' == '/adelaide/' %}active{% endif %}" href="/adelaide/">Adelaide</a></li>
-                    <li><a class="dropdown-item {% if request.path|slice:':12' == '/gold-coast/' %}active{% endif %}" href="/gold-coast/">Gold Coast</a></li>
-                  {% endif %}
-                </ul>
-            </li>
-            {% endcomment %}
-
+            
             <li class="nav-item dropdown dropdown-mega active">
                 <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" data-bs-display="static">About Us</a>
                 <div class="dropdown-menu">
-                <p class="dropdown-column dropdown-column-img bg-secondary" style="background-image: url('{{ page_bg }}');"></p>
-                <div class="dropdown-column">
-                    <a class="dropdown-item" href="/about_us/">Learn About Us</a>
-                    <a class="dropdown-item" href="/information/">More Information About Booking</a>
-                    <a class="dropdown-item" href="/easygo_review/">Read Customer Reviews</a>
-                    {% if current_region %}                        
-                        {% if current_region.slug == 'sydney' %}
-                        <a class="dropdown-item" href="/more_suburbs/">Sydney Explore Service Areas</a>
-                        <a class="dropdown-item" href="/meeting_point/">Sydney Airport Meeting Point</a>
-                        <a class="dropdown-item" href="/arrival_guide/">Sydney Arrival Guide</a>
+                    <p class="dropdown-column dropdown-column-img bg-secondary" style="background-image: url('{{ page_bg }}');"></p>
+                    <div class="dropdown-column">
+                        <a class="dropdown-item" href="/about_us/">Learn About Us</a>
+                        <a class="dropdown-item" href="/information/">More Information About Booking</a>
+                        <a class="dropdown-item" href="/easygo_review/">Read Customer Reviews</a>
+                        {% if current_region and current_region.slug != 'sydney' %}
+                            <a class="dropdown-item" href="/{{ current_region.slug }}/suburbs/">{{ current_region.name }} Explore Service Areas</a>
+                            <a class="dropdown-item" href="/{{ current_region.slug }}/meeting-point/">{{ current_region.name }} Airport Meeting Point</a>
+                            <a class="dropdown-item" href="/{{ current_region.slug }}/arrival-guide/">{{ current_region.name }} Arrival Guide</a>
                         {% else %}
-                        <a class="dropdown-item" href="/{{ current_region.slug }}/suburbs/">{{ current_region.name }} Explore Service Areas</a>
-                        <a class="dropdown-item" href="/{{ current_region.slug }}/meeting-point/">{{ current_region.name }} Airport Meeting Point</a>
-                        <a class="dropdown-item" href="/{{ current_region.slug }}/arrival-guide/">{{ current_region.name }} Arrival Guide</a>
+                            <a class="dropdown-item" href="/more_suburbs/">Sydney Explore Service Areas</a>
+                            <a class="dropdown-item" href="/meeting_point/">Sydney Airport Meeting Point</a>
+                            <a class="dropdown-item" href="/arrival_guide/">Sydney Arrival Guide</a>
                         {% endif %}
-                    {% else %}
-                        <a class="dropdown-item" href="/more_suburbs/">Sydney Explore Service Areas</a>
-                        <a class="dropdown-item" href="/meeting_point/">Sydney Airport Meeting Point</a>
-                        <a class="dropdown-item" href="/arrival_guide/">Sydney Arrival Guide</a>
-                    {% endif %}
-                </div>
+                    </div>
                 </div>
             </li>
 
@@ -101,8 +66,8 @@
             <li class="nav-item dropdown active">
                 <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" data-bs-display="static">Airport Transfer</a>
                 <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="/{{ current_region.slug }}/inquiry/">Price Inquiry</a></li>
-                <li><a class="dropdown-item" href="/{{ current_region.slug }}/booking/">Book Now</a></li>
+                <li><a class="dropdown-item" href="/{{ current_region.slug }}/inquiry/">Get a Quote</a></li>
+                <li><a class="dropdown-item" href="/quick_rebook/">Book Again</a></li>
                 <li><a class="dropdown-item" href="/{{ current_region.slug }}/#reasons">Why Us?</a></li>
                 </ul>
             </li>
@@ -110,8 +75,8 @@
             <li class="nav-item dropdown active">
                 <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" data-bs-display="static">Airport Transfer</a>
                 <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="/inquiry/">Price Inquiry</a></li>
-                <li><a class="dropdown-item" href="/booking/">Book Now</a></li>
+                <li><a class="dropdown-item" href="/inquiry/">Get a Quote</a></li>
+                <li><a class="dropdown-item" href="/quick_rebook/">Book Again</a></li>
                 <li><a class="dropdown-item" href="/#reasons">Why Us?</a></li>
                 </ul>
             </li>
@@ -120,27 +85,20 @@
             <li class="nav-item dropdown active">
                 <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" data-bs-display="static">Cruise Transfer</a>
                 <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="/cruise_inquiry/">Price Inquiry</a></li>
-                <li><a class="dropdown-item" href="/cruise_booking/">Book Now</a></li>
+                <li><a class="dropdown-item" href="/cruise_inquiry/">Get a Quote</a></li>
                 </ul>
             </li>
 
             <li class="nav-item dropdown active">
-                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" data-bs-display="static">Price & Booking</a>
+                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" data-bs-display="static">Price & Availability</a>
                 <ul class="dropdown-menu">
-                <li class="dropdown"><a class="dropdown-item dropdown-toggle" href="#" data-bs-toggle="dropdown">Price</a>
-                    <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="{% if current_region %}/{{ current_region.slug }}/inquiry/{% else %}/inquiry/{% endif %}">Airport</a></li>
-                    <li><a class="dropdown-item" href="/cruise_inquiry/">Cruise</a></li>
-                    <li><a class="dropdown-item" href="/p2p_single/">Point to Point</a></li>
-                    </ul>
-                </li>
-                <li class="dropdown"><a class="dropdown-item dropdown-toggle" href="#" data-bs-toggle="dropdown">Booking</a>
-                    <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="{% if current_region %}/{{ current_region.slug }}/booking/{% else %}/booking/{% endif %}">Airport</a></li>
-                    <li><a class="dropdown-item" href="/cruise_booking/">Cruise</a></li>
-                    </ul>
-                </li>
+                    <li class="dropdown"><a class="dropdown-item dropdown-toggle" href="#" data-bs-toggle="dropdown">Price</a>
+                        <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% if current_region %}/{{ current_region.slug }}/inquiry/{% else %}/inquiry/{% endif %}">Airport</a></li>
+                        <li><a class="dropdown-item" href="/cruise_inquiry/">Cruise</a></li>
+                        <li><a class="dropdown-item" href="/p2p_single/">Point to Point</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </li>
 
@@ -148,6 +106,7 @@
                 <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" data-bs-display="static">Payment</a>
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="/payonline/" >PayPal</a></li>
+                    <li><a class="dropdown-item" href="/pay/stripe/" >Stripe</a></li>
                     <li><a class="dropdown-item" href="/payment_options/" >PayID</a></li>
                 </ul>                
             </li>
@@ -161,7 +120,6 @@
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="/contact/"><i class="fas fa-paper-plane me-2"></i>Send a Message</a></li>
                     <li><a class="dropdown-item" href="mailto:info@easygoshuttle.com.au"><i class="fas fa-envelope me-2"></i>Via Email</a></li>
-                    <li><a class="dropdown-item" href="sms:{{ business_phone }}"><i class="fas fa-comment-alt me-2"></i>Text Message</a></li>
                 </ul>
             </li>
             </ul>

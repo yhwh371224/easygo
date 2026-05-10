@@ -53,7 +53,7 @@ def _resolve_terminal(region: Region, raw_value: str):
     return None
 
 
-# Inquiry for airport
+# Inquiry for airport (BOOk NOW/New Booking button)
 @ratelimit(key='ip', rate='5/m', method='POST', block=True)
 @require_turnstile
 def inquiry_details(request):

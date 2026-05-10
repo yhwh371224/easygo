@@ -1,0 +1,87 @@
+{% extends 'basecamp/base/easygo_base.html' %}
+{% load static %}
+
+{% block title %}{{ region.name }} Cruise Transfer – Port Pickup &amp; Airport Shuttle Service | EasyGo{% endblock %}
+{% block meta_description %}{{ region.name }} cruise transfer with private shuttle &amp; maxi vans. Cruise port to airport &amp; hotels. Book in 1 minute.{% endblock %}
+
+{% block extra_css %}
+<style>
+  hr { border:none; border-top:1px solid rgba(255,255,255,0.3); opacity:0.5; margin:2.5rem 0; }
+  .page-wrapper { padding-top:60px !important; background-color:#e0f0ff !important; }
+  body { background-color:#e0f0ff; }
+  .container:not(.navbar .container):not(.site-footer .container) { background-color:#e0f0ff; }
+  .container:not(.navbar .container):not(.site-footer .container) p,
+  .container:not(.navbar .container):not(.site-footer .container) li,
+  .container:not(.navbar .container):not(.site-footer .container) h1,
+  .container:not(.navbar .container):not(.site-footer .container) h2,
+  .container:not(.navbar .container):not(.site-footer .container) h3 { color:#212529 !important; }
+  ul { list-style:none; padding:0; margin:0; }
+  ul li { margin-bottom:0.5rem; }
+  h1 { margin-bottom:2.5rem !important; }
+  h1 span, h2 span, h3 span { color:#e6b635 !important; }
+  a { color:#0d6efd; }
+  a:hover { color:#074cb4; }
+  .site-footer .container, .site-footer ul, .site-footer li,
+  .site-footer p, .site-footer span { background-color:transparent !important; }
+  .site-footer a { color:#f09144 !important; text-decoration:none !important; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container d-flex flex-column justify-content-center min-vh-100 py-5">
+  <div class="text-center pt-4 mt-lg-2">
+
+    <h1>{{ region.name }} Cruise Transfer &amp; Port Pickup Service</h1>
+
+    <p>
+      Reliable, door-to-door <strong>{{ region.name }} cruise transfer</strong> services with EasyGo Airport Shuttle.
+      We specialise in private transfers, maxi vans, and family-friendly cruise port pickups from
+      <strong>{{ region.name }}'s cruise terminals</strong> to the airport and all suburbs.
+    </p>
+    <p>
+      Whether you're travelling with kids, cruise luggage, or need an early pre-cruise pickup,
+      our professional drivers ensure a smooth, stress-free cruise transfer.
+    </p>
+
+    <hr>
+
+    <h2><span>Why Choose EasyGo for {{ region.name }} Cruise Transfers?</span></h2>
+    <ul>
+      <li>🚐 <strong>Private Transfers Only</strong> – No ride sharing, no waiting</li>
+      <li>🧳 <strong>Perfect for Cruise Luggage &amp; Families</strong> – Maxi vans available</li>
+      <li>🚢 <strong>All {{ region.name }} Cruise Terminals</strong> – Port to airport &amp; CBD</li>
+      <li>⏰ <strong>24/7 Pre-Cruise &amp; Post-Cruise Transfers</strong></li>
+      <li>📍 <strong>{{ region.name }}-Wide Coverage</strong> – Airport, hotels, CBD &amp; all suburbs</li>
+    </ul>
+
+    <hr>
+
+    <h2><span>{{ region.name }} Cruise Terminal Services</span></h2>
+    <h3><span>🚢 Cruise Port Pickup (Disembarkation)</span></h3>
+    <ul>
+      <li>Meet &amp; greet at the cruise terminal</li>
+      <li>Direct transfer to {{ region.name }} Airport or your hotel</li>
+      <li>Assistance with heavy cruise luggage</li>
+    </ul>
+    <h3><span>🏨 Pre-Cruise Drop-off (Embarkation)</span></h3>
+    <ul>
+      <li>Door-to-door service from your hotel or home</li>
+      <li>Stress-free early morning pickups</li>
+      <li>Ideal for families and groups with luggage</li>
+    </ul>
+
+    <hr>
+
+    <h2><span>Book Your {{ region.name }} Cruise Transfer Today</span></h2>
+    <p>
+      👉 <strong><a href="/{{ region.slug }}/inquiry/">Book online in 1 minute</a></strong> or contact us for group bookings.
+    </p>
+    <p>
+      <a href="/{{ region.slug }}/suburbs/" style="font-size:1.05rem;">
+        👉 Search your {{ region.name }} suburb for cruise transfer 🔍
+      </a>
+    </p>
+
+  </div>
+</div>
+{% endblock %}

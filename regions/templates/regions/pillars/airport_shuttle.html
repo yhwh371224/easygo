@@ -1,0 +1,88 @@
+{% extends 'basecamp/base/easygo_base.html' %}
+{% load static %}
+
+{% block title %}{{ region.name }} Airport Shuttle – Door-to-Door Shuttle Service | EasyGo{% endblock %}
+{% block meta_description %}{{ region.name }} airport shuttle with private transfers &amp; maxi vans. Door-to-door service from {{ region.name }} Airport to all suburbs. Book in 1 minute.{% endblock %}
+
+{% block extra_css %}
+<style>
+  hr { border:none; border-top:1px solid #e0dae6 !important; opacity:1; margin:2.5rem 0; }
+  .page-wrapper { padding-top:60px !important; background-color:#e0dae6; }
+  body { background-color:#e0dae6; }
+  .container:not(.navbar .container):not(.site-footer .container) { background-color:#e0dae6; }
+  .container:not(.navbar .container):not(.site-footer .container) p,
+  .container:not(.navbar .container):not(.site-footer .container) li,
+  .container:not(.navbar .container):not(.site-footer .container) h1,
+  .container:not(.navbar .container):not(.site-footer .container) h2,
+  .container:not(.navbar .container):not(.site-footer .container) h3 { color:#212529 !important; }
+  ul { list-style:none; padding:0; margin:0; }
+  ul li { margin-bottom:0.5rem; }
+  h1 { margin-bottom:2.5rem !important; }
+  h1 span, h2 span, h3 span { color:#867070 !important; }
+  a { color:#ee710a !important; }
+  a:hover { color:#cfa07f !important; }
+  .site-footer .container, .site-footer ul, .site-footer li,
+  .site-footer p, .site-footer span { background-color:transparent !important; }
+  .site-footer a { color:#f09144 !important; text-decoration:none !important; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container d-flex flex-column justify-content-center min-vh-100 py-5">
+  <div class="text-center pt-4 mt-lg-2">
+
+    <h1>{{ region.name }} Airport Shuttle &amp; Transfer Service</h1>
+
+    <p>
+      Reliable, door-to-door <strong>{{ region.name }} airport shuttle</strong> services with
+      <a href="/{{ region.slug }}/"><strong>EasyGo Airport Shuttle</strong></a>.
+      We specialise in private transfers, maxi vans, and family-friendly airport pickups from
+      <strong>{{ region.name }} Airport</strong> to all {{ region.name }} suburbs, hotels, and the CBD.
+    </p>
+    <p>
+      Whether you're travelling with kids, heavy luggage, or need an early morning pickup,
+      our professional drivers ensure a smooth, stress-free airport transfer.
+    </p>
+
+    <hr>
+
+    <h2><span>Why Choose EasyGo for {{ region.name }} Airport Shuttle?</span></h2>
+    <ul>
+      <li>🚐 <strong>Private Transfers Only</strong> – No ride sharing, no waiting</li>
+      <li>🧳 <strong>Perfect for Luggage &amp; Families</strong> – Maxi vans available</li>
+      <li>✈️ <strong>All Airport Terminals</strong> – Domestic &amp; International</li>
+      <li>⏰ <strong>24/7 Airport Pickups &amp; Drop-offs</strong></li>
+      <li>📍 <strong>{{ region.name }}-Wide Coverage</strong> – All suburbs, hotels &amp; CBD</li>
+    </ul>
+
+    <hr>
+
+    <h2><span>{{ region.name }} Airport Pickup &amp; Drop-off Services</span></h2>
+    <h3><span>✈️ Airport Pickup (Arrivals)</span></h3>
+    <ul>
+      <li>Meet &amp; greet at arrivals terminal</li>
+      <li>Domestic &amp; International terminals covered</li>
+      <li>Direct transfer to your home, hotel, or business</li>
+    </ul>
+    <h3><span>🏨 Airport Drop-off (Departures)</span></h3>
+    <ul>
+      <li>Door-to-door service from your hotel or home</li>
+      <li>Stress-free early morning pickups</li>
+      <li>Ideal for families and groups with luggage</li>
+    </ul>
+
+    <hr>
+
+    <h2><span>Book Your {{ region.name }} Airport Shuttle Today</span></h2>
+    <p>
+      👉 <strong><a href="/{{ region.slug }}/inquiry/">Book online in 1 minute</a></strong>
+    </p>
+    <p>
+      <a href="/{{ region.slug }}/suburbs/" style="font-size:1.05rem;">
+        👉 Search your {{ region.name }} suburb for airport shuttle 🔍
+      </a>
+    </p>
+
+  </div>
+</div>
+{% endblock %}

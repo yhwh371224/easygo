@@ -22,10 +22,11 @@ urlpatterns = [
     # Legacy basecamp flows made region-aware
     path('<slug:region_slug>/price_detail/', make_region_view(price_detail), name='price_detail'),
     path('<slug:region_slug>/inquiry_details1/', make_region_view(inquiry_details1), name='inquiry_details1'),
+    path('<slug:region_slug>/booking/', views.region_booking, name='booking'),
     path('<slug:region_slug>/inquiry/', views.region_inquiry, name='inquiry'),
     path('<slug:region_slug>/inquiry_details/', views.region_inquiry_details, name='inquiry_details'),
-    path('<slug:region_slug>/booking/', views.region_booking, name='booking'),
-    path('<slug:region_slug>/booking_detail/', views.region_booking_detail, name='booking_detail'),
+    path('<slug:region_slug>/quick_rebook/', views.quick_rebook_step1, name='quick_rebook_step1'),
+    path('<slug:region_slug>/quick_rebook/confirm/', views.quick_rebook_confirm, name='quick_rebook_confirm'),
     path('<slug:region_slug>/confirmation/', views.region_confirmation, name='confirmation'),
     path('<slug:region_slug>/meeting-point/', views.region_meeting_point, name='region_meeting_point'),
     path('<slug:region_slug>/arrival-guide/', views.region_arrival_guide, name='arrival_guide'),

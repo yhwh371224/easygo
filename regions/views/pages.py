@@ -47,6 +47,8 @@ def region_home(request, region_slug):
         airport__regions=region
     ).select_related('airport').order_by('type', 'name')
 
+    rebook_error = request.session.pop('rebook_error', None)
+
     return render(request, 'regions/pages/home.html', {
         'region': region,
         'form_suburbs': form_suburbs,
@@ -54,6 +56,7 @@ def region_home(request, region_slug):
         'airport_terminals': airport_terminals,
         'google_review_url': settings.GOOGLE_REVIEW_URL,
         'latest_post': latest_post,
+        'rebook_error': rebook_error,
     })
 
 
@@ -88,20 +91,34 @@ def _render_pillar(request, template_path):
     return render(request, template_path)
 
 
+def _render_pillar_with_region(request, region_slug, template_path):
+    region = get_object_or_404(Region, slug=region_slug, is_active=True)
+    return render(request, template_path, {'region': region})
+
+
 def region_airport_shuttle(request, region_slug):
-    return _render_pillar(request, f'regions/pillars/{region_slug}_airport_shuttle.html')
+    return _render_pillar_with_region(request, region_slug, 'regions/pillars/airport_shuttle.html')
 
 
 def region_airport_transfer(request, region_slug):
-    return _render_pillar(request, f'regions/pillars/{region_slug}_airport_transfer.html')
+    return _render_pillar_with_region(request, region_slug, 'regions/pillars/airport_transfer.html')
 
 
 def region_cruise_transfer(request, region_slug):
-    return _render_pillar(request, f'regions/pillars/{region_slug}_cruise_transfer.html')
+    return _render_pillar_with_region(request, region_slug, 'regions/pillars/cruise_transfer.html')
 
 
 def region_maxi_taxi(request, region_slug):
-    return _render_pillar(request, f'regions/pillars/{region_slug}_maxi_taxi.html')
+    region = get_object_or_404(Region, slug=region_slug, is_active=True)
+    pinned_suburbs = (
+        RegionSuburb.objects
+        .filter(region=region, is_active=True, is_pinned=True)
+        .order_by('sort_order', 'name')
+    )
+    return render(request, 'regions/pillars/maxi_taxi.html', {
+        'region': region,
+        'pinned_suburbs': pinned_suburbs,
+    })
 
 
 def region_airport_shuttle_list(request, region_slug):

@@ -18,6 +18,9 @@ shell:
 superuser:
 	python3 manage.py createsuperuser
 
+cst:
+	python3 manage.py collectstatic --noinput
+
 article:
 	python3 manage.py generate_article
 

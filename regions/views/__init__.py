@@ -1,5 +1,6 @@
 from .inquiry import region_inquiry, region_inquiry_details
-from .booking import region_booking, region_booking_detail
+from .booking import region_booking
+from basecamp.views.bookings import quick_rebook_step1, quick_rebook_confirm
 from .pages import (
     region_coming_soon,
     region_home,

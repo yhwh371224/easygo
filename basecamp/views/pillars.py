@@ -37,6 +37,7 @@ def home(request):
     airport_terminals = Terminal.objects.filter(
         airport__in=region.airports.all()
     ).select_related("airport")
+    rebook_error = request.session.pop('rebook_error', None)
     
     latest_post = Post.objects.filter(status='published').order_by('-created_at').first()
 
@@ -46,6 +47,7 @@ def home(request):
         'airport_terminals': airport_terminals,
         'google_review_url': settings.GOOGLE_REVIEW_URL,
         'latest_post': latest_post,
+        'rebook_error': rebook_error,
 
     })    
 

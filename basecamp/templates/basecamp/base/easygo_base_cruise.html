@@ -20,6 +20,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'basecamp/favi/favicon-16x16.png' %}">
     <link rel="manifest" href="{% static 'basecamp/favi/site.webmanifest' %}">      
     <link rel="stylesheet" href="{% static 'basecamp/css/flatpickr.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'basecamp/css/head_home.css' %}">
     <link rel="stylesheet" href="{% static 'basecamp/css/theme.min.css' %}">
     <link rel="preload" href="{% static 'basecamp/css/footer.css' %}" as="style">
     <link rel="stylesheet" href="{% static 'basecamp/css/footer.css' %}">
@@ -27,6 +28,10 @@
     .spinner { width: 16px; height: 16px; border: 2px solid #ffffff4d; border-top-color: #fff; border-radius: 50%; display: inline-block; vertical-align: middle; margin-left: 8px; animation: spin .8s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
     .booking-hero::before {content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(180deg, rgba(0,0,0,0.3), rgba(0,0,0,0.7)); opacity: 0.7;}
+    .flatpickr-months { margin-left: -0.5rem; margin-right: -0.5rem; border-radius: 0.75rem 0.75rem 0 0; }
+    .flatpickr-innerContainer { overflow: visible; }
+    .flatpickr-rContainer { width: 100%; }
+    .flatpickr-weekdays { margin-left: -0.5rem; width: calc(100% + 1rem); }
     .booking-form-col {margin-top: -220px;}
     @media (min-width: 768px) {.booking-hero {padding-top: 7rem; padding-bottom: 7rem;} .booking-form-col { margin-top: -140px; }}
     @media (min-width: 480px) {.booking-hero {padding-top: 6rem; padding-bottom: 6rem;} .booking-form-col { margin-top: -120px; }}

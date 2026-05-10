@@ -54,7 +54,18 @@
       <div class="card border-0 shadow-lg">
         <div class="page-form text-center">
 
-          <!-- 1. PayPal -->
+          <!-- 1. PayID -->
+          <div class="mb-3 pb-1 payment-method">
+            <strong class="d-block mb-4">3. PayID</strong>
+            <p class="mb-2">&bull; Mobile: 0406 883 355</p>
+            <small class="d-block mb-0" style="color: #eb7828;">
+              Please email the receipt after PayID payment
+            </small>
+          </div>
+
+          <hr>
+
+          <!-- 2. PayPal -->
           <div class="mb-3 pb-1 payment-method">
             <strong class="d-block mb-4">1. Online payment through PayPal</strong>
             <p class="mb-2">You can make payments online through PayPal</p>
@@ -68,7 +79,7 @@
 
           <hr>
 
-          <!-- 2. Stripe -->
+          <!-- 3. Stripe -->
           <div class="mb-3 pb-1 payment-method">
             <strong class="d-block mb-4">2. Online payment through Stripe</strong>
             <p class="mb-2">You can make payments online through Stripe</p>
@@ -82,24 +93,13 @@
 
           <hr>
 
-          <!-- 3. PayID -->
-          <div class="mb-3 pb-1 payment-method">
-            <strong class="d-block mb-4">3. PayID</strong>
-            <p class="mb-2">&bull; Mobile: 0406 883 355</p>
-            <small class="d-block mb-0" style="color: #eb7828;">
-              Please email the receipt after PayID payment
-            </small>
-          </div>
-
-          <hr>
-
           <!-- 4. Bank Transfer -->
-          <div class="mb-3 pb-5 payment-method">
+          {% comment %} <div class="mb-3 pb-5 payment-method">
             <strong class="d-block mb-4">4. Direct Bank Transfer</strong>
             <div class="text-center direct-details px-2">
               {% include 'basecamp/includes/bank_details.html' with bank=DEFAULT_BANK %}
             </div>
-          </div>
+          </div> {% endcomment %}
 
           <!-- Note -->
           <div class="mb-3 pb-3">

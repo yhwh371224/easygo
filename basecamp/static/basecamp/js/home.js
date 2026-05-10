@@ -44,3 +44,21 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 });
 
+function switchBookingTab(btn, tabId) {
+  document.querySelectorAll('.booking-tab-btn').forEach(b => b.classList.remove('active', 'active-green'));
+  document.querySelectorAll('.booking-tab-pane').forEach(p => {
+    p.classList.remove('active', 'active-green');
+  });
+  const isRebook = tabId === 'quick-rebook';
+  btn.classList.add(isRebook ? 'active-green' : 'active');
+  const pane = document.getElementById('tab-' + tabId);
+  pane.classList.add(isRebook ? 'active-green' : 'active');
+}
+
+const bookingTabs = document.getElementById('booking-tabs');
+if (bookingTabs && bookingTabs.dataset.rebookError === 'true') {
+  var rebookBtn = document.querySelector('[data-tab="quick-rebook"]');
+  if (rebookBtn) switchBookingTab(rebookBtn, 'quick-rebook');
+}
+
+

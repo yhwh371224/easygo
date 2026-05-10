@@ -10,6 +10,7 @@ app_name = "basecamp"
 urlpatterns = [
     path('', views.home, name='home'),
     path('about_us/', views.about_us, name='about_us'),
+    path('booking/', views.booking, name='booking'),
     path('sovereign_chauffeurs_v2/', views.sovereign_chauffeurs_v2, name='sovereign_chauffeurs_v2'),
     path('maxi-taxi/<slug:suburb>/', views.maxi_taxi, name='maxi_taxi_suburb'),
     path('maxi-taxi/', views.maxi_taxi, name='maxi_taxi_hyphen'),
@@ -27,8 +28,6 @@ urlpatterns = [
     path('sydney_airport_transfer/', views.sydney_airport_transfer, name='sydney_airport_transfer'),
     path('sydney_cruise_transfer/', views.sydney_cruise_transfer, name='sydney_cruise_transfer'),
     path('arrival_guide/', views.arrival_guide, name='arrival_guide'),
-    path('booking/', views.booking, name="booking"),
-    path('booking_detail/', views.booking_detail, name="booking_detail"),
     path('confirmation/', views.confirmation, name="confirmation"),
     path('confirmation_detail/', views.confirmation_detail, name='confirmation_detail'),
     path('confirm_booking/', views.confirm_booking, name="confirm_booking"),
@@ -36,8 +35,6 @@ urlpatterns = [
     path('contact/', views.contact_form, name='contact_form'),
     path('contact_submit/', views.contact_submit, name='contact_submit'),
     path('create_stripe_checkout_session/', create_stripe_checkout_session, name='create_stripe_checkout_session'),
-    path('cruise_booking/', views.cruise_booking, name="cruise_booking"),
-    path('cruise_booking_detail/', views.cruise_booking_detail, name='cruise_booking_detail'),
     path('cruise_inquiry/', views.cruise_inquiry, name="cruise_inquiry"),
     path('error/', views.error, name='error'),
     path('email_dispatch/', views.email_dispatch, name='email_dispatch'),
@@ -79,6 +76,8 @@ urlpatterns = [
     path('terms/', views.terms, name='terms'),
     path('wrong_date_today/', views.wrong_date_today, name='wrong_date_today'),
     path('pay/stripe/', lambda request: redirect('https://buy.stripe.com/7sIcP940RbKH7LO6ow'), name='pay_stripe'),
+    path('quick_rebook/',         views.quick_rebook_step1,   name='quick_rebook_step1'),
+    path('quick_rebook/confirm/', views.quick_rebook_confirm,  name='quick_rebook_confirm'),
 
 ]
 
