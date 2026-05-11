@@ -8,7 +8,7 @@ from django.db.models import Q
 from django.http import JsonResponse
 from main.settings import RECIPIENT_EMAIL
 from basecamp.area import get_suburbs
-from regions.models import Region, Terminal
+from regions.models import Region, RegionSuburb, Terminal
 from basecamp.basecamp_utils import (
     is_ajax, parse_date,
     verify_turnstile, get_sorted_suburbs,
@@ -61,13 +61,15 @@ def price_detail(request):
             return render(request, 'basecamp/home.html', {
                 'error_message': str(e),
                 'suburbs': get_suburbs(),
-                'home_suburbs': get_sorted_suburbs(),
+                'carousel_suburbs': get_suburbs(),
+                'home_suburbs': RegionSuburb.objects.filter(region__slug='sydney', is_active=True).order_by('-is_pinned', 'sort_order', 'name'),
                 'airport_terminals': _airport_terminals_for_request(request),
                 'google_review_url': settings.GOOGLE_REVIEW_URL,
                 'latest_post': latest_post,
                 'start_point_value': start_point if start_point != 'Select your option' else '',
                 'end_point_value': end_point if end_point != 'Select your option' else '',
                 'no_of_passenger_value': no_of_passenger,
+                'rebook_error': None,
             })
 
         request.session['original_start_point'] = start_point
@@ -120,10 +122,12 @@ def price_detail(request):
         # Region-less legacy home can still render, but it won't allow terminal-based pricing.
         return render(request, 'basecamp/home.html', {
             'suburbs': get_suburbs(),
-            'home_suburbs': get_sorted_suburbs(),
+            'carousel_suburbs': get_suburbs(),
+            'home_suburbs': RegionSuburb.objects.filter(region__slug='sydney', is_active=True).order_by('-is_pinned', 'sort_order', 'name'),
             'airport_terminals': _airport_terminals_for_request(request),
             'google_review_url': settings.GOOGLE_REVIEW_URL,
             'latest_post': latest_post,
+            'rebook_error': None,
         })
     
 
