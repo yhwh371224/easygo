@@ -19,8 +19,8 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   setTimeout(fixSliderA11y, 500);
-  setTimeout(fixSliderA11y, 1000); 
-  setTimeout(fixSliderA11y, 2000);  
+  setTimeout(fixSliderA11y, 1000);
+  setTimeout(fixSliderA11y, 2000);
 
   const sliderContainer = document.querySelector('.tns-carousel-wrapper');
   if (sliderContainer) {
@@ -28,9 +28,10 @@ document.addEventListener('DOMContentLoaded', function () {
     observer.observe(sliderContainer, {
       attributes: true,
       subtree: true,
-      attributeFilter: ['aria-hidden']  // aria-hidden 변경만 감지
+      attributeFilter: ['aria-hidden']
     });
   }
+
   // 3. 날짜 필드 유효성 검사
   const bookingForm = document.getElementById('booking-form');
   if (bookingForm) {
@@ -42,23 +43,28 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
   }
-});
 
-function switchBookingTab(btn, tabId) {
-  document.querySelectorAll('.booking-tab-btn').forEach(b => b.classList.remove('active', 'active-green'));
-  document.querySelectorAll('.booking-tab-pane').forEach(p => {
-    p.classList.remove('active', 'active-green');
+  // 4. 탭 전환 (mobile touch 포함)
+  function switchBookingTab(btn, tabId) {
+    document.querySelectorAll('.booking-tab-btn').forEach(b => b.classList.remove('active', 'active-green'));
+    document.querySelectorAll('.booking-tab-pane').forEach(p => p.classList.remove('active', 'active-green'));
+    const isRebook = tabId === 'quick-rebook';
+    btn.classList.add(isRebook ? 'active-green' : 'active');
+    const pane = document.getElementById('tab-' + tabId);
+    if (pane) pane.classList.add(isRebook ? 'active-green' : 'active');
+  }
+
+  document.querySelectorAll('.booking-tab-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      switchBookingTab(btn, btn.dataset.tab);
+    });
   });
-  const isRebook = tabId === 'quick-rebook';
-  btn.classList.add(isRebook ? 'active-green' : 'active');
-  const pane = document.getElementById('tab-' + tabId);
-  pane.classList.add(isRebook ? 'active-green' : 'active');
-}
 
-const bookingTabs = document.getElementById('booking-tabs');
-if (bookingTabs && bookingTabs.dataset.rebookError === 'true') {
-  var rebookBtn = document.querySelector('[data-tab="quick-rebook"]');
-  if (rebookBtn) switchBookingTab(rebookBtn, 'quick-rebook');
-}
+  // rebook_error 있으면 자동으로 Book Again 탭 열기
+  const bookingTabs = document.getElementById('booking-tabs');
+  if (bookingTabs && bookingTabs.dataset.rebookError === 'true') {
+    var rebookBtn = document.querySelector('[data-tab="quick-rebook"]');
+    if (rebookBtn) switchBookingTab(rebookBtn, 'quick-rebook');
+  }
 
-
+});
