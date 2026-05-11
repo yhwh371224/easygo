@@ -1,7 +1,7 @@
 {% extends "regions/base.html" %}
 {% load static %}
 
-{% block title %}{% if suburb.meta_title %}{{ suburb.meta_title }}{% elif service_type == 'transfer' %}{{ suburb.name }} Airport Transfer {{ region.name }} | Private Car Service | EasyGo{% else %}{{ suburb.name }} to {{ region.name }} Airport Shuttle | EasyGo{% endif %}{% endblock %}
+{% block title %}{% if service_type == 'transfer' %}{{ suburb.name }} Airport Transfer {{ region.name }} | Private Car Service | EasyGo{% elif suburb.meta_title %}{{ suburb.meta_title }}{% else %}{{ suburb.name }} to {{ region.name }} Airport Shuttle | EasyGo{% endif %}{% endblock %}
 
 {% block canonical %}
 <link rel="canonical" href="https://easygoshuttle.com.au/{{ region.slug }}/{{ service_path }}/{{ suburb.slug }}/">
@@ -9,7 +9,7 @@
 
 {% block meta %}
 {% if service_type == 'transfer' %}
-  <meta name="description" content="{% if suburb.meta_description %}{{ suburb.meta_description }}{% else %}Private airport transfer from {{ suburb.name }}{% if region and region.primary_airport %} to {{ region.primary_airport.name }}{% endif %}. Dedicated vehicle, professional driver, flight tracking included.{% if suburb.price %} Fixed price ${{ suburb.price }}.{% endif %} Book online.{% endif %}">
+  <meta name="description" content="Private airport transfer from {{ suburb.name }}{% if region and region.primary_airport %} to {{ region.primary_airport.name }}{% endif %}. Dedicated vehicle, professional driver, flight tracking included.{% if suburb.price %} Fixed price ${{ suburb.price }}.{% endif %} Book online.">
   <meta name="keywords" content="{{ suburb.name }} airport transfer, private car {{ suburb.name }} airport{% if region and region.primary_airport %}, {{ suburb.name }} to {{ region.primary_airport.name }}{% endif %}, airport taxi {{ suburb.name }} {{ region.name }}">
 {% else %}
   <meta name="description" content="{% if suburb.meta_description %}{{ suburb.meta_description }}{% else %}Airport shuttle from {{ suburb.name }}{% if region and region.primary_airport %} to {{ region.primary_airport.name }}{% endif %}. Fixed-price private door-to-door service for families and groups.{% if suburb.price %} From ${{ suburb.price }}.{% endif %} Book online.{% endif %}">
