@@ -30,6 +30,10 @@ urlpatterns = [
     path('<slug:region_slug>/confirmation/', views.region_confirmation, name='confirmation'),
     path('<slug:region_slug>/meeting-point/', views.region_meeting_point, name='region_meeting_point'),
     path('<slug:region_slug>/arrival-guide/', views.region_arrival_guide, name='arrival_guide'),
+    # Suburb slug correction redirects (301)
+    path('sydney/airport-shuttle/whitebay-cruise-terminal/', RedirectView.as_view(url='/sydney/airport-shuttle/white-bay-cruise-terminal/', permanent=True)),
+    path('sydney/airport-transfer/whitebay-cruise-terminal/', RedirectView.as_view(url='/sydney/airport-transfer/white-bay-cruise-terminal/', permanent=True)),
+
     path('<slug:region_slug>/airport-shuttle/<slug:suburb_slug>/', views.airport_shuttle_suburb, {'service_type': 'shuttle'}, name='airport_shuttle_suburb'),
     path('<slug:region_slug>/airport-transfer/<slug:suburb_slug>/', views.airport_shuttle_suburb, {'service_type': 'transfer'}, name='airport_transfer_suburb'),
     path('<slug:region_slug>/suburbs/', views.region_more_suburbs, name='region_more_suburbs'),

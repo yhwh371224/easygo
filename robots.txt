@@ -18,13 +18,9 @@ Disallow: /error/
 Disallow: /home_error/
 Disallow: /wrong_date_today/
 
-# 중복 및 리다이렉트 URL
-Disallow: /home/
-
 # 내부 API 및 Webhook
 Disallow: /paypal_ipn/
 Disallow: /stripe_webhook/
-Disallow: /blog/pay/
 
 # 인증 페이지 (?next= 파라미터 포함 URL 인덱싱 방지)
 # Disallow: /accounts/
