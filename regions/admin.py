@@ -70,7 +70,7 @@ class RegionSuburbAdmin(admin.ModelAdmin):
             'fields': ('is_pinned', 'is_featured', 'sort_order'),
         }),
             ('Carousel', {
-            'fields': ('carousel_image', 'meta_description'),  
+            'fields': ('carousel_image',),
         }),
         ('SEO', {
             'fields': ('meta_title', 'meta_description'),
