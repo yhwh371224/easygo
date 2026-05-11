@@ -52,35 +52,6 @@ def home(request):
     })    
 
 
-def airport_shuttle(request, suburb):
-    if not suburb:
-        return render(request, 'basecamp/pillars/sydney_airport_shuttle.html')
-
-    suburb_obj = RegionSuburb.objects.filter(
-        region__slug='sydney', slug=suburb, is_active=True,
-    ).first()
-
-    if suburb_obj:
-        zone_info = area_zones.get(suburb_obj.zone, {})
-        context = _build_pillar_context(suburb_obj, zone_info)
-        return render(request, 'basecamp/pillars/airport-shuttle-template.html', context)
-    return render(request, 'basecamp/pillars/sydney_airport_shuttle.html')
-
-
-def airport_transfer(request, suburb):
-    if not suburb:
-        return render(request, 'basecamp/pillars/sydney_airport_transfer.html')
-
-    suburb_obj = RegionSuburb.objects.filter(
-        region__slug='sydney', slug=suburb, is_active=True,
-    ).first()
-
-    if suburb_obj:
-        zone_info = area_zones.get(suburb_obj.zone, {})
-        context = _build_pillar_context(suburb_obj, zone_info)
-        return render(request, 'basecamp/pillars/airport-transfer-template.html', context)
-    return render(request, 'basecamp/pillars/sydney_airport_transfer.html')
-
 
 def maxi_taxi(request, suburb=None):
     if suburb and suburb != suburb.lower():

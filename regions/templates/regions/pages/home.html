@@ -305,7 +305,7 @@
               &quot;responsive&quot;: {&quot;0&quot;:{&quot;items&quot;:1},&quot;540&quot;:{&quot;items&quot;:2},&quot;900&quot;:{&quot;items&quot;:3}}}">
             {% for suburb in featured_suburbs %}
               <div class="pb-1">
-                <a class="card border-0 shadow card-hover mx-1" href="/{{ region.slug }}-airport-transfer/{{ suburb.slug }}/">
+                <a class="card border-0 shadow card-hover mx-1" href="/{{ region.slug }}/airport-transfer/{{ suburb.slug }}/">
                   <span class="badge badge-lg badge-floating badge-floating-end bg-danger badge-price">${{ suburb.price|default:"-" }}</span>
                   <div class="card-img-top card-img-gradient offer-card-img">
                     {% if suburb.carousel_image %}

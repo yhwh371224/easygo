@@ -126,7 +126,7 @@ def region_airport_shuttle_list(request, region_slug):
     return redirect('regions:home', region_slug=region_slug, permanent=False)
 
 
-def airport_shuttle_suburb(request, region_slug, suburb_slug):
+def airport_shuttle_suburb(request, region_slug, suburb_slug, service_type='shuttle'):
     region = get_object_or_404(
         Region.objects.select_related('primary_airport'),
         slug=region_slug, is_active=True,
@@ -140,11 +140,16 @@ def airport_shuttle_suburb(request, region_slug, suburb_slug):
         .exclude(slug=suburb_slug)
         .order_by('name')
     )
+    service_label = 'Airport Transfer' if service_type == 'transfer' else 'Airport Shuttle'
+    service_path = 'airport-transfer' if service_type == 'transfer' else 'airport-shuttle'
     return render(request, 'regions/pages/airport_shuttle_suburb.html', {
         'region': region,
         'suburb': suburb,
         'zone_suburbs': zone_suburbs,
         'current_region': region,
+        'service_type': service_type,
+        'service_label': service_label,
+        'service_path': service_path,
     })
 
 

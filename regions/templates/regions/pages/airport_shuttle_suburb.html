@@ -1,33 +1,42 @@
 {% extends "regions/base.html" %}
 {% load static %}
 
-{% block title %}{% if suburb.meta_title %}{{ suburb.meta_title }}{% else %}{{ suburb.name }} to {{ region.name }} Airport Shuttle | EasyGo{% endif %}{% endblock %}
+{% block title %}{% if suburb.meta_title %}{{ suburb.meta_title }}{% elif service_type == 'transfer' %}{{ suburb.name }} Airport Transfer {{ region.name }} | Private Car Service | EasyGo{% else %}{{ suburb.name }} to {{ region.name }} Airport Shuttle | EasyGo{% endif %}{% endblock %}
 
 {% block canonical %}
-<link rel="canonical" href="https://easygoshuttle.com.au/{{ region.slug }}/airport-shuttle/{{ suburb.slug }}/">
+<link rel="canonical" href="https://easygoshuttle.com.au/{{ region.slug }}/{{ service_path }}/{{ suburb.slug }}/">
 {% endblock %}
 
 {% block meta %}
-<meta name="description" content="{% if suburb.meta_description %}{{ suburb.meta_description }}{% else %}Private airport shuttle from {{ suburb.name }}{% if region and region.primary_airport %} to {{ region.primary_airport.name }}{% endif %}. Fixed price, door-to-door. Book online.{% endif %}">
-<meta name="keywords" content="{{ suburb.name }} airport shuttle{% if region and region.primary_airport %}, {{ suburb.name }} to {{ region.primary_airport.name }}{% endif %}, airport transfer {{ suburb.name }} {{ region.name }}">
+{% if service_type == 'transfer' %}
+  <meta name="description" content="{% if suburb.meta_description %}{{ suburb.meta_description }}{% else %}Private airport transfer from {{ suburb.name }}{% if region and region.primary_airport %} to {{ region.primary_airport.name }}{% endif %}. Dedicated vehicle, professional driver, flight tracking included.{% if suburb.price %} Fixed price ${{ suburb.price }}.{% endif %} Book online.{% endif %}">
+  <meta name="keywords" content="{{ suburb.name }} airport transfer, private car {{ suburb.name }} airport{% if region and region.primary_airport %}, {{ suburb.name }} to {{ region.primary_airport.name }}{% endif %}, airport taxi {{ suburb.name }} {{ region.name }}">
+{% else %}
+  <meta name="description" content="{% if suburb.meta_description %}{{ suburb.meta_description }}{% else %}Airport shuttle from {{ suburb.name }}{% if region and region.primary_airport %} to {{ region.primary_airport.name }}{% endif %}. Fixed-price private door-to-door service for families and groups.{% if suburb.price %} From ${{ suburb.price }}.{% endif %} Book online.{% endif %}">
+  <meta name="keywords" content="{{ suburb.name }} airport shuttle{% if region and region.primary_airport %}, shuttle from {{ suburb.name }} to {{ region.primary_airport.name }}{% endif %}, group airport transfer {{ suburb.name }} {{ region.name }}">
+{% endif %}
 <meta name="author" content="easygoshuttle.com.au">
 {% endblock %}
 
 {% block schema_org %}
-{# LocalBusiness from parent #}
 {{ block.super }}
-{# Service schema for this suburb route #}
 <script type="application/ld+json" nonce="{{ CSP_NONCE }}">
 {
   "@context": "https://schema.org",
   "@type": "Service",
-  "serviceType": "Airport Shuttle",
-  "name": "{{ suburb.name }}{% if region and region.primary_airport %} to {{ region.primary_airport.name }}{% endif %} Shuttle",
-  "description": "Private airport shuttle from {{ suburb.name }}{% if region and region.primary_airport %} to {{ region.primary_airport.name }}{% endif %}. {% if suburb.price %}Fixed price ${{ suburb.price }}, {% endif %}door-to-door service.",
+  {% if service_type == 'transfer' %}
+  "serviceType": "TaxiService",
+  "name": "{{ suburb.name }}{% if region and region.primary_airport %} to {{ region.primary_airport.name }}{% endif %} Airport Transfer",
+  "description": "Private airport transfer from {{ suburb.name }}{% if region and region.primary_airport %} to {{ region.primary_airport.name }}{% endif %}. Dedicated vehicle and professional driver.{% if suburb.price %} Fixed price ${{ suburb.price }}.{% endif %}",
+  {% else %}
+  "serviceType": "AirportShuttle",
+  "name": "{{ suburb.name }}{% if region and region.primary_airport %} to {{ region.primary_airport.name }}{% endif %} Airport Shuttle",
+  "description": "Private airport shuttle from {{ suburb.name }}{% if region and region.primary_airport %} to {{ region.primary_airport.name }}{% endif %} for families and groups.{% if suburb.price %} Fixed price ${{ suburb.price }}.{% endif %}",
+  {% endif %}
   "provider": {
     "@type": "LocalBusiness",
     "@id": "https://easygoshuttle.com.au/{{ region.slug }}/#localbusiness",
-    "name": "EasyGo Airport Shuttle {{ region.name }}",
+    "name": "EasyGo {{ service_label }} {{ region.name }}",
     "telephone": "{{ business_phone }}"
   },
   "areaServed": {
@@ -43,8 +52,67 @@
     "price": "{{ suburb.price }}",
     "priceCurrency": "AUD",{% endif %}
     "availability": "https://schema.org/InStock",
-    "url": "https://easygoshuttle.com.au/{{ region.slug }}/airport-shuttle/{{ suburb.slug }}/"
+    "url": "https://easygoshuttle.com.au/{{ region.slug }}/{{ service_path }}/{{ suburb.slug }}/"
   }
+}
+</script>
+<script type="application/ld+json" nonce="{{ CSP_NONCE }}">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {% if service_type == 'transfer' %}
+    {
+      "@type": "Question",
+      "name": "Is the vehicle exclusively for my party?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. All EasyGo airport transfers are private — you will never share your vehicle with other passengers."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do you offer a meet and greet service?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Your driver will be waiting at the arrival terminal with a name board when you land."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What happens if my flight is delayed?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "We monitor all flights in real time. If your flight is delayed, your driver adjusts automatically — no rebooking or extra charges needed."
+      }
+    }
+    {% else %}
+    {
+      "@type": "Question",
+      "name": "Is the airport shuttle shared with other passengers?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. EasyGo's shuttle is private — your vehicle is exclusively for you and your group. No shared rides, no extra stops."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How much luggage can we bring?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Each vehicle accommodates standard luggage for all passengers. Contact us if you have oversized or bulky items."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I book for a large group?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. We have vehicles suitable for groups and extra luggage. Check our maxi taxi option for groups up to 13 passengers."
+      }
+    }
+    {% endif %}
+  ]
 }
 </script>
 {% endblock %}
@@ -53,16 +121,23 @@
 {% static 'basecamp/photos/bg-pattern02.webp' as hero_bg %}
 
 <!-- Hero -->
-<section class="bg-dark" style="background-size: cover; background-position: center 38%; position: relative; min-height: 480px; display: flex; align-items: center;"> 
+<section class="bg-dark" style="background-size: cover; background-position: center 38%; position: relative; min-height: 480px; display: flex; align-items: center;">
   <div class="container position-relative py-5" style="z-index: 2; padding-top: 110px !important;">
     <h1 class="text-white fw-bold mb-5">
+      {% if service_type == 'transfer' %}
+      <span style="color: #eb7828;">{{ suburb.name }}</span> Airport Transfer
+      {% else %}
       <span style="color: #eb7828;">{{ suburb.name }}</span> to {{ region.name }} Airport Shuttle
+      {% endif %}
     </h1>
     <p class="fs-lg text-white opacity-90 mb-4">
-      Fixed price private transfer{% if region and region.primary_airport %} to {{ region.primary_airport.name }}{% endif %}
+      {% if service_type == 'transfer' %}
+      Dedicated private vehicle{% if region and region.primary_airport %} to {{ region.primary_airport.name }}{% endif %} — professional driver, door-to-door
+      {% else %}
+      Fixed price private shuttle{% if region and region.primary_airport %} to {{ region.primary_airport.name }}{% endif %} — no shared rides, no detours
+      {% endif %}
     </p>
 
-    <!-- Price badge -->
     {% if suburb.price %}
     <div class="d-inline-flex align-items-center bg-white rounded-3 px-4 py-2 mb-5 shadow-sm">
       <span class="text-muted fs-sm me-2">From</span>
@@ -86,25 +161,57 @@
   <div class="row g-4">
     <!-- Left: content -->
     <div class="col-lg-8">
-      <h2 class="h4 fw-bold mb-3">
-        {{ suburb.name }} Airport Shuttle Service
-      </h2>
 
+      {% if service_type == 'transfer' %}
+      <h2 class="h4 fw-bold mb-3">{{ suburb.name }} Private Airport Transfer</h2>
       <p>
-        Need an airport transfer from <strong>{{ suburb.name }}</strong> to
-        {% if region and region.primary_airport %}<strong>{{ region.primary_airport.name }}</strong>?{% endif %} EasyGo provides private, fixed-price
-        door-to-door shuttle service across {{ region.name }}, including {{ suburb.name }}.
+        Need a reliable airport transfer from <strong>{{ suburb.name }}</strong>{% if region and region.primary_airport %} to <strong>{{ region.primary_airport.name }}</strong>{% endif %}?
+        EasyGo provides a dedicated private vehicle with a professional driver — door-to-door, no shared pickups, no unexpected stops.
+        Ideal for business travellers, late-night arrivals, and anyone who values punctuality and privacy.
       </p>
+      {% else %}
+      <h2 class="h4 fw-bold mb-3">{{ suburb.name }} Airport Shuttle Service</h2>
+      <p>
+        Planning your trip from <strong>{{ suburb.name }}</strong>{% if region and region.primary_airport %} to <strong>{{ region.primary_airport.name }}</strong>{% endif %}?
+        EasyGo's private airport shuttle gets your whole group there on time — fixed price, door-to-door, with space for luggage.
+        No shared rides, no detours, no surprises.
+      </p>
+      {% endif %}
 
       <h3 class="h5 fw-semibold mt-4 mb-2">What's Included</h3>
       <ul>
         {% if suburb.price %}<li>Fixed price — ${{ suburb.price }} per vehicle (not per person)</li>{% endif %}
         <li>Door-to-door from {{ suburb.name }}{% if region and region.primary_airport %} to {{ region.primary_airport.name }}{% endif %}</li>
+        {% if service_type == 'transfer' %}
+        <li>Dedicated professional driver</li>
+        <li>Meet &amp; greet at arrival terminal with name board</li>
+        <li>Real-time flight monitoring — automatic adjustment for delays</li>
+        {% else %}
         <li>Meet &amp; greet at arrival terminal</li>
         <li>Flight tracking — no extra charge for delays</li>
+        <li>Spacious vehicle with room for group luggage</li>
+        {% endif %}
         <li>Private vehicle, no shared rides</li>
         <li>Up to 2 child seats at no cost</li>
       </ul>
+
+      {% if service_type == 'transfer' %}
+      <h3 class="h5 fw-semibold mt-4 mb-2">Why Choose a Private Transfer?</h3>
+      <ul>
+        <li><strong>Business travel</strong> — reliable, on-time, professional presentation</li>
+        <li><strong>Late-night arrivals</strong> — driver waiting regardless of delay</li>
+        <li><strong>Privacy</strong> — no strangers sharing your vehicle</li>
+        <li><strong>Stress-free</strong> — driver handles routing, no navigation needed</li>
+      </ul>
+      {% else %}
+      <h3 class="h5 fw-semibold mt-4 mb-2">Ideal For</h3>
+      <ul>
+        <li><strong>Families travelling together</strong> — everyone in one vehicle</li>
+        <li><strong>Groups with large luggage</strong> — sports teams, holiday bags, prams</li>
+        <li><strong>Travellers wanting a stress-free start</strong> — fixed price, no metered surprises</li>
+        <li><strong>Early morning or late-night flights</strong> — 24/7 availability</li>
+      </ul>
+      {% endif %}
 
       <h3 class="h5 fw-semibold mt-4 mb-2">Booking in Advance</h3>
       <ul>
@@ -120,9 +227,43 @@
         directly{% if region and region.primary_airport %} to {{ region.primary_airport.name }}{% endif %} — no detours, no shared pickups.
       </p>
 
+      <!-- FAQ -->
+      <h3 class="h5 fw-semibold mt-4 mb-2">Frequently Asked Questions</h3>
+      {% if service_type == 'transfer' %}
+      <div class="mb-3">
+        <p class="fw-medium mb-1">Is the vehicle exclusively for my party?</p>
+        <p class="text-muted fs-sm">Yes. All EasyGo airport transfers are private — you will never share your vehicle with other passengers.</p>
+      </div>
+      <div class="mb-3">
+        <p class="fw-medium mb-1">Do you offer a meet &amp; greet service?</p>
+        <p class="text-muted fs-sm">Yes. Your driver will be waiting at the arrival terminal with a name board when you land.</p>
+      </div>
+      <div class="mb-3">
+        <p class="fw-medium mb-1">What happens if my flight is delayed?</p>
+        <p class="text-muted fs-sm">We monitor all flights in real time. If your flight is delayed, your driver adjusts automatically — no rebooking or extra charges needed.</p>
+      </div>
+      {% else %}
+      <div class="mb-3">
+        <p class="fw-medium mb-1">Is the airport shuttle shared with other passengers?</p>
+        <p class="text-muted fs-sm">No. EasyGo's shuttle is private — your vehicle is exclusively for you and your group. No shared rides, no extra stops.</p>
+      </div>
+      <div class="mb-3">
+        <p class="fw-medium mb-1">How much luggage can we bring?</p>
+        <p class="text-muted fs-sm">Each vehicle accommodates standard luggage for all passengers. Contact us if you have oversized or bulky items.</p>
+      </div>
+      <div class="mb-3">
+        <p class="fw-medium mb-1">Can I book for a large group?</p>
+        <p class="text-muted fs-sm">Yes. We have vehicles suitable for groups and extra luggage. Check our <a href="/{{ region.slug }}/maxi-taxi/">maxi taxi option</a> for groups up to 13 passengers.</p>
+      </div>
+      {% endif %}
+
       <!-- CTA box -->
       <div class="p-4 rounded-3 mt-4" style="background: #f8f4ff; border-left: 4px solid #eb7828;">
-        <p class="mb-2 fw-semibold">Ready to book your {{ suburb.name }} airport transfer?</p>
+        {% if service_type == 'transfer' %}
+        <p class="mb-2 fw-semibold">Ready to book your {{ suburb.name }} private transfer?</p>
+        {% else %}
+        <p class="mb-2 fw-semibold">Ready to book your {{ suburb.name }} airport shuttle?</p>
+        {% endif %}
         {% if suburb.price %}
         <a href="/{{ region.slug }}/inquiry/" class="btn btn-primary me-2">Book Now — ${{ suburb.price }}</a>
         {% else %}
@@ -130,6 +271,7 @@
         {% endif %}
         <a href="/contact/" class="btn btn-outline-secondary">Inquiry First</a>
       </div>
+
     </div>
 
     <!-- Right: aside -->
@@ -177,7 +319,7 @@
     <div class="row g-2">
       {% for s in zone_suburbs %}
       <div class="col-6 col-md-4 col-lg-3">
-        <a href="/{{ region.slug }}/airport-shuttle/{{ s.slug }}/"
+        <a href="/{{ region.slug }}/{{ service_path }}/{{ s.slug }}/"
            class="d-block text-decoration-none p-2 border rounded bg-white">
           <span class="d-block fw-medium text-dark fs-sm">{{ s.name }}</span>
           <span class="text-muted fs-xs">From ${{ s.price }}</span>

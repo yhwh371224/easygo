@@ -70,7 +70,7 @@ logs/
 # Other / Misc
 # ==============================
 dump.rdb
-sitemap.xml
+sitemap*.xml
 last_history_id.txt
 *.cmd
 *.pem
