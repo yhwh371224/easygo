@@ -2,17 +2,17 @@
   <label class="form-label">{{ label }}</label>
   <div class="d-flex align-items-center border rounded tp-wrap"
        data-field="{{ field_name }}"
-       style="height:42px;overflow:hidden;background:#fff;width:fit-content;max-width:100%">
-    <input type="tel" class="tp-hour border-0 text-center px-2"
+       style="height:42px;background:#fff;width:fit-content;min-width:0;flex-shrink:1">
+    <input type="tel" class="tp-hour border-0 text-center"
            min="1" max="12"
-           style="width:52px;outline:none;font-size:15px;font-weight:500">
-    <span class="px-1 fw-bold" style="color:#495057">:</span>
-    <input type="tel" class="tp-min border-0 text-center px-2"
+           style="width:44px;min-width:0;outline:none;font-size:15px;font-weight:500">
+    <span class="fw-bold" style="color:#495057">:</span>
+    <input type="tel" class="tp-min border-0 text-center"
            min="0" max="59"
-           style="width:52px;outline:none;font-size:15px;font-weight:500">
-    <div style="width:1px;height:100%;background:#ced4da"></div>
-    <button type="button" class="tp-ampm border-0 px-3 h-100 {% if ampm == 'AM' %}tp-active{% endif %}" data-val="AM" style="font-size:13px;font-weight:500">AM</button>
-    <button type="button" class="tp-ampm border-0 px-3 h-100 {% if ampm == 'PM' %}tp-active{% endif %}" data-val="PM" style="font-size:13px;font-weight:500">PM</button>
+           style="width:44px;min-width:0;outline:none;font-size:15px;font-weight:500">
+    <div style="width:1px;height:100%;background:#ced4da;flex-shrink:0"></div>
+    <button type="button" class="tp-ampm border-0 px-2 h-100 flex-shrink-0 {% if ampm == 'AM' %}tp-active{% endif %}" data-val="AM" style="font-size:13px;font-weight:500">AM</button>
+    <button type="button" class="tp-ampm border-0 px-2 h-100 flex-shrink-0 {% if ampm == 'PM' %}tp-active{% endif %}" data-val="PM" style="font-size:13px;font-weight:500;border-radius:0 0.375rem 0.375rem 0">PM</button>
   </div>
   <small class="text-muted mt-1 d-block" style="padding-left:18px">e.g. 01 : 30  PM</small>
   <input type="hidden" name="{{ field_name }}" id="id_{{ field_name }}">
