@@ -122,7 +122,7 @@ def region_maxi_taxi(request, region_slug):
 
 
 def region_airport_shuttle_list(request, region_slug):
-    return redirect('regions:home', region_slug=region_slug, permanent=True)
+    return redirect('regions:home', region_slug=region_slug, permanent=False)
 
 
 def airport_shuttle_suburb(request, region_slug, suburb_slug):
