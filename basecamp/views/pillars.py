@@ -97,9 +97,7 @@ def more_suburbs_maxi_taxi(request):
 
 
 def booking(request):
-    return render(request, 'basecamp/booking/booking.html', {
-        'home_suburbs': get_sorted_suburbs(),
-    })
+    return redirect('/sydney/inquiry/', permanent=True)
 
 
 @login_required

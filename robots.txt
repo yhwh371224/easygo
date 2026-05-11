@@ -3,7 +3,7 @@ Allow: /
 
 # 관리 페이지
 Disallow: /admin/
-Disallow: /horeb_yhwh/
+Disallow: /secure-admin-x9k2p7/
 
 # 보안 및 시스템 파일
 Disallow: /secure/
@@ -26,6 +26,17 @@ Disallow: /paypal_ipn/
 Disallow: /stripe_webhook/
 Disallow: /blog/pay/
 
+# 인증 페이지 (?next= 파라미터 포함 URL 인덱싱 방지)
+# Disallow: /accounts/
+# Disallow: /driver/
+
+# 내부 전용 페이지 (login required)
+Disallow: /easygo_review/verse/
+Disallow: /easygo_review/verse_of_today/
+Disallow: /easygo_review/create/
+Disallow: /easygo_review/*/update/
+Disallow: /easygo_review/comment/
+
 # 폼 처리 URL (인덱싱 불필요)
 Disallow: /*_detail/
 Disallow: /confirm_booking/
@@ -35,8 +46,8 @@ Disallow: /price_detail/
 
 # 쿼리 파라미터 URL
 Allow: /easygo_review/
-Allow: /easygo_review/*?page=* 
-Allow: /blog/?category=* 
+Allow: /easygo_review/*?page=*
+Allow: /blog/?category=*
 
 
 User-agent: Barkrowler
