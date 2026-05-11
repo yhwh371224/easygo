@@ -105,6 +105,10 @@ class RegionSuburb(models.Model):
     featured_order = models.PositiveSmallIntegerField(default=999)
     meta_title = models.CharField(max_length=60, blank=True)
     meta_description = models.CharField(max_length=500, blank=True)
+    carousel_image = models.CharField(
+        max_length=255, blank=True,
+        help_text="Carousel card image URL, e.g. /static/regions/photos/chatswood.webp"
+    )
 
     # Dropdown ordering: pinned items (airports, terminals) appear first
     is_pinned = models.BooleanField(default=False)

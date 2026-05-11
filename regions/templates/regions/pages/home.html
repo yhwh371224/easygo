@@ -308,6 +308,10 @@
                 <a class="card border-0 shadow card-hover mx-1" href="/{{ region.slug }}-airport-transfer/{{ suburb.slug }}/">
                   <span class="badge badge-lg badge-floating badge-floating-end bg-danger badge-price">${{ suburb.price|default:"-" }}</span>
                   <div class="card-img-top card-img-gradient offer-card-img">
+                    {% if suburb.carousel_image %}
+                      <img loading="lazy" src="{{ suburb.carousel_image }}" alt="{{ suburb.name }} airport transfer" 
+                          width="400" height="461" class="offer-card-inner-img">
+                    {% endif %}
                     <span class="card-floating-text text-light fw-medium">Discover the trip<i class="ai-chevron-right align-middle fs-lg ms-1"></i></span>
                   </div>
                   <div class="card-body text-center">
