@@ -43,6 +43,10 @@ class RegionAdmin(admin.ModelAdmin):
         ('SEO', {
             'fields': ('meta_title', 'meta_description',),
         }),
+        ('Hero Image', {
+            'fields': ('hero_image',),
+            'description': 'Filename only (e.g. melbourneairport.webp). Leave blank to use {slug}airport.webp automatically.',
+        }),
         ('Guides & Terminals', {
             'fields': ('terminal_info', 'meeting_point', 'arrival_guide'),
             'classes': ('collapse',),

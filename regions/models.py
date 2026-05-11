@@ -21,6 +21,10 @@ class Region(models.Model):
     meta_title = models.CharField(max_length=100, blank=True)
     meta_description = models.TextField(blank=True)
 
+    # Hero background image filename (e.g. "melbourneairport.webp").
+    # Falls back to "{slug}airport.webp" when blank.
+    hero_image = models.CharField(max_length=200, blank=True)
+
     # Service areas displayed on the region home page
     service_areas = models.JSONField(blank=True, null=True)
 
@@ -37,6 +41,10 @@ class Region(models.Model):
         null=True,
         blank=True,
     )
+
+    @property
+    def hero_image_file(self):
+        return self.hero_image or f"{self.slug}airport.webp"
 
     class Meta:
         ordering = ['name']
