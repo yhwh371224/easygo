@@ -1,6 +1,7 @@
 import logging
 
 from django.conf import settings
+from django.contrib.staticfiles.storage import staticfiles_storage
 from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template import TemplateDoesNotExist
@@ -48,6 +49,7 @@ def region_home(request, region_slug):
     ).select_related('airport').order_by('type', 'name')
 
     rebook_error = request.session.pop('rebook_error', None)
+    hero_image_url = staticfiles_storage.url(f'basecamp/photos/{region.hero_image_file}')
 
     return render(request, 'regions/pages/home.html', {
         'region': region,
@@ -58,6 +60,7 @@ def region_home(request, region_slug):
         'latest_post': latest_post,
         'rebook_error': rebook_error,
         'service_areas': region.service_areas or [],
+        'hero_image_url': hero_image_url,
     })
 
 
