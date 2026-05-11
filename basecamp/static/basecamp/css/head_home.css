@@ -150,19 +150,20 @@ body { margin: 0; font-family: Arial, sans-serif; }
 .flatpickr-weekday { background: #3d4a5c; color: #fff !important; }
 
 @media (max-width: 768px) {
+  /* specificity 0,2,0 — .booking-tabs-wrapper 추가로 기본 스타일(0,1,0) 항상 override */
   .booking-form-top { margin-top: -40px; }
   .booking-tabs-wrapper { border-radius: 10px; }
-  .booking-tab-nav { gap: 6px; padding: 10px 12px; }
-  .booking-tab-btn { flex: 1; justify-content: center; padding: 10px 8px; font-size: 0.78rem; gap: 5px; }
-  .rebook-badge { font-size: 0.65rem; padding: 2px 6px; }
-  .booking-tab-pane { padding: 16px 14px; }
-  .booking-fields { flex-direction: column; gap: 10px; }
-  .booking-field,
-  .booking-field--sm,
-  .booking-field--lg { flex: 1 1 100%; width: 100%; min-width: 0; }
-  .booking-field--btn { flex: 1 1 100%; width: 100%; align-self: auto; }
-  .booking-submit { width: 100%; font-size: 1rem; height: 48px; }
-  .booking-input { height: 48px; font-size: 1rem; }
-  .booking-label { font-size: 0.82rem; }
-  .rebook-hint { font-size: 0.8rem; padding: 8px 4px; }
+  .booking-tabs-wrapper .booking-tab-nav { gap: 6px; padding: 10px 12px; }
+  .booking-tabs-wrapper .booking-tab-btn { flex: 1; justify-content: center; padding: 10px 8px; font-size: 0.78rem; gap: 5px; }
+  .booking-tabs-wrapper .rebook-badge { font-size: 0.65rem; padding: 2px 6px; }
+  .booking-tabs-wrapper .booking-tab-pane { padding: 16px 14px; }
+  .booking-tabs-wrapper .booking-fields { flex-direction: column; gap: 10px; }
+  .booking-tabs-wrapper .booking-field,
+  .booking-tabs-wrapper .booking-field--sm,
+  .booking-tabs-wrapper .booking-field--lg { flex: 1 1 100%; width: 100%; min-width: 0; }
+  .booking-tabs-wrapper .booking-field--btn { flex: 1 1 100%; width: 100%; align-self: stretch; }
+  .booking-tabs-wrapper .booking-submit { width: 100%; font-size: 1rem; height: 48px; }
+  .booking-tabs-wrapper .booking-input { height: 48px; font-size: 1rem; }
+  .booking-tabs-wrapper .booking-label { font-size: 0.82rem; }
+  .booking-tabs-wrapper .rebook-hint { font-size: 0.8rem; padding: 8px 4px; }
 }
