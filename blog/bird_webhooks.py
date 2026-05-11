@@ -151,30 +151,34 @@ def voice_webhook(request):
     except Exception:
         return JsonResponse({'error': 'invalid json'}, status=400)
 
+    logger.debug('[Bird Voice RAW] %s', json.dumps(data, indent=2))
+
     event = data.get('payload', {})
     call_id = event.get('id')
     from_number = event.get('from')
-    status = event.get('status')
+    call_status = event.get('status')
 
     if not call_id or not from_number:
+        logger.warning('[Bird Voice] Missing call_id or from_number')
         return JsonResponse({'error': 'missing data'}, status=400)
 
     from_number = normalize_phone(from_number)
 
-    # ✔ relaxed status handling
-    if status not in ['starting', 'initiated']:
+    if call_status not in ['starting', 'initiated']:
+        logger.debug('[Bird Voice] Ignored status: %s', call_status)
         return JsonResponse({'status': 'ignored'})
 
     mapping = _get_active_mapping(from_number)
 
     if mapping:
         destination = mapping.to_number
-        route = "mapping"
+        route = 'mapping'
     else:
         destination = _get_driver_target(from_number)
-        route = "post_fallback"
+        route = 'post_fallback'
 
     if not destination:
+        logger.warning('[Bird Voice] No destination for %s', from_number)
         return JsonResponse({'status': 'no mapping'})
 
     url = (
@@ -209,9 +213,13 @@ def voice_webhook(request):
         status_code = e.response.status_code if e.response else None
 
         if status_code == 400:
+            logger.warning(
+                '[Bird Voice] 400 from Bird (call already handled?): %s',
+                e.response.text if e.response else ''
+            )
             return JsonResponse({'status': 'ok'})
 
-        logger.error('[Bird Voice] HTTP error: %s', e)
+        logger.error('[Bird Voice] HTTP error %s: %s', status_code, e)
         return JsonResponse({'error': 'bridge failed'}, status=500)
 
     except requests.RequestException as e:
