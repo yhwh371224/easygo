@@ -45,7 +45,6 @@ Allow: /easygo_review/
 Allow: /easygo_review/*?page=*
 Allow: /blog/?category=*
 
-
 User-agent: Barkrowler
 Disallow: /
 
@@ -64,4 +63,4 @@ Sitemap: https://easygoshuttle.com.au/sitemap-brisbane.xml
 Sitemap: https://easygoshuttle.com.au/sitemap-melbourne.xml
 Sitemap: https://easygoshuttle.com.au/sitemap-static.xml
 Sitemap: https://easygoshuttle.com.au/sitemap-sydney.xml
-Sitemap: https://easygoshuttle.com.au/sitemap-xml
+Sitemap: https://easygoshuttle.com.au/sitemap.xml

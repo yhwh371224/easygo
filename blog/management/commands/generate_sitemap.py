@@ -47,28 +47,26 @@ class Command(BaseCommand):
 
         # ── 1. sitemap-static.xml ────────────────────────────────────────
         static_urls = [
-            {"loc": f"{BASE_URL}/",                      "changefreq": "daily",   "priority": "1.0000"},
+            {"loc": f"{BASE_URL}/",                          "changefreq": "daily",   "priority": "1.0000"},
             {"loc": f"{BASE_URL}/sydney_airport_transfer/",  "changefreq": "weekly",  "priority": "0.9000"},
-            {"loc": f"{BASE_URL}/sydney-cruise-transfer/",  "changefreq": "weekly",  "priority": "0.9000"},
-            {"loc": f"{BASE_URL}/sydney_airport_shuttle/",  "changefreq": "weekly",  "priority": "0.9000"},
-            {"loc": f"{BASE_URL}/maxi-taxi/",               "changefreq": "weekly",  "priority": "0.9000"},
-            {"loc": f"{BASE_URL}/booking/",                 "changefreq": "weekly",  "priority": "0.8000"},
-            {"loc": f"{BASE_URL}/inquiry/",                 "changefreq": "weekly",  "priority": "0.8000"},
-            {"loc": f"{BASE_URL}/cruise_inquiry/",          "changefreq": "weekly",  "priority": "0.7000"},
-            {"loc": f"{BASE_URL}/about_us/",                "changefreq": "monthly", "priority": "0.7000"},
-            {"loc": f"{BASE_URL}/easygo_review/",           "changefreq": "weekly",  "priority": "0.7000"},
-            {"loc": f"{BASE_URL}/blog/",                    "changefreq": "daily",   "priority": "0.7000"},
-            {"loc": f"{BASE_URL}/information/",             "changefreq": "monthly", "priority": "0.6000"},
-            {"loc": f"{BASE_URL}/meeting_point/",           "changefreq": "monthly", "priority": "0.6000"},
-            {"loc": f"{BASE_URL}/arrival_guide/",           "changefreq": "monthly", "priority": "0.6000"},
-            {"loc": f"{BASE_URL}/more_suburbs/",            "changefreq": "weekly",  "priority": "0.6000"},
-            {"loc": f"{BASE_URL}/more_suburbs_maxi_taxi/",  "changefreq": "weekly",  "priority": "0.6000"},
-            {"loc": f"{BASE_URL}/more_suburbs1/",           "changefreq": "weekly",  "priority": "0.6000"},
-            {"loc": f"{BASE_URL}/payment_options/",         "changefreq": "monthly", "priority": "0.5000"},
-            {"loc": f"{BASE_URL}/payonline/",               "changefreq": "monthly", "priority": "0.5000"},
-            {"loc": f"{BASE_URL}/payment_options1/",        "changefreq": "monthly", "priority": "0.5000"},
-            {"loc": f"{BASE_URL}/terms/",                   "changefreq": "yearly",  "priority": "0.3000"},
-            {"loc": f"{BASE_URL}/privacy/",                 "changefreq": "yearly",  "priority": "0.3000"},
+            {"loc": f"{BASE_URL}/sydney-cruise-transfer/",   "changefreq": "weekly",  "priority": "0.9000"},
+            {"loc": f"{BASE_URL}/sydney_airport_shuttle/",   "changefreq": "weekly",  "priority": "0.9000"},
+            {"loc": f"{BASE_URL}/maxi-taxi/",                "changefreq": "weekly",  "priority": "0.9000"},
+            {"loc": f"{BASE_URL}/inquiry/",                  "changefreq": "weekly",  "priority": "0.8000"},
+            {"loc": f"{BASE_URL}/cruise_inquiry/",           "changefreq": "weekly",  "priority": "0.7000"},
+            {"loc": f"{BASE_URL}/about_us/",                 "changefreq": "monthly", "priority": "0.7000"},
+            {"loc": f"{BASE_URL}/easygo_review/",            "changefreq": "weekly",  "priority": "0.7000"},
+            {"loc": f"{BASE_URL}/articles/blog/",            "changefreq": "daily",   "priority": "0.7000"},
+            {"loc": f"{BASE_URL}/information/",              "changefreq": "monthly", "priority": "0.6000"},
+            {"loc": f"{BASE_URL}/meeting_point/",            "changefreq": "monthly", "priority": "0.6000"},
+            {"loc": f"{BASE_URL}/arrival_guide/",            "changefreq": "monthly", "priority": "0.6000"},
+            {"loc": f"{BASE_URL}/more_suburbs/",             "changefreq": "weekly",  "priority": "0.6000"},
+            {"loc": f"{BASE_URL}/more_suburbs_maxi_taxi/",   "changefreq": "weekly",  "priority": "0.6000"},
+            {"loc": f"{BASE_URL}/payment_options/",          "changefreq": "monthly", "priority": "0.5000"},
+            {"loc": f"{BASE_URL}/payonline/",                "changefreq": "monthly", "priority": "0.5000"},
+            {"loc": f"{BASE_URL}/payment_options1/",         "changefreq": "monthly", "priority": "0.5000"},
+            {"loc": f"{BASE_URL}/terms/",                    "changefreq": "yearly",  "priority": "0.3000"},
+            {"loc": f"{BASE_URL}/privacy/",                  "changefreq": "yearly",  "priority": "0.3000"},
         ]
         _write_urlset(static_urls, os.path.join(base_dir, "sitemap-static.xml"), today)
         index_entries.append({"loc": f"{BASE_URL}/sitemap-static.xml", "lastmod": today})
@@ -104,13 +102,13 @@ class Command(BaseCommand):
         self.stdout.write(f"  sitemap-sydney.xml  — {len(sydney_urls)} URLs")
 
         # ── 3. sitemap-{region}.xml per active region ────────────────────
-        try:
-            from regions.models import Region, RegionSuburb
-            regions = Region.objects.filter(
-                is_active=True, is_coming_soon=False
-            ).exclude(slug='sydney').order_by('slug')
+        from regions.models import Region, RegionSuburb
+        regions = Region.objects.filter(
+            is_active=True, is_coming_soon=False
+        ).exclude(slug='sydney').order_by('slug')
 
-            for region in regions:
+        for region in regions:
+            try:
                 region_urls = []
 
                 # 지역 홈
@@ -154,8 +152,8 @@ class Command(BaseCommand):
                 index_entries.append({"loc": f"{BASE_URL}/{filename}", "lastmod": today})
                 self.stdout.write(f"  {filename}  — {len(region_urls)} URLs ({suburbs.count()} suburbs × 2 + pages)")
 
-        except Exception as e:
-            self.stdout.write(self.style.WARNING(f"  Region sitemap error: {e}"))
+            except Exception as e:
+                self.stdout.write(self.style.WARNING(f"  {region.slug} sitemap error: {e}"))
 
         # ── 4. sitemap-blog.xml ──────────────────────────────────────────
         blog_urls = []
@@ -167,7 +165,7 @@ class Command(BaseCommand):
                 lastmod_dt = post.updated_at or post.published_at
                 lastmod = lastmod_dt.astimezone(sydney_tz).strftime("%Y-%m-%dT%H:%M:%S+11:00") if lastmod_dt else today
                 blog_urls.append({
-                    "loc": f"{BASE_URL}/blog/{post.slug}/",
+                    "loc": f"{BASE_URL}/articles/blog/{post.slug}/",
                     "changefreq": "weekly",
                     "priority": "0.6000",
                     "lastmod": lastmod,
