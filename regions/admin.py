@@ -69,6 +69,9 @@ class RegionSuburbAdmin(admin.ModelAdmin):
         ('Display & Ordering', {
             'fields': ('is_pinned', 'is_featured', 'sort_order'),
         }),
+            ('Carousel', {
+            'fields': ('carousel_image', 'meta_description'),  
+        }),
         ('SEO', {
             'fields': ('meta_title', 'meta_description'),
             'classes': ('collapse',),
