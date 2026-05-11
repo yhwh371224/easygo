@@ -60,6 +60,7 @@ Disallow: /
 # Sitemap
 Sitemap: https://easygoshuttle.com.au/sitemap-blog.xml
 Sitemap: https://easygoshuttle.com.au/sitemap-brisbane.xml
+Sitemap: https://easygoshuttle.com.au/sitemap-gold-coast.xml
 Sitemap: https://easygoshuttle.com.au/sitemap-melbourne.xml
 Sitemap: https://easygoshuttle.com.au/sitemap-static.xml
 Sitemap: https://easygoshuttle.com.au/sitemap-sydney.xml
