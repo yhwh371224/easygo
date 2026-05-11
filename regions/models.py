@@ -21,6 +21,9 @@ class Region(models.Model):
     meta_title = models.CharField(max_length=100, blank=True)
     meta_description = models.TextField(blank=True)
 
+    # Service areas displayed on the region home page
+    service_areas = models.JSONField(blank=True, null=True)
+
     # Guides & Terminals
     terminal_info = models.JSONField(blank=True, null=True)
     meeting_point = models.TextField(blank=True)

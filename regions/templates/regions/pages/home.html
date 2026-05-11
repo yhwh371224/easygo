@@ -441,76 +441,18 @@
             we provide reliable door-to-door airport transfers at competitive fixed prices.
           </p>
           <div class="row g-4">
+            {% for area in service_areas %}
             <div class="col-md-3 col-sm-6">
               <div class="card h-100 border-0 shadow-sm p-4">
-                <h3 class="h5 text-brand mb-2">🏙️ Inner {{ region.name }}</h3>
-                <p class="fs-sm text-muted mb-0">
-                  Door-to-door transfers from {{ region.name }} CBD, Southbank, Docklands, South Yarra,
-                  Richmond, Fitzroy, and Carlton. Whether you're at a city hotel or apartment,
-                  we get you to the airport on time — every time.
-                </p>
+                <h3 class="h5 text-brand mb-2">{{ area.icon }} {{ area.title }}</h3>
+                <p class="fs-sm text-muted mb-0">{{ area.description }}</p>
               </div>
             </div>
-            <div class="col-md-3 col-sm-6">
-              <div class="card h-100 border-0 shadow-sm p-4">
-                <h3 class="h5 text-brand mb-2">🌊 Inner South</h3>
-                <p class="fs-sm text-muted mb-0">
-                  Reliable airport pickups and drop-offs serving St Kilda, Prahran, Windsor,
-                  Toorak, and Hawthorn. Fixed prices, no hidden fees — perfect for families
-                  and travellers with plenty of luggage.
-                </p>
-              </div>
+            {% empty %}
+            <div class="col-12 text-center text-muted">
+              <p>Service area details coming soon.</p>
             </div>
-            <div class="col-md-3 col-sm-6">
-              <div class="card h-100 border-0 shadow-sm p-4">
-                <h3 class="h5 text-brand mb-2">🌳 Eastern Suburbs</h3>
-                <p class="fs-sm text-muted mb-0">
-                  Private airport transfers covering Camberwell, Box Hill, Doncaster,
-                  Ringwood, and Knox. Our spacious 8–13 seater vehicles handle families
-                  and groups with ease, at a guaranteed fixed price.
-                </p>
-              </div>
-            </div>
-            <div class="col-md-3 col-sm-6">
-              <div class="card h-100 border-0 shadow-sm p-4">
-                <h3 class="h5 text-brand mb-2">🏘️ Northern Suburbs</h3>
-                <p class="fs-sm text-muted mb-0">
-                  Serving Coburg, Brunswick, Reservoir, Preston, Bundoora, and Epping.
-                  Stress-free door-to-door transfers to {{ region.name }} Airport with real-time
-                  flight tracking and no extra charge for delays.
-                </p>
-              </div>
-            </div>
-            <div class="col-md-3 col-sm-6">
-              <div class="card h-100 border-0 shadow-sm p-4">
-                <h3 class="h5 text-brand mb-2">🌿 Western Suburbs</h3>
-                <p class="fs-sm text-muted mb-0">
-                  Reliable transfers from Footscray, Williamstown, Altona, Werribee,
-                  and Point Cook. Private, punctual service for individuals, families,
-                  and groups travelling with oversized luggage.
-                </p>
-              </div>
-            </div>
-            <div class="col-md-3 col-sm-6">
-              <div class="card h-100 border-0 shadow-sm p-4">
-                <h3 class="h5 text-brand mb-2">🏖️ South-East</h3>
-                <p class="fs-sm text-muted mb-0">
-                  Airport transfers covering Dandenong, Frankston, and the Mornington
-                  Peninsula. Fixed competitive prices for the longer run — no surge pricing,
-                  airport parking included.
-                </p>
-              </div>
-            </div>
-            <div class="col-md-3 col-sm-6">
-              <div class="card h-100 border-0 shadow-sm p-4">
-                <h3 class="h5 text-brand mb-2">🌄 Regional</h3>
-                <p class="fs-sm text-muted mb-0">
-                  Private transfers from Geelong and surrounding regional areas to
-                  {{ region.name }} Airport. Comfortable 8–13 seater vehicles, qualified drivers,
-                  and a fixed price agreed upfront — no surprises.
-                </p>
-              </div>
-            </div>
+            {% endfor %}
           </div>
           <div class="text-center mt-4">
             <a href="/{{ region.slug }}/suburbs/" class="btn btn-primary">Check Your Suburb &raquo;</a>
@@ -605,7 +547,7 @@
         <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
           {% for r in active_regions %}
             <div class="col">
-              <div class="city-card h-100 border rounded-3 p-3 p-md-4 {% if current_region and current_region.slug == r.slug %}is-active{% endif %}">
+              <div class="city-card h-100 border rounded-3 p-3 p-md-4 {% if region.slug == r.slug %}is-active{% endif %}">
                 <div class="d-flex align-items-start justify-content-between gap-3">
                   <div>
                     <div class="city-name fw-semibold">{{ r.name }}</div>
@@ -614,7 +556,7 @@
                     </div>
                   </div>
                   <div class="text-end">
-                    {% if current_region and current_region.slug == r.slug %}
+                    {% if region.slug == r.slug %}
                       <span class="badge badge-current">Current</span>
                     {% elif r.is_coming_soon %}
                       <span class="badge bg-warning text-dark">Coming Soon</span>
@@ -728,7 +670,7 @@
                 </h2>
                 <div class="accordion-collapse collapse" id="faq-content-5" aria-labelledby="faq-heading-5" data-bs-parent="#faq">
                   <div class="accordion-body">
-                    <div class="fs-sm">Our maxi vans accommodate up to 13 passengers, making them ideal for families, large groups, and travellers with plenty of luggage. <a href='/maxi-taxi/' class="text-brand">Check Maxi Taxi options here</a></div>
+                    <div class="fs-sm">Our maxi vans accommodate up to 13 passengers, making them ideal for families, large groups, and travellers with plenty of luggage. <a href="{% if region.slug == 'sydney' %}/maxi-taxi/{% else %}/{{ region.slug }}/maxi-taxi/{% endif %}" class="text-brand">Check Maxi Taxi options here</a></div>
                   </div>
                 </div>
               </div>
