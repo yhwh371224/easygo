@@ -10,6 +10,7 @@ from basecamp.area import get_suburbs
 from basecamp.area_zones import area_zones
 from basecamp.basecamp_utils import get_sorted_suburbs
 from articles.models import Post
+from regions.models.airport import CruiseTerminal
 
 logger = logging.getLogger(__name__)
 
@@ -37,6 +38,7 @@ def home(request):
     airport_terminals = Terminal.objects.filter(
         airport__in=region.airports.all()
     ).select_related("airport")
+    cruise_terminals = CruiseTerminal.objects.filter(region=region)
     rebook_error = request.session.pop('rebook_error', None)
     
     latest_post = Post.objects.filter(status='published').order_by('-created_at').first()
@@ -45,6 +47,7 @@ def home(request):
         'carousel_suburbs': carousel_suburbs,
         'home_suburbs': home_suburbs,
         'airport_terminals': airport_terminals,
+        'cruise_terminals': cruise_terminals,
         'google_review_url': settings.GOOGLE_REVIEW_URL,
         'latest_post': latest_post,
         'rebook_error': rebook_error,
