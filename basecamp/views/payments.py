@@ -86,14 +86,8 @@ def _get_start_end_points(booking):
     if booking.start_point and booking.end_point:
         return booking.start_point, booking.end_point
 
-    direction = (booking.direction or "").lower()
+    direction = (booking.direction or "").strip().lower()
     addr = f"{booking.street}, {booking.suburb}"
-
-    if "drop off" in direction:
-        if "domestic" in direction:
-            return addr, "Domestic Airport"
-        if "intl" in direction or "international" in direction:
-            return addr, "International Airport"
 
     if "pickup" in direction:
         if "domestic" in direction:
@@ -101,7 +95,13 @@ def _get_start_end_points(booking):
         if "intl" in direction or "international" in direction:
             return "International Airport", addr
 
-    return addr, "Airport"
+    if "drop off" in direction:
+        if "domestic" in direction:
+            return addr, "Domestic Airport"
+        if "intl" in direction or "international" in direction:
+            return addr, "International Airport"
+
+    return "Unknown", "Unknown"
 
 
 def _apply_gst_updates_multi(bookings):
