@@ -8,6 +8,7 @@ from .models import (
     Terminal,
     TerminalPickupPoint,
     PickupPointMap,
+    CruiseTerminal,
 )
 
 
@@ -117,3 +118,9 @@ class RegionSuburbAdmin(admin.ModelAdmin):
             "classes": ("collapse",),
         }),
     )
+
+
+@admin.register(CruiseTerminal)
+class CruiseTerminalAdmin(admin.ModelAdmin):
+    list_display = ['name', 'region']
+    list_filter = ['region']
