@@ -48,14 +48,24 @@ def notify_user_post(sender, instance, created, **kwargs):
     if not instance.cash and not instance.paid:
         update_data['pending'] = True
 
-    if instance.is_confirmed:
-        pk = instance.pk
-        transaction.on_commit(
-            lambda: send_post_confirmation_email_task.delay(pk)
-        )
-
     if update_data:
         Post.objects.filter(pk=instance.pk).update(**update_data)
+
+    if not instance.is_confirmed:
+        return
+
+    updated = Post.objects.filter(
+        pk=instance.pk,
+        is_confirmed=True,
+        sent_email=False
+    ).update(sent_email=True)
+
+    if updated == 0:
+        return
+
+    transaction.on_commit(
+        lambda: send_post_confirmation_email_task.delay(instance.pk)
+    )
 
 
 # Send email notification if a Post is cancelled and email hasn't been sent yet

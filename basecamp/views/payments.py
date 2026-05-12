@@ -340,8 +340,6 @@ def invoice_detail(request):
     DEFAULT_BANK = getattr(settings, "DEFAULT_BANK_CODE", "westpac")
 
     bookings, multiple = _resolve_bookings(users, index, params['from_date'], params['to_date'])
-    bookings = [users[index]]
-    multiple = False
 
     if multiple and not bookings.exists():
         return HttpResponse("No bookings found in selected date range", status=404)
