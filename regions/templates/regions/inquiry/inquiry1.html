@@ -144,7 +144,7 @@
 				<!-- Extra Luggage (hidden by default) -->
 				<div id="extraLuggageFields" style="display: none;">
 					<!-- Row 1: Baby / Booster / Prams -->
-					<div class="row g-2 mb-3">
+					<div class="row g-2 mb-3 align-items-end">
 						<div class="col">
 							<label for="baggage_baby" class="form-label mb-0">Baby seats</label>
 							<input type="number" class="form-control" name="baggage_baby" placeholder="Baby seats" min="0" max="9" value="0" id="baggage_baby">
@@ -236,33 +236,8 @@
 	    </div>			  
 
     		<!-- Categories Widget -->
-			<div class="col-lg-4 col-md-4 offset-md-1">
-				<div class="card my-4">
-					<h5 class="card-header text-danger">Note!</h5>
-					<div class="card-body">
-						<div class="widget-content">
-							<p class="fw-bold mb-1">For arrivals</p>
-							<p class="mb-1">Your driver will keep track of arrival time to meet you on time.</p>
-							<p class="mb-1">Please check &raquo; 
-								<a href="/meeting_point/" target="_blank" class="text-decoration-underline">Airport Meeting Points</a>
-							</p>
-						</div>
-					</div>
-				</div>
-				<div class="card my-4">
-					<h5 class="card-header text-primary">Note!</h5>
-					<div class="card-body">
-						<div class="widget-content">
-							<p class="fw-bold mb-1">For departure</p>
-							<p class="mb-2">Please inform us your preferred pickup time.</p>
-							<div class="small border-start ps-2">
-								<p class="mb-1">Our vehicles are entitled to use BUS LANE.</p>
-							</div>
-						</div>
-					</div>
-				</div> 
-                <div class="card my-4">                    
-                    <h6 class="card-header text-muted">Your previous details</h6>
+			 <div class="card my-4">                    
+                    <h6 class="card-header bg-secondary text-muted">Your previous details</h6>
                     <div class="card-body small text-muted">
                         {% if region %}
                         <div class="mb-1">
@@ -283,6 +258,31 @@
                         </div>
                     </div>
                 </div>           
+			<div class="col-lg-4 col-md-4 offset-md-1">
+				<div class="card my-4">
+					<h5 class="card-header bg-secondary text-danger">Note!</h5>
+					<div class="card-body">
+						<div class="widget-content">
+							<p class="fw-bold mb-1">For arrivals</p>
+							<p class="mb-1">Your driver will keep track of arrival time to meet you on time.</p>
+							<p class="mb-1">Please check &raquo; 
+								<a href="{% url 'regions:region_meeting_point' region.slug %}" target="_blank" class="text-decoration-underline">Airport Meeting Points</a>
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="card my-4">
+					<h5 class="card-header bg-secondary text-primary">Note!</h5>
+					<div class="card-body">
+						<div class="widget-content">
+							<p class="fw-bold mb-1">For departure</p>
+							<p class="mb-2">Please inform us your preferred pickup time.</p>
+							<div class="small border-start ps-2">
+								<p class="mb-1">Our vehicles are entitled to use BUS LANE.</p>
+							</div>
+						</div>
+					</div>
+				</div> 
 			</div>
 		</div>
 	</section>
