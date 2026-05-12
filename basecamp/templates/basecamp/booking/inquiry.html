@@ -81,7 +81,7 @@
 					</div>
 
 				<div class="mb-3 pb-1">
-					<label class="form-label" for="flight-date">Pickup date&nbsp;(Sydney)</label>
+					<label class="form-label" for="flight-date">Pickup date</label>
 					<input id="flight-date" class="form-control date-picker rounded" required name="pickup_date" type="text" placeholder="Choose pickup date" data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;F j, Y&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;}" >
 					<div id="date-error" class="invalid-feedback" style="display: none;">Please enter a future date!</div>
 				</div>
@@ -105,7 +105,7 @@
 						<label class="form-label" for="flight_number">Flight number</label>
 						<input class="form-control" type="text" placeholder="Your flight number" name="flight_number" id="flight_number">
 					</div>
-					{% time_picker "flight_time" "Flight time (Sydney)" %}
+					{% time_picker "flight_time" "Flight time" %}
 				</div>
 
 				<div id="address-fields">
@@ -302,7 +302,7 @@
 			<!-- Categories Widget -->
 			<div class="col-lg-4 col-md-4 offset-md-1">
 				<div class="card my-4">
-					<h5 class="card-header text-danger">Note!</h5>
+					<h5 class="card-header bg-secondary text-danger">Note!</h5>
 					<div class="card-body">
 						<div class="widget-content">
 							<p class="fw-bold mb-1">For arrivals</p>
@@ -314,7 +314,7 @@
 					</div>
 				</div>
 				<div class="card my-4">
-					<h5 class="card-header text-primary">Note!</h5>
+					<h5 class="card-header bg-secondary text-primary">Note!</h5>
 					<div class="card-body">
 						<div class="widget-content">
 							<p class="fw-bold mb-1">For departure</p>
