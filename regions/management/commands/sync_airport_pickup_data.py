@@ -8,6 +8,8 @@ Usage:
     python manage.py sync_airport_pickup_data          # both airports
     python manage.py sync_airport_pickup_data --sydney
     python manage.py sync_airport_pickup_data --melbourne
+    python manage.py sync_airport_pickup_data --brisbane
+    python manage.py sync_airport_pickup_data --goldcoast
 """
 
 from django.core.management.base import BaseCommand, CommandError
@@ -361,6 +363,121 @@ MELBOURNE = {
     ],
 }
 
+BRISBANE = {
+    "code": "BNE",
+    "terminals": [
+        {
+            "name": "Brisbane International",
+            "type": Terminal.TerminalType.INTL,
+            "pickup_points": [
+                {
+                    "name": "Public Pickup",
+                    "instruction": (
+                        "After clearing customs, proceed to the Ground Transport area "
+                        "outside the arrivals level. Follow signage to the pickup bays "
+                        "where your driver will meet you."
+                    ),
+                    "maps": [
+                        {
+                            "type": PickupPointMap.MapType.LOCATION,
+                            "title": "Brisbane International Pickup Map",
+                            "url": "https://www.bne.com.au/passenger-information/maps",
+                        }
+                    ],
+                },
+                {
+                    "name": "Rideshare Pickup",
+                    "instruction": (
+                        "Rideshare pickup is located in the designated rideshare zone "
+                        "outside the international arrivals terminal. Follow signage."
+                    ),
+                    "maps": [],
+                },
+                {
+                    "name": "Accessible Pickup",
+                    "instruction": (
+                        "Accessible pickup is available at the kerbside accessible zone "
+                        "directly outside arrivals."
+                    ),
+                    "maps": [],
+                },
+            ],
+        },
+        {
+            "name": "Brisbane Domestic",
+            "type": Terminal.TerminalType.DOMESTIC,
+            "pickup_points": [
+                {
+                    "name": "Public Pickup",
+                    "instruction": (
+                        "Exit baggage claim and follow signs to the ground transport "
+                        "pickup area outside the domestic terminal."
+                    ),
+                    "maps": [],
+                },
+                {
+                    "name": "Rideshare Pickup",
+                    "instruction": (
+                        "Rideshare pickup is located at the designated zone outside "
+                        "the domestic terminal arrivals."
+                    ),
+                    "maps": [],
+                },
+                {
+                    "name": "Accessible Pickup",
+                    "instruction": (
+                        "Accessible pickup is available at the marked kerbside area "
+                        "outside domestic arrivals."
+                    ),
+                    "maps": [],
+                },
+            ],
+        },
+    ],
+}
+
+GOLD_COAST = {
+    "code": "OOL",
+    "terminals": [
+        {
+            "name": "Gold Coast Airport",
+            "type": Terminal.TerminalType.INTL,
+            "pickup_points": [
+                {
+                    "name": "Public Pickup",
+                    "instruction": (
+                        "After collecting your baggage, exit the terminal and follow signs "
+                        "to the Ground Transport area outside the arrivals hall. "
+                        "Your EasyGo driver will be waiting in the designated pickup zone."
+                    ),
+                    "maps": [
+                        {
+                            "type": PickupPointMap.MapType.LOCATION,
+                            "title": "Gold Coast Pickup Zone Map",
+                            "url": "https://www.goldcoastairport.com.au/passenger-info/maps",
+                        }
+                    ],
+                },
+                {
+                    "name": "Rideshare Pickup",
+                    "instruction": (
+                        "Follow signs for Rideshare/Taxi after exiting the terminal. "
+                        "The rideshare pickup area is clearly marked outside arrivals."
+                    ),
+                    "maps": [],
+                },
+                {
+                    "name": "Accessible Pickup",
+                    "instruction": (
+                        "Accessible pickup is located in the designated kerbside area "
+                        "outside the terminal near the main arrivals exit."
+                    ),
+                    "maps": [],
+                },
+            ],
+        }
+    ],
+}
 
 # ──────────────────────────────────────────────────────────────────────────────
 # Command
@@ -384,16 +501,26 @@ class Command(BaseCommand):
             action="store_true",
             help="Sync Melbourne Airport only.",
         )
+        parser.add_argument("--brisbane", action="store_true")
+        parser.add_argument("--goldcoast", action="store_true")
 
     def handle(self, *args, **options):
         run_sydney = options["sydney"]
         run_melbourne = options["melbourne"]
-        run_all = not run_sydney and not run_melbourne
+        run_brisbane = options["brisbane"]
+        run_goldcoast = options["goldcoast"]
+        run_all = not run_sydney and not run_melbourne and not run_brisbane and not run_goldcoast
 
         if run_all or run_sydney:
             self.sync_sydney()
         if run_all or run_melbourne:
             self.sync_melbourne()
+        if run_all or run_brisbane:
+            self._sync_airport(BRISBANE)
+        if run_all or run_goldcoast:
+            self._sync_airport(GOLD_COAST)
+
+        
 
         self.stdout.write(self.style.SUCCESS("\nAll done."))
 
