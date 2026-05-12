@@ -82,20 +82,26 @@ def _calc_discount(discount_input, booking):
 
 def _get_start_end_points(booking):
     """Derive start/end points from booking fields."""
-    if booking.start_point:
+
+    if booking.start_point and booking.end_point:
         return booking.start_point, booking.end_point
-    direction = booking.direction or ""
+
+    direction = (booking.direction or "").lower()
     addr = f"{booking.street}, {booking.suburb}"
-    mapping = [
-        ("Drop off to Domestic", addr,                 "Domestic Airport"),
-        ("Drop off to Intl",     addr,                 "International Airport"),
-        ("Pickup from Domestic", "Domestic Airport",   addr),
-        ("Pickup from Intl",     "International Airport", addr),
-    ]
-    for key, start, end in mapping:
-        if key in direction:
-            return start, end
-    return "Unknown", "Unknown"
+
+    if "drop off" in direction:
+        if "domestic" in direction:
+            return addr, "Domestic Airport"
+        if "intl" in direction or "international" in direction:
+            return addr, "International Airport"
+
+    if "pickup" in direction:
+        if "domestic" in direction:
+            return "Domestic Airport", addr
+        if "intl" in direction or "international" in direction:
+            return "International Airport", addr
+
+    return addr, "Airport"
 
 
 def _apply_gst_updates_multi(bookings):
