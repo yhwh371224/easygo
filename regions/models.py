@@ -85,6 +85,7 @@ class Terminal(models.Model):
     airport = models.ForeignKey(Airport, on_delete=models.CASCADE, related_name="terminals")
     name = models.CharField(max_length=100)
     type = models.CharField(max_length=10, choices=TerminalType.choices)
+    pickup_instruction = models.TextField(blank=True)
 
     class Meta:
         ordering = ["airport__code", "type", "name"]
@@ -92,6 +93,22 @@ class Terminal(models.Model):
 
     def __str__(self):
         return f"{self.airport.code} {self.get_type_display()} — {self.name}"
+    
+
+class TerminalMap(models.Model):
+    terminal = models.ForeignKey(
+        Terminal,
+        on_delete=models.CASCADE,
+        related_name="maps"
+    )
+    title = models.CharField(max_length=255)
+    url = models.URLField()
+
+    class Meta:
+        ordering = ["terminal", "title"]
+
+    def __str__(self):
+        return f"{self.terminal} — {self.title}"
 
 
 class RegionSuburb(models.Model):

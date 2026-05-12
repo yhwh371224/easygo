@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Region, RegionSuburb, Airport, Terminal
+from .models import Region, RegionSuburb, Airport, Terminal, TerminalMap
 
 
 class TerminalInline(admin.TabularInline):
@@ -8,6 +8,17 @@ class TerminalInline(admin.TabularInline):
     extra = 1
     fields = ('name', 'type')
 
+
+class TerminalMapInline(admin.TabularInline):
+    model = TerminalMap
+    extra = 1    
+
+
+@admin.register(Terminal)
+class TerminalAdmin(admin.ModelAdmin):
+    list_display = ("airport", "name", "type")
+    inlines = [TerminalMapInline]
+    
 
 @admin.register(Airport)
 class AirportAdmin(admin.ModelAdmin):
