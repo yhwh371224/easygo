@@ -1,5 +1,7 @@
 from django.db import models
 
+from regions.models.region import Region
+
 
 class Airport(models.Model):
     country = models.ForeignKey("Country", on_delete=models.PROTECT, related_name="airports")
@@ -77,3 +79,11 @@ class PickupPointMap(models.Model):
 
     def __str__(self):
         return f"{self.pickup_point} — {self.get_type_display()} — {self.title}"
+    
+
+class CruiseTerminal(models.Model):
+    region = models.ForeignKey(Region, on_delete=models.PROTECT, related_name="cruise_terminals")
+    name = models.CharField(max_length=150)
+    
+    def __str__(self):
+        return self.name

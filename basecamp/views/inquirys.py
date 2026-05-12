@@ -17,6 +17,7 @@ from basecamp.basecamp_utils import (
     get_client_ip,
 )
 from django_ratelimit.decorators import ratelimit
+from regions.models.airport import CruiseTerminal
 from utils.telegram import send_telegram_notification, get_ip_info
 from regions.models import RequestLog
 
@@ -50,6 +51,15 @@ def _resolve_terminal(region: Region, raw_value: str):
     if value.isdigit():
         return qs.filter(pk=int(value)).first()
 
+    return None
+
+
+def _resolve_cruise_terminal(region: Region, raw_value: str):
+    if not region or not raw_value:
+        return None
+    value = str(raw_value).strip()
+    if value.isdigit():
+        return CruiseTerminal.objects.filter(pk=int(value), region=region).first()
     return None
 
 
