@@ -317,7 +317,8 @@ def quick_rebook_step1(request, region_slug=None):
         'pickup_date_obj': pickup_date_obj,
         'flight_number'  : flight_number,
         'pickup_time'    : pickup_time,
-        'active_regions': Region.objects.filter(is_active=True),
+        'active_regions' : Region.objects.filter(is_active=True),
+        'error'          : None,
     })
 
 
