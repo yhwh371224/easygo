@@ -7,7 +7,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.template import TemplateDoesNotExist
 from django.template.loader import get_template
 
-from regions.models import Region, RegionSuburb
+from regions.models import Region, RegionSuburb, CruiseTerminal
 from articles.models import Post as BlogPost
 
 logger = logging.getLogger(__name__)
@@ -48,6 +48,8 @@ def region_home(request, region_slug):
         airport__regions=region
     ).select_related('airport').order_by('type', 'name')
 
+    cruise_terminals = CruiseTerminal.objects.filter(region=region)
+
     rebook_error = request.session.pop('rebook_error', None)
     hero_image_url = staticfiles_storage.url(f'basecamp/photos/{region.hero_image_file}')
 
@@ -56,6 +58,7 @@ def region_home(request, region_slug):
         'form_suburbs': form_suburbs,
         'featured_suburbs': featured_suburbs,
         'airport_terminals': airport_terminals,
+        'cruise_terminals': cruise_terminals,
         'google_review_url': settings.GOOGLE_REVIEW_URL,
         'latest_post': latest_post,
         'rebook_error': rebook_error,

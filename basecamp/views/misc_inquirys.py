@@ -8,7 +8,7 @@ from django.db.models import Q
 from django.http import JsonResponse
 from main.settings import RECIPIENT_EMAIL
 from basecamp.area import get_suburbs
-from regions.models import Region, RegionSuburb, Terminal
+from regions.models import Region, RegionSuburb, Terminal, CruiseTerminal
 from basecamp.basecamp_utils import (
     is_ajax, parse_date,
     verify_turnstile, get_sorted_suburbs,
@@ -16,7 +16,7 @@ from basecamp.basecamp_utils import (
 )
 from articles.models import Post
 from django_ratelimit.decorators import ratelimit
-from basecamp.views.inquirys import _get_request_region, _resolve_terminal
+from basecamp.views.inquirys import _get_request_region, _resolve_terminal, _resolve_cruise_terminal
 
 
 def _airport_terminals_for_request(request):
@@ -26,6 +26,13 @@ def _airport_terminals_for_request(request):
     return Terminal.objects.filter(
         airport__regions=region
     ).select_related('airport').order_by('type', 'name')
+
+
+def _cruise_terminals_for_request(request):
+    region = getattr(request, 'region', None)
+    if not region:
+        return CruiseTerminal.objects.none()
+    return CruiseTerminal.objects.filter(region=region)
 
 
 @ratelimit(key='ip', rate='5/m', method='POST', block=True)
@@ -42,6 +49,8 @@ def price_detail(request):
         if not post_region:
             post_region = Region.objects.filter(slug='sydney', is_active=True).first()
 
+        request.region = post_region
+
         pickup_date_str = request.POST.get('pickup_date', '')  
         start_point = request.POST.get('start_point')
         end_point = request.POST.get('end_point')
@@ -56,7 +65,7 @@ def price_detail(request):
             pickup_date = parse_date(pickup_date_str, field_name="Pickup Date")
 
         except ValueError as e:
-            if getattr(request, 'region', None):
+            if post_region and post_region.slug != 'sydney':
                 return redirect('regions:home', region_slug=request.region.slug)
             return render(request, 'basecamp/home.html', {
                 'error_message': str(e),
@@ -64,6 +73,7 @@ def price_detail(request):
                 'carousel_suburbs': get_suburbs(),
                 'home_suburbs': RegionSuburb.objects.filter(region__slug='sydney', is_active=True).order_by('-is_pinned', 'sort_order', 'name'),
                 'airport_terminals': _airport_terminals_for_request(request),
+                'cruise_terminals': _cruise_terminals_for_request(request),
                 'google_review_url': settings.GOOGLE_REVIEW_URL,
                 'latest_post': latest_post,
                 'start_point_value': start_point if start_point != 'Select your option' else '',
@@ -75,43 +85,44 @@ def price_detail(request):
         request.session['original_start_point'] = start_point
         request.session['original_end_point'] = end_point
 
-        normalized_start_point = start_point
-        normalized_end_point = end_point
-
         region = request.region
 
-        if not region:
-            start_terminal = None
-            end_terminal = None
-        else:
+        if region:
             start_terminal = _resolve_terminal(region, start_point)
             end_terminal = _resolve_terminal(region, end_point)
+            start_cruise = _resolve_cruise_terminal(region, start_point)
+            end_cruise = _resolve_cruise_terminal(region, end_point)
+        else:
+            start_terminal = end_terminal = start_cruise = end_cruise = None
 
-        if start_terminal:
-            normalized_start_point = 'Airport'
-
-        if end_terminal:
-            normalized_end_point = 'Airport'
+        is_start_airport = bool(start_terminal)
+        is_end_airport = bool(end_terminal)
+        is_start_cruise = bool(start_cruise)
+        is_end_cruise = bool(end_cruise)
 
         condition_met = not (
-            (normalized_start_point in ['Overseas cruise terminal', 'WhiteBay cruise terminal'] and normalized_end_point == 'Airport') or
-            (normalized_start_point == 'Airport' and normalized_end_point in ['Overseas cruise terminal', 'WhiteBay cruise terminal'])
+            (is_start_cruise and is_end_airport) or
+            (is_start_airport and is_end_cruise)
         )
 
         context = {
             'pickup_date': pickup_date.strftime('%Y-%m-%d'),
-            'start_point': normalized_start_point,
-            'end_point': normalized_end_point,
-            # Keep original values (e.g., terminal IDs) for downstream direction resolution.
+            'start_point': start_point,
+            'end_point': end_point,
             'original_start_point': start_point,
             'original_end_point': end_point,
             'no_of_passenger': no_of_passenger,
             'condition_met': condition_met,
+            'is_start_airport': is_start_airport,
+            'is_end_airport': is_end_airport,
+            'is_start_cruise': is_start_cruise,
+            'is_end_cruise': is_end_cruise,
             'latest_post': latest_post,
         }
 
         if region is not None:
             context['region'] = region
+            context['cruise_terminals'] = CruiseTerminal.objects.filter(region=region)
             return render(request, 'regions/inquiry/inquiry1.html', context)
 
         return render(request, 'basecamp/booking/inquiry1.html', context)
@@ -125,6 +136,7 @@ def price_detail(request):
             'carousel_suburbs': get_suburbs(),
             'home_suburbs': RegionSuburb.objects.filter(region__slug='sydney', is_active=True).order_by('-is_pinned', 'sort_order', 'name'),
             'airport_terminals': _airport_terminals_for_request(request),
+            'cruise_terminals': _cruise_terminals_for_request(request),
             'google_review_url': settings.GOOGLE_REVIEW_URL,
             'latest_post': latest_post,
             'rebook_error': None,

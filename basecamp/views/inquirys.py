@@ -58,8 +58,8 @@ def _resolve_cruise_terminal(region: Region, raw_value: str):
     if not region or not raw_value:
         return None
     value = str(raw_value).strip()
-    if value.isdigit():
-        return CruiseTerminal.objects.filter(pk=int(value), region=region).first()
+    if value.startswith("cruise_") and value[7:].isdigit():
+        return CruiseTerminal.objects.filter(pk=int(value[7:]), region=region).first()
     return None
 
 
@@ -223,52 +223,45 @@ def inquiry_details1(request):
 
         start_terminal = _resolve_terminal(region, original_start_point)
         end_terminal = _resolve_terminal(region, original_end_point)
+        start_cruise = _resolve_cruise_terminal(region, original_start_point)
+        end_cruise = _resolve_cruise_terminal(region, original_end_point)
 
         direction = ""
         suburb = ""
 
-        # ❗ 핵심 추가: region 없으면 무조건 skip
-        if not region:
-            start_terminal = None
-            end_terminal = None
-
-        # ✅ 1. pickup 우선
+        # ✅ 1. Airport pickup (start is airport terminal)
         if start_terminal:
             if start_terminal.type == Terminal.TerminalType.INTL:
                 direction = 'Pickup from Intl Airport'
-                suburb = original_end_point
-                start_point = ''
-                end_point = ''
-            elif start_terminal.type == Terminal.TerminalType.DOMESTIC:
+            else:
                 direction = 'Pickup from Domestic Airport'
-                suburb = original_end_point
-                start_point = ''
-                end_point = ''
-
-        # ✅ 2. dropoff (pickup 없을 때만)
-        elif end_terminal:
-            if end_terminal.type == Terminal.TerminalType.INTL:
-                direction = 'Drop off to Intl Airport'
-                suburb = original_start_point
-                start_point = ''
-                end_point = ''
-            elif end_terminal.type == Terminal.TerminalType.DOMESTIC:
-                direction = 'Drop off to Domestic Airport'
-                suburb = original_start_point
-                start_point = ''
-                end_point = ''
-
-        # Fallback: if normalized "Airport" got posted without a terminal id.
-        elif str(original_start_point).strip().lower() == "airport":
-            direction = "Pickup from Airport"
             suburb = original_end_point
             start_point = ''
             end_point = ''
-        elif str(original_end_point).strip().lower() == "airport":
-            direction = "Drop off to Airport"
+
+        # ✅ 2. Airport drop-off (end is airport terminal)
+        elif end_terminal:
+            if end_terminal.type == Terminal.TerminalType.INTL:
+                direction = 'Drop off to Intl Airport'
+            else:
+                direction = 'Drop off to Domestic Airport'
             suburb = original_start_point
             start_point = ''
             end_point = ''
+
+        # ✅ 3. Cruise terminal pickup
+        elif start_cruise:
+            direction = 'Pickup from Cruise Terminal'
+            suburb = original_end_point
+            start_point = start_cruise.name
+            end_point = ''
+
+        # ✅ 4. Cruise terminal drop-off
+        elif end_cruise:
+            direction = 'Drop off to Cruise Terminal'
+            suburb = original_start_point
+            start_point = ''
+            end_point = end_cruise.name
 
         baggage_str = parse_baggage(request)
 

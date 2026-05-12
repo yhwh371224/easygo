@@ -167,17 +167,8 @@
 												{% if start_point %}
 													Pickup date:  {{ pickup_date|date:"Y-m-d" }}<br>
 													Pickup time:  {{ pickup_time|default:'' }}<br>
-
-													{% if start_point == 'Overseas cruise terminal' or start_point == 'WhieBay cruise terminal' %}
-														Start point:  {{ start_point }}<br>      
-														End point:  {{ street|default:'' }} {{ end_point|default:'' }}<br>
-													{% elif end_point == 'Overseas cruise terminal' or start_point == 'WhieBay cruise terminal' %}
-														Start point:  {{ street|default:'' }} {{ start_point|default:'' }}<br>      
-														End point:  {{ end_point }}<br>
-													{% else %}
-														Start point: {{ start_point }}<br>
-														End point:  {{ end_point }}<br>
-													{% endif %}
+													Start point: {{ start_point }}<br>
+													End point:  {{ end_point }}<br>
 												{% endif %}
 													Number of passenger: {{ no_of_passenger }}<br>
 													Number of baggage:  {{ no_of_baggage|default:'' }}<br>
