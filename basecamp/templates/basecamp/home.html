@@ -218,6 +218,13 @@
                           {% endfor %}
                         </optgroup>
                       {% endif %}
+                      {% if cruise_terminals %}
+                        <optgroup label="Cruise terminals">
+                          {% for ct in cruise_terminals %}
+                            <option value="cruise_{{ ct.id }}">{{ ct.name }}</option>
+                          {% endfor %}
+                        </optgroup>
+                      {% endif %}
                       {% for area in home_suburbs %}
                         <option value="{{ area.name }}">{{ area.name }}</option>
                       {% endfor %}
@@ -232,6 +239,13 @@
                         <optgroup label="Airport terminals">
                           {% for t in airport_terminals %}
                             <option value="{{ t.id }}">{{ t.name }}</option>
+                          {% endfor %}
+                        </optgroup>
+                      {% endif %}
+                      {% if cruise_terminals %}
+                        <optgroup label="Cruise terminals">
+                          {% for ct in cruise_terminals %}
+                            <option value="cruise_{{ ct.id }}">{{ ct.name }}</option>
                           {% endfor %}
                         </optgroup>
                       {% endif %}

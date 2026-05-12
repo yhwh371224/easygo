@@ -30,9 +30,10 @@ def _airport_terminals_for_request(request):
 
 def _cruise_terminals_for_request(request):
     region = getattr(request, 'region', None)
-    if not region:
-        return CruiseTerminal.objects.none()
-    return CruiseTerminal.objects.filter(region=region)
+    if region:
+        return CruiseTerminal.objects.filter(region=region)
+    # Basecamp home is Sydney-specific; fall back to Sydney cruise terminals.
+    return CruiseTerminal.objects.filter(region__slug='sydney')
 
 
 @ratelimit(key='ip', rate='5/m', method='POST', block=True)
