@@ -81,24 +81,28 @@ def _calc_discount(discount_input, booking):
 
 
 def _get_start_end_points(booking):
-    """Derive start/end points from booking fields."""
+    direction = (booking.direction or "").lower()
 
-    if booking.start_point and booking.end_point:
-        return booking.start_point, booking.end_point
-
-    direction = (booking.direction or "").strip().lower()
     addr = f"{booking.street}, {booking.suburb}"
 
-    if "pickup" in direction:
-        if "domestic" in direction:
+    is_pickup = "pickup" in direction
+    is_dropoff = "drop" in direction
+
+    is_domestic = "domestic" in direction
+    is_intl = "intl" in direction or "international" in direction
+
+    # PICKUP: Airport → Address
+    if is_pickup:
+        if is_domestic:
             return "Domestic Airport", addr
-        if "intl" in direction or "international" in direction:
+        if is_intl:
             return "International Airport", addr
 
-    if "drop off" in direction:
-        if "domestic" in direction:
+    # DROPOFF: Address → Airport
+    if is_dropoff:
+        if is_domestic:
             return addr, "Domestic Airport"
-        if "intl" in direction or "international" in direction:
+        if is_intl:
             return addr, "International Airport"
 
     return "Unknown", "Unknown"
