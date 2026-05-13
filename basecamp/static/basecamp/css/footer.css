@@ -24,6 +24,7 @@
 @media (max-width: 768px) {
   .ft-top { flex-direction: column; gap: 2rem; }
   .ft-bottom { justify-content: center; text-align: center; }
+  .ft-rating { margin-top: 8px; }
 }
 @media (min-width: 769px) {
   /* 1. 가운데 섹션(Service Regions)을 오른쪽으로 밀기 */

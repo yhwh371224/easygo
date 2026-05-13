@@ -233,6 +233,7 @@
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer nonce="{{ CSP_NONCE }}"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" defer nonce="{{ CSP_NONCE }}"></script>
     <script src="{% static 'basecamp/js/theme.min.js' %}" defer nonce="{{ CSP_NONCE }}"></script>
+    {% block extra_js %}{% endblock %}
 
 </body>
 </html>

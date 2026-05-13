@@ -14,6 +14,9 @@
 <style nonce="{{ CSP_NONCE }}">
 .booking-hero {position: relative; background-image: url("{% static 'basecamp/images/page-title-bg.webp' %}"); background-size: cover; background-position: center; padding-top: 5rem; padding-bottom: 7rem;}
 .booking-form-col {margin-top: -220px;}
+input.baggage-qty::-webkit-outer-spin-button,
+input.baggage-qty::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+input.baggage-qty { -moz-appearance: textfield; appearance: textfield; }
 </style>
 {% endblock %}
 
@@ -172,15 +175,15 @@
 					<div class="row g-2">
 						<div class="col">
 						<label for="baggage_large" class="form-label mb-0">Large size bag</label>
-						<input type="number" class="form-control" name="baggage_large" placeholder="Large" min="0" max="9" value="0" id="baggage_large">
+						<input type="number" class="form-control baggage-qty" name="baggage_large" placeholder="Large" min="0" max="30" value="" id="baggage_large">
 						</div>
 						<div class="col">
 						<label for="baggage_medium" class="form-label mb-0">Medium size bag</label>
-						<input type="number" class="form-control" name="baggage_medium" placeholder="Medium" min="0" max="9" value="0" id="baggage_medium">
+						<input type="number" class="form-control baggage-qty" name="baggage_medium" placeholder="Medium" min="0" max="30" value="" id="baggage_medium">
 						</div>
 						<div class="col">
 						<label for="baggage_small" class="form-label mb-0">Small size bag</label>
-						<input type="number" class="form-control" name="baggage_small" placeholder="Small" min="0" max="9" value="0" id="baggage_small">
+						<input type="number" class="form-control baggage-qty" name="baggage_small" placeholder="Small" min="0" max="30" value="" id="baggage_small">
 						</div>
 					</div>
 				</div>
@@ -208,22 +211,22 @@
 					<div class="row g-2 mb-3">
 						<div class="col">
 							<label for="baggage_baby" class="form-label mb-0">Baby seats</label>
-							<input type="number" class="form-control" name="baggage_baby" placeholder="Baby seats" min="0" max="9" value="0" id="baggage_baby">
+							<input type="number" class="form-control baggage-qty" name="baggage_baby" placeholder="Baby seats" min="0" max="30" value="" id="baggage_baby">
 						</div>
 						<div class="col">
 							<label for="baggage_booster" class="form-label mb-0">Booster seats</label>
-							<input type="number" class="form-control" name="baggage_booster" placeholder="Booster seats" min="0" max="9" value="0" id="baggage_booster">
+							<input type="number" class="form-control baggage-qty" name="baggage_booster" placeholder="Booster seats" min="0" max="30" value="" id="baggage_booster">
 						</div>
 						<div class="col">
 							<label for="baggage_pram" class="form-label mb-0">Prams</label>
-							<input type="number" class="form-control" name="baggage_pram" placeholder="Prams" min="0" max="9" value="0" id="baggage_pram">
+							<input type="number" class="form-control baggage-qty" name="baggage_pram" placeholder="Prams" min="0" max="30" value="" id="baggage_pram">
 						</div>
 					</div>
 					<!-- Row 2: Ski / Snowboards / Golf -->
 					<div class="row g-2 mb-3">
 						<div class="col">
 							<label for="baggage_ski" class="form-label mb-0">Ski bags</label>
-							<input type="number" class="form-control" id="baggage_ski" name="baggage_ski" placeholder="Ski bags" min="0" max="9" value="0">
+							<input type="number" class="form-control baggage-qty" id="baggage_ski" name="baggage_ski" placeholder="Ski bags" min="0" max="30" value="">
 							<div class="form-check mt-1">
 								<input class="form-check-input" type="checkbox" name="ski_oversize" id="ski_oversize">
 								<label class="form-check-label" for="ski_oversize">Oversize</label>
@@ -231,7 +234,7 @@
 						</div>
 						<div class="col">
 							<label for="baggage_snowboard" class="form-label mb-0">Snowboards</label>
-							<input type="number" class="form-control" id="baggage_snowboard" name="baggage_snowboard" placeholder="Snowboards" min="0" max="9" value="0">
+							<input type="number" class="form-control baggage-qty" id="baggage_snowboard" name="baggage_snowboard" placeholder="Snowboards" min="0" max="30" value="">
 							<div class="form-check mt-1">
 								<input class="form-check-input" type="checkbox" name="snowboard_oversize" id="snowboard_oversize">
 								<label class="form-check-label" for="snowboard_oversize">Oversize</label>
@@ -239,7 +242,7 @@
 						</div>
 						<div class="col">
 							<label for="baggage_golf" class="form-label mb-0">Golf bags</label>
-							<input type="number" class="form-control" id="baggage_golf" name="baggage_golf" placeholder="Golf bags" min="0" max="9" value="0">
+							<input type="number" class="form-control baggage-qty" id="baggage_golf" name="baggage_golf" placeholder="Golf bags" min="0" max="30" value="">
 							<div class="form-check mt-1">
 								<input class="form-check-input" type="checkbox" name="golf_oversize" id="golf_oversize">
 								<label class="form-check-label" for="golf_oversize">Oversize</label>
@@ -250,7 +253,7 @@
 					<div class="row g-2 mb-3">
 						<div class="col">
 							<label for="baggage_bike" class="form-label mb-0">Bike bags</label>
-							<input type="number" class="form-control" id="baggage_bike" name="baggage_bike" placeholder="Bike bags" min="0" max="9" value="0">
+							<input type="number" class="form-control baggage-qty" id="baggage_bike" name="baggage_bike" placeholder="Bike bags" min="0" max="30" value="">
 							<div class="form-check mt-1">
 								<input class="form-check-input" type="checkbox" name="bike_oversize" id="bike_oversize">
 								<label class="form-check-label" for="bike_oversize">Oversize</label>
@@ -258,7 +261,7 @@
 						</div>
 						<div class="col">
 							<label for="baggage_boxes" class="form-label mb-0">Carton boxes</label>
-							<input type="number" class="form-control" id="baggage_boxes" name="baggage_boxes" placeholder="Carton boxes" min="0" max="9" value="0">
+							<input type="number" class="form-control baggage-qty" id="baggage_boxes" name="baggage_boxes" placeholder="Carton boxes" min="0" max="30" value="">
 							<div class="form-check mt-1">
 								<input class="form-check-input" type="checkbox" name="boxes_oversize" id="boxes_oversize">
 								<label class="form-check-label" for="boxes_oversize">Oversize</label>
@@ -266,7 +269,7 @@
 						</div>
 						<div class="col">
 							<label for="baggage_music" class="form-label mb-0">Musical instruments</label>
-							<input type="number" class="form-control" id="baggage_music" name="baggage_music" placeholder="Musical instruments" min="0" max="9" value="0">
+							<input type="number" class="form-control baggage-qty" id="baggage_music" name="baggage_music" placeholder="Musical instruments" min="0" max="30" value="">
 							<div class="form-check mt-1">
 								<input class="form-check-input" type="checkbox" name="music_oversize" id="music_oversize">
 								<label class="form-check-label" for="music_oversize">Oversize</label>
@@ -329,4 +332,32 @@
 
 		</div>
 	</section>
+{% endblock %}
+
+{% block extra_js %}
+<script nonce="{{ CSP_NONCE }}">
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.baggage-qty').forEach(function (input) {
+        input.addEventListener('focus', function () {
+            if (this.value === '0') this.value = '';
+        });
+        input.addEventListener('blur', function () {
+            if (this.value === '') return;
+            var val = parseInt(this.value, 10);
+            if (isNaN(val) || val < 0) this.value = '';
+            else if (val > 30) this.value = '30';
+        });
+        input.addEventListener('keydown', function (e) {
+            var allow = ['Backspace','Delete','Tab','Escape','Enter','ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End'];
+            if (allow.includes(e.key) || e.ctrlKey || e.metaKey) return;
+            if (!/^\d$/.test(e.key)) { e.preventDefault(); return; }
+            if (parseInt(this.value + e.key, 10) > 30) e.preventDefault();
+        });
+        input.addEventListener('input', function () {
+            this.value = this.value.replace(/\D/g, '');
+            if (this.value !== '' && parseInt(this.value, 10) > 30) this.value = '30';
+        });
+    });
+});
+</script>
 {% endblock %}
