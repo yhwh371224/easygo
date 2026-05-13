@@ -61,7 +61,12 @@
         {% for step in steps %}
         <li class="step-item">
           <div class="step-num">{{ forloop.counter }}</div>
-          <div class="step-text">{{ step|slice:"3:" }}</div>
+          <div class="step-text">
+            {{ step|slice:"3:" }}
+            {% if forloop.counter == 3 %}
+            <br><span class="text-muted" style="font-size:13px;">You can also refer to our meeting point guide: <a href="/{{ region.slug }}/meeting-point/" target="_blank" rel="noopener">easygoshuttle.com.au/{{ region.slug }}/meeting-point/</a></span>
+            {% endif %}
+          </div>
         </li>
         {% endfor %}
       </ul>
