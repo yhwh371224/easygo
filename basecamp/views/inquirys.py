@@ -156,9 +156,14 @@ def inquiry_details(request):
         region = _get_request_region(request)
         if not region:
             region = Region.objects.filter(slug='sydney', is_active=True).first()
+        home_suburbs = (
+            region.suburbs.filter(is_active=True).order_by('-is_pinned', 'sort_order', 'name')
+            if region else []
+        )
         return render(request, 'basecamp/booking/inquiry.html', {
             "region": region,
             "active_regions": active_regions,
+            "home_suburbs": home_suburbs,
         })
 
 
