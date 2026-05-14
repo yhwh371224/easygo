@@ -1,0 +1,279 @@
+{% extends 'basecamp/base/easygo_base.html' %}
+{% load static %}
+
+{% block title %}Airport Meeting Points – EasyGo Airport Shuttle Sydney{% endblock %}
+
+{% block meta %}
+<meta name="description" content="Find the official meeting points for EasyGo Airport Shuttle at Sydney Airport. Get instructions for T1 International, T2 Domestic, and Qantas T3 terminals for smooth pickups.">
+<meta name="keywords" content="Sydney airport meeting points, T1 International Airport pickup, T2 Domestic Airport pickup, T3 Qantas pickup, EasyGo Airport Shuttle, airport transfer Sydney, airport pickup map">
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* ── Page layout ── */
+  .mp-wrapper { max-width: 780px; margin: 0 auto; padding: 0 1rem 4rem; }
+
+  /* ── Hero ── */
+  .mp-hero { position: relative; overflow: hidden; min-height: 320px; display: flex; align-items: center; }
+  .mp-hero-body { position: relative; z-index: 2; width: 100%; }
+  .mp-hero-overlay { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(24,36,60,.82) 0%, rgba(10,18,35,.72) 100%); z-index: 1; }
+
+  /* ── Terminal tabs ── */
+  .mp-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 2rem; }
+  .mp-tab {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 10px 20px; border-radius: 999px;
+    border: 2px solid #e2e8f0; background: #fff;
+    font-size: 0.9rem; font-weight: 600; color: #4b5563;
+    cursor: pointer; transition: all .18s; white-space: nowrap;
+  }
+  .mp-tab:hover { border-color: #eb7828; color: #eb7828; }
+  .mp-tab.active { background: #eb7828; border-color: #eb7828; color: #fff; }
+
+  /* ── Tab panels ── */
+  .mp-panel { display: none; }
+  .mp-panel.active { display: block; }
+
+  /* ── Terminal tip box ── */
+  .mp-tip {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: #fffbf0; border: 1px solid #fde68a;
+    border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 1.5rem;
+    font-size: 0.9rem; color: #78350f;
+  }
+  .mp-tip-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+
+  /* ── Pickup point card ── */
+  .mp-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-left: 4px solid #eb7828;
+    border-radius: 0 14px 14px 0;
+    padding: 1.4rem 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,.05);
+  }
+  .mp-card-title {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 1rem; font-weight: 700; color: #eb7828;
+    margin-bottom: 0.6rem;
+  }
+  .mp-card-instruction { font-size: 0.92rem; color: #374151; margin-bottom: 1.1rem; line-height: 1.6; }
+
+  /* ── Map buttons ── */
+  .mp-maps { display: flex; flex-wrap: wrap; gap: 8px; }
+  .mp-map-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 9px 16px; border-radius: 8px;
+    font-size: 0.83rem; font-weight: 600;
+    text-decoration: none; transition: filter .15s, transform .1s;
+    border: none;
+  }
+  .mp-map-btn:hover { filter: brightness(.93); transform: translateY(-1px); text-decoration: none; }
+  .mp-map-btn--location { background: #dbeafe; color: #1d4ed8; }
+  .mp-map-btn--google   { background: #dcfce7; color: #15803d; }
+  .mp-map-btn--walking  { background: #e0f2fe; color: #0369a1; }
+  .mp-map-btn--pdf      { background: #fee2e2; color: #b91c1c; }
+  .mp-map-btn--image    { background: #f3e8ff; color: #6d28d9; }
+  .mp-map-btn--default  { background: #f1f5f9; color: #334155; }
+
+  /* ── Disclaimer ── */
+  .mp-disclaimer {
+    font-size: 0.82rem; color: #6b7280;
+    border-top: 1px solid #e5e7eb;
+    padding-top: 0.9rem; margin-top: 1.5rem;
+  }
+
+  /* ── Contact sidebar ── */
+  .mp-contact-card {
+    background: #f8fafc; border: 1px solid #e2e8f0;
+    border-radius: 14px; padding: 1.75rem;
+    position: sticky; top: 90px;
+  }
+
+  /* ── Empty state ── */
+  .mp-empty { text-align: center; padding: 3rem 1rem; color: #9ca3af; }
+  .mp-empty-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+
+  @media (max-width: 767px) {
+    .mp-tab { padding: 8px 14px; font-size: 0.83rem; }
+    .mp-card { padding: 1.1rem 1.1rem 1.1rem 1.2rem; }
+    .mp-map-btn { padding: 8px 13px; font-size: 0.8rem; }
+    .mp-contact-card { margin-top: 2rem; position: static; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ── Hero ── -->
+<section class="mp-hero">
+  <img src="{% static 'basecamp/images/page-title-bg.webp' %}"
+       alt="Sydney Airport Meeting Points"
+       fetchpriority="high"
+       style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 38%;">
+  <div class="mp-hero-overlay"></div>
+  <div class="mp-hero-body container py-6">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 text-center">
+        <p class="text-warning fw-semibold mb-2 small" style="letter-spacing:.1em;text-transform:uppercase;">Sydney Airport · SYD</p>
+        <h1 class="text-white fw-bold mb-2" style="font-size:clamp(1.7rem,4vw,2.4rem);">Airport Meeting Points</h1>
+        <p class="mb-0" style="color:rgba(255,255,255,.75);font-size:1rem;">Select your terminal — your driver will be waiting at the meeting point shown.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Main content ── -->
+<div class="container py-5">
+  <div class="row g-4">
+
+    <!-- Left: tabs + cards -->
+    <div class="col-lg-8">
+
+      {% for airport in airports %}
+
+        <!-- Terminal tabs -->
+        {% with terminals=airport.terminals.all %}
+        {% if terminals %}
+        <div class="mp-tabs" role="tablist">
+          {% for terminal in terminals %}
+          <button class="mp-tab {% if forloop.first %}active{% endif %}"
+                  role="tab"
+                  data-panel="mp-panel-{{ terminal.pk }}"
+                  onclick="mpSwitchTab(this)">
+            {{ terminal.icon }} {{ terminal.name }}
+          </button>
+          {% endfor %}
+        </div>
+
+        <!-- Terminal panels -->
+        {% for terminal in terminals %}
+        <div class="mp-panel {% if forloop.first %}active{% endif %}" id="mp-panel-{{ terminal.pk }}">
+
+          {% if terminal.note %}
+          <div class="mp-tip">
+            <span class="mp-tip-icon">💡</span>
+            <span>{{ terminal.note }}</span>
+          </div>
+          {% endif %}
+
+          {% with points=terminal.pickup_points.all %}
+          {% if points %}
+            {% for point in points %}
+            <div class="mp-card">
+              <div class="mp-card-title">
+                <span>📍</span>
+                <span>{{ point.name }}</span>
+              </div>
+
+              {% if point.instruction %}
+              <p class="mp-card-instruction">{{ point.instruction }}</p>
+              {% endif %}
+
+              {% with maps=point.maps.all %}
+              {% if maps %}
+              <div class="mp-maps">
+                {% for map in maps %}
+                  {% if map.type == 'pdf' %}
+                    {% with btn_class="mp-map-btn--pdf" icon="📄" %}
+                    <a href="{{ map.url }}" target="_blank" rel="noopener"
+                       class="mp-map-btn {{ btn_class }}">{{ icon }} {{ map.title }}</a>
+                    {% endwith %}
+                  {% elif map.type == 'google' %}
+                    {% with btn_class="mp-map-btn--google" icon="📍" %}
+                    <a href="{{ map.url }}" target="_blank" rel="noopener"
+                       class="mp-map-btn {{ btn_class }}">{{ icon }} {{ map.title }}</a>
+                    {% endwith %}
+                  {% elif map.type == 'walking' %}
+                    {% with btn_class="mp-map-btn--walking" icon="🚶" %}
+                    <a href="{{ map.url }}" target="_blank" rel="noopener"
+                       class="mp-map-btn {{ btn_class }}">{{ icon }} {{ map.title }}</a>
+                    {% endwith %}
+                  {% elif map.type == 'image' %}
+                    {% with btn_class="mp-map-btn--image" icon="🖼️" %}
+                    <a href="{{ map.url }}" target="_blank" rel="noopener"
+                       class="mp-map-btn {{ btn_class }}">{{ icon }} {{ map.title }}</a>
+                    {% endwith %}
+                  {% else %}
+                    <a href="{{ map.url }}" target="_blank" rel="noopener"
+                       class="mp-map-btn mp-map-btn--location">🗺️ {{ map.title }}</a>
+                  {% endif %}
+                {% endfor %}
+              </div>
+              {% endif %}
+              {% endwith %}
+
+            </div>
+            {% endfor %}
+
+          {% else %}
+          <div class="mp-empty">
+            <div class="mp-empty-icon">🔧</div>
+            <p>Meeting point details coming soon.</p>
+          </div>
+          {% endif %}
+          {% endwith %}
+
+          <p class="mp-disclaimer">
+            ℹ️ The meeting point may vary — your driver will notify you on the day of your flight.
+          </p>
+
+        </div>
+        {% endfor %}
+
+        {% else %}
+        <div class="mp-empty">
+          <div class="mp-empty-icon">✈️</div>
+          <p>Terminal information is being updated. Please contact us for assistance.</p>
+        </div>
+        {% endif %}
+        {% endwith %}
+
+      {% empty %}
+      <div class="mp-empty">
+        <div class="mp-empty-icon">✈️</div>
+        <p>Meeting point information coming soon.</p>
+      </div>
+      {% endfor %}
+
+    </div>
+
+    <!-- Right: contact -->
+    <div class="col-lg-4">
+      <div class="mp-contact-card">
+        <h2 class="h5 fw-bold mb-1">Need help?</h2>
+        <p class="text-muted mb-4" style="font-size:.88rem;">Contact us before or after your flight.</p>
+        <ul class="list-unstyled mb-0" style="font-size:.9rem;">
+          <li class="d-flex align-items-center gap-2 mb-3">
+            <i class="ai-mail fs-lg text-muted"></i>
+            <a href="mailto:info@easygoshuttle.com.au" class="text-dark">info@easygoshuttle.com.au</a>
+          </li>
+          <li class="d-flex align-items-center gap-2 mb-3">
+            <i class="ai-phone fs-lg text-muted"></i>
+            <a href="tel:+61406883355" class="text-dark">+61 406 883 355</a>
+          </li>
+          <li class="d-flex align-items-center gap-2">
+            <i class="ai-message-circle fs-lg text-muted"></i>
+            <a href="sms:+61406883355" class="text-dark">SMS only</a>
+          </li>
+        </ul>
+        <hr class="my-4">
+        <a href="/contact/" class="btn btn-outline-secondary btn-sm w-100">Send a Message</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function mpSwitchTab(btn) {
+  const panelId = btn.dataset.panel;
+  btn.closest('.col-lg-8, .col-12').querySelectorAll('.mp-tab').forEach(b => b.classList.remove('active'));
+  btn.closest('.col-lg-8, .col-12').querySelectorAll('.mp-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(panelId).classList.add('active');
+}
+</script>
+
+{% endblock %}

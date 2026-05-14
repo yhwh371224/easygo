@@ -26,9 +26,12 @@ class Terminal(models.Model):
     airport = models.ForeignKey(Airport, on_delete=models.CASCADE, related_name="terminals")
     name = models.CharField(max_length=100)
     type = models.CharField(max_length=10, choices=TerminalType.choices)
+    icon = models.CharField(max_length=10, blank=True, default="✈️", help_text="Emoji shown on the tab button")
+    note = models.TextField(blank=True, help_text="Shown as a tip inside the terminal panel (e.g. 'On landing simply turn on your mobile phone')")
+    sort_order = models.PositiveSmallIntegerField(default=0)
 
     class Meta:
-        ordering = ["airport__code", "type", "name"]
+        ordering = ["airport__code", "sort_order", "name"]
         unique_together = [("airport", "type", "name")]
 
     def __str__(self):
@@ -43,9 +46,10 @@ class TerminalPickupPoint(models.Model):
     )
     name = models.CharField(max_length=100)
     instruction = models.TextField(blank=True)
+    sort_order = models.PositiveSmallIntegerField(default=0)
 
     class Meta:
-        ordering = ["name"]
+        ordering = ["sort_order", "name"]
 
     def __str__(self):
         return f"{self.terminal} — {self.name}"

@@ -1,6 +1,7 @@
 from django.shortcuts import redirect, render
 from django.conf import settings
 from regions.models import Region
+from regions.models.airport import Airport
 
 
 def sovereign_chauffeurs_v2(request): 
@@ -56,7 +57,7 @@ def invoice(request):
 def invoice_details(request): 
     return render(request, 'basecamp/invoice_details.html')
 
-def meeting_point(request): 
+def meeting_point(request):
     return render(request, 'basecamp/pages/meeting_point.html')
 
 def payment_cancel(request): 

@@ -20,8 +20,9 @@ class PickupPointMapInline(admin.TabularInline):
 
 @admin.register(TerminalPickupPoint)
 class TerminalPickupPointAdmin(admin.ModelAdmin):
-    list_display = ("terminal", "name")
+    list_display = ("terminal", "name", "sort_order")
     list_filter = ("terminal__airport",)
+    list_editable = ("sort_order",)
     inlines = [PickupPointMapInline]
 
 
@@ -29,19 +30,31 @@ class TerminalPickupPointInline(admin.StackedInline):
     model = TerminalPickupPoint
     extra = 1
     show_change_link = True
-    fields = ("name", "instruction")
+    fields = ("name", "sort_order", "instruction")
 
 
 @admin.register(Terminal)
 class TerminalAdmin(admin.ModelAdmin):
-    list_display = ("airport", "name", "type")
+    list_display = ("airport", "name", "type", "icon", "sort_order")
+    list_filter = ("airport",)
+    list_editable = ("sort_order",)
     inlines = [TerminalPickupPointInline]
+    fieldsets = (
+        (None, {
+            "fields": ("airport", "name", "type", "icon", "sort_order"),
+        }),
+        ("Tip / Note", {
+            "fields": ("note",),
+            "description": "Optional tip shown inside the terminal panel. Leave blank to hide.",
+        }),
+    )
 
 
 class TerminalInline(admin.TabularInline):
     model = Terminal
     extra = 1
-    fields = ("name", "type")
+    show_change_link = True
+    fields = ("name", "type", "icon", "sort_order")
 
 
 @admin.register(Airport)

@@ -116,6 +116,7 @@
     <link rel="stylesheet" href="{% static 'basecamp/css/flatpickr.min.css' %}" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="{% static 'basecamp/css/head_home.css' %}">
     <link rel="stylesheet" href="{% static 'basecamp/css/home.css' %}">
+    <link rel="stylesheet" href="{% static 'basecamp/css/footer.css' %}">
     <noscript><link rel="stylesheet" href="{% static 'basecamp/css/tiny-slider.css' %}"></noscript>
     <style nonce="{{ CSP_NONCE }}">
       .site-footer a { text-decoration: none !important; }
@@ -597,8 +598,6 @@
         </div>
       </section>
 
-      <!-- TODO: 멀티 지역 완성 후 주석 해제 -->
-      {% comment %}
       <!-- ===== CHOOSE YOUR CITY SECTION ===== -->
       <section class="container city-chooser-section py-4 py-md-5">
         <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
@@ -612,7 +611,13 @@
         <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
           {% for r in active_regions %}
             <div class="col">
-              <div class="city-card h-100 border rounded-3 p-3 p-md-4 {% if r.slug == region.slug %}is-active{% endif %}">
+              {% if r.is_coming_soon %}
+              <div class="city-card h-100 border rounded-3 p-3 p-md-4" style="opacity:0.6;">
+              {% elif r.slug == 'sydney' %}
+              <a class="city-card h-100 border rounded-3 p-3 p-md-4 d-block text-decoration-none {% if region.slug == r.slug %}is-active{% endif %}" href="/">
+              {% else %}
+              <a class="city-card h-100 border rounded-3 p-3 p-md-4 d-block text-decoration-none {% if region.slug == r.slug %}is-active{% endif %}" href="/{{ r.slug }}/">
+              {% endif %}
                 <div class="d-flex align-items-start justify-content-between gap-3">
                   <div>
                     <div class="city-name fw-semibold">{{ r.name }}</div>
@@ -621,27 +626,22 @@
                     </div>
                   </div>
                   <div class="text-end">
-                    {% if r.slug == region.slug %}
+                    {% if region.slug == r.slug %}
                       <span class="badge badge-current">Current</span>
-                    {% elif r.slug == 'brisbane' or r.slug == 'perth' or r.slug == 'adelaide' or r.slug == 'gold-coast' %}
+                    {% elif r.is_coming_soon %}
                       <span class="badge bg-warning text-dark">Coming Soon</span>
                     {% endif %}
                   </div>
                 </div>
-
-                <div class="mt-3">
-                  {% if r.slug == 'sydney' %}
-                    <a class="btn btn-sm btn-outline-primary w-100" href="/" aria-label="Go to Sydney">→</a>
-                  {% else %}
-                    <a class="btn btn-sm btn-outline-primary w-100" href="/{{ r.slug }}/" aria-label="Go to {{ r.name }}">→</a>
-                  {% endif %}
-                </div>
+              {% if r.is_coming_soon %}
               </div>
+              {% else %}
+              </a>
+              {% endif %}
             </div>
           {% endfor %}
         </div>
       </section>
-      {% endcomment %}
 
       <!-- ===== FAQ SECTION ===== -->
       <section class="container py-3 my-4 my-sm-0 py-sm-4 py-md-7">
@@ -859,36 +859,24 @@
 
       <section class="bg-dark text-light py-5">
         <div class="container text-center">
-          <h2 class="mb-4"><span class="text-orange">2024 Quality Business Award!</span></h2>
-          <p class="services-list-item">EasyGo Airport Shuttle has won the 2024 Quality Business Award from the Inner West Council — recognising our commitment to reliable, professional, and customer-focused airport transfer services across Sydney.</p>
-          <a href="https://easygo.s3.ap-southeast-2.amazonaws.com/panel_members.webp" target="_blank" class="award-panel-link">
+          <h2 class="mb-4">
+            <span class="text-orange">2024 Quality Business Award</span>
+          </h2>
+          <p class="services-list-item text-muted">
+            EasyGo Airport Shuttle is proud to receive the 2024 Quality Business Award 
+          </p>
+          {% comment %} <a href="https://easygo.s3.ap-southeast-2.amazonaws.com/panel_members.webp"
+            target="_blank"
+            class="award-panel-link">
             🧑‍💼 🧑‍🤝‍🧑 View Panel Members 👥➡️
-          </a>
+          </a> {% endcomment %}
         </div>
       </section>
 
     </main>
 
     <!-- ===== FOOTER ===== -->
-    <footer class="site-footer bg-dark pt-5 pb-4">
-      <div class="container d-md-flex justify-content-between align-items-center text-center">
-        <ul class="list-inline fs-sm mb-3 order-md-2">
-          <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="mailto:info@easygoshuttle.com.au">Support</a></li>
-          <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="/contact/">Contact</a></li>
-          <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="/privacy/">Privacy Policy</a></li>
-          <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="/terms/">Terms &amp; Conditions</a></li>
-          <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="/maxi_taxi/">Maxi Taxi Info</a></li>
-          <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="/sydney_airport_transfer/">Sydney Airport Transfer</a></li>
-          <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="{% url 'articles:post_list' %}">Blog</a></li>
-        </ul>
-        <p class="fs-sm mb-3 order-md-1">
-          <span class="text-light opacity-80 me-1">
-            © <span id="current-year"></span> EasyGo. All rights reserved. Designed and built by
-            <a href="https://sungkam.github.io" target="_blank" rel="noopener" style="color: #ffb347;">EasyCoding</a>
-          </span>
-        </p>
-      </div>
-    </footer>
+    {% include "basecamp/layouts/footer.html" %}
 
     <script src="{% static 'basecamp/js/bootstrap.bundle.min.js' %}" defer></script>
     <script src="{% static 'basecamp/js/min/tiny-slider.js' %}" defer></script>

@@ -8,6 +8,9 @@
   }
 
   /* ── Hero banner ── */
+  .blog-hero .container {
+    padding-left: 2.5rem;
+  }
   .blog-hero {
     background: linear-gradient(135deg, #0d6efd 0%, #0a4fcf 60%, #072ea8 100%);
     color: #fff;
