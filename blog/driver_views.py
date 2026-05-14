@@ -12,7 +12,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 from django.contrib.admin.views.decorators import staff_member_required
-from basecamp.modules.view_helpers import verify_turnstile, get_client_ip
+from django_ratelimit.decorators import ratelimit
 from main import settings
 
 
@@ -49,6 +49,7 @@ def driver_impersonate_exit(request):
     return redirect(f'/{settings.SECRET_ADMIN_URL}/')
 
 
+@ratelimit(key='ip', rate='10/m', method='POST', block=True)
 def driver_login(request):
     if request.user.is_authenticated:
         try:
@@ -59,9 +60,6 @@ def driver_login(request):
 
     error = None
     if request.method == 'POST':
-        token = request.POST.get('cf-turnstile-response', '')
-        if not verify_turnstile(token, get_client_ip(request)):
-            return render(request, 'basecamp/driver/login.html', {'error': 'Security verification failed. Please try again.'})
         username = request.POST.get('username', '').strip()
         password = request.POST.get('password', '').strip()
         user = authenticate(request, username=username, password=password)

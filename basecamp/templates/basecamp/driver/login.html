@@ -66,9 +66,9 @@
             style="font-size:1.1rem;padding:0.75rem 1rem;"
           >
         </div>
-        {% if not TURNSTILE_DISABLED %}
+        {% comment %} {% if not TURNSTILE_DISABLED %}
         <div class="cf-turnstile mb-3" data-sitekey="{{ CLOUDFLARE_TURNSTILE_SITE_KEY }}" data-theme="dark"></div>
-        {% endif %}
+        {% endif %} {% endcomment %}
         <button type="submit" class="btn-submit">Log In</button>
       </form>
       <p class="text-center mt-3 small">
