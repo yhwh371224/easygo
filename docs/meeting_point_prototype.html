@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meeting Point – Prototype</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    :root { --brand: #185FA5; }
+
+    .mp-hero {
+      background: linear-gradient(135deg, #3d4a5c 0%, #212529 100%);
+      padding: 100px 0 60px;
+    }
+    .mp-hero h1 { color: #fff; font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 600; }
+    .mp-hero p  { color: rgba(255,255,255,0.7); }
+
+    /* Terminal tabs */
+    .tab-nav {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      border-bottom: 2px solid #e5e7eb; margin-bottom: 2rem;
+    }
+    .tab-btn {
+      background: none; border: none; padding: 10px 20px;
+      font-size: 14px; font-weight: 500; color: #6b7280; cursor: pointer;
+      border-bottom: 3px solid transparent; margin-bottom: -2px;
+      transition: color .15s, border-color .15s;
+    }
+    .tab-btn.active { color: var(--brand); border-bottom-color: var(--brand); }
+    .tab-btn:hover:not(.active) { color: #374151; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* Pickup point card */
+    .pp-card {
+      background: #f8fafc; border: 1px solid #e2e8f0;
+      border-radius: 12px; padding: 1.5rem 1.75rem;
+      margin-bottom: 1rem;
+    }
+    .pp-card h3 {
+      font-size: 1rem; font-weight: 700;
+      color: var(--brand); margin-bottom: 0.5rem;
+    }
+    .pp-card .instruction {
+      color: #4b5563; font-size: 0.93rem; margin-bottom: 1rem;
+    }
+
+    /* Map buttons */
+    .map-btns { display: flex; flex-wrap: wrap; gap: 8px; }
+    .map-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: 20px; font-size: 0.82rem;
+      font-weight: 500; text-decoration: none; border: 1px solid;
+      transition: opacity .15s;
+    }
+    .map-btn:hover { opacity: 0.8; }
+    .map-btn.google { background: #fff; border-color: #4285F4; color: #4285F4; }
+    .map-btn.walking { background: #fff; border-color: #34A853; color: #34A853; }
+    .map-btn.image  { background: #fff; border-color: #F4A835; color: #c47e00; }
+    .map-btn.pdf    { background: #fff; border-color: #EA4335; color: #EA4335; }
+
+    /* Multi pickup point — numbered badge */
+    .pp-badge {
+      display: inline-block;
+      background: var(--brand); color: #fff;
+      border-radius: 50%; width: 24px; height: 24px;
+      font-size: 0.75rem; font-weight: 700; line-height: 24px;
+      text-align: center; margin-right: 8px; flex-shrink: 0;
+    }
+    .pp-header { display: flex; align-items: center; margin-bottom: 0.5rem; }
+
+    /* CTA */
+    .cta-strip { background: #1a1f2e; padding: 3rem 0; margin-top: 3rem; }
+    .cta-strip h2 { color: #fff; font-size: 1.3rem; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="mp-hero">
+  <div class="container">
+    <p class="text-warning fw-semibold mb-2 small">MEL · Melbourne Airport</p>
+    <h1>Airport Meeting Point</h1>
+    <p class="mb-0">Select your terminal below to find where your EasyGo driver will be waiting.</p>
+  </div>
+</section>
+
+<!-- TERMINAL TABS + PICKUP POINTS -->
+<section class="container py-5">
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab(this,'t1')">✈️ T1 International</button>
+    <button class="tab-btn" onclick="switchTab(this,'t2')">🛬 T2 Qantas</button>
+    <button class="tab-btn" onclick="switchTab(this,'t3')">🛬 T3 Virgin / Rex</button>
+    <button class="tab-btn" onclick="switchTab(this,'t4')">🛫 T4 Jetstar</button>
+  </div>
+
+  <!-- T1: 3 pickup points -->
+  <div class="tab-panel active" id="t1">
+    <p class="text-muted mb-4" style="font-size:.93rem;">
+      Arrivals are on Level 2. After clearing customs, follow the signs to the Arrivals Hall — your driver will be waiting with a name board.
+    </p>
+
+    <div class="pp-card">
+      <div class="pp-header">
+        <span class="pp-badge">1</span>
+        <h3 class="mb-0">Hall A — General Arrivals (Flights AA, QF, EK)</h3>
+      </div>
+      <p class="instruction">Exit through the automatic sliding doors from Hall A. Your driver will be standing near the yellow bollards, holding a name board. This is the most common pickup spot.</p>
+      <div class="map-btns">
+        <a href="#" class="map-btn google">📍 Google Map</a>
+        <a href="#" class="map-btn walking">🚶 Walking Route</a>
+        <a href="#" class="map-btn image">🗺️ Terminal Map</a>
+      </div>
+    </div>
+
+    <div class="pp-card">
+      <div class="pp-header">
+        <span class="pp-badge">2</span>
+        <h3 class="mb-0">Hall B — Asian Carriers (CX, MH, SQ, JL)</h3>
+      </div>
+      <p class="instruction">Hall B exits on the far right side of Level 2. Turn right after passing customs, follow the signs. Driver waits at the meeting pillar marked "B".</p>
+      <div class="map-btns">
+        <a href="#" class="map-btn google">📍 Google Map</a>
+        <a href="#" class="map-btn image">🗺️ Terminal Map</a>
+      </div>
+    </div>
+
+    <div class="pp-card">
+      <div class="pp-header">
+        <span class="pp-badge">3</span>
+        <h3 class="mb-0">Overflow — Late-night / Charter Arrivals</h3>
+      </div>
+      <p class="instruction">For late-night charters or overflow arrivals, the driver will wait at the Ground Level kerbside (Level 1) near Door 7. Your reminder email will confirm which applies to your flight.</p>
+      <div class="map-btns">
+        <a href="#" class="map-btn google">📍 Google Map</a>
+        <a href="#" class="map-btn pdf">📄 PDF Guide</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- T2: 1 pickup point -->
+  <div class="tab-panel" id="t2">
+    <p class="text-muted mb-4" style="font-size:.93rem;">
+      Collect your baggage and exit through the main Arrivals door. Your driver meets you on the kerbside directly outside baggage claim.
+    </p>
+
+    <div class="pp-card">
+      <div class="pp-header">
+        <span class="pp-badge">1</span>
+        <h3 class="mb-0">Kerbside — Main Exit</h3>
+      </div>
+      <p class="instruction">Exit through the automatic doors directly opposite baggage carousel 2–4. Your driver will be waiting on the kerbside with a name board. Do not walk to the multi-storey car park.</p>
+      <div class="map-btns">
+        <a href="#" class="map-btn google">📍 Google Map</a>
+        <a href="#" class="map-btn walking">🚶 Walking Route</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- T3: 2 pickup points -->
+  <div class="tab-panel" id="t3">
+    <p class="text-muted mb-4" style="font-size:.93rem;">
+      Connected to T2 via a short walkway. Exit at Ground Level. Driver meets you at the main kerbside exit.
+    </p>
+
+    <div class="pp-card">
+      <div class="pp-header">
+        <span class="pp-badge">1</span>
+        <h3 class="mb-0">Main Exit — Virgin Australia Gate</h3>
+      </div>
+      <p class="instruction">After collecting baggage, walk through the main exit doors directly facing the taxi rank. Your driver waits immediately to the right of the exit, past the queue barrier.</p>
+      <div class="map-btns">
+        <a href="#" class="map-btn google">📍 Google Map</a>
+        <a href="#" class="map-btn image">🗺️ Terminal Map</a>
+      </div>
+    </div>
+
+    <div class="pp-card">
+      <div class="pp-header">
+        <span class="pp-badge">2</span>
+        <h3 class="mb-0">Rex Airlines — Side Exit (Gate 3)</h3>
+      </div>
+      <p class="instruction">Rex flights use a separate baggage carousel and exit near Gate 3 on the south side. Follow the "Ground Transport" signs. Driver waits at the covered waiting bay outside Gate 3.</p>
+      <div class="map-btns">
+        <a href="#" class="map-btn google">📍 Google Map</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- T4: 1 pickup point -->
+  <div class="tab-panel" id="t4">
+    <p class="text-muted mb-4" style="font-size:.93rem;">
+      Separate terminal on Departure Drive. After collecting baggage, exit through the main doors. Driver meets you on the pick-up kerbside.
+    </p>
+
+    <div class="pp-card">
+      <div class="pp-header">
+        <span class="pp-badge">1</span>
+        <h3 class="mb-0">Kerbside — T4 Main Doors</h3>
+      </div>
+      <p class="instruction">T4 is a standalone terminal. Exit through the main sliding doors and turn left — driver will be waiting with a name board in the designated "Rideshare / Charter" pickup zone, marked in yellow.</p>
+      <div class="map-btns">
+        <a href="#" class="map-btn google">📍 Google Map</a>
+        <a href="#" class="map-btn walking">🚶 Walking Route</a>
+        <a href="#" class="map-btn pdf">📄 PDF Guide</a>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ASSISTANCE STRIP -->
+<section class="container py-2 pb-5">
+  <div class="p-4 rounded-3 border text-center" style="background:#f8fafc;">
+    <p class="text-muted mb-1 small">Running late or need assistance?</p>
+    <p class="fw-semibold mb-3">Your driver's contact number is in the reminder email sent on the day of your arrival. If you can't find your driver, call us directly.</p>
+    <a href="#" class="btn btn-secondary">Contact Us</a>
+  </div>
+</section>
+
+<!-- CTA STRIP -->
+<section class="cta-strip">
+  <div class="container text-center">
+    <h2>Not sure what to expect at the airport?</h2>
+    <a href="#" class="btn btn-light me-2">📖 Melbourne Arrival Guide</a>
+    <a href="#" class="btn btn-outline-light">Book a Shuttle</a>
+  </div>
+</section>
+
+<script>
+function switchTab(btn, panelId) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(panelId).classList.add('active');
+}
+</script>
+</body>
+</html>
