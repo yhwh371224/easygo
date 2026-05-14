@@ -108,9 +108,9 @@
 				  <option value="-1" disabled="disabled">Over 13 (please leave message below)</option>
               </select>
                 </div>
-            <hr class="my-5"> 
+            <hr class="my-5 baggage-section">
                 <!-- Regular Baggage -->
-				<div class="mb-3 pb-1">
+				<div class="mb-3 pb-1 baggage-section">
 					<p class="form-label mb-1">Baggage (Regular)</p>
 
 					<!-- 안내 문구 -->
@@ -139,7 +139,7 @@
 				</div>
 				
 				<!-- Toggle Extra Luggage -->
-				<div class="mb-3 pb-1">
+				<div class="mb-3 pb-1 baggage-section">
 					<div class="form-check">
 						<input class="form-check-input" type="checkbox" id="extraLuggageCheck">
 						<label class="form-check-label" for="extraLuggageCheck">
@@ -153,7 +153,7 @@
 				</div>
 
 				<!-- Extra Luggage (hidden by default) -->
-				<div id="extraLuggageFields" style="display: none;">
+				<div id="extraLuggageFields" class="baggage-section" style="display: none;">
 					<!-- Row 1: Baby / Booster / Prams -->
 					<div class="row g-2 mb-3 align-items-end">
 						<div class="col">
@@ -271,5 +271,9 @@
 			
 		  </div>
 		</div>
-	</section>	
+	</section>
+<script nonce="{{ CSP_NONCE }}">
+  if (new URLSearchParams(location.search).get('event'))
+    document.querySelectorAll('.baggage-section').forEach(el => el.style.display = 'none');
+</script>
 {% endblock %}

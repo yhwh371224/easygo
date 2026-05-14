@@ -105,7 +105,10 @@ def sydney_airport_transfer(request):
 def sydney_cruise_transfer(request):
     return render(request, 'basecamp/pillars/sydney_cruise_transfer.html')
 
-def terms(request): 
+def service(request):
+    return render(request, 'basecamp/pages/service.html')
+
+def terms(request):
     return render(request, 'basecamp/pages/terms.html')
 
 def wrong_date_today(request): 
