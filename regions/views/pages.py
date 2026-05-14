@@ -51,7 +51,7 @@ def region_home(request, region_slug):
     cruise_terminals = CruiseTerminal.objects.filter(region=region)
 
     rebook_error = request.session.pop('rebook_error', None)
-    hero_image_url = staticfiles_storage.url(f'basecamp/photos/{region.hero_image_file}')
+    hero_image_url = staticfiles_storage.url(f'basecamp/photos/airports/{region.hero_image_file}')
 
     return render(request, 'regions/pages/home.html', {
         'region': region,
