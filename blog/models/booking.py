@@ -58,15 +58,7 @@ class Inquiry(models.Model):
     extra_stop           = models.PositiveSmallIntegerField(default=0)
     extra_stop_addresses = models.JSONField(default=list, blank=True)
     same_extra_stop      = models.BooleanField(default=False)
-    special_items = models.JSONField(
-        default=dict, blank=True,
-        help_text=(
-            "Keys: baby, booster, pram, "
-            "ski, ski_oversize, snowboard, snowboard_oversize, "
-            "surfboard, surfboard_oversize, bike, bike_oversize, "
-            "golf, golf_oversize, boxes, boxes_oversize"
-        ),
-    )
+    special_items = models.JSONField(default=dict, blank=True)
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -132,15 +124,7 @@ class Post(models.Model):
     extra_stop           = models.PositiveSmallIntegerField(default=0)
     extra_stop_addresses = models.JSONField(default=list, blank=True)
     same_extra_stop      = models.BooleanField(default=False)
-    special_items = models.JSONField(
-        default=dict, blank=True,
-        help_text=(
-            "Keys: baby, booster, pram, "
-            "ski, ski_oversize, snowboard, snowboard_oversize, "
-            "surfboard, surfboard_oversize, bike, bike_oversize, "
-            "golf, golf_oversize, boxes, boxes_oversize"
-        ),
-    )
+    special_items = models.JSONField(default=dict, blank=True)
     created = models.DateTimeField(auto_now_add=True)
 
     @property

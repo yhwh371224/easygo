@@ -49,6 +49,8 @@
                         <a class="dropdown-item" href="/about_us/">Learn About Us</a>
                         <a class="dropdown-item" href="/information/">More Information About Booking</a>
                         <a class="dropdown-item" href="/easygo_review/">Read Customer Reviews</a>
+                        <a class="dropdown-item" href="/services/">Other Services</a>
+                        <a class="dropdown-item" href="{% url 'articles:post_list' %}">Blog</a>
                         {% if current_region and current_region.slug != 'sydney' %}
                             <a class="dropdown-item" href="/{{ current_region.slug }}/suburbs/">{{ current_region.name }} Explore Service Areas</a>
                             <a class="dropdown-item" href="/{{ current_region.slug }}/meeting-point/">{{ current_region.name }} Airport Meeting Point</a>
@@ -66,28 +68,23 @@
             <li class="nav-item dropdown active">
                 <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" data-bs-display="static">Airport Transfer</a>
                 <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="/{{ current_region.slug }}/inquiry/">Get a Quote</a></li>
+                <li><a class="dropdown-item" href="/{{ current_region.slug }}/inquiry/">Get a Quote - Airport</a></li>
+                <li><a class="dropdown-item" href="/cruise_inquiry/">Get a Quote - Cruise</a></li>
                 <li><a class="dropdown-item" href="/quick_rebook/">Book Again</a></li>
                 <li><a class="dropdown-item" href="/{{ current_region.slug }}/#reasons">Why Us?</a></li>
                 </ul>
             </li>
             {% else %}
             <li class="nav-item dropdown active">
-                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" data-bs-display="static">Airport Transfer</a>
+                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" data-bs-display="static">Airport & Cruise Transfer</a>
                 <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="/inquiry/">Get a Quote</a></li>
+                <li><a class="dropdown-item" href="/inquiry/">Get a Quote - Airport</a></li>
+                <li><a class="dropdown-item" href="/cruise_inquiry/">Get a Quote - Cruise</a></li>
                 <li><a class="dropdown-item" href="/quick_rebook/">Book Again</a></li>
                 <li><a class="dropdown-item" href="/#reasons">Why Us?</a></li>
                 </ul>
             </li>
             {% endif %}
-
-            <li class="nav-item dropdown active">
-                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" data-bs-display="static">Cruise Transfer</a>
-                <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="/cruise_inquiry/">Get a Quote</a></li>
-                </ul>
-            </li>
 
             <li class="nav-item dropdown active">
                 <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" data-bs-display="static">Price & Availability</a>
@@ -97,6 +94,8 @@
                         <li><a class="dropdown-item" href="{% if current_region %}/{{ current_region.slug }}/inquiry/{% else %}/inquiry/{% endif %}">Airport</a></li>
                         <li><a class="dropdown-item" href="/cruise_inquiry/">Cruise</a></li>
                         <li><a class="dropdown-item" href="/p2p_single/">Point to Point</a></li>
+                        <li><a class="dropdown-item" href="/services/">Events, Weddings & Concerts</a></li>
+                        <li><a class="dropdown-item" href="/sovereign_chauffeurs_v2/">Corporate & Business</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -109,14 +108,6 @@
                     <li><a class="dropdown-item" href="/pay/stripe/" >Stripe</a></li>
                     <li><a class="dropdown-item" href="/payment_options/" >PayID</a></li>
                 </ul>                
-            </li>
-
-            <li class="nav-item active">
-                <a class="nav-link" href="/services/">Services</a>
-            </li>
-
-            <li class="nav-item active">
-                <a class="nav-link" href="{% url 'articles:post_list' %}">Blog</a>
             </li>
 
             <li class="nav-item dropdown active">
