@@ -162,7 +162,7 @@ input.baggage-qty { -moz-appearance: textfield; appearance: textfield; }
 						</div>
 					</div>
 
-					<!-- Row 2: Ski / Snowboards / Golf -->
+					<!-- Row 2: Ski / Snowboards / Surfboards -->
 					<div class="row g-2 mb-3">
 						<div class="col">
 							<label for="baggage_ski" class="form-label mb-0">Ski bags</label>
@@ -181,16 +181,16 @@ input.baggage-qty { -moz-appearance: textfield; appearance: textfield; }
 							</div>
 						</div>
 						<div class="col">
-							<label for="baggage_golf" class="form-label mb-0">Golf bags</label>
-							<input type="number" class="form-control baggage-qty" name="baggage_golf" placeholder="Golf bags" min="0" max="30" value="" id="baggage_golf">
+							<label for="baggage_surfboard" class="form-label mb-0">Surfboards</label>
+							<input type="number" class="form-control baggage-qty" name="baggage_surfboard" placeholder="Surfboards" min="0" max="30" value="" id="baggage_surfboard">
 							<div class="form-check mt-1">
-								<input class="form-check-input" type="checkbox" name="golf_oversize" id="golf_oversize">
-								<label class="form-check-label" for="golf_oversize">Oversize</label>
+								<input class="form-check-input" type="checkbox" name="surfboard_oversize" id="surfboard_oversize">
+								<label class="form-check-label" for="surfboard_oversize">Oversize</label>
 							</div>
 						</div>
 					</div>
 
-					<!-- Row 3: Bike / Carton Boxes / Musical Instruments -->
+					<!-- Row 3: Bike / Golf / Carton Boxes -->
 					<div class="row g-2 mb-3">
 						<div class="col">
 							<label for="baggage_bike" class="form-label mb-0">Bike bags</label>
@@ -201,19 +201,19 @@ input.baggage-qty { -moz-appearance: textfield; appearance: textfield; }
 							</div>
 						</div>
 						<div class="col">
+							<label for="baggage_golf" class="form-label mb-0">Golf bags</label>
+							<input type="number" class="form-control baggage-qty" name="baggage_golf" placeholder="Golf bags" min="0" max="30" value="" id="baggage_golf">
+							<div class="form-check mt-1">
+								<input class="form-check-input" type="checkbox" name="golf_oversize" id="golf_oversize">
+								<label class="form-check-label" for="golf_oversize">Oversize</label>
+							</div>
+						</div>
+						<div class="col">
 							<label for="baggage_boxes" class="form-label mb-0">Carton boxes</label>
 							<input type="number" class="form-control baggage-qty" name="baggage_boxes" placeholder="Carton boxes" min="0" max="30" value="" id="baggage_boxes">
 							<div class="form-check mt-1">
 								<input class="form-check-input" type="checkbox" name="boxes_oversize" id="boxes_oversize">
 								<label class="form-check-label" for="boxes_oversize">Oversize</label>
-							</div>
-						</div>
-						<div class="col">
-							<label for="baggage_music" class="form-label mb-0">Musical instruments</label>
-							<input type="number" class="form-control baggage-qty" name="baggage_music" placeholder="Musical instruments" min="0" max="30" value="" id="baggage_music">
-							<div class="form-check mt-1">
-								<input class="form-check-input" type="checkbox" name="music_oversize" id="music_oversize">
-								<label class="form-check-label" for="music_oversize">Oversize</label>
 							</div>
 						</div>
 					</div>

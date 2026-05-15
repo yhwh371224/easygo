@@ -18,6 +18,11 @@ class RegionSuburb(models.Model):
         help_text="Carousel card image URL, e.g. /static/regions/photos/chatswood.webp",
     )
 
+    distance_km = models.DecimalField(
+        max_digits=6, decimal_places=2, null=True, blank=True,
+        help_text="Drive distance from airport in km (used for distance-based pricing)",
+    )
+
     # Pinned items (airports, terminals) appear first in dropdowns
     is_pinned = models.BooleanField(default=False)
     sort_order = models.PositiveSmallIntegerField(default=0)

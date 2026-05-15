@@ -55,6 +55,16 @@ class Inquiry(models.Model):
     prepay = models.BooleanField(default=False, blank=True)
     pending = models.BooleanField(default=False, blank=True)
     calendar_event_id = models.CharField(max_length=255, blank=True, null=True)
+    extra_stop    = models.PositiveSmallIntegerField(default=0)
+    special_items = models.JSONField(
+        default=dict, blank=True,
+        help_text=(
+            "Keys: baby, booster, pram, "
+            "ski, ski_oversize, snowboard, snowboard_oversize, "
+            "surfboard, surfboard_oversize, bike, bike_oversize, "
+            "golf, golf_oversize, boxes, boxes_oversize"
+        ),
+    )
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:

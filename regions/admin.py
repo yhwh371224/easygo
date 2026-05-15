@@ -9,6 +9,9 @@ from .models import (
     TerminalPickupPoint,
     PickupPointMap,
     CruiseTerminal,
+    VehicleType,
+    SpecialItemType,
+    PricingRule,
 )
 
 
@@ -118,7 +121,7 @@ class RegionSuburbAdmin(admin.ModelAdmin):
     search_fields = ("name", "slug")
     fieldsets = (
         (None, {
-            "fields": ("region", "name", "slug", "zone", "price", "is_active"),
+            "fields": ("region", "name", "slug", "zone", "price", "distance_km", "is_active"),
         }),
         ("Display & Ordering", {
             "fields": ("is_pinned", "is_featured", "sort_order"),
@@ -137,3 +140,50 @@ class RegionSuburbAdmin(admin.ModelAdmin):
 class CruiseTerminalAdmin(admin.ModelAdmin):
     list_display = ['name', 'region']
     list_filter = ['region']
+
+
+@admin.register(VehicleType)
+class VehicleTypeAdmin(admin.ModelAdmin):
+    list_display  = ("name", "slug", "capacity_pax", "price_multiplier", "is_active")
+    list_editable = ("price_multiplier", "is_active")
+    prepopulated_fields = {"slug": ("name",)}
+
+
+@admin.register(SpecialItemType)
+class SpecialItemTypeAdmin(admin.ModelAdmin):
+    list_display  = ("name", "slug", "fee", "is_active")
+    list_editable = ("fee", "is_active")
+    prepopulated_fields = {"slug": ("name",)}
+
+
+@admin.register(PricingRule)
+class PricingRuleAdmin(admin.ModelAdmin):
+    list_display = (
+        "region", "rate_per_km", "extra_bag_fee", "oversize_fee",
+        "second_stop_fee", "pax_surcharge_mid_fee", "pax_surcharge_large_fee",
+    )
+    fieldsets = (
+        (None, {
+            "fields": ("region",),
+        }),
+        ("Distance & Vehicle", {
+            "fields": ("rate_per_km",),
+        }),
+        ("Extra Fees", {
+            "fields": (
+                "extra_bag_fee", "oversize_fee", "second_stop_fee",
+                "special_item_fee", "special_item_oversize_fee",
+            ),
+        }),
+        ("Passenger Surcharges", {
+            "fields": ("pax_surcharge_mid_fee", "pax_surcharge_large_fee"),
+            "description": "mid = 5–9 pax, large = 10+ pax (stacked on top of mid)",
+        }),
+        ("Peak / Night Windows", {
+            "fields": ("peak_windows",),
+            "description": (
+                'JSON list. Example: '
+                '[{"type":"peak","start":6,"end":9,"surcharge_rate":0.20}]'
+            ),
+        }),
+    )
