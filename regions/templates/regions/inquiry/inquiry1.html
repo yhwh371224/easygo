@@ -39,7 +39,7 @@
       <!-- Contact form + details-->
       <section class="container position-relative zindex-5 pb-5">
         <div class="row">
-          <div class="col-lg-7 col-md-7 pb-2 mb-5 booking-form-col">
+          <div class="col-lg-7 col-md-7 pb-2 mb-5 booking-form-col order-2 order-lg-1">
       <div class="card border-1 shadow-lg">
         <!-- Contact form + details-->  	  
         <form method="post" action="{% url 'regions:inquiry_details1' region.slug %}" class="card-body needs-validation p-5">
@@ -287,7 +287,7 @@
 	        </div>
 	    </div>
 
-		<div class="col-lg-4 col-md-4 offset-md-1">
+		<div class="col-lg-4 col-md-4 offset-md-1 order-1 order-lg-2">
     		<!-- Categories Widget -->
 			 <div class="card my-4">
                     <h6 class="card-header bg-secondary">Your previous details</h6>
@@ -301,10 +301,10 @@
                             <strong>Date:</strong> {{ pickup_date }}
                         </div>
                         <div class="mb-1">
-                            <strong>From:</strong> {{ start_point }}
+                            <strong>From:</strong> {{ start_point_display|default:start_point }}
                         </div>
                         <div class="mb-1">
-                            <strong>To:</strong> {{ end_point }}
+                            <strong>To:</strong> {{ end_point_display|default:end_point }}
                         </div>
                         <div class="mb-1">
                             <strong>Passengers:</strong> {{ no_of_passenger }}

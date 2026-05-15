@@ -440,9 +440,6 @@ def quick_rebook_confirm(request, region_slug=None):
     )
     p.save()
 
-    # 이전 Post cancelled 처리 (DB 기록 보존)
-    previous.cancelled = True
-    previous.save(update_fields=['cancelled'])
 
     logger.info(f"[QUICK REBOOK CONFIRM] Post id={p.id} email={email} date={pickup_date_str}")
 

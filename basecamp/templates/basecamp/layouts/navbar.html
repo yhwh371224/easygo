@@ -48,25 +48,24 @@
                     <div class="dropdown-column">
                         <a class="dropdown-item" href="/about_us/">Learn About Us</a>
                         <a class="dropdown-item" href="/information/">More Information About Booking</a>
-                        <a class="dropdown-item" href="/easygo_review/">Read Customer Reviews</a>
-                        <a class="dropdown-item" href="/services/">Other Services</a>
-                        <a class="dropdown-item" href="{% url 'articles:post_list' %}">Blog</a>
+                        <a class="dropdown-item" href="/easygo_review/">Read Customer Reviews</a>                        
                         {% if current_region and current_region.slug != 'sydney' %}
                             <a class="dropdown-item" href="/{{ current_region.slug }}/suburbs/">{{ current_region.name }} Explore Service Areas</a>
                             <a class="dropdown-item" href="/{{ current_region.slug }}/meeting-point/">{{ current_region.name }} Airport Meeting Point</a>
                             <a class="dropdown-item" href="/{{ current_region.slug }}/arrival-guide/">{{ current_region.name }} Arrival Guide</a>
                         {% else %}
-                            <a class="dropdown-item" href="/more_suburbs/">Sydney Explore Service Areas</a>
                             <a class="dropdown-item" href="/meeting_point/">Sydney Airport Meeting Point</a>
                             <a class="dropdown-item" href="/arrival_guide/">Sydney Arrival Guide</a>
                         {% endif %}
+                        <a class="dropdown-item" href="/services/">Other Services</a>
+                        <a class="dropdown-item" href="{% url 'articles:post_list' %}">Blog</a>
                     </div>
                 </div>
             </li>
 
             {% if current_region %}
             <li class="nav-item dropdown active">
-                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" data-bs-display="static">Airport Transfer</a>
+                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" data-bs-display="static">Airport & Cruise Transfer</a>
                 <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="/{{ current_region.slug }}/inquiry/">Get a Quote - Airport</a></li>
                 <li><a class="dropdown-item" href="/cruise_inquiry/">Get a Quote - Cruise</a></li>

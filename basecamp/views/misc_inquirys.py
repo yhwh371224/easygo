@@ -106,10 +106,17 @@ def price_detail(request):
             (is_start_airport and is_end_cruise)
         )
 
+        start_display = (start_terminal.name if start_terminal else
+                         start_cruise.name if start_cruise else start_point)
+        end_display = (end_terminal.name if end_terminal else
+                       end_cruise.name if end_cruise else end_point)
+
         context = {
             'pickup_date': pickup_date.strftime('%Y-%m-%d'),
             'start_point': start_point,
             'end_point': end_point,
+            'start_point_display': start_display,
+            'end_point_display': end_display,
             'original_start_point': start_point,
             'original_end_point': end_point,
             'no_of_passenger': no_of_passenger,
