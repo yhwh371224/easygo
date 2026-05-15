@@ -26,6 +26,30 @@ def safe_float(value):
         return None
 
 
+_SPECIAL_KEYS = [
+    'baby', 'booster', 'pram',
+    'ski', 'snowboard', 'surfboard',
+    'bike', 'golf', 'boxes',
+]
+_NO_OVERSIZE = frozenset({'baby', 'booster', 'pram'})
+
+
+def parse_special_items(request) -> dict:
+    """
+    Extract special item counts + oversize flags from POST data.
+    Returns a dict suitable for Inquiry.special_items (JSONField).
+    Only includes items with qty > 0; oversize flag only when checked.
+    """
+    result = {}
+    for key in _SPECIAL_KEYS:
+        qty = to_int(request.POST.get(f'baggage_{key}'))
+        if qty > 0:
+            result[key] = qty
+            if key not in _NO_OVERSIZE and to_bool(request.POST.get(f'{key}_oversize')):
+                result[f'{key}_oversize'] = True
+    return result
+
+
 def parse_baggage(request) -> str:
     baggage_summary = []
 

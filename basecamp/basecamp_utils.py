@@ -33,6 +33,7 @@ from basecamp.modules.baggage_utils import (   # noqa: F401
     add_bag,
     safe_float,
     parse_baggage,
+    parse_special_items,
 )
 from basecamp.modules.payment_utils import (   # noqa: F401
     paypal_ipn_error_email,

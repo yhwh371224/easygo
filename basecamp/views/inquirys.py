@@ -10,7 +10,7 @@ from blog.models import Inquiry
 from regions.models import Region
 from regions.models import Terminal
 from basecamp.basecamp_utils import (
-    is_ajax, parse_baggage, parse_date, handle_email_sending,
+    is_ajax, parse_baggage, parse_special_items, parse_date, handle_email_sending,
     verify_turnstile,
     render_inquiry_done, booking_success_response, require_turnstile,
     is_duplicate_submission, parse_booking_dates, get_customer_status,
@@ -120,7 +120,9 @@ def inquiry_details(request):
 
         # 🧳 개별 수하물 항목 수집
         baggage_str = parse_baggage(request)
-                    
+        special_items = parse_special_items(request)
+        extra_stop = int(request.POST.get('extra_stop') or 0)
+
         p = Inquiry(
             name=name, contact=contact, email=email,
             pickup_date=pickup_date_obj,
@@ -128,6 +130,7 @@ def inquiry_details(request):
             pickup_time=pickup_time, direction=direction, suburb=suburb,
             street=street, start_point=start_point, end_point=end_point,
             no_of_passenger=no_of_passenger, no_of_baggage=baggage_str,
+            special_items=special_items, extra_stop=extra_stop,
             return_direction=return_direction,
             return_pickup_date=return_pickup_date_obj,
             return_flight_number=return_flight_number, return_flight_time=return_flight_time,
@@ -269,6 +272,21 @@ def inquiry_details1(request):
             end_point = end_cruise.name
 
         baggage_str = parse_baggage(request)
+        special_items = parse_special_items(request)
+        extra_stop = int(request.POST.get('extra_stop') or 0)
+
+        return_direction = request.POST.get('return_direction', '')
+        return_pickup_date_str = request.POST.get('return_pickup_date', '')
+        return_flight_number = request.POST.get('return_flight_number', '')
+        return_flight_time = request.POST.get('return_flight_time', '')
+        return_pickup_time = request.POST.get('return_pickup_time')
+        return_start_point = request.POST.get('return_start_point', '')
+        return_end_point = request.POST.get('return_end_point', '')
+
+        try:
+            _, return_pickup_date_obj = parse_booking_dates('', return_pickup_date_str)
+        except ValueError:
+            return_pickup_date_obj = None
 
         p = Inquiry(
             name=name, contact=contact, email=email, pickup_date=pickup_date_obj,
@@ -276,7 +294,11 @@ def inquiry_details1(request):
             direction=direction, suburb=suburb, street=street,
             start_point=start_point, end_point=end_point,
             no_of_passenger=no_of_passenger, no_of_baggage=baggage_str,
-            message=message
+            special_items=special_items, extra_stop=extra_stop,
+            return_direction=return_direction, return_pickup_date=return_pickup_date_obj,
+            return_flight_number=return_flight_number, return_flight_time=return_flight_time,
+            return_pickup_time=return_pickup_time, return_start_point=return_start_point,
+            return_end_point=return_end_point, message=message,
         )
         p.region = post_region
         p.save()

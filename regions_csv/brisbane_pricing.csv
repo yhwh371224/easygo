@@ -1,0 +1,171 @@
+﻿region,zone,name,distance_km,price,is_active
+Brisbane,Eastern,Belmont,15.79,60.00,True
+Brisbane,Eastern,Carina Heights,19.76,60.00,True
+Brisbane,Eastern,Holland Park,23.80,60.00,True
+Brisbane,Eastern,Holland Park West,22.94,60.00,True
+Brisbane,Eastern,Lota,19.93,60.00,True
+Brisbane,Eastern,Manly,19.95,60.00,True
+Brisbane,Eastern,Wynnum,19.78,60.00,True
+Brisbane,Far North,Caboolture,48.84,130.00,True
+Brisbane,Far North,Dakabin,35.17,112.00,True
+Brisbane,Far North,Deception Bay,36.59,118.00,True
+Brisbane,Far North,Griffin,27.21,115.00,True
+Brisbane,Far North,Kallangur,28.22,110.00,True
+Brisbane,Far North,Mango Hill,29.26,112.00,True
+Brisbane,Far North,Morayfield,46.72,122.00,True
+Brisbane,Far North,Narangba,40.23,115.00,True
+Brisbane,Far North,North Lakes,34.98,115.00,True
+Brisbane,Far South,Kingston,36.46,122.00,True
+Brisbane,Far South,Loganholme,41.83,120.00,True
+Brisbane,Far South,Meadowbrook,36.30,120.00,True
+Brisbane,Far South,Rochedale,23.44,112.00,True
+Brisbane,Far South,Shailer Park,37.72,118.00,True
+Brisbane,Far South,Slacks Creek,33.98,118.00,True
+Brisbane,Far South,Springwood,30.53,115.00,True
+Brisbane,Far South,Underwood,27.62,112.00,True
+Brisbane,Far South,Woodridge,33.61,120.00,True
+Brisbane,Inner Brisbane,Bowen Hills,11.90,60.00,True
+Brisbane,Inner Brisbane,Herston,13.68,60.00,True
+Brisbane,Inner City,Brisbane CBD,18.19,80.00,True
+Brisbane,Inner City,Dutton Park,20.83,85.00,True
+Brisbane,Inner City,Fortitude Valley,14.32,80.00,True
+Brisbane,Inner City,Highgate Hill,20.99,85.00,True
+Brisbane,Inner City,Kangaroo Point,18.36,82.00,True
+Brisbane,Inner City,New Farm,14.39,82.00,True
+Brisbane,Inner City,Newstead,11.79,80.00,True
+Brisbane,Inner City,South Brisbane,17.30,82.00,True
+Brisbane,Inner City,Spring Hill,14.52,80.00,True
+Brisbane,Inner City,Teneriffe,13.41,82.00,True
+Brisbane,Inner City,West End,18.56,82.00,True
+Brisbane,Inner City,Woolloongabba,18.28,85.00,True
+Brisbane,Inner East,Balmoral,14.11,90.00,True
+Brisbane,Inner East,Bulimba,15.10,88.00,True
+Brisbane,Inner East,Camp Hill,17.12,90.00,True
+Brisbane,Inner East,Cannon Hill,12.17,88.00,True
+Brisbane,Inner East,Carina,13.59,92.00,True
+Brisbane,Inner East,Carindale,18.69,95.00,True
+Brisbane,Inner East,Hawthorne,15.92,88.00,True
+Brisbane,Inner East,Morningside,13.73,88.00,True
+Brisbane,Inner East,Murarrie,10.71,82.00,True
+Brisbane,Inner East,Norman Park,16.02,88.00,True
+Brisbane,Inner East,Tingalpa,13.35,90.00,True
+Brisbane,Inner North,Albion,10.06,80.00,True
+Brisbane,Inner North,Ascot,8.46,75.00,True
+Brisbane,Inner North,Brisbane Airport,1.26,0.00,True
+Brisbane,Inner North,Chermside,12.12,85.00,True
+Brisbane,Inner North,Clayfield,7.41,75.00,True
+Brisbane,Inner North,Gordon Park,11.12,82.00,True
+Brisbane,Inner North,Hamilton,8.01,75.00,True
+Brisbane,Inner North,Hendra,6.08,75.00,True
+Brisbane,Inner North,Kedron,11.46,85.00,True
+Brisbane,Inner North,Nundah,7.80,80.00,True
+Brisbane,Inner North,Stafford,11.83,85.00,True
+Brisbane,Inner North,Wavell Heights,10.19,82.00,True
+Brisbane,Inner North,Windsor,11.36,82.00,True
+Brisbane,Inner South,Annerley,20.35,88.00,True
+Brisbane,Inner South,Fairfield,20.28,88.00,True
+Brisbane,Inner South,Greenslopes,20.59,88.00,True
+Brisbane,Inner South,MacGregor,25.56,95.00,True
+Brisbane,Inner South,Moorooka,22.75,90.00,True
+Brisbane,Inner South,Nathan,25.91,92.00,True
+Brisbane,Inner South,Robertson,28.20,95.00,True
+Brisbane,Inner South,Rocklea,26.78,92.00,True
+Brisbane,Inner South,Salisbury,26.32,92.00,True
+Brisbane,Inner South,Tarragindi,23.89,92.00,True
+Brisbane,Inner South,Yeronga,22.08,60.00,True
+Brisbane,Inner West,Alderley,14.52,88.00,True
+Brisbane,Inner West,Ashgrove,18.35,90.00,True
+Brisbane,Inner West,Auchenflower,18.17,85.00,True
+Brisbane,Inner West,Bardon,18.75,92.00,True
+Brisbane,Inner West,Enoggera,20.21,90.00,True
+Brisbane,Inner West,Gaythorne,16.04,92.00,True
+Brisbane,Inner West,Kelvin Grove,16.18,85.00,True
+Brisbane,Inner West,Keperra,19.81,95.00,True
+Brisbane,Inner West,Milton,16.92,82.00,True
+Brisbane,Inner West,Mitchelton,17.04,92.00,True
+Brisbane,Inner West,Paddington,17.12,85.00,True
+Brisbane,Inner West,Red Hill,16.75,85.00,True
+Brisbane,Inner West,Rosalie,17.52,85.00,True
+Brisbane,Ipswich Corridor,Chelmer,26.74,98.00,True
+Brisbane,Ipswich Corridor,Corinda,32.97,100.00,True
+Brisbane,Ipswich Corridor,Darra,31.83,100.00,True
+Brisbane,Ipswich Corridor,Graceville,27.24,98.00,True
+Brisbane,Ipswich Corridor,Jindalee,29.48,102.00,True
+Brisbane,Ipswich Corridor,Middle Park,31.49,105.00,True
+Brisbane,Ipswich Corridor,Oxley,31.36,100.00,True
+Brisbane,Ipswich Corridor,Riverhills,33.55,108.00,True
+Brisbane,Ipswich Corridor,Seventeen Mile Rocks,29.50,105.00,True
+Brisbane,Ipswich Corridor,Sherwood,28.48,98.00,True
+Brisbane,Ipswich Corridor,Sinnamon Park,28.88,100.00,True
+Brisbane,Ipswich Corridor,Wacol,34.66,105.00,True
+Brisbane,Northern,Murrumba Downs,25.44,85.00,True
+Brisbane,Northern,Nudgee,9.72,60.00,True
+Brisbane,Northern,Nudgee Beach,11.62,60.00,True
+Brisbane,Northern,Petrie,31.91,90.00,True
+Brisbane,Northern Suburbs,Aspley,15.72,90.00,True
+Brisbane,Northern Suburbs,Bald Hills,21.82,95.00,True
+Brisbane,Northern Suburbs,Banyo,9.77,78.00,True
+Brisbane,Northern Suburbs,Boondall,14.69,85.00,True
+Brisbane,Northern Suburbs,Bracken Ridge,21.08,92.00,True
+Brisbane,Northern Suburbs,Bridgeman Downs,24.46,95.00,True
+Brisbane,Northern Suburbs,Brighton,20.45,98.00,True
+Brisbane,Northern Suburbs,Carseldine,21.83,92.00,True
+Brisbane,Northern Suburbs,Deagon,18.36,92.00,True
+Brisbane,Northern Suburbs,Fitzgibbon,20.03,90.00,True
+Brisbane,Northern Suburbs,Geebung,11.94,88.00,True
+Brisbane,Northern Suburbs,McDowall,16.54,92.00,True
+Brisbane,Northern Suburbs,Northgate,8.63,78.00,True
+Brisbane,Northern Suburbs,Sandgate,19.39,95.00,True
+Brisbane,Northern Suburbs,Shorncliffe,20.44,98.00,True
+Brisbane,Northern Suburbs,Taigum,19.18,88.00,True
+Brisbane,Northern Suburbs,Virginia,11.08,80.00,True
+Brisbane,Northern Suburbs,Zillmere,14.70,90.00,True
+Brisbane,North-West,Albany Creek,20.63,65.00,True
+Brisbane,North-West,Brendale,24.08,85.00,True
+Brisbane,North-West,Bunya,22.44,70.00,True
+Brisbane,North-West,Eatons Hill,28.90,75.00,True
+Brisbane,North-West,Everton Hills,17.87,60.00,True
+Brisbane,North-West,Everton Park,15.68,60.00,True
+Brisbane,North-West,Grange,12.96,60.00,True
+Brisbane,North-West,Samford Valley,31.79,95.00,True
+Brisbane,North-West,Stafford Heights,13.80,60.00,True
+Brisbane,North-West,Strathpine,25.46,85.00,True
+Brisbane,North-West,Warner,29.24,80.00,True
+Brisbane,Redlands,Cleveland,33.16,105.00,True
+Brisbane,Redlands,Victoria Point,37.70,130.00,True
+Brisbane,South-Eastern Suburbs,Acacia Ridge,35.81,98.00,True
+Brisbane,South-Eastern Suburbs,Archerfield,27.49,95.00,True
+Brisbane,South-Eastern Suburbs,Calamvale,33.58,105.00,True
+Brisbane,South-Eastern Suburbs,Coopers Plains,28.55,95.00,True
+Brisbane,South-Eastern Suburbs,Eight Mile Plains,26.64,102.00,True
+Brisbane,South-Eastern Suburbs,Kuraby,29.24,105.00,True
+Brisbane,South-Eastern Suburbs,Mount Gravatt,25.11,95.00,True
+Brisbane,South-Eastern Suburbs,Mount Gravatt East,22.91,95.00,True
+Brisbane,South-Eastern Suburbs,Runcorn,31.60,100.00,True
+Brisbane,South-Eastern Suburbs,Stretton,30.92,108.00,True
+Brisbane,South-Eastern Suburbs,Sunnybank,29.37,98.00,True
+Brisbane,South-Eastern Suburbs,Sunnybank Hills,32.90,100.00,True
+Brisbane,South-Eastern Suburbs,Upper Mount Gravatt,25.17,98.00,True
+Brisbane,South-Eastern Suburbs,Wishart,21.70,100.00,True
+Brisbane,Southern,Algester,34.75,85.00,True
+Brisbane,Southern,Drewvale,37.75,85.00,True
+Brisbane,Southern,Larapinta,40.19,80.00,True
+Brisbane,Southern,Mansfield,23.85,65.00,True
+Brisbane,Southern,Parkinson,38.86,85.00,True
+Brisbane,Western,Fig Tree Pocket,26.41,65.00,True
+Brisbane,Western,Forest Lake,44.98,80.00,True
+Brisbane,Western,Inala,36.13,75.00,True
+Brisbane,Western,Richlands,35.99,75.00,True
+Brisbane,Western Suburbs,Arana Hills,19.30,100.00,True
+Brisbane,Western Suburbs,Brookfield,29.52,110.00,True
+Brisbane,Western Suburbs,Chapel Hill,24.96,100.00,True
+Brisbane,Western Suburbs,Ferny Grove,23.16,105.00,True
+Brisbane,Western Suburbs,Ferny Hills,20.74,102.00,True
+Brisbane,Western Suburbs,Indooroopilly,24.71,95.00,True
+Brisbane,Western Suburbs,Kenmore,25.94,102.00,True
+Brisbane,Western Suburbs,Kenmore Hills,28.68,105.00,True
+Brisbane,Western Suburbs,St Lucia,21.46,90.00,True
+Brisbane,Western Suburbs,Taringa,24.86,92.00,True
+Brisbane,Western Suburbs,The Gap,23.93,100.00,True
+Brisbane,Western Suburbs,Toowong,20.12,90.00,True
+Brisbane,Western Suburbs,Upper Kedron,22.84,105.00,True

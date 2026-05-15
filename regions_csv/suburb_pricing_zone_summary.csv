@@ -1,0 +1,49 @@
+﻿region,zone,suburb_count,price_min,price_max,price_avg,dist_min_km,dist_max_km,dist_avg_km,ratio_avg_price_per_km
+Brisbane,Eastern,7,60.0,60.0,60.0,15.8,23.8,20.3,3.0
+Brisbane,Far North,9,110.0,130.0,116.56,27.2,48.8,36.4,3.31
+Brisbane,Far South,9,112.0,122.0,117.44,23.4,41.8,33.5,3.59
+Brisbane,Inner Brisbane,2,60.0,60.0,60.0,11.9,13.7,12.8,4.71
+Brisbane,Inner City,12,80.0,85.0,82.08,11.8,21.0,16.7,5.04
+Brisbane,Inner East,11,82.0,95.0,89.0,10.7,18.7,14.6,6.22
+Brisbane,Inner North,12,75.0,85.0,80.08,6.1,12.1,9.7,8.6
+Brisbane,Inner South,11,60.0,95.0,88.36,20.3,28.2,23.9,3.73
+Brisbane,Inner West,13,82.0,95.0,88.15,14.5,20.2,17.5,5.07
+Brisbane,Ipswich Corridor,12,98.0,108.0,101.58,26.7,34.7,30.5,3.34
+Brisbane,Northern,4,60.0,90.0,73.75,9.7,31.9,19.7,4.37
+Brisbane,Northern Suburbs,18,78.0,98.0,89.78,8.6,24.5,17.2,5.57
+Brisbane,North-West,11,60.0,95.0,72.27,13.0,31.8,22.1,3.42
+Brisbane,Redlands,2,105.0,130.0,117.5,33.2,37.7,35.4,3.31
+Brisbane,South-Eastern Suburbs,14,95.0,108.0,99.57,21.7,35.8,28.6,3.54
+Brisbane,Southern,5,65.0,85.0,80.0,23.9,40.2,35.1,2.32
+Brisbane,Western,4,65.0,80.0,73.75,26.4,45.0,35.9,2.1
+Brisbane,Western Suburbs,13,90.0,110.0,99.69,19.3,29.5,23.9,4.23
+Gold Coast,Airport Surrounds,11,55.0,70.0,62.0,2.5,12.8,7.1,10.61
+Gold Coast,Central Gold Coast,12,70.0,90.0,85.33,16.2,33.4,25.5,3.42
+Gold Coast,Far North,13,105.0,125.0,111.85,37.7,61.4,49.5,2.3
+Gold Coast,Far Northern Fringe,9,170.0,205.0,187.22,56.9,72.9,63.6,2.95
+Gold Coast,Hinterland,13,80.0,125.0,94.77,14.9,56.1,28.2,3.69
+Gold Coast,Northern Gold Coast,15,85.0,100.0,94.67,27.1,50.9,36.9,2.65
+Gold Coast,Outer Northern Gold Coast,9,115.0,155.0,135.0,33.7,67.4,47.3,2.92
+Gold Coast,Southern Gold Coast,10,60.0,80.0,73.9,6.3,17.2,13.1,6.18
+Melbourne,Central Melbourne,11,50.0,78.0,69.18,19.5,34.7,27.4,2.59
+Melbourne,Eastern Suburbs,29,90.0,125.0,102.62,30.6,63.7,49.9,2.1
+Melbourne,Inner East,14,80.0,95.0,86.86,35.4,46.5,39.8,2.19
+Melbourne,Inner North,7,60.0,82.0,74.43,19.8,36.1,26.2,2.89
+Melbourne,Inner North/West,11,60.0,65.0,60.64,8.0,17.8,13.1,4.89
+Melbourne,Inner South,13,65.0,100.0,81.08,29.4,42.5,35.1,2.31
+Melbourne,melbourn city,1,50.0,50.0,50.0,27.2,27.2,27.2,1.84
+Melbourne,North-East,14,80.0,110.0,91.07,31.1,53.6,39.8,2.32
+Melbourne,Northern Suburbs,21,60.0,100.0,70.71,13.2,44.2,22.9,3.26
+Melbourne,Regional,2,155.0,165.0,160.0,85.4,96.3,90.9,1.77
+Melbourne,South-East,32,90.0,135.0,111.34,42.9,81.6,54.3,2.07
+Melbourne,Western Suburbs,27,60.0,130.0,76.7,14.8,50.8,27.9,2.96
+Sydney,central_west,29,60.0,100.0,86.9,23.7,36.6,29.9,2.92
+Sydney,eastern_suburbs,46,50.0,100.0,69.13,3.4,20.4,10.6,7.69
+Sydney,inner_west,28,50.0,80.0,63.21,7.5,23.7,15.4,4.45
+Sydney,northern_beaches,31,70.0,140.0,98.71,23.9,41.9,30.5,3.25
+Sydney,north_shore,48,60.0,100.0,74.38,16.5,38.5,22.7,3.37
+Sydney,north_west,44,60.0,150.0,97.05,15.6,58.1,37.6,2.71
+Sydney,outer_west,64,100.0,240.0,153.91,38.4,72.9,54.8,2.81
+Sydney,sydney_city,17,50.0,70.0,61.18,9.4,16.3,12.6,4.93
+Sydney,upper_north_shore,19,60.0,160.0,113.16,34.6,65.5,43.9,2.59
+Sydney,west,45,50.0,90.0,68.89,10.6,32.6,21.7,3.33

@@ -1,0 +1,183 @@
+﻿region,zone,name,distance_km,price,is_active
+Melbourne,Central Melbourne,Brunswick,23.63,75.00,True
+Melbourne,Central Melbourne,Carlton,24.93,75.00,True
+Melbourne,Central Melbourne,Coburg,19.47,72.00,True
+Melbourne,Central Melbourne,Collingwood,27.21,75.00,True
+Melbourne,Central Melbourne,Docklands,26.72,60.00,True
+Melbourne,Central Melbourne,Fitzroy,26.39,76.00,True
+Melbourne,Central Melbourne,Melbourne CBD,27.06,75.00,True
+Melbourne,Central Melbourne,Richmond,34.70,78.00,True
+Melbourne,Central Melbourne,Southbank,31.10,75.00,True
+Melbourne,Central Melbourne,Station Pier Cruise Terminal,30.96,50.00,True
+Melbourne,Central Melbourne,Webb Dock Cruise Terminal,29.53,50.00,True
+Melbourne,Eastern Suburbs,Bayswater,57.72,102.00,True
+Melbourne,Eastern Suburbs,Blackburn,45.45,95.00,True
+Melbourne,Eastern Suburbs,Blackburn North,43.72,95.00,True
+Melbourne,Eastern Suburbs,Blackburn South,55.48,100.00,True
+Melbourne,Eastern Suburbs,Boronia,58.66,102.00,True
+Melbourne,Eastern Suburbs,Box Hill,42.59,92.00,True
+Melbourne,Eastern Suburbs,Burwood East,53.55,95.00,True
+Melbourne,Eastern Suburbs,Croydon,55.17,95.00,True
+Melbourne,Eastern Suburbs,Croydon North,57.42,120.00,True
+Melbourne,Eastern Suburbs,Croydon South,53.91,120.00,True
+Melbourne,Eastern Suburbs,Diamond Creek,34.49,98.00,True
+Melbourne,Eastern Suburbs,Doncaster,39.65,90.00,True
+Melbourne,Eastern Suburbs,Eltham,36.44,92.00,True
+Melbourne,Eastern Suburbs,Forest Hill,49.08,105.00,True
+Melbourne,Eastern Suburbs,Glen Waverley,52.98,90.00,True
+Melbourne,Eastern Suburbs,Greensborough,30.62,90.00,True
+Melbourne,Eastern Suburbs,Heathmont,53.30,120.00,True
+Melbourne,Eastern Suburbs,Lilydale,63.74,110.00,True
+Melbourne,Eastern Suburbs,Mitcham,47.95,110.00,True
+Melbourne,Eastern Suburbs,Mont Albert,42.39,95.00,True
+Melbourne,Eastern Suburbs,Mooroolbark,60.33,105.00,True
+Melbourne,Eastern Suburbs,Mount Waverley,49.97,95.00,True
+Melbourne,Eastern Suburbs,Notting Hill,50.43,100.00,True
+Melbourne,Eastern Suburbs,Nunawading,46.46,100.00,True
+Melbourne,Eastern Suburbs,Ringwood,50.41,95.00,True
+Melbourne,Eastern Suburbs,Ringwood East,51.91,125.00,True
+Melbourne,Eastern Suburbs,Vermont,50.24,115.00,True
+Melbourne,Eastern Suburbs,Wantirna,53.39,110.00,True
+Melbourne,Eastern Suburbs,Wantirna South,59.94,115.00,True
+Melbourne,Inner East,Balwyn,38.37,85.00,True
+Melbourne,Inner East,Balwyn North,36.50,85.00,True
+Melbourne,Inner East,Burwood,43.37,85.00,True
+Melbourne,Inner East,Camberwell,41.92,90.00,True
+Melbourne,Inner East,Caulfield,40.19,90.00,True
+Melbourne,Inner East,Caulfield North,37.99,85.00,True
+Melbourne,Inner East,Caulfield South,40.45,95.00,True
+Melbourne,Inner East,Glen Iris,39.93,85.00,True
+Melbourne,Inner East,Hawthorn,36.66,85.00,True
+Melbourne,Inner East,Kooyong,38.84,85.00,True
+Melbourne,Inner East,Malvern,38.36,80.00,True
+Melbourne,Inner East,Malvern East,42.09,90.00,True
+Melbourne,Inner East,Oakleigh,46.49,88.00,True
+Melbourne,Inner East,Toorak,35.41,88.00,True
+Melbourne,Inner North,Batman,19.82,60.00,True
+Melbourne,Inner North,Heidelberg,36.07,82.00,True
+Melbourne,Inner North,Ivanhoe,28.77,82.00,True
+Melbourne,Inner North,Northcote,26.95,78.00,True
+Melbourne,Inner North,Preston,22.69,78.00,True
+Melbourne,Inner North,Reservoir,24.71,76.00,True
+Melbourne,Inner North,Thornbury,24.48,65.00,True
+Melbourne,Inner North/West,Aberfeldie,16.41,60.00,True
+Melbourne,Inner North/West,Airport West,10.45,60.00,True
+Melbourne,Inner North/West,Essendon,16.00,62.00,True
+Melbourne,Inner North/West,Essendon North,13.91,60.00,True
+Melbourne,Inner North/West,Gladstone Park,9.99,60.00,True
+Melbourne,Inner North/West,Keilor,10.33,60.00,True
+Melbourne,Inner North/West,Moonee Ponds,17.82,65.00,True
+Melbourne,Inner North/West,Niddrie,13.01,60.00,True
+Melbourne,Inner North/West,Strathmore,16.52,60.00,True
+Melbourne,Inner North/West,Tullamarine,8.00,60.00,True
+Melbourne,Inner North/West,Westmeadows,11.90,60.00,True
+Melbourne,Inner South,Albert Park,30.55,70.00,True
+Melbourne,Inner South,Armadale,37.75,80.00,True
+Melbourne,Inner South,Brighton,40.13,88.00,True
+Melbourne,Inner South,Brighton East,40.92,100.00,True
+Melbourne,Inner South,Hampton,42.51,100.00,True
+Melbourne,Inner South,Hawksburn,36.48,80.00,True
+Melbourne,Inner South,Middle Park,31.49,75.00,True
+Melbourne,Inner South,Port Melbourne,29.36,65.00,True
+Melbourne,Inner South,Prahran,37.04,82.00,True
+Melbourne,Inner South,South Melbourne,29.45,65.00,True
+Melbourne,Inner South,South Yarra,32.81,82.00,True
+Melbourne,Inner South,St Kilda,34.08,85.00,True
+Melbourne,Inner South,Windsor,34.35,82.00,True
+Melbourne,melbourn city,Hotel in City,27.22,50.00,True
+Melbourne,North-East,Doncaster East,44.42,95.00,True
+Melbourne,North-East,Lower Plenty,37.97,90.00,True
+Melbourne,North-East,Macleod,33.12,80.00,True
+Melbourne,North-East,Montmorency,35.03,95.00,True
+Melbourne,North-East,Park Orchards,50.28,105.00,True
+Melbourne,North-East,Plenty,33.87,90.00,True
+Melbourne,North-East,Rosanna,34.57,80.00,True
+Melbourne,North-East,Templestowe,40.69,85.00,True
+Melbourne,North-East,Templestowe Lower,42.04,80.00,True
+Melbourne,North-East,Viewbank,35.38,80.00,True
+Melbourne,North-East,Warrandyte,47.55,110.00,True
+Melbourne,North-East,Warrandyte South,53.56,110.00,True
+Melbourne,North-East,Watsonia,31.06,80.00,True
+Melbourne,North-East,Yarrambat,37.27,95.00,True
+Melbourne,Northern Suburbs,Broadmeadows,14.36,60.00,True
+Melbourne,Northern Suburbs,Bundoora,27.62,85.00,True
+Melbourne,Northern Suburbs,Campbellfield,18.98,60.00,True
+Melbourne,Northern Suburbs,Coburg North,20.54,60.00,True
+Melbourne,Northern Suburbs,Craigieburn,23.11,72.00,True
+Melbourne,Northern Suburbs,Dallas,15.63,60.00,True
+Melbourne,Northern Suburbs,Doreen,44.24,100.00,True
+Melbourne,Northern Suburbs,Epping,28.15,85.00,True
+Melbourne,Northern Suburbs,Fawkner,18.75,60.00,True
+Melbourne,Northern Suburbs,Glenroy,13.18,60.00,True
+Melbourne,Northern Suburbs,Greenvale,14.64,60.00,True
+Melbourne,Northern Suburbs,Kingsbury,27.44,70.00,True
+Melbourne,Northern Suburbs,Lalor,24.13,65.00,True
+Melbourne,Northern Suburbs,Meadow Heights,17.64,60.00,True
+Melbourne,Northern Suburbs,Mernda,37.23,95.00,True
+Melbourne,Northern Suburbs,Mill Park,28.05,88.00,True
+Melbourne,Northern Suburbs,Oak Park,14.37,60.00,True
+Melbourne,Northern Suburbs,Pascoe Vale,17.61,60.00,True
+Melbourne,Northern Suburbs,Roxburgh Park,21.56,70.00,True
+Melbourne,Northern Suburbs,South Morang,32.77,90.00,True
+Melbourne,Northern Suburbs,Thomastown,21.43,65.00,True
+Melbourne,Regional,Geelong,85.44,165.00,True
+Melbourne,Regional,Mornington,96.33,155.00,True
+Melbourne,South-East,Bangholme,69.66,135.00,True
+Melbourne,South-East,Beaumaris,50.24,115.00,True
+Melbourne,South-East,Bentleigh,46.36,100.00,True
+Melbourne,South-East,Bentleigh East,50.72,100.00,True
+Melbourne,South-East,Black Rock,47.76,115.00,True
+Melbourne,South-East,Carnegie,43.42,95.00,True
+Melbourne,South-East,Cheltenham,47.33,95.00,True
+Melbourne,South-East,Clayton,49.37,110.00,True
+Melbourne,South-East,Dandenong,62.03,108.00,True
+Melbourne,South-East,Dingley Village,56.61,110.00,True
+Melbourne,South-East,Frankston,81.60,115.00,True
+Melbourne,South-East,Heatherton,52.50,100.00,True
+Melbourne,South-East,Huntingdale,48.02,115.00,True
+Melbourne,South-East,Keysborough,64.33,130.00,True
+Melbourne,South-East,Knox,61.67,105.00,True
+Melbourne,South-East,Lysterfield,63.56,130.00,True
+Melbourne,South-East,McKinnon,42.85,95.00,True
+Melbourne,South-East,Mentone,55.81,110.00,True
+Melbourne,South-East,Moorabbin,52.54,95.00,True
+Melbourne,South-East,Mordialloc,58.31,115.00,True
+Melbourne,South-East,Mulgrave,52.58,120.00,True
+Melbourne,South-East,Murrumbeena,48.01,90.00,True
+Melbourne,South-East,Noble Park,61.95,130.00,True
+Melbourne,South-East,Oakleigh East,48.17,110.00,True
+Melbourne,South-East,Oakleigh South,49.76,115.00,True
+Melbourne,South-East,Ormond,44.74,95.00,True
+Melbourne,South-East,Parkdale,56.70,110.00,True
+Melbourne,South-East,Rowville,58.07,130.00,True
+Melbourne,South-East,Sandringham,45.33,110.00,True
+Melbourne,South-East,Springvale,55.96,105.00,True
+Melbourne,South-East,Springvale South,58.82,130.00,True
+Melbourne,South-East,Wheelers Hill,53.35,125.00,True
+Melbourne,Western Suburbs,Albanvale,18.26,60.00,True
+Melbourne,Western Suburbs,Altona,34.96,82.00,True
+Melbourne,Western Suburbs,Avondale Heights,14.77,60.00,True
+Melbourne,Western Suburbs,Caroline Springs,21.20,75.00,True
+Melbourne,Western Suburbs,Deer Park,20.32,65.00,True
+Melbourne,Western Suburbs,Derrimut,22.83,65.00,True
+Melbourne,Western Suburbs,Footscray,21.05,78.00,True
+Melbourne,Western Suburbs,Hillside,21.61,60.00,True
+Melbourne,Western Suburbs,Hoppers Crossing,42.63,92.00,True
+Melbourne,Western Suburbs,Kings Park,17.40,60.00,True
+Melbourne,Western Suburbs,Laverton,33.27,85.00,True
+Melbourne,Western Suburbs,Manor Lakes,50.84,130.00,True
+Melbourne,Western Suburbs,Maribyrnong,19.03,60.00,True
+Melbourne,Western Suburbs,Melton South,46.62,100.00,True
+Melbourne,Western Suburbs,Point Cook,37.29,90.00,True
+Melbourne,Western Suburbs,St Albans,14.92,60.00,True
+Melbourne,Western Suburbs,Sunshine,17.86,60.00,True
+Melbourne,Western Suburbs,Sunshine North,15.62,60.00,True
+Melbourne,Western Suburbs,Sunshine West,19.85,60.00,True
+Melbourne,Western Suburbs,Tarneit,36.50,90.00,True
+Melbourne,Western Suburbs,Taylors Hill,19.90,60.00,True
+Melbourne,Western Suburbs,Taylors Lakes,16.02,60.00,True
+Melbourne,Western Suburbs,Truganina,27.94,85.00,True
+Melbourne,Western Suburbs,Werribee,43.12,92.00,True
+Melbourne,Western Suburbs,Williams Landing,36.05,85.00,True
+Melbourne,Western Suburbs,Williamstown,36.02,82.00,True
+Melbourne,Western Suburbs,Wyndham Vale,47.63,115.00,True

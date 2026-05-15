@@ -9,7 +9,7 @@ from regions.models import Region, RequestLog
 from blog.models import Inquiry
 from basecamp.basecamp_utils import (
     require_turnstile, is_duplicate_submission,
-    booking_success_response, parse_baggage, parse_booking_dates,
+    booking_success_response, parse_baggage, parse_special_items, parse_booking_dates,
     get_client_ip,
 )
 from utils.telegram import get_ip_info, send_telegram_notification
@@ -74,6 +74,8 @@ def region_inquiry_details(request, region_slug):
             return JsonResponse({'success': False, 'error': str(e)})
 
         baggage_str = parse_baggage(request)
+        special_items = parse_special_items(request)
+        extra_stop = int(request.POST.get('extra_stop') or 0)
 
         p = Inquiry(
             name=name, contact=contact, email=email,
@@ -82,6 +84,7 @@ def region_inquiry_details(request, region_slug):
             pickup_time=pickup_time, direction=direction, suburb=suburb,
             street=street, start_point=start_point, end_point=end_point,
             no_of_passenger=no_of_passenger, no_of_baggage=baggage_str,
+            special_items=special_items, extra_stop=extra_stop,
             return_direction=return_direction,
             return_pickup_date=return_pickup_date_obj,
             return_flight_number=return_flight_number, return_flight_time=return_flight_time,

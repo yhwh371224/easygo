@@ -1,0 +1,374 @@
+﻿region,zone,name,distance_km,price,is_active
+Sydney,central_west,Camellia,28.42,80.00,True
+Sydney,central_west,Clyde,25.34,60.00,True
+Sydney,central_west,Constitution Hill,34.58,80.00,True
+Sydney,central_west,Dundas,28.03,70.00,True
+Sydney,central_west,Dundas Valley,28.83,80.00,True
+Sydney,central_west,Ermington,26.36,80.00,True
+Sydney,central_west,Girraween,34.56,90.00,True
+Sydney,central_west,Granville,26.81,80.00,True
+Sydney,central_west,Greystanes,33.00,90.00,True
+Sydney,central_west,Harris Park,27.18,80.00,True
+Sydney,central_west,Merrylands,29.95,100.00,True
+Sydney,central_west,Merrylands West,30.96,100.00,True
+Sydney,central_west,Newington,25.25,80.00,True
+Sydney,central_west,Northmead,31.74,100.00,True
+Sydney,central_west,North Parramatta,30.70,90.00,True
+Sydney,central_west,Oatlands,29.45,90.00,True
+Sydney,central_west,Old Toongabbie,34.61,100.00,True
+Sydney,central_west,Olympic Park,24.11,70.00,True
+Sydney,central_west,Parramatta,30.45,90.00,True
+Sydney,central_west,Pemulwuy,36.61,100.00,True
+Sydney,central_west,Pendle Hill,33.51,100.00,True
+Sydney,central_west,Rosehill,26.01,80.00,True
+Sydney,central_west,Rydalmere,26.95,90.00,True
+Sydney,central_west,Silverwater,23.70,70.00,True
+Sydney,central_west,South Wentworthville,30.19,100.00,True
+Sydney,central_west,Telopea,30.77,90.00,True
+Sydney,central_west,Toongabbie,35.85,100.00,True
+Sydney,central_west,Wentworthville,32.17,90.00,True
+Sydney,central_west,Westmead,30.52,90.00,True
+Sydney,eastern_suburbs,Alexandria,6.58,60.00,True
+Sydney,eastern_suburbs,Banksmeadow,5.46,80.00,True
+Sydney,eastern_suburbs,Beaconsfield,8.21,60.00,True
+Sydney,eastern_suburbs,Bellevue Hill,15.19,60.00,True
+Sydney,eastern_suburbs,Bondi,13.75,80.00,True
+Sydney,eastern_suburbs,Bondi Beach,15.12,80.00,True
+Sydney,eastern_suburbs,Bondi Junction,12.91,60.00,True
+Sydney,eastern_suburbs,Botany,3.38,70.00,True
+Sydney,eastern_suburbs,Bronte,12.65,60.00,True
+Sydney,eastern_suburbs,Chifley,10.89,90.00,True
+Sydney,eastern_suburbs,Chippendale,10.78,50.00,True
+Sydney,eastern_suburbs,Clovelly,12.86,70.00,True
+Sydney,eastern_suburbs,Coogee,12.74,60.00,True
+Sydney,eastern_suburbs,Double Bay,13.24,60.00,True
+Sydney,eastern_suburbs,Eastgardens,6.39,70.00,True
+Sydney,eastern_suburbs,Eastlakes,4.92,60.00,True
+Sydney,eastern_suburbs,Edgecliff,12.79,60.00,True
+Sydney,eastern_suburbs,Eveleigh,9.88,50.00,True
+Sydney,eastern_suburbs,Hillsdale,6.96,70.00,True
+Sydney,eastern_suburbs,Kensington,8.17,70.00,True
+Sydney,eastern_suburbs,Kingsford,7.06,70.00,True
+Sydney,eastern_suburbs,La Perouse,11.54,100.00,True
+Sydney,eastern_suburbs,Little Bay,11.02,100.00,True
+Sydney,eastern_suburbs,Malabar,11.26,90.00,True
+Sydney,eastern_suburbs,Maroubra,7.30,80.00,True
+Sydney,eastern_suburbs,Maroubra Junction,8.42,80.00,True
+Sydney,eastern_suburbs,Mascot,3.62,70.00,True
+Sydney,eastern_suburbs,Matraville,8.74,90.00,True
+Sydney,eastern_suburbs,North Bondi,18.26,70.00,True
+Sydney,eastern_suburbs,Pagewood,4.93,70.00,True
+Sydney,eastern_suburbs,Point Piper,14.98,70.00,True
+Sydney,eastern_suburbs,Queens Park,11.40,60.00,True
+Sydney,eastern_suburbs,Randwick,10.84,60.00,True
+Sydney,eastern_suburbs,Randwick North,10.95,60.00,True
+Sydney,eastern_suburbs,Randwick West,12.04,60.00,True
+Sydney,eastern_suburbs,Redfern,9.53,50.00,True
+Sydney,eastern_suburbs,Rose Bay,16.36,70.00,True
+Sydney,eastern_suburbs,Rosebery,4.51,60.00,True
+Sydney,eastern_suburbs,South Coogee,9.85,70.00,True
+Sydney,eastern_suburbs,Tamarama,14.37,70.00,True
+Sydney,eastern_suburbs,Vaucluse,18.32,80.00,True
+Sydney,eastern_suburbs,Waterloo,8.64,60.00,True
+Sydney,eastern_suburbs,Watsons Bay,20.43,80.00,True
+Sydney,eastern_suburbs,Waverley,12.02,70.00,True
+Sydney,eastern_suburbs,Woollahra,11.30,60.00,True
+Sydney,eastern_suburbs,Zetland,7.85,60.00,True
+Sydney,inner_west,Ashfield,15.94,60.00,True
+Sydney,inner_west,Balmain,16.21,60.00,True
+Sydney,inner_west,Birchgrove,17.11,70.00,True
+Sydney,inner_west,Breakfast Point,21.58,80.00,True
+Sydney,inner_west,Cabarita,21.02,70.00,True
+Sydney,inner_west,Camperdown,15.42,60.00,True
+Sydney,inner_west,Canada Bay,15.88,70.00,True
+Sydney,inner_west,Chiswick,16.61,70.00,True
+Sydney,inner_west,Concord,19.37,70.00,True
+Sydney,inner_west,Concord West,20.43,70.00,True
+Sydney,inner_west,Drummoyne,14.15,60.00,True
+Sydney,inner_west,Dulwich Hill,9.68,60.00,True
+Sydney,inner_west,Enmore,7.50,50.00,True
+Sydney,inner_west,Five Dock,14.76,60.00,True
+Sydney,inner_west,Forest Lodge,15.22,60.00,True
+Sydney,inner_west,Haberfield,15.67,60.00,True
+Sydney,inner_west,Leichhardt,14.04,60.00,True
+Sydney,inner_west,Liberty Grove,23.22,60.00,True
+Sydney,inner_west,Lilyfield,16.43,50.00,True
+Sydney,inner_west,Marrickville,8.12,60.00,True
+Sydney,inner_west,Newtown,7.55,60.00,True
+Sydney,inner_west,Petersham,9.32,60.00,True
+Sydney,inner_west,Rhodes,23.66,70.00,True
+Sydney,inner_west,Rozelle,15.79,60.00,True
+Sydney,inner_west,Russell Lea,15.60,70.00,True
+Sydney,inner_west,Stanmore,8.98,60.00,True
+Sydney,inner_west,Summer Hill,16.93,60.00,True
+Sydney,inner_west,Wareemba,16.19,70.00,True
+Sydney,northern_beaches,Allambie Heights,28.12,90.00,True
+Sydney,northern_beaches,Balgowlah,23.93,80.00,True
+Sydney,northern_beaches,Balgowlah Heights,24.63,80.00,True
+Sydney,northern_beaches,Beacon Hill,30.19,100.00,True
+Sydney,northern_beaches,Belrose,30.68,100.00,True
+Sydney,northern_beaches,Brookvale,27.25,100.00,True
+Sydney,northern_beaches,Collaroy,32.01,110.00,True
+Sydney,northern_beaches,Collaroy Plateau,32.12,110.00,True
+Sydney,northern_beaches,Cromer,34.88,100.00,True
+Sydney,northern_beaches,Curl Curl,29.19,100.00,True
+Sydney,northern_beaches,Davidson,31.57,100.00,True
+Sydney,northern_beaches,Dee Why,29.49,80.00,True
+Sydney,northern_beaches,Elanora Heights,38.63,100.00,True
+Sydney,northern_beaches,Fairlight,25.03,70.00,True
+Sydney,northern_beaches,Forestville,26.30,80.00,True
+Sydney,northern_beaches,Frenchs Forest,29.69,90.00,True
+Sydney,northern_beaches,Freshwater,27.50,100.00,True
+Sydney,northern_beaches,Ingleside,40.18,140.00,True
+Sydney,northern_beaches,Killarney Heights,27.92,80.00,True
+Sydney,northern_beaches,Manly,25.83,90.00,True
+Sydney,northern_beaches,Manly Vale,25.70,90.00,True
+Sydney,northern_beaches,Mona Vale,41.86,130.00,True
+Sydney,northern_beaches,Narrabeen,33.92,120.00,True
+Sydney,northern_beaches,Narraweena,32.58,110.00,True
+Sydney,northern_beaches,North Balgowlah,24.16,90.00,True
+Sydney,northern_beaches,North Curl Curl,30.11,110.00,True
+Sydney,northern_beaches,North Manly,26.32,90.00,True
+Sydney,northern_beaches,Seaforth,24.29,90.00,True
+Sydney,northern_beaches,Terrey Hills,36.37,110.00,True
+Sydney,northern_beaches,Warriewood,40.37,120.00,True
+Sydney,northern_beaches,Wheeler Heights,35.00,100.00,True
+Sydney,north_shore,Artarmon,20.59,60.00,True
+Sydney,north_shore,Beauty Point,20.95,90.00,True
+Sydney,north_shore,Cammeray,17.03,70.00,True
+Sydney,north_shore,Castle Cove,23.66,70.00,True
+Sydney,north_shore,Castlecrag,20.66,70.00,True
+Sydney,north_shore,Chatswood,22.47,70.00,True
+Sydney,north_shore,Chatswood West,24.63,80.00,True
+Sydney,north_shore,Cremorne,18.25,60.00,True
+Sydney,north_shore,Cremorne Point,18.46,70.00,True
+Sydney,north_shore,Crows Nest,17.86,60.00,True
+Sydney,north_shore,East Killara,26.46,80.00,True
+Sydney,north_shore,East Lindfield,24.66,70.00,True
+Sydney,north_shore,Gordon,31.88,80.00,True
+Sydney,north_shore,Greenwich,20.44,60.00,True
+Sydney,north_shore,Killara,27.41,80.00,True
+Sydney,north_shore,Kirribilli,16.61,60.00,True
+Sydney,north_shore,Kurraba Point,18.19,70.00,True
+Sydney,north_shore,Lane Cove,21.43,70.00,True
+Sydney,north_shore,Lane Cove North,22.48,70.00,True
+Sydney,north_shore,Lane Cove West,19.05,70.00,True
+Sydney,north_shore,Lavender Bay,16.53,70.00,True
+Sydney,north_shore,Lindfield,24.93,70.00,True
+Sydney,north_shore,Linley Point,17.79,60.00,True
+Sydney,north_shore,Longueville,23.18,80.00,True
+Sydney,north_shore,McMahons Point,16.59,70.00,True
+Sydney,north_shore,Middle Cove,21.60,70.00,True
+Sydney,north_shore,Mosman,19.00,80.00,True
+Sydney,north_shore,Naremburn,19.22,70.00,True
+Sydney,north_shore,Neutral Bay,17.12,70.00,True
+Sydney,north_shore,Northbridge,19.02,70.00,True
+Sydney,north_shore,North Sydney,16.69,70.00,True
+Sydney,north_shore,North Turramurra,38.50,100.00,True
+Sydney,north_shore,North Willoughby,20.70,70.00,True
+Sydney,north_shore,Northwood,21.19,70.00,True
+Sydney,north_shore,Pymble,31.91,90.00,True
+Sydney,north_shore,Riverview,23.10,70.00,True
+Sydney,north_shore,Roseville,22.23,80.00,True
+Sydney,north_shore,Roseville Chase,23.92,80.00,True
+Sydney,north_shore,South Turramurra,33.71,100.00,True
+Sydney,north_shore,St Ives,34.60,90.00,True
+Sydney,north_shore,St Ives Chase,36.24,100.00,True
+Sydney,north_shore,St Leonards,18.69,60.00,True
+Sydney,north_shore,Turramurra,34.60,100.00,True
+Sydney,north_shore,Waverton,17.55,70.00,True
+Sydney,north_shore,West Pymble,29.79,90.00,True
+Sydney,north_shore,Willoughby,20.81,70.00,True
+Sydney,north_shore,Willoughby East,20.12,70.00,True
+Sydney,north_shore,Wollstonecraft,17.97,70.00,True
+Sydney,north_west,Baulkham Hills,41.96,100.00,True
+Sydney,north_west,Beaumont Hills,53.51,100.00,True
+Sydney,north_west,Bella Vista,47.58,110.00,True
+Sydney,north_west,Carlingford,37.50,90.00,True
+Sydney,north_west,Castle Hill,44.48,100.00,True
+Sydney,north_west,Cheltenham,33.12,90.00,True
+Sydney,north_west,Cherrybrook,39.44,110.00,True
+Sydney,north_west,Denistone,28.52,70.00,True
+Sydney,north_west,Denistone East,30.51,80.00,True
+Sydney,north_west,Dural,43.27,100.00,True
+Sydney,north_west,East Ryde,26.84,70.00,True
+Sydney,north_west,Eastwood,35.81,80.00,True
+Sydney,north_west,Epping,33.16,80.00,True
+Sydney,north_west,Galston,49.19,130.00,True
+Sydney,north_west,Gladesville,18.12,60.00,True
+Sydney,north_west,Glenhaven,44.86,110.00,True
+Sydney,north_west,Glenwood,48.18,120.00,True
+Sydney,north_west,Henley,16.79,60.00,True
+Sydney,north_west,Huntleys Cove,16.63,60.00,True
+Sydney,north_west,Huntleys Point,15.56,60.00,True
+Sydney,north_west,Kellyville,48.74,110.00,True
+Sydney,north_west,Kellyville Ridge,52.36,120.00,True
+Sydney,north_west,Kenthurst,48.20,140.00,True
+Sydney,north_west,Kings Langley,47.83,110.00,True
+Sydney,north_west,Kings Park,51.54,120.00,True
+Sydney,north_west,Lalor Park,47.49,120.00,True
+Sydney,north_west,Macquarie Park,28.99,80.00,True
+Sydney,north_west,Marsfield,28.81,80.00,True
+Sydney,north_west,Meadowbank,26.55,80.00,True
+Sydney,north_west,Melrose Park,28.11,80.00,True
+Sydney,north_west,North Epping,35.84,90.00,True
+Sydney,north_west,North Kellyville,51.84,130.00,True
+Sydney,north_west,North Ryde,26.48,80.00,True
+Sydney,north_west,Parklea,51.09,110.00,True
+Sydney,north_west,Putney,20.40,80.00,True
+Sydney,north_west,Rouse Hill,54.11,150.00,True
+Sydney,north_west,Ryde,26.01,80.00,True
+Sydney,north_west,Seven Hills,40.22,100.00,True
+Sydney,north_west,Stanhope Gardens,52.46,130.00,True
+Sydney,north_west,Tennyson Point,19.25,80.00,True
+Sydney,north_west,The Ponds,58.09,140.00,True
+Sydney,north_west,Westleigh,39.92,100.00,True
+Sydney,north_west,West Ryde,27.18,80.00,True
+Sydney,north_west,Winston Hills,35.72,100.00,True
+Sydney,outer_west,Arndell Park,40.79,120.00,True
+Sydney,outer_west,Bidwill,51.69,160.00,True
+Sydney,outer_west,Blackett,50.84,140.00,True
+Sydney,outer_west,Blacktown,40.58,100.00,True
+Sydney,outer_west,Bligh Park,62.83,170.00,True
+Sydney,outer_west,Box Hill,59.41,170.00,True
+Sydney,outer_west,Caddens,53.97,170.00,True
+Sydney,outer_west,Cambridge Gardens,59.56,170.00,True
+Sydney,outer_west,Cambridge Park,58.64,170.00,True
+Sydney,outer_west,Castlereagh,72.88,150.00,True
+Sydney,outer_west,Colebee,51.09,130.00,True
+Sydney,outer_west,Colyton,48.35,140.00,True
+Sydney,outer_west,Cranebrook,63.98,180.00,True
+Sydney,outer_west,Dean Park,50.40,120.00,True
+Sydney,outer_west,Dharruk,49.86,120.00,True
+Sydney,outer_west,Doonside,45.20,110.00,True
+Sydney,outer_west,Eastern Creek,42.66,130.00,True
+Sydney,outer_west,Emerton,51.37,150.00,True
+Sydney,outer_west,Emu Plains,61.84,190.00,True
+Sydney,outer_west,Glendenning,47.88,110.00,True
+Sydney,outer_west,Glenmore Park,61.25,190.00,True
+Sydney,outer_west,Glenorie,54.94,140.00,True
+Sydney,outer_west,Hassall Grove,50.97,130.00,True
+Sydney,outer_west,Hebersham,49.17,110.00,True
+Sydney,outer_west,Huntingwood,40.15,120.00,True
+Sydney,outer_west,Jamisontown,59.70,190.00,True
+Sydney,outer_west,Jordan Springs,63.45,180.00,True
+Sydney,outer_west,Kingswood,56.41,170.00,True
+Sydney,outer_west,Lethbridge Park,52.18,100.00,True
+Sydney,outer_west,Londonderry,67.34,180.00,True
+Sydney,outer_west,Marayong,43.52,140.00,True
+Sydney,outer_west,Marsden Park,51.53,160.00,True
+Sydney,outer_west,McGraths Hill,66.00,160.00,True
+Sydney,outer_west,Minchinbury,44.68,160.00,True
+Sydney,outer_west,Mt Druitt,49.37,150.00,True
+Sydney,outer_west,Mulgrave,65.39,160.00,True
+Sydney,outer_west,North Richmond,70.62,190.00,True
+Sydney,outer_west,Oakhurst,49.97,150.00,True
+Sydney,outer_west,Oakville,64.75,170.00,True
+Sydney,outer_west,Orchard Hills,51.80,150.00,True
+Sydney,outer_west,Oxley Park,48.98,150.00,True
+Sydney,outer_west,Penrith,62.06,190.00,True
+Sydney,outer_west,Pitt Town,69.58,200.00,True
+Sydney,outer_west,Plumpton,47.44,150.00,True
+Sydney,outer_west,Prospect,38.43,100.00,True
+Sydney,outer_west,Quakers Hill,54.86,140.00,True
+Sydney,outer_west,Richmond,66.88,180.00,True
+Sydney,outer_west,Riverstone,57.32,150.00,True
+Sydney,outer_west,Rooty Hill,47.50,120.00,True
+Sydney,outer_west,Ropes Crossing,54.78,160.00,True
+Sydney,outer_west,Schofields,55.49,150.00,True
+Sydney,outer_west,Shalvey,52.85,150.00,True
+Sydney,outer_west,South Penrith,58.32,190.00,True
+Sydney,outer_west,South Windsor,63.96,240.00,True
+Sydney,outer_west,St Clair,49.32,130.00,True
+Sydney,outer_west,St Marys,50.95,150.00,True
+Sydney,outer_west,St Marys North,51.99,160.00,True
+Sydney,outer_west,Tregear,51.74,130.00,True
+Sydney,outer_west,Vineyard,61.30,160.00,True
+Sydney,outer_west,Werrington,55.92,160.00,True
+Sydney,outer_west,Werrington County,56.82,160.00,True
+Sydney,outer_west,Whalan,50.15,160.00,True
+Sydney,outer_west,Willmot,53.92,190.00,True
+Sydney,outer_west,Windsor,67.42,180.00,True
+Sydney,sydney_city,Barangaroo,13.43,60.00,True
+Sydney,sydney_city,Darlinghurst,11.75,50.00,True
+Sydney,sydney_city,Darling Point,12.80,50.00,True
+Sydney,sydney_city,Glebe,14.28,60.00,True
+Sydney,sydney_city,Haymarket,13.74,60.00,True
+Sydney,sydney_city,Hotels In City,11.63,60.00,True
+Sydney,sydney_city,Millers Point,14.11,70.00,True
+Sydney,sydney_city,Milsons Point,16.27,70.00,True
+Sydney,sydney_city,Overseas Cruise Terminal,14.36,0.00,True
+Sydney,sydney_city,Paddington,11.16,70.00,True
+Sydney,sydney_city,Potts Point,12.00,70.00,True
+Sydney,sydney_city,Pyrmont,13.34,60.00,True
+Sydney,sydney_city,Surry Hills,9.86,60.00,True
+Sydney,sydney_city,Sydney CBD,12.99,60.00,True
+Sydney,sydney_city,Sydney City,9.42,60.00,True
+Sydney,sydney_city,The Rocks,13.27,60.00,True
+Sydney,sydney_city,Ultimo,13.31,60.00,True
+Sydney,sydney_city,White Bay Cruise Terminal,17.64,0.00,True
+Sydney,sydney_city,Woolloomooloo,11.09,60.00,True
+Sydney,upper_north_shore,Asquith,43.04,60.00,True
+Sydney,upper_north_shore,Beecroft,34.59,100.00,True
+Sydney,upper_north_shore,Berowra,48.91,130.00,True
+Sydney,upper_north_shore,Berowra Heights,50.36,140.00,True
+Sydney,upper_north_shore,Berowra Waters,61.42,150.00,True
+Sydney,upper_north_shore,Brooklyn,65.46,160.00,True
+Sydney,upper_north_shore,Cowan,53.25,150.00,True
+Sydney,upper_north_shore,Hornsby,40.12,100.00,True
+Sydney,upper_north_shore,Hornsby Heights,42.81,110.00,True
+Sydney,upper_north_shore,Mount Colah,44.42,120.00,True
+Sydney,upper_north_shore,Mount Kuring-gai,49.15,120.00,True
+Sydney,upper_north_shore,Normanhurst,40.05,100.00,True
+Sydney,upper_north_shore,North Wahroonga,38.22,110.00,True
+Sydney,upper_north_shore,Pennant Hills,36.82,100.00,True
+Sydney,upper_north_shore,Thornleigh,38.72,100.00,True
+Sydney,upper_north_shore,Wahroonga,36.35,100.00,True
+Sydney,upper_north_shore,Waitara,38.17,100.00,True
+Sydney,upper_north_shore,Warrawee,34.79,100.00,True
+Sydney,upper_north_shore,West Pennant Hills,37.09,100.00,True
+Sydney,west,Auburn,26.36,90.00,True
+Sydney,west,Bankstown,22.13,60.00,True
+Sydney,west,Bass Hill,26.68,60.00,True
+Sydney,west,Belfield,16.63,60.00,True
+Sydney,west,Belmore,15.08,60.00,True
+Sydney,west,Berala,24.76,80.00,True
+Sydney,west,Beverly Hills,15.09,60.00,True
+Sydney,west,Beverly Park,11.12,60.00,True
+Sydney,west,Bexley,10.60,60.00,True
+Sydney,west,Bexley North,14.31,60.00,True
+Sydney,west,Birrong,25.52,70.00,True
+Sydney,west,Burwood,17.29,60.00,True
+Sydney,west,Chester Hill,27.95,80.00,True
+Sydney,west,Chullora,23.43,80.00,True
+Sydney,west,Condell Park,21.74,70.00,True
+Sydney,west,Enfield,17.99,50.00,True
+Sydney,west,Georges Hall,28.59,60.00,True
+Sydney,west,Greenacre,19.46,60.00,True
+Sydney,west,Guildford,30.70,80.00,True
+Sydney,west,Guildford West,32.52,80.00,True
+Sydney,west,Homebush,19.16,60.00,True
+Sydney,west,Homebush West,20.57,60.00,True
+Sydney,west,Hurstville,16.02,50.00,True
+Sydney,west,Lakemba,18.04,60.00,True
+Sydney,west,Lansdowne,31.04,80.00,True
+Sydney,west,Lidcombe,24.96,60.00,True
+Sydney,west,Milperra,24.52,60.00,True
+Sydney,west,Mortdale,18.77,80.00,True
+Sydney,west,North Strathfield,18.85,70.00,True
+Sydney,west,Old Guildford,32.20,80.00,True
+Sydney,west,Padstow,19.89,70.00,True
+Sydney,west,Panania,23.05,80.00,True
+Sydney,west,Peakhurst,19.31,70.00,True
+Sydney,west,Penshurst,17.46,70.00,True
+Sydney,west,Potts Hill,25.11,70.00,True
+Sydney,west,Punchbowl,19.16,70.00,True
+Sydney,west,Regents Park,26.86,80.00,True
+Sydney,west,Revesby,20.55,70.00,True
+Sydney,west,Riverwood,17.06,80.00,True
+Sydney,west,Roselands,15.44,60.00,True
+Sydney,west,Sefton,27.17,80.00,True
+Sydney,west,Strathfield,19.92,70.00,True
+Sydney,west,Villawood,32.65,80.00,True
+Sydney,west,Wiley Park,17.10,60.00,True
+Sydney,west,Yagoona,24.43,90.00,True

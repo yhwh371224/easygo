@@ -221,12 +221,63 @@ input.baggage-qty { -moz-appearance: textfield; appearance: textfield; }
 				
 				<hr class="my-5">
 
+				<!-- Extra Stop -->
+				<div class="mb-4">
+					<label for="extra_stop" class="form-label">Extra Stop(s)</label>
+					<select class="form-select" id="extra_stop" name="extra_stop">
+						<option value="0">No extra stop</option>
+						<option value="1">1 extra stop</option>
+						<option value="2">2 extra stops</option>
+						<option value="3">3 extra stops</option>
+					</select>
+				</div>
+
+				<!-- Return Trip -->
+				<div class="mb-4">
+					<div class="d-flex align-items-center mb-3">
+						<label class="form-label mb-0 me-3" for="return-trip-check">Need a Return Trip?</label>
+						<input class="form-check-input" type="checkbox" id="return-trip-check" style="margin-top: 0; width: 1.25rem; height: 1.25rem;">
+					</div>
+					<div id="return-trip-fields" style="display:none;">
+						<div class="card bg-secondary p-4">
+							<h5 class="mb-3">✈️ Return Trip</h5>
+							<div class="mb-3">
+								<label class="form-label" for="return_direction">Return Direction</label>
+								<select class="form-select" name="return_direction" id="return_direction">
+									<option value="">Select direction...</option>
+									<option value="Drop off to Domestic Airport">Drop off to Domestic Airport</option>
+									<option value="Drop off to Intl Airport">Drop off to International Airport</option>
+									<option value="Pickup from Domestic Airport">Pickup from Domestic Airport</option>
+									<option value="Pickup from Intl Airport">Pickup from International Airport</option>
+								</select>
+							</div>
+							<div class="mb-3">
+								<label class="form-label" for="return_pickup_date">Return Pickup Date</label>
+								<input class="form-control" type="date" name="return_pickup_date" id="return_pickup_date">
+							</div>
+							<div class="mb-3">
+								<label class="form-label" for="return_pickup_time">Return Pickup Time</label>
+								<input class="form-control" type="time" name="return_pickup_time" id="return_pickup_time">
+							</div>
+							<hr class="my-3">
+							<div class="mb-3">
+								<label class="form-label" for="return_flight_number">Return Flight Number</label>
+								<input class="form-control" type="text" name="return_flight_number" id="return_flight_number" placeholder="e.g. QF123">
+							</div>
+							<div class="mb-3">
+								<label class="form-label" for="return_flight_time">Return Flight Time</label>
+								<input class="form-control" type="time" name="return_flight_time" id="return_flight_time">
+							</div>
+						</div>
+					</div>
+				</div>
+
 						<input type="hidden" name="pickup_date" value="{{ pickup_date }}">
 						<input type="hidden" name="start_point" value="{{ start_point }}">
 						<input type="hidden" name="end_point" value="{{ end_point }}">
 						<input type="hidden" name="original_start_point" value="{{ original_start_point }}">
 						<input type="hidden" name="original_end_point" value="{{ original_end_point }}">
-						<input type="hidden" name="no_of_passenger" value="{{ no_of_passenger }}">  
+						<input type="hidden" name="no_of_passenger" value="{{ no_of_passenger }}">
 				<br>
 	            <div id="errorMessage" style="display:none; color: red; margin-top: 20px;" ></div>
 				<br>
@@ -294,6 +345,19 @@ input.baggage-qty { -moz-appearance: textfield; appearance: textfield; }
 {% block extra_js %}
 <script nonce="{{ CSP_NONCE }}">
 document.addEventListener('DOMContentLoaded', function () {
+    // Return trip toggle
+    var returnCheck = document.getElementById('return-trip-check');
+    var returnFields = document.getElementById('return-trip-fields');
+    if (returnCheck && returnFields) {
+        returnCheck.addEventListener('change', function () {
+            returnFields.style.display = this.checked ? 'block' : 'none';
+        });
+        var returnDateInput = document.getElementById('return_pickup_date');
+        if (returnDateInput) {
+            returnDateInput.min = new Date().toISOString().split('T')[0];
+        }
+    }
+
     document.querySelectorAll('.baggage-qty').forEach(function (input) {
         input.addEventListener('focus', function () {
             if (this.value === '0') this.value = '';
