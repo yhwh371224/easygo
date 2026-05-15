@@ -214,14 +214,18 @@ def return_trip_detail(request):
         return render(request, '403.html')    
         
     else:
-        name = user.name     
-        company_name = user.company_name       
+        name = user.name
+        company_name = user.company_name
         contact = user.contact
         suburb = user.suburb
         street = user.street
         no_of_passenger = user.no_of_passenger
-        no_of_baggage = user.no_of_baggage   
-        region = user.region         
+        no_of_baggage = user.no_of_baggage
+        region = user.region
+        extra_stop = user.extra_stop or 0
+        same_extra_stop = user.same_extra_stop
+        extra_stop_addresses = user.extra_stop_addresses if same_extra_stop else []
+        special_items = user.special_items or {}
         if not start_point:
             start_point = user.start_point
         if not end_point:
@@ -264,7 +268,9 @@ def return_trip_detail(request):
                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, cash=cash, prepay=prepay, return_direction=return_direction,
                 return_pickup_date=return_pickup_date_obj, return_flight_number=return_flight_number, return_flight_time=return_flight_time,
                 return_pickup_time=return_pickup_time, return_start_point=return_start_point, return_end_point=return_end_point, driver=driver,
-                price=price, toll=toll, fuel_surcharge=fuel_surcharge, region=region)
+                price=price, toll=toll, fuel_surcharge=fuel_surcharge, region=region,
+                extra_stop=extra_stop, same_extra_stop=same_extra_stop, extra_stop_addresses=extra_stop_addresses,
+                special_items=special_items)
 
     p.save()
 
@@ -370,6 +376,15 @@ def quick_rebook_confirm(request, region_slug=None):
     previous_name  = previous.name
     previous_price = previous.price
     region         = previous.region
+    extra_stop     = int(request.POST.get('extra_stop') or previous.extra_stop or 0)
+    same_extra_stop = request.POST.get('same_extra_stop') == '1'
+    extra_stop_addresses = [
+        a for i in range(1, extra_stop + 1)
+        if (a := request.POST.get(f'extra_stop_address_{i}', '').strip())
+    ]
+    if not extra_stop_addresses and same_extra_stop:
+        extra_stop_addresses = previous.extra_stop_addresses
+    special_items  = previous.special_items or {}
 
     # Driver 배정
     driver = resolve_driver(suburb)
@@ -418,6 +433,10 @@ def quick_rebook_confirm(request, region_slug=None):
         return_flight_time   = return_flight_time if has_return else '',
         return_pickup_time   = return_pickup_time if has_return else '',
         return_direction     = 'Pickup from Intl Airport' if has_return else '',
+        extra_stop           = extra_stop,
+        same_extra_stop      = same_extra_stop,
+        extra_stop_addresses = extra_stop_addresses,
+        special_items        = special_items,
     )
     p.save()
 

@@ -299,7 +299,27 @@
 						</div>
 					</div>
 				</div>
-				<hr class="my-5">  		
+				<hr class="my-5">
+
+				<!-- Extra Stop -->
+				<div class="mb-4">
+					<label for="extra_stop" class="form-label">Extra Stop(s)</label>
+					<select class="form-select" id="extra_stop" name="extra_stop">
+						<option value="0">No extra stop</option>
+						<option value="1">1 extra stop</option>
+						<option value="2">2 extra stops</option>
+						<option value="3">3 extra stops</option>
+					</select>
+					<div id="extra-stop-addresses" class="mt-3"></div>
+				</div>
+				<div class="mb-3">
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox" id="same_extra_stop" name="same_extra_stop" value="1">
+						<label class="form-check-label" for="same_extra_stop">Same as outbound (for return trip)</label>
+					</div>
+				</div>
+
+				<hr class="my-5">
 
 				<!-- Return Flight Option -->
 				<label for="return-flight">Return Trip:&nbsp;&nbsp;</label>
@@ -355,5 +375,9 @@
 	  
 
 	</section>
-		
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'basecamp/js/extra_stop_addresses.js' %}" nonce="{{ CSP_NONCE }}"></script>
 {% endblock %}

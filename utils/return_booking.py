@@ -113,6 +113,10 @@ def handle_return_trip(instance):
             'fuel_surcharge': instance.fuel_surcharge,
             'driver': driver,
             'region': region,
+            'extra_stop': instance.extra_stop,
+            'same_extra_stop': instance.same_extra_stop,
+            'extra_stop_addresses': instance.extra_stop_addresses if instance.same_extra_stop else [],
+            'special_items': instance.special_items or {},
         }
 
         Post.objects.create(**post_fields)

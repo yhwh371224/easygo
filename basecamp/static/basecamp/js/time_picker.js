@@ -15,6 +15,7 @@ function initTimePickers(container){
       else if(ampm==='PM'&&h!==12)h+=12;
       hidden.value=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
     }
+    wrap._tpUpdate=update;
     wrap.querySelectorAll('.tp-ampm').forEach(btn=>{
       btn.addEventListener('click',()=>{
         wrap.querySelectorAll('.tp-ampm').forEach(b=>b.classList.remove('tp-active'));
@@ -37,4 +38,19 @@ function initTimePickers(container){
     });
   });
 }
-document.addEventListener('DOMContentLoaded',()=>initTimePickers());
+
+function flushTimePickers(form){
+  (form||document).querySelectorAll('.tp-wrap').forEach(wrap=>{
+    if(!wrap._tpUpdate)return;
+    const h=wrap.querySelector('.tp-hour').value;
+    const m=wrap.querySelector('.tp-min').value;
+    if(h||m)wrap._tpUpdate();
+  });
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  initTimePickers();
+  document.querySelectorAll('form').forEach(form=>{
+    form.addEventListener('submit',()=>flushTimePickers(form),true);
+  });
+});

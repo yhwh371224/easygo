@@ -14,7 +14,7 @@ from blog.sms_utils import send_sms_notice, send_whatsapp_template, format_au_ph
 from blog.blog_utils import resolve_driver
 from csp.constants import NONCE
 from basecamp.basecamp_utils import (
-    parse_baggage, handle_email_sending, format_pickup_time_12h,
+    parse_baggage, parse_special_items, handle_email_sending, format_pickup_time_12h,
     to_bool, is_ajax,
     render_inquiry_done, parse_booking_dates,
     parse_one_based_index, resolve_payment_flags,
@@ -74,12 +74,21 @@ def confirmation_detail(request):
         
         # 🧳 개별 수하물 항목 수집
         baggage_str = parse_baggage(request)
+        special_items = parse_special_items(request)
+        extra_stop = int(request.POST.get('extra_stop') or 0)
+        extra_stop_addresses = [
+            a for i in range(1, extra_stop + 1)
+            if (a := request.POST.get(f'extra_stop_address_{i}', '').strip())
+        ]
+        same_extra_stop = request.POST.get('same_extra_stop') == '1'
 
         p = Post(company_name=company_name, name=name, contact=contact, email=email, email1=email1, pickup_date=pickup_date_obj, flight_number=flight_number,
                  flight_time=flight_time, pickup_time=pickup_time, start_point=start_point, end_point=end_point, direction=direction, suburb=suburb, street=street,
-                 no_of_passenger=no_of_passenger, no_of_baggage=baggage_str, message=message, return_direction=return_direction, return_pickup_date=return_pickup_date_obj, 
+                 no_of_passenger=no_of_passenger, no_of_baggage=baggage_str, message=message, return_direction=return_direction, return_pickup_date=return_pickup_date_obj,
                  return_flight_number=return_flight_number, return_flight_time=return_flight_time, return_pickup_time=return_pickup_time, return_start_point=return_start_point,
-                 return_end_point=return_end_point, notice=notice, price=price, paid=paid, cash=cash, prepay=prepay, driver=driver)
+                 return_end_point=return_end_point, notice=notice, price=price, paid=paid, cash=cash, prepay=prepay, driver=driver,
+                 extra_stop=extra_stop, extra_stop_addresses=extra_stop_addresses,
+                 same_extra_stop=same_extra_stop, special_items=special_items)
         
         p.save()        
 
