@@ -119,10 +119,25 @@
     <link rel="stylesheet" href="{% static 'basecamp/css/footer.css' %}">
     <noscript><link rel="stylesheet" href="{% static 'basecamp/css/tiny-slider.css' %}"></noscript>
     <style nonce="{{ CSP_NONCE }}">
+      #region-hero { position: relative; isolation: isolate; background-image: url("{% static 'basecamp/photos/airports/sydney_airport.webp' %}"); background-size: cover; background-position: center top; min-height: 72vh; }
+      #region-hero::before { content: ""; position: absolute; inset: 0; background: rgba(0,0,0,0.45); z-index: -1; }
+      @media (max-width: 576px) { #region-hero { min-height: 62vh; background-position: center; } }
+      @media (max-width: 767.98px) { .award-badge { top: 35vh !important; bottom: auto !important; transform: none !important; } }
+      .main-img { display: none; }
+      .hero-text-wrap { position:absolute; inset:0; z-index:1; display:flex; align-items:flex-start; justify-content:center; padding-top:9rem; pointer-events:none; }
+      .hero-text-inner { text-align:center; color:#fff; max-width:660px; padding:0 1.5rem; }
+      .hero-eyebrow { display:inline-block; font-size:.72rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#fff; margin-bottom:.25rem; }
+      .hero-title { font-size:clamp(1.6rem,4.5vw,3.25rem); font-weight:700; line-height:1.2; margin-bottom:.6rem; text-shadow:0 2px 14px rgba(0,0,0,.4); }
+      .hero-title span { color:#ff9f4a; }
+      .hero-sub { font-size:clamp(.82rem,2vw,1.05rem); color:#fff; margin-bottom:.75rem; font-weight:400; letter-spacing:.02em; }
+      .hero-trust { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:.3rem .5rem; font-size:clamp(.72rem,1.8vw,.82rem); color:#fff; }
+      .hero-trust strong { color:#fff; font-weight:600; }
+      .hero-trust-sep { color:rgba(255,255,255,.5); }
+      @media (max-width:576px) { .hero-text-wrap { padding-top:4.5rem; } .hero-title br { display:none; } .hero-trust-sep { display:none; } }
       .site-footer a { text-decoration: none !important; }
       .site-footer a:hover, .site-footer a:focus, .site-footer a:active { text-decoration: none !important; }
-      .city-card { background: #fbf6ee; transition: background-color .15s ease, border-color .15s ease; }
-      .city-card:hover { background: #f6eddf; }
+      .city-card { background: #fbf6ee; transition: background-color .15s ease, border-color .15s ease, box-shadow .15s ease, transform .1s ease; color: inherit; cursor: pointer; }
+      .city-card:hover { background: #f6eddf; box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); color: inherit; }
       .city-card.is-active { background: #f3e6d2; border-color: rgba(243, 128, 32, 0.35) !important; }
       .city-name { white-space: nowrap; }
       .badge-current{ background: rgba(34,197,94,.18); color:#14532d; border: 1px solid rgba(34,197,94,.30); }
@@ -147,31 +162,21 @@
     <main class="page-wrapper">
 
       <!-- ===== HERO SECTION ===== -->
-      <section class="bg-dark pt-6 pb-5 py-sm-6">
+      <section id="region-hero" class="bg-dark pt-6 pb-5 py-sm-6">
         <div class="main-img" fetchpriority="high"></div>
         <img src="{% static 'basecamp/images/award-badge-sm.webp' %}" width="240" height="240" alt="EasyGo 2024 Quality Business Award Badge – Sydney Airport Transfer" class="award-badge" fetchpriority="high">
-        <div class="container py-4 py-sm-5 text-center">
-          <div class="py-md-6">
-            <h1 class="text-light fs-4 fs-md-3 fw-semibold mb-2">
-              Sydney Airport Transfer - Private Pickup & Shuttle Service
-            </h1>
-            <h2 class="text-light fs-6 fs-md-5 fw-bold mb-4">
-              <span class="text-brand"><strong>8–13 Seater Private Transfer across Sydney CBD, North Shore & Western Sydney</strong></span>
-            </h2><br>
-            <div>|
-              <a role="button" class="btn btn-success" href="/inquiry/">Check Price & Availability</a>
+        <div class="hero-text-wrap">
+          <div class="hero-text-inner">
+            <span class="hero-eyebrow">Sydney Private Airport Transfer Service</span>
+            <p class="hero-title">Sydney Airport<br><span>Transfer</span></p>
+            <p class="hero-sub">8–13 Seater &nbsp;·&nbsp; Fixed Price &nbsp;·&nbsp; Door-to-Door</p>
+            <div class="hero-trust">
+              <strong>⭐ 4.8</strong>
+              <span class="hero-trust-sep">|</span>
+              <span>376 Google Reviews</span>
+              <span class="hero-trust-sep">|</span>
+              <span>100% Private Ride</span>
             </div>
-            <div class="mt-4">
-              <a href="/easygo_review/" class="me-4 fw-bold review-link-white">
-                <span class="fs-lg">🏆🏆🏆</span> Reviews on our website <i class="ai-external-link ms-1 text-ext-icon"></i>
-              </a>
-              <a href="{{ google_review_url }}" target="_blank" rel="noopener" class="fw-bold review-link-white review-link">
-                <span class="fs-lg">🥇🥇🥇</span> Google reviews <i class="ai-external-link ms-1 text-ext-icon"></i>
-              </a>
-            </div>
-            <p class="fs-lg text-light" id="changing-text">
-              <strong>Reliable Sydney airport transfer services for families and large groups, travelling comfortably with lots of luggage.</strong>
-            </p>
           </div>
         </div>
       </section>
@@ -330,6 +335,17 @@
 
       <!-- ===== HOT OFFER CAROUSEL ===== -->
       <section class="container rounded bg-dark py-5 my-4 my-sm-0 py-sm-6 py-md-7">
+        <div class="text-center mb-5">
+          <h1 class="text-light fs-4 fs-md-3 fw-semibold mb-2">
+            Sydney Airport Transfer - Private Pickup & Shuttle Service
+          </h1>
+          <h2 class="text-light fs-6 fs-md-5 fw-bold mb-4">
+            <span class="text-brand"><strong>8–13 Seater Private Transfer across Sydney CBD, North Shore & Western Sydney</strong></span>
+          </h2><br>
+          <div>|
+            <a role="button" class="btn btn-success" href="/inquiry/">Check Price & Availability</a>
+          </div>
+        </div>
         <h2 class="text-center mb-4 text-white"><span class="text-brand">HOT OFFER</span> - Best Price Guaranteed</h2>
         <div class="tns-carousel-wrapper">
           <div class="text-end offer-search-end">
