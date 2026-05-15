@@ -347,6 +347,17 @@
         </div>
       {% endif %}
 
+      {% if post.extra_stop_addresses %}
+        <div class="trip-message">
+          Extra stops: {{ post.extra_stop_addresses|join:" / " }}
+        </div>
+        {% if post.return_pickup_date and post.same_extra_stop %}
+          <div class="trip-message">
+            Return extra stops: {{ post.extra_stop_addresses|join:" / " }}
+          </div>
+        {% endif %}
+      {% endif %}
+
       {% if post.price or post.paid or post.cash %}
       <div class="trip-payment">
         {% if post.price %}<span class="trip-price">${{ post.price }}</span>{% endif %}

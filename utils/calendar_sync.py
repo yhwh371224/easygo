@@ -138,6 +138,14 @@ def _build_common(instance, contact_display=None):
     }
 
 
+def _return_stop_list(instance):
+    """Return the extra stop addresses to show on the return leg.
+    If same_extra_stop is True, reuse the outbound list; otherwise return empty."""
+    if getattr(instance, 'same_extra_stop', False):
+        return instance.extra_stop_addresses or []
+    return []
+
+
 def build_event_data(instance):
     """회사 캘린더용 event body 생성"""
     contact_display = _get_contact_display(instance)
@@ -148,14 +156,18 @@ def build_event_data(instance):
     tz = (instance.region.timezone if instance.region_id else None) or 'Australia/Sydney'
 
     baggage_str = abbreviate_baggage(instance.no_of_baggage)
+    extra_stops = instance.extra_stop_addresses or []
+    return_stops = _return_stop_list(instance) if instance.return_pickup_date else []
     message = " ".join(filter(None, [
         instance.name,
         instance.email,
         f"b:{baggage_str}" if baggage_str else "",
+        f"Extra stops: {' / '.join(extra_stops)}" if extra_stops else "",
         f"t:{instance.toll}" if instance.toll else "",
         f"m:{instance.message}" if instance.message else "",
         f"n:{instance.notice}" if instance.notice else "",
         f"d:{instance.return_pickup_date}" if instance.return_pickup_date else "",
+        f"Ret.stops: {' / '.join(return_stops)}" if return_stops else "",
         f"${instance.paid}" if instance.paid else "",
         "private" if instance.private_ride else "",
         f"end.:{instance.end_point}" if instance.end_point else "",
@@ -181,9 +193,13 @@ def build_driver_event_data(instance):
     tz = (instance.region.timezone if instance.region_id else None) or 'Australia/Sydney'
 
     baggage_str = abbreviate_baggage(instance.no_of_baggage)
+    extra_stops = instance.extra_stop_addresses or []
+    return_stops = _return_stop_list(instance) if instance.return_pickup_date else []
     description = " ".join(filter(None, [
         instance.name or '',
         f"b:{baggage_str}" if baggage_str else "",
+        f"Extra stops: {' / '.join(extra_stops)}" if extra_stops else "",
+        f"Ret.stops: {' / '.join(return_stops)}" if return_stops else "",
         instance.message or '',
         instance.end_point or '',
     ]))

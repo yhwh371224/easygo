@@ -76,6 +76,11 @@ def region_inquiry_details(request, region_slug):
         baggage_str = parse_baggage(request)
         special_items = parse_special_items(request)
         extra_stop = int(request.POST.get('extra_stop') or 0)
+        extra_stop_addresses = [
+            a for i in range(1, extra_stop + 1)
+            if (a := request.POST.get(f'extra_stop_address_{i}', '').strip())
+        ]
+        same_extra_stop = request.POST.get('same_extra_stop') == '1'
 
         p = Inquiry(
             name=name, contact=contact, email=email,
@@ -85,6 +90,8 @@ def region_inquiry_details(request, region_slug):
             street=street, start_point=start_point, end_point=end_point,
             no_of_passenger=no_of_passenger, no_of_baggage=baggage_str,
             special_items=special_items, extra_stop=extra_stop,
+            extra_stop_addresses=extra_stop_addresses,
+            same_extra_stop=same_extra_stop,
             return_direction=return_direction,
             return_pickup_date=return_pickup_date_obj,
             return_flight_number=return_flight_number, return_flight_time=return_flight_time,

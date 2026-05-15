@@ -90,7 +90,11 @@ def confirm_booking_detail(request):
     fuel_surcharge = user.fuel_surcharge
     paid = user.paid
     private_ride = user.private_ride
-    region = user.region 
+    region = user.region
+    special_items = user.special_items or {}
+    extra_stop = user.extra_stop or 0
+    extra_stop_addresses = user.extra_stop_addresses or []
+    same_extra_stop = user.same_extra_stop
 
     try:
         pickup_date_obj, return_pickup_date_obj = parse_booking_dates(pickup_date, return_pickup_date)
@@ -146,6 +150,8 @@ def confirm_booking_detail(request):
         message=message, notice=notice, price=final_price, toll=toll_value,
         fuel_surcharge=fuel_surcharge_value, prepay=prepay, pending=pending,
         paid=paid, cash=cash, is_confirmed=is_confirmed, driver=driver, region=region,
+        special_items=special_items, extra_stop=extra_stop, extra_stop_addresses=extra_stop_addresses,
+        same_extra_stop=same_extra_stop,
     )
 
     p.save()

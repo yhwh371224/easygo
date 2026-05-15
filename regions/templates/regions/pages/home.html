@@ -323,7 +323,7 @@
             {% for suburb in featured_suburbs %}
               <div class="pb-1">
                 <a class="card border-0 shadow card-hover mx-1" href="/{{ region.slug }}/airport-transfer/{{ suburb.slug }}/">
-                  <span class="badge badge-lg badge-floating badge-floating-end bg-danger badge-price">${{ suburb.price|default:"-" }}</span>
+                  <span class="badge badge-lg badge-floating badge-floating-end badge-price" style="background-color:#9ea8b3;">${{ suburb.price|default:"-" }}</span>
                   <div class="card-img-top card-img-gradient offer-card-img">
                     {% if suburb.carousel_image %}
                       <img loading="lazy" src="{{ suburb.carousel_image }}" alt="{{ suburb.name }} airport transfer" 

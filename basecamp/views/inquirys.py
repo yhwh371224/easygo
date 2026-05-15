@@ -122,6 +122,11 @@ def inquiry_details(request):
         baggage_str = parse_baggage(request)
         special_items = parse_special_items(request)
         extra_stop = int(request.POST.get('extra_stop') or 0)
+        extra_stop_addresses = [
+            a for i in range(1, extra_stop + 1)
+            if (a := request.POST.get(f'extra_stop_address_{i}', '').strip())
+        ]
+        same_extra_stop = request.POST.get('same_extra_stop') == '1'
 
         p = Inquiry(
             name=name, contact=contact, email=email,
@@ -131,6 +136,8 @@ def inquiry_details(request):
             street=street, start_point=start_point, end_point=end_point,
             no_of_passenger=no_of_passenger, no_of_baggage=baggage_str,
             special_items=special_items, extra_stop=extra_stop,
+            extra_stop_addresses=extra_stop_addresses,
+            same_extra_stop=same_extra_stop,
             return_direction=return_direction,
             return_pickup_date=return_pickup_date_obj,
             return_flight_number=return_flight_number, return_flight_time=return_flight_time,
@@ -274,6 +281,11 @@ def inquiry_details1(request):
         baggage_str = parse_baggage(request)
         special_items = parse_special_items(request)
         extra_stop = int(request.POST.get('extra_stop') or 0)
+        extra_stop_addresses = [
+            a for i in range(1, extra_stop + 1)
+            if (a := request.POST.get(f'extra_stop_address_{i}', '').strip())
+        ]
+        same_extra_stop = request.POST.get('same_extra_stop') == '1'
 
         return_direction = request.POST.get('return_direction', '')
         return_pickup_date_str = request.POST.get('return_pickup_date', '')
@@ -284,7 +296,7 @@ def inquiry_details1(request):
         return_end_point = request.POST.get('return_end_point', '')
 
         try:
-            _, return_pickup_date_obj = parse_booking_dates('', return_pickup_date_str)
+            return_pickup_date_obj = parse_date(return_pickup_date_str, field_name="Return Pickup Date", required=False)
         except ValueError:
             return_pickup_date_obj = None
 
@@ -295,6 +307,8 @@ def inquiry_details1(request):
             start_point=start_point, end_point=end_point,
             no_of_passenger=no_of_passenger, no_of_baggage=baggage_str,
             special_items=special_items, extra_stop=extra_stop,
+            extra_stop_addresses=extra_stop_addresses,
+            same_extra_stop=same_extra_stop,
             return_direction=return_direction, return_pickup_date=return_pickup_date_obj,
             return_flight_number=return_flight_number, return_flight_time=return_flight_time,
             return_pickup_time=return_pickup_time, return_start_point=return_start_point,
