@@ -14,6 +14,9 @@
 <style nonce="{{ CSP_NONCE }}">
 .booking-hero {position: relative; background-image: url("{% static 'basecamp/images/page-title-bg.webp' %}"); background-size: cover; background-position: center; padding-top: 5rem; padding-bottom: 7rem;}
 .booking-form-col {margin-top: -240px;}
+@media (max-width: 991px) {
+  .booking-form-col { margin-top: 0 !important; }
+}
 </style>
 {% endblock %}
 
@@ -39,7 +42,24 @@
       <!-- Contact form + details-->
       <section class="container position-relative zindex-5 pb-5">
         <div class="row">
-          <div class="col-lg-7 col-md-7 pb-2 mb-5 booking-form-col order-2 order-lg-1">
+
+          <!-- Mobile only: Your previous details (hidden on desktop) -->
+          <div class="col-12 d-lg-none">
+            <div class="card my-4">
+              <h6 class="card-header">Your previous details</h6>
+              <div class="card-body small">
+                {% if region %}
+                <div class="mb-1"><strong>Region:</strong> {{ region.name }}</div>
+                {% endif %}
+                <div class="mb-1"><strong>Date:</strong> {{ pickup_date }}</div>
+                <div class="mb-1"><strong>From:</strong> {{ start_point_display|default:start_point }}</div>
+                <div class="mb-1"><strong>To:</strong> {{ end_point_display|default:end_point }}</div>
+                <div class="mb-1"><strong>Passengers:</strong> {{ no_of_passenger }}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-7 col-md-7 pb-2 mb-5 booking-form-col order-lg-1">
       <div class="card border-1 shadow-lg">
         <!-- Contact form + details-->  	  
         <form method="post" enctype="multipart/form-data" id="booking-form" action="{% url 'basecamp:inquiry_details1' %}" class="card-body needs-validation p-5" >
@@ -288,8 +308,9 @@
 	    </div>			  
 
     		<!-- Categories Widget -->
-			<div class="col-lg-4 col-md-4 offset-md-1 order-1 order-lg-2">
-				<div class="card my-4">                    
+			<div class="col-lg-4 col-md-4 offset-md-1 order-lg-2">
+				<!-- Desktop only: Your previous details (shown on mobile above the form) -->
+				<div class="card my-4 d-none d-lg-block">
                     <h6 class="card-header">Your previous details</h6>
                     <div class="card-body small">
                         {% if region %}
