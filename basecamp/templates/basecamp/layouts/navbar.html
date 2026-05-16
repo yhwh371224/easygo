@@ -1,24 +1,15 @@
 {% load static %}
 {% static 'basecamp/images/aboutus.webp' as page_bg %}
 
-<style nonce="{{ CSP_NONCE }}">
-  @media (min-width: 992px){
-    .navbar-nav .dropdown.hover-open:hover > .dropdown-menu{
-      display:block;
-      margin-top: 0;
-    }
-  }
-  .dropdown-menu .dropdown-item.active{
-    font-weight: 700;
-  }
-</style>
+<link rel="stylesheet" href="{% static 'basecamp/css/overlay.css' %}">
+
 
 <header class="header navbar navbar-expand-lg {{ navbar_theme|default:'navbar-dark' }} navbar-floating navbar-sticky" data-scroll-header data-fixed-element>
     <div class="container px-0 px-xl-3">
         <button class="navbar-toggler ms-n2 me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#primaryMenu" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
         </button>
-        
+
         <a class="navbar-brand flex-shrink-0 order-lg-1 mx-auto ms-lg-0 pe-lg-2 me-lg-4" href="/" aria-label="EasyGo Home">
         <img class="navbar-floating-logo d-none d-lg-block" src="{% static 'basecamp/images/easygo_icon.webp' %}" style="border-radius: 30%; height: auto !important; width: 45px" alt="EasyGo_image">
         </a>
@@ -34,13 +25,13 @@
             <h5 class="mt-1 mb-0">Menu</h5>
             <button class="btn-close lead" type="button" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
-        
+
         <div class="offcanvas-body d-lg-flex justify-content-lg-center">
             <ul class="navbar-nav">
             <li class="nav-item active">
                 <a class="nav-link" href="{% if region %}{% url 'regions:home' region.slug %}{% else %}{% url 'basecamp:home' %}{% endif %}">Home</a>
             </li>
-            
+
             <li class="nav-item dropdown dropdown-mega active">
                 <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" data-bs-display="static">About Us</a>
                 <div class="dropdown-menu">
@@ -48,7 +39,7 @@
                     <div class="dropdown-column">
                         <a class="dropdown-item" href="/about_us/">Learn About Us</a>
                         <a class="dropdown-item" href="/information/">More Information About Booking</a>
-                        <a class="dropdown-item" href="/easygo_review/">Read Customer Reviews</a>                        
+                        <a class="dropdown-item" href="/easygo_review/">Read Customer Reviews</a>
                         {% if current_region and current_region.slug != 'sydney' %}
                             <a class="dropdown-item" href="/{{ current_region.slug }}/suburbs/">{{ current_region.name }} Explore Service Areas</a>
                             <a class="dropdown-item" href="/{{ current_region.slug }}/meeting-point/">{{ current_region.name }} Airport Meeting Point</a>
@@ -106,7 +97,7 @@
                     <li><a class="dropdown-item" href="/payonline/" >PayPal</a></li>
                     <li><a class="dropdown-item" href="/pay/stripe/" >Stripe</a></li>
                     <li><a class="dropdown-item" href="/payment_options/" >PayID</a></li>
-                </ul>                
+                </ul>
             </li>
 
             <li class="nav-item dropdown active">
@@ -122,117 +113,13 @@
     </div>
 </header>
 
-<!-- Book Again Overlay -->
-<style nonce="{{ CSP_NONCE }}">
-  #rebook-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.55);
-    z-index: 9999;
-    align-items: center;
-    justify-content: center;
-  }
-  #rebook-overlay.is-open {
-    display: flex;
-  }
-  #rebook-card {
-    background: #fff;
-    border-radius: 14px;
-    padding: 28px 28px 24px;
-    width: 420px;
-    max-width: 92vw;
-    position: relative;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.22);
-  }
-  #rebook-close {
-    position: absolute;
-    top: 12px;
-    right: 14px;
-    background: none;
-    border: none;
-    font-size: 1.4rem;
-    line-height: 1;
-    color: #666;
-    cursor: pointer;
-    padding: 0;
-  }
-  #rebook-close:hover { color: #111; }
-  #rebook-card h5 {
-    margin: 0 0 4px;
-    font-size: 1.1rem;
-    font-weight: 700;
-  }
-  #rebook-card .rebook-hint {
-    color: #777;
-    font-size: .85rem;
-    margin: 0 0 18px;
-  }
-  #rebook-card label {
-    display: block;
-    font-size: .85rem;
-    font-weight: 600;
-    margin-bottom: 4px;
-    color: #333;
-  }
-  #rebook-card label span { font-weight: 400; color: #999; }
-  #rebook-card input {
-    width: 100%;
-    padding: 9px 12px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: .95rem;
-    box-sizing: border-box;
-    margin-bottom: 14px;
-  }
-  #rebook-card input:focus,
-  #rebook-card .flatpickr-input:focus {
-    outline: none;
-    border-color: #4caf50;
-    box-shadow: 0 0 0 3px rgba(76,175,80,.15);
-  }
-  #rebook-card .flatpickr-input.form-control {
-    width: 100%;
-    padding: 9px 12px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: .95rem;
-    box-sizing: border-box;
-    margin-bottom: 14px;
-  }
-  #rebook-submit {
-    width: 100%;
-    padding: 11px;
-    background: #28a745;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    margin-top: 4px;
-  }
-  #rebook-submit:hover { background: #218838; }
-  #rebook-error-msg {
-    background: #f8d7da;
-    color: #721c24;
-    border-radius: 6px;
-    padding: 8px 12px;
-    font-size: .85rem;
-    margin-bottom: 14px;
-    display: none;
-  }
-  #rebook-error-msg.is-visible { display: block; }
-</style>
-
-<div id="rebook-overlay" role="dialog" aria-modal="true" aria-label="Book Again">
-  <div id="rebook-card">
-    <button id="rebook-close" aria-label="Close">&times;</button>
+{# ── Book Again Overlay ── #}
+<div id="rebook-overlay" class="eg-overlay" role="dialog" aria-modal="true" aria-label="Book Again">
+  <div class="eg-card">
+    <button class="eg-card-close" data-overlay-close="rebook-overlay" aria-label="Close">&times;</button>
     <h5>Book Again</h5>
-    <p class="rebook-hint">Used EasyGo before? Enter your email — we'll fill in your previous route.</p>
-    <div id="rebook-error-msg"{% if rebook_error %} class="is-visible"{% endif %}>
-      {{ rebook_error }}
-    </div>
+    <p class="eg-hint">Used EasyGo before? Enter your email — we'll fill in your previous route.</p>
+    <div class="eg-error-msg{% if rebook_error %} is-visible{% endif %}">{{ rebook_error }}</div>
     <form action="{% url 'basecamp:quick_rebook_step1' %}" method="post">
       {% csrf_token %}
       <label>Email address <span>(from previous booking)</span></label>
@@ -244,62 +131,76 @@
         data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;F j, Y&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;}">
       <label>Flight number <span>(optional)</span></label>
       <input type="text" name="flight_number" placeholder="e.g. QF400" autocomplete="off">
-      <button type="submit" id="rebook-submit">Next — final stop &#187;</button>
+      <button type="submit" class="eg-btn-green">Next — final stop &#187;</button>
     </form>
   </div>
 </div>
 
 <script nonce="{{ CSP_NONCE }}">
 (function () {
-  var overlay = document.getElementById('rebook-overlay');
-  var card    = document.getElementById('rebook-card');
-  var closeBtn = document.getElementById('rebook-close');
-
-  function openRebookOverlay() {
-    overlay.classList.add('is-open');
+  function openOverlay(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.classList.add('is-open');
     document.body.style.overflow = 'hidden';
   }
-  function closeRebookOverlay() {
-    overlay.classList.remove('is-open');
+
+  function closeOverlay(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.classList.remove('is-open');
     document.body.style.overflow = '';
   }
 
-  // 닫기 버튼
-  closeBtn.addEventListener('click', closeRebookOverlay);
-  // 배경 클릭 시 닫기
-  overlay.addEventListener('click', function (e) {
-    if (e.target === overlay) closeRebookOverlay();
-  });
-  // ESC 키
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') closeRebookOverlay();
+  function closeAllDropdowns() {
+    var offcanvas = document.getElementById('primaryMenu');
+    if (offcanvas && typeof bootstrap !== 'undefined') {
+      var bsOC = bootstrap.Offcanvas.getInstance(offcanvas);
+      if (bsOC) bsOC.hide();
+    }
+  }
+
+  // Close buttons
+  document.querySelectorAll('[data-overlay-close]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      closeOverlay(btn.dataset.overlayClose);
+    });
   });
 
-  // navbar "Book Again" 링크 연결
+  // Click outside card to close
+  document.querySelectorAll('.eg-overlay').forEach(function (overlay) {
+    overlay.addEventListener('click', function (e) {
+      if (e.target === overlay) closeOverlay(overlay.id);
+    });
+  });
+
+  // ESC key
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.eg-overlay.is-open').forEach(function (o) {
+        closeOverlay(o.id);
+      });
+    }
+  });
+
+  // Book Again trigger
   document.querySelectorAll('[data-rebook-trigger]').forEach(function (el) {
     el.addEventListener('click', function (e) {
       e.preventDefault();
       closeAllDropdowns();
-      openRebookOverlay();
+      openOverlay('rebook-overlay');
     });
   });
 
-  function closeAllDropdowns() {
-    // Bootstrap offcanvas 닫기 (모바일 메뉴)
-    var offcanvas = document.getElementById('primaryMenu');
-    if (offcanvas && typeof bootstrap !== 'undefined') {
-      var bsOffcanvas = bootstrap.Offcanvas.getInstance(offcanvas);
-      if (bsOffcanvas) bsOffcanvas.hide();
+  // Auto-open rebook overlay on rebook_error
+  document.addEventListener('DOMContentLoaded', function () {
+    var bookingTabs = document.getElementById('booking-tabs');
+    if (bookingTabs && bookingTabs.dataset.rebookError === 'true') {
+      openOverlay('rebook-overlay');
     }
-  }
+  });
 
-  // rebook_error 있으면 오버레이 자동 열기
-  var bookingTabs = document.getElementById('booking-tabs');
-  if (bookingTabs && bookingTabs.dataset.rebookError === 'true') {
-    openRebookOverlay();
-  }
-
-  window.openRebookOverlay  = openRebookOverlay;
-  window.closeRebookOverlay = closeRebookOverlay;
+  window.openOverlay  = openOverlay;
+  window.closeOverlay = closeOverlay;
 })();
 </script>

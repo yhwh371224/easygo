@@ -1,0 +1,114 @@
+/* Navbar dropdown */
+@media (min-width: 992px){
+  .navbar-nav .dropdown.hover-open:hover > .dropdown-menu{
+    display:block;
+    margin-top: 0;
+  }
+}
+.dropdown-menu .dropdown-item.active{
+  font-weight: 700;
+}
+
+/* Book Again overlay */
+.eg-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+}
+.eg-overlay.is-open { display: flex; }
+
+.eg-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 28px 28px 24px;
+  width: 440px;
+  max-width: 92vw;
+  position: relative;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.22);
+}
+.eg-card-close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  line-height: 1;
+  color: #666;
+  cursor: pointer;
+  padding: 0;
+}
+.eg-card-close:hover { color: #111; }
+.eg-card h5 {
+  margin: 0 0 2px;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+.eg-card .eg-hint {
+  color: #777;
+  font-size: .85rem;
+  margin: 0 0 16px;
+}
+.eg-card label {
+  display: block;
+  font-size: .85rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #333;
+}
+.eg-card label span { font-weight: 400; color: #999; }
+.eg-card input,
+.eg-card select {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: .95rem;
+  box-sizing: border-box;
+  margin-bottom: 14px;
+  background: #fff;
+  appearance: auto;
+}
+.eg-card input:focus,
+.eg-card select:focus,
+.eg-card .flatpickr-input:focus {
+  outline: none;
+  border-color: #28a745;
+  box-shadow: 0 0 0 3px rgba(40,167,69,.15);
+}
+.eg-card .flatpickr-input {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: .95rem;
+  box-sizing: border-box;
+  margin-bottom: 14px;
+}
+.eg-btn-green {
+  width: 100%;
+  padding: 11px;
+  background: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 2px;
+}
+.eg-btn-green:hover { background: #218838; }
+.eg-error-msg {
+  background: #f8d7da;
+  color: #721c24;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: .85rem;
+  margin-bottom: 14px;
+  display: none;
+}
+.eg-error-msg.is-visible { display: block; }
