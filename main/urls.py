@@ -1,15 +1,28 @@
+import os
+import re
+
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.conf import settings
 from django.conf.urls.static import static
+from django.http import FileResponse, Http404
 from email_agent.views import GmailWebhookView
 from basecamp.views import stripe_webhook
 from blog import bird_webhooks
 from decouple import config
 
+
+def serve_sitemap(request, filename):
+    path_ = os.path.join(settings.BASE_DIR, 'sitemaps', filename)
+    if not os.path.exists(path_) or not re.fullmatch(r'sitemap[\w\-]*\.xml', filename):
+        raise Http404
+    return FileResponse(open(path_, 'rb'), content_type='application/xml')
+
 SECRET_ADMIN_URL = config('SECRET_ADMIN_URL', default='secure-admin-x9k2p7')
 
-urlpatterns = [  
+urlpatterns = [
+    re_path(r'^(?P<filename>sitemap[\w\-]*\.xml)$', serve_sitemap, name='sitemap'),
+
     path('admin/', include('admin_honeypot.urls', namespace='admin_honeypot')),
     path(f'{SECRET_ADMIN_URL}/', admin.site.urls),
 

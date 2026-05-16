@@ -42,7 +42,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         sydney_tz = pytz.timezone("Australia/Sydney")
         today = datetime.now(sydney_tz).strftime("%Y-%m-%dT00:00:00+11:00")
-        base_dir = settings.BASE_DIR
+        base_dir = os.path.join(settings.BASE_DIR, 'sitemaps')
         index_entries = []
 
         # ── 1. sitemap-static.xml ────────────────────────────────────────
