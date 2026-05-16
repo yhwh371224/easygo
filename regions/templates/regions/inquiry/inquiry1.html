@@ -18,6 +18,9 @@
   .booking-form-col { margin-top: 0 !important; }
   .booking-content { margin-top: -240px; }
 }
+@media (min-width: 992px) {
+  .booking-sidebar-col { margin-top: -160px; }
+}
 </style>
 {% endblock %}
 
@@ -31,8 +34,8 @@
           </svg>
         </div>
         <div class="container position-relative zindex-5 pt-5 pb-7 pt-md-5">
-          <div class="row justify-content-center pb-7">
-            <div class="col-lg-10 mt-3 mt-md-5">
+          <div class="row pb-7">
+            <div class="col-lg-7 mt-3 mt-md-5">
               <h3 class="text-light">Please complete the form to get the exact price</h3>
             </div>
           </div>
@@ -307,7 +310,7 @@
 	        </div>
 	    </div>
 
-		<div class="col-lg-4 col-md-4 offset-md-1 order-lg-2">
+		<div class="col-lg-4 col-md-4 offset-md-1 order-lg-2 booking-sidebar-col">
     		<!-- Categories Widget -->
 			 <!-- Desktop only: Your previous details (shown on mobile above the form) -->
 			 <div class="card my-4 d-none d-lg-block">
