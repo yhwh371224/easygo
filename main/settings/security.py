@@ -91,6 +91,12 @@ CSRF_TRUSTED_ORIGINS = [
     'https://easygoshuttle.com.au',
     'https://www.easygoshuttle.com.au',
 ]
+if ENVIRONMENT != 'production':
+    CSRF_TRUSTED_ORIGINS += [
+        'https://*.ngrok-free.app',
+        'https://*.ngrok-free.dev',
+        'https://*.ngrok.io',
+    ]
 
 CORS_ALLOW_METHODS = ['GET', 'POST']
 CORS_ALLOW_HEADERS = ['Content-Type', 'X-CSRFToken']
