@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const bookingForm = document.getElementById('booking-form');
   if (bookingForm) {
     bookingForm.addEventListener('submit', function (e) {
-      const pickupDate = document.querySelector('[name="pickup_date"]').value;
+      const pickupDate = bookingForm.querySelector('[name="pickup_date"]').value;
       if (!pickupDate) {
         e.preventDefault();
         alert('Please select a pickup date.');
