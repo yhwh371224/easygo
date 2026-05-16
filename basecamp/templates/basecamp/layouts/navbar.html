@@ -143,6 +143,18 @@
     if (!el) return;
     el.classList.add('is-open');
     document.body.style.overflow = 'hidden';
+    if (id === 'rebook-overlay' && typeof flatpickr !== 'undefined') {
+      var inp = document.getElementById('rebook-date');
+      if (inp && !inp._flatpickr) {
+        flatpickr(inp, {
+          disableMobile: true,
+          dateFormat: 'Y-m-d',
+          altInput: true,
+          altFormat: 'F j, Y',
+          minDate: 'today'
+        });
+      }
+    }
   }
 
   function closeOverlay(id) {
@@ -183,17 +195,23 @@
     }
   });
 
-  // Book Again trigger
+  // Book Again trigger — 홈으로 이동 후 overlay 자동 오픈
   document.querySelectorAll('[data-rebook-trigger]').forEach(function (el) {
     el.addEventListener('click', function (e) {
       e.preventDefault();
       closeAllDropdowns();
-      openOverlay('rebook-overlay');
+      sessionStorage.setItem('openRebook', '1');
+      window.location.href = '/';
     });
   });
 
-  // Auto-open rebook overlay on rebook_error
+  // 홈 도착 시 또는 rebook_error 시 overlay 자동 오픈
   document.addEventListener('DOMContentLoaded', function () {
+    if (sessionStorage.getItem('openRebook') === '1') {
+      sessionStorage.removeItem('openRebook');
+      openOverlay('rebook-overlay');
+      return;
+    }
     var bookingTabs = document.getElementById('booking-tabs');
     if (bookingTabs && bookingTabs.dataset.rebookError === 'true') {
       openOverlay('rebook-overlay');
