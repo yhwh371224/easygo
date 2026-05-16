@@ -39,8 +39,6 @@ def home(request):
         airport__in=region.airports.all()
     ).select_related("airport")
     cruise_terminals = CruiseTerminal.objects.filter(region=region)
-    rebook_error = request.session.pop('rebook_error', None)
-    
     latest_post = Post.objects.filter(status='published').order_by('-created_at').first()
 
     return render(request, 'basecamp/home.html', {
@@ -50,9 +48,7 @@ def home(request):
         'cruise_terminals': cruise_terminals,
         'google_review_url': settings.GOOGLE_REVIEW_URL,
         'latest_post': latest_post,
-        'rebook_error': rebook_error,
-
-    })    
+    })
 
 
 
@@ -74,7 +70,6 @@ def maxi_taxi(request, suburb=None):
     context = _build_pillar_context(suburb_obj, zone_info)
     context['landmark'] = context['landmarks']
     context['page_bg'] = 'basecamp/photos/bg-pattern02.webp'
-    context['rebook_error'] = request.session.pop('rebook_error', None)
 
     return render(request, 'basecamp/pillars/airport-maxi-taxi.html', context)
 

@@ -80,7 +80,6 @@ def price_detail(request):
                 'start_point_value': start_point if start_point != 'Select your option' else '',
                 'end_point_value': end_point if end_point != 'Select your option' else '',
                 'no_of_passenger_value': no_of_passenger,
-                'rebook_error': None,
             })
 
         request.session['original_start_point'] = start_point
@@ -147,7 +146,6 @@ def price_detail(request):
             'cruise_terminals': _cruise_terminals_for_request(request),
             'google_review_url': settings.GOOGLE_REVIEW_URL,
             'latest_post': latest_post,
-            'rebook_error': None,
         })
     
 

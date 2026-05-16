@@ -86,6 +86,7 @@ TEMPLATES = [
                 'basecamp.context_processors.navbar_defaults',
                 'regions.context_processors.region_config',
                 'basecamp.context_processors.google_analytics',
+                'basecamp.context_processors.rebook_error',
             ],
         },
     },

@@ -30,3 +30,6 @@ def google_analytics(request):
     if settings.DEBUG:
         return {}
     return {'GOOGLE_ANALYTICS_ID': getattr(settings, 'GOOGLE_ANALYTICS_ID', '')}
+
+def rebook_error(request):
+    return {'rebook_error': request.session.pop('rebook_error', None)}

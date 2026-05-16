@@ -50,7 +50,6 @@ def region_home(request, region_slug):
 
     cruise_terminals = CruiseTerminal.objects.filter(region=region)
 
-    rebook_error = request.session.pop('rebook_error', None)
     hero_image_url = staticfiles_storage.url(f'basecamp/photos/airports/{region.hero_image_file}')
 
     return render(request, 'regions/pages/home.html', {
@@ -61,7 +60,6 @@ def region_home(request, region_slug):
         'cruise_terminals': cruise_terminals,
         'google_review_url': settings.GOOGLE_REVIEW_URL,
         'latest_post': latest_post,
-        'rebook_error': rebook_error,
         'service_areas': region.service_areas or [],
         'hero_image_url': hero_image_url,
     })
@@ -148,7 +146,6 @@ def airport_shuttle_suburb(request, region_slug, suburb_slug, service_type='shut
     )
     service_label = 'Airport Transfer' if service_type == 'transfer' else 'Airport Shuttle'
     service_path = 'airport-transfer' if service_type == 'transfer' else 'airport-shuttle'
-    rebook_error = request.session.pop('rebook_error', None)
     return render(request, 'regions/pages/airport_shuttle_suburb.html', {
         'region': region,
         'suburb': suburb,
@@ -157,7 +154,6 @@ def airport_shuttle_suburb(request, region_slug, suburb_slug, service_type='shut
         'service_type': service_type,
         'service_label': service_label,
         'service_path': service_path,
-        'rebook_error': rebook_error,
     })
 
 
