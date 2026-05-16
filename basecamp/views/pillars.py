@@ -74,6 +74,7 @@ def maxi_taxi(request, suburb=None):
     context = _build_pillar_context(suburb_obj, zone_info)
     context['landmark'] = context['landmarks']
     context['page_bg'] = 'basecamp/photos/bg-pattern02.webp'
+    context['rebook_error'] = request.session.pop('rebook_error', None)
 
     return render(request, 'basecamp/pillars/airport-maxi-taxi.html', context)
 

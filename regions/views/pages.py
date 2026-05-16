@@ -148,6 +148,7 @@ def airport_shuttle_suburb(request, region_slug, suburb_slug, service_type='shut
     )
     service_label = 'Airport Transfer' if service_type == 'transfer' else 'Airport Shuttle'
     service_path = 'airport-transfer' if service_type == 'transfer' else 'airport-shuttle'
+    rebook_error = request.session.pop('rebook_error', None)
     return render(request, 'regions/pages/airport_shuttle_suburb.html', {
         'region': region,
         'suburb': suburb,
@@ -156,6 +157,7 @@ def airport_shuttle_suburb(request, region_slug, suburb_slug, service_type='shut
         'service_type': service_type,
         'service_label': service_label,
         'service_path': service_path,
+        'rebook_error': rebook_error,
     })
 
 
