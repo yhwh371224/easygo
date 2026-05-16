@@ -241,6 +241,10 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Australia/Sydney'
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 
+if ENVIRONMENT != 'production':
+    CELERY_TASK_ALWAYS_EAGER = True
+    CELERY_TASK_EAGER_PROPAGATES = True
+
 SITE_ID = 1
 SITE_URL = 'https://easygoshuttle.com.au'
 
