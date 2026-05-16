@@ -60,11 +60,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  // rebook_error 있으면 자동으로 Book Again 탭 열기
-  const bookingTabs = document.getElementById('booking-tabs');
-  if (bookingTabs && bookingTabs.dataset.rebookError === 'true') {
-    var rebookBtn = document.querySelector('[data-tab="quick-rebook"]');
-    if (rebookBtn) switchBookingTab(rebookBtn, 'quick-rebook');
-  }
+  // rebook_error → 오버레이는 navbar.html 인라인 스크립트에서 처리
 
 });

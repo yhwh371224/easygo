@@ -69,7 +69,7 @@
                 <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="/{{ current_region.slug }}/inquiry/">Get a Quote - Airport</a></li>
                 <li><a class="dropdown-item" href="/cruise_inquiry/">Get a Quote - Cruise</a></li>
-                <li><a class="dropdown-item" href="/quick_rebook/">Book Again</a></li>
+                <li><a class="dropdown-item" href="#" data-rebook-trigger>Book Again</a></li>
                 <li><a class="dropdown-item" href="/{{ current_region.slug }}/#reasons">Why Us?</a></li>
                 </ul>
             </li>
@@ -79,7 +79,7 @@
                 <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="/inquiry/">Get a Quote - Airport</a></li>
                 <li><a class="dropdown-item" href="/cruise_inquiry/">Get a Quote - Cruise</a></li>
-                <li><a class="dropdown-item" href="/quick_rebook/">Book Again</a></li>
+                <li><a class="dropdown-item" href="#" data-rebook-trigger>Book Again</a></li>
                 <li><a class="dropdown-item" href="/#reasons">Why Us?</a></li>
                 </ul>
             </li>
@@ -121,3 +121,185 @@
         </div>
     </div>
 </header>
+
+<!-- Book Again Overlay -->
+<style nonce="{{ CSP_NONCE }}">
+  #rebook-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+  }
+  #rebook-overlay.is-open {
+    display: flex;
+  }
+  #rebook-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 28px 28px 24px;
+    width: 420px;
+    max-width: 92vw;
+    position: relative;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.22);
+  }
+  #rebook-close {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    background: none;
+    border: none;
+    font-size: 1.4rem;
+    line-height: 1;
+    color: #666;
+    cursor: pointer;
+    padding: 0;
+  }
+  #rebook-close:hover { color: #111; }
+  #rebook-card h5 {
+    margin: 0 0 4px;
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+  #rebook-card .rebook-hint {
+    color: #777;
+    font-size: .85rem;
+    margin: 0 0 18px;
+  }
+  #rebook-card label {
+    display: block;
+    font-size: .85rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: #333;
+  }
+  #rebook-card label span { font-weight: 400; color: #999; }
+  #rebook-card input {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: .95rem;
+    box-sizing: border-box;
+    margin-bottom: 14px;
+  }
+  #rebook-card input:focus,
+  #rebook-card .flatpickr-input:focus {
+    outline: none;
+    border-color: #4caf50;
+    box-shadow: 0 0 0 3px rgba(76,175,80,.15);
+  }
+  #rebook-card .flatpickr-input.form-control {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: .95rem;
+    box-sizing: border-box;
+    margin-bottom: 14px;
+  }
+  #rebook-submit {
+    width: 100%;
+    padding: 11px;
+    background: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 4px;
+  }
+  #rebook-submit:hover { background: #218838; }
+  #rebook-error-msg {
+    background: #f8d7da;
+    color: #721c24;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: .85rem;
+    margin-bottom: 14px;
+    display: none;
+  }
+  #rebook-error-msg.is-visible { display: block; }
+</style>
+
+<div id="rebook-overlay" role="dialog" aria-modal="true" aria-label="Book Again">
+  <div id="rebook-card">
+    <button id="rebook-close" aria-label="Close">&times;</button>
+    <h5>Book Again</h5>
+    <p class="rebook-hint">Used EasyGo before? Enter your email — we'll fill in your previous route.</p>
+    <div id="rebook-error-msg"{% if rebook_error %} class="is-visible"{% endif %}>
+      {{ rebook_error }}
+    </div>
+    <form action="{% url 'basecamp:quick_rebook_step1' %}" method="post">
+      {% csrf_token %}
+      <label>Email address <span>(from previous booking)</span></label>
+      <input type="email" name="email" placeholder="your@email.com" required autocomplete="email">
+      <label>Pickup date</label>
+      <input type="text" name="pickup_date" required
+        class="date-picker"
+        placeholder="Choose pickup date"
+        data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;F j, Y&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;}">
+      <label>Flight number <span>(optional)</span></label>
+      <input type="text" name="flight_number" placeholder="e.g. QF400" autocomplete="off">
+      <button type="submit" id="rebook-submit">Next — final stop &#187;</button>
+    </form>
+  </div>
+</div>
+
+<script nonce="{{ CSP_NONCE }}">
+(function () {
+  var overlay = document.getElementById('rebook-overlay');
+  var card    = document.getElementById('rebook-card');
+  var closeBtn = document.getElementById('rebook-close');
+
+  function openRebookOverlay() {
+    overlay.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeRebookOverlay() {
+    overlay.classList.remove('is-open');
+    document.body.style.overflow = '';
+  }
+
+  // 닫기 버튼
+  closeBtn.addEventListener('click', closeRebookOverlay);
+  // 배경 클릭 시 닫기
+  overlay.addEventListener('click', function (e) {
+    if (e.target === overlay) closeRebookOverlay();
+  });
+  // ESC 키
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeRebookOverlay();
+  });
+
+  // navbar "Book Again" 링크 연결
+  document.querySelectorAll('[data-rebook-trigger]').forEach(function (el) {
+    el.addEventListener('click', function (e) {
+      e.preventDefault();
+      closeAllDropdowns();
+      openRebookOverlay();
+    });
+  });
+
+  function closeAllDropdowns() {
+    // Bootstrap offcanvas 닫기 (모바일 메뉴)
+    var offcanvas = document.getElementById('primaryMenu');
+    if (offcanvas && typeof bootstrap !== 'undefined') {
+      var bsOffcanvas = bootstrap.Offcanvas.getInstance(offcanvas);
+      if (bsOffcanvas) bsOffcanvas.hide();
+    }
+  }
+
+  // rebook_error 있으면 오버레이 자동 열기
+  var bookingTabs = document.getElementById('booking-tabs');
+  if (bookingTabs && bookingTabs.dataset.rebookError === 'true') {
+    openRebookOverlay();
+  }
+
+  window.openRebookOverlay  = openRebookOverlay;
+  window.closeRebookOverlay = closeRebookOverlay;
+})();
+</script>
