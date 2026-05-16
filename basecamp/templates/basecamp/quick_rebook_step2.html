@@ -41,24 +41,45 @@
       color: #9ca3af;
       margin-bottom: 1.25rem;
     }
+    .route-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
     .route-toggle-btn {
-      flex: 1;
-      padding: 0.6rem 0.5rem;
-      font-size: 0.875rem;
-      border: 1px solid #d1d5db;
+      padding: 0.7rem 0.75rem;
+      border: 1.5px solid #d1d5db;
       border-radius: 0.5rem;
       background: #f9fafb;
       color: #374151;
       cursor: pointer;
-      text-align: center;
+      text-align: left;
       transition: all 0.15s;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .route-toggle-btn:hover {
+      border-color: #f38020;
+      background: #fff7f0;
     }
     .route-toggle-btn.active {
       background: #f38020;
       color: #fff;
       border-color: #f38020;
-      font-weight: 600;
     }
+    .route-main {
+      font-size: 0.82rem;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    .route-type {
+      font-size: 0.72rem;
+      opacity: 0.65;
+      font-weight: 500;
+    }
+    .route-toggle-btn.active .route-type { opacity: 0.85; }
     .prefilled-input {
       background-color: #fff8f0 !important;
       border-color: #f38020 !important;
@@ -117,6 +138,12 @@
           <span class="rebook-prev-key">Contact</span>
           <span class="rebook-prev-val" id="display-contact">{{ previous.contact }}</span>
         </div>
+        {% if previous.street or previous.suburb %}
+        <div class="rebook-prev-row">
+          <span class="rebook-prev-key">Address</span>
+          <span class="rebook-prev-val">{{ previous.street }}{% if previous.street and previous.suburb %}, {% endif %}{{ previous.suburb }}</span>
+        </div>
+        {% endif %}
         <div class="rebook-prev-row">
           <span class="rebook-prev-key">Passengers</span>
           <span class="rebook-prev-val" id="display-pax">{{ previous.no_of_passenger }}</span>
@@ -136,24 +163,19 @@
 
         {# ===== ROUTE SELECTION ===== #}
         <div class="rebook-card">
-          <p class="rebook-section-label">Your previous route (tap to change)</p>
+          <p class="rebook-section-label">Tap to select</p>
 
-          <div class="d-flex gap-2 mb-3" id="route-toggle">
-            {# Direction A: Airport → Suburb #}
-            <button type="button" class="route-toggle-btn active" data-direction="to_home"
-              onclick="selectRoute(this, 'to_home')">
-              Airport &rarr; {{ previous.suburb|default:previous.end_point }}
-            </button>
-            {# Direction B: Suburb → Airport #}
-            <button type="button" class="route-toggle-btn" data-direction="to_airport"
-              onclick="selectRoute(this, 'to_airport')">
-              {{ previous.suburb|default:previous.start_point }} &rarr; Airport
-            </button>
+          <div class="route-grid" id="route-toggle">
+            <button type="button" class="route-toggle-btn" onclick="selectRoute(this, 'Pickup from Intl Airport')">Pickup from Intl Airport</button>
+            <button type="button" class="route-toggle-btn" onclick="selectRoute(this, 'Pickup from Domestic Airport')">Pickup from Domestic Airport</button>
+            <button type="button" class="route-toggle-btn" onclick="selectRoute(this, 'Drop off to Intl Airport')">Drop off to Intl Airport</button>
+            <button type="button" class="route-toggle-btn" onclick="selectRoute(this, 'Drop off to Domestic Airport')">Drop off to Domestic Airport</button>
           </div>
 
-          {# hidden fields updated by JS #}
-          <input type="hidden" name="direction" id="hidden-direction" value="{{ previous.direction }}">
-          <input type="hidden" name="suburb" id="hidden-suburb" value="{{ previous.suburb }}">
+          <input type="hidden" name="direction"   id="hidden-direction" value="{{ previous.direction }}">
+          <input type="hidden" name="suburb"      id="hidden-suburb"    value="{{ previous.suburb }}">
+          <input type="hidden" name="start_point" id="hidden-start"     value="{{ previous.start_point }}">
+          <input type="hidden" name="end_point"   id="hidden-end"       value="{{ previous.end_point }}">
         </div>
 
         {# ===== NEW TRIP DETAILS ===== #}
@@ -298,8 +320,8 @@
           <button type="submit" class="btn btn-warning btn-lg">
             Confirm booking
           </button>
-          <p class="text-muted mb-0" style="font-size:0.8rem; width:100%; text-align:center;">
-            No payment now &mdash; we'll email your confirmation shortly.
+          <p class="text-muted mb-0" style="font-size:0.875rem; width:100%; text-align:center;">
+            we'll email your confirmation shortly.
           </p>
         </div>
 
@@ -322,28 +344,10 @@
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
   <script nonce="{{ CSP_NONCE }}">
-    const suburb = "{{ previous.suburb|default:previous.end_point }}";
-
     function selectRoute(el, direction) {
       document.querySelectorAll('.route-toggle-btn').forEach(b => b.classList.remove('active'));
       el.classList.add('active');
-
-      const dirField = document.getElementById('hidden-direction');
-      const startField = document.getElementById('hidden-start');
-      const endField = document.getElementById('hidden-end');
-      const suburbField = document.getElementById('hidden-suburb');
-
-      if (direction === 'to_home') {
-        dirField.value = 'Pickup from Airport';
-        startField.value = '';
-        endField.value = '';
-        suburbField.value = suburb;
-      } else {
-        dirField.value = 'Drop off to Airport';
-        startField.value = suburb;
-        endField.value = '';
-        suburbField.value = suburb;
-      }
+      document.getElementById('hidden-direction').value = direction;
     }
 
     function toggleReturn(cb) {
