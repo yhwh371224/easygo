@@ -32,7 +32,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:cen
 
 /* ── HERO ── */
 .hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:var(--black);}
-.hero-img{position:absolute;inset:0;background-image:url('{% static "basecamp/images/hero-bg.jpg" %}');background-size:cover;background-position:center 40%;opacity:0.35;transform:scale(1.04);transition:transform 8s ease-out;}
+.hero-img{position:absolute;inset:0;background-image:url('{% static "basecamp/images/hero-bg.webp" %}');background-size:cover;background-position:center 40%;opacity:0.35;transform:scale(1.04);transition:transform 8s ease-out;}
 .hero-img.loaded{transform:scale(1.0);}
 .hero-bg{position:absolute;inset:0;background:linear-gradient(to bottom, rgba(10,10,10,0.55) 0%, rgba(10,10,10,0.3) 40%, rgba(10,10,10,0.7) 100%);}
 .hero-bg2{position:absolute;inset:0;background:radial-gradient(ellipse 65% 55% at 50% 55%,rgba(201,168,76,0.06) 0%,transparent 68%);}
@@ -122,7 +122,7 @@ h2 em{font-style:italic;color:var(--gold);}
 
 /* ── FLEET ── */
 .fleet-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:1.5px;background:rgba(201,168,76,0.1);margin-top:4rem;}
-.fleet-main{background:var(--dark2);padding:3.5rem;min-height:360px;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;background-image:url('{% static "basecamp/images/fleet-main.jpg" %}');background-size:cover;background-position:center;}
+.fleet-main{background:var(--dark2);padding:3.5rem;min-height:360px;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;background-image:url('{% static "basecamp/images/fleet-main.webp" %}');background-size:cover;background-position:center;}
 .fleet-main-bg{position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,0,0,0.88) 0%,rgba(0,0,0,0.5) 60%,rgba(201,168,76,0.04) 100%);}
 .fleet-tag{font-size:9px;letter-spacing:0.28em;text-transform:uppercase;color:var(--gold);background:rgba(201,168,76,0.1);padding:5px 12px;display:inline-block;margin-bottom:1.1rem;position:relative;z-index:2;}
 .fleet-name{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:300;color:var(--white);position:relative;z-index:2;line-height:1.1;}
@@ -150,7 +150,7 @@ h2 em{font-style:italic;color:var(--gold);}
 .area-list{display:flex;flex-wrap:wrap;gap:0.6rem;margin-top:2rem;}
 .area-tag{font-size:9.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(201,168,76,0.22);padding:5px 12px;}
 .coverage-highlight{font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;color:var(--gold-light);border-left:2px solid var(--gold);padding-left:1.4rem;margin:2rem 0;line-height:1.65;}
-.coverage-map{background:var(--dark3);border:1px solid rgba(201,168,76,0.1);padding:2.5rem;min-height:400px;display:flex;align-items:center;justify-content:center;position:relative;background-image:url('{% static "basecamp/images/sydney-night.jpg" %}');background-size:cover;background-position:center;}
+.coverage-map{background:var(--dark3);border:1px solid rgba(201,168,76,0.1);padding:2.5rem;min-height:400px;display:flex;align-items:center;justify-content:center;position:relative;background-image:url('{% static "basecamp/images/sydney-night.webp" %}');background-size:cover;background-position:center;}
 .coverage-map::before{content:'';position:absolute;inset:0;background:rgba(10,10,10,0.72);}
 
 /* ── REVIEWS ── */
@@ -598,7 +598,7 @@ footer{background:var(--black);border-top:1px solid rgba(201,168,76,0.12);paddin
     </div>
     <div class="fleet-side">
       <div class="fleet-item">
-        <div class="fi-img" style="background-image:url('{% static "basecamp/images/fleet-sedan.jpg" %}');"></div>
+        <div class="fi-img" style="background-image:url('{% static "basecamp/images/fleet-sedan.webp" %}');"></div>
         <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.92) 0%,rgba(0,0,0,0.35) 100%);"></div>
         <div style="position:relative;z-index:2;">
           <div class="fleet-itag">Business Sedan</div>
@@ -607,7 +607,7 @@ footer{background:var(--black);border-top:1px solid rgba(201,168,76,0.12);paddin
         </div>
       </div>
       <div class="fleet-item">
-        <div class="fi-img" style="background-image:url('{% static "basecamp/images/fleet-suv.jpg" %}');"></div>
+        <div class="fi-img" style="background-image:url('{% static "basecamp/images/fleet-suv.webp" %}');"></div>
         <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.92) 0%,rgba(0,0,0,0.35) 100%);"></div>
         <div style="position:relative;z-index:2;">
           <div class="fleet-itag">Premium SUV</div>
@@ -616,7 +616,7 @@ footer{background:var(--black);border-top:1px solid rgba(201,168,76,0.12);paddin
         </div>
       </div>
       <div class="fleet-item">
-        <div class="fi-img" style="background-image:url('{% static "basecamp/images/fleet-limo.jpg" %}');"></div>
+        <div class="fi-img" style="background-image:url('{% static "basecamp/images/fleet-limo.webp" %}');"></div>
         <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.92) 0%,rgba(0,0,0,0.35) 100%);"></div>
         <div style="position:relative;z-index:2;">
           <div class="fleet-itag">Special Occasions</div>
