@@ -53,6 +53,12 @@ LOGGING = {
             'token': config('TELEGRAM_BOT_TOKEN'),
             'chat_id': config('TELEGRAM_CHAT_ID'),
         },
+        'inquiry_file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs/inquiry.log'),
+            'formatter': 'verbose',
+        },
     },
 
     'loggers': {
@@ -106,6 +112,11 @@ LOGGING = {
             'level': 'INFO',
             'propagate': False,
         },
+        'inquiry': {
+            'handlers': ['inquiry_file', 'console'],
+            'level': 'INFO',
+            'propagate': False,
+        },        
     },
 }
 

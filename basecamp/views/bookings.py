@@ -175,13 +175,7 @@ def confirm_booking_detail(request):
 @ratelimit(key='ip', rate='5/m', method='POST', block=True)
 @require_POST
 @require_turnstile
-def return_trip_detail(request):
-    logger.info(
-        f"[BOOKING] IP={get_client_ip(request)} "
-        f"path={request.path} "
-        f"email={request.POST.get('email')}"
-    )
-    
+def return_trip_detail(request):    
     pickup_date_str = request.POST.get('pickup_date', '')
     return_pickup_date_str = request.POST.get('return_pickup_date', '')
     email = request.POST.get('email', '').strip()

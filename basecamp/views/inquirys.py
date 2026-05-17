@@ -21,7 +21,7 @@ from regions.models.airport import CruiseTerminal
 from utils.telegram import send_telegram_notification, get_ip_info
 from regions.models import RequestLog
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("inquiry")
 
 
 def _get_request_region(request):

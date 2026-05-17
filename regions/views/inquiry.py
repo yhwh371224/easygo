@@ -14,7 +14,7 @@ from basecamp.basecamp_utils import (
 )
 from utils.telegram import get_ip_info, send_telegram_notification
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("inquiry")
 
 
 def region_inquiry(request, region_slug):
