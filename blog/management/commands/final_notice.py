@@ -22,10 +22,11 @@ class Command(BaseCommand):
             final_notices = Post.objects.filter(
                 pickup_date__range=(today, within_one_day),
                 cancelled=False,
+                pending=True,
             ).filter(
                 Q(paid__isnull=True) | Q(paid__exact="")
-            ).filter(
-                Q(reminder=False) | Q(pending=True)
+            ).exclude(
+                Q(cash=True) | Q(reminder=True)
             )
 
             for notice in final_notices:
