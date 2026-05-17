@@ -111,6 +111,19 @@ class RegionAdmin(admin.ModelAdmin):
     )
 
 
+_ZONE_HELP = (
+    "<b>Melbourne:</b> Airport · Inner North/West · Central Melbourne · Inner North · "
+    "Inner South · Inner East · Eastern Suburbs · Northern Suburbs · Western Suburbs · "
+    "South-East · Regional<br>"
+    "<b>Sydney:</b> sydney_city · inner_west · central_west · west · north_west · "
+    "outer_west · upper_north_shore · north_shore · northern_beaches · eastern_suburbs<br>"
+    "<b>Gold Coast:</b> Southern Beaches · Southern Gold Coast · Central Gold Coast · "
+    "Northern Gold Coast · Outer Northern Gold Coast · Far Northern Fringe<br>"
+    "<b>Brisbane:</b> Inner Brisbane · Inner South · Eastern · Northern · Southern · "
+    "Western · North-West · Redlands"
+)
+
+
 @admin.register(RegionSuburb)
 class RegionSuburbAdmin(admin.ModelAdmin):
     ordering = ("region", "-is_pinned", "-is_featured", "sort_order", "name")
@@ -119,6 +132,12 @@ class RegionSuburbAdmin(admin.ModelAdmin):
     list_editable = ("price", "is_active", "is_featured")
     prepopulated_fields = {"slug": ("name",)}
     search_fields = ("name", "slug")
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        form.base_fields["zone"].help_text = _ZONE_HELP
+        return form
+
     fieldsets = (
         (None, {
             "fields": ("region", "name", "slug", "zone", "price", "distance_km", "is_active"),
