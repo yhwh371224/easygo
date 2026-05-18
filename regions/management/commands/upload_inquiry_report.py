@@ -47,6 +47,18 @@ class Command(BaseCommand):
         week_counts  = _ip_counts(RequestLog.objects.filter(created_at__date__gte=week_ago))
         month_counts = _ip_counts(RequestLog.objects.filter(created_at__date__gte=month_ago))
 
+        flagged_ips = {
+            ip for ip, cnt in today_counts.items() if cnt >= 3
+        } | {
+            ip for ip, cnt in week_counts.items() if cnt >= 3
+        } | {
+            ip for ip, cnt in month_counts.items() if cnt >= 3
+        }
+
+        if not flagged_ips:
+            self.stdout.write(f"No flagged IPs for {today}, skipping.")
+            return
+
         flagged = {}  # ip -> {email, count_today, count_week, count_month}
 
         with open(report_path, "w", newline="") as f:
@@ -58,6 +70,9 @@ class Command(BaseCommand):
             ])
 
             for log in logs:
+                if log.ip not in flagged_ips:
+                    continue
+
                 count_today = today_counts.get(log.ip, 0)
                 count_week  = week_counts.get(log.ip, 0)
                 count_month = month_counts.get(log.ip, 0)
@@ -76,14 +91,13 @@ class Command(BaseCommand):
                     "⚠️" if count_month >= 3 else "",
                 ])
 
-                if count_today >= 3 or count_week >= 3 or count_month >= 3:
-                    if log.ip not in flagged:
-                        flagged[log.ip] = {
-                            "email": log.email,
-                            "count_today": count_today,
-                            "count_week": count_week,
-                            "count_month": count_month,
-                        }
+                if log.ip not in flagged:
+                    flagged[log.ip] = {
+                        "email": log.email,
+                        "count_today": count_today,
+                        "count_week": count_week,
+                        "count_month": count_month,
+                    }
 
         self.stdout.write(f"✅ Report written: {report_path}")
 
