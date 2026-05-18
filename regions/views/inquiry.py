@@ -40,6 +40,7 @@ def region_inquiry_details(request, region_slug):
             region=region,
             path=request.path,
             ip=get_client_ip(request),
+            email=request.POST.get('email', ''),
             user_agent=request.META.get("HTTP_USER_AGENT", ""),
         )
 

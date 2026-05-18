@@ -83,10 +83,17 @@ def inquiry_details(request):
             f"path={request.path} "
             f"email={request.POST.get('email')}"
         )
-        
+        RequestLog.objects.create(
+            region=post_region,
+            path=request.path,
+            ip=get_client_ip(request),
+            email=request.POST.get('email', ''),
+            user_agent=request.META.get("HTTP_USER_AGENT", ""),
+        )
+
         name = request.POST.get('name', '')
         contact = request.POST.get('contact', '')
-        email = request.POST.get('email', '')  
+        email = request.POST.get('email', '')
 
         # ✅ Collect date strings
         pickup_date_str = request.POST.get('pickup_date', '')           
@@ -192,7 +199,14 @@ def inquiry_details1(request):
             f"path={request.path} "
             f"email={request.POST.get('email')}"
         )
-        
+        RequestLog.objects.create(
+            region=post_region,
+            path=request.path,
+            ip=get_client_ip(request),
+            email=request.POST.get('email', ''),
+            user_agent=request.META.get("HTTP_USER_AGENT", ""),
+        )
+
         pickup_date_str = request.POST.get('pickup_date', '')
         name = request.POST.get('name', '')
         contact = request.POST.get('contact', '')

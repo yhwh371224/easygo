@@ -5,6 +5,7 @@ class RequestLog(models.Model):
     region = models.ForeignKey("regions.Region", null=True, on_delete=models.SET_NULL)
     path = models.CharField(max_length=255)
     ip = models.GenericIPAddressField()
+    email = models.EmailField(blank=True, default="")
     user_agent = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
