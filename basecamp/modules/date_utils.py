@@ -1,7 +1,7 @@
 from datetime import datetime, date
 
 
-def parse_date(date_str, field_name="Date", required=True, reference_date=None):
+def parse_date(date_str, field_name="Date", required=True, reference_date=None, allow_past=False):
     if isinstance(date_str, date):
         return date_str
 
@@ -15,7 +15,7 @@ def parse_date(date_str, field_name="Date", required=True, reference_date=None):
     except ValueError:
         raise ValueError(f"Invalid date format for '{field_name}' ({date_str}). Please use YYYY-MM-DD.")
 
-    if parsed_date <= date.today():
+    if not allow_past and parsed_date < date.today():
         raise ValueError(f"'{field_name}' cannot be in the past ({date.today().strftime('%Y-%m-%d')}).")
 
     if reference_date and parsed_date < reference_date:
@@ -25,10 +25,11 @@ def parse_date(date_str, field_name="Date", required=True, reference_date=None):
     return parsed_date
 
 
-def parse_booking_dates(pickup_str, return_str=None):
-    pickup_date_obj = parse_date(pickup_str, field_name="Pickup Date", required=True)
+def parse_booking_dates(pickup_str, return_str=None, allow_past=False):
+    pickup_date_obj = parse_date(pickup_str, field_name="Pickup Date", required=True, allow_past=allow_past)
     return_pickup_date_obj = parse_date(
-        return_str, field_name="Return Pickup Date", required=False, reference_date=pickup_date_obj
+        return_str, field_name="Return Pickup Date", required=False,
+        reference_date=pickup_date_obj, allow_past=allow_past,
     )
     return pickup_date_obj, return_pickup_date_obj
 

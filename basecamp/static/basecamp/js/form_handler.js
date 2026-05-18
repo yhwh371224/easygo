@@ -24,26 +24,35 @@ document.addEventListener("DOMContentLoaded", function() {
             })
             .then(data => {
                 if (data.success) {
-                    window.location.href = '/inquiry_done/'; // Redirect to the desired URL
+                    window.location.href = data.redirect_url || '/inquiry_done/';
                 } else {
+                    var submitButton = document.getElementById("submitButton");
+                    if (submitButton) {
+                        submitButton.disabled = false;
+                        submitButton.innerHTML = "Submit";
+                    }
                     var errorMessageDiv = document.getElementById("errorMessage");
-                    if (errorMessageDiv) { // Check if the errorMessage element exists
-                        errorMessageDiv.textContent = data.error;
+                    if (errorMessageDiv) {
+                        errorMessageDiv.textContent = data.error || data.message || 'An error occurred. Please try again.';
                         errorMessageDiv.style.display = 'block';
                     } else {
-                        console.error('Error message div not found on the page.');
+                        alert(data.error || data.message || 'An error occurred. Please try again.');
                     }
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('Error: ' + error.message);  // 임시로 alert로 확인
+                var submitButton = document.getElementById("submitButton");
+                if (submitButton) {
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = "Submit";
+                }
                 var errorMessageDiv = document.getElementById("errorMessage");
-                if (errorMessageDiv) { 
+                if (errorMessageDiv) {
                     errorMessageDiv.textContent = 'There was a problem processing your request.';
                     errorMessageDiv.style.display = 'block';
                 } else {
-                    console.error('Error message div not found on the page.');
+                    alert('There was a problem processing your request.');
                 }
             });
         });

@@ -237,9 +237,9 @@ def return_trip_detail(request):
         elif not notice:
             notice = user.notice
 
-        # 날짜 파싱
+        # 날짜 파싱 (admin form — 과거 날짜 허용)
         try:
-            pickup_date_obj, return_pickup_date_obj = parse_booking_dates(pickup_date_str, return_pickup_date_str)
+            pickup_date_obj, return_pickup_date_obj = parse_booking_dates(pickup_date_str, return_pickup_date_str, allow_past=True)
         except ValueError as e:
             return JsonResponse({'success': False, 'error': str(e)})
         
@@ -369,6 +369,7 @@ def quick_rebook_confirm(request, region_slug=None):
 
     previous_name  = previous.name
     previous_price = previous.price
+    previous_street = previous.street or ''
     region         = previous.region
     extra_stop     = int(request.POST.get('extra_stop') or previous.extra_stop or 0)
     same_extra_stop = request.POST.get('same_extra_stop') == '1'
@@ -415,6 +416,7 @@ def quick_rebook_confirm(request, region_slug=None):
         pickup_time     = pickup_time,
         direction       = direction,
         suburb          = suburb,
+        street          = previous_street,
         no_of_passenger = no_of_passenger,
         no_of_baggage   = no_of_baggage,
         message         = message,
