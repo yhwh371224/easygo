@@ -8,6 +8,7 @@ from django.core.management.base import BaseCommand
 from django.utils import timezone
 
 from regions.models import RequestLog
+from utils.telegram import send_telegram_sync
 
 
 class Command(BaseCommand):
@@ -46,6 +47,8 @@ class Command(BaseCommand):
         week_counts  = _ip_counts(RequestLog.objects.filter(created_at__date__gte=week_ago))
         month_counts = _ip_counts(RequestLog.objects.filter(created_at__date__gte=month_ago))
 
+        flagged = {}  # ip -> {email, count_today, count_week, count_month}
+
         with open(report_path, "w", newline="") as f:
             writer = csv.writer(f)
             writer.writerow([
@@ -73,7 +76,34 @@ class Command(BaseCommand):
                     "⚠️" if count_month >= 3 else "",
                 ])
 
+                if count_today >= 3 or count_week >= 3 or count_month >= 3:
+                    if log.ip not in flagged:
+                        flagged[log.ip] = {
+                            "email": log.email,
+                            "count_today": count_today,
+                            "count_week": count_week,
+                            "count_month": count_month,
+                        }
+
         self.stdout.write(f"✅ Report written: {report_path}")
+
+        if flagged:
+            lines = [f"⚠️ *Inquiry Flag Report* — {today}\n"]
+            for ip, info in flagged.items():
+                flags = []
+                if info["count_today"] >= 3:
+                    flags.append(f"오늘 {info['count_today']}회")
+                if info["count_week"] >= 3:
+                    flags.append(f"주간 {info['count_week']}회")
+                if info["count_month"] >= 3:
+                    flags.append(f"월간 {info['count_month']}회")
+                lines.append(f"• `{ip}` ({info['email']}) — {', '.join(flags)}")
+            lines.append(f"\n총 {len(flagged)}개 IP 플래그")
+            try:
+                send_telegram_sync("\n".join(lines))
+                self.stdout.write(f"✅ Telegram 알림 전송: {len(flagged)}개 IP")
+            except Exception as e:
+                self.stderr.write(f"❌ Telegram 전송 실패: {e}")
 
         result = subprocess.run(
             ["rclone", "copy", str(report_path), self.GDRIVE_DEST],
