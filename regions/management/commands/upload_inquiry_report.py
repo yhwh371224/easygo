@@ -3,6 +3,7 @@ import subprocess
 from datetime import date, timedelta
 from pathlib import Path
 
+from django.db.models import Count
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 
@@ -35,6 +36,16 @@ class Command(BaseCommand):
         week_ago = today - timedelta(days=7)
         month_ago = today - timedelta(days=30)
 
+        def _ip_counts(qs):
+            return {
+                row['ip']: row['cnt']
+                for row in qs.values('ip').annotate(cnt=Count('ip'))
+            }
+
+        today_counts = _ip_counts(RequestLog.objects.filter(created_at__date=today))
+        week_counts  = _ip_counts(RequestLog.objects.filter(created_at__date__gte=week_ago))
+        month_counts = _ip_counts(RequestLog.objects.filter(created_at__date__gte=month_ago))
+
         with open(report_path, "w", newline="") as f:
             writer = csv.writer(f)
             writer.writerow([
@@ -44,15 +55,9 @@ class Command(BaseCommand):
             ])
 
             for log in logs:
-                count_today = RequestLog.objects.filter(
-                    ip=log.ip, created_at__date=today
-                ).count()
-                count_week = RequestLog.objects.filter(
-                    ip=log.ip, created_at__date__gte=week_ago
-                ).count()
-                count_month = RequestLog.objects.filter(
-                    ip=log.ip, created_at__date__gte=month_ago
-                ).count()
+                count_today = today_counts.get(log.ip, 0)
+                count_week  = week_counts.get(log.ip, 0)
+                count_month = month_counts.get(log.ip, 0)
 
                 writer.writerow([
                     log.created_at.strftime("%H:%M:%S"),
