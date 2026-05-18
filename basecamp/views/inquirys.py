@@ -266,7 +266,7 @@ def inquiry_details1(request):
                 direction = 'Pickup from Intl Airport'
             else:
                 direction = 'Pickup from Domestic Airport'
-            suburb = original_end_point
+            suburb = end_cruise.name if end_cruise else original_end_point
             start_point = ''
             end_point = ''
 
@@ -276,7 +276,7 @@ def inquiry_details1(request):
                 direction = 'Drop off to Intl Airport'
             else:
                 direction = 'Drop off to Domestic Airport'
-            suburb = original_start_point
+            suburb = start_cruise.name if start_cruise else original_start_point
             start_point = ''
             end_point = ''
 
