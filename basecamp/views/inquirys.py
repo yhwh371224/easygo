@@ -20,6 +20,7 @@ from django_ratelimit.decorators import ratelimit
 from regions.models.airport import CruiseTerminal
 from utils.telegram import send_telegram_notification, get_ip_info
 from regions.models import RequestLog
+from regions.pricing import calculate_inquiry_price
 
 logger = logging.getLogger("inquiry")
 
@@ -152,6 +153,7 @@ def inquiry_details(request):
             return_end_point=return_end_point, message=message, region=post_region,
         )
 
+        p.price = calculate_inquiry_price(p, post_region)
         p.save()
 
         ip = get_client_ip(request)
@@ -329,6 +331,7 @@ def inquiry_details1(request):
             return_end_point=return_end_point, message=message,
         )
         p.region = post_region
+        p.price = calculate_inquiry_price(p, post_region)
         p.save()
 
         ip = get_client_ip(request)

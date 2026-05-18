@@ -7,6 +7,7 @@ from django_ratelimit.decorators import ratelimit
 
 from regions.models import Region, RequestLog
 from blog.models import Inquiry
+from regions.pricing import calculate_inquiry_price
 from basecamp.basecamp_utils import (
     require_turnstile, is_duplicate_submission,
     booking_success_response, parse_baggage, parse_special_items, parse_booking_dates,
@@ -100,6 +101,7 @@ def region_inquiry_details(request, region_slug):
             return_end_point=return_end_point, message=message,
         )
         p.region = region
+        p.price = calculate_inquiry_price(p, region)
         p.save()
 
         ip = get_client_ip(request)

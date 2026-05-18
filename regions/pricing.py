@@ -2,10 +2,11 @@
 Pricing calculation engine for EasyGo airport transfers.
 
 Usage:
-    rule   = get_pricing_rule(region_id)
-    config = get_pricing_config(suburb, vehicle, rule)
-    result = calculate_price(config, booking)
-    data   = price_to_dict(result)
+    rule    = get_pricing_rule(region_id)
+    config  = build_config_from_rule(suburb_obj, rule)
+    booking = inquiry_to_pricing(inquiry, rule)
+    result  = calculate_price(config, booking)
+    total   = result["total"]          # Decimal
 """
 from __future__ import annotations
 
@@ -42,15 +43,11 @@ class WindowConfig:
 @dataclass
 class PricingConfig:
     base_fare: Decimal
-    distance_km_base: Decimal
-    rate_per_km: Decimal
     extra_bag_fee: Decimal
     oversize_fee: Decimal
     second_stop_fee: Decimal
-    vehicle_multiplier: Decimal
-    vehicle_capacity: int
-    pax_surcharge_mid_fee: Decimal
-    pax_surcharge_large_fee: Decimal
+    pax_surcharge_mid_fee: Decimal    # per-person rate from 2nd passenger ($10)
+    pax_surcharge_large_fee: Decimal  # extra flat fee for 10+ passengers ($30)
     windows: List[WindowConfig] = field(default_factory=list)
 
 
@@ -58,10 +55,8 @@ class PricingConfig:
 class ExtraItems:
     extra_bags: int = 0
     oversize_items: int = 0
-    special_items: int = 0                           # legacy: uniform-fee count path
-    special_item_fee: Decimal = Decimal("10.00")     # legacy: from SpecialItemType.fee
-    special_items_fee_total: Decimal = Decimal("0.00")  # per-item JSON fee total
-    extra_stop: int = 0                              # number of extra stops
+    special_items_fee_total: Decimal = Decimal("0.00")  # sum from special_items JSON
+    extra_stop: int = 0
 
 
 @dataclass
@@ -69,66 +64,57 @@ class BookingInput:
     passengers: int
     pickup_hour: int                            # local time, 0-23
     extras: ExtraItems = field(default_factory=ExtraItems)
-    has_second_stop: bool = False
-    extra_distance_km: Decimal = Decimal("0.00")
+    extra_distance_km: Decimal = Decimal("0.00")  # kept for API compat, unused
 
 
 # ── Core calculation ──────────────────────────────────────────────────────────
 
 def calculate_price(config: PricingConfig, booking: BookingInput) -> dict:
     """
-    Returns a breakdown dict with Decimal values:
-        base, distance_charge, vehicle_subtotal,
-        peak_surcharge, pax_surcharge, extra_fees, total
+    New pricing formula:
+
+        total = base_fare
+              + peak_surcharge          (base_fare × rate if pickup in window)
+              + pax_surcharge           ((pax-1) × $10; +$30 extra for 10+)
+              + extra_fees              (bags, oversize, special items, extra stops)
+
+    Returns a breakdown dict with Decimal values.
     """
     ZERO = Decimal("0.00")
 
-    # 1. Distance charge
-    total_km = config.distance_km_base + booking.extra_distance_km
-    distance_charge = (total_km * config.rate_per_km).quantize(Decimal("0.01"))
-
-    # 2. Vehicle subtotal (base fare + distance, scaled by vehicle multiplier)
-    vehicle_subtotal = (
-        (config.base_fare + distance_charge) * config.vehicle_multiplier
-    ).quantize(Decimal("0.01"))
-
-    # 3. Peak / night surcharge (first matching window wins)
+    # 1. Peak / night surcharge on base fare (first matching window wins)
     peak_surcharge = ZERO
     for window in config.windows:
         if window.matches_hour(booking.pickup_hour):
-            peak_surcharge = (vehicle_subtotal * window.surcharge_rate).quantize(Decimal("0.01"))
+            peak_surcharge = (config.base_fare * window.surcharge_rate).quantize(Decimal("0.01"))
             break
 
-    # 4. Passenger surcharge
+    # 2. Passenger surcharge: +$10 per person from 2nd passenger, +$30 extra for 10+
     pax = booking.passengers
-    if pax >= 10:
-        pax_surcharge = config.pax_surcharge_mid_fee + config.pax_surcharge_large_fee
-    elif pax >= 5:
-        pax_surcharge = config.pax_surcharge_mid_fee
+    if pax >= 2:
+        pax_surcharge = Decimal(pax - 1) * config.pax_surcharge_mid_fee
+        if pax >= 10:
+            pax_surcharge += config.pax_surcharge_large_fee
     else:
         pax_surcharge = ZERO
 
-    # 5. Extras
+    # 3. Extras
     ex = booking.extras
     extra_fees = (
         Decimal(ex.extra_bags)    * config.extra_bag_fee
-        + Decimal(ex.oversize_items)  * config.oversize_fee
-        + Decimal(ex.special_items)   * ex.special_item_fee      # legacy uniform-fee path
-        + ex.special_items_fee_total                              # per-item JSON path
-        + Decimal(ex.extra_stop)  * config.second_stop_fee       # multi-stop
-        + (config.second_stop_fee if booking.has_second_stop else ZERO)  # legacy boolean
+        + Decimal(ex.oversize_items) * config.oversize_fee
+        + ex.special_items_fee_total
+        + Decimal(ex.extra_stop)  * config.second_stop_fee
     ).quantize(Decimal("0.01"))
 
-    total = (vehicle_subtotal + peak_surcharge + pax_surcharge + extra_fees).quantize(Decimal("0.01"))
+    total = (config.base_fare + peak_surcharge + pax_surcharge + extra_fees).quantize(Decimal("0.01"))
 
     return {
-        "base":             config.base_fare,
-        "distance_charge":  distance_charge,
-        "vehicle_subtotal": vehicle_subtotal,
-        "peak_surcharge":   peak_surcharge,
-        "pax_surcharge":    pax_surcharge,
-        "extra_fees":       extra_fees,
-        "total":            total,
+        "base":           config.base_fare,
+        "peak_surcharge": peak_surcharge,
+        "pax_surcharge":  pax_surcharge,
+        "extra_fees":     extra_fees,
+        "total":          total,
     }
 
 
@@ -139,20 +125,16 @@ def price_to_dict(result: dict) -> dict:
 
 # ── DB helpers ────────────────────────────────────────────────────────────────
 
-def get_pricing_config(suburb, vehicle, rule) -> PricingConfig:
-    """Assemble a PricingConfig from ORM objects."""
+def build_config_from_rule(suburb, rule) -> PricingConfig:
+    """Assemble a PricingConfig from a RegionSuburb and PricingRule."""
     return PricingConfig(
-        base_fare               = suburb.price,
-        distance_km_base        = suburb.distance_km or Decimal("0.00"),
-        rate_per_km             = rule.rate_per_km,
-        extra_bag_fee           = rule.extra_bag_fee,
-        oversize_fee            = rule.oversize_fee,
-        second_stop_fee         = rule.second_stop_fee,
-        vehicle_multiplier      = vehicle.price_multiplier,
-        vehicle_capacity        = vehicle.capacity_pax,
-        pax_surcharge_mid_fee   = rule.pax_surcharge_mid_fee,
-        pax_surcharge_large_fee = rule.pax_surcharge_large_fee,
-        windows                 = [WindowConfig.from_dict(w) for w in rule.peak_windows],
+        base_fare=suburb.price,
+        extra_bag_fee=rule.extra_bag_fee,
+        oversize_fee=rule.oversize_fee,
+        second_stop_fee=rule.second_stop_fee,
+        pax_surcharge_mid_fee=rule.pax_surcharge_mid_fee,
+        pax_surcharge_large_fee=rule.pax_surcharge_large_fee,
+        windows=[WindowConfig.from_dict(w) for w in rule.peak_windows],
     )
 
 
@@ -174,27 +156,25 @@ _NO_FEE_KEYS = frozenset({"baby", "booster", "pram"})
 _OVERSIZE_SUFFIX = "_oversize"
 
 
-def inquiry_to_pricing(inquiry, rule) -> "BookingInput":
+def inquiry_to_pricing(inquiry, rule) -> BookingInput:
     """
     Build a BookingInput from an Inquiry instance and a PricingRule.
 
     special_items JSON schema:
         {
             "ski": 2, "ski_oversize": true,
-            "baby": 1,          # no fee — vehicle allocation only
+            "baby": 1,          # no fee
             ...
         }
-    Oversize flag keys (ending in _oversize) are boolean and are read
-    alongside their base key; they are never iterated as quantity items.
     """
     items: dict = inquiry.special_items or {}
     fee_total = Decimal("0.00")
 
     for key, qty in items.items():
         if key.endswith(_OVERSIZE_SUFFIX):
-            continue                   # handled via base key lookup below
+            continue
         if key in _NO_FEE_KEYS:
-            continue                   # baby / booster / pram — no charge
+            continue
         qty = int(qty or 0)
         if not qty:
             continue
@@ -216,5 +196,38 @@ def inquiry_to_pricing(inquiry, rule) -> "BookingInput":
         passengers=int(inquiry.no_of_passenger or 0),
         pickup_hour=hour,
         extras=extras,
-        extra_distance_km=Decimal("0.00"),
     )
+
+
+# ── Top-level inquiry price helper ────────────────────────────────────────────
+
+def calculate_inquiry_price(inquiry, region) -> str | None:
+    """
+    Calculate and return the price total for an Inquiry before saving.
+    Returns a string like "120.00", or None if suburb/rule lookup fails.
+    """
+    from regions.models import RegionSuburb
+
+    if not region:
+        return None
+
+    try:
+        rule = get_pricing_rule(region.id)
+    except Exception:
+        return None
+
+    suburb_obj = None
+    if inquiry.suburb:
+        suburb_obj = (
+            RegionSuburb.objects
+            .filter(region=region, name=inquiry.suburb, is_active=True)
+            .first()
+        )
+
+    if not suburb_obj:
+        return None
+
+    config = build_config_from_rule(suburb_obj, rule)
+    booking = inquiry_to_pricing(inquiry, rule)
+    result = calculate_price(config, booking)
+    return str(result["total"])
