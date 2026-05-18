@@ -33,6 +33,19 @@ class InquiryAdmin(admin.ModelAdmin):
     list_filter  = ['region', 'is_confirmed', 'cancelled', 'pending']
     search_fields = ['pickup_date', 'pickup_time', 'suburb', 'email', 'street', 'booker_email', 'booker_name',
                      'name', 'contact', 'email1', 'message', 'notice', 'region__name']
+    readonly_fields = ['suburb_distance_km', 'suburb_base_price']
+
+    def suburb_distance_km(self, obj):
+        from regions.models import RegionSuburb
+        rs = RegionSuburb.objects.filter(region=obj.region, name__iexact=obj.suburb).first()
+        return f"{rs.distance_km} km" if rs and rs.distance_km is not None else "-"
+    suburb_distance_km.short_description = "Distance (km)"
+
+    def suburb_base_price(self, obj):
+        from regions.models import RegionSuburb
+        rs = RegionSuburb.objects.filter(region=obj.region, name__iexact=obj.suburb).first()
+        return f"${rs.price}" if rs else "-"
+    suburb_base_price.short_description = "Base Price"
 
 
 class PaypalPaymentAdmin(admin.ModelAdmin):
@@ -51,6 +64,19 @@ class PostAdmin(admin.ModelAdmin):
     list_filter  = ['region', 'cancelled', 'pending', 'cash']
     search_fields = ['pickup_date', 'pickup_time', 'suburb', 'email', 'street', 'booker_email', 'booker_name',
                      'name', 'contact', 'price', 'paid', 'email1', 'message', 'notice', 'region__name']
+    readonly_fields = ['suburb_distance_km', 'suburb_base_price']
+
+    def suburb_distance_km(self, obj):
+        from regions.models import RegionSuburb
+        rs = RegionSuburb.objects.filter(region=obj.region, name__iexact=obj.suburb).first()
+        return f"{rs.distance_km} km" if rs and rs.distance_km is not None else "-"
+    suburb_distance_km.short_description = "Distance (km)"
+
+    def suburb_base_price(self, obj):
+        from regions.models import RegionSuburb
+        rs = RegionSuburb.objects.filter(region=obj.region, name__iexact=obj.suburb).first()
+        return f"${rs.price}" if rs else "-"
+    suburb_base_price.short_description = "Base Price"
 
 
 class PhoneMappingAdmin(admin.ModelAdmin):
