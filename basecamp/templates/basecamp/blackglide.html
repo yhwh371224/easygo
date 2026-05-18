@@ -1,0 +1,658 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Black Glide Sydney | Luxury Airport Transfers & Chauffeur Service</title>
+<meta name="description" content="Sydney's premier luxury chauffeur service. Airport transfers, corporate hire, weddings & tours. Instant online booking. Available 24/7 across Greater Sydney.">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'basecamp/css/blackglide.css' %}">
+</head>
+<body>
+
+<!-- ── NAVIGATION ── -->
+<nav>
+  <a href="#" class="logo">Black <span>Glide</span></a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#fleet">Fleet</a></li>
+    <li><a href="#coverage">Sydney</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div style="display:flex;align-items:center;gap:1.5rem;">
+    {% comment %} <div class="nav-phone">📞 <strong>(02) 9XXX XXXX</strong></div> {% endcomment %}
+    <a href="#booking" class="nav-cta">Book Now</a>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <div class="hero-img" id="heroImg" style="background-image:url('{% static "basecamp/images/hero-bg.webp" %}')"></div>
+  <div class="hero-bg"></div>
+  <div class="hero-bg2"></div>
+  <div class="vline vl-l"></div>
+  <div class="vline vl-r"></div>
+  <div class="hero-content">
+    <div class="eyebrow">Sydney's Premier Chauffeur Service</div>
+    <h1>Arrive in<br><em>Black Glide</em><br>Style</h1>
+    <p class="hero-sub">Luxury chauffeur-driven transfers across Greater Sydney — airport, corporate, weddings & tours. Available 24/7.</p>
+    <div class="hero-btns">
+      <a href="#booking" class="btn-gold">Get Instant Quote</a>
+      <a href="#fleet" class="btn-line">View Our Fleet</a>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-bar"></div>
+  </div>
+</div>
+
+<!-- ── BOOKING ENGINE ── -->
+<div class="booking-engine" id="booking">
+  <div class="booking-tabs">
+    <button class="btab active" onclick="switchTab('airport')">✈ Airport Transfer</button>
+    <button class="btab" onclick="switchTab('hourly')">⏱ Hourly Hire</button>
+    <button class="btab" onclick="switchTab('wedding')">💍 Wedding & Events</button>
+    <button class="btab" onclick="switchTab('corporate')">💼 Corporate</button>
+  </div>
+  <div class="booking-form-wrap">
+
+    <!-- AIRPORT TAB -->
+    <div class="bform active" id="tab-airport">
+      <div class="bform-grid">
+        <div class="bf-group">
+          <div class="bf-label">Pickup Location</div>
+          <input class="bf-input" id="ap-from" type="text" placeholder="Sydney Airport (SYD) or Address">
+        </div>
+        <div class="bf-group">
+          <div class="bf-label">Destination</div>
+          <input class="bf-input" id="ap-to" type="text" placeholder="Hotel, Suburb or Address">
+        </div>
+        <div class="bf-group">
+          <div class="bf-label">Vehicle Class</div>
+          <select class="bf-input" id="ap-vehicle">
+            <option value="sedan">Business Sedan — from $95</option>
+            <option value="luxury">Luxury Sedan (S-Class) — from $145</option>
+            <option value="suv">Premium SUV — from $125</option>
+            <option value="van">People Mover (7 seat) — from $155</option>
+            <option value="limo">Stretch Limousine — from $280</option>
+          </select>
+        </div>
+        <div class="bf-group">
+          <div class="bf-label">Date & Time</div>
+          <input class="bf-input" id="ap-date" type="datetime-local">
+        </div>
+        <button class="bf-submit" onclick="calcPrice('airport')">Calculate Price →</button>
+      </div>
+      <div class="price-result" id="price-airport">
+        <div class="price-result-inner">
+          <div>
+            <div class="price-label">Estimated Fare</div>
+            <div class="price-amount" id="pa-amount">$0</div>
+            <div class="price-note">Includes all tolls · GST inclusive · No hidden fees</div>
+          </div>
+          <div class="price-details">
+            <div class="pd-item"><strong id="pa-vehicle">—</strong>Vehicle</div>
+            <div class="pd-item"><strong id="pa-dist">—</strong>Est. Distance</div>
+            <div class="pd-item"><strong id="pa-time">—</strong>Est. Duration</div>
+            <div class="pd-item"><strong>60 min</strong>Free Wait Time</div>
+          </div>
+          <div class="price-actions">
+            <button class="btn-gold" onclick="openModal('airport')">Book This Journey</button>
+            <button class="btn-line" onclick="callUs()">Call to Book</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HOURLY TAB -->
+    <div class="bform" id="tab-hourly">
+      <div class="bform-grid-3">
+        <div class="bf-group">
+          <div class="bf-label">Pickup Location</div>
+          <input class="bf-input" id="hr-from" type="text" placeholder="Sydney CBD or Address">
+        </div>
+        <div class="bf-group">
+          <div class="bf-label">Vehicle Class</div>
+          <select class="bf-input" id="hr-vehicle">
+            <option value="sedan">Business Sedan — $95/hr</option>
+            <option value="luxury">Luxury Sedan (S-Class) — $145/hr</option>
+            <option value="suv">Premium SUV — $125/hr</option>
+            <option value="van">People Mover — $155/hr</option>
+          </select>
+        </div>
+        <div class="bf-group">
+          <div class="bf-label">Hours Required</div>
+          <select class="bf-input" id="hr-hours">
+            <option value="2">2 hours</option>
+            <option value="3">3 hours</option>
+            <option value="4">4 hours</option>
+            <option value="5">5 hours</option>
+            <option value="6">6 hours</option>
+            <option value="8">8 hours (full day)</option>
+            <option value="10">10 hours</option>
+          </select>
+        </div>
+        <button class="bf-submit" onclick="calcPrice('hourly')">Calculate Price →</button>
+      </div>
+      <div class="price-result" id="price-hourly">
+        <div class="price-result-inner">
+          <div>
+            <div class="price-label">Estimated Fare</div>
+            <div class="price-amount" id="ph-amount">$0</div>
+            <div class="price-note">Includes fuel & GST · Minimum 2 hours</div>
+          </div>
+          <div class="price-details">
+            <div class="pd-item"><strong id="ph-vehicle">—</strong>Vehicle</div>
+            <div class="pd-item"><strong id="ph-hours">—</strong>Duration</div>
+            <div class="pd-item"><strong id="ph-rate">—</strong>Hourly Rate</div>
+          </div>
+          <div class="price-actions">
+            <button class="btn-gold" onclick="openModal('hourly')">Book This Journey</button>
+            <button class="btn-line" onclick="callUs()">Call to Book</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEDDING TAB -->
+    <div class="bform" id="tab-wedding">
+      <div class="bform-grid">
+        <div class="bf-group">
+          <div class="bf-label">Venue / Location</div>
+          <input class="bf-input" id="wd-loc" type="text" placeholder="Ceremony or Reception Venue">
+        </div>
+        <div class="bf-group">
+          <div class="bf-label">Vehicle</div>
+          <select class="bf-input" id="wd-vehicle">
+            <option value="limo">Stretch Limousine — from $280</option>
+            <option value="luxury">Luxury Sedan (S-Class) — from $145</option>
+            <option value="suv">Premium SUV — from $125</option>
+            <option value="van">Bridal Party Van — from $195</option>
+          </select>
+        </div>
+        <div class="bf-group">
+          <div class="bf-label">Wedding Date</div>
+          <input class="bf-input" id="wd-date" type="date">
+        </div>
+        <div class="bf-group">
+          <div class="bf-label">Hours Required</div>
+          <select class="bf-input" id="wd-hours">
+            <option value="3">3 hours</option>
+            <option value="4">4 hours</option>
+            <option value="5">5 hours</option>
+            <option value="6">6 hours</option>
+            <option value="8">Full Day (8 hrs)</option>
+          </select>
+        </div>
+        <button class="bf-submit" onclick="calcPrice('wedding')">Get Wedding Quote →</button>
+      </div>
+      <div class="price-result" id="price-wedding">
+        <div class="price-result-inner">
+          <div>
+            <div class="price-label">Wedding Package From</div>
+            <div class="price-amount" id="pw-amount">$0</div>
+            <div class="price-note">Includes ribbon decoration, champagne & red carpet</div>
+          </div>
+          <div class="price-details">
+            <div class="pd-item"><strong id="pw-vehicle">—</strong>Vehicle</div>
+            <div class="pd-item"><strong id="pw-hours">—</strong>Duration</div>
+          </div>
+          <div class="price-actions">
+            <button class="btn-gold" onclick="openModal('wedding')">Book Wedding Package</button>
+            <button class="btn-line" onclick="callUs()">Speak to Us</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CORPORATE TAB -->
+    <div class="bform" id="tab-corporate">
+      <div class="bform-grid-3">
+        <div class="bf-group">
+          <div class="bf-label">Company Name</div>
+          <input class="bf-input" id="co-company" type="text" placeholder="Your Company">
+        </div>
+        <div class="bf-group">
+          <div class="bf-label">Service Type</div>
+          <select class="bf-input" id="co-type">
+            <option value="airport">Airport Transfer</option>
+            <option value="roadshow">Roadshow / Day Hire</option>
+            <option value="event">Conference / Event</option>
+            <option value="account">Monthly Account</option>
+          </select>
+        </div>
+        <div class="bf-group">
+          <div class="bf-label">Estimated Trips/Month</div>
+          <select class="bf-input" id="co-volume">
+            <option value="1-5">1–5 trips</option>
+            <option value="5-20">5–20 trips</option>
+            <option value="20-50">20–50 trips</option>
+            <option value="50+">50+ trips</option>
+          </select>
+        </div>
+        <button class="bf-submit" onclick="calcPrice('corporate')">Get Corporate Rate →</button>
+      </div>
+      <div class="price-result" id="price-corporate">
+        <div class="price-result-inner">
+          <div>
+            <div class="price-label">Corporate Account</div>
+            <div class="price-amount" style="font-size:28px;" id="pc-msg">Tailored pricing for your business</div>
+            <div class="price-note">Volume discounts · Monthly invoicing · Priority dispatch</div>
+          </div>
+          <div class="price-actions">
+            <button class="btn-gold" onclick="openModal('corporate')">Apply for Account</button>
+            <button class="btn-line" onclick="callUs()">Speak to Our Team</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── STATS ── -->
+<div class="stats">
+  <div class="stat"><div class="stat-n">10+</div><div class="stat-l">Years in Sydney</div></div>
+  <div class="stat"><div class="stat-n">30K+</div><div class="stat-l">Journeys Completed</div></div>
+  <div class="stat"><div class="stat-n">4.9★</div><div class="stat-l">Google Rating</div></div>
+  <div class="stat"><div class="stat-n">24/7</div><div class="stat-l">Always Available</div></div>
+  <div class="stat"><div class="stat-n">$0</div><div class="stat-l">Hidden Fees</div></div>
+</div>
+
+<!-- ── SERVICES ── -->
+<div class="svc-wrap" id="services">
+<div class="sec">
+  <div class="sec-eye">What We Offer</div>
+  <h2>Every Occasion,<br><em>Perfectly Served</em></h2>
+  <p class="sec-desc">From Sydney Airport arrivals to Hunter Valley day tours — tailored luxury for every journey.</p>
+  <div class="svc-grid">
+    <div class="svc">
+      <div class="svc-icon"><svg viewBox="0 0 24 24"><path d="M20 7H4C3 7 2 8 2 9v6c0 1 1 2 2 2h16c1 0 2-1 2-2V9c0-1-1-2-2-2z"/><circle cx="6" cy="17" r="2"/><circle cx="18" cy="17" r="2"/></svg></div>
+      <div class="svc-title">Airport Transfers</div>
+      <div class="svc-desc">Sydney Airport (SYD) pickups and drop-offs with real-time flight monitoring, 60-minute complimentary wait, and meet-and-greet in arrivals.</div>
+      <div class="svc-price">From $95 · All terminals covered</div>
+      <button class="svc-link" onclick="switchTab('airport');document.getElementById('booking').scrollIntoView({behavior:'smooth'})">Get Instant Quote →</button>
+    </div>
+    <div class="svc">
+      <div class="svc-icon"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="1"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></div>
+      <div class="svc-title">Corporate & Executive</div>
+      <div class="svc-desc">Discreet transfers for CBD executives, board members and visiting VIPs. On-account monthly billing available with dedicated account manager.</div>
+      <div class="svc-price">From $95 · Priority dispatch</div>
+      <button class="svc-link" onclick="switchTab('corporate');document.getElementById('booking').scrollIntoView({behavior:'smooth'})">Get Corporate Rate →</button>
+    </div>
+    <div class="svc">
+      <div class="svc-icon"><svg viewBox="0 0 24 24"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2z"/></svg></div>
+      <div class="svc-title">Weddings & Events</div>
+      <div class="svc-desc">Ribbon-dressed vehicles, champagne on arrival, red carpet service, and white-glove coordination for your Sydney wedding or gala.</div>
+      <div class="svc-price">From $280 · Packages available</div>
+      <button class="svc-link" onclick="switchTab('wedding');document.getElementById('booking').scrollIntoView({behavior:'smooth'})">Get Wedding Quote →</button>
+    </div>
+    <div class="svc">
+      <div class="svc-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+      <div class="svc-title">Hourly Hire</div>
+      <div class="svc-desc">Retain your chauffeur for as long as needed. Ideal for shopping, multi-stop business days, or exploring Sydney at your own pace.</div>
+      <div class="svc-price">From $95/hr · 2 hour minimum</div>
+      <button class="svc-link" onclick="switchTab('hourly');document.getElementById('booking').scrollIntoView({behavior:'smooth'})">Book By the Hour →</button>
+    </div>
+    <div class="svc">
+      <div class="svc-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
+      <div class="svc-title">Winery & Day Tours</div>
+      <div class="svc-desc">Hunter Valley wine tours, Blue Mountains escapes, and Southern Highlands day journeys in ultimate comfort from Sydney.</div>
+      <div class="svc-price">From $580 · Full day packages</div>
+      <button class="svc-link" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Enquire Now →</button>
+    </div>
+    <div class="svc">
+      <div class="svc-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+      <div class="svc-title">Group Transfers</div>
+      <div class="svc-desc">Coordinated fleet logistics for groups up to 50. Corporate roadshows, sporting events, cruise terminals, and private Sydney Harbour functions.</div>
+      <div class="svc-price">From $155 · Fleet coordination</div>
+      <button class="svc-link" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Get Group Quote →</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── WHY US ── -->
+<div class="why-wrap">
+<div class="sec">
+  <div class="sec-eye">Why Black Glide</div>
+  <h2>The Difference You<br><em>Can Feel</em></h2>
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="why-num">01</div>
+      <div class="why-title">Instant Online Booking</div>
+      <div class="why-desc">Get a real price in seconds. Book and confirm immediately — no waiting for a callback like other services.</div>
+    </div>
+    <div class="why-card">
+      <div class="why-num">02</div>
+      <div class="why-title">Flight Tracking</div>
+      <div class="why-desc">We monitor your flight in real-time. Delayed? Your chauffeur already knows and adjusts accordingly.</div>
+    </div>
+    <div class="why-card">
+      <div class="why-num">03</div>
+      <div class="why-title">Fixed Pricing</div>
+      <div class="why-desc">The price you see is the price you pay. No surge pricing, no surprise tolls, no hidden extras. Ever.</div>
+    </div>
+    <div class="why-card">
+      <div class="why-num">04</div>
+      <div class="why-title">Sydney Specialists</div>
+      <div class="why-desc">Born and based in Sydney. Our chauffeurs know every shortcut, every entrance, every preferred drop-off point in the city.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── FLEET ── -->
+<div class="fleet-wrap" id="fleet">
+<div class="sec">
+  <div class="sec-eye">Our Fleet</div>
+  <h2>Vehicles Worthy<br>of <em>Distinction</em></h2>
+  <p class="sec-desc">Every vehicle is less than 3 years old, immaculately maintained, and presented to the highest standard.</p>
+  <div class="fleet-grid">
+    <div class="fleet-main">
+      <img src="{% static 'basecamp/images/fleet-main1.webp' %}" class="fleet-img" alt="Mercedes-Benz S-Class">
+      <div class="fleet-info">
+        <div class="fleet-tag">Flagship · Most Popular</div>
+        <div class="fleet-name">Mercedes-Benz S-Class</div>
+        <div class="fleet-spec">Long Wheelbase · Executive Rear Suite · Ambient Lighting · Wi-Fi</div>
+        <div class="fleet-price">From $145 per transfer</div>
+      </div>
+    </div>
+    <div class="fleet-side">
+      <div class="fleet-item">
+        <img src="{% static 'basecamp/images/fleet-sedan.webp' %}" class="fleet-img" alt="Business Sedan">
+        <div class="fleet-info">
+          <div class="fleet-itag">Business Sedan</div>
+          <div class="fleet-iname">Mercedes E-Class / BMW 5</div>
+          <div class="fleet-iprice">From $95</div>
+        </div>
+      </div>
+      <div class="fleet-item">
+        <img src="{% static 'basecamp/images/fleet-suv.webp' %}" class="fleet-img" alt="Premium SUV">
+        <div class="fleet-info">
+          <div class="fleet-itag">Premium SUV</div>
+          <div class="fleet-iname">Mercedes GLS / BMW X7</div>
+          <div class="fleet-iprice">From $125</div>
+        </div>
+      </div>
+      <div class="fleet-item">
+        <img src="{% static 'basecamp/images/fleet-limo.webp' %}" class="fleet-img" alt="Stretch Limousine">
+        <div class="fleet-info">
+          <div class="fleet-itag">Special Occasions</div>
+          <div class="fleet-iname">Stretch Limousine</div>
+          <div class="fleet-iprice">From $280</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── PROCESS ── -->
+<div class="process-wrap">
+<div class="sec">
+  <div class="sec-eye">How It Works</div>
+  <h2>Booked in Under<br><em>60 Seconds</em></h2>
+  <div class="process-row">
+    <div class="p-step">
+      <div class="p-num">01</div>
+      <div class="p-title">Get Instant Price</div>
+      <div class="p-desc">Enter your pickup and destination above. See your exact price immediately — no forms, no callbacks.</div>
+    </div>
+    <div class="p-step">
+      <div class="p-num">02</div>
+      <div class="p-title">Confirm & Pay</div>
+      <div class="p-desc">Book securely online in under a minute. Instant confirmation email with your chauffeur details.</div>
+    </div>
+    <div class="p-step">
+      <div class="p-num">03</div>
+      <div class="p-title">We Prepare</div>
+      <div class="p-desc">Your chauffeur is briefed on your preferences. Flight tracked in real-time. Chilled water ready.</div>
+    </div>
+    <div class="p-step">
+      <div class="p-num">04</div>
+      <div class="p-title">Arrive in Style</div>
+      <div class="p-desc">Your uniformed chauffeur is waiting — 15 minutes early. Every time, without exception.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── COVERAGE ── -->
+<div class="coverage-wrap" id="coverage">
+  <div class="coverage-inner">
+    <div>
+      <div class="sec-eye">Sydney Coverage</div>
+      <h2>Every Corner<br>of <em>Sydney</em></h2>
+      <p class="sec-desc">From Bondi to the Blue Mountains, Manly to Macquarie Park — our Sydney knowledge is unmatched.</p>
+      <div class="coverage-highlight">"Our chauffeurs know Sydney like no one else — every shortcut, every landmark, every preferred entrance."</div>
+      <div class="area-list">
+        <span class="area-tag">CBD & City</span>
+        <span class="area-tag">Sydney Airport</span>
+        <span class="area-tag">Eastern Suburbs</span>
+        <span class="area-tag">North Shore</span>
+        <span class="area-tag">Northern Beaches</span>
+        <span class="area-tag">Inner West</span>
+        <span class="area-tag">Parramatta</span>
+        <span class="area-tag">Hills District</span>
+        <span class="area-tag">Southern Suburbs</span>
+        <span class="area-tag">Hunter Valley</span>
+        <span class="area-tag">Blue Mountains</span>
+        <span class="area-tag">Wollongong</span>
+      </div>
+    </div>
+    <div class="coverage-map" style="background-image:url('{% static "basecamp/images/sydney-night.webp" %}')">
+      <div style="position:relative;z-index:2;">
+      <svg viewBox="0 0 300 360" width="260" height="310" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M90 115 Q118 95 148 106 Q180 116 200 100 Q222 86 244 94 L252 136 Q232 146 212 134 Q190 122 170 138 Q148 155 128 144 Q108 134 90 144 Z" fill="rgba(201,168,76,0.07)" stroke="rgba(201,168,76,0.3)" stroke-width="1"/>
+        <rect x="128" y="142" width="34" height="42" rx="2" fill="rgba(201,168,76,0.09)" stroke="rgba(201,168,76,0.45)" stroke-width="1.1"/>
+        <path d="M118 133 Q148 112 180 133" stroke="rgba(201,168,76,0.55)" stroke-width="1.4" fill="none"/>
+        <line x1="118" y1="133" x2="118" y2="142" stroke="rgba(201,168,76,0.35)" stroke-width="1"/>
+        <line x1="180" y1="133" x2="180" y2="142" stroke="rgba(201,168,76,0.35)" stroke-width="1"/>
+        <circle cx="188" cy="132" r="3.5" fill="var(--gold)" opacity="0.65"/>
+        <line x1="145" y1="184" x2="145" y2="320" stroke="rgba(201,168,76,0.13)" stroke-width="1"/>
+        <line x1="70" y1="192" x2="240" y2="192" stroke="rgba(201,168,76,0.13)" stroke-width="1"/>
+        <line x1="92" y1="144" x2="52" y2="252" stroke="rgba(201,168,76,0.09)" stroke-width="1"/>
+        <line x1="200" y1="144" x2="252" y2="272" stroke="rgba(201,168,76,0.09)" stroke-width="1"/>
+        <circle cx="145" cy="163" r="5" fill="var(--gold)" opacity="0.9"/>
+        <text x="154" y="167" fill="rgba(201,168,76,0.85)" font-size="8.5" font-family="Montserrat,sans-serif" letter-spacing="0.05em">CBD</text>
+        <circle cx="232" cy="158" r="3" fill="var(--gold)" opacity="0.55"/>
+        <text x="238" y="162" fill="rgba(201,168,76,0.55)" font-size="7.5" font-family="Montserrat,sans-serif">Eastern</text>
+        <circle cx="80" cy="202" r="3" fill="var(--gold)" opacity="0.55"/>
+        <text x="50" y="218" fill="rgba(201,168,76,0.55)" font-size="7.5" font-family="Montserrat,sans-serif">Inner West</text>
+        <circle cx="145" cy="262" r="3" fill="var(--gold)" opacity="0.55"/>
+        <text x="152" y="266" fill="rgba(201,168,76,0.55)" font-size="7.5" font-family="Montserrat,sans-serif">South</text>
+        <circle cx="92" cy="148" r="3" fill="var(--gold)" opacity="0.55"/>
+        <text x="52" y="145" fill="rgba(201,168,76,0.55)" font-size="7.5" font-family="Montserrat,sans-serif">N. Shore</text>
+        <circle cx="232" cy="252" r="3.5" fill="var(--gold)" opacity="0.7"/>
+        <text x="238" y="256" fill="rgba(201,168,76,0.65)" font-size="7.5" font-family="Montserrat,sans-serif">Airport ✈</text>
+        <circle cx="268" cy="46" r="14" stroke="rgba(201,168,76,0.18)" stroke-width="1" fill="none"/>
+        <text x="265" y="39" fill="rgba(201,168,76,0.5)" font-size="7.5" font-family="Montserrat,sans-serif" font-weight="500">N</text>
+        <line x1="268" y1="41" x2="268" y2="60" stroke="rgba(201,168,76,0.25)" stroke-width="0.7"/>
+        <line x1="258" y1="51" x2="278" y2="51" stroke="rgba(201,168,76,0.18)" stroke-width="0.7"/>
+      </svg>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── REVIEWS ── -->
+<div class="reviews-wrap" id="reviews">
+<div class="sec">
+  <div class="reviews-header">
+    <div>
+      <div class="sec-eye">Client Reviews</div>
+      <h2>Trusted by Sydney's<br><em>Finest</em></h2>
+    </div>
+    <div class="google-badge">
+      <div>
+        <div class="google-stars">★★★★★</div>
+        <div class="google-info"><strong>4.9 / 5.0</strong>Based on 180+ Google Reviews</div>
+      </div>
+    </div>
+  </div>
+  <div class="test-grid">
+    <div class="test">
+      <div class="test-stars">★★★★★</div>
+      <div class="qmark">"</div>
+      <div class="qtext">Black Glide is the only car service I trust for CBD meetings. The instant online booking was so easy — price shown upfront, no surprises.</div>
+      <div class="qauthor">James Whitfield</div>
+      <div class="qrole">Managing Director · Sydney CBD</div>
+    </div>
+    <div class="test">
+      <div class="test-stars">★★★★★</div>
+      <div class="qmark">"</div>
+      <div class="qtext">Our wedding day was flawless. The Black Glide team coordinated everything perfectly — the S-Class was stunning and our chauffeur was exceptional.</div>
+      <div class="qauthor">Sophie & Michael Chen</div>
+      <div class="qrole">Wedding · Northern Beaches</div>
+    </div>
+    <div class="test">
+      <div class="test-stars">★★★★★</div>
+      <div class="qmark">"</div>
+      <div class="qtext">Flight was delayed 2 hours and my chauffeur already knew when I landed. That level of service is why I book Black Glide every Sydney visit.</div>
+      <div class="qauthor">Alexandra Voss</div>
+      <div class="qrole">International Executive · Regular Client</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── CONTACT ── -->
+<div class="book-wrap" id="contact">
+  <div class="book-inner">
+    <div>
+      <div class="sec-eye">Get In Touch</div>
+      <h2>Ready to<br><em>Ride?</em></h2>
+      <p class="sec-desc">Our Sydney team is available around the clock. Bookings accepted from 2 hours to months in advance.</p>
+      <div class="contact-block">
+        <div>
+          <div class="ci-label">Phone</div>
+          <div class="ci-val">(02) 9XXX XXXX</div>
+        </div>
+        <div>
+          <div class="ci-label">After Hours</div>
+          <div class="ci-sub">0400 XXX XXX · Available 24/7</div>
+        </div>
+        <div>
+          <div class="ci-label">Email</div>
+          <div class="ci-sub">reservations@blackglide.com.au</div>
+        </div>
+        <div>
+          <div class="ci-label">Service Area</div>
+          <div class="ci-sub">Greater Sydney · Hunter Valley · Blue Mountains</div>
+        </div>
+      </div>
+    </div>
+    <div class="full-form">
+      <div class="f-row">
+        <div class="f-group"><div class="f-label">First Name</div><input class="f-input" type="text" placeholder="James"></div>
+        <div class="f-group"><div class="f-label">Last Name</div><input class="f-input" type="text" placeholder="Whitfield"></div>
+      </div>
+      <div class="f-group"><div class="f-label">Phone Number</div><input class="f-input" type="tel" placeholder="0400 000 000"></div>
+      <div class="f-group"><div class="f-label">Email Address</div><input class="f-input" type="email" placeholder="james@company.com.au"></div>
+      <div class="f-group">
+        <div class="f-label">Service Type</div>
+        <select class="f-input">
+          <option>Airport Transfer (SYD)</option>
+          <option>Corporate & Executive</option>
+          <option>Wedding & Events</option>
+          <option>Hourly Hire</option>
+          <option>Winery / Day Tour</option>
+          <option>Group Transfer</option>
+          <option>Corporate Account Enquiry</option>
+        </select>
+      </div>
+      <div class="f-row">
+        <div class="f-group"><div class="f-label">Date</div><input class="f-input" type="date"></div>
+        <div class="f-group"><div class="f-label">Time</div><input class="f-input" type="time" name="pickup_time"></div>
+      </div>
+      <div class="f-group"><div class="f-label">Pickup Location</div><input class="f-input" type="text" placeholder="Sydney CBD / Airport / Suburb"></div>
+      <div class="f-group"><div class="f-label">Destination</div><input class="f-input" type="text" placeholder="Address, Suburb or Venue"></div>
+      <button class="f-submit" onclick="submitEnquiry()">Send Enquiry →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-in">
+    <div class="ft">
+      <div>
+        <div class="flogo">Black <span>Glide</span></div>
+        <div class="fdesc">Sydney's most distinguished chauffeur service. Delivering exceptional journeys for those who demand nothing but the finest.</div>
+        <div class="fsocial">
+          <a href="#" class="fsoc"><svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+          <a href="#" class="fsoc"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+          <a href="#" class="fsoc"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+        </div>
+      </div>
+      <div>
+        <div class="fhead">Services</div>
+        <ul class="flinks">
+          <li><a href="#">Airport Transfers</a></li>
+          <li><a href="#">Corporate Hire</a></li>
+          <li><a href="#">Weddings</a></li>
+          <li><a href="#">Hourly Hire</a></li>
+          <li><a href="#">Day Tours</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="fhead">Sydney Areas</div>
+        <ul class="flinks">
+          <li><a href="#">CBD & City</a></li>
+          <li><a href="#">Eastern Suburbs</a></li>
+          <li><a href="#">North Shore</a></li>
+          <li><a href="#">Northern Beaches</a></li>
+          <li><a href="#">Inner West & West</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="fhead">Company</div>
+        <ul class="flinks">
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Our Fleet</a></li>
+          <li><a href="#">Corporate Accounts</a></li>
+          <li><a href="#">Join Our Fleet</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="fb">
+      <div class="fcopy">© 2025 Black Glide Pty Ltd · ABN 00 000 000 000 · Sydney NSW 2000 · Passenger Transport Accredited</div>
+      <div class="fbadge">blackglide.com.au</div>
+    </div>
+  </div>
+</footer>
+
+<!-- ── BOOKING MODAL ── -->
+<div class="modal-overlay" id="bookingModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <div class="modal-eye">Confirm Your Booking</div>
+    <div class="modal-title" id="modal-title">Airport Transfer</div>
+    <div class="modal-price" id="modal-price">$145 <span>est. fare</span></div>
+    <div class="modal-details" id="modal-details">
+      <div class="md-item"><strong id="md-from">—</strong>Pickup</div>
+      <div class="md-item"><strong id="md-to">—</strong>Destination</div>
+      <div class="md-item"><strong id="md-vehicle">—</strong>Vehicle</div>
+      <div class="md-item"><strong>Fixed Price</strong>No hidden fees</div>
+    </div>
+    <div class="modal-form">
+      <div class="f-row">
+        <div class="f-group"><div class="f-label">First Name</div><input class="f-input" type="text" placeholder="James"></div>
+        <div class="f-group"><div class="f-label">Last Name</div><input class="f-input" type="text" placeholder="Whitfield"></div>
+      </div>
+      <div class="f-group"><div class="f-label">Mobile Number</div><input class="f-input" type="tel" placeholder="0400 000 000"></div>
+      <div class="f-group"><div class="f-label">Email (confirmation sent here)</div><input class="f-input" type="email" placeholder="you@email.com"></div>
+      <div class="f-group"><div class="f-label">Special Requests (optional)</div><input class="f-input" type="text" placeholder="Child seat, extra luggage, preferences..."></div>
+      <button class="f-submit" onclick="confirmBooking()" style="margin-top:0.5rem;">Confirm & Book →</button>
+    </div>
+  </div>
+</div>
+
+<script src="{% static 'basecamp/js/blackglide.js' %}"></script>
+</body>
+</html>
