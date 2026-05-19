@@ -280,18 +280,18 @@ def inquiry_details1(request):
             start_point = ''
             end_point = ''
 
-        # ✅ 3. Cruise terminal pickup
+        # ✅ 3. Cruise terminal pickup (point to point)
         elif start_cruise:
-            direction = 'Pickup from Cruise Terminal'
-            suburb = original_end_point
+            direction = ''
+            suburb = ''
             start_point = start_cruise.name
-            end_point = ''
+            end_point = original_end_point
 
-        # ✅ 4. Cruise terminal drop-off
+        # ✅ 4. Cruise terminal drop-off (point to point)
         elif end_cruise:
-            direction = 'Drop off to Cruise Terminal'
-            suburb = original_start_point
-            start_point = ''
+            direction = ''
+            suburb = ''
+            start_point = original_start_point
             end_point = end_cruise.name
 
         baggage_str = parse_baggage(request)
