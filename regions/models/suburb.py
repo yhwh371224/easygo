@@ -23,6 +23,15 @@ class RegionSuburb(models.Model):
         help_text="Drive distance from airport in km (used for distance-based pricing)",
     )
 
+    latitude = models.DecimalField(
+        max_digits=9, decimal_places=6, null=True, blank=True,
+        help_text="WGS84 latitude of the suburb/terminal centroid",
+    )
+    longitude = models.DecimalField(
+        max_digits=9, decimal_places=6, null=True, blank=True,
+        help_text="WGS84 longitude of the suburb/terminal centroid",
+    )
+
     # Pinned items (airports, terminals) appear first in dropdowns
     is_pinned = models.BooleanField(default=False)
     sort_order = models.PositiveSmallIntegerField(default=0)
