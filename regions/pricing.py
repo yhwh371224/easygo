@@ -156,7 +156,7 @@ _NO_FEE_KEYS = frozenset({"baby", "booster", "pram"})
 _OVERSIZE_SUFFIX = "_oversize"
 
 
-def inquiry_to_pricing(inquiry, rule) -> BookingInput:
+def inquiry_to_pricing(inquiry, rule, is_return: bool = False) -> BookingInput:
     """
     Build a BookingInput from an Inquiry instance and a PricingRule.
 
@@ -182,13 +182,20 @@ def inquiry_to_pricing(inquiry, rule) -> BookingInput:
         fee = rule.special_item_oversize_fee if is_oversize else rule.special_item_fee
         fee_total += Decimal(qty) * fee
 
+    if is_return:
+        extra_stop = int(inquiry.extra_stop or 0) if inquiry.same_extra_stop else 0
+        pickup_time_str = inquiry.return_pickup_time
+    else:
+        extra_stop = int(inquiry.extra_stop or 0)
+        pickup_time_str = inquiry.pickup_time
+
     extras = ExtraItems(
         special_items_fee_total=fee_total,
-        extra_stop=int(inquiry.extra_stop or 0),
+        extra_stop=extra_stop,
     )
 
     try:
-        hour = int(str(inquiry.pickup_time).split(":")[0]) if inquiry.pickup_time else 0
+        hour = int(str(pickup_time_str).split(":")[0]) if pickup_time_str else 0
     except (ValueError, IndexError):
         hour = 0
 
@@ -204,6 +211,7 @@ def inquiry_to_pricing(inquiry, rule) -> BookingInput:
 def calculate_inquiry_price(inquiry, region) -> str | None:
     """
     Calculate and return the price total for an Inquiry before saving.
+    Includes return trip price if return_pickup_date is set.
     Returns a string like "120.00", or None if suburb/rule lookup fails.
     """
     from regions.models import RegionSuburb
@@ -228,6 +236,12 @@ def calculate_inquiry_price(inquiry, region) -> str | None:
         return None
 
     config = build_config_from_rule(suburb_obj, rule)
+
     booking = inquiry_to_pricing(inquiry, rule)
-    result = calculate_price(config, booking)
-    return str(result["total"])
+    total = calculate_price(config, booking)["total"]
+
+    if inquiry.return_pickup_time:
+        return_booking = inquiry_to_pricing(inquiry, rule, is_return=True)
+        total += calculate_price(config, return_booking)["total"]
+
+    return str(total.quantize(Decimal("0.01")))
