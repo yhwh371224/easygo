@@ -139,10 +139,16 @@
     </p>
 
     {% if suburb.price %}
-    <div class="d-inline-flex align-items-center bg-white rounded-3 px-4 py-2 mb-5 shadow-sm">
-      <span class="text-muted fs-sm me-2">From</span>
-      <span class="fw-bold fs-3" style="color: #eb7828;">${{ suburb.price }}</span>
-      <span class="text-muted fs-sm ms-2">/ vehicle</span>
+    <div class="mb-5">
+      <div class="d-inline-flex align-items-center bg-white rounded-3 px-4 py-2 shadow-sm">
+        <span class="text-muted fs-sm me-2">From</span>
+        <span class="fw-bold fs-3" style="color: #eb7828;">${{ suburb.price }}</span>
+        <span class="text-muted fs-sm ms-2">/ vehicle</span>
+      </div>
+      <p class="text-white opacity-75 fs-xs mt-2 mb-0">
+        * Base price. Final fare may vary depending on number of passengers, luggage, and pickup time.<br>
+        Once confirmed, your fare is locked in — no extra charges for traffic or flight delays.
+      </p>
     </div>
     {% else %}
     <div class="d-inline-flex align-items-center bg-white rounded-3 px-4 py-2 mb-5 shadow-sm">
@@ -180,7 +186,7 @@
 
       <h3 class="h5 fw-semibold mt-4 mb-2">What's Included</h3>
       <ul>
-        {% if suburb.price %}<li>Fixed price — ${{ suburb.price }} per vehicle (not per person)</li>{% endif %}
+        {% if suburb.price %}<li>Base price from ${{ suburb.price }} per vehicle (not per person) — final fare may vary by passengers, luggage, and pickup time; once confirmed, locked in regardless of traffic or flight delays</li>{% endif %}
         <li>Door-to-door from {{ suburb.name }}{% if region and region.primary_airport %} to {{ region.primary_airport.name }}{% endif %}</li>
         {% if service_type == 'transfer' %}
         <li>Dedicated professional driver</li>
@@ -287,12 +293,17 @@
             <span class="text-muted">Destination</span>
             <span class="fw-medium">{% if region and region.primary_airport %}{{ region.primary_airport.name }}{% endif %}</span>
           </li>
-          <li class="py-2 border-bottom d-flex justify-content-between">
-            <span class="text-muted">Price</span>
+          <li class="py-2 border-bottom">
+            <div class="d-flex justify-content-between">
+              <span class="text-muted">Base Price</span>
+              {% if suburb.price %}
+              <span class="fw-bold" style="color: #eb7828;">${{ suburb.price }}</span>
+              {% else %}
+              <span class="fw-bold" style="color: #eb7828;">Call Us</span>
+              {% endif %}
+            </div>
             {% if suburb.price %}
-            <span class="fw-bold" style="color: #eb7828;">${{ suburb.price }}</span>
-            {% else %}
-            <span class="fw-bold" style="color: #eb7828;">Call Us</span>
+            <p class="text-muted fs-xs mb-0 mt-1">May vary by passengers, luggage &amp; time.<br>Once confirmed, locked in — no extra charges for traffic or delays.</p>
             {% endif %}
           </li>
           <li class="py-2 border-bottom d-flex justify-content-between">
@@ -305,7 +316,7 @@
           </li>
         </ul>
         <a href="/{{ region.slug }}/inquiry/" class="btn btn-primary w-100 mt-3">Book This Transfer</a>
-        <p class="text-center fs-xs text-muted mt-2 mb-0">Fixed price · No surprises</p>
+        <p class="text-center fs-xs text-muted mt-2 mb-0">Base price shown · Final fare confirmed at booking</p>
       </div>
     </div>
   </div>
