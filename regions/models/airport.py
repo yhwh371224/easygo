@@ -88,6 +88,10 @@ class PickupPointMap(models.Model):
 class CruiseTerminal(models.Model):
     region = models.ForeignKey(Region, on_delete=models.PROTECT, related_name="cruise_terminals")
     name = models.CharField(max_length=150)
-    
+    lat = models.DecimalField(max_digits=10, decimal_places=6, null=True, blank=True)
+    lng = models.DecimalField(max_digits=11, decimal_places=6, null=True, blank=True)
+    distance_km = models.DecimalField(max_digits=6, decimal_places=1, null=True, blank=True, help_text="Distance from terminal to airport (km)")
+    base_price = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True, help_text="Base price = distance_km × $3")
+
     def __str__(self):
         return self.name

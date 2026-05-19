@@ -157,8 +157,9 @@ class RegionSuburbAdmin(admin.ModelAdmin):
 
 @admin.register(CruiseTerminal)
 class CruiseTerminalAdmin(admin.ModelAdmin):
-    list_display = ['name', 'region']
+    list_display = ['name', 'region', 'distance_km', 'base_price', 'lat', 'lng']
     list_filter = ['region']
+    list_editable = ['distance_km', 'base_price']
 
 
 @admin.register(VehicleType)
