@@ -83,6 +83,12 @@ def _calc_discount(discount_input, booking):
 def _get_start_end_points(booking):
     direction = (booking.direction or "").lower()
 
+    # Cruise / Point-to-point → use stored start/end points
+    if not direction or "cruise" in direction or "point to point" in direction:
+        start = getattr(booking, 'start_point', None) or "Unknown"
+        end = getattr(booking, 'end_point', None) or "Unknown"
+        return start, end
+
     addr = f"{booking.street}, {booking.suburb}"
 
     is_pickup = "pickup" in direction
@@ -105,7 +111,10 @@ def _get_start_end_points(booking):
         if is_intl:
             return addr, "International Airport"
 
-    return "Unknown", "Unknown"
+     # Fallback if direction exists but doesn't match known patterns
+    start = getattr(booking, 'start_point', None) or "Unknown"
+    end = getattr(booking, 'end_point', None) or "Unknown"
+    return start, end
 
 
 def _apply_gst_updates_multi(bookings):
