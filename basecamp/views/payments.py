@@ -4,10 +4,11 @@ import stripe
 from django.conf import settings
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
-from main.settings import RECIPIENT_EMAIL
-from utils.email import send_html_email
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from django.db.models import Q
+from main.settings import RECIPIENT_EMAIL
+from utils.email import send_html_email
 from blog.models import Post, PaypalPayment
 from basecamp.basecamp_utils import (
     render_to_pdf, safe_float,
@@ -93,7 +94,6 @@ def _get_start_end_points(booking):
 
     is_pickup = "pickup" in direction
     is_dropoff = "drop" in direction
-
     is_domestic = "domestic" in direction
     is_intl = "intl" in direction or "international" in direction
 
@@ -336,9 +336,9 @@ def invoice_detail(request):
         return HttpResponse("Invalid index value", status=400)
 
     # booker_email로 먼저 검색, 없으면 email로 검색
-    users = Post.objects.filter(booker_email__iexact=email)
-    if not users.exists():
-        users = Post.objects.filter(email__iexact=email)
+    users_by_booker = Post.objects.filter(booker_email__iexact=email)
+    users_by_email = Post.objects.filter(email__iexact=email)
+    users = (users_by_booker | users_by_email).distinct()
 
     if not users.exists():
         return HttpResponse("No bookings found", status=404)
