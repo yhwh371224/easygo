@@ -89,7 +89,7 @@ class Command(BaseCommand):
             self.stdout.write(msg)
             return
 
-        template_name = "html_email-today.html"
+        template_name = "emails/driver_details.html"
         subject = f"Reminder - Today ({arrival_type.capitalize()} Arrivals)"
 
         self.send_email_task(booking_list, template_name, subject)
@@ -158,11 +158,19 @@ class Command(BaseCommand):
     # EMAIL + NOTIFICATION FLOW
     # =========================
     def send_email_task(self, booking_reminders, template_name, subject):
+        from regions.models import TerminalPickupPoint
+
         for booking in booking_reminders:
 
             # future-safe hook (optional DB field)
             if getattr(booking, "notification_sent", False):
                 continue
+
+            if not booking.terminal_pickup_point and booking.meeting_point:
+                booking.terminal_pickup_point = TerminalPickupPoint.objects.filter(
+                    name=booking.meeting_point,
+                    terminal__airport__regions=booking.region,
+                ).first()
 
             driver = booking.driver
             pickup_time_12h = format_pickup_time_12h(booking.pickup_time)
@@ -172,6 +180,7 @@ class Command(BaseCommand):
                 pickup_time_12h,
                 driver
             )
+            context['post'] = booking
 
             recipients = collect_recipients(
                 booking.email,

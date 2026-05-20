@@ -53,6 +53,8 @@ def build_reminder_context(booking, pickup_time_12h, driver):
         'cruise': getattr(booking, "cruise", False),
 
         'bird_number': bird_number,
+
+        'post': booking,
     }
 
 

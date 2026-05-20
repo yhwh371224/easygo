@@ -108,6 +108,13 @@ class Post(models.Model):
         default=None,
     )
     meeting_point = models.CharField(max_length=100, blank=True, null=True)
+    terminal_pickup_point = models.ForeignKey(
+        'regions.TerminalPickupPoint',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='bookings',
+    )
     is_confirmed = models.BooleanField(default=False, blank=True)
     cash = models.BooleanField(default=False, blank=True)
     cruise = models.BooleanField(default=False, blank=True)

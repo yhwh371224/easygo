@@ -56,6 +56,13 @@ class Command(BaseCommand):
                     logger.warning(f"No driver for booking {booking_reminder.id}")
                     continue
                 
+                from regions.models import TerminalPickupPoint
+                if not booking_reminder.terminal_pickup_point and booking_reminder.meeting_point:
+                    booking_reminder.terminal_pickup_point = TerminalPickupPoint.objects.filter(
+                        name=booking_reminder.meeting_point,
+                        terminal__airport__regions=booking_reminder.region,
+                    ).first()
+
                 driver = getattr(booking_reminder, "driver", None)
                 pickup_time_12h = format_pickup_time_12h(booking_reminder.pickup_time)
                 context = build_reminder_context(booking_reminder, pickup_time_12h, driver)
@@ -80,6 +87,13 @@ class Command(BaseCommand):
                         email_recipients = collect_recipients(booker_email)
                 else:
                     email_recipients = collect_recipients(booking_reminder.email, booking_reminder.email1)
+
+                if is_today:
+                    if booking_reminder.terminal_pickup_point:
+                        today_template = "emails/driver_details.html"
+                    else:
+                        today_template = "html_email-today.html"
+                    template_name = today_template
 
                 if not email_recipients:
                     logger.warning(f"No recipients for booking {booking_reminder.id}, skipping.")
