@@ -74,7 +74,6 @@ def process_generic_payment(payment_instance, posts, admin_email, calculated_amo
         new_paid = p_paid + apply_now
         post.paid = clean_float(new_paid)
         post.toll = "" if new_paid >= p_price else "short payment"
-        post.cash = False
         post.reminder = True
         post.pending = False
         post.cancelled = False
