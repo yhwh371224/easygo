@@ -84,6 +84,10 @@ def region_inquiry_details(request, region_slug):
         ]
         same_extra_stop = request.POST.get('same_extra_stop') == '1'
 
+        if extra_stop_addresses:
+            stops_text = '\n'.join(f'Extra Stop {i}: {addr}' for i, addr in enumerate(extra_stop_addresses, 1))
+            message = f"{message}\n{stops_text}".strip() if message else stops_text
+
         p = Inquiry(
             name=name, contact=contact, email=email,
             pickup_date=pickup_date_obj,
