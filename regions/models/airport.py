@@ -47,6 +47,8 @@ class TerminalPickupPoint(models.Model):
     name = models.CharField(max_length=100)
     instruction = models.TextField(blank=True)
     sort_order = models.PositiveSmallIntegerField(default=0)
+    is_default_point = models.BooleanField(default=False, help_text="드라이버 하루 첫 번째 미지정 픽업에 자동 배정 (Public 등)")
+    is_default_second = models.BooleanField(default=False, help_text="드라이버 하루 두 번째 이상 미지정 픽업에 자동 배정 (Rideshare 등)")
 
     class Meta:
         ordering = ["sort_order", "name"]

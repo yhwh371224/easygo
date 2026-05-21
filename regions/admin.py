@@ -23,9 +23,9 @@ class PickupPointMapInline(admin.TabularInline):
 
 @admin.register(TerminalPickupPoint)
 class TerminalPickupPointAdmin(admin.ModelAdmin):
-    list_display = ("terminal", "name", "sort_order")
-    list_filter = ("terminal__airport",)
-    list_editable = ("sort_order",)
+    list_display = ("terminal", "name", "is_default_point", "is_default_second", "sort_order")
+    list_filter = ("terminal__airport", "is_default_point", "is_default_second")
+    list_editable = ("is_default_point", "is_default_second", "sort_order")
     inlines = [PickupPointMapInline]
 
 
@@ -33,7 +33,7 @@ class TerminalPickupPointInline(admin.StackedInline):
     model = TerminalPickupPoint
     extra = 1
     show_change_link = True
-    fields = ("name", "sort_order", "instruction")
+    fields = ("name", "sort_order", "instruction", "is_default_point", "is_default_second")
 
 
 @admin.register(Terminal)

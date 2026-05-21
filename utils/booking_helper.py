@@ -62,72 +62,90 @@ def build_reminder_context(booking, pickup_time_12h, driver):
 # MAIN LOGIC (OPTIMIZED)
 # =========================
 def update_meeting_point_for_arrivals():
+    from regions.models import Terminal, TerminalPickupPoint
 
     today = timezone.localdate()
 
-    rules = [
-        {
-            "direction": "Pickup from Intl Airport",
-            "primary_value": "Public",
-            "secondary_value": "Rideshare",
-        },
-        {
-            "direction": "Pickup from Domestic Airport",
-            "primary_value": "Express",
-            "secondary_value": "Priority",
-        },
-    ]
+    DIRECTION_TO_TERMINAL_TYPE = {
+        "Pickup from Intl Airport": Terminal.TerminalType.INTL,
+        "Pickup from Domestic Airport": Terminal.TerminalType.DOMESTIC,
+    }
 
-    for rule in rules:
+    bookings = list(
+        Post.objects.filter(
+            pickup_date=today,
+            direction__in=list(DIRECTION_TO_TERMINAL_TYPE.keys()),
+            cancelled=False,
+        ).select_related("driver", "region").order_by("flight_time")
+    )
 
-        bookings = list(
-            Post.objects.filter(
-                pickup_date=today,
-                direction=rule["direction"],
-                cancelled=False
-            ).select_related("driver").order_by("flight_time")
-        )
+    if not bookings:
+        return
 
-        if not bookings:
+    _defaults_cache = {}
+
+    def _get_defaults(region_id, terminal_type):
+        key = (region_id, terminal_type)
+        if key not in _defaults_cache:
+            base_qs = TerminalPickupPoint.objects.filter(
+                terminal__type=terminal_type,
+                terminal__airport__regions=region_id,
+            )
+            _defaults_cache[key] = (
+                base_qs.filter(is_default_point=True).first(),
+                base_qs.filter(is_default_second=True).first(),
+            )
+        return _defaults_cache[key]
+
+    # (driver_id, terminal_type) 키 — 국제선/국내선 별도 카운트
+    driver_first_flag = {}
+    to_update = []
+
+    for booking in bookings:
+
+        driver = booking.driver
+        if not driver:
+            logger.warning(f"No driver for booking {booking.id}")
             continue
 
-        driver_first_flag = {}
+        terminal_type = DIRECTION_TO_TERMINAL_TYPE.get(booking.direction)
+        if not terminal_type or not booking.region_id:
+            continue
 
-        # ✔ FIX: reduce DB writes via bulk pattern
-        to_update = []
+        flag_key = (driver.id, terminal_type)
+        if flag_key not in driver_first_flag:
+            driver_first_flag[flag_key] = True
 
-        for booking in bookings:
+        if booking.meeting_point or booking.terminal_pickup_point_id:
+            # 수동 지정(terminal_pickup_point) 또는 기존 meeting_point → flag 소비 후 스킵
+            driver_first_flag[flag_key] = False
+            continue
 
-            driver = booking.driver
-            if not driver:
-                logger.warning(f"No driver for booking {booking.id}")
-                continue
-            driver_id = driver.id
+        default_point, default_second = _get_defaults(booking.region_id, terminal_type)
 
-            if driver_id not in driver_first_flag:
-                driver_first_flag[driver_id] = True
+        if driver_first_flag[flag_key]:
+            assigned = default_point
+            driver_first_flag[flag_key] = False
+        else:
+            assigned = default_second
 
-            if booking.meeting_point:
-                # 이미 배정된 경우 flag만 소비하고 스킵
-                driver_first_flag[driver_id] = False
-                continue
-
-            if driver_first_flag[driver_id]:
-                booking.meeting_point = rule["primary_value"]
-                driver_first_flag[driver_id] = False
-            else:
-                booking.meeting_point = rule["secondary_value"]
-
-            to_update.append(booking)
-
-            logger.info(
-                'Set %s for %s - %s',
-                booking.meeting_point,
-                getattr(driver, "driver_name", ""),
-                booking.name
+        if not assigned:
+            logger.warning(
+                "No default pickup point for booking %s (region=%s, terminal_type=%s)",
+                booking.id, booking.region_id, terminal_type,
             )
+            continue
 
-        # ✔ FIX: batch DB update
-        with transaction.atomic():
-            if to_update:
-                Post.objects.bulk_update(to_update, ["meeting_point"])
+        booking.terminal_pickup_point = assigned
+        to_update.append(booking)
+
+        logger.info(
+            "Set terminal_pickup_point=%s for %s - %s",
+            assigned,
+            getattr(driver, "driver_name", ""),
+            booking.name,
+        )
+
+    with transaction.atomic():
+        if to_update:
+            Post.objects.bulk_update(to_update, ["terminal_pickup_point"])
