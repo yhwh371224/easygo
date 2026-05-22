@@ -34,6 +34,13 @@ def custom_login_view(request):
         if not verify_turnstile(token, get_client_ip(request)):
             return render(request, 'easygo_review/custom_login.html', {'error': 'Security verification failed. Please try again.'})
         email = request.POST['email']
+
+        # ✅ Superuser 체크: Django 로그인된 superuser면 이메일로 세션 설정
+        if request.user.is_authenticated and request.user.is_superuser:
+            request.session.cycle_key()
+            request.session['email'] = email
+            return redirect('easygo_review:easygo_review')
+        
         posts = BlogPost.objects.filter(email=email)
         if posts.exists():
             post = posts.first()
@@ -83,12 +90,11 @@ class PostList(ListView):
 
         email = self.request.session.get('email', None)
         if email:
-            blog_post = BlogPost.objects.filter(email=email).first()  
-            if blog_post:
-                user_name = blog_post.name
-                context['user_name'] = user_name
+            if self.request.user.is_authenticated and self.request.user.is_superuser:
+                context['user_name'] = "EasyGo Admin"
             else:
-                context['user_name'] = None
+                blog_post = BlogPost.objects.filter(email=email).first()
+                context['user_name'] = blog_post.name if blog_post else None
         else:
             context['user_name'] = None
 
@@ -160,12 +166,11 @@ class PostDetail(DetailView):
         context['authenticated_post'] = authenticated_post 
 
         if email:
-            blog_post = BlogPost.objects.filter(email=email).first()  
-            if blog_post:
-                user_name = blog_post.name
-                context['user_name'] = user_name
+            if self.request.user.is_authenticated and self.request.user.is_superuser:
+                context['user_name'] = "EasyGo Admin"
             else:
-                context['user_name'] = None
+                blog_post = BlogPost.objects.filter(email=email).first()
+                context['user_name'] = blog_post.name if blog_post else None
         else:
             context['user_name'] = None
 
@@ -187,12 +192,11 @@ class PostUpdate(UpdateView):
         context['authenticated_post'] = authenticated_post 
 
         if email:
-            blog_post = BlogPost.objects.filter(email=email).first()  
-            if blog_post:
-                user_name = blog_post.name
-                context['user_name'] = user_name
+            if self.request.user.is_authenticated and self.request.user.is_superuser:
+                context['user_name'] = "EasyGo Admin"
             else:
-                context['user_name'] = None
+                blog_post = BlogPost.objects.filter(email=email).first()
+                context['user_name'] = blog_post.name if blog_post else None
         else:
             context['user_name'] = None
 
@@ -205,7 +209,9 @@ class CommentCreate(View):
         email = request.session.get('email', None)
 
         user_name = None
-        if email:
+        if request.user.is_authenticated and request.user.is_superuser:
+            user_name = "EasyGo Admin"
+        else:
             blog_post = BlogPost.objects.filter(email=email).first()
             if blog_post:
                 user_name = blog_post.name
@@ -226,7 +232,9 @@ class CommentCreate(View):
         email = request.session.get('email', None)
 
         user_name = None
-        if email:
+        if request.user.is_authenticated and request.user.is_superuser:
+            user_name = "EasyGo Admin"
+        elif email:
             blog_post = BlogPost.objects.filter(email=email).first()
             if blog_post:
                 user_name = blog_post.name
@@ -259,6 +267,10 @@ class CommentUpdate(UpdateView):
         comment = super().get_object(queryset)        
         session_email = self.request.session.get('email', None)
 
+        # ✅ Superuser는 모든 댓글 수정 가능
+        if self.request.user.is_authenticated and self.request.user.is_superuser:
+            return comment
+
         if comment.email != session_email:
             raise PermissionDenied('No right to edit')
 
@@ -281,6 +293,10 @@ class CommentDelete(DeleteView):
     def get_object(self, queryset=None):
         comment = super().get_object(queryset)        
         session_email = self.request.session.get('email', None)
+
+        # ✅ Superuser는 모든 댓글 삭제 가능
+        if self.request.user.is_authenticated and self.request.user.is_superuser:
+            return comment
 
         if comment.email != session_email:
             raise PermissionDenied('No right to delete Comment')
