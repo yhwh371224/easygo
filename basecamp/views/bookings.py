@@ -17,6 +17,7 @@ from basecamp.basecamp_utils import (
     render_inquiry_done, booking_success_response, require_turnstile,
     is_duplicate_submission, parse_booking_dates, get_client_ip,
 )
+from utils import email
 from utils.telegram import send_telegram_notification, get_ip_info
 
 logger = logging.getLogger(__name__)
@@ -363,7 +364,8 @@ def quick_rebook_confirm(request, region_slug=None):
         })
     
     # 3. DB에서 직접 조회 — 안전하고 정확
-    previous = Post.objects.filter(email__iexact=email, cancelled=False).first()
+    previous_id = request.POST.get('previous_id')
+    previous = Post.objects.filter(id=previous_id, email__iexact=email, cancelled=False).first()
     if not previous:
         return redirect('basecamp:home')
 
@@ -433,6 +435,10 @@ def quick_rebook_confirm(request, region_slug=None):
         same_extra_stop      = same_extra_stop,
         extra_stop_addresses = extra_stop_addresses,
         special_items        = special_items,
+    )
+    logger.debug(
+        "[QUICK REBOOK] pre-save street=%r (from Post id=%s, email=%s)",
+        previous_street, previous.id, email,
     )
     p.save()
 
