@@ -456,6 +456,14 @@ def email_dispatch_detail(request):
             today = timezone.localdate()
             user_today = Post.objects.select_related('driver').filter(email=email, pickup_date=today).order_by('pickup_time').first()
             if user_today:
+                # template 선택
+                if user_today.terminal_pickup_point:
+                    template_name = "emails/driver_details1.html"
+                else:
+                    template_name = "html_email-today1.html"
+                # terminal_pickup_point 없으면 meeting_point로 fallback
+                display_meeting_point = user_today.terminal_pickup_point or user_today.meeting_point
+
                 # bird_number 조회
                 bird_number = None
                 if user_today.use_proxy:
@@ -469,7 +477,8 @@ def email_dispatch_detail(request):
                 context.update({
                     'pickup_time': user_today.pickup_time,
                     'contact': user_today.contact,
-                    'meeting_point': user_today.meeting_point,
+                    'meeting_point': display_meeting_point,  # ← fallback 적용
+                    'terminal_pickup_point': user_today.terminal_pickup_point,
                     'direction': user_today.direction,
                     'cash': user_today.cash,
                     'cruise': user_today.cruise,
