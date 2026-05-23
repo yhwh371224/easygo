@@ -188,7 +188,7 @@
 
 													{% if post.terminal_pickup_point %}
 														<strong>=== The meeting point ===</strong><br>
-														• {{ post.terminal_pickup_point.instruction }}<br>
+														• {{ post.terminal_pickup_point.instruction|linebreaksbr }}<br>
 														{% for map in post.terminal_pickup_point.maps.all %}
 														• <a href="{{ map.url }}">{{ map.title }}</a><br>
 														{% endfor %}
@@ -242,7 +242,7 @@
 
 													{% if post.terminal_pickup_point %}
 														<strong>=== The meeting point ===</strong><br>
-														• {{ post.terminal_pickup_point.instruction }}<br>
+														• {{ post.terminal_pickup_point.instruction|linebreaksbr }}<br>
 														{% for map in post.terminal_pickup_point.maps.all %}
 														• <a href="{{ map.url }}">{{ map.title }}</a><br>
 														{% endfor %}
