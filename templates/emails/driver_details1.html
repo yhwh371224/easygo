@@ -156,7 +156,7 @@
 
 													{% if terminal_pickup_point %}
 														<strong>=== The meeting point ===</strong><br>
-														• {{ terminal_pickup_point.instruction|linebreaksbr }}<br>
+														{{ terminal_pickup_point.instruction|linebreaksbr }}<br>
 														{% for map in terminal_pickup_point.maps.all %}
 														• <a href="{{ map.url }}">{{ map.title }}</a><br>
 														{% endfor %}
@@ -207,7 +207,7 @@
 
 													{% if terminal_pickup_point %}
 														<strong>=== The meeting point ===</strong><br>
-														• {{ terminal_pickup_point.instruction|linebreaksbr }}<br>
+														{{ terminal_pickup_point.instruction|linebreaksbr }}<br>
 														{% for map in terminal_pickup_point.maps.all %}
 														• <a href="{{ map.url }}">{{ map.title }}</a><br>
 														{% endfor %}
