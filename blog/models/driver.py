@@ -11,6 +11,7 @@ class VirtualNumber(models.Model):
 
 
 class Driver(models.Model):
+    order = models.PositiveSmallIntegerField(default=0)
     user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True)
     must_change_password = models.BooleanField(default=True)
     region = models.ForeignKey('regions.Region', null=True, blank=True, on_delete=models.SET_NULL)
@@ -23,7 +24,10 @@ class Driver(models.Model):
     driver_car = models.CharField(max_length=30, blank=True, null=True)
     driver_bankdetails = models.TextField(blank=True, null=True)
     google_calendar_id = models.CharField(max_length=255, blank=True, null=True)
-    virtual_number = models.ForeignKey('VirtualNumber', on_delete=models.SET_NULL, null=True, blank=True)
+    virtual_number = models.ForeignKey('VirtualNumber', on_delete=models.SET_NULL, null=True, blank=True)\
+    
+    class Meta:
+        ordering = ['order']
 
     def __str__(self):
         return self.driver_name

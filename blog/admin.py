@@ -6,8 +6,9 @@ from .models import Driver, DriverSettlement, Inquiry, PaypalPayment, PhoneMappi
 
 
 class DriverAdmin(admin.ModelAdmin):
-    list_display = ['driver_name', 'driver_contact', 'driver_email', 'driver_plate', 'user', 'must_change_password', 'impersonate_button']
+    list_display = ['order', 'driver_name', 'driver_contact', 'driver_email', 'driver_plate', 'user', 'must_change_password', 'impersonate_button']
     search_fields = ['driver_name', 'driver_contact', 'driver_email', 'driver_address', 'driver_plate']
+    ordering = ['order']
 
     def impersonate_button(self, obj):
         if obj.user:
@@ -84,7 +85,7 @@ class PostAdmin(admin.ModelAdmin):
                     'return_start_point', 'return_end_point']
         }),
         ('Pricing', {
-            'fields': ['suburb_distance_km', 'suburb_base_price', 'price', 'paid', 'discount', 'toll', 'fuel_surcharge', 'cash', 'prepay']
+            'fields': ['suburb_distance_km', 'suburb_base_price', 'price', 'paid', 'discount', 'toll', 'surcharge', 'cash', 'prepay']
         }),
         ('Status', {
             'fields': ['is_confirmed', 'cancelled', 'pending', 'private_ride',

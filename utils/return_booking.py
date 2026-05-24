@@ -110,7 +110,7 @@ def handle_return_trip(instance):
             'paid': half_paid,
             'private_ride': instance.private_ride,
             'toll': instance.toll,
-            'fuel_surcharge': instance.fuel_surcharge,
+            'surcharge': instance.surcharge,
             'driver': driver,
             'region': region,
             'extra_stop': instance.extra_stop,

@@ -60,7 +60,7 @@ def send_post_confirmation_email(instance):
 
         # extra
         'toll': instance.toll,
-        'fuel_surcharge': instance.fuel_surcharge,  
+        'surcharge': instance.surcharge,
         }
     )
 

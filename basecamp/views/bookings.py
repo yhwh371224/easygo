@@ -149,7 +149,7 @@ def confirm_booking_detail(request):
         return_flight_time=return_flight_time, return_pickup_time=return_pickup_time,
         return_start_point=return_start_point, return_end_point=return_end_point,
         message=message, notice=notice, price=final_price, toll=toll_value,
-        fuel_surcharge=fuel_surcharge_value, prepay=prepay, pending=pending,
+        surcharge=fuel_surcharge_value, prepay=prepay, pending=pending,
         paid=paid, cash=cash, is_confirmed=is_confirmed, driver=driver, region=region,
         special_items=special_items, extra_stop=extra_stop, extra_stop_addresses=extra_stop_addresses,
         same_extra_stop=same_extra_stop,
@@ -263,7 +263,7 @@ def return_trip_detail(request):
                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, cash=cash, prepay=prepay, return_direction=return_direction,
                 return_pickup_date=return_pickup_date_obj, return_flight_number=return_flight_number, return_flight_time=return_flight_time,
                 return_pickup_time=return_pickup_time, return_start_point=return_start_point, return_end_point=return_end_point, driver=driver,
-                price=price, toll=toll, fuel_surcharge=fuel_surcharge, region=region,
+                price=price, toll=toll, surcharge=fuel_surcharge, region=region,
                 extra_stop=extra_stop, same_extra_stop=same_extra_stop, extra_stop_addresses=extra_stop_addresses,
                 special_items=special_items)
 

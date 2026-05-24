@@ -169,7 +169,7 @@ def sending_email_first_detail(request):
                         'price': display_price, 'paid': user.paid, 'cash': final_cash, 'prepay': final_prepay,
                         'toll': user.toll, 'start_point': user.start_point, 'end_point': user.end_point,
                         'return_start_point': user.return_start_point, 'return_end_point': user.return_end_point,
-                        'fuel_surcharge': user.fuel_surcharge,
+                        'surcharge': user.surcharge,
                     },
                     ([user.booker_email] if user.booker_email else list(filter(None, [user.email, user.email1]))) + [RECIPIENT_EMAIL],
                     request=request,
@@ -283,7 +283,7 @@ def sending_email_second_detail(request):
                 'end_point': user.end_point,
                 'return_start_point': user.return_start_point,
                 'return_end_point': user.return_end_point,
-                'fuel_surcharge': user.fuel_surcharge,
+                'surcharge': user.surcharge,
             }
 
             customer_recipients = [user.booker_email] if user.booker_email else list(filter(None, [user.email, user.email1]))

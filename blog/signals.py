@@ -129,7 +129,7 @@ CALENDAR_EXCLUDED_FIELDS = {
     'company_name', 'booker_name', 'booker_email', 'email1',
     'return_direction', 'return_flight_number', 'return_flight_time',
     'return_pickup_time', 'return_start_point', 'return_end_point',
-    'discount', 'fuel_surcharge', 'region', 'is_confirmed',
+    'discount', 'surcharge', 'region', 'is_confirmed',
     'cruise', 'sms_reminder', 'prepay',
     'calendar_event_id', 'driver_calendar_event_id', 'use_proxy', 'created',
 }
