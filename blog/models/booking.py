@@ -33,7 +33,7 @@ class Inquiry(models.Model):
     paid = models.CharField(max_length=100, blank=True, null=True)
     discount = models.CharField(max_length=30, blank=True, null=True)
     toll = models.CharField(max_length=30, blank=True, null=True)
-    fuel_surcharge = models.CharField(max_length=30, blank=True, null=True)
+    surcharge = models.CharField(max_length=30, blank=True, null=True)
     driver = models.ForeignKey('Driver', on_delete=models.SET_NULL, null=True, blank=True)
     region = models.ForeignKey(
         'regions.Region',

@@ -25,7 +25,7 @@ def send_inquiry_email(instance):
             'no_of_baggage': instance.no_of_baggage,
             'return_direction': instance.return_direction,
             'toll': instance.toll,
-            'fuel_surcharge': instance.fuel_surcharge,
+            'surcharge': instance.surcharge,
             'return_pickup_date': instance.return_pickup_date,
             'return_flight_number': instance.return_flight_number,
             'return_flight_time': instance.return_flight_time,

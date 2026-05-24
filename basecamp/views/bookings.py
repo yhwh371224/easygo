@@ -88,7 +88,7 @@ def confirm_booking_detail(request):
     notice = user.notice
     price = user.price
     toll = user.toll
-    fuel_surcharge = user.surcharge
+    surcharge = user.surcharge
     paid = user.paid
     private_ride = user.private_ride
     region = user.region
@@ -106,18 +106,18 @@ def confirm_booking_detail(request):
     if price in [None, ""]:
         final_price = "TBA"
         toll_value = ""
-        fuel_surcharge_value = ""
+        surcharge_value = ""
     else:
         try:
             final_price = float(price)
             if toll:
                 final_price += float(toll)
-            if fuel_surcharge:
-                final_price += float(fuel_surcharge)
+            if surcharge:
+                final_price += float(surcharge)
         except Exception:
             final_price = price
         toll_value = "toll included" if toll else ""
-        fuel_surcharge_value = "fs included" if fuel_surcharge else ""
+        surcharge_value = "surcharge included" if surcharge else ""
 
     # pending 상태 결정
     if paid or cash or prepay:
@@ -149,7 +149,7 @@ def confirm_booking_detail(request):
         return_flight_time=return_flight_time, return_pickup_time=return_pickup_time,
         return_start_point=return_start_point, return_end_point=return_end_point,
         message=message, notice=notice, price=final_price, toll=toll_value,
-        surcharge=fuel_surcharge_value, prepay=prepay, pending=pending,
+        surcharge=surcharge_value, prepay=prepay, pending=pending,
         paid=paid, cash=cash, is_confirmed=is_confirmed, driver=driver, region=region,
         special_items=special_items, extra_stop=extra_stop, extra_stop_addresses=extra_stop_addresses,
         same_extra_stop=same_extra_stop,
@@ -190,7 +190,7 @@ def return_trip_detail(request):
     notice = request.POST.get('notice', '')
     price = request.POST.get('price', '')
     toll = request.POST.get('toll', '')
-    fuel_surcharge = request.POST.get('fuel_surcharge', '')
+    surcharge = request.POST.get('surcharge', '')
     cash = to_bool(request.POST.get('cash', ''))
     prepay = to_bool(request.POST.get('prepay', ''))
     return_direction = request.POST.get('return_direction', '')
@@ -263,7 +263,7 @@ def return_trip_detail(request):
                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, cash=cash, prepay=prepay, return_direction=return_direction,
                 return_pickup_date=return_pickup_date_obj, return_flight_number=return_flight_number, return_flight_time=return_flight_time,
                 return_pickup_time=return_pickup_time, return_start_point=return_start_point, return_end_point=return_end_point, driver=driver,
-                price=price, toll=toll, surcharge=fuel_surcharge, region=region,
+                price=price, toll=toll, surcharge=surcharge, region=region,
                 extra_stop=extra_stop, same_extra_stop=same_extra_stop, extra_stop_addresses=extra_stop_addresses,
                 special_items=special_items)
 
