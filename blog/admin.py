@@ -66,9 +66,6 @@ class InquiryAdmin(admin.ModelAdmin):
         ('Notes', {
             'fields': ['message', 'notice', 'special_items']
         }),
-        ('Calendar', {
-            'fields': ['calendar_event_id', 'driver_calendar_event_id']
-        }),
     ]
 
     def suburb_distance_km(self, obj):
