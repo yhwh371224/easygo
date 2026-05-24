@@ -1,14 +1,6 @@
-import io
-import json
-import urllib.parse
-import urllib.request
-
-from django.conf import settings
+from django.core.files.base import ContentFile
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
-
-from PIL import Image
-from django.core.files.base import ContentFile
 
 from .models import Post
 
@@ -45,35 +37,22 @@ def auto_fetch_thumbnail(sender, instance, created, **kwargs):
         return
 
     try:
-        query = urllib.parse.quote(instance.thumbnail_query)
-        api_url = (
-            f"https://api.unsplash.com/search/photos"
-            f"?query={query}&per_page=1&orientation=landscape"
-            f"&client_id={settings.UNSPLASH_ACCESS_KEY}"
+        from posting_agent.image_ai import generate_post_image
+        category_name = instance.category.name if instance.category else None
+        result = generate_post_image(
+            alt_text=instance.title,
+            filename_slug=instance.slug,
+            query=instance.thumbnail_query,
+            category=category_name,
         )
 
-        with urllib.request.urlopen(api_url, timeout=10) as response:
-            data = json.loads(response.read())
-
-        results = data.get('results', [])
-        if not results:
-            print(f"Unsplash: no results for '{instance.thumbnail_query}'")
-            return
-
-        image_url = results[0]['urls']['regular']
-        with urllib.request.urlopen(image_url, timeout=10) as img_response:
-            img_data = img_response.read()
-
-        img = Image.open(io.BytesIO(img_data)).convert('RGB')
-        buffer = io.BytesIO()
-        img.save(buffer, format='WEBP', quality=85)
-        buffer.seek(0)
-
-        filename = f"{instance.slug}.webp"
         post = Post.objects.get(pk=instance.pk)
-        post.thumbnail.save(filename, ContentFile(buffer.getvalue()), save=False)
-        Post.objects.filter(pk=instance.pk).update(thumbnail=post.thumbnail.name, thumbnail_source_url=image_url)
-        print(f"Unsplash thumbnail saved: {filename}")
+        post.thumbnail.save(result['filename'], ContentFile(result['image_bytes']), save=False)
+        Post.objects.filter(pk=instance.pk).update(
+            thumbnail=post.thumbnail.name,
+            thumbnail_source_url=result['source_url'],
+        )
+        print(f"Unsplash thumbnail saved: {result['filename']}")
 
     except Exception as e:
         print(f"Unsplash thumbnail fetch failed: {e}")

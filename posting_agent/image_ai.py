@@ -21,17 +21,24 @@ def _unsplash_random_fallback() -> str | None:
         return None
 
 
-def generate_post_image(alt_text: str, filename_slug: str, query: str = None):
+def generate_post_image(alt_text: str, filename_slug: str, query: str = None, category: str = None):
     """
     Fetch an image for a post in the following priority:
-    1. Unsplash search (query-based, random from top 10)
-    2. Unsplash completely random (/photos/random)
-    3. Raise ValueError
+    1. Unsplash search — original query (per_page=10, random pick)
+    2. Unsplash search — first two words of the query
+    3. Unsplash search — category name
+    4. Unsplash completely random (/photos/random)
+    5. Raise ValueError
     """
-    search_query = query or "sydney airport transfer shuttle"
+    search_query = query or "airport transfer shuttle"
 
-    # Step 1: Unsplash search (up to 2 queries)
-    queries = [search_query, "sydney airport shuttle transfer"]
+    words = search_query.split()
+    two_words = " ".join(words[:2]) if len(words) >= 2 else search_query
+
+    queries = [search_query, two_words]
+    if category and category.lower() not in search_query.lower():
+        queries.append(category)
+
     image_url = None
 
     for q in queries:
@@ -50,7 +57,7 @@ def generate_post_image(alt_text: str, filename_slug: str, query: str = None):
         except Exception:
             continue
 
-    # Step 2: Unsplash completely random
+    # Step 4: Unsplash completely random
     if not image_url:
         image_url = _unsplash_random_fallback()
 
