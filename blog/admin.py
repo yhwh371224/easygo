@@ -43,10 +43,8 @@ class InquiryAdmin(admin.ModelAdmin):
         }),
         ('Pickup Info', {
             'fields': ['pickup_date', 'pickup_time', 'direction', 'flight_number', 'flight_time',
-                    'suburb', 'street', 'start_point', 'end_point',
-                    'region', 'terminal_pickup_point', 'meeting_point',
-                    'no_of_passenger', 'no_of_baggage',
-                    'extra_stop', 'extra_stop_addresses', 'same_extra_stop']
+                    'suburb', 'street', 'start_point', 'end_point', 'region', 'meeting_point',
+                    'no_of_passenger', 'no_of_baggage', 'extra_stop', 'extra_stop_addresses', 'same_extra_stop']
         }),
         ('Return Info', {
             'fields': ['return_direction', 'return_pickup_date', 'return_pickup_time',
@@ -61,7 +59,7 @@ class InquiryAdmin(admin.ModelAdmin):
                     'private_ride','cruise',  'sms_reminder']
         }),
         ('Driver', {
-            'fields': ['driver', 'use_proxy']
+            'fields': ['driver']
         }),
         ('Notes', {
             'fields': ['message', 'notice', 'special_items']
