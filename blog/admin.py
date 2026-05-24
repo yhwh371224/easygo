@@ -102,6 +102,28 @@ class PostAdmin(admin.ModelAdmin):
         }),
     ]
 
+    def save_model(self, request, obj, form, change):
+        if change:
+            for field in ('calendar_event_id', 'driver_calendar_event_id'):
+                submitted = (form.cleaned_data.get(field) or '').strip()
+                if submitted:
+                    continue
+                # Submitted is empty — decide whether to keep the DB value.
+                initial = (form.initial.get(field) or '').strip()
+                if initial:
+                    # Form was loaded with a value and admin cleared it — intentional, allow.
+                    continue
+                # Form was loaded with empty; guard against the race window where Celery
+                # set a value after the form was fetched but before this save commits.
+                db_val = (
+                    Post.objects.filter(pk=obj.pk)
+                    .values_list(field, flat=True)
+                    .first() or ''
+                ).strip()
+                if db_val:
+                    setattr(obj, field, db_val)
+        super().save_model(request, obj, form, change)
+
     def suburb_distance_km(self, obj):
         from regions.models import RegionSuburb
         rs = RegionSuburb.objects.filter(region=obj.region, name__iexact=obj.suburb).first()

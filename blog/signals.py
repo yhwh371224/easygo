@@ -36,11 +36,6 @@ def notify_user_inquiry(sender, instance, created, **kwargs):
 @receiver(post_save, sender=Post, dispatch_uid="notify_user_post_once")
 def notify_user_post(sender, instance, created, **kwargs):
     update_fields = kwargs.get('update_fields')
-    logger.info(
-        'notify_user_post: Post pk=%s created=%s update_fields=%s price=%s cash=%s paid=%s is_confirmed=%s cancelled=%s',
-        instance.pk, created, list(update_fields) if update_fields else None,
-        instance.price, instance.cash, instance.paid, instance.is_confirmed, instance.cancelled,
-    )
 
     try:
         handle_return_trip(instance)
@@ -61,10 +56,8 @@ def notify_user_post(sender, instance, created, **kwargs):
     if instance.is_confirmed:
         pk = instance.pk
         transaction.on_commit(lambda: send_post_confirmation_email_task.delay(pk))
-        logger.info('notify_user_post: queued send_post_confirmation_email_task for Post pk=%s', pk)
 
     if update_data:
-        logger.info('notify_user_post: applying update_data=%s to Post pk=%s', update_data, instance.pk)
         Post.objects.filter(pk=instance.pk).update(**update_data)
 
 
