@@ -88,7 +88,7 @@ def confirm_booking_detail(request):
     notice = user.notice
     price = user.price
     toll = user.toll
-    fuel_surcharge = user.fuel_surcharge
+    fuel_surcharge = user.surcharge
     paid = user.paid
     private_ride = user.private_ride
     region = user.region

@@ -24,8 +24,8 @@ class Driver(models.Model):
     driver_car = models.CharField(max_length=30, blank=True, null=True)
     driver_bankdetails = models.TextField(blank=True, null=True)
     google_calendar_id = models.CharField(max_length=255, blank=True, null=True)
-    virtual_number = models.ForeignKey('VirtualNumber', on_delete=models.SET_NULL, null=True, blank=True)\
-    
+    virtual_number = models.ForeignKey('VirtualNumber', on_delete=models.SET_NULL, null=True, blank=True)
+
     class Meta:
         ordering = ['order']
 
