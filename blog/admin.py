@@ -66,6 +66,42 @@ class PostAdmin(admin.ModelAdmin):
                      'name', 'contact', 'price', 'paid', 'email1', 'message', 'notice', 'region__name']
     readonly_fields = ['suburb_distance_km', 'suburb_base_price']
 
+    fieldsets = [
+        ('Customer Info', {
+            'fields': ['name', 'company_name', 'contact', 'email', 'email1',
+                    'booker_name', 'booker_email']
+        }),
+        ('Pickup Info', {
+            'fields': ['pickup_date', 'pickup_time', 'direction', 'flight_number', 'flight_time',
+                    'suburb', 'street', 'start_point', 'end_point',
+                    'region', 'terminal_pickup_point', 'meeting_point',
+                    'no_of_passenger', 'no_of_baggage',
+                    'extra_stop', 'extra_stop_addresses', 'same_extra_stop']
+        }),
+        ('Return Info', {
+            'fields': ['return_direction', 'return_pickup_date', 'return_pickup_time',
+                    'return_flight_number', 'return_flight_time',
+                    'return_start_point', 'return_end_point']
+        }),
+        ('Pricing', {
+            'fields': ['suburb_distance_km', 'suburb_base_price', 'price', 'paid', 'discount', 'toll', 'fuel_surcharge', 'cash', 'prepay']
+        }),
+        ('Status', {
+            'fields': ['is_confirmed', 'cancelled', 'pending', 'private_ride',
+                    'cruise', 'reminder', 'sent_email', 'sms_reminder']
+        }),
+        ('Driver', {
+            'fields': ['driver', 'use_proxy']
+        }),
+        ('Notes', {
+            'fields': ['message', 'notice', 'special_items']
+        }),
+        ('Calendar', {
+            'classes': ['collapse'],
+            'fields': ['calendar_event_id', 'driver_calendar_event_id']
+        }),
+    ]
+
     def suburb_distance_km(self, obj):
         from regions.models import RegionSuburb
         rs = RegionSuburb.objects.filter(region=obj.region, name__iexact=obj.suburb).first()
