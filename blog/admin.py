@@ -98,7 +98,6 @@ class PostAdmin(admin.ModelAdmin):
             'fields': ['message', 'notice', 'special_items']
         }),
         ('Calendar', {
-            'classes': ['collapse'],
             'fields': ['calendar_event_id', 'driver_calendar_event_id']
         }),
     ]
