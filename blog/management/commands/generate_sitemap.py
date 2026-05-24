@@ -43,6 +43,7 @@ class Command(BaseCommand):
         sydney_tz = pytz.timezone("Australia/Sydney")
         today = datetime.now(sydney_tz).strftime("%Y-%m-%dT00:00:00+11:00")
         base_dir = os.path.join(settings.BASE_DIR, 'sitemaps')
+        os.makedirs(base_dir, exist_ok=True)
         index_entries = []
 
         # ── 1. sitemap-static.xml ────────────────────────────────────────
