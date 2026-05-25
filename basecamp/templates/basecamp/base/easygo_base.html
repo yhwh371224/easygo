@@ -4,14 +4,14 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>{% block title %}EasyGo Airport Shuttle – Sydney Transfers{% endblock %}</title>
+    <title>{% block title %}EasyGo Airport Shuttle – {{ region.name }} Transfers{% endblock %}</title>
     {% block canonical %}
       <link rel="canonical" href="https://easygoshuttle.com.au{{ request.path }}">
     {% endblock %}
     {% block meta %}
     <meta name="google-site-verification" content="hae39L0Kv7JIxVc3YclvckH7Im5SdYa2hk_vZbGJIkA" />
-    <meta name="description" content="EasyGo Airport Shuttle provides private airport transfer across Sydney. Punctual, luggage-friendly service for individuals, families, and groups.">    
-    <meta name="keywords" content="Sydney airport transfer, private airport shuttle, group airport transfer, luggage-friendly shuttle">
+    <meta name="description" content="{% block meta_description %}EasyGo Airport Shuttle provides private airport transfer across {{ region.name|default:'Australia' }}. Punctual, luggage-friendly service for individuals, families, and groups.{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}{{ region.name|default:'Australia' }} airport transfer, private airport shuttle, group airport transfer, luggage-friendly shuttle{% endblock %}">
     <meta name="author" content="easygoshuttle.com.au">
     {% endblock %}    
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -111,7 +111,21 @@
       document.getElementById('current-year').textContent = new Date().getFullYear();
     </script>
     <script type="application/ld+json" nonce="{{ CSP_NONCE }}">
-    {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What are included in the price we get? Is there any extra charge?","acceptedAnswer":{"@type":"Answer","text":"The price you receive from EasyGo includes the airport parking fee, and we do not charge extra for any waiting time incurred due to flight delays. Our price is fixed, and there are no additional charges."}},{"@type":"Question","name":"What if my flight is delayed?","acceptedAnswer":{"@type":"Answer","text":"EasyGo drivers track your flight’s landing time in real time to ensure they meet you on time. Your driver will contact you around baggage collection time. Please check your phone and email messages, then proceed to the meeting point where your driver will be waiting."}},{"@type":"Question","name":"What are the payment options available?","acceptedAnswer":{"@type":"Answer","text":"EasyGo accepts all major credit cards including American Express, MasterCard and Visa. Cash payment to the driver is also available. For passengers arriving in Sydney, advance payment is kindly requested."}},{"@type":"Question","name":"Do you offer infant seats or baby capsules?","acceptedAnswer":{"@type":"Answer","text":"Yes. EasyGo provides infant seats and baby capsules. Up to two child seats are available free of charge, with an additional $10 fee per extra seat. Please specify the number of seats required during booking."}},{"@type":"Question","name":"Do you provide Sydney airport pickup services from both International and Domestic terminals?","acceptedAnswer":{"@type":"Answer","text":"Yes. EasyGo provides private Sydney airport pickup services from both Sydney International and Domestic terminals. Our drivers track your flight in real time and meet you at the designated airport meeting point for a smooth door-to-door transfer."}},{"@type":"Question","name":"How many bags can I take with me?","acceptedAnswer":{"@type":"Answer","text":"Each passenger is allowed one (1) standard bag plus one (1) carry-on item. If you have additional or oversized luggage, please inform EasyGo in advance."}},{"@type":"Question","name":"Is EasyGo a private Sydney airport pickup service or a shared shuttle?","acceptedAnswer":{"@type":"Answer","text":"EasyGo operates as a private Sydney airport pickup and transfer service. Your booking is exclusively for your group only, with no shared rides, additional pickups, or waiting for other passengers."}},{"@type":"Question","name":"Do you provide transfers from Sydney CBD hotels?","acceptedAnswer":{"@type":"Answer","text":"Yes. EasyGo provides transfers to and from Sydney CBD hotels, serviced apartments, and city accommodations."}},{"@type":"Question","name":"Which areas do you service in Sydney?","acceptedAnswer":{"@type":"Answer","text":"EasyGo services Sydney North Shore, CBD, Inner West, and Western Sydney suburbs. Customers can check pricing and availability for their suburb using the online booking system."}}]}
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {"@type": "Question", "name": "What are included in the price? Is there any extra charge?", "acceptedAnswer": {"@type": "Answer", "text": "The price you receive from EasyGo includes the airport parking fee, and we do not charge extra for any waiting time incurred due to flight delays. Our price is fixed, and there are no additional charges."}},
+        {"@type": "Question", "name": "What if my flight is delayed?", "acceptedAnswer": {"@type": "Answer", "text": "EasyGo drivers track your flight’s landing time in real time to ensure they meet you on time. Your driver will contact you around baggage collection time. Please check your phone and email messages, then proceed to the meeting point where your driver will be waiting."}},
+        {"@type": "Question", "name": "What are the payment options available?", "acceptedAnswer": {"@type": "Answer", "text": "EasyGo accepts all major credit cards including American Express, MasterCard and Visa. Cash payment to the driver is also available. For passengers arriving in {{ region.name }}, advance payment is kindly requested."}},
+        {"@type": "Question", "name": "Do you offer infant seats or baby capsules?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. EasyGo provides infant seats and baby capsules. Up to two child seats are available free of charge, with an additional $10 fee per extra seat. Please specify the number of seats required during booking."}},
+        {"@type": "Question", "name": "Do you provide {{ region.name }} airport pickup services from both International and Domestic terminals?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. EasyGo provides private {{ region.name }} airport pickup services from both {{ region.name }} International and Domestic terminals. Our drivers track your flight in real time and meet you at the designated airport meeting point for a smooth door-to-door transfer."}},
+        {"@type": "Question", "name": "How many bags can I take with me?", "acceptedAnswer": {"@type": "Answer", "text": "Each passenger is allowed one (1) standard bag plus one (1) carry-on item. If you have additional or oversized luggage, please inform EasyGo in advance."}},
+        {"@type": "Question", "name": "Is EasyGo a private {{ region.name }} airport pickup service or a shared shuttle?", "acceptedAnswer": {"@type": "Answer", "text": "EasyGo operates as a private {{ region.name }} airport pickup and transfer service. Your booking is exclusively for your group only, with no shared rides, additional pickups, or waiting for other passengers."}},
+        {"@type": "Question", "name": "Do you provide transfers from {{ region.name }} CBD hotels?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. EasyGo provides transfers to and from {{ region.name }} CBD hotels, serviced apartments, and city accommodations."}},
+        {"@type": "Question", "name": "Which areas do you service in {{ region.name }}?", "acceptedAnswer": {"@type": "Answer", "text": "EasyGo services {{ region.name }} CBD, Northern Suburbs, Eastern Suburbs, and Western {{ region.name }} suburbs. Customers can check pricing and availability for their suburb using the online booking system."}}
+      ]
+    }
     </script>
   </body>
 </html>
