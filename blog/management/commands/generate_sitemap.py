@@ -70,7 +70,7 @@ class Command(BaseCommand):
             {"loc": f"{BASE_URL}/privacy/",                  "changefreq": "yearly",  "priority": "0.3000"},
         ]
         _write_urlset(static_urls, os.path.join(base_dir, "sitemap-static.xml"), today)
-        index_entries.append({"loc": f"{BASE_URL}/sitemap-static.xml", "lastmod": today})
+        index_entries.append({"loc": f"{BASE_URL}/sitemaps/sitemap-static.xml", "lastmod": today})
         self.stdout.write(f"  sitemap-static.xml  — {len(static_urls)} URLs")
 
         # ── 2. sitemap-sydney.xml ────────────────────────────────────────
@@ -99,7 +99,7 @@ class Command(BaseCommand):
         except Exception as e:
             self.stdout.write(self.style.WARNING(f"  Sydney suburbs error: {e}"))
         _write_urlset(sydney_urls, os.path.join(base_dir, "sitemap-sydney.xml"), today)
-        index_entries.append({"loc": f"{BASE_URL}/sitemap-sydney.xml", "lastmod": today})
+        index_entries.append({"loc": f"{BASE_URL}/sitemaps/sitemap-sydney.xml", "lastmod": today})
         self.stdout.write(f"  sitemap-sydney.xml  — {len(sydney_urls)} URLs")
 
         # ── 3. sitemap-{region}.xml per active region ────────────────────
@@ -150,7 +150,7 @@ class Command(BaseCommand):
 
                 filename = f"sitemap-{region.slug}.xml"
                 _write_urlset(region_urls, os.path.join(base_dir, filename), today)
-                index_entries.append({"loc": f"{BASE_URL}/{filename}", "lastmod": today})
+                index_entries.append({"loc": f"{BASE_URL}/sitemaps/{filename}", "lastmod": today})
                 self.stdout.write(f"  {filename}  — {len(region_urls)} URLs ({suburbs.count()} suburbs × 2 + pages)")
 
             except Exception as e:
@@ -176,7 +176,7 @@ class Command(BaseCommand):
         except Exception as e:
             self.stdout.write(self.style.WARNING(f"  Blog sitemap error: {e}"))
         _write_urlset(blog_urls, os.path.join(base_dir, "sitemap-blog.xml"), today)
-        index_entries.append({"loc": f"{BASE_URL}/sitemap-blog.xml", "lastmod": blog_lastmod})
+        index_entries.append({"loc": f"{BASE_URL}/sitemaps/sitemap-blog.xml", "lastmod": blog_lastmod})
         self.stdout.write(f"  sitemap-blog.xml    — {len(blog_urls)} URLs")
 
         # ── 5. sitemap.xml (index) ───────────────────────────────────────
