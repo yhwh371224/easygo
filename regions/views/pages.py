@@ -176,3 +176,54 @@ def region_more_suburbs(request, region_slug):
         'current_region': region,
         'suburbs': suburbs,
     })
+
+
+def _build_city_context(request, slug):
+    from django.contrib.staticfiles.storage import staticfiles_storage
+    region = get_object_or_404(Region, slug=slug, is_active=True)
+    form_suburbs = region.suburbs.filter(is_active=True).order_by('-is_pinned', 'sort_order', 'name')
+    featured_suburbs = (
+        region.suburbs
+        .filter(is_active=True, is_featured=True)
+        .only('name', 'slug', 'price', 'meta_description', 'featured_order', 'carousel_image')
+        .order_by('featured_order', 'name')[:5]
+    )
+    latest_post = (
+        BlogPost.objects
+        .filter(status='published', region=region)
+        .only('title', 'slug', 'created_at')
+        .order_by('-created_at')
+        .first()
+    )
+    from regions.models import Terminal
+    airport_terminals = Terminal.objects.filter(
+        airport__regions=region
+    ).select_related('airport').order_by('type', 'name')
+    cruise_terminals = CruiseTerminal.objects.filter(region=region)
+    hero_image_url = staticfiles_storage.url(f'basecamp/photos/airports/{region.hero_image_file}')
+    return {
+        'region': region,
+        'form_suburbs': form_suburbs,
+        'featured_suburbs': featured_suburbs,
+        'airport_terminals': airport_terminals,
+        'cruise_terminals': cruise_terminals,
+        'google_review_url': settings.GOOGLE_REVIEW_URL,
+        'latest_post': latest_post,
+        'service_areas': region.service_areas or [],
+        'hero_image_url': hero_image_url,
+    }
+
+
+def brisbane_home(request):
+    ctx = _build_city_context(request, 'brisbane')
+    return render(request, 'regions/pages/brisbane_home.html', ctx)
+
+
+def melbourne_home(request):
+    ctx = _build_city_context(request, 'melbourne')
+    return render(request, 'regions/pages/melbourne_home.html', ctx)
+
+
+def gold_coast_home(request):
+    ctx = _build_city_context(request, 'gold-coast')
+    return render(request, 'regions/pages/gold_coast_home.html', ctx)

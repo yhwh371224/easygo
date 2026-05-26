@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>{% if region.meta_title %}{{ region.meta_title }}{% else %}Melbourne Airport Transfer | Tullamarine | CityLink | EasyGo{% endif %}</title>
+    <link rel="canonical" href="https://easygoshuttle.com.au/melbourne/">
+    <meta name="google-site-verification" content="hae39L0Kv7JIxVc3YclvckH7Im5SdYa2hk_vZbGJIkA" />
+    <meta name="description" content="{% if region.meta_description %}{{ region.meta_description }}{% else %}Melbourne airport transfer from Tullamarine (MEL) — CityLink tolls included, all 4 terminals. No airport train to the city. Private 8–13 seater, 24/7.{% endif %}">
+    <meta name="keywords" content="melbourne airport transfer, melbourne airport shuttle, tullamarine airport transfer, MEL tullamarine transfer, citylink toll airport transfer, large group airport transfer melbourne, 8 seater melbourne airport, 13 seater melbourne airport, no airport train melbourne">
+    <meta name="author" content="easygoshuttle.com.au">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="{% if region.meta_title %}{{ region.meta_title }}{% else %}EasyGo Melbourne Airport Transfer – CityLink Tolls Included, 4 Terminals Covered{% endif %}">
+    <meta property="og:image" content="https://easygoshuttle.com.au{{ hero_image_url }}">
+    <meta property="og:description" content="Melbourne airport transfer from Tullamarine (MEL) — CityLink tolls included, all 4 terminals covered, private 8–13 seater for families and groups. No airport train needed.">
+    <meta property="og:url" content="https://easygoshuttle.com.au/melbourne/">
+    <meta property="og:type" content="website">
+    <script type="application/ld+json" nonce="{{ CSP_NONCE }}">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "@id": "https://easygoshuttle.com.au/melbourne/#localbusiness",
+      "name": "EasyGo Airport Transfer Melbourne",
+      "image": "https://easygoshuttle.com.au/static/basecamp/images/easygo-logo-final.webp",
+      "url": "https://easygoshuttle.com.au/melbourne/",
+      "telephone": "{{ business_phone }}",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Melbourne Airport",
+        "addressRegion": "VIC",
+        "postalCode": "3045",
+        "addressCountry": "AU"
+      },
+      "areaServed": [
+        {% for suburb in form_suburbs %}{ "@type": "Place", "name": "{{ suburb.name }}" }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+      ],
+      "priceRange": "$$",
+      "openingHours": "Mo-Su 03:00-23:00",
+      "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.8", "reviewCount": "376" },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Melbourne Airport Transfer Services",
+        "itemListElement": [
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Melbourne Airport Transfer", "description": "Private door-to-door airport transfer from Melbourne Airport (MEL) Tullamarine — CityLink tolls included, all 4 terminals covered", "image": "https://easygoshuttle.com.au/static/basecamp/photos/vehicle-1.webp" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Melbourne Airport Shuttle", "description": "8–13 seater shuttle from Tullamarine for Melbourne families and groups — fixed price, tolls included", "image": "https://easygoshuttle.com.au/static/basecamp/photos/vehicles.webp" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Melbourne Airport Maxi Taxi", "description": "Large group maxi taxi from MEL Tullamarine — up to 13 passengers, CityLink included", "image": "https://easygoshuttle.com.au/static/basecamp/photos/vehicles.webp" } }
+        ]
+      }
+    }
+    </script>
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'basecamp/favi/favicon.ico' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'basecamp/favi/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'basecamp/favi/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'basecamp/favi/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'basecamp/favi/site.webmanifest' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Inter:400,600,700&display=swap" rel="stylesheet">
+    <link rel="preload" fetchpriority="high" as="image" href="{{ hero_image_url }}" type="image/webp">
+    <link rel="preload" href="{% static 'basecamp/css/head_home.css' %}" as="style">
+    <link rel="preload" href="{% static 'basecamp/css/home.css' %}" as="style">
+    <link rel="preload" href="{% static 'basecamp/css/footer.css' %}" as="style">
+    <link rel="stylesheet" href="{% static 'basecamp/css/tiny-slider.css' %}" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="{% static 'basecamp/css/flatpickr.min.css' %}" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="{% static 'basecamp/css/head_home.css' %}">
+    <link rel="stylesheet" href="{% static 'basecamp/css/home.css' %}">
+    <link rel="stylesheet" href="{% static 'basecamp/css/footer.css' %}">
+    <noscript><link rel="stylesheet" href="{% static 'basecamp/css/tiny-slider.css' %}"></noscript>
+    <style nonce="{{ CSP_NONCE }}">
+      #region-hero { position: relative; isolation: isolate; background-image: url("{{ hero_image_url }}"); background-size: cover; background-position: center top; min-height: 72vh; }
+      #region-hero::before { content: ""; position: absolute; inset: 0; background: rgba(0,0,0,0.45); z-index: -1; }
+      @media (max-width: 576px) { #region-hero { min-height: 62vh; background-position: center; } }
+      @media (max-width: 767.98px) { .award-badge { top: 35vh !important; bottom: auto !important; transform: none !important; } }
+      .main-img { display: none; }
+      .site-footer a { text-decoration: none !important; }
+      .site-footer a:hover, .site-footer a:focus, .site-footer a:active { text-decoration: none !important; }
+      .city-card { background: #fbf6ee; transition: background-color .15s ease, border-color .15s ease, box-shadow .15s ease, transform .1s ease; color: inherit; cursor: pointer; }
+      .city-card:hover { background: #f6eddf; box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); color: inherit; }
+      .city-card.is-active { background: #f3e6d2; border-color: rgba(243, 128, 32, 0.35) !important; }
+      .city-name { white-space: nowrap; }
+      .badge-current { background: rgba(34,197,94,.18); color:#14532d; border: 1px solid rgba(34,197,94,.30); }
+      .live-pill { display:inline-flex; align-items:center; gap:.5rem; padding:.25rem .6rem; border:1px solid rgba(255,255,255,.20); border-radius:999px; background: rgba(0,0,0,.22); color: rgba(255,255,255,.78); }
+      .live-pill strong { color:#ffffff; }
+      .live-pill .live-muted { color: rgba(255,255,255,.62); }
+      .live-dot { width:.5rem; height:.5rem; border-radius:999px; background:#22c55e; box-shadow: 0 0 0 0 rgba(34,197,94,.55); animation: livePulse 1.4s infinite; }
+      @keyframes livePulse { 0%{ box-shadow:0 0 0 0 rgba(34,197,94,.55);} 70%{ box-shadow:0 0 0 .5rem rgba(34,197,94,0);} 100%{ box-shadow:0 0 0 0 rgba(34,197,94,0);} }
+      .hero-text-wrap { position:absolute; inset:0; z-index:1; display:flex; align-items:flex-start; justify-content:center; padding-top:9rem; pointer-events:none; }
+      .hero-text-inner { text-align:center; color:#fff; max-width:680px; padding:0 1.5rem; }
+      .hero-eyebrow { display:inline-block; font-size:.72rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#fff; margin-bottom:.25rem; }
+      .hero-title { font-size:clamp(1.6rem,4.5vw,3.25rem); font-weight:700; line-height:1.2; margin-bottom:.6rem; text-shadow:0 2px 14px rgba(0,0,0,.4); }
+      .hero-title span { color:#ff9f4a; }
+      .hero-sub { font-size:clamp(.82rem,2vw,1.05rem); color:#fff; margin-bottom:.75rem; font-weight:400; letter-spacing:.02em; }
+      .hero-trust { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:.3rem .5rem; font-size:clamp(.72rem,1.8vw,.82rem); color:#fff; }
+      .hero-trust strong { color:#fff; font-weight:600; }
+      .hero-trust-sep { color:rgba(255,255,255,.5); }
+      @media (max-width:576px) { .hero-text-wrap { padding-top:4.5rem; } .hero-title br { display:none; } .hero-trust-sep { display:none; } }
+      /* Melbourne terminal cards */
+      .mel-terminal-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1rem; margin-top:1.5rem; }
+      .mel-terminal-card { background:#fff; border:1px solid #e5e7eb; border-radius:10px; padding:1.1rem 1rem; position:relative; }
+      .mel-terminal-card:hover { border-color:#ff6b35; box-shadow:0 4px 14px rgba(255,107,53,.12); }
+      .mel-terminal-code { display:inline-block; background:#1e293b; color:#ff9f4a; font-size:.68rem; font-weight:800; letter-spacing:.1em; padding:.2rem .5rem; border-radius:4px; margin-bottom:.5rem; text-transform:uppercase; }
+      .mel-terminal-name { font-weight:700; font-size:.9rem; color:#1e293b; margin-bottom:.25rem; }
+      .mel-terminal-detail { font-size:.78rem; color:#6b7280; line-height:1.4; }
+      .mel-no-train-banner { background:linear-gradient(135deg,#1e3a5f 0%,#2d5986 100%); border-radius:12px; padding:1.5rem 2rem; color:#fff; margin-top:2.5rem; display:flex; align-items:center; gap:1.5rem; flex-wrap:wrap; }
+      .mel-no-train-icon { font-size:2.5rem; flex-shrink:0; }
+      .mel-no-train-text strong { font-size:1rem; display:block; margin-bottom:.3rem; }
+      .mel-no-train-text span { font-size:.83rem; color:rgba(255,255,255,.82); }
+    </style>
+    {% if GOOGLE_ANALYTICS_ID %}
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ GOOGLE_ANALYTICS_ID }}"></script>
+    <script nonce="{{ CSP_NONCE }}">
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '{{ GOOGLE_ANALYTICS_ID }}');
+    </script>
+    {% endif %}
+  </head>
+  <body>
+    {% include "basecamp/layouts/navbar.html" %}
+    <main class="page-wrapper">
+
+      <!-- ===== HERO ===== -->
+      <section id="region-hero" class="bg-dark pt-6 pb-5 py-sm-6">
+        <div class="main-img" fetchpriority="high"></div>
+        <div class="hero-text-wrap">
+          <div class="hero-text-inner">
+            <span class="hero-eyebrow">Melbourne Tullamarine Airport (MEL) — Private Transfer Service</span>
+            <h1 class="hero-title">4 Terminals.<br><span>One Fixed Price.</span></h1>
+            <p class="hero-sub">CityLink Tolls Included &nbsp;·&nbsp; 8–13 Seater &nbsp;·&nbsp; Tullamarine to Your Door</p>
+            <div class="hero-trust">
+              <strong>⭐ 4.8</strong>
+              <span class="hero-trust-sep">|</span>
+              <span>376 Google Reviews</span>
+              <span class="hero-trust-sep">|</span>
+              <span>CityLink tolls included</span>
+              <span class="hero-trust-sep">|</span>
+              <span>100% Private Ride</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== BOOKING FORM ===== -->
+      <section class="container position-relative zindex-5 booking-form-top" id="booking-tabs" data-rebook-error="{{ rebook_error|yesno:'true,false' }}">
+        <div class="booking-tabs-wrapper">
+          <div class="booking-tab-nav">
+            <button class="booking-tab-btn active" data-tab="new-booking" onclick="switchBookingTab(this, 'new-booking')">
+              Check Availability & Price
+            </button>
+            <button class="booking-tab-btn" data-tab="quick-rebook" onclick="switchBookingTab(this, 'quick-rebook')">
+              Book Again
+              <span class="rebook-badge">Returning?</span>
+            </button>
+          </div>
+          <div class="booking-tab-body">
+            <div class="booking-tab-pane active" id="tab-new-booking">
+              <form action="{% url 'regions:price_detail' region.slug %}" id="booking-form" method="post">
+                {% csrf_token %}
+                <div class="booking-fields">
+                  <div class="booking-field">
+                    <label class="booking-label">Pickup date</label>
+                    <input class="booking-input date-picker" name="pickup_date" required type="date" placeholder="Choose date" data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;F j, Y&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;}">
+                  </div>
+                  <div class="booking-field">
+                    <label class="booking-label" for="start-point">Pickup Location</label>
+                    <select class="booking-input" id="start-point" name="start_point" required>
+                      <option value="" disabled selected>Select your option</option>
+                      {% if airport_terminals %}<optgroup label="Airport terminals">{% for t in airport_terminals %}<option value="{{ t.id }}">{{ t.name }}</option>{% endfor %}</optgroup>{% endif %}
+                      {% if cruise_terminals %}<optgroup label="Cruise terminals">{% for ct in cruise_terminals %}<option value="cruise_{{ ct.id }}">{{ ct.name }}</option>{% endfor %}</optgroup>{% endif %}
+                      {% for suburb in form_suburbs %}<option value="{{ suburb.name }}">{{ suburb.name }}</option>{% endfor %}
+                    </select>
+                  </div>
+                  <div class="booking-field">
+                    <label class="booking-label" for="end-point">Drop-off Location</label>
+                    <select class="booking-input" id="end-point" name="end_point" required>
+                      <option value="" disabled selected>Select your option</option>
+                      {% if airport_terminals %}<optgroup label="Airport terminals">{% for t in airport_terminals %}<option value="{{ t.id }}">{{ t.name }}</option>{% endfor %}</optgroup>{% endif %}
+                      {% if cruise_terminals %}<optgroup label="Cruise terminals">{% for ct in cruise_terminals %}<option value="cruise_{{ ct.id }}">{{ ct.name }}</option>{% endfor %}</optgroup>{% endif %}
+                      {% for suburb in form_suburbs %}<option value="{{ suburb.name }}">{{ suburb.name }}</option>{% endfor %}
+                    </select>
+                  </div>
+                  <div class="booking-field booking-field--sm">
+                    <label class="booking-label" for="passengers">Passengers</label>
+                    <select class="booking-input" id="passengers" name="no_of_passenger" required>
+                      <option disabled selected value="">No. of people</option>
+                      <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option>
+                      <option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option>
+                      <option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option>
+                      <option value="13">13</option><option value="" disabled>Over 13 — contact us</option>
+                    </select>
+                  </div>
+                  <div class="booking-field booking-field--btn">
+                    <button type="submit" class="booking-submit booking-submit--orange" id="submitButton">See price &rsaquo;&rsaquo;</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="booking-tab-pane" id="tab-quick-rebook">
+              {% if rebook_error %}<div class="rebook-error">{{ rebook_error }}</div>{% endif %}
+              <p class="rebook-hint">Used EasyGo before? Enter your email — we'll fill in your previous route automatically.</p>
+              <form action="{% url 'regions:quick_rebook_step1' region.slug %}" method="post" id="quick-rebook-form">
+                {% csrf_token %}
+                <div class="booking-fields">
+                  <div class="booking-field booking-field--lg">
+                    <label class="booking-label">Email address <span class="booking-label-muted">(from previous booking)</span></label>
+                    <input type="email" class="booking-input" name="email" placeholder="your@email.com" required autocomplete="email">
+                  </div>
+                  <div class="booking-field">
+                    <label class="booking-label">Pickup date</label>
+                    <input class="booking-input date-picker" name="pickup_date" required type="date" placeholder="Choose date" data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;F j, Y&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;}">
+                  </div>
+                  <div class="booking-field">
+                    <label class="booking-label">Flight number</label>
+                    <input type="text" class="booking-input" name="flight_number" placeholder="e.g. VA800" autocomplete="off">
+                  </div>
+                  <div class="booking-field booking-field--btn">
+                    <button type="submit" class="booking-submit booking-submit--green">Next — final stop &rsaquo;&rsaquo;</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== HOT OFFER CAROUSEL ===== -->
+      <section class="container rounded bg-dark py-5 my-4 my-sm-0 py-sm-6 py-md-7">
+        <div class="text-center mb-5">
+          <h2 class="text-light fs-4 fs-md-3 fw-semibold mb-2">Melbourne Airport Transfer — Private 8–13 Seater from Tullamarine (MEL)</h2>
+          <h2 class="text-light fs-6 fs-md-5 fw-bold mb-4"><span class="text-brand"><strong>CityLink Tolls Included · CBD, Eastern, Northern, Western & Bayside Suburbs</strong></span></h2><br>
+          <div>| <a role="button" class="btn btn-success" href="/melbourne/inquiry/">Check Availability & Price</a></div>
+        </div>
+        <h2 class="text-center mb-4 text-white"><span class="text-brand">HOT OFFER</span> - Best Price Guaranteed</h2>
+        <div class="tns-carousel-wrapper">
+          <div class="text-end offer-search-end">
+            <a href="/melbourne/suburbs/" class="text-brand">Search your area &raquo;&raquo;&raquo;</a>
+          </div>
+          <div class="tns-carousel-inner" data-carousel-options="{&quot;items&quot;: 3, &quot;nav&quot;: false, &quot;gutter&quot;: 23, &quot;responsive&quot;: {&quot;0&quot;:{&quot;items&quot;:1},&quot;540&quot;:{&quot;items&quot;:2},&quot;900&quot;:{&quot;items&quot;:3}}}">
+            {% for suburb in featured_suburbs %}
+              <div class="pb-1">
+                <a class="card border-0 shadow card-hover mx-1" href="/melbourne/airport-transfer/{{ suburb.slug }}/">
+                  <span class="badge badge-lg badge-floating badge-floating-end badge-price" style="background-color:#9ea8b3;">${{ suburb.price|default:"-" }}</span>
+                  <div class="card-img-top card-img-gradient offer-card-img">
+                    {% if suburb.carousel_image %}<img loading="lazy" src="{{ suburb.carousel_image }}" alt="{{ suburb.name }} Melbourne airport transfer" width="400" height="461" class="offer-card-inner-img">{% endif %}
+                    <span class="card-floating-text text-light fw-medium">Discover the trip<i class="ai-chevron-right align-middle fs-lg ms-1"></i></span>
+                  </div>
+                  <div class="card-body text-center">
+                    <h3 class="h5 pt-1 mb-3">{{ suburb.name }}</h3>
+                    {% if suburb.meta_description %}<p class="fs-sm text-muted mb-2">{{ suburb.meta_description }}</p>{% endif %}
+                    <p class="fs-sm mb-2 text-blue-link">more details >>></p>
+                  </div>
+                </a>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- INTRO TEXT -->
+        <div id="service-intro" class="row justify-content-center intro-top mt-5">
+          <div class="col-lg-10 text-center">
+            <p class="fs-md mb-2 intro-text">
+              Melbourne's Tullamarine Airport sits 23km north of the CBD — and unlike Sydney or Brisbane, there is
+              <strong>no direct airport train to the city</strong>. That means private transport isn't just a luxury here;
+              it's the sensible choice. EasyGo's <strong>Melbourne airport transfer</strong> picks you up from any of
+              MEL's four terminals and drives you straight to your door — CityLink tolls already in the price.
+            </p>
+            <p class="fs-md mb-2 intro-text">
+              Whether you're landing at the International Terminal after a long-haul flight, connecting through the
+              Qantas Domestic hub, or catching a budget Jetstar service, our <strong>Tullamarine airport transfer</strong>
+              service covers every terminal and every Melbourne suburb. Families, corporate travellers, AFL footy groups,
+              Melbourne Cup racegoers — our 8–13 seater maxi vans handle them all.
+            </p>
+          </div>
+        </div>
+
+        <div id="service-options" class="row text-center service-options-top">
+          <div class="col-lg-6 mb-3 mb-lg-0">
+            <h3 class="fs-sm fw-bold mb-2 text-light">Melbourne Airport Maxi Taxi</h3>
+            <p class="fs-sm mb-2 text-light">Private 8–13 seater from Tullamarine — CityLink included:</p>
+            <ul class="list-unstyled fs-sm text-light">
+              <li class="mb-1"><a href="/melbourne/maxi-taxi/" class="fw-semibold text-blue-link">🚐 Melbourne Airport Maxi Taxi</a> - 8–13 seater for groups &amp; luggage</li>
+              <li class="mb-1"><a href="/melbourne/cruise-transfer/" class="fw-semibold text-blue-link">🚢 Melbourne Cruise Transfer</a> - Station Pier &amp; Swanson Dock</li>
+            </ul>
+          </div>
+          <div class="col-lg-6">
+            <h3 class="fs-sm fw-bold mb-2 text-light">Melbourne Airport Services</h3>
+            <p class="fs-sm mb-2 text-light">Choose your Melbourne airport service:</p>
+            <ul class="list-unstyled fs-sm text-light">
+              <li class="mb-1"><a href="/melbourne/airport-transfer/" class="fw-semibold text-blue-link">🚗 Melbourne Airport Transfer</a> - Door-to-door, all tolls in price</li>
+              <li class="mb-1"><a href="/melbourne/airport-shuttle/" class="fw-semibold text-blue-link">🚐 Melbourne Airport Shuttle</a> - Flexible rides across Melbourne</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== TULLAMARINE: 4 TERMINALS GUIDE ===== -->
+      <section class="container py-5 my-2">
+        <h2 class="text-center mb-2">Tullamarine Has 4 Terminals — We Know Every One</h2>
+        <p class="text-center text-muted mb-4 col-lg-8 mx-auto">
+          Melbourne Airport (MEL) spreads across four separate terminal buildings. Getting to the wrong one wastes time.
+          Your EasyGo driver knows exactly which terminal to meet you at — and tracks your flight in real time so
+          they're there when you land, not when your booked time says you should have landed.
+        </p>
+        <div class="mel-terminal-grid">
+          <div class="mel-terminal-card">
+            <div class="mel-terminal-code">T1</div>
+            <div class="mel-terminal-name">Qantas Domestic</div>
+            <div class="mel-terminal-detail">All Qantas domestic flights including QantasLink. Ground Transport pickup via the covered pick-up road directly outside arrivals.</div>
+          </div>
+          <div class="mel-terminal-card">
+            <div class="mel-terminal-code">T2</div>
+            <div class="mel-terminal-name">International Terminal</div>
+            <div class="mel-terminal-detail">All international arrivals — Singapore Airlines, Emirates, Cathay Pacific, Air New Zealand and more. Ground Transport is Level 1, exits A and B.</div>
+          </div>
+          <div class="mel-terminal-card">
+            <div class="mel-terminal-code">T3</div>
+            <div class="mel-terminal-name">Virgin Australia & Jetstar</div>
+            <div class="mel-terminal-detail">Virgin domestic and Jetstar budget services. The busiest domestic terminal by passenger volume. Pickup via roadside Ground Transport lane.</div>
+          </div>
+          <div class="mel-terminal-card">
+            <div class="mel-terminal-code">T4</div>
+            <div class="mel-terminal-name">Regional & Other Carriers</div>
+            <div class="mel-terminal-detail">Rex Airlines regional routes and other smaller carriers. Separate building — tell us your airline at booking and we'll be at the right spot.</div>
+          </div>
+        </div>
+        <div class="mel-no-train-banner">
+          <div class="mel-no-train-icon">🚆</div>
+          <div class="mel-no-train-text">
+            <strong>There is no airport train to Melbourne CBD.</strong>
+            <span>Unlike Sydney's Airport Link or Brisbane's Airtrain, Tullamarine has no rail connection to the city — only buses, rideshares, and private transfers. EasyGo is Melbourne's direct, private alternative: your driver, your vehicle, CityLink tolls already in the price.</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== WHY CHOOSE ===== -->
+      <section class="container py-5 my-2">
+        <h2 class="text-center mb-3">Why Melbourne Travellers Choose EasyGo Over Everything Else</h2>
+        <p class="text-center text-muted mb-5 col-lg-8 mx-auto">
+          Tullamarine is 23km from the CBD, has no rail link, and CityLink tolls catch everyone off guard.
+          Here's why EasyGo is the logical choice for Melbourne airport transfers.
+        </p>
+        <div class="row g-4">
+          <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm p-4 text-center">
+              <div class="fs-1 mb-3">🛣️</div>
+              <h3 class="h5 mb-2">CityLink Tolls Already in Your Price</h3>
+              <p class="fs-sm text-muted mb-0">
+                The Tullamarine Freeway connects directly to CityLink — most routes to Melbourne CBD pass through
+                toll zones. Unlike rideshares that add toll charges at the end, EasyGo includes every CityLink toll
+                in your fixed quote. What you see is what you pay.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm p-4 text-center">
+              <div class="fs-1 mb-3">✈️</div>
+              <h3 class="h5 mb-2">All 4 Tullamarine Terminals Covered</h3>
+              <p class="fs-sm text-muted mb-0">
+                T1 Qantas, T2 International, T3 Virgin/Jetstar, T4 Regional — your driver knows
+                which terminal, which exit, and which bay. We track your flight in real time and adjust
+                if your arrival time shifts. No extra cost for delays.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm p-4 text-center">
+              <div class="fs-1 mb-3">🚆</div>
+              <h3 class="h5 mb-2">No Airport Train — EasyGo Fills the Gap</h3>
+              <p class="fs-sm text-muted mb-0">
+                Melbourne has no rail link from Tullamarine to the city. The Skybus stops at Southern Cross only —
+                no door-to-door service. EasyGo drives directly to your address, whether that's a CBD hotel,
+                a Fitzroy laneway, or a Dandenong suburb.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm p-4 text-center">
+              <div class="fs-1 mb-3">🌦️</div>
+              <h3 class="h5 mb-2">"4 Seasons in One Day" — We Track That Too</h3>
+              <p class="fs-sm text-muted mb-0">
+                Melbourne's notorious weather — blazing sun at 10am, hailstorm by 2pm — means outdoor waiting
+                is never pleasant. Your driver tracks your flight and meets you inside the terminal. No standing
+                on a kerb in a surprise southerly.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm p-4 text-center">
+              <div class="fs-1 mb-3">🏉</div>
+              <h3 class="h5 mb-2">AFL Grand Final & Melbourne Cup Weekend</h3>
+              <p class="fs-sm text-muted mb-0">
+                MCG on game day. Flemington on Cup Day. These are Melbourne institutions — and they mean
+                congested roads and surge-priced rideshares. EasyGo's fixed price never changes.
+                Book your AFL group in advance and we guarantee the rate.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm p-4 text-center">
+              <div class="fs-1 mb-3">👨‍👩‍👧‍👦</div>
+              <h3 class="h5 mb-2">Ample Space for Melbourne Luggage</h3>
+              <p class="fs-sm text-muted mb-0">
+                International returns with 30kg bags. Ski gear from Perisher. Overseas shoppers with extra
+                suitcases. Our 8–13 seater maxi vans have cargo space built for long-haul travellers —
+                not sardine-tin sedans. Child seats also available free.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== SERVICE AREAS ===== -->
+      <section class="bg-light py-5 my-2">
+        <div class="container">
+          <h2 class="text-center mb-3">Melbourne Airport Transfer — Service Areas</h2>
+          <p class="text-center text-muted mb-5 col-lg-8 mx-auto">
+            From the trams of Fitzroy to the wineries of the Yarra Valley — EasyGo covers all of Melbourne.
+            CBD, inner suburbs, eastern sprawl, the bayside strip, and even regional Victoria.
+            CityLink tolls included on every route.
+          </p>
+          <div class="row g-4">
+            {% for area in service_areas %}
+            <div class="col-md-3 col-sm-6">
+              <div class="card h-100 border-0 shadow-sm p-4">
+                <h3 class="h5 text-brand mb-2">{{ area.icon }} {{ area.title }}</h3>
+                <p class="fs-sm text-muted mb-0">{{ area.description }}</p>
+              </div>
+            </div>
+            {% empty %}
+            <div class="col-md-3 col-sm-6"><div class="card h-100 border-0 shadow-sm p-4"><h3 class="h5 text-brand mb-2">🏙️ CBD & Inner City</h3><p class="fs-sm text-muted mb-0">Melbourne CBD, Fitzroy, Collingwood, Richmond, South Yarra, St Kilda, Carlton</p></div></div>
+            <div class="col-md-3 col-sm-6"><div class="card h-100 border-0 shadow-sm p-4"><h3 class="h5 text-brand mb-2">🌆 Eastern Suburbs</h3><p class="fs-sm text-muted mb-0">Box Hill, Doncaster, Ringwood, Croydon, Knox, Dandenong, Glen Waverley, Rowville</p></div></div>
+            <div class="col-md-3 col-sm-6"><div class="card h-100 border-0 shadow-sm p-4"><h3 class="h5 text-brand mb-2">🌇 Northern & Western</h3><p class="fs-sm text-muted mb-0">Brunswick, Coburg, Preston, Epping, Footscray, Werribee, Melton, Sunbury</p></div></div>
+            <div class="col-md-3 col-sm-6"><div class="card h-100 border-0 shadow-sm p-4"><h3 class="h5 text-brand mb-2">🏖️ Bayside & Peninsula</h3><p class="fs-sm text-muted mb-0">Brighton, Frankston, Moorabbin, Dandenong, Mornington Peninsula, Geelong</p></div></div>
+            {% endfor %}
+          </div>
+          <div class="text-center mt-4">
+            <a href="/melbourne/suburbs/" class="btn btn-primary">Check Your Melbourne Suburb &raquo;</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== HOW TO BOOK ===== -->
+      <section class="container py-5 my-2">
+        <h2 class="text-center mb-3">How to Book Your Melbourne Airport Transfer</h2>
+        <p class="text-center text-muted mb-5 col-lg-8 mx-auto">CityLink tolls and parking are already in the price. Booking takes under 2 minutes:</p>
+        <div class="row g-4 text-center">
+          <div class="col-md-3 text-center">
+            <div class="rounded-circle text-white d-inline-flex align-items-center justify-content-center mb-3 mx-auto" style="width:56px;height:56px;font-size:1.4rem;font-weight:700;background:#ff6b35;display:flex;align-items:center;justify-content:center;">1</div>
+            <h3 class="h6 mb-2">Enter Your Details</h3>
+            <p class="fs-sm text-muted">Select your pickup date, terminal (T1–T4) or Melbourne suburb, drop-off address, and number of passengers.</p>
+          </div>
+          <div class="col-md-3 text-center">
+            <div class="rounded-circle text-white d-inline-flex align-items-center justify-content-center mb-3 mx-auto" style="width:56px;height:56px;font-size:1.4rem;font-weight:700;background:#ff6b35;display:flex;align-items:center;justify-content:center;">2</div>
+            <h3 class="h6 mb-2">See Your All-In Fixed Price</h3>
+            <p class="fs-sm text-muted">CityLink tolls, airport parking, and flight delay waiting time — all included. No add-ons at checkout.</p>
+          </div>
+          <div class="col-md-3 text-center">
+            <div class="rounded-circle text-white d-inline-flex align-items-center justify-content-center mb-3 mx-auto" style="width:56px;height:56px;font-size:1.4rem;font-weight:700;background:#ff6b35;display:flex;align-items:center;justify-content:center;">3</div>
+            <h3 class="h6 mb-2">Confirm Your Booking</h3>
+            <p class="fs-sm text-muted">Pay by credit card online or cash on the day. Instant confirmation email with your booking details.</p>
+          </div>
+          <div class="col-md-3 text-center">
+            <div class="rounded-circle text-white d-inline-flex align-items-center justify-content-center mb-3 mx-auto" style="width:56px;height:56px;font-size:1.4rem;font-weight:700;background:#ff6b35;display:flex;align-items:center;justify-content:center;">4</div>
+            <h3 class="h6 mb-2">We Meet You at Your Terminal</h3>
+            <p class="fs-sm text-muted">Your driver tracks your flight and is waiting at your specific terminal — T1, T2, T3 or T4 — when you land.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== PROFESSIONAL SERVICE ===== -->
+      <section class="bg-gradient position-relative pt-6 pb-5 py-sm-6">
+        <div class="position-absolute top-0 start-0 w-100 h-100">
+          <img loading="lazy" src="{% static 'basecamp/photos/bg-pattern01.webp' %}" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">
+        </div>
+        <div class="position-relative zindex-5 container py-2">
+          <div class="row align-items-center">
+            <div class="col-lg-5 offset-lg-1 order-lg-2 pb-5 pb-lg-0 text-center text-lg-start">
+              <h2 class="text-light">Melbourne's Garden City Deserves a Proper Transfer</h2>
+              <p class="text-light mb-0">
+                Melbourne is a city of trams, laneways, great coffee, and impossible weather — and the last thing
+                you need after a long flight is a ride where your luggage doesn't fit, the driver adds $9 in tolls
+                you weren't told about, or you end up at the wrong terminal building. EasyGo handles all of it:
+                fixed price, CityLink included, correct terminal, professional drivers who know every Mornington
+                Peninsula back road and every CBD loading dock.
+              </p>
+            </div>
+            <div class="col-lg-6 order-lg-1">
+              <div class="row">
+                <div class="col-12 col-sm-4 mb-2 pb-4 mb-sm-0 pb-sm-0">
+                  <div class="px-2 text-center d-flex flex-column align-items-center">
+                    <img loading="lazy" class="bg-light rounded-circle mb-2 img-fluid" src="{% static 'basecamp/images/01.svg' %}" alt="Easy online booking Melbourne Tullamarine airport transfer" width="105" height="auto">
+                    <p class="fs-sm fw-medium text-light mb-0 pt-1">Book online in 2 minutes — instant price</p>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-4 mb-2 pb-4 mb-sm-0 pb-sm-0">
+                  <div class="px-2 text-center d-flex flex-column align-items-center">
+                    <img loading="lazy" class="bg-light rounded-circle mb-2 img-fluid" src="{% static 'basecamp/images/02.svg' %}" alt="8-13 seater maxi taxi all 4 Melbourne terminals covered" width="105" height="auto">
+                    <p class="fs-sm fw-medium text-light mb-0 pt-1">All 4 terminals — T1, T2, T3, T4</p>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-4 mb-2 pb-4 mb-sm-0 pb-sm-0">
+                  <div class="px-2 text-center d-flex flex-column align-items-center">
+                    <img loading="lazy" class="bg-light rounded-circle mb-2 img-fluid" src="{% static 'basecamp/images/03.svg' %}" alt="CityLink tolls included Melbourne airport transfer fixed price" width="105" height="auto">
+                    <p class="fs-sm fw-medium text-light mb-0 pt-1">CityLink tolls included — no add-ons</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== CHOOSE YOUR CITY ===== -->
+      <section class="container city-chooser-section py-4 py-md-5">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+          <h2 class="mb-0">Choose your city</h2>
+          <span class="live-pill fs-sm">
+            <span class="live-dot" aria-hidden="true"></span>
+            <span><strong>Melbourne</strong> <span class="live-muted">Live now</span></span>
+          </span>
+        </div>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
+          {% for r in active_regions %}
+            <div class="col">
+              {% if r.is_coming_soon %}
+              <div class="city-card h-100 border rounded-3 p-3 p-md-4" style="opacity:0.6;">
+              {% elif r.slug == 'sydney' %}
+              <a class="city-card h-100 border rounded-3 p-3 p-md-4 d-block text-decoration-none {% if region.slug == r.slug %}is-active{% endif %}" href="/">
+              {% else %}
+              <a class="city-card h-100 border rounded-3 p-3 p-md-4 d-block text-decoration-none {% if region.slug == r.slug %}is-active{% endif %}" href="/{{ r.slug }}/">
+              {% endif %}
+                <div class="d-flex align-items-start justify-content-between gap-3">
+                  <div>
+                    <div class="city-name fw-semibold">{{ r.name }}</div>
+                    <div class="text-muted fs-sm">{% if r.primary_airport %}{{ r.primary_airport.code }}{% else %}Airport transfers{% endif %}</div>
+                  </div>
+                  <div class="text-end">
+                    {% if region.slug == r.slug %}<span class="badge badge-current">Current</span>
+                    {% elif r.is_coming_soon %}<span class="badge bg-warning text-dark">Coming Soon</span>{% endif %}
+                  </div>
+                </div>
+              {% if r.is_coming_soon %}</div>{% else %}</a>{% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      </section>
+
+      <!-- ===== FAQ ===== -->
+      <section class="container py-3 my-4 my-sm-0 py-sm-4 py-md-7">
+        <h2 class="text-center mb-4 text-brand">Melbourne Airport Transfer FAQs — Tullamarine (MEL)</h2>
+        <p class="text-center pb-2 mb-5 fs-5">Everything you need to know before booking</p>
+        <div class="row pb-2">
+          <div class="col-lg-6">
+            <div class="accordion" id="faq">
+              <div class="accordion-item shadow">
+                <h2 class="accordion-header" id="faq-heading-1">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-1" aria-expanded="true">Are CityLink tolls included in the Melbourne airport transfer price?</button>
+                </h2>
+                <div class="accordion-collapse collapse show" id="faq-content-1" data-bs-parent="#faq">
+                  <div class="accordion-body"><div class="fs-sm">Yes — CityLink tolls are fully included in your fixed price. The Tullamarine Freeway connects directly to the CityLink toll network and most routes to Melbourne CBD pass through toll zones. EasyGo builds this into your quote so you never get a surprise charge at the end. <a href="/terms/">See full Pricing Terms</a></div></div>
+                </div>
+              </div>
+              <div class="accordion-item shadow">
+                <h2 class="accordion-header" id="faq-heading-2">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-2" aria-expanded="true">Which terminal does EasyGo pick up from at Tullamarine?</button>
+                </h2>
+                <div class="accordion-collapse collapse show" id="faq-content-2" data-bs-parent="#faq">
+                  <div class="accordion-body"><div class="fs-sm">EasyGo covers all four Tullamarine terminals: T1 (Qantas Domestic), T2 (International), T3 (Virgin Australia &amp; Jetstar), and T4 (Regional/Rex). Tell us your airline when booking and we'll be at the correct terminal pickup bay when you land. <a href="/melbourne/arrival-guide/">View Melbourne Arrival Guide</a></div></div>
+                </div>
+              </div>
+              <div class="accordion-item shadow">
+                <h2 class="accordion-header" id="faq-heading-3">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-3" aria-expanded="true">Why is there no airport train from Melbourne Tullamarine?</button>
+                </h2>
+                <div class="accordion-collapse collapse show" id="faq-content-3" data-bs-parent="#faq">
+                  <div class="accordion-body"><div class="fs-sm">Melbourne Airport has no direct rail connection to the city — a long-discussed project that has never been built. Options from Tullamarine are: Skybus (drops at Southern Cross Station only), rideshare (adds tolls at the end), taxi, or EasyGo private transfer (door-to-door, CityLink included, correct terminal). Most families and groups find a private transfer the most practical option.</div></div>
+                </div>
+              </div>
+              <div class="accordion-item shadow">
+                <h2 class="accordion-header" id="faq-heading-4">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-4" aria-expanded="false">What happens if Melbourne's weather causes flight delays?</button>
+                </h2>
+                <div class="accordion-collapse collapse" id="faq-content-4" data-bs-parent="#faq">
+                  <div class="accordion-body"><div class="fs-sm">Melbourne is famous for its unpredictable weather — storms, fog, and wind can delay flights at any time of year. EasyGo drivers track your flight's live status and adjust their arrival accordingly. Whether you're delayed 30 minutes or 2 hours, your driver waits at no extra charge. You'll receive a message before you need to start heading to the pickup point.</div></div>
+                </div>
+              </div>
+              <div class="accordion-item shadow">
+                <h2 class="accordion-header" id="faq-heading-5">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-5" aria-expanded="false">How far is Melbourne Airport from the CBD?</button>
+                </h2>
+                <div class="accordion-collapse collapse" id="faq-content-5" data-bs-parent="#faq">
+                  <div class="accordion-body"><div class="fs-sm">Melbourne Airport (Tullamarine) is approximately 23km from Melbourne CBD via the Tullamarine Freeway and CityLink. Typical drive time is 25–45 minutes depending on traffic. During peak hour (7–9am and 4–7pm), allow extra time — EasyGo's fixed price covers the entire trip regardless of travel time.</div></div>
+                </div>
+              </div>
+              <div class="accordion-item shadow">
+                <h2 class="accordion-header" id="faq-heading-6">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-6" aria-expanded="false">Do you transfer to Melbourne's cruise terminals?</button>
+                </h2>
+                <div class="accordion-collapse collapse" id="faq-content-6" data-bs-parent="#faq">
+                  <div class="accordion-body"><div class="fs-sm">Yes. EasyGo provides transfers to and from Melbourne's cruise terminals including Station Pier (Port Melbourne) and Swanson Dock (Docklands). Both terminals are popular departure points for cruises around Australia, New Zealand, and Asia. <a href="/melbourne/cruise-transfer/" class="text-brand">Melbourne Cruise Transfer details</a></div></div>
+                </div>
+              </div>
+              <div class="accordion-item shadow">
+                <h2 class="accordion-header" id="faq-heading-7">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-7" aria-expanded="false">Which Melbourne suburbs do you cover?</button>
+                </h2>
+                <div class="accordion-collapse collapse" id="faq-content-7" data-bs-parent="#faq">
+                  <div class="accordion-body"><div class="fs-sm">EasyGo covers all Melbourne suburbs — CBD, St Kilda, Fitzroy, Richmond, Carlton, Box Hill, Doncaster, Dandenong, Frankston, Brighton, Footscray, Werribee, and even the Mornington Peninsula and regional areas like Geelong. <a href="/melbourne/suburbs/">View all Melbourne service areas</a></div></div>
+                </div>
+              </div>
+              <div class="accordion-item shadow">
+                <h2 class="accordion-header" id="faq-heading-8">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-8" aria-expanded="false">How many passengers fit, and do you provide child seats?</button>
+                </h2>
+                <div class="accordion-collapse collapse" id="faq-content-8" data-bs-parent="#faq">
+                  <div class="accordion-body"><div class="fs-sm">Our maxi vans seat up to 13 passengers with ample luggage space for international-trip bags. Up to two infant seats or baby capsules are provided free of charge — please specify at the time of booking your Melbourne transfer.</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-lg-5 offset-lg-1 mt-3 mt-lg-0 text-center pb-0 mb-0">
+            <img loading="lazy" src="{% static 'basecamp/images/illustration.svg' %}" alt="Melbourne Tullamarine airport transfer FAQ – EasyGo Shuttle" class="img-fluid">
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== BLOG PREVIEW ===== -->
+      <section class="py-5 my-2">
+        <div class="container" style="height:auto;min-height:0;">
+          <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10 col-12 text-center">
+              <h2 class="mb-4">Arriving at Melbourne Tullamarine? Your Terminal-by-Terminal Pick-up Guide</h2>
+              {% if latest_post %}
+                <p class="text-muted mb-4">{{ latest_post.excerpt|truncatechars:150 }}</p>
+                <a href="{% url 'articles:post_detail' latest_post.slug %}" class="btn btn-primary">Read More &rarr;</a>
+              {% else %}
+                <p class="text-muted">Travel tips, terminal guides, and Melbourne airport transfer advice — coming soon.</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== WHY TRUST ===== -->
+      <section class="row g-0 mt-3" id="reasons">
+        <div class="col-md-6 services-cover" style="position:relative !important; min-height:300px !important;">
+          <img loading="lazy" src="{% static 'basecamp/photos/services-cover.webp' %}" alt="EasyGo maxi van Melbourne Tullamarine airport transfer CityLink included" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">
+        </div>
+        <div class="col-md-6 border-top border-bottom px-3 pe-xl-0 ps-lg-5 ps-xl-7">
+          <div class="ms-sm-4 my-2 py-5 my-sm-0 py-sm-6 py-md-7 services-content">
+            <h3 class="mb-4"><span class="text-orange">What Makes EasyGo Different in Melbourne</span></h3>
+            <p class="services-list-item"><i class="fad fa-caret-right"></i>&nbsp;CityLink tolls and airport parking fees included — no surprises</p>
+            <p class="services-list-item"><i class="fad fa-caret-right"></i>&nbsp;All 4 Tullamarine terminals — T1, T2, T3 and T4 all covered</p>
+            <p class="services-list-item"><i class="fad fa-caret-right"></i>&nbsp;100% private — your vehicle, your group, direct to your door</p>
+            <p class="services-list-item"><i class="fad fa-caret-right"></i>&nbsp;Real-time MEL flight tracking — we wait, no extra charge</p>
+            <p class="services-list-item"><i class="fad fa-caret-right"></i>&nbsp;8–13 seater maxi vans with ample luggage space</p>
+            <p class="services-list-item"><i class="fad fa-caret-right"></i>&nbsp;Station Pier &amp; Swanson Dock cruise transfers</p>
+            <p class="services-list-item"><i class="fad fa-caret-right"></i>&nbsp;Available 24/7 including AFL Grand Final &amp; Melbourne Cup weekend</p>
+            <p class="services-list-item"><i class="fad fa-caret-right"></i>&nbsp;Infant seats &amp; baby capsules on request — free of charge</p><br>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== TESTIMONIALS ===== -->
+      <section class="pt-0 pt-md-5">
+        <div class="container">
+          <div class="text-center position-relative py-5 testimonials-bg">
+            <img loading="lazy" src="{% static 'basecamp/images/map.svg' %}" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0;">
+            <div class="bg-overlay bg-dark opacity-1"></div>
+            <div class="row mb-5"><div class="col-12"><h3>Melbourne Travellers Who Chose EasyGo</h3></div></div>
+            <div class="row">
+              <div class="col-md-9 col-xl-6 mx-auto">
+                <div class="tiny-slider dots-primary">
+                  <div class="tiny-slider-inner" data-autoplay="6000" data-arrow="false" data-dots="true" data-edge="2" data-items="1">
+                    <div><p class="h5 fw-light mb-3">"We flew in on Singapore Airlines and landed at T2 International. Our flight was delayed almost 90 minutes — EasyGo were there waiting without any fuss, and the CityLink toll was already included in the price. Our family of seven made it to Box Hill without a single issue. Would not use anyone else."</p><div class="h5 mb-3">— Jennifer Tan, Box Hill</div></div><br>
+                    <div><p class="h5 fw-light mb-3">"Organised a group of 11 for AFL Grand Final weekend — we needed reliable transport from St Kilda Road to Tullamarine for our 6am flight. EasyGo knew every back street to avoid the traffic, the price was fixed, and they were there at 4:30am sharp. No complaints whatsoever."</p><div class="h5 mb-0">— Marcus D., South Yarra</div></div><br>
+                    <div><p class="h5 fw-light mb-3">"I use EasyGo every time I fly out of Tullamarine for work. The CityLink toll being included was the reason I first switched from Uber — no add-ons, no fluctuating prices. Now I wouldn't use anything else for Melbourne airport transfers."</p><div class="h5 mb-3">— Sarah K., Melbourne CBD</div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="container mb-5">
+        <div class="col-12 mt-4 d-flex justify-content-center align-items-center gap-4">
+          <a href="/easygo_review/" class="me-4 fw-bold review-link"><span class="fs-lg">👉</span> Reviews on our website</a>
+          <a href="{{ google_review_url }}" target="_blank" rel="noopener" class="fw-bold review-link"><span class="fs-lg">👉</span> Google reviews <i class="ai-external-link ms-1 text-ext-icon"></i></a>
+        </div>
+      </section>
+
+    </main>
+
+    {% include "basecamp/layouts/footer.html" %}
+
+    <script src="{% static 'basecamp/js/bootstrap.bundle.min.js' %}" defer></script>
+    <script src="{% static 'basecamp/js/min/tiny-slider.js' %}" defer></script>
+    <script src="{% static 'basecamp/js/flatpickr.min.js' %}" defer></script>
+    <script src="{% static 'basecamp/js/date-picker.js' %}" defer></script>
+    <script src="{% static 'basecamp/js/theme.home.min.js' %}" defer></script>
+    <script src="{% static 'basecamp/js/home.js' %}" defer></script>
+    <script nonce="{{ CSP_NONCE }}">document.getElementById('current-year').textContent = new Date().getFullYear();</script>
+    <script type="application/ld+json" nonce="{{ CSP_NONCE }}">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        { "@type": "Question", "name": "Are CityLink tolls included in the Melbourne airport transfer price?", "acceptedAnswer": { "@type": "Answer", "text": "Yes — CityLink tolls, Tullamarine Freeway costs, and airport parking are all included in the fixed price. No surprise charges at the end." } },
+        { "@type": "Question", "name": "Which terminal does EasyGo pick up from at Tullamarine?", "acceptedAnswer": { "@type": "Answer", "text": "EasyGo covers all four terminals: T1 Qantas Domestic, T2 International, T3 Virgin/Jetstar, and T4 Regional. Your driver meets you at the correct terminal bay." } },
+        { "@type": "Question", "name": "Why is there no airport train from Melbourne Tullamarine?", "acceptedAnswer": { "@type": "Answer", "text": "Melbourne Airport has no rail connection to the city. Options are Skybus (to Southern Cross only), rideshare, taxi, or a private transfer. EasyGo drives door-to-door with CityLink included." } },
+        { "@type": "Question", "name": "How far is Melbourne Airport from the CBD?", "acceptedAnswer": { "@type": "Answer", "text": "Melbourne Airport is approximately 23km from the CBD via the Tullamarine Freeway and CityLink. Drive time is 25–45 minutes depending on traffic." } },
+        { "@type": "Question", "name": "Do you transfer to Melbourne cruise terminals?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. EasyGo transfers to and from Station Pier (Port Melbourne) and Swanson Dock (Docklands) cruise terminals." } }
+      ]
+    }
+    </script>
+    <a href="/confirmation/" class="btn btn-secondary btn-sm admin-btn" role="button">Warning!</a>
+  </body>
+</html>

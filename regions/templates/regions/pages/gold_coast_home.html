@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>{% if region.meta_title %}{{ region.meta_title }}{% else %}Gold Coast Airport Transfer | OOL Coolangatta | Fixed Price | EasyGo{% endif %}</title>
+    <link rel="canonical" href="https://easygoshuttle.com.au/gold-coast/">
+    <meta name="google-site-verification" content="hae39L0Kv7JIxVc3YclvckH7Im5SdYa2hk_vZbGJIkA" />
+    <meta name="description" content="{% if region.meta_description %}{{ region.meta_description }}{% else %}Gold Coast airport transfer from OOL Coolangatta — surfboards welcome, NSW-QLD border service, no Schoolies surge. Private 8–13 seater direct to your resort.{% endif %}">
+    <meta name="keywords" content="gold coast airport transfer, OOL coolangatta transfer, surfers paradise airport transfer, gold coast holiday transfer, schoolies airport transfer, tweed heads airport transfer, theme park transfer gold coast, surfboard airport transfer gold coast, 8 seater gold coast airport">
+    <meta name="author" content="easygoshuttle.com.au">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="{% if region.meta_title %}{{ region.meta_title }}{% else %}EasyGo Gold Coast Airport Transfer – Holiday Families, Surfboards Welcome, NSW Border Service{% endif %}">
+    <meta property="og:image" content="https://easygoshuttle.com.au{{ hero_image_url }}">
+    <meta property="og:description" content="Gold Coast airport transfer from OOL Coolangatta — surfboards, strollers, and holiday gear welcome. Direct to your resort, no shared stops, no Schoolies surcharge. NSW-QLD border service included.">
+    <meta property="og:url" content="https://easygoshuttle.com.au/gold-coast/">
+    <meta property="og:type" content="website">
+    <script type="application/ld+json" nonce="{{ CSP_NONCE }}">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "@id": "https://easygoshuttle.com.au/gold-coast/#localbusiness",
+      "name": "EasyGo Airport Transfer Gold Coast",
+      "image": "https://easygoshuttle.com.au/static/basecamp/images/easygo-logo-final.webp",
+      "url": "https://easygoshuttle.com.au/gold-coast/",
+      "telephone": "{{ business_phone }}",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Gold Coast Airport",
+        "addressRegion": "QLD",
+        "postalCode": "4225",
+        "addressCountry": "AU"
+      },
+      "areaServed": [
+        {% for suburb in form_suburbs %}{ "@type": "Place", "name": "{{ suburb.name }}" }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+      ],
+      "priceRange": "$$",
+      "openingHours": "Mo-Su 03:00-23:00",
+      "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.8", "reviewCount": "376" },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Gold Coast Airport Transfer Services",
+        "itemListElement": [
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Gold Coast Airport Transfer", "description": "Private door-to-door airport transfer from OOL Coolangatta to any Gold Coast or Tweed Heads destination — surfboards and holiday gear welcome", "image": "https://easygoshuttle.com.au/static/basecamp/photos/vehicle-1.webp" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Gold Coast Airport Shuttle", "description": "8–13 seater private shuttle for Gold Coast holiday families — direct to your resort from OOL", "image": "https://easygoshuttle.com.au/static/basecamp/photos/vehicles.webp" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Gold Coast Airport Maxi Taxi", "description": "Large group maxi taxi from OOL — up to 13 passengers with room for surfboards, golf clubs and holiday gear", "image": "https://easygoshuttle.com.au/static/basecamp/photos/vehicles.webp" } }
+        ]
+      }
+    }
+    </script>
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'basecamp/favi/favicon.ico' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'basecamp/favi/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'basecamp/favi/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'basecamp/favi/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'basecamp/favi/site.webmanifest' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Inter:400,600,700&display=swap" rel="stylesheet">
+    <link rel="preload" fetchpriority="high" as="image" href="{{ hero_image_url }}" type="image/webp">
+    <link rel="preload" href="{% static 'basecamp/css/head_home.css' %}" as="style">
+    <link rel="preload" href="{% static 'basecamp/css/home.css' %}" as="style">
+    <link rel="preload" href="{% static 'basecamp/css/footer.css' %}" as="style">
+    <link rel="stylesheet" href="{% static 'basecamp/css/tiny-slider.css' %}" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="{% static 'basecamp/css/flatpickr.min.css' %}" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="{% static 'basecamp/css/head_home.css' %}">
+    <link rel="stylesheet" href="{% static 'basecamp/css/home.css' %}">
+    <link rel="stylesheet" href="{% static 'basecamp/css/footer.css' %}">
+    <noscript><link rel="stylesheet" href="{% static 'basecamp/css/tiny-slider.css' %}"></noscript>
+    <style nonce="{{ CSP_NONCE }}">
+      #region-hero { position: relative; isolation: isolate; background-image: url("{{ hero_image_url }}"); background-size: cover; background-position: center top; min-height: 72vh; }
+      #region-hero::before { content: ""; position: absolute; inset: 0; background: rgba(0,0,0,0.42); z-index: -1; }
+      @media (max-width: 576px) { #region-hero { min-height: 62vh; background-position: center; } }
+      @media (max-width: 767.98px) { .award-badge { top: 35vh !important; bottom: auto !important; transform: none !important; } }
+      .main-img { display: none; }
+      .site-footer a { text-decoration: none !important; }
+      .site-footer a:hover, .site-footer a:focus, .site-footer a:active { text-decoration: none !important; }
+      .city-card { background: #fbf6ee; transition: background-color .15s ease, border-color .15s ease, box-shadow .15s ease, transform .1s ease; color: inherit; cursor: pointer; }
+      .city-card:hover { background: #f6eddf; box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); color: inherit; }
+      .city-card.is-active { background: #f3e6d2; border-color: rgba(243, 128, 32, 0.35) !important; }
+      .city-name { white-space: nowrap; }
+      .badge-current { background: rgba(34,197,94,.18); color:#14532d; border: 1px solid rgba(34,197,94,.30); }
+      .live-pill { display:inline-flex; align-items:center; gap:.5rem; padding:.25rem .6rem; border:1px solid rgba(255,255,255,.20); border-radius:999px; background: rgba(0,0,0,.22); color: rgba(255,255,255,.78); }
+      .live-pill strong { color:#ffffff; }
+      .live-pill .live-muted { color: rgba(255,255,255,.62); }
+      .live-dot { width:.5rem; height:.5rem; border-radius:999px; background:#22c55e; box-shadow: 0 0 0 0 rgba(34,197,94,.55); animation: livePulse 1.4s infinite; }
+      @keyframes livePulse { 0%{ box-shadow:0 0 0 0 rgba(34,197,94,.55);} 70%{ box-shadow:0 0 0 .5rem rgba(34,197,94,0);} 100%{ box-shadow:0 0 0 0 rgba(34,197,94,0);} }
+      .hero-text-wrap { position:absolute; inset:0; z-index:1; display:flex; align-items:flex-start; justify-content:center; padding-top:9rem; pointer-events:none; }
+      .hero-text-inner { text-align:center; color:#fff; max-width:680px; padding:0 1.5rem; }
+      .hero-eyebrow { display:inline-block; font-size:.72rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#fff; margin-bottom:.25rem; }
+      .hero-title { font-size:clamp(1.6rem,4.5vw,3.25rem); font-weight:700; line-height:1.2; margin-bottom:.6rem; text-shadow:0 2px 14px rgba(0,0,0,.4); }
+      .hero-title span { color:#ff9f4a; }
+      .hero-sub { font-size:clamp(.82rem,2vw,1.05rem); color:#fff; margin-bottom:.75rem; font-weight:400; letter-spacing:.02em; }
+      .hero-trust { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:.3rem .5rem; font-size:clamp(.72rem,1.8vw,.82rem); color:#fff; }
+      .hero-trust strong { color:#fff; font-weight:600; }
+      .hero-trust-sep { color:rgba(255,255,255,.5); }
+      @media (max-width:576px) { .hero-text-wrap { padding-top:4.5rem; } .hero-title br { display:none; } .hero-trust-sep { display:none; } }
+      /* Gold Coast OOL quick-exit section */
+      .ool-quick-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:1rem; margin-top:1.5rem; }
+      .ool-feature-card { background:#fff; border:2px solid #e5e7eb; border-radius:10px; padding:1rem; text-align:center; transition:border-color .15s, box-shadow .15s; }
+      .ool-feature-card:hover { border-color:#ff6b35; box-shadow:0 4px 14px rgba(255,107,53,.12); }
+      .ool-feature-icon { font-size:1.8rem; margin-bottom:.4rem; }
+      .ool-feature-title { font-weight:700; font-size:.88rem; color:#1e293b; margin-bottom:.25rem; }
+      .ool-feature-desc { font-size:.76rem; color:#6b7280; line-height:1.4; }
+      .ool-gear-banner { background:linear-gradient(135deg,#0f4c35 0%,#1a7a56 100%); border-radius:12px; padding:1.4rem 2rem; color:#fff; margin-top:2.5rem; display:flex; align-items:center; gap:1.5rem; flex-wrap:wrap; }
+      .ool-gear-icon { font-size:2.2rem; flex-shrink:0; }
+      .ool-gear-text strong { font-size:1rem; display:block; margin-bottom:.25rem; }
+      .ool-gear-text span { font-size:.83rem; color:rgba(255,255,255,.85); }
+      .ool-border-strip { background:#fff7ed; border:1px solid #fed7aa; border-radius:10px; padding:1rem 1.5rem; margin-top:1.25rem; display:flex; align-items:center; gap:1rem; }
+      .ool-border-flag { font-size:1.6rem; flex-shrink:0; }
+      .ool-border-text strong { font-size:.88rem; color:#92400e; display:block; }
+      .ool-border-text span { font-size:.78rem; color:#b45309; }
+    </style>
+    {% if GOOGLE_ANALYTICS_ID %}
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ GOOGLE_ANALYTICS_ID }}"></script>
+    <script nonce="{{ CSP_NONCE }}">
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '{{ GOOGLE_ANALYTICS_ID }}');
+    </script>
+    {% endif %}
+  </head>
+  <body>
+    {% include "basecamp/layouts/navbar.html" %}
+    <main class="page-wrapper">
+
+      <!-- ===== HERO ===== -->
+      <section id="region-hero" class="bg-dark pt-6 pb-5 py-sm-6">
+        <div class="main-img" fetchpriority="high"></div>
+        <div class="hero-text-wrap">
+          <div class="hero-text-inner">
+            <span class="hero-eyebrow">Gold Coast Airport (OOL) Coolangatta — Holiday Transfer Service</span>
+            <h1 class="hero-title">Resort to Your Door.<br><span>Holiday Mode On.</span></h1>
+            <p class="hero-sub">Surfboards Welcome &nbsp;·&nbsp; 8–13 Seater &nbsp;·&nbsp; OOL to Your Gold Coast Resort</p>
+            <div class="hero-trust">
+              <strong>⭐ 4.8</strong>
+              <span class="hero-trust-sep">|</span>
+              <span>376 Google Reviews</span>
+              <span class="hero-trust-sep">|</span>
+              <span>No Schoolies surcharge</span>
+              <span class="hero-trust-sep">|</span>
+              <span>NSW-QLD border service</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== BOOKING FORM ===== -->
+      <section class="container position-relative zindex-5 booking-form-top" id="booking-tabs" data-rebook-error="{{ rebook_error|yesno:'true,false' }}">
+        <div class="booking-tabs-wrapper">
+          <div class="booking-tab-nav">
+            <button class="booking-tab-btn active" data-tab="new-booking" onclick="switchBookingTab(this, 'new-booking')">
+              Check Availability & Price
+            </button>
+            <button class="booking-tab-btn" data-tab="quick-rebook" onclick="switchBookingTab(this, 'quick-rebook')">
+              Book Again
+              <span class="rebook-badge">Returning?</span>
+            </button>
+          </div>
+          <div class="booking-tab-body">
+            <div class="booking-tab-pane active" id="tab-new-booking">
+              <form action="{% url 'regions:price_detail' region.slug %}" id="booking-form" method="post">
+                {% csrf_token %}
+                <div class="booking-fields">
+                  <div class="booking-field">
+                    <label class="booking-label">Pickup date</label>
+                    <input class="booking-input date-picker" name="pickup_date" required type="date" placeholder="Choose date" data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;F j, Y&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;}">
+                  </div>
+                  <div class="booking-field">
+                    <label class="booking-label" for="start-point">Pickup Location</label>
+                    <select class="booking-input" id="start-point" name="start_point" required>
+                      <option value="" disabled selected>Select your option</option>
+                      {% if airport_terminals %}<optgroup label="Airport terminals">{% for t in airport_terminals %}<option value="{{ t.id }}">{{ t.name }}</option>{% endfor %}</optgroup>{% endif %}
+                      {% if cruise_terminals %}<optgroup label="Cruise terminals">{% for ct in cruise_terminals %}<option value="cruise_{{ ct.id }}">{{ ct.name }}</option>{% endfor %}</optgroup>{% endif %}
+                      {% for suburb in form_suburbs %}<option value="{{ suburb.name }}">{{ suburb.name }}</option>{% endfor %}
+                    </select>
+                  </div>
+                  <div class="booking-field">
+                    <label class="booking-label" for="end-point">Drop-off Location</label>
+                    <select class="booking-input" id="end-point" name="end_point" required>
+                      <option value="" disabled selected>Select your option</option>
+                      {% if airport_terminals %}<optgroup label="Airport terminals">{% for t in airport_terminals %}<option value="{{ t.id }}">{{ t.name }}</option>{% endfor %}</optgroup>{% endif %}
+                      {% if cruise_terminals %}<optgroup label="Cruise terminals">{% for ct in cruise_terminals %}<option value="cruise_{{ ct.id }}">{{ ct.name }}</option>{% endfor %}</optgroup>{% endif %}
+                      {% for suburb in form_suburbs %}<option value="{{ suburb.name }}">{{ suburb.name }}</option>{% endfor %}
+                    </select>
+                  </div>
+                  <div class="booking-field booking-field--sm">
+                    <label class="booking-label" for="passengers">Passengers</label>
+                    <select class="booking-input" id="passengers" name="no_of_passenger" required>
+                      <option disabled selected value="">No. of people</option>
+                      <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option>
+                      <option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option>
+                      <option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option>
+                      <option value="13">13</option><option value="" disabled>Over 13 — contact us</option>
+                    </select>
+                  </div>
+                  <div class="booking-field booking-field--btn">
+                    <button type="submit" class="booking-submit booking-submit--orange" id="submitButton">See price &rsaquo;&rsaquo;</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="booking-tab-pane" id="tab-quick-rebook">
+              {% if rebook_error %}<div class="rebook-error">{{ rebook_error }}</div>{% endif %}
+              <p class="rebook-hint">Used EasyGo before? Enter your email — we'll fill in your previous route automatically.</p>
+              <form action="{% url 'regions:quick_rebook_step1' region.slug %}" method="post" id="quick-rebook-form">
+                {% csrf_token %}
+                <div class="booking-fields">
+                  <div class="booking-field booking-field--lg">
+                    <label class="booking-label">Email address <span class="booking-label-muted">(from previous booking)</span></label>
+                    <input type="email" class="booking-input" name="email" placeholder="your@email.com" required autocomplete="email">
+                  </div>
+                  <div class="booking-field">
+                    <label class="booking-label">Pickup date</label>
+                    <input class="booking-input date-picker" name="pickup_date" required type="date" placeholder="Choose date" data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;F j, Y&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;}">
+                  </div>
+                  <div class="booking-field">
+                    <label class="booking-label">Flight number</label>
+                    <input type="text" class="booking-input" name="flight_number" placeholder="e.g. JQ738" autocomplete="off">
+                  </div>
+                  <div class="booking-field booking-field--btn">
+                    <button type="submit" class="booking-submit booking-submit--green">Next — final stop &rsaquo;&rsaquo;</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== HOT OFFER CAROUSEL ===== -->
+      <section class="container rounded bg-dark py-5 my-4 my-sm-0 py-sm-6 py-md-7">
+        <div class="text-center mb-5">
+          <h2 class="text-light fs-4 fs-md-3 fw-semibold mb-2">Gold Coast Airport Transfer — Private 8–13 Seater from OOL Coolangatta</h2>
+          <h2 class="text-light fs-6 fs-md-5 fw-bold mb-4"><span class="text-brand"><strong>Surfers Paradise · Broadbeach · Theme Parks · Tweed Heads · All Gold Coast Resorts</strong></span></h2><br>
+          <div>| <a role="button" class="btn btn-success" href="/gold-coast/inquiry/">Check Availability & Price</a></div>
+        </div>
+        <h2 class="text-center mb-4 text-white"><span class="text-brand">HOT OFFER</span> - Best Price Guaranteed</h2>
+        <div class="tns-carousel-wrapper">
+          <div class="text-end offer-search-end">
+            <a href="/gold-coast/suburbs/" class="text-brand">Search your area &raquo;&raquo;&raquo;</a>
+          </div>
+          <div class="tns-carousel-inner" data-carousel-options="{&quot;items&quot;: 3, &quot;nav&quot;: false, &quot;gutter&quot;: 23, &quot;responsive&quot;: {&quot;0&quot;:{&quot;items&quot;:1},&quot;540&quot;:{&quot;items&quot;:2},&quot;900&quot;:{&quot;items&quot;:3}}}">
+            {% for suburb in featured_suburbs %}
+              <div class="pb-1">
+                <a class="card border-0 shadow card-hover mx-1" href="/gold-coast/airport-transfer/{{ suburb.slug }}/">
+                  <span class="badge badge-lg badge-floating badge-floating-end badge-price" style="background-color:#9ea8b3;">${{ suburb.price|default:"-" }}</span>
+                  <div class="card-img-top card-img-gradient offer-card-img">
+                    {% if suburb.carousel_image %}<img loading="lazy" src="{{ suburb.carousel_image }}" alt="{{ suburb.name }} Gold Coast airport transfer" width="400" height="461" class="offer-card-inner-img">{% endif %}
+                    <span class="card-floating-text text-light fw-medium">Discover the trip<i class="ai-chevron-right align-middle fs-lg ms-1"></i></span>
+                  </div>
+                  <div class="card-body text-center">
+                    <h3 class="h5 pt-1 mb-3">{{ suburb.name }}</h3>
+                    {% if suburb.meta_description %}<p class="fs-sm text-muted mb-2">{{ suburb.meta_description }}</p>{% endif %}
+                    <p class="fs-sm mb-2 text-blue-link">more details >>></p>
+                  </div>
+                </a>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- INTRO TEXT -->
+        <div id="service-intro" class="row justify-content-center intro-top mt-5">
+          <div class="col-lg-10 text-center">
+            <p class="fs-md mb-2 intro-text">
+              Gold Coast isn't a commuter city — it's where people come to <em>holiday</em>. Families with strollers
+              and beach gear, surfers with boards strapped to everything, theme park groups with excited kids,
+              and golfers with bags that don't fit in a sedan. EasyGo's <strong>Gold Coast airport transfer</strong>
+              from OOL Coolangatta is built around holiday travel — spacious 8–13 seater maxi vans, fixed price,
+              and your driver at arrivals when you land.
+            </p>
+            <p class="fs-md mb-2 intro-text">
+              The G:link light rail is great for the Surfers Paradise strip — but it doesn't go anywhere near
+              <strong>OOL airport</strong>. From the moment you clear customs, EasyGo takes you directly to your
+              Surfers Paradise hotel, your Broadbeach resort, a Coomera theme park property, or across the
+              NSW border to Tweed Heads — no shared stops, no detours, no surprises.
+            </p>
+          </div>
+        </div>
+
+        <div id="service-options" class="row text-center service-options-top">
+          <div class="col-lg-6 mb-3 mb-lg-0">
+            <h3 class="fs-sm fw-bold mb-2 text-light">Gold Coast Airport Maxi Taxi</h3>
+            <p class="fs-sm mb-2 text-light">Private 8–13 seater from OOL — holiday gear welcome:</p>
+            <ul class="list-unstyled fs-sm text-light">
+              <li class="mb-1"><a href="/gold-coast/maxi-taxi/" class="fw-semibold text-blue-link">🚐 Gold Coast Airport Maxi Taxi</a> - 8–13 seater, surfboards &amp; gear fit</li>
+              <li class="mb-1"><a href="/gold-coast/cruise-transfer/" class="fw-semibold text-blue-link">🚢 Gold Coast Cruise Transfer</a> - Portside Wharf cruise terminal</li>
+            </ul>
+          </div>
+          <div class="col-lg-6">
+            <h3 class="fs-sm fw-bold mb-2 text-light">Gold Coast Airport Services</h3>
+            <p class="fs-sm mb-2 text-light">Choose your Gold Coast airport service:</p>
+            <ul class="list-unstyled fs-sm text-light">
+              <li class="mb-1"><a href="/gold-coast/airport-transfer/" class="fw-semibold text-blue-link">🚗 Gold Coast Airport Transfer</a> - Direct to your resort from OOL</li>
+              <li class="mb-1"><a href="/gold-coast/airport-shuttle/" class="fw-semibold text-blue-link">🚐 Gold Coast Airport Shuttle</a> - Flexible rides across the Gold Coast</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== OOL QUICK EXIT SECTION ===== -->
+      <section class="container py-5 my-2">
+        <h2 class="text-center mb-2">OOL: Australia's Quickest Airport Exit</h2>
+        <p class="text-center text-muted mb-4 col-lg-8 mx-auto">
+          Gold Coast Airport (OOL) at Coolangatta is refreshingly compact compared to Sydney's T1 or Melbourne's Tullamarine.
+          There's no 20-minute terminal walk, no multi-level carpark maze, no sky train between terminals.
+          You land, you collect bags, and you're outside — often in under 10 minutes. Your EasyGo driver is already there.
+        </p>
+        <div class="ool-quick-grid">
+          <div class="ool-feature-card">
+            <div class="ool-feature-icon">⚡</div>
+            <div class="ool-feature-title">10 Minutes to Street</div>
+            <div class="ool-feature-desc">OOL has just one compact arrivals hall. Bag collection to kerbside pickup takes a fraction of the time it does at larger airports.</div>
+          </div>
+          <div class="ool-feature-card">
+            <div class="ool-feature-icon">🅿️</div>
+            <div class="ool-feature-title">No Carpark Maze</div>
+            <div class="ool-feature-desc">Ground Transport is at street level, directly outside arrivals. No lifts, no carparks, no guessing which level your ride is on.</div>
+          </div>
+          <div class="ool-feature-card">
+            <div class="ool-feature-icon">🏄</div>
+            <div class="ool-feature-title">Surfboards? No Problem</div>
+            <div class="ool-feature-desc">Our maxi vans have rear cargo space sized for surfboards, golf bags, dive gear, prams, and as many holiday bags as your family can carry.</div>
+          </div>
+          <div class="ool-feature-card">
+            <div class="ool-feature-icon">📡</div>
+            <div class="ool-feature-title">Flight Tracking Included</div>
+            <div class="ool-feature-desc">Your driver monitors your real-time arrival status. Whether your Jetstar flight is early or running 90 minutes late, they adjust — no extra charge.</div>
+          </div>
+        </div>
+        <div class="ool-gear-banner">
+          <div class="ool-gear-icon">🏖️</div>
+          <div class="ool-gear-text">
+            <strong>Holiday gear is welcome — and expected.</strong>
+            <span>Surfboards, boogie boards, golf clubs, dive bags, strollers, prams, ski bags — EasyGo's 8–13 seater maxi vans are designed for families bringing everything they need. Not the rideshare sedan that looks at your board and drives away.</span>
+          </div>
+        </div>
+        <div class="ool-border-strip">
+          <div class="ool-border-flag">🗺️</div>
+          <div class="ool-border-text">
+            <strong>QLD–NSW Border? We cross it.</strong>
+            <span>Tweed Heads, Banora Point, Kingscliff, Casuarina, Murwillumbah — EasyGo services both sides of the border. Your destination is in NSW? That's fine. Same fixed price, same direct service from OOL.</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== WHY CHOOSE ===== -->
+      <section class="container py-5 my-2">
+        <h2 class="text-center mb-3">Why Gold Coast Holiday Groups Choose EasyGo</h2>
+        <p class="text-center text-muted mb-5 col-lg-8 mx-auto">
+          The Gold Coast is not a CBD-office destination. It's the Glitter Strip, theme parks, surf breaks, and
+          beachside resorts. Here's why holiday travellers trust EasyGo from OOL.
+        </p>
+        <div class="row g-4">
+          <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm p-4 text-center">
+              <div class="fs-1 mb-3">🚋</div>
+              <h3 class="h5 mb-2">The G:Link Doesn't Reach OOL — EasyGo Does</h3>
+              <p class="fs-sm text-muted mb-0">
+                The Gold Coast light rail (G:link) is excellent for getting between Broadbeach and Helensvale —
+                but it stops well short of OOL Airport. From Coolangatta, the only practical options are taxi,
+                rideshare, or a private transfer like EasyGo. We go direct to your resort.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm p-4 text-center">
+              <div class="fs-1 mb-3">🎢</div>
+              <h3 class="h5 mb-2">Straight to Dreamworld, Movie World or Sea World</h3>
+              <p class="fs-sm text-muted mb-0">
+                Families heading to the theme parks stay near Coomera and Oxenford — a good 40km north of OOL.
+                Shared shuttles stop at every hotel along the way. EasyGo drives directly to your theme park
+                hotel, so you arrive with energy for the rides, not the road.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm p-4 text-center">
+              <div class="fs-1 mb-3">💰</div>
+              <h3 class="h5 mb-2">Schoolies, Christmas & Easter — Same Fixed Price</h3>
+              <p class="fs-sm text-muted mb-0">
+                Gold Coast's busiest weeks — Schoolies in November, Christmas/New Year, Easter long weekend,
+                Queensland school holidays — are exactly when rideshare prices surge. EasyGo's rate is fixed.
+                Book in advance and lock in your price, no matter when you travel.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm p-4 text-center">
+              <div class="fs-1 mb-3">🗺️</div>
+              <h3 class="h5 mb-2">NSW–QLD Border? Tweed Heads? We're Across It</h3>
+              <p class="fs-sm text-muted mb-0">
+                Many Gold Coast visitors stay in Tweed Heads, Banora Point, Kingscliff, or Casuarina — technically
+                in NSW. Most transfer services stop at the Queensland border. EasyGo services both sides.
+                Same OOL pickup, same fixed price, same direct service.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm p-4 text-center">
+              <div class="fs-1 mb-3">🔒</div>
+              <h3 class="h5 mb-2">100% Private — Direct to Your Resort</h3>
+              <p class="fs-sm text-muted mb-0">
+                Shared airport shuttles tour the entire Surfers Paradise strip before getting to your hotel.
+                EasyGo goes directly to your specific address — Chevron Renaissance, Peppers Soul, Q1, wherever
+                you're staying. One pickup, one drop-off. Holiday starts now.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm p-4 text-center">
+              <div class="fs-1 mb-3">👨‍👩‍👧‍👦</div>
+              <h3 class="h5 mb-2">Child Seats for Theme Park Families</h3>
+              <p class="fs-sm text-muted mb-0">
+                Bringing young children to Dreamworld or Paradise Country? Up to two infant seats or baby capsules
+                are available free of charge. Pre-book at the time of your Gold Coast reservation —
+                no last-minute scramble at the airport.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== SERVICE AREAS ===== -->
+      <section class="bg-light py-5 my-2">
+        <div class="container">
+          <h2 class="text-center mb-3">Gold Coast Airport Transfer — Where We Go</h2>
+          <p class="text-center text-muted mb-5 col-lg-8 mx-auto">
+            From the beachside strip at Surfers Paradise to the theme parks at Coomera — and across the border
+            to Tweed Heads — EasyGo covers every Gold Coast destination. Fixed price, door-to-door.
+          </p>
+          <div class="row g-4">
+            {% for area in service_areas %}
+            <div class="col-md-3 col-sm-6">
+              <div class="card h-100 border-0 shadow-sm p-4">
+                <h3 class="h5 text-brand mb-2">{{ area.icon }} {{ area.title }}</h3>
+                <p class="fs-sm text-muted mb-0">{{ area.description }}</p>
+              </div>
+            </div>
+            {% empty %}
+            <div class="col-md-3 col-sm-6"><div class="card h-100 border-0 shadow-sm p-4"><h3 class="h5 text-brand mb-2">🏄 The Glitter Strip</h3><p class="fs-sm text-muted mb-0">Surfers Paradise, Broadbeach, Main Beach, Southport, Bundall, Labrador</p></div></div>
+            <div class="col-md-3 col-sm-6"><div class="card h-100 border-0 shadow-sm p-4"><h3 class="h5 text-brand mb-2">🏖️ Southern Gold Coast</h3><p class="fs-sm text-muted mb-0">Coolangatta, Kirra, Burleigh Heads, Palm Beach, Currumbin, Tugun</p></div></div>
+            <div class="col-md-3 col-sm-6"><div class="card h-100 border-0 shadow-sm p-4"><h3 class="h5 text-brand mb-2">🎢 Northern GC & Theme Parks</h3><p class="fs-sm text-muted mb-0">Coomera, Oxenford (Dreamworld/Movie World), Hope Island, Sanctuary Cove, Runaway Bay</p></div></div>
+            <div class="col-md-3 col-sm-6"><div class="card h-100 border-0 shadow-sm p-4"><h3 class="h5 text-brand mb-2">🌿 Tweed & NSW Border</h3><p class="fs-sm text-muted mb-0">Tweed Heads, Banora Point, Kingscliff, Casuarina, Murwillumbah, Chinderah</p></div></div>
+            {% endfor %}
+          </div>
+          <div class="text-center mt-4">
+            <a href="/gold-coast/suburbs/" class="btn btn-primary">Check Your Gold Coast Suburb &raquo;</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== HOW TO BOOK ===== -->
+      <section class="container py-5 my-2">
+        <h2 class="text-center mb-3">How to Book Your Gold Coast Airport Transfer from OOL</h2>
+        <p class="text-center text-muted mb-5 col-lg-8 mx-auto">Your holiday starts the moment you land. Booking takes under 2 minutes:</p>
+        <div class="row g-4 text-center">
+          <div class="col-md-3 text-center">
+            <div class="rounded-circle text-white d-inline-flex align-items-center justify-content-center mb-3 mx-auto" style="width:56px;height:56px;font-size:1.4rem;font-weight:700;background:#ff6b35;display:flex;align-items:center;justify-content:center;">1</div>
+            <h3 class="h6 mb-2">Enter Your Details</h3>
+            <p class="fs-sm text-muted">Select your arrival date, OOL as your pickup, your resort or Tweed Heads address, and the size of your holiday group.</p>
+          </div>
+          <div class="col-md-3 text-center">
+            <div class="rounded-circle text-white d-inline-flex align-items-center justify-content-center mb-3 mx-auto" style="width:56px;height:56px;font-size:1.4rem;font-weight:700;background:#ff6b35;display:flex;align-items:center;justify-content:center;">2</div>
+            <h3 class="h6 mb-2">See Your Fixed Holiday Price</h3>
+            <p class="fs-sm text-muted">Instant all-inclusive price — OOL airport parking and flight delay waiting included. Schoolies week, Christmas, Easter — the price never changes.</p>
+          </div>
+          <div class="col-md-3 text-center">
+            <div class="rounded-circle text-white d-inline-flex align-items-center justify-content-center mb-3 mx-auto" style="width:56px;height:56px;font-size:1.4rem;font-weight:700;background:#ff6b35;display:flex;align-items:center;justify-content:center;">3</div>
+            <h3 class="h6 mb-2">Confirm Your Booking</h3>
+            <p class="fs-sm text-muted">Pay by credit card online or cash on the day. Instant confirmation email with your Gold Coast trip details.</p>
+          </div>
+          <div class="col-md-3 text-center">
+            <div class="rounded-circle text-white d-inline-flex align-items-center justify-content-center mb-3 mx-auto" style="width:56px;height:56px;font-size:1.4rem;font-weight:700;background:#ff6b35;display:flex;align-items:center;justify-content:center;">4</div>
+            <h3 class="h6 mb-2">Holiday Mode: On</h3>
+            <p class="fs-sm text-muted">Your driver tracks your flight and is waiting at OOL arrivals. Surfboards loaded, kids buckled in, straight to your resort. Enjoy.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== PROFESSIONAL SERVICE ===== -->
+      <section class="bg-gradient position-relative pt-6 pb-5 py-sm-6">
+        <div class="position-absolute top-0 start-0 w-100 h-100">
+          <img loading="lazy" src="{% static 'basecamp/photos/bg-pattern01.webp' %}" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">
+        </div>
+        <div class="position-relative zindex-5 container py-2">
+          <div class="row align-items-center">
+            <div class="col-lg-5 offset-lg-1 order-lg-2 pb-5 pb-lg-0 text-center text-lg-start">
+              <h2 class="text-light">Sun, Surf & a Stress-Free Transfer from OOL</h2>
+              <p class="text-light mb-0">
+                The Gold Coast is Australia's undisputed holiday capital — and EasyGo is the transfer service built
+                for it. Not commuters in suits. Holiday families with surfboards, strollers, and excited kids. Groups
+                heading to Schoolies. Golf foursomes with oversized bags. Corporate retreats at Sanctuary Cove.
+                Every booking is private, every quote is fixed, and the van is big enough to fit everything.
+                OOL to your door — holiday mode on from the moment you land.
+              </p>
+            </div>
+            <div class="col-lg-6 order-lg-1">
+              <div class="row">
+                <div class="col-12 col-sm-4 mb-2 pb-4 mb-sm-0 pb-sm-0">
+                  <div class="px-2 text-center d-flex flex-column align-items-center">
+                    <img loading="lazy" class="bg-light rounded-circle mb-2 img-fluid" src="{% static 'basecamp/images/01.svg' %}" alt="Easy online booking Gold Coast OOL airport transfer" width="105" height="auto">
+                    <p class="fs-sm fw-medium text-light mb-0 pt-1">Book in 2 minutes — instant resort price</p>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-4 mb-2 pb-4 mb-sm-0 pb-sm-0">
+                  <div class="px-2 text-center d-flex flex-column align-items-center">
+                    <img loading="lazy" class="bg-light rounded-circle mb-2 img-fluid" src="{% static 'basecamp/images/02.svg' %}" alt="8-13 seater maxi taxi Gold Coast surfboards holiday gear" width="105" height="auto">
+                    <p class="fs-sm fw-medium text-light mb-0 pt-1">8–13 seats — surfboards &amp; holiday gear fit</p>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-4 mb-2 pb-4 mb-sm-0 pb-sm-0">
+                  <div class="px-2 text-center d-flex flex-column align-items-center">
+                    <img loading="lazy" class="bg-light rounded-circle mb-2 img-fluid" src="{% static 'basecamp/images/03.svg' %}" alt="Fixed price Gold Coast transfer no Schoolies surcharge" width="105" height="auto">
+                    <p class="fs-sm fw-medium text-light mb-0 pt-1">Fixed price — no Schoolies or Christmas surge</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== CHOOSE YOUR CITY ===== -->
+      <section class="container city-chooser-section py-4 py-md-5">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+          <h2 class="mb-0">Choose your city</h2>
+          <span class="live-pill fs-sm">
+            <span class="live-dot" aria-hidden="true"></span>
+            <span><strong>Gold Coast</strong> <span class="live-muted">Live now</span></span>
+          </span>
+        </div>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
+          {% for r in active_regions %}
+            <div class="col">
+              {% if r.is_coming_soon %}
+              <div class="city-card h-100 border rounded-3 p-3 p-md-4" style="opacity:0.6;">
+              {% elif r.slug == 'sydney' %}
+              <a class="city-card h-100 border rounded-3 p-3 p-md-4 d-block text-decoration-none {% if region.slug == r.slug %}is-active{% endif %}" href="/">
+              {% else %}
+              <a class="city-card h-100 border rounded-3 p-3 p-md-4 d-block text-decoration-none {% if region.slug == r.slug %}is-active{% endif %}" href="/{{ r.slug }}/">
+              {% endif %}
+                <div class="d-flex align-items-start justify-content-between gap-3">
+                  <div>
+                    <div class="city-name fw-semibold">{{ r.name }}</div>
+                    <div class="text-muted fs-sm">{% if r.primary_airport %}{{ r.primary_airport.code }}{% else %}Airport transfers{% endif %}</div>
+                  </div>
+                  <div class="text-end">
+                    {% if region.slug == r.slug %}<span class="badge badge-current">Current</span>
+                    {% elif r.is_coming_soon %}<span class="badge bg-warning text-dark">Coming Soon</span>{% endif %}
+                  </div>
+                </div>
+              {% if r.is_coming_soon %}</div>{% else %}</a>{% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      </section>
+
+      <!-- ===== FAQ ===== -->
+      <section class="container py-3 my-4 my-sm-0 py-sm-4 py-md-7">
+        <h2 class="text-center mb-4 text-brand">Gold Coast Airport Transfer FAQs — OOL Coolangatta</h2>
+        <p class="text-center pb-2 mb-5 fs-5">Holiday travel questions answered</p>
+        <div class="row pb-2">
+          <div class="col-lg-6">
+            <div class="accordion" id="faq">
+              <div class="accordion-item shadow">
+                <h2 class="accordion-header" id="faq-heading-1">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-1" aria-expanded="true">How fast can I get from OOL to my Surfers Paradise hotel?</button>
+                </h2>
+                <div class="accordion-collapse collapse show" id="faq-content-1" data-bs-parent="#faq">
+                  <div class="accordion-body"><div class="fs-sm">OOL's compact arrivals hall means you're typically at the kerbside within 10 minutes of landing (bag collection included). From Coolangatta to Surfers Paradise is around 30–40 minutes drive depending on traffic. Your EasyGo driver is waiting at arrivals when you exit — no waiting for a ride to accept your request. <a href="/gold-coast/arrival-guide/">View Gold Coast Arrival Guide</a></div></div>
+                </div>
+              </div>
+              <div class="accordion-item shadow">
+                <h2 class="accordion-header" id="faq-heading-2">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-2" aria-expanded="true">Can you fit surfboards, golf clubs, and holiday gear?</button>
+                </h2>
+                <div class="accordion-collapse collapse show" id="faq-content-2" data-bs-parent="#faq">
+                  <div class="accordion-body"><div class="fs-sm">Yes. Our 8–13 seater maxi vans have dedicated rear cargo space designed for holiday travel. Surfboards (unbagged up to standard shortboard length), golf bags, dive equipment, strollers, prams, and multiple large suitcases all fit. If you have unusual gear, mention it when booking and we'll confirm. <a href="/gold-coast/maxi-taxi/" class="text-brand">Check Gold Coast Maxi Taxi options</a></div></div>
+                </div>
+              </div>
+              <div class="accordion-item shadow">
+                <h2 class="accordion-header" id="faq-heading-3">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-3" aria-expanded="true">Do you cross the NSW-QLD border to Tweed Heads?</button>
+                </h2>
+                <div class="accordion-collapse collapse show" id="faq-content-3" data-bs-parent="#faq">
+                  <div class="accordion-body"><div class="fs-sm">Yes. EasyGo services both sides of the Gold Coast border region — Tweed Heads, Banora Point, Kingscliff, Casuarina, and even Murwillumbah. Many visitors to the Gold Coast area stay on the NSW side of the border. There's no extra charge for crossing — same fixed price from OOL.</div></div>
+                </div>
+              </div>
+              <div class="accordion-item shadow">
+                <h2 class="accordion-header" id="faq-heading-4">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-4" aria-expanded="false">Is the price the same during Schoolies week and Christmas?</button>
+                </h2>
+                <div class="accordion-collapse collapse" id="faq-content-4" data-bs-parent="#faq">
+                  <div class="accordion-body"><div class="fs-sm">Yes. EasyGo's prices are fixed regardless of when you travel. Schoolies week (November), Christmas, New Year, Easter, Queensland school holidays — the quoted price is the price. We strongly recommend booking in advance during these peak periods as vehicle availability fills up quickly.</div></div>
+                </div>
+              </div>
+              <div class="accordion-item shadow">
+                <h2 class="accordion-header" id="faq-heading-5">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-5" aria-expanded="false">Why can't I take the G:link tram from Gold Coast Airport?</button>
+                </h2>
+                <div class="accordion-collapse collapse" id="faq-content-5" data-bs-parent="#faq">
+                  <div class="accordion-body"><div class="fs-sm">The Gold Coast light rail (G:link) runs from Helensvale through Southport and Surfers Paradise to Broadbeach — but it doesn't extend to OOL Airport at Coolangatta. The airport is in the far south of the Gold Coast, well outside the tram network. From OOL, your options are taxi, rideshare, or a private transfer. EasyGo goes direct to your specific resort or address.</div></div>
+                </div>
+              </div>
+              <div class="accordion-item shadow">
+                <h2 class="accordion-header" id="faq-heading-6">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-6" aria-expanded="false">Do you transfer to Dreamworld, Movie World, and Sea World hotels?</button>
+                </h2>
+                <div class="accordion-collapse collapse" id="faq-content-6" data-bs-parent="#faq">
+                  <div class="accordion-body"><div class="fs-sm">Yes. EasyGo transfers to hotels and resorts near all Gold Coast theme parks — Dreamworld and WhiteWater World (Coomera), Warner Bros. Movie World (Oxenford), Sea World (Main Beach), and Paradise Country. The theme park precinct is around 40km north of OOL — far enough that a direct transfer is far more practical than a shared shuttle. <a href="/gold-coast/suburbs/">Check your suburb price</a></div></div>
+                </div>
+              </div>
+              <div class="accordion-item shadow">
+                <h2 class="accordion-header" id="faq-heading-7">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-7" aria-expanded="false">Where is the exact pickup point at Gold Coast Airport (OOL)?</button>
+                </h2>
+                <div class="accordion-collapse collapse" id="faq-content-7" data-bs-parent="#faq">
+                  <div class="accordion-body"><div class="fs-sm">After landing at OOL, collect your bags and head to the Ground Transport area directly outside the main arrivals exit — it's at street level, a very short walk. Your driver will contact you with their exact position. OOL is small enough that you'll find each other easily. <a href="/gold-coast/arrival-guide/">View Gold Coast Arrival Guide</a></div></div>
+                </div>
+              </div>
+              <div class="accordion-item shadow">
+                <h2 class="accordion-header" id="faq-heading-8">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-8" aria-expanded="false">Do you provide child seats for Gold Coast family holidays?</button>
+                </h2>
+                <div class="accordion-collapse collapse" id="faq-content-8" data-bs-parent="#faq">
+                  <div class="accordion-body"><div class="fs-sm">Yes. Up to two infant seats or baby capsules are available free of charge for Gold Coast family transfers. If you need more than two, additional seats are $10 each. Please specify at the time of booking so we can have the seats installed and ready.</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-lg-5 offset-lg-1 mt-3 mt-lg-0 text-center pb-0 mb-0">
+            <img loading="lazy" src="{% static 'basecamp/images/illustration.svg' %}" alt="Gold Coast OOL airport transfer FAQ guide – EasyGo Shuttle" class="img-fluid">
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== BLOG PREVIEW ===== -->
+      <section class="py-5 my-2">
+        <div class="container" style="height:auto;min-height:0;">
+          <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10 col-12 text-center">
+              <h2 class="mb-4">Arriving at Gold Coast Airport (OOL)? Your Holiday Pick-up Guide</h2>
+              {% if latest_post %}
+                <p class="text-muted mb-4">{{ latest_post.excerpt|truncatechars:150 }}</p>
+                <a href="{% url 'articles:post_detail' latest_post.slug %}" class="btn btn-primary">Read More &rarr;</a>
+              {% else %}
+                <p class="text-muted">Gold Coast travel tips, OOL arrival guides, and holiday transfer advice — coming soon.</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== WHY TRUST ===== -->
+      <section class="row g-0 mt-3" id="reasons">
+        <div class="col-md-6 services-cover" style="position:relative !important; min-height:300px !important;">
+          <img loading="lazy" src="{% static 'basecamp/photos/services-cover.webp' %}" alt="EasyGo maxi van Gold Coast OOL Coolangatta airport transfer surfboards welcome" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">
+        </div>
+        <div class="col-md-6 border-top border-bottom px-3 pe-xl-0 ps-lg-5 ps-xl-7">
+          <div class="ms-sm-4 my-2 py-5 my-sm-0 py-sm-6 py-md-7 services-content">
+            <h3 class="mb-4"><span class="text-orange">Why Gold Coast Holiday Families Trust EasyGo</span></h3>
+            <p class="services-list-item"><i class="fad fa-caret-right"></i>&nbsp;Fixed price from OOL — parking &amp; flight delay waiting included, no peak surcharges</p>
+            <p class="services-list-item"><i class="fad fa-caret-right"></i>&nbsp;Surfboards, golf bags, dive gear &amp; strollers all fit in our maxi van</p>
+            <p class="services-list-item"><i class="fad fa-caret-right"></i>&nbsp;100% private — direct to your resort, no shared stops across the strip</p>
+            <p class="services-list-item"><i class="fad fa-caret-right"></i>&nbsp;NSW-QLD border service — Tweed Heads, Banora Point, Kingscliff covered</p>
+            <p class="services-list-item"><i class="fad fa-caret-right"></i>&nbsp;Real-time OOL flight tracking — we wait however long, no extra cost</p>
+            <p class="services-list-item"><i class="fad fa-caret-right"></i>&nbsp;Schoolies, Christmas, Easter — same price guaranteed</p>
+            <p class="services-list-item"><i class="fad fa-caret-right"></i>&nbsp;Theme park hotel transfers — Dreamworld, Movie World, Sea World area</p>
+            <p class="services-list-item"><i class="fad fa-caret-right"></i>&nbsp;Infant seats &amp; baby capsules available on request — free of charge</p><br>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== TESTIMONIALS ===== -->
+      <section class="pt-0 pt-md-5">
+        <div class="container">
+          <div class="text-center position-relative py-5 testimonials-bg">
+            <img loading="lazy" src="{% static 'basecamp/images/map.svg' %}" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0;">
+            <div class="bg-overlay bg-dark opacity-1"></div>
+            <div class="row mb-5"><div class="col-12"><h3>Gold Coast Holiday Travellers Who Chose EasyGo</h3></div></div>
+            <div class="row">
+              <div class="col-md-9 col-xl-6 mx-auto">
+                <div class="tiny-slider dots-primary">
+                  <div class="tiny-slider-inner" data-autoplay="6000" data-arrow="false" data-dots="true" data-edge="2" data-items="1">
+                    <div><p class="h5 fw-light mb-3">"We landed at OOL with two surfboards, a stroller, and five suitcases for a family of eight. The driver had everything loaded in five minutes and we were at our Surfers Paradise resort without a single complaint from the kids. Couldn't have asked for better. Booking again for Christmas."</p><div class="h5 mb-3">— The Williams Family, Sydney</div></div><br>
+                    <div><p class="h5 fw-light mb-3">"Organised EasyGo for our golf group of ten — we had eight golf bags between us and I was genuinely worried they wouldn't fit. They fit perfectly. Driver was early, price was exactly as quoted, and we were at Sanctuary Cove in no time. Best decision of the whole trip."</p><div class="h5 mb-0">— Andrew M., Brisbane</div></div><br>
+                    <div><p class="h5 fw-light mb-3">"Our Jetstar flight from Melbourne was delayed by nearly two hours. EasyGo tracked it and were there waiting when we finally landed, no extra charge, no questions. Twelve of us heading to Chevron Renaissance for Schoolies — they handled it like professionals. Will always recommend."</p><div class="h5 mb-3">— Jess T., Melbourne</div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="container mb-5">
+        <div class="col-12 mt-4 d-flex justify-content-center align-items-center gap-4">
+          <a href="/easygo_review/" class="me-4 fw-bold review-link"><span class="fs-lg">👉</span> Reviews on our website</a>
+          <a href="{{ google_review_url }}" target="_blank" rel="noopener" class="fw-bold review-link"><span class="fs-lg">👉</span> Google reviews <i class="ai-external-link ms-1 text-ext-icon"></i></a>
+        </div>
+      </section>
+
+    </main>
+
+    {% include "basecamp/layouts/footer.html" %}
+
+    <script src="{% static 'basecamp/js/bootstrap.bundle.min.js' %}" defer></script>
+    <script src="{% static 'basecamp/js/min/tiny-slider.js' %}" defer></script>
+    <script src="{% static 'basecamp/js/flatpickr.min.js' %}" defer></script>
+    <script src="{% static 'basecamp/js/date-picker.js' %}" defer></script>
+    <script src="{% static 'basecamp/js/theme.home.min.js' %}" defer></script>
+    <script src="{% static 'basecamp/js/home.js' %}" defer></script>
+    <script nonce="{{ CSP_NONCE }}">document.getElementById('current-year').textContent = new Date().getFullYear();</script>
+    <script type="application/ld+json" nonce="{{ CSP_NONCE }}">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        { "@type": "Question", "name": "How fast can I get from Gold Coast Airport OOL to my hotel?", "acceptedAnswer": { "@type": "Answer", "text": "OOL is compact — bags to kerbside in around 10 minutes. From Coolangatta to Surfers Paradise is 30–40 minutes drive. Your EasyGo driver is waiting at arrivals when you land." } },
+        { "@type": "Question", "name": "Can you fit surfboards and holiday gear in the Gold Coast transfer van?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Our 8–13 seater maxi vans have large rear cargo space for surfboards, golf bags, dive equipment, strollers, and multiple large suitcases." } },
+        { "@type": "Question", "name": "Do you cross the NSW-QLD border to Tweed Heads?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. EasyGo services both sides of the Gold Coast border — Tweed Heads, Banora Point, Kingscliff, Casuarina and beyond. Same fixed price from OOL." } },
+        { "@type": "Question", "name": "Is the price the same during Schoolies and Christmas?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. EasyGo's prices are fixed regardless of season. Schoolies week, Christmas, Easter, Queensland school holidays — the quoted price is the price." } },
+        { "@type": "Question", "name": "Why can't I take the G:link tram from Gold Coast Airport?", "acceptedAnswer": { "@type": "Answer", "text": "The G:link light rail does not reach OOL Airport. It stops well north of Coolangatta. EasyGo is the direct private transfer option from OOL to any Gold Coast or Tweed Heads destination." } }
+      ]
+    }
+    </script>
+    <a href="/confirmation/" class="btn btn-secondary btn-sm admin-btn" role="button">Warning!</a>
+  </body>
+</html>

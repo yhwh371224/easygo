@@ -13,5 +13,8 @@ from .pages import (
     region_airport_transfer,
     region_cruise_transfer,
     region_maxi_taxi,
-    region_more_suburbs, 
+    region_more_suburbs,
+    brisbane_home,
+    melbourne_home,
+    gold_coast_home,
 )

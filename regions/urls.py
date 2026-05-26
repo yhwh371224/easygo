@@ -9,6 +9,11 @@ from basecamp.views.inquirys import inquiry_details1
 app_name = 'regions'
 
 urlpatterns = [
+    # City-specific home pages (must come before generic <slug> route)
+    path('brisbane/', views.brisbane_home, name='brisbane_home'),
+    path('melbourne/', views.melbourne_home, name='melbourne_home'),
+    path('gold-coast/', views.gold_coast_home, name='gold_coast_home'),
+
     # Region pillar pages
     path('<slug:region_slug>/airport-shuttle/', views.region_airport_shuttle, name='region_airport_shuttle'),
     path('<slug:region_slug>/airport-transfer/', views.region_airport_transfer, name='region_airport_transfer'),
