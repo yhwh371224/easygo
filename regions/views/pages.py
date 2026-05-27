@@ -154,6 +154,7 @@ def airport_shuttle_suburb(request, region_slug, suburb_slug, service_type='shut
         'service_type': service_type,
         'service_label': service_label,
         'service_path': service_path,
+        'google_review_url': settings.GOOGLE_REVIEW_URL,
     })
 
 
