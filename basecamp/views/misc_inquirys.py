@@ -75,7 +75,6 @@ def price_detail(request):
                 'home_suburbs': RegionSuburb.objects.filter(region__slug='sydney', is_active=True).order_by('-is_pinned', 'sort_order', 'name'),
                 'airport_terminals': _airport_terminals_for_request(request),
                 'cruise_terminals': _cruise_terminals_for_request(request),
-                'google_review_url': settings.GOOGLE_REVIEW_URL,
                 'latest_post': latest_post,
                 'start_point_value': start_point if start_point != 'Select your option' else '',
                 'end_point_value': end_point if end_point != 'Select your option' else '',
@@ -144,7 +143,6 @@ def price_detail(request):
             'home_suburbs': RegionSuburb.objects.filter(region__slug='sydney', is_active=True).order_by('-is_pinned', 'sort_order', 'name'),
             'airport_terminals': _airport_terminals_for_request(request),
             'cruise_terminals': _cruise_terminals_for_request(request),
-            'google_review_url': settings.GOOGLE_REVIEW_URL,
             'latest_post': latest_post,
         })
     

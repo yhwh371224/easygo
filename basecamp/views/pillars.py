@@ -46,7 +46,6 @@ def home(request):
         'home_suburbs': home_suburbs,
         'airport_terminals': airport_terminals,
         'cruise_terminals': cruise_terminals,
-        'google_review_url': settings.GOOGLE_REVIEW_URL,
         'latest_post': latest_post,
     })
 
@@ -70,7 +69,6 @@ def maxi_taxi(request, suburb=None):
     context = _build_pillar_context(suburb_obj, zone_info)
     context['landmark'] = context['landmarks']
     context['page_bg'] = 'basecamp/photos/bg-pattern02.webp'
-
     return render(request, 'basecamp/pillars/airport-maxi-taxi.html', context)
 
 

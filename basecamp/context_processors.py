@@ -33,3 +33,6 @@ def google_analytics(request):
 
 def rebook_error(request):
     return {'rebook_error': request.session.pop('rebook_error', None)}
+
+def google_review_url(request):
+    return {'google_review_url': getattr(settings, 'GOOGLE_REVIEW_URL', '')}

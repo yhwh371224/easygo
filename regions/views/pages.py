@@ -58,7 +58,6 @@ def region_home(request, region_slug):
         'featured_suburbs': featured_suburbs,
         'airport_terminals': airport_terminals,
         'cruise_terminals': cruise_terminals,
-        'google_review_url': settings.GOOGLE_REVIEW_URL,
         'latest_post': latest_post,
         'service_areas': region.service_areas or [],
         'hero_image_url': hero_image_url,
@@ -154,7 +153,6 @@ def airport_shuttle_suburb(request, region_slug, suburb_slug, service_type='shut
         'service_type': service_type,
         'service_label': service_label,
         'service_path': service_path,
-        'google_review_url': settings.GOOGLE_REVIEW_URL,
     })
 
 
@@ -163,7 +161,6 @@ def region_inquiry_done(request, region_slug):
     return render(request, 'basecamp/inquiry_done.html', {
         'region': region,
         'current_region': region,
-        'google_review_url': settings.GOOGLE_REVIEW_URL,
     })
 
 
@@ -208,7 +205,6 @@ def _build_city_context(request, slug):
         'featured_suburbs': featured_suburbs,
         'airport_terminals': airport_terminals,
         'cruise_terminals': cruise_terminals,
-        'google_review_url': settings.GOOGLE_REVIEW_URL,
         'latest_post': latest_post,
         'service_areas': region.service_areas or [],
         'hero_image_url': hero_image_url,
