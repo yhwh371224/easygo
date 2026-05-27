@@ -282,8 +282,13 @@ def quick_rebook_step1(request, region_slug=None):
     flight_number = request.POST.get('flight_number', '').strip()
     pickup_time   = request.POST.get('pickup_time', '').strip()
 
+    error_redirect = request.POST.get('error_redirect', '').strip()
+    _ALLOWED_ERROR_REDIRECTS = {'/rebook/'}
+
     def render_step1_error(msg):
         request.session['rebook_error'] = msg
+        if error_redirect in _ALLOWED_ERROR_REDIRECTS:
+            return redirect(error_redirect)
         region = _get_request_region(request)
         if region:
             return redirect(f'/{region.slug}/')
@@ -310,6 +315,8 @@ def quick_rebook_step1(request, region_slug=None):
             'No previous booking found for this email. '
             'Please use New Booking.'
         )
+        if error_redirect in _ALLOWED_ERROR_REDIRECTS:
+            return redirect(error_redirect)
         region = _get_request_region(request)
         if region:
             return redirect(f'/{region.slug}/')

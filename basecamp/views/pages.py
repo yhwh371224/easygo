@@ -73,8 +73,11 @@ def payment_options1(request):
 def p2p_single(request):
     return render(request, 'basecamp/booking/p2p_single.html')
 
-def privacy(request):     
+def privacy(request):
     return render(request, 'basecamp/pages/privacy.html')
+
+def rebook(request):
+    return render(request, 'basecamp/pages/rebook.html')
 
 def return_cruise_fields(request): 
     return render(request, 'basecamp/layouts/return_cruise_fields.html')

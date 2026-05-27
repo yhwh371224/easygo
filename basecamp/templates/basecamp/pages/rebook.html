@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Book Again | EasyGo Sydney Airport Transfer</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" type="image/x-icon" href="{% static 'basecamp/favi/favicon.ico' %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css?family=Inter:400,600,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'basecamp/css/flatpickr.min.css' %}" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="{% static 'basecamp/css/head_home.css' %}">
+  <link rel="stylesheet" href="{% static 'basecamp/css/home.css' %}">
+  <link rel="stylesheet" href="{% static 'basecamp/css/footer.css' %}">
+  <style nonce="{{ CSP_NONCE }}">
+    body { display: flex; flex-direction: column; min-height: 100vh; }
+    .page-wrapper { flex: 1; }
+    .rebook-page-hero {
+      background: #3d5368;
+      padding: 100px 0 40px;
+    }
+    .rebook-page-hero h1 {
+      color: #fff;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+    .rebook-page-hero p {
+      color: rgba(255,255,255,0.75);
+      font-size: 0.9rem;
+      margin-bottom: 0;
+    }
+    .rebook-form-wrap {
+      margin-top: -24px;
+      padding-bottom: 60px;
+    }
+  </style>
+</head>
+<body>
+  {% include "basecamp/layouts/navbar.html" %}
+
+  <main class="page-wrapper">
+
+    <section class="rebook-page-hero">
+      <div class="container">
+        <h1>Book Again</h1>
+        <p>Used EasyGo before? We'll pull up your previous booking details automatically.</p>
+      </div>
+    </section>
+
+    <section class="container rebook-form-wrap">
+      <div class="booking-tabs-wrapper">
+
+        <div class="booking-tab-nav">
+          <span class="booking-tab-btn active-green" style="cursor:default;">
+            Book Again
+            <span class="rebook-badge">Returning?</span>
+          </span>
+        </div>
+
+        <div class="booking-tab-body">
+          <div class="booking-tab-pane active-green">
+
+            {% if rebook_error %}
+              <div class="rebook-error">{{ rebook_error }}</div>
+            {% endif %}
+
+            <p class="rebook-hint">Enter your email — we'll fill in your previous route automatically.</p>
+
+            <form action="{% url 'basecamp:quick_rebook_step1' %}" method="post">
+              {% csrf_token %}
+              <input type="hidden" name="error_redirect" value="/rebook/">
+              <div class="booking-fields">
+
+                <div class="booking-field booking-field--lg">
+                  <label class="booking-label">
+                    Email address
+                    <span class="booking-label-muted">(from previous booking)</span>
+                  </label>
+                  <input type="email" class="booking-input" name="email"
+                    placeholder="your@email.com" required autocomplete="email">
+                </div>
+
+                <div class="booking-field">
+                  <label class="booking-label">Pickup date</label>
+                  <input class="booking-input date-picker"
+                    name="pickup_date" required type="date"
+                    placeholder="Choose date"
+                    data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;F j, Y&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;}">
+                </div>
+
+                <div class="booking-field">
+                  <label class="booking-label">Flight number</label>
+                  <input type="text" class="booking-input" name="flight_number"
+                    placeholder="e.g. QF400" autocomplete="off" required>
+                </div>
+
+                <div class="booking-field booking-field--btn">
+                  <button type="submit" class="booking-submit booking-submit--green">
+                    Next — final step &rsaquo;&rsaquo;
+                  </button>
+                </div>
+
+              </div>
+            </form>
+
+          </div>
+        </div>
+
+      </div>
+
+      <div class="text-center mt-4">
+        <a href="/" class="text-muted" style="font-size:0.875rem;">&larr; Back to home</a>
+        &nbsp;&nbsp;
+        <a href="/sydney/inquiry/" class="text-muted" style="font-size:0.875rem;">New booking &rarr;</a>
+      </div>
+    </section>
+
+  </main>
+
+  {% include "basecamp/layouts/footer.html" %}
+
+  <script src="{% static 'basecamp/js/bootstrap.bundle.min.js' %}" defer></script>
+  <script src="{% static 'basecamp/js/flatpickr.min.js' %}" defer></script>
+  <script src="{% static 'basecamp/js/date-picker.js' %}" defer></script>
+  <script nonce="{{ CSP_NONCE }}">
+    document.getElementById('current-year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

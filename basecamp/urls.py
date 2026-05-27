@@ -79,6 +79,7 @@ urlpatterns = [
     path('terms/', views.terms, name='terms'),
     path('wrong_date_today/', views.wrong_date_today, name='wrong_date_today'),
     path('pay/stripe/', lambda request: redirect('https://buy.stripe.com/7sIcP940RbKH7LO6ow'), name='pay_stripe'),
+    path('rebook/',               views.rebook,                name='rebook'),
     path('quick_rebook/',         views.quick_rebook_step1,   name='quick_rebook_step1'),
     path('quick_rebook/confirm/', views.quick_rebook_confirm,  name='quick_rebook_confirm'),
 
