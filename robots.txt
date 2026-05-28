@@ -33,6 +33,9 @@ Disallow: /easygo_review/create/
 Disallow: /easygo_review/*/update/
 Disallow: /easygo_review/comment/
 
+# SMS 링크 URL (크롤러가 sms: 링크를 URL로 잘못 인식하는 경우 차단)
+Disallow: /*/sms:*
+
 # 폼 처리 URL (인덱싱 불필요)
 Disallow: /*_detail/
 Disallow: /confirm_booking/
