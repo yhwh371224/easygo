@@ -61,62 +61,18 @@
     <link rel="preload" href="{% static 'basecamp/css/head_home.css' %}" as="style">
     <link rel="preload" href="{% static 'basecamp/css/home.css' %}" as="style">
     <link rel="preload" href="{% static 'basecamp/css/footer.css' %}" as="style">
+    <link rel="preload" href="{% static 'basecamp/css/region_home_shared.css' %}" as="style">
+    <link rel="preload" href="{% static 'basecamp/css/gold_coast_home.css' %}" as="style">
     <link rel="stylesheet" href="{% static 'basecamp/css/tiny-slider.css' %}" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="{% static 'basecamp/css/flatpickr.min.css' %}" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="{% static 'basecamp/css/head_home.css' %}">
     <link rel="stylesheet" href="{% static 'basecamp/css/home.css' %}">
     <link rel="stylesheet" href="{% static 'basecamp/css/footer.css' %}">
+    <link rel="stylesheet" href="{% static 'basecamp/css/region_home_shared.css' %}">
+    <link rel="stylesheet" href="{% static 'basecamp/css/gold_coast_home.css' %}">
     <noscript><link rel="stylesheet" href="{% static 'basecamp/css/tiny-slider.css' %}"></noscript>
     <style nonce="{{ CSP_NONCE }}">
       #region-hero { position: relative; isolation: isolate; background-image: url("{{ hero_image_url }}"); background-size: cover; background-position: center top; min-height: 72vh; }
-      #region-hero::before { content: ""; position: absolute; inset: 0; background: rgba(0,0,0,0.42); z-index: -1; }
-      @media (max-width: 576px) { #region-hero { min-height: 62vh; background-position: center; } }
-      @media (max-width: 767.98px) { .award-badge { top: 35vh !important; bottom: auto !important; transform: none !important; } }
-      .main-img { display: none; }
-      .site-footer a { text-decoration: none !important; }
-      .site-footer a:hover, .site-footer a:focus, .site-footer a:active { text-decoration: none !important; }
-      .city-card { background: #fbf6ee; transition: background-color .15s ease, border-color .15s ease, box-shadow .15s ease, transform .1s ease; color: inherit; cursor: pointer; }
-      .city-card:hover { background: #f6eddf; box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); color: inherit; }
-      .city-card.is-active { background: #f3e6d2; border-color: rgba(243, 128, 32, 0.35) !important; }
-      .city-name { white-space: nowrap; }
-      .badge-current { background: rgba(34,197,94,.18); color:#14532d; border: 1px solid rgba(34,197,94,.30); }
-      .live-pill { display:inline-flex; align-items:center; gap:.5rem; padding:.25rem .6rem; border:1px solid rgba(255,255,255,.20); border-radius:999px; background: rgba(0,0,0,.22); color: rgba(255,255,255,.78); }
-      .live-pill strong { color:#ffffff; }
-      .live-pill .live-muted { color: rgba(255,255,255,.62); }
-      .live-dot { width:.5rem; height:.5rem; border-radius:999px; background:#22c55e; box-shadow: 0 0 0 0 rgba(34,197,94,.55); animation: livePulse 1.4s infinite; }
-      @keyframes livePulse { 0%{ box-shadow:0 0 0 0 rgba(34,197,94,.55);} 70%{ box-shadow:0 0 0 .5rem rgba(34,197,94,0);} 100%{ box-shadow:0 0 0 0 rgba(34,197,94,0);} }
-      .hero-text-wrap { position:absolute; inset:0; z-index:1; display:flex; align-items:flex-start; justify-content:center; padding-top:9rem; pointer-events:none; }
-      .hero-text-inner { text-align:center; color:#fff; max-width:660px; padding:0 1.5rem; }
-      .hero-eyebrow { display:inline-block; font-size:.72rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#fff; margin-bottom:1.2rem; }
-      .hero-title { font-size:clamp(1.6rem,4.5vw,3.25rem); font-weight:700; line-height:1.2; margin-bottom:1rem; text-shadow:0 2px 14px rgba(0,0,0,.4); }
-      .hero-title span { color:#ff9f4a; }
-      .hero-sub { font-size:clamp(.82rem,2vw,1.05rem); color:#fff; margin-bottom:1rem; font-weight:400; letter-spacing:.02em; }
-      .hero-trust { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:.3rem .5rem; font-size:clamp(.72rem,1.8vw,.82rem); color:#fff; }
-      .hero-trust strong { color:#fff; font-weight:600; }
-      .hero-trust-sep { color:rgba(255,255,255,.5); }
-      @media (max-width:576px) {
-        .hero-text-wrap { padding-top:4.5rem; }
-        .hero-eyebrow { margin-bottom:.25rem; }
-        .hero-title { margin-bottom:.6rem; }
-        .hero-title br { display:none; }
-        .hero-sub { margin-bottom:.75rem; }
-        .hero-trust-sep { display:none; }
-      }
-      /* Gold Coast OOL quick-exit section */
-      .ool-quick-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:1rem; margin-top:1.5rem; }
-      .ool-feature-card { background:#fff; border:2px solid #e5e7eb; border-radius:10px; padding:1rem; text-align:center; transition:border-color .15s, box-shadow .15s; }
-      .ool-feature-card:hover { border-color:#ff6b35; box-shadow:0 4px 14px rgba(255,107,53,.12); }
-      .ool-feature-icon { font-size:1.8rem; margin-bottom:.4rem; }
-      .ool-feature-title { font-weight:700; font-size:.88rem; color:#1e293b; margin-bottom:.25rem; }
-      .ool-feature-desc { font-size:.76rem; color:#6b7280; line-height:1.4; }
-      .ool-gear-banner { background:linear-gradient(135deg,#0f4c35 0%,#1a7a56 100%); border-radius:12px; padding:1.4rem 2rem; color:#fff; margin-top:2.5rem; display:flex; align-items:center; gap:1.5rem; flex-wrap:wrap; }
-      .ool-gear-icon { font-size:2.2rem; flex-shrink:0; }
-      .ool-gear-text strong { font-size:1rem; display:block; margin-bottom:.25rem; }
-      .ool-gear-text span { font-size:.83rem; color:rgba(255,255,255,.85); }
-      .ool-border-strip { background:#fff7ed; border:1px solid #fed7aa; border-radius:10px; padding:1rem 1.5rem; margin-top:1.25rem; display:flex; align-items:center; gap:1rem; }
-      .ool-border-flag { font-size:1.6rem; flex-shrink:0; }
-      .ool-border-text strong { font-size:.88rem; color:#92400e; display:block; }
-      .ool-border-text span { font-size:.78rem; color:#b45309; }
     </style>
     {% if GOOGLE_ANALYTICS_ID %}
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ GOOGLE_ANALYTICS_ID }}"></script>

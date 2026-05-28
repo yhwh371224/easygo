@@ -1,0 +1,26 @@
+#region-hero::before { content: ""; position: absolute; inset: 0; background: rgba(0,0,0,0.42); z-index: -1; }
+
+.hero-eyebrow { display:inline-block; font-size:.72rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#fff; margin-bottom:3rem; }
+.hero-title { font-size:clamp(1.6rem,4.5vw,3.25rem); font-weight:700; line-height:1.2; margin-bottom:1rem; text-shadow:0 2px 14px rgba(0,0,0,.4); }
+.hero-sub { font-size:clamp(.82rem,2vw,1.05rem); color:#fff; margin-bottom:1rem; font-weight:400; letter-spacing:.02em; }
+
+@media (max-width:576px) {
+  .hero-eyebrow { margin-bottom:.25rem; }
+  .hero-title { margin-bottom:.6rem; }
+  .hero-sub { margin-bottom:.75rem; }
+}
+
+.ool-quick-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:1rem; margin-top:1.5rem; }
+.ool-feature-card { background:#fff; border:2px solid #e5e7eb; border-radius:10px; padding:1rem; text-align:center; transition:border-color .15s, box-shadow .15s; }
+.ool-feature-card:hover { border-color:#ff6b35; box-shadow:0 4px 14px rgba(255,107,53,.12); }
+.ool-feature-icon { font-size:1.8rem; margin-bottom:.4rem; }
+.ool-feature-title { font-weight:700; font-size:.88rem; color:#1e293b; margin-bottom:.25rem; }
+.ool-feature-desc { font-size:.76rem; color:#6b7280; line-height:1.4; }
+.ool-gear-banner { background:linear-gradient(135deg,#0f4c35 0%,#1a7a56 100%); border-radius:12px; padding:1.4rem 2rem; color:#fff; margin-top:2.5rem; display:flex; align-items:center; gap:1.5rem; flex-wrap:wrap; }
+.ool-gear-icon { font-size:2.2rem; flex-shrink:0; }
+.ool-gear-text strong { font-size:1rem; display:block; margin-bottom:.25rem; }
+.ool-gear-text span { font-size:.83rem; color:rgba(255,255,255,.85); }
+.ool-border-strip { background:#fff7ed; border:1px solid #fed7aa; border-radius:10px; padding:1rem 1.5rem; margin-top:1.25rem; display:flex; align-items:center; gap:1rem; }
+.ool-border-flag { font-size:1.6rem; flex-shrink:0; }
+.ool-border-text strong { font-size:.88rem; color:#92400e; display:block; }
+.ool-border-text span { font-size:.78rem; color:#b45309; }

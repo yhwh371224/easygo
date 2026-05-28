@@ -1,0 +1,14 @@
+#region-hero::before { content: ""; position: absolute; inset: 0; background: rgba(0,0,0,0.62); z-index: -1; }
+
+.hero-eyebrow { display:inline-block; font-size:.72rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#fff; margin-bottom:3rem; text-shadow:0 1px 8px rgba(0,0,0,.7); }
+.hero-title { font-size:clamp(1.6rem,4.5vw,3.25rem); font-weight:700; line-height:1.2; margin-bottom:1rem; color:#fff; text-shadow:0 2px 16px rgba(0,0,0,.7); }
+.hero-sub { font-size:clamp(.82rem,2vw,1.05rem); color:#fff; margin-bottom:1rem; font-weight:400; letter-spacing:.02em; text-shadow:0 1px 8px rgba(0,0,0,.6); }
+
+@media (max-width:576px) {
+  .hero-eyebrow { margin-bottom:.25rem; }
+  .hero-title { margin-bottom:.6rem; }
+  .hero-sub { margin-bottom:.75rem; }
+}
+
+.terminal-box { background:#1a2332; border:1px solid rgba(255,255,255,.12); border-radius:.75rem; padding:1.25rem 1.5rem; }
+.terminal-badge { display:inline-block; background:rgba(255,159,74,.18); color:#ff9f4a; border:1px solid rgba(255,159,74,.35); border-radius:.4rem; font-size:.72rem; font-weight:700; padding:.15rem .5rem; letter-spacing:.08em; text-transform:uppercase; }

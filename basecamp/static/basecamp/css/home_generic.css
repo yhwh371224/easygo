@@ -1,0 +1,10 @@
+#region-hero::before { content: ""; position: absolute; inset: 0; background: rgba(0,0,0,0.45); z-index: -1; }
+
+.hero-eyebrow { display:inline-block; font-size:.72rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#fff; margin-bottom:.25rem; }
+.hero-title { font-size:clamp(1.6rem,4.5vw,3.25rem); font-weight:700; line-height:1.2; margin-bottom:.6rem; text-shadow:0 2px 14px rgba(0,0,0,.4); }
+.hero-sub { font-size:clamp(.82rem,2vw,1.05rem); color:#fff; margin-bottom:.75rem; font-weight:400; letter-spacing:.02em; }
+.hero-seo { font-size:clamp(.7rem,1.6vw,.8rem); color:#fff; margin-top:.75rem; line-height:1.6; }
+
+@media (max-width:576px) {
+  .hero-seo { display:none; }
+}
