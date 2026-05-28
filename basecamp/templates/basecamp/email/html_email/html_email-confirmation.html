@@ -79,6 +79,13 @@
                   •&nbsp;<strong>Contact #:</strong> {{ contact }}<br />
                   •&nbsp;<strong>Baggage:</strong> {{ no_of_baggage|default:'N/A' }}<br />
 
+                  {% if extra_stop_addresses %}
+                    <br />📍 <strong>Extra Stops:</strong><br />
+                    {% for addr in extra_stop_addresses %}
+                      &nbsp;&nbsp;• {{ addr }}<br />
+                    {% endfor %}
+                  {% endif %}
+
                   {% if paid %}
                     •&nbsp;<strong>Payment:</strong> Paid<br />
                   {% elif cash %}

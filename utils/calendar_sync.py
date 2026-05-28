@@ -158,21 +158,25 @@ def build_event_data(instance):
     baggage_str = abbreviate_baggage(instance.no_of_baggage)
     extra_stops = instance.extra_stop_addresses or []
     return_stops = _return_stop_list(instance) if instance.return_pickup_date else []
+    extra_stops_block = ("Extra Stops:\n" + "\n".join(f"• {a}" for a in extra_stops)) if extra_stops else ""
+    return_stops_block = ("Return Extra Stops:\n" + "\n".join(f"• {a}" for a in return_stops)) if return_stops else ""
     message = " ".join(filter(None, [
         instance.name,
         instance.email,
         f"b:{baggage_str}" if baggage_str else "",
-        f"E: {' / '.join(extra_stops)}" if extra_stops else "",
         f"t:{instance.toll}" if instance.toll else "",
         f"m:{instance.message}" if instance.message else "",
         f"n:{instance.notice}" if instance.notice else "",
         f"d:{instance.return_pickup_date}" if instance.return_pickup_date else "",
-        f"Ret.stops: {' / '.join(return_stops)}" if return_stops else "",
         f"${instance.paid}" if instance.paid else "",
         f"end.:{instance.end_point}" if instance.end_point else "",
         instance.meeting_point if instance.meeting_point else '',
         instance.contact if contact_display != instance.contact else '',
     ]))
+    if extra_stops_block:
+        message = message + "\n\n" + extra_stops_block
+    if return_stops_block:
+        message = message + "\n\n" + return_stops_block
 
     return {
         "summary": common["title"],
@@ -194,14 +198,18 @@ def build_driver_event_data(instance):
     baggage_str = abbreviate_baggage(instance.no_of_baggage)
     extra_stops = instance.extra_stop_addresses or []
     return_stops = _return_stop_list(instance) if instance.return_pickup_date else []
+    extra_stops_block = ("Extra Stops:\n" + "\n".join(f"• {a}" for a in extra_stops)) if extra_stops else ""
+    return_stops_block = ("Return Extra Stops:\n" + "\n".join(f"• {a}" for a in return_stops)) if return_stops else ""
     description = " ".join(filter(None, [
         instance.name or '',
         f"b:{baggage_str}" if baggage_str else "",
-        f"E: {' / '.join(extra_stops)}" if extra_stops else "",
-        f"ReE: {' / '.join(return_stops)}" if return_stops else "",
         instance.message or '',
         instance.end_point or '',
     ]))
+    if extra_stops_block:
+        description = description + "\n\n" + extra_stops_block
+    if return_stops_block:
+        description = description + "\n\n" + return_stops_block
 
     return {
         "summary": common["title"],

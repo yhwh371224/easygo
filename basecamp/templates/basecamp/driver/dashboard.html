@@ -349,11 +349,21 @@
 
       {% if post.extra_stop_addresses %}
         <div class="trip-message">
-          Extra stops: {{ post.extra_stop_addresses|join:" / " }}
+          <strong>Extra Stops:</strong>
+          <ul style="margin:.25rem 0 0 1rem;padding:0;">
+            {% for addr in post.extra_stop_addresses %}
+              <li>{{ addr }}</li>
+            {% endfor %}
+          </ul>
         </div>
         {% if post.return_pickup_date and post.same_extra_stop %}
           <div class="trip-message">
-            Return extra stops: {{ post.extra_stop_addresses|join:" / " }}
+            <strong>Return Extra Stops:</strong>
+            <ul style="margin:.25rem 0 0 1rem;padding:0;">
+              {% for addr in post.extra_stop_addresses %}
+                <li>{{ addr }}</li>
+              {% endfor %}
+            </ul>
           </div>
         {% endif %}
       {% endif %}
