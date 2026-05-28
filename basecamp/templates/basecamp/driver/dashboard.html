@@ -356,16 +356,6 @@
             {% endfor %}
           </ul>
         </div>
-        {% if post.return_pickup_date and post.same_extra_stop %}
-          <div class="trip-message">
-            <strong>Return Extra Stops:</strong>
-            <ul style="margin:.25rem 0 0 1rem;padding:0;">
-              {% for addr in post.extra_stop_addresses %}
-                <li>{{ addr }}</li>
-              {% endfor %}
-            </ul>
-          </div>
-        {% endif %}
       {% endif %}
 
       {% if post.price or post.paid or post.cash %}
