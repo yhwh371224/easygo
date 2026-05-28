@@ -61,6 +61,7 @@ def send_post_confirmation_email(instance):
         # extra
         'toll': instance.toll,
         'surcharge': instance.surcharge,
+        'extra_stop_addresses': instance.extra_stop_addresses or [],
         }
     )
 

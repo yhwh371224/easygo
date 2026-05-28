@@ -56,6 +56,7 @@ class Command(BaseCommand):
                     'notice': post.notice,
                     'price': post.price,
                     'paid': post.paid,
+                    'extra_stop_addresses': post.extra_stop_addresses or [],
                 }
                 if post.booker_email:
                     recipients = [post.booker_email, RECIPIENT_EMAIL]
