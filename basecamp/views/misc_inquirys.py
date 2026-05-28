@@ -1,8 +1,11 @@
+import logging
 from datetime import date
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.conf import settings
 from utils.email import send_text_email
+
+logger = logging.getLogger(__name__)
 from utils.telegram import send_telegram_sync
 from django.db.models import Q
 from django.http import JsonResponse
@@ -185,7 +188,10 @@ def contact_submit(request):
 
         subject = f"[New Contact] Submission from {data['name']}"
 
-        send_text_email(subject, message, [RECIPIENT_EMAIL])
+        try:
+            send_text_email(subject, message, [RECIPIENT_EMAIL])
+        except Exception:
+            logger.exception("contact_submit: failed to send email for %s", data['email'])
 
         telegram_text = (
             f"📬 *New Contact Form*\n"
