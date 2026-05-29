@@ -35,6 +35,9 @@
                     Log in
                 </button>
             {% else %}
+                {% if duplicate_error %}
+                    <div class="alert alert-warning" role="alert">{{ duplicate_error }}</div>
+                {% endif %}
                 <form method="post" action="{{ object.get_absolute_url }}new_comment/">{% csrf_token %}
                     <div class="form-group">
                         {{ comment_form.as_p }}

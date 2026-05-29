@@ -1,8 +1,10 @@
 import json
 import requests
 import os
+import datetime
 
 from django.conf import settings
+from django.utils import timezone
 from django.core.exceptions import PermissionDenied
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -125,6 +127,16 @@ class PostCreate(View):
                 if not (1 <= rating <= 5):
                     form.add_error('rating', 'Rating must be between 1 and 5')
                     return render(request, 'easygo_review/post_form.html', {'form': form, 'form_guide': 'Please post your review'})
+
+                today_start = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
+                already_posted_today = Post.objects.filter(
+                    author=blog_post.name,
+                    created__gte=today_start
+                ).exists()
+                if already_posted_today:
+                    form.add_error(None, 'You have already submitted a review today, but you can edit the content if you want.')
+                    return render(request, 'easygo_review/post_form.html', {'form': form, 'form_guide': 'Please post your review'})
+
                 form.save()
 
                 send_telegram_sync("⭐ New review has been posted on EasyGo website.")
@@ -239,6 +251,22 @@ class CommentCreate(View):
 
         comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
+            two_minutes_ago = timezone.now() - datetime.timedelta(minutes=2)
+            is_duplicate = Comment.objects.filter(
+                email=email,
+                text=comment_form.cleaned_data['text'],
+                created_at__gte=two_minutes_ago
+            ).exists()
+            if is_duplicate:
+                context = {
+                    'post': post,
+                    'email': email,
+                    'user_name': user_name,
+                    'comment_form': comment_form,
+                    'duplicate_error': 'You have already submitted this comment. Please wait a moment before trying again.',
+                }
+                return render(request, 'easygo_review/post_detail1.html', context)
+
             comment = comment_form.save(commit=False)
             comment.post = post
             comment.author = user_name
