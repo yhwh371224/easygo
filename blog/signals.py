@@ -192,11 +192,14 @@ def close_bird_mapping_on_no_driver(sender, instance, created, **kwargs):
 
     if created:
         if instance.use_proxy and instance.driver:
-            try:
-                create_bird_mapping(instance)
-                logger.info('close_bird_mapping_on_no_driver: created bird mapping for new Post pk=%s', instance.pk)
-            except Exception:
-                logger.error('close_bird_mapping_on_no_driver: create_bird_mapping failed for Post pk=%s', instance.pk, exc_info=True)
+            if is_foreign_number(instance.contact):
+                logger.info('close_bird_mapping_on_no_driver: skipping Bird mapping for foreign contact Post pk=%s', instance.pk)
+            else:
+                try:
+                    create_bird_mapping(instance)
+                    logger.info('close_bird_mapping_on_no_driver: created bird mapping for new Post pk=%s', instance.pk)
+                except Exception:
+                    logger.error('close_bird_mapping_on_no_driver: create_bird_mapping failed for Post pk=%s', instance.pk, exc_info=True)
         return
 
     update_fields = kwargs.get('update_fields')
@@ -218,11 +221,14 @@ def close_bird_mapping_on_no_driver(sender, instance, created, **kwargs):
         else:
             logger.warning('close_bird_mapping_on_no_driver: Bird mapping close failed for Post %s', instance.pk)
     else:
-        ok = create_bird_mapping(instance)
-        if ok:
-            logger.info('close_bird_mapping_on_no_driver: Bird mapping created for Post %s', instance.pk)
+        if is_foreign_number(instance.contact):
+            logger.info('close_bird_mapping_on_no_driver: skipping Bird mapping for foreign contact Post %s', instance.pk)
         else:
-            logger.warning('close_bird_mapping_on_no_driver: Bird mapping create failed for Post %s', instance.pk)
+            ok = create_bird_mapping(instance)
+            if ok:
+                logger.info('close_bird_mapping_on_no_driver: Bird mapping created for Post %s', instance.pk)
+            else:
+                logger.warning('close_bird_mapping_on_no_driver: Bird mapping create failed for Post %s', instance.pk)
 
 
 # sender를 문자열로 지정: "앱이름.모델이름"
