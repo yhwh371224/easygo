@@ -9,6 +9,7 @@ from django.http import HttpResponse, JsonResponse
 from django.utils import timezone
 from main.settings import RECIPIENT_EMAIL
 from utils.email import send_template_email
+from utils.booking_helper import normalize_direction
 from blog.models import Post, Inquiry, Driver
 from blog.sms_utils import send_sms_notice, send_whatsapp_template, format_au_phone
 from blog.blog_utils import resolve_driver
@@ -161,9 +162,9 @@ def sending_email_first_detail(request):
                         'booker_name': user.booker_name, 'booker_email': user.booker_email,
                         'email': user.email, 'email1': user.email1, 'pickup_date': user.pickup_date,
                         'flight_number': user.flight_number, 'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
-                        'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
+                        'direction': normalize_direction(user.direction), 'street': user.street, 'suburb': user.suburb,
                         'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
-                        'return_direction': user.return_direction, 'return_pickup_date': user.return_pickup_date,
+                        'return_direction': normalize_direction(user.return_direction), 'return_pickup_date': user.return_pickup_date,
                         'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time,
                         'return_pickup_time': user.return_pickup_time, 'message': user.message, 'notice': user.notice,
                         'price': display_price, 'paid': user.paid, 'cash': final_cash, 'prepay': final_prepay,
@@ -263,12 +264,12 @@ def sending_email_second_detail(request):
                 'flight_number': user.flight_number,
                 'flight_time': user.flight_time,
                 'pickup_time': user.pickup_time,
-                'direction': user.direction,
+                'direction': normalize_direction(user.direction),
                 'street': user.street,
                 'suburb': user.suburb,
                 'no_of_passenger': user.no_of_passenger,
                 'no_of_baggage': user.no_of_baggage,
-                'return_direction': user.return_direction,
+                'return_direction': normalize_direction(user.return_direction),
                 'return_pickup_date': user.return_pickup_date,
                 'return_flight_number': user.return_flight_number,
                 'return_flight_time': user.return_flight_time,
@@ -332,11 +333,11 @@ def sending_email_input_data_detail(request):
                 'name': user.name, 'contact': user.contact, 'email': user.email,
                 'pickup_date': user.pickup_date, 'flight_number': user.flight_number,
                 'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
-                'direction': user.direction, 'street': user.street, 'suburb': user.suburb,
-                'no_of_baggage': user.no_of_baggage, 'field': field, 
+                'direction': normalize_direction(user.direction), 'street': user.street, 'suburb': user.suburb,
+                'no_of_baggage': user.no_of_baggage, 'field': field,
                 'start_point': user.start_point, 'end_point': user.end_point,
                 'return_start_point': user.return_start_point, 'return_end_point': user.return_end_point,
-                'return_direction': user.return_direction, 'return_pickup_date': user.return_pickup_date, 
+                'return_direction': normalize_direction(user.return_direction), 'return_pickup_date': user.return_pickup_date,
                 'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
                 'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
             }
@@ -484,7 +485,7 @@ def email_dispatch_detail(request):
                     'contact': user_today.contact,
                     'meeting_point': display_meeting_point,  # ← fallback 적용
                     'terminal_pickup_point': user_today.terminal_pickup_point,
-                    'direction': user_today.direction,
+                    'direction': normalize_direction(user_today.direction),
                     'cash': user_today.cash,
                     'cruise': user_today.cruise,
                     'sms_reminder': user_today.sms_reminder,

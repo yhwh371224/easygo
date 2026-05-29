@@ -9,6 +9,22 @@ from blog.sms_utils import normalize_phone, format_au_phone
 logger = logging.getLogger(__name__)
 
 
+_DIRECTION_ALIASES = {
+    "pickup from intl airport": "Pickup from Intl Airport",
+    "pickup from domestic airport": "Pickup from Domestic Airport",
+    "drop off to intl airport": "Drop off to Intl Airport",
+    "drop off to domestic airport": "Drop off to Domestic Airport",
+    "cruise transfers or point to point": "Cruise transfers or Point to Point",
+}
+
+def normalize_direction(direction):
+    """Normalize direction string: collapse spaces, lowercase-compare, return canonical form."""
+    if not direction:
+        return direction
+    key = " ".join(direction.lower().split())
+    return _DIRECTION_ALIASES.get(key, direction)
+
+
 # =========================
 # CONTEXT BUILDER
 # =========================
@@ -32,7 +48,7 @@ def build_reminder_context(booking, pickup_time_12h, driver):
         'pickup_date': getattr(booking, "pickup_date", None),
         'flight_number': getattr(booking, "flight_number", None),
         'flight_time': getattr(booking, "flight_time", None),
-        'direction': getattr(booking, "direction", None),
+        'direction': normalize_direction(getattr(booking, "direction", None)),
         'pickup_time': pickup_time_12h,
         'start_point': getattr(booking, "start_point", "") or "",
         'end_point': getattr(booking, "end_point", "") or "",
@@ -71,11 +87,14 @@ def update_meeting_point_for_arrivals():
         "Pickup from Domestic Airport": Terminal.TerminalType.DOMESTIC,
     }
 
+    from django.db.models import Q as _Q
     bookings = list(
         Post.objects.filter(
             pickup_date=today,
-            direction__in=list(DIRECTION_TO_TERMINAL_TYPE.keys()),
             cancelled=False,
+        ).filter(
+            _Q(direction__iregex=r'pick\s*up from intl airport') |
+            _Q(direction__iregex=r'pick\s*up from domestic airport')
         ).select_related("driver", "region").order_by("flight_time")
     )
 
@@ -108,7 +127,7 @@ def update_meeting_point_for_arrivals():
             logger.warning(f"No driver for booking {booking.id}")
             continue
 
-        terminal_type = DIRECTION_TO_TERMINAL_TYPE.get(booking.direction)
+        terminal_type = DIRECTION_TO_TERMINAL_TYPE.get(normalize_direction(booking.direction))
         if not terminal_type or not booking.region_id:
             continue
 
