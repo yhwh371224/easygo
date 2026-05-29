@@ -456,7 +456,10 @@ def email_dispatch_detail(request):
         # ✅ Pickup Notice Today
         if selected_option == "Pickup Notice for Today":
             today = timezone.localdate()
-            user_today = Post.objects.select_related('driver').filter(email=email, pickup_date=today).order_by('pickup_time').first()
+            user_today = Post.objects.select_related('driver').filter(
+                Q(email=email) | Q(booker_email=email),
+                pickup_date=today
+            ).order_by('pickup_time').first()
             if user_today:
                 # template 선택
                 if user_today.terminal_pickup_point:
