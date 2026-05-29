@@ -1,5 +1,8 @@
+from datetime import timedelta
+
 from django.core.management.base import BaseCommand
 from django.db.models import Q
+from django.utils import timezone
 
 from blog.models import Post
 from utils.direction_utils import (
@@ -38,8 +41,12 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         fix = options['fix']
 
-        # Fetch all records where either field loosely contains 'pickup'
+        since = timezone.now() - timedelta(days=2)
+
+        # Fetch records created in the last 2 days where either field loosely contains 'pickup'
         candidates = Post.objects.filter(
+            created__gte=since,
+        ).filter(
             Q(direction__icontains='pickup') | Q(return_direction__icontains='pickup')
         ).only('id', 'name', 'email', 'pickup_date', 'direction', 'return_direction')
 
