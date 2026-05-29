@@ -1,4 +1,5 @@
 from django.db import models
+from utils.prepay_helper import is_foreign_number
 
 
 class Inquiry(models.Model):
@@ -137,6 +138,10 @@ class Post(models.Model):
     @property
     def invoice_name(self):
         return self.booker_name if self.booker_name else self.name
+
+    @property
+    def is_foreign_contact(self):
+        return is_foreign_number(self.contact)
 
     class Meta:
         ordering = ['-created']

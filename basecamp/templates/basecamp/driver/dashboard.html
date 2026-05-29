@@ -266,7 +266,7 @@
 
       <div class="trip-name">{{ post.name }}</div>
 
-      {% if post.driver.virtual_number %}
+      {% if post.driver.virtual_number and not post.is_foreign_contact %}
       <a class="trip-phone" href="tel:{{ post.driver.virtual_number.number }}">
         <span class="icon"></span>
         {{ post.driver.virtual_number.number|format_au_phone }}
