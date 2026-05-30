@@ -156,31 +156,33 @@
                                                 </p>
 												<p style="Margin:0;font-size:12px;line-height:20px;Margin-bottom:6px;border-top: 1px solid #a09a9a;">
 												<p style="Margin:0;font-size:12px;line-height:20px;Margin-bottom:6px;">
-												{% if not direction %}
-													{% if return_flight_number %}
+												{% if start_point %}
+													{% if return_pickup_time %}
 													Trip type: Round Trip<br>
-													Service: Point to point/Cruise<br>
-													{{ flight_number }} To/From {{ street }}<br>
-													Trip date: {{ pickup_date|date:"Y-m-d" }} & {{ return_pickup_date|date:"Y-m-d" }}<br>																										
+													Service: Point to Point<br>
+													{{ start_point }} To/From {{ end_point }}<br>
+													Frist Pickup time & date: {{ pickup_time }} on {{ pickup_date|date:"Y-m-d" }}<br>
+													Secound Pickup time & date: {{ return_pickup_time }} on {{ return_pickup_date|date:"Y-m-d" }}<br>
 													{% else %}
 													Trip type: Single Trip<br>
-													Service: Point to point/Cruise<br>
-													{{ flight_number }} To {{ street }}<br>
-													Trip date: {{ pickup_date|date:"Y-m-d" }}<br>
-													{% endif %}																																																			
+													Service: Point to Point<br>
+													{{ start_point }} To {{ end_point }}<br>
+													Pickup date: {{ pickup_date|date:"Y-m-d" }}<br>
+													Pickup time: {{ pickup_time }}<br>
+													{% endif %}																																															
 												{% else %}
 													{% if return_pickup_time %}
 													Trip type: Round Trip<br>
 													Service: Airport transfers<br>
-													Flight date: {{ pickup_date|date:"Y-m-d" }} & {{ return_pickup_date|date:"Y-m-d" }}<br>	
-													Pick-up time: {{ pickup_time}} & {{ return_pickup_time}}<br>											
+													Frist Pickup time & date: {{ pickup_time }} on {{ pickup_date|date:"Y-m-d" }}<br>
+													Secound Pickup time & date: {{ return_pickup_time }} on {{ return_pickup_date|date:"Y-m-d" }}<br>
 													{% else %}
 													Trip type: Single Trip<br>
 													Service: Airport transfers<br>
 													Flight date: {{ pickup_date|date:"Y-m-d" }}<br>
-													Pick-up time: {{ pickup_time }}<br>														
-													{% endif %}															
-													Address: {{ street }}, {{ suburb }}<br>												
+													Pickup time: {{ pickup_time }}<br>
+													{% endif %}
+													Address: {{ street }}, {{ suburb }}<br>										
 												{% endif %}																							
 												Number of Passenger: {{ no_of_passenger }}<br>
 												Number of Baggage: {{ no_of_baggage }}<br>
