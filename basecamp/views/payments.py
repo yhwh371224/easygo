@@ -214,7 +214,8 @@ def _build_single_context(user, users, params, inv_no, today, DEFAULT_BANK):
     toll_input = params['toll_input']
     email = params['email']
 
-    start_point, end_point = _get_start_end_points(user)
+    start_point = user.start_point  
+    end_point = user.end_point
     price = safe_float(user.price) or 0.0
     with_gst = round(price * 0.10, 2) if user.company_name else 0.0
     surcharge_calc, surcharge_display = _calc_surcharge(surcharge_input, price)
