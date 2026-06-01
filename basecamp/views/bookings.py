@@ -377,7 +377,7 @@ def quick_rebook_confirm(request, region_slug=None):
         return redirect('basecamp:home')
 
     previous_name  = previous.name
-    previous_price = previous.price
+    previous_price = previous.price * 2 if (has_return and return_pickup_time) else previous.price
     previous_street = previous.street or ''
     region         = previous.region
     extra_stop     = int(request.POST.get('extra_stop') or previous.extra_stop or 0)
