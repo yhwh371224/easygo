@@ -16,8 +16,8 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django_ratelimit.decorators import ratelimit
 from main import settings
 
-COMPANY_NAME = "[YOUR_COMPANY_NAME]"
-COMPANY_ABN  = "[YOUR_COMPANY_ABN]"
+COMPANY_NAME = "EasyGo Airport Shuttle"
+COMPANY_ABN  = "25 697 358 535"
 
 
 def _build_rcti_context(settlement):

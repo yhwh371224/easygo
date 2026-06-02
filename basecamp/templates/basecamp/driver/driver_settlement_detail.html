@@ -168,7 +168,7 @@
     <div class="party">
       <div class="party-label">Supplier</div>
       <div class="party-name">{{ driver.driver_name }}</div>
-      <div class="party-abn">ABN: {{ driver.abn|default:"Not provided" }}</div>
+      <div class="party-abn">ABN: {{ driver.abn|default:"—" }}</div>
       {% if driver.driver_address %}<div class="party-extra">{{ driver.driver_address }}</div>{% endif %}
     </div>
   </div>
@@ -249,12 +249,10 @@
         <div class="val">{{ settlement.paid_at|date:"d M Y" }}</div>
       </div>
       {% endif %}
-      {% if settlement.settled_by %}
       <div class="footer-item">
         <div class="lbl">Issued By</div>
-        <div class="val">{{ settlement.settled_by.get_full_name|default:settlement.settled_by.username }}</div>
+        <div class="val">{{ company_name }}</div>
       </div>
-      {% endif %}
     </div>
   </div>
 

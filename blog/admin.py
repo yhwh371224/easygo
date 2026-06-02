@@ -1,10 +1,30 @@
+from datetime import date
+
 from django.contrib import admin, messages
 from django.contrib.admin import AdminSite
 from django.core.exceptions import ValidationError
+from django import forms
+from django.template.response import TemplateResponse
+from django.urls import path as url_path, reverse
 from django.utils import timezone
 from django.utils.html import format_html
-from django.urls import reverse
 from .models import Driver, DriverSettlement, Inquiry, PaypalPayment, PhoneMapping, StripePayment, Post, VirtualNumber
+
+
+class CreateSettlementForm(forms.Form):
+    driver = forms.ModelChoiceField(
+        queryset=Driver.objects.order_by('order'),
+        empty_label='— select driver —',
+    )
+    from_date = forms.DateField(
+        widget=forms.DateInput(attrs={'type': 'date'}),
+        label='From date',
+    )
+    to_date = forms.DateField(
+        widget=forms.DateInput(attrs={'type': 'date'}),
+        label='To date',
+        initial=date.today,
+    )
 
 
 class DriverAdmin(admin.ModelAdmin):
@@ -27,9 +47,87 @@ class DriverSettlementAdmin(admin.ModelAdmin):
     search_fields = ['settlement_number']
     readonly_fields = ['created_at']
     actions = ['action_lock_settlement', 'action_mark_paid', 'action_email_rcti']
+    change_list_template = 'admin/blog/driversettlement/change_list.html'
 
     _MONEY_FIELDS = ['total_amount', 'cash_total', 'paid_total', 'gst_total']
     _NUMBER_FIELDS = ['settlement_number', 'rcti_number', 'from_date', 'to_date']
+
+    # ── Custom URL + view ───────────────────────────────────────────
+
+    def get_urls(self):
+        custom = [
+            url_path(
+                'create-settlement/',
+                self.admin_site.admin_view(self.create_settlement_view),
+                name='blog_driversettlement_create',
+            ),
+        ]
+        return custom + super().get_urls()
+
+    def create_settlement_view(self, request):
+        from blog.services.settlement_service import SettlementService
+
+        if request.method == 'POST':
+            form = CreateSettlementForm(request.POST)
+            if form.is_valid():
+                driver     = form.cleaned_data['driver']
+                from_date  = form.cleaned_data['from_date']
+                to_date    = form.cleaned_data['to_date']
+
+                settlement = SettlementService.create_settlement(
+                    driver, from_date, to_date, user=request.user
+                )
+
+                if settlement is None:
+                    self.message_user(
+                        request,
+                        f"No trips found for {driver.driver_name} "
+                        f"between {from_date} and {to_date}.",
+                        messages.WARNING,
+                    )
+                else:
+                    self.message_user(
+                        request,
+                        f"Settlement {settlement.settlement_number} created "
+                        f"(paid total: ${settlement.paid_total}). "
+                        "Review and use 'Lock settlement' when ready.",
+                    )
+                    return self._redirect_to_change(settlement)
+        else:
+            form = CreateSettlementForm(initial={'to_date': date.today()})
+
+        context = {
+            **self.admin_site.each_context(request),
+            'title': 'Create Settlement',
+            'form': form,
+            'opts': self.model._meta,
+            'media': self.media + form.media,
+        }
+        return TemplateResponse(
+            request,
+            'admin/blog/driversettlement/create_settlement.html',
+            context,
+        )
+
+    def _redirect_to_change(self, settlement):
+        from django.http import HttpResponseRedirect
+        url = reverse(
+            f'{self.admin_site.name}:blog_driversettlement_change',
+            args=[settlement.pk],
+        )
+        return HttpResponseRedirect(url)
+
+    # ── Inject "Create Settlement" URL into changelist context ──────
+
+    def changelist_view(self, request, extra_context=None):
+        extra_context = extra_context or {}
+        try:
+            extra_context['create_settlement_url'] = reverse(
+                f'{self.admin_site.name}:blog_driversettlement_create'
+            )
+        except Exception:
+            pass
+        return super().changelist_view(request, extra_context=extra_context)
 
     def get_readonly_fields(self, request, obj=None):
         base = list(self.readonly_fields)
