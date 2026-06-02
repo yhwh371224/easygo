@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
-from django.http import JsonResponse
+from django.http import Http404, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from django.views.decorators.http import require_POST
@@ -316,6 +316,43 @@ def driver_dashboard(request):
         'current_total_cash': current_total_cash,
         'current_grand_total': current_grand_total,
         'to_be_paid': to_be_paid,
+        'impersonator_id': request.session.get('impersonator_id'),
+    })
+
+
+@login_required(login_url='/driver/login/')
+def driver_settlement_list(request):
+    try:
+        driver = request.user.driver
+    except Exception:
+        return redirect('blog:driver_login')
+
+    from blog.models import DriverSettlement
+    settlements = DriverSettlement.objects.filter(driver=driver).order_by('-settled_at')
+    return render(request, 'basecamp/driver/driver_settlement_list.html', {
+        'driver': driver,
+        'settlements': settlements,
+        'impersonator_id': request.session.get('impersonator_id'),
+    })
+
+
+@login_required(login_url='/driver/login/')
+def driver_settlement_detail(request, settlement_number):
+    try:
+        driver = request.user.driver
+    except Exception:
+        return redirect('blog:driver_login')
+
+    from blog.models import DriverSettlement
+    settlement = get_object_or_404(DriverSettlement, settlement_number=settlement_number)
+    if settlement.driver != driver:
+        raise Http404
+
+    items = settlement.items.select_related('post').all()
+    return render(request, 'basecamp/driver/driver_settlement_detail.html', {
+        'driver': driver,
+        'settlement': settlement,
+        'items': items,
         'impersonator_id': request.session.get('impersonator_id'),
     })
 

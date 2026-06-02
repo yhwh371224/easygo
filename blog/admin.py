@@ -1,5 +1,7 @@
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.contrib.admin import AdminSite
+from django.core.exceptions import ValidationError
+from django.utils import timezone
 from django.utils.html import format_html
 from django.urls import reverse
 from .models import Driver, DriverSettlement, Inquiry, PaypalPayment, PhoneMapping, StripePayment, Post, VirtualNumber
@@ -20,9 +22,41 @@ class DriverAdmin(admin.ModelAdmin):
 
 @admin.register(DriverSettlement)
 class DriverSettlementAdmin(admin.ModelAdmin):
-    list_display = ['driver', 'amount', 'note', 'settled_by', 'settled_at']
-    list_filter = ['driver']
-    
+    list_display = ['settlement_number', 'driver', 'from_date', 'to_date', 'total_amount', 'status', 'settled_by', 'settled_at']
+    list_filter = ['status', 'driver']
+    search_fields = ['settlement_number']
+    readonly_fields = ['created_at']
+    actions = ['action_lock_settlement', 'action_mark_paid']
+
+    _MONEY_FIELDS = ['total_amount', 'cash_total', 'paid_total', 'gst_total']
+    _NUMBER_FIELDS = ['settlement_number', 'rcti_number', 'from_date', 'to_date']
+
+    def get_readonly_fields(self, request, obj=None):
+        base = list(self.readonly_fields)
+        if obj and obj.status != 'draft':
+            base += self._MONEY_FIELDS + self._NUMBER_FIELDS
+        return base
+
+    @admin.action(description='Lock settlement')
+    def action_lock_settlement(self, request, queryset):
+        from blog.services.settlement_service import lock_settlement
+        for settlement in queryset:
+            try:
+                lock_settlement(settlement, request.user)
+                self.message_user(request, f"Locked: {settlement.settlement_number}")
+            except ValidationError as e:
+                self.message_user(request, str(e), messages.ERROR)
+
+    @admin.action(description='Mark as paid')
+    def action_mark_paid(self, request, queryset):
+        from blog.services.settlement_service import mark_paid
+        for settlement in queryset:
+            try:
+                mark_paid(settlement, request.user, settlement.payment_method, timezone.now())
+                self.message_user(request, f"Marked as paid: {settlement.settlement_number}")
+            except ValidationError as e:
+                self.message_user(request, str(e), messages.ERROR)
+
     def save_model(self, request, obj, form, change):
         obj.settled_by = request.user
         super().save_model(request, obj, form, change)
@@ -180,6 +214,7 @@ class MyAdminSite(AdminSite):
 
 admin_site = MyAdminSite(name='horeb_yhwh')
 admin_site.register(Driver, DriverAdmin)
+admin_site.register(DriverSettlement, DriverSettlementAdmin)
 admin_site.register(Inquiry, InquiryAdmin)
 admin_site.register(PaypalPayment, PaypalPaymentAdmin)
 admin_site.register(StripePayment, StripePaymentAdmin)
