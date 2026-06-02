@@ -17,6 +17,7 @@ class Driver(models.Model):
     region = models.ForeignKey('regions.Region', null=True, blank=True, on_delete=models.SET_NULL)
     is_default = models.BooleanField(default=False)
     driver_name = models.CharField(max_length=100, blank=True, null=True)
+    abn = models.CharField(max_length=20, blank=True, null=True)
     driver_contact = models.CharField(max_length=50, blank=True, null=True)
     driver_email = models.EmailField(blank=True, null=True)
     driver_address = models.CharField(max_length=200, blank=True, null=True)

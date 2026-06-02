@@ -8,8 +8,8 @@ from .models import Driver, DriverSettlement, Inquiry, PaypalPayment, PhoneMappi
 
 
 class DriverAdmin(admin.ModelAdmin):
-    list_display = ['order', 'driver_name', 'driver_contact', 'driver_email', 'driver_plate', 'user', 'must_change_password', 'impersonate_button']
-    search_fields = ['driver_name', 'driver_contact', 'driver_email', 'driver_address', 'driver_plate']
+    list_display = ['order', 'driver_name', 'abn', 'driver_contact', 'driver_email', 'driver_plate', 'user', 'must_change_password', 'impersonate_button']
+    search_fields = ['driver_name', 'abn', 'driver_contact', 'driver_email', 'driver_address', 'driver_plate']
     ordering = ['order']
 
     def impersonate_button(self, obj):
