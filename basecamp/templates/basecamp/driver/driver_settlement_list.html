@@ -89,7 +89,7 @@
         <div class="s-period">{{ s.from_date|date:"d M Y" }} – {{ s.to_date|date:"d M Y" }}</div>
       </div>
       <div class="s-right">
-        <div class="s-amount">${{ s.total_amount }}</div>
+        <div class="s-amount">${{ s.paid_total }}</div>
         <div>
           <span class="badge-status badge-{{ s.status }}">{{ s.get_status_display }}</span>
         </div>
