@@ -15,5 +15,6 @@ urlpatterns = [
     path('impersonate/exit/', driver_views.driver_impersonate_exit, name='driver_impersonate_exit'),
     path('settlements/', driver_views.driver_settlement_list, name='driver_settlement_list'),
     path('settlements/<str:settlement_number>/', driver_views.driver_settlement_detail, name='driver_settlement_detail'),
+    path('settlements/<str:settlement_number>/pdf/', driver_views.driver_settlement_pdf, name='driver_settlement_pdf'),
 ]
 

@@ -33,11 +33,14 @@ class SettlementService:
             return None
 
         # 2) settlement 생성
+        seq = DriverSettlement.objects.filter(
+            driver=driver, to_date=to_date
+        ).count() + 1
         settlement = DriverSettlement.objects.create(
             driver=driver,
             from_date=from_date,
             to_date=to_date,
-            settlement_number=generate_settlement_number(driver, from_date),
+            settlement_number=generate_settlement_number(driver, to_date, seq),
             settled_by=user,
             status='draft',
         )

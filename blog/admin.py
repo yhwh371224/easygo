@@ -26,7 +26,7 @@ class DriverSettlementAdmin(admin.ModelAdmin):
     list_filter = ['status', 'driver']
     search_fields = ['settlement_number']
     readonly_fields = ['created_at']
-    actions = ['action_lock_settlement', 'action_mark_paid']
+    actions = ['action_lock_settlement', 'action_mark_paid', 'action_email_rcti']
 
     _MONEY_FIELDS = ['total_amount', 'cash_total', 'paid_total', 'gst_total']
     _NUMBER_FIELDS = ['settlement_number', 'rcti_number', 'from_date', 'to_date']
@@ -56,6 +56,73 @@ class DriverSettlementAdmin(admin.ModelAdmin):
                 self.message_user(request, f"Marked as paid: {settlement.settlement_number}")
             except ValidationError as e:
                 self.message_user(request, str(e), messages.ERROR)
+
+    @admin.action(description='Email RCTI PDF to driver')
+    def action_email_rcti(self, request, queryset):
+        from decimal import Decimal, ROUND_HALF_UP
+        from django.template.loader import render_to_string
+        from weasyprint import HTML
+        from utils.email import send_html_email
+        from blog.driver_views import COMPANY_NAME, COMPANY_ABN, _build_rcti_context
+
+        for settlement in queryset:
+            if settlement.status != 'paid':
+                self.message_user(
+                    request,
+                    f"Skipped {settlement.settlement_number}: status is '{settlement.status}', not 'paid'.",
+                    messages.WARNING,
+                )
+                continue
+
+            driver = settlement.driver
+            if not driver.driver_email:
+                self.message_user(
+                    request,
+                    f"Skipped {settlement.settlement_number}: driver has no email address.",
+                    messages.WARNING,
+                )
+                continue
+
+            ctx = {'driver': driver, 'settlement': settlement, 'is_pdf': True}
+            ctx.update(_build_rcti_context(settlement))
+            html_string = render_to_string(
+                'basecamp/driver/driver_settlement_detail.html', ctx
+            )
+            pdf_bytes = HTML(
+                string=html_string, base_url=request.build_absolute_uri('/')
+            ).write_pdf()
+
+            period = (
+                f"{settlement.from_date.strftime('%d %b')}–"
+                f"{settlement.to_date.strftime('%d %b %Y')}"
+            )
+            subject = f"RCTI {settlement.settlement_number} – {period}"
+            body_html = (
+                f"<p>Dear {driver.driver_name},</p>"
+                f"<p>Please find attached your Recipient Created Tax Invoice "
+                f"<strong>{settlement.settlement_number}</strong> "
+                f"for the period {settlement.from_date.strftime('%d %b %Y')} to "
+                f"{settlement.to_date.strftime('%d %b %Y')}.</p>"
+                f"<p>Total (incl. GST): <strong>${settlement.paid_total}</strong></p>"
+                f"<p>Regards,<br>{COMPANY_NAME}</p>"
+            )
+            try:
+                send_html_email(
+                    subject=subject,
+                    html_content=body_html,
+                    recipient_list=[driver.driver_email],
+                    attachments=[(f"{settlement.settlement_number}.pdf", pdf_bytes, 'application/pdf')],
+                )
+                self.message_user(
+                    request,
+                    f"RCTI emailed to {driver.driver_email} ({settlement.settlement_number}).",
+                )
+            except Exception as e:
+                self.message_user(
+                    request,
+                    f"Email failed for {settlement.settlement_number}: {e}",
+                    messages.ERROR,
+                )
 
     def save_model(self, request, obj, form, change):
         obj.settled_by = request.user

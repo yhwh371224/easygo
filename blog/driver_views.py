@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from decimal import Decimal
+from decimal import Decimal, ROUND_HALF_UP
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
@@ -7,13 +7,48 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
-from django.http import Http404, JsonResponse
+from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.template.loader import render_to_string
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 from django.contrib.admin.views.decorators import staff_member_required
 from django_ratelimit.decorators import ratelimit
 from main import settings
+
+COMPANY_NAME = "[YOUR_COMPANY_NAME]"
+COMPANY_ABN  = "[YOUR_COMPANY_ABN]"
+
+
+def _build_rcti_context(settlement):
+    """
+    Return display-only RCTI figures for a settlement.
+    Does NOT modify any stored field.
+    """
+    all_items = settlement.items.select_related('post').all()
+    paid_items_raw = [item for item in all_items if not item.post.cash]
+
+    rcti_items = []
+    for item in paid_items_raw:
+        lt = item.line_total
+        item_gst = (lt / Decimal('11')).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+        rcti_items.append({
+            'date': item.post.pickup_date,
+            'description': item.description or item.post.suburb or '–',
+            'amount_ex': lt - item_gst,
+            'gst': item_gst,
+            'line_total': lt,
+        })
+
+    paid_total = settlement.paid_total
+    gst = (paid_total / Decimal('11')).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+    return {
+        'rcti_items': rcti_items,
+        'rcti_gst': gst,
+        'rcti_amount_ex': paid_total - gst,
+        'company_name': COMPANY_NAME,
+        'company_abn': COMPANY_ABN,
+    }
 
 
 @staff_member_required
@@ -348,13 +383,41 @@ def driver_settlement_detail(request, settlement_number):
     if settlement.driver != driver:
         raise Http404
 
-    items = settlement.items.select_related('post').all()
-    return render(request, 'basecamp/driver/driver_settlement_detail.html', {
+    ctx = {
         'driver': driver,
         'settlement': settlement,
-        'items': items,
         'impersonator_id': request.session.get('impersonator_id'),
-    })
+        'is_pdf': False,
+    }
+    if settlement.status == 'paid':
+        ctx.update(_build_rcti_context(settlement))
+    return render(request, 'basecamp/driver/driver_settlement_detail.html', ctx)
+
+
+@login_required(login_url='/driver/login/')
+def driver_settlement_pdf(request, settlement_number):
+    try:
+        driver = request.user.driver
+    except Exception:
+        return redirect('blog:driver_login')
+
+    from blog.models import DriverSettlement
+    settlement = get_object_or_404(DriverSettlement, settlement_number=settlement_number)
+    if settlement.driver != driver:
+        raise Http404
+    if settlement.status != 'paid':
+        raise Http404
+
+    from weasyprint import HTML
+    ctx = {'driver': driver, 'settlement': settlement, 'is_pdf': True}
+    ctx.update(_build_rcti_context(settlement))
+    html_string = render_to_string('basecamp/driver/driver_settlement_detail.html', ctx)
+    pdf = HTML(string=html_string, base_url=request.build_absolute_uri('/')).write_pdf()
+    response = HttpResponse(pdf, content_type='application/pdf')
+    response['Content-Disposition'] = (
+        f'attachment; filename="{settlement.settlement_number}.pdf"'
+    )
+    return response
 
 
 @login_required(login_url='/driver/login/')
