@@ -394,7 +394,7 @@
   {% for item in timeline %}
     {% if item.type == 'settlement' %}
       <div class="settlement-divider">
-        Settled {{ item.data.settled_at|date:"d M Y" }} &nbsp;${{ item.data.amount }}
+        Settled {{ item.data.settled_at|date:"d M Y" }} &nbsp;${{ item.data.total_amount }}
       </div>
     {% else %}
       {% with post=item.data %}
