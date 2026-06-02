@@ -214,7 +214,7 @@ def driver_dashboard(request):
         .exclude(price='')
     )
     if last_settlement:
-        past_posts = past_posts.filter(pickup_date__gt=last_settlement.local_date)
+        past_posts = past_posts.filter(pickup_date__gt=last_settlement.to_date)
     past_posts = past_posts.order_by('-pickup_date', '-pickup_time')
 
     # timeline용 posts: second_last_settlement 이후 ~ today 미만 (히스토리 표시용)
@@ -229,9 +229,9 @@ def driver_dashboard(request):
         .exclude(price='')
     )
     if second_last_settlement:
-        timeline_posts = timeline_posts.filter(pickup_date__gt=second_last_settlement.local_date)
+        timeline_posts = timeline_posts.filter(pickup_date__gt=second_last_settlement.to_date)
     if last_settlement:  # ← 이거 추가
-        timeline_posts = timeline_posts.exclude(pickup_date=last_settlement.local_date)
+        timeline_posts = timeline_posts.exclude(pickup_date=last_settlement.to_date)
     timeline_posts = timeline_posts.order_by('-pickup_date', '-pickup_time')
 
     # 트립과 정산을 날짜순으로 인터리브
@@ -245,7 +245,7 @@ def driver_dashboard(request):
     for s in settlements:
         timeline.append({
             'type': 'settlement',
-            'date': s.local_date,
+            'date': s.to_date,
             'data': s,
         })
 
@@ -284,7 +284,7 @@ def driver_dashboard(request):
             current_total_cash += amount
         elif post.paid:
             current_total_paid += amount
-        if not last_settlement or post.pickup_date > last_settlement.local_date:
+        if not last_settlement or post.pickup_date > last_settlement.to_date:
             if post.cash:
                 to_be_cash += amount
             elif post.paid:
@@ -299,7 +299,7 @@ def driver_dashboard(request):
             current_total_cash += amount
         elif post.paid:
             current_total_paid += amount
-        if not last_settlement or post.pickup_date > last_settlement.local_date:
+        if not last_settlement or post.pickup_date > last_settlement.to_date:
             if post.cash:
                 to_be_cash += amount
             elif post.paid:
