@@ -1,3 +1,4 @@
+{% load email_filters %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
@@ -52,6 +53,18 @@
           </td>
         </tr>
 
+        <!-- ── GREETING / STATUS ── -->
+        <tr>
+          <td class="mobile-pad" style="padding:0 30px 10px;font-size:14px;line-height:22px;">
+            Hello {% if company_name %}{{ company_name }}, Attn: {% if booker_name %}{{ booker_name }}{% else %}{{ name }}{% endif %}{% else %}{% if booker_name %}{{ booker_name }}{% else %}{{ name }}{% endif %}{% endif %}<br /><br />
+            {% if paid %}
+              Thank you for your booking. Your booking is fully confirmed.
+            {% else %}
+              Thank you for your booking request with EasyGo Airport Shuttle.
+            {% endif %}
+          </td>
+        </tr>
+
         <!-- ── BOOKING SUMMARY ── -->
         <tr>
           <td class="mobile-pad" style="padding:20px;">
@@ -60,7 +73,7 @@
                 <td style="padding:15px;font-size:14px;line-height:22px;color:#333;">
                   <strong>✅ Booking Summary</strong><br /><br />
 
-                  •&nbsp;<strong>Pickup Date:</strong> {{ pickup_date|date:"Y-m-d" }}<br />
+                  •&nbsp;<strong>Pickup Date:</strong> {{ pickup_date|date:"D, j M Y" }}<br />
                   •&nbsp;<strong>Pickup Time:</strong> {{ pickup_time }}<br />
 
                   {% if start_point %}
@@ -77,7 +90,7 @@
 
                   •&nbsp;<strong>Passengers:</strong> {{ no_of_passenger }}<br />
                   •&nbsp;<strong>Contact #:</strong> {{ contact }}<br />
-                  •&nbsp;<strong>Baggage:</strong> {{ no_of_baggage|default:'N/A' }}<br />
+                  •&nbsp;<strong>Baggage:</strong> {{ no_of_baggage|expand_baggage|default:'N/A' }}<br />
 
                   {% if extra_stop_addresses %}
                     📍 <strong>Extra Stops:</strong><br />
@@ -103,7 +116,7 @@
                     <hr style="border:none;border-top:1px solid #ddd;margin:10px 0;" />
                     <strong>🔁 Return Trip</strong><br />
 
-                    •&nbsp;<strong>Date:</strong> {{ return_pickup_date|date:"Y-m-d" }}<br />
+                    •&nbsp;<strong>Date:</strong> {{ return_pickup_date|date:"D, j M Y" }}<br />
 
                     {% if return_flight_number %}
                       •&nbsp;<strong>Flight:</strong> {{ return_flight_number }}<br />
@@ -122,11 +135,24 @@
                       •&nbsp;<strong>Direction:</strong> {{ return_direction }}<br />
                       •&nbsp;<strong>Address:</strong> {{ street|default:'' }}, {{ suburb|default:'' }}<br />
                     {% endif %}
+
+                    •&nbsp;<strong>Passengers:</strong> {{ no_of_passenger }}<br />
+                    •&nbsp;<strong>Contact #:</strong> {{ contact }}<br />
+                    •&nbsp;<strong>Baggage:</strong> {{ no_of_baggage|expand_baggage|default:'N/A' }}<br />
+
+                    {% if extra_stop_addresses %}
+                      📍 <strong>Extra Stops:</strong><br />
+                      {% for addr in extra_stop_addresses %}
+                        &nbsp;&nbsp;• {{ addr }}<br />
+                      {% endfor %}
+                    {% endif %}
                   {% endif %}
 
-                  {% if notice %}
-                    <br />⚠️ <strong>Notice:</strong><br />{{ notice|linebreaksbr }}
+                  {% with cleaned_notice=notice|strip_return_marker %}
+                  {% if cleaned_notice %}
+                    <br />⚠️ <strong>Notice:</strong><br />{{ cleaned_notice|linebreaksbr }}
                   {% endif %}
+                  {% endwith %}
 
                 </td>
               </tr>
@@ -134,19 +160,8 @@
           </td>
         </tr>
 
-        <!-- ── GREETING / STATUS ── -->
-        <tr>
-          <td class="mobile-pad" style="padding:0 30px 10px;font-size:14px;line-height:22px;">
-            Hello {% if company_name %}{{ company_name }}, Attn: {% if booker_name %}{{ booker_name }}{% else %}{{ name }}{% endif %}{% else %}{% if booker_name %}{{ booker_name }}{% else %}{{ name }}{% endif %}{% endif %}<br /><br />
-            {% if paid %}
-              Thank you for your booking. Your booking is fully confirmed.
-            {% else %}
-              Thank you for your booking request with EasyGo Airport Shuttle.
-            {% endif %}
-          </td>
-        </tr>
-
         <!-- ── PAYMENT SUMMARY ── -->
+        {% with rt_total=notice|roundtrip_total %}
         <tr>
           <td class="mobile-pad" style="padding:20px;">
             <table width="100%" role="presentation" style="border:1px solid #E1E1E1;border-radius:6px;background:#FAFAFA;" class="darkmode-card darkmode-border">
@@ -159,16 +174,28 @@
                   {% elif company_name %}
                       • An invoice will be sent to you via email shortly.<br />
                   {% elif cash %}
+                      {% if rt_total %}
+                      • Total (round trip): ${{ rt_total }}{% if toll and surcharge %}, toll & fuel surcharge included{% elif toll %}, toll included{% elif surcharge %}, fuel surcharge included{% endif %}<br />
+                      {% else %}
                       • The total cost is ${{ price }}{% if toll and surcharge %}, toll & fuel surcharge included{% elif toll %}, toll included{% elif surcharge %}, fuel surcharge included{% endif %}<br />
+                      {% endif %}
                       {% if surcharge %}<span style="color:#666;">&nbsp;&nbsp;* Fuel surcharge is temporary due to the recent rise in fuel costs.</span><br />{% endif %}
                       • Payment will be made in cash directly to the driver on the day.<br />
                   {% elif prepay %}
+                      {% if rt_total %}
+                      • Total (round trip): ${{ rt_total }}{% if toll and surcharge %}, toll & fuel surcharge included{% elif toll %}, toll included{% elif surcharge %}, fuel surcharge included{% endif %}<br />
+                      {% else %}
                       • The total cost is ${{ price }}{% if toll and surcharge %}, toll & fuel surcharge included{% elif toll %}, toll included{% elif surcharge %}, fuel surcharge included{% endif %}<br />
+                      {% endif %}
                       {% if surcharge %}<span style="color:#666;">&nbsp;&nbsp;* Fuel surcharge is temporary due to the recent rise in fuel costs.</span><br />{% endif %}
                       • Please make payment online in advance using the link below:<br />
                       &nbsp;&nbsp;<a href="https://easygoshuttle.com.au/payonline">easygoshuttle.com.au/payonline</a><br />
                   {% else %}
+                      {% if rt_total %}
+                      • Total (round trip): ${{ rt_total }}{% if toll and surcharge %}, toll & fuel surcharge included{% elif toll %}, toll included{% elif surcharge %}, fuel surcharge included{% endif %}<br />
+                      {% else %}
                       • The total cost is ${{ price }}{% if toll and surcharge %}, toll & fuel surcharge included{% elif toll %}, toll included{% elif surcharge %}, fuel surcharge included{% endif %}<br />
+                      {% endif %}
                       {% if surcharge %}<span style="color:#666;">&nbsp;&nbsp;* Fuel surcharge is temporary due to the recent rise in fuel costs.</span><br />{% endif %}
                       • You may prepay securely via PayPal using the link below:<br />
                       &nbsp;&nbsp;<a href="https://easygoshuttle.com.au/payonline">easygoshuttle.com.au/payonline</a><br />
@@ -180,6 +207,7 @@
             </table>
           </td>
         </tr>
+        {% endwith %}
 
         <!-- ── SIGNATURE ── -->
         <tr>
