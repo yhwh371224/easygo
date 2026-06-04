@@ -1,5 +1,5 @@
 # company_data.py
-# EasyGo Airport Transfers - Company Knowledge Base
+# EasyGo Airport Shuttle - Company Knowledge Base
 # Used as context for Claude API email reply generation
 
 COMPANY_INFO = """
