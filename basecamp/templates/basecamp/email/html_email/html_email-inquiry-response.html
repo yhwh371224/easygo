@@ -179,12 +179,19 @@
 														&nbsp; {{ addr }}<br>
 													{% endfor %}
 												{% endif %}
+												<br>
 
 												{% if return_start_point %}
 													Return booking date: {{ return_pickup_date|date:"D, j M Y" }}<br>
 													Return Pickup Location: {{ return_start_point }}<br>
 													Return Drop-off Location: {{ return_end_point }}<br>
 													Return pickup time: {{ return_pickup_time }}<br>
+													{% if same_extra_stop and extra_stop_addresses %}
+														Return Extra Stops:
+														{% for addr in extra_stop_addresses %}
+															&nbsp; {{ addr }}<br>
+														{% endfor %}
+													{% endif %}
 												{% elif return_direction %}
 													Return Direction: {{ return_direction }}<br>
 													Return Flight date: {{ return_pickup_date|date:"D, j M Y" }}<br>
@@ -192,6 +199,12 @@
 													Return Flight time: {{ return_flight_time }}<br>
 													Return Pickup time: {{ return_pickup_time }}<br>
 													Return Address: {{ street|format_address:suburb }}<br>
+													{% if same_extra_stop and extra_stop_addresses %}
+														Return Extra Stops:
+														{% for addr in extra_stop_addresses %}
+															&nbsp; {{ addr }}<br>
+														{% endfor %}
+													{% endif %}
 												{% endif %}
 													Message: {{ message|linebreaksbr }}<br>                                             
 												</p>

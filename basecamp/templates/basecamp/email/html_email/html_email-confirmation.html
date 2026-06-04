@@ -140,7 +140,7 @@
                     •&nbsp;<strong>Contact #:</strong> {{ contact }}<br />
                     •&nbsp;<strong>Baggage:</strong> {{ no_of_baggage|expand_baggage|default:'N/A' }}<br />
 
-                    {% if extra_stop_addresses %}
+                    {% if same_extra_stop and extra_stop_addresses %}
                       📍 <strong>Extra Stops:</strong><br />
                       {% for addr in extra_stop_addresses %}
                         &nbsp;&nbsp;• {{ addr }}<br />

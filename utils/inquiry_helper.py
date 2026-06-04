@@ -37,6 +37,7 @@ def send_inquiry_email(instance):
             'notice': instance.notice,
             'private_ride': instance.private_ride,
             'extra_stop_addresses': instance.extra_stop_addresses or [],
+            'same_extra_stop': instance.same_extra_stop,
         })
 
     elif instance.cancelled:
