@@ -1,3 +1,4 @@
+{% load email_filters %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
@@ -147,8 +148,8 @@
 											<td align="left" style="padding-top:28px;padding-left:0;">
                                                 <p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">                                                    
                                                     Thank you for reaching out with your inquiry.<br><br>
-													We can certainly assist you with your transportation needs<br><br>
-													Based on the information you've provided, here are the details of your booking:<br><br>                                                   
+													We can certainly assist you with your transportation needs.<br><br>
+													Based on the information you've provided, here are the details of your booking:<br><br>
 												 </p>
 												 <p style="Margin:0;font-size:12px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;"> 
 												{% if company_name %}
@@ -158,20 +159,20 @@
 													Contact: {{ contact }}<br>
 												{% if direction %}
 													Direction: {{ direction }}<br>
-													Flight date: {{ pickup_date|date:"Y-m-d" }}<br>
+													Flight date: {{ pickup_date|date:"D, j M Y" }}<br>
 													Flight number: {{ flight_number }}<br>
 													Flight time: {{ flight_time|default:'' }}<br>
 													Pickup time: {{ pickup_time }}<br>
-													Address: {{ street|default:'' }} {{ suburb|default:'' }}<br>
+													Address: {{ street|format_address:suburb }}<br>
 												{% endif %}
 												{% if start_point %}
-													Pickup date:  {{ pickup_date|date:"Y-m-d" }}<br>
-													Pickup time:  {{ pickup_time|default:'' }}<br>
+													Pickup date: {{ pickup_date|date:"D, j M Y" }}<br>
+													Pickup time: {{ pickup_time|default:'' }}<br>
 													Start point: {{ start_point }}<br>
-													End point:  {{ end_point }}<br>
+													End point: {{ end_point }}<br>
 												{% endif %}
 													Number of passenger: {{ no_of_passenger }}<br>
-													Number of baggage:  {{ no_of_baggage|default:'' }}<br>
+													Number of baggage: {{ no_of_baggage|expand_baggage|default:'' }}<br>
 												{% if extra_stop_addresses %}
 													Extra Stops:
 													{% for addr in extra_stop_addresses %}
@@ -180,26 +181,26 @@
 												{% endif %}
 
 												{% if return_start_point %}
-													Return booking date:  {{ return_pickup_date|date:"Y-m-d" }}<br>	
+													Return booking date: {{ return_pickup_date|date:"D, j M Y" }}<br>
 													Return Pickup Location: {{ return_start_point }}<br>
-													Return Drop-off Location: {{ return_end_point }}<br>													
-													Return pickup time:  {{ return_pickup_time }}<br>
+													Return Drop-off Location: {{ return_end_point }}<br>
+													Return pickup time: {{ return_pickup_time }}<br>
 												{% elif return_direction %}
 													Return Direction: {{ return_direction }}<br>
-													Return Flight date: {{ return_pickup_date|date:"Y-m-d" }}<br>
+													Return Flight date: {{ return_pickup_date|date:"D, j M Y" }}<br>
 													Return Flight number: {{ return_flight_number }}<br>
 													Return Flight time: {{ return_flight_time }}<br>
 													Return Pickup time: {{ return_pickup_time }}<br>
-													Return Address: {{ street|default:'' }}, {{ suburb|default:'' }}<br>
+													Return Address: {{ street|format_address:suburb }}<br>
 												{% endif %}
 													Message: {{ message|linebreaksbr }}<br>                                             
 												</p>
 												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;">
 												💰 Payment <br><br>
 												{% if return_pickup_time %}
-													The total cost for this booking, including both the outbound and return trips, is ${{ price }}&nbsp;
+													The total cost for this booking, including both the outbound and return trips, is ${{ price }}.
 												{% else %}
-													The cost for this booking is ${{ price }} for a one-way trip.&nbsp;
+													The cost for this booking is ${{ price }} for a one-way trip.
 												{% endif %}
 												{% if toll and surcharge %}
 													plus ${{ toll }} toll and ${{ surcharge }} fuel surcharge

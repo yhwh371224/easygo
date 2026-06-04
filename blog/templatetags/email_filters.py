@@ -61,3 +61,12 @@ def roundtrip_total(value):
         return None
     m = re.search(r'===RETURN===\s*\(Total Price: \$(\d+(?:\.\d+)?)\)', str(value))
     return m.group(1) if m else None
+
+
+@register.filter
+def format_address(street, suburb=''):
+    """Normalize 'street suburb' or 'street, suburb' to 'Street, Suburb'.
+    Usage: {{ street|format_address:suburb }}
+    """
+    parts = [p.strip() for p in [str(street or ''), str(suburb or '')] if str(p).strip()]
+    return ', '.join(parts)
