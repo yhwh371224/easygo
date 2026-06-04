@@ -5,6 +5,7 @@ from django.db import transaction
 
 from blog.models import Post, Driver, PhoneMapping
 from blog.sms_utils import normalize_phone, format_au_phone
+from utils.direction_utils import is_intl_pickup, is_domestic_pickup
 
 logger = logging.getLogger(__name__)
 
@@ -67,6 +68,9 @@ def build_reminder_context(booking, pickup_time_12h, driver):
         'paid': getattr(booking, "paid", False),
         'cash': getattr(booking, "cash", False),
         'cruise': getattr(booking, "cruise", False),
+
+        'is_intl': is_intl_pickup(getattr(booking, "direction", None)),
+        'is_domestic': is_domestic_pickup(getattr(booking, "direction", None)),
 
         'bird_number': bird_number,
 
