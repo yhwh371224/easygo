@@ -5,6 +5,7 @@ from itertools import zip_longest
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 from blog.models import Post
+from main.settings import RECIPIENT_EMAIL
 from utils import booking_helper
 from utils.booking_helper import build_reminder_context
 from utils.email import send_template_email, collect_recipients
@@ -15,6 +16,13 @@ logger = logging.getLogger(__name__)
 
 class Command(BaseCommand):
     help = 'Send booking reminder emails for upcoming flights'
+
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '--today',
+            action='store_true',
+            help='Send only today\'s reminder emails',
+        )
 
     def handle(self, *args, **options):
         # --- 오늘 국제선 도착 예약 meeting_point 업데이트 ---
@@ -38,6 +46,10 @@ class Command(BaseCommand):
             "Review-EasyGo",
         ]
 
+        if options['today']:
+            self.send_email(0, "html_email-today.html", "Reminder-Today")
+            return
+
         for interval, template, subject in zip_longest(reminder_intervals, templates, subjects, fillvalue=""):
             self.send_email(interval, template, subject)
 
@@ -56,16 +68,19 @@ class Command(BaseCommand):
     def send_email_task(self, booking_reminders, template_name, subject, target_date):
         for booking_reminder in booking_reminders:
             try:
+                logger.info(f"[{subject}] Processing booking id={booking_reminder.id} email={booking_reminder.email} booker_email={booking_reminder.booker_email}")
+
                 if not booking_reminder.driver:
-                    logger.warning(f"No driver for booking {booking_reminder.id}")
+                    logger.warning(f"[{subject}] SKIP id={booking_reminder.id} — no driver")
                     continue
-                
+
                 from regions.models import TerminalPickupPoint
                 if not booking_reminder.terminal_pickup_point and booking_reminder.meeting_point:
                     booking_reminder.terminal_pickup_point = TerminalPickupPoint.objects.filter(
                         name=booking_reminder.meeting_point,
                         terminal__airport__regions=booking_reminder.region,
                     ).first()
+                logger.info(f"[{subject}] id={booking_reminder.id} terminal_pickup_point={booking_reminder.terminal_pickup_point} meeting_point={booking_reminder.meeting_point}")
 
                 driver = getattr(booking_reminder, "driver", None)
                 pickup_time_12h = format_pickup_time_12h(booking_reminder.pickup_time)
@@ -93,15 +108,18 @@ class Command(BaseCommand):
                 else:
                     email_recipients = collect_recipients(booking_reminder.email, booking_reminder.email1)
 
+                logger.info(f"[{subject}] id={booking_reminder.id} email_recipients={email_recipients}")
+
                 if is_today:
                     if booking_reminder.terminal_pickup_point:
                         today_template = "emails/driver_details.html"
                     else:
                         today_template = "html_email-today.html"
                     template_name = today_template
+                    logger.info(f"[{subject}] id={booking_reminder.id} template={template_name}")
 
                 if not email_recipients:
-                    logger.warning(f"No recipients for booking {booking_reminder.id}, skipping.")
+                    logger.warning(f"[{subject}] SKIP id={booking_reminder.id} — no recipients (email={booking_reminder.email} email1={booking_reminder.email1} booker_email={booker_email})")
                     continue
 
                 try:
