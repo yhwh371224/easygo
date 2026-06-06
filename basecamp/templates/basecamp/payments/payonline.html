@@ -108,6 +108,16 @@
         </div>
       </section>
 
+      <!-- Pre-fill from redirect params (e.g. from confirm_booking_prepay_detail) -->
+      <script nonce="{{ CSP_NONCE }}">
+        (function () {
+          var p = new URLSearchParams(window.location.search);
+          var n = p.get('name'); var a = p.get('amount');
+          if (n) document.getElementById('description').value = n;
+          if (a) document.getElementById('amount').value = a;
+        })();
+      </script>
+
       <!-- Scripts -->
       <script src="https://www.paypal.com/sdk/js?client-id={{ paypal_client_id }}&components=buttons&enable-funding=card&disable-funding=paylater,venmo&currency=AUD" data-sdk-integration-source="integrationbuilder_sc" nonce="{{ CSP_NONCE }}"></script>
       <script nonce="{{ CSP_NONCE }}">

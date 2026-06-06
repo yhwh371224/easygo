@@ -23,8 +23,11 @@ def booking(request):
 def confirmation_multiplebookings(request): 
     return render(request, 'basecamp/confirmation_multiplebookings.html')
 
-def confirm_booking(request): 
+def confirm_booking(request):
     return render(request, 'basecamp/booking/confirm_booking.html')
+
+def confirm_booking_prepay(request):
+    return render(request, 'basecamp/booking/confirm_booking_prepay.html')
 
 def contact_form(request):
     return render(request, 'basecamp/pages/contact_form.html')

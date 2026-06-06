@@ -1,5 +1,6 @@
 import asyncio
 import logging
+from urllib.parse import urlencode
 
 from django.contrib import messages
 from django.shortcuts import render, redirect
@@ -97,6 +98,20 @@ def confirm_booking_detail(request):
     extra_stop_addresses = user.extra_stop_addresses or []
     same_extra_stop = user.same_extra_stop
 
+    # ── 도착편 + 첫이용 → prepay 강제 ──
+    is_arrival = (direction or "").startswith("Pickup from")
+    has_completed_trip = Post.objects.filter(
+        email__iexact=email,
+        cancelled=False,
+        pending=False,
+    ).exists()
+    is_first_time = not has_completed_trip
+
+    if is_arrival and is_first_time:
+        cash = False
+        prepay = True
+    # ─────────────────────────────────
+
     try:
         pickup_date_obj, return_pickup_date_obj = parse_booking_dates(pickup_date, return_pickup_date)
     except ValueError as e:
@@ -171,6 +186,156 @@ def confirm_booking_detail(request):
         logger.error(f"[TELEGRAM] Failed to send: {e}")
 
     return render_inquiry_done(request)
+
+
+@ratelimit(key='ip', rate='5/m', method='POST', block=True)
+@require_POST
+def confirm_booking_prepay_detail(request):
+    logger.info(
+        f"[BOOKING PREPAY] IP={get_client_ip(request)} "
+        f"path={request.path} "
+        f"email={request.POST.get('email')}"
+    )
+
+    honeypot = request.POST.get('phone_verify', '')
+    if honeypot != '':
+        return JsonResponse({'success': False, 'error': 'Bot detected.'})
+    email = request.POST.get('email')
+    is_confirmed = request.POST.get('is_confirmed') == 'True'
+
+    index = request.POST.get('index_visible') or request.POST.get('index', '1')
+    try:
+        index = int(index) - 1
+    except ValueError:
+        return HttpResponse("Invalid index value", status=400)
+
+    cash = request.POST.get('cash') == 'on'
+    prepay = request.POST.get('prepay') == 'on'
+
+    users = Inquiry.objects.filter(booker_email__iexact=email)
+    if not users.exists():
+        users = Inquiry.objects.filter(email__iexact=email)
+
+    if users.exists() and 0 <= index < len(users):
+        user = users[index]
+    else:
+        return render(request, 'basecamp/email/email_error_confirmbooking.html')
+
+    name = user.name
+    booker_name = user.booker_name
+    booer_email = user.booker_email
+    contact = user.contact
+    company_name = user.company_name
+    email1 = user.email1
+    pickup_date = user.pickup_date
+    flight_number = getattr(user, 'flight_number', "")
+    flight_time = getattr(user, 'flight_time', "")
+    pickup_time = user.pickup_time
+    direction = user.direction
+    suburb = user.suburb
+    street = user.street
+    start_point = getattr(user, 'start_point', "")
+    end_point = getattr(user, 'end_point', "")
+    no_of_passenger = user.no_of_passenger
+    no_of_baggage = user.no_of_baggage
+    return_direction = getattr(user, 'return_direction', "")
+    return_pickup_date = getattr(user, 'return_pickup_date', "")
+    return_flight_number = getattr(user, 'return_flight_number', "")
+    return_flight_time = getattr(user, 'return_flight_time', "")
+    return_pickup_time = getattr(user, 'return_pickup_time', "")
+    return_start_point = getattr(user, 'return_start_point', "")
+    return_end_point = getattr(user, 'return_end_point', "")
+    cruise = user.cruise
+    message = user.message
+    notice = user.notice
+    price = user.price
+    toll = user.toll
+    surcharge = user.surcharge
+    paid = user.paid
+    private_ride = user.private_ride
+    region = user.region
+    special_items = user.special_items or {}
+    extra_stop = user.extra_stop or 0
+    extra_stop_addresses = user.extra_stop_addresses or []
+    same_extra_stop = user.same_extra_stop
+
+    # prepay 경로이므로 항상 prepay 강제
+    cash = False
+    prepay = True
+
+    try:
+        pickup_date_obj, return_pickup_date_obj = parse_booking_dates(pickup_date, return_pickup_date)
+    except ValueError as e:
+        return JsonResponse({'success': False, 'error': str(e)})
+
+    if price in [None, ""]:
+        final_price = "TBA"
+        toll_value = ""
+        surcharge_value = ""
+    else:
+        try:
+            final_price = float(price)
+            if toll:
+                final_price += float(toll)
+            if surcharge:
+                final_price += float(surcharge)
+        except Exception:
+            final_price = price
+        toll_value = "toll included" if toll else ""
+        surcharge_value = "surcharge included" if surcharge else ""
+
+    if paid or cash or prepay:
+        pending = False
+    else:
+        pending = True
+
+    driver = get_default_driver_for_region(region)
+
+    if not driver:
+        sydney_region = Region.objects.filter(slug='sydney', is_active=True).first()
+        if sydney_region:
+            driver = get_default_driver_for_region(sydney_region)
+
+    if not driver:
+        logger.error(f"No default driver found for region: {region} or sydney fallback")
+        return JsonResponse({'success': False, 'message': 'Service unavailable. Please contact us directly.'})
+
+    is_confirmed = False
+
+    p = Post(
+        name=name, contact=contact, email=email, company_name=company_name, email1=email1,
+        pickup_date=pickup_date_obj, flight_number=flight_number, flight_time=flight_time, pickup_time=pickup_time,
+        direction=direction, suburb=suburb, street=street, start_point=start_point, end_point=end_point,
+        cruise=cruise, no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage,
+        return_direction=return_direction, private_ride=private_ride,
+        return_pickup_date=return_pickup_date_obj, return_flight_number=return_flight_number,
+        return_flight_time=return_flight_time, return_pickup_time=return_pickup_time,
+        return_start_point=return_start_point, return_end_point=return_end_point,
+        message=message, notice=notice, price=final_price, toll=toll_value,
+        surcharge=surcharge_value, prepay=prepay, pending=pending,
+        paid=paid, cash=cash, is_confirmed=is_confirmed, driver=driver, region=region,
+        special_items=special_items, extra_stop=extra_stop, extra_stop_addresses=extra_stop_addresses,
+        same_extra_stop=same_extra_stop,
+    )
+
+    p.save()
+
+    user.delete()
+
+    ip = get_client_ip(request)
+    ip_info = get_ip_info(ip)
+    try:
+        asyncio.run(send_telegram_notification(
+            f"Clicked the confirm button (prepay):\n"
+            f"IP: `{ip}`\n"
+            f"Location: {ip_info}"
+        ))
+    except Exception as e:
+        logger.error(f"[TELEGRAM] Failed to send: {e}")
+
+    params = urlencode({'name': name, 'amount': final_price})
+    return redirect(f"/payonline/?{params}")
+
 
 # For Return Trip
 @ratelimit(key='ip', rate='5/m', method='POST', block=True)
