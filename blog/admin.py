@@ -242,7 +242,7 @@ class InquiryAdmin(admin.ModelAdmin):
         }),
         ('Pickup Info', {
             'fields': ['pickup_date', 'pickup_time', 'direction', 'flight_number', 'flight_time',
-                    'suburb', 'street', 'start_point', 'end_point', 'region', 'meeting_point',
+                    'suburb', 'street', 'start_point', 'end_point', 'region', 'customer_history',
                     'no_of_passenger', 'no_of_baggage', 'extra_stop', 'extra_stop_addresses', 'same_extra_stop']
         }),
         ('Return Info', {
@@ -304,7 +304,7 @@ class PostAdmin(admin.ModelAdmin):
         ('Pickup Info', {
             'fields': ['pickup_date', 'pickup_time', 'direction', 'flight_number', 'flight_time',
                     'suburb', 'street', 'start_point', 'end_point',
-                    'region', 'terminal_pickup_point', 'meeting_point',
+                    'region', 'terminal_pickup_point', 'customer_history',
                     'no_of_passenger', 'no_of_baggage',
                     'extra_stop', 'extra_stop_addresses', 'same_extra_stop']
         }),

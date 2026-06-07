@@ -6,14 +6,15 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.conf import settings
 from requests import request
-from blog.models import Inquiry
+from django.db.models import Q
+from blog.models import Inquiry, Post
 from regions.models import Region
 from regions.models import Terminal
 from basecamp.basecamp_utils import (
-    is_ajax, parse_baggage, parse_special_items, parse_date, handle_email_sending,
+    is_ajax, parse_baggage, parse_special_items, parse_date,
     verify_turnstile,
     render_inquiry_done, booking_success_response, require_turnstile,
-    is_duplicate_submission, parse_booking_dates, get_customer_status,
+    is_duplicate_submission, parse_booking_dates,
     get_client_ip,
 )
 from django_ratelimit.decorators import ratelimit
@@ -154,6 +155,12 @@ def inquiry_details(request):
         )
 
         p.price = calculate_inquiry_price(p, post_region)
+        inquiry_count = Inquiry.objects.filter(email__iexact=email).count()
+        post_count = Post.objects.filter(
+            Q(booker_email__iexact=email) | Q(email__iexact=email),
+            cancelled=False, pending=False,
+        ).count()
+        p.customer_history = f"Inquiry: {inquiry_count} | Post: {post_count}"
         p.save()
 
         ip = get_client_ip(request)
@@ -332,6 +339,12 @@ def inquiry_details1(request):
         )
         p.region = post_region
         p.price = calculate_inquiry_price(p, post_region)
+        inquiry_count = Inquiry.objects.filter(email__iexact=email).count()
+        post_count = Post.objects.filter(
+            Q(booker_email__iexact=email) | Q(email__iexact=email),
+            cancelled=False, pending=False,
+        ).count()
+        p.customer_history = f"Inquiry: {inquiry_count} | Post: {post_count}"
         p.save()
 
         ip = get_client_ip(request)

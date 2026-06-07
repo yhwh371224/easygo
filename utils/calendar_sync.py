@@ -170,7 +170,7 @@ def build_event_data(instance):
         f"d:{instance.return_pickup_date}" if instance.return_pickup_date else "",
         f"${instance.paid}" if instance.paid else "",
         f"end.:{instance.end_point}" if instance.end_point else "",
-        instance.meeting_point if instance.meeting_point else '',
+        instance.terminal_pickup_point.name if instance.terminal_pickup_point else '',
         instance.contact if contact_display != instance.contact else '',
     ]))
     if extra_stops_block:

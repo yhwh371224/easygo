@@ -44,7 +44,7 @@ class Inquiry(models.Model):
         related_name='inquiries',
         default=None,
     )
-    meeting_point = models.CharField(max_length=100, blank=True, null=True)
+    customer_history = models.CharField(max_length=100, blank=True, null=True)
     is_confirmed = models.BooleanField(default=False, blank=True)
     cash = models.BooleanField(default=False, blank=True)
     cruise = models.BooleanField(default=False, blank=True)
@@ -108,7 +108,7 @@ class Post(models.Model):
         related_name='posts',
         default=None,
     )
-    meeting_point = models.CharField(max_length=100, blank=True, null=True)
+    customer_history = models.CharField(max_length=100, blank=True, null=True)
     terminal_pickup_point = models.ForeignKey(
         'regions.TerminalPickupPoint',
         on_delete=models.SET_NULL,

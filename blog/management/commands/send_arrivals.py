@@ -166,12 +166,6 @@ class Command(BaseCommand):
             if getattr(booking, "notification_sent", False):
                 continue
 
-            if not booking.terminal_pickup_point and booking.meeting_point:
-                booking.terminal_pickup_point = TerminalPickupPoint.objects.filter(
-                    name=booking.meeting_point,
-                    terminal__airport__regions=booking.region,
-                ).first()
-
             driver = booking.driver
             pickup_time_12h = format_pickup_time_12h(booking.pickup_time)
 

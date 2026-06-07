@@ -309,8 +309,8 @@
         {% if post.flight_number %} · {{ post.flight_number }}{% endif %}
       </div>
 
-      {% if post.meeting_point %}
-        <div class="trip-meta">Meeting point: {{ post.meeting_point }}</div>
+      {% if post.terminal_pickup_point %}
+        <div class="trip-meta">Pickup point: {{ post.terminal_pickup_point.name }}</div>
       {% endif %}
 
       {% if post.street or post.suburb %}

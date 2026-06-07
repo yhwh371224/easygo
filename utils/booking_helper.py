@@ -58,8 +58,6 @@ def build_reminder_context(booking, pickup_time_12h, driver):
         'price': getattr(booking, "price", None),
         'reminder': getattr(booking, "reminder", None),
         'sms_reminder': getattr(booking, "sms_reminder", None),
-        'meeting_point': getattr(booking, "meeting_point", None),
-
         'driver_name': getattr(driver, "driver_name", None) if driver else None,
         'driver_contact': getattr(driver, "driver_contact", None) if driver else None,
         'driver_plate': getattr(driver, "driver_plate", None) if driver else None,
@@ -139,8 +137,8 @@ def update_meeting_point_for_arrivals():
         if flag_key not in driver_first_flag:
             driver_first_flag[flag_key] = True
 
-        if booking.meeting_point or booking.terminal_pickup_point_id:
-            # 수동 지정(terminal_pickup_point) 또는 기존 meeting_point → flag 소비 후 스킵
+        if booking.terminal_pickup_point_id:
+            # 수동 지정(terminal_pickup_point) → flag 소비 후 스킵
             driver_first_flag[flag_key] = False
             continue
 

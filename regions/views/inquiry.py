@@ -6,7 +6,8 @@ from django.shortcuts import render, get_object_or_404
 from django_ratelimit.decorators import ratelimit
 
 from regions.models import Region, RequestLog
-from blog.models import Inquiry
+from django.db.models import Q
+from blog.models import Inquiry, Post
 from regions.pricing import calculate_inquiry_price
 from basecamp.basecamp_utils import (
     require_turnstile, is_duplicate_submission,
@@ -106,6 +107,12 @@ def region_inquiry_details(request, region_slug):
         )
         p.region = region
         p.price = calculate_inquiry_price(p, region)
+        inquiry_count = Inquiry.objects.filter(email__iexact=email).count()
+        post_count = Post.objects.filter(
+            Q(booker_email__iexact=email) | Q(email__iexact=email),
+            cancelled=False, pending=False,
+        ).count()
+        p.customer_history = f"Inquiry: {inquiry_count} | Post: {post_count}"
         p.save()
 
         ip = get_client_ip(request)

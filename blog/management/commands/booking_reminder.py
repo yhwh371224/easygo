@@ -74,13 +74,7 @@ class Command(BaseCommand):
                     logger.warning(f"[{subject}] SKIP id={booking_reminder.id} — no driver")
                     continue
 
-                from regions.models import TerminalPickupPoint
-                if not booking_reminder.terminal_pickup_point and booking_reminder.meeting_point:
-                    booking_reminder.terminal_pickup_point = TerminalPickupPoint.objects.filter(
-                        name=booking_reminder.meeting_point,
-                        terminal__airport__regions=booking_reminder.region,
-                    ).first()
-                logger.info(f"[{subject}] id={booking_reminder.id} terminal_pickup_point={booking_reminder.terminal_pickup_point} meeting_point={booking_reminder.meeting_point}")
+                logger.info(f"[{subject}] id={booking_reminder.id} terminal_pickup_point={booking_reminder.terminal_pickup_point}")
 
                 driver = getattr(booking_reminder, "driver", None)
                 pickup_time_12h = format_pickup_time_12h(booking_reminder.pickup_time)
