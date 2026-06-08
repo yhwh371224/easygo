@@ -5,6 +5,7 @@ from urllib.parse import urlencode
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_POST
+from decimal import Decimal
 from basecamp.views.inquirys import _get_request_region
 from django_ratelimit.decorators import ratelimit
 from django.db.models import Q
@@ -542,7 +543,8 @@ def quick_rebook_confirm(request, region_slug=None):
         return redirect('basecamp:home')
 
     previous_name  = previous.name
-    previous_price = previous.price * 2 if (has_return and return_pickup_time) else previous.price
+    base_price = Decimal(previous.price)
+    previous_price = base_price * 2 if (has_return and return_pickup_time) else base_price
     previous_street = previous.street or ''
     region         = previous.region
     extra_stop     = int(request.POST.get('extra_stop') or previous.extra_stop or 0)
