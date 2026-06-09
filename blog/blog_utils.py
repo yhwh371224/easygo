@@ -48,15 +48,31 @@ def process_generic_payment(payment_instance, posts, admin_email, calculated_amo
         )
         return False, 0.0, set()
 
-    remaining_amount = float(calculated_amount or instance.amount or 0)
+    posts = posts.filter(
+        pickup_date__isnull=False,
+        pickup_date__gte=timezone.localdate(),
+    )
+    posts_list = list(posts)
+    has_future_bookings = bool(posts_list)
+
     total_balance = 0.0
+    for post in posts_list:
+        try:
+            balance = round(float(post.price or 0) - float(post.paid or 0), 2)
+        except (ValueError, TypeError):
+            continue
+        if balance > 0:
+            total_balance += balance
+
+    all_already_paid = has_future_bookings and total_balance == 0
+    remaining_amount = float(calculated_amount or instance.amount or 0)
     recipient_emails = set()
     method_label = "STRIPE" if hasattr(instance, 'payment_intent_id') else "PAYPAL"
 
-    for post in posts:
+    for post in posts_list:
         if remaining_amount <= 0:
             break
-            
+
         try:
             p_price = float(post.price or 0)
             p_paid = float(post.paid or 0)
@@ -66,21 +82,20 @@ def process_generic_payment(payment_instance, posts, admin_email, calculated_amo
         balance = round(p_price - p_paid, 2)
         if balance <= 0:
             continue
-        
-        total_balance += balance
+
         apply_now = min(remaining_amount, balance)
-        
-        # 실제 데이터 업데이트
+        total_balance -= apply_now
+
         new_paid = p_paid + apply_now
         post.paid = clean_float(new_paid)
         post.toll = "" if new_paid >= p_price else "short payment"
         post.reminder = True
         post.pending = False
         post.cancelled = False
-        
+
         new_entry = f"{method_label}: ${apply_now:.0f}"
         post.notice = f"{post.notice or ''} | {new_entry}".strip(" | ")
-        
+
         post.save()
         remaining_amount -= apply_now
         if post.booker_email:
@@ -92,16 +107,16 @@ def process_generic_payment(payment_instance, posts, admin_email, calculated_amo
     instance.processed_at = timezone.now()
     instance.save()
 
-    return True, total_balance, recipient_emails
+    return True, total_balance, recipient_emails, has_future_bookings, all_already_paid
 
 
-def send_payment_notification_email(instance, total_balance, recipient_emails, admin_email, method, raw_amount=None, net_amount=None, booker_name=None):
+def send_payment_notification_email(instance, total_balance, recipient_emails, admin_email, method, raw_amount=None, net_amount=None, booker_name=None, has_future_bookings=False, all_already_paid=False, nearest_post=None):
     if net_amount is None:
         net_amount = float(instance.amount or 0)
     if raw_amount is None:
         raw_amount = net_amount
 
-    remaining_balance = round(total_balance - net_amount, 2)
+    remaining_balance = round(total_balance, 2)
 
     # ✅ 고객에게만 이메일 (admin_email 제거)
     recipient_list = [email for email in recipient_emails if email]
@@ -117,14 +132,14 @@ def send_payment_notification_email(instance, total_balance, recipient_emails, a
         'amount': net_amount,
     }
 
-    if total_balance == 0:
+    if not has_future_bookings:
         template = "html_email-noIdentity.html" if method == "PAYPAL" else "html_email-noIdentity-stripe.html"
-    elif remaining_balance <= 0:
+    elif all_already_paid or remaining_balance <= 0:
         template = "html_email-payment-success.html" if method == "PAYPAL" else "html_email-payment-success-stripe.html"
     else:
         template = "html_email-response-discrepancy.html"
         context.update({
-            'price': round(total_balance, 2),
+            'price': round(net_amount + total_balance, 2),
             'paid': round(net_amount, 2),
             'diff': round(remaining_balance, 2)
         })
@@ -132,13 +147,32 @@ def send_payment_notification_email(instance, total_balance, recipient_emails, a
     html_content = render_email_template(template, context)
     send_html_email("Payment Received - EasyGo", html_content, recipient_list, from_email=DEFAULT_FROM_EMAIL)
 
-    # ✅ 관리자에게는 텔레그램 알림
-    send_telegram_sync(
-    f"💳 Payment received via {method}\n\n"
-    f"👤 {instance.name}\n"
-    f"📧 {instance.email}\n"
-    f"💰 ${net_amount}"
-)
+    amount_display = f"${raw_amount} (${net_amount})" if raw_amount != net_amount else f"${net_amount}"
+
+    if all_already_paid:
+        if nearest_post:
+            entry = f"paid again ${raw_amount} via {method.capitalize()}"
+            nearest_post.notice = f"{nearest_post.notice or ''} | {entry}".strip(" | ")
+            nearest_post.save()
+        send_telegram_sync(
+            f"All future bookings already fully paid but paid {method.capitalize()}: {amount_display}\n"
+            f"👤 {instance.name}\n"
+            f"📧 {instance.email}"
+        )
+    elif total_balance == 0:
+        send_telegram_sync(
+            f"No future bookings found. Manual action required.\n"
+            f"👤 {instance.name}\n"
+            f"📧 {instance.email}\n"
+            f"{method.capitalize()}: {amount_display}"
+        )
+    else:
+        send_telegram_sync(
+            f"💳 Payment received via {method}\n\n"
+            f"👤 {instance.name}\n"
+            f"📧 {instance.email}\n"
+            f"💰 ${net_amount}"
+        )
     
    
 def get_default_driver_for_region(region):

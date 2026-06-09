@@ -1,4 +1,5 @@
 from datetime import datetime, date
+from django.utils import timezone
 import requests
 import stripe
 from django.conf import settings
@@ -434,17 +435,46 @@ def create_stripe_checkout_session(request):
             if is_ajax(request):
                 return JsonResponse({'success': False, 'message': 'Too many requests. Please wait a moment and try again.'}, status=429)
             return render(request, '403.html', status=429)
+        email = request.POST.get('email', '').strip()
+        if not email:
+            return JsonResponse({'error': 'Email required'}, status=400)
+
+        today = timezone.localdate()
+        future_posts = Post.objects.filter(
+            Q(booker_email__iexact=email) | Q(email__iexact=email),
+            pickup_date__isnull=False,
+            pickup_date__gte=today,
+        )
+
+        total_cents = 0
+        for post in future_posts:
+            try:
+                p_price = float(post.price or 0)
+                p_paid = float(post.paid or 0)
+            except (ValueError, TypeError):
+                continue
+            balance = round(p_price - p_paid, 2)
+            if balance > 0:
+                total_cents += round(balance * 100)
+
+        if total_cents <= 0:
+            return JsonResponse({'error': 'No outstanding balance found for this email'}, status=400)
+
         session = stripe.checkout.Session.create(
             payment_method_types=['card'],
             line_items=[{
-            'price': 'price_1PRwKAI9LkpP3oK9hQF7BHj7', 
-            'quantity': 1,
+                'price_data': {
+                    'currency': 'aud',
+                    'unit_amount': total_cents,
+                    'product_data': {'name': 'EasyGo Airport Transfer'},
+                },
+                'quantity': 1,
             }],
             mode='payment',
             success_url='https://easygoshuttle.com.au/success/',
-            cancel_url='https://easygoshuttle.com.au/cancel/',                
+            cancel_url='https://easygoshuttle.com.au/cancel/',
         )
-        
+
         return JsonResponse({'id': session.id})
        
 

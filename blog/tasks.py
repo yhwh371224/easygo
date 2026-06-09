@@ -3,6 +3,7 @@ import logging
 
 from django.db import transaction
 from django.db.models import Q
+from django.utils import timezone
 
 from celery import shared_task
 
@@ -59,15 +60,19 @@ def notify_user_payment_paypal(instance_id):
 
         posts = Post.objects.filter(
             Q(booker_email__iexact=instance.email) |
-            Q(email__iexact=instance.email) | 
+            Q(email__iexact=instance.email) |
             Q(name__iexact=instance.name)
         ).order_by('pickup_date')
-        
-        success, total_balance, recipient_emails = process_generic_payment(
+
+        success, total_balance, recipient_emails, has_future_bookings, all_already_paid = process_generic_payment(
             instance, posts, RECIPIENT_EMAIL, calculated_amount
         )
         first_post = posts.first()
         booker_name = first_post.booker_name if first_post else None
+        nearest_future_post = posts.filter(
+            pickup_date__isnull=False,
+            pickup_date__gte=timezone.localdate(),
+        ).first()
 
         if not success: return
 
@@ -77,6 +82,9 @@ def notify_user_payment_paypal(instance_id):
         raw_amount=raw_amount,
         net_amount=calculated_amount,
         booker_name=booker_name,
+        has_future_bookings=has_future_bookings,
+        all_already_paid=all_already_paid,
+        nearest_post=nearest_future_post,
     )
 
 
@@ -96,9 +104,13 @@ def notify_user_payment_stripe(instance_id):
             Q(name__iexact=instance.name)
         ).order_by('pickup_date')
 
-        success, total_balance, recipient_emails = process_generic_payment(instance, posts, RECIPIENT_EMAIL)
+        success, total_balance, recipient_emails, has_future_bookings, all_already_paid = process_generic_payment(instance, posts, RECIPIENT_EMAIL)
         first_post = posts.first()
         booker_name = first_post.booker_name if first_post else None
+        nearest_future_post = posts.filter(
+            pickup_date__isnull=False,
+            pickup_date__gte=timezone.localdate(),
+        ).first()
 
         if not success: return
 
@@ -106,6 +118,9 @@ def notify_user_payment_stripe(instance_id):
         instance, total_balance, recipient_emails, RECIPIENT_EMAIL,
         method="STRIPE",
         booker_name=booker_name,
+        has_future_bookings=has_future_bookings,
+        all_already_paid=all_already_paid,
+        nearest_post=nearest_future_post,
     )
 
 
