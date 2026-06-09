@@ -38,21 +38,17 @@ class Command(BaseCommand):
                     
                     flight_valid = False
 
-                    # Special exception for exactly '5j39' (case-insensitive)
-                    if flight_number_cleaned.lower() == '5j39':
-                        flight_valid = True
-                    else:
-                        match = re.match(r'^([A-Z]{1,3})(\d+)$', flight_number_cleaned)
+                    match = re.match(r'^([A-Z]\d|\d[A-Z]|[A-Z]{1,3})(\d+)$', flight_number_cleaned)
 
-                        if match:
-                            airline_code = match.group(1)
-                            number_part_raw = match.group(2)
-                            number_part_no_zero = number_part_raw.lstrip('0')
+                    if match:
+                        airline_code = match.group(1)
+                        number_part_raw = match.group(2)
+                        number_part_no_zero = number_part_raw.lstrip('0')
 
-                            if len(number_part_no_zero) <= 4:
-                                number_part = str(int(number_part_raw))  
-                                flight_number_final = airline_code + number_part
-                                flight_valid = bool(re.match(r'^[A-Z]{1,3}\d{1,4}$', flight_number_final))
+                        if 1 <= len(number_part_no_zero) <= 4:
+                            number_part = str(int(number_part_raw))
+                            flight_number_final = airline_code + number_part
+                            flight_valid = bool(re.match(r'^([A-Z]\d|\d[A-Z]|[A-Z]{1,3})\d{1,4}$', flight_number_final))
 
                     flight_issue = not flight_valid
                     if flight_issue:

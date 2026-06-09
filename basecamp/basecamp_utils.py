@@ -119,15 +119,12 @@ def check_and_send_missing_info_email(post):
     if post.direction and post.direction.strip().lower() in AIRPORT_PICKUPS:
         flight_valid = False
 
-        if flight_number_cleaned.lower() == '5j39':
-            flight_valid = True
-        else:
-            match = re.match(r'^([A-Z]{1,3})(\d+)$', flight_number_cleaned)
-            if match:
-                number_part_raw = match.group(2)
-                number_part_no_zero = number_part_raw.lstrip('0')
-                if len(number_part_no_zero) <= 4:
-                    flight_valid = True
+        match = re.match(r'^([A-Z]\d|\d[A-Z]|[A-Z]{1,3})(\d+)$', flight_number_cleaned)
+        if match:
+            number_part_raw = match.group(2)
+            number_part_no_zero = number_part_raw.lstrip('0')
+            if 1 <= len(number_part_no_zero) <= 4:
+                flight_valid = True
 
         if not flight_valid:
             issues.append('Flight number is missing or invalid')
