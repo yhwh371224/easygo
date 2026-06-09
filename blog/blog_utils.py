@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.db.models import Q
 from main.settings import DEFAULT_FROM_EMAIL
 from basecamp.basecamp_utils import render_email_template
-from blog.models import Driver
+from blog.models import Driver, Post
 from regions.models import RegionSuburb
 from utils.email import send_text_email, send_html_email
 from utils.telegram import send_telegram_sync
@@ -155,17 +155,35 @@ def send_payment_notification_email(instance, total_balance, recipient_emails, a
             nearest_post.notice = f"{nearest_post.notice or ''} | {entry}".strip(" | ")
             nearest_post.save()
         send_telegram_sync(
-            f"All future bookings already fully paid but paid {method.capitalize()}: {amount_display}\n"
+            f"Fully paid but paid again {method.capitalize()}: {amount_display}\n"
             f"👤 {instance.name}\n"
             f"📧 {instance.email}"
         )
     elif total_balance == 0:
-        send_telegram_sync(
-            f"No future bookings found. Manual action required.\n"
-            f"👤 {instance.name}\n"
-            f"📧 {instance.email}\n"
-            f"{method.capitalize()}: {amount_display}"
-        )
+        name_matched = list(Post.objects.filter(
+            name__iexact=instance.name,
+            pickup_date__isnull=False,
+            pickup_date__gte=timezone.localdate(),
+        ))
+        if name_matched:
+            for post in name_matched:
+                entry = f"{method}: ${net_amount:.0f} (payer email mismatch: {instance.email})"
+                Post.objects.filter(pk=post.pk).update(
+                    notice=(f"{post.notice} | {entry}" if post.notice else entry)
+                )
+            send_telegram_sync(
+                f"💳 Payment matched by name via {method} (email mismatch)\n\n"
+                f"👤 {instance.name}\n"
+                f"📧 {instance.email}\n"
+                f"💰 {amount_display}"
+            )
+        else:
+            send_telegram_sync(
+                f"No future bookings found. Manual action required.\n"
+                f"👤 {instance.name}\n"
+                f"📧 {instance.email}\n"
+                f"{method.capitalize()}: {amount_display}"
+            )
     else:
         send_telegram_sync(
             f"💳 Payment received via {method}\n\n"
