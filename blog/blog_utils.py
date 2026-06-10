@@ -159,31 +159,13 @@ def send_payment_notification_email(instance, total_balance, recipient_emails, a
             f"👤 {instance.name}\n"
             f"📧 {instance.email}"
         )
-    elif total_balance == 0:
-        name_matched = list(Post.objects.filter(
-            name__iexact=instance.name,
-            pickup_date__isnull=False,
-            pickup_date__gte=timezone.localdate(),
-        ))
-        if name_matched:
-            for post in name_matched:
-                entry = f"{method}: ${net_amount:.0f} (payer email mismatch: {instance.email})"
-                Post.objects.filter(pk=post.pk).update(
-                    notice=(f"{post.notice} | {entry}" if post.notice else entry)
-                )
-            send_telegram_sync(
-                f"💳 Payment matched by name via {method} (email mismatch)\n\n"
-                f"👤 {instance.name}\n"
-                f"📧 {instance.email}\n"
-                f"💰 {amount_display}"
-            )
-        else:
-            send_telegram_sync(
-                f"No future bookings found. Manual action required.\n"
-                f"👤 {instance.name}\n"
-                f"📧 {instance.email}\n"
-                f"{method.capitalize()}: {amount_display}"
-            )
+    elif not has_future_bookings:
+        send_telegram_sync(
+            f"No future bookings found. Manual action required.\n"
+            f"👤 {instance.name}\n"
+            f"📧 {instance.email}\n"
+            f"{method.capitalize()}: {amount_display}"
+        )
     else:
         send_telegram_sync(
             f"💳 Payment received via {method}\n\n"
