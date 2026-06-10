@@ -70,7 +70,7 @@ class Command(BaseCommand):
             try:
                 logger.info(f"[{subject}] Processing booking id={booking_reminder.id} email={booking_reminder.email} booker_email={booking_reminder.booker_email}")
 
-                if not booking_reminder.driver:
+                if not booking_reminder.driver and subject == "Reminder-Today":
                     logger.warning(f"[{subject}] SKIP id={booking_reminder.id} — no driver")
                     continue
 
