@@ -143,7 +143,7 @@
 										<tr>
 											<td align="left" style="padding-top:28px;padding-left:0;">
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
-													Your airport pickup is <strong>today</strong> — {{ pickup_date|date:"l, j F Y" }}.<br><br>
+													Your pickup day is <strong>today</strong> — {{ pickup_date|date:"l, j F Y" }}.<br><br>
 												</p>
 
 												{% if cash %}
@@ -152,54 +152,103 @@
 													</p>
 												{% endif %}
 
-												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:16px;border-bottom: 2px solid #E1E1E1;padding-bottom:16px;">
+												<!-- Pickup location map -->
+												{% if is_intl %}
+													<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:16px;border-bottom: 2px solid #E1E1E1;padding-bottom:16px;">
 													• Arrival Date: {{ pickup_date|date:"l, j F Y" }}<br>
 													• Flight Number: {{ flight_number }} <small>(ETA {{ flight_time }})</small><br>
 													• Pickup around {{ pickup_time }}<br>
-												</p>
-
-												<!-- Pickup location map -->
-												{% if is_intl %}
-												<p style="Margin:0;font-size:13px;font-weight:bold;line-height:20px;Margin-bottom:8px;color:#4F5557;">
-													📍 International Terminal — Pickup Location
-												</p>
-												<table role="presentation" style="border-spacing:0;margin-bottom:20px;">
-													<tr>
-														<td style="border-radius:6px;background-color:#277fd2;text-align:center;padding:0;">
-															<a href="https://easygo.s3.ap-southeast-2.amazonaws.com/sydmap.svg"
-															   target="_blank"
-															   style="display:inline-block;padding:11px 24px;font-size:14px;font-weight:bold;color:#ffffff;text-decoration:none;font-family:'Lato',sans-serif,Arial,Helvetica;">
-																View Pickup Map
-															</a>
-														</td>
-													</tr>
-												</table>
+													</p>
+													<p style="Margin:0;font-size:13px;font-weight:bold;line-height:20px;Margin-bottom:8px;color:#4F5557;">
+														📍 International Terminal — Pickup Location
+													</p>
+													<table role="presentation" style="border-spacing:0;margin-bottom:20px;">
+														<tr>
+															<td style="border-radius:6px;background-color:#277fd2;text-align:center;padding:0;">
+																<a href="https://easygo.s3.ap-southeast-2.amazonaws.com/sydmap.svg"
+																target="_blank"
+																style="display:inline-block;padding:11px 24px;font-size:14px;font-weight:bold;color:#ffffff;text-decoration:none;font-family:'Lato',sans-serif,Arial,Helvetica;">
+																	View Pickup Map
+																</a>
+															</td>
+														</tr>
+													</table>
+													<!-- Key arrival instructions -->
+													<p style="margin:0; font-size:16px; line-height:24px; font-weight:bold; margin-top:16px;">
+														✈️ On Arrival — Please Note:
+													</p>
+													<p style="Margin:0;font-size:14px;line-height:24px;Margin-top:10px;Margin-bottom:8px;padding:12px 14px;background-color:#fff8f2;border-left:4px solid #eb7828;">
+														<strong>1.</strong> Once your flight lands, <span style="color:#eb7828;font-weight:bold;">please check your email for any updated information</span> from us before you proceed.
+													</p>
+													<p style="Margin:0;font-size:14px;line-height:24px;Margin-top:10px;Margin-bottom:8px;padding:12px 14px;background-color:#fff8f2;border-left:4px solid #eb7828;">
+														<strong>2.</strong> After collecting your luggage, <span style="color:#eb7828;font-weight:bold;">please call your driver</span> to let them know you have collected your bags.<br>
+														Your driver will then tell you exactly where to meet.
+													</p>
+													<p style="Margin:0;font-size:14px;line-height:24px;Margin-top:10px;Margin-bottom:16px;padding:12px 14px;background-color:#fff8f2;border-left:4px solid #eb7828;">
+														<strong>3.</strong> You can use the <span style="color:#eb7828;font-weight:bold;">pickup map above</span> to find your way to the meeting point.
+													</p>
 												{% elif is_domestic %}
-												<p style="Margin:0;font-size:13px;font-weight:bold;line-height:20px;Margin-bottom:6px;color:#4F5557;">
-													📍 Domestic Terminal — Pickup Map
-												</p>
-												<p style="Margin:0;Margin-bottom:20px;">
-													<img src="https://easygo.s3.ap-southeast-2.amazonaws.com/t2shuttlebusbay.webp"
-														 alt="Sydney Domestic Terminal Pickup Map"
-														 width="460"
-														 style="border-width:0;max-width:100%;height:auto;display:block;">
-												</p>
-												{% endif %}
-
-												<!-- Key arrival instructions -->
-												<p style="margin:0; font-size:16px; line-height:24px; font-weight:bold; margin-top:16px;">
-													✈️ On Arrival — Please Note:
-												</p>
-												<p style="Margin:0;font-size:14px;line-height:24px;Margin-top:10px;Margin-bottom:8px;padding:12px 14px;background-color:#fff8f2;border-left:4px solid #eb7828;">
-													<strong>1.</strong> Once your flight lands, <span style="color:#eb7828;font-weight:bold;">please check your email for any updated information</span> from us before you proceed.
-												</p>
-												<p style="Margin:0;font-size:14px;line-height:24px;Margin-top:10px;Margin-bottom:8px;padding:12px 14px;background-color:#fff8f2;border-left:4px solid #eb7828;">
-													<strong>2.</strong> After collecting your luggage, <span style="color:#eb7828;font-weight:bold;">please call your driver</span> to let them know you have collected your bags.<br>
-													Your driver will then tell you exactly where to meet.
-												</p>
-												<p style="Margin:0;font-size:14px;line-height:24px;Margin-top:10px;Margin-bottom:16px;padding:12px 14px;background-color:#fff8f2;border-left:4px solid #eb7828;">
-													<strong>3.</strong> You can use the <span style="color:#eb7828;font-weight:bold;">pickup map above</span> to find your way to the meeting point.
-												</p>
+													<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:16px;border-bottom: 2px solid #E1E1E1;padding-bottom:16px;">
+													• Arrival Date: {{ pickup_date|date:"l, j F Y" }}<br>
+													• Flight Number: {{ flight_number }} <small>(ETA {{ flight_time }})</small><br>
+													• Pickup around {{ pickup_time }}<br>
+													</p>
+													<p style="Margin:0;font-size:13px;font-weight:bold;line-height:20px;Margin-bottom:6px;color:#4F5557;">
+														📍 Domestic Terminal — Pickup Map
+													</p>
+													<p style="Margin:0;Margin-bottom:20px;">
+														<img src="https://easygo.s3.ap-southeast-2.amazonaws.com/t2shuttlebusbay.webp"
+															alt="Sydney Domestic Terminal Pickup Map"
+															width="460"
+															style="border-width:0;max-width:100%;height:auto;display:block;">
+													</p>
+													<!-- Key arrival instructions -->
+													<p style="margin:0; font-size:16px; line-height:24px; font-weight:bold; margin-top:16px;">
+														✈️ On Arrival — Please Note:
+													</p>
+													<p style="Margin:0;font-size:14px;line-height:24px;Margin-top:10px;Margin-bottom:8px;padding:12px 14px;background-color:#fff8f2;border-left:4px solid #eb7828;">
+														<strong>1.</strong> Once your flight lands, <span style="color:#eb7828;font-weight:bold;">please check your email for any updated information</span> from us before you proceed.
+													</p>
+													<p style="Margin:0;font-size:14px;line-height:24px;Margin-top:10px;Margin-bottom:8px;padding:12px 14px;background-color:#fff8f2;border-left:4px solid #eb7828;">
+														<strong>2.</strong> After collecting your luggage, <span style="color:#eb7828;font-weight:bold;">please call your driver</span> to let them know you have collected your bags.<br>
+														Your driver will then tell you exactly where to meet.
+													</p>
+													<p style="Margin:0;font-size:14px;line-height:24px;Margin-top:10px;Margin-bottom:16px;padding:12px 14px;background-color:#fff8f2;border-left:4px solid #eb7828;">
+														<strong>3.</strong> You can use the <span style="color:#eb7828;font-weight:bold;">pickup map above</span> to find your way to the meeting point.
+													</p>
+												{% elif cruise %}
+													<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
+														<br>
+														Please be ready at your scheduled pickup time of {{ pickup_time }}.<br>
+														We kindly request that you contact your driver 60 minutes before pickup to ensure a smooth and seamless experience<br><br>
+													</p>
+													<table width="100%" style="border-spacing:0;background-color:#fef6f0;margin-bottom:20px;" role="presentation">
+														<tr>
+															<td style="padding:15px;color:#af865f;">
+																<strong>=== Driver's details ===</strong><br>
+																• Name: {{ driver_name }}<br>
+																• Phone:
+																{% if bird_number %}
+																	<a href="tel:{{ bird_number }}">{{ bird_number }}</a>
+																{% else %}
+																	<a href="tel:{{ driver_contact }}">{{ driver_contact }}</a>
+																{% endif %}<br>
+																• Vehicle: {{ driver_car }}<br>
+																{% if driver_plate %}
+																• Vehicle plate: {{ driver_plate }}<br>
+																{% endif %}
+																<small>Please note that our driver may contact you via text or phone at {{ contact }}.</small><br>
+															</td>
+														</tr>
+													</table>
+												{% else %}
+													<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
+														Please be ready on your pickup time, {{ pickup_time }}<br><br></p>
+													<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
+														Delays greater than 5 mins from pickup time creates last min reschedule expenses
+														and additional liabilities to other scheduled passengers, additional charge will apply<br>
+														More details >><a href="https://easygoshuttle.com.au/information">&nbsp;click here</a><br><br></p>
+												{% endif %}												
 
 												<p style="Margin:0;font-size:12px;line-height:21px;Margin-top:12px;Margin-bottom:12px;">
 													<span style="color: #eb7828">Please note:</span><br>
