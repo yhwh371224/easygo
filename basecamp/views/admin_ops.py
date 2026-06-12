@@ -481,6 +481,7 @@ def email_dispatch_detail(request):
                     'pickup_time': user_today.pickup_time,
                     'contact': user_today.contact,
                     'terminal_pickup_point': user_today.terminal_pickup_point,
+                    'city': user_today.region.name if user_today.region_id else '',
                     'direction': normalize_direction(user_today.direction),
                     'cash': user_today.cash,
                     'cruise': user_today.cruise,

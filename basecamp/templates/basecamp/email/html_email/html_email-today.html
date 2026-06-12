@@ -146,7 +146,7 @@
 													Your pickup day is <strong>today</strong> — {{ pickup_date|date:"l, j F Y" }}.<br><br>
 												</p>
 
-												{% if cash %}
+												{% if cash and not paid %}
 													<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
 														Please note that the driver may not have a card machine available. We kindly ask you to prepare the cash in advance.<br><br>
 													</p>
@@ -198,7 +198,7 @@
 													</p>
 													<p style="Margin:0;Margin-bottom:20px;">
 														<img src="https://easygo.s3.ap-southeast-2.amazonaws.com/t2shuttlebusbay.webp"
-															alt="Sydney Domestic Terminal Pickup Map"
+															alt="{% if city %}{{ city }} {% endif %}Domestic Terminal Pickup Map"
 															width="460"
 															style="border-width:0;max-width:100%;height:auto;display:block;">
 													</p>

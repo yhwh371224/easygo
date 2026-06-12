@@ -121,8 +121,8 @@
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
 													There has been a slight update to your pickup details. Please refer to the information below as the most accurate and up-to-date.<br><br>
 
-													{% if cash %}
-														We kindly ask that you <span style="color: #eb7828">email us immediately</span> upon your arrival in Sydney
+													{% if cash and not paid %}
+														We kindly ask that you <span style="color: #eb7828">email us immediately</span> upon your arrival{% if city %} in {{ city }}{% endif %}
 														and ensure that your mobile phone remains switched on.<br><br>
 														Please note that the driver may not have a card machine available.
 														We kindly ask you to prepare the cash in advance.<br><br>
@@ -174,8 +174,8 @@
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
 													There has been a slight update to your pickup details. Please refer to the information below as the most accurate and up-to-date.<br><br>
 
-													{% if cash %}
-														We kindly ask that you <span style="color: #eb7828">email us immediately</span> upon your arrival in Sydney
+													{% if cash and not paid %}
+														We kindly ask that you <span style="color: #eb7828">email us immediately</span> upon your arrival{% if city %} in {{ city }}{% endif %}
 														and ensure that your mobile phone remains switched on.<br><br>
 														Please note that the driver may not have a card machine available.
 														We kindly ask you to prepare the cash in advance.<br><br>
@@ -243,8 +243,8 @@
 												</td>
 												    </tr>
 												</table>
-												{% if cash %}
-													We kindly ask that you <span style="color: #eb7828">email us </span> upon your arrival in Sydney<br><br>
+												{% if cash and not paid %}
+													We kindly ask that you <span style="color: #eb7828">email us </span> upon your arrival{% if city %} in {{ city }}{% endif %}<br><br>
 													Please note that the driver may not have a card machine available. We kindly ask you to prepare the cash in advance<br>
 												{% endif %}
 
@@ -255,7 +255,7 @@
 													Delays greater than 5 mins from pickup time creates last min reschedule expenses
 													and additional liabilities to other scheduled passengers, additional charge will apply<br>
 													More details >><a href="https://easygoshuttle.com.au/information">&nbsp;click here</a><br><br></p>
-												{% if cash|default:False %}
+												{% if cash and not paid %}
 													Please note that the driver may not have a card machine available. We kindly ask you to <span style="color: #eb7828; font-weight: bold">prepare the cash in advance</span><br><br>
 												{% endif %}
                                             {% endif %}

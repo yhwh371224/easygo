@@ -72,6 +72,8 @@ def build_reminder_context(booking, pickup_time_12h, driver):
 
         'bird_number': bird_number,
 
+        'city': booking.region.name if booking.region_id else '',
+
         'post': booking,
     }
 

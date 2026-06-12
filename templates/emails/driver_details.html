@@ -145,11 +145,11 @@
 										</tr>
 										<tr>
 											<td align="left" style="padding-top:28px;padding-left:0;">
-											{% if direction == 'Pickup from Intl Airport' %}
+											{% if is_intl %}
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
 
-													{% if cash %}
-														We kindly ask that you <span style="color: #eb7828">email us immediately</span> upon your arrival in Sydney
+													{% if cash and not paid	%}
+														We kindly ask that you <span style="color: #eb7828">email us immediately</span> upon your arrival{% if city %} in {{ city }}{% endif %}
 														and ensure that your mobile phone remains switched on.<br><br>
 
 														Please note that the driver may not have a card machine available.
@@ -199,11 +199,11 @@
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
 													If there are any changes, you will be notified by email or SMS<br><br><br></p>
 
-											{% elif direction == 'Pickup from Domestic Airport' %}
+											{% elif is_domestic %}
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
 
-													{% if cash %}
-														We kindly ask that you <span style="color: #eb7828">email us immediately</span> upon your arrival in Sydney
+													{% if cash and not paid	%}
+														We kindly ask that you <span style="color: #eb7828">email us immediately</span> upon your arrival{% if city %} in {{ city }}{% endif %}
 														and ensure that your mobile phone remains switched on.<br><br>
 
 														Please note that the driver may not have a card machine available.
@@ -281,8 +281,8 @@
 												    </tr>
 												</table>
 
-													{% if cash %}
-														We kindly ask that you <span style="color: #eb7828">email us </span> upon your arrival in Sydney</span><br><br>
+													{% if cash and not paid %}
+														We kindly ask that you <span style="color: #eb7828">email us </span> upon your arrival{% if city %} in {{ city }}{% endif %}<br><br>
 														Please note that the driver may not have a card machine available. We kindly ask you to prepare the cash in advance<br>
 													{% endif %}
 
@@ -294,7 +294,7 @@
 													and additional liabilities to other scheduled passengers, additional charge will apply<br>
 													More details >><a href="https://easygoshuttle.com.au/information">&nbsp;click here</a><br><br></p>
 
-													{% if cash|default:False %}
+													{% if cash and not paid %}
 														Please note that the driver may not have a card machine available. We kindly ask you to <span style="color: #eb7828; font-weight: bold">prepare the cash in advance</span><br><br>
 													{% endif %}
 
