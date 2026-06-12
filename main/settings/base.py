@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'posting_agent.apps.PostingAgentConfig',
     'articles.apps.ArticlesConfig',
     'regions.apps.RegionsConfig',
+    'accounting.apps.AccountingConfig',
     'admin_honeypot',
     'allauth',
     'allauth.account',
