@@ -144,7 +144,8 @@
 											<td align="left" style="padding-top:28px;padding-left:0;">
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
 													Your pickup day is <strong>today</strong> — {{ pickup_date|date:"l, j F Y" }}.<br><br>
-												</p>
+													EasyGo driver will pick you up at your requested pickup time, {{ pickup_time }}, as scheduled.
+												</p>												
 
 												{% if cash and not paid %}
 													<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
@@ -157,7 +158,7 @@
 													<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:16px;border-bottom: 2px solid #E1E1E1;padding-bottom:16px;">
 													• Arrival Date: {{ pickup_date|date:"l, j F Y" }}<br>
 													• Flight Number: {{ flight_number }} <small>(ETA {{ flight_time }})</small><br>
-													• Pickup around {{ pickup_time }}<br>
+													• Pickup at {{ pickup_time }}<br>
 													</p>
 													<p style="Margin:0;font-size:13px;font-weight:bold;line-height:20px;Margin-bottom:8px;color:#4F5557;">
 														📍 International Terminal — Pickup Location
@@ -181,7 +182,7 @@
 														<strong>1.</strong> Once your flight lands, <span style="color:#eb7828;font-weight:bold;">please check your email for any updated information</span> from us before you proceed.
 													</p>
 													<p style="Margin:0;font-size:14px;line-height:24px;Margin-top:10px;Margin-bottom:8px;padding:12px 14px;background-color:#fff8f2;border-left:4px solid #eb7828;">
-														<strong>2.</strong> After collecting your luggage, <span style="color:#eb7828;font-weight:bold;">please call your driver</span> to let them know you have collected your bags.<br>
+														<strong>2.</strong> After collecting your luggage, <span style="color:#eb7828;font-weight:bold;">please call/message your driver</span> to let them know you have collected your bags.<br>
 														Your driver will then tell you exactly where to meet.
 													</p>
 													<p style="Margin:0;font-size:14px;line-height:24px;Margin-top:10px;Margin-bottom:16px;padding:12px 14px;background-color:#fff8f2;border-left:4px solid #eb7828;">
@@ -191,7 +192,7 @@
 													<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:16px;border-bottom: 2px solid #E1E1E1;padding-bottom:16px;">
 													• Arrival Date: {{ pickup_date|date:"l, j F Y" }}<br>
 													• Flight Number: {{ flight_number }} <small>(ETA {{ flight_time }})</small><br>
-													• Pickup around {{ pickup_time }}<br>
+													• Pickup at {{ pickup_time }}<br>
 													</p>
 													<p style="Margin:0;font-size:13px;font-weight:bold;line-height:20px;Margin-bottom:6px;color:#4F5557;">
 														📍 Domestic Terminal — Pickup Map
@@ -210,7 +211,7 @@
 														<strong>1.</strong> Once your flight lands, <span style="color:#eb7828;font-weight:bold;">please check your email for any updated information</span> from us before you proceed.
 													</p>
 													<p style="Margin:0;font-size:14px;line-height:24px;Margin-top:10px;Margin-bottom:8px;padding:12px 14px;background-color:#fff8f2;border-left:4px solid #eb7828;">
-														<strong>2.</strong> After collecting your luggage, <span style="color:#eb7828;font-weight:bold;">please call your driver</span> to let them know you have collected your bags.<br>
+														<strong>2.</strong> After collecting your luggage, <span style="color:#eb7828;font-weight:bold;">please call/message your driver</span> to let them know you have collected your bags.<br>
 														Your driver will then tell you exactly where to meet.
 													</p>
 													<p style="Margin:0;font-size:14px;line-height:24px;Margin-top:10px;Margin-bottom:16px;padding:12px 14px;background-color:#fff8f2;border-left:4px solid #eb7828;">

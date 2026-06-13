@@ -157,7 +157,7 @@
 													</p>
 												{% endif %}
 
-												{% if cash %}	
+												{% if cash and not paid %}	
 													<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">													
 														Please note that the driver may not have a card machine available. We kindly ask you to prepare the cash in advance<br><br>
 													</p>											
@@ -169,7 +169,7 @@
 														• Flight number: {{ flight_number }} <small>(ETA {{ flight_time }})</small><br>
 														• Pickup around {{ pickup_time }}<br><br>
 
-														{% if cash %}
+														{% if cash and not paid %}
 															<span style="color: #eb7828">We kindly request that you email us before boarding your flight and after landing to Sydney</span><br><br>													
 														{% else %}
 															<span style="color: #eb7828">After landing, please check your email. You will be notified of the meeting details via email or SMS</span><br><br>

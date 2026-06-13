@@ -155,7 +155,7 @@
 													</p>
 												{% endif %}
 
-												{% if cash %}
+												{% if cash and not paid %}
 													<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
 														Please note that the driver may not have a card machine available. We kindly ask you to prepare the cash in advance.<br><br>
 													</p>
@@ -164,7 +164,7 @@
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:16px;border-bottom: 2px solid #E1E1E1;padding-bottom:16px;">
 													• Arrival Date: {{ pickup_date|date:"l, j F Y" }}<br>
 													• Flight Number: {{ flight_number }} <small>(ETA {{ flight_time }})</small><br>
-													• Pickup around {{ pickup_time }}<br>
+													• Pickup at {{ pickup_time }}<br>
 												</p>
 
 												<!-- Arrival Guide Button -->
@@ -218,7 +218,7 @@
 													<strong>1.</strong> Once your flight lands, <span style="color:#eb7828;font-weight:bold;">please check your email for any updated information</span> from us before you proceed.
 												</p>
 												<p style="Margin:0;font-size:14px;line-height:24px;Margin-top:10px;Margin-bottom:16px;padding:12px 14px;background-color:#fff8f2;border-left:4px solid #eb7828;">
-													<strong>2.</strong> After collecting your luggage, <span style="color:#eb7828;font-weight:bold;">please call your driver on the number shown in the email</span> to let them know you have collected your bags.<br>
+													<strong>2.</strong> After collecting your luggage, <span style="color:#eb7828;font-weight:bold;">please call/message your driver</span> to let them know you have collected your bags.<br>
 													The driver will then come to the meeting point to pick you up.
 												</p>
 

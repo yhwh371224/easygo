@@ -150,7 +150,7 @@
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
                                                     Upcoming your booking on {{ pickup_date|date:"Y-m-d" }}<br><br>
                                                     Your booking day is only 3 days away<br><br></p>
-											{% if not reminder or cash %}	
+											{% if not reminder %}	
 												<p style="margin:0; font-size:16px; line-height:24px; font-weight:bold;">
 													✨ Important Notice:  
 												</p>																				
@@ -160,7 +160,7 @@
 												</p>
 											{% endif %}	
 
-											{% if cash %}	
+											{% if cash and not paid %}	
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">													
 													Please note that the driver may not have a card machine available. We kindly ask you to prepare the cash in advance<br><br></p>											
 											{% endif %}
@@ -169,7 +169,7 @@
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
 													• Sydney arrival date: {{ pickup_date|date:"Y-m-d" }}<br> 
 												    • Flight number: {{ flight_number }} <small>(ETA {{ flight_time }})</small><br>	
-													{% if cash %}
+													{% if cash and not paid %}
 														<span style="color: #eb7828">We kindly request that you email us before boarding your flight and after landing to Sydney</span><br><br>													
 													{% else %}
 														<span style="color: #eb7828">After landing, please check your email. You will be notified of the meeting details via email or SMS</span><br><br>
