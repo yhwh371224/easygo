@@ -10,6 +10,15 @@
 {% endblock %}
 
 {% block content %}
+<style>
+  .report-table { border-collapse: collapse; min-width: 560px; }
+  .report-table th,
+  .report-table td { padding: 8px 12px; border-bottom: 1px solid #eee; }
+  .report-table thead tr { border-bottom: 2px solid #ccc; }
+  .report-table td.num,
+  .report-table th.num { text-align: right; width: 14em; }
+</style>
+
 <h1>Business Activity Statement &mdash; Cash Basis</h1>
 
 <form method="get" style="margin-bottom:1.5em;">
@@ -48,12 +57,12 @@
 {# GST                                                                  #}
 {# ------------------------------------------------------------------ #}
 <h2>GST</h2>
-<table>
+<table class="report-table">
   <thead>
     <tr>
       <th style="width:7em;">Label</th>
       <th>Description</th>
-      <th style="text-align:right; width:14em;">AUD</th>
+      <th class="num">AUD</th>
     </tr>
   </thead>
   <tbody>
@@ -62,38 +71,38 @@
     <tr style="background:#f0fff4;">
       <th>1A</th>
       <th>GST on sales (collected)</th>
-      <td style="text-align:right;"><strong>${{ bas.gst_1a|floatformat:2|intcomma }}</strong></td>
+      <td class="num"><strong>${{ bas.gst_1a|floatformat:2|intcomma }}</strong></td>
     </tr>
     <tr>
       <td></td>
       <td style="padding-left:2em;">&mdash; Total taxable sales (paid sum)</td>
-      <td style="text-align:right;">${{ bas.sales.total_paid|floatformat:2|intcomma }}</td>
+      <td class="num">${{ bas.sales.total_paid|floatformat:2|intcomma }}</td>
     </tr>
     <tr>
       <td></td>
       <td style="padding-left:2em;">&mdash; Cash &nbsp; paid&nbsp;/&nbsp;GST</td>
-      <td style="text-align:right;">
+      <td class="num">
         ${{ bas.sales.cash_paid|floatformat:2|intcomma }}&nbsp;/&nbsp;${{ bas.sales.cash_gst|floatformat:2|intcomma }}
       </td>
     </tr>
     <tr>
       <td></td>
       <td style="padding-left:2em;">&mdash; Online &nbsp; paid&nbsp;/&nbsp;GST</td>
-      <td style="text-align:right;">
+      <td class="num">
         ${{ bas.sales.online_paid|floatformat:2|intcomma }}&nbsp;/&nbsp;${{ bas.sales.online_gst|floatformat:2|intcomma }}
       </td>
     </tr>
     <tr>
       <td></td>
       <td style="padding-left:2em; color:#999;">Bookings counted</td>
-      <td style="text-align:right; color:#999;">{{ bas.sales.post_count }}</td>
+      <td class="num" style="color:#999;">{{ bas.sales.post_count }}</td>
     </tr>
 
     {# 1B #}
     <tr style="background:#fff8f0;">
       <th>1B</th>
       <th>GST on purchases (credits)</th>
-      <td style="text-align:right;"><strong>${{ bas.gst_1b|floatformat:2|intcomma }}</strong></td>
+      <td class="num"><strong>${{ bas.gst_1b|floatformat:2|intcomma }}</strong></td>
     </tr>
 
     {# Net #}
@@ -107,7 +116,7 @@
           &mdash; <span style="color:#27ae60;">ATO refund</span>
         {% endif %}
       </th>
-      <td style="text-align:right;">
+      <td class="num">
         <strong {% if bas.net_gst >= 0 %}style="color:#c0392b;"{% else %}style="color:#27ae60;"{% endif %}>
           ${{ bas.net_gst|floatformat:2|intcomma }}
         </strong>
@@ -121,24 +130,24 @@
 {# Wages                                                                #}
 {# ------------------------------------------------------------------ #}
 <h2 style="margin-top:2em;">W &mdash; Wages &amp; PAYG Withholding</h2>
-<table>
+<table class="report-table">
   <thead>
     <tr>
       <th style="width:7em;">Label</th>
       <th>Description</th>
-      <th style="text-align:right; width:14em;">AUD</th>
+      <th class="num">AUD</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>W1</th>
       <td>Total salary &amp; wages (gross pay)</td>
-      <td style="text-align:right;">${{ bas.w1|floatformat:2|intcomma }}</td>
+      <td class="num">${{ bas.w1|floatformat:2|intcomma }}</td>
     </tr>
     <tr>
       <th>W2</th>
       <td>PAYG withholding</td>
-      <td style="text-align:right;">${{ bas.w2|floatformat:2|intcomma }}</td>
+      <td class="num">${{ bas.w2|floatformat:2|intcomma }}</td>
     </tr>
   </tbody>
 </table>
@@ -153,13 +162,13 @@
   <strong>These amounts were NOT deducted from 1A automatically.</strong><br>
   If a refund was paid out, reduce 1A manually or lodge a GST adjustment with the ATO.
 </div>
-<table>
+<table class="report-table">
   <thead>
     <tr>
       <th>Source</th>
       <th>Description</th>
-      <th style="text-align:right;">Paid amount</th>
-      <th style="text-align:right;">GST ref (&divide;11)</th>
+      <th class="num">Paid amount</th>
+      <th class="num">GST ref (&divide;11)</th>
     </tr>
   </thead>
   <tbody>
@@ -167,8 +176,8 @@
     <tr>
       <td>{{ r.source }}</td>
       <td>{{ r.description }}</td>
-      <td style="text-align:right;">${{ r.amount|floatformat:2 }}</td>
-      <td style="text-align:right;">${{ r.gst_ref|floatformat:2 }}</td>
+      <td class="num">${{ r.amount|floatformat:2 }}</td>
+      <td class="num">${{ r.gst_ref|floatformat:2 }}</td>
     </tr>
     {% endfor %}
   </tbody>

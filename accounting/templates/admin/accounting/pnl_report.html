@@ -53,24 +53,33 @@
   {% if pnl.is_all %}All brands (combined){% else %}{{ pnl.brand|capfirst }}{% endif %}
 </p>
 
-<table>
+<style>
+  .report-table { border-collapse: collapse; min-width: 480px; }
+  .report-table th,
+  .report-table td { padding: 8px 12px; border-bottom: 1px solid #eee; }
+  .report-table thead tr { border-bottom: 2px solid #ccc; }
+  .report-table td.num,
+  .report-table th.num { text-align: right; width: 14em; }
+</style>
+
+<table class="report-table">
   <thead>
-    <tr><th>Line</th><th style="text-align:right;">Amount</th></tr>
+    <tr><th>Line</th><th class="num">Amount</th></tr>
   </thead>
   <tbody>
     <tr>
       <th>Income</th>
-      <td style="text-align:right;">{{ pnl.income_total|floatformat:2|intcomma }}</td>
+      <td class="num">{{ pnl.income_total|floatformat:2|intcomma }}</td>
     </tr>
 
     <tr>
       <th>Expenses (Transactions)</th>
-      <td style="text-align:right;">{{ pnl.expense_total|floatformat:2|intcomma }}</td>
+      <td class="num">{{ pnl.expense_total|floatformat:2|intcomma }}</td>
     </tr>
     {% for row in pnl.expense_breakdown %}
     <tr>
       <td style="padding-left:2em;">&mdash; {{ row.category|default:"(uncategorised)" }}</td>
-      <td style="text-align:right;">{{ row.subtotal|floatformat:2|intcomma }}</td>
+      <td class="num">{{ row.subtotal|floatformat:2|intcomma }}</td>
     </tr>
     {% empty %}
     <tr><td style="padding-left:2em;" colspan="2"><em>No expenses in this period.</em></td></tr>
@@ -81,22 +90,22 @@
         Labour (payroll)
         {% if not pnl.labour_in_net %}<span style="color:#999;">(unallocated)</span>{% endif %}
       </th>
-      <td style="text-align:right;">{{ pnl.labour_total|floatformat:2|intcomma }}</td>
+      <td class="num">{{ pnl.labour_total|floatformat:2|intcomma }}</td>
     </tr>
 
     {% if pnl.is_all %}
     <tr style="border-top:2px solid #ccc;">
       <th>Total cost (expenses + labour)</th>
-      <td style="text-align:right;">{{ pnl.total_cost|floatformat:2|intcomma }}</td>
+      <td class="num">{{ pnl.total_cost|floatformat:2|intcomma }}</td>
     </tr>
     <tr style="border-top:2px solid #444;">
       <th>Net profit (income &minus; expenses &minus; labour)</th>
-      <td style="text-align:right;"><strong>{{ pnl.net|floatformat:2|intcomma }}</strong></td>
+      <td class="num"><strong>{{ pnl.net|floatformat:2|intcomma }}</strong></td>
     </tr>
     {% else %}
     <tr style="border-top:2px solid #444;">
       <th>Brand net profit (income &minus; expenses)</th>
-      <td style="text-align:right;"><strong>{{ pnl.net|floatformat:2|intcomma }}</strong></td>
+      <td class="num"><strong>{{ pnl.net|floatformat:2|intcomma }}</strong></td>
     </tr>
     {% endif %}
   </tbody>
