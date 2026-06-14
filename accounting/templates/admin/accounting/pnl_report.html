@@ -30,17 +30,17 @@
           <option value="{{ c.value }}" {% if c.value == fy_end_year %}selected{% endif %}>{{ c.label }}</option>
         {% endfor %}
       </select>
-      <span class="help" style="margin-right:10px;">Used unless both custom dates below are set.</span>
+      <span class="help" style="margin-left:10px;">Used unless both custom dates below are set.</span>
     </div>
 
     <div class="form-row">
       <label for="id_start" style="margin-right: 10px;">Custom period:</label>
-      <input type="date" name="start" value="{{ start_str }}"> &ndash;
-      <input type="date" name="end" value="{{ end_str }}">
-      <span class="help" style="margin-right:10px;">Overrides the financial year when both are filled.</span>
+      <input type="date" name="start" value="{{ start_str }}" style="margin-right: 8px;"> &ndash;
+      <input type="date" name="end" value="{{ end_str }}" style="margin-left:8px;">
+      <span class="help" style="margin-left:10px;">Overrides the financial year when both are filled.</span>
     </div>
 
-    <div class="submit-row">
+    <div class="submit-row" style="margin-top:16px;">
       <input type="submit" value="Run report" class="default">
     </div>
   </fieldset>
