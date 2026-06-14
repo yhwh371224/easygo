@@ -1,6 +1,6 @@
 import datetime
 import logging
-from decimal import Decimal, ROUND_HALF_UP
+from decimal import Decimal, ROUND_HALF_UP, InvalidOperation
 
 import stripe
 
@@ -105,6 +105,103 @@ def _record_stripe_fee(payment_intent_id):
         send_text_email(
             f'Stripe fee recording error [{payment_intent_id}]',
             f"Failed to record Stripe fee for {payment_intent_id}:\n{exc}",
+            [settings.RECIPIENT_EMAIL],
+        )
+
+
+# PayPal Australia treats its merchant transaction fees as a GST-free financial
+# supply — unlike Stripe AU, PayPal does NOT add GST to seller fees, so there is
+# no input-tax credit (1B) to claim. Fees are recorded as no_gst / zero GST.
+# If a PayPal tax invoice ever shows a GST line, flip this to True.
+_PAYPAL_FEE_HAS_GST = False
+
+
+def _parse_paypal_date(payment_date):
+    """Parse the PayPal IPN ``payment_date`` (e.g. '20:12:59 Jan 13, 2024 PST').
+
+    The trailing timezone abbreviation is dropped (Python can't parse %Z for
+    arbitrary abbreviations); falls back to today on any parse failure.
+    """
+    if payment_date:
+        cleaned = payment_date.rsplit(' ', 1)[0]  # drop trailing tz abbrev
+        for fmt in ('%H:%M:%S %b %d, %Y', '%H:%M:%S %b. %d, %Y'):
+            try:
+                return datetime.datetime.strptime(cleaned, fmt).date()
+            except ValueError:
+                continue
+    return datetime.date.today()
+
+
+def _record_paypal_fee(txn_id, mc_fee, payment_date=None):
+    """Create an expense Transaction for the PayPal processing fee (BAS 1B).
+
+    ``mc_fee`` comes straight from the IPN payload — it is the exact fee PayPal
+    deducted, so no API call is needed (contrast _record_stripe_fee). PayPal AU
+    fees are GST-free, so gst_code='no_gst' and gst_amount=0 (see
+    _PAYPAL_FEE_HAS_GST).
+
+    Silently skips if:
+      - txn_id is missing
+      - mc_fee is missing / unparseable / not positive
+      - a Transaction for this txn_id already exists (idempotent on duplicate IPNs)
+
+    Errors are logged and emailed; they never propagate to the caller.
+    """
+    from accounting.models import Transaction
+
+    if not txn_id:
+        return
+
+    description = f"PayPal fee {txn_id}"
+
+    # Duplicate guard — idempotent on repeated IPN deliveries, keyed on txn_id
+    if Transaction.objects.filter(
+        category='payment_fee',
+        description=description,
+    ).exists():
+        logger.info('_record_paypal_fee: skipped duplicate for %s', txn_id)
+        return
+
+    try:
+        fee = Decimal(str(mc_fee)).quantize(_CENT)
+    except (InvalidOperation, TypeError, ValueError):
+        logger.warning('_record_paypal_fee: bad mc_fee %r for %s', mc_fee, txn_id)
+        return
+
+    if fee <= 0:
+        logger.info('_record_paypal_fee: non-positive fee %s for %s', fee, txn_id)
+        return
+
+    if _PAYPAL_FEE_HAS_GST:
+        gst_code = 'gst'
+        gst = (fee / _ELEVEN).quantize(_CENT, rounding=ROUND_HALF_UP)
+    else:
+        gst_code = 'no_gst'
+        gst = Decimal('0')
+
+    try:
+        Transaction.objects.create(
+            date=_parse_paypal_date(payment_date),
+            direction='expense',
+            brand='shuttle',
+            description=description,
+            gross_amount=fee,
+            gst_code=gst_code,
+            gst_amount=gst,
+            category='payment_fee',
+            source='paypal',
+            counterparty='PayPal',
+        )
+        logger.info(
+            '_record_paypal_fee: recorded fee=%.2f gst=%.2f for %s',
+            fee, gst, txn_id,
+        )
+
+    except Exception as exc:
+        logger.exception('_record_paypal_fee: error for %s', txn_id)
+        send_text_email(
+            f'PayPal fee recording error [{txn_id}]',
+            f"Failed to record PayPal fee for {txn_id}:\n{exc}",
             [settings.RECIPIENT_EMAIL],
         )
 

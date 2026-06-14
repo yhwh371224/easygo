@@ -518,3 +518,99 @@ class DriverImpersonateViewTests(TestCase):
         response = self.client.get(url)
         self.assertRedirects(response, reverse('blog:driver_dashboard'))
         self.assertIn('impersonator_id', self.client.session)
+
+
+# ---------------------------------------------------------------------------
+# Settlement GST (Option A — driver.gst_registered drives GST, not ABN)
+# ---------------------------------------------------------------------------
+
+class SettlementGstTests(TestCase):
+
+    def setUp(self):
+        from blog.services.settlement_service import SettlementService
+        self.SettlementService = SettlementService
+        self.admin = User.objects.create_superuser('gstadmin', 'g@x.com', 'pass')
+        self.region = make_region()
+        self.from_date = datetime.date.today()
+        self.to_date = datetime.date.today() + datetime.timedelta(days=6)
+        self.pickup = self.from_date + datetime.timedelta(days=1)
+
+    def _make_post(self, driver, price, cash=False):
+        # patch bird proxy so Post.save side-effects stay offline
+        with patch('blog.bird_proxy.create_bird_mapping', return_value=True), \
+             patch('blog.bird_proxy.close_bird_mapping', return_value=True):
+            return Post.objects.create(
+                name='Pax', email='p@x.com', no_of_passenger='1',
+                price=str(price), cash=cash, driver=driver,
+                pickup_date=self.pickup, pickup_time='10:00',
+            )
+
+    def _settle_and_pay(self, driver):
+        from blog.services.settlement_service import lock_settlement, mark_paid
+        # settlement-number generation depends on region/airport config that is
+        # irrelevant to GST behaviour — stub it with a unique value.
+        number = f"TEST-SET-{driver.pk}"
+        with patch('blog.services.settlement_service.generate_settlement_number',
+                   return_value=number):
+            settlement = self.SettlementService.create_settlement(
+                driver, self.from_date, self.to_date, user=self.admin
+            )
+        lock_settlement(settlement, self.admin)
+        mark_paid(settlement, self.admin, 'bank', timezone.now())
+        settlement.refresh_from_db()
+        return settlement
+
+    def test_registered_driver_gets_gst_and_gst_transaction(self):
+        from accounting.models import Transaction
+        driver = make_driver(user=make_user('reg_drv'), region=self.region)
+        driver.gst_registered = True
+        driver.save()
+        self._make_post(driver, '110', cash=False)   # bank-paid → counts toward paid_total
+
+        settlement = self._settle_and_pay(driver)
+
+        item = settlement.items.first()
+        self.assertEqual(item.gst_amount, Decimal('10.00'))   # 110 / 11
+        self.assertEqual(settlement.gst_total, Decimal('10.00'))
+
+        tx = Transaction.objects.get(category='subcontract',
+                                     description=settlement.settlement_number)
+        self.assertEqual(tx.gst_code, 'gst')
+        self.assertEqual(tx.gst_amount, Decimal('10.00'))
+        self.assertEqual(tx.direction, 'expense')
+        self.assertEqual(tx.gross_amount, settlement.paid_total)
+
+    def test_unregistered_driver_zero_gst_and_no_gst_transaction(self):
+        from accounting.models import Transaction
+        driver = make_driver(user=make_user('unreg_drv'), region=self.region)
+        self.assertFalse(driver.gst_registered)   # default
+        self._make_post(driver, '110', cash=False)
+
+        settlement = self._settle_and_pay(driver)
+
+        item = settlement.items.first()
+        self.assertEqual(item.gst_amount, Decimal('0'))
+        self.assertEqual(settlement.gst_total, Decimal('0'))
+
+        tx = Transaction.objects.get(category='subcontract',
+                                     description=settlement.settlement_number)
+        self.assertEqual(tx.gst_code, 'no_gst')
+        self.assertEqual(tx.gst_amount, Decimal('0'))
+
+    def test_mark_paid_twice_creates_single_transaction(self):
+        from accounting.models import Transaction
+        from blog.services.settlement_service import _record_settlement_expense
+        driver = make_driver(user=make_user('dup_drv'), region=self.region)
+        driver.gst_registered = True
+        driver.save()
+        self._make_post(driver, '220', cash=False)
+
+        settlement = self._settle_and_pay(driver)
+        # second call (idempotent guard) — simulate a re-run of the post-pay hook
+        _record_settlement_expense(settlement)
+
+        count = Transaction.objects.filter(
+            category='subcontract',
+            description=settlement.settlement_number,
+        ).count()
+        self.assertEqual(count, 1)

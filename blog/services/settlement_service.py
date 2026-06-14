@@ -56,9 +56,13 @@ class SettlementService:
         for post in posts:
             amount = Decimal(str(post.price))
 
-            gst_amount = Decimal('0')
-            if hasattr(post, 'gst') and post.gst:
-                gst_amount = Decimal(str(post.gst))
+            # GST is determined by the driver's registration status, NOT by ABN —
+            # an ABN holder may still be unregistered for GST. Only registered
+            # drivers' settlements carry a GST component (gross ÷ 11).
+            if driver.gst_registered:
+                gst_amount = (amount / Decimal('11')).quantize(Decimal('0.01'))
+            else:
+                gst_amount = Decimal('0')
 
             line_total = amount + gst_amount
 
@@ -148,3 +152,51 @@ def mark_paid(settlement, user, payment_method, paid_at):
     settlement.paid_at = paid_at
     settlement.settled_by = user
     settlement.save()
+
+    _record_settlement_expense(settlement)
+
+
+def _record_settlement_expense(settlement):
+    """Create the BAS 1B expense Transaction for a paid settlement.
+
+    Records the subcontractor payment so it flows into the BAS report. GST is
+    only claimable when the driver is registered for GST — registered drivers
+    get gst_code='gst' with the stored gst_total; unregistered drivers still
+    have the expense recorded but with gst_code='no_gst' and zero GST.
+
+    Idempotent: guarded on (category='subcontract', description=settlement_number)
+    so repeated mark_paid calls never create duplicate expense rows.
+    """
+    from accounting.models import Transaction
+
+    driver = settlement.driver
+    description = settlement.settlement_number
+
+    # Duplicate guard — one expense row per settlement
+    if Transaction.objects.filter(
+        category='subcontract',
+        description=description,
+    ).exists():
+        return
+
+    if driver.gst_registered:
+        gst_code = 'gst'
+        gst_amount = settlement.gst_total
+    else:
+        gst_code = 'no_gst'
+        gst_amount = Decimal('0')
+
+    tx_date = settlement.paid_at.date() if settlement.paid_at else timezone.now().date()
+
+    Transaction.objects.create(
+        date=tx_date,
+        direction='expense',
+        brand='shuttle',
+        description=description,
+        gross_amount=settlement.paid_total,
+        gst_code=gst_code,
+        gst_amount=gst_amount,
+        category='subcontract',
+        source='bank',
+        counterparty=driver.driver_name or '',
+    )

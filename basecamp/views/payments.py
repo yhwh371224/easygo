@@ -18,6 +18,7 @@ from basecamp.basecamp_utils import (
     render_inquiry_done, require_turnstile, parse_one_based_index,
     is_ajax,
 )
+from basecamp.modules.payment_utils import _record_paypal_fee
 from django_ratelimit.decorators import ratelimit
 
 
@@ -388,6 +389,8 @@ def paypal_ipn(request):
         payer_email = request.POST.get('payer_email')
         gross_amount = request.POST.get('mc_gross')
         txn_id = request.POST.get('txn_id')
+        mc_fee = request.POST.get('mc_fee')
+        payment_date = request.POST.get('payment_date')
 
         if PaypalPayment.objects.filter(txn_id=txn_id).exists():
             return HttpResponse(status=200, content="Duplicate IPN Notification")
@@ -410,6 +413,9 @@ def paypal_ipn(request):
             response_content = response.text.strip()
             
             if response.status_code == 200 and response_content == 'VERIFIED':
+                # Record the PayPal processing fee as an expense Transaction for
+                # BAS. Only on VERIFIED IPNs; errors are caught internally.
+                _record_paypal_fee(txn_id, mc_fee, payment_date)
                 return HttpResponse(status=200)
             else:
                 paypal_ipn_error_email('PayPal IPN Verification Failed', 'Failed to verify PayPal IPN.', item_name, payer_email, gross_amount)
