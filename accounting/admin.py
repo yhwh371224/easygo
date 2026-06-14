@@ -21,9 +21,13 @@ class TransactionAdmin(admin.ModelAdmin):
         custom = [
             path(
                 'pnl-report/',
-                # admin_view enforces staff login; keeps the report admin-only.
                 self.admin_site.admin_view(self.pnl_report_view),
                 name='accounting_pnl_report',
+            ),
+            path(
+                'bas-report/',
+                self.admin_site.admin_view(self.bas_report_view),
+                name='accounting_bas_report',
             ),
         ]
         return custom + urls
@@ -75,6 +79,44 @@ class TransactionAdmin(admin.ModelAdmin):
             'end_str': end.isoformat() if end else '',
         }
         return TemplateResponse(request, 'admin/accounting/pnl_report.html', context)
+
+    def bas_report_view(self, request):
+        cur_fy = reports.current_fy_end_year()
+
+        try:
+            fy_year = int(request.GET.get('fy_year') or cur_fy)
+        except (TypeError, ValueError):
+            fy_year = cur_fy
+
+        try:
+            fy_quarter = int(request.GET.get('fy_quarter') or 1)
+            if fy_quarter not in (1, 2, 3, 4):
+                fy_quarter = 1
+        except (TypeError, ValueError):
+            fy_quarter = 1
+
+        bas = reports.build_bas(fy_year, fy_quarter)
+
+        fy_choices = [
+            {'value': y, 'label': f'FY{y}'}
+            for y in range(cur_fy - 3, cur_fy + 2)
+        ]
+        quarter_choices = [
+            {'value': q, 'label': label}
+            for q, label in reports.QUARTER_LABELS.items()
+        ]
+
+        context = {
+            **self.admin_site.each_context(request),
+            'title': 'BAS Report',
+            'opts': self.model._meta,
+            'bas': bas,
+            'fy_year': fy_year,
+            'fy_quarter': fy_quarter,
+            'fy_choices': fy_choices,
+            'quarter_choices': quarter_choices,
+        }
+        return TemplateResponse(request, 'admin/accounting/bas_report.html', context)
 
 
 @admin.register(PayrollEntry)
