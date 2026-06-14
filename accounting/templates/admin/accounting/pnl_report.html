@@ -23,7 +23,7 @@
       </select>
     </div>
 
-    <div class="form-row">
+    <div class="form-row" style="margin-top:8px;">
       <label for="id_fy" style="margin-right: 10px;">Financial year:</label>
       <select name="fy" id="id_fy">
         {% for c in fy_choices %}
@@ -33,7 +33,7 @@
       <span class="help" style="margin-left:10px;">Used unless both custom dates below are set.</span>
     </div>
 
-    <div class="form-row">
+    <div class="form-row" style="margin-top:8px;">
       <label for="id_start" style="margin-right: 10px;">Custom period:</label>
       <input type="date" name="start" value="{{ start_str }}" style="margin-right: 8px;"> &ndash;
       <input type="date" name="end" value="{{ end_str }}" style="margin-left:8px;">
