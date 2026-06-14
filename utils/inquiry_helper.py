@@ -5,7 +5,8 @@ from utils.email import send_html_email
 
 def send_inquiry_email(instance):
     if instance.is_confirmed:
-        html_content = render_email_template("html_email-inquiry-response.html", {
+        template = "html_email-inquiry-response-prepay.html" if instance.prepay else "html_email-inquiry-response.html"
+        html_content = render_email_template(template, {
             'booker_name': instance.booker_name,
             'booker_email': instance.booker_email,
             'company_name': instance.company_name,
