@@ -15,6 +15,7 @@ class TransactionAdmin(admin.ModelAdmin):
     list_filter = ('brand', 'direction', 'gst_code', 'source')
     date_hierarchy = 'date'
     search_fields = ('description', 'counterparty')
+    change_list_template = 'admin/accounting/transaction/change_list.html'
 
     def get_urls(self):
         urls = super().get_urls()

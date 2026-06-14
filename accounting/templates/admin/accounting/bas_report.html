@@ -15,7 +15,7 @@
 <form method="get" style="margin-bottom:1.5em;">
   <fieldset class="module aligned" style="padding:10px;">
     <div class="form-row">
-      <label for="id_fy_year">Financial year:</label>
+      <label for="id_fy_year" style="margin-right: 10px;">Financial year: </label>
       <select name="fy_year" id="id_fy_year">
         {% for c in fy_choices %}
           <option value="{{ c.value }}" {% if c.value == fy_year %}selected{% endif %}>{{ c.label }}</option>
@@ -23,7 +23,7 @@
       </select>
     </div>
     <div class="form-row">
-      <label for="id_fy_quarter">Quarter:</label>
+      <label for="id_fy_quarter" style="margin-right: 10px;">Quarter: </label>
       <select name="fy_quarter" id="id_fy_quarter">
         {% for c in quarter_choices %}
           <option value="{{ c.value }}" {% if c.value == fy_quarter %}selected{% endif %}>{{ c.label }}</option>
