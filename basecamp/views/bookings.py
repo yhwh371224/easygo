@@ -95,6 +95,7 @@ def confirm_booking_detail(request):
     private_ride = user.private_ride
     region = user.region
     special_items = user.special_items or {}
+    customer_history = getattr(user, 'customer_history', "")
     extra_stop = user.extra_stop or 0
     extra_stop_addresses = user.extra_stop_addresses or []
     same_extra_stop = user.same_extra_stop
@@ -168,7 +169,7 @@ def confirm_booking_detail(request):
         surcharge=surcharge_value, prepay=prepay, pending=pending,
         paid=paid, cash=cash, is_confirmed=is_confirmed, driver=driver, region=region,
         special_items=special_items, extra_stop=extra_stop, extra_stop_addresses=extra_stop_addresses,
-        same_extra_stop=same_extra_stop,
+        same_extra_stop=same_extra_stop, customer_history=customer_history, 
     )
 
     p.save()
@@ -256,6 +257,7 @@ def confirm_booking_prepay_detail(request):
     private_ride = user.private_ride
     region = user.region
     special_items = user.special_items or {}
+    customer_history = getattr(user, 'customer_history', "")
     extra_stop = user.extra_stop or 0
     extra_stop_addresses = user.extra_stop_addresses or []
     same_extra_stop = user.same_extra_stop
@@ -316,7 +318,7 @@ def confirm_booking_prepay_detail(request):
         surcharge=surcharge_value, prepay=prepay, pending=pending,
         paid=paid, cash=cash, is_confirmed=is_confirmed, driver=driver, region=region,
         special_items=special_items, extra_stop=extra_stop, extra_stop_addresses=extra_stop_addresses,
-        same_extra_stop=same_extra_stop,
+        same_extra_stop=same_extra_stop, customer_history=customer_history, 
     )
 
     p.save()
