@@ -28,6 +28,7 @@ class Transaction(models.Model):
 
     SOURCE_CHOICES = [
         ('paypal', 'PayPal'),
+        ('stripe', 'Stripe'),
         ('bank', 'Bank'),
         ('cash', 'Cash'),
         ('manual', 'Manual'),
