@@ -118,6 +118,10 @@ class Post(models.Model):
     )
     is_confirmed = models.BooleanField(default=False, blank=True)
     cash = models.BooleanField(default=False, blank=True)
+    driver_collected_cash = models.BooleanField(
+        default=False, blank=True,
+        help_text="타 드라이버가 손님에게 직접 현금 수령 (회사 매출 아님, GST 제외)",
+    )
     cruise = models.BooleanField(default=False, blank=True)
     cancelled = models.BooleanField(default=False, blank=True)
     private_ride = models.BooleanField(default=False, blank=True)

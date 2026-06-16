@@ -97,6 +97,7 @@ def build_sales_gst(year, quarter):
             pickup_date__quarter=quarter,
             pickup_date__gte=GST_REGISTRATION_DATE,
             cancelled=False,
+            driver_collected_cash=False,
         )
         .exclude(paid__isnull=True)
         .exclude(paid='')
