@@ -13,9 +13,10 @@ class Command(BaseCommand):
 
         qs = Post.objects.filter(
             pickup_date=yesterday,
-            cancelled=False,
+            cancelled=True,
             cash=True,
-            paid__isnull=True,            
+            paid__isnull=True, 
+            sms_reminder=True,           
         )
 
         updated_count = qs.update(paid=models.F('price'))
