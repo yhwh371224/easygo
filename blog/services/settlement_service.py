@@ -161,8 +161,14 @@ def _record_settlement_expense(settlement):
 
     Records the subcontractor payment so it flows into the BAS report. GST is
     only claimable when the driver is registered for GST — registered drivers
-    get gst_code='gst' with the stored gst_total; unregistered drivers still
+    get gst_code='gst' with the recomputed GST; unregistered drivers still
     have the expense recorded but with gst_code='no_gst' and zero GST.
+
+    The expense base is recomputed from the settlement items rather than the
+    stored paid_total/gst_total: any post the driver collected cash for
+    directly (post.cash) or the customer paid the driver in cash for
+    (post.driver_collected_cash) never passed through the company, so it is
+    excluded from both gross_amount and gst_amount (not a BAS 1B expense).
 
     Idempotent: guarded on (category='subcontract', description=settlement_number)
     so repeated mark_paid calls never create duplicate expense rows.
@@ -179,9 +185,19 @@ def _record_settlement_expense(settlement):
     ).exists():
         return
 
+    # Recompute the expense base from items, excluding rides paid in cash
+    # (driver/customer cash never passed through the company).
+    expense_gross = Decimal('0')
+    expense_gst   = Decimal('0')
+    for item in settlement.items.select_related('post'):
+        if item.post.cash or item.post.driver_collected_cash:
+            continue
+        expense_gross += item.line_total
+        expense_gst   += item.gst_amount
+
     if driver.gst_registered:
         gst_code = 'gst'
-        gst_amount = settlement.gst_total
+        gst_amount = expense_gst
     else:
         gst_code = 'no_gst'
         gst_amount = Decimal('0')
@@ -193,7 +209,7 @@ def _record_settlement_expense(settlement):
         direction='expense',
         brand='shuttle',
         description=description,
-        gross_amount=settlement.paid_total,
+        gross_amount=expense_gross,
         gst_code=gst_code,
         gst_amount=gst_amount,
         category='subcontract',
