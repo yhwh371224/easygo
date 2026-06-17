@@ -18,8 +18,22 @@ from decouple import config
 logger = logging.getLogger(__name__)
 
 
+
+
+
 class Command(BaseCommand):
     help = "Send reminders ONLY for today's arrivals (intl/domestic/all)"
+
+    # =========================
+    # ARGUMENTS
+    # =========================
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '--arrivals',
+            choices=['intl', 'domestic', 'all'],
+            default='all',
+            help="Which arrivals to send: intl, domestic, or all (default).",
+        )
 
     # =========================
     # INIT
