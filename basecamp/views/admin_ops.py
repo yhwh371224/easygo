@@ -545,7 +545,7 @@ def email_dispatch_detail(request):
                 booking.reminder = True
                 booking.cash = False
                 booking.pending = False
-                booking.prepay = False
+                booking.cancelled = False
 
                 applied_bookings.append(booking)
 
@@ -554,12 +554,8 @@ def email_dispatch_detail(request):
                 if remaining_amount <= 0:
                     break
 
-            if applied_bookings:
-                Post.objects.bulk_update(
-                    applied_bookings,
-                    ['paid', 'notice', 'reminder', 'toll', 'cash', 'pending'],
-                    batch_size=50,
-                )
+            for booking in applied_bookings:
+                booking.save(update_fields=['paid', 'notice', 'reminder', 'cash', 'pending', 'cancelled'])
 
             context.update({
                 'applied_bookings': applied_bookings,
