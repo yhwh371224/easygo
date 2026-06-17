@@ -46,10 +46,27 @@ class Transaction(models.Model):
     counterparty = models.CharField(max_length=120, blank=True)
     notes = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    import_hash = models.CharField(
+        max_length=64, blank=True, default='', db_index=True,
+        help_text="SHA-256 fingerprint of the source bank row (dedup key). "
+                  "Empty for manually-entered transactions.",
+    )
+    gst_auto_estimated = models.BooleanField(
+        default=False,
+        help_text="True if gst_code/gst_amount were auto-guessed on import "
+                  "and still need human review before BAS.",
+    )
 
     class Meta:
         indexes = [
             models.Index(fields=['date', 'brand', 'direction']),
+        ]
+        constraints = [
+            models.UniqueConstraint(
+                fields=['import_hash'],
+                condition=models.Q(import_hash__gt=''),
+                name='uniq_bank_import_hash',
+            ),
         ]
 
     def __str__(self):
