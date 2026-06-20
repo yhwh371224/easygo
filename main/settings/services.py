@@ -5,7 +5,7 @@ from decouple import config
 PAYPAL_MODE = 'live'
 PAYPAL_CLIENT_ID = config('PAYPAL_CLIENT_ID')
 PAYPAL_CLIENT_SECRET = config('PAYPAL_CLIENT_SECRET')
-PAYPAL_RECEIVER_EMAIL = 'info@easygoshuttle.com.au'
+PAYPAL_RECEIVER_EMAIL = config('PAYPAL_RECEIVER_EMAIL')
 PAYPAL_IPN_URL = 'https://easygoshuttle.com.au/paypal_ipn/'
 
 # Stripe
