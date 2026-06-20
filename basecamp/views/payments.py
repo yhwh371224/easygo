@@ -19,6 +19,7 @@ from basecamp.basecamp_utils import (
     is_ajax,
 )
 from basecamp.modules.payment_utils import _record_paypal_fee
+from accounting.conf import GST_REGISTRATION_DATE
 from django_ratelimit.decorators import ratelimit
 
 
@@ -119,22 +120,24 @@ def _get_start_end_points(booking):
     return start, end
 
 
-def _apply_gst_updates_multi(bookings):
-    """Apply 10% GST price update for corporate non-cash bookings (multi-invoice)."""
-    for booking in bookings:
-        if booking.company_name and not booking.prepay and not booking.cash:
-            if booking.price in (None, '', 'TBA'):
-                continue
-            booking.price = round(float(booking.price) * 1.10, 2)
-            booking.prepay = True
-            booking.save()
+def _gst_lines(apply_gst_flag, price, booking):
+    """(gst_added, gst_included) 반환.
+    GST 체크 O (법인/개인 무관): 가격 위에 +10% (with_gst).
+    GST 체크 X + 등록일 이후 pickup: 포함가의 1/11을 'Includes GST'로 표시만.
+    GST 체크 X + 등록일 이전: 표시 없음."""
+    if apply_gst_flag:
+        return round(price * 0.10, 2), 0.0
+    registered = booking.pickup_date and booking.pickup_date >= GST_REGISTRATION_DATE
+    if registered:
+        return 0.0, round(price / 11, 2)
+    return 0.0, 0.0
 
 
 def _build_booking_row(booking, apply_gst_flag, surcharge_input, toll_input):
     """Build a single booking dict row for the multi-invoice table."""
     start_point, end_point = _get_start_end_points(booking)
     price = safe_float(booking.price) or 0.0
-    with_gst = round(price * 0.10, 2) if apply_gst_flag else 0.0
+    with_gst, gst_included = _gst_lines(apply_gst_flag, price, booking)
     surcharge_calc, surcharge_display = _calc_surcharge(surcharge_input, price)
     toll = safe_float(toll_input) if toll_input else safe_float(booking.toll) or 0.0
     paid = safe_float(booking.paid) or 0.0
@@ -150,6 +153,7 @@ def _build_booking_row(booking, apply_gst_flag, surcharge_input, toll_input):
         "notice": booking.notice,
         "price": price,
         "with_gst": with_gst,
+        "gst_included": gst_included,
         "surcharge": surcharge_display,
         "toll": toll,
         "total_price": total,
@@ -161,8 +165,6 @@ def _build_booking_row(booking, apply_gst_flag, surcharge_input, toll_input):
 
 def _build_multi_context(bookings, params, inv_no, today, DEFAULT_BANK):
     """Build (template_name, context) for a multi-booking invoice."""
-    _apply_gst_updates_multi(bookings)
-
     apply_gst_flag = params['apply_gst_flag']
     surcharge_input = params['surcharge_input']
     discount_input = params['discount_input']
@@ -170,12 +172,13 @@ def _build_multi_context(bookings, params, inv_no, today, DEFAULT_BANK):
 
     booking_data = []
     total_price_without_gst = total_paid = grand_total = 0.0
-    total_gst = total_surcharge = total_toll = 0.0
+    total_gst = total_surcharge = total_toll = total_gst_included = 0.0
 
     for booking in bookings:
         row = _build_booking_row(booking, apply_gst_flag, surcharge_input, toll_input)
         total_price_without_gst += row['price']
         total_gst += row['with_gst']
+        total_gst_included += row['gst_included']
         total_surcharge += row['_surcharge_calc']
         total_toll += row['toll']
         total_paid += row['_paid']
@@ -197,6 +200,7 @@ def _build_multi_context(bookings, params, inv_no, today, DEFAULT_BANK):
         "bookings": booking_data,
         "total_price_without_gst": round(total_price_without_gst, 2),
         "with_gst": round(total_gst, 2),
+        "total_gst_included": round(total_gst_included, 2),
         "surcharge": round(total_surcharge, 2),
         "toll": round(total_toll, 2),
         "discount": discount,
@@ -219,7 +223,7 @@ def _build_single_context(user, users, params, inv_no, today, DEFAULT_BANK):
     start_point = user.start_point  
     end_point = user.end_point
     price = safe_float(user.price) or 0.0
-    with_gst = round(price * 0.10, 2) if user.company_name else 0.0
+    with_gst, gst_included = _gst_lines(apply_gst_flag, price, user)
     surcharge_calc, surcharge_display = _calc_surcharge(surcharge_input, price)
     toll = safe_float(toll_input) if toll_input else safe_float(user.toll) or 0.0
     discount = _calc_discount(discount_input, user)
@@ -233,6 +237,7 @@ def _build_single_context(user, users, params, inv_no, today, DEFAULT_BANK):
         "invoice_date": today,
         "toll": toll,
         "discount": discount,
+        "gst_included": gst_included,
         "DEFAULT_BANK": DEFAULT_BANK,
     }
 
@@ -263,7 +268,7 @@ def _build_single_context(user, users, params, inv_no, today, DEFAULT_BANK):
         base_paid = safe_float(user1.paid) or 0.0
         doubled_price = base_price * 2
         doubled_paid = base_paid * 2
-        doubled_with_gst = round(doubled_price * 0.10, 2) if user1.company_name else 0.0
+        doubled_with_gst, doubled_gst_included = _gst_lines(apply_gst_flag, doubled_price, user1)
         doubled_surcharge = round(doubled_price * 0.03, 2) if surcharge_input else 0.0
         doubled_total = doubled_price + doubled_with_gst + doubled_surcharge + toll - discount
         balance = round(doubled_total - doubled_paid, 2)
@@ -275,6 +280,7 @@ def _build_single_context(user, users, params, inv_no, today, DEFAULT_BANK):
             "pickup_date": user1.pickup_date, "pickup_time": user1.pickup_time,
             "start_point": user1.start_point, "end_point": user1.end_point,
             "price": doubled_price, "with_gst": doubled_with_gst,
+            "gst_included": doubled_gst_included,
             "surcharge": doubled_surcharge, "total_price": doubled_total,
             "balance": balance, "paid": doubled_paid,
             "message": user1.message, "no_of_passenger": user1.no_of_passenger,
@@ -366,12 +372,6 @@ def invoice_detail(request):
     first_user = users[0]
     customer_recipients = [first_user.booker_email] if first_user.booker_email else list(filter(None, [first_user.email, first_user.email1]))
     _send_invoice_email(template_name, context, customer_recipients + [RECIPIENT_EMAIL], inv_no)
-
-    if not multiple and user.company_name and not user.prepay and not user.cash:
-        if user.price not in (None, '', 'TBA'):
-            user.price = round(float(user.price) * 1.10, 2)
-            user.prepay = True
-            user.save()
 
     return render_inquiry_done(request)
     
