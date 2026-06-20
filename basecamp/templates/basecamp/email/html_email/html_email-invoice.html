@@ -202,7 +202,7 @@
 												<table width="100%" style="border-spacing:0;background-color:#fef6f0;margin-bottom:20px;" role="presentation">
 												    <tr>
 												        <td style="padding:15px;color:#af865f;font-size:12px;line-height:20px;">
-													<strong>Price: ${{ price }}</strong> includes gst <br>
+													<strong>Price: ${{ price }}</strong> {% if not apply_gst_flag %} includes gst{% endif %} <br>
 													{% if toll %}<strong>The price includes the toll fee</strong><br>{% endif %}
 													{% if apply_gst_flag %}<strong>GST (10%): ${{ with_gst }}</strong><br>{% endif %}
 													{% if surcharge %}<strong>Surcharge: ${{ surcharge }}</strong><br>{% endif %}													
