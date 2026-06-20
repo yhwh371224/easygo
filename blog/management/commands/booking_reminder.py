@@ -9,6 +9,7 @@ from main.settings import RECIPIENT_EMAIL
 from utils import booking_helper
 from utils.booking_helper import build_reminder_context
 from utils.email import send_template_email, collect_recipients
+from utils.telegram import send_telegram_sync
 from basecamp.modules.date_utils import format_pickup_time_12h
 
 logger = logging.getLogger(__name__)
@@ -23,8 +24,33 @@ class Command(BaseCommand):
             action='store_true',
             help='Send only today\'s reminder emails',
         )
+        parser.add_argument(
+            '--ids',
+            type=str,
+            help='콤마구분 booking id 목록 (해당 id만 today reminder 재발송)',
+        )
 
     def handle(self, *args, **options):
+        self._today_sent_ids = set()
+
+        ids_raw = options.get('ids')
+        if ids_raw:
+            target_ids = [int(i.strip()) for i in ids_raw.split(',') if i.strip()]
+            today = timezone.localdate()
+            qs = Post.objects.filter(id__in=target_ids).select_related('driver')
+            self.send_email_task(qs, "html_email-today.html", "Reminder-Today", today)
+            missing_ids = set(target_ids) - self._today_sent_ids
+            if missing_ids:
+                missing_posts = Post.objects.filter(id__in=missing_ids)
+                lines = [f"⚠️ 재발송 후에도 누락 {len(missing_ids)}건"]
+                for p in missing_posts:
+                    lines.append(f"• {p.name} | {p.email} | #{p.id} | {p.pickup_date}")
+                try:
+                    send_telegram_sync("\n".join(lines))
+                except Exception as e:
+                    logger.error(f"[Reminder-Today] 텔레그램 알림 전송 실패: {e}")
+            return
+
         # --- 오늘 국제선 도착 예약 meeting_point 업데이트 ---
         booking_helper.update_meeting_point_for_arrivals()
 
@@ -48,10 +74,28 @@ class Command(BaseCommand):
 
         if options['today']:
             self.send_email(0, "html_email-today.html", "Reminder-Today")
-            return
+        else:
+            for interval, template, subject in zip_longest(reminder_intervals, templates, subjects, fillvalue=""):
+                self.send_email(interval, template, subject)
 
-        for interval, template, subject in zip_longest(reminder_intervals, templates, subjects, fillvalue=""):
-            self.send_email(interval, template, subject)
+        # --- 당일 reminder 누락 탐지 ---
+        today = timezone.localdate()
+        expected_ids = set(
+            Post.objects.filter(pickup_date=today)
+            .exclude(cancelled=True)
+            .exclude(pending=True)
+            .values_list('id', flat=True)
+        )
+        missing_ids = expected_ids - self._today_sent_ids
+        if missing_ids:
+            missing_posts = Post.objects.filter(id__in=missing_ids)
+            lines = [f"⚠️ 당일 reminder 누락 {len(missing_ids)}건"]
+            for p in missing_posts:
+                lines.append(f"• {p.name} | {p.email} | #{p.id} | {p.pickup_date}")
+            try:
+                send_telegram_sync("\n".join(lines))
+            except Exception as e:
+                logger.error(f"[Reminder-Today] 텔레그램 알림 전송 실패: {e}")
 
     def send_email(self, date_offset, template_name, subject):
         target_date = timezone.localdate() + timedelta(days=date_offset)
@@ -121,6 +165,8 @@ class Command(BaseCommand):
                     logger.info(
                         f"Successfully sent '{subject}' email to {email_recipients} for pickup on {target_date}"
                     )
+                    if subject == "Reminder-Today":
+                        self._today_sent_ids.add(booking_reminder.id)
                 except Exception as e:
                     logger.error(f"Failed to send email to {email_recipients}: {str(e)}")
 
