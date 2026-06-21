@@ -56,6 +56,16 @@ class Transaction(models.Model):
         help_text="True if gst_code/gst_amount were auto-guessed on import "
                   "and still need human review before BAS.",
     )
+    needs_review = models.BooleanField(
+        default=False, db_index=True,
+        help_text="Held for human triage (e.g. a large bank withdrawal). "
+                  "Excluded from BAS 1B and P&L totals until approved.",
+    )
+    excluded = models.BooleanField(
+        default=False, db_index=True,
+        help_text="Permanently excluded from BAS/P&L — e.g. a driver payout "
+                  "already recorded via DriverSettlement (avoids double count).",
+    )
 
     class Meta:
         indexes = [

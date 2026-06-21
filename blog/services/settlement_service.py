@@ -54,7 +54,10 @@ class SettlementService:
         seq = 1
 
         for post in posts:
-            amount = Decimal(str(post.price))
+            # Subcontractor payout = price − company commission (price × rate%).
+            # The full price stays untouched in the DB (display-only invoice
+            # principle); the commission margin is implicit in price − payout.
+            amount = post.subcontractor_payout
 
             # GST is determined by the driver's registration status, NOT by ABN —
             # an ABN holder may still be unregistered for GST. Only registered

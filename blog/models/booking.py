@@ -1,3 +1,5 @@
+from decimal import Decimal, ROUND_HALF_UP, InvalidOperation
+
 from django.db import models
 from utils.prepay_helper import is_foreign_number
 
@@ -146,6 +148,33 @@ class Post(models.Model):
     @property
     def is_foreign_contact(self):
         return is_foreign_number(self.contact)
+
+    @property
+    def _price_decimal(self):
+        """price is a CharField (may be blank/None/non-numeric) — coerce safely."""
+        try:
+            return Decimal(str(self.price))
+        except (InvalidOperation, TypeError):
+            return Decimal('0')
+
+    @property
+    def commission_amount(self):
+        """Company commission on this ride. Display/calc only — never stored.
+
+        Zero when there is no driver or the driver's commission_rate is 0.
+        Otherwise price × rate / 100, rounded to cents (ROUND_HALF_UP).
+        """
+        driver = self.driver
+        if not driver or not driver.commission_rate:
+            return Decimal('0')
+        commission = self._price_decimal * driver.commission_rate / Decimal('100')
+        return commission.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+
+    @property
+    def subcontractor_payout(self):
+        """What the subcontractor is paid: price − commission. Display/calc only."""
+        payout = self._price_decimal - self.commission_amount
+        return payout.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
 
     class Meta:
         ordering = ['-created']

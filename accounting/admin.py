@@ -11,11 +11,26 @@ from . import reports
 
 @admin.register(Transaction)
 class TransactionAdmin(admin.ModelAdmin):
-    list_display = ('date', 'brand', 'direction', 'description', 'gross_amount', 'gst_code', 'category')
-    list_filter = ('brand', 'direction', 'gst_code', 'source')
+    list_display = ('date', 'brand', 'direction', 'description', 'gross_amount',
+                    'gst_code', 'category', 'needs_review', 'excluded')
+    list_filter = ('needs_review', 'excluded', 'brand', 'direction', 'gst_code', 'source')
     date_hierarchy = 'date'
     search_fields = ('description', 'counterparty')
     change_list_template = 'admin/accounting/transaction/change_list.html'
+    actions = ('approve_as_expense', 'exclude_as_driver_payment')
+
+    @admin.action(description="경비 승인 — count as BAS 1B expense")
+    def approve_as_expense(self, request, queryset):
+        """Clear the review hold so the row counts as a normal 1B expense."""
+        updated = queryset.update(needs_review=False, excluded=False)
+        self.message_user(request, f"{updated} transaction(s) approved as expense.")
+
+    @admin.action(description="드라이버 지급(제외) — exclude from BAS/P&L")
+    def exclude_as_driver_payment(self, request, queryset):
+        """Mark as a driver payout already captured by DriverSettlement, so it
+        is permanently excluded from BAS/P&L (avoids double counting)."""
+        updated = queryset.update(needs_review=False, excluded=True)
+        self.message_user(request, f"{updated} transaction(s) excluded as driver payment.")
 
     def get_urls(self):
         urls = super().get_urls()

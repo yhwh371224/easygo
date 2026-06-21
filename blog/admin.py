@@ -28,8 +28,8 @@ class CreateSettlementForm(forms.Form):
 
 
 class DriverAdmin(admin.ModelAdmin):
-    list_display = ['order', 'driver_name', 'abn', 'gst_registered', 'driver_contact', 'driver_email', 'driver_plate', 'user', 'must_change_password', 'impersonate_button']
-    list_editable = ['gst_registered']
+    list_display = ['order', 'driver_name', 'abn', 'gst_registered', 'commission_rate', 'driver_contact', 'driver_email', 'driver_plate', 'user', 'must_change_password', 'impersonate_button']
+    list_editable = ['gst_registered', 'commission_rate']
     list_filter = ['gst_registered']
     search_fields = ['driver_name', 'abn', 'driver_contact', 'driver_email', 'driver_address', 'driver_plate']
     ordering = ['order']
@@ -297,7 +297,7 @@ class PostAdmin(admin.ModelAdmin):
     list_filter  = ['region', 'cancelled', 'pending', 'cash']
     search_fields = ['pickup_date', 'pickup_time', 'suburb', 'email', 'street', 'booker_email', 'booker_name',
                      'name', 'contact', 'price', 'paid', 'email1', 'message', 'notice', 'region__name']
-    readonly_fields = ['suburb_distance_km', 'suburb_base_price']
+    readonly_fields = ['suburb_distance_km', 'suburb_base_price', 'commission_amount_display', 'subcontractor_payout_display']
 
     fieldsets = [
         ('Customer Info', {
@@ -317,7 +317,8 @@ class PostAdmin(admin.ModelAdmin):
                     'return_start_point', 'return_end_point']
         }),
         ('Pricing', {
-            'fields': ['suburb_distance_km', 'suburb_base_price', 'price', 'paid', 'discount', 'toll', 'surcharge']
+            'fields': ['suburb_distance_km', 'suburb_base_price', 'price', 'paid', 'discount', 'toll', 'surcharge',
+                       'commission_amount_display', 'subcontractor_payout_display']
         }),
         ('Status', {
             'fields': ['is_confirmed', 'cancelled', 'pending', 'sent_email', 'reminder', 'cash', 'driver_collected_cash', 'prepay',
@@ -363,6 +364,15 @@ class PostAdmin(admin.ModelAdmin):
         rs = RegionSuburb.objects.filter(region=obj.region, name__iexact=obj.suburb).first()
         return f"${rs.price}" if rs else "-"
     suburb_base_price.short_description = "Base Price"
+
+    def commission_amount_display(self, obj):
+        rate = obj.driver.commission_rate if obj.driver else 0
+        return f"${obj.commission_amount} ({rate}%)"
+    commission_amount_display.short_description = "Commission"
+
+    def subcontractor_payout_display(self, obj):
+        return f"${obj.subcontractor_payout}"
+    subcontractor_payout_display.short_description = "Subcontractor Payout"
 
 
 class PhoneMappingAdmin(admin.ModelAdmin):

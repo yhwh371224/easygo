@@ -198,10 +198,13 @@ def build_bas(fy_year, fy_quarter):
     gst_1a = sales['total_gst_1a']
 
     # --- 1B ---
+    # needs_review (held for triage) and excluded (driver payouts already in
+    # settlements) rows are NOT claimed as 1B until approved in the admin.
     gst_1b = ZERO
     for tx in Transaction.objects.filter(
         date__gte=start, date__lte=end,
         direction='expense', gst_code='gst',
+        needs_review=False, excluded=False,
     ):
         if tx.gst_amount > ZERO:
             gst_1b += tx.gst_amount
@@ -288,7 +291,12 @@ def build_pnl(start, end, brand=BRAND_ALL):
     if brand not in VALID_BRANDS:
         brand = BRAND_ALL
 
-    tx = Transaction.objects.filter(date__gte=start, date__lte=end)
+    # Held-for-review and excluded rows are not finalised figures: keep them out
+    # of P&L until triaged (excluded driver payouts are already in settlements).
+    tx = Transaction.objects.filter(
+        date__gte=start, date__lte=end,
+        needs_review=False, excluded=False,
+    )
     if brand != BRAND_ALL:
         tx = tx.filter(brand=brand)
 

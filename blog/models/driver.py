@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -19,6 +21,12 @@ class Driver(models.Model):
     driver_name = models.CharField(max_length=100, blank=True, null=True)
     abn = models.CharField(max_length=20, blank=True, null=True)
     gst_registered = models.BooleanField(default=False)
+    commission_rate = models.DecimalField(
+        max_digits=4,
+        decimal_places=2,
+        default=Decimal('0'),
+        help_text='회사 커미션 %. 예: 10.00 = 10%',
+    )
     driver_contact = models.CharField(max_length=50, blank=True, null=True)
     driver_email = models.EmailField(blank=True, null=True)
     driver_address = models.CharField(max_length=200, blank=True, null=True)
