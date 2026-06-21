@@ -171,7 +171,7 @@ def build_event_data(instance):
         f"${instance.paid}" if instance.paid else "",
         f"end.:{instance.end_point}" if instance.end_point else "",
         instance.terminal_pickup_point.name if instance.terminal_pickup_point else '',
-        instance.driver if instance.driver else '',
+        (instance.driver.driver_name or '') if instance.driver else '',
         instance.contact if contact_display != instance.contact else '',
     ]))
     if extra_stops_block:
