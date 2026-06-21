@@ -13,6 +13,7 @@ from utils.booking_helper import normalize_direction
 from blog.models import Post, Inquiry, Driver
 from blog.sms_utils import send_sms_notice, send_whatsapp_template, format_au_phone
 from blog.blog_utils import resolve_driver
+from utils.direction_utils import is_airport_pickup
 from csp.constants import NONCE
 from basecamp.basecamp_utils import (
     parse_baggage, parse_special_items, handle_email_sending, format_pickup_time_12h,
@@ -71,7 +72,7 @@ def confirmation_detail(request):
         except ValueError as e:
             return JsonResponse({'success': False, 'error': str(e)})
 
-        driver = resolve_driver(suburb)
+        driver = resolve_driver(suburb) if is_airport_pickup(direction) else None
         
         # 🧳 개별 수하물 항목 수집
         baggage_str = parse_baggage(request)
