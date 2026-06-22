@@ -98,7 +98,7 @@
                       <input class="form-control" type="text" placeholder="Your flight number" name="flight_number" id="flight_number">
                       <div class="invalid-feedback">Please enter your flight number!</div>
                   </div>
-                  {% time_picker "flight_time" "Flight time" hint="Sydney arrival time" %}
+                  {% time_picker "flight_time" "Flight time" hint=region.name %}
               </div>
           {% endif %}
             <br>
