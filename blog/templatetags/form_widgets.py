@@ -3,7 +3,7 @@ register = template.Library()
 
 
 @register.inclusion_tag('widgets/time_picker.html')
-def time_picker(field_name, label, value=''):
+def time_picker(field_name, label, value='', hint=''):
     hour, minute, ampm = '', '', 'AM'
     if value:
         try:
@@ -16,4 +16,4 @@ def time_picker(field_name, label, value=''):
         except (ValueError, IndexError):
             pass
     return {'field_name': field_name, 'label': label,
-            'hour': hour, 'minute': str(minute).zfill(2), 'ampm': ampm}
+            'hour': hour, 'minute': str(minute).zfill(2), 'ampm': ampm, 'hint': hint}
