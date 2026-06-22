@@ -108,11 +108,30 @@ def region_inquiry_details(request, region_slug):
         p.region = region
         p.price = calculate_inquiry_price(p, region)
         inquiry_count = Inquiry.objects.filter(email__iexact=email).count()
-        post_count = Post.objects.filter(
+        past_posts = Post.objects.filter(
             Q(booker_email__iexact=email) | Q(email__iexact=email),
             cancelled=False, pending=False,
-        ).count()
-        p.customer_history = f"Inquiry: {inquiry_count} | Post: {post_count}"
+        )
+        post_count = past_posts.count()
+        latest_post = past_posts.first()
+        last_source = last_pax = last_price = last_date = None
+        if latest_post and (latest_post.price or latest_post.no_of_passenger):
+            last_source = 'Post'
+            last_pax = latest_post.no_of_passenger or '-'
+            last_price = latest_post.price or '-'
+            last_date = latest_post.pickup_date
+        else:
+            latest_inquiry = Inquiry.objects.filter(email__iexact=email).first()
+            if latest_inquiry and (latest_inquiry.price or latest_inquiry.no_of_passenger):
+                last_source = 'Inquiry'
+                last_pax = latest_inquiry.no_of_passenger or '-'
+                last_price = latest_inquiry.price or '-'
+                last_date = latest_inquiry.pickup_date
+        history = f"Inquiry: {inquiry_count} | Post: {post_count}"
+        if last_source:
+            date_str = last_date.strftime('%Y-%m-%d') if last_date else '-'
+            history += f" | {last_source}: {last_pax}pax ${last_price} {date_str}"
+        p.customer_history = history
         p.save()
 
         ip = get_client_ip(request)
