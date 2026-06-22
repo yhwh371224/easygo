@@ -138,6 +138,12 @@ class Post(models.Model):
     extra_stop           = models.PositiveSmallIntegerField(default=0)
     extra_stop_addresses = models.JSONField(default=list, blank=True)
     same_extra_stop      = models.BooleanField(default=False)
+    commission_rate = models.DecimalField(
+        max_digits=4,
+        decimal_places=2,
+        default=Decimal('0'),
+        help_text='이 부킹에 적용된 커미션 %. 드라이버 배정 시 기본값 자동 적용.',
+    )
     special_items = models.JSONField(default=dict, blank=True)
     created = models.DateTimeField(auto_now_add=True)
 
@@ -159,15 +165,10 @@ class Post(models.Model):
 
     @property
     def commission_amount(self):
-        """Company commission on this ride. Display/calc only — never stored.
-
-        Zero when there is no driver or the driver's commission_rate is 0.
-        Otherwise price × rate / 100, rounded to cents (ROUND_HALF_UP).
-        """
-        driver = self.driver
-        if not driver or not driver.commission_rate:
+        """Company commission on this ride. Uses Post's own commission_rate field."""
+        if not self.commission_rate:
             return Decimal('0')
-        commission = self._price_decimal * driver.commission_rate / Decimal('100')
+        commission = self._price_decimal * self.commission_rate / Decimal('100')
         return commission.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
 
     @property

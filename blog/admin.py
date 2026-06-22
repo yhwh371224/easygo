@@ -318,7 +318,7 @@ class PostAdmin(admin.ModelAdmin):
         }),
         ('Pricing', {
             'fields': ['suburb_distance_km', 'suburb_base_price', 'price', 'paid', 'discount', 'toll', 'surcharge',
-                       'commission_amount_display', 'subcontractor_payout_display']
+                       'commission_rate', 'commission_amount_display', 'subcontractor_payout_display']
         }),
         ('Status', {
             'fields': ['is_confirmed', 'cancelled', 'pending', 'sent_email', 'reminder', 'cash', 'driver_collected_cash', 'prepay',
@@ -351,6 +351,9 @@ class PostAdmin(admin.ModelAdmin):
                 ).strip()
                 if db_val:
                     setattr(obj, field, db_val)
+        # 드라이버 배정 시 commission_rate가 0이면 드라이버 기본 요율 자동 적용
+        if obj.driver and not obj.commission_rate:
+            obj.commission_rate = obj.driver.commission_rate
         super().save_model(request, obj, form, change)
 
     def suburb_distance_km(self, obj):
@@ -366,8 +369,7 @@ class PostAdmin(admin.ModelAdmin):
     suburb_base_price.short_description = "Base Price"
 
     def commission_amount_display(self, obj):
-        rate = obj.driver.commission_rate if obj.driver else 0
-        return f"${obj.commission_amount} ({rate}%)"
+        return f"${obj.commission_amount} ({obj.commission_rate}%)"
     commission_amount_display.short_description = "Commission"
 
     def subcontractor_payout_display(self, obj):
