@@ -470,7 +470,15 @@ def create_stripe_checkout_session(request):
                 p_paid = float(post.paid or 0)
             except (ValueError, TypeError):
                 continue
-            balance = round(p_price - p_paid, 2)
+            # Apply the same surcharge/discount formula used in the confirmation
+            # email and invoices so the online charge matches the quoted total.
+            # The helpers only act on numeric surcharge/discount fields; when
+            # those are blank or text (e.g. "surcharge included" on self-booked
+            # Posts whose price is already all-inclusive) they contribute 0, so
+            # there is no double counting.
+            surcharge_amt, _ = _calc_surcharge(None, p_price, post)
+            discount_amt = _calc_discount(None, post)
+            balance = round(p_price + surcharge_amt - discount_amt - p_paid, 2)
             if balance > 0:
                 total_cents += round(balance * 100)
 

@@ -20,6 +20,20 @@ def clean_float(value):
         return "0"
 
 
+def _net_adjustment(post):
+    """Return (surcharge, discount) numeric adjustments from a booking's own
+    fields, mirroring basecamp.views.payments._calc_surcharge / _calc_discount
+    when called with no form input (the charge-side fallback). Only numeric
+    field values are applied; blank or text values (e.g. "surcharge included"
+    on self-booked Posts whose price is already all-inclusive) yield 0 so the
+    reconciled amount matches what was charged."""
+    s = (getattr(post, 'surcharge', '') or '').strip()
+    surcharge = round(float(s), 2) if s.replace('.', '', 1).isdigit() else 0.0
+    d = (getattr(post, 'discount', '') or '').strip()
+    discount = float(d) if d.replace('.', '', 1).isdigit() else 0.0
+    return surcharge, discount
+
+
 def process_generic_payment(payment_instance, posts, admin_email, calculated_amount=None):
     """
     Stripe/PayPal 결제 건을 분석하여 여러 예약(Post)에 금액을 배분합니다.
@@ -58,7 +72,8 @@ def process_generic_payment(payment_instance, posts, admin_email, calculated_amo
     total_balance = 0.0
     for post in posts_list:
         try:
-            balance = round(float(post.price or 0) - float(post.paid or 0), 2)
+            surcharge, discount = _net_adjustment(post)
+            balance = round(float(post.price or 0) + surcharge - discount - float(post.paid or 0), 2)
         except (ValueError, TypeError):
             continue
         if balance > 0:
@@ -79,7 +94,9 @@ def process_generic_payment(payment_instance, posts, admin_email, calculated_amo
         except (ValueError, TypeError):
             continue
 
-        balance = round(p_price - p_paid, 2)
+        surcharge, discount = _net_adjustment(post)
+        p_total = round(p_price + surcharge - discount, 2)
+        balance = round(p_total - p_paid, 2)
         if balance <= 0:
             continue
 
@@ -88,7 +105,7 @@ def process_generic_payment(payment_instance, posts, admin_email, calculated_amo
 
         new_paid = p_paid + apply_now
         post.paid = clean_float(new_paid)
-        post.toll = "" if new_paid >= p_price else "short payment"
+        post.toll = "" if new_paid >= p_total else "short payment"
         post.reminder = True
         post.pending = False
         post.cancelled = False
