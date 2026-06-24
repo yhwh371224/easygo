@@ -43,7 +43,7 @@ def custom_login_view(request):
             request.session['email'] = email
             return redirect('easygo_review:easygo_review')
         
-        posts = BlogPost.objects.filter(email=email)
+        posts = BlogPost.objects.filter(email=email, cancelled=False, pending=False).exclude(paid__isnull=True).exclude(paid='')
         if posts.exists():
             post = posts.first()
             request.session.cycle_key()
@@ -63,9 +63,9 @@ def custom_logout_view(request):
 def get_authenticated_post(request):
     email = request.session.get('email')
     if email:
-        posts = BlogPost.objects.filter(email=email)
+        posts = BlogPost.objects.filter(email=email, cancelled=False, pending=False).exclude(paid__isnull=True).exclude(paid='')
         if posts.exists():
-            return posts.first()  
+            return posts.first()
     return None
 
 
