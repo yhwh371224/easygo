@@ -13,7 +13,7 @@ from utils.email import send_template_email
 from utils.booking_helper import normalize_direction
 from blog.models import Post, Inquiry, Driver
 from blog.sms_utils import send_sms_notice, send_whatsapp_template, format_au_phone
-from blog.blog_utils import resolve_driver
+from blog.blog_utils import resolve_driver, _net_adjustment
 from utils.direction_utils import is_airport_pickup
 from csp.constants import NONCE
 from basecamp.basecamp_utils import (
@@ -550,11 +550,15 @@ def email_dispatch_detail(request):
                 price = float(booking.price)
                 paid = float(booking.paid or 0)
 
+                # 청구(Stripe/PayPal)·정산과 동일 공식: 총액 = price + surcharge − discount
+                surcharge, discount = _net_adjustment(booking)
+                total_due = round(price + surcharge - discount, 2)
+
                 # 이미 전액 결제 → 완전히 스킵
-                if paid >= price:
+                if paid >= total_due:
                     continue
 
-                due = price - paid
+                due = total_due - paid
                 apply_amount = min(remaining_amount, due)
 
                 # 적용할 금액이 없으면 스킵
