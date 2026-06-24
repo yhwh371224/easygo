@@ -15,6 +15,13 @@ def send_post_confirmation_email(instance):
     else:
         price = "TBA"
 
+    raw_discount = str(instance.discount or '').strip()
+    try:
+        discount_amount = int(Decimal(raw_discount)) if raw_discount else 0
+    except Exception:
+        discount_amount = 0
+    discounted_price = price - discount_amount if isinstance(price, int) and discount_amount else price
+
     html_content = render_email_template(
         "html_email-confirmation.html",
         {
@@ -63,6 +70,8 @@ def send_post_confirmation_email(instance):
         'surcharge': instance.surcharge,
         'extra_stop_addresses': instance.extra_stop_addresses or [],
         'same_extra_stop': instance.same_extra_stop,
+        'discount': discount_amount,
+        'discounted_price': discounted_price,
         }
     )
 

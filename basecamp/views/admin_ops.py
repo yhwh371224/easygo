@@ -1,4 +1,5 @@
 from datetime import datetime, date, timedelta
+from decimal import Decimal
 import logging
 import stripe
 from django.conf import settings
@@ -27,6 +28,15 @@ from django_ratelimit.decorators import ratelimit
 logger = logging.getLogger(__name__)
 
 stripe.api_key = settings.STRIPE_LIVE_SECRET_KEY
+
+
+def _parse_discount(value):
+    """Parse a CharField discount value to int, 0 if absent or unparseable."""
+    s = str(value or '').strip()
+    try:
+        return int(Decimal(s)) if s else 0
+    except Exception:
+        return 0
 
 
 # Booking by myself
@@ -155,6 +165,12 @@ def sending_email_first_detail(request):
             else:
                 template_name = "html_email-confirmation.html"
 
+                discount_amt = _parse_discount(user.discount)
+                try:
+                    disc_price = int(Decimal(str(display_price)) - discount_amt) if discount_amt and display_price not in ('TBA', None, '') else display_price
+                except Exception:
+                    disc_price = display_price
+
                 send_template_email(
                     "Booking confirmation - EasyGo",
                     "html_email-confirmation.html",
@@ -173,6 +189,8 @@ def sending_email_first_detail(request):
                         'return_start_point': user.return_start_point, 'return_end_point': user.return_end_point,
                         'surcharge': user.surcharge,
                         'extra_stop_addresses': user.extra_stop_addresses or [],
+                        'discount': discount_amt,
+                        'discounted_price': disc_price,
                     },
                     ([user.booker_email] if user.booker_email else list(filter(None, [user.email, user.email1]))) + [RECIPIENT_EMAIL],
                     request=request,
@@ -234,6 +252,9 @@ def sending_email_second_detail(request):
         paid2 = float(user1.paid) if user1.paid else 0
         double_paid = paid1 + paid2
 
+        total_discount = _parse_discount(user.discount) + _parse_discount(user1.discount)
+        disc_double_price = int(double_price - total_discount) if total_discount and isinstance(double_price, (int, float)) else double_price
+
         if user.cancelled or user1.cancelled:
             template_name = "html_email-cancelled.html"
             subject = "Booking Cancellation Notice - EasyGo" 
@@ -288,6 +309,8 @@ def sending_email_second_detail(request):
                 'return_end_point': user.return_end_point,
                 'surcharge': user.surcharge,
                 'extra_stop_addresses': user.extra_stop_addresses or [],
+                'discount': total_discount,
+                'discounted_price': disc_double_price,
             }
 
             customer_recipients = [user.booker_email] if user.booker_email else list(filter(None, [user.email, user.email1]))

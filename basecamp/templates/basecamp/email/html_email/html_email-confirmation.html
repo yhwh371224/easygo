@@ -176,16 +176,20 @@
                   {% elif cash %}
                       {% if rt_total %}
                       • Total (round trip): ${{ rt_total }}{% if toll and surcharge %}, toll & fuel surcharge included{% elif toll %}, toll included{% elif surcharge %}, fuel surcharge included{% endif %}<br />
+                      {% elif discount %}
+                      • The total cost is ${{ price }} − ${{ discount }} (discount) = ${{ discounted_price }}{% if toll and surcharge %}, toll & fuel surcharge included{% elif toll %}, toll included{% elif surcharge %}, fuel surcharge included{% endif %}<br />
                       {% else %}
-                      • The total cost is ${{ price }}{% if toll and surcharge %}, toll & fuel surcharge included{% elif toll %}, toll included{% elif surcharge %}, fuel surcharge included{% endif %}<br />
+                      • The total cost is ${{ discounted_price }}{% if toll and surcharge %}, toll & fuel surcharge included{% elif toll %}, toll included{% elif surcharge %}, fuel surcharge included{% endif %}<br />
                       {% endif %}
                       {% if surcharge %}<span style="color:#666;">&nbsp;&nbsp;* Fuel surcharge is temporary due to the recent rise in fuel costs.</span><br />{% endif %}
                       • Payment will be made in cash directly to the driver on the day.<br />
                   {% elif prepay %}
                       {% if rt_total %}
                       • Total (round trip): ${{ rt_total }}{% if toll and surcharge %}, toll & fuel surcharge included{% elif toll %}, toll included{% elif surcharge %}, fuel surcharge included{% endif %}<br />
+                      {% elif discount %}
+                      • The total cost is ${{ price }} − ${{ discount }} (discount) = ${{ discounted_price }}{% if toll and surcharge %}, toll & fuel surcharge included{% elif toll %}, toll included{% elif surcharge %}, fuel surcharge included{% endif %}<br />
                       {% else %}
-                      • The total cost is ${{ price }}{% if toll and surcharge %}, toll & fuel surcharge included{% elif toll %}, toll included{% elif surcharge %}, fuel surcharge included{% endif %}<br />
+                      • The total cost is ${{ discounted_price }}{% if toll and surcharge %}, toll & fuel surcharge included{% elif toll %}, toll included{% elif surcharge %}, fuel surcharge included{% endif %}<br />
                       {% endif %}
                       {% if surcharge %}<span style="color:#666;">&nbsp;&nbsp;* Fuel surcharge is temporary due to the recent rise in fuel costs.</span><br />{% endif %}
                       • Please make payment online in advance using the link below:<br />
@@ -193,8 +197,10 @@
                   {% else %}
                       {% if rt_total %}
                       • Total (round trip): ${{ rt_total }}{% if toll and surcharge %}, toll & fuel surcharge included{% elif toll %}, toll included{% elif surcharge %}, fuel surcharge included{% endif %}<br />
+                      {% elif discount %}
+                      • The total cost is ${{ price }} − ${{ discount }} (discount) = ${{ discounted_price }}{% if toll and surcharge %}, toll & fuel surcharge included{% elif toll %}, toll included{% elif surcharge %}, fuel surcharge included{% endif %}<br />
                       {% else %}
-                      • The total cost is ${{ price }}{% if toll and surcharge %}, toll & fuel surcharge included{% elif toll %}, toll included{% elif surcharge %}, fuel surcharge included{% endif %}<br />
+                      • The total cost is ${{ discounted_price }}{% if toll and surcharge %}, toll & fuel surcharge included{% elif toll %}, toll included{% elif surcharge %}, fuel surcharge included{% endif %}<br />
                       {% endif %}
                       {% if surcharge %}<span style="color:#666;">&nbsp;&nbsp;* Fuel surcharge is temporary due to the recent rise in fuel costs.</span><br />{% endif %}
                       • You may choose either of the following:<br />
