@@ -62,13 +62,24 @@ def _resolve_bookings(users, index, from_date, to_date):
     return bookings, False
 
 
-def _calc_surcharge(surcharge_input, price):
-    """Return (surcharge_calc, surcharge_display)."""
-    if surcharge_input == "Yes":
+def _calc_surcharge(surcharge_input, price, booking=None):
+    """Return (surcharge_calc, surcharge_display).
+    - "Yes": 3% of price applied.
+    - numeric input: that exact amount applied.
+    - blank: fall back to booking.surcharge model field if numeric.
+    The calc and display values are always equal so the displayed amount
+    is the one actually added to the total."""
+    s = (surcharge_input or '').strip()
+    if s == "Yes":
         calc = round(price * 0.03, 2)
         return calc, calc
-    if surcharge_input:
-        return 0.0, surcharge_input
+    if s.replace('.', '', 1).isdigit():
+        val = round(float(s), 2)
+        return val, val
+    booking_surcharge = (getattr(booking, 'surcharge', '') or '').strip()
+    if booking_surcharge.replace('.', '', 1).isdigit():
+        val = round(float(booking_surcharge), 2)
+        return val, val
     return 0.0, 0.0
 
 
@@ -138,7 +149,7 @@ def _build_booking_row(booking, apply_gst_flag, surcharge_input, toll_input):
     start_point, end_point = _get_start_end_points(booking)
     price = safe_float(booking.price) or 0.0
     with_gst, gst_included = _gst_lines(apply_gst_flag, price, booking)
-    surcharge_calc, surcharge_display = _calc_surcharge(surcharge_input, price)
+    surcharge_calc, surcharge_display = _calc_surcharge(surcharge_input, price, booking)
     toll = safe_float(toll_input) if toll_input else safe_float(booking.toll) or 0.0
     paid = safe_float(booking.paid) or 0.0
     total = price + with_gst + surcharge_calc + toll
@@ -224,7 +235,7 @@ def _build_single_context(user, users, params, inv_no, today, DEFAULT_BANK):
     end_point = user.end_point
     price = safe_float(user.price) or 0.0
     with_gst, gst_included = _gst_lines(apply_gst_flag, price, user)
-    surcharge_calc, surcharge_display = _calc_surcharge(surcharge_input, price)
+    surcharge_calc, surcharge_display = _calc_surcharge(surcharge_input, price, user)
     toll = safe_float(toll_input) if toll_input else safe_float(user.toll) or 0.0
     discount = _calc_discount(discount_input, user)
     total_price = price + with_gst + surcharge_calc + toll - discount
@@ -269,7 +280,7 @@ def _build_single_context(user, users, params, inv_no, today, DEFAULT_BANK):
         doubled_price = base_price * 2
         doubled_paid = base_paid * 2
         doubled_with_gst, doubled_gst_included = _gst_lines(apply_gst_flag, doubled_price, user1)
-        doubled_surcharge = round(doubled_price * 0.03, 2) if surcharge_input else 0.0
+        doubled_surcharge, _ = _calc_surcharge(surcharge_input, doubled_price, user1)
         doubled_total = doubled_price + doubled_with_gst + doubled_surcharge + toll - discount
         balance = round(doubled_total - doubled_paid, 2)
         context = {
