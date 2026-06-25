@@ -114,8 +114,12 @@ class Command(BaseCommand):
             try:
                 logger.info(f"[{subject}] Processing booking id={booking_reminder.id} email={booking_reminder.email} booker_email={booking_reminder.booker_email}")
 
-                if not booking_reminder.driver and subject == "Reminder-Today":
-                    logger.warning(f"[{subject}] SKIP id={booking_reminder.id} — no driver")
+                # 도착("Pickup from") 손님은 driver 없으면 여기서 skip — send_arrivals 명령이
+                # driver 유무와 무관하게 별도로 발송함. 출발/일반 손님은 백업 경로가 없으므로
+                # driver가 없어도 누락되지 않도록 발송한다.
+                is_arrival = "pickup from" in (booking_reminder.direction or "").lower()
+                if not booking_reminder.driver and subject == "Reminder-Today" and is_arrival:
+                    logger.warning(f"[{subject}] SKIP id={booking_reminder.id} — no driver (arrival, handled by send_arrivals)")
                     continue
 
                 logger.info(f"[{subject}] id={booking_reminder.id} terminal_pickup_point={booking_reminder.terminal_pickup_point}")
