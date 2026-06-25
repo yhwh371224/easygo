@@ -85,11 +85,7 @@ def send_post_confirmation_email(instance):
         'extra_stop_addresses': instance.extra_stop_addresses or [],
         'same_extra_stop': instance.same_extra_stop,
         'discount': discount_amount,
-<<<<<<< Updated upstream
         'final_price': final_price,
-=======
-        'final_price': discounted_price,
->>>>>>> Stashed changes
         }
     )
 
