@@ -1,7 +1,6 @@
 import logging
 from django.conf import settings
 from django.utils import timezone
-from django.db import transaction
 
 from blog.models import Post, Driver, PhoneMapping
 from blog.sms_utils import normalize_phone, format_au_phone
@@ -169,6 +168,13 @@ def update_meeting_point_for_arrivals():
             booking.name,
         )
 
-    with transaction.atomic():
-        if to_update:
-            Post.objects.bulk_update(to_update, ["terminal_pickup_point"])
+    # bulk_update()는 post_save 시그널을 발생시키지 않아 캘린더가 갱신되지 않는다.
+    # terminal_pickup_point 변경이 캘린더에 반영되도록 개별 save()로 시그널을 발생시킨다.
+    for booking in to_update:
+        try:
+            booking.save(update_fields=["terminal_pickup_point"])
+        except Exception:
+            logger.error(
+                "Failed to save terminal_pickup_point for booking %s",
+                booking.id, exc_info=True,
+            )
