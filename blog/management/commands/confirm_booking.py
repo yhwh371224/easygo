@@ -56,6 +56,9 @@ class Command(BaseCommand):
                     'notice': post.notice,
                     'price': post.price,
                     'paid': post.paid,
+                    'cash': post.cash,
+                    'prepay': post.prepay,
+                    'reminder': post.reminder,
                     'extra_stop_addresses': post.extra_stop_addresses or [],
                 }
                 if post.booker_email:

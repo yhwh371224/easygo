@@ -202,6 +202,9 @@
                       {% comment %}{% if surcharge %}<span style="color:#666;">&nbsp;&nbsp;* Fuel surcharge is temporary due to the recent rise in fuel costs.</span><br />{% endif %}{% endcomment %}
                       • Please make payment online in advance using the link below:<br />
                       &nbsp;&nbsp;<a href="https://easygoshuttle.com.au/payonline">easygoshuttle.com.au/payonline</a><br />
+                      {% if not reminder %}
+                      <br /><span style="color:#c0392b;font-weight:bold;">⚠️ Important: Payment must be received within 48 hours of this email, or your booking will be automatically cancelled.</span><br />
+                      {% endif %}
                   {% else %}
                       {% if rt_total %}
                       • Total (round trip): ${{ rt_total }}{% if toll %}, toll included{% endif %}<br />
@@ -219,6 +222,9 @@
                       &nbsp;&nbsp;<strong>1.</strong> Prepay securely via PayPal: <a href="https://easygoshuttle.com.au/payonline">easygoshuttle.com.au/payonline</a><br />
                       &nbsp;&nbsp;<strong>2.</strong> Pay cash to the driver on the day — simply reply to this email to confirm.<br />
                       <span style="color:#666;">&nbsp;&nbsp;* For cash bookings, a quick reply helps us secure your seat. Please let us know as early as possible if your plans change.</span><br />
+                      {% if not reminder %}
+                      <br /><span style="color:#c0392b;font-weight:bold;">⚠️ Important: Please reply within 48 hours to confirm your preferred payment method (cash or online). If we do not hear back, your booking will be automatically cancelled.</span><br />
+                      {% endif %}
                   {% endif %}
 
                 </td>
