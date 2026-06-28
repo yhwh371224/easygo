@@ -200,11 +200,11 @@
             </div>
 
             <div class="col-sm-6">
-              {% include "widgets/time_picker.html" with field_name="flight_time" label="Flight time" ampm="AM" %}
+              {% include "widgets/time_picker.html" with field_name="flight_time" label="Flight time" ampm="AM" hint="Flight" %}
             </div>
 
             <div class="col-sm-6">
-              {% include "widgets/time_picker.html" with field_name="pickup_time" label="Pickup time" ampm="AM" %}
+              {% include "widgets/time_picker.html" with field_name="pickup_time" label="Pickup time" ampm="AM" hint="Pickup" %}
             </div>
 
           </div>
@@ -291,12 +291,12 @@
               </div>
               {# return_flight_time #}
               <div class="col-sm-6">
-                {% include "widgets/time_picker.html" with field_name="return_flight_time" label="Flight time" ampm="AM" %}
+                {% include "widgets/time_picker.html" with field_name="return_flight_time" label="Flight time" ampm="AM" hint="Flight" %}
               </div>
 
               {# return_pickup_time #}
               <div class="col-sm-6">
-                {% include "widgets/time_picker.html" with field_name="return_pickup_time" label="Pickup time" ampm="AM" %}
+                {% include "widgets/time_picker.html" with field_name="return_pickup_time" label="Pickup time" ampm="AM" hint="Pickup" %}
               </div>
               <div class="col-12">
                 <div class="form-check mt-1">

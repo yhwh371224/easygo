@@ -196,6 +196,7 @@ def sending_email_first_detail(request):
                         'extra_stop_addresses': user.extra_stop_addresses or [],
                         'discount': discount_amt,
                         'final_price': final_price,
+                        'reminder': user.reminder,
                     },
                     ([user.booker_email] if user.booker_email else list(filter(None, [user.email, user.email1]))) + [RECIPIENT_EMAIL],
                     request=request,
@@ -317,6 +318,7 @@ def sending_email_second_detail(request):
                 'extra_stop_addresses': user.extra_stop_addresses or [],
                 'discount': total_discount,
                 'final_price': final_double_price,
+                'reminder': user.reminder,
             }
 
             customer_recipients = [user.booker_email] if user.booker_email else list(filter(None, [user.email, user.email1]))
