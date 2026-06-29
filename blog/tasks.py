@@ -73,6 +73,10 @@ def notify_user_payment_paypal(instance_id):
             pickup_date__isnull=False,
             pickup_date__gte=timezone.localdate(),
         ).first()
+        prepay_qs = posts.filter(prepay=True, pickup_date__gte=timezone.localdate()).order_by('-id')
+        prepay_post = prepay_qs.first()
+        if prepay_post and prepay_post.return_pickup_time == 'x':
+            prepay_post = prepay_qs[1:2].first()
 
         if not success: return
 
@@ -87,8 +91,11 @@ def notify_user_payment_paypal(instance_id):
         nearest_post=nearest_future_post,
     )
 
+    if prepay_post and not (prepay_post.company_name or '').strip():
+        send_post_confirmation_email_task.delay(prepay_post.pk)
 
-# Stripe payment 
+
+# Stripe payment
 @shared_task
 def notify_user_payment_stripe(instance_id):
     from .blog_utils import process_generic_payment, send_payment_notification_email
@@ -111,6 +118,10 @@ def notify_user_payment_stripe(instance_id):
             pickup_date__isnull=False,
             pickup_date__gte=timezone.localdate(),
         ).first()
+        prepay_qs = posts.filter(prepay=True, pickup_date__gte=timezone.localdate()).order_by('-id')
+        prepay_post = prepay_qs.first()
+        if prepay_post and prepay_post.return_pickup_time == 'x':
+            prepay_post = prepay_qs[1:2].first()
 
         if not success: return
 
@@ -122,6 +133,9 @@ def notify_user_payment_stripe(instance_id):
         all_already_paid=all_already_paid,
         nearest_post=nearest_future_post,
     )
+
+    if prepay_post and not (prepay_post.company_name or '').strip():
+        send_post_confirmation_email_task.delay(prepay_post.pk)
 
 
 @shared_task
