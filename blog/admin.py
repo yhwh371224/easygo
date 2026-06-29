@@ -293,7 +293,6 @@ class StripePaymentAdmin(admin.ModelAdmin):
 class PostAdmin(admin.ModelAdmin):
     list_display = ['pickup_date', 'region', 'name', 'suburb', 'pickup_time', 'price', 'paid',
                     'cancelled', 'pending', 'cash', 'direction', 'return_flight_number', 'created']
-    list_editable = ['driver_collected_cash']
     list_filter  = ['region', 'cancelled', 'pending', 'cash']
     search_fields = ['pickup_date', 'pickup_time', 'suburb', 'email', 'street', 'booker_email', 'booker_name',
                      'name', 'contact', 'price', 'paid', 'email1', 'message', 'notice', 'region__name']
