@@ -5,7 +5,7 @@ from django.template.response import TemplateResponse
 from django.urls import path
 from django.utils.dateparse import parse_date
 
-from .models import Transaction, PayrollEntry, DividendRecord
+from .models import Transaction, PayrollEntry, DividendRecord, DirectorLoan
 from . import reports
 
 
@@ -146,3 +146,16 @@ class DividendRecordAdmin(admin.ModelAdmin):
     list_display = ('declared_date', 'amount', 'franking_credit', 'status')
     list_filter = ('status',)
     date_hierarchy = 'declared_date'
+
+
+@admin.register(DirectorLoan)
+class DirectorLoanAdmin(admin.ModelAdmin):
+    list_display  = ('date', 'direction', 'amount', 'description')
+    list_filter   = ('direction',)
+    date_hierarchy = 'date'
+    change_list_template = 'admin/accounting/directorloan/change_list.html'
+
+    def changelist_view(self, request, extra_context=None):
+        extra_context = extra_context or {}
+        extra_context['director_loan_balance'] = DirectorLoan.current_balance()
+        return super().changelist_view(request, extra_context=extra_context)

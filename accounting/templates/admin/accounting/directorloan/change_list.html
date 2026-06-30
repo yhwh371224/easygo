@@ -1,0 +1,18 @@
+{% extends "admin/change_list.html" %}
+
+{% block object-tools-items %}
+  <li>
+    <span style="
+      display:inline-block;
+      padding:.4rem 1rem;
+      background:{% if director_loan_balance > 0 %}#d1fae5{% else %}#fee2e2{% endif %};
+      color:{% if director_loan_balance > 0 %}#065f46{% else %}#991b1b{% endif %};
+      border-radius:4px;
+      font-weight:700;
+      font-size:.85rem;
+    ">
+      Outstanding Balance: ${{ director_loan_balance }}
+    </span>
+  </li>
+  {{ block.super }}
+{% endblock %}

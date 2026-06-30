@@ -41,6 +41,16 @@ class Command(BaseCommand):
     def _contains_any(haystack_upper, needles):
         return any(n.upper() in haystack_upper for n in needles)
 
+    @staticmethod
+    def _exact_match(haystack_upper, markers):
+        """Full-string exact match — description must equal a marker exactly.
+
+        Used for WAGE and LOAN markers to prevent partial-match false positives
+        (e.g. 'DIRECTOR WAGE ADJUSTMENT' must NOT match 'DIRECTOR WAGE').
+        haystack_upper is already .strip().upper() at call site.
+        """
+        return haystack_upper in {m.upper() for m in markers}
+
     def _load_driver_matchers(self):
         """
         Build digit-list and name-regex list from active drivers in DB.
@@ -84,8 +94,16 @@ class Command(BaseCommand):
         return any(rx.search(desc_upper) for rx in self._driver_name_regexes)
 
     def _is_wage_payment(self, desc_upper):
-        """True if row is a director/owner wage transfer (already in PayrollEntry)."""
-        return self._contains_any(desc_upper, conf.WAGE_SKIP_MARKERS)
+        """True if row is a director/owner wage transfer (already in PayrollEntry).
+        Exact full-string match — no partial matching.
+        """
+        return self._exact_match(desc_upper, conf.WAGE_SKIP_MARKERS)
+
+    def _is_loan_payment(self, desc_upper):
+        """True if row is a director loan contribution/repayment (already in DirectorLoan).
+        Exact full-string match — no partial matching.
+        """
+        return self._exact_match(desc_upper, conf.LOAN_SKIP_MARKERS)
 
     def _is_super_payment(self, desc_upper):
         """True if row is a super contribution (already in PayrollEntry)."""
@@ -121,7 +139,7 @@ class Command(BaseCommand):
             raise CommandError(f"Could not open {path}: {e}")
 
         created = skipped_income = skipped_driver = skipped_transfer = 0
-        skipped_wage = skipped_super = skipped_dup = errors = held_for_review = 0
+        skipped_wage = skipped_loan = skipped_super = skipped_dup = errors = held_for_review = 0
         to_create = []
 
         with fh:
@@ -155,6 +173,10 @@ class Command(BaseCommand):
 
                 if self._is_wage_payment(desc_upper):
                     skipped_wage += 1
+                    continue
+
+                if self._is_loan_payment(desc_upper):
+                    skipped_loan += 1
                     continue
 
                 if self._is_super_payment(desc_upper):
@@ -215,6 +237,7 @@ class Command(BaseCommand):
         self.stdout.write(f"  Skipped — income rows:           {skipped_income}")
         self.stdout.write(f"  Skipped — driver payments:       {skipped_driver}")
         self.stdout.write(f"  Skipped — wage transfers:        {skipped_wage}")
+        self.stdout.write(f"  Skipped — director loan:         {skipped_loan}")
         self.stdout.write(f"  Skipped — super contributions:   {skipped_super}")
         self.stdout.write(f"  Skipped — internal transfer:     {skipped_transfer}")
         self.stdout.write(f"  Skipped — duplicates:            {skipped_dup}")

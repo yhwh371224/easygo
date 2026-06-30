@@ -3,9 +3,14 @@ from decimal import Decimal
 
 GST_REGISTRATION_DATE = date(2026, 7, 1)
 
-# Bank CSV import: director/owner wage transfers — already in PayrollEntry, skip to
-# avoid double-counting in P&L.
+# Bank CSV import: director/owner wage net transfers — already in PayrollEntry.
+# Exact full-string match only (no substring). Skipped to prevent P&L double-count.
 WAGE_SKIP_MARKERS = ['DIRECTOR WAGE']
+
+# Bank CSV import: director capital contributions / repayments — already in
+# DirectorLoan. Exact full-string match only. These are balance-sheet items,
+# not P&L — must never be imported as income or expense.
+LOAN_SKIP_MARKERS = ['LOAN FROM DIRECTOR']
 
 # Bank CSV import: super contributions — fill in clearing house description after
 # first payrun (e.g. 'AUSTRALIANSUPER', 'SUPERCHOICE'). Already in PayrollEntry.
