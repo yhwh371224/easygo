@@ -489,8 +489,8 @@
   }
 </script>
 
-{# SETTLEMENTS BUTTON — 비활성화. 재활성화: dashboard.html 하단 주석 해제 #}
-{# <a href="{% url 'blog:driver_settlement_list' %}" style="
+{% comment %}SETTLEMENTS BUTTON — 비활성화. 재활성화: dashboard.html 하단 주석 해제
+<a href="{% url 'blog:driver_settlement_list' %}" style="
   position:fixed;
   bottom:1rem;
   left:1rem;
@@ -501,7 +501,8 @@
   padding:.4rem .75rem;
   border-radius:6px;
   z-index:100;
-">Settlements</a> #}
+">Settlements</a>
+{% endcomment %}
 
 <a href="{% url 'blog:driver_password_change' %}" style="
   position:fixed;
