@@ -117,6 +117,20 @@
     }
     .btn-pdf:hover { background:#374151; color:#fff; }
 
+    /* ── RCTI Agreement footer ──────────────────────────── */
+    .rcti-agreement {
+      margin-top:1.75rem; padding-top:1rem;
+      border-top:1px solid #e5e7eb;
+      font-size:.65rem; color:#9ca3af; line-height:1.5;
+    }
+    .rcti-agreement-title {
+      font-size:.65rem; font-weight:700; color:#6b7280;
+      text-transform:uppercase; letter-spacing:.05em;
+      margin-bottom:.45rem;
+    }
+    .rcti-agreement ul { margin:.35rem 0 0 1rem; padding:0; }
+    .rcti-agreement ul li { margin-bottom:.25rem; }
+
     /* ── Print / PDF media ───────────────────────────────── */
     @page { size: A4; margin: 18mm 15mm; }
     @media print {
@@ -155,8 +169,13 @@
 {# ──────────────────────────────────────────────────────────── #}
 <div class="rcti-page">
 
+  {% if driver.gst_registered %}
   <div class="rcti-heading">Recipient Created Tax Invoice</div>
   <div class="rcti-sub">Tax invoice issued by the recipient on behalf of the supplier</div>
+  {% else %}
+  <div class="rcti-heading">Payment Advice</div>
+  <div class="rcti-sub">Settlement summary issued by {{ company_name }}</div>
+  {% endif %}
 
   <!-- Parties -->
   <div class="parties">
@@ -196,8 +215,10 @@
       <tr>
         <th>Date</th>
         <th>Description</th>
+        {% if driver.gst_registered %}
         <th class="r">Ex-GST</th>
         <th class="r">GST</th>
+        {% endif %}
         <th class="r">Total</th>
       </tr>
     </thead>
@@ -206,8 +227,10 @@
       <tr>
         <td style="white-space:nowrap;">{{ item.date|date:"d M" }}</td>
         <td>{{ item.description }}</td>
+        {% if driver.gst_registered %}
         <td class="r">${{ item.amount_ex }}</td>
         <td class="r">${{ item.gst }}</td>
+        {% endif %}
         <td class="r" style="font-weight:600;">${{ item.line_total }}</td>
       </tr>
       {% endfor %}
@@ -217,6 +240,7 @@
 
   <!-- Totals -->
   <div class="totals">
+    {% if driver.gst_registered %}
     <div class="total-row">
       <span class="lbl">Subtotal (ex-GST)</span>
       <span class="val">${{ rcti_amount_ex }}</span>
@@ -229,12 +253,20 @@
       <span class="lbl">Total (incl. GST)</span>
       <span class="val">${{ settlement.paid_total }}</span>
     </div>
+    {% else %}
+    <div class="total-row grand">
+      <span class="lbl">Total</span>
+      <span class="val">${{ settlement.paid_total }}</span>
+    </div>
+    {% endif %}
   </div>
 
   <!-- ATO required statement -->
+  {% if driver.gst_registered %}
   <div class="gst-statement">
     The GST shown is payable by the supplier.
   </div>
+  {% endif %}
 
   <!-- Payment / audit footer -->
   <div class="rcti-footer">
@@ -255,6 +287,27 @@
       </div>
     </div>
   </div>
+
+  <!-- RCTI Agreement — GST-registered drivers only, PDF only -->
+  {% if is_pdf and driver.gst_registered %}
+  <div class="rcti-agreement">
+    <div class="rcti-agreement-title">Recipient Created Tax Invoice Agreement</div>
+    This document is a Recipient Created Tax Invoice (RCTI) issued under
+    A New Tax System (Goods and Services Tax) Act 1999.
+    <ul>
+      <li>The Recipient ({{ company_name }}, ABN {{ company_abn }}) and the
+          Supplier ({{ driver.business_name|default:driver.driver_name }}, ABN {{ driver.abn|default:"—" }})
+          are both registered for GST as at the date of this invoice.</li>
+      <li>The Recipient may issue Recipient Created Tax Invoices for the supplies
+          shown above. The Supplier will not issue tax invoices for these supplies.</li>
+      <li>Each party will notify the other if it ceases to be registered for GST.</li>
+      <li>The Supplier indemnifies the Recipient for any GST, penalties or interest
+          arising from the Supplier's failure to notify cessation of GST registration.</li>
+      <li>If the Supplier does not notify the Recipient of non-acceptance of this
+          agreement within 21 days of issue, the agreement is taken to be accepted.</li>
+    </ul>
+  </div>
+  {% endif %}
 
   <!-- PDF download button (screen only) -->
   {% if not is_pdf %}

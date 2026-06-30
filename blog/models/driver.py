@@ -19,6 +19,7 @@ class Driver(models.Model):
     region = models.ForeignKey('regions.Region', null=True, blank=True, on_delete=models.SET_NULL)
     is_default = models.BooleanField(default=False)
     driver_name = models.CharField(max_length=100, blank=True, null=True)
+    business_name = models.CharField(max_length=200, blank=True, null=True)
     abn = models.CharField(max_length=20, blank=True, null=True)
     gst_registered = models.BooleanField(default=False)
     commission_rate = models.DecimalField(
