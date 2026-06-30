@@ -41,28 +41,56 @@ class Command(BaseCommand):
     def _contains_any(haystack_upper, needles):
         return any(n.upper() in haystack_upper for n in needles)
 
-    # Compiled once: secondary name safety-net patterns (case-insensitive).
-    _DRIVER_NAME_REGEXES = [
-        re.compile(p, re.IGNORECASE) for p in conf.DRIVER_SKIP_NAME_PATTERNS
-    ]
-    # Mansoor's PayID number, reduced to bare digits for substring matching.
-    _MANSOOR_PAYID_DIGITS = re.sub(r'\D', '', conf.MANSOOR_PAYID)
+    def _load_driver_matchers(self):
+        """
+        Build digit-list and name-regex list from active drivers in DB.
+        Called once at the start of handle() — CSV loop uses a single snapshot.
+
+        payment_match_digits guard: empty string is skipped entirely — it would
+        be a substring of every description and match everything.
+        Name guard: only names ≥ 4 chars with word boundaries to prevent short-
+        name false positives (e.g. 'Don' matching DONCASTER, GORDON, DONUT).
+        """
+        from blog.models import Driver
+        match_digits = []
+        name_regexes = []
+        for d in Driver.objects.filter(is_active=True).values(
+                'payment_match_digits', 'driver_name'):
+            digits = re.sub(r'\D', '', d['payment_match_digits'] or '')
+            if digits:  # ⚠ never add empty string — would match every row
+                match_digits.append(digits)
+            name = (d['driver_name'] or '').strip()
+            if len(name) >= 4:
+                name_regexes.append(
+                    re.compile(r'\b' + re.escape(name) + r'\b', re.IGNORECASE)
+                )
+        self._driver_match_digits = match_digits
+        self._driver_name_regexes = name_regexes
 
     def _is_driver_payment(self, description, desc_upper):
-        """True if this row looks like a driver/subcontractor payout.
+        """True if row looks like a driver/subcontractor payout.
 
-        PRIMARY: Mansoor's PayID mobile number. Strip every non-digit from the
-        description and test the bare 9-digit number as a substring — this
-        tolerates +61 / leading 0 / spaces / hyphens and survives PayID
-        display-name changes (e.g. "Paid to M JADOON +61-425455302").
-        SECONDARY: a name pattern matches — backstop for rows that carry the
-        name but not the number.
+        Priority:
+        1. 'DRIVER ' prefix pattern — owner tags driver payments with this marker.
+        2. payment_match_digits — digit-normalized PayID / account suffix match
+           (tolerates +61 / leading 0 / spaces / hyphens). Skipped if empty.
+        3. driver_name fallback — word-boundary regex, 4+ chars only.
         """
-        if self._MANSOOR_PAYID_DIGITS:
-            desc_digits = re.sub(r'\D', '', description)
-            if self._MANSOOR_PAYID_DIGITS in desc_digits:
-                return True
-        return any(rx.search(desc_upper) for rx in self._DRIVER_NAME_REGEXES)
+        if 'DRIVER ' in desc_upper:
+            return True
+        desc_digits = re.sub(r'\D', '', description)
+        if any(d in desc_digits for d in self._driver_match_digits):
+            return True
+        return any(rx.search(desc_upper) for rx in self._driver_name_regexes)
+
+    def _is_wage_payment(self, desc_upper):
+        """True if row is a director/owner wage transfer (already in PayrollEntry)."""
+        return self._contains_any(desc_upper, conf.WAGE_SKIP_MARKERS)
+
+    def _is_super_payment(self, desc_upper):
+        """True if row is a super contribution (already in PayrollEntry)."""
+        return bool(conf.SUPER_SKIP_MARKERS) and self._contains_any(
+            desc_upper, conf.SUPER_SKIP_MARKERS)
 
     def _estimate_gst(self, description_upper, gross):
         for keywords, code in conf.GST_KEYWORD_RULES:
@@ -85,13 +113,15 @@ class Command(BaseCommand):
         brand = opts['brand']
         dry_run = opts['dry_run']
 
+        self._load_driver_matchers()
+
         try:
             fh = open(path, newline='', encoding='utf-8-sig')
         except OSError as e:
             raise CommandError(f"Could not open {path}: {e}")
 
         created = skipped_income = skipped_driver = skipped_transfer = 0
-        skipped_dup = errors = held_for_review = 0
+        skipped_wage = skipped_super = skipped_dup = errors = held_for_review = 0
         to_create = []
 
         with fh:
@@ -123,6 +153,14 @@ class Command(BaseCommand):
                     skipped_driver += 1
                     continue
 
+                if self._is_wage_payment(desc_upper):
+                    skipped_wage += 1
+                    continue
+
+                if self._is_super_payment(desc_upper):
+                    skipped_super += 1
+                    continue
+
                 try:
                     tx_date = datetime.strptime(date_str, '%d/%m/%Y').date()
                 except ValueError:
@@ -137,15 +175,18 @@ class Command(BaseCommand):
                     skipped_dup += 1
                     continue
 
+                needs_review = gross >= conf.REVIEW_THRESHOLD
+
                 if tx_date >= conf.GST_REGISTRATION_DATE:
-                    gst_code, gst_amount, auto_flag = self._estimate_gst(desc_upper, gross)
+                    if self._contains_any(desc_upper, conf.REVIEW_OVERRIDE_KEYWORDS):
+                        # insurance / rego: no auto-GST, flag for manual review
+                        gst_code, gst_amount, auto_flag = 'no_gst', Decimal('0.00'), False
+                        needs_review = True
+                    else:
+                        gst_code, gst_amount, auto_flag = self._estimate_gst(desc_upper, gross)
                 else:
                     gst_code, gst_amount, auto_flag = 'no_gst', Decimal('0.00'), False
 
-                # Large withdrawals are held for human triage: imported but kept
-                # out of BAS 1B / P&L totals (needs_review) until approved or
-                # excluded in the admin.
-                needs_review = gross >= conf.REVIEW_THRESHOLD
                 if needs_review:
                     held_for_review += 1
 
@@ -169,19 +210,21 @@ class Command(BaseCommand):
 
         self.stdout.write("")
         self.stdout.write(self.style.MIGRATE_HEADING("Bank CSV import summary"))
-        self.stdout.write(f"  To import (expenses):        {created}")
-        self.stdout.write(f"    of which held (needs_review): {held_for_review}")
-        self.stdout.write(f"  Skipped — income rows:       {skipped_income}")
-        self.stdout.write(f"  Skipped — driver payments:   {skipped_driver}")
-        self.stdout.write(f"  Skipped — internal transfer: {skipped_transfer}")
-        self.stdout.write(f"  Skipped — duplicates:        {skipped_dup}")
-        self.stdout.write(f"  Errors (bad row):            {errors}")
+        self.stdout.write(f"  To import (expenses):            {created}")
+        self.stdout.write(f"    of which held (needs_review):    {held_for_review}")
+        self.stdout.write(f"  Skipped — income rows:           {skipped_income}")
+        self.stdout.write(f"  Skipped — driver payments:       {skipped_driver}")
+        self.stdout.write(f"  Skipped — wage transfers:        {skipped_wage}")
+        self.stdout.write(f"  Skipped — super contributions:   {skipped_super}")
+        self.stdout.write(f"  Skipped — internal transfer:     {skipped_transfer}")
+        self.stdout.write(f"  Skipped — duplicates:            {skipped_dup}")
+        self.stdout.write(f"  Errors (bad row):                {errors}")
 
         if dry_run:
             self.stdout.write(self.style.WARNING("\nDRY RUN — nothing written."))
             for t in to_create[:20]:
                 if t.needs_review:
-                    flag = " [NEEDS_REVIEW ≥ threshold]"
+                    flag = " [NEEDS_REVIEW]"
                 elif t.gst_auto_estimated and t.gst_code == 'no_gst':
                     flag = " [gst review]"
                 else:

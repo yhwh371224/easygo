@@ -22,6 +22,9 @@ class Driver(models.Model):
     business_name = models.CharField(max_length=200, blank=True, null=True)
     abn = models.CharField(max_length=20, blank=True, null=True)
     gst_registered = models.BooleanField(default=False)
+    payment_match_digits = models.CharField(max_length=30, blank=True, null=True,
+        help_text='PayID 번호 또는 계좌번호 끝자리 등 송금 식별 숫자. 비워두면 숫자 매칭 안 함.')
+    is_active = models.BooleanField(default=True)
     commission_rate = models.DecimalField(
         max_digits=4,
         decimal_places=2,
