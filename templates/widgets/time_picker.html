@@ -15,6 +15,6 @@
     <button type="button" class="tp-ampm border-0 px-2 h-100 flex-shrink-0 {% if ampm == 'PM' %}tp-active{% endif %}" data-val="PM" style="font-size:13px;font-weight:500;border-radius:0 0.375rem 0.375rem 0">PM</button>
   </div>
   <small class="text-muted mt-1 d-block" style="padding-left:18px">e.g. 01 : 30  PM</small>
-  {% if hint|default:'' %}<small class="d-block" style="padding-left:18px;color:#dc3545;font-weight:600">⚠ {{ hint }} arrival/departure time</small>{% endif %}
+  {% if hint|default:'' %}<small class="d-block" style="padding-left:18px;color:#dc3545;font-weight:600">⚠ {{ hint }} time</small>{% endif %}
   <input type="hidden" name="{{ field_name }}" id="id_{{ field_name }}">
 </div>

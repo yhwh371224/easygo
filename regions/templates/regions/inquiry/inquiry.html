@@ -113,7 +113,11 @@
 						<label class="form-label" for="flight_number">Flight number</label>
 						<input class="form-control" type="text" placeholder="Your flight number" name="flight_number" id="flight_number">
 					</div>
-					{% time_picker "flight_time" "Flight time" hint=region.name %}
+					{% if "Drop off to" in direction %}
+						{% time_picker "flight_time" "Flight time" hint=region.name|add:" departure time" %}
+					{% else %}
+						{% time_picker "flight_time" "Flight time" hint=region.name|add:" arrival time" %}
+					{% endif %}
 				</div>
 
 				<div id="address-fields">

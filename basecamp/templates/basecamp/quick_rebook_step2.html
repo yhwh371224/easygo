@@ -200,11 +200,15 @@
             </div>
 
             <div class="col-sm-6">
-              {% include "widgets/time_picker.html" with field_name="flight_time" label="Flight time" ampm="AM" hint="Flight" %}
+              {% if "Drop off to" in direction %}
+                {% include "widgets/time_picker.html" with field_name="flight_time" label="Flight time" ampm="AM" hint_text="Flight departure time" %}
+              {% else %}
+                {% include "widgets/time_picker.html" with field_name="flight_time" label="Flight time" ampm="AM" hint_text="Flight arrival time" %}
+              {% endif %}
             </div>
 
             <div class="col-sm-6">
-              {% include "widgets/time_picker.html" with field_name="pickup_time" label="Pickup time" ampm="AM" hint="Pickup" %}
+              {% include "widgets/time_picker.html" with field_name="pickup_time" label="Pickup time" ampm="AM" %}
             </div>
 
           </div>
