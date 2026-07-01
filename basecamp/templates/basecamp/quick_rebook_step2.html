@@ -104,7 +104,7 @@
     .navbar { background-color: #3d5368 !important; }
   </style>
 </head>
-<body>
+<body data-region-name="{{ region.name|default:'Sydney' }}">
   <div class="bg-dark">
   {% include "basecamp/layouts/navbar.html" %}
   </div>
@@ -201,9 +201,9 @@
 
             <div class="col-sm-6">
               {% if "Drop off to" in direction %}
-                {% include "widgets/time_picker.html" with field_name="flight_time" label="Flight time" ampm="AM" hint_text="departure time" %}
+                {% include "widgets/time_picker.html" with field_name="flight_time" label="Flight time" ampm="AM" %}
               {% else %}
-                {% include "widgets/time_picker.html" with field_name="flight_time" label="Flight time" ampm="AM" hint_text="arrival time" %}
+                {% include "widgets/time_picker.html" with field_name="flight_time" label="Flight time" ampm="AM" hint_text=" arrival time" %}
               {% endif %}
             </div>
 
@@ -296,9 +296,9 @@
               {# return_flight_time #}
               <div class="col-sm-6">
                 {% if "Drop off to" in direction %}
-                  {% include "widgets/time_picker.html" with field_name="flight_time" label="Flight time" ampm="AM" hint_text="departure time" %}
+                  {% include "widgets/time_picker.html" with field_name="flight_time" label="Flight time" ampm="AM" %}
                 {% else %}
-                  {% include "widgets/time_picker.html" with field_name="flight_time" label="Flight time" ampm="AM" hint_text="arrival time" %}
+                  {% include "widgets/time_picker.html" with field_name="flight_time" label="Flight time" ampm="AM" hint_text=" arrival time" %}
                 {% endif %}
               </div>
 
@@ -350,7 +350,7 @@
   <script src="{% static 'basecamp/js/date-picker.js' %}" defer></script>
   <script src="{% static 'basecamp/js/time_picker.js' %}" defer></script>
   <script src="{% static 'basecamp/js/extra_stop_addresses.js' %}" defer></script>
-  <script src="{% static 'basecamp/js/flight_hint.js' %}" defer nonce="{{ CSP_NONCE }}"></script>
+  <script src="{% static 'basecamp/js/flight_hint.js' %}" defer></script>
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
   <script nonce="{{ CSP_NONCE }}">

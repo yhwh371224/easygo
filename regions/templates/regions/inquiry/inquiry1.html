@@ -99,7 +99,7 @@
                       <div class="invalid-feedback">Please enter your flight number!</div>
                   </div>
                   {% if "Drop off to" in direction %}
-						{% time_picker "flight_time" "Flight time" hint=region.name|add:" departure time" %}
+						{% time_picker "flight_time" "Flight time" %}
 				  {% else %}
 						{% time_picker "flight_time" "Flight time" hint=region.name|add:" arrival time" %}
 			      {% endif %}
@@ -286,7 +286,11 @@
 								<label class="form-label" for="return_flight_number">Return Flight Number</label>
 								<input class="form-control" type="text" name="return_flight_number" id="return_flight_number" placeholder="e.g. QF123">
 							</div>
-							{% time_picker "return_flight_time" "Return Flight Time" %}
+							{% if "Drop off to" in direction %}
+									{% time_picker "return_flight_time" "Return Flight Time" %}
+							{% else %}
+									{% time_picker "return_flight_time" "Return Flight Time" hint=region.name|add:" arrival time" %}
+							{% endif %}
 							<div class="mb-2 mt-3">
 								<div class="form-check">
 									<input class="form-check-input" type="checkbox" id="same_extra_stop" name="same_extra_stop" value="1">
