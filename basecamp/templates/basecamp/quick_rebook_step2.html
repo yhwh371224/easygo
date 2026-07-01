@@ -295,12 +295,16 @@
               </div>
               {# return_flight_time #}
               <div class="col-sm-6">
-                {% include "widgets/time_picker.html" with field_name="return_flight_time" label="Flight time" ampm="AM" hint="Flight" %}
+                {% if "Drop off to" in direction %}
+                  {% include "widgets/time_picker.html" with field_name="flight_time" label="Flight time" ampm="AM" hint_text="departure time" %}
+                {% else %}
+                  {% include "widgets/time_picker.html" with field_name="flight_time" label="Flight time" ampm="AM" hint_text="arrival time" %}
+                {% endif %}
               </div>
 
               {# return_pickup_time #}
               <div class="col-sm-6">
-                {% include "widgets/time_picker.html" with field_name="return_pickup_time" label="Pickup time" ampm="AM" hint="Pickup" %}
+                {% include "widgets/time_picker.html" with field_name="return_pickup_time" label="Pickup time" ampm="AM" %}
               </div>
               <div class="col-12">
                 <div class="form-check mt-1">
@@ -346,6 +350,7 @@
   <script src="{% static 'basecamp/js/date-picker.js' %}" defer></script>
   <script src="{% static 'basecamp/js/time_picker.js' %}" defer></script>
   <script src="{% static 'basecamp/js/extra_stop_addresses.js' %}" defer></script>
+  <script src="{% static 'basecamp/js/flight_hint.js' %}" defer nonce="{{ CSP_NONCE }}"></script>
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
   <script nonce="{{ CSP_NONCE }}">
