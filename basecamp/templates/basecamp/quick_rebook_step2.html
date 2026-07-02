@@ -299,7 +299,7 @@
               {# return_flight_time #}
               <div class="col-sm-6">
                 {% if "Drop off to" in direction %}
-                  {% include "widgets/time_picker.html" with field_name="return_flight_time" label="Flight time" ampm="AM" hint=" arrival time" %}
+                  {% include "widgets/time_picker.html" with field_name="return_flight_time" label="Flight time" ampm="AM" hint="arrival time" %}
                 {% else %}
                   {% include "widgets/time_picker.html" with field_name="return_flight_time" label="Flight time" ampm="AM" %}
                 {% endif %}
