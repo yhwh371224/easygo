@@ -174,9 +174,9 @@
 												<table role="presentation" style="border-spacing:0;margin-bottom:20px;">
 													<tr>
 														<td style="border-radius:6px;background-color:#eb7828;text-align:center;padding:0;">
-															<a href="https://easygoshuttle.com.au/arrival_guide/" target="_blank"
+															<a href="{{ arrival_guide_url }}" target="_blank"
 															   style="display:inline-block;padding:11px 24px;font-size:14px;font-weight:bold;color:#ffffff;text-decoration:none;font-family:'Lato',sans-serif,Arial,Helvetica;">
-																Sydney Arrival Guide
+																{% if city %}{{ city }} {% endif %}Arrival Guide
 															</a>
 														</td>
 													</tr>
@@ -190,7 +190,7 @@
 												<table role="presentation" style="border-spacing:0;margin-bottom:20px;">
 													<tr>
 														<td style="border-radius:6px;background-color:#277fd2;text-align:center;padding:0;">
-															<a href="https://easygo.s3.ap-southeast-2.amazonaws.com/sydmap.svg"
+															<a href="{{ pickup_map_url }}"
 															   target="_blank"
 															   style="display:inline-block;padding:11px 24px;font-size:14px;font-weight:bold;color:#ffffff;text-decoration:none;font-family:'Lato',sans-serif,Arial,Helvetica;">
 																View Pickup Map
@@ -203,8 +203,8 @@
 													📍 Domestic Terminal — Pickup Map
 												</p>
 												<p style="Margin:0;Margin-bottom:20px;">
-													<img src="https://easygo.s3.ap-southeast-2.amazonaws.com/t2shuttlebusbay.webp"
-														 alt="Sydney Domestic Terminal Pickup Map"
+													<img src="{{ pickup_map_url }}"
+														 alt="{% if city %}{{ city }} {% endif %}Domestic Terminal Pickup Map"
 														 width="460"
 														 style="border-width:0;max-width:100%;height:auto;display:block;">
 												</p>
