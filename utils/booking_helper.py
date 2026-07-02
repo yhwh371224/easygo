@@ -28,10 +28,10 @@ def normalize_direction(direction):
 # =========================
 # CONTEXT BUILDER
 # =========================
-def _get_default_pickup_map_url(region_id, terminal_type):
-    """해당 지역/터미널 타입의 대표 pickup point에 연결된 map url을 반환.
+def _get_default_pickup_maps(region_id, terminal_type):
+    """해당 지역/터미널 타입의 대표 pickup point에 연결된 모든 map을 반환.
     아직 booking에 terminal_pickup_point가 배정되지 않은 시점(예: 2일전 리마인더)에
-    지역별 기본 pickup map을 보여주기 위한 용도.
+    지역별 기본 pickup map(들)을 보여주기 위한 용도.
 
     update_meeting_point_for_arrivals()가 당일 driver 배정 시 쓰는 것과 동일한
     is_default_point(1순위) → is_default_second(2순위) 어드민 설정을 그대로 따른다."""
@@ -46,10 +46,7 @@ def _get_default_pickup_map_url(region_id, terminal_type):
         base_qs.filter(is_default_point=True).first()
         or base_qs.filter(is_default_second=True).first()
     )
-    if not point:
-        return None
-    pickup_map = point.maps.filter(type="location").first() or point.maps.first()
-    return pickup_map.url if pickup_map else None
+    return list(point.maps.all()) if point else []
 
 
 def build_reminder_context(booking, pickup_time_12h, driver):
@@ -68,16 +65,16 @@ def build_reminder_context(booking, pickup_time_12h, driver):
 
     region_slug = booking.region.slug if booking.region_id else "sydney"
 
-    pickup_map_url = None
+    pickup_maps = []
     if booking.region_id and (is_intl or is_domestic):
         terminal_type = Terminal.TerminalType.INTL if is_intl else Terminal.TerminalType.DOMESTIC
-        pickup_map_url = _get_default_pickup_map_url(booking.region_id, terminal_type)
-    if not pickup_map_url:
+        pickup_maps = _get_default_pickup_maps(booking.region_id, terminal_type)
+    if not pickup_maps:
         # 지역에 map 데이터가 없을 때 기존 Sydney 기본 이미지로 폴백
         if is_intl:
-            pickup_map_url = "https://easygo.s3.ap-southeast-2.amazonaws.com/sydmap.svg"
+            pickup_maps = [{"title": "View Pickup Map", "url": "https://easygo.s3.ap-southeast-2.amazonaws.com/sydmap.svg"}]
         elif is_domestic:
-            pickup_map_url = "https://easygo.s3.ap-southeast-2.amazonaws.com/t2shuttlebusbay.webp"
+            pickup_maps = [{"title": "Domestic Terminal Pickup Map", "url": "https://easygo.s3.ap-southeast-2.amazonaws.com/t2shuttlebusbay.webp"}]
 
     return {
         'booker_name': getattr(booking, "booker_name", None),
@@ -115,7 +112,7 @@ def build_reminder_context(booking, pickup_time_12h, driver):
         'city': booking.region.name if booking.region_id else '',
         'region_slug': region_slug,
         'arrival_guide_url': f"https://easygoshuttle.com.au/{region_slug}/arrival-guide/",
-        'pickup_map_url': pickup_map_url,
+        'pickup_maps': pickup_maps,
 
         'post': booking,
     }

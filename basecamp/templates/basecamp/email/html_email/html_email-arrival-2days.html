@@ -183,31 +183,27 @@
 												</table>
 
 												<!-- Pickup location map -->
-												{% if is_intl %}
+												{% if pickup_maps %}
 												<p style="Margin:0;font-size:13px;font-weight:bold;line-height:20px;Margin-bottom:8px;color:#4F5557;">
-													📍 International Terminal — Pickup Location
+													📍 {% if is_intl %}International{% else %}Domestic{% endif %} Terminal — Pickup Location
 												</p>
+												{% if pickup_maps|length == 1 %}
 												<table role="presentation" style="border-spacing:0;margin-bottom:20px;">
 													<tr>
 														<td style="border-radius:6px;background-color:#277fd2;text-align:center;padding:0;">
-															<a href="{{ pickup_map_url }}"
+															<a href="{{ pickup_maps.0.url }}"
 															   target="_blank"
 															   style="display:inline-block;padding:11px 24px;font-size:14px;font-weight:bold;color:#ffffff;text-decoration:none;font-family:'Lato',sans-serif,Arial,Helvetica;">
-																View Pickup Map
+																{{ pickup_maps.0.title }}
 															</a>
 														</td>
 													</tr>
 												</table>
-												{% elif is_domestic %}
-												<p style="Margin:0;font-size:13px;font-weight:bold;line-height:20px;Margin-bottom:6px;color:#4F5557;">
-													📍 Domestic Terminal — Pickup Map
+												{% else %}
+												<p style="Margin:0;font-size:14px;line-height:24px;Margin-bottom:20px;">
+													{% for map in pickup_maps %}<a href="{{ map.url }}" target="_blank" style="color:#277fd2;text-decoration:underline;">{{ map.title }}</a>{% if not forloop.last %}<br>{% endif %}{% endfor %}
 												</p>
-												<p style="Margin:0;Margin-bottom:20px;">
-													<img src="{{ pickup_map_url }}"
-														 alt="{% if city %}{{ city }} {% endif %}Domestic Terminal Pickup Map"
-														 width="460"
-														 style="border-width:0;max-width:100%;height:auto;display:block;">
-												</p>
+												{% endif %}
 												{% endif %}
 
 												<!-- Key arrival instructions -->
