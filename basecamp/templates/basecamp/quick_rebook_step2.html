@@ -206,7 +206,7 @@
               {% if "Drop off to" in direction %}
                 {% include "widgets/time_picker.html" with field_name="flight_time" label="Flight time" ampm="AM" %}
               {% else %}
-                {% include "widgets/time_picker.html" with field_name="flight_time" label="Flight time" ampm="AM" hint_text=" arrival time" %}
+                {% include "widgets/time_picker.html" with field_name="flight_time" label="Flight time" ampm="AM" hint=" arrival time" %}
               {% endif %}
             </div>
 
@@ -301,7 +301,7 @@
                 {% if "Drop off to" in direction %}
                   {% include "widgets/time_picker.html" with field_name="return_flight_time" label="Flight time" ampm="AM" %}
                 {% else %}
-                  {% include "widgets/time_picker.html" with field_name="return_flight_time" label="Flight time" ampm="AM" hint_text=" arrival time" %}
+                  {% include "widgets/time_picker.html" with field_name="return_flight_time" label="Flight time" ampm="AM" hint=" arrival time" %}
                 {% endif %}
               </div>
 
