@@ -174,6 +174,9 @@
           </div>
 
           <input type="hidden" name="direction"   id="hidden-direction" value="{{ previous.direction }}">
+          <select id="direction" style="display:none" aria-hidden="true" tabindex="-1">
+            <option value="{{ previous.direction }}" selected>{{ previous.direction }}</option>
+          </select>
           <input type="hidden" name="suburb"      id="hidden-suburb"    value="{{ previous.suburb }}">
           <input type="hidden" name="start_point" id="hidden-start"     value="{{ previous.start_point }}">
           <input type="hidden" name="end_point"   id="hidden-end"       value="{{ previous.end_point }}">
@@ -296,9 +299,9 @@
               {# return_flight_time #}
               <div class="col-sm-6">
                 {% if "Drop off to" in direction %}
-                  {% include "widgets/time_picker.html" with field_name="flight_time" label="Flight time" ampm="AM" %}
+                  {% include "widgets/time_picker.html" with field_name="return_flight_time" label="Flight time" ampm="AM" %}
                 {% else %}
-                  {% include "widgets/time_picker.html" with field_name="flight_time" label="Flight time" ampm="AM" hint_text=" arrival time" %}
+                  {% include "widgets/time_picker.html" with field_name="return_flight_time" label="Flight time" ampm="AM" hint_text=" arrival time" %}
                 {% endif %}
               </div>
 
@@ -358,6 +361,10 @@
       document.querySelectorAll('.route-toggle-btn').forEach(b => b.classList.remove('active'));
       el.classList.add('active');
       document.getElementById('hidden-direction').value = direction;
+
+      const directionProxy = document.getElementById('direction');
+      directionProxy.innerHTML = `<option value="${direction}" selected>${direction}</option>`;
+      directionProxy.dispatchEvent(new Event('change'));
     }
 
     function toggleReturn(cb) {
