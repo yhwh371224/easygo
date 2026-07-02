@@ -112,6 +112,15 @@ def price_detail(request):
         end_display = (end_terminal.name if end_terminal else
                        end_cruise.name if end_cruise else end_point)
 
+        # Flight-time hint on this page has no direction dropdown of its own —
+        # derive it from the airport leg the customer already picked on the home form.
+        if is_end_airport:
+            direction = 'Drop off to Airport'
+        elif is_start_airport:
+            direction = 'Pickup from Airport'
+        else:
+            direction = ''
+
         context = {
             'pickup_date': pickup_date.strftime('%Y-%m-%d'),
             'start_point': start_point,
@@ -126,6 +135,7 @@ def price_detail(request):
             'is_end_airport': is_end_airport,
             'is_start_cruise': is_start_cruise,
             'is_end_cruise': is_end_cruise,
+            'direction': direction,
             'latest_post': latest_post,
         }
 

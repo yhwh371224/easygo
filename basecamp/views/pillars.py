@@ -108,13 +108,14 @@ def confirmation(request):
 def inquiry(request):
     return render(request, 'basecamp/booking/inquiry.html', {
         'home_suburbs': get_sorted_suburbs(),
+        'direction': 'Drop off to Domestic Airport',
     })
 
 
 def inquiry1(request):
     return render(request, 'basecamp/booking/inquiry.html', {
         'pickup_date': None,
-        'direction': None,
+        'direction': 'Drop off to Domestic Airport',
         'suburb': None,
         'no_of_passenger': None,
     })

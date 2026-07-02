@@ -25,6 +25,7 @@ def region_inquiry(request, region_slug):
     return render(request, 'regions/inquiry/inquiry.html', {
         'region': region,
         'suburbs': suburbs,
+        'direction': 'Drop off to Domestic Airport',
     })
 
 
@@ -146,5 +147,9 @@ def region_inquiry_details(request, region_slug):
 
     region = get_object_or_404(Region, slug=region_slug, is_active=True)
     suburbs = region.suburbs.filter(is_active=True).order_by('-is_pinned', 'sort_order', 'name')
-    return render(request, 'regions/inquiry/inquiry.html', {'region': region, 'suburbs': suburbs})
+    return render(request, 'regions/inquiry/inquiry.html', {
+        'region': region,
+        'suburbs': suburbs,
+        'direction': 'Drop off to Domestic Airport',
+    })
 

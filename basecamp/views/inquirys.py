@@ -209,6 +209,7 @@ def inquiry_details(request):
             "region": region,
             "active_regions": active_regions,
             "home_suburbs": home_suburbs,
+            "direction": "Drop off to Domestic Airport",
         })
 
 

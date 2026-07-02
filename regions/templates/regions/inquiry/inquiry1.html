@@ -286,7 +286,7 @@
 								<label class="form-label" for="return_flight_number">Return Flight Number</label>
 								<input class="form-control" type="text" name="return_flight_number" id="return_flight_number" placeholder="e.g. QF123">
 							</div>
-							{% if "Drop off to" in direction %}
+							{% if "Drop off to" in return_direction %}
 									{% time_picker "return_flight_time" "Return Flight Time" %}
 							{% else %}
 									{% time_picker "return_flight_time" "Return Flight Time" hint=region.name|add:" arrival time" %}
