@@ -60,7 +60,7 @@ def process_generic_payment(payment_instance, posts, admin_email, calculated_amo
             message=admin_notice,
             recipient_list=[admin_email],
         )
-        return False, 0.0, set()
+        return False, 0.0, set(), False, False, False
 
     posts = posts.filter(
         pickup_date__isnull=False,
@@ -124,10 +124,30 @@ def process_generic_payment(payment_instance, posts, admin_email, calculated_amo
     instance.processed_at = timezone.now()
     instance.save()
 
-    return True, total_balance, recipient_emails, has_future_bookings, all_already_paid
+    # 남은 잔액(total_balance > 0)이 전부 "디파짓 인보이스로 이미 예고된 미납분"으로
+    # 설명되면 미납 안내 메일을 보낼 필요가 없음. 디파짓 문턱(deposit_amount_due)을
+    # 아직 못 채운 post가 하나라도 있으면 진짜 부족 결제이므로 그대로 경고 메일 발송.
+    deposit_satisfied = False
+    if total_balance > 0:
+        deposit_satisfied = True
+        for post in posts_list:
+            try:
+                surcharge, discount = _net_adjustment(post)
+                p_total = round(float(post.price or 0) + surcharge - discount, 2)
+                p_paid = float(post.paid or 0)
+            except (ValueError, TypeError):
+                continue
+            if round(p_total - p_paid, 2) <= 0:
+                continue
+            deposit_due = post.deposit_amount_due
+            if deposit_due is None or p_paid < float(deposit_due):
+                deposit_satisfied = False
+                break
+
+    return True, total_balance, recipient_emails, has_future_bookings, all_already_paid, deposit_satisfied
 
 
-def send_payment_notification_email(instance, total_balance, recipient_emails, admin_email, method, raw_amount=None, net_amount=None, booker_name=None, has_future_bookings=False, all_already_paid=False, nearest_post=None):
+def send_payment_notification_email(instance, total_balance, recipient_emails, admin_email, method, raw_amount=None, net_amount=None, booker_name=None, has_future_bookings=False, all_already_paid=False, nearest_post=None, deposit_satisfied=False):
     if net_amount is None:
         net_amount = float(instance.amount or 0)
     if raw_amount is None:
@@ -153,6 +173,9 @@ def send_payment_notification_email(instance, total_balance, recipient_emails, a
         template = "html_email-noIdentity.html" if method == "PAYPAL" else "html_email-noIdentity-stripe.html"
     elif all_already_paid or remaining_balance <= 0:
         template = "html_email-payment-success.html" if method == "PAYPAL" else "html_email-payment-success-stripe.html"
+    elif deposit_satisfied:
+        # 디파짓 인보이스로 예고된 부분 결제 — 잔액이 남아도 미납 경고 메일은 보내지 않음.
+        template = None
     else:
         template = "html_email-response-discrepancy.html"
         context.update({
@@ -161,12 +184,20 @@ def send_payment_notification_email(instance, total_balance, recipient_emails, a
             'diff': round(remaining_balance, 2)
         })
 
-    html_content = render_email_template(template, context)
-    send_html_email("Payment Received - EasyGo", html_content, recipient_list, from_email=DEFAULT_FROM_EMAIL)
+    if template:
+        html_content = render_email_template(template, context)
+        send_html_email("Payment Received - EasyGo", html_content, recipient_list, from_email=DEFAULT_FROM_EMAIL)
 
     amount_display = f"${raw_amount} (${net_amount})" if raw_amount != net_amount else f"${net_amount}"
 
-    if all_already_paid:
+    if deposit_satisfied:
+        send_telegram_sync(
+            f"💰 Deposit payment received via {method}\n\n"
+            f"👤 {instance.name}\n"
+            f"📧 {instance.email}\n"
+            f"💰 ${net_amount} (remaining balance: ${remaining_balance})"
+        )
+    elif all_already_paid:
         if nearest_post:
             entry = f"paid again ${raw_amount} via {method.capitalize()}"
             nearest_post.notice = f"{nearest_post.notice or ''} | {entry}".strip(" | ")

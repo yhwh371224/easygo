@@ -64,7 +64,7 @@ def notify_user_payment_paypal(instance_id):
             Q(name__iexact=instance.name)
         ).order_by('pickup_date')
 
-        success, total_balance, recipient_emails, has_future_bookings, all_already_paid = process_generic_payment(
+        success, total_balance, recipient_emails, has_future_bookings, all_already_paid, deposit_satisfied = process_generic_payment(
             instance, posts, RECIPIENT_EMAIL, calculated_amount
         )
         first_post = posts.first()
@@ -89,6 +89,7 @@ def notify_user_payment_paypal(instance_id):
         has_future_bookings=has_future_bookings,
         all_already_paid=all_already_paid,
         nearest_post=nearest_future_post,
+        deposit_satisfied=deposit_satisfied,
     )
 
     if prepay_post and not (prepay_post.company_name or '').strip():
@@ -111,7 +112,7 @@ def notify_user_payment_stripe(instance_id):
             Q(name__iexact=instance.name)
         ).order_by('pickup_date')
 
-        success, total_balance, recipient_emails, has_future_bookings, all_already_paid = process_generic_payment(instance, posts, RECIPIENT_EMAIL)
+        success, total_balance, recipient_emails, has_future_bookings, all_already_paid, deposit_satisfied = process_generic_payment(instance, posts, RECIPIENT_EMAIL)
         first_post = posts.first()
         booker_name = first_post.booker_name if first_post else None
         nearest_future_post = posts.filter(
@@ -132,6 +133,7 @@ def notify_user_payment_stripe(instance_id):
         has_future_bookings=has_future_bookings,
         all_already_paid=all_already_paid,
         nearest_post=nearest_future_post,
+        deposit_satisfied=deposit_satisfied,
     )
 
     if prepay_post and not (prepay_post.company_name or '').strip():

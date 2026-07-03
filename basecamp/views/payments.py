@@ -39,6 +39,7 @@ def _parse_invoice_params(request):
         'index': request.POST.get('index', '1'),
         'from_date': request.POST.get('from_date'),
         'to_date': request.POST.get('to_date'),
+        'deposit_percent_input': request.POST.get('deposit_percent'),
     }
 
 
@@ -93,6 +94,23 @@ def _calc_discount(discount_input, booking):
     if booking_discount.replace('.', '', 1).isdigit():
         return float(booking_discount)
     return 0.0
+
+
+def _calc_deposit(deposit_percent_input, total_price):
+    """Return (deposit_percent, deposit_amount, deposit_balance_due) or (None, None, None)
+    when no valid deposit percentage was supplied."""
+    raw = (deposit_percent_input or '').strip()
+    if not raw:
+        return None, None, None
+    try:
+        pct = float(raw)
+    except ValueError:
+        return None, None, None
+    if not (0 < pct <= 100):
+        return None, None, None
+    deposit_amount = round(total_price * pct / 100, 2)
+    deposit_balance_due = round(total_price - deposit_amount, 2)
+    return pct, deposit_amount, deposit_balance_due
 
 
 def _get_start_end_points(booking):
@@ -250,6 +268,9 @@ def _build_single_context(user, users, params, inv_no, today, DEFAULT_BANK):
         "discount": discount,
         "gst_included": gst_included,
         "DEFAULT_BANK": DEFAULT_BANK,
+        "deposit_percent": None,
+        "deposit_amount": None,
+        "deposit_balance_due": None,
     }
 
     if user.cash and user.paid:
@@ -303,6 +324,14 @@ def _build_single_context(user, users, params, inv_no, today, DEFAULT_BANK):
         return "html_email-invoice.html", context
 
     # Standard single booking
+    deposit_percent, deposit_amount, deposit_balance_due = _calc_deposit(
+        params.get('deposit_percent_input'), total_price
+    )
+    # deposit_amount_due는 이 booking에 대해 마지막으로 발행한 인보이스가 무엇을
+    # 기대하는지 나타냄. 디파짓 인보이스가 아니면 None으로 되돌려서, 이후 결제가
+    # 전액에 못 미칠 때 미납 경고 메일이 정상적으로 다시 발송되도록 함.
+    Post.objects.filter(pk=user.pk).update(deposit_amount_due=deposit_amount)
+
     context = {
         **shared,
         "name": user.invoice_name, "company_name": user.company_name,
@@ -317,6 +346,9 @@ def _build_single_context(user, users, params, inv_no, today, DEFAULT_BANK):
         "street": user.street, "suburb": user.suburb,
         "return_pickup_time": user.return_pickup_time,
         "return_pickup_date": user.return_pickup_date,
+        "deposit_percent": deposit_percent,
+        "deposit_amount": deposit_amount,
+        "deposit_balance_due": deposit_balance_due,
     }
     return "html_email-invoice.html", context
 

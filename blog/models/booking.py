@@ -145,6 +145,11 @@ class Post(models.Model):
         help_text='이 부킹에 적용된 커미션 %. 드라이버 배정 시 기본값 자동 적용.',
     )
     special_items = models.JSONField(default=dict, blank=True)
+    deposit_amount_due = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True,
+        help_text='디파짓 인보이스로 청구한 금액. 결제가 이 금액 이상 들어오면 '
+                   '전액에 못 미쳐도 미납 안내 메일을 보내지 않음.',
+    )
     created = models.DateTimeField(auto_now_add=True)
 
     @property

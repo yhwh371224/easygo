@@ -210,8 +210,13 @@
 														<strong>Discount: ${{ discount }}</strong><br>
 													{% endif %}					
 													<strong><u>Total: ${{ total_price }}</u></strong><br>
-													<strong><u>Paid: ${{ paid }}</u></strong><br>													
+													{% if deposit_amount %}
+													<strong><u>Deposit due now ({{ deposit_percent }}%): ${{ deposit_amount }}</u></strong><br>
+													<strong style="text-decoration: underline double;">Remaining balance (due later): ${{ deposit_balance_due }}</strong><br>
+													{% else %}
+													<strong><u>Paid: ${{ paid }}</u></strong><br>
 													<strong style="text-decoration: underline double;">Balance due: ${{ balance }}</strong><br>
+													{% endif %}
 												</td>
 												    </tr>
 												</table>
