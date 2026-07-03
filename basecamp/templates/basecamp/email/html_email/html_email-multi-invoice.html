@@ -98,19 +98,19 @@
             <table width="100%" style="border-spacing:0;background-color:#fef6f0;margin-bottom:20px;" role="presentation">
                 <tr>
                     <td style="padding:15px;color:#af865f;font-size:12px;line-height:20px;">
-              <strong>Price: ${{ total_price_without_gst }}</strong>{% if apply_gst_flag %} without gst{% endif %}<br>
+              <strong>Price: ${{ total_price_without_gst|floatformat:2 }}</strong>{% if apply_gst_flag %} without gst{% endif %}<br>
 			  {% if toll %}<strong>The price includes the toll fee</strong><br>{% endif %}
-              {% if with_gst %}<strong>GST (10%): ${{ with_gst }}</strong><br>{% endif %}
-              {% if total_gst_included %}<strong>Includes GST: ${{ total_gst_included }}</strong><br>{% endif %}
-              {% if surcharge %}<strong>Surcharge: ${{ surcharge }}</strong><br>{% endif %}
-              {% if discount and discount != 'Yes' %}<strong>Discount: -${{ discount }}</strong><br>{% endif %}
-              <strong><u>Total: ${{ total_price }}</u></strong><br>
+              {% if with_gst %}<strong>GST (10%): ${{ with_gst|floatformat:2 }}</strong><br>{% endif %}
+              {% if total_gst_included %}<strong>Includes GST: ${{ total_gst_included|floatformat:2 }}</strong><br>{% endif %}
+              {% if surcharge %}<strong>Surcharge: ${{ surcharge|floatformat:2 }}</strong><br>{% endif %}
+              {% if discount and discount != 'Yes' %}<strong>Discount: -${{ discount|floatformat:2 }}</strong><br>{% endif %}
+              <strong><u>Total: ${{ total_price|floatformat:2 }}</u></strong><br>
               {% if deposit_amount %}
-              <strong><u>Deposit due now ({{ deposit_percent }}%): ${{ deposit_amount }}</u></strong><br>
-              <strong style="text-decoration: underline double;">Remaining balance (due later): ${{ deposit_balance_due }}</strong>
+              <strong><u>Deposit due now ({{ deposit_percent|floatformat:-2 }}%): ${{ deposit_amount|floatformat:2 }}</u></strong><br>
+              <strong style="text-decoration: underline double;">Remaining balance (due later): ${{ deposit_balance_due|floatformat:2 }}</strong>
               {% else %}
-              <strong><u>Paid: ${{ paid }}</u></strong><br>
-              <strong style="text-decoration: underline double;">Balance due: ${{ balance }}</strong>
+              <strong><u>Paid: ${{ paid|floatformat:2 }}</u></strong><br>
+              <strong style="text-decoration: underline double;">Balance due: ${{ balance|floatformat:2 }}</strong>
               {% endif %}
             </td>
                 </tr>
