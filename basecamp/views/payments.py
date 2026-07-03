@@ -200,6 +200,7 @@ def _build_multi_context(bookings, params, inv_no, today, DEFAULT_BANK):
     toll_input = params['toll_input']
 
     booking_data = []
+    booking_pks_and_totals = []
     total_price_without_gst = total_paid = grand_total = 0.0
     total_gst = total_surcharge = total_toll = total_gst_included = 0.0
 
@@ -212,12 +213,23 @@ def _build_multi_context(bookings, params, inv_no, today, DEFAULT_BANK):
         total_toll += row['toll']
         total_paid += row['_paid']
         grand_total += row['total_price']
+        booking_pks_and_totals.append((booking.pk, row['total_price']))
         booking_data.append({k: v for k, v in row.items() if not k.startswith('_')})
 
     first_booking = bookings.first() if hasattr(bookings, "first") else (bookings[0] if bookings else None)
     discount = _calc_discount(discount_input, first_booking)
     final_total = grand_total - discount
     total_balance = round(final_total - total_paid, 2)
+
+    deposit_percent, deposit_amount, deposit_balance_due = _calc_deposit(
+        params.get('deposit_percent_input'), final_total
+    )
+    # 날짜 범위로 묶인 여러 예약에 디파짓을 나눌 때는, 각 예약의 총액에 동일한
+    # 비율을 적용해서 개별 Post에 deposit_amount_due를 저장한다. (할인은 각
+    # booking에 분배하지 않고 인보이스 합계에서만 반영 — 사소한 오차는 무시)
+    for pk, booking_total in booking_pks_and_totals:
+        due = round(booking_total * deposit_percent / 100, 2) if deposit_percent is not None else None
+        Post.objects.filter(pk=pk).update(deposit_amount_due=due)
 
     context = {
         "inv_no": inv_no,
@@ -237,6 +249,9 @@ def _build_multi_context(bookings, params, inv_no, today, DEFAULT_BANK):
         "paid": round(total_paid, 2),
         "balance": round(total_balance, 2),
         "DEFAULT_BANK": DEFAULT_BANK,
+        "deposit_percent": deposit_percent,
+        "deposit_amount": deposit_amount,
+        "deposit_balance_due": deposit_balance_due,
     }
     return "html_email-multi-invoice.html", context
 
