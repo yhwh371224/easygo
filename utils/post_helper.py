@@ -72,6 +72,7 @@ def send_post_confirmation_email(instance):
 
         'message': instance.message,
         'notice': instance.notice,
+        'reminder': instance.reminder,
 
         # payment
         'price': price,

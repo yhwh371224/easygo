@@ -136,6 +136,7 @@ def price_detail(request):
             'is_start_cruise': is_start_cruise,
             'is_end_cruise': is_end_cruise,
             'direction': direction,
+            'return_direction': '',
             'latest_post': latest_post,
         }
 
