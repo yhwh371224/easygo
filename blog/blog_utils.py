@@ -85,15 +85,53 @@ def process_generic_payment(payment_instance, posts, admin_email, calculated_amo
     method_label = "STRIPE" if hasattr(instance, 'payment_intent_id') else "PAYPAL"
 
     for post in posts_list:
+        post._applied = 0.0
+
+    # 1차: 디파짓 인보이스가 걸린 부킹은 디파짓 금액까지만 채우고 다음 부킹으로
+    # 넘긴다. 디파짓이 없는 부킹은 목표가 곧 잔액 전체라 기존과 동일하게 한
+    # 번에 채워진다.
+    for post in posts_list:
         if remaining_amount <= 0:
             break
 
         try:
             p_price = float(post.price or 0)
-            p_paid = float(post.paid or 0)
         except (ValueError, TypeError):
             continue
 
+        p_paid = float(post.paid or 0) + post._applied
+        surcharge, discount = _net_adjustment(post)
+        p_total = round(p_price + surcharge - discount, 2)
+        balance = round(p_total - p_paid, 2)
+        if balance <= 0:
+            continue
+
+        deposit_due = post.deposit_amount_due
+        if deposit_due is not None and p_paid < float(deposit_due):
+            target = min(balance, float(deposit_due) - p_paid)
+        else:
+            target = balance
+
+        apply_now = min(remaining_amount, target)
+        if apply_now <= 0:
+            continue
+        total_balance -= apply_now
+        remaining_amount -= apply_now
+        post._applied += apply_now
+
+    # 2차: 다른 부킹으로 넘길 디파짓 목표가 더 없는데 돈이 남았다면(=넘길 곳이
+    # 없거나 모든 디파짓을 이미 채웠으면) 남은 금액을 앞 부킹부터 순서대로 잔액이
+    # 다 찰 때까지 채운다.
+    for post in posts_list:
+        if remaining_amount <= 0:
+            break
+
+        try:
+            p_price = float(post.price or 0)
+        except (ValueError, TypeError):
+            continue
+
+        p_paid = float(post.paid or 0) + post._applied
         surcharge, discount = _net_adjustment(post)
         p_total = round(p_price + surcharge - discount, 2)
         balance = round(p_total - p_paid, 2)
@@ -102,19 +140,28 @@ def process_generic_payment(payment_instance, posts, admin_email, calculated_amo
 
         apply_now = min(remaining_amount, balance)
         total_balance -= apply_now
+        remaining_amount -= apply_now
+        post._applied += apply_now
 
-        new_paid = p_paid + apply_now
+    for post in posts_list:
+        if not post._applied:
+            continue
+
+        p_paid = float(post.paid or 0)
+        new_paid = p_paid + post._applied
+        surcharge, discount = _net_adjustment(post)
+        p_total = round(float(post.price or 0) + surcharge - discount, 2)
+
         post.paid = clean_float(new_paid)
         post.toll = "" if new_paid >= p_total else "short payment"
         post.reminder = True
         post.pending = False
         post.cancelled = False
 
-        new_entry = f"{method_label}: ${apply_now:.0f}"
+        new_entry = f"{method_label}: ${post._applied:.0f}"
         post.notice = f"{post.notice or ''} | {new_entry}".strip(" | ")
 
         post.save()
-        remaining_amount -= apply_now
         if post.booker_email:
             recipient_emails.add(post.booker_email)
         else:
