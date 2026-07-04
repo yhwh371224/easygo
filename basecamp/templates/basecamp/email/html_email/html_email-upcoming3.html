@@ -156,17 +156,17 @@
 													You paid a deposit of ${{ deposit_amount_due|floatformat:2 }}. The remaining balance of <strong>${{ deposit_remaining_balance|floatformat:2 }}</strong> is due before your pickup.<br>
 												</p>
 											{% endif %}
-											{% if not reminder %}
-												<p style="margin:0; font-size:16px; line-height:24px; font-weight:bold;">
-													✨ Important Notice:  
-												</p>																				
-												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
-													<span style="color: #eb7828">Please reply "Yes" to this email for reconfirming your booking and details below</span><br><br>													
+											{% if cash and not paid %}
+											<p style="margin:0; font-size:16px; line-height:24px; font-weight:bold;">
+												✨ Important Notice:
+											</p>
+											<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
+												<span style="color: #eb7828">Please reply "Yes" to this email for reconfirming your booking and details below</span><br><br>
                                                     We can not guarantee your booking unless we receive a confirmation with a "Yes" response via email<br>
-												</p>
-											{% endif %}	
+											</p>
+											{% endif %}
 
-											{% if cash and not paid %}	
+											{% if cash and not paid %}
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">													
 													Please note that the driver may not have a card machine available. We kindly ask you to prepare the cash in advance<br><br></p>											
 											{% endif %}
