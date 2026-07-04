@@ -2,13 +2,12 @@ from datetime import date
 
 from django.contrib import admin, messages
 from django.contrib.admin import AdminSite
-from django.core.exceptions import ValidationError
 from django import forms
 from django.template.response import TemplateResponse
 from django.urls import path as url_path, reverse
-from django.utils import timezone
 from django.utils.html import format_html
 from .models import Driver, DriverSettlement, Inquiry, PaypalPayment, PhoneMapping, StripePayment, Post, VirtualNumber
+from .models.driver import DriverSettlementItem
 
 
 class CreateSettlementForm(forms.Form):
@@ -42,17 +41,27 @@ class DriverAdmin(admin.ModelAdmin):
     impersonate_button.short_description = 'Impersonate'
 
 
+class DriverSettlementItemInline(admin.TabularInline):
+    model = DriverSettlementItem
+    extra = 0
+    raw_id_fields = ['post']
+    fields = ['post', 'amount', 'gst_amount', 'line_total', 'description']
+
+
 @admin.register(DriverSettlement)
 class DriverSettlementAdmin(admin.ModelAdmin):
-    list_display = ['settlement_number', 'driver', 'from_date', 'to_date', 'total_amount', 'status', 'settled_by', 'settled_at']
-    list_filter = ['status', 'driver']
+    list_display = ['settlement_number', 'driver', 'from_date', 'to_date', 'total_amount', 'settled_by', 'settled_at']
+    list_filter = ['driver']
     search_fields = ['settlement_number']
-    readonly_fields = ['created_at']
-    actions = ['action_lock_settlement', 'action_mark_paid', 'action_email_rcti']
+    inlines = [DriverSettlementItemInline]
+    # Totals are derived from the line items (recomputed on save), and the
+    # settlement number / status are system-managed — shown read-only.
+    readonly_fields = ['created_at', 'settlement_number', 'status',
+                       'total_amount', 'cash_total', 'paid_total', 'gst_total']
+    # Xero is not used (bookkeeping is done in e-PayDay Go) — hide those fields.
+    exclude = ['xero_exported', 'xero_exported_at', 'xero_reference',
+               'xero_invoice_id']
     change_list_template = 'admin/blog/driversettlement/change_list.html'
-
-    _MONEY_FIELDS = ['total_amount', 'cash_total', 'paid_total', 'gst_total']
-    _NUMBER_FIELDS = ['settlement_number', 'rcti_number', 'from_date', 'to_date']
 
     # ── Custom URL + view ───────────────────────────────────────────
 
@@ -92,7 +101,8 @@ class DriverSettlementAdmin(admin.ModelAdmin):
                         request,
                         f"Settlement {settlement.settlement_number} created "
                         f"(paid total: ${settlement.paid_total}). "
-                        "Review and use 'Lock settlement' when ready.",
+                        "It is recorded and editable below — adjust the line "
+                        "items if anything is wrong.",
                     )
                     return self._redirect_to_change(settlement)
         else:
@@ -131,102 +141,40 @@ class DriverSettlementAdmin(admin.ModelAdmin):
             pass
         return super().changelist_view(request, extra_context=extra_context)
 
-    def get_readonly_fields(self, request, obj=None):
-        base = list(self.readonly_fields)
-        if obj and obj.status != 'draft':
-            base += self._MONEY_FIELDS + self._NUMBER_FIELDS
-        return base
-
-    @admin.action(description='Lock settlement')
-    def action_lock_settlement(self, request, queryset):
-        from blog.services.settlement_service import lock_settlement
-        for settlement in queryset:
-            try:
-                lock_settlement(settlement, request.user)
-                self.message_user(request, f"Locked: {settlement.settlement_number}")
-            except ValidationError as e:
-                self.message_user(request, str(e), messages.ERROR)
-
-    @admin.action(description='Mark as paid')
-    def action_mark_paid(self, request, queryset):
-        from blog.services.settlement_service import mark_paid
-        for settlement in queryset:
-            try:
-                mark_paid(settlement, request.user, settlement.payment_method, timezone.now())
-                self.message_user(request, f"Marked as paid: {settlement.settlement_number}")
-            except ValidationError as e:
-                self.message_user(request, str(e), messages.ERROR)
-
-    @admin.action(description='Email RCTI PDF to driver')
-    def action_email_rcti(self, request, queryset):
-        from decimal import Decimal, ROUND_HALF_UP
-        from django.template.loader import render_to_string
-        from weasyprint import HTML
-        from utils.email import send_html_email
-        from blog.driver_views import COMPANY_NAME, COMPANY_ABN, _build_rcti_context
-
-        for settlement in queryset:
-            if settlement.status != 'paid':
-                self.message_user(
-                    request,
-                    f"Skipped {settlement.settlement_number}: status is '{settlement.status}', not 'paid'.",
-                    messages.WARNING,
-                )
-                continue
-
-            driver = settlement.driver
-            if not driver.driver_email:
-                self.message_user(
-                    request,
-                    f"Skipped {settlement.settlement_number}: driver has no email address.",
-                    messages.WARNING,
-                )
-                continue
-
-            ctx = {'driver': driver, 'settlement': settlement, 'is_pdf': True}
-            ctx.update(_build_rcti_context(settlement))
-            html_string = render_to_string(
-                'basecamp/driver/driver_settlement_detail.html', ctx
-            )
-            pdf_bytes = HTML(
-                string=html_string, base_url=request.build_absolute_uri('/')
-            ).write_pdf()
-
-            period = (
-                f"{settlement.from_date.strftime('%d %b')}–"
-                f"{settlement.to_date.strftime('%d %b %Y')}"
-            )
-            subject = f"RCTI {settlement.settlement_number} – {period}"
-            body_html = (
-                f"<p>Dear {driver.driver_name},</p>"
-                f"<p>Please find attached your Recipient Created Tax Invoice "
-                f"<strong>{settlement.settlement_number}</strong> "
-                f"for the period {settlement.from_date.strftime('%d %b %Y')} to "
-                f"{settlement.to_date.strftime('%d %b %Y')}.</p>"
-                f"<p>Total (incl. GST): <strong>${settlement.paid_total}</strong></p>"
-                f"<p>Regards,<br>{COMPANY_NAME}</p>"
-            )
-            try:
-                send_html_email(
-                    subject=subject,
-                    html_content=body_html,
-                    recipient_list=[driver.driver_email],
-                    attachments=[(f"{settlement.settlement_number}.pdf", pdf_bytes, 'application/pdf')],
-                )
-                self.message_user(
-                    request,
-                    f"RCTI emailed to {driver.driver_email} ({settlement.settlement_number}).",
-                )
-            except Exception as e:
-                self.message_user(
-                    request,
-                    f"Email failed for {settlement.settlement_number}: {e}",
-                    messages.ERROR,
-                )
+    def has_add_permission(self, request):
+        # Settlements are only ever created through the custom "Create
+        # Settlement" flow (which pulls the driver's trips and computes the
+        # numbers). Disable the default admin "Add" so the raw blank form —
+        # which can't produce a valid settlement number/totals — is never used.
+        return False
 
     def save_model(self, request, obj, form, change):
         obj.settled_by = request.user
+        if not obj.status:
+            obj.status = 'paid'
         super().save_model(request, obj, form, change)
+
+    def save_related(self, request, form, formsets, change):
+        """After the line items are saved, re-derive the totals and re-sync the
+        BAS 1B expense so the books always match the edited settlement."""
+        super().save_related(request, form, formsets, change)
+        from blog.services.settlement_service import (
+            recompute_totals, sync_settlement_expense,
+        )
+        settlement = form.instance
+        recompute_totals(settlement)
+        sync_settlement_expense(settlement)
+
+    def delete_model(self, request, obj):
+        from blog.services.settlement_service import delete_settlement_expense
+        delete_settlement_expense(obj)
+        super().delete_model(request, obj)
+
+    def delete_queryset(self, request, queryset):
+        from blog.services.settlement_service import delete_settlement_expense
+        for obj in queryset:
+            delete_settlement_expense(obj)
+        super().delete_queryset(request, queryset)
 
 
 class InquiryAdmin(admin.ModelAdmin):

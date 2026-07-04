@@ -545,8 +545,8 @@ class SettlementGstTests(TestCase):
                 pickup_date=self.pickup, pickup_time='10:00',
             )
 
-    def _settle_and_pay(self, driver):
-        from blog.services.settlement_service import lock_settlement, mark_paid
+    def _settle(self, driver):
+        # One-step flow: create_settlement records the expense immediately.
         # settlement-number generation depends on region/airport config that is
         # irrelevant to GST behaviour — stub it with a unique value.
         number = f"TEST-SET-{driver.pk}"
@@ -555,8 +555,6 @@ class SettlementGstTests(TestCase):
             settlement = self.SettlementService.create_settlement(
                 driver, self.from_date, self.to_date, user=self.admin
             )
-        lock_settlement(settlement, self.admin)
-        mark_paid(settlement, self.admin, 'bank', timezone.now())
         settlement.refresh_from_db()
         return settlement
 
@@ -567,7 +565,7 @@ class SettlementGstTests(TestCase):
         driver.save()
         self._make_post(driver, '110', cash=False)   # bank-paid → counts toward paid_total
 
-        settlement = self._settle_and_pay(driver)
+        settlement = self._settle(driver)
 
         item = settlement.items.first()
         self.assertEqual(item.gst_amount, Decimal('10.00'))   # 110 / 11
@@ -586,7 +584,7 @@ class SettlementGstTests(TestCase):
         self.assertFalse(driver.gst_registered)   # default
         self._make_post(driver, '110', cash=False)
 
-        settlement = self._settle_and_pay(driver)
+        settlement = self._settle(driver)
 
         item = settlement.items.first()
         self.assertEqual(item.gst_amount, Decimal('0'))
@@ -597,17 +595,17 @@ class SettlementGstTests(TestCase):
         self.assertEqual(tx.gst_code, 'no_gst')
         self.assertEqual(tx.gst_amount, Decimal('0'))
 
-    def test_mark_paid_twice_creates_single_transaction(self):
+    def test_resync_creates_single_transaction(self):
         from accounting.models import Transaction
-        from blog.services.settlement_service import _record_settlement_expense
+        from blog.services.settlement_service import sync_settlement_expense
         driver = make_driver(user=make_user('dup_drv'), region=self.region)
         driver.gst_registered = True
         driver.save()
         self._make_post(driver, '220', cash=False)
 
-        settlement = self._settle_and_pay(driver)
-        # second call (idempotent guard) — simulate a re-run of the post-pay hook
-        _record_settlement_expense(settlement)
+        settlement = self._settle(driver)
+        # re-syncing (e.g. after an edit) must upsert, never duplicate.
+        sync_settlement_expense(settlement)
 
         count = Transaction.objects.filter(
             category='subcontract',
