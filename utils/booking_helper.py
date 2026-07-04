@@ -49,6 +49,29 @@ def _get_default_pickup_maps(region_id, terminal_type):
     return list(point.maps.all()) if point else []
 
 
+def _deposit_remaining_balance(booking):
+    """디파짓 인보이스가 걸린 예약의 남은 잔액을 계산.
+    mirrors blog.blog_utils._net_adjustment — price/paid/discount/toll/surcharge는
+    CharField라 blank/None/텍스트값(e.g. "surcharge included")이 섞여 있어 안전 변환 필요."""
+    deposit_due = getattr(booking, "deposit_amount_due", None)
+    if deposit_due is None:
+        return None, None
+
+    def _num(value):
+        v = (value or '').strip() if isinstance(value, str) else value
+        try:
+            return float(v)
+        except (TypeError, ValueError):
+            return 0.0
+
+    price = _num(getattr(booking, "price", None))
+    paid = _num(getattr(booking, "paid", None))
+    surcharge = _num(getattr(booking, "surcharge", None))
+    discount = _num(getattr(booking, "discount", None))
+    remaining = round(price + surcharge - discount - paid, 2)
+    return float(deposit_due), remaining
+
+
 def build_reminder_context(booking, pickup_time_12h, driver):
     from regions.models import Terminal
 
@@ -62,6 +85,8 @@ def build_reminder_context(booking, pickup_time_12h, driver):
 
     is_intl = is_intl_pickup(getattr(booking, "direction", None))
     is_domestic = is_domestic_pickup(getattr(booking, "direction", None))
+
+    deposit_amount_due, deposit_remaining_balance = _deposit_remaining_balance(booking)
 
     region_slug = booking.region.slug if booking.region_id else "sydney"
 
@@ -103,6 +128,9 @@ def build_reminder_context(booking, pickup_time_12h, driver):
         'paid': getattr(booking, "paid", False),
         'cash': getattr(booking, "cash", False),
         'cruise': getattr(booking, "cruise", False),
+
+        'deposit_amount_due': deposit_amount_due,
+        'deposit_remaining_balance': deposit_remaining_balance,
 
         'is_intl': is_intl,
         'is_domestic': is_domestic,

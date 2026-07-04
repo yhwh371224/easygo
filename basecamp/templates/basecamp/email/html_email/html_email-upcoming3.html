@@ -150,7 +150,13 @@
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
                                                     Upcoming your booking on {{ pickup_date|date:"Y-m-d" }}<br><br>
                                                     Your booking day is only 3 days away<br><br></p>
-											{% if not reminder %}	
+											{% if deposit_amount_due and deposit_remaining_balance > 0 %}
+												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;background-color:#fff4e5;padding:10px;border-left:3px solid #eb7828;">
+													<span style="color: #eb7828"><strong>Remaining balance reminder:</strong></span><br>
+													You paid a deposit of ${{ deposit_amount_due|floatformat:2 }}. The remaining balance of <strong>${{ deposit_remaining_balance|floatformat:2 }}</strong> is due before your pickup.<br>
+												</p>
+											{% endif %}
+											{% if not reminder %}
 												<p style="margin:0; font-size:16px; line-height:24px; font-weight:bold;">
 													✨ Important Notice:  
 												</p>																				
