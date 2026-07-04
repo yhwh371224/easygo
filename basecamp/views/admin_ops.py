@@ -540,34 +540,72 @@ def email_dispatch_detail(request):
 
             remaining_amount = payment_amount
 
-            bookings = (
+            bookings = list(
                 Post.objects
                 .filter(email__iexact=_email, pickup_date__gte=timezone.localdate())
                 .order_by('pickup_date')
             )
 
-            applied_bookings = []
-
-            for booking in bookings:
+            def _paid_and_total_due(booking, applied_so_far):
                 price = float(booking.price)
-                paid = float(booking.paid or 0)
-
+                paid = float(booking.paid or 0) + applied_so_far
                 # 청구(Stripe/PayPal)·정산과 동일 공식: 총액 = price + surcharge − discount
                 surcharge, discount = _net_adjustment(booking)
                 total_due = round(price + surcharge - discount, 2)
+                return paid, total_due
 
-                # 이미 전액 결제 → 완전히 스킵
-                if paid >= total_due:
+            applied_amounts = {}
+
+            # 1차: 디파짓 인보이스가 걸린 예약은 디파짓 금액까지만 채우고 다음
+            # 예약으로 넘긴다. 디파짓이 없는 예약은 목표가 곧 잔액 전체라
+            # 기존과 동일하게 한 번에 채워진다.
+            for booking in bookings:
+                if remaining_amount <= 0:
+                    break
+
+                paid, total_due = _paid_and_total_due(booking, applied_amounts.get(booking.pk, 0.0))
+                due = round(total_due - paid, 2)
+                if due <= 0:
                     continue
 
-                due = total_due - paid
-                apply_amount = min(remaining_amount, due)
+                deposit_due = booking.deposit_amount_due
+                if deposit_due is not None and paid < float(deposit_due):
+                    target = min(due, float(deposit_due) - paid)
+                else:
+                    target = due
 
-                # 적용할 금액이 없으면 스킵
+                apply_amount = min(remaining_amount, target)
                 if apply_amount <= 0:
                     continue
 
+                applied_amounts[booking.pk] = applied_amounts.get(booking.pk, 0.0) + apply_amount
+                remaining_amount -= apply_amount
+
+            # 2차: 다른 예약으로 넘길 디파짓 목표가 더 없는데 돈이 남았다면(=넘길
+            # 곳이 없거나 모든 디파짓을 이미 채웠으면) 남은 금액을 앞 예약부터
+            # 순서대로 잔액이 다 찰 때까지 채운다.
+            for booking in bookings:
+                if remaining_amount <= 0:
+                    break
+
+                paid, total_due = _paid_and_total_due(booking, applied_amounts.get(booking.pk, 0.0))
+                due = round(total_due - paid, 2)
+                if due <= 0:
+                    continue
+
+                apply_amount = min(remaining_amount, due)
+                applied_amounts[booking.pk] = applied_amounts.get(booking.pk, 0.0) + apply_amount
+                remaining_amount -= apply_amount
+
+            applied_bookings = []
+
+            for booking in bookings:
+                apply_amount = applied_amounts.get(booking.pk)
+                if not apply_amount:
+                    continue
+
                 # ✅ 여기부터가 "돈이 실제로 적용된 예약"만
+                paid = float(booking.paid or 0)
                 booking.paid = paid + apply_amount
 
                 original_notice = (booking.notice or "").strip()
@@ -584,11 +622,6 @@ def email_dispatch_detail(request):
                 booking.cancelled = False
 
                 applied_bookings.append(booking)
-
-                remaining_amount -= apply_amount
-
-                if remaining_amount <= 0:
-                    break
 
             for booking in applied_bookings:
                 booking.save(update_fields=['paid', 'notice', 'reminder', 'cash', 'pending', 'cancelled'])
