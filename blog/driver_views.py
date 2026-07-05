@@ -342,11 +342,19 @@ def driver_dashboard(request):
 
     current_grand_total = current_total_paid + current_total_cash
 
+    from blog.models import DriverAgreement, CURRENT_AGREEMENT_VERSION
+    agreement_confirmed = DriverAgreement.objects.filter(
+        driver=driver,
+        version=CURRENT_AGREEMENT_VERSION,
+        confirmed_at__isnull=False,
+    ).exists()
+
     return render(request, 'basecamp/driver/dashboard.html', {
         'driver': driver,
         'trips': trips,
         'today': today,
         'timeline': timeline,
+        'agreement_confirmed': agreement_confirmed,
         'current_total_paid': current_total_paid,
         'current_total_cash': current_total_cash,
         'current_grand_total': current_grand_total,
@@ -418,6 +426,123 @@ def driver_settlement_pdf(request, settlement_number):
         f'attachment; filename="{settlement.settlement_number}.pdf"'
     )
     return response
+
+
+def _agreement_items(driver):
+    """The three summary items shown on the agreement page.
+
+    RCTI wording pulls the driver's ABN registered name (stored as
+    ``business_name``) and ABN dynamically so each driver sees their own
+    details.
+    """
+    abn_registered_name = (driver.business_name or driver.driver_name or '').strip()
+    abn = (driver.abn or '').strip()
+    return [
+        {
+            'field': 'item_status_confirmed',
+            'title': 'I am an independent subcontractor',
+            'detail': (
+                "I operate my own business and provide services to "
+                f"{COMPANY_NAME} as an independent subcontractor, not as an "
+                "employee. I am responsible for my own vehicle, licences, "
+                "registration and running costs, and I am free to accept or "
+                "decline work offered to me."
+            ),
+        },
+        {
+            'field': 'item_liability_confirmed',
+            'title': 'Insurance & liability are my responsibility',
+            'detail': (
+                "I hold the insurances required to carry passengers for hire "
+                "and reward (including CTP and public liability) and I am "
+                "responsible for any fines, damage or liability arising from my "
+                "own driving and vehicle."
+            ),
+        },
+        {
+            'field': 'item_rcti_confirmed',
+            'title': 'Recipient Created Tax Invoices (RCTI)',
+            'detail': (
+                f"I agree that {COMPANY_NAME} (ABN {COMPANY_ABN}) may issue "
+                "Recipient Created Tax Invoices (RCTIs) for the services I "
+                "supply, and that I will not issue my own tax invoices for "
+                "those services. These RCTIs will be issued to "
+                f"{abn_registered_name or '[your business name]'} "
+                f"(ABN {abn or '[your ABN]'}). I will notify EasyGo if my GST "
+                "registration status changes."
+            ),
+        },
+    ]
+
+
+@login_required(login_url='/driver/login/')
+def driver_agreement(request):
+    """Driver portal page where the logged-in driver reviews and confirms the
+    subcontractor agreement.
+
+    GET renders the three summary items (expand-on-click detail). POST records
+    a :class:`DriverAgreement` once all three boxes are ticked. Nothing here
+    ever touches the accounting app.
+    """
+    try:
+        driver = request.user.driver
+    except Exception:
+        return redirect('blog:driver_login')
+
+    from blog.models import DriverAgreement, CURRENT_AGREEMENT_VERSION
+    from basecamp.modules.view_helpers import get_client_ip
+
+    version = CURRENT_AGREEMENT_VERSION
+
+    existing = (
+        DriverAgreement.objects
+        .filter(driver=driver, version=version, confirmed_at__isnull=False)
+        .first()
+    )
+
+    items = _agreement_items(driver)
+
+    if request.method == 'POST':
+        # Already confirmed — treat a re-submit as a no-op (idempotent link).
+        if existing:
+            return render(request, 'basecamp/driver/agreement_done.html', {
+                'driver': driver, 'version': version, 'agreement': existing,
+            })
+
+        all_checked = all(request.POST.get(item['field']) == 'on' for item in items)
+        if not all_checked:
+            return render(request, 'basecamp/driver/agreement.html', {
+                'driver': driver,
+                'version': version,
+                'items': items,
+                'error': 'Please tick all three boxes before confirming.',
+            })
+
+        agreement, _ = DriverAgreement.objects.get_or_create(
+            driver=driver, version=version,
+        )
+        agreement.item_status_confirmed = True
+        agreement.item_liability_confirmed = True
+        agreement.item_rcti_confirmed = True
+        agreement.confirmed_at = timezone.now()
+        agreement.ip_address = get_client_ip(request)
+        agreement.gst_registered_snapshot = driver.gst_registered
+        agreement.save()
+
+        return render(request, 'basecamp/driver/agreement_done.html', {
+            'driver': driver, 'version': version, 'agreement': agreement,
+        })
+
+    if existing:
+        return render(request, 'basecamp/driver/agreement_done.html', {
+            'driver': driver, 'version': version, 'agreement': existing,
+        })
+
+    return render(request, 'basecamp/driver/agreement.html', {
+        'driver': driver,
+        'version': version,
+        'items': items,
+    })
 
 
 @login_required(login_url='/driver/login/')

@@ -7,7 +7,7 @@ from django.template.response import TemplateResponse
 from django.urls import path as url_path, reverse
 from django.utils.html import format_html
 from .models import Driver, DriverSettlement, Inquiry, PaypalPayment, PhoneMapping, StripePayment, Post, VirtualNumber
-from .models.driver import DriverSettlementItem
+from .models.driver import DriverSettlementItem, DriverAgreement
 
 
 class CreateSettlementForm(forms.Form):
@@ -177,6 +177,32 @@ class DriverSettlementAdmin(admin.ModelAdmin):
         super().delete_queryset(request, queryset)
 
 
+class ConfirmedFilter(admin.SimpleListFilter):
+    """Filter agreements by whether they've actually been confirmed yet."""
+    title = 'confirmed'
+    parameter_name = 'confirmed'
+
+    def lookups(self, request, model_admin):
+        return [('yes', 'Confirmed'), ('no', 'Not confirmed')]
+
+    def queryset(self, request, queryset):
+        if self.value() == 'yes':
+            return queryset.filter(confirmed_at__isnull=False)
+        if self.value() == 'no':
+            return queryset.filter(confirmed_at__isnull=True)
+        return queryset
+
+
+class DriverAgreementAdmin(admin.ModelAdmin):
+    list_display = ['driver', 'version', 'confirmed_at', 'gst_registered_snapshot',
+                    'ip_address']
+    list_filter = [ConfirmedFilter, 'version', 'gst_registered_snapshot', 'driver']
+    search_fields = ['driver__driver_name', 'driver__abn', 'version']
+    readonly_fields = ['created_at', 'confirmed_at', 'ip_address',
+                       'gst_registered_snapshot']
+    ordering = ['-created_at']
+
+
 class InquiryAdmin(admin.ModelAdmin):
     list_display = ['pickup_date', 'region', 'suburb', 'pickup_time', 'direction', 'no_of_passenger',
                     'return_flight_number', 'is_confirmed', 'cancelled', 'pending', 'created']
@@ -343,6 +369,7 @@ class MyAdminSite(AdminSite):
 admin_site = MyAdminSite(name='horeb_yhwh')
 admin_site.register(Driver, DriverAdmin)
 admin_site.register(DriverSettlement, DriverSettlementAdmin)
+admin_site.register(DriverAgreement, DriverAgreementAdmin)
 admin_site.register(Inquiry, InquiryAdmin)
 admin_site.register(PaypalPayment, PaypalPaymentAdmin)
 admin_site.register(StripePayment, StripePaymentAdmin)
@@ -351,6 +378,7 @@ admin_site.register(PhoneMapping, PhoneMappingAdmin)
 admin_site.register(VirtualNumber, VirtualNumberAdmin)
 
 admin.site.register(Driver, DriverAdmin)
+admin.site.register(DriverAgreement, DriverAgreementAdmin)
 admin.site.register(Inquiry, InquiryAdmin)
 admin.site.register(PaypalPayment, PaypalPaymentAdmin)
 admin.site.register(StripePayment, StripePaymentAdmin)

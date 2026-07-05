@@ -241,6 +241,14 @@
 
 <div class="container py-3" style="max-width:600px;">
 
+  {% if not agreement_confirmed %}
+  <a href="{% url 'blog:driver_agreement' %}"
+     style="display:block;text-decoration:none;background:#78350f;border:1px solid #b45309;
+            color:#fde68a;padding:.85rem 1rem;border-radius:10px;margin-bottom:1rem;">
+    📄 <strong>Action required:</strong> Please review &amp; confirm your subcontractor agreement →
+  </a>
+  {% endif %}
+
   {% if not trips %}
   <div class="empty-state">
     <div class="icon">🚐</div>

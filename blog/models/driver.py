@@ -47,6 +47,47 @@ class Driver(models.Model):
         return self.driver_name
 
 
+# Bump this when the agreement wording changes. Drivers are asked to
+# re-confirm whenever the current version differs from what they last signed.
+CURRENT_AGREEMENT_VERSION = "2026-07"
+
+
+class DriverAgreement(models.Model):
+    """A driver's acknowledgement of the subcontractor agreement.
+
+    Purely a record of consent — deliberately isolated from the accounting
+    app (no Transaction / PayrollEntry writes ever happen off this model).
+    """
+    driver = models.ForeignKey(
+        'Driver',
+        on_delete=models.CASCADE,
+        related_name='agreements',
+    )
+    version = models.CharField(max_length=20, default=CURRENT_AGREEMENT_VERSION)
+
+    item_status_confirmed = models.BooleanField(default=False)
+    item_liability_confirmed = models.BooleanField(default=False)
+    item_rcti_confirmed = models.BooleanField(default=False)
+
+    confirmed_at = models.DateTimeField(null=True, blank=True)
+    ip_address = models.CharField(max_length=45, null=True, blank=True)
+
+    # Snapshot of driver.gst_registered at the moment of confirmation, so the
+    # record is meaningful even if the driver's GST status later changes.
+    gst_registered_snapshot = models.BooleanField(default=False)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        # One acknowledgement row per driver per version.
+        unique_together = ('driver', 'version')
+
+    def __str__(self):
+        state = 'confirmed' if self.confirmed_at else 'pending'
+        return f"{self.driver} | {self.version} | {state}"
+
+
 class DriverSettlement(models.Model):
     driver = models.ForeignKey(
         'Driver',
