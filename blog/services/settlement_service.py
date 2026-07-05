@@ -2,6 +2,7 @@ from decimal import Decimal
 from django.db import transaction
 from django.utils import timezone
 
+from accounting.conf import GST_REGISTRATION_DATE
 from blog.models import DriverSettlement
 from blog.models.driver import DriverSettlementItem
 from blog.models import Post
@@ -67,7 +68,9 @@ class SettlementService:
             # GST-inclusive. For registered drivers we only EXTRACT the embedded
             # GST (gross ÷ 11) for the RCTI/1B line — we never add it on top, or
             # the driver would be overpaid and the expense overstated.
-            if driver.gst_registered:
+            # Before GST_REGISTRATION_DATE the company wasn't GST-registered, so
+            # the price never had GST embedded in it — nothing to extract.
+            if driver.gst_registered and post.pickup_date >= GST_REGISTRATION_DATE:
                 gst_amount = (amount / Decimal('11')).quantize(Decimal('0.01'))
             else:
                 gst_amount = Decimal('0')
