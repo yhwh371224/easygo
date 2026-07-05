@@ -445,8 +445,7 @@ def _agreement_items(driver):
                 "I operate my own business and provide services to "
                 f"{COMPANY_NAME} as an independent subcontractor, not as an "
                 "employee. I am responsible for my own vehicle, licences, "
-                "registration and running costs, and I am free to accept or "
-                "decline work offered to me."
+                "registration and running costs."
             ),
         },
         {
@@ -454,9 +453,8 @@ def _agreement_items(driver):
             'title': 'Insurance & liability are my responsibility',
             'detail': (
                 "I hold the insurances required to carry passengers for hire "
-                "and reward (including CTP and public liability) and I am "
-                "responsible for any fines, damage or liability arising from my "
-                "own driving and vehicle."
+                "and reward, and I am responsible for any fines, damage or "
+                "liability arising from my own driving and vehicle."
             ),
         },
         {
@@ -466,10 +464,7 @@ def _agreement_items(driver):
                 f"I agree that {COMPANY_NAME} (ABN {COMPANY_ABN}) may issue "
                 "Recipient Created Tax Invoices (RCTIs) for the services I "
                 "supply, and that I will not issue my own tax invoices for "
-                "those services. These RCTIs will be issued to "
-                f"{abn_registered_name or '[your business name]'} "
-                f"(ABN {abn or '[your ABN]'}). I will notify EasyGo if my GST "
-                "registration status changes."
+                "those services."
             ),
         },
     ]
