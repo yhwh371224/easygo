@@ -156,6 +156,22 @@ class Post(models.Model):
     def invoice_name(self):
         return self.booker_name if self.booker_name else self.name
 
+    def save(self, *args, **kwargs):
+        # 자동: Sam 아닌 드라이버가 지정되고 cash 건이면 driver_collected_cash 체크
+        # (손님이 드라이버에게 직접 현금 지불 → 회사 매출/GST 제외). 한 번 True면
+        # 다시 건드리지 않고, Sam(본인) 운전 건은 회사 매출로 남기기 위해 제외.
+        if (
+            self.cash
+            and self.driver_id
+            and not self.driver_collected_cash
+            and (self.driver.driver_name or '').strip().lower() != 'sam'
+        ):
+            self.driver_collected_cash = True
+            uf = kwargs.get('update_fields')
+            if uf is not None:
+                kwargs['update_fields'] = set(uf) | {'driver_collected_cash'}
+        super().save(*args, **kwargs)
+
     @property
     def is_foreign_contact(self):
         return is_foreign_number(self.contact)
