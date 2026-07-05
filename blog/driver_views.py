@@ -16,7 +16,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django_ratelimit.decorators import ratelimit
 from main import settings
 
-COMPANY_NAME = "Nexflow Ventures Pty Ltd t/a EasyGo Airport Shuttle"
+COMPANY_NAME = "EasyGo Airport Shuttle (Nexflow Ventures Pty Ltd)"
 COMPANY_ABN  = "25 697 358 535"
 
 
