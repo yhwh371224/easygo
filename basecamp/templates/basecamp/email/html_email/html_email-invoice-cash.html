@@ -186,6 +186,12 @@
 												{% endif %}																							
 												Number of Passenger: {{ no_of_passenger }}<br>
 												Number of Baggage: {{ no_of_baggage }}<br>
+												{% if extra_stop_addresses %}
+												Extra Stops:<br>
+												{% for addr in extra_stop_addresses %}
+												&nbsp;&nbsp;• {{ addr }}<br>
+												{% endfor %}
+												{% endif %}
 												<!-- message -->
 												{% if message %}{{ message|linebreaksbr }}{% endif %}</p>
 											</td>

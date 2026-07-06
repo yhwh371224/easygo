@@ -85,6 +85,12 @@
               To: {{ booking.end_point }}<br>
               Number of Passenger: {{ booking.no_of_passenger }}<br>
               Number of Baggage: {{ booking.no_of_baggage }}<br>
+              {% if booking.extra_stop_addresses %}
+              Extra Stops:<br>
+              {% for addr in booking.extra_stop_addresses %}
+              &nbsp;&nbsp;• {{ addr }}<br>
+              {% endfor %}
+              {% endif %}
               {% if booking.message %}Message: {{ booking.message }}<br>{% endif %}
               {% if booking.notice %}Notice: {{ booking.notice }}<br>{% endif %}
             </div>
