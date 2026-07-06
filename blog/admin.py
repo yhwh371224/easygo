@@ -32,6 +32,7 @@ class DriverAdmin(admin.ModelAdmin):
     list_filter = ['gst_registered']
     search_fields = ['driver_name', 'abn', 'driver_contact', 'driver_email', 'driver_address', 'driver_plate']
     ordering = ['order']
+    readonly_fields = ['agreement_link_display']
 
     def impersonate_button(self, obj):
         if obj.user:
@@ -39,6 +40,22 @@ class DriverAdmin(admin.ModelAdmin):
             return format_html('<a class="button" href="{}">Login as Driver</a>', url)
         return '-'
     impersonate_button.short_description = 'Impersonate'
+
+    def agreement_link_display(self, obj):
+        from django.conf import settings
+        if not obj.pk or not obj.agreement_token:
+            return '-'
+        path = reverse('blog:driver_agreement_public', args=[obj.agreement_token])
+        url = f"{settings.SITE_URL}{path}"
+        return format_html(
+            '<input type="text" readonly style="width:480px" value="{0}" '
+            'onclick="this.select()"> <a class="button" href="{0}" target="_blank">Open</a>'
+            '<div style="color:#666;font-size:.85em;margin-top:.3em;">'
+            'No-login link — send this to the subcontractor so they can review '
+            '&amp; confirm the agreement before they have a portal login.</div>',
+            url,
+        )
+    agreement_link_display.short_description = 'Agreement link (no login)'
 
 
 class DriverSettlementItemInline(admin.TabularInline):

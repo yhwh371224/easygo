@@ -1,3 +1,4 @@
+import secrets
 from decimal import Decimal
 
 from django.db import models
@@ -39,9 +40,19 @@ class Driver(models.Model):
     driver_bankdetails = models.TextField(blank=True, null=True)
     google_calendar_id = models.CharField(max_length=255, blank=True, null=True)
     virtual_number = models.ForeignKey('VirtualNumber', on_delete=models.SET_NULL, null=True, blank=True)
+    agreement_token = models.CharField(
+        max_length=64, unique=True, null=True, blank=True, editable=False,
+        help_text='로그인 없이 subcontractor agreement 페이지를 열 수 있는 토큰. '
+                   '자동 생성됨.',
+    )
 
     class Meta:
         ordering = ['order']
+
+    def save(self, *args, **kwargs):
+        if not self.agreement_token:
+            self.agreement_token = secrets.token_urlsafe(32)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.driver_name

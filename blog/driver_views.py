@@ -470,20 +470,16 @@ def _agreement_items(driver):
     ]
 
 
-@login_required(login_url='/driver/login/')
-def driver_agreement(request):
-    """Driver portal page where the logged-in driver reviews and confirms the
-    subcontractor agreement.
+def _handle_agreement(request, driver):
+    """Shared GET/POST handling for the subcontractor agreement page.
 
-    GET renders the three summary items (expand-on-click detail). POST records
-    a :class:`DriverAgreement` once all three boxes are ticked. Nothing here
-    ever touches the accounting app.
+    Used both by the logged-in portal page and by the no-login token link,
+    so a subcontractor without dashboard credentials yet can still review
+    and confirm. GET renders the three summary items (expand-on-click
+    detail). POST records a :class:`DriverAgreement` once all three boxes
+    are ticked and the company name/ABN are filled in. Nothing here ever
+    touches the accounting app.
     """
-    try:
-        driver = request.user.driver
-    except Exception:
-        return redirect('blog:driver_login')
-
     from blog.models import DriverAgreement, CURRENT_AGREEMENT_VERSION
     from basecamp.modules.view_helpers import get_client_ip
 
@@ -557,6 +553,31 @@ def driver_agreement(request):
         'company_name': driver.business_name or '',
         'abn': driver.abn or '',
     })
+
+
+@login_required(login_url='/driver/login/')
+def driver_agreement(request):
+    """Driver portal page where the logged-in driver reviews and confirms the
+    subcontractor agreement."""
+    try:
+        driver = request.user.driver
+    except Exception:
+        return redirect('blog:driver_login')
+    return _handle_agreement(request, driver)
+
+
+def driver_agreement_public(request, token):
+    """No-login link for confirming the subcontractor agreement.
+
+    Sent directly to a subcontractor so they can review and confirm before
+    (or without ever needing) a portal login — dashboard access can be set
+    up separately afterwards. Looked up by the driver's private
+    ``agreement_token``, not by session, so it deliberately does not grant
+    any further portal access beyond this one page.
+    """
+    from blog.models import Driver
+    driver = get_object_or_404(Driver, agreement_token=token)
+    return _handle_agreement(request, driver)
 
 
 @login_required(login_url='/driver/login/')
