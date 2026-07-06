@@ -457,8 +457,7 @@ def _agreement_items(driver):
                 'field': 'item_liability_confirmed',
                 'title': 'Insurance & liability are our responsibility',
                 'detail': (
-                    "Our company holds the public liability insurance (and any "
-                    "other insurance required by law) covering our drivers and "
+                    "Our company holds the required insurance covering our drivers and "
                     "vehicles while performing work for "
                     f"{COMPANY_NAME}, and our company is responsible for any "
                     "fines, damage, injury or liability arising from the conduct "
