@@ -439,6 +439,8 @@ def _agreement_items(driver):
     my own vehicle" since they're not the one driving.
     """
     if driver.is_company:
+        # No RCTI item here — a company partner always invoices us directly
+        # under its own ABN, so there's no RCTI-vs-self-invoice choice to make.
         return [
             {
                 'field': 'item_status_confirmed',
@@ -461,18 +463,6 @@ def _agreement_items(driver):
                     f"{COMPANY_NAME}, and our company is responsible for any "
                     "fines, damage, injury or liability arising from the conduct "
                     "of our drivers or vehicles."
-                ),
-            },
-            {
-                'field': 'item_rcti_confirmed',
-                'title': 'Tax invoicing',
-                'detail': (
-                    "Our company will issue a valid tax invoice (including our "
-                    "ABN, and GST component if we are GST-registered) for each "
-                    f"job performed for {COMPANY_NAME}, unless we separately "
-                    f"agree in writing to let {COMPANY_NAME} (ABN {COMPANY_ABN}) "
-                    "issue Recipient Created Tax Invoices (RCTIs) on our behalf "
-                    "instead."
                 ),
             },
         ]
@@ -515,10 +505,10 @@ def _handle_agreement(request, driver):
 
     Used both by the logged-in portal page and by the no-login token link,
     so a subcontractor without dashboard credentials yet can still review
-    and confirm. GET renders the three summary items (expand-on-click
-    detail). POST records a :class:`DriverAgreement` once all three boxes
-    are ticked and the company name/ABN are filled in. Nothing here ever
-    touches the accounting app.
+    and confirm. GET renders the summary items for this driver/company
+    (expand-on-click detail — see :func:`_agreement_items`). POST records a
+    :class:`DriverAgreement` once every item shown is ticked and the company
+    name/ABN are filled in. Nothing here ever touches the accounting app.
     """
     from blog.models import DriverAgreement, CURRENT_AGREEMENT_VERSION
     from basecamp.modules.view_helpers import get_client_ip
@@ -575,9 +565,10 @@ def _handle_agreement(request, driver):
         agreement, _ = DriverAgreement.objects.get_or_create(
             driver=driver, version=version,
         )
-        agreement.item_status_confirmed = True
-        agreement.item_liability_confirmed = True
-        agreement.item_rcti_confirmed = True
+        # Only the items actually shown/ticked apply — the company flow has
+        # no RCTI item, so item_rcti_confirmed stays False for those.
+        for item in items:
+            setattr(agreement, item['field'], True)
         if driver.is_company:
             agreement.signed_by_name = signed_by_name
             agreement.signed_by_title = signed_by_title

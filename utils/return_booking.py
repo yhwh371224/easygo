@@ -52,6 +52,15 @@ def handle_return_trip(instance):
             except ValueError:
                 pass
 
+        # driver_price 처리 — price/paid와 동일하게 반으로 나눔. 아직 자동
+        # 채움 전이라 비어있으면 price 기준으로 취급.
+        driver_price_raw = str(instance.driver_price or '').strip()
+        try:
+            full_driver_price = float(driver_price_raw) if driver_price_raw not in ('', 'TBA') else full_price
+        except ValueError:
+            full_driver_price = full_price
+        half_driver_price = round(full_driver_price / 2, 2)
+
         # notice 생성
         notice_parts = [original_notice.strip(), f"===RETURN=== (Total Price: ${int(full_price)})"]
 
@@ -62,11 +71,13 @@ def handle_return_trip(instance):
 
         instance.price = half_price
         instance.paid = half_paid
+        instance.driver_price = half_driver_price
         instance.notice = updated_notice
 
         Post.objects.filter(id=instance.id).update(
             price=half_price,
             paid=half_paid,
+            driver_price=half_driver_price,
             notice=updated_notice
         )
 
@@ -108,6 +119,7 @@ def handle_return_trip(instance):
             'prepay': bool(prepay_val),
             'price': half_price,
             'paid': half_paid,
+            'driver_price': half_driver_price,
             'private_ride': instance.private_ride,
             'toll': instance.toll,
             'surcharge': instance.surcharge,
