@@ -265,7 +265,7 @@ class StripePaymentAdmin(admin.ModelAdmin):
 
 
 class PostAdmin(admin.ModelAdmin):
-    list_display = ['pickup_date', 'region', 'name', 'suburb', 'pickup_time', 'price', 'paid',
+    list_display = ['pickup_date', 'region', 'name', 'suburb', 'pickup_time', 'price', 'paid', 'driver_price',
                     'cancelled', 'pending', 'cash', 'sent_email', 'direction', 'return_flight_number', 'created']
     list_filter  = ['region', 'cancelled', 'pending', 'cash']
     search_fields = ['pickup_date', 'pickup_time', 'suburb', 'email', 'street', 'booker_email', 'booker_name',
@@ -291,7 +291,7 @@ class PostAdmin(admin.ModelAdmin):
         }),
         ('Pricing', {
             'fields': ['suburb_distance_km', 'suburb_base_price', 'price', 'paid', 'discount', 'toll', 'surcharge',
-                       'commission_rate', 'commission_amount_override', 'commission_amount_display', 'subcontractor_payout_display',
+                       'driver_price', 'commission_rate', 'commission_amount_override', 'commission_amount_display', 'subcontractor_payout_display',
                        'deposit_amount_due']
         }),
         ('Status', {

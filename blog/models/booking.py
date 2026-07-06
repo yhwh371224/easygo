@@ -98,6 +98,11 @@ class Post(models.Model):
     notice = models.TextField(blank=True, null=True)
     price = models.CharField(max_length=100, blank=True, null=True)
     paid = models.CharField(max_length=100, blank=True, null=True)
+    driver_price = models.CharField(
+        max_length=100, blank=True, null=True,
+        help_text='드라이버 대시보드 표시 및 커미션/정산 계산에 쓰이는 금액. '
+                   '비어있으면 저장 시 price 값으로 자동 채워짐. 손님 결제(price/paid)와는 별개.',
+    )
     discount = models.CharField(max_length=30, blank=True, null=True)
     toll = models.CharField(max_length=30, blank=True, null=True)
     surcharge = models.CharField(max_length=30, blank=True, null=True)
@@ -177,6 +182,12 @@ class Post(models.Model):
             uf = kwargs.get('update_fields')
             if uf is not None:
                 kwargs['update_fields'] = set(uf) | {'driver_collected_cash'}
+        # driver_price를 수동으로 채워넣기 전까지는 price 값을 그대로 따라감.
+        if not self.driver_price:
+            self.driver_price = self.price
+            uf = kwargs.get('update_fields')
+            if uf is not None:
+                kwargs['update_fields'] = set(uf) | {'driver_price'}
         super().save(*args, **kwargs)
 
     @property
@@ -192,20 +203,28 @@ class Post(models.Model):
             return Decimal('0')
 
     @property
+    def _driver_price_decimal(self):
+        """driver_price is a CharField (may be blank/None/non-numeric) — coerce safely."""
+        try:
+            return Decimal(str(self.driver_price))
+        except (InvalidOperation, TypeError):
+            return Decimal('0')
+
+    @property
     def commission_amount(self):
         """Company commission on this ride. A flat commission_amount_override
-        takes priority; otherwise falls back to price * commission_rate%."""
+        takes priority; otherwise falls back to driver_price * commission_rate%."""
         if self.commission_amount_override is not None:
             return self.commission_amount_override.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
         if not self.commission_rate:
             return Decimal('0')
-        commission = self._price_decimal * self.commission_rate / Decimal('100')
+        commission = self._driver_price_decimal * self.commission_rate / Decimal('100')
         return commission.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
 
     @property
     def subcontractor_payout(self):
-        """What the subcontractor is paid: price − commission. Display/calc only."""
-        payout = self._price_decimal - self.commission_amount
+        """What the subcontractor is paid: driver_price − commission. Display/calc only."""
+        payout = self._driver_price_decimal - self.commission_amount
         return payout.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
 
     class Meta:

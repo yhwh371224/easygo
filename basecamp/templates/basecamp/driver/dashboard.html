@@ -366,9 +366,9 @@
         </div>
       {% endif %}
 
-      {% if post.price or post.paid or post.cash %}
+      {% if post.driver_price or post.paid or post.cash %}
       <div class="trip-payment">
-        {% if post.price %}<span class="trip-price">${{ post.price }}</span>{% endif %}
+        {% if post.driver_price %}<span class="trip-price">${{ post.driver_price }}</span>{% endif %}
         {% if post.paid %}<span class="badge-paid">Paid</span>{% endif %}
         {% if post.cash and not post.paid %}<span class="badge-cash">Cash</span>{% endif %}
       </div>
@@ -380,7 +380,7 @@
       <button
         class="btn-complete active"
         id="btn-{{ post.id }}"
-        data-price="{{ post.price }}"
+        data-price="{{ post.driver_price }}"
         data-cash="{{ post.cash|yesno:'true,false' }}"
         onclick="completeTrip({{ post.id }})"
       >
@@ -412,7 +412,7 @@
           <span class="past-trip-time">{{ post.pickup_time }}</span>
         </div>
         <div class="past-trip-right">
-          {% if post.price %}<span class="past-trip-price">${{ post.price }}</span>{% endif %}
+          {% if post.driver_price %}<span class="past-trip-price">${{ post.driver_price }}</span>{% endif %}
           {% if post.cash %}
             <span class="badge-cash">Cash</span>
           {% elif post.paid %}

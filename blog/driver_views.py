@@ -312,7 +312,7 @@ def driver_dashboard(request):
 
     for post in past_posts:
         try:
-            amount = Decimal(str(post.price))
+            amount = Decimal(str(post.driver_price))
         except Exception:
             continue
         if post.cash:
@@ -327,7 +327,7 @@ def driver_dashboard(request):
 
     for post in balance_posts_today:
         try:
-            amount = Decimal(str(post.price))
+            amount = Decimal(str(post.driver_price))
         except Exception:
             continue
         if post.cash:
