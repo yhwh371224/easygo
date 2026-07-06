@@ -22,11 +22,16 @@ class SettlementService:
         """
 
         # 1) posts 조회
+        # driver_collected_cash=True 건은 손님이 드라이버에게 직접 현금을 지불해
+        # 회사를 거치지 않은 거래이므로(회사 매출/GST 제외 대상과 동일한 이유),
+        # 정산 대상에서도 완전히 제외한다 — 회사가 이미 지급된 금액을 또 지급액으로
+        # 잡으면 안 되기 때문.
         posts = Post.objects.filter(
             driver=driver,
             pickup_date__gte=from_date,
             pickup_date__lte=to_date,
             cancelled=False,
+            driver_collected_cash=False,
         ).exclude(price__isnull=True).exclude(price='')
 
         if not posts.exists():

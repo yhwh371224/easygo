@@ -18,6 +18,7 @@ from blog.models import (
     VirtualNumber, Driver, DriverSettlement,
     Inquiry, Post, PaypalPayment, StripePayment, PhoneMapping,
 )
+from blog.models.driver import DriverSettlementItem
 from regions.models import Region
 
 
@@ -594,6 +595,24 @@ class SettlementGstTests(TestCase):
                                      description=settlement.settlement_number)
         self.assertEqual(tx.gst_code, 'no_gst')
         self.assertEqual(tx.gst_amount, Decimal('0'))
+
+    def test_driver_collected_cash_excluded_from_settlement(self):
+        # Customer paid the driver directly in cash — money never touched the
+        # company, so it must not create a settlement item/payout at all.
+        driver = make_driver(user=make_user('dcc_drv'), region=self.region)
+        post = self._make_post(driver, '130', cash=True)
+        post.driver_collected_cash = True
+        post.save()
+
+        number = f"TEST-SET-DCC-{driver.pk}"
+        with patch('blog.services.settlement_service.generate_settlement_number',
+                   return_value=number):
+            settlement = self.SettlementService.create_settlement(
+                driver, self.from_date, self.to_date, user=self.admin
+            )
+
+        self.assertIsNone(settlement)
+        self.assertEqual(DriverSettlementItem.objects.filter(post=post).count(), 0)
 
     def test_resync_creates_single_transaction(self):
         from accounting.models import Transaction
