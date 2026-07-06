@@ -51,9 +51,15 @@
 <section class="py-5">
   <div class="container agree-card">
     <div class="text-center mb-4">
+      {% if driver.is_company %}
+      <h3 class="mt-3">EasyGo Partner Company Agreement</h3>
+      <p class="text-secondary mb-1">{{ driver.driver_name }}</p>
+      <p class="text-secondary small">Please review and confirm on behalf of your company. Version {{ version }} — tap each item to read the detail.</p>
+      {% else %}
       <h3 class="mt-3">EasyGo Subcontractor Agreement</h3>
       <p class="text-secondary mb-1">{{ driver.driver_name }}</p>
       <p class="text-secondary small">Version {{ version }} — tap each item to read the detail.</p>
+      {% endif %}
     </div>
 
     {% if error %}
@@ -70,6 +76,14 @@
         <label for="abn">ABN</label>
         <input type="text" class="form-control" name="abn" id="abn"
                value="{{ abn }}" required>
+        {% if driver.is_company %}
+        <label for="signed_by_name">Your Name</label>
+        <input type="text" class="form-control" name="signed_by_name" id="signed_by_name"
+               value="{{ signed_by_name }}" required>
+        <label for="signed_by_title">Your Title / Position</label>
+        <input type="text" class="form-control" name="signed_by_title" id="signed_by_title"
+               value="{{ signed_by_title }}" required>
+        {% endif %}
       </div>
 
       {% for item in items %}
@@ -99,14 +113,20 @@
     var boxes = Array.prototype.slice.call(document.querySelectorAll('.agree-input'));
     var companyName = document.getElementById('company_name');
     var abn = document.getElementById('abn');
+    var signedByName = document.getElementById('signed_by_name');
+    var signedByTitle = document.getElementById('signed_by_title');
     var btn = document.getElementById('confirmBtn');
     function sync() {
       btn.disabled = !boxes.every(function (b) { return b.checked; })
-        || !companyName.value.trim() || !abn.value.trim();
+        || !companyName.value.trim() || !abn.value.trim()
+        || (signedByName && !signedByName.value.trim())
+        || (signedByTitle && !signedByTitle.value.trim());
     }
     boxes.forEach(function (b) { b.addEventListener('change', sync); });
     companyName.addEventListener('input', sync);
     abn.addEventListener('input', sync);
+    if (signedByName) signedByName.addEventListener('input', sync);
+    if (signedByTitle) signedByTitle.addEventListener('input', sync);
     sync();
     document.getElementById('agreeForm').addEventListener('submit', function () {
       btn.disabled = true;

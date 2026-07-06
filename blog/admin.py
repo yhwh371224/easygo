@@ -27,9 +27,9 @@ class CreateSettlementForm(forms.Form):
 
 
 class DriverAdmin(admin.ModelAdmin):
-    list_display = ['order', 'driver_name', 'abn', 'gst_registered', 'commission_rate', 'driver_contact', 'driver_email', 'driver_plate', 'user', 'impersonate_button']
+    list_display = ['order', 'driver_name', 'is_company', 'abn', 'gst_registered', 'commission_rate', 'driver_contact', 'driver_email', 'driver_plate', 'user', 'impersonate_button']
     list_editable = ['gst_registered', 'commission_rate']
-    list_filter = ['gst_registered']
+    list_filter = ['gst_registered', 'is_company']
     search_fields = ['driver_name', 'abn', 'driver_contact', 'driver_email', 'driver_address', 'driver_plate']
     ordering = ['order']
     readonly_fields = ['agreement_link_display']
@@ -211,8 +211,8 @@ class ConfirmedFilter(admin.SimpleListFilter):
 
 
 class DriverAgreementAdmin(admin.ModelAdmin):
-    list_display = ['driver', 'version', 'confirmed_at', 'gst_registered_snapshot',
-                    'ip_address']
+    list_display = ['driver', 'version', 'confirmed_at', 'signed_by_name',
+                    'signed_by_title', 'gst_registered_snapshot', 'ip_address']
     list_filter = [ConfirmedFilter, 'version', 'gst_registered_snapshot', 'driver']
     search_fields = ['driver__driver_name', 'driver__abn', 'version']
     readonly_fields = ['created_at', 'confirmed_at', 'ip_address',

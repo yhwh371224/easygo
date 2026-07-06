@@ -431,12 +431,52 @@ def driver_settlement_pdf(request, settlement_number):
 def _agreement_items(driver):
     """The three summary items shown on the agreement page.
 
-    RCTI wording pulls the driver's ABN registered name (stored as
-    ``business_name``) and ABN dynamically so each driver sees their own
-    details.
+    Wording branches on ``driver.is_company``: individual owner-drivers
+    confirm things in the first person ("I..."), while partner companies
+    that supply drivers (e.g. a depot/fleet operator) confirm on behalf of
+    their business ("Our company...") — an office contact at that company
+    can't truthfully tick "I hold the insurance" or "I am responsible for
+    my own vehicle" since they're not the one driving.
     """
-    abn_registered_name = (driver.business_name or driver.driver_name or '').strip()
-    abn = (driver.abn or '').strip()
+    if driver.is_company:
+        return [
+            {
+                'field': 'item_status_confirmed',
+                'title': 'Our company is an independent contractor',
+                'detail': (
+                    "Our company operates as an independent business supplying "
+                    f"driver and vehicle services to {COMPANY_NAME}, not as its "
+                    "employee or agent. Our company is responsible for engaging, "
+                    "managing and paying our own drivers, and for their vehicles, "
+                    "licences and registrations."
+                ),
+            },
+            {
+                'field': 'item_liability_confirmed',
+                'title': 'Insurance & liability are our responsibility',
+                'detail': (
+                    "Our company holds the public liability insurance (and any "
+                    "other insurance required by law) covering our drivers and "
+                    "vehicles while performing work for "
+                    f"{COMPANY_NAME}, and our company is responsible for any "
+                    "fines, damage, injury or liability arising from the conduct "
+                    "of our drivers or vehicles."
+                ),
+            },
+            {
+                'field': 'item_rcti_confirmed',
+                'title': 'Tax invoicing',
+                'detail': (
+                    "Our company will issue a valid tax invoice (including our "
+                    "ABN, and GST component if we are GST-registered) for each "
+                    f"job performed for {COMPANY_NAME}, unless we separately "
+                    f"agree in writing to let {COMPANY_NAME} (ABN {COMPANY_ABN}) "
+                    "issue Recipient Created Tax Invoices (RCTIs) on our behalf "
+                    "instead."
+                ),
+            },
+        ]
+
     return [
         {
             'field': 'item_status_confirmed',
@@ -502,11 +542,15 @@ def _handle_agreement(request, driver):
 
         company_name = (request.POST.get('company_name') or '').strip()
         abn = (request.POST.get('abn') or '').strip()
+        signed_by_name = (request.POST.get('signed_by_name') or '').strip()
+        signed_by_title = (request.POST.get('signed_by_title') or '').strip()
         all_checked = all(request.POST.get(item['field']) == 'on' for item in items)
 
         error = None
         if not company_name or not abn:
             error = 'Please enter your company name and ABN.'
+        elif driver.is_company and (not signed_by_name or not signed_by_title):
+            error = 'Please enter your name and title/position.'
         elif not all_checked:
             error = 'Please tick all three boxes before confirming.'
 
@@ -517,6 +561,8 @@ def _handle_agreement(request, driver):
                 'items': items,
                 'company_name': company_name,
                 'abn': abn,
+                'signed_by_name': signed_by_name,
+                'signed_by_title': signed_by_title,
                 'error': error,
             })
 
@@ -532,6 +578,9 @@ def _handle_agreement(request, driver):
         agreement.item_status_confirmed = True
         agreement.item_liability_confirmed = True
         agreement.item_rcti_confirmed = True
+        if driver.is_company:
+            agreement.signed_by_name = signed_by_name
+            agreement.signed_by_title = signed_by_title
         agreement.confirmed_at = timezone.now()
         agreement.ip_address = get_client_ip(request)
         agreement.gst_registered_snapshot = driver.gst_registered

@@ -45,6 +45,12 @@ class Driver(models.Model):
         help_text='로그인 없이 subcontractor agreement 페이지를 열 수 있는 토큰. '
                    '자동 생성됨.',
     )
+    is_company = models.BooleanField(
+        default=False,
+        help_text='이 레코드가 개인 드라이버가 아니라 드라이버를 공급하는 협력업체(법인)인 '
+                   '경우 체크. Agreement 페이지 문구가 회사용으로 바뀌고, 확인은 그 회사 '
+                   '담당자 이름/직책으로 기록됨.',
+    )
 
     class Meta:
         ordering = ['order']
@@ -79,6 +85,12 @@ class DriverAgreement(models.Model):
     item_status_confirmed = models.BooleanField(default=False)
     item_liability_confirmed = models.BooleanField(default=False)
     item_rcti_confirmed = models.BooleanField(default=False)
+
+    # Only populated for company-level agreements (driver.is_company) — the
+    # name/title of the person at the partner company who certified it, since
+    # the company itself can't click a button.
+    signed_by_name = models.CharField(max_length=100, blank=True, null=True)
+    signed_by_title = models.CharField(max_length=100, blank=True, null=True)
 
     confirmed_at = models.DateTimeField(null=True, blank=True)
     ip_address = models.CharField(max_length=45, null=True, blank=True)
