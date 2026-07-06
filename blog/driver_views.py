@@ -504,14 +504,31 @@ def driver_agreement(request):
                 'driver': driver, 'version': version, 'agreement': existing,
             })
 
+        company_name = (request.POST.get('company_name') or '').strip()
+        abn = (request.POST.get('abn') or '').strip()
         all_checked = all(request.POST.get(item['field']) == 'on' for item in items)
-        if not all_checked:
+
+        error = None
+        if not company_name or not abn:
+            error = 'Please enter your company name and ABN.'
+        elif not all_checked:
+            error = 'Please tick all three boxes before confirming.'
+
+        if error:
             return render(request, 'basecamp/driver/agreement.html', {
                 'driver': driver,
                 'version': version,
                 'items': items,
-                'error': 'Please tick all three boxes before confirming.',
+                'company_name': company_name,
+                'abn': abn,
+                'error': error,
             })
+
+        # Subcontractor enters their own registered details — trusted as the
+        # source of truth over whatever admin may have typed in previously.
+        driver.business_name = company_name
+        driver.abn = abn
+        driver.save(update_fields=['business_name', 'abn'])
 
         agreement, _ = DriverAgreement.objects.get_or_create(
             driver=driver, version=version,
@@ -537,6 +554,8 @@ def driver_agreement(request):
         'driver': driver,
         'version': version,
         'items': items,
+        'company_name': driver.business_name or '',
+        'abn': driver.abn or '',
     })
 
 

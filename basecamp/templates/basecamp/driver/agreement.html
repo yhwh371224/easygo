@@ -31,6 +31,13 @@
     }
     .agree-check input { margin-top:.2rem; width:1.15rem; height:1.15rem; flex:0 0 auto; }
     .agree-check label { font-size:.9rem; color:#e5e7eb; margin:0; }
+    .biz-details {
+      background:#1f2937; border:1px solid #374151; border-radius:10px;
+      padding:1rem 1.1rem; margin-bottom:1rem;
+    }
+    .biz-details label { font-size:.85rem; color:#9ca3af; margin-bottom:.3rem; display:block; }
+    .biz-details .form-control { margin-bottom:.85rem; }
+    .biz-details .form-control:last-child { margin-bottom:0; }
     .btn-submit {
       background:#f59e0b; color:#fff; border:none; padding:.85rem; width:100%;
       font-size:1rem; font-weight:600; border-radius:8px; cursor:pointer;
@@ -55,6 +62,15 @@
 
     <form method="POST" id="agreeForm">
       {% csrf_token %}
+
+      <div class="biz-details">
+        <label for="company_name">Company / Business Name (as registered for your ABN)</label>
+        <input type="text" class="form-control" name="company_name" id="company_name"
+               value="{{ company_name }}" required>
+        <label for="abn">ABN</label>
+        <input type="text" class="form-control" name="abn" id="abn"
+               value="{{ abn }}" required>
+      </div>
 
       {% for item in items %}
       <div class="agree-item">
@@ -81,11 +97,16 @@
 <script>
   (function () {
     var boxes = Array.prototype.slice.call(document.querySelectorAll('.agree-input'));
+    var companyName = document.getElementById('company_name');
+    var abn = document.getElementById('abn');
     var btn = document.getElementById('confirmBtn');
     function sync() {
-      btn.disabled = !boxes.every(function (b) { return b.checked; });
+      btn.disabled = !boxes.every(function (b) { return b.checked; })
+        || !companyName.value.trim() || !abn.value.trim();
     }
     boxes.forEach(function (b) { b.addEventListener('change', sync); });
+    companyName.addEventListener('input', sync);
+    abn.addEventListener('input', sync);
     sync();
     document.getElementById('agreeForm').addEventListener('submit', function () {
       btn.disabled = true;

@@ -23,6 +23,11 @@
       Confirmed on {{ agreement.confirmed_at|date:"j M Y, g:i A" }}.
     </p>
     {% endif %}
+    {% if driver.business_name or driver.abn %}
+    <p class="text-secondary small">
+      {{ driver.business_name }}{% if driver.abn %} — ABN {{ driver.abn }}{% endif %}
+    </p>
+    {% endif %}
     <p class="mt-4"><a href="/" class="text-secondary text-decoration-none">← Home</a></p>
   </div>
 </section>
