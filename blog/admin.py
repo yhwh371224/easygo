@@ -291,7 +291,7 @@ class PostAdmin(admin.ModelAdmin):
         }),
         ('Pricing', {
             'fields': ['suburb_distance_km', 'suburb_base_price', 'price', 'paid', 'discount', 'toll', 'surcharge',
-                       'commission_rate', 'commission_amount_display', 'subcontractor_payout_display',
+                       'commission_rate', 'commission_amount_override', 'commission_amount_display', 'subcontractor_payout_display',
                        'deposit_amount_due']
         }),
         ('Status', {
@@ -343,6 +343,8 @@ class PostAdmin(admin.ModelAdmin):
     suburb_base_price.short_description = "Base Price"
 
     def commission_amount_display(self, obj):
+        if obj.commission_amount_override is not None:
+            return f"${obj.commission_amount} (flat override)"
         return f"${obj.commission_amount} ({obj.commission_rate}%)"
     commission_amount_display.short_description = "Commission"
 

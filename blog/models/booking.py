@@ -144,6 +144,13 @@ class Post(models.Model):
         default=Decimal('0'),
         help_text='이 부킹에 적용된 커미션 %. 드라이버 배정 시 기본값 자동 적용.',
     )
+    commission_amount_override = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        help_text='이 부킹 한정 커미션 고정 금액($). 입력하면 commission_rate(%) 대신 이 금액을 사용.',
+    )
     special_items = models.JSONField(default=dict, blank=True)
     deposit_amount_due = models.DecimalField(
         max_digits=10, decimal_places=2, null=True, blank=True,
@@ -186,7 +193,10 @@ class Post(models.Model):
 
     @property
     def commission_amount(self):
-        """Company commission on this ride. Uses Post's own commission_rate field."""
+        """Company commission on this ride. A flat commission_amount_override
+        takes priority; otherwise falls back to price * commission_rate%."""
+        if self.commission_amount_override is not None:
+            return self.commission_amount_override.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
         if not self.commission_rate:
             return Decimal('0')
         commission = self._price_decimal * self.commission_rate / Decimal('100')
