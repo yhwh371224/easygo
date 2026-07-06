@@ -457,10 +457,10 @@ def _agreement_items(driver):
                 'detail': (
                     "Our company holds the required insurance covering our drivers and "
                     "vehicles while performing work for "
-                    f"{COMPANY_NAME}, and our company is responsible for any "
-                    "fines, damage, injury or liability arising from the conduct "
-                    "of our drivers or vehicles. Any failure to pick up or drop off "
-                    "passengers is our company's responsibility."
+                    f"{COMPANY_NAME}, and is responsible for any damage, "
+                    "injury or liability arising from the conduct "
+                    "of our drivers or vehicles, including anything that occurs "
+                    "between pickup and drop-off."
                 ),
             },
         ]
@@ -481,9 +481,9 @@ def _agreement_items(driver):
             'title': 'My responsibility',
             'detail': (
                 "I hold the insurances required to carry passengers for hire "
-                "and reward, and I am responsible for any fines, damage or "
-                "liability arising from my own driving and vehicle. Any failure to pick up or drop off "
-                "passengers is my responsibility."
+                "and reward, and I am responsible for any damage or "
+                "liability arising from my own driving and vehicle, including "
+                "anything that occurs between pickup and drop-off."
             ),
         },
         {
