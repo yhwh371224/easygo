@@ -138,7 +138,9 @@ body { margin: 0; font-family: Arial, sans-serif; }
     .city-name { white-space: normal; word-break: break-word; }
   }
 
-.tp-active { background: #adb5bd !important; color: #fff !important; }
+.tp-ampm { background: #fff; color: #495057; }
+.tp-ampm.tp-active { background: #eafbf1 !important; color: #198754 !important; font-weight: 700; }
+.tp-ampm.tp-active::after { content: "✓"; margin-left: 4px; color: #198754; font-weight: 700; }
 
 .flatpickr-months { background: #3d4a5c; border-radius: 5px 5px 0 0; }
 .flatpickr-months .flatpickr-month { background: #3d4a5c; color: #fff; fill: #fff; }

@@ -29,7 +29,9 @@
     <style nonce="{{ CSP_NONCE }}">
     .spinner{border:2px solid rgba(255,255,255,0.3);border-top:2px solid white;border-radius:50%;width:16px;height:16px;display:inline-block;vertical-align:middle;margin-left:8px;animation:spin 0.8s linear infinite}
     @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
-    .tp-active{background:#adb5bd!important;color:#fff!important}
+    .tp-ampm{background:#fff;color:#495057}
+    .tp-ampm.tp-active{background:#eafbf1!important;color:#198754!important;font-weight:700}
+    .tp-ampm.tp-active::after{content:"✓";margin-left:4px;color:#198754;font-weight:700}
     .flatpickr-months { margin-left: -0.5rem; margin-right: -0.5rem; border-radius: 0.75rem 0.75rem 0 0; }
     .flatpickr-innerContainer { overflow: visible; }
     .flatpickr-rContainer { width: 100%; }

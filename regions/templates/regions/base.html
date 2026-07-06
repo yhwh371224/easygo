@@ -50,7 +50,9 @@
       .hero-content { position: relative; z-index: 2; }
       @media (max-width: 768px) { .hero, .hero-about { min-height: 400px; } }
       @media (max-width: 480px) { .hero, .hero-about { min-height: 300px; } }
-      .tp-active{background:#adb5bd!important;color:#fff!important}
+      .tp-ampm{background:#fff;color:#495057}
+      .tp-ampm.tp-active{background:#eafbf1!important;color:#198754!important;font-weight:700}
+      .tp-ampm.tp-active::after{content:"✓";margin-left:4px;color:#198754;font-weight:700}
     </style>
 
     {% block extra_css %}{% endblock %}
