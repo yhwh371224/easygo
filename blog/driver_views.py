@@ -439,12 +439,10 @@ def _agreement_items(driver):
     my own vehicle" since they're not the one driving.
     """
     if driver.is_company:
-        # No RCTI item here — a company partner always invoices us directly
-        # under its own ABN, so there's no RCTI-vs-self-invoice choice to make.
         return [
             {
                 'field': 'item_status_confirmed',
-                'title': 'Our company is an independent contractor',
+                'title': 'Independent contractor, not an agent',
                 'detail': (
                     "Our company operates as an independent business supplying "
                     f"driver and vehicle services to {COMPANY_NAME}, not as its "
@@ -455,13 +453,14 @@ def _agreement_items(driver):
             },
             {
                 'field': 'item_liability_confirmed',
-                'title': 'Insurance & liability are our responsibility',
+                'title': 'Our responsibility',
                 'detail': (
                     "Our company holds the required insurance covering our drivers and "
                     "vehicles while performing work for "
                     f"{COMPANY_NAME}, and our company is responsible for any "
                     "fines, damage, injury or liability arising from the conduct "
-                    "of our drivers or vehicles."
+                    "of our drivers or vehicles. Any failure to pick up or drop off "
+                    "passengers is our company's responsibility."
                 ),
             },
         ]
@@ -469,7 +468,7 @@ def _agreement_items(driver):
     return [
         {
             'field': 'item_status_confirmed',
-            'title': 'I am an independent subcontractor',
+            'title': 'Independent subcontractor, not an employee',
             'detail': (
                 "I operate my own business and provide services to "
                 f"{COMPANY_NAME} as an independent subcontractor, not as an "
@@ -479,19 +478,20 @@ def _agreement_items(driver):
         },
         {
             'field': 'item_liability_confirmed',
-            'title': 'Insurance & liability are my responsibility',
+            'title': 'My responsibility',
             'detail': (
                 "I hold the insurances required to carry passengers for hire "
                 "and reward, and I am responsible for any fines, damage or "
-                "liability arising from my own driving and vehicle."
+                "liability arising from my own driving and vehicle. Any failure to pick up or drop off "
+                "passengers is my responsibility."
             ),
         },
         {
             'field': 'item_rcti_confirmed',
-            'title': 'Recipient Created Tax Invoices (RCTI)',
+            'title': 'Tax Invoice (RCTI)',
             'detail': (
                 f"I agree that {COMPANY_NAME} (ABN {COMPANY_ABN}) may issue "
-                "Recipient Created Tax Invoices (RCTIs) for the services I "
+                "Tax Invoices (RCTIs) for the services I "
                 "supply, and that I will not issue my own tax invoices for "
                 "those services."
             ),
