@@ -446,7 +446,7 @@ def _agreement_items(driver):
                 'detail': (
                     "Our company operates as an independent business supplying "
                     f"driver and vehicle services to {COMPANY_NAME}, not as its "
-                    "employee or agent. Our company is responsible for engaging, "
+                    "agent. Our company is responsible for engaging, "
                     "managing and paying our own drivers, and for their vehicles, "
                     "licences and registrations."
                 ),
