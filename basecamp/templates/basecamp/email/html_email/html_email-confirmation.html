@@ -170,7 +170,15 @@
                   💰 <strong>Payment</strong><br /><br />
 
                   {% if paid %}
+                      {% with shortfall=final_price|payment_shortfall:paid %}
+                      {% if shortfall %}
+                      • Price: ${{ final_price }}<br />
+                      • Paid: ${{ paid }}<br />
+                      • We have received a partial payment. Remaining balance: ${{ shortfall }}<br />
+                      {% else %}
                       • We have received your payment. Thank you very much.<br />
+                      {% endif %}
+                      {% endwith %}
                   {% elif company_name %}
                       • An invoice will be sent to you via email shortly.<br />
                   {% elif cash %}

@@ -64,6 +64,25 @@ def roundtrip_total(value):
 
 
 @register.filter
+def payment_shortfall(total, paid):
+    """Amount still owed (total - paid), or None if fully paid / not computable.
+    Both fields are free-text CharFields (may be blank/None/'TBA'), so parse defensively.
+    """
+    try:
+        total_val = float(str(total))
+    except (TypeError, ValueError):
+        return None
+    try:
+        paid_val = float(str(paid)) if paid not in (None, '', 'TBA') else 0.0
+    except (TypeError, ValueError):
+        paid_val = 0.0
+    diff = round(total_val - paid_val, 2)
+    if diff <= 0:
+        return None
+    return int(diff) if diff == int(diff) else diff
+
+
+@register.filter
 def format_address(street, suburb=''):
     """Normalize 'street suburb' or 'street, suburb' to 'Street, Suburb'.
     Usage: {{ street|format_address:suburb }}
