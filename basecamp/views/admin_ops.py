@@ -21,6 +21,7 @@ from basecamp.basecamp_utils import (
     to_bool, is_ajax,
     render_inquiry_done, parse_booking_dates,
     parse_one_based_index, resolve_payment_flags,
+    get_sorted_suburbs,
 )
 from django_ratelimit.decorators import ratelimit
 
@@ -107,8 +108,10 @@ def confirmation_detail(request):
         return JsonResponse({'success': True, 'redirect_url': '/inquiry_done/'})
 
     else:
-        print("ADMIN_URL =", settings.SECRET_ADMIN_URL) 
-        return render(request, 'basecamp/booking/confirmation.html', {})
+        return render(request, 'basecamp/booking/confirmation.html', {
+            'home_suburbs': get_sorted_suburbs(),
+            'ADMIN_URL': settings.SECRET_ADMIN_URL,
+        })
 
 # sending confirmation email first one
 @login_required

@@ -591,6 +591,9 @@ def _handle_agreement(request, driver):
         'items': items,
         'company_name': driver.business_name or '',
         'abn': driver.abn or '',
+        'signed_by_name': '',
+        'signed_by_title': '',
+        'error': None,
     })
 
 

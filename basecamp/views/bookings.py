@@ -536,18 +536,24 @@ def quick_rebook_confirm(request, region_slug=None):
     return_flight_time   = request.POST.get('return_flight_time', '').strip()
     return_pickup_time   = request.POST.get('return_pickup_time', '').strip()
 
-    # 중복 제출 방지
-    if is_duplicate_submission(Post, email):
-        return render(request, 'basecamp/quick_rebook_step2.html', {
-            'direction': direction,
-            'error': 'Duplicate submission. Please wait a moment and try again.',
-        })
-    
     # 3. DB에서 직접 조회 — 안전하고 정확
     previous_id = request.POST.get('previous_id')
     previous = Post.objects.filter(id=previous_id, email__iexact=email, cancelled=False).first()
     if not previous:
         return redirect('basecamp:home')
+
+    # 중복 제출 방지
+    if is_duplicate_submission(Post, email):
+        return render(request, 'basecamp/quick_rebook_step2.html', {
+            'previous'      : previous,
+            'email'         : email,
+            'pickup_date'   : pickup_date_str,
+            'flight_number' : flight_number,
+            'pickup_time'   : pickup_time,
+            'direction'     : direction,
+            'active_regions': Region.objects.filter(is_active=True),
+            'error'         : 'Duplicate submission. Please wait a moment and try again.',
+        })
 
     previous_name  = previous.name
     base_price = Decimal(previous.price)
@@ -582,7 +588,16 @@ def quick_rebook_confirm(request, region_slug=None):
     try:
         pickup_date_obj = parse_date(pickup_date_str, field_name='Pickup Date', required=True)
     except ValueError as e:
-        return render(request, 'basecamp/quick_rebook_step2.html', {'direction': direction, 'error': str(e)})
+        return render(request, 'basecamp/quick_rebook_step2.html', {
+            'previous'      : previous,
+            'email'         : email,
+            'pickup_date'   : pickup_date_str,
+            'flight_number' : flight_number,
+            'pickup_time'   : pickup_time,
+            'direction'     : direction,
+            'active_regions': Region.objects.filter(is_active=True),
+            'error'         : str(e),
+        })
 
     return_date_obj = None
     if has_return and return_date_str:
