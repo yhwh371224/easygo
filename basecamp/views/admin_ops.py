@@ -13,7 +13,7 @@ from utils.email import send_template_email
 from utils.booking_helper import normalize_direction
 from blog.models import Post, Inquiry, Driver
 from blog.sms_utils import send_sms_notice, send_whatsapp_template, format_au_phone
-from blog.blog_utils import resolve_driver, _net_adjustment
+from blog.blog_utils import resolve_driver, _net_adjustment, clean_float
 from utils.direction_utils import is_airport_pickup
 from csp.constants import NONCE
 from basecamp.basecamp_utils import (
@@ -606,7 +606,7 @@ def email_dispatch_detail(request):
 
                 # ✅ 여기부터가 "돈이 실제로 적용된 예약"만
                 paid = float(booking.paid or 0)
-                booking.paid = paid + apply_amount
+                booking.paid = clean_float(paid + apply_amount)
 
                 original_notice = (booking.notice or "").strip()
                 paid_text = f"===Gratitude=== Applied: ${apply_amount}"
