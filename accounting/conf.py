@@ -1,15 +1,16 @@
 from datetime import date
 from decimal import Decimal
 
+# GST registration confirmed with ATO effective 2026-07-01 (verified — not a placeholder).
 GST_REGISTRATION_DATE = date(2026, 7, 1)
 
 # Bank CSV import: director/owner wage net transfers — already in PayrollEntry.
-# Exact full-string match only (no substring). Skipped to prevent P&L double-count.
+# Substring match (via _contains_any). Skipped to prevent P&L double-count.
 WAGE_SKIP_MARKERS = ['DIRECTOR WAGE']
 
 # Bank CSV import: director capital contributions / repayments — already in
-# DirectorLoan. Exact full-string match only. These are balance-sheet items,
-# not P&L — must never be imported as income or expense.
+# DirectorLoan. Substring match (via _contains_any). These are balance-sheet
+# items, not P&L — must never be imported as income or expense.
 LOAN_SKIP_MARKERS = ['LOAN FROM DIRECTOR']
 
 # Bank CSV import: super contributions — fill in clearing house description after

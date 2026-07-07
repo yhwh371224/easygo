@@ -41,16 +41,6 @@ class Command(BaseCommand):
     def _contains_any(haystack_upper, needles):
         return any(n.upper() in haystack_upper for n in needles)
 
-    @staticmethod
-    def _exact_match(haystack_upper, markers):
-        """Full-string exact match — description must equal a marker exactly.
-
-        Used for WAGE and LOAN markers to prevent partial-match false positives
-        (e.g. 'DIRECTOR WAGE ADJUSTMENT' must NOT match 'DIRECTOR WAGE').
-        haystack_upper is already .strip().upper() at call site.
-        """
-        return haystack_upper in {m.upper() for m in markers}
-
     def _load_driver_matchers(self):
         """
         Build digit-list and name-regex list from active drivers in DB.
@@ -95,15 +85,15 @@ class Command(BaseCommand):
 
     def _is_wage_payment(self, desc_upper):
         """True if row is a director/owner wage transfer (already in PayrollEntry).
-        Exact full-string match — no partial matching.
+        Substring match via _contains_any.
         """
-        return self._exact_match(desc_upper, conf.WAGE_SKIP_MARKERS)
+        return self._contains_any(desc_upper, conf.WAGE_SKIP_MARKERS)
 
     def _is_loan_payment(self, desc_upper):
         """True if row is a director loan contribution/repayment (already in DirectorLoan).
-        Exact full-string match — no partial matching.
+        Substring match via _contains_any.
         """
-        return self._exact_match(desc_upper, conf.LOAN_SKIP_MARKERS)
+        return self._contains_any(desc_upper, conf.LOAN_SKIP_MARKERS)
 
     def _is_super_payment(self, desc_upper):
         """True if row is a super contribution (already in PayrollEntry)."""
