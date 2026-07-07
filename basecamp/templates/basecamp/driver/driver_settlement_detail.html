@@ -84,9 +84,8 @@
 
     /* ── GST statement ───────────────────────────────────── */
     .gst-statement {
-      margin-top:1.25rem; padding:.6rem .85rem;
-      background:#fffbeb; border-left:3px solid #f59e0b;
-      font-size:.78rem; color:#92400e; font-weight:600;
+      margin-top:1.25rem;
+      font-size:.65rem; color:#d1d5db; font-weight:400;
     }
 
     /* ── Payment / audit footer ──────────────────────────── */
@@ -186,7 +185,7 @@
     </div>
     <div class="party">
       <div class="party-label">Supplier</div>
-      <div class="party-name">{{ driver.driver_name }}</div>
+      <div class="party-name">{{ driver.business_name|default:driver.driver_name }}</div>
       <div class="party-abn">ABN: {{ driver.abn|default:"—" }}</div>
       {% if driver.driver_address %}<div class="party-extra">{{ driver.driver_address }}</div>{% endif %}
     </div>
