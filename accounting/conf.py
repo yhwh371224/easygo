@@ -35,6 +35,8 @@ GST_KEYWORD_RULES = [
     (('TELSTRA', 'OPTUS', 'VODAFONE', 'TPG', 'AUSSIE BROADBAND',
       'BELONG', 'INTERNET', 'MOBILE'), 'gst'),
     (('GOOGLE', 'META', 'FACEBOOK', 'MARKETING', 'ADVERTIS', 'SEO'), 'gst'),
+    (('GROUP TRANSPORT',), 'gst'),
+    (('NORTH SYDNEY EXECUTIVE', 'VIRTUAL OFFICE'), 'gst'),
 ]
 
 # These keywords force needs_review=True with no auto-GST, regardless of amount.
@@ -58,4 +60,6 @@ CATEGORY_KEYWORD_RULES = [
     (('INSURANCE', 'NRMA', 'AAMI', 'ALLIANZ', 'QBE', 'GIO', 'ZURICH'), 'insurance'),
     (('REGO', 'REGISTRATION', 'SERVICE NSW', 'TRANSPORT FOR NSW', 'RMS'),
      'vehicle_registration'),
+    (('GROUP TRANSPORT',), 'subcontractor_payout'),
+    (('NORTH SYDNEY EXECUTIVE', 'VIRTUAL OFFICE'), 'office_expense'),
 ]
