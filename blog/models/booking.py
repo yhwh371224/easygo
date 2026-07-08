@@ -182,9 +182,12 @@ class Post(models.Model):
             uf = kwargs.get('update_fields')
             if uf is not None:
                 kwargs['update_fields'] = set(uf) | {'driver_collected_cash'}
-        # driver_price를 수동으로 채워넣기 전까지는 price 값을 그대로 따라감.
+        # driver_price를 수동으로 채워넣기 전까지는 price에서 10을 뺀 값을 따라감.
         if not self.driver_price:
-            self.driver_price = self.price
+            try:
+                self.driver_price = str(Decimal(str(self.price)) - Decimal('10'))
+            except (InvalidOperation, TypeError):
+                self.driver_price = self.price
             uf = kwargs.get('update_fields')
             if uf is not None:
                 kwargs['update_fields'] = set(uf) | {'driver_price'}
