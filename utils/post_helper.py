@@ -4,12 +4,51 @@ from utils.email import send_html_email
 from decimal import Decimal
 
 
+def _safe_decimal(value):
+    """paid is a free-text CharField (may be blank/None/'TBA') — parse defensively."""
+    try:
+        return Decimal(str(value)) if value not in (None, '', 'TBA') else Decimal(0)
+    except Exception:
+        return Decimal(0)
+
+
+def _find_return_leg(instance):
+    """Find the sibling Post created by handle_return_trip() for the return leg.
+
+    handle_return_trip() splits a round-trip booking into two Post rows (each
+    holding its own half of price/paid) rather than linking them by FK, so we
+    match on the fields it sets: same email, return_pickup_time == "x", and
+    pickup/return dates swapped relative to this (outbound) instance.
+    """
+    from blog.models import Post
+
+    if not instance.return_pickup_time or instance.return_pickup_time == 'x':
+        return None
+
+    return Post.objects.filter(
+        email=instance.email,
+        return_pickup_time='x',
+        pickup_date=instance.return_pickup_date,
+        return_pickup_date=instance.pickup_date,
+    ).exclude(pk=instance.pk).order_by('-pk').first()
+
+
 def send_post_confirmation_email(instance):
     subject = "Booking Confirmation - EasyGo"
 
+    paid_total = instance.paid
+
     if instance.price not in [None, "TBA", ""]:
         if instance.return_pickup_time:
-            price = int(Decimal(instance.price) * 2)
+            return_leg = _find_return_leg(instance)
+            if return_leg is not None and return_leg.price not in [None, "TBA", ""]:
+                # Sum the two actual split rows rather than assuming an exact
+                # 50/50 split (paid amounts can be adjusted per-leg later).
+                price = int(Decimal(instance.price) + Decimal(return_leg.price))
+                paid_total = _safe_decimal(instance.paid) + _safe_decimal(return_leg.paid)
+            else:
+                price = int(Decimal(instance.price) * 2)
+                paid_total = _safe_decimal(instance.paid) * 2
         else:
             price = int(Decimal(instance.price))
     else:
@@ -76,7 +115,7 @@ def send_post_confirmation_email(instance):
 
         # payment
         'price': price,
-        'paid': instance.paid,
+        'paid': paid_total,
         'cash': instance.cash,
         'prepay': instance.prepay,
 
