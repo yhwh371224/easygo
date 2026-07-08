@@ -62,6 +62,11 @@
             {% else %}
               Thank you for your booking request with EasyGo Airport Shuttle.
             {% endif %}
+
+            {% if booker_name and booker_email and email == booker_email %}
+              <br /><br />
+              📩 On the day of arrival, we'll send the meeting point details to this same email address. If you'd like us to send it directly to the travelling client instead, please reply and let us know the client's email address.
+            {% endif %}
           </td>
         </tr>
 
