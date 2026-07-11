@@ -27,6 +27,15 @@ def paypal_ipn_error_email(subject, exception, item_name, payer_email, gross_amo
     send_text_email(subject, error_message, [settings.RECIPIENT_EMAIL])
 
 
+class StripeFeeNotReadyError(Exception):
+    """Charge exists but Stripe hasn't attached balance_transaction yet.
+
+    Raised by _record_stripe_fee so the caller (record_stripe_fee_task in
+    basecamp.tasks) can retry after a delay instead of silently giving up —
+    at webhook time this condition is the *normal* case, not an error.
+    """
+
+
 def _record_stripe_fee(payment_intent_id):
     """Create an expense Transaction for the Stripe processing fee.
 
@@ -34,13 +43,17 @@ def _record_stripe_fee(payment_intent_id):
     to obtain the GST-inclusive fee (Stripe AU charges 10% GST on fees).
     gst_amount = fee ÷ 11.
 
-    Silently skips if:
+    Silently skips (no exception) if:
       - payment_intent_id is not a real PI string (e.g. starts with 'cs_')
-      - balance_transaction is not yet available
       - fee is zero or negative
       - a Transaction with the same description already exists (duplicate guard)
 
-    Errors are logged and emailed; they never propagate to the caller.
+    Raises StripeFeeNotReadyError if the charge/balance_transaction isn't
+    attached yet — this is expected immediately after checkout.session.completed
+    and the caller should retry shortly; it must NOT be treated as a real error.
+
+    Other errors (bad API call, DB write failure) are logged and emailed; they
+    never propagate to the caller.
     """
     from accounting.models import Transaction
 
@@ -49,7 +62,7 @@ def _record_stripe_fee(payment_intent_id):
 
     description = f"Stripe fee {payment_intent_id}"
 
-    # Duplicate guard — idempotent on repeated webhook deliveries
+    # Duplicate guard — idempotent on repeated webhook deliveries / retries
     if Transaction.objects.filter(
         category='payment_fee',
         description=description,
@@ -65,14 +78,12 @@ def _record_stripe_fee(payment_intent_id):
 
         charge = pi.latest_charge
         if not charge:
-            logger.warning('_record_stripe_fee: no latest_charge for %s', payment_intent_id)
-            return
+            raise StripeFeeNotReadyError(f"no latest_charge yet for {payment_intent_id}")
 
         bt = charge.balance_transaction
         # bt is a BalanceTransaction object when expanded; a bare string when not
         if not bt or isinstance(bt, str):
-            logger.warning('_record_stripe_fee: balance_transaction not expanded for %s', payment_intent_id)
-            return
+            raise StripeFeeNotReadyError(f"balance_transaction not expanded yet for {payment_intent_id}")
 
         fee_cents = bt.fee
         if not fee_cents or fee_cents <= 0:
@@ -100,6 +111,8 @@ def _record_stripe_fee(payment_intent_id):
             fee, gst, payment_intent_id,
         )
 
+    except StripeFeeNotReadyError:
+        raise
     except Exception as exc:
         logger.exception('_record_stripe_fee: error for %s', payment_intent_id)
         send_text_email(
@@ -233,8 +246,12 @@ def handle_checkout_session_completed(session):
         )
 
     # Record Stripe processing fee as an expense Transaction for BAS 1B.
-    # Runs after StripePayment save; errors are caught internally.
-    _record_stripe_fee(session.payment_intent)
+    # Delayed + retried via Celery: at webhook time Stripe hasn't attached
+    # balance_transaction to the charge yet, so calling _record_stripe_fee
+    # synchronously here missed 100% of fees (see incident 2026-07-11).
+    if session.payment_intent:
+        from basecamp.tasks import record_stripe_fee_task
+        record_stripe_fee_task.apply_async(args=[session.payment_intent], countdown=20)
 
 
 def stripe_payment_error_email(subject, message, name, email, amount):
