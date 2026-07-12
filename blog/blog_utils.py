@@ -81,6 +81,10 @@ def process_generic_payment(payment_instance, posts, admin_email, calculated_amo
 
     all_already_paid = has_future_bookings and total_balance == 0
     remaining_amount = float(calculated_amount or instance.amount or 0)
+    # 노트에 찍을 총 결제액. remaining_amount는 배분하면서 깎이므로 따로 보관한다.
+    # 리턴부킹은 두 개의 Post로 나뉘어 각 leg에 절반씩 적용되는데, 노트에는
+    # 절반이 아니라 실제로 페이한 총액을 그대로 넣는다. (금액 적용 로직은 그대로)
+    paid_total = remaining_amount
     recipient_emails = set()
     method_label = "STRIPE" if hasattr(instance, 'payment_intent_id') else "PAYPAL"
 
@@ -158,7 +162,7 @@ def process_generic_payment(payment_instance, posts, admin_email, calculated_amo
         post.pending = False
         post.cancelled = False
 
-        new_entry = f"{method_label}: ${post._applied:.0f}"
+        new_entry = f"{method_label}: ${paid_total:.0f}"
         post.notice = f"{post.notice or ''} | {new_entry}".strip(" | ")
 
         post.save()
