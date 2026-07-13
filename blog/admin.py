@@ -225,13 +225,13 @@ class InquiryAdmin(admin.ModelAdmin):
                     'return_flight_number', 'is_confirmed', 'cancelled', 'pending', 'created']
     list_filter  = ['region', 'is_confirmed', 'cancelled', 'pending']
     search_fields = ['pickup_date', 'pickup_time', 'suburb', 'email', 'street', 'booker_email', 'booker_name',
-                     'name', 'contact', 'email1', 'message', 'notice', 'region__name']
+                     'booker_contact', 'name', 'contact', 'email1', 'message', 'notice', 'region__name']
     readonly_fields = ['suburb_distance_km', 'suburb_base_price']
 
     fieldsets = [
         ('Customer Info', {
             'fields': ['name', 'company_name', 'contact', 'email', 'email1',
-                    'booker_name', 'booker_email']
+                    'booker_name', 'booker_email', 'booker_contact']
         }),
         ('Pickup Info', {
             'fields': ['pickup_date', 'pickup_time', 'direction', 'flight_number', 'flight_time',
@@ -286,13 +286,13 @@ class PostAdmin(admin.ModelAdmin):
                     'cancelled', 'pending', 'cash', 'sent_email', 'direction', 'return_flight_number', 'created']
     list_filter  = ['region', 'cancelled', 'pending', 'cash']
     search_fields = ['pickup_date', 'pickup_time', 'suburb', 'email', 'street', 'booker_email', 'booker_name',
-                     'name', 'contact', 'price', 'paid', 'email1', 'message', 'notice', 'region__name']
+                     'booker_contact', 'name', 'contact', 'price', 'paid', 'email1', 'message', 'notice', 'region__name']
     readonly_fields = ['suburb_distance_km', 'suburb_base_price', 'commission_amount_display', 'subcontractor_payout_display']
 
     fieldsets = [
         ('Customer Info', {
             'fields': ['name', 'company_name', 'contact', 'email', 'email1',
-                    'booker_name', 'booker_email']
+                    'booker_name', 'booker_email', 'booker_contact']
         }),
         ('Pickup Info', {
             'fields': ['pickup_date', 'pickup_time', 'direction', 'flight_number', 'flight_time',

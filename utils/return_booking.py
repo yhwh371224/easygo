@@ -95,6 +95,7 @@ def handle_return_trip(instance):
         post_fields = {
             'booker_name': instance.booker_name,
             'booker_email': instance.booker_email,
+            'booker_contact': instance.booker_contact,
             'name': instance.name,
             'contact': instance.contact,
             'email': instance.email,

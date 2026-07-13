@@ -69,6 +69,7 @@ def notify_user_payment_paypal(instance_id):
         )
         first_post = posts.first()
         booker_name = first_post.booker_name if first_post else None
+        booker_contact = first_post.booker_contact if first_post else None
         nearest_future_post = posts.filter(
             pickup_date__isnull=False,
             pickup_date__gte=timezone.localdate(),
@@ -86,6 +87,7 @@ def notify_user_payment_paypal(instance_id):
         raw_amount=raw_amount,
         net_amount=calculated_amount,
         booker_name=booker_name,
+        booker_contact=booker_contact,
         has_future_bookings=has_future_bookings,
         all_already_paid=all_already_paid,
         nearest_post=nearest_future_post,
@@ -115,6 +117,7 @@ def notify_user_payment_stripe(instance_id):
         success, total_balance, recipient_emails, has_future_bookings, all_already_paid, deposit_satisfied = process_generic_payment(instance, posts, RECIPIENT_EMAIL)
         first_post = posts.first()
         booker_name = first_post.booker_name if first_post else None
+        booker_contact = first_post.booker_contact if first_post else None
         nearest_future_post = posts.filter(
             pickup_date__isnull=False,
             pickup_date__gte=timezone.localdate(),
@@ -130,6 +133,7 @@ def notify_user_payment_stripe(instance_id):
         instance, total_balance, recipient_emails, RECIPIENT_EMAIL,
         method="STRIPE",
         booker_name=booker_name,
+        booker_contact=booker_contact,
         has_future_bookings=has_future_bookings,
         all_already_paid=all_already_paid,
         nearest_post=nearest_future_post,

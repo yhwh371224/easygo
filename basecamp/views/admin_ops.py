@@ -155,6 +155,7 @@ def sending_email_first_detail(request):
                 
                 context = {
                     'booker_name': user.booker_name,
+                    'booker_contact': user.booker_contact,
                     'name': user.name,
                     'email': user.email,
                     'pickup_date': user.pickup_date or "",
@@ -185,6 +186,7 @@ def sending_email_first_detail(request):
                     {
                         'company_name': user.company_name, 'name': user.name, 'contact': user.contact,
                         'booker_name': user.booker_name, 'booker_email': user.booker_email,
+                        'booker_contact': user.booker_contact,
                         'email': user.email, 'email1': user.email1, 'pickup_date': user.pickup_date,
                         'flight_number': user.flight_number, 'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
                         'direction': normalize_direction(user.direction), 'street': user.street, 'suburb': user.suburb,
@@ -288,6 +290,7 @@ def sending_email_second_detail(request):
             context = {
                 'company_name': user.company_name,
                 'booker_name': user.booker_name,
+                'booker_contact': user.booker_contact,
                 'name': user.name,
                 'contact': user.contact,
                 'email': user.email,
@@ -365,6 +368,7 @@ def sending_email_input_data_detail(request):
             # 템플릿에 전달할 컨텍스트 구성
             context = {
                 'booker_name': getattr(user, 'booker_name', None),
+                'booker_contact': getattr(user, 'booker_contact', None),
                 'name': user.name, 'contact': user.contact, 'email': user.email,
                 'pickup_date': user.pickup_date, 'flight_number': user.flight_number,
                 'flight_time': user.flight_time, 'pickup_time': user.pickup_time,
@@ -468,6 +472,7 @@ def email_dispatch_detail(request):
             'email': email,
             'name': user.name if user else '',
             'booker_name': getattr(user, 'booker_name', None),
+            'booker_contact': getattr(user, 'booker_contact', None),
             'adjusted_pickup_time': adjusted_pickup_time,
             'payment_amount': payment_amount,
             'remain_first_booking': remain_first_booking,    

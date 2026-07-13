@@ -160,6 +160,7 @@ def confirm_booking_detail(request):
     # Post 모델 저장
     p = Post(
         name=name, contact=contact, email=email, company_name=company_name, email1=email1,
+        booker_name=booker_name, booker_email=booer_email, booker_contact=getattr(user, 'booker_contact', None),
         pickup_date=pickup_date_obj, flight_number=flight_number, flight_time=flight_time, pickup_time=pickup_time,
         direction=direction, suburb=suburb, street=street, start_point=start_point, end_point=end_point,
         cruise=cruise, no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage,
@@ -171,7 +172,7 @@ def confirm_booking_detail(request):
         surcharge=surcharge_value, prepay=prepay, pending=pending,
         paid=paid, cash=cash, is_confirmed=is_confirmed, driver=driver, region=region,
         special_items=special_items, extra_stop=extra_stop, extra_stop_addresses=extra_stop_addresses,
-        same_extra_stop=same_extra_stop, customer_history=customer_history, 
+        same_extra_stop=same_extra_stop, customer_history=customer_history,
     )
 
     p.save()
@@ -310,6 +311,7 @@ def confirm_booking_prepay_detail(request):
 
     p = Post(
         name=name, contact=contact, email=email, company_name=company_name, email1=email1,
+        booker_name=booker_name, booker_email=booer_email, booker_contact=getattr(user, 'booker_contact', None),
         pickup_date=pickup_date_obj, flight_number=flight_number, flight_time=flight_time, pickup_time=pickup_time,
         direction=direction, suburb=suburb, street=street, start_point=start_point, end_point=end_point,
         cruise=cruise, no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage,
@@ -321,7 +323,7 @@ def confirm_booking_prepay_detail(request):
         surcharge=surcharge_value, prepay=prepay, pending=pending,
         paid=paid, cash=cash, is_confirmed=is_confirmed, driver=driver, region=region,
         special_items=special_items, extra_stop=extra_stop, extra_stop_addresses=extra_stop_addresses,
-        same_extra_stop=same_extra_stop, customer_history=customer_history, 
+        same_extra_stop=same_extra_stop, customer_history=customer_history,
     )
 
     p.save()

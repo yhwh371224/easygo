@@ -198,7 +198,7 @@ def process_generic_payment(payment_instance, posts, admin_email, calculated_amo
     return True, total_balance, recipient_emails, has_future_bookings, all_already_paid, deposit_satisfied
 
 
-def send_payment_notification_email(instance, total_balance, recipient_emails, admin_email, method, raw_amount=None, net_amount=None, booker_name=None, has_future_bookings=False, all_already_paid=False, nearest_post=None, deposit_satisfied=False):
+def send_payment_notification_email(instance, total_balance, recipient_emails, admin_email, method, raw_amount=None, net_amount=None, booker_name=None, booker_contact=None, has_future_bookings=False, all_already_paid=False, nearest_post=None, deposit_satisfied=False):
     if net_amount is None:
         net_amount = float(instance.amount or 0)
     if raw_amount is None:
@@ -215,6 +215,7 @@ def send_payment_notification_email(instance, total_balance, recipient_emails, a
     context = {
         'name': instance.name,
         'booker_name': booker_name,
+        'booker_contact': booker_contact,
         'email': instance.email,
         'raw_amount': raw_amount,
         'amount': net_amount,

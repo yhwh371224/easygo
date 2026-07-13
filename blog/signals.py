@@ -147,7 +147,7 @@ def reset_driver_calendar_event_id(sender, instance, **kwargs):
 
 # google calendar recording
 CALENDAR_EXCLUDED_FIELDS = {
-    'company_name', 'booker_name', 'booker_email', 'email1',
+    'company_name', 'booker_name', 'booker_email', 'booker_contact', 'email1',
     'return_direction', 'return_flight_number', 'return_flight_time',
     'return_pickup_time', 'return_start_point', 'return_end_point',
     'discount', 'surcharge', 'region', 'is_confirmed',

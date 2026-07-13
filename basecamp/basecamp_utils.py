@@ -137,6 +137,7 @@ def check_and_send_missing_info_email(post):
             template_name="html_email-missing-flight-contact.html",
             context={
                 'booker_name': post.booker_name,
+                'booker_contact': post.booker_contact,
                 'name': post.name,
                 'email': post.email,
                 'pickup_date': post.pickup_date,

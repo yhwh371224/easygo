@@ -106,6 +106,7 @@ def build_reminder_context(booking, pickup_time_12h, driver):
         'name': getattr(booking, "name", None),
         'company_name': getattr(booking, "company_name", None),
         'booker_email': getattr(booking, "booker_email", None),
+        'booker_contact': getattr(booking, "booker_contact", None),
         'email': getattr(booking, "email", None),
         'contact': getattr(booking, "contact", None),
         'pickup_date': getattr(booking, "pickup_date", None),

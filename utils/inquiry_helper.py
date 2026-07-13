@@ -9,6 +9,7 @@ def send_inquiry_email(instance):
         html_content = render_email_template(template, {
             'booker_name': instance.booker_name,
             'booker_email': instance.booker_email,
+            'booker_contact': instance.booker_contact,
             'company_name': instance.company_name,
             'name': instance.name,
             'contact': instance.contact,
@@ -45,6 +46,7 @@ def send_inquiry_email(instance):
         html_content = render_email_template("html_email-cancelled.html", {
             'booker_name': instance.booker_name,
             'booker_email': instance.booker_email,
+            'booker_contact': instance.booker_contact,
             'name': instance.name,
             'email': instance.email,
             'pickup_date': instance.pickup_date,
@@ -57,6 +59,7 @@ def send_inquiry_email(instance):
         html_content = render_email_template("html_email-inquiry-pending.html", {
             'booker_name': instance.booker_name,
             'booker_email': instance.booker_email,
+            'booker_contact': instance.booker_contact,
             'name': instance.name,
             'email': instance.email,
             'pickup_date': instance.pickup_date,
