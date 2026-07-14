@@ -288,6 +288,25 @@ class PostAdmin(admin.ModelAdmin):
     search_fields = ['pickup_date', 'pickup_time', 'suburb', 'email', 'street', 'booker_email', 'booker_name',
                      'booker_contact', 'name', 'contact', 'price', 'paid', 'email1', 'message', 'notice', 'region__name']
     readonly_fields = ['suburb_distance_km', 'suburb_base_price', 'commission_amount_display', 'subcontractor_payout_display']
+    actions = ['duplicate_bookings']
+
+    @admin.action(description='선택한 부킹 복제 (드라이버 추가 배정용 — 복제본은 캘린더 이벤트/드라이버/proxy가 비워집니다)')
+    def duplicate_bookings(self, request, queryset):
+        created = 0
+        for obj in queryset:
+            obj.pk = None
+            obj._state.adding = True
+            obj.calendar_event_id = ''
+            obj.driver_calendar_event_id = ''
+            obj.driver = None
+            obj.use_proxy = False
+            obj.save()
+            created += 1
+        self.message_user(
+            request,
+            f'{created}건을 복제했습니다. 복제본을 열어 드라이버를 배정하세요 (자동으로 proxy가 생성됩니다).',
+            messages.SUCCESS,
+        )
 
     fieldsets = [
         ('Customer Info', {
