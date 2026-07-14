@@ -102,8 +102,8 @@ class Post(models.Model):
     paid = models.CharField(max_length=100, blank=True, null=True)
     driver_price = models.CharField(
         max_length=100, blank=True, null=True,
-        help_text='드라이버 대시보드 표시 및 커미션/정산 계산에 쓰이는 금액. '
-                   '비어있으면 저장 시 price 값으로 자동 채워짐. 손님 결제(price/paid)와는 별개.',
+        help_text='Amount used for driver dashboard display and commission/settlement calculations. '
+                   'If empty, automatically filled with the price value on save. Separate from customer payment (price/paid).',
     )
     discount = models.CharField(max_length=30, blank=True, null=True)
     toll = models.CharField(max_length=30, blank=True, null=True)
@@ -129,7 +129,7 @@ class Post(models.Model):
     cash = models.BooleanField(default=False, blank=True)
     driver_collected_cash = models.BooleanField(
         default=False, blank=True,
-        help_text="타 드라이버가 손님에게 직접 현금 수령 (회사 매출 아님, GST 제외)",
+        help_text="Another driver collected cash directly from the customer (not company revenue, excluded from GST)",
     )
     cruise = models.BooleanField(default=False, blank=True)
     cancelled = models.BooleanField(default=False, blank=True)
@@ -149,20 +149,20 @@ class Post(models.Model):
         max_digits=4,
         decimal_places=2,
         default=Decimal('0'),
-        help_text='이 부킹에 적용된 커미션 %. 드라이버 배정 시 기본값 자동 적용.',
+        help_text='Commission % applied to this booking. Automatically set to the default when a driver is assigned.',
     )
     commission_amount_override = models.DecimalField(
         max_digits=10,
         decimal_places=2,
         null=True,
         blank=True,
-        help_text='이 부킹 한정 커미션 고정 금액($). 입력하면 commission_rate(%) 대신 이 금액을 사용.',
+        help_text='Flat commission amount ($) for this booking only. If set, used instead of commission_rate(%).',
     )
     special_items = models.JSONField(default=dict, blank=True)
     deposit_amount_due = models.DecimalField(
         max_digits=10, decimal_places=2, null=True, blank=True,
-        help_text='디파짓 인보이스로 청구한 금액. 결제가 이 금액 이상 들어오면 '
-                   '전액에 못 미쳐도 미납 안내 메일을 보내지 않음.',
+        help_text='Amount invoiced as a deposit. If payment received reaches this amount, '
+                   'the unpaid-balance reminder email is not sent even if it falls short of the full price.',
     )
     created = models.DateTimeField(auto_now_add=True)
 
@@ -171,9 +171,9 @@ class Post(models.Model):
         return self.booker_name if self.booker_name else self.name
 
     def save(self, *args, **kwargs):
-        # 자동: Sam 아닌 드라이버가 지정되고 cash 건이면 driver_collected_cash 체크
-        # (손님이 드라이버에게 직접 현금 지불 → 회사 매출/GST 제외). 한 번 True면
-        # 다시 건드리지 않고, Sam(본인) 운전 건은 회사 매출로 남기기 위해 제외.
+        # Auto: check driver_collected_cash when a non-Sam driver is assigned and it's a cash booking
+        # (customer paid the driver directly -> excluded from company revenue/GST). Once True,
+        # leave it alone; Sam's (own) rides are excluded so they stay as company revenue.
         if (
             self.cash
             and self.driver_id
@@ -184,7 +184,7 @@ class Post(models.Model):
             uf = kwargs.get('update_fields')
             if uf is not None:
                 kwargs['update_fields'] = set(uf) | {'driver_collected_cash'}
-        # driver_price를 수동으로 채워넣기 전까지는 price에서 10을 뺀 값을 따라감.
+        # Until driver_price is manually set, it follows price minus 10.
         if not self.driver_price:
             try:
                 self.driver_price = str(Decimal(str(self.price)) - Decimal('10'))

@@ -290,7 +290,7 @@ class PostAdmin(admin.ModelAdmin):
     readonly_fields = ['suburb_distance_km', 'suburb_base_price', 'commission_amount_display', 'subcontractor_payout_display']
     actions = ['duplicate_bookings']
 
-    @admin.action(description='선택한 부킹 복제 (드라이버 추가 배정용 — 복제본은 캘린더 이벤트/드라이버/proxy가 비워집니다)')
+    @admin.action(description='Duplicate selected booking(s)')
     def duplicate_bookings(self, request, queryset):
         created = 0
         for obj in queryset:
@@ -304,7 +304,7 @@ class PostAdmin(admin.ModelAdmin):
             created += 1
         self.message_user(
             request,
-            f'{created}건을 복제했습니다. 복제본을 열어 드라이버를 배정하세요 (자동으로 proxy가 생성됩니다).',
+            f'Duplicated {created} booking(s). Assign a driver on each copy.',
             messages.SUCCESS,
         )
 
