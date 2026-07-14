@@ -161,6 +161,9 @@ def async_create_event_on_calendar(sender, instance, created, update_fields, **k
         'async_create_event_on_calendar: Post pk=%s created=%s update_fields=%s calendar_event_id=%r',
         instance.pk, created, list(update_fields) if update_fields else None, instance.calendar_event_id,
     )
+    if getattr(instance, '_skip_calendar_sync', False):
+        logger.info('async_create_event_on_calendar: skipping Post pk=%s (_skip_calendar_sync set)', instance.pk)
+        return
     if update_fields is not None and set(update_fields).issubset(CALENDAR_EXCLUDED_FIELDS):
         logger.info(
             'async_create_event_on_calendar: skipping Post pk=%s — update_fields %s are all excluded',

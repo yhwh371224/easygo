@@ -300,6 +300,10 @@ class PostAdmin(admin.ModelAdmin):
             obj.driver_calendar_event_id = ''
             obj.driver = None
             obj.use_proxy = False
+            # Skip calendar sync on this initial copy — otherwise it races with the
+            # user's follow-up edit-and-save and creates two events for one booking.
+            # The follow-up save (without this flag) is what actually creates the event.
+            obj._skip_calendar_sync = True
             obj.save()
             created += 1
         self.message_user(
