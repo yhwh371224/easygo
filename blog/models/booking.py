@@ -143,6 +143,10 @@ class Post(models.Model):
         null=True, blank=True,
         help_text='48h 무응답 최종 경고 메일 발송 시각. 24h 유예 후 자동 취소 판단에 사용.',
     )
+    short_payment_notified_at = models.DateTimeField(
+        null=True, blank=True,
+        help_text='잔액 부족(short payment) 안내 메일 발송 시각. final_notice 중복 발송 방지에 사용.',
+    )
     calendar_event_id = models.CharField(max_length=255, blank=True, null=True)
     driver_calendar_event_id = models.CharField(max_length=255, blank=True, null=True)
     use_proxy = models.BooleanField(default=False)
