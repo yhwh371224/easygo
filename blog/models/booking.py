@@ -139,6 +139,10 @@ class Post(models.Model):
     sms_reminder = models.BooleanField(default=False, blank=True)
     prepay = models.BooleanField(default=False, blank=True)
     pending = models.BooleanField(default=False, blank=True)
+    final_warning_at = models.DateTimeField(
+        null=True, blank=True,
+        help_text='48h 무응답 최종 경고 메일 발송 시각. 24h 유예 후 자동 취소 판단에 사용.',
+    )
     calendar_event_id = models.CharField(max_length=255, blank=True, null=True)
     driver_calendar_event_id = models.CharField(max_length=255, blank=True, null=True)
     use_proxy = models.BooleanField(default=False)
