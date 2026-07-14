@@ -86,6 +86,27 @@ def abbreviate_baggage(baggage_str):
     return short_baggage_str
 
 
+def _parse_amount(value):
+    """Best-effort float parse for price/paid CharFields (e.g. 'TBA' -> None)."""
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def _paid_price_display(instance):
+    """paid: 실제 결제 금액, 부분결제 시 'paid $50/$150'처럼 전체 가격도 함께 표시."""
+    if instance.paid:
+        paid_amount = _parse_amount(instance.paid)
+        price_amount = _parse_amount(instance.price)
+        if paid_amount is not None and price_amount is not None and paid_amount < price_amount:
+            return f'paid ${instance.paid}/${instance.price}'
+        return f'paid ${instance.paid}'
+    if instance.cash:
+        return f'cash ${instance.price}' if instance.price else 'cash'
+    return f'${instance.price}' if instance.price else ''
+
+
 def _build_common(instance, contact_display=None):
     """title, address, start/end 등 두 캘린더가 공유하는 공통 필드 계산.
     날짜/시간 파싱 실패 시 None 반환."""
@@ -101,9 +122,7 @@ def _build_common(instance, contact_display=None):
         instance.start_point or '',
         instance.flight_time or '',
         f'p{instance.no_of_passenger}' if instance.no_of_passenger else '',
-        'paid' if instance.paid else '',
-        'cash' if instance.cash and not instance.paid else '',
-        f'${instance.price}' if instance.price else '',
+        _paid_price_display(instance),
         contact_display or '',
     ])).strip()
 
