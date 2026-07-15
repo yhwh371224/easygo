@@ -97,7 +97,13 @@ def verify_bird_signature(view):
             return view(request, *args, **kwargs)
 
         if _signature_is_valid(request):
-            logger.debug('[Bird] Signature ok path=%s', request.path)
+            if settings.BIRD_WEBHOOK_REQUIRE_SIGNATURE:
+                logger.debug('[Bird] Signature ok path=%s', request.path)
+            else:
+                # Positive confirmation while rolling out: enforcement should be
+                # switched on because signatures were seen validating, not
+                # because no warning happened to appear.
+                logger.info('[Bird] Signature ok (not yet enforced) path=%s', request.path)
             return view(request, *args, **kwargs)
 
         if settings.BIRD_WEBHOOK_REQUIRE_SIGNATURE:
