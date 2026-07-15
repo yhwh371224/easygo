@@ -1,9 +1,9 @@
 import logging
-from django.conf import settings
 from django.utils import timezone
 
-from blog.models import Post, Driver, PhoneMapping
-from blog.sms_utils import normalize_phone, format_au_phone
+from blog.bird_proxy import get_proxy_number
+from blog.models import Post, Driver
+from blog.sms_utils import format_au_phone
 from utils.direction_utils import is_intl_pickup, is_domestic_pickup
 
 logger = logging.getLogger(__name__)
@@ -75,13 +75,8 @@ def _deposit_remaining_balance(booking):
 def build_reminder_context(booking, pickup_time_12h, driver):
     from regions.models import Terminal
 
-    customer_phone = normalize_phone(getattr(booking, "contact", None))
-
-    # ✔ FIX: safer proxy detection (not just exists)
-    bird_number = None
-    if booking.use_proxy and customer_phone:
-        if PhoneMapping.objects.filter(from_number=customer_phone).exists():
-            bird_number = format_au_phone(settings.BIRD_NUMBER)
+    proxy_number = get_proxy_number(booking, driver)
+    bird_number = format_au_phone(proxy_number) if proxy_number else None
 
     is_intl = is_intl_pickup(getattr(booking, "direction", None))
     is_domestic = is_domestic_pickup(getattr(booking, "direction", None))

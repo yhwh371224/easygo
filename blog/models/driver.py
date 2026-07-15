@@ -9,8 +9,31 @@ from django.utils import timezone
 class VirtualNumber(models.Model):
     number = models.CharField(max_length=20, unique=True)
 
+    # Bird channel that owns this number, one per platform. Populated by
+    # `manage.py sync_bird_channels`; a number is useless to us until Bird is
+    # routing its calls and texts at our webhooks, hence is_wired below.
+    sms_channel_id = models.CharField(
+        max_length=64, blank=True, null=True, unique=True,
+        help_text='Bird sms-messagebird channel id. Run sync_bird_channels to fill.',
+    )
+    voice_channel_id = models.CharField(
+        max_length=64, blank=True, null=True, unique=True,
+        help_text='Bird voice-messagebird channel id. Run sync_bird_channels to fill.',
+    )
+
+    @property
+    def is_wired(self):
+        """Whether Bird actually delivers this number's traffic to us.
+
+        Assigning a number in the admin is not enough: without both channels
+        synced, a customer dialling it reaches nothing. Never advertise a
+        number that isn't wired.
+        """
+        return bool(self.sms_channel_id and self.voice_channel_id)
+
     def __str__(self):
-        return self.number
+        suffix = '' if self.is_wired else ' (not wired)'
+        return f'{self.number}{suffix}'
 
 
 class Driver(models.Model):

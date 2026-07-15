@@ -29,8 +29,14 @@ urlpatterns = [
     # Webhooks
     path('stripe_webhook/', stripe_webhook, name='stripe_webhook'),
     path('gmail_webhook/', GmailWebhookView.as_view(), name='gmail_webhook'),
+    # The channel in the path is how we know which of our numbers was dialled.
+    # The bare paths are the legacy subscriptions; sync_bird_channels moves them.
     path('webhook/bird/sms/', bird_webhooks.sms_webhook, name='bird_sms_webhook'),
     path('webhook/bird/voice/', bird_webhooks.voice_webhook, name='bird_voice_webhook'),
+    path('webhook/bird/sms/<uuid:channel_id>/', bird_webhooks.sms_webhook,
+         name='bird_sms_webhook_channel'),
+    path('webhook/bird/voice/<uuid:channel_id>/', bird_webhooks.voice_webhook,
+         name='bird_voice_webhook_channel'),
 
     # Specific prefix apps
     path('markdownx/', include('markdownx.urls')),

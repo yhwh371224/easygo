@@ -24,9 +24,13 @@ def _bird_headers():
 # =========================
 # Send SMS via Bird
 # =========================
-def send_bird_sms(to_number, body):
+def send_bird_sms(to_number, body, channel_id=None):
     """
     Send SMS using Bird API.
+
+    The channel decides which number the text comes from, so replies in a proxy
+    session must go back out on the channel the message arrived on — otherwise
+    the customer is answered from a number they were never given.
     Returns response JSON or None.
     """
 
@@ -34,10 +38,12 @@ def send_bird_sms(to_number, body):
         logger.error("[Bird SMS] Invalid input to=%s body_empty=%s", to_number, not body)
         return None
 
+    channel_id = channel_id or settings.BIRD_CHANNEL_ID
+
     url = (
         f"{BIRD_API_BASE}/workspaces/"
         f"{settings.BIRD_WORKSPACE_ID}/channels/"
-        f"{settings.BIRD_CHANNEL_ID}/messages"
+        f"{channel_id}/messages"
     )
 
     payload = {
@@ -73,7 +79,7 @@ def send_bird_sms(to_number, body):
             )
             return None
 
-        logger.info("[Bird SMS SENT] to=%s", to_number)
+        logger.info("[Bird SMS SENT] to=%s channel=%s", to_number, channel_id)
         return resp.json()
 
     except requests.RequestException as e:
@@ -86,12 +92,80 @@ def send_bird_sms(to_number, body):
 
 
 # =========================
+# Resolve Proxy Number (Display)
+# =========================
+def resolve_virtual_number(driver):
+    """
+    The number to advertise for this driver: their own virtual number when Bird
+    actually routes it to us, otherwise the shared company number.
+
+    Every surface — customer email, calendar, driver dashboard — must resolve
+    through here. Two surfaces each deriving a number their own way is what put
+    a driver and a customer on different numbers and left them unable to
+    connect; going through one function makes that mismatch impossible.
+    """
+
+    virtual_number = getattr(driver, "virtual_number", None)
+
+    if virtual_number and virtual_number.is_wired:
+        return virtual_number.number
+
+    if virtual_number:
+        logger.warning(
+            "[Bird] virtual_number %s is assigned to driver=%s but has no Bird "
+            "channels — advertising %s instead. Run sync_bird_channels.",
+            virtual_number.number,
+            getattr(driver, "id", None),
+            settings.BIRD_NUMBER,
+        )
+
+    return settings.BIRD_NUMBER
+
+
+def get_proxy_number(instance, driver=None):
+    """
+    The number the customer should call/text for this booking, or None when the
+    booking has no live proxy session and callers should show the real contact.
+    """
+
+    from blog.models import PhoneMapping
+    from utils.prepay_helper import is_foreign_number
+
+    if not getattr(instance, "use_proxy", False):
+        return None
+
+    if driver is None:
+        driver = getattr(instance, "driver", None)
+
+    if driver is None:
+        return None
+
+    # Our numbers are AU landline-style; an overseas customer can't reliably
+    # reach them, so both sides fall back to the real contact.
+    if is_foreign_number(getattr(instance, "contact", None)):
+        return None
+
+    customer_phone = normalize_phone(getattr(instance, "contact", None))
+    if not customer_phone:
+        return None
+
+    if not PhoneMapping.objects.filter(from_number=customer_phone).exists():
+        return None
+
+    return resolve_virtual_number(driver)
+
+
+# =========================
 # Create Proxy Mapping (Trip Start)
 # =========================
 def create_bird_mapping(instance):
     """
-    Create one-way mapping:
-    Customer → Driver's virtual number
+    Open a proxy session: an inbound leg from this customer reaches this driver.
+
+    Routing is keyed on the caller, not on the number dialled, so a driver
+    without a virtual number of their own still gets a working session on the
+    shared company number — resolve_virtual_number() decides which number the
+    two sides are told to use.
     """
 
     from blog.models import PhoneMapping, Post
@@ -105,26 +179,19 @@ def create_bird_mapping(instance):
         )
         return False
 
-    # virtual_number 체크
-    if not driver.virtual_number:
-        logger.warning(
-            "[Bird] Missing virtual_number for driver=%s post=%s",
-            driver.id,
-            instance.id,
-        )
-        return False
-
     customer_phone = normalize_phone(instance.contact)
-    virtual_number = normalize_phone(driver.virtual_number.number)  # ← ForeignKey라 .number
+    driver_phone = normalize_phone(driver.driver_contact)
 
-    if not customer_phone or not virtual_number:
+    if not customer_phone or not driver_phone:
         logger.warning(
-            "[Bird] Invalid phone post=%s customer=%s virtual=%s",
+            "[Bird] Invalid phone post=%s customer=%s driver=%s",
             instance.id,
             instance.contact,
-            driver.virtual_number.number,
+            driver.driver_contact,
         )
         return False
+
+    virtual_number = resolve_virtual_number(driver)
 
     try:
         with transaction.atomic():
@@ -132,7 +199,7 @@ def create_bird_mapping(instance):
 
             PhoneMapping.objects.create(
                 from_number=customer_phone,
-                to_number=normalize_phone(driver.driver_contact),
+                to_number=driver_phone,
                 driver_name=driver.driver_name,
                 pickup_date=instance.pickup_date,
                 pickup_time=instance.pickup_time,

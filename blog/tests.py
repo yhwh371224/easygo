@@ -5,12 +5,18 @@ Celery tasks use transaction.on_commit which never fires inside TestCase
 (the DB transaction is never committed), so email/calendar tasks are safe.
 Bird proxy calls are patched where they would run synchronously.
 """
+import base64
 import datetime
+import hashlib
+import hmac
+import json
+import time
 from decimal import Decimal
 from unittest.mock import patch, MagicMock
 
+from django.conf import settings
 from django.contrib.auth.models import User
-from django.test import TestCase, Client
+from django.test import TestCase, Client, override_settings
 from django.urls import reverse
 from django.utils import timezone
 
@@ -19,6 +25,7 @@ from blog.models import (
     Inquiry, Post, PaypalPayment, StripePayment, PhoneMapping,
 )
 from blog.models.driver import DriverSettlementItem
+from blog.sms_utils import format_au_phone
 from regions.models import Region
 
 
@@ -61,9 +68,26 @@ FUTURE_DATE = (datetime.date.today() + datetime.timedelta(days=7)).isoformat()
 
 class VirtualNumberModelTests(TestCase):
 
-    def test_create_and_str(self):
+    def test_str_flags_a_number_bird_does_not_route(self):
+        """The admin picks numbers off this label; an unwired one reaches nobody."""
         vn = VirtualNumber.objects.create(number='+61200000001')
-        self.assertEqual(str(vn), '+61200000001')
+        self.assertEqual(str(vn), '+61200000001 (not wired)')
+        self.assertFalse(vn.is_wired)
+
+    def test_str_is_bare_once_wired(self):
+        vn = VirtualNumber.objects.create(
+            number='+61200000004',
+            sms_channel_id='sms-channel',
+            voice_channel_id='voice-channel',
+        )
+        self.assertEqual(str(vn), '+61200000004')
+        self.assertTrue(vn.is_wired)
+
+    def test_one_channel_alone_is_not_wired(self):
+        vn = VirtualNumber.objects.create(
+            number='+61200000005', voice_channel_id='voice-only',
+        )
+        self.assertFalse(vn.is_wired)
 
     def test_number_unique(self):
         VirtualNumber.objects.create(number='+61200000002')
@@ -320,6 +344,283 @@ class PhoneMappingModelTests(TestCase):
             driver_name='Test Driver',
         )
         self.assertEqual(pm.from_number, '+61200000010')
+
+
+# ---------------------------------------------------------------------------
+# Bird proxy
+#
+# Regression cover for a live incident: the customer's email advertised the
+# shared BIRD_NUMBER while the driver's dashboard showed their pooled virtual
+# number, so the two sides dialled different numbers. Worse, the pooled number
+# had no Bird webhook at all, so the driver's leg reached nothing and said so
+# to no one.
+#
+# The invariants that keep that from recurring:
+#   - every surface resolves the number through one function, so the driver and
+#     the customer are never told different things;
+#   - a number is only ever advertised once Bird actually routes it to us.
+# ---------------------------------------------------------------------------
+
+VOICE_CHANNEL = 'aaaaaaaa-0000-4000-8000-000000000001'
+SMS_CHANNEL = 'bbbbbbbb-0000-4000-8000-000000000002'
+
+
+class ProxyNumberTestCase(TestCase):
+    """Shared fixture: one driver, one pooled number, one live session."""
+
+    DRIVER_VNUM = '+61485908774'
+    CUSTOMER = '+61411111111'
+    DRIVER_PHONE = '+61400000001'
+
+    def setUp(self):
+        self.vnum = VirtualNumber.objects.create(number=self.DRIVER_VNUM)
+        self.driver = make_driver(user=make_user('proxydrv'))
+        self.driver.driver_contact = self.DRIVER_PHONE
+        self.driver.virtual_number = self.vnum
+        self.driver.save()
+        # post_save runs create_bird_mapping, which opens the proxy session.
+        self.post = Post.objects.create(
+            name='Customer', contact=self.CUSTOMER, driver=self.driver,
+            pickup_date=datetime.date.today(),
+            pickup_time=timezone.localtime().strftime('%H:%M'),
+            direction='Pickup from Intl Airport', use_proxy=True,
+        )
+
+    def wire(self):
+        """What `sync_bird_channels` does once Bird is routing the number."""
+        self.vnum.sms_channel_id = SMS_CHANNEL
+        self.vnum.voice_channel_id = VOICE_CHANNEL
+        self.vnum.save()
+
+    # -- surfaces ----------------------------------------------------------
+    def email_number(self):
+        from utils.booking_helper import build_reminder_context
+        return build_reminder_context(self.post, '10:00 AM', self.driver)['bird_number']
+
+    def calendar_number(self):
+        from utils.calendar_sync import _get_contact_display
+        return _get_contact_display(self.post)
+
+    def dashboard_number(self):
+        client = Client()
+        client.force_login(self.driver.user)
+        response = client.get(reverse('blog:driver_dashboard'))
+        trips = response.context['trips']
+        return trips[0]['proxy_number'] if trips else None
+
+    # -- webhooks ----------------------------------------------------------
+    def call(self, from_number, channel_id=VOICE_CHANNEL):
+        """Drive the voice webhook; return (bridge_url, bridge_payload)."""
+        captured = {}
+
+        def fake_post(url, json=None, headers=None, timeout=None):
+            captured['url'] = url
+            captured['payload'] = json or {}
+            resp = MagicMock()
+            resp.status_code = 200
+            resp.raise_for_status.return_value = None
+            return resp
+
+        path = f'/webhook/bird/voice/{channel_id}/' if channel_id else '/webhook/bird/voice/'
+        with patch('blog.bird_webhooks.requests.post', side_effect=fake_post):
+            Client().post(
+                path,
+                data=json.dumps({'payload': {
+                    'id': 'call-1', 'from': from_number, 'status': 'starting',
+                }}),
+                content_type='application/json',
+            )
+        return captured.get('url'), captured.get('payload', {})
+
+    def text(self, from_number, channel_id=SMS_CHANNEL):
+        """Drive the SMS webhook; return the channel we replied on."""
+        captured = {}
+
+        def fake_send(to_number, body, channel_id=None):
+            captured['to'] = to_number
+            captured['channel_id'] = channel_id
+            return {}
+
+        with patch('blog.bird_webhooks.send_bird_sms', side_effect=fake_send):
+            Client().post(
+                f'/webhook/bird/sms/{channel_id}/',
+                data=json.dumps({'payload': {
+                    'sender': {'contact': {'identifierValue': from_number}},
+                    'body': {'text': {'text': 'hi'}},
+                }}),
+                content_type='application/json',
+            )
+        return captured
+
+
+class ProxyNumberResolutionTests(ProxyNumberTestCase):
+
+    def test_unwired_number_is_never_advertised(self):
+        """A number assigned in the admin but absent from Bird reaches nobody."""
+        self.assertFalse(self.vnum.is_wired)
+        self.assertEqual(self.calendar_number(), settings.BIRD_NUMBER)
+        self.assertEqual(self.dashboard_number(), settings.BIRD_NUMBER)
+        self.assertEqual(self.email_number(), format_au_phone(settings.BIRD_NUMBER))
+
+    def test_wired_number_is_used_everywhere(self):
+        self.wire()
+        self.assertEqual(self.calendar_number(), self.DRIVER_VNUM)
+        self.assertEqual(self.dashboard_number(), self.DRIVER_VNUM)
+        self.assertEqual(self.email_number(), format_au_phone(self.DRIVER_VNUM))
+
+    def test_driver_and_customer_are_never_told_different_numbers(self):
+        """The actual incident: dashboard said one number, email said another."""
+        for wired in (False, True):
+            with self.subTest(wired=wired):
+                if wired:
+                    self.wire()
+                self.assertEqual(
+                    format_au_phone(self.dashboard_number()),
+                    self.email_number(),
+                )
+
+    def test_driver_without_a_pooled_number_still_gets_a_session(self):
+        self.driver.virtual_number = None
+        self.driver.save()
+        self.assertTrue(PhoneMapping.objects.filter(from_number=self.CUSTOMER).exists())
+        self.assertEqual(self.calendar_number(), settings.BIRD_NUMBER)
+
+    def test_overseas_customer_gets_the_real_contact(self):
+        """AU proxy numbers aren't reachable from abroad, so don't pretend."""
+        self.wire()
+        self.post.contact = '+821012345678'
+        self.post.save()
+        self.assertIsNone(self.email_number())
+        self.assertEqual(self.calendar_number(), '+821012345678')
+
+    def test_no_proxy_when_use_proxy_is_off(self):
+        self.post.use_proxy = False
+        self.post.save()
+        self.assertIsNone(self.email_number())
+        self.assertEqual(self.calendar_number(), self.CUSTOMER)
+
+
+class ProxyBridgeTests(ProxyNumberTestCase):
+
+    def test_both_legs_bridge_on_the_channel_the_call_arrived_on(self):
+        """A call_id only exists on its own channel; bridging it elsewhere 400s."""
+        self.wire()
+
+        url, payload = self.call(self.CUSTOMER)
+        self.assertIn(VOICE_CHANNEL, url)
+        self.assertEqual(payload['to'], self.DRIVER_PHONE)
+        self.assertEqual(payload['from'], self.DRIVER_VNUM)
+
+        url, payload = self.call(self.DRIVER_PHONE)
+        self.assertIn(VOICE_CHANNEL, url)
+        self.assertEqual(payload['to'], self.CUSTOMER)
+        self.assertEqual(payload['from'], self.DRIVER_VNUM)
+
+    def test_shared_channel_bridges_from_the_shared_number(self):
+        url, payload = self.call(self.CUSTOMER, channel_id=None)
+        self.assertIn(settings.BIRD_VOICE_CHANNEL_ID, url)
+        self.assertEqual(payload['from'], settings.BIRD_NUMBER)
+
+    def test_driver_leg_bridges_when_contact_is_not_stored_as_e164(self):
+        """Caller ID always arrives as +61...; driver_contact is free text."""
+        for stored in ['0400000001', '0400 000 001', '+61 400 000 001']:
+            with self.subTest(driver_contact=stored):
+                self.driver.driver_contact = stored
+                self.driver.save()
+                _, payload = self.call(self.DRIVER_PHONE)
+                self.assertEqual(payload.get('to'), self.CUSTOMER)
+
+    def test_unknown_caller_is_not_bridged(self):
+        self.assertEqual(self.call('+61499999999'), (None, {}))
+
+    def test_sms_is_answered_on_the_channel_it_arrived_on(self):
+        self.wire()
+        self.assertEqual(
+            self.text(self.CUSTOMER),
+            {'to': self.DRIVER_PHONE, 'channel_id': SMS_CHANNEL},
+        )
+        self.assertEqual(
+            self.text(self.DRIVER_PHONE),
+            {'to': self.CUSTOMER, 'channel_id': SMS_CHANNEL},
+        )
+
+
+@override_settings(
+    BIRD_WEBHOOK_SIGNING_KEY='test-signing-key',
+    BIRD_WEBHOOK_BASE_URL='https://example.test',
+    BIRD_WEBHOOK_REQUIRE_SIGNATURE=True,
+)
+class WebhookSignatureTests(TestCase):
+    """The endpoints bridge calls to arbitrary numbers, so an unsigned POST
+    from anyone must not be enough to drive them."""
+
+    PATH = '/webhook/bird/voice/aaaaaaaa-0000-4000-8000-000000000001/'
+
+    def _body(self):
+        return json.dumps({'payload': {
+            'id': 'call-1', 'from': '+61411111111', 'status': 'starting',
+        }})
+
+    def _sign(self, body, timestamp):
+        signed = b'\n'.join([
+            str(timestamp).encode(),
+            f'https://example.test{self.PATH}'.encode(),
+            hashlib.sha256(body.encode()).digest(),
+        ])
+        digest = hmac.new(b'test-signing-key', signed, hashlib.sha256).digest()
+        return base64.b64encode(digest).decode()
+
+    def _post(self, headers):
+        # Accepted requests run the full view; never let one reach Bird.
+        with patch('blog.bird_webhooks.requests.post') as bird:
+            response = Client().post(
+                self.PATH, data=self._body(),
+                content_type='application/json', headers=headers,
+            )
+        self.bird_called = bird.called
+        return response
+
+    def test_valid_signature_is_accepted(self):
+        body, ts = self._body(), int(time.time())
+        response = self._post({
+            'messagebird-signature': self._sign(body, ts),
+            'messagebird-request-timestamp': str(ts),
+        })
+        self.assertNotEqual(response.status_code, 403)
+
+    def test_unsigned_request_is_rejected(self):
+        self.assertEqual(self._post({}).status_code, 403)
+
+    def test_wrong_signature_is_rejected(self):
+        response = self._post({
+            'messagebird-signature': base64.b64encode(b'nope').decode(),
+            'messagebird-request-timestamp': str(int(time.time())),
+        })
+        self.assertEqual(response.status_code, 403)
+
+    def test_replayed_old_request_is_rejected(self):
+        stale = int(time.time()) - 3600
+        response = self._post({
+            'messagebird-signature': self._sign(self._body(), stale),
+            'messagebird-request-timestamp': str(stale),
+        })
+        self.assertEqual(response.status_code, 403)
+
+    @override_settings(BIRD_WEBHOOK_SIGNING_KEY='')
+    def test_verification_is_skipped_when_no_key_configured(self):
+        self.assertNotEqual(self._post({}).status_code, 403)
+
+    @override_settings(BIRD_WEBHOOK_REQUIRE_SIGNATURE=False)
+    def test_rollout_mode_serves_requests_it_cannot_verify(self):
+        """Signatures cover the URL, so a base-URL mismatch would take every
+        call down at once. Until enforcement is switched on, log and serve."""
+        self.assertNotEqual(self._post({}).status_code, 403)
+
+        response = self._post({
+            'messagebird-signature': base64.b64encode(b'nope').decode(),
+            'messagebird-request-timestamp': str(int(time.time())),
+        })
+        self.assertNotEqual(response.status_code, 403)
 
 
 # ---------------------------------------------------------------------------

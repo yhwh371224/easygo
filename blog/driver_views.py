@@ -16,6 +16,8 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django_ratelimit.decorators import ratelimit
 from main import settings
 
+from blog.bird_proxy import get_proxy_number
+
 COMPANY_NAME = "EasyGo Airport Shuttle (Nexflow Ventures Pty Ltd)"
 COMPANY_ABN  = "25 697 358 535"
 
@@ -225,6 +227,9 @@ def driver_dashboard(request):
             'post': post,
             'pickup_dt': pickup_dt,
             'is_past': is_past,
+            # Same resolver the customer's email uses, so the driver is never
+            # told to ring a number the customer was never given.
+            'proxy_number': get_proxy_number(post, driver),
         })
 
     # 정산 내역 (최신순, 최대 2개)

@@ -401,8 +401,15 @@ class PhoneMappingAdmin(admin.ModelAdmin):
 
 
 class VirtualNumberAdmin(admin.ModelAdmin):
-    list_display = ['number']
+    list_display = ['number', 'is_wired']
     search_fields = ['number']
+    readonly_fields = ['sms_channel_id', 'voice_channel_id']
+
+    # Channel ids come from Bird via `manage.py sync_bird_channels`; typing one
+    # by hand would claim a number is routable when it isn't.
+    @admin.display(boolean=True, description='Wired to Bird')
+    def is_wired(self, obj):
+        return obj.is_wired
 
 
 class MyAdminSite(AdminSite):

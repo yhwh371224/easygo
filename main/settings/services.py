@@ -61,6 +61,28 @@ BIRD_WORKSPACE_ID = config('BIRD_WORKSPACE_ID')
 BIRD_CHANNEL_ID = config('BIRD_CHANNEL_ID')
 BIRD_VOICE_CHANNEL_ID = config('BIRD_VOICE_CHANNEL_ID')
 
+# Bird signs each webhook over the URL it was registered with, so subscription
+# creation and signature verification must build that URL the same way — both
+# read this base. Getting it wrong rejects every webhook, so it is one setting,
+# not two.
+BIRD_WEBHOOK_BASE_URL = config(
+    'BIRD_WEBHOOK_BASE_URL',
+    default='https://easygoshuttle.com.au',
+).rstrip('/')
+
+# Empty disables verification (endpoints stay open). Set it before running
+# `manage.py sync_bird_channels`, which stamps it onto every subscription.
+BIRD_WEBHOOK_SIGNING_KEY = config('BIRD_WEBHOOK_SIGNING_KEY', default='')
+
+# Enforcement is a separate switch on purpose. Subscriptions created before the
+# key existed send no signature, so turning verification on at the same moment
+# the key lands would 403 every call. Deploy with this off, run
+# sync_bird_channels, confirm the logs show signatures validating, then turn it
+# on. While off, a bad signature is still rejected — only a missing one passes.
+BIRD_WEBHOOK_REQUIRE_SIGNATURE = config(
+    'BIRD_WEBHOOK_REQUIRE_SIGNATURE', default=False, cast=bool,
+)
+
 # Honeypot
 HONEYPOT_FIELD_NAME = 'phone_verify'
 HONEYPOT_VALUE = ''

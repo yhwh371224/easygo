@@ -508,14 +508,9 @@ def email_dispatch_detail(request):
                 else:
                     template_name = "html_email-today1.html"
                 # bird_number 조회
-                bird_number = None
-                if user_today.use_proxy:
-                    from blog.models import PhoneMapping
-                    from blog.sms_utils import normalize_phone
-                    customer_phone = normalize_phone(user_today.contact)
-                    mapping = PhoneMapping.objects.filter(from_number=customer_phone).first()
-                    if mapping:
-                        bird_number = format_au_phone(settings.BIRD_NUMBER)
+                from blog.bird_proxy import get_proxy_number
+                proxy_number = get_proxy_number(user_today)
+                bird_number = format_au_phone(proxy_number) if proxy_number else None
 
                 context.update({
                     'pickup_time': user_today.pickup_time,

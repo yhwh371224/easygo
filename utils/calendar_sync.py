@@ -7,18 +7,13 @@ from googleapiclient.errors import HttpError
 from google.oauth2 import service_account
 from django.conf import settings
 from blog.models import Post
-from blog.sms_utils import normalize_phone
 
 logger = logging.getLogger(__name__)
 
 
 def _get_contact_display(instance):
-    from blog.models import PhoneMapping
-    if getattr(instance, 'use_proxy', False):
-        customer_phone = normalize_phone(instance.contact)
-        if PhoneMapping.objects.filter(from_number=customer_phone).exists():
-            return settings.BIRD_NUMBER
-    return instance.contact
+    from blog.bird_proxy import get_proxy_number
+    return get_proxy_number(instance) or instance.contact
 
 
 SCOPES = ['https://www.googleapis.com/auth/calendar']
