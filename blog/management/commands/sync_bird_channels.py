@@ -58,8 +58,15 @@ class Command(BaseCommand):
 
     # -------------------------------------------------- steps
     def _sync_numbers(self, channels, apply):
-        """Record each pooled number's channel ids. The shared company number is
-        configured via settings and deliberately has no VirtualNumber row."""
+        """Record every workspace number's channel ids, the shared company
+        number included.
+
+        Skipping the shared number used to look tidy — it is configured through
+        settings, after all — but any VirtualNumber row for it could then never
+        be wired, so the admin labelled our most-used number '(not wired)' and
+        resolve_virtual_number() logged a false warning on every lookup. A
+        number is a number; settings only decide which one is the fallback.
+        """
         by_number = {}
         for channel in channels:
             identifier = channel.get('identifier')
@@ -69,10 +76,6 @@ class Command(BaseCommand):
             by_number.setdefault(identifier, {})[platform] = channel['id']
 
         for number, platforms in sorted(by_number.items()):
-            if number == settings.BIRD_NUMBER:
-                self.stdout.write(f'  {number}  shared company number — skipped')
-                continue
-
             sms_id = platforms.get(SMS_PLATFORM)
             voice_id = platforms.get(VOICE_PLATFORM)
 

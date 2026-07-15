@@ -12,10 +12,12 @@ import hmac
 import json
 import time
 from decimal import Decimal
+from io import StringIO
 from unittest.mock import patch, MagicMock
 
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.management import call_command
 from django.test import TestCase, Client, override_settings
 from django.urls import reverse
 from django.utils import timezone
@@ -543,6 +545,70 @@ class ProxyBridgeTests(ProxyNumberTestCase):
             self.text(self.DRIVER_PHONE),
             {'to': self.CUSTOMER, 'channel_id': SMS_CHANNEL},
         )
+
+
+@override_settings(BIRD_NUMBER='+61485922632')
+class SyncBirdChannelsTests(TestCase):
+    """This command is the only way a number becomes usable, so any number it
+    quietly passes over is a number that can never be advertised."""
+
+    # Bird hands out uuids, and the webhook routes only accept uuids.
+    SMS_774 = '11111111-1111-4111-8111-111111111111'
+    VOICE_774 = '22222222-2222-4222-8222-222222222222'
+    SMS_632 = '33333333-3333-4333-8333-333333333333'
+    VOICE_632 = '44444444-4444-4444-8444-444444444444'
+
+    CHANNELS = [
+        {'id': SMS_774, 'identifier': '+61485908774', 'platformId': 'sms-messagebird'},
+        {'id': VOICE_774, 'identifier': '+61485908774', 'platformId': 'voice-messagebird'},
+        {'id': SMS_632, 'identifier': '+61485922632', 'platformId': 'sms-messagebird'},
+        {'id': VOICE_632, 'identifier': '+61485922632', 'platformId': 'voice-messagebird'},
+    ]
+
+    def _run(self, *args):
+        def fake_get(url, **kwargs):
+            resp = MagicMock()
+            resp.json.return_value = {
+                'results': self.CHANNELS if url.endswith('/channels') else []
+            }
+            resp.raise_for_status.return_value = None
+            return resp
+
+        module = 'blog.management.commands.sync_bird_channels.requests'
+        with patch(f'{module}.get', side_effect=fake_get), patch(f'{module}.post') as post:
+            call_command('sync_bird_channels', *args, stdout=StringIO())
+        return post
+
+    def test_shared_company_number_is_wired_like_any_other(self):
+        """It was special-cased once, on the theory that settings already knew
+        about it. The admin then labelled our busiest number '(not wired)' and
+        the resolver warned about it on every single lookup."""
+        self._run('--apply')
+        shared = VirtualNumber.objects.get(number=settings.BIRD_NUMBER)
+        self.assertTrue(shared.is_wired)
+
+    def test_pooled_number_gets_its_channels(self):
+        self._run('--apply')
+        pooled = VirtualNumber.objects.get(number='+61485908774')
+        self.assertEqual(pooled.sms_channel_id, self.SMS_774)
+        self.assertEqual(pooled.voice_channel_id, self.VOICE_774)
+
+    def test_subscription_is_registered_per_channel(self):
+        """The channel in the URL is the only thing telling the webhook which
+        number was dialled, so every channel needs its own subscription."""
+        post = self._run('--apply')
+        urls = [call.kwargs['json']['url'] for call in post.call_args_list]
+        self.assertEqual(len(urls), 4)
+        for channel_id in [self.SMS_774, self.VOICE_774, self.SMS_632, self.VOICE_632]:
+            self.assertTrue(
+                any(url.endswith(f'/{channel_id}/') for url in urls),
+                f'{channel_id} got no subscription: {urls}',
+            )
+
+    def test_dry_run_writes_nothing(self):
+        post = self._run()
+        self.assertEqual(VirtualNumber.objects.count(), 0)
+        self.assertFalse(post.called)
 
 
 @override_settings(
