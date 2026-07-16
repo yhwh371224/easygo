@@ -258,3 +258,6 @@ class Post(models.Model):
 
     class Meta:
         ordering = ['-created']
+        indexes = [
+            models.Index(fields=['pickup_date'], name='blog_post_pickup_date_idx'),
+        ]
