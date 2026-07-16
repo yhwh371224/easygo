@@ -23,7 +23,7 @@
 			table {border-collapse: collapse !important;}
 		</style>
 	<![endif]-->
-	
+
 </head>
 <body style="Margin:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;min-width:100%;background-color:#F6F9FC;">
 
@@ -39,7 +39,7 @@
 
          <!-- Preheader (remove comment) -->
          <div style="font-size: 0px;color: #fafdfe;line-height: 1px;mso-line-height-rule:exactly;display: none;max-width: 0px;max-height: 0px;opacity: 0;overflow: hidden;mso-hide:all;">
-            <!-- Add Preheader Text Here (85-100 characters in length) -->
+            Final notice: your booking still has an outstanding balance and pickup is tomorrow.
          </div>
          <!-- End Preheader (remove comment) -->
 
@@ -67,7 +67,7 @@
 							<tr>
 								<td class="padded px-600-0" style="padding-top:20px;padding-right:0px;padding-bottom:5px;padding-left:22px;">
 									<table class="content" style="border-spacing:0;width:100%;text-align:center;" role="presentation">
-										
+
 
 									</table>
 								</td>
@@ -77,7 +77,7 @@
 						<!--[if (gte mso 9)|(IE)]>
 							</td><td width="100" valign="top" style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;">
 						<![endif]-->
-						
+
 						<table class="d-600-none" style="border-spacing:0;width:100%;max-width:100px;display:inline-block;" role="presentation">
 							<tr>
 								<td class="padded px-600-0" style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;">
@@ -90,7 +90,7 @@
 								</td>
 							</tr>
 						</table>
-					
+
 						<!--[if (gte mso 9)|(IE)]>
 							</td><td width="250" valign="top" style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;">
 						<![endif]-->
@@ -140,87 +140,36 @@
                                     <table class="content" style="border-spacing:0;text-align: center;" role="presentation">
 										<tr>
 											<td align="left" style="padding-left:0px;">
-												<p style="Margin:0;font-size:18px;font-weight:bold;line-height:22px;">Good morning! {{ name }}, </p>
+												<p style="Margin:0;font-size:18px;font-weight:bold;line-height:22px;">Dear {% if booker_name %}{{ booker_name }}{% else %}{{ name }}{% endif %},</p>
 											</td>
 										</tr>
 										<tr>
-											<td align="left" style="padding-top:28px;padding-left:0;">	
-												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
-													Tomorrow is your trip day! {{ pickup_date|date:"Y-m-d" }}<br><br></p>
+											<td align="left" style="padding-top:28px;padding-left:0;">
+												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
+                                                    This is a final reminder about the outstanding balance on your booking on <strong>{{ pickup_date|date:"Y-m-d" }}</strong> — <strong>your pickup is tomorrow</strong>.<br><br>
 
-												{% if deposit_amount_due and deposit_remaining_balance > 0 %}
-													<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;background-color:#fff4e5;padding:10px;border-left:3px solid #eb7828;">
-														<span style="color: #eb7828"><strong>Remaining balance reminder:</strong></span><br>
-														You paid a deposit of ${{ deposit_amount_due|floatformat:2 }}. The remaining balance of <strong>${{ deposit_remaining_balance|floatformat:2 }}</strong> is due before your pickup.<br>
-														Please have this amount ready in <strong>cash</strong> for the driver on pickup day, as the driver may not have a card machine available.<br>
-													</p>
-												{% endif %}
+                                                    We previously let you know that the amount paid does not cover the full amount due:<br><br>
+                                                    &nbsp; • &nbsp;Total Amount Due: ${{ price }} <br>
+                                                    &nbsp; • &nbsp;Amount Paid: ${{ paid }} <br>
+                                                    &nbsp; • &nbsp;Outstanding Balance: ${{ diff }} <br><br>
 
-												{% if cash and not paid %}
-													<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">													
-														Please note that the driver may not have a card machine available. We kindly ask you to prepare the cash in advance<br><br>
-													</p>											
-												{% endif %}
+                                                    Please settle the outstanding balance as soon as possible by clicking the link below:<br>
+													<a href="https://easygoshuttle.com.au/payment_options">👉 easygoshuttle.com.au/payment_options</a><br><br>
 
-												{% if direction == 'Pickup from Intl Airport' or direction == 'Pickup from Domestic Airport' %}												
-													<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
-														• Sydney Arrival Date: {{ pickup_date|date:"Y-m-d" }}<br> 
-														• Flight number: {{ flight_number }} <small>(ETA {{ flight_time }})</small><br>
-														• Pickup around {{ pickup_time }}<br><br>
+													If it's easier, you're also welcome to reply to this email to arrange paying the remaining balance in cash to the driver on the day.<br><br>
 
-														{% if cash and not paid %}
-															<span style="color: #eb7828">We kindly request that you email us before boarding your flight and after landing to Sydney</span><br><br>													
-														{% else %}
-															<span style="color: #eb7828">After landing, please check your email. You will be notified of the meeting details via email or SMS</span><br><br>
-														{% endif %}
+                                                    <span style="color: #c0392b;font-weight:bold;">If the outstanding balance is not settled and we don't hear from you before pickup, we may need to cancel this booking. Bookings cancelled due to non-payment are not eligible for a refund of any amount already paid.</span><br><br>
 
-														<span style="color:#eb7828;">
-															✨ For more detailed Sydney arrival information, please visit: 
-															<a href="{{ arrival_guide_url }}" target="_blank">{{ arrival_guide_url }}</a>
-														</span><br>
-													</p>												
-												{% elif start_point or not direction %}
-													<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">													
-														• See you on time, {{ pickup_time }}<br>											
-														• Start point: {{ start_point|default:"" }}<br>
-														{% if street %}
-														• {{ street }}<br>
-														{% endif %}
-														• End point: {{ end_point|default:"" }}<br>
-													</p>	
-													<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
-														To avoid any inconvenience for you and other passengers, please be ready at your pickup time. 
-														Late changes may incur additional costs.<br>
-														More details >><a href="https://easygoshuttle.com.au/information">&nbsp;click here</a><br><br>
-													</p>
-												{% else %} 
-													<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
-														• Direction: {{ direction }}<br>
-														• Pickup @ {{ pickup_time }}<br>
-														{% if street or suburb %}
-															• Pickup address:
-															{% if street %}{{ street }}{% endif %}
-															{% if suburb %}, {{ suburb }}{% endif %}<br>
-														{% endif %}
-													</p>
-													<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
-														To avoid any inconvenience for you and other passengers, please be ready at your pickup time. 
-														Late changes may incur additional costs.<br>
-														More details >><a href="https://easygoshuttle.com.au/information">&nbsp;click here</a><br><br>
-													</p>					
-												{% endif %} 		
-																																		
-												<p style="Margin:0;font-size:12px;line-height:21px;Margin-top:12px;Margin-bottom:12px;">    
-													<span style="color: #eb7828">Please note:</span><br>
-													If you have anything to change or cancel, please let us know asap<br><br>
+													We'd much rather get you to your destination — please reach out if there's anything we can help with.<br><br>
+
+													Best regards,
 												</p>
 												<p style="Margin:0;font-size:14px;font-weight:bold;line-height:22px;Margin-bottom:12px;">
 													<span style="color: #eb7828">Easy</span><span style="color: blue">Go&nbsp;</span>Airport Shuttle<br>
-												</p>
-												
+                                                </p>
 											</td>
 										</tr>
-										
+
                                     </table>
 									<!--[if (gte mso 9)|(IE)]>
 							            </td>
@@ -241,20 +190,20 @@
 <tr>
 	<td style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;">
 		<table width="100%" style="border-spacing:0;background-color:#FAFAFA;" role="presentation">
-			
+
 			<tr>
 				<td style="padding-top:5px;padding-right:5px;padding-bottom:5px;padding-left:5px;">
-					<p style="font-size:11px;color:#a09f9f;text-align:center;">  
-						Website:<a href="https://easygoshuttle.com.au">easygoshuttle.com.au</a><br>                                  
-						Email:<a href="mailto:info@easygoshuttle.com.au">info@easygoshuttle.com.au</a><br>					
-						<!-- Whatsapp:<a href="tel:+61406883355">+61406883355</a><br> -->						
-                        SMS:<a href="tel:+61406883355">0406 883 355 (message only)</a>
-					</p>                                       
-					<p style="font-size:11px;color:#a09f9f;text-align:center;">     
-						EasyGo Airport Shuttle&nbsp;ABN 25 697 358 535	
+					<p style="font-size:11px;color:#a09f9f;text-align:center;">
+						Website:<a href="https://easygoshuttle.com.au">easygoshuttle.com.au</a><br>
+						Email:<a href="mailto:info@easygoshuttle.com.au">info@easygoshuttle.com.au</a><br>
+						<!-- Whatsapp:<a href="tel:+61406883355">+61406883355</a><br> -->
+                        <!-- SMS:<a href="tel:+61406883355">0406 883 355</a> -->
+					</p>
+					<p style="font-size:11px;color:#a09f9f;text-align:center;">
+						EasyGo Airport Shuttle&nbsp;ABN 25 697 358 535
 					</p>
 				</td>
-			
+
 			<tr>
 				<td class="padded content" style="background-color: #FAFAFA;padding-top:0px;padding-bottom:0px;padding-right:0;padding-left:0;width:100%;text-align:center;font-family:'Neuton',serif;font-size: 24px;color: #727272;width:600px;">
 					<a href="https://www.facebook.com"><img src="https://easygo.s3.ap-southeast-2.amazonaws.com/icons8-facebook-50.png" alt="facebook-icon" width="14" style="border-width:0;padding-right:1px;"></a>
@@ -282,8 +231,8 @@
 			<tr>
 				<td class="padded content" style="padding-top:6px;padding-right:20px;padding-bottom:24px;padding-left:20px;width:100%;text-align:center;font-size: 13px;color: #C4C7C9;width:600px;">
 					<p style="font-size:11px;line-height:15px;color: #a09f9f">
-						Attention: This email and attachments are intended solely for your use and may be confidential. 
-						Any review, dissemination, distribution or reproduction of this email is strictly prohibited. 
+						Attention: This email and attachments are intended solely for your use and may be confidential.
+						Any review, dissemination, distribution or reproduction of this email is strictly prohibited.
 						Please contact the sender if you have received this message in error.
 					</p>
 				</td>
