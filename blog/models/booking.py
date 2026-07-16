@@ -137,6 +137,10 @@ class Post(models.Model):
     reminder = models.BooleanField(default=False, blank=True)
     sent_email = models.BooleanField(default=False, blank=True)
     sms_reminder = models.BooleanField(default=False, blank=True)
+    no_review = models.BooleanField(
+        default=False, blank=True,
+        help_text='체크하면 픽업 5일 후 리뷰 요청(Review-EasyGo) 리마인더 메일을 보내지 않음.',
+    )
     prepay = models.BooleanField(default=False, blank=True)
     pending = models.BooleanField(default=False, blank=True)
     final_warning_at = models.DateTimeField(

@@ -107,6 +107,9 @@ class Command(BaseCommand):
         )
         if subject == "Reminder-Arrival-2days":
             booking_reminders = booking_reminders.filter(direction__istartswith="pickup")
+        if subject == "Review-EasyGo":
+            # 리뷰 요청 거부(no_review) 고객 제외
+            booking_reminders = booking_reminders.exclude(no_review=True)
         self.send_email_task(booking_reminders, template_name, subject, target_date)
 
     def send_email_task(self, booking_reminders, template_name, subject, target_date):
