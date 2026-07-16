@@ -3,6 +3,7 @@ import logging
 from datetime import date, timedelta
 from django.core.management.base import BaseCommand
 from django.db.models import Q
+from django.utils import timezone
 from blog.models import Post
 from main.settings import RECIPIENT_EMAIL
 from utils.email import send_template_email, collect_recipients
@@ -41,17 +42,21 @@ class Command(BaseCommand):
                 paid = float(booking.paid or 0)
 
                 # ----------------------------
-                # 1. 결제 미완료 메일
+                # 1. 결제 미완료 메일 (단계별 1회만 발송 — 이미 보낸 단계는 건너뜀)
                 # ----------------------------
                 if booking.paid is None or booking.paid == "" or paid == 0:
                     days_difference = (booking.pickup_date - start_date).days
                     if days_difference <= 2:
                         email_subject = "Urgent notice for payment"
-                        template = "html_email-nopayment-today.html" 
-                            
+                        template = "html_email-nopayment-today.html"
+                        sent_field = "no_payment_urgent_sent_at"
                     else:
                         email_subject = "Payment notice"
-                        template = "html_email-nopayment.html"                             
+                        template = "html_email-nopayment.html"
+                        sent_field = "no_payment_notice_sent_at"
+
+                    if getattr(booking, sent_field) is not None:
+                        continue
 
                     send_template_email(
                         email_subject,
@@ -68,6 +73,8 @@ class Command(BaseCommand):
                         },
                         collect_recipients(booking.booker_email or booking.email)
                     )
+                    setattr(booking, sent_field, timezone.now())
+                    booking.save(update_fields=[sent_field])
 
                 # ----------------------------
                 # 2. 결제 차액 메일

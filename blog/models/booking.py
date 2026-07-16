@@ -147,6 +147,14 @@ class Post(models.Model):
         null=True, blank=True,
         help_text='잔액 부족(short payment) 안내 메일 발송 시각. final_notice 중복 발송 방지에 사용.',
     )
+    no_payment_notice_sent_at = models.DateTimeField(
+        null=True, blank=True,
+        help_text='결제 미완료 1차 안내(Payment notice) 발송 시각. no_payment_yet 중복 발송 방지에 사용.',
+    )
+    no_payment_urgent_sent_at = models.DateTimeField(
+        null=True, blank=True,
+        help_text='결제 미완료 최종 안내(Urgent notice for payment) 발송 시각. no_payment_yet 중복 발송 방지에 사용.',
+    )
     calendar_event_id = models.CharField(max_length=255, blank=True, null=True)
     driver_calendar_event_id = models.CharField(max_length=255, blank=True, null=True)
     use_proxy = models.BooleanField(default=False)
