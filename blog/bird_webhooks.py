@@ -409,7 +409,11 @@ def voice_webhook(request, channel_id=None):
         )
 
     except requests.exceptions.HTTPError as e:
-        status_code = e.response.status_code if e.response else None
+        # NB: a Response for a 4xx/5xx is falsy (Response.__bool__ == .ok), so
+        # `if e.response` would read as None here and skip the 400 branch below,
+        # turning a swallow-able 400 into a 500 (and a Telegram alert). Test for
+        # presence explicitly.
+        status_code = e.response.status_code if e.response is not None else None
 
         if status_code == 400:
             # Kept as a 200 so Bird stops retrying a call that is already over,
@@ -423,7 +427,7 @@ def voice_webhook(request, channel_id=None):
                 destination,
                 bridge_from,
                 channel_id,
-                e.response.text if e.response else '',
+                e.response.text if e.response is not None else '',
             )
             return JsonResponse({'status': 'ok'})
 
