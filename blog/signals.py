@@ -151,7 +151,7 @@ CALENDAR_EXCLUDED_FIELDS = {
     'return_direction', 'return_flight_number', 'return_flight_time',
     'return_pickup_time', 'return_start_point', 'return_end_point',
     'discount', 'surcharge', 'region', 'is_confirmed',
-    'cruise', 'sms_reminder', 'prepay',
+    'cruise', 'no_email_reminder', 'prepay',
     'calendar_event_id', 'driver_calendar_event_id', 'use_proxy', 'created',
 }
 

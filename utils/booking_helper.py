@@ -115,7 +115,7 @@ def build_reminder_context(booking, pickup_time_12h, driver):
         'suburb': getattr(booking, "suburb", None),
         'price': getattr(booking, "price", None),
         'reminder': getattr(booking, "reminder", None),
-        'sms_reminder': getattr(booking, "sms_reminder", None),
+        'no_email_reminder': getattr(booking, "no_email_reminder", None),
         'driver_name': getattr(driver, "driver_name", None) if driver else None,
         'driver_contact': getattr(driver, "driver_contact", None) if driver else None,
         'driver_plate': getattr(driver, "driver_plate", None) if driver else None,

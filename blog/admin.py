@@ -250,7 +250,7 @@ class InquiryAdmin(admin.ModelAdmin):
         }),
         ('Status', {
             'fields': ['is_confirmed', 'cancelled', 'pending', 'sent_email', 'reminder', 'cash', 'prepay',
-                    'private_ride','cruise',  'sms_reminder']
+                    'private_ride','cruise',  'no_email_reminder']
         }),
         ('Driver', {
             'fields': ['driver']
@@ -328,6 +328,31 @@ class PostAdmin(admin.ModelAdmin):
             return val  # non-numeric — leave untouched
         return str(halved)
 
+    # no_of_baggage is a comma-joined summary of label+count tokens, e.g.
+    # 'L5, S4' or 'L2, M1, Ski2(Oversize)'. Halve the count in each token while
+    # keeping the label and any '(Oversize)' marker (round half up, never 0).
+    @staticmethod
+    def _halve_baggage(val):
+        if val is None:
+            return val
+        s = str(val).strip()
+        if not s:
+            return val
+        out = []
+        for tok in (t.strip() for t in s.split(',')):
+            if not tok:
+                continue
+            m = re.match(r'^([A-Za-z]+)\s*(\d+)\s*(.*)$', tok)
+            if not m:
+                out.append(tok)  # unexpected shape — leave untouched
+                continue
+            label, qty, rest = m.group(1), m.group(2), m.group(3).strip()
+            halved = (Decimal(qty) / Decimal('2')).quantize(Decimal('1'), rounding=ROUND_HALF_UP)
+            if halved <= 0:
+                continue  # count rounded to 0 — drop the item
+            out.append(f'{label}{halved}{rest}')
+        return ', '.join(out)
+
     @admin.action(description='Duplicate selected booking(s)')
     def duplicate_bookings(self, request, queryset):
         created = 0
@@ -338,7 +363,7 @@ class PostAdmin(admin.ModelAdmin):
             half_paid = self._halve_amount(obj.paid)
             half_driver_price = self._halve_amount(obj.driver_price)
             half_passenger = self._halve_count(obj.no_of_passenger)
-            half_baggage = self._halve_count(obj.no_of_baggage)
+            half_baggage = self._halve_baggage(obj.no_of_baggage)
 
             obj.price = half_price
             obj.paid = half_paid
@@ -364,6 +389,8 @@ class PostAdmin(admin.ModelAdmin):
             obj.driver_price = half_driver_price
             obj.no_of_passenger = half_passenger
             obj.no_of_baggage = half_baggage
+            # The copy is an internal split — don't send it an email reminder.
+            obj.no_email_reminder = True
             # Skip calendar sync on this initial copy — otherwise it races with the
             # user's follow-up edit-and-save and creates two events for one booking.
             # The follow-up save (without this flag) is what actually creates the event.
@@ -400,7 +427,7 @@ class PostAdmin(admin.ModelAdmin):
         }),
         ('Status', {
             'fields': ['is_confirmed', 'cancelled', 'pending', 'sent_email', 'reminder', 'cash', 'driver_collected_cash', 'prepay',
-                    'private_ride','cruise',  'sms_reminder', 'no_review']
+                    'private_ride','cruise',  'no_email_reminder', 'no_review']
         }),
         ('Driver', {
             'fields': ['driver', 'use_proxy']

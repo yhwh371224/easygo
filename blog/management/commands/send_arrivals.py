@@ -180,6 +180,11 @@ class Command(BaseCommand):
             if getattr(booking, "notification_sent", False):
                 continue
 
+            # Customer opted out of the email reminder — don't send anything.
+            if getattr(booking, "no_email_reminder", False):
+                logger.info(f"[EMAIL SKIPPED] no_email_reminder set for {booking.email}")
+                continue
+
             driver = booking.driver
             pickup_time_12h = format_pickup_time_12h(booking.pickup_time)
 
@@ -212,14 +217,18 @@ class Command(BaseCommand):
             # SMS
             sms_sent = False
 
-            if booking.sms_reminder and (booking.paid or booking.cash):
-                sms_sent = self.send_sms_reminder(
-                    booking.contact,
-                    booking.name,
-                    booking.pickup_date,
-                    booking.email,
-                    booking.price
-                )
+            # DISABLED: the SMS reminder was gated on the old `sms_reminder`
+            # flag, which has been repurposed as `no_email_reminder`. SMS
+            # reminders are not in use — re-enable behind a dedicated flag if
+            # they ever come back.
+            # if booking.<sms flag> and (booking.paid or booking.cash):
+            #     sms_sent = self.send_sms_reminder(
+            #         booking.contact,
+            #         booking.name,
+            #         booking.pickup_date,
+            #         booking.email,
+            #         booking.price
+            #     )
 
             # DISABLED: Twilio WhatsApp sending — do not uncomment without approval
             # WhatsApp fallback (intl only)

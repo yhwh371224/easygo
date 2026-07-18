@@ -55,7 +55,7 @@ class Inquiry(models.Model):
     private_ride = models.BooleanField(default=False, blank=True)
     reminder = models.BooleanField(default=False, blank=True)
     sent_email = models.BooleanField(default=False, blank=True)
-    sms_reminder = models.BooleanField(default=False, blank=True)
+    no_email_reminder = models.BooleanField(default=False, blank=True)
     prepay = models.BooleanField(default=False, blank=True)
     pending = models.BooleanField(default=False, blank=True)
     calendar_event_id = models.CharField(max_length=255, blank=True, null=True)
@@ -136,7 +136,7 @@ class Post(models.Model):
     private_ride = models.BooleanField(default=False, blank=True)
     reminder = models.BooleanField(default=False, blank=True)
     sent_email = models.BooleanField(default=False, blank=True)
-    sms_reminder = models.BooleanField(default=False, blank=True)
+    no_email_reminder = models.BooleanField(default=False, blank=True)
     no_review = models.BooleanField(
         default=False, blank=True,
         help_text='체크하면 픽업 5일 후 리뷰 요청(Review-EasyGo) 리마인더 메일을 보내지 않음.',

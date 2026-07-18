@@ -520,7 +520,7 @@ def email_dispatch_detail(request):
                     'direction': normalize_direction(user_today.direction),
                     'cash': user_today.cash,
                     'cruise': user_today.cruise,
-                    'sms_reminder': user_today.sms_reminder,
+                    'no_email_reminder': user_today.no_email_reminder,
                     'bird_number': bird_number,
                     'driver': user_today.driver,
                     'driver_name': user_today.driver.driver_name,
