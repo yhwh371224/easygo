@@ -269,7 +269,7 @@
 
       <div class="trip-time">
         {{ post.pickup_time|default:"--:--" }}
-        {% if post.use_proxy %}<span class="badge-proxy">proxy on</span>{% endif %}
+        {% if t.proxy_number %}<span class="badge-proxy">proxy on</span>{% endif %}
       </div>
 
       <div class="trip-name">{{ post.name }}</div>

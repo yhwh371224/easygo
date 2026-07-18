@@ -68,6 +68,29 @@ def normalize_phone(phone_number, default_region="AU"):
         return None
 
 
+def is_au_mobile(phone_number, default_region="AU"):
+    """
+    True only for an Australian mobile — the local ``04XXXXXXXX`` form or its
+    ``+61 4XXXXXXXX`` international equivalent. Landlines (02/03/07/08) and any
+    overseas number return False.
+
+    Proxy sessions run on Bird numbers that only mobiles can be bridged/texted
+    to reliably, so this gates whether a booking gets a virtual number at all.
+    """
+    if not phone_number:
+        return False
+
+    try:
+        parsed = phonenumbers.parse(phone_number, default_region)
+    except NumberParseException:
+        return False
+
+    if not phonenumbers.is_valid_number(parsed):
+        return False
+
+    return phonenumbers.number_type(parsed) == phonenumbers.PhoneNumberType.MOBILE
+
+
 # =========================
 # SMS (Twilio)
 # =========================

@@ -4,7 +4,7 @@ import requests
 from django.conf import settings
 from django.db import transaction
 
-from blog.sms_utils import normalize_phone
+from blog.sms_utils import normalize_phone, is_au_mobile
 
 logger = logging.getLogger(__name__)
 
@@ -149,6 +149,11 @@ def get_proxy_number(instance, driver=None):
     if not customer_phone:
         return None
 
+    # Only AU mobiles (04… / +61 4…) get a proxy — landlines can't be reliably
+    # bridged/texted on our Bird numbers, so they show the real contact instead.
+    if not is_au_mobile(customer_phone):
+        return None
+
     if not PhoneMapping.objects.filter(from_number=customer_phone).exists():
         return None
 
@@ -188,6 +193,16 @@ def create_bird_mapping(instance):
             instance.id,
             instance.contact,
             driver.driver_contact,
+        )
+        return False
+
+    # Only AU mobiles (04… / +61 4…) get a proxy session — a landline customer
+    # can't be bridged/texted on our Bird numbers, so no mapping is opened.
+    if not is_au_mobile(customer_phone):
+        logger.info(
+            "[Bird] Skipping proxy — customer %s is not an AU mobile (post=%s)",
+            customer_phone,
+            instance.id,
         )
         return False
 
