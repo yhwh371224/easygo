@@ -27,16 +27,17 @@ INTERNAL_TRANSFER_MARKERS = ['xx8784', 'CommBank app']
 # Applied only to expense rows dated on/after GST_REGISTRATION_DATE.
 # insurance and vehicle_registration intentionally omitted — see REVIEW_OVERRIDE_KEYWORDS.
 GST_KEYWORD_RULES = [
-    (('BP', 'CALTEX', 'AMPOL', 'SHELL', '7-ELEVEN', '7 ELEVEN',
+    (('BP', 'CALTEX', 'AMPOL', 'SHELL', '7-ELEVEN', '7 ELEVEN', 'OTR',
       'UNITED PETROLEUM', 'METRO PETROLEUM', 'FUEL', 'PETROL'), 'gst'),
     (('LINKT', 'E-TOLL', 'ETOLL', 'TOLL', 'TRANSURBAN'), 'gst'),
     (('SERVICE', 'MECHANIC', 'AUTO', 'TYRE', 'TYRES', 'REPCO',
-      'SUPERCHEAP', 'PANEL', 'SMASH'), 'gst'),
+      'SUPERCHEAP', 'PANEL', 'SMASH', 'CIRCUM VENDING'), 'gst'),
     (('TELSTRA', 'OPTUS', 'VODAFONE', 'TPG', 'AUSSIE BROADBAND',
       'BELONG', 'INTERNET', 'MOBILE'), 'gst'),
     (('GOOGLE', 'META', 'FACEBOOK', 'MARKETING', 'ADVERTIS', 'SEO'), 'gst'),
     (('GROUP TRANSPORT',), 'gst'),
     (('NORTH SYDNEY EXECUTIVE', 'VIRTUAL OFFICE'), 'gst'),
+    (('COUNCIL',), 'gst'),
 ]
 
 # These keywords force needs_review=True with no auto-GST, regardless of amount.
@@ -49,11 +50,11 @@ REVIEW_OVERRIDE_KEYWORDS = (
 
 # Category auto-labelling (first match wins, falls back to 'uncategorised')
 CATEGORY_KEYWORD_RULES = [
-    (('BP', 'CALTEX', 'AMPOL', 'SHELL', '7-ELEVEN', '7 ELEVEN', 'FUEL',
+    (('BP', 'CALTEX', 'AMPOL', 'SHELL', '7-ELEVEN', '7 ELEVEN', 'OTR', 'FUEL',
       'PETROL', 'UNITED PETROLEUM', 'METRO PETROLEUM'), 'fuel'),
     (('LINKT', 'E-TOLL', 'ETOLL', 'TOLL', 'TRANSURBAN'), 'tolls'),
     (('SERVICE', 'MECHANIC', 'AUTO', 'TYRE', 'TYRES', 'REPCO',
-      'SUPERCHEAP', 'PANEL', 'SMASH'), 'vehicle_maintenance'),
+      'SUPERCHEAP', 'PANEL', 'SMASH', 'CIRCUM VENDING'), 'vehicle_maintenance'),
     (('TELSTRA', 'OPTUS', 'VODAFONE', 'TPG', 'AUSSIE BROADBAND',
       'BELONG', 'INTERNET', 'MOBILE'), 'phone_internet'),
     (('GOOGLE', 'META', 'FACEBOOK', 'MARKETING', 'ADVERTIS', 'SEO'), 'marketing'),
