@@ -84,6 +84,14 @@
       font-size:.75rem;
       font-weight:600;
     }
+    .badge-refund {
+      background:#fee2e2;
+      color:#991b1b;
+      border-radius:4px;
+      padding:.1rem .45rem;
+      font-size:.75rem;
+      font-weight:600;
+    }
     .trip-price {
       font-size:.95rem;
       font-weight:700;
@@ -371,6 +379,7 @@
         {% if post.driver_price %}<span class="trip-price">${{ post.driver_price }}</span>{% endif %}
         {% if post.paid %}<span class="badge-paid">Paid</span>{% endif %}
         {% if post.cash and not post.paid %}<span class="badge-cash">Cash</span>{% endif %}
+        {% if post.driver_refund_deduction %}<span class="badge-refund">↩ Refund −${{ post.driver_refund_deduction|floatformat:"-2" }}</span>{% endif %}
       </div>
       {% endif %}
 
@@ -418,6 +427,7 @@
           {% elif post.paid %}
             <span class="badge-paid">Paid</span>
           {% endif %}
+          {% if post.driver_refund_deduction %}<span class="badge-refund">↩ Refund −${{ post.driver_refund_deduction|floatformat:"-2" }}</span>{% endif %}
         </div>
       </div>
       {% endwith %}
