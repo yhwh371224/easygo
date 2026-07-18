@@ -1,4 +1,6 @@
+import re
 from datetime import date
+from decimal import Decimal, InvalidOperation
 
 from django.contrib import admin, messages
 from django.contrib.admin import AdminSite
@@ -290,6 +292,25 @@ class PostAdmin(admin.ModelAdmin):
     readonly_fields = ['suburb_distance_km', 'suburb_base_price', 'commission_amount_display', 'subcontractor_payout_display']
     actions = ['duplicate_bookings']
 
+    # price / paid / driver_price are CharFields holding numeric strings, so
+    # halving means parsing the number out, dividing by 2, and reformatting.
+    @staticmethod
+    def _halve_amount(val):
+        if val is None:
+            return val
+        s = str(val).strip()
+        if not s:
+            return val
+        cleaned = re.sub(r'[^0-9.\-]', '', s)  # tolerate '$', commas, spaces
+        try:
+            halved = (Decimal(cleaned) / Decimal('2')).quantize(Decimal('0.01'))
+        except (InvalidOperation, ValueError):
+            return val  # non-numeric — leave untouched
+        out = format(halved, 'f')
+        if '.' in out:
+            out = out.rstrip('0').rstrip('.')  # 75.00 -> 75, 77.50 -> 77.5
+        return out
+
     @admin.action(description='Duplicate selected booking(s)')
     def duplicate_bookings(self, request, queryset):
         created = 0
@@ -300,6 +321,10 @@ class PostAdmin(admin.ModelAdmin):
             obj.driver_calendar_event_id = ''
             obj.driver = None
             obj.use_proxy = False
+            # Split the money in half on each copy.
+            obj.price = self._halve_amount(obj.price)
+            obj.paid = self._halve_amount(obj.paid)
+            obj.driver_price = self._halve_amount(obj.driver_price)
             # Skip calendar sync on this initial copy — otherwise it races with the
             # user's follow-up edit-and-save and creates two events for one booking.
             # The follow-up save (without this flag) is what actually creates the event.
