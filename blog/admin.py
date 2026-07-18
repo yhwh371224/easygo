@@ -389,8 +389,10 @@ class PostAdmin(admin.ModelAdmin):
             obj.driver_price = half_driver_price
             obj.no_of_passenger = half_passenger
             obj.no_of_baggage = half_baggage
-            # The copy is an internal split — don't send it an email reminder.
+            # The copy is an internal split — don't send it an email reminder,
+            # and don't send it a review request either.
             obj.no_email_reminder = True
+            obj.no_review = True
             # Skip calendar sync on this initial copy — otherwise it races with the
             # user's follow-up edit-and-save and creates two events for one booking.
             # The follow-up save (without this flag) is what actually creates the event.
