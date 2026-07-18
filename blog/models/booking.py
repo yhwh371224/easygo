@@ -192,6 +192,18 @@ class Post(models.Model):
         help_text='Amount invoiced as a deposit. If payment received reaches this amount, '
                    'the unpaid-balance reminder email is not sent even if it falls short of the full price.',
     )
+    refund = models.DecimalField(
+        max_digits=10, decimal_places=2, default=Decimal('0'), blank=True,
+        help_text='Total amount refunded to the customer for this booking ($). '
+                   'Automatically netted off company sales/GST (1A). Separate from the '
+                   "driver's share of the refund (driver_refund_deduction).",
+    )
+    driver_refund_deduction = models.DecimalField(
+        max_digits=10, decimal_places=2, default=Decimal('0'), blank=True,
+        help_text="Portion of the customer refund the driver bears ($). Deducted from "
+                   'the driver settlement/payout and the driver dashboard. e.g. a $100 '
+                   'refund where the driver bears 50% -> enter 50 here (and 100 in refund).',
+    )
     created = models.DateTimeField(auto_now_add=True)
 
     @property
@@ -255,9 +267,19 @@ class Post(models.Model):
         return commission.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
 
     @property
+    def _driver_refund_deduction_decimal(self):
+        """driver_refund_deduction is a DecimalField (default 0, but guard None)."""
+        return self.driver_refund_deduction or Decimal('0')
+
+    @property
     def subcontractor_payout(self):
-        """What the subcontractor is paid: driver_price − commission. Display/calc only."""
-        payout = self._driver_price_decimal - self.commission_amount
+        """What the subcontractor is paid: driver_price − commission − the driver's
+        share of any customer refund (driver_refund_deduction). Display/calc only."""
+        payout = (
+            self._driver_price_decimal
+            - self.commission_amount
+            - self._driver_refund_deduction_decimal
+        )
         return payout.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
 
     class Meta:

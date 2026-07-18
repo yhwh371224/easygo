@@ -332,7 +332,7 @@ class PostAdmin(admin.ModelAdmin):
         ('Pricing', {
             'fields': ['suburb_distance_km', 'suburb_base_price', 'price', 'paid', 'discount', 'toll', 'surcharge',
                        'driver_price', 'commission_rate', 'commission_amount_override', 'commission_amount_display', 'subcontractor_payout_display',
-                       'deposit_amount_due']
+                       'deposit_amount_due', 'refund', 'driver_refund_deduction']
         }),
         ('Status', {
             'fields': ['is_confirmed', 'cancelled', 'pending', 'sent_email', 'reminder', 'cash', 'driver_collected_cash', 'prepay',

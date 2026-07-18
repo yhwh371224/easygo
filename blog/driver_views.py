@@ -320,6 +320,8 @@ def driver_dashboard(request):
             amount = Decimal(str(post.driver_price))
         except Exception:
             continue
+        # Driver bears their share of any customer refund on this trip.
+        amount -= (post.driver_refund_deduction or Decimal('0'))
         if post.cash:
             current_total_cash += amount
         elif post.paid:
@@ -335,6 +337,8 @@ def driver_dashboard(request):
             amount = Decimal(str(post.driver_price))
         except Exception:
             continue
+        # Driver bears their share of any customer refund on this trip.
+        amount -= (post.driver_refund_deduction or Decimal('0'))
         if post.cash:
             current_total_cash += amount
         elif post.paid:

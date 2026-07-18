@@ -102,7 +102,7 @@ def build_sales_gst(year, quarter):
         .exclude(paid__isnull=True)
         .exclude(paid='')
         .exclude(paid='TBA')
-        .only('paid', 'cash')
+        .only('paid', 'cash', 'refund')
     )
 
     total_paid = ZERO
@@ -115,6 +115,11 @@ def build_sales_gst(year, quarter):
 
     for post in posts:
         paid = to_decimal_safe(post.paid)
+        # Net any customer refund off the sale (cash-basis): the company only
+        # collected paid − refund, so 1A GST is charged on the net. Refund is
+        # netted in the pickup_date quarter (we have no separate refund date).
+        refund = post.refund or ZERO
+        paid = paid - refund
         if paid <= ZERO:
             continue
         gst = (paid / _ELEVEN).quantize(_CENT, rounding=ROUND_HALF_UP)
