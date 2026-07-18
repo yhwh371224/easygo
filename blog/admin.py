@@ -1,6 +1,6 @@
 import re
 from datetime import date
-from decimal import Decimal, InvalidOperation
+from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
 
 from django.contrib import admin, messages
 from django.contrib.admin import AdminSite
@@ -311,20 +311,59 @@ class PostAdmin(admin.ModelAdmin):
             out = out.rstrip('0').rstrip('.')  # 75.00 -> 75, 77.50 -> 77.5
         return out
 
+    # no_of_passenger / no_of_baggage are CharFields holding whole-number
+    # counts — halve, then round to a whole number so no decimal ever shows
+    # (e.g. '3' -> 2, '5' -> 3).
+    @staticmethod
+    def _halve_count(val):
+        if val is None:
+            return val
+        s = str(val).strip()
+        if not s:
+            return val
+        cleaned = re.sub(r'[^0-9.\-]', '', s)
+        try:
+            halved = (Decimal(cleaned) / Decimal('2')).quantize(Decimal('1'), rounding=ROUND_HALF_UP)
+        except (InvalidOperation, ValueError):
+            return val  # non-numeric — leave untouched
+        return str(halved)
+
     @admin.action(description='Duplicate selected booking(s)')
     def duplicate_bookings(self, request, queryset):
         created = 0
         for obj in queryset:
+            # Split the money in half: the original keeps one half, the copy
+            # gets the other. Halve the original in place first, then save it.
+            half_price = self._halve_amount(obj.price)
+            half_paid = self._halve_amount(obj.paid)
+            half_driver_price = self._halve_amount(obj.driver_price)
+            half_passenger = self._halve_count(obj.no_of_passenger)
+            half_baggage = self._halve_count(obj.no_of_baggage)
+
+            obj.price = half_price
+            obj.paid = half_paid
+            obj.driver_price = half_driver_price
+            obj.no_of_passenger = half_passenger
+            obj.no_of_baggage = half_baggage
+            # Let the original sync so its existing calendar event updates to the
+            # new half price (sync_to_calendar edits in place when an event id
+            # already exists — no duplicate-event race here, only the copy needs
+            # the skip below).
+            obj.save()
+
+            # Now turn the same instance into a brand-new copy carrying the
+            # other half.
             obj.pk = None
             obj._state.adding = True
             obj.calendar_event_id = ''
             obj.driver_calendar_event_id = ''
             obj.driver = None
             obj.use_proxy = False
-            # Split the money in half on each copy.
-            obj.price = self._halve_amount(obj.price)
-            obj.paid = self._halve_amount(obj.paid)
-            obj.driver_price = self._halve_amount(obj.driver_price)
+            obj.price = half_price
+            obj.paid = half_paid
+            obj.driver_price = half_driver_price
+            obj.no_of_passenger = half_passenger
+            obj.no_of_baggage = half_baggage
             # Skip calendar sync on this initial copy — otherwise it races with the
             # user's follow-up edit-and-save and creates two events for one booking.
             # The follow-up save (without this flag) is what actually creates the event.
