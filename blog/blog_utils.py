@@ -5,7 +5,7 @@ from django.db.models import Q
 from main.settings import DEFAULT_FROM_EMAIL
 from basecamp.basecamp_utils import render_email_template
 from blog.models import Driver, Post
-from regions.models import RegionSuburb
+from regions.models import Region, RegionSuburb
 from utils.email import send_text_email, send_html_email
 from utils.telegram import send_telegram_sync
 
@@ -305,3 +305,28 @@ def resolve_driver(suburb):
         )
 
     return Driver.objects.filter(is_default=True).first()
+
+
+def assign_default_driver_if_missing(post):
+    """Auto-assign a default driver to an unassigned post, saving it, so
+    reminder emails never get skipped/blanked for lack of a driver.
+    Same fallback chain as assign_drivers.py: suburb → region → Sydney.
+    Returns the post's driver (existing or newly assigned), or None."""
+    if post.driver:
+        return post.driver
+
+    driver = resolve_driver(post.suburb) or get_default_driver_for_region(post.region)
+    if not driver:
+        sydney_region = Region.objects.filter(slug='sydney', is_active=True).first()
+        if sydney_region:
+            driver = get_default_driver_for_region(sydney_region)
+
+    if driver:
+        post.driver = driver
+        post.save(update_fields=['driver'])
+        logger.warning(
+            "assign_default_driver_if_missing: auto-assigned driver=%s to Post pk=%s (was unassigned)",
+            driver.pk, post.pk,
+        )
+
+    return driver

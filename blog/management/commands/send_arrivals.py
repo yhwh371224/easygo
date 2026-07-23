@@ -7,6 +7,7 @@ from blog.models import Post
 
 from utils import booking_helper
 from utils.booking_helper import build_reminder_context
+from blog.blog_utils import assign_default_driver_if_missing
 from utils.email import send_template_email, collect_recipients
 from basecamp.modules.date_utils import format_pickup_time_12h
 from blog.sms_utils import normalize_phone
@@ -185,7 +186,9 @@ class Command(BaseCommand):
                 logger.info(f"[EMAIL SKIPPED] no_email_reminder set for {booking.email}")
                 continue
 
-            driver = booking.driver
+            driver = assign_default_driver_if_missing(booking)
+            if not driver:
+                logger.warning(f"[EMAIL] no driver and no default driver found for id={booking.id} region={booking.region} — sending without driver details")
             pickup_time_12h = format_pickup_time_12h(booking.pickup_time)
 
             context = build_reminder_context(

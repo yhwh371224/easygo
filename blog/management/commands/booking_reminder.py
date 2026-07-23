@@ -8,6 +8,7 @@ from blog.models import Post
 from main.settings import RECIPIENT_EMAIL
 from utils import booking_helper
 from utils.booking_helper import build_reminder_context
+from blog.blog_utils import assign_default_driver_if_missing
 from utils.email import send_template_email, collect_recipients
 from utils.telegram import send_telegram_sync
 from basecamp.modules.date_utils import format_pickup_time_12h
@@ -117,13 +118,16 @@ class Command(BaseCommand):
             try:
                 logger.info(f"[{subject}] Processing booking id={booking_reminder.id} email={booking_reminder.email} booker_email={booking_reminder.booker_email}")
 
-                # 도착("Pickup from") 손님은 driver 없으면 여기서 skip — send_arrivals 명령이
-                # driver 유무와 무관하게 별도로 발송함. 출발/일반 손님은 백업 경로가 없으므로
-                # driver가 없어도 누락되지 않도록 발송한다.
+                # 도착("Pickup from") 손님이 driver 미배정이면 지역 기본 드라이버를
+                # 자동 배정해서 발송한다 (전에는 여기서 skip하고 send_arrivals가 처리했지만,
+                # driver 없이도 send_arrivals가 돌기 때문에 driver 상세 정보 없이 메일이
+                # 나가거나, 아예 다른 이유로 send_arrivals에서도 누락되면 조용히 빠지는 문제가 있었음).
                 is_arrival = "pickup from" in (booking_reminder.direction or "").lower()
                 if not booking_reminder.driver and subject == "Reminder-Today" and is_arrival:
-                    logger.warning(f"[{subject}] SKIP id={booking_reminder.id} — no driver (arrival, handled by send_arrivals)")
-                    continue
+                    driver = assign_default_driver_if_missing(booking_reminder)
+                    if not driver:
+                        logger.warning(f"[{subject}] SKIP id={booking_reminder.id} — no driver and no default driver found for region={booking_reminder.region}")
+                        continue
 
                 logger.info(f"[{subject}] id={booking_reminder.id} terminal_pickup_point={booking_reminder.terminal_pickup_point}")
 
