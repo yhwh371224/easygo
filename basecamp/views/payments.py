@@ -323,6 +323,15 @@ def _build_single_context(user, users, params, inv_no, today, DEFAULT_BANK):
         doubled_surcharge, _ = _calc_surcharge(surcharge_input, doubled_price, user1)
         doubled_total = doubled_price + doubled_with_gst + doubled_surcharge + toll - discount
         balance = round(doubled_total - doubled_paid, 2)
+
+        deposit_percent, deposit_amount, deposit_balance_due = _calc_deposit(
+            params.get('deposit_percent_input'), doubled_total
+        )
+        # paid/price가 각 leg(편도) Post에 절반씩 나뉘어 저장되므로, deposit_amount_due도
+        # 동일하게 절반씩 양쪽 leg에 저장해야 결제 도착 시 임계값 비교가 맞는다.
+        leg_deposit_due = round(deposit_amount / 2, 2) if deposit_amount is not None else None
+        Post.objects.filter(pk__in=[user.pk, user1.pk]).update(deposit_amount_due=leg_deposit_due)
+
         context = {
             **shared,
             "name": user1.invoice_name, "company_name": user1.company_name,
@@ -341,6 +350,9 @@ def _build_single_context(user, users, params, inv_no, today, DEFAULT_BANK):
             "street": user1.street, "suburb": user1.suburb,
             "return_pickup_time": user1.return_pickup_time,
             "return_pickup_date": user1.return_pickup_date,
+            "deposit_percent": deposit_percent,
+            "deposit_amount": deposit_amount,
+            "deposit_balance_due": deposit_balance_due,
         }
         return "html_email-invoice.html", context
 
