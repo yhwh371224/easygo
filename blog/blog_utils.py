@@ -307,11 +307,13 @@ def resolve_driver(suburb):
     return Driver.objects.filter(is_default=True).first()
 
 
-def assign_default_driver_if_missing(post):
+def assign_default_driver_if_missing(post, dry_run=False):
     """Auto-assign a default driver to an unassigned post, saving it, so
     reminder emails never get skipped/blanked for lack of a driver.
-    Same fallback chain as assign_drivers.py: suburb → region → Sydney.
-    Returns the post's driver (existing or newly assigned), or None."""
+    Fallback chain: suburb → region → Sydney. Shared by the nightly
+    assign_drivers command and the day-of reminder emails.
+    Returns the post's driver (existing or newly assigned), or None.
+    With dry_run=True, the resolved driver is returned but not saved."""
     if post.driver:
         return post.driver
 
@@ -321,7 +323,7 @@ def assign_default_driver_if_missing(post):
         if sydney_region:
             driver = get_default_driver_for_region(sydney_region)
 
-    if driver:
+    if driver and not dry_run:
         post.driver = driver
         post.save(update_fields=['driver'])
         logger.warning(

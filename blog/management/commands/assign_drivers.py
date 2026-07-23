@@ -4,8 +4,7 @@ from django.core.management.base import BaseCommand
 from django.utils import timezone
 
 from blog.models import Post
-from blog.blog_utils import resolve_driver, get_default_driver_for_region
-from regions.models import Region
+from blog.blog_utils import assign_default_driver_if_missing
 from utils.direction_utils import is_airport_pickup
 
 logger = logging.getLogger(__name__)
@@ -25,8 +24,6 @@ class Command(BaseCommand):
         dry_run = options['dry_run']
         today = timezone.localdate()
 
-        sydney_region = Region.objects.filter(slug='sydney', is_active=True).first()
-
         posts = Post.objects.filter(
             pickup_date__gte=today,
             driver__isnull=True,
@@ -44,13 +41,7 @@ class Command(BaseCommand):
         skipped = 0
 
         for post in posts:
-            driver = resolve_driver(post.suburb)
-
-            if not driver:
-                driver = get_default_driver_for_region(post.region)
-
-            if not driver and sydney_region:
-                driver = get_default_driver_for_region(sydney_region)
+            driver = assign_default_driver_if_missing(post, dry_run=dry_run)
 
             if not driver:
                 logger.warning(
@@ -71,14 +62,6 @@ class Command(BaseCommand):
                 f"pk={post.pk} {post.name} {post.pickup_date} "
                 f"→ {driver.driver_name}"
             )
-
-            if not dry_run:
-                post.driver = driver
-                post.save(update_fields=['driver'])
-                logger.info(
-                    "assign_drivers: assigned driver=%s to Post pk=%s",
-                    driver.pk, post.pk,
-                )
             assigned += 1
 
         self.stdout.write(
