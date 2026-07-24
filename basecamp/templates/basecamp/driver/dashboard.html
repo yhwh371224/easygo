@@ -191,7 +191,21 @@
     .past-trip-date { font-weight:500; color:#374151; }
     .past-trip-time { color:#9ca3af; }
     .past-trip-right { display:flex; align-items:center; gap:.4rem; }
-    .past-trip-price { font-weight:600; color:#1f2937; }
+    .past-trip-price {
+      font-weight:600;
+      color:#1f2937;
+      min-width:3.6rem;
+      text-align:right;
+    }
+    .past-trip-right .badge-paid,
+    .past-trip-right .badge-cash {
+      min-width:3rem;
+      text-align:center;
+    }
+    .past-trip-right .badge-commission {
+      min-width:4.4rem;
+      text-align:center;
+    }
 
     /* 정산 구분선 */
     .settlement-divider {
