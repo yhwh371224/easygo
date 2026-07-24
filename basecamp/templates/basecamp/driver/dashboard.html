@@ -190,22 +190,21 @@
     .past-trip-left { display:flex; gap:.75rem; align-items:center; }
     .past-trip-date { font-weight:500; color:#374151; }
     .past-trip-time { color:#9ca3af; }
-    .past-trip-right { display:flex; align-items:center; gap:.4rem; }
+    /* Fixed columns so price / paid-cash / commission line up vertically
+       even on rows where a given badge is absent — each column is always
+       rendered as a slot (empty or not), see dashboard.html markup. */
+    .past-trip-right {
+      display:grid;
+      grid-template-columns: 3.6rem 3rem auto 4.4rem;
+      column-gap:.4rem;
+      align-items:center;
+    }
     .past-trip-price {
       font-weight:600;
       color:#1f2937;
-      min-width:3.6rem;
       text-align:right;
     }
-    .past-trip-right .badge-paid,
-    .past-trip-right .badge-cash {
-      min-width:3rem;
-      text-align:center;
-    }
-    .past-trip-right .badge-commission {
-      min-width:4.4rem;
-      text-align:center;
-    }
+    .past-trip-slot { display:flex; justify-content:center; }
 
     /* 정산 구분선 */
     .settlement-divider {
@@ -444,14 +443,20 @@
           <span class="past-trip-time">{{ post.pickup_time }}</span>
         </div>
         <div class="past-trip-right">
-          {% if post.driver_price %}<span class="past-trip-price">${{ post.driver_price }}</span>{% endif %}
-          {% if post.cash %}
-            <span class="badge-cash">Cash</span>
-          {% elif post.paid %}
-            <span class="badge-paid">Paid</span>
-          {% endif %}
-          {% if post.driver_refund_deduction %}<span class="badge-refund">↩ Refund −${{ post.driver_refund_deduction|floatformat:"-2" }}</span>{% endif %}
-          {% if post.commission_amount %}<span class="badge-commission">Comm. −${{ post.commission_amount|floatformat:"-2" }}</span>{% endif %}
+          <span class="past-trip-price">{% if post.driver_price %}${{ post.driver_price }}{% endif %}</span>
+          <span class="past-trip-slot">
+            {% if post.cash %}
+              <span class="badge-cash">Cash</span>
+            {% elif post.paid %}
+              <span class="badge-paid">Paid</span>
+            {% endif %}
+          </span>
+          <span class="past-trip-slot">
+            {% if post.driver_refund_deduction %}<span class="badge-refund">↩ Refund −${{ post.driver_refund_deduction|floatformat:"-2" }}</span>{% endif %}
+          </span>
+          <span class="past-trip-slot">
+            {% if post.commission_amount %}<span class="badge-commission">Comm. −${{ post.commission_amount|floatformat:"-2" }}</span>{% endif %}
+          </span>
         </div>
       </div>
       {% endwith %}
