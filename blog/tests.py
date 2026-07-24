@@ -682,6 +682,49 @@ class ProxyWindowTests(ProxyNumberTestCase):
         self.assertFalse(trip['in_window'])
         self.assertIsNone(trip['proxy_number'])
 
+    def test_far_future_dashboard_shows_admin_curated_extra_stop_area(self):
+        self._push_far_future()
+        self.post.extra_stop_area = 'Parramatta'
+        self.post.save()
+
+        client = Client()
+        client.force_login(self.driver.user)
+        response = client.get(reverse('blog:driver_dashboard'))
+
+        self.assertContains(response, 'There is an additional stop, Parramatta on the way')
+        self.assertNotContains(response, '99 Extra Rd')
+
+    def test_far_future_dashboard_hides_paid_cash_badges_shows_only_price(self):
+        self._push_far_future()
+        self.post.driver_price = '150'
+        self.post.paid = '2026-07-01'
+        self.post.cash = True
+        self.post.driver_refund_deduction = Decimal('10.00')
+        self.post.commission_amount_override = Decimal('5.00')
+        self.post.save()
+
+        client = Client()
+        client.force_login(self.driver.user)
+        response = client.get(reverse('blog:driver_dashboard'))
+
+        self.assertContains(response, '$150')
+        self.assertNotContains(response, '<span class="badge-paid">Paid</span>')
+        self.assertNotContains(response, '<span class="badge-cash">Cash</span>')
+        self.assertNotContains(response, '<span class="badge-refund">')
+        self.assertNotContains(response, '<span class="badge-commission">')
+
+    def test_tomorrow_dashboard_shows_paid_cash_badges(self):
+        self.post.pickup_date = datetime.date.today() + datetime.timedelta(days=1)
+        self.post.driver_price = '150'
+        self.post.cash = True
+        self.post.save()
+
+        client = Client()
+        client.force_login(self.driver.user)
+        response = client.get(reverse('blog:driver_dashboard'))
+
+        self.assertContains(response, '<span class="badge-cash">Cash</span>')
+
     def test_tomorrow_dashboard_shows_full_address_and_live_number(self):
         self.post.street = '12 Smith St'
         self.post.suburb = 'Bondi'

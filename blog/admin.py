@@ -415,7 +415,7 @@ class PostAdmin(admin.ModelAdmin):
                     'suburb', 'street', 'start_point', 'end_point',
                     'region', 'terminal_pickup_point', 'customer_history',
                     'no_of_passenger', 'no_of_baggage',
-                    'extra_stop', 'extra_stop_addresses', 'same_extra_stop']
+                    'extra_stop', 'extra_stop_addresses', 'same_extra_stop', 'extra_stop_area']
         }),
         ('Return Info', {
             'fields': ['return_direction', 'return_pickup_date', 'return_pickup_time',

@@ -173,6 +173,14 @@ class Post(models.Model):
     extra_stop           = models.PositiveSmallIntegerField(default=0)
     extra_stop_addresses = models.JSONField(default=list, blank=True)
     same_extra_stop      = models.BooleanField(default=False)
+    extra_stop_area = models.CharField(
+        max_length=100, blank=True, null=True,
+        help_text='Suburb/area only (no street) — shown to the driver in place '
+                   'of the full extra-stop address before the 24h-before-pickup '
+                   'window opens. Admin-entered, separate from extra_stop_addresses '
+                   'since those are free text and cannot be safely reduced to a '
+                   'suburb automatically.',
+    )
     commission_rate = models.DecimalField(
         max_digits=4,
         decimal_places=2,

@@ -412,17 +412,21 @@
           </ul>
         </div>
         {% else %}
-        <div class="trip-message">There is an additional stop on the way</div>
+        <div class="trip-message">
+          {% if post.extra_stop_area %}There is an additional stop, {{ post.extra_stop_area }} on the way{% else %}There is an additional stop on the way{% endif %}
+        </div>
         {% endif %}
       {% endif %}
 
       {% if post.driver_price or post.paid or post.cash %}
       <div class="trip-payment">
         {% if post.driver_price %}<span class="trip-price">${{ post.driver_price }}</span>{% endif %}
-        {% if post.paid %}<span class="badge-paid">Paid</span>{% endif %}
-        {% if post.cash and not post.paid %}<span class="badge-cash">Cash</span>{% endif %}
-        {% if post.driver_refund_deduction %}<span class="badge-refund">↩ Refund −${{ post.driver_refund_deduction|floatformat:"-2" }}</span>{% endif %}
-        {% if post.commission_amount %}<span class="badge-commission">Comm. −${{ post.commission_amount|floatformat:"-2" }}</span>{% endif %}
+        {% if t.in_window %}
+          {% if post.paid %}<span class="badge-paid">Paid</span>{% endif %}
+          {% if post.cash and not post.paid %}<span class="badge-cash">Cash</span>{% endif %}
+          {% if post.driver_refund_deduction %}<span class="badge-refund">↩ Refund −${{ post.driver_refund_deduction|floatformat:"-2" }}</span>{% endif %}
+          {% if post.commission_amount %}<span class="badge-commission">Comm. −${{ post.commission_amount|floatformat:"-2" }}</span>{% endif %}
+        {% endif %}
       </div>
       {% endif %}
 
