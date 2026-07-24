@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'articles.apps.ArticlesConfig',
     'regions.apps.RegionsConfig',
     'accounting.apps.AccountingConfig',
+    'fleet.apps.FleetConfig',
     'admin_honeypot',
     'allauth',
     'allauth.account',
