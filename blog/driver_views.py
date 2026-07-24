@@ -474,7 +474,7 @@ def _agreement_items(driver):
             },
         ]
 
-    return [
+    items = [
         {
             'field': 'item_status_confirmed',
             'title': 'Independent subcontractor, not an employee',
@@ -495,7 +495,13 @@ def _agreement_items(driver):
                 "anything that occurs between pickup and drop-off."
             ),
         },
-        {
+    ]
+
+    # RCTIs only carry GST for drivers registered for it (see
+    # settlement_service.py), so the item is meaningless — and only confusing
+    # — for a driver who isn't GST-registered.
+    if driver.gst_registered:
+        items.append({
             'field': 'item_rcti_confirmed',
             'title': 'Tax Invoice (RCTI)',
             'detail': (
@@ -504,8 +510,9 @@ def _agreement_items(driver):
                 "supply, and that I will not issue my own tax invoices for "
                 "those services."
             ),
-        },
-    ]
+        })
+
+    return items
 
 
 def _handle_agreement(request, driver):
@@ -550,7 +557,7 @@ def _handle_agreement(request, driver):
         elif driver.is_company and (not signed_by_name or not signed_by_title):
             error = 'Please enter your name and title/position.'
         elif not all_checked:
-            error = 'Please tick all three boxes before confirming.'
+            error = 'Please tick all the boxes above before confirming.'
 
         if error:
             return render(request, 'basecamp/driver/agreement.html', {
