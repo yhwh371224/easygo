@@ -66,6 +66,13 @@ class Transaction(models.Model):
         help_text="Permanently excluded from BAS/P&L — e.g. a driver payout "
                   "already recorded via DriverSettlement (avoids double count).",
     )
+    is_tax_deductible = models.BooleanField(
+        default=True, db_index=True,
+        help_text="False for expenses that are imported for record-keeping but "
+                  "must not be claimed as a business expense — e.g. fines/"
+                  "infringements (non_deductible_fine). Excluded from P&L "
+                  "expense totals and BAS 1B regardless of gst_code.",
+    )
 
     class Meta:
         indexes = [

@@ -85,6 +85,16 @@
     <tr><td style="padding-left:2em;" colspan="2"><em>No expenses in this period.</em></td></tr>
     {% endfor %}
 
+    {% if pnl.non_deductible_total %}
+    <tr>
+      <th style="color:#999;">
+        Non-deductible (fines/infringements)
+        <span style="font-weight:normal;">— excluded from expenses above</span>
+      </th>
+      <td class="num" style="color:#999;">{{ pnl.non_deductible_total|floatformat:2|intcomma }}</td>
+    </tr>
+    {% endif %}
+
     <tr>
       <th>
         Labour (payroll)

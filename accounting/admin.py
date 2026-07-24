@@ -12,8 +12,9 @@ from . import reports
 @admin.register(Transaction)
 class TransactionAdmin(admin.ModelAdmin):
     list_display = ('date', 'brand', 'direction', 'description', 'gross_amount',
-                    'gst_code', 'category', 'needs_review', 'excluded')
-    list_filter = ('needs_review', 'excluded', 'brand', 'direction', 'gst_code', 'source')
+                    'gst_code', 'category', 'is_tax_deductible', 'needs_review', 'excluded')
+    list_filter = ('needs_review', 'excluded', 'is_tax_deductible', 'brand', 'direction',
+                   'gst_code', 'source')
     date_hierarchy = 'date'
     search_fields = ('description', 'counterparty')
     change_list_template = 'admin/accounting/transaction/change_list.html'

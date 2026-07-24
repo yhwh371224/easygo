@@ -202,6 +202,8 @@ class Command(BaseCommand):
                 if needs_review:
                     held_for_review += 1
 
+                category = self._category(desc_upper)
+
                 to_create.append(Transaction(
                     date=tx_date,
                     direction='expense',
@@ -210,13 +212,14 @@ class Command(BaseCommand):
                     gross_amount=gross,
                     gst_code=gst_code,
                     gst_amount=gst_amount,
-                    category=self._category(desc_upper),
+                    category=category,
                     source='bank',
                     counterparty='',
                     notes='',
                     import_hash=row_hash,
                     gst_auto_estimated=auto_flag,
                     needs_review=needs_review,
+                    is_tax_deductible=category not in conf.NON_TAX_DEDUCTIBLE_CATEGORIES,
                 ))
                 created += 1
 
@@ -238,6 +241,8 @@ class Command(BaseCommand):
             for t in to_create[:20]:
                 if t.needs_review:
                     flag = " [NEEDS_REVIEW]"
+                elif not t.is_tax_deductible:
+                    flag = " [non-deductible]"
                 elif t.gst_auto_estimated and t.gst_code == 'no_gst':
                     flag = " [gst review]"
                 else:

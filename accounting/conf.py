@@ -28,7 +28,7 @@ INTERNAL_TRANSFER_MARKERS = ['xx8784', 'CommBank app']
 # insurance and vehicle_registration intentionally omitted — see REVIEW_OVERRIDE_KEYWORDS.
 GST_KEYWORD_RULES = [
     (('BP', 'CALTEX', 'AMPOL', 'SHELL', '7-ELEVEN', '7 ELEVEN', 'OTR',
-      'UNITED PETROLEUM', 'METRO PETROLEUM', 'FUEL', 'PETROL'), 'gst'),
+      'UNITED PETROLEUM', 'METRO PETROLEUM', 'FUEL', 'PETROL', 'VEZINA'), 'gst'),
     (('LINKT', 'E-TOLL', 'ETOLL', 'TOLL', 'TRANSURBAN'), 'gst'),
     (('SERVICE', 'MECHANIC', 'AUTO', 'TYRE', 'TYRES', 'REPCO',
       'SUPERCHEAP', 'PANEL', 'SMASH', 'CIRCUM VENDING'), 'gst'),
@@ -38,6 +38,9 @@ GST_KEYWORD_RULES = [
     (('GROUP TRANSPORT',), 'gst'),
     (('NORTH SYDNEY EXECUTIVE', 'VIRTUAL OFFICE'), 'gst'),
     (('COUNCIL',), 'gst'),
+    # Fines/infringements are never GST-eligible — explicit no_gst so this can
+    # never be shadowed by a broader keyword added above in future.
+    (('SDRO', 'INFRNGMNT', 'PENALTY'), 'no_gst'),
 ]
 
 # These keywords force needs_review=True with no auto-GST, regardless of amount.
@@ -49,18 +52,30 @@ REVIEW_OVERRIDE_KEYWORDS = (
 )
 
 # Category auto-labelling (first match wins, falls back to 'uncategorised')
+#
+# Ordering note: vehicle_registration ('SERVICE NSW', ...) is checked BEFORE
+# vehicle_maintenance ('SERVICE', ...) — 'SERVICE' is a substring of
+# 'SERVICE NSW', so the broader vehicle_maintenance keyword would otherwise
+# shadow the more specific registration match.
 CATEGORY_KEYWORD_RULES = [
     (('BP', 'CALTEX', 'AMPOL', 'SHELL', '7-ELEVEN', '7 ELEVEN', 'OTR', 'FUEL',
-      'PETROL', 'UNITED PETROLEUM', 'METRO PETROLEUM'), 'fuel'),
+      'PETROL', 'UNITED PETROLEUM', 'METRO PETROLEUM', 'VEZINA'), 'fuel'),
     (('LINKT', 'E-TOLL', 'ETOLL', 'TOLL', 'TRANSURBAN'), 'tolls'),
+    (('REGO', 'REGISTRATION', 'SERVICE NSW', 'TRANSPORT FOR NSW', 'RMS'),
+     'vehicle_registration'),
+    (('SDRO', 'INFRNGMNT', 'PENALTY'), 'non_deductible_fine'),
     (('SERVICE', 'MECHANIC', 'AUTO', 'TYRE', 'TYRES', 'REPCO',
       'SUPERCHEAP', 'PANEL', 'SMASH', 'CIRCUM VENDING'), 'vehicle_maintenance'),
     (('TELSTRA', 'OPTUS', 'VODAFONE', 'TPG', 'AUSSIE BROADBAND',
       'BELONG', 'INTERNET', 'MOBILE'), 'phone_internet'),
     (('GOOGLE', 'META', 'FACEBOOK', 'MARKETING', 'ADVERTIS', 'SEO'), 'marketing'),
     (('INSURANCE', 'NRMA', 'AAMI', 'ALLIANZ', 'QBE', 'GIO', 'ZURICH'), 'insurance'),
-    (('REGO', 'REGISTRATION', 'SERVICE NSW', 'TRANSPORT FOR NSW', 'RMS'),
-     'vehicle_registration'),
     (('GROUP TRANSPORT',), 'subcontractor_payout'),
     (('NORTH SYDNEY EXECUTIVE', 'VIRTUAL OFFICE'), 'office_expense'),
 ]
+
+# Categories that are imported for record-keeping but must NEVER be counted as
+# a tax-deductible business expense (fines/infringements are non-deductible
+# under ATO rules). Transaction.is_tax_deductible is set False for these on
+# import; P&L/BAS aggregation excludes them from deductible expense totals.
+NON_TAX_DEDUCTIBLE_CATEGORIES = {'non_deductible_fine'}

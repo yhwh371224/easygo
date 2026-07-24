@@ -209,7 +209,7 @@ def build_bas(fy_year, fy_quarter):
     for tx in Transaction.objects.filter(
         date__gte=start, date__lte=end,
         direction='expense', gst_code='gst',
-        needs_review=False, excluded=False,
+        needs_review=False, excluded=False, is_tax_deductible=True,
     ):
         if tx.gst_amount > ZERO:
             gst_1b += tx.gst_amount
@@ -308,11 +308,19 @@ def build_pnl(start, end, brand=BRAND_ALL):
     income_total = _sum(tx.filter(direction='income'), 'gross_amount')
 
     expense_qs = tx.filter(direction='expense')
-    expense_total = _sum(expense_qs, 'gross_amount')
+
+    # Non-deductible rows (e.g. fines/infringements, is_tax_deductible=False)
+    # are imported for record-keeping but must never count as a business
+    # expense — kept out of expense_total/expense_breakdown and reported
+    # separately for visibility.
+    deductible_expense_qs = expense_qs.filter(is_tax_deductible=True)
+    expense_total = _sum(deductible_expense_qs, 'gross_amount')
+    non_deductible_total = _sum(
+        expense_qs.filter(is_tax_deductible=False), 'gross_amount')
 
     # category breakdown — grouped in the DB, not in python.
     expense_breakdown = list(
-        expense_qs.values('category')
+        deductible_expense_qs.values('category')
         .annotate(subtotal=Sum('gross_amount'))
         .order_by('-subtotal')
     )
@@ -342,6 +350,7 @@ def build_pnl(start, end, brand=BRAND_ALL):
         'income_total': income_total,
         'expense_total': expense_total,
         'expense_breakdown': expense_breakdown,
+        'non_deductible_total': non_deductible_total,
         'labour_total': labour_total,
         'labour_in_net': labour_in_net,
         'net': net,
