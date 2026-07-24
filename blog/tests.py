@@ -645,6 +645,86 @@ class ProxyBridgeTests(ProxyNumberTestCase):
         )
 
 
+class ProxyWindowTests(ProxyNumberTestCase):
+    """Full detail (street address + phone number) only opens up the day
+    before pickup and on the day itself — see the `in_window` flag in
+    driver_views.py and the pickup_date filter in
+    bird_webhooks._get_active_mapping(). Before that, the trip is still
+    visible (so the driver can plan around it) but shows suburb-only, no
+    phone line at all, and a notice instead."""
+
+    def _push_far_future(self):
+        self.post.street = '12 Smith St'
+        self.post.suburb = 'Bondi'
+        self.post.extra_stop_addresses = ['99 Extra Rd, Somewhere']
+        self.post.pickup_date = datetime.date.today() + datetime.timedelta(days=5)
+        self.post.save()
+
+    def test_far_future_dashboard_shows_suburb_only_and_no_phone_line(self):
+        self._push_far_future()
+
+        client = Client()
+        client.force_login(self.driver.user)
+        response = client.get(reverse('blog:driver_dashboard'))
+
+        self.assertContains(response, 'Bondi')
+        self.assertNotContains(response, '12 Smith St')
+        self.assertNotContains(response, '99 Extra Rd')
+        self.assertContains(response, 'There is an additional stop on the way')
+        self.assertContains(response, 'full booking details will only be visible')
+        # No phone line at all pre-window — not even a placeholder number,
+        # since the real BIRD_NUMBER is live and dialling it could bridge
+        # into an unrelated in-window booking.
+        self.assertNotContains(response, 'href="tel:')
+        self.assertNotContains(response, settings.BIRD_NUMBER)
+
+        trip = response.context['trips'][0]
+        self.assertFalse(trip['in_window'])
+        self.assertIsNone(trip['proxy_number'])
+
+    def test_tomorrow_dashboard_shows_full_address_and_live_number(self):
+        self.post.street = '12 Smith St'
+        self.post.suburb = 'Bondi'
+        self.post.pickup_date = datetime.date.today() + datetime.timedelta(days=1)
+        self.post.save()
+
+        client = Client()
+        client.force_login(self.driver.user)
+        response = client.get(reverse('blog:driver_dashboard'))
+
+        self.assertContains(response, '12 Smith St')
+        self.assertNotContains(response, 'full booking details will only be visible')
+
+        trip = response.context['trips'][0]
+        self.assertTrue(trip['in_window'])
+
+    def test_far_future_call_is_not_bridged(self):
+        self.wire()
+        self._push_far_future()
+        self.assertEqual(self.call(self.CUSTOMER), (None, {}))
+
+    def test_far_future_text_is_not_answered(self):
+        self.wire()
+        self._push_far_future()
+        self.assertEqual(self.text(self.CUSTOMER), {})
+
+    def test_reschedule_into_window_opens_it_without_resaving_use_proxy(self):
+        """PhoneMapping.pickup_date is a snapshot taken at mapping-creation
+        time; only driver/use_proxy changes retrigger create_bird_mapping
+        (see signals.py), so a plain reschedule never refreshes it. Routing
+        must key off the booking's live pickup_date, not the stale snapshot,
+        or a rescheduled-into-window trip would stay silently unbridgeable."""
+        self.wire()
+        self._push_far_future()
+        self.assertEqual(self.call(self.CUSTOMER), (None, {}))
+
+        self.post.pickup_date = datetime.date.today()
+        self.post.save()
+
+        _, payload = self.call(self.CUSTOMER)
+        self.assertEqual(payload['to'], self.DRIVER_PHONE)
+
+
 @override_settings(BIRD_NUMBER='+61485922632')
 class SyncBirdChannelsTests(TestCase):
     """This command is the only way a number becomes usable, so any number it

@@ -223,13 +223,24 @@ def driver_dashboard(request):
             pickup_dt = None
 
         is_past = pickup_dt and (pickup_dt + timedelta(hours=3) < now)
+        # Full detail (street + live proxy number) only opens up the day
+        # before pickup and on the day itself — see _get_active_mapping()
+        # in bird_webhooks.py, which enforces the same window on the actual
+        # call/SMS bridging. Before that, the trip is visible (so the driver
+        # can plan around it) but shows suburb-only and a placeholder number.
+        in_window = post.pickup_date in (today, tomorrow)
         trips.append({
             'post': post,
             'pickup_dt': pickup_dt,
             'is_past': is_past,
+            'in_window': in_window,
             # Same resolver the customer's email uses, so the driver is never
-            # told to ring a number the customer was never given.
-            'proxy_number': get_proxy_number(post, driver),
+            # told to ring a number the customer was never given. Outside the
+            # window there's nothing live to show — BIRD_NUMBER is a real,
+            # routable number, and showing it here risks the driver dialling
+            # it and reaching an unrelated in-window booking that also falls
+            # back to it (see _get_driver_target in bird_webhooks.py).
+            'proxy_number': get_proxy_number(post, driver) if in_window else None,
         })
 
     # 정산 내역 (최신순, 최대 2개)

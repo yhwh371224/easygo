@@ -298,21 +298,23 @@
 
       <div class="trip-time">
         {{ post.pickup_time|default:"--:--" }}
-        {% if t.proxy_number %}<span class="badge-proxy">proxy on</span>{% endif %}
+        {% if t.in_window and t.proxy_number %}<span class="badge-proxy">proxy on</span>{% endif %}
       </div>
 
       <div class="trip-name">{{ post.name }}</div>
 
-      {% if t.proxy_number %}
-      <a class="trip-phone" href="tel:{{ t.proxy_number }}">
-        <span class="icon"></span>
-        {{ t.proxy_number|format_au_phone }}
-      </a>
-      {% elif post.contact %}
-      <a class="trip-phone" href="tel:{{ post.contact }}">
-        <span class="icon"></span>
-        {{ post.contact|format_au_phone }}
-      </a>
+      {% if t.in_window %}
+        {% if t.proxy_number %}
+        <a class="trip-phone" href="tel:{{ t.proxy_number }}">
+          <span class="icon"></span>
+          {{ t.proxy_number|format_au_phone }}
+        </a>
+        {% elif post.contact %}
+        <a class="trip-phone" href="tel:{{ post.contact }}">
+          <span class="icon"></span>
+          {{ post.contact|format_au_phone }}
+        </a>
+        {% endif %}
       {% endif %}
 
       {% if post.direction == "Drop off to Domestic Airport" %}
@@ -351,6 +353,7 @@
       {% endif %}
 
       {% if post.street or post.suburb %}
+        {% if t.in_window %}
         {% with address=post.street|add:" "|add:post.suburb %}
         <a class="trip-address"
            href="https://www.google.com/maps/search/?api=1&query={{ address|urlencode }}"
@@ -359,7 +362,15 @@
           {{ post.street }}{% if post.street and post.suburb %}, {% endif %}{{ post.suburb }}
         </a>
         {% endwith %}
-      {% elif post.direction == "Cruise or Point to Point" %}
+        {% else %}
+        <a class="trip-address"
+           href="https://www.google.com/maps/search/?api=1&query={{ post.suburb|urlencode }}"
+           target="_blank" rel="noopener">
+          <span class="icon">📍</span>
+          {{ post.suburb }}
+        </a>
+        {% endif %}
+      {% elif post.direction == "Cruise or Point to Point" and t.in_window %}
         {% with sp=post.start_point ep=post.end_point %}
           {% if sp and sp|slice:":1" >= "0" and sp|slice:":1" <= "9" %}
           <a class="trip-address"
@@ -376,7 +387,13 @@
           </a>
           {% endif %}
         {% endwith %}
-      {% endif %}      
+      {% endif %}
+
+      {% if not t.in_window %}
+        <div class="trip-message" style="color:#92400e;background:#fffbeb;border-radius:8px;padding:.5rem .65rem;font-size:.85rem;">
+          Please note: full booking details will only be visible on the dashboard from 24 hours prior to the pickup, in line with our standard driver access policy
+        </div>
+      {% endif %}
 
       {% if post.message %}
         <div class="trip-message">
@@ -385,6 +402,7 @@
       {% endif %}
 
       {% if post.extra_stop_addresses %}
+        {% if t.in_window %}
         <div class="trip-message">
           <strong>Extra Stops:</strong>
           <ul style="margin:.25rem 0 0 1rem;padding:0;">
@@ -393,6 +411,9 @@
             {% endfor %}
           </ul>
         </div>
+        {% else %}
+        <div class="trip-message">There is an additional stop on the way</div>
+        {% endif %}
       {% endif %}
 
       {% if post.driver_price or post.paid or post.cash %}

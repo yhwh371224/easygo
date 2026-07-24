@@ -9,6 +9,7 @@ from functools import wraps
 
 import requests
 from django.conf import settings
+from django.db.models import Q
 from django.http import JsonResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
@@ -157,11 +158,28 @@ def _get_active_mapping(from_number, channel_id=None, platform=None):
     when the call/text lands on the shared company number do we fall back to
     the same "closest pickup to now" heuristic _get_driver_target() uses for
     the driver-calling-in direction.
+
+    Only bridges within the day-before/day-of window — a booking's row can
+    exist weeks ahead of pickup (created the moment it's assigned), but
+    dashboard.html only shows the driver a placeholder number until this same
+    window opens, so a call/text landing outside it must not connect either.
+
+    Windowing reads the booking's *live* pickup_date via post__pickup_date,
+    not the PhoneMapping.pickup_date snapshot — a reschedule doesn't retrigger
+    create_bird_mapping (only driver/use_proxy changes do, see signals.py), so
+    the snapshot can go stale. Rows with no post link (pre-post-FK legacy data)
+    fall back to the snapshot since it's all they have.
     """
 
     from_number = normalize_phone(from_number)
+    today = timezone.localdate()
+    tomorrow = today + timedelta(days=1)
     mappings = list(
         PhoneMapping.objects.filter(from_number=from_number)
+        .filter(
+            Q(post__pickup_date__in=[today, tomorrow])
+            | Q(post__isnull=True, pickup_date__in=[today, tomorrow])
+        )
         .select_related('post__driver__virtual_number')
     )
 
@@ -177,9 +195,11 @@ def _get_active_mapping(from_number, channel_id=None, platform=None):
     now = timezone.now()
 
     def _distance_from_now(mapping):
+        pickup_date = mapping.post.pickup_date if mapping.post_id else mapping.pickup_date
+        pickup_time = mapping.post.pickup_time if mapping.post_id else mapping.pickup_time
         try:
             pickup_naive = datetime.strptime(
-                f'{mapping.pickup_date} {mapping.pickup_time or "00:00"}',
+                f'{pickup_date} {pickup_time or "00:00"}',
                 '%Y-%m-%d %H:%M'
             )
             pickup_dt = timezone.make_aware(pickup_naive)
