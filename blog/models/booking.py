@@ -145,7 +145,9 @@ class Post(models.Model):
     pending = models.BooleanField(default=False, blank=True)
     final_warning_at = models.DateTimeField(
         null=True, blank=True,
-        help_text='48h 무응답 최종 경고 메일 발송 시각. 24h 유예 후 자동 취소 판단에 사용.',
+        help_text='사다리 창(픽업 21일) 밖 먼 미래 미결제 건의 "예약 pending 상태" '
+                  '조기 안내(send_final_warning) 발송 시각. 중복 발송 방지에 사용. '
+                  '(픽업 임박 독촉/취소는 no_payment_yet + auto_cancel_pending 담당)',
     )
     short_payment_notified_at = models.DateTimeField(
         null=True, blank=True,
@@ -166,6 +168,11 @@ class Post(models.Model):
     discrepancy_final_sent_at = models.DateTimeField(
         null=True, blank=True,
         help_text='부분결제 최종 경고(취소/환불불가 안내) 메일 발송 시각(픽업 1일 전). no_payment_yet 중복 발송 방지에 사용.',
+    )
+    final_notice_sent_at = models.DateTimeField(
+        null=True, blank=True,
+        help_text='완전 미결제 건 Final notice(자동취소 예고) 메일 발송 시각. '
+                  'dep 픽업 48h 전 / arr 72h 전 1회 발송, 중복 발송 방지에 사용.',
     )
     calendar_event_id = models.CharField(max_length=255, blank=True, null=True)
     driver_calendar_event_id = models.CharField(max_length=255, blank=True, null=True)

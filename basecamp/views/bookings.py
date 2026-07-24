@@ -11,6 +11,7 @@ from django_ratelimit.decorators import ratelimit
 from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
 from blog.models import Post, Inquiry, Driver
+from blog import dunning
 from blog.blog_utils import get_default_driver_for_region, resolve_driver
 from utils.direction_utils import is_airport_pickup
 from regions.models import Region
@@ -119,6 +120,15 @@ def confirm_booking_detail(request):
         pickup_date_obj, return_pickup_date_obj = parse_booking_dates(pickup_date, return_pickup_date)
     except ValueError as e:
         return JsonResponse({'success': False, 'error': str(e)})
+
+    # ── 초임박 예약(픽업 24h 이내) → 선결제 강제 ──
+    # 사다리(Payment→Urgent→Final→취소)를 돌릴 시간이 없어 결제 기회도 없이
+    # 취소되는 것을 막기 위해, 이런 건은 결제해야 확정되도록 한다(방향 무관).
+    pickup_dt = dunning.combine_pickup(pickup_date_obj, pickup_time)
+    if dunning.is_prepay_required_at_booking(pickup_dt):
+        cash = False
+        prepay = True
+    # ─────────────────────────────────
 
     # 최종 가격 계산
     if price in [None, ""]:
