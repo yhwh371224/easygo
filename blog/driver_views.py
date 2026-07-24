@@ -351,6 +351,27 @@ def driver_dashboard(request):
 
     current_grand_total = current_total_paid + current_total_cash
 
+    # 예정 금액: 모레 이후 트립 중 배정+proxy 연결된 것만 (아직 정산 대상 아님, 참고용 별도 라인)
+    pending_posts = (
+        Post.objects
+        .filter(
+            driver=driver,
+            pickup_date__gte=today + timedelta(days=2),
+            cancelled=False,
+            use_proxy=True,
+        )
+        .exclude(price__isnull=True)
+        .exclude(price='')
+    )
+    pending_total = Decimal('0')
+    for post in pending_posts:
+        try:
+            amount = Decimal(str(post.driver_price))
+        except Exception:
+            continue
+        amount -= (post.driver_refund_deduction or Decimal('0'))
+        pending_total += amount
+
     from blog.models import DriverAgreement, CURRENT_AGREEMENT_VERSION
     agreement_confirmed = DriverAgreement.objects.filter(
         driver=driver,
@@ -368,6 +389,7 @@ def driver_dashboard(request):
         'current_total_cash': current_total_cash,
         'current_grand_total': current_grand_total,
         'to_be_paid': to_be_paid,
+        'pending_total': pending_total,
         'impersonator_id': request.session.get('impersonator_id'),
     })
 

@@ -154,7 +154,9 @@ def get_proxy_number(instance, driver=None):
     if not is_au_mobile(customer_phone):
         return None
 
-    if not PhoneMapping.objects.filter(from_number=customer_phone).exists():
+    # Keyed on this booking, not the customer number — a repeat customer with
+    # another live booking must not hide this one's proxy number.
+    if not PhoneMapping.objects.filter(post=instance).exists():
         return None
 
     return resolve_virtual_number(driver)
@@ -210,9 +212,12 @@ def create_bird_mapping(instance):
 
     try:
         with transaction.atomic():
-            PhoneMapping.objects.filter(from_number=customer_phone).delete()
+            # Only this booking's own (stale) mapping — other live bookings for
+            # the same customer number, if any, are untouched.
+            PhoneMapping.objects.filter(post=instance).delete()
 
             PhoneMapping.objects.create(
+                post=instance,
                 from_number=customer_phone,
                 to_number=driver_phone,
                 driver_name=driver.driver_name,
@@ -249,24 +254,12 @@ def close_bird_mapping(instance):
 
     from blog.models import PhoneMapping, Post
 
-    customer_phone = normalize_phone(
-        getattr(instance, "contact", None)
-    )
-
-    if not customer_phone:
-        logger.info(
-            "[Bird] No customer phone post=%s",
-            instance.id,
-        )
-        Post.objects.filter(pk=instance.pk).update(
-            use_proxy=False
-        )
-        return True
-
     try:
         with transaction.atomic():  # ← 추가
+            # Only this booking's mapping — a repeat customer's other live
+            # booking(s) must keep working after this one closes.
             deleted, _ = PhoneMapping.objects.filter(
-                from_number=customer_phone
+                post=instance
             ).delete()
 
             Post.objects.filter(pk=instance.pk).update(

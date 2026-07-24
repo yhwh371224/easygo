@@ -502,6 +502,104 @@ class ProxyNumberResolutionTests(ProxyNumberTestCase):
         self.assertEqual(self.calendar_number(), self.CUSTOMER)
 
 
+DRIVER2_VOICE_CHANNEL = 'cccccccc-0000-4000-8000-000000000003'
+DRIVER2_SMS_CHANNEL = 'dddddddd-0000-4000-8000-000000000004'
+
+
+class SameCustomerConcurrentBookingsTests(ProxyNumberTestCase):
+    """A repeat customer with two live bookings must not lose either proxy
+    session — and, short of a proxy number, the dashboard falls back to
+    showing the customer's real contact (see dashboard.html), so losing the
+    mapping isn't just cosmetic, it leaks the customer's number."""
+
+    def _second_booking(self, pickup_time=None, wire=False):
+        driver2 = make_driver(user=make_user('proxydrv2'))
+        vnum2 = VirtualNumber.objects.create(number='+61485908775')
+        driver2.driver_contact = '+61400000002'
+        driver2.virtual_number = vnum2
+        driver2.save()
+        if wire:
+            vnum2.voice_channel_id = DRIVER2_VOICE_CHANNEL
+            vnum2.sms_channel_id = DRIVER2_SMS_CHANNEL
+            vnum2.save()
+        post2 = Post.objects.create(
+            name='Customer', contact=self.CUSTOMER, driver=driver2,
+            pickup_date=datetime.date.today(),
+            pickup_time=pickup_time or timezone.localtime().strftime('%H:%M'),
+            direction='Pickup from Intl Airport', use_proxy=True,
+        )
+        return driver2, post2, vnum2
+
+    def test_second_booking_gets_its_own_mapping_not_a_takeover(self):
+        _, post2, _ = self._second_booking()
+        self.assertEqual(
+            PhoneMapping.objects.filter(from_number=self.CUSTOMER).count(), 2,
+        )
+        self.assertTrue(PhoneMapping.objects.filter(post=self.post).exists())
+        self.assertTrue(PhoneMapping.objects.filter(post=post2).exists())
+
+    def test_dashboard_shows_proxy_not_real_number_for_both_drivers(self):
+        driver2, _, _ = self._second_booking()
+
+        self.assertIsNotNone(self.dashboard_number())
+
+        client = Client()
+        client.force_login(driver2.user)
+        response = client.get(reverse('blog:driver_dashboard'))
+        trips = response.context['trips']
+        self.assertIsNotNone(trips[0]['proxy_number'])
+        self.assertNotEqual(trips[0]['proxy_number'], self.CUSTOMER)
+
+    def test_closing_one_booking_leaves_the_others_mapping_alive(self):
+        _, post2, _ = self._second_booking()
+
+        self.post.use_proxy = False
+        self.post.save()
+
+        self.assertFalse(PhoneMapping.objects.filter(post=self.post).exists())
+        self.assertTrue(PhoneMapping.objects.filter(post=post2).exists())
+
+    def _push_first_booking_pickup_far_away(self):
+        """Makes booking 1's pickup hours away so the time-proximity fallback
+        would always prefer booking 2 (pickup ~now) — an unambiguous baseline
+        to prove channel matching, not clock luck, decides the routing."""
+        self.post.pickup_time = (
+            timezone.localtime() + datetime.timedelta(hours=5)
+        ).strftime('%H:%M')
+        self.post.save()
+
+    def test_call_on_a_drivers_own_number_wins_over_the_time_heuristic(self):
+        self.wire()
+        self._push_first_booking_pickup_far_away()
+        driver2, post2, vnum2 = self._second_booking(wire=True)
+
+        _, payload = self.call(self.CUSTOMER, channel_id=VOICE_CHANNEL)
+        self.assertEqual(payload['to'], self.DRIVER_PHONE)
+
+        _, payload = self.call(self.CUSTOMER, channel_id=DRIVER2_VOICE_CHANNEL)
+        self.assertEqual(payload['to'], driver2.driver_contact)
+
+    def test_text_on_a_drivers_own_number_wins_over_the_time_heuristic(self):
+        self.wire()
+        self._push_first_booking_pickup_far_away()
+        driver2, post2, vnum2 = self._second_booking(wire=True)
+
+        captured = self.text(self.CUSTOMER, channel_id=SMS_CHANNEL)
+        self.assertEqual(captured['to'], self.DRIVER_PHONE)
+
+        captured = self.text(self.CUSTOMER, channel_id=DRIVER2_SMS_CHANNEL)
+        self.assertEqual(captured['to'], driver2.driver_contact)
+
+    def test_shared_channel_still_falls_back_to_the_time_heuristic(self):
+        """Neither driver has a wired number, so only caller ID is known —
+        the closest-pickup fallback is the best we can do."""
+        self._push_first_booking_pickup_far_away()
+        driver2, post2, vnum2 = self._second_booking()
+
+        _, payload = self.call(self.CUSTOMER, channel_id=None)
+        self.assertEqual(payload['to'], driver2.driver_contact)
+
+
 class ProxyBridgeTests(ProxyNumberTestCase):
 
     def test_both_legs_bridge_on_the_channel_the_call_arrived_on(self):

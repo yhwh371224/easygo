@@ -122,9 +122,73 @@ def verify_bird_signature(view):
 # =========================
 # Mapping lookup (FIX #3: normalize key)
 # =========================
-def _get_active_mapping(from_number):
+def _disambiguate_by_channel(mappings, channel_id, platform):
+    """
+    If this call/text arrived on a driver's own dedicated virtual number, that
+    alone identifies which of several concurrent bookings for this customer
+    it's for — no need to guess. Only the shared company number is ambiguous;
+    a pooled number is dialled by exactly one driver's customers.
+    """
+
+    if not channel_id:
+        return None
+
+    from blog.models import VirtualNumber
+
+    field = 'voice_channel_id' if platform == 'voice' else 'sms_channel_id'
+    dialled = VirtualNumber.objects.filter(**{field: channel_id}).first()
+    if not dialled:
+        return None
+
+    matches = [
+        m for m in mappings
+        if m.post_id and m.post.driver_id
+        and m.post.driver.virtual_number_id == dialled.id
+    ]
+    return matches[0] if len(matches) == 1 else None
+
+
+def _get_active_mapping(from_number, channel_id=None, platform=None):
+    """
+    The live mapping for this caller — normally exactly one, but a repeat
+    customer can have two concurrent bookings (each keeps its own row now,
+    see PhoneMapping.post). If both drivers have their own wired virtual
+    number, the channel this arrived on disambiguates them outright; only
+    when the call/text lands on the shared company number do we fall back to
+    the same "closest pickup to now" heuristic _get_driver_target() uses for
+    the driver-calling-in direction.
+    """
+
     from_number = normalize_phone(from_number)
-    return PhoneMapping.objects.filter(from_number=from_number).first()
+    mappings = list(
+        PhoneMapping.objects.filter(from_number=from_number)
+        .select_related('post__driver__virtual_number')
+    )
+
+    if not mappings:
+        return None
+    if len(mappings) == 1:
+        return mappings[0]
+
+    by_channel = _disambiguate_by_channel(mappings, channel_id, platform)
+    if by_channel:
+        return by_channel
+
+    now = timezone.now()
+
+    def _distance_from_now(mapping):
+        try:
+            pickup_naive = datetime.strptime(
+                f'{mapping.pickup_date} {mapping.pickup_time or "00:00"}',
+                '%Y-%m-%d %H:%M'
+            )
+            pickup_dt = timezone.make_aware(pickup_naive)
+        except Exception:
+            return float('inf')
+        return abs((pickup_dt - now).total_seconds())
+
+    mappings.sort(key=_distance_from_now)
+    return mappings[0]
 
 
 # =========================
@@ -223,16 +287,17 @@ def _get_driver_target(driver_phone):
 # =========================
 # Route resolution
 # =========================
-def _resolve_route(from_number):
+def _resolve_route(from_number, channel_id=None, platform=None):
     """
     Who this caller/texter should reach. Returns (destination, route).
 
-    Keyed on the caller, never on the number dialled: a customer reaches their
+    Keyed on the caller, not the number dialled: a customer reaches their
     driver and a driver reaches their closest customer, whichever of our
-    numbers they rang.
+    numbers they rang. The one exception is disambiguating between two
+    concurrent bookings for the same caller — see _disambiguate_by_channel.
     """
 
-    mapping = _get_active_mapping(from_number)
+    mapping = _get_active_mapping(from_number, channel_id=channel_id, platform=platform)
 
     if mapping:
         return mapping.to_number, 'mapping'
@@ -311,7 +376,7 @@ def sms_webhook(request, channel_id=None):
     # ✔ normalize ONLY customer side
     from_number = normalize_phone(from_number)
 
-    to_number, route = _resolve_route(from_number)
+    to_number, route = _resolve_route(from_number, channel_id=channel_id, platform='sms')
 
     if not to_number:
         return JsonResponse({'status': 'no mapping'})
@@ -368,7 +433,7 @@ def voice_webhook(request, channel_id=None):
         logger.debug('[Bird Voice] Ignored status: %s', call_status)
         return JsonResponse({'status': 'ignored'})
 
-    destination, route = _resolve_route(from_number)
+    destination, route = _resolve_route(from_number, channel_id=channel_id, platform='voice')
 
     if not destination:
         logger.warning('[Bird Voice] No destination for %s', from_number)

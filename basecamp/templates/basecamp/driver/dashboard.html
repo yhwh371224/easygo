@@ -484,6 +484,12 @@
       <span>💰 To be paid to {{ driver.driver_name }}</span>
       <span id="to-be-paid-amount">${{ to_be_paid }}</span>
     </div>
+    {% if pending_total %}
+    <div class="totals-row" style="margin-top:.5rem; padding:.65rem .75rem; background:#f3f4f6; border-radius:8px; color:#6b7280; font-size:.9rem;">
+      <span>📅 Pending (future trips)</span>
+      <span>${{ pending_total }}</span>
+    </div>
+    {% endif %}
   </div>
   {% endif %}
   
