@@ -114,9 +114,13 @@ def is_cancel_eligible(post, now=None):
     if deadline is None:
         return False
     pickup_dt = get_pickup_datetime(post)
-    if pickup_dt is not None and deadline >= pickup_dt:
-        # 유예가 픽업을 넘김 → 자동취소 금지(선결제 필수/수동 처리 영역)
-        return False
+    if pickup_dt is not None:
+        if now >= pickup_dt:
+            # 픽업 도달/경과 → 자동취소 금지(사후 취소 방지, 수동 처리 영역)
+            return False
+        if deadline >= pickup_dt:
+            # 유예가 픽업을 넘김 → 자동취소 금지(선결제 필수/수동 처리 영역)
+            return False
     return now >= deadline
 
 

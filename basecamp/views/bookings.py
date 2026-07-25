@@ -618,6 +618,13 @@ def quick_rebook_confirm(request, region_slug=None):
         except ValueError:
             return_date_obj = None
 
+    # ── 초임박 재예약(픽업 24h 이내) → 선결제 강제 ──
+    # confirm_booking_detail 과 동일 규칙. 사다리를 돌릴 시간이 없어 결제 기회도
+    # 없이 취소되는 것을 막는다. 선결제 강제 시 pending 은 해제(메인 경로와 동일).
+    pickup_dt = dunning.combine_pickup(pickup_date_obj, pickup_time)
+    prepay = dunning.is_prepay_required_at_booking(pickup_dt)
+    pending = not prepay
+
     # Post 저장
     p = Post(
         name            = previous_name,
@@ -635,7 +642,8 @@ def quick_rebook_confirm(request, region_slug=None):
         message         = message,
         region          = region,
         price           = previous_price,
-        pending         = True,
+        prepay          = prepay,
+        pending         = pending,
         driver          = driver,
         return_pickup_date   = return_date_obj if has_return else None,
         return_flight_number = return_flight_number if has_return else '',

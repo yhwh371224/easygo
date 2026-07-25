@@ -54,6 +54,12 @@ class Command(BaseCommand):
             display_date = self.get_display_date(booking)
 
             try:
+                # 픽업이 이미 지난 건에는 어떤 결제 독촉도 보내지 않는다.
+                # (쿼리셋이 오늘을 포함하므로 오늘 픽업이 지난 건이 섞일 수 있음)
+                h_to_pickup = dunning.hours_until_pickup(booking)
+                if h_to_pickup is not None and h_to_pickup <= 0:
+                    continue
+
                 price = float(booking.price or 0)
                 paid = float(booking.paid or 0)
 
