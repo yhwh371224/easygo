@@ -78,11 +78,23 @@
     </div>
 
     {% if region.slug == 'sydney' %}
-    <div class="mt-4 text-center">
-      <a href="https://easygo.s3.ap-southeast-2.amazonaws.com/sydmap.svg" target="_blank" rel="noopener">
-        <img src="https://easygo.s3.ap-southeast-2.amazonaws.com/sydmap.svg" alt="Sydney Airport meeting point map" class="img-fluid rounded border" style="max-width: 100%;">
-      </a>
-    </div>
+    {% if 'International' in t.name %}
+      {% with map_url="https://easygo.s3.ap-southeast-2.amazonaws.com/sydmap.svg" %}
+      <div class="mt-4 text-center">
+        <a href="{{ map_url }}" target="_blank" rel="noopener">
+          <img src="{{ map_url }}" alt="{{ t.name }} meeting point map" class="img-fluid rounded border" style="max-width: 100%;">
+        </a>
+      </div>
+      {% endwith %}
+    {% else %}
+      {% with map_url="https://easygo.s3.ap-southeast-2.amazonaws.com/t2shuttlebusbay.webp" %}
+      <div class="mt-4 text-center">
+        <a href="{{ map_url }}" target="_blank" rel="noopener">
+          <img src="{{ map_url }}" alt="{{ t.name }} meeting point map" class="img-fluid rounded border" style="max-width: 100%;">
+        </a>
+      </div>
+      {% endwith %}
+    {% endif %}
     {% endif %}
   </div>
   {% endfor %}
