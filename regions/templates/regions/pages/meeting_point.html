@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block meta %}
-<meta name="description" content="Find your EasyGo driver{% if region and region.primary_airport %} at {{ region.primary_airport.name }}{% endif %}. Meeting point details for each terminal — T1 International, T2 Qantas, T3 Virgin/Rex, T4 Budget.">
+<meta name="description" content="Find your EasyGo driver{% if region and region.primary_airport %} at {{ region.primary_airport.name }}{% endif %}.{% if terminals %} Meeting point details for each terminal — {% for t in terminals %}{{ t.name }}{% if not forloop.last %}, {% endif %}{% endfor %}.{% endif %}">
 <meta name="keywords" content="{{ region.name }} airport meeting point{% if region and region.primary_airport %}, {{ region.primary_airport.code }} driver pickup{% endif %}, EasyGo {{ region.name }}">
 <meta name="author" content="easygoshuttle.com.au">
 {% endblock %}
