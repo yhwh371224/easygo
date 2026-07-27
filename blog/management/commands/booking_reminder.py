@@ -144,8 +144,11 @@ class Command(BaseCommand):
                 is_review = subject == "Review-EasyGo"
 
                 if is_review:
-                    # 리뷰 요청: 실제 탑승자에게만 (booker 제외)
-                    email_recipients = collect_recipients(booking_reminder.email, booking_reminder.email1)
+                    # 리뷰 요청: booker_email이 있으면 booker에게, 없으면 실제 탑승자에게
+                    if booker_email:
+                        email_recipients = collect_recipients(booker_email)
+                    else:
+                        email_recipients = collect_recipients(booking_reminder.email, booking_reminder.email1)
                 elif booker_email:
                     if is_today:
                         email_recipients = collect_recipients(booking_reminder.email, booking_reminder.email1)
