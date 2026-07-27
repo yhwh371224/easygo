@@ -71,7 +71,8 @@ def region_confirmation(request, region_slug):
 
 def region_meeting_point(request, region_slug):
     region = get_object_or_404(Region, slug=region_slug, is_active=True)
-    terminals = region.terminal_info or []
+    from regions.models import Terminal
+    terminals = Terminal.objects.filter(airport__regions=region).select_related('airport')
     return render(request, 'regions/pages/meeting_point.html', {
         'region': region,
         'terminals': terminals,

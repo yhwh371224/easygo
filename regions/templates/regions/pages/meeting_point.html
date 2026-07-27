@@ -68,7 +68,7 @@
     <div class="terminal-card">
       <div class="terminal-icon">{{ t.icon }}</div>
       <h2 class="h4 fw-semibold mb-3">{{ t.name }}</h2>
-      <p class="text-muted mb-0">{{ t.description }}</p>
+      {% if t.note %}<p class="text-muted mb-0">{{ t.note }}</p>{% endif %}
     </div>
 
     <div class="meeting-box">
