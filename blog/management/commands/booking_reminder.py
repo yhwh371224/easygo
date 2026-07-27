@@ -115,6 +115,12 @@ class Command(BaseCommand):
 
     def send_email_task(self, booking_reminders, template_name, subject, target_date):
         for booking_reminder in booking_reminders:
+            if getattr(booking_reminder, "no_email_reminder", False):
+                logger.info(f"[{subject}] SKIP id={booking_reminder.id} — no_email_reminder set for {booking_reminder.email}")
+                continue
+            if subject == "Review-EasyGo" and getattr(booking_reminder, "no_review", False):
+                logger.info(f"[{subject}] SKIP id={booking_reminder.id} — no_review set for {booking_reminder.email}")
+                continue
             try:
                 logger.info(f"[{subject}] Processing booking id={booking_reminder.id} email={booking_reminder.email} booker_email={booking_reminder.booker_email}")
 
