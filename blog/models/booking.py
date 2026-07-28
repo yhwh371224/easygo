@@ -3,6 +3,11 @@ from decimal import Decimal, ROUND_HALF_UP, InvalidOperation
 from django.db import models
 from utils.prepay_helper import is_foreign_number
 
+# Owner/company drivers: cash they collect stays company revenue (no one to
+# pay commission to), so driver_collected_cash is never auto-set for them.
+# Commission is handled separately via each Driver's own commission_rate=0.
+OWNER_DRIVER_NAMES = {'sam', 'sung', 'peter'}
+
 
 class Inquiry(models.Model):
     name = models.CharField(max_length=100, blank=False)
@@ -226,14 +231,15 @@ class Post(models.Model):
         return self.booker_name if self.booker_name else self.name
 
     def save(self, *args, **kwargs):
-        # Auto: check driver_collected_cash when a non-Sam driver is assigned and it's a cash booking
+        # Auto: check driver_collected_cash when a non-owner driver is assigned and it's a cash booking
         # (customer paid the driver directly -> excluded from company revenue/GST). Once True,
-        # leave it alone; Sam's (own) rides are excluded so they stay as company revenue.
+        # leave it alone; owner drivers' (OWNER_DRIVER_NAMES) own rides are excluded so they stay
+        # as company revenue.
         if (
             self.cash
             and self.driver_id
             and not self.driver_collected_cash
-            and (self.driver.driver_name or '').strip().lower() != 'sam'
+            and (self.driver.driver_name or '').strip().lower() not in OWNER_DRIVER_NAMES
         ):
             self.driver_collected_cash = True
             uf = kwargs.get('update_fields')

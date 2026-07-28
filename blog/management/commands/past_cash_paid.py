@@ -2,7 +2,9 @@ from django.core.management.base import BaseCommand
 from django.utils import timezone
 from datetime import timedelta
 from django.db import models
+from django.db.models import Q
 from blog.models import Post
+from blog.models.booking import OWNER_DRIVER_NAMES
 
 
 class Command(BaseCommand):
@@ -17,8 +19,11 @@ class Command(BaseCommand):
             cash=True,
         )
 
-        # 1) driver가 본인 아닌 cash 건 → driver_collected_cash=True
-        flagged = base.exclude(driver__driver_name__iexact='sam').update(
+        # 1) driver가 오너(OWNER_DRIVER_NAMES) 아닌 cash 건 → driver_collected_cash=True
+        owner_q = Q()
+        for name in OWNER_DRIVER_NAMES:
+            owner_q |= Q(driver__driver_name__iexact=name)
+        flagged = base.exclude(owner_q).update(
             driver_collected_cash=True
         )
 
