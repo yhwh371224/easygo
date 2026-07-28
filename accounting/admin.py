@@ -18,7 +18,7 @@ class TransactionAdmin(admin.ModelAdmin):
     date_hierarchy = 'date'
     search_fields = ('description', 'counterparty')
     change_list_template = 'admin/accounting/transaction/change_list.html'
-    actions = ('approve_as_expense', 'exclude_as_driver_payment')
+    actions = ('approve_as_expense', 'exclude_as_driver_payment', 'exclude_as_customer_refund')
 
     @admin.action(description="경비 승인 — count as BAS 1B expense")
     def approve_as_expense(self, request, queryset):
@@ -32,6 +32,15 @@ class TransactionAdmin(admin.ModelAdmin):
         is permanently excluded from BAS/P&L (avoids double counting)."""
         updated = queryset.update(needs_review=False, excluded=True)
         self.message_user(request, f"{updated} transaction(s) excluded as driver payment.")
+
+    @admin.action(description="고객 환불(제외) — exclude from BAS/P&L")
+    def exclude_as_customer_refund(self, request, queryset):
+        """Mark as a customer refund already captured on the booking (Post.refund,
+        netted off 1A), so it is permanently excluded from BAS/P&L (avoids double
+        counting). Only use after confirming the matching Post.refund was entered —
+        if it wasn't, enter it there first, then exclude this bank row."""
+        updated = queryset.update(needs_review=False, excluded=True)
+        self.message_user(request, f"{updated} transaction(s) excluded as customer refund.")
 
     def get_urls(self):
         urls = super().get_urls()

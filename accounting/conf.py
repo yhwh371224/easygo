@@ -46,9 +46,13 @@ GST_KEYWORD_RULES = [
 # These keywords force needs_review=True with no auto-GST, regardless of amount.
 # insurance: stamp duty portion has no GST → manual split required to avoid 1B over-claim.
 # vehicle_registration: CTP (REGO) is partly GST-free; SERVICE NSW fees vary.
+# refund: customer refunds are usually already recorded on the booking (Post.refund,
+# netted off 1A) — always held for review so the owner can confirm that and mark the
+# bank row excluded, instead of it silently landing in P&L as an ordinary expense.
 REVIEW_OVERRIDE_KEYWORDS = (
     'INSURANCE', 'NRMA', 'AAMI', 'ALLIANZ', 'QBE', 'GIO', 'ZURICH',
     'REGO', 'REGISTRATION', 'SERVICE NSW', 'TRANSPORT FOR NSW', 'RMS',
+    'REFUND',
 )
 
 # Category auto-labelling (first match wins, falls back to 'uncategorised')
@@ -58,6 +62,7 @@ REVIEW_OVERRIDE_KEYWORDS = (
 # 'SERVICE NSW', so the broader vehicle_maintenance keyword would otherwise
 # shadow the more specific registration match.
 CATEGORY_KEYWORD_RULES = [
+    (('REFUND',), 'customer_refund'),
     (('BP', 'CALTEX', 'AMPOL', 'SHELL', '7-ELEVEN', '7 ELEVEN', 'OTR', 'FUEL',
       'PETROL', 'UNITED PETROLEUM', 'METRO PETROLEUM', 'VEZINA'), 'fuel'),
     (('LINKT', 'E-TOLL', 'ETOLL', 'TOLL', 'TRANSURBAN'), 'tolls'),
