@@ -132,6 +132,7 @@ def _notify_new_driver_application(driver):
         f"Name: {driver.driver_name}\n"
         f"Contact: {driver.driver_contact}\n"
         f"Email: {driver.driver_email}\n"
+        f"Region: {driver.region}\n"
         f"Vehicle: {driver.driver_car}\n"
         f"Licence: {driver.license_number} ({driver.get_license_class_display()})\n"
         f"Licence scan attached: {'Yes' if driver.license_scan else 'No — follow up with the driver'}\n"
@@ -161,6 +162,9 @@ def driver_apply(request):
     """
     from blog.models import Driver
     from blog.models.driver import LICENSE_CLASS_CHOICES
+    from regions.models import Region
+
+    regions = Region.objects.filter(is_active=True).order_by('name')
 
     error = None
     form_data = {
@@ -168,8 +172,9 @@ def driver_apply(request):
         'driver_car': '', 'license_number': '', 'license_class': '',
         'abn': '', 'gst_registered': False, 'payment_method': '',
         'bank_account_name': '', 'bank_bsb': '', 'bank_account_number': '',
-        'payid_number': '',
+        'payid_number': '', 'region_id': '',
     }
+    region = None
 
     if request.method == 'POST':
         for field in form_data:
@@ -177,6 +182,7 @@ def driver_apply(request):
                 continue
             form_data[field] = (request.POST.get(field) or '').strip()
         form_data['gst_registered'] = request.POST.get('gst_registered') == 'on'
+        region = regions.filter(pk=form_data['region_id']).first() if form_data['region_id'] else None
 
         token = request.POST.get('cf-turnstile-response', '')
         required = ['driver_name', 'driver_contact', 'driver_email', 'driver_car',
@@ -190,6 +196,8 @@ def driver_apply(request):
             error = 'One of the fields is too long — please shorten it.'
         elif form_data['license_class'] not in dict(LICENSE_CLASS_CHOICES):
             error = 'Please choose a valid licence class.'
+        elif not region:
+            error = 'Please select which region you\'ll be driving in.'
         elif not _is_valid_email(form_data['driver_email']):
             error = 'Please enter a valid email address.'
         elif form_data['payment_method'] == 'bank' and not all([
@@ -210,6 +218,7 @@ def driver_apply(request):
                 driver_name=form_data['driver_name'],
                 driver_contact=form_data['driver_contact'],
                 driver_email=form_data['driver_email'],
+                region=region,
                 driver_car=form_data['driver_car'],
                 license_number=form_data['license_number'],
                 license_class=form_data['license_class'],
@@ -233,6 +242,7 @@ def driver_apply(request):
         'form_data': form_data,
         'license_classes': LICENSE_CLASS_CHOICES,
         'car_type_suggestions': CAR_TYPE_SUGGESTIONS,
+        'regions': regions,
     })
 
 

@@ -31,9 +31,9 @@ class CreateSettlementForm(forms.Form):
 
 
 class DriverAdmin(admin.ModelAdmin):
-    list_display = ['order', 'driver_name', 'is_company', 'is_active', 'application_submitted_at', 'abn', 'gst_registered', 'commission_rate', 'driver_contact', 'driver_email', 'driver_plate', 'user', 'impersonate_button']
+    list_display = ['order', 'driver_name', 'region', 'is_company', 'is_active', 'application_submitted_at', 'abn', 'gst_registered', 'commission_rate', 'driver_contact', 'driver_email', 'driver_plate', 'user', 'impersonate_button']
     list_editable = ['gst_registered', 'commission_rate']
-    list_filter = ['is_active', 'gst_registered', 'is_company']
+    list_filter = ['is_active', 'region', 'gst_registered', 'is_company']
     search_fields = ['driver_name', 'abn', 'driver_contact', 'driver_email', 'driver_address', 'driver_plate', 'license_number']
     ordering = ['order']
     readonly_fields = ['agreement_link_display', 'application_submitted_at', 'license_scan_link']
