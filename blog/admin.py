@@ -1,3 +1,4 @@
+import os
 import re
 from datetime import date
 from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
@@ -5,6 +6,7 @@ from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
 from django.contrib import admin, messages
 from django.contrib.admin import AdminSite
 from django import forms
+from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.urls import path as url_path, reverse
 from django.utils.html import format_html
@@ -29,12 +31,12 @@ class CreateSettlementForm(forms.Form):
 
 
 class DriverAdmin(admin.ModelAdmin):
-    list_display = ['order', 'driver_name', 'is_company', 'abn', 'gst_registered', 'commission_rate', 'driver_contact', 'driver_email', 'driver_plate', 'user', 'impersonate_button']
+    list_display = ['order', 'driver_name', 'is_company', 'is_active', 'application_submitted_at', 'abn', 'gst_registered', 'commission_rate', 'driver_contact', 'driver_email', 'driver_plate', 'user', 'impersonate_button']
     list_editable = ['gst_registered', 'commission_rate']
-    list_filter = ['gst_registered', 'is_company']
-    search_fields = ['driver_name', 'abn', 'driver_contact', 'driver_email', 'driver_address', 'driver_plate']
+    list_filter = ['is_active', 'gst_registered', 'is_company']
+    search_fields = ['driver_name', 'abn', 'driver_contact', 'driver_email', 'driver_address', 'driver_plate', 'license_number']
     ordering = ['order']
-    readonly_fields = ['agreement_link_display']
+    readonly_fields = ['agreement_link_display', 'application_submitted_at', 'license_scan_link']
 
     def impersonate_button(self, obj):
         if obj.user:
@@ -42,6 +44,40 @@ class DriverAdmin(admin.ModelAdmin):
             return format_html('<a class="button" href="{}">Login as Driver</a>', url)
         return '-'
     impersonate_button.short_description = 'Impersonate'
+
+    def get_urls(self):
+        custom = [
+            url_path(
+                '<int:driver_id>/license-scan/',
+                self.admin_site.admin_view(self.license_scan_view),
+                name='blog_driver_license_scan',
+            ),
+        ]
+        return custom + super().get_urls()
+
+    def license_scan_view(self, request, driver_id):
+        """Staff-only: streams the driver's licence scan from private storage.
+
+        Never exposed under MEDIA_URL — see blog/storage.py — so this admin
+        view (login + is_staff enforced by admin_site.admin_view) is the only
+        way to read it back.
+        """
+        from django.http import FileResponse, Http404
+
+        driver = get_object_or_404(Driver, pk=driver_id)
+        if not driver.license_scan:
+            raise Http404
+        return FileResponse(
+            driver.license_scan.open('rb'),
+            filename=os.path.basename(driver.license_scan.name),
+        )
+
+    def license_scan_link(self, obj):
+        if not obj.pk or not obj.license_scan:
+            return '-'
+        url = reverse(f'{self.admin_site.name}:blog_driver_license_scan', args=[obj.pk])
+        return format_html('<a class="button" href="{}" target="_blank">View / Download</a>', url)
+    license_scan_link.short_description = 'Licence Scan'
 
     def agreement_link_display(self, obj):
         from django.conf import settings

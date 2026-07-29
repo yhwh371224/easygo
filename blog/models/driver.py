@@ -1,9 +1,27 @@
 import secrets
 from decimal import Decimal
 
+from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+
+from blog.storage import private_driver_docs_storage
+
+LICENSE_CLASS_CHOICES = [
+    ('C', 'Car (C)'),
+    ('LR', 'Light Rigid (LR)'),
+    ('MR', 'Medium Rigid (MR)'),
+    ('HR', 'Heavy Rigid (HR)'),
+    ('HC', 'Heavy Combination (HC)'),
+    ('MC', 'Multi Combination (MC)'),
+    ('OTHER', 'Other'),
+]
+
+PAYMENT_METHOD_CHOICES = [
+    ('bank', 'Bank Transfer'),
+    ('payid', 'PayID'),
+]
 
 
 class VirtualNumber(models.Model):
@@ -61,6 +79,32 @@ class Driver(models.Model):
     driver_plate = models.CharField(max_length=30, blank=True, null=True)
     driver_car = models.CharField(max_length=30, blank=True, null=True)
     driver_bankdetails = models.TextField(blank=True, null=True)
+
+    license_number = models.CharField(max_length=40, blank=True, null=True)
+    license_class = models.CharField(
+        max_length=10, choices=LICENSE_CLASS_CHOICES, blank=True, null=True,
+    )
+    license_scan = models.FileField(
+        upload_to='driver_licenses/%Y/%m/',
+        storage=private_driver_docs_storage,
+        blank=True, null=True,
+        validators=[FileExtensionValidator(['jpg', 'jpeg', 'png', 'pdf'])],
+        help_text='드라이버 라이센스 스캔/사진. 오피스 관리자만 열람 가능 (private storage).',
+    )
+
+    payment_method = models.CharField(
+        max_length=10, choices=PAYMENT_METHOD_CHOICES, blank=True, null=True,
+    )
+    bank_account_name = models.CharField(max_length=100, blank=True, null=True)
+    bank_bsb = models.CharField(max_length=10, blank=True, null=True)
+    bank_account_number = models.CharField(max_length=20, blank=True, null=True)
+    payid_number = models.CharField(max_length=50, blank=True, null=True)
+
+    # Set when a driver self-registers via the public application form.
+    # Paired with is_active=False at creation — staff flips is_active to True
+    # in the admin once licence/insurance docs have been checked. Null for
+    # drivers office staff created directly (no application to review).
+    application_submitted_at = models.DateTimeField(null=True, blank=True)
     google_calendar_id = models.CharField(max_length=255, blank=True, null=True)
     virtual_number = models.ForeignKey('VirtualNumber', on_delete=models.SET_NULL, null=True, blank=True)
     agreement_token = models.CharField(

@@ -276,6 +276,11 @@
             color:#fde68a;padding:.85rem 1rem;border-radius:10px;margin-bottom:1rem;">
     📄 <strong>Action required:</strong> Please review &amp; confirm your subcontractor agreement →
   </a>
+  {% elif not driver.is_active %}
+  <div style="background:#374151;border:1px solid #4b5563;color:#e5e7eb;
+              padding:.85rem 1rem;border-radius:10px;margin-bottom:1rem;">
+    ⏳ Your application is pending office review. You'll be notified once your account is active and you can be assigned trips.
+  </div>
   {% endif %}
 
   {% if not trips %}

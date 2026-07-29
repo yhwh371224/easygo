@@ -1,3 +1,5 @@
+import logging
+import re
 from datetime import datetime, timedelta
 from decimal import Decimal, ROUND_HALF_UP
 
@@ -5,6 +7,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.http import Http404, HttpResponse, JsonResponse
@@ -16,10 +19,38 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django_ratelimit.decorators import ratelimit
 from main import settings
 
+from basecamp.modules.view_helpers import verify_turnstile, get_client_ip
 from blog.bird_proxy import get_proxy_number
+
+logger = logging.getLogger(__name__)
 
 COMPANY_NAME = "EasyGo Airport Shuttle (Nexflow Ventures Pty Ltd)"
 COMPANY_ABN  = "25 697 358 535"
+
+CAR_TYPE_SUGGESTIONS = [
+    'Sedan',
+    'SUV',
+    'Van / People Mover (up to 7 seats)',
+    'Maxi Taxi / Minibus (8–11 seats)',
+]
+
+# Mirrors the Driver model field max_length values — checked before create()
+# so a deliberately-oversized POST gets a clean form error instead of an
+# unhandled DB-level "value too long" error (Postgres enforces varchar(N)).
+DRIVER_APPLY_FIELD_MAX_LENGTHS = {
+    'driver_name': 100, 'driver_contact': 50, 'driver_email': 254, 'driver_car': 30,
+    'license_number': 40, 'abn': 20, 'bank_account_name': 100,
+    'bank_bsb': 10, 'bank_account_number': 20, 'payid_number': 50,
+}
+
+
+def _is_valid_email(value):
+    from django.core.validators import validate_email
+    try:
+        validate_email(value)
+        return True
+    except ValidationError:
+        return False
 
 
 def _build_rcti_context(settlement):
@@ -84,6 +115,181 @@ def driver_impersonate_exit(request):
         except User.DoesNotExist:
             pass
     return redirect(f'/{settings.SECRET_ADMIN_URL}/')
+
+
+def _notify_new_driver_application(driver):
+    """Best-effort email to the office when a new application comes in.
+
+    Failure to send must never block the applicant's flow — they've already
+    been saved as a pending Driver by the time this runs.
+    """
+    from utils.email import send_text_email
+    from main.settings import RECIPIENT_EMAIL
+
+    review_url = f"{settings.SITE_URL}/{settings.SECRET_ADMIN_URL}/blog/driver/{driver.pk}/change/"
+    message = (
+        "New driver application received — pending review (not active yet).\n\n"
+        f"Name: {driver.driver_name}\n"
+        f"Contact: {driver.driver_contact}\n"
+        f"Email: {driver.driver_email}\n"
+        f"Vehicle: {driver.driver_car}\n"
+        f"Licence: {driver.license_number} ({driver.get_license_class_display()})\n"
+        f"Licence scan attached: {'Yes' if driver.license_scan else 'No — follow up with the driver'}\n"
+        f"ABN: {driver.abn} (GST registered: {'Yes' if driver.gst_registered else 'No'})\n"
+        f"Payment method: {driver.get_payment_method_display()}\n\n"
+        f"Review and activate here:\n{review_url}\n"
+    )
+    try:
+        send_text_email(f"[New Driver Application] {driver.driver_name}", message, [RECIPIENT_EMAIL])
+    except Exception:
+        logger.exception("driver_apply: failed to send admin notification for driver id=%s", driver.pk)
+
+
+@ratelimit(key='ip', rate='5/m', method='POST', block=True)
+def driver_apply(request):
+    """Public job-application form — no login required.
+
+    Creates a Driver record with is_active=False: the account exists and the
+    applicant can immediately set up a portal login and confirm the
+    subcontractor agreement (see driver_apply_account / driver_agreement),
+    but the driver stays out of dispatch-relevant queries (bank-payment
+    auto-matching, reminder emails — see Driver.is_active usages) until
+    office staff review the application and flip is_active on in the admin.
+    No licence scan is collected here — the applicant just types their
+    licence number/class; staff request a photo separately if they need one
+    (Driver.license_scan can still be attached manually via the admin).
+    """
+    from blog.models import Driver
+    from blog.models.driver import LICENSE_CLASS_CHOICES
+
+    error = None
+    form_data = {
+        'driver_name': '', 'driver_contact': '', 'driver_email': '',
+        'driver_car': '', 'license_number': '', 'license_class': '',
+        'abn': '', 'gst_registered': False, 'payment_method': '',
+        'bank_account_name': '', 'bank_bsb': '', 'bank_account_number': '',
+        'payid_number': '',
+    }
+
+    if request.method == 'POST':
+        for field in form_data:
+            if field == 'gst_registered':
+                continue
+            form_data[field] = (request.POST.get(field) or '').strip()
+        form_data['gst_registered'] = request.POST.get('gst_registered') == 'on'
+
+        token = request.POST.get('cf-turnstile-response', '')
+        required = ['driver_name', 'driver_contact', 'driver_email', 'driver_car',
+                    'license_number', 'license_class', 'abn']
+
+        if not verify_turnstile(token, get_client_ip(request)):
+            error = 'Security verification failed. Please try again.'
+        elif not all(form_data[f] for f in required):
+            error = 'Please fill in all required fields.'
+        elif any(len(form_data[f]) > limit for f, limit in DRIVER_APPLY_FIELD_MAX_LENGTHS.items()):
+            error = 'One of the fields is too long — please shorten it.'
+        elif form_data['license_class'] not in dict(LICENSE_CLASS_CHOICES):
+            error = 'Please choose a valid licence class.'
+        elif not _is_valid_email(form_data['driver_email']):
+            error = 'Please enter a valid email address.'
+        elif form_data['payment_method'] == 'bank' and not all([
+            form_data['bank_account_name'], form_data['bank_bsb'], form_data['bank_account_number'],
+        ]):
+            error = 'Please enter your bank account name, BSB and account number.'
+        elif form_data['payment_method'] == 'payid' and not form_data['payid_number']:
+            error = 'Please enter your PayID.'
+        elif form_data['payment_method'] not in ('bank', 'payid'):
+            error = 'Please choose how you would like to be paid.'
+
+        if not error:
+            payid_or_account = (
+                form_data['payid_number'] if form_data['payment_method'] == 'payid'
+                else form_data['bank_account_number']
+            )
+            driver = Driver.objects.create(
+                driver_name=form_data['driver_name'],
+                driver_contact=form_data['driver_contact'],
+                driver_email=form_data['driver_email'],
+                driver_car=form_data['driver_car'],
+                license_number=form_data['license_number'],
+                license_class=form_data['license_class'],
+                abn=form_data['abn'],
+                gst_registered=form_data['gst_registered'],
+                payment_method=form_data['payment_method'],
+                bank_account_name=form_data['bank_account_name'],
+                bank_bsb=form_data['bank_bsb'],
+                bank_account_number=form_data['bank_account_number'],
+                payid_number=form_data['payid_number'],
+                payment_match_digits=re.sub(r'\D', '', payid_or_account),
+                is_active=False,
+                application_submitted_at=timezone.now(),
+            )
+            request.session['pending_driver_id'] = driver.pk
+            _notify_new_driver_application(driver)
+            return redirect('blog:driver_apply_account')
+
+    return render(request, 'basecamp/driver/apply.html', {
+        'error': error,
+        'form_data': form_data,
+        'license_classes': LICENSE_CLASS_CHOICES,
+        'car_type_suggestions': CAR_TYPE_SUGGESTIONS,
+    })
+
+
+@ratelimit(key='ip', rate='10/m', method='POST', block=True)
+def driver_apply_account(request):
+    """Step 2 of the public application: applicant sets their own portal
+    username/password, right after driver_apply creates the pending Driver.
+
+    Only reachable via the pending_driver_id stashed in session by
+    driver_apply — this is not a general "create a driver account" endpoint.
+    Once the User is created and linked, the applicant is logged straight
+    into the subcontractor agreement page.
+    """
+    from blog.models import Driver
+
+    driver_id = request.session.get('pending_driver_id')
+    if not driver_id:
+        return redirect('blog:driver_apply')
+    driver = get_object_or_404(Driver, pk=driver_id)
+    if driver.user:
+        request.session.pop('pending_driver_id', None)
+        return redirect('blog:driver_login')
+
+    error = None
+    username = ''
+
+    if request.method == 'POST':
+        username = (request.POST.get('username') or '').strip()
+        password = request.POST.get('password', '')
+        confirm = request.POST.get('confirm_password', '')
+
+        if not username:
+            error = 'Please choose a username.'
+        elif User.objects.filter(username__iexact=username).exists():
+            error = 'That username is already taken.'
+        elif password != confirm:
+            error = 'Passwords do not match.'
+        else:
+            try:
+                validate_password(password)
+            except ValidationError as e:
+                error = ' '.join(e.messages)
+
+        if not error:
+            user = User.objects.create_user(
+                username=username, password=password, email=driver.driver_email or '',
+            )
+            driver.user = user
+            driver.must_change_password = False
+            driver.save(update_fields=['user', 'must_change_password'])
+            request.session.pop('pending_driver_id', None)
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+            return redirect('blog:driver_agreement')
+
+    return render(request, 'basecamp/driver/apply_account.html', {
+        'error': error, 'driver': driver, 'username': username,
+    })
 
 
 @ratelimit(key='ip', rate='10/m', method='POST', block=True)

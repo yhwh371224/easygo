@@ -33,6 +33,11 @@
       Confirmed by {{ agreement.signed_by_name }}{% if agreement.signed_by_title %} ({{ agreement.signed_by_title }}){% endif %}
     </p>
     {% endif %}
+    {% if not driver.is_active %}
+    <div class="alert alert-warning mt-4" role="alert" style="background:#78350f;color:#fef3c7;border-color:#92400e;">
+      Your application is now with our office for review. We'll check your licence and details, and let you know once your account is active and you can be assigned trips.
+    </div>
+    {% endif %}
     <p class="mt-4"><a href="/" class="text-secondary text-decoration-none">← Home</a></p>
   </div>
 </section>

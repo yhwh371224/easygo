@@ -1,0 +1,99 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Create Your Login – EasyGo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="shortcut icon" type="image/x-icon" href="{% static 'basecamp/favi/favicon.ico' %}">
+  <link rel="stylesheet" href="{% static 'basecamp/css/base_home.css' %}" media="all" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .btn-submit {
+      background:#f59e0b;
+      color:#fff;
+      border:none;
+      padding:.85rem;
+      width:100%;
+      font-size:1rem;
+      font-weight:600;
+      border-radius:8px;
+      cursor:pointer;
+      transition:background .2s;
+    }
+    .btn-submit:hover { background:#d97706; }
+    .btn-submit:active { background:#92400e; opacity:.8; }
+  </style>
+</head>
+<body class="bg-dark">
+<section class="position-relative pt-6 pb-5 py-sm-6" style="min-height:100vh;display:flex;align-items:center;">
+  <div class="container">
+    <div class="mx-auto" style="max-width:420px;">
+      <div class="text-center mb-4">
+        <h3 class="text-light mt-3">Thanks, {{ driver.driver_name }}</h3>
+        <p style="font-size:.95rem;color:#f3f4f6;">
+          Almost done — set up your portal login so you can review and confirm the subcontractor agreement.
+        </p>
+      </div>
+
+      {% if error %}
+      <div class="alert alert-danger text-center" role="alert">{{ error }}</div>
+      {% endif %}
+
+      <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+          <input
+            type="text"
+            name="username"
+            class="form-control form-control-lg"
+            placeholder="Choose a username"
+            autocomplete="username"
+            value="{{ username }}"
+            required
+            style="font-size:1.1rem;padding:0.75rem 1rem;"
+          >
+        </div>
+        <div class="mb-3">
+          <input
+            type="password"
+            name="password"
+            class="form-control form-control-lg"
+            placeholder="Password"
+            autocomplete="new-password"
+            required
+            style="font-size:1.1rem;padding:0.75rem 1rem;"
+          >
+        </div>
+        <div class="mb-4">
+          <input
+            type="password"
+            name="confirm_password"
+            class="form-control form-control-lg"
+            placeholder="Confirm Password"
+            autocomplete="new-password"
+            required
+            style="font-size:1.1rem;padding:0.75rem 1rem;"
+          >
+        </div>
+        <button type="submit" class="btn-submit">Create Login &amp; Continue</button>
+      </form>
+    </div>
+  </div>
+</section>
+<script>
+document.querySelectorAll('.btn-submit').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const original = this.textContent;
+    this.textContent = 'Submitting…';
+    this.style.background = '#92400e';
+    setTimeout(() => {
+      this.textContent = original;
+      this.style.background = '';
+    }, 1000);
+  });
+});
+</script>
+</body>
+</html>

@@ -5,6 +5,8 @@ from . import driver_views
 app_name = 'blog'
 
 urlpatterns = [
+    path('apply/', driver_views.driver_apply, name='driver_apply'),
+    path('apply/account/', driver_views.driver_apply_account, name='driver_apply_account'),
     path('login/', driver_views.driver_login, name='driver_login'),
     path('logout/', driver_views.driver_logout, name='driver_logout'),
     path('', driver_views.driver_dashboard, name='driver_dashboard'),

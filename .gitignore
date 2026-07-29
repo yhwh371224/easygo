@@ -23,6 +23,7 @@ tests/
 # Media / Temp / Backups
 # ==============================
 media/
+private_media/
 temp/
 .backup/
 static_backup_*/
