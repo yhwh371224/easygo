@@ -16,5 +16,6 @@
   </div>
   <small class="text-muted mt-1 d-block" style="padding-left:18px">e.g. 01 : 30  PM</small>
   <small id="id_{{ field_name }}_hint" style="padding-left:18px;color:#dc3545;font-weight:600;display:{% if hint %}block{% else %}none{% endif %}">⚠ {{ hint|default:"" }} </small>
+  <small class="tp-midnight-note" style="padding-left:18px;color:#dc3545;font-weight:600;display:none">⚠ No pickups at midnight — set to 12:00 PM</small>
   <input type="hidden" name="{{ field_name }}" id="id_{{ field_name }}">
 </div>

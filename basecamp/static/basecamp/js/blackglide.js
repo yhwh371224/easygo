@@ -127,3 +127,20 @@ function submitEnquiry(){
 document.getElementById('bookingModal').addEventListener('click',function(e){
   if(e.target===this) closeModal();
 });
+
+// No pickups at midnight — auto-correct 00:00 to 12:00 PM (noon)
+(function(){
+  const timeInput=document.getElementById('bg-pickup-time');
+  const note=document.getElementById('bg-midnight-note');
+  if(!timeInput||!note) return;
+  timeInput.addEventListener('change',function(){
+    const parts=this.value.split(':');
+    const hh=parseInt(parts[0],10);
+    if(hh===0){
+      this.value='12'+this.value.slice(2);
+      note.style.display='block';
+      clearTimeout(timeInput._noteTimer);
+      timeInput._noteTimer=setTimeout(()=>{note.style.display='none';},4000);
+    }
+  });
+})();

@@ -567,7 +567,11 @@
       </div>
       <div class="f-row">
         <div class="f-group"><div class="f-label">Date</div><input class="f-input" type="date"></div>
-        <div class="f-group"><div class="f-label">Time</div><input class="f-input" type="time" name="pickup_time"></div>
+        <div class="f-group">
+          <div class="f-label">Time</div>
+          <input class="f-input" type="time" name="pickup_time" id="bg-pickup-time">
+          <div id="bg-midnight-note" style="display:none;color:#dc3545;font-weight:600;font-size:13px;margin-top:4px">⚠ No pickups at midnight — set to 12:00 PM</div>
+        </div>
       </div>
       <div class="f-group"><div class="f-label">Pickup Location</div><input class="f-input" type="text" placeholder="Sydney CBD / Airport / Suburb"></div>
       <div class="f-group"><div class="f-label">Destination</div><input class="f-input" type="text" placeholder="Address, Suburb or Venue"></div>

@@ -8,9 +8,19 @@ function initTimePickers(container){
       const mEl=wrap.querySelector('.tp-min');
       let h=parseInt(hEl.value)||parseInt(hEl.placeholder)||12;
       let m=parseInt(mEl.value)||parseInt(mEl.placeholder)||0;
-      const ampm=wrap.querySelector('.tp-ampm.tp-active').dataset.val;
       h=Math.min(12,Math.max(1,h));
       m=Math.min(59,Math.max(0,m));
+      let ampm=wrap.querySelector('.tp-ampm.tp-active').dataset.val;
+      if(h===12&&ampm==='AM'){
+        ampm='PM';
+        wrap.querySelectorAll('.tp-ampm').forEach(b=>b.classList.toggle('tp-active',b.dataset.val==='PM'));
+        const note=wrap.parentElement.querySelector('.tp-midnight-note');
+        if(note){
+          note.style.display='block';
+          clearTimeout(wrap._tpNoteTimer);
+          wrap._tpNoteTimer=setTimeout(()=>{note.style.display='none';},4000);
+        }
+      }
       if(ampm==='AM'&&h===12)h=0;
       else if(ampm==='PM'&&h!==12)h+=12;
       hidden.value=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
