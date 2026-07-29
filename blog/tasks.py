@@ -19,6 +19,32 @@ logger = logging.getLogger('easygo')
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
+def _auto_fill_post_refund(instance):
+    """A negative Stripe/PayPal payment (refund) matched to exactly one Post
+    whose refund field is still empty gets that Post.refund auto-filled, so
+    the admin doesn't have to type it in by hand. If Post.refund is already
+    set (manually entered) or the match is ambiguous (0 or 2+ posts), leave
+    it alone — accounting (BAS 1A netting) relies on Post.refund being
+    correct, so we only auto-fill when there's a single unambiguous match.
+    Returns the Post if it was auto-filled, else None, and the match count."""
+    matched_posts = Post.objects.filter(
+        Q(booker_email__iexact=instance.email) |
+        Q(email__iexact=instance.email) |
+        Q(name__iexact=instance.name)
+    )
+    match_count = matched_posts.count()
+    if match_count != 1:
+        return None, match_count
+
+    post = matched_posts.first()
+    if post.refund:
+        return None, match_count
+
+    post.refund = abs(instance.amount)
+    post.save(update_fields=['refund'])
+    return post, match_count
+
+
 # Google Calendar event 
 @shared_task
 def create_event_on_calendar(instance_id):
@@ -48,14 +74,28 @@ def create_event_on_calendar(instance_id):
 # PayPal payment in tasks.py
 @shared_task
 def notify_user_payment_paypal(instance_id):
-    from .blog_utils import process_generic_payment, send_payment_notification_email
+    from .blog_utils import process_generic_payment, send_payment_notification_email, send_refund_notification_email
     with transaction.atomic():
         try:
             instance = PaypalPayment.objects.select_for_update().get(id=instance_id)
         except PaypalPayment.DoesNotExist:
             return
-        
+
         raw_amount = float(instance.amount or 0)
+
+        if raw_amount < 0:
+            if instance.is_processed:
+                return
+            instance.is_processed = True
+            instance.processed_at = timezone.now()
+            instance.save()
+            auto_filled_post, match_count = _auto_fill_post_refund(instance)
+            send_refund_notification_email(
+                instance, method="PAYPAL", amount=raw_amount,
+                auto_filled_post=auto_filled_post, match_count=match_count,
+            )
+            return
+
         calculated_amount = round(raw_amount / 1.03, 2)
 
         posts = Post.objects.filter(
@@ -101,11 +141,26 @@ def notify_user_payment_paypal(instance_id):
 # Stripe payment
 @shared_task
 def notify_user_payment_stripe(instance_id):
-    from .blog_utils import process_generic_payment, send_payment_notification_email
+    from .blog_utils import process_generic_payment, send_payment_notification_email, send_refund_notification_email
     with transaction.atomic():
         try:
             instance = StripePayment.objects.select_for_update().get(id=instance_id)
         except StripePayment.DoesNotExist:
+            return
+
+        raw_amount = float(instance.amount or 0)
+
+        if raw_amount < 0:
+            if instance.is_processed:
+                return
+            instance.is_processed = True
+            instance.processed_at = timezone.now()
+            instance.save()
+            auto_filled_post, match_count = _auto_fill_post_refund(instance)
+            send_refund_notification_email(
+                instance, method="STRIPE", amount=raw_amount,
+                auto_filled_post=auto_filled_post, match_count=match_count,
+            )
             return
 
         posts = Post.objects.filter(

@@ -275,6 +275,50 @@ def send_payment_notification_email(instance, total_balance, recipient_emails, a
         )
     
    
+def send_refund_notification_email(instance, method, amount=None, booker_name=None, auto_filled_post=None, match_count=0):
+    """PayPal/Stripe에서 환불(-$ 금액)이 들어왔을 때, 결제 완료 메일 대신
+    발송하는 환불 안내 메일. instance.amount는 그대로 두고 표시용으로만
+    절대값을 사용한다.
+
+    auto_filled_post: 매칭되는 예약이 정확히 1건이고 Post.refund가 비어 있어서
+    자동으로 채워 넣은 경우 그 Post. 매칭이 모호하거나(0건/2건 이상) 이미
+    수동으로 입력돼 있었다면 None이며, 이때는 관리자가 Post.refund를 직접
+    확인/입력해야 한다."""
+    if amount is None:
+        amount = float(instance.amount or 0)
+    amount = abs(amount)
+
+    recipient_list = [instance.email] if instance.email else []
+
+    context = {
+        'name': instance.name,
+        'booker_name': booker_name,
+        'amount': amount,
+        'method': method.capitalize(),
+    }
+
+    if recipient_list:
+        html_content = render_email_template("html_email-refund-processed.html", context)
+        send_html_email("Refund Processed - EasyGo", html_content, recipient_list, from_email=DEFAULT_FROM_EMAIL)
+
+    if auto_filled_post:
+        refund_status_line = f"✅ Post.refund auto-filled on booking #{auto_filled_post.pk} ({auto_filled_post.pickup_date})"
+    elif match_count == 0:
+        refund_status_line = "⚠️ No matching booking found — enter Post.refund manually"
+    elif match_count == 1:
+        refund_status_line = "ℹ️ Matching booking already has Post.refund set (manual entry assumed)"
+    else:
+        refund_status_line = f"⚠️ {match_count} matching bookings found — enter Post.refund manually"
+
+    send_telegram_sync(
+        f"↩️ Refund processed via {method}\n\n"
+        f"👤 {instance.name}\n"
+        f"📧 {instance.email}\n"
+        f"💰 ${amount}\n"
+        f"{refund_status_line}"
+    )
+
+
 def get_default_driver_for_region(region):
     return Driver.objects.filter(
         region=region,
