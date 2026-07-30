@@ -76,6 +76,12 @@
         <label for="abn">ABN</label>
         <input type="text" class="form-control" name="abn" id="abn"
                value="{{ abn }}" required>
+        <label for="invoice_email">Email for invoices &amp; payment receipts</label>
+        <input type="email" class="form-control" name="invoice_email" id="invoice_email"
+               value="{{ invoice_email }}" required>
+        <p class="text-secondary small mt-1 mb-0" style="font-size:.8rem;">
+          Every payment we make is emailed to this address with its invoice / receipt.
+        </p>
         {% if driver.is_company %}
         <label for="signed_by_name">Your Name</label>
         <input type="text" class="form-control" name="signed_by_name" id="signed_by_name"
@@ -113,18 +119,21 @@
     var boxes = Array.prototype.slice.call(document.querySelectorAll('.agree-input'));
     var companyName = document.getElementById('company_name');
     var abn = document.getElementById('abn');
+    var invoiceEmail = document.getElementById('invoice_email');
     var signedByName = document.getElementById('signed_by_name');
     var signedByTitle = document.getElementById('signed_by_title');
     var btn = document.getElementById('confirmBtn');
     function sync() {
       btn.disabled = !boxes.every(function (b) { return b.checked; })
         || !companyName.value.trim() || !abn.value.trim()
+        || !invoiceEmail.value.trim()
         || (signedByName && !signedByName.value.trim())
         || (signedByTitle && !signedByTitle.value.trim());
     }
     boxes.forEach(function (b) { b.addEventListener('change', sync); });
     companyName.addEventListener('input', sync);
     abn.addEventListener('input', sync);
+    invoiceEmail.addEventListener('input', sync);
     if (signedByName) signedByName.addEventListener('input', sync);
     if (signedByTitle) signedByTitle.addEventListener('input', sync);
     sync();

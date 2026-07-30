@@ -1219,3 +1219,69 @@ class SettlementGstTests(TestCase):
             description=settlement.settlement_number,
         ).count()
         self.assertEqual(count, 1)
+
+
+# ---------------------------------------------------------------------------
+# Agreement: invoice email, and who sees the RCTI item
+# ---------------------------------------------------------------------------
+
+class AgreementConsentTests(TestCase):
+    """The agreement collects the address invoices/receipts are emailed to.
+    The RCTI item is only put to GST-registered drivers; nobody who has
+    already signed is re-prompted on their own."""
+
+    def setUp(self):
+        from blog.driver_views import _confirmed_agreement
+        self._confirmed_agreement = _confirmed_agreement
+        self.region = make_region()
+        self.driver = make_driver(user=make_user('agr_drv'), region=self.region)
+        self.client.force_login(self.driver.user)
+
+    def _sign(self, **extra):
+        data = {
+            'company_name': 'Drv Pty Ltd', 'abn': '11 111 111 111',
+            'invoice_email': 'invoices@drv.example.com',
+            'item_status_confirmed': 'on',
+            'item_liability_confirmed': 'on',
+            'item_rcti_confirmed': 'on',
+        }
+        data.update(extra)
+        return self.client.post(reverse('blog:driver_agreement'), data)
+
+    def test_rcti_item_hidden_without_gst(self):
+        self.assertFalse(self.driver.gst_registered)
+        response = self.client.get(reverse('blog:driver_agreement'))
+        self.assertNotContains(response, 'RCTI')
+
+    def test_rcti_item_shown_for_gst_registered(self):
+        self.driver.gst_registered = True
+        self.driver.save(update_fields=['gst_registered'])
+        response = self.client.get(reverse('blog:driver_agreement'))
+        self.assertContains(response, 'RCTI')
+
+    def test_signing_records_invoice_email(self):
+        self._sign()
+        self.assertIsNotNone(self._confirmed_agreement(self.driver))
+        self.driver.refresh_from_db()
+        self.assertEqual(self.driver.driver_email, 'invoices@drv.example.com')
+        self.assertEqual(self.driver.business_name, 'Drv Pty Ltd')
+
+    def test_invoice_email_required(self):
+        response = self._sign(invoice_email='')
+        self.assertContains(response, 'email address your invoices should go to')
+        self.assertIsNone(self._confirmed_agreement(self.driver))
+
+    def test_invoice_email_must_be_valid(self):
+        response = self._sign(invoice_email='not-an-email')
+        self.assertContains(response, 'valid email address')
+        self.assertIsNone(self._confirmed_agreement(self.driver))
+
+    def test_signed_driver_is_not_re_prompted_when_gst_turned_on(self):
+        # Staff ticking GST later must not reopen the agreement — re-collecting
+        # consent is done manually (delete the row, send the link).
+        self._sign()
+        self.driver.gst_registered = True
+        self.driver.save(update_fields=['gst_registered'])
+        self.assertIsNotNone(self._confirmed_agreement(self.driver))
+        response = self.client.get(reverse('blog:driver_agreement'))
+        self.assertTemplateUsed(response, 'basecamp/driver/agreement_done.html')

@@ -39,7 +39,7 @@ CAR_TYPE_SUGGESTIONS = [
 # unhandled DB-level "value too long" error (Postgres enforces varchar(N)).
 DRIVER_APPLY_FIELD_MAX_LENGTHS = {
     'driver_name': 100, 'driver_contact': 50, 'driver_email': 254, 'driver_car': 30,
-    'license_number': 40, 'abn': 20, 'bank_account_name': 100,
+    'driver_plate': 30, 'abn': 20, 'bank_account_name': 100,
     'bank_bsb': 10, 'bank_account_number': 20, 'payid_number': 50,
 }
 
@@ -133,10 +133,13 @@ def _notify_new_driver_application(driver):
         f"Contact: {driver.driver_contact}\n"
         f"Email: {driver.driver_email}\n"
         f"Region: {driver.region}\n"
-        f"Vehicle: {driver.driver_car}\n"
-        f"Licence: {driver.license_number} ({driver.get_license_class_display()})\n"
+        f"Vehicle: {driver.driver_car} — plate {driver.driver_plate or 'not supplied'}\n"
+        f"Licence class: {driver.get_license_class_display()} "
+        f"(number not collected on the form — take it off the licence itself)\n"
         f"Licence scan attached: {'Yes' if driver.license_scan else 'No — follow up with the driver'}\n"
-        f"ABN: {driver.abn} (GST registered: {'Yes' if driver.gst_registered else 'No'})\n"
+        f"Vehicle insurance declared: "
+        f"{'Yes' if driver.has_vehicle_insurance else 'No — do not activate until covered'}\n"
+        f"ABN: {driver.abn} — check GST registration on ABN Lookup and set it in the admin\n"
         f"Payment method: {driver.get_payment_method_display()}\n\n"
         f"Review and activate here:\n{review_url}\n"
     )
@@ -156,9 +159,16 @@ def driver_apply(request):
     but the driver stays out of dispatch-relevant queries (bank-payment
     auto-matching, reminder emails — see Driver.is_active usages) until
     office staff review the application and flip is_active on in the admin.
-    No licence scan is collected here — the applicant just types their
-    licence number/class; staff request a photo separately if they need one
-    (Driver.license_scan can still be attached manually via the admin).
+    Licence class is the only licence detail asked for — it decides what work
+    the driver can be given (maxi/minibus needs LR+), so staff need it before
+    any paperwork arrives. The licence number and scan are deliberately NOT
+    collected here: an unverified typed number is useless, and staff capture
+    both off the licence itself during review (Driver.license_number /
+    license_scan are still editable in the admin).
+
+    Also used by subcontractors (partner operators supplying their own
+    vehicles/drivers) — same fields, same review. Driver.is_company is a
+    staff-side flag set in the admin during review, not asked for here.
     """
     from blog.models import Driver
     from blog.models.driver import LICENSE_CLASS_CHOICES
@@ -169,24 +179,26 @@ def driver_apply(request):
     error = None
     form_data = {
         'driver_name': '', 'driver_contact': '', 'driver_email': '',
-        'driver_car': '', 'license_number': '', 'license_class': '',
-        'abn': '', 'gst_registered': False, 'payment_method': '',
+        'driver_car': '', 'driver_plate': '', 'license_class': '',
+        'abn': '', 'has_vehicle_insurance': False, 'payment_method': '',
         'bank_account_name': '', 'bank_bsb': '', 'bank_account_number': '',
         'payid_number': '', 'region_id': '',
     }
+    checkbox_fields = ('has_vehicle_insurance',)
     region = None
 
     if request.method == 'POST':
         for field in form_data:
-            if field == 'gst_registered':
+            if field in checkbox_fields:
                 continue
             form_data[field] = (request.POST.get(field) or '').strip()
-        form_data['gst_registered'] = request.POST.get('gst_registered') == 'on'
+        for field in checkbox_fields:
+            form_data[field] = request.POST.get(field) == 'on'
         region = regions.filter(pk=form_data['region_id']).first() if form_data['region_id'] else None
 
         token = request.POST.get('cf-turnstile-response', '')
         required = ['driver_name', 'driver_contact', 'driver_email', 'driver_car',
-                    'license_number', 'license_class', 'abn']
+                    'driver_plate', 'license_class', 'abn']
 
         if not verify_turnstile(token, get_client_ip(request)):
             error = 'Security verification failed. Please try again.'
@@ -220,10 +232,10 @@ def driver_apply(request):
                 driver_email=form_data['driver_email'],
                 region=region,
                 driver_car=form_data['driver_car'],
-                license_number=form_data['license_number'],
+                driver_plate=form_data['driver_plate'],
+                has_vehicle_insurance=form_data['has_vehicle_insurance'],
                 license_class=form_data['license_class'],
                 abn=form_data['abn'],
-                gst_registered=form_data['gst_registered'],
                 payment_method=form_data['payment_method'],
                 bank_account_name=form_data['bank_account_name'],
                 bank_bsb=form_data['bank_bsb'],
@@ -599,12 +611,7 @@ def driver_dashboard(request):
         amount -= (post.driver_refund_deduction or Decimal('0'))
         pending_total += amount
 
-    from blog.models import DriverAgreement, CURRENT_AGREEMENT_VERSION
-    agreement_confirmed = DriverAgreement.objects.filter(
-        driver=driver,
-        version=CURRENT_AGREEMENT_VERSION,
-        confirmed_at__isnull=False,
-    ).exists()
+    agreement_confirmed = _confirmed_agreement(driver) is not None
 
     return render(request, 'basecamp/driver/dashboard.html', {
         'driver': driver,
@@ -686,8 +693,27 @@ def driver_settlement_pdf(request, settlement_number):
     return response
 
 
+def _confirmed_agreement(driver):
+    """The driver's acknowledgement of the current agreement version, if any.
+
+    Deliberately only asks "is there a confirmed row for this version": a
+    driver who has already signed is never re-prompted on their own, even if
+    the items they'd be shown today differ (e.g. staff turned GST on
+    afterwards). Re-collecting consent is a manual call — delete the
+    DriverAgreement row in the admin and send them the agreement link.
+    The dashboard's "Action required" banner keys off this too.
+    """
+    from blog.models import DriverAgreement, CURRENT_AGREEMENT_VERSION
+
+    return DriverAgreement.objects.filter(
+        driver=driver,
+        version=CURRENT_AGREEMENT_VERSION,
+        confirmed_at__isnull=False,
+    ).first()
+
+
 def _agreement_items(driver):
-    """The three summary items shown on the agreement page.
+    """The summary items shown on the agreement page.
 
     Wording branches on ``driver.is_company``: individual owner-drivers
     confirm things in the first person ("I..."), while partner companies
@@ -752,12 +778,13 @@ def _agreement_items(driver):
     if driver.gst_registered:
         items.append({
             'field': 'item_rcti_confirmed',
-            'title': 'Tax Invoice (RCTI)',
+            'title': 'Invoices & payment receipts',
             'detail': (
                 f"I agree that {COMPANY_NAME} (ABN {COMPANY_ABN}) may issue "
-                "Tax Invoices (RCTIs) for the services I "
-                "supply, and that I will not issue my own tax invoices for "
-                "those services."
+                "Recipient Created Tax Invoices (RCTIs) for the services I "
+                "supply, so I do not need to issue my own invoices for those "
+                "services. Each time a payment is made, the invoice / receipt "
+                "for it is emailed to the address I give below."
             ),
         })
 
@@ -772,18 +799,15 @@ def _handle_agreement(request, driver):
     and confirm. GET renders the summary items for this driver/company
     (expand-on-click detail — see :func:`_agreement_items`). POST records a
     :class:`DriverAgreement` once every item shown is ticked and the company
-    name/ABN are filled in. Nothing here ever touches the accounting app.
+    name/ABN/invoice email are filled in. Nothing here ever touches the
+    accounting app.
     """
     from blog.models import DriverAgreement, CURRENT_AGREEMENT_VERSION
     from basecamp.modules.view_helpers import get_client_ip
 
     version = CURRENT_AGREEMENT_VERSION
 
-    existing = (
-        DriverAgreement.objects
-        .filter(driver=driver, version=version, confirmed_at__isnull=False)
-        .first()
-    )
+    existing = _confirmed_agreement(driver)
 
     items = _agreement_items(driver)
 
@@ -796,6 +820,7 @@ def _handle_agreement(request, driver):
 
         company_name = (request.POST.get('company_name') or '').strip()
         abn = (request.POST.get('abn') or '').strip()
+        invoice_email = (request.POST.get('invoice_email') or '').strip()
         signed_by_name = (request.POST.get('signed_by_name') or '').strip()
         signed_by_title = (request.POST.get('signed_by_title') or '').strip()
         all_checked = all(request.POST.get(item['field']) == 'on' for item in items)
@@ -803,6 +828,10 @@ def _handle_agreement(request, driver):
         error = None
         if not company_name or not abn:
             error = 'Please enter your company name and ABN.'
+        elif not invoice_email:
+            error = 'Please enter the email address your invoices should go to.'
+        elif not _is_valid_email(invoice_email):
+            error = 'Please enter a valid email address for your invoices.'
         elif driver.is_company and (not signed_by_name or not signed_by_title):
             error = 'Please enter your name and title/position.'
         elif not all_checked:
@@ -815,6 +844,7 @@ def _handle_agreement(request, driver):
                 'items': items,
                 'company_name': company_name,
                 'abn': abn,
+                'invoice_email': invoice_email,
                 'signed_by_name': signed_by_name,
                 'signed_by_title': signed_by_title,
                 'error': error,
@@ -822,15 +852,19 @@ def _handle_agreement(request, driver):
 
         # Subcontractor enters their own registered details — trusted as the
         # source of truth over whatever admin may have typed in previously.
+        # The invoice address is the one they just agreed their RCTIs go to,
+        # so it becomes the driver's contact email outright.
         driver.business_name = company_name
         driver.abn = abn
-        driver.save(update_fields=['business_name', 'abn'])
+        driver.driver_email = invoice_email
+        driver.save(update_fields=['business_name', 'abn', 'driver_email'])
 
         agreement, _ = DriverAgreement.objects.get_or_create(
             driver=driver, version=version,
         )
-        # Only the items actually shown/ticked apply — the company flow has
-        # no RCTI item, so item_rcti_confirmed stays False for those.
+        # Only the items actually shown/ticked apply — a driver who isn't
+        # GST-registered never sees the RCTI item, so item_rcti_confirmed
+        # stays False for them.
         for item in items:
             setattr(agreement, item['field'], True)
         if driver.is_company:
@@ -856,6 +890,7 @@ def _handle_agreement(request, driver):
         'items': items,
         'company_name': driver.business_name or '',
         'abn': driver.abn or '',
+        'invoice_email': driver.driver_email or '',
         'signed_by_name': '',
         'signed_by_title': '',
         'error': None,

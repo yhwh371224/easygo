@@ -38,7 +38,17 @@
   <div class="container apply-card">
     <div class="text-center mb-4">
       <h3 class="mt-3">Drive With EasyGo</h3>
-      <p class="text-secondary small">Tell us about yourself and your vehicle. Office staff will review your details before your account goes live.</p>
+      <p class="text-secondary small">
+        For individual drivers <strong>and subcontractors</strong> — if you run your own
+        transport business or supply vehicles and drivers, use this same form and apply
+        under your business ABN.
+      </p>
+      <p class="text-secondary small">
+        Tell us about yourself and your vehicle. No documents needed yet — office staff
+        will ask for your driver licence and certificate of currency separately during
+        review, before your account goes live. If you operate more than one vehicle,
+        enter your main one here; you can give us the rest once your account is approved.
+      </p>
     </div>
 
     {% if error %}
@@ -73,8 +83,10 @@
         <datalist id="car-type-options">
           {% for c in car_type_suggestions %}<option value="{{ c }}">{% endfor %}
         </datalist>
-        <label for="license_number">Driver Licence Number</label>
-        <input type="text" class="form-control" name="license_number" id="license_number" value="{{ form_data.license_number }}" required>
+        <label for="driver_plate">Vehicle Plate Number</label>
+        <input type="text" class="form-control" name="driver_plate" id="driver_plate"
+               value="{{ form_data.driver_plate }}" placeholder="e.g. ABC12D" maxlength="30"
+               style="text-transform:uppercase" required>
         <label for="license_class">Licence Class</label>
         <select class="form-select" name="license_class" id="license_class" required>
           <option value="" disabled {% if not form_data.license_class %}selected{% endif %}>— select —</option>
@@ -82,16 +94,27 @@
           <option value="{{ value }}" {% if form_data.license_class == value %}selected{% endif %}>{{ label }}</option>
           {% endfor %}
         </select>
+        <div class="form-check mt-3">
+          <input class="form-check-input" type="checkbox" name="has_vehicle_insurance" id="has_vehicle_insurance"
+                 {% if form_data.has_vehicle_insurance %}checked{% endif %}>
+          <label class="form-check-label" for="has_vehicle_insurance">
+            This vehicle is currently insured (comprehensive or third-party property, plus any
+            passenger/public liability cover your state requires)
+          </label>
+        </div>
+        <p class="text-secondary small mt-2 mb-0">
+          We'll ask for your certificate of currency during review — your account can't be
+          activated without valid cover.
+        </p>
       </div>
 
       <div class="apply-section">
         <h6>Business Details</h6>
         <label for="abn">ABN</label>
         <input type="text" class="form-control" name="abn" id="abn" value="{{ form_data.abn }}" required>
-        <div class="form-check mt-1">
-          <input class="form-check-input" type="checkbox" name="gst_registered" id="gst_registered" {% if form_data.gst_registered %}checked{% endif %}>
-          <label class="form-check-label" for="gst_registered">I am registered for GST</label>
-        </div>
+        <p class="text-secondary small mt-2 mb-0">
+          We check your GST registration against your ABN ourselves — nothing to fill in here.
+        </p>
       </div>
 
       <div class="apply-section">

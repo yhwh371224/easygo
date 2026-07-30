@@ -78,6 +78,13 @@ class Driver(models.Model):
     driver_address = models.CharField(max_length=200, blank=True, null=True)
     driver_plate = models.CharField(max_length=30, blank=True, null=True)
     driver_car = models.CharField(max_length=30, blank=True, null=True)
+    # Self-declared on the public application form — NOT proof of cover.
+    # Staff still sight the certificate of currency before flipping is_active.
+    has_vehicle_insurance = models.BooleanField(
+        default=False,
+        help_text='차량 보험(대인/대물 등) 가입 여부. 지원서에서 본인이 체크한 값이며 '
+                   '증빙 서류 확인은 별도로 해야 함.',
+    )
     driver_bankdetails = models.TextField(blank=True, null=True)
 
     license_number = models.CharField(max_length=40, blank=True, null=True)
