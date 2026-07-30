@@ -111,11 +111,12 @@ class Command(BaseCommand):
     def _is_target(self, post, now):
         """이 부킹이 지금 자동취소 대상인지.
 
-        미결제(paid 0/공백)  : final_notice_sent_at 이 있고 컷오프 도달.
+        미결제(paid 0/공백)  : final_notice_sent_at 이 예고 시각.
                               (금액을 못 뽑는 건도 기존과 동일하게 미결제로 본다)
         부분결제(paid > 0)   : 잔액이 남아 있고(디파짓 충족분 제외),
-                              discrepancy_final_sent_at 이 있고,
-                              그 예고로부터 GRACE_HOURS 지났고, 컷오프 도달.
+                              discrepancy_final_sent_at 이 예고 시각.
+
+        공통: 예고 메일을 실제로 보냈고 + 그로부터 GRACE_HOURS 지났고 + 픽업 컷오프 도달.
         """
         amounts = booking_balance(post)
         if amounts is None:
@@ -128,8 +129,7 @@ class Command(BaseCommand):
         _, paid, balance = amounts
 
         if paid <= 0:
-            if post.final_notice_sent_at is None:
-                return False
+            notified_at = post.final_notice_sent_at
         else:
             # 완납/과납이면 대상 아님 — 예고 메일을 받은 뒤 잔액을 낸 손님 보호.
             if balance <= 0:
@@ -137,12 +137,21 @@ class Command(BaseCommand):
             # 디파짓 인보이스로 예고된 부분결제는 정상 흐름 → 취소하지 않는다.
             if is_deposit_satisfied(post):
                 return False
-            if post.discrepancy_final_sent_at is None:
-                return False
-            # 부분결제 예고는 결제가 늦게 들어온 건에서 컷오프 직전에 나갈 수 있어
-            # 픽업 기준 유예만으로는 부족하다 → 예고 후 GRACE_HOURS 를 따로 보장.
-            # (유예가 픽업을 넘기면 is_cancel_eligible 이 False → 수동 처리 영역)
-            if now < post.discrepancy_final_sent_at + timedelta(hours=dunning.GRACE_HOURS):
-                return False
+            notified_at = post.discrepancy_final_sent_at
+
+        # 경고 없이 취소하지 않는다.
+        if notified_at is None:
+            return False
+
+        # 예고 후 GRACE_HOURS 를 실제 발송 시각 기준으로 보장한다.
+        #
+        # 사다리 단계(픽업 -48h/-72h)와 취소 컷오프(픽업 -24h/-48h) 사이 간격이
+        # 24h 라 "크론이 촘촘히 돌면" 자동으로 만족되지만, 크론이 하루 1회면
+        # 예고가 컷오프 직전에 나가 유예가 15h 남짓으로 쪼그라든다. 그러면 메일에
+        # 쓴 "24시간 내 미결제 시 취소" 약속을 시스템이 어기게 된다.
+        # → 스케줄 간격과 무관하게 코드에서 보장한다.
+        # (유예가 픽업을 넘기면 is_cancel_eligible 이 False → 수동 처리 영역)
+        if now < notified_at + timedelta(hours=dunning.GRACE_HOURS):
+            return False
 
         return dunning.is_cancel_eligible(post, now)

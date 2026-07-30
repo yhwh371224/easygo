@@ -207,6 +207,7 @@ class Command(BaseCommand):
         # 2단계: Urgent notice.
         if (
             booking.no_payment_urgent_sent_at is None
+            and booking.final_notice_sent_at is None
             and dunning.is_urgent_notice_due(booking)
         ):
             return (
@@ -217,7 +218,15 @@ class Command(BaseCommand):
             )
 
         # 1단계: Payment notice (가장 부드러운 초기 안내).
-        if booking.no_payment_notice_sent_at is None:
+        #   이 단계만 시각 게이트가 없다 — 21일 창에 들어온 미결제 건은 언제든
+        #   1회 받아야 하기 때문. 그래서 임박 예약(생성 시점이 이미 Urgent/Final
+        #   창 안)에서는 강한 단계가 먼저 나간 뒤 이 부드러운 안내가 뒤따라 나가는
+        #   역순이 생긴다. 이미 더 강한 경고를 보냈으면 보내지 않는다.
+        if (
+            booking.no_payment_notice_sent_at is None
+            and booking.no_payment_urgent_sent_at is None
+            and booking.final_notice_sent_at is None
+        ):
             return (
                 "Payment notice",
                 "html_email-nopayment.html",
