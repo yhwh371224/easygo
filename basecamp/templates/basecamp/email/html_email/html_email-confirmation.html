@@ -181,7 +181,7 @@
                       • Paid: ${{ paid }}<br />
                       • We have received a partial payment. Remaining balance: ${{ shortfall }}<br />
                       {% else %}
-                      • We have received your payment. Thank you very much.<br />
+                      • We have received your payment of ${{ paid }}. Thank you very much.<br />
                       {% endif %}
                       {% endwith %}
                   {% elif company_name %}
