@@ -64,9 +64,9 @@ def booking_balance(post):
 
 
 def is_deposit_satisfied(post):
-    """디파짓 인보이스 금액을 채운 부분결제인지.
+    """디파짓 인보이스 금액을 채운 부분결제인지(=분할 결제 중).
 
-    True 면 잔액이 남아 있어도 "예고된 부분결제"이므로 독촉/자동취소 대상에서 제외.
+    True 면 미납 독촉 사다리가 아니라 디파짓 잔액 안내 사다리를 탄다.
     """
     due = post.deposit_amount_due
     if due is None:
@@ -75,6 +75,17 @@ def is_deposit_satisfied(post):
     if amounts is None:
         return False
     return amounts[1] >= float(due)
+
+
+def is_deposit_protected(post):
+    """디파짓 건이 아직 "연체 트랙"에서 보호되는 상태인지.
+
+    디파짓을 낸 손님은 연체가 아니라 분할 결제 중이므로 SMS·자동취소 대상이
+    아니다. 다만 잔액 안내를 두 번 보내고도 픽업이 임박하면 취소 예고
+    (discrepancy_final_sent_at)를 보내고, 그 시점부터는 보호가 풀려 일반
+    부분결제와 똑같이 취급된다 — 무기한 기다리지 않기 위해서.
+    """
+    return is_deposit_satisfied(post) and post.discrepancy_final_sent_at is None
 
 
 def process_generic_payment(payment_instance, posts, admin_email, calculated_amount=None):

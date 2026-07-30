@@ -8,7 +8,7 @@ from django.utils import timezone
 
 from blog.models import Post
 from blog import dunning
-from blog.blog_utils import booking_balance, is_deposit_satisfied
+from blog.blog_utils import booking_balance, is_deposit_protected
 from utils.post_helper import send_post_cancelled_email
 
 logger = logging.getLogger(__name__)
@@ -134,8 +134,9 @@ class Command(BaseCommand):
             # 완납/과납이면 대상 아님 — 예고 메일을 받은 뒤 잔액을 낸 손님 보호.
             if balance <= 0:
                 return False
-            # 디파짓 인보이스로 예고된 부분결제는 정상 흐름 → 취소하지 않는다.
-            if is_deposit_satisfied(post):
+            # 디파짓 건은 분할 결제 중이라 보호되지만, 잔액 안내를 두 번 받고도
+            # 픽업이 임박해 취소 예고까지 나갔으면 보호가 풀린다(무기한 대기 방지).
+            if is_deposit_protected(post):
                 return False
             notified_at = post.discrepancy_final_sent_at
 

@@ -42,6 +42,15 @@ PREPAY_REQUIRED_LEAD_HOURS = 24
 URGENT_NOTICE_LEAD_HOURS = {'departure': 72, 'arrival': 96}
 FINAL_NOTICE_LEAD_HOURS = {'departure': 48, 'arrival': 72}
 
+# ── 디파짓 잔액 안내 ──
+# 디파짓(deposit_amount_due)을 채운 부킹은 "예고된 부분결제"라 미납 독촉·자동취소
+# 대상이 아니다. 다만 잔액을 픽업 전에 받아야 하므로 별도의 부드러운 안내를 보낸다.
+# 방향(출발/도착)과 무관 — 도착편을 더 일찍 자르는 건 픽업 직전 연락 두절 때문인데,
+# 이 단계는 취소로 이어지지 않으므로 그 구분이 필요 없다.
+# 값 조정만으로 시점을 바꿀 수 있다(일 단위로 적기 위해 24 를 곱해 둠).
+DEPOSIT_BALANCE_NOTICE_LEAD_HOURS = 14 * 24   # 픽업 14일 전 1차 안내
+DEPOSIT_BALANCE_FINAL_LEAD_HOURS = 7 * 24     # 픽업 7일 전 2차(최종) 안내
+
 
 def is_airport_arrival(post):
     """공항 도착(=공항에서 손님을 픽업) 건이면 True.
@@ -147,6 +156,18 @@ def is_final_notice_due(post, now=None):
     """Final notice 발송 시점에 접어들었는지 (dep 48h / arr 72h 이하)."""
     h = hours_until_pickup(post, now)
     return h is not None and 0 < h <= FINAL_NOTICE_LEAD_HOURS[_lead_key(post)]
+
+
+def is_deposit_balance_notice_due(post, now=None):
+    """디파짓 잔액 1차 안내 시점인지 (픽업 14일 전 이하)."""
+    h = hours_until_pickup(post, now)
+    return h is not None and 0 < h <= DEPOSIT_BALANCE_NOTICE_LEAD_HOURS
+
+
+def is_deposit_balance_final_due(post, now=None):
+    """디파짓 잔액 2차(최종) 안내 시점인지 (픽업 7일 전 이하)."""
+    h = hours_until_pickup(post, now)
+    return h is not None and 0 < h <= DEPOSIT_BALANCE_FINAL_LEAD_HOURS
 
 
 def is_prepay_required_at_booking(pickup_dt, now=None):

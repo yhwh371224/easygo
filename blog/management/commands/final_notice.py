@@ -4,7 +4,7 @@ from datetime import date, timedelta
 from django.core.management.base import BaseCommand
 from django.db.models import Q
 from blog.models import Post
-from blog.blog_utils import booking_balance, is_deposit_satisfied
+from blog.blog_utils import booking_balance, is_deposit_protected
 from blog.sms_utils import send_sms_notice, send_whatsapp_template
 
 sms_logger = logging.getLogger('sms')
@@ -68,8 +68,9 @@ class Command(BaseCommand):
                 if amounts is None:
                     continue  # 금액 판정 불가(비숫자 텍스트) → 수동 처리 영역
                 _, paid, balance = amounts
-                # 이미 잔액을 낸 손님, 디파짓으로 예고된 부분결제는 제외.
-                if paid <= 0 or balance <= 0 or is_deposit_satisfied(notice):
+                # 이미 잔액을 낸 손님, 그리고 아직 보호 중인 디파짓 건은 제외.
+                # (취소 예고까지 나간 디파짓 건은 보호가 풀려 여기 포함된다)
+                if paid <= 0 or balance <= 0 or is_deposit_protected(notice):
                     continue
                 self._send(
                     notice,

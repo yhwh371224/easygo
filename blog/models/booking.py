@@ -179,6 +179,16 @@ class Post(models.Model):
         help_text='완전 미결제 건 Final notice(자동취소 예고) 메일 발송 시각. '
                   'dep 픽업 48h 전 / arr 72h 전 1회 발송, 중복 발송 방지에 사용.',
     )
+    deposit_balance_notice_sent_at = models.DateTimeField(
+        null=True, blank=True,
+        help_text='디파짓 충족 건의 잔액 안내 1차 메일 발송 시각(픽업 14일 전). '
+                  'no_payment_yet 중복 발송 방지에 사용.',
+    )
+    deposit_balance_final_sent_at = models.DateTimeField(
+        null=True, blank=True,
+        help_text='디파짓 충족 건의 잔액 안내 2차(최종) 메일 발송 시각(픽업 7일 전). '
+                  '디파짓 건은 자동취소 대상이 아니므로 취소 예고가 아니라 마지막 안내다.',
+    )
     calendar_event_id = models.CharField(max_length=255, blank=True, null=True)
     driver_calendar_event_id = models.CharField(max_length=255, blank=True, null=True)
     use_proxy = models.BooleanField(default=False)

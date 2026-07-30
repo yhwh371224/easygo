@@ -125,15 +125,19 @@ class Command(BaseCommand):
 
                 # ----------------------------------------------------------
                 # 2. 부분 결제(short payment) → 단계별 1회 독촉.
-                #    디파짓 인보이스로 예고된 부분결제는 제외, 진짜 차액만.
-                #    미결제 사다리와 같은 픽업 시각 기준(dep 72h/48h, arr 96h/72h)
-                #    이라 discrepancy final ↔ 자동취소 사이 GRACE_HOURS 가 보장된다.
+                #    ① 진짜 차액(디파짓 미충족) → discrepancy 사다리.
+                #       미결제 사다리와 같은 픽업 시각 기준(dep 72h/48h, arr 96h/72h)
+                #       이라 discrepancy final ↔ 자동취소 사이 GRACE_HOURS 보장.
+                #    ② 디파짓 충족 → deposit balance 안내(14일/7일 전). 자동취소 없음.
                 # ----------------------------------------------------------
                 elif balance > 0:
-                    if is_deposit_satisfied(booking):
-                        continue
-
-                    stage = self._pick_partial_stage(booking)
+                    # 디파짓을 채운 건은 "예고된 부분결제"라 미납 독촉/자동취소가
+                    # 아니라, 잔액을 받기 위한 부드러운 안내 단계를 탄다.
+                    deposit = is_deposit_satisfied(booking)
+                    stage = (
+                        self._pick_deposit_balance_stage(booking) if deposit
+                        else self._pick_partial_stage(booking)
+                    )
                     if stage is None:
                         continue
 
@@ -158,6 +162,8 @@ class Command(BaseCommand):
                         'pickup_date': booking.pickup_date,
                         'return_pickup_date': booking.return_pickup_date,
                         'display_date': display_date,
+                        # 디파짓 잔액 템플릿에서 1차/2차 문구를 가르는 플래그.
+                        'is_final': sent_field == 'deposit_balance_final_sent_at',
                     }
 
                     recipients = collect_recipients(booking.booker_email or booking.email)
@@ -271,6 +277,58 @@ class Command(BaseCommand):
                 "Urgent notice for payment discrepancy",
                 "html_email-response-discrepancy.html",
                 "discrepancy_notice_sent_at",
+            )
+
+        return None
+
+    def _pick_deposit_balance_stage(self, booking):
+        """디파짓을 채운 건의 잔액 안내 단계를 반환. 없으면 None.
+
+        반환: (subject, template, sent_field)
+        판정 순서: 취소예고(가장 임박) → 2차 → 1차. 각 단계 1회만.
+
+        1·2차는 부드러운 안내라 취소로 이어지지 않지만, 그러고도 잔액이 안
+        들어온 채 픽업이 임박하면 3단계에서 일반 부분결제와 같은 취소 예고를
+        보낸다. 그 시점부터 is_deposit_protected 가 False 가 되어 자동취소·SMS
+        대상이 된다 — 디파짓만 받고 무기한 기다리지 않기 위해서.
+        """
+        # 3단계: 취소 예고 (dep 픽업 48h 전 / arr 72h 전).
+        #        미납 사다리와 같은 필드·템플릿을 써서 이후 흐름을 공유한다.
+        #        기업 고객은 인보이스 처리라 자동취소 대상이 아니므로 제외.
+        if (
+            booking.discrepancy_final_sent_at is None
+            and not _has_company(booking)
+            and dunning.is_final_notice_due(booking)
+        ):
+            return (
+                "Final notice: outstanding balance on your booking",
+                "html_email-response-discrepancy-final.html",
+                "discrepancy_final_sent_at",
+            )
+
+        # 2단계: 최종 안내 (픽업 7일 전). 취소 예고를 이미 보냈으면 생략(역순 방지).
+        if (
+            booking.deposit_balance_final_sent_at is None
+            and booking.discrepancy_final_sent_at is None
+            and dunning.is_deposit_balance_final_due(booking)
+        ):
+            return (
+                "Reminder: remaining balance for your booking",
+                "html_email-deposit-balance.html",
+                "deposit_balance_final_sent_at",
+            )
+
+        # 1단계: 1차 안내 (픽업 14일 전). 더 강한 단계를 이미 보냈으면 생략(역순 방지).
+        if (
+            booking.deposit_balance_notice_sent_at is None
+            and booking.deposit_balance_final_sent_at is None
+            and booking.discrepancy_final_sent_at is None
+            and dunning.is_deposit_balance_notice_due(booking)
+        ):
+            return (
+                "Your remaining balance is now due",
+                "html_email-deposit-balance.html",
+                "deposit_balance_notice_sent_at",
             )
 
         return None
