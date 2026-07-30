@@ -1,0 +1,36 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# EasyGo 결제 독촉(dunning) 스케줄
+#
+# 설치:  scripts/cron/install_crontab.sh
+#        (기존 crontab 을 지우지 않고 이 블록만 넣거나 갱신한다)
+#
+# ⚠ 시각 주의: cron 은 "서버 시스템 시간" 으로 스케줄을 해석한다. Django 는
+#   Australia/Sydney 로 동작하므로, 서버 TZ 가 Sydney 가 아니면 아래 "매일" 작업
+#   (final_notice / send_final_warning) 이 손님 기준 새벽에 나갈 수 있다.
+#   → 서버에서 `date` 로 확인하고, 다르면 아래 두 줄의 시각을 조정하거나
+#     이 파일 맨 위에 CRON_TZ=Australia/Sydney 를 넣는다(cron 버전에 따라 미지원).
+#   매시간 작업은 시각과 무관하므로 영향 없음.
+# ─────────────────────────────────────────────────────────────────────────────
+
+# 실패 시에만 메일 (run.sh 는 성공하면 아무것도 출력하지 않음). MTA 없으면 무시됨.
+MAILTO=info@easygoshuttle.com.au
+
+# ── 매시간: 사다리 단계 판정 ──────────────────────────────────────────────
+# 미결제:   Payment notice → Urgent(dep 72h/arr 96h) → Final(dep 48h/arr 72h)
+# 부분결제: Discrepancy notice(dep 72h/arr 96h) → Discrepancy final(dep 48h/arr 72h)
+# 사다리 임계값이 "시간" 단위라 매시간 돌아야 단계가 제때 나간다. 각 단계 1회만.
+05 * * * * __PROJECT_ROOT__/scripts/cron/run.sh no_payment_yet
+
+# ── 매시간: 자동 취소 ─────────────────────────────────────────────────────
+# 취소 예고 메일을 실제로 보낸 건만, 예고 후 24h 유예를 지나 컷오프
+# (dep 픽업 24h 전 / arr 48h 전)에 도달했을 때 취소한다.
+# 위 no_payment_yet(:05) 이 끝난 뒤에 돌도록 30분 뒤(:35)에 배치 — 같은 시간에
+# 예고와 취소가 동시에 판정되는 걸 피한다.
+35 * * * * __PROJECT_ROOT__/scripts/cron/run.sh auto_cancel_pending
+
+# ── 매일 아침: SMS 마지막 에스컬레이션 ────────────────────────────────────
+# 픽업 오늘~내일 + 미납 건에 SMS. 문자는 새벽에 보내면 안 되므로 하루 1회 아침만.
+10 9 * * * __PROJECT_ROOT__/scripts/cron/run.sh final_notice
+
+# ── 매일 아침: 먼 미래(픽업 21일 초과) 미결제 건 "예약 pending" 안내 ──────
+20 9 * * * __PROJECT_ROOT__/scripts/cron/run.sh send_final_warning

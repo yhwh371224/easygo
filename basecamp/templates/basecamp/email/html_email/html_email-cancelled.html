@@ -148,7 +148,12 @@
                                                 <p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
 													Thank you for your inquiry with EasyGo.<br><br>
 
-													Unfortunately, we are unavailable for the pickup date you requested:<br>
+													{% if unpaid_balance %}
+														Unfortunately, we have had to cancel your booking as the outstanding
+														balance was not settled before pickup, despite the notices we sent you:<br>
+													{% else %}
+														Unfortunately, we are unavailable for the pickup date you requested:<br>
+													{% endif %}
 
 													{% if pickup_date or pickup_time %}
 														Pickup:
@@ -160,6 +165,14 @@
 														Return:
 														{% if return_pickup_date %}{{ return_pickup_date|date:"Y-m-d" }}{% endif %}
 														<br>
+													{% endif %}
+
+													{% if unpaid_balance %}
+														<br>
+														Amount already paid: ${{ amount_paid }}<br>
+														Outstanding balance: ${{ unpaid_balance }}<br><br>
+
+														If you would like to discuss this, please reply to this email.<br>
 													{% endif %}
 
 													<br>

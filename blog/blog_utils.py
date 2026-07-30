@@ -34,6 +34,49 @@ def _net_adjustment(post):
     return surcharge, discount
 
 
+def _amount(value):
+    """price/paid 는 자유 입력 CharField — 비었으면 0.0, 숫자면 float, 그 외엔 None."""
+    if value in (None, ''):
+        return 0.0
+    try:
+        return float(str(value).strip())
+    except (ValueError, TypeError):
+        return None
+
+
+def booking_balance(post):
+    """부킹의 (총 청구액, 결제액, 잔액) 을 surcharge/discount 반영해서 계산한다.
+
+    독촉 메일·자동취소·결제 배분·온라인 잔액결제(basecamp.views.payments)가 모두
+    같은 공식을 쓰도록 하는 단일 헬퍼.
+
+    price/paid 가 'TBA' 같은 비숫자 텍스트라 금액 판정이 불가능하면 None 을 돌려
+    호출측이 건너뛰게 한다 — 0 으로 퉁치면 실제로 결제된 부킹을 미결제로 오판해
+    독촉하거나 자동취소할 수 있다.
+    """
+    price = _amount(post.price)
+    paid = _amount(post.paid)
+    if price is None or paid is None:
+        return None
+    surcharge, discount = _net_adjustment(post)
+    total = round(price + surcharge - discount, 2)
+    return total, paid, round(total - paid, 2)
+
+
+def is_deposit_satisfied(post):
+    """디파짓 인보이스 금액을 채운 부분결제인지.
+
+    True 면 잔액이 남아 있어도 "예고된 부분결제"이므로 독촉/자동취소 대상에서 제외.
+    """
+    due = post.deposit_amount_due
+    if due is None:
+        return False
+    amounts = booking_balance(post)
+    if amounts is None:
+        return False
+    return amounts[1] >= float(due)
+
+
 def process_generic_payment(payment_instance, posts, admin_email, calculated_amount=None):
     """
     Stripe/PayPal 결제 건을 분석하여 여러 예약(Post)에 금액을 배분합니다.

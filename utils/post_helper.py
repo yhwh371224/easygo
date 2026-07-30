@@ -135,7 +135,14 @@ def send_post_confirmation_email(instance):
     send_html_email(subject, html_content, recipients)
 
 
-def send_post_cancelled_email(instance):
+def send_post_cancelled_email(instance, unpaid_balance=None, amount_paid=None):
+    """부킹 취소 통보 메일.
+
+    unpaid_balance/amount_paid 는 부분결제(short payment) 미납으로 자동취소된
+    건에서만 넘어온다(auto_cancel_pending). 값이 있으면 이미 결제된 금액이
+    있다는 사실을 메일에 명시해 손님이 환불 문의를 어디로 해야 할지 알게 한다.
+    일반 취소(가용 차량 없음 등)에서는 None 이라 문구가 나오지 않는다.
+    """
     html_content = render_email_template("html_email-cancelled.html", {
         'booker_name': instance.booker_name,
         'booker_email': instance.booker_email,
@@ -146,6 +153,8 @@ def send_post_cancelled_email(instance):
         'pickup_time': instance.pickup_time,
         'return_pickup_date': instance.return_pickup_date,
         'return_pickup_time': instance.return_pickup_time,
+        'unpaid_balance': unpaid_balance,
+        'amount_paid': amount_paid,
     })
     
     recipients = [instance.booker_email] if instance.booker_email else list(filter(None, [instance.email, instance.email1]))
