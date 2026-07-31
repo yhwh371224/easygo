@@ -13,9 +13,11 @@ WAGE_SKIP_MARKERS = ['DIRECTOR WAGE']
 # items, not P&L — must never be imported as income or expense.
 LOAN_SKIP_MARKERS = ['LOAN FROM DIRECTOR']
 
-# Bank CSV import: super contributions — fill in clearing house description after
-# first payrun (e.g. 'AUSTRALIANSUPER', 'SUPERCHOICE'). Already in PayrollEntry.
-SUPER_SKIP_MARKERS = []  # TBD after first real payrun
+# Bank CSV import: super contributions — already counted via PayrollEntry.super_amount
+# in P&L (see reports.py labour_total). Importing the bank transfer too would double-count.
+# 'PAYCLEAR' = Payclear Services Pty Ltd, the super clearing house used for real payruns
+# (confirmed 2026-07-26: $156 transfer = 2 x $78 super_amount from PayrollEntry).
+SUPER_SKIP_MARKERS = ['PAYCLEAR']
 
 # Bank CSV import: expense rows at/above this amount are held for human triage.
 REVIEW_THRESHOLD = Decimal('1000')
@@ -36,8 +38,10 @@ GST_KEYWORD_RULES = [
       'BELONG', 'INTERNET', 'MOBILE'), 'gst'),
     (('GOOGLE', 'META', 'FACEBOOK', 'MARKETING', 'ADVERTIS', 'SEO'), 'gst'),
     (('GROUP TRANSPORT',), 'gst'),
-    (('NORTH SYDNEY EXECUTIVE', 'VIRTUAL OFFICE'), 'gst'),
-    (('COUNCIL',), 'gst'),
+    (('NORTH SYDNEY EXECUTIVE', 'VIRTUAL OFFICE', 'CWH'), 'gst'),
+    # 'COUNCI' (not 'COUNCIL') — CommBank truncates some council names, e.g.
+    # 'WILLOUGHBY CITY COUNCI'. Substring match still covers the full spelling.
+    (('COUNCI',), 'gst'),
     # Fines/infringements are never GST-eligible — explicit no_gst so this can
     # never be shadowed by a broader keyword added above in future.
     (('SDRO', 'INFRNGMNT', 'PENALTY'), 'no_gst'),
@@ -76,7 +80,8 @@ CATEGORY_KEYWORD_RULES = [
     (('GOOGLE', 'META', 'FACEBOOK', 'MARKETING', 'ADVERTIS', 'SEO'), 'marketing'),
     (('INSURANCE', 'NRMA', 'AAMI', 'ALLIANZ', 'QBE', 'GIO', 'ZURICH'), 'insurance'),
     (('GROUP TRANSPORT',), 'subcontractor_payout'),
-    (('NORTH SYDNEY EXECUTIVE', 'VIRTUAL OFFICE'), 'office_expense'),
+    (('NORTH SYDNEY EXECUTIVE', 'VIRTUAL OFFICE', 'CWH'), 'office_expense'),
+    (('COUNCI',), 'parking'),
 ]
 
 # Categories that are imported for record-keeping but must NEVER be counted as
