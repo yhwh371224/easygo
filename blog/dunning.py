@@ -113,6 +113,20 @@ def cancel_deadline(post):
     return max(pickup_cutoff, min_grace)
 
 
+def cancel_deadline_display(post):
+    """cancel_deadline() 을 고객 안내 문구용으로 정시로 내림한 값.
+
+    "12:57 AM" 처럼 어중간한 분 단위가 이메일에 그대로 노출되는 걸 막기 위함.
+    자동취소 판정(cancel_deadline/is_cancel_eligible)은 그대로 분 단위를 쓰고,
+    이건 표시 전용 — 내림이라 고객에게 말한 시각보다 시스템이 먼저 취소하는
+    일은 없다(항상 실제 컷오프가 표시 시각과 같거나 더 늦음).
+    """
+    deadline = cancel_deadline(post)
+    if deadline is None:
+        return None
+    return deadline.replace(minute=0, second=0, microsecond=0)
+
+
 def is_cancel_eligible(post, now=None):
     """지금 자동취소 대상인지. (미결제 등 다른 필터는 호출측 쿼리에서 처리)
 

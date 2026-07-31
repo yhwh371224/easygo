@@ -199,7 +199,7 @@ class Command(BaseCommand):
             and not _has_company(booking)
             and dunning.is_final_notice_due(booking)
         ):
-            deadline = dunning.cancel_deadline(booking)
+            deadline = dunning.cancel_deadline_display(booking)
             return (
                 "Final notice — payment required to keep your booking",
                 "html_email-final-warning.html",
