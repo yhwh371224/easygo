@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, timedelta
 
 from django.contrib import admin
 from django.template.response import TemplateResponse
@@ -149,6 +149,21 @@ class TransactionAdmin(admin.ModelAdmin):
 class PayrollEntryAdmin(admin.ModelAdmin):
     list_display = ('pay_date', 'employee_name', 'gross_pay', 'paygw_withheld', 'super_amount', 'net_pay')
     date_hierarchy = 'pay_date'
+    actions = ('duplicate_next_week',)
+
+    @admin.action(description="다음 주로 복제 — copy with dates shifted +7 days")
+    def duplicate_next_week(self, request, queryset):
+        """Copy each selected entry, shifting pay_date/period_start/period_end
+        by 7 days so the same weekly payroll doesn't need re-entering by hand."""
+        created = 0
+        for entry in queryset:
+            entry.pk = None
+            entry.pay_date += timedelta(days=7)
+            entry.period_start += timedelta(days=7)
+            entry.period_end += timedelta(days=7)
+            entry.save()
+            created += 1
+        self.message_user(request, f"{created}건을 다음 주 날짜로 복제했습니다.")
 
 
 @admin.register(DividendRecord)
