@@ -189,6 +189,17 @@ class Post(models.Model):
         help_text='디파짓 충족 건의 잔액 안내 2차(최종) 메일 발송 시각(픽업 7일 전). '
                   '디파짓 건은 자동취소 대상이 아니므로 취소 예고가 아니라 마지막 안내다.',
     )
+    sms_notice_sent_at = models.DateTimeField(
+        null=True, blank=True,
+        help_text='미결제 건 SMS 독촉(send_sms, 픽업 3일 이내) 발송 시각. 중복 발송 방지에 사용. '
+                  '예전엔 reminder=True 로 중복을 막았지만, reminder 는 "고객이 답장함"·'
+                  '"결제됨" 의미로도 쓰여서 SMS 발송이 다른 독촉을 잘라먹었다.',
+    )
+    sms_final_sent_at = models.DateTimeField(
+        null=True, blank=True,
+        help_text='마지막 SMS 에스컬레이션(final_notice, 픽업 당일~내일) 발송 시각. '
+                  '미결제·부분결제 두 경로가 공유하는 중복 발송 방지 필드.',
+    )
     calendar_event_id = models.CharField(max_length=255, blank=True, null=True)
     driver_calendar_event_id = models.CharField(max_length=255, blank=True, null=True)
     use_proxy = models.BooleanField(default=False)

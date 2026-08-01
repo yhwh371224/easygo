@@ -4,6 +4,7 @@ from datetime import date, timedelta
 from django.core.management.base import BaseCommand
 from django.db.models import Q
 from django.conf import settings
+from django.utils import timezone
 
 from blog.models import Post
 from blog.sms_utils import normalize_phone
@@ -39,10 +40,18 @@ class Command(BaseCommand):
             messaging_service_sid = settings.TWILIO_MESSAGING_SERVICE_SID
             whatsapp_from = settings.TWILIO_WHATSAPP_FROM
 
+            # 중복 방지는 전용 필드(sms_notice_sent_at)로 한다.
+            # 예전엔 reminder=False 로 거르고 발송 후 reminder=True 를 찍었는데,
+            # reminder 는 "고객이 답장함"(update_reminder)·"결제됨"(process_generic_payment)
+            # 의미로도 쓰이는 필드라 SMS 한 통이 다른 독촉 경로까지 잘라먹었다.
+            #
+            # sms_final_sent_at 도 함께 본다 — 두 명령의 창(여기 3일, final_notice
+            # 1일)이 겹치므로, 어느 쪽이 먼저 돌든 부킹당 SMS 총량은 1통이 된다.
             final_notices = Post.objects.filter(
                 pickup_date__range=[today, day_after_tomorrow],
                 cancelled=False,
-                reminder=False
+                sms_notice_sent_at__isnull=True,
+                sms_final_sent_at__isnull=True,
             ).filter(
                 Q(paid__isnull=True) | Q(paid__exact="")
             ).exclude(
@@ -111,9 +120,14 @@ class Command(BaseCommand):
                 # =========================
                 # STATUS UPDATE
                 # =========================
+                # reminder 는 건드리지 않는다 — 발송 사실은 sms_notice_sent_at 에만
+                # 기록한다. 발송 실패 시엔 기록하지 않아 다음 실행에서 재시도한다.
                 notice.pending = True
-                notice.reminder = True
-                notice.save(update_fields=['pending', 'reminder'])
+                update_fields = ['pending']
+                if sms_sent:
+                    notice.sms_notice_sent_at = timezone.now()
+                    update_fields.append('sms_notice_sent_at')
+                notice.save(update_fields=update_fields)
 
             self.stdout.write(
                 self.style.SUCCESS('Final notices processed successfully.')
