@@ -204,14 +204,14 @@
 
             <div class="col-sm-6">
               {% if "Drop off to" in direction %}
-                {% include "widgets/time_picker.html" with field_name="flight_time" label="Flight time" ampm="AM" %}
+                {% include "widgets/time_picker.html" with field_name="flight_time" label="Flight time" ampm="AM" hint="" %}
               {% else %}
                 {% include "widgets/time_picker.html" with field_name="flight_time" label="Flight time" ampm="AM" hint=" arrival time" %}
               {% endif %}
             </div>
 
             <div class="col-sm-6">
-              {% include "widgets/time_picker.html" with field_name="pickup_time" label="Pickup time" ampm="AM" %}
+              {% include "widgets/time_picker.html" with field_name="pickup_time" label="Pickup time" ampm="AM" hint="" %}
             </div>
 
           </div>
@@ -302,13 +302,13 @@
                 {% if "Drop off to" in direction %}
                   {% include "widgets/time_picker.html" with field_name="return_flight_time" label="Flight time" ampm="AM" hint="arrival time" %}
                 {% else %}
-                  {% include "widgets/time_picker.html" with field_name="return_flight_time" label="Flight time" ampm="AM" %}
+                  {% include "widgets/time_picker.html" with field_name="return_flight_time" label="Flight time" ampm="AM" hint="" %}
                 {% endif %}
               </div>
 
               {# return_pickup_time #}
               <div class="col-sm-6">
-                {% include "widgets/time_picker.html" with field_name="return_pickup_time" label="Pickup time" ampm="AM" %}
+                {% include "widgets/time_picker.html" with field_name="return_pickup_time" label="Pickup time" ampm="AM" hint="" %}
               </div>
               <div class="col-12">
                 <div class="form-check mt-1">
