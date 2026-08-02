@@ -15,8 +15,10 @@ from decimal import Decimal
 from io import StringIO
 from unittest.mock import patch, MagicMock
 
+import pytz
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.core import mail
 from django.core.management import call_command
 from django.test import TestCase, Client, override_settings
 from django.urls import reverse
@@ -1285,3 +1287,154 @@ class AgreementConsentTests(TestCase):
         self.assertIsNotNone(self._confirmed_agreement(self.driver))
         response = self.client.get(reverse('blog:driver_agreement'))
         self.assertTemplateUsed(response, 'basecamp/driver/agreement_done.html')
+
+
+# ---------------------------------------------------------------------------
+# Command: arrival_reminder (도착 1시간 전 리마인더)
+# ---------------------------------------------------------------------------
+
+class ArrivalReminderTests(TestCase):
+    """도착 손님은 아침 메일을 비행 중이라 못 본다. 이 메일이 그 자리를 대신하므로,
+    한 번은 반드시 나가야 하고 두 번은 절대 나가면 안 된다."""
+
+    TZ = pytz.timezone('Australia/Sydney')
+
+    def setUp(self):
+        self.region = make_region()
+        self.now = self.TZ.localize(datetime.datetime(2026, 8, 2, 9, 0))
+
+    def make_arrival(self, flight_time='10:00', **kwargs):
+        fields = dict(
+            name='Arriving Guest',
+            email='guest@example.com',
+            no_of_passenger='2',
+            price='100',
+            paid='100',  # 미결제 건은 notify_user_post 시그널이 pending=True 로 만들어 대상에서 빠진다
+            region=self.region,
+            pickup_date=self.now.date(),
+            direction='Pickup from Intl Airport',
+            flight_number='KE121',
+            flight_time=flight_time,
+            pickup_time='10:45',
+        )
+        fields.update(kwargs)
+        return Post.objects.create(**fields)
+
+    def run_command(self, *args, now=None):
+        module = 'blog.management.commands.arrival_reminder'
+        with patch(f'{module}.current_time', return_value=now or self.now), \
+             patch(f'{module}.booking_helper.update_meeting_point_for_arrivals'), \
+             patch(f'{module}.assign_default_driver_if_missing', return_value=None), \
+             patch(f'{module}.send_telegram_sync'):
+            call_command('arrival_reminder', *args, stdout=StringIO())
+
+    @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+    @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+    def test_sends_one_hour_before_scheduled_arrival(self, *_):
+        post = self.make_arrival(flight_time='10:00')  # now=09:00 → 정확히 창 시작
+        self.run_command()
+        post.refresh_from_db()
+        self.assertIsNotNone(post.arrival_reminder_sent_at)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertIn('guest@example.com', mail.outbox[0].to)
+
+    @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+    @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+    def test_not_sent_before_the_window_opens(self, *_):
+        post = self.make_arrival(flight_time='14:00')  # now=09:00 → 아직 5시간 전
+        self.run_command()
+        post.refresh_from_db()
+        self.assertIsNone(post.arrival_reminder_sent_at)
+        self.assertEqual(mail.outbox, [])
+
+    @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+    @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+    def test_second_run_does_not_resend(self, *_):
+        """크론이 10분마다 도니 중복 방지가 깨지면 손님은 하루에 6통을 받는다."""
+        self.make_arrival(flight_time='10:00')
+        self.run_command()
+        self.run_command(now=self.TZ.localize(datetime.datetime(2026, 8, 2, 9, 10)))
+        self.assertEqual(len(mail.outbox), 1)
+
+    @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+    @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+    def test_late_run_still_sends(self, *_):
+        """크론이 멈췄다 살아나면 늦게라도 보내야 한다 — 조용히 건너뛰면 안 된다."""
+        self.make_arrival(flight_time='10:00')
+        self.run_command(now=self.TZ.localize(datetime.datetime(2026, 8, 2, 11, 30)))
+        self.assertEqual(len(mail.outbox), 1)
+
+    @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+    @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+    def test_falls_back_to_pickup_time_when_flight_time_missing(self, *_):
+        """flight_time이 비었다고 스킵하면 그 손님은 당일 메일을 아예 못 받는다."""
+        self.make_arrival(flight_time='', pickup_time='09:30')
+        self.run_command()
+        self.assertEqual(len(mail.outbox), 1)
+
+    @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+    @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+    def test_skips_cancelled_pending_and_opted_out(self, *_):
+        self.make_arrival(cancelled=True)
+        self.make_arrival(pending=True)
+        self.make_arrival(no_email_reminder=True)
+        self.run_command()
+        self.assertEqual(mail.outbox, [])
+
+    @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+    @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+    def test_departures_are_left_to_booking_reminder(self, *_):
+        self.make_arrival(direction='Drop off to Intl Airport')
+        self.run_command()
+        self.assertEqual(mail.outbox, [])
+
+    @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+    @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+    def test_booking_reminder_no_longer_sends_todays_arrival_mail(self, *_):
+        """두 커맨드가 같은 건을 보내면 중복이다 — 당일 도착은 arrival_reminder 전담."""
+        self.make_arrival()
+        with patch('blog.management.commands.booking_reminder.booking_helper'
+                   '.update_meeting_point_for_arrivals'), \
+             patch('blog.management.commands.booking_reminder.send_telegram_sync'):
+            call_command('booking_reminder', '--today', stdout=StringIO())
+        self.assertEqual(mail.outbox, [])
+
+    @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+    @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+    def test_meeting_point_mail_renders(self, *_):
+        """미팅포인트가 배정된 건은 driver_details 템플릿으로 나간다 — 실제 도착 손님이
+        가장 많이 받는 경로라 렌더링이 깨지면 당일 메일이 통째로 사라진다."""
+        from regions.models import Airport, Country, Terminal, TerminalPickupPoint
+
+        airport = Airport.objects.create(
+            country=Country.objects.create(name='Australia'), city='Sydney', code='SYD',
+        )
+        self.region.airports.add(airport)
+        terminal = Terminal.objects.create(
+            airport=airport, name='T1', type=Terminal.TerminalType.INTL,
+        )
+        point = TerminalPickupPoint.objects.create(
+            terminal=terminal, name='Public Pickup', is_default_point=True,
+            instruction='Meet the driver at the Public Pickup zone.',
+        )
+        post = self.make_arrival(terminal_pickup_point=point)
+
+        self.run_command()
+        post.refresh_from_db()
+        self.assertIsNotNone(post.arrival_reminder_sent_at)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertIn('Public Pickup zone', mail.outbox[0].body)
+
+    @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+    @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+    def test_idle_run_touches_nothing(self, *_):
+        """몇 분마다 도는 커맨드다 — 보낼 게 없는 대부분의 실행은 조회만 하고 끝나야
+        한다(미팅포인트 갱신은 DB 저장 + 캘린더 동기화를 유발한다)."""
+        self.make_arrival(flight_time='14:00')  # now=09:00 → 아직 대상 아님
+        module = 'blog.management.commands.arrival_reminder'
+        with patch(f'{module}.current_time', return_value=self.now), \
+             patch(f'{module}.booking_helper.update_meeting_point_for_arrivals') as update_points, \
+             patch(f'{module}.send_telegram_sync'):
+            call_command('arrival_reminder', stdout=StringIO())
+        update_points.assert_not_called()
+        self.assertEqual(mail.outbox, [])

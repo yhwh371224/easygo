@@ -195,6 +195,12 @@ class Post(models.Model):
                   '예전엔 reminder=True 로 중복을 막았지만, reminder 는 "고객이 답장함"·'
                   '"결제됨" 의미로도 쓰여서 SMS 발송이 다른 독촉을 잘라먹었다.',
     )
+    arrival_reminder_sent_at = models.DateTimeField(
+        null=True, blank=True,
+        help_text='공항 도착 건의 당일 리마인더(arrival_reminder, 도착 예정시각 1시간 전) '
+                  '발송 시각. 크론이 10분마다 돌기 때문에 중복 발송 방지에 필수. '
+                  '도착 건은 이 메일이 아침 Reminder-Today를 대체한다.',
+    )
     sms_final_sent_at = models.DateTimeField(
         null=True, blank=True,
         help_text='마지막 SMS 에스컬레이션(final_notice, 픽업 당일~내일) 발송 시각. '

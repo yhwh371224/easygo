@@ -9,6 +9,7 @@ from main.settings import RECIPIENT_EMAIL
 from utils import booking_helper
 from utils.booking_helper import build_reminder_context
 from blog.blog_utils import assign_default_driver_if_missing
+from utils.direction_utils import airport_arrival_q
 from utils.email import send_template_email, collect_recipients
 from utils.telegram import send_telegram_sync
 from basecamp.modules.date_utils import format_pickup_time_12h
@@ -83,6 +84,7 @@ class Command(BaseCommand):
         today = timezone.localdate()
         expected_ids = set(
             Post.objects.filter(pickup_date=today)
+            .exclude(airport_arrival_q())  # arrival_reminder가 담당 — 여기선 누락이 아니다
             .exclude(cancelled=True)
             .exclude(pending=True)
             .values_list('id', flat=True)
@@ -106,6 +108,10 @@ class Command(BaseCommand):
             .exclude(pending=True)
             .select_related('driver')
         )
+        if subject == "Reminder-Today":
+            # 공항 도착 건의 당일 메일은 arrival_reminder 커맨드가 도착 1시간 전에
+            # 따로 보낸다(비행 중이라 아침 메일을 못 보는 문제). 여기서 보내면 중복.
+            booking_reminders = booking_reminders.exclude(airport_arrival_q())
         if subject == "Reminder-Arrival-2days":
             booking_reminders = booking_reminders.filter(direction__istartswith="pickup")
         if subject == "Review-EasyGo":

@@ -35,6 +35,12 @@ class Command(BaseCommand):
             default='all',
             help="Which arrivals to send: intl, domestic, or all (default).",
         )
+        parser.add_argument(
+            '--force',
+            action='store_true',
+            help="이미 arrival_reminder(도착 1시간 전)가 보낸 건에도 다시 보낸다. "
+                 "기본값은 스킵 — 이 커맨드는 이제 수동 재발송용이다.",
+        )
 
     # =========================
     # INIT
@@ -49,6 +55,7 @@ class Command(BaseCommand):
 
         self.twilio_client = Client(self.account_sid, self.auth_token)
 
+        self.force = options['force']
         self.send_today_arrivals(options['arrivals'])
 
     # =========================
@@ -179,6 +186,12 @@ class Command(BaseCommand):
 
             # future-safe hook (optional DB field)
             if getattr(booking, "notification_sent", False):
+                continue
+
+            # 당일 도착 메일의 정규 경로는 arrival_reminder(도착 1시간 전)다.
+            # 이미 보낸 건을 이 커맨드가 또 보내지 않도록 막는다(중복 방지).
+            if booking.arrival_reminder_sent_at and not getattr(self, "force", False):
+                logger.info(f"[EMAIL SKIPPED] arrival_reminder already sent for id={booking.id}")
                 continue
 
             # Customer opted out of the email reminder — don't send anything.
