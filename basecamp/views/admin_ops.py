@@ -431,7 +431,9 @@ def email_dispatch_detail(request):
         pickup_time_12h = None
 
         # 3️⃣ Adjusted pickup time 처리
-        if adjusted_pickup_time and user:
+        # "Pickup Notice for Today"는 이 시간을 실제 pickup_time 변경이 아니라
+        # "몇 시까지는 출발해야 하는 마지노선" 안내 문구로만 사용하므로 DB 갱신/SMS는 건너뛴다.
+        if adjusted_pickup_time and user and selected_option != "Pickup Notice for Today":
             users = Post.objects.filter(email=_email, pickup_date__gte=timezone.localdate()).order_by('pickup_date')
             if users.exists():
                 closest_user = users.first()
@@ -528,6 +530,15 @@ def email_dispatch_detail(request):
                     'driver_plate': user_today.driver.driver_plate,
                     'driver_car': user_today.driver.driver_car,
                 })
+
+                if adjusted_pickup_time:
+                    context['deadline_time_12h'] = format_pickup_time_12h(adjusted_pickup_time)
+                    # 마지노선 안내 메일을 이미 보냈으므로, 도착 1시간 전 자동 발송되는
+                    # 당일 pickup 알림(send_arrivals / booking_reminder)이 중복으로
+                    # 나가지 않도록 두 커맨드가 공통으로 확인하는 플래그를 세워둔다.
+                    if not user_today.no_email_reminder:
+                        user_today.no_email_reminder = True
+                        user_today.save(update_fields=['no_email_reminder'])
 
         # ✅ Gratitude For Payment
         if selected_option == "Gratitude For Payment":

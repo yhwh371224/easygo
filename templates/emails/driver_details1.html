@@ -112,6 +112,20 @@
 												<p style="Margin:0;font-size:18px;font-weight:bold;line-height:22px;">Hello, {{ name }}</p>
 											</td>
 										</tr>
+										{% if deadline_time_12h %}
+										<tr>
+											<td align="left" style="padding-top:16px;padding-left:0;">
+												<table width="100%" style="border-spacing:0;background-color:#fff4e5;margin-bottom:4px;" role="presentation">
+													<tr>
+														<td style="padding:15px;color:#8a5a20;font-size:14px;line-height:22px;">
+															⏰ Please note, your assigned bus must depart <strong>no later than {{ deadline_time_12h }}</strong> — this is the final deadline, and there is enough buffer time built in, so please don't miss it.<br><br>
+															If you happen to miss this bus, please reply to this email to ask about the next available bus, and we will let you know as soon as possible.
+														</td>
+													</tr>
+												</table>
+											</td>
+										</tr>
+										{% endif %}
 										<tr>
 											<td align="left" style="padding-top:28px;padding-left:0;">
 											{% if direction == 'Pickup from Intl Airport' %}
