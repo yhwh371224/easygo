@@ -533,12 +533,6 @@ def email_dispatch_detail(request):
 
                 if adjusted_pickup_time:
                     context['deadline_time_12h'] = format_pickup_time_12h(adjusted_pickup_time)
-                    # 마지노선 안내 메일을 이미 보냈으므로, 도착 1시간 전 자동 발송되는
-                    # 당일 pickup 알림(send_arrivals / booking_reminder)이 중복으로
-                    # 나가지 않도록 두 커맨드가 공통으로 확인하는 플래그를 세워둔다.
-                    if not user_today.no_email_reminder:
-                        user_today.no_email_reminder = True
-                        user_today.save(update_fields=['no_email_reminder'])
 
         # ✅ Gratitude For Payment
         if selected_option == "Gratitude For Payment":

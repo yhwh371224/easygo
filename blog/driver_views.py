@@ -149,6 +149,30 @@ def _notify_new_driver_application(driver):
         logger.exception("driver_apply: failed to send admin notification for driver id=%s", driver.pk)
 
 
+def _notify_driver_application_received(driver):
+    """Best-effort confirmation email to the applicant themselves.
+
+    Same "must never block the applicant's flow" reasoning as
+    _notify_new_driver_application — the Driver record already exists by
+    the time this runs, so a failed send here is just a missed courtesy
+    email, not a broken application.
+    """
+    from utils.email import send_text_email
+
+    message = (
+        f"Hi {driver.driver_name},\n\n"
+        "Thanks for applying to drive with EasyGo Airport Shuttle! We've received "
+        "your application and it's now with our team for review. We'll be in touch "
+        "soon once we've had a look.\n\n"
+        "Thanks again for applying,\n"
+        f"{COMPANY_NAME}\n"
+    )
+    try:
+        send_text_email("Your EasyGo driver application has been received", message, [driver.driver_email])
+    except Exception:
+        logger.exception("driver_apply: failed to send applicant confirmation for driver id=%s", driver.pk)
+
+
 @ratelimit(key='ip', rate='5/m', method='POST', block=True)
 def driver_apply(request):
     """Public job-application form — no login required.
@@ -247,6 +271,7 @@ def driver_apply(request):
             )
             request.session['pending_driver_id'] = driver.pk
             _notify_new_driver_application(driver)
+            _notify_driver_application_received(driver)
             return redirect('blog:driver_apply_account')
 
     return render(request, 'basecamp/driver/apply.html', {
