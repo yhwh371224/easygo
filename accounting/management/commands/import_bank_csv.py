@@ -238,7 +238,7 @@ class Command(BaseCommand):
 
         if dry_run:
             self.stdout.write(self.style.WARNING("\nDRY RUN — nothing written."))
-            for t in to_create[:20]:
+            for t in to_create:
                 if t.needs_review:
                     flag = " [NEEDS_REVIEW]"
                 elif not t.is_tax_deductible:
@@ -250,8 +250,6 @@ class Command(BaseCommand):
                 self.stdout.write(
                     f"    {t.date}  -{t.gross_amount:>8}  {t.gst_code:8} "
                     f"{t.category:20} {t.description[:40]}{flag}")
-            if len(to_create) > 20:
-                self.stdout.write(f"    ... and {len(to_create) - 20} more")
             return
 
         if to_create:

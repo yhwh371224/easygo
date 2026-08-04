@@ -17,7 +17,9 @@ LOAN_SKIP_MARKERS = ['LOAN FROM DIRECTOR']
 # in P&L (see reports.py labour_total). Importing the bank transfer too would double-count.
 # 'PAYCLEAR' = Payclear Services Pty Ltd, the super clearing house used for real payruns
 # (confirmed 2026-07-26: $156 transfer = 2 x $78 super_amount from PayrollEntry).
-SUPER_SKIP_MARKERS = ['PAYCLEAR']
+# 'SUPERCHOICE' = SuperChoice Services Pty Ltd, another clearing house used for the
+# same payruns (confirmed 2026-08-05: $78 transfers match PayrollEntry.super_amount).
+SUPER_SKIP_MARKERS = ['PAYCLEAR', 'SUPERCHOICE']
 
 # Bank CSV import: expense rows at/above this amount are held for human triage.
 REVIEW_THRESHOLD = Decimal('1000')
@@ -42,6 +44,9 @@ GST_KEYWORD_RULES = [
     # 'COUNCI' (not 'COUNCIL') — CommBank truncates some council names, e.g.
     # 'WILLOUGHBY CITY COUNCI'. Substring match still covers the full spelling.
     (('COUNCI',), 'gst'),
+    (('VULTR',), 'gst'),
+    (('INTERNATIONAL TRANSACTION FEE',), 'gst'),
+    (('TAXIPAY',), 'gst'),
     # Fines/infringements are never GST-eligible — explicit no_gst so this can
     # never be shadowed by a broader keyword added above in future.
     (('SDRO', 'INFRNGMNT', 'PENALTY'), 'no_gst'),
@@ -82,6 +87,10 @@ CATEGORY_KEYWORD_RULES = [
     (('GROUP TRANSPORT',), 'subcontractor_payout'),
     (('NORTH SYDNEY EXECUTIVE', 'VIRTUAL OFFICE', 'CWH'), 'office_expense'),
     (('COUNCI',), 'parking'),
+    # VULTR: all charges are server/hosting costs (VPS provider).
+    (('VULTR',), 'hosting'),
+    (('INTERNATIONAL TRANSACTION FEE',), 'bank_fees'),
+    (('TAXIPAY',), 'taxi'),
 ]
 
 # Categories that are imported for record-keeping but must NEVER be counted as
