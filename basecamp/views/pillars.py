@@ -4,6 +4,8 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 
+from django.db.models import Q
+
 from regions.models import Region, RegionSuburb
 from regions.models import Terminal
 from basecamp.area import get_suburbs
@@ -39,7 +41,13 @@ def home(request):
         airport__in=region.airports.all()
     ).select_related("airport")
     cruise_terminals = CruiseTerminal.objects.filter(region=region)
-    latest_post = Post.objects.filter(status='published').order_by('-created_at').first()
+    latest_post = (
+        Post.objects
+        .filter(status='published')
+        .filter(Q(region__isnull=True) | Q(region__slug='sydney'))
+        .order_by('-created_at')
+        .first()
+    )
 
     return render(request, 'basecamp/home.html', {
         'carousel_suburbs': carousel_suburbs,

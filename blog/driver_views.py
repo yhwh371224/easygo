@@ -298,7 +298,7 @@ def driver_apply_account(request):
 
     driver_id = request.session.get('pending_driver_id')
     if not driver_id:
-        return redirect('blog:driver_apply')
+        return redirect('blog_apply:driver_apply')
     driver = get_object_or_404(Driver, pk=driver_id)
     if driver.user:
         request.session.pop('pending_driver_id', None)

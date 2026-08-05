@@ -8,7 +8,7 @@ from django.conf.urls.static import static
 from django.http import FileResponse, Http404
 from email_agent.views import GmailWebhookView
 from basecamp.views import stripe_webhook
-from blog import bird_webhooks
+from blog import bird_webhooks, driver_views
 from decouple import config
 
 
@@ -42,9 +42,15 @@ urlpatterns = [
     path('markdownx/', include('markdownx.urls')),
     path('posting_agent/', include('posting_agent.urls', namespace='posting_agent')),  
     path('easygo_review/', include('easygo_review.urls')),
-    path('articles/', include(('articles.urls', 'articles'), namespace='articles')),    
+    path('articles/', include(('articles.urls', 'articles'), namespace='articles')),
     path('accounts/', include('allauth.urls')),
     path('paypal/', include('paypal.standard.ipn.urls')),
+    path('partner/', include(('blog.apply_urls', 'blog_apply'), namespace='blog_apply')),
+    # /driver/apply/ kept live alongside /partner/apply/ (both serve the same
+    # form) since old links/ads/bookmarks may point here. Page is
+    # noindex,nofollow so two live paths isn't an SEO duplicate-content issue.
+    # The step-2 continuation only exists at /driver/apply/account/ (in blog/urls.py).
+    path('driver/apply/', driver_views.driver_apply, name='driver_apply_legacy'),
     path('driver/', include(('blog.urls', 'blog'), namespace='blog')),
 
     # Empty prefix apps - 맨 아래

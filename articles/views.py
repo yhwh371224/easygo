@@ -7,6 +7,15 @@ from .models import Post, Category, Tag
 def post_list(request):
     posts = Post.objects.filter(status='published').select_related('category')
 
+    # 지역 필터링: ?region= 쿼리(지역 홈페이지에서 넘어온 경우) 우선,
+    # 없으면 URL 경로 기반 지역을 사용. 시드니(지역 미지정 포함)는 지역 없는 글도 함께 노출
+    region_slug = request.GET.get('region', '').strip()
+    active_region_slug = region_slug or getattr(getattr(request, 'region', None), 'slug', '')
+    if active_region_slug and active_region_slug != 'sydney':
+        posts = posts.filter(region__slug=active_region_slug)
+    else:
+        posts = posts.filter(Q(region__isnull=True) | Q(region__slug='sydney'))
+
     # 검색
     query = request.GET.get('q', '').strip()
     if query:
@@ -46,6 +55,7 @@ def post_list(request):
         'category_slug'    : category_slug,
         'current_category' : current_category,
         'tag_slug'         : tag_slug,
+        'region_slug'      : region_slug,
     }
     return render(request, 'articles/blog_list.html', context)
 

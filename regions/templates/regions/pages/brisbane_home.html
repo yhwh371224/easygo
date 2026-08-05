@@ -521,6 +521,7 @@
               <h2 class="mb-4">First Time Arriving at Brisbane Airport (BNE)? Read This First.</h2>
               {% if latest_post %}<p class="text-muted mb-4">{{ latest_post.excerpt|truncatechars:150 }}</p><a href="{% url 'articles:post_detail' latest_post.slug %}" class="btn btn-primary">Read More &rarr;</a>
               {% else %}<p class="text-muted">Coming soon: our Brisbane Airport pick-up guide covering both terminals, parking zones, and the fastest routes to the CBD.</p>{% endif %}
+              <div class="mt-3"><a href="{% url 'articles:post_list' %}?region={{ region.slug }}">View all Brisbane posts &rarr;</a></div>
             </div>
           </div>
         </div>
