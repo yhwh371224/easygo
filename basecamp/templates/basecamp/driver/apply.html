@@ -60,6 +60,7 @@
         <input type="tel" class="form-control" name="driver_contact" id="driver_contact" value="{{ form_data.driver_contact }}" required>
         <label for="driver_email">Email Address</label>
         <input type="email" class="form-control" name="driver_email" id="driver_email" value="{{ form_data.driver_email }}" required>
+        {% comment %} Region picker disabled — set manually via Django admin after applicant is created.
         <label for="region_id">Region</label>
         <select class="form-select" name="region_id" id="region_id" required>
           <option value="" disabled {% if not form_data.region_id %}selected{% endif %}>— select —</option>
@@ -67,6 +68,7 @@
           <option value="{{ r.pk }}" {% if form_data.region_id == r.pk|stringformat:"s" %}selected{% endif %}>{{ r.name }}</option>
           {% endfor %}
         </select>
+        {% endcomment %}
       </div>
 
       <div class="apply-section">

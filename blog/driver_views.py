@@ -232,8 +232,10 @@ def driver_apply(request):
             error = 'One of the fields is too long — please shorten it.'
         elif form_data['license_class'] not in dict(LICENSE_CLASS_CHOICES):
             error = 'Please choose a valid licence class.'
-        elif not region:
-            error = 'Please select which region you\'ll be driving in.'
+        # Region picker disabled on the form — set manually via Django admin
+        # after the applicant is created (Driver.region is nullable).
+        # elif not region:
+        #     error = 'Please select which region you\'ll be driving in.'
         elif not _is_valid_email(form_data['driver_email']):
             error = 'Please enter a valid email address.'
         elif form_data['payment_method'] == 'bank' and not all([
@@ -810,6 +812,19 @@ def _agreement_items(driver):
                 "supply, so I do not need to issue my own invoices for those "
                 "services. Each time a payment is made, the invoice / receipt "
                 "for it is emailed to the address I give below."
+            ),
+        })
+
+    # Only a driver with an ABN can issue their own tax invoice at all — a
+    # driver without one always gets an RCTI, so the choice doesn't apply.
+    if driver.abn:
+        items.append({
+            'field': 'item_tax_invoice_confirmed',
+            'title': 'Tax invoice or RCTI',
+            'detail': (
+                "You may issue EasyGo a tax invoice for your services "
+                "provided; otherwise, EasyGo will issue you a Recipient "
+                "Created Tax Invoice (RCTI) on your behalf."
             ),
         })
 

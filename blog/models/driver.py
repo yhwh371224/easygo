@@ -159,6 +159,7 @@ class DriverAgreement(models.Model):
     item_status_confirmed = models.BooleanField(default=False)
     item_liability_confirmed = models.BooleanField(default=False)
     item_rcti_confirmed = models.BooleanField(default=False)
+    item_tax_invoice_confirmed = models.BooleanField(default=False)
 
     # Only populated for company-level agreements (driver.is_company) — the
     # name/title of the person at the partner company who certified it, since
