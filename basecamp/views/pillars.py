@@ -44,8 +44,9 @@ def home(request):
     latest_post = (
         Post.objects
         .filter(status='published')
-        .filter(Q(region__isnull=True) | Q(region__slug='sydney'))
+        .filter(Q(regions__isnull=True) | Q(regions__slug='sydney'))
         .order_by('-created_at')
+        .distinct()
         .first()
     )
 

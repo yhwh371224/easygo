@@ -8,13 +8,15 @@ def post_list(request):
     posts = Post.objects.filter(status='published').select_related('category')
 
     # 지역 필터링: ?region= 쿼리(지역 홈페이지에서 넘어온 경우) 우선,
-    # 없으면 URL 경로 기반 지역을 사용. 시드니(지역 미지정 포함)는 지역 없는 글도 함께 노출
+    # 없으면 URL 경로 기반 지역을 사용, 그마저 없으면 시드니를 기본값으로 사용.
+    # regions가 비어 있는 글(범용 글)은 어느 지역에서든 함께 노출된다.
     region_slug = request.GET.get('region', '').strip()
-    active_region_slug = region_slug or getattr(getattr(request, 'region', None), 'slug', '')
-    if active_region_slug and active_region_slug != 'sydney':
-        posts = posts.filter(region__slug=active_region_slug)
-    else:
-        posts = posts.filter(Q(region__isnull=True) | Q(region__slug='sydney'))
+    active_region_slug = (
+        region_slug or getattr(getattr(request, 'region', None), 'slug', '') or 'sydney'
+    )
+    posts = posts.filter(
+        Q(regions__isnull=True) | Q(regions__slug=active_region_slug)
+    ).distinct()
 
     # 검색
     query = request.GET.get('q', '').strip()

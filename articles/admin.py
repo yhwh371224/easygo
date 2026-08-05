@@ -17,13 +17,18 @@ class TagAdmin(admin.ModelAdmin):
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display  = ('title', 'region', 'category', 'status', 'is_featured',
+    list_display  = ('title', 'region_display', 'category', 'status', 'is_featured',
                      'view_count', 'published_at')
-    list_filter   = ('status', 'is_featured', 'region', 'category', 'tags')
+    list_filter   = ('status', 'is_featured', 'regions', 'category', 'tags')
     search_fields = ('title', 'excerpt', 'content')
     prepopulated_fields  = {'slug': ('title',)}
     readonly_fields      = ('view_count', 'created_at', 'updated_at', 'published_at')
-    filter_horizontal    = ('tags',)
+    filter_horizontal    = ('regions', 'tags')
+
+    @admin.display(description='Region(s)')
+    def region_display(self, obj):
+        names = [r.name for r in obj.regions.all()]
+        return ', '.join(names) if names else 'All regions (universal)'
 
     # SNS 발행 상태는 나중에 posting_agent 연동 후 활성화
     # list_display 에 posted_to_google, posted_to_facebook, posted_to_instagram 추가 예정
@@ -33,7 +38,8 @@ class PostAdmin(admin.ModelAdmin):
             'fields': ('title', 'slug', 'excerpt', 'content', 'thumbnail', 'thumbnail_query', 'thumbnail_source_url')
         }),
         ('Classification', {
-            'fields': ('region', 'category', 'tags')
+            'fields': ('regions', 'category', 'tags'),
+            'description': 'Leave Regions empty to publish this post to every region at once.',
         }),
         ('SEO', {
             'fields': ('meta_title', 'meta_description'),

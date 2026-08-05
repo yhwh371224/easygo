@@ -43,9 +43,9 @@ class Post(models.Model):
     content   = models.TextField(verbose_name='Content (HTML)')
 
     # ── 지역 ───────────────────────────────────
-    region    = models.ForeignKey('regions.Region', on_delete=models.SET_NULL,
-                                  null=True, blank=True,
-                                  related_name='blog_posts', verbose_name='Region')
+    # 비워두면(regions.count() == 0) 모든 지역에 노출되는 범용 글로 취급한다.
+    regions   = models.ManyToManyField('regions.Region', blank=True,
+                                       related_name='blog_posts', verbose_name='Regions')
 
     # ── 분류 ───────────────────────────────────
     category  = models.ForeignKey(Category, on_delete=models.SET_NULL,

@@ -138,7 +138,8 @@ class Command(BaseCommand):
         parser.add_argument('--topic', default=None)
         parser.add_argument('--category', default=None)
         parser.add_argument('--region', default=None,
-                             help='Region slug (sydney, melbourne, brisbane, gold-coast). 비워두면 지역 없음.')
+                             help='Region slug(s), comma-separated (e.g. "sydney,melbourne"). '
+                                  '비워두면 모든 지역에 노출되는 범용 글로 저장.')
 
     def handle(self, *args, **options):
 
@@ -163,25 +164,22 @@ class Command(BaseCommand):
                 self.stdout.write(self.style.ERROR("❌ Category not found"))
                 category_name = ""
 
-        # --- region ---
+        # --- region(s) ---
         from regions.models import Region
 
-        region = None
-        region_slug = options['region']
-        if region_slug:
+        regions = []
+        region_input = options['region']
+        if region_input is None:
+            existing_regions = list(Region.objects.filter(is_active=True).values_list('slug', flat=True))
+            self.stdout.write(f"\n📍 Available regions: {', '.join(existing_regions)} "
+                               f"(쉼표로 복수 선택 가능, 엔터만 치면 모든 지역에 노출)")
+            region_input = input("📍 Region(s) (엔터=전체): ").strip()
+
+        for region_slug in [s.strip() for s in region_input.split(',') if s.strip()]:
             try:
-                region = Region.objects.get(slug=region_slug, is_active=True)
+                regions.append(Region.objects.get(slug=region_slug, is_active=True))
             except Region.DoesNotExist:
                 raise CommandError(f"Region '{region_slug}' not found or inactive.")
-        else:
-            existing_regions = list(Region.objects.filter(is_active=True).values_list('slug', flat=True))
-            self.stdout.write(f"\n📍 Available regions: {', '.join(existing_regions)} (엔터만 치면 지역 없음)")
-            region_slug = input("📍 Region (엔터=없음): ").strip()
-            if region_slug:
-                try:
-                    region = Region.objects.get(slug=region_slug, is_active=True)
-                except Region.DoesNotExist:
-                    self.stdout.write(self.style.WARNING(f"⚠️ Region '{region_slug}' not found — 지역 없이 저장합니다."))
 
         self.stdout.write("\n🤖 Generating article...\n")
 
@@ -239,15 +237,15 @@ class Command(BaseCommand):
             thumbnail_query=data['thumbnail_query'],
             category=category,
             status=status,
-            region=region,
         )
+        post.regions.set(regions)
 
         admin_url = f"{settings.SITE_URL}/admin/articles/post/{post.id}/change/"
 
         self.stdout.write("\n📌 RESULT")
         self.stdout.write(f"ID    : {post.id}")
         self.stdout.write(f"STATUS: {status}")
-        self.stdout.write(f"REGION: {region.slug if region else '(none)'}")
+        self.stdout.write(f"REGIONS: {', '.join(r.slug for r in regions) if regions else 'all (universal)'}")
         self.stdout.write(f"ADMIN : {admin_url}")
 
         self.stdout.write("\n🎉 Done.")

@@ -2,6 +2,7 @@ import logging
 
 from django.conf import settings
 from django.contrib.staticfiles.storage import staticfiles_storage
+from django.db.models import Q
 from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template import TemplateDoesNotExist
@@ -37,9 +38,11 @@ def region_home(request, region_slug):
 
     latest_post = (
         BlogPost.objects
-        .filter(status='published', region=region)
+        .filter(status='published')
+        .filter(Q(regions=region) | Q(regions__isnull=True))
         .only('title', 'slug', 'created_at')
         .order_by('-created_at')
+        .distinct()
         .first()
     )
 
@@ -189,9 +192,11 @@ def _build_city_context(request, slug):
     )
     latest_post = (
         BlogPost.objects
-        .filter(status='published', region=region)
+        .filter(status='published')
+        .filter(Q(regions=region) | Q(regions__isnull=True))
         .only('title', 'slug', 'created_at')
         .order_by('-created_at')
+        .distinct()
         .first()
     )
     from regions.models import Terminal
