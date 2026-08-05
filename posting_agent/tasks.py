@@ -64,7 +64,7 @@ def post_to_gmb_from_article(post_pk: int):
     success = post_to_google_business(
         text=gmb_text,
         image_url=image_url,
-        call_to_action_url=f"{settings.SITE_URL}/blog/{post.slug}/",
+        call_to_action_url=f"{settings.SITE_URL}/articles/blog/{post.slug}/",
     )
 
     # Mark as posted only if successful
