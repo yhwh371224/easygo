@@ -20,7 +20,7 @@
                     <a class="nav-link" href="/easygo_review/">Reviews</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'articles:post_list' %}">Blog</a>
+                    <a class="nav-link" href="{% url 'articles:post_list' %}?region={{ current_region.slug }}">Blog</a>
                 </li>
             </ul>
         </div>
