@@ -30,8 +30,8 @@ COMPANY_ABN  = "25 697 358 535"
 CAR_TYPE_SUGGESTIONS = [
     'Sedan',
     'SUV',
-    'Van / People Mover (up to 7 seats)',
-    'Maxi Taxi / Minibus (8–11 seats)',
+    'Van / People Mover (7 seats)',
+    'Maxi Taxi / Minibus (8-11)',
 ]
 
 # Mirrors the Driver model field max_length values — checked before create()
