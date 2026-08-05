@@ -43,11 +43,6 @@ GMB_TOKEN_FILE = config('GMB_TOKEN_FILE', default='')
 GMB_ACCOUNT_NAME = config('GMB_ACCOUNT_NAME', default='')
 GMB_LOCATION_NAME = config('GMB_LOCATION_NAME', default='')
 
-# Facebook / Instagram
-FACEBOOK_PAGE_ID = config('FACEBOOK_PAGE_ID', default='')
-FACEBOOK_PAGE_TOKEN = config('FACEBOOK_PAGE_TOKEN', default='')
-INSTAGRAM_ACCOUNT_ID = config('INSTAGRAM_ACCOUNT_ID', default='')
-
 # Twilio
 TWILIO_ACCOUNT_SID = config('TWILIO_ACCOUNT_SID')
 TWILIO_AUTH_TOKEN = config('TWILIO_AUTH_TOKEN')

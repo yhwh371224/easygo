@@ -137,6 +137,8 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('--topic', default=None)
         parser.add_argument('--category', default=None)
+        parser.add_argument('--region', default=None,
+                             help='Region slug (sydney, melbourne, brisbane, gold-coast). 비워두면 지역 없음.')
 
     def handle(self, *args, **options):
 
@@ -160,6 +162,26 @@ class Command(BaseCommand):
             except Category.DoesNotExist:
                 self.stdout.write(self.style.ERROR("❌ Category not found"))
                 category_name = ""
+
+        # --- region ---
+        from regions.models import Region
+
+        region = None
+        region_slug = options['region']
+        if region_slug:
+            try:
+                region = Region.objects.get(slug=region_slug, is_active=True)
+            except Region.DoesNotExist:
+                raise CommandError(f"Region '{region_slug}' not found or inactive.")
+        else:
+            existing_regions = list(Region.objects.filter(is_active=True).values_list('slug', flat=True))
+            self.stdout.write(f"\n📍 Available regions: {', '.join(existing_regions)} (엔터만 치면 지역 없음)")
+            region_slug = input("📍 Region (엔터=없음): ").strip()
+            if region_slug:
+                try:
+                    region = Region.objects.get(slug=region_slug, is_active=True)
+                except Region.DoesNotExist:
+                    self.stdout.write(self.style.WARNING(f"⚠️ Region '{region_slug}' not found — 지역 없이 저장합니다."))
 
         self.stdout.write("\n🤖 Generating article...\n")
 
@@ -217,6 +239,7 @@ class Command(BaseCommand):
             thumbnail_query=data['thumbnail_query'],
             category=category,
             status=status,
+            region=region,
         )
 
         admin_url = f"{settings.SITE_URL}/admin/articles/post/{post.id}/change/"
@@ -224,6 +247,7 @@ class Command(BaseCommand):
         self.stdout.write("\n📌 RESULT")
         self.stdout.write(f"ID    : {post.id}")
         self.stdout.write(f"STATUS: {status}")
+        self.stdout.write(f"REGION: {region.slug if region else '(none)'}")
         self.stdout.write(f"ADMIN : {admin_url}")
 
         self.stdout.write("\n🎉 Done.")

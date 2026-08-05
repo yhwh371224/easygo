@@ -17,9 +17,9 @@ class TagAdmin(admin.ModelAdmin):
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display  = ('title', 'category', 'status', 'is_featured',
+    list_display  = ('title', 'region', 'category', 'status', 'is_featured',
                      'view_count', 'published_at')
-    list_filter   = ('status', 'is_featured', 'category', 'tags')
+    list_filter   = ('status', 'is_featured', 'region', 'category', 'tags')
     search_fields = ('title', 'excerpt', 'content')
     prepopulated_fields  = {'slug': ('title',)}
     readonly_fields      = ('view_count', 'created_at', 'updated_at', 'published_at')
@@ -33,7 +33,7 @@ class PostAdmin(admin.ModelAdmin):
             'fields': ('title', 'slug', 'excerpt', 'content', 'thumbnail', 'thumbnail_query', 'thumbnail_source_url')
         }),
         ('Classification', {
-            'fields': ('category', 'tags')
+            'fields': ('region', 'category', 'tags')
         }),
         ('SEO', {
             'fields': ('meta_title', 'meta_description'),

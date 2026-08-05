@@ -1,14 +1,10 @@
 import logging
 from django.core.management.base import BaseCommand
 from django.conf import settings
-from asgiref.sync import sync_to_async
 from telegram import Update
 from telegram.ext import Application, CallbackQueryHandler, ContextTypes
-from posting_agent.telegram_bot import load_pending, clear_pending, load_pending_review, clear_pending_review
-from posting_agent.blog_poster import save_blog_post
-from posting_agent.social_poster import post_to_facebook, post_to_instagram
+from posting_agent.telegram_bot import load_pending_review, clear_pending_review
 from posting_agent.review_manager import post_reply
-from posting_agent.gmb_poster import post_to_google_business
 
 
 logging.basicConfig(level=logging.INFO)
@@ -18,49 +14,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
 
-    if query.data == "approve_all":
-        content, image_bytes = load_pending()
-        if not content:
-            await query.edit_message_caption("❌ 저장된 포스트가 없어요.")
-            return
-
-        results = []
-
-        # 1. Django 블로그 저장
-        post = None
-        try:
-            post = await sync_to_async(save_blog_post)(content, image_bytes, f"{content['topic_slug']}.webp")
-            results.append(f"✅ 블로그: {post.get_absolute_url()}")
-        except Exception as e:
-            results.append(f"❌ 블로그 실패: {e}")
-            print(f"❌ 블로그 저장 실패: {e}")
-
-        # 2. Facebook
-        # fb_ok = post_to_facebook(content['social_content'], image_bytes)
-        # results.append("✅ Facebook 발행" if fb_ok else "❌ Facebook 실패")
-
-        # 3. Google My Business
-        blog_url = f"https://easygoairportshuttle.com.au/blog/{content['topic_slug']}/"
-        image_url = content.get('image_url')
-        gmb_ok = post_to_google_business(content['gmb_content'], call_to_action_url=blog_url, image_url=image_url)
-        results.append("✅ GMB 포스트 발행" if gmb_ok else "❌ GMB 실패")
-
-        # 4. Instagram (이미지 URL 필요 - 블로그 저장 후 URL 사용)
-        # TODO: Meta API 셋업 후 활성화
-        # results.append("⏸️ Instagram (Meta API 셋업 후 활성화)")
-
-        clear_pending()
-        await query.edit_message_caption("\n".join(results))
-
-    elif query.data == "regenerate":
-        clear_pending()
-        await query.edit_message_caption("🔄 재생성: python manage.py generate_post 를 다시 실행해주세요.")
-
-    elif query.data == "cancel":
-        clear_pending()
-        await query.edit_message_caption("❌ 취소됐습니다.")
-
-    elif query.data.startswith("ra:"):
+    if query.data.startswith("ra:"):
         review_id = query.data.split(":")[1]
         review, reply = load_pending_review(review_id)
         if not review:
@@ -82,31 +36,9 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         review_id = query.data.split(":")[1]
         await query.edit_message_text("✏️ 수정할 답변 내용을 입력해주세요:")
 
-    elif query.data.startswith("ap:"):
-        from articles.models import Post
-        post_id = int(query.data.split(":")[1])
-        try:
-            post = await sync_to_async(Post.objects.get)(id=post_id)
-            post.status = 'published'
-            await sync_to_async(post.save)()
-            await query.edit_message_text(f"✅ 발행 완료!\n\n{post.title}")
-        except Post.DoesNotExist:
-            await query.edit_message_text("❌ 포스트를 찾을 수 없어요.")
-
-    elif query.data.startswith("ad:"):
-        from articles.models import Post
-        post_id = int(query.data.split(":")[1])
-        try:
-            post = await sync_to_async(Post.objects.get)(id=post_id)
-            title = post.title
-            await sync_to_async(post.delete)()
-            await query.edit_message_text(f"🗑️ 삭제 완료!\n\n{title}")
-        except Post.DoesNotExist:
-            await query.edit_message_text("❌ 포스트를 찾을 수 없어요.")
-
 
 class Command(BaseCommand):
-    help = 'Run Telegram bot for post approval'
+    help = 'Run Telegram bot for review-reply approval'
 
     def handle(self, *args, **options):
         app = Application.builder().token(settings.TELEGRAM_BOT_TOKEN).build()
