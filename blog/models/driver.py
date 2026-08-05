@@ -77,7 +77,7 @@ class Driver(models.Model):
     driver_email = models.EmailField(blank=True, null=True)
     driver_address = models.CharField(max_length=200, blank=True, null=True)
     driver_plate = models.CharField(max_length=30, blank=True, null=True)
-    driver_car = models.CharField(max_length=30, blank=True, null=True)
+    driver_car = models.CharField(max_length=40, blank=True, null=True)
     # Self-declared on the public application form — NOT proof of cover.
     # Staff still sight the certificate of currency before flipping is_active.
     has_vehicle_insurance = models.BooleanField(

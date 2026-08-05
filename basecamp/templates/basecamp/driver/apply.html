@@ -75,7 +75,7 @@
         <h6>Vehicle &amp; Licence</h6>
         <label for="driver_car">Vehicle Type (colour)</label>
         <input type="text" class="form-control" name="driver_car" id="driver_car" list="car-type-options"
-               value="{{ form_data.driver_car }}" placeholder="e.g. Sedan, SUV, Van (7-seat)" maxlength="30" required>
+               value="{{ form_data.driver_car }}" placeholder="e.g. Sedan, SUV, Van (7-seat)" maxlength="40" required>
         <datalist id="car-type-options">
           {% for c in car_type_suggestions %}<option value="{{ c }}">{% endfor %}
         </datalist>

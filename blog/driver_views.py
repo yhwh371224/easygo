@@ -30,15 +30,15 @@ COMPANY_ABN  = "25 697 358 535"
 CAR_TYPE_SUGGESTIONS = [
     'Sedan',
     'SUV',
-    'Van / People Mover (7 seats)',
-    'Maxi Taxi / Minibus (8-11)',
+    'Van / People Mover (up to 7 seats)',
+    'Maxi Taxi / Minibus (8-11 seats)',
 ]
 
 # Mirrors the Driver model field max_length values — checked before create()
 # so a deliberately-oversized POST gets a clean form error instead of an
 # unhandled DB-level "value too long" error (Postgres enforces varchar(N)).
 DRIVER_APPLY_FIELD_MAX_LENGTHS = {
-    'driver_name': 100, 'driver_contact': 50, 'driver_email': 254, 'driver_car': 30,
+    'driver_name': 100, 'driver_contact': 50, 'driver_email': 254, 'driver_car': 40,
     'driver_plate': 30, 'abn': 20, 'bank_account_name': 100,
     'bank_bsb': 10, 'bank_account_number': 20, 'payid_number': 50,
 }
