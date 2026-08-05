@@ -822,9 +822,9 @@ def _agreement_items(driver):
             'field': 'item_tax_invoice_confirmed',
             'title': 'Tax invoice or RCTI',
             'detail': (
-                "You may issue EasyGo a tax invoice for your services "
-                "provided; otherwise, EasyGo will issue you a Recipient "
-                "Created Tax Invoice (RCTI) on your behalf."
+                "I may issue EasyGo a tax invoice for my services "
+                "provided; otherwise, EasyGo will issue me a Recipient "
+                "Created Tax Invoice (RCTI) on my behalf."
             ),
         })
 
