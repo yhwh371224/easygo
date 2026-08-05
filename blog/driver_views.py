@@ -161,14 +161,13 @@ def _notify_driver_application_received(driver):
 
     message = (
         f"Hi {driver.driver_name},\n\n"
-        "Thanks for applying to drive with EasyGo Airport Shuttle! We've received "
-        "your application and it's now with our team for review. We'll be in touch "
-        "soon once we've had a look.\n\n"
-        "Thanks again for applying,\n"
-        f"{COMPANY_NAME}\n"
+        "Thanks for applying to partner with EasyGo Airport Shuttle! We've received "
+        "your application and it's now with our team for review. We'll be in touch soon.\n\n"
+        "Thanks again,\n"
+        "EasyGo Airport Shuttle\n"
     )
     try:
-        send_text_email("Your EasyGo driver application has been received", message, [driver.driver_email])
+        send_text_email("Your form has been received", message, [driver.driver_email])
     except Exception:
         logger.exception("driver_apply: failed to send applicant confirmation for driver id=%s", driver.pk)
 
