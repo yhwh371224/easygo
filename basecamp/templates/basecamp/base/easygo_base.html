@@ -54,6 +54,10 @@
         /* Responsive overrides */
         @media(max-width: 768px) { .award-badge { top: 30px; left: 20px; width: 100px !important; height: 100px; background-image: url('/static/basecamp/images/award-badge-md.webp'); } .hero, .hero-about { min-height: 400px; } .hero::before { background-position: center 30%; } }
         @media(min-width: 992px) { .award-badge { top: 70px; left: 40px; width: 280px !important; height: 280px; background-image: url('/static/basecamp/images/award-badge-md.webp'); } }
+        /* 2026 Mosman badge swap — scoped to .award-badge-2026 so pages not opting in (e.g. about_us) keep the 2024 badge */
+        .award-badge.award-badge-2026 { background-image: url('/static/basecamp/images/award-badge-2026-sm.webp'); }
+        @media(max-width: 768px) { .award-badge.award-badge-2026 { background-image: url('/static/basecamp/images/award-badge-2026-md.webp'); } }
+        @media(min-width: 992px) { .award-badge.award-badge-2026 { background-image: url('/static/basecamp/images/award-badge-2026-md.webp'); } }
         @media(max-width: 480px) { .hero, .hero-about { min-height: 300px; } .hero::before { background-position: center 25%; } }
     </style>
     {% block extra_css %}{% endblock %}
