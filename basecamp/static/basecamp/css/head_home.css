@@ -1,10 +1,17 @@
 @font-face { font-family: "around-icons"; src: url("../fonts/around-icons.ttf?enmnv5") format("truetype"), url("../fonts/around-icons.woff?enmnv5") format("woff"), url("../fonts/around-icons.svg?enmnv5#around-icons") format("svg"); font-weight: normal; font-style: normal; font-display: optional;}
 .award-badge { position: fixed; top: 90px; left: 6%; transform: translateX(-6%); width: 110px !important; height: 110px; image-rendering: -webkit-optimize-contrast; z-index: 1000; display: block;}
+/* Homepage hero only — decoupled from the sitewide .award-badge so other pages are unaffected */
+.hero-badge-left { position: fixed; top: 35vh; left: 6%; transform: translateX(-6%); width: 110px !important; height: 110px; image-rendering: -webkit-optimize-contrast; z-index: 1000; display: block;}
+.hero-badge-right { position: fixed; top: 35vh; left: calc(6% + 95px); transform: translateX(-6%); width: 110px !important; height: 110px; image-rendering: -webkit-optimize-contrast; z-index: 1001; display: block;}
 @media (max-width: 576px) { .card-img-top { height: 140px; }}
 @media (max-width: 768px) { .hero-about { min-height: 400px; } .hero-about h1 { font-size: 1.6rem; } .hero-overlap-container { margin-top: -60px; } .content-card-box { padding: 2rem 1.5rem !important; } #booking-form { margin-top: 5px !important; transform: translateY(-20px); } .admin-btn { display: none !important; } .services-cover { min-height: 300px !important; position: relative !important; }}
 @media (max-width: 992px) { .card-img-top { height: 180px; }}
 @media (min-width: 768px) { .award-badge { position: absolute; top: 100px; left: auto; transform: none; right: 45px; width: 140px !important; height: auto; }}
+@media (min-width: 768px) { .hero-badge-left { position: absolute; top: 100px; left: 45px; transform: none; width: 140px !important; height: auto; }}
+@media (min-width: 768px) { .hero-badge-right { position: absolute; top: 100px; left: 160px; transform: none; width: 140px !important; height: auto; }}
 @media (min-width: 992px) { .award-badge { position: fixed; top: 140px; right: 40px; width: 240px !important; height: auto; } .main-img { min-height: 500px; }}
+@media (min-width: 992px) { .hero-badge-left { position: fixed; top: 160px; left: 40px; width: 240px !important; height: auto; }}
+@media (min-width: 992px) { .hero-badge-right { position: fixed; top: 160px; left: 240px; width: 240px !important; height: auto; }}
 @media (min-width: 992px) and (max-width: 1279px) { .container { max-width: 100%; }}
 body { margin: 0; font-family: Arial, sans-serif; }
   .page-wrapper { width: 100%; overflow-x: hidden; }

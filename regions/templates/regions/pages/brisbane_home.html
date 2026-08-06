@@ -83,7 +83,8 @@
       <!-- HERO -->
       <section id="region-hero" class="bg-dark pt-6 pb-5 py-sm-6">
         <div class="main-img" fetchpriority="high"></div>
-        <img src="{% static 'basecamp/images/award-badge-sm.webp' %}" width="240" height="240" alt="EasyGo 2024 Quality Business Award Badge – Brisbane Airport Transfer" class="award-badge" fetchpriority="high">
+        <img src="{% static 'basecamp/images/award-badge-sm.webp' %}" width="240" height="240" alt="EasyGo 2024 Quality Business Award Badge – Brisbane Airport Transfer" class="hero-badge-left" fetchpriority="high">
+        <img src="{% static 'basecamp/images/award-badge-2026-md.webp' %}" width="240" height="240" alt="EasyGo 2026 Quality Business Award Badge – Brisbane Airport Transfer" class="hero-badge-right" fetchpriority="high">
         <div class="hero-text-wrap">
           <div class="hero-text-inner">
             <span class="hero-eyebrow">Brisbane Airport — Private Transfer</span>
@@ -576,14 +577,45 @@
         </div>
       </section>
 
-      <!-- ===== AWARD SECTION ===== -->
+      <!-- ===== AWARD SECTION (2024 INNER WEST + 2026 MOSMAN, SIDE BY SIDE) ===== -->
+      <section class="container mt-3">
+        <div class="row g-5">
+          <div class="col-md-6 award-section" id="quality-award" style="position:relative;">
+            <img
+              loading="lazy"
+              src="{% static 'basecamp/images/Digital-Certificate.webp' %}"
+              alt="EasyGo Airport Shuttle – 2024 Quality Business Award Certificate from Inner West Council"
+              style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain;"
+            >
+            <div class="py-6 award-section-inner"></div>
+          </div>
+          <div class="col-md-6 award-section" id="quality-award-2026" style="position:relative;">
+            <img
+              loading="lazy"
+              src="{% static 'basecamp/images/Digital-Certificate-2026-mosman.webp' %}"
+              alt="EasyGo Airport Shuttle – 2026 Quality Business Award Certificate from Mosman Council"
+              style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain;"
+            >
+            <div class="py-6 award-section-inner"></div>
+          </div>
+        </div>
+      </section>
+
       <section class="bg-dark text-light py-5">
-        <div class="container text-center">
-          <h2 class="mb-4"><span class="text-orange">2024 Quality Business Award!</span></h2>
-          <p class="services-list-item">EasyGo Airport Shuttle has won the 2024 Quality Business Award from the Inner West Council — recognising our commitment to reliable, professional, and customer-focused airport transfer services across NSW.</p>
-          <a href="https://easygo.s3.ap-southeast-2.amazonaws.com/panel_members.webp" target="_blank" class="award-panel-link">
-            🧑‍💼 🧑‍🤝‍🧑 View Panel Members 👥➡️
-          </a>
+        <div class="container">
+          <div class="row g-5">
+            <div class="col-md-6 text-center">
+              <h2 class="mb-4"><span class="text-orange">2024 Quality Business Award!</span></h2>
+              <p class="services-list-item">EasyGo Airport Shuttle has won the 2024 Quality Business Award from the Inner West Council — recognising our commitment to reliable, professional, and customer-focused airport transfer services across NSW.</p>
+              <a href="https://easygo.s3.ap-southeast-2.amazonaws.com/panel_members.webp" target="_blank" class="award-panel-link">
+                🧑‍💼 🧑‍🤝‍🧑 View Panel Members 👥➡️
+              </a>
+            </div>
+            <div class="col-md-6 text-center">
+              <h2 class="mb-4"><span class="text-orange">2026 Quality Business Award!</span></h2>
+              <p class="services-list-item">EasyGo Airport Shuttle has won the 2026 Quality Business Award from Mosman Council — recognising our commitment to reliable, professional, and customer-focused airport transfer services across Sydney's North Shore.</p>
+            </div>
+          </div>
         </div>
       </section>
     </main>
