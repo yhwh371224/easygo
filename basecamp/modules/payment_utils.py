@@ -122,11 +122,10 @@ def _record_stripe_fee(payment_intent_id):
         )
 
 
-# PayPal Australia treats its merchant transaction fees as a GST-free financial
-# supply — unlike Stripe AU, PayPal does NOT add GST to seller fees, so there is
-# no input-tax credit (1B) to claim. Fees are recorded as no_gst / zero GST.
-# If a PayPal tax invoice ever shows a GST line, flip this to True.
-_PAYPAL_FEE_HAS_GST = False
+# PayPal AU does add 10% GST to its merchant transaction fees, same as Stripe —
+# the fee is GST-inclusive, so an input-tax credit (1B) can be claimed on it.
+# gst_amount = fee ÷ 11, same formula as _record_stripe_fee.
+_PAYPAL_FEE_HAS_GST = True
 
 
 def _parse_paypal_date(payment_date):
@@ -150,7 +149,7 @@ def _record_paypal_fee(txn_id, mc_fee, payment_date=None):
 
     ``mc_fee`` comes straight from the IPN payload — it is the exact fee PayPal
     deducted, so no API call is needed (contrast _record_stripe_fee). PayPal AU
-    fees are GST-free, so gst_code='no_gst' and gst_amount=0 (see
+    fees are GST-inclusive, so gst_code='gst' and gst_amount = fee / 11 (see
     _PAYPAL_FEE_HAS_GST).
 
     Silently skips if:
