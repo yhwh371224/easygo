@@ -130,6 +130,9 @@
     .btn-complete.active { background:#f59e0b; color:#fff; }
     .btn-complete.active:hover { background:#d97706; }
     .btn-complete.done { background:#d1fae5; color:#065f46; cursor:default; }
+    .btn-complete.btn-accept { background:#16a34a; color:#fff; }
+    .btn-complete.btn-accept:hover { background:#15803d; }
+    .candidate-card { border:1px solid #86efac; }
     .trip-direction {
       display:inline-block;
       font-size:.75rem;
@@ -146,6 +149,17 @@
       font-size:.7rem;
       background:#dbeafe;
       color:#1d4ed8;
+      border-radius:4px;
+      padding:.1rem .4rem;
+      margin-left:.4rem;
+      vertical-align:middle;
+    }
+    .badge-confirmed {
+      display:inline-block;
+      font-size:.7rem;
+      font-weight:600;
+      background:#d1fae5;
+      color:#065f46;
       border-radius:4px;
       padding:.1rem .4rem;
       margin-left:.4rem;
@@ -283,11 +297,85 @@
   </div>
   {% endif %}
 
-  {% if not trips %}
+  {% if not trips and not candidates %}
   <div class="empty-state">
     <div class="icon">🚐</div>
     <p>No trips scheduled for today.</p>
   </div>
+  {% endif %}
+
+  {% if candidates %}
+  <div class="past-trips-header" style="color:#16a34a;">🆕 Available Jobs — Accept to Confirm</div>
+  {% for c in candidates %}
+  {% with post=c.post %}
+  <div class="trip-card candidate-card" id="candidate-{{ post.id }}">
+    <div class="trip-card-body">
+
+      {% if post.pickup_date == today %}
+        <div class="trip-date-label today">📅 Today: {{ today|date:"D, d M Y" }}</div>
+      {% else %}
+        <div class="trip-date-label">📅 {{ post.pickup_date|date:"D, d M" }}</div>
+      {% endif %}
+
+      <div class="trip-time">{{ post.pickup_time|default:"--:--" }}</div>
+
+      <div class="trip-name">{{ post.name }}</div>
+
+      {% if post.direction == "Drop off to Domestic Airport" %}
+        <div class="trip-direction to-airport">✈️ To Domestic</div>
+      {% elif post.direction == "Drop off to Intl Airport" %}
+        <div class="trip-direction to-airport">✈️ To International</div>
+      {% elif post.direction == "Pickup from Domestic Airport" %}
+        <div class="trip-direction from-airport">✈️ From Domestic</div>
+      {% elif post.direction == "Pickup from Intl Airport" %}
+        <div class="trip-direction from-airport">✈️ From International</div>
+      {% elif post.direction == "Cruise or Point to Point" %}
+        <div class="trip-direction cruise">🚗 Point to Point</div>
+      {% endif %}
+
+      <div class="trip-route">
+        <span>{{ post.start_point|default:"–" }}</span>
+        <span class="arrow">→</span>
+        <span>{{ post.end_point|default:"–" }}</span>
+      </div>
+
+      <div class="trip-meta">
+        {{ post.no_of_passenger }} pax
+        {% if post.no_of_baggage %} · {{ post.no_of_baggage }} bags{% endif %}
+        {% if post.flight_number %} · {{ post.flight_number }}{% endif %}
+      </div>
+
+      {% if post.suburb %}
+      <a class="trip-address"
+         href="https://www.google.com/maps/search/?api=1&query={{ post.suburb|urlencode }}"
+         target="_blank" rel="noopener">
+        <span class="icon">📍</span>
+        {{ post.suburb }}
+      </a>
+      {% endif %}
+
+      {% if post.driver_price %}
+      <div class="trip-payment">
+        <span class="trip-price">${{ post.driver_price }}</span>
+      </div>
+      {% endif %}
+
+      <div class="trip-message" style="color:#065f46;background:#d1fae5;border-radius:8px;padding:.5rem .65rem;font-size:.85rem;">
+        Accept this job to see the full pickup address, customer contact, and payment details.
+      </div>
+
+    </div>
+
+    <button
+      class="btn-complete btn-accept"
+      id="btn-accept-{{ post.id }}"
+      onclick="acceptJob({{ post.id }})"
+    >
+      Accept This Job
+    </button>
+  </div>
+  {% endwith %}
+  {% endfor %}
   {% endif %}
 
   {% for t in trips %}
@@ -303,6 +391,7 @@
 
       <div class="trip-time">
         {{ post.pickup_time|default:"--:--" }}
+        <span class="badge-confirmed">✅ Job Confirmed</span>
         {% if t.in_window and t.proxy_number %}<span class="badge-proxy">proxy on</span>{% endif %}
       </div>
 
@@ -567,6 +656,36 @@
     .catch(() => {
       btn.disabled = false;
       btn.textContent = 'Complete Trip';
+      alert('Network error. Please try again.');
+    });
+  }
+
+  function acceptJob(postId) {
+    const btn = document.getElementById('btn-accept-' + postId);
+    if (!btn || btn.disabled) return;
+    btn.disabled = true;
+    btn.textContent = 'Processing…';
+
+    fetch("{% url 'blog:driver_accept_job' 0 %}".replace('/0/', '/' + postId + '/'), {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': '{{ csrf_token }}',
+        'Content-Type': 'application/json',
+      },
+    })
+    .then(r => r.json().then(data => ({ status: r.status, data })))
+    .then(({ status, data }) => {
+      if (data.ok) {
+        window.location.reload();
+      } else {
+        btn.disabled = false;
+        btn.textContent = 'Accept This Job';
+        alert(status === 409 ? 'Sorry, this job has already been taken by another driver.' : 'Failed. Please try again.');
+      }
+    })
+    .catch(() => {
+      btn.disabled = false;
+      btn.textContent = 'Accept This Job';
       alert('Network error. Please try again.');
     });
   }

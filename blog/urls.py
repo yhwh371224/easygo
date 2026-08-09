@@ -10,6 +10,7 @@ urlpatterns = [
     path('logout/', driver_views.driver_logout, name='driver_logout'),
     path('', driver_views.driver_dashboard, name='driver_dashboard'),
     path('complete/<int:post_id>/', driver_views.driver_complete_trip, name='driver_complete_trip'),
+    path('accept/<int:post_id>/', driver_views.driver_accept_job, name='driver_accept_job'),
     path('change-password/', driver_views.driver_change_password, name='driver_change_password'),
     path('password-change/', driver_views.driver_password_change, name='driver_password_change'),
     path('impersonate/<int:driver_id>/', driver_views.driver_impersonate, name='driver_impersonate'),

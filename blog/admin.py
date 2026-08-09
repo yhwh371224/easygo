@@ -398,6 +398,8 @@ class PostAdmin(admin.ModelAdmin):
             out.append(f'{label}{halved}{rest}')
         return ', '.join(out)
 
+    filter_horizontal = ['candidate_drivers']
+
     @admin.action(description='Duplicate selected booking(s)')
     def duplicate_bookings(self, request, queryset):
         created = 0
@@ -477,7 +479,7 @@ class PostAdmin(admin.ModelAdmin):
                     'private_ride','cruise',  'no_email_reminder', 'no_review']
         }),
         ('Driver', {
-            'fields': ['driver', 'use_proxy']
+            'fields': ['driver', 'use_proxy', 'candidate_drivers']
         }),
         ('Notes', {
             'fields': ['message', 'notice', 'special_items']

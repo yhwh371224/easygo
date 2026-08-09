@@ -114,6 +114,7 @@ class Post(models.Model):
     toll = models.CharField(max_length=30, blank=True, null=True)
     surcharge = models.CharField(max_length=30, blank=True, null=True)
     driver = models.ForeignKey('Driver', on_delete=models.SET_NULL, null=True, blank=True)
+    candidate_drivers = models.ManyToManyField('Driver', blank=True, related_name='candidate_posts')
     region = models.ForeignKey(
         'regions.Region',
         null=True,

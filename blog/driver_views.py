@@ -452,6 +452,20 @@ def driver_dashboard(request):
         .order_by('pickup_date', 'pickup_time')
     )
 
+    # 후보로 선택되었지만 아직 배정 확정(driver 지정) 안된 잡 — 여러 드라이버에게 노출,
+    # 배정 확정 전까지는 디테일을 항상 마스킹 (suburb만, 전화번호 없음)
+    candidate_qs = (
+        Post.objects
+        .filter(
+            candidate_drivers=driver,
+            driver__isnull=True,
+            pickup_date__gte=today,
+            cancelled=False,
+        )
+        .order_by('pickup_date', 'pickup_time')
+    )
+    candidates = [{'post': post} for post in candidate_qs]
+
     # 밸런스용 오늘~내일까지 트립 (완료 포함, use_proxy 무관) - 모레 이후 제외
     balance_posts_today = (
         Post.objects
@@ -642,6 +656,7 @@ def driver_dashboard(request):
     return render(request, 'basecamp/driver/dashboard.html', {
         'driver': driver,
         'trips': trips,
+        'candidates': candidates,
         'today': today,
         'timeline': timeline,
         'agreement_confirmed': agreement_confirmed,
@@ -976,3 +991,39 @@ def driver_complete_trip(request, post_id):
     ok = close_bird_mapping(post)
 
     return JsonResponse({'ok': ok})
+
+
+@login_required(login_url='/driver/login/')
+@require_POST
+def driver_accept_job(request, post_id):
+    try:
+        driver = request.user.driver
+    except Exception:
+        return JsonResponse({'ok': False, 'error': 'No driver account linked.'}, status=403)
+
+    from blog.models import Post
+    from django.db import transaction
+
+    with transaction.atomic():
+        post = (
+            Post.objects
+            .select_for_update()
+            .filter(pk=post_id, candidate_drivers=driver, driver__isnull=True, cancelled=False)
+            .first()
+        )
+        if post is None:
+            return JsonResponse(
+                {'ok': False, 'error': 'This job has already been taken or is no longer available.'},
+                status=409,
+            )
+        post.driver = driver
+        post.use_proxy = True
+        post.save(update_fields=['driver', 'use_proxy'])
+
+    from utils.telegram import send_telegram_sync
+    send_telegram_sync(
+        f"🚗 Job accepted: {driver.driver_name} confirmed booking #{post.id} "
+        f"({post.pickup_date} {post.pickup_time or ''}, {post.name})"
+    )
+
+    return JsonResponse({'ok': True})
