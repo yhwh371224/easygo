@@ -26,13 +26,18 @@ class SettlementService:
         # 회사를 거치지 않은 거래이므로(회사 매출/GST 제외 대상과 동일한 이유),
         # 정산 대상에서도 완전히 제외한다 — 회사가 이미 지급된 금액을 또 지급액으로
         # 잡으면 안 되기 때문.
+        # 이미 다른 settlement에 포함된 post는 제외 — 자동 일일 정산(cron)과 수동
+        # 정산이 같은 기간을 중복 처리해도, 혹은 같은 날짜로 재실행되어도 같은
+        # 예약이 두 번 지급되지 않도록 하는 안전장치.
         posts = Post.objects.filter(
             driver=driver,
             pickup_date__gte=from_date,
             pickup_date__lte=to_date,
             cancelled=False,
             driver_collected_cash=False,
-        ).exclude(price__isnull=True).exclude(price='')
+        ).exclude(price__isnull=True).exclude(price='').exclude(
+            driversettlementitem__isnull=False
+        )
 
         if not posts.exists():
             return None
