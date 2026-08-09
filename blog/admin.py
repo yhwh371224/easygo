@@ -309,6 +309,13 @@ class InquiryAdmin(admin.ModelAdmin):
         return f"${rs.price}" if rs else "-"
     suburb_base_price.short_description = "Base Price"
 
+    def save_model(self, request, obj, form, change):
+        # TEMPORARY (2026-08): auto-force prepay/private_ride True on every save.
+        # Requested to always land True regardless of the checkbox state. Revert later.
+        obj.prepay = True
+        obj.private_ride = True
+        super().save_model(request, obj, form, change)
+
 
 class PaypalPaymentAdmin(admin.ModelAdmin):
     list_display = ['name', 'email', 'amount', 'txn_id', 'created']    
