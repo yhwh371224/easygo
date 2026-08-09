@@ -813,22 +813,6 @@ def _agreement_items(driver):
         },
     ]
 
-    # RCTIs only carry GST for drivers registered for it (see
-    # settlement_service.py), so the item is meaningless — and only confusing
-    # — for a driver who isn't GST-registered.
-    if driver.gst_registered:
-        items.append({
-            'field': 'item_rcti_confirmed',
-            'title': 'Invoices & payment receipts',
-            'detail': (
-                f"I agree that {COMPANY_NAME} (ABN {COMPANY_ABN}) may issue "
-                "Recipient Created Tax Invoices (RCTIs) for the services I "
-                "supply, so I do not need to issue my own invoices for those "
-                "services. Each time a payment is made, the invoice / receipt "
-                "for it is emailed to the address I give below."
-            ),
-        })
-
     # Only a driver with an ABN can issue their own tax invoice at all — a
     # driver without one always gets an RCTI, so the choice doesn't apply.
     if driver.abn:
@@ -916,9 +900,7 @@ def _handle_agreement(request, driver):
         agreement, _ = DriverAgreement.objects.get_or_create(
             driver=driver, version=version,
         )
-        # Only the items actually shown/ticked apply — a driver who isn't
-        # GST-registered never sees the RCTI item, so item_rcti_confirmed
-        # stays False for them.
+        # Only the items actually shown/ticked apply.
         for item in items:
             setattr(agreement, item['field'], True)
         if driver.is_company:

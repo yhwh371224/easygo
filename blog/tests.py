@@ -1224,13 +1224,12 @@ class SettlementGstTests(TestCase):
 
 
 # ---------------------------------------------------------------------------
-# Agreement: invoice email, and who sees the RCTI item
+# Agreement: invoice email
 # ---------------------------------------------------------------------------
 
 class AgreementConsentTests(TestCase):
     """The agreement collects the address invoices/receipts are emailed to.
-    The RCTI item is only put to GST-registered drivers; nobody who has
-    already signed is re-prompted on their own."""
+    Nobody who has already signed is re-prompted on their own."""
 
     def setUp(self):
         from blog.driver_views import _confirmed_agreement
@@ -1245,21 +1244,9 @@ class AgreementConsentTests(TestCase):
             'invoice_email': 'invoices@drv.example.com',
             'item_status_confirmed': 'on',
             'item_liability_confirmed': 'on',
-            'item_rcti_confirmed': 'on',
         }
         data.update(extra)
         return self.client.post(reverse('blog:driver_agreement'), data)
-
-    def test_rcti_item_hidden_without_gst(self):
-        self.assertFalse(self.driver.gst_registered)
-        response = self.client.get(reverse('blog:driver_agreement'))
-        self.assertNotContains(response, 'RCTI')
-
-    def test_rcti_item_shown_for_gst_registered(self):
-        self.driver.gst_registered = True
-        self.driver.save(update_fields=['gst_registered'])
-        response = self.client.get(reverse('blog:driver_agreement'))
-        self.assertContains(response, 'RCTI')
 
     def test_signing_records_invoice_email(self):
         self._sign()
