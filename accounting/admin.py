@@ -6,7 +6,7 @@ from django.urls import path
 from django.utils.dateparse import parse_date
 
 from .models import Transaction, PayrollEntry, DividendRecord, DirectorLoan
-from . import reports
+from . import conf, reports
 
 
 @admin.register(Transaction)
@@ -18,7 +18,8 @@ class TransactionAdmin(admin.ModelAdmin):
     date_hierarchy = 'date'
     search_fields = ('description', 'counterparty')
     change_list_template = 'admin/accounting/transaction/change_list.html'
-    actions = ('approve_as_expense', 'exclude_as_driver_payment', 'exclude_as_customer_refund')
+    actions = ('approve_as_expense', 'exclude_as_driver_payment',
+               'exclude_as_customer_refund', 'exclude_as_personal')
 
     @admin.action(description="경비 승인 — count as BAS 1B expense")
     def approve_as_expense(self, request, queryset):
@@ -41,6 +42,35 @@ class TransactionAdmin(admin.ModelAdmin):
         if it wasn't, enter it there first, then exclude this bank row."""
         updated = queryset.update(needs_review=False, excluded=True)
         self.message_user(request, f"{updated} transaction(s) excluded as customer refund.")
+
+    @admin.action(description="개인 지출(제외) — exclude + record as director loan")
+    def exclude_as_personal(self, request, queryset):
+        """Mark as a personal (non-business) purchase paid off the company account.
+
+        Excluded from BAS/P&L and flagged non-deductible, then mirrored into
+        DirectorLoan as a 'repayment' so the amount owed back shows on the loan
+        balance. Use this for personal spend from a merchant that isn't in
+        conf.PERSONAL_EXPENSE_MARKERS (those are handled on import).
+
+        Saved row-by-row rather than via queryset.update() because each row needs
+        its DirectorLoan entry created; the mirror is idempotent, so re-running
+        the action on the same rows will not double-count.
+        """
+        updated = loans = 0
+        for tx in queryset:
+            tx.needs_review = False
+            tx.excluded = True
+            tx.is_tax_deductible = False
+            tx.category = conf.PERSONAL_EXPENSE_CATEGORY
+            tx.save(update_fields=['needs_review', 'excluded',
+                                   'is_tax_deductible', 'category'])
+            updated += 1
+            if DirectorLoan.record_personal_expense(tx) is not None:
+                loans += 1
+        self.message_user(
+            request,
+            f"{updated}건을 개인 지출로 제외했습니다 — director loan {loans}건 기록, "
+            f"잔액 ${DirectorLoan.current_balance()}.")
 
     def get_urls(self):
         urls = super().get_urls()

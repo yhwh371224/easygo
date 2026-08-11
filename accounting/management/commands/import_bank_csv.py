@@ -14,7 +14,7 @@ from decimal import Decimal, ROUND_HALF_UP
 from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction as db_transaction
 
-from accounting.models import Transaction
+from accounting.models import Transaction, DirectorLoan
 from accounting import conf
 
 
@@ -240,7 +240,9 @@ class Command(BaseCommand):
         self.stdout.write(self.style.MIGRATE_HEADING("Bank CSV import summary"))
         self.stdout.write(f"  To import (expenses):            {created}")
         self.stdout.write(f"    of which held (needs_review):    {held_for_review}")
-        self.stdout.write(f"    of which personal (excluded):    {personal}")
+        self.stdout.write(
+            f"    of which personal (excluded):    {personal}"
+            f"  → {personal} director loan repayment(s)")
         self.stdout.write(f"  Skipped — income rows:           {skipped_income}")
         self.stdout.write(f"  Skipped — driver payments:       {skipped_driver}")
         self.stdout.write(f"  Skipped — wage transfers:        {skipped_wage}")
@@ -269,9 +271,21 @@ class Command(BaseCommand):
             return
 
         if to_create:
+            loans_created = 0
             with db_transaction.atomic():
+                # PostgreSQL populates PKs on bulk_create, which the personal
+                # rows need in order to link their DirectorLoan entry.
                 Transaction.objects.bulk_create(to_create)
+                for t in to_create:
+                    if t.category == conf.PERSONAL_EXPENSE_CATEGORY:
+                        if DirectorLoan.record_personal_expense(t) is not None:
+                            loans_created += 1
             self.stdout.write(self.style.SUCCESS(f"\nImported {created} transactions."))
+            if loans_created:
+                self.stdout.write(self.style.SUCCESS(
+                    f"Recorded {loans_created} director loan repayment(s) for "
+                    f"personal spend. Loan balance now "
+                    f"${DirectorLoan.current_balance()}."))
         else:
             self.stdout.write("\nNothing new to import.")
 

@@ -12,6 +12,14 @@
       font-size:.85rem;
     ">
       Outstanding Balance: ${{ director_loan_balance }}
+      &mdash;
+      {% if director_loan_balance > 0 %}
+        회사가 대표에게 갚을 돈 (company owes director)
+      {% elif director_loan_balance < 0 %}
+        대표가 회사에 돌려줄 돈 (director owes company)
+      {% else %}
+        정산 완료 (settled)
+      {% endif %}
     </span>
   </li>
   {{ block.super }}
