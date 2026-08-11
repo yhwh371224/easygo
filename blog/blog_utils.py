@@ -6,6 +6,7 @@ from main.settings import DEFAULT_FROM_EMAIL
 from basecamp.basecamp_utils import render_email_template
 from blog.models import Driver, Post
 from regions.models import Region, RegionSuburb
+from utils.direction_utils import is_airport_pickup
 from utils.email import send_text_email, send_html_email
 from utils.telegram import send_telegram_sync
 
@@ -393,33 +394,45 @@ def resolve_driver(suburb):
 
     driver = get_default_driver_for_region(suburb_obj.region)
 
-    if driver: 
-        return driver
-
-    else:
+    if not driver:
         logger.warning(
             f"No default driver for region '{suburb_obj.region.name}' "
             f"(suburb: '{suburb}')"
         )
 
-    return Driver.objects.filter(is_default=True).first()
+    return driver
+
+
+def resolve_booking_driver(direction, suburb, region):
+    """예약 생성 시점에 붙일 드라이버를 정한다. 공항 픽업만 대상이고,
+    서버브의 지역 default driver → 예약 지역의 default driver 순으로만 찾는다.
+    해당 지역에 default driver 가 없으면 배정하지 않고 None 을 돌려준다.
+    (다른 지역 기사에게 미리 떠넘기지 않는다 — 미배정 건은 나중에
+    assign_drivers 크론이 다시 시도한다.)"""
+    if not is_airport_pickup(direction):
+        return None
+
+    driver = resolve_driver(suburb) or get_default_driver_for_region(region)
+    if not driver:
+        logger.warning(
+            "resolve_booking_driver: no default driver for suburb=%s region=%s — left unassigned",
+            suburb, region,
+        )
+    return driver
 
 
 def assign_default_driver_if_missing(post, dry_run=False):
     """Auto-assign a default driver to an unassigned post, saving it, so
     reminder emails never get skipped/blanked for lack of a driver.
-    Fallback chain: suburb → region → Sydney. Shared by the nightly
-    assign_drivers command and the day-of reminder emails.
+    Fallback chain: suburb → the booking's own region. Never crosses into
+    another region's driver. Shared by the nightly assign_drivers command
+    and the day-of reminder emails.
     Returns the post's driver (existing or newly assigned), or None.
     With dry_run=True, the resolved driver is returned but not saved."""
     if post.driver:
         return post.driver
 
     driver = resolve_driver(post.suburb) or get_default_driver_for_region(post.region)
-    if not driver:
-        sydney_region = Region.objects.filter(slug='sydney', is_active=True).first()
-        if sydney_region:
-            driver = get_default_driver_for_region(sydney_region)
 
     if driver and not dry_run:
         post.driver = driver

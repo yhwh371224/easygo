@@ -18,6 +18,7 @@ from .tasks import (
 
 from utils.return_booking import handle_return_trip
 from utils.prepay_helper import is_foreign_number
+from .blog_utils import _amount
 
 logger = logging.getLogger('easygo')
 
@@ -30,6 +31,20 @@ def notify_user_inquiry(sender, instance, created, **kwargs):
         pk = instance.pk
         transaction.on_commit(lambda: send_inquiry_email_task.delay(pk))
         logger.info('notify_user_inquiry: queued send_inquiry_email_task for Inquiry pk=%s', pk)
+
+
+def _payment_landed(instance):
+    """이번 저장에서 입금액(paid)이 늘었는지. 늘었으면 결제가 새로 들어온 것으로 본다.
+
+    금액이 그대로인 저장에는 False 를 돌려서, 이미 결제된 건을 환불·취소 처리할 때
+    (paid 는 남기고 cancelled 만 체크) 취소가 도로 풀리지 않게 한다.
+    paid 가 'TBA' 처럼 숫자로 못 읽히는 값이면 판단하지 않는다(False).
+    """
+    new_paid = _amount(instance.paid)
+    if new_paid is None or new_paid <= 0:
+        return False
+    old_paid = _amount(getattr(instance, '_pre_save_paid', None)) or 0.0
+    return new_paid > old_paid
 
 
 # Post signals
@@ -50,7 +65,20 @@ def notify_user_post(sender, instance, created, **kwargs):
     except (ValueError, TypeError):
         pass
 
-    if not instance.cash and not instance.paid:
+    if _payment_landed(instance):
+        # 입금이 새로 잡힌 건은 확정 상태로 맞춘다. 온라인 결제·수동 배분 경로는
+        # 이미 같은 값을 직접 세팅하는데, 장고 어드민에서 paid 만 채우고
+        # pending/cancelled/reminder 를 손대지 않는 경우가 있어 여기서 보장한다.
+        # paid 가 그대로인 저장(예: 환불 후 cancelled 체크)에는 관여하지 않는다.
+        update_data.update(pending=False, cancelled=False, reminder=True)
+        instance.pending = False
+        instance.cancelled = False
+        instance.reminder = True
+        logger.info(
+            'notify_user_post: payment landed for Post pk=%s paid=%s — forced pending=False, cancelled=False, reminder=True',
+            instance.pk, instance.paid,
+        )
+    elif not instance.cash and not instance.paid:
         update_data['pending'] = True
 
     if instance.is_confirmed:
@@ -112,7 +140,7 @@ def async_notify_user_payment_stripe(sender, instance, created, **kwargs):
         logger.info('async_notify_user_payment_stripe: queued notify_user_payment_stripe for pk=%s', pk)
 
 
-# 드라이버 변경 시 driver_calendar_event_id 초기화 + proxy 비교용 이전 값 보존
+# 드라이버 변경 시 driver_calendar_event_id 초기화 + proxy/입금액 비교용 이전 값 보존
 @receiver(pre_save, sender=Post, dispatch_uid="reset_driver_calendar_event_id_once")
 def reset_driver_calendar_event_id(sender, instance, **kwargs):
     if not instance.pk:
@@ -121,6 +149,7 @@ def reset_driver_calendar_event_id(sender, instance, **kwargs):
         old = Post.objects.get(pk=instance.pk)
         instance._pre_save_driver_id = old.driver_id
         instance._pre_save_use_proxy = old.use_proxy
+        instance._pre_save_paid = old.paid
         if old.driver != instance.driver:
             logger.info(
                 'reset_driver_calendar_event_id: driver changed for Post pk=%s old_driver=%s new_driver=%s',

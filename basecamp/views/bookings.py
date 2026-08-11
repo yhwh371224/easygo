@@ -12,8 +12,7 @@ from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
 from blog.models import Post, Inquiry, Driver
 from blog import dunning
-from blog.blog_utils import get_default_driver_for_region, resolve_driver
-from utils.direction_utils import is_airport_pickup
+from blog.blog_utils import resolve_booking_driver
 from regions.models import Region
 from basecamp.basecamp_utils import (
     is_ajax, parse_baggage, parse_date,
@@ -102,6 +101,14 @@ def confirm_booking_detail(request):
     extra_stop_addresses = user.extra_stop_addresses or []
     same_extra_stop = user.same_extra_stop
 
+    # ── Inquiry 단계에서 이미 선결제로 확정된 건 → 그대로 승계 ──
+    # 관리자가 가격 넣고 저장하면 prepay=True 가 찍히고 prepay 안내메일이 나가는데,
+    # 손님이 그 링크 대신 일반 confirm_booking 으로 들어와도 조건은 유지되어야 한다.
+    if user.prepay:
+        cash = False
+        prepay = True
+    # ─────────────────────────────────
+
     # ── 도착편 + 첫이용 → prepay 강제 ──
     is_arrival = (direction or "").startswith("Pickup from")
     has_completed_trip = Post.objects.filter(
@@ -153,17 +160,7 @@ def confirm_booking_detail(request):
     else:
         pending = True  
 
-    if is_airport_pickup(direction):
-        driver = get_default_driver_for_region(region)
-        if not driver:
-            sydney_region = Region.objects.filter(slug='sydney', is_active=True).first()
-            if sydney_region:
-                driver = get_default_driver_for_region(sydney_region)
-        if not driver:
-            logger.error(f"No default driver found for region: {region} or sydney fallback")
-            return JsonResponse({'success': False, 'message': 'Service unavailable. Please contact us directly.'})
-    else:
-        driver = None
+    driver = resolve_booking_driver(direction, suburb, region)
 
     is_confirmed = False
 
@@ -305,17 +302,7 @@ def confirm_booking_prepay_detail(request):
     else:
         pending = True
 
-    if is_airport_pickup(direction):
-        driver = get_default_driver_for_region(region)
-        if not driver:
-            sydney_region = Region.objects.filter(slug='sydney', is_active=True).first()
-            if sydney_region:
-                driver = get_default_driver_for_region(sydney_region)
-        if not driver:
-            logger.error(f"No default driver found for region: {region} or sydney fallback")
-            return JsonResponse({'success': False, 'message': 'Service unavailable. Please contact us directly.'})
-    else:
-        driver = None
+    driver = resolve_booking_driver(direction, suburb, region)
 
     is_confirmed = False
 
@@ -427,20 +414,8 @@ def return_trip_detail(request):
         except ValueError as e:
             return JsonResponse({'success': False, 'error': str(e)})
         
-    if is_airport_pickup(direction):
-        driver = resolve_driver(suburb)
-        if not driver:
-            driver = get_default_driver_for_region(region)
-        if not driver:
-            sydney_region = Region.objects.filter(slug='sydney', is_active=True).first()
-            if sydney_region:
-                driver = get_default_driver_for_region(sydney_region)
-        if not driver:
-            logger.error(f"No default driver found for suburb: {suburb}, region: {region}")
-            return JsonResponse({'success': False, 'message': 'Service unavailable. Please contact us directly.'})
-    else:
-        driver = None
-                
+    driver = resolve_booking_driver(direction, suburb, region)
+
     p = Post(name=name, company_name=company_name, contact=contact, email=email, pickup_date=pickup_date_obj, flight_number=flight_number, flight_time=flight_time,
                 pickup_time=pickup_time, start_point=start_point, end_point=end_point, direction=direction, suburb=suburb, street=street,
                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, cash=cash, prepay=prepay, return_direction=return_direction,
@@ -583,18 +558,7 @@ def quick_rebook_confirm(request, region_slug=None):
     special_items  = previous.special_items or {}
 
     # Driver 배정
-    if is_airport_pickup(direction):
-        driver = resolve_driver(suburb)
-        if not driver:
-            driver = get_default_driver_for_region(region)
-        if not driver:
-            sydney_region = Region.objects.filter(slug='sydney', is_active=True).first()
-            if sydney_region:
-                driver = get_default_driver_for_region(sydney_region)
-        if not driver:
-            logger.error(f"[QUICK REBOOK] No driver found for suburb={suburb}, region={region}")
-    else:
-        driver = None
+    driver = resolve_booking_driver(direction, suburb, region)
 
     # 날짜 파싱
     try:
