@@ -130,6 +130,7 @@ class Command(BaseCommand):
 
         created = skipped_income = skipped_driver = skipped_transfer = 0
         skipped_wage = skipped_loan = skipped_super = skipped_dup = errors = held_for_review = 0
+        personal = 0
         to_create = []
 
         with fh:
@@ -188,21 +189,32 @@ class Command(BaseCommand):
                     continue
 
                 needs_review = gross >= conf.REVIEW_THRESHOLD
+                is_personal = self._contains_any(
+                    desc_upper, conf.PERSONAL_EXPENSE_MARKERS)
 
-                if tx_date >= conf.GST_REGISTRATION_DATE:
-                    if self._contains_any(desc_upper, conf.REVIEW_OVERRIDE_KEYWORDS):
-                        # insurance / rego: no auto-GST, flag for manual review
-                        gst_code, gst_amount, auto_flag = 'no_gst', Decimal('0.00'), False
-                        needs_review = True
-                    else:
-                        gst_code, gst_amount, auto_flag = self._estimate_gst(desc_upper, gross)
-                else:
+                if is_personal:
+                    # Personal spend on the company account: recorded so the
+                    # amount owed back stays visible, but excluded outright —
+                    # no GST claim, no deduction, never triaged into P&L.
                     gst_code, gst_amount, auto_flag = 'no_gst', Decimal('0.00'), False
+                    needs_review = False
+                    category = conf.PERSONAL_EXPENSE_CATEGORY
+                    personal += 1
+                else:
+                    if tx_date >= conf.GST_REGISTRATION_DATE:
+                        if self._contains_any(desc_upper, conf.REVIEW_OVERRIDE_KEYWORDS):
+                            # insurance / rego: no auto-GST, flag for manual review
+                            gst_code, gst_amount, auto_flag = 'no_gst', Decimal('0.00'), False
+                            needs_review = True
+                        else:
+                            gst_code, gst_amount, auto_flag = self._estimate_gst(desc_upper, gross)
+                    else:
+                        gst_code, gst_amount, auto_flag = 'no_gst', Decimal('0.00'), False
+
+                    category = self._category(desc_upper)
 
                 if needs_review:
                     held_for_review += 1
-
-                category = self._category(desc_upper)
 
                 to_create.append(Transaction(
                     date=tx_date,
@@ -219,6 +231,7 @@ class Command(BaseCommand):
                     import_hash=row_hash,
                     gst_auto_estimated=auto_flag,
                     needs_review=needs_review,
+                    excluded=is_personal,
                     is_tax_deductible=category not in conf.NON_TAX_DEDUCTIBLE_CATEGORIES,
                 ))
                 created += 1
@@ -227,6 +240,7 @@ class Command(BaseCommand):
         self.stdout.write(self.style.MIGRATE_HEADING("Bank CSV import summary"))
         self.stdout.write(f"  To import (expenses):            {created}")
         self.stdout.write(f"    of which held (needs_review):    {held_for_review}")
+        self.stdout.write(f"    of which personal (excluded):    {personal}")
         self.stdout.write(f"  Skipped — income rows:           {skipped_income}")
         self.stdout.write(f"  Skipped — driver payments:       {skipped_driver}")
         self.stdout.write(f"  Skipped — wage transfers:        {skipped_wage}")
@@ -239,7 +253,9 @@ class Command(BaseCommand):
         if dry_run:
             self.stdout.write(self.style.WARNING("\nDRY RUN — nothing written."))
             for t in to_create:
-                if t.needs_review:
+                if t.excluded:
+                    flag = " [personal — owed back, excluded]"
+                elif t.needs_review:
                     flag = " [NEEDS_REVIEW]"
                 elif not t.is_tax_deductible:
                     flag = " [non-deductible]"

@@ -27,6 +27,15 @@ REVIEW_THRESHOLD = Decimal('1000')
 # Bank CSV import: own-account internal transfers — skip outright.
 INTERNAL_TRANSFER_MARKERS = ['xx8784', 'CommBank app']
 
+# Bank CSV import: personal (non-business) spending that went through the
+# company account. These are NOT skipped — they are imported with
+# excluded=True so the owner can see what is owed back to the company — but
+# they never reach P&L or BAS (no GST claim, no deduction).
+# Confirmed personal by the owner:
+#   MUJI — homeware/stationery retail, personal purchases only.
+PERSONAL_EXPENSE_MARKERS = ['MUJI']
+PERSONAL_EXPENSE_CATEGORY = 'personal_drawings'
+
 # GST auto-estimation rules (first match wins).
 # Applied only to expense rows dated on/after GST_REGISTRATION_DATE.
 # insurance and vehicle_registration intentionally omitted — see REVIEW_OVERRIDE_KEYWORDS.
@@ -34,8 +43,10 @@ GST_KEYWORD_RULES = [
     (('BP', 'CALTEX', 'AMPOL', 'SHELL', '7-ELEVEN', '7 ELEVEN', 'OTR',
       'UNITED PETROLEUM', 'METRO PETROLEUM', 'FUEL', 'PETROL', 'VEZINA'), 'gst'),
     (('LINKT', 'E-TOLL', 'ETOLL', 'TOLL', 'TRANSURBAN'), 'gst'),
+    # 'RIZKALLA' = J RIZKALLA & J VISVI (North Sydney) — car servicing, confirmed
+    # a business vehicle cost by the owner. Merchant name, not a generic word.
     (('SERVICE', 'MECHANIC', 'AUTO', 'TYRE', 'TYRES', 'REPCO',
-      'SUPERCHEAP', 'PANEL', 'SMASH', 'CIRCUM VENDING'), 'gst'),
+      'SUPERCHEAP', 'PANEL', 'SMASH', 'CIRCUM VENDING', 'RIZKALLA'), 'gst'),
     (('TELSTRA', 'OPTUS', 'VODAFONE', 'TPG', 'AUSSIE BROADBAND',
       'BELONG', 'INTERNET', 'MOBILE'), 'gst'),
     (('GOOGLE', 'META', 'FACEBOOK', 'MARKETING', 'ADVERTIS', 'SEO'), 'gst'),
@@ -45,6 +56,11 @@ GST_KEYWORD_RULES = [
     # 'WILLOUGHBY CITY COUNCI'. Substring match still covers the full spelling.
     (('COUNCI',), 'gst'),
     (('VULTR',), 'gst'),
+    # ANTHROPIC (Claude subscription) — used for company systems work and
+    # project coding, so a business expense. Billed in AUD with 10% AU GST
+    # included; if an ABN is ever registered with Anthropic the charge becomes
+    # GST-free (B2B reverse charge) and this rule must move to 'gst_free'.
+    (('ANTHROPIC',), 'gst'),
     (('INTERNATIONAL TRANSACTION FEE',), 'gst'),
     (('TAXIPAY',), 'gst'),
     # Fines/infringements are never GST-eligible — explicit no_gst so this can
@@ -79,7 +95,8 @@ CATEGORY_KEYWORD_RULES = [
      'vehicle_registration'),
     (('SDRO', 'INFRNGMNT', 'PENALTY'), 'non_deductible_fine'),
     (('SERVICE', 'MECHANIC', 'AUTO', 'TYRE', 'TYRES', 'REPCO',
-      'SUPERCHEAP', 'PANEL', 'SMASH', 'CIRCUM VENDING'), 'vehicle_maintenance'),
+      'SUPERCHEAP', 'PANEL', 'SMASH', 'CIRCUM VENDING', 'RIZKALLA'),
+     'vehicle_maintenance'),
     (('TELSTRA', 'OPTUS', 'VODAFONE', 'TPG', 'AUSSIE BROADBAND',
       'BELONG', 'INTERNET', 'MOBILE'), 'phone_internet'),
     (('GOOGLE', 'META', 'FACEBOOK', 'MARKETING', 'ADVERTIS', 'SEO'), 'marketing'),
@@ -89,12 +106,16 @@ CATEGORY_KEYWORD_RULES = [
     (('COUNCI',), 'parking'),
     # VULTR: all charges are server/hosting costs (VPS provider).
     (('VULTR',), 'hosting'),
+    # AI/dev tooling subscriptions — kept separate from 'hosting' (infrastructure)
+    # so the recurring software spend is visible on its own P&L line.
+    (('ANTHROPIC',), 'software_subscription'),
     (('INTERNATIONAL TRANSACTION FEE',), 'bank_fees'),
     (('TAXIPAY',), 'taxi'),
 ]
 
 # Categories that are imported for record-keeping but must NEVER be counted as
 # a tax-deductible business expense (fines/infringements are non-deductible
-# under ATO rules). Transaction.is_tax_deductible is set False for these on
-# import; P&L/BAS aggregation excludes them from deductible expense totals.
-NON_TAX_DEDUCTIBLE_CATEGORIES = {'non_deductible_fine'}
+# under ATO rules; personal_drawings is not a company expense at all).
+# Transaction.is_tax_deductible is set False for these on import; P&L/BAS
+# aggregation excludes them from deductible expense totals.
+NON_TAX_DEDUCTIBLE_CATEGORIES = {'non_deductible_fine', PERSONAL_EXPENSE_CATEGORY}
