@@ -9,6 +9,7 @@ from django.utils import timezone
 from blog.models import Post
 from blog import dunning
 from main.settings import RECIPIENT_EMAIL
+from utils.command_alerts import TelegramAlertMixin
 from utils.email import send_template_email, collect_recipients
 
 logger = logging.getLogger(__name__)
@@ -19,7 +20,9 @@ logger = logging.getLogger(__name__)
 LADDER_WINDOW_DAYS = 21
 
 
-class Command(BaseCommand):
+class Command(TelegramAlertMixin, BaseCommand):
+    alert_header = 'send_final_warning 실패'
+
     help = (
         '사다리 창(픽업 21일) 밖의 먼 미래 미결제·무응답 예약에 '
         '"예약 pending 상태" 조기 안내 1회 발송. '
@@ -87,6 +90,7 @@ class Command(BaseCommand):
                     recipients = collect_recipients(notice.email, notice.email1, RECIPIENT_EMAIL)
                 if not recipients:
                     logger.warning('send_final_warning: no recipients for Post pk=%s', notice.pk)
+                    self.alerts.append(f"✉️ 수신자 없음 | {notice.name} | #{notice.id}")
                     continue
 
                 send_template_email(
@@ -112,8 +116,11 @@ class Command(BaseCommand):
                     notice.pk, notice.email, notice.pickup_date,
                 )
             except Exception as e:
-                logger.error('send_final_warning: failed for Post pk=%s: %s', notice.pk, e)
+                logger.exception('send_final_warning: failed for Post pk=%s', notice.pk)
                 self.stdout.write(self.style.ERROR(f"Failed for #{notice.id}: {e}"))
+                self.alerts.append(
+                    f"❌ pending 안내 발송 실패 | {notice.name} | #{notice.id} | {str(e)[:120]}"
+                )
 
         if dry_run:
             self.stdout.write(self.style.WARNING(f'\n[DRY RUN] 실제 발송 없음. {count}건 대상 확인 완료.\n'))

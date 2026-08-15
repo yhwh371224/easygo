@@ -1,4 +1,5 @@
 import logging
+from collections import defaultdict
 from datetime import timedelta
 from itertools import zip_longest
 
@@ -33,7 +34,10 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-        self._today_sent_ids = set()
+        # 제목별 발송 성공 id. 누락 탐지가 Reminder-Today 뿐 아니라 모든 단계를
+        # 보도록 제목을 키로 둔다(2026-08-16 SMTP 장애 때 Today 외 8건이 조용히 실패).
+        self._sent_ids = defaultdict(set)
+        self._expected_ids = {}
 
         ids_raw = options.get('ids')
         if ids_raw:
@@ -41,16 +45,13 @@ class Command(BaseCommand):
             today = timezone.localdate()
             qs = Post.objects.filter(id__in=target_ids).select_related('driver')
             self.send_email_task(qs, "html_email-today.html", "Reminder-Today", today)
-            missing_ids = set(target_ids) - self._today_sent_ids
-            if missing_ids:
-                missing_posts = Post.objects.filter(id__in=missing_ids)
-                lines = [f"⚠️ 재발송 후에도 누락 {len(missing_ids)}건"]
-                for p in missing_posts:
-                    lines.append(f"• {p.name} | {p.email} | #{p.id} | {p.pickup_date}")
-                try:
-                    send_telegram_sync("\n".join(lines))
-                except Exception as e:
-                    logger.error(f"[Reminder-Today] 텔레그램 알림 전송 실패: {e}")
+            # 수신거부 건은 애초에 보내지 않는 게 정상이라 누락으로 세지 않는다.
+            expected = set(
+                Post.objects.filter(id__in=target_ids)
+                .exclude(no_email_reminder=True)
+                .values_list('id', flat=True)
+            )
+            self.report_missing("재발송 후에도 누락", expected - self._sent_ids["Reminder-Today"])
             return
 
         # --- 오늘 국제선 도착 예약 meeting_point 업데이트 ---
@@ -80,25 +81,21 @@ class Command(BaseCommand):
             for interval, template, subject in zip_longest(reminder_intervals, templates, subjects, fillvalue=""):
                 self.send_email(interval, template, subject)
 
-        # --- 당일 reminder 누락 탐지 ---
-        today = timezone.localdate()
-        expected_ids = set(
-            Post.objects.filter(pickup_date=today)
-            .exclude(airport_arrival_q())  # arrival_reminder가 담당 — 여기선 누락이 아니다
-            .exclude(cancelled=True)
-            .exclude(pending=True)
-            .values_list('id', flat=True)
-        )
-        missing_ids = expected_ids - self._today_sent_ids
-        if missing_ids:
-            missing_posts = Post.objects.filter(id__in=missing_ids)
-            lines = [f"⚠️ 당일 reminder 누락 {len(missing_ids)}건"]
-            for p in missing_posts:
-                lines.append(f"• {p.name} | {p.email} | #{p.id} | {p.pickup_date}")
-            try:
-                send_telegram_sync("\n".join(lines))
-            except Exception as e:
-                logger.error(f"[Reminder-Today] 텔레그램 알림 전송 실패: {e}")
+        # --- 단계별 누락 탐지 ---
+        # 발송 대상으로 뽑혔는데 성공 기록이 없는 건 = 발송 실패·수신자 없음·예외.
+        for subject, expected in self._expected_ids.items():
+            self.report_missing(f"{subject} 누락", expected - self._sent_ids[subject])
+
+    def report_missing(self, title, missing_ids):
+        if not missing_ids:
+            return
+        lines = [f"⚠️ {title} {len(missing_ids)}건"]
+        for p in Post.objects.filter(id__in=missing_ids):
+            lines.append(f"• {p.name} | {p.email} | #{p.id} | {p.pickup_date}")
+        try:
+            send_telegram_sync("\n".join(lines))
+        except Exception as e:
+            logger.error(f"[{title}] 텔레그램 알림 전송 실패: {e}")
 
     def send_email(self, date_offset, template_name, subject):
         target_date = timezone.localdate() + timedelta(days=date_offset)
@@ -117,6 +114,11 @@ class Command(BaseCommand):
         if subject == "Review-EasyGo":
             # 리뷰 요청 거부(no_review) 고객 제외
             booking_reminders = booking_reminders.exclude(no_review=True)
+        # 수신거부 건은 send_email_task 가 의도적으로 건너뛰므로 기대 집합에서도 뺀다.
+        # (넣어두면 매일 "누락"으로 잡혀 알림이 늑대소년이 된다)
+        self._expected_ids[subject] = set(
+            booking_reminders.exclude(no_email_reminder=True).values_list('id', flat=True)
+        )
         self.send_email_task(booking_reminders, template_name, subject, target_date)
 
     def send_email_task(self, booking_reminders, template_name, subject, target_date):
@@ -191,8 +193,7 @@ class Command(BaseCommand):
                     logger.info(
                         f"Successfully sent '{subject}' email to {email_recipients} for pickup on {target_date}"
                     )
-                    if subject == "Reminder-Today":
-                        self._today_sent_ids.add(booking_reminder.id)
+                    self._sent_ids[subject].add(booking_reminder.id)
                 except Exception as e:
                     logger.error(f"Failed to send email to {email_recipients}: {str(e)}")
 

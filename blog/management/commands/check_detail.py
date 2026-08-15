@@ -1,11 +1,19 @@
+import logging
+
 from datetime import date, timedelta
 from django.core.management.base import BaseCommand
 from blog.models import Post
 from main.settings import RECIPIENT_EMAIL
+from utils.command_alerts import TelegramAlertMixin
 from utils.email import send_template_email
 
 
-class Command(BaseCommand):
+logger = logging.getLogger(__name__)
+
+
+class Command(TelegramAlertMixin, BaseCommand):
+    alert_header = 'check_detail 실패'
+
     help = 'Check bookings with missing details (consolidated report)'
 
     def handle(self, *args, **options):
@@ -60,4 +68,6 @@ class Command(BaseCommand):
                 self.stdout.write(self.style.SUCCESS('No bookings with missing details found.'))
 
         except Exception as e:
+            logger.exception('check_detail: failed to send summary')
             self.stdout.write(self.style.ERROR(f'Failed to send summary: {str(e)}'))
+            self.alerts.append(f"❌ 누락정보 요약 리포트 발송 실패 | {str(e)[:150]}")

@@ -1,13 +1,20 @@
+import logging
 import re
 
 from datetime import date, timedelta
 from django.core.management.base import BaseCommand
 from blog.models import Post
 from main.settings import RECIPIENT_EMAIL
+from utils.command_alerts import TelegramAlertMixin
 from utils.email import send_template_email
 
 
-class Command(BaseCommand):
+logger = logging.getLogger(__name__)
+
+
+class Command(TelegramAlertMixin, BaseCommand):
+    alert_header = 'check_flight_no 실패'
+
     help = 'Check for missing flight or contact numbers and send reminder emails'
 
     def handle(self, *args, **options):
@@ -55,24 +62,35 @@ class Command(BaseCommand):
                         issues.append('Flight number is missing or invalid')
 
                 if contact_issue or flight_issue:
-                    send_template_email(
-                        "Missing or Invalid Flight/Contact Information Reminder",
-                        "html_email-missing-flight-contact.html",
-                        {
-                            'booker_name': booking.booker_name,
-                            'name': booking.name,
-                            'email': booking.email,
-                            'pickup_date': booking.pickup_date,
-                            'direction': booking.direction,
-                            'flight_number': booking.flight_number,
-                            'contact': booking.contact,
-                            'issues': issues,
-                        },
-                        [booking.booker_email or booking.email],
-                        fail_silently=False,
-                    )
+                    # 건별로 감싼다 — 예외를 바깥 try 까지 올리면 첫 실패에서
+                    # 루프가 끊겨 뒤 예약들은 확인조차 되지 않는다.
+                    try:
+                        send_template_email(
+                            "Missing or Invalid Flight/Contact Information Reminder",
+                            "html_email-missing-flight-contact.html",
+                            {
+                                'booker_name': booking.booker_name,
+                                'name': booking.name,
+                                'email': booking.email,
+                                'pickup_date': booking.pickup_date,
+                                'direction': booking.direction,
+                                'flight_number': booking.flight_number,
+                                'contact': booking.contact,
+                                'issues': issues,
+                            },
+                            [booking.booker_email or booking.email],
+                            fail_silently=False,
+                        )
+                    except Exception as e:
+                        logger.exception('check_flight_no: failed for Post pk=%s', booking.pk)
+                        self.alerts.append(
+                            f"❌ 정보누락 안내 발송 실패 | {booking.name} | "
+                            f"#{booking.id} | {str(e)[:120]}"
+                        )
 
             self.stdout.write(self.style.SUCCESS('Missing flight/contact number reminders sent successfully'))
 
         except Exception as e:
+            logger.exception('check_flight_no: aborted')
             self.stdout.write(self.style.ERROR(f'Failed to send missing flight/contact number reminders: {str(e)}'))
+            self.alerts.append(f"💥 check_flight_no 중단 | {str(e)[:150]}")

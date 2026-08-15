@@ -3,13 +3,16 @@ from django.core.management.base import BaseCommand
 from blog.models import Post
 from django.utils import timezone
 from main.settings import RECIPIENT_EMAIL
+from utils.command_alerts import TelegramAlertMixin
 from utils.email import send_template_email
 
 
 logger = logging.getLogger(__name__)
 
 
-class Command(BaseCommand):
+class Command(TelegramAlertMixin, BaseCommand):
+    alert_header = 'confirm_booking 실패'
+
     help = 'Send booking confirmation'
 
     def handle(self, *args, **options):
@@ -65,9 +68,20 @@ class Command(BaseCommand):
                     recipients = [post.booker_email, RECIPIENT_EMAIL]
                 else:
                     recipients = [r for r in [post.email, post.email1, RECIPIENT_EMAIL] if r]
-                email_tasks.append((subject, template_name, context, recipients))
+                email_tasks.append((post, (subject, template_name, context, recipients)))
 
         if to_update:
             Post.objects.bulk_update(to_update, ['sent_email'], batch_size=50)
-            for args in email_tasks:
-                send_template_email(*args)
+            for post, args in email_tasks:
+                # 한 건이 실패해도 나머지는 계속 보낸다. 예외를 그대로 두면 첫 실패에서
+                # 루프가 끊겨 뒤 예약들은 sent_email=True 인 채 메일이 아예 안 나간다.
+                try:
+                    send_template_email(*args)
+                except Exception as e:
+                    logger.exception('confirm_booking: failed for Post pk=%s', post.pk)
+                    # sent_email 은 이미 True 로 저장된 뒤라 다음 실행에서 재시도되지 않는다.
+                    # 이 알림을 놓치면 그 손님은 확인 메일을 영영 못 받는다.
+                    self.alerts.append(
+                        f"❌ 예약확인 메일 발송 실패(재시도 없음) | {post.name} | "
+                        f"#{post.id} | {str(e)[:120]}"
+                    )

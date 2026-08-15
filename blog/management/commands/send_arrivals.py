@@ -8,6 +8,7 @@ from blog.models import Post
 from utils import booking_helper
 from utils.booking_helper import build_reminder_context
 from blog.blog_utils import assign_default_driver_if_missing
+from utils.command_alerts import TelegramAlertMixin
 from utils.email import send_template_email, collect_recipients
 from basecamp.modules.date_utils import format_pickup_time_12h
 from blog.sms_utils import normalize_phone
@@ -22,7 +23,9 @@ logger = logging.getLogger(__name__)
 
 
 
-class Command(BaseCommand):
+class Command(TelegramAlertMixin, BaseCommand):
+    alert_header = 'send_arrivals 실패'
+
     help = "Send reminders ONLY for today's arrivals (intl/domestic/all)"
 
     # =========================
@@ -228,7 +231,10 @@ class Command(BaseCommand):
                 logger.info(f"[EMAIL SENT] {booking.email}")
 
             except Exception as e:
-                logger.error(f"[EMAIL ERROR] {booking.email} {str(e)}")
+                logger.exception(f"[EMAIL ERROR] {booking.email}")
+                self.alerts.append(
+                    f"❌ 도착 안내 발송 실패 | {booking.name} | #{booking.id} | {str(e)[:120]}"
+                )
 
             # SMS
             sms_sent = False

@@ -11,6 +11,7 @@ import hashlib
 import hmac
 import json
 import time
+from datetime import timedelta
 from decimal import Decimal
 from io import StringIO
 from unittest.mock import patch, MagicMock
@@ -20,10 +21,12 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.core import mail
 from django.core.management import call_command
+from django.core.management.base import BaseCommand
 from django.test import TestCase, Client, override_settings
 from django.urls import reverse
 from django.utils import timezone
 
+from utils.command_alerts import TelegramAlertMixin
 from blog.models import (
     VirtualNumber, Driver, DriverSettlement,
     Inquiry, Post, PaypalPayment, StripePayment, PhoneMapping,
@@ -1425,3 +1428,136 @@ class ArrivalReminderTests(TestCase):
             call_command('arrival_reminder', stdout=StringIO())
         update_points.assert_not_called()
         self.assertEqual(mail.outbox, [])
+
+
+# ---------------------------------------------------------------------------
+# 발송 실패 알림 (2026-08-16 SMTP 자격증명 만료로 4시간 40분간 전 메일이
+# 조용히 죽은 뒤 추가). 크론 커맨드는 실패해도 로그에만 남아서, 알림이 없으면
+# 장애를 며칠씩 모른다.
+# ---------------------------------------------------------------------------
+class _Boom(Exception):
+    pass
+
+
+class MixinTests(TestCase):
+    def _cmd(self, header='테스트 실패'):
+        class C(TelegramAlertMixin, BaseCommand):
+            alert_header = header
+
+            def handle(self, *a, **kw):
+                for m in getattr(self, '_todo', []):
+                    self.alerts.append(m)
+                if getattr(self, '_raise', False):
+                    raise _Boom('db gone')
+        return C()
+
+    def test_flush_on_normal_completion(self):
+        c = self._cmd()
+        c._todo = ['❌ a', '❌ b']
+        with patch('utils.command_alerts.send_telegram_sync') as tg:
+            c.run_from_argv(['manage.py', 'x'])
+        msg = tg.call_args_list[0].args[0]
+        print('\n[정상 종료]\n' + msg)
+        self.assertIn('⚠️ 테스트 실패 2건', msg)
+
+    def test_no_alert_when_clean(self):
+        c = self._cmd()
+        with patch('utils.command_alerts.send_telegram_sync') as tg:
+            c.run_from_argv(['manage.py', 'x'])
+        self.assertEqual(tg.call_count, 0)
+
+    def test_flush_even_when_command_crashes(self):
+        c = self._cmd()
+        c._todo = ['❌ 먼저 실패한 건']
+        c._raise = True
+        with patch('utils.command_alerts.send_telegram_sync') as tg:
+            with self.assertRaises(_Boom):
+                c.run_from_argv(['manage.py', 'x'])
+        msg = tg.call_args_list[0].args[0]
+        print('\n[커맨드 중단]\n' + msg)
+        self.assertIn('먼저 실패한 건', msg)
+        self.assertIn('💥 커맨드 중단 | _Boom: db gone', msg)
+
+    def test_lines_capped_and_cleared(self):
+        c = self._cmd()
+        c._todo = [f'❌ {i}' for i in range(14)]
+        with patch('utils.command_alerts.send_telegram_sync') as tg:
+            c.run_from_argv(['manage.py', 'x'])
+        self.assertIn('…외 4건', tg.call_args_list[0].args[0])
+        c.flush_alerts()                       # 두 번째 호출은 조용해야 한다
+        self.assertEqual(tg.call_count, 1)
+
+    def test_no_header_keeps_raw_lines(self):
+        c = self._cmd(header=None)
+        c._todo = ['⏰ 지연 발송 30분']
+        with patch('utils.command_alerts.send_telegram_sync') as tg:
+            c.run_from_argv(['manage.py', 'x'])
+        self.assertEqual(tg.call_args_list[0].args[0], '⏰ 지연 발송 30분')
+
+
+class ConvertedCommandsTests(TestCase):
+    def test_all_targets_have_mixin_and_header(self):
+        from importlib import import_module
+        names = ['send_final_warning', 'confirm_booking', 'check_detail',
+                 'check_flight_no', 'send_arrivals', 'double_check_calendar']
+        for n in names:
+            cmd = import_module(f'blog.management.commands.{n}').Command
+            self.assertTrue(issubclass(cmd, TelegramAlertMixin), n)
+            self.assertTrue(cmd.alert_header, n)
+        print('\n믹스인 적용 확인:', ', '.join(names))
+
+    def test_confirm_booking_alerts_and_continues(self):
+        for n in ('alice', 'bob'):
+            Post.objects.create(name=n, email=f'{n}@example.com', no_of_passenger='2',
+                                pickup_date=timezone.localdate() + timedelta(days=3))
+        with patch('blog.management.commands.confirm_booking.send_template_email',
+                   side_effect=Exception('535 BadCredentials')) as se, \
+             patch('utils.command_alerts.send_telegram_sync') as tg:
+            call_command('confirm_booking')
+        msg = tg.call_args_list[0].args[0]
+        print('\n[confirm_booking]\n' + msg)
+        self.assertEqual(se.call_count, 2)          # 첫 실패로 루프가 끊기지 않는다
+        self.assertIn('confirm_booking 실패 2건', msg)
+
+
+class BookingReminderMissingTests(TestCase):
+    def _make(self, name, offset, **kw):
+        d = dict(name=name, email=f'{name}@example.com', no_of_passenger='2',
+                 pickup_date=timezone.localdate() + timedelta(days=offset),
+                 pickup_time='10:00', direction='Drop off to Intl Airport')
+        d.update(kw)
+        p = Post.objects.create(**d)
+        Post.objects.filter(pk=p.pk).update(pending=False)
+        return p
+
+    def _run(self):
+        with patch('utils.booking_helper.update_meeting_point_for_arrivals'), \
+             patch('blog.management.commands.booking_reminder.send_telegram_sync') as tg:
+            call_command('booking_reminder')
+            return [c.args[0] for c in tg.call_args_list]
+
+    def test_detects_missing_in_every_stage(self):
+        self._make('today', 0)
+        self._make('tomorrow', 1)
+        self._make('review', -5)
+        with patch('blog.management.commands.booking_reminder.send_template_email',
+                   side_effect=Exception('535 BadCredentials')):
+            msgs = self._run()
+        joined = '\n'.join(msgs)
+        print('\n[전 단계 누락 탐지]\n' + joined)
+        self.assertIn('Reminder-Today 누락 1건', joined)
+        self.assertIn('Reminder-Tomorrow 누락 1건', joined)
+        self.assertIn('Review-EasyGo 누락 1건', joined)
+
+    def test_opted_out_is_not_reported(self):
+        self._make('optout', 0, no_email_reminder=True)
+        with patch('blog.management.commands.booking_reminder.send_template_email'):
+            msgs = self._run()
+        print('\n[수신거부 오탐 여부] telegram calls =', len(msgs))
+        self.assertEqual(msgs, [])
+
+    def test_silent_when_all_sent(self):
+        self._make('ok', 0)
+        with patch('blog.management.commands.booking_reminder.send_template_email'):
+            msgs = self._run()
+        self.assertEqual(msgs, [])

@@ -1,11 +1,19 @@
+import logging
+
 from datetime import date, timedelta
 from django.core.management.base import BaseCommand
+from utils.command_alerts import TelegramAlertMixin
 from utils.email import send_text_email
 from blog.models import Post
 from main.settings import RECIPIENT_EMAIL
 
 
-class Command(BaseCommand):
+logger = logging.getLogger(__name__)
+
+
+class Command(TelegramAlertMixin, BaseCommand):
+    alert_header = 'double_check_calendar 실패'
+
     help = 'Double check calendar'
 
     def handle(self, *args, **options):
@@ -24,5 +32,12 @@ class Command(BaseCommand):
             subject = f"Empty calendar ID for {booking.pickup_date}"
             message = f"{booking.name} & {booking.email}"
             recipient_list = [RECIPIENT_EMAIL]
-            send_text_email(subject, message, recipient_list)
+            try:
+                send_text_email(subject, message, recipient_list)
+            except Exception as e:
+                logger.exception('double_check_calendar: failed for Post pk=%s', booking.pk)
+                self.alerts.append(
+                    f"❌ 캘린더 누락 통지 실패 | {booking.name} | "
+                    f"#{booking.id} | {str(e)[:120]}"
+                )
 
