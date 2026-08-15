@@ -8,9 +8,14 @@ from blog import dunning
 from blog.blog_utils import booking_balance, is_deposit_satisfied
 from main.settings import RECIPIENT_EMAIL
 from utils.email import send_template_email, collect_recipients
+from utils.telegram import send_telegram_sync
 
 
 logger = logging.getLogger(__name__)
+
+# 발송 실패는 건당이 아니라 실행당 한 통으로 묶어 알린다. 자격증명 만료처럼
+# 전건이 무너지는 장애에서 예약 수만큼 텔레그램이 쏟아지면 알림이 무의미해진다.
+MAX_ALERT_LINES = 10
 
 
 def _has_company(booking):
@@ -43,6 +48,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         dry_run = options.get('dry_run')
+        self.alerts = []
         today = date.today()
         # 오늘~+21일. 픽업 시각 기준 단계(Urgent/Final)는 모두 며칠 내이므로 이 창 안에 포함됨.
         start_date = today
@@ -56,6 +62,9 @@ class Command(BaseCommand):
 
         for booking in bookings:
             display_date = self.get_display_date(booking)
+            # 어느 독촉 단계에서 죽었는지가 알림의 핵심 정보다 — 단계별 1회뿐이라
+            # Final notice 실패와 첫 안내 실패는 대응이 다르다.
+            self.stage_label = None
 
             try:
                 # 픽업이 이미 지난 건에는 어떤 결제 독촉도 보내지 않는다.
@@ -88,6 +97,7 @@ class Command(BaseCommand):
                         continue
 
                     subject, template, sent_field, extra_ctx = stage
+                    self.stage_label = sent_field
                     if dry_run:
                         h = dunning.hours_until_pickup(booking)
                         self.stdout.write(
@@ -117,6 +127,9 @@ class Command(BaseCommand):
                         )
                     if not recipients:
                         logger.warning(f"no_payment_yet: no recipients for #{booking.id}")
+                        self.alerts.append(
+                            f"✉️ 수신자 없음(독촉) | {booking.name} | #{booking.id} | {sent_field}"
+                        )
                         continue
 
                     send_template_email(subject, template, context, recipients)
@@ -142,6 +155,7 @@ class Command(BaseCommand):
                         continue
 
                     subject, template, sent_field = stage
+                    self.stage_label = sent_field
                     if dry_run:
                         h = dunning.hours_until_pickup(booking)
                         self.stdout.write(
@@ -174,6 +188,9 @@ class Command(BaseCommand):
                         )
                     if not recipients:
                         logger.warning(f"no_payment_yet: no recipients for #{booking.id}")
+                        self.alerts.append(
+                            f"✉️ 수신자 없음(독촉) | {booking.name} | #{booking.id} | {sent_field}"
+                        )
                         continue
 
                     send_template_email(subject, template, context, recipients)
@@ -181,10 +198,27 @@ class Command(BaseCommand):
                     booking.save(update_fields=[sent_field])
 
             except Exception as e:
-                logger.error(f"Failed to send email for booking {booking.id} ({booking.email}): {e}")
+                logger.exception(f"Failed to send email for booking {booking.id} ({booking.email})")
                 self.stdout.write(self.style.ERROR(f"Failed to send email for {booking.email}: {e}"))
+                self.alerts.append(
+                    f"❌ 독촉 메일 발송 실패 | {booking.name} | #{booking.id} | "
+                    f"{self.stage_label or '단계미정'} | {str(e)[:120]}"
+                )
 
+        if not dry_run:
+            self.flush_alerts()
         self.stdout.write(self.style.SUCCESS('No_payment_yet emailed successfully'))
+
+    def flush_alerts(self):
+        if not self.alerts:
+            return
+        lines = self.alerts[:MAX_ALERT_LINES]
+        if len(self.alerts) > MAX_ALERT_LINES:
+            lines.append(f"…외 {len(self.alerts) - MAX_ALERT_LINES}건 (logs/django.log 참조)")
+        try:
+            send_telegram_sync('\n'.join([f"⚠️ no_payment_yet 실패 {len(self.alerts)}건"] + lines))
+        except Exception as e:
+            logger.error('[no_payment_yet] 텔레그램 알림 전송 실패: %s', e)
 
     def _pick_unpaid_stage(self, booking):
         """완전 미결제 건에서 지금 발송해야 할 단계를 반환. 없으면 None.

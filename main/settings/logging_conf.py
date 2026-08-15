@@ -112,6 +112,13 @@ LOGGING = {
             'level': 'INFO',
             'propagate': False,
         },
+        # utils.telegram 이 알림 전송 실패를 여기로 남긴다. 루트로 흘리면
+        # lastResort 핸들러가 stderr 로만 뱉어서 크론 로그마다 흩어진다.
+        'utils': {
+            'handlers': ['file', 'console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
         'inquiry': {
             'handlers': ['inquiry_file', 'console'],
             'level': 'INFO',
