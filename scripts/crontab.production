@@ -1,0 +1,48 @@
+# 실서버(vultr / EasyGo-Airport-Shuttle, user=horeb) 크론탭.
+# 2026-08-16 배포본과 동일 — 서버에서 `crontab -l` 한 결과를 그대로 담았다.
+#
+# 모든 작업이 /home/horeb/cronwrap.sh 를 거친다. 실패(종료코드 != 0)하면
+# 텔레그램으로 알림이 가고, 로그는 /home/horeb/logs/cron/<이름>.log 에 쌓인다.
+# 원래 `>> 로그 2>&1` 이 붙어 있던 3개 작업은 -l 로 넘겨 기존 로그 경로를 유지한다.
+#
+# 2026-08-16: `20 03 * * * /home/horeb/dumpdata.sh` 제거. 스크립트가 서버에 없어
+# 매일 exit 127 로 실패해 왔고 로그 흔적도 없었다. DB 백업은 23:25 backup.sh 담당.
+#
+# 백업: 서버 /home/horeb/crontab.bak.20260816            (래퍼 적용 전 원본)
+#       서버 /home/horeb/crontab.bak.20260816_predumpdata (dumpdata 제거 직전)
+# 되돌리기: ssh vultr 'crontab /home/horeb/crontab.bak.20260816'
+# MAILTO="info@easygoshuttle.com.au"
+30 00 1 * * /home/horeb/cronwrap.sh /home/horeb/generate_sitemap.sh
+04 01 * * * /home/horeb/cronwrap.sh /home/horeb/.local/bin/cleanup_logs.sh
+05 01 * * * /home/horeb/cronwrap.sh /home/horeb/upgrade_update.sh
+20 01 * * * /home/horeb/cronwrap.sh /usr/local/bin/auto_reboot.sh
+40 01 * * * /home/horeb/cronwrap.sh /home/horeb/update_cash_status.sh
+45 01 * * * /home/horeb/cronwrap.sh /home/horeb/assign_drivers.sh
+50 01 * * * /home/horeb/cronwrap.sh /home/horeb/payment_options.sh
+00 02 */6 * * /home/horeb/cronwrap.sh /home/horeb/watch_gmail.sh
+10 02 * * * /home/horeb/cronwrap.sh /home/horeb/booking_reminder.sh
+40 02 * * * /home/horeb/cronwrap.sh /home/horeb/.local/bin/backup_logs.sh
+*/30 4-22 * * * /home/horeb/cronwrap.sh /home/horeb/arrival_reminder.sh
+0 03 1,15 * * /home/horeb/cronwrap.sh /home/horeb/generate_review_replies.sh
+15 03 * * * /home/horeb/cronwrap.sh /home/horeb/double_check_calendar.sh
+50 03 * * * /home/horeb/cronwrap.sh /home/horeb/clear_driver_assignments.sh
+55 03 * * 0 /home/horeb/cronwrap.sh -n clearsessions -l /home/horeb/github/easygo/logs/vacuum/clearsessions.log -- bash -c 'cd /home/horeb/github/easygo && venv/bin/python manage.py clearsessions'
+0 04 * * 0 /home/horeb/cronwrap.sh -n pg_vacuum -l /home/horeb/github/easygo/logs/vacuum/cron.log -- /home/horeb/pg_vacuum.sh -t blog_post -t blog_inquiry -t django_session
+08 04 * * * /home/horeb/cronwrap.sh /home/horeb/past_cash_paid.sh
+12 * * * * /home/horeb/cronwrap.sh /home/horeb/no_payment_yet.sh
+10 05 * * * /home/horeb/cronwrap.sh /home/horeb/upload_inquiry_report.sh
+0 6 7 * * /home/horeb/cronwrap.sh -l /home/horeb/logs/compact_payment_fees.log /home/horeb/compact_payment_fees.sh
+10 07 * * * /home/horeb/cronwrap.sh /home/horeb/send_liquidity_email.sh
+20 09 * * * /home/horeb/cronwrap.sh /home/horeb/send_final_warning.sh
+26 10 * * * /home/horeb/cronwrap.sh /home/horeb/upgrade_update.sh
+55 10 * * * /home/horeb/cronwrap.sh /home/horeb/check_flight_no.sh
+30 15 * * * /home/horeb/cronwrap.sh /home/horeb/update_reminder.sh
+42 18 * * * /home/horeb/cronwrap.sh /home/horeb/upgrade_update.sh
+55 18 * * * /home/horeb/cronwrap.sh /home/horeb/final_notice.sh
+37 * * * * /home/horeb/cronwrap.sh /home/horeb/auto_cancel_pending.sh
+45 22 * * * /home/horeb/cronwrap.sh /home/horeb/update_reminder.sh
+05 23 * * * /home/horeb/cronwrap.sh /home/horeb/normalize_direction.sh
+25 23 * * * /home/horeb/cronwrap.sh /home/horeb/backup.sh
+55 23 * * * /home/horeb/cronwrap.sh /home/horeb/close_proxy_sessions.sh
+
+
