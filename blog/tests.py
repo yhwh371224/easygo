@@ -1645,3 +1645,56 @@ class BookingReminderMissingTests(TestCase):
         with patch('blog.management.commands.booking_reminder.send_template_email'):
             msgs = self._run()
         self.assertEqual(msgs, [])
+
+
+# ---------------------------------------------------------------------------
+# Command: create_daily_settlements
+# ---------------------------------------------------------------------------
+
+class CreateDailySettlementsTests(TestCase):
+    """Only drivers who are actually paid off at the end of each day may be
+    auto-settled. Settling a driver who is paid weekly/monthly books money that
+    never moved, and the trip then drops out of what their dashboard says they
+    are owed (2026-08 Don)."""
+
+    def setUp(self):
+        self.today = datetime.date.today()
+
+    def _driver(self, username, **kwargs):
+        driver = make_driver(user=make_user(username), region=make_region())
+        for field, value in kwargs.items():
+            setattr(driver, field, value)
+        driver.save()
+        return driver
+
+    def _post(self, driver):
+        with patch('blog.bird_proxy.create_bird_mapping', return_value=True), \
+             patch('blog.bird_proxy.close_bird_mapping', return_value=True):
+            return Post.objects.create(
+                name='Pax', email='p@x.com', no_of_passenger='1',
+                price='190', driver=driver,
+                pickup_date=self.today, pickup_time='15:00',
+            )
+
+    def _run(self):
+        with patch('blog.services.settlement_service.generate_settlement_number',
+                   side_effect=lambda d, to_date, seq: f'TEST-{d.pk}-{seq}'):
+            call_command('create_daily_settlements', '--date', self.today.isoformat())
+
+    def test_settles_daily_driver(self):
+        driver = self._driver('daily_drv', settle_daily=True)
+        self._post(driver)
+        self._run()
+        self.assertEqual(DriverSettlement.objects.filter(driver=driver).count(), 1)
+
+    def test_skips_driver_settled_in_batches(self):
+        driver = self._driver('monthly_drv', settle_daily=False)
+        self._post(driver)
+        self._run()
+        self.assertFalse(DriverSettlement.objects.filter(driver=driver).exists())
+
+    def test_skips_company(self):
+        driver = self._driver('company_drv', is_company=True)
+        self._post(driver)
+        self._run()
+        self.assertFalse(DriverSettlement.objects.filter(driver=driver).exists())

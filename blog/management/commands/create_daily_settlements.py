@@ -12,9 +12,10 @@ logger = logging.getLogger(__name__)
 
 class Command(BaseCommand):
     help = (
-        '개인 드라이버(is_company=False, is_active=True)의 당일 예약을 '
-        '자동으로 당일 정산 처리 (same-day settlement). 협력업체(is_company=True) '
-        '드라이버는 지금처럼 관리자가 수동으로 정산한다.'
+        '당일 정산 드라이버(settle_daily=True, is_company=False, is_active=True)의 '
+        '당일 예약을 자동으로 정산 처리 (same-day settlement). 협력업체'
+        '(is_company=True)나 주/월 단위로 모아서 정산하는 드라이버'
+        '(settle_daily=False)는 관리자가 수동으로 정산한다.'
     )
 
     def add_arguments(self, parser):
@@ -44,12 +45,16 @@ class Command(BaseCommand):
         # =========================
         # QUERY
         # =========================
+        # settle_daily=False 는 주/월 단위로 모아서 정산받는 드라이버 — 여기서
+        # 정산서를 만들어 버리면 실제로 지급하지 않은 돈이 '정산 완료'로 잡히고,
+        # 그 트립이 드라이버 대시보드의 받을 돈에서 사라진다.
         driver_ids = Post.objects.filter(
             pickup_date=target_date,
             cancelled=False,
             driver__isnull=False,
             driver__is_company=False,
             driver__is_active=True,
+            driver__settle_daily=True,
         ).values_list('driver_id', flat=True).distinct()
 
         drivers = list(Driver.objects.filter(id__in=driver_ids))

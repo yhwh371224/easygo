@@ -125,6 +125,14 @@ class Driver(models.Model):
                    '경우 체크. Agreement 페이지 문구가 회사용으로 바뀌고, 확인은 그 회사 '
                    '담당자 이름/직책으로 기록됨.',
     )
+    settle_daily = models.BooleanField(
+        default=True,
+        help_text='일이 끝나면 그날 바로 정산받는 드라이버. 매일 밤 크론'
+                  '(create_daily_settlements)이 당일 트립을 정산 처리한다. '
+                  '주/월 단위로 모아서 정산하는 드라이버는 체크를 풀 것 — '
+                  '체크된 채로 두면 실제로 지급하지도 않은 정산서가 매일 생겨 '
+                  '드라이버 대시보드에 "받을 돈 0"으로 보인다.',
+    )
 
     class Meta:
         ordering = ['order']

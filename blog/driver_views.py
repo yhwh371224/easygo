@@ -28,11 +28,12 @@ logger = logging.getLogger(__name__)
 COMPANY_NAME = "EasyGo Airport Shuttle (Nexflow Ventures Pty Ltd)"
 COMPANY_ABN  = "25 697 358 535"
 
-# 대시보드 'Past Trips' 창. 정산 주기가 아니라 날짜로 고정한다 — 개인 드라이버는
-# 매일 밤 자동 정산되므로 정산 기준으로 자르면 기록이 하루치만 남는다.
+# 대시보드 'Past Trips' 창. 정산 주기가 아니라 날짜로 고정한다 — 당일 정산
+# 드라이버는 매일 밤 자동 정산되므로 정산 기준으로 자르면 기록이 하루치만 남는다.
+# 미정산 구간이 이보다 길면 창을 그만큼 넓힌다 (driver_dashboard 참고).
 # 건수 상한은 트립이 많은 드라이버의 대시보드가 끝없이 길어지는 것을 막는 용도.
 TIMELINE_DAYS = 90
-TIMELINE_MAX_TRIPS = 30
+TIMELINE_MAX_TRIPS = 60
 
 CAR_TYPE_SUGGESTIONS = [
     'Sedan',
@@ -565,6 +566,11 @@ def driver_dashboard(request):
     # 이제 창은 날짜로 고정하고, 정산된 트립은 지우는 대신 'Settled' 배지를
     # 달아 그대로 남긴다 (배지는 해당 RCTI 로 링크).
     timeline_window_start = today - timedelta(days=TIMELINE_DAYS)
+    # 정산 주기가 긴 드라이버(주/월 단위)는 미정산 구간이 90일보다 길 수 있다.
+    # 합계에는 잡히는데 목록에 없으면 드라이버가 받을 돈을 검증할 수 없으므로,
+    # 마지막 정산 이후는 얼마나 오래됐든 전부 보여준다.
+    if last_settlement and last_settlement.to_date < timeline_window_start:
+        timeline_window_start = last_settlement.to_date
 
     timeline_posts = (
         Post.objects
