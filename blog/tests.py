@@ -1042,6 +1042,90 @@ class DriverDashboardViewTests(TestCase):
         response = self.client.get(self.url)
         self.assertEqual(response.context['current_grand_total'], Decimal('0'))
 
+    def _past_post(self, driver, days_ago, price='190'):
+        with patch('blog.bird_proxy.create_bird_mapping', return_value=True), \
+             patch('blog.bird_proxy.close_bird_mapping', return_value=True):
+            return Post.objects.create(
+                name='Pax', email='p@x.com', no_of_passenger='1',
+                price=price, driver=driver, use_proxy=False,
+                pickup_date=datetime.date.today() - datetime.timedelta(days=days_ago),
+                pickup_time='15:00',
+            )
+
+    def _settle_day(self, driver, post, number):
+        """Same-day settlement, the shape create_daily_settlements produces."""
+        with patch('blog.services.settlement_service.generate_settlement_number',
+                   return_value=number):
+            from blog.services.settlement_service import SettlementService
+            return SettlementService.create_settlement(
+                driver, post.pickup_date, post.pickup_date, user=None,
+            )
+
+    @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+    @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+    def test_settled_past_trip_stays_in_timeline(self, mock_close, mock_create):
+        """A trip must not vanish from the history the night it gets settled.
+
+        create_daily_settlements settles each individual driver's day at 23:55,
+        so on the old 'between the last two settlements' window a driver woke up
+        to an empty Past Trips list (2026-08 Don). The trip stays, carrying the
+        settlement number so the row can link to its RCTI.
+        """
+        user = make_user(username='tl1', password='TestPass1!')
+        driver = make_driver(user=user)
+        post = self._past_post(driver, days_ago=3)
+        settlement = self._settle_day(driver, post, 'TEST-TL1-SET-01')
+        self.assertIsNotNone(settlement)
+
+        self.client.force_login(user)
+        timeline = self.client.get(self.url).context['timeline']
+
+        trips = [i for i in timeline if i['type'] == 'trip']
+        self.assertEqual([i['data'].pk for i in trips], [post.pk])
+        self.assertEqual(trips[0]['settlement_number'], 'TEST-TL1-SET-01')
+
+    @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+    @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+    def test_daily_settlements_do_not_truncate_older_history(self, mock_close, mock_create):
+        """Two same-day settlements used to cut history down to the days between
+        them — everything older disappeared. All three trips must survive."""
+        user = make_user(username='tl2', password='TestPass1!')
+        driver = make_driver(user=user)
+        old = self._past_post(driver, days_ago=40)
+        mid = self._past_post(driver, days_ago=6)
+        recent = self._past_post(driver, days_ago=2)
+        self._settle_day(driver, mid, 'TEST-TL2-SET-01')
+        self._settle_day(driver, recent, 'TEST-TL2-SET-02')
+
+        self.client.force_login(user)
+        timeline = self.client.get(self.url).context['timeline']
+
+        trips = {i['data'].pk: i['settlement_number']
+                 for i in timeline if i['type'] == 'trip'}
+        self.assertEqual(set(trips), {old.pk, mid.pk, recent.pk})
+        self.assertIsNone(trips[old.pk])
+        self.assertEqual(trips[mid.pk], 'TEST-TL2-SET-01')
+        self.assertEqual(trips[recent.pk], 'TEST-TL2-SET-02')
+
+    @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+    @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+    def test_unsettled_trip_on_settlement_date_still_owed(self, mock_close, mock_create):
+        """A trip added after that day's settlement ran keeps counting as owed —
+        the old 'pickup_date > to_date' cut silently dropped it from the balance."""
+        user = make_user(username='tl3', password='TestPass1!')
+        driver = make_driver(user=user)
+        settled = self._past_post(driver, days_ago=2, price='190')
+        self._settle_day(driver, settled, 'TEST-TL3-SET-01')
+        latecomer = self._past_post(driver, days_ago=2, price='110')
+        latecomer.paid = '110'
+        latecomer.save()
+
+        self.client.force_login(user)
+        context = self.client.get(self.url).context
+
+        # driver_price defaults to price − 10 → only the unsettled 110 job counts.
+        self.assertEqual(context['to_be_paid'], Decimal('100'))
+
 
 # ---------------------------------------------------------------------------
 # View: driver_change_password

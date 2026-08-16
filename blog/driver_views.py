@@ -10,6 +10,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
+from django.db.models import F
 from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
@@ -26,6 +27,12 @@ logger = logging.getLogger(__name__)
 
 COMPANY_NAME = "EasyGo Airport Shuttle (Nexflow Ventures Pty Ltd)"
 COMPANY_ABN  = "25 697 358 535"
+
+# 대시보드 'Past Trips' 창. 정산 주기가 아니라 날짜로 고정한다 — 개인 드라이버는
+# 매일 밤 자동 정산되므로 정산 기준으로 자르면 기록이 하루치만 남는다.
+# 건수 상한은 트립이 많은 드라이버의 대시보드가 끝없이 길어지는 것을 막는 용도.
+TIMELINE_DAYS = 90
+TIMELINE_MAX_TRIPS = 30
 
 CAR_TYPE_SUGGESTIONS = [
     'Sedan',
@@ -436,6 +443,7 @@ def driver_dashboard(request):
         return redirect('blog:driver_login')
 
     from blog.models import Post, DriverSettlement
+    from blog.models.driver import DriverSettlementItem
     today = timezone.localdate()
     now = timezone.now()
     tomorrow = today + timedelta(days=1)
@@ -466,7 +474,9 @@ def driver_dashboard(request):
     )
     candidates = [{'post': post} for post in candidate_qs]
 
-    # 밸런스용 오늘~내일까지 트립 (완료 포함, use_proxy 무관) - 모레 이후 제외
+    # 밸런스용 오늘~내일까지 트립 (완료 포함, use_proxy 무관) - 모레 이후 제외.
+    # 이미 정산서에 들어간 건은 뺀다 — 당일 정산 크론이 23:55 에 돌고 나면
+    # 자정까지 같은 트립이 '받을 돈'에 계속 남아 두 번 세어지기 때문.
     balance_posts_today = (
         Post.objects
         .filter(
@@ -477,6 +487,7 @@ def driver_dashboard(request):
         )
         .exclude(price__isnull=True)
         .exclude(price='')
+        .exclude(driversettlementitem__isnull=False)
     )
 
     trips = []
@@ -511,17 +522,19 @@ def driver_dashboard(request):
             'proxy_number': get_proxy_number(post, driver) if in_window else None,
         })
 
-    # 정산 내역 (최신순, 최대 2개)
-    settlements = list(
+    # 미정산 잔액의 하한선으로 쓸 마지막 정산
+    last_settlement = (
         DriverSettlement.objects
         .filter(driver=driver)
-        .order_by('-settled_at')[:2]
+        .order_by('-settled_at')
+        .first()
     )
 
-    last_settlement = settlements[0] if len(settlements) >= 1 else None
-    second_last_settlement = settlements[1] if len(settlements) >= 2 else None
-
-    # 계산용 past_posts: last_settlement 이후 ~ today 미만
+    # 계산용 past_posts: 아직 정산되지 않은 과거 트립.
+    # 마지막 정산일을 하한선으로 쓰되(그보다 오래된 트립까지 미정산으로
+    # 되살아나면 안 되므로), 그 안에서는 실제 정산 편입 여부로 판단한다 —
+    # 예전엔 'to_date 이후' 날짜로만 잘라서, 정산일 당일에 정산에 못 들어간
+    # 트립(정산 크론이 23:55 에 돈 뒤 배정된 건 등)이 잔액에서 통째로 빠졌다.
     past_posts = (
         Post.objects
         .filter(
@@ -531,44 +544,42 @@ def driver_dashboard(request):
         )
         .exclude(price__isnull=True)
         .exclude(price='')
+        .exclude(driversettlementitem__isnull=False)
     )
     if last_settlement:
-        past_posts = past_posts.filter(pickup_date__gt=last_settlement.to_date)
+        if last_settlement.items.exists():
+            # 아이템이 있는 정산 — 어떤 트립이 들어갔는지 알 수 있으므로
+            # 정산일 당일 트립도 편입 여부로 판단한다.
+            past_posts = past_posts.filter(pickup_date__gte=last_settlement.to_date)
+        else:
+            # 아이템 없이 총액만 남은 옛 정산 — 무엇이 포함됐는지 알 수 없으니
+            # 예전처럼 날짜로만 자른다(정산일 당일은 정산된 것으로 본다).
+            past_posts = past_posts.filter(pickup_date__gt=last_settlement.to_date)
     past_posts = past_posts.order_by('-pickup_date', '-pickup_time')
 
-    # timeline용 posts: second_last_settlement 이후 ~ today 미만 (히스토리 표시용)
+    # timeline용 posts: 최근 TIMELINE_DAYS일치를 정산 여부와 무관하게 보여준다.
+    # 예전엔 '직전 두 정산 사이' 구간만 남기고 마지막 정산일의 트립은 아예
+    # 제외했다. 정산 주기가 몇 주 단위이던 시절엔 맞는 창이었지만, 개인
+    # 드라이버가 매일 밤 create_daily_settlements 로 당일 정산되면서 그 창이
+    # 하루짜리로 쪼그라들어 과거 기록이 통째로 사라진 것처럼 보였다.
+    # 이제 창은 날짜로 고정하고, 정산된 트립은 지우는 대신 'Settled' 배지를
+    # 달아 그대로 남긴다 (배지는 해당 RCTI 로 링크).
+    timeline_window_start = today - timedelta(days=TIMELINE_DAYS)
+
     timeline_posts = (
         Post.objects
         .filter(
             driver=driver,
             pickup_date__lt=today,
+            pickup_date__gte=timeline_window_start,
             cancelled=False,
         )
         .exclude(price__isnull=True)
         .exclude(price='')
+        .order_by('-pickup_date', '-pickup_time')[:TIMELINE_MAX_TRIPS]
     )
-    if second_last_settlement:
-        timeline_posts = timeline_posts.filter(pickup_date__gt=second_last_settlement.to_date)
-    if last_settlement:  # ← 이거 추가
-        timeline_posts = timeline_posts.exclude(pickup_date=last_settlement.to_date)
-    timeline_posts = timeline_posts.order_by('-pickup_date', '-pickup_time')
 
-    # 트립과 정산을 날짜순으로 인터리브
-    timeline = []
-    for post in timeline_posts:
-        timeline.append({
-            'type': 'trip',
-            'date': post.pickup_date,
-            'data': post,
-        })
-    for s in settlements:
-        timeline.append({
-            'type': 'settlement',
-            'date': s.to_date,
-            'data': s,
-        })
-
-    # 오늘 완료된 잡 (use_proxy=False, 대시보드에 표시 안 되지만 timeline엔 표시)
+    # 오늘 완료된 잡 (use_proxy=False, 대시보드 상단엔 표시 안 되지만 timeline엔 표시)
     completed_today = (
         Post.objects
         .filter(
@@ -580,21 +591,53 @@ def driver_dashboard(request):
         .exclude(price__isnull=True)
         .exclude(price='')
     )
-    for post in completed_today:
-        timeline.append({
+
+    history_posts = list(timeline_posts) + list(completed_today)
+
+    # 어떤 트립이 어느 정산서에 들어갔는지 한 번에 조회 (행마다 쿼리 나가지 않게)
+    settled_by_post = dict(
+        DriverSettlementItem.objects
+        .filter(settlement__driver=driver, post__in=history_posts)
+        .values_list('post_id', 'settlement__settlement_number')
+    )
+
+    # 트립과 정산을 날짜순으로 인터리브
+    timeline = [
+        {
             'type': 'trip',
             'date': post.pickup_date,
             'data': post,
+            'settlement_number': settled_by_post.get(post.id),
+        }
+        for post in history_posts
+    ]
+
+    # 정산 구분선은 '기간'의 경계를 뜻한다. 당일 자동 정산(from_date == to_date)은
+    # 기간이 아니라 트립 한 건과 1:1 이라 구분선이 매일 하나씩 끼어들어 기록을
+    # 뒤덮는다 — 그 건은 트립 행의 Settled 배지로 이미 드러나므로 제외한다.
+    divider_settlements = (
+        DriverSettlement.objects
+        .filter(driver=driver, to_date__gte=timeline_window_start)
+        .exclude(from_date=F('to_date'))
+        .order_by('-to_date')
+    )
+    for s in divider_settlements:
+        timeline.append({
+            'type': 'settlement',
+            'date': s.to_date,
+            'data': s,
         })
+
     timeline.sort(key=lambda x: x['date'], reverse=True)
 
-    # 마지막 정산 이후 트립만 합계 계산
+    # 미정산 트립만 합계 계산. past_posts / balance_posts_today 가 이미 정산에
+    # 편입된 건을 걸러낸 상태라, 여기서 날짜로 한 번 더 자르지 않는다 — 예전엔
+    # 'pickup_date > last_settlement.to_date' 조건을 걸어서 정산일 당일에 정산에
+    # 못 들어간 트립이 '받을 돈'에서 사라졌다.
     current_total_paid = Decimal('0')
     current_total_cash = Decimal('0')
-    to_be_paid = Decimal('0')
-    to_be_cash = Decimal('0')
 
-    for post in past_posts:
+    for post in list(past_posts) + list(balance_posts_today):
         try:
             amount = Decimal(str(post.driver_price))
         except Exception:
@@ -605,30 +648,13 @@ def driver_dashboard(request):
             current_total_cash += amount
         elif post.paid:
             current_total_paid += amount
-        if not last_settlement or post.pickup_date > last_settlement.to_date:
-            if post.cash:
-                to_be_cash += amount
-            elif post.paid:
-                to_be_paid += amount
-
-    for post in balance_posts_today:
-        try:
-            amount = Decimal(str(post.driver_price))
-        except Exception:
-            continue
-        # Driver bears their share of any customer refund on this trip.
-        amount -= (post.driver_refund_deduction or Decimal('0'))
-        if post.cash:
-            current_total_cash += amount
-        elif post.paid:
-            current_total_paid += amount
-        if not last_settlement or post.pickup_date > last_settlement.to_date:
-            if post.cash:
-                to_be_cash += amount
-            elif post.paid:
-                to_be_paid += amount
 
     current_grand_total = current_total_paid + current_total_cash
+
+    # 미정산분이 곧 회사가 줘야 할 돈. cash 건은 드라이버가 이미 손님한테서
+    # 받아 쥔 돈이라 'To be paid' 에는 들어가지 않는다.
+    to_be_paid = current_total_paid
+    to_be_cash = current_total_cash
 
     # 예정 금액: 모레 이후 트립 중 배정+proxy 연결된 것만 (아직 정산 대상 아님, 참고용 별도 라인)
     pending_posts = (
