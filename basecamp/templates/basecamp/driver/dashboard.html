@@ -204,12 +204,12 @@
     .past-trip-left { display:flex; gap:.75rem; align-items:center; }
     .past-trip-date { font-weight:500; color:#374151; }
     .past-trip-time { color:#9ca3af; }
-    /* Fixed columns so price / paid-cash / commission line up vertically
+    /* Fixed columns so price / paid-cash / refund line up vertically
        even on rows where a given badge is absent — each column is always
        rendered as a slot (empty or not), see dashboard.html markup. */
     .past-trip-right {
       display:grid;
-      grid-template-columns: 3.6rem 3rem auto 4.4rem;
+      grid-template-columns: 3.6rem 3rem auto;
       column-gap:.4rem;
       align-items:center;
     }
@@ -519,7 +519,7 @@
           {% if post.paid %}<span class="badge-paid">Paid</span>{% endif %}
           {% if post.cash and not post.paid %}<span class="badge-cash">Cash</span>{% endif %}
           {% if post.driver_refund_deduction %}<span class="badge-refund">↩ Refund −${{ post.driver_refund_deduction|floatformat:"-2" }}</span>{% endif %}
-          {% if post.commission_amount %}<span class="badge-commission">Comm. −${{ post.commission_amount|floatformat:"-2" }}</span>{% endif %}
+          {# commission 배지는 대시보드에서 노출하지 않음 (정산 상세에서만 표시) #}
         {% endif %}
       </div>
       {% endif %}
@@ -573,9 +573,7 @@
           <span class="past-trip-slot">
             {% if post.driver_refund_deduction %}<span class="badge-refund">↩ Refund −${{ post.driver_refund_deduction|floatformat:"-2" }}</span>{% endif %}
           </span>
-          <span class="past-trip-slot">
-            {% if post.commission_amount %}<span class="badge-commission">Comm. −${{ post.commission_amount|floatformat:"-2" }}</span>{% endif %}
-          </span>
+          {# commission 배지는 대시보드에서 노출하지 않음 (정산 상세에서만 표시) #}
         </div>
       </div>
       {% endwith %}
@@ -691,21 +689,8 @@
   }
 </script>
 
-{# RCTI/Settlements 버튼 — agreement 확인·제출한 드라이버에게만 노출 #}
-{% if agreement_confirmed %}
-<a href="{% url 'blog:driver_settlement_list' %}" style="
-  position:fixed;
-  bottom:1rem;
-  left:1rem;
-  background:#374151;
-  color:#9ca3af;
-  font-size:.75rem;
-  text-decoration:none;
-  padding:.4rem .75rem;
-  border-radius:6px;
-  z-index:100;
-">RCTI Invoices</a>
-{% endif %}
+{# RCTI/Settlements 버튼 — 대시보드에서는 노출하지 않음 (GST 등록 여부와 무관하게 숨김).
+   정산 목록은 blog:driver_settlement_list URL로 직접 접근 가능. #}
 
 <a href="{% url 'blog:driver_password_change' %}" style="
   position:fixed;
