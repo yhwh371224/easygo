@@ -283,6 +283,79 @@ class PostModelTests(TestCase):
 
 
 # ---------------------------------------------------------------------------
+# Post.commission_rate autofill
+# ---------------------------------------------------------------------------
+
+@patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+@patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+class PostCommissionRateTests(TestCase):
+    """The driver's default rate must be stamped on the booking however the
+    driver got assigned, not only through the admin form.
+
+    It was admin-only until 2026-08-17, so every job a driver accepted from
+    their own dashboard (driver_accept_job, live 2026-08-09) was booked at 0%
+    and settled at the full driver_price — Loly was paid 5% too much on every
+    job from 2026-08-11 on.
+    """
+
+    def setUp(self):
+        self.driver = make_driver()
+        self.driver.commission_rate = Decimal('5.00')
+        self.driver.save()
+
+    def _post(self, **kw):
+        return Post.objects.create(
+            name='Pax', email='p@x.com', no_of_passenger='1', price='110',
+            driver_price='100', **kw,
+        )
+
+    def test_rate_stamped_when_driver_assigned_on_create(self, *_):
+        post = self._post(driver=self.driver)
+        self.assertEqual(post.commission_rate, Decimal('5.00'))
+        self.assertEqual(post.commission_amount, Decimal('5.00'))
+        self.assertEqual(post.subcontractor_payout, Decimal('95.00'))
+
+    def test_rate_stamped_when_driver_assigned_later(self, *_):
+        post = self._post()
+        self.assertEqual(post.commission_rate, Decimal('0'))
+        post.driver = self.driver
+        post.save()
+        self.assertEqual(post.commission_rate, Decimal('5.00'))
+
+    def test_rate_stamped_on_partial_save(self, *_):
+        """driver_accept_job saves update_fields=['driver', 'use_proxy'] — the
+        rate is worthless if it never reaches the database."""
+        post = self._post()
+        post.driver = self.driver
+        post.use_proxy = True
+        post.save(update_fields=['driver', 'use_proxy'])
+
+        post.refresh_from_db()
+        self.assertEqual(post.commission_rate, Decimal('5.00'))
+
+    def test_hand_typed_rate_is_not_overwritten(self, *_):
+        post = self._post(driver=self.driver, commission_rate=Decimal('12.00'))
+        post.save()
+        self.assertEqual(post.commission_rate, Decimal('12.00'))
+
+    def test_unassigned_post_keeps_zero_rate(self, *_):
+        post = self._post()
+        self.assertEqual(post.commission_rate, Decimal('0'))
+        self.assertEqual(post.commission_amount, Decimal('0'))
+
+    def test_no_commission_on_driver_collected_cash(self, *_):
+        """The customer paid the driver directly, so the company never handled
+        the money and charges nothing on it. Stamping a rate would only put a
+        deduction on the dashboard that no settlement ever collects."""
+        post = self._post(driver=self.driver, cash=True)
+
+        self.assertTrue(post.driver_collected_cash)
+        self.assertEqual(post.commission_rate, Decimal('0'))
+        self.assertEqual(post.commission_amount, Decimal('0'))
+        self.assertEqual(post.subcontractor_payout, Decimal('100.00'))
+
+
+# ---------------------------------------------------------------------------
 # Model: PaypalPayment
 # ---------------------------------------------------------------------------
 

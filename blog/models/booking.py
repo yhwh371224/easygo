@@ -273,6 +273,26 @@ class Post(models.Model):
             uf = kwargs.get('update_fields')
             if uf is not None:
                 kwargs['update_fields'] = set(uf) | {'driver_collected_cash'}
+        # Commission follows the assigned driver's default rate. This lives on
+        # save() rather than the admin form because a driver is assigned by
+        # several paths that never touch the admin — driver_accept_job (the
+        # driver takes the job from their dashboard) and
+        # assign_default_driver_if_missing (the nightly assign_drivers cron).
+        # It used to be admin-only, so from 2026-08-11 every job Loly accepted
+        # herself was booked at 0% and she was paid the full driver_price.
+        # Only filled when the rate is still 0 — a rate typed in by hand for one
+        # booking is never overwritten.
+        # driver_collected_cash rides are skipped: the customer paid the driver
+        # directly, the money never passed through the company, and no
+        # commission is charged on them. They are excluded from settlements
+        # entirely (see SettlementService.create_settlement), so a rate here
+        # would only ever show up as a deduction on the dashboard that nobody
+        # actually collects. Runs after the block above, so the flag is settled.
+        if self.driver_id and not self.commission_rate and not self.driver_collected_cash:
+            self.commission_rate = self.driver.commission_rate
+            uf = kwargs.get('update_fields')
+            if uf is not None:
+                kwargs['update_fields'] = set(uf) | {'commission_rate'}
         # Until driver_price is manually set, it follows price minus 10.
         if not self.driver_price:
             try:
