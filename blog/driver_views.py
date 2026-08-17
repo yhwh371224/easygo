@@ -444,7 +444,6 @@ def driver_dashboard(request):
         return redirect('blog:driver_login')
 
     from blog.models import Post, DriverSettlement
-    from blog.models.driver import DriverSettlementItem
     today = timezone.localdate()
     now = timezone.now()
     tomorrow = today + timedelta(days=1)
@@ -563,8 +562,10 @@ def driver_dashboard(request):
     # 제외했다. 정산 주기가 몇 주 단위이던 시절엔 맞는 창이었지만, 개인
     # 드라이버가 매일 밤 create_daily_settlements 로 당일 정산되면서 그 창이
     # 하루짜리로 쪼그라들어 과거 기록이 통째로 사라진 것처럼 보였다.
-    # 이제 창은 날짜로 고정하고, 정산된 트립은 지우는 대신 'Settled' 배지를
-    # 달아 그대로 남긴다 (배지는 해당 RCTI 로 링크).
+    # 이제 창은 날짜로 고정하고, 정산된 트립도 지우지 않고 그대로 남긴다.
+    # 정산 여부는 행에 표시하지 않는다 — 당일 정산이 매일 돌면 과거 트립의
+    # 거의 전부가 '정산됨'이라 표시가 아무것도 구분해 주지 못했다. 받을 돈은
+    # 상단 합계가, 정산서별 내역은 하단 정산서 목록이 답한다.
     timeline_window_start = today - timedelta(days=TIMELINE_DAYS)
     # 정산 주기가 긴 드라이버(주/월 단위)는 미정산 구간이 90일보다 길 수 있다.
     # 합계에는 잡히는데 목록에 없으면 드라이버가 받을 돈을 검증할 수 없으므로,
@@ -600,27 +601,19 @@ def driver_dashboard(request):
 
     history_posts = list(timeline_posts) + list(completed_today)
 
-    # 어떤 트립이 어느 정산서에 들어갔는지 한 번에 조회 (행마다 쿼리 나가지 않게)
-    settled_by_post = dict(
-        DriverSettlementItem.objects
-        .filter(settlement__driver=driver, post__in=history_posts)
-        .values_list('post_id', 'settlement__settlement_number')
-    )
-
     # 트립과 정산을 날짜순으로 인터리브
     timeline = [
         {
             'type': 'trip',
             'date': post.pickup_date,
             'data': post,
-            'settlement_number': settled_by_post.get(post.id),
         }
         for post in history_posts
     ]
 
     # 정산 구분선은 '기간'의 경계를 뜻한다. 당일 자동 정산(from_date == to_date)은
-    # 기간이 아니라 트립 한 건과 1:1 이라 구분선이 매일 하나씩 끼어들어 기록을
-    # 뒤덮는다 — 그 건은 트립 행의 Settled 배지로 이미 드러나므로 제외한다.
+    # 기간이 아니라 하루와 1:1 이라, 넣으면 구분선이 매일 하나씩 끼어들어 트립
+    # 기록을 뒤덮는다 — 하루치 정산 내역은 정산서 목록에서 보면 되므로 제외한다.
     divider_settlements = (
         DriverSettlement.objects
         .filter(driver=driver, to_date__gte=timeline_window_start)

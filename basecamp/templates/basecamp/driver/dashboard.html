@@ -100,21 +100,6 @@
       font-size:.75rem;
       font-weight:600;
     }
-    /* 정산 완료된 과거 트립 표시 — 누르면 해당 RCTI 로 간다.
-       예전엔 정산된 트립을 목록에서 아예 지웠는데, 드라이버 입장에선
-       기록이 사라진 것으로 보여서 배지로 바꿨다. */
-    .badge-settled {
-      background:#ecfdf5;
-      color:#047857;
-      border:1px solid #a7f3d0;
-      border-radius:4px;
-      padding:.1rem .45rem;
-      font-size:.75rem;
-      font-weight:600;
-      text-decoration:none;
-      white-space:nowrap;
-    }
-    .badge-settled:hover { background:#d1fae5; color:#065f46; }
     .trip-price {
       font-size:.95rem;
       font-weight:700;
@@ -575,11 +560,6 @@
         <div class="past-trip-left">
           <span class="past-trip-date">{{ post.pickup_date|date:"d M" }}</span>
           <span class="past-trip-time">{{ post.pickup_time }}</span>
-          {% if item.settlement_number %}
-            <a class="badge-settled"
-               href="{% url 'blog:driver_settlement_detail' item.settlement_number %}"
-               title="{{ item.settlement_number }}">✓ Settled</a>
-          {% endif %}
         </div>
         <div class="past-trip-right">
           <span class="past-trip-price">{% if post.driver_price %}${{ post.driver_price }}{% endif %}</span>

@@ -1068,8 +1068,8 @@ class DriverDashboardViewTests(TestCase):
 
         create_daily_settlements settles each individual driver's day at 23:55,
         so on the old 'between the last two settlements' window a driver woke up
-        to an empty Past Trips list (2026-08 Don). The trip stays, carrying the
-        settlement number so the row can link to its RCTI.
+        to an empty Past Trips list (2026-08 Don). Being settled must not remove
+        the row — the history is a record of work done, not of what is owed.
         """
         user = make_user(username='tl1', password='TestPass1!')
         driver = make_driver(user=user)
@@ -1082,7 +1082,6 @@ class DriverDashboardViewTests(TestCase):
 
         trips = [i for i in timeline if i['type'] == 'trip']
         self.assertEqual([i['data'].pk for i in trips], [post.pk])
-        self.assertEqual(trips[0]['settlement_number'], 'TEST-TL1-SET-01')
 
     @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
     @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
@@ -1100,12 +1099,8 @@ class DriverDashboardViewTests(TestCase):
         self.client.force_login(user)
         timeline = self.client.get(self.url).context['timeline']
 
-        trips = {i['data'].pk: i['settlement_number']
-                 for i in timeline if i['type'] == 'trip'}
-        self.assertEqual(set(trips), {old.pk, mid.pk, recent.pk})
-        self.assertIsNone(trips[old.pk])
-        self.assertEqual(trips[mid.pk], 'TEST-TL2-SET-01')
-        self.assertEqual(trips[recent.pk], 'TEST-TL2-SET-02')
+        trips = {i['data'].pk for i in timeline if i['type'] == 'trip'}
+        self.assertEqual(trips, {old.pk, mid.pk, recent.pk})
 
     @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
     @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
