@@ -356,6 +356,35 @@ class PostCommissionRateTests(TestCase):
 
 
 # ---------------------------------------------------------------------------
+# Calendar event description
+# ---------------------------------------------------------------------------
+
+@patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+@patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+class CalendarEventDescriptionTests(TestCase):
+
+    def _post(self, **kw):
+        kw.setdefault('pickup_date', datetime.date.today())
+        kw.setdefault('pickup_time', '09:00')
+        return Post.objects.create(
+            name='Pax', email='p@x.com', no_of_passenger='1', price='110', **kw,
+        )
+
+    def test_driver_price_in_description(self, *_):
+        from utils.calendar_sync import build_event_data
+
+        post = self._post(driver_price='100')
+        self.assertIn('dp:$100', build_event_data(post)['description'])
+
+    def test_driver_price_omitted_when_blank(self, *_):
+        """price is blank too, so Post.save() has nothing to derive it from."""
+        from utils.calendar_sync import build_event_data
+
+        post = self._post(price='', driver_price='')
+        self.assertNotIn('dp:$', build_event_data(post)['description'])
+
+
+# ---------------------------------------------------------------------------
 # Model: PaypalPayment
 # ---------------------------------------------------------------------------
 
