@@ -147,7 +147,7 @@
 											<td align="left" style="padding-top:28px;padding-left:0;">
 
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
-													Thank you for your recent payment {% if payment_amount %}<strong>${{ payment_amount }}</strong>{% endif %}
+													Thank you for your recent payment {% if payment_amount %}<strong>${{ payment_amount|floatformat:2 }}</strong>{% endif %}
 												</p>
 
 												{% if applied_bookings %}

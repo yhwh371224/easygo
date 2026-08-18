@@ -15,6 +15,7 @@ from blog.models import Post, Inquiry, Driver
 from blog.sms_utils import send_sms_notice, send_whatsapp_template, format_au_phone
 from blog.blog_utils import resolve_driver, _net_adjustment, clean_float
 from utils.direction_utils import is_airport_pickup
+from utils.telegram import send_telegram_sync
 from csp.constants import NONCE
 from basecamp.basecamp_utils import (
     parse_baggage, parse_special_items, handle_email_sending, format_pickup_time_12h,
@@ -633,6 +634,20 @@ def email_dispatch_detail(request):
 
             for booking in applied_bookings:
                 booking.save(update_fields=['paid', 'notice', 'reminder', 'cash', 'pending', 'cancelled'])
+
+            # 배분하고도 남은 돈은 어느 예약에도 기록되지 않는다 — 입력 금액과 실제
+            # paid 증가분이 어긋나는데 흔적이 없으면 나중에 추적할 수 없으므로 알린다.
+            leftover = round(remaining_amount, 2)
+            if leftover > 0:
+                applied_total = round(payment_amount - leftover, 2)
+                warning = (
+                    f"⚠️ Gratitude For Payment: 입력 ${payment_amount:.2f} 중 "
+                    f"${applied_total:.2f} 만 배분되고 ${leftover:.2f} 가 남았습니다 "
+                    f"({_email}). 잔액이 남은 예약이 없어 어디에도 기록되지 않았습니다 — "
+                    f"금액 오입력이거나 환불/추가 예약 확인이 필요합니다."
+                )
+                logger.warning(warning)
+                send_telegram_sync(warning)
 
             context.update({
                 'applied_bookings': applied_bookings,
