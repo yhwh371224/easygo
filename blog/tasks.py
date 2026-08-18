@@ -27,11 +27,9 @@ def _auto_fill_post_refund(instance):
     it alone — accounting (BAS 1A netting) relies on Post.refund being
     correct, so we only auto-fill when there's a single unambiguous match.
     Returns the Post if it was auto-filled, else None, and the match count."""
-    matched_posts = Post.objects.filter(
-        Q(booker_email__iexact=instance.email) |
-        Q(email__iexact=instance.email) |
-        Q(name__iexact=instance.name)
-    )
+    from .blog_utils import match_posts_for_payer
+
+    matched_posts = match_posts_for_payer(instance)
     match_count = matched_posts.count()
     if match_count != 1:
         return None, match_count
@@ -74,7 +72,10 @@ def create_event_on_calendar(instance_id):
 # PayPal payment in tasks.py
 @shared_task
 def notify_user_payment_paypal(instance_id):
-    from .blog_utils import process_generic_payment, send_payment_notification_email, send_refund_notification_email
+    from .blog_utils import (
+        handle_paypal_dispute, handle_paypal_dispute_resolved,
+        process_generic_payment, send_payment_notification_email, send_refund_notification_email,
+    )
     with transaction.atomic():
         try:
             instance = PaypalPayment.objects.select_for_update().get(id=instance_id)
@@ -82,18 +83,28 @@ def notify_user_payment_paypal(instance_id):
             return
 
         raw_amount = float(instance.amount or 0)
+        kind = instance.kind
 
-        if raw_amount < 0:
+        # Anything that is not money coming in is handled here and returns: a
+        # dispute must not send the customer a refund email, and a dispute being
+        # reversed back must not be booked as a fresh payment.
+        if kind != PaypalPayment.KIND_PAYMENT:
             if instance.is_processed:
                 return
             instance.is_processed = True
             instance.processed_at = timezone.now()
             instance.save()
-            auto_filled_post, match_count = _auto_fill_post_refund(instance)
-            send_refund_notification_email(
-                instance, method="PAYPAL", amount=raw_amount,
-                auto_filled_post=auto_filled_post, match_count=match_count,
-            )
+
+            if kind == PaypalPayment.KIND_DISPUTE:
+                handle_paypal_dispute(instance, method="PAYPAL")
+            elif kind == PaypalPayment.KIND_DISPUTE_RESOLVED:
+                handle_paypal_dispute_resolved(instance, method="PAYPAL")
+            else:
+                auto_filled_post, match_count = _auto_fill_post_refund(instance)
+                send_refund_notification_email(
+                    instance, method="PAYPAL", amount=raw_amount,
+                    auto_filled_post=auto_filled_post, match_count=match_count,
+                )
             return
 
         calculated_amount = round(raw_amount / 1.03, 2)

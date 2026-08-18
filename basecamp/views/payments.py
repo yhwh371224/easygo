@@ -1,4 +1,6 @@
 from datetime import datetime, date
+import logging
+
 from django.utils import timezone
 import requests
 import stripe
@@ -21,6 +23,8 @@ from basecamp.basecamp_utils import (
 from basecamp.modules.payment_utils import _record_paypal_fee
 from accounting.conf import GST_REGISTRATION_DATE
 from django_ratelimit.decorators import ratelimit
+
+logger = logging.getLogger('easygo')
 
 
 # ---------------------------------------------------------------------------
@@ -462,48 +466,87 @@ PAYPAL_VERIFY_URL = "https://ipnpb.paypal.com/cgi-bin/webscr"
 @csrf_exempt
 @require_POST
 def paypal_ipn(request):
-    if request.method == 'POST':        
-        item_name = request.POST.get('item_name')
-        payer_email = request.POST.get('payer_email')
-        gross_amount = request.POST.get('mc_gross')
-        txn_id = request.POST.get('txn_id')
-        mc_fee = request.POST.get('mc_fee')
-        payment_date = request.POST.get('payment_date')
+    """PayPal IPN endpoint.
 
-        if PaypalPayment.objects.filter(txn_id=txn_id).exists():
+    Order matters: the payload is posted back to PayPal and must come back
+    VERIFIED *before* anything is written or sent. Saving first (as this view
+    used to) meant a forged POST created a PaypalPayment row and fired the
+    customer email, the Telegram alert and the Post.refund auto-fill before the
+    verification that would have rejected it ever ran.
+    """
+    item_name = request.POST.get('item_name')
+    payer_email = request.POST.get('payer_email')
+    gross_amount = request.POST.get('mc_gross')
+    txn_id = request.POST.get('txn_id')
+    mc_fee = request.POST.get('mc_fee')
+    payment_date = request.POST.get('payment_date')
+    case_id = (request.POST.get('case_id') or '').strip()
+
+    # --- 1. Verify with PayPal first -------------------------------------
+    ipn_data = request.POST.copy()
+    ipn_data['cmd'] = '_notify-validate'
+    headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+
+    try:
+        response = requests.post(
+            PAYPAL_VERIFY_URL, data=ipn_data, headers=headers, verify=True, timeout=30,
+        )
+    except requests.exceptions.RequestException as e:
+        paypal_ipn_error_email('PayPal IPN Request Exception', str(e), item_name, payer_email, gross_amount)
+        return HttpResponse(status=500, content="Error processing PayPal IPN")
+
+    if not (response.status_code == 200 and response.text.strip() == 'VERIFIED'):
+        # Not from PayPal (or PayPal rejected it) — nothing is stored, nobody is
+        # notified. 200 so a forged sender learns nothing from the status code.
+        logger.warning('paypal_ipn: unverified IPN discarded (txn_id=%s)', txn_id)
+        paypal_ipn_error_email(
+            'PayPal IPN Verification Failed', 'Failed to verify PayPal IPN.',
+            item_name, payer_email, gross_amount,
+        )
+        return HttpResponse(status=200, content="Unverified IPN discarded")
+
+    # --- 2. Duplicate guard ----------------------------------------------
+    # PayPal retries an IPN until it gets a 200. Money events (payment, refund,
+    # reversal) each carry their own txn_id, so txn_id dedupes them. A case
+    # notification instead repeats the *original* transaction's txn_id, which
+    # under the old txn_id-only guard was silently swallowed as a duplicate —
+    # that is why a dispute left no trace anywhere. Those dedupe on case_id.
+    if case_id:
+        if PaypalPayment.objects.filter(case_id=case_id).exists():
             return HttpResponse(status=200, content="Duplicate IPN Notification")
-        
-        p = PaypalPayment(name=item_name, email=payer_email, amount=gross_amount, txn_id=txn_id)
+    elif PaypalPayment.objects.filter(txn_id=txn_id).exists():
+        return HttpResponse(status=200, content="Duplicate IPN Notification")
 
-        try:
-            p.save()
+    # --- 3. Store ---------------------------------------------------------
+    # A case notification moves no money on its own (the reversal IPN that
+    # accompanies it does), so its amount is stored as 0 — the disputed amount
+    # stays in `raw`. Otherwise a dispute would read as a fresh payment.
+    amount = 0 if case_id else gross_amount
 
-        except Exception as e:
-            paypal_ipn_error_email('PayPal IPN Error', str(e), item_name, payer_email, gross_amount)
-            return HttpResponse(status=500, content="Error processing PayPal IPN")
+    p = PaypalPayment(
+        name=item_name,
+        email=payer_email,
+        amount=amount,
+        txn_id=txn_id,
+        payment_status=(request.POST.get('payment_status') or '').strip(),
+        txn_type=(request.POST.get('txn_type') or '').strip(),
+        parent_txn_id=(request.POST.get('parent_txn_id') or '').strip(),
+        reason_code=(request.POST.get('reason_code') or '').strip(),
+        case_id=case_id,
+        case_type=(request.POST.get('case_type') or '').strip(),
+        raw=dict(request.POST.items()),
+    )
 
-        ipn_data = request.POST.copy()
-        ipn_data['cmd'] = '_notify-validate'
-        headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+    try:
+        p.save()
+    except Exception as e:
+        paypal_ipn_error_email('PayPal IPN Error', str(e), item_name, payer_email, gross_amount)
+        return HttpResponse(status=500, content="Error processing PayPal IPN")
 
-        try:
-            response = requests.post(PAYPAL_VERIFY_URL, data=ipn_data, headers=headers, verify=True)
-            response_content = response.text.strip()
-            
-            if response.status_code == 200 and response_content == 'VERIFIED':
-                # Record the PayPal processing fee as an expense Transaction for
-                # BAS. Only on VERIFIED IPNs; errors are caught internally.
-                _record_paypal_fee(txn_id, mc_fee, payment_date)
-                return HttpResponse(status=200)
-            else:
-                paypal_ipn_error_email('PayPal IPN Verification Failed', 'Failed to verify PayPal IPN.', item_name, payer_email, gross_amount)
-                return HttpResponse(status=500, content="Error processing PayPal IPN")
-
-        except requests.exceptions.RequestException as e:
-            paypal_ipn_error_email('PayPal IPN Request Exception', str(e), item_name, payer_email, gross_amount)
-            return HttpResponse(status=500, content="Error processing PayPal IPN")
-
-    return HttpResponse(status=400)
+    # Record the PayPal processing fee as an expense Transaction for BAS
+    # (negative fees on a refund/reversal are booked as a credit).
+    _record_paypal_fee(txn_id, mc_fee, payment_date)
+    return HttpResponse(status=200)
 
 
 # --------------------------

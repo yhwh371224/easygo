@@ -374,6 +374,124 @@ def send_refund_notification_email(instance, method, amount=None, booker_name=No
     )
 
 
+def match_posts_for_payer(instance):
+    """Bookings that a PayPal/Stripe payment record plausibly belongs to.
+
+    Same rule the payment and refund paths use — payer email, booker email or
+    name — so a dispute is attached to the same bookings the payment was."""
+    return Post.objects.filter(
+        Q(booker_email__iexact=instance.email) |
+        Q(email__iexact=instance.email) |
+        Q(name__iexact=instance.name)
+    )
+
+
+def _dispute_target_posts(instance, limit=5):
+    """Bookings to flag for a dispute: future pickups first, else the newest.
+
+    A dispute names no booking, only the payer, and a common name can match
+    years of history — so flag the bookings still ahead (the ones the money was
+    for) and fall back to the most recent one when everything is in the past."""
+    matched = match_posts_for_payer(instance)
+    future = matched.filter(
+        pickup_date__isnull=False,
+        pickup_date__gte=timezone.localdate(),
+    ).order_by('pickup_date')
+    posts = list(future[:limit])
+    if not posts:
+        posts = list(matched.order_by('-pickup_date', '-id')[:1])
+    return posts
+
+
+def handle_paypal_dispute(instance, method="PAYPAL"):
+    """A customer opened a dispute/chargeback — money is held, not refunded.
+
+    Deliberately sends the customer nothing: they have an open case, and the
+    "Refund Processed" email the refund path sends would tell them a refund
+    they have not been given is done. Post.refund is left alone for the same
+    reason — nothing is settled until the case closes. The bookings are marked
+    so the dispute is visible where the booking is, and Sung gets a Telegram
+    alert telling him a seller response is required."""
+    amount = abs(float(instance.amount or 0))
+    case_ref = instance.case_id or instance.parent_txn_id or instance.txn_id or ''
+    now = timezone.now()
+
+    posts = _dispute_target_posts(instance)
+    entry = f"⚠️ PAYPAL DISPUTE {case_ref} ${amount:.2f} on {now.strftime('%Y-%m-%d')}"
+    for post in posts:
+        # A dispute arrives as up to two IPNs (the case notice, which carries the
+        # PP-R-… case id, and the reversal, which may only carry txn ids). Keep
+        # the real case id once we have it — that is what Sung searches PayPal by.
+        if instance.case_id or not post.paypal_dispute_case_id:
+            post.paypal_dispute_case_id = case_ref[:64]
+        post.paypal_dispute_opened_at = now
+        post.notice = f"{post.notice or ''} | {entry}".strip(" | ")
+        post.save(update_fields=['paypal_dispute_case_id', 'paypal_dispute_opened_at', 'notice'])
+
+    logger.warning(
+        'handle_paypal_dispute: case=%s payer=%s amount=%s flagged_posts=%s',
+        case_ref, instance.email, amount, [p.pk for p in posts],
+    )
+
+    if posts:
+        booking_lines = "\n".join(
+            f"   #{p.pk} {p.pickup_date} {p.name} (paid: {p.paid})" for p in posts
+        )
+    else:
+        booking_lines = "   ⚠️ No matching booking found"
+
+    reason = instance.reason_code or instance.case_type or 'unknown'
+    send_telegram_sync(
+        f"🚨 DISPUTE opened via {method} — funds on hold, NOT refunded\n\n"
+        f"👤 {instance.name}\n"
+        f"📧 {instance.email}\n"
+        f"💰 ${amount:.2f}\n"
+        f"🗂 Case: {case_ref} (reason: {reason})\n"
+        f"📌 Flagged bookings:\n{booking_lines}\n\n"
+        f"👉 Respond in PayPal Resolution Centre before the deadline — "
+        f"no response usually means the buyer wins automatically.\n"
+        f"ℹ️ No refund email was sent to the customer, and Post.refund was left empty."
+    )
+
+
+def handle_paypal_dispute_resolved(instance, method="PAYPAL"):
+    """PayPal cancelled the reversal — the held money came back.
+
+    This arrives as a *positive* amount, which the payment path would otherwise
+    treat as a brand-new payment and use to mark bookings paid all over again.
+    It is not a payment: it is the same money returning, so the only thing to do
+    is clear the dispute flag and say so."""
+    amount = abs(float(instance.amount or 0))
+    case_ref = instance.case_id or instance.parent_txn_id or instance.txn_id or ''
+
+    posts = list(Post.objects.filter(paypal_dispute_case_id=case_ref[:64])) if case_ref else []
+    if not posts:
+        posts = [p for p in _dispute_target_posts(instance) if p.paypal_dispute_case_id]
+
+    entry = f"✅ PAYPAL DISPUTE resolved (funds returned ${amount:.2f}) on {timezone.now().strftime('%Y-%m-%d')}"
+    for post in posts:
+        post.paypal_dispute_case_id = ''
+        post.paypal_dispute_opened_at = None
+        post.notice = f"{post.notice or ''} | {entry}".strip(" | ")
+        post.save(update_fields=['paypal_dispute_case_id', 'paypal_dispute_opened_at', 'notice'])
+
+    logger.info(
+        'handle_paypal_dispute_resolved: case=%s payer=%s amount=%s cleared_posts=%s',
+        case_ref, instance.email, amount, [p.pk for p in posts],
+    )
+
+    cleared = ", ".join(f"#{p.pk}" for p in posts) or "none"
+    send_telegram_sync(
+        f"✅ Dispute reversed back via {method} — funds returned\n\n"
+        f"👤 {instance.name}\n"
+        f"📧 {instance.email}\n"
+        f"💰 ${amount:.2f}\n"
+        f"🗂 Case: {case_ref}\n"
+        f"📌 Dispute flag cleared on: {cleared}\n"
+        f"ℹ️ Not counted as a new payment — this is the held money coming back."
+    )
+
+
 def get_default_driver_for_region(region):
     return Driver.objects.filter(
         region=region,

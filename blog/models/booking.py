@@ -252,6 +252,17 @@ class Post(models.Model):
                    'the driver settlement/payout and the driver dashboard. e.g. a $100 '
                    'refund where the driver bears 50% -> enter 50 here (and 100 in refund).',
     )
+    paypal_dispute_case_id = models.CharField(
+        max_length=64, blank=True, default='', db_index=True,
+        help_text='값이 있으면 이 예약의 결제금이 PayPal 분쟁(dispute/chargeback)으로 '
+                   '보류·차감된 상태다. 환불(refund)과 달리 아직 확정된 게 아니므로 '
+                   'refund 필드는 건드리지 않는다. 분쟁이 취소되거나 판매자 승소로 '
+                   '끝나면(Canceled_Reversal) 자동으로 비워진다.',
+    )
+    paypal_dispute_opened_at = models.DateTimeField(
+        null=True, blank=True,
+        help_text='PayPal 분쟁 알림(IPN)을 받은 시각. 페이팔 응답 기한 관리를 위해 기록한다.',
+    )
     created = models.DateTimeField(auto_now_add=True)
 
     @property

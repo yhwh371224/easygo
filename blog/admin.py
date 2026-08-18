@@ -318,8 +318,14 @@ class InquiryAdmin(admin.ModelAdmin):
 
 
 class PaypalPaymentAdmin(admin.ModelAdmin):
-    list_display = ['name', 'email', 'amount', 'txn_id', 'created']    
-    search_fields = ['name', 'email', 'amount']
+    list_display = ['name', 'email', 'amount', 'kind', 'payment_status', 'case_id', 'txn_id', 'created']
+    list_filter = ['payment_status', 'txn_type']
+    search_fields = ['name', 'email', 'amount', 'txn_id', 'case_id']
+    readonly_fields = ['raw']
+
+    @admin.display(description='Kind')
+    def kind(self, obj):
+        return obj.kind
 
 
 class StripePaymentAdmin(admin.ModelAdmin):
@@ -472,7 +478,8 @@ class PostAdmin(admin.ModelAdmin):
         ('Pricing', {
             'fields': ['suburb_distance_km', 'suburb_base_price', 'price', 'paid', 'discount', 'toll', 'surcharge',
                        'driver_price', 'commission_rate', 'commission_amount_override', 'commission_amount_display', 'subcontractor_payout_display',
-                       'deposit_amount_due', 'refund', 'driver_refund_deduction']
+                       'deposit_amount_due', 'refund', 'driver_refund_deduction',
+                       'paypal_dispute_case_id', 'paypal_dispute_opened_at']
         }),
         ('Status', {
             'fields': ['is_confirmed', 'cancelled', 'pending', 'sent_email', 'reminder', 'cash', 'driver_collected_cash', 'prepay',

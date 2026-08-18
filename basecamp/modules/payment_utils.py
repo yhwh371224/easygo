@@ -152,9 +152,16 @@ def _record_paypal_fee(txn_id, mc_fee, payment_date=None):
     fees are GST-inclusive, so gst_code='gst' and gst_amount = fee / 11 (see
     _PAYPAL_FEE_HAS_GST).
 
+    A refund or dispute reversal carries a *negative* mc_fee: PayPal is handing
+    the fee back. That is booked as a negative expense row (a credit note), so
+    BAS 1B nets it off the original fee automatically — build_bas sums
+    gst_amount when positive and falls back to gross_amount ÷ 11 otherwise, and
+    both give the right sign here. Previously negative fees were skipped, so the
+    original fee stayed on the books with no offset and 1B was overstated.
+
     Silently skips if:
       - txn_id is missing
-      - mc_fee is missing / unparseable / not positive
+      - mc_fee is missing / unparseable / zero
       - a Transaction for this txn_id already exists (idempotent on duplicate IPNs)
 
     Errors are logged and emailed; they never propagate to the caller.
@@ -164,7 +171,18 @@ def _record_paypal_fee(txn_id, mc_fee, payment_date=None):
     if not txn_id:
         return
 
-    description = f"PayPal fee {txn_id}"
+    try:
+        fee = Decimal(str(mc_fee)).quantize(_CENT)
+    except (InvalidOperation, TypeError, ValueError):
+        logger.warning('_record_paypal_fee: bad mc_fee %r for %s', mc_fee, txn_id)
+        return
+
+    if fee == 0:
+        logger.info('_record_paypal_fee: zero fee for %s', txn_id)
+        return
+
+    is_reversal = fee < 0
+    description = f"PayPal fee {'reversal ' if is_reversal else ''}{txn_id}"
 
     # Duplicate guard — idempotent on repeated IPN deliveries, keyed on txn_id
     if Transaction.objects.filter(
@@ -172,16 +190,6 @@ def _record_paypal_fee(txn_id, mc_fee, payment_date=None):
         description=description,
     ).exists():
         logger.info('_record_paypal_fee: skipped duplicate for %s', txn_id)
-        return
-
-    try:
-        fee = Decimal(str(mc_fee)).quantize(_CENT)
-    except (InvalidOperation, TypeError, ValueError):
-        logger.warning('_record_paypal_fee: bad mc_fee %r for %s', mc_fee, txn_id)
-        return
-
-    if fee <= 0:
-        logger.info('_record_paypal_fee: non-positive fee %s for %s', fee, txn_id)
         return
 
     if _PAYPAL_FEE_HAS_GST:
@@ -205,8 +213,8 @@ def _record_paypal_fee(txn_id, mc_fee, payment_date=None):
             counterparty='PayPal',
         )
         logger.info(
-            '_record_paypal_fee: recorded fee=%.2f gst=%.2f for %s',
-            fee, gst, txn_id,
+            '_record_paypal_fee: recorded %s fee=%.2f gst=%.2f for %s',
+            'reversal' if is_reversal else 'fee', fee, gst, txn_id,
         )
 
     except Exception as exc:

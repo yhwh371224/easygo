@@ -413,6 +413,146 @@ class PaypalPaymentModelTests(TestCase):
 
 
 # ---------------------------------------------------------------------------
+# PayPal IPN: refund vs dispute
+# ---------------------------------------------------------------------------
+
+class PaypalPaymentKindTests(TestCase):
+    """A dispute pulls money back exactly like a refund does, so only the IPN
+    metadata can tell them apart."""
+
+    def test_positive_payment(self):
+        p = PaypalPayment(amount=Decimal('100'), payment_status='Completed')
+        self.assertEqual(p.kind, PaypalPayment.KIND_PAYMENT)
+
+    def test_refund(self):
+        p = PaypalPayment(amount=Decimal('-100'), payment_status='Refunded')
+        self.assertEqual(p.kind, PaypalPayment.KIND_REFUND)
+
+    def test_dispute_reversal(self):
+        p = PaypalPayment(amount=Decimal('-100'), payment_status='Reversed')
+        self.assertEqual(p.kind, PaypalPayment.KIND_DISPUTE)
+
+    def test_case_notification_is_a_dispute(self):
+        p = PaypalPayment(amount=Decimal('0'), txn_type='new_case', case_id='PP-R-UKB-1')
+        self.assertEqual(p.kind, PaypalPayment.KIND_DISPUTE)
+
+    def test_cancelled_reversal_is_not_a_new_payment(self):
+        """Funds coming back are positive, but booking them as a payment would
+        mark the bookings paid a second time."""
+        p = PaypalPayment(amount=Decimal('100'), payment_status='Canceled_Reversal')
+        self.assertEqual(p.kind, PaypalPayment.KIND_DISPUTE_RESOLVED)
+
+    def test_legacy_rows_fall_back_to_the_sign(self):
+        """Rows written before the metadata existed must keep behaving as before."""
+        self.assertEqual(PaypalPayment(amount=Decimal('-50')).kind, PaypalPayment.KIND_REFUND)
+        self.assertEqual(PaypalPayment(amount=Decimal('50')).kind, PaypalPayment.KIND_PAYMENT)
+
+
+@patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+@patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+class PaypalDisputeHandlingTests(TestCase):
+
+    def setUp(self):
+        self.payer = PaypalPayment.objects.create(
+            name='Sal Collins', email='sal@example.com',
+            amount=Decimal('-269.74'), txn_id='REV1',
+            payment_status='Reversed', parent_txn_id='PAY1',
+            case_id='PP-R-UKB-641959771', reason_code='not_as_described',
+        )
+
+    def _booking(self, **kw):
+        defaults = dict(
+            name='Sal Collins', email='sal@example.com',
+            no_of_passenger='2', price='135', paid='135',
+            pickup_date=datetime.date.today() + timedelta(days=30),
+        )
+        defaults.update(kw)
+        return Post.objects.create(**defaults)
+
+    @patch('blog.blog_utils.send_telegram_sync')
+    def test_dispute_flags_booking_without_emailing_customer(self, mock_tg, *mocks):
+        from blog.blog_utils import handle_paypal_dispute
+
+        post = self._booking()
+        handle_paypal_dispute(self.payer)
+        post.refresh_from_db()
+
+        self.assertEqual(post.paypal_dispute_case_id, 'PP-R-UKB-641959771')
+        self.assertIsNotNone(post.paypal_dispute_opened_at)
+        self.assertIn('PAYPAL DISPUTE', post.notice)
+        # nothing settled yet — refund stays untouched, customer gets no mail
+        self.assertEqual(post.refund, Decimal('0'))
+        self.assertEqual(len(mail.outbox), 0)
+        self.assertTrue(mock_tg.called)
+        self.assertIn('DISPUTE', mock_tg.call_args[0][0])
+
+    @patch('blog.blog_utils.send_telegram_sync')
+    def test_dispute_prefers_future_bookings(self, mock_tg, *mocks):
+        from blog.blog_utils import handle_paypal_dispute
+
+        past = self._booking(pickup_date=datetime.date.today() - timedelta(days=200))
+        future = self._booking()
+        handle_paypal_dispute(self.payer)
+
+        past.refresh_from_db()
+        future.refresh_from_db()
+        self.assertEqual(past.paypal_dispute_case_id, '')
+        self.assertEqual(future.paypal_dispute_case_id, 'PP-R-UKB-641959771')
+
+    @patch('blog.blog_utils.send_telegram_sync')
+    def test_resolution_clears_the_flag(self, mock_tg, *mocks):
+        from blog.blog_utils import handle_paypal_dispute, handle_paypal_dispute_resolved
+
+        post = self._booking()
+        handle_paypal_dispute(self.payer)
+
+        returned = PaypalPayment.objects.create(
+            name='Sal Collins', email='sal@example.com',
+            amount=Decimal('269.74'), txn_id='REV2',
+            payment_status='Canceled_Reversal', case_id='PP-R-UKB-641959771',
+        )
+        handle_paypal_dispute_resolved(returned)
+
+        post.refresh_from_db()
+        self.assertEqual(post.paypal_dispute_case_id, '')
+        self.assertIsNone(post.paypal_dispute_opened_at)
+        self.assertIn('DISPUTE resolved', post.notice)
+
+    @patch('blog.blog_utils.send_telegram_sync')
+    @patch('blog.blog_utils.send_html_email')
+    def test_task_routes_dispute_away_from_the_refund_path(self, mock_mail, mock_tg, *mocks):
+        """The whole point: a dispute must not take the refund path, which
+        emails the customer that a refund has been processed."""
+        from blog.tasks import notify_user_payment_paypal
+
+        post = self._booking()
+        notify_user_payment_paypal(self.payer.pk)
+
+        post.refresh_from_db()
+        self.payer.refresh_from_db()
+        self.assertTrue(self.payer.is_processed)
+        self.assertEqual(post.refund, Decimal('0'))
+        self.assertFalse(mock_mail.called)
+        self.assertIn('DISPUTE', mock_tg.call_args[0][0])
+
+    @patch('blog.blog_utils.send_telegram_sync')
+    @patch('blog.blog_utils.send_html_email')
+    def test_returned_funds_are_not_booked_as_a_new_payment(self, mock_mail, mock_tg, *mocks):
+        from blog.tasks import notify_user_payment_paypal
+
+        post = self._booking(paid='')
+        returned = PaypalPayment.objects.create(
+            name='Sal Collins', email='sal@example.com',
+            amount=Decimal('269.74'), txn_id='REV3',
+            payment_status='Canceled_Reversal', case_id='PP-R-UKB-641959771',
+        )
+        notify_user_payment_paypal(returned.pk)
+
+        post.refresh_from_db()
+        self.assertEqual(post.paid or '', '')  # not marked paid all over again
+
+
+# ---------------------------------------------------------------------------
 # Model: StripePayment
 # ---------------------------------------------------------------------------
 
