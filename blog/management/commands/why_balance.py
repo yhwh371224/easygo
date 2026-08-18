@@ -50,7 +50,8 @@ class Command(BaseCommand):
             self.stdout.write("")
             self.stdout.write(
                 f"  pk={b.pk}  {b.pickup_date}  "
-                f"return_pickup_time={b.return_pickup_time!r}  cancelled={b.cancelled}"
+                f"return_pickup_time={b.return_pickup_time!r}  "
+                f"return_pickup_date={b.return_pickup_date}  cancelled={b.cancelled}"
             )
             self.stdout.write(
                 f"    raw:  price={b.price!r}  paid={b.paid!r}  "
@@ -93,3 +94,37 @@ class Command(BaseCommand):
                     f"  ⚠️ 왕복 {len(legs)}줄에 surcharge 가 합계 ${sur_sum:.2f} 붙어 있다. "
                     f"청구서는 왕복 총액에 surcharge 를 한 번만 얹으므로, 손님이 청구서대로 "
                     f"완납해도 여기서는 약 ${sur_sum / 2:.2f} 가 미납으로 남는다."))
+
+        # 왕복 짝 맞추기 — email dispatch 가 두 날짜를 찾을 때 쓰는 조건과 동일하다.
+        # 날짜가 맞물리지 않으면 손님 메일에 날짜가 하나만 나간다.
+        self.stdout.write("")
+        self.stdout.write("  --- 왕복 짝 ---")
+        paired = set()
+        for b in bookings:
+            if b.pk in paired or not b.return_pickup_date:
+                continue
+            mate = next((o for o in bookings
+                         if o.pk != b.pk and o.pickup_date == b.return_pickup_date), None)
+            if mate is None:
+                self.stdout.write(self.style.WARNING(
+                    f"  pk={b.pk} ({b.pickup_date}) 의 짝을 못 찾음 "
+                    f"— return_pickup_date={b.return_pickup_date}"))
+                continue
+            paired.update({b.pk, mate.pk})
+            swap_ok = mate.return_pickup_date == b.pickup_date
+            self.stdout.write(
+                f"  pk={b.pk} ({b.pickup_date}) ↔ pk={mate.pk} ({mate.pickup_date})"
+                f"   날짜 맞교환={'OK' if swap_ok else '깨짐'}"
+            )
+            for tag, one, two in (('===RETURN===', b, mate),):
+                def _seg(post):
+                    for part in (post.notice or '').split('|'):
+                        if tag in part:
+                            return part.strip()
+                    return None
+                s1, s2 = _seg(one), _seg(two)
+                if s1 and s2 and s1 != s2:
+                    self.stdout.write(self.style.WARNING(
+                        f"    ⚠️ 두 줄의 {tag} 기록이 다르다 — 같은 분할에서 나왔다면 같아야 한다:\n"
+                        f"       pk={one.pk}: {s1}\n"
+                        f"       pk={two.pk}: {s2}"))

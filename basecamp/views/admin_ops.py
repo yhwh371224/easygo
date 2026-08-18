@@ -583,12 +583,17 @@ def email_dispatch_detail(request):
                 else:
                     target = due
 
-                apply_amount = min(remaining_amount, target)
+                # 센트 단위로 끊어서 배분한다. 안 끊으면 paid 는 clean_float 가
+                # 2자리로 반올림해 저장하는데 remaining_amount 는 반올림 전 값을
+                # 그대로 깎아서, 기록한 금액과 차감한 금액이 어긋난다
+                # (예: 배분 119.63999999999999 → paid "119.64").
+                apply_amount = round(min(remaining_amount, target), 2)
                 if apply_amount <= 0:
                     continue
 
-                applied_amounts[booking.pk] = applied_amounts.get(booking.pk, 0.0) + apply_amount
-                remaining_amount -= apply_amount
+                applied_amounts[booking.pk] = round(
+                    applied_amounts.get(booking.pk, 0.0) + apply_amount, 2)
+                remaining_amount = round(remaining_amount - apply_amount, 2)
 
             # 2차: 다른 예약으로 넘길 디파짓 목표가 더 없는데 돈이 남았다면(=넘길
             # 곳이 없거나 모든 디파짓을 이미 채웠으면) 남은 금액을 앞 예약부터
@@ -602,9 +607,13 @@ def email_dispatch_detail(request):
                 if due <= 0:
                     continue
 
-                apply_amount = min(remaining_amount, due)
-                applied_amounts[booking.pk] = applied_amounts.get(booking.pk, 0.0) + apply_amount
-                remaining_amount -= apply_amount
+                apply_amount = round(min(remaining_amount, due), 2)
+                if apply_amount <= 0:
+                    continue
+
+                applied_amounts[booking.pk] = round(
+                    applied_amounts.get(booking.pk, 0.0) + apply_amount, 2)
+                remaining_amount = round(remaining_amount - apply_amount, 2)
 
             applied_bookings = []
 
@@ -618,14 +627,17 @@ def email_dispatch_detail(request):
                 booking.paid = clean_float(paid + apply_amount)
 
                 original_notice = (booking.notice or "").strip()
-                # apply_amount 는 float 뺄셈의 결과라 그대로 찍으면 이진수 오차가
-                # 노티스에 그대로 남는다 (예: $119.63999999999999).
-                paid_text = f"===Gratitude=== Applied: ${apply_amount:.2f}"
-                if "===Gratitude===" not in original_notice:
-                    booking.notice = (
-                        f"{original_notice} | {paid_text}"
-                        if original_notice else paid_text
-                    )
+                # 발송할 때마다 한 줄씩 쌓는다. 예전에는 "===Gratitude=== 가 이미
+                # 있으면 안 붙임" 가드가 있어서 2회차부터 기록이 남지 않았고,
+                # 나중에 "이 잔액이 어디서 왔나"를 추적할 수가 없었다.
+                paid_text = (
+                    f"===Gratitude=== {timezone.localdate():%Y-%m-%d} "
+                    f"Applied: ${apply_amount:.2f}"
+                )
+                booking.notice = (
+                    f"{original_notice} | {paid_text}"
+                    if original_notice else paid_text
+                )
 
                 booking.reminder = True
                 booking.cash = False
