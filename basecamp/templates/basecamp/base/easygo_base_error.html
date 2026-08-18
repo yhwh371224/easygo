@@ -28,7 +28,8 @@
         body { margin:0; font-family:Arial,sans-serif; }
         .award-badge { position: fixed; top: 60px; left: 10px; width: 100px !important; height: 100px; background: url('/static/basecamp/images/award-badge-sm.webp') center/contain no-repeat; image-rendering: -webkit-optimize-contrast; z-index: 1000; }
         .award-badge-container { position: relative; z-index: 10; margin-top: 3.5rem; margin-left: clamp(1rem, 8vw, 8rem); width: clamp(120px, 20vw, 240px); height: clamp(120px, 20vw, 240px); background: url('/static/basecamp/images/award-badge-sm.webp') center/contain no-repeat; image-rendering: -webkit-optimize-contrast; display: block; }
-        @media (min-width: 768px) { .award-badge { top: 30px; left: 20px; width: 180px !important; height: 180px; background-image: url('/static/basecamp/images/award-badge-md.webp'); } .award-badge-container { background-image: url('/static/basecamp/images/award-badge-md.webp'); } }
+        /* 표시 크기(180~280px) × 고밀도 화면 → 640px 원본(lg) 이어야 선명함 */
+        @media (min-width: 768px) { .award-badge { top: 30px; left: 20px; width: 180px !important; height: 180px; background-image: url('/static/basecamp/images/award-badge-lg.webp'); } .award-badge-container { background-image: url('/static/basecamp/images/award-badge-lg.webp'); } }
         @media (min-width: 992px) { .award-badge { top: 70px; left: 40px; width: 280px !important; height: 280px; } }
     </style>
 

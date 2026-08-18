@@ -14,6 +14,26 @@ from articles.models import Post as BlogPost
 logger = logging.getLogger(__name__)
 
 
+def _hero_image_urls(region):
+    """URLs for the region hero photo: (base, 960px, 1600px).
+
+    The width variants are pre-rendered files next to the original
+    (e.g. brisbaneairport-960.webp). A region without them falls back to the
+    original so a newly added hero image never 404s.
+    """
+    from django.contrib.staticfiles import finders
+
+    name = region.hero_image_file
+    stem, _, ext = name.rpartition('.')
+
+    def variant(width):
+        path = f'basecamp/photos/airports/{stem}-{width}.{ext}'
+        return staticfiles_storage.url(path) if finders.find(path) else None
+
+    base = staticfiles_storage.url(f'basecamp/photos/airports/{name}')
+    return base, variant(960) or base, variant(1600) or base
+
+
 def region_coming_soon(request, region_slug):
     region = get_object_or_404(Region, slug=region_slug, is_active=True)
     if not region.is_coming_soon:
@@ -53,7 +73,7 @@ def region_home(request, region_slug):
 
     cruise_terminals = CruiseTerminal.objects.filter(region=region)
 
-    hero_image_url = staticfiles_storage.url(f'basecamp/photos/airports/{region.hero_image_file}')
+    hero_image_url, hero_image_url_sm, hero_image_url_lg = _hero_image_urls(region)
 
     return render(request, 'regions/pages/home.html', {
         'region': region,
@@ -64,6 +84,8 @@ def region_home(request, region_slug):
         'latest_post': latest_post,
         'service_areas': region.service_areas or [],
         'hero_image_url': hero_image_url,
+        'hero_image_url_sm': hero_image_url_sm,
+        'hero_image_url_lg': hero_image_url_lg,
     })
 
 
@@ -181,7 +203,6 @@ def region_more_suburbs(request, region_slug):
 
 
 def _build_city_context(request, slug):
-    from django.contrib.staticfiles.storage import staticfiles_storage
     region = get_object_or_404(Region, slug=slug, is_active=True)
     form_suburbs = region.suburbs.filter(is_active=True).order_by('-is_pinned', 'sort_order', 'name')
     featured_suburbs = (
@@ -204,7 +225,7 @@ def _build_city_context(request, slug):
         airport__regions=region
     ).select_related('airport').order_by('type', 'name')
     cruise_terminals = CruiseTerminal.objects.filter(region=region)
-    hero_image_url = staticfiles_storage.url(f'basecamp/photos/airports/{region.hero_image_file}')
+    hero_image_url, hero_image_url_sm, hero_image_url_lg = _hero_image_urls(region)
     return {
         'region': region,
         'form_suburbs': form_suburbs,
@@ -214,6 +235,8 @@ def _build_city_context(request, slug):
         'latest_post': latest_post,
         'service_areas': region.service_areas or [],
         'hero_image_url': hero_image_url,
+        'hero_image_url_sm': hero_image_url_sm,
+        'hero_image_url_lg': hero_image_url_lg,
     }
 
 

@@ -109,7 +109,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css?family=Inter:400,600,700&display=swap" rel="stylesheet">
-    <link rel="preload" fetchpriority="high" as="image" href="{% static 'basecamp/photos/airports/sydney_airport.webp' %}" type="image/webp">
+    <link rel="preload" fetchpriority="high" as="image" href="{% static 'basecamp/photos/airports/sydney_airport-960.webp' %}" type="image/webp" media="(max-width: 991.98px)">
+    <link rel="preload" fetchpriority="high" as="image" href="{% static 'basecamp/photos/airports/sydney_airport-1600.webp' %}" type="image/webp" media="(min-width: 992px)">
     <link rel="preload" href="{% static 'basecamp/css/head_home.css' %}" as="style">
     <link rel="preload" href="{% static 'basecamp/css/home.css' %}" as="style">
     <link rel="preload" href="{% static 'basecamp/css/footer.css' %}" as="style">
@@ -126,7 +127,9 @@
     <link rel="stylesheet" href="{% static 'basecamp/css/home_sydney.css' %}">
     <noscript><link rel="stylesheet" href="{% static 'basecamp/css/tiny-slider.css' %}"></noscript>
     <style nonce="{{ CSP_NONCE }}">
-      #region-hero { background-image: url("{% static 'basecamp/photos/airports/sydney_airport.webp' %}"); }
+      /* 히어로 배경: 화면 폭에 맞춰 큰 파일을 주도록 분기 (작은 원본을 늘려 쓰던 흐림 해소) */
+      #region-hero { background-image: url("{% static 'basecamp/photos/airports/sydney_airport-960.webp' %}"); }
+      @media (min-width: 992px) { #region-hero { background-image: url("{% static 'basecamp/photos/airports/sydney_airport-1600.webp' %}"); } }
     </style>
     {% if GOOGLE_ANALYTICS_ID %}
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ GOOGLE_ANALYTICS_ID }}"></script>
@@ -145,8 +148,15 @@
       <!-- ===== HERO SECTION ===== -->
       <section id="region-hero" class="bg-dark pt-6 pb-5 py-sm-6">
         <div class="main-img" fetchpriority="high"></div>
-        <img src="{% static 'basecamp/images/award-badge-sm.webp' %}" width="240" height="240" alt="EasyGo 2024 Quality Business Award Badge – Sydney Airport Transfer" class="hero-badge-left" fetchpriority="high">
-        <img src="{% static 'basecamp/images/award-badge-2026-md.webp' %}" width="240" height="240" alt="EasyGo 2026 Quality Business Award Badge – Mosman Council" class="hero-badge-right" fetchpriority="high">
+        {# 배지는 최대 240 CSS px로 표시 → 고밀도 화면(2x)에서는 640px 원본(lg)을 사용해야 선명함 #}
+        <img src="{% static 'basecamp/images/award-badge-md.webp' %}"
+             srcset="{% static 'basecamp/images/award-badge-md.webp' %} 240w, {% static 'basecamp/images/award-badge-lg.webp' %} 640w"
+             sizes="(min-width: 992px) 240px, (min-width: 768px) 140px, 110px" width="240" height="240"
+             alt="EasyGo 2024 Quality Business Award Badge – Sydney Airport Transfer" class="hero-badge-left" fetchpriority="high">
+        <img src="{% static 'basecamp/images/award-badge-2026-md.webp' %}"
+             srcset="{% static 'basecamp/images/award-badge-2026-md.webp' %} 240w, {% static 'basecamp/images/award-badge-2026-lg.webp' %} 640w"
+             sizes="(min-width: 992px) 240px, (min-width: 768px) 140px, 110px" width="240" height="240"
+             alt="EasyGo 2026 Quality Business Award Badge – Mosman Council" class="hero-badge-right" fetchpriority="high">
         <div class="hero-text-wrap">
           <div class="hero-text-inner">
             <span class="hero-eyebrow">Sydney Private Airport Transfer Service</span>

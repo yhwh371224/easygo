@@ -11,7 +11,7 @@
     <meta name="author" content="easygoshuttle.com.au">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta property="og:title" content="{% if region.meta_title %}{{ region.meta_title }}{% else %}EasyGo Airport Shuttle – 8–13 Seater {{ region.name }}{% endif %}">
-    <meta property="og:image" content="https://easygoshuttle.com.au{{ hero_image_url }}">
+    <meta property="og:image" content="https://easygoshuttle.com.au{{ hero_image_url_lg }}">
     <meta property="og:description" content="{% if region.meta_description %}{{ region.meta_description }}{% else %}Traveling with a large group or lots of luggage? EasyGo Airport Shuttle offers private 8–13 seater transfers across {{ region.name }}. Perfect for families, hotel guests & oversized luggage.{% endif %}">
     <meta property="og:url" content="https://easygoshuttle.com.au/{{ region.slug }}/">
     <meta property="og:type" content="website">
@@ -62,7 +62,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css?family=Inter:400,600,700&display=swap" rel="stylesheet">
-    <link rel="preload" fetchpriority="high" as="image" href="{{ hero_image_url }}" type="image/webp">
+    <link rel="preload" fetchpriority="high" as="image" href="{{ hero_image_url_sm }}" type="image/webp" media="(max-width: 991.98px)">
+    <link rel="preload" fetchpriority="high" as="image" href="{{ hero_image_url_lg }}" type="image/webp" media="(min-width: 992px)">
     <link rel="preload" href="{% static 'basecamp/css/head_home.css' %}" as="style">
     <link rel="preload" href="{% static 'basecamp/css/home.css' %}" as="style">
     <link rel="preload" href="{% static 'basecamp/css/footer.css' %}" as="style">
@@ -77,7 +78,9 @@
     <link rel="stylesheet" href="{% static 'basecamp/css/home_generic.css' %}">
     <noscript><link rel="stylesheet" href="{% static 'basecamp/css/tiny-slider.css' %}"></noscript>
     <style nonce="{{ CSP_NONCE }}">
-      #region-hero { position: relative; isolation: isolate; background-image: url("{{ hero_image_url }}"); background-size: cover; background-position: center top; min-height: 72vh; }
+      /* 히어로 배경: 화면 폭에 맞는 크기의 파일을 주도록 분기 (작은 원본을 늘려 쓰던 흐림 해소) */
+      #region-hero { position: relative; isolation: isolate; background-image: url("{{ hero_image_url_sm }}"); background-size: cover; background-position: center top; min-height: 72vh; }
+      @media (min-width: 992px) { #region-hero { background-image: url("{{ hero_image_url_lg }}"); } }
     </style>
     {% if GOOGLE_ANALYTICS_ID %}
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ GOOGLE_ANALYTICS_ID }}"></script>
