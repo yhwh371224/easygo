@@ -618,7 +618,9 @@ def email_dispatch_detail(request):
                 booking.paid = clean_float(paid + apply_amount)
 
                 original_notice = (booking.notice or "").strip()
-                paid_text = f"===Gratitude=== Applied: ${apply_amount}"
+                # apply_amount 는 float 뺄셈의 결과라 그대로 찍으면 이진수 오차가
+                # 노티스에 그대로 남는다 (예: $119.63999999999999).
+                paid_text = f"===Gratitude=== Applied: ${apply_amount:.2f}"
                 if "===Gratitude===" not in original_notice:
                     booking.notice = (
                         f"{original_notice} | {paid_text}"
@@ -634,6 +636,50 @@ def email_dispatch_detail(request):
 
             for booking in applied_bookings:
                 booking.save(update_fields=['paid', 'notice', 'reminder', 'cash', 'pending', 'cancelled'])
+
+            # 왕복은 Post 두 줄로 쪼개져 있고 각 줄이 자기 몫의 잔액만 들고 있다.
+            # 한쪽 다리가 이미 완납이면 이번 배분에서 돈을 못 받아 applied_bookings
+            # 에 안 들어가고, 손님 메일에 왕복인데 날짜가 하나만 찍힌다.
+            # 돈이 붙은 예약의 짝을 찾아 "이 결제가 커버하는 예약" 목록을 따로 만든다.
+            def _return_sibling(booking):
+                """왕복 반대편 Post. handle_return_trip() 이 FK 없이 pickup_date /
+                return_pickup_date 를 서로 맞바꿔 저장하므로 어느 쪽 다리에서든
+                같은 조건으로 짝을 찾을 수 있다 (utils.post_helper._find_return_leg
+                는 아웃바운드에서만 동작해서 여기서는 대칭 버전을 쓴다)."""
+                if not booking.return_pickup_date or not booking.pickup_date:
+                    return None
+                qs = (
+                    Post.objects
+                    .filter(
+                        email__iexact=booking.email,
+                        pickup_date=booking.return_pickup_date,
+                    )
+                    .exclude(pk=booking.pk)
+                    .exclude(cancelled=True)
+                    .order_by('pk')
+                )
+                sibling = qs.filter(return_pickup_date=booking.pickup_date).first()
+                if sibling is None:
+                    # 어드민에서 손으로 만든 예약 등 return_pickup_date 가 비어 있는
+                    # 구 데이터는 날짜 맞교환이 성립하지 않는다. 같은 이메일 + 우리
+                    # return_pickup_date 와 정확히 같은 pickup_date 면 충분히 특정된다.
+                    sibling = qs.first()
+                return sibling
+
+            # 이번 배분에서 돈이 붙은 예약이 하나도 없어도(전액 완납 상태에서 재발송
+            # 등) 손님에게는 어느 예약 건인지 보여야 한다 — 그 경우 폼에 넣은
+            # 이메일로 조회된 예약을 기준으로 삼는다.
+            covered_bookings = list(applied_bookings)
+            if not covered_bookings and isinstance(user, Post):
+                covered_bookings = [user]
+
+            seen_pks = {b.pk for b in covered_bookings}
+            for booking in list(covered_bookings):
+                sibling = _return_sibling(booking)
+                if sibling is not None and sibling.pk not in seen_pks:
+                    covered_bookings.append(sibling)
+                    seen_pks.add(sibling.pk)
+            covered_bookings.sort(key=lambda b: (b.pickup_date is None, b.pickup_date))
 
             # 배분하고도 남은 돈은 어느 예약에도 기록되지 않는다 — 입력 금액과 실제
             # paid 증가분이 어긋나는데 흔적이 없으면 나중에 추적할 수 없으므로 알린다.
@@ -651,6 +697,7 @@ def email_dispatch_detail(request):
 
             context.update({
                 'applied_bookings': applied_bookings,
+                'covered_bookings': covered_bookings,
                 'payment_amount': payment_amount,
             })
 

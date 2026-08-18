@@ -150,10 +150,10 @@
 													Thank you for your recent payment {% if payment_amount %}<strong>${{ payment_amount|floatformat:2 }}</strong>{% endif %}
 												</p>
 
-												{% if applied_bookings %}
+												{% if covered_bookings %}
 													<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
-														We have received your payment for the pickup scheduled on
-														{% for booking in applied_bookings %}
+														We have received your payment for the pickup{{ covered_bookings|pluralize }} scheduled on
+														{% for booking in covered_bookings %}
 															<strong>{{ booking.pickup_date|date:"d M Y" }}</strong>{% if not forloop.last %}, {% endif %}
 														{% endfor %}
 													</p>
