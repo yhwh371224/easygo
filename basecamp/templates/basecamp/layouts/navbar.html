@@ -129,8 +129,24 @@
         class="date-picker"
         placeholder="Choose pickup date"
         data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;F j, Y&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;}">
-      <label>Flight number <span>(optional)</span></label>
-      <input type="text" name="flight_number" placeholder="e.g. QF400" autocomplete="off" required>
+      <label>Passengers</label>
+      <select name="no_of_passenger" required>
+        <option value="" disabled selected>No. of people</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+        <option value="13">13</option>
+        <option value="" disabled>Over 13 &mdash; email us</option>
+      </select>
       <button type="submit" class="eg-btn-green">Next — final stop &#187;</button>
     </form>
   </div>

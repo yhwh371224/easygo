@@ -197,9 +197,9 @@
 
             <div class="col-sm-6">
               <label class="form-label" for="flight_number">Flight number</label>
-              <input type="text" class="form-control prefilled-input"
+              <input type="text" class="form-control"
                 id="flight_number" name="flight_number"
-                value="{{ flight_number }}" placeholder="e.g. QF400">
+                value="{{ flight_number }}" placeholder="e.g. QF400" required>
             </div>
 
             <div class="col-sm-6">
@@ -231,16 +231,14 @@
 
             <div class="col-sm-6">
               <label class="form-label" for="no_of_passenger">Passengers</label>
-              <select class="form-select" id="no_of_passenger" name="no_of_passenger">
-                {% for i in "123456789" %}
-                  <option value="{{ i }}" {% if previous.no_of_passenger == i %}selected{% endif %}>{{ i }}</option>
+              <select class="form-select" id="no_of_passenger" name="no_of_passenger" required>
+                <option value="" disabled {% if not no_of_passenger %}selected{% endif %}>No. of people</option>
+                {% for i in passenger_choices %}
+                  <option value="{{ i }}" {% if no_of_passenger|stringformat:"s" == i|stringformat:"s" %}selected{% endif %}>{{ i }}</option>
                 {% endfor %}
-                <option value="10" {% if previous.no_of_passenger == "10" %}selected{% endif %}>10</option>
-                <option value="11" {% if previous.no_of_passenger == "11" %}selected{% endif %}>11</option>
-                <option value="12" {% if previous.no_of_passenger == "12" %}selected{% endif %}>12</option>
-                <option value="13" {% if previous.no_of_passenger == "13" %}selected{% endif %}>13</option>
               </select>
-              <small class="form-text text-muted">More than 13: leave message</small>
+              <small class="form-text text-muted">More than 13? Email us at
+                <a href="mailto:info@easygoshuttle.com.au">info@easygoshuttle.com.au</a>.</small>
             </div>
 
             <div class="col-12">

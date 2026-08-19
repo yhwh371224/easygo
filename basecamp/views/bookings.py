@@ -27,6 +27,25 @@ logger = logging.getLogger(__name__)
 
 from regions.models import RequestLog
 
+# Quick rebook — 차량이 13인승까지라 그 이상은 폼으로 받지 않고 메일로 안내한다.
+MAX_REBOOK_PASSENGERS = 13
+SUPPORT_EMAIL = 'info@easygoshuttle.com.au'
+
+
+def _normalize_pax(value):
+    """인원수 문자열 → 1~MAX_REBOOK_PASSENGERS 범위의 int.
+
+    범위 밖이거나 숫자가 아니면 None. 예전 예약의 no_of_passenger 는 CharField 라
+    '8 people' 같은 값도 들어있어 셀렉트 기본값으로 그대로 쓸 수 없다.
+    """
+    try:
+        pax = int(str(value).strip())
+    except (TypeError, ValueError):
+        return None
+    if 1 <= pax <= MAX_REBOOK_PASSENGERS:
+        return pax
+    return None
+
 
 @ratelimit(key='ip', rate='5/m', method='POST', block=True)
 @require_POST
@@ -435,10 +454,10 @@ def return_trip_detail(request):
 @ratelimit(key='ip', rate='5/m', method='POST', block=True)
 @require_POST
 def quick_rebook_step1(request, region_slug=None):
-    email         = request.POST.get('email', '').strip()
-    pickup_date   = request.POST.get('pickup_date', '').strip()
-    flight_number = request.POST.get('flight_number', '').strip()
-    pickup_time   = request.POST.get('pickup_time', '').strip()
+    email           = request.POST.get('email', '').strip()
+    pickup_date     = request.POST.get('pickup_date', '').strip()
+    pickup_time     = request.POST.get('pickup_time', '').strip()
+    no_of_passenger = request.POST.get('no_of_passenger', '').strip()
 
     error_redirect = request.POST.get('error_redirect', '').strip()
     _ALLOWED_ERROR_REDIRECTS = {'/rebook/'}
@@ -462,6 +481,18 @@ def quick_rebook_step1(request, region_slug=None):
         pickup_date_obj = parse_date(pickup_date, field_name='Pickup Date', required=True)
     except ValueError as e:
         return render_step1_error(str(e))
+
+    # 인원수 — 홈/네비바/rebook 폼 공통. 1~13명만 받고, 그 이상은 메일로 안내.
+    if not no_of_passenger:
+        return render_step1_error('Please select the number of passengers.')
+
+    pax = _normalize_pax(no_of_passenger)
+    if pax is None:
+        return render_step1_error(
+            f'Please select 1-{MAX_REBOOK_PASSENGERS} passengers. '
+            f'For larger groups, email us at {SUPPORT_EMAIL} and we will arrange it for you.'
+        )
+    no_of_passenger = str(pax)
 
     previous = Post.objects.filter(
         email__iexact=email,
@@ -487,8 +518,10 @@ def quick_rebook_step1(request, region_slug=None):
         'email'          : email,
         'pickup_date'    : pickup_date,
         'pickup_date_obj': pickup_date_obj,
-        'flight_number'  : flight_number,
+        'flight_number'  : '',
         'pickup_time'    : pickup_time,
+        'no_of_passenger': no_of_passenger,
+        'passenger_choices': range(1, MAX_REBOOK_PASSENGERS + 1),
         'direction'      : previous.direction,
         'active_regions' : Region.objects.filter(is_active=True),
         'error'          : None,
@@ -538,9 +571,34 @@ def quick_rebook_confirm(request, region_slug=None):
             'flight_number' : flight_number,
             'pickup_time'   : pickup_time,
             'direction'     : direction,
+            'no_of_passenger': no_of_passenger,
+            'passenger_choices': range(1, MAX_REBOOK_PASSENGERS + 1),
             'active_regions': Region.objects.filter(is_active=True),
             'error'         : 'Duplicate submission. Please wait a moment and try again.',
         })
+
+    # 인원수 검증 — step1 과 동일 규칙(1~13명, 초과는 메일 안내)
+    def render_pax_error(msg):
+        return render(request, 'basecamp/quick_rebook_step2.html', {
+            'previous'      : previous,
+            'email'         : email,
+            'pickup_date'   : pickup_date_str,
+            'flight_number' : flight_number,
+            'pickup_time'   : pickup_time,
+            'direction'     : direction,
+            'no_of_passenger': no_of_passenger,
+            'passenger_choices': range(1, MAX_REBOOK_PASSENGERS + 1),
+            'active_regions': Region.objects.filter(is_active=True),
+            'error'         : msg,
+        })
+
+    pax = _normalize_pax(no_of_passenger)
+    if pax is None:
+        return render_pax_error(
+            f'Please select 1-{MAX_REBOOK_PASSENGERS} passengers. '
+            f'For larger groups, email us at {SUPPORT_EMAIL} and we will arrange it for you.'
+        )
+    no_of_passenger = str(pax)
 
     previous_name  = previous.name
     base_price = Decimal(previous.price)
@@ -571,6 +629,8 @@ def quick_rebook_confirm(request, region_slug=None):
             'flight_number' : flight_number,
             'pickup_time'   : pickup_time,
             'direction'     : direction,
+            'no_of_passenger': no_of_passenger,
+            'passenger_choices': range(1, MAX_REBOOK_PASSENGERS + 1),
             'active_regions': Region.objects.filter(is_active=True),
             'error'         : str(e),
         })
