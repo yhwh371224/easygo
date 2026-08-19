@@ -33,7 +33,21 @@ INTERNAL_TRANSFER_MARKERS = ['xx8784', 'CommBank app']
 # they never reach P&L or BAS (no GST claim, no deduction).
 # Confirmed personal by the owner:
 #   MUJI — homeware/stationery retail, personal purchases only.
-PERSONAL_EXPENSE_MARKERS = ['MUJI']
+#   UBER — rideshare trips taken privately (confirmed 2026-08-20). Note the
+#     matching 'International Transaction Fee' rows cannot be tied back to the
+#     Uber charge they belong to, so those stay as ordinary bank_fees.
+#   NOMADESIM — travel eSIM data, bought for personal trips (confirmed
+#     2026-08-20). Not the company mobile plan — that is DODO.
+#   INTERNATIONAL TRANSACTION FEE — the CommBank 3.5% FX fee. Every such fee
+#     seen so far belongs to a personal foreign charge (UBER, NOMADESIM);
+#     Anthropic, the one foreign business charge, is billed in AUD and raises
+#     no fee. The CSV gives no link back to the charge a fee belongs to, so
+#     this is a blanket call by the owner (2026-08-20). If a foreign *business*
+#     charge is ever billed in USD (e.g. VULTR), its fee will be caught here
+#     too and must be flipped back to a business expense in admin.
+PERSONAL_EXPENSE_MARKERS = [
+    'MUJI', 'UBER', 'NOMADESIM', 'INTERNATIONAL TRANSACTION FEE',
+]
 PERSONAL_EXPENSE_CATEGORY = 'personal_drawings'
 
 # GST auto-estimation rules (first match wins).
@@ -47,11 +61,16 @@ GST_KEYWORD_RULES = [
     # a business vehicle cost by the owner. Merchant name, not a generic word.
     (('SERVICE', 'MECHANIC', 'AUTO', 'TYRE', 'TYRES', 'REPCO',
       'SUPERCHEAP', 'PANEL', 'SMASH', 'CIRCUM VENDING', 'RIZKALLA'), 'gst'),
+    # 'DODO' must stay ahead of the vehicle_maintenance 'SERVICE' keyword —
+    # the bank writes it as 'DODO SERVICES PTY LTD'. It is the company mobile
+    # plan, not car servicing.
+    (('DODO',), 'gst'),
     (('TELSTRA', 'OPTUS', 'VODAFONE', 'TPG', 'AUSSIE BROADBAND',
       'BELONG', 'INTERNET', 'MOBILE'), 'gst'),
     (('GOOGLE', 'META', 'FACEBOOK', 'MARKETING', 'ADVERTIS', 'SEO'), 'gst'),
     (('GROUP TRANSPORT',), 'gst'),
-    (('NORTH SYDNEY EXECUTIVE', 'VIRTUAL OFFICE', 'CWH'), 'gst'),
+    (('NORTH SYDNEY EXECUTIVE', 'VIRTUAL OFFICE', 'CWH',
+      'JB HI FI', 'JB HI-FI'), 'gst'),
     # 'COUNCI' (not 'COUNCIL') — CommBank truncates some council names, e.g.
     # 'WILLOUGHBY CITY COUNCI'. Substring match still covers the full spelling.
     (('COUNCI',), 'gst'),
@@ -61,6 +80,15 @@ GST_KEYWORD_RULES = [
     # included; if an ABN is ever registered with Anthropic the charge becomes
     # GST-free (B2B reverse charge) and this rule must move to 'gst_free'.
     (('ANTHROPIC',), 'gst'),
+    # 'TFNSW' = Transport for NSW, billed as '200 TFNSW INTER/IVR ...'.
+    # These are driver test / licence fees, charged GST-inclusive (confirmed
+    # by the owner 2026-08-20). Kept separate from the broader
+    # 'TRANSPORT FOR NSW' spelling, which stays in REVIEW_OVERRIDE_KEYWORDS
+    # because it also covers rego-type charges with mixed GST treatment.
+    (('TFNSW',), 'gst'),
+    # Currently unreachable: the same string is in PERSONAL_EXPENSE_MARKERS,
+    # which is matched first and skips GST entirely. Kept so the fee falls back
+    # to a correct business treatment if that personal marker is ever removed.
     (('INTERNATIONAL TRANSACTION FEE',), 'gst'),
     (('TAXIPAY',), 'gst'),
     # Fines/infringements are never GST-eligible — explicit no_gst so this can
@@ -85,15 +113,24 @@ REVIEW_OVERRIDE_KEYWORDS = (
 # Ordering note: vehicle_registration ('SERVICE NSW', ...) is checked BEFORE
 # vehicle_maintenance ('SERVICE', ...) — 'SERVICE' is a substring of
 # 'SERVICE NSW', so the broader vehicle_maintenance keyword would otherwise
-# shadow the more specific registration match.
+# shadow the more specific registration match. Same reason for the 'DODO'
+# rule sitting above vehicle_maintenance.
 CATEGORY_KEYWORD_RULES = [
     (('REFUND',), 'customer_refund'),
     (('BP', 'CALTEX', 'AMPOL', 'SHELL', '7-ELEVEN', '7 ELEVEN', 'OTR', 'FUEL',
       'PETROL', 'UNITED PETROLEUM', 'METRO PETROLEUM', 'VEZINA'), 'fuel'),
     (('LINKT', 'E-TOLL', 'ETOLL', 'TOLL', 'TRANSURBAN'), 'tolls'),
+    # 'TFNSW' ('200 TFNSW INTER/IVR SURRY HILLS') = Transport for NSW driver
+    # test / licence fees. Checked before vehicle_registration so it lands on
+    # its own line rather than being read as a rego cost.
+    (('TFNSW',), 'licence_fees'),
     (('REGO', 'REGISTRATION', 'SERVICE NSW', 'TRANSPORT FOR NSW', 'RMS'),
      'vehicle_registration'),
     (('SDRO', 'INFRNGMNT', 'PENALTY'), 'non_deductible_fine'),
+    # DODO Services Pty Ltd = the company mobile plan. Checked BEFORE
+    # vehicle_maintenance because 'SERVICE' is a substring of 'DODO SERVICES'
+    # and would otherwise label the phone bill as car servicing.
+    (('DODO',), 'phone_internet'),
     (('SERVICE', 'MECHANIC', 'AUTO', 'TYRE', 'TYRES', 'REPCO',
       'SUPERCHEAP', 'PANEL', 'SMASH', 'CIRCUM VENDING', 'RIZKALLA'),
      'vehicle_maintenance'),
@@ -102,13 +139,16 @@ CATEGORY_KEYWORD_RULES = [
     (('GOOGLE', 'META', 'FACEBOOK', 'MARKETING', 'ADVERTIS', 'SEO'), 'marketing'),
     (('INSURANCE', 'NRMA', 'AAMI', 'ALLIANZ', 'QBE', 'GIO', 'ZURICH'), 'insurance'),
     (('GROUP TRANSPORT',), 'subcontractor_payout'),
-    (('NORTH SYDNEY EXECUTIVE', 'VIRTUAL OFFICE', 'CWH'), 'office_expense'),
+    # JB Hi-Fi: office consumables/equipment bought for the office.
+    (('NORTH SYDNEY EXECUTIVE', 'VIRTUAL OFFICE', 'CWH',
+      'JB HI FI', 'JB HI-FI'), 'office_expense'),
     (('COUNCI',), 'parking'),
     # VULTR: all charges are server/hosting costs (VPS provider).
     (('VULTR',), 'hosting'),
     # AI/dev tooling subscriptions — kept separate from 'hosting' (infrastructure)
     # so the recurring software spend is visible on its own P&L line.
     (('ANTHROPIC',), 'software_subscription'),
+    # Also shadowed by PERSONAL_EXPENSE_MARKERS — see the GST rule above.
     (('INTERNATIONAL TRANSACTION FEE',), 'bank_fees'),
     (('TAXIPAY',), 'taxi'),
 ]
