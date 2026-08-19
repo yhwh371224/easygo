@@ -689,8 +689,10 @@
   }
 </script>
 
-{# RCTI/Settlements 버튼 — 대시보드에서는 노출하지 않음 (GST 등록 여부와 무관하게 숨김).
-   정산 목록은 blog:driver_settlement_list URL로 직접 접근 가능. #}
+{% comment %}
+RCTI/Settlements 버튼 — 대시보드에서는 노출하지 않음 (GST 등록 여부와 무관하게 숨김).
+정산 목록은 blog:driver_settlement_list URL로 직접 접근 가능.
+{% endcomment %}
 
 <a href="{% url 'blog:driver_password_change' %}" style="
   position:fixed;
