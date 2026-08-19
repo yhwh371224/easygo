@@ -101,15 +101,32 @@
     .rebook-card .form-label { display: block; margin-top: 12px; margin-bottom: 8px !important; }
     .rebook-card .row { margin-left: -0.5rem; margin-right: -0.5rem; }
     .rebook-card .row > [class*="col-"] { padding-left: 0.5rem; padding-right: 0.5rem; }
-    .navbar { background-color: #3d5368 !important; }
+    .rebook-header {
+      background: #3d5368;
+      padding: 0.75rem 0;
+    }
+    .rebook-header img { height: auto; }
+    .rebook-header-step {
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      opacity: 0.85;
+    }
   </style>
 </head>
 <body data-region-name="{{ region.name|default:'Sydney' }}">
-  <div class="bg-dark">
-  {% include "basecamp/layouts/navbar.html" %}
-  </div>
+  {# 예약을 끝내는 화면이라 메뉴(Point to Point / Check Price 등)를 두지 않는다.
+     여기서 새어나가면 재예약 대신 새 inquiry 가 들어온다. #}
+  <header class="rebook-header">
+    <div class="container d-flex align-items-center justify-content-between" style="max-width:720px;">
+      <img src="{% static 'basecamp/images/easygo-logo-final.webp' %}"
+           alt="EasyGo Airport Shuttle" width="120" height="auto">
+      <span class="rebook-header-step">Step 2 of 2</span>
+    </div>
+  </header>
 
-  <main class="page-wrapper" style="background: #f3f4f6; padding-top: 180px; padding-bottom: 60px;">
+  <main class="page-wrapper" style="background: #f3f4f6; padding-top: 32px; padding-bottom: 60px;">
     <div class="container" style="max-width: 720px;">
 
       {# ===== PAGE HEADER ===== #}
@@ -136,7 +153,7 @@
         </div>
         <div class="rebook-prev-row">
           <span class="rebook-prev-key">Contact</span>
-          <span class="rebook-prev-val" id="display-contact">{{ previous.contact }}</span>
+          <span class="rebook-prev-val" id="display-contact">{{ previous.contact|default_if_none:"—" }}</span>
         </div>
         {% if previous.street or previous.suburb %}
         <div class="rebook-prev-row">
@@ -144,6 +161,16 @@
           <span class="rebook-prev-val">{{ previous.street }}{% if previous.street and previous.suburb %}, {% endif %}{{ previous.suburb }}</span>
         </div>
         {% endif %}
+        <div class="rebook-prev-row">
+          <span class="rebook-prev-key">Route</span>
+          <span class="rebook-prev-val" id="display-route">
+            {% if previous.direction %}
+              {{ previous.direction }}{% if previous.suburb %} &middot; {{ previous.suburb }}{% endif %}
+            {% else %}
+              {{ previous.start_point|default:"—" }} &rarr; {{ previous.end_point|default:"—" }}
+            {% endif %}
+          </span>
+        </div>
         <div class="rebook-prev-row">
           <span class="rebook-prev-key">Passengers</span>
           <span class="rebook-prev-val" id="display-pax">{{ previous.no_of_passenger }}</span>
@@ -164,22 +191,65 @@
 
         {# ===== ROUTE SELECTION ===== #}
         <div class="rebook-card">
-          <p class="rebook-section-label">Tap to select</p>
+          <p class="rebook-section-label">Your route</p>
 
-          <div class="route-grid" id="route-toggle">
-            <button type="button" class="route-toggle-btn" onclick="selectRoute(this, 'Pickup from Intl Airport')">Pickup from Intl Airport</button>
-            <button type="button" class="route-toggle-btn" onclick="selectRoute(this, 'Pickup from Domestic Airport')">Pickup from Domestic Airport</button>
-            <button type="button" class="route-toggle-btn" onclick="selectRoute(this, 'Drop off to Intl Airport')">Drop off to Intl Airport</button>
-            <button type="button" class="route-toggle-btn" onclick="selectRoute(this, 'Drop off to Domestic Airport')">Drop off to Domestic Airport</button>
+          <div class="route-grid" id="trip-type-toggle">
+            <button type="button" class="route-toggle-btn{% if not is_point_to_point %} active{% endif %}"
+              onclick="selectTripType(this, 'airport')">
+              <span class="route-main">Airport trip</span>
+              <span class="route-type">To or from the airport</span>
+            </button>
+            <button type="button" class="route-toggle-btn{% if is_point_to_point %} active{% endif %}"
+              onclick="selectTripType(this, 'point_to_point')">
+              <span class="route-main">Other trip</span>
+              <span class="route-type">No airport &mdash; point to point</span>
+            </button>
+          </div>
+          <input type="hidden" name="trip_type" id="hidden-trip-type"
+            value="{% if is_point_to_point %}point_to_point{% else %}airport{% endif %}">
+
+          {# --- airport trip: direction only, suburb is carried over --- #}
+          <div id="airport-route" class="mt-3"{% if is_point_to_point %} style="display:none;"{% endif %}>
+            <p class="text-muted mb-2" style="font-size:0.8rem;">Tap the direction for this trip.</p>
+            <div class="route-grid" id="route-toggle">
+              <button type="button" class="route-toggle-btn{% if direction == "Pickup from Intl Airport" %} active{% endif %}"
+                onclick="selectRoute(this, 'Pickup from Intl Airport')">Pickup from Intl Airport</button>
+              <button type="button" class="route-toggle-btn{% if direction == "Pickup from Domestic Airport" %} active{% endif %}"
+                onclick="selectRoute(this, 'Pickup from Domestic Airport')">Pickup from Domestic Airport</button>
+              <button type="button" class="route-toggle-btn{% if direction == "Drop off to Intl Airport" %} active{% endif %}"
+                onclick="selectRoute(this, 'Drop off to Intl Airport')">Drop off to Intl Airport</button>
+              <button type="button" class="route-toggle-btn{% if direction == "Drop off to Domestic Airport" %} active{% endif %}"
+                onclick="selectRoute(this, 'Drop off to Domestic Airport')">Drop off to Domestic Airport</button>
+            </div>
+            <input type="hidden" name="suburb" id="hidden-suburb" value="{{ previous.suburb }}">
           </div>
 
-          <input type="hidden" name="direction"   id="hidden-direction" value="{{ previous.direction }}">
+          {# --- point to point: pick-up / drop-off typed in by hand --- #}
+          <div id="p2p-route" class="mt-3"{% if not is_point_to_point %} style="display:none;"{% endif %}>
+            <div class="row">
+              <div class="col-sm-6">
+                <label class="form-label" for="start_point">Pick-up from</label>
+                <input type="text" class="form-control{% if start_point %} prefilled-input{% endif %}"
+                  id="start_point" name="start_point" value="{{ start_point }}"
+                  placeholder="Suburb, hotel or full address">
+              </div>
+              <div class="col-sm-6">
+                <label class="form-label" for="end_point">Drop-off to</label>
+                <input type="text" class="form-control{% if end_point %} prefilled-input{% endif %}"
+                  id="end_point" name="end_point" value="{{ end_point }}"
+                  placeholder="Suburb, hotel or full address">
+              </div>
+              <div class="col-12">
+                <small class="form-text text-muted">From your last booking &mdash; change it if this trip is different.
+                  A new route may change the price; we'll confirm by email.</small>
+              </div>
+            </div>
+          </div>
+
+          <input type="hidden" name="direction" id="hidden-direction" value="{{ direction }}">
           <select id="direction" style="display:none" aria-hidden="true" tabindex="-1">
-            <option value="{{ previous.direction }}" selected>{{ previous.direction }}</option>
+            <option value="{{ direction }}" selected>{{ direction }}</option>
           </select>
-          <input type="hidden" name="suburb"      id="hidden-suburb"    value="{{ previous.suburb }}">
-          <input type="hidden" name="start_point" id="hidden-start"     value="{{ previous.start_point }}">
-          <input type="hidden" name="end_point"   id="hidden-end"       value="{{ previous.end_point }}">
         </div>
 
         {# ===== NEW TRIP DETAILS ===== #}
@@ -195,14 +265,15 @@
                 value="{{ pickup_date }}" readonly>
             </div>
 
-            <div class="col-sm-6">
+            <div class="col-sm-6 flight-only">
               <label class="form-label" for="flight_number">Flight number</label>
-              <input type="text" class="form-control"
+              <input type="text" class="form-control prefilled-input"
                 id="flight_number" name="flight_number"
                 value="{{ flight_number }}" placeholder="e.g. QF400" required>
+              <small class="form-text text-muted">From your last booking &mdash; please change it to this trip's flight.</small>
             </div>
 
-            <div class="col-sm-6">
+            <div class="col-sm-6 flight-only">
               {% if "Drop off to" in direction %}
                 {% include "widgets/time_picker.html" with field_name="flight_time" label="Flight time" ampm="AM" hint="" %}
               {% else %}
@@ -226,7 +297,7 @@
               <label class="form-label" for="contact">Contact number</label>
               <input type="text" class="form-control"
                 id="contact" name="contact"
-                value="{{ previous.contact }}" placeholder="+61 4xx xxx xxx">
+                value="{{ contact|default:previous.contact|default_if_none:'' }}" placeholder="+61 4xx xxx xxx">
             </div>
 
             <div class="col-sm-6">
@@ -245,20 +316,22 @@
               <label class="form-label" for="no_of_baggage">Luggage</label>
               <input type="text" class="form-control"
                 id="no_of_baggage" name="no_of_baggage"
-                value="{{ previous.no_of_baggage }}"
+                value="{{ no_of_baggage|default:previous.no_of_baggage|default_if_none:'' }}"
                 placeholder="e.g. 4 bags, 1 pram, golf clubs">
             </div>
 
             <div class="col-12 mt-2">
               <label class="form-label" for="extra_stop">Extra Stop(s)</label>
+              {% with selected_stops=extra_stop|default:previous.extra_stop|stringformat:"s" %}
               <select class="form-select" id="extra_stop" name="extra_stop">
-                <option value="0" {% if previous.extra_stop == 0 %}selected{% endif %}>No extra stop</option>
-                <option value="1" {% if previous.extra_stop == 1 %}selected{% endif %}>1 extra stop</option>
-                <option value="2" {% if previous.extra_stop == 2 %}selected{% endif %}>2 extra stops</option>
-                <option value="3" {% if previous.extra_stop == 3 %}selected{% endif %}>3 extra stops</option>
+                <option value="0" {% if selected_stops == "0" %}selected{% endif %}>No extra stop</option>
+                <option value="1" {% if selected_stops == "1" %}selected{% endif %}>1 extra stop</option>
+                <option value="2" {% if selected_stops == "2" %}selected{% endif %}>2 extra stops</option>
+                <option value="3" {% if selected_stops == "3" %}selected{% endif %}>3 extra stops</option>
               </select>
+              {% endwith %}
               <div id="extra-stop-addresses" class="mt-3">
-                {% for addr in previous.extra_stop_addresses %}
+                {% for addr in extra_stop_addresses|default:previous.extra_stop_addresses %}
                 <div class="mb-3">
                   <label class="form-label" for="extra_stop_address_{{ forloop.counter }}">Stop {{ forloop.counter }} Address</label>
                   <input type="text" class="form-control" name="extra_stop_address_{{ forloop.counter }}" id="extra_stop_address_{{ forloop.counter }}" placeholder="Full address" value="{{ addr }}">
@@ -322,7 +395,7 @@
         <div class="rebook-card">
           <label class="form-label" for="message">Message <span class="text-muted fw-normal">(optional)</span></label>
           <textarea class="form-control" id="message" name="message"
-            rows="3" ></textarea>
+            rows="3" >{{ message|default:'' }}</textarea>
         </div>
 
         {# ===== SUBMIT ===== #}
@@ -357,7 +430,7 @@
 
   <script nonce="{{ CSP_NONCE }}">
     function selectRoute(el, direction) {
-      document.querySelectorAll('.route-toggle-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('#route-toggle .route-toggle-btn').forEach(b => b.classList.remove('active'));
       el.classList.add('active');
       document.getElementById('hidden-direction').value = direction;
 
@@ -365,6 +438,30 @@
       directionProxy.innerHTML = `<option value="${direction}" selected>${direction}</option>`;
       directionProxy.dispatchEvent(new Event('change'));
     }
+
+    // 공항편 / 지점간 전환. 항공편 번호는 공항편일 때만 필수.
+    function selectTripType(el, tripType) {
+      document.querySelectorAll('#trip-type-toggle .route-toggle-btn').forEach(b => b.classList.remove('active'));
+      el.classList.add('active');
+      document.getElementById('hidden-trip-type').value = tripType;
+
+      const isP2P = tripType === 'point_to_point';
+      document.getElementById('airport-route').style.display = isP2P ? 'none' : '';
+      document.getElementById('p2p-route').style.display = isP2P ? '' : 'none';
+      applyFlightFields(isP2P);
+    }
+
+    // 지점간 예약이면 항공편 입력은 숨기고 필수 해제(숨은 required 는 제출을 막는다).
+    function applyFlightFields(isP2P) {
+      document.querySelectorAll('.flight-only').forEach(el => {
+        el.style.display = isP2P ? 'none' : '';
+      });
+      document.getElementById('flight_number').required = !isP2P;
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      applyFlightFields(document.getElementById('hidden-trip-type').value === 'point_to_point');
+    });
 
     function toggleReturn(cb) {
       document.getElementById('return-fields').style.display = cb.checked ? 'block' : 'none';

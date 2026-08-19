@@ -32,6 +32,18 @@ MAX_REBOOK_PASSENGERS = 13
 SUPPORT_EMAIL = 'info@easygoshuttle.com.au'
 
 
+def _posted_stop_addresses(request):
+    """폼에 입력된 경유지 주소들. step2 를 에러로 다시 그릴 때 입력을 살리는 용도."""
+    try:
+        count = int(request.POST.get('extra_stop') or 0)
+    except ValueError:
+        count = 0
+    return [
+        request.POST.get(f'extra_stop_address_{i}', '').strip()
+        for i in range(1, max(count, 0) + 1)
+    ]
+
+
 def _normalize_pax(value):
     """인원수 문자열 → 1~MAX_REBOOK_PASSENGERS 범위의 int.
 
@@ -518,20 +530,27 @@ def quick_rebook_step1(request, region_slug=None):
         'email'          : email,
         'pickup_date'    : pickup_date,
         'pickup_date_obj': pickup_date_obj,
-        'flight_number'  : '',
+        # 항공편은 지난 예약 값을 미리 채워주고, step2 폼에서 반드시 고칠 수 있게 둔다.
+        'flight_number'  : previous.flight_number or '',
         'pickup_time'    : pickup_time,
         'no_of_passenger': no_of_passenger,
         'passenger_choices': range(1, MAX_REBOOK_PASSENGERS + 1),
         'direction'      : previous.direction,
+        # 지난 예약에 direction 이 없으면 공항을 안 거친 지점간 예약이었다는 뜻.
+        'is_point_to_point': not (previous.direction or '').strip(),
+        'start_point'    : previous.start_point or '',
+        'end_point'      : previous.end_point or '',
         'active_regions' : Region.objects.filter(is_active=True),
         'error'          : None,
     })
 
 
 # STEP 2 — POST from quick_rebook_step2.html form submission
+# require_turnstile 데코레이터는 실패 시 JSON 을 돌려준다 — AJAX 인 inquiry 폼에는 맞지만
+# 이 폼은 일반 POST 라 고객이 원시 JSON 을 보게 된다. 여기서는 직접 검사해서
+# step2 를 에러와 함께 다시 보여준다(그래야 재예약을 포기하고 나가지 않는다).
 @ratelimit(key='ip', rate='5/m', method='POST', block=True)
 @require_POST
-@require_turnstile
 def quick_rebook_confirm(request, region_slug=None):
 
     # 1. Step 1 에서 넘어온 값
@@ -549,6 +568,13 @@ def quick_rebook_confirm(request, region_slug=None):
     flight_time     = request.POST.get('flight_time', '').strip()
     message         = request.POST.get('message', '').strip()
 
+    # 공항을 안 거치는 지점간(point to point) 예약도 있다. 이 경우 메인 예약 흐름과
+    # 동일하게 direction/suburb 는 비우고 start_point/end_point 에 실제 지점을 담는다.
+    trip_type         = request.POST.get('trip_type', '').strip()
+    is_point_to_point = trip_type == 'point_to_point'
+    start_point       = request.POST.get('start_point', '').strip()
+    end_point         = request.POST.get('end_point', '').strip()
+
     # Return trip
     has_return           = request.POST.get('has_return') == 'on'
     return_date_str      = request.POST.get('return_pickup_date', '').strip()
@@ -562,43 +588,63 @@ def quick_rebook_confirm(request, region_slug=None):
     if not previous:
         return redirect('basecamp:home')
 
+    def render_step2_error(msg):
+        """입력값을 그대로 살려 step2 를 다시 보여준다."""
+        return render(request, 'basecamp/quick_rebook_step2.html', {
+            'previous'          : previous,
+            'email'             : email,
+            'pickup_date'       : pickup_date_str,
+            'flight_number'     : flight_number,
+            'pickup_time'       : pickup_time,
+            'direction'         : direction,
+            'no_of_passenger'   : no_of_passenger,
+            'passenger_choices' : range(1, MAX_REBOOK_PASSENGERS + 1),
+            'start_point'       : start_point,
+            'end_point'         : end_point,
+            'is_point_to_point' : is_point_to_point,
+            # 고객이 고쳐 넣은 값들 — 다시 그릴 때 지난 예약 값으로 되돌아가면 안 된다.
+            'contact'           : contact,
+            'no_of_baggage'     : no_of_baggage,
+            'message'           : message,
+            'extra_stop'        : request.POST.get('extra_stop', ''),
+            'extra_stop_addresses': _posted_stop_addresses(request),
+            'active_regions'    : Region.objects.filter(is_active=True),
+            'error'             : msg,
+        })
+
+    # Turnstile 검증 — 저장 전에, 그리고 step2 를 다시 그릴 수 있는 시점에서.
+    if not verify_turnstile(request.POST.get('cf-turnstile-response', ''), get_client_ip(request)):
+        logger.warning(
+            "[QUICK REBOOK CONFIRM] turnstile failed email=%s ip=%s", email, get_client_ip(request),
+        )
+        return render_step2_error(
+            'Security check failed. Please complete the checkbox below and submit again.'
+        )
+
     # 중복 제출 방지
     if is_duplicate_submission(Post, email):
-        return render(request, 'basecamp/quick_rebook_step2.html', {
-            'previous'      : previous,
-            'email'         : email,
-            'pickup_date'   : pickup_date_str,
-            'flight_number' : flight_number,
-            'pickup_time'   : pickup_time,
-            'direction'     : direction,
-            'no_of_passenger': no_of_passenger,
-            'passenger_choices': range(1, MAX_REBOOK_PASSENGERS + 1),
-            'active_regions': Region.objects.filter(is_active=True),
-            'error'         : 'Duplicate submission. Please wait a moment and try again.',
-        })
+        return render_step2_error('Duplicate submission. Please wait a moment and try again.')
 
     # 인원수 검증 — step1 과 동일 규칙(1~13명, 초과는 메일 안내)
-    def render_pax_error(msg):
-        return render(request, 'basecamp/quick_rebook_step2.html', {
-            'previous'      : previous,
-            'email'         : email,
-            'pickup_date'   : pickup_date_str,
-            'flight_number' : flight_number,
-            'pickup_time'   : pickup_time,
-            'direction'     : direction,
-            'no_of_passenger': no_of_passenger,
-            'passenger_choices': range(1, MAX_REBOOK_PASSENGERS + 1),
-            'active_regions': Region.objects.filter(is_active=True),
-            'error'         : msg,
-        })
-
     pax = _normalize_pax(no_of_passenger)
     if pax is None:
-        return render_pax_error(
+        return render_step2_error(
             f'Please select 1-{MAX_REBOOK_PASSENGERS} passengers. '
             f'For larger groups, email us at {SUPPORT_EMAIL} and we will arrange it for you.'
         )
     no_of_passenger = str(pax)
+
+    # 경로 검증 — 공항편이면 direction, 지점간이면 start/end point 가 있어야 한다.
+    if is_point_to_point:
+        direction = ''
+        suburb    = ''
+        if not start_point or not end_point:
+            return render_step2_error('Please enter both the pick-up and drop-off points.')
+    else:
+        start_point = ''
+        end_point   = ''
+        if not direction:
+            return render_step2_error('Please select the direction of your airport trip.')
 
     previous_name  = previous.name
     base_price = Decimal(previous.price)
@@ -622,18 +668,7 @@ def quick_rebook_confirm(request, region_slug=None):
     try:
         pickup_date_obj = parse_date(pickup_date_str, field_name='Pickup Date', required=True)
     except ValueError as e:
-        return render(request, 'basecamp/quick_rebook_step2.html', {
-            'previous'      : previous,
-            'email'         : email,
-            'pickup_date'   : pickup_date_str,
-            'flight_number' : flight_number,
-            'pickup_time'   : pickup_time,
-            'direction'     : direction,
-            'no_of_passenger': no_of_passenger,
-            'passenger_choices': range(1, MAX_REBOOK_PASSENGERS + 1),
-            'active_regions': Region.objects.filter(is_active=True),
-            'error'         : str(e),
-        })
+        return render_step2_error(str(e))
 
     return_date_obj = None
     if has_return and return_date_str:
@@ -660,6 +695,8 @@ def quick_rebook_confirm(request, region_slug=None):
         pickup_time     = pickup_time,
         direction       = direction,
         suburb          = suburb,
+        start_point     = start_point,
+        end_point       = end_point,
         street          = previous_street,
         no_of_passenger = no_of_passenger,
         no_of_baggage   = no_of_baggage,
@@ -673,7 +710,10 @@ def quick_rebook_confirm(request, region_slug=None):
         return_flight_number = return_flight_number if has_return else '',
         return_flight_time   = return_flight_time if has_return else '',
         return_pickup_time   = return_pickup_time if has_return else '',
-        return_direction     = 'Pickup from Intl Airport' if has_return else '',
+        # 지점간 예약의 돌아오는 편은 공항 방향이 아니라 출발/도착지를 뒤집은 것이다.
+        return_direction     = '' if (is_point_to_point or not has_return) else 'Pickup from Intl Airport',
+        return_start_point   = end_point if (has_return and is_point_to_point) else '',
+        return_end_point     = start_point if (has_return and is_point_to_point) else '',
         extra_stop           = extra_stop,
         same_extra_stop      = same_extra_stop,
         extra_stop_addresses = extra_stop_addresses,
