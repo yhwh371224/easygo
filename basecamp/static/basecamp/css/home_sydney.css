@@ -10,7 +10,7 @@
 /* 홈 히어로 오버레이: home_generic.css 의 균일한 rgba(0,0,0,.45) 를 그라데이션으로 교체.
    글자가 놓이는 상단은 더 어둡게(대비 확보), 사진이 보이는 하단은 밝게 → 사진이 덜 뿌옇게 보임 */
 #region-hero::before {
-  background: linear-gradient(180deg, rgba(0,0,0,.62) 0%, rgba(0,0,0,.56) 45%, rgba(0,0,0,.38) 75%, rgba(0,0,0,.30) 100%);
+  background: linear-gradient(180deg, rgba(0,0,0,.68) 0%, rgba(0,0,0,.62) 45%, rgba(0,0,0,.44) 75%, rgba(0,0,0,.36) 100%);
 }
 
 /* live-pill — light variant for white-background city chooser section */

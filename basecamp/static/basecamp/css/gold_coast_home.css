@@ -1,5 +1,5 @@
 /* 히어로 오버레이: 글자가 놓이는 상단은 더 어둡게(대비 확보), 사진이 보이는 하단은 밝게 → 사진이 덜 뿌옇게 보임 */
-#region-hero::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.52) 0%, rgba(0,0,0,.48) 45%, rgba(0,0,0,.28) 75%, rgba(0,0,0,.20) 100%); z-index: -1; }
+#region-hero::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.59) 0%, rgba(0,0,0,.54) 45%, rgba(0,0,0,.36) 75%, rgba(0,0,0,.28) 100%); z-index: -1; }
 
 .hero-eyebrow { display:inline-block; font-size:.72rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#fff; margin-bottom:3rem; }
 .hero-title { font-size:clamp(1.6rem,4.5vw,3.25rem); font-weight:700; line-height:1.2; margin-bottom:1rem; color:#fff; text-shadow:0 2px 14px rgba(0,0,0,.4); }
