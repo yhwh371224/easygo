@@ -159,7 +159,7 @@
 													Contact: {{ contact }}<br>
 												{% if direction %}
 													Direction: {{ direction }}<br>
-													Flight date: {{ pickup_date|date:"D, j M Y" }}<br>
+													Pickup date: {{ pickup_date|date:"D, j M Y" }}<br>
 													Flight number: {{ flight_number }}<br>
 													Flight time: {{ flight_time|default:'' }}<br>
 													Pickup time: {{ pickup_time }}<br>
@@ -194,7 +194,7 @@
 													{% endif %}
 												{% elif return_direction %}
 													Return Direction: {{ return_direction }}<br>
-													Return Flight date: {{ return_pickup_date|date:"D, j M Y" }}<br>
+													Return Pickup date: {{ return_pickup_date|date:"D, j M Y" }}<br>
 													Return Flight number: {{ return_flight_number }}<br>
 													Return Flight time: {{ return_flight_time }}<br>
 													Return Pickup time: {{ return_pickup_time }}<br>
