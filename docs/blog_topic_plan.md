@@ -57,7 +57,7 @@ Title:  Travelling with Kids? Everything You Need to Know About Child Seats on A
 Slug:   child-seats-sydney-airport-transfer
 Focus keyword: child seat airport transfer Sydney
 Why:    Parents searching this have high booking intent.
-Notes:  Highlight EasyGo's free infant/baby capsule offer, $10 for extra seats policy.
+Notes:  Highlight EasyGo's infant/baby capsule and child seat pricing ($10 each).
 
 ## WEEK 9
 Title:  Western Sydney to the Airport: Why a Private Transfer Makes Sense

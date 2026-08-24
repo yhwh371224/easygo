@@ -69,8 +69,7 @@ Additional luggage surcharges:
 CHILD_SEAT_POLICY = """
 CHILD SEAT POLICY:
 - Infant seats and baby capsules available
-- Up to 2 child seats provided free of charge
-- Additional child seats beyond 2: $10 each
+- Child seats: $10 each
 """
 
 WAITING_AND_ARRIVAL_POLICY = """
@@ -123,7 +122,7 @@ Q: What payment options are available?
 A: We accept all major credit cards (American Express, MasterCard, Visa) and cash payment to the driver on the day. Advance payment is required for corporate bookings and passengers arriving from overseas. Note: 3% surcharge applies on card payments.
 
 Q: Do you offer infant seats or baby capsules?
-A: Yes. Up to 2 child seats are provided free of charge. Additional seats beyond 2 are available for $10 each. Please specify the number required at time of booking.
+A: Yes. Child seats are available for $10 each. Please specify the number required at time of booking.
 
 Q: How many passengers can fit in your vehicle?
 A: Our maxi vans accommodate up to 13 passengers — ideal for families, large groups, and travellers with lots of luggage.

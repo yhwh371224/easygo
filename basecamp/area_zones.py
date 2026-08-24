@@ -2,7 +2,7 @@
 area_zones = {
     "sydney_city": {
         "title": "{suburb} Airport Transfer Sydney | EasyGo Shuttle",
-        "meta_description": "Book private airport transfer from {suburb} to Sydney Airport. From $60. Door-to-door service. Free child seats. Book online now.",
+        "meta_description": "Book private airport transfer from {suburb} to Sydney Airport. From $60. Door-to-door service. Child seats available. Book online now.",
         "h1": "Airport Transfer {suburb} to Sydney Airport",
         "h2": "Private & Reliable Door-to-Door Service",
         "route_info": "Sydney Airport ↔ Sydney CBD, {suburb}, Darlinghurst, Pyrmont",
@@ -12,7 +12,7 @@ area_zones = {
     
     "inner_west": {
         "title": "{suburb} Airport Transfer | Inner West Sydney Shuttle",
-        "meta_description": "Private airport transfer from {suburb} to Sydney Airport. Reliable, comfortable service. Free child seats. No hidden fees. Book now.",
+        "meta_description": "Private airport transfer from {suburb} to Sydney Airport. Reliable, comfortable service. Child seats available. No hidden fees. Book now.",
         "h1": "Airport Transfer {suburb} to Sydney Airport",
         "h2": "Comfortable Private Transfers from Inner West",
         "route_info": "Sydney Airport ↔ {suburb}, Ashfield, Balmain, Newtown",
@@ -22,7 +22,7 @@ area_zones = {
     
     "central_west": {
         "title": "{suburb} Airport Transfer Parramatta | EasyGo Shuttle",
-        "meta_description": "Family airport transfer from {suburb} to Sydney Airport. Spacious vans for groups. Free child seats. Track your driver. Book online.",
+        "meta_description": "Family airport transfer from {suburb} to Sydney Airport. Spacious vans for groups. Child seats available. Track your driver. Book online.",
         "h1": "Airport Transfer {suburb} to Sydney Airport",
         "h2": "Family-Friendly Private Vans from Parramatta Area",
         "route_info": "Sydney Airport ↔ {suburb}, Parramatta, Westmead, Merrylands",
@@ -32,7 +32,7 @@ area_zones = {
     
     "west": {
         "title": "{suburb} Airport Transfer Western Sydney | EasyGo",
-        "meta_description": "Reliable airport transfer from {suburb} to Sydney Airport. Professional drivers. Flight tracking. Free child seats. Book online 24/7.",
+        "meta_description": "Reliable airport transfer from {suburb} to Sydney Airport. Professional drivers. Flight tracking. Child seats available. Book online 24/7.",
         "h1": "Airport Transfer {suburb} to Sydney Airport",
         "h2": "Private Transfers from Western Sydney Suburbs",
         "route_info": "Sydney Airport ↔ {suburb}, Auburn, Bankstown, Liverpool",
@@ -52,7 +52,7 @@ area_zones = {
     
     "outer_west": {
         "title": "{suburb} Airport Transfer Penrith Blacktown | EasyGo",
-        "meta_description": "Airport transfer from {suburb} to Sydney Airport. Comfortable long-distance service. Flight tracking. Free child seats. Book now.",
+        "meta_description": "Airport transfer from {suburb} to Sydney Airport. Comfortable long-distance service. Flight tracking. Child seats available. Book now.",
         "h1": "Airport Transfer {suburb} to Sydney Airport",
         "h2": "Private & Comfortable Transfers from Outer West",
         "route_info": "Sydney Airport ↔ {suburb}, Blacktown, Penrith, Windsor, Richmond",
@@ -72,7 +72,7 @@ area_zones = {
     
     "north_shore": {
         "title": "{suburb} Airport Transfer North Shore | EasyGo Shuttle",
-        "meta_description": "Private airport transfer from {suburb} to Sydney Airport. Lower North Shore service. Free child seats. Flight tracking. Book online now.",
+        "meta_description": "Private airport transfer from {suburb} to Sydney Airport. Lower North Shore service. Child seats available. Flight tracking. Book online now.",
         "h1": "Airport Transfer {suburb} to Sydney Airport",
         "h2": "Private & Reliable Transfers from Lower North Shore",
         "route_info": "Sydney Airport ↔ {suburb}, Chatswood, Artarmon, Lane Cove",
@@ -92,7 +92,7 @@ area_zones = {
     
     "eastern_suburbs": {
         "title": "{suburb} Airport Transfer Eastern Suburbs | EasyGo",
-        "meta_description": "Private airport transfer from {suburb} to Sydney Airport. Eastern Suburbs service. Free child seats. No surge pricing. Book online.",
+        "meta_description": "Private airport transfer from {suburb} to Sydney Airport. Eastern Suburbs service. Child seats available. No surge pricing. Book online.",
         "h1": "Airport Transfer {suburb} to Sydney Airport",
         "h2": "Private & Comfortable Transfers from Eastern Suburbs",
         "route_info": "Sydney Airport ↔ {suburb}, Bondi, Coogee, Maroubra",
