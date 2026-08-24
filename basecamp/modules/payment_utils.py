@@ -55,7 +55,7 @@ def _record_stripe_fee(payment_intent_id):
     Other errors (bad API call, DB write failure) are logged and emailed; they
     never propagate to the caller.
     """
-    from accounting.models import Transaction
+    from accounting.models import PaymentFeeLog
 
     if not payment_intent_id or not str(payment_intent_id).startswith('pi_'):
         return
@@ -63,10 +63,7 @@ def _record_stripe_fee(payment_intent_id):
     description = f"Stripe fee {payment_intent_id}"
 
     # Duplicate guard — idempotent on repeated webhook deliveries / retries
-    if Transaction.objects.filter(
-        category='payment_fee',
-        description=description,
-    ).exists():
+    if PaymentFeeLog.objects.filter(description=description).exists():
         logger.info('_record_stripe_fee: skipped duplicate for %s', payment_intent_id)
         return
 
@@ -94,7 +91,7 @@ def _record_stripe_fee(payment_intent_id):
         gst = (fee / _ELEVEN).quantize(_CENT, rounding=ROUND_HALF_UP)
         tx_date = datetime.date.fromtimestamp(bt.created)
 
-        Transaction.objects.create(
+        PaymentFeeLog.objects.create(
             date=tx_date,
             direction='expense',
             brand='shuttle',
@@ -102,7 +99,6 @@ def _record_stripe_fee(payment_intent_id):
             gross_amount=fee,
             gst_code='gst',
             gst_amount=gst,
-            category='payment_fee',
             source='stripe',
             counterparty='Stripe',
         )
@@ -166,7 +162,7 @@ def _record_paypal_fee(txn_id, mc_fee, payment_date=None):
 
     Errors are logged and emailed; they never propagate to the caller.
     """
-    from accounting.models import Transaction
+    from accounting.models import PaymentFeeLog
 
     if not txn_id:
         return
@@ -185,10 +181,7 @@ def _record_paypal_fee(txn_id, mc_fee, payment_date=None):
     description = f"PayPal fee {'reversal ' if is_reversal else ''}{txn_id}"
 
     # Duplicate guard — idempotent on repeated IPN deliveries, keyed on txn_id
-    if Transaction.objects.filter(
-        category='payment_fee',
-        description=description,
-    ).exists():
+    if PaymentFeeLog.objects.filter(description=description).exists():
         logger.info('_record_paypal_fee: skipped duplicate for %s', txn_id)
         return
 
@@ -200,7 +193,7 @@ def _record_paypal_fee(txn_id, mc_fee, payment_date=None):
         gst = Decimal('0')
 
     try:
-        Transaction.objects.create(
+        PaymentFeeLog.objects.create(
             date=_parse_paypal_date(payment_date),
             direction='expense',
             brand='shuttle',
@@ -208,7 +201,6 @@ def _record_paypal_fee(txn_id, mc_fee, payment_date=None):
             gross_amount=fee,
             gst_code=gst_code,
             gst_amount=gst,
-            category='payment_fee',
             source='paypal',
             counterparty='PayPal',
         )

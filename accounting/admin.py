@@ -5,7 +5,7 @@ from django.template.response import TemplateResponse
 from django.urls import path
 from django.utils.dateparse import parse_date
 
-from .models import Transaction, PayrollEntry, DividendRecord, DirectorLoan
+from .models import Transaction, PaymentFeeLog, PayrollEntry, DividendRecord, DirectorLoan
 from . import conf, reports
 
 
@@ -173,6 +173,18 @@ class TransactionAdmin(admin.ModelAdmin):
             'quarter_choices': quarter_choices,
         }
         return TemplateResponse(request, 'admin/accounting/bas_report.html', context)
+
+
+@admin.register(PaymentFeeLog)
+class PaymentFeeLogAdmin(admin.ModelAdmin):
+    """Raw PayPal/Stripe fee rows awaiting monthly compaction into Transaction
+    (see the compact_payment_fees command) — read here to check this month's
+    fees before the 7th-of-next-month compaction runs."""
+    list_display = ('date', 'source', 'brand', 'direction', 'description',
+                    'gross_amount', 'gst_code', 'gst_amount')
+    list_filter = ('source', 'brand', 'direction', 'gst_code')
+    date_hierarchy = 'date'
+    search_fields = ('description', 'counterparty')
 
 
 @admin.register(PayrollEntry)

@@ -1,7 +1,8 @@
 """
-Compact individual PayPal/Stripe payment_fee Transaction rows into one
-summary row per source per month, so the accounting Transaction list doesn't
-fill up with dozens of $2-15 fee rows.
+Compact individual PayPal/Stripe fee rows logged in PaymentFeeLog into one
+summary Transaction row per source per month, so the accounting Transaction
+list only ever sees one line for PayPal/Stripe fees each month instead of
+dozens of $2-15 fee rows.
 
 Intended to run on the 7th of each month, for the PREVIOUS calendar month —
 by then any pending Celery retries (Stripe, up to ~6.5 min after checkout —
@@ -16,9 +17,10 @@ Safety:
   replaces, so BAS 1B / P&L totals for the month are unchanged.
 - Every original description is kept in the summary row's notes field, so
   the per-payment (txn_id / payment_intent_id) audit trail isn't lost.
-- Idempotent: summary rows are excluded from the source queryset (by their
-  description prefix), so re-running for an already-compacted month is a
-  harmless no-op rather than a double-merge.
+- Idempotent: PaymentFeeLog only ever holds raw (never summarized) rows, and
+  merged rows are deleted from it once folded into the Transaction summary,
+  so re-running for an already-compacted month just finds nothing left and
+  is a harmless no-op.
 """
 import calendar
 from datetime import date, timedelta
@@ -28,7 +30,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction as db_transaction
 from django.db.models import Sum
 
-from accounting.models import Transaction
+from accounting.models import PaymentFeeLog, Transaction
 
 SOURCE_LABELS = {'paypal': 'PayPal', 'stripe': 'Stripe'}
 
@@ -70,12 +72,11 @@ class Command(BaseCommand):
         label = SOURCE_LABELS[source]
         summary_prefix = f"{label} fees — "
 
-        qs = Transaction.objects.filter(
+        qs = PaymentFeeLog.objects.filter(
             source=source,
-            category='payment_fee',
             date__gte=month_start,
             date__lte=month_end,
-        ).exclude(description__startswith=summary_prefix)
+        )
 
         count = qs.count()
         if count == 0:
