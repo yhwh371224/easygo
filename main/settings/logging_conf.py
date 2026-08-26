@@ -83,7 +83,7 @@ LOGGING = {
             'propagate': False,
         },
         'sms': {
-            'handlers': ['sms_file'],
+            'handlers': ['sms_file', 'telegram'],
             'level': 'INFO',
             'propagate': False,
         },
