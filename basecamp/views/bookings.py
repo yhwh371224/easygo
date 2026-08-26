@@ -13,6 +13,7 @@ from django.http import HttpResponse, JsonResponse
 from blog.models import Post, Inquiry, Driver
 from blog import dunning
 from blog.blog_utils import resolve_booking_driver
+from blog.tasks import send_post_confirmation_email_task
 from regions.models import Region
 from basecamp.basecamp_utils import (
     is_ajax, parse_baggage, parse_date,
@@ -357,6 +358,11 @@ def confirm_booking_prepay_detail(request):
     p.save()
 
     user.delete()
+
+    # 결제 여부와 무관하게, confirm 클릭 10분 후 confirmation email 발송.
+    # 이미 다른 경로(예: admin is_confirmed)로 발송됐다면 태스크 내 sent_email
+    # 플래그가 막아주므로 중복 걱정 없음.
+    send_post_confirmation_email_task.apply_async(args=[p.pk], countdown=600)
 
     ip = get_client_ip(request)
     ip_info = get_ip_info(ip)
