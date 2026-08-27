@@ -59,14 +59,16 @@ GST_KEYWORD_RULES = [
     (('LINKT', 'E-TOLL', 'ETOLL', 'TOLL', 'TRANSURBAN'), 'gst'),
     # 'RIZKALLA' = J RIZKALLA & J VISVI (North Sydney) — car servicing, confirmed
     # a business vehicle cost by the owner. Merchant name, not a generic word.
-    (('SERVICE', 'MECHANIC', 'AUTO', 'TYRE', 'TYRES', 'REPCO',
-      'SUPERCHEAP', 'PANEL', 'SMASH', 'CIRCUM VENDING', 'RIZKALLA'), 'gst'),
-    # 'DODO' must stay ahead of the vehicle_maintenance 'SERVICE' keyword —
-    # the bank writes it as 'DODO SERVICES PTY LTD'. It is the company mobile
-    # plan, not car servicing.
+    # 'DODO' and the phone/internet carriers must stay ahead of the
+    # vehicle_maintenance 'SERVICE' keyword — the bank writes some of these
+    # as e.g. 'DODO SERVICES PTY LTD' / 'TELSTRA SERVICES MELBOURNE AU',
+    # and 'SERVICE' is a substring of both. They are the phone/internet
+    # bill, not car servicing.
     (('DODO',), 'gst'),
     (('TELSTRA', 'OPTUS', 'VODAFONE', 'TPG', 'AUSSIE BROADBAND',
       'BELONG', 'INTERNET', 'MOBILE'), 'gst'),
+    (('SERVICE', 'MECHANIC', 'AUTO', 'TYRE', 'TYRES', 'REPCO',
+      'SUPERCHEAP', 'PANEL', 'SMASH', 'CIRCUM VENDING', 'RIZKALLA'), 'gst'),
     (('GOOGLE', 'META', 'FACEBOOK', 'MARKETING', 'ADVERTIS', 'SEO'), 'gst'),
     (('GROUP TRANSPORT',), 'gst'),
     (('NORTH SYDNEY EXECUTIVE', 'VIRTUAL OFFICE', 'CWH',
@@ -113,8 +115,10 @@ REVIEW_OVERRIDE_KEYWORDS = (
 # Ordering note: vehicle_registration ('SERVICE NSW', ...) is checked BEFORE
 # vehicle_maintenance ('SERVICE', ...) — 'SERVICE' is a substring of
 # 'SERVICE NSW', so the broader vehicle_maintenance keyword would otherwise
-# shadow the more specific registration match. Same reason for the 'DODO'
-# rule sitting above vehicle_maintenance.
+# shadow the more specific registration match. Same reason phone_internet
+# ('DODO', 'TELSTRA', ...) sits above vehicle_maintenance: the bank writes
+# e.g. 'DODO SERVICES PTY LTD' and 'TELSTRA SERVICES MELBOURNE AU', both of
+# which contain 'SERVICE'.
 CATEGORY_KEYWORD_RULES = [
     (('REFUND',), 'customer_refund'),
     (('BP', 'CALTEX', 'AMPOL', 'SHELL', '7-ELEVEN', '7 ELEVEN', 'OTR', 'FUEL',
@@ -127,15 +131,15 @@ CATEGORY_KEYWORD_RULES = [
     (('REGO', 'REGISTRATION', 'SERVICE NSW', 'TRANSPORT FOR NSW', 'RMS'),
      'vehicle_registration'),
     (('SDRO', 'INFRNGMNT', 'PENALTY'), 'non_deductible_fine'),
-    # DODO Services Pty Ltd = the company mobile plan. Checked BEFORE
-    # vehicle_maintenance because 'SERVICE' is a substring of 'DODO SERVICES'
-    # and would otherwise label the phone bill as car servicing.
+    # DODO Services Pty Ltd / TELSTRA SERVICES / etc. = phone or internet
+    # bills. Checked BEFORE vehicle_maintenance because 'SERVICE' is a
+    # substring of both and would otherwise label them as car servicing.
     (('DODO',), 'phone_internet'),
+    (('TELSTRA', 'OPTUS', 'VODAFONE', 'TPG', 'AUSSIE BROADBAND',
+      'BELONG', 'INTERNET', 'MOBILE'), 'phone_internet'),
     (('SERVICE', 'MECHANIC', 'AUTO', 'TYRE', 'TYRES', 'REPCO',
       'SUPERCHEAP', 'PANEL', 'SMASH', 'CIRCUM VENDING', 'RIZKALLA'),
      'vehicle_maintenance'),
-    (('TELSTRA', 'OPTUS', 'VODAFONE', 'TPG', 'AUSSIE BROADBAND',
-      'BELONG', 'INTERNET', 'MOBILE'), 'phone_internet'),
     (('GOOGLE', 'META', 'FACEBOOK', 'MARKETING', 'ADVERTIS', 'SEO'), 'marketing'),
     (('INSURANCE', 'NRMA', 'AAMI', 'ALLIANZ', 'QBE', 'GIO', 'ZURICH'), 'insurance'),
     (('GROUP TRANSPORT',), 'subcontractor_payout'),
