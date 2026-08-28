@@ -37,7 +37,8 @@ INTERNAL_TRANSFER_MARKERS = ['xx8784', 'CommBank app']
 #     matching 'International Transaction Fee' rows cannot be tied back to the
 #     Uber charge they belong to, so those stay as ordinary bank_fees.
 #   NOMADESIM — travel eSIM data, bought for personal trips (confirmed
-#     2026-08-20). Not the company mobile plan — that is DODO.
+#     2026-08-20). Not the company mobile plan — that is SpinTel, billed
+#     through PayPal (DODO before it).
 #   INTERNATIONAL TRANSACTION FEE — the CommBank 3.5% FX fee. Every such fee
 #     seen so far belongs to a personal foreign charge (UBER, NOMADESIM);
 #     Anthropic, the one foreign business charge, is billed in AUD and raises
@@ -65,6 +66,18 @@ GST_KEYWORD_RULES = [
     # and 'SERVICE' is a substring of both. They are the phone/internet
     # bill, not car servicing.
     (('DODO',), 'gst'),
+    # SPINTEL = the current mobile + internet plan. The bill is paid through
+    # PayPal, so the bank row carries no merchant name at all — only PayPal's
+    # direct-debit reference, e.g. 'Direct Debit 617704 PAYPAL AUSTRALIA
+    # 105...'. 617704 is PayPal Australia's *debit* APCA user ID; 617702 is the
+    # credit side (incoming PayPal payouts), which is income and skipped on
+    # import, so this rule can never touch it. Charged GST-inclusive
+    # (confirmed by the owner 2026-08-28).
+    # WARNING: any *other* purchase funded from the bank via PayPal would carry
+    # the same 617704 reference and be treated as a phone bill here. The
+    # SpinTel plan is a fixed monthly amount ($159.95 as at 2026-08) — if a
+    # PayPal debit for a different amount shows up, re-categorise it in admin.
+    (('SPINTEL', '617704 PAYPAL'), 'gst'),
     (('TELSTRA', 'OPTUS', 'VODAFONE', 'TPG', 'AUSSIE BROADBAND',
       'BELONG', 'INTERNET', 'MOBILE'), 'gst'),
     (('SERVICE', 'MECHANIC', 'AUTO', 'TYRE', 'TYRES', 'REPCO',
@@ -135,6 +148,9 @@ CATEGORY_KEYWORD_RULES = [
     # bills. Checked BEFORE vehicle_maintenance because 'SERVICE' is a
     # substring of both and would otherwise label them as car servicing.
     (('DODO',), 'phone_internet'),
+    # SpinTel, direct-debited by PayPal — see the matching GST rule above for
+    # why the bank reference ('617704 PAYPAL') is the only usable marker.
+    (('SPINTEL', '617704 PAYPAL'), 'phone_internet'),
     (('TELSTRA', 'OPTUS', 'VODAFONE', 'TPG', 'AUSSIE BROADBAND',
       'BELONG', 'INTERNET', 'MOBILE'), 'phone_internet'),
     (('SERVICE', 'MECHANIC', 'AUTO', 'TYRE', 'TYRES', 'REPCO',
