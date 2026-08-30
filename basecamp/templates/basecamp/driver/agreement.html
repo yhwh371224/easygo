@@ -70,9 +70,6 @@
       {% csrf_token %}
 
       <div class="biz-details">
-        <label for="company_name">Company / Business Name (as registered for your ABN)</label>
-        <input type="text" class="form-control" name="company_name" id="company_name"
-               value="{{ company_name }}" required>
         <label for="abn">ABN</label>
         <input type="text" class="form-control" name="abn" id="abn"
                value="{{ abn }}" required>
@@ -117,7 +114,6 @@
 <script>
   (function () {
     var boxes = Array.prototype.slice.call(document.querySelectorAll('.agree-input'));
-    var companyName = document.getElementById('company_name');
     var abn = document.getElementById('abn');
     var invoiceEmail = document.getElementById('invoice_email');
     var signedByName = document.getElementById('signed_by_name');
@@ -125,13 +121,12 @@
     var btn = document.getElementById('confirmBtn');
     function sync() {
       btn.disabled = !boxes.every(function (b) { return b.checked; })
-        || !companyName.value.trim() || !abn.value.trim()
+        || !abn.value.trim()
         || !invoiceEmail.value.trim()
         || (signedByName && !signedByName.value.trim())
         || (signedByTitle && !signedByTitle.value.trim());
     }
     boxes.forEach(function (b) { b.addEventListener('change', sync); });
-    companyName.addEventListener('input', sync);
     abn.addEventListener('input', sync);
     invoiceEmail.addEventListener('input', sync);
     if (signedByName) signedByName.addEventListener('input', sync);

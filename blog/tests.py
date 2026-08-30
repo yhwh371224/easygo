@@ -1564,7 +1564,7 @@ class AgreementConsentTests(TestCase):
 
     def _sign(self, **extra):
         data = {
-            'company_name': 'Drv Pty Ltd', 'abn': '11 111 111 111',
+            'abn': '11 111 111 111',
             'invoice_email': 'invoices@drv.example.com',
             'item_status_confirmed': 'on',
             'item_liability_confirmed': 'on',
@@ -1577,7 +1577,7 @@ class AgreementConsentTests(TestCase):
         self.assertIsNotNone(self._confirmed_agreement(self.driver))
         self.driver.refresh_from_db()
         self.assertEqual(self.driver.driver_email, 'invoices@drv.example.com')
-        self.assertEqual(self.driver.business_name, 'Drv Pty Ltd')
+        self.assertEqual(self.driver.abn, '11 111 111 111')
 
     def test_invoice_email_required(self):
         response = self._sign(invoice_email='')

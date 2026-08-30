@@ -861,9 +861,10 @@ def _handle_agreement(request, driver):
     so a subcontractor without dashboard credentials yet can still review
     and confirm. GET renders the summary items for this driver/company
     (expand-on-click detail — see :func:`_agreement_items`). POST records a
-    :class:`DriverAgreement` once every item shown is ticked and the company
-    name/ABN/invoice email are filled in. Nothing here ever touches the
-    accounting app.
+    :class:`DriverAgreement` once every item shown is ticked and the
+    ABN/invoice email are filled in. The registered business name is not
+    asked for — it is looked up from the ABN when needed. Nothing here ever
+    touches the accounting app.
     """
     from blog.models import DriverAgreement, CURRENT_AGREEMENT_VERSION
     from basecamp.modules.view_helpers import get_client_ip
@@ -881,7 +882,6 @@ def _handle_agreement(request, driver):
                 'driver': driver, 'version': version, 'agreement': existing,
             })
 
-        company_name = (request.POST.get('company_name') or '').strip()
         abn = (request.POST.get('abn') or '').strip()
         invoice_email = (request.POST.get('invoice_email') or '').strip()
         signed_by_name = (request.POST.get('signed_by_name') or '').strip()
@@ -889,8 +889,8 @@ def _handle_agreement(request, driver):
         all_checked = all(request.POST.get(item['field']) == 'on' for item in items)
 
         error = None
-        if not company_name or not abn:
-            error = 'Please enter your company name and ABN.'
+        if not abn:
+            error = 'Please enter your ABN.'
         elif not invoice_email:
             error = 'Please enter the email address your invoices should go to.'
         elif not _is_valid_email(invoice_email):
@@ -905,7 +905,6 @@ def _handle_agreement(request, driver):
                 'driver': driver,
                 'version': version,
                 'items': items,
-                'company_name': company_name,
                 'abn': abn,
                 'invoice_email': invoice_email,
                 'signed_by_name': signed_by_name,
@@ -917,10 +916,9 @@ def _handle_agreement(request, driver):
         # source of truth over whatever admin may have typed in previously.
         # The invoice address is the one they just agreed their RCTIs go to,
         # so it becomes the driver's contact email outright.
-        driver.business_name = company_name
         driver.abn = abn
         driver.driver_email = invoice_email
-        driver.save(update_fields=['business_name', 'abn', 'driver_email'])
+        driver.save(update_fields=['abn', 'driver_email'])
 
         agreement, _ = DriverAgreement.objects.get_or_create(
             driver=driver, version=version,
@@ -949,7 +947,6 @@ def _handle_agreement(request, driver):
         'driver': driver,
         'version': version,
         'items': items,
-        'company_name': driver.business_name or '',
         'abn': driver.abn or '',
         'invoice_email': driver.driver_email or '',
         'signed_by_name': '',
