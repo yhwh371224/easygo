@@ -129,9 +129,10 @@ REVIEW_OVERRIDE_KEYWORDS = (
 # vehicle_maintenance ('SERVICE', ...) — 'SERVICE' is a substring of
 # 'SERVICE NSW', so the broader vehicle_maintenance keyword would otherwise
 # shadow the more specific registration match. Same reason phone_internet
-# ('DODO', 'TELSTRA', ...) sits above vehicle_maintenance: the bank writes
-# e.g. 'DODO SERVICES PTY LTD' and 'TELSTRA SERVICES MELBOURNE AU', both of
-# which contain 'SERVICE'.
+# ('DODO', 'TELSTRA', ...) and the ENEX subcontractor rule sit above
+# vehicle_maintenance: the bank writes e.g. 'DODO SERVICES PTY LTD',
+# 'TELSTRA SERVICES MELBOURNE AU' and 'ENEX SERVICES PTY LTD', all of which
+# contain 'SERVICE'.
 CATEGORY_KEYWORD_RULES = [
     (('REFUND',), 'customer_refund'),
     (('BP', 'CALTEX', 'AMPOL', 'SHELL', '7-ELEVEN', '7 ELEVEN', 'OTR', 'FUEL',
@@ -153,6 +154,11 @@ CATEGORY_KEYWORD_RULES = [
     (('SPINTEL', '617704 PAYPAL'), 'phone_internet'),
     (('TELSTRA', 'OPTUS', 'VODAFONE', 'TPG', 'AUSSIE BROADBAND',
       'BELONG', 'INTERNET', 'MOBILE'), 'phone_internet'),
+    # ENEX SERVICES PTY LTD — subcontractor, confirmed by the owner
+    # (2026-08-31): Smile Pickup asks for these jobs to be paid out to ENEX
+    # directly via PayID. Checked BEFORE vehicle_maintenance because 'SERVICE'
+    # is a substring of 'SERVICES' and would otherwise read as car servicing.
+    (('ENEX',), 'subcontractor_payout'),
     (('SERVICE', 'MECHANIC', 'AUTO', 'TYRE', 'TYRES', 'REPCO',
       'SUPERCHEAP', 'PANEL', 'SMASH', 'CIRCUM VENDING', 'RIZKALLA'),
      'vehicle_maintenance'),
