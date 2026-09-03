@@ -16,6 +16,7 @@ class TransactionAdmin(admin.ModelAdmin):
     list_filter = ('needs_review', 'excluded', 'is_tax_deductible', 'brand', 'direction',
                    'gst_code', 'source')
     date_hierarchy = 'date'
+    ordering = ('-date', '-pk')
     search_fields = ('description', 'counterparty')
     change_list_template = 'admin/accounting/transaction/change_list.html'
     actions = ('approve_as_expense', 'exclude_as_driver_payment',
@@ -185,12 +186,14 @@ class PaymentFeeLogAdmin(admin.ModelAdmin):
     list_filter = ('source', 'brand', 'direction', 'gst_code')
     date_hierarchy = 'date'
     search_fields = ('description', 'counterparty')
+    ordering = ('-date', '-pk')
 
 
 @admin.register(PayrollEntry)
 class PayrollEntryAdmin(admin.ModelAdmin):
     list_display = ('pay_date', 'employee_name', 'gross_pay', 'paygw_withheld', 'super_amount', 'net_pay')
     date_hierarchy = 'pay_date'
+    ordering = ('-pay_date', '-pk')
     actions = ('duplicate_next_week',)
 
     @admin.action(description="다음 주로 복제 — copy with dates shifted +7 days")
@@ -213,6 +216,7 @@ class DividendRecordAdmin(admin.ModelAdmin):
     list_display = ('declared_date', 'amount', 'franking_credit', 'status')
     list_filter = ('status',)
     date_hierarchy = 'declared_date'
+    ordering = ('-declared_date', '-pk')
 
 
 @admin.register(DirectorLoan)
@@ -220,6 +224,7 @@ class DirectorLoanAdmin(admin.ModelAdmin):
     list_display  = ('date', 'direction', 'amount', 'description')
     list_filter   = ('direction',)
     date_hierarchy = 'date'
+    ordering = ('-date', '-pk')
     change_list_template = 'admin/accounting/directorloan/change_list.html'
 
     def changelist_view(self, request, extra_context=None):
