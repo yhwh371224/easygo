@@ -11,7 +11,11 @@ WAGE_SKIP_MARKERS = ['DIRECTOR WAGE']
 # Bank CSV import: director capital contributions / repayments — already in
 # DirectorLoan. Substring match (via _contains_any). These are balance-sheet
 # items, not P&L — must never be imported as income or expense.
-LOAN_SKIP_MARKERS = ['LOAN FROM DIRECTOR']
+# 'LOAN FROM DIRECTOR' = contributions (director -> company); 'LOAN REPAYMENT'
+# = repayments (company -> director), e.g. the 2026-08/09 $2,000 x 3
+# settlement transfers. Both directions land in the same skip list since
+# either way the movement is already recorded in DirectorLoan by hand.
+LOAN_SKIP_MARKERS = ['LOAN FROM DIRECTOR', 'LOAN REPAYMENT']
 
 # Bank CSV import: super contributions — already counted via PayrollEntry.super_amount
 # in P&L (see reports.py labour_total). Importing the bank transfer too would double-count.
