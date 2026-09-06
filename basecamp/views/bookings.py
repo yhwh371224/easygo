@@ -14,6 +14,7 @@ from blog.models import Post, Inquiry, Driver
 from blog import dunning
 from blog.blog_utils import resolve_booking_driver
 from blog.tasks import send_post_confirmation_email_task
+from main.settings import RECIPIENT_EMAIL
 from regions.models import Region
 from basecamp.basecamp_utils import (
     is_ajax, parse_baggage, parse_date,
@@ -58,6 +59,27 @@ def _normalize_pax(value):
     if 1 <= pax <= MAX_REBOOK_PASSENGERS:
         return pax
     return None
+
+
+def _send_invoice_for_new_booking(request, post):
+    """Admin 'Send invoice' checkbox on confirm_booking — same default invoice
+    the customer-facing /invoice/ page produces when only email+index are
+    submitted (no GST/surcharge/discount/deposit overrides), just built
+    straight from the Post we just created instead of a fresh lookup."""
+    from datetime import date
+    from django.conf import settings
+    from basecamp.views.payments import (
+        _build_single_context, _resolve_inv_no, _send_invoice_email, _parse_invoice_params,
+    )
+
+    params = _parse_invoice_params(request)
+    users = Post.objects.filter(email__iexact=post.email)
+    inv_no = _resolve_inv_no(post, params['inv_no'])
+    default_bank = getattr(settings, "DEFAULT_BANK_CODE", "westpac")
+
+    template_name, context = _build_single_context(post, users, params, inv_no, date.today(), default_bank)
+    recipients = [post.booker_email] if post.booker_email else list(filter(None, [post.email, post.email1]))
+    _send_invoice_email(template_name, context, recipients + [RECIPIENT_EMAIL], inv_no)
 
 
 @ratelimit(key='ip', rate='5/m', method='POST', block=True)
@@ -217,6 +239,12 @@ def confirm_booking_detail(request):
     p.save()
 
     user.delete()
+
+    if request.POST.get('send_confirmation_email') == 'on':
+        send_post_confirmation_email_task.delay(p.pk)
+
+    if request.POST.get('send_invoice') == 'on':
+        _send_invoice_for_new_booking(request, p)
 
     ip = get_client_ip(request)
     ip_info = get_ip_info(ip)
