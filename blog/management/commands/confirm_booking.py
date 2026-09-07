@@ -32,6 +32,7 @@ class Command(TelegramAlertMixin, BaseCommand):
         for post in posts:
             if not post.sent_email:
                 post.sent_email = True
+                post.is_confirmed = True
                 to_update.append(post)
 
                 context = {
@@ -71,7 +72,7 @@ class Command(TelegramAlertMixin, BaseCommand):
                 email_tasks.append((post, (subject, template_name, context, recipients)))
 
         if to_update:
-            Post.objects.bulk_update(to_update, ['sent_email'], batch_size=50)
+            Post.objects.bulk_update(to_update, ['sent_email', 'is_confirmed'], batch_size=50)
             for post, args in email_tasks:
                 # 한 건이 실패해도 나머지는 계속 보낸다. 예외를 그대로 두면 첫 실패에서
                 # 루프가 끊겨 뒤 예약들은 sent_email=True 인 채 메일이 아예 안 나간다.
