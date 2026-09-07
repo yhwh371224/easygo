@@ -126,12 +126,13 @@ def driver_impersonate_exit(request):
 
 
 def _notify_new_driver_application(driver):
-    """Best-effort email to the office when a new application comes in.
+    """Best-effort email + Telegram alert to the office when a new application comes in.
 
     Failure to send must never block the applicant's flow — they've already
     been saved as a pending Driver by the time this runs.
     """
     from utils.email import send_text_email
+    from utils.telegram import send_telegram_sync
     from main.settings import RECIPIENT_EMAIL
 
     review_url = f"{settings.SITE_URL}/{settings.SECRET_ADMIN_URL}/blog/driver/{driver.pk}/change/"
@@ -155,6 +156,13 @@ def _notify_new_driver_application(driver):
         send_text_email(f"[New Driver Application] {driver.driver_name}", message, [RECIPIENT_EMAIL])
     except Exception:
         logger.exception("driver_apply: failed to send admin notification for driver id=%s", driver.pk)
+
+    send_telegram_sync(
+        f"🚐 New driver application: {driver.driver_name}\n"
+        f"Contact: {driver.driver_contact}\n"
+        f"Region: {driver.region}\n"
+        f"Review: {review_url}"
+    )
 
 
 def _notify_driver_application_received(driver):
