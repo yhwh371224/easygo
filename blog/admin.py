@@ -266,6 +266,7 @@ class InquiryAdmin(admin.ModelAdmin):
                      'booker_contact', 'name', 'contact', 'email1', 'message', 'notice', 'region__name',
                      'driver__driver_name']
     readonly_fields = ['suburb_distance_km', 'suburb_base_price']
+    actions = ['send_first_trip_only_notice', 'send_last_trip_only_notice']
 
     fieldsets = [
         ('Customer Info', {
@@ -315,6 +316,48 @@ class InquiryAdmin(admin.ModelAdmin):
         obj.prepay = True
         obj.private_ride = True
         super().save_model(request, obj, form, change)
+
+    def _send_trip_availability_notice(self, request, queryset, first_trip_available, last_trip_available):
+        from utils.email import send_html_email
+        from basecamp.basecamp_utils import render_email_template
+
+        sent, skipped = 0, 0
+        for obj in queryset:
+            if not obj.return_pickup_date:
+                skipped += 1
+                continue
+            html_content = render_email_template("html_email-inquiry-return-availability.html", {
+                'name': obj.name,
+                'booker_name': obj.booker_name,
+                'email': obj.email,
+                # Template's own field names — first_booking/remain_first = first trip,
+                # remain_return/return_booking = last trip. Not renamed here since the
+                # same template is shared with email_dispatch_detail().
+                'remain_first_booking': first_trip_available,
+                'remain_return_booking': last_trip_available,
+                'first_booking_date': obj.pickup_date,
+                'return_booking_date': obj.return_pickup_date,
+            })
+            recipients = [obj.booker_email] if obj.booker_email else list(filter(None, [obj.email, obj.email1]))
+            send_html_email("Booking Availability Notice - EasyGo", html_content, recipients)
+            sent += 1
+
+        if sent:
+            self.message_user(request, f"Sent trip-availability notice to {sent} inquiry(ies).")
+        if skipped:
+            self.message_user(
+                request,
+                f"Skipped {skipped} inquiry(ies) — no return trip on the record.",
+                level=messages.WARNING,
+            )
+
+    @admin.action(description="First trip available")
+    def send_first_trip_only_notice(self, request, queryset):
+        self._send_trip_availability_notice(request, queryset, first_trip_available=True, last_trip_available=False)
+
+    @admin.action(description="Last trip available")
+    def send_last_trip_only_notice(self, request, queryset):
+        self._send_trip_availability_notice(request, queryset, first_trip_available=False, last_trip_available=True)
 
 
 class PaypalPaymentAdmin(admin.ModelAdmin):
