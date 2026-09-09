@@ -84,8 +84,14 @@ GST_KEYWORD_RULES = [
     (('SPINTEL', '617704 PAYPAL'), 'gst'),
     (('TELSTRA', 'OPTUS', 'VODAFONE', 'TPG', 'AUSSIE BROADBAND',
       'BELONG', 'INTERNET', 'MOBILE'), 'gst'),
+    # 'ULTRA TUNE' = Ultra Tune Artarmon, car servicing/mechanic — confirmed
+    # a business vehicle cost by the owner (2026-09-09), always GST-inclusive.
+    # Bank rows for this merchant carry varying prefixes (e.g. 'ZLR*Ultra
+    # Tune Artarmon Artarmon AU') that don't hit the generic 'AUTO'/'SERVICE'
+    # keywords below, so it needs its own explicit match.
     (('SERVICE', 'MECHANIC', 'AUTO', 'TYRE', 'TYRES', 'REPCO',
-      'SUPERCHEAP', 'PANEL', 'SMASH', 'CIRCUM VENDING', 'RIZKALLA'), 'gst'),
+      'SUPERCHEAP', 'PANEL', 'SMASH', 'CIRCUM VENDING', 'RIZKALLA',
+      'ULTRA TUNE'), 'gst'),
     (('GOOGLE', 'META', 'FACEBOOK', 'MARKETING', 'ADVERTIS', 'SEO'), 'gst'),
     (('GROUP TRANSPORT',), 'gst'),
     (('NORTH SYDNEY EXECUTIVE', 'VIRTUAL OFFICE', 'CWH',
@@ -164,7 +170,8 @@ CATEGORY_KEYWORD_RULES = [
     # is a substring of 'SERVICES' and would otherwise read as car servicing.
     (('ENEX',), 'subcontractor_payout'),
     (('SERVICE', 'MECHANIC', 'AUTO', 'TYRE', 'TYRES', 'REPCO',
-      'SUPERCHEAP', 'PANEL', 'SMASH', 'CIRCUM VENDING', 'RIZKALLA'),
+      'SUPERCHEAP', 'PANEL', 'SMASH', 'CIRCUM VENDING', 'RIZKALLA',
+      'ULTRA TUNE'),
      'vehicle_maintenance'),
     (('GOOGLE', 'META', 'FACEBOOK', 'MARKETING', 'ADVERTIS', 'SEO'), 'marketing'),
     (('INSURANCE', 'NRMA', 'AAMI', 'ALLIANZ', 'QBE', 'GIO', 'ZURICH'), 'insurance'),
