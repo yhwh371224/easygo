@@ -29,7 +29,7 @@ def serve_assetlinks(request):
             "namespace": "android_app",
             "package_name": "au.com.easygoshuttle.driver",
             "sha256_cert_fingerprints": [
-                "REPLACE_WITH_SHA256_FINGERPRINT_FROM_AAB_SIGNING_KEY",
+                "F3:11:B8:63:D5:C6:55:BB:6D:D2:D3:00:54:0E:9B:E3:2A:44:3B:D3:8D:7D:36:17:F2:4D:93:AA:A1:D7:A8:49",
             ],
         },
     }], safe=False)
