@@ -5,7 +5,7 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from django.conf import settings
 from django.conf.urls.static import static
-from django.http import FileResponse, Http404
+from django.http import FileResponse, Http404, JsonResponse
 from email_agent.views import GmailWebhookView
 from basecamp.views import stripe_webhook
 from blog import bird_webhooks, driver_views
@@ -18,10 +18,27 @@ def serve_sitemap(request, filename):
         raise Http404
     return FileResponse(open(path_, 'rb'), content_type='application/xml')
 
+
+# TWA (Trusted Web Activity) Digital Asset Links verification for the
+# EasyGo Driver Android app on Play Store. sha256_cert_fingerprints gets
+# filled in once the signed AAB is generated (PWABuilder/Bubblewrap shows it).
+def serve_assetlinks(request):
+    return JsonResponse([{
+        "relation": ["delegate_permission/common.handle_all_urls"],
+        "target": {
+            "namespace": "android_app",
+            "package_name": "au.com.easygoshuttle.driver",
+            "sha256_cert_fingerprints": [
+                "REPLACE_WITH_SHA256_FINGERPRINT_FROM_AAB_SIGNING_KEY",
+            ],
+        },
+    }], safe=False)
+
 SECRET_ADMIN_URL = config('SECRET_ADMIN_URL', default='secure-admin-x9k2p7')
 
 urlpatterns = [
     re_path(r'^(?P<filename>sitemap[\w\-]*\.xml)$', serve_sitemap, name='sitemap'),
+    path('.well-known/assetlinks.json', serve_assetlinks, name='assetlinks'),
 
     path('admin/', include('admin_honeypot.urls', namespace='admin_honeypot')),
     path(f'{SECRET_ADMIN_URL}/', admin.site.urls),
