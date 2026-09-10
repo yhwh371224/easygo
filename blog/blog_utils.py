@@ -297,12 +297,17 @@ def send_payment_notification_email(instance, total_balance, recipient_emails, a
 
     amount_display = f"${raw_amount} (${net_amount})" if raw_amount != net_amount else f"${net_amount}"
 
+    pickup_line = ""
+    if nearest_post and nearest_post.pickup_date:
+        pickup_line = f"\n🗓️ {nearest_post.pickup_date} {nearest_post.pickup_time or ''}".rstrip()
+
     if deposit_satisfied:
         send_telegram_sync(
             f"💰 Deposit payment received via {method}\n\n"
             f"👤 {instance.name}\n"
             f"📧 {instance.email}\n"
             f"💰 ${net_amount} (remaining balance: ${remaining_balance})"
+            f"{pickup_line}"
         )
     elif all_already_paid:
         if nearest_post:
@@ -313,6 +318,7 @@ def send_payment_notification_email(instance, total_balance, recipient_emails, a
             f"Fully paid but paid again {method.capitalize()}: {amount_display}\n"
             f"👤 {instance.name}\n"
             f"📧 {instance.email}"
+            f"{pickup_line}"
         )
     elif not has_future_bookings:
         send_telegram_sync(
@@ -327,6 +333,7 @@ def send_payment_notification_email(instance, total_balance, recipient_emails, a
             f"👤 {instance.name}\n"
             f"📧 {instance.email}\n"
             f"💰 ${net_amount}"
+            f"{pickup_line}"
         )
     
    
