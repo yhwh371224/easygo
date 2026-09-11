@@ -5,7 +5,7 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from django.conf import settings
 from django.conf.urls.static import static
-from django.http import FileResponse, Http404, JsonResponse
+from django.http import FileResponse, Http404, HttpResponse, JsonResponse
 from email_agent.views import GmailWebhookView
 from basecamp.views import stripe_webhook
 from blog import bird_webhooks, driver_views
@@ -34,11 +34,29 @@ def serve_assetlinks(request):
         },
     }], safe=False)
 
+# nginx serves .webmanifest as application/octet-stream and we send
+# X-Content-Type-Options: nosniff, so Chrome refuses to parse the manifest off
+# /static/ — which also makes PWABuilder report "no manifest". Serving it here
+# pins the right type without needing an nginx change. The path stays under
+# /driver/ because DriverAccessRestrictionMiddleware bounces logged-in drivers
+# off every other prefix, and they are the ones whose Chrome fetches this.
+DRIVER_MANIFEST = os.path.join(
+    settings.BASE_DIR, 'basecamp', 'static', 'basecamp', 'favi',
+    'driver-manifest.webmanifest')
+
+
+def serve_driver_manifest(request):
+    with open(DRIVER_MANIFEST, 'rb') as fh:
+        return HttpResponse(fh.read(), content_type='application/manifest+json')
+
+
 SECRET_ADMIN_URL = config('SECRET_ADMIN_URL', default='secure-admin-x9k2p7')
 
 urlpatterns = [
     re_path(r'^(?P<filename>sitemap[\w\-]*\.xml)$', serve_sitemap, name='sitemap'),
     path('.well-known/assetlinks.json', serve_assetlinks, name='assetlinks'),
+    path('driver/manifest.webmanifest', serve_driver_manifest,
+         name='driver_manifest'),
 
     path('admin/', include('admin_honeypot.urls', namespace='admin_honeypot')),
     path(f'{SECRET_ADMIN_URL}/', admin.site.urls),
