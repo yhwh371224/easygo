@@ -84,9 +84,10 @@ class Command(BaseCommand):
                         post,
                         unpaid_balance=f"{balance:.2f}",
                         amount_paid=f"{paid:.2f}",
+                        non_payment=True,
                     )
                 else:
-                    send_post_cancelled_email(post)
+                    send_post_cancelled_email(post, non_payment=True)
             except Exception as e:
                 logger.error('auto_cancel_pending: cancel email failed for Post pk=%s: %s — skipping cancel', post.pk, e)
                 self.stdout.write(self.style.ERROR(f"Cancel email failed for #{post.id}: {e} — skipped"))

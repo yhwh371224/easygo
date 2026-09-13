@@ -135,15 +135,20 @@ def send_post_confirmation_email(instance):
     send_html_email(subject, html_content, recipients)
 
 
-def send_post_cancelled_email(instance, unpaid_balance=None, amount_paid=None):
+def send_post_cancelled_email(instance, unpaid_balance=None, amount_paid=None, non_payment=False):
     """부킹 취소 통보 메일.
 
     unpaid_balance/amount_paid 는 부분결제(short payment) 미납으로 자동취소된
     건에서만 넘어온다(auto_cancel_pending). 값이 있으면 이미 결제된 금액이
     있다는 사실을 메일에 명시해 손님이 환불 문의를 어디로 해야 할지 알게 한다.
     일반 취소(가용 차량 없음 등)에서는 None 이라 문구가 나오지 않는다.
+
+    non_payment=True 는 final notice 발송 후에도 응답/결제가 없어 자동취소된
+    건(auto_cancel_pending)에서만 넘어온다. 이 경우 "여러 차례 안내했지만
+    응답/결제가 없어 취소한다"는 문구의 전용 템플릿을 사용한다.
     """
-    html_content = render_email_template("html_email-cancelled.html", {
+    template = "html_email-cancelled-nonpayment.html" if non_payment else "html_email-cancelled.html"
+    html_content = render_email_template(template, {
         'booker_name': instance.booker_name,
         'booker_email': instance.booker_email,
         'booker_contact': instance.booker_contact,

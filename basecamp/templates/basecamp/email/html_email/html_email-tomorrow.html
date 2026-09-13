@@ -168,6 +168,8 @@
 														• Flight number: {{ flight_number }} <small>(ETA {{ flight_time }})</small><br>
 														• Pickup around {{ pickup_time }}<br><br>
 
+														<span style="color: #eb7828">If your flight number, arrival time, or pickup time above is incorrect, please reply to this email as soon as possible so we can correct it.</span><br><br>
+
 														{% if cash and not paid %}
 															<span style="color: #eb7828">We kindly request that you email us before boarding your flight and after landing to {{ city|default:"Sydney" }}</span><br><br>
 														{% else %}
