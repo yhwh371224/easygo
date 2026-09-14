@@ -51,6 +51,12 @@ DRIVER_APPLY_FIELD_MAX_LENGTHS = {
     'bank_bsb': 10, 'bank_account_number': 20, 'payid_number': 50,
 }
 
+# License scan is optional on the public form (Driver.license_scan is
+# blank=True) — applicants without a scan handy can still apply and staff
+# chase it up during review. Mirrors the model's FileExtensionValidator.
+LICENSE_SCAN_ALLOWED_EXTENSIONS = ('jpg', 'jpeg', 'png', 'pdf')
+LICENSE_SCAN_MAX_SIZE_BYTES = 10 * 1024 * 1024
+
 
 def _is_valid_email(value):
     from django.core.validators import validate_email
@@ -198,12 +204,14 @@ def driver_apply(request):
     but the driver stays out of dispatch-relevant queries (bank-payment
     auto-matching, reminder emails — see Driver.is_active usages) until
     office staff review the application and flip is_active on in the admin.
-    Licence class is the only licence detail asked for — it decides what work
+    Licence class is the main licence detail asked for — it decides what work
     the driver can be given (maxi/minibus needs LR+), so staff need it before
-    any paperwork arrives. The licence number and scan are deliberately NOT
-    collected here: an unverified typed number is useless, and staff capture
-    both off the licence itself during review (Driver.license_number /
-    license_scan are still editable in the admin).
+    any paperwork arrives. A licence scan can optionally be attached here to
+    speed up review, but it's not required — staff still verify it (or chase
+    it up) during review. The licence number itself is still NOT collected:
+    an unverified typed number is useless, so staff capture it off the
+    licence/scan during review (Driver.license_number is still editable in
+    the admin).
 
     Also used by subcontractors (partner operators supplying their own
     vehicles/drivers) — same fields, same review. Driver.is_company is a
@@ -235,6 +243,8 @@ def driver_apply(request):
             form_data[field] = request.POST.get(field) == 'on'
         region = regions.filter(pk=form_data['region_id']).first() if form_data['region_id'] else None
 
+        license_scan = request.FILES.get('license_scan')
+
         token = request.POST.get('cf-turnstile-response', '')
         required = ['driver_name', 'driver_contact', 'driver_email', 'driver_car',
                     'driver_plate', 'license_class', 'abn']
@@ -247,10 +257,8 @@ def driver_apply(request):
             error = 'One of the fields is too long — please shorten it.'
         elif form_data['license_class'] not in dict(LICENSE_CLASS_CHOICES):
             error = 'Please choose a valid licence class.'
-        # Region picker disabled on the form — set manually via Django admin
-        # after the applicant is created (Driver.region is nullable).
-        # elif not region:
-        #     error = 'Please select which region you\'ll be driving in.'
+        elif not region:
+            error = 'Please select which region you\'ll be driving in.'
         elif not _is_valid_email(form_data['driver_email']):
             error = 'Please enter a valid email address.'
         elif form_data['payment_method'] == 'bank' and not all([
@@ -261,6 +269,10 @@ def driver_apply(request):
             error = 'Please enter your PayID.'
         elif form_data['payment_method'] not in ('bank', 'payid'):
             error = 'Please choose how you would like to be paid.'
+        elif license_scan and license_scan.name.rsplit('.', 1)[-1].lower() not in LICENSE_SCAN_ALLOWED_EXTENSIONS:
+            error = 'Licence scan must be a JPG, PNG or PDF file.'
+        elif license_scan and license_scan.size > LICENSE_SCAN_MAX_SIZE_BYTES:
+            error = 'Licence scan is too large — please upload a file under 10MB.'
 
         if not error:
             payid_or_account = (
@@ -276,6 +288,7 @@ def driver_apply(request):
                 driver_plate=form_data['driver_plate'],
                 has_vehicle_insurance=form_data['has_vehicle_insurance'],
                 license_class=form_data['license_class'],
+                license_scan=license_scan,
                 abn=form_data['abn'],
                 payment_method=form_data['payment_method'],
                 bank_account_name=form_data['bank_account_name'],
