@@ -8,7 +8,7 @@ from django.conf.urls.static import static
 from django.http import FileResponse, Http404, HttpResponse, JsonResponse
 from email_agent.views import GmailWebhookView
 from basecamp.views import stripe_webhook
-from blog import bird_webhooks, driver_views
+from blog import bird_webhooks, driver_views, search_survey_views
 from decouple import config
 
 
@@ -90,6 +90,8 @@ urlpatterns = [
     # The step-2 continuation only exists at /driver/apply/account/ (in blog/urls.py).
     path('driver/apply/', driver_views.driver_apply, name='driver_apply_legacy'),
     path('driver/', include(('blog.urls', 'blog'), namespace='blog')),
+
+    path('search-survey/', search_survey_views.search_survey, name='search_survey'),
 
     # Empty prefix apps - 맨 아래
     path('', include(('basecamp.urls', 'basecamp'), namespace='basecamp')),

@@ -5,6 +5,7 @@ from .driver import (
 from .booking import Post, Inquiry
 from .payment import PaypalPayment, StripePayment
 from .phone import PhoneMapping
+from .search_survey import SearchSurveyResponse
 
 __all__ = [
     'Driver',
@@ -17,4 +18,5 @@ __all__ = [
     'PaypalPayment',
     'StripePayment',
     'PhoneMapping',
+    'SearchSurveyResponse',
 ]

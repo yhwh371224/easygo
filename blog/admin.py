@@ -10,7 +10,7 @@ from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.urls import path as url_path, reverse
 from django.utils.html import format_html
-from .models import Driver, DriverSettlement, Inquiry, PaypalPayment, PhoneMapping, StripePayment, Post, VirtualNumber
+from .models import Driver, DriverSettlement, Inquiry, PaypalPayment, PhoneMapping, StripePayment, Post, VirtualNumber, SearchSurveyResponse
 from .models.driver import DriverSettlementItem, DriverAgreement
 
 
@@ -603,6 +603,14 @@ class VirtualNumberAdmin(admin.ModelAdmin):
         return obj.is_wired
 
 
+class SearchSurveyResponseAdmin(admin.ModelAdmin):
+    list_display = ['name', 'email', 'keyword', 'page', 'landed', 'created']
+    search_fields = ['name', 'email', 'keyword']
+    list_filter = ['page', 'landed']
+    readonly_fields = ['created']
+    ordering = ['-created']
+
+
 class MyAdminSite(AdminSite):
     site_header = 'EasyGo administration'
 
@@ -616,6 +624,7 @@ admin_site.register(StripePayment, StripePaymentAdmin)
 admin_site.register(Post, PostAdmin)
 admin_site.register(PhoneMapping, PhoneMappingAdmin)
 admin_site.register(VirtualNumber, VirtualNumberAdmin)
+admin_site.register(SearchSurveyResponse, SearchSurveyResponseAdmin)
 
 admin.site.register(Driver, DriverAdmin)
 admin.site.register(DriverAgreement, DriverAgreementAdmin)
@@ -625,3 +634,4 @@ admin.site.register(StripePayment, StripePaymentAdmin)
 admin.site.register(Post, PostAdmin)
 admin.site.register(PhoneMapping, PhoneMappingAdmin) 
 admin.site.register(VirtualNumber, VirtualNumberAdmin)
+admin.site.register(SearchSurveyResponse, SearchSurveyResponseAdmin)
