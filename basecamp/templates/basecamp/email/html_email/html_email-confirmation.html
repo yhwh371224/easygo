@@ -190,29 +190,29 @@
                       {% if rt_total %}
                       • Total (round trip): ${{ rt_total }}{% if toll %}, toll included{% endif %}<br />
                       {% elif discount and surcharge %}
-                      • The total cost is ${{ price }} − ${{ discount }} (discount) + ${{ surcharge }} (surcharge) = ${{ final_price }}{% if toll %}, toll included{% endif %}<br />
+                      • The total cost is ${{ price }} − ${{ discount }} (discount) + ${{ surcharge }} (fuel surcharge) = ${{ final_price }}{% if toll %}, toll included{% endif %}<br />
                       {% elif discount %}
                       • The total cost is ${{ price }} − ${{ discount }} (discount) = ${{ final_price }}{% if toll %}, toll included{% endif %}<br />
                       {% elif surcharge %}
-                      • The total cost is ${{ price }} + ${{ surcharge }} (surcharge) = ${{ final_price }}{% if toll %}, toll included{% endif %}<br />
+                      • The total cost is ${{ price }} + ${{ surcharge }} (fuel surcharge) = ${{ final_price }}{% if toll %}, toll included{% endif %}<br />
                       {% else %}
                       • The total cost is ${{ final_price }}{% if toll %}, toll included{% endif %}<br />
                       {% endif %}
-                      {% comment %}{% if surcharge %}<span style="color:#666;">&nbsp;&nbsp;* Fuel surcharge is temporary due to the recent rise in fuel costs.</span><br />{% endif %}{% endcomment %}
+                      {% if surcharge %}<span style="color:#666;">&nbsp;&nbsp;* Fuel surcharge is temporary due to the recent rise in fuel costs.</span><br />{% endif %}
                       • Payment will be made in cash directly to the driver on the day.<br />
                   {% elif prepay %}
                       {% if rt_total %}
                       • Total (round trip): ${{ rt_total }}{% if toll %}, toll included{% endif %}<br />
                       {% elif discount and surcharge %}
-                      • The total cost is ${{ price }} − ${{ discount }} (discount) + ${{ surcharge }} (surcharge) = ${{ final_price }}{% if toll %}, toll included{% endif %}<br />
+                      • The total cost is ${{ price }} − ${{ discount }} (discount) + ${{ surcharge }} (fuel surcharge) = ${{ final_price }}{% if toll %}, toll included{% endif %}<br />
                       {% elif discount %}
                       • The total cost is ${{ price }} − ${{ discount }} (discount) = ${{ final_price }}{% if toll %}, toll included{% endif %}<br />
                       {% elif surcharge %}
-                      • The total cost is ${{ price }} + ${{ surcharge }} (surcharge) = ${{ final_price }}{% if toll %}, toll included{% endif %}<br />
+                      • The total cost is ${{ price }} + ${{ surcharge }} (fuel surcharge) = ${{ final_price }}{% if toll %}, toll included{% endif %}<br />
                       {% else %}
                       • The total cost is ${{ final_price }}{% if toll %}, toll included{% endif %}<br />
                       {% endif %}
-                      {% comment %}{% if surcharge %}<span style="color:#666;">&nbsp;&nbsp;* Fuel surcharge is temporary due to the recent rise in fuel costs.</span><br />{% endif %}{% endcomment %}
+                      {% if surcharge %}<span style="color:#666;">&nbsp;&nbsp;* Fuel surcharge is temporary due to the recent rise in fuel costs.</span><br />{% endif %}
                       • Please make payment online in advance using the link below:<br />
                       &nbsp;&nbsp;<a href="https://easygoshuttle.com.au/payonline">easygoshuttle.com.au/payonline</a><br />
                       {% if not reminder %}
@@ -222,15 +222,15 @@
                       {% if rt_total %}
                       • Total (round trip): ${{ rt_total }}{% if toll %}, toll included{% endif %}<br />
                       {% elif discount and surcharge %}
-                      • The total cost is ${{ price }} − ${{ discount }} (discount) + ${{ surcharge }} (surcharge) = ${{ final_price }}{% if toll %}, toll included{% endif %}<br />
+                      • The total cost is ${{ price }} − ${{ discount }} (discount) + ${{ surcharge }} (fuel surcharge) = ${{ final_price }}{% if toll %}, toll included{% endif %}<br />
                       {% elif discount %}
                       • The total cost is ${{ price }} − ${{ discount }} (discount) = ${{ final_price }}{% if toll %}, toll included{% endif %}<br />
                       {% elif surcharge %}
-                      • The total cost is ${{ price }} + ${{ surcharge }} (surcharge) = ${{ final_price }}{% if toll %}, toll included{% endif %}<br />
+                      • The total cost is ${{ price }} + ${{ surcharge }} (fuel surcharge) = ${{ final_price }}{% if toll %}, toll included{% endif %}<br />
                       {% else %}
                       • The total cost is ${{ final_price }}{% if toll %}, toll included{% endif %}<br />
                       {% endif %}
-                      {% comment %}{% if surcharge %}<span style="color:#666;">&nbsp;&nbsp;* Fuel surcharge is temporary due to the recent rise in fuel costs.</span><br />{% endif %}{% endcomment %}
+                      {% if surcharge %}<span style="color:#666;">&nbsp;&nbsp;* Fuel surcharge is temporary due to the recent rise in fuel costs.</span><br />{% endif %}
                       • You may choose either of the following:<br />
                       &nbsp;&nbsp;<strong>1.</strong> Prepay securely via PayPal: <a href="https://easygoshuttle.com.au/payonline">easygoshuttle.com.au/payonline</a><br />
                       &nbsp;&nbsp;<strong>2.</strong> Pay cash to the driver on the day — simply reply to this email to confirm.<br />
