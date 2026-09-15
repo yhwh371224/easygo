@@ -59,8 +59,14 @@ PERSONAL_EXPENSE_CATEGORY = 'personal_drawings'
 # Applied only to expense rows dated on/after GST_REGISTRATION_DATE.
 # insurance and vehicle_registration intentionally omitted — see REVIEW_OVERRIDE_KEYWORDS.
 GST_KEYWORD_RULES = [
+    # 'REDDY EXPRESS' = the rebranded Coles Express service stations (Viva
+    # Energy / Shell), written by the bank as e.g.
+    # '1589-REDDY EXPRESS WEST WEST RYDE AU'. Fuel, GST-inclusive (confirmed
+    # by the owner 2026-09-16). Needs its own keyword — the row carries no
+    # 'FUEL'/'PETROL'/'SHELL' word for the generic markers to catch.
     (('BP', 'CALTEX', 'AMPOL', 'SHELL', '7-ELEVEN', '7 ELEVEN', 'OTR',
-      'UNITED PETROLEUM', 'METRO PETROLEUM', 'FUEL', 'PETROL', 'VEZINA'), 'gst'),
+      'UNITED PETROLEUM', 'METRO PETROLEUM', 'FUEL', 'PETROL', 'VEZINA',
+      'REDDY EXPRESS'), 'gst'),
     (('LINKT', 'E-TOLL', 'ETOLL', 'TOLL', 'TRANSURBAN'), 'gst'),
     # 'RIZKALLA' = J RIZKALLA & J VISVI (North Sydney) — car servicing, confirmed
     # a business vehicle cost by the owner. Merchant name, not a generic word.
@@ -145,8 +151,10 @@ REVIEW_OVERRIDE_KEYWORDS = (
 # contain 'SERVICE'.
 CATEGORY_KEYWORD_RULES = [
     (('REFUND',), 'customer_refund'),
+    # 'REDDY EXPRESS' — see the matching GST rule above.
     (('BP', 'CALTEX', 'AMPOL', 'SHELL', '7-ELEVEN', '7 ELEVEN', 'OTR', 'FUEL',
-      'PETROL', 'UNITED PETROLEUM', 'METRO PETROLEUM', 'VEZINA'), 'fuel'),
+      'PETROL', 'UNITED PETROLEUM', 'METRO PETROLEUM', 'VEZINA',
+      'REDDY EXPRESS'), 'fuel'),
     (('LINKT', 'E-TOLL', 'ETOLL', 'TOLL', 'TRANSURBAN'), 'tolls'),
     # 'TFNSW' ('200 TFNSW INTER/IVR SURRY HILLS') = Transport for NSW driver
     # test / licence fees. Checked before vehicle_registration so it lands on
