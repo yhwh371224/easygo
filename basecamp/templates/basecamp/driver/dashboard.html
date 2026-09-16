@@ -260,6 +260,53 @@
       color:#6b7280;
       padding:.25rem 0;
     }
+    /* 드라이버 의무 안내 — 데스크톱은 오른쪽 sticky, 모바일은 트립 위 */
+    .dash-layout {
+      max-width:600px;
+      margin:0 auto;
+      padding:1rem .75rem;
+      display:grid;
+      grid-template-columns:minmax(0,1fr);
+      grid-template-areas:"duty" "main";
+    }
+    .dash-main { grid-area:main; min-width:0; }
+    .duty-panel { grid-area:duty; }
+    .duty-card {
+      background:#fff;
+      border-left:4px solid #f59e0b;
+      border-radius:12px;
+      box-shadow:0 1px 4px rgba(0,0,0,.08);
+      padding:.85rem 1rem;
+      margin-bottom:1rem;
+    }
+    .duty-title {
+      font-size:.75rem;
+      font-weight:700;
+      color:#92400e;
+      text-transform:uppercase;
+      letter-spacing:.05em;
+      margin-bottom:.5rem;
+    }
+    .duty-list { list-style:none; margin:0; padding:0; }
+    .duty-list li {
+      display:flex;
+      gap:.5rem;
+      font-size:.9rem;
+      color:#374151;
+      line-height:1.35;
+      padding:.2rem 0;
+    }
+    .duty-list li strong { color:#1f2937; }
+    .duty-note { font-size:.8rem; color:#6b7280; margin:.5rem 0 0; }
+    @media (min-width:992px) {
+      .dash-layout {
+        max-width:940px;
+        grid-template-columns:minmax(0,600px) 300px;
+        grid-template-areas:"main duty";
+        column-gap:1.5rem;
+      }
+      .duty-panel { align-self:start; position:sticky; top:1rem; }
+    }
     .totals-row.grand {
       border-top:2px solid #e5e7eb;
       margin-top:.5rem;
@@ -288,7 +335,20 @@
   </form>
 </div>
 
-<div class="container py-3" style="max-width:600px;">
+<div class="dash-layout">
+
+<aside class="duty-panel">
+  <div class="duty-card">
+    <div class="duty-title">🧳 Every trip — no exceptions</div>
+    <ul class="duty-list">
+      <li><span>⬆️</span><span><strong>Pickup:</strong> load the customer's luggage into the vehicle for them.</span></li>
+      <li><span>⬇️</span><span><strong>Drop-off:</strong> take the luggage out and hand it to the customer.</span></li>
+    </ul>
+    <p class="duty-note">Customers should never have to lift their own bags. This is part of the job and part of what they paid for.</p>
+  </div>
+</aside>
+
+<div class="dash-main">
 
   {% if not agreement_confirmed %}
   <a href="{% url 'blog:driver_agreement' %}"
@@ -624,7 +684,8 @@
   {% endif %}
   
 
-</div>
+</div>{# /dash-main #}
+</div>{# /dash-layout #}
 
 <script>
   function completeTrip(postId) {
