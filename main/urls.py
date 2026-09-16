@@ -21,11 +21,12 @@ def serve_sitemap(request, filename):
 
 
 # TWA (Trusted Web Activity) Digital Asset Links verification for the
-# EasyGo Driver Android app on Play Store. Two fingerprints are listed
+# EasyGo Driver Android app on Play Store. Several fingerprints are listed
 # because Play App Signing re-signs the distributed app with a Google-held
 # key, so both the original PWABuilder upload keystore (used to sign the
-# uploaded AAB) and the Play App Signing certificate (what actually ships
-# to users) need to verify.
+# uploaded AAB) and every Play App Signing certificate that has shipped to
+# users need to verify. Play rotated the app signing key to a quantum-ready
+# one, so the superseded certificate stays listed alongside the current one.
 def serve_assetlinks(request):
     return JsonResponse([{
         "relation": ["delegate_permission/common.handle_all_urls"],
@@ -35,6 +36,7 @@ def serve_assetlinks(request):
             "sha256_cert_fingerprints": [
                 "F3:11:B8:63:D5:C6:55:BB:6D:D2:D3:00:54:0E:9B:E3:2A:44:3B:D3:8D:7D:36:17:F2:4D:93:AA:A1:D7:A8:49",
                 "EA:44:59:DE:05:63:EA:58:A3:EF:6A:B6:AA:B8:62:B8:7F:77:23:45:3E:01:CA:7D:62:A6:43:A5:FA:9A:A6:96",
+                "66:E0:B8:C2:11:08:D1:E5:17:31:48:09:F8:E2:04:35:20:2E:D1:56:6E:6B:B1:BE:EB:40:DC:7D:C2:0A:84:72",
             ],
         },
     }], safe=False)
