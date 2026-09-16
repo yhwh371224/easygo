@@ -102,7 +102,7 @@ def search_survey(request):
     and report what they found. Saved to SearchSurveyResponse (queryable in
     admin) and mirrored out via email + Telegram so it's seen right away —
     same pattern as blog.driver_views.driver_apply."""
-    from blog.models import SearchSurveyResponse
+    from easygo_review.models import SearchSurveyResponse
 
     error = None
     submitted = False

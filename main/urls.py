@@ -8,7 +8,8 @@ from django.conf.urls.static import static
 from django.http import FileResponse, Http404, HttpResponse, JsonResponse
 from email_agent.views import GmailWebhookView
 from basecamp.views import stripe_webhook
-from blog import bird_webhooks, driver_views, search_survey_views
+from blog import bird_webhooks, driver_views
+from easygo_review import search_survey_views
 from decouple import config
 
 
