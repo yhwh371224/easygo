@@ -90,6 +90,15 @@ GST_KEYWORD_RULES = [
     (('SPINTEL', '617704 PAYPAL'), 'gst'),
     (('TELSTRA', 'OPTUS', 'VODAFONE', 'TPG', 'AUSSIE BROADBAND',
       'BELONG', 'INTERNET', 'MOBILE'), 'gst'),
+    # ENEX SERVICES PTY LTD — subcontractor payouts (see the matching category
+    # rule below). GST-registered, billed GST-inclusive (confirmed by the owner
+    # 2026-09-16). This needs its own rule for the same reason the category
+    # rule does: 'SERVICE' is a substring of 'ENEX SERVICES', so without it the
+    # row picks up GST from the vehicle_maintenance keyword by accident rather
+    # than by decision. It lands on 'gst' either way today, but the treatment
+    # must be explicit so a future change to the maintenance rule cannot
+    # silently move a subcontractor payout with it.
+    (('ENEX',), 'gst'),
     # 'ULTRA TUNE' = Ultra Tune Artarmon, car servicing/mechanic — confirmed
     # a business vehicle cost by the owner (2026-09-09), always GST-inclusive.
     # Bank rows for this merchant carry varying prefixes (e.g. 'ZLR*Ultra
