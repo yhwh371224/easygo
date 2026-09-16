@@ -271,6 +271,40 @@
     color:var(--ink-soft);
     margin:0;
   }
+  .code-card{
+    margin:22px auto 4px;
+    max-width:340px;
+    border:2px dashed var(--orange);
+    border-radius:14px;
+    background:var(--orange-wash);
+    padding:18px 16px;
+  }
+  .code-card .code-label{
+    font-size:11px;
+    letter-spacing:1.4px;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+    margin:0 0 6px;
+  }
+  .code-card .code{
+    font-family:'Archivo', ui-monospace, monospace;
+    font-weight:900;
+    font-size:28px;
+    letter-spacing:3px;
+    color:var(--ink);
+    margin:0;
+  }
+  .code-card .code-amount{
+    font-size:15px;
+    font-weight:700;
+    color:var(--orange-deep);
+    margin:8px 0 0;
+  }
+  .code-card .code-expiry{
+    font-size:12px;
+    color:var(--ink-faint);
+    margin:4px 0 0;
+  }
 
   footer{
     margin-top:32px;
@@ -297,7 +331,21 @@
   <div class="steps">
     <div class="step success-card">
       <p class="big">Thanks — we've got it! 🎉</p>
-      <p>Your answers have been recorded. Keep an eye on your inbox for a discount code for your next booking.</p>
+      <p>Your answers have been recorded. This really helps us make the site easier to use.</p>
+      {% comment %}
+      할인 코드 안내는 일단 보류 (2026-09-16). 설문에 참여했다고 할인까지 주는 건
+      과하다고 판단 — 발급/메일 기능은 그대로 남겨뒀으니 다시 주기로 하면
+      blog/search_survey_views.py 의 발급 호출과 함께 이 블록만 되살리면 된다.
+      {% endcomment %}
+      {% if discount_code %}
+      <div class="code-card">
+        <p class="code-label">Your discount code</p>
+        <p class="code">{{ discount_code }}</p>
+        <p class="code-amount">${{ discount_amount }} off your next trip</p>
+        {% if discount_expires %}<p class="code-expiry">Valid until {{ discount_expires|date:"j F Y" }}</p>{% endif %}
+      </div>
+      <p style="margin-top:16px;">Quote this code when you book and we'll take ${{ discount_amount }} off your fare.</p>
+      {% endif %}
     </div>
   </div>
   {% else %}
@@ -394,8 +442,11 @@
         <span class="step-title">Leave your details and submit</span>
       </div>
       <div class="step-body">
-        <p class="step-desc">Add your name and email so we can send you a discount code.</p>
+        <p class="step-desc">Add your name and email so we know who the feedback came from.</p>
+        {% comment %}
+        할인 약속 문구 보류 (2026-09-16). 다시 주기로 하면 아래 perk 배너를 되살린다.
         <div class="perk">🎁 <span><b>Everyone who takes part</b> gets a <b>discount code</b> emailed to them for their next booking.</span></div>
+        {% endcomment %}
         <div class="row2">
           <div class="field">
             <label for="name">Name</label>
@@ -412,7 +463,7 @@
         {% endif %}
 
         <button type="submit" class="submit-btn">Submit Survey</button>
-        <p class="hint">Your email is only used to send your discount code — it won't be shared.</p>
+        <p class="hint">Your email is only used to follow up on your feedback — it won't be shared.</p>
       </div>
     </div>
 

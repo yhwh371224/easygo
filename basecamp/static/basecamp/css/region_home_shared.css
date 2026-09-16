@@ -31,3 +31,41 @@
 
 @media (max-width: 576px) { #region-hero { min-height: 62vh; background-position: center; } }
 @media (max-width: 767.98px) { .award-badge { top: 35vh !important; bottom: auto !important; transform: none !important; } }
+
+/* ── Website survey banner (홈 5종 공용) ─────────────────────────────
+   설문에 참여하면 할인 코드를 메일로 보내준다. 예약 폼 아래에 붙는
+   얇은 띠라서 히어로/폼의 시선을 뺏지 않는다. */
+.survey-banner {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: .7rem 1rem;
+  border: 1px solid rgba(243,128,32,.35);
+  border-radius: .5rem;
+  background: #fff7ef;
+  color: #2b2b2b;
+  text-decoration: none !important;
+  transition: background-color .15s ease, box-shadow .15s ease, transform .1s ease;
+}
+.survey-banner:hover, .survey-banner:focus {
+  background: #ffefdf;
+  box-shadow: 0 4px 16px rgba(0,0,0,.08);
+  transform: translateY(-1px);
+  color: #2b2b2b;
+}
+.survey-banner__icon { flex: 0 0 auto; font-size: 1.2rem; line-height: 1; }
+.survey-banner__text { flex: 1 1 0; min-width: 0; font-size: .875rem; line-height: 1.45; }
+.survey-banner__text b { font-weight: 700; color: #b8560f; }
+.survey-banner__cta {
+  flex: 0 0 auto;
+  font-size: .8125rem;
+  font-weight: 700;
+  white-space: nowrap;
+  color: #f38020;
+}
+
+@media (max-width: 575.98px) {
+  .survey-banner { flex-wrap: wrap; gap: .55rem; padding: .65rem .8rem; }
+  .survey-banner__text { font-size: .8125rem; }
+  .survey-banner__cta { flex: 1 1 100%; padding-left: 1.95rem; }
+}

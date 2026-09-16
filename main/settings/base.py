@@ -85,6 +85,7 @@ TEMPLATES = [
                 'csp.context_processors.nonce',
                 'basecamp.context_processors.add_custom_context',
                 'basecamp.context_processors.bank_settings',
+                'basecamp.context_processors.survey_discount',
                 'basecamp.context_processors.turnstile_site_key',
                 'basecamp.context_processors.navbar_defaults',
                 'regions.context_processors.region_config',
@@ -150,3 +151,8 @@ SESSION_COOKIE_SIGNED = True
 
 DEFAULT_BANK_CODE = 'commbank'
 GOOGLE_ANALYTICS_ID = 'G-YZ51V54FK0'
+
+# search-survey(설문) 참여자에게 자동으로 나가는 할인 코드.
+# 금액은 달러 정액 — 예약의 discount 필드에 그대로 넣으면 되도록 맞췄다.
+SURVEY_DISCOUNT_AMOUNT = config('SURVEY_DISCOUNT_AMOUNT', default=10, cast=int)
+SURVEY_DISCOUNT_VALID_DAYS = config('SURVEY_DISCOUNT_VALID_DAYS', default=90, cast=int)

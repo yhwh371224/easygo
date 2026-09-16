@@ -16,6 +16,14 @@ def add_custom_context(request):
         'subtitle': 'Welcome to the admin panel',  
     }
 
+def survey_discount(request):
+    """홈 배너 문구의 할인 금액. 설정값을 그대로 내려서 .env 에서 금액을
+    바꾸면 배너와 메일이 같이 따라오게 한다."""
+    return {
+        'SURVEY_DISCOUNT_AMOUNT': getattr(settings, 'SURVEY_DISCOUNT_AMOUNT', 10)
+    }
+
+
 def bank_settings(request):
     return {
         'DEFAULT_BANK': getattr(settings, 'DEFAULT_BANK_CODE', 'anz')

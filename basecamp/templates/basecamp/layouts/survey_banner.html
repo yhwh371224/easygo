@@ -1,0 +1,20 @@
+{% comment %}
+홈(시드니 + 지역 4종) 공용 설문 배너.
+예약 폼과 경쟁하지 않도록 폼 섹션 바로 아래에 얇은 띠로 넣는다.
+스타일은 5개 홈이 모두 불러오는 region_home_shared.css 에 있다.
+
+할인 약속 문구는 보류 (2026-09-16). 다시 주기로 하면 아래 문구를
+"Tell us how you found our website and get <b>${{ SURVEY_DISCOUNT_AMOUNT }} off</b>
+your next booking." 로 되돌리고, search_survey.html / search_survey_views.py 의
+안내·발급 블록도 같이 되살린다.
+{% endcomment %}
+<section class="container pt-3 pb-1">
+  <a class="survey-banner" href="{% url 'search_survey' %}" rel="nofollow">
+    <span class="survey-banner__icon" aria-hidden="true">💬</span>
+    <span class="survey-banner__text">
+      <b>Got 5 minutes?</b> Tell us how you found our website — your feedback
+      helps us make booking easier for everyone.
+    </span>
+    <span class="survey-banner__cta">Take the survey &rarr;</span>
+  </a>
+</section>
