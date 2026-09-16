@@ -1568,6 +1568,7 @@ class AgreementConsentTests(TestCase):
             'invoice_email': 'invoices@drv.example.com',
             'item_status_confirmed': 'on',
             'item_liability_confirmed': 'on',
+            'item_luggage_confirmed': 'on',
         }
         data.update(extra)
         return self.client.post(reverse('blog:driver_agreement'), data)

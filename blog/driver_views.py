@@ -834,6 +834,15 @@ def _agreement_items(driver):
                     "between pickup and drop-off."
                 ),
             },
+            {
+                'field': 'item_luggage_confirmed',
+                'title': 'Luggage handling',
+                'detail': (
+                    "Our drivers load the customer's luggage into the vehicle "
+                    "at pickup and unload it for the customer at drop-off, on "
+                    "every trip. Customers are never left to lift their own bags."
+                ),
+            },
         ]
 
     items = [
@@ -855,6 +864,15 @@ def _agreement_items(driver):
                 "and reward, and I am responsible for any damage or "
                 "liability arising from my own driving and vehicle, including "
                 "anything that occurs between pickup and drop-off."
+            ),
+        },
+        {
+            'field': 'item_luggage_confirmed',
+            'title': 'Luggage handling',
+            'detail': (
+                "I load the customer's luggage into the vehicle at pickup and "
+                "unload it for the customer at drop-off, on every trip. "
+                "Customers are never left to lift their own bags."
             ),
         },
     ]
