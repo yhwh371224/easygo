@@ -189,13 +189,42 @@ def sync_settlement_expense(settlement):
             existing.delete()
         return
 
-    if driver.gst_registered:
+    # expense_gst can be zero even for a registered driver — every item whose
+    # pickup_date predates GST_REGISTRATION_DATE contributes 0, because the
+    # customer price had no GST embedded to extract. Saying gst_code='gst' with
+    # gst_amount=0 is then actively harmful: build_bas() reads a zero amount as
+    # "not filled in" and synthesises gross/11 instead (accounting/reports.py),
+    # which claimed GST on pre-registration jobs. Only claim when there is
+    # something to claim.
+    if driver.gst_registered and expense_gst > Decimal('0'):
         gst_code, gst_amount = 'gst', expense_gst
     else:
         gst_code, gst_amount = 'no_gst', Decimal('0')
 
-    tx_date = (settlement.settled_at.date()
-               if settlement.settled_at else timezone.now().date())
+    # Book the cost on the day the driver was actually paid.
+    #
+    # settled_at is NOT that day — it defaults to timezone.now(), so it records
+    # when the settlement was *created*. Settling a past period late therefore
+    # dated the expense to the day the paperwork was done: an Apr-Jun payout
+    # entered in September landed in September's P&L.
+    #
+    # to_date is the reliable stand-in. Drivers are paid the day the job is
+    # done, so for the daily settlements (from_date == to_date) to_date IS the
+    # pickup date and the payment date. It also matches the convention already
+    # in the data: every backfilled paid_at sits exactly on its to_date.
+    #
+    # paid_at wins when it is set, for the one case that breaks the rule — a
+    # payout deferred to a later date (e.g. Don, whose Apr-Jun jobs were paid
+    # on 2026-08-31). localtime() matters there: these are aware datetimes, and
+    # .date() on the raw UTC value shifts an early-morning AEST payment back a
+    # day.
+    #
+    # Settlements with no claimable amount return above, so the LEGACY rows
+    # carrying a 2020-01-01 sentinel to_date never reach this.
+    if settlement.paid_at:
+        tx_date = timezone.localtime(settlement.paid_at).date()
+    else:
+        tx_date = settlement.to_date
 
     fields = dict(
         date=tx_date,

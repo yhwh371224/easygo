@@ -558,7 +558,11 @@
   {% for item in timeline %}
     {% if item.type == 'settlement' %}
       <div class="settlement-divider">
-        Settled {{ item.data.settled_at|date:"d M Y" }} &nbsp;${{ item.data.total_amount }}
+        {# 실제 송금일(paid_at)을 보여준다. settled_at 은 정산서를 '만든' 시각이라
+           (default=timezone.now) 과거 기간을 뒤늦게 정산하면 오늘 날짜가 찍혀
+           드라이버에게 엉뚱한 날 돈을 받은 것처럼 보였다. 아직 송금 전이라
+           paid_at 이 비어 있는 정산서만 settled_at 으로 대체한다. #}
+        Settled {{ item.data.paid_at|default_if_none:item.data.settled_at|date:"d M Y" }} &nbsp;${{ item.data.total_amount }}
       </div>
     {% else %}
       {% with post=item.data %}
