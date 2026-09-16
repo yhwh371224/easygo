@@ -392,6 +392,14 @@ def confirm_booking_prepay_detail(request):
     # 플래그가 막아주므로 중복 걱정 없음.
     send_post_confirmation_email_task.apply_async(args=[p.pk], countdown=600)
 
+    # 관리자가 'Send confirmation email now' 를 체크했으면 10분 기다리지 않고
+    # 바로 보낸다. 위 예약분은 sent_email 플래그에 막혀 그냥 no-op 이 된다.
+    if request.POST.get('send_confirmation_email') == 'on':
+        send_post_confirmation_email_task.delay(p.pk)
+
+    if request.POST.get('send_invoice') == 'on':
+        _send_invoice_for_new_booking(request, p)
+
     ip = get_client_ip(request)
     ip_info = get_ip_info(ip)
     try:
