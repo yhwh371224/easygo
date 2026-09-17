@@ -1397,6 +1397,30 @@ class DriverDashboardViewTests(TestCase):
 
         self.assertEqual(response.context['to_be_paid'], Decimal('200'))
         self.assertNotContains(response, '% Commission')
+        self.assertNotContains(response, 'Not GST registered')
+
+    def test_unregistered_driver_to_be_paid_is_net_of_non_gst_deduction(self):
+        """A driver not registered for GST is paid driver_price − 10%, the same
+        subcontractor_payout the settlement pays, and sees the deduction."""
+        user = make_user(username='ng1', password='TestPass1!')
+        driver = make_driver(user=user)
+        self.assertFalse(driver.gst_registered)   # default
+        driver.non_gst_deduction = True
+        driver.save()
+        post = self._past_post(driver, days_ago=2, price='210')
+        post.paid = '210'
+        post.save()
+
+        self.client.force_login(user)
+        response = self.client.get(self.url)
+        context = response.context
+
+        # driver_price 200 → 10% deduction 20 → owed 180.
+        self.assertEqual(context['current_grand_total'], Decimal('200'))
+        self.assertEqual(context['current_non_gst_deduction'], Decimal('20.00'))
+        self.assertEqual(context['to_be_paid'], Decimal('180.00'))
+        self.assertEqual(context['to_be_paid'], post.subcontractor_payout)
+        self.assertContains(response, 'Not GST registered (−10%)')
 
 
 # ---------------------------------------------------------------------------
@@ -1468,6 +1492,64 @@ class DriverImpersonateViewTests(TestCase):
         response = self.client.get(url)
         self.assertRedirects(response, reverse('blog:driver_dashboard'))
         self.assertIn('impersonator_id', self.client.session)
+
+
+# ---------------------------------------------------------------------------
+# Non-GST deduction (drivers not registered for GST are paid driver_price − 10%)
+# ---------------------------------------------------------------------------
+
+class NonGstDeductionTests(TestCase):
+
+    def _driver(self):
+        driver = make_driver()
+        driver.non_gst_deduction = True
+        driver.save()
+        return driver
+
+    def _post(self, driver, pickup_date, price='210'):
+        with patch('blog.bird_proxy.create_bird_mapping', return_value=True), \
+             patch('blog.bird_proxy.close_bird_mapping', return_value=True):
+            return Post.objects.create(
+                name='Pax', email='p@x.com', no_of_passenger='1',
+                price=price, driver=driver,
+                pickup_date=pickup_date, pickup_time='10:00',
+            )
+
+    def test_unregistered_driver_deducted(self):
+        post = self._post(self._driver(), datetime.date(2026, 7, 1))
+        self.assertEqual(post.non_gst_deduction, Decimal('20.00'))
+        self.assertEqual(post.subcontractor_payout, Decimal('180.00'))
+
+    def test_registered_driver_not_deducted(self):
+        driver = self._driver()
+        driver.gst_registered = True
+        driver.save()
+        post = self._post(driver, datetime.date(2026, 7, 1))
+        self.assertEqual(post.non_gst_deduction, Decimal('0'))
+        self.assertEqual(post.subcontractor_payout, Decimal('200.00'))
+
+    def test_pickup_before_gst_registration_not_deducted(self):
+        # Before 2026-07-01 the customer price had no GST in it.
+        post = self._post(self._driver(), datetime.date(2026, 6, 30))
+        self.assertEqual(post.non_gst_deduction, Decimal('0'))
+
+    def test_driver_not_switched_on_not_deducted(self):
+        # Off by default — staff tick it by hand after checking the ABN.
+        driver = make_driver()
+        self.assertFalse(driver.non_gst_deduction)
+        post = self._post(driver, datetime.date(2026, 7, 1))
+        self.assertEqual(post.non_gst_deduction, Decimal('0'))
+
+    def test_settlement_pays_net_amount(self):
+        from blog.services.settlement_service import SettlementService
+        driver = self._driver()
+        pickup = datetime.date(2026, 7, 1)
+        self._post(driver, pickup)
+        with patch('blog.services.settlement_service.generate_settlement_number',
+                   return_value='TEST-NG-SET-01'):
+            settlement = SettlementService.create_settlement(driver, pickup, pickup)
+        self.assertEqual(settlement.items.get().line_total, Decimal('180.00'))
+        self.assertEqual(settlement.paid_total, Decimal('180.00'))
 
 
 # ---------------------------------------------------------------------------

@@ -31,8 +31,8 @@ class CreateSettlementForm(forms.Form):
 
 
 class DriverAdmin(admin.ModelAdmin):
-    list_display = ['order', 'driver_name', 'impersonate_button', 'region', 'abn', 'gst_registered', 'commission_rate', 'driver_contact', 'driver_plate', 'user']
-    list_editable = ['gst_registered', 'commission_rate']
+    list_display = ['order', 'driver_name', 'impersonate_button', 'region', 'abn', 'gst_registered', 'non_gst_deduction', 'commission_rate', 'driver_contact', 'driver_plate', 'user']
+    list_editable = ['gst_registered', 'non_gst_deduction', 'commission_rate']
     list_filter = ['is_active', 'region', 'gst_registered', 'is_company', 'settle_daily', 'has_vehicle_insurance']
     search_fields = ['driver_name', 'abn', 'driver_contact', 'driver_email', 'driver_address', 'driver_plate', 'license_number']
     ordering = ['order']
@@ -383,7 +383,7 @@ class PostAdmin(admin.ModelAdmin):
     search_fields = ['pickup_date', 'pickup_time', 'suburb', 'email', 'street', 'booker_email', 'booker_name',
                      'booker_contact', 'name', 'contact', 'price', 'paid', 'email1', 'message', 'notice', 'region__name',
                      'driver__driver_name']
-    readonly_fields = ['suburb_distance_km', 'suburb_base_price', 'commission_amount_display', 'subcontractor_payout_display']
+    readonly_fields = ['suburb_distance_km', 'suburb_base_price', 'commission_amount_display', 'non_gst_deduction_display', 'subcontractor_payout_display']
     actions = ['duplicate_bookings']
 
     # price / paid / driver_price are CharFields holding numeric strings, so
@@ -520,7 +520,7 @@ class PostAdmin(admin.ModelAdmin):
         }),
         ('Pricing', {
             'fields': ['suburb_distance_km', 'suburb_base_price', 'price', 'paid', 'discount', 'toll', 'surcharge',
-                       'driver_price', 'commission_rate', 'commission_amount_override', 'commission_amount_display', 'subcontractor_payout_display',
+                       'driver_price', 'commission_rate', 'commission_amount_override', 'commission_amount_display', 'non_gst_deduction_display', 'subcontractor_payout_display',
                        'deposit_amount_due', 'refund', 'driver_refund_deduction',
                        'paypal_dispute_case_id', 'paypal_dispute_opened_at']
         }),
@@ -577,6 +577,10 @@ class PostAdmin(admin.ModelAdmin):
             return f"${obj.commission_amount} (flat override)"
         return f"${obj.commission_amount} ({obj.commission_rate}%)"
     commission_amount_display.short_description = "Commission"
+
+    def non_gst_deduction_display(self, obj):
+        return f"${obj.non_gst_deduction}"
+    non_gst_deduction_display.short_description = "Not GST registered (−10%)"
 
     def subcontractor_payout_display(self, obj):
         return f"${obj.subcontractor_payout}"

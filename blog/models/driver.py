@@ -125,6 +125,12 @@ class Driver(models.Model):
                    '경우 체크. Agreement 페이지 문구가 회사용으로 바뀌고, 확인은 그 회사 '
                    '담당자 이름/직책으로 기록됨.',
     )
+    non_gst_deduction = models.BooleanField(
+        default=False,
+        help_text='GST 미등록 드라이버에게서 driver_price 의 10%를 빼고 지급 '
+                  '(2026-07-01 이후 픽업분). GST 등록 드라이버는 체크와 상관없이 '
+                  '공제 안 함. 자동으로 켜지지 않음 — ABN 확인 후 수동으로 체크.',
+    )
     settle_daily = models.BooleanField(
         default=True,
         help_text='일이 끝나면 그날 바로 정산받는 드라이버. 매일 밤 크론'

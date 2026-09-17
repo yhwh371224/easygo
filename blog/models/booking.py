@@ -8,6 +8,10 @@ from utils.prepay_helper import is_foreign_number
 # Commission is handled separately via each Driver's own commission_rate=0.
 OWNER_DRIVER_NAMES = {'sam', 'sung', 'peter'}
 
+# % of driver_price held back from drivers not registered for GST
+# (see Post.non_gst_deduction).
+NON_GST_DEDUCTION_RATE = Decimal('10')
+
 
 class Inquiry(models.Model):
     name = models.CharField(max_length=100, blank=False)
@@ -347,17 +351,45 @@ class Post(models.Model):
         return commission.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
 
     @property
+    def non_gst_deduction(self):
+        """Held back from a driver who is not registered for GST:
+        driver_price × NON_GST_DEDUCTION_RATE%. The customer price is
+        GST-inclusive, but an unregistered driver gives us no GST credit to
+        claim, so they are paid the lower rate.
+
+        Opt-in per driver (Driver.non_gst_deduction), ticked by hand in the
+        admin after the ABN is checked — never switched on automatically.
+        Only for pickups on/after GST_REGISTRATION_DATE — before that the price
+        had no GST in it. Follows the driver's current flags; settlement items
+        snapshot the result, so flipping them later doesn't touch past
+        settlements."""
+        from accounting.conf import GST_REGISTRATION_DATE
+        driver = self.driver
+        if (
+            driver is None
+            or driver.gst_registered
+            or not driver.non_gst_deduction
+            or self.pickup_date is None
+            or self.pickup_date < GST_REGISTRATION_DATE
+        ):
+            return Decimal('0')
+        deduction = self._driver_price_decimal * NON_GST_DEDUCTION_RATE / Decimal('100')
+        return deduction.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+
+    @property
     def _driver_refund_deduction_decimal(self):
         """driver_refund_deduction is a DecimalField (default 0, but guard None)."""
         return self.driver_refund_deduction or Decimal('0')
 
     @property
     def subcontractor_payout(self):
-        """What the subcontractor is paid: driver_price − commission − the driver's
-        share of any customer refund (driver_refund_deduction). Display/calc only."""
+        """What the subcontractor is paid: driver_price − commission − non-GST
+        deduction − the driver's share of any customer refund
+        (driver_refund_deduction). Display/calc only."""
         payout = (
             self._driver_price_decimal
             - self.commission_amount
+            - self.non_gst_deduction
             - self._driver_refund_deduction_decimal
         )
         return payout.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)

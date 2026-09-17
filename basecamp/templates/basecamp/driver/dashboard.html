@@ -679,6 +679,13 @@
       <span>−${{ current_commission }}</span>
     </div>
     {% endif %}
+    {# GST 미등록 드라이버: 2026-07-01 이후 트립의 driver_price 10% 공제. 공제분이 없으면 숨긴다 #}
+    {% if current_non_gst_deduction %}
+    <div class="totals-row">
+      <span>Not GST registered (−10%)</span>
+      <span>−${{ current_non_gst_deduction }}</span>
+    </div>
+    {% endif %}
     <div class="totals-row" style="border-top:1px dashed #e5e7eb; margin-top:.75rem; padding-top:.75rem; background:#fffbeb; border-radius:8px; padding:.65rem .75rem; color:#92400e; font-weight:600; font-size:.95rem;">
       <span>💰 To be paid to {{ driver.driver_name }}</span>
       <span id="to-be-paid-amount">${{ to_be_paid }}</span>
