@@ -672,6 +672,13 @@
       <span>Grand Total</span>
       <span>${{ current_grand_total }}</span>
     </div>
+    {# 커미션이 책정되지 않은 드라이버(commission_rate 0)에게는 줄 자체를 숨긴다 #}
+    {% if driver.commission_rate %}
+    <div class="totals-row">
+      <span>{{ driver.commission_rate|floatformat:"-2" }}% Commission</span>
+      <span>−${{ current_commission }}</span>
+    </div>
+    {% endif %}
     <div class="totals-row" style="border-top:1px dashed #e5e7eb; margin-top:.75rem; padding-top:.75rem; background:#fffbeb; border-radius:8px; padding:.65rem .75rem; color:#92400e; font-weight:600; font-size:.95rem;">
       <span>💰 To be paid to {{ driver.driver_name }}</span>
       <span id="to-be-paid-amount">${{ to_be_paid }}</span>

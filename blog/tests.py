@@ -1363,6 +1363,41 @@ class DriverDashboardViewTests(TestCase):
         # driver_price defaults to price − 10 → only the unsettled 110 job counts.
         self.assertEqual(context['to_be_paid'], Decimal('100'))
 
+    def test_commission_driver_to_be_paid_is_net_of_commission(self):
+        """A driver on a commission rate is owed driver_price − commission, the
+        same subcontractor_payout the settlement pays, and sees the deduction."""
+        user = make_user(username='cm1', password='TestPass1!')
+        driver = make_driver(user=user)
+        driver.commission_rate = Decimal('5.00')
+        driver.save()
+        post = self._past_post(driver, days_ago=2, price='210')
+        post.paid = '210'
+        post.save()
+
+        self.client.force_login(user)
+        response = self.client.get(self.url)
+        context = response.context
+
+        # driver_price 200 → 5% commission 10 → owed 190.
+        self.assertEqual(context['current_grand_total'], Decimal('200'))
+        self.assertEqual(context['current_commission'], Decimal('10.00'))
+        self.assertEqual(context['to_be_paid'], Decimal('190.00'))
+        self.assertEqual(context['to_be_paid'], post.subcontractor_payout)
+        self.assertContains(response, '5% Commission')
+
+    def test_no_commission_row_for_driver_without_rate(self):
+        user = make_user(username='cm2', password='TestPass1!')
+        driver = make_driver(user=user)
+        post = self._past_post(driver, days_ago=2, price='210')
+        post.paid = '210'
+        post.save()
+
+        self.client.force_login(user)
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.context['to_be_paid'], Decimal('200'))
+        self.assertNotContains(response, '% Commission')
+
 
 # ---------------------------------------------------------------------------
 # View: driver_change_password

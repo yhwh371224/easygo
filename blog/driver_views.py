@@ -656,6 +656,11 @@ def driver_dashboard(request):
     # 못 들어간 트립이 '받을 돈'에서 사라졌다.
     current_total_paid = Decimal('0')
     current_total_cash = Decimal('0')
+    # 'To be paid' 에서 빠지는 회사 커미션. 정산서가 드라이버에게 주는 금액은
+    # post.subcontractor_payout(driver_price − commission − 환불분담)이라, 같은
+    # post.commission_amount 를 써야 대시보드와 정산서 금액이 어긋나지 않는다.
+    # cash 건은 애초에 'To be paid' 에 없으므로 커미션도 paid 건에서만 모은다.
+    current_commission = Decimal('0')
 
     for post in list(past_posts) + list(balance_posts_today):
         try:
@@ -668,12 +673,13 @@ def driver_dashboard(request):
             current_total_cash += amount
         elif post.paid:
             current_total_paid += amount
+            current_commission += post.commission_amount
 
     current_grand_total = current_total_paid + current_total_cash
 
     # 미정산분이 곧 회사가 줘야 할 돈. cash 건은 드라이버가 이미 손님한테서
     # 받아 쥔 돈이라 'To be paid' 에는 들어가지 않는다.
-    to_be_paid = current_total_paid
+    to_be_paid = current_total_paid - current_commission
     to_be_cash = current_total_cash
 
     # 예정 금액: 모레 이후 트립 중 배정+proxy 연결된 것만 (아직 정산 대상 아님, 참고용 별도 라인)
@@ -709,6 +715,7 @@ def driver_dashboard(request):
         'current_total_paid': current_total_paid,
         'current_total_cash': current_total_cash,
         'current_grand_total': current_grand_total,
+        'current_commission': current_commission,
         'to_be_paid': to_be_paid,
         'pending_total': pending_total,
         'impersonator_id': request.session.get('impersonator_id'),
