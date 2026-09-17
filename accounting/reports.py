@@ -293,6 +293,8 @@ def build_pnl(start, end, brand=BRAND_ALL):
         reported as an unallocated, company-wide line and EXCLUDED from the
         brand net profit (keeps shuttle + coaches + unallocated == all).
     """
+    from blog.models import Post
+
     if brand not in VALID_BRANDS:
         brand = BRAND_ALL
 
@@ -305,7 +307,27 @@ def build_pnl(start, end, brand=BRAND_ALL):
     if brand != BRAND_ALL:
         tx = tx.filter(brand=brand)
 
-    income_total = _sum(tx.filter(direction='income'), 'gross_amount')
+    income_transactions = _sum(tx.filter(direction='income'), 'gross_amount')
+
+    # Booking income — Post has no brand field (all Post rows are shuttle),
+    # so this only applies to the 'all' and 'shuttle' views. Excludes
+    # cancelled and cash bookings, and nets each row's refund off its paid
+    # amount (mirrors build_sales_gst's cash-basis treatment).
+    income_bookings = ZERO
+    if brand in (BRAND_ALL, 'shuttle'):
+        posts = (
+            Post.objects
+            .filter(pickup_date__gte=start, pickup_date__lte=end,
+                    cancelled=False, cash=False)
+            .exclude(paid__isnull=True).exclude(paid='').exclude(paid='TBA')
+            .only('paid', 'refund')
+        )
+        for post in posts:
+            net = to_decimal_safe(post.paid) - (post.refund or ZERO)
+            if net > ZERO:
+                income_bookings += net
+
+    income_total = income_transactions + income_bookings
 
     expense_qs = tx.filter(direction='expense')
 
@@ -348,6 +370,8 @@ def build_pnl(start, end, brand=BRAND_ALL):
         'brand': brand,
         'is_all': is_all,
         'income_total': income_total,
+        'income_bookings': income_bookings,
+        'income_transactions': income_transactions,
         'expense_total': expense_total,
         'expense_breakdown': expense_breakdown,
         'non_deductible_total': non_deductible_total,

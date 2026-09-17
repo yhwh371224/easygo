@@ -71,6 +71,14 @@
       <th>Income</th>
       <td class="num">{{ pnl.income_total|floatformat:2|intcomma }}</td>
     </tr>
+    <tr>
+      <td style="padding-left:2em;">&mdash; Bookings (Post.paid, net of refund; excl. cash &amp; cancelled)</td>
+      <td class="num">{{ pnl.income_bookings|floatformat:2|intcomma }}</td>
+    </tr>
+    <tr>
+      <td style="padding-left:2em;">&mdash; Other (Transactions)</td>
+      <td class="num">{{ pnl.income_transactions|floatformat:2|intcomma }}</td>
+    </tr>
 
     <tr>
       <th>Expenses (Transactions)</th>
