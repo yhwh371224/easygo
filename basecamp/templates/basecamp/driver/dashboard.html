@@ -618,13 +618,15 @@
   {% for item in timeline %}
     {% if item.type == 'settlement' %}
       <div class="settlement-divider">
-        {# 실제 송금일을 보여준다. 규칙은 sync_settlement_expense() 와 동일하게
+        {% comment %}
+           실제 송금일을 보여준다. 규칙은 sync_settlement_expense() 와 동일하게
            paid_at -> to_date 다 (blog/services/settlement_service.py). 드라이버는
            일한 당일 지급받으므로 to_date 가 곧 지급일이고, daily 정산은 to_date
            가 픽업일이기도 하다. settled_at 은 쓰지 않는다 — 정산서를 '만든'
            시각이라(default=timezone.now) 정산 크론이 다음 날 돌거나 과거 기간을
            뒤늦게 정산하면 엉뚱한 날짜가 찍힌다. paid_at 은 지급이 미뤄진
-           예외(Don)에만 채워지고, 그때는 그 값이 이긴다. #}
+           예외(Don)에만 채워지고, 그때는 그 값이 이긴다.
+        {% endcomment %}
         Settled {{ item.data.paid_at|default_if_none:item.data.to_date|date:"d M Y" }} &nbsp;${{ item.data.total_amount }}
       </div>
     {% else %}
