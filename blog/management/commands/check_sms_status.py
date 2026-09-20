@@ -26,7 +26,8 @@ class Command(BaseCommand):
             type=int,
             default=None,
             metavar="N",
-            help="SID 를 직접 주는 대신, logs/sms.log 에서 가장 최근 SMS SENT 로그 N건을 찾아 확인한다.",
+            help="SID 를 직접 주는 대신, logs/sms.log 에서 가장 최근 SMS SENT 로그 N건을 찾아 확인한다. "
+            "(아무 인자 없이 실행하면 기본값 3건)",
         )
 
     def handle(self, *args, **options):
@@ -34,8 +35,7 @@ class Command(BaseCommand):
         recent = options["recent"]
 
         if not sids and not recent:
-            self.stderr.write(self.style.ERROR("SID 를 지정하거나 --recent N 을 사용하세요."))
-            return
+            recent = 3  # 아무 인자 없이 실행하면 최근 3건을 보여준다
 
         entries = []  # list of (sid, to) — to 는 없으면 None
         if recent:
