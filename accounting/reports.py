@@ -65,6 +65,40 @@ def to_decimal_safe(value):
             return ZERO
 
 
+_PAYPAL_SURCHARGE_RATE = Decimal('1.03')
+
+
+def paypal_surcharge_total(start, end):
+    """Sum the 3% PayPal card surcharge received between start and end.
+
+    notify_user_payment_paypal (blog/tasks.py) applies only amount ÷ 1.03 to
+    Post.paid, so the surcharge never reaches the booking-based income. It is
+    still taxable revenue, so it is added here from the PayPal IPN rows,
+    dated by when the money moved (created).
+
+    Refunds (negative amount) subtract their own surcharge portion, so a
+    cancelled + refunded booking leaves no surcharge behind. The base portion
+    of a refund is netted on the booking side via Post.refund, which
+    _auto_fill_post_refund stores ex-surcharge for PayPal. Disputes are not
+    netted here.
+    """
+    from blog.models import PaypalPayment
+
+    total = ZERO
+    for pm in PaypalPayment.objects.filter(
+        created__date__gte=start, created__date__lte=end,
+    ).exclude(amount__isnull=True).exclude(amount=0).only(
+        'amount', 'payment_status', 'txn_type', 'case_id',
+    ):
+        if pm.kind not in (PaypalPayment.KIND_PAYMENT, PaypalPayment.KIND_REFUND):
+            continue
+        # quantize the base, not the surcharge, to mirror blog/tasks.py's
+        # round(amount / 1.03, 2) applied to Post.paid.
+        base = (pm.amount / _PAYPAL_SURCHARGE_RATE).quantize(_CENT, rounding=ROUND_HALF_UP)
+        total += pm.amount - base   # negative for a refund
+    return total
+
+
 # ---------------------------------------------------------------------------
 # Sales GST (1A) — cash basis, Post-based
 # ---------------------------------------------------------------------------
@@ -133,10 +167,21 @@ def build_sales_gst(year, quarter):
             online_paid += paid
             online_gst  += gst
 
+    # PayPal 3% surcharge (not in Post.paid) — online, dated by receipt.
+    q_start = date(year, 3 * quarter - 2, 1)
+    q_end = date(year, 3 * quarter, 31 if quarter in (1, 4) else 30)
+    surcharge = paypal_surcharge_total(max(q_start, GST_REGISTRATION_DATE), q_end)
+    surcharge_gst = (surcharge / _ELEVEN).quantize(_CENT, rounding=ROUND_HALF_UP)
+    total_paid  += surcharge
+    total_gst   += surcharge_gst
+    online_paid += surcharge
+    online_gst  += surcharge_gst
+
     return {
         'year': year,
         'quarter': quarter,
         'gst_registration_date': GST_REGISTRATION_DATE,
+        'paypal_surcharge': surcharge,
         'total_paid': total_paid,
         'total_gst_1a': total_gst,
         'cash_paid': cash_paid,
@@ -311,14 +356,16 @@ def build_pnl(start, end, brand=BRAND_ALL):
 
     # Booking income — Post has no brand field (all Post rows are shuttle),
     # so this only applies to the 'all' and 'shuttle' views. Excludes
-    # cancelled and cash bookings, and nets each row's refund off its paid
-    # amount (mirrors build_sales_gst's cash-basis treatment).
+    # cancelled bookings and cash a non-owner driver collected directly
+    # (driver_collected_cash — not company revenue); owner drivers' cash stays
+    # in. Nets each row's refund off its paid amount (mirrors build_sales_gst).
     income_bookings = ZERO
+    income_paypal_surcharge = ZERO
     if brand in (BRAND_ALL, 'shuttle'):
         posts = (
             Post.objects
             .filter(pickup_date__gte=start, pickup_date__lte=end,
-                    cancelled=False, cash=False)
+                    cancelled=False, driver_collected_cash=False)
             .exclude(paid__isnull=True).exclude(paid='').exclude(paid='TBA')
             .only('paid', 'refund')
         )
@@ -326,8 +373,9 @@ def build_pnl(start, end, brand=BRAND_ALL):
             net = to_decimal_safe(post.paid) - (post.refund or ZERO)
             if net > ZERO:
                 income_bookings += net
+        income_paypal_surcharge = paypal_surcharge_total(start, end)
 
-    income_total = income_transactions + income_bookings
+    income_total = income_transactions + income_bookings + income_paypal_surcharge
 
     expense_qs = tx.filter(direction='expense')
 
@@ -371,6 +419,7 @@ def build_pnl(start, end, brand=BRAND_ALL):
         'is_all': is_all,
         'income_total': income_total,
         'income_bookings': income_bookings,
+        'income_paypal_surcharge': income_paypal_surcharge,
         'income_transactions': income_transactions,
         'expense_total': expense_total,
         'expense_breakdown': expense_breakdown,

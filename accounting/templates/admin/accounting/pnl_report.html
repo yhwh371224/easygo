@@ -72,8 +72,12 @@
       <td class="num">{{ pnl.income_total|floatformat:2|intcomma }}</td>
     </tr>
     <tr>
-      <td style="padding-left:2em;">&mdash; Bookings (Post.paid, net of refund; excl. cash &amp; cancelled)</td>
+      <td style="padding-left:2em;">&mdash; Bookings (Post.paid, net of refund; excl. driver-collected cash &amp; cancelled)</td>
       <td class="num">{{ pnl.income_bookings|floatformat:2|intcomma }}</td>
+    </tr>
+    <tr>
+      <td style="padding-left:2em;">&mdash; PayPal 3% surcharge (by receipt date)</td>
+      <td class="num">{{ pnl.income_paypal_surcharge|floatformat:2|intcomma }}</td>
     </tr>
     <tr>
       <td style="padding-left:2em;">&mdash; Other (Transactions)</td>

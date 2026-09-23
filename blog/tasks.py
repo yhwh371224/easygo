@@ -1,5 +1,6 @@
 import os
 import logging
+from decimal import Decimal, ROUND_HALF_UP
 
 from django.db import transaction
 from django.db.models import Q
@@ -38,7 +39,14 @@ def _auto_fill_post_refund(instance):
     if post.refund:
         return None, match_count
 
-    post.refund = abs(instance.amount)
+    refund = abs(instance.amount)
+    if isinstance(instance, PaypalPayment):
+        # Post.paid holds PayPal payments ex the 3% surcharge (amount / 1.03),
+        # so store the refund on the same basis. The surcharge portion of the
+        # refund is netted in accounting.reports.paypal_surcharge_total.
+        refund = (refund / Decimal('1.03')).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+
+    post.refund = refund
     post.save(update_fields=['refund'])
     return post, match_count
 

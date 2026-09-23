@@ -72,11 +72,14 @@ class Command(BaseCommand):
 
         Priority:
         1. 'DRIVER ' prefix pattern — owner tags driver payments with this marker.
-        2. payment_match_digits — digit-normalized PayID / account suffix match
+        2. conf.DRIVER_PAYOUT_MARKERS — payee names exactly as the bank writes them.
+        3. payment_match_digits — digit-normalized PayID / account suffix match
            (tolerates +61 / leading 0 / spaces / hyphens). Skipped if empty.
-        3. driver_name fallback — word-boundary regex, 4+ chars only.
+        4. driver_name fallback — word-boundary regex, 4+ chars only.
         """
         if 'DRIVER ' in desc_upper:
+            return True
+        if self._contains_any(desc_upper, conf.DRIVER_PAYOUT_MARKERS):
             return True
         desc_digits = re.sub(r'\D', '', description)
         if any(d in desc_digits for d in self._driver_match_digits):

@@ -25,6 +25,15 @@ LOAN_SKIP_MARKERS = ['LOAN FROM DIRECTOR', 'LOAN REPAYMENT']
 # same payruns (confirmed 2026-08-05: $78 transfers match PayrollEntry.super_amount).
 SUPER_SKIP_MARKERS = ['PAYCLEAR', 'SUPERCHOICE']
 
+# Bank CSV import: driver/subcontractor payouts — already recorded as the
+# 'subcontract' expense by DriverSettlement -> sync_settlement_expense(), so the
+# bank row is skipped to avoid a P&L double-count. For payees the automatic
+# driver matching misses: the bank writes 'Transfer To A REZAI PayID Phone from
+# Net' (initial + surname, no PayID digits), which neither the full
+# driver_name regex nor payment_match_digits can catch.
+# 'A REZAI' = subcontractor, confirmed by the owner 2026-09-23.
+DRIVER_PAYOUT_MARKERS = ['A REZAI']
+
 # Bank CSV import: expense rows at/above this amount are held for human triage.
 REVIEW_THRESHOLD = Decimal('1000')
 
@@ -106,13 +115,20 @@ GST_KEYWORD_RULES = [
     # Bank rows for this merchant carry varying prefixes (e.g. 'ZLR*Ultra
     # Tune Artarmon Artarmon AU') that don't hit the generic 'AUTO'/'SERVICE'
     # keywords below, so it needs its own explicit match.
+    # 'YONGHOAN JUNG' (Lidcombe) = mobile mechanic called out to the vehicle,
+    # GST-inclusive (confirmed by the owner 2026-09-23). The bank row is just
+    # his name, e.g. 'YONGHOAN JUNG LIDCOMBE NSW AU'.
     (('SERVICE', 'MECHANIC', 'AUTO', 'TYRE', 'TYRES', 'REPCO',
       'SUPERCHEAP', 'PANEL', 'SMASH', 'CIRCUM VENDING', 'RIZKALLA',
-      'ULTRA TUNE'), 'gst'),
+      'ULTRA TUNE', 'YONGHOAN JUNG'), 'gst'),
     (('GOOGLE', 'META', 'FACEBOOK', 'MARKETING', 'ADVERTIS', 'SEO'), 'gst'),
     (('GROUP TRANSPORT',), 'gst'),
+    # 'OFFICEWORKS' = office supplies for the business (confirmed by the
+    # owner 2026-09-23), e.g. 'OFFICEWORKS 0202 ALEXANDRIA AU'. GST-inclusive.
+    # 'BUNNINGS' = business supplies, also confirmed by the owner 2026-09-23,
+    # e.g. 'BUNNINGS 594000 ARTARMON AU'. GST-inclusive.
     (('NORTH SYDNEY EXECUTIVE', 'VIRTUAL OFFICE', 'CWH',
-      'JB HI FI', 'JB HI-FI'), 'gst'),
+      'JB HI FI', 'JB HI-FI', 'OFFICEWORKS', 'BUNNINGS'), 'gst'),
     # 'COUNCI' (not 'COUNCIL') — CommBank truncates some council names, e.g.
     # 'WILLOUGHBY CITY COUNCI'. Substring match still covers the full spelling.
     (('COUNCI',), 'gst'),
@@ -190,14 +206,14 @@ CATEGORY_KEYWORD_RULES = [
     (('ENEX',), 'subcontractor_payout'),
     (('SERVICE', 'MECHANIC', 'AUTO', 'TYRE', 'TYRES', 'REPCO',
       'SUPERCHEAP', 'PANEL', 'SMASH', 'CIRCUM VENDING', 'RIZKALLA',
-      'ULTRA TUNE'),
+      'ULTRA TUNE', 'YONGHOAN JUNG'),
      'vehicle_maintenance'),
     (('GOOGLE', 'META', 'FACEBOOK', 'MARKETING', 'ADVERTIS', 'SEO'), 'marketing'),
     (('INSURANCE', 'NRMA', 'AAMI', 'ALLIANZ', 'QBE', 'GIO', 'ZURICH'), 'insurance'),
     (('GROUP TRANSPORT',), 'subcontractor_payout'),
-    # JB Hi-Fi: office consumables/equipment bought for the office.
+    # JB Hi-Fi / Officeworks / Bunnings: consumables/equipment bought for the business.
     (('NORTH SYDNEY EXECUTIVE', 'VIRTUAL OFFICE', 'CWH',
-      'JB HI FI', 'JB HI-FI'), 'office_expense'),
+      'JB HI FI', 'JB HI-FI', 'OFFICEWORKS', 'BUNNINGS'), 'office_expense'),
     (('COUNCI',), 'parking'),
     # VULTR: all charges are server/hosting costs (VPS provider).
     (('VULTR',), 'hosting'),
