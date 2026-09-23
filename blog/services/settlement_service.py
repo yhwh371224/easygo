@@ -4,6 +4,7 @@ from django.utils import timezone
 
 from accounting.conf import GST_REGISTRATION_DATE
 from blog.models import DriverSettlement
+from blog.models.booking import OWNER_DRIVER_NAMES
 from blog.models.driver import DriverSettlementItem
 from blog.models import Post
 from blog.utils.number_generate import generate_settlement_number
@@ -20,6 +21,13 @@ class SettlementService:
         3. Item 생성
         4. totals 계산
         """
+
+        # Owner drivers (Sam / Sung / Peter are all the owner) are paid a weekly
+        # wage through PayrollEntry, never per trip. Settling them books a
+        # 'subcontract' expense for money that never left the company — the
+        # daily cron did exactly that from 2026-08-10 ($6,425 in FY27 Q1).
+        if (driver.driver_name or '').strip().lower() in OWNER_DRIVER_NAMES:
+            return None
 
         # 1) posts 조회
         # driver_collected_cash=True 건은 손님이 드라이버에게 직접 현금을 지불해

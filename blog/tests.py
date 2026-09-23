@@ -2042,6 +2042,13 @@ class CreateDailySettlementsTests(TestCase):
         self._run()
         self.assertEqual(DriverSettlement.objects.filter(driver=driver).count(), 1)
 
+    def test_skips_owner_driver(self):
+        """Owner drivers are paid a weekly wage, not per trip."""
+        driver = self._driver('owner_drv', settle_daily=True, driver_name='Sung')
+        self._post(driver)
+        self._run()
+        self.assertFalse(DriverSettlement.objects.filter(driver=driver).exists())
+
     def test_skips_driver_settled_in_batches(self):
         driver = self._driver('monthly_drv', settle_daily=False)
         self._post(driver)
