@@ -164,25 +164,38 @@
 
 {% if bas.refund_candidates %}
 <div style="padding:10px; background:#fff3cd; border:1px solid #ffc107; max-width:700px; margin-bottom:1em;">
-  <strong>These amounts were NOT deducted from 1A automatically.</strong><br>
-  If a refund was paid out, reduce 1A manually or lodge a GST adjustment with the ATO.
+  <strong>Do NOT reduce 1A manually for these rows.</strong><br>
+  Cancelled bookings are already excluded from 1A, refunds on active bookings are
+  netted via Post.refund, and the refunded PayPal surcharge is netted automatically.
+  Fix the booking instead (cancel it, or enter Post.refund) and re-run this report.<br>
+  <span style="color:#27ae60;">OK</span> — nothing to do.
+  <span style="color:#c0392b;">WARN</span> — possible revenue missing from 1A, or Post.refund on the wrong basis.
+  <span style="color:#e67e22;">CHECK</span> — needs a human (dispute, refund not linked to a booking).
 </div>
 <table class="report-table">
   <thead>
     <tr>
+      <th>Status</th>
       <th>Source</th>
       <th>Description</th>
-      <th class="num">Paid amount</th>
+      <th class="num">Amount</th>
       <th class="num">GST ref (&divide;11)</th>
+      <th>Note</th>
     </tr>
   </thead>
   <tbody>
     {% for r in bas.refund_candidates %}
     <tr>
+      <td>
+        {% if r.status == 'ok' %}<span style="color:#27ae60;">OK</span>
+        {% elif r.status == 'warn' %}<strong style="color:#c0392b;">WARN</strong>
+        {% else %}<strong style="color:#e67e22;">CHECK</strong>{% endif %}
+      </td>
       <td>{{ r.source }}</td>
       <td>{{ r.description }}</td>
       <td class="num">${{ r.amount|floatformat:2 }}</td>
       <td class="num">${{ r.gst_ref|floatformat:2 }}</td>
+      <td style="font-size:0.9em;">{{ r.note }}</td>
     </tr>
     {% endfor %}
   </tbody>

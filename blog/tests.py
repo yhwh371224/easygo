@@ -2053,3 +2053,52 @@ class CreateDailySettlementsTests(TestCase):
         self._post(driver)
         self._run()
         self.assertFalse(DriverSettlement.objects.filter(driver=driver).exists())
+
+
+class BulkInvoiceDunningTests(TestCase):
+    """멀티 인보이스 한 장으로 합산 청구하는 부킹(bulk_invoice)은 부킹별 독촉에서
+    빠져야 한다 — 부킹 수만큼 독촉 메일이 쏟아지는 걸 막기 위함."""
+
+    def setUp(self):
+        self.region = make_region()
+
+    def make_unpaid(self, **kwargs):
+        fields = dict(
+            name='Corp Guest',
+            email='corp@example.com',
+            no_of_passenger='2',
+            price='100',
+            region=self.region,
+            pickup_date=datetime.date.today() + timedelta(days=5),
+            pickup_time='10:00',
+            direction='Pickup from Home',
+        )
+        fields.update(kwargs)
+        return Post.objects.create(**fields)
+
+    @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+    @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+    def test_no_payment_yet_skips_bulk_invoice_bookings(self, *_):
+        normal = self.make_unpaid()
+        bulk = self.make_unpaid(email='bulk@example.com', bulk_invoice=True)
+        out = StringIO()
+        call_command('no_payment_yet', '--dry-run', stdout=out)
+        self.assertIn(f'#{normal.id} ', out.getvalue())
+        self.assertNotIn(f'#{bulk.id} ', out.getvalue())
+
+    @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+    @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+    def test_multi_invoice_marks_bookings_as_bulk_invoice(self, *_):
+        from basecamp.views.payments import _build_multi_context
+        inside = self.make_unpaid()
+        outside = self.make_unpaid(pickup_date=datetime.date.today() + timedelta(days=40))
+        bookings = Post.objects.filter(pk=inside.pk)
+        params = {
+            'apply_gst_flag': None, 'surcharge_input': None, 'discount_input': None,
+            'toll_input': None, 'deposit_percent_input': None,
+        }
+        _build_multi_context(bookings, params, '1', datetime.date.today(), 'westpac')
+        inside.refresh_from_db()
+        outside.refresh_from_db()
+        self.assertTrue(inside.bulk_invoice)
+        self.assertFalse(outside.bulk_invoice)

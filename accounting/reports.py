@@ -79,23 +79,46 @@ def paypal_surcharge_total(start, end):
     Refunds (negative amount) subtract their own surcharge portion, so a
     cancelled + refunded booking leaves no surcharge behind. The base portion
     of a refund is netted on the booking side via Post.refund, which
-    _auto_fill_post_refund stores ex-surcharge for PayPal. Disputes are not
-    netted here.
+    _auto_fill_post_refund stores ex-surcharge for PayPal.
+
+    Disputes (Reversed — the customer pulled the money back) also take the
+    original payment's surcharge off, and a Canceled_Reversal puts it back.
+    PayPal can send several Reversed IPNs for one payment (e.g. 2026-08-25 and
+    again 2026-09-04 for the same parent_txn_id), so only the earliest row per
+    parent payment and kind counts, across all periods.
     """
     from blog.models import PaypalPayment
+
+    def surcharge_of(amount):
+        # quantize the base, not the surcharge, to mirror blog/tasks.py's
+        # round(amount / 1.03, 2) applied to Post.paid.
+        base = (amount / _PAYPAL_SURCHARGE_RATE).quantize(_CENT, rounding=ROUND_HALF_UP)
+        return amount - base
 
     total = ZERO
     for pm in PaypalPayment.objects.filter(
         created__date__gte=start, created__date__lte=end,
-    ).exclude(amount__isnull=True).exclude(amount=0).only(
-        'amount', 'payment_status', 'txn_type', 'case_id',
-    ):
-        if pm.kind not in (PaypalPayment.KIND_PAYMENT, PaypalPayment.KIND_REFUND):
+    ).exclude(amount__isnull=True).exclude(amount=0):
+        kind = pm.kind
+        if kind in (PaypalPayment.KIND_PAYMENT, PaypalPayment.KIND_REFUND):
+            total += surcharge_of(pm.amount)   # negative for a refund
             continue
-        # quantize the base, not the surcharge, to mirror blog/tasks.py's
-        # round(amount / 1.03, 2) applied to Post.paid.
-        base = (pm.amount / _PAYPAL_SURCHARGE_RATE).quantize(_CENT, rounding=ROUND_HALF_UP)
-        total += pm.amount - base   # negative for a refund
+
+        if not pm.parent_txn_id:
+            continue
+        siblings = [
+            o for o in PaypalPayment.objects.filter(parent_txn_id=pm.parent_txn_id)
+            .exclude(amount=0).order_by('created', 'pk')
+            if o.kind == kind
+        ]
+        if not siblings or siblings[0].pk != pm.pk:
+            continue
+        parent = PaypalPayment.objects.filter(txn_id=pm.parent_txn_id).first()
+        amount = abs(parent.amount) if parent and parent.amount else abs(pm.amount)
+        if kind == PaypalPayment.KIND_DISPUTE:
+            total -= surcharge_of(amount)
+        elif kind == PaypalPayment.KIND_DISPUTE_RESOLVED:
+            total += surcharge_of(amount)
     return total
 
 
@@ -225,6 +248,120 @@ def fy_quarter_to_range(fy_year, fy_quarter):
     raise ValueError(f"fy_quarter must be 1–4, got {fy_quarter!r}")
 
 
+_MATCH_TOLERANCE = Decimal('0.02')
+
+
+def _near(a, b):
+    return abs(a - b) <= _MATCH_TOLERANCE
+
+
+def _refund_base(pm, amt):
+    """Refund amount on the same basis as Post.paid: PayPal ex 3% surcharge."""
+    from blog.models import PaypalPayment
+    if isinstance(pm, PaypalPayment):
+        return (amt / _PAYPAL_SURCHARGE_RATE).quantize(_CENT, rounding=ROUND_HALF_UP)
+    return amt
+
+
+def _payer_refunds(post):
+    """Refund rows (PayPal kind=refund, negative Stripe) from this booking's payer."""
+    from django.db.models import Q
+    from blog.models import PaypalPayment, StripePayment
+
+    q = Q(pk__in=[])
+    for email in {(post.email or '').strip(), (post.booker_email or '').strip()} - {''}:
+        q |= Q(email__iexact=email)
+    if (post.name or '').strip():
+        q |= Q(name__iexact=post.name.strip())
+
+    rows = [pm for pm in PaypalPayment.objects.filter(q, amount__lt=0)
+            if pm.kind == PaypalPayment.KIND_REFUND]
+    rows += list(StripePayment.objects.filter(q, amount__lt=0))
+    return rows
+
+
+def _classify_cancelled_post(post, paid):
+    """(status, note) for a cancelled booking that still carries a paid amount.
+
+    Cancelled bookings are already excluded from 1A, so the only question is
+    whether the customer got the money back. Money kept (cancellation fee,
+    no-show) is revenue that is currently missing from 1A.
+    """
+    refunds = _payer_refunds(post)
+    full = {paid, (paid * _PAYPAL_SURCHARGE_RATE).quantize(_CENT, rounding=ROUND_HALF_UP)}
+    for pm in refunds:
+        amt = abs(pm.amount)
+        # >= paid also covers one refund for both legs of a return booking.
+        if any(_near(amt, f) for f in full) or amt >= paid:
+            return 'ok', (f"Refunded ${amt} on {pm.created:%Y-%m-%d} — "
+                          f"booking already excluded from 1A, nothing to do.")
+    if refunds:
+        amounts = ', '.join(f"${abs(pm.amount)} ({pm.created:%Y-%m-%d})" for pm in refunds)
+        return 'warn', (f"Refund on record ({amounts}) doesn't match paid ${paid}. "
+                        f"Any part kept (e.g. cancellation fee) is revenue missing from 1A.")
+    return 'warn', ("No PayPal/Stripe refund on record. Refunded by bank → OK. "
+                    "Kept (fee / no-show / credit) → revenue missing from 1A.")
+
+
+def _classify_refund_payment(pm, amt):
+    """(status, note) for a negative PayPal/Stripe row in the quarter."""
+    from datetime import timedelta
+    from blog.models import PaypalPayment
+    from blog.blog_utils import match_posts_for_payer
+
+    created = pm.created.date()
+    posts = list(
+        match_posts_for_payer(pm)
+        .filter(pickup_date__gte=created - timedelta(days=180),
+                pickup_date__lte=created + timedelta(days=365))
+        .order_by('pickup_date')
+    )
+    active = [p for p in posts if not p.cancelled]
+
+    if isinstance(pm, PaypalPayment) and pm.kind == PaypalPayment.KIND_DISPUTE:
+        if not active:
+            return 'ok', ("Dispute/chargeback — matching bookings are cancelled (excluded "
+                          "from 1A) and the surcharge is netted automatically.")
+        ids = ', '.join(f"#{p.pk} ({p.pickup_date})" for p in active)
+        return 'check', (f"Dispute/chargeback ({pm.payment_status or 'reversal'}) — NOT a "
+                         f"refund we issued. Active bookings still counted in 1A: {ids}. "
+                         f"If PayPal kept the money, cancel or adjust those bookings.")
+
+    if not posts:
+        return 'check', ("No booking matched by email/name — find the booking and "
+                         "enter Post.refund on it if it is still active.")
+
+    base = _refund_base(pm, amt)
+    # Cancelled bookings this refund (or another refund from the same payer)
+    # fully covers — keyed on paid, or on Post.refund when paid was cleared.
+    fully_refunded = set()
+    for p in posts:
+        if not p.cancelled:
+            continue
+        targets = {to_decimal_safe(p.paid), p.refund or ZERO} - {ZERO}
+        if any(_near(amt, v) or _near(base, v) for v in targets):
+            return 'ok', f"Cancelled booking #{p.pk} ({p.pickup_date}) — already excluded from 1A."
+        for other in _payer_refunds(p):
+            o_amt = abs(other.amount)
+            if any(_near(o_amt, v) or _near(_refund_base(other, o_amt), v) for v in targets):
+                fully_refunded.add(p.pk)
+    for p in active:
+        refund = p.refund or ZERO
+        if refund > ZERO and _near(refund, base):
+            return 'ok', f"Netted via Post.refund ${refund} on #{p.pk} ({p.pickup_date})."
+        if refund > ZERO and _near(refund, amt) and base != amt:
+            return 'warn', (f"Post.refund on #{p.pk} is ${refund} incl. surcharge — "
+                            f"should be ${base} (surcharge is netted separately).")
+    for p in posts:
+        if (p.cancelled and p.pk not in fully_refunded
+                and amt < to_decimal_safe(p.paid) * _PAYPAL_SURCHARGE_RATE):
+            return 'warn', (f"Partial refund on cancelled booking #{p.pk} ({p.pickup_date}) — "
+                            f"the part kept is revenue missing from 1A.")
+    ids = ', '.join(f"#{p.pk} ({p.pickup_date})" for p in active) or 'none'
+    return 'check', (f"Not linked to a cancelled booking or Post.refund. If it belongs to "
+                     f"an active booking ({ids}), enter Post.refund = ${base} on it.")
+
+
 def build_bas(fy_year, fy_quarter):
     """Assemble full BAS data for one Australian FY quarter.
 
@@ -269,6 +406,11 @@ def build_bas(fy_year, fy_quarter):
     w2 = payroll['w2'] or ZERO
 
     # --- Refund candidates (display only) ---
+    # Each row carries a status so the list can be triaged at a glance:
+    #   ok    — already handled (cancelled booking excluded / Post.refund set)
+    #   warn  — possible revenue missing from 1A (money kept on a cancelled
+    #           booking) or a Post.refund entered on the wrong basis
+    #   check — needs a human (dispute, refund not linked to any booking)
     refund_candidates = []
 
     # (a) cancelled Post with a recorded paid amount
@@ -281,15 +423,18 @@ def build_bas(fy_year, fy_quarter):
             cancelled=True,
         )
         .exclude(paid__isnull=True).exclude(paid='').exclude(paid='TBA')
-        .only('paid', 'name', 'email', 'pickup_date')
+        .only('paid', 'name', 'email', 'booker_email', 'pickup_date')
     ):
         paid = to_decimal_safe(post.paid)
         if paid > ZERO:
+            status, note = _classify_cancelled_post(post, paid)
             refund_candidates.append({
                 'source': 'Cancelled booking',
                 'description': f"{post.name} / {post.email} — {post.pickup_date}",
                 'amount': paid,
                 'gst_ref': (paid / _ELEVEN).quantize(_CENT, rounding=ROUND_HALF_UP),
+                'status': status,
+                'note': note,
             })
 
     # (b) negative-amount online payment records in the quarter
@@ -301,13 +446,20 @@ def build_bas(fy_year, fy_quarter):
             created__date__gte=start,
             created__date__lte=end,
             amount__lt=0,
-        ).only('amount', 'name', 'email'):
+        ):
             amt = abs(pm.amount)
+            status, note = _classify_refund_payment(pm, amt)
+            is_dispute = (
+                PayModel is PaypalPayment
+                and pm.kind == PaypalPayment.KIND_DISPUTE
+            )
             refund_candidates.append({
-                'source': label,
-                'description': f"{pm.name} / {pm.email}",
+                'source': 'PayPal dispute' if is_dispute else label,
+                'description': f"{pm.name} / {pm.email} — {pm.created:%Y-%m-%d}",
                 'amount': amt,
                 'gst_ref': (amt / _ELEVEN).quantize(_CENT, rounding=ROUND_HALF_UP),
+                'status': status,
+                'note': note,
             })
 
     return {

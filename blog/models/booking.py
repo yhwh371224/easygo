@@ -153,6 +153,12 @@ class Post(models.Model):
     )
     prepay = models.BooleanField(default=False, blank=True)
     pending = models.BooleanField(default=False, blank=True)
+    bulk_invoice = models.BooleanField(
+        default=False, blank=True,
+        help_text='체크하면 여러 부킹을 한 장의 인보이스(날짜 범위 멀티 인보이스)로 청구하는 건으로 보고 '
+                  '부킹별 결제 독촉 메일·SMS·자동취소에서 모두 제외한다. '
+                  '날짜 범위로 멀티 인보이스를 보내면 포함된 부킹에 자동으로 체크된다.',
+    )
     final_warning_at = models.DateTimeField(
         null=True, blank=True,
         help_text='사다리 창(픽업 21일) 밖 먼 미래 미결제 건의 "예약 pending 상태" '

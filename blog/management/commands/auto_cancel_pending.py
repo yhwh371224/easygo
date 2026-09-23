@@ -36,6 +36,7 @@ class Command(BaseCommand):
         #   cash=False           → 캐쉬 미선택
         #   cancelled=False      → 아직 취소 안 됨
         #   company_name 없음    → 기업 고객 제외 (인보이스 처리)
+        #   bulk_invoice=False   → 멀티 인보이스 합산 청구 건 제외
         #   취소 예고 메일을 실제로 보낸 건만 (미결제=final_notice_sent_at,
         #   부분결제=discrepancy_final_sent_at)
         #  ※ reminder 는 조건이 아님 — "곧 낼게요" 응답만 하고 미결제인 건도 취소 대상.
@@ -44,6 +45,7 @@ class Command(BaseCommand):
         qs = Post.objects.filter(
             cancelled=False,
             cash=False,
+            bulk_invoice=False,
         ).filter(
             Q(final_notice_sent_at__isnull=False)
             | Q(discrepancy_final_sent_at__isnull=False)

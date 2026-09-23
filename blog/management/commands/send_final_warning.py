@@ -52,6 +52,7 @@ class Command(TelegramAlertMixin, BaseCommand):
         #   cancelled=False       → 아직 취소 안 됨
         #   paid 없음             → 결제 미완료
         #   company_name 없음     → 기업 고객 제외 (인보이스 처리)
+        #   bulk_invoice=False    → 멀티 인보이스 합산 청구 건 제외
         #   final_warning_at 없음 → 아직 조기 안내 안 보냄 (dedup)
         #   created <= cutoff     → 48시간 이상 무응답
         #   pickup_date > 창 끝    → 사다리 창 밖 (임박건은 no_payment_yet 담당)
@@ -59,6 +60,7 @@ class Command(TelegramAlertMixin, BaseCommand):
             reminder=False,
             cash=False,
             cancelled=False,
+            bulk_invoice=False,
             final_warning_at__isnull=True,
             created__lte=cutoff,
             pickup_date__gt=window_end,

@@ -56,6 +56,8 @@ class Command(BaseCommand):
                 Q(paid__isnull=True) | Q(paid__exact="")
             ).exclude(
                 cash=True
+            ).exclude(
+                bulk_invoice=True  # 멀티 인보이스 합산 청구 건
             )
 
             for notice in final_notices:

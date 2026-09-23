@@ -54,10 +54,12 @@ class Command(BaseCommand):
         start_date = today
         end_date = today + timedelta(days=21)
 
+        # bulk_invoice 건은 멀티 인보이스 한 장으로 합산 청구하므로 부킹별 독촉에서 제외.
         bookings = Post.objects.filter(
             pickup_date__range=(start_date, end_date),
             cash=False,
             cancelled=False,
+            bulk_invoice=False,
         )
 
         for booking in bookings:

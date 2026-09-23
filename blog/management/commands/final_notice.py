@@ -31,6 +31,7 @@ class Command(BaseCommand):
                 pickup_date__range=(today, within_one_day),
                 cancelled=False,
                 cash=False,
+                bulk_invoice=False,  # 멀티 인보이스 합산 청구 건 제외
             ).filter(
                 # 기업 고객 제외 (인보이스 처리)
                 Q(company_name__isnull=True) | Q(company_name__exact="")
