@@ -95,7 +95,7 @@ class Driver(models.Model):
         upload_to='driver_licenses/%Y/%m/',
         storage=private_driver_docs_storage,
         blank=True, null=True,
-        validators=[FileExtensionValidator(['jpg', 'jpeg', 'png', 'pdf'])],
+        validators=[FileExtensionValidator(['jpg', 'jpeg', 'png', 'heic', 'heif', 'pdf'])],
         help_text='드라이버 라이센스 스캔/사진. 오피스 관리자만 열람 가능 (private storage).',
     )
 

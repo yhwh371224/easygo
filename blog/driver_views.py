@@ -54,7 +54,7 @@ DRIVER_APPLY_FIELD_MAX_LENGTHS = {
 # License scan is optional on the public form (Driver.license_scan is
 # blank=True) — applicants without a scan handy can still apply and staff
 # chase it up during review. Mirrors the model's FileExtensionValidator.
-LICENSE_SCAN_ALLOWED_EXTENSIONS = ('jpg', 'jpeg', 'png', 'pdf')
+LICENSE_SCAN_ALLOWED_EXTENSIONS = ('jpg', 'jpeg', 'png', 'heic', 'heif', 'pdf')
 LICENSE_SCAN_MAX_SIZE_BYTES = 10 * 1024 * 1024
 
 
@@ -270,7 +270,7 @@ def driver_apply(request):
         elif form_data['payment_method'] not in ('bank', 'payid'):
             error = 'Please choose how you would like to be paid.'
         elif license_scan and license_scan.name.rsplit('.', 1)[-1].lower() not in LICENSE_SCAN_ALLOWED_EXTENSIONS:
-            error = 'Licence scan must be a JPG, PNG or PDF file.'
+            error = 'Licence scan must be a JPG, PNG, HEIC or PDF file.'
         elif license_scan and license_scan.size > LICENSE_SCAN_MAX_SIZE_BYTES:
             error = 'Licence scan is too large — please upload a file under 10MB.'
 
