@@ -92,8 +92,8 @@
               &nbsp;&nbsp;• {{ addr }}<br>
               {% endfor %}
               {% endif %}
-              {% if booking.message %}Message: {{ booking.message }}<br>{% endif %}
-              {% if booking.notice %}Notice: {{ booking.notice }}<br>{% endif %}
+              {% if booking.message %}Message: {{ booking.message|linebreaksbr }}<br>{% endif %}
+              {% if booking.notice %}Notice: {{ booking.notice|linebreaksbr }}<br>{% endif %}
             </div>
             {% endfor %}
           </td>
