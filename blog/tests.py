@@ -1804,11 +1804,31 @@ class ArrivalReminderTests(TestCase):
     @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
     @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
     def test_skips_cancelled_pending_and_opted_out(self, *_):
-        self.make_arrival(cancelled=True)
-        self.make_arrival(pending=True)
+        # paid 가 있으면 시그널이 cancelled/pending 을 False 로 되돌리므로 저장 후에 직접 세팅한다.
+        Post.objects.filter(pk=self.make_arrival().pk).update(cancelled=True)
+        Post.objects.filter(pk=self.make_arrival().pk).update(pending=True)
         self.make_arrival(no_email_reminder=True)
         self.run_command()
         self.assertEqual(mail.outbox, [])
+
+    @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+    @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+    def test_pending_alerts_once_instead_of_sending(self, *_):
+        """미결제 건은 메일 대신 텔레그램 — 30분마다 도는 크론이라 창이 열린 첫 실행만."""
+        post = self.make_arrival(flight_time='10:00')
+        Post.objects.filter(pk=post.pk).update(pending=True)
+        module = 'blog.management.commands.arrival_reminder'
+        msgs = []
+        for hh, mm in ((8, 30), (9, 0), (9, 30), (10, 0)):
+            now = self.TZ.localize(datetime.datetime(2026, 8, 2, hh, mm))
+            with patch(f'{module}.current_time', return_value=now), \
+                 patch(f'{module}.send_telegram_sync') as tg:
+                call_command('arrival_reminder', stdout=StringIO())
+            msgs += [c.args[0] for c in tg.call_args_list]
+        self.assertEqual(mail.outbox, [])
+        self.assertEqual(len(msgs), 1)
+        self.assertIn('미결제라 도착 리마인더 미발송', msgs[0])
+        self.assertIn(f'#{post.id}', msgs[0])
 
     @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
     @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
@@ -2000,6 +2020,16 @@ class BookingReminderMissingTests(TestCase):
         with patch('blog.management.commands.booking_reminder.send_template_email'):
             msgs = self._run()
         self.assertEqual(msgs, [])
+
+    def test_pending_departure_today_alerts(self):
+        paid = self._make('paid_guest', 0)
+        unpaid = self._make('unpaid_guest', 0)
+        Post.objects.filter(pk=unpaid.pk).update(pending=True)
+        msgs = self._run()
+        joined = '\n'.join(msgs)
+        self.assertIn('미결제라 당일 리마인더 미발송 1건', joined)
+        self.assertIn(f'#{unpaid.id}', joined)
+        self.assertNotIn(f'#{paid.id} ', joined)
 
 
 # ---------------------------------------------------------------------------

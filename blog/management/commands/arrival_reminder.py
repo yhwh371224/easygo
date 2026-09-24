@@ -47,6 +47,10 @@ DEFAULT_LEAD_MINUTES = 60
 # 크론 간격(30분)보다 넉넉히 커야 한다 — 정상 실행에서도 창이 열린 직후를 놓치면
 # 다음 실행까지 최대 한 간격이 밀리기 때문에, 그걸 지연으로 알리면 매일 울린다.
 LATE_ALERT_MINUTES = 45
+# 미결제(pending) 건은 메일을 보내지 않고 텔레그램으로만 알린다. 크론이 30분마다
+# 돌기 때문에 "발송 시각 ~ +30분" 창에 걸린 실행 한 번만 알려야 하루 종일 반복되지
+# 않는다. 크론 간격을 바꾸면 이 값도 같이 바꿀 것.
+PENDING_ALERT_WINDOW_MINUTES = 30
 TIME_FORMATS = ('%H:%M', '%I:%M %p', '%H:%M:%S')
 
 SUBJECT = 'Reminder-Today'
@@ -156,13 +160,14 @@ class Command(BaseCommand):
                 .filter(airport_arrival_q())
                 .filter(arrival_reminder_sent_at__isnull=True)
                 .exclude(cancelled=True)
-                .exclude(pending=True)
                 .exclude(no_email_reminder=True)
                 .select_related('driver', 'region', 'terminal_pickup_point')
             )
 
             for booking in queryset:
                 anchor, source = self.anchor_time(booking, tz)
+                if anchor is None and booking.pending:
+                    continue
                 if anchor is None:
                     self.alerts.append(
                         f'⚠️ 도착 리마인더 발송 불가(시각 없음) | {booking.name} | '
@@ -175,6 +180,16 @@ class Command(BaseCommand):
 
                 due_at = anchor - self.lead
                 if now_dt < due_at:
+                    continue
+
+                # 미결제 건은 보내지 않는다. 다만 손님은 당일 안내를 못 받은 채 도착하므로
+                # 결제 확인/수동 발송을 할 수 있게 알린다(2026-09-24 #7755 결제 취소 건).
+                if booking.pending:
+                    if now_dt - due_at < timedelta(minutes=PENDING_ALERT_WINDOW_MINUTES):
+                        self.alerts.append(
+                            f'💳 미결제라 도착 리마인더 미발송 | {booking.name} | #{booking.id} | '
+                            f'{booking.flight_number or "편명없음"} {anchor:%H:%M} 도착'
+                        )
                     continue
 
                 yield booking, due_at, now_dt, source

@@ -97,6 +97,29 @@ class Command(BaseCommand):
         except Exception as e:
             logger.error(f"[{title}] 텔레그램 알림 전송 실패: {e}")
 
+    def report_pending_today(self, target_date):
+        """미결제(pending)라 당일 메일이 안 나가는 출발 건을 텔레그램으로 알린다.
+
+        도착 건은 arrival_reminder가 발송 시각에 따로 알린다. 이 커맨드는 하루 한 번
+        돌기 때문에 중복 방지 없이 매 실행 알려도 된다.
+        """
+        pending = (
+            Post.objects.filter(pickup_date=target_date, pending=True)
+            .exclude(cancelled=True)
+            .exclude(no_email_reminder=True)
+            .exclude(airport_arrival_q())
+            .order_by('pickup_time')
+        )
+        if not pending:
+            return
+        lines = [f"💳 미결제라 당일 리마인더 미발송 {len(pending)}건"]
+        for p in pending:
+            lines.append(f"• {p.name} | #{p.id} | {p.pickup_time or '시각없음'} | {p.direction or ''}")
+        try:
+            send_telegram_sync("\n".join(lines))
+        except Exception as e:
+            logger.error(f"[Reminder-Today] 미결제 텔레그램 알림 전송 실패: {e}")
+
     def send_email(self, date_offset, template_name, subject):
         target_date = timezone.localdate() + timedelta(days=date_offset)
         booking_reminders = (
@@ -109,6 +132,7 @@ class Command(BaseCommand):
             # 공항 도착 건의 당일 메일은 arrival_reminder 커맨드가 도착 1시간 전에
             # 따로 보낸다(비행 중이라 아침 메일을 못 보는 문제). 여기서 보내면 중복.
             booking_reminders = booking_reminders.exclude(airport_arrival_q())
+            self.report_pending_today(target_date)
         if subject == "Reminder-Arrival-2days":
             booking_reminders = booking_reminders.filter(direction__istartswith="pickup")
         if subject == "Review-EasyGo":
