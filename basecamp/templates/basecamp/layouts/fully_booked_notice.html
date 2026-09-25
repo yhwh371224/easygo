@@ -1,0 +1,67 @@
+{% comment %}
+예약 마감 안내 (2026-09-25 추가). footer.html 에서 include 하므로 모든 예약 폼에 적용된다.
+pickup_date / return_pickup_date 에서 FULLY_BOOKED_UNTIL 이하 날짜를 고르면 날짜칸 아래에 안내를 띄운다.
+안내만 하고 제출은 막지 않는다. 날짜를 골랐을 때만 JS 로 그리므로 초기 HTML 에는 문구가 없다 (SEO 영향 없음).
+기준일이 지나면 자동으로 동작하지 않는다. 제외할 입력칸은 data-skip-booking-notice 를 붙인다.
+{% endcomment %}
+<style>
+  .fully-booked-notice {
+    margin-top: .5rem;
+    padding: .6rem .8rem;
+    border-left: 4px solid #d97706;
+    border-radius: 4px;
+    background: #fff7ed;
+    color: #7c2d12;
+    font-size: .875rem;
+    line-height: 1.4;
+    text-align: left;
+  }
+</style>
+<script>
+(function () {
+  var FULLY_BOOKED_UNTIL = '2026-10-15';
+  var FIELDS = 'input[name="pickup_date"], input[name="return_pickup_date"]';
+  var MESSAGE = '<b>We\'re fully booked until 15 October.</b> ' +
+    'Please choose a date from 16 October onwards, or ' +
+    '<a href="/contact/">contact us</a> to check for any last-minute availability.';
+
+  function today() {
+    var d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+  if (today() > FULLY_BOOKED_UNTIL) return;
+
+  function update(input) {
+    if (input.hasAttribute('data-skip-booking-notice')) return;
+    // flatpickr altInput 이 있으면 화면에 보이는 칸은 그쪽이다
+    var anchor = (input._flatpickr && input._flatpickr.altInput) || input;
+    var notice = input._fullyBookedNotice;
+    var value = (input.value || '').slice(0, 10);
+    var blocked = /^\d{4}-\d{2}-\d{2}$/.test(value) && value <= FULLY_BOOKED_UNTIL;
+
+    if (!blocked) {
+      if (notice) notice.hidden = true;
+      return;
+    }
+    if (!notice) {
+      notice = document.createElement('div');
+      notice.className = 'fully-booked-notice';
+      notice.setAttribute('role', 'alert');
+      notice.innerHTML = MESSAGE;
+      input._fullyBookedNotice = notice;
+    }
+    anchor.insertAdjacentElement('afterend', notice);
+    notice.hidden = false;
+  }
+
+  document.addEventListener('change', function (e) {
+    if (e.target.matches && e.target.matches(FIELDS)) update(e.target);
+  });
+  // 다음 단계 페이지처럼 날짜가 이미 채워진 읽기 전용 칸
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll(FIELDS).forEach(function (input) {
+      if (input.readOnly && input.type !== 'hidden') update(input);
+    });
+  });
+})();
+</script>
