@@ -648,7 +648,9 @@ def driver_dashboard(request):
             'data': s,
         })
 
-    timeline.sort(key=lambda x: x['date'], reverse=True)
+    # 같은 날짜면 정산 구분선을 트립 위에 둔다 — 구분선은 to_date 까지의
+    # 트립을 닫는 경계라, 그날 트립 밑에 깔리면 그날이 미정산처럼 보인다.
+    timeline.sort(key=lambda x: (x['date'], x['type'] == 'settlement'), reverse=True)
 
     # 미정산 트립만 합계 계산. past_posts / balance_posts_today 가 이미 정산에
     # 편입된 건을 걸러낸 상태라, 여기서 날짜로 한 번 더 자르지 않는다 — 예전엔
