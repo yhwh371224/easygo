@@ -1423,6 +1423,45 @@ class DriverDashboardViewTests(TestCase):
         self.assertContains(response, 'Not GST registered (−10%)')
 
 
+    def _proxy_post(self, driver, pickup_date):
+        with patch('blog.bird_proxy.create_bird_mapping', return_value=True), \
+             patch('blog.bird_proxy.close_bird_mapping', return_value=True):
+            return Post.objects.create(
+                name='Pax', email='p@x.com', no_of_passenger='1',
+                price='190', driver=driver, use_proxy=True,
+                pickup_date=pickup_date, pickup_time='09:10',
+            )
+
+    @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+    def test_complete_trip_rejected_before_pickup(self, mock_close):
+        """Completing tomorrow's trip right after accepting it used to drop it
+        off the dashboard — not upcoming (use_proxy=False), not history (future)."""
+        user = make_user(username='cmp1', password='TestPass1!')
+        driver = make_driver(user=user)
+        post = self._proxy_post(driver, datetime.date.today() + datetime.timedelta(days=1))
+        self.client.force_login(user)
+
+        response = self.client.post(reverse('blog:driver_complete_trip', args=[post.id]))
+
+        self.assertEqual(response.status_code, 400)
+        mock_close.assert_not_called()
+        response = self.client.get(self.url)
+        self.assertContains(response, 'Complete after pickup')
+        self.assertFalse(response.context['trips'][0]['can_complete'])
+
+    def test_complete_trip_allowed_after_pickup(self):
+        user = make_user(username='cmp2', password='TestPass1!')
+        driver = make_driver(user=user)
+        post = self._proxy_post(driver, datetime.date.today() - datetime.timedelta(days=1))
+        self.client.force_login(user)
+
+        with patch('blog.bird_proxy.close_bird_mapping', return_value=True) as mock_close:
+            response = self.client.post(reverse('blog:driver_complete_trip', args=[post.id]))
+
+        self.assertEqual(response.status_code, 200)
+        mock_close.assert_called_once()
+
+
 # ---------------------------------------------------------------------------
 # View: driver_change_password
 # ---------------------------------------------------------------------------

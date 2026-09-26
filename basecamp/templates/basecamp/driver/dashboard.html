@@ -135,6 +135,7 @@
     }
     .btn-complete.active { background:#f59e0b; color:#fff; }
     .btn-complete.active:hover { background:#d97706; }
+    .btn-complete.pending { background:#e5e7eb; color:#6b7280; cursor:default; }
     .btn-complete.done { background:#d1fae5; color:#065f46; cursor:default; }
     .btn-complete.btn-accept { background:#16a34a; color:#fff; }
     .btn-complete.btn-accept:hover { background:#15803d; }
@@ -592,7 +593,11 @@
 
     </div>
 
-    {% if post.use_proxy %}
+    {% if post.use_proxy and not t.can_complete %}
+      <button class="btn-complete pending" disabled>
+        Complete after pickup
+      </button>
+    {% elif post.use_proxy %}
       <button
         class="btn-complete active"
         id="btn-{{ post.id }}"
@@ -707,6 +712,7 @@
   function completeTrip(postId) {
     const btn = document.getElementById('btn-' + postId);
     if (!btn || btn.disabled) return;
+    if (!confirm('Mark this trip as completed?')) return;
     btn.disabled = true;
     btn.textContent = 'Processing…';
 
@@ -738,7 +744,7 @@
       } else {
         btn.disabled = false;
         btn.textContent = 'Complete Trip';
-        alert('Failed. Please try again.');
+        alert(data.error || 'Failed. Please try again.');
       }
     })
     .catch(() => {

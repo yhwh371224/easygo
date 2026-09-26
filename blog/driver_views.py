@@ -457,6 +457,22 @@ def driver_logout(request):
     return redirect('blog:driver_login')
 
 
+def _pickup_datetime(post):
+    try:
+        pickup_naive = datetime.strptime(
+            f'{post.pickup_date} {post.pickup_time or "00:00"}',
+            '%Y-%m-%d %H:%M'
+        )
+        return timezone.make_aware(pickup_naive)
+    except Exception:
+        return None
+
+
+def _can_complete(pickup_dt, now):
+    # An unparseable pickup time shouldn't lock the driver out of closing the trip.
+    return pickup_dt is None or pickup_dt <= now
+
+
 @login_required(login_url='/driver/login/')
 def driver_dashboard(request):
     try:
@@ -513,14 +529,7 @@ def driver_dashboard(request):
 
     trips = []
     for post in posts:
-        try:
-            pickup_naive = datetime.strptime(
-                f'{post.pickup_date} {post.pickup_time or "00:00"}',
-                '%Y-%m-%d %H:%M'
-            )
-            pickup_dt = timezone.make_aware(pickup_naive)
-        except Exception:
-            pickup_dt = None
+        pickup_dt = _pickup_datetime(post)
 
         is_past = pickup_dt and (pickup_dt + timedelta(hours=3) < now)
         # Full detail (street + live proxy number) only opens up the day
@@ -541,6 +550,9 @@ def driver_dashboard(request):
             # it and reaching an unrelated in-window booking that also falls
             # back to it (see _get_driver_target in bird_webhooks.py).
             'proxy_number': get_proxy_number(post, driver) if in_window else None,
+            # Complete Trip only opens once the pickup time has passed — see
+            # driver_complete_trip for why.
+            'can_complete': _can_complete(pickup_dt, now),
         })
 
     # 미정산 잔액의 하한선으로 쓸 마지막 정산
@@ -1045,6 +1057,15 @@ def driver_complete_trip(request, post_id):
     from blog.bird_proxy import close_bird_mapping
 
     post = get_object_or_404(Post, pk=post_id, driver=driver)
+    # A trip completed before pickup drops off the dashboard entirely: the
+    # upcoming list needs use_proxy=True, and history only holds today and
+    # earlier. Drivers hit this by tapping Complete Trip right after
+    # accepting, since it renders where Accept This Job just was.
+    if not _can_complete(_pickup_datetime(post), timezone.now()):
+        return JsonResponse(
+            {'ok': False, 'error': 'This trip can only be completed after the pickup time.'},
+            status=400,
+        )
     ok = close_bird_mapping(post)
 
     return JsonResponse({'ok': ok})
