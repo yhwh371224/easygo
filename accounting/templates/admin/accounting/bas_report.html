@@ -41,6 +41,8 @@
     </div>
     <div class="submit-row" style="margin-top:16px;">
       <input type="submit" value="Run report" class="default">
+      <a href="{% url 'admin:accounting_bas_report_pdf' %}?fy_year={{ fy_year }}&fy_quarter={{ fy_quarter }}"
+         class="button" style="margin-left:10px; padding:10px 15px;">Download PDF</a>
     </div>
   </fieldset>
 </form>

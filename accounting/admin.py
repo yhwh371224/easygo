@@ -86,6 +86,11 @@ class TransactionAdmin(admin.ModelAdmin):
                 self.admin_site.admin_view(self.bas_report_view),
                 name='accounting_bas_report',
             ),
+            path(
+                'bas-report/pdf/',
+                self.admin_site.admin_view(self.bas_report_pdf_view),
+                name='accounting_bas_report_pdf',
+            ),
         ]
         return custom + urls
 
@@ -137,7 +142,7 @@ class TransactionAdmin(admin.ModelAdmin):
         }
         return TemplateResponse(request, 'admin/accounting/pnl_report.html', context)
 
-    def bas_report_view(self, request):
+    def _bas_params(self, request):
         cur_fy = reports.current_fy_end_year()
 
         try:
@@ -152,6 +157,10 @@ class TransactionAdmin(admin.ModelAdmin):
         except (TypeError, ValueError):
             fy_quarter = 1
 
+        return cur_fy, fy_year, fy_quarter
+
+    def bas_report_view(self, request):
+        cur_fy, fy_year, fy_quarter = self._bas_params(request)
         bas = reports.build_bas(fy_year, fy_quarter)
 
         fy_choices = [
@@ -174,6 +183,28 @@ class TransactionAdmin(admin.ModelAdmin):
             'quarter_choices': quarter_choices,
         }
         return TemplateResponse(request, 'admin/accounting/bas_report.html', context)
+
+    def bas_report_pdf_view(self, request):
+        from django.http import HttpResponse
+        from django.template.loader import render_to_string
+        from django.utils import timezone
+        from weasyprint import HTML
+        from blog.driver_views import COMPANY_NAME, COMPANY_ABN
+
+        _, fy_year, fy_quarter = self._bas_params(request)
+        bas = reports.build_bas(fy_year, fy_quarter)
+        html_string = render_to_string('admin/accounting/bas_report_pdf.html', {
+            'bas': bas,
+            'company_name': COMPANY_NAME,
+            'company_abn': COMPANY_ABN,
+            'generated_at': timezone.localtime(),
+        })
+        pdf = HTML(string=html_string, base_url=request.build_absolute_uri('/')).write_pdf()
+        response = HttpResponse(pdf, content_type='application/pdf')
+        response['Content-Disposition'] = (
+            f'attachment; filename="BAS_FY{fy_year}_Q{fy_quarter}.pdf"'
+        )
+        return response
 
 
 @admin.register(PaymentFeeLog)
