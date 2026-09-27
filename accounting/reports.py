@@ -68,6 +68,20 @@ def to_decimal_safe(value):
 _PAYPAL_SURCHARGE_RATE = Decimal('1.03')
 
 
+def _is_first_of_kind(pm):
+    """True if pm is the earliest non-zero PaypalPayment of its kind for its
+    parent payment. PayPal can send several Reversed IPNs for one payment
+    (e.g. 2026-08-25 and again 2026-09-04), so only the first one counts."""
+    from blog.models import PaypalPayment
+
+    siblings = [
+        o for o in PaypalPayment.objects.filter(parent_txn_id=pm.parent_txn_id)
+        .exclude(amount=0).order_by('created', 'pk')
+        if o.kind == pm.kind
+    ]
+    return bool(siblings) and siblings[0].pk == pm.pk
+
+
 def paypal_surcharge_total(start, end):
     """Sum the 3% PayPal card surcharge received between start and end.
 
@@ -104,14 +118,7 @@ def paypal_surcharge_total(start, end):
             total += surcharge_of(pm.amount)   # negative for a refund
             continue
 
-        if not pm.parent_txn_id:
-            continue
-        siblings = [
-            o for o in PaypalPayment.objects.filter(parent_txn_id=pm.parent_txn_id)
-            .exclude(amount=0).order_by('created', 'pk')
-            if o.kind == kind
-        ]
-        if not siblings or siblings[0].pk != pm.pk:
+        if not pm.parent_txn_id or not _is_first_of_kind(pm):
             continue
         parent = PaypalPayment.objects.filter(txn_id=pm.parent_txn_id).first()
         amount = abs(parent.amount) if parent and parent.amount else abs(pm.amount)
@@ -454,12 +461,15 @@ def build_bas(fy_year, fy_quarter):
             created__date__lte=end,
             amount__lt=0,
         ):
-            amt = abs(pm.amount)
-            status, note = _classify_refund_payment(pm, amt)
             is_dispute = (
                 PayModel is PaypalPayment
                 and pm.kind == PaypalPayment.KIND_DISPUTE
             )
+            # One row per disputed payment, same rule as the 1A surcharge.
+            if is_dispute and pm.parent_txn_id and not _is_first_of_kind(pm):
+                continue
+            amt = abs(pm.amount)
+            status, note = _classify_refund_payment(pm, amt)
             refund_candidates.append({
                 'source': 'PayPal dispute' if is_dispute else label,
                 'description': f"{pm.name} / {pm.email} — {pm.created:%Y-%m-%d}",
