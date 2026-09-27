@@ -288,6 +288,12 @@ def _classify_cancelled_post(post, paid):
     no-show) is revenue that is currently missing from 1A.
     """
     refunds = _payer_refunds(post)
+    # A refund made by bank leaves no payment row to match against, so trust
+    # Post.refund — but only then: with a PayPal/Stripe refund on record the
+    # real amount below decides (a hand-entered Post.refund could hide a kept fee).
+    if not refunds and (post.refund or ZERO) >= paid:
+        return 'ok', (f"Refunded by bank (Post.refund ${post.refund}) — "
+                      f"booking already excluded from 1A, nothing to do.")
     full = {paid, (paid * _PAYPAL_SURCHARGE_RATE).quantize(_CENT, rounding=ROUND_HALF_UP)}
     for pm in refunds:
         amt = abs(pm.amount)
@@ -299,8 +305,9 @@ def _classify_cancelled_post(post, paid):
         amounts = ', '.join(f"${abs(pm.amount)} ({pm.created:%Y-%m-%d})" for pm in refunds)
         return 'warn', (f"Refund on record ({amounts}) doesn't match paid ${paid}. "
                         f"Any part kept (e.g. cancellation fee) is revenue missing from 1A.")
-    return 'warn', ("No PayPal/Stripe refund on record. Refunded by bank → OK. "
-                    "Kept (fee / no-show / credit) → revenue missing from 1A.")
+    return 'warn', ("No PayPal/Stripe refund on record. Refunded by bank → enter "
+                    "Post.refund = paid to clear this. Kept (fee / no-show / credit) "
+                    "→ revenue missing from 1A.")
 
 
 def _classify_refund_payment(pm, amt):
@@ -423,7 +430,7 @@ def build_bas(fy_year, fy_quarter):
             cancelled=True,
         )
         .exclude(paid__isnull=True).exclude(paid='').exclude(paid='TBA')
-        .only('paid', 'name', 'email', 'booker_email', 'pickup_date')
+        .only('paid', 'refund', 'name', 'email', 'booker_email', 'pickup_date')
     ):
         paid = to_decimal_safe(post.paid)
         if paid > ZERO:
