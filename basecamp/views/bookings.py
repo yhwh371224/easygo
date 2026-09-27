@@ -9,6 +9,7 @@ from decimal import Decimal
 from basecamp.views.inquirys import _get_request_region
 from django_ratelimit.decorators import ratelimit
 from django.db.models import Q
+from django.utils import timezone
 from django.http import HttpResponse, JsonResponse
 from blog.models import Post, Inquiry, Driver
 from blog import dunning
@@ -80,6 +81,27 @@ def _send_invoice_for_new_booking(request, post):
     template_name, context = _build_single_context(post, users, params, inv_no, date.today(), default_bank)
     recipients = [post.booker_email] if post.booker_email else list(filter(None, [post.email, post.email1]))
     _send_invoice_email(template_name, context, recipients + [RECIPIENT_EMAIL], inv_no)
+
+
+def _confirm_click_details(inquiry, post):
+    """텔레그램 확정 알림에 붙일 예약 요약.
+
+    손님이 오래전 견적 메일의 링크로 들어오면 그때 가격이 그대로 Post 로 넘어간다.
+    견적을 언제 만들어 줬는지와 가격을 알림에서 바로 보고 차이를 놓치지 않게 한다.
+    """
+    created = timezone.localtime(inquiry.created)
+    region = post.region.name if post.region else '-'
+    try:
+        price = f"${float(post.price):.2f}"
+    except (TypeError, ValueError):
+        price = post.price or '-'
+    return (
+        f"Inquiry created: {created:%Y-%m-%d}\n"
+        f"Pickup: {post.pickup_date} {post.pickup_time or ''}\n"
+        f"Price: {price}\n"
+        f"Passengers: {post.no_of_passenger}\n"
+        f"Region: {region}\n"
+    )
 
 
 @ratelimit(key='ip', rate='5/m', method='POST', block=True)
@@ -251,6 +273,7 @@ def confirm_booking_detail(request):
     try:
         asyncio.run(send_telegram_notification(
             f"Clicked the confirm button:\n"
+            f"{_confirm_click_details(user, p)}"
             f"IP: `{ip}`\n"
             f"Location: {ip_info}"
         ))
@@ -405,6 +428,7 @@ def confirm_booking_prepay_detail(request):
     try:
         asyncio.run(send_telegram_notification(
             f"Clicked the confirm button (prepay):\n"
+            f"{_confirm_click_details(user, p)}"
             f"IP: `{ip}`\n"
             f"Location: {ip_info}"
         ))
