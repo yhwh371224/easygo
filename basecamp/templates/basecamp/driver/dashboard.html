@@ -261,7 +261,7 @@
       color:#6b7280;
       padding:.25rem 0;
     }
-    /* 드라이버 의무 안내 — 데스크톱은 오른쪽 sticky, 모바일은 트립 위 */
+    /* 드라이버 의무 안내 (새 드라이버만) — 데스크톱은 오른쪽 sticky, 모바일은 트립 위 */
     .dash-layout {
       max-width:600px;
       margin:0 auto;
@@ -300,7 +300,7 @@
     .duty-list li strong { color:#1f2937; }
     .duty-note { font-size:.8rem; color:#6b7280; margin:.5rem 0 0; }
     @media (min-width:992px) {
-      .dash-layout {
+      .dash-layout.has-duty {
         max-width:940px;
         grid-template-columns:minmax(0,600px) 300px;
         grid-template-areas:"main duty";
@@ -336,8 +336,9 @@
   </form>
 </div>
 
-<div class="dash-layout">
+<div class="dash-layout{% if show_luggage_duty %} has-duty{% endif %}">
 
+{% if show_luggage_duty %}
 <aside class="duty-panel">
   <div class="duty-card">
     <div class="duty-title">🧳 Every trip — no exceptions</div>
@@ -348,6 +349,7 @@
     <p class="duty-note">Customers should never have to lift their own bags. This is part of the job and part of what they paid for.</p>
   </div>
 </aside>
+{% endif %}
 
 <div class="dash-main">
 

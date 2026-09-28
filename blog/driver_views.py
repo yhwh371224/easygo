@@ -35,6 +35,9 @@ COMPANY_ABN  = "25 697 358 535"
 TIMELINE_DAYS = 90
 TIMELINE_MAX_TRIPS = 60
 
+# 대시보드의 '짐 실어주기' 안내는 완료 트립이 이보다 적은 새 드라이버에게만 보인다.
+LUGGAGE_DUTY_TRIP_THRESHOLD = 20
+
 CAR_TYPE_SUGGESTIONS = [
     'Sedan',
     'SUV',
@@ -723,6 +726,12 @@ def driver_dashboard(request):
 
     agreement_confirmed = _confirmed_agreement(driver) is not None
 
+    show_luggage_duty = (
+        Post.objects
+        .filter(driver=driver, pickup_date__lt=today, cancelled=False)
+        .count() < LUGGAGE_DUTY_TRIP_THRESHOLD
+    )
+
     return render(request, 'basecamp/driver/dashboard.html', {
         'driver': driver,
         'trips': trips,
@@ -730,6 +739,7 @@ def driver_dashboard(request):
         'today': today,
         'timeline': timeline,
         'agreement_confirmed': agreement_confirmed,
+        'show_luggage_duty': show_luggage_duty,
         'current_total_paid': current_total_paid,
         'current_total_cash': current_total_cash,
         'current_grand_total': current_grand_total,

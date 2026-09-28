@@ -1294,6 +1294,32 @@ class DriverDashboardViewTests(TestCase):
                 pickup_time='15:00',
             )
 
+    @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+    @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+    def test_luggage_duty_shown_to_new_driver(self, mock_close, mock_create):
+        from blog.driver_views import LUGGAGE_DUTY_TRIP_THRESHOLD
+        user = make_user(username='drvnew', password='TestPass1!')
+        driver = make_driver(user=user)
+        for i in range(LUGGAGE_DUTY_TRIP_THRESHOLD - 1):
+            self._past_post(driver, days_ago=i + 1)
+        self.client.force_login(user)
+        response = self.client.get(self.url)
+        self.assertTrue(response.context['show_luggage_duty'])
+        self.assertContains(response, 'Every trip — no exceptions')
+
+    @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+    @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+    def test_luggage_duty_hidden_for_experienced_driver(self, mock_close, mock_create):
+        from blog.driver_views import LUGGAGE_DUTY_TRIP_THRESHOLD
+        user = make_user(username='drvold', password='TestPass1!')
+        driver = make_driver(user=user)
+        for i in range(LUGGAGE_DUTY_TRIP_THRESHOLD):
+            self._past_post(driver, days_ago=i + 1)
+        self.client.force_login(user)
+        response = self.client.get(self.url)
+        self.assertFalse(response.context['show_luggage_duty'])
+        self.assertNotContains(response, 'Every trip — no exceptions')
+
     def _settle_day(self, driver, post, number):
         """Same-day settlement, the shape create_daily_settlements produces."""
         with patch('blog.services.settlement_service.generate_settlement_number',
