@@ -359,6 +359,24 @@ def _classify_refund_payment(pm, amt):
             o_amt = abs(other.amount)
             if any(_near(o_amt, v) or _near(_refund_base(other, o_amt), v) for v in targets):
                 fully_refunded.add(p.pk)
+    # One refund can cover both legs of a cancelled return booking. The first
+    # leg carries the return time ('x' marks the second leg) and its
+    # return_pickup_date is the second leg's pickup_date.
+    for p in posts:
+        ret_time = (p.return_pickup_time or '').strip().lower()
+        if not p.cancelled or ret_time in ('', 'x') or not p.return_pickup_date:
+            continue
+        leg2 = next((o for o in posts if o.cancelled and o.pk != p.pk
+                     and o.pickup_date == p.return_pickup_date), None)
+        if leg2 is None:
+            continue
+        pair_paid = to_decimal_safe(p.paid) + to_decimal_safe(leg2.paid)
+        legs = f"#{p.pk} ({p.pickup_date}) + #{leg2.pk} ({leg2.pickup_date})"
+        if _near(amt, pair_paid) or _near(base, pair_paid):
+            return 'ok', f"Cancelled return booking {legs} — already excluded from 1A."
+        if ZERO < base < pair_paid:
+            return 'warn', (f"Partial refund on cancelled return booking {legs} — "
+                            f"${pair_paid - base} kept is revenue missing from 1A.")
     for p in active:
         refund = p.refund or ZERO
         if refund > ZERO and _near(refund, base):
