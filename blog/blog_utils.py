@@ -217,7 +217,7 @@ def process_generic_payment(payment_instance, posts, admin_email, calculated_amo
         post.pending = False
         post.cancelled = False
 
-        new_entry = f"{method_label}: ${paid_total:.0f}"
+        new_entry = f"{method_label}: ${clean_float(paid_total)}"
         post.notice = f"{post.notice or ''} | {new_entry}".strip(" | ")
 
         post.save()

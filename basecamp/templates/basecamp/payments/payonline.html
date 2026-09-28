@@ -122,6 +122,17 @@
           var n = p.get('name'); var a = p.get('amount');
           if (n) document.getElementById('description').value = n;
           if (a) document.getElementById('amount').value = a;
+
+          // A number input with step=0.01 changes by a cent on mouse wheel or
+          // arrow keys, so scrolling the page with the field focused quietly
+          // turned $160 into $159.99. Only typed input may change the amount.
+          var amountInput = document.getElementById('amount');
+          amountInput.addEventListener('wheel', function (e) {
+            if (document.activeElement === amountInput) e.preventDefault();
+          }, { passive: false });
+          amountInput.addEventListener('keydown', function (e) {
+            if (e.key === 'ArrowUp' || e.key === 'ArrowDown') e.preventDefault();
+          });
         })();
       </script>
 
