@@ -430,7 +430,11 @@
       {% endif %}
 
       <div class="trip-message" style="color:#065f46;background:#d1fae5;border-radius:8px;padding:.5rem .65rem;font-size:.85rem;">
-        Accept this job to see the full pickup address, customer contact, and payment details.
+        {% if c.in_window %}
+        Accept this job to see the full pickup address and customer phone number.
+        {% else %}
+        Once accepted, the full pickup address and customer phone number open the day before pickup.
+        {% endif %}
       </div>
 
     </div>

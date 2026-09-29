@@ -512,7 +512,11 @@ def driver_dashboard(request):
         )
         .order_by('pickup_date', 'pickup_time')
     )
-    candidates = [{'post': post} for post in candidate_qs]
+    # 수락해도 풀주소·전화번호는 전날부터 열리므로, 카드 안내 문구를 창 기준으로 나눈다.
+    candidates = [
+        {'post': post, 'in_window': post.pickup_date in (today, tomorrow)}
+        for post in candidate_qs
+    ]
 
     # 밸런스용 오늘~내일까지 트립 (완료 포함, use_proxy 무관) - 모레 이후 제외.
     # 이미 정산서에 들어간 건은 뺀다 — 당일 정산 크론이 23:55 에 돌고 나면
