@@ -929,6 +929,27 @@ class ProxyWindowTests(ProxyNumberTestCase):
         self.assertFalse(trip['in_window'])
         self.assertIsNone(trip['proxy_number'])
 
+    def test_far_future_always_show_address_driver_sees_address_not_phone(self):
+        self._push_far_future()
+        self.driver.always_show_address = True
+        self.driver.save()
+
+        client = Client()
+        client.force_login(self.driver.user)
+        response = client.get(reverse('blog:driver_dashboard'))
+
+        self.assertContains(response, '12 Smith St')
+        self.assertContains(response, '99 Extra Rd')
+        # Phone still waits for the window.
+        self.assertContains(response, "customer's phone number will only be visible")
+        self.assertNotContains(response, 'full booking details will only be visible')
+        self.assertNotContains(response, 'href="tel:')
+
+        trip = response.context['trips'][0]
+        self.assertFalse(trip['in_window'])
+        self.assertTrue(trip['show_address'])
+        self.assertIsNone(trip['proxy_number'])
+
     def test_far_future_dashboard_shows_admin_curated_extra_stop_area(self):
         self._push_far_future()
         self.post.extra_stop_area = 'Parramatta'

@@ -550,6 +550,9 @@ def driver_dashboard(request):
             'pickup_dt': pickup_dt,
             'is_past': is_past,
             'in_window': in_window,
+            # Per-driver override: the street address (not the phone) can be
+            # opened up early for trusted drivers — see Driver.always_show_address.
+            'show_address': in_window or driver.always_show_address,
             # Same resolver the customer's email uses, so the driver is never
             # told to ring a number the customer was never given. Outside the
             # window there's nothing live to show — BIRD_NUMBER is a real,

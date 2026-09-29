@@ -139,6 +139,11 @@ class Driver(models.Model):
                   '체크된 채로 두면 실제로 지급하지도 않은 정산서가 매일 생겨 '
                   '드라이버 대시보드에 "받을 돈 0"으로 보인다.',
     )
+    always_show_address = models.BooleanField(
+        default=False,
+        help_text='체크하면 배정된 트립의 풀주소를 전날까지 기다리지 않고 대시보드에 '
+                  '바로 보여준다. 고객 전화번호/프록시 번호는 여전히 전날부터만 열림.',
+    )
 
     class Meta:
         ordering = ['order']

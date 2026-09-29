@@ -520,7 +520,7 @@
       {% endif %}
 
       {% if post.street or post.suburb %}
-        {% if t.in_window %}
+        {% if t.show_address %}
         {% with address=post.street|add:" "|add:post.suburb %}
         <a class="trip-address"
            href="https://www.google.com/maps/search/?api=1&query={{ address|urlencode }}"
@@ -537,7 +537,7 @@
           {{ post.suburb }}
         </a>
         {% endif %}
-      {% elif post.direction == "Cruise or Point to Point" and t.in_window %}
+      {% elif post.direction == "Cruise or Point to Point" and t.show_address %}
         {% with sp=post.start_point ep=post.end_point %}
           {% if sp and sp|slice:":1" >= "0" and sp|slice:":1" <= "9" %}
           <a class="trip-address"
@@ -558,7 +558,11 @@
 
       {% if not t.in_window %}
         <div class="trip-message" style="color:#92400e;background:#fffbeb;border-radius:8px;padding:.5rem .65rem;font-size:.85rem;">
+          {% if t.show_address %}
+          Please note: the customer's phone number will only be visible on the dashboard from 24 hours prior to the pickup, in line with our standard driver access policy
+          {% else %}
           Please note: full booking details will only be visible on the dashboard from 24 hours prior to the pickup, in line with our standard driver access policy
+          {% endif %}
         </div>
       {% endif %}
 
@@ -569,7 +573,7 @@
       {% endif %}
 
       {% if post.extra_stop_addresses %}
-        {% if t.in_window %}
+        {% if t.show_address %}
         <div class="trip-message">
           <strong>Extra Stops:</strong>
           <ul style="margin:.25rem 0 0 1rem;padding:0;">
