@@ -32,7 +32,9 @@ SUPER_SKIP_MARKERS = ['PAYCLEAR', 'SUPERCHOICE']
 # Net' (initial + surname, no PayID digits), which neither the full
 # driver_name regex nor payment_match_digits can catch.
 # 'A REZAI' = subcontractor, confirmed by the owner 2026-09-23.
-DRIVER_PAYOUT_MARKERS = ['A REZAI']
+# 'D S KANG' = subcontractor, written as 'Transfer To D S Kang NetBank EasyGo
+#   to D...' (confirmed by the owner 2026-09-30).
+DRIVER_PAYOUT_MARKERS = ['A REZAI', 'D S KANG']
 
 # Bank CSV import: expense rows at/above this amount are held for human triage.
 REVIEW_THRESHOLD = Decimal('1000')
@@ -46,7 +48,8 @@ INTERNAL_TRANSFER_MARKERS = ['xx8784', 'CommBank app']
 # they never reach P&L or BAS (no GST claim, no deduction).
 # Confirmed personal by the owner:
 #   MUJI — homeware/stationery retail, personal purchases only.
-#   UBER — rideshare trips taken privately (confirmed 2026-08-20). Note the
+#   UBER — rideshare trips taken privately (confirmed 2026-08-20), and
+#     'UBER *EATS' food delivery (confirmed 2026-09-30). Note the
 #     matching 'International Transaction Fee' rows cannot be tied back to the
 #     Uber charge they belong to, so those stay as ordinary bank_fees.
 #   NOMADESIM — travel eSIM data, bought for personal trips (confirmed
@@ -99,6 +102,10 @@ GST_KEYWORD_RULES = [
     (('SPINTEL', '617704 PAYPAL'), 'gst'),
     (('TELSTRA', 'OPTUS', 'VODAFONE', 'TPG', 'AUSSIE BROADBAND',
       'BELONG', 'INTERNET', 'MOBILE'), 'gst'),
+    # 'BIRD AMSTERDAM' = Bird (bird.com), the virtual-number / call-forwarding
+    # provider behind the customer-facing numbers. Billed in AUD, GST-inclusive
+    # (confirmed by the owner 2026-09-30), e.g. 'Bird Amsterdam NL Card xx9565'.
+    (('BIRD AMSTERDAM',), 'gst'),
     # ENEX SERVICES PTY LTD — a driver payout (Don's jobs are paid out to ENEX
     # by request), NOT a GST-bearing purchase. The settlement is the authority
     # here: DriverSettlement -> sync_settlement_expense() already writes the
@@ -118,9 +125,12 @@ GST_KEYWORD_RULES = [
     # 'YONGHOAN JUNG' (Lidcombe) = mobile mechanic called out to the vehicle,
     # GST-inclusive (confirmed by the owner 2026-09-23). The bank row is just
     # his name, e.g. 'YONGHOAN JUNG LIDCOMBE NSW AU'.
+    # 'AMAZON MARKETPLACE' = company vehicle parts, GST-inclusive (confirmed by
+    # the owner 2026-09-30). WARNING: this is every Amazon purchase — anything
+    # bought there that is not a car part must be re-categorised in admin.
     (('SERVICE', 'MECHANIC', 'AUTO', 'TYRE', 'TYRES', 'REPCO',
       'SUPERCHEAP', 'PANEL', 'SMASH', 'CIRCUM VENDING', 'RIZKALLA',
-      'ULTRA TUNE', 'YONGHOAN JUNG'), 'gst'),
+      'ULTRA TUNE', 'YONGHOAN JUNG', 'AMAZON MARKETPLACE'), 'gst'),
     (('GOOGLE', 'META', 'FACEBOOK', 'MARKETING', 'ADVERTIS', 'SEO'), 'gst'),
     (('GROUP TRANSPORT',), 'gst'),
     # 'OFFICEWORKS' = office supplies for the business (confirmed by the
@@ -199,6 +209,8 @@ CATEGORY_KEYWORD_RULES = [
     (('SPINTEL', '617704 PAYPAL'), 'phone_internet'),
     (('TELSTRA', 'OPTUS', 'VODAFONE', 'TPG', 'AUSSIE BROADBAND',
       'BELONG', 'INTERNET', 'MOBILE'), 'phone_internet'),
+    # Bird virtual numbers — see the matching GST rule above.
+    (('BIRD AMSTERDAM',), 'phone_internet'),
     # ENEX SERVICES PTY LTD — subcontractor, confirmed by the owner
     # (2026-08-31): Smile Pickup asks for these jobs to be paid out to ENEX
     # directly via PayID. Checked BEFORE vehicle_maintenance because 'SERVICE'
@@ -206,7 +218,7 @@ CATEGORY_KEYWORD_RULES = [
     (('ENEX',), 'subcontractor_payout'),
     (('SERVICE', 'MECHANIC', 'AUTO', 'TYRE', 'TYRES', 'REPCO',
       'SUPERCHEAP', 'PANEL', 'SMASH', 'CIRCUM VENDING', 'RIZKALLA',
-      'ULTRA TUNE', 'YONGHOAN JUNG'),
+      'ULTRA TUNE', 'YONGHOAN JUNG', 'AMAZON MARKETPLACE'),
      'vehicle_maintenance'),
     (('GOOGLE', 'META', 'FACEBOOK', 'MARKETING', 'ADVERTIS', 'SEO'), 'marketing'),
     (('INSURANCE', 'NRMA', 'AAMI', 'ALLIANZ', 'QBE', 'GIO', 'ZURICH'), 'insurance'),
