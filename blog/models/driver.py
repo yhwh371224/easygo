@@ -144,6 +144,12 @@ class Driver(models.Model):
         help_text='체크하면 배정된 트립의 풀주소를 전날까지 기다리지 않고 대시보드에 '
                   '바로 보여준다. 고객 전화번호/프록시 번호는 여전히 전날부터만 열림.',
     )
+    direct_contact = models.BooleanField(
+        default=False,
+        help_text='체크하면 이 드라이버는 Bird 프록시를 쓰지 않는다 — 외국번호 손님처럼 '
+                  '대시보드에 손님 실제 번호가, 손님 리마인더 이메일에 드라이버 실제 '
+                  '번호가 나간다. 트립의 use_proxy 는 그대로 켜 둘 것(끄면 대시보드에서 사라짐).',
+    )
 
     class Meta:
         ordering = ['order']

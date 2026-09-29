@@ -892,6 +892,49 @@ class ProxyBridgeTests(ProxyNumberTestCase):
         )
 
 
+class DirectContactDriverTests(ProxyNumberTestCase):
+    """Driver.direct_contact opts a driver out of the proxy entirely — every
+    surface falls back to the real numbers, same as a foreign-number
+    customer, and no Bird session bridges."""
+
+    def _make_direct(self):
+        self.wire()
+        self.driver.direct_contact = True
+        self.driver.save()
+
+    def test_all_surfaces_show_real_numbers(self):
+        self._make_direct()
+
+        self.assertIsNone(self.email_number())
+        self.assertIsNone(self.dashboard_number())
+        self.assertEqual(self.calendar_number(), self.CUSTOMER)
+
+        client = Client()
+        client.force_login(self.driver.user)
+        response = client.get(reverse('blog:driver_dashboard'))
+        self.assertContains(response, f'href="tel:{self.CUSTOMER}"')
+
+    def test_new_assignment_opens_no_session(self):
+        self._make_direct()
+        post = Post.objects.create(
+            name='Other', contact='+61422222222', driver=self.driver,
+            pickup_date=datetime.date.today(),
+            pickup_time=timezone.localtime().strftime('%H:%M'),
+            direction='Pickup from Intl Airport', use_proxy=True,
+        )
+        self.assertFalse(PhoneMapping.objects.filter(post=post).exists())
+        # use_proxy stays on so the trip keeps showing on the dashboard.
+        post.refresh_from_db()
+        self.assertTrue(post.use_proxy)
+
+    def test_leftover_session_does_not_bridge(self):
+        # Mapping was opened in setUp, before the flag was set.
+        self._make_direct()
+        self.assertTrue(PhoneMapping.objects.filter(post=self.post).exists())
+        self.assertEqual(self.call(self.CUSTOMER), (None, {}))
+        self.assertEqual(self.text(self.CUSTOMER), {})
+
+
 class ProxyWindowTests(ProxyNumberTestCase):
     """Full detail (street address + phone number) only opens up the day
     before pickup and on the day itself — see the `in_window` flag in

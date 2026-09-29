@@ -140,6 +140,11 @@ def get_proxy_number(instance, driver=None):
     if driver is None:
         return None
 
+    # Driver opted out of the proxy — both sides get the real numbers, same
+    # as a foreign-number customer.
+    if getattr(driver, "direct_contact", False):
+        return None
+
     # Our numbers are AU landline-style; an overseas customer can't reliably
     # reach them, so both sides fall back to the real contact.
     if is_foreign_number(getattr(instance, "contact", None)):
@@ -182,6 +187,17 @@ def create_bird_mapping(instance):
     if not driver or not driver.driver_contact:
         logger.warning(
             "[Bird] Missing driver for post=%s",
+            instance.id,
+        )
+        return False
+
+    if driver.direct_contact:
+        # No session for a direct-contact driver; drop any left over from
+        # before the flag was set so an inbound leg can't still bridge.
+        PhoneMapping.objects.filter(post=instance).delete()
+        logger.info(
+            "[Bird] Skipping proxy — driver=%s is direct-contact (post=%s)",
+            driver.id,
             instance.id,
         )
         return False

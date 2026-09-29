@@ -180,6 +180,10 @@ def _get_active_mapping(from_number, channel_id=None, platform=None):
             Q(post__pickup_date__in=[today, tomorrow])
             | Q(post__isnull=True, pickup_date__in=[today, tomorrow])
         )
+        # A mapping opened before its driver was switched to direct contact
+        # stays in the table; the customer was never given this number for
+        # it, so it must not bridge.
+        .exclude(post__driver__direct_contact=True)
         .select_related('post__driver__virtual_number')
     )
 
