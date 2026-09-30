@@ -87,6 +87,11 @@ class TransactionAdmin(admin.ModelAdmin):
                 name='accounting_bas_report',
             ),
             path(
+                'subcontract-margin/',
+                self.admin_site.admin_view(self.subcontract_margin_view),
+                name='accounting_subcontract_margin',
+            ),
+            path(
                 'bas-report/pdf/',
                 self.admin_site.admin_view(self.bas_report_pdf_view),
                 name='accounting_bas_report_pdf',
@@ -141,6 +146,58 @@ class TransactionAdmin(admin.ModelAdmin):
             'end_str': end.isoformat() if end else '',
         }
         return TemplateResponse(request, 'admin/accounting/pnl_report.html', context)
+
+    def subcontract_margin_view(self, request):
+        # Period: explicit start/end take priority; otherwise FY + optional quarter.
+        cur_fy = reports.current_fy_end_year()
+        start = parse_date(request.GET.get('start') or '')
+        end = parse_date(request.GET.get('end') or '')
+
+        try:
+            fy_year = int(request.GET.get('fy_year') or cur_fy)
+        except (TypeError, ValueError):
+            fy_year = cur_fy
+        try:
+            fy_quarter = int(request.GET.get('fy_quarter') or 0)
+        except (TypeError, ValueError):
+            fy_quarter = 0
+        if fy_quarter not in (0, 1, 2, 3, 4):
+            fy_quarter = 0
+
+        if start and end:
+            period_mode = 'custom'
+        else:
+            period_mode = 'fy'
+            if fy_quarter:
+                _, _, start, end = reports.fy_quarter_to_range(fy_year, fy_quarter)
+            else:
+                start, end = reports.fy_range(fy_year)
+
+        margin = reports.build_subcontract_margin(start, end)
+
+        fy_choices = [
+            {'value': y, 'label': f'FY{y}'}
+            for y in range(cur_fy - 3, cur_fy + 2)
+        ]
+        quarter_choices = [{'value': 0, 'label': 'Whole year'}] + [
+            {'value': q, 'label': label}
+            for q, label in reports.QUARTER_LABELS.items()
+        ]
+
+        context = {
+            **self.admin_site.each_context(request),
+            'title': 'Subcontractor Margin',
+            'opts': self.model._meta,
+            'margin': margin,
+            'period_mode': period_mode,
+            'fy_year': fy_year,
+            'fy_quarter': fy_quarter,
+            'fy_choices': fy_choices,
+            'quarter_choices': quarter_choices,
+            'start_str': start.isoformat() if period_mode == 'custom' else '',
+            'end_str': end.isoformat() if period_mode == 'custom' else '',
+        }
+        return TemplateResponse(request, 'admin/accounting/subcontract_margin.html', context)
 
     def _bas_params(self, request):
         cur_fy = reports.current_fy_end_year()

@@ -1,0 +1,118 @@
+{% extends "admin/base_site.html" %}
+{% load humanize %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <a href="{% url 'admin:index' %}">Home</a>
+  &rsaquo; <a href="{% url 'admin:app_list' app_label='accounting' %}">Accounting</a>
+  &rsaquo; Subcontractor Margin
+</div>
+{% endblock %}
+
+{% block content %}
+<h1>Subcontractor Margin</h1>
+
+<form method="get" style="margin-bottom:1.5em;">
+  <fieldset class="module aligned" style="padding:10px;">
+    <div class="form-row">
+      <label for="id_fy_year" style="margin-right: 10px;">Financial year:</label>
+      <select name="fy_year" id="id_fy_year">
+        {% for c in fy_choices %}
+          <option value="{{ c.value }}" {% if c.value == fy_year %}selected{% endif %}>{{ c.label }}</option>
+        {% endfor %}
+      </select>
+      <select name="fy_quarter" style="margin-left:8px;">
+        {% for c in quarter_choices %}
+          <option value="{{ c.value }}" {% if c.value == fy_quarter %}selected{% endif %}>{{ c.label }}</option>
+        {% endfor %}
+      </select>
+      <span class="help" style="margin-left:10px;">Used unless both custom dates below are set.</span>
+    </div>
+
+    <div class="form-row" style="margin-top:8px;">
+      <label for="id_start" style="margin-right: 10px;">Custom period:</label>
+      <input type="date" name="start" id="id_start" value="{{ start_str }}" style="margin-right: 8px;"> &ndash;
+      <input type="date" name="end" value="{{ end_str }}" style="margin-left:8px;">
+      <span class="help" style="margin-left:10px;">Overrides the financial year when both are filled.</span>
+    </div>
+
+    <div class="submit-row" style="margin-top:16px;">
+      <input type="submit" value="Run report" class="default">
+    </div>
+  </fieldset>
+</form>
+
+<p><strong>Pickup dates:</strong> {{ margin.start }} &ndash; {{ margin.end }}</p>
+
+<style>
+  .report-table { border-collapse: collapse; }
+  .report-table th,
+  .report-table td { padding: 8px 12px; border-bottom: 1px solid #eee; }
+  .report-table thead tr { border-bottom: 2px solid #ccc; }
+  .report-table td.num,
+  .report-table th.num { text-align: right; white-space: nowrap; }
+  .report-table tr.total td { border-top: 2px solid #999; font-weight: bold; }
+  .neg { color: #c0392b; }
+</style>
+
+{% if margin.rows %}
+<table class="report-table">
+  <thead>
+    <tr>
+      <th>Driver</th>
+      <th class="num">Rides</th>
+      <th class="num">Customer paid</th>
+      <th class="num">Paid to driver</th>
+      <th class="num">Margin</th>
+      <th class="num">Margin %</th>
+      <th class="num">of which commission</th>
+      <th class="num">GST on sale</th>
+      <th class="num">GST credit</th>
+      <th class="num">Net (ex GST)</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in margin.rows %}
+    <tr>
+      <td>
+        {{ r.driver_name }}
+        <span class="help">{{ r.commission_rate|floatformat:"-2" }}%{% if not r.gst_registered %} · no GST{% endif %}</span>
+        {% if r.negative_rides %}<br><span class="neg" style="font-size:0.85em;">{{ r.negative_rides }} ride(s) paid more than the customer paid</span>{% endif %}
+      </td>
+      <td class="num">{{ r.rides }}</td>
+      <td class="num">${{ r.customer|floatformat:2|intcomma }}</td>
+      <td class="num">${{ r.payout|floatformat:2|intcomma }}</td>
+      <td class="num {% if r.margin < 0 %}neg{% endif %}">${{ r.margin|floatformat:2|intcomma }}</td>
+      <td class="num">{{ r.margin_pct|floatformat:1 }}%</td>
+      <td class="num">${{ r.commission|floatformat:2|intcomma }}</td>
+      <td class="num">&minus;${{ r.gst_on_sale|floatformat:2|intcomma }}</td>
+      <td class="num">+${{ r.gst_credit|floatformat:2|intcomma }}</td>
+      <td class="num {% if r.net < 0 %}neg{% endif %}"><strong>${{ r.net|floatformat:2|intcomma }}</strong></td>
+    </tr>
+    {% endfor %}
+    <tr class="total">
+      <td>Total</td>
+      <td class="num">{{ margin.totals.rides }}</td>
+      <td class="num">${{ margin.totals.customer|floatformat:2|intcomma }}</td>
+      <td class="num">${{ margin.totals.payout|floatformat:2|intcomma }}</td>
+      <td class="num {% if margin.totals.margin < 0 %}neg{% endif %}">${{ margin.totals.margin|floatformat:2|intcomma }}</td>
+      <td class="num">{{ margin.totals.margin_pct|floatformat:1 }}%</td>
+      <td class="num">${{ margin.totals.commission|floatformat:2|intcomma }}</td>
+      <td class="num">&minus;${{ margin.totals.gst_on_sale|floatformat:2|intcomma }}</td>
+      <td class="num">+${{ margin.totals.gst_credit|floatformat:2|intcomma }}</td>
+      <td class="num {% if margin.totals.net < 0 %}neg{% endif %}">${{ margin.totals.net|floatformat:2|intcomma }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<p class="help" style="margin-top:1em; max-width:760px;">
+  Settled subcontractor rides only (owner drivers and driver-collected cash rides are never settled).
+  <strong>Customer paid</strong> = booking price − refund.
+  <strong>Paid to driver</strong> = settlement amount (after commission, non-GST deduction and refund share).
+  <strong>Margin</strong> = the difference; <em>of which commission</em> is the part from the driver's commission rate, the rest is the gap between price and driver price.
+  <strong>Net (ex GST)</strong> = margin − GST owed on the sale (pickups from 2026-07-01) + GST credit on the driver's payout (GST-registered drivers only).
+</p>
+{% else %}
+<p style="color:#888;">No settled subcontractor rides in this period.</p>
+{% endif %}
+{% endblock %}

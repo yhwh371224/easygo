@@ -657,3 +657,84 @@ def build_pnl(start, end, brand=BRAND_ALL):
         # for the "all" view, expense + labour is the total cost block
         'total_cost': (expense_total + labour_total) if is_all else expense_total,
     }
+
+
+# ---------------------------------------------------------------------------
+# Subcontractor margin
+# ---------------------------------------------------------------------------
+
+def build_subcontract_margin(start, end):
+    """Company margin on rides done by subcontractors, by pickup_date.
+
+    Only rides that were actually settled (a non-draft DriverSettlementItem)
+    are counted, so owner drivers (wage-paid, never settled) and
+    driver_collected_cash rides (never pass through the company) drop out.
+
+    Per ride:
+        customer  = Post.price − Post.refund (what the customer was charged)
+        payout    = DriverSettlementItem.line_total (what the driver was paid)
+        margin    = customer − payout
+        net       = margin − GST on the sale (customer ÷ 11, pickups on/after
+                    GST_REGISTRATION_DATE) + the driver's GST credit
+                    (DriverSettlementItem.gst_amount)
+    commission is Post.commission_amount as it stands now — shown only as the
+    part of margin that comes from the driver's commission rate.
+    """
+    from blog.models.driver import DriverSettlementItem
+    from .conf import GST_REGISTRATION_DATE
+
+    items = (
+        DriverSettlementItem.objects
+        .filter(post__pickup_date__gte=start, post__pickup_date__lte=end)
+        .exclude(settlement__status='draft')
+        .select_related('post', 'settlement__driver')
+    )
+
+    by_driver = {}
+    for item in items:
+        post = item.post
+        driver = item.settlement.driver
+        row = by_driver.setdefault(driver.pk, {
+            'driver_name': driver.driver_name or '(unnamed)',
+            'commission_rate': driver.commission_rate,
+            'gst_registered': driver.gst_registered,
+            'rides': 0,
+            'customer': ZERO,
+            'payout': ZERO,
+            'commission': ZERO,
+            'gst_on_sale': ZERO,
+            'gst_credit': ZERO,
+            'negative_rides': 0,
+        })
+        customer = post._price_decimal - (post.refund or ZERO)
+        payout = item.line_total
+        if post.pickup_date >= GST_REGISTRATION_DATE:
+            gst_on_sale = (customer / _ELEVEN).quantize(_CENT, rounding=ROUND_HALF_UP)
+        else:
+            gst_on_sale = ZERO
+
+        row['rides'] += 1
+        row['customer'] += customer
+        row['payout'] += payout
+        row['commission'] += post.commission_amount
+        row['gst_on_sale'] += gst_on_sale
+        row['gst_credit'] += item.gst_amount
+        if customer - payout < ZERO:
+            row['negative_rides'] += 1
+
+    rows = sorted(by_driver.values(), key=lambda r: r['driver_name'].lower())
+    totals = {k: ZERO for k in ('customer', 'payout', 'commission',
+                                'gst_on_sale', 'gst_credit', 'margin', 'net')}
+    totals['rides'] = 0
+    totals['negative_rides'] = 0
+    for r in rows:
+        r['margin'] = r['customer'] - r['payout']
+        r['net'] = r['margin'] - r['gst_on_sale'] + r['gst_credit']
+        r['margin_pct'] = (r['margin'] / r['customer'] * 100) if r['customer'] else ZERO
+        for k in totals:
+            totals[k] += r[k]
+    totals['margin_pct'] = (
+        totals['margin'] / totals['customer'] * 100 if totals['customer'] else ZERO
+    )
+
+    return {'start': start, 'end': end, 'rows': rows, 'totals': totals}
