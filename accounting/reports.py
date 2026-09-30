@@ -4,12 +4,12 @@ This module is admin-only. Public views/templates must never import it.
 
 build_pnl       — Transaction + PayrollEntry only; ORM-level aggregation.
 build_sales_gst — blog.Post cash-basis GST 1A; Python-loop (CharField paid).
-build_bas       — full BAS: 1A + 1B + W1/W2 + refund candidates.
+build_bas       — full BAS: 1A + 1B + W1–W5 + refund candidates.
 """
 from datetime import date
 from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
 
-from django.db.models import Sum
+from django.db.models import Count, Q, Sum
 
 from .models import Transaction, PayrollEntry
 
@@ -402,13 +402,19 @@ def build_bas(fy_year, fy_quarter):
           when > 0, else falls back to gross_amount ÷ 11.
     W1  — PayrollEntry.gross_pay total for the quarter.
     W2  — PayrollEntry.paygw_withheld total.
+    W3  — other amounts withheld: always 0 (no such payments are made).
+    W4  — amount withheld where no ABN is quoted: always 0 — driver payouts
+          are paid in full, nothing is withheld. no_abn_payees lists drivers
+          paid in the quarter with no ABN on file, for manual review only.
+    W5  — W2 + W3 + W4.
     net_gst — 1A − 1B.
 
     refund_candidates — NOT subtracted from 1A; shown for manual review only:
         (a) Cancelled Post rows with a paid amount in the quarter.
         (b) Negative-amount PaypalPayment / StripePayment rows in the quarter.
     """
-    from blog.models import Post, PaypalPayment, StripePayment
+    from blog.models import Post, PaypalPayment, StripePayment, DriverSettlement
+    from blog.models.booking import OWNER_DRIVER_NAMES
 
     cal_year, cal_quarter, start, end = fy_quarter_to_range(fy_year, fy_quarter)
 
@@ -436,6 +442,36 @@ def build_bas(fy_year, fy_quarter):
     ).aggregate(w1=Sum('gross_pay'), w2=Sum('paygw_withheld'))
     w1 = payroll['w1'] or ZERO
     w2 = payroll['w2'] or ZERO
+
+    # --- W3 / W4 / W5 ---
+    # W4 is the amount actually withheld, not what should have been withheld.
+    # Settlements pay drivers in full, so it stays 0; no_abn_payees surfaces
+    # the drivers the 47% no-ABN withholding rule may apply to.
+    w3 = ZERO
+    w4 = ZERO
+    w5 = w2 + w3 + w4
+
+    no_abn_payees = []
+    no_abn_rows = (
+        DriverSettlement.objects
+        .filter(to_date__gte=start, to_date__lte=end)
+        .exclude(status='draft')
+        .filter(Q(driver__abn__isnull=True) | Q(driver__abn__regex=r'^\s*$'))
+        .values('driver__driver_name')
+        .annotate(total=Sum('total_amount'), count=Count('id'))
+        .order_by('driver__driver_name')
+    )
+    for row in no_abn_rows:
+        name = row['driver__driver_name'] or '(unnamed)'
+        if name.strip().lower() in OWNER_DRIVER_NAMES:
+            continue
+        total = row['total'] or ZERO
+        no_abn_payees.append({
+            'driver_name': name,
+            'settlement_count': row['count'],
+            'total': total,
+            'withholding_47': (total * Decimal('0.47')).quantize(_CENT, rounding=ROUND_HALF_UP),
+        })
 
     # --- Refund candidates (display only) ---
     # Each row carries a status so the list can be triaged at a glance:
@@ -509,6 +545,10 @@ def build_bas(fy_year, fy_quarter):
         'net_gst': gst_1a - gst_1b,
         'w1': w1,
         'w2': w2,
+        'w3': w3,
+        'w4': w4,
+        'w5': w5,
+        'no_abn_payees': no_abn_payees,
         'refund_candidates': refund_candidates,
     }
 

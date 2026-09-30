@@ -156,8 +156,51 @@
       <td>PAYG withholding</td>
       <td class="num">${{ bas.w2|floatformat:2|intcomma }}</td>
     </tr>
+    <tr>
+      <th>W3</th>
+      <td>Other amounts withheld (excluding any amount shown at W2 or W4)</td>
+      <td class="num">${{ bas.w3|floatformat:2|intcomma }}</td>
+    </tr>
+    <tr>
+      <th>W4</th>
+      <td>Amount withheld where no ABN is quoted</td>
+      <td class="num">${{ bas.w4|floatformat:2|intcomma }}</td>
+    </tr>
+    <tr>
+      <th>W5</th>
+      <td><strong>Total amount withheld (W2 + W4 + W3)</strong></td>
+      <td class="num"><strong>${{ bas.w5|floatformat:2|intcomma }}</strong></td>
+    </tr>
   </tbody>
 </table>
+
+{% if bas.no_abn_payees %}
+<div style="padding:10px; background:#fff3cd; border:1px solid #ffc107; max-width:700px; margin-top:1em;">
+  <strong>No-ABN drivers paid this quarter — W4 review.</strong><br>
+  These drivers have no ABN on file and were paid in full (nothing withheld, so W4 stays $0).
+  The 47% no-ABN withholding rule may apply — check with the accountant before lodging.
+  <table class="report-table" style="margin-top:0.5em;">
+    <thead>
+      <tr>
+        <th>Driver</th>
+        <th class="num">Settlements</th>
+        <th class="num">Paid</th>
+        <th class="num">47% would be</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in bas.no_abn_payees %}
+      <tr>
+        <td>{{ p.driver_name }}</td>
+        <td class="num">{{ p.settlement_count }}</td>
+        <td class="num">${{ p.total|floatformat:2|intcomma }}</td>
+        <td class="num">${{ p.withholding_47|floatformat:2|intcomma }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
 
 {# ------------------------------------------------------------------ #}
 {# Refund candidates                                                    #}

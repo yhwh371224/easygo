@@ -79,8 +79,19 @@
         <td class="num">${{ bas.w1|floatformat:2|intcomma }}</td></tr>
     <tr><td class="label">W2</td><td>PAYG withholding</td>
         <td class="num">${{ bas.w2|floatformat:2|intcomma }}</td></tr>
+    <tr><td class="label">W3</td><td>Other amounts withheld (excluding any amount shown at W2 or W4)</td>
+        <td class="num">${{ bas.w3|floatformat:2|intcomma }}</td></tr>
+    <tr><td class="label">W4</td><td>Amount withheld where no ABN is quoted</td>
+        <td class="num">${{ bas.w4|floatformat:2|intcomma }}</td></tr>
+    <tr class="total"><td class="label">W5</td><td>Total amount withheld (W2 + W4 + W3)</td>
+        <td class="num">${{ bas.w5|floatformat:2|intcomma }}</td></tr>
   </tbody>
 </table>
+{% if bas.no_abn_payees %}
+<div class="note">No-ABN drivers paid in full this quarter (W4 review, nothing withheld):
+  {% for p in bas.no_abn_payees %}{{ p.driver_name }} ${{ p.total|floatformat:2|intcomma }} (47% = ${{ p.withholding_47|floatformat:2|intcomma }}){% if not forloop.last %}; {% endif %}{% endfor %}
+</div>
+{% endif %}
 
 <h2>Refund Candidates</h2>
 {% if bas.refund_candidates %}
