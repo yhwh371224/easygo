@@ -667,8 +667,11 @@ def build_subcontract_margin(start, end):
     """Company margin on rides done by subcontractors, by pickup_date.
 
     Only rides that were actually settled (a non-draft DriverSettlementItem)
-    are counted, so owner drivers (wage-paid, never settled) and
-    driver_collected_cash rides (never pass through the company) drop out.
+    are counted, so driver_collected_cash rides (never pass through the
+    company) drop out. Owner drivers (OWNER_DRIVER_NAMES — the director, paid
+    a wage) are skipped explicitly: the daily cron wrongly settled them from
+    2026-08-10 until create_settlement learned to refuse, and those
+    settlements still exist.
 
     Per ride:
         customer  = Post.price − Post.refund (what the customer was charged)
@@ -680,6 +683,7 @@ def build_subcontract_margin(start, end):
     commission is Post.commission_amount as it stands now — shown only as the
     part of margin that comes from the driver's commission rate.
     """
+    from blog.models.booking import OWNER_DRIVER_NAMES
     from blog.models.driver import DriverSettlementItem
     from .conf import GST_REGISTRATION_DATE
 
@@ -694,6 +698,8 @@ def build_subcontract_margin(start, end):
     for item in items:
         post = item.post
         driver = item.settlement.driver
+        if (driver.driver_name or '').strip().lower() in OWNER_DRIVER_NAMES:
+            continue
         row = by_driver.setdefault(driver.pk, {
             'driver_name': driver.driver_name or '(unnamed)',
             'commission_rate': driver.commission_rate,
