@@ -580,6 +580,59 @@ class StripePaymentModelTests(TestCase):
             StripePayment.objects.create(payment_intent_id='pi_dup', amount=Decimal('20'))
 
 
+class StripeChargeRefundedTests(TestCase):
+    """charge.refunded webhook → negative StripePayment per succeeded refund."""
+
+    def _charge(self, pi='pi_orig', billing=None):
+        import stripe
+        return stripe.StripeObject.construct_from({
+            'id': 'ch_1', 'payment_intent': pi, 'amount_refunded': 12250,
+            'billing_details': billing or {'name': None, 'email': None},
+        }, 'k')
+
+    def _refunds(self, *rows):
+        import stripe
+        lst = MagicMock()
+        lst.auto_paging_iter.return_value = [
+            stripe.StripeObject.construct_from(r, 'k') for r in rows
+        ]
+        return lst
+
+    def _run(self, charge, refunds):
+        from basecamp.modules.payment_utils import handle_charge_refunded
+        with patch('basecamp.modules.payment_utils.stripe.Refund.list', return_value=refunds):
+            handle_charge_refunded(charge)
+
+    def test_partial_refund_uses_original_payer(self):
+        StripePayment.objects.create(name='Kate Vose', email='kate@x.com',
+                                     amount=Decimal('123.00'), payment_intent_id='pi_orig')
+        self._run(self._charge(), self._refunds(
+            {'id': 're_1', 'amount': 12250, 'status': 'succeeded'}))
+        row = StripePayment.objects.get(payment_intent_id='re_1')
+        self.assertEqual(row.amount, Decimal('-122.50'))
+        self.assertEqual((row.name, row.email), ('Kate Vose', 'kate@x.com'))
+
+    def test_redelivery_and_second_partial_refund(self):
+        StripePayment.objects.create(name='A', email='a@x.com',
+                                     amount=Decimal('100'), payment_intent_id='pi_orig')
+        first = {'id': 're_1', 'amount': 3000, 'status': 'succeeded'}
+        self._run(self._charge(), self._refunds(first))
+        self._run(self._charge(), self._refunds(first))   # webhook redelivered
+        self._run(self._charge(), self._refunds(
+            {'id': 're_2', 'amount': 2000, 'status': 'succeeded'}, first))
+        amounts = sorted(StripePayment.objects.filter(amount__lt=0)
+                         .values_list('amount', flat=True))
+        self.assertEqual(amounts, [Decimal('-30.00'), Decimal('-20.00')])
+
+    def test_skips_unsucceeded_and_falls_back_to_billing(self):
+        self._run(self._charge(billing={'name': 'B', 'email': 'b@x.com'}), self._refunds(
+            {'id': 're_p', 'amount': 500, 'status': 'pending'},
+            {'id': 're_s', 'amount': 700, 'status': 'succeeded'}))
+        self.assertFalse(StripePayment.objects.filter(payment_intent_id='re_p').exists())
+        row = StripePayment.objects.get(payment_intent_id='re_s')
+        self.assertEqual((row.name, row.email, row.amount), ('B', 'b@x.com', Decimal('-7.00')))
+
+
 # ---------------------------------------------------------------------------
 # Model: PhoneMapping
 # ---------------------------------------------------------------------------

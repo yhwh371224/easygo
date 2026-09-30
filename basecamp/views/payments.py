@@ -20,7 +20,7 @@ from basecamp.basecamp_utils import (
     render_inquiry_done, require_turnstile, parse_one_based_index,
     is_ajax,
 )
-from basecamp.modules.payment_utils import _record_paypal_fee
+from basecamp.modules.payment_utils import _record_paypal_fee, handle_charge_refunded
 from accounting.conf import GST_REGISTRATION_DATE
 from django_ratelimit.decorators import ratelimit
 
@@ -642,6 +642,9 @@ def stripe_webhook(request):
         session = event.data.object
         print('PaymentIntent was successful!')
         handle_checkout_session_completed(session)
+
+    elif event.type == 'charge.refunded':
+        handle_charge_refunded(event.data.object)
 
     else:
         print(f'Unhandled event type: {event.type}')

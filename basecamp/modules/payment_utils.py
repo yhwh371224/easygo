@@ -253,6 +253,47 @@ def handle_checkout_session_completed(session):
         record_stripe_fee_task.apply_async(args=[session.payment_intent], countdown=20)
 
 
+def handle_charge_refunded(charge):
+    """Record each succeeded refund on a Stripe charge as a negative StripePayment.
+
+    Stripe fires charge.refunded on every full or partial refund, but the
+    charge object no longer embeds its refunds list, so the refunds are listed
+    via the API. Each refund is stored under its own re_… id in
+    payment_intent_id (the field is unique), which makes redelivered webhooks
+    and repeat partial refunds idempotent. Saving the row triggers
+    notify_user_payment_stripe, whose negative-amount branch auto-fills
+    Post.refund (single match only) and sends the refund email + Telegram.
+
+    Name/email come from the original payment row, so the refund matches the
+    same bookings the payment did; billing_details is only the fallback.
+    """
+    original = StripePayment.objects.filter(payment_intent_id=charge.payment_intent).first()
+    billing = charge.billing_details or {}
+    name = (original.name if original else None) or billing.get('name')
+    email = (original.email if original else None) or billing.get('email')
+
+    try:
+        refunds = stripe.Refund.list(charge=charge.id, limit=100)
+    except Exception as e:
+        logger.exception('handle_charge_refunded: listing refunds failed for %s', charge.id)
+        stripe_payment_error_email('Stripe Refund Fetch Error', str(e), name, email, charge.amount_refunded / 100)
+        return
+
+    for refund in refunds.auto_paging_iter():
+        if refund.status != 'succeeded':
+            continue
+        amount = -(Decimal(refund.amount) / 100).quantize(_CENT)
+        try:
+            _, created = StripePayment.objects.get_or_create(
+                payment_intent_id=refund.id,
+                defaults={'name': name, 'email': email, 'amount': amount},
+            )
+            logger.info('handle_charge_refunded: %s %s amount=%s created=%s',
+                        charge.payment_intent, refund.id, amount, created)
+        except Exception as e:
+            stripe_payment_error_email('Stripe Refund Save Error', str(e), name, email, amount)
+
+
 def stripe_payment_error_email(subject, message, name, email, amount):
     content = f"""
     Subject: {subject}
