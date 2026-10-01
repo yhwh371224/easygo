@@ -59,6 +59,10 @@
         <td class="num">${{ bas.sales.paypal_surcharge|floatformat:2|intcomma }}</td></tr>
     <tr class="muted"><td></td><td class="desc" style="padding-left:7mm;">Bookings counted</td>
         <td class="num">{{ bas.sales.post_count }}</td></tr>
+    {% if bas.other_income_gst %}
+    <tr class="sub"><td></td><td class="desc">Other income (Transactions) gross / GST</td>
+        <td class="num">${{ bas.other_income_total|floatformat:2|intcomma }} / ${{ bas.other_income_gst|floatformat:2|intcomma }}</td></tr>
+    {% endif %}
     <tr><td class="label">1B</td><td><strong>GST on purchases (credits)</strong></td>
         <td class="num"><strong>${{ bas.gst_1b|floatformat:2|intcomma }}</strong></td></tr>
     <tr class="total">

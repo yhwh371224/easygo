@@ -7,6 +7,7 @@ from googleapiclient.errors import HttpError
 from google.oauth2 import service_account
 from django.conf import settings
 from blog.models import Post
+from blog.models.booking import OWNER_DRIVER_NAMES
 
 logger = logging.getLogger(__name__)
 
@@ -160,6 +161,13 @@ def _return_stop_list(instance):
     return []
 
 
+def _shows_driver_price(instance):
+    """driver_price 는 외부 드라이버(subcontractor)에게 배정된 건에만 의미가 있다."""
+    if not instance.driver_price or not instance.driver:
+        return False
+    return (instance.driver.driver_name or '').strip().lower() not in OWNER_DRIVER_NAMES
+
+
 def build_event_data(instance):
     """회사 캘린더용 event body 생성"""
     contact_display = _get_contact_display(instance)
@@ -188,7 +196,8 @@ def build_event_data(instance):
         (instance.driver.driver_name or '') if instance.driver else '',
         # 드라이버에게 지급할 금액. 커미션 차감 전 금액(driver_price)이라
         # 정산서의 지급액(subcontractor_payout)과는 다를 수 있다.
-        f"dp:${instance.driver_price}" if instance.driver_price else '',
+        # 드라이버 미배정 건과 오너(sam/sung/peter, wage 받음) 건은 제목의 price 만 본다.
+        f"dp:${instance.driver_price}" if _shows_driver_price(instance) else '',
         instance.region.name if instance.region_id else '',
         instance.contact if contact_display != instance.contact else '',
     ]))

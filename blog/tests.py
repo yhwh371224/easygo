@@ -366,27 +366,45 @@ class CalendarEventDescriptionTests(TestCase):
     def _post(self, **kw):
         kw.setdefault('pickup_date', datetime.date.today())
         kw.setdefault('pickup_time', '09:00')
+        kw.setdefault('price', '110')
         return Post.objects.create(
-            name='Pax', email='p@x.com', no_of_passenger='1', price='110', **kw,
+            name='Pax', email='p@x.com', no_of_passenger='1', **kw,
         )
 
     def test_driver_price_in_description(self, *_):
         from utils.calendar_sync import build_event_data
 
-        post = self._post(driver_price='100')
+        post = self._post(driver_price='100', driver=make_driver())
         self.assertIn('dp:$100', build_event_data(post)['description'])
 
     def test_driver_price_omitted_when_blank(self, *_):
         """price is blank too, so Post.save() has nothing to derive it from."""
         from utils.calendar_sync import build_event_data
 
-        post = self._post(price='', driver_price='')
+        post = self._post(price='', driver_price='', driver=make_driver())
+        self.assertNotIn('dp:$', build_event_data(post)['description'])
+
+    def test_driver_price_omitted_when_unassigned(self, *_):
+        from utils.calendar_sync import build_event_data
+
+        post = self._post(driver_price='100')
+        self.assertNotIn('dp:$', build_event_data(post)['description'])
+
+    def test_driver_price_omitted_for_owner_driver(self, *_):
+        """sam/sung/peter are the owner on a wage — the title's price is enough."""
+        from utils.calendar_sync import build_event_data
+
+        driver = make_driver()
+        driver.driver_name = 'Sung'
+        driver.save()
+        post = self._post(driver_price='100', driver=driver)
         self.assertNotIn('dp:$', build_event_data(post)['description'])
 
     def test_region_follows_driver_price_in_description(self, *_):
         from utils.calendar_sync import build_event_data
 
-        post = self._post(driver_price='100', region=make_region('sydney', 'Sydney'))
+        post = self._post(driver_price='100', driver=make_driver(),
+                          region=make_region('test-sydney', 'Sydney'))
         self.assertIn('dp:$100 Sydney', build_event_data(post)['description'])
 
 
@@ -2417,3 +2435,77 @@ class FullyBookedDateTests(TestCase):
         html = render_to_string('basecamp/layouts/fully_booked_notice.html', {})
         self.assertIn('id="fully-booked-dates"', html)
         self.assertIn(day.isoformat(), html)
+
+
+# ---------------------------------------------------------------------------
+# accounting.reports.build_pnl — ex-GST
+# ---------------------------------------------------------------------------
+
+@patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+@patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+class BuildPnlExGstTests(TestCase):
+    def _post(self, pickup_date, paid):
+        return Post.objects.create(
+            name='Pax', email='p@x.com', no_of_passenger='1', price=paid, paid=paid,
+            pickup_date=pickup_date, pickup_time='09:00',
+        )
+
+    def _tx(self, day, gross, gst_code='no_gst', gst_amount='0', category='fuel'):
+        from accounting.models import Transaction
+        return Transaction.objects.create(
+            date=day, direction='expense', description='x', category=category,
+            gross_amount=Decimal(gross), gst_code=gst_code, gst_amount=Decimal(gst_amount),
+        )
+
+    def test_figures_exclude_gst_after_registration(self, *_):
+        from accounting.reports import build_pnl
+        day = datetime.date(2026, 8, 1)
+        self._post(day, '1100')
+        self._tx(day, '110', gst_code='gst', gst_amount='10')           # fuel
+        self._tx(day, '220', gst_code='gst', category='tolls')          # gst_amount 0 → ÷11
+        self._tx(day, '500', category='subcontract')                    # unregistered driver
+
+        p = build_pnl(datetime.date(2026, 7, 1), datetime.date(2026, 9, 30))
+
+        self.assertEqual(p['income_bookings'], Decimal('1000.00'))
+        self.assertEqual(p['expense_total'], Decimal('800.00'))         # 100 + 200 + 500
+        self.assertEqual(p['net'], Decimal('200.00'))
+        self.assertEqual(p['gst_collected'], Decimal('100.00'))
+        self.assertEqual(p['gst_credits'], Decimal('30.00'))
+        self.assertEqual(p['gst_net'], Decimal('70.00'))
+        self.assertEqual(
+            {r['category']: r['subtotal'] for r in p['expense_breakdown']},
+            {'fuel': Decimal('100.00'), 'tolls': Decimal('200.00'), 'subcontract': Decimal('500.00')},
+        )
+
+    def test_no_gst_taken_out_before_registration(self, *_):
+        from accounting.reports import build_pnl
+        day = datetime.date(2026, 6, 1)
+        self._post(day, '1100')
+        self._tx(day, '110', gst_code='gst', gst_amount='10')
+
+        p = build_pnl(datetime.date(2026, 4, 1), datetime.date(2026, 6, 30))
+
+        self.assertEqual(p['income_bookings'], Decimal('1100'))
+        self.assertEqual(p['expense_total'], Decimal('110'))
+        self.assertEqual(p['gst_net'], Decimal('0'))
+
+    def test_bas_1a_includes_income_transaction_gst(self, *_):
+        """Hand-entered income (e.g. coaches, no Post rows) — P&L strips its
+        GST, so BAS must collect it in 1A."""
+        from accounting.models import Transaction
+        from accounting.reports import build_bas
+        Transaction.objects.create(
+            date=datetime.date(2026, 8, 1), direction='income', brand='coaches',
+            description='coach hire', category='coach_income',
+            gross_amount=Decimal('550'), gst_code='gst',
+        )
+        Transaction.objects.create(
+            date=datetime.date(2026, 8, 2), direction='income', description='held',
+            category='x', gross_amount=Decimal('1100'), gst_code='gst', needs_review=True,
+        )
+
+        b = build_bas(2027, 1)
+
+        self.assertEqual(b['other_income_gst'], Decimal('50.00'))
+        self.assertEqual(b['gst_1a'], b['sales']['total_gst_1a'] + Decimal('50.00'))

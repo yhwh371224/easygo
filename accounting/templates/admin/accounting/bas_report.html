@@ -104,6 +104,15 @@
       <td style="padding-left:2em; color:#999;">Bookings counted</td>
       <td class="num" style="color:#999;">{{ bas.sales.post_count }}</td>
     </tr>
+    {% if bas.other_income_gst %}
+    <tr>
+      <td></td>
+      <td style="padding-left:2em;">&mdash; Other income (Transactions) &nbsp; gross&nbsp;/&nbsp;GST</td>
+      <td class="num">
+        ${{ bas.other_income_total|floatformat:2|intcomma }}&nbsp;/&nbsp;${{ bas.other_income_gst|floatformat:2|intcomma }}
+      </td>
+    </tr>
+    {% endif %}
 
     {# 1B #}
     <tr style="background:#fff8f0;">

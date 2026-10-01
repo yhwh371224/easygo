@@ -64,7 +64,7 @@
 
 <table class="report-table">
   <thead>
-    <tr><th>Line</th><th class="num">Amount</th></tr>
+    <tr><th>Line</th><th class="num">Amount (ex-GST)</th></tr>
   </thead>
   <tbody>
     <tr>
@@ -128,6 +128,21 @@
     <tr style="border-top:2px solid #444;">
       <th>Brand net profit (income &minus; expenses)</th>
       <td class="num"><strong>{{ pnl.net|floatformat:2|intcomma }}</strong></td>
+    </tr>
+    {% endif %}
+
+    {% if pnl.gst_collected or pnl.gst_credits %}
+    <tr style="color:#999;">
+      <td style="padding-top:1.5em;">GST taken out above &mdash; collected (1A-type)</td>
+      <td class="num" style="padding-top:1.5em;">{{ pnl.gst_collected|floatformat:2|intcomma }}</td>
+    </tr>
+    <tr style="color:#999;">
+      <td>GST taken out above &mdash; credits (1B-type)</td>
+      <td class="num">{{ pnl.gst_credits|floatformat:2|intcomma }}</td>
+    </tr>
+    <tr style="color:#999;">
+      <td>Net GST (owed to the ATO via BAS, not profit)</td>
+      <td class="num">{{ pnl.gst_net|floatformat:2|intcomma }}</td>
     </tr>
     {% endif %}
   </tbody>

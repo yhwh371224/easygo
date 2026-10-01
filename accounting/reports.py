@@ -6,7 +6,7 @@ build_pnl       — Transaction + PayrollEntry only; ORM-level aggregation.
 build_sales_gst — blog.Post cash-basis GST 1A; Python-loop (CharField paid).
 build_bas       — full BAS: 1A + 1B + W1–W5 + refund candidates.
 """
-from datetime import date
+from datetime import date, timedelta
 from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
 
 from django.db.models import Count, Q, Sum
@@ -397,7 +397,9 @@ def _classify_refund_payment(pm, amt):
 def build_bas(fy_year, fy_quarter):
     """Assemble full BAS data for one Australian FY quarter.
 
-    1A  — Post.paid cash-basis GST (via build_sales_gst).
+    1A  — Post.paid cash-basis GST (via build_sales_gst), plus GST on income
+          Transactions entered by hand in admin (e.g. coaches, which has no
+          Post rows) — same rule as 1B via _tx_gst.
     1B  — Transaction expense rows with gst_code='gst'; uses stored gst_amount
           when > 0, else falls back to gross_amount ÷ 11.
     W1  — PayrollEntry.gross_pay total for the quarter.
@@ -420,7 +422,17 @@ def build_bas(fy_year, fy_quarter):
 
     # --- 1A ---
     sales = build_sales_gst(cal_year, cal_quarter)
-    gst_1a = sales['total_gst_1a']
+    other_income_total = ZERO
+    other_income_gst = ZERO
+    for tx in Transaction.objects.filter(
+        date__gte=start, date__lte=end,
+        direction='income', needs_review=False, excluded=False,
+    ):
+        gst = _tx_gst(tx)
+        if gst > ZERO:
+            other_income_total += tx.gross_amount
+            other_income_gst += gst
+    gst_1a = sales['total_gst_1a'] + other_income_gst
 
     # --- 1B ---
     # needs_review (held for triage) and excluded (driver payouts already in
@@ -540,6 +552,8 @@ def build_bas(fy_year, fy_quarter):
         'start': start,
         'end': end,
         'sales': sales,
+        'other_income_total': other_income_total,
+        'other_income_gst': other_income_gst,
         'gst_1a': gst_1a,
         'gst_1b': gst_1b,
         'net_gst': gst_1a - gst_1b,
@@ -557,8 +571,27 @@ def build_bas(fy_year, fy_quarter):
 # P&L
 # ---------------------------------------------------------------------------
 
+def _tx_gst(tx):
+    """GST inside one Transaction's gross_amount — same rule as BAS 1B: the
+    stored gst_amount, else gross ÷ 11. Zero unless gst_code='gst' and the row
+    is dated on/after GST registration."""
+    from .conf import GST_REGISTRATION_DATE
+
+    if tx.gst_code != 'gst' or tx.date < GST_REGISTRATION_DATE:
+        return ZERO
+    if tx.gst_amount > ZERO:
+        return tx.gst_amount
+    return (tx.gross_amount / _ELEVEN).quantize(_CENT, rounding=ROUND_HALF_UP)
+
+
 def build_pnl(start, end, brand=BRAND_ALL):
     """Build the P&L summary for the given period and brand.
+
+    All figures are ex-GST. Post.paid and Transaction.gross_amount are
+    GST-inclusive; the GST in them is owed to / claimed from the ATO via BAS
+    (1A / 1B), not company income or cost, so it is taken out here with the
+    same rules build_sales_gst / build_bas use. Amounts dated before
+    GST_REGISTRATION_DATE carry no GST and are left as they are.
 
     brand == 'all'  -> sum across all brands; labour is included in net.
     brand == shuttle/coaches -> only that brand's Transactions; labour is
@@ -566,6 +599,7 @@ def build_pnl(start, end, brand=BRAND_ALL):
         brand net profit (keeps shuttle + coaches + unallocated == all).
     """
     from blog.models import Post
+    from .conf import GST_REGISTRATION_DATE
 
     if brand not in VALID_BRANDS:
         brand = BRAND_ALL
@@ -579,7 +613,13 @@ def build_pnl(start, end, brand=BRAND_ALL):
     if brand != BRAND_ALL:
         tx = tx.filter(brand=brand)
 
-    income_transactions = _sum(tx.filter(direction='income'), 'gross_amount')
+    gst_collected = ZERO
+
+    income_transactions = ZERO
+    for row in tx.filter(direction='income'):
+        gst = _tx_gst(row)
+        income_transactions += row.gross_amount - gst
+        gst_collected += gst
 
     # Booking income — Post has no brand field (all Post rows are shuttle),
     # so this only applies to the 'all' and 'shuttle' views. Excludes
@@ -594,13 +634,27 @@ def build_pnl(start, end, brand=BRAND_ALL):
             .filter(pickup_date__gte=start, pickup_date__lte=end,
                     cancelled=False, driver_collected_cash=False)
             .exclude(paid__isnull=True).exclude(paid='').exclude(paid='TBA')
-            .only('paid', 'refund')
+            .only('paid', 'refund', 'pickup_date')
         )
         for post in posts:
             net = to_decimal_safe(post.paid) - (post.refund or ZERO)
-            if net > ZERO:
-                income_bookings += net
-        income_paypal_surcharge = paypal_surcharge_total(start, end)
+            if net <= ZERO:
+                continue
+            gst = ZERO
+            if post.pickup_date >= GST_REGISTRATION_DATE:
+                gst = (net / _ELEVEN).quantize(_CENT, rounding=ROUND_HALF_UP)
+            income_bookings += net - gst
+            gst_collected += gst
+
+        # Surcharge before registration has no GST; after it, ÷ 11 as in 1A.
+        if start < GST_REGISTRATION_DATE:
+            income_paypal_surcharge += paypal_surcharge_total(
+                start, min(end, GST_REGISTRATION_DATE - timedelta(days=1)))
+        if end >= GST_REGISTRATION_DATE:
+            surcharge = paypal_surcharge_total(max(start, GST_REGISTRATION_DATE), end)
+            gst = (surcharge / _ELEVEN).quantize(_CENT, rounding=ROUND_HALF_UP)
+            income_paypal_surcharge += surcharge - gst
+            gst_collected += gst
 
     income_total = income_transactions + income_bookings + income_paypal_surcharge
 
@@ -609,21 +663,27 @@ def build_pnl(start, end, brand=BRAND_ALL):
     # Non-deductible rows (e.g. fines/infringements, is_tax_deductible=False)
     # are imported for record-keeping but must never count as a business
     # expense — kept out of expense_total/expense_breakdown and reported
-    # separately for visibility.
-    deductible_expense_qs = expense_qs.filter(is_tax_deductible=True)
-    expense_total = _sum(deductible_expense_qs, 'gross_amount')
+    # separately for visibility. No GST is claimed on them (BAS skips them
+    # too), so they stay at their full amount.
     non_deductible_total = _sum(
         expense_qs.filter(is_tax_deductible=False), 'gross_amount')
 
-    # category breakdown — grouped in the DB, not in python.
-    expense_breakdown = list(
-        deductible_expense_qs.values('category')
-        .annotate(subtotal=Sum('gross_amount'))
-        .order_by('-subtotal')
+    # category breakdown, ex-GST per row.
+    gst_credits = ZERO
+    by_category = {}
+    for row in expense_qs.filter(is_tax_deductible=True):
+        gst = _tx_gst(row)
+        by_category[row.category] = by_category.get(row.category, ZERO) + row.gross_amount - gst
+        gst_credits += gst
+    expense_breakdown = sorted(
+        ({'category': c, 'subtotal': t} for c, t in by_category.items()),
+        key=lambda r: r['subtotal'], reverse=True,
     )
+    expense_total = sum(by_category.values(), ZERO)
 
     # Labour = gross_pay + super, by pay_date in the period. PayrollEntry has no
     # brand, so it is always computed company-wide regardless of brand filter.
+    # Wages carry no GST.
     payroll = PayrollEntry.objects.filter(
         pay_date__gte=start, pay_date__lte=end
     ).aggregate(gross=Sum('gross_pay'), super_total=Sum('super_amount'))
@@ -656,6 +716,10 @@ def build_pnl(start, end, brand=BRAND_ALL):
         'net': net,
         # for the "all" view, expense + labour is the total cost block
         'total_cost': (expense_total + labour_total) if is_all else expense_total,
+        # GST taken out of the figures above (reference; settled via BAS)
+        'gst_collected': gst_collected,
+        'gst_credits': gst_credits,
+        'gst_net': gst_collected - gst_credits,
     }
 
 
