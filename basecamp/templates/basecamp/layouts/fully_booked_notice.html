@@ -1,12 +1,10 @@
 {% comment %}
-예약 마감 안내 (2026-09-25 추가). footer.html 에서 include 하므로 모든 예약 폼에 적용된다.
-pickup_date / return_pickup_date 에서 FULLY_BOOKED_UNTIL 이하 날짜를 고르면 날짜칸 아래에 안내를 띄운다.
+예약 마감 안내. footer.html 에서 include 하므로 모든 예약 폼에 적용된다.
+어드민 달력(Blog > Fully booked dates)에서 full 로 체크한 날짜를 pickup_date / return_pickup_date 에서 고르면
+날짜칸 아래에 안내를 띄운다 (전 지역 공통). 해당 날짜는 flatpickr 달력에서도 표시된다.
 안내만 하고 제출은 막지 않는다. 날짜를 골랐을 때만 JS 로 그리므로 초기 HTML 에는 문구가 없다 (SEO 영향 없음).
-기준일이 지나면 자동으로 동작하지 않는다. 제외할 입력칸은 data-skip-booking-notice 를 붙인다.
-FULLY_BOOKED_REGIONS 지역에만 띄운다 (2026-09-26, 2026-09-28 부터 sydney 만). 폼에 region 칸(select/hidden)이 있으면 그 값을,
-없으면 페이지 지역(URL 접두사, 접두사 없는 페이지는 sydney)을 기준으로 한다.
-2026-10-01: 어드민 달력(Blog > Fully booked dates)에서 체크한 날짜도 같은 방식으로 안내한다 (전 지역 공통, 경고만).
-해당 날짜는 flatpickr 달력에서도 표시된다. 위의 FULLY_BOOKED_UNTIL 기간 안내는 기준일이 지나면 저절로 꺼진다.
+제외할 입력칸은 data-skip-booking-notice 를 붙인다.
+(2026-09-25 의 시드니 10/6 까지 하드코딩 안내는 2026-10-01 에 이 달력 방식으로 대체됨)
 {% endcomment %}
 {% load booking_tags %}
 {% fully_booked_dates as full_dates %}
@@ -31,35 +29,19 @@ FULLY_BOOKED_REGIONS 지역에만 띄운다 (2026-09-26, 2026-09-28 부터 sydne
 </style>
 <script>
 (function () {
-  var FULLY_BOOKED_UNTIL = '2026-10-06';
-  var FULLY_BOOKED_REGIONS = ['sydney'];
-  var PAGE_REGION = '{{ region.slug|default:""|escapejs }}';
-  var FIELDS = 'input[name="pickup_date"], input[name="return_pickup_date"]';
-  var MESSAGE = '<b>We\'re fully booked until 6 October.</b> ' +
-    'Please choose a date from 7 October onwards, or ' +
-    '<a href="/contact/">contact us</a> to check for any last-minute availability.';
-  // 어드민 달력에서 full 로 체크한 날짜 (전 지역 공통)
   var FULL_DATES = JSON.parse(document.getElementById('fully-booked-dates').textContent || '[]');
+  if (!FULL_DATES.length) return;
+
+  var FIELDS = 'input[name="pickup_date"], input[name="return_pickup_date"]';
   var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
     'August', 'September', 'October', 'November', 'December'];
-  function fullDateMessage(value) {
+
+  function message(value) {
     var parts = value.split('-');
     var label = parseInt(parts[2], 10) + ' ' + MONTHS[parseInt(parts[1], 10) - 1];
     return '<b>We\'re fully booked on ' + label + '.</b> ' +
       'We may not be able to take new bookings for this date. You\'re welcome to send your inquiry anyway ' +
       'and we\'ll let you know if a vehicle becomes available, or choose a different date.';
-  }
-
-  function today() {
-    var d = new Date();
-    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
-  }
-  var legacyActive = today() <= FULLY_BOOKED_UNTIL;
-  if (!legacyActive && !FULL_DATES.length) return;
-
-  function regionOf(input) {
-    var field = input.form && input.form.querySelector('[name="region"]');
-    return (field && field.value) || PAGE_REGION;
   }
 
   function update(input) {
@@ -68,16 +50,8 @@ FULLY_BOOKED_REGIONS 지역에만 띄운다 (2026-09-26, 2026-09-28 부터 sydne
     var anchor = (input._flatpickr && input._flatpickr.altInput) || input;
     var notice = input._fullyBookedNotice;
     var value = (input.value || '').slice(0, 10);
-    var isDate = /^\d{4}-\d{2}-\d{2}$/.test(value);
-    var message = null;
-    if (isDate && legacyActive && value <= FULLY_BOOKED_UNTIL &&
-        FULLY_BOOKED_REGIONS.indexOf(regionOf(input)) !== -1) {
-      message = MESSAGE;
-    } else if (isDate && FULL_DATES.indexOf(value) !== -1) {
-      message = fullDateMessage(value);
-    }
 
-    if (!message) {
+    if (FULL_DATES.indexOf(value) === -1) {
       if (notice) notice.hidden = true;
       return;
     }
@@ -87,18 +61,13 @@ FULLY_BOOKED_REGIONS 지역에만 띄운다 (2026-09-26, 2026-09-28 부터 sydne
       notice.setAttribute('role', 'alert');
       input._fullyBookedNotice = notice;
     }
-    notice.innerHTML = message;
+    notice.innerHTML = message(value);
     anchor.insertAdjacentElement('afterend', notice);
     notice.hidden = false;
   }
 
   document.addEventListener('change', function (e) {
-    if (!e.target.matches) return;
-    if (e.target.matches(FIELDS)) update(e.target);
-    // 지역 선택을 바꾸면 같은 폼의 날짜칸 안내도 다시 판단한다
-    else if (e.target.matches('[name="region"]') && e.target.form) {
-      e.target.form.querySelectorAll(FIELDS).forEach(update);
-    }
+    if (e.target.matches && e.target.matches(FIELDS)) update(e.target);
   });
   // 다음 단계 페이지처럼 날짜가 이미 채워진 읽기 전용 칸
   document.addEventListener('DOMContentLoaded', function () {
@@ -118,7 +87,6 @@ FULLY_BOOKED_REGIONS 지역에만 띄운다 (2026-09-26, 2026-09-28 부터 sydne
     }
   }
   window.addEventListener('load', function () {
-    if (!FULL_DATES.length) return;
     document.querySelectorAll(FIELDS).forEach(function (input) {
       var fp = input._flatpickr;
       if (!fp || input.hasAttribute('data-skip-booking-notice')) return;
