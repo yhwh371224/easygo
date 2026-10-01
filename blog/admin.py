@@ -610,7 +610,9 @@ class VirtualNumberAdmin(admin.ModelAdmin):
 class FullyBookedDateAdmin(admin.ModelAdmin):
     """Month calendar instead of a list: click a day to mark/unmark it full.
 
-    Customers picking a marked date only get a warning on the booking forms
+    Pick a region tab first — each region has its own calendar, and the
+    "All regions" tab marks a date full everywhere. Customers picking a marked
+    date only get a warning on the booking forms
     (layouts/fully_booked_notice.html) — inquiries are still accepted.
     """
     change_list_template = 'admin/blog/fullybookeddate/calendar.html'
@@ -625,10 +627,19 @@ class FullyBookedDateAdmin(admin.ModelAdmin):
         ]
         return custom + super().get_urls()
 
+    @staticmethod
+    def _region_from(value):
+        """'' / missing → None (all regions); unknown slug → raises Region.DoesNotExist."""
+        from regions.models import Region
+        if not value:
+            return None
+        return Region.objects.get(slug=value)
+
     def changelist_view(self, request, extra_context=None):
         import calendar
         from django.db.models import Count
         from django.utils import timezone
+        from regions.models import Region
 
         today = timezone.localdate()
         try:
@@ -639,20 +650,29 @@ class FullyBookedDateAdmin(admin.ModelAdmin):
             first = today.replace(day=1)
         last = first.replace(day=calendar.monthrange(first.year, first.month)[1])
 
-        full = set(
-            FullyBookedDate.objects.filter(date__range=(first, last))
-            .values_list('date', flat=True)
+        try:
+            region = self._region_from(request.GET.get('region', ''))
+        except Region.DoesNotExist:
+            region = None
+
+        month_rows = FullyBookedDate.objects.filter(date__range=(first, last))
+        full = set(month_rows.filter(region=region).values_list('date', flat=True))
+        # On a region tab, also show days already full for every region
+        full_all = (
+            set(month_rows.filter(region__isnull=True).values_list('date', flat=True))
+            if region else set()
         )
-        counts = dict(
-            Post.objects.filter(pickup_date__range=(first, last), cancelled=False)
-            .values_list('pickup_date').annotate(n=Count('id'))
-        )
+        posts = Post.objects.filter(pickup_date__range=(first, last), cancelled=False)
+        if region:
+            posts = posts.filter(region=region)
+        counts = dict(posts.values_list('pickup_date').annotate(n=Count('id')))
         weeks = [
             [
                 {
                     'date': d,
                     'in_month': d.month == first.month,
                     'is_full': d in full,
+                    'is_full_all': d in full_all,
                     'is_past': d < today,
                     'is_today': d == today,
                     'bookings': counts.get(d, 0),
@@ -673,8 +693,11 @@ class FullyBookedDateAdmin(admin.ModelAdmin):
             'prev_month': prev_month,
             'next_month': next_month,
             'this_month': today.replace(day=1),
+            'regions': Region.objects.filter(is_active=True),
+            'region': region,
+            'region_slug': region.slug if region else '',
             'toggle_url': reverse(f'{self.admin_site.name}:blog_fullybookeddate_toggle'),
-            'upcoming': FullyBookedDate.objects.filter(date__gte=today),
+            'upcoming': FullyBookedDate.objects.filter(date__gte=today).select_related('region'),
             **(extra_context or {}),
         }
         return TemplateResponse(request, self.change_list_template, context)
@@ -682,20 +705,28 @@ class FullyBookedDateAdmin(admin.ModelAdmin):
     def toggle_view(self, request):
         from django.http import HttpResponseNotAllowed, JsonResponse
         from django.utils.dateparse import parse_date
+        from regions.models import Region
 
         if request.method != 'POST':
             return HttpResponseNotAllowed(['POST'])
         day = parse_date(request.POST.get('date', '') or '')
         if not day:
             return JsonResponse({'ok': False, 'error': 'invalid date'}, status=400)
-        existing = FullyBookedDate.objects.filter(date=day).first()
+        try:
+            region = self._region_from(request.POST.get('region', ''))
+        except Region.DoesNotExist:
+            return JsonResponse({'ok': False, 'error': 'invalid region'}, status=400)
+        existing = FullyBookedDate.objects.filter(date=day, region=region).first()
         if existing:
             existing.delete()
             is_full = False
         else:
-            FullyBookedDate.objects.create(date=day)
+            FullyBookedDate.objects.create(date=day, region=region)
             is_full = True
-        return JsonResponse({'ok': True, 'date': day.isoformat(), 'is_full': is_full})
+        return JsonResponse({
+            'ok': True, 'date': day.isoformat(),
+            'region': region.slug if region else '', 'is_full': is_full,
+        })
 
 
 class MyAdminSite(AdminSite):

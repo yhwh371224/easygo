@@ -1,7 +1,9 @@
 {% comment %}
 예약 마감 안내. footer.html 에서 include 하므로 모든 예약 폼에 적용된다.
 어드민 달력(Blog > Fully booked dates)에서 full 로 체크한 날짜를 pickup_date / return_pickup_date 에서 고르면
-날짜칸 아래에 안내를 띄운다 (전 지역 공통). 해당 날짜는 flatpickr 달력에서도 표시된다.
+날짜칸 아래에 안내를 띄운다. 해당 날짜는 flatpickr 달력에서도 표시된다.
+지역별로 체크한다 ('*' = All regions 탭에서 체크한 전 지역 공통 날짜). 폼에 region 칸(select/hidden)이 있으면 그 값을,
+없으면 페이지 지역(URL 접두사, 접두사 없는 페이지는 sydney)을 기준으로 한다.
 안내만 하고 제출은 막지 않는다. 날짜를 골랐을 때만 JS 로 그리므로 초기 HTML 에는 문구가 없다 (SEO 영향 없음).
 제외할 입력칸은 data-skip-booking-notice 를 붙인다.
 (2026-09-25 의 시드니 10/6 까지 하드코딩 안내는 2026-10-01 에 이 달력 방식으로 대체됨)
@@ -29,9 +31,11 @@
 </style>
 <script>
 (function () {
-  var FULL_DATES = JSON.parse(document.getElementById('fully-booked-dates').textContent || '[]');
-  if (!FULL_DATES.length) return;
+  // {region slug | '*': [ISO dates]}
+  var FULL_DATES = JSON.parse(document.getElementById('fully-booked-dates').textContent || '{}');
+  if (!Object.keys(FULL_DATES).length) return;
 
+  var PAGE_REGION = '{{ region.slug|default:""|escapejs }}';
   var FIELDS = 'input[name="pickup_date"], input[name="return_pickup_date"]';
   var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
     'August', 'September', 'October', 'November', 'December'];
@@ -44,6 +48,15 @@
       'and we\'ll let you know if a vehicle becomes available, or choose a different date.';
   }
 
+  function regionOf(input) {
+    var field = input.form && input.form.querySelector('[name="region"]');
+    return (field && field.value) || PAGE_REGION;
+  }
+  function isFull(input, value) {
+    var dates = (FULL_DATES[regionOf(input)] || []).concat(FULL_DATES['*'] || []);
+    return dates.indexOf(value) !== -1;
+  }
+
   function update(input) {
     if (input.hasAttribute('data-skip-booking-notice')) return;
     // flatpickr altInput 이 있으면 화면에 보이는 칸은 그쪽이다
@@ -51,7 +64,7 @@
     var notice = input._fullyBookedNotice;
     var value = (input.value || '').slice(0, 10);
 
-    if (FULL_DATES.indexOf(value) === -1) {
+    if (!isFull(input, value)) {
       if (notice) notice.hidden = true;
       return;
     }
@@ -67,7 +80,15 @@
   }
 
   document.addEventListener('change', function (e) {
-    if (e.target.matches && e.target.matches(FIELDS)) update(e.target);
+    if (!e.target.matches) return;
+    if (e.target.matches(FIELDS)) update(e.target);
+    // 지역 선택을 바꾸면 같은 폼의 날짜칸 안내와 달력 표시도 다시 판단한다
+    else if (e.target.matches('[name="region"]') && e.target.form) {
+      e.target.form.querySelectorAll(FIELDS).forEach(function (input) {
+        update(input);
+        if (input._flatpickr) input._flatpickr.redraw();
+      });
+    }
   });
   // 다음 단계 페이지처럼 날짜가 이미 채워진 읽기 전용 칸
   document.addEventListener('DOMContentLoaded', function () {
@@ -81,7 +102,7 @@
     return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
   }
   function markFullDay(dObj, dStr, fp, dayElem) {
-    if (FULL_DATES.indexOf(isoOf(dayElem.dateObj)) !== -1) {
+    if (isFull(fp.input, isoOf(dayElem.dateObj))) {
       dayElem.classList.add('fully-booked');
       dayElem.title = 'Fully booked';
     }

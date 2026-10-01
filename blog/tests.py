@@ -2336,12 +2336,51 @@ class FullyBookedDateTests(TestCase):
     def test_toggle_marks_and_unmarks_date(self):
         day = (timezone.localdate() + timedelta(days=3)).isoformat()
         res = self.client.post(self.toggle_url, {'date': day})
-        self.assertEqual(res.json(), {'ok': True, 'date': day, 'is_full': True})
-        self.assertEqual(self.Model.upcoming_iso(), [day])
+        self.assertEqual(res.json(), {'ok': True, 'date': day, 'region': '', 'is_full': True})
+        self.assertEqual(self.Model.upcoming_by_region(), {'*': [day]})
 
         res = self.client.post(self.toggle_url, {'date': day})
         self.assertFalse(res.json()['is_full'])
-        self.assertEqual(self.Model.upcoming_iso(), [])
+        self.assertEqual(self.Model.upcoming_by_region(), {})
+
+    def test_toggle_per_region_is_independent(self):
+        sydney = make_region('sydney', 'Sydney')
+        make_region('melbourne', 'Melbourne')
+        day = (timezone.localdate() + timedelta(days=3)).isoformat()
+        self.client.post(self.toggle_url, {'date': day, 'region': 'sydney'})
+        self.client.post(self.toggle_url, {'date': day, 'region': 'melbourne'})
+        self.client.post(self.toggle_url, {'date': day})
+        self.assertEqual(
+            self.Model.upcoming_by_region(),
+            {'sydney': [day], 'melbourne': [day], '*': [day]},
+        )
+        res = self.client.post(self.toggle_url, {'date': day, 'region': 'melbourne'})
+        self.assertFalse(res.json()['is_full'])
+        self.assertEqual(set(self.Model.upcoming_by_region()), {'sydney', '*'})
+        self.assertTrue(self.Model.objects.filter(region=sydney).exists())
+
+    def test_toggle_rejects_unknown_region(self):
+        res = self.client.post(self.toggle_url, {'date': '2030-01-01', 'region': 'nowhere'})
+        self.assertEqual(res.status_code, 400)
+        self.assertFalse(self.Model.objects.exists())
+
+    def test_region_calendar_shows_region_and_all_region_days(self):
+        sydney = make_region('sydney', 'Sydney')
+        today = timezone.localdate()
+        d1 = today + timedelta(days=1)
+        if d1.month != today.month:
+            d1 = today
+        self.Model.objects.create(date=d1, region=sydney)
+        url = reverse('admin:blog_fullybookeddate_changelist')
+        res = self.client.get(url, {'region': 'sydney'})
+        self.assertContains(res, 'fb-day is-full')
+        self.assertNotContains(res, 'class="tag-all"')
+        # All regions tab doesn't show a Sydney-only day as full
+        res = self.client.get(url)
+        self.assertNotContains(res, 'fb-day is-full')
+        self.Model.objects.create(date=d1, region=None)
+        res = self.client.get(url, {'region': 'sydney'})
+        self.assertContains(res, 'class="tag-all"')
 
     def test_toggle_rejects_get_and_bad_date(self):
         self.assertEqual(self.client.get(self.toggle_url).status_code, 405)
@@ -2363,7 +2402,7 @@ class FullyBookedDateTests(TestCase):
         today = timezone.localdate()
         self.Model.objects.create(date=today - timedelta(days=1))
         self.Model.objects.create(date=today)
-        self.assertEqual(self.Model.upcoming_iso(), [today.isoformat()])
+        self.assertEqual(self.Model.upcoming_by_region(), {'*': [today.isoformat()]})
 
     def test_notice_template_embeds_dates(self):
         from django.template.loader import render_to_string

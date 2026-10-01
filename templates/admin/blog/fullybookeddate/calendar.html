@@ -24,27 +24,40 @@
   .fb-day .count { font-size: .75rem; opacity: .7; }
   .fb-day .tag { font-size: .7rem; font-weight: 700; color: #fff; background: #ba2121; border-radius: 3px; padding: 0 .3rem; align-self: flex-start; }
   .fb-day:not(.is-full) .tag { display: none; }
+  .fb-day .tag-all { font-size: .7rem; font-weight: 700; color: #fff; background: #888; border-radius: 3px; padding: 0 .3rem; align-self: flex-start; }
+  .fb-day.is-full-all:not(.is-full) { background: #eee; }
   .fb-day.is-full { background: #fde2e2; }
   .fb-day.is-today .num { text-decoration: underline; }
   .fb-day.out-month { opacity: .35; }
   .fb-day[disabled] { cursor: default; opacity: .35; }
   .fb-help { color: var(--body-quiet-color, #666); max-width: 760px; }
   .fb-upcoming { margin-top: 1.5rem; }
+  .fb-regions { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: 1rem; }
+  .fb-regions a { padding: .3rem .8rem; border: 1px solid var(--hairline-color, #ccc); border-radius: 4px; text-decoration: none; }
+  .fb-regions a.active { background: var(--primary, #79aec8); border-color: var(--primary, #79aec8); color: #fff; font-weight: 600; }
 </style>
 {% endblock %}
 
 {% block content %}
 <div id="content-main">
   <p class="fb-help">
-    날짜를 클릭하면 <b>full</b> 체크/해제됩니다. 체크된 날짜를 고객이 예약/문의 폼에서 고르면
-    경고 문구가 뜹니다 (문의 접수는 막지 않음, 전 지역 공통). 칸 아래 숫자는 그날 픽업 예약 건수(취소 제외)입니다.
+    지역을 고른 뒤 날짜를 클릭하면 그 지역에 <b>full</b> 체크/해제됩니다. <b>All regions</b> 에서 체크하면 전 지역 공통입니다.
+    체크된 날짜를 고객이 해당 지역 예약/문의 폼에서 고르면 경고 문구가 뜹니다 (문의 접수는 막지 않음).
+    지역 달력의 회색 <b>ALL</b> 표시는 전 지역으로 이미 막힌 날입니다. 칸 아래 숫자는 그날 픽업 예약 건수(취소 제외{% if region %}, {{ region.name }}{% endif %})입니다.
   </p>
 
+  <div class="fb-regions">
+    <a href="?year={{ month.year }}&month={{ month.month }}"{% if not region %} class="active"{% endif %}>All regions</a>
+    {% for r in regions %}
+    <a href="?year={{ month.year }}&month={{ month.month }}&region={{ r.slug }}"{% if region and region.pk == r.pk %} class="active"{% endif %}>{{ r.name }}</a>
+    {% endfor %}
+  </div>
+
   <div class="fb-nav">
-    <a class="button" href="?year={{ prev_month.year }}&month={{ prev_month.month }}">&larr; Prev</a>
-    <h2>{{ month|date:"F Y" }}</h2>
-    <a class="button" href="?year={{ next_month.year }}&month={{ next_month.month }}">Next &rarr;</a>
-    <a href="?year={{ this_month.year }}&month={{ this_month.month }}">This month</a>
+    <a class="button" href="?year={{ prev_month.year }}&month={{ prev_month.month }}&region={{ region_slug }}">&larr; Prev</a>
+    <h2>{{ month|date:"F Y" }}<br><small>{% if region %}{{ region.name }}{% else %}All regions{% endif %}</small></h2>
+    <a class="button" href="?year={{ next_month.year }}&month={{ next_month.month }}&region={{ region_slug }}">Next &rarr;</a>
+    <a href="?year={{ this_month.year }}&month={{ this_month.month }}&region={{ region_slug }}">This month</a>
   </div>
 
   <table class="fb-cal">
@@ -55,11 +68,12 @@
         {% for day in week %}
         <td>
           <button type="button"
-                  class="fb-day{% if day.is_full %} is-full{% endif %}{% if day.is_today %} is-today{% endif %}{% if not day.in_month %} out-month{% endif %}"
+                  class="fb-day{% if day.is_full %} is-full{% endif %}{% if day.is_full_all %} is-full-all{% endif %}{% if day.is_today %} is-today{% endif %}{% if not day.in_month %} out-month{% endif %}"
                   data-date="{{ day.date|date:'Y-m-d' }}"
                   {% if day.is_past %}disabled{% endif %}>
             <span class="num">{{ day.date.day }}</span>
             <span class="tag">FULL</span>
+            {% if day.is_full_all %}<span class="tag-all">ALL</span>{% endif %}
             <span class="count">{% if day.bookings %}{{ day.bookings }} booking{{ day.bookings|pluralize }}{% endif %}</span>
           </button>
         </td>
@@ -72,7 +86,7 @@
   <div class="fb-upcoming">
     <h3>Upcoming full dates</h3>
     {% if upcoming %}
-      <ul>{% for d in upcoming %}<li>{{ d.date|date:"D j M Y" }}</li>{% endfor %}</ul>
+      <ul>{% for d in upcoming %}<li>{{ d.date|date:"D j M Y" }} — {% if d.region %}{{ d.region.name }}{% else %}All regions{% endif %}</li>{% endfor %}</ul>
     {% else %}
       <p>None.</p>
     {% endif %}
@@ -82,6 +96,7 @@
 <script>
 (function () {
   var csrf = '{{ csrf_token }}';
+  var region = '{{ region_slug|escapejs }}';
   document.querySelectorAll('.fb-day').forEach(function (btn) {
     btn.addEventListener('click', function () {
       if (btn.disabled) return;
@@ -89,7 +104,7 @@
       fetch('{{ toggle_url }}', {
         method: 'POST',
         headers: { 'X-CSRFToken': csrf, 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: 'date=' + encodeURIComponent(btn.dataset.date),
+        body: 'date=' + encodeURIComponent(btn.dataset.date) + '&region=' + encodeURIComponent(region),
         credentials: 'same-origin'
       })
         .then(function (r) { return r.json(); })

@@ -407,28 +407,50 @@ class Post(models.Model):
         ]
 
 
-FULLY_BOOKED_CACHE_KEY = 'fully_booked_dates'
+FULLY_BOOKED_CACHE_KEY = 'fully_booked_dates_by_region'
 
 
 class FullyBookedDate(models.Model):
-    """A pickup date marked full in the admin calendar (all regions).
+    """A pickup date marked full in the admin calendar.
 
-    Booking forms only warn the customer when they pick one of these dates —
-    inquiries are still accepted (see layouts/fully_booked_notice.html).
+    region=None means every region. Booking forms only warn the customer when
+    they pick one of these dates for the matching region — inquiries are still
+    accepted (see layouts/fully_booked_notice.html).
     """
-    date = models.DateField(unique=True)
+    region = models.ForeignKey(
+        'regions.Region',
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
+        related_name='fully_booked_dates',
+        help_text='Blank = all regions',
+    )
+    date = models.DateField()
     note = models.CharField(max_length=200, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    ALL_REGIONS_KEY = '*'
+
     class Meta:
         ordering = ['date']
+        constraints = [
+            models.UniqueConstraint(
+                fields=['region', 'date'], name='fullybooked_region_date_uniq',
+            ),
+            # NULLs are distinct in a unique index, so all-region rows need their own
+            models.UniqueConstraint(
+                fields=['date'], condition=models.Q(region__isnull=True),
+                name='fullybooked_all_regions_date_uniq',
+            ),
+        ]
 
     def __str__(self):
-        return self.date.isoformat()
+        label = self.region.slug if self.region_id else 'all'
+        return f'{self.date.isoformat()} ({label})'
 
     @classmethod
-    def upcoming_iso(cls):
-        """ISO strings of today-and-later full dates, cached for the footer."""
+    def upcoming_by_region(cls):
+        """{region slug | '*': [ISO dates]} for today-and-later full dates, cached for the footer."""
         from django.core.cache import cache
         from django.utils import timezone
 
@@ -439,11 +461,13 @@ class FullyBookedDate(models.Model):
         except Exception:
             dates = None
         if dates is None:
-            dates = [
-                d.isoformat() for d in cls.objects
-                .filter(date__gte=timezone.localdate())
-                .values_list('date', flat=True)
-            ]
+            dates = {}
+            rows = (
+                cls.objects.filter(date__gte=timezone.localdate())
+                .values_list('region__slug', 'date')
+            )
+            for slug, day in rows:
+                dates.setdefault(slug or cls.ALL_REGIONS_KEY, []).append(day.isoformat())
             try:
                 cache.set(FULLY_BOOKED_CACHE_KEY, dates, 60 * 60)
             except Exception:

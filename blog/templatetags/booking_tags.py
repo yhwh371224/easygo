@@ -7,5 +7,5 @@ register = template.Library()
 
 @register.simple_tag
 def fully_booked_dates():
-    """Upcoming dates marked full in the admin calendar, as ISO strings."""
-    return FullyBookedDate.upcoming_iso()
+    """Upcoming dates marked full in the admin calendar: {region slug | '*': [ISO dates]}."""
+    return FullyBookedDate.upcoming_by_region()
