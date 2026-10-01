@@ -115,7 +115,7 @@
       <td class="num">{{ pnl.labour_total|floatformat:2|intcomma }}</td>
     </tr>
 
-    {% if pnl.is_all %}
+    {% if pnl.labour_in_net %}
     <tr style="border-top:2px solid #ccc;">
       <th>Total cost (expenses + labour)</th>
       <td class="num">{{ pnl.total_cost|floatformat:2|intcomma }}</td>

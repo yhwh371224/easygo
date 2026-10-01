@@ -2509,3 +2509,39 @@ class BuildPnlExGstTests(TestCase):
 
         self.assertEqual(b['other_income_gst'], Decimal('50.00'))
         self.assertEqual(b['gst_1a'], b['sales']['total_gst_1a'] + Decimal('50.00'))
+
+    def _payroll(self, day, gross):
+        from accounting.models import PayrollEntry
+        return PayrollEntry.objects.create(
+            pay_date=day, period_start=day, period_end=day,
+            gross_pay=Decimal(gross), net_pay=Decimal(gross),
+        )
+
+    def test_shuttle_net_includes_labour_when_no_coaches(self, *_):
+        from accounting.reports import build_pnl
+        day = datetime.date(2026, 8, 1)
+        self._post(day, '1100')
+        self._payroll(day, '600')
+        q = (datetime.date(2026, 7, 1), datetime.date(2026, 9, 30))
+
+        shuttle = build_pnl(*q, brand='shuttle')
+
+        self.assertTrue(shuttle['labour_in_net'])
+        self.assertEqual(shuttle['net'], Decimal('400.00'))      # 1000 − 600
+        self.assertEqual(shuttle['net'], build_pnl(*q)['net'])
+
+    def test_shuttle_net_excludes_labour_when_coaches_active(self, *_):
+        from accounting.models import Transaction
+        from accounting.reports import build_pnl
+        day = datetime.date(2026, 8, 1)
+        self._post(day, '1100')
+        self._payroll(day, '600')
+        Transaction.objects.create(
+            date=day, direction='expense', brand='coaches', description='x',
+            category='fuel', gross_amount=Decimal('50'),
+        )
+
+        shuttle = build_pnl(datetime.date(2026, 7, 1), datetime.date(2026, 9, 30), brand='shuttle')
+
+        self.assertFalse(shuttle['labour_in_net'])
+        self.assertEqual(shuttle['net'], Decimal('1000.00'))

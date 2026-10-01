@@ -597,6 +597,9 @@ def build_pnl(start, end, brand=BRAND_ALL):
     brand == shuttle/coaches -> only that brand's Transactions; labour is
         reported as an unallocated, company-wide line and EXCLUDED from the
         brand net profit (keeps shuttle + coaches + unallocated == all).
+        Exception: when the period has no coaches Transactions at all, shuttle
+        is the only brand running, so all labour is shuttle's and the shuttle
+        net includes it (then equals the 'all' net).
     """
     from blog.models import Post
     from .conf import GST_REGISTRATION_DATE
@@ -690,8 +693,13 @@ def build_pnl(start, end, brand=BRAND_ALL):
     labour_total = (payroll['gross'] or ZERO) + (payroll['super_total'] or ZERO)
 
     is_all = brand == BRAND_ALL
-    if is_all:
-        # company-wide: expense + labour both reduce net
+    shuttle_only = brand == 'shuttle' and not Transaction.objects.filter(
+        date__gte=start, date__lte=end,
+        needs_review=False, excluded=False, brand='coaches',
+    ).exists()
+    if is_all or shuttle_only:
+        # company-wide (or shuttle is the only brand running):
+        # expense + labour both reduce net
         net = income_total - (expense_total + labour_total)
         labour_in_net = True
     else:
@@ -714,8 +722,8 @@ def build_pnl(start, end, brand=BRAND_ALL):
         'labour_total': labour_total,
         'labour_in_net': labour_in_net,
         'net': net,
-        # for the "all" view, expense + labour is the total cost block
-        'total_cost': (expense_total + labour_total) if is_all else expense_total,
+        # when labour is in net, expense + labour is the total cost block
+        'total_cost': (expense_total + labour_total) if labour_in_net else expense_total,
         # GST taken out of the figures above (reference; settled via BAS)
         'gst_collected': gst_collected,
         'gst_credits': gst_credits,
