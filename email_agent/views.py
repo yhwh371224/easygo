@@ -1,5 +1,6 @@
 import json
 import base64
+from django.conf import settings
 from django.http import HttpResponse
 from django.views import View
 from django.utils.decorators import method_decorator
@@ -10,6 +11,9 @@ from .tasks import gmail_watch_topic
 @method_decorator(csrf_exempt, name='dispatch')
 class GmailWebhookView(View):
     def post(self, request):
+        if not getattr(settings, 'EMAIL_AI_DRAFTS_ENABLED', False):
+            # Ack so Pub/Sub doesn't retry, but don't run AI drafting.
+            return HttpResponse(status=200)
         try:
             data = json.loads(request.body)
             pubsub_message = data.get('message', {})

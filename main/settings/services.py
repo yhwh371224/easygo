@@ -20,6 +20,8 @@ CLOUDFLARE_TURNSTILE_SECRET_KEY = config('CLOUDFLARE_TURNSTILE_SECRET_KEY')
 
 # Anthropic / AI
 ANTHROPIC_API_KEY = config('ANTHROPIC_API_KEY')
+# Master switch for Gmail Pub/Sub → AI reply drafts. Off by default (drafts were too inaccurate).
+EMAIL_AI_DRAFTS_ENABLED = config('EMAIL_AI_DRAFTS_ENABLED', default=False, cast=bool)
 EMAIL_AI_DUAL_MODE = config('EMAIL_AI_DUAL_MODE', default=False, cast=bool)
 EMAIL_AI_OPENAI_ONLY = config('EMAIL_AI_OPENAI_ONLY', default=False, cast=bool)
 # If True, emails with no airport keywords still get a cheap one-shot AIRPORT/OTHER LLM gate
