@@ -5,7 +5,12 @@ pickup_date / return_pickup_date 에서 FULLY_BOOKED_UNTIL 이하 날짜를 고�
 기준일이 지나면 자동으로 동작하지 않는다. 제외할 입력칸은 data-skip-booking-notice 를 붙인다.
 FULLY_BOOKED_REGIONS 지역에만 띄운다 (2026-09-26, 2026-09-28 부터 sydney 만). 폼에 region 칸(select/hidden)이 있으면 그 값을,
 없으면 페이지 지역(URL 접두사, 접두사 없는 페이지는 sydney)을 기준으로 한다.
+2026-10-01: 어드민 달력(Blog > Fully booked dates)에서 체크한 날짜도 같은 방식으로 안내한다 (전 지역 공통, 경고만).
+해당 날짜는 flatpickr 달력에서도 표시된다. 위의 FULLY_BOOKED_UNTIL 기간 안내는 기준일이 지나면 저절로 꺼진다.
 {% endcomment %}
+{% load booking_tags %}
+{% fully_booked_dates as full_dates %}
+{{ full_dates|json_script:"fully-booked-dates" }}
 <style>
   .fully-booked-notice {
     margin-top: .5rem;
@@ -18,6 +23,11 @@ FULLY_BOOKED_REGIONS 지역에만 띄운다 (2026-09-26, 2026-09-28 부터 sydne
     line-height: 1.4;
     text-align: left;
   }
+  .flatpickr-day.fully-booked:not(.selected) {
+    background: #fde2e2;
+    border-color: #fde2e2;
+    color: #991b1b;
+  }
 </style>
 <script>
 (function () {
@@ -28,12 +38,24 @@ FULLY_BOOKED_REGIONS 지역에만 띄운다 (2026-09-26, 2026-09-28 부터 sydne
   var MESSAGE = '<b>We\'re fully booked until 6 October.</b> ' +
     'Please choose a date from 7 October onwards, or ' +
     '<a href="/contact/">contact us</a> to check for any last-minute availability.';
+  // 어드민 달력에서 full 로 체크한 날짜 (전 지역 공통)
+  var FULL_DATES = JSON.parse(document.getElementById('fully-booked-dates').textContent || '[]');
+  var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
+    'August', 'September', 'October', 'November', 'December'];
+  function fullDateMessage(value) {
+    var parts = value.split('-');
+    var label = parseInt(parts[2], 10) + ' ' + MONTHS[parseInt(parts[1], 10) - 1];
+    return '<b>We\'re fully booked on ' + label + '.</b> ' +
+      'We may not be able to take new bookings for this date. You\'re welcome to send your inquiry anyway ' +
+      'and we\'ll let you know if a vehicle becomes available, or choose a different date.';
+  }
 
   function today() {
     var d = new Date();
     return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
   }
-  if (today() > FULLY_BOOKED_UNTIL) return;
+  var legacyActive = today() <= FULLY_BOOKED_UNTIL;
+  if (!legacyActive && !FULL_DATES.length) return;
 
   function regionOf(input) {
     var field = input.form && input.form.querySelector('[name="region"]');
@@ -46,10 +68,16 @@ FULLY_BOOKED_REGIONS 지역에만 띄운다 (2026-09-26, 2026-09-28 부터 sydne
     var anchor = (input._flatpickr && input._flatpickr.altInput) || input;
     var notice = input._fullyBookedNotice;
     var value = (input.value || '').slice(0, 10);
-    var blocked = /^\d{4}-\d{2}-\d{2}$/.test(value) && value <= FULLY_BOOKED_UNTIL &&
-      FULLY_BOOKED_REGIONS.indexOf(regionOf(input)) !== -1;
+    var isDate = /^\d{4}-\d{2}-\d{2}$/.test(value);
+    var message = null;
+    if (isDate && legacyActive && value <= FULLY_BOOKED_UNTIL &&
+        FULLY_BOOKED_REGIONS.indexOf(regionOf(input)) !== -1) {
+      message = MESSAGE;
+    } else if (isDate && FULL_DATES.indexOf(value) !== -1) {
+      message = fullDateMessage(value);
+    }
 
-    if (!blocked) {
+    if (!message) {
       if (notice) notice.hidden = true;
       return;
     }
@@ -57,9 +85,9 @@ FULLY_BOOKED_REGIONS 지역에만 띄운다 (2026-09-26, 2026-09-28 부터 sydne
       notice = document.createElement('div');
       notice.className = 'fully-booked-notice';
       notice.setAttribute('role', 'alert');
-      notice.innerHTML = MESSAGE;
       input._fullyBookedNotice = notice;
     }
+    notice.innerHTML = message;
     anchor.insertAdjacentElement('afterend', notice);
     notice.hidden = false;
   }
@@ -76,6 +104,26 @@ FULLY_BOOKED_REGIONS 지역에만 띄운다 (2026-09-26, 2026-09-28 부터 sydne
   document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll(FIELDS).forEach(function (input) {
       if (input.readOnly && input.type !== 'hidden') update(input);
+    });
+  });
+
+  // flatpickr 달력에서 full 날짜 칸을 색칠한다 (date-picker.js 는 defer 라 load 시점엔 초기화돼 있다)
+  function isoOf(d) {
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+  function markFullDay(dObj, dStr, fp, dayElem) {
+    if (FULL_DATES.indexOf(isoOf(dayElem.dateObj)) !== -1) {
+      dayElem.classList.add('fully-booked');
+      dayElem.title = 'Fully booked';
+    }
+  }
+  window.addEventListener('load', function () {
+    if (!FULL_DATES.length) return;
+    document.querySelectorAll(FIELDS).forEach(function (input) {
+      var fp = input._flatpickr;
+      if (!fp || input.hasAttribute('data-skip-booking-notice')) return;
+      fp.config.onDayCreate.push(markFullDay);
+      fp.redraw();
     });
   });
 })();

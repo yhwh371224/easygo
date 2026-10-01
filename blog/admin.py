@@ -1,6 +1,6 @@
 import os
 import re
-from datetime import date
+from datetime import date, timedelta
 from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
 
 from django.contrib import admin, messages
@@ -10,7 +10,7 @@ from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.urls import path as url_path, reverse
 from django.utils.html import format_html
-from .models import Driver, DriverSettlement, Inquiry, PaypalPayment, PhoneMapping, StripePayment, Post, VirtualNumber
+from .models import Driver, DriverSettlement, FullyBookedDate, Inquiry, PaypalPayment, PhoneMapping, StripePayment, Post, VirtualNumber
 from .models.driver import DriverSettlementItem, DriverAgreement
 
 
@@ -607,6 +607,97 @@ class VirtualNumberAdmin(admin.ModelAdmin):
         return obj.is_wired
 
 
+class FullyBookedDateAdmin(admin.ModelAdmin):
+    """Month calendar instead of a list: click a day to mark/unmark it full.
+
+    Customers picking a marked date only get a warning on the booking forms
+    (layouts/fully_booked_notice.html) — inquiries are still accepted.
+    """
+    change_list_template = 'admin/blog/fullybookeddate/calendar.html'
+
+    def get_urls(self):
+        custom = [
+            url_path(
+                'toggle/',
+                self.admin_site.admin_view(self.toggle_view),
+                name='blog_fullybookeddate_toggle',
+            ),
+        ]
+        return custom + super().get_urls()
+
+    def changelist_view(self, request, extra_context=None):
+        import calendar
+        from django.db.models import Count
+        from django.utils import timezone
+
+        today = timezone.localdate()
+        try:
+            year = int(request.GET.get('year', today.year))
+            month = int(request.GET.get('month', today.month))
+            first = date(year, month, 1)
+        except ValueError:
+            first = today.replace(day=1)
+        last = first.replace(day=calendar.monthrange(first.year, first.month)[1])
+
+        full = set(
+            FullyBookedDate.objects.filter(date__range=(first, last))
+            .values_list('date', flat=True)
+        )
+        counts = dict(
+            Post.objects.filter(pickup_date__range=(first, last), cancelled=False)
+            .values_list('pickup_date').annotate(n=Count('id'))
+        )
+        weeks = [
+            [
+                {
+                    'date': d,
+                    'in_month': d.month == first.month,
+                    'is_full': d in full,
+                    'is_past': d < today,
+                    'is_today': d == today,
+                    'bookings': counts.get(d, 0),
+                }
+                for d in week
+            ]
+            for week in calendar.Calendar(firstweekday=0).monthdatescalendar(first.year, first.month)
+        ]
+        prev_month = (first - timedelta(days=1)).replace(day=1)
+        next_month = last + timedelta(days=1)
+
+        context = {
+            **self.admin_site.each_context(request),
+            'opts': self.model._meta,
+            'title': 'Fully booked dates',
+            'month': first,
+            'weeks': weeks,
+            'prev_month': prev_month,
+            'next_month': next_month,
+            'this_month': today.replace(day=1),
+            'toggle_url': reverse(f'{self.admin_site.name}:blog_fullybookeddate_toggle'),
+            'upcoming': FullyBookedDate.objects.filter(date__gte=today),
+            **(extra_context or {}),
+        }
+        return TemplateResponse(request, self.change_list_template, context)
+
+    def toggle_view(self, request):
+        from django.http import HttpResponseNotAllowed, JsonResponse
+        from django.utils.dateparse import parse_date
+
+        if request.method != 'POST':
+            return HttpResponseNotAllowed(['POST'])
+        day = parse_date(request.POST.get('date', '') or '')
+        if not day:
+            return JsonResponse({'ok': False, 'error': 'invalid date'}, status=400)
+        existing = FullyBookedDate.objects.filter(date=day).first()
+        if existing:
+            existing.delete()
+            is_full = False
+        else:
+            FullyBookedDate.objects.create(date=day)
+            is_full = True
+        return JsonResponse({'ok': True, 'date': day.isoformat(), 'is_full': is_full})
+
+
 class MyAdminSite(AdminSite):
     site_header = 'EasyGo administration'
 
@@ -620,6 +711,7 @@ admin_site.register(StripePayment, StripePaymentAdmin)
 admin_site.register(Post, PostAdmin)
 admin_site.register(PhoneMapping, PhoneMappingAdmin)
 admin_site.register(VirtualNumber, VirtualNumberAdmin)
+admin_site.register(FullyBookedDate, FullyBookedDateAdmin)
 
 admin.site.register(Driver, DriverAdmin)
 admin.site.register(DriverAgreement, DriverAgreementAdmin)
@@ -629,3 +721,4 @@ admin.site.register(StripePayment, StripePaymentAdmin)
 admin.site.register(Post, PostAdmin)
 admin.site.register(PhoneMapping, PhoneMappingAdmin) 
 admin.site.register(VirtualNumber, VirtualNumberAdmin)
+admin.site.register(FullyBookedDate, FullyBookedDateAdmin)

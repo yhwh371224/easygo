@@ -405,3 +405,64 @@ class Post(models.Model):
         indexes = [
             models.Index(fields=['pickup_date'], name='blog_post_pickup_date_idx'),
         ]
+
+
+FULLY_BOOKED_CACHE_KEY = 'fully_booked_dates'
+
+
+class FullyBookedDate(models.Model):
+    """A pickup date marked full in the admin calendar (all regions).
+
+    Booking forms only warn the customer when they pick one of these dates —
+    inquiries are still accepted (see layouts/fully_booked_notice.html).
+    """
+    date = models.DateField(unique=True)
+    note = models.CharField(max_length=200, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['date']
+
+    def __str__(self):
+        return self.date.isoformat()
+
+    @classmethod
+    def upcoming_iso(cls):
+        """ISO strings of today-and-later full dates, cached for the footer."""
+        from django.core.cache import cache
+        from django.utils import timezone
+
+        # Rendered in the footer of every public page — a cache outage must
+        # not take the page down, so fall back to the DB.
+        try:
+            dates = cache.get(FULLY_BOOKED_CACHE_KEY)
+        except Exception:
+            dates = None
+        if dates is None:
+            dates = [
+                d.isoformat() for d in cls.objects
+                .filter(date__gte=timezone.localdate())
+                .values_list('date', flat=True)
+            ]
+            try:
+                cache.set(FULLY_BOOKED_CACHE_KEY, dates, 60 * 60)
+            except Exception:
+                pass
+        return dates
+
+    @staticmethod
+    def clear_cache():
+        from django.core.cache import cache
+        try:
+            cache.delete(FULLY_BOOKED_CACHE_KEY)
+        except Exception:
+            pass
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self.clear_cache()
+
+    def delete(self, *args, **kwargs):
+        result = super().delete(*args, **kwargs)
+        self.clear_cache()
+        return result

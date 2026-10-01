@@ -2321,3 +2321,54 @@ class BulkInvoiceDunningTests(TestCase):
         outside.refresh_from_db()
         self.assertTrue(inside.bulk_invoice)
         self.assertFalse(outside.bulk_invoice)
+
+
+@override_settings(CACHES={'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'}})
+class FullyBookedDateTests(TestCase):
+    def setUp(self):
+        from blog.models import FullyBookedDate
+        self.Model = FullyBookedDate
+        self.Model.clear_cache()
+        self.staff = User.objects.create_superuser('fbstaff', 'fb@x.com', 'pass')
+        self.client.force_login(self.staff)
+        self.toggle_url = reverse('admin:blog_fullybookeddate_toggle')
+
+    def test_toggle_marks_and_unmarks_date(self):
+        day = (timezone.localdate() + timedelta(days=3)).isoformat()
+        res = self.client.post(self.toggle_url, {'date': day})
+        self.assertEqual(res.json(), {'ok': True, 'date': day, 'is_full': True})
+        self.assertEqual(self.Model.upcoming_iso(), [day])
+
+        res = self.client.post(self.toggle_url, {'date': day})
+        self.assertFalse(res.json()['is_full'])
+        self.assertEqual(self.Model.upcoming_iso(), [])
+
+    def test_toggle_rejects_get_and_bad_date(self):
+        self.assertEqual(self.client.get(self.toggle_url).status_code, 405)
+        self.assertEqual(self.client.post(self.toggle_url, {'date': 'nope'}).status_code, 400)
+
+    def test_toggle_requires_staff(self):
+        self.client.logout()
+        res = self.client.post(self.toggle_url, {'date': '2030-01-01'})
+        self.assertEqual(res.status_code, 302)
+        self.assertFalse(self.Model.objects.exists())
+
+    def test_calendar_changelist_renders(self):
+        self.Model.objects.create(date=timezone.localdate() + timedelta(days=1))
+        res = self.client.get(reverse('admin:blog_fullybookeddate_changelist'))
+        self.assertEqual(res.status_code, 200)
+        self.assertContains(res, 'fb-day is-full')
+
+    def test_upcoming_excludes_past_dates(self):
+        today = timezone.localdate()
+        self.Model.objects.create(date=today - timedelta(days=1))
+        self.Model.objects.create(date=today)
+        self.assertEqual(self.Model.upcoming_iso(), [today.isoformat()])
+
+    def test_notice_template_embeds_dates(self):
+        from django.template.loader import render_to_string
+        day = timezone.localdate() + timedelta(days=5)
+        self.Model.objects.create(date=day)
+        html = render_to_string('basecamp/layouts/fully_booked_notice.html', {})
+        self.assertIn('id="fully-booked-dates"', html)
+        self.assertIn(day.isoformat(), html)

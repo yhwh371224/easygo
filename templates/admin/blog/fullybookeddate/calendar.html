@@ -1,0 +1,106 @@
+{% extends "admin/base_site.html" %}
+{% block title %}Fully booked dates | {{ site_title|default:"Django site admin" }}{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <a href="{% url 'admin:index' %}">Home</a> &rsaquo;
+  <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a> &rsaquo;
+  Fully booked dates
+</div>
+{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+  .fb-nav { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+  .fb-nav h2 { margin: 0; min-width: 11rem; text-align: center; }
+  .fb-cal { border-collapse: collapse; width: 100%; max-width: 760px; table-layout: fixed; }
+  .fb-cal th { padding: .4rem; text-align: center; }
+  .fb-cal td { border: 1px solid var(--hairline-color, #ddd); height: 64px; padding: 0; vertical-align: top; }
+  .fb-day { width: 100%; height: 100%; min-height: 64px; border: 0; background: transparent; cursor: pointer;
+            padding: .35rem; text-align: left; font: inherit; color: inherit; display: flex; flex-direction: column; justify-content: space-between; }
+  .fb-day:hover { background: var(--selected-row, #ffc); }
+  .fb-day .num { font-weight: 600; }
+  .fb-day .count { font-size: .75rem; opacity: .7; }
+  .fb-day .tag { font-size: .7rem; font-weight: 700; color: #fff; background: #ba2121; border-radius: 3px; padding: 0 .3rem; align-self: flex-start; }
+  .fb-day:not(.is-full) .tag { display: none; }
+  .fb-day.is-full { background: #fde2e2; }
+  .fb-day.is-today .num { text-decoration: underline; }
+  .fb-day.out-month { opacity: .35; }
+  .fb-day[disabled] { cursor: default; opacity: .35; }
+  .fb-help { color: var(--body-quiet-color, #666); max-width: 760px; }
+  .fb-upcoming { margin-top: 1.5rem; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+  <p class="fb-help">
+    날짜를 클릭하면 <b>full</b> 체크/해제됩니다. 체크된 날짜를 고객이 예약/문의 폼에서 고르면
+    경고 문구가 뜹니다 (문의 접수는 막지 않음, 전 지역 공통). 칸 아래 숫자는 그날 픽업 예약 건수(취소 제외)입니다.
+  </p>
+
+  <div class="fb-nav">
+    <a class="button" href="?year={{ prev_month.year }}&month={{ prev_month.month }}">&larr; Prev</a>
+    <h2>{{ month|date:"F Y" }}</h2>
+    <a class="button" href="?year={{ next_month.year }}&month={{ next_month.month }}">Next &rarr;</a>
+    <a href="?year={{ this_month.year }}&month={{ this_month.month }}">This month</a>
+  </div>
+
+  <table class="fb-cal">
+    <thead><tr><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th></tr></thead>
+    <tbody>
+      {% for week in weeks %}
+      <tr>
+        {% for day in week %}
+        <td>
+          <button type="button"
+                  class="fb-day{% if day.is_full %} is-full{% endif %}{% if day.is_today %} is-today{% endif %}{% if not day.in_month %} out-month{% endif %}"
+                  data-date="{{ day.date|date:'Y-m-d' }}"
+                  {% if day.is_past %}disabled{% endif %}>
+            <span class="num">{{ day.date.day }}</span>
+            <span class="tag">FULL</span>
+            <span class="count">{% if day.bookings %}{{ day.bookings }} booking{{ day.bookings|pluralize }}{% endif %}</span>
+          </button>
+        </td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="fb-upcoming">
+    <h3>Upcoming full dates</h3>
+    {% if upcoming %}
+      <ul>{% for d in upcoming %}<li>{{ d.date|date:"D j M Y" }}</li>{% endfor %}</ul>
+    {% else %}
+      <p>None.</p>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+(function () {
+  var csrf = '{{ csrf_token }}';
+  document.querySelectorAll('.fb-day').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      if (btn.disabled) return;
+      btn.disabled = true;
+      fetch('{{ toggle_url }}', {
+        method: 'POST',
+        headers: { 'X-CSRFToken': csrf, 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'date=' + encodeURIComponent(btn.dataset.date),
+        credentials: 'same-origin'
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          if (!data.ok) throw new Error(data.error || 'failed');
+          btn.classList.toggle('is-full', data.is_full);
+        })
+        .catch(function (err) { console.error('[fully-booked] toggle failed', err); })
+        .finally(function () { btn.disabled = false; });
+    });
+  });
+})();
+</script>
+{% endblock %}
