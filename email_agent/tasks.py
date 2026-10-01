@@ -145,6 +145,10 @@ def _run_ai_reply_and_draft(
     thread_history_without_current: list,
 ) -> None:
     """Steps 6–7: full AI analysis (existing dual / OpenAI / Claude paths) + draft."""
+    if not getattr(settings, "EMAIL_AI_DRAFTS_ENABLED", False):
+        logger.info("AI reply drafts disabled; skipping draft for message %s", msg_id)
+        return
+
     if OPENAI_ONLY:
         try:
             result = analyze_email_with_openai(
