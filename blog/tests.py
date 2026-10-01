@@ -383,6 +383,12 @@ class CalendarEventDescriptionTests(TestCase):
         post = self._post(price='', driver_price='')
         self.assertNotIn('dp:$', build_event_data(post)['description'])
 
+    def test_region_follows_driver_price_in_description(self, *_):
+        from utils.calendar_sync import build_event_data
+
+        post = self._post(driver_price='100', region=make_region('sydney', 'Sydney'))
+        self.assertIn('dp:$100 Sydney', build_event_data(post)['description'])
+
 
 # ---------------------------------------------------------------------------
 # Model: PaypalPayment

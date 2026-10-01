@@ -189,6 +189,7 @@ def build_event_data(instance):
         # 드라이버에게 지급할 금액. 커미션 차감 전 금액(driver_price)이라
         # 정산서의 지급액(subcontractor_payout)과는 다를 수 있다.
         f"dp:${instance.driver_price}" if instance.driver_price else '',
+        instance.region.name if instance.region_id else '',
         instance.contact if contact_display != instance.contact else '',
     ]))
     if extra_stops_block:
