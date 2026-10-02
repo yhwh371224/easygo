@@ -2563,9 +2563,12 @@ class AutoFillPostRefundTests(TestCase):
         return Post.objects.create(**defaults)
 
     def _return_booking(self):
-        leg1 = self._booking(10, return_pickup_date=datetime.date.today() + timedelta(days=17),
+        """handle_return_trip splits a $200 return booking into two $100 legs."""
+        leg1 = self._booking(10, price='200', paid='200',
+                             return_pickup_date=datetime.date.today() + timedelta(days=17),
                              return_pickup_time='10:00')
-        leg2 = self._booking(17, return_pickup_time='x')
+        leg2 = Post.objects.exclude(pk=leg1.pk).get(email='rae@example.com')
+        leg1.refresh_from_db()
         return leg1, leg2
 
     def _refund(self, amount):
