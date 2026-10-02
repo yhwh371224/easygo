@@ -67,6 +67,13 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': False,
         },
+        # 템플릿의 {{ var|default:... }} 가 없는 변수를 찾을 때마다 남기는
+        # VariableDoesNotExist DEBUG 로그(정상 동작)가 django.log 를 뒤덮지 않게 한다.
+        'django.template': {
+            'handlers': ['file', 'telegram'],
+            'level': 'INFO',
+            'propagate': False,
+        },
         'blog.management.commands.booking_reminder': {
             'handlers': ['email_file'],
             'level': 'INFO',
