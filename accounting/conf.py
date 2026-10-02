@@ -25,6 +25,17 @@ LOAN_SKIP_MARKERS = ['LOAN FROM DIRECTOR', 'LOAN REPAYMENT']
 # same payruns (confirmed 2026-08-05: $78 transfers match PayrollEntry.super_amount).
 SUPER_SKIP_MARKERS = ['PAYCLEAR', 'SUPERCHOICE']
 
+# Bank CSV import: payments to the ATO (BAS — GST + PAYG withholding, PAYG
+# instalments, income tax). None of it is a P&L expense: GST is already kept
+# out of P&L (figures are ex-GST), PAYGW is already in PayrollEntry.gross_pay
+# (labour_total), and income tax comes after profit. Importing the bank row
+# would double-count, so it is skipped like super / wage transfers.
+# CommBank writes a BPAY to the ATO as e.g. 'TAX OFFICE PAYMENTS NetBank BPAY
+# 75556 ...' (75556 = the ATO's BPAY biller code). 'ATO' itself is matched as a
+# whole word (ATO_PAYMENT_PATTERN) so names like 'PLATO' or 'CURATOR' don't hit.
+ATO_PAYMENT_MARKERS = ['TAX OFFICE', 'BPAY 75556']
+ATO_PAYMENT_PATTERN = r'\bATO\b'
+
 # Bank CSV import: driver/subcontractor payouts — already recorded as the
 # 'subcontract' expense by DriverSettlement -> sync_settlement_expense(), so the
 # bank row is skipped to avoid a P&L double-count. For payees the automatic

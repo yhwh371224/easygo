@@ -103,6 +103,12 @@ class Command(BaseCommand):
         return bool(conf.SUPER_SKIP_MARKERS) and self._contains_any(
             desc_upper, conf.SUPER_SKIP_MARKERS)
 
+    def _is_ato_payment(self, desc_upper):
+        """True if row is a payment to the ATO (BAS / PAYG / income tax) — not
+        a P&L expense, see conf.ATO_PAYMENT_MARKERS."""
+        return (self._contains_any(desc_upper, conf.ATO_PAYMENT_MARKERS)
+                or bool(re.search(conf.ATO_PAYMENT_PATTERN, desc_upper)))
+
     def _estimate_gst(self, description_upper, gross):
         for keywords, code in conf.GST_KEYWORD_RULES:
             if self._contains_any(description_upper, keywords):
@@ -133,6 +139,7 @@ class Command(BaseCommand):
 
         created = skipped_income = skipped_driver = skipped_transfer = 0
         skipped_wage = skipped_loan = skipped_super = skipped_dup = errors = held_for_review = 0
+        skipped_ato = 0
         personal = 0
         to_create = []
 
@@ -175,6 +182,10 @@ class Command(BaseCommand):
 
                 if self._is_super_payment(desc_upper):
                     skipped_super += 1
+                    continue
+
+                if self._is_ato_payment(desc_upper):
+                    skipped_ato += 1
                     continue
 
                 try:
@@ -251,6 +262,7 @@ class Command(BaseCommand):
         self.stdout.write(f"  Skipped — wage transfers:        {skipped_wage}")
         self.stdout.write(f"  Skipped — director loan:         {skipped_loan}")
         self.stdout.write(f"  Skipped — super contributions:   {skipped_super}")
+        self.stdout.write(f"  Skipped — ATO payments:          {skipped_ato}")
         self.stdout.write(f"  Skipped — internal transfer:     {skipped_transfer}")
         self.stdout.write(f"  Skipped — duplicates:            {skipped_dup}")
         self.stdout.write(f"  Errors (bad row):                {errors}")
