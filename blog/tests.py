@@ -2545,3 +2545,97 @@ class BuildPnlExGstTests(TestCase):
 
         self.assertFalse(shuttle['labour_in_net'])
         self.assertEqual(shuttle['net'], Decimal('1000.00'))
+
+
+# ---------------------------------------------------------------------------
+# Refund → Post.refund auto-fill (return bookings)
+# ---------------------------------------------------------------------------
+
+class AutoFillPostRefundTests(TestCase):
+
+    def _booking(self, days, **kw):
+        defaults = dict(
+            name='Rae Turner', email='rae@example.com',
+            no_of_passenger='2', price='100', paid='100',
+            pickup_date=datetime.date.today() + timedelta(days=days),
+        )
+        defaults.update(kw)
+        return Post.objects.create(**defaults)
+
+    def _return_booking(self):
+        leg1 = self._booking(10, return_pickup_date=datetime.date.today() + timedelta(days=17),
+                             return_pickup_time='10:00')
+        leg2 = self._booking(17, return_pickup_time='x')
+        return leg1, leg2
+
+    def _refund(self, amount):
+        return PaypalPayment.objects.create(
+            name='Rae Turner', email='rae@example.com',
+            amount=Decimal(amount), txn_id='R1', payment_status='Refunded',
+        )
+
+    def test_return_booking_fills_the_later_leg(self):
+        from blog.tasks import _auto_fill_post_refund
+
+        leg1, leg2 = self._return_booking()
+        filled, count = _auto_fill_post_refund(self._refund('-51.50'))
+        leg1.refresh_from_db()
+        leg2.refresh_from_db()
+
+        self.assertEqual(count, 2)
+        self.assertEqual([(p.pk, a) for p, a in filled], [(leg2.pk, Decimal('50.00'))])
+        self.assertEqual(leg2.refund, Decimal('50.00'))
+        self.assertEqual(leg1.refund, Decimal('0'))
+
+    def test_return_booking_refund_above_leg_paid_spills_to_earlier_leg(self):
+        """BAS netting drops refund above a leg's paid, so the rest goes on leg 1."""
+        from blog.tasks import _auto_fill_post_refund
+
+        leg1, leg2 = self._return_booking()
+        filled, _ = _auto_fill_post_refund(self._refund('-154.50'))
+        leg1.refresh_from_db()
+        leg2.refresh_from_db()
+
+        self.assertEqual(leg2.refund, Decimal('100'))
+        self.assertEqual(leg1.refund, Decimal('50.00'))
+        self.assertEqual(len(filled), 2)
+
+    def test_two_unrelated_bookings_are_left_alone(self):
+        from blog.tasks import _auto_fill_post_refund
+
+        a = self._booking(10)
+        b = self._booking(40)
+        filled, count = _auto_fill_post_refund(self._refund('-51.50'))
+        a.refresh_from_db()
+        b.refresh_from_db()
+
+        self.assertEqual((filled, count), ([], 2))
+        self.assertEqual(a.refund, Decimal('0'))
+        self.assertEqual(b.refund, Decimal('0'))
+
+    def test_return_booking_with_refund_already_set_is_left_alone(self):
+        from blog.tasks import _auto_fill_post_refund
+
+        leg1, leg2 = self._return_booking()
+        leg1.refund = Decimal('20')
+        leg1.save()
+        filled, _ = _auto_fill_post_refund(self._refund('-51.50'))
+        leg2.refresh_from_db()
+
+        self.assertEqual(filled, [])
+        self.assertEqual(leg2.refund, Decimal('0'))
+
+    @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+    @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+    @patch('blog.blog_utils.send_telegram_sync')
+    @patch('blog.blog_utils.send_html_email')
+    def test_telegram_names_the_filled_leg(self, mock_mail, mock_tg, *mocks):
+        from blog.tasks import notify_user_payment_paypal
+
+        leg1, leg2 = self._return_booking()
+        notify_user_payment_paypal(self._refund('-51.50').pk)
+
+        msg = mock_tg.call_args[0][0]
+        self.assertIn('Return booking', msg)
+        self.assertIn(f'#{leg2.pk}', msg)
+        self.assertNotIn('enter Post.refund manually', msg)

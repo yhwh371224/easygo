@@ -1,5 +1,6 @@
 import os
 import logging
+from datetime import date
 from decimal import Decimal, ROUND_HALF_UP
 
 from django.db import transaction
@@ -20,24 +21,49 @@ logger = logging.getLogger('easygo')
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
+def _return_pair(posts):
+    """The two legs of one return booking, earlier leg first, or None.
+
+    The first leg's return_pickup_date is the second leg's pickup_date."""
+    if len(posts) != 2:
+        return None
+    first, second = sorted(posts, key=lambda p: (p.pickup_date or date.min, p.pk))
+    if first.return_pickup_date and first.return_pickup_date == second.pickup_date:
+        return first, second
+    return None
+
+
+def _paid_decimal(post):
+    try:
+        return Decimal(str(post.paid or '0').replace('$', '').replace(',', '').strip())
+    except Exception:
+        return Decimal('0')
+
+
 def _auto_fill_post_refund(instance):
     """A negative Stripe/PayPal payment (refund) matched to exactly one Post
     whose refund field is still empty gets that Post.refund auto-filled, so
-    the admin doesn't have to type it in by hand. If Post.refund is already
-    set (manually entered) or the match is ambiguous (0 or 2+ posts), leave
-    it alone — accounting (BAS 1A netting) relies on Post.refund being
-    correct, so we only auto-fill when there's a single unambiguous match.
-    Returns the Post if it was auto-filled, else None, and the match count."""
+    the admin doesn't have to type it in by hand. A return booking (two legs
+    matched) is filled on the later leg; whatever exceeds that leg's paid
+    spills onto the earlier leg, since BAS netting drops a refund above paid.
+    If Post.refund is already set (manually entered) or the match is otherwise
+    ambiguous, leave it alone — accounting (BAS 1A netting) relies on
+    Post.refund being correct.
+    Returns the list of (Post, amount) filled (empty if none) and the match count."""
     from .blog_utils import match_posts_for_payer
 
-    matched_posts = match_posts_for_payer(instance)
-    match_count = matched_posts.count()
-    if match_count != 1:
-        return None, match_count
+    matched_posts = list(match_posts_for_payer(instance))
+    match_count = len(matched_posts)
+    if match_count == 1:
+        legs = matched_posts
+    else:
+        pair = _return_pair(matched_posts)
+        if pair is None:
+            return [], match_count
+        legs = [pair[1], pair[0]]   # later leg first
 
-    post = matched_posts.first()
-    if post.refund:
-        return None, match_count
+    if any(post.refund for post in legs):
+        return [], match_count
 
     refund = abs(instance.amount)
     if isinstance(instance, PaypalPayment):
@@ -46,9 +72,18 @@ def _auto_fill_post_refund(instance):
         # refund is netted in accounting.reports.paypal_surcharge_total.
         refund = (refund / Decimal('1.03')).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
 
-    post.refund = refund
-    post.save(update_fields=['refund'])
-    return post, match_count
+    filled = []
+    remaining = refund
+    for i, post in enumerate(legs):
+        last = i == len(legs) - 1
+        amount = remaining if last else min(remaining, _paid_decimal(post))
+        if amount <= 0:
+            continue
+        post.refund = amount
+        post.save(update_fields=['refund'])
+        filled.append((post, amount))
+        remaining -= amount
+    return filled, match_count
 
 
 # Google Calendar event 
@@ -108,10 +143,10 @@ def notify_user_payment_paypal(instance_id):
             elif kind == PaypalPayment.KIND_DISPUTE_RESOLVED:
                 handle_paypal_dispute_resolved(instance, method="PAYPAL")
             else:
-                auto_filled_post, match_count = _auto_fill_post_refund(instance)
+                auto_filled, match_count = _auto_fill_post_refund(instance)
                 send_refund_notification_email(
                     instance, method="PAYPAL", amount=raw_amount,
-                    auto_filled_post=auto_filled_post, match_count=match_count,
+                    auto_filled=auto_filled, match_count=match_count,
                 )
             return
 
@@ -175,10 +210,10 @@ def notify_user_payment_stripe(instance_id):
             instance.is_processed = True
             instance.processed_at = timezone.now()
             instance.save()
-            auto_filled_post, match_count = _auto_fill_post_refund(instance)
+            auto_filled, match_count = _auto_fill_post_refund(instance)
             send_refund_notification_email(
                 instance, method="STRIPE", amount=raw_amount,
-                auto_filled_post=auto_filled_post, match_count=match_count,
+                auto_filled=auto_filled, match_count=match_count,
             )
             return
 
