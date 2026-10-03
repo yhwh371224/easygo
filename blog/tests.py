@@ -2708,3 +2708,75 @@ class UgoArrivalEmailTests(TestCase):
         self.assertEqual(settlement.settlement_number,
                          f"ALL-UGO-{post.pickup_date:%y%m%d}-SET-01")
         self.assertEqual(settlement.total_amount, Decimal('100'))
+
+
+class FinalNoticeEmailTests(TestCase):
+    """final_notice 는 마지막 에스컬레이션 SMS 와 함께 같은 내용의 메일도 보낸다."""
+
+    def setUp(self):
+        self.region = make_region()
+
+    def make_post(self, **kwargs):
+        fields = dict(
+            name='Late Payer',
+            email='late@example.com',
+            contact='0412345678',
+            no_of_passenger='2',
+            price='100',
+            region=self.region,
+            pickup_date=datetime.date.today() + timedelta(days=1),
+            pickup_time='10:00',
+            direction='Pickup from Home',
+            final_notice_sent_at=timezone.now(),
+        )
+        fields.update(kwargs)
+        return Post.objects.create(**fields)
+
+    def _run(self, sms_result='SM123'):
+        with patch('blog.management.commands.final_notice.send_sms_notice',
+                   return_value=sms_result) as sms:
+            call_command('final_notice', stdout=StringIO())
+        return sms
+
+    @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+    @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+    def test_unpaid_gets_sms_and_email(self, *_):
+        post = self.make_post()
+        sms = self._run()
+        sms.assert_called_once()
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertIn('late@example.com', mail.outbox[0].to)
+        self.assertIn('Urgent notice', mail.outbox[0].subject)
+        post.refresh_from_db()
+        self.assertIsNotNone(post.sms_final_sent_at)
+
+    @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+    @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+    def test_short_payment_email_shows_balance(self, *_):
+        self.make_post(paid='40', final_notice_sent_at=None,
+                       discrepancy_final_sent_at=timezone.now())
+        self._run()
+        self.assertEqual(len(mail.outbox), 1)
+        html = mail.outbox[0].alternatives[0][0] if mail.outbox[0].alternatives else mail.outbox[0].body
+        self.assertIn('$60.00', html)
+
+    @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+    @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+    def test_sms_failure_sends_no_email_and_retries(self, *_):
+        post = self.make_post()
+        self._run(sms_result=None)
+        self.assertEqual(len(mail.outbox), 0)
+        post.refresh_from_db()
+        self.assertIsNone(post.sms_final_sent_at)
+
+    @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+    @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+    def test_no_contact_still_gets_email_once(self, *_):
+        post = self.make_post(contact='')
+        sms = self._run()
+        sms.assert_not_called()
+        self.assertEqual(len(mail.outbox), 1)
+        self._run()
+        self.assertEqual(len(mail.outbox), 1)
+        post.refresh_from_db()
+        self.assertIsNotNone(post.sms_final_sent_at)

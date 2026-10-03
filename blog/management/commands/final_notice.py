@@ -7,6 +7,8 @@ from django.utils import timezone
 from blog.models import Post
 from blog.blog_utils import booking_balance, is_deposit_protected
 from blog.sms_utils import send_sms_notice, send_whatsapp_template
+from main.settings import RECIPIENT_EMAIL
+from utils.email import send_template_email, collect_recipients
 
 sms_logger = logging.getLogger('sms')
 
@@ -18,8 +20,8 @@ class Command(BaseCommand):
         '  · 부분 결제(short payment): 차액 안내 메일을 이미 보낸 건만\n'
         'SMS 는 부킹당 총 1통 — send_sms 가 이미 보냈으면(sms_notice_sent_at) '
         '여기서는 보내지 않는다. 두 명령이 sms_* 필드를 서로 확인한다.\n'
-        '(Final notice 이메일 및 잔액부족 안내 이메일은 no_payment_yet 이 픽업 시각 '
-        '기준으로 이미 발송하므로 여기서는 중복 이메일 없이 SMS 채널만 담당한다.)'
+        'SMS 와 같은 내용의 긴급 안내 메일(html_email-final-urgent)도 함께 보낸다 — '
+        'SMS 가 안 닿는 손님(번호 오류/해외번호)도 마지막 경고를 받게.'
     )
 
     def handle(self, *args, **options):
@@ -98,33 +100,64 @@ class Command(BaseCommand):
                     "Please settle it ASAP to ensure your booking remains confirmed.\n"
                     "Reply only via email >> info@easygoshuttle.com.au",
                     label='short-payment',
+                    balance=balance,
                 )
 
-            self.stdout.write(self.style.SUCCESS('Final-notice SMS escalation done.'))
+            self.stdout.write(self.style.SUCCESS('Final-notice SMS + email escalation done.'))
 
         except Exception as e:
             sms_logger.error(f'Error in final_notice handle: {e}')
             self.stdout.write(self.style.ERROR('Failed to send final-notice SMS'))
 
-    def _send(self, notice, sms_message, label):
+    def _send(self, notice, sms_message, label, balance=None):
         try:
-            if not notice.contact:
-                return
-            if send_sms_notice(notice.contact, sms_message) is None:
-                # 번호 오류/Twilio 실패 → 발송 기록을 남기지 않아 다음 실행에서 재시도.
-                sms_logger.warning(
-                    f"Final-notice SMS ({label}) failed for #{notice.id} — will retry"
+            # 번호가 없으면 메일만 보낸다. 번호가 있는데 SMS 가 실패하면 메일도
+            # 보내지 않고 기록을 남기지 않아, 다음 실행에서 SMS+메일을 함께 재시도한다
+            # (메일만 먼저 나가고 재시도 때 또 나가는 중복 방지).
+            if notice.contact:
+                if send_sms_notice(notice.contact, sms_message) is None:
+                    sms_logger.warning(
+                        f"Final-notice SMS ({label}) failed for #{notice.id} — will retry"
+                    )
+                    return
+                sms_logger.info(
+                    f"Final-notice SMS ({label}) sent to {notice.contact} (#{notice.id})"
                 )
-                return
+
+            self._send_email(notice, label, balance)
+
             # 중복 발송 방지는 전용 필드로만 한다(reminder/pending 은 건드리지 않음).
+            # 이름은 sms_ 지만 "마지막 에스컬레이션(SMS+메일) 완료" 표시로 쓴다.
             notice.sms_final_sent_at = timezone.now()
             notice.save(update_fields=['sms_final_sent_at'])
-            sms_logger.info(
-                f"Final-notice SMS ({label}) sent to {notice.contact} (#{notice.id})"
-            )
-            if notice.direction == 'Pickup from Intl Airport':
+            if notice.contact and notice.direction == 'Pickup from Intl Airport':
                 # DISABLED: Twilio WhatsApp sending — do not uncomment without approval
                 pass  # send_whatsapp_template(notice.contact, user_name=notice.name)
 
         except Exception as e:
             sms_logger.error(f"Failed to send final-notice SMS for {notice.email}: {e}")
+
+    def _send_email(self, notice, label, balance):
+        """SMS 와 같은 내용의 긴급 안내 메일. 실패해도 SMS 는 이미 나갔으므로
+        재시도하지 않는다(재시도하면 SMS 가 또 나감) — 로그만 남긴다."""
+        recipients = collect_recipients(
+            notice.booker_email or notice.email, RECIPIENT_EMAIL
+        )
+        if not recipients:
+            return
+        try:
+            send_template_email(
+                "Urgent notice — your booking is not yet confirmed",
+                "html_email-final-urgent.html",
+                {
+                    'booker_name': notice.booker_name,
+                    'name': notice.name,
+                    'pickup_date': notice.pickup_date,
+                    'return_pickup_date': notice.return_pickup_date,
+                    'balance': f"{balance:.2f}" if balance else None,
+                },
+                recipients,
+            )
+            sms_logger.info(f"Final-notice email ({label}) sent for #{notice.id}")
+        except Exception as e:
+            sms_logger.error(f"Final-notice email ({label}) failed for #{notice.id}: {e}")
