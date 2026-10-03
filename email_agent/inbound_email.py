@@ -33,6 +33,13 @@ AIRPORT_KEYWORDS: tuple[str, ...] = (
 
 CONTACT_FORM_SUBJECT_MARKER = "[New Contact] Submission from"
 
+# Gmail auto-categories that are never customer inquiries (newsletters, notifications, social)
+SKIP_CATEGORY_LABELS: tuple[str, ...] = (
+    "CATEGORY_PROMOTIONS",
+    "CATEGORY_SOCIAL",
+    "CATEGORY_UPDATES",
+)
+
 
 def _normalize(text: str) -> str:
     return re.sub(r"\s+", " ", (text or "").lower())
@@ -202,6 +209,10 @@ def system_filter_skip_reason(
         return "Skipping: already processed label exists"
     if own_email in sender and not is_contact_form_submission(subject):
         return "Skipping: own outbound / internal email"
+    if not is_contact_form_submission(subject):
+        for label in SKIP_CATEGORY_LABELS:
+            if label in label_ids:
+                return f"Skipping: Gmail category {label}"
     return None
 
 
