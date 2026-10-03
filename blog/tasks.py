@@ -79,8 +79,19 @@ def _auto_fill_post_refund(instance):
         amount = remaining if last else min(remaining, _paid_decimal(post))
         if amount <= 0:
             continue
+        # 환불 메일이 이미 나가므로 sent_email 부터 먼저 저장해 취소 메일을 막는다.
         post.refund = amount
-        post.save(update_fields=['refund'])
+        post.sent_email = True
+        post.save(update_fields=['refund', 'sent_email'])
+        # 전액 환불만 취소 처리한다. 부분 환불은 운행이 남아 있으므로 리뷰 요청만 막는다.
+        paid = _paid_decimal(post)
+        fields = []
+        if paid > 0 and amount >= paid:
+            post.cancelled = True
+            fields.append('cancelled')
+        post.no_review = True
+        fields.append('no_review')
+        post.save(update_fields=fields)
         filled.append((post, amount))
         remaining -= amount
     return filled, match_count

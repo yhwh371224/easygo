@@ -2589,6 +2589,10 @@ class AutoFillPostRefundTests(TestCase):
         self.assertEqual([(p.pk, a) for p, a in filled], [(leg2.pk, Decimal('50.00'))])
         self.assertEqual(leg2.refund, Decimal('50.00'))
         self.assertEqual(leg1.refund, Decimal('0'))
+        # partial refund on leg2: no cancel, but no review/cancel mail either
+        self.assertFalse(leg2.cancelled)
+        self.assertTrue(leg2.no_review and leg2.sent_email)
+        self.assertFalse(leg1.cancelled or leg1.no_review or leg1.sent_email)
 
     def test_return_booking_refund_above_leg_paid_spills_to_earlier_leg(self):
         """BAS netting drops refund above a leg's paid, so the rest goes on leg 1."""
@@ -2602,6 +2606,10 @@ class AutoFillPostRefundTests(TestCase):
         self.assertEqual(leg2.refund, Decimal('100'))
         self.assertEqual(leg1.refund, Decimal('50.00'))
         self.assertEqual(len(filled), 2)
+        # leg2 fully refunded → cancelled; leg1 partially → stays active
+        self.assertTrue(leg2.cancelled and leg2.no_review and leg2.sent_email)
+        self.assertFalse(leg1.cancelled)
+        self.assertTrue(leg1.no_review and leg1.sent_email)
 
     def test_two_unrelated_bookings_are_left_alone(self):
         from blog.tasks import _auto_fill_post_refund
