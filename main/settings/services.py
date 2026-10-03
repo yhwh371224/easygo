@@ -20,7 +20,7 @@ CLOUDFLARE_TURNSTILE_SECRET_KEY = config('CLOUDFLARE_TURNSTILE_SECRET_KEY')
 
 # Anthropic / AI
 ANTHROPIC_API_KEY = config('ANTHROPIC_API_KEY')
-# AI reply drafts only (Gmail watch/classification keep running). Off: drafts were too inaccurate.
+# AI reply drafts only (Gmail watch/classification keep running). Drafts use the current email only (no thread history).
 EMAIL_AI_DRAFTS_ENABLED = config('EMAIL_AI_DRAFTS_ENABLED', default=False, cast=bool)
 EMAIL_AI_DUAL_MODE = config('EMAIL_AI_DUAL_MODE', default=False, cast=bool)
 EMAIL_AI_OPENAI_ONLY = config('EMAIL_AI_OPENAI_ONLY', default=False, cast=bool)

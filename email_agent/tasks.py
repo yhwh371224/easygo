@@ -16,7 +16,6 @@ from .inbound_email import (
     classify_with_optional_ai_fallback,
     extract_inbox_message_ids_from_history,
     extract_plain_body_from_payload,
-    get_thread_history,
     headers_dict_from_message,
     load_full_message,
     load_message_metadata,
@@ -142,9 +141,11 @@ def _run_ai_reply_and_draft(
     subject: str,
     body: str,
     thread_id: str,
-    thread_history_without_current: list,
 ) -> None:
-    """Steps 6–7: full AI analysis (existing dual / OpenAI / Claude paths) + draft."""
+    """Steps 6–7: full AI analysis (existing dual / OpenAI / Claude paths) + draft.
+
+    Drafts are written from the current email only — no thread history is sent.
+    """
     if not getattr(settings, "EMAIL_AI_DRAFTS_ENABLED", False):
         logger.info("AI reply drafts disabled; skipping draft for message %s", msg_id)
         return
@@ -152,7 +153,7 @@ def _run_ai_reply_and_draft(
     if OPENAI_ONLY:
         try:
             result = analyze_email_with_openai(
-                sender, subject, body, thread_history_without_current
+                sender, subject, body, []
             )
         except Exception as e:
             logger.exception("OpenAI API failed for message %s: %s", msg_id, e)
@@ -172,7 +173,7 @@ def _run_ai_reply_and_draft(
     elif DUAL_MODE:
         try:
             dual_result = analyze_email_dual(
-                sender, subject, body, thread_history_without_current
+                sender, subject, body, []
             )
             GmailDraftService().build_comparison_draft(
                 to=reply_to,
@@ -186,7 +187,7 @@ def _run_ai_reply_and_draft(
     else:
         try:
             result = analyze_email_with_claude(
-                sender, subject, body, thread_history_without_current
+                sender, subject, body, []
             )
         except Exception as e:
             logger.exception("Claude API failed for message %s: %s", msg_id, e)
@@ -278,12 +279,6 @@ def gmail_watch_topic(payload):
                 mark_message_processed(service, msg_id)
                 continue
 
-            # Thread context only when we will call reply AI
-            thread_history = get_thread_history(service, thread_id)
-            thread_history_without_current = [
-                m for m in thread_history if m.get("body", "").strip() != body.strip()
-            ]
-
             reply_to = reply_to_address(subject, body, sender)
             logger.info(
                 "Processing airport message %s | classification=%s | reply_to=%s",
@@ -300,7 +295,6 @@ def gmail_watch_topic(payload):
                 subject=subject,
                 body=body,
                 thread_id=thread_id,
-                thread_history_without_current=thread_history_without_current,
             )
 
     except Exception:
