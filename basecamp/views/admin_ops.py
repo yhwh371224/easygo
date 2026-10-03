@@ -824,3 +824,27 @@ def email_dispatch_detail(request):
 
     return render(request, 'basecamp/email/email_dispatch.html', {})
 
+
+
+# Manual SMS to a customer via Twilio
+@login_required
+@ratelimit(key='ip', rate='10/m', method='POST', block=False)
+def send_sms(request):
+    context = {}
+    if request.method == "POST":
+        if getattr(request, 'limited', False):
+            return render(request, '403.html', status=429)
+        contact = request.POST.get('contact', '').strip()
+        message = request.POST.get('message', '').strip()
+        context.update({'contact': contact, 'message': message})
+
+        if not contact or not message:
+            context['error'] = "Phone number and message are both required."
+        else:
+            sid = send_sms_notice(contact, message)
+            if sid:
+                context = {'success': f"SMS sent to {format_au_phone(contact)} (SID: {sid})"}
+            else:
+                context['error'] = "SMS failed. Check the number (or see the sms log)."
+
+    return render(request, 'basecamp/email/send_sms.html', context)

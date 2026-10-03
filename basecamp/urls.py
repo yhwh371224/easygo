@@ -77,6 +77,7 @@ urlpatterns = [
     path('sending_email_second_detail/', views.sending_email_second_detail, name="sending_email_second_detail"),
     path('sending_email_input_data/', views.sending_email_input_data, name="sending_email_input_data"),
     path('sending_email_input_data_detail/', views.sending_email_input_data_detail, name="sending_email_input_data_detail"),
+    path('send_sms/', views.send_sms, name='send_sms'),
     path('success/', views.success, name='success'),
     path('terms/', views.terms, name='terms'),
     path('wrong_date_today/', views.wrong_date_today, name='wrong_date_today'),
