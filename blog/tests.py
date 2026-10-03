@@ -2727,14 +2727,16 @@ class FinalNoticeEmailTests(TestCase):
             pickup_date=datetime.date.today() + timedelta(days=1),
             pickup_time='10:00',
             direction='Pickup from Home',
-            final_notice_sent_at=timezone.now(),
+            final_notice_sent_at=timezone.now() - timedelta(hours=13),
         )
         fields.update(kwargs)
         return Post.objects.create(**fields)
 
-    def _run(self, sms_result='SM123'):
-        with patch('blog.management.commands.final_notice.send_sms_notice',
-                   return_value=sms_result) as sms:
+    def _run(self, sms_result='SM123', hours=(0, 24)):
+        cmd = 'blog.management.commands.final_notice'
+        with patch(f'{cmd}.send_sms_notice', return_value=sms_result) as sms, \
+                patch(f'{cmd}.SEND_HOUR_START', hours[0]), \
+                patch(f'{cmd}.SEND_HOUR_END', hours[1]):
             call_command('final_notice', stdout=StringIO())
         return sms
 
@@ -2754,7 +2756,7 @@ class FinalNoticeEmailTests(TestCase):
     @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
     def test_short_payment_email_shows_balance(self, *_):
         self.make_post(paid='40', final_notice_sent_at=None,
-                       discrepancy_final_sent_at=timezone.now())
+                       discrepancy_final_sent_at=timezone.now() - timedelta(hours=13))
         self._run()
         self.assertEqual(len(mail.outbox), 1)
         html = mail.outbox[0].alternatives[0][0] if mail.outbox[0].alternatives else mail.outbox[0].body
@@ -2780,3 +2782,34 @@ class FinalNoticeEmailTests(TestCase):
         self.assertEqual(len(mail.outbox), 1)
         post.refresh_from_db()
         self.assertIsNotNone(post.sms_final_sent_at)
+
+    @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+    @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+    def test_waits_12h_after_final_notice(self, *_):
+        """예고 메일 직후엔 보내지 않고, 12시간 유예 중간에 보낸다."""
+        post = self.make_post(final_notice_sent_at=timezone.now() - timedelta(hours=11))
+        sms = self._run()
+        sms.assert_not_called()
+        self.assertEqual(len(mail.outbox), 0)
+        post.refresh_from_db()
+        self.assertIsNone(post.sms_final_sent_at)
+
+    @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+    @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+    def test_far_pickup_still_escalated(self, *_):
+        """예전엔 오늘·내일 픽업만 봤다 — 도착편(48h 전 취소)은 영영 못 받았다."""
+        self.make_post(pickup_date=datetime.date.today() + timedelta(days=3),
+                       direction='Pickup from Intl Airport')
+        sms = self._run()
+        sms.assert_called_once()
+        self.assertEqual(len(mail.outbox), 1)
+
+    @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+    @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+    def test_quiet_hours_skip(self, *_):
+        post = self.make_post()
+        sms = self._run(hours=(0, 0))
+        sms.assert_not_called()
+        self.assertEqual(len(mail.outbox), 0)
+        post.refresh_from_db()
+        self.assertIsNone(post.sms_final_sent_at)

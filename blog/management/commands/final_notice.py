@@ -5,6 +5,7 @@ from django.core.management.base import BaseCommand
 from django.db.models import Q
 from django.utils import timezone
 from blog.models import Post
+from blog import dunning
 from blog.blog_utils import booking_balance, is_deposit_protected
 from blog.sms_utils import send_sms_notice, send_whatsapp_template
 from main.settings import RECIPIENT_EMAIL
@@ -12,12 +13,24 @@ from utils.email import send_template_email, collect_recipients
 
 sms_logger = logging.getLogger('sms')
 
+# 취소 예고 메일 후 이만큼 지나도 미결제면 마지막 SMS+메일을 보낸다.
+# 자동취소는 예고 후 GRACE_HOURS(24h) 이후라, 그 유예의 중간쯤에 한 번 더 찌른다.
+ESCALATION_DELAY_HOURS = 12
+
+# 이 시간대(현지 시각)에만 발송 — 한밤중 SMS 방지. 매시간 실행되므로
+# 밤에 도래한 건은 다음 날 08시 실행에서 나간다. 밤 시간(11h)이 남은 유예
+# (24h − 12h = 12h)보다 짧아 자동취소 전에 반드시 한 번은 발송 창이 온다.
+SEND_HOUR_START = 8
+SEND_HOUR_END = 21
+
 
 class Command(BaseCommand):
     help = (
-        '픽업 임박(오늘~내일) 미납 부킹에 마지막 SMS 에스컬레이션.\n'
-        '  · 완전 미결제: 취소 예고 메일(final_notice_sent_at)을 이미 보낸 건만\n'
-        '  · 부분 결제(short payment): 차액 안내 메일을 이미 보낸 건만\n'
+        '취소 예고 메일 후 12시간이 지나도 미납인 부킹에 마지막 SMS+메일 에스컬레이션.\n'
+        '  · 완전 미결제: final_notice_sent_at + 12h 경과\n'
+        '  · 부분 결제(short payment): discrepancy_final_sent_at + 12h 경과\n'
+        '자동취소(예고 + 24h) 전에 손님이 마지막 경고를 받도록 유예 중간에 보낸다. '
+        '매시간 실행(no_payment_yet.sh 끝에 붙어 있음), 08~21시에만 발송.\n'
         'SMS 는 부킹당 총 1통 — send_sms 가 이미 보냈으면(sms_notice_sent_at) '
         '여기서는 보내지 않는다. 두 명령이 sms_* 필드를 서로 확인한다.\n'
         'SMS 와 같은 내용의 긴급 안내 메일(html_email-final-urgent)도 함께 보낸다 — '
@@ -26,11 +39,14 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         try:
-            today = date.today()
-            within_one_day = today + timedelta(days=1)
+            now = timezone.now()
+            if not SEND_HOUR_START <= timezone.localtime(now).hour < SEND_HOUR_END:
+                self.stdout.write('Outside sending hours — skipped.')
+                return
+            cutoff = now - timedelta(hours=ESCALATION_DELAY_HOURS)
 
             base = Post.objects.filter(
-                pickup_date__range=(today, within_one_day),
+                pickup_date__gte=date.today(),
                 cancelled=False,
                 cash=False,
                 bulk_invoice=False,  # 멀티 인보이스 합산 청구 건 제외
@@ -54,7 +70,7 @@ class Command(BaseCommand):
             #   sms_notice_sent_at 도 함께 본다 — SMS 총량은 부킹당 1통 유지.
             #   (예전엔 send_sms 가 찍는 reminder=True 가 우연히 이 역할을 했다)
             unpaid = base.filter(
-                final_notice_sent_at__isnull=False,
+                final_notice_sent_at__lte=cutoff,
                 sms_final_sent_at__isnull=True,
                 sms_notice_sent_at__isnull=True,
             ).filter(
@@ -62,6 +78,8 @@ class Command(BaseCommand):
             )
 
             for notice in unpaid:
+                if not self._before_pickup(notice, now):
+                    continue
                 self._send(
                     notice,
                     "EasyGo - Urgent notice\n\n"
@@ -72,19 +90,19 @@ class Command(BaseCommand):
                 )
 
             # ── 2. 부분 결제(short payment) ──
-            #   차액 안내 메일을 이미 보낸 건(= 손님이 이메일로 충분히 고지받은 건)만
-            #   SMS 로 마지막 에스컬레이션.
+            #   차액 취소 예고 메일(discrepancy_final)을 받고 12시간이 지난 건만
+            #   마지막 에스컬레이션 — 자동취소와 같은 기준 필드.
             partial = base.filter(
+                discrepancy_final_sent_at__lte=cutoff,
                 sms_final_sent_at__isnull=True,
                 sms_notice_sent_at__isnull=True,
-            ).filter(
-                Q(discrepancy_notice_sent_at__isnull=False)
-                | Q(discrepancy_final_sent_at__isnull=False)
             ).exclude(
                 Q(paid__isnull=True) | Q(paid__exact="")
             )
 
             for notice in partial:
+                if not self._before_pickup(notice, now):
+                    continue
                 amounts = booking_balance(notice)
                 if amounts is None:
                     continue  # 금액 판정 불가(비숫자 텍스트) → 수동 처리 영역
@@ -108,6 +126,12 @@ class Command(BaseCommand):
         except Exception as e:
             sms_logger.error(f'Error in final_notice handle: {e}')
             self.stdout.write(self.style.ERROR('Failed to send final-notice SMS'))
+
+    @staticmethod
+    def _before_pickup(notice, now):
+        """픽업이 이미 지난 건엔 독촉하지 않는다(오늘 픽업 중 지난 건이 섞임)."""
+        h = dunning.hours_until_pickup(notice, now)
+        return h is None or h > 0
 
     def _send(self, notice, sms_message, label, balance=None):
         try:
