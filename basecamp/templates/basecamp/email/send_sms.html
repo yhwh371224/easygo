@@ -41,13 +41,15 @@
 						<!-- Message -->
 						<div class="mb-0">
 							<label class="form-label mb-3" for="message">
-								Message <sup class="text-danger ms-1">*</sup>
+								Message <small class="text-muted">(up to 141 characters)</small> <sup class="text-danger ms-1">*</sup>
 							</label>
 							<textarea class="form-control"
 								rows="6"
 								required
 								name="message"
 								id="message">{{ message|default:'' }}</textarea>
+							<small class="text-muted d-block mt-2">Auto footer: {{ footer }}</small>
+							<small class="d-block mt-1" id="sms-counter" data-footer="{{ footer }}"></small>
 						</div>
 
 					</div>
@@ -64,4 +66,40 @@
 		  </div>
 	</div>
 	</section>
+
+	<script nonce="{{ CSP_NONCE }}">
+	(function () {
+		// GSM-7 charset: 160 chars per SMS (153 per part when split).
+		// Anything outside it (emoji, smart quotes, —) switches to UCS-2: 70 / 67.
+		var GSM = "@£$¥èéùìòÇ\nØø\rÅåΔ_ΦΓΛΩΠΨΣΘΞÆæßÉ !\"#¤%&'()*+,-./0123456789:;<=>?¡ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÑÜ§¿abcdefghijklmnopqrstuvwxyzäöñüà";
+		var GSM_EXT = "^{}\\[~]|€";  // count as 2 chars each
+
+		var textarea = document.getElementById('message');
+		var counter = document.getElementById('sms-counter');
+		var footer = "\n\n" + counter.dataset.footer;
+
+		function update() {
+			var text = textarea.value.replace(/\r\n/g, "\n") + footer;
+			var chars = Array.from(text);
+			var unicode = false, len = 0;
+			chars.forEach(function (c) {
+				if (GSM.indexOf(c) !== -1) len += 1;
+				else if (GSM_EXT.indexOf(c) !== -1) len += 2;
+				else unicode = true;
+			});
+			if (unicode) len = text.length;  // UTF-16 units: emoji count as 2
+
+			var single = unicode ? 70 : 160, multi = unicode ? 67 : 153;
+			var parts = len <= single ? 1 : Math.ceil(len / multi);
+			var left = (parts === 1 ? single : parts * multi) - len;
+
+			counter.textContent = len + " chars (incl. footer) · " + parts + " SMS · " +
+				left + " left before next" + (unicode ? " · special chars/emoji: 70-char limit" : "");
+			counter.className = "d-block mt-1 " + (parts > 1 || unicode ? "text-danger fw-semibold" : "text-muted");
+		}
+
+		textarea.addEventListener('input', update);
+		update();
+	})();
+	</script>
 {% endblock %}

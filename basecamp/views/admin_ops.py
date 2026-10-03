@@ -827,6 +827,8 @@ def email_dispatch_detail(request):
 
 
 # Manual SMS to a customer via Twilio
+SMS_FOOTER = "\n\nEasyGo-DoNotReply"
+
 @login_required
 @ratelimit(key='ip', rate='10/m', method='POST', block=False)
 def send_sms(request):
@@ -841,10 +843,11 @@ def send_sms(request):
         if not contact or not message:
             context['error'] = "Phone number and message are both required."
         else:
-            sid = send_sms_notice(contact, message)
+            sid = send_sms_notice(contact, message + SMS_FOOTER)
             if sid:
                 context = {'success': f"SMS sent to {format_au_phone(contact)} (SID: {sid})"}
             else:
                 context['error'] = "SMS failed. Check the number (or see the sms log)."
 
+    context['footer'] = SMS_FOOTER.strip()
     return render(request, 'basecamp/email/send_sms.html', context)
