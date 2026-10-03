@@ -1446,7 +1446,8 @@ class DriverDashboardViewTests(TestCase):
         self.client.force_login(user)
         response = self.client.get(self.url)
         self.assertTrue(response.context['show_luggage_duty'])
-        self.assertContains(response, 'Every trip — no exceptions')
+        # Panel is commented out in the template for now.
+        self.assertNotContains(response, 'Every trip — no exceptions')
 
     @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
     @patch('blog.bird_proxy.close_bird_mapping', return_value=True)

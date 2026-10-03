@@ -336,8 +336,10 @@
   </form>
 </div>
 
-<div class="dash-layout{% if show_luggage_duty %} has-duty{% endif %}">
+{# Luggage duty panel hidden for now — restore has-duty + the block below to bring it back. #}
+<div class="dash-layout">
 
+{% comment %}
 {% if show_luggage_duty %}
 <aside class="duty-panel">
   <div class="duty-card">
@@ -350,6 +352,7 @@
   </div>
 </aside>
 {% endif %}
+{% endcomment %}
 
 <div class="dash-main">
 
