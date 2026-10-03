@@ -145,7 +145,53 @@
 										</tr>
 										<tr>
 											<td align="left" style="padding-top:28px;padding-left:0;">
-											{% if is_intl %}
+											{% if is_ugo_arrival %}
+												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
+
+													{% if cash and not paid	%}
+														We kindly ask that you <span style="color: #eb7828">email us immediately</span> upon your arrival{% if city %} in {{ city }}{% endif %}
+														and ensure that your mobile phone remains switched on.<br><br>
+
+														Please note that the driver may not have a card machine available.
+														We kindly ask you to prepare the cash in advance.<br><br>
+													{% endif %}
+
+													Your driver today is <strong>{{ driver_name }}</strong>.<br><br>
+
+													<span style="color:#eb7828;font-weight:bold;">Once you have collected your luggage, please call or message {{ driver_name }}</span>
+													on the number below — {{ driver_name }} will let you know <strong>where to meet</strong>.<br><br>
+
+												</p>
+
+												<table width="100%" style="border-spacing:0;background-color:#fef6f0;margin-bottom:20px;" role="presentation">
+												    <tr>
+												        <td style="padding:15px;color:#af865f;">
+
+													<strong>=== Driver's details ===</strong><br>
+													• Name: {{ driver_name }}<br>
+													• Phone:
+													{% if bird_number %}
+														<a href="tel:{{ bird_number }}">{{ bird_number }}</a>
+													{% else %}
+														<a href="tel:{{ driver_contact }}">{{ driver_contact }}</a>
+													{% endif %}<br>
+													<small>
+													Please note that our driver may contact you via text or phone at {{ contact }}.
+													</small>
+												</td>
+												    </tr>
+												</table>
+												<!-- IMPORTANT: contact requirement + responsibility notice (arrival only) -->
+												<p style="Margin:0;font-size:14px;line-height:24px;Margin-top:10px;Margin-bottom:16px;padding:14px;background-color:#fdecea;border:2px solid #d64541;border-radius:6px;">
+													<span style="color:#d64541;font-weight:bold;font-size:15px;">⚠️ Call or message {{ driver_name }} after collecting your luggage — this is important</span><br><br>
+													There is no fixed meeting point for this pickup. <span style="color:#eb7828;font-weight:bold;">As soon as you have collected your luggage, you must call or message {{ driver_name }} on the number above to find out where to meet.</span> <span style="color:#eb7828;font-weight:bold;">If you cannot reach {{ driver_name }}, please email us straight away at <a href="mailto:info@easygoshuttle.com.au" style="color:#eb7828;text-decoration:underline;">info@easygoshuttle.com.au</a>.</span><br><br>
+													<span style="color:#d64541;font-weight:bold;">📱 You must contact us from the number you gave us{% if contact %} — {{ contact }}{% endif %}.</span> That is the only number your driver has, so please call or message from that number — a call or text from any other number cannot be matched to your booking. If your contact number has changed, please email us straight away.<br><br>
+													We have <strong>no way of knowing exactly when you come out of the terminal</strong>. We can only meet at the right place at the right time if you <strong>contact {{ driver_name }}</strong>. If we do not hear from you, <span style="color:#d64541;font-weight:bold;">EasyGo cannot be held responsible</span> for a missed or delayed pickup.
+												</p>
+												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
+													If there are any changes, you will be notified by email or SMS<br><br><br></p>
+
+											{% elif is_intl %}
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
 
 													{% if cash and not paid	%}

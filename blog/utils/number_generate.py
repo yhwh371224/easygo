@@ -13,6 +13,12 @@ def generate_settlement_number(driver, date, seq):
     Raises:
         ValueError if the driver's region or primary_airport is not configured.
     """
+    from utils.booking_helper import is_ugo_driver
+
+    # Ugo (Uber 대행 가상 드라이버)는 전 지역을 커버하므로 region 을 비워 둔다.
+    if is_ugo_driver(driver) and not driver.region:
+        return f"ALL-UGO-{date.strftime('%y%m%d')}-SET-{seq:02d}"
+
     if not driver.region:
         raise ValueError(
             f"Driver '{driver.driver_name}' has no region set — "

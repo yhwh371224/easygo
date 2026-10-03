@@ -2650,3 +2650,60 @@ class AutoFillPostRefundTests(TestCase):
         self.assertIn('Return booking', msg)
         self.assertIn(f'#{leg2.pk}', msg)
         self.assertNotIn('enter Post.refund manually', msg)
+
+
+# ---------------------------------------------------------------------------
+# Ugo (Uber 대행 가상 드라이버) — 도착 픽업 메일
+# ---------------------------------------------------------------------------
+
+class UgoArrivalEmailTests(TestCase):
+
+    def setUp(self):
+        self.ugo = Driver.objects.create(
+            driver_name='Ugo', driver_contact='0406783559',
+            gst_registered=True, direct_contact=True, is_active=False,
+        )
+
+    def _context(self, direction, driver=None):
+        from utils.booking_helper import build_reminder_context
+        post = Post.objects.create(
+            name='Customer', contact='0400000000', driver=driver or self.ugo,
+            pickup_date=datetime.date.today(), pickup_time='10:00',
+            direction=direction, use_proxy=True,
+        )
+        return post, build_reminder_context(post, '10:00 AM', driver or self.ugo)
+
+    def test_arrival_email_tells_customer_to_call_ugo_after_luggage(self):
+        from django.template.loader import render_to_string
+
+        post, ctx = self._context('Pickup from Intl Airport')
+        self.assertTrue(ctx['is_ugo_arrival'])
+        self.assertIsNone(ctx['bird_number'])   # direct_contact → real number
+        html = render_to_string('emails/driver_details.html', {**ctx, 'post': post})
+
+        self.assertIn('0406783559', html)
+        self.assertIn('Your driver today is <strong>Ugo</strong>', html)
+        self.assertIn('As soon as you have collected your luggage, you must call or message Ugo', html)
+        self.assertNotIn('meeting point listed below', html)
+
+    def test_departure_is_not_ugo_arrival(self):
+        _, ctx = self._context('Drop off to Intl Airport')
+        self.assertFalse(ctx['is_ugo_arrival'])
+
+    def test_other_driver_is_not_ugo_arrival(self):
+        other = make_driver(user=make_user('notugo'))
+        _, ctx = self._context('Pickup from Intl Airport', driver=other)
+        self.assertFalse(ctx['is_ugo_arrival'])
+
+    def test_settlement_without_region(self):
+        """Ugo covers every region, so it has no region — settling must still work."""
+        from blog.services.settlement_service import SettlementService
+
+        post, _ = self._context('Pickup from Intl Airport')
+        Post.objects.filter(pk=post.pk).update(price='120', paid='120', driver_price='100')
+        settlement = SettlementService.create_settlement(
+            self.ugo, post.pickup_date, post.pickup_date)
+
+        self.assertEqual(settlement.settlement_number,
+                         f"ALL-UGO-{post.pickup_date:%y%m%d}-SET-01")
+        self.assertEqual(settlement.total_amount, Decimal('100'))

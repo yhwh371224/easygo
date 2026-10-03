@@ -6,6 +6,14 @@ from blog.models import Post, Driver
 from blog.sms_utils import format_au_phone
 from utils.direction_utils import is_intl_pickup, is_domestic_pickup
 
+# 우버로 대신 보내는 건에 배정하는 가상 드라이버. 도착 픽업이면 손님에게 이름·번호만
+# 알려주고, 만남 장소는 짐을 찾은 뒤 그 번호로 연락해 묻도록 안내한다.
+UGO_DRIVER_NAME = 'ugo'
+
+
+def is_ugo_driver(driver):
+    return bool(driver) and (driver.driver_name or '').strip().lower() == UGO_DRIVER_NAME
+
 logger = logging.getLogger(__name__)
 
 
@@ -132,6 +140,7 @@ def build_reminder_context(booking, pickup_time_12h, driver):
         'is_domestic': is_domestic,
 
         'bird_number': bird_number,
+        'is_ugo_arrival': is_ugo_driver(driver) and (is_intl or is_domestic),
 
         'city': booking.region.name if booking.region_id else '',
         'region_slug': region_slug,
@@ -193,6 +202,10 @@ def update_meeting_point_for_arrivals():
         driver = booking.driver
         if not driver:
             logger.warning(f"No driver for booking {booking.id}")
+            continue
+
+        # Ugo 는 손님이 짐 찾은 뒤 전화로 만날 곳을 정한다 — 기본 만남 장소를 넣지 않는다.
+        if is_ugo_driver(driver):
             continue
 
         terminal_type = DIRECTION_TO_TERMINAL_TYPE.get(normalize_direction(booking.direction))

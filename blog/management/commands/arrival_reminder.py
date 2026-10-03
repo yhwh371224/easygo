@@ -247,11 +247,14 @@ class Command(BaseCommand):
             self.alerts.append(f'✉️ 수신자 없음 | {booking.name} | #{booking.id}')
             return False
 
-        template_name = (
-            'emails/driver_details.html' if booking.terminal_pickup_point else 'html_email-today.html'
-        )
         context = build_reminder_context(
             booking, format_pickup_time_12h(booking.pickup_time), driver
+        )
+        # Ugo 건은 만남 장소가 없어도 Ugo 안내가 있는 driver_details 로 보낸다.
+        template_name = (
+            'emails/driver_details.html'
+            if booking.terminal_pickup_point or context['is_ugo_arrival']
+            else 'html_email-today.html'
         )
 
         if self.dry_run:
