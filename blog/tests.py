@@ -1976,6 +1976,23 @@ class ArrivalReminderTests(TestCase):
 
     @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
     @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+    def test_successful_send_is_reported_to_telegram(self, *_):
+        """알림이 실패 때만 오면 '조용함'이 성공인지 크론 중단인지 알 수 없다."""
+        post = self.make_arrival(flight_time='10:00')
+        module = 'blog.management.commands.arrival_reminder'
+        with patch(f'{module}.current_time', return_value=self.now), \
+             patch(f'{module}.booking_helper.update_meeting_point_for_arrivals'), \
+             patch(f'{module}.assign_default_driver_if_missing', return_value=None), \
+             patch(f'{module}.send_telegram_sync') as tg:
+            call_command('arrival_reminder', stdout=StringIO())
+        self.assertEqual(tg.call_count, 1)
+        msg = tg.call_args.args[0]
+        self.assertIn('✅ 도착 리마인더 발송', msg)
+        self.assertIn(f'#{post.id}', msg)
+        self.assertIn('guest@example.com', msg)
+
+    @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+    @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
     def test_not_sent_before_the_window_opens(self, *_):
         post = self.make_arrival(flight_time='14:00')  # now=09:00 → 아직 5시간 전
         self.run_command()

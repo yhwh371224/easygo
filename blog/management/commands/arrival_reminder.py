@@ -278,6 +278,14 @@ class Command(BaseCommand):
             arrival_reminder_sent_at=booking.arrival_reminder_sent_at
         )
         logger.info('[arrival_reminder] SENT id=%s to %s (%s)', booking.id, recipients, template_name)
+        # 성공도 알린다 — 실패 알림만 있으면 "알림 없음"이 발송 성공인지 크론이 죽은
+        # 건지 구분이 안 된다. 같은 실행의 다른 알림과 한 메시지로 묶여 나간다.
+        driver_name = getattr(driver, 'driver_name', None) or '기사 미배정'
+        self.alerts.append(
+            f'✅ 도착 리마인더 {"재발송" if force else "발송"} | {booking.name} | #{booking.id} | '
+            f'{booking.flight_number or "편명없음"} {booking.flight_time or "-"} 도착 | '
+            f'{driver_name} | {", ".join(recipients)}'
+        )
         return True
 
     # =========================
