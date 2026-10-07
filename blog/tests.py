@@ -1990,6 +1990,7 @@ class ArrivalReminderTests(TestCase):
         self.assertIn('✅ 도착 리마인더 발송', msg)
         self.assertIn(f'#{post.id}', msg)
         self.assertIn('guest@example.com', msg)
+        self.assertIn('📍 만남장소 미지정', msg)
 
     @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
     @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
@@ -2079,11 +2080,13 @@ class ArrivalReminderTests(TestCase):
         가장 많이 받는 경로라 렌더링이 깨지면 당일 메일이 통째로 사라진다."""
         from regions.models import Airport, Country, Terminal, TerminalPickupPoint
 
-        airport = Airport.objects.create(
-            country=Country.objects.create(name='Australia'), city='Sydney', code='SYD',
+        # 데이터 마이그레이션이 Australia/SYD 를 미리 만들어 둘 수 있다.
+        country, _ = Country.objects.get_or_create(name='Australia')
+        airport, _ = Airport.objects.get_or_create(
+            code='SYD', defaults={'country': country, 'city': 'Sydney'},
         )
         self.region.airports.add(airport)
-        terminal = Terminal.objects.create(
+        terminal, _ = Terminal.objects.get_or_create(
             airport=airport, name='T1', type=Terminal.TerminalType.INTL,
         )
         point = TerminalPickupPoint.objects.create(
@@ -2092,11 +2095,18 @@ class ArrivalReminderTests(TestCase):
         )
         post = self.make_arrival(terminal_pickup_point=point)
 
-        self.run_command()
+        module = 'blog.management.commands.arrival_reminder'
+        with patch(f'{module}.current_time', return_value=self.now), \
+             patch(f'{module}.booking_helper.update_meeting_point_for_arrivals'), \
+             patch(f'{module}.assign_default_driver_if_missing', return_value=None), \
+             patch(f'{module}.send_telegram_sync') as tg:
+            call_command('arrival_reminder', stdout=StringIO())
         post.refresh_from_db()
         self.assertIsNotNone(post.arrival_reminder_sent_at)
         self.assertEqual(len(mail.outbox), 1)
         self.assertIn('Public Pickup zone', mail.outbox[0].body)
+        # 텔레그램 발송 알림에도 만남 장소가 있어야 손님 문의 때 메일을 다시 안 찾아본다.
+        self.assertIn('📍 T1 Public Pickup', tg.call_args.args[0])
 
     @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
     @patch('blog.bird_proxy.close_bird_mapping', return_value=True)

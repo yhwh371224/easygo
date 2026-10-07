@@ -96,7 +96,7 @@ class Command(BaseCommand):
             self.refresh_meeting_points()
             sent = 0
             for booking in Post.objects.filter(id__in=target_ids).select_related(
-                    'driver', 'region', 'terminal_pickup_point'):
+                    'driver', 'region', 'terminal_pickup_point__terminal'):
                 if self.send_one(booking, force=True):
                     sent += 1
             self.stdout.write(f'Forced resend: {sent}/{len(target_ids)}')
@@ -161,7 +161,7 @@ class Command(BaseCommand):
                 .filter(arrival_reminder_sent_at__isnull=True)
                 .exclude(cancelled=True)
                 .exclude(no_email_reminder=True)
-                .select_related('driver', 'region', 'terminal_pickup_point')
+                .select_related('driver', 'region', 'terminal_pickup_point__terminal')
             )
 
             for booking in queryset:
@@ -284,9 +284,20 @@ class Command(BaseCommand):
         self.alerts.append(
             f'✅ 도착 리마인더 {"재발송" if force else "발송"} | {booking.name} | #{booking.id} | '
             f'{booking.flight_number or "편명없음"} {booking.flight_time or "-"} 도착 | '
+            f'📍 {self.meeting_point_label(booking, context)} | '
             f'{driver_name} | {", ".join(recipients)}'
         )
         return True
+
+    @staticmethod
+    def meeting_point_label(booking, context):
+        """텔레그램용 만남 장소 — 메일 템플릿 선택과 같은 기준(지정 지점 > Ugo > 없음)."""
+        point = booking.terminal_pickup_point
+        if point:
+            return f'{point.terminal.name} {point.name}'
+        if context.get('is_ugo_arrival'):
+            return 'Ugo 안내'
+        return '만남장소 미지정'
 
     # =========================
     # 알림
