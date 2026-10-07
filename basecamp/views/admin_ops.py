@@ -13,7 +13,7 @@ from utils.email import send_template_email
 from utils.booking_helper import normalize_direction
 from blog.models import Post, Inquiry, Driver
 from blog.sms_utils import send_sms_notice, send_whatsapp_template, format_au_phone
-from blog.blog_utils import resolve_driver, _net_adjustment, clean_float
+from blog.blog_utils import resolve_driver, _net_adjustment, clean_float, booking_balance
 from utils.direction_utils import is_airport_pickup
 from utils.telegram import send_telegram_sync
 from csp.constants import NONCE
@@ -452,6 +452,7 @@ def email_dispatch_detail(request):
             "Gratitude For Payment": ("html_email-response-payment-received.html", "Payment Received - EasyGo"),
             "Pickup Notice for Today": ("html_email-today1.html", "Important Update for Today's Pickup - EasyGo "),
             "Payment Method": ("html_email-response-payment.html", "Payment Method - EasyGo"),
+            "Payment Reminder": ("html_email-payment-reminder.html", "Payment required to confirm your booking - EasyGo"),
             "Airport Pickup Guide": ("html_email-response-arrival-guide.html", "Airport Pickup Guide - EasyGo"),
             'Earlier Pickup Requested for Departure': ("html_email-departure-early.html", "Urgent notice - EasyGo"),
             'Early Arrival Notification': ("html_email-arrival-early.html", "Urgent notice - EasyGo"),
@@ -801,6 +802,36 @@ def email_dispatch_detail(request):
                 user1.reminder = True
                 user1.cancelled = False
                 user1.save()   
+
+        # ✅ Payment Reminder — 이메일만으로 다가오는 미결제 예약을 모아 잔액과 함께 독촉한다.
+        if selected_option == "Payment Reminder":
+            unpaid_bookings = []
+            for booking in (
+                Post.objects
+                .filter(Q(email__iexact=_email) | Q(booker_email__iexact=_email),
+                        pickup_date__gte=timezone.localdate(), cancelled=False)
+                .order_by('pickup_date', 'pickup_time')
+            ):
+                amounts = booking_balance(booking)
+                if amounts is None or amounts[2] <= 0:
+                    continue
+                unpaid_bookings.append({
+                    'pickup_date': booking.pickup_date,
+                    'pickup_time': booking.pickup_time,
+                    'direction': normalize_direction(booking.direction),
+                    'balance': amounts[2],
+                })
+
+            if not unpaid_bookings:
+                return JsonResponse({
+                    'success': False,
+                    'error': 'No upcoming unpaid booking for this email.'
+                }, status=400)
+
+            context.update({
+                'unpaid_bookings': unpaid_bookings,
+                'total_due': round(sum(b['balance'] for b in unpaid_bookings), 2),
+            })
 
         # ✅ Inquiry Return Availability Notice (새로 추가)
         if selected_option == "Inquiry Return Availability Notice":
