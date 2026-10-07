@@ -207,6 +207,8 @@ footer{background:#111;border-top:1px solid rgba(201,168,76,0.2);padding:5rem 4r
 .flogo{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;color:var(--white);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1.2rem;}
 .flogo span{color:#C8A000;}
 .fdesc{font-size:12px;color:#ddd;line-height:1.95;font-weight:400;max-width:260px;margin-bottom:1.5rem;}
+.fpartner a{color:#C8A000;text-decoration:none;border-bottom:1px solid rgba(200,160,0,0.4);transition:color 0.3s;}
+.fpartner a:hover{color:#e6c34d;}
 .fsocial{display:flex;gap:10px;}
 .fsoc{width:32px;height:32px;border:1px solid rgba(255,255,255,0.35);display:flex;align-items:center;justify-content:center;text-decoration:none;transition:all 0.3s;}
 .fsoc:hover{border-color:#C8A000;background:rgba(201,168,76,0.15);}
@@ -217,7 +219,7 @@ footer{background:#111;border-top:1px solid rgba(201,168,76,0.2);padding:5rem 4r
 .flinks a:hover{color:#fff;}
 .fb{display:flex;justify-content:space-between;align-items:center;}
 .fcopy{font-size:11px;color:rgba(255,255,255,0.75);font-weight:400;}
-.fbadge{font-size:10px;color:#C8A000;letter-spacing:0.15em;text-transform:uppercase;border:1px solid #C8A000;padding:5px 14px;font-weight:600;}
+.fbadge{font-size:10px;color:#C8A000;letter-spacing:0.15em;text-transform:uppercase;border:1px solid #C8A000;padding:5px 14px;font-weight:600;text-decoration:none;}
 
 /* ── MODAL ── */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:500;align-items:center;justify-content:center;padding:2rem;}
