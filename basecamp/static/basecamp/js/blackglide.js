@@ -23,6 +23,19 @@ const vehicleRates={
   limo:{name:'Stretch Limousine',base:280,perKm:4.5,hrRate:280}
 };
 
+// The form asks for passengers, not vehicle class — pick the vehicle that fits.
+function vehicleForPax(pax){
+  if(pax<=3) return 'sedan';
+  if(pax<=6) return 'suv';
+  return 'van';
+}
+
+function weddingVehicleForPax(pax){
+  if(pax<=4) return 'luxury';
+  if(pax<=7) return 'van';
+  return 'limo';
+}
+
 function getRouteEstimate(from,to){
   const toLC=to.toLowerCase();
   if(toLC.includes('cbd')||toLC.includes('city')||toLC.includes('circular')||toLC.includes('darling')) return {dist:15,dur:'25 min'};
@@ -39,8 +52,8 @@ function calcPrice(type){
   if(type==='airport'){
     const from=document.getElementById('ap-from').value||'Sydney Airport';
     const to=document.getElementById('ap-to').value||'Sydney CBD';
-    const vKey=document.getElementById('ap-vehicle').value;
-    const v=vehicleRates[vKey];
+    const pax=parseInt(document.getElementById('ap-pax').value);
+    const v=vehicleRates[vehicleForPax(pax)];
     const route=getRouteEstimate(from,to);
     const price=Math.round(v.base+(route.dist*v.perKm));
     document.getElementById('pa-amount').textContent='$'+price;
@@ -49,7 +62,8 @@ function calcPrice(type){
     document.getElementById('pa-time').textContent=route.dur;
     document.getElementById('price-airport').style.display='block';
   } else if(type==='hourly'){
-    const vKey=document.getElementById('hr-vehicle').value;
+    const pax=parseInt(document.getElementById('hr-pax').value);
+    const vKey=vehicleForPax(pax);
     const hours=parseInt(document.getElementById('hr-hours').value);
     const v=vehicleRates[vKey];
     const price=v.hrRate*hours;
@@ -59,7 +73,7 @@ function calcPrice(type){
     document.getElementById('ph-rate').textContent='$'+v.hrRate+'/hr';
     document.getElementById('price-hourly').style.display='block';
   } else if(type==='wedding'){
-    const vKey=document.getElementById('wd-vehicle').value;
+    const vKey=weddingVehicleForPax(parseInt(document.getElementById('wd-pax').value));
     const hours=parseInt(document.getElementById('wd-hours').value);
     const weddingRates={limo:280,luxury:175,suv:150,van:195};
     const vNames={limo:'Stretch Limousine',luxury:'S-Class Sedan',suv:'Premium SUV',van:'Bridal Party Van'};
@@ -76,57 +90,40 @@ function calcPrice(type){
   }
 }
 
-function openModal(type){
-  const modal=document.getElementById('bookingModal');
-  if(type==='airport'){
-    document.getElementById('modal-title').textContent='Airport Transfer';
-    document.getElementById('modal-price').innerHTML=document.getElementById('pa-amount').textContent+' <span>est. fare</span>';
-    document.getElementById('md-from').textContent=document.getElementById('ap-from').value||'Sydney Airport';
-    document.getElementById('md-to').textContent=document.getElementById('ap-to').value||'Sydney CBD';
-    document.getElementById('md-vehicle').textContent=document.getElementById('pa-vehicle').textContent;
-  } else if(type==='hourly'){
-    document.getElementById('modal-title').textContent='Hourly Hire';
-    document.getElementById('modal-price').innerHTML=document.getElementById('ph-amount').textContent+' <span>total fare</span>';
-    document.getElementById('md-from').textContent=document.getElementById('hr-from').value||'Sydney CBD';
-    document.getElementById('md-to').textContent='As directed';
-    document.getElementById('md-vehicle').textContent=document.getElementById('ph-vehicle').textContent;
-  } else if(type==='wedding'){
-    document.getElementById('modal-title').textContent='Wedding Package';
-    document.getElementById('modal-price').innerHTML=document.getElementById('pw-amount').textContent+' <span>package from</span>';
-    document.getElementById('md-from').textContent=document.getElementById('wd-loc').value||'Venue TBC';
-    document.getElementById('md-to').textContent='Wedding venue';
-    document.getElementById('md-vehicle').textContent=document.getElementById('pw-vehicle').textContent;
-  } else {
-    document.getElementById('modal-title').textContent='Corporate Account';
-    document.getElementById('modal-price').innerHTML='Custom <span>pricing</span>';
-    document.getElementById('md-from').textContent=document.getElementById('co-company').value||'Your company';
-    document.getElementById('md-to').textContent='Multiple locations';
-    document.getElementById('md-vehicle').textContent='Fleet assignment';
-  }
-  modal.classList.add('open');
+// All booking actions hand off to the real Black Glide inquiry form, which
+// prefills pickup / dropoff / date / passengers from the query string.
+const BG_URL='https://blackglide.com.au';
+const BG_PHONE='1300253300';
+
+function goInquiry(pickup,dropoff,date,passengers){
+  const params=new URLSearchParams();
+  if(pickup) params.set('pickup',pickup);
+  if(dropoff) params.set('dropoff',dropoff);
+  if(date) params.set('date',date.slice(0,10));
+  if(passengers) params.set('passengers',passengers);
+  const qs=params.toString();
+  window.location.href=BG_URL+'/inquiry/'+(qs?'?'+qs:'');
 }
 
-function closeModal(){
-  document.getElementById('bookingModal').classList.remove('open');
+function val(id){
+  const el=document.getElementById(id);
+  return el?el.value.trim():'';
 }
 
-function confirmBooking(){
-  closeModal();
-  alert('Thank you! Your booking request has been received.\n\nA Black Glide specialist will contact you within 15 minutes to confirm.\n\nFor urgent bookings call: (02) 9XXX XXXX');
+function bookOnline(type){
+  if(type==='airport') goInquiry(val('ap-from'),val('ap-to'),val('ap-date'),val('ap-pax'));
+  else if(type==='hourly') goInquiry(val('hr-from'),'','',val('hr-pax'));
+  else if(type==='wedding') goInquiry(val('wd-loc'),'',val('wd-date'),val('wd-pax'));
+  else window.location.href=BG_URL+'/contact/';
 }
 
 function callUs(){
-  alert('Call us anytime on (02) 9XXX XXXX\nAfter hours: 0400 XXX XXX\n\nWe\'re available 24/7.');
+  window.location.href='tel:'+BG_PHONE;
 }
 
 function submitEnquiry(){
-  alert('Thank you for your enquiry!\n\nOur Sydney team will respond within 30 minutes.\n\nFor urgent bookings: (02) 9XXX XXXX');
+  goInquiry(val('bg-pickup'),val('bg-dropoff'),val('bg-date'));
 }
-
-// Close modal on overlay click
-document.getElementById('bookingModal').addEventListener('click',function(e){
-  if(e.target===this) closeModal();
-});
 
 // No pickups at midnight — auto-correct 00:00 to 12:00 PM (noon)
 (function(){

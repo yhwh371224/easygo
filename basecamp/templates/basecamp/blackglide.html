@@ -13,7 +13,7 @@
 
 <!-- ── NAVIGATION ── -->
 <nav>
-  <a href="#" class="logo">Black <span>Glide</span></a>
+  <a href="https://blackglide.com.au/" class="logo">Black <span>Glide</span></a>
   <ul class="nav-links">
     <li><a href="#services">Services</a></li>
     <li><a href="#fleet">Fleet</a></li>
@@ -23,7 +23,7 @@
   </ul>
   <div style="display:flex;align-items:center;gap:1.5rem;">
     {% comment %} <div class="nav-phone">📞 <strong>(02) 9XXX XXXX</strong></div> {% endcomment %}
-    <a href="#booking" class="nav-cta">Book Now</a>
+    <a href="https://blackglide.com.au/inquiry/" class="nav-cta">Book Now</a>
   </div>
 </nav>
 
@@ -40,7 +40,7 @@
     <p class="hero-sub">Luxury chauffeur-driven transfers across Greater Sydney — airport, corporate, weddings & tours. Available 24/7.</p>
     <div class="hero-btns">
       <a href="#booking" class="btn-gold">Get Instant Quote</a>
-      <a href="#fleet" class="btn-line">View Our Fleet</a>
+      <a href="https://blackglide.com.au/properties/" class="btn-line">View Our Fleet</a>
     </div>
   </div>
   <div class="scroll-hint">
@@ -71,13 +71,16 @@
           <input class="bf-input" id="ap-to" type="text" placeholder="Hotel, Suburb or Address">
         </div>
         <div class="bf-group">
-          <div class="bf-label">Vehicle Class</div>
-          <select class="bf-input" id="ap-vehicle">
-            <option value="sedan">Business Sedan — from $95</option>
-            <option value="luxury">Luxury Sedan (S-Class) — from $145</option>
-            <option value="suv">Premium SUV — from $125</option>
-            <option value="van">People Mover (7 seat) — from $155</option>
-            <option value="limo">Stretch Limousine — from $280</option>
+          <div class="bf-label">Passengers</div>
+          <select class="bf-input" id="ap-pax">
+            <option value="1">1 passenger</option>
+            <option value="2">2 passengers</option>
+            <option value="3">3 passengers</option>
+            <option value="4">4 passengers</option>
+            <option value="5">5 passengers</option>
+            <option value="6">6 passengers</option>
+            <option value="7">7 passengers</option>
+            <option value="8">8+ passengers (group)</option>
           </select>
         </div>
         <div class="bf-group">
@@ -100,7 +103,7 @@
             <div class="pd-item"><strong>60 min</strong>Free Wait Time</div>
           </div>
           <div class="price-actions">
-            <button class="btn-gold" onclick="openModal('airport')">Book This Journey</button>
+            <button class="btn-gold" onclick="bookOnline('airport')">Book This Journey</button>
             <button class="btn-line" onclick="callUs()">Call to Book</button>
           </div>
         </div>
@@ -115,12 +118,16 @@
           <input class="bf-input" id="hr-from" type="text" placeholder="Sydney CBD or Address">
         </div>
         <div class="bf-group">
-          <div class="bf-label">Vehicle Class</div>
-          <select class="bf-input" id="hr-vehicle">
-            <option value="sedan">Business Sedan — $95/hr</option>
-            <option value="luxury">Luxury Sedan (S-Class) — $145/hr</option>
-            <option value="suv">Premium SUV — $125/hr</option>
-            <option value="van">People Mover — $155/hr</option>
+          <div class="bf-label">Passengers</div>
+          <select class="bf-input" id="hr-pax">
+            <option value="1">1 passenger</option>
+            <option value="2">2 passengers</option>
+            <option value="3">3 passengers</option>
+            <option value="4">4 passengers</option>
+            <option value="5">5 passengers</option>
+            <option value="6">6 passengers</option>
+            <option value="7">7 passengers</option>
+            <option value="8">8+ passengers (group)</option>
           </select>
         </div>
         <div class="bf-group">
@@ -150,7 +157,7 @@
             <div class="pd-item"><strong id="ph-rate">—</strong>Hourly Rate</div>
           </div>
           <div class="price-actions">
-            <button class="btn-gold" onclick="openModal('hourly')">Book This Journey</button>
+            <button class="btn-gold" onclick="bookOnline('hourly')">Book This Journey</button>
             <button class="btn-line" onclick="callUs()">Call to Book</button>
           </div>
         </div>
@@ -165,12 +172,16 @@
           <input class="bf-input" id="wd-loc" type="text" placeholder="Ceremony or Reception Venue">
         </div>
         <div class="bf-group">
-          <div class="bf-label">Vehicle</div>
-          <select class="bf-input" id="wd-vehicle">
-            <option value="limo">Stretch Limousine — from $280</option>
-            <option value="luxury">Luxury Sedan (S-Class) — from $145</option>
-            <option value="suv">Premium SUV — from $125</option>
-            <option value="van">Bridal Party Van — from $195</option>
+          <div class="bf-label">Passengers</div>
+          <select class="bf-input" id="wd-pax">
+            <option value="1">1 passenger</option>
+            <option value="2">2 passengers</option>
+            <option value="3">3 passengers</option>
+            <option value="4">4 passengers</option>
+            <option value="5">5 passengers</option>
+            <option value="6">6 passengers</option>
+            <option value="7">7 passengers</option>
+            <option value="8">8+ passengers (group)</option>
           </select>
         </div>
         <div class="bf-group">
@@ -201,7 +212,7 @@
             <div class="pd-item"><strong id="pw-hours">—</strong>Duration</div>
           </div>
           <div class="price-actions">
-            <button class="btn-gold" onclick="openModal('wedding')">Book Wedding Package</button>
+            <button class="btn-gold" onclick="bookOnline('wedding')">Book Wedding Package</button>
             <button class="btn-line" onclick="callUs()">Speak to Us</button>
           </div>
         </div>
@@ -243,7 +254,7 @@
             <div class="price-note">Volume discounts · Monthly invoicing · Priority dispatch</div>
           </div>
           <div class="price-actions">
-            <button class="btn-gold" onclick="openModal('corporate')">Apply for Account</button>
+            <button class="btn-gold" onclick="bookOnline('corporate')">Apply for Account</button>
             <button class="btn-line" onclick="callUs()">Speak to Our Team</button>
           </div>
         </div>
@@ -302,14 +313,14 @@
       <div class="svc-title">Winery & Day Tours</div>
       <div class="svc-desc">Hunter Valley wine tours, Blue Mountains escapes, and Southern Highlands day journeys in ultimate comfort from Sydney.</div>
       <div class="svc-price">From $580 · Full day packages</div>
-      <button class="svc-link" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Enquire Now →</button>
+      <a class="svc-link" href="https://blackglide.com.au/inquiry/">Enquire Now →</a>
     </div>
     <div class="svc">
       <div class="svc-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
       <div class="svc-title">Group Transfers</div>
       <div class="svc-desc">Coordinated fleet logistics for groups up to 50. Corporate roadshows, sporting events, cruise terminals, and private Sydney Harbour functions.</div>
       <div class="svc-price">From $155 · Fleet coordination</div>
-      <button class="svc-link" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Get Group Quote →</button>
+      <a class="svc-link" href="https://blackglide.com.au/inquiry/">Get Group Quote →</a>
     </div>
   </div>
 </div>
@@ -530,15 +541,15 @@
       <div class="contact-block">
         <div>
           <div class="ci-label">Phone</div>
-          <div class="ci-val">1300 245 432</div>
+          <div class="ci-val"><a href="tel:1300253300">1300 253 300</a></div>
         </div>
         <div>
           <div class="ci-label">After Hours</div>
-          <div class="ci-sub">0406 883 355</div>
+          <div class="ci-sub"><a href="tel:0406883355">0406 883 355</a></div>
         </div>
         <div>
           <div class="ci-label">Email</div>
-          <div class="ci-sub">admin@blackglide.com.au</div>
+          <div class="ci-sub"><a href="mailto:info@blackglide.com.au">info@blackglide.com.au</a></div>
         </div>
         <div>
           <div class="ci-label">Service Area</div>
@@ -566,15 +577,15 @@
         </select>
       </div>
       <div class="f-row">
-        <div class="f-group"><div class="f-label">Date</div><input class="f-input" type="date"></div>
+        <div class="f-group"><div class="f-label">Date</div><input class="f-input" type="date" id="bg-date"></div>
         <div class="f-group">
           <div class="f-label">Time</div>
           <input class="f-input" type="time" name="pickup_time" id="bg-pickup-time">
           <div id="bg-midnight-note" style="display:none;color:#dc3545;font-weight:600;font-size:13px;margin-top:4px">⚠ No pickups at midnight — set to 12:00 PM</div>
         </div>
       </div>
-      <div class="f-group"><div class="f-label">Pickup Location</div><input class="f-input" type="text" placeholder="Sydney CBD / Airport / Suburb"></div>
-      <div class="f-group"><div class="f-label">Destination</div><input class="f-input" type="text" placeholder="Address, Suburb or Venue"></div>
+      <div class="f-group"><div class="f-label">Pickup Location</div><input class="f-input" type="text" id="bg-pickup" placeholder="Sydney CBD / Airport / Suburb"></div>
+      <div class="f-group"><div class="f-label">Destination</div><input class="f-input" type="text" id="bg-dropoff" placeholder="Address, Suburb or Venue"></div>
       <button class="f-submit" onclick="submitEnquiry()">Send Enquiry →</button>
     </div>
   </div>
@@ -588,40 +599,36 @@
         <div class="flogo">Black <span>Glide</span></div>
         <div class="fdesc">Sydney's most distinguished chauffeur service. Delivering exceptional journeys for those who demand nothing but the finest.</div>
         <div class="fdesc fpartner">Ready to ride in style? Browse our premium fleet and book your chauffeur online at <a href="https://blackglide.com.au/" target="_blank" rel="noopener">blackglide.com.au</a>.</div>
-        <div class="fsocial">
-          <a href="#" class="fsoc"><svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
-          <a href="#" class="fsoc"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
-          <a href="#" class="fsoc"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
-        </div>
       </div>
       <div>
         <div class="fhead">Services</div>
         <ul class="flinks">
-          <li><a href="#">Airport Transfers</a></li>
-          <li><a href="#">Corporate Hire</a></li>
-          <li><a href="#">Weddings</a></li>
-          <li><a href="#">Hourly Hire</a></li>
-          <li><a href="#">Day Tours</a></li>
+          <li><a href="https://blackglide.com.au/#services">Airport Transfers</a></li>
+          <li><a href="https://blackglide.com.au/#services">Corporate Hire</a></li>
+          <li><a href="https://blackglide.com.au/#services">Weddings</a></li>
+          <li><a href="https://blackglide.com.au/#services">Hourly Hire</a></li>
+          <li><a href="https://blackglide.com.au/#services">Day Tours</a></li>
         </ul>
       </div>
       <div>
         <div class="fhead">Sydney Areas</div>
         <ul class="flinks">
-          <li><a href="#">CBD & City</a></li>
-          <li><a href="#">Eastern Suburbs</a></li>
-          <li><a href="#">North Shore</a></li>
-          <li><a href="#">Northern Beaches</a></li>
-          <li><a href="#">Inner West & West</a></li>
+          <li><a href="https://blackglide.com.au/inquiry/">CBD & City</a></li>
+          <li><a href="https://blackglide.com.au/inquiry/">Eastern Suburbs</a></li>
+          <li><a href="https://blackglide.com.au/inquiry/">North Shore</a></li>
+          <li><a href="https://blackglide.com.au/inquiry/">Northern Beaches</a></li>
+          <li><a href="https://blackglide.com.au/inquiry/">Inner West & West</a></li>
         </ul>
       </div>
       <div>
         <div class="fhead">Company</div>
         <ul class="flinks">
-          <li><a href="#">About Us</a></li>
-          <li><a href="#">Our Fleet</a></li>
-          <li><a href="#">Corporate Accounts</a></li>
-          <li><a href="#">Join Our Fleet</a></li>
-          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="https://blackglide.com.au/about/">About Us</a></li>
+          <li><a href="https://blackglide.com.au/properties/">Our Fleet</a></li>
+          <li><a href="https://blackglide.com.au/contact/">Corporate Accounts</a></li>
+          <li><a href="https://blackglide.com.au/contact/">Join Our Fleet</a></li>
+          <li><a href="https://blackglide.com.au/reviews/">Reviews</a></li>
+          <li><a href="https://blackglide.com.au/articles/blog/">Blog</a></li>
         </ul>
       </div>
     </div>
@@ -631,32 +638,6 @@
     </div>
   </div>
 </footer>
-
-<!-- ── BOOKING MODAL ── -->
-<div class="modal-overlay" id="bookingModal">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal()">×</button>
-    <div class="modal-eye">Confirm Your Booking</div>
-    <div class="modal-title" id="modal-title">Airport Transfer</div>
-    <div class="modal-price" id="modal-price">$145 <span>est. fare</span></div>
-    <div class="modal-details" id="modal-details">
-      <div class="md-item"><strong id="md-from">—</strong>Pickup</div>
-      <div class="md-item"><strong id="md-to">—</strong>Destination</div>
-      <div class="md-item"><strong id="md-vehicle">—</strong>Vehicle</div>
-      <div class="md-item"><strong>Fixed Price</strong>No hidden fees</div>
-    </div>
-    <div class="modal-form">
-      <div class="f-row">
-        <div class="f-group"><div class="f-label">First Name</div><input class="f-input" type="text" placeholder="James"></div>
-        <div class="f-group"><div class="f-label">Last Name</div><input class="f-input" type="text" placeholder="Whitfield"></div>
-      </div>
-      <div class="f-group"><div class="f-label">Mobile Number</div><input class="f-input" type="tel" placeholder="0400 000 000"></div>
-      <div class="f-group"><div class="f-label">Email (confirmation sent here)</div><input class="f-input" type="email" placeholder="you@email.com"></div>
-      <div class="f-group"><div class="f-label">Special Requests (optional)</div><input class="f-input" type="text" placeholder="Child seat, extra luggage, preferences..."></div>
-      <button class="f-submit" onclick="confirmBooking()" style="margin-top:0.5rem;">Confirm & Book →</button>
-    </div>
-  </div>
-</div>
 
 <script src="{% static 'basecamp/js/blackglide.js' %}"></script>
 </body>
