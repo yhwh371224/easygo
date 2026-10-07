@@ -2840,3 +2840,43 @@ class FinalNoticeEmailTests(TestCase):
         self.assertEqual(len(mail.outbox), 0)
         post.refresh_from_db()
         self.assertIsNone(post.sms_final_sent_at)
+
+
+# ---------------------------------------------------------------------------
+# Round-trip invoice shows the full (both legs) total
+# ---------------------------------------------------------------------------
+
+class RoundTripInvoiceTotalTests(TestCase):
+
+    def _legs(self):
+        leg1 = Post.objects.create(
+            name='Rae Turner', email='rae@example.com', no_of_passenger='2',
+            price='165', pickup_date=datetime.date.today() + timedelta(days=10),
+            return_pickup_date=datetime.date.today() + timedelta(days=17),
+            return_pickup_time='10:00',
+        )
+        leg2 = Post.objects.exclude(pk=leg1.pk).get(email='rae@example.com')
+        leg1.refresh_from_db()
+        return leg1, leg2
+
+    def _context(self, booking):
+        from basecamp.views.payments import _build_single_context
+        params = {
+            'email': 'rae@example.com', 'apply_gst_flag': None, 'surcharge_input': None,
+            'discount_input': None, 'toll_input': None, 'deposit_percent_input': None,
+        }
+        users = Post.objects.filter(email__iexact='rae@example.com')
+        return _build_single_context(booking, users, params, '1', datetime.date.today(), 'westpac')[1]
+
+    def test_outbound_leg_invoice_shows_full_total(self):
+        leg1, leg2 = self._legs()
+        self.assertEqual(float(leg1.price), 82.5)
+        ctx = self._context(leg1)
+        self.assertEqual(ctx['total_price'], 165.0)
+        self.assertEqual(ctx['pickup_date'], leg1.pickup_date)
+
+    def test_return_leg_invoice_shows_full_total(self):
+        leg1, leg2 = self._legs()
+        ctx = self._context(leg2)
+        self.assertEqual(ctx['total_price'], 165.0)
+        self.assertEqual(ctx['pickup_date'], leg1.pickup_date)

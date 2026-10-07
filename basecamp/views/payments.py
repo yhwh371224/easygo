@@ -266,6 +266,27 @@ def _build_multi_context(bookings, params, inv_no, today, DEFAULT_BANK):
     return "html_email-multi-invoice.html", context
 
 
+def _round_trip_legs(booking):
+    """Return (outbound, return_leg) for a round-trip split by
+    handle_return_trip(), or None. Works from either leg: the two rows swap
+    pickup_date / return_pickup_date and the return leg has
+    return_pickup_time == "x"."""
+    if not booking.return_pickup_time or not booking.pickup_date or not booking.return_pickup_date:
+        return None
+    is_return_leg = booking.return_pickup_time == "x"
+    qs = Post.objects.filter(
+        email__iexact=booking.email,
+        pickup_date=booking.return_pickup_date,
+        return_pickup_date=booking.pickup_date,
+        cancelled=False,
+    ).exclude(pk=booking.pk)
+    qs = qs.exclude(return_pickup_time="x") if is_return_leg else qs.filter(return_pickup_time="x")
+    sibling = qs.order_by('-pk').first()
+    if sibling is None:
+        return None
+    return (sibling, booking) if is_return_leg else (booking, sibling)
+
+
 def _build_single_context(user, users, params, inv_no, today, DEFAULT_BANK):
     """Build (template_name, context) for a single-booking invoice."""
     apply_gst_flag = params['apply_gst_flag']
@@ -320,13 +341,15 @@ def _build_single_context(user, users, params, inv_no, today, DEFAULT_BANK):
         }
         return "html_email-invoice-cash.html", context
 
-    if user.return_pickup_time == "x":
-        # Round-trip: price is doubled using the second booking record
-        user1 = users[1] if len(list(users[:2])) > 1 else None
-        base_price = safe_float(user1.price) or 0.0
-        base_paid = safe_float(user1.paid) or 0.0
-        doubled_price = base_price * 2
-        doubled_paid = base_paid * 2
+    legs = _round_trip_legs(user)
+    if legs:
+        # Round-trip: handle_return_trip() split the total into two Post rows,
+        # so the invoice sums both legs back up — whichever leg we were handed
+        # (confirm_booking passes the outbound leg, /invoice/ index 1 is usually
+        # the newer "x" return leg).
+        user1, return_leg = legs
+        doubled_price = (safe_float(user1.price) or 0.0) + (safe_float(return_leg.price) or 0.0)
+        doubled_paid = (safe_float(user1.paid) or 0.0) + (safe_float(return_leg.paid) or 0.0)
         doubled_with_gst, doubled_gst_included = _gst_lines(apply_gst_flag, doubled_price, user1)
         doubled_surcharge, _ = _calc_surcharge(surcharge_input, doubled_price, user1)
         doubled_total = doubled_price + doubled_with_gst + doubled_surcharge + toll - discount
@@ -338,7 +361,7 @@ def _build_single_context(user, users, params, inv_no, today, DEFAULT_BANK):
         # paid/price가 각 leg(편도) Post에 절반씩 나뉘어 저장되므로, deposit_amount_due도
         # 동일하게 절반씩 양쪽 leg에 저장해야 결제 도착 시 임계값 비교가 맞는다.
         leg_deposit_due = round(deposit_amount / 2, 2) if deposit_amount is not None else None
-        Post.objects.filter(pk__in=[user.pk, user1.pk]).update(deposit_amount_due=leg_deposit_due)
+        Post.objects.filter(pk__in=[user1.pk, return_leg.pk]).update(deposit_amount_due=leg_deposit_due)
 
         context = {
             **shared,
