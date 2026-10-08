@@ -15,7 +15,11 @@ WAGE_SKIP_MARKERS = ['DIRECTOR WAGE']
 # = repayments (company -> director), e.g. the 2026-08/09 $2,000 x 3
 # settlement transfers. Both directions land in the same skip list since
 # either way the movement is already recorded in DirectorLoan by hand.
-LOAN_SKIP_MARKERS = ['LOAN FROM DIRECTOR', 'LOAN REPAYMENT']
+# 'WDL ATM' / 'WDL BRANCH' = cash withdrawals by the director (ATM or branch
+# counter), always put back into the company account the same or next day.
+# Both legs are recorded in DirectorLoan by hand (confirmed by the owner
+# 2026-10-08); the redeposit is income-side and skipped on import anyway.
+LOAN_SKIP_MARKERS = ['LOAN FROM DIRECTOR', 'LOAN REPAYMENT', 'WDL ATM', 'WDL BRANCH']
 
 # Bank CSV import: super contributions — already counted via PayrollEntry.super_amount
 # in P&L (see reports.py labour_total). Importing the bank transfer too would double-count.
@@ -45,7 +49,14 @@ ATO_PAYMENT_PATTERN = r'\bATO\b'
 # 'A REZAI' = subcontractor, confirmed by the owner 2026-09-23.
 # 'D S KANG' = subcontractor, written as 'Transfer To D S Kang NetBank EasyGo
 #   to D...' (confirmed by the owner 2026-09-30).
-DRIVER_PAYOUT_MARKERS = ['A REZAI', 'D S KANG']
+# 'UBER *BUSINESS' = Uber rides booked for customers, i.e. Uber used as a
+#   subcontractor (confirmed by the owner 2026-10-08), e.g. 'UBER *BUSINESS
+#   TRIP HELP. Sydney AU Card xx9565'. Recorded as driver 'Ugo' (RASIER
+#   PACIFIC PTY LTD, GST-registered) with the fare in the booking's
+#   driver_price, so the settlement writes the 'subcontract' expense. Must
+#   stay here (checked before PERSONAL_EXPENSE_MARKERS, which still holds the
+#   broader 'UBER' for UBER *EATS).
+DRIVER_PAYOUT_MARKERS = ['A REZAI', 'D S KANG', 'UBER *BUSINESS']
 
 # Bank CSV import: expense rows at/above this amount are held for human triage.
 REVIEW_THRESHOLD = Decimal('1000')
@@ -60,21 +71,20 @@ INTERNAL_TRANSFER_MARKERS = ['xx8784', 'CommBank app']
 # Confirmed personal by the owner:
 #   MUJI — homeware/stationery retail, personal purchases only.
 #   UBER — rideshare trips taken privately (confirmed 2026-08-20), and
-#     'UBER *EATS' food delivery (confirmed 2026-09-30). Note the
+#     'UBER *EATS' food delivery (confirmed 2026-09-30). From 2026-10-08
+#     'UBER *BUSINESS' trips are subcontracted customer rides and are
+#     caught earlier by DRIVER_PAYOUT_MARKERS, so never reach here. Note the
 #     matching 'International Transaction Fee' rows cannot be tied back to the
 #     Uber charge they belong to, so those stay as ordinary bank_fees.
 #   NOMADESIM — travel eSIM data, bought for personal trips (confirmed
 #     2026-08-20). Not the company mobile plan — that is SpinTel, billed
 #     through PayPal (DODO before it).
-#   INTERNATIONAL TRANSACTION FEE — the CommBank 3.5% FX fee. Every such fee
-#     seen so far belongs to a personal foreign charge (UBER, NOMADESIM);
-#     Anthropic, the one foreign business charge, is billed in AUD and raises
-#     no fee. The CSV gives no link back to the charge a fee belongs to, so
-#     this is a blanket call by the owner (2026-08-20). If a foreign *business*
-#     charge is ever billed in USD (e.g. VULTR), its fee will be caught here
-#     too and must be flipped back to a business expense in admin.
+#   NON CBA ATM WITHDRAWAL FEE — the fee on the director's cash withdrawals
+#     (see 'WDL ATM' in LOAN_SKIP_MARKERS), charged to the director loan
+#     rather than the company (confirmed by the owner 2026-10-08).
 PERSONAL_EXPENSE_MARKERS = [
-    'MUJI', 'UBER', 'NOMADESIM', 'INTERNATIONAL TRANSACTION FEE',
+    'MUJI', 'UBER', 'NOMADESIM',
+    'NON CBA ATM WITHDRAWAL FEE',
 ]
 PERSONAL_EXPENSE_CATEGORY = 'personal_drawings'
 
@@ -165,10 +175,14 @@ GST_KEYWORD_RULES = [
     # 'TRANSPORT FOR NSW' spelling, which stays in REVIEW_OVERRIDE_KEYWORDS
     # because it also covers rego-type charges with mixed GST treatment.
     (('TFNSW',), 'gst'),
-    # Currently unreachable: the same string is in PERSONAL_EXPENSE_MARKERS,
-    # which is matched first and skips GST entirely. Kept so the fee falls back
-    # to a correct business treatment if that personal marker is ever removed.
-    (('INTERNATIONAL TRANSACTION FEE',), 'gst'),
+    # INTERNATIONAL TRANSACTION FEE — the CommBank 3.5% FX fee, treated as a
+    # business bank fee (owner, 2026-10-08): the foreign charges behind it are
+    # now mostly business (e.g. VULTR billed in USD). It was a blanket
+    # personal call before (2026-08-20) when UBER was personal. The CSV gives
+    # no link back to the charge a fee belongs to, so a fee on a personal
+    # foreign charge (e.g. NOMADESIM) must be flipped to personal in admin.
+    # Bank fees are input-taxed financial supplies — no GST to claim.
+    (('INTERNATIONAL TRANSACTION FEE',), 'no_gst'),
     (('TAXIPAY',), 'gst'),
     # Fines/infringements are never GST-eligible — explicit no_gst so this can
     # never be shadowed by a broader keyword added above in future.
@@ -243,7 +257,7 @@ CATEGORY_KEYWORD_RULES = [
     # AI/dev tooling subscriptions — kept separate from 'hosting' (infrastructure)
     # so the recurring software spend is visible on its own P&L line.
     (('ANTHROPIC',), 'software_subscription'),
-    # Also shadowed by PERSONAL_EXPENSE_MARKERS — see the GST rule above.
+    # CommBank FX fee — see the matching GST rule above.
     (('INTERNATIONAL TRANSACTION FEE',), 'bank_fees'),
     (('TAXIPAY',), 'taxi'),
 ]
@@ -253,4 +267,11 @@ CATEGORY_KEYWORD_RULES = [
 # under ATO rules; personal_drawings is not a company expense at all).
 # Transaction.is_tax_deductible is set False for these on import; P&L/BAS
 # aggregation excludes them from deductible expense totals.
-NON_TAX_DEDUCTIBLE_CATEGORIES = {'non_deductible_fine', PERSONAL_EXPENSE_CATEGORY}
+# staff_entertainment = meal entertainment for staff (e.g. a team dinner at a
+# restaurant). Under the FBT minor-benefit exemption (< $300 a head, no FBT
+# paid) it is neither deductible nor eligible for a GST credit, so these rows
+# are kept with gst_code='no_gst' (owner, 2026-10-08). If FBT is ever paid on
+# such a benefit, flip the row back to deductible with its GST in admin.
+NON_TAX_DEDUCTIBLE_CATEGORIES = {
+    'non_deductible_fine', 'staff_entertainment', PERSONAL_EXPENSE_CATEGORY,
+}
