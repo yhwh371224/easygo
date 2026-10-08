@@ -592,8 +592,12 @@ def driver_dashboard(request):
     if last_settlement:
         if last_settlement.items.exists():
             # 아이템이 있는 정산 — 어떤 트립이 들어갔는지 알 수 있으므로
-            # 정산일 당일 트립도 편입 여부로 판단한다.
-            past_posts = past_posts.filter(pickup_date__gte=last_settlement.to_date)
+            # 정산 기간 안의 트립은 편입 여부로 판단한다. 하한선은 to_date 가
+            # 아니라 from_date — 기간이 긴 정산서에서 트립을 빼면(예: 2026-10
+            # Ugo, 은행 출금 전인 10/05 건을 9/1~10/8 정산서에서 제외) to_date
+            # 기준으로는 그 트립이 '정산됨'으로 보이며 받을 돈에서 사라졌다.
+            # 당일 정산은 from_date == to_date 라 결과가 같다.
+            past_posts = past_posts.filter(pickup_date__gte=last_settlement.from_date)
         else:
             # 아이템 없이 총액만 남은 옛 정산 — 무엇이 포함됐는지 알 수 없으니
             # 예전처럼 날짜로만 자른다(정산일 당일은 정산된 것으로 본다).

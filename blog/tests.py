@@ -1531,6 +1531,37 @@ class DriverDashboardViewTests(TestCase):
         # driver_price defaults to price − 10 → only the unsettled 110 job counts.
         self.assertEqual(context['to_be_paid'], Decimal('100'))
 
+    @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+    @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+    def test_trip_removed_from_period_settlement_still_owed(self, mock_close, mock_create):
+        """A trip taken back out of a multi-day settlement keeps counting as owed.
+
+        The cut used to be the last settlement's to_date, so a trip dated inside
+        a longer period but removed from it (2026-10 Ugo: the 10/05 job held back
+        until the bank showed it) vanished from 'To be paid'."""
+        from blog.services.settlement_service import SettlementService, recompute_totals
+        user = make_user(username='tl4', password='TestPass1!')
+        driver = make_driver(user=user)
+        kept = self._past_post(driver, days_ago=5, price='190')
+        held_back = self._past_post(driver, days_ago=3, price='110')
+        for post in (kept, held_back):
+            post.paid = post.price
+            post.save()
+        with patch('blog.services.settlement_service.generate_settlement_number',
+                   return_value='TEST-TL4-SET-01'):
+            settlement = SettlementService.create_settlement(
+                driver, kept.pickup_date,
+                datetime.date.today() - datetime.timedelta(days=1), user=None,
+            )
+        settlement.items.filter(post=held_back).delete()
+        recompute_totals(settlement)
+
+        self.client.force_login(user)
+        context = self.client.get(self.url).context
+
+        # driver_price defaults to price − 10 → only the held-back 110 job counts.
+        self.assertEqual(context['to_be_paid'], Decimal('100'))
+
     def test_commission_driver_to_be_paid_is_net_of_commission(self):
         """A driver on a commission rate is owed driver_price − commission, the
         same subcontractor_payout the settlement pays, and sees the deduction."""
