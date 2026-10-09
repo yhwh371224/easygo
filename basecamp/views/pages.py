@@ -68,10 +68,16 @@ def payment_cancel(request):
     return render(request, 'basecamp/payments/payment_cancel.html')
 
 def payment_options(request):
-    return render(request, 'basecamp/payments/payment_options.html')
+    from accounting.conf import paypal_surcharge_percent
+    return render(request, 'basecamp/payments/payment_options.html', {
+        'paypal_surcharge_percent': paypal_surcharge_percent(),
+    })
 
 def payment_options1(request): 
-    return render(request, 'basecamp/payments/payment_options1.html')
+    from accounting.conf import paypal_surcharge_percent
+    return render(request, 'basecamp/payments/payment_options1.html', {
+        'paypal_surcharge_percent': paypal_surcharge_percent(),
+    })
 
 def p2p_single(request):
     return render(request, 'basecamp/booking/p2p_single.html')

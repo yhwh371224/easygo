@@ -28,6 +28,11 @@ def paypal_surcharge_rate(at=None):
             rate = r
     return rate
 
+
+def paypal_surcharge_percent(at=None):
+    """Rate for customer-facing text, e.g. '2.5'."""
+    return f"{(paypal_surcharge_rate(at) * 100).normalize():f}"
+
 # Bank CSV import: director/owner wage net transfers — already in PayrollEntry.
 # Substring match (via _contains_any). Skipped to prevent P&L double-count.
 WAGE_SKIP_MARKERS = ['DIRECTOR WAGE']
