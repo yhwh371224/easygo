@@ -2629,6 +2629,45 @@ class BuildPnlExGstTests(TestCase):
 
 
 # ---------------------------------------------------------------------------
+# PayPal surcharge rate: 3% until 2026-10-10, 2.5% after
+# ---------------------------------------------------------------------------
+
+class PaypalSurchargeRateTests(TestCase):
+
+    def _pm(self, amount, when, **kw):
+        pm = PaypalPayment.objects.create(name='Uma', email='u@x.com',
+                                          amount=Decimal(amount), **kw)
+        PaypalPayment.objects.filter(pk=pm.pk).update(created=when)
+        pm.refresh_from_db()
+        return pm
+
+    BEFORE = datetime.datetime(2026, 10, 9, 12, tzinfo=datetime.timezone.utc)   # 10-09 23:00 Sydney
+    AFTER = datetime.datetime(2026, 10, 9, 14, tzinfo=datetime.timezone.utc)    # 10-10 01:00 Sydney
+
+    def test_rate_switches_at_sydney_midnight(self):
+        from accounting.conf import paypal_surcharge_rate
+        self.assertEqual(paypal_surcharge_rate(self.BEFORE), Decimal('0.03'))
+        self.assertEqual(paypal_surcharge_rate(self.AFTER), Decimal('0.025'))
+
+    def test_payment_uses_rate_at_its_own_date(self):
+        self.assertEqual(self._pm('103', self.BEFORE, txn_id='A').surcharge_factor, Decimal('1.03'))
+        self.assertEqual(self._pm('102.5', self.AFTER, txn_id='B').surcharge_factor, Decimal('1.025'))
+
+    def test_refund_after_switch_uses_original_payment_rate(self):
+        self._pm('103', self.BEFORE, txn_id='PAY1')
+        refund = self._pm('-103', self.AFTER, txn_id='RF1',
+                          payment_status='Refunded', parent_txn_id='PAY1')
+        self.assertEqual(refund.surcharge_factor, Decimal('1.03'))
+
+    def test_surcharge_total_mixes_rates(self):
+        from accounting.reports import paypal_surcharge_total
+        self._pm('103', self.BEFORE, txn_id='A')
+        self._pm('102.50', self.AFTER, txn_id='B')
+        total = paypal_surcharge_total(datetime.date(2026, 10, 1), datetime.date(2026, 10, 31))
+        self.assertEqual(total, Decimal('5.50'))
+
+
+# ---------------------------------------------------------------------------
 # Refund → Post.refund auto-fill (return bookings)
 # ---------------------------------------------------------------------------
 
@@ -2653,10 +2692,16 @@ class AutoFillPostRefundTests(TestCase):
         return leg1, leg2
 
     def _refund(self, amount):
-        return PaypalPayment.objects.create(
+        # Amounts below assume the 3% surcharge, so date the refund before the
+        # 2026-10-10 switch to 2.5% (created is auto_now_add, hence update()).
+        pm = PaypalPayment.objects.create(
             name='Rae Turner', email='rae@example.com',
             amount=Decimal(amount), txn_id='R1', payment_status='Refunded',
         )
+        PaypalPayment.objects.filter(pk=pm.pk).update(
+            created=datetime.datetime(2026, 9, 1, 12, tzinfo=datetime.timezone.utc))
+        pm.refresh_from_db()
+        return pm
 
     def test_return_booking_fills_the_later_leg(self):
         from blog.tasks import _auto_fill_post_refund

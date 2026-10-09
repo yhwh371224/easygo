@@ -1,8 +1,32 @@
-from datetime import date
+from datetime import date, datetime
 from decimal import Decimal
+from zoneinfo import ZoneInfo
 
 # GST registration confirmed with ATO effective 2026-07-01 (verified — not a placeholder).
 GST_REGISTRATION_DATE = date(2026, 7, 1)
+
+# PayPal card surcharge added on top of the price at checkout (payonline page,
+# invoice surcharge 'Yes'), and backed out again when a payment is applied to
+# Post.paid and when the surcharge is reported as income. Each payment uses the
+# rate in force when it was made, so a rate change never restates old payments.
+# 3% -> 2.5% from 2026-10-10 (owner, 2026-10-09): PayPal's own fee averaged
+# ~2.39% of the booking amount in FY27 Q1, and a card surcharge should not
+# exceed the cost of acceptance. Append new rates, oldest first.
+PAYPAL_SURCHARGE_RATES = [
+    (None, Decimal('0.03')),
+    (datetime(2026, 10, 10, tzinfo=ZoneInfo('Australia/Sydney')), Decimal('0.025')),
+]
+
+
+def paypal_surcharge_rate(at=None):
+    """PayPal surcharge rate in force at `at` (aware datetime, default now)."""
+    from django.utils import timezone
+    at = at or timezone.now()
+    rate = PAYPAL_SURCHARGE_RATES[0][1]
+    for start, r in PAYPAL_SURCHARGE_RATES[1:]:
+        if at >= start:
+            rate = r
+    return rate
 
 # Bank CSV import: director/owner wage net transfers — already in PayrollEntry.
 # Substring match (via _contains_any). Skipped to prevent P&L double-count.

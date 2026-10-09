@@ -119,7 +119,7 @@ Q: What if my flight is delayed?
 A: No problem — our drivers track your flight in real time. Simply proceed to the meeting point and your driver will be waiting at no extra charge. Check your email and phone for any updates from us.
 
 Q: What payment options are available?
-A: We accept all major credit cards (American Express, MasterCard, Visa) and cash payment to the driver on the day. Advance payment is required for corporate bookings and passengers arriving from overseas. Note: 3% surcharge applies on card payments.
+A: We accept all major credit cards (American Express, MasterCard, Visa) and cash payment to the driver on the day. Advance payment is required for corporate bookings and passengers arriving from overseas. Note: 2.5% surcharge applies on card payments.
 
 Q: Do you offer infant seats or baby capsules?
 A: Yes. Child seats are available for $10 each. Please specify the number required at time of booking.

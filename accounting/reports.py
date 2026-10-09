@@ -65,9 +65,6 @@ def to_decimal_safe(value):
             return ZERO
 
 
-_PAYPAL_SURCHARGE_RATE = Decimal('1.03')
-
-
 def _is_first_of_kind(pm):
     """True if pm is the earliest non-zero PaypalPayment of its kind for its
     parent payment. PayPal can send several Reversed IPNs for one payment
@@ -83,9 +80,10 @@ def _is_first_of_kind(pm):
 
 
 def paypal_surcharge_total(start, end):
-    """Sum the 3% PayPal card surcharge received between start and end.
+    """Sum the PayPal card surcharge received between start and end.
 
-    notify_user_payment_paypal (blog/tasks.py) applies only amount ÷ 1.03 to
+    notify_user_payment_paypal (blog/tasks.py) applies only
+    amount ÷ pm.surcharge_factor (3%, 2.5% from 2026-10-10) to
     Post.paid, so the surcharge never reaches the booking-based income. It is
     still taxable revenue, so it is added here from the PayPal IPN rows,
     dated by when the money moved (created).
@@ -103,10 +101,10 @@ def paypal_surcharge_total(start, end):
     """
     from blog.models import PaypalPayment
 
-    def surcharge_of(amount):
+    def surcharge_of(amount, pm):
         # quantize the base, not the surcharge, to mirror blog/tasks.py's
-        # round(amount / 1.03, 2) applied to Post.paid.
-        base = (amount / _PAYPAL_SURCHARGE_RATE).quantize(_CENT, rounding=ROUND_HALF_UP)
+        # round(amount / factor, 2) applied to Post.paid.
+        base = (amount / pm.surcharge_factor).quantize(_CENT, rounding=ROUND_HALF_UP)
         return amount - base
 
     total = ZERO
@@ -115,7 +113,7 @@ def paypal_surcharge_total(start, end):
     ).exclude(amount__isnull=True).exclude(amount=0):
         kind = pm.kind
         if kind in (PaypalPayment.KIND_PAYMENT, PaypalPayment.KIND_REFUND):
-            total += surcharge_of(pm.amount)   # negative for a refund
+            total += surcharge_of(pm.amount, pm)   # negative for a refund
             continue
 
         if not pm.parent_txn_id or not _is_first_of_kind(pm):
@@ -123,9 +121,9 @@ def paypal_surcharge_total(start, end):
         parent = PaypalPayment.objects.filter(txn_id=pm.parent_txn_id).first()
         amount = abs(parent.amount) if parent and parent.amount else abs(pm.amount)
         if kind == PaypalPayment.KIND_DISPUTE:
-            total -= surcharge_of(amount)
+            total -= surcharge_of(amount, parent or pm)
         elif kind == PaypalPayment.KIND_DISPUTE_RESOLVED:
-            total += surcharge_of(amount)
+            total += surcharge_of(amount, parent or pm)
     return total
 
 
@@ -197,7 +195,7 @@ def build_sales_gst(year, quarter):
             online_paid += paid
             online_gst  += gst
 
-    # PayPal 3% surcharge (not in Post.paid) — online, dated by receipt.
+    # PayPal surcharge (not in Post.paid) — online, dated by receipt.
     q_start = date(year, 3 * quarter - 2, 1)
     q_end = date(year, 3 * quarter, 31 if quarter in (1, 4) else 30)
     surcharge = paypal_surcharge_total(max(q_start, GST_REGISTRATION_DATE), q_end)
@@ -263,10 +261,10 @@ def _near(a, b):
 
 
 def _refund_base(pm, amt):
-    """Refund amount on the same basis as Post.paid: PayPal ex 3% surcharge."""
+    """Refund amount on the same basis as Post.paid: PayPal ex surcharge."""
     from blog.models import PaypalPayment
     if isinstance(pm, PaypalPayment):
-        return (amt / _PAYPAL_SURCHARGE_RATE).quantize(_CENT, rounding=ROUND_HALF_UP)
+        return (amt / pm.surcharge_factor).quantize(_CENT, rounding=ROUND_HALF_UP)
     return amt
 
 
@@ -294,6 +292,8 @@ def _classify_cancelled_post(post, paid):
     whether the customer got the money back. Money kept (cancellation fee,
     no-show) is revenue that is currently missing from 1A.
     """
+    from blog.models import PaypalPayment
+
     refunds = _payer_refunds(post)
     # A refund made by bank leaves no payment row to match against, so trust
     # Post.refund — but only then: with a PayPal/Stripe refund on record the
@@ -301,9 +301,10 @@ def _classify_cancelled_post(post, paid):
     if not refunds and (post.refund or ZERO) >= paid:
         return 'ok', (f"Refunded by bank (Post.refund ${post.refund}) — "
                       f"booking already excluded from 1A, nothing to do.")
-    full = {paid, (paid * _PAYPAL_SURCHARGE_RATE).quantize(_CENT, rounding=ROUND_HALF_UP)}
     for pm in refunds:
         amt = abs(pm.amount)
+        factor = pm.surcharge_factor if isinstance(pm, PaypalPayment) else Decimal('1')
+        full = {paid, (paid * factor).quantize(_CENT, rounding=ROUND_HALF_UP)}
         # >= paid also covers one refund for both legs of a return booking.
         if any(_near(amt, f) for f in full) or amt >= paid:
             return 'ok', (f"Refunded ${amt} on {pm.created:%Y-%m-%d} — "
@@ -386,7 +387,7 @@ def _classify_refund_payment(pm, amt):
                             f"should be ${base} (surcharge is netted separately).")
     for p in posts:
         if (p.cancelled and p.pk not in fully_refunded
-                and amt < to_decimal_safe(p.paid) * _PAYPAL_SURCHARGE_RATE):
+                and amt < to_decimal_safe(p.paid) * (pm.surcharge_factor if isinstance(pm, PaypalPayment) else 1)):
             return 'warn', (f"Partial refund on cancelled booking #{p.pk} ({p.pickup_date}) — "
                             f"the part kept is revenue missing from 1A.")
     ids = ', '.join(f"#{p.pk} ({p.pickup_date})" for p in active) or 'none'

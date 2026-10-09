@@ -67,10 +67,11 @@ def _auto_fill_post_refund(instance):
 
     refund = abs(instance.amount)
     if isinstance(instance, PaypalPayment):
-        # Post.paid holds PayPal payments ex the 3% surcharge (amount / 1.03),
-        # so store the refund on the same basis. The surcharge portion of the
-        # refund is netted in accounting.reports.paypal_surcharge_total.
-        refund = (refund / Decimal('1.03')).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+        # Post.paid holds PayPal payments ex surcharge (amount / factor, at the
+        # original payment's rate), so store the refund on the same basis.
+        # The surcharge portion of the refund is netted in
+        # accounting.reports.paypal_surcharge_total.
+        refund = (refund / instance.surcharge_factor).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
 
     filled = []
     remaining = refund
@@ -161,7 +162,7 @@ def notify_user_payment_paypal(instance_id):
                 )
             return
 
-        calculated_amount = round(raw_amount / 1.03, 2)
+        calculated_amount = round(raw_amount / float(instance.surcharge_factor), 2)
 
         posts = Post.objects.filter(
             Q(booker_email__iexact=instance.email) |

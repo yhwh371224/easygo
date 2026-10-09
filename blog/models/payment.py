@@ -77,6 +77,21 @@ class PaypalPayment(models.Model):
 
         return self.KIND_REFUND if (self.amount or 0) < 0 else self.KIND_PAYMENT
 
+    @property
+    def surcharge_factor(self):
+        """1 + the PayPal surcharge rate this money was charged at.
+
+        A refund or dispute takes the rate of the payment it relates to, so
+        refunding a 3% payment after the rate changed still backs out 3%."""
+        from accounting.conf import paypal_surcharge_rate
+        at = self.created
+        if self.kind != self.KIND_PAYMENT and self.parent_txn_id:
+            parent = (PaypalPayment.objects.filter(txn_id=self.parent_txn_id)
+                      .exclude(pk=self.pk).only('created').first())
+            if parent and parent.created:
+                at = parent.created
+        return 1 + paypal_surcharge_rate(at)
+
 
 class StripePayment(models.Model):
     name = models.CharField(max_length=100, blank=True, null=True)

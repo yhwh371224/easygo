@@ -55,7 +55,7 @@
         <td class="num">${{ bas.sales.cash_paid|floatformat:2|intcomma }} / ${{ bas.sales.cash_gst|floatformat:2|intcomma }}</td></tr>
     <tr class="sub"><td></td><td class="desc">Online &mdash; paid / GST</td>
         <td class="num">${{ bas.sales.online_paid|floatformat:2|intcomma }} / ${{ bas.sales.online_gst|floatformat:2|intcomma }}</td></tr>
-    <tr class="muted"><td></td><td class="desc" style="padding-left:12mm;">of which PayPal 3% surcharge</td>
+    <tr class="muted"><td></td><td class="desc" style="padding-left:12mm;">of which PayPal surcharge (3%, 2.5% from 2026-10-10)</td>
         <td class="num">${{ bas.sales.paypal_surcharge|floatformat:2|intcomma }}</td></tr>
     <tr class="muted"><td></td><td class="desc" style="padding-left:7mm;">Bookings counted</td>
         <td class="num">{{ bas.sales.post_count }}</td></tr>

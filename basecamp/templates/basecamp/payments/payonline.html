@@ -149,7 +149,7 @@
               alert("Please enter a valid booking name and amount.");
               return;
             }
-            var gross_amount = (amount * 1.03).toFixed(2);
+            var gross_amount = (amount * {{ paypal_surcharge_factor }}).toFixed(2);
             return actions.order.create({
               purchase_units: [{
                 amount: { value: gross_amount },

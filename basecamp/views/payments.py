@@ -69,14 +69,15 @@ def _resolve_bookings(users, index, from_date, to_date):
 
 def _calc_surcharge(surcharge_input, price, booking=None):
     """Return (surcharge_calc, surcharge_display).
-    - "Yes": 3% of price applied.
+    - "Yes": PayPal surcharge rate (accounting.conf) of price applied.
     - numeric input: that exact amount applied.
     - blank: fall back to booking.surcharge model field if numeric.
     The calc and display values are always equal so the displayed amount
     is the one actually added to the total."""
     s = (surcharge_input or '').strip()
     if s == "Yes":
-        calc = round(price * 0.03, 2)
+        from accounting.conf import paypal_surcharge_rate
+        calc = round(price * float(paypal_surcharge_rate()), 2)
         return calc, calc
     if s.replace('.', '', 1).isdigit():
         val = round(float(s), 2)
