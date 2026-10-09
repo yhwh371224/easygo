@@ -2356,6 +2356,28 @@ class CreateDailySettlementsTests(TestCase):
         self._run()
         self.assertFalse(DriverSettlement.objects.filter(driver=driver).exists())
 
+    def test_one_failure_still_settles_others_then_exits_nonzero(self):
+        """A per-driver error (e.g. no region, SHOEB 2026-09) must fail the
+        command so cronwrap sends a Telegram alert — it used to exit 0 and the
+        miss only showed in the log."""
+        from django.core.management.base import CommandError
+        ok = self._driver('ok_drv', settle_daily=True)
+        bad = make_driver(user=make_user('bad_drv'), region=ok.region)
+        self._post(ok)
+        self._post(bad)
+
+        def number(d, to_date, seq):
+            if d.pk == bad.pk:
+                raise ValueError('no region')
+            return f'TEST-{d.pk}-{seq}'
+
+        with patch('blog.services.settlement_service.generate_settlement_number',
+                   side_effect=number):
+            with self.assertRaises(CommandError):
+                call_command('create_daily_settlements', '--date', self.today.isoformat())
+        self.assertEqual(DriverSettlement.objects.filter(driver=ok).count(), 1)
+        self.assertFalse(DriverSettlement.objects.filter(driver=bad).exists())
+
 
 class BulkInvoiceDunningTests(TestCase):
     """멀티 인보이스 한 장으로 합산 청구하는 부킹(bulk_invoice)은 부킹별 독촉에서

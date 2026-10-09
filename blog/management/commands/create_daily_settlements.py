@@ -1,7 +1,7 @@
 import logging
 from datetime import date
 
-from django.core.management.base import BaseCommand
+from django.core.management.base import BaseCommand, CommandError
 from django.utils import timezone
 
 from blog.models import Driver, Post
@@ -106,3 +106,13 @@ class Command(BaseCommand):
         self.stdout.write(
             f'Done. Settled: {success}, Skipped: {skipped}, Failed: {fail}'
         )
+
+        # 드라이버 한 명이 실패해도 예전엔 exit 0 으로 끝나서 cronwrap 이 성공으로
+        # 보고 텔레그램 알림이 안 갔다. SHOEB 가 region 없이 9/14·9/17 두 번
+        # 실패했는데 로그에만 남아 3주 넘게 정산·비용이 빠져 있었다 (2026-10-09).
+        # 다른 드라이버 정산은 위에서 이미 끝났으니, 마지막에 실패로 끝내기만 한다.
+        if fail:
+            raise CommandError(
+                f'{fail} driver settlement(s) failed for {target_date} — '
+                'see [SETTLE ERROR] lines in the log'
+            )
