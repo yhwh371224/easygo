@@ -56,7 +56,13 @@ ATO_PAYMENT_PATTERN = r'\bATO\b'
 #   driver_price, so the settlement writes the 'subcontract' expense. Must
 #   stay here (checked before PERSONAL_EXPENSE_MARKERS, which still holds the
 #   broader 'UBER' for UBER *EATS).
-DRIVER_PAYOUT_MARKERS = ['A REZAI', 'D S KANG', 'UBER *BUSINESS']
+# 'ENEX SERVICES' = ENEX SERVICES PTY LTD, where driver Don (Smile Pickup) asks
+#   to be paid, e.g. 'Transfer To ENEX SERVICES PTY LTD PayID Phone from NetBank
+#   EasyGo to Don smile pickup'. Don's settlement already writes the
+#   'subcontract' expense (the 2026-08-31 and 2026-09-25 bank rows were both
+#   duplicates; confirmed by the owner 2026-10-09). Settle Don BEFORE paying
+#   ENEX, or the payout lands in no expense row at all.
+DRIVER_PAYOUT_MARKERS = ['A REZAI', 'D S KANG', 'UBER *BUSINESS', 'ENEX SERVICES']
 
 # Bank CSV import: expense rows at/above this amount are held for human triage.
 REVIEW_THRESHOLD = Decimal('1000')
@@ -135,8 +141,8 @@ GST_KEYWORD_RULES = [
     # 'no_gst' so that a row which slips through can never claim GST on its own
     # — without this rule 'SERVICE' (a substring of 'ENEX SERVICES') matches the
     # vehicle_maintenance keyword and silently produces a GST credit.
-    # Better still: put ENEX's PayID in Don's Driver.payment_match_digits so the
-    # row is skipped at import and never becomes a Transaction at all.
+    # Normally unreachable now that 'ENEX SERVICES' is in DRIVER_PAYOUT_MARKERS
+    # (skipped at import); kept as a backstop.
     (('ENEX',), 'no_gst'),
     # 'ULTRA TUNE' = Ultra Tune Artarmon, car servicing/mechanic — confirmed
     # a business vehicle cost by the owner (2026-09-09), always GST-inclusive.
@@ -240,6 +246,7 @@ CATEGORY_KEYWORD_RULES = [
     # (2026-08-31): Smile Pickup asks for these jobs to be paid out to ENEX
     # directly via PayID. Checked BEFORE vehicle_maintenance because 'SERVICE'
     # is a substring of 'SERVICES' and would otherwise read as car servicing.
+    # Normally unreachable: DRIVER_PAYOUT_MARKERS skips these rows at import.
     (('ENEX',), 'subcontractor_payout'),
     (('SERVICE', 'MECHANIC', 'AUTO', 'TYRE', 'TYRES', 'REPCO',
       'SUPERCHEAP', 'PANEL', 'SMASH', 'CIRCUM VENDING', 'RIZKALLA',
