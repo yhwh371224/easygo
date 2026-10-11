@@ -24,6 +24,7 @@ function initTimePickers(container){
       if(ampm==='AM'&&h===12)h=0;
       else if(ampm==='PM'&&h!==12)h+=12;
       hidden.value=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+      checkFlightPickupGap();
     }
     wrap._tpUpdate=update;
     wrap.querySelectorAll('.tp-ampm').forEach(btn=>{
@@ -49,6 +50,40 @@ function initTimePickers(container){
   });
 }
 
+// Flight vs pickup time more than 6h apart almost always means AM/PM was
+// picked wrong on one of them — warn under the pickup time (non-blocking).
+const TP_GAP_PAIRS=[['flight_time','pickup_time'],['return_flight_time','return_pickup_time']];
+const TP_GAP_MAX_MIN=6*60;
+function tpMinutes(v){
+  const m=/^(\d{2}):(\d{2})$/.exec(v||'');
+  return m?parseInt(m[1])*60+parseInt(m[2]):null;
+}
+function checkFlightPickupGap(){
+  TP_GAP_PAIRS.forEach(([flightName,pickupName])=>{
+    const pickup=document.getElementById('id_'+pickupName);
+    if(!pickup)return;
+    let note=pickup.parentElement.querySelector('.tp-ampm-gap-note');
+    const flight=document.getElementById('id_'+flightName);
+    const flightWrap=flight&&flight.parentElement.querySelector('.tp-wrap');
+    const f=flight&&flightWrap&&flightWrap.offsetParent!==null?tpMinutes(flight.value):null;
+    const p=tpMinutes(pickup.value);
+    let show=false;
+    if(f!==null&&p!==null){
+      const d=Math.abs(f-p);
+      show=Math.min(d,1440-d)>TP_GAP_MAX_MIN;  // circular, so 11:30 PM vs 1:00 AM is 1.5h
+    }
+    if(!note){
+      if(!show)return;
+      note=document.createElement('small');
+      note.className='tp-ampm-gap-note';
+      note.style.cssText='padding-left:18px;color:#dc3545;font-weight:600;display:none';
+      note.textContent='⚠ AM / PM may be selected incorrectly. Please check again.';
+      pickup.parentElement.insertBefore(note,pickup);
+    }
+    note.style.display=show?'block':'none';
+  });
+}
+
 function flushTimePickers(form){
   (form||document).querySelectorAll('.tp-wrap').forEach(wrap=>{
     if(!wrap._tpUpdate)return;
@@ -60,6 +95,8 @@ function flushTimePickers(form){
 
 document.addEventListener('DOMContentLoaded',()=>{
   initTimePickers();
+  const dir=document.getElementById('direction');
+  if(dir)dir.addEventListener('change',checkFlightPickupGap);  // cruise hides flight time
   document.querySelectorAll('form').forEach(form=>{
     form.addEventListener('submit',()=>flushTimePickers(form),true);
   });
