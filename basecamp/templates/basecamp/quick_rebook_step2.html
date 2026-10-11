@@ -459,6 +459,7 @@
         el.style.display = isP2P ? 'none' : '';
       });
       document.getElementById('flight_number').required = !isP2P;
+      if (typeof checkFlightPickupGap === 'function') checkFlightPickupGap();
     }
 
     document.addEventListener('DOMContentLoaded', function () {
