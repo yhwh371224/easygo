@@ -144,7 +144,7 @@
 
 													{% if not no_email_reminder %}
 														The driver will meet you at the <strong>meeting point listed below</strong>
-														at your <strong>requested pickup time, {{ pickup_time }}</strong>, as scheduled.<br><br>
+														at your <strong>requested pickup time{% if not hide_pickup_time %}, {{ pickup_time }}{% endif %}</strong>, as scheduled.<br><br>
 													{% endif %}
 
 													Once you have collected your luggage, please contact the driver.
@@ -196,7 +196,7 @@
 													{% endif %}
 
 													The driver will meet you at the <strong>meeting point listed below</strong>
-													at your <strong>requested pickup time, {{ pickup_time }}</strong>, as scheduled.<br><br>
+													at your <strong>requested pickup time{% if not hide_pickup_time %}, {{ pickup_time }}{% endif %}</strong>, as scheduled.<br><br>
 
 													Once you have collected your luggage, please contact the driver.
 													This helps us ensure a smooth process.<br><br>
@@ -235,7 +235,7 @@
 											{% elif cruise %}
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
 													<br>
-													Please be ready at your scheduled pickup time of {{ pickup_time }}.<br>
+													Please be ready at your scheduled pickup time{% if not hide_pickup_time %} of {{ pickup_time }}{% endif %}.<br>
 													We kindly request that you contact your driver 60 minutes before pickup to ensure a smooth and seamless experience<br><br>
 												</p>
 												<table width="100%" style="border-spacing:0;background-color:#fef6f0;margin-bottom:20px;" role="presentation">
@@ -264,7 +264,7 @@
 
 											{% else %}
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
-													Please be ready on your pickup time, {{ pickup_time }}<br><br></p>
+													Please be ready on your pickup time{% if not hide_pickup_time %}, {{ pickup_time }}{% endif %}<br><br></p>
 												<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
 													Delays greater than 5 mins from pickup time creates last min reschedule expenses
 													and additional liabilities to other scheduled passengers, additional charge will apply<br>

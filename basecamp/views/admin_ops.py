@@ -410,6 +410,7 @@ def email_dispatch_detail(request):
         payment_amount = request.POST.get('payment_amount')
         remain_first_booking = 'remain_first_booking' in request.POST
         remain_return_booking = 'remain_return_booking' in request.POST
+        hide_pickup_time = 'hide_pickup_time' in request.POST
         wait_duration = request.POST.get('wait_duration')
         discount_price = request.POST.get('discount_price')
 
@@ -518,6 +519,7 @@ def email_dispatch_detail(request):
 
                 context.update({
                     'pickup_time': user_today.pickup_time,
+                    'hide_pickup_time': hide_pickup_time,
                     'contact': user_today.contact,
                     'terminal_pickup_point': user_today.terminal_pickup_point,
                     'city': user_today.region.name if user_today.region_id else '',
