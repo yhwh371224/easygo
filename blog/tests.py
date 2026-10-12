@@ -2427,6 +2427,30 @@ class BulkInvoiceDunningTests(TestCase):
         self.assertTrue(inside.bulk_invoice)
         self.assertFalse(outside.bulk_invoice)
 
+    @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+    @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+    def test_multi_invoice_sums_discounts_across_bookings(self, *_):
+        from basecamp.views.payments import _build_multi_context
+        first = self.make_unpaid(paid='100')
+        later = self.make_unpaid(pickup_date=datetime.date.today() + timedelta(days=6),
+                                 discount='30', paid='70')
+        bookings = Post.objects.filter(pk__in=[first.pk, later.pk]).order_by('pickup_date')
+        params = {
+            'apply_gst_flag': None, 'surcharge_input': None, 'discount_input': None,
+            'toll_input': None, 'deposit_percent_input': None,
+        }
+        _, ctx = _build_multi_context(bookings, params, '1', datetime.date.today(), 'westpac')
+        self.assertEqual(ctx['discount'], 30.0)
+        self.assertEqual(ctx['balance'], 0.0)
+
+        params['discount_input'] = '10'
+        _, ctx = _build_multi_context(bookings, params, '1', datetime.date.today(), 'westpac')
+        self.assertEqual(ctx['discount'], 10.0)
+
+        params['discount_input'] = 'Yes'
+        _, ctx = _build_multi_context(bookings, params, '1', datetime.date.today(), 'westpac')
+        self.assertEqual(ctx['discount'], 0.0)
+
 
 @override_settings(CACHES={'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'}})
 class FullyBookedDateTests(TestCase):

@@ -223,7 +223,12 @@ def _build_multi_context(bookings, params, inv_no, today, DEFAULT_BANK):
         booking_data.append({k: v for k, v in row.items() if not k.startswith('_')})
 
     first_booking = bookings.first() if hasattr(bookings, "first") else (bookings[0] if bookings else None)
-    discount = _calc_discount(discount_input, first_booking)
+    # 폼에 할인값('Yes' 포함)을 넣었으면 그 값을 우선하고, 비어 있으면 묶인
+    # 예약들의 discount를 모두 더한다 (할인이 첫 예약에만 걸려 있지 않으므로).
+    if (discount_input or '').strip():
+        discount = _calc_discount(discount_input, first_booking)
+    else:
+        discount = sum(_calc_discount('', b) for b in bookings)
     final_total = grand_total - discount
     total_balance = round(final_total - total_paid, 2)
 
