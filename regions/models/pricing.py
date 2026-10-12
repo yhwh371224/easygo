@@ -33,7 +33,11 @@ class PricingRule(models.Model):
         "Region", on_delete=models.CASCADE, related_name="pricing_rule"
     )
 
-    rate_per_km             = models.DecimalField(max_digits=5, decimal_places=2, default=2.50)
+    rate_per_km             = models.DecimalField(max_digits=5, decimal_places=2, default=3.00)
+    base_fee                = models.DecimalField(
+        max_digits=6, decimal_places=2, default=30.00,
+        help_text="Flat amount added after distance × rate_per_km",
+    )
     extra_bag_fee           = models.DecimalField(max_digits=5, decimal_places=2, default=10.00)
     oversize_fee            = models.DecimalField(max_digits=5, decimal_places=2, default=20.00)
     second_stop_fee         = models.DecimalField(max_digits=5, decimal_places=2, default=20.00)

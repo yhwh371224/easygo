@@ -179,7 +179,7 @@ class SpecialItemTypeAdmin(admin.ModelAdmin):
 @admin.register(PricingRule)
 class PricingRuleAdmin(admin.ModelAdmin):
     list_display = (
-        "region", "rate_per_km", "extra_bag_fee", "oversize_fee",
+        "region", "rate_per_km", "base_fee", "extra_bag_fee", "oversize_fee",
         "second_stop_fee", "pax_surcharge_mid_fee", "pax_surcharge_large_fee",
     )
     fieldsets = (
@@ -187,7 +187,9 @@ class PricingRuleAdmin(admin.ModelAdmin):
             "fields": ("region",),
         }),
         ("Distance & Vehicle", {
-            "fields": ("rate_per_km",),
+            "fields": ("rate_per_km", "base_fee"),
+            "description": "Base fare = suburb distance_km × rate_per_km + base_fee "
+                           "(falls back to the suburb's fixed price if distance_km is empty)",
         }),
         ("Extra Fees", {
             "fields": (
@@ -197,7 +199,7 @@ class PricingRuleAdmin(admin.ModelAdmin):
         }),
         ("Passenger Surcharges", {
             "fields": ("pax_surcharge_mid_fee", "pax_surcharge_large_fee"),
-            "description": "mid = 5–9 pax, large = 10+ pax (stacked on top of mid)",
+            "description": "mid = per person from the 3rd passenger, large = extra flat fee for 10+ pax",
         }),
         ("Peak / Night Windows", {
             "fields": ("peak_windows",),

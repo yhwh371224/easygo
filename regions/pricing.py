@@ -46,7 +46,7 @@ class PricingConfig:
     extra_bag_fee: Decimal
     oversize_fee: Decimal
     second_stop_fee: Decimal
-    pax_surcharge_mid_fee: Decimal    # per-person rate from 2nd passenger ($10)
+    pax_surcharge_mid_fee: Decimal    # per-person rate from 3rd passenger ($10)
     pax_surcharge_large_fee: Decimal  # extra flat fee for 10+ passengers ($30)
     windows: List[WindowConfig] = field(default_factory=list)
 
@@ -73,9 +73,9 @@ def calculate_price(config: PricingConfig, booking: BookingInput) -> dict:
     """
     New pricing formula:
 
-        total = base_fare
+        total = base_fare               (distance_km × rate_per_km + base_fee)
               + peak_surcharge          (base_fare × rate if pickup in window)
-              + pax_surcharge           ((pax-1) × $10; +$30 extra for 10+)
+              + pax_surcharge           ((pax-2) × $10 from 3rd pax; +$30 extra for 10+)
               + extra_fees              (bags, oversize, special items, extra stops)
 
     Returns a breakdown dict with Decimal values.
@@ -89,10 +89,10 @@ def calculate_price(config: PricingConfig, booking: BookingInput) -> dict:
             peak_surcharge = (config.base_fare * window.surcharge_rate).quantize(Decimal("0.01"))
             break
 
-    # 2. Passenger surcharge: +$10 per person from 2nd passenger, +$30 extra for 10+
+    # 2. Passenger surcharge: 1-2 pax included, +$10 per person from 3rd, +$30 extra for 10+
     pax = booking.passengers
-    if pax >= 2:
-        pax_surcharge = Decimal(pax - 1) * config.pax_surcharge_mid_fee
+    if pax >= 3:
+        pax_surcharge = Decimal(pax - 2) * config.pax_surcharge_mid_fee
         if pax >= 10:
             pax_surcharge += config.pax_surcharge_large_fee
     else:
@@ -128,7 +128,7 @@ def price_to_dict(result: dict) -> dict:
 def build_config_from_rule(suburb, rule) -> PricingConfig:
     """Assemble a PricingConfig from a RegionSuburb and PricingRule."""
     return PricingConfig(
-        base_fare=suburb.price,
+        base_fare=suburb_base_fare(suburb, rule),
         extra_bag_fee=rule.extra_bag_fee,
         oversize_fee=rule.oversize_fee,
         second_stop_fee=rule.second_stop_fee,
@@ -136,6 +136,13 @@ def build_config_from_rule(suburb, rule) -> PricingConfig:
         pax_surcharge_large_fee=rule.pax_surcharge_large_fee,
         windows=[WindowConfig.from_dict(w) for w in rule.peak_windows],
     )
+
+
+def suburb_base_fare(suburb, rule) -> Decimal:
+    """distance_km × rate_per_km + base_fee; fixed suburb.price if no distance."""
+    if suburb.distance_km is None:
+        return suburb.price
+    return (suburb.distance_km * rule.rate_per_km + rule.base_fee).quantize(Decimal("0.01"))
 
 
 def get_pricing_rule(region_id: int):
