@@ -51,7 +51,7 @@ function initTimePickers(container){
 }
 
 // Flight vs pickup time more than 6h apart almost always means AM/PM was
-// picked wrong on one of them — warn under the pickup time, and ask again on submit.
+// picked wrong on one of them — warn under the pickup time and block submit.
 const TP_GAP_PAIRS=[['flight_time','pickup_time'],['return_flight_time','return_pickup_time']];
 const TP_GAP_MAX_MIN=6*60;
 function tpMinutes(v){
@@ -91,9 +91,9 @@ function checkFlightPickupGap(){
   return gaps;
 }
 
-// Shown on submit while a gap remains. "Correct my times" cancels and jumps to
-// the pickup time; "Times are correct" resubmits (a real >6h gap is rare but possible).
-function tpGapModal(gaps,onConfirm){
+// Shown on submit while a gap remains — submission is blocked until the times
+// are corrected; the button jumps to the pickup time.
+function tpGapModal(gaps){
   const old=document.getElementById('tp-gap-modal');
   if(old)old.remove();
   const rows=gaps.map(g=>`<li style="margin-bottom:6px"><b>${g.pickupName.startsWith('return_')?'Return trip':'Trip'}</b>: flight ${tpFormat(g.flight)} / pickup ${tpFormat(g.pickup)}</li>`).join('');
@@ -104,10 +104,9 @@ function tpGapModal(gaps,onConfirm){
     <h5 style="margin:0 0 10px;color:#dc3545;font-weight:700">⚠ Please check your times</h5>
     <p style="margin:0 0 10px">Your flight time and pickup time are more than 6 hours apart. AM / PM is probably selected incorrectly.</p>
     <ul style="padding-left:18px;margin:0 0 12px">${rows}</ul>
-    <p style="margin:0 0 16px">Please check the times and correct them before submitting.</p>
+    <p style="margin:0 0 16px">Please correct the times. The booking cannot be submitted while flight and pickup times are more than 6 hours apart.</p>
     <div style="display:flex;flex-direction:column;gap:8px">
       <button type="button" class="tp-gap-fix" style="padding:10px;border:0;border-radius:6px;background:#dc3545;color:#fff;font-weight:600">Correct my times</button>
-      <button type="button" class="tp-gap-ok" style="padding:10px;border:1px solid #ccc;border-radius:6px;background:#fff;color:#555">My times are correct, submit</button>
     </div></div>`;
   document.body.appendChild(box);
   box.querySelector('.tp-gap-fix').addEventListener('click',()=>{
@@ -117,7 +116,6 @@ function tpGapModal(gaps,onConfirm){
     const hour=wrap.querySelector('.tp-hour');
     if(hour)setTimeout(()=>hour.focus({preventScroll:true}),400);
   });
-  box.querySelector('.tp-gap-ok').addEventListener('click',()=>{box.remove();onConfirm();});
 }
 
 function flushTimePickers(form){
@@ -137,18 +135,12 @@ document.addEventListener('DOMContentLoaded',()=>{
     form.addEventListener('submit',e=>{
       flushTimePickers(form);
       const gaps=checkFlightPickupGap();
-      const sig=JSON.stringify(gaps);
-      if(!gaps.length||form._tpGapConfirmed===sig)return;
+      if(!gaps.length)return;
       // capture phase on the form runs before the page's own submit handlers,
       // so stopping here keeps the button from flipping to "Submitting..."
       e.preventDefault();
       e.stopImmediatePropagation();
-      const submitter=e.submitter;
-      tpGapModal(gaps,()=>{
-        form._tpGapConfirmed=sig;
-        if(form.requestSubmit)form.requestSubmit(submitter&&submitter.form===form?submitter:undefined);
-        else form.submit();
-      });
+      tpGapModal(gaps);
     },true);
   });
 });
