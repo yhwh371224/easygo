@@ -145,12 +145,27 @@ class DriverSettlementAdmin(admin.ModelAdmin):
                 )
 
                 if settlement is None:
-                    self.message_user(
-                        request,
-                        f"No trips found for {driver.driver_name} "
-                        f"between {from_date} and {to_date}.",
-                        messages.WARNING,
-                    )
+                    # 기간 안 트립이 이미 다른 정산서에 들어가 있어도 None 이 온다 —
+                    # "트립 없음"으로 보이면 정산이 빠진 줄 알고 헤매게 된다.
+                    already_settled = Post.objects.filter(
+                        driver=driver,
+                        pickup_date__gte=from_date,
+                        pickup_date__lte=to_date,
+                        cancelled=False,
+                        driversettlementitem__isnull=False,
+                    ).distinct().count()
+                    if already_settled:
+                        msg = (
+                            f"All trips for {driver.driver_name} between "
+                            f"{from_date} and {to_date} are already settled "
+                            f"({already_settled} trip(s)) — no new settlement created."
+                        )
+                    else:
+                        msg = (
+                            f"No trips found for {driver.driver_name} "
+                            f"between {from_date} and {to_date}."
+                        )
+                    self.message_user(request, msg, messages.WARNING)
                 else:
                     self.message_user(
                         request,

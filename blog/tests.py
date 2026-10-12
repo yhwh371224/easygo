@@ -2378,6 +2378,24 @@ class CreateDailySettlementsTests(TestCase):
         self.assertEqual(DriverSettlement.objects.filter(driver=ok).count(), 1)
         self.assertFalse(DriverSettlement.objects.filter(driver=bad).exists())
 
+    def test_manual_settlement_warns_already_settled(self):
+        """Re-settling a range the daily cron already covered used to say
+        'No trips found', which read as if the trips were missing (Pascal 2026-10)."""
+        driver = self._driver('resettle_drv', settle_daily=True)
+        self._post(driver)
+        self._run()
+        staff = User.objects.create_superuser('settle_admin', 'a@x.com', 'pass')
+        self.client.force_login(staff)
+        url = reverse('admin:blog_driversettlement_create')
+        day = self.today.isoformat()
+        res = self.client.post(url, {'driver': driver.pk, 'from_date': day, 'to_date': day}, follow=True)
+        self.assertContains(res, 'already settled')
+        self.assertNotContains(res, 'No trips found')
+
+        empty = make_driver(user=make_user('empty_drv'), region=driver.region)
+        res = self.client.post(url, {'driver': empty.pk, 'from_date': day, 'to_date': day}, follow=True)
+        self.assertContains(res, 'No trips found')
+
 
 class BulkInvoiceDunningTests(TestCase):
     """멀티 인보이스 한 장으로 합산 청구하는 부킹(bulk_invoice)은 부킹별 독촉에서
