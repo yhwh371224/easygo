@@ -141,18 +141,42 @@
 										<tr>
 											<td align="left" style="padding-left:0px;">
 												<p style="Margin:0;font-size:18px;font-weight:bold;line-height:22px;">
-													Hello! {% if booker_name %}{{ booker_name }}{% else %}{% if booker_name %}{{ booker_name }}{% else %}{{ name }}{% endif %}{% endif %},
+													Hello! {% if booker_name %}{{ booker_name }}{% else %}{{ name }}{% endif %},
 												</p>												
 											</td>
 										</tr>
 										<tr>
 											<td align="left" style="padding-top:28px;padding-left:0;">
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">                                                    
-                                                    Your booking day is a month away<br><br>
-                                                    Booking date: {{ pickup_date|date:"Y-m-d" }}<br><br>													
-													Pickup time: {{ pickup_time }}<br><br></p>											
+                                                    Your trip day is 28 days away<br><br>                                                    
+												</p>
+											{% if direction == 'Pickup from Intl Airport' or direction == 'Pickup from Domestic Airport' %}
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
-												    We will remind you again of your booking close to the Booking date<br><br><br></p>																	    										                                                 
+													• {{ city|default:"Sydney" }} arrival date: {{ pickup_date|date:"Y-m-d" }}<br><br>
+												    • Flight number: {{ flight_number }} <small>(ETA {{ flight_time }})</small><br><br>
+													• Pickup at {{ pickup_time }}<br><br>
+													{% if cash %}
+														<span style="color: #eb7828">We kindly request that you email us before boarding your flight and after landing to {{ city|default:"Sydney" }}</span><br><br>
+													{% else %}
+														<span style="color: #eb7828">After landing, please check your email. You will be notified of the meeting details via email or SMS</span><br><br>
+													{% endif %}
+													<span style="color: #eb7828">If your flight number, arrival time, or pickup time above is incorrect, please reply to this email as soon as possible so we can correct it.</span><br><br>
+												</p>
+											{% elif not direction or start_point %}
+												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">													
+													• See you on time,{{ pickup_time }}<br>											
+													• Start point: {{ start_point|default:"" }}<br>
+													{% if street %}
+													• {{ street }}<br>
+													{% endif %}
+													• End point: {{ end_point|default:"" }}<br><br>
+												</p>												
+											{% else %}			
+												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
+													• Pickup date: {{ pickup_date|date:"Y-m-d" }}<br><br>
+												    • Pickup time: {{ pickup_time }}<br><br></p>
+											{% endif %}														
+												<br>																	    										                                                 
 												<p style="Margin:0;font-size:12px;line-height:21px;Margin-top:16px;Margin-bottom:12px;">    
                                                     <span style="color: #eb7828">Please note:</span><br>
                                                     If you have anything to change or cancel, Please let us know asap<br><br></p>

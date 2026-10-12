@@ -57,7 +57,7 @@ class Command(BaseCommand):
         # --- 오늘 국제선 도착 예약 meeting_point 업데이트 ---
         booking_helper.update_meeting_point_for_arrivals()
 
-        reminder_intervals = [0, 1, 2, 3, 7, 15, -5]  # -5: 5일 전 픽업 완료 고객 리뷰 요청
+        reminder_intervals = [0, 1, 2, 3, 7, 15, 28, -5]  # -5: 5일 전 픽업 완료 고객 리뷰 요청
         templates = [
             "html_email-today.html",
             "html_email-tomorrow.html",
@@ -65,6 +65,7 @@ class Command(BaseCommand):
             "html_email-upcoming3.html",
             "html_email-upcoming7.html",
             "html_email-upcoming15.html",
+            "html_email-upcoming28.html",
             "html_email-yesterday.html",
         ]
         subjects = [
@@ -74,6 +75,7 @@ class Command(BaseCommand):
             "Reminder-3days",
             "Reminder-7days",
             "Reminder-15days",
+            "Reminder-28days",
             "Review-EasyGo",
         ]
 
@@ -195,7 +197,7 @@ class Command(BaseCommand):
                     elif is_tomorrow or is_arrival_2days:
                         email_recipients = collect_recipients(booking_reminder.email, booking_reminder.email1, booker_email)
                     else:
-                        # 3days/7days/15days: booker_email만
+                        # 3days/7days/15days/28days: booker_email만
                         email_recipients = collect_recipients(booker_email)
                 else:
                     email_recipients = collect_recipients(booking_reminder.email, booking_reminder.email1)
