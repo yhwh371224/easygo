@@ -559,7 +559,8 @@ class PostAdmin(admin.ModelAdmin):
     def get_fieldsets(self, request, obj=None):
         fieldsets = list(super().get_fieldsets(request, obj))
         if request.user.is_superuser:
-            fieldsets.insert(0, ('Private Memo', {'fields': ['admin_memo']}))
+            notes_idx = next(i for i, (name, _) in enumerate(fieldsets) if name == 'Notes')
+            fieldsets.insert(notes_idx + 1, ('Private Memo', {'fields': ['admin_memo']}))
         return fieldsets
 
     def save_model(self, request, obj, form, change):

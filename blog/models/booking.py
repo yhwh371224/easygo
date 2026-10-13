@@ -109,7 +109,7 @@ class Post(models.Model):
     notice = models.TextField(blank=True, null=True)
     admin_memo = models.TextField(
         blank=True, default='',
-        help_text='관리자 전용 메모. 슈퍼유저에게만 어드민에 보이고, 고객·드라이버 화면/메일에는 절대 노출되지 않음.',
+        help_text='관리자 전용 메모. 슈퍼유저에게만 어드민에 보임.',
     )
     price = models.CharField(max_length=100, blank=True, null=True)
     paid = models.CharField(max_length=100, blank=True, null=True)
