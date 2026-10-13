@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.db import transaction
 
 from .models import Vehicle, ServiceVisit, ServiceItem
 
@@ -35,3 +36,21 @@ class ServiceVisitAdmin(admin.ModelAdmin):
     date_hierarchy = 'service_date'
     search_fields = ('vehicle__plate_number', 'vendor')
     inlines = [ServiceItemInline]
+    actions = ['duplicate_visits']
+
+    @admin.action(description='Duplicate selected service visits')
+    def duplicate_visits(self, request, queryset):
+        count = 0
+        with transaction.atomic():
+            for visit in queryset.prefetch_related('items'):
+                items = list(visit.items.all())
+                visit.pk = None
+                visit._state.adding = True
+                visit.save()
+                for item in items:
+                    item.pk = None
+                    item._state.adding = True
+                    item.visit = visit
+                ServiceItem.objects.bulk_create(items)
+                count += 1
+        self.message_user(request, f'{count} service visit(s) duplicated.')
