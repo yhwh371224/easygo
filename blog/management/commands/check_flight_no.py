@@ -4,6 +4,7 @@ import re
 from datetime import date, timedelta
 from django.core.management.base import BaseCommand
 from blog.models import Post
+from blog.sms_utils import normalize_phone
 from main.settings import RECIPIENT_EMAIL
 from utils.command_alerts import TelegramAlertMixin
 from utils.email import send_template_email
@@ -35,6 +36,9 @@ class Command(TelegramAlertMixin, BaseCommand):
                 contact = booking.contact.strip() if booking.contact else ''
                 cleaned_contact = ''.join(filter(str.isdigit, contact))
                 contact_issue = not cleaned_contact or len(cleaned_contact) < 9 or len(cleaned_contact) > 13
+                # 자릿수가 범위 밖이어도 국제번호로 유효하면 통과
+                if contact_issue and normalize_phone(contact):
+                    contact_issue = False
 
                 if contact_issue:
                     issues.append('Contact number is missing or invalid')

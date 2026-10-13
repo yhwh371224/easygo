@@ -101,11 +101,15 @@ def handle_email_sending(request, email, subject, template_name, context, email1
 # Missing info email
 # --------------------------
 def check_and_send_missing_info_email(post):
+    from blog.sms_utils import normalize_phone
+
     issues = []
 
     contact = (post.contact or '').strip()
     cleaned_contact = ''.join(filter(str.isdigit, contact))
-    if not cleaned_contact or len(cleaned_contact) < 10 or len(cleaned_contact) > 16:
+    # 국제번호(예: 뉴칼레도니아 +687 6자리)는 자릿수가 짧아도 유효할 수 있다.
+    bad_length = not cleaned_contact or len(cleaned_contact) < 10 or len(cleaned_contact) > 16
+    if bad_length and not normalize_phone(contact):
         issues.append('Contact number is missing or invalid')
 
     AIRPORT_PICKUPS = {
