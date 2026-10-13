@@ -554,6 +554,14 @@ class PostAdmin(admin.ModelAdmin):
         }),
     ]
 
+    # admin_memo 는 슈퍼유저 전용 — 다른 스태프 계정은 fieldset 에서 빠지므로
+    # 폼에도 포함되지 않아 보거나 수정할 수 없다.
+    def get_fieldsets(self, request, obj=None):
+        fieldsets = list(super().get_fieldsets(request, obj))
+        if request.user.is_superuser:
+            fieldsets.insert(0, ('Private Memo', {'fields': ['admin_memo']}))
+        return fieldsets
+
     def save_model(self, request, obj, form, change):
         if change:
             for field in ('calendar_event_id', 'driver_calendar_event_id'):
