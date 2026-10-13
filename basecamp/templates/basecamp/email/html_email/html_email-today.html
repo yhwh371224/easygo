@@ -161,9 +161,9 @@
 													• Pickup at {{ pickup_time }}<br><br>
 													<span style="color: #eb7828">If your flight number, arrival time, or pickup time above is incorrect, please reply to this email as soon as possible so we can correct it.</span>
 													</p>
-													<p style="Margin:0;font-size:13px;font-weight:bold;line-height:20px;Margin-bottom:8px;color:#4F5557;">
+													{% if pickup_maps %}<p style="Margin:0;font-size:13px;font-weight:bold;line-height:20px;Margin-bottom:8px;color:#4F5557;">
 														📍 International Terminal — Pickup Location
-													</p>
+													</p>{% endif %}
 													{% if pickup_maps|length == 1 %}
 													<table role="presentation" style="border-spacing:0;margin-bottom:20px;">
 														<tr>
@@ -192,13 +192,13 @@
 														<strong>2.</strong> After collecting your luggage, <span style="color:#eb7828;font-weight:bold;">please call/message your driver</span> to let them know you have collected your bags.<br>
 														Your driver will then tell you exactly where to meet.
 													</p>
-													<p style="Margin:0;font-size:14px;line-height:24px;Margin-top:10px;Margin-bottom:16px;padding:12px 14px;background-color:#fff8f2;border-left:4px solid #eb7828;">
+													{% if pickup_maps %}<p style="Margin:0;font-size:14px;line-height:24px;Margin-top:10px;Margin-bottom:16px;padding:12px 14px;background-color:#fff8f2;border-left:4px solid #eb7828;">
 														<strong>3.</strong> You can use the <span style="color:#eb7828;font-weight:bold;">pickup map above</span> to find your way to the meeting point.
-													</p>
+													</p>{% endif %}
 													<!-- IMPORTANT: contact requirement + responsibility notice (arrival only) -->
 													<p style="Margin:0;font-size:14px;line-height:24px;Margin-top:10px;Margin-bottom:16px;padding:14px;background-color:#fdecea;border:2px solid #d64541;border-radius:6px;">
 														<span style="color:#d64541;font-weight:bold;font-size:15px;">⚠️ Please stay in contact — this is important</span><br><br>
-														<span style="color:#d64541;font-weight:bold;">This is the most important step:</span> as soon as you have collected your luggage, you <strong>must</strong> call or message your driver. <span style="color:#eb7828;font-weight:bold;">Only if you cannot reach your driver — please wait at McDonald's near Arrival A, and email us straight away from there at <a href="mailto:info@easygoshuttle.com.au" style="color:#eb7828;text-decoration:underline;">info@easygoshuttle.com.au</a>.</span><br><br>
+														<span style="color:#d64541;font-weight:bold;">This is the most important step:</span> as soon as you have collected your luggage, you <strong>must</strong> call or message your driver. <span style="color:#eb7828;font-weight:bold;">Only if you cannot reach your driver — {% if region_slug == 'sydney' %}please wait at McDonald's near Arrival A, and email us straight away from there at{% else %}please email us straight away at{% endif %} <a href="mailto:info@easygoshuttle.com.au" style="color:#eb7828;text-decoration:underline;">info@easygoshuttle.com.au</a>.</span><br><br>
 														<span style="color:#d64541;font-weight:bold;">📱 You must contact us from the number you gave us{% if contact %} — {{ contact }}{% endif %}.</span> That is the only number your driver has, so please call or message from that number — a call or text from any other number cannot be matched to your booking. If your contact number has changed, please email us straight away.<br><br>
 														We have <strong>no way of knowing exactly when you come out of the terminal</strong>. We can only recognise each other and meet at the right place at the right time if we are <strong>in contact with one another</strong>. If we do not hear from you, <span style="color:#d64541;font-weight:bold;">EasyGo cannot be held responsible</span> for a missed or delayed pickup.
 													</p>
@@ -209,9 +209,9 @@
 													• Pickup at {{ pickup_time }}<br><br>
 													<span style="color: #eb7828">If your flight number, arrival time, or pickup time above is incorrect, please reply to this email as soon as possible so we can correct it.</span>
 													</p>
-													<p style="Margin:0;font-size:13px;font-weight:bold;line-height:20px;Margin-bottom:6px;color:#4F5557;">
+													{% if pickup_maps %}<p style="Margin:0;font-size:13px;font-weight:bold;line-height:20px;Margin-bottom:6px;color:#4F5557;">
 														📍 Domestic Terminal — Pickup Map
-													</p>
+													</p>{% endif %}
 													{% if pickup_maps|length == 1 %}
 													<table role="presentation" style="border-spacing:0;margin-bottom:20px;">
 														<tr>
@@ -240,13 +240,13 @@
 														<strong>2.</strong> After collecting your luggage, <span style="color:#eb7828;font-weight:bold;">please call/message your driver</span> to let them know you have collected your bags.<br>
 														Your driver will then tell you exactly where to meet.
 													</p>
-													<p style="Margin:0;font-size:14px;line-height:24px;Margin-top:10px;Margin-bottom:16px;padding:12px 14px;background-color:#fff8f2;border-left:4px solid #eb7828;">
+													{% if pickup_maps %}<p style="Margin:0;font-size:14px;line-height:24px;Margin-top:10px;Margin-bottom:16px;padding:12px 14px;background-color:#fff8f2;border-left:4px solid #eb7828;">
 														<strong>3.</strong> You can use the <span style="color:#eb7828;font-weight:bold;">pickup map above</span> to find your way to the meeting point.
-													</p>
+													</p>{% endif %}
 													<!-- IMPORTANT: contact requirement + responsibility notice (arrival only) -->
 													<p style="Margin:0;font-size:14px;line-height:24px;Margin-top:10px;Margin-bottom:16px;padding:14px;background-color:#fdecea;border:2px solid #d64541;border-radius:6px;">
 														<span style="color:#d64541;font-weight:bold;font-size:15px;">⚠️ Please stay in contact — this is important</span><br><br>
-														<span style="color:#d64541;font-weight:bold;">This is the most important step:</span> as soon as you have collected your luggage, you <strong>must</strong> call or message your driver. <span style="color:#eb7828;font-weight:bold;">Only if you cannot reach your driver — please wait at McDonald's near Arrival A, and email us straight away from there at <a href="mailto:info@easygoshuttle.com.au" style="color:#eb7828;text-decoration:underline;">info@easygoshuttle.com.au</a>.</span><br><br>
+														<span style="color:#d64541;font-weight:bold;">This is the most important step:</span> as soon as you have collected your luggage, you <strong>must</strong> call or message your driver. <span style="color:#eb7828;font-weight:bold;">Only if you cannot reach your driver — {% if region_slug == 'sydney' %}please wait at McDonald's near Arrival A, and email us straight away from there at{% else %}please email us straight away at{% endif %} <a href="mailto:info@easygoshuttle.com.au" style="color:#eb7828;text-decoration:underline;">info@easygoshuttle.com.au</a>.</span><br><br>
 														<span style="color:#d64541;font-weight:bold;">📱 You must contact us from the number you gave us{% if contact %} — {{ contact }}{% endif %}.</span> That is the only number your driver has, so please call or message from that number — a call or text from any other number cannot be matched to your booking. If your contact number has changed, please email us straight away.<br><br>
 														We have <strong>no way of knowing exactly when you come out of the terminal</strong>. We can only recognise each other and meet at the right place at the right time if we are <strong>in contact with one another</strong>. If we do not hear from you, <span style="color:#d64541;font-weight:bold;">EasyGo cannot be held responsible</span> for a missed or delayed pickup.
 													</p>

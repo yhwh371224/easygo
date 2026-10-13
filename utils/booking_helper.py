@@ -122,8 +122,9 @@ def build_reminder_context(booking, pickup_time_12h, driver):
     if booking.region_id and (is_intl or is_domestic):
         terminal_type = Terminal.TerminalType.INTL if is_intl else Terminal.TerminalType.DOMESTIC
         pickup_maps = _get_default_pickup_maps(booking.region_id, terminal_type)
-    if not pickup_maps:
-        # 지역에 map 데이터가 없을 때 기존 Sydney 기본 이미지로 폴백
+    if not pickup_maps and region_slug == "sydney":
+        # 시드니에 map 데이터가 없을 때만 기존 Sydney 기본 이미지로 폴백.
+        # 다른 지역에 시드니 지도를 보내면 안 되므로 그 지역은 지도 없이 나간다.
         if is_intl:
             pickup_maps = [{"title": "View Pickup Map", "url": "https://easygo.s3.ap-southeast-2.amazonaws.com/sydmap.svg"}]
         elif is_domestic:
