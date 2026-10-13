@@ -39,6 +39,15 @@ def normalize_direction(direction):
 SYDNEY_INTL_AIRPORT_CODE = 'SYD'
 SYDNEY_INTL_PICKUP_POINT_NAME = 'Public Pickup'
 
+# 공항 사정상 정해진 만남 장소가 없고 드라이버가 그때그때 만날 곳을 알려주는 지역.
+# 이 지역 도착 건은 기본 만남 장소를 자동 배정하지 않고, 메일에도 "드라이버에게 연락해 지시를
+# 받고, 연락이 안 되면 이메일" 안내만 넣는다. (어드민에서 수동 지정한 장소는 그대로 존중)
+DRIVER_DIRECTED_REGION_SLUGS = {'melbourne'}
+
+
+def is_driver_directed_region(region):
+    return bool(region) and region.slug in DRIVER_DIRECTED_REGION_SLUGS
+
 
 def _sydney_intl_public_pickup(region_id, terminal_type):
     """region 이 SYD 공항에 연결된 국제선 도착이면 Public Pickup 포인트, 아니면 None."""
@@ -57,10 +66,10 @@ def _sydney_intl_public_pickup(region_id, terminal_type):
 # =========================
 # CONTEXT BUILDER
 # =========================
-def _get_default_pickup_maps(region_id, terminal_type):
-    """해당 지역/터미널 타입의 대표 pickup point에 연결된 모든 map을 반환.
-    아직 booking에 terminal_pickup_point가 배정되지 않은 시점(예: 2일전 리마인더)에
-    지역별 기본 pickup map(들)을 보여주기 위한 용도.
+def _get_default_pickup_point(region_id, terminal_type):
+    """해당 지역/터미널 타입의 대표 pickup point.
+    아직 booking에 terminal_pickup_point가 배정되지 않은 시점(예: 2일전 리마인더, 당일 배정 전)에
+    지역 기본 만남 장소(이름·안내문·지도)를 보여주기 위한 용도.
 
     update_meeting_point_for_arrivals()가 당일 driver 배정 시 쓰는 것과 동일한
     is_default_point(1순위) → is_default_second(2순위) 어드민 설정을 그대로 따른다."""
@@ -68,18 +77,16 @@ def _get_default_pickup_maps(region_id, terminal_type):
 
     sydney_public = _sydney_intl_public_pickup(region_id, terminal_type)
     if sydney_public:
-        return list(sydney_public.maps.all())
+        return sydney_public
 
     base_qs = TerminalPickupPoint.objects.filter(
         terminal__type=terminal_type,
         terminal__airport__regions=region_id,
-    ).prefetch_related("maps")
-
-    point = (
+    )
+    return (
         base_qs.filter(is_default_point=True).first()
         or base_qs.filter(is_default_second=True).first()
     )
-    return list(point.maps.all()) if point else []
 
 
 def _deposit_remaining_balance(booking):
@@ -118,10 +125,15 @@ def build_reminder_context(booking, pickup_time_12h, driver):
 
     region_slug = booking.region.slug if booking.region_id else "sydney"
 
+    driver_directs_meeting = (is_intl or is_domestic) and is_driver_directed_region(booking.region)
+
+    default_pickup_point = None
     pickup_maps = []
-    if booking.region_id and (is_intl or is_domestic):
+    if booking.region_id and (is_intl or is_domestic) and not driver_directs_meeting:
         terminal_type = Terminal.TerminalType.INTL if is_intl else Terminal.TerminalType.DOMESTIC
-        pickup_maps = _get_default_pickup_maps(booking.region_id, terminal_type)
+        default_pickup_point = _get_default_pickup_point(booking.region_id, terminal_type)
+        if default_pickup_point:
+            pickup_maps = list(default_pickup_point.maps.all())
     if not pickup_maps and region_slug == "sydney":
         # 시드니에 map 데이터가 없을 때만 기존 Sydney 기본 이미지로 폴백.
         # 다른 지역에 시드니 지도를 보내면 안 되므로 그 지역은 지도 없이 나간다.
@@ -172,6 +184,8 @@ def build_reminder_context(booking, pickup_time_12h, driver):
         'region_slug': region_slug,
         'arrival_guide_url': f"https://easygoshuttle.com.au/{region_slug}/arrival-guide/",
         'pickup_maps': pickup_maps,
+        'default_pickup_point': default_pickup_point,
+        'driver_directs_meeting': driver_directs_meeting,
 
         'post': booking,
     }
@@ -243,6 +257,10 @@ def update_meeting_point_for_arrivals():
 
         terminal_type = DIRECTION_TO_TERMINAL_TYPE.get(normalize_direction(booking.direction))
         if not terminal_type or not booking.region_id:
+            continue
+
+        # 멜번 등: 드라이버가 만날 곳을 직접 알려준다 — 기본 만남 장소를 넣지 않는다.
+        if is_driver_directed_region(booking.region):
             continue
 
         # 시드니 국제선: 수동 지정 여부·드라이버 순번 무시하고 무조건 Public Pickup.

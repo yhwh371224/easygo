@@ -161,9 +161,25 @@
 													• Pickup at {{ pickup_time }}<br><br>
 													<span style="color: #eb7828">If your flight number, arrival time, or pickup time above is incorrect, please reply to this email as soon as possible so we can correct it.</span>
 													</p>
-													{% if pickup_maps %}<p style="Margin:0;font-size:13px;font-weight:bold;line-height:20px;Margin-bottom:8px;color:#4F5557;">
-														📍 International Terminal — Pickup Location
-													</p>{% endif %}
+													{% if driver_directs_meeting %}
+													<p style="Margin:0;font-size:13px;font-weight:bold;line-height:20px;Margin-bottom:8px;color:#4F5557;">
+														📍 International Terminal — Meeting Point
+													</p>
+													<p style="Margin:0;font-size:14px;line-height:24px;Margin-bottom:16px;padding:12px 14px;background-color:#fff8f2;border-left:4px solid #eb7828;">
+														Due to {% if city %}{{ city }} {% endif %}Airport arrangements, there is no fixed meeting point — <span style="color:#eb7828;font-weight:bold;">your driver will tell you where to meet.</span><br>
+														After collecting your luggage, please call or message your driver and follow their directions.
+														If you cannot reach your driver, please email us straight away at <a href="mailto:info@easygoshuttle.com.au" style="color:#eb7828;text-decoration:underline;">info@easygoshuttle.com.au</a>.
+													</p>
+													{% elif default_pickup_point or pickup_maps %}
+													<p style="Margin:0;font-size:13px;font-weight:bold;line-height:20px;Margin-bottom:8px;color:#4F5557;">
+														📍 International Terminal — Pickup Location{% if default_pickup_point %}: {{ default_pickup_point.name }}{% endif %}
+													</p>
+													{% if default_pickup_point.instruction %}
+													<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
+														{{ default_pickup_point.instruction|linebreaksbr }}
+													</p>
+													{% endif %}
+													{% endif %}
 													{% if pickup_maps|length == 1 %}
 													<table role="presentation" style="border-spacing:0;margin-bottom:20px;">
 														<tr>
@@ -209,9 +225,25 @@
 													• Pickup at {{ pickup_time }}<br><br>
 													<span style="color: #eb7828">If your flight number, arrival time, or pickup time above is incorrect, please reply to this email as soon as possible so we can correct it.</span>
 													</p>
-													{% if pickup_maps %}<p style="Margin:0;font-size:13px;font-weight:bold;line-height:20px;Margin-bottom:6px;color:#4F5557;">
-														📍 Domestic Terminal — Pickup Map
-													</p>{% endif %}
+													{% if driver_directs_meeting %}
+													<p style="Margin:0;font-size:13px;font-weight:bold;line-height:20px;Margin-bottom:8px;color:#4F5557;">
+														📍 Domestic Terminal — Meeting Point
+													</p>
+													<p style="Margin:0;font-size:14px;line-height:24px;Margin-bottom:16px;padding:12px 14px;background-color:#fff8f2;border-left:4px solid #eb7828;">
+														Due to {% if city %}{{ city }} {% endif %}Airport arrangements, there is no fixed meeting point — <span style="color:#eb7828;font-weight:bold;">your driver will tell you where to meet.</span><br>
+														After collecting your luggage, please call or message your driver and follow their directions.
+														If you cannot reach your driver, please email us straight away at <a href="mailto:info@easygoshuttle.com.au" style="color:#eb7828;text-decoration:underline;">info@easygoshuttle.com.au</a>.
+													</p>
+													{% elif default_pickup_point or pickup_maps %}
+													<p style="Margin:0;font-size:13px;font-weight:bold;line-height:20px;Margin-bottom:8px;color:#4F5557;">
+														📍 Domestic Terminal — Pickup Location{% if default_pickup_point %}: {{ default_pickup_point.name }}{% endif %}
+													</p>
+													{% if default_pickup_point.instruction %}
+													<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
+														{{ default_pickup_point.instruction|linebreaksbr }}
+													</p>
+													{% endif %}
+													{% endif %}
 													{% if pickup_maps|length == 1 %}
 													<table role="presentation" style="border-spacing:0;margin-bottom:20px;">
 														<tr>
