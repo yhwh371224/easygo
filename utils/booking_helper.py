@@ -33,6 +33,27 @@ def normalize_direction(direction):
     return _DIRECTION_ALIASES.get(key, direction)
 
 
+# 시드니 국제선(SYD T1) 도착 픽업은 드라이버/순번과 상관없이 무조건 Public Pickup 으로 배정한다.
+# 기존 1순위(is_default_point)/2순위(is_default_second)·수동 지정 로직은 다른 지역이 계속 쓰므로 그대로 두고,
+# 시드니 국제선만 그 앞에서 가로챈다. 되돌리려면 아래 sydney_public 분기 두 곳만 주석처리하면 된다.
+SYDNEY_INTL_AIRPORT_CODE = 'SYD'
+SYDNEY_INTL_PICKUP_POINT_NAME = 'Public Pickup'
+
+
+def _sydney_intl_public_pickup(region_id, terminal_type):
+    """region 이 SYD 공항에 연결된 국제선 도착이면 Public Pickup 포인트, 아니면 None."""
+    from regions.models import Terminal, TerminalPickupPoint
+
+    if terminal_type != Terminal.TerminalType.INTL:
+        return None
+    return TerminalPickupPoint.objects.filter(
+        terminal__type=terminal_type,
+        terminal__airport__code=SYDNEY_INTL_AIRPORT_CODE,
+        terminal__airport__regions=region_id,
+        name__iexact=SYDNEY_INTL_PICKUP_POINT_NAME,
+    ).first()
+
+
 # =========================
 # CONTEXT BUILDER
 # =========================
@@ -44,6 +65,10 @@ def _get_default_pickup_maps(region_id, terminal_type):
     update_meeting_point_for_arrivals()가 당일 driver 배정 시 쓰는 것과 동일한
     is_default_point(1순위) → is_default_second(2순위) 어드민 설정을 그대로 따른다."""
     from regions.models import TerminalPickupPoint
+
+    sydney_public = _sydney_intl_public_pickup(region_id, terminal_type)
+    if sydney_public:
+        return list(sydney_public.maps.all())
 
     base_qs = TerminalPickupPoint.objects.filter(
         terminal__type=terminal_type,
@@ -179,6 +204,13 @@ def update_meeting_point_for_arrivals():
         return
 
     _defaults_cache = {}
+    _sydney_public_cache = {}
+
+    def _get_sydney_public(region_id, terminal_type):
+        key = (region_id, terminal_type)
+        if key not in _sydney_public_cache:
+            _sydney_public_cache[key] = _sydney_intl_public_pickup(region_id, terminal_type)
+        return _sydney_public_cache[key]
 
     def _get_defaults(region_id, terminal_type):
         key = (region_id, terminal_type)
@@ -210,6 +242,20 @@ def update_meeting_point_for_arrivals():
 
         terminal_type = DIRECTION_TO_TERMINAL_TYPE.get(normalize_direction(booking.direction))
         if not terminal_type or not booking.region_id:
+            continue
+
+        # 시드니 국제선: 수동 지정 여부·드라이버 순번 무시하고 무조건 Public Pickup.
+        sydney_public = _get_sydney_public(booking.region_id, terminal_type)
+        if sydney_public:
+            if booking.terminal_pickup_point_id != sydney_public.id:
+                booking.terminal_pickup_point = sydney_public
+                to_update.append(booking)
+                logger.info(
+                    "Set terminal_pickup_point=%s for %s - %s (Sydney intl forced)",
+                    sydney_public,
+                    getattr(driver, "driver_name", ""),
+                    booking.name,
+                )
             continue
 
         flag_key = (driver.id, terminal_type)
