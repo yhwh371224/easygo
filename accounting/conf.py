@@ -199,6 +199,10 @@ GST_KEYWORD_RULES = [
     # 'WILLOUGHBY CITY COUNCI'. Substring match still covers the full spelling.
     (('COUNCI',), 'gst'),
     (('VULTR',), 'gst'),
+    # 'CRAZYDOMAINS' = website domain / hosting for the business site, billed
+    # GST-inclusive (confirmed by the owner 2026-10-14), e.g.
+    # 'CRAZYDOMAINS WEBSITE HOST SG Card xx9565'.
+    (('CRAZYDOMAINS', 'CRAZY DOMAINS'), 'gst'),
     # ANTHROPIC (Claude subscription) — used for company systems work and
     # project coding, so a business expense. Billed in AUD with 10% AU GST
     # included; if an ABN is ever registered with Anthropic the charge becomes
@@ -290,6 +294,8 @@ CATEGORY_KEYWORD_RULES = [
     (('COUNCI',), 'parking'),
     # VULTR: all charges are server/hosting costs (VPS provider).
     (('VULTR',), 'hosting'),
+    # Crazy Domains: website domain / hosting — see the matching GST rule above.
+    (('CRAZYDOMAINS', 'CRAZY DOMAINS'), 'hosting'),
     # AI/dev tooling subscriptions — kept separate from 'hosting' (infrastructure)
     # so the recurring software spend is visible on its own P&L line.
     (('ANTHROPIC',), 'software_subscription'),
