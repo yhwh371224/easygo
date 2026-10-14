@@ -133,6 +133,10 @@
 
                     •&nbsp;<strong>Pickup Time:</strong> {{ return_pickup_time }}<br />
 
+                    {% if return_no_of_passenger %}
+                      •&nbsp;<strong>Passengers:</strong> {{ return_no_of_passenger }}<br />
+                    {% endif %}
+
                     {% if return_start_point %}
                       •&nbsp;<strong>From:</strong> {{ return_start_point }}<br />
                       •&nbsp;<strong>To:</strong> {{ return_end_point }}<br />

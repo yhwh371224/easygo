@@ -295,7 +295,7 @@ class InquiryAdmin(admin.ModelAdmin):
         }),
         ('Return Info', {
             'fields': ['return_direction', 'return_pickup_date', 'return_pickup_time',
-                    'return_flight_number', 'return_flight_time',
+                    'return_flight_number', 'return_flight_time', 'return_no_of_passenger',
                     'return_start_point', 'return_end_point']
         }),
         ('Pricing', {
@@ -530,7 +530,7 @@ class PostAdmin(admin.ModelAdmin):
         }),
         ('Return Info', {
             'fields': ['return_direction', 'return_pickup_date', 'return_pickup_time',
-                    'return_flight_number', 'return_flight_time',
+                    'return_flight_number', 'return_flight_time', 'return_no_of_passenger',
                     'return_start_point', 'return_end_point']
         }),
         ('Pricing', {

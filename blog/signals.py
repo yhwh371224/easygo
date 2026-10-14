@@ -178,7 +178,7 @@ def reset_driver_calendar_event_id(sender, instance, **kwargs):
 CALENDAR_EXCLUDED_FIELDS = {
     'company_name', 'booker_name', 'booker_email', 'booker_contact', 'email1',
     'return_direction', 'return_flight_number', 'return_flight_time',
-    'return_pickup_time', 'return_start_point', 'return_end_point',
+    'return_pickup_time', 'return_start_point', 'return_end_point', 'return_no_of_passenger',
     'discount', 'surcharge', 'region', 'is_confirmed',
     'cruise', 'no_email_reminder', 'prepay',
     'calendar_event_id', 'driver_calendar_event_id', 'use_proxy', 'created',

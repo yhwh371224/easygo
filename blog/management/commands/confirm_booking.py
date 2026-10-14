@@ -50,6 +50,7 @@ class Command(TelegramAlertMixin, BaseCommand):
                     'return_pickup_date': post.return_pickup_date,
                     'return_flight_number': post.return_flight_number,
                     'return_flight_time': post.return_flight_time,
+                    'return_no_of_passenger': post.return_no_of_passenger,
                     'return_pickup_time': post.return_pickup_time,
                     'direction': post.direction,
                     'street': post.street,

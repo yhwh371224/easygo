@@ -198,6 +198,7 @@
 													Return Flight number: {{ return_flight_number }}<br>
 													Return Flight time: {{ return_flight_time }}<br>
 													Return Pickup time: {{ return_pickup_time }}<br>
+													{% if return_no_of_passenger %}Return Passengers: {{ return_no_of_passenger }}<br>{% endif %}
 													Return Address: {{ street|format_address:suburb }}<br>
 													{% if same_extra_stop and extra_stop_addresses %}
 														Return Extra Stops:

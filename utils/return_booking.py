@@ -110,7 +110,8 @@ def handle_return_trip(instance):
             'end_point': return_end_val,
             'suburb': suburb_val,
             'street': street_val,
-            'no_of_passenger': instance.no_of_passenger,
+            # 리턴 인원이 따로 적혀 있으면 그 값을, 없으면 편도 인원을 그대로 쓴다.
+            'no_of_passenger': instance.return_no_of_passenger or instance.no_of_passenger,
             'no_of_baggage': instance.no_of_baggage,
             'message': instance.message,
             'return_pickup_time': "x",

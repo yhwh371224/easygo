@@ -113,6 +113,7 @@ def inquiry_details(request):
         return_direction = request.POST.get('return_direction', '')  
         return_flight_number = request.POST.get('return_flight_number', '')
         return_flight_time = request.POST.get('return_flight_time', '')
+        return_no_of_passenger = request.POST.get('return_no_of_passenger', '').strip()
         return_pickup_time = request.POST.get('return_pickup_time')
         return_start_point = request.POST.get('return_start_point', '')
         return_end_point = request.POST.get('return_end_point', '')
@@ -150,6 +151,7 @@ def inquiry_details(request):
             return_direction=return_direction,
             return_pickup_date=return_pickup_date_obj,
             return_flight_number=return_flight_number, return_flight_time=return_flight_time,
+            return_no_of_passenger=return_no_of_passenger or None,
             return_pickup_time=return_pickup_time, return_start_point=return_start_point,
             return_end_point=return_end_point, message=message, region=post_region,
         )
@@ -339,6 +341,7 @@ def inquiry_details1(request):
         return_pickup_date_str = request.POST.get('return_pickup_date', '')
         return_flight_number = request.POST.get('return_flight_number', '')
         return_flight_time = request.POST.get('return_flight_time', '')
+        return_no_of_passenger = request.POST.get('return_no_of_passenger', '').strip()
         return_pickup_time = request.POST.get('return_pickup_time')
         return_start_point = request.POST.get('return_start_point', '')
         return_end_point = request.POST.get('return_end_point', '')
@@ -359,6 +362,7 @@ def inquiry_details1(request):
             same_extra_stop=same_extra_stop,
             return_direction=return_direction, return_pickup_date=return_pickup_date_obj,
             return_flight_number=return_flight_number, return_flight_time=return_flight_time,
+            return_no_of_passenger=return_no_of_passenger or None,
             return_pickup_time=return_pickup_time, return_start_point=return_start_point,
             return_end_point=return_end_point, message=message,
         )

@@ -250,6 +250,7 @@ def confirm_booking_detail(request):
         return_direction=return_direction, private_ride=private_ride,
         return_pickup_date=return_pickup_date_obj, return_flight_number=return_flight_number,
         return_flight_time=return_flight_time, return_pickup_time=return_pickup_time,
+        return_no_of_passenger=getattr(user, 'return_no_of_passenger', None),
         return_start_point=return_start_point, return_end_point=return_end_point,
         message=message, notice=notice, price=final_price, toll=toll_value,
         surcharge=surcharge_value, prepay=prepay, pending=pending,
@@ -398,6 +399,7 @@ def confirm_booking_prepay_detail(request):
         return_direction=return_direction, private_ride=private_ride,
         return_pickup_date=return_pickup_date_obj, return_flight_number=return_flight_number,
         return_flight_time=return_flight_time, return_pickup_time=return_pickup_time,
+        return_no_of_passenger=getattr(user, 'return_no_of_passenger', None),
         return_start_point=return_start_point, return_end_point=return_end_point,
         message=message, notice=notice, price=final_price, toll=toll_value,
         surcharge=surcharge_value, prepay=prepay, pending=pending,
@@ -463,6 +465,7 @@ def return_trip_detail(request):
     return_direction = request.POST.get('return_direction', '')
     return_flight_number = request.POST.get('return_flight_number', '')
     return_flight_time = request.POST.get('return_flight_time', '')
+    return_no_of_passenger = request.POST.get('return_no_of_passenger', '').strip()
     return_pickup_time = request.POST.get('return_pickup_time', '')
     return_start_point = request.POST.get('return_start_point', '')
     return_end_point = request.POST.get('return_end_point', '') 
@@ -518,6 +521,7 @@ def return_trip_detail(request):
                 no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, cash=cash, prepay=prepay, return_direction=return_direction,
                 return_pickup_date=return_pickup_date_obj, return_flight_number=return_flight_number, return_flight_time=return_flight_time,
                 return_pickup_time=return_pickup_time, return_start_point=return_start_point, return_end_point=return_end_point, driver=driver,
+                return_no_of_passenger=return_no_of_passenger or None,
                 price=price, toll=toll, surcharge=surcharge, region=region,
                 extra_stop=extra_stop, same_extra_stop=same_extra_stop, extra_stop_addresses=extra_stop_addresses,
                 special_items=special_items)

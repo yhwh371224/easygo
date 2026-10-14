@@ -106,6 +106,7 @@ def send_post_confirmation_email(instance):
         'return_pickup_date': instance.return_pickup_date,
         'return_flight_number': instance.return_flight_number,
         'return_flight_time': instance.return_flight_time,
+        'return_no_of_passenger': instance.return_no_of_passenger,
         'return_pickup_time': instance.return_pickup_time,
         'return_start_point': instance.return_start_point,
         'return_end_point': instance.return_end_point,

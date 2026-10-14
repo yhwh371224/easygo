@@ -3020,3 +3020,28 @@ class RoundTripInvoiceTotalTests(TestCase):
         ctx = self._context(leg2)
         self.assertEqual(ctx['total_price'], 165.0)
         self.assertEqual(ctx['pickup_date'], leg1.pickup_date)
+
+
+# ---------------------------------------------------------------------------
+# Return leg passenger count
+# ---------------------------------------------------------------------------
+
+class ReturnPassengerCountTests(TestCase):
+
+    def _return_booking(self, **kw):
+        leg1 = Post.objects.create(
+            name='Rae Turner', email='rae@example.com',
+            no_of_passenger='4', price='200', paid='200',
+            pickup_date=datetime.date.today() + timedelta(days=10),
+            return_pickup_date=datetime.date.today() + timedelta(days=17),
+            return_pickup_time='10:00', **kw,
+        )
+        return Post.objects.exclude(pk=leg1.pk).get(email='rae@example.com')
+
+    def test_return_leg_uses_return_passenger_count(self):
+        leg2 = self._return_booking(return_no_of_passenger='2')
+        self.assertEqual(leg2.no_of_passenger, '2')
+
+    def test_return_leg_falls_back_to_outbound_count(self):
+        leg2 = self._return_booking()
+        self.assertEqual(leg2.no_of_passenger, '4')

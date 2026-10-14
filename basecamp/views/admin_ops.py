@@ -69,6 +69,7 @@ def confirmation_detail(request):
         return_direction = request.POST.get('return_direction')
         return_flight_number = request.POST.get('return_flight_number', '')
         return_flight_time = request.POST.get('return_flight_time', '')
+        return_no_of_passenger = request.POST.get('return_no_of_passenger', '').strip()
         return_pickup_time = request.POST.get('return_pickup_time')
         return_start_point = request.POST.get('return_start_point', '')
         return_end_point = request.POST.get('return_end_point', '')
@@ -100,6 +101,7 @@ def confirmation_detail(request):
                  flight_time=flight_time, pickup_time=pickup_time, start_point=start_point, end_point=end_point, direction=direction, suburb=suburb, street=street,
                  no_of_passenger=no_of_passenger, no_of_baggage=baggage_str, message=message, return_direction=return_direction, return_pickup_date=return_pickup_date_obj,
                  return_flight_number=return_flight_number, return_flight_time=return_flight_time, return_pickup_time=return_pickup_time, return_start_point=return_start_point,
+                 return_no_of_passenger=return_no_of_passenger or None,
                  return_end_point=return_end_point, notice=notice, price=price, paid=paid, cash=cash, prepay=prepay, driver=driver,
                  extra_stop=extra_stop, extra_stop_addresses=extra_stop_addresses,
                  same_extra_stop=same_extra_stop, special_items=special_items)
@@ -193,7 +195,7 @@ def sending_email_first_detail(request):
                         'direction': normalize_direction(user.direction), 'street': user.street, 'suburb': user.suburb,
                         'no_of_passenger': user.no_of_passenger, 'no_of_baggage': user.no_of_baggage,
                         'return_direction': normalize_direction(user.return_direction), 'return_pickup_date': user.return_pickup_date,
-                        'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time,
+                        'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 'return_no_of_passenger': user.return_no_of_passenger,
                         'return_pickup_time': user.return_pickup_time, 'message': user.message, 'notice': user.notice,
                         'price': display_price, 'paid': user.paid, 'cash': final_cash, 'prepay': final_prepay,
                         'toll': user.toll, 'start_point': user.start_point, 'end_point': user.end_point,
@@ -309,6 +311,7 @@ def sending_email_second_detail(request):
                 'return_pickup_date': user.return_pickup_date,
                 'return_flight_number': user.return_flight_number,
                 'return_flight_time': user.return_flight_time,
+                'return_no_of_passenger': user.return_no_of_passenger,
                 'return_pickup_time': user.return_pickup_time,
                 'message': user.message,
                 'notice': user.notice,
@@ -378,7 +381,7 @@ def sending_email_input_data_detail(request):
                 'start_point': user.start_point, 'end_point': user.end_point,
                 'return_start_point': user.return_start_point, 'return_end_point': user.return_end_point,
                 'return_direction': normalize_direction(user.return_direction), 'return_pickup_date': user.return_pickup_date,
-                'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 
+                'return_flight_number': user.return_flight_number, 'return_flight_time': user.return_flight_time, 'return_no_of_passenger': user.return_no_of_passenger, 
                 'return_pickup_time': user.return_pickup_time,'message': user.message, 'notice': user.notice, 
             }
 

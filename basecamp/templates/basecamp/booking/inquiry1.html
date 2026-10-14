@@ -281,6 +281,7 @@
 								<input class="form-control date-picker rounded" name="return_pickup_date" id="return_pickup_date" type="text" placeholder="Choose return date" data-datepicker-options='{"altInput": true, "altFormat": "F j, Y", "dateFormat": "Y-m-d", "minDate": "today"}'>
 							</div>
 							{% time_picker "return_pickup_time" "Return Pickup Time" %}
+							{% include "basecamp/layouts/return_passenger_field.html" %}
 							<hr class="my-3">
 							<div class="mb-3">
 								<label class="form-label" for="return_flight_number">Return Flight Number</label>
