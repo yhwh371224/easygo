@@ -397,6 +397,24 @@ def match_posts_for_payer(instance):
     )
 
 
+def match_posts_for_payment(instance):
+    """Bookings an incoming PayPal/Stripe payment is applied to.
+
+    Payer/booker email first; name only when the email has no upcoming booking
+    (booker and payer emails differ). Matching by name alongside a hit email
+    pulls in a stale same-name duplicate booked under another address and
+    reports its price as an outstanding balance. Blank email/name match
+    nothing, rather than every booking with that field empty."""
+    by_email = Q(pk__in=[])
+    if instance.email:
+        by_email = Q(booker_email__iexact=instance.email) | Q(email__iexact=instance.email)
+        email_posts = Post.objects.filter(by_email)
+        if email_posts.filter(pickup_date__gte=timezone.localdate()).exists():
+            return email_posts
+    by_name = Q(name__iexact=instance.name) if instance.name else Q(pk__in=[])
+    return Post.objects.filter(by_email | by_name)
+
+
 def _dispute_target_posts(instance, limit=5):
     """Bookings to flag for a dispute: future pickups first, else the newest.
 

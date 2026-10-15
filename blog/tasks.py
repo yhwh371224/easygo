@@ -129,7 +129,8 @@ def create_event_on_calendar(instance_id):
 def notify_user_payment_paypal(instance_id):
     from .blog_utils import (
         handle_paypal_dispute, handle_paypal_dispute_resolved,
-        process_generic_payment, send_payment_notification_email, send_refund_notification_email,
+        match_posts_for_payment, process_generic_payment, send_payment_notification_email,
+        send_refund_notification_email,
     )
     with transaction.atomic():
         try:
@@ -164,11 +165,7 @@ def notify_user_payment_paypal(instance_id):
 
         calculated_amount = round(raw_amount / float(instance.surcharge_factor), 2)
 
-        posts = Post.objects.filter(
-            Q(booker_email__iexact=instance.email) |
-            Q(email__iexact=instance.email) |
-            Q(name__iexact=instance.name)
-        ).order_by('pickup_date')
+        posts = match_posts_for_payment(instance).order_by('pickup_date')
 
         success, total_balance, recipient_emails, has_future_bookings, all_already_paid, deposit_satisfied = process_generic_payment(
             instance, posts, RECIPIENT_EMAIL, calculated_amount
@@ -207,7 +204,10 @@ def notify_user_payment_paypal(instance_id):
 # Stripe payment
 @shared_task
 def notify_user_payment_stripe(instance_id):
-    from .blog_utils import process_generic_payment, send_payment_notification_email, send_refund_notification_email
+    from .blog_utils import (
+        match_posts_for_payment, process_generic_payment, send_payment_notification_email,
+        send_refund_notification_email,
+    )
     with transaction.atomic():
         try:
             instance = StripePayment.objects.select_for_update().get(id=instance_id)
@@ -229,11 +229,7 @@ def notify_user_payment_stripe(instance_id):
             )
             return
 
-        posts = Post.objects.filter(
-            Q(booker_email__iexact=instance.email) |
-            Q(email__iexact=instance.email) |
-            Q(name__iexact=instance.name)
-        ).order_by('pickup_date')
+        posts = match_posts_for_payment(instance).order_by('pickup_date')
 
         success, total_balance, recipient_emails, has_future_bookings, all_already_paid, deposit_satisfied = process_generic_payment(instance, posts, RECIPIENT_EMAIL)
         first_post = posts.first()

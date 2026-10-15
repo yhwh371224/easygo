@@ -421,6 +421,38 @@ class RegionInquiryViewTests(TestCase):
         response = self.client.post(url, data)
         self.assertEqual(Inquiry.objects.count(), count_before + 1)
 
+    @patch('basecamp.views.bookings.get_ip_info', return_value='')
+    @patch('basecamp.views.bookings.send_telegram_notification', new_callable=AsyncMock)
+    @patch('regions.views.inquiry.send_telegram_notification', new_callable=AsyncMock)
+    def test_return_passenger_count_flows_inquiry_to_post(self, *_):
+        """리턴 인원: 폼 → Inquiry → 확정 Post → 자동 생성되는 리턴 Post."""
+        from blog.models import Inquiry, Post
+        url = reverse('regions:inquiry_details', kwargs={'region_slug': 'iqtest'})
+        response = self.client.post(url, {
+            'name': 'Rina', 'contact': '0411111111', 'email': 'rina@example.com',
+            'pickup_date': FUTURE, 'pickup_time': '08:00',
+            'direction': 'Drop off to Intl Airport', 'suburb': 'CBD',
+            'no_of_passenger': '4',
+            'return_direction': 'Pickup from Intl Airport',
+            'return_pickup_date': FUTURE, 'return_pickup_time': '18:00',
+            'return_no_of_passenger': '2',
+            'cf-turnstile-response': 'XXXX',
+        })
+        self.assertTrue(Inquiry.objects.filter(email='rina@example.com').exists(), response.content[:300])
+        inquiry = Inquiry.objects.get(email='rina@example.com')
+        self.assertEqual(inquiry.return_no_of_passenger, '2')
+
+        # 가격이 있어야 리턴 레그가 분리 생성된다.
+        Inquiry.objects.filter(pk=inquiry.pk).update(price='200')
+        self.client.post(reverse('basecamp:confirm_booking_detail'), {
+            'email': 'rina@example.com', 'index': '1', 'cash': 'on',
+        })
+        outbound = Post.objects.get(email='rina@example.com', direction='Drop off to Intl Airport')
+        self.assertEqual(outbound.no_of_passenger, '4')
+        self.assertEqual(outbound.return_no_of_passenger, '2')
+        return_leg = Post.objects.get(email='rina@example.com', direction='Pickup from Intl Airport')
+        self.assertEqual(return_leg.no_of_passenger, '2')
+
 
 # ---------------------------------------------------------------------------
 # Business logic: parse_date / parse_booking_dates

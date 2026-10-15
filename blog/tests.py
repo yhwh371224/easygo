@@ -576,6 +576,71 @@ class PaypalDisputeHandlingTests(TestCase):
         self.assertEqual(post.paid or '', '')  # not marked paid all over again
 
 
+@patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+@patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+class PaymentPostMatchingTests(TestCase):
+    """A payment goes to the payer's own bookings; same-name bookings under
+    another email are only a fallback when the email has nothing upcoming."""
+
+    def _payment(self, amount='100.00', **kw):
+        defaults = dict(name='Kuniko Scholberg', email='Kuniko3@bigpond.com',
+                        amount=Decimal(amount), txn_id='PAYK1', payment_status='Completed')
+        defaults.update(kw)
+        return PaypalPayment(**defaults)
+
+    def _booking(self, days=40, **kw):
+        defaults = dict(
+            name='Kuniko Scholberg', email='kuniko3@bigpond.com',
+            no_of_passenger='5', price='100',
+            pickup_date=datetime.date.today() + timedelta(days=days),
+        )
+        defaults.update(kw)
+        return Post.objects.create(**defaults)
+
+    def test_same_name_duplicate_under_other_email_is_ignored(self, *mocks):
+        from blog.blog_utils import match_posts_for_payment
+
+        own = self._booking()
+        self._booking(email='akachaka925@gmail.com', price='106')
+        self.assertEqual(list(match_posts_for_payment(self._payment())), [own])
+
+    def test_falls_back_to_name_when_email_has_no_upcoming_booking(self, *mocks):
+        from blog.blog_utils import match_posts_for_payment
+
+        past = self._booking(days=-200)
+        other = self._booking(email='akachaka925@gmail.com', price='106')
+        matched = set(match_posts_for_payment(self._payment()))
+        self.assertEqual(matched, {past, other})
+
+    def test_blank_payer_email_matches_by_name_only(self, *mocks):
+        from blog.blog_utils import match_posts_for_payment
+
+        self._booking(name='Someone Else', email='')
+        named = self._booking(email='akachaka925@gmail.com')
+        self.assertEqual(list(match_posts_for_payment(self._payment(email=''))), [named])
+
+    @patch('blog.tasks.send_post_confirmation_email_task')
+    @patch('blog.blog_utils.send_telegram_sync')
+    @patch('blog.blog_utils.render_email_template', return_value='')
+    @patch('blog.blog_utils.send_html_email')
+    def test_paid_booking_gets_success_email_not_discrepancy(self, mock_mail, mock_render, mock_tg, mock_confirm, *mocks):
+        from blog.tasks import notify_user_payment_paypal
+
+        own = self._booking()
+        dup = self._booking(email='akachaka925@gmail.com', price='106')
+        payment = self._payment()
+        payment.amount = Decimal(str(round(100 * float(payment.surcharge_factor), 2)))
+        payment.save()
+        notify_user_payment_paypal(payment.pk)
+
+        own.refresh_from_db()
+        dup.refresh_from_db()
+        self.assertEqual(float(own.paid), 100.0)
+        self.assertFalse(dup.paid)
+        template = mock_render.call_args[0][0]
+        self.assertEqual(template, 'html_email-payment-success.html')
+
+
 # ---------------------------------------------------------------------------
 # Model: StripePayment
 # ---------------------------------------------------------------------------
