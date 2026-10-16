@@ -83,7 +83,7 @@ def paypal_surcharge_total(start, end):
     """Sum the PayPal card surcharge received between start and end.
 
     notify_user_payment_paypal (blog/tasks.py) applies only
-    amount ÷ pm.surcharge_factor (3%, 2.5% from 2026-10-10) to
+    amount ÷ pm.surcharge_factor (3%, 2.5% from 2026-10-10, 1.95% from 2026-10-18) to
     Post.paid, so the surcharge never reaches the booking-based income. It is
     still taxable revenue, so it is added here from the PayPal IPN rows,
     dated by when the money moved (created).

@@ -11,10 +11,13 @@ GST_REGISTRATION_DATE = date(2026, 7, 1)
 # rate in force when it was made, so a rate change never restates old payments.
 # 3% -> 2.5% from 2026-10-10 (owner, 2026-10-09): PayPal's own fee averaged
 # ~2.39% of the booking amount in FY27 Q1, and a card surcharge should not
-# exceed the cost of acceptance. Append new rates, oldest first.
+# exceed the cost of acceptance. 2.5% -> 1.95% from 2026-10-18 (owner,
+# 2026-10-17); the rate is no longer stated on the terms/payment pages, it is
+# simply added at PayPal checkout. Append new rates, oldest first.
 PAYPAL_SURCHARGE_RATES = [
     (None, Decimal('0.03')),
     (datetime(2026, 10, 10, tzinfo=ZoneInfo('Australia/Sydney')), Decimal('0.025')),
+    (datetime(2026, 10, 18, tzinfo=ZoneInfo('Australia/Sydney')), Decimal('0.0195')),
 ]
 
 
@@ -28,10 +31,6 @@ def paypal_surcharge_rate(at=None):
             rate = r
     return rate
 
-
-def paypal_surcharge_percent(at=None):
-    """Rate for customer-facing text, e.g. '2.5'."""
-    return f"{(paypal_surcharge_rate(at) * 100).normalize():f}"
 
 # Bank CSV import: director/owner wage net transfers — already in PayrollEntry.
 # Substring match (via _contains_any). Skipped to prevent P&L double-count.

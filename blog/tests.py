@@ -2791,7 +2791,7 @@ class BuildPnlExGstTests(TestCase):
 
 
 # ---------------------------------------------------------------------------
-# PayPal surcharge rate: 3% until 2026-10-10, 2.5% after
+# PayPal surcharge rate: 3% until 2026-10-10, 2.5% until 2026-10-18, 1.95% after
 # ---------------------------------------------------------------------------
 
 class PaypalSurchargeRateTests(TestCase):
@@ -2810,6 +2810,13 @@ class PaypalSurchargeRateTests(TestCase):
         from accounting.conf import paypal_surcharge_rate
         self.assertEqual(paypal_surcharge_rate(self.BEFORE), Decimal('0.03'))
         self.assertEqual(paypal_surcharge_rate(self.AFTER), Decimal('0.025'))
+
+    def test_rate_switches_to_1_95_on_2026_10_18(self):
+        from accounting.conf import paypal_surcharge_rate
+        before = datetime.datetime(2026, 10, 17, 12, tzinfo=datetime.timezone.utc)  # 10-17 23:00 Sydney
+        after = datetime.datetime(2026, 10, 17, 14, tzinfo=datetime.timezone.utc)   # 10-18 01:00 Sydney
+        self.assertEqual(paypal_surcharge_rate(before), Decimal('0.025'))
+        self.assertEqual(paypal_surcharge_rate(after), Decimal('0.0195'))
 
     def test_payment_uses_rate_at_its_own_date(self):
         self.assertEqual(self._pm('103', self.BEFORE, txn_id='A').surcharge_factor, Decimal('1.03'))
