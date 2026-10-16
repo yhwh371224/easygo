@@ -1966,6 +1966,30 @@ class SettlementGstTests(TestCase):
         ).count()
         self.assertEqual(count, 1)
 
+    def test_resync_owner_driver_books_no_expense(self):
+        # A settlement for an owner driver (wage-paid) made/edited via admin
+        # must not book a subcontract expense, and keeps old rows excluded.
+        from accounting.models import Transaction
+        from blog.models import DriverSettlement
+        from blog.services.settlement_service import sync_settlement_expense
+        driver = make_driver(user=make_user('owner_drv'), region=self.region)
+        driver.driver_name = 'Sung'
+        driver.save()
+        post = self._make_post(driver, '150')
+        settlement = DriverSettlement.objects.create(
+            driver=driver, from_date=self.from_date, to_date=self.to_date,
+            settlement_number='TEST-SET-OWNER',
+        )
+        DriverSettlementItem.objects.create(
+            settlement=settlement, post=post, amount=Decimal('150'),
+            line_total=Decimal('150'),
+        )
+        sync_settlement_expense(settlement)
+        self.assertFalse(Transaction.objects.filter(
+            category='subcontract', description='TEST-SET-OWNER',
+            excluded=False,
+        ).exists())
+
 
 # ---------------------------------------------------------------------------
 # Agreement: invoice email

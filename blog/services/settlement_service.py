@@ -178,6 +178,16 @@ def sync_settlement_expense(settlement):
     driver = settlement.driver
     description = settlement.settlement_number
 
+    # Owner drivers (Sam / Sung / Peter) are paid a weekly wage, never per
+    # trip — create_settlement() refuses them, but a settlement added or edited
+    # in admin still lands here. Never book a 'subcontract' expense for them;
+    # the old cron-made rows are kept for the record, just held out of P&L/BAS.
+    if (driver.driver_name or '').strip().lower() in OWNER_DRIVER_NAMES:
+        Transaction.objects.filter(
+            category='subcontract', description=description, excluded=False,
+        ).update(excluded=True)
+        return
+
     expense_gross = Decimal('0')
     expense_gst   = Decimal('0')
     for item in settlement.items.select_related('post'):
