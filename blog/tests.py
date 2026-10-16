@@ -1902,16 +1902,41 @@ class SettlementGstTests(TestCase):
 
         settlement = self._settle(driver)
 
+        # driver_price defaults to price − 10, so the payout is 100 and the
+        # GST extracted from it is 100 / 11.
         item = settlement.items.first()
-        self.assertEqual(item.gst_amount, Decimal('10.00'))   # 110 / 11
-        self.assertEqual(settlement.gst_total, Decimal('10.00'))
+        self.assertEqual(item.line_total, Decimal('100.00'))
+        self.assertEqual(item.gst_amount, Decimal('9.09'))
+        self.assertEqual(settlement.gst_total, Decimal('9.09'))
 
         tx = Transaction.objects.get(category='subcontract',
                                      description=settlement.settlement_number)
         self.assertEqual(tx.gst_code, 'gst')
-        self.assertEqual(tx.gst_amount, Decimal('10.00'))
+        self.assertEqual(tx.gst_amount, Decimal('9.09'))
         self.assertEqual(tx.direction, 'expense')
         self.assertEqual(tx.gross_amount, settlement.paid_total)
+
+    def test_flat_commission_override_reduces_payout_and_expense(self):
+        # Pascal / Dillon are sometimes paid driver_price − $10: entering 10 in
+        # commission_amount_override on that booking must flow through to the
+        # settlement line, its GST and the subcontract expense.
+        from accounting.models import Transaction
+        driver = make_driver(user=make_user('flat_drv'), region=self.region)
+        driver.gst_registered = True
+        driver.save()
+        post = self._make_post(driver, '110', cash=False)   # driver_price 100
+        post.commission_amount_override = Decimal('10')
+        post.save()
+
+        settlement = self._settle(driver)
+
+        item = settlement.items.first()
+        self.assertEqual(item.line_total, Decimal('90.00'))
+        self.assertEqual(item.gst_amount, Decimal('8.18'))   # 90 / 11
+        tx = Transaction.objects.get(category='subcontract',
+                                     description=settlement.settlement_number)
+        self.assertEqual(tx.gross_amount, Decimal('90.00'))
+        self.assertEqual(tx.gst_amount, Decimal('8.18'))
 
     def test_unregistered_driver_zero_gst_and_no_gst_transaction(self):
         from accounting.models import Transaction
