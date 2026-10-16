@@ -142,33 +142,39 @@ class DriverSettlementModelTests(TestCase):
     def setUp(self):
         self.admin = User.objects.create_superuser('admin', 'admin@x.com', 'pass')
         self.driver = make_driver()
+        self.today = datetime.date.today()
+
+    def _make(self, number, total, **kwargs):
+        return DriverSettlement.objects.create(
+            driver=self.driver,
+            settlement_number=number,
+            from_date=self.today,
+            to_date=self.today,
+            total_amount=Decimal(total),
+            settled_by=self.admin,
+            **kwargs,
+        )
 
     def test_create_settlement(self):
-        s = DriverSettlement.objects.create(
-            driver=self.driver,
-            amount=Decimal('150.00'),
-            note='Weekly run',
-            settled_by=self.admin,
-        )
-        self.assertEqual(s.amount, Decimal('150.00'))
+        s = self._make('TEST-SET-1', '150.00', note='Weekly run')
+        self.assertEqual(s.total_amount, Decimal('150.00'))
+        self.assertEqual(s.status, 'draft')
 
-    def test_str_contains_driver_and_amount(self):
-        s = DriverSettlement.objects.create(
-            driver=self.driver,
-            amount=Decimal('75.50'),
-            settled_by=self.admin,
-        )
+    def test_str_contains_number_driver_and_amount(self):
+        s = self._make('TEST-SET-2', '75.50')
+        self.assertIn('TEST-SET-2', str(s))
         self.assertIn('Test Driver', str(s))
         self.assertIn('75.50', str(s))
 
     def test_ordering_newest_first(self):
-        s1 = DriverSettlement.objects.create(driver=self.driver, amount=Decimal('10'), settled_by=self.admin)
-        s2 = DriverSettlement.objects.create(driver=self.driver, amount=Decimal('20'), settled_by=self.admin)
+        now = timezone.now()
+        s1 = self._make('TEST-SET-3', '10', settled_at=now - datetime.timedelta(hours=1))
+        s2 = self._make('TEST-SET-4', '20', settled_at=now)
         qs = list(DriverSettlement.objects.filter(driver=self.driver))
-        self.assertEqual(qs[0].pk, s2.pk)
+        self.assertEqual([s.pk for s in qs], [s2.pk, s1.pk])
 
     def test_cascade_delete_with_driver(self):
-        DriverSettlement.objects.create(driver=self.driver, amount=Decimal('50'), settled_by=self.admin)
+        self._make('TEST-SET-5', '50')
         driver_pk = self.driver.pk
         self.driver.delete()
         self.assertFalse(DriverSettlement.objects.filter(driver_id=driver_pk).exists())
