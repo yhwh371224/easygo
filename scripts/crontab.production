@@ -33,6 +33,7 @@
 10 05 * * * /home/horeb/cronwrap.sh /home/horeb/upload_inquiry_report.sh
 0 6 7 * * /home/horeb/cronwrap.sh -l /home/horeb/logs/compact_payment_fees.log /home/horeb/compact_payment_fees.sh
 10 07 * * * /home/horeb/cronwrap.sh /home/horeb/send_liquidity_email.sh
+30 08 * * * /home/horeb/cronwrap.sh -n check_vehicle_expiry -- bash -c 'cd /home/horeb/github/easygo && venv/bin/python manage.py check_vehicle_expiry'
 20 09 * * * /home/horeb/cronwrap.sh /home/horeb/send_final_warning.sh
 26 10 * * * /home/horeb/cronwrap.sh /home/horeb/upgrade_update.sh
 55 10 * * * /home/horeb/cronwrap.sh /home/horeb/check_flight_no.sh
