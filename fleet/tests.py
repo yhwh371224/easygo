@@ -17,8 +17,8 @@ class CheckVehicleExpiryTests(TestCase):
         dates = {field: self.today + timedelta(days=d) for field, d in expiry_offsets.items()}
         return Vehicle.objects.create(make_model='Toyota Hiace', plate_number=plate, **dates)
 
-    def test_alerts_on_milestone_days_and_overdue(self, send):
-        self.make_vehicle('AAA111', rego_expiry_date=30, inspection_date=-2, green_slip_expiry_date=20)
+    def test_alerts_within_30_days_and_overdue(self, send):
+        self.make_vehicle('AAA111', rego_expiry_date=30, inspection_date=-2, green_slip_expiry_date=31)
         call_command('check_vehicle_expiry')
         message = send.call_args[0][0]
         self.assertIn('AAA111 등록(Rego)', message)
@@ -26,8 +26,8 @@ class CheckVehicleExpiryTests(TestCase):
         self.assertIn('2일 지남', message)
         self.assertNotIn('그린슬립', message)
 
-    def test_no_alert_between_milestones(self, send):
-        self.make_vehicle('BBB222', rego_expiry_date=20, green_slip_expiry_date=45)
+    def test_no_alert_beyond_30_days(self, send):
+        self.make_vehicle('BBB222', rego_expiry_date=31, green_slip_expiry_date=45)
         call_command('check_vehicle_expiry')
         send.assert_not_called()
 
@@ -37,10 +37,3 @@ class CheckVehicleExpiryTests(TestCase):
         v.save()
         call_command('check_vehicle_expiry')
         send.assert_not_called()
-
-    def test_all_flag_lists_everything_within_window(self, send):
-        self.make_vehicle('DDD444', rego_expiry_date=20, green_slip_expiry_date=45)
-        call_command('check_vehicle_expiry', '--all')
-        message = send.call_args[0][0]
-        self.assertIn('DDD444 등록(Rego)', message)
-        self.assertNotIn('그린슬립', message)

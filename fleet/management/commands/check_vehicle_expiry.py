@@ -16,20 +16,13 @@ EXPIRY_FIELDS = [
     ('green_slip_expiry_date', '그린슬립(CTP)'),
 ]
 
-# 남은 일수가 이 값들과 정확히 같은 날에만 알린다. 매일 보내면 한 달 내내 같은
-# 알림이 와서 무시하게 된다. 만료일이 지난 뒤에는 갱신할 때까지 매일 보낸다.
-NOTIFY_DAYS = (30, 14, 7, 3, 1, 0)
-
+# 크론은 주 1회(월요일) 돈다. 만료 한 달 전부터 갱신할 때까지 매주 알린다.
 
 class Command(BaseCommand):
     help = 'Telegram alert when fleet rego / inspection / green slip expiry is approaching'
 
     def add_arguments(self, parser):
-        parser.add_argument(
-            '--all', action='store_true',
-            help='알림 일자와 상관없이 --within 일 이내 만료 건을 전부 보낸다 (수동 점검용)',
-        )
-        parser.add_argument('--within', type=int, default=30)
+        parser.add_argument('--within', type=int, default=30, help='만료까지 남은 일수가 이 이하면 알린다')
         parser.add_argument('--dry-run', action='store_true', help='텔레그램 대신 화면에만 출력')
 
     def handle(self, *args, **options):
@@ -42,12 +35,7 @@ class Command(BaseCommand):
                 if not expiry:
                     continue
                 days_left = (expiry - today).days
-
-                if options['all']:
-                    due = days_left <= options['within']
-                else:
-                    due = days_left < 0 or days_left in NOTIFY_DAYS
-                if not due:
+                if days_left > options['within']:
                     continue
 
                 if days_left < 0:
