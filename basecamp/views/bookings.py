@@ -3,6 +3,7 @@ import logging
 from urllib.parse import urlencode
 
 from django.contrib import messages
+from django.core.cache import cache
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_POST
 from decimal import Decimal
@@ -24,7 +25,7 @@ from basecamp.basecamp_utils import (
     is_duplicate_submission, parse_booking_dates, get_client_ip,
 )
 from utils import email
-from utils.telegram import send_telegram_notification, get_ip_info
+from utils.telegram import send_telegram_notification, send_telegram_sync, get_ip_info
 
 logger = logging.getLogger(__name__)
 
@@ -104,6 +105,29 @@ def _confirm_click_details(inquiry, post):
     )
 
 
+HONEYPOT_ALERT_SECONDS = 60 * 60
+
+
+def _honeypot_blocked(request):
+    """허니팟: 사람은 못 보는 칸이라 값이 있으면 봇으로 보고 아무것도 처리하지 않는다.
+    봇이 눈치채지 못하게 평소 완료 화면을 보여준다. 진짜 고객이 막히는 경우
+    (자동완성 등)를 알아챌 수 있게 텔레그램으로 알린다 — 같은 IP 는 한 시간에 한 번만."""
+    ip = get_client_ip(request)
+    email = request.POST.get('email', '')
+    filled = request.POST.get('website', '').strip()[:100]
+    logger.warning(f"[HONEYPOT] {request.path} IP={ip} email={email} website={filled!r}")
+    if cache.add(f'honeypot_alert:{ip}', True, HONEYPOT_ALERT_SECONDS):
+        send_telegram_sync(
+            f"🍯 Honeypot blocked a booking confirmation\n"
+            f"Page: {request.path}\n"
+            f"Email: {email or '-'}\n"
+            f"Hidden field: {filled}\n"
+            f"IP: {ip} ({get_ip_info(ip)})\n"
+            f"If this is a real customer, their booking was NOT processed — contact them."
+        )
+    return render_inquiry_done(request)
+
+
 @ratelimit(key='ip', rate='5/m', method='POST', block=True)
 @require_POST
 def confirm_booking_detail(request):
@@ -113,9 +137,8 @@ def confirm_booking_detail(request):
         f"email={request.POST.get('email')}"
     )
     
-    honeypot = request.POST.get('phone_verify', '')
-    if honeypot != '':
-        return JsonResponse({'success': False, 'error': 'Bot detected.'})
+    if request.POST.get('website', '').strip():
+        return _honeypot_blocked(request)
     email = request.POST.get('email')
     is_confirmed = request.POST.get('is_confirmed') == 'True'
 
@@ -293,9 +316,8 @@ def confirm_booking_prepay_detail(request):
         f"email={request.POST.get('email')}"
     )
 
-    honeypot = request.POST.get('phone_verify', '')
-    if honeypot != '':
-        return JsonResponse({'success': False, 'error': 'Bot detected.'})
+    if request.POST.get('website', '').strip():
+        return _honeypot_blocked(request)
     email = request.POST.get('email')
     is_confirmed = request.POST.get('is_confirmed') == 'True'
 

@@ -578,3 +578,41 @@ class GetDefaultDriverForRegionTests(TestCase):
         )
         driver = get_default_driver_for_region(region3)
         self.assertIsNone(driver)
+
+
+# ---------------------------------------------------------------------------
+# Honeypot on the confirm-booking pages
+# ---------------------------------------------------------------------------
+# Local-memory cache so ratelimit counts and the alert de-dupe start clean
+# without touching the real Redis cache.
+@override_settings(CACHES={'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+                                       'LOCATION': 'honeypot-tests'}})
+class ConfirmBookingHoneypotTests(TestCase):
+
+    def test_pages_render_honeypot(self):
+        for name in ('confirm_booking', 'confirm_booking_prepay'):
+            with self.subTest(page=name):
+                response = self.client.get(reverse(f'basecamp:{name}'))
+                self.assertContains(response, 'name="website"')
+
+    @patch('basecamp.views.bookings.get_ip_info', return_value='Sydney')
+    @patch('basecamp.views.bookings.send_telegram_sync')
+    def test_filled_honeypot_looks_like_success_but_does_nothing(self, telegram, _ip_info):
+        from blog.models import Inquiry, Post
+        Inquiry.objects.create(name='Bot Target', email='target@example.com', price='100',
+                               pickup_date=datetime.date.today() + datetime.timedelta(days=5))
+        for name in ('confirm_booking_detail', 'confirm_booking_prepay_detail'):
+            with self.subTest(view=name):
+                response = self.client.post(reverse(f'basecamp:{name}'), {
+                    'email': 'target@example.com', 'index': '1', 'cash': 'on',
+                    'website': 'http://spam.example',
+                })
+                self.assertEqual(response.status_code, 200)
+                self.assertTemplateUsed(response, 'basecamp/inquiry_done.html')
+        self.assertFalse(Post.objects.filter(email='target@example.com').exists())
+        # Staff hear about it, but only once per IP per hour.
+        telegram.assert_called_once()
+        alert = telegram.call_args.args[0]
+        self.assertIn('target@example.com', alert)
+        self.assertIn('http://spam.example', alert)
+        self.assertIn('/confirm_booking_detail/', alert)

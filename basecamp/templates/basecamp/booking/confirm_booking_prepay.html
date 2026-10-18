@@ -20,7 +20,11 @@
         <div class="card shadow-lg">
           <form method="post" id="booking-form" action="{% url 'basecamp:confirm_booking_prepay_detail' %}" class="card-body needs-validation p-4 m-3">
             {% csrf_token %}
-            {# <input type="text" name="phone_verify" value="" style="display:none !important" tabindex="-1" autocomplete="off"> #}
+            {# Honeypot — checked in confirm_booking_detail / confirm_booking_prepay_detail. Off-screen, not display:none, which some bots skip. #}
+            <div aria-hidden="true" style="position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden;">
+              <label for="id_website">Leave this field empty</label>
+              <input type="text" name="website" id="id_website" value="" tabindex="-1" autocomplete="off">
+            </div>
             <div class="card text-white bg-secondary" style="padding: 2.5rem 3rem;">
 
               <!-- Email Address Field -->
