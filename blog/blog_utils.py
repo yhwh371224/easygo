@@ -415,6 +415,32 @@ def match_posts_for_payment(instance):
     return Post.objects.filter(by_email | by_name)
 
 
+def alert_cancelled_bookings_for_payer(instance, posts, method):
+    """Telegram the payer's upcoming bookings that are still cancelled after a payment.
+
+    A payment reinstates the bookings it is applied to, so anything still
+    cancelled here got none of this money — e.g. a return leg cancelled by
+    mistake in admin while the customer had already paid for it."""
+    cancelled = list(posts.filter(
+        cancelled=True,
+        pickup_date__isnull=False,
+        pickup_date__gte=timezone.localdate(),
+    ).order_by('pickup_date'))
+    if not cancelled:
+        return
+    lines = "\n".join(
+        f"#{p.pk} {p.pickup_date} {p.pickup_time or ''} price ${p.price} paid ${p.paid or 0}"
+        for p in cancelled
+    )
+    send_telegram_sync(
+        f"⚠️ Payment via {method} from a customer with cancelled upcoming booking(s) — check\n\n"
+        f"👤 {instance.name}\n"
+        f"📧 {instance.email}\n"
+        f"💰 ${instance.amount}\n\n"
+        f"{lines}"
+    )
+
+
 def _dispute_target_posts(instance, limit=5):
     """Bookings to flag for a dispute: future pickups first, else the newest.
 

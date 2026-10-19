@@ -647,6 +647,69 @@ class PaymentPostMatchingTests(TestCase):
         self.assertEqual(template, 'html_email-payment-success.html')
 
 
+@patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+@patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+class CancelStateTelegramAlertTests(TestCase):
+    """Cancelling a paid booking, or money landing on a cancelled one, is
+    flagged on Telegram so a mistaken admin edit cannot go unnoticed."""
+
+    def _booking(self, **kw):
+        defaults = dict(
+            name='Rachel Coleman', email='r.j.coleman@xtra.co.nz',
+            no_of_passenger='2', price='95', sent_email=True,
+            pickup_date=datetime.date.today() + timedelta(days=7),
+        )
+        defaults.update(kw)
+        return Post.objects.create(**defaults)
+
+    def _save(self, post, **fields):
+        post = Post.objects.get(pk=post.pk)
+        for k, v in fields.items():
+            setattr(post, k, v)
+        with patch('blog.signals.send_telegram_sync') as tg, \
+                self.captureOnCommitCallbacks(execute=True):
+            post.save()
+        return tg
+
+    def test_cancelling_paid_booking_alerts(self, *mocks):
+        post = self._booking(paid='95')
+        tg = self._save(post, paid='', cancelled=True)
+        tg.assert_called_once()
+        self.assertIn('Paid booking cancelled', tg.call_args[0][0])
+        self.assertIn('$95 → $0', tg.call_args[0][0])
+
+    def test_cancelling_unpaid_booking_does_not_alert(self, *mocks):
+        post = self._booking()
+        tg = self._save(post, cancelled=True)
+        tg.assert_not_called()
+
+    def test_payment_on_cancelled_booking_alerts(self, *mocks):
+        post = self._booking(cancelled=True)
+        tg = self._save(post, paid='95')
+        tg.assert_called_once()
+        self.assertIn('Payment landed on a cancelled booking', tg.call_args[0][0])
+
+    @patch('blog.tasks.send_post_confirmation_email_task')
+    @patch('blog.blog_utils.render_email_template', return_value='')
+    @patch('blog.blog_utils.send_html_email')
+    def test_payment_flags_payers_other_cancelled_booking(self, mock_mail, mock_render, mock_confirm, *mocks):
+        from blog.tasks import notify_user_payment_paypal
+
+        self._booking(price='10')
+        cancelled = self._booking(cancelled=True, pickup_date=datetime.date.today() + timedelta(days=10))
+        Post.objects.filter(pk=cancelled.pk).update(paid='')
+        payment = PaypalPayment(name='Rachel Coleman', email='r.j.coleman@xtra.co.nz',
+                                amount=Decimal('10.00'), txn_id='PAYRC1', payment_status='Completed')
+        payment.amount = Decimal(str(round(10 * float(payment.surcharge_factor), 2)))
+        payment.save()
+        with patch('blog.blog_utils.send_telegram_sync') as tg:
+            notify_user_payment_paypal(payment.pk)
+
+        alerts = [c[0][0] for c in tg.call_args_list if 'cancelled upcoming' in c[0][0]]
+        self.assertEqual(len(alerts), 1)
+        self.assertIn(f'#{cancelled.pk}', alerts[0])
+
+
 # ---------------------------------------------------------------------------
 # Model: StripePayment
 # ---------------------------------------------------------------------------

@@ -19,6 +19,7 @@ from .tasks import (
 from utils.return_booking import handle_return_trip
 from utils.prepay_helper import is_foreign_number
 from .blog_utils import _amount
+from utils.telegram import send_telegram_sync
 
 logger = logging.getLogger('easygo')
 
@@ -89,6 +90,42 @@ def notify_user_post(sender, instance, created, **kwargs):
         Post.objects.filter(pk=instance.pk).update(**update_data)
 
 
+# 결제된 부킹이 취소되거나, 취소된 부킹에 돈이 들어오면 텔레그램으로 알린다.
+# 어드민에서 paid 를 지우고 cancelled 를 체크하는 실수(2026-10-13 Post 8002)가
+# 아무 알림 없이 묻혀 손님이 픽업을 못 받을 뻔한 일이 있었다.
+@receiver(post_save, sender=Post, dispatch_uid="alert_paid_booking_cancel_state_once")
+def alert_paid_booking_cancel_state(sender, instance, created, **kwargs):
+    if created or not hasattr(instance, '_pre_save_cancelled'):
+        return
+    was_cancelled = instance._pre_save_cancelled
+    old_paid = _amount(instance._pre_save_paid) or 0.0
+    new_paid = _amount(instance.paid) or 0.0
+    when = f"{instance.pickup_date} {instance.pickup_time or ''}".rstrip()
+
+    if not was_cancelled and instance.cancelled and max(old_paid, new_paid) > 0:
+        paid_line = f"${old_paid:g}" if old_paid == new_paid else f"${old_paid:g} → ${new_paid:g}"
+        text = (
+            f"⚠️ Paid booking cancelled — check it was intended\n\n"
+            f"#{instance.pk} {instance.name}\n"
+            f"📧 {instance.email}\n"
+            f"🗓️ {when}\n"
+            f"💰 paid {paid_line} / price ${instance.price}"
+        )
+    elif was_cancelled and _payment_landed(instance):
+        text = (
+            f"⚠️ Payment landed on a cancelled booking — now reinstated, please check\n\n"
+            f"#{instance.pk} {instance.name}\n"
+            f"📧 {instance.email}\n"
+            f"🗓️ {when}\n"
+            f"💰 paid ${old_paid:g} → ${new_paid:g} / price ${instance.price}"
+        )
+    else:
+        return
+
+    logger.info('alert_paid_booking_cancel_state: alerting for Post pk=%s', instance.pk)
+    transaction.on_commit(lambda: send_telegram_sync(text))
+
+
 # Send email notification if a Post is cancelled and email hasn't been sent yet
 @receiver(post_save, sender=Post, dispatch_uid="notify_user_post_cancelled_once")
 def notify_user_post_cancelled(sender, instance, created, **kwargs):
@@ -150,6 +187,7 @@ def reset_driver_calendar_event_id(sender, instance, **kwargs):
         instance._pre_save_driver_id = old.driver_id
         instance._pre_save_use_proxy = old.use_proxy
         instance._pre_save_paid = old.paid
+        instance._pre_save_cancelled = old.cancelled
         if old.driver != instance.driver:
             logger.info(
                 'reset_driver_calendar_event_id: driver changed for Post pk=%s old_driver=%s new_driver=%s',

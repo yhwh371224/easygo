@@ -128,7 +128,7 @@ def create_event_on_calendar(instance_id):
 @shared_task
 def notify_user_payment_paypal(instance_id):
     from .blog_utils import (
-        handle_paypal_dispute, handle_paypal_dispute_resolved,
+        alert_cancelled_bookings_for_payer, handle_paypal_dispute, handle_paypal_dispute_resolved,
         match_posts_for_payment, process_generic_payment, send_payment_notification_email,
         send_refund_notification_email,
     )
@@ -197,6 +197,8 @@ def notify_user_payment_paypal(instance_id):
         deposit_satisfied=deposit_satisfied,
     )
 
+    alert_cancelled_bookings_for_payer(instance, posts, "PAYPAL")
+
     if prepay_post and not (prepay_post.company_name or '').strip():
         send_post_confirmation_email_task.delay(prepay_post.pk)
 
@@ -205,8 +207,8 @@ def notify_user_payment_paypal(instance_id):
 @shared_task
 def notify_user_payment_stripe(instance_id):
     from .blog_utils import (
-        match_posts_for_payment, process_generic_payment, send_payment_notification_email,
-        send_refund_notification_email,
+        alert_cancelled_bookings_for_payer, match_posts_for_payment, process_generic_payment,
+        send_payment_notification_email, send_refund_notification_email,
     )
     with transaction.atomic():
         try:
@@ -256,6 +258,8 @@ def notify_user_payment_stripe(instance_id):
         nearest_post=nearest_future_post,
         deposit_satisfied=deposit_satisfied,
     )
+
+    alert_cancelled_bookings_for_payer(instance, posts, "STRIPE")
 
     if prepay_post and not (prepay_post.company_name or '').strip():
         send_post_confirmation_email_task.delay(prepay_post.pk)
