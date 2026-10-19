@@ -316,3 +316,11 @@ CATEGORY_KEYWORD_RULES = [
 NON_TAX_DEDUCTIBLE_CATEGORIES = {
     'non_deductible_fine', 'staff_entertainment', PERSONAL_EXPENSE_CATEGORY,
 }
+
+# Categories written by code paths other than CATEGORY_KEYWORD_RULES (driver
+# settlements, PayPal/Stripe fees) or only ever set by hand in admin. Together
+# with the keyword-rule categories these are listed under the admin category
+# field, so a manual entry reuses an existing P&L line instead of a new spelling.
+EXTRA_CATEGORIES = (
+    'subcontract', 'payment_fee', 'staff_entertainment', PERSONAL_EXPENSE_CATEGORY,
+)

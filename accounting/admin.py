@@ -22,6 +22,28 @@ class TransactionAdmin(admin.ModelAdmin):
     actions = ('approve_as_expense', 'exclude_as_driver_payment',
                'exclude_as_customer_refund', 'exclude_as_personal')
 
+    def get_form(self, request, obj=None, **kwargs):
+        """List the categories already in use under the free-text category
+        field, so a manual entry lands on an existing P&L line."""
+        form = super().get_form(request, obj, **kwargs)
+        known = {cat for _, cat in conf.CATEGORY_KEYWORD_RULES}
+        known.update(conf.EXTRA_CATEGORIES)
+        known.update(Transaction.objects.values_list('category', flat=True).distinct())
+        known.discard('uncategorised')
+        known.discard('')
+        form.base_fields['category'].help_text = (
+            "기존 카테고리 중에서 그대로 입력: " + ", ".join(sorted(known)))
+        return form
+
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        loan = DirectorLoan.sync_director_card_expense(obj)
+        if loan is not None:
+            self.message_user(
+                request,
+                f"개인카드 대납 — director loan contribution ${loan.amount} 기록, "
+                f"잔액 ${DirectorLoan.current_balance()}.")
+
     @admin.action(description="경비 승인 — count as BAS 1B expense")
     def approve_as_expense(self, request, queryset):
         """Clear the review hold so the row counts as a normal 1B expense."""
@@ -66,6 +88,11 @@ class TransactionAdmin(admin.ModelAdmin):
             tx.save(update_fields=['needs_review', 'excluded',
                                    'is_tax_deductible', 'category'])
             updated += 1
+            if tx.source == 'dir_card':
+                # Personal spend on the personal card never touched company
+                # money — drop the contribution, record no repayment.
+                DirectorLoan.sync_director_card_expense(tx)
+                continue
             if DirectorLoan.record_personal_expense(tx) is not None:
                 loans += 1
         self.message_user(

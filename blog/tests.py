@@ -3172,3 +3172,61 @@ class ReturnPassengerCountTests(TestCase):
     def test_return_leg_falls_back_to_outbound_count(self):
         leg2 = self._return_booking()
         self.assertEqual(leg2.no_of_passenger, '4')
+
+
+class DirectorCardExpenseTests(TestCase):
+    """source='dir_card' expenses mirror into DirectorLoan as a contribution."""
+
+    def setUp(self):
+        self.admin = User.objects.create_superuser('boss', 'b@x.com', 'pw')
+        self.client.force_login(self.admin)
+
+    def _add(self, **overrides):
+        data = {
+            'date': '2026-10-19', 'direction': 'expense', 'brand': 'shuttle',
+            'description': 'Shell West Ryde', 'gross_amount': '88.00',
+            'gst_code': 'gst', 'gst_amount': '8.00', 'category': 'fuel',
+            'source': 'dir_card', 'is_tax_deductible': 'on',
+        }
+        data.update(overrides)
+        return self.client.post(reverse('admin:accounting_transaction_add'), data)
+
+    def test_admin_save_records_contribution(self):
+        from accounting.models import DirectorLoan, Transaction
+        self.assertEqual(self._add().status_code, 302)
+        tx = Transaction.objects.get()
+        loan = DirectorLoan.objects.get(source_transaction=tx)
+        self.assertEqual(loan.direction, 'contribution')
+        self.assertEqual(loan.amount, Decimal('88.00'))
+        self.assertEqual(DirectorLoan.current_balance(), Decimal('88.00'))
+
+    def test_resave_updates_and_source_change_removes(self):
+        from accounting.models import DirectorLoan, Transaction
+        self._add()
+        tx = Transaction.objects.get()
+        tx.gross_amount = Decimal('90.00')
+        DirectorLoan.sync_director_card_expense(tx)
+        self.assertEqual(DirectorLoan.objects.get().amount, Decimal('90.00'))
+        tx.source = 'manual'
+        DirectorLoan.sync_director_card_expense(tx)
+        self.assertFalse(DirectorLoan.objects.exists())
+
+    def test_other_sources_create_no_loan(self):
+        from accounting.models import DirectorLoan
+        self._add(source='manual')
+        self.assertFalse(DirectorLoan.objects.exists())
+
+    def test_exclude_as_personal_drops_contribution(self):
+        from accounting.models import DirectorLoan, Transaction
+        self._add()
+        tx = Transaction.objects.get()
+        self.client.post(reverse('admin:accounting_transaction_changelist'), {
+            'action': 'exclude_as_personal', '_selected_action': [tx.pk],
+        })
+        self.assertFalse(DirectorLoan.objects.exists())
+
+    def test_category_help_lists_known_categories(self):
+        resp = self.client.get(reverse('admin:accounting_transaction_add'))
+        self.assertContains(resp, '기존 카테고리')
+        self.assertContains(resp, 'vehicle_maintenance')
+        self.assertContains(resp, 'subcontract')

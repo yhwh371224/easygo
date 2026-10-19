@@ -32,6 +32,10 @@ class Transaction(models.Model):
         ('bank', 'Bank'),
         ('cash', 'Cash'),
         ('manual', 'Manual'),
+        # Business expense paid on the director's personal card (e.g. while the
+        # company card is suspended). Saving one in admin mirrors it into
+        # DirectorLoan as a 'contribution' — the company owes that back.
+        ('dir_card', 'Director personal card'),
     ]
 
     date = models.DateField()

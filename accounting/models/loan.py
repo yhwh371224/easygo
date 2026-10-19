@@ -3,6 +3,8 @@ from decimal import Decimal
 from django.db import models
 from django.db.models import Sum
 
+from .. import conf
+
 
 class DirectorLoan(models.Model):
     """Director's loan / capital contribution tracking.
@@ -61,6 +63,36 @@ class DirectorLoan(models.Model):
                         f"{transaction.description}"[:255],
             source_transaction=transaction,
         )
+
+    @classmethod
+    def sync_director_card_expense(cls, transaction):
+        """Keep the loan entry for a business expense paid on the director's
+        personal card (Transaction.source='dir_card') in step with the row.
+
+        Direction is 'contribution' (Director → Company): the director paid a
+        company cost out of their own pocket, so the company owes it back.
+        Re-saving updates date/amount; switching the row away from 'dir_card',
+        to income, or to personal_drawings removes the entry. A 'repayment'
+        mirror from record_personal_expense() is never touched.
+        """
+        applies = (transaction.source == 'dir_card'
+                   and transaction.direction == 'expense'
+                   and transaction.category != conf.PERSONAL_EXPENSE_CATEGORY)
+        if not applies:
+            cls.objects.filter(source_transaction=transaction,
+                               direction='contribution').delete()
+            return None
+        entry, _ = cls.objects.update_or_create(
+            source_transaction=transaction,
+            defaults={
+                'date': transaction.date,
+                'amount': transaction.gross_amount,
+                'direction': 'contribution',
+                'description': f"Paid on director's personal card — "
+                               f"{transaction.description}"[:255],
+            },
+        )
+        return entry
 
     @classmethod
     def current_balance(cls):
