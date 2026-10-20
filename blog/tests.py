@@ -678,6 +678,11 @@ class CancelStateTelegramAlertTests(TestCase):
         self.assertIn('Paid booking cancelled', tg.call_args[0][0])
         self.assertIn('$95 → $0', tg.call_args[0][0])
 
+    def test_cancelling_refunded_booking_does_not_alert(self, *mocks):
+        post = self._booking(paid='95')
+        tg = self._save(post, cancelled=True, refund=Decimal('95'))
+        tg.assert_not_called()
+
     def test_cancelling_unpaid_booking_does_not_alert(self, *mocks):
         post = self._booking()
         tg = self._save(post, cancelled=True)
@@ -708,6 +713,24 @@ class CancelStateTelegramAlertTests(TestCase):
         alerts = [c[0][0] for c in tg.call_args_list if 'cancelled upcoming' in c[0][0]]
         self.assertEqual(len(alerts), 1)
         self.assertIn(f'#{cancelled.pk}', alerts[0])
+
+    @patch('blog.tasks.send_post_confirmation_email_task')
+    @patch('blog.blog_utils.render_email_template', return_value='')
+    @patch('blog.blog_utils.send_html_email')
+    def test_payment_skips_payers_refunded_cancelled_booking(self, mock_mail, mock_render, mock_confirm, *mocks):
+        from blog.tasks import notify_user_payment_paypal
+
+        self._booking(price='10')
+        refunded = self._booking(cancelled=True, pickup_date=datetime.date.today() + timedelta(days=10))
+        Post.objects.filter(pk=refunded.pk).update(paid='95', refund=Decimal('95'))
+        payment = PaypalPayment(name='Rachel Coleman', email='r.j.coleman@xtra.co.nz',
+                                amount=Decimal('10.00'), txn_id='PAYRC4', payment_status='Completed')
+        payment.amount = Decimal(str(round(10 * float(payment.surcharge_factor), 2)))
+        payment.save()
+        with patch('blog.blog_utils.send_telegram_sync') as tg:
+            notify_user_payment_paypal(payment.pk)
+
+        self.assertFalse([c for c in tg.call_args_list if 'cancelled upcoming' in c[0][0]])
 
     @patch('blog.tasks.send_post_confirmation_email_task')
     @patch('blog.blog_utils.render_email_template', return_value='')

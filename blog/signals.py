@@ -102,7 +102,10 @@ def alert_paid_booking_cancel_state(sender, instance, created, **kwargs):
     new_paid = _amount(instance.paid) or 0.0
     when = f"{instance.pickup_date} {instance.pickup_time or ''}".rstrip()
 
-    if not was_cancelled and instance.cancelled and max(old_paid, new_paid) > 0:
+    # refund 에 금액이 있으면 환불 처리된 정상 취소로 보고 알리지 않는다.
+    refunded = (instance.refund or 0) > 0
+
+    if not was_cancelled and instance.cancelled and max(old_paid, new_paid) > 0 and not refunded:
         paid_line = f"${old_paid:g}" if old_paid == new_paid else f"${old_paid:g} → ${new_paid:g}"
         text = (
             f"⚠️ Paid booking cancelled — check it was intended\n\n"

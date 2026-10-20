@@ -436,12 +436,13 @@ def alert_cancelled_bookings_for_payer(instance, posts, method):
 
     A payment reinstates the bookings it is applied to, so anything still
     cancelled here got none of this money — e.g. a return leg cancelled by
-    mistake in admin while the customer had already paid for it."""
+    mistake in admin while the customer had already paid for it. Bookings with
+    Post.refund set were cancelled and refunded on purpose, so they are skipped."""
     cancelled = list(posts.filter(
         cancelled=True,
         pickup_date__isnull=False,
         pickup_date__gte=timezone.localdate(),
-    ).order_by('pickup_date'))
+    ).exclude(refund__gt=0).order_by('pickup_date'))
     if not cancelled:
         return
     lines = "\n".join(
