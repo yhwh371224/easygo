@@ -290,9 +290,11 @@ class RegionMeetingPointViewTests(TestCase):
         self.assertTemplateUsed(response, 'regions/pages/meeting_point.html')
 
     def test_terminals_in_context(self):
+        # Terminals come from the region's airports (Terminal model), not terminal_info.
         region = make_region(slug='test-mp-terms', name='Terminal City')
-        region.terminal_info = [{'name': 'T1', 'info': 'Gate A'}]
-        region.save()
+        airport = make_airport(code='TMP')
+        region.airports.add(airport)
+        Terminal.objects.create(airport=airport, name='T1', type=Terminal.TerminalType.INTL)
         url = reverse('regions:region_meeting_point', kwargs={'region_slug': 'test-mp-terms'})
         response = self.client.get(url)
         self.assertEqual(len(response.context['terminals']), 1)

@@ -13,7 +13,8 @@ class SurveyBannerTests(TestCase):
         for slug, name in [('sydney', 'Sydney'), ('brisbane', 'Brisbane'),
                            ('melbourne', 'Melbourne'), ('gold-coast', 'Gold Coast'),
                            ('perth', 'Perth')]:
-            Region.objects.create(slug=slug, name=name, is_active=True)
+            # sydney/melbourne are seeded by regions migrations, so reuse those rows.
+            Region.objects.update_or_create(slug=slug, defaults=dict(name=name, is_active=True))
 
     def _assert_banner(self, url):
         r = self.client.get(url)
