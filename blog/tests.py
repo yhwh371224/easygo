@@ -41,12 +41,12 @@ from regions.models import Region
 # ---------------------------------------------------------------------------
 
 def make_region(slug='test-region', name='Test Region'):
-    return Region.objects.create(
+    # sydney/melbourne are seeded by regions migrations, so reuse those rows.
+    region, _ = Region.objects.get_or_create(
         slug=slug,
-        name=name,
-        timezone='Australia/Sydney',
-        phone='0200000000',
+        defaults=dict(name=name, timezone='Australia/Sydney', phone='0200000000'),
     )
+    return region
 
 
 def make_user(username='testdriver', password='Pass1234!'):
