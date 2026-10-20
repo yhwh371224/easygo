@@ -230,6 +230,22 @@ def process_generic_payment(payment_instance, posts, admin_email, calculated_amo
     instance.processed_at = timezone.now()
     instance.save()
 
+    # 잔액을 다 채우고도 남은 돈은 어느 부킹에도 기록되지 않으므로 알린다.
+    # (완납 상태에서 또 낸 경우·미래 부킹이 없는 경우는 send_payment_notification_email 이 따로 알린다)
+    # 1달러 미만은 PayPal 수수료 역산 반올림 오차로 보고 무시.
+    overpaid = round(remaining_amount, 2)
+    if has_future_bookings and not all_already_paid and overpaid >= 1:
+        applied = ", ".join(
+            f"#{p.pk} {p.pickup_date} +${clean_float(p._applied)}" for p in posts_list if p._applied
+        )
+        send_telegram_sync(
+            f"⚠️ Overpaid via {method_label} — ${clean_float(overpaid)} not applied to any booking\n\n"
+            f"👤 {instance.name}\n"
+            f"📧 {instance.email}\n"
+            f"💰 paid ${clean_float(paid_total)}\n"
+            f"Applied: {applied or 'none'}"
+        )
+
     # 남은 잔액(total_balance > 0)이 전부 "디파짓 인보이스로 이미 예고된 미납분"으로
     # 설명되면 미납 안내 메일을 보낼 필요가 없음. 디파짓 문턱(deposit_amount_due)을
     # 아직 못 채운 post가 하나라도 있으면 진짜 부족 결제이므로 그대로 경고 메일 발송.

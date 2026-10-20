@@ -709,6 +709,42 @@ class CancelStateTelegramAlertTests(TestCase):
         self.assertEqual(len(alerts), 1)
         self.assertIn(f'#{cancelled.pk}', alerts[0])
 
+    @patch('blog.tasks.send_post_confirmation_email_task')
+    @patch('blog.blog_utils.render_email_template', return_value='')
+    @patch('blog.blog_utils.send_html_email')
+    def test_overpayment_alerts_unapplied_amount(self, mock_mail, mock_render, mock_confirm, *mocks):
+        from blog.tasks import notify_user_payment_paypal
+
+        post = self._booking()
+        payment = PaypalPayment(name='Rachel Coleman', email='r.j.coleman@xtra.co.nz',
+                                amount=Decimal('0'), txn_id='PAYRC2', payment_status='Completed')
+        payment.amount = Decimal(str(round(120 * float(payment.surcharge_factor), 2)))
+        payment.save()
+        with patch('blog.blog_utils.send_telegram_sync') as tg:
+            notify_user_payment_paypal(payment.pk)
+
+        post.refresh_from_db()
+        self.assertEqual(float(post.paid), 95.0)
+        alerts = [c[0][0] for c in tg.call_args_list if 'Overpaid' in c[0][0]]
+        self.assertEqual(len(alerts), 1)
+        self.assertIn('$25 not applied', alerts[0])
+
+    @patch('blog.tasks.send_post_confirmation_email_task')
+    @patch('blog.blog_utils.render_email_template', return_value='')
+    @patch('blog.blog_utils.send_html_email')
+    def test_exact_payment_does_not_alert_overpaid(self, mock_mail, mock_render, mock_confirm, *mocks):
+        from blog.tasks import notify_user_payment_paypal
+
+        self._booking()
+        payment = PaypalPayment(name='Rachel Coleman', email='r.j.coleman@xtra.co.nz',
+                                amount=Decimal('0'), txn_id='PAYRC3', payment_status='Completed')
+        payment.amount = Decimal(str(round(95 * float(payment.surcharge_factor), 2)))
+        payment.save()
+        with patch('blog.blog_utils.send_telegram_sync') as tg:
+            notify_user_payment_paypal(payment.pk)
+
+        self.assertFalse([c for c in tg.call_args_list if 'Overpaid' in c[0][0]])
+
 
 # ---------------------------------------------------------------------------
 # Model: StripePayment
