@@ -92,6 +92,17 @@ class PaypalPayment(models.Model):
                 at = parent.created
         return 1 + paypal_surcharge_rate(at)
 
+    @property
+    def refund_includes_surcharge(self):
+        """Whether this refund gave back the surcharge along with the booking amount.
+
+        Refunds from PAYPAL_REFUND_BASE_ONLY_FROM return the booking amount only,
+        so the whole refund is base (Post.refund = amount) and the surcharge stays
+        income. Earlier refunds are split base/surcharge at the original rate."""
+        from django.utils import timezone
+        from accounting.conf import PAYPAL_REFUND_BASE_ONLY_FROM
+        return (self.created or timezone.now()) < PAYPAL_REFUND_BASE_ONLY_FROM
+
 
 class StripePayment(models.Model):
     name = models.CharField(max_length=100, blank=True, null=True)

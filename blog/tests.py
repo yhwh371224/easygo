@@ -2950,6 +2950,20 @@ class PaypalSurchargeRateTests(TestCase):
                           payment_status='Refunded', parent_txn_id='PAY1')
         self.assertEqual(refund.surcharge_factor, Decimal('1.03'))
 
+    def test_surcharge_kept_on_base_only_refund(self):
+        """From 2026-10-10 a refund returns the booking amount only, so the
+        payment's surcharge stays income; earlier refunds net their own share."""
+        from accounting.reports import paypal_surcharge_total
+        self._pm('112.75', self.AFTER, txn_id='PAY2')
+        self._pm('-110', self.AFTER, txn_id='RF2', payment_status='Refunded', parent_txn_id='PAY2')
+        total = paypal_surcharge_total(datetime.date(2026, 10, 1), datetime.date(2026, 10, 31))
+        self.assertEqual(total, Decimal('2.75'))
+
+        self._pm('103', self.BEFORE, txn_id='PAY3')
+        self._pm('-103', self.BEFORE, txn_id='RF3', payment_status='Refunded', parent_txn_id='PAY3')
+        total = paypal_surcharge_total(datetime.date(2026, 10, 1), datetime.date(2026, 10, 31))
+        self.assertEqual(total, Decimal('2.75'))
+
     def test_surcharge_total_mixes_rates(self):
         from accounting.reports import paypal_surcharge_total
         self._pm('103', self.BEFORE, txn_id='A')
@@ -3027,6 +3041,21 @@ class AutoFillPostRefundTests(TestCase):
         self.assertTrue(leg2.cancelled and leg2.no_review and leg2.sent_email)
         self.assertFalse(leg1.cancelled)
         self.assertTrue(leg1.no_review and leg1.sent_email)
+
+    def test_base_only_refund_is_stored_as_is(self):
+        """A refund from 2026-10-10 returns the booking amount only — no ÷ surcharge."""
+        from blog.tasks import _auto_fill_post_refund
+
+        post = self._booking(10)
+        pm = self._refund('-100')
+        PaypalPayment.objects.filter(pk=pm.pk).update(
+            created=datetime.datetime(2026, 10, 13, 12, tzinfo=datetime.timezone.utc))
+        pm.refresh_from_db()
+        _auto_fill_post_refund(pm)
+        post.refresh_from_db()
+
+        self.assertEqual(post.refund, Decimal('100.00'))
+        self.assertTrue(post.cancelled)
 
     def test_two_unrelated_bookings_are_left_alone(self):
         from blog.tasks import _auto_fill_post_refund

@@ -88,10 +88,11 @@ def paypal_surcharge_total(start, end):
     still taxable revenue, so it is added here from the PayPal IPN rows,
     dated by when the money moved (created).
 
-    Refunds (negative amount) subtract their own surcharge portion, so a
-    cancelled + refunded booking leaves no surcharge behind. The base portion
-    of a refund is netted on the booking side via Post.refund, which
-    _auto_fill_post_refund stores ex-surcharge for PayPal.
+    Refunds from PAYPAL_REFUND_BASE_ONLY_FROM give back the booking amount
+    only, so the surcharge stays income and the whole refund is netted on the
+    booking side via Post.refund. Earlier refunds (negative amount) included
+    the surcharge and subtract their own surcharge portion; their base portion
+    is in Post.refund, which _auto_fill_post_refund stored ex-surcharge.
 
     Disputes (Reversed — the customer pulled the money back) also take the
     original payment's surcharge off, and a Canceled_Reversal puts it back.
@@ -112,6 +113,8 @@ def paypal_surcharge_total(start, end):
         created__date__gte=start, created__date__lte=end,
     ).exclude(amount__isnull=True).exclude(amount=0):
         kind = pm.kind
+        if kind == PaypalPayment.KIND_REFUND and not pm.refund_includes_surcharge:
+            continue
         if kind in (PaypalPayment.KIND_PAYMENT, PaypalPayment.KIND_REFUND):
             total += surcharge_of(pm.amount, pm)   # negative for a refund
             continue
@@ -261,9 +264,10 @@ def _near(a, b):
 
 
 def _refund_base(pm, amt):
-    """Refund amount on the same basis as Post.paid: PayPal ex surcharge."""
+    """Refund amount on the same basis as Post.paid: PayPal ex surcharge
+    (only for older refunds that included the surcharge)."""
     from blog.models import PaypalPayment
-    if isinstance(pm, PaypalPayment):
+    if isinstance(pm, PaypalPayment) and pm.refund_includes_surcharge:
         return (amt / pm.surcharge_factor).quantize(_CENT, rounding=ROUND_HALF_UP)
     return amt
 

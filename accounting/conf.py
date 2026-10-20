@@ -21,6 +21,14 @@ PAYPAL_SURCHARGE_RATES = [
 ]
 
 
+# From this date PayPal refunds give back the booking amount only — the
+# surcharge is kept (owner, 2026-10-20). Refunds before it were mostly full
+# PayPal refunds including the surcharge (e.g. 2026-10-07 Josh Gunn $226.60 =
+# $220 x 1.03) and stay split base/surcharge at the original rate; the first
+# base-only one was 2026-10-13 (Jordan Schembri $110 on a $110 booking).
+PAYPAL_REFUND_BASE_ONLY_FROM = datetime(2026, 10, 10, tzinfo=ZoneInfo('Australia/Sydney'))
+
+
 def paypal_surcharge_rate(at=None):
     """PayPal surcharge rate in force at `at` (aware datetime, default now)."""
     from django.utils import timezone

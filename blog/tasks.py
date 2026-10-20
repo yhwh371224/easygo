@@ -66,11 +66,12 @@ def _auto_fill_post_refund(instance):
         return [], match_count
 
     refund = abs(instance.amount)
-    if isinstance(instance, PaypalPayment):
+    if isinstance(instance, PaypalPayment) and instance.refund_includes_surcharge:
         # Post.paid holds PayPal payments ex surcharge (amount / factor, at the
-        # original payment's rate), so store the refund on the same basis.
-        # The surcharge portion of the refund is netted in
-        # accounting.reports.paypal_surcharge_total.
+        # original payment's rate), so an older refund that included the
+        # surcharge is stored on the same basis; its surcharge portion is netted
+        # in accounting.reports.paypal_surcharge_total. Newer refunds return the
+        # booking amount only and are stored as is.
         refund = (refund / instance.surcharge_factor).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
 
     filled = []
