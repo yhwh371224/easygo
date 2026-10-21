@@ -74,6 +74,11 @@ SUPER_SKIP_MARKERS = ['PAYCLEAR', 'SUPERCHOICE']
 # 75556 ...' (75556 = the ATO's BPAY biller code). 'ATO' itself is matched as a
 # whole word (ATO_PAYMENT_PATTERN) so names like 'PLATO' or 'CURATOR' don't hit.
 ATO_PAYMENT_MARKERS = ['TAX OFFICE', 'BPAY 75556']
+# Company (Nexflow Ventures Pty Ltd) ATO BPAY details, for paying activity
+# statements from the company account: biller code 75556, reference = PRN.
+# Not the owner's personal PRN, which belongs to a separate ATO account.
+ATO_BPAY_BILLER_CODE = '75556'
+ATO_PRN = '002256973585357860'
 ATO_PAYMENT_PATTERN = r'\bATO\b'
 
 # Bank CSV import: driver/subcontractor payouts — already recorded as the
