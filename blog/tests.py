@@ -1514,7 +1514,7 @@ class DriverLoginViewTests(TestCase):
     def test_redirect_if_already_authenticated(self):
         self.client.force_login(self.user)
         response = self.client.get(self.url, secure=True)
-        self.assertRedirects(response, reverse('blog:driver_dashboard'))
+        self.assertRedirects(response, reverse('blog:driver_dashboard'), fetch_redirect_response=False)
 
     def test_login_with_invalid_credentials(self):
         response = self.client.post(self.url, {
@@ -1529,7 +1529,7 @@ class DriverLoginViewTests(TestCase):
             'username': 'drv1',
             'password': 'TestPass1!',
         }, secure=True)
-        self.assertRedirects(response, reverse('blog:driver_dashboard'))
+        self.assertRedirects(response, reverse('blog:driver_dashboard'), fetch_redirect_response=False)
 
     def test_login_must_change_password_redirects(self):
         self.driver.must_change_password = True
@@ -1538,7 +1538,7 @@ class DriverLoginViewTests(TestCase):
             'username': 'drv1',
             'password': 'TestPass1!',
         }, secure=True)
-        self.assertRedirects(response, reverse('blog:driver_change_password'))
+        self.assertRedirects(response, reverse('blog:driver_change_password'), fetch_redirect_response=False)
 
     def test_login_user_without_driver_shows_error(self):
         no_driver_user = make_user(username='nodrvr', password='Pass9999!')
@@ -1565,7 +1565,7 @@ class DriverLogoutViewTests(TestCase):
     def test_logout_redirects_to_login(self):
         url = reverse('blog:driver_logout')
         response = self.client.post(url, secure=True)
-        self.assertRedirects(response, reverse('blog:driver_login'))
+        self.assertRedirects(response, reverse('blog:driver_login'), fetch_redirect_response=False)
 
     def test_logout_get_not_allowed(self):
         url = reverse('blog:driver_logout')
@@ -1585,13 +1585,13 @@ class DriverDashboardViewTests(TestCase):
 
     def test_redirects_unauthenticated(self):
         response = self.client.get(self.url, secure=True)
-        self.assertRedirects(response, '/driver/login/?next=/driver/')
+        self.assertRedirects(response, '/driver/login/?next=/driver/', fetch_redirect_response=False)
 
     def test_redirects_user_without_driver(self):
         user = make_user(username='nodrv', password='pass1234!')
         self.client.force_login(user)
         response = self.client.get(self.url, secure=True)
-        self.assertRedirects(response, reverse('blog:driver_login'))
+        self.assertRedirects(response, reverse('blog:driver_login'), fetch_redirect_response=False)
 
     @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
     @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
@@ -1869,7 +1869,7 @@ class DriverChangePasswordViewTests(TestCase):
 
     def test_get_requires_login(self):
         response = self.client.get(self.url, secure=True)
-        self.assertRedirects(response, '/driver/login/?next=/driver/change-password/')
+        self.assertRedirects(response, '/driver/login/?next=/driver/change-password/', fetch_redirect_response=False)
 
     def test_get_renders_form(self):
         user = make_user(username='cp1', password='OldPass1!')
@@ -1896,7 +1896,7 @@ class DriverChangePasswordViewTests(TestCase):
             'new_password': 'NewValidP@ss1!',
             'confirm_password': 'NewValidP@ss1!',
         }, secure=True)
-        self.assertRedirects(response, reverse('blog:driver_dashboard'))
+        self.assertRedirects(response, reverse('blog:driver_dashboard'), fetch_redirect_response=False)
         driver.refresh_from_db()
         self.assertFalse(driver.must_change_password)
 
@@ -1924,7 +1924,7 @@ class DriverImpersonateViewTests(TestCase):
         self.client.force_login(self.staff)
         url = reverse('blog:driver_impersonate', args=[self.driver.pk])
         response = self.client.get(url, secure=True)
-        self.assertRedirects(response, reverse('blog:driver_dashboard'))
+        self.assertRedirects(response, reverse('blog:driver_dashboard'), fetch_redirect_response=False)
         self.assertIn('impersonator_id', self.client.session)
 
 
