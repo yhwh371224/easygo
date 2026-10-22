@@ -6,3 +6,4 @@ from .email_conf import *
 from .celery_conf import *
 from .logging_conf import *
 from .services import *
+from .testing import *
