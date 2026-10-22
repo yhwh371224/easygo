@@ -2168,7 +2168,11 @@ class AgreementConsentTests(TestCase):
             'item_luggage_confirmed': 'on',
         }
         data.update(extra)
-        return self.client.post(reverse('blog:driver_agreement'), data)
+        return self.client.post(
+            reverse('blog:driver_agreement'),
+            data,
+            secure=True,
+        )
 
     def test_signing_records_invoice_email(self):
         self._sign()
@@ -2194,7 +2198,10 @@ class AgreementConsentTests(TestCase):
         self.driver.gst_registered = True
         self.driver.save(update_fields=['gst_registered'])
         self.assertIsNotNone(self._confirmed_agreement(self.driver))
-        response = self.client.get(reverse('blog:driver_agreement'))
+        response = self.client.get(
+            reverse('blog:driver_agreement'),
+            secure=True,
+        )
         self.assertTemplateUsed(response, 'basecamp/driver/agreement_done.html')
 
 
