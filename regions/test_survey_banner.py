@@ -17,7 +17,7 @@ class SurveyBannerTests(TestCase):
             Region.objects.update_or_create(slug=slug, defaults=dict(name=name, is_active=True))
 
     def _assert_banner(self, url):
-        r = self.client.get(url)
+        r = self.client.get(url, secure=True)
         self.assertEqual(r.status_code, 200, url)
         self.assertContains(r, 'survey-banner', msg_prefix=url)
         self.assertContains(r, 'href="/search-survey/"', msg_prefix=url)

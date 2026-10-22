@@ -923,7 +923,7 @@ class ProxyNumberTestCase(TestCase):
     def dashboard_number(self):
         client = Client()
         client.force_login(self.driver.user)
-        response = client.get(reverse('blog:driver_dashboard'))
+        response = client.get(reverse('blog:driver_dashboard'), secure=True)
         trips = response.context['trips']
         return trips[0]['proxy_number'] if trips else None
 
@@ -948,6 +948,7 @@ class ProxyNumberTestCase(TestCase):
                     'id': 'call-1', 'from': from_number, 'status': 'starting',
                 }}),
                 content_type='application/json',
+                secure=True,
             )
         return captured.get('url'), captured.get('payload', {})
 
@@ -968,6 +969,7 @@ class ProxyNumberTestCase(TestCase):
                     'body': {'text': {'text': 'hi'}},
                 }}),
                 content_type='application/json',
+                secure=True,
             )
         return captured
 
@@ -1062,7 +1064,7 @@ class SameCustomerConcurrentBookingsTests(ProxyNumberTestCase):
 
         client = Client()
         client.force_login(driver2.user)
-        response = client.get(reverse('blog:driver_dashboard'))
+        response = client.get(reverse('blog:driver_dashboard'), secure=True)
         trips = response.context['trips']
         self.assertIsNotNone(trips[0]['proxy_number'])
         self.assertNotEqual(trips[0]['proxy_number'], self.CUSTOMER)
@@ -1181,7 +1183,7 @@ class DirectContactDriverTests(ProxyNumberTestCase):
 
         client = Client()
         client.force_login(self.driver.user)
-        response = client.get(reverse('blog:driver_dashboard'))
+        response = client.get(reverse('blog:driver_dashboard'), secure=True)
         self.assertContains(response, f'href="tel:{self.CUSTOMER}"')
 
     def test_new_assignment_opens_no_session(self):
@@ -1225,7 +1227,7 @@ class ProxyWindowTests(ProxyNumberTestCase):
 
         client = Client()
         client.force_login(self.driver.user)
-        response = client.get(reverse('blog:driver_dashboard'))
+        response = client.get(reverse('blog:driver_dashboard'), secure=True)
 
         self.assertContains(response, 'Bondi')
         self.assertNotContains(response, '12 Smith St')
@@ -1249,7 +1251,7 @@ class ProxyWindowTests(ProxyNumberTestCase):
 
         client = Client()
         client.force_login(self.driver.user)
-        response = client.get(reverse('blog:driver_dashboard'))
+        response = client.get(reverse('blog:driver_dashboard'), secure=True)
 
         self.assertContains(response, '12 Smith St')
         self.assertContains(response, '99 Extra Rd')
@@ -1270,7 +1272,7 @@ class ProxyWindowTests(ProxyNumberTestCase):
 
         client = Client()
         client.force_login(self.driver.user)
-        response = client.get(reverse('blog:driver_dashboard'))
+        response = client.get(reverse('blog:driver_dashboard'), secure=True)
 
         self.assertContains(response, 'There is an additional stop, Parramatta on the way')
         self.assertNotContains(response, '99 Extra Rd')
@@ -1286,7 +1288,7 @@ class ProxyWindowTests(ProxyNumberTestCase):
 
         client = Client()
         client.force_login(self.driver.user)
-        response = client.get(reverse('blog:driver_dashboard'))
+        response = client.get(reverse('blog:driver_dashboard'), secure=True)
 
         self.assertContains(response, '$150')
         self.assertNotContains(response, '<span class="badge-paid">Paid</span>')
@@ -1302,7 +1304,7 @@ class ProxyWindowTests(ProxyNumberTestCase):
 
         client = Client()
         client.force_login(self.driver.user)
-        response = client.get(reverse('blog:driver_dashboard'))
+        response = client.get(reverse('blog:driver_dashboard'), secure=True)
 
         self.assertContains(response, '<span class="badge-cash">Cash</span>')
 
@@ -1314,7 +1316,7 @@ class ProxyWindowTests(ProxyNumberTestCase):
 
         client = Client()
         client.force_login(self.driver.user)
-        response = client.get(reverse('blog:driver_dashboard'))
+        response = client.get(reverse('blog:driver_dashboard'), secure=True)
 
         self.assertContains(response, '12 Smith St')
         self.assertNotContains(response, 'full booking details will only be visible')
@@ -1444,6 +1446,7 @@ class WebhookSignatureTests(TestCase):
             response = Client().post(
                 self.PATH, data=self._body(),
                 content_type='application/json', headers=headers,
+                secure=True,
             )
         self.bird_called = bird.called
         return response
@@ -1504,20 +1507,20 @@ class DriverLoginViewTests(TestCase):
         self.driver = make_driver(user=self.user)
 
     def test_get_login_page(self):
-        response = self.client.get(self.url)
+        response = self.client.get(self.url, secure=True)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'basecamp/driver/login.html')
 
     def test_redirect_if_already_authenticated(self):
         self.client.force_login(self.user)
-        response = self.client.get(self.url)
+        response = self.client.get(self.url, secure=True)
         self.assertRedirects(response, reverse('blog:driver_dashboard'))
 
     def test_login_with_invalid_credentials(self):
         response = self.client.post(self.url, {
             'username': 'drv1',
             'password': 'wrong',
-        })
+        }, secure=True)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Incorrect username or password')
 
@@ -1525,7 +1528,7 @@ class DriverLoginViewTests(TestCase):
         response = self.client.post(self.url, {
             'username': 'drv1',
             'password': 'TestPass1!',
-        })
+        }, secure=True)
         self.assertRedirects(response, reverse('blog:driver_dashboard'))
 
     def test_login_must_change_password_redirects(self):
@@ -1534,7 +1537,7 @@ class DriverLoginViewTests(TestCase):
         response = self.client.post(self.url, {
             'username': 'drv1',
             'password': 'TestPass1!',
-        })
+        }, secure=True)
         self.assertRedirects(response, reverse('blog:driver_change_password'))
 
     def test_login_user_without_driver_shows_error(self):
@@ -1542,7 +1545,7 @@ class DriverLoginViewTests(TestCase):
         response = self.client.post(self.url, {
             'username': 'nodrvr',
             'password': 'Pass9999!',
-        })
+        }, secure=True)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'No driver account')
 
@@ -1561,12 +1564,12 @@ class DriverLogoutViewTests(TestCase):
 
     def test_logout_redirects_to_login(self):
         url = reverse('blog:driver_logout')
-        response = self.client.post(url)
+        response = self.client.post(url, secure=True)
         self.assertRedirects(response, reverse('blog:driver_login'))
 
     def test_logout_get_not_allowed(self):
         url = reverse('blog:driver_logout')
-        response = self.client.get(url)
+        response = self.client.get(url, secure=True)
         self.assertEqual(response.status_code, 405)
 
 
@@ -1581,13 +1584,13 @@ class DriverDashboardViewTests(TestCase):
         self.url = reverse('blog:driver_dashboard')
 
     def test_redirects_unauthenticated(self):
-        response = self.client.get(self.url)
+        response = self.client.get(self.url, secure=True)
         self.assertRedirects(response, '/driver/login/?next=/driver/')
 
     def test_redirects_user_without_driver(self):
         user = make_user(username='nodrv', password='pass1234!')
         self.client.force_login(user)
-        response = self.client.get(self.url)
+        response = self.client.get(self.url, secure=True)
         self.assertRedirects(response, reverse('blog:driver_login'))
 
     @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
@@ -1596,7 +1599,7 @@ class DriverDashboardViewTests(TestCase):
         user = make_user(username='drv2', password='TestPass1!')
         driver = make_driver(user=user)
         self.client.force_login(user)
-        response = self.client.get(self.url)
+        response = self.client.get(self.url, secure=True)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'basecamp/driver/dashboard.html')
 
@@ -1606,7 +1609,7 @@ class DriverDashboardViewTests(TestCase):
         user = make_user(username='drv3', password='TestPass1!')
         driver = make_driver(user=user)
         self.client.force_login(user)
-        response = self.client.get(self.url)
+        response = self.client.get(self.url, secure=True)
         self.assertEqual(response.context['driver'], driver)
 
     @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
@@ -1615,7 +1618,7 @@ class DriverDashboardViewTests(TestCase):
         user = make_user(username='drv4', password='TestPass1!')
         make_driver(user=user)
         self.client.force_login(user)
-        response = self.client.get(self.url)
+        response = self.client.get(self.url, secure=True)
         self.assertEqual(response.context['current_grand_total'], Decimal('0'))
 
     def _past_post(self, driver, days_ago, price='190'):
@@ -1637,7 +1640,7 @@ class DriverDashboardViewTests(TestCase):
         for i in range(LUGGAGE_DUTY_TRIP_THRESHOLD - 1):
             self._past_post(driver, days_ago=i + 1)
         self.client.force_login(user)
-        response = self.client.get(self.url)
+        response = self.client.get(self.url, secure=True)
         self.assertTrue(response.context['show_luggage_duty'])
         # Panel is commented out in the template for now.
         self.assertNotContains(response, 'Every trip — no exceptions')
@@ -1651,7 +1654,7 @@ class DriverDashboardViewTests(TestCase):
         for i in range(LUGGAGE_DUTY_TRIP_THRESHOLD):
             self._past_post(driver, days_ago=i + 1)
         self.client.force_login(user)
-        response = self.client.get(self.url)
+        response = self.client.get(self.url, secure=True)
         self.assertFalse(response.context['show_luggage_duty'])
         self.assertNotContains(response, 'Every trip — no exceptions')
 
@@ -1681,7 +1684,7 @@ class DriverDashboardViewTests(TestCase):
         self.assertIsNotNone(settlement)
 
         self.client.force_login(user)
-        timeline = self.client.get(self.url).context['timeline']
+        timeline = self.client.get(self.url, secure=True).context['timeline']
 
         trips = [i for i in timeline if i['type'] == 'trip']
         self.assertEqual([i['data'].pk for i in trips], [post.pk])
@@ -1700,7 +1703,7 @@ class DriverDashboardViewTests(TestCase):
         self._settle_day(driver, recent, 'TEST-TL2-SET-02')
 
         self.client.force_login(user)
-        timeline = self.client.get(self.url).context['timeline']
+        timeline = self.client.get(self.url, secure=True).context['timeline']
 
         trips = {i['data'].pk for i in timeline if i['type'] == 'trip'}
         self.assertEqual(trips, {old.pk, mid.pk, recent.pk})
@@ -1719,7 +1722,7 @@ class DriverDashboardViewTests(TestCase):
         latecomer.save()
 
         self.client.force_login(user)
-        context = self.client.get(self.url).context
+        context = self.client.get(self.url, secure=True).context
 
         # driver_price defaults to price − 10 → only the unsettled 110 job counts.
         self.assertEqual(context['to_be_paid'], Decimal('100'))
@@ -1750,7 +1753,7 @@ class DriverDashboardViewTests(TestCase):
         recompute_totals(settlement)
 
         self.client.force_login(user)
-        context = self.client.get(self.url).context
+        context = self.client.get(self.url, secure=True).context
 
         # driver_price defaults to price − 10 → only the held-back 110 job counts.
         self.assertEqual(context['to_be_paid'], Decimal('100'))
@@ -1767,7 +1770,7 @@ class DriverDashboardViewTests(TestCase):
         post.save()
 
         self.client.force_login(user)
-        response = self.client.get(self.url)
+        response = self.client.get(self.url, secure=True)
         context = response.context
 
         # driver_price 200 → 5% commission 10 → owed 190.
@@ -1785,7 +1788,7 @@ class DriverDashboardViewTests(TestCase):
         post.save()
 
         self.client.force_login(user)
-        response = self.client.get(self.url)
+        response = self.client.get(self.url, secure=True)
 
         self.assertEqual(response.context['to_be_paid'], Decimal('200'))
         self.assertNotContains(response, '% Commission')
@@ -1804,7 +1807,7 @@ class DriverDashboardViewTests(TestCase):
         post.save()
 
         self.client.force_login(user)
-        response = self.client.get(self.url)
+        response = self.client.get(self.url, secure=True)
         context = response.context
 
         # driver_price 200 → 10% deduction 20 → owed 180.
@@ -1833,11 +1836,11 @@ class DriverDashboardViewTests(TestCase):
         post = self._proxy_post(driver, datetime.date.today() + datetime.timedelta(days=1))
         self.client.force_login(user)
 
-        response = self.client.post(reverse('blog:driver_complete_trip', args=[post.id]))
+        response = self.client.post(reverse('blog:driver_complete_trip', args=[post.id]), secure=True)
 
         self.assertEqual(response.status_code, 400)
         mock_close.assert_not_called()
-        response = self.client.get(self.url)
+        response = self.client.get(self.url, secure=True)
         self.assertContains(response, 'Complete after pickup')
         self.assertFalse(response.context['trips'][0]['can_complete'])
 
@@ -1848,7 +1851,7 @@ class DriverDashboardViewTests(TestCase):
         self.client.force_login(user)
 
         with patch('blog.bird_proxy.close_bird_mapping', return_value=True) as mock_close:
-            response = self.client.post(reverse('blog:driver_complete_trip', args=[post.id]))
+            response = self.client.post(reverse('blog:driver_complete_trip', args=[post.id]), secure=True)
 
         self.assertEqual(response.status_code, 200)
         mock_close.assert_called_once()
@@ -1865,14 +1868,14 @@ class DriverChangePasswordViewTests(TestCase):
         self.url = reverse('blog:driver_change_password')
 
     def test_get_requires_login(self):
-        response = self.client.get(self.url)
+        response = self.client.get(self.url, secure=True)
         self.assertRedirects(response, '/driver/login/?next=/driver/change-password/')
 
     def test_get_renders_form(self):
         user = make_user(username='cp1', password='OldPass1!')
         make_driver(user=user, must_change_password=True)
         self.client.force_login(user)
-        response = self.client.get(self.url)
+        response = self.client.get(self.url, secure=True)
         self.assertEqual(response.status_code, 200)
 
     def test_password_mismatch_shows_error(self):
@@ -1882,7 +1885,7 @@ class DriverChangePasswordViewTests(TestCase):
         response = self.client.post(self.url, {
             'new_password': 'NewPass99!',
             'confirm_password': 'Different!',
-        })
+        }, secure=True)
         self.assertContains(response, 'do not match')
 
     def test_password_change_success_redirects_to_dashboard(self):
@@ -1892,7 +1895,7 @@ class DriverChangePasswordViewTests(TestCase):
         response = self.client.post(self.url, {
             'new_password': 'NewValidP@ss1!',
             'confirm_password': 'NewValidP@ss1!',
-        })
+        }, secure=True)
         self.assertRedirects(response, reverse('blog:driver_dashboard'))
         driver.refresh_from_db()
         self.assertFalse(driver.must_change_password)
@@ -1914,13 +1917,13 @@ class DriverImpersonateViewTests(TestCase):
         regular = make_user(username='reg', password='RegPass1!')
         self.client.force_login(regular)
         url = reverse('blog:driver_impersonate', args=[self.driver.pk])
-        response = self.client.get(url)
+        response = self.client.get(url, secure=True)
         self.assertNotEqual(response.status_code, 200)
 
     def test_staff_impersonates_driver(self):
         self.client.force_login(self.staff)
         url = reverse('blog:driver_impersonate', args=[self.driver.pk])
-        response = self.client.get(url)
+        response = self.client.get(url, secure=True)
         self.assertRedirects(response, reverse('blog:driver_dashboard'))
         self.assertIn('impersonator_id', self.client.session)
 
@@ -2637,12 +2640,12 @@ class CreateDailySettlementsTests(TestCase):
         self.client.force_login(staff)
         url = reverse('admin:blog_driversettlement_create')
         day = self.today.isoformat()
-        res = self.client.post(url, {'driver': driver.pk, 'from_date': day, 'to_date': day}, follow=True)
+        res = self.client.post(url, {'driver': driver.pk, 'from_date': day, 'to_date': day}, follow=True, secure=True)
         self.assertContains(res, 'already settled')
         self.assertNotContains(res, 'No trips found')
 
         empty = make_driver(user=make_user('empty_drv'), region=driver.region)
-        res = self.client.post(url, {'driver': empty.pk, 'from_date': day, 'to_date': day}, follow=True)
+        res = self.client.post(url, {'driver': empty.pk, 'from_date': day, 'to_date': day}, follow=True, secure=True)
         self.assertContains(res, 'No trips found')
 
 
@@ -2731,11 +2734,11 @@ class FullyBookedDateTests(TestCase):
 
     def test_toggle_marks_and_unmarks_date(self):
         day = (timezone.localdate() + timedelta(days=3)).isoformat()
-        res = self.client.post(self.toggle_url, {'date': day})
+        res = self.client.post(self.toggle_url, {'date': day}, secure=True)
         self.assertEqual(res.json(), {'ok': True, 'date': day, 'region': '', 'is_full': True})
         self.assertEqual(self.Model.upcoming_by_region(), {'*': [day]})
 
-        res = self.client.post(self.toggle_url, {'date': day})
+        res = self.client.post(self.toggle_url, {'date': day}, secure=True)
         self.assertFalse(res.json()['is_full'])
         self.assertEqual(self.Model.upcoming_by_region(), {})
 
@@ -2743,20 +2746,20 @@ class FullyBookedDateTests(TestCase):
         sydney = make_region('sydney', 'Sydney')
         make_region('melbourne', 'Melbourne')
         day = (timezone.localdate() + timedelta(days=3)).isoformat()
-        self.client.post(self.toggle_url, {'date': day, 'region': 'sydney'})
-        self.client.post(self.toggle_url, {'date': day, 'region': 'melbourne'})
-        self.client.post(self.toggle_url, {'date': day})
+        self.client.post(self.toggle_url, {'date': day, 'region': 'sydney'}, secure=True)
+        self.client.post(self.toggle_url, {'date': day, 'region': 'melbourne'}, secure=True)
+        self.client.post(self.toggle_url, {'date': day}, secure=True)
         self.assertEqual(
             self.Model.upcoming_by_region(),
             {'sydney': [day], 'melbourne': [day], '*': [day]},
         )
-        res = self.client.post(self.toggle_url, {'date': day, 'region': 'melbourne'})
+        res = self.client.post(self.toggle_url, {'date': day, 'region': 'melbourne'}, secure=True)
         self.assertFalse(res.json()['is_full'])
         self.assertEqual(set(self.Model.upcoming_by_region()), {'sydney', '*'})
         self.assertTrue(self.Model.objects.filter(region=sydney).exists())
 
     def test_toggle_rejects_unknown_region(self):
-        res = self.client.post(self.toggle_url, {'date': '2030-01-01', 'region': 'nowhere'})
+        res = self.client.post(self.toggle_url, {'date': '2030-01-01', 'region': 'nowhere'}, secure=True)
         self.assertEqual(res.status_code, 400)
         self.assertFalse(self.Model.objects.exists())
 
@@ -2768,29 +2771,29 @@ class FullyBookedDateTests(TestCase):
             d1 = today
         self.Model.objects.create(date=d1, region=sydney)
         url = reverse('admin:blog_fullybookeddate_changelist')
-        res = self.client.get(url, {'region': 'sydney'})
+        res = self.client.get(url, {'region': 'sydney'}, secure=True)
         self.assertContains(res, 'fb-day is-full')
         self.assertNotContains(res, 'class="tag-all"')
         # All regions tab doesn't show a Sydney-only day as full
-        res = self.client.get(url)
+        res = self.client.get(url, secure=True)
         self.assertNotContains(res, 'fb-day is-full')
         self.Model.objects.create(date=d1, region=None)
-        res = self.client.get(url, {'region': 'sydney'})
+        res = self.client.get(url, {'region': 'sydney'}, secure=True)
         self.assertContains(res, 'class="tag-all"')
 
     def test_toggle_rejects_get_and_bad_date(self):
-        self.assertEqual(self.client.get(self.toggle_url).status_code, 405)
-        self.assertEqual(self.client.post(self.toggle_url, {'date': 'nope'}).status_code, 400)
+        self.assertEqual(self.client.get(self.toggle_url, secure=True).status_code, 405)
+        self.assertEqual(self.client.post(self.toggle_url, {'date': 'nope'}, secure=True).status_code, 400)
 
     def test_toggle_requires_staff(self):
         self.client.logout()
-        res = self.client.post(self.toggle_url, {'date': '2030-01-01'})
+        res = self.client.post(self.toggle_url, {'date': '2030-01-01'}, secure=True)
         self.assertEqual(res.status_code, 302)
         self.assertFalse(self.Model.objects.exists())
 
     def test_calendar_changelist_renders(self):
         self.Model.objects.create(date=timezone.localdate() + timedelta(days=1))
-        res = self.client.get(reverse('admin:blog_fullybookeddate_changelist'))
+        res = self.client.get(reverse('admin:blog_fullybookeddate_changelist'), secure=True)
         self.assertEqual(res.status_code, 200)
         self.assertContains(res, 'fb-day is-full')
 
@@ -3347,7 +3350,7 @@ class DirectorCardExpenseTests(TestCase):
             'source': 'dir_card', 'is_tax_deductible': 'on',
         }
         data.update(overrides)
-        return self.client.post(reverse('admin:accounting_transaction_add'), data)
+        return self.client.post(reverse('admin:accounting_transaction_add'), data, secure=True)
 
     def test_admin_save_records_contribution(self):
         from accounting.models import DirectorLoan, Transaction
@@ -3380,11 +3383,11 @@ class DirectorCardExpenseTests(TestCase):
         tx = Transaction.objects.get()
         self.client.post(reverse('admin:accounting_transaction_changelist'), {
             'action': 'exclude_as_personal', '_selected_action': [tx.pk],
-        })
+        }, secure=True)
         self.assertFalse(DirectorLoan.objects.exists())
 
     def test_category_help_lists_known_categories(self):
-        resp = self.client.get(reverse('admin:accounting_transaction_add'))
+        resp = self.client.get(reverse('admin:accounting_transaction_add'), secure=True)
         self.assertContains(resp, '기존 카테고리')
         self.assertContains(resp, 'vehicle_maintenance')
         self.assertContains(resp, 'subcontract')

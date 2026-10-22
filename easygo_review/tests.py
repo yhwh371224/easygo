@@ -41,7 +41,7 @@ class SearchSurveySubmitTests(TestCase):
 
     def _post(self):
         with patch('easygo_review.search_survey_views.send_telegram_sync'):
-            return self.client.post(self.url, self.payload)
+            return self.client.post(self.url, self.payload, secure=True)
 
     def test_submission_is_saved(self):
         response = self._post()

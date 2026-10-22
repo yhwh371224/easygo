@@ -223,25 +223,25 @@ class RegionHomeViewTests(TestCase):
 
     def test_active_region_returns_200(self):
         url = reverse('regions:home', kwargs={'region_slug': 'test-home'})
-        response = self.client.get(url)
+        response = self.client.get(url, secure=True)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'regions/pages/home.html')
 
     def test_inactive_region_returns_404(self):
         make_region(slug='test-inactive', name='Inactive City', is_active=False)
         url = reverse('regions:home', kwargs={'region_slug': 'test-inactive'})
-        response = self.client.get(url)
+        response = self.client.get(url, secure=True)
         self.assertEqual(response.status_code, 404)
 
     def test_coming_soon_renders_coming_soon_template(self):
         make_region(slug='test-coming', name='Coming City', is_coming_soon=True)
         url = reverse('regions:home', kwargs={'region_slug': 'test-coming'})
-        response = self.client.get(url)
+        response = self.client.get(url, secure=True)
         self.assertTemplateUsed(response, 'regions/pages/coming_soon.html')
 
     def test_context_contains_region(self):
         url = reverse('regions:home', kwargs={'region_slug': 'test-home'})
-        response = self.client.get(url)
+        response = self.client.get(url, secure=True)
         self.assertEqual(response.context['region'].slug, 'test-home')
 
     def test_featured_suburbs_limited_to_seven(self):
@@ -257,7 +257,7 @@ class RegionHomeViewTests(TestCase):
                 featured_order=i,
             )
         url = reverse('regions:home', kwargs={'region_slug': 'test-home'})
-        response = self.client.get(url)
+        response = self.client.get(url, secure=True)
         self.assertLessEqual(len(response.context['featured_suburbs']), 7)
 
 
@@ -271,7 +271,7 @@ class RegionConfirmationViewTests(TestCase):
     def test_confirmation_page_returns_200(self):
         make_region(slug='test-conf', name='Conf City')
         url = reverse('regions:confirmation', kwargs={'region_slug': 'test-conf'})
-        response = self.client.get(url)
+        response = self.client.get(url, secure=True)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'regions/booking/confirmation.html')
 
@@ -285,7 +285,7 @@ class RegionMeetingPointViewTests(TestCase):
     def test_meeting_point_returns_200(self):
         make_region(slug='test-mp', name='Meeting Point City')
         url = reverse('regions:region_meeting_point', kwargs={'region_slug': 'test-mp'})
-        response = self.client.get(url)
+        response = self.client.get(url, secure=True)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'regions/pages/meeting_point.html')
 
@@ -296,7 +296,7 @@ class RegionMeetingPointViewTests(TestCase):
         region.airports.add(airport)
         Terminal.objects.create(airport=airport, name='T1', type=Terminal.TerminalType.INTL)
         url = reverse('regions:region_meeting_point', kwargs={'region_slug': 'test-mp-terms'})
-        response = self.client.get(url)
+        response = self.client.get(url, secure=True)
         self.assertEqual(len(response.context['terminals']), 1)
 
 
@@ -309,7 +309,7 @@ class RegionArrivalGuideViewTests(TestCase):
     def test_arrival_guide_steps_parsed(self):
         region = make_region(slug='test-ag', name='Arrival Guide City')
         url = reverse('regions:arrival_guide', kwargs={'region_slug': 'test-ag'})
-        response = self.client.get(url)
+        response = self.client.get(url, secure=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['steps'], ['Step 1', 'Step 2', 'Step 3'])
 
@@ -318,7 +318,7 @@ class RegionArrivalGuideViewTests(TestCase):
         r.arrival_guide = ''
         r.save()
         url = reverse('regions:arrival_guide', kwargs={'region_slug': 'test-ag-empty'})
-        response = self.client.get(url)
+        response = self.client.get(url, secure=True)
         self.assertEqual(response.context['steps'], [])
 
 
@@ -344,7 +344,7 @@ class AirportShuttleSuburbViewTests(TestCase):
         url = reverse('regions:airport_shuttle_suburb', kwargs={
             'region_slug': 'test-suburb-region', 'suburb_slug': 'chatswood'
         })
-        response = self.client.get(url)
+        response = self.client.get(url, secure=True)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'regions/pages/airport_shuttle_suburb.html')
 
@@ -352,14 +352,14 @@ class AirportShuttleSuburbViewTests(TestCase):
         url = reverse('regions:airport_shuttle_suburb', kwargs={
             'region_slug': 'test-suburb-region', 'suburb_slug': 'nonexistent'
         })
-        response = self.client.get(url)
+        response = self.client.get(url, secure=True)
         self.assertEqual(response.status_code, 404)
 
     def test_context_contains_suburb(self):
         url = reverse('regions:airport_shuttle_suburb', kwargs={
             'region_slug': 'test-suburb-region', 'suburb_slug': 'chatswood'
         })
-        response = self.client.get(url)
+        response = self.client.get(url, secure=True)
         self.assertEqual(response.context['suburb'].slug, 'chatswood')
 
     def test_zone_suburbs_excludes_current(self):
@@ -370,7 +370,7 @@ class AirportShuttleSuburbViewTests(TestCase):
         url = reverse('regions:airport_shuttle_suburb', kwargs={
             'region_slug': 'test-suburb-region', 'suburb_slug': 'chatswood'
         })
-        response = self.client.get(url)
+        response = self.client.get(url, secure=True)
         zone_slugs = [s.slug for s in response.context['zone_suburbs']]
         self.assertNotIn('chatswood', zone_slugs)
         self.assertIn('artarmon', zone_slugs)
@@ -383,7 +383,7 @@ class AirportShuttleSuburbViewTests(TestCase):
         url = reverse('regions:airport_shuttle_suburb', kwargs={
             'region_slug': 'test-suburb-region', 'suburb_slug': 'hidden'
         })
-        response = self.client.get(url)
+        response = self.client.get(url, secure=True)
         self.assertEqual(response.status_code, 404)
 
 
@@ -399,7 +399,7 @@ class RegionInquiryViewTests(TestCase):
 
     def test_get_inquiry_page_returns_200(self):
         url = reverse('regions:inquiry', kwargs={'region_slug': 'iqtest'})
-        response = self.client.get(url)
+        response = self.client.get(url, secure=True)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'regions/inquiry/inquiry.html')
 
@@ -420,7 +420,7 @@ class RegionInquiryViewTests(TestCase):
             'cf-turnstile-response': 'XXXX',
         }
         count_before = Inquiry.objects.count()
-        response = self.client.post(url, data)
+        response = self.client.post(url, data, secure=True)
         self.assertEqual(Inquiry.objects.count(), count_before + 1)
 
     @patch('basecamp.views.bookings.get_ip_info', return_value='')
@@ -439,7 +439,7 @@ class RegionInquiryViewTests(TestCase):
             'return_pickup_date': FUTURE, 'return_pickup_time': '18:00',
             'return_no_of_passenger': '2',
             'cf-turnstile-response': 'XXXX',
-        })
+        }, secure=True)
         self.assertTrue(Inquiry.objects.filter(email='rina@example.com').exists(), response.content[:300])
         inquiry = Inquiry.objects.get(email='rina@example.com')
         self.assertEqual(inquiry.return_no_of_passenger, '2')
@@ -448,7 +448,7 @@ class RegionInquiryViewTests(TestCase):
         Inquiry.objects.filter(pk=inquiry.pk).update(price='200')
         self.client.post(reverse('basecamp:confirm_booking_detail'), {
             'email': 'rina@example.com', 'index': '1', 'cash': 'on',
-        })
+        }, secure=True)
         outbound = Post.objects.get(email='rina@example.com', direction='Drop off to Intl Airport')
         self.assertEqual(outbound.no_of_passenger, '4')
         self.assertEqual(outbound.return_no_of_passenger, '2')
@@ -594,7 +594,7 @@ class ConfirmBookingHoneypotTests(TestCase):
     def test_pages_render_honeypot(self):
         for name in ('confirm_booking', 'confirm_booking_prepay'):
             with self.subTest(page=name):
-                response = self.client.get(reverse(f'basecamp:{name}'))
+                response = self.client.get(reverse(f'basecamp:{name}'), secure=True)
                 self.assertContains(response, 'name="website"')
 
     @patch('basecamp.views.bookings.get_ip_info', return_value='Sydney')
@@ -608,7 +608,7 @@ class ConfirmBookingHoneypotTests(TestCase):
                 response = self.client.post(reverse(f'basecamp:{name}'), {
                     'email': 'target@example.com', 'index': '1', 'cash': 'on',
                     'website': 'http://spam.example',
-                })
+                }, secure=True)
                 self.assertEqual(response.status_code, 200)
                 self.assertTemplateUsed(response, 'basecamp/inquiry_done.html')
         self.assertFalse(Post.objects.filter(email='target@example.com').exists())
