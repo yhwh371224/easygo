@@ -884,6 +884,8 @@ VOICE_CHANNEL = 'aaaaaaaa-0000-4000-8000-000000000001'
 SMS_CHANNEL = 'bbbbbbbb-0000-4000-8000-000000000002'
 
 
+# Routing tests post unsigned webhooks; signing itself is WebhookSignatureTests'.
+@override_settings(BIRD_WEBHOOK_REQUIRE_SIGNATURE=False)
 class ProxyNumberTestCase(TestCase):
     """Shared fixture: one driver, one pooled number, one live session."""
 

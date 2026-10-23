@@ -4,6 +4,7 @@ Tests for the regions app: models, views, and business logic.
 import datetime
 from unittest.mock import patch, AsyncMock
 
+from django.conf import settings
 from django.test import TestCase, Client, override_settings
 from django.urls import reverse
 
@@ -215,6 +216,11 @@ class RequestLogModelTests(TestCase):
 # View: region_home
 # ---------------------------------------------------------------------------
 
+# Test regions have no hero image, so it can't be in a production manifest.
+@override_settings(STORAGES={
+    **settings.STORAGES,
+    'staticfiles': {'BACKEND': 'django.contrib.staticfiles.storage.StaticFilesStorage'},
+})
 class RegionHomeViewTests(TestCase):
 
     def setUp(self):
