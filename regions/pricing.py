@@ -73,7 +73,8 @@ def calculate_price(config: PricingConfig, booking: BookingInput) -> dict:
     """
     New pricing formula:
 
-        total = base_fare               (distance_km × rate_per_km + base_fee)
+        total = base_fare               (distance_km × rate_per_km + base_fee;
+                                         short_trip_base_fee under short_trip_km)
               + peak_surcharge          (base_fare × rate if pickup in window)
               + pax_surcharge           ((pax-2) × $10 from 3rd pax; +$30 extra for 10+)
               + extra_fees              (bags, oversize, special items, extra stops)
@@ -139,10 +140,14 @@ def build_config_from_rule(suburb, rule) -> PricingConfig:
 
 
 def suburb_base_fare(suburb, rule) -> Decimal:
-    """distance_km × rate_per_km + base_fee; fixed suburb.price if no distance."""
+    """
+    distance_km × rate_per_km + base_fee, using short_trip_base_fee instead
+    when distance_km < short_trip_km; fixed suburb.price if no distance.
+    """
     if suburb.distance_km is None:
         return suburb.price
-    return (suburb.distance_km * rule.rate_per_km + rule.base_fee).quantize(Decimal("0.01"))
+    fee = rule.short_trip_base_fee if suburb.distance_km < rule.short_trip_km else rule.base_fee
+    return (suburb.distance_km * rule.rate_per_km + fee).quantize(Decimal("0.01"))
 
 
 def get_pricing_rule(region_id: int):
@@ -161,6 +166,14 @@ def get_pricing_rule(region_id: int):
 
 _NO_FEE_KEYS = frozenset({"baby", "booster", "pram"})
 _OVERSIZE_SUFFIX = "_oversize"
+
+
+def _to_int(value) -> int:
+    """Parse a passenger count that may be a string, blank or None."""
+    try:
+        return int(str(value).strip()) if value not in (None, "") else 0
+    except ValueError:
+        return 0
 
 
 def inquiry_to_pricing(inquiry, rule, is_return: bool = False) -> BookingInput:
@@ -189,9 +202,12 @@ def inquiry_to_pricing(inquiry, rule, is_return: bool = False) -> BookingInput:
         fee = rule.special_item_oversize_fee if is_oversize else rule.special_item_fee
         fee_total += Decimal(qty) * fee
 
+    passengers = _to_int(inquiry.no_of_passenger)
     if is_return:
         extra_stop = int(inquiry.extra_stop or 0) if inquiry.same_extra_stop else 0
         pickup_time_str = inquiry.return_pickup_time
+        # Return leg uses its own passenger count when given, else the outbound one
+        passengers = _to_int(inquiry.return_no_of_passenger) or passengers
     else:
         extra_stop = int(inquiry.extra_stop or 0)
         pickup_time_str = inquiry.pickup_time
@@ -207,7 +223,7 @@ def inquiry_to_pricing(inquiry, rule, is_return: bool = False) -> BookingInput:
         hour = 0
 
     return BookingInput(
-        passengers=int(inquiry.no_of_passenger or 0),
+        passengers=passengers,
         pickup_hour=hour,
         extras=extras,
     )

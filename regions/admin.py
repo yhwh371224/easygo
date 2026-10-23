@@ -187,8 +187,9 @@ class PricingRuleAdmin(admin.ModelAdmin):
             "fields": ("region",),
         }),
         ("Distance & Vehicle", {
-            "fields": ("rate_per_km", "base_fee"),
-            "description": "Base fare = suburb distance_km × rate_per_km + base_fee "
+            "fields": ("rate_per_km", "base_fee", "short_trip_km", "short_trip_base_fee"),
+            "description": "Base fare = suburb distance_km × rate_per_km + base_fee, "
+                           "or + short_trip_base_fee when distance_km < short_trip_km "
                            "(falls back to the suburb's fixed price if distance_km is empty)",
         }),
         ("Extra Fees", {

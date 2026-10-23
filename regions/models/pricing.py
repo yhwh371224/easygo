@@ -35,8 +35,16 @@ class PricingRule(models.Model):
 
     rate_per_km             = models.DecimalField(max_digits=5, decimal_places=2, default=3.00)
     base_fee                = models.DecimalField(
-        max_digits=6, decimal_places=2, default=30.00,
+        max_digits=6, decimal_places=2, default=20.00,
         help_text="Flat amount added after distance × rate_per_km",
+    )
+    short_trip_km           = models.DecimalField(
+        max_digits=5, decimal_places=2, default=15.00,
+        help_text="Suburbs closer than this use short_trip_base_fee instead of base_fee",
+    )
+    short_trip_base_fee     = models.DecimalField(
+        max_digits=6, decimal_places=2, default=30.00,
+        help_text="Flat amount added for suburbs under short_trip_km",
     )
     extra_bag_fee           = models.DecimalField(max_digits=5, decimal_places=2, default=10.00)
     oversize_fee            = models.DecimalField(max_digits=5, decimal_places=2, default=20.00)

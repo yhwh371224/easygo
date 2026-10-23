@@ -626,3 +626,61 @@ class ConfirmBookingHoneypotTests(TestCase):
         self.assertIn('target@example.com', alert)
         self.assertIn('http://spam.example', alert)
         self.assertIn('/confirm_booking_detail/', alert)
+
+
+# ---------------------------------------------------------------------------
+# Pricing
+# ---------------------------------------------------------------------------
+
+class CalculateInquiryPriceTests(TestCase):
+
+    def setUp(self):
+        from regions.models import PricingRule
+        self.region = make_region()
+        PricingRule.objects.create(region=self.region, peak_windows=[])
+        RegionSuburb.objects.create(
+            region=self.region, name='Ryde', slug='ryde', price=0, zone='A',
+            distance_km=20,
+        )
+
+    def _inquiry(self, **kwargs):
+        from blog.models import Inquiry
+        fields = dict(suburb='Ryde', pickup_time='12:00', no_of_passenger='1')
+        fields.update(kwargs)
+        return Inquiry(**fields)
+
+    def _price(self, **kwargs):
+        from regions.pricing import calculate_inquiry_price
+        return calculate_inquiry_price(self._inquiry(**kwargs), self.region)
+
+    def test_base_fare_is_distance_times_3_plus_20(self):
+        self.assertEqual(self._price(), '80.00')
+
+    def test_under_15km_adds_30_instead_of_20(self):
+        RegionSuburb.objects.create(
+            region=self.region, name='Mascot', slug='mascot', price=0, zone='A',
+            distance_km=10,
+        )
+        self.assertEqual(self._price(suburb='Mascot'), '60.00')
+
+    def test_exactly_15km_adds_20(self):
+        RegionSuburb.objects.filter(name='Ryde').update(distance_km=15)
+        self.assertEqual(self._price(), '65.00')
+
+    def test_two_passengers_have_no_surcharge(self):
+        self.assertEqual(self._price(no_of_passenger='2'), '80.00')
+
+    def test_surcharge_starts_at_third_passenger(self):
+        self.assertEqual(self._price(no_of_passenger='5'), '110.00')
+
+    def test_return_leg_defaults_to_outbound_passengers(self):
+        self.assertEqual(
+            self._price(no_of_passenger='5', return_pickup_time='12:00'), '220.00',
+        )
+
+    def test_return_leg_uses_its_own_passenger_count(self):
+        self.assertEqual(
+            self._price(no_of_passenger='5', return_pickup_time='12:00',
+                        return_no_of_passenger='2'),
+            '190.00',
+        )
