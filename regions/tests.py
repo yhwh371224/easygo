@@ -403,8 +403,9 @@ class RegionInquiryViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'regions/inquiry/inquiry.html')
 
+    @patch('regions.views.inquiry.get_ip_info', return_value='')
     @patch('regions.views.inquiry.send_telegram_notification', new_callable=AsyncMock)
-    def test_post_creates_inquiry(self, mock_telegram):
+    def test_post_creates_inquiry(self, mock_telegram, _ip_info):
         from blog.models import Inquiry
         url = reverse('regions:inquiry_details', kwargs={'region_slug': 'iqtest'})
         data = {
@@ -423,6 +424,7 @@ class RegionInquiryViewTests(TestCase):
         response = self.client.post(url, data, secure=True)
         self.assertEqual(Inquiry.objects.count(), count_before + 1)
 
+    @patch('regions.views.inquiry.get_ip_info', return_value='')
     @patch('basecamp.views.bookings.get_ip_info', return_value='')
     @patch('basecamp.views.bookings.send_telegram_notification', new_callable=AsyncMock)
     @patch('regions.views.inquiry.send_telegram_notification', new_callable=AsyncMock)
