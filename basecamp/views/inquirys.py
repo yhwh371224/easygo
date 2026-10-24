@@ -1,4 +1,3 @@
-import asyncio
 import logging
 
 from django.contrib import messages
@@ -19,7 +18,7 @@ from basecamp.basecamp_utils import (
 )
 from django_ratelimit.decorators import ratelimit
 from regions.models.airport import CruiseTerminal
-from utils.telegram import send_telegram_notification, get_ip_info
+from blog.tasks import send_telegram_task
 from regions.models import RequestLog
 from regions.pricing import calculate_inquiry_price
 
@@ -185,16 +184,15 @@ def inquiry_details(request):
         p.save()
 
         ip = get_client_ip(request)
-        ip_info = get_ip_info(ip)
         try:
-            asyncio.run(send_telegram_notification(
+            send_telegram_task.delay(
                 f"✈️ New inquiry:\n"
                 f"Region: {post_region.name if post_region else 'Unknown'}\n"
-                f"IP: `{ip}`\n"
-                f"Location: {ip_info}"
-            ))
+                f"IP: `{ip}`\n",
+                location_ip=ip,
+            )
         except Exception as e:
-            logger.error(f"[TELEGRAM] Failed to send: {e}")
+            logger.error(f"[TELEGRAM] Failed to queue: {e}")
 
         return booking_success_response(request)
 
@@ -396,12 +394,11 @@ def inquiry_details1(request):
         p.save()
 
         ip = get_client_ip(request)
-        ip_info = get_ip_info(ip)
-        asyncio.run(send_telegram_notification(
+        send_telegram_task.delay(
             f"✈️ Home Inquiry:\n"
-            f"IP: `{ip}`\n"
-            f"Location: {ip_info}"
-        ))
+            f"IP: `{ip}`\n",
+            location_ip=ip,
+        )
 
         return render_inquiry_done(request)
 

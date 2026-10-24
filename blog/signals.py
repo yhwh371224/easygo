@@ -14,12 +14,12 @@ from .tasks import (
     send_missing_direction_email_task,
     check_and_send_missing_info_email_task,
     send_inquiry_email_task,
+    send_telegram_task,
 )
 
 from utils.return_booking import handle_return_trip
 from utils.prepay_helper import is_foreign_number
 from .blog_utils import _amount
-from utils.telegram import send_telegram_sync
 
 logger = logging.getLogger('easygo')
 
@@ -126,7 +126,7 @@ def alert_paid_booking_cancel_state(sender, instance, created, **kwargs):
         return
 
     logger.info('alert_paid_booking_cancel_state: alerting for Post pk=%s', instance.pk)
-    transaction.on_commit(lambda: send_telegram_sync(text))
+    transaction.on_commit(lambda: send_telegram_task.delay(text))
 
 
 # Send email notification if a Post is cancelled and email hasn't been sent yet

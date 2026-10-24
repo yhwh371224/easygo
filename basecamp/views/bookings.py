@@ -1,4 +1,3 @@
-import asyncio
 import logging
 from urllib.parse import urlencode
 
@@ -15,7 +14,7 @@ from django.http import HttpResponse, JsonResponse
 from blog.models import Post, Inquiry, Driver
 from blog import dunning
 from blog.blog_utils import resolve_booking_driver
-from blog.tasks import send_post_confirmation_email_task
+from blog.tasks import send_post_confirmation_email_task, send_telegram_task
 from main.settings import RECIPIENT_EMAIL
 from regions.models import Region
 from basecamp.basecamp_utils import (
@@ -25,7 +24,6 @@ from basecamp.basecamp_utils import (
     is_duplicate_submission, parse_booking_dates, get_client_ip,
 )
 from utils import email
-from utils.telegram import send_telegram_notification, send_telegram_sync, get_ip_info
 
 logger = logging.getLogger(__name__)
 
@@ -117,13 +115,14 @@ def _honeypot_blocked(request):
     filled = request.POST.get('website', '').strip()[:100]
     logger.warning(f"[HONEYPOT] {request.path} IP={ip} email={email} website={filled!r}")
     if cache.add(f'honeypot_alert:{ip}', True, HONEYPOT_ALERT_SECONDS):
-        send_telegram_sync(
+        send_telegram_task.delay(
             f"🍯 Honeypot blocked a booking confirmation\n"
             f"Page: {request.path}\n"
             f"Email: {email or '-'}\n"
             f"Hidden field: {filled}\n"
-            f"IP: {ip} ({get_ip_info(ip)})\n"
-            f"If this is a real customer, their booking was NOT processed — contact them."
+            f"If this is a real customer, their booking was NOT processed — contact them.\n"
+            f"IP: {ip}\n",
+            location_ip=ip,
         )
     return render_inquiry_done(request)
 
@@ -293,16 +292,15 @@ def confirm_booking_detail(request):
         _send_invoice_for_new_booking(request, p)
 
     ip = get_client_ip(request)
-    ip_info = get_ip_info(ip)
     try:
-        asyncio.run(send_telegram_notification(
+        send_telegram_task.delay(
             f"Clicked the confirm button:\n"
             f"{_confirm_click_details(user, p)}"
-            f"IP: `{ip}`\n"
-            f"Location: {ip_info}"
-        ))
+            f"IP: `{ip}`\n",
+            location_ip=ip,
+        )
     except Exception as e:
-        logger.error(f"[TELEGRAM] Failed to send: {e}")
+        logger.error(f"[TELEGRAM] Failed to queue: {e}")
 
     return render_inquiry_done(request)
 
@@ -448,16 +446,15 @@ def confirm_booking_prepay_detail(request):
         _send_invoice_for_new_booking(request, p)
 
     ip = get_client_ip(request)
-    ip_info = get_ip_info(ip)
     try:
-        asyncio.run(send_telegram_notification(
+        send_telegram_task.delay(
             f"Clicked the confirm button (prepay):\n"
             f"{_confirm_click_details(user, p)}"
-            f"IP: `{ip}`\n"
-            f"Location: {ip_info}"
-        ))
+            f"IP: `{ip}`\n",
+            location_ip=ip,
+        )
     except Exception as e:
-        logger.error(f"[TELEGRAM] Failed to send: {e}")
+        logger.error(f"[TELEGRAM] Failed to queue: {e}")
 
     params = urlencode({'name': name, 'amount': final_price})
     return redirect(f"/payonline/?{params}")
@@ -843,13 +840,12 @@ def quick_rebook_confirm(request, region_slug=None):
     logger.info(f"[QUICK REBOOK CONFIRM] Post id={p.id} email={email} date={pickup_date_str}")
 
     ip      = get_client_ip(request)
-    ip_info = get_ip_info(ip)
     try:
-        asyncio.run(send_telegram_notification(
+        send_telegram_task.delay(
             f"🔄 Quick Rebook:\n"
-            f"IP: `{ip}`\n"
-            f"Location: {ip_info}"
-        ))
+            f"IP: `{ip}`\n",
+            location_ip=ip,
+        )
     except Exception as e:
         logger.error(f"[TELEGRAM] Quick Rebook failed: {e}")
 

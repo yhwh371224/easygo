@@ -733,6 +733,12 @@ class PostAdmin(admin.ModelAdmin):
             'next_month': next_month,
             'this_month': today.replace(day=1),
             'drivers': Driver.objects.filter(is_active=True).order_by('order', 'driver_name'),
+            'legend': [
+                {'name': d.driver_name or f'#{d.pk}', 'color': color_hex[d.calendar_color]}
+                for d in Driver.objects.filter(is_active=True).exclude(calendar_color='')
+                .order_by('order', 'driver_name')
+                if d.calendar_color in color_hex
+            ],
             'driver_param': driver_param,
             'regions': Region.objects.filter(is_active=True).order_by('name'),
             'region_param': region_param,

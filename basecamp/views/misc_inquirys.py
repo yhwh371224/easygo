@@ -6,7 +6,7 @@ from django.conf import settings
 from utils.email import send_text_email
 
 logger = logging.getLogger(__name__)
-from utils.telegram import send_telegram_sync
+from blog.tasks import send_telegram_task
 from django.db.models import Q
 from django.http import JsonResponse
 from main.settings import RECIPIENT_EMAIL
@@ -210,7 +210,7 @@ def contact_submit(request):
             f"Email: {data['email']}\n"
             f"Message: {data['message']}"
         )
-        send_telegram_sync(telegram_text)
+        send_telegram_task.delay(telegram_text)
 
         return booking_success_response(request)
     else:

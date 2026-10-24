@@ -23,7 +23,7 @@ from .forms import CommentForm, PostForm
 from blog.models import Post as BlogPost
 from main.settings import RECIPIENT_EMAIL
 from .review_utils import create_verse_image
-from utils.telegram import send_telegram_sync
+from blog.tasks import send_telegram_task
 
 
 @ratelimit(key='ip', rate='5/m', method='POST', block=False)
@@ -139,7 +139,7 @@ class PostCreate(View):
 
                 form.save()
 
-                send_telegram_sync("⭐ New review has been posted on EasyGo website.")
+                send_telegram_task.delay("⭐ New review has been posted on EasyGo website.")
 
                 return redirect('/easygo_review/')
         return render(request, 'easygo_review/post_form.html', {'form': form, 'form_guide': 'Please post your review'})

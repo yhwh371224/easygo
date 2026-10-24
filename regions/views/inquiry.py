@@ -1,4 +1,3 @@
-import asyncio
 import logging
 
 from django.http import JsonResponse
@@ -14,7 +13,7 @@ from basecamp.basecamp_utils import (
     booking_success_response, parse_baggage, parse_special_items, parse_booking_dates,
     get_client_ip,
 )
-from utils.telegram import get_ip_info, send_telegram_notification
+from blog.tasks import send_telegram_task
 
 logger = logging.getLogger("inquiry")
 
@@ -138,13 +137,12 @@ def region_inquiry_details(request, region_slug):
         p.save()
 
         ip = get_client_ip(request)
-        ip_info = get_ip_info(ip)
-        asyncio.run(send_telegram_notification(
+        send_telegram_task.delay(
             f"✈️ New inquiry:\n"
             f"Region: {region.name}\n"
-            f"IP: `{ip}`\n"
-            f"Location: {ip_info}"
-        ))
+            f"IP: `{ip}`\n",
+            location_ip=ip,
+        )
         return booking_success_response(request)
 
     region = get_object_or_404(Region, slug=region_slug, is_active=True)

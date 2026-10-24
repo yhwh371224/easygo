@@ -15,7 +15,7 @@ from blog.models import Post, Inquiry, Driver
 from blog.sms_utils import send_sms_notice, send_whatsapp_template, format_au_phone
 from blog.blog_utils import resolve_driver, _net_adjustment, clean_float, booking_balance
 from utils.direction_utils import is_airport_pickup
-from utils.telegram import send_telegram_sync
+from blog.tasks import send_telegram_task
 from csp.constants import NONCE
 from basecamp.basecamp_utils import (
     parse_baggage, parse_special_items, handle_email_sending, format_pickup_time_12h,
@@ -711,7 +711,7 @@ def email_dispatch_detail(request):
                     f"금액 오입력이거나 환불/추가 예약 확인이 필요합니다."
                 )
                 logger.warning(warning)
-                send_telegram_sync(warning)
+                send_telegram_task.delay(warning)
 
             context.update({
                 'applied_bookings': applied_bookings,

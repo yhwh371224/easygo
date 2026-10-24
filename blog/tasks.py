@@ -326,3 +326,14 @@ def send_inquiry_email_task(pk):
         send_inquiry_email(instance)
 
 
+@shared_task
+def send_telegram_task(text, location_ip=None):
+    """Staff Telegram alert off the request thread — send_telegram_sync waits
+    on api.telegram.org (≈1s, up to 10s per try, and a second try when
+    Markdown is rejected), which a customer or driver pressing a button
+    shouldn't sit through. location_ip appends a "Location:" line looked up
+    here, since get_ip_info is another blocking call (ipinfo.io, up to 3s)."""
+    from utils.telegram import get_ip_info, send_telegram_sync
+    if location_ip:
+        text = f"{text}Location: {get_ip_info(location_ip)}"
+    send_telegram_sync(text)

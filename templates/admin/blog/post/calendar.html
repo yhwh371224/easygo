@@ -16,7 +16,9 @@
   .bc-bar { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem 1rem; margin-bottom: 1rem; }
   .bc-bar h2 { margin: 0; min-width: 9rem; text-align: center; }
   .bc-filters { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; margin-left: auto; }
-  .bc-help { color: var(--body-quiet-color, #666); margin: 0 0 1rem; }
+  .bc-legend { display: flex; flex-wrap: wrap; gap: .3rem 1rem; list-style: none; margin: 0 0 1rem; padding: 0; }
+  .bc-legend li { display: flex; align-items: center; gap: .35rem; list-style: none; padding: 0; }
+  .bc-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--sw); flex: none; }
   .bc-cal { border-collapse: collapse; width: 100%; table-layout: fixed; }
   .bc-cal th { padding: .4rem; text-align: center; }
   .bc-cal td { border: 1px solid var(--hairline-color, #ddd); height: 96px; padding: .25rem; vertical-align: top; }
@@ -89,9 +91,11 @@
     </form>
   </div>
 
-  <p class="bc-help">
-    제목 앞 표시: <b>!</b> 리마인더 · <b>C</b> 취소 · <b>?</b> 미확정/가격 없음. 일정을 누르면 상세 내용, 색깔 선택, 수정 링크가 나옵니다. 색을 따로 고르지 않은 일정은 배정된 드라이버의 색으로 보입니다.
-  </p>
+  {% if legend %}
+  <ul class="bc-legend" aria-label="Driver colours">
+    {% for d in legend %}<li><span class="bc-dot" style="--sw: {{ d.color }}"></span>{{ d.name }}</li>{% endfor %}
+  </ul>
+  {% endif %}
 
   <table class="bc-cal">
     <thead><tr><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th></tr></thead>

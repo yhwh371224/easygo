@@ -8,7 +8,7 @@ from django_ratelimit.decorators import ratelimit
 from basecamp.modules.view_helpers import verify_turnstile, get_client_ip
 from main.settings import RECIPIENT_EMAIL
 from utils.email import send_template_email, send_text_email
-from utils.telegram import send_telegram_sync
+from blog.tasks import send_telegram_task
 
 logger = logging.getLogger(__name__)
 
@@ -71,9 +71,9 @@ Email: {email}
         f"Landed: {response.landed}"
     )
     try:
-        send_telegram_sync(telegram_text)
+        send_telegram_task.delay(telegram_text)
     except Exception:
-        logger.exception("search_survey: failed to send telegram for %s", response.email)
+        logger.exception("search_survey: failed to queue telegram for %s", response.email)
 
 
 def _send_discount_code(response):

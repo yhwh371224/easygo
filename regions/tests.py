@@ -2,7 +2,7 @@
 Tests for the regions app: models, views, and business logic.
 """
 import datetime
-from unittest.mock import patch, AsyncMock
+from unittest.mock import patch
 
 from django.conf import settings
 from django.test import TestCase, Client, override_settings
@@ -409,9 +409,8 @@ class RegionInquiryViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'regions/inquiry/inquiry.html')
 
-    @patch('regions.views.inquiry.get_ip_info', return_value='')
-    @patch('regions.views.inquiry.send_telegram_notification', new_callable=AsyncMock)
-    def test_post_creates_inquiry(self, mock_telegram, _ip_info):
+    @patch('blog.tasks.send_telegram_task.delay')
+    def test_post_creates_inquiry(self, mock_telegram):
         from blog.models import Inquiry
         url = reverse('regions:inquiry_details', kwargs={'region_slug': 'iqtest'})
         data = {
@@ -427,13 +426,16 @@ class RegionInquiryViewTests(TestCase):
             'cf-turnstile-response': 'XXXX',
         }
         count_before = Inquiry.objects.count()
-        response = self.client.post(url, data, secure=True)
+        with patch('utils.telegram.get_ip_info') as lookup:
+            response = self.client.post(url, data, secure=True)
         self.assertEqual(Inquiry.objects.count(), count_before + 1)
+        # Telegram and the ipinfo.io lookup both happen in the worker, not here.
+        lookup.assert_not_called()
+        mock_telegram.assert_called_once()
+        self.assertIn('New inquiry', mock_telegram.call_args.args[0])
+        self.assertTrue(mock_telegram.call_args.kwargs['location_ip'])
 
-    @patch('regions.views.inquiry.get_ip_info', return_value='')
-    @patch('basecamp.views.bookings.get_ip_info', return_value='')
-    @patch('basecamp.views.bookings.send_telegram_notification', new_callable=AsyncMock)
-    @patch('regions.views.inquiry.send_telegram_notification', new_callable=AsyncMock)
+    @patch('blog.tasks.send_telegram_task.delay')
     def test_return_passenger_count_flows_inquiry_to_post(self, *_):
         """리턴 인원: 폼 → Inquiry → 확정 Post → 자동 생성되는 리턴 Post."""
         from blog.models import Inquiry, Post
@@ -605,9 +607,8 @@ class ConfirmBookingHoneypotTests(TestCase):
                 response = self.client.get(reverse(f'basecamp:{name}'), secure=True)
                 self.assertContains(response, 'name="website"')
 
-    @patch('basecamp.views.bookings.get_ip_info', return_value='Sydney')
-    @patch('basecamp.views.bookings.send_telegram_sync')
-    def test_filled_honeypot_looks_like_success_but_does_nothing(self, telegram, _ip_info):
+    @patch('blog.tasks.send_telegram_task.delay')
+    def test_filled_honeypot_looks_like_success_but_does_nothing(self, telegram):
         from blog.models import Inquiry, Post
         Inquiry.objects.create(name='Bot Target', email='target@example.com', price='100',
                                pickup_date=datetime.date.today() + datetime.timedelta(days=5))

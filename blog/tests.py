@@ -515,6 +515,14 @@ class BookingCalendarAdminTests(TestCase):
         response = self.client.post(color_url, {'post_id': post.pk, 'color': ''})
         self.assertEqual(response.json(), {'ok': True, 'color': '', 'shade': 'peacock', 'hex': '#039be5'})
 
+    def test_legend_lists_only_coloured_active_drivers(self, *_):
+        Driver.objects.create(driver_name='Sam', is_active=True, calendar_color='peacock')
+        Driver.objects.create(driver_name='Plain', is_active=True)
+        Driver.objects.create(driver_name='Gone', is_active=False, calendar_color='grape')
+        response = self.client.get(self.url)
+        self.assertEqual(response.context['legend'], [{'name': 'Sam', 'color': '#039be5'}])
+        self.assertNotContains(response, '제목 앞 표시')
+
     def test_driver_list_shows_colour(self, *_):
         driver = make_driver()
         driver.calendar_color = 'peacock'
@@ -793,7 +801,7 @@ class CancelStateTelegramAlertTests(TestCase):
         post = Post.objects.get(pk=post.pk)
         for k, v in fields.items():
             setattr(post, k, v)
-        with patch('blog.signals.send_telegram_sync') as tg, \
+        with patch('blog.tasks.send_telegram_task.delay') as tg, \
                 self.captureOnCommitCallbacks(execute=True):
             post.save()
         return tg
@@ -1984,6 +1992,64 @@ class DriverDashboardViewTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         mock_close.assert_called_once()
+
+
+# ---------------------------------------------------------------------------
+# View: driver_accept_job
+# ---------------------------------------------------------------------------
+
+@patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+@patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+class DriverAcceptJobViewTests(TestCase):
+
+    def setUp(self):
+        self.user = make_user(username='acc1', password='TestPass1!')
+        self.driver = make_driver(user=self.user)
+        self.post = Post.objects.create(
+            name='Pax', email='p@x.com', contact='0412345678', price='110',
+            pickup_date=datetime.date.today() + timedelta(days=2), pickup_time='10:00',
+        )
+        self.post.candidate_drivers.add(self.driver)
+        self.client.force_login(self.user)
+        self.url = reverse('blog:driver_accept_job', args=[self.post.pk])
+
+    def test_accept_queues_telegram_instead_of_sending_inline(self, *_):
+        """Sending inline made the driver wait on api.telegram.org before the
+        dashboard could reload."""
+        with patch('blog.tasks.send_telegram_task.delay') as queued, \
+                patch('utils.telegram.send_telegram_sync') as inline:
+            response = self.client.post(self.url, secure=True)
+
+        self.assertEqual(response.json(), {'ok': True})
+        self.post.refresh_from_db()
+        self.assertEqual(self.post.driver, self.driver)
+        inline.assert_not_called()
+        queued.assert_called_once()
+        self.assertIn(f'confirmed booking #{self.post.pk}', queued.call_args.args[0])
+
+    def test_taken_job_sends_nothing(self, *_):
+        self.post.driver = make_driver(user=make_user(username='acc2'))
+        self.post.save()
+        with patch('blog.tasks.send_telegram_task.delay') as queued:
+            response = self.client.post(self.url, secure=True)
+        self.assertEqual(response.status_code, 409)
+        queued.assert_not_called()
+
+    def test_task_sends_the_text(self, *_):
+        from blog.tasks import send_telegram_task
+
+        with patch('utils.telegram.send_telegram_sync') as inline:
+            send_telegram_task('hello')
+        inline.assert_called_once_with('hello')
+
+    def test_task_looks_up_location_off_the_request(self, *_):
+        from blog.tasks import send_telegram_task
+
+        with patch('utils.telegram.get_ip_info', return_value='Sydney, NSW (Telstra)') as lookup, \
+                patch('utils.telegram.send_telegram_sync') as inline:
+            send_telegram_task('New inquiry:\nIP: `1.2.3.4`\n', location_ip='1.2.3.4')
+        lookup.assert_called_once_with('1.2.3.4')
+        inline.assert_called_once_with('New inquiry:\nIP: `1.2.3.4`\nLocation: Sydney, NSW (Telstra)')
 
 
 # ---------------------------------------------------------------------------

@@ -40,7 +40,7 @@ class SearchSurveySubmitTests(TestCase):
         }
 
     def _post(self):
-        with patch('easygo_review.search_survey_views.send_telegram_sync'):
+        with patch('blog.tasks.send_telegram_task.delay'):
             return self.client.post(self.url, self.payload, secure=True)
 
     def test_submission_is_saved(self):

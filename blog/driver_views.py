@@ -141,7 +141,7 @@ def _notify_new_driver_application(driver):
     been saved as a pending Driver by the time this runs.
     """
     from utils.email import send_text_email
-    from utils.telegram import send_telegram_sync
+    from blog.tasks import send_telegram_task
     from main.settings import RECIPIENT_EMAIL
 
     review_url = f"{settings.SITE_URL}/{settings.SECRET_ADMIN_URL}/blog/driver/{driver.pk}/change/"
@@ -166,7 +166,7 @@ def _notify_new_driver_application(driver):
     except Exception:
         logger.exception("driver_apply: failed to send admin notification for driver id=%s", driver.pk)
 
-    send_telegram_sync(
+    send_telegram_task.delay(
         f"🚐 New driver application: {driver.driver_name}\n"
         f"Contact: {driver.driver_contact}\n"
         f"Region: {driver.region}\n"
@@ -1119,8 +1119,10 @@ def driver_accept_job(request, post_id):
         post.use_proxy = True
         post.save(update_fields=['driver', 'use_proxy'])
 
-    from utils.telegram import send_telegram_sync
-    send_telegram_sync(
+    # Queued, not sent inline: waiting on Telegram here held the driver's
+    # Accept button for seconds before the dashboard could reload.
+    from blog.tasks import send_telegram_task
+    send_telegram_task.delay(
         f"🚗 Job accepted: {driver.driver_name} confirmed booking #{post.id} "
         f"({post.pickup_date} {post.pickup_time or ''}, {post.name})"
     )
