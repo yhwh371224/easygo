@@ -1,5 +1,9 @@
 {% load admin_urls %}<button type="button"
         class="bc-ev{% if ev.post.cancelled %} is-cancelled{% elif ev.post.pending or ev.post.price == 'TBA' %} is-pending{% endif %}"
+        {% if ev.color %}style="--ev-color: {{ ev.color }}"{% endif %}
+        data-id="{{ ev.post.pk }}"
+        data-color="{{ ev.post.calendar_color }}"
+        data-shade="{{ ev.shade }}"
         title="{{ ev.title }}"
         data-title="{{ ev.title }}"
         data-when="{{ ev.post.pickup_date|date:'D j M Y' }}{% if ev.post.pickup_time %} · {{ ev.post.pickup_time }}{% endif %}"

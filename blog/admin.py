@@ -31,12 +31,25 @@ class CreateSettlementForm(forms.Form):
 
 
 class DriverAdmin(admin.ModelAdmin):
-    list_display = ['order', 'driver_name', 'impersonate_button', 'region', 'abn', 'gst_registered', 'non_gst_deduction', 'commission_rate', 'driver_contact', 'driver_plate', 'user']
+    list_display = ['order', 'driver_name', 'calendar_color_swatch', 'impersonate_button', 'region', 'abn', 'gst_registered', 'non_gst_deduction', 'commission_rate', 'driver_contact', 'driver_plate', 'user']
     list_editable = ['gst_registered', 'non_gst_deduction', 'commission_rate']
     list_filter = ['is_active', 'region', 'gst_registered', 'is_company', 'settle_daily', 'has_vehicle_insurance']
     search_fields = ['driver_name', 'abn', 'driver_contact', 'driver_email', 'driver_address', 'driver_plate', 'license_number']
     ordering = ['order']
     readonly_fields = ['agreement_link_display', 'application_submitted_at', 'license_scan_link']
+
+    @admin.display(description='Colour', ordering='calendar_color')
+    def calendar_color_swatch(self, obj):
+        from .models.booking import CALENDAR_COLORS
+
+        hex_ = {key: hex_ for key, _, hex_ in CALENDAR_COLORS}.get(obj.calendar_color)
+        if not hex_:
+            return '-'
+        return format_html(
+            '<span style="white-space:nowrap"><span style="display:inline-block;width:12px;height:12px;'
+            'border-radius:50%;background:{};vertical-align:middle"></span> {}</span>',
+            hex_, obj.get_calendar_color_display(),
+        )
 
     def impersonate_button(self, obj):
         if obj.user:
@@ -551,7 +564,7 @@ class PostAdmin(admin.ModelAdmin):
             'fields': ['message', 'notice', 'special_items']
         }),
         ('Calendar', {
-            'fields': ['calendar_event_id', 'driver_calendar_event_id']
+            'fields': ['calendar_color', 'calendar_event_id', 'driver_calendar_event_id']
         }),
     ]
 
@@ -618,6 +631,11 @@ class PostAdmin(admin.ModelAdmin):
                 self.admin_site.admin_view(self.calendar_view),
                 name='blog_post_calendar',
             ),
+            url_path(
+                'calendar/color/',
+                self.admin_site.admin_view(self.calendar_color_view),
+                name='blog_post_calendar_color',
+            ),
         ]
         return custom + super().get_urls()
 
@@ -633,6 +651,7 @@ class PostAdmin(admin.ModelAdmin):
         from django.utils import timezone
         from urllib.parse import urlencode
         from regions.models import Region
+        from .models.booking import CALENDAR_COLORS
         from utils.calendar_sync import build_event_data
 
         if not self.has_view_permission(request):
@@ -668,14 +687,23 @@ class PostAdmin(admin.ModelAdmin):
             ('driver', driver_param), ('region', region_param),
             ('cancelled', '' if show_cancelled else '0')] if v})
 
+        color_hex = {key: hex_ for key, _, hex_ in CALENDAR_COLORS}
+
+        def shade_of(post):
+            return post.calendar_color or (post.driver.calendar_color if post.driver_id else '')
+
         by_day = {}
         for post in sorted(posts, key=lambda p: (p.pickup_time or '', p.pk)):
             event = build_event_data(post) or {}
+            shade = shade_of(post)
             by_day.setdefault(post.pickup_date, []).append({
                 'post': post,
                 'title': event.get('summary', ''),
                 'location': event.get('location', ''),
                 'description': event.get('description', ''),
+                # The booking's own colour wins, else its driver's.
+                'shade': shade,
+                'color': color_hex.get(shade, ''),
             })
 
         weeks = [
@@ -710,8 +738,34 @@ class PostAdmin(admin.ModelAdmin):
             'region_param': region_param,
             'show_cancelled': show_cancelled,
             'filter_query': filter_query,
+            'colors': CALENDAR_COLORS,
+            'can_change': self.has_change_permission(request),
+            'color_url': reverse(f'{self.admin_site.name}:blog_post_calendar_color'),
         }
         return TemplateResponse(request, 'admin/blog/post/calendar.html', context)
+
+    def calendar_color_view(self, request):
+        """POST post_id + color (a CALENDAR_COLORS key, '' for the default)
+        from the calendar's event popup. Written with queryset.update, so
+        no post_save: a colour change doesn't re-sync Google or send mail."""
+        from django.core.exceptions import PermissionDenied
+        from django.http import HttpResponseNotAllowed, JsonResponse
+        from .models.booking import CALENDAR_COLORS
+
+        if request.method != 'POST':
+            return HttpResponseNotAllowed(['POST'])
+        post_id = request.POST.get('post_id', '')
+        color = request.POST.get('color', '')
+        color_hex = {key: hex_ for key, _, hex_ in CALENDAR_COLORS}
+        if not post_id.isdigit() or (color and color not in color_hex):
+            return JsonResponse({'ok': False, 'error': 'invalid request'}, status=400)
+        post = get_object_or_404(Post, pk=int(post_id))
+        if not self.has_change_permission(request, post):
+            raise PermissionDenied
+        Post.objects.filter(pk=post.pk).update(calendar_color=color)
+        # '' falls back to the driver's colour, so report what now shows.
+        shade = color or (post.driver.calendar_color if post.driver_id else '')
+        return JsonResponse({'ok': True, 'color': color, 'shade': shade, 'hex': color_hex.get(shade, '')})
 
 
 class PhoneMappingAdmin(admin.ModelAdmin):

@@ -434,6 +434,11 @@ class BookingCalendarAdminTests(TestCase):
     def _query(self, post):
         return {'year': post.pickup_date.year, 'month': post.pickup_date.month}
 
+    @staticmethod
+    def _shades(response):
+        return [(ev['shade'], ev['color'])
+                for week in response.context['weeks'] for day in week for ev in day['events']]
+
     def test_shows_google_style_title_and_details(self, *_):
         post = self._post(pickup_time='07:30', flight_number='QF1', no_of_passenger='2',
                           driver_price='100', driver=make_driver())
@@ -477,6 +482,51 @@ class BookingCalendarAdminTests(TestCase):
         self.assertIn('test-bris', [r.slug for r in response.context['regions']])
         self.assertContains(response, 'region=test-bris')
         self.assertEqual(response.context['filter_query'], 'region=test-bris&cancelled=0')
+
+    def test_colour_saved_from_popup_and_painted(self, *_):
+        post = self._post(pickup_time='08:00')
+        color_url = reverse('admin:blog_post_calendar_color')
+        # No Post.save() → no post_save, so no Google re-sync or emails.
+        with patch.object(Post, 'save') as save:
+            response = self.client.post(color_url, {'post_id': post.pk, 'color': 'basil'})
+        self.assertEqual(response.json(), {'ok': True, 'color': 'basil', 'shade': 'basil', 'hex': '#0b8043'})
+        save.assert_not_called()
+        post.refresh_from_db()
+        self.assertEqual(post.calendar_color, 'basil')
+        self.assertContains(self.client.get(self.url, self._query(post)), '#0b8043')
+
+        self.client.post(color_url, {'post_id': post.pk, 'color': ''})
+        post.refresh_from_db()
+        self.assertEqual(post.calendar_color, '')
+
+    def test_driver_colour_unless_booking_has_its_own(self, *_):
+        driver = make_driver()
+        driver.calendar_color = 'peacock'
+        driver.save()
+        post = self._post(pickup_time='08:00', driver=driver)
+        query = self._query(post)
+        self.assertEqual(self._shades(self.client.get(self.url, query)), [('peacock', '#039be5')])
+
+        color_url = reverse('admin:blog_post_calendar_color')
+        self.client.post(color_url, {'post_id': post.pk, 'color': 'grape'})
+        self.assertEqual(self._shades(self.client.get(self.url, query)), [('grape', '#8e24aa')])
+
+        # Back to default → the driver's colour again.
+        response = self.client.post(color_url, {'post_id': post.pk, 'color': ''})
+        self.assertEqual(response.json(), {'ok': True, 'color': '', 'shade': 'peacock', 'hex': '#039be5'})
+
+    def test_driver_list_shows_colour(self, *_):
+        driver = make_driver()
+        driver.calendar_color = 'peacock'
+        driver.save()
+        self.assertContains(self.client.get(reverse('admin:blog_driver_changelist')), '#039be5')
+
+    def test_colour_rejects_bad_input(self, *_):
+        post = self._post()
+        color_url = reverse('admin:blog_post_calendar_color')
+        self.assertEqual(self.client.post(color_url, {'post_id': post.pk, 'color': 'pink'}).status_code, 400)
+        self.assertEqual(self.client.post(color_url, {'post_id': 'x', 'color': 'basil'}).status_code, 400)
+        self.assertEqual(self.client.get(color_url).status_code, 405)
 
     def test_bad_month_falls_back(self, *_):
         self.assertEqual(self.client.get(self.url, {'year': 'x', 'month': '13'}).status_code, 200)

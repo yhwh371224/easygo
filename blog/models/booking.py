@@ -79,6 +79,23 @@ class Inquiry(models.Model):
         ordering = ['-created']
 
 
+# Google Calendar's event colours, keyed by name; the staff booking
+# calendar (PostAdmin.calendar_view) paints each booking with its colour.
+CALENDAR_COLORS = [
+    ('tomato', 'Tomato', '#d50000'),
+    ('flamingo', 'Flamingo', '#e67c73'),
+    ('tangerine', 'Tangerine', '#f4511e'),
+    ('banana', 'Banana', '#f6bf26'),
+    ('sage', 'Sage', '#33b679'),
+    ('basil', 'Basil', '#0b8043'),
+    ('peacock', 'Peacock', '#039be5'),
+    ('blueberry', 'Blueberry', '#3f51b5'),
+    ('lavender', 'Lavender', '#7986cb'),
+    ('grape', 'Grape', '#8e24aa'),
+    ('graphite', 'Graphite', '#616161'),
+]
+
+
 class Post(models.Model):
     name = models.CharField(max_length=100, blank=False)
     company_name = models.CharField(max_length=100, blank=True, null=True)
@@ -225,6 +242,10 @@ class Post(models.Model):
     )
     calendar_event_id = models.CharField(max_length=255, blank=True, null=True)
     driver_calendar_event_id = models.CharField(max_length=255, blank=True, null=True)
+    calendar_color = models.CharField(
+        max_length=20, blank=True, default='',
+        choices=[(key, label) for key, label, _ in CALENDAR_COLORS],
+    )
     use_proxy = models.BooleanField(default=False)
     extra_stop           = models.PositiveSmallIntegerField(default=0)
     extra_stop_addresses = models.JSONField(default=list, blank=True)

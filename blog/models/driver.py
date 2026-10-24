@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 
 from blog.storage import private_driver_docs_storage
+from .booking import CALENDAR_COLORS
 
 LICENSE_CLASS_CHOICES = [
     ('C', 'Car (C)'),
@@ -113,6 +114,12 @@ class Driver(models.Model):
     # drivers office staff created directly (no application to review).
     application_submitted_at = models.DateTimeField(null=True, blank=True)
     google_calendar_id = models.CharField(max_length=255, blank=True, null=True)
+    calendar_color = models.CharField(
+        max_length=20, blank=True, default='',
+        choices=[(key, label) for key, label, _ in CALENDAR_COLORS],
+        help_text='Bookings assigned to this driver show in this colour on the staff '
+                  'calendar, unless the booking has its own colour.',
+    )
     virtual_number = models.ForeignKey('VirtualNumber', on_delete=models.SET_NULL, null=True, blank=True)
     agreement_token = models.CharField(
         max_length=64, unique=True, null=True, blank=True, editable=False,

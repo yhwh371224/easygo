@@ -31,6 +31,14 @@
   .bc-ev:hover { filter: brightness(.95); }
   .bc-ev.is-pending { border-left-color: #d98a00; }
   .bc-ev.is-cancelled { border-left-color: #999; opacity: .55; text-decoration: line-through; }
+  .bc-ev[style] { background: var(--ev-color); border-left-color: var(--ev-color); color: #fff; }
+  .bc-ev[data-shade="banana"] { color: #222; }
+  .bc-colors { display: flex; flex-wrap: wrap; gap: .4rem; margin: .2rem 0 .9rem; }
+  .bc-colors button { width: 28px; height: 28px; border-radius: 50%; border: 2px solid transparent; padding: 0; cursor: pointer;
+                      background: var(--sw); box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .15); }
+  .bc-colors button[data-key=""] { background: var(--selected-bg, #f3ead8);
+                                   background-image: linear-gradient(135deg, transparent 45%, #999 45%, #999 55%, transparent 55%); }
+  .bc-colors button[aria-pressed="true"] { border-color: var(--body-fg, #333); }
   .bc-agenda { display: none; }
   .bc-agenda h3 { margin: 1rem 0 .3rem; }
   .bc-agenda .bc-ev { white-space: normal; font-size: .85rem; padding: .4rem .5rem; }
@@ -82,7 +90,7 @@
   </div>
 
   <p class="bc-help">
-    제목 앞 표시: <b>!</b> 리마인더 · <b>C</b> 취소 · <b>?</b> 미확정/가격 없음. 일정을 누르면 상세 내용과 수정 링크가 나옵니다.
+    제목 앞 표시: <b>!</b> 리마인더 · <b>C</b> 취소 · <b>?</b> 미확정/가격 없음. 일정을 누르면 상세 내용, 색깔 선택, 수정 링크가 나옵니다. 색을 따로 고르지 않은 일정은 배정된 드라이버의 색으로 보입니다.
   </p>
 
   <table class="bc-cal">
@@ -117,6 +125,14 @@
   <p class="bc-when" data-field="when"></p>
   <p class="bc-where" data-field="location"></p>
   <pre data-field="description"></pre>
+  {% if can_change %}
+  <div class="bc-colors" role="group" aria-label="Colour">
+    <button type="button" data-key="" title="Default (driver's colour)" aria-label="Default colour — driver's colour if set"></button>
+    {% for key, label, hex in colors %}
+    <button type="button" data-key="{{ key }}" style="--sw: {{ hex }}" title="{{ label }}" aria-label="{{ label }}"></button>
+    {% endfor %}
+  </div>
+  {% endif %}
   <div class="bc-actions">
     <a class="button default" data-field="edit" href="#">Edit booking</a>
     <button type="button" class="button" data-close>Close</button>
@@ -126,7 +142,13 @@
 <script>
 (function () {
   var dialog = document.getElementById('bc-dialog');
+  var current = null;
   function field(name) { return dialog.querySelector('[data-field="' + name + '"]'); }
+  function markColor(key) {
+    dialog.querySelectorAll('.bc-colors button').forEach(function (sw) {
+      sw.setAttribute('aria-pressed', sw.dataset.key === key ? 'true' : 'false');
+    });
+  }
   document.querySelectorAll('.bc-ev').forEach(function (btn) {
     btn.addEventListener('click', function () {
       field('title').textContent = btn.dataset.title;
@@ -134,7 +156,34 @@
       field('location').textContent = btn.dataset.location;
       field('description').textContent = btn.dataset.description;
       field('edit').href = btn.dataset.edit;
+      current = btn.dataset.id;
+      markColor(btn.dataset.color);
       dialog.showModal();
+      // Otherwise the first swatch takes focus and its ring reads as "selected".
+      dialog.querySelector('[data-close]').focus();
+    });
+  });
+  dialog.querySelectorAll('.bc-colors button').forEach(function (sw) {
+    sw.addEventListener('click', function () {
+      var id = current;
+      fetch('{{ color_url }}', {
+        method: 'POST',
+        headers: { 'X-CSRFToken': '{{ csrf_token }}', 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'post_id=' + encodeURIComponent(id) + '&color=' + encodeURIComponent(sw.dataset.key),
+        credentials: 'same-origin'
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          if (!data.ok) throw new Error(data.error || 'failed');
+          // The booking shows twice (grid + phone agenda) — repaint both.
+          document.querySelectorAll('.bc-ev[data-id="' + id + '"]').forEach(function (ev) {
+            ev.dataset.color = data.color;
+            ev.dataset.shade = data.shade;
+            if (data.hex) ev.style.setProperty('--ev-color', data.hex); else ev.removeAttribute('style');
+          });
+          if (id === current) markColor(data.color);
+        })
+        .catch(function (err) { console.error('[booking-calendar] colour save failed', err); });
     });
   });
   dialog.querySelector('[data-close]').addEventListener('click', function () { dialog.close(); });
