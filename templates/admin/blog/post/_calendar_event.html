@@ -1,0 +1,8 @@
+{% load admin_urls %}<button type="button"
+        class="bc-ev{% if ev.post.cancelled %} is-cancelled{% elif ev.post.pending or ev.post.price == 'TBA' %} is-pending{% endif %}"
+        title="{{ ev.title }}"
+        data-title="{{ ev.title }}"
+        data-when="{{ ev.post.pickup_date|date:'D j M Y' }}{% if ev.post.pickup_time %} · {{ ev.post.pickup_time }}{% endif %}"
+        data-location="{{ ev.location }}"
+        data-description="{{ ev.description }}"
+        data-edit="{% url opts|admin_urlname:'change' ev.post.pk %}">{{ ev.title|default:"(no details)" }}</button>

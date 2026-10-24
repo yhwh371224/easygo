@@ -400,6 +400,7 @@ class PostAdmin(admin.ModelAdmin):
                      'driver__driver_name']
     readonly_fields = ['suburb_distance_km', 'suburb_base_price', 'commission_amount_display', 'non_gst_deduction_display', 'subcontractor_payout_display']
     actions = ['duplicate_bookings']
+    change_list_template = 'admin/blog/post/change_list.html'
 
     # price / paid / driver_price are CharFields holding numeric strings, so
     # halving means parsing the number out, dividing by 2, and reformatting.
@@ -609,6 +610,108 @@ class PostAdmin(admin.ModelAdmin):
     def subcontractor_payout_display(self, obj):
         return f"${obj.subcontractor_payout}"
     subcontractor_payout_display.short_description = "Subcontractor Payout"
+
+    def get_urls(self):
+        custom = [
+            url_path(
+                'calendar/',
+                self.admin_site.admin_view(self.calendar_view),
+                name='blog_post_calendar',
+            ),
+        ]
+        return custom + super().get_urls()
+
+    def calendar_view(self, request):
+        """Staff month calendar of bookings by pickup date — the in-site
+        version of the Google company calendar. Each booking shows the same
+        title and details as its Google event (utils.calendar_sync
+        build_event_data), read straight from the database. Everything shows
+        by default; ?driver=assigned / none / <id> and ?region=<slug> narrow it (the <id> view
+        stands in for the per-driver Google calendars)."""
+        import calendar
+        from django.core.exceptions import PermissionDenied
+        from django.utils import timezone
+        from urllib.parse import urlencode
+        from regions.models import Region
+        from utils.calendar_sync import build_event_data
+
+        if not self.has_view_permission(request):
+            raise PermissionDenied
+
+        today = timezone.localdate()
+        try:
+            year = int(request.GET.get('year', today.year))
+            month = int(request.GET.get('month', today.month))
+            first = date(year, month, 1)
+        except ValueError:
+            first = today.replace(day=1)
+        last = first.replace(day=calendar.monthrange(first.year, first.month)[1])
+        grid = calendar.Calendar(firstweekday=0).monthdatescalendar(first.year, first.month)
+
+        driver_param = request.GET.get('driver', '')
+        region_param = request.GET.get('region', '')
+        show_cancelled = request.GET.get('cancelled') != '0'
+        posts = (Post.objects.filter(pickup_date__range=(grid[0][0], grid[-1][-1]))
+                 .select_related('driver', 'region', 'terminal_pickup_point'))
+        if driver_param == 'assigned':
+            posts = posts.filter(driver__isnull=False)
+        elif driver_param == 'none':
+            posts = posts.filter(driver__isnull=True)
+        elif driver_param.isdigit():
+            posts = posts.filter(driver_id=int(driver_param))
+        if region_param:
+            posts = posts.filter(region__slug=region_param)
+        if not show_cancelled:
+            posts = posts.filter(cancelled=False)
+        # Carried on the prev/next/today links so the filters stick.
+        filter_query = urlencode({k: v for k, v in [
+            ('driver', driver_param), ('region', region_param),
+            ('cancelled', '' if show_cancelled else '0')] if v})
+
+        by_day = {}
+        for post in sorted(posts, key=lambda p: (p.pickup_time or '', p.pk)):
+            event = build_event_data(post) or {}
+            by_day.setdefault(post.pickup_date, []).append({
+                'post': post,
+                'title': event.get('summary', ''),
+                'location': event.get('location', ''),
+                'description': event.get('description', ''),
+            })
+
+        weeks = [
+            [
+                {
+                    'date': d,
+                    'in_month': d.month == first.month,
+                    'is_today': d == today,
+                    'events': by_day.get(d, []),
+                }
+                for d in week
+            ]
+            for week in grid
+        ]
+        prev_month = (first - timedelta(days=1)).replace(day=1)
+        next_month = last + timedelta(days=1)
+
+        context = {
+            **self.admin_site.each_context(request),
+            'opts': self.model._meta,
+            'title': 'Booking calendar',
+            'subtitle': None,  # basecamp's context processor sets one for every admin page
+            'month': first,
+            'weeks': weeks,
+            'agenda': [day for week in weeks for day in week if day['in_month'] and day['events']],
+            'prev_month': prev_month,
+            'next_month': next_month,
+            'this_month': today.replace(day=1),
+            'drivers': Driver.objects.filter(is_active=True).order_by('order', 'driver_name'),
+            'driver_param': driver_param,
+            'regions': Region.objects.filter(is_active=True).order_by('name'),
+            'region_param': region_param,
+            'show_cancelled': show_cancelled,
+            'filter_query': filter_query,
+        }
+        return TemplateResponse(request, 'admin/blog/post/calendar.html', context)
 
 
 class PhoneMappingAdmin(admin.ModelAdmin):

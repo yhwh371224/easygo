@@ -1,0 +1,144 @@
+{% extends "admin/base_site.html" %}
+{% block title %}Booking calendar | {{ site_title|default:"Django site admin" }}{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <a href="{% url 'admin:index' %}">Home</a> &rsaquo;
+  <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a> &rsaquo;
+  <a href="{% url 'admin:blog_post_changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a> &rsaquo;
+  Calendar
+</div>
+{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+  .bc-bar { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem 1rem; margin-bottom: 1rem; }
+  .bc-bar h2 { margin: 0; min-width: 9rem; text-align: center; }
+  .bc-filters { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; margin-left: auto; }
+  .bc-help { color: var(--body-quiet-color, #666); margin: 0 0 1rem; }
+  .bc-cal { border-collapse: collapse; width: 100%; table-layout: fixed; }
+  .bc-cal th { padding: .4rem; text-align: center; }
+  .bc-cal td { border: 1px solid var(--hairline-color, #ddd); height: 96px; padding: .25rem; vertical-align: top; }
+  .bc-cal td.out-month { background: var(--darkened-bg, #f8f8f8); }
+  .bc-cal td.out-month .bc-num { opacity: .4; }
+  .bc-num { display: inline-block; font-weight: 600; min-width: 1.6em; text-align: center; border-radius: 1em; margin-bottom: .2rem; text-decoration: none; color: inherit; }
+  .is-today .bc-num { background: var(--primary, #c8a000); color: #fff; }
+  .bc-count { display: none; }
+  .bc-ev { display: block; width: 100%; border: 0; border-left: 3px solid var(--primary, #c8a000); background: var(--selected-bg, #f3ead8);
+           color: var(--body-fg, #333); font: inherit; font-size: .75rem; line-height: 1.3; text-align: left; padding: .15rem .3rem;
+           margin-bottom: 2px; border-radius: 2px; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bc-ev:hover { filter: brightness(.95); }
+  .bc-ev.is-pending { border-left-color: #d98a00; }
+  .bc-ev.is-cancelled { border-left-color: #999; opacity: .55; text-decoration: line-through; }
+  .bc-agenda { display: none; }
+  .bc-agenda h3 { margin: 1rem 0 .3rem; }
+  .bc-agenda .bc-ev { white-space: normal; font-size: .85rem; padding: .4rem .5rem; }
+  #bc-dialog { box-sizing: border-box; max-width: 32rem; width: calc(100% - 32px); border: 1px solid var(--hairline-color, #ccc); border-radius: 6px;
+               background: var(--body-bg, #fff); color: var(--body-fg, #333); padding: 1rem 1.2rem; }
+  #bc-dialog::backdrop { background: rgba(0, 0, 0, .4); }
+  #bc-dialog h3 { margin: 0 0 .3rem; font-size: 1rem; word-break: break-word; }
+  #bc-dialog .bc-when, #bc-dialog .bc-where { color: var(--body-quiet-color, #666); margin: 0 0 .3rem; }
+  #bc-dialog pre { white-space: pre-wrap; word-break: break-word; font: inherit; margin: .6rem 0; }
+  #bc-dialog .bc-actions { display: flex; gap: .6rem; justify-content: flex-end; flex-wrap: wrap; }
+  @media (max-width: 767px) {
+    .bc-filters { margin-left: 0; }
+    .bc-cal th { padding: .2rem 0; font-size: .7rem; }
+    .bc-cal td { height: 48px; padding: .15rem; text-align: center; }
+    .bc-cal .bc-ev { display: none; }
+    .bc-count { display: block; font-size: .7rem; font-weight: 700; color: var(--link-fg, #6f5800); }
+    .bc-agenda { display: block; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+  <div class="bc-bar">
+    <a class="button" href="?year={{ prev_month.year }}&month={{ prev_month.month }}{% if filter_query %}&{{ filter_query }}{% endif %}">&larr;</a>
+    <h2>{{ month|date:"F Y" }}</h2>
+    <a class="button" href="?year={{ next_month.year }}&month={{ next_month.month }}{% if filter_query %}&{{ filter_query }}{% endif %}">&rarr;</a>
+    <a href="?year={{ this_month.year }}&month={{ this_month.month }}{% if filter_query %}&{{ filter_query }}{% endif %}">Today</a>
+
+    <form class="bc-filters" method="get">
+      <input type="hidden" name="year" value="{{ month.year }}">
+      <input type="hidden" name="month" value="{{ month.month }}">
+      <select name="driver" onchange="this.form.submit()" aria-label="Driver">
+        <option value="">All bookings</option>
+        <option value="assigned"{% if driver_param == "assigned" %} selected{% endif %}>All drivers</option>
+        <option value="none"{% if driver_param == "none" %} selected{% endif %}>Unassigned</option>
+        {% for d in drivers %}
+        <option value="{{ d.pk }}"{% if driver_param == d.pk|stringformat:"d" %} selected{% endif %}>{{ d.driver_name|default:d.pk }}</option>
+        {% endfor %}
+      </select>
+      <select name="region" onchange="this.form.submit()" aria-label="Region">
+        <option value="">All regions</option>
+        {% for r in regions %}
+        <option value="{{ r.slug }}"{% if region_param == r.slug %} selected{% endif %}>{{ r.name }}</option>
+        {% endfor %}
+      </select>
+      <label><input type="checkbox" name="cancelled" value="0" onchange="this.form.submit()"{% if not show_cancelled %} checked{% endif %}> Hide cancelled</label>
+    </form>
+  </div>
+
+  <p class="bc-help">
+    제목 앞 표시: <b>!</b> 리마인더 · <b>C</b> 취소 · <b>?</b> 미확정/가격 없음. 일정을 누르면 상세 내용과 수정 링크가 나옵니다.
+  </p>
+
+  <table class="bc-cal">
+    <thead><tr><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th></tr></thead>
+    <tbody>
+      {% for week in weeks %}
+      <tr>
+        {% for day in week %}
+        <td class="{% if not day.in_month %}out-month{% endif %}{% if day.is_today %} is-today{% endif %}">
+          {% if day.events and day.in_month %}<a class="bc-num" href="#d-{{ day.date|date:'Y-m-d' }}">{{ day.date.day }}</a>{% else %}<span class="bc-num">{{ day.date.day }}</span>{% endif %}
+          {% if day.events %}<span class="bc-count">{{ day.events|length }}</span>{% endif %}
+          {% for ev in day.events %}{% include "admin/blog/post/_calendar_event.html" %}{% endfor %}
+        </td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="bc-agenda">
+    {% for day in agenda %}
+    <h3 id="d-{{ day.date|date:'Y-m-d' }}">{{ day.date|date:"D j M" }}</h3>
+    {% for ev in day.events %}{% include "admin/blog/post/_calendar_event.html" %}{% endfor %}
+    {% empty %}
+    <p>No bookings this month.</p>
+    {% endfor %}
+  </div>
+</div>
+
+<dialog id="bc-dialog">
+  <h3 data-field="title"></h3>
+  <p class="bc-when" data-field="when"></p>
+  <p class="bc-where" data-field="location"></p>
+  <pre data-field="description"></pre>
+  <div class="bc-actions">
+    <a class="button default" data-field="edit" href="#">Edit booking</a>
+    <button type="button" class="button" data-close>Close</button>
+  </div>
+</dialog>
+
+<script>
+(function () {
+  var dialog = document.getElementById('bc-dialog');
+  function field(name) { return dialog.querySelector('[data-field="' + name + '"]'); }
+  document.querySelectorAll('.bc-ev').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      field('title').textContent = btn.dataset.title;
+      field('when').textContent = btn.dataset.when;
+      field('location').textContent = btn.dataset.location;
+      field('description').textContent = btn.dataset.description;
+      field('edit').href = btn.dataset.edit;
+      dialog.showModal();
+    });
+  });
+  dialog.querySelector('[data-close]').addEventListener('click', function () { dialog.close(); });
+  dialog.addEventListener('click', function (e) { if (e.target === dialog) dialog.close(); });
+})();
+</script>
+{% endblock %}

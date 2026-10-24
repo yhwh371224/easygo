@@ -414,6 +414,83 @@ class CalendarEventDescriptionTests(TestCase):
         self.assertIn('dp:$100 Sydney', build_event_data(post)['description'])
 
 
+@patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+@patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+class BookingCalendarAdminTests(TestCase):
+    """Admin month calendar (PostAdmin.calendar_view) — same title/details
+    as the Google company calendar, read from the database."""
+
+    def setUp(self):
+        self.client.force_login(User.objects.create_superuser('boss', 'boss@x.com', 'pass'))
+        self.url = reverse('admin:blog_post_calendar')
+
+    def _post(self, **kw):
+        kw.setdefault('pickup_date', datetime.date.today() + timedelta(days=3))
+        kw.setdefault('pickup_time', '09:00')
+        kw.setdefault('price', '110')
+        kw.setdefault('start_point', 'Sydney Airport')
+        return Post.objects.create(name='Pax', email='p@x.com', contact='0412345678', **kw)
+
+    def _query(self, post):
+        return {'year': post.pickup_date.year, 'month': post.pickup_date.month}
+
+    def test_shows_google_style_title_and_details(self, *_):
+        post = self._post(pickup_time='07:30', flight_number='QF1', no_of_passenger='2',
+                          driver_price='100', driver=make_driver())
+        response = self.client.get(self.url, self._query(post))
+        self.assertContains(response, '07:30 QF1 Sydney Airport p2 $110 0412345678')
+        self.assertContains(response, 'dp:$100')
+        self.assertContains(response, reverse('admin:blog_post_change', args=[post.pk]))
+
+    def test_cancelled_marked_and_hideable(self, *_):
+        post = self._post(cancelled=True, pickup_time='10:15')
+        response = self.client.get(self.url, self._query(post))
+        self.assertContains(response, 'is-cancelled')
+        self.assertContains(response, 'data-title="C ')
+        response = self.client.get(self.url, {**self._query(post), 'cancelled': '0'})
+        self.assertNotContains(response, '10:15')
+
+    def test_driver_filter(self, *_):
+        driver = make_driver()
+        mine = self._post(pickup_time='08:00', driver=driver)
+        self._post(pickup_time='11:00', start_point='Mascot')
+        query = self._query(mine)
+        for param, shown, hidden in [('', ['08:00', 'Mascot'], []),
+                                     ('assigned', ['08:00'], ['Mascot']),
+                                     ('none', ['Mascot'], ['08:00 Sydney Airport']),
+                                     (str(driver.pk), ['08:00'], ['Mascot'])]:
+            response = self.client.get(self.url, {**query, 'driver': param})
+            for text in shown:
+                self.assertContains(response, text)
+            for text in hidden:
+                self.assertNotContains(response, text)
+
+    def test_region_filter_sticks_on_month_links(self, *_):
+        region = make_region('test-bris', 'Test Bris')
+        mine = self._post(pickup_time='08:00', region=region)
+        self._post(pickup_time='11:00', start_point='Mascot')
+        response = self.client.get(self.url, {**self._query(mine), 'region': 'test-bris', 'cancelled': '0'})
+        self.assertContains(response, '08:00')
+        self.assertNotContains(response, 'Mascot')
+        # Markup is minified (attribute order/format changes), so check context.
+        self.assertEqual(response.context['region_param'], 'test-bris')
+        self.assertIn('test-bris', [r.slug for r in response.context['regions']])
+        self.assertContains(response, 'region=test-bris')
+        self.assertEqual(response.context['filter_query'], 'region=test-bris&cancelled=0')
+
+    def test_bad_month_falls_back(self, *_):
+        self.assertEqual(self.client.get(self.url, {'year': 'x', 'month': '13'}).status_code, 200)
+
+    def test_staff_only(self, *_):
+        self.client.logout()
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 302)
+        self.assertIn('login', response['Location'])
+
+    def test_linked_from_booking_list(self, *_):
+        self.assertContains(self.client.get(reverse('admin:blog_post_changelist')), self.url)
+
+
 # ---------------------------------------------------------------------------
 # Model: PaypalPayment
 # ---------------------------------------------------------------------------
