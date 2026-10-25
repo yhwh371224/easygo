@@ -4,13 +4,20 @@
 
 {% include "basecamp/layouts/sub_navbar.html" %}
 
+{% block extra_css %}
+<style nonce="{{ CSP_NONCE }}">
+  /* 모바일: floating navbar 아래로 내용 내리기 (pt-7 은 home.css 에 없음) */
+  @media (max-width: 575.98px) { .success-content { padding-top: 6rem !important; } }
+</style>
+{% endblock %}
+
 {% block content %}
 {% static 'basecamp/photos/bg-pattern01.webp' as page_bg %}
   <body class="bg-dark text-light">
       <section class="jarallax bg-dark py-0" data-jarallax data-speed="0.1">
         <div class="jarallax-img" style="background-image: url('{{ page_bg }}');"></div>
             <br>
-        <div class="container pt-7 pb-4 py-sm-7 text-center">
+        <div class="container success-content pb-4 py-sm-7 text-center">
           <div class="py-md-6">
               <h2 class="text-light pb-3"><span style="color: #eb7828">Thank you for your payment! </span></h2><br>          
               <h3 class="fs-lg text-light">Your payment has been processed successfully</h3><br><br>
