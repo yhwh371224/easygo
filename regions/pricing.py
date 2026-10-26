@@ -11,7 +11,7 @@ Usage:
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from decimal import Decimal
+from decimal import Decimal, ROUND_HALF_UP
 from typing import List
 
 from django.core.cache import cache
@@ -79,6 +79,9 @@ def calculate_price(config: PricingConfig, booking: BookingInput) -> dict:
               + pax_surcharge           ((pax-2) × $10 from 3rd pax; +$30 extra for 10+)
               + extra_fees              (bags, oversize, special items, extra stops)
 
+    The total is rounded to whole dollars (half up) so customers are quoted
+    clean prices; the breakdown parts keep their cents.
+
     Returns a breakdown dict with Decimal values.
     """
     ZERO = Decimal("0.00")
@@ -108,7 +111,9 @@ def calculate_price(config: PricingConfig, booking: BookingInput) -> dict:
         + Decimal(ex.extra_stop)  * config.second_stop_fee
     ).quantize(Decimal("0.01"))
 
-    total = (config.base_fare + peak_surcharge + pax_surcharge + extra_fees).quantize(Decimal("0.01"))
+    total = (config.base_fare + peak_surcharge + pax_surcharge + extra_fees).quantize(
+        Decimal("1"), rounding=ROUND_HALF_UP,
+    )
 
     return {
         "base":           config.base_fare,
@@ -235,7 +240,7 @@ def calculate_inquiry_price(inquiry, region) -> str | None:
     """
     Calculate and return the price total for an Inquiry before saving.
     Includes return trip price if return_pickup_date is set.
-    Returns a string like "120.00", or None if suburb/rule lookup fails.
+    Returns a whole-dollar string like "120", or None if suburb/rule lookup fails.
     """
     from regions.models import RegionSuburb
 
@@ -267,4 +272,4 @@ def calculate_inquiry_price(inquiry, region) -> str | None:
         return_booking = inquiry_to_pricing(inquiry, rule, is_return=True)
         total += calculate_price(config, return_booking)["total"]
 
-    return str(total.quantize(Decimal("0.01")))
+    return str(total)
