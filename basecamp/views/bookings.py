@@ -8,6 +8,7 @@ from django.views.decorators.http import require_POST
 from decimal import Decimal
 from basecamp.views.inquirys import _get_request_region
 from django_ratelimit.decorators import ratelimit
+from django.db import transaction
 from django.db.models import Q
 from django.utils import timezone
 from django.http import HttpResponse, JsonResponse
@@ -28,6 +29,23 @@ from utils import email
 logger = logging.getLogger(__name__)
 
 from regions.models import RequestLog
+
+def _save_post_claiming_inquiry(post, inquiry):
+    """Inquiry 를 지우면서 Post 를 저장한다. 이미 다른 요청이 같은 Inquiry 를
+    Post 로 옮겼으면 저장하지 않고 False.
+
+    confirm 버튼 연타·새로고침으로 같은 Inquiry 에 요청이 거의 동시에 여러 번
+    들어오면, 전부 Inquiry 를 읽은 뒤 각자 Post 를 만들어 똑같은 부킹이 여러 개
+    생겼다(2026-10 candeeseley 3중 부킹). DELETE 는 행 잠금이 걸려 동시에
+    들어와도 한 요청만 1건을 지우므로, 지운 요청만 Post 를 저장한다.
+    """
+    with transaction.atomic():
+        deleted, _ = Inquiry.objects.filter(pk=inquiry.pk).delete()
+        if not deleted:
+            return False
+        post.save()
+    return True
+
 
 # Quick rebook — 차량이 13인승까지라 그 이상은 폼으로 받지 않고 메일로 안내한다.
 MAX_REBOOK_PASSENGERS = 13
@@ -281,9 +299,9 @@ def confirm_booking_detail(request):
         same_extra_stop=same_extra_stop, customer_history=customer_history,
     )
 
-    p.save()
-
-    user.delete()
+    if not _save_post_claiming_inquiry(p, user):
+        logger.warning(f"[BOOKING] duplicate confirm ignored: inquiry pk={user.pk} email={email}")
+        return render_inquiry_done(request)
 
     if request.POST.get('send_confirmation_email') == 'on':
         send_post_confirmation_email_task.delay(p.pk)
@@ -428,9 +446,9 @@ def confirm_booking_prepay_detail(request):
         same_extra_stop=same_extra_stop, customer_history=customer_history,
     )
 
-    p.save()
-
-    user.delete()
+    if not _save_post_claiming_inquiry(p, user):
+        logger.warning(f"[BOOKING PREPAY] duplicate confirm ignored: inquiry pk={user.pk} email={email}")
+        return redirect(f"/payonline/?{urlencode({'name': name, 'amount': final_price})}")
 
     # 결제 여부와 무관하게, confirm 클릭 10분 후 confirmation email 발송.
     # 이미 다른 경로(예: admin is_confirmed)로 발송됐다면 태스크 내 sent_email

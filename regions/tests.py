@@ -6,7 +6,7 @@ from decimal import Decimal
 from unittest.mock import patch
 
 from django.conf import settings
-from django.test import TestCase, Client, override_settings
+from django.test import TestCase, TransactionTestCase, Client, override_settings
 from django.urls import reverse
 
 from regions.models import Region, Country, Airport, Terminal, RegionSuburb, RequestLog
@@ -628,6 +628,60 @@ class ConfirmBookingHoneypotTests(TestCase):
         self.assertIn('target@example.com', alert)
         self.assertIn('http://spam.example', alert)
         self.assertIn('/confirm_booking_detail/', alert)
+
+
+# 손님이 confirm 버튼을 거의 동시에 여러 번 누르면 똑같은 부킹이 여러 개
+# 저장됐다. 요청마다 자기 DB 연결이 필요해서 TransactionTestCase + 스레드.
+@override_settings(CACHES={'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+                                       'LOCATION': 'confirm-race-tests'}})
+class ConfirmBookingConcurrentClickTests(TransactionTestCase):
+
+    def _race(self, view_name, clicks=3):
+        import threading
+        from django.db import connection
+        from blog.blog_utils import resolve_booking_driver
+        from blog.models import Inquiry, Post
+
+        Inquiry.objects.create(name='Double Click', email='dbl@example.com', price='85',
+                               no_of_passenger='1', direction='Drop off to Domestic Airport',
+                               pickup_date=datetime.date.today() + datetime.timedelta(days=5))
+        # 모든 요청이 Inquiry 를 읽은 뒤에야 저장 단계로 넘어가게 해서 경합을 재현.
+        barrier = threading.Barrier(clicks, timeout=10)
+
+        def wait_then_resolve(*args, **kwargs):
+            barrier.wait()
+            return resolve_booking_driver(*args, **kwargs)
+
+        statuses = []
+
+        def click():
+            try:
+                response = Client().post(reverse(f'basecamp:{view_name}'), {
+                    'email': 'dbl@example.com', 'index': '1', 'cash': 'on',
+                }, secure=True)
+                statuses.append(response.status_code)
+            finally:
+                connection.close()
+
+        with patch('basecamp.views.bookings.resolve_booking_driver', side_effect=wait_then_resolve), \
+                patch('basecamp.views.bookings.send_telegram_task.delay'), \
+                patch('basecamp.views.bookings.send_post_confirmation_email_task.apply_async'):
+            threads = [threading.Thread(target=click) for _ in range(clicks)]
+            for t in threads:
+                t.start()
+            for t in threads:
+                t.join()
+
+        self.assertEqual(len(statuses), clicks)
+        self.assertEqual(Post.objects.filter(email='dbl@example.com').count(), 1)
+        self.assertFalse(Inquiry.objects.filter(email='dbl@example.com').exists())
+        return statuses
+
+    def test_simultaneous_confirm_clicks_save_one_booking(self):
+        self.assertEqual(self._race('confirm_booking_detail'), [200, 200, 200])
+
+    def test_simultaneous_prepay_confirm_clicks_save_one_booking(self):
+        self.assertEqual(self._race('confirm_booking_prepay_detail'), [302, 302, 302])
 
 
 # ---------------------------------------------------------------------------
