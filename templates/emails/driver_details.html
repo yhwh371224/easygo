@@ -234,7 +234,13 @@
 														<strong>=== The meeting point ===</strong><br>
 														{{ post.terminal_pickup_point.instruction|linebreaksbr }}<br>
 														{% for map in post.terminal_pickup_point.maps.all %}
-														• <a href="{{ map.url }}">{{ map.title }}</a><br>
+														{% if map.type == 'image' %}
+														<br><strong>{{ map.title }}</strong><br>
+														<a href="{{ map.url }}" target="_blank"><img src="{{ map.url }}" alt="{{ map.title }}" width="480" style="display:block;width:100%;max-width:480px;height:auto;border:1px solid #dddddd;border-radius:6px;Margin-top:6px;"></a>
+														<a href="{{ map.url }}" target="_blank" style="color:#277fd2;text-decoration:underline;font-size:13px;">Can't see the photo? Tap here to open it</a><br>
+														{% else %}
+														{% ifchanged map.type %}<br>{% endifchanged %}• <a href="{{ map.url }}">{{ map.title }}</a><br>
+														{% endif %}
 														{% endfor %}
 													{% endif %}
 												</td>
@@ -295,7 +301,13 @@
 														<strong>=== The meeting point ===</strong><br>
 														{{ post.terminal_pickup_point.instruction|linebreaksbr }}<br>
 														{% for map in post.terminal_pickup_point.maps.all %}
-														• <a href="{{ map.url }}">{{ map.title }}</a><br>
+														{% if map.type == 'image' %}
+														<br><strong>{{ map.title }}</strong><br>
+														<a href="{{ map.url }}" target="_blank"><img src="{{ map.url }}" alt="{{ map.title }}" width="480" style="display:block;width:100%;max-width:480px;height:auto;border:1px solid #dddddd;border-radius:6px;Margin-top:6px;"></a>
+														<a href="{{ map.url }}" target="_blank" style="color:#277fd2;text-decoration:underline;font-size:13px;">Can't see the photo? Tap here to open it</a><br>
+														{% else %}
+														{% ifchanged map.type %}<br>{% endifchanged %}• <a href="{{ map.url }}">{{ map.title }}</a><br>
+														{% endif %}
 														{% endfor %}
 													{% endif %}
 												</td>
