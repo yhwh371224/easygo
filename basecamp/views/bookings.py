@@ -47,6 +47,21 @@ def _save_post_claiming_inquiry(post, inquiry):
     return True
 
 
+def _render_confirm_lookup_failed(request, email, has_inquiry):
+    """confirm 할 Inquiry 를 못 찾았을 때의 응답.
+
+    confirm 하면 Inquiry 가 Post 로 옮겨지므로, 이미 confirm 한 손님이 링크를
+    다시 누르거나 페이지에서 또 보내면 Inquiry 가 없다. 그 이메일로 Post 가
+    있으면 에러 대신 이미 예약되었다는 안내를 보여준다.
+    """
+    if email and not has_inquiry and Post.objects.filter(
+        Q(email__iexact=email) | Q(booker_email__iexact=email),
+        cancelled=False,
+    ).exists():
+        return render(request, 'basecamp/booking/booking_already_confirmed.html')
+    return render(request, 'basecamp/email/email_error_confirmbooking.html')
+
+
 # Quick rebook — 차량이 13인승까지라 그 이상은 폼으로 받지 않고 메일로 안내한다.
 MAX_REBOOK_PASSENGERS = 13
 SUPPORT_EMAIL = 'info@easygoshuttle.com.au'
@@ -175,7 +190,7 @@ def confirm_booking_detail(request):
     if users.exists() and 0 <= index < len(users):
         user = users[index]
     else:
-        return render(request, 'basecamp/email/email_error_confirmbooking.html')
+        return _render_confirm_lookup_failed(request, email, users.exists())
 
     # 기존 데이터
     name = user.name
@@ -353,7 +368,7 @@ def confirm_booking_prepay_detail(request):
     if users.exists() and 0 <= index < len(users):
         user = users[index]
     else:
-        return render(request, 'basecamp/email/email_error_confirmbooking.html')
+        return _render_confirm_lookup_failed(request, email, users.exists())
 
     name = user.name
     booker_name = user.booker_name
