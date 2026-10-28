@@ -1,0 +1,14 @@
+{% extends 'basecamp/base/easygo_base_error.html' %}
+{% block content %}
+
+<main class="page-wrapper">
+    <div class="container d-flex flex-column justify-content-center min-vh-100 py-5">
+      <div class="text-center pt-4 mt-lg-2">
+        <h1 class="display-5 text-light pb-1">We couldn't find this email address</h1>
+        <p class="fs-lg pb-2 pb-md-0 mb-4 mb-md-5"><span style="color: #eb7828">The email address you entered is not in our system.<br>Please confirm again using the same email address you entered in your inquiry form.</span></p>
+        <a class="btn btn-lg btn-primary" href="javascript:history.back()">Go back and try again</a>
+      </div>
+    </div>
+  </main>
+
+{% endblock %}

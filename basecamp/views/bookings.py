@@ -52,13 +52,16 @@ def _render_confirm_lookup_failed(request, email, has_inquiry):
 
     confirm 하면 Inquiry 가 Post 로 옮겨지므로, 이미 confirm 한 손님이 링크를
     다시 누르거나 페이지에서 또 보내면 Inquiry 가 없다. 그 이메일로 Post 가
-    있으면 에러 대신 이미 예약되었다는 안내를 보여준다.
+    있으면 에러 대신 이미 예약되었다는 안내를 보여준다. Post 에도 없으면
+    문의 때와 다른 이메일을 넣은 것이라 문의 폼에 쓴 이메일로 다시 하라고 안내한다.
     """
-    if email and not has_inquiry and Post.objects.filter(
-        Q(email__iexact=email) | Q(booker_email__iexact=email),
-        cancelled=False,
-    ).exists():
+    if has_inquiry:
+        return render(request, 'basecamp/email/email_error_confirmbooking.html')
+    posts = Post.objects.filter(Q(email__iexact=email) | Q(booker_email__iexact=email)) if email else Post.objects.none()
+    if posts.filter(cancelled=False).exists():
         return render(request, 'basecamp/booking/booking_already_confirmed.html')
+    if not posts.exists():
+        return render(request, 'basecamp/booking/booking_email_not_found.html')
     return render(request, 'basecamp/email/email_error_confirmbooking.html')
 
 
