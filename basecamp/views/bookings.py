@@ -18,8 +18,9 @@ from blog.blog_utils import resolve_booking_driver
 from blog.tasks import send_post_confirmation_email_task, send_telegram_task
 from main.settings import RECIPIENT_EMAIL
 from regions.models import Region
+from regions.pricing import calculate_inquiry_price
 from basecamp.basecamp_utils import (
-    is_ajax, parse_baggage, parse_date,
+    is_ajax, parse_baggage, parse_special_items, parse_date,
     to_bool, verify_turnstile,
     render_inquiry_done, booking_success_response, require_turnstile,
     is_duplicate_submission, parse_booking_dates, get_client_ip,
@@ -884,5 +885,140 @@ def quick_rebook_confirm(request, region_slug=None):
         )
     except Exception as e:
         logger.error(f"[TELEGRAM] Quick Rebook failed: {e}")
+
+    return booking_success_response(request)
+
+# Direct booking — 메일로 문의만 하고 폼 없이 예약하겠다는 손님에게 보내는 링크.
+# 견적(Inquiry) 단계 없이 바로 Post 로 저장한다. 공개 페이지에 링크된 /booking/ 과
+# 분리한 이유: 아무나 들어와서 확인 안 된 자동가격으로 예약을 만들지 않게 하려고.
+# 저장된 Post 는 direct_booking=True 로 표시되고 텔레그램으로 알린다.
+DIRECT_BOOKING_DUPLICATE_SECONDS = 30
+
+
+def _direct_booking_region(request):
+    region = _get_request_region(request)
+    slug = request.POST.get('region') or request.GET.get('region')
+    if not region and slug:
+        region = Region.objects.filter(slug=slug, is_active=True).first()
+    return region or Region.objects.filter(slug='sydney', is_active=True).first()
+
+
+def _direct_booking_alert(post, open_inquiries, ip):
+    when = f"{post.pickup_date} {post.pickup_time or ''}".rstrip()
+    lines = [
+        "📩 DIRECT BOOKING (/book-direct/) — check price & confirm",
+        "",
+        f"#{post.pk} {post.name}",
+        f"📧 {post.email}",
+        f"📞 {post.contact or '-'}",
+        f"🗓️ {when}",
+        f"🧭 {post.direction or '-'} / {post.suburb or post.start_point or '-'}",
+        f"👥 {post.no_of_passenger} pax",
+        f"💰 auto price ${post.price}" if post.price else "💰 price TBA",
+    ]
+    if post.return_pickup_date:
+        lines.append(f"↩️ return {post.return_pickup_date} {post.return_pickup_time or ''}".rstrip())
+    if post.prepay:
+        lines.append("💳 prepay required")
+    if open_inquiries:
+        lines.append(f"⚠️ {open_inquiries} open inquiry for this email — delete it if it's the same trip")
+    lines.append(f"Region: {post.region.name if post.region else '-'}")
+    lines.append(f"IP: `{ip}`")
+    return "\n".join(lines) + "\n"
+
+
+@ratelimit(key='ip', rate='5/m', method='POST', block=True)
+@require_turnstile
+def direct_booking(request):
+    region = _direct_booking_region(request)
+
+    if request.method != "POST":
+        home_suburbs = (
+            region.suburbs.filter(is_active=True).order_by('-is_pinned', 'sort_order', 'name')
+            if region else []
+        )
+        return render(request, 'basecamp/booking/inquiry.html', {
+            "region": region,
+            "home_suburbs": home_suburbs,
+            "direction": "Drop off to Domestic Airport",
+            "direct_booking": True,
+        })
+
+    ip = get_client_ip(request)
+    email = request.POST.get('email', '').strip()
+    logger.info(f"[DIRECT_BOOKING] IP={ip} path={request.path} email={email}")
+    RequestLog.objects.create(
+        region=region, path=request.path, ip=ip, email=email,
+        user_agent=request.META.get("HTTP_USER_AGENT", ""),
+    )
+
+    if is_duplicate_submission(Post, email, seconds=DIRECT_BOOKING_DUPLICATE_SECONDS):
+        return JsonResponse({'success': False, 'message': 'This booking was already submitted. Please wait before trying again.'})
+
+    try:
+        pickup_date_obj, return_pickup_date_obj = parse_booking_dates(
+            request.POST.get('pickup_date', ''), request.POST.get('return_pickup_date', ''),
+        )
+    except ValueError as e:
+        return JsonResponse({'success': False, 'error': str(e)})
+
+    direction = request.POST.get('direction', '')
+    suburb = request.POST.get('suburb', '')
+    pickup_time = request.POST.get('pickup_time')
+    extra_stop = int(request.POST.get('extra_stop') or 0)
+
+    p = Post(
+        name=request.POST.get('name', ''),
+        contact=request.POST.get('contact', ''),
+        email=email,
+        pickup_date=pickup_date_obj,
+        flight_number=request.POST.get('flight_number', ''),
+        flight_time=request.POST.get('flight_time', ''),
+        pickup_time=pickup_time,
+        direction=direction,
+        suburb=suburb,
+        street=request.POST.get('street', ''),
+        start_point=request.POST.get('start_point', ''),
+        end_point=request.POST.get('end_point', ''),
+        no_of_passenger=request.POST.get('no_of_passenger', ''),
+        no_of_baggage=parse_baggage(request),
+        special_items=parse_special_items(request),
+        extra_stop=extra_stop,
+        extra_stop_addresses=[
+            a for i in range(1, extra_stop + 1)
+            if (a := request.POST.get(f'extra_stop_address_{i}', '').strip())
+        ],
+        same_extra_stop=request.POST.get('same_extra_stop') == '1',
+        return_direction=request.POST.get('return_direction', ''),
+        return_pickup_date=return_pickup_date_obj,
+        return_flight_number=request.POST.get('return_flight_number', ''),
+        return_flight_time=request.POST.get('return_flight_time', ''),
+        return_no_of_passenger=request.POST.get('return_no_of_passenger', '').strip() or None,
+        return_pickup_time=request.POST.get('return_pickup_time'),
+        return_start_point=request.POST.get('return_start_point', ''),
+        return_end_point=request.POST.get('return_end_point', ''),
+        message=request.POST.get('message', ''),
+        region=region,
+        direct_booking=True,
+    )
+    p.price = calculate_inquiry_price(p, region)
+
+    # confirm_booking_detail 과 같은 선결제 규칙: 첫 이용 도착편, 픽업 24h 이내.
+    is_arrival = direction.startswith("Pickup from")
+    is_first_time = not Post.objects.filter(email__iexact=email, cancelled=False, pending=False).exists()
+    pickup_dt = dunning.combine_pickup(pickup_date_obj, pickup_time)
+    p.prepay = (is_arrival and is_first_time) or dunning.is_prepay_required_at_booking(pickup_dt)
+    p.pending = not p.prepay
+    p.driver = resolve_booking_driver(direction, suburb, region)
+
+    open_inquiries = Inquiry.objects.filter(Q(email__iexact=email) | Q(booker_email__iexact=email)).count()
+    post_count = Post.objects.filter(Q(email__iexact=email) | Q(booker_email__iexact=email), cancelled=False).count()
+    p.customer_history = f"Direct booking | Inquiry: {open_inquiries} | Post: {post_count}"
+    p.save()
+
+    try:
+        send_telegram_task.delay(_direct_booking_alert(p, open_inquiries, ip), location_ip=ip)
+    except Exception as e:
+        logger.error(f"[TELEGRAM] Failed to queue: {e}")
 
     return booking_success_response(request)

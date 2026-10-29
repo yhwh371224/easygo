@@ -11,6 +11,7 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('about_us/', views.about_us, name='about_us'),
     path('booking/', views.booking, name='booking'),
+    path('book-direct/', views.direct_booking, name='direct_booking'),
     path('sovereign_chauffeurs_v2/', views.sovereign_chauffeurs_v2, name='sovereign_chauffeurs_v2'),
     path('blackglide/', views.blackglide, name='blackglide'),
     path('maxi-taxi/<slug:suburb>/', views.maxi_taxi, name='maxi_taxi_suburb'),

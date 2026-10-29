@@ -131,6 +131,7 @@ def handle_return_trip(instance):
             'same_extra_stop': instance.same_extra_stop,
             'extra_stop_addresses': instance.extra_stop_addresses if instance.same_extra_stop else [],
             'special_items': instance.special_items or {},
+            'direct_booking': instance.direct_booking,
         }
 
         Post.objects.create(**post_fields)

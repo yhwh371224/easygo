@@ -405,9 +405,9 @@ class StripePaymentAdmin(admin.ModelAdmin):
 
 
 class PostAdmin(admin.ModelAdmin):
-    list_display = ['pickup_date', 'region', 'name', 'suburb', 'pickup_time', 'price', 'paid', 'driver_price',
+    list_display = ['pickup_date', 'region', 'name', 'direct_booking', 'suburb', 'pickup_time', 'price', 'paid', 'driver_price',
                     'cancelled', 'pending', 'cash', 'sent_email', 'direction', 'return_flight_number', 'created']
-    list_filter  = ['region', 'cancelled', 'pending', 'cash', 'bulk_invoice']
+    list_filter  = ['region', 'direct_booking', 'cancelled', 'pending', 'cash', 'bulk_invoice']
     search_fields = ['pickup_date', 'pickup_time', 'suburb', 'email', 'street', 'booker_email', 'booker_name',
                      'booker_contact', 'name', 'contact', 'price', 'paid', 'email1', 'message', 'notice', 'region__name',
                      'driver__driver_name']
@@ -554,7 +554,7 @@ class PostAdmin(admin.ModelAdmin):
                        'paypal_dispute_case_id', 'paypal_dispute_opened_at']
         }),
         ('Status', {
-            'fields': ['is_confirmed', 'cancelled', 'pending', 'sent_email', 'reminder', 'cash', 'driver_collected_cash', 'prepay', 'bulk_invoice',
+            'fields': ['is_confirmed', 'direct_booking', 'cancelled', 'pending', 'sent_email', 'reminder', 'cash', 'driver_collected_cash', 'prepay', 'bulk_invoice',
                     'private_ride','cruise',  'no_email_reminder', 'no_review']
         }),
         ('Driver', {

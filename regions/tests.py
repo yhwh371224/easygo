@@ -746,3 +746,92 @@ class CalculateInquiryPriceTests(TestCase):
                         return_no_of_passenger='2'),
             '190',
         )
+
+
+# /book-direct/ — 메일로 문의한 손님에게 보내는 예약 폼. Inquiry 없이 바로 Post.
+@override_settings(CACHES={'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+                                       'LOCATION': 'direct-booking-tests'}})
+class DirectBookingViewTests(TestCase):
+
+    def setUp(self):
+        # 데이터 마이그레이션이 sydney 를 이미 만들어 둔다.
+        Region.objects.update_or_create(slug='sydney', defaults={'name': 'Sydney', 'is_active': True})
+        # 같은 이메일 중복 제출 차단 키가 캐시에 남아 다음 테스트를 막지 않게.
+        from django.core.cache import cache
+        cache.clear()
+
+    def _data(self, **overrides):
+        data = {
+            'name': 'Dana', 'contact': '0411111111', 'email': 'dana@example.com',
+            'pickup_date': FUTURE, 'pickup_time': '08:00',
+            'direction': 'Drop off to Intl Airport', 'suburb': 'CBD', 'street': '1 George St',
+            'no_of_passenger': '2', 'region': 'sydney',
+            'cf-turnstile-response': 'XXXX',
+        }
+        data.update(overrides)
+        return data
+
+    def test_get_renders_booking_form_posting_to_itself(self):
+        response = self.client.get(reverse('basecamp:direct_booking'), secure=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'action="/book-direct/"')
+        self.assertContains(response, 'noindex')
+        self.assertNotContains(response, 'Booking Inquiry Form')
+
+    def test_inquiry_page_unchanged(self):
+        response = self.client.get(reverse('basecamp:inquiry_details'), secure=True)
+        self.assertContains(response, 'Booking Inquiry Form')
+        self.assertNotContains(response, 'noindex')
+
+    @patch('blog.tasks.send_telegram_task.delay')
+    def test_post_saves_marked_post_and_alerts(self, telegram):
+        from blog.models import Inquiry, Post
+        response = self.client.post(reverse('basecamp:direct_booking'), self._data(), secure=True)
+        self.assertEqual(response.status_code, 200)
+        post = Post.objects.get(email='dana@example.com')
+        self.assertTrue(post.direct_booking)
+        self.assertEqual(post.region.slug, 'sydney')
+        self.assertEqual(post.street, '1 George St')
+        self.assertFalse(Inquiry.objects.filter(email='dana@example.com').exists())
+        telegram.assert_called_once()
+        alert = telegram.call_args.args[0]
+        self.assertIn('DIRECT BOOKING', alert)
+        self.assertIn(f'#{post.pk}', alert)
+        self.assertIn('dana@example.com', alert)
+
+    @patch('blog.tasks.send_telegram_task.delay')
+    def test_alert_flags_open_inquiry_for_same_email(self, telegram):
+        from blog.models import Inquiry
+        Inquiry.objects.create(name='Dana', email='dana@example.com',
+                               pickup_date=datetime.date.today() + datetime.timedelta(days=7))
+        self.client.post(reverse('basecamp:direct_booking'), self._data(), secure=True)
+        self.assertIn('open inquiry', telegram.call_args.args[0])
+
+    @patch('blog.tasks.send_telegram_task.delay')
+    def test_first_time_arrival_requires_prepay(self, telegram):
+        from blog.models import Post
+        self.client.post(reverse('basecamp:direct_booking'),
+                         self._data(direction='Pickup from Intl Airport'), secure=True)
+        post = Post.objects.get(email='dana@example.com')
+        self.assertTrue(post.prepay)
+
+    @patch('blog.tasks.send_telegram_task.delay')
+    def test_return_leg_is_marked_too(self, telegram):
+        from blog.models import Post
+        with patch('basecamp.views.bookings.calculate_inquiry_price', return_value='200'):
+            self.client.post(reverse('basecamp:direct_booking'), self._data(
+                return_direction='Pickup from Intl Airport',
+                return_pickup_date=RETURN_FUTURE, return_pickup_time='18:00',
+            ), secure=True)
+        posts = Post.objects.filter(email='dana@example.com')
+        self.assertEqual(posts.count(), 2)
+        self.assertTrue(all(p.direct_booking for p in posts))
+
+    @patch('blog.tasks.send_telegram_task.delay')
+    def test_double_submit_saves_once(self, telegram):
+        from blog.models import Post
+        url = reverse('basecamp:direct_booking')
+        self.client.post(url, self._data(), secure=True)
+        response = self.client.post(url, self._data(), secure=True, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertFalse(response.json()['success'])
+        self.assertEqual(Post.objects.filter(email='dana@example.com').count(), 1)

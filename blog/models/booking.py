@@ -159,6 +159,11 @@ class Post(models.Model):
         related_name='bookings',
     )
     is_confirmed = models.BooleanField(default=False, blank=True)
+    direct_booking = models.BooleanField(
+        default=False, blank=True,
+        help_text='손님이 /book-direct/ 폼으로 견적 단계 없이 직접 넣은 예약. '
+                  '가격은 자동 계산값이라 메일로 합의한 금액과 다를 수 있으니 확인 후 해제.',
+    )
     cash = models.BooleanField(default=False, blank=True)
     driver_collected_cash = models.BooleanField(
         default=False, blank=True,
