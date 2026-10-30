@@ -33,6 +33,16 @@ def normalize_direction(direction):
     return _DIRECTION_ALIASES.get(key, direction)
 
 
+def reverse_direction(direction):
+    """왕복의 돌아오는 편 방향. 공항 픽업 <-> 드롭오프만 뒤집고 크루즈 등은 그대로 둔다."""
+    direction = normalize_direction(direction) or ''
+    if direction.startswith('Pickup from '):
+        return direction.replace('Pickup from ', 'Drop off to ', 1)
+    if direction.startswith('Drop off to '):
+        return direction.replace('Drop off to ', 'Pickup from ', 1)
+    return direction
+
+
 # 공항 사정상 정해진 만남 장소가 없고 드라이버가 그때그때 만날 곳을 알려주는 지역.
 # 이 지역 도착 건은 기본 만남 장소를 자동 배정하지 않고, 메일에도 "드라이버에게 연락해 지시를
 # 받고, 연락이 안 되면 이메일" 안내만 넣는다. (어드민에서 수동 지정한 장소는 그대로 존중)

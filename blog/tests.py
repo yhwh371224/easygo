@@ -20,6 +20,7 @@ import pytz
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core import mail
+from django.core.cache import cache
 from django.core.management import call_command
 from django.core.management.base import BaseCommand
 from django.test import TestCase, Client, override_settings
@@ -3605,3 +3606,101 @@ class DirectorCardExpenseTests(TestCase):
         self.assertContains(resp, '기존 카테고리')
         self.assertContains(resp, 'vehicle_maintenance')
         self.assertContains(resp, 'subcontract')
+
+
+# ---------------------------------------------------------------------------
+# Quick rebook → return leg
+# ---------------------------------------------------------------------------
+
+class QuickRebookReturnTripTests(TestCase):
+
+    def setUp(self):
+        cache.clear()
+        self.pickup_date = datetime.date.today() + timedelta(days=10)
+        self.return_date = datetime.date.today() + timedelta(days=17)
+
+    def _rebook(self, direction):
+        previous = Post.objects.create(
+            name='Rae Turner', email='rae@example.com', contact='0400000000',
+            no_of_passenger='2', price='100', direction='Drop off to Intl Airport',
+            suburb='Ryde', pickup_date=datetime.date.today() - timedelta(days=30),
+            return_pickup_time='x',
+            notice='===RETURN=== (Total Price: $200) | old staff note',
+        )
+        return self.client.post(reverse('basecamp:quick_rebook_confirm'), {
+            'email': 'rae@example.com', 'previous_id': previous.pk,
+            'pickup_date': self.pickup_date.isoformat(), 'pickup_time': '10:00',
+            'flight_number': 'QF1', 'contact': '0400000000', 'no_of_passenger': '2',
+            'direction': direction, 'suburb': 'Ryde',
+            'trip_type': 'airport', 'has_return': 'on',
+            'return_pickup_date': self.return_date.isoformat(), 'return_pickup_time': '12:00',
+            'return_flight_number': 'QF2',
+        })
+
+    def test_rebooking_a_return_leg_still_creates_the_return(self):
+        """지난 예약이 왕복이면 notice 에 ===RETURN=== 이 남아 있다. 이 문구가 새 예약으로
+        넘어오면 handle_return_trip 이 이미 처리된 건으로 보고 리턴을 만들지 않는다."""
+        response = self._rebook('Drop off to Intl Airport')
+
+        self.assertEqual(response.status_code, 200)
+        outbound = Post.objects.get(pickup_date=self.pickup_date)
+        return_leg = Post.objects.get(pickup_date=self.return_date)
+        self.assertEqual(float(outbound.price), 100.0)
+        self.assertEqual(float(return_leg.price), 100.0)
+        self.assertEqual(return_leg.return_pickup_time, 'x')
+        self.assertNotIn('old staff note', outbound.notice)
+        self.assertNotIn('old staff note', return_leg.notice)
+
+    def test_return_leg_direction_is_the_reverse_of_the_outbound(self):
+        for outbound, expected in (
+            ('Drop off to Intl Airport', 'Pickup from Intl Airport'),
+            ('Drop off to Domestic Airport', 'Pickup from Domestic Airport'),
+            ('Pickup from Intl Airport', 'Drop off to Intl Airport'),
+            ('Pickup from Domestic Airport', 'Drop off to Domestic Airport'),
+        ):
+            with self.subTest(outbound=outbound):
+                Post.objects.all().delete()
+                cache.clear()
+                self._rebook(outbound)
+                self.assertEqual(Post.objects.get(pickup_date=self.return_date).direction, expected)
+
+
+class ReturnTripDetailNoticeTests(TestCase):
+
+    def setUp(self):
+        cache.clear()
+        self.pickup_date = datetime.date.today() + timedelta(days=10)
+        self.return_date = datetime.date.today() + timedelta(days=17)
+        Post.objects.create(
+            name='Rae Turner', email='rae@example.com', contact='0400000000',
+            no_of_passenger='2', price='100', direction='Drop off to Intl Airport',
+            suburb='Ryde', pickup_date=datetime.date.today() - timedelta(days=30),
+            return_pickup_time='x',
+            notice='vip client | ===RETURN=== (Total Price: $200) | Total Paid: $200',
+        )
+
+    def _post(self, **extra):
+        return self.client.post(reverse('basecamp:return_trip_detail'), {
+            'email': 'rae@example.com', 'price': '200',
+            'pickup_date': self.pickup_date.isoformat(), 'pickup_time': '10:00',
+            'direction': 'Drop off to Intl Airport',
+            'return_pickup_date': self.return_date.isoformat(), 'return_pickup_time': '12:00',
+            'return_direction': 'Pickup from Intl Airport',
+            **extra,
+        })
+
+    def test_old_return_marker_does_not_block_the_new_return_leg(self):
+        self._post()
+
+        outbound = Post.objects.get(pickup_date=self.pickup_date)
+        return_leg = Post.objects.get(pickup_date=self.return_date)
+        self.assertEqual(float(outbound.price), 100.0)
+        self.assertEqual(float(return_leg.price), 100.0)
+
+    def test_only_the_typed_notice_is_saved(self):
+        self._post(notice='child seat')
+
+        outbound = Post.objects.get(pickup_date=self.pickup_date)
+        return_leg = Post.objects.get(pickup_date=self.return_date)
+        self.assertEqual(outbound.notice, 'child seat | ===RETURN=== (Total Price: $200)')
+        self.assertEqual(return_leg.notice, outbound.notice)

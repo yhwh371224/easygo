@@ -26,6 +26,7 @@ from basecamp.basecamp_utils import (
     is_duplicate_submission, parse_booking_dates, get_client_ip,
 )
 from utils import email
+from utils.booking_helper import reverse_direction
 
 logger = logging.getLogger(__name__)
 
@@ -558,12 +559,6 @@ def return_trip_detail(request):
         elif not message:
             message = user.message
 
-        # notice 추가 (기존 내용 보존)
-        if notice and user.notice:
-            notice = f"{user.notice} | {notice}"
-        elif not notice:
-            notice = user.notice
-
         # 날짜 파싱 (admin form — 과거 날짜 허용)
         try:
             pickup_date_obj, return_pickup_date_obj = parse_booking_dates(pickup_date_str, return_pickup_date_str, allow_past=True)
@@ -574,7 +569,7 @@ def return_trip_detail(request):
 
     p = Post(name=name, company_name=company_name, contact=contact, email=email, pickup_date=pickup_date_obj, flight_number=flight_number, flight_time=flight_time,
                 pickup_time=pickup_time, start_point=start_point, end_point=end_point, direction=direction, suburb=suburb, street=street,
-                no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, cash=cash, prepay=prepay, return_direction=return_direction,
+                no_of_passenger=no_of_passenger, no_of_baggage=no_of_baggage, message=message, notice=notice, cash=cash, prepay=prepay, return_direction=return_direction,
                 return_pickup_date=return_pickup_date_obj, return_flight_number=return_flight_number, return_flight_time=return_flight_time,
                 return_pickup_time=return_pickup_time, return_start_point=return_start_point, return_end_point=return_end_point, driver=driver,
                 return_no_of_passenger=return_no_of_passenger or None,
@@ -778,7 +773,6 @@ def quick_rebook_confirm(request, region_slug=None):
     previous_booker_name   = previous.booker_name
     previous_booker_email  = previous.booker_email
     previous_booker_contact = previous.booker_contact
-    previous_notice             = previous.notice
     previous_customer_history   = previous.customer_history
     previous_terminal_pickup_point = previous.terminal_pickup_point
     previous_extra_stop_area    = previous.extra_stop_area
@@ -843,7 +837,6 @@ def quick_rebook_confirm(request, region_slug=None):
         no_of_passenger = no_of_passenger,
         no_of_baggage   = no_of_baggage,
         message         = message,
-        notice          = previous_notice,
         customer_history      = previous_customer_history,
         terminal_pickup_point = previous_terminal_pickup_point,
         extra_stop_area       = previous_extra_stop_area,
@@ -859,7 +852,7 @@ def quick_rebook_confirm(request, region_slug=None):
         return_flight_time   = return_flight_time if has_return else '',
         return_pickup_time   = return_pickup_time if has_return else '',
         # 지점간 예약의 돌아오는 편은 공항 방향이 아니라 출발/도착지를 뒤집은 것이다.
-        return_direction     = '' if (is_point_to_point or not has_return) else 'Pickup from Intl Airport',
+        return_direction     = '' if (is_point_to_point or not has_return) else reverse_direction(direction),
         return_start_point   = end_point if (has_return and is_point_to_point) else '',
         return_end_point     = start_point if (has_return and is_point_to_point) else '',
         extra_stop           = extra_stop,
