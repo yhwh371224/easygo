@@ -84,6 +84,9 @@ class Command(BaseCommand):
         else:
             for interval, template, subject in zip_longest(reminder_intervals, templates, subjects, fillvalue=""):
                 self.send_email(interval, template, subject)
+        # 당일 도착 건: 상세 메일은 arrival_reminder 가 도착 1시간 전에 보내므로
+        # 새벽 메일은 "착륙 후 메일 확인하라"는 짧은 안내만. --today 경로에서도 보낸다.
+        self.send_email(0, "html_email-arrival-today-notice.html", "Reminder-Arrival-Today")
 
         # --- 단계별 누락 탐지 ---
         # 발송 대상으로 뽑혔는데 성공 기록이 없는 건 = 발송 실패·수신자 없음·예외.
@@ -137,6 +140,8 @@ class Command(BaseCommand):
             # 따로 보낸다(비행 중이라 아침 메일을 못 보는 문제). 여기서 보내면 중복.
             booking_reminders = booking_reminders.exclude(airport_arrival_q())
             self.report_pending_today(target_date)
+        if subject == "Reminder-Arrival-Today":
+            booking_reminders = booking_reminders.filter(airport_arrival_q())
         if subject == "Reminder-Arrival-2days":
             booking_reminders = booking_reminders.filter(direction__istartswith="pickup")
         if subject == "Review-EasyGo":
@@ -179,6 +184,8 @@ class Command(BaseCommand):
 
                 booker_email = booking_reminder.booker_email
                 is_today = subject == "Reminder-Today"
+                # 실제 탑승자만 받으면 되는 당일 메일 — 수신자 규칙은 Today 와 같다.
+                is_arrival_today = subject == "Reminder-Arrival-Today"
                 is_tomorrow = subject == "Reminder-Tomorrow"
                 is_arrival_2days = subject == "Reminder-Arrival-2days"
                 is_upcoming3 = subject == "Reminder-3days"
@@ -192,7 +199,7 @@ class Command(BaseCommand):
                     else:
                         email_recipients = collect_recipients(booking_reminder.email, booking_reminder.email1)
                 elif booker_email:
-                    if is_today:
+                    if is_today or is_arrival_today:
                         email_recipients = collect_recipients(booking_reminder.email, booking_reminder.email1)
                     elif is_tomorrow or is_arrival_2days:
                         email_recipients = collect_recipients(booking_reminder.email, booking_reminder.email1, booker_email)

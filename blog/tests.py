@@ -2543,13 +2543,32 @@ class ArrivalReminderTests(TestCase):
     @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
     @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
     def test_booking_reminder_no_longer_sends_todays_arrival_mail(self, *_):
-        """두 커맨드가 같은 건을 보내면 중복이다 — 당일 도착은 arrival_reminder 전담."""
-        self.make_arrival()
+        """두 커맨드가 같은 건을 보내면 중복이다 — 당일 도착 상세는 arrival_reminder 전담.
+        booking_reminder 는 새벽에 '착륙 후 메일 확인' 안내 한 통만 보낸다."""
+        self.make_arrival(pickup_date=timezone.localdate())
+        for args in (('--today',), ()):
+            mail.outbox = []
+            with patch('blog.management.commands.booking_reminder.booking_helper'
+                       '.update_meeting_point_for_arrivals'), \
+                 patch('blog.management.commands.booking_reminder.send_telegram_sync'):
+                call_command('booking_reminder', *args, stdout=StringIO())
+            self.assertEqual([m.subject for m in mail.outbox], ['Reminder-Arrival-Today'])
+            body = mail.outbox[0].alternatives[0][0]
+            self.assertIn('Once your flight lands, please check your email.', body)
+            self.assertIn('KE121', body)
+
+    @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+    @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+    def test_arrival_today_notice_skips_departures_pending_and_opted_out(self, *_):
+        today = timezone.localdate()
+        self.make_arrival(pickup_date=today, direction='Drop off to Intl Airport')
+        Post.objects.filter(pk=self.make_arrival(pickup_date=today).pk).update(pending=True)
+        self.make_arrival(pickup_date=today, no_email_reminder=True)
         with patch('blog.management.commands.booking_reminder.booking_helper'
                    '.update_meeting_point_for_arrivals'), \
              patch('blog.management.commands.booking_reminder.send_telegram_sync'):
             call_command('booking_reminder', '--today', stdout=StringIO())
-        self.assertEqual(mail.outbox, [])
+        self.assertNotIn('Reminder-Arrival-Today', [m.subject for m in mail.outbox])
 
     @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
     @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
