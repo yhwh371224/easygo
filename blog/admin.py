@@ -508,6 +508,7 @@ class PostAdmin(admin.ModelAdmin):
             obj.calendar_event_id = ''
             obj.driver_calendar_event_id = ''
             obj.driver = None
+            obj.commission_rate = Decimal('0')
             obj.use_proxy = False
             obj.price = half_price
             obj.paid = half_paid
@@ -597,6 +598,22 @@ class PostAdmin(admin.ModelAdmin):
         # 여기에만 있으면 admin 밖에서 배정된 건(드라이버 잡 수락, assign_drivers
         # 크론)은 0% 로 남는다.
         super().save_model(request, obj, form, change)
+        # 드라이버를 바꾸면 Post.save() 가 커미션율도 새 드라이버 값으로 맞춘다.
+        # 정산 금액이 달라지는 변경이라 저장 직후 화면에서 확인할 수 있게 알린다.
+        previous_rate = form.initial.get('commission_rate')
+        if (
+            change
+            and 'driver' in form.changed_data
+            and previous_rate is not None
+            and Decimal(str(previous_rate)) != obj.commission_rate
+        ):
+            driver_name = obj.driver.driver_name if obj.driver else 'no driver'
+            self.message_user(
+                request,
+                f"Commission rate changed {previous_rate}% → {obj.commission_rate}% "
+                f"for #{obj.pk} ({driver_name}).",
+                messages.WARNING,
+            )
 
     def suburb_distance_km(self, obj):
         from regions.models import RegionSuburb

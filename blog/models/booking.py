@@ -334,7 +334,27 @@ class Post(models.Model):
         # It used to be admin-only, so from 2026-08-11 every job Loly accepted
         # herself was booked at 0% and she was paid the full driver_price.
         # Only filled when the rate is still 0 — a rate typed in by hand for one
-        # booking is never overwritten.
+        # booking is kept while the driver stays the same.
+        #
+        # A change of driver starts over from 0 so the fill below picks up the
+        # new driver's rate. Without this the old driver's rate stayed on the
+        # booking: a job moved from a 5% driver to Don (0%) settled 5% short on
+        # 2026-10-25. A rate edited in the same save as the driver is respected.
+        if self.pk:
+            previous = (
+                Post.objects.filter(pk=self.pk)
+                .values('driver_id', 'commission_rate')
+                .first()
+            )
+            if (
+                previous
+                and previous['driver_id'] != self.driver_id
+                and previous['commission_rate'] == self.commission_rate
+            ):
+                self.commission_rate = Decimal('0')
+                uf = kwargs.get('update_fields')
+                if uf is not None:
+                    kwargs['update_fields'] = set(uf) | {'commission_rate'}
         # driver_collected_cash rides are skipped: the customer paid the driver
         # directly, the money never passed through the company, and no
         # commission is charged on them. They are excluded from settlements

@@ -361,6 +361,59 @@ class PostCommissionRateTests(TestCase):
         self.assertEqual(post.commission_amount, Decimal('0'))
         self.assertEqual(post.subcontractor_payout, Decimal('100.00'))
 
+    def _no_commission_driver(self):
+        other = make_driver(user=make_user(username='nocomm'))
+        self.assertEqual(other.commission_rate, Decimal('0'))
+        return other
+
+    def test_rate_cleared_when_moved_to_no_commission_driver(self, *_):
+        """A job moved from a 5% driver to Don (0%) kept the 5% and settled
+        $3.05 short on 2026-10-25."""
+        post = self._post(driver=self.driver)
+        post.driver = self._no_commission_driver()
+        post.save()
+
+        post.refresh_from_db()
+        self.assertEqual(post.commission_rate, Decimal('0'))
+        self.assertEqual(post.subcontractor_payout, Decimal('100.00'))
+
+    def test_rate_follows_move_to_commission_driver(self, *_):
+        post = self._post(driver=self._no_commission_driver())
+        self.assertEqual(post.commission_rate, Decimal('0'))
+        post.driver = self.driver
+        post.save()
+        self.assertEqual(post.commission_rate, Decimal('5.00'))
+
+    def test_rate_cleared_when_driver_removed(self, *_):
+        """Unassigning must not leave a rate behind for the next driver."""
+        post = self._post(driver=self.driver)
+        post.driver = None
+        post.save()
+        post.refresh_from_db()
+        self.assertEqual(post.commission_rate, Decimal('0'))
+
+        post.driver = self._no_commission_driver()
+        post.save()
+        post.refresh_from_db()
+        self.assertEqual(post.commission_rate, Decimal('0'))
+
+    def test_rate_change_reaches_database_on_partial_save(self, *_):
+        post = self._post(driver=self.driver)
+        post.driver = self._no_commission_driver()
+        post.save(update_fields=['driver'])
+
+        post.refresh_from_db()
+        self.assertEqual(post.commission_rate, Decimal('0'))
+
+    def test_rate_typed_with_driver_change_is_kept(self, *_):
+        post = self._post(driver=self.driver)
+        post.driver = self._no_commission_driver()
+        post.commission_rate = Decimal('12.00')
+        post.save()
+
+        post.refresh_from_db()
+        self.assertEqual(post.commission_rate, Decimal('12.00'))
+
 
 # ---------------------------------------------------------------------------
 # Calendar event description
