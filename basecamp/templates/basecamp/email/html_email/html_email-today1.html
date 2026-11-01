@@ -142,7 +142,7 @@
 														We kindly ask you to prepare the cash in advance.<br><br>
 													{% endif %}
 
-													{% if not no_email_reminder %}
+													{% if not no_email_reminder and not hide_driver_meet_notice %}
 														The driver will meet you at the <strong>pickup area</strong>
 														at your <strong>requested pickup time{% if not hide_pickup_time %}, {{ pickup_time }}{% endif %}</strong>, as scheduled.<br><br>
 													{% endif %}
@@ -204,8 +204,10 @@
 														We kindly ask you to prepare the cash in advance.<br><br>
 													{% endif %}
 
-													The driver will meet you at the <strong>pickup area</strong>
-													at your <strong>requested pickup time{% if not hide_pickup_time %}, {{ pickup_time }}{% endif %}</strong>, as scheduled.<br><br>
+													{% if not hide_driver_meet_notice %}
+														The driver will meet you at the <strong>pickup area</strong>
+														at your <strong>requested pickup time{% if not hide_pickup_time %}, {{ pickup_time }}{% endif %}</strong>, as scheduled.<br><br>
+													{% endif %}
 
 													Once you have collected your luggage, please contact the driver.
 													The driver will then let you know exactly where to meet, and you can use the map below to find your way to the meeting point.<br><br>

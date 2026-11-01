@@ -436,9 +436,10 @@ def email_dispatch_detail(request):
         pickup_time_12h = None
 
         # 3️⃣ Adjusted pickup time 처리
-        # "Pickup Notice for Today"는 이 시간을 실제 pickup_time 변경이 아니라
+        # "Pickup Notice for Today"(및 "- new")는 이 시간을 실제 pickup_time 변경이 아니라
         # "몇 시까지는 출발해야 하는 마지노선" 안내 문구로만 사용하므로 DB 갱신/SMS는 건너뛴다.
-        if adjusted_pickup_time and user and selected_option != "Pickup Notice for Today":
+        is_pickup_notice_today = selected_option in ("Pickup Notice for Today", "Pickup Notice for Today - new")
+        if adjusted_pickup_time and user and not is_pickup_notice_today:
             users = Post.objects.filter(email=_email, pickup_date__gte=timezone.localdate()).order_by('pickup_date')
             if users.exists():
                 closest_user = users.first()
@@ -455,6 +456,7 @@ def email_dispatch_detail(request):
         template_options = {
             "Gratitude For Payment": ("html_email-response-payment-received.html", "Payment Received - EasyGo"),
             "Pickup Notice for Today": ("html_email-today1.html", "Important Update for Today's Pickup - EasyGo "),
+            "Pickup Notice for Today - new": ("html_email-today1.html", "Important Update for Today's Pickup - EasyGo "),
             "Payment Method": ("html_email-response-payment.html", "Payment Method - EasyGo"),
             "Payment Reminder": ("html_email-payment-reminder.html", "Payment required to confirm your booking - EasyGo"),
             "Airport Pickup Guide": ("html_email-response-arrival-guide.html", "Airport Pickup Guide - EasyGo"),
@@ -503,7 +505,7 @@ def email_dispatch_detail(request):
             })
 
         # ✅ Pickup Notice Today
-        if selected_option == "Pickup Notice for Today":
+        if is_pickup_notice_today:
             today = timezone.localdate()
             user_today = Post.objects.select_related('driver').filter(
                 Q(email=email) | Q(booker_email=email),
@@ -523,6 +525,8 @@ def email_dispatch_detail(request):
                 context.update({
                     'pickup_time': user_today.pickup_time,
                     'hide_pickup_time': hide_pickup_time,
+                    # "- new": "The driver will meet you ... as scheduled." 문구만 뺀 버전
+                    'hide_driver_meet_notice': selected_option == "Pickup Notice for Today - new",
                     'contact': user_today.contact,
                     'terminal_pickup_point': user_today.terminal_pickup_point,
                     'city': user_today.region.name if user_today.region_id else '',
