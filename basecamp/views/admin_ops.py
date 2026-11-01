@@ -413,7 +413,6 @@ def email_dispatch_detail(request):
         payment_amount = request.POST.get('payment_amount')
         remain_first_booking = 'remain_first_booking' in request.POST
         remain_return_booking = 'remain_return_booking' in request.POST
-        hide_pickup_time = 'hide_pickup_time' in request.POST
         wait_duration = request.POST.get('wait_duration')
         discount_price = request.POST.get('discount_price')
 
@@ -524,9 +523,8 @@ def email_dispatch_detail(request):
 
                 context.update({
                     'pickup_time': user_today.pickup_time,
-                    'hide_pickup_time': hide_pickup_time,
                     # "- new": "The driver will meet you ... as scheduled." 문구만 뺀 버전
-                    'hide_driver_meet_notice': selected_option == "Pickup Notice for Today - new",
+                    'hide_arrival_pickup_time': selected_option == "Pickup Notice for Today - new",
                     'contact': user_today.contact,
                     'terminal_pickup_point': user_today.terminal_pickup_point,
                     'city': user_today.region.name if user_today.region_id else '',

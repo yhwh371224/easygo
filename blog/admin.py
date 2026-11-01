@@ -556,7 +556,7 @@ class PostAdmin(admin.ModelAdmin):
         }),
         ('Status', {
             'fields': ['is_confirmed', 'direct_booking', 'cancelled', 'pending', 'sent_email', 'reminder', 'cash', 'driver_collected_cash', 'prepay', 'bulk_invoice',
-                    'private_ride','cruise',  'no_email_reminder', 'no_review']
+                    'private_ride','cruise',  'no_email_reminder', 'no_review', 'hide_arrival_pickup_time']
         }),
         ('Driver', {
             'fields': ['driver', 'use_proxy', 'candidate_drivers']

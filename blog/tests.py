@@ -2498,6 +2498,48 @@ class ArrivalReminderTests(TestCase):
 
     @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
     @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+    def test_hide_arrival_pickup_time_drops_pickup_time_from_mail(self, *_):
+        """체크박스는 시간 문구만 뺀다 — 메일 자체는 그대로 나가야 한다."""
+        self.make_arrival(hide_arrival_pickup_time=True)
+        self.run_command()
+        self.assertEqual(len(mail.outbox), 1)
+        html = mail.outbox[0].alternatives[0][0]
+        self.assertNotIn('requested pickup time', html)
+        self.assertNotIn('Pickup at', html)
+        self.assertIn('KE121', html)
+
+    @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+    @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+    def test_pickup_time_stays_in_mail_by_default(self, *_):
+        self.make_arrival()
+        self.run_command()
+        html = mail.outbox[0].alternatives[0][0]
+        self.assertIn('requested pickup time', html)
+        self.assertIn('Pickup at', html)
+
+    @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+    @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+    def test_hide_arrival_pickup_time_covers_driver_details_template(self, *_):
+        from django.template.loader import render_to_string
+        from utils.booking_helper import build_reminder_context
+
+        post = self.make_arrival(hide_arrival_pickup_time=True)
+        ctx = build_reminder_context(post, '10:45 AM', None)
+        html = render_to_string('emails/driver_details.html', {**ctx, 'post': post})
+        self.assertNotIn('requested pickup time', html)
+        self.assertIn('Once you have collected your luggage', html)
+
+    @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+    @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+    def test_hide_arrival_pickup_time_ignored_for_departure(self, *_):
+        """공용 템플릿이라 출발 건이 체크돼 있어도 픽업시간은 빠지면 안 된다."""
+        from utils.booking_helper import build_reminder_context
+
+        post = self.make_arrival(direction='Drop off to Intl Airport', hide_arrival_pickup_time=True)
+        self.assertFalse(build_reminder_context(post, '10:45 AM', None)['hide_arrival_pickup_time'])
+
+    @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+    @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
     def test_sends_one_hour_before_scheduled_arrival(self, *_):
         post = self.make_arrival(flight_time='10:00')  # now=09:00 → 정확히 창 시작
         self.run_command()

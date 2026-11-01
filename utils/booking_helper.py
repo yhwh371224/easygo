@@ -148,6 +148,8 @@ def build_reminder_context(booking, pickup_time_12h, driver):
         'price': getattr(booking, "price", None),
         'reminder': getattr(booking, "reminder", None),
         'no_email_reminder': getattr(booking, "no_email_reminder", None),
+        # 도착 건 전용 — 공용 템플릿이라 출발 메일까지 문구가 빠지지 않게 여기서 막는다.
+        'hide_arrival_pickup_time': (is_intl or is_domestic) and getattr(booking, "hide_arrival_pickup_time", False),
         'driver_name': getattr(driver, "driver_name", None) if driver else None,
         'driver_contact': getattr(driver, "driver_contact", None) if driver else None,
         'driver_plate': getattr(driver, "driver_plate", None) if driver else None,

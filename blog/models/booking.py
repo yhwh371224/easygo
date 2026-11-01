@@ -179,6 +179,12 @@ class Post(models.Model):
         default=False, blank=True,
         help_text='체크하면 픽업 5일 후 리뷰 요청(Review-EasyGo) 리마인더 메일을 보내지 않음.',
     )
+    hide_arrival_pickup_time = models.BooleanField(
+        default=False, blank=True,
+        help_text='체크하면 당일 공항 도착 자동 메일(아침 안내·도착 1시간 전 리마인더)에서 '
+                  '"기사가 몇 시에 만난다"는 픽업시간 문구를 뺌. 메일은 그대로 발송되고, '
+                  '발송 전에 체크해야 적용됨. 공항 도착 건에만 적용.',
+    )
     prepay = models.BooleanField(default=False, blank=True)
     pending = models.BooleanField(default=False, blank=True)
     bulk_invoice = models.BooleanField(

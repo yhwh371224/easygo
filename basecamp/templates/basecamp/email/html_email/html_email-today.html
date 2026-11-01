@@ -143,8 +143,8 @@
 										<tr>
 											<td align="left" style="padding-top:28px;padding-left:0;">
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
-													Your pickup day is <strong>today</strong> — {{ pickup_date|date:"l, j F Y" }}.<br><br>
-													EasyGo driver will pick you up at your requested pickup time, {{ pickup_time }}, as scheduled.
+													Your pickup day is <strong>today</strong> — {{ pickup_date|date:"l, j F Y" }}.{% if not hide_arrival_pickup_time %}<br><br>
+													EasyGo driver will pick you up at your requested pickup time, {{ pickup_time }}, as scheduled.{% endif %}
 												</p>												
 
 												{% if cash and not paid %}
@@ -158,8 +158,8 @@
 													<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:16px;border-bottom: 2px solid #E1E1E1;padding-bottom:16px;">
 													• Arrival Date: {{ pickup_date|date:"l, j F Y" }}<br>
 													• Flight Number: {{ flight_number }} <small>(ETA {{ flight_time }})</small><br>
-													• Pickup at {{ pickup_time }}<br><br>
-													<span style="color: #eb7828">If your flight number, arrival time, or pickup time above is incorrect, please reply to this email as soon as possible so we can correct it.</span>
+													{% if not hide_arrival_pickup_time %}• Pickup at {{ pickup_time }}<br>{% endif %}<br>
+													<span style="color: #eb7828">If your flight number{% if hide_arrival_pickup_time %} or arrival time{% else %}, arrival time, or pickup time{% endif %} above is incorrect, please reply to this email as soon as possible so we can correct it.</span>
 													</p>
 													{% if driver_directs_meeting %}
 													<p style="Margin:0;font-size:13px;font-weight:bold;line-height:20px;Margin-bottom:8px;color:#4F5557;">
@@ -222,8 +222,8 @@
 													<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:16px;border-bottom: 2px solid #E1E1E1;padding-bottom:16px;">
 													• Arrival Date: {{ pickup_date|date:"l, j F Y" }}<br>
 													• Flight Number: {{ flight_number }} <small>(ETA {{ flight_time }})</small><br>
-													• Pickup at {{ pickup_time }}<br><br>
-													<span style="color: #eb7828">If your flight number, arrival time, or pickup time above is incorrect, please reply to this email as soon as possible so we can correct it.</span>
+													{% if not hide_arrival_pickup_time %}• Pickup at {{ pickup_time }}<br>{% endif %}<br>
+													<span style="color: #eb7828">If your flight number{% if hide_arrival_pickup_time %} or arrival time{% else %}, arrival time, or pickup time{% endif %} above is incorrect, please reply to this email as soon as possible so we can correct it.</span>
 													</p>
 													{% if driver_directs_meeting %}
 													<p style="Margin:0;font-size:13px;font-weight:bold;line-height:20px;Margin-bottom:8px;color:#4F5557;">
