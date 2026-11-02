@@ -4,7 +4,7 @@ from django.utils import timezone
 from blog.bird_proxy import get_proxy_number
 from blog.models import Post, Driver
 from blog.sms_utils import format_au_phone
-from utils.direction_utils import is_intl_pickup, is_domestic_pickup
+from utils.direction_utils import ARRIVAL_UNKNOWN_TERMINAL, airport_arrival_q, arrival_type
 
 # 우버로 대신 보내는 건에 배정하는 가상 드라이버. 도착 픽업이면 손님에게 이름·번호만
 # 알려주고, 만남 장소는 짐을 찾은 뒤 그 번호로 연락해 묻도록 안내한다.
@@ -104,8 +104,13 @@ def build_reminder_context(booking, pickup_time_12h, driver):
     proxy_number = get_proxy_number(booking, driver)
     bird_number = format_au_phone(proxy_number) if proxy_number else None
 
-    is_intl = is_intl_pickup(getattr(booking, "direction", None))
-    is_domestic = is_domestic_pickup(getattr(booking, "direction", None))
+    arrival = arrival_type(getattr(booking, "direction", None), getattr(booking, "start_point", None))
+    # 'Sydney Airport' 처럼 터미널을 모르는 건은 어드민이 지정한 만남 장소의 터미널을 따른다.
+    manual_point = getattr(booking, "terminal_pickup_point", None)
+    if arrival == ARRIVAL_UNKNOWN_TERMINAL and manual_point:
+        arrival = 'intl' if manual_point.terminal.type == Terminal.TerminalType.INTL else 'domestic'
+    is_intl = arrival == 'intl'
+    is_domestic = arrival == 'domestic'
 
     deposit_amount_due, deposit_remaining_balance = _deposit_remaining_balance(booking)
 
@@ -187,19 +192,17 @@ def update_meeting_point_for_arrivals():
 
     today = timezone.localdate()
 
-    DIRECTION_TO_TERMINAL_TYPE = {
-        "Pickup from Intl Airport": Terminal.TerminalType.INTL,
-        "Pickup from Domestic Airport": Terminal.TerminalType.DOMESTIC,
+    ARRIVAL_TO_TERMINAL_TYPE = {
+        'intl': Terminal.TerminalType.INTL,
+        'domestic': Terminal.TerminalType.DOMESTIC,
     }
 
-    from django.db.models import Q as _Q
     bookings = list(
         Post.objects.filter(
             pickup_date=today,
             cancelled=False,
         ).filter(
-            _Q(direction__iregex=r'pick\s*up from intl airport') |
-            _Q(direction__iregex=r'pick\s*up from domestic airport')
+            airport_arrival_q()
         ).select_related("driver", "region").order_by("flight_time")
     )
 
@@ -235,7 +238,7 @@ def update_meeting_point_for_arrivals():
         if is_ugo_driver(driver):
             continue
 
-        terminal_type = DIRECTION_TO_TERMINAL_TYPE.get(normalize_direction(booking.direction))
+        terminal_type = ARRIVAL_TO_TERMINAL_TYPE.get(arrival_type(booking.direction, booking.start_point))
         if not terminal_type or not booking.region_id:
             continue
 

@@ -147,8 +147,8 @@
 												</p>
 
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:16px;border-bottom: 2px solid #E1E1E1;padding-bottom:16px;">
-													• Flight Number: {{ flight_number }} <small>(ETA {{ flight_time }})</small>{% if not hide_arrival_pickup_time %}<br>
-													• Pickup at {{ pickup_time }}{% endif %}
+													{% if flight_number %}• Flight Number: {{ flight_number }}{% if flight_time %} <small>(ETA {{ flight_time }})</small>{% endif %}{% if not hide_arrival_pickup_time %}<br>{% endif %}{% endif %}
+													{% if not hide_arrival_pickup_time %}• Pickup at {{ pickup_time }}{% endif %}
 												</p>
 
 												<p style="Margin:0;font-size:14px;line-height:24px;Margin-bottom:16px;padding:12px 14px;background-color:#fff8f2;border-left:4px solid #eb7828;">

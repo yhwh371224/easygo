@@ -43,6 +43,8 @@ logger = logging.getLogger(__name__)
 
 DEFAULT_TZ = 'Australia/Sydney'
 DEFAULT_LEAD_MINUTES = 60
+# 항공편 시각이 없어 픽업시각을 기준으로 삼는 건은 언제 착륙할지 몰라 더 일찍 보낸다.
+PICKUP_TIME_LEAD_MINUTES = 120
 # 발송이 이만큼 늦으면(크론 중단, 당일 늦게 들어온 예약 등) 보내되 텔레그램으로 알린다.
 # 크론 간격(30분)보다 넉넉히 커야 한다 — 정상 실행에서도 창이 열린 직후를 놓치면
 # 다음 실행까지 최대 한 간격이 밀리기 때문에, 그걸 지연으로 알리면 매일 울린다.
@@ -178,7 +180,11 @@ class Command(BaseCommand):
                     )
                     continue
 
-                due_at = anchor - self.lead
+                lead = (
+                    timedelta(minutes=PICKUP_TIME_LEAD_MINUTES)
+                    if source == 'pickup_time' else self.lead
+                )
+                due_at = anchor - lead
                 if now_dt < due_at:
                     continue
 

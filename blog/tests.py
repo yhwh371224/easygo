@@ -2602,6 +2602,17 @@ class ArrivalReminderTests(TestCase):
 
     @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
     @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+    def test_pickup_time_fallback_sends_two_hours_before(self, *_):
+        """항공편 시각이 없으면 착륙 시각을 몰라 픽업 2시간 전에 보낸다(now=09:00)."""
+        self.make_arrival(flight_time='', pickup_time='11:30')
+        self.run_command()
+        self.assertEqual(mail.outbox, [])
+        self.make_arrival(flight_time='', pickup_time='11:00')
+        self.run_command()
+        self.assertEqual(len(mail.outbox), 1)
+
+    @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+    @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
     def test_skips_cancelled_pending_and_opted_out(self, *_):
         # paid 가 있으면 시그널이 cancelled/pending 을 False 로 되돌리므로 저장 후에 직접 세팅한다.
         Post.objects.filter(pk=self.make_arrival().pk).update(cancelled=True)
@@ -2700,6 +2711,84 @@ class ArrivalReminderTests(TestCase):
         self.assertIn('Public Pickup zone', mail.outbox[0].body)
         # 텔레그램 발송 알림에도 만남 장소가 있어야 손님 문의 때 메일을 다시 안 찾아본다.
         self.assertIn('📍 T1 Public Pickup', tg.call_args.args[0])
+
+    @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+    @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+    def test_airport_start_point_without_direction_is_an_arrival(self, *_):
+        """p2p 폼으로 들어온 공항 출발 건은 direction 이 비어 있다 — 만남 장소 메일이
+        픽업 1시간 전에 나가야 하고, 새벽 Reminder-Today 는 받으면 안 된다."""
+        from regions.models import Airport, Country, Terminal, TerminalPickupPoint
+
+        country, _ = Country.objects.get_or_create(name='Australia')
+        airport, _ = Airport.objects.get_or_create(
+            code='SYD', defaults={'country': country, 'city': 'Sydney'},
+        )
+        self.region.airports.add(airport)
+        terminal, _ = Terminal.objects.get_or_create(
+            airport=airport, name='T1', type=Terminal.TerminalType.INTL,
+        )
+        TerminalPickupPoint.objects.create(
+            terminal=terminal, name='Public Pickup', is_default_point=True,
+            instruction='Meet the driver at the Public Pickup zone.',
+        )
+        driver = Driver.objects.create(
+            driver_name='Tom', driver_contact='0400000000', driver_email='tom@example.com',
+        )
+        post = self.make_arrival(
+            direction=None, start_point='Sydney International Airport',
+            end_point='200 Coward Street, Mascot', flight_number=None, flight_time=None,
+            pickup_time='10:00', pickup_date=timezone.localdate(), driver=driver,
+        )
+        now = self.TZ.localize(datetime.datetime.combine(post.pickup_date, datetime.time(9, 0)))
+
+        with patch('blog.management.commands.booking_reminder.send_telegram_sync'):
+            call_command('booking_reminder', '--today', stdout=StringIO())
+        self.assertEqual([m.subject for m in mail.outbox], ['Reminder-Arrival-Today'])
+        self.assertNotIn('None', mail.outbox[0].alternatives[0][0].split('Good day')[1].split('Once your flight')[0])
+
+        mail.outbox = []
+        module = 'blog.management.commands.arrival_reminder'
+        with patch(f'{module}.current_time', return_value=now), \
+             patch(f'{module}.send_telegram_sync'):
+            call_command('arrival_reminder', stdout=StringIO())
+        post.refresh_from_db()
+        self.assertIsNotNone(post.arrival_reminder_sent_at)
+        self.assertEqual(post.terminal_pickup_point.name, 'Public Pickup')
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertIn('Public Pickup zone', mail.outbox[0].body)
+
+    def test_arrival_type_matches_the_database_filter(self):
+        """파이썬 판별과 DB 필터가 어긋나면 대상에는 뽑히는데 만남 장소가 빠진다."""
+        from utils.direction_utils import airport_arrival_q, arrival_type
+
+        cases = [
+            (None, 'Sydney International Airport', 'intl'),
+            ('', 'SYD INT AIRPORT', 'intl'),
+            (None, 'Terminal 1', 'intl'),
+            ('cruise or point to point', 'Intl Airport', 'intl'),
+            (None, 'Qantas domestic terminal', 'domestic'),
+            (None, 'T2 Jetstar', 'domestic'),
+            ('Pickup from Domestic Airport', '3 Smith St', 'domestic'),
+            (None, 'Sydney Airport', 'unknown'),
+            (None, 'Airport', 'unknown'),
+            (None, 'Moxy Sydney Airport Hotel', None),
+            (None, 'Travelodge Mascot Airport', None),
+            (None, 'Novotel International Airport', None),
+            (None, 'Overseas Passenger Terminal', None),
+            (None, 'International Cruise Terminal', None),
+            (None, 'White Bay Cruise Terminal 1', None),
+            (None, '41 Terminal 1 Road Hotel', None),
+            ('Drop off to Intl Airport', 'International Airport', None),
+            (None, None, None),
+        ]
+        for direction, start_point, expected in cases:
+            with self.subTest(direction=direction, start_point=start_point):
+                post = self.make_arrival(direction=direction, start_point=start_point)
+                self.assertEqual(arrival_type(direction, start_point), expected)
+                self.assertEqual(
+                    Post.objects.filter(airport_arrival_q(), pk=post.pk).exists(),
+                    expected is not None,
+                )
 
     @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
     @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
