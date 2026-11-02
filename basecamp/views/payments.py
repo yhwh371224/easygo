@@ -13,6 +13,7 @@ from django.db.models import Q
 from main.settings import RECIPIENT_EMAIL
 from utils.email import send_html_email
 from blog.models import Post, PaypalPayment
+from blog.blog_utils import booking_balance
 from basecamp.basecamp_utils import (
     render_to_pdf, safe_float,
     handle_checkout_session_completed, paypal_ipn_error_email,
@@ -54,7 +55,29 @@ def _resolve_inv_no(user, inv_no_raw):
     return f"{user.pickup_date.toordinal()}" if user.pickup_date else "896021"
 
 
-def _resolve_bookings(users, index, from_date, to_date):
+def _invoice_sort_key(post, today):
+    """Sort key for the Index field: 1 is the booking the customer most likely
+    needs an invoice for, not the most recently created row (a later change to
+    an old trip would otherwise push a past booking ahead of tomorrow's).
+
+    Upcoming and unpaid, then upcoming and paid, then upcoming bookings
+    cancelled unpaid (payment reinstates them), soonest first. Everything else
+    keeps the queryset's -created order, because sorted() is stable.
+    """
+    if not post.pickup_date or post.pickup_date < today:
+        return (3,)
+    amounts = booking_balance(post)
+    unpaid = amounts is not None and amounts[2] > 0
+    if post.cancelled:
+        if not unpaid or post.refund:
+            return (3,)
+        rank = 2
+    else:
+        rank = 0 if unpaid else 1
+    return (rank, post.pickup_date, post.pickup_time or '')
+
+
+def _resolve_bookings(users, index, from_date, to_date, today):
     """Return (bookings, is_multiple)."""
     if from_date and to_date:
         from_date_obj = datetime.strptime(from_date, "%Y-%m-%d").date()
@@ -63,8 +86,8 @@ def _resolve_bookings(users, index, from_date, to_date):
             pickup_date__range=(from_date_obj, to_date_obj)
         ).order_by('pickup_date', 'pickup_time')
         return bookings, True
-    bookings = [users[index]] if 0 <= index < len(users) else [users.first()]
-    return bookings, False
+    ordered = sorted(users, key=lambda post: _invoice_sort_key(post, today))
+    return [ordered[index] if 0 <= index < len(ordered) else ordered[0]], False
 
 
 def _calc_surcharge(surcharge_input, price, booking=None):
@@ -466,23 +489,20 @@ def invoice_detail(request):
     if not users.exists():
         return HttpResponse("No bookings found", status=404)
 
-    user = users[0]
     today = date.today()
-    inv_no = _resolve_inv_no(user, params['inv_no'])
     DEFAULT_BANK = getattr(settings, "DEFAULT_BANK_CODE", "westpac")
 
-    bookings, multiple = _resolve_bookings(users, index, params['from_date'], params['to_date'])
+    bookings, multiple = _resolve_bookings(users, index, params['from_date'], params['to_date'], today)
 
     if multiple and not bookings.exists():
         return HttpResponse("No bookings found in selected date range", status=404)
 
+    inv_no = _resolve_inv_no(bookings[0], params['inv_no'])
+
     if multiple:
         template_name, context = _build_multi_context(bookings, params, inv_no, today, DEFAULT_BANK)
     else:
-        user = bookings[0]
-        if not user:
-            return HttpResponse("No booking found", status=404)
-        template_name, context = _build_single_context(user, users, params, inv_no, today, DEFAULT_BANK)
+        template_name, context = _build_single_context(bookings[0], users, params, inv_no, today, DEFAULT_BANK)
 
     first_user = users[0]
     customer_recipients = [first_user.booker_email] if first_user.booker_email else list(filter(None, [first_user.email, first_user.email1]))

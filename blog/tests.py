@@ -3621,6 +3621,74 @@ class RoundTripInvoiceTotalTests(TestCase):
 
 
 # ---------------------------------------------------------------------------
+# Invoice form Index picks the booking that needs invoicing
+# ---------------------------------------------------------------------------
+
+@patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+@patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+class InvoiceIndexSelectionTests(TestCase):
+    email = 'pick@example.com'
+
+    def make(self, days, **kw):
+        kw.setdefault('price', '110')
+        return Post.objects.create(
+            name='Pat', email=self.email, no_of_passenger='2',
+            pickup_date=datetime.date.today() + timedelta(days=days), **kw,
+        )
+
+    def pick(self, index=0):
+        from basecamp.views.payments import _resolve_bookings
+        users = Post.objects.filter(email__iexact=self.email)
+        bookings, multiple = _resolve_bookings(users, index, None, None, datetime.date.today())
+        self.assertFalse(multiple)
+        return bookings[0].pk
+
+    def test_upcoming_unpaid_beats_newer_past_booking(self, *_):
+        upcoming = self.make(1)
+        self.make(-14, paid='110')  # created later, as with Post 8225
+        self.assertEqual(self.pick(), upcoming.pk)
+
+    def test_soonest_unpaid_first(self, *_):
+        later = self.make(9)
+        soon = self.make(2)
+        self.assertEqual(self.pick(0), soon.pk)
+        self.assertEqual(self.pick(1), later.pk)
+
+    def test_unpaid_beats_sooner_paid(self, *_):
+        unpaid = self.make(9)
+        self.make(2, paid='110')
+        self.assertEqual(self.pick(), unpaid.pk)
+
+    def test_auto_cancelled_unpaid_beats_past_booking(self, *_):
+        cancelled = self.make(1)
+        Post.objects.filter(pk=cancelled.pk).update(cancelled=True)
+        self.make(-14, paid='110')
+        self.assertEqual(self.pick(), cancelled.pk)
+
+    def test_active_upcoming_beats_cancelled_upcoming(self, *_):
+        cancelled = self.make(1)
+        Post.objects.filter(pk=cancelled.pk).update(cancelled=True)
+        active = self.make(5, paid='110')
+        self.assertEqual(self.pick(), active.pk)
+
+    def test_refunded_cancellation_is_not_prioritised(self, *_):
+        refunded = self.make(1)
+        Post.objects.filter(pk=refunded.pk).update(cancelled=True, refund=110)
+        past = self.make(-14, paid='110')
+        self.assertEqual(self.pick(), past.pk)
+
+    def test_all_past_keeps_newest_created_first(self, *_):
+        self.make(-30, paid='110')
+        newest = self.make(-60, paid='110')
+        self.assertEqual(self.pick(), newest.pk)
+
+    def test_out_of_range_index_falls_back_to_first(self, *_):
+        only = self.make(1)
+        self.assertEqual(self.pick(7), only.pk)
+        self.assertEqual(self.pick(-1), only.pk)
+
+
+# ---------------------------------------------------------------------------
 # Return leg passenger count
 # ---------------------------------------------------------------------------
 
