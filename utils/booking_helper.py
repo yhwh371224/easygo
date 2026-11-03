@@ -49,7 +49,17 @@ def reverse_direction(direction):
 DRIVER_DIRECTED_REGION_SLUGS = {'melbourne'}
 
 
+def region_arrival_point(region):
+    """지역 전체 도착 건의 고정 만남 장소(Region.arrival_meeting_point). 없으면 None."""
+    if not region or not getattr(region, 'arrival_meeting_point_id', None):
+        return None
+    return region.arrival_meeting_point
+
+
 def is_driver_directed_region(region):
+    # 지역 고정 만남 장소가 있으면 그 안내가 우선한다 — '기사가 알려줌' 문구를 쓰지 않는다.
+    if region_arrival_point(region):
+        return False
     return bool(region) and region.slug in DRIVER_DIRECTED_REGION_SLUGS
 
 
@@ -120,7 +130,12 @@ def build_reminder_context(booking, pickup_time_12h, driver):
 
     default_pickup_point = None
     pickup_maps = []
-    if booking.region_id and (is_intl or is_domestic) and not driver_directs_meeting:
+    fixed_point = region_arrival_point(booking.region) if (is_intl or is_domestic) else None
+    if fixed_point:
+        # 지역 고정 만남 장소 — 국제선·국내선 구분 없이 같은 곳.
+        default_pickup_point = fixed_point
+        pickup_maps = list(fixed_point.maps.all())
+    elif booking.region_id and (is_intl or is_domestic) and not driver_directs_meeting:
         terminal_type = Terminal.TerminalType.INTL if is_intl else Terminal.TerminalType.DOMESTIC
         default_pickup_point = _get_default_pickup_point(booking.region_id, terminal_type)
         if default_pickup_point:
@@ -179,6 +194,8 @@ def build_reminder_context(booking, pickup_time_12h, driver):
         'pickup_maps': pickup_maps,
         'default_pickup_point': default_pickup_point,
         'driver_directs_meeting': driver_directs_meeting,
+        # 국내선 손님도 국제선 터미널에서 만날 수 있으므로 템플릿이 터미널 이름을 그대로 보여준다.
+        'region_fixed_point': bool(fixed_point),
 
         'post': booking,
     }
@@ -203,7 +220,7 @@ def update_meeting_point_for_arrivals():
             cancelled=False,
         ).filter(
             airport_arrival_q()
-        ).select_related("driver", "region").order_by("flight_time")
+        ).select_related("driver", "region__arrival_meeting_point").order_by("flight_time")
     )
 
     if not bookings:
@@ -230,12 +247,23 @@ def update_meeting_point_for_arrivals():
     for booking in bookings:
 
         driver = booking.driver
-        if not driver:
-            logger.warning(f"No driver for booking {booking.id}")
-            continue
 
         # Ugo 는 손님이 짐 찾은 뒤 전화로 만날 곳을 정한다 — 기본 만남 장소를 넣지 않는다.
         if is_ugo_driver(driver):
+            continue
+
+        # 지역 고정 만남 장소(예: Melbourne T2 Groups & Charters): 기사·터미널과 상관없이
+        # 모든 도착 건에 같은 곳. 수동 지정한 장소는 건드리지 않는다.
+        fixed_point = region_arrival_point(booking.region)
+        if fixed_point:
+            if not booking.terminal_pickup_point_id:
+                booking.terminal_pickup_point = fixed_point
+                to_update.append(booking)
+                logger.info("Set terminal_pickup_point=%s (region fixed) for %s", fixed_point, booking.name)
+            continue
+
+        if not driver:
+            logger.warning(f"No driver for booking {booking.id}")
             continue
 
         terminal_type = ARRIVAL_TO_TERMINAL_TYPE.get(arrival_type(booking.direction, booking.start_point))

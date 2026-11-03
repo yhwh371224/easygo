@@ -172,7 +172,7 @@
 													</p>
 													{% elif default_pickup_point or pickup_maps %}
 													<p style="Margin:0;font-size:13px;font-weight:bold;line-height:20px;Margin-bottom:8px;color:#4F5557;">
-														📍 International Terminal — Pickup Location{% if default_pickup_point %}: {{ default_pickup_point.name }}{% endif %}
+														📍 {% if region_fixed_point %}Meeting Point: {{ default_pickup_point.terminal.name }} — {{ default_pickup_point.name }}{% else %}International Terminal — Pickup Location{% if default_pickup_point %}: {{ default_pickup_point.name }}{% endif %}{% endif %}
 													</p>
 													{% if default_pickup_point.instruction %}
 													<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
@@ -236,7 +236,7 @@
 													</p>
 													{% elif default_pickup_point or pickup_maps %}
 													<p style="Margin:0;font-size:13px;font-weight:bold;line-height:20px;Margin-bottom:8px;color:#4F5557;">
-														📍 Domestic Terminal — Pickup Location{% if default_pickup_point %}: {{ default_pickup_point.name }}{% endif %}
+														📍 {% if region_fixed_point %}Meeting Point: {{ default_pickup_point.terminal.name }} — {{ default_pickup_point.name }}{% else %}Domestic Terminal — Pickup Location{% if default_pickup_point %}: {{ default_pickup_point.name }}{% endif %}{% endif %}
 													</p>
 													{% if default_pickup_point.instruction %}
 													<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">

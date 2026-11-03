@@ -234,6 +234,7 @@
 
 													{% if post.terminal_pickup_point %}
 														<strong>=== The meeting point ===</strong><br>
+														{% if region_fixed_point %}<strong>📍 {{ post.terminal_pickup_point.terminal.name }} — {{ post.terminal_pickup_point.name }}</strong><br>{% endif %}
 														{{ post.terminal_pickup_point.instruction|linebreaksbr }}<br>
 														{% for map in post.terminal_pickup_point.maps.all %}
 														{% if map.type == 'image' %}
@@ -303,6 +304,7 @@
 
 													{% if post.terminal_pickup_point %}
 														<strong>=== The meeting point ===</strong><br>
+														{% if region_fixed_point %}<strong>📍 {{ post.terminal_pickup_point.terminal.name }} — {{ post.terminal_pickup_point.name }}</strong><br>{% endif %}
 														{{ post.terminal_pickup_point.instruction|linebreaksbr }}<br>
 														{% for map in post.terminal_pickup_point.maps.all %}
 														{% if map.type == 'image' %}

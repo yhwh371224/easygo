@@ -92,7 +92,7 @@ class RegionAdmin(admin.ModelAdmin):
             "fields": ("slug", "name", "state_code", "timezone", "is_active", "is_coming_soon"),
         }),
         ("Airports", {
-            "fields": ("primary_airport", "airports"),
+            "fields": ("primary_airport", "airports", "arrival_meeting_point"),
         }),
         ("Contact & Location", {
             "fields": ("phone", "phone_display", "address", "latitude", "longitude"),

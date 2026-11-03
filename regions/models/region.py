@@ -52,6 +52,17 @@ class Region(models.Model):
         null=True,
         blank=True,
     )
+    # 설정하면 이 지역의 모든 공항 도착 건(국제선·국내선 모두)이 이 한 곳에서 만난다.
+    # 터미널별 기본 만남 장소(is_default_point)와 '기사가 만날 곳을 알려줌' 안내보다 우선한다.
+    # 예: Melbourne — 모든 도착 손님을 T2 Groups & Charters 에서 만남.
+    arrival_meeting_point = models.ForeignKey(
+        "TerminalPickupPoint",
+        on_delete=models.SET_NULL,
+        related_name="+",
+        null=True,
+        blank=True,
+        help_text="모든 도착 건(국제선·국내선)을 이 만남 장소로 자동 배정·안내합니다. 비우면 터미널별 기본값을 씁니다.",
+    )
 
     @property
     def hero_image_file(self):

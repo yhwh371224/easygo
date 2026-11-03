@@ -2757,6 +2757,65 @@ class ArrivalReminderTests(TestCase):
         self.assertEqual(len(mail.outbox), 1)
         self.assertIn('Public Pickup zone', mail.outbox[0].body)
 
+    @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+    @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+    def test_region_fixed_meeting_point_applies_to_every_arrival(self, *_):
+        """Melbourne 은 국내선 손님도 T2 International Groups & Charters 에서 만난다 —
+        터미널별 기본값(T1 Qantas)이나 '기사가 알려줌' 문구 대신 그 장소로 배정·안내."""
+        from regions.models import Airport, Country, Terminal, TerminalPickupPoint
+
+        mel = make_region('melbourne', 'Melbourne')
+        country, _ = Country.objects.get_or_create(name='Australia')
+        airport, _ = Airport.objects.get_or_create(
+            code='MEL', defaults={'country': country, 'city': 'Melbourne'},
+        )
+        mel.airports.add(airport)
+        t2, _ = Terminal.objects.get_or_create(
+            airport=airport, name='T2 International', type=Terminal.TerminalType.INTL,
+        )
+        t1, _ = Terminal.objects.get_or_create(
+            airport=airport, name='T1 Domestic (Qantas)', type=Terminal.TerminalType.DOMESTIC,
+        )
+        TerminalPickupPoint.objects.create(
+            terminal=t1, name='Public Pickup', is_default_point=True, instruction='Qantas public pickup.',
+        )
+        groups = TerminalPickupPoint.objects.create(
+            terminal=t2, name='Groups & Charters', instruction='Look for the Groups & Charters signs.',
+        )
+        mel.arrival_meeting_point = groups
+        mel.save()
+
+        driver = Driver.objects.create(
+            driver_name='Dillon', driver_contact='0400000000', driver_email='dillon@example.com',
+        )
+        post = self.make_arrival(
+            region=mel, direction='Pickup from Domestic Airport', flight_number='VA216',
+            flight_time='13:15', pickup_time='13:45', pickup_date=timezone.localdate(), driver=driver,
+        )
+        now = self.TZ.localize(datetime.datetime.combine(post.pickup_date, datetime.time(12, 30)))
+
+        module = 'blog.management.commands.arrival_reminder'
+        with patch(f'{module}.current_time', return_value=now), \
+             patch(f'{module}.send_telegram_sync') as tg:
+            call_command('arrival_reminder', stdout=StringIO())
+        post.refresh_from_db()
+        self.assertEqual(post.terminal_pickup_point, groups)
+        self.assertEqual(len(mail.outbox), 1)
+        html = mail.outbox[0].alternatives[0][0]
+        self.assertIn('T2 International — Groups &amp; Charters', html)
+        self.assertIn('Groups &amp; Charters signs', html)
+        self.assertNotIn('no fixed meeting point', html)
+        self.assertNotIn('Qantas public pickup', html)
+        self.assertIn('📍 T2 International Groups & Charters', tg.call_args.args[0])
+
+        # 2일 전 안내(배정 전)도 같은 장소를 보여준다.
+        from utils.booking_helper import build_reminder_context
+        post.terminal_pickup_point = None
+        ctx = build_reminder_context(post, '1:45 PM', driver)
+        self.assertEqual(ctx['default_pickup_point'], groups)
+        self.assertFalse(ctx['driver_directs_meeting'])
+        self.assertTrue(ctx['region_fixed_point'])
+
     def test_arrival_type_matches_the_database_filter(self):
         """파이썬 판별과 DB 필터가 어긋나면 대상에는 뽑히는데 만남 장소가 빠진다."""
         from utils.direction_utils import airport_arrival_q, arrival_type
