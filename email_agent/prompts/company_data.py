@@ -45,12 +45,31 @@ PAYMENT:
 """
 
 CANCELLATION_POLICY = """
-CANCELLATION & REFUND POLICY:
-- 100% refund available for cancellations made more than 24 hours before pickup
-- No refund for cancellations made 24 hours or less before pickup
-- Cancellations should be made as soon as possible
-- If rescheduling is needed, booking remains valid for use within the next 6 months
-- EasyGo cannot accept responsibility for delayed or cancelled flights, or traffic incidents beyond our control
+DEPOSIT & CANCELLATION POLICY:
+- A deposit (or full payment, depending on booking type) is required to confirm a booking
+- If a deposit was paid, refunds apply to the deposit; if full payment was made, refunds apply to the full amount paid
+- All cancellations must be requested in writing (email)
+- The refund tier is determined by the time the cancellation email is SENT, not when it is read or acknowledged
+
+Standard bookings (individual/small group bookings):
+- More than 24 hours before pickup: 100% refund
+- Between 12 and 24 hours before pickup: 50% refund
+- Less than 12 hours before pickup, or no-show: no refund
+  (a travel credit may be offered at EasyGo's discretion for genuine last-minute changes; excludes no-shows)
+
+Group & Charter bookings (larger group, charter, special luggage, or multi-day bookings, as reasonably determined by EasyGo):
+- More than 48 hours before pickup: 50% refund
+- Less than 48 hours before pickup: no refund
+
+Force majeure exception:
+- The tiers above do NOT apply where cancellation is due to circumstances beyond the client's control,
+  including flight cancellations, flight delays, or severe weather
+- In these cases a full refund (of deposit or full payment, as applicable) is provided upon submission of
+  supporting documentation (e.g. airline cancellation notice, delay confirmation)
+
+Amendments (date/time changes):
+- Changes after confirmation are accepted subject to availability
+- EasyGo may charge an amendment fee in addition to any other applicable charges
 """
 
 LUGGAGE_POLICY = """
@@ -152,7 +171,7 @@ Q: What if my flight or pickup time changes?
 A: Contact us anytime by email — we're always happy to assist.
 
 Q: Can I cancel my booking?
-A: Yes, free cancellation if done more than 24 hours before pickup. No refund within 24 hours. If rescheduling, your booking stays valid for 6 months.
+A: Yes, by email. For standard bookings: full refund more than 24 hours before pickup, 50% refund between 12 and 24 hours, and no refund within 12 hours or for no-shows. Group & Charter bookings: 50% refund more than 48 hours before pickup, no refund within 48 hours. If your flight is cancelled or delayed, or there is severe weather, you get a full refund once you send supporting documentation (e.g. the airline's cancellation notice). Date or time changes are subject to availability.
 """
 
 
