@@ -19,22 +19,11 @@ def _get_contact_display(instance):
 
 SCOPES = ['https://www.googleapis.com/auth/calendar']
 
-_UNSET = object()
-
-def get_calendar_service(subject=_UNSET):
-    service_account_file = settings.CALENDAR_SERVICE_ACCOUNT_FILE
-
-    # 명시적으로 None을 넘긴 경우 → 서비스 계정 직접 접근 (드라이버용)
-    # 아무것도 안 넘긴 경우 → settings에서 기본값 읽기 (회사 캘린더용)
-    if subject is _UNSET:
-        subject = getattr(settings, 'RECIPIENT_EMAIL', None)
-
-    kwargs = {'scopes': SCOPES}
-    if subject:
-        kwargs['subject'] = subject
-
+def get_calendar_service():
     credentials = service_account.Credentials.from_service_account_file(
-        service_account_file, **kwargs
+        settings.CALENDAR_SERVICE_ACCOUNT_FILE,
+        scopes=SCOPES,
+        subject=getattr(settings, 'RECIPIENT_EMAIL', None),
     )
     return build('calendar', 'v3', credentials=credentials)
 
@@ -104,7 +93,7 @@ def _paid_price_display(instance):
 
 
 def _build_common(instance, contact_display=None):
-    """title, address, start/end 등 두 캘린더가 공유하는 공통 필드 계산.
+    """title, address, start/end 등 공통 필드 계산.
     날짜/시간 파싱 실패 시 None 반환."""
     if contact_display is None:
         contact_display = instance.contact
@@ -215,66 +204,13 @@ def build_event_data(instance):
     }
 
 
-def build_driver_event_data(instance):
-    """드라이버 캘린더용 event body 생성 (간결한 설명)"""
-    common = _build_common(instance, contact_display=_get_contact_display(instance))
-    if common is None:
-        return None
-
-    tz = (instance.region.timezone if instance.region_id else None) or 'Australia/Sydney'
-
-    baggage_str = abbreviate_baggage(instance.no_of_baggage)
-    extra_stops = instance.extra_stop_addresses or []
-    return_stops = _return_stop_list(instance) if instance.return_pickup_date else []
-    extra_stops_block = ("Extra Stops:\n" + "\n".join(f"• {a}" for a in extra_stops)) if extra_stops else ""
-    return_stops_block = ("Return Extra Stops:\n" + "\n".join(f"• {a}" for a in return_stops)) if return_stops else ""
-    description = " ".join(filter(None, [
-        instance.name or '',
-        f"b:{baggage_str}" if baggage_str else "",
-        instance.message or '',
-        instance.end_point or '',
-    ]))
-    if extra_stops_block:
-        description = description + "\n\n" + extra_stops_block
-    if return_stops_block:
-        description = description + "\n\n" + return_stops_block
-
-    return {
-        "summary": common["title"],
-        "location": common["address"],
-        "start": {"dateTime": common["start"].strftime("%Y-%m-%dT%H:%M:%S"), "timeZone": tz},
-        "end": {"dateTime": common["end"].strftime("%Y-%m-%dT%H:%M:%S"), "timeZone": tz},
-        "description": description,
-    }
-
-
-def delete_from_calendar(calendar_id, event_id):
-    """캘린더에서 이벤트 삭제 (서비스 계정 직접 접근, delegation 없음)"""
-    service = get_calendar_service(subject=None)
-    try:
-        service.events().delete(calendarId=calendar_id, eventId=event_id).execute()
-        logger.info(f"Deleted event {event_id} from calendar {calendar_id}")
-    except HttpError as e:
-        # ✅ 5번: 404(이미 삭제된 이벤트)는 warning, 그 외는 error
-        if e.resp.status == 404:
-            logger.warning(f"Event {event_id} not found in calendar {calendar_id} (already deleted?)")
-        else:
-            logger.error(f"Calendar delete failed (calendar: {calendar_id}, event: {event_id}): {e}")
-    except Exception as e:
-        logger.error(f"Calendar delete failed (calendar: {calendar_id}, event: {event_id}): {e}")
-
-
-def sync_to_calendar(instance, calendar_id="primary", is_driver=False):
-    service = get_calendar_service(subject=None) if is_driver else get_calendar_service()
-    event = build_driver_event_data(instance) if is_driver else build_event_data(instance)
+def sync_to_calendar(instance, calendar_id="primary"):
+    service = get_calendar_service()
+    event = build_event_data(instance)
     if not event:
         return
 
-    event_id = (
-        (instance.driver_calendar_event_id or "").strip()
-        if is_driver
-        else (instance.calendar_event_id or "").strip()
-    )
+    event_id = (instance.calendar_event_id or "").strip()
 
     try:
         if event_id:
@@ -294,14 +230,9 @@ def sync_to_calendar(instance, calendar_id="primary", is_driver=False):
             new_event = service.events().insert(calendarId=calendar_id, body=event).execute()
             new_event_id = new_event["id"]
 
-            if is_driver:
-                Post.objects.filter(pk=instance.pk).update(driver_calendar_event_id=new_event_id)
-                # ✅ 1번: 메모리상 인스턴스도 동기화
-                instance.driver_calendar_event_id = new_event_id
-            else:
-                Post.objects.filter(pk=instance.pk).update(calendar_event_id=new_event_id)
-                # ✅ 1번: 메모리상 인스턴스도 동기화
-                instance.calendar_event_id = new_event_id
+            Post.objects.filter(pk=instance.pk).update(calendar_event_id=new_event_id)
+            # ✅ 1번: 메모리상 인스턴스도 동기화
+            instance.calendar_event_id = new_event_id
 
     except Exception as e:
         logger.error(f"Calendar sync failed for post {instance.id} (calendar: {calendar_id}): {e}")

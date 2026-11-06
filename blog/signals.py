@@ -180,39 +180,19 @@ def async_notify_user_payment_stripe(sender, instance, created, **kwargs):
         logger.info('async_notify_user_payment_stripe: queued notify_user_payment_stripe for pk=%s', pk)
 
 
-# 드라이버 변경 시 driver_calendar_event_id 초기화 + proxy/입금액 비교용 이전 값 보존
-@receiver(pre_save, sender=Post, dispatch_uid="reset_driver_calendar_event_id_once")
-def reset_driver_calendar_event_id(sender, instance, **kwargs):
+# proxy/입금액 비교용 이전 값 보존
+@receiver(pre_save, sender=Post, dispatch_uid="capture_pre_save_state_once")
+def capture_pre_save_state(sender, instance, **kwargs):
     if not instance.pk:
         return
     try:
         old = Post.objects.get(pk=instance.pk)
-        instance._pre_save_driver_id = old.driver_id
-        instance._pre_save_use_proxy = old.use_proxy
-        instance._pre_save_paid = old.paid
-        instance._pre_save_cancelled = old.cancelled
-        if old.driver != instance.driver:
-            logger.info(
-                'reset_driver_calendar_event_id: driver changed for Post pk=%s old_driver=%s new_driver=%s',
-                instance.pk, old.driver_id, instance.driver_id,
-            )
-            if (
-                old.driver_calendar_event_id
-                and old.driver
-                and old.driver.google_calendar_id
-            ):
-                try:
-                    from utils.calendar_sync import delete_from_calendar
-                    delete_from_calendar(old.driver.google_calendar_id, old.driver_calendar_event_id)
-                except Exception:
-                    logger.error(
-                        'reset_driver_calendar_event_id: delete_from_calendar failed for Post pk=%s event_id=%s',
-                        instance.pk, old.driver_calendar_event_id, exc_info=True,
-                    )
-            instance.driver_calendar_event_id = None
-            logger.info('reset_driver_calendar_event_id: cleared driver_calendar_event_id for Post pk=%s', instance.pk)
     except Post.DoesNotExist:
-        pass
+        return
+    instance._pre_save_driver_id = old.driver_id
+    instance._pre_save_use_proxy = old.use_proxy
+    instance._pre_save_paid = old.paid
+    instance._pre_save_cancelled = old.cancelled
 
 
 # google calendar recording

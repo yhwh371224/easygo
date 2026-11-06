@@ -25,7 +25,7 @@ class Command(BaseCommand):
         # dispatch_uid가 없으면 receiver 함수 id로 룩업.
         SIGNALS = [
             # --- blog/signals.py ---
-            (pre_save,  blog_signals.reset_driver_calendar_event_id,     BlogPost,       'reset_driver_calendar_event_id_once'),
+            (pre_save,  blog_signals.capture_pre_save_state,             BlogPost,       'capture_pre_save_state_once'),
             (post_save, blog_signals.notify_user_inquiry,                 Inquiry,        'notify_user_inquiry_once'),
             (post_save, blog_signals.notify_user_post,                    BlogPost,       'notify_user_post_once'),
             (post_save, blog_signals.notify_user_post_cancelled,          BlogPost,       'notify_user_post_cancelled_once'),

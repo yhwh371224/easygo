@@ -506,7 +506,6 @@ class PostAdmin(admin.ModelAdmin):
             obj.pk = None
             obj._state.adding = True
             obj.calendar_event_id = ''
-            obj.driver_calendar_event_id = ''
             obj.driver = None
             obj.commission_rate = Decimal('0')
             obj.use_proxy = False
@@ -565,7 +564,7 @@ class PostAdmin(admin.ModelAdmin):
             'fields': ['message', 'notice', 'special_items']
         }),
         ('Calendar', {
-            'fields': ['calendar_color', 'calendar_event_id', 'driver_calendar_event_id']
+            'fields': ['calendar_color', 'calendar_event_id']
         }),
     ]
 
@@ -580,7 +579,7 @@ class PostAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         if change:
-            for field in ('calendar_event_id', 'driver_calendar_event_id'):
+            for field in ('calendar_event_id',):
                 submitted = (form.cleaned_data.get(field) or '').strip()
                 if submitted:
                     continue

@@ -6,7 +6,6 @@ from django.utils import timezone
 
 from blog.models import Post
 from blog.bird_proxy import create_bird_mapping
-from utils.calendar_sync import sync_to_calendar
 
 logger = logging.getLogger(__name__)
 
@@ -82,23 +81,6 @@ class Command(BaseCommand):
                     booking.name,
                     booking.pickup_time,
                 )
-
-                # =========================
-                # Calendar sync (NON-BLOCKING)
-                # =========================
-                try:
-                    if booking.driver.google_calendar_id:
-                        sync_to_calendar(
-                            booking,
-                            calendar_id=booking.driver.google_calendar_id,
-                            is_driver=True,
-                        )
-                except Exception as e:
-                    logger.warning(
-                        '[CALENDAR WARN] Post=%s error=%s',
-                        booking.id,
-                        str(e),
-                    )
 
             except Exception as e:
                 fail += 1
