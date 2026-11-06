@@ -65,6 +65,7 @@ class Command(BaseCommand):
             {"loc": f"{BASE_URL}/more_suburbs_maxi_taxi/",   "changefreq": "weekly",  "priority": "0.6000"},
             {"loc": f"{BASE_URL}/payment_options/",          "changefreq": "monthly", "priority": "0.5000"},
             {"loc": f"{BASE_URL}/payonline/",                "changefreq": "monthly", "priority": "0.5000"},
+            {"loc": f"{BASE_URL}/payonline/paypal/",         "changefreq": "monthly", "priority": "0.5000"},
             {"loc": f"{BASE_URL}/payment_options1/",         "changefreq": "monthly", "priority": "0.5000"},
             {"loc": f"{BASE_URL}/terms/",                    "changefreq": "yearly",  "priority": "0.3000"},
             {"loc": f"{BASE_URL}/privacy/",                  "changefreq": "yearly",  "priority": "0.3000"},

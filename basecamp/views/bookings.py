@@ -468,7 +468,12 @@ def confirm_booking_prepay_detail(request):
 
     if not _save_post_claiming_inquiry(p, user):
         logger.warning(f"[BOOKING PREPAY] duplicate confirm ignored: inquiry pk={user.pk} email={email}")
-        return redirect(f"/payonline/?{urlencode({'name': name, 'amount': final_price})}")
+        # 연타로 들어온 두 번째 요청 — 첫 요청이 만든 Post 로 결제 페이지를 연다.
+        existing = Post.objects.filter(
+            Q(email__iexact=email) | Q(booker_email__iexact=email),
+            pickup_date=pickup_date_obj,
+        ).order_by('-id').first()
+        return _redirect_to_prepay_payment(existing, name, final_price)
 
     # 결제 여부와 무관하게, confirm 클릭 10분 후 confirmation email 발송.
     # 이미 다른 경로(예: admin is_confirmed)로 발송됐다면 태스크 내 sent_email
@@ -494,8 +499,20 @@ def confirm_booking_prepay_detail(request):
     except Exception as e:
         logger.error(f"[TELEGRAM] Failed to queue: {e}")
 
-    params = urlencode({'name': name, 'amount': final_price})
-    return redirect(f"/payonline/?{params}")
+    return _redirect_to_prepay_payment(p, name, final_price)
+
+
+def _redirect_to_prepay_payment(post, name, final_price):
+    """prepay confirm 후 결제 페이지로 보낸다.
+
+    기본은 금액·이메일이 채워진 Stripe Checkout. 금액이 TBA 이거나 Stripe
+    세션 생성이 실패하면 이름·금액이 채워진 PayPal 페이지로 보낸다.
+    """
+    from basecamp.views.payments import stripe_checkout_url_for_post
+    url = stripe_checkout_url_for_post(post) if post else None
+    if url:
+        return redirect(url)
+    return redirect(f"/payonline/paypal/?{urlencode({'name': name, 'amount': final_price})}")
 
 
 # For Return Trip

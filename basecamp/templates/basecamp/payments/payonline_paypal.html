@@ -1,0 +1,178 @@
+{% extends 'basecamp/base/easygo_base.html' %}
+
+{% load static %}
+
+{% block title %}PayPal Payment – EasyGo Airport Shuttle{% endblock %}
+
+{% block meta %}
+<meta name="description" content="Find the official meeting points for EasyGo Airport Shuttle at Sydney Airport. Get instructions for T1 International, T2 Domestic, and Qantas T3 terminals for smooth pickups.">
+<meta name="keywords" content="Sydney airport meeting points, T1 International Airport pickup, T2 Domestic Airport pickup, T3 Qantas pickup, EasyGo Airport Shuttle, airport transfer Sydney, airport pickup map">
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  .hero-paypal { position: relative; min-height: 450px; display: flex; align-items: center; overflow: hidden; }
+  .card-body { background-color: #c3e2f7 !important; }
+  .form-control hr { border: none; border-top: 1px solid #e0e0e0; opacity: 0.5; margin: 2.5rem 0; }
+  .form-control h2 { margin-top: 3rem; margin-bottom: 1.5rem; }
+  .form-control .mb-3 p { margin-bottom: 0.8rem; }
+  .faq-card-wrapper { margin-top: -230px; }
+  @media (max-width: 768px) { .hero .hero-content { padding-top: 150px !important; } .faq-card-wrapper { margin-top: -140px; } .card-section { padding-left: 30px !important; } }
+  @media (max-width: 480px) { .hero .hero-content { padding-top: 120px !important; } }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- ===== Hero Section ===== -->
+<section class="hero hero-paypal">
+  <img src="{% static 'basecamp/images/page-title-bg.webp' %}"
+       alt="PayPal payment for EasyGo Airport Shuttle"
+       fetchpriority="high"
+       style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 38%; z-index:0;">
+  <span class="position-absolute top-0 start-0 w-100 h-100 bg-gradient opacity-80" style="z-index:1;"></span>
+  <div class="shape shape-bottom shape-slant bg-body">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 260">
+      <polygon fill="currentColor" points="0,257 0,260 3000,260 3000,0"></polygon>
+    </svg>
+  </div>
+  <div class="container pt-5 pb-4">
+    <div class="row"></div>
+  </div>
+</section>
+<!-- ===== /Hero Section ===== -->
+
+      <!-- Contact form + details-->
+      <section class="container position-relative zindex-5 pb-0">
+        <div class="row">
+
+          <div class="col-lg-6 col-md-7 offset-lg-1 pb-2 mb-5 faq-card-wrapper">
+            <div class="paypal-card border-0 shadow-lg" >
+              <div class="form-control" style="padding:2rem">
+                
+                <form method="post" id="paypal-form" class="card-body p-5">
+                    {% csrf_token %}
+                    <h2 class="text-center">PAYPAL CHECKOUT</h2>
+                    <div id="smart-button-container">
+                    <div style="text-align: center"><small>BOOKING NAME</small></div>
+                    <div style="text-align: center">
+                        <input type="text" name="descriptionInput" id="description" value="">
+                    </div>
+                    <p id="descriptionError" style="visibility: hidden; color:red; text-align: center;">Please enter your booking name</p>
+                    <div style="text-align: center"><small>ENTER AMOUNT</small></div>
+                    <div style="text-align: center">
+                        <input name="amountInput" type="number" id="amount" min="1" step="0.01" value="">
+                    </div>
+                    <p id="priceLabelError" style="visibility: hidden; color:red; text-align: center;">Price only without $ sign</p>
+                    <div style="text-align: center; margin-top: 0.625rem;" id="paypal-button-container"></div>
+                    </div>
+                </form>
+
+                <div class="container" style="margin-top: 60px;">
+                    <h5 class="text-center mb-4">Secure Payment Guaranteed</h5>
+                </div>
+                <div class="text-center" style="margin-top: 16px; margin-bottom: 8px;">
+                    <span style="display: inline-flex; align-items: center; flex-wrap: wrap; justify-content: center; gap: 6px; color: #888; font-size: 0.8rem;">
+                    Secured by PayPal's encryption & buyer protection.&nbsp;
+                    <a href="https://www.paypal.com/us/legalhub/privacy-full" target="_blank" rel="noopener">Privacy Policy</a>&
+                    <a href="https://www.paypal.com/us/legalhub/useragreement-full" target="_blank" rel="noopener">Terms</a>
+                    </span>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-4 offset-md-1 card-section">
+            <h3 class="h4 pb-3">Payment Instructions</h3><hr>
+            <ul class="list-unstyled fs-sm pb-3">
+              <li class="mb-3">
+                <p class="fw-bold mb-1">Step 1</p>
+                <p class="mb-3">Enter your Booking Name and Amount.</p>
+              </li>
+              <hr>
+              <li class="mb-3">
+                <p class="fw-bold mb-1">Step 2</p>
+                <p class="mb-0">Choose your payment option:
+                    Select either PayPal or Debit/Credit Card to proceed.
+                </p>
+              </li>
+              <hr>
+              <li class="mb-3">
+                <p class="fw-bold mb-1">Step 3</p>
+                <p class="mb-0"><strong>PayPal Option:</strong> After clicking the PayPal button, a blank popup window may appear. Close it manually to reveal the PayPal login window behind it.</p>
+                <p class="mb-2"><strong>Debit/Credit Card Option:</strong> After clicking the Debit/Credit button, please note two important points:</p>
+                <p class="mb-1">1. Select the <strong>country where your card was issued</strong>.</p>
+                <p class="mb-0">2. Enter <strong>the same email address</strong> you used when making your booking.</p>
+              </li>
+              {% comment %} <hr>
+              <br>
+              <li class="mb-3">
+                <p class="fw-bold mb-1">Important</p>
+                <p class="mb-0">Please enter the same email address you used when making your booking</p>
+              </li> {% endcomment %}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Pre-fill from redirect params (e.g. from confirm_booking_prepay_detail) -->
+      <script nonce="{{ CSP_NONCE }}">
+        (function () {
+          var p = new URLSearchParams(window.location.search);
+          var n = p.get('name'); var a = p.get('amount');
+          if (n) document.getElementById('description').value = n;
+          if (a) document.getElementById('amount').value = a;
+
+          // A number input with step=0.01 changes by a cent on mouse wheel or
+          // arrow keys, so scrolling the page with the field focused quietly
+          // turned $160 into $159.99. Only typed input may change the amount.
+          var amountInput = document.getElementById('amount');
+          amountInput.addEventListener('wheel', function (e) {
+            if (document.activeElement === amountInput) e.preventDefault();
+          }, { passive: false });
+          amountInput.addEventListener('keydown', function (e) {
+            if (e.key === 'ArrowUp' || e.key === 'ArrowDown') e.preventDefault();
+          });
+        })();
+      </script>
+
+      <!-- Scripts -->
+      <script src="https://www.paypal.com/sdk/js?client-id={{ paypal_client_id }}&components=buttons&enable-funding=card&disable-funding=paylater,venmo&currency=AUD" data-sdk-integration-source="integrationbuilder_sc" nonce="{{ CSP_NONCE }}"></script>
+      <script nonce="{{ CSP_NONCE }}">
+        paypal.Buttons({
+          commit: true,                 
+
+          createOrder: function(data, actions) {
+            var item_name = document.getElementById("description").value.trim();
+            var amount = document.getElementById("amount").value;
+            if(!item_name || isNaN(amount) || amount <= 0){
+              alert("Please enter a valid booking name and amount.");
+              return;
+            }
+            var gross_amount = (amount * {{ paypal_surcharge_factor }}).toFixed(2);
+            return actions.order.create({
+              purchase_units: [{
+                amount: { value: gross_amount },
+                description: item_name,
+                // 카드 명세서에 'Nexflow Ventures' 대신 표시될 이름 (최대 22자)
+                soft_descriptor: "EASYGO AIRPORT SHUTTLE",
+              }],
+              application_context: {
+                brand_name: "EASYGO AIRPORT SHUTTLE",
+                shipping_preference: "NO_SHIPPING",
+              }
+            });
+          },
+          
+          onApprove: function(data, actions) {
+            return actions.order.capture().then(function(details) {
+              // The actual payment record is written by PayPal's server-to-server
+              // IPN callback, not from here — this browser can't produce a payload
+              // that would pass /paypal_ipn/'s PayPal verification anyway.
+              window.location.href = "/success/";
+            });
+          }
+        }).render('#paypal-button-container');
+      </script>
+
+{% endblock %}

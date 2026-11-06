@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import paypal_ipn, create_stripe_checkout_session
+from .views import paypal_ipn, create_stripe_checkout_session, payonline_checkout
 from django.shortcuts import redirect
 from django.views.generic import RedirectView
 
@@ -63,6 +63,8 @@ urlpatterns = [
     path('payment_options/', views.payment_options, name='payment_options'),
     path('payment_options1/', views.payment_options1, name='payment_options1'),
     path('payonline/', views.payonline, name='payonline'),
+    path('payonline/checkout/', payonline_checkout, name='payonline_checkout'),
+    path('payonline/paypal/', views.payonline_paypal, name='payonline_paypal'),
     path('paypal_ipn/', paypal_ipn, name='paypal_ipn'),    
     path('price_detail/', views.price_detail, name='price_detail'),
     path('privacy/', views.privacy, name='privacy'),
@@ -82,7 +84,7 @@ urlpatterns = [
     path('success/', views.success, name='success'),
     path('terms/', views.terms, name='terms'),
     path('wrong_date_today/', views.wrong_date_today, name='wrong_date_today'),
-    path('pay/stripe/', lambda request: redirect('https://buy.stripe.com/7sIcP940RbKH7LO6ow'), name='pay_stripe'),
+    path('pay/stripe/', lambda request: redirect('basecamp:payonline'), name='pay_stripe'),
     path('rebook/',               views.rebook,                name='rebook'),
     path('quick_rebook/',         views.quick_rebook_step1,   name='quick_rebook_step1'),
     path('quick_rebook/confirm/', views.quick_rebook_confirm,  name='quick_rebook_confirm'),

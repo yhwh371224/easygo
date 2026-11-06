@@ -155,15 +155,11 @@
 													Please choose the one that suits you best from the following:<br><br>
 												</p>
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
-													1. <strong>Online payment through PayPal</strong>: You can make payments online through our website.<br> 
-													&nbsp; • &nbsp;<a href="https://easygoshuttle.com.au/payonline">https://easygoshuttle.com.au/payonline</a><br><br>
+													1. <strong>Online card payment</strong>: You can pay securely online by debit or credit card through our website.<br> 
+													&nbsp; • &nbsp;<a href="https://easygoshuttle.com.au/payonline/?name={{ name|urlencode }}{% if email %}&amp;email={{ email|urlencode }}{% endif %}">https://easygoshuttle.com.au/payonline</a><br><br>
 												</p>
 												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
-													2. <strong>Online payment through Stripe</strong>: You can make payments online through Stripe.<br> 
-													&nbsp; • &nbsp;<a href="https://buy.stripe.com/7sIcP940RbKH7LO6ow">Stripe link</a> for EasyGo Airport Transfers<br><br>
-												</p>
-												<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
-													3. <strong>Bank transfer</strong>: You can transfer funds directly to our company's bank account. The transfer details are as follows:<br>
+													2. <strong>Bank transfer</strong>: You can transfer funds directly to our company's bank account. The transfer details are as follows:<br>
 
 													{% include 'basecamp/includes/bank_details.html' with bank=DEFAULT_BANK %}
 													<br><br>
@@ -171,7 +167,7 @@
 													<span style="color:#d9534f;"><strong>✨ Important:</strong> Please include the email address you used for the booking in the payment description.</span><br><br>
 												</p>
                                                 <p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
-													4. <strong>PayID</strong>:<br>
+													3. <strong>PayID</strong>:<br>
 													&nbsp; • &nbsp;ABN PayID: 25 697 358 535<br><br>
 												</p>     
 												<br><br>

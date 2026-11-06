@@ -2,6 +2,7 @@
 Tests for the regions app: models, views, and business logic.
 """
 import datetime
+from types import SimpleNamespace
 from decimal import Decimal
 from unittest.mock import patch
 
@@ -665,7 +666,9 @@ class ConfirmBookingConcurrentClickTests(TransactionTestCase):
 
         with patch('basecamp.views.bookings.resolve_booking_driver', side_effect=wait_then_resolve), \
                 patch('basecamp.views.bookings.send_telegram_task.delay'), \
-                patch('basecamp.views.bookings.send_post_confirmation_email_task.apply_async'):
+                patch('basecamp.views.bookings.send_post_confirmation_email_task.apply_async'), \
+                patch('basecamp.views.payments.stripe.checkout.Session.create',
+                      return_value=SimpleNamespace(url='https://checkout.stripe.com/c/pay/test')):
             threads = [threading.Thread(target=click) for _ in range(clicks)]
             for t in threads:
                 t.start()
@@ -682,6 +685,135 @@ class ConfirmBookingConcurrentClickTests(TransactionTestCase):
 
     def test_simultaneous_prepay_confirm_clicks_save_one_booking(self):
         self.assertEqual(self._race('confirm_booking_prepay_detail'), [302, 302, 302])
+
+
+# prepay confirm 후 PayPal 대신 금액·이메일이 채워진 Stripe Checkout 으로 보낸다.
+@override_settings(CACHES={'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+                                       'LOCATION': 'prepay-stripe-tests'}})
+class ConfirmPrepayStripeRedirectTests(TestCase):
+
+    def _confirm(self, price='85', **inquiry):
+        from blog.models import Inquiry
+        Inquiry.objects.create(name='Stripe Payer', email='pay@example.com', price=price,
+                               no_of_passenger='1', direction='Drop off to Domestic Airport',
+                               pickup_date=datetime.date.today() + datetime.timedelta(days=5),
+                               **inquiry)
+        with patch('basecamp.views.bookings.send_telegram_task.delay'), \
+                patch('basecamp.views.bookings.send_post_confirmation_email_task.apply_async'):
+            return self.client.post(reverse('basecamp:confirm_booking_prepay_detail'), {
+                'email': 'pay@example.com', 'index': '1',
+            }, secure=True)
+
+    @patch('basecamp.views.payments.stripe.checkout.Session.create',
+           return_value=SimpleNamespace(url='https://checkout.stripe.com/c/pay/cs_test_1'))
+    def test_redirects_to_prefilled_stripe_checkout(self, create):
+        from blog.models import Post
+        response = self._confirm(price='85', toll='10')
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response['Location'], 'https://checkout.stripe.com/c/pay/cs_test_1')
+        post = Post.objects.get(email='pay@example.com')
+        kwargs = create.call_args.kwargs
+        self.assertEqual(kwargs['customer_email'], 'pay@example.com')
+        self.assertEqual(kwargs['line_items'][0]['price_data']['unit_amount'], 9500)
+        self.assertEqual(kwargs['line_items'][0]['price_data']['currency'], 'aud')
+        self.assertEqual(kwargs['metadata']['post_id'], str(post.pk))
+
+    @patch('basecamp.views.payments.stripe.checkout.Session.create',
+           side_effect=Exception('stripe down'))
+    def test_stripe_failure_falls_back_to_paypal_page(self, create):
+        response = self._confirm(price='85')
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response['Location'].startswith('/payonline/paypal/?'))
+        self.assertIn('amount=85', response['Location'])
+
+    @patch('basecamp.views.payments.stripe.checkout.Session.create')
+    def test_tba_price_skips_stripe(self, create):
+        response = self._confirm(price='')
+        self.assertTrue(response['Location'].startswith('/payonline/paypal/?'))
+        create.assert_not_called()
+
+
+# /payonline/ 는 Stripe 카드 결제 폼. 이름·이메일·금액이 채워진 Checkout 으로 보낸다.
+@override_settings(CACHES={'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+                                       'LOCATION': 'payonline-stripe-tests'}})
+class PayOnlineStripeTests(TestCase):
+    CHECKOUT = 'https://checkout.stripe.com/c/pay/cs_test_po'
+
+    def _post(self, **data):
+        return self.client.post(reverse('basecamp:payonline_checkout'), data, secure=True)
+
+    def test_page_prefills_from_query(self):
+        response = self.client.get('/payonline/?name=Jane%20Doe&email=jane@example.com&amount=120',
+                                   secure=True)
+        self.assertContains(response, 'value="Jane Doe"')
+        self.assertContains(response, 'value="jane@example.com"')
+        self.assertContains(response, 'value="120"')
+        self.assertNotContains(response, 'paypal.com/sdk')
+
+    def test_paypal_page_still_available(self):
+        response = self.client.get(reverse('basecamp:payonline_paypal'), secure=True)
+        self.assertContains(response, 'paypal.com/sdk')
+
+    @patch('basecamp.views.payments.stripe.checkout.Session.create')
+    def test_typed_amount_goes_to_checkout(self, create):
+        create.return_value = SimpleNamespace(url=self.CHECKOUT)
+        response = self._post(name='Jane Doe', email='jane@example.com', amount='$1,234.50')
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response['Location'], self.CHECKOUT)
+        kwargs = create.call_args.kwargs
+        self.assertEqual(kwargs['customer_email'], 'jane@example.com')
+        self.assertEqual(kwargs['metadata']['booking_name'], 'Jane Doe')
+        self.assertEqual(kwargs['line_items'][0]['price_data']['unit_amount'], 123450)
+
+    @patch('basecamp.views.payments.stripe.checkout.Session.create')
+    def test_blank_amount_charges_upcoming_balance(self, create):
+        from blog.models import Post
+        create.return_value = SimpleNamespace(url=self.CHECKOUT)
+        future = datetime.date.today() + datetime.timedelta(days=3)
+        Post.objects.create(name='Jane Doe', email='jane@example.com', price='120', paid='20',
+                            pickup_date=future)
+        Post.objects.create(name='Jane Doe', email='jane@example.com', price='80', pickup_date=future)
+        Post.objects.create(name='Jane Doe', email='jane@example.com', price='99', pickup_date=future,
+                            cancelled=True)
+        Post.objects.create(name='Jane Doe', email='jane@example.com', price='50',
+                            pickup_date=datetime.date.today() - datetime.timedelta(days=3))
+        self._post(name='Jane Doe', email='jane@example.com', amount='')
+        self.assertEqual(create.call_args.kwargs['line_items'][0]['price_data']['unit_amount'], 18000)
+
+    @patch('basecamp.views.payments.stripe.checkout.Session.create')
+    def test_validation_errors_rerender_form(self, create):
+        cases = [
+            ({'name': '', 'email': 'a@example.com', 'amount': '10'}, 'booking name'),
+            ({'name': 'A', 'email': 'nope', 'amount': '10'}, 'email address'),
+            ({'name': 'A', 'email': 'a@example.com', 'amount': 'abc'}, 'as a number'),
+            ({'name': 'A', 'email': 'a@example.com', 'amount': '0.50'}, 'at least $1.00'),
+            ({'name': 'A', 'email': 'a@example.com', 'amount': '20000'}, 'over $10,000'),
+            ({'name': 'A', 'email': 'a@example.com', 'amount': ''}, 'outstanding balance'),
+        ]
+        for data, message in cases:
+            with self.subTest(data=data):
+                response = self._post(**data)
+                self.assertEqual(response.status_code, 400)
+                self.assertContains(response, message, status_code=400)
+        create.assert_not_called()
+
+    @patch('basecamp.views.payments.stripe.checkout.Session.create', side_effect=Exception('down'))
+    def test_stripe_error_shows_message(self, create):
+        response = self._post(name='A', email='a@example.com', amount='10')
+        self.assertContains(response, 'temporarily unavailable', status_code=502)
+
+    def test_webhook_stores_booking_name_from_metadata(self):
+        import stripe
+        from blog.models import StripePayment
+        from basecamp.modules.payment_utils import handle_checkout_session_completed
+        session = stripe.StripeObject.construct_from({
+            'customer_details': {'email': 'jane@example.com', 'name': 'J CARDHOLDER'},
+            'metadata': {'booking_name': 'Jane Doe'},
+            'amount_total': 12000, 'payment_intent': None, 'id': 'cs_test_x',
+        }, 'k')
+        with patch('blog.tasks.notify_user_payment_stripe.delay', create=True):
+            handle_checkout_session_completed(session)
+        self.assertEqual(StripePayment.objects.get(payment_intent_id='cs_test_x').name, 'Jane Doe')
 
 
 # ---------------------------------------------------------------------------

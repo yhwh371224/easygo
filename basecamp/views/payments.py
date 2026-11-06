@@ -606,6 +606,153 @@ def paypal_ipn(request):
 # Stripe Checkout Session
 # --------------------------
 
+SITE_URL = 'https://easygoshuttle.com.au'
+
+
+def _create_checkout_session(amount_cents, email, booking_name, description, post_id=''):
+    """Hosted Stripe Checkout session for one card payment; returns its URL.
+
+    The email is locked to what we pass so the webhook
+    (match_posts_for_payment, email first) applies the payment to that
+    customer's bookings. The booking name travels in metadata — the webhook
+    stores it instead of the cardholder name, so the name fallback matches the
+    booking the same way PayPal's item_name does. No card surcharge is added:
+    the webhook applies the Stripe amount to Post.paid as-is.
+
+    Raises on Stripe errors; callers decide the fallback.
+    """
+    metadata = {'booking_name': booking_name or ''}
+    if post_id:
+        metadata['post_id'] = str(post_id)
+    session = stripe.checkout.Session.create(
+        mode='payment',
+        payment_method_types=['card'],
+        customer_email=email or None,
+        client_reference_id=str(post_id) if post_id else None,
+        metadata=metadata,
+        payment_intent_data={
+            'description': f"EasyGo {('#' + str(post_id) + ' ') if post_id else ''}{description}".strip(),
+            'metadata': metadata,
+        },
+        line_items=[{
+            'price_data': {
+                'currency': 'aud',
+                'unit_amount': amount_cents,
+                'product_data': {
+                    'name': 'EasyGo Airport Transfer',
+                    'description': description or 'EasyGo Airport Transfer',
+                },
+            },
+            'quantity': 1,
+        }],
+        success_url=f'{SITE_URL}/success/',
+        cancel_url=f'{SITE_URL}/payonline/',
+    )
+    return session.url
+
+
+def stripe_checkout_url_for_post(post):
+    """Stripe Checkout URL for one booking's outstanding balance, or None.
+
+    Used right after a prepay booking is confirmed. The amount is the booking
+    balance (booking_balance — same formula as dunning and payment
+    allocation). Returns None when there is nothing to charge (price TBA,
+    already paid) or Stripe errors — the caller falls back to the PayPal page.
+    """
+    result = booking_balance(post)
+    if result is None:
+        return None
+    amount_cents = round(result[2] * 100)
+    if amount_cents <= 0:
+        return None
+
+    email = (post.booker_email or post.email or '').strip()
+    pickup = post.pickup_date.strftime('%d %b %Y') if post.pickup_date else ''
+    description = f"{post.name or 'Booking'} — {pickup} {post.pickup_time or ''}".strip()
+    try:
+        return _create_checkout_session(amount_cents, email, post.name, description, post_id=post.pk)
+    except Exception:
+        logger.exception('stripe_checkout_url_for_post: session create failed for post %s', post.pk)
+        return None
+
+
+def _upcoming_balance_cents(email):
+    """Outstanding balance (cents) of the customer's upcoming bookings."""
+    posts = Post.objects.filter(
+        Q(booker_email__iexact=email) | Q(email__iexact=email),
+        pickup_date__isnull=False,
+        pickup_date__gte=timezone.localdate(),
+        cancelled=False,
+    )
+    total = 0
+    for post in posts:
+        result = booking_balance(post)
+        if result and result[2] > 0:
+            total += round(result[2] * 100)
+    return total
+
+
+PAYONLINE_MAX_CENTS = 1_000_000  # $10,000 — guards against a mistyped extra digit
+
+
+@ratelimit(key='ip', rate='10/m', method='POST', block=False)
+@require_POST
+def payonline_checkout(request):
+    """/payonline/ form → Stripe Checkout with name, email and amount filled in.
+
+    Amount left blank = the customer's full outstanding balance for upcoming
+    bookings under that email. Errors re-render the form with what was typed.
+    """
+    from django.core.validators import validate_email
+    from django.core.exceptions import ValidationError
+    from django.shortcuts import redirect
+    from decimal import Decimal, InvalidOperation
+
+    name = (request.POST.get('name') or '').strip()[:100]
+    email = (request.POST.get('email') or '').strip()[:254]
+    amount_raw = (request.POST.get('amount') or '').strip().lstrip('$').replace(',', '')
+
+    def fail(message, status=400):
+        return render(request, 'basecamp/payments/payonline.html', {
+            'error': message, 'name': name, 'email': email, 'amount': amount_raw,
+        }, status=status)
+
+    if getattr(request, 'limited', False):
+        return fail('Too many attempts. Please wait a minute and try again.', status=429)
+    if request.POST.get('website', '').strip():  # honeypot
+        return fail('Something went wrong. Please try again.')
+    if not name:
+        return fail('Please enter your booking name.')
+    try:
+        validate_email(email)
+    except ValidationError:
+        return fail('Please enter the email address you used for your booking.')
+
+    if amount_raw:
+        try:
+            amount = Decimal(amount_raw)
+        except InvalidOperation:
+            return fail('Please enter the amount as a number, without the $ sign.')
+        amount_cents = int((amount * 100).to_integral_value())
+        if amount_cents < 100:
+            return fail('The amount must be at least $1.00.')
+    else:
+        amount_cents = _upcoming_balance_cents(email)
+        if amount_cents <= 0:
+            return fail('We could not find an outstanding balance for this email. '
+                        'Please enter the amount to pay.')
+    if amount_cents > PAYONLINE_MAX_CENTS:
+        return fail('For payments over $10,000 please contact us.')
+
+    try:
+        url = _create_checkout_session(amount_cents, email, name, f'{name} — online payment')
+    except Exception:
+        logger.exception('payonline_checkout: session create failed (email=%s)', email)
+        return fail('Card payment is temporarily unavailable. Please try again shortly, '
+                    'or pay with PayPal or PayID from the Payment menu.', status=502)
+    return redirect(url)
+
+
 @ratelimit(key='ip', rate='5/m', method='POST', block=False)
 @csrf_exempt
 @require_POST

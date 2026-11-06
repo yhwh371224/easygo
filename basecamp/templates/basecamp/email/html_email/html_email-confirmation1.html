@@ -175,12 +175,12 @@
                       • The total cost is ${{ price }}{% if toll and surcharge %}, toll & fuel surcharge included{% elif toll %}, toll included{% elif surcharge %}, fuel surcharge included{% endif %}<br />
                       {% if surcharge %}<span style="color:#666;">&nbsp;&nbsp;* Fuel surcharge is temporary due to the recent rise in fuel costs.</span><br />{% endif %}
                       • Please make payment online in advance using the link below:<br />
-                      &nbsp;&nbsp;<a href="https://easygoshuttle.com.au/payonline">easygoshuttle.com.au/payonline</a><br />
+                      &nbsp;&nbsp;<a href="https://easygoshuttle.com.au/payonline/?name={{ name|urlencode }}{% if email %}&amp;email={{ email|urlencode }}{% endif %}">easygoshuttle.com.au/payonline</a><br />
                   {% else %}
                       • The total cost is ${{ price }}{% if toll and surcharge %}, toll & fuel surcharge included{% elif toll %}, toll included{% elif surcharge %}, fuel surcharge included{% endif %}<br />
                       {% if surcharge %}<span style="color:#666;">&nbsp;&nbsp;* Fuel surcharge is temporary due to the recent rise in fuel costs.</span><br />{% endif %}
-                      • You may prepay securely via PayPal using the link below:<br />
-                      &nbsp;&nbsp;<a href="https://easygoshuttle.com.au/payonline">easygoshuttle.com.au/payonline</a><br />
+                      • You may prepay securely by card using the link below:<br />
+                      &nbsp;&nbsp;<a href="https://easygoshuttle.com.au/payonline/?name={{ name|urlencode }}{% if email %}&amp;email={{ email|urlencode }}{% endif %}">easygoshuttle.com.au/payonline</a><br />
                       • Alternatively, if you prefer to pay in cash, please reply to this email to confirm your booking.<br />
                   {% endif %}
 

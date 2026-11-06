@@ -220,7 +220,16 @@ def _record_paypal_fee(txn_id, mc_fee, payment_date=None):
 
 def handle_checkout_session_completed(session):
     email = session.customer_details.email
-    name = session.customer_details.name
+    # Sessions we create (payonline page, prepay confirm) carry the booking
+    # name typed on our side; prefer it over the cardholder name so the name
+    # fallback in match_posts_for_payment finds the booking. Payment Link
+    # sessions have no such metadata and keep the cardholder name.
+    metadata = getattr(session, 'metadata', None) or {}
+    try:
+        booking_name = (metadata.get('booking_name') or '').strip()
+    except AttributeError:
+        booking_name = ''
+    name = booking_name or session.customer_details.name
     amount = session.amount_total / 100
     payment_intent_id = session.payment_intent or session.id
 

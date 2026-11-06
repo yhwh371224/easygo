@@ -162,7 +162,7 @@
     													<strong>cash on the day</strong> or <strong>by card in advance</strong>.<br><br>
 													{% else %}
 														Please complete your payment via the following link:<br>
-    													<a href="https://easygoshuttle.com.au/payonline">easygoshuttle.com.au/payonline</a><br>
+    													<a href="https://easygoshuttle.com.au/payonline/?name={{ name|urlencode }}{% if email %}&amp;email={{ email|urlencode }}{% endif %}">easygoshuttle.com.au/payonline</a><br>
 														Once payment is received, your booking will be fully confirmed.<br><br>
 													{% endif %}
 

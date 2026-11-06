@@ -131,8 +131,19 @@ def inquiry1(request):
 
 
 def payonline(request):
-    from accounting.conf import paypal_surcharge_rate
+    """Card payment page (Stripe). Links from emails / redirects prefill it
+    with ?name=&email=&amount=; the form posts to payonline_checkout."""
     return render(request, 'basecamp/payments/payonline.html', {
+        'name': (request.GET.get('name') or '').strip()[:100],
+        'email': (request.GET.get('email') or '').strip()[:254],
+        'amount': (request.GET.get('amount') or '').strip()[:12],
+    })
+
+
+def payonline_paypal(request):
+    """The previous PayPal checkout page, kept as an alternative to Stripe."""
+    from accounting.conf import paypal_surcharge_rate
+    return render(request, 'basecamp/payments/payonline_paypal.html', {
         'paypal_client_id': settings.PAYPAL_CLIENT_ID,
         # Plain string for JS — str(Decimal) keeps it locale-free ('1.0195').
         'paypal_surcharge_factor': str(1 + paypal_surcharge_rate()),

@@ -5,7 +5,7 @@ from zoneinfo import ZoneInfo
 # GST registration confirmed with ATO effective 2026-07-01 (verified — not a placeholder).
 GST_REGISTRATION_DATE = date(2026, 7, 1)
 
-# PayPal card surcharge added on top of the price at checkout (payonline page,
+# PayPal card surcharge added on top of the price at checkout (payonline/paypal page,
 # invoice surcharge 'Yes'), and backed out again when a payment is applied to
 # Post.paid and when the surcharge is reported as income. Each payment uses the
 # rate in force when it was made, so a rate change never restates old payments.
