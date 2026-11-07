@@ -6,6 +6,15 @@ PAYPAL_MODE = 'live'
 PAYPAL_CLIENT_ID = config('PAYPAL_CLIENT_ID')
 PAYPAL_CLIENT_SECRET = config('PAYPAL_CLIENT_SECRET')
 PAYPAL_RECEIVER_EMAIL = config('PAYPAL_RECEIVER_EMAIL')
+# Every PayPal account whose IPNs /paypal_ipn/ should accept; IPNs addressed to
+# any other receiver are discarded (PayPal verifies them all as VERIFIED).
+# info@easygoshuttle.com.au is the owner's second PayPal account — it sent real
+# payment/refund IPNs here (e.g. 2026-09-14), so it stays accepted.
+PAYPAL_RECEIVER_EMAILS = [PAYPAL_RECEIVER_EMAIL] + [
+    e.strip() for e in config(
+        'PAYPAL_EXTRA_RECEIVER_EMAILS', default='info@easygoshuttle.com.au',
+    ).split(',') if e.strip()
+]
 PAYPAL_IPN_URL = 'https://easygoshuttle.com.au/paypal_ipn/'
 
 # Stripe

@@ -4015,3 +4015,119 @@ class ReturnTripDetailNoticeTests(TestCase):
         return_leg = Post.objects.get(pickup_date=self.return_date)
         self.assertEqual(outbound.notice, 'child seat | ===RETURN=== (Total Price: $200)')
         self.assertEqual(return_leg.notice, outbound.notice)
+
+
+# ---------------------------------------------------------------------------
+# /paypal_ipn/ — receiver check, final-status filter, duplicate guard
+# ---------------------------------------------------------------------------
+from django.db import IntegrityError
+
+
+@override_settings(PAYPAL_RECEIVER_EMAILS=['ours@example.com', 'second@example.com'])
+@patch('basecamp.views.payments._record_paypal_fee')
+@patch('basecamp.views.payments.paypal_ipn_error_email')
+@patch('basecamp.views.payments.requests.post')
+class PaypalIpnViewTests(TestCase):
+
+    def _post(self, **overrides):
+        data = {
+            'item_name': 'Jane', 'payer_email': 'jane@example.com', 'mc_gross': '102.00',
+            'mc_fee': '2.50', 'txn_id': 'TXN-A', 'payment_status': 'Completed',
+            'txn_type': 'express_checkout', 'receiver_email': 'ours@example.com',
+        }
+        data.update(overrides)
+        with patch('blog.signals.notify_user_payment_paypal'):
+            return self.client.post('/paypal_ipn/', data, secure=True)
+
+    def _verified(self, post):
+        post.return_value = MagicMock(status_code=200, text='VERIFIED')
+
+    def test_completed_payment_to_our_account_is_recorded(self, post, err, fee):
+        self._verified(post)
+        self.assertEqual(self._post().status_code, 200)
+        self.assertEqual(PaypalPayment.objects.get().txn_id, 'TXN-A')
+
+    def test_receiver_match_is_case_insensitive_and_allows_extra_accounts(self, post, err, fee):
+        self._verified(post)
+        self._post(receiver_email='OURS@Example.com')
+        self._post(txn_id='TXN-B', receiver_email='second@example.com')
+        self.assertEqual(PaypalPayment.objects.count(), 2)
+
+    def test_foreign_receiver_is_discarded(self, post, err, fee):
+        self._verified(post)
+        self.assertEqual(self._post(receiver_email='stranger@example.com').status_code, 200)
+        self.assertFalse(PaypalPayment.objects.exists())
+        fee.assert_not_called()
+        self.assertIn('Wrong Receiver', err.call_args[0][0])
+
+    def test_missing_receiver_is_discarded(self, post, err, fee):
+        self._verified(post)
+        self._post(receiver_email='')
+        self.assertFalse(PaypalPayment.objects.exists())
+
+    def test_unverified_ipn_is_discarded_before_receiver_check(self, post, err, fee):
+        post.return_value = MagicMock(status_code=200, text='INVALID')
+        self._post()
+        self.assertFalse(PaypalPayment.objects.exists())
+
+    def test_pending_is_not_recorded_and_later_completed_is(self, post, err, fee):
+        self._verified(post)
+        self._post(payment_status='Pending', pending_reason='echeck')
+        self.assertFalse(PaypalPayment.objects.exists())
+        fee.assert_not_called()
+        err.assert_called_once()
+        self._post(payment_status='Completed')
+        self.assertEqual(PaypalPayment.objects.get().payment_status, 'Completed')
+
+    def test_denied_after_pending_is_dropped_silently(self, post, err, fee):
+        self._verified(post)
+        self._post(payment_status='Denied')
+        self.assertFalse(PaypalPayment.objects.exists())
+        err.assert_not_called()
+
+    def test_refund_reversal_and_cancelled_reversal_are_recorded(self, post, err, fee):
+        self._verified(post)
+        self._post(txn_id='R1', payment_status='Refunded', mc_gross='-50.00', parent_txn_id='TXN-A')
+        self._post(txn_id='R2', payment_status='Reversed', mc_gross='-50.00', parent_txn_id='TXN-A')
+        self._post(txn_id='R3', payment_status='Canceled_Reversal', mc_gross='50.00', parent_txn_id='TXN-A')
+        self.assertEqual(PaypalPayment.objects.count(), 3)
+
+    def test_case_notification_without_status_is_recorded_once(self, post, err, fee):
+        self._verified(post)
+        self._post(payment_status='', txn_type='new_case', case_id='PP-R-1', case_type='dispute')
+        self._post(payment_status='', txn_type='new_case', case_id='PP-R-1', case_type='dispute')
+        self.assertEqual(PaypalPayment.objects.get().amount, 0)
+
+    def test_retried_ipn_is_recorded_once(self, post, err, fee):
+        self._verified(post)
+        self._post()
+        self._post()
+        self.assertEqual(PaypalPayment.objects.count(), 1)
+
+    def test_concurrent_duplicate_losing_the_insert_race_returns_200(self, post, err, fee):
+        # Both deliveries passed the exists() check; the DB constraint stops the second.
+        self._verified(post)
+        with patch.object(PaypalPayment, 'save', side_effect=IntegrityError('dup')):
+            resp = self._post()
+        self.assertEqual(resp.status_code, 200)
+        err.assert_not_called()
+        fee.assert_not_called()
+
+    def test_reversal_and_cancel_sharing_a_case_id_are_both_recorded_with_amounts(self, post, err, fee):
+        self._verified(post)
+        self._post(payment_status='', txn_type='new_case', case_id='PP-R-2', mc_gross='50.00')
+        self._post(txn_id='RV1', payment_status='Reversed', mc_gross='-50.00', case_id='PP-R-2')
+        self._post(txn_id='RV2', payment_status='Canceled_Reversal', mc_gross='50.00', case_id='PP-R-2')
+        amounts = dict(PaypalPayment.objects.values_list('payment_status', 'amount'))
+        self.assertEqual(amounts, {'': 0, 'Reversed': Decimal('-50.00'),
+                                   'Canceled_Reversal': Decimal('50.00')})
+
+    def test_db_rejects_duplicate_txn_id(self, post, err, fee):
+        PaypalPayment.objects.create(txn_id='DUP', amount=1)
+        with self.assertRaises(IntegrityError):
+            PaypalPayment.objects.create(txn_id='DUP', amount=1)
+
+    def test_db_allows_case_row_sharing_original_txn_id(self, post, err, fee):
+        PaypalPayment.objects.create(txn_id='ORIG', amount=10)
+        PaypalPayment.objects.create(txn_id='ORIG', amount=0, case_id='PP-R-9')
+        self.assertEqual(PaypalPayment.objects.filter(txn_id='ORIG').count(), 2)

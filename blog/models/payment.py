@@ -52,6 +52,24 @@ class PaypalPayment(models.Model):
 
     class Meta:
         ordering = ['-created']
+        constraints = [
+            # One row per money event (payment / refund / reversal txn_id) and
+            # one per case notification — so PayPal's retries and concurrent
+            # deliveries of the same IPN can't book it twice. A case
+            # notification (case_id set, no payment_status) repeats the
+            # original payment's txn_id, so it is keyed on case_id instead.
+            models.UniqueConstraint(
+                fields=['txn_id'],
+                condition=models.Q(txn_id__isnull=False) & (
+                    models.Q(case_id='') | ~models.Q(payment_status='')),
+                name='uniq_paypalpayment_txn_id',
+            ),
+            models.UniqueConstraint(
+                fields=['case_id'],
+                condition=~models.Q(case_id='') & models.Q(payment_status=''),
+                name='uniq_paypalpayment_case_id',
+            ),
+        ]
 
     def __str__(self):
         status = "Done" if self.is_processed else "Pending"

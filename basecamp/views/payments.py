@@ -9,6 +9,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from django.db import IntegrityError, transaction
 from django.db.models import Q
 from main.settings import RECIPIENT_EMAIL
 from utils.email import send_html_email
@@ -516,6 +517,17 @@ def invoice_detail(request):
 # --------------------------
 PAYPAL_VERIFY_URL = "https://ipnpb.paypal.com/cgi-bin/webscr"
 
+# payment_status values that mean money actually moved and won't move back on
+# its own. Anything else (Pending, Denied, Failed, Voided, Expired …) is not
+# recorded. Denied/Failed/Voided/Expired only ever follow a Pending we already
+# skipped, so they are dropped without an alert email.
+PAYPAL_FINAL_STATUSES = {'Completed', 'Refunded', 'Reversed', 'Canceled_Reversal'}
+PAYPAL_SILENT_STATUSES = {'Denied', 'Failed', 'Voided', 'Expired'}
+
+
+def _paypal_receiver_emails():
+    return {e.strip().lower() for e in settings.PAYPAL_RECEIVER_EMAILS if e.strip()}
+
 @csrf_exempt
 @require_POST
 def paypal_ipn(request):
@@ -534,6 +546,11 @@ def paypal_ipn(request):
     mc_fee = request.POST.get('mc_fee')
     payment_date = request.POST.get('payment_date')
     case_id = (request.POST.get('case_id') or '').strip()
+    payment_status = (request.POST.get('payment_status') or '').strip()
+    # A case notification (new_case …) moves no money and has no payment_status;
+    # a money event (payment / refund / reversal) always has one, even when it
+    # also carries the case_id of the dispute it belongs to.
+    is_case_notice = bool(case_id) and not payment_status
 
     # --- 1. Verify with PayPal first -------------------------------------
     ipn_data = request.POST.copy()
@@ -558,30 +575,64 @@ def paypal_ipn(request):
         )
         return HttpResponse(status=200, content="Unverified IPN discarded")
 
-    # --- 2. Duplicate guard ----------------------------------------------
+    # --- 2. Is it ours, and is it final? ---------------------------------
+    # Verification only proves PayPal sent it — an IPN for *any* PayPal account
+    # posted here comes back VERIFIED too. So the receiving account must be one
+    # of ours, or a stranger's payment would be booked against our customers.
+    receiver = (request.POST.get('receiver_email') or '').strip().lower()
+    if receiver not in _paypal_receiver_emails():
+        logger.warning('paypal_ipn: foreign receiver %r discarded (txn_id=%s)', receiver, txn_id)
+        paypal_ipn_error_email(
+            'PayPal IPN Wrong Receiver',
+            f'receiver_email={receiver or "(missing)"} is not in PAYPAL_RECEIVER_EMAILS — discarded.',
+            item_name, payer_email, gross_amount,
+        )
+        return HttpResponse(status=200, content="Foreign receiver discarded")
+
+    # Only settled money is booked. A Pending payment (eCheck, review hold…)
+    # can still end Denied/Failed; PayPal sends a Completed IPN for the same
+    # txn_id once it clears, and that is the one recorded. Case notifications
+    # carry no payment_status of their own and are handled below.
+    if not is_case_notice and payment_status not in PAYPAL_FINAL_STATUSES:
+        logger.info('paypal_ipn: non-final status %r ignored (txn_id=%s)', payment_status, txn_id)
+        if payment_status not in PAYPAL_SILENT_STATUSES:
+            paypal_ipn_error_email(
+                f'PayPal IPN {payment_status or "no status"} — not recorded',
+                f'payment_status={payment_status!r}, pending_reason='
+                f'{request.POST.get("pending_reason")!r}. Will be recorded when a '
+                f'Completed IPN arrives for txn_id {txn_id}.',
+                item_name, payer_email, gross_amount,
+            )
+        return HttpResponse(status=200, content="Non-final status ignored")
+
+    # --- 3. Duplicate guard ----------------------------------------------
     # PayPal retries an IPN until it gets a 200. Money events (payment, refund,
     # reversal) each carry their own txn_id, so txn_id dedupes them. A case
     # notification instead repeats the *original* transaction's txn_id, which
     # under the old txn_id-only guard was silently swallowed as a duplicate —
     # that is why a dispute left no trace anywhere. Those dedupe on case_id.
-    if case_id:
-        if PaypalPayment.objects.filter(case_id=case_id).exists():
+    if is_case_notice:
+        if PaypalPayment.objects.filter(case_id=case_id, payment_status='').exists():
             return HttpResponse(status=200, content="Duplicate IPN Notification")
     elif PaypalPayment.objects.filter(txn_id=txn_id).exists():
         return HttpResponse(status=200, content="Duplicate IPN Notification")
 
-    # --- 3. Store ---------------------------------------------------------
+    # --- 4. Store ---------------------------------------------------------
+    # The exists() checks above are only the fast path: PayPal can deliver the
+    # same IPN twice concurrently, and both requests pass them. The unique
+    # constraints on PaypalPayment (txn_id / case_id) make the second insert
+    # fail, so the payment is applied — and the customer emailed — once.
     # A case notification moves no money on its own (the reversal IPN that
     # accompanies it does), so its amount is stored as 0 — the disputed amount
     # stays in `raw`. Otherwise a dispute would read as a fresh payment.
-    amount = 0 if case_id else gross_amount
+    amount = 0 if is_case_notice else gross_amount
 
     p = PaypalPayment(
         name=item_name,
         email=payer_email,
         amount=amount,
         txn_id=txn_id,
-        payment_status=(request.POST.get('payment_status') or '').strip(),
+        payment_status=payment_status,
         txn_type=(request.POST.get('txn_type') or '').strip(),
         parent_txn_id=(request.POST.get('parent_txn_id') or '').strip(),
         reason_code=(request.POST.get('reason_code') or '').strip(),
@@ -591,7 +642,11 @@ def paypal_ipn(request):
     )
 
     try:
-        p.save()
+        with transaction.atomic():
+            p.save()
+    except IntegrityError:
+        logger.info('paypal_ipn: concurrent duplicate dropped (txn_id=%s case_id=%s)', txn_id, case_id)
+        return HttpResponse(status=200, content="Duplicate IPN Notification")
     except Exception as e:
         paypal_ipn_error_email('PayPal IPN Error', str(e), item_name, payer_email, gross_amount)
         return HttpResponse(status=500, content="Error processing PayPal IPN")
