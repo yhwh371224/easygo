@@ -103,7 +103,12 @@ ATO_PAYMENT_PATTERN = r'\bATO\b'
 #   'subcontract' expense (the 2026-08-31 and 2026-09-25 bank rows were both
 #   duplicates; confirmed by the owner 2026-10-09). Settle Don BEFORE paying
 #   ENEX, or the payout lands in no expense row at all.
-DRIVER_PAYOUT_MARKERS = ['A REZAI', 'D S KANG', 'UBER *BUSINESS', 'ENEX SERVICES']
+# 'MIN SOO KANG' = subcontractor (confirmed by the owner 2026-11-09), written
+#   as 'Transfer To MIN SOO KANG NetBank EasyGo'. The 2026-11-01 $1,652.40
+#   transfer equals Don's SYD-DON-261031-SET-01 settlement, which already
+#   wrote the 'subcontract' expense — same rule as ENEX: settle first.
+DRIVER_PAYOUT_MARKERS = ['A REZAI', 'D S KANG', 'UBER *BUSINESS', 'ENEX SERVICES',
+                         'MIN SOO KANG']
 
 # Bank CSV import: expense rows at/above this amount are held for human triage.
 REVIEW_THRESHOLD = Decimal('1000')
@@ -199,6 +204,9 @@ GST_KEYWORD_RULES = [
     (('SERVICE', 'MECHANIC', 'AUTO', 'TYRE', 'TYRES', 'REPCO',
       'SUPERCHEAP', 'PANEL', 'SMASH', 'CIRCUM VENDING', 'RIZKALLA',
       'ULTRA TUNE', 'YONGHOAN JUNG', 'AMAZON MARKETPLACE'), 'gst'),
+    # 'PRISTINE THE ULTIMATE CAR' (Rosehill) = car wash for the company
+    # vehicle, GST-inclusive (confirmed by the owner 2026-11-09).
+    (('PRISTINE THE ULTIMATE CAR',), 'gst'),
     (('GOOGLE', 'META', 'FACEBOOK', 'MARKETING', 'ADVERTIS', 'SEO'), 'gst'),
     (('GROUP TRANSPORT',), 'gst'),
     # 'OFFICEWORKS' = office supplies for the business (confirmed by the
@@ -210,6 +218,9 @@ GST_KEYWORD_RULES = [
     # 'COUNCI' (not 'COUNCIL') — CommBank truncates some council names, e.g.
     # 'WILLOUGHBY CITY COUNCI'. Substring match still covers the full spelling.
     (('COUNCI',), 'gst'),
+    # 'CITYOFSYDNEY PARKING' = City of Sydney street parking meters (confirmed
+    # parking by the owner 2026-11-09). Council parking fees carry GST.
+    (('CITYOFSYDNEY', 'CITY OF SYDNEY', 'PARKING'), 'gst'),
     (('VULTR',), 'gst'),
     # 'CRAZYDOMAINS' = website domain / hosting for the business site, billed
     # GST-inclusive (confirmed by the owner 2026-10-14), e.g.
@@ -295,7 +306,8 @@ CATEGORY_KEYWORD_RULES = [
     (('ENEX',), 'subcontractor_payout'),
     (('SERVICE', 'MECHANIC', 'AUTO', 'TYRE', 'TYRES', 'REPCO',
       'SUPERCHEAP', 'PANEL', 'SMASH', 'CIRCUM VENDING', 'RIZKALLA',
-      'ULTRA TUNE', 'YONGHOAN JUNG', 'AMAZON MARKETPLACE'),
+      'ULTRA TUNE', 'YONGHOAN JUNG', 'AMAZON MARKETPLACE',
+      'PRISTINE THE ULTIMATE CAR'),
      'vehicle_maintenance'),
     (('GOOGLE', 'META', 'FACEBOOK', 'MARKETING', 'ADVERTIS', 'SEO'), 'marketing'),
     (('INSURANCE', 'NRMA', 'AAMI', 'ALLIANZ', 'QBE', 'GIO', 'ZURICH'), 'insurance'),
@@ -303,7 +315,13 @@ CATEGORY_KEYWORD_RULES = [
     # JB Hi-Fi / Officeworks / Bunnings: consumables/equipment bought for the business.
     (('NORTH SYDNEY EXECUTIVE', 'VIRTUAL OFFICE', 'CWH',
       'JB HI FI', 'JB HI-FI', 'OFFICEWORKS', 'BUNNINGS'), 'office_expense'),
-    (('COUNCI',), 'parking'),
+    # 'CHEMIST WAREHOUSE' = business supplies (confirmed by the owner
+    # 2026-11-09). Category only — no GST rule on purpose: pharmacy baskets
+    # mix taxable goods with GST-free medicines, so a flat gross/11 would
+    # over-claim. Rows import as no_gst [gst review]; enter the GST from the
+    # receipt in admin.
+    (('CHEMIST WAREHOUSE',), 'office_expense'),
+    (('COUNCI', 'CITYOFSYDNEY', 'CITY OF SYDNEY', 'PARKING'), 'parking'),
     # VULTR: all charges are server/hosting costs (VPS provider).
     (('VULTR',), 'hosting'),
     # Crazy Domains: website domain / hosting — see the matching GST rule above.
