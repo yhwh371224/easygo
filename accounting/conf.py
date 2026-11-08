@@ -245,6 +245,10 @@ GST_KEYWORD_RULES = [
     # foreign charge (e.g. NOMADESIM) must be flipped to personal in admin.
     # Bank fees are input-taxed financial supplies — no GST to claim.
     (('INTERNATIONAL TRANSACTION FEE',), 'no_gst'),
+    # Plain 'Transaction Fee' (e.g. $5.00 on 2026-11-01) = CommBank account
+    # fee, a company bank fee (confirmed by the owner 2026-11-09). Input-taxed,
+    # no GST. Sits after the international rule, which it would also match.
+    (('TRANSACTION FEE',), 'no_gst'),
     (('TAXIPAY',), 'gst'),
     # Fines/infringements are never GST-eligible — explicit no_gst so this can
     # never be shadowed by a broader keyword added above in future.
@@ -331,6 +335,8 @@ CATEGORY_KEYWORD_RULES = [
     (('ANTHROPIC',), 'software_subscription'),
     # CommBank FX fee — see the matching GST rule above.
     (('INTERNATIONAL TRANSACTION FEE',), 'bank_fees'),
+    # Plain CommBank 'Transaction Fee' — see the matching GST rule above.
+    (('TRANSACTION FEE',), 'bank_fees'),
     (('TAXIPAY',), 'taxi'),
 ]
 
