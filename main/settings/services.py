@@ -67,6 +67,15 @@ BIRD_WORKSPACE_ID = config('BIRD_WORKSPACE_ID')
 BIRD_CHANNEL_ID = config('BIRD_CHANNEL_ID')
 BIRD_VOICE_CHANNEL_ID = config('BIRD_VOICE_CHANNEL_ID')
 
+# Every number sync_bird_channels may wire to this site (comma-separated
+# E.164); BIRD_NUMBER is always included. The Bird workspace is shared with
+# BlackGlide, so anything not listed here — BlackGlide's numbers — is left
+# alone. A newly bought easygo number must be added here before syncing.
+BIRD_OWN_NUMBERS = config(
+    'BIRD_OWN_NUMBERS', default='',
+    cast=lambda v: [s.strip() for s in v.split(',') if s.strip()],
+)
+
 # Bird signs each webhook over the URL it was registered with, so subscription
 # creation and signature verification must build that URL the same way — both
 # read this base. Getting it wrong rejects every webhook, so it is one setting,

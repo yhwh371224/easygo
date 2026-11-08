@@ -4,18 +4,23 @@ Buying a number in Bird is not enough: until its channels are recorded here and
 Bird is told to deliver their events to our webhooks, anyone who dials it
 reaches nothing — silently. That gap is what left a driver ringing a number no
 call ever arrived from. This command closes it in one step, so adding a number
-later is `buy in Bird → run this → assign in the admin`.
+later is `buy in Bird → add to BIRD_OWN_NUMBERS → run this → assign in the admin`.
 
 Read-only by default; pass --apply to write.
+
+Only easygo's own numbers are touched (settings.BIRD_OWN_NUMBERS +
+BIRD_NUMBER). The Bird workspace is shared with BlackGlide, and re-pointing one
+of its channels here would send BlackGlide's callers to this site.
 """
 import logging
 
 import requests
 from django.conf import settings
-from django.core.management.base import BaseCommand
+from django.core.management.base import BaseCommand, CommandError
 from django.urls import reverse
 
 from blog.models import VirtualNumber
+from blog.sms_utils import normalize_phone
 
 logger = logging.getLogger('bird_proxy')
 
@@ -51,6 +56,17 @@ class Command(BaseCommand):
         resp = requests.get(f'{BIRD_API_BASE}{path}', headers=self._headers(), timeout=20)
         resp.raise_for_status()
         return resp.json().get('results', [])
+
+    def _own_channels(self, channels):
+        """Only channels for numbers easygo owns."""
+        own = {normalize_phone(n) for n in [*settings.BIRD_OWN_NUMBERS, settings.BIRD_NUMBER]} - {None}
+        mine, skipped = [], set()
+        for channel in channels:
+            if normalize_phone(channel.get('identifier')) in own:
+                mine.append(channel)
+            elif channel.get('identifier'):
+                skipped.add(channel['identifier'])
+        return mine, sorted(skipped)
 
     def _webhook_url(self, route_name, channel_id):
         path = reverse(route_name, kwargs={'channel_id': channel_id})
@@ -216,8 +232,14 @@ class Command(BaseCommand):
                 'unsigned and the endpoints stay open to anyone.\n'
             ))
 
-        channels = self._get(f'/workspaces/{ws}/channels')
+        if not (settings.BIRD_OWN_NUMBERS or settings.BIRD_NUMBER):
+            raise CommandError('Set BIRD_NUMBER / BIRD_OWN_NUMBERS first — without them every number '
+                               'in the workspace, BlackGlide\'s included, would look like ours.')
+
+        channels, skipped = self._own_channels(self._get(f'/workspaces/{ws}/channels'))
         existing = self._get(f'/workspaces/{ws}/webhook-subscriptions')
+        if skipped:
+            self.stdout.write(f'Leaving alone (not in BIRD_OWN_NUMBERS): {", ".join(skipped)}\n')
 
         self.stdout.write(f'Bird workspace {ws}')
         self.stdout.write(f'  {len(channels)} channels, {len(existing)} webhook subscriptions')

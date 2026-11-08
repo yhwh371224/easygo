@@ -22,6 +22,7 @@ from django.contrib.auth.models import User
 from django.core import mail
 from django.core.cache import cache
 from django.core.management import call_command
+from django.core.management.base import CommandError
 from django.core.management.base import BaseCommand
 from django.test import TestCase, Client, override_settings
 from django.urls import reverse
@@ -1542,7 +1543,7 @@ class ProxyWindowTests(ProxyNumberTestCase):
         self.assertEqual(payload['to'], self.DRIVER_PHONE)
 
 
-@override_settings(BIRD_NUMBER='+61485922632')
+@override_settings(BIRD_NUMBER='+61485922632', BIRD_OWN_NUMBERS=['+61485908774'])
 class SyncBirdChannelsTests(TestCase):
     """This command is the only way a number becomes usable, so any number it
     quietly passes over is a number that can never be advertised."""
@@ -1604,6 +1605,22 @@ class SyncBirdChannelsTests(TestCase):
         post = self._run()
         self.assertEqual(VirtualNumber.objects.count(), 0)
         self.assertFalse(post.called)
+
+    @override_settings(BIRD_OWN_NUMBERS=[])
+    def test_numbers_we_do_not_own_are_left_alone(self):
+        """The workspace is shared with BlackGlide. A number missing from
+        BIRD_OWN_NUMBERS is theirs: wiring it here would steal their calls."""
+        post = self._run('--apply')
+        self.assertFalse(VirtualNumber.objects.filter(number='+61485908774').exists())
+        urls = [call.kwargs['json']['url'] for call in post.call_args_list]
+        self.assertEqual(len(urls), 2)
+        for channel_id in [self.SMS_774, self.VOICE_774]:
+            self.assertFalse(any(channel_id in url for url in urls), urls)
+
+    @override_settings(BIRD_NUMBER='', BIRD_OWN_NUMBERS=[])
+    def test_refuses_to_run_without_knowing_our_numbers(self):
+        with self.assertRaises(CommandError):
+            self._run('--apply')
 
 
 @override_settings(
