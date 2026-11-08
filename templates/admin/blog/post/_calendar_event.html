@@ -8,5 +8,6 @@
         data-title="{{ ev.title }}"
         data-when="{{ ev.post.pickup_date|date:'D j M Y' }}{% if ev.post.pickup_time %} · {{ ev.post.pickup_time }}{% endif %}"
         data-location="{{ ev.location }}"
+        data-phone="{{ ev.post.contact|default:'' }}"
         data-description="{{ ev.description }}"
         data-edit="{% url opts|admin_urlname:'change' ev.post.pk %}">{{ ev.title|default:"(no details)" }}</button>

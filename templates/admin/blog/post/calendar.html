@@ -49,6 +49,9 @@
   #bc-dialog::backdrop { background: rgba(0, 0, 0, .4); }
   #bc-dialog h3 { margin: 0 0 .3rem; font-size: 1rem; word-break: break-word; }
   #bc-dialog .bc-when, #bc-dialog .bc-where { color: var(--body-quiet-color, #666); margin: 0 0 .3rem; }
+  #bc-dialog .bc-where a { text-decoration: underline; }
+  #bc-dialog .bc-where a[data-field="location"]::before { content: "📍 "; }
+  #bc-dialog .bc-where a[data-field="phone"]::before { content: "📞 "; }
   #bc-dialog pre { white-space: pre-wrap; word-break: break-word; font: inherit; margin: .6rem 0; }
   #bc-dialog .bc-actions { display: flex; gap: .6rem; justify-content: flex-end; flex-wrap: wrap; }
   @media (max-width: 767px) {
@@ -127,7 +130,8 @@
 <dialog id="bc-dialog">
   <h3 data-field="title"></h3>
   <p class="bc-when" data-field="when"></p>
-  <p class="bc-where" data-field="location"></p>
+  <p class="bc-where"><a data-field="location" href="#" target="_blank" rel="noopener"></a></p>
+  <p class="bc-where" data-field="phone-row"><a data-field="phone" href="#"></a></p>
   <pre data-field="description"></pre>
   {% if can_change %}
   <div class="bc-colors" role="group" aria-label="Colour">
@@ -157,7 +161,15 @@
     btn.addEventListener('click', function () {
       field('title').textContent = btn.dataset.title;
       field('when').textContent = btn.dataset.when;
-      field('location').textContent = btn.dataset.location;
+      var loc = field('location');
+      loc.textContent = btn.dataset.location;
+      loc.href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(btn.dataset.location);
+      loc.parentNode.hidden = !btn.dataset.location;
+      var phone = field('phone');
+      var digits = (btn.dataset.phone || '').replace(/[^\d+]/g, '');
+      phone.textContent = btn.dataset.phone;
+      phone.href = 'tel:' + digits;
+      field('phone-row').hidden = !digits;
       field('description').textContent = btn.dataset.description;
       field('edit').href = btn.dataset.edit;
       current = btn.dataset.id;
