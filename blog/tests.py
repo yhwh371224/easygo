@@ -4131,3 +4131,40 @@ class PaypalIpnViewTests(TestCase):
         PaypalPayment.objects.create(txn_id='ORIG', amount=10)
         PaypalPayment.objects.create(txn_id='ORIG', amount=0, case_id='PP-R-9')
         self.assertEqual(PaypalPayment.objects.filter(txn_id='ORIG').count(), 2)
+
+
+# ---------------------------------------------------------------------------
+# /stripe_webhook/ — only paid Checkout sessions are recorded
+# ---------------------------------------------------------------------------
+from types import SimpleNamespace as _NS
+
+
+@patch('basecamp.views.payments.stripe_payment_error_email')
+@patch('basecamp.views.payments.handle_checkout_session_completed')
+@patch('basecamp.views.payments.stripe.Webhook.construct_event')
+class StripeWebhookPaidOnlyTests(TestCase):
+
+    def _send(self, construct, event_type, payment_status):
+        session = _NS(id='cs_1', payment_status=payment_status, amount_total=10000,
+                      customer_details=_NS(name='Jane', email='jane@example.com'))
+        construct.return_value = _NS(type=event_type, data=_NS(object=session))
+        return self.client.post('/stripe_webhook/', b'{}', content_type='application/json',
+                                HTTP_STRIPE_SIGNATURE='t=1,v1=x', secure=True)
+
+    def test_paid_completed_session_is_recorded(self, construct, handle, err):
+        self.assertEqual(self._send(construct, 'checkout.session.completed', 'paid').status_code, 200)
+        handle.assert_called_once()
+        err.assert_not_called()
+
+    def test_unpaid_completed_session_is_not_recorded(self, construct, handle, err):
+        self.assertEqual(self._send(construct, 'checkout.session.completed', 'unpaid').status_code, 200)
+        handle.assert_not_called()
+        err.assert_called_once()
+
+    def test_async_payment_succeeded_is_recorded(self, construct, handle, err):
+        self._send(construct, 'checkout.session.async_payment_succeeded', 'paid')
+        handle.assert_called_once()
+
+    def test_async_payment_failed_is_not_recorded(self, construct, handle, err):
+        self._send(construct, 'checkout.session.async_payment_failed', 'unpaid')
+        handle.assert_not_called()

@@ -22,7 +22,9 @@ from basecamp.basecamp_utils import (
     render_inquiry_done, require_turnstile, parse_one_based_index,
     is_ajax,
 )
-from basecamp.modules.payment_utils import _record_paypal_fee, handle_charge_refunded
+from basecamp.modules.payment_utils import (
+    _record_paypal_fee, handle_charge_refunded, stripe_payment_error_email,
+)
 from accounting.conf import GST_REGISTRATION_DATE
 from django_ratelimit.decorators import ratelimit
 
@@ -889,10 +891,29 @@ def stripe_webhook(request):
         print('Error verifying webhook signature: {}'.format(str(e)))
         return HttpResponse(status=400)
 
-    if event.type == 'checkout.session.completed':
+    if event.type in ('checkout.session.completed', 'checkout.session.async_payment_succeeded'):
         session = event.data.object
-        print('PaymentIntent was successful!')
-        handle_checkout_session_completed(session)
+        # Only settled money is booked. A delayed method (BECS, PayTo …) that a
+        # Payment Link's dynamic payment methods may offer completes the session
+        # with payment_status='unpaid'; the money is recorded when
+        # checkout.session.async_payment_succeeded arrives for the same session.
+        if session.payment_status == 'paid':
+            handle_checkout_session_completed(session)
+        else:
+            logger.info('stripe_webhook: %s %s payment_status=%s not recorded',
+                        event.type, session.id, session.payment_status)
+            details = getattr(session, 'customer_details', None)
+            stripe_payment_error_email(
+                f'Stripe payment {session.payment_status} — not recorded',
+                f'Checkout session {session.id} completed but is not paid yet. It is '
+                f'recorded when checkout.session.async_payment_succeeded arrives.',
+                getattr(details, 'name', None), getattr(details, 'email', None),
+                (session.amount_total or 0) / 100,
+            )
+
+    elif event.type == 'checkout.session.async_payment_failed':
+        session = event.data.object
+        logger.warning('stripe_webhook: async payment failed for %s', session.id)
 
     elif event.type == 'charge.refunded':
         handle_charge_refunded(event.data.object)
