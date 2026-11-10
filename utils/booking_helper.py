@@ -126,12 +126,21 @@ def build_reminder_context(booking, pickup_time_12h, driver):
 
     region_slug = booking.region.slug if booking.region_id else "sydney"
 
-    driver_directs_meeting = (is_intl or is_domestic) and is_driver_directed_region(booking.region)
+    # 어드민이 직접 지정한 만남 장소가 있으면 그게 우선이다 — 2일전 메일이 지역 기본(Public Pickup)으로
+    # 나가지 않게 한다. 당일 update_meeting_point_for_arrivals()도 수동 지정 건은 건드리지 않는다.
+    manual_point = manual_point if (is_intl or is_domestic) else None
+
+    driver_directs_meeting = (
+        (is_intl or is_domestic) and not manual_point and is_driver_directed_region(booking.region)
+    )
 
     default_pickup_point = None
     pickup_maps = []
     fixed_point = region_arrival_point(booking.region) if (is_intl or is_domestic) else None
-    if fixed_point:
+    if manual_point:
+        default_pickup_point = manual_point
+        pickup_maps = list(manual_point.maps.all())
+    elif fixed_point:
         # 지역 고정 만남 장소 — 국제선·국내선 구분 없이 같은 곳.
         default_pickup_point = fixed_point
         pickup_maps = list(fixed_point.maps.all())
@@ -196,6 +205,8 @@ def build_reminder_context(booking, pickup_time_12h, driver):
         'driver_directs_meeting': driver_directs_meeting,
         # 국내선 손님도 국제선 터미널에서 만날 수 있으므로 템플릿이 터미널 이름을 그대로 보여준다.
         'region_fixed_point': bool(fixed_point),
+        # 수동 지정 장소는 국내선 손님이 국제선 터미널에서 만나는 경우도 있어 터미널 이름을 그대로 보여준다.
+        'manual_pickup_point': bool(manual_point),
 
         'post': booking,
     }

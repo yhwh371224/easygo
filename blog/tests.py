@@ -2833,6 +2833,42 @@ class ArrivalReminderTests(TestCase):
         self.assertFalse(ctx['driver_directs_meeting'])
         self.assertTrue(ctx['region_fixed_point'])
 
+    def test_two_day_reminder_never_names_a_pickup_point(self):
+        """만남 장소는 바뀔 수 있다 — 2일전 메일은 지정 장소가 있든 없든 장소를 알려주지 않고,
+        당일 도착 몇 시간 전 메일로만 보낸다."""
+        from regions.models import Airport, Country, Terminal, TerminalPickupPoint
+
+        country, _ = Country.objects.get_or_create(name='Australia')
+        airport, _ = Airport.objects.get_or_create(
+            code='SYD', defaults={'country': country, 'city': 'Sydney'},
+        )
+        self.region.airports.add(airport)
+        t3, _ = Terminal.objects.get_or_create(
+            airport=airport, name='T3 Qantas Domestic', type=Terminal.TerminalType.DOMESTIC,
+        )
+        TerminalPickupPoint.objects.create(
+            terminal=t3, name='Public Pickup', is_default_point=True, instruction='Public pickup zone.',
+        )
+        accessible = TerminalPickupPoint.objects.create(
+            terminal=t3, name='Accessible Pickup', instruction='Wait at the accessible pickup bay.',
+        )
+        post = self.make_arrival(
+            direction='Pickup from Domestic Airport', start_point=None,
+            pickup_date=timezone.localdate() + datetime.timedelta(days=2),
+            terminal_pickup_point=accessible,
+        )
+
+        call_command('booking_reminder', stdout=StringIO())
+        sent = [m for m in mail.outbox if m.subject == 'Reminder-Arrival-2days']
+        self.assertEqual(len(sent), 1)
+        html = sent[0].alternatives[0][0]
+        self.assertIn('pickup location will be emailed to you a few hours before', html)
+        for leaked in ('Accessible Pickup', 'accessible pickup bay', 'Public Pickup', 'Public pickup zone',
+                       'Pickup Map', 'sydmap'):
+            self.assertNotIn(leaked, html)
+        post.refresh_from_db()
+        self.assertEqual(post.terminal_pickup_point, accessible)
+
     def test_arrival_type_matches_the_database_filter(self):
         """파이썬 판별과 DB 필터가 어긋나면 대상에는 뽑히는데 만남 장소가 빠진다."""
         from utils.direction_utils import airport_arrival_q, arrival_type
