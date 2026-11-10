@@ -865,7 +865,7 @@ def email_dispatch_detail(request):
 
 
 # Manual SMS to a customer via Twilio
-SMS_FOOTER = "\n\nEasyGo-DoNotReply"
+SMS_FOOTER = "\n\nEasyGo - reply by email: info@easygoshuttle.com.au"
 
 @login_required
 @ratelimit(key='ip', rate='10/m', method='POST', block=False)
