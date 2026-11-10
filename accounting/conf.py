@@ -134,9 +134,14 @@ INTERNAL_TRANSFER_MARKERS = ['xx8784', 'CommBank app']
 #   NON CBA ATM WITHDRAWAL FEE — the fee on the director's cash withdrawals
 #     (see 'WDL ATM' in LOAN_SKIP_MARKERS), charged to the director loan
 #     rather than the company (confirmed by the owner 2026-10-08).
+#   CRUNCH FITNESS — gym membership, used while waiting for customers
+#     (confirmed by the owner 2026-11-11). ATO treats gym fees as private
+#     unless the job itself demands an exceptional level of fitness, which
+#     driving does not — so no deduction and no GST credit.
 PERSONAL_EXPENSE_MARKERS = [
     'MUJI', 'UBER', 'NOMADESIM',
     'NON CBA ATM WITHDRAWAL FEE',
+    'CRUNCH FITNESS',
 ]
 PERSONAL_EXPENSE_CATEGORY = 'personal_drawings'
 
