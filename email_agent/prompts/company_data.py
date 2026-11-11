@@ -39,8 +39,9 @@ BOOKING POLICY:
 - All bookings are subject to availability at time of reservation
 
 PAYMENT:
-- Accepted: American Express, MasterCard, Visa, or cash to driver on the day
-- Advance payment required for: corporate bookings and international passengers arriving in Sydney
+- Accepted: American Express, MasterCard, Visa — paid online in advance
+- Full payment must be made in advance for ALL bookings
+- Cash is NOT accepted; drivers do not take cash or card payments on the day
 - Fixed fares — price quoted at booking is what you pay
 """
 
@@ -138,7 +139,7 @@ Q: What if my flight is delayed?
 A: No problem — our drivers track your flight in real time. Simply proceed to the meeting point and your driver will be waiting at no extra charge. Check your email and phone for any updates from us.
 
 Q: What payment options are available?
-A: We accept all major credit cards (American Express, MasterCard, Visa) and cash payment to the driver on the day. Advance payment is required for corporate bookings and passengers arriving from overseas.
+A: We accept all major credit cards (American Express, MasterCard, Visa). Full payment must be made online in advance — our drivers do not accept cash.
 
 Q: Do you offer infant seats or baby capsules?
 A: Yes. Child seats are available for $10 each. Please specify the number required at time of booking.

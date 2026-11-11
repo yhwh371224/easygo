@@ -138,8 +138,7 @@
 													{% if cash and not paid %}
 														We kindly ask that you <span style="color: #eb7828">email us immediately</span> upon your arrival{% if city %} in {{ city }}{% endif %}
 														and ensure that your mobile phone remains switched on.<br><br>
-														Please note that the driver may not have a card machine available.
-														We kindly ask you to prepare the cash in advance.<br><br>
+														Please note that our drivers do not accept cash. Full payment must be made online before your pickup: <a href="https://easygoshuttle.com.au/payonline/?name={{ name|urlencode }}{% if email %}&amp;email={{ email|urlencode }}{% endif %}">easygoshuttle.com.au/payonline</a>.<br><br>
 													{% endif %}
 
 													{% if not no_email_reminder and not hide_arrival_pickup_time %}
@@ -204,8 +203,7 @@
 													{% if cash and not paid %}
 														We kindly ask that you <span style="color: #eb7828">email us immediately</span> upon your arrival{% if city %} in {{ city }}{% endif %}
 														and ensure that your mobile phone remains switched on.<br><br>
-														Please note that the driver may not have a card machine available.
-														We kindly ask you to prepare the cash in advance.<br><br>
+														Please note that our drivers do not accept cash. Full payment must be made online before your pickup: <a href="https://easygoshuttle.com.au/payonline/?name={{ name|urlencode }}{% if email %}&amp;email={{ email|urlencode }}{% endif %}">easygoshuttle.com.au/payonline</a>.<br><br>
 													{% endif %}
 
 													{% if not hide_arrival_pickup_time %}
@@ -287,7 +285,7 @@
 												</table>
 												{% if cash and not paid %}
 													We kindly ask that you <span style="color: #eb7828">email us </span> upon your arrival{% if city %} in {{ city }}{% endif %}<br><br>
-													Please note that the driver may not have a card machine available. We kindly ask you to prepare the cash in advance<br>
+													Please note that our drivers do not accept cash. Full payment must be made online before your pickup: <a href="https://easygoshuttle.com.au/payonline/?name={{ name|urlencode }}{% if email %}&amp;email={{ email|urlencode }}{% endif %}">easygoshuttle.com.au/payonline</a>.<br>
 												{% endif %}
 
 											{% else %}
@@ -298,7 +296,7 @@
 													and additional liabilities to other scheduled passengers, additional charge will apply<br>
 													More details >><a href="https://easygoshuttle.com.au/information">&nbsp;click here</a><br><br></p>
 												{% if cash and not paid %}
-													Please note that the driver may not have a card machine available. We kindly ask you to <span style="color: #eb7828; font-weight: bold">prepare the cash in advance</span><br><br>
+													Please note that our drivers do not accept cash. Full payment must be made online before your pickup: <a href="https://easygoshuttle.com.au/payonline/?name={{ name|urlencode }}{% if email %}&amp;email={{ email|urlencode }}{% endif %}">easygoshuttle.com.au/payonline</a>.<br><br>
 												{% endif %}
                                             {% endif %}
 												<p style="Margin:0;font-size:14px;font-weight:bold;line-height:22px;Margin-bottom:12px;">

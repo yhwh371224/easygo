@@ -152,13 +152,14 @@
 													<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;background-color:#fff4e5;padding:10px;border-left:3px solid #eb7828;">
 														<span style="color: #eb7828"><strong>Remaining balance reminder:</strong></span><br>
 														You paid a deposit of ${{ deposit_amount_due|floatformat:2 }}. The remaining balance of <strong>${{ deposit_remaining_balance|floatformat:2 }}</strong> is due before your pickup.<br>
-														Please have this amount ready in <strong>cash</strong> for the driver on pickup day, as the driver may not have a card machine available.<br>
+														Please pay this balance online before your pickup: <a href="https://easygoshuttle.com.au/payonline/?name={{ name|urlencode }}{% if email %}&amp;email={{ email|urlencode }}{% endif %}">easygoshuttle.com.au/payonline</a><br>
+														Our drivers do not accept cash on the day.<br>
 													</p>
 												{% endif %}
 
 												{% if cash and not paid %}
 													<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">													
-														Please note that the driver may not have a card machine available. We kindly ask you to prepare the cash in advance<br><br>
+														Please note that our drivers do not accept cash. Full payment must be made online before your pickup: <a href="https://easygoshuttle.com.au/payonline/?name={{ name|urlencode }}{% if email %}&amp;email={{ email|urlencode }}{% endif %}">easygoshuttle.com.au/payonline</a>.<br><br>
 													</p>											
 												{% endif %}
 
