@@ -14,6 +14,7 @@ def send_inquiry_email(instance):
             'name': instance.name,
             'contact': instance.contact,
             'email': instance.email,
+            'region': instance.region.name if instance.region else None,
             'pickup_date': instance.pickup_date,
             'flight_number': instance.flight_number,
             'flight_time': instance.flight_time,
@@ -45,6 +46,7 @@ def send_inquiry_email(instance):
 
     elif instance.cancelled:
         html_content = render_email_template("html_email-cancelled.html", {
+            'region': instance.region.name if instance.region else None,
             'booker_name': instance.booker_name,
             'booker_email': instance.booker_email,
             'booker_contact': instance.booker_contact,

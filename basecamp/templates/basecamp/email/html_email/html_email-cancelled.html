@@ -155,6 +155,10 @@
 														Unfortunately, we are unavailable for the pickup date you requested:<br>
 													{% endif %}
 
+													{% if region %}
+														Region: {{ region }}<br>
+													{% endif %}
+
 													{% if pickup_date or pickup_time %}
 														Pickup:
 														{% if pickup_date %}{{ pickup_date|date:"Y-m-d" }}{% endif %}

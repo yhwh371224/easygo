@@ -157,6 +157,9 @@
 													Attention: {% if booker_name %}{{ booker_name }}{% else %}{{ name }}{% endif %}<br>
 												{% endif %}   
 													Contact: {{ contact }}<br>
+												{% if region %}
+													Region: {{ region }}<br>
+												{% endif %}
 												{% if direction %}
 													Direction: {{ direction }}<br>
 													Pickup date: {{ pickup_date|date:"D, j M Y" }}<br>
