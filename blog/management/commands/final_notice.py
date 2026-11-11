@@ -38,6 +38,7 @@ class Command(BaseCommand):
     )
 
     def handle(self, *args, **options):
+        self.sent = []  # 터미널 요약용: 이번 실행에서 발송된 건
         try:
             now = timezone.now()
             if not SEND_HOUR_START <= timezone.localtime(now).hour < SEND_HOUR_END:
@@ -121,6 +122,12 @@ class Command(BaseCommand):
                     balance=balance,
                 )
 
+            if self.sent:
+                self.stdout.write(f'Sent to {len(self.sent)} booking(s):')
+                for line in self.sent:
+                    self.stdout.write(f'  {line}')
+            else:
+                self.stdout.write('No final notices sent.')
             self.stdout.write(self.style.SUCCESS('Final-notice SMS + email escalation done.'))
 
         except Exception as e:
@@ -154,6 +161,11 @@ class Command(BaseCommand):
             # 이름은 sms_ 지만 "마지막 에스컬레이션(SMS+메일) 완료" 표시로 쓴다.
             notice.sms_final_sent_at = timezone.now()
             notice.save(update_fields=['sms_final_sent_at'])
+            self.sent.append(
+                f"#{notice.id} [{label}] {notice.name} | "
+                f"{notice.booker_email or notice.email} | "
+                f"pickup {notice.pickup_date}"
+            )
             if notice.contact and notice.direction == 'Pickup from Intl Airport':
                 # DISABLED: Twilio WhatsApp sending — do not uncomment without approval
                 pass  # send_whatsapp_template(notice.contact, user_name=notice.name)
