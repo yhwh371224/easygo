@@ -185,6 +185,12 @@ class Post(models.Model):
                   '"기사가 몇 시에 만난다"는 픽업시간 문구를 뺌. 메일은 그대로 발송되고, '
                   '발송 전에 체크해야 적용됨. 공항 도착 건에만 적용.',
     )
+    show_driver_details = models.BooleanField(
+        default=False, blank=True,
+        help_text='체크하면 출발(공항 도착 외) 건의 당일 리마인더 메일(Reminder-Today)에 '
+                  '드라이버 이름과 번호를 넣음. 새벽 발송 전에 체크해야 적용되고, 이후엔 '
+                  'booking_reminder --ids 로 재발송. use_proxy 켜진 건은 Bird 번호가 나감.',
+    )
     prepay = models.BooleanField(default=False, blank=True)
     pending = models.BooleanField(default=False, blank=True)
     bulk_invoice = models.BooleanField(

@@ -2555,6 +2555,30 @@ class ArrivalReminderTests(TestCase):
         post = self.make_arrival(direction='Drop off to Intl Airport', hide_arrival_pickup_time=True)
         self.assertFalse(build_reminder_context(post, '10:45 AM', None)['hide_arrival_pickup_time'])
 
+    def _render_departure_today(self, **kwargs):
+        from django.template.loader import render_to_string
+        from utils.booking_helper import build_reminder_context
+
+        driver = make_driver(region=self.region)
+        post = self.make_arrival(direction='Drop off to Intl Airport', driver=driver, **kwargs)
+        ctx = build_reminder_context(post, '10:45 AM', driver)
+        return render_to_string('basecamp/email/html_email/html_email-today.html', ctx)
+
+    @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+    @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+    def test_show_driver_details_adds_name_and_phone_to_departure_today_mail(self, *_):
+        html = self._render_departure_today(show_driver_details=True)
+        self.assertIn('Test Driver', html)
+        self.assertIn('0400000000', html)
+        self.assertNotIn('Vehicle', html)
+
+    @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+    @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+    def test_departure_today_mail_has_no_driver_details_by_default(self, *_):
+        html = self._render_departure_today()
+        self.assertNotIn('Test Driver', html)
+        self.assertNotIn('0400000000', html)
+
     @patch('blog.bird_proxy.create_bird_mapping', return_value=True)
     @patch('blog.bird_proxy.close_bird_mapping', return_value=True)
     def test_sends_one_hour_before_scheduled_arrival(self, *_):

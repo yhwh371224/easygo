@@ -310,6 +310,23 @@
 												{% else %}
 													<p style="Margin:0;font-size:14px;line-height:22px;Margin-bottom:12px;">
 														Please be ready on your pickup time, {{ pickup_time }}<br><br></p>
+													{% if show_driver_details and driver_name %}
+													<table width="100%" style="border-spacing:0;background-color:#fef6f0;margin-bottom:20px;" role="presentation">
+														<tr>
+															<td style="padding:15px;color:#af865f;">
+																Your driver for today is below — feel free to contact them if needed.<br><br>
+																<strong>=== Driver's details ===</strong><br>
+																• Name: {{ driver_name }}<br>
+																• Phone:
+																{% if bird_number %}
+																	<a href="tel:{{ bird_number }}">{{ bird_number }}</a>
+																{% else %}
+																	<a href="tel:{{ driver_contact }}">{{ driver_contact }}</a>
+																{% endif %}<br>
+															</td>
+														</tr>
+													</table>
+													{% endif %}
 													<p style="Margin:0;font-size:13px;line-height:22px;Margin-bottom:12px;border-bottom: 2px solid #E1E1E1;">
 														Delays greater than 5 mins from pickup time creates last min reschedule expenses
 														and additional liabilities to other scheduled passengers, additional charge will apply<br>

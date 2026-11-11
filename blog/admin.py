@@ -558,7 +558,7 @@ class PostAdmin(admin.ModelAdmin):
                     'private_ride','cruise',  'no_email_reminder', 'no_review', 'hide_arrival_pickup_time']
         }),
         ('Driver', {
-            'fields': ['driver', 'use_proxy', 'candidate_drivers']
+            'fields': ['driver', 'use_proxy', 'show_driver_details', 'candidate_drivers']
         }),
         ('Notes', {
             'fields': ['message', 'notice', 'special_items']
