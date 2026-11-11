@@ -3914,6 +3914,72 @@ class InvoiceIndexSelectionTests(TestCase):
 
 
 # ---------------------------------------------------------------------------
+# Multi-booking invoice groups bookings by region
+# ---------------------------------------------------------------------------
+
+@patch('blog.bird_proxy.create_bird_mapping', return_value=True)
+@patch('blog.bird_proxy.close_bird_mapping', return_value=True)
+class MultiInvoiceRegionOrderTests(TestCase):
+    email = 'multi@example.com'
+
+    def make(self, region, days, time):
+        return Post.objects.create(
+            name='Vin', email=self.email, no_of_passenger='2', price='100',
+            region=region, pickup_time=time,
+            pickup_date=datetime.date.today() + timedelta(days=days),
+        )
+
+    def resolve(self, first_day, last_day):
+        from basecamp.views.payments import _resolve_bookings
+        today = datetime.date.today()
+        users = Post.objects.filter(email__iexact=self.email)
+        bookings, multiple = _resolve_bookings(
+            users, 0,
+            str(today + timedelta(days=first_day)),
+            str(today + timedelta(days=last_day)),
+            today,
+        )
+        self.assertTrue(multiple)
+        return bookings
+
+    def test_grouped_by_region_in_order_of_first_trip(self, *_):
+        sydney = make_region('sydney', 'Sydney')
+        melbourne = make_region('melbourne', 'Melbourne')
+        # Created out of order, and a Melbourne trip sits between the Sydney ones
+        mel_late = self.make(melbourne, 10, '12:30')
+        syd_first = self.make(sydney, 5, '23:45')
+        mel_first = self.make(melbourne, 6, '16:00')
+        syd_late = self.make(sydney, 8, '10:00')
+        bookings = self.resolve(5, 10)
+        self.assertEqual([b.pk for b in bookings],
+                         [syd_first.pk, syd_late.pk, mel_first.pk, mel_late.pk])
+
+    def test_earlier_region_comes_first_and_same_day_sorts_by_time(self, *_):
+        sydney = make_region('sydney', 'Sydney')
+        melbourne = make_region('melbourne', 'Melbourne')
+        syd = self.make(sydney, 4, '10:00')
+        mel_pm = self.make(melbourne, 3, '16:00')
+        mel_am = self.make(melbourne, 3, '09:00')
+        bookings = self.resolve(1, 9)
+        self.assertEqual([b.pk for b in bookings], [mel_am.pk, mel_pm.pk, syd.pk])
+
+    def test_invoice_rows_show_region(self, *_):
+        from basecamp.views.payments import _build_multi_context
+        from django.template.loader import render_to_string
+        self.make(make_region('sydney', 'Sydney'), 5, '10:00')
+        self.make(make_region('melbourne', 'Melbourne'), 6, '10:00')
+        params = {
+            'apply_gst_flag': None, 'surcharge_input': None, 'discount_input': None,
+            'toll_input': None, 'deposit_percent_input': None,
+        }
+        template, ctx = _build_multi_context(self.resolve(5, 6), params, '1', datetime.date.today(), 'westpac')
+        self.assertEqual([row['region'] for row in ctx['bookings']], ['Sydney', 'Melbourne'])
+        html = render_to_string(f'basecamp/email/html_email/{template}', ctx)
+        self.assertIn('Region: Sydney', html)
+        self.assertIn('Region: Melbourne', html)
+
+
+# ---------------------------------------------------------------------------
 # Return leg passenger count
 # ---------------------------------------------------------------------------
 

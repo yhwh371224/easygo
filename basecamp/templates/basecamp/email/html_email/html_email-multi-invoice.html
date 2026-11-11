@@ -80,6 +80,7 @@
             {% for booking in bookings %}
             <div style="margin-bottom: 15px; font-size:12px; line-height:20px;">
               <strong>Booking {{ forloop.counter }}:</strong><br>
+              {% if booking.region %}Region: {{ booking.region }}<br>{% endif %}
               Pickup Date: {{ booking.pickup_date|date:"Y-m-d" }}<br>
               Pickup Time: {{ booking.pickup_time }}<br>
               From: {{ booking.start_point }}<br>

@@ -80,6 +80,19 @@ def _invoice_sort_key(post, today):
     return (rank, post.pickup_date, post.pickup_time or '')
 
 
+def _group_by_region(bookings):
+    """Group date-ordered bookings by region for the multi-invoice.
+
+    Regions appear in the order of their first trip (the customer's travel
+    order); within a region the incoming date/time order is kept. Bookings
+    without a region form their own group, placed by the same rule.
+    """
+    groups = {}
+    for booking in bookings:
+        groups.setdefault(booking.region_id, []).append(booking)
+    return [booking for group in groups.values() for booking in group]
+
+
 def _resolve_bookings(users, index, from_date, to_date, today):
     """Return (bookings, is_multiple)."""
     if from_date and to_date:
@@ -87,8 +100,8 @@ def _resolve_bookings(users, index, from_date, to_date, today):
         to_date_obj = datetime.strptime(to_date, "%Y-%m-%d").date()
         bookings = users.filter(
             pickup_date__range=(from_date_obj, to_date_obj)
-        ).order_by('pickup_date', 'pickup_time')
-        return bookings, True
+        ).select_related('region').order_by('pickup_date', 'pickup_time')
+        return _group_by_region(bookings), True
     ordered = sorted(users, key=lambda post: _invoice_sort_key(post, today))
     return [ordered[index] if 0 <= index < len(ordered) else ordered[0]], False
 
@@ -203,6 +216,7 @@ def _build_booking_row(booking, apply_gst_flag, surcharge_input, toll_input):
     paid = safe_float(booking.paid) or 0.0
     total = price + with_gst + surcharge_calc + toll
     return {
+        "region": booking.region.name if booking.region_id else "",
         "pickup_date": booking.pickup_date,
         "pickup_time": booking.pickup_time,
         "start_point": start_point,
@@ -360,6 +374,7 @@ def _build_single_context(user, users, params, inv_no, today, DEFAULT_BANK):
             "booker_name": user.booker_name,
             "booker_contact": user.booker_contact,
             "contact": user.contact, "email": booker_email or email,
+            "region": user.region.name if user.region_id else "",
             "pickup_date": user.pickup_date, "pickup_time": user.pickup_time,
             "start_point": start_point, "end_point": end_point,
             "price": user.price, "with_gst": with_gst, "surcharge": surcharge_display,
@@ -401,6 +416,7 @@ def _build_single_context(user, users, params, inv_no, today, DEFAULT_BANK):
             "booker_name": user1.booker_name,
             "booker_contact": user1.booker_contact,
             "contact": user1.contact,
+            "region": user1.region.name if user1.region_id else "",
             "pickup_date": user1.pickup_date, "pickup_time": user1.pickup_time,
             "start_point": user1.start_point, "end_point": user1.end_point,
             "price": doubled_price, "with_gst": doubled_with_gst,
@@ -434,6 +450,7 @@ def _build_single_context(user, users, params, inv_no, today, DEFAULT_BANK):
         "booker_name": user.booker_name,
         "booker_contact": user.booker_contact,
         "contact": user.contact,
+        "region": user.region.name if user.region_id else "",
         "pickup_date": user.pickup_date, "pickup_time": user.pickup_time,
         "start_point": start_point, "end_point": end_point,
         "price": user.price, "with_gst": with_gst, "surcharge": surcharge_display,
@@ -497,7 +514,7 @@ def invoice_detail(request):
 
     bookings, multiple = _resolve_bookings(users, index, params['from_date'], params['to_date'], today)
 
-    if multiple and not bookings.exists():
+    if multiple and not bookings:
         return HttpResponse("No bookings found in selected date range", status=404)
 
     inv_no = _resolve_inv_no(bookings[0], params['inv_no'])
