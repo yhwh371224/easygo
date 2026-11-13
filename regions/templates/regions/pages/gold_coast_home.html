@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-{% load static %}
+{% load static review_tags %}
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -37,7 +37,6 @@
       ],
       "priceRange": "$$",
       "openingHours": "Mo-Su 03:00-23:00",
-      "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.8", "reviewCount": "376" },
       "hasOfferCatalog": {
         "@type": "OfferCatalog",
         "name": "Gold Coast Airport Transfer Services",
@@ -655,27 +654,7 @@
         </div>
       </section>
 
-      <!-- ===== TESTIMONIALS ===== -->
-      <section class="pt-0 pt-md-5">
-        <div class="container">
-          <div class="text-center position-relative py-5 testimonials-bg">
-            <img loading="lazy" src="{% static 'basecamp/images/map.svg' %}" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0;">
-            <div class="bg-overlay bg-dark opacity-1"></div>
-            <div class="row mb-5"><div class="col-12"><h3>Gold Coast Holiday Travellers Who Chose EasyGo</h3></div></div>
-            <div class="row">
-              <div class="col-md-9 col-xl-6 mx-auto">
-                <div class="tiny-slider dots-primary">
-                  <div class="tiny-slider-inner" data-autoplay="6000" data-arrow="false" data-dots="true" data-edge="2" data-items="1">
-                    <div><p class="h5 fw-light mb-3">"We landed at OOL with two surfboards, a stroller, and five suitcases for a family of eight. The driver had everything loaded in five minutes and we were at our Surfers Paradise resort without a single complaint from the kids. Couldn't have asked for better. Booking again for Christmas."</p><div class="h5 mb-3">— The Williams Family, Sydney</div></div><br>
-                    <div><p class="h5 fw-light mb-3">"Organised EasyGo for our golf group of ten — we had eight golf bags between us and I was genuinely worried they wouldn't fit. They fit perfectly. Driver was early, price was exactly as quoted, and we were at Sanctuary Cove in no time. Best decision of the whole trip."</p><div class="h5 mb-0">— Andrew M., Brisbane</div></div><br>
-                    <div><p class="h5 fw-light mb-3">"Our Jetstar flight from Melbourne was delayed by nearly two hours. EasyGo tracked it and were there waiting when we finally landed, no extra charge, no questions. Twelve of us heading to Chevron Renaissance for Schoolies — they handled it like professionals. Will always recommend."</p><div class="h5 mb-3">— Jess T., Melbourne</div></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {% review_testimonials "What Our Customers Say" keyword="Gold Coast" %}
 
       <section class="container mb-5">
         <div class="col-12 mt-4 d-flex justify-content-center align-items-center gap-4">

@@ -74,6 +74,24 @@ class Command(BaseCommand):
         index_entries.append({"loc": f"{BASE_URL}/sitemaps/sitemap-static.xml", "lastmod": today})
         self.stdout.write(f"  sitemap-static.xml  — {len(static_urls)} URLs")
 
+        # ── 1b. sitemap-reviews.xml — each published customer review ────
+        review_urls = []
+        try:
+            from easygo_review.models import Post as Review
+            for review in Review.objects.filter(is_published=True).order_by('-created'):
+                stamp = review.date or review.created.date()
+                review_urls.append({
+                    "loc": f"{BASE_URL}{review.get_absolute_url()}",
+                    "lastmod": stamp.strftime("%Y-%m-%dT00:00:00+11:00"),
+                    "changefreq": "yearly",
+                    "priority": "0.5000",
+                })
+        except Exception as e:
+            self.stdout.write(self.style.WARNING(f"  Reviews error: {e}"))
+        _write_urlset(review_urls, os.path.join(base_dir, "sitemap-reviews.xml"), today)
+        index_entries.append({"loc": f"{BASE_URL}/sitemaps/sitemap-reviews.xml", "lastmod": today})
+        self.stdout.write(f"  sitemap-reviews.xml — {len(review_urls)} URLs")
+
         # ── 2. sitemap-sydney.xml ────────────────────────────────────────
         sydney_urls = []
         try:

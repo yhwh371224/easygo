@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-{% load static %}
+{% load static review_tags %}
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -37,7 +37,6 @@
       ],
       "priceRange": "$$",
       "openingHours": "Mo-Su 03:00-23:00",
-      "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.8", "reviewCount": "376" },
       "hasOfferCatalog": {
         "@type": "OfferCatalog",
         "name": "Melbourne Airport Transfer Services",
@@ -646,27 +645,7 @@
         </div>
       </section>
 
-      <!-- ===== TESTIMONIALS ===== -->
-      <section class="pt-0 pt-md-5">
-        <div class="container">
-          <div class="text-center position-relative py-5 testimonials-bg">
-            <img loading="lazy" src="{% static 'basecamp/images/map.svg' %}" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0;">
-            <div class="bg-overlay bg-dark opacity-1"></div>
-            <div class="row mb-5"><div class="col-12"><h3>Melbourne Travellers Who Chose EasyGo</h3></div></div>
-            <div class="row">
-              <div class="col-md-9 col-xl-6 mx-auto">
-                <div class="tiny-slider dots-primary">
-                  <div class="tiny-slider-inner" data-autoplay="6000" data-arrow="false" data-dots="true" data-edge="2" data-items="1">
-                    <div><p class="h5 fw-light mb-3">"We flew in on Singapore Airlines and landed at T2 International. Our flight was delayed almost 90 minutes — EasyGo were there waiting without any fuss, and the CityLink toll was already included in the price. Our family of seven made it to Box Hill without a single issue. Would not use anyone else."</p><div class="h5 mb-3">— Jennifer Tan, Box Hill</div></div><br>
-                    <div><p class="h5 fw-light mb-3">"Organised a group of 11 for AFL Grand Final weekend — we needed reliable transport from St Kilda Road to Tullamarine for our 6am flight. EasyGo knew every back street to avoid the traffic, the price was fixed, and they were there at 4:30am sharp. No complaints whatsoever."</p><div class="h5 mb-0">— Marcus D., South Yarra</div></div><br>
-                    <div><p class="h5 fw-light mb-3">"I use EasyGo every time I fly out of Tullamarine for work. The CityLink toll being included was the reason I first switched from Uber — no add-ons, no fluctuating prices. Now I wouldn't use anything else for Melbourne airport transfers."</p><div class="h5 mb-3">— Sarah K., Melbourne CBD</div></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {% review_testimonials "What Our Customers Say" keyword="Melbourne" %}
 
       <section class="container mb-5">
         <div class="col-12 mt-4 d-flex justify-content-center align-items-center gap-4">

@@ -1,6 +1,8 @@
 {% extends 'easygo_review/base.html' %}
 
-{% block title %}EasyGo Review{% endblock %}
+{% block title %}{{ object.rating }}★ review of EasyGo Airport Shuttle by {{ object.name }}{% if object.date %} ({{ object.date|date:"M Y" }}){% endif %}{% endblock %}
+{% block description %}{{ object.get_markdown_content|striptags|truncatechars:155 }}{% endblock %}
+{% block canonical %}<link rel="canonical" href="https://easygoshuttle.com.au{{ object.get_absolute_url }}" />{% if not object.is_published %}<meta name="robots" content="noindex">{% endif %}{% endblock %}
 
 {% block content %}
 <div class="review-section" style="padding: 20px;">

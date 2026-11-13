@@ -2,7 +2,7 @@
 
 {% load static %}
 
-{% block canonical %}<link rel="canonical" href="https://easygoshuttle.com.au/easygo_review/" />{% endblock %}
+{% block canonical %}<link rel="canonical" href="https://easygoshuttle.com.au/easygo_review/{% if page_obj.number > 1 %}?page={{ page_obj.number }}{% endif %}" />{% endblock %}
 
 {% block content %}
 {% load custom_filters %}
