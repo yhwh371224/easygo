@@ -725,24 +725,66 @@ def _create_checkout_session(amount_cents, email, booking_name, description, pos
     return session.url
 
 
+def _return_leg_of(post):
+    """The other leg of a return booking, or None.
+
+    handle_return_trip splits a return booking into two Posts at half price
+    each. The return leg is marked return_pickup_time='x' and has
+    pickup_date/return_pickup_date swapped; the first leg carries the real
+    return_pickup_time.
+    """
+    marker = (post.return_pickup_time or '').strip()
+    if not marker or not post.pickup_date or not post.return_pickup_date:
+        return None  # one-way booking
+    emails = [e for e in (post.email, post.booker_email) if e]
+    if not emails:
+        return None
+    email_q = Q()
+    for e in emails:
+        email_q |= Q(email__iexact=e) | Q(booker_email__iexact=e)
+    legs = Post.objects.filter(
+        email_q,
+        name=post.name,
+        pickup_date=post.return_pickup_date,
+        return_pickup_date=post.pickup_date,
+        cancelled=False,
+    ).exclude(pk=post.pk)
+    if marker.lower() == 'x':
+        legs = legs.exclude(return_pickup_time__iexact='x')  # post is the return leg
+    else:
+        legs = legs.filter(return_pickup_time__iexact='x')  # post is the first leg
+    return legs.order_by('-id').first()
+
+
 def stripe_checkout_url_for_post(post):
     """Stripe Checkout URL for one booking's outstanding balance, or None.
 
     Used right after a prepay booking is confirmed. The amount is the booking
     balance (booking_balance — same formula as dunning and payment
-    allocation). Returns None when there is nothing to charge (price TBA,
-    already paid) or Stripe errors — the caller falls back to the PayPal page.
+    allocation). A return booking is stored as two half-price legs, so the
+    other leg's balance is added — the customer pays the whole return trip.
+    Returns None when there is nothing to charge (price TBA, already paid) or
+    Stripe errors — the caller falls back to the PayPal page.
     """
     result = booking_balance(post)
     if result is None:
         return None
     amount_cents = round(result[2] * 100)
+
+    return_leg = _return_leg_of(post)
+    if return_leg is not None:
+        leg_result = booking_balance(return_leg)
+        if leg_result is not None and leg_result[2] > 0:
+            amount_cents += round(leg_result[2] * 100)
+
     if amount_cents <= 0:
         return None
 
     email = (post.booker_email or post.email or '').strip()
     pickup = post.pickup_date.strftime('%d %b %Y') if post.pickup_date else ''
     description = f"{post.name or 'Booking'} — {pickup} {post.pickup_time or ''}".strip()
+    if return_leg is not None:
+        description += ' (return trip, both ways)'
     try:
         return _create_checkout_session(amount_cents, email, post.name, description, post_id=post.pk)
     except Exception:
