@@ -105,6 +105,8 @@ HONEYPOT_VALUE = ''
 # Google
 GOOGLE_REVIEW_URL = config('GOOGLE_REVIEW_URL')
 GOOGLE_MAPS_API_KEY = config('GOOGLE_MAPS_API_KEY', default='')
-# Server-side key with Places API (New) enabled — used weekly by refresh_google_rating.
-GOOGLE_PLACES_API_KEY = config('GOOGLE_PLACES_API_KEY', default='')
-GOOGLE_PLACE_ID = config('GOOGLE_PLACE_ID', default='')
+# Places API (New) for refresh_google_rating. The Maps key (EasyGo-Calendar
+# project, IP-restricted) has Places API (New) enabled, so it is the default.
+GOOGLE_PLACES_API_KEY = config('GOOGLE_PLACES_API_KEY', default='') or GOOGLE_MAPS_API_KEY
+# Public place ID of the EasyGo Airport Shuttle Business Profile (service-area business).
+GOOGLE_PLACE_ID = config('GOOGLE_PLACE_ID', default='ChIJgScpoZGnEmsRo1T_fWF7Ato')

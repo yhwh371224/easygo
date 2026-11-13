@@ -51,7 +51,10 @@ def _headers(field_mask):
 
 def find_place_ids(query='EasyGo Airport Shuttle'):
     """[(place_id, name, address, rating, count)] — to look up GOOGLE_PLACE_ID once."""
-    r = requests.post(SEARCH_URL, json={'textQuery': query}, timeout=15, headers=_headers(
+    # EasyGo's profile is a pure service-area business (no public address);
+    # without this flag Text Search never returns it.
+    body = {'textQuery': query, 'includePureServiceAreaBusinesses': True}
+    r = requests.post(SEARCH_URL, json=body, timeout=15, headers=_headers(
         'places.id,places.displayName,places.formattedAddress,places.rating,places.userRatingCount'))
     r.raise_for_status()
     return [
