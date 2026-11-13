@@ -44,3 +44,9 @@ def rebook_error(request):
 
 def google_review_url(request):
     return {'google_review_url': getattr(settings, 'GOOGLE_REVIEW_URL', '')}
+
+
+def review_stats(request):
+    """google_rating / google_review_count / site_review_count for templates."""
+    from easygo_review.review_stats import get_review_stats
+    return get_review_stats()

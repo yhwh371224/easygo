@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.admin import AdminSite
 from django.utils import timezone
 
-from .models import Post, Comment, SearchSurveyResponse
+from .models import Post, Comment, SearchSurveyResponse, GoogleRatingSnapshot
 
 
 class PostAdmin(admin.ModelAdmin):
@@ -69,3 +69,15 @@ admin_site.register(SearchSurveyResponse, SearchSurveyResponseAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(Post, PostAdmin)
 admin.site.register(SearchSurveyResponse, SearchSurveyResponseAdmin)
+
+
+@admin.register(GoogleRatingSnapshot)
+class GoogleRatingSnapshotAdmin(admin.ModelAdmin):
+    """Weekly Google rating fetches. Adding a row by hand overrides the site
+    numbers until the next fetch (e.g. while the API key is not set up)."""
+    list_display = ['fetched_at', 'rating', 'review_count']
+
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        from .review_stats import clear_review_stats_cache
+        clear_review_stats_cache()

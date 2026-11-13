@@ -101,9 +101,9 @@
             <h1 class="hero-title">Gold Coast Airport <br><span>Transfer & Pickup</span></h1>
             <p class="hero-sub">Surfboards Welcome &nbsp;·&nbsp; 8–13 Seater &nbsp;·&nbsp; OOL to Your Gold Coast Resort</p>
             <div class="hero-trust">
-              <strong>⭐ 4.8</strong>
+              <strong>⭐ {{ google_rating }}</strong>
               <span class="hero-trust-sep">|</span>
-              <span>376 Google Reviews</span>
+              <span>{{ google_review_count }} Google Reviews</span>
               <span class="hero-trust-sep">|</span>
               <span>No Schoolies surcharge</span>
               <span class="hero-trust-sep">|</span>
@@ -658,8 +658,8 @@
 
       <section class="container mb-5">
         <div class="col-12 mt-4 d-flex justify-content-center align-items-center gap-4">
-          <a href="/easygo_review/" class="me-4 fw-bold review-link"><span class="fs-lg">👉</span> Reviews on our website</a>
-          <a href="{{ google_review_url }}" target="_blank" rel="noopener" class="fw-bold review-link"><span class="fs-lg">👉</span> Google reviews <i class="ai-external-link ms-1 text-ext-icon"></i></a>
+          <a href="/easygo_review/" class="me-4 fw-bold review-link"><span class="fs-lg">👉</span> Reviews on our website ({{ site_review_count }})</a>
+          <a href="{{ google_review_url }}" target="_blank" rel="noopener" class="fw-bold review-link"><span class="fs-lg">👉</span> Google reviews ({{ google_review_count }}) <i class="ai-external-link ms-1 text-ext-icon"></i></a>
         </div>
       </section>
 

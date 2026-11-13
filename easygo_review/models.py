@@ -119,3 +119,18 @@ class SearchSurveyResponse(models.Model):
         if not self.discount_code or self.discount_redeemed:
             return False
         return not self.discount_expires or self.discount_expires >= timezone.localdate()
+
+
+class GoogleRatingSnapshot(models.Model):
+    """Google Business Profile rating + review count, fetched weekly by
+    `manage.py refresh_google_rating`. The latest row feeds the
+    "⭐ 4.8 | 376 Google Reviews" text across the site."""
+    rating = models.DecimalField(max_digits=2, decimal_places=1)
+    review_count = models.PositiveIntegerField()
+    fetched_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-fetched_at']
+
+    def __str__(self):
+        return f"{self.rating} ({self.review_count}) @ {self.fetched_at:%Y-%m-%d}"

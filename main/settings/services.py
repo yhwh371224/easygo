@@ -105,3 +105,6 @@ HONEYPOT_VALUE = ''
 # Google
 GOOGLE_REVIEW_URL = config('GOOGLE_REVIEW_URL')
 GOOGLE_MAPS_API_KEY = config('GOOGLE_MAPS_API_KEY', default='')
+# Server-side key with Places API (New) enabled — used weekly by refresh_google_rating.
+GOOGLE_PLACES_API_KEY = config('GOOGLE_PLACES_API_KEY', default='')
+GOOGLE_PLACE_ID = config('GOOGLE_PLACE_ID', default='')
