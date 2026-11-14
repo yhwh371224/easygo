@@ -359,7 +359,7 @@ def send_refund_notification_email(instance, method, amount=None, booker_name=No
     절대값을 사용한다.
 
     auto_filled: 자동으로 Post.refund를 채운 (Post, 금액) 목록. 매칭이 1건이거나
-    리턴부킹 2건(최근 leg에 먼저 채움)이고 Post.refund가 비어 있을 때만 채워진다.
+    리턴부킹 2건(두 leg에 paid 비율로 나눠 채움)이고 Post.refund가 비어 있을 때만 채워진다.
     매칭이 모호하거나 이미 수동으로 입력돼 있었다면 빈 목록이며, 이때는
     관리자가 Post.refund를 직접 확인/입력해야 한다."""
     if amount is None:
@@ -381,7 +381,7 @@ def send_refund_notification_email(instance, method, amount=None, booker_name=No
 
     if auto_filled and match_count == 2:
         filled = ", ".join(f"#{p.pk} ({p.pickup_date}) ${amt}" for p, amt in auto_filled)
-        refund_status_line = f"✅ Return booking — Post.refund auto-filled on the later leg first: {filled}"
+        refund_status_line = f"✅ Return booking — Post.refund split across both legs: {filled}"
     elif auto_filled:
         post, amt = auto_filled[0]
         refund_status_line = f"✅ Post.refund auto-filled on booking #{post.pk} ({post.pickup_date}) ${amt}"

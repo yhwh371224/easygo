@@ -1,7 +1,7 @@
 import os
 import logging
 from datetime import date
-from decimal import Decimal, ROUND_HALF_UP
+from decimal import Decimal, ROUND_DOWN, ROUND_HALF_UP
 
 from django.db import transaction
 from django.db.models import Q
@@ -47,8 +47,9 @@ def _auto_fill_post_refund(instance):
     """A negative Stripe/PayPal payment (refund) matched to exactly one Post
     whose refund field is still empty gets that Post.refund auto-filled, so
     the admin doesn't have to type it in by hand. A return booking (two legs
-    matched) is filled on the later leg; whatever exceeds that leg's paid
-    spills onto the earlier leg, since BAS netting drops a refund above paid.
+    matched) is split across both legs in proportion to each leg's paid
+    (equal legs → half each), so each leg's paid − refund stays its real
+    net; any rounding cent lands on the later leg.
     If Post.refund is already set (manually entered) or the match is otherwise
     ambiguous, leave it alone — accounting (BAS 1A netting) relies on
     Post.refund being correct.
@@ -77,11 +78,18 @@ def _auto_fill_post_refund(instance):
         # booking amount only and are stored as is.
         refund = (refund / instance.surcharge_factor).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
 
+    if len(legs) == 2:
+        later, earlier = legs
+        paid_later, paid_earlier = _paid_decimal(later), _paid_decimal(earlier)
+        total_paid = paid_later + paid_earlier
+        share = paid_earlier / total_paid if total_paid > 0 else Decimal('0.5')
+        earlier_amount = (refund * share).quantize(Decimal("0.01"), rounding=ROUND_DOWN)
+        amounts = [refund - earlier_amount, earlier_amount]
+    else:
+        amounts = [refund]
+
     filled = []
-    remaining = refund
-    for i, post in enumerate(legs):
-        last = i == len(legs) - 1
-        amount = remaining if last else min(remaining, _paid_decimal(post))
+    for post, amount in zip(legs, amounts):
         if amount <= 0:
             continue
         # 환불 메일이 이미 나가므로 sent_email 부터 먼저 저장해 취소 메일을 막는다.
@@ -98,7 +106,6 @@ def _auto_fill_post_refund(instance):
         fields.append('no_review')
         post.save(update_fields=fields)
         filled.append((post, amount))
-        remaining -= amount
     return filled, match_count
 
 

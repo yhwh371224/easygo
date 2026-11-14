@@ -3553,7 +3553,7 @@ class AutoFillPostRefundTests(TestCase):
         pm.refresh_from_db()
         return pm
 
-    def test_return_booking_fills_the_later_leg(self):
+    def test_return_booking_partial_refund_is_split_across_legs(self):
         from blog.tasks import _auto_fill_post_refund
 
         leg1, leg2 = self._return_booking()
@@ -3562,30 +3562,41 @@ class AutoFillPostRefundTests(TestCase):
         leg2.refresh_from_db()
 
         self.assertEqual(count, 2)
-        self.assertEqual([(p.pk, a) for p, a in filled], [(leg2.pk, Decimal('50.00'))])
-        self.assertEqual(leg2.refund, Decimal('50.00'))
-        self.assertEqual(leg1.refund, Decimal('0'))
-        # partial refund on leg2: no cancel, but no review/cancel mail either
-        self.assertFalse(leg2.cancelled)
+        self.assertEqual([(p.pk, a) for p, a in filled],
+                         [(leg2.pk, Decimal('25.00')), (leg1.pk, Decimal('25.00'))])
+        self.assertEqual(leg1.refund + leg2.refund, Decimal('50.00'))
+        # partial refund: neither leg cancelled, but no review/cancel mail
+        self.assertFalse(leg1.cancelled or leg2.cancelled)
+        self.assertTrue(leg1.no_review and leg1.sent_email)
         self.assertTrue(leg2.no_review and leg2.sent_email)
-        self.assertFalse(leg1.cancelled or leg1.no_review or leg1.sent_email)
 
-    def test_return_booking_refund_above_leg_paid_spills_to_earlier_leg(self):
-        """BAS netting drops refund above a leg's paid, so the rest goes on leg 1."""
+    def test_return_booking_odd_cent_goes_to_later_leg(self):
         from blog.tasks import _auto_fill_post_refund
 
         leg1, leg2 = self._return_booking()
-        filled, _ = _auto_fill_post_refund(self._refund('-154.50'))
+        pm = self._refund('-100.01')
+        PaypalPayment.objects.filter(pk=pm.pk).update(
+            created=datetime.datetime(2026, 10, 13, 12, tzinfo=datetime.timezone.utc))
+        pm.refresh_from_db()
+        _auto_fill_post_refund(pm)
         leg1.refresh_from_db()
         leg2.refresh_from_db()
 
-        self.assertEqual(leg2.refund, Decimal('100'))
-        self.assertEqual(leg1.refund, Decimal('50.00'))
+        self.assertEqual(leg1.refund + leg2.refund, Decimal('100.01'))
+        self.assertEqual(leg2.refund - leg1.refund, Decimal('0.01'))
+
+    def test_return_booking_full_refund_cancels_both_legs(self):
+        from blog.tasks import _auto_fill_post_refund
+
+        leg1, leg2 = self._return_booking()
+        filled, _ = _auto_fill_post_refund(self._refund('-206.00'))
+        leg1.refresh_from_db()
+        leg2.refresh_from_db()
+
+        self.assertEqual(leg1.refund, Decimal('100.00'))
+        self.assertEqual(leg2.refund, Decimal('100.00'))
         self.assertEqual(len(filled), 2)
-        # leg2 fully refunded → cancelled; leg1 partially → stays active
-        self.assertTrue(leg2.cancelled and leg2.no_review and leg2.sent_email)
-        self.assertFalse(leg1.cancelled)
-        self.assertTrue(leg1.no_review and leg1.sent_email)
+        self.assertTrue(leg1.cancelled and leg2.cancelled)
 
     def test_base_only_refund_is_stored_as_is(self):
         """A refund from 2026-10-10 returns the booking amount only — no ÷ surcharge."""
