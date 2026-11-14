@@ -411,7 +411,8 @@ class PostAdmin(admin.ModelAdmin):
     search_fields = ['pickup_date', 'pickup_time', 'suburb', 'email', 'street', 'booker_email', 'booker_name',
                      'booker_contact', 'name', 'contact', 'price', 'paid', 'email1', 'message', 'notice', 'region__name',
                      'driver__driver_name']
-    readonly_fields = ['suburb_distance_km', 'suburb_base_price', 'commission_amount_display', 'non_gst_deduction_display', 'subcontractor_payout_display']
+    readonly_fields = ['suburb_distance_km', 'suburb_base_price', 'commission_amount_display', 'non_gst_deduction_display', 'subcontractor_payout_display',
+                       'driver_reminder_sent_at', 'driver_ack_at', 'driver_ack_alert_sent_at']
     actions = ['duplicate_bookings']
     change_list_template = 'admin/blog/post/change_list.html'
 
@@ -558,7 +559,8 @@ class PostAdmin(admin.ModelAdmin):
                     'private_ride','cruise',  'no_email_reminder', 'no_review', 'hide_arrival_pickup_time']
         }),
         ('Driver', {
-            'fields': ['driver', 'use_proxy', 'show_driver_details', 'candidate_drivers']
+            'fields': ['driver', 'use_proxy', 'show_driver_details', 'candidate_drivers',
+                       'driver_reminder_sent_at', 'driver_ack_at', 'driver_ack_alert_sent_at']
         }),
         ('Notes', {
             'fields': ['message', 'notice', 'special_items']

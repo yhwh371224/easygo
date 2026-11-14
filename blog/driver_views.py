@@ -476,6 +476,20 @@ def _can_complete(pickup_dt, now):
     return pickup_dt is None or pickup_dt <= now
 
 
+def _telegram_link_url(driver):
+    """미연결 드라이버의 'Connect Telegram' deep link. 연결됐거나 봇 미설정이면 None.
+    토큰은 처음 필요할 때 만들고, 연결되면 webhook 이 지운다(1회용)."""
+    from utils import telegram_driver
+    if driver.telegram_chat_id or not telegram_driver.is_configured():
+        return None
+    if not driver.telegram_link_token:
+        import secrets
+        from blog.models import Driver
+        driver.telegram_link_token = secrets.token_urlsafe(24)
+        Driver.objects.filter(pk=driver.pk).update(telegram_link_token=driver.telegram_link_token)
+    return telegram_driver.link_url(driver.telegram_link_token)
+
+
 @login_required(login_url='/driver/login/')
 def driver_dashboard(request):
     try:
@@ -745,6 +759,7 @@ def driver_dashboard(request):
 
     return render(request, 'basecamp/driver/dashboard.html', {
         'driver': driver,
+        'telegram_link_url': _telegram_link_url(driver),
         'trips': trips,
         'candidates': candidates,
         'today': today,

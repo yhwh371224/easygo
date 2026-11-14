@@ -40,6 +40,13 @@ EMAIL_AI_CLASSIFIER_FALLBACK = config('EMAIL_AI_CLASSIFIER_FALLBACK', default=Fa
 # Telegram
 TELEGRAM_BOT_TOKEN = config('TELEGRAM_BOT_TOKEN')
 TELEGRAM_CHAT_ID = config('TELEGRAM_CHAT_ID')
+# 드라이버 전용 봇(픽업 2시간 전 알림 + 확인 버튼). 관리자 알림 봇과 분리 —
+# 드라이버에게 보이는 봇이고, 이 토큰은 공개 webhook 뒤에 있기 때문.
+# 비어 있으면 driver_pickup_reminder 는 아무것도 하지 않고 대시보드 연결 버튼도 숨는다.
+TELEGRAM_DRIVER_BOT_TOKEN = config('TELEGRAM_DRIVER_BOT_TOKEN', default='')
+TELEGRAM_DRIVER_BOT_USERNAME = config('TELEGRAM_DRIVER_BOT_USERNAME', default='')
+# setWebhook 의 secret_token. 비어 있으면 webhook 은 모든 요청을 거절한다(fail closed).
+TELEGRAM_DRIVER_WEBHOOK_SECRET = config('TELEGRAM_DRIVER_WEBHOOK_SECRET', default='')
 
 # Unsplash
 UNSPLASH_ACCESS_KEY = config('UNSPLASH_ACCESS_KEY')

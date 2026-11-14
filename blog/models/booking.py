@@ -257,6 +257,24 @@ class Post(models.Model):
         help_text='마지막 SMS 에스컬레이션(final_notice, 픽업 당일~내일) 발송 시각. '
                   '미결제·부분결제 두 경로가 공유하는 중복 발송 방지 필드.',
     )
+    driver_reminder_sent_to = models.ForeignKey(
+        'Driver', on_delete=models.SET_NULL, null=True, blank=True, related_name='+',
+        help_text='픽업 2시간 전 텔레그램 알림(driver_pickup_reminder)을 처리한 드라이버. '
+                  '현재 driver 와 다르면(재배정) 새 드라이버에게 다시 보낸다. '
+                  'sent_at 없이 이 값만 있으면 텔레그램 미연결 등으로 못 보낸 것.',
+    )
+    driver_reminder_sent_at = models.DateTimeField(
+        null=True, blank=True,
+        help_text='픽업 2시간 전 드라이버 텔레그램 알림 발송 시각.',
+    )
+    driver_ack_at = models.DateTimeField(
+        null=True, blank=True,
+        help_text='드라이버가 텔레그램 알림의 확인 버튼을 누른 시각.',
+    )
+    driver_ack_alert_sent_at = models.DateTimeField(
+        null=True, blank=True,
+        help_text='픽업 1시간 전까지 드라이버 확인이 없어 관리자에게 경고를 보낸 시각.',
+    )
     calendar_event_id = models.CharField(max_length=255, blank=True, null=True)
     driver_calendar_event_id = models.CharField(max_length=255, blank=True, null=True)
     calendar_color = models.CharField(

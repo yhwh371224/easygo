@@ -8,7 +8,7 @@ from django.conf.urls.static import static
 from django.http import FileResponse, Http404, HttpResponse, JsonResponse
 from email_agent.views import GmailWebhookView
 from basecamp.views import stripe_webhook
-from blog import bird_webhooks, driver_views
+from blog import bird_webhooks, driver_views, telegram_driver_webhook
 from easygo_review import search_survey_views
 from decouple import config
 
@@ -73,6 +73,8 @@ urlpatterns = [
     path('gmail_webhook/', GmailWebhookView.as_view(), name='gmail_webhook'),
     # The channel in the path is how we know which of our numbers was dialled.
     # The bare paths are the legacy subscriptions; sync_bird_channels moves them.
+    path('webhook/telegram/driver/', telegram_driver_webhook.telegram_driver_webhook,
+         name='telegram_driver_webhook'),
     path('webhook/bird/sms/', bird_webhooks.sms_webhook, name='bird_sms_webhook'),
     path('webhook/bird/voice/', bird_webhooks.voice_webhook, name='bird_voice_webhook'),
     path('webhook/bird/sms/<uuid:channel_id>/', bird_webhooks.sms_webhook,

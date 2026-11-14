@@ -158,6 +158,17 @@ class Driver(models.Model):
                   '번호가 나간다. 트립의 use_proxy 는 그대로 켜 둘 것(끄면 대시보드에서 사라짐).',
     )
 
+    telegram_chat_id = models.CharField(
+        max_length=32, blank=True, null=True,
+        help_text='드라이버 봇(픽업 2시간 전 알림)과 연결된 텔레그램 chat id. 드라이버가 '
+                  '대시보드의 "Connect Telegram" 버튼으로 연결하면 자동 저장된다. '
+                  '비우면 연결 해제.',
+    )
+    telegram_link_token = models.CharField(
+        max_length=64, unique=True, null=True, blank=True, editable=False,
+        help_text='텔레그램 연결용 1회용 토큰(t.me/<bot>?start=<token>). 연결되면 지워진다.',
+    )
+
     class Meta:
         ordering = ['order']
 

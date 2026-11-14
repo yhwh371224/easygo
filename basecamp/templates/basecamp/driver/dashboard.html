@@ -369,6 +369,15 @@
   </div>
   {% endif %}
 
+  {% if telegram_link_url %}
+  <a href="{{ telegram_link_url }}" target="_blank" rel="noopener"
+     style="display:block;text-decoration:none;background:#0c4a6e;border:1px solid #0284c7;
+            color:#e0f2fe;padding:.85rem 1rem;border-radius:10px;margin-bottom:1rem;">
+    🔔 <strong>Connect Telegram</strong> — get a reminder 2 hours before each pickup.
+    Tap here, then press <strong>Start</strong> in Telegram →
+  </a>
+  {% endif %}
+
   {% if not trips and not candidates %}
   <div class="empty-state">
     <div class="icon">🚐</div>
